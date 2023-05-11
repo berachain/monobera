@@ -1,8 +1,20 @@
-# Turborepo Tailwind CSS starter
+# MonoBera 🐻
 
-This is an official starter Turborepo.
+This is an official home for:
 
-## Using this example
+- Homepage
+- Dex
+- Honey
+- BGS
+
+## Stack
+
+This Turborepo has the following tools already setup for you:
+
+- [Tailwind CSS](https://tailwindcss.com/) for styles
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
 
 Run the following command:
 
@@ -16,8 +28,19 @@ This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `web`: another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+#### Apps
+
+- `docs` (Not sure we'll need this, came with the template): a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+- `web` (Homepage): another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+
+The following can be built as separate apps or as one app with multiple routes:
+
+- `dex` (Dex): another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+- `honey` (Honey): another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+- `bgs` (BGS): another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+
+#### Packages
+
 - `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `docs` applications
 - `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
@@ -40,12 +63,3 @@ For example, in [tailwind.config.js](packages/tailwind-config/tailwind.config.js
     "../../packages/**/*.{js,ts,jsx,tsx}",
   ],
 ```
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [Tailwind CSS](https://tailwindcss.com/) for styles
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
