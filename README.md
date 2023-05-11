@@ -16,10 +16,18 @@ This Turborepo has the following tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 
-Run the following command:
+Run the following commands to start hacking:
+
+Web: runs on localhost:3000
 
 ```sh
-npx create-turbo@latest -e with-tailwind
+yarn dev:web
+```
+
+Dapp: runs on localhost:3001
+
+```sh
+yarn dev:dapp
 ```
 
 ## What's inside?
@@ -41,7 +49,7 @@ For now `dapp` will include routes for the following:
 
 #### Packages
 
-- `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `docs` applications
+- `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `dapps` applications
 - `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 

@@ -3,7 +3,8 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "dev:dapp": "turbo dev --filter=ui --filter=dapp",
+    "dev:dapp": "turbo dev --filter=ui --filter=dapp && open http://localhost:3001",
+    "dev:web": "turbo dev --filter=ui --filter=web && open http://localhost:3000",
     "lint": "turbo lint",
     "clean": "turbo clean",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""

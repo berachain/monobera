@@ -1,7 +1,7 @@
 import React from "react";
 import { PageHeading } from "./PageHeading";
 
-export default function Page({
+export function PageContent({
   title,
   children,
 }: {
