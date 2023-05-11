@@ -8,8 +8,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="bg-zinc-900">
-      <body>{children}</body>
+    <html lang="en" className="h-full bg-zinc-900">
+      <body className="h-full">{children}</body>
     </html>
   );
 }

@@ -1,5 +1,5 @@
 {
-  "name": "docs",
+  "name": "dapp",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.14",
     "next": "^13.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

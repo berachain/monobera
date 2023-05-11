@@ -30,14 +30,14 @@ This Turborepo includes the following packages/apps:
 
 #### Apps
 
-- `docs` (Not sure we'll need this, came with the template): a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `web` (Homepage): another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+- `web` (Homepage): [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+- `dapp` (MainDapp): another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
 
-The following can be built as separate apps or as one app with multiple routes:
+For now `dapp` will include routes for the following:
 
-- `dex` (Dex): another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `honey` (Honey): another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `bgs` (BGS): another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
+- `dex`
+- `honey`
+- `bgs`
 
 #### Packages
 

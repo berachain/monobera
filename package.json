@@ -3,6 +3,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "dev:dapp": "turbo dev --filter=ui --filter=dapp",
     "lint": "turbo lint",
     "clean": "turbo clean",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
