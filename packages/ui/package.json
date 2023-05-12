@@ -1,36 +1,190 @@
 {
-  "name": "ui",
-  "version": "0.0.0",
-  "sideEffects": [
-    "**/*.css"
-  ],
+  "name": "@bera/ui",
+  "version": "0.1.0",
+  "main": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": "./dist",
-    "./styles.css": "./dist/index.css"
-  },
-  "license": "MIT",
   "scripts": {
     "build": "tsup",
+    "clean": "git clean -xdf dist .turbo node_modules",
     "dev": "tsup --watch",
-    "check-types": "tsc --noEmit"
-  },
-  "peerDependencies": {
-    "react": "^18.2.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.2.5",
-    "eslint": "^7.32.0",
-    "eslint-config-custom": "*",
-    "postcss": "^8.4.20",
-    "react": "^18.2.0",
-    "tailwind-config": "*",
-    "tsconfig": "*",
-    "tsup": "^6.1.3",
-    "typescript": "^4.9.4"
+    "lint": "eslint src",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.14",
-    "@heroicons/react": "^2.0.18"
+    "@radix-ui/react-avatar": "^1.0.2",
+    "@radix-ui/react-dialog": "^1.0.3",
+    "@radix-ui/react-dropdown-menu": "^2.0.4",
+    "@radix-ui/react-label": "^2.0.1",
+    "@radix-ui/react-popover": "^1.0.5",
+    "@radix-ui/react-scroll-area": "^1.0.3",
+    "@radix-ui/react-select": "^1.2.1",
+    "@radix-ui/react-tabs": "^1.0.3",
+    "@radix-ui/react-toast": "^1.1.3",
+    "class-variance-authority": "^0.6.0",
+    "clsx": "^1.2.1",
+    "cmdk": "^0.2.0",
+    "lucide-react": "^0.214.0",
+    "tailwind-merge": "^1.12.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-day-picker": "^8.7.1",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.3.2",
+    "tailwindcss-animate": "^1.0.5"
+  },
+  "devDependencies": {
+    "@bera/eslint-config": "0.1.0",
+    "@bera/tailwind-config": "0.1.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.1",
+    "date-fns": "^2.29.3",
+    "eslint": "^8.39.0",
+    "postcss": "^8.4.23",
+    "react": "18.2.0",
+    "react-day-picker": "^8.7.1",
+    "react-dom": "18.2.0",
+    "tailwindcss": "^3.3.2",
+    "tailwindcss-animate": "^1.0.5",
+    "tsup": "^6.7.0",
+    "typescript": "^5.1.0-beta"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    "./styles.css": "./dist/index.css",
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./avatar": {
+      "import": "./dist/avatar.mjs",
+      "types": "./dist/avatar.d.ts"
+    },
+    "./calendar": {
+      "import": "./dist/calendar.mjs",
+      "types": "./dist/calendar.d.ts"
+    },
+    "./command": {
+      "import": "./dist/command.mjs",
+      "types": "./dist/command.d.ts"
+    },
+    "./dialog": {
+      "import": "./dist/dialog.mjs",
+      "types": "./dist/dialog.d.ts"
+    },
+    "./dropdown-menu": {
+      "import": "./dist/dropdown-menu.mjs",
+      "types": "./dist/dropdown-menu.d.ts"
+    },
+    "./input": {
+      "import": "./dist/input.mjs",
+      "types": "./dist/input.d.ts"
+    },
+    "./label": {
+      "import": "./dist/label.mjs",
+      "types": "./dist/label.d.ts"
+    },
+    "./popover": {
+      "import": "./dist/popover.mjs",
+      "types": "./dist/popover.d.ts"
+    },
+    "./scroll-area": {
+      "import": "./dist/scroll-area.mjs",
+      "types": "./dist/scroll-area.d.ts"
+    },
+    "./select": {
+      "import": "./dist/select.mjs",
+      "types": "./dist/select.d.ts"
+    },
+    "./sheet": {
+      "import": "./dist/sheet.mjs",
+      "types": "./dist/sheet.d.ts"
+    },
+    "./tabs": {
+      "import": "./dist/tabs.mjs",
+      "types": "./dist/tabs.d.ts"
+    },
+    "./toaster": {
+      "import": "./dist/toaster.mjs",
+      "types": "./dist/toaster.d.ts"
+    },
+    "./use-toast": {
+      "import": "./dist/use-toast.mjs",
+      "types": "./dist/use-toast.d.ts"
+    },
+    "./button": {
+      "import": "./dist/button.mjs",
+      "types": "./dist/button.d.ts"
+    },
+    "./icons": {
+      "import": "./dist/icons.mjs",
+      "types": "./dist/icons.d.ts"
+    },
+    "./card": {
+      "import": "./dist/card.mjs",
+      "types": "./dist/card.d.ts"
+    },
+    "./toast": {
+      "import": "./dist/toast.mjs",
+      "types": "./dist/toast.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "toast": [
+        "dist/toast.d.ts"
+      ],
+      "avatar": [
+        "dist/avatar.d.ts"
+      ],
+      "calendar": [
+        "dist/calendar.d.ts"
+      ],
+      "command": [
+        "dist/command.d.ts"
+      ],
+      "dialog": [
+        "dist/dialog.d.ts"
+      ],
+      "dropdown-menu": [
+        "dist/dropdown-menu.d.ts"
+      ],
+      "input": [
+        "dist/input.d.ts"
+      ],
+      "label": [
+        "dist/label.d.ts"
+      ],
+      "popover": [
+        "dist/popover.d.ts"
+      ],
+      "select": [
+        "dist/select.d.ts"
+      ],
+      "tabs": [
+        "dist/tabs.d.ts"
+      ],
+      "toaster": [
+        "dist/toaster.d.ts"
+      ],
+      "use-toast": [
+        "dist/use-toast.d.ts"
+      ],
+      "button": [
+        "dist/button.d.ts"
+      ],
+      "icons": [
+        "dist/icons.d.ts"
+      ],
+      "card": [
+        "dist/card.d.ts"
+      ],
+      "sheet": [
+        "dist/sheet.d.ts"
+      ],
+      "scroll-area": [
+        "dist/scroll-area.d.ts"
+      ]
+    }
   }
 }

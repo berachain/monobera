@@ -1,27 +1,98 @@
-import { Metadata } from "next";
+import { cn } from "@bera/ui";
+import { buttonVariants } from "@bera/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@bera/ui/card";
+import { Icons } from "@bera/ui/icons";
+import Balancer from "react-wrap-balancer";
+import { marketingFeatures, siteConfig } from "~/app/config";
+import { MainNav } from "~/app/dashboard/components/main-nav";
+import { MobileDropdown } from "~/components/mobile-nav";
 
-import LinkButton from "../components/LinkButton";
-
-export const metadata: Metadata = {
-  title: "Bera Dapp - DEX / Honey / BGT Station",
-};
+export const runtime = "edge";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <main className="mx-auto w-auto px-4 pb-8 pt-16 sm:pt-24 lg:px-8">
-        <h1 className="mx-auto text-center text-6xl font-extrabold tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-8xl">
-          DAPP
-          <span className="block bg-gradient-to-r from-brandred to-brandblue bg-clip-text px-2 text-transparent">
-            DEX / Honey / BGT Station
-          </span>
-        </h1>
-        <div className="mx-auto mt-5 max-w-xl gap-2 sm:flex sm:justify-center md:mt-8">
-          <LinkButton href="/dapp/dex">DEX</LinkButton>
-          <LinkButton href="/dapp/bgt">BGT Station</LinkButton>
-          <LinkButton href="/dapp/honey">Honey</LinkButton>
+    <>
+      <nav className="fixed left-0 right-0 z-50 border-b bg-background">
+        <div className="flex items-center h-16 max-w-4xl px-4 mx-auto">
+          <div className="items-center hidden mr-8 md:flex">
+            <Icons.logo className="w-6 h-6 mr-2" />
+            <span className="text-lg font-bold tracking-tight">bera Corp</span>
+          </div>
+          <MobileDropdown />
+          <MainNav />
+        </div>
+      </nav>
+      <main className="container flex flex-col items-center justify-center w-full min-h-screen pt-48">
+        <div className="z-10 min-h-[50vh] w-full max-w-4xl px-5 xl:px-0">
+          {/* <a
+          href="https://twitter.com/steventey/status/1613928948915920896"
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center justify-center py-2 mx-auto mb-5 space-x-2 overflow-hidden transition-colors rounded-full max-w-fit animate-fade-up bg-sky-100 px-7 hover:bg-sky-200"
+        >
+          <Icons.twitter className="w-5 h-5 text-sky-500" />
+          <p className="text-sm font-semibold text-sky-500">
+            Introducing bera Corp
+          </p>
+        </a> */}
+          <h1
+            className="font-display animate-fade-up bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-center text-4xl font-bold tracking-[-0.02em] text-transparent opacity-0 drop-shadow-sm md:text-7xl/[5rem]"
+            style={{ animationDelay: "0.20s", animationFillMode: "forwards" }}
+          >
+            <Balancer>
+              Your all-in-one, enterprise ready starting point
+            </Balancer>
+          </h1>
+          <p
+            className="mt-6 text-center opacity-0 animate-fade-up text-muted-foreground/80 md:text-xl"
+            style={{ animationDelay: "0.30s", animationFillMode: "forwards" }}
+          >
+            <Balancer>
+              Acme Corp is a Next.js starter kit that includes everything you
+              need to build a modern web application. Mobile application
+              preconfigured, ready to go.
+            </Balancer>
+          </p>
+          <div
+            className="flex items-center justify-center mx-auto mt-6 space-x-5 opacity-0 animate-fade-up"
+            style={{ animationDelay: "0.40s", animationFillMode: "forwards" }}
+          >
+            <a
+              className={cn(buttonVariants({ variant: "default" }))}
+              href={siteConfig.github}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icons.gitHub className="w-4 h-4 mr-1" />
+              <span>Star on GitHub</span>
+            </a>
+          </div>
+        </div>
+        <div className="w-full max-w-screen-lg gap-5 p-5 my-16 border-t animate-fade-up xl:px-0">
+          <h2 className="py-8 text-3xl font-bold text-center md:text-4xl">
+            What&apos;s included?
+          </h2>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            {marketingFeatures.map((feature) => (
+              <Card key={feature.title} className={feature.extraClassNames}>
+                <CardHeader>{feature.icon}</CardHeader>
+                <CardContent>
+                  <CardTitle>{feature.title}</CardTitle>
+                  <CardDescription className="mt-2">
+                    {feature.body}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </main>
-    </div>
+    </>
   );
 }
