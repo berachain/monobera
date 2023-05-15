@@ -15,7 +15,7 @@ import { ThemeProvider } from "~/components/theme-provider";
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
-  subsets: ["latin-ext"],
+  subsets: ["latin"],
 });
 
 export default function RootLayout(props: {
@@ -28,7 +28,7 @@ export default function RootLayout(props: {
 
   return (
     <>
-      <html lang="en" suppressHydrationWarning className="bg-background">
+      <html lang="en" className="bg-background">
         <body
           className={cn(
             "min-h-screen font-sans antialiased",
@@ -49,9 +49,7 @@ export default function RootLayout(props: {
                     <MainNav pathname={pathname} />
                   </div>
                 </nav>
-                <main className="container w-full min-h-screen pt-40">
-                  {props.children}
-                </main>
+                <main className="container w-full pt-40">{props.children}</main>
                 {props.modal}
               </div>
               <SiteFooter />

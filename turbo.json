@@ -8,14 +8,11 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {},
     "lint:fix": {},
     "clean": {
-      "cache": false
-    },
-    "//#clean": {
       "cache": false
     },
     "type-check": {

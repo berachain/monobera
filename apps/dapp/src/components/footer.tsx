@@ -4,7 +4,7 @@ import Link from "next/link";
 import { siteConfig } from "~/app/config";
 
 const ThemeToggle = dynamic(() => import("~/components/theme-toggle"), {
-  ssr: false,
+  ssr: true,
 });
 
 export function SiteFooter() {
