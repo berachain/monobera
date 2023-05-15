@@ -24,6 +24,7 @@ import {
   Twitter,
   User,
   X,
+  ArrowUpDown,
   type Icon as LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -55,6 +56,7 @@ export const Icons = {
   copyDone: ClipboardCheck,
   sun: SunMedium,
   moon: Moon,
+  swap: ArrowUpDown,
   laptop: Laptop,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>

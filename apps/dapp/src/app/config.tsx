@@ -8,20 +8,12 @@ export const siteConfig = {
 
 export const navItems = [
   {
-    href: "/dashboard",
+    href: "/",
     title: "Overview",
   },
   {
-    href: "/dashboard",
-    title: "Customers",
-  },
-  {
-    href: "/dashboard",
-    title: "Products",
-  },
-  {
-    href: "/dashboard",
-    title: "Settings",
+    href: "/swap",
+    title: "Swap",
   },
 ];
 
@@ -46,7 +38,7 @@ export const marketingFeatures = [
     ),
   },
   {
-    icon: <Icons.clerkWide />,
+    icon: <Icons.billing />,
     title: "Authentication",
     body: (
       <>
@@ -64,7 +56,7 @@ export const marketingFeatures = [
     ),
   },
   {
-    icon: <Icons.mdx />,
+    icon: <Icons.add />,
     title: "MDX",
     body: (
       <>

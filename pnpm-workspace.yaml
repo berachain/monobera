@@ -1,4 +1,4 @@
 packages:
-  - apps/web
+  - apps/dapp
   - packages/config/*
   - packages/ui

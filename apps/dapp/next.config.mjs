@@ -4,9 +4,8 @@ import "./src/env.mjs";
 const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx", "mdx"],
-
+  transpilePackages: ["@bera/ui"],
   experimental: {
-    appDir: true,
     mdxRs: true,
     typedRoutes: true,
   },

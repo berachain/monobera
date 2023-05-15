@@ -17,5 +17,11 @@
     "incremental": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": [".eslintrc.js", ".prettierrc.js"]
+  "include": [
+    "src",
+    "index.ts",
+    "transformer.ts",
+    ".eslintrc.js",
+    ".prettierrc.js"
+  ]
 }
