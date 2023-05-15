@@ -2,17 +2,17 @@
   "$schema": "https://turborepo.org/schema.json",
   "globalDependencies": ["**/.env"],
   "pipeline": {
-    "dev": {
-      "persistent": true,
-      "cache": false
-    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "lint": {},
     "lint:fix": {},
     "clean": {
+      "cache": false
+    },
+    "dev": {
+      "persistent": true,
       "cache": false
     },
     "type-check": {
