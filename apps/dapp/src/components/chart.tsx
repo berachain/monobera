@@ -13,6 +13,7 @@ const PercentageDifference: React.FC<Props> = ({ value1, value2 }) => {
   const percentageDiff = ((value1 - value2) / value2) * 100;
   const isNegative = percentageDiff < 0;
   const textColor = isNegative ? "text-red-500" : "text-green-500";
+  
   return (
     <div className="flex items-center">
       <div className="mt-1">
