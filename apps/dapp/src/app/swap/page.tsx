@@ -49,7 +49,7 @@ export default function Swap() {
       </div>
       <div className="col-span-2">
         <Card>
-          <CardContent>
+          <CardContent className="p-4">
             <DynamicChart chartData={tempPriceData} pool={"DAI/ETH"} />
           </CardContent>
         </Card>
