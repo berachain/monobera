@@ -1,7 +1,9 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { cn } from "@bera/ui";
+import { Button } from "@bera/ui/button";
 import { Toaster } from "@bera/ui/toaster";
+import { TooltipProvider } from "@bera/ui/tooltip";
 import { Analytics } from "@vercel/analytics/react";
 import { IBM_Plex_Sans } from "next/font/google";
 import { headers } from "next/headers";
@@ -36,25 +38,30 @@ export default function RootLayout(props: {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="relative flex flex-col min-h-screen">
-              <div className="flex-1">
-                <nav className="fixed left-0 right-0 z-50 border-b bg-background">
-                  <div className="flex items-center h-16 max-w-4xl px-4 mx-auto">
-                    <div className="items-center hidden mr-8 md:flex">
-                      <span className="text-lg font-bold tracking-tight">
-                        <Link href={"/"}>bera Corp</Link>
-                      </span>
+            <TooltipProvider>
+              <div className="relative flex flex-col min-h-screen">
+                <div className="flex-1">
+                  <nav className="fixed left-0 right-0 z-50 border-b bg-background">
+                    <div className="flex items-center h-16 max-w-4xl px-4 mx-auto justify-between">
+                      <div className="items-center hidden mr-8 md:flex">
+                        <span className="text-lg font-bold tracking-tight">
+                          <Link href={"/"}>bera Corp</Link>
+                        </span>
+                      </div>
+                      <MobileDropdown />
+                      <MainNav pathname={pathname} />
+                      <Button>Connect wallet</Button>
                     </div>
-                    <MobileDropdown />
-                    <MainNav pathname={pathname} />
-                  </div>
-                </nav>
-                <main className="container w-full pt-40">{props.children}</main>
-                {props.modal}
+                  </nav>
+                  <main className="container w-full pt-40">
+                    {props.children}
+                  </main>
+                  {props.modal}
+                </div>
+                <SiteFooter />
               </div>
-              <SiteFooter />
-            </div>
-            <TailwindIndicator />
+              <TailwindIndicator />
+            </TooltipProvider>
           </ThemeProvider>
           <Analytics />
           <Toaster />

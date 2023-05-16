@@ -25,6 +25,7 @@ import {
   User,
   X,
   ArrowUpDown,
+  Info,
   type Icon as LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -58,6 +59,7 @@ export const Icons = {
   moon: Moon,
   swap: ArrowUpDown,
   laptop: Laptop,
+  tooltip: Info,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path

@@ -16,8 +16,11 @@ const client = [
   "./src/scroll-area.tsx",
   "./src/select.tsx",
   "./src/sheet.tsx",
+  "./src/switch.tsx",
   "./src/tabs.tsx",
   "./src/toaster.tsx",
+  "./src/toggle.tsx",
+  "./src/tooltip.tsx",
   "./src/use-toast.tsx",
 ];
 

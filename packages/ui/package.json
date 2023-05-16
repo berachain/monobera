@@ -20,6 +20,9 @@
     "@radix-ui/react-select": "^1.2.1",
     "@radix-ui/react-tabs": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.3",
+    "@radix-ui/react-toggle": "^1.0.2",
+    "@radix-ui/react-tooltip": "^1.0.5",
+    "@radix-ui/react-switch": "^1.0.2",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
@@ -100,6 +103,10 @@
       "import": "./dist/sheet.mjs",
       "types": "./dist/sheet.d.ts"
     },
+    "./switch": {
+      "import": "./dist/switch.mjs",
+      "types": "./dist/switch.d.ts"
+    },
     "./tabs": {
       "import": "./dist/tabs.mjs",
       "types": "./dist/tabs.d.ts"
@@ -107,6 +114,14 @@
     "./toaster": {
       "import": "./dist/toaster.mjs",
       "types": "./dist/toaster.d.ts"
+    },
+    "./toggle": {
+      "import": "./dist/toggle.mjs",
+      "types": "./dist/toggle.d.ts"
+    },
+    "./tooltip": {
+      "import": "./dist/tooltip.mjs",
+      "types": "./dist/tooltip.d.ts"
     },
     "./use-toast": {
       "import": "./dist/use-toast.mjs",
@@ -184,6 +199,15 @@
       ],
       "scroll-area": [
         "dist/scroll-area.d.ts"
+      ],
+      "tooltip": [
+        "dist/tooltip.d.ts"
+      ],
+      "switch": [
+        "dist/switch.d.ts"
+      ],
+      "toggle": [
+        "dist/toggle.d.ts"
       ]
     }
   }
