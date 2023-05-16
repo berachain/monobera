@@ -17,6 +17,7 @@ const PercentageDifference: React.FC<Props> = ({ value1, value2 }) => {
     <div className="flex items-center">
       <div className="mt-1">
         <span className={`text-sm ${textColor}`}>
+          {!isNegative && "+"}
           {percentageDiff.toFixed(2)}%
         </span>
       </div>
@@ -152,13 +153,7 @@ const LineChart: React.FC<LineChartProps> = ({ chartData, pool }) => {
           value2={chartData.data[0] || 1}
         />
       )}
-      <Chart
-        options={options}
-        series={[chartData]}
-        type="line"
-        height={75}
-        width={250}
-      />
+      <Chart options={options} series={[chartData]} type="line" height={75} />
     </>
   );
 };
