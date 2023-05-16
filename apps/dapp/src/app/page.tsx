@@ -7,6 +7,7 @@ import {
 } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import Balancer from "react-wrap-balancer";
+
 import { marketingFeatures } from "~/app/config";
 
 export const runtime = "edge";
@@ -19,9 +20,9 @@ export default function Home() {
           href="https://twitter.com/steventey/status/1613928948915920896"
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center py-2 mx-auto mb-5 space-x-2 overflow-hidden transition-colors rounded-full max-w-fit animate-fade-up bg-sky-100 px-7 hover:bg-sky-200"
+          className="mx-auto mb-5 flex max-w-fit animate-fade-up items-center justify-center space-x-2 overflow-hidden rounded-full bg-sky-100 px-7 py-2 transition-colors hover:bg-sky-200"
         >
-          <Icons.twitter className="w-5 h-5 text-sky-500" />
+          <Icons.twitter className="h-5 w-5 text-sky-500" />
           <p className="text-sm font-semibold text-sky-500">
             Introducing bera Corp
           </p>
@@ -33,7 +34,7 @@ export default function Home() {
           <Balancer>Your all-in-one, enterprise ready starting point</Balancer>
         </h1>
         <p
-          className="mt-6 text-center opacity-0 animate-fade-up text-muted-foreground/80 md:text-xl"
+          className="mt-6 animate-fade-up text-center text-muted-foreground/80 opacity-0 md:text-xl"
           style={{ animationDelay: "0.30s", animationFillMode: "forwards" }}
         >
           <Balancer>
@@ -43,8 +44,8 @@ export default function Home() {
           </Balancer>
         </p>
       </div>
-      <div className="w-full max-w-screen-lg gap-5 p-5 my-16 border-t animate-fade-up xl:px-0">
-        <h2 className="py-8 text-3xl font-bold text-center md:text-4xl">
+      <div className="my-16 w-full max-w-screen-lg animate-fade-up gap-5 border-t p-5 xl:px-0">
+        <h2 className="py-8 text-center text-3xl font-bold md:text-4xl">
           What&apos;s included?
         </h2>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
