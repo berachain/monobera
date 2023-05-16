@@ -2,6 +2,7 @@
 
 import ThemeToggle from "./theme-toggle";
 import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { ScrollArea } from "@bera/ui/scroll-area";
 import Link from "next/link";
@@ -26,7 +27,7 @@ export function MobileDropdown() {
           variant="ghost"
           className="px-0 mr-2 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
-          <span className="text-lg font-bold tracking-tight">bera Corp</span>
+          <Icons.logo className="w-12 h-12" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen animate-none rounded-none border-none transition-transform">
