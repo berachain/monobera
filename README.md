@@ -4,11 +4,11 @@
 
 Create a `.env` file in the root directory.
 
-```sh
+````sh
 
 ```sh
 pnpm i
-```
+````
 
 ## Usage
 
