@@ -1,5 +1,3 @@
-import { cn } from "@bera/ui";
-import { buttonVariants } from "@bera/ui/button";
 import {
   Card,
   CardContent,
@@ -9,7 +7,7 @@ import {
 } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import Balancer from "react-wrap-balancer";
-import { marketingFeatures, siteConfig } from "~/app/config";
+import { marketingFeatures } from "~/app/config";
 
 export const runtime = "edge";
 
@@ -44,19 +42,6 @@ export default function Home() {
             ready to go.
           </Balancer>
         </p>
-        <div
-          className="flex items-center justify-center mx-auto mt-6 space-x-5 opacity-0 animate-fade-up"
-          style={{ animationDelay: "0.40s", animationFillMode: "forwards" }}
-        >
-          <a
-            className={cn(buttonVariants({ variant: "default" }))}
-            href={siteConfig.github}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>Star on GitHub</span>
-          </a>
-        </div>
       </div>
       <div className="w-full max-w-screen-lg gap-5 p-5 my-16 border-t animate-fade-up xl:px-0">
         <h2 className="py-8 text-3xl font-bold text-center md:text-4xl">
