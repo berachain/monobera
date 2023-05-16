@@ -1,27 +1,28 @@
+import React from "react";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Switch } from "@bera/ui/switch";
 import { Toggle } from "@bera/ui/toggle";
-import React from "react";
-import useLocalStorage from "~/hooks/useLocalStorage";
+
 import { LOCAL_STORAGE_KEYS, TRANSACTION_TYPES } from "~/utils/constants";
+import useLocalStorage from "~/hooks/useLocalStorage";
 
 export default function SwapSettings() {
   const [slippageTolerance, setSlippageTolerance] = useLocalStorage(
     LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE,
-    0.5
+    0.5,
   );
 
   const [transactionType, setTransactionType] = useLocalStorage(
     LOCAL_STORAGE_KEYS.TRANSACTION_TYPE,
-    TRANSACTION_TYPES.LEGACY
+    TRANSACTION_TYPES.LEGACY,
   );
 
   const [useSignatures, setUseSignatures] = useLocalStorage(
     LOCAL_STORAGE_KEYS.USE_SIGNATURES,
-    false
+    false,
   );
 
   function isNotPreset() {
@@ -31,9 +32,9 @@ export default function SwapSettings() {
   return (
     <div className="grid gap-4">
       <div className="space-y-2">
-        <h4 className="font-medium leading-none flex gap-1 items-center">
+        <h4 className="flex items-center gap-1 font-medium leading-none">
           Slippage tolerance
-          <Button variant="ghost" className="w-5 h-5 rounded-full p-0">
+          <Button variant="ghost" className="h-5 w-5 rounded-full p-0">
             <Icons.tooltip className="h-3 w-3 text-muted-foreground" />
             <span className="sr-only">Help</span>
           </Button>
@@ -72,9 +73,9 @@ export default function SwapSettings() {
         />
       </div>
       <div className="space-y-2">
-        <h4 className="font-medium leading-none flex gap-1 items-center">
+        <h4 className="flex items-center gap-1 font-medium leading-none">
           Transaction type
-          <Button variant="ghost" className="w-5 h-5 rounded-full p-0">
+          <Button variant="ghost" className="h-5 w-5 rounded-full p-0">
             <Icons.tooltip className="h-3 w-3 text-muted-foreground" />
             <span className="sr-only">Help</span>
           </Button>
@@ -97,9 +98,9 @@ export default function SwapSettings() {
         </Toggle>
       </div>
       <div className="space-y-2">
-        <h4 className="font-medium leading-none flex gap-1 items-center">
+        <h4 className="flex items-center gap-1 font-medium leading-none">
           Use signatures
-          <Button variant="ghost" className="w-5 h-5 rounded-full p-0">
+          <Button variant="ghost" className="h-5 w-5 rounded-full p-0">
             <Icons.tooltip className="h-3 w-3 text-muted-foreground" />
             <span className="sr-only">Help</span>
           </Button>

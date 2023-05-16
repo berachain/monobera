@@ -1,3 +1,5 @@
+import React from "react";
+import Image from "next/image";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -6,21 +8,20 @@ import {
   DialogTitle,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import Image from "next/image";
-import React from "react";
+
+import { LOCAL_STORAGE_KEYS, WALLET_ADDRESS } from "~/utils/constants";
 import { wallets } from "~/assets/wallets";
 import useLocalStorage from "~/hooks/useLocalStorage";
-import { LOCAL_STORAGE_KEYS, WALLET_ADDRESS } from "~/utils/constants";
 
 export default function ConnectWalletDialog() {
   const [open, setOpen] = React.useState(false);
   const [, setWalletAddress] = useLocalStorage<string | null>(
     LOCAL_STORAGE_KEYS.WALLET_ADDRESS,
-    null
+    null,
   );
   const [, setWaletNetwork] = useLocalStorage<string | null>(
     LOCAL_STORAGE_KEYS.WALLET_NETWORK,
-    null
+    null,
   );
   return (
     <>
@@ -29,7 +30,7 @@ export default function ConnectWalletDialog() {
         onClick={() => setOpen(true)}
         className="w-48"
       >
-        <Icons.wallet className="w-6 h-6 mr-2" />
+        <Icons.wallet className="mr-2 h-6 w-6" />
         Connect wallet
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -54,7 +55,7 @@ export default function ConnectWalletDialog() {
                   width={24}
                   height={24}
                   alt={wallet.name}
-                  className="w-6 h-6 mr-2"
+                  className="mr-2 h-6 w-6"
                 />
                 <span>{wallet.name}</span>
               </Button>
