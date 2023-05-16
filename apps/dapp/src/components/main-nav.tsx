@@ -2,15 +2,10 @@ import { cn } from "@bera/ui";
 import Link from "next/link";
 import { navItems } from "~/app/config";
 
-type Props = {
-  pathname: string;
-};
-
 export function MainNav({
   className,
-  pathname,
   ...props
-}: React.HTMLAttributes<HTMLElement> & Props) {
+}: React.HTMLAttributes<HTMLElement>) {
   return (
     <nav
       className={cn(
@@ -25,7 +20,7 @@ export function MainNav({
           key={`${item.href}-${idx}`}
           className={cn(
             "text-sm font-medium transition-colors hover:text-primary",
-            pathname !== item.href && "text-muted-foreground"
+            idx !== 0 && "text-muted-foreground"
           )}
         >
           {item.title}
