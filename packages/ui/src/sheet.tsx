@@ -1,11 +1,10 @@
 "use client";
 
-import * as React from "react";
+import { cn } from "./utils/cn";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
-
-import { cn } from "./utils/cn";
+import * as React from "react";
 
 const Sheet = SheetPrimitive.Root;
 
@@ -46,7 +45,7 @@ const SheetOverlay = React.forwardRef<
   <SheetPrimitive.Overlay
     className={cn(
       "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm transition-all duration-100 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
-      className,
+      className
     )}
     {...props}
     ref={ref}
@@ -139,7 +138,7 @@ const sheetVariants = cva(
       position: "right",
       size: "default",
     },
-  },
+  }
 );
 
 export interface DialogContentProps
@@ -174,7 +173,7 @@ const SheetHeader = ({
   <div
     className={cn(
       "flex flex-col space-y-2 text-center sm:text-left",
-      className,
+      className
     )}
     {...props}
   />
@@ -188,7 +187,7 @@ const SheetFooter = ({
   <div
     className={cn(
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-      className,
+      className
     )}
     {...props}
   />

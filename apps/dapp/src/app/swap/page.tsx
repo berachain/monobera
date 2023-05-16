@@ -16,6 +16,24 @@ import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Switch } from "@bera/ui/switch";
 import dynamic from "next/dynamic";
 
+const generateDataForPast24Hours = () => {
+  // Generate data for the past 24 hours
+  const timeIntervals = 24; // Number of data points
+
+  const data = [];
+  for (let i = timeIntervals - 1; i >= 0; i--) {
+    const value = Math.floor(Math.random() * 100); // Random value for demonstration
+    data.push(value);
+  }
+
+  return {
+    name: "Price",
+    data: data,
+  };
+};
+
+export const tempPriceData = generateDataForPast24Hours();
+
 export const runtime = "edge";
 
 const DynamicChart = dynamic(() => import("~/components/chart"), {
@@ -165,7 +183,7 @@ export default function Swap() {
         <Card>
           <CardContent>
             <CardDescription className="mt-2">
-              <DynamicChart />
+              <DynamicChart chartData={tempPriceData} pool={"DAI/ETH"} />
             </CardDescription>
           </CardContent>
         </Card>

@@ -13,12 +13,12 @@ importers:
       '@manypkg/cli':
         specifier: ^0.20.0
         version: 0.20.0
-      '@radix-ui/react-tooltip':
-        specifier: ^1.0.5
-        version: 1.0.5(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)
       '@types/prettier':
         specifier: ^2.7.2
         version: 2.7.2
+      dapp:
+        specifier: ^0.0.0
+        version: 0.0.0
       eslint:
         specifier: ^8.39.0
         version: 8.39.0
@@ -49,18 +49,24 @@ importers:
       '@vercel/analytics':
         specifier: ^1.0.1
         version: 1.0.1
+      apexcharts:
+        specifier: 3.35.3
+        version: 3.35.3
       date-fns:
         specifier: ^2.29.3
         version: 2.29.3
       next:
         specifier: ^13.4.1
-        version: 13.4.1(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
+        version: 13.4.1(react-dom@18.2.0)(react@18.2.0)
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@13.4.1)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
+      react-apexcharts:
+        specifier: 1.4.0
+        version: 1.4.0(apexcharts@3.35.3)(react@18.2.0)
       react-day-picker:
         specifier: ^8.7.1
         version: 8.7.1(date-fns@2.29.3)(react@18.2.0)
@@ -72,7 +78,7 @@ importers:
         version: 0.5.0(react@18.2.0)
       recharts:
         specifier: ^2.5.0
-        version: 2.5.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 2.5.0(react-dom@18.2.0)(react@18.2.0)
       superjson:
         specifier: 1.9.1
         version: 1.9.1
@@ -1969,6 +1975,17 @@ packages:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
+  /apexcharts@3.35.3:
+    resolution: {integrity: sha512-UDlxslJr3DG63I/SgoiivIu4lpP25GMaKFK8NvCHmTksTQshx4ng3oPPrYvdsBFOvD/ajPYIh/p7rNB0jq8vXg==}
+    dependencies:
+      svg.draggable.js: 2.2.2
+      svg.easing.js: 2.0.0
+      svg.filter.js: 2.0.2
+      svg.pathmorphing.js: 0.1.3
+      svg.resize.js: 1.4.3
+      svg.select.js: 3.0.1
+    dev: false
+
   /arg@5.0.2:
     resolution: {integrity: sha512-PYjyFOLKQ9y57JvQ6QLo8dAgNqswh8M1RMJYdQduT6xbWSgK36P/Z/v+p888pM69jMMfS8Xd8F6I1kQ/I9HUGg==}
 
@@ -2404,6 +2421,12 @@ packages:
 
   /damerau-levenshtein@1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
+    dev: false
+
+  /dapp@0.0.0:
+    resolution: {integrity: sha512-y1oslZxBgjMx+knESKxgt1Gv2LMs1KU7ariRsgloD71Btr6mJCvXrsfhb0/AnDpkS8gbewkAUTrwAuCib9OK/w==}
+    dependencies:
+      xmlhttprequest: 1.7.0
     dev: false
 
   /date-fns@2.29.3:
@@ -3892,12 +3915,12 @@ packages:
       react: '*'
       react-dom: '*'
     dependencies:
-      next: 13.4.1(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
+      next: 13.4.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /next@13.4.1(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0):
+  /next@13.4.1(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-JBw2kAIyhKDpjhEWvNVoFeIzNp9xNxg8wrthDOtMctfn3EpqGCmW0FSviNyGgOSOSn6zDaX48pmvbdf6X2W9xA==}
     engines: {node: '>=16.8.0'}
     hasBin: true
@@ -3925,7 +3948,7 @@ packages:
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.1(@babel/core@7.21.8)(react@18.2.0)
+      styled-jsx: 5.1.1(react@18.2.0)
       zod: 3.21.4
     optionalDependencies:
       '@next/swc-darwin-arm64': 13.4.1
@@ -4379,6 +4402,17 @@ packages:
       strip-json-comments: 2.0.1
     dev: false
 
+  /react-apexcharts@1.4.0(apexcharts@3.35.3)(react@18.2.0):
+    resolution: {integrity: sha512-DrcMV4aAMrUG+n6412yzyATWEyCDWlpPBBhVbpzBC4PDeuYU6iF84SmExbck+jx5MUm4U5PM3/T307Mc3kzc9Q==}
+    peerDependencies:
+      apexcharts: ^3.18.0
+      react: '>=0.13'
+    dependencies:
+      apexcharts: 3.35.3
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
   /react-day-picker@8.7.1(date-fns@2.29.3)(react@18.2.0):
     resolution: {integrity: sha512-Gv426AW8b151CZfh3aP5RUGztLwHB/EyJgWZ5iMgtzbFBkjHfG6Y66CIQFMWGLnYjsQ9DYSJRmJ5S0Pg5HWKjA==}
     peerDependencies:
@@ -4470,7 +4504,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /react-smooth@2.0.2(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0):
+  /react-smooth@2.0.2(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-pgqSp1q8rAGtF1bXQE0m3CHGLNfZZh5oA5o1tsPLXRHnKtkujMIJ8Ws5nO1mTySZf1c4vgwlEk+pHi3Ln6eYLw==}
     peerDependencies:
       prop-types: ^15.6.0
@@ -4478,7 +4512,6 @@ packages:
       react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:
       fast-equals: 4.0.3
-      prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-transition-group: 2.9.0(react-dom@18.2.0)(react@18.2.0)
@@ -4556,7 +4589,7 @@ packages:
       decimal.js-light: 2.5.1
     dev: false
 
-  /recharts@2.5.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0):
+  /recharts@2.5.0(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-0EQYz3iA18r1Uq8VqGZ4dABW52AKBnio37kJgnztIqprELJXpOEsa0SzkqU1vjAhpCXCv52Dx1hiL9119xsqsQ==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -4567,12 +4600,11 @@ packages:
       classnames: 2.3.2
       eventemitter3: 4.0.7
       lodash: 4.17.21
-      prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-is: 16.13.1
       react-resize-detector: 8.1.0(react-dom@18.2.0)(react@18.2.0)
-      react-smooth: 2.0.2(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+      react-smooth: 2.0.2(react-dom@18.2.0)(react@18.2.0)
       recharts-scale: 0.4.5
       reduce-css-calc: 2.1.8
       victory-vendor: 36.6.10
@@ -4850,7 +4882,7 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
-  /styled-jsx@5.1.1(@babel/core@7.21.8)(react@18.2.0):
+  /styled-jsx@5.1.1(react@18.2.0):
     resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
     engines: {node: '>= 12.0.0'}
     peerDependencies:
@@ -4863,7 +4895,6 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
-      '@babel/core': 7.21.8
       client-only: 0.0.1
       react: 18.2.0
     dev: false
@@ -4904,6 +4935,60 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  /svg.draggable.js@2.2.2:
+    resolution: {integrity: sha512-JzNHBc2fLQMzYCZ90KZHN2ohXL0BQJGQimK1kGk6AvSeibuKcIdDX9Kr0dT9+UJ5O8nYA0RB839Lhvk4CY4MZw==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      svg.js: 2.7.1
+    dev: false
+
+  /svg.easing.js@2.0.0:
+    resolution: {integrity: sha512-//ctPdJMGy22YoYGV+3HEfHbm6/69LJUTAqI2/5qBvaNHZ9uUFVC82B0Pl299HzgH13rKrBgi4+XyXXyVWWthA==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      svg.js: 2.7.1
+    dev: false
+
+  /svg.filter.js@2.0.2:
+    resolution: {integrity: sha512-xkGBwU+dKBzqg5PtilaTb0EYPqPfJ9Q6saVldX+5vCRy31P6TlRCP3U9NxH3HEufkKkpNgdTLBJnmhDHeTqAkw==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      svg.js: 2.7.1
+    dev: false
+
+  /svg.js@2.7.1:
+    resolution: {integrity: sha512-ycbxpizEQktk3FYvn/8BH+6/EuWXg7ZpQREJvgacqn46gIddG24tNNe4Son6omdXCnSOaApnpZw6MPCBA1dODA==}
+    dev: false
+
+  /svg.pathmorphing.js@0.1.3:
+    resolution: {integrity: sha512-49HWI9X4XQR/JG1qXkSDV8xViuTLIWm/B/7YuQELV5KMOPtXjiwH4XPJvr/ghEDibmLQ9Oc22dpWpG0vUDDNww==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      svg.js: 2.7.1
+    dev: false
+
+  /svg.resize.js@1.4.3:
+    resolution: {integrity: sha512-9k5sXJuPKp+mVzXNvxz7U0uC9oVMQrrf7cFsETznzUDDm0x8+77dtZkWdMfRlmbkEEYvUn9btKuZ3n41oNA+uw==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      svg.js: 2.7.1
+      svg.select.js: 2.1.2
+    dev: false
+
+  /svg.select.js@2.1.2:
+    resolution: {integrity: sha512-tH6ABEyJsAOVAhwcCjF8mw4crjXSI1aa7j2VQR8ZuJ37H2MBUbyeqYr5nEO7sSN3cy9AR9DUwNg0t/962HlDbQ==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      svg.js: 2.7.1
+    dev: false
+
+  /svg.select.js@3.0.1:
+    resolution: {integrity: sha512-h5IS/hKkuVCbKSieR9uQCj9w+zLHoPh+ce19bBYyqF53g6mnPB8sAtIbe1s9dh2S2fCmYX2xel1Ln3PJBbK4kw==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      svg.js: 2.7.1
+    dev: false
 
   /synckit@0.8.5:
     resolution: {integrity: sha512-L1dapNV6vu2s/4Sputv8xGsCdAVlb5nRDMFU/E27D44l5U6cw1g0dGd45uLc+OXjNMmF4ntiMdCimzcjFKQI8Q==}
@@ -5333,6 +5418,11 @@ packages:
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+
+  /xmlhttprequest@1.7.0:
+    resolution: {integrity: sha512-iALKn450gypsTdytqr2qHYRMS5uDY3XyhSOnf8E6S2Ew0UJxIln40ylqZrCiQoW5cZhDpDg9E23aQDfPK7OJ7Q==}
+    engines: {node: '>=0.4.0'}
+    dev: false
 
   /yallist@2.1.2:
     resolution: {integrity: sha512-ncTzHV7NvsQZkYe1DW7cbDLm0YpzHmZF5r/iyP3ZnQtMiJ+pjzisCiMNI+Sj+xQF5pXhSHxSB3uDbsBTzY/c2A==}

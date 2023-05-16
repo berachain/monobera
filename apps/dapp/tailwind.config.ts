@@ -1,6 +1,5 @@
-import type { Config } from "tailwindcss";
-
 import baseConfig from "@bera/tailwind-config";
+import type { Config } from "tailwindcss";
 
 export default {
   content: baseConfig.content,
