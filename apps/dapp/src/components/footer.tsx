@@ -1,7 +1,6 @@
 import { Icons } from "@bera/ui/icons";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { siteConfig } from "~/app/config";
 
 const ThemeToggle = dynamic(() => import("~/components/theme-toggle"), {
   ssr: true,
