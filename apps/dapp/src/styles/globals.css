@@ -80,3 +80,8 @@
     @apply max-sm:px-4;
   }
 }
+
+.apexcharts-tooltip {
+  background: #f3f3f3;
+  color: black;
+}

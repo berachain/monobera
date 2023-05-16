@@ -6,6 +6,24 @@ import { useState } from "react";
 import { type Token, tokens } from "~/assets/tokens";
 import { SwapCard } from "~/components/swap-card";
 
+const generateDataForPast24Hours = () => {
+  // Generate data for the past 24 hours
+  const timeIntervals = 24; // Number of data points
+
+  const data = [];
+  for (let i = timeIntervals - 1; i >= 0; i--) {
+    const value = Math.floor(Math.random() * 100); // Random value for demonstration
+    data.push(value);
+  }
+
+  return {
+    name: "Price",
+    data: data,
+  };
+};
+
+export const tempPriceData = generateDataForPast24Hours();
+
 export const runtime = "edge";
 
 const DynamicChart = dynamic(() => import("~/components/chart"), {
@@ -31,8 +49,8 @@ export default function Swap() {
       </div>
       <div className="col-span-2">
         <Card>
-          <CardContent>
-            <DynamicChart />
+          <CardContent className="p-4">
+            <DynamicChart chartData={tempPriceData} pool={"DAI/ETH"} />
           </CardContent>
         </Card>
       </div>
