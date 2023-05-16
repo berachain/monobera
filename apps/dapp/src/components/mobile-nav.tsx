@@ -1,13 +1,14 @@
 "use client";
 
-import ThemeToggle from "./theme-toggle";
+import * as React from "react";
+import Link from "next/link";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { ScrollArea } from "@bera/ui/scroll-area";
-import Link from "next/link";
-import * as React from "react";
+
 import { navItems } from "~/app/config";
+import ThemeToggle from "./theme-toggle";
 
 export function MobileDropdown() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -25,9 +26,9 @@ export function MobileDropdown() {
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          className="px-0 mr-2 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+          className="mr-2 px-0 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
-          <Icons.logo className="w-12 h-12" />
+          <Icons.logo className="h-12 w-12" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen animate-none rounded-none border-none transition-transform">
@@ -37,13 +38,13 @@ export function MobileDropdown() {
               key={href}
               href={{ pathname: href }}
               // className="flex items-center mt-2 text-lg font-semibold sm:text-sm"
-              className="flex py-1 text-base font-medium transition-colors text-muted-foreground hover:text-primary"
+              className="flex py-1 text-base font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               {title}
             </Link>
           ))}
         </ScrollArea>
-        <div className="pt-4 border-t">
+        <div className="border-t pt-4">
           <ThemeToggle side="top" align="start" />
         </div>
       </PopoverContent>

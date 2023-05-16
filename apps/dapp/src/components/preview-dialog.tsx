@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -7,7 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@bera/ui/dialog";
-import React from "react";
 
 export default function PreviewDialog() {
   return (

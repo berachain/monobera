@@ -1,7 +1,8 @@
+import { type StaticImageData } from "next/image";
+
 import beraIcon from "./icons/beraIcon.jpg";
 import bgtIcon from "./icons/bgtIcon.jpg";
 import honeyIcon from "./icons/honeyIcon.jpg";
-import { type StaticImageData } from "next/image";
 
 export type Token = {
   address: string;

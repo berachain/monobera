@@ -1,15 +1,16 @@
-import PreviewDialog from "./preview-dialog";
-import { SettingsPopover } from "./settings-popover";
-import TokenDialog from "./token-dialog";
+import React from "react";
+import Image from "next/image";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Label } from "@bera/ui/label";
 import { Switch } from "@bera/ui/switch";
-import Image from "next/image";
-import React from "react";
+
 import { type Token } from "~/assets/tokens";
+import PreviewDialog from "./preview-dialog";
+import { SettingsPopover } from "./settings-popover";
+import TokenDialog from "./token-dialog";
 
 type Props = {
   selectedFrom: Token;
@@ -30,17 +31,17 @@ export function SwapCard({
     <>
       <Card>
         <CardHeader>
-          <div className="flex justify-between center">
+          <div className="center flex justify-between">
             Swap <SettingsPopover />
           </div>
         </CardHeader>
         <CardContent>
           <div className="py-4">
-            <div className="flex gap-2 flex-col">
+            <div className="flex flex-col gap-2">
               <div className="relative">
                 <Button
                   variant="secondary"
-                  className="absolute top-3 left-3 flex gap-2"
+                  className="absolute left-3 top-3 flex gap-2"
                   onClick={() => {
                     setOpen(true);
                     setChoosingFrom(true);
@@ -54,32 +55,32 @@ export function SwapCard({
                     className="rounded-full"
                   />
                   {selectedFrom.symbol}
-                  <Icons.chevronDown className="w-4 h-4" />
+                  <Icons.chevronDown className="h-4 w-4" />
                 </Button>
                 <Input
                   type="text"
                   placeholder="0.0"
-                  className="text-right text-lg py-8 px-5"
+                  className="px-5 py-8 text-right text-lg"
                 />
               </div>
-              <div className="flex gap-2 items-center">
+              <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-10 h-10 rounded-full"
+                  className="h-10 w-10 rounded-full"
                   onClick={() => {
                     setSelectedFrom(selectedTo);
                     setSelectedTo(selectedFrom);
                   }}
                 >
-                  <Icons.swap className="w-8 h-8" />
+                  <Icons.swap className="h-8 w-8" />
                 </Button>
-                <div className="w-full h-0.5 bg-slate-400" />
+                <div className="h-0.5 w-full bg-slate-400" />
               </div>
               <div className="relative">
                 <Button
                   variant="secondary"
-                  className="absolute top-3 left-3 flex gap-2"
+                  className="absolute left-3 top-3 flex gap-2"
                   onClick={() => {
                     setOpen(true);
                     setChoosingFrom(false);
@@ -93,12 +94,12 @@ export function SwapCard({
                     className="rounded-full"
                   />
                   {selectedTo.symbol}
-                  <Icons.chevronDown className="w-4 h-4" />
+                  <Icons.chevronDown className="h-4 w-4" />
                 </Button>
                 <Input
                   type="text"
                   placeholder="0.0"
-                  className="text-right text-lg py-8 px-5"
+                  className="px-5 py-8 text-right text-lg"
                 />
               </div>
               <PreviewDialog />

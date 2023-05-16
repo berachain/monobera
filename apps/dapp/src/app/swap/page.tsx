@@ -1,10 +1,11 @@
 "use client";
 
-import { Card, CardContent } from "@bera/ui/card";
-import dynamic from "next/dynamic";
 import { useState } from "react";
-import { type Token, tokens } from "~/assets/tokens";
+import dynamic from "next/dynamic";
+import { Card, CardContent } from "@bera/ui/card";
+
 import { SwapCard } from "~/components/swap-card";
+import { tokens, type Token } from "~/assets/tokens";
 
 const generateDataForPast24Hours = () => {
   // Generate data for the past 24 hours

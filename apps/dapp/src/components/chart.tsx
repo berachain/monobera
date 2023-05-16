@@ -1,7 +1,7 @@
 "use client";
 
-import { type ApexOptions } from "apexcharts";
 import React, { useState } from "react";
+import { type ApexOptions } from "apexcharts";
 import Chart from "react-apexcharts";
 
 interface Props {
@@ -13,7 +13,7 @@ const PercentageDifference: React.FC<Props> = ({ value1, value2 }) => {
   const percentageDiff = ((value1 - value2) / value2) * 100;
   const isNegative = percentageDiff < 0;
   const textColor = isNegative ? "text-red-500" : "text-green-500";
-  
+
   return (
     <div className="flex items-center">
       <div className="mt-1">
@@ -134,10 +134,10 @@ const LineChart: React.FC<LineChartProps> = ({ chartData, pool }) => {
   };
   return (
     <>
-      <h4 className="font-medium leading-none flex gap-1 align-middle">
+      <h4 className="flex gap-1 align-middle font-medium leading-none">
         {pool}
       </h4>
-      <h4 className="font-medium text-muted-foreground text-2xl leading-none flex gap-1 align-middle mt-1">
+      <h4 className="mt-1 flex gap-1 align-middle text-2xl font-medium leading-none text-muted-foreground">
         {(
           chartData?.data[selectedXIndex] || chartData?.data[23]
         )?.toLocaleString()}
