@@ -13,9 +13,6 @@ importers:
       '@manypkg/cli':
         specifier: ^0.20.0
         version: 0.20.0
-      '@radix-ui/react-tooltip':
-        specifier: ^1.0.5
-        version: 1.0.5(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)
       '@types/prettier':
         specifier: ^2.7.2
         version: 2.7.2
