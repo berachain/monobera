@@ -16,7 +16,7 @@
       "cache": false
     },
     "type-check": {
-      "dependsOn": [],
+      "dependsOn": ["^build"],
       "cache": false
     }
   },
