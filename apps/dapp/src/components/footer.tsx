@@ -1,6 +1,6 @@
-import { Icons } from "@bera/ui/icons";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { Icons } from "@bera/ui/icons";
 
 const ThemeToggle = dynamic(() => import("~/components/theme-toggle"), {
   ssr: true,
@@ -8,11 +8,11 @@ const ThemeToggle = dynamic(() => import("~/components/theme-toggle"), {
 
 export function SiteFooter() {
   return (
-    <footer className="container py-6 border-t">
+    <footer className="container border-t py-6">
       <div className="flex flex-col items-center justify-between gap-4">
-        <div className="flex justify-between w-full">
+        <div className="flex w-full justify-between">
           <Link href="/" className="flex items-center text-lg font-medium">
-            <Icons.logo className="w-12 h-12" />
+            <Icons.logo className="h-12 w-12" />
           </Link>
           <ThemeToggle />
         </div>

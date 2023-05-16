@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { Button } from "@bera/ui/button";
 import {
   DropdownMenu,
@@ -9,7 +10,6 @@ import {
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
 import { useTheme } from "next-themes";
-import * as React from "react";
 
 export default function ThemeToggle(props: {
   align?: "center" | "start" | "end";
@@ -18,9 +18,9 @@ export default function ThemeToggle(props: {
   const { setTheme, theme } = useTheme();
 
   const triggerIcon = {
-    light: <Icons.sun className="w-6 h-6" />,
-    dark: <Icons.moon className="w-6 h-6" />,
-    system: <Icons.system className="w-6 h-6" />,
+    light: <Icons.sun className="h-6 w-6" />,
+    dark: <Icons.moon className="h-6 w-6" />,
+    system: <Icons.system className="h-6 w-6" />,
   }[theme as "light" | "dark" | "system"];
 
   return (
@@ -38,15 +38,15 @@ export default function ThemeToggle(props: {
       </DropdownMenuTrigger>
       <DropdownMenuContent align={props.align} side={props.side}>
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          <Icons.sun className="w-4 h-4 mr-2" />
+          <Icons.sun className="mr-2 h-4 w-4" />
           <span>Light</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          <Icons.moon className="w-4 h-4 mr-2" />
+          <Icons.moon className="mr-2 h-4 w-4" />
           <span>Dark</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          <Icons.system className="w-4 h-4 mr-2" />
+          <Icons.system className="mr-2 h-4 w-4" />
           <span>System</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

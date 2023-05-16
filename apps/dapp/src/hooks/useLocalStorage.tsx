@@ -1,9 +1,9 @@
 import {
-  type Dispatch,
-  type SetStateAction,
   useCallback,
   useEffect,
   useState,
+  type Dispatch,
+  type SetStateAction,
 } from "react";
 import { useEventCallback, useEventListener } from "usehooks-ts";
 
@@ -43,7 +43,7 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
     // Prevent build error "window is undefined" but keeps working
     if (typeof window === "undefined") {
       console.warn(
-        `Tried setting localStorage key “${key}” even though environment is not a client`
+        `Tried setting localStorage key “${key}” even though environment is not a client`,
       );
     }
 
@@ -76,7 +76,7 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
       }
       setStoredValue(readValue());
     },
-    [key, readValue]
+    [key, readValue],
   );
 
   // this only works for other documents, not the current one

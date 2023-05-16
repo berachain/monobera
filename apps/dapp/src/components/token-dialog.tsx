@@ -1,3 +1,5 @@
+import React from "react";
+import Image from "next/image";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -5,8 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@bera/ui/dialog";
-import Image from "next/image";
-import React from "react";
+
 import { tokens, type Token } from "~/assets/tokens";
 
 type Props = {
@@ -26,7 +27,7 @@ export default function TokenDialog({
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px] px-4">
+      <DialogContent className="px-4 sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Token search</DialogTitle>
         </DialogHeader>
@@ -35,13 +36,13 @@ export default function TokenDialog({
             .filter(
               (token) =>
                 token.address !== selectedFrom.address &&
-                token.address !== selectedTo.address
+                token.address !== selectedTo.address,
             )
             .map((token) => (
               <Button
                 variant="ghost"
                 key={token.name}
-                className="flex items-center gap-2 text-left justify-start px-2"
+                className="flex items-center justify-start gap-2 px-2 text-left"
                 onClick={() => {
                   onSelectedToken(token);
                   setOpen(false);
