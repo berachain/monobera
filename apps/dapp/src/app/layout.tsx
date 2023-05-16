@@ -20,10 +20,7 @@ const fontSans = IBM_Plex_Sans({
   subsets: ["latin"],
 });
 
-export default function RootLayout(props: {
-  children: React.ReactNode;
-  modal: React.ReactNode;
-}) {
+export default function RootLayout(props: { children: React.ReactNode }) {
   const headersList = headers();
   // read the custom x-pathname header
   const pathname = headersList.get("x-pathname") || "";
@@ -55,7 +52,6 @@ export default function RootLayout(props: {
                   </div>
                 </nav>
                 <main className="container w-full pt-40">{props.children}</main>
-                {props.modal}
               </div>
               <SiteFooter />
             </div>
