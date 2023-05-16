@@ -1,121 +1,102 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  type Dispatch,
+  type SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import { useEventCallback, useEventListener } from "usehooks-ts";
 
-type Serializer<T> = (object: T | undefined) => string;
-type Parser<T> = (val: string) => T | undefined;
-type Setter<T> = React.Dispatch<React.SetStateAction<T | undefined>>;
+declare global {
+  interface WindowEventMap {
+    "local-storage": CustomEvent;
+  }
+}
 
-type Options<T> = Partial<{
-  serializer: Serializer<T>;
-  parser: Parser<T>;
-  logger: (error: any) => void;
-  syncData: boolean;
-}>;
+type SetValue<T> = Dispatch<SetStateAction<T>>;
 
-function useLocalStorage<T>(
-  key: string,
-  defaultValue: T,
-  options?: Options<T>
-): [T, Setter<T>];
-function useLocalStorage<T>(
-  key: string,
-  defaultValue?: T,
-  options?: Options<T>
-) {
-  const opts = useMemo(() => {
-    return {
-      serializer: JSON.stringify,
-      parser: JSON.parse,
-      logger: console.log,
-      syncData: true,
-      ...options,
-    };
-  }, [options]);
-
-  const { serializer, parser, logger, syncData } = opts;
-
-  const rawValueRef = useRef<string | null>(null);
-
-  const [value, setValue] = useState(() => {
-    if (typeof window === "undefined") return defaultValue;
+function useLocalStorage<T>(key: string, initialValue: T): [T, SetValue<T>] {
+  // Get from local storage then
+  // parse stored json or return initialValue
+  const readValue = useCallback((): T => {
+    // Prevent build error "window is undefined" but keeps working
+    if (typeof window === "undefined") {
+      return initialValue;
+    }
 
     try {
-      rawValueRef.current = window.localStorage.getItem(key);
-      const res: T = rawValueRef.current
-        ? parser(rawValueRef.current)
-        : defaultValue;
-      return res;
-    } catch (e) {
-      logger(e);
-      return defaultValue;
+      const item = window.localStorage.getItem(key);
+      return item ? (parseJSON(item) as T) : initialValue;
+    } catch (error) {
+      console.warn(`Error reading localStorage key “${key}”:`, error);
+      return initialValue;
+    }
+  }, [initialValue, key]);
+
+  // State to store our value
+  // Pass initial state function to useState so logic is only executed once
+  const [storedValue, setStoredValue] = useState<T>(readValue);
+
+  // Return a wrapped version of useState's setter function that ...
+  // ... persists the new value to localStorage.
+  const setValue: SetValue<T> = useEventCallback((value) => {
+    // Prevent build error "window is undefined" but keeps working
+    if (typeof window === "undefined") {
+      console.warn(
+        `Tried setting localStorage key “${key}” even though environment is not a client`
+      );
+    }
+
+    try {
+      // Allow value to be a function so we have the same API as useState
+      const newValue = value instanceof Function ? value(storedValue) : value;
+
+      // Save to local storage
+      window.localStorage.setItem(key, JSON.stringify(newValue));
+
+      // Save state
+      setStoredValue(newValue);
+
+      // We dispatch a custom event so every useLocalStorage hook are notified
+      window.dispatchEvent(new Event("local-storage"));
+    } catch (error) {
+      console.warn(`Error setting localStorage key “${key}”:`, error);
     }
   });
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    setStoredValue(readValue());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    const updateLocalStorage = () => {
-      // Browser ONLY dispatch storage events to other tabs, NOT current tab.
-      // We need to manually dispatch storage event for current tab
-      if (value !== undefined) {
-        const newValue = serializer(value);
-        const oldValue = rawValueRef.current;
-        rawValueRef.current = newValue;
-        window.localStorage.setItem(key, newValue);
-        window.dispatchEvent(
-          new StorageEvent("storage", {
-            storageArea: window.localStorage,
-            url: window.location.href,
-            key,
-            newValue,
-            oldValue,
-          })
-        );
-      } else {
-        window.localStorage.removeItem(key);
-        window.dispatchEvent(
-          new StorageEvent("storage", {
-            storageArea: window.localStorage,
-            url: window.location.href,
-            key,
-          })
-        );
+  const handleStorageChange = useCallback(
+    (event: StorageEvent | CustomEvent) => {
+      if ((event as StorageEvent)?.key && (event as StorageEvent).key !== key) {
+        return;
       }
-    };
+      setStoredValue(readValue());
+    },
+    [key, readValue]
+  );
 
-    try {
-      updateLocalStorage();
-    } catch (e) {
-      logger(e);
-    }
-  }, [value]);
+  // this only works for other documents, not the current one
+  useEventListener("storage", handleStorageChange);
 
-  useEffect(() => {
-    if (!syncData) return;
+  // this is a custom event, triggered in writeValueToLocalStorage
+  // See: useLocalStorage()
+  useEventListener("local-storage", handleStorageChange);
 
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key !== key || e.storageArea !== window.localStorage) return;
-
-      try {
-        if (e.newValue !== rawValueRef.current) {
-          rawValueRef.current = e.newValue;
-          setValue(e.newValue ? parser(e.newValue) : undefined);
-        }
-      } catch (e) {
-        logger(e);
-      }
-    };
-
-    if (typeof window === "undefined") return;
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, [key, syncData]);
-
-  return [value, setValue];
+  return [storedValue, setValue];
 }
 
 export default useLocalStorage;
+
+// A wrapper for "JSON.parse()"" to support "undefined" value
+function parseJSON<T>(value: string | null): T | undefined {
+  try {
+    return value === "undefined" ? undefined : JSON.parse(value ?? "");
+  } catch {
+    console.log("parsing error on", { value });
+    return undefined;
+  }
+}
