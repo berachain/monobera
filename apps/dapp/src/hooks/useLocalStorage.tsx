@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type Serializer<T> = (object: T | undefined) => string;

@@ -11,14 +11,14 @@ export type Wallet = {
 export const wallets: Wallet[] = [
   {
     name: "MetaMask",
-    icon: metamask,
+    icon: metamask as StaticImageData,
   },
   {
     name: "WalletConnect",
-    icon: walletconnect,
+    icon: walletconnect as StaticImageData,
   },
   {
     name: "Coinbase Wallet",
-    icon: coinbase,
+    icon: coinbase as StaticImageData,
   },
 ];
