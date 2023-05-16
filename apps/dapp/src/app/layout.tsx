@@ -2,6 +2,7 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 import { Toaster } from "@bera/ui/toaster";
 import { TooltipProvider } from "@bera/ui/tooltip";
 import { Analytics } from "@vercel/analytics/react";
@@ -45,7 +46,9 @@ export default function RootLayout(props: {
                     <div className="flex items-center h-16 max-w-4xl px-4 mx-auto justify-between">
                       <div className="items-center hidden mr-8 md:flex">
                         <span className="text-lg font-bold tracking-tight">
-                          <Link href={"/"}>bera Corp</Link>
+                          <Link href={"/"}>
+                            <Icons.logo className="w-12 h-12" />
+                          </Link>
                         </span>
                       </div>
                       <MobileDropdown />
