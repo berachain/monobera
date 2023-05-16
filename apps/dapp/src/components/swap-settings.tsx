@@ -9,7 +9,7 @@ import useLocalStorage from "~/hooks/useLocalStorage";
 import { LOCAL_STORAGE_KEYS, TRANSACTION_TYPES } from "~/utils/constants";
 
 export default function SwapSettings() {
-  const [slippageTolerance, setSlippaceTollerance] = useLocalStorage(
+  const [slippageTolerance, setSlippageTolerance] = useLocalStorage(
     LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE,
     0.5
   );
@@ -43,21 +43,21 @@ export default function SwapSettings() {
         <Toggle
           variant="outline"
           pressed={slippageTolerance === 0.5}
-          onPressedChange={() => setSlippaceTollerance(0.5)}
+          onPressedChange={() => setSlippageTolerance(0.5)}
         >
           0.5%
         </Toggle>
         <Toggle
           variant="outline"
           pressed={slippageTolerance === 1}
-          onPressedChange={() => setSlippaceTollerance(1)}
+          onPressedChange={() => setSlippageTolerance(1)}
         >
           1.0%
         </Toggle>
         <Toggle
           variant="outline"
           pressed={slippageTolerance === 2}
-          onPressedChange={() => setSlippaceTollerance(2)}
+          onPressedChange={() => setSlippageTolerance(2)}
         >
           2.0%
         </Toggle>
@@ -66,7 +66,9 @@ export default function SwapSettings() {
           className={cn(" text-right", isNotPreset() && "bg-accent")}
           placeholder="0.1"
           defaultValue={slippageTolerance}
-          onChange={(e) => setSlippaceTollerance(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSlippageTolerance(Number(e.target.value))
+          }
         />
       </div>
       <div className="space-y-2">
