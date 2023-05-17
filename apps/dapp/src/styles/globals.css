@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0deg 0% 100%;
+    --background: 24deg 26% 96%;
     --foreground: 222.2deg 47.4% 11.2%;
 
     --muted: 210deg 40% 96.1%;
@@ -19,8 +19,8 @@
     --card: 0deg 0% 100%;
     --card-foreground: 222.2deg 47.4% 11.2%;
 
-    --primary: 222.2deg 47.4% 11.2%;
-    --primary-foreground: 210deg 40% 98%;
+    --primary: 26deg 33% 81%;
+    --primary-foreground: 26deg 58% 25%;
 
     --secondary: 210deg 40% 96.1%;
     --secondary-foreground: 222.2deg 47.4% 11.2%;
@@ -37,7 +37,7 @@
   }
 
   .dark {
-    --background: 224 71% 4%;
+    --background: 223deg 27% 13%;
     --foreground: 213 31% 91%;
 
     --muted: 223 47% 11%;
@@ -84,4 +84,16 @@
 .apexcharts-tooltip {
   background: #f3f3f3;
   color: black;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
