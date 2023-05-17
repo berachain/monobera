@@ -1,10 +1,5 @@
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Icons } from "@bera/ui/icons";
-
-const ThemeToggle = dynamic(() => import("~/components/theme-toggle"), {
-  ssr: true,
-});
 
 export function SiteFooter() {
   return (
@@ -14,7 +9,6 @@ export function SiteFooter() {
           <Link href="/" className="flex items-center text-lg font-medium">
             <Icons.logo className="h-12 w-12" />
           </Link>
-          <ThemeToggle />
         </div>
       </div>
     </footer>
