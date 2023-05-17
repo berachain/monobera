@@ -5,9 +5,9 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Switch } from "@bera/ui/switch";
 import { Toggle } from "@bera/ui/toggle";
+import { useLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS, TRANSACTION_TYPES } from "~/utils/constants";
-import useLocalStorage from "~/hooks/useLocalStorage";
 
 export default function SwapSettings() {
   const [slippageTolerance, setSlippageTolerance] = useLocalStorage(

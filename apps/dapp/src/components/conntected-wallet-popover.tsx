@@ -3,10 +3,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
+import { useLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS, WALLET_ADDRESS } from "~/utils/constants";
 import { truncateWalletAddress } from "~/utils/truncateWalletAddress";
-import useLocalStorage from "~/hooks/useLocalStorage";
 import SwapSettings from "./swap-settings";
 
 export default function ConnectedWalletPopover() {

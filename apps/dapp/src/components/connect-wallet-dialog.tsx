@@ -8,10 +8,10 @@ import {
   DialogTitle,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { useLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS, WALLET_ADDRESS } from "~/utils/constants";
 import { wallets } from "~/assets/wallets";
-import useLocalStorage from "~/hooks/useLocalStorage";
 
 export default function ConnectWalletDialog() {
   const [open, setOpen] = React.useState(false);
