@@ -61,7 +61,6 @@ const LineChart: React.FC<LineChartProps> = ({ chartData, pool }) => {
   const [selectedXIndex, setSelectedXIndex] = useState<number>(23);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDataPointHover = (event: any, chartContext: any, config: any) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const selectedXIndex: number = config.dataPointIndex as number;
     if (selectedXIndex === -1) {
       setSelectedXIndex(23);

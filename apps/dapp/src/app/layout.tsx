@@ -27,7 +27,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="relative flex min-h-screen flex-col">
+            <div className="relative flex min-h-screen flex-col overflow-hidden">
               <div className="flex-1">
                 <Header />
                 <main className="container w-full pt-40">{props.children}</main>
