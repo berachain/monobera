@@ -31,13 +31,13 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <div className="flex-1">
                 <Header />
                 <main className="container w-full pt-40">{props.children}</main>
+                <Toaster />
               </div>
               <SiteFooter />
             </div>
             <TailwindIndicator />
           </ThemeProvider>
           <Analytics />
-          <Toaster />
         </body>
       </html>
     </>
