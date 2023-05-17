@@ -5,6 +5,7 @@ import { defineConfig, type Options } from "tsup";
 // and just have esbuild keep the directives so that components with
 // the directive stays a client component and the rest is server...
 const client = [
+  "./src/accordion.tsx",
   "./src/avatar.tsx",
   "./src/calendar.tsx",
   "./src/command.tsx",
@@ -13,6 +14,7 @@ const client = [
   "./src/input.tsx",
   "./src/label.tsx",
   "./src/popover.tsx",
+  "./src/progress.tsx",
   "./src/scroll-area.tsx",
   "./src/select.tsx",
   "./src/sheet.tsx",

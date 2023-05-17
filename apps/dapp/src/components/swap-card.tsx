@@ -27,6 +27,8 @@ export function SwapCard({
 }: Props) {
   const [open, setOpen] = React.useState(false);
   const [choosingFrom, setChoosingFrom] = React.useState(false);
+  const [fromAmount, setFromAmount] = React.useState(0);
+  const [toAmount, setToAmount] = React.useState(0);
   return (
     <>
       <Card>
@@ -58,9 +60,16 @@ export function SwapCard({
                   <Icons.chevronDown className="h-4 w-4" />
                 </Button>
                 <Input
-                  type="text"
+                  type="number"
+                  step="any"
+                  min="0"
                   placeholder="0.0"
                   className="px-5 py-8 text-right text-lg"
+                  value={fromAmount > 0 ? fromAmount : ""}
+                  onChange={(e) => {
+                    setFromAmount(Number(e.target.value));
+                    setToAmount(Number(e.target.value) * 2);
+                  }}
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -97,9 +106,16 @@ export function SwapCard({
                   <Icons.chevronDown className="h-4 w-4" />
                 </Button>
                 <Input
-                  type="text"
+                  type="number"
+                  step="any"
+                  min="0"
                   placeholder="0.0"
                   className="px-5 py-8 text-right text-lg"
+                  value={toAmount > 0 ? toAmount : ""}
+                  onChange={(e) => {
+                    setToAmount(Number(e.target.value));
+                    setFromAmount(Number(e.target.value) / 2);
+                  }}
                 />
               </div>
               <PreviewDialog />

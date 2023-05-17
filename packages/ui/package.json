@@ -11,11 +11,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@radix-ui/react-accordion": "^1.1.1",
     "@radix-ui/react-avatar": "^1.0.2",
     "@radix-ui/react-dialog": "^1.0.3",
     "@radix-ui/react-dropdown-menu": "^2.0.4",
     "@radix-ui/react-label": "^2.0.1",
     "@radix-ui/react-popover": "^1.0.5",
+    "@radix-ui/react-progress": "^1.0.2",
     "@radix-ui/react-scroll-area": "^1.0.3",
     "@radix-ui/react-select": "^1.2.1",
     "@radix-ui/react-switch": "^1.0.2",
@@ -59,6 +61,10 @@
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
     },
+    "./accordion": {
+      "import": "./dist/accordion.mjs",
+      "types": "./dist/accordion.d.ts"
+    },
     "./avatar": {
       "import": "./dist/avatar.mjs",
       "types": "./dist/avatar.d.ts"
@@ -90,6 +96,10 @@
     "./popover": {
       "import": "./dist/popover.mjs",
       "types": "./dist/popover.d.ts"
+    },
+    "./progress": {
+      "import": "./dist/progress.mjs",
+      "types": "./dist/progress.d.ts"
     },
     "./scroll-area": {
       "import": "./dist/scroll-area.mjs",
@@ -208,6 +218,12 @@
       ],
       "toggle": [
         "dist/toggle.d.ts"
+      ],
+      "progress": [
+        "dist/progress.d.ts"
+      ],
+      "accordion": [
+        "dist/accordion.d.ts"
       ]
     }
   }
