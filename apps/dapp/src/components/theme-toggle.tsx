@@ -27,12 +27,12 @@ export default function ThemeToggle(props: {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="ghost"
+          variant="secondary"
           size="sm"
           className="gap-1 px-2 text-lg font-semibold md:text-base"
         >
           {triggerIcon}
-          <span className="capitalize">{theme}</span>
+
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
