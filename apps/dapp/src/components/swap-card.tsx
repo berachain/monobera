@@ -84,7 +84,6 @@ export function SwapCard({
                 >
                   <Icons.swap className="h-8 w-8" />
                 </Button>
-                <div className="h-0.5 w-full bg-slate-400" />
               </div>
               <div className="relative">
                 <Button
