@@ -1,86 +1,120 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import Balancer from "react-wrap-balancer";
 
 import { getCurrentDate } from "~/utils/getCurrentDate";
-import { ctaFeatures } from "~/app/config";
+import { ctaFeatures, partnerships } from "~/app/config";
 
 export const runtime = "edge";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center">
-      <div className="z-10 min-h-[50vh] w-full max-w-4xl px-5 xl:px-0">
-        {/* <a
-          href="https://twitter.com/steventey/status/1613928948915920896"
-          target="_blank"
-          rel="noreferrer"
-          className="mx-auto mb-5 flex max-w-fit animate-fade-up items-center justify-center space-x-2 overflow-hidden rounded-full bg-sky-100 px-7 py-2 transition-colors hover:bg-sky-200"
-        >
-          <Icons.twitter className="h-5 w-5 text-sky-500" />
-          <p className="text-sm font-semibold text-sky-500">
-            Introducing bera Corp
-          </p>
-        </a> */}
-        <h1
-          className="font-display animate-fade-up bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-center text-4xl font-bold tracking-[-0.02em] text-transparent opacity-0 drop-shadow-sm md:text-7xl/[5rem]"
-          style={{ animationDelay: "0.20s", animationFillMode: "forwards" }}
-        >
-          <Balancer>Bera Dex</Balancer>
-        </h1>
-        <p
-          className="mt-6 animate-fade-up text-center text-muted-foreground/80 opacity-0 md:text-xl"
-          style={{ animationDelay: "0.30s", animationFillMode: "forwards" }}
-        >
-          <Balancer>
-            Bera Dex is the liquidity engine of berachain its a good project bls
-            buy
-          </Balancer>
-        </p>
-        <div className="my-16 flex w-full items-center justify-center gap-5">
-          <Button>Explore Pools</Button>
-          <Button variant={"outline"}>Start Building</Button>
-        </div>
-
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {ctaFeatures.map((feature) => (
-            <Link
-              key={feature.title}
-              href={{
-                pathname: feature.href,
-              }}
+    <>
+      <div className="home-background absolute bottom-0 left-0 right-0 top-0 bg-[url('/light-bera.png')] bg-contain bg-no-repeat dark:bg-[url('/dark-bera.png')] 2xl:bg-cover" />
+      <div className="relative z-10 flex flex-col items-center justify-center bg-transparent">
+        <div className="min-h-[50vh] w-full max-w-4xl px-5 xl:px-0 ">
+          <section className="min-h-[50vh]">
+            <h1
+              className="font-display animate-fade-up bg-clip-text text-center text-4xl font-bold tracking-[-0.02em] opacity-0 drop-shadow-sm md:text-7xl/[5rem]"
+              style={{ animationDelay: "0.20s", animationFillMode: "forwards" }}
             >
-              <Card>
-                <CardHeader>
-                  <div className="h-20 w-full bg-red-500"></div>
-                </CardHeader>
-                <CardContent className="flex justify-center">
-                  <CardTitle>{feature.title}</CardTitle>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-        <div className="my-16 flex w-full flex-col items-center justify-center">
-          <h1 className="text-6xl font-bold">Bera Dex Stats</h1>
-          <p className="text-md">As of {getCurrentDate()}</p>
-          <div className="my-16 flex w-full items-center justify-center gap-5">
-            <div className="flex w-full flex-col items-center justify-center gap-2">
-              <h1 className="text-md font-bold">Total Volume</h1>
-              <p className="text-6xl font-bold">$302m</p>
+              <Balancer>Bera Dex</Balancer>
+            </h1>
+            <div className="my-6 flex w-full items-center justify-center gap-5">
+              <Button variant={"secondary"}>Explore Pools</Button>
+              <Button variant={"outline"}>Start Building</Button>
             </div>
-            <div className="flex w-full flex-col items-center justify-center gap-2">
-              <h1 className="text-md font-bold">Total Pools</h1>
-              <p className="text-6xl font-bold">23.0k</p>
+
+            <div className="mt-40 flex w-full flex-col items-center justify-center">
+              <h1 className="text-4xl font-bold">Bera Dex Stats</h1>
+              <p className="text-sm text-primary-foreground">
+                As of {getCurrentDate()}
+              </p>
+              <div className="my-16 flex w-full items-center justify-center gap-5">
+                <div className="flex w-full flex-col items-center justify-center gap-2">
+                  <h1 className="text-sm font-bold text-primary-foreground">
+                    Total Volume
+                  </h1>
+                  <p className="text-4xl font-bold">$302m</p>
+                </div>
+                <div className="flex w-full flex-col items-center justify-center gap-2">
+                  <h1 className="text-sm font-bold text-primary-foreground">
+                    Total Pools
+                  </h1>
+                  <p className="text-4xl font-bold">23.0k</p>
+                </div>
+                <div className="flex w-full flex-col items-center justify-center gap-2">
+                  <h1 className="text-sm font-bold text-primary-foreground">
+                    Total Liquidity
+                  </h1>
+                  <p className="text-4xl font-bold">$1.32b</p>
+                </div>
+              </div>
             </div>
-            <div className="flex w-full flex-col items-center justify-center gap-2">
-              <h1 className="text-md font-bold">Total Liquidity</h1>
-              <p className="text-6xl font-bold">$1.32b</p>
+          </section>
+
+          <div className="grid grid-cols-1 md:grid-cols-3">
+            {ctaFeatures.map((feature) => (
+              <Link
+                key={feature.title}
+                href={{
+                  pathname: feature.href,
+                }}
+              >
+                <Card className="border-none bg-transparent shadow-none">
+                  <CardHeader>
+                    <CardTitle className="flex justify-center">
+                      <span className="text-primary-foreground">
+                        {feature.title}
+                      </span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex justify-center p-0">
+                    <Image
+                      width={324}
+                      height={324}
+                      src={feature.logoURI}
+                      alt={feature.title}
+                      className="rounded-full"
+                    />
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+
+          <div className="my-24 flex w-full flex-col items-center justify-center">
+            <h1 className="text-4xl font-bold">Partners</h1>
+            <span className="text-md">ooooga booooooga</span>
+            <div className="mt-8 grid w-full grid-cols-2 gap-5 lg:grid-cols-3">
+              {partnerships.map((feature) => (
+                <Link
+                  key={feature.title}
+                  href={{
+                    pathname: feature.href,
+                  }}
+                >
+                  <Card className="hover:border-primary-foreground">
+                    <CardContent className="flex flex-col items-center justify-center ">
+                      <div className="r-hex">
+                        <div className="r-hex-inner"></div>
+                      </div>
+                      <p className="font-bold text-foreground">
+                        {feature.title}
+                      </p>
+                      <p className="text-center text-primary-foreground">
+                        {feature.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

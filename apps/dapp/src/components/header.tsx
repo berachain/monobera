@@ -1,10 +1,15 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Icons } from "@bera/ui/icons";
 
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
 import { Wallet } from "./wallet";
+
+const ThemeToggle = dynamic(() => import("~/components/theme-toggle"), {
+  ssr: true,
+});
 
 export function Header() {
   return (
@@ -19,7 +24,10 @@ export function Header() {
         </div>
         <MobileDropdown />
         <MainNav />
-        <Wallet />
+        <div className="flex gap-5">
+          <ThemeToggle />
+          <Wallet />
+        </div>
       </div>
     </nav>
   );
