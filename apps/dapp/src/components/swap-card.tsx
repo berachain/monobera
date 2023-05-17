@@ -118,7 +118,12 @@ export function SwapCard({
                   }}
                 />
               </div>
-              <PreviewDialog />
+              <PreviewDialog
+                toToken={selectedTo}
+                fromToken={selectedFrom}
+                fromAmount={fromAmount}
+                toAmount={toAmount}
+              />
             </div>
           </div>
           <div className="flex items-center space-x-2">
