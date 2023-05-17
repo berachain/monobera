@@ -63,10 +63,17 @@ export default function SwapSettings() {
           2.0%
         </Toggle>
         <Input
-          type="text"
-          className={cn(" text-right", isNotPreset() && "bg-accent")}
+          type="number"
+          step="any"
+          min="0"
+          className={cn(
+            " text-right",
+            isNotPreset() && "border-primary-foreground",
+          )}
           placeholder="0.1"
-          defaultValue={slippageTolerance}
+          defaultValue={
+            isNotPreset() && slippageTolerance > 0 ? slippageTolerance : ""
+          }
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setSlippageTolerance(Number(e.target.value))
           }
