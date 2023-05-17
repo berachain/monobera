@@ -1,14 +1,10 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@bera/ui/card";
-import { Icons } from "@bera/ui/icons";
+import Link from "next/link";
+import { Button } from "@bera/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import Balancer from "react-wrap-balancer";
 
-import { marketingFeatures } from "~/app/config";
+import { getCurrentDate } from "~/utils/getCurrentDate";
+import { ctaFeatures } from "~/app/config";
 
 export const runtime = "edge";
 
@@ -16,7 +12,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="z-10 min-h-[50vh] w-full max-w-4xl px-5 xl:px-0">
-        <a
+        {/* <a
           href="https://twitter.com/steventey/status/1613928948915920896"
           target="_blank"
           rel="noreferrer"
@@ -26,40 +22,63 @@ export default function Home() {
           <p className="text-sm font-semibold text-sky-500">
             Introducing bera Corp
           </p>
-        </a>
+        </a> */}
         <h1
           className="font-display animate-fade-up bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-center text-4xl font-bold tracking-[-0.02em] text-transparent opacity-0 drop-shadow-sm md:text-7xl/[5rem]"
           style={{ animationDelay: "0.20s", animationFillMode: "forwards" }}
         >
-          <Balancer>Your all-in-one, enterprise ready starting point</Balancer>
+          <Balancer>Bera Dex</Balancer>
         </h1>
         <p
           className="mt-6 animate-fade-up text-center text-muted-foreground/80 opacity-0 md:text-xl"
           style={{ animationDelay: "0.30s", animationFillMode: "forwards" }}
         >
           <Balancer>
-            Acme Corp is a Next.js starter kit that includes everything you need
-            to build a modern web application. Mobile application preconfigured,
-            ready to go.
+            Bera Dex is the liquidity engine of berachain its a good project bls
+            buy
           </Balancer>
         </p>
-      </div>
-      <div className="my-16 w-full max-w-screen-lg animate-fade-up gap-5 border-t p-5 xl:px-0">
-        <h2 className="py-8 text-center text-3xl font-bold md:text-4xl">
-          What&apos;s included?
-        </h2>
+        <div className="my-16 flex w-full items-center justify-center gap-5">
+          <Button>Explore Pools</Button>
+          <Button variant={"outline"}>Start Building</Button>
+        </div>
+
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {marketingFeatures.map((feature) => (
-            <Card key={feature.title} className={feature.extraClassNames}>
-              <CardHeader>{feature.icon}</CardHeader>
-              <CardContent>
-                <CardTitle>{feature.title}</CardTitle>
-                <CardDescription className="mt-2">
-                  {feature.body}
-                </CardDescription>
-              </CardContent>
-            </Card>
+          {ctaFeatures.map((feature) => (
+            <Link
+              key={feature.title}
+              href={{
+                pathname: feature.href,
+              }}
+            >
+              <Card>
+                <CardHeader>
+                  <div className="h-20 w-full bg-red-500"></div>
+                </CardHeader>
+                <CardContent className="flex justify-center">
+                  <CardTitle>{feature.title}</CardTitle>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
+        </div>
+        <div className="my-16 flex w-full flex-col items-center justify-center">
+          <h1 className="text-6xl font-bold">Bera Dex Stats</h1>
+          <p className="text-md">As of {getCurrentDate()}</p>
+          <div className="my-16 flex w-full items-center justify-center gap-5">
+            <div className="flex w-full flex-col items-center justify-center gap-2">
+              <h1 className="text-md font-bold">Total Volume</h1>
+              <p className="text-6xl font-bold">$302m</p>
+            </div>
+            <div className="flex w-full flex-col items-center justify-center gap-2">
+              <h1 className="text-md font-bold">Total Pools</h1>
+              <p className="text-6xl font-bold">23.0k</p>
+            </div>
+            <div className="flex w-full flex-col items-center justify-center gap-2">
+              <h1 className="text-md font-bold">Total Liquidity</h1>
+              <p className="text-6xl font-bold">$1.32b</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
