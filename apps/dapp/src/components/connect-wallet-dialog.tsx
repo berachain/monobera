@@ -25,7 +25,11 @@ export default function ConnectWalletDialog() {
   );
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="w-48">
+      <Button
+        onClick={() => setOpen(true)}
+        className="w-48"
+        variant="secondary"
+      >
         <Icons.wallet className="mr-2 h-6 w-6" />
         Connect wallet
       </Button>

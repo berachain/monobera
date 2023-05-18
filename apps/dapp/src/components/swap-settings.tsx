@@ -80,10 +80,6 @@ export default function SwapSettings() {
       <div className="space-y-2">
         <h4 className="flex items-center gap-1 font-medium leading-none">
           Transaction type
-          <Button variant="ghost" className="h-5 w-5 rounded-full p-0">
-            <Icons.tooltip className="h-3 w-3 text-muted-foreground" />
-            <span className="sr-only">Help</span>
-          </Button>
         </h4>
       </div>
       <div className="grid grid-cols-3 gap-1">

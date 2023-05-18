@@ -23,9 +23,9 @@ export default function ConnectedWalletPopover() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant={"secondary"}
           className="w-48"
           onClick={() => setOpen(true)}
+          variant="secondary"
         >
           <Avatar className="mr-2 h-6 w-6">
             <AvatarImage src="https://github.com/wallet.png" />
@@ -38,7 +38,7 @@ export default function ConnectedWalletPopover() {
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold leading-none">Account</h3>
           <Button
-            variant="secondary"
+            variant="outline"
             size="sm"
             onClick={() => {
               setWalletAddress(null);
@@ -63,9 +63,7 @@ export default function ConnectedWalletPopover() {
                 <Icons.external className="h-3 w-3" />
               </Button>
             </p>
-            <p className="text-sm leading-none text-gray-500">
-              {walletNetwork}
-            </p>
+            <p className="text-sm leading-none ">{walletNetwork}</p>
           </div>
         </div>
         <SwapSettings />

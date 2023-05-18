@@ -96,7 +96,7 @@ export default function Home() {
                     pathname: feature.href,
                   }}
                 >
-                  <Card className="hover:border-primary-foreground">
+                  <Card className="hover:border-border">
                     <CardContent className="flex flex-col items-center justify-center ">
                       <div className="r-hex">
                         <div className="r-hex-inner"></div>
