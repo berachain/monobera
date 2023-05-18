@@ -84,8 +84,16 @@ export default function SwapInput({
                 You&apos;re exceeding your balance
               </p>
             ) : (
-              <div className="flex justify-between">
-                <p>Balance: {tokenBalance}</p>
+              <div className="flex items-center justify-between">
+                <p>
+                  <Button
+                    variant="link"
+                    className="text-md text-default h-8 p-0"
+                    onClick={() => setAmount(tokenBalance || 0)}
+                  >
+                    Balance: {tokenBalance}
+                  </Button>
+                </p>
                 <p>${tokenBalance && tokenBalance * 0.69}</p>
               </div>
             )}
