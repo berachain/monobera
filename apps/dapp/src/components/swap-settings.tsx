@@ -1,7 +1,5 @@
 import React from "react";
 import { cn } from "@bera/ui";
-import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Switch } from "@bera/ui/switch";
 import { Toggle } from "@bera/ui/toggle";
