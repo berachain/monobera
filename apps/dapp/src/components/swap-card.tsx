@@ -1,18 +1,12 @@
 import React from "react";
-import Image from "next/image";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader } from "@bera/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
-import { Label } from "@bera/ui/label";
-import { Progress } from "@bera/ui/progress";
-import { Switch } from "@bera/ui/switch";
-import { useReadLocalStorage } from "usehooks-ts";
 
-import { BERA_BALANCE, LOCAL_STORAGE_KEYS } from "~/utils/constants";
 import { type Token } from "~/assets/tokens";
 import PreviewDialog from "./preview-dialog";
 import { SettingsPopover } from "./settings-popover";
+import SwapInput from "./swap-input";
 import TokenDialog from "./token-dialog";
 
 type Props = {
@@ -28,119 +22,66 @@ export function SwapCard({
   setSelectedFrom,
   setSelectedTo,
 }: Props) {
-  const [open, setOpen] = React.useState(false);
   const [choosingFrom, setChoosingFrom] = React.useState(false);
   const [fromAmount, setFromAmount] = React.useState(0);
   const [toAmount, setToAmount] = React.useState(0);
-  const walletAddress = useReadLocalStorage(LOCAL_STORAGE_KEYS.WALLET_ADDRESS);
+  const [open, setOpen] = React.useState(false);
   return (
     <>
       <Card>
         <CardHeader>
-          <div className="center flex justify-between">
+          <CardTitle className="center flex justify-between">
             Swap <SettingsPopover />
-          </div>
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="py-4">
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-row flex-wrap justify-between gap-3 rounded-lg border border-primary p-3">
-                <Button
-                  className="flex shrink-0 gap-2"
-                  onClick={() => {
-                    setOpen(true);
-                    setChoosingFrom(true);
-                  }}
-                >
-                  <Image
-                    width={24}
-                    height={24}
-                    src={selectedFrom.logoURI}
-                    alt={selectedFrom.name}
-                    className="rounded-full"
-                  />
-                  {selectedFrom.symbol}
-                  <Icons.chevronDown className="h-4 w-4" />
-                </Button>
-                <Input
-                  type="number"
-                  step="any"
-                  min="0"
-                  placeholder="0.0"
-                  className="w-100 grow border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0"
-                  value={fromAmount > 0 ? fromAmount : ""}
-                  onChange={(e) => {
-                    setFromAmount(Number(e.target.value));
-                    setToAmount(Number(e.target.value) * 2);
-                  }}
-                />
-                {walletAddress && fromAmount > 0 ? (
-                  <div className="w-full">
-                    <div className="flex justify-between">
-                      <p>Balance: {BERA_BALANCE}</p>
-                      <p>$420.69</p>
-                    </div>
+          <div className="mb-4 flex flex-col gap-4">
+            <SwapInput
+              selected={selectedFrom}
+              setChoosing={setChoosingFrom}
+              amount={fromAmount}
+              setAmount={(amount) => {
+                setFromAmount(Number(amount));
+                setToAmount(Number(amount) * 2);
+              }}
+              setOpen={setOpen}
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-10 w-10 rounded-full hover:bg-transparent"
+              onClick={() => {
+                setSelectedFrom(selectedTo);
+                setSelectedTo(selectedFrom);
+              }}
+            >
+              <Icons.swap className="h-8 w-8" />
+            </Button>
 
-                    <Progress value={59} className="h-2" />
-                  </div>
-                ) : null}
-              </div>
+            <SwapInput
+              selected={selectedTo}
+              setChoosing={() => setChoosingFrom(false)}
+              amount={toAmount}
+              setAmount={(amount) => {
+                setToAmount(Number(amount));
+                setFromAmount(Number(amount) / 2);
+              }}
+              setOpen={setOpen}
+              hideBalance
+            />
 
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-10 w-10 rounded-full"
-                onClick={() => {
-                  setSelectedFrom(selectedTo);
-                  setSelectedTo(selectedFrom);
-                }}
-              >
-                <Icons.swap className="h-8 w-8" />
-              </Button>
-
-              <div className="relative">
-                <Button
-                  className="absolute left-3 top-3 flex gap-2"
-                  onClick={() => {
-                    setOpen(true);
-                    setChoosingFrom(false);
-                  }}
-                >
-                  <Image
-                    width={24}
-                    height={24}
-                    src={selectedTo.logoURI}
-                    alt={selectedTo.name}
-                    className="rounded-full"
-                  />
-                  {selectedTo.symbol}
-                  <Icons.chevronDown className="h-4 w-4" />
-                </Button>
-                <Input
-                  type="number"
-                  step="any"
-                  min="0"
-                  placeholder="0.0"
-                  className="px-5 py-8 text-right text-lg"
-                  value={toAmount > 0 ? toAmount : ""}
-                  onChange={(e) => {
-                    setToAmount(Number(e.target.value));
-                    setFromAmount(Number(e.target.value) / 2);
-                  }}
-                />
-              </div>
-              <PreviewDialog
-                toToken={selectedTo}
-                fromToken={selectedFrom}
-                fromAmount={fromAmount}
-                toAmount={toAmount}
-              />
-            </div>
+            <PreviewDialog
+              toToken={selectedTo}
+              fromToken={selectedFrom}
+              fromAmount={fromAmount}
+              toAmount={toAmount}
+            />
           </div>
-          <div className="flex items-center space-x-2">
+
+          {/* <div className="flex items-center space-x-2">
             <Switch id="gasless-mode" />
             <Label htmlFor="airplane-mode">Swap gasless by signature</Label>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
       <TokenDialog

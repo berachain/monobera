@@ -96,11 +96,20 @@ export default function Home() {
                     pathname: feature.href,
                   }}
                 >
-                  <Card className="hover:border-primary-foreground">
+                  <Card className="hover:border-border">
                     <CardContent className="flex flex-col items-center justify-center ">
-                      <div className="r-hex">
+                      {/* <div className="r-hex">
                         <div className="r-hex-inner"></div>
+                      </div> */}
+                      <div className="py-4">
+                        <Image
+                          width={150}
+                          height={150}
+                          src={feature.logoURI}
+                          alt={feature.title}
+                        />
                       </div>
+
                       <p className="font-bold text-foreground">
                         {feature.title}
                       </p>
