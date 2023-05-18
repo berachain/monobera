@@ -8,7 +8,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { ScrollArea } from "@bera/ui/scroll-area";
 
 import { navItems } from "~/app/config";
-import ThemeToggle from "./theme-toggle";
 
 export function MobileDropdown() {
   const [isOpen, setIsOpen] = React.useState(false);
