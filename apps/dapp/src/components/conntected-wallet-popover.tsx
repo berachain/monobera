@@ -38,7 +38,7 @@ export default function ConnectedWalletPopover() {
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold leading-none">Account</h3>
           <Button
-            variant="destructive"
+            variant="secondary"
             size="sm"
             onClick={() => {
               setWalletAddress(null);
