@@ -67,7 +67,7 @@ export function SwapCard({
                   step="any"
                   min="0"
                   placeholder="0.0"
-                  className="w-100 grow border-0 p-0 text-right text-lg outline-none ring-offset-0 focus-visible:ring-0"
+                  className="w-100 grow border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0"
                   value={fromAmount > 0 ? fromAmount : ""}
                   onChange={(e) => {
                     setFromAmount(Number(e.target.value));
