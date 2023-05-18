@@ -153,7 +153,7 @@ const LineChart: React.FC<LineChartProps> = ({ chartData, pool }) => {
           value2={chartData.data[0] || 1}
         />
       )}
-      <Chart options={options} series={[chartData]} type="line" height={75} />
+      <Chart options={options} series={[chartData]} type="line" height={100} />
     </>
   );
 };

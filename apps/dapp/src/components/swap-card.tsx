@@ -5,8 +5,11 @@ import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Label } from "@bera/ui/label";
+import { Progress } from "@bera/ui/progress";
 import { Switch } from "@bera/ui/switch";
+import { useReadLocalStorage } from "usehooks-ts";
 
+import { BERA_BALANCE, LOCAL_STORAGE_KEYS } from "~/utils/constants";
 import { type Token } from "~/assets/tokens";
 import PreviewDialog from "./preview-dialog";
 import { SettingsPopover } from "./settings-popover";
@@ -29,6 +32,7 @@ export function SwapCard({
   const [choosingFrom, setChoosingFrom] = React.useState(false);
   const [fromAmount, setFromAmount] = React.useState(0);
   const [toAmount, setToAmount] = React.useState(0);
+  const walletAddress = useReadLocalStorage(LOCAL_STORAGE_KEYS.WALLET_ADDRESS);
   return (
     <>
       <Card>
@@ -39,11 +43,10 @@ export function SwapCard({
         </CardHeader>
         <CardContent>
           <div className="py-4">
-            <div className="flex flex-col gap-2">
-              <div className="relative">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-row flex-wrap justify-between gap-3 rounded-lg border border-primary p-3">
                 <Button
-                  variant="secondary"
-                  className="absolute left-3 top-3 flex gap-2"
+                  className="flex shrink-0 gap-2"
                   onClick={() => {
                     setOpen(true);
                     setChoosingFrom(true);
@@ -64,30 +67,39 @@ export function SwapCard({
                   step="any"
                   min="0"
                   placeholder="0.0"
-                  className="px-5 py-8 text-right text-lg"
+                  className="w-100 grow border-0 p-0 text-right text-lg outline-none ring-offset-0 focus-visible:ring-0"
                   value={fromAmount > 0 ? fromAmount : ""}
                   onChange={(e) => {
                     setFromAmount(Number(e.target.value));
                     setToAmount(Number(e.target.value) * 2);
                   }}
                 />
+                {walletAddress && fromAmount > 0 ? (
+                  <div className="w-full">
+                    <div className="flex justify-between">
+                      <p>Balance: {BERA_BALANCE}</p>
+                      <p>$420.69</p>
+                    </div>
+
+                    <Progress value={59} className="h-2" />
+                  </div>
+                ) : null}
               </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-10 w-10 rounded-full"
-                  onClick={() => {
-                    setSelectedFrom(selectedTo);
-                    setSelectedTo(selectedFrom);
-                  }}
-                >
-                  <Icons.swap className="h-8 w-8" />
-                </Button>
-              </div>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-10 w-10 rounded-full"
+                onClick={() => {
+                  setSelectedFrom(selectedTo);
+                  setSelectedTo(selectedFrom);
+                }}
+              >
+                <Icons.swap className="h-8 w-8" />
+              </Button>
+
               <div className="relative">
                 <Button
-                  variant="secondary"
                   className="absolute left-3 top-3 flex gap-2"
                   onClick={() => {
                     setOpen(true);
