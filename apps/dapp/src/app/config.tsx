@@ -1,11 +1,18 @@
-import pool from "../assets/graphics/pool.png";
-import rewards from "../assets/graphics/rewards.png";
-import swap from "../assets/graphics/swap.png";
-
-export const siteConfig = {
-  github: "https://github.com/juliusmarminge/acme-corp",
-  twitter: "https://twitter.com/jullerino",
-};
+import pool from "~/assets/graphics/pool.png";
+import rewards from "~/assets/graphics/rewards.png";
+import swap from "~/assets/graphics/swap.png";
+import agora from "~/assets/partners/Agora.png";
+import gumball from "~/assets/partners/Gumball.png";
+import hallsOfOlympia from "~/assets/partners/HallsOfOlympia.png";
+import hiddenHand from "~/assets/partners/HiddenHand.png";
+import midas from "~/assets/partners/Midas.png";
+import olympus from "~/assets/partners/Olympus.png";
+import pickle from "~/assets/partners/Pickle.png";
+import pirex from "~/assets/partners/Pirex.png";
+import qidao from "~/assets/partners/QiDao.png";
+import redacted from "~/assets/partners/Redacted.png";
+import synapse from "~/assets/partners/Synapse.png";
+import y2k from "~/assets/partners/Y2K.png";
 
 export const navItems = [
   {
@@ -38,74 +45,74 @@ export const ctaFeatures = [
 
 export const partnerships = [
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: agora,
+    title: "Agora",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: gumball,
+    title: "Gumball",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: hallsOfOlympia,
+    title: "HallsOfOlympia",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: hiddenHand,
+    title: "HiddenHand",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: midas,
+    title: "Midas",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: olympus,
+    title: "Olympus",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: pickle,
+    title: "Pickle",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: pirex,
+    title: "Pirex",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: qidao,
+    title: "QiDao",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: redacted,
+    title: "Redacted",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: synapse,
+    title: "Synapse",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
   {
-    logoURI: pool,
-    title: "Pool",
+    logoURI: y2k,
+    title: "Y2K",
     href: "/pool",
     description: "Pool with other people to earn rewards",
   },
