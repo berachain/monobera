@@ -44,9 +44,6 @@ export function MobileDropdown() {
             </Link>
           ))}
         </ScrollArea>
-        <div className="border-t pt-4">
-          <ThemeToggle side="top" align="start" />
-        </div>
       </PopoverContent>
     </Popover>
   );
