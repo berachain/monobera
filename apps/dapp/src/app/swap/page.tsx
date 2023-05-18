@@ -21,9 +21,9 @@ export default function Swap() {
   const [selectedFrom, setSelectedFrom] = useState(honey);
   const [selectedTo, setSelectedTo] = useState(bera);
   return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-6">
-      <div className="col-span-1"></div>
-      <div className="col-span-3">
+    <div className="grid grid-cols-8 gap-5">
+      <div className="max-xl:hidden xl:col-span-2"></div>
+      <div className="col-span-8 lg:col-span-5 xl:col-span-4">
         <SwapCard
           selectedFrom={selectedFrom}
           setSelectedFrom={setSelectedFrom}
@@ -31,12 +31,12 @@ export default function Swap() {
           setSelectedTo={setSelectedTo}
         />
       </div>
-      <div className="col-span-2">
+      <div className="col-span-8 lg:col-span-3 xl:col-span-2">
         <Card>
           <CardContent className="p-4">
             <DynamicChart
               chartData={generateDataForPast24Hours()}
-              pool={"DAI/ETH"}
+              pool={`${selectedFrom.symbol}/${selectedTo.symbol}`}
             />
           </CardContent>
         </Card>
