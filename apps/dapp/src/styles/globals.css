@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 24deg 26% 96;
+    --background: 24deg 26% 96%;
     --foreground: 26deg 58% 25%;
 
     --muted: 210deg 40% 96.1%;
@@ -19,7 +19,7 @@
     --card: 0deg 0% 100%;
     --card-foreground: 222.2deg 47.4% 11.2%;
 
-    --primary: 	32deg 52% 90%;
+    --primary: 32deg 52% 90%;
     --primary-foreground: 27deg 33% 62%;
 
     --secondary: 0deg 0% 100%;
@@ -52,10 +52,10 @@
     --border: 216 34% 17%;
     --input: 216 34% 17%;
 
-    --card: 	224deg 24% 22%;
+    --card: 224deg 24% 22%;
     --card-foreground: 32deg 52% 90%;
 
-    --primary: 	15deg 9% 42%;
+    --primary: 15deg 9% 42%;
     --primary-foreground: 32deg 52% 90%;
 
     --secondary: 15deg 9% 42%;
@@ -102,24 +102,28 @@ input[type="number"] {
   overflow: hidden;
   display: inline-block;
   margin: 2em 0;
-  width: 10em; height: calc(17.32em / 2);
+  width: 10em;
+  height: calc(17.32em / 2);
   transform: rotate(-30deg) skewX(30deg);
-  border-radius: .5em;
+  border-radius: 0.5em;
 }
-.r-hex *, .r-hex *:before {
+.r-hex *,
+.r-hex *:before {
   display: block;
   overflow: hidden;
-  width: inherit; height: inherit;
+  width: inherit;
+  height: inherit;
   border-radius: inherit;
 }
 .r-hex-inner {
   transform: skewX(-30deg) rotate(60deg) skewX(30deg);
   cursor: pointer;
 }
-.r-hex:first-child .r-hex-inner:before, .r-hex-inner-2 {
+.r-hex:first-child .r-hex-inner:before,
+.r-hex-inner-2 {
   transform: skewX(-30deg) rotate(60deg) skewX(30deg);
-  background: #DECCBE;
-  content: '';
+  background: #deccbe;
+  content: "";
 }
 
 .home-background {
