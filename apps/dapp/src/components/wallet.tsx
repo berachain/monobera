@@ -3,17 +3,15 @@
 import React from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 
-import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
+import { LOCAL_STORAGE_KEYS, type Wallet } from "~/utils/constants";
 import ConnectWalletDialog from "./connect-wallet-dialog";
 import ConnectedWalletPopover from "./conntected-wallet-popover";
 
 export function Wallet() {
-  const walletAddress = useReadLocalStorage<string | null>(
-    LOCAL_STORAGE_KEYS.WALLET_ADDRESS,
-  );
+  const wallet = useReadLocalStorage<Wallet | null>(LOCAL_STORAGE_KEYS.WALLET);
   return (
     <div className="flex items-center">
-      {!walletAddress ? <ConnectWalletDialog /> : <ConnectedWalletPopover />}
+      {!wallet?.address ? <ConnectWalletDialog /> : <ConnectedWalletPopover />}
     </div>
   );
 }

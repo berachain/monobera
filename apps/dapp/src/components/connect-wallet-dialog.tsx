@@ -10,13 +10,13 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { useLocalStorage } from "usehooks-ts";
 
-import { LOCAL_STORAGE_KEYS, WALLET_ADDRESS } from "~/utils/constants";
+import { LOCAL_STORAGE_KEYS, WALLET, type Wallet } from "~/utils/constants";
 import { wallets } from "~/assets/wallets";
 
 export default function ConnectWalletDialog() {
   const [open, setOpen] = React.useState(false);
-  const [, setWalletAddress] = useLocalStorage<string | null>(
-    LOCAL_STORAGE_KEYS.WALLET_ADDRESS,
+  const [, setWalletAddress] = useLocalStorage<Wallet | null>(
+    LOCAL_STORAGE_KEYS.WALLET,
     null,
   );
   const [, setWaletNetwork] = useLocalStorage<string | null>(
@@ -45,7 +45,7 @@ export default function ConnectWalletDialog() {
                 variant="ghost"
                 className="flex justify-start"
                 onClick={() => {
-                  setWalletAddress(WALLET_ADDRESS);
+                  setWalletAddress(WALLET);
                   setWaletNetwork(wallet.name);
                   setOpen(false);
                 }}
