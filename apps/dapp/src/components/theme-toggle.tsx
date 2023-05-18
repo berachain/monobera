@@ -26,7 +26,10 @@ export default function ThemeToggle(props: {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="gap-1 px-2 text-lg font-semibold md:text-base">
+        <Button
+          className="gap-1 px-2 text-lg font-semibold md:text-base"
+          variant="secondary"
+        >
           {triggerIcon}
           <span className="sr-only">Toggle theme</span>
         </Button>

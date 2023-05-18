@@ -20,7 +20,7 @@ export default function BeraTooltip({ text }: { text: string }) {
             onMouseEnter={() => setTooltipOpen(true)}
             onMouseLeave={() => setTooltipOpen(false)}
           >
-            <Icons.tooltip className="h-3 w-3 text-muted-foreground" />
+            <Icons.tooltip className="h-3 w-3" />
             <span className="sr-only">Tooltip</span>
           </Button>
         </TooltipTrigger>
