@@ -76,7 +76,7 @@ export default function PreviewDialog({
                     <span className="text-sm font-medium">
                       {fromAmount} {fromToken.symbol}
                     </span>
-                    <span className="text-xs font-medium text-primary">
+                    <span className="text-xs font-medium text-backgroundSecondary">
                       $420,69.42
                     </span>
                   </div>
@@ -96,7 +96,7 @@ export default function PreviewDialog({
                     <span className="text-sm font-medium">
                       {toAmount} {toToken.symbol}
                     </span>
-                    <span className="text-xs font-medium text-primary">
+                    <span className="text-xs font-medium text-backgroundSecondary">
                       $69,420.69
                     </span>
                   </div>
