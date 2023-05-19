@@ -1,4 +1,5 @@
 packages:
   - apps/dapp
+  - apps/bgtstation
   - packages/config/*
   - packages/ui
