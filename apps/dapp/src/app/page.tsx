@@ -12,10 +12,10 @@ export const runtime = "edge";
 export default function Home() {
   return (
     <>
-      <div className="home-background absolute bottom-0 left-0 right-0 top-0 bg-[url('/light-bera.png')] bg-contain bg-no-repeat dark:bg-[url('/dark-bera.png')] 2xl:bg-cover" />
+      <div className="home-background absolute bottom-0 left-0 right-0 top-0 bg-[url('/light-bera.png')] bg-contain bg-top bg-no-repeat dark:bg-[url('/dark-bera.png')] 2xl:bg-cover" />
       <div className="relative z-10 flex flex-col items-center justify-center bg-transparent">
-        <div className="min-h-[50vh] w-full max-w-4xl px-5 xl:px-0 ">
-          <section className="min-h-[50vh]">
+        <div className="w-full max-w-4xl px-5 xl:px-0 ">
+          <section className="md:min-h-[700px] xl:min-h-[900px]">
             <h1
               className="font-display animate-fade-up bg-clip-text text-center text-4xl font-bold tracking-[-0.02em] opacity-0 drop-shadow-sm md:text-7xl/[5rem]"
               style={{ animationDelay: "0.20s", animationFillMode: "forwards" }}
@@ -27,7 +27,7 @@ export default function Home() {
               <Button variant={"outline"}>Start Building</Button>
             </div>
 
-            <div className="mt-40 flex w-full flex-col items-center justify-center">
+            <div className="mt-32 flex w-full flex-col items-center justify-center">
               <h1 className="text-4xl font-bold">Bera Dex Stats</h1>
               <p className="text-sm text-primary-foreground">
                 As of {getCurrentDate()}
@@ -55,7 +55,7 @@ export default function Home() {
             </div>
           </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             {ctaFeatures.map((feature) => (
               <Link
                 key={feature.title}
@@ -63,7 +63,7 @@ export default function Home() {
                   pathname: feature.href,
                 }}
               >
-                <Card className="border-none bg-transparent shadow-none">
+                <Card className="border border-transparent shadow-none hover:border-border">
                   <CardHeader>
                     <CardTitle className="flex justify-center">
                       <span className="text-primary-foreground">
@@ -96,15 +96,15 @@ export default function Home() {
                     pathname: feature.href,
                   }}
                 >
-                  <Card className="hover:border-border">
+                  <Card className="border border-transparent bg-transparent shadow-none hover:border-border">
                     <CardContent className="flex flex-col items-center justify-center ">
                       {/* <div className="r-hex">
                         <div className="r-hex-inner"></div>
                       </div> */}
                       <div className="py-4">
                         <Image
-                          width={150}
-                          height={150}
+                          width={200}
+                          height={200}
                           src={feature.logoURI}
                           alt={feature.title}
                         />
