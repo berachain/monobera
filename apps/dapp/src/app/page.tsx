@@ -23,30 +23,30 @@ export default function Home() {
               <Balancer>Bera Dex</Balancer>
             </h1>
             <div className="my-6 flex w-full items-center justify-center gap-5">
-              <Button variant={"secondary"}>Explore Pools</Button>
+              <Button variant={"outline"}>Explore Pools</Button>
               <Button variant={"outline"}>Start Building</Button>
             </div>
 
             <div className="mt-32 flex w-full flex-col items-center justify-center">
               <h1 className="text-4xl font-bold">Bera Dex Stats</h1>
-              <p className="text-sm text-primary-foreground">
+              <p className="text-sm text-secondary-foreground">
                 As of {getCurrentDate()}
               </p>
               <div className="my-16 flex w-full items-center justify-center gap-5">
                 <div className="flex w-full flex-col items-center justify-center gap-2">
-                  <h1 className="text-sm font-bold text-primary-foreground">
+                  <h1 className="text-sm font-bold text-secondary-foreground">
                     Total Volume
                   </h1>
                   <p className="text-4xl font-bold">$302m</p>
                 </div>
                 <div className="flex w-full flex-col items-center justify-center gap-2">
-                  <h1 className="text-sm font-bold text-primary-foreground">
+                  <h1 className="text-sm font-bold text-secondary-foreground">
                     Total Pools
                   </h1>
                   <p className="text-4xl font-bold">23.0k</p>
                 </div>
                 <div className="flex w-full flex-col items-center justify-center gap-2">
-                  <h1 className="text-sm font-bold text-primary-foreground">
+                  <h1 className="text-sm font-bold text-secondary-foreground">
                     Total Liquidity
                   </h1>
                   <p className="text-4xl font-bold">$1.32b</p>
@@ -64,14 +64,7 @@ export default function Home() {
                 }}
               >
                 <Card className="border border-transparent shadow-none hover:border-border">
-                  <CardHeader>
-                    <CardTitle className="flex justify-center">
-                      <span className="text-primary-foreground">
-                        {feature.title}
-                      </span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex justify-center p-0">
+                  <CardContent className="flex flex-col items-center justify-center">
                     <Image
                       width={324}
                       height={324}
@@ -79,6 +72,9 @@ export default function Home() {
                       alt={feature.title}
                       className="rounded-full"
                     />
+                    <p className="font-medium text-primary-foreground">
+                      {feature.title}
+                    </p>
                   </CardContent>
                 </Card>
               </Link>
@@ -87,7 +83,9 @@ export default function Home() {
 
           <div className="my-24 flex w-full flex-col items-center justify-center">
             <h1 className="text-4xl font-bold">Partners</h1>
-            <span className="text-md">ooooga booooooga</span>
+            <span className="text-md text-secondary-foreground">
+              ooooga booooooga
+            </span>
             <div className="mt-8 grid w-full grid-cols-2 gap-5 lg:grid-cols-3">
               {partnerships.map((feature) => (
                 <Link
@@ -113,7 +111,7 @@ export default function Home() {
                       <p className="font-bold text-foreground">
                         {feature.title}
                       </p>
-                      <p className="text-center text-primary-foreground">
+                      <p className="text-center text-secondary-foreground">
                         {feature.description}
                       </p>
                     </CardContent>

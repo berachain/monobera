@@ -38,7 +38,7 @@ export default function SwapInput({
     <>
       <div
         className={cn(
-          "flex flex-row flex-wrap justify-between gap-3 rounded-lg border border-input bg-input p-3",
+          "flex flex-row flex-wrap justify-between gap-3 rounded-lg border border-input bg-input p-3 pr-6",
           focused && "border-border",
         )}
       >
@@ -79,11 +79,7 @@ export default function SwapInput({
         />
         {wallet?.address ? (
           <div className="w-full pl-4">
-            {!hideBalance && exceeding ? (
-              <p className="text-destructive">
-                You&apos;re exceeding your balance
-              </p>
-            ) : (
+            {hideBalance ? null : (
               <div className="flex items-center justify-between">
                 <p>
                   <Button
@@ -102,6 +98,11 @@ export default function SwapInput({
                 value={exceeding ? 100 : progress}
                 className={cn("h-2", exceeding && "bg-destructive")}
               />
+            ) : null}
+            {!hideBalance && exceeding ? (
+              <p className="text-destructive">
+                You&apos;re exceeding your balance
+              </p>
             ) : null}
           </div>
         ) : null}
