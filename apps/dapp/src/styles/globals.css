@@ -139,6 +139,6 @@ input[type="number"] {
 }
 
 .home-background {
-  background-position-y: 10vh;
+  background-position-y: 200px;
   background-position-x: center;
 }
