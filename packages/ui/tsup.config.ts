@@ -8,6 +8,7 @@ const client = [
   "./src/accordion.tsx",
   "./src/avatar.tsx",
   "./src/calendar.tsx",
+  "./src/checkbox.tsx",
   "./src/command.tsx",
   "./src/dialog.tsx",
   "./src/dropdown-menu.tsx",
@@ -30,6 +31,7 @@ const server = [
   "./src/button.tsx",
   "./src/icons.tsx",
   "./src/card.tsx",
+  "./src/table.tsx",
   "./src/toast.tsx",
 ];
 

@@ -23,6 +23,14 @@ export const navItems = [
     href: "/swap",
     title: "Swap",
   },
+  {
+    href: "/pool",
+    title: "Pool",
+  },
+  {
+    href: "/claim",
+    title: "Claim",
+  },
 ];
 
 export const ctaFeatures = [
