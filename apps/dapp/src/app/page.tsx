@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Card, CardContent } from "@bera/ui/card";
 import Balancer from "react-wrap-balancer";
 
 import { getCurrentDate } from "~/utils/getCurrentDate";
