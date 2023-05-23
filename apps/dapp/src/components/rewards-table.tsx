@@ -27,7 +27,7 @@ interface DataTableProps {
   data: Reward[];
 }
 
-export default function PoolTable({ columns, data }: DataTableProps) {
+export default function RewardsTable({ columns, data }: DataTableProps) {
   const [expanded, setExpanded] = React.useState<ExpandedState>({});
   const table = useReactTable({
     data,
