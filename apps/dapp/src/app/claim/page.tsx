@@ -2,7 +2,7 @@ import { Card } from "@bera/ui/card";
 
 import { rewards } from "~/utils/constants";
 import { columns } from "~/components/column";
-import PoolTable from "~/components/pool-table";
+import RewardsTable from "~/components/rewards-table";
 
 export const runtime = "edge";
 
@@ -30,7 +30,7 @@ export default function Claim() {
             <h3 className="text-lg font-medium">$6,969.69</h3>
           </div>
         </div>
-        <PoolTable columns={columns} data={rewards} />
+        <RewardsTable columns={columns} data={rewards} />
       </Card>
     </div>
   );

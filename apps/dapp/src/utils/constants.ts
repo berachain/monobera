@@ -100,3 +100,55 @@ export const rewards: Reward[] = [
   },
   // ...
 ];
+
+export const pools = [
+  {
+    id: "POOL001",
+    name: "Pool 1",
+    value: "$42,699.00",
+    volume: "$69,420.00",
+    apr: "69%",
+  },
+  {
+    id: "POOL002",
+    name: "Pool 2",
+    value: "$42,699.00",
+    volume: "$69,420.00",
+    apr: "69%",
+  },
+  {
+    id: "POOL003",
+    name: "Pool 3",
+    value: "$42,699.00",
+    volume: "$69,420.00",
+    apr: "69%",
+  },
+  {
+    id: "POOL004",
+    name: "Pool 4",
+    value: "$42,699.00",
+    volume: "$69,420.00",
+    apr: "69%",
+  },
+  {
+    id: "POOL005",
+    name: "Pool 5",
+    value: "$42,699.00",
+    volume: "$69,420.00",
+    apr: "69%",
+  },
+  {
+    id: "POOL006",
+    name: "Pool 6",
+    value: "$42,699.00",
+    volume: "$69,420.00",
+    apr: "69%",
+  },
+  {
+    id: "POOL007",
+    name: "Pool 7",
+    value: "$42,699.00",
+    volume: "$69,420.00",
+    apr: "69%",
+  },
+];
