@@ -4,7 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { Card, CardContent } from "@bera/ui/card";
 
-import { generateDataForPast24Hours } from "~/utils/generateDataForPast24Hours";
+import { generateDataForPast24Hours } from "~/utils/generateData";
 import { SwapCard } from "~/components/swap-card";
 import { tokens, type Token } from "~/assets/tokens";
 
