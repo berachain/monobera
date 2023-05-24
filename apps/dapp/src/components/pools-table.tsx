@@ -17,7 +17,7 @@ export default function PoolsTable() {
   const router = useRouter();
   return (
     <div className="p-5">
-      <Table className="border-separate border-spacing-y-2">
+      <Table className="border-separate border-spacing-y-2 p-1">
         <TableHeader>
           <TableRow>
             <TableHead className="">Composition</TableHead>
@@ -31,7 +31,7 @@ export default function PoolsTable() {
             <TableRow
               key={pool.id}
               onClick={() => router.push(`/pool/${pool.id}`)}
-              className="cursor-pointer"
+              className="cursor-pointer rounded-md outline outline-secondary"
             >
               <TableCell className="font-medium">{pool.name}</TableCell>
               <TableCell>{pool.value}</TableCell>
