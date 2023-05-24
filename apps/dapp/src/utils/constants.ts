@@ -152,3 +152,81 @@ export const pools = [
     apr: "69%",
   },
 ];
+
+export const tokens = [
+  {
+    icon: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    name: "Bitcoin",
+    symbol: "BTC",
+    weight: "69%",
+    tokenP: "69%",
+    balance: "69.420",
+    value: "$69,420.00",
+  },
+  {
+    icon: "https://s2.coinmarketcap.com/static/img/coins/64x64/2.png",
+    name: "Litecoin",
+    symbol: "LTC",
+    weight: "69%",
+    tokenP: "69%",
+    balance: "69.420",
+    value: "$69,420.00",
+  },
+];
+
+export const liquidityProvisions = [
+  {
+    icon: "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    action: "Deposit",
+    tokenAmount: "69.420",
+    tokenName: "Bitcoin",
+    tokenSymbol: "BTC",
+    value: "$69,420.00",
+    timeStamp: "8 hours ago",
+  },
+  {
+    icon: "https://s2.coinmarketcap.com/static/img/coins/64x64/2.png",
+    action: "Withdraw",
+    tokenAmount: "69.420",
+    tokenName: "Litecoin",
+    tokenSymbol: "LTC",
+    value: "$69,420.00",
+    timeStamp: "8 hours ago",
+  },
+];
+
+export const swaps = [
+  {
+    wallet: "0x1234567890123456789012345678901234567890",
+    from: "Bitcoin",
+    fromSymbol: "BTC",
+    fromAmount: "69.420",
+    toAmount: "69.420",
+    to: "Litecoin",
+    toSymbol: "LTC",
+    value: "$69,420.00",
+    timeStamp: "8 hours ago",
+  },
+  {
+    wallet: "0x1234567890123456789012345678901234567890",
+    from: "Bitcoin",
+    fromSymbol: "BTC",
+    fromAmount: "69.420",
+    toAmount: "69.420",
+    to: "Litecoin",
+    toSymbol: "LTC",
+    value: "$69,420.00",
+    timeStamp: "8 hours ago",
+  },
+];
+
+export const poolDetails = {
+  name: "Pool 1",
+  poolSymbol: "POOL001",
+  poolType: "Liquidity Pool",
+  swapFee: "0.3%",
+  poolManager: "0x1234567890123456789012345678901234567890",
+  poolOwner: "0x1234567890123456789012345678901234567890",
+  contractAddress: "0x1234567890123456789012345678901234567890",
+  creationDate: "04 May, 2021",
+};

@@ -56,12 +56,15 @@ interface LineChartProps {
   chartData: ChartData;
   pool?: string;
   type?: "line" | "bar";
+  showYAxis?: boolean;
+  showXAxis?: boolean;
 }
 
 const LineChart: React.FC<LineChartProps> = ({
   chartData,
   pool,
   type = "line",
+  showYAxis = false,
 }) => {
   const [selectedXIndex, setSelectedXIndex] = useState<number>(23);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -103,7 +106,7 @@ const LineChart: React.FC<LineChartProps> = ({
       width: 2,
     },
     yaxis: {
-      show: false,
+      show: showYAxis,
     },
     colors: ["#4bde80"],
     grid: {
@@ -164,7 +167,7 @@ const LineChart: React.FC<LineChartProps> = ({
         options={options}
         series={[chartData]}
         type={type}
-        height={type === "line" ? 100 : 500}
+        height={type === "line" ? 100 : 385}
       />
     </>
   );
