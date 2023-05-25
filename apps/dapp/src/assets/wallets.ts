@@ -1,25 +1,19 @@
-import { type StaticImageData } from "next/image";
-
-import coinbase from "./icons/coinbase.svg";
-import metamask from "./icons/metamask.svg";
-import walletconnect from "./icons/walletconnect.svg";
-
 export type Wallet = {
   name: string;
-  icon: StaticImageData;
+  icon: string;
 };
 
 export const wallets: Wallet[] = [
   {
     name: "MetaMask",
-    icon: metamask as StaticImageData,
+    icon: "/icons/metamask.svg",
   },
   {
     name: "WalletConnect",
-    icon: walletconnect as StaticImageData,
+    icon: "/icons/walletconnect.svg",
   },
   {
     name: "Coinbase Wallet",
-    icon: coinbase as StaticImageData,
+    icon: "/icons/coinbase.svg",
   },
 ];
