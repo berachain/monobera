@@ -15,7 +15,10 @@
       "persistent": true,
       "cache": false
     },
-    "check-types": {}
+    "check-types": {
+      "dependsOn": ["^build"],
+      "cache": false
+    }
   },
   "globalEnv": ["CI", "NODE_ENV", "SKIP_ENV_VALIDATION", "VERCEL", "VERCEL_URL"]
 }
