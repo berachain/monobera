@@ -131,9 +131,6 @@ importers:
 
   packages/berajs:
     dependencies:
-      '@ethereumjs/tx':
-        specifier: ^4.1.2
-        version: 4.1.2
       '@keplr-wallet/cosmos':
         specifier: ^0.11.23
         version: 0.11.63
@@ -531,24 +528,6 @@ packages:
       to-fast-properties: 2.0.0
     dev: false
 
-  /@chainsafe/as-sha256@0.4.1:
-    resolution: {integrity: sha512-IqeeGwQihK6Y2EYLFofqs2eY2ep1I2MvQXHzOAI+5iQN51OZlUkrLgyAugu2x86xZewDk5xas7lNczkzFzF62w==}
-    dev: false
-
-  /@chainsafe/persistent-merkle-tree@0.6.1:
-    resolution: {integrity: sha512-gcENLemRR13+1MED2NeZBMA7FRS0xQPM7L2vhMqvKkjqtFT4YfjSVADq5U0iLuQLhFUJEMVuA8fbv5v+TN6O9A==}
-    dependencies:
-      '@chainsafe/as-sha256': 0.4.1
-      '@noble/hashes': 1.3.0
-    dev: false
-
-  /@chainsafe/ssz@0.11.1:
-    resolution: {integrity: sha512-cB8dBkgGN6ZoeOKuk+rIRHKN0L5i9JLGeC0Lui71QX0TuLcQKwgbfkUexpyJxnGFatWf8yeJxlOjozMn/OTP0g==}
-    dependencies:
-      '@chainsafe/as-sha256': 0.4.1
-      '@chainsafe/persistent-merkle-tree': 0.6.1
-    dev: false
-
   /@coinbase/wallet-sdk@3.6.6:
     resolution: {integrity: sha512-vX+epj/Ttjo7XRwlr3TFUUfW5GTRMvORpERPwiu7z2jl3DSVL4rXLmHt5y6LDPlUVreas2gumdcFbu0fLRG9Jg==}
     engines: {node: '>= 10.0.0'}
@@ -807,45 +786,6 @@ packages:
   /@eslint/js@8.39.0:
     resolution: {integrity: sha512-kf9RB0Fg7NZfap83B3QOqOGg9QmD9yBudqQXzzOtn3i4y7ZUXe5ONeW34Gwi+TxhH4mvj72R1Zc300KUMa9Bng==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-
-  /@ethereumjs/common@3.1.2:
-    resolution: {integrity: sha512-YV+bZfRlFhAXg+FfwC5r4UQKVj4OG7vDP5/JvvNXLLbYpNplH5Vca9jD0L+ab8y0YlTYJMQM1ALyHFu3AE3eBA==}
-    dependencies:
-      '@ethereumjs/util': 8.0.6
-      crc-32: 1.2.2
-    dev: false
-
-  /@ethereumjs/rlp@4.0.1:
-    resolution: {integrity: sha512-tqsQiBQDQdmPWE1xkkBq4rlSW5QZpLOUJ5RJh2/9fug+q9tnUhuZoVLk7s0scUIKTOzEtR72DFBXI4WiZcMpvw==}
-    engines: {node: '>=14'}
-    hasBin: true
-    dev: false
-
-  /@ethereumjs/tx@4.1.2:
-    resolution: {integrity: sha512-PWWyO9lAFOiLwk7nB9OQisoJUsuvMz2PN2v4/ILbBpzamC5Ug79OddVq9r4rKvIDLPY+bn4NFerxBJg29+sjaA==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      c-kzg: ^1.0.8
-    peerDependenciesMeta:
-      c-kzg:
-        optional: true
-    dependencies:
-      '@chainsafe/ssz': 0.11.1
-      '@ethereumjs/common': 3.1.2
-      '@ethereumjs/rlp': 4.0.1
-      '@ethereumjs/util': 8.0.6
-      ethereum-cryptography: 2.0.0
-    dev: false
-
-  /@ethereumjs/util@8.0.6:
-    resolution: {integrity: sha512-zFLG/gXtF3QUC7iKFn4PT6HCr+DEnlCbwUGKGtXoqjA+64T+e0FuqMjlo4bQIY2ngRzk3EtudKdGYC4g31ehhg==}
-    engines: {node: '>=14'}
-    dependencies:
-      '@chainsafe/ssz': 0.11.1
-      '@ethereumjs/rlp': 4.0.1
-      ethereum-cryptography: 2.0.0
-      micro-ftch: 0.3.1
-    dev: false
 
   /@ethersproject/abi@5.7.0:
     resolution: {integrity: sha512-351ktp42TiRcYB3H1OP8yajPeAQstMW/yCFokj/AthP9bLHzQFPlOrxOcwYEDkUAICmOHljvN4K39OMTMUa9RA==}
@@ -4085,12 +4025,6 @@ packages:
       toggle-selection: 1.0.6
     dev: false
 
-  /crc-32@1.2.2:
-    resolution: {integrity: sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==}
-    engines: {node: '>=0.8'}
-    hasBin: true
-    dev: false
-
   /create-hash@1.2.0:
     resolution: {integrity: sha512-z00bCGNHDG8mHAkP7CtT1qVu+bFQUPjYq/4Iv3C3kWjTFV10zIjfSoeqXo9Asws8gwSHDGj/hl2u4OGIjapeCg==}
     dependencies:
@@ -4987,15 +4921,6 @@ packages:
     resolution: {integrity: sha512-n+Re6Gu8XGyfFy1it0AwbD1x0MUzspQs0D5UiPs1fFPCr6WAwZM+vbIhXheBFrpgosqN9bs5PqlB4Q61U/QytQ==}
     dependencies:
       fast-safe-stringify: 2.1.1
-    dev: false
-
-  /ethereum-cryptography@2.0.0:
-    resolution: {integrity: sha512-g25m4EtfQGjstWgVE1aIz7XYYjf3kH5kG17ULWVB5dH6uLahsoltOhACzSxyDV+fhn4gbR4xRrOXGe6r2uh4Bg==}
-    dependencies:
-      '@noble/curves': 1.0.0
-      '@noble/hashes': 1.3.0
-      '@scure/bip32': 1.3.0
-      '@scure/bip39': 1.2.0
     dev: false
 
   /ethers@5.7.2:
@@ -6066,10 +5991,6 @@ packages:
   /merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
-
-  /micro-ftch@0.3.1:
-    resolution: {integrity: sha512-/0LLxhzP0tfiR5hcQebtudP56gUurs2CLkGarnCiB/OqEyUFQ6U3paQi/tgLv0hBJYt2rnr9MNpxz4fiiugstg==}
-    dev: false
 
   /micromatch@4.0.5:
     resolution: {integrity: sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==}
