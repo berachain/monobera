@@ -1,14 +1,8 @@
-import { type StaticImageData } from "next/image";
-
-import beraIcon from "./icons/beraIcon.jpg";
-import bgtIcon from "./icons/bgtIcon.jpg";
-import honeyIcon from "./icons/honeyIcon.jpg";
-
 export type Token = {
   address: string;
   chainId: number;
   decimals: number;
-  logoURI: StaticImageData;
+  logoURI: string;
   name: string;
   symbol: string;
 };
@@ -18,7 +12,7 @@ export const tokens: Token[] = [
     address: "0x639A647fbe20b6c8ac19E48E2de44ea792c62123",
     chainId: 42220,
     decimals: 18,
-    logoURI: honeyIcon,
+    logoURI: "/icons/honeyIcon.jpg",
     name: "Honey",
     symbol: "HONEY",
   },
@@ -26,7 +20,7 @@ export const tokens: Token[] = [
     address: "0x639A647fbe20b6c8ac19E48E2de44ea792c62456",
     chainId: 42220,
     decimals: 18,
-    logoURI: beraIcon,
+    logoURI: "/icons/beraIcon.jpg",
     name: "Bera",
     symbol: "BERA",
   },
@@ -34,7 +28,7 @@ export const tokens: Token[] = [
     address: "0x639A647fbe20b6c8ac19E48E2de44ea792c62789",
     chainId: 42220,
     decimals: 18,
-    logoURI: bgtIcon,
+    logoURI: "/icons/bgtIcon.jpg",
     name: "BGT",
     symbol: "IBGT",
   },
