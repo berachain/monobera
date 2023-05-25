@@ -54,10 +54,18 @@ interface ChartData {
 
 interface LineChartProps {
   chartData: ChartData;
-  pool: string;
+  pool?: string;
+  type?: "line" | "bar";
+  showYAxis?: boolean;
+  showXAxis?: boolean;
 }
 
-const LineChart: React.FC<LineChartProps> = ({ chartData, pool }) => {
+const LineChart: React.FC<LineChartProps> = ({
+  chartData,
+  pool,
+  type = "line",
+  showYAxis = false,
+}) => {
   const [selectedXIndex, setSelectedXIndex] = useState<number>(23);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDataPointHover = (event: any, chartContext: any, config: any) => {
@@ -98,7 +106,7 @@ const LineChart: React.FC<LineChartProps> = ({ chartData, pool }) => {
       width: 2,
     },
     yaxis: {
-      show: false,
+      show: showYAxis,
     },
     colors: ["#4bde80"],
     grid: {
@@ -133,9 +141,11 @@ const LineChart: React.FC<LineChartProps> = ({ chartData, pool }) => {
   };
   return (
     <>
-      <h4 className="flex gap-1 align-middle font-medium leading-none">
-        {pool}
-      </h4>
+      {pool && (
+        <h4 className="flex gap-1 align-middle font-medium leading-none">
+          {pool}
+        </h4>
+      )}
       <h4 className="mt-1 flex gap-1 align-middle text-2xl font-medium leading-none text-muted-foreground">
         {(
           chartData?.data[selectedXIndex] || chartData?.data[23]
@@ -153,7 +163,12 @@ const LineChart: React.FC<LineChartProps> = ({ chartData, pool }) => {
           value2={chartData.data[0] || 1}
         />
       )}
-      <Chart options={options} series={[chartData]} type="line" height={100} />
+      <Chart
+        options={options}
+        series={[chartData]}
+        type={type}
+        height={type === "line" ? 100 : 385}
+      />
     </>
   );
 };
