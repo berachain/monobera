@@ -1,19 +1,3 @@
-import pool from "~/assets/graphics/pool.png";
-import rewards from "~/assets/graphics/rewards.png";
-import swap from "~/assets/graphics/swap.png";
-import agora from "~/assets/partners/Agora.png";
-import gumball from "~/assets/partners/Gumball.png";
-import hallsOfOlympia from "~/assets/partners/HallsOfOlympia.png";
-import hiddenHand from "~/assets/partners/HiddenHand.png";
-import midas from "~/assets/partners/Midas.png";
-import olympus from "~/assets/partners/Olympus.png";
-import pickle from "~/assets/partners/Pickle.png";
-import pirex from "~/assets/partners/Pirex.png";
-import qidao from "~/assets/partners/QiDao.png";
-import redacted from "~/assets/partners/Redacted.png";
-import synapse from "~/assets/partners/Synapse.png";
-import y2k from "~/assets/partners/Y2K.png";
-
 export const navItems = [
   {
     href: "/",
@@ -35,17 +19,17 @@ export const navItems = [
 
 export const ctaFeatures = [
   {
-    logoURI: swap,
+    logoURI: "/graphics/swap.png",
     title: "Swap",
     href: "/swap",
   },
   {
-    logoURI: rewards,
+    logoURI: "/graphics/rewards.png",
     title: "Rewards",
     href: "/swap",
   },
   {
-    logoURI: pool,
+    logoURI: "/graphics/pool.png",
     title: "Pool",
     href: "/swap",
   },
@@ -53,73 +37,73 @@ export const ctaFeatures = [
 
 export const partnerships = [
   {
-    logoURI: agora,
+    logoURI: "/partners/agora.png",
     title: "Agora",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: gumball,
+    logoURI: "/partners/gumball.png",
     title: "Gumball",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: hallsOfOlympia,
+    logoURI: "/partners/hallsOfOlympia.png",
     title: "HallsOfOlympia",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: hiddenHand,
+    logoURI: "/partners/hiddenHand.png",
     title: "HiddenHand",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: midas,
+    logoURI: "/partners/midas.png",
     title: "Midas",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: olympus,
+    logoURI: "/partners/olympus.png",
     title: "Olympus",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: pickle,
+    logoURI: "/partners/pickle.png",
     title: "Pickle",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: pirex,
+    logoURI: "/partners/pirex.png",
     title: "Pirex",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: qidao,
+    logoURI: "/partners/qidao.png",
     title: "QiDao",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: redacted,
+    logoURI: "/partners/redacted.png",
     title: "Redacted",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: synapse,
+    logoURI: "/partners/synapse.png",
     title: "Synapse",
     href: "/pool",
     description: "Pool with others",
   },
   {
-    logoURI: y2k,
+    logoURI: "/partners/y2k.png",
     title: "Y2K",
     href: "/pool",
     description: "Pool with others",
