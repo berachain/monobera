@@ -1,0 +1,17 @@
+{
+  "name": "berajs",
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "author": "deez",
+  "license": "MIT",
+  "dependencies": {
+    "@keplr-wallet/cosmos": "^0.11.23",
+    "@keplr-wallet/types": "^0.11.26",
+    "bech32": "^2.0.0",
+    "crypto-addr-codec": "^0.1.7",
+    "react-device-detect": "^2.2.3",
+    "typescript": "^5.1.0-beta",
+    "viem": "~0.3.35",
+    "wagmi": "^1.0.2"
+  }
+}

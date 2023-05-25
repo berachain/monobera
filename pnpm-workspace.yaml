@@ -2,3 +2,4 @@ packages:
   - apps/dapp
   - packages/config/*
   - packages/ui
+  - packages/berajs
