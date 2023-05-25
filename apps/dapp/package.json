@@ -9,16 +9,16 @@
     "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
     "lint:fix": "pnpm lint --fix",
     "start": "pnpm with-env next start",
-    "type-check": "tsc --noEmit",
+    "check-types": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@bera/tailwind-config": "^0.1.0",
-    "@bera/ui": "^0.1.0",
+    "@bera/berajs": "0.1.0",
+    "@bera/tailwind-config": "0.1.0",
+    "@bera/ui": "0.1.0",
     "@t3-oss/env-nextjs": "^0.2.2",
     "@vercel/analytics": "^1.0.1",
     "apexcharts": "3.35.3",
-    "berajs": "^0.1.0",
     "date-fns": "^2.29.3",
     "next": "^13.4.1",
     "next-themes": "^0.2.1",
@@ -34,7 +34,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@bera/eslint-config": "^0.1.0",
+    "@bera/eslint-config": "0.1.0",
     "@types/node": "^18.16.6",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
