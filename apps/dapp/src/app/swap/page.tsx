@@ -8,8 +8,6 @@ import { generateDataForPast24Hours } from "~/utils/generateData";
 import { SwapCard } from "~/components/swap-card";
 import { tokens, type Token } from "~/assets/tokens";
 
-export const runtime = "edge";
-
 const DynamicChart = dynamic(() => import("~/components/chart"), {
   loading: () => <p>Loading...</p>,
   ssr: false,

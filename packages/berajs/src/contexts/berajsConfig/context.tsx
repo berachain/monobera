@@ -1,12 +1,12 @@
 "use client";
 
-import React, { PropsWithChildren, createContext } from "react";
+import React, { createContext, type PropsWithChildren } from "react";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 // import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
-import { NetworkConfig } from "../../config/types";
+import { type NetworkConfig } from "../../config/types";
 import { TransactionStoreProvider } from "../../hooks/transactions/TransactionStoreContext";
 import useEagerConnect from "../../hooks/useAuth/useEagerConnect";
 import { BeraJsProvider } from "../berajsProvider";

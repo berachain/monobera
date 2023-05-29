@@ -2,8 +2,6 @@ import { Card } from "@bera/ui/card";
 
 import PoolsTable from "~/components/pools-table";
 
-export const runtime = "edge";
-
 export default function Pool() {
   return (
     <div className="m-auto flex w-full flex-col gap-5">
