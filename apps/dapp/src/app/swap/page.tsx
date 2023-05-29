@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { getTokens, usePollAssetWalletBalance, type Token } from "@bera/berajs";
 import { Card, CardContent } from "@bera/ui/card";
 
 import { generateDataForPast24Hours } from "~/utils/generateData";
 import { SwapCard } from "~/components/swap-card";
-import { tokens, type Token } from "~/assets/tokens";
 
 const DynamicChart = dynamic(() => import("~/components/chart"), {
   loading: () => <p>Loading...</p>,
@@ -14,10 +14,13 @@ const DynamicChart = dynamic(() => import("~/components/chart"), {
 });
 
 export default function Swap() {
-  const bera = tokens.find((token) => token.name === "Bera") as Token;
-  const honey = tokens.find((token) => token.name === "Honey") as Token;
+  const tokens = getTokens();
+  usePollAssetWalletBalance();
+  const bera = tokens.find((token) => token.symbol === "TK") as Token;
+  const honey = tokens.find((token) => token.symbol === "TK") as Token;
   const [selectedFrom, setSelectedFrom] = useState(honey);
   const [selectedTo, setSelectedTo] = useState(bera);
+
   return (
     <div className="grid grid-cols-8 gap-5">
       <div className="max-xl:hidden xl:col-span-2"></div>

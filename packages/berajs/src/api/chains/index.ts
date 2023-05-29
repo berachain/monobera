@@ -1,4 +1,4 @@
-import { isProduction } from "~/utils/isProduction";
+import { isProduction } from "../utils/isProduction";
 
 export enum ChainId {
   MAINNET = 56,
@@ -33,3 +33,5 @@ export const getChainId = () => {
 export const getCosmosChainId = () => {
   return isProduction() ? CosmosChainId.MAINNET : CosmosChainId.TESTNET;
 };
+
+export * from "./cosmosChain";

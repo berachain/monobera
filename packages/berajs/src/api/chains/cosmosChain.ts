@@ -1,7 +1,7 @@
 import { Bech32Address } from "@keplr-wallet/cosmos";
 import type { BIP44, ChainInfo } from "@keplr-wallet/types";
 
-import { isProduction } from "~/utils/isProduction";
+import { isProduction } from "../utils/isProduction";
 
 const beraBip44: BIP44 = {
   coinType: 60,
@@ -19,6 +19,12 @@ const BGT = {
   coinDecimals: 18,
 };
 
+const HONEY = {
+  coinDenom: "honey",
+  coinMinimalDenom: "ahoney",
+  coinDecimals: 18,
+};
+
 const TESTNET_CHAIN_INFO: ChainInfo = {
   coinType: 60,
   rpc: "http://localhost:26657",
@@ -28,7 +34,7 @@ const TESTNET_CHAIN_INFO: ChainInfo = {
   stakeCurrency: BGT,
   bip44: beraBip44,
   bech32Config: Bech32Address.defaultBech32Config("bera"),
-  currencies: [BERA, BGT],
+  currencies: [BERA, BGT, HONEY],
   feeCurrencies: [BERA],
   features: ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
 };
@@ -42,7 +48,7 @@ const MAINNET_CHAIN_INFO: ChainInfo = {
   stakeCurrency: BGT,
   bip44: beraBip44,
   bech32Config: Bech32Address.defaultBech32Config("bera"),
-  currencies: [BERA, BGT],
+  currencies: [BERA, BGT, HONEY],
   feeCurrencies: [BERA],
   features: ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useBeraJs } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";

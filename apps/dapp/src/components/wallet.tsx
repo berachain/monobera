@@ -4,7 +4,7 @@ import React from "react";
 import { useBeraJs } from "@bera/berajs";
 
 import ConnectWalletDialog from "./connect-wallet-dialog";
-import ConnectedWalletPopover from "./conntected-wallet-popover";
+import ConnectedWalletPopover from "./connected-wallet-popover";
 
 export function Wallet() {
   const { isConnected } = useBeraJs();
