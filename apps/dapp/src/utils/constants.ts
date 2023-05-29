@@ -1,3 +1,7 @@
+import axios from "axios";
+
+import { isProduction } from "./isProduction";
+
 export const WALLET_ADDRESS = "0x1234567890123456789012345678901234567890";
 
 export type Wallet = {
@@ -33,6 +37,7 @@ export const WALLET: Wallet = {
 export enum LOCAL_STORAGE_KEYS {
   WALLET = "WALLET",
   WALLET_NETWORK = "WALLET_NETWORK",
+  CONNECTOR_ID = "CONNECTOR_ID",
   SLIPPAGE_TOLERANCE = "SLIPPAGE_TOLERANCE",
   TRANSACTION_TYPE = "TRANSACTION_TYPE",
   USE_SIGNATURES = "USE_SIGNATURES",
@@ -229,4 +234,84 @@ export const poolDetails = {
   poolOwner: "0x1234567890123456789012345678901234567890",
   contractAddress: "0x1234567890123456789012345678901234567890",
   creationDate: "04 May, 2021",
+};
+
+export enum POLLING {
+  FAST = 5000,
+  NORMAL = 10000,
+  SLOW = 100000,
+}
+
+export const MAINNET_RPC_URLS = [
+  "https://bsc-dataseed1.ninicoin.io",
+  "https://bsc-dataseed1.defibit.io",
+  "https://bsc-dataseed.binance.org",
+];
+
+export const TESTNET_RPC_URLS = ["https://rpc.flashbots.net"];
+
+export const TESTNET_AXIOS = axios.create({
+  baseURL: "http://localhost:26654/",
+  timeout: 1000,
+});
+
+export const MAINNET_AXIOS = axios.create({
+  baseURL: "http://localhost:26654/",
+  timeout: 1000,
+});
+
+export const TESTNET_TRPC = "http://localhost:26657";
+
+export const MAINNET_TRPC = "http://localhost:26657";
+
+export const getRpc = () => {
+  const rpcUrls = isProduction() ? MAINNET_RPC_URLS : TESTNET_RPC_URLS;
+  return getHealthyRpc(rpcUrls, 0)
+    .then((result: any) => {
+      return result;
+    })
+    .catch(() => {
+      return rpcUrls[0];
+    });
+};
+
+const getHealthyRpc: any = async (rpcUrls: string[], depth: number) => {
+  try {
+    const response = await fetch(rpcUrls[depth] as RequestInfo | URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "net_version",
+        params: [],
+        id: 67,
+      }),
+    });
+
+    const { result } = await response.json();
+
+    if (result) {
+      return rpcUrls[depth];
+    }
+    return "";
+  } catch (err) {
+    console.log(`${depth} RPC failed, trying different endpoint`);
+    if (depth < rpcUrls.length) {
+      return getHealthyRpc(rpcUrls, depth + 1);
+    }
+  }
+
+  return "";
+};
+
+export const getAxiosInstance = () => {
+  if (isProduction()) return MAINNET_AXIOS;
+  return TESTNET_AXIOS;
+};
+
+export const getTrpc = () => {
+  if (isProduction()) return MAINNET_TRPC;
+  return TESTNET_TRPC;
 };
