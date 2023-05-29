@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { getTokens, type Token } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -7,8 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@bera/ui/dialog";
-
-import { tokens, type Token } from "~/assets/tokens";
 
 type Props = {
   open: boolean;
@@ -25,6 +24,7 @@ export default function TokenDialog({
   selectedFrom,
   selectedTo,
 }: Props) {
+  const tokens = getTokens();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="px-4 sm:max-w-[425px]">
@@ -41,7 +41,7 @@ export default function TokenDialog({
             .map((token) => (
               <Button
                 variant="ghost"
-                key={token.name}
+                key={token.address}
                 className="flex items-center justify-start gap-2 px-2 text-left"
                 onClick={() => {
                   onSelectedToken(token);
@@ -51,13 +51,12 @@ export default function TokenDialog({
                 <Image
                   width={30}
                   height={30}
-                  src={token.logoURI}
-                  alt={token.name}
+                  src={`/icons/${token.symbol.toLowerCase()}.jpg`}
+                  alt={token.symbol}
                   className="rounded-full"
                 />
                 <div className="flex flex-col">
                   <span className="text-sm font-medium">{token.symbol}</span>
-                  <span className="text-xs text-gray-400">{token.name}</span>
                 </div>
               </Button>
             ))}

@@ -1,14 +1,15 @@
 import React from "react";
 import Image from "next/image";
+import {
+  useBeraJs,
+  useSelectedAssetWalletBalance,
+  type Token,
+} from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Progress } from "@bera/ui/progress";
-import { useReadLocalStorage } from "usehooks-ts";
-
-import { LOCAL_STORAGE_KEYS, type Wallet } from "~/utils/constants";
-import { type Token } from "~/assets/tokens";
 
 type Props = {
   selected: Token;
@@ -28,11 +29,13 @@ export default function SwapInput({
   hideBalance = false,
 }: Props) {
   const [focused, setFocused] = React.useState(false);
-  const wallet = useReadLocalStorage<Wallet>(LOCAL_STORAGE_KEYS.WALLET);
-  const tokenBalance = wallet?.tokens.find(
-    (t) => t.address === selected.address,
-  )?.balance;
-  const exceeding = tokenBalance && amount > tokenBalance;
+  const tokenBalance = Number(
+    useSelectedAssetWalletBalance(selected.address)?.balance || 0,
+  );
+
+  const { account } = useBeraJs();
+
+  const exceeding = amount > tokenBalance;
   const progress = tokenBalance && ((amount / tokenBalance) * 100) | 0;
   return (
     <>
@@ -53,8 +56,8 @@ export default function SwapInput({
           <Image
             width={24}
             height={24}
-            src={selected.logoURI}
-            alt={selected.name}
+            src={`/icons/${selected.symbol.toLowerCase()}.jpg`}
+            alt={selected.symbol}
             className="rounded-full"
           />
           {selected.symbol}
@@ -77,7 +80,7 @@ export default function SwapInput({
             setAmount(Number(e.target.value));
           }}
         />
-        {wallet?.address ? (
+        {account ? (
           <div className="w-full pl-4">
             {hideBalance ? null : (
               <div className="flex items-center justify-between">

@@ -22,14 +22,11 @@ const fontSans = IBM_Plex_Sans({
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <BeraConfig networkConfig={beraConfig} autoConnect={true}>
-      <html lang="en" className="bg-background">
-        <body
-          className={cn(
-            "min-h-screen font-sans antialiased",
-            fontSans.variable,
-          )}
-        >
+    <html lang="en" className="bg-background">
+      <body
+        className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
+      >
+        <BeraConfig networkConfig={beraConfig} autoConnect={true}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col overflow-hidden">
               <div className="flex-1">
@@ -42,8 +39,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <TailwindIndicator />
           </ThemeProvider>
           <Analytics />
-        </body>
-      </html>
-    </BeraConfig>
+        </BeraConfig>
+      </body>
+    </html>
   );
 }

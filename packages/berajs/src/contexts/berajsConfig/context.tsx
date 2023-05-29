@@ -40,7 +40,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
     [networkConfig.chain],
     [
       jsonRpcProvider({
-        rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] }),
+        rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] || "" }),
       }),
     ],
   );
