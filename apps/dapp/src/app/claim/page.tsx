@@ -4,8 +4,6 @@ import { rewards } from "~/utils/constants";
 import { columns } from "~/components/column";
 import RewardsTable from "~/components/rewards-table";
 
-export const runtime = "edge";
-
 export default function Claim() {
   return (
     <div className="m-auto flex w-full max-w-4xl flex-col items-center justify-center gap-5">

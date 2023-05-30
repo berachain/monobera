@@ -1,23 +1,23 @@
+"use client";
+
 import React from "react";
+import { useBeraJs } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
-import { useLocalStorage } from "usehooks-ts";
+import { useReadLocalStorage } from "usehooks-ts";
 
-import { LOCAL_STORAGE_KEYS, WALLET } from "~/utils/constants";
+import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
+import { formatConnectorName } from "~/utils/formatConnectorName";
 import { truncateWalletAddress } from "~/utils/truncateWalletAddress";
 import SwapSettings from "./swap-settings";
 
 export default function ConnectedWalletPopover() {
   const [open, setOpen] = React.useState(false);
-  const [, setWallet] = useLocalStorage<string | null>(
-    LOCAL_STORAGE_KEYS.WALLET,
-    null,
-  );
-  const [walletNetwork] = useLocalStorage<string | null>(
-    LOCAL_STORAGE_KEYS.WALLET_NETWORK,
-    null,
+  const { account, logout } = useBeraJs();
+  const connectorName = useReadLocalStorage<string>(
+    LOCAL_STORAGE_KEYS.CONNECTOR_ID,
   );
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -31,7 +31,7 @@ export default function ConnectedWalletPopover() {
             <AvatarImage src="https://github.com/wallet.png" />
             <AvatarFallback>BR</AvatarFallback>
           </Avatar>
-          {truncateWalletAddress(WALLET.address)}
+          {truncateWalletAddress(account ?? "")}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80" align="end">
@@ -41,7 +41,7 @@ export default function ConnectedWalletPopover() {
             variant="destructive"
             size="sm"
             onClick={() => {
-              setWallet(null);
+              logout(connectorName as string);
               setOpen(false);
             }}
           >
@@ -55,7 +55,7 @@ export default function ConnectedWalletPopover() {
           </Avatar>
           <div className="flex flex-col">
             <p className="flex items-center text-lg font-semibold leading-none">
-              {truncateWalletAddress(WALLET.address)}
+              {truncateWalletAddress(account ?? "")}
               <Button variant="ghost" size="sm" className="ml-2 rounded-full">
                 <Icons.copy className="h-3 w-3" />
               </Button>
@@ -63,7 +63,9 @@ export default function ConnectedWalletPopover() {
                 <Icons.external className="h-3 w-3" />
               </Button>
             </p>
-            <p className="text-sm leading-none ">{walletNetwork}</p>
+            <p className="text-sm leading-none ">
+              {formatConnectorName(connectorName as string)}
+            </p>
           </div>
         </div>
         <SwapSettings />

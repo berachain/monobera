@@ -5,10 +5,10 @@ import { encodeFunctionData, toHex } from "viem";
 import { useFeeData, usePublicClient } from "wagmi";
 
 import { useBeraConfig, useBeraJs } from "../../contexts";
-import { BaseAccount, getBaseAccount } from "../../services";
+import { getBaseAccount, type BaseAccount } from "../../services";
 import { ActionEnum, initialState, reducer } from "../../utils/stateReducer";
 import { TransactionFailedError } from "./error";
-import { IContractWrite, IUseContractWrite } from "./types";
+import { type IContractWrite, type IUseContractWrite } from "./types";
 
 async function broadcastTransaction(dynamicFeeTx: any) {
   try {
@@ -63,11 +63,11 @@ const useKeplrContractWrite = ({
         });
 
         const gas = await publicClient.estimateContractGas({
-          address: address as `0x${string}`,
+          address: address,
           abi: abi,
           functionName: functionName,
           args: params,
-          account: account as `0x${string}`,
+          account: account,
         });
 
         const dynamicFeeTx = {

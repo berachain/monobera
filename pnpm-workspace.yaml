@@ -3,3 +3,4 @@ packages:
   - packages/config/*
   - packages/ui
   - packages/berajs
+  - packages/api

@@ -7,8 +7,6 @@ import Balancer from "react-wrap-balancer";
 import { getCurrentDate } from "~/utils/getCurrentDate";
 import { ctaFeatures, partnerships } from "~/app/config";
 
-export const runtime = "edge";
-
 export default function Home() {
   return (
     <>

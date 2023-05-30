@@ -20,5 +20,12 @@
       "cache": false
     }
   },
-  "globalEnv": ["CI", "NODE_ENV", "SKIP_ENV_VALIDATION", "VERCEL", "VERCEL_URL"]
+  "globalEnv": [
+    "CI",
+    "NODE_ENV",
+    "SKIP_ENV_VALIDATION",
+    "VERCEL",
+    "VERCEL_URL",
+    "VERCEL_ENV"
+  ]
 }
