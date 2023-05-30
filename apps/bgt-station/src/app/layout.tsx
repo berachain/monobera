@@ -8,7 +8,6 @@ import { cn } from "@bera/ui";
 import { Toaster } from "@bera/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
 
-import { SiteFooter } from "~/components/footer";
 import { Header } from "~/components/header";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
@@ -24,17 +23,21 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en" className="bg-background">
       <body
-        className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+        )}
       >
         <BeraConfig networkConfig={beraConfig} autoConnect={true}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col overflow-hidden">
               <div className="flex-1">
                 <Header />
-                <main className="w-full pt-40">{props.children}</main>
+                <main className="container w-full pt-20 lg:pl-52">
+                  {props.children}
+                </main>
                 <Toaster />
               </div>
-              <SiteFooter />
             </div>
             <TailwindIndicator />
           </ThemeProvider>
