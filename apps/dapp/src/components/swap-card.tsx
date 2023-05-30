@@ -1,9 +1,9 @@
 import React from "react";
+import { usePollAssetWalletBalance, type Token } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
-import { type Token } from "~/assets/tokens";
 import PreviewDialog from "./preview-dialog";
 import { SettingsPopover } from "./settings-popover";
 import SwapInput from "./swap-input";
@@ -26,6 +26,7 @@ export function SwapCard({
   const [fromAmount, setFromAmount] = React.useState(0);
   const [toAmount, setToAmount] = React.useState(0);
   const [open, setOpen] = React.useState(false);
+  usePollAssetWalletBalance();
   return (
     <>
       <Card>

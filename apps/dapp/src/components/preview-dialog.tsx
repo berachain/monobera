@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { type Token } from "@bera/berajs";
 import {
   Accordion,
   AccordionContent,
@@ -21,7 +22,6 @@ import { useToast } from "@bera/ui/use-toast";
 import { useReadLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
-import { type Token } from "~/assets/tokens";
 
 type Props = {
   fromToken: Token;
@@ -68,7 +68,7 @@ export default function PreviewDialog({
                   <Image
                     width={36}
                     height={36}
-                    src={fromToken.logoURI}
+                    src={`/icons/${fromToken.symbol.toLowerCase()}.jpg}`}
                     alt={fromToken.name}
                     className="rounded-full"
                   />
@@ -88,7 +88,7 @@ export default function PreviewDialog({
                   <Image
                     width={36}
                     height={36}
-                    src={toToken.logoURI}
+                    src={`/icons/${toToken.symbol.toLowerCase()}.jpg}`}
                     alt={toToken.name}
                     className="rounded-full"
                   />

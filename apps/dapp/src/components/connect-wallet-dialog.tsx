@@ -1,5 +1,6 @@
 import React from "react";
-import Image from "next/image";
+import { useBeraJs } from "@bera/berajs";
+import { ConnectorNames } from "@bera/berajs/src/config";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -10,19 +11,40 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { useLocalStorage } from "usehooks-ts";
 
-import { LOCAL_STORAGE_KEYS, WALLET, type Wallet } from "~/utils/constants";
-import { wallets } from "~/assets/wallets";
+import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
+
+type ConnectorAssetsType = Partial<
+  Record<ConnectorNames, { icon: React.ReactElement; name: string }>
+>;
+
+const ConnectorAssets: ConnectorAssetsType = {
+  [ConnectorNames.Injected]: {
+    icon: <Icons.metamask height="50px" width="50px" />,
+    name: "Metamask",
+  },
+  [ConnectorNames.Coinbase]: {
+    icon: <Icons.coinbase height="50px" width="50px" />,
+    name: "Coinbase",
+  },
+
+  [ConnectorNames.WalletConnect]: {
+    icon: <Icons.walletConnect height="50px" width="50px" />,
+    name: "WalletConnect",
+  },
+  [ConnectorNames.Keplr]: {
+    icon: <Icons.keplr height="50px" width="50px" />,
+    name: "Keplr",
+  },
+};
 
 export default function ConnectWalletDialog() {
   const [open, setOpen] = React.useState(false);
-  const [, setWalletAddress] = useLocalStorage<Wallet | null>(
-    LOCAL_STORAGE_KEYS.WALLET,
-    null,
+  const [, setConnectorId] = useLocalStorage(
+    LOCAL_STORAGE_KEYS.CONNECTOR_ID,
+    "",
   );
-  const [, setWaletNetwork] = useLocalStorage<string | null>(
-    LOCAL_STORAGE_KEYS.WALLET_NETWORK,
-    null,
-  );
+  const { login } = useBeraJs();
+
   return (
     <>
       <Button
@@ -31,33 +53,30 @@ export default function ConnectWalletDialog() {
         variant="secondary"
       >
         <Icons.wallet className="mr-2 h-6 w-6" />
-        Connect wallet
+        Connect
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Connect to a wallet</DialogTitle>
+            <DialogTitle>Connect to Web3</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            {wallets.map((wallet) => (
+            {Object.values(ConnectorNames).map((connectorName) => (
               <Button
-                key={wallet.name}
+                key={connectorName}
                 variant="ghost"
                 className="flex justify-start"
                 onClick={() => {
-                  setWalletAddress(WALLET);
-                  setWaletNetwork(wallet.name);
-                  setOpen(false);
+                  setConnectorId(connectorName);
+                  login(connectorName)
+                    .then(() => setOpen(false))
+                    .catch((e) => {
+                      console.log(e);
+                    });
                 }}
               >
-                <Image
-                  src={wallet.icon}
-                  width={24}
-                  height={24}
-                  alt={wallet.name}
-                  className="mr-2 h-6 w-6"
-                />
-                <span>{wallet.name}</span>
+                <span>{ConnectorAssets[connectorName]?.icon}</span>
+                <span>{ConnectorAssets[connectorName]?.name}</span>
               </Button>
             ))}
           </div>

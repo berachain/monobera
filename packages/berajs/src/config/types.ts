@@ -1,5 +1,5 @@
 import type { ChainInfo } from "@keplr-wallet/types";
-import { Chain } from "wagmi";
+import { type Chain } from "wagmi";
 
 export type Token = {
   chainId: number;
