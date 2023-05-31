@@ -21,7 +21,7 @@ const fontSans = IBM_Plex_Sans({
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="bg-background">
+    <html lang="en" className="light bg-background">
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",

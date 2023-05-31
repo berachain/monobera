@@ -1,38 +1,30 @@
-import { readContract } from "@wagmi/core";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
+import { usePublicClient } from "wagmi";
 
 import abi from "../../../config/abi/modules/staking/IStakingModule.abi";
 import { useBeraJs } from "../../../contexts";
+import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
 
 const REFRESH_INTERVAL = 2000;
 
-// Default Address of the Staking Precompile Contract on Polaris.
-// More information here: TODO: Add link to docs
-const STAKING_PRECOMPILE_ADDRESS = "0xd9A998CaC66092748FfEc7cFBD155Aae1737C2fF";
-
-export const useGetAccountDelegation = (validator_address: string) => {
-  const { mutate } = useSWRConfig();
+export const usePollAccountDelegation = (validatorAddress: `0x${string}`) => {
   const { account: address, error } = useBeraJs();
+  const publicClient = usePublicClient();
   useSWR(
-    [address, validator_address, "rawDelegation"],
+    [address, validatorAddress, "rawDelegation"],
     async () => {
       if (address && !error) {
-        const result = await readContract({
+        const result = await publicClient.readContract({
           address: STAKING_PRECOMPILE_ADDRESS,
           abi,
           functionName: "getDelegation",
-          args: [address, validator_address],
+          args: [address, validatorAddress],
         });
 
         const castedDelegation = result as bigint;
         const parsedDelegation = formatUnits(castedDelegation, 0).toString();
-
-        await mutate(
-          [address, validator_address, parsedDelegation, "rawDelegation"],
-          parsedDelegation,
-        );
 
         return parsedDelegation;
       }
