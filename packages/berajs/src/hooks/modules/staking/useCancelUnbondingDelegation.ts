@@ -1,12 +1,12 @@
 import abi from "../../../config/abi/modules/staking/IStakingModule.abi";
-import { useBeraContractWrite } from "../../../hooks/useContractWrite";
+import { useBeraContractWrite } from "../../useContractWrite";
 import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
 
-export const useDelegate = (
+export const useCancelUnbondingDelegation = (
   validatorAddress: `0x${string}`,
   amount: bigint,
+  creationHeight: string,
 ) => {
-  console.log(validatorAddress, amount);
   const { write, isError, isLoading, isSuccess } = useBeraContractWrite({
     onError(error) {
       console.log("Error", error);
@@ -20,12 +20,12 @@ export const useDelegate = (
     isError,
     isLoading,
     isSuccess,
-    delegate: () =>
+    cancelUnbondingDelegation: () =>
       write({
         address: STAKING_PRECOMPILE_ADDRESS,
         abi: abi,
-        functionName: "delegate",
-        params: [validatorAddress, amount],
+        functionName: "cancelUnbondingDelegation",
+        params: [validatorAddress, amount, creationHeight],
       }),
   };
 };

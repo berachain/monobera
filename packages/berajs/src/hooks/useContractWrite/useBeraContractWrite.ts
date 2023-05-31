@@ -40,6 +40,7 @@ const useBeraContractWrite = ({
       let receipt: any | undefined;
       try {
         if (isConnectionKeplr()) {
+          console.log(window.keplr);
           receipt = await keplrWrite({ abi, address, params, functionName });
         } else {
           receipt = await walletClient?.writeContract({
@@ -67,6 +68,7 @@ const useBeraContractWrite = ({
           throw e;
         }
       } catch (e: any) {
+        console.log(e);
         dispatch({ type: ActionEnum.ERROR });
         onError && onError(e);
         return;
