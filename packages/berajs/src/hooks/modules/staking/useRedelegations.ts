@@ -4,12 +4,12 @@
 // useGetRedelegationForSrcValidator - do we need this?
 // useGetRedelegationForDstValidator - do we need this?
 
-import { readContract } from "@wagmi/core";
-import POLLING from "src/config/constants/polling";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import { usePublicClient } from "wagmi";
 
 import abi from "../../../config/abi/modules/staking/IStakingModule.abi";
+import POLLING from "../../../config/constants/polling";
 import { useBeraJs } from "../../../contexts";
 import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
 
@@ -35,19 +35,28 @@ export const usePollRedelegations = (
   srcValidator: `0x${string}`,
   dstValidator: `0x${string}`,
 ) => {
+  const publicClient = usePublicClient();
   // Grab the user account from bera.js
   const { account: delegatorAddress, error } = useBeraJs();
   useSWR(
     [delegatorAddress, "redelegations"],
     async () => {
       if (delegatorAddress && !error) {
-        const result = (await readContract({
-          address: STAKING_PRECOMPILE_ADDRESS,
-          abi,
-          functionName: "getRedelegations",
-          args: [delegatorAddress, srcValidator, dstValidator],
-        })) as Array<RedelegationEntry>;
-        return result;
+        const result = (await publicClient
+          .readContract({
+            address: STAKING_PRECOMPILE_ADDRESS,
+            abi,
+            functionName: "getRedelegations",
+            args: [delegatorAddress, srcValidator, dstValidator],
+          })
+          .catch((e) => {
+            console.log(e);
+          })) as Array<RedelegationEntry>;
+
+        if (result.length) {
+          return result;
+        }
+        return [];
       }
       return undefined;
     },
@@ -59,7 +68,7 @@ export const usePollRedelegations = (
 
 export const useGetRedelegations = () => {
   const { account: delegatorAddress } = useBeraJs();
-  const { data: redelegations } = useSWRImmutable([
+  const { data: redelegations = [] } = useSWRImmutable([
     delegatorAddress,
     "redelegations",
   ]);

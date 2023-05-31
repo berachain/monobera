@@ -1,17 +1,17 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
+import { usePublicClient } from "wagmi";
 
 import abi from "../../../config/abi/modules/staking/IStakingModule.abi";
 import { useBeraJs } from "../../../contexts";
 import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
-import { usePublicClient } from "wagmi";
 
 const REFRESH_INTERVAL = 2000;
 
-export const useGetAccountDelegation = (validatorAddress: `0x${string}`) => {
+export const usePollAccountDelegation = (validatorAddress: `0x${string}`) => {
   const { account: address, error } = useBeraJs();
-  const publicClient = usePublicClient()
+  const publicClient = usePublicClient();
   useSWR(
     [address, validatorAddress, "rawDelegation"],
     async () => {

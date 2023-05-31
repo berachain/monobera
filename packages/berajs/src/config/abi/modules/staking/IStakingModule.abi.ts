@@ -15,10 +15,22 @@ const STAKING_ABI = [
         type: "address",
       },
       {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
         indexed: false,
-        internalType: "uint256",
+        internalType: "struct Cosmos.Coin[]",
         name: "amount",
-        type: "uint256",
+        type: "tuple[]",
       },
       {
         indexed: false,
@@ -40,10 +52,22 @@ const STAKING_ABI = [
         type: "address",
       },
       {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
         indexed: false,
-        internalType: "uint256",
+        internalType: "struct Cosmos.Coin[]",
         name: "amount",
-        type: "uint256",
+        type: "tuple[]",
       },
     ],
     name: "CreateValidator",
@@ -59,10 +83,22 @@ const STAKING_ABI = [
         type: "address",
       },
       {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
         indexed: false,
-        internalType: "uint256",
+        internalType: "struct Cosmos.Coin[]",
         name: "amount",
-        type: "uint256",
+        type: "tuple[]",
       },
     ],
     name: "Delegate",
@@ -84,10 +120,22 @@ const STAKING_ABI = [
         type: "address",
       },
       {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
         indexed: false,
-        internalType: "uint256",
+        internalType: "struct Cosmos.Coin[]",
         name: "amount",
-        type: "uint256",
+        type: "tuple[]",
       },
     ],
     name: "Redelegate",
@@ -103,10 +151,22 @@ const STAKING_ABI = [
         type: "address",
       },
       {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
         indexed: false,
-        internalType: "uint256",
+        internalType: "struct Cosmos.Coin[]",
         name: "amount",
-        type: "uint256",
+        type: "tuple[]",
       },
     ],
     name: "Unbond",
@@ -131,7 +191,13 @@ const STAKING_ABI = [
       },
     ],
     name: "beginRedelegate",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "payable",
     type: "function",
   },
@@ -154,7 +220,13 @@ const STAKING_ABI = [
       },
     ],
     name: "beginRedelegate",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "payable",
     type: "function",
   },
@@ -177,7 +249,13 @@ const STAKING_ABI = [
       },
     ],
     name: "cancelUnbondingDelegation",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "payable",
     type: "function",
   },
@@ -200,7 +278,13 @@ const STAKING_ABI = [
       },
     ],
     name: "cancelUnbondingDelegation",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "payable",
     type: "function",
   },
@@ -218,7 +302,13 @@ const STAKING_ABI = [
       },
     ],
     name: "delegate",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "payable",
     type: "function",
   },
@@ -236,7 +326,13 @@ const STAKING_ABI = [
       },
     ],
     name: "delegate",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "payable",
     type: "function",
   },
@@ -305,6 +401,11 @@ const STAKING_ABI = [
     inputs: [
       {
         internalType: "address",
+        name: "delegatorAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
         name: "srcValidator",
         type: "address",
       },
@@ -356,6 +457,11 @@ const STAKING_ABI = [
     inputs: [
       {
         internalType: "string",
+        name: "delegatorAddress",
+        type: "string",
+      },
+      {
+        internalType: "string",
         name: "srcValidator",
         type: "string",
       },
@@ -403,54 +509,14 @@ const STAKING_ABI = [
     stateMutability: "view",
     type: "function",
   },
+
   {
     inputs: [
       {
-        internalType: "string",
-        name: "validatorAddress",
-        type: "string",
+        internalType: "address",
+        name: "delegatorAddress",
+        type: "address",
       },
-    ],
-    name: "getUnbondingDelegation",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "int64",
-            name: "creationHeight",
-            type: "int64",
-          },
-          {
-            internalType: "string",
-            name: "completionTime",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "initialBalance",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "balance",
-            type: "uint256",
-          },
-          {
-            internalType: "uint64",
-            name: "unbondingId",
-            type: "uint64",
-          },
-        ],
-        internalType: "struct IStakingModule.UnbondingDelegationEntry[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
       {
         internalType: "address",
         name: "validatorAddress",
@@ -495,6 +561,7 @@ const STAKING_ABI = [
     stateMutability: "view",
     type: "function",
   },
+
   {
     inputs: [
       {
@@ -509,7 +576,13 @@ const STAKING_ABI = [
       },
     ],
     name: "undelegate",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "payable",
     type: "function",
   },
@@ -527,7 +600,13 @@ const STAKING_ABI = [
       },
     ],
     name: "undelegate",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "payable",
     type: "function",
   },
