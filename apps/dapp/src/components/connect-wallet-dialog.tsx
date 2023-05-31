@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useBeraJs } from "@bera/berajs";
 import { ConnectorNames } from "@bera/berajs/src/config";

@@ -8,9 +8,9 @@ import { isConnectionKeplr } from "../../utils/isConnectionKeplr";
 import { ActionEnum, initialState, reducer } from "../../utils/stateReducer";
 import { TransactionFailedError } from "./error";
 import {
-  IContractWrite,
-  IUseContractWrite,
-  useContractWriteApi,
+  type IContractWrite,
+  type IUseContractWrite,
+  type useContractWriteApi,
 } from "./types";
 import useKeplrContractWrite from "./useKeplrContractWrite";
 
@@ -40,6 +40,7 @@ const useBeraContractWrite = ({
       let receipt: any | undefined;
       try {
         if (isConnectionKeplr()) {
+          console.log(window.keplr);
           receipt = await keplrWrite({ abi, address, params, functionName });
         } else {
           receipt = await walletClient?.writeContract({
@@ -67,6 +68,7 @@ const useBeraContractWrite = ({
           throw e;
         }
       } catch (e: any) {
+        console.log(e);
         dispatch({ type: ActionEnum.ERROR });
         onError && onError(e);
         return;

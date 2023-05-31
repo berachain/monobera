@@ -80,16 +80,21 @@ const useKeplrContractWrite = ({
           chainId: toHex(networkConfig.chain.id),
           type: 2,
         };
-
-        const signature = await window.keplr?.signEthereum(
-          networkConfig.chainId,
-          bech32Address ?? "",
-          JSON.stringify(dynamicFeeTx),
-          EthSignType.TRANSACTION,
-        );
+        console.log("dynamicFeeTx", dynamicFeeTx);
+        const signature = await window.keplr
+          ?.signEthereum(
+            networkConfig.chainId,
+            bech32Address ?? "",
+            JSON.stringify(dynamicFeeTx),
+            EthSignType.TRANSACTION,
+          )
+          .catch((e) => {
+            console.log("error", e);
+          });
         onSubmission && onSubmission();
 
         const reciept: any = await broadcastTransaction(toHex(signature ?? ""));
+        console.log("reciept", reciept);
         if (reciept?.status === 200) {
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess && onSuccess(reciept.data.result);
