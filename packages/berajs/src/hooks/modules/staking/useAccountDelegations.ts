@@ -1,4 +1,3 @@
-import { readContract } from "@wagmi/core";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
@@ -6,16 +5,18 @@ import { formatUnits } from "viem";
 import abi from "../../../config/abi/modules/staking/IStakingModule.abi";
 import { useBeraJs } from "../../../contexts";
 import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
+import { usePublicClient } from "wagmi";
 
 const REFRESH_INTERVAL = 2000;
 
 export const useGetAccountDelegation = (validatorAddress: `0x${string}`) => {
   const { account: address, error } = useBeraJs();
+  const publicClient = usePublicClient()
   useSWR(
     [address, validatorAddress, "rawDelegation"],
     async () => {
       if (address && !error) {
-        const result = await readContract({
+        const result = await publicClient.readContract({
           address: STAKING_PRECOMPILE_ADDRESS,
           abi,
           functionName: "getDelegation",
