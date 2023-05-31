@@ -28,10 +28,6 @@ export default function ConnectedWalletPopover() {
           onClick={() => setOpen(true)}
           variant="secondary"
         >
-          <Avatar className="mr-2 h-6 w-6">
-            <AvatarImage src="https://github.com/wallet.png" />
-            <AvatarFallback>BR</AvatarFallback>
-          </Avatar>
           {truncateWalletAddress(account ?? "")}
         </Button>
       </PopoverTrigger>

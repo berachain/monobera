@@ -6,7 +6,6 @@ export const useDelegate = (
   validatorAddress: `0x${string}`,
   amount: bigint,
 ) => {
-  console.log(validatorAddress, amount);
   const { write, isError, isLoading, isSuccess } = useBeraContractWrite({
     onError(error) {
       console.log("Error", error);
