@@ -19,22 +19,16 @@ const BGT = {
   coinDecimals: 18,
 };
 
-const HONEY = {
-  coinDenom: "honey",
-  coinMinimalDenom: "ahoney",
-  coinDecimals: 18,
-};
-
 const TESTNET_CHAIN_INFO: ChainInfo = {
   coinType: 60,
   rpc: "http://localhost:26657",
-  rest: "http://localhost:26654",
-  chainId: "beradevnet_420-1",
+  rest: "http://localhost:1317",
+  chainId: "polaris-2061",
   chainName: "berachain-devnet",
   stakeCurrency: BGT,
   bip44: beraBip44,
-  bech32Config: Bech32Address.defaultBech32Config("bera"),
-  currencies: [BERA, BGT, HONEY],
+  bech32Config: Bech32Address.defaultBech32Config("polar"),
+  currencies: [BERA, BGT],
   feeCurrencies: [BERA],
   features: ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
 };
@@ -48,7 +42,7 @@ const MAINNET_CHAIN_INFO: ChainInfo = {
   stakeCurrency: BGT,
   bip44: beraBip44,
   bech32Config: Bech32Address.defaultBech32Config("bera"),
-  currencies: [BERA, BGT, HONEY],
+  currencies: [BERA, BGT],
   feeCurrencies: [BERA],
   features: ["ibc-transfer", "ibc-go", "eth-address-gen", "eth-key-sign"],
 };

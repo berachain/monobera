@@ -9,7 +9,7 @@ import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
 
 const REFRESH_INTERVAL = 2000;
 
-export const useGetAccountDelegation = (validatorAddress: `0x${string}`) => {
+export const useSetUnbondingDelegation = (validatorAddress: `0x${string}`) => {
   const { account: address, error } = useBeraJs();
   useSWR(
     [address, validatorAddress, "rawDelegation"],
@@ -18,7 +18,7 @@ export const useGetAccountDelegation = (validatorAddress: `0x${string}`) => {
         const result = await readContract({
           address: STAKING_PRECOMPILE_ADDRESS,
           abi,
-          functionName: "getDelegation",
+          functionName: "getUnbondingDelegation",
           args: [address, validatorAddress],
         });
 
@@ -35,13 +35,13 @@ export const useGetAccountDelegation = (validatorAddress: `0x${string}`) => {
   );
 };
 
-export const useSelectedAccountDelegation = (validatorAddress: string) => {
+export const useGetUnbondingDelegation = (validatorAddress: `0x${string}`) => {
   const { account } = useBeraJs();
 
-  const { data: rawDelegation = undefined } = useSWRImmutable([
+  const { data: unbondingDelegations = undefined } = useSWRImmutable([
     account,
     validatorAddress,
-    "rawDelegation",
+    "unbondingDelegations",
   ]);
-  return rawDelegation;
+  return unbondingDelegations;
 };
