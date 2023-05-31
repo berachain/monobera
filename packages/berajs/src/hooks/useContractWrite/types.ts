@@ -10,7 +10,7 @@ export interface useContractWriteApi {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
-  write: (props: IContractWrite) => Promise<void>;
+  write: (props: IContractWrite) => void;
 }
 
 export interface IUseContractWrite {

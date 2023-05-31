@@ -8,9 +8,9 @@ import { isConnectionKeplr } from "../../utils/isConnectionKeplr";
 import { ActionEnum, initialState, reducer } from "../../utils/stateReducer";
 import { TransactionFailedError } from "./error";
 import {
-  IContractWrite,
-  IUseContractWrite,
-  useContractWriteApi,
+  type IContractWrite,
+  type IUseContractWrite,
+  type useContractWriteApi,
 } from "./types";
 import useKeplrContractWrite from "./useKeplrContractWrite";
 
