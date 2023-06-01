@@ -3,8 +3,8 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
-import abi from "../../../config/abi/modules/staking/IStakingModule.abi";
-import { useBeraJs } from "../../../contexts";
+import abi from "~/config/abi/modules/staking/IStakingModule.abi";
+import { useBeraJs } from "~/contexts";
 import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
 
 const REFRESH_INTERVAL = 2000;

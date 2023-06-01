@@ -6,11 +6,11 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 // import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
-import { type NetworkConfig } from "../../config/types";
-import { TransactionStoreProvider } from "../../hooks/transactions/TransactionStoreContext";
-import useEagerConnect from "../../hooks/useAuth/useEagerConnect";
-import { BeraJsProvider } from "../berajsProvider";
-import { CosmosWalletProvider } from "../keplrProvider/context";
+import { type NetworkConfig } from "~/config/types";
+import { BeraJsProvider } from "~/contexts/berajsProvider";
+import { CosmosWalletProvider } from "~/contexts/keplrProvider/context";
+import { TransactionStoreProvider } from "~/hooks/transactions/TransactionStoreContext";
+import useEagerConnect from "~/hooks/useAuth/useEagerConnect";
 
 interface IBeraConfig extends PropsWithChildren {
   networkConfig: NetworkConfig;

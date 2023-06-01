@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { isMobile } from "react-device-detect";
 
+import { ConnectorNames } from "~/config";
 import { connectorLocalStorageKey } from ".";
-import { ConnectorNames } from "../../config";
 import useAuth from "./useAuth";
 
 const safeGetLocalStorageItem = () => {

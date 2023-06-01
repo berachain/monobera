@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { usePublicClient } from "wagmi";
 
-import { useBeraJs } from "../../contexts";
-import { useChainId } from "../useChainId";
+import { useBeraJs } from "~/contexts";
+import { useChainId } from "~/hooks/useChainId";
 import {
   createTransactionStore,
   type TransactionStore,
