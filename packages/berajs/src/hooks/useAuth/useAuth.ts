@@ -1,10 +1,10 @@
 import { useCallback, useReducer } from "react";
-import { useConnect, useDisconnect, useSwitchNetwork } from "wagmi";
+import { useConnect, useDisconnect } from "wagmi";
 
 import { connectorLocalStorageKey } from ".";
 import { ConnectorNames } from "../../config";
 import { useBeraConfig, useKeplr } from "../../contexts";
-import { ActionEnum, initialState, reducer } from "../../utils/stateReducer";
+import { initialState, reducer } from "../../utils/stateReducer";
 import { KeplrNotInstalledError, KeplrOutdatedError } from "./error";
 
 export interface useAuthApi {
@@ -30,14 +30,14 @@ const useAuth = ({
   onLogoutError,
   onLogoutSuccess,
 }: IuseAuth = {}) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state] = useReducer(reducer, initialState);
   const { loginCosmos, logoutCosmos } = useKeplr();
   const { networkConfig } = useBeraConfig();
   const { connectAsync, connectors } = useConnect({
     chainId: networkConfig.chain.id,
   });
   const { disconnect } = useDisconnect();
-  const { switchNetworkAsync } = useSwitchNetwork();
+  // const { switchNetworkAsync } = useSwitchNetwork();
 
   const login = useCallback(
     async (connectorID: ConnectorNames | string) => {

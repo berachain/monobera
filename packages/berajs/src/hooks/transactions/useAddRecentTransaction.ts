@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { useBeraJs } from "../../contexts";
 import { useChainId } from "../useChainId";
 import { useTransactionStore } from "./TransactionStoreContext";
-import { NewTransaction } from "./transactionStore";
+import { type NewTransaction } from "./transactionStore";
 
 export function useAddRecentTransaction(): (
   transaction: NewTransaction,

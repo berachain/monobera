@@ -35,6 +35,12 @@ const MAINNET_TOKENS = [
     symbol: "HONEY",
     name: "HONEY",
   },
+  {
+    address: "0x3945f611Fe77A51C7F3e1f84709C1a2fDcDfAC5B",
+    decimals: 18,
+    symbol: "TK",
+    name: "Token",
+  },
 ];
 
 export const getTokens = () => {

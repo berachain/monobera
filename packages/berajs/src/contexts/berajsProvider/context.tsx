@@ -1,6 +1,6 @@
 "use client";
 
-import React, { PropsWithChildren, createContext, useState } from "react";
+import React, { createContext, useState, type PropsWithChildren } from "react";
 import { useAccount, useConnect } from "wagmi";
 
 import { useAuth } from "../../hooks";

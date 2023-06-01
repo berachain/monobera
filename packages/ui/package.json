@@ -8,6 +8,7 @@
     "clean": "git clean -xdf dist .turbo node_modules",
     "dev": "tsup --watch",
     "lint": "eslint src",
+    "lint:fix": "pnpm lint --fix",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
@@ -54,7 +55,7 @@
     "tailwindcss": "^3.3.2",
     "tailwindcss-animate": "^1.0.5",
     "tsup": "^6.7.0",
-    "typescript": "^5.1.0-beta"
+    "typescript": "^5.0.4"
   },
   "exports": {
     "./package.json": "./package.json",

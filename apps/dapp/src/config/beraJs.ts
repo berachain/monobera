@@ -15,7 +15,7 @@ export const BGT = {
 };
 
 const PolarisChain: Chain = {
-  id: 69420,
+  id: 2061,
   name: "Polaris",
   network: "Polaris",
   nativeCurrency: {

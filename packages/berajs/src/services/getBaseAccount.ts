@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { BaseAccount } from "./types";
+import { type BaseAccount } from "./types";
 
 const getBaseAccount = async (
   url: string,
