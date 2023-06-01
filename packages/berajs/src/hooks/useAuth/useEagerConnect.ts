@@ -45,7 +45,7 @@ const useEagerConnect = () => {
       tryLogin(connectorId);
     } else {
       // dapp browser
-      if (isMobile && window.ethereum) {
+      if (isMobile && window?.ethereum) {
         tryLogin(ConnectorNames.Injected);
       }
     }

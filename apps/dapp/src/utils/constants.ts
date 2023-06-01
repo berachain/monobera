@@ -139,6 +139,15 @@ export const tokens = [
     balance: "69.420",
     value: "$69,420.00",
   },
+  {
+    icon: "https://s2.coinmarketcap.com/static/img/coins/64x64/2.png",
+    name: "TestKoin",
+    symbol: "TK",
+    weight: "69%",
+    tokenP: "69%",
+    balance: "69.420",
+    value: "$69,420.00",
+  },
 ];
 
 export const liquidityProvisions = [

@@ -1,9 +1,10 @@
 import { bech32 } from "bech32";
+
 import {
   isValidChecksumAddress,
   stripHexPrefix,
   toChecksumAddress,
-} from "crypto-addr-codec";
+} from "./addressChecker";
 
 function makeChecksummedHexDecoder(chainId?: number) {
   return (data: string) => {

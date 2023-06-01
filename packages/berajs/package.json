@@ -1,21 +1,42 @@
 {
   "name": "@bera/berajs",
   "version": "0.1.0",
-  "main": "src/index.ts",
+  "main": "./src/index.ts",
   "author": "deez",
   "license": "MIT",
   "scripts": {
-    "check-types": "tsc --noEmit"
+    "build": "tsup src",
+    "clean": "git clean -xdf dist .turbo node_modules",
+    "check-types": "tsc --noEmit",
+    "dev": "tsup src --watch",
+    "lint": "eslint src",
+    "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
     "@keplr-wallet/cosmos": "^0.11.23",
-    "@keplr-wallet/types": "^0.11.26",
     "bech32": "^2.0.0",
-    "crypto-addr-codec": "^0.1.7",
     "react-device-detect": "^2.2.3",
+    "sha3": "^2.1.4",
     "swr": "^2.1.5",
-    "typescript": "^5.1.0-beta",
     "viem": "~0.3.35",
     "wagmi": "^1.0.2"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-day-picker": "^8.7.1",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@bera/eslint-config": "0.1.0",
+    "@hyrious/esbuild-plugin-commonjs": "0.2.2",
+    "@keplr-wallet/types": "^0.11.26",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.1",
+    "eslint": "^8.39.0",
+    "react": "18.2.0",
+    "react-day-picker": "^8.7.1",
+    "react-dom": "18.2.0",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4"
   }
 }

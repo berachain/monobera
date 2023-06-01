@@ -15,7 +15,6 @@ export const usePollUnbondingDelegation = (validatorAddress: `0x${string}`) => {
   useSWR(
     [address, validatorAddress, "getUnbondingDelegation"],
     async () => {
-      console.log(address, validatorAddress);
       if (address && !error) {
         const result: any = await publicClient
           .readContract({
@@ -27,11 +26,12 @@ export const usePollUnbondingDelegation = (validatorAddress: `0x${string}`) => {
           .catch((e) => {
             console.log(e);
           });
-        console.log(result);
-        return result.map((delegation) => ({
+        return result.map((delegation: any) => ({
           ...delegation,
-          initialBalance: formatUnits(delegation.initialBalance, 0).toString(),
-          balance: formatUnits(delegation.balance, 0).toString(),
+          initialBalance: formatUnits(delegation.initialBalance, 18).toString(),
+          creationHeight: formatUnits(delegation.creationHeight, 0).toString(),
+          unbondingId: formatUnits(delegation.initialBalance, 18).toString(),
+          balance: formatUnits(delegation.balance, 18).toString(),
         }));
       }
       return undefined;
@@ -48,7 +48,7 @@ export const useGetUnbondingDelegation = (validatorAddress: `0x${string}`) => {
   const { data: unbondingDelegations = undefined } = useSWRImmutable([
     account,
     validatorAddress,
-    "unbondingDelegations",
+    "getUnbondingDelegation",
   ]);
   return unbondingDelegations;
 };
