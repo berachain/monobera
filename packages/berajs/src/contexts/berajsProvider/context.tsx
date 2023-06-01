@@ -3,8 +3,8 @@
 import React, { createContext, useState, type PropsWithChildren } from "react";
 import { useAccount, useConnect } from "wagmi";
 
-import { useAuth } from "../../hooks";
-import { useKeplr } from "../keplrProvider/hooks";
+import { useKeplr } from "~/contexts/keplrProvider/hooks";
+import { useAuth } from "~/hooks";
 
 export interface IBeraJsAPI {
   bech32Address: string | undefined;

@@ -1,5 +1,5 @@
-import abi from "../../../config/abi/modules/staking/IStakingModule.abi";
-import { useBeraContractWrite } from "../../../hooks/useContractWrite";
+import abi from "~/config/abi/modules/staking/IStakingModule.abi";
+import { useBeraContractWrite } from "~/hooks/useContractWrite";
 import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
 
 export const useUnDelegate = (

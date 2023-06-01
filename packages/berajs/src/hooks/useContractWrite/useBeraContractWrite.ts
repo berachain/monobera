@@ -3,9 +3,9 @@
 import { useCallback, useReducer } from "react";
 import { usePublicClient, useWalletClient } from "wagmi";
 
-import { useBeraJs } from "../../contexts";
-import { isConnectionKeplr } from "../../utils/isConnectionKeplr";
-import { ActionEnum, initialState, reducer } from "../../utils/stateReducer";
+import { isConnectionKeplr } from "~/utils/isConnectionKeplr";
+import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
+import { useBeraJs } from "~/contexts";
 import { TransactionFailedError } from "./error";
 import {
   type IContractWrite,

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
-import { useBeraJs } from "../../contexts";
-import { useChainId } from "../useChainId";
+import { useBeraJs } from "~/contexts";
+import { useChainId } from "~/hooks/useChainId";
 import { useTransactionStore } from "./TransactionStoreContext";
 import { type NewTransaction } from "./transactionStore";
 

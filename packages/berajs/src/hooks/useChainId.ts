@@ -1,4 +1,4 @@
-import { useBeraConfig } from "../contexts";
+import { useBeraConfig } from "~/contexts";
 
 export function useChainId(): number | null {
   const { networkConfig } = useBeraConfig();
