@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { isProduction } from "../utils/isProduction";
+import { isProduction } from "~/api/utils/isProduction";
 
 export const MAINNET_RPC_URLS = [
   "https://bsc-dataseed1.ninicoin.io",

@@ -8,9 +8,9 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import abi from "../../../config/abi/modules/staking/IStakingModule.abi";
-import POLLING from "../../../config/constants/polling";
-import { useBeraJs } from "../../../contexts";
+import abi from "~/config/abi/modules/staking/IStakingModule.abi";
+import POLLING from "~/config/constants/polling";
+import { useBeraJs } from "~/contexts";
 import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
 
 // Returns a list of delegatorAddress's redelegating bonds from srcValidator to dstValidator
