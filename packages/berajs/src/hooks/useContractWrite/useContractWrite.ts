@@ -7,9 +7,9 @@ import { useBeraJs } from "../../contexts";
 import { ActionEnum, initialState, reducer } from "../../utils/stateReducer";
 import { TransactionFailedError } from "./error";
 import {
-  IContractWrite,
-  IUseContractWrite,
-  useContractWriteApi,
+  type IContractWrite,
+  type IUseContractWrite,
+  type useContractWriteApi,
 } from "./types";
 
 // just a wrapper around wagmi
@@ -30,8 +30,8 @@ const useContractWrite = ({
       abi,
       functionName,
       params,
-      txnName = "",
-    }: IContractWrite): Promise<void> => {
+    }: // txnName = "",
+    IContractWrite): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
       onLoading && onLoading();
       let receipt: any | undefined;

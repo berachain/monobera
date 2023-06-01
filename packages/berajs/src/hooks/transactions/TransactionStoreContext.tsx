@@ -3,7 +3,10 @@ import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "../../contexts";
 import { useChainId } from "../useChainId";
-import { TransactionStore, createTransactionStore } from "./transactionStore";
+import {
+  createTransactionStore,
+  type TransactionStore,
+} from "./transactionStore";
 
 // Only allow a single instance of the store to exist at once
 // so that multiple RainbowKitProvider instances can share the same store.

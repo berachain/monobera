@@ -24,7 +24,7 @@ export const usePollAccountDelegation = (validatorAddress: `0x${string}`) => {
         });
 
         const castedDelegation = result as bigint;
-        const parsedDelegation = formatUnits(castedDelegation, 0).toString();
+        const parsedDelegation = formatUnits(castedDelegation, 18).toString();
 
         return parsedDelegation;
       }

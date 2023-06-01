@@ -2,7 +2,7 @@
 
 import { Buffer } from "buffer";
 import React, { createContext, useCallback, useEffect, useState } from "react";
-import { Key } from "@keplr-wallet/types";
+import { type Key } from "@keplr-wallet/types";
 import { useAccount, useConnect } from "wagmi";
 
 import { ethToBera } from "../../utils/evmToBera";
