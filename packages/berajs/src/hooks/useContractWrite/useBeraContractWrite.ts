@@ -33,8 +33,8 @@ const useBeraContractWrite = ({
       abi,
       functionName,
       params,
-      txnName = "",
-    }: IContractWrite): Promise<void> => {
+    }: // txnName = "",
+    IContractWrite): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
       onLoading && onLoading();
       let receipt: any | undefined;

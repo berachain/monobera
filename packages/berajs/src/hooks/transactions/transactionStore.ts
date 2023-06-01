@@ -172,14 +172,14 @@ export function createTransactionStore({
 
     let completedTransactionCount = 0;
     const MAX_COMPLETED_TRANSACTIONS = 10;
-    const transactions = updateFn(data[account][chainId] ?? [])
+    const transactions = updateFn(data?.[account]?.[chainId] ?? [])
       // Keep the list of completed transactions from growing indefinitely
       .filter(({ status }) => {
         return status === "pending"
           ? true
           : completedTransactionCount++ <= MAX_COMPLETED_TRANSACTIONS;
       });
-
+    // @ts-ignore
     data[account][chainId] = transactions.length > 0 ? transactions : undefined;
 
     persistData();

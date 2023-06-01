@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { IReDelegationResponse } from "./types";
+import { type IReDelegationResponse } from "./types";
 
 const isUserPendingReDelegation = async (
   url: string,

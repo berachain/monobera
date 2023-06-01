@@ -12,6 +12,7 @@
     "dev": "turbo dev",
     "dev:dex": "turbo dev --filter=dapp",
     "dev:bgt": "turbo dev --filter=bgt-station",
+    "check-types": "turbo check-types",
     "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,md,json}\" --ignore-path .gitignore",
     "lint": "turbo lint && manypkg check",
     "lint:fix": "turbo lint:fix && manypkg fix",
@@ -28,6 +29,6 @@
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",
     "turbo": "^1.9.9",
-    "typescript": "^5.1.0-beta"
+    "typescript": "^5.0.4"
   }
 }

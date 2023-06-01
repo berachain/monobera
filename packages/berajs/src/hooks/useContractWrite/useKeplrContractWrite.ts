@@ -46,9 +46,10 @@ const useKeplrContractWrite = ({
       abi,
       functionName,
       params,
-      txnName = "",
-    }: IContractWrite) => {
+    }: // txnName = "",
+    IContractWrite) => {
       try {
+        if (!account) throw new Error("Need an account");
         dispatch({ type: ActionEnum.LOADING });
         onLoading && onLoading();
         const baseAccount: BaseAccount = await getBaseAccount(
@@ -80,7 +81,7 @@ const useKeplrContractWrite = ({
           chainId: toHex(networkConfig.chain.id),
           type: 2,
         };
-        console.log("dynamicFeeTx", dynamicFeeTx);
+
         const signature = await window.keplr
           ?.signEthereum(
             networkConfig.chainId,
@@ -88,17 +89,17 @@ const useKeplrContractWrite = ({
             JSON.stringify(dynamicFeeTx),
             EthSignType.TRANSACTION,
           )
-          .catch((e) => {
+          .catch((e: any) => {
             console.log("error", e);
           });
         onSubmission && onSubmission();
 
-        const reciept: any = await broadcastTransaction(toHex(signature ?? ""));
-        console.log("reciept", reciept);
-        if (reciept?.status === 200) {
+        const receipt: any = await broadcastTransaction(toHex(signature ?? ""));
+
+        if (receipt?.status === 200) {
           dispatch({ type: ActionEnum.SUCCESS });
-          onSuccess && onSuccess(reciept.data.result);
-          return reciept.data.result;
+          onSuccess && onSuccess(receipt.data.result);
+          return receipt.data.result;
         } else {
           dispatch({ type: ActionEnum.ERROR });
           const e = new TransactionFailedError();

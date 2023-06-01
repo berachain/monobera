@@ -1,23 +1,12 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "jsx": "react",
-    "target": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "declaration": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "outDir": "dist",
-    "baseUrl": ".",
+    "incremental": false,
     "paths": {
-      "@/*": ["src/"]
-    }
+      "~/*": ["./src/*"]
+    },
+    "typeRoots": ["./src/window.d.ts"]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist", "build", "coverage", "lib", "esm", "cjs"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
 }
