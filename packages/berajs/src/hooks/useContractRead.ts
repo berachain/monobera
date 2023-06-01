@@ -3,7 +3,7 @@
 import { useCallback, useReducer } from "react";
 import { usePublicClient } from "wagmi";
 
-import { ActionEnum, initialState, reducer } from "../utils/stateReducer";
+import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 
 interface IContractRead {
   address: `0x${string}`;

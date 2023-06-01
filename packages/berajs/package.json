@@ -1,7 +1,8 @@
 {
   "name": "@bera/berajs",
   "version": "0.1.0",
-  "main": "./src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "deez",
   "license": "MIT",
   "scripts": {
@@ -33,6 +34,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
     "eslint": "^8.39.0",
+    "fs": "0.0.2",
     "react": "18.2.0",
     "react-day-picker": "^8.7.1",
     "react-dom": "18.2.0",

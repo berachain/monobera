@@ -4,9 +4,9 @@ import axios from "axios";
 import { encodeFunctionData, toHex } from "viem";
 import { useFeeData, usePublicClient } from "wagmi";
 
-import { useBeraConfig, useBeraJs } from "../../contexts";
-import { getBaseAccount, type BaseAccount } from "../../services";
-import { ActionEnum, initialState, reducer } from "../../utils/stateReducer";
+import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
+import { useBeraConfig, useBeraJs } from "~/contexts";
+import { getBaseAccount, type BaseAccount } from "~/services";
 import { TransactionFailedError } from "./error";
 import { type IContractWrite, type IUseContractWrite } from "./types";
 

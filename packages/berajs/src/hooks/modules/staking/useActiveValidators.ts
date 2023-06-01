@@ -2,7 +2,7 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import abi from "../../../config/abi/modules/staking/IStakingModule.abi";
+import abi from "~/config/abi/modules/staking/IStakingModule.abi";
 import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
 
 const REFRESH_INTERVAL = 2000;

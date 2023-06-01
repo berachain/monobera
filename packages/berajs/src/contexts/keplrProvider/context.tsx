@@ -5,8 +5,8 @@ import React, { createContext, useCallback, useEffect, useState } from "react";
 import { type Key } from "@keplr-wallet/types";
 import { useAccount, useConnect } from "wagmi";
 
-import { ethToBera } from "../../utils/evmToBera";
-import useBeraConfig from "../berajsConfig/hooks";
+import { ethToBera } from "~/utils/evmToBera";
+import useBeraConfig from "~/contexts/berajsConfig/hooks";
 
 interface KeplrProvider extends React.PropsWithChildren {
   children: React.ReactNode;

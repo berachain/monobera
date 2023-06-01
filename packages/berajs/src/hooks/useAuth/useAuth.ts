@@ -1,10 +1,10 @@
 import { useCallback, useReducer } from "react";
 import { useConnect, useDisconnect } from "wagmi";
 
+import { initialState, reducer } from "~/utils/stateReducer";
+import { ConnectorNames } from "~/config";
+import { useBeraConfig, useKeplr } from "~/contexts";
 import { connectorLocalStorageKey } from ".";
-import { ConnectorNames } from "../../config";
-import { useBeraConfig, useKeplr } from "../../contexts";
-import { initialState, reducer } from "../../utils/stateReducer";
 import { KeplrNotInstalledError, KeplrOutdatedError } from "./error";
 
 export interface useAuthApi {
