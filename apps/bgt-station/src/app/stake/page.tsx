@@ -1,9 +1,21 @@
-import ValidatorDetails from "./components/ValidatorDetails";
+import React from "react";
+import { Card, CardHeader } from "@bera/ui/card";
+import { Input } from "@bera/ui/input";
 
-export default function Stake() {
+import ValidatorsTable from "./components/ValidatorsTable";
+import { columns } from "./components/column";
+import { validators } from "./data/validators";
+
+export default function ValidatorList() {
   return (
-    <div className="container flex justify-center">
-      <ValidatorDetails />
+    <div>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-0">
+          <h3 className="text-lg font-medium">Stake</h3>
+          <Input type="text" placeholder="Search" className="w-72" />
+        </CardHeader>
+        <ValidatorsTable columns={columns} data={validators} />
+      </Card>
     </div>
   );
 }

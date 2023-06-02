@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { cn } from "@bera/ui";
-import { Button } from "@bera/ui/button";
+import { useRouter } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -14,39 +13,30 @@ import {
 import {
   flexRender,
   getCoreRowModel,
-  getExpandedRowModel,
   useReactTable,
   type ColumnDef,
-  type ExpandedState,
 } from "@tanstack/react-table";
 
-import { type Reward } from "~/utils/constants";
+import { type Validator } from "../data/validators";
 
-interface DataTableProps {
-  columns: ColumnDef<Reward>[];
-  data: Reward[];
+interface ValidatorsTableProps {
+  columns: ColumnDef<Validator>[];
+  data: Validator[];
 }
 
-export default function RewardsTable({ columns, data }: DataTableProps) {
-  const [expanded, setExpanded] = React.useState<ExpandedState>({});
+export default function ValidatorsTable({
+  columns,
+  data,
+}: ValidatorsTableProps) {
   const table = useReactTable({
     data,
     columns,
-    state: {
-      expanded,
-    },
-    onExpandedChange: setExpanded,
-    getExpandedRowModel: getExpandedRowModel(),
     getCoreRowModel: getCoreRowModel(),
-    getSubRows: (row) => row.brokenDownRewards,
   });
-
-  const someOrAllRowsSelected =
-    table.getRowModel().rows?.length &&
-    table.getRowModel().rows.some((row) => row.getIsSelected());
+  const router = useRouter();
   return (
-    <div className="rounded-md p-4">
-      <Table className="border-b">
+    <div className="p-5">
+      <Table className="border-separate border-spacing-y-2 p-1">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -70,14 +60,22 @@ export default function RewardsTable({ columns, data }: DataTableProps) {
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
+                className="cursor-pointer "
                 data-state={row.getIsSelected() && "selected"}
-                className={cn("", !row.getCanExpand() && "border-0")}
+                onClick={() =>
+                  router.push(`/stake/${row.original.validatorAddress}`)
+                }
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="grow">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {row.getVisibleCells().map((cell) => {
+                  return (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))
           ) : (
@@ -89,9 +87,6 @@ export default function RewardsTable({ columns, data }: DataTableProps) {
           )}
         </TableBody>
       </Table>
-      <div className="mt-4 flex justify-center">
-        <Button disabled={!someOrAllRowsSelected}>Claim rewards</Button>
-      </div>
     </div>
   );
 }
