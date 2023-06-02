@@ -52,7 +52,7 @@ interface ChartData {
   data: number[];
 }
 
-interface LineChartProps {
+interface BeraChartProps {
   chartData: ChartData;
   pool?: string;
   type?: "line" | "bar";
@@ -60,7 +60,7 @@ interface LineChartProps {
   showXAxis?: boolean;
 }
 
-const LineChart: React.FC<LineChartProps> = ({
+const BeraChart: React.FC<BeraChartProps> = ({
   chartData,
   pool,
   type = "line",
@@ -173,4 +173,4 @@ const LineChart: React.FC<LineChartProps> = ({
   );
 };
 
-export default LineChart;
+export default BeraChart;

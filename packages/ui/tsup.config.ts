@@ -28,6 +28,7 @@ const client = [
 ];
 
 const server = [
+  "./src/badge.tsx",
   "./src/button.tsx",
   "./src/icons.tsx",
   "./src/card.tsx",

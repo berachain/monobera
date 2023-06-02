@@ -144,6 +144,10 @@
       "import": "./dist/use-toast.mjs",
       "types": "./dist/use-toast.d.ts"
     },
+    "./badge": {
+      "import": "./dist/badge.mjs",
+      "types": "./dist/badge.d.ts"
+    },
     "./button": {
       "import": "./dist/button.mjs",
       "types": "./dist/button.d.ts"
@@ -241,6 +245,9 @@
       ],
       "checkbox": [
         "dist/checkbox.d.ts"
+      ],
+      "badge": [
+        "dist/badge.d.ts"
       ]
     }
   }
