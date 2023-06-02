@@ -89,8 +89,7 @@ export function SwapCard({
         open={open}
         onSelectedToken={choosingFrom ? setSelectedFrom : setSelectedTo}
         setOpen={setOpen}
-        selectedFrom={selectedFrom}
-        selectedTo={selectedTo}
+        selectedTokens={[selectedFrom, selectedTo]}
       />
     </>
   );

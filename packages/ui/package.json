@@ -68,6 +68,10 @@
       "import": "./dist/accordion.mjs",
       "types": "./dist/accordion.d.ts"
     },
+    "./alert": {
+      "import": "./dist/alert.mjs",
+      "types": "./dist/alert.d.ts"
+    },
     "./avatar": {
       "import": "./dist/avatar.mjs",
       "types": "./dist/avatar.d.ts"
@@ -246,8 +250,8 @@
       "checkbox": [
         "dist/checkbox.d.ts"
       ],
-      "badge": [
-        "dist/badge.d.ts"
+      "alert": [
+        "dist/alert.d.ts"
       ]
     }
   }

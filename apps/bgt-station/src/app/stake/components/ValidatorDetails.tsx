@@ -9,7 +9,6 @@ import {
   useGetUnbondingDelegation,
   usePollAccountDelegation,
   usePollRawValidators,
-  // usePollRedelegations,
   usePollUnbondingDelegation,
   useSelectedAccountDelegation,
   useUnDelegate,

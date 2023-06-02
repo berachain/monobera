@@ -21,6 +21,7 @@ import {
   Info,
   Laptop,
   Loader2,
+  Lock,
   Moon,
   MoreVertical,
   Pizza,
@@ -28,7 +29,9 @@ import {
   Settings,
   SunMedium,
   Trash,
+  Trash2,
   Twitter,
+  Unlock,
   User,
   Wallet,
   X,
@@ -71,6 +74,9 @@ export const Icons = {
   laptop: Laptop,
   tooltip: Info,
   wallet: Wallet,
+  lock: Lock,
+  unlock: Unlock,
+  trash2: Trash2,
   external: ArrowUpRight,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
