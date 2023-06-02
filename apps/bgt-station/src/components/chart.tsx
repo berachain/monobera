@@ -52,15 +52,15 @@ interface ChartData {
   data: number[];
 }
 
-interface LineChartProps {
+interface BeraChartProps {
   chartData: ChartData;
   pool?: string;
-  type?: "line" | "bar";
+  type?: "line" | "bar" | "pie";
   showYAxis?: boolean;
   showXAxis?: boolean;
 }
 
-const LineChart: React.FC<LineChartProps> = ({
+const BeraChart: React.FC<BeraChartProps> = ({
   chartData,
   pool,
   type = "line",
@@ -139,6 +139,28 @@ const LineChart: React.FC<LineChartProps> = ({
       },
     },
   };
+
+  const pieOptions: ApexOptions = {
+    series: [33.333, 33.333, 33.333],
+    chart: {
+      width: 380,
+      type: "pie",
+    },
+    labels: ["Team A", "Team B", "Team C"],
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 300,
+          },
+          legend: {
+            position: "bottom",
+          },
+        },
+      },
+    ],
+  };
   return (
     <>
       {pool && (
@@ -146,11 +168,13 @@ const LineChart: React.FC<LineChartProps> = ({
           {pool}
         </h4>
       )}
-      <h4 className="mt-1 flex gap-1 align-middle text-2xl font-medium leading-none text-muted-foreground">
-        {(
-          chartData?.data[selectedXIndex] || chartData?.data[23]
-        )?.toLocaleString()}
-      </h4>
+      {type === "pie" ? null : (
+        <h4 className="mt-1 flex gap-1 align-middle text-2xl font-medium leading-none text-muted-foreground">
+          {(
+            chartData?.data[selectedXIndex] || chartData?.data[23]
+          )?.toLocaleString()}
+        </h4>
+      )}
       {selectedXIndex !== 23 && (
         <PercentageDifference
           value1={chartData.data[23] || 1}
@@ -164,8 +188,8 @@ const LineChart: React.FC<LineChartProps> = ({
         />
       )}
       <Chart
-        options={options}
-        series={[chartData]}
+        options={type === "pie" ? pieOptions : options}
+        series={type !== "pie" ? [chartData] : pieOptions.series}
         type={type}
         height={type === "line" ? 100 : 385}
       />
@@ -173,4 +197,4 @@ const LineChart: React.FC<LineChartProps> = ({
   );
 };
 
-export default LineChart;
+export default BeraChart;
