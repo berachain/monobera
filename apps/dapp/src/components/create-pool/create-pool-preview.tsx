@@ -4,7 +4,6 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { AlertCircle } from "lucide-react";
 
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import CreatePoolPreviewInput from "./create-pool-preview-input";
@@ -70,7 +69,7 @@ export function CreatePoolPreview({
         </div>
         {error && (
           <Alert variant="destructive" className="my-4">
-            <AlertCircle className="h-4 w-4" />
+            <Icons.warning className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error && error.message}</AlertDescription>
           </Alert>

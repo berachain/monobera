@@ -10,7 +10,7 @@ import {
   CreatePoolStepper,
   type IStep,
 } from "~/components/create-pool/create-pool-stepper";
-import useCreateTokenWeights from "~/hooks/useCreateTokenWeights";
+import useCreateTokenWeights, { Steps } from "~/hooks/useCreateTokenWeights";
 
 const DynamicChart = dynamic(
   () => import("~/components/create-pool/create-pool-pie-chart"),
@@ -64,7 +64,7 @@ export default function Create() {
         <CreatePoolStepper step={step} steps={steps} setStep={setStep} />
       </div>
       <div className="col-span-5 flex items-center justify-center lg:col-span-2 xl:col-span-1">
-        {step === 0 && (
+        {step === Steps.SET_TOKEN_WEIGHTS && (
           <CreatePool
             tokenWeights={tokenWeights}
             totalWeight={totalWeight}
@@ -75,26 +75,26 @@ export default function Create() {
             onLock={onLock}
             onUnlock={onUnlock}
             onAddToken={onAddToken}
-            onContinue={() => !error && setStep(1)}
+            onContinue={() => !error && setStep(Steps.SET_SWAP_FEES)}
           />
         )}
-        {step === 1 && (
+        {step === Steps.SET_SWAP_FEES && (
           <CreatePoolFeeData
             swapFee={swapFee}
             error={error}
             setSwapFee={setSwapFee}
-            onContinue={() => !error && setStep(2)}
+            onContinue={() => !error && setStep(Steps.SET_INITIAL_LIQUIDITY)}
           />
         )}
-        {step === 2 && (
+        {step === Steps.SET_INITIAL_LIQUIDITY && (
           <CreatePoolInitialLiquidity
             tokenWeights={tokenWeights}
             error={error}
             onTokenBalanceChange={onTokenBalanceChange}
-            onContinue={() => !error && setStep(3)}
+            onContinue={() => !error && setStep(Steps.CREATE_POOL_PREVIEW)}
           />
         )}
-        {step === 3 && (
+        {step === Steps.CREATE_POOL_PREVIEW && (
           <CreatePoolPreview
             tokenWeights={tokenWeights}
             poolName={poolName}

@@ -5,7 +5,7 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Input } from "@bera/ui/input";
 import { Toggle } from "@bera/ui/toggle";
-import { AlertCircle } from "lucide-react";
+import { Icons } from "@bera/ui/icons";
 
 type Props = {
   swapFee: number;
@@ -78,7 +78,7 @@ export function CreatePoolFeeData({
         </div>
         {error && (
           <Alert variant="destructive" className="my-4">
-            <AlertCircle className="h-4 w-4" />
+            <Icons.warning className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error && error.message}</AlertDescription>
           </Alert>
