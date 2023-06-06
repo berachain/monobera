@@ -1,9 +1,12 @@
 import React from "react";
-import Image from "next/image";
-import { useBeraJs, useSelectedAssetWalletBalance } from "@bera/berajs";
+import {
+  useBeraJs,
+  usePollAssetWalletBalance,
+  useSelectedAssetWalletBalance,
+} from "@bera/berajs";
 import { cn } from "@bera/ui";
+import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Progress } from "@bera/ui/progress";
 
@@ -21,9 +24,10 @@ export default function CreatePoolInitialLiquidityInput({
   onTokenBalanceChange,
 }: Props) {
   const [focused, setFocused] = React.useState(false);
+  usePollAssetWalletBalance();
   const tokenBalance = Number(
-    useSelectedAssetWalletBalance(tokenWeight.token?.address ?? "")?.balance ||
-      0,
+    useSelectedAssetWalletBalance(tokenWeight.token?.address ?? "")
+      ?.formattedBalance || 0,
   );
   const exceeding = tokenWeight.initialLiquidity > tokenBalance;
   const progress =
@@ -34,7 +38,7 @@ export default function CreatePoolInitialLiquidityInput({
     <div className="my-4">
       <div
         className={cn(
-          "flex flex-row justify-between gap-3 rounded-lg border border-input bg-input p-3 pr-6",
+          "flex flex-row flex-wrap justify-between gap-3 rounded-lg border border-input bg-input p-3 pr-6",
           focused && "border-border",
         )}
       >
@@ -42,15 +46,20 @@ export default function CreatePoolInitialLiquidityInput({
           className="hover:text-primary-text flex shrink-0 gap-2 hover:bg-transparent"
           variant="ghost"
         >
-          <Image
-            width={24}
-            height={24}
-            src={`/icons/${tokenWeight.token?.symbol.toLowerCase()}.jpg`}
-            alt={tokenWeight.token?.symbol ?? ""}
-            className="rounded-full"
-          />
-          {tokenWeight.token?.symbol}
-          <Icons.chevronDown className="h-4 w-4" />
+          <>
+            <Avatar className="h-12 w-12">
+              <AvatarImage
+                src={`/icons/${tokenWeight.token?.symbol.toLowerCase()}.jpg`}
+              />
+              <AvatarFallback className="font-bold">
+                {tokenWeight.token?.symbol.slice(0, 3)}
+              </AvatarFallback>
+            </Avatar>
+            {tokenWeight.token?.symbol}
+            <p className="text-xs text-muted-foreground">
+              {tokenWeight.weight}%
+            </p>
+          </>
         </Button>
         <Input
           type="number"
@@ -58,7 +67,9 @@ export default function CreatePoolInitialLiquidityInput({
           min="0"
           placeholder="0.0"
           className="w-100 grow border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-          value={tokenWeight.weight > 0 ? tokenWeight.weight : ""}
+          value={
+            tokenWeight.initialLiquidity > 0 ? tokenWeight.initialLiquidity : ""
+          }
           onFocus={() => {
             setFocused(true);
           }}
@@ -76,7 +87,7 @@ export default function CreatePoolInitialLiquidityInput({
                 <Button
                   variant="link"
                   className="text-md text-default h-8 p-0"
-                  onClick={() => onTokenBalanceChange(index, tokenBalance || 0)}
+                  onClick={() => onTokenBalanceChange(index, tokenBalance)}
                 >
                   Balance: {tokenBalance}
                 </Button>
@@ -84,9 +95,14 @@ export default function CreatePoolInitialLiquidityInput({
               <p>${tokenBalance && tokenBalance * 0.69}</p>
             </div>
             <Progress
-              value={progress}
+              value={exceeding ? 100 : progress}
               className={cn("h-2", exceeding && "bg-destructive")}
             />
+            {exceeding ? (
+              <p className="text-destructive">
+                You&apos;re exceeding your balance
+              </p>
+            ) : null}
           </div>
         ) : null}
       </div>

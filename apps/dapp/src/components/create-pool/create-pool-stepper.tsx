@@ -12,7 +12,7 @@ type Props = {
   steps: IStep[];
   setStep: (step: number) => void;
 };
-export function CreatePoolStepper({ step, steps, setStep }: Props) {
+export function CreatePoolStepper({ step = 0, steps, setStep }: Props) {
   return (
     <ol role="list" className="overflow-hidden">
       {steps.map((item, stepIdx) => (

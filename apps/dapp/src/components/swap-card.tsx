@@ -7,7 +7,6 @@ import { Icons } from "@bera/ui/icons";
 import PreviewDialog from "./preview-dialog";
 import { SettingsPopover } from "./settings-popover";
 import SwapInput from "./swap-input";
-import TokenDialog from "./token-dialog";
 
 type Props = {
   selectedFrom: Token;
@@ -22,10 +21,8 @@ export function SwapCard({
   setSelectedFrom,
   setSelectedTo,
 }: Props) {
-  const [choosingFrom, setChoosingFrom] = React.useState(false);
   const [fromAmount, setFromAmount] = React.useState(0);
   const [toAmount, setToAmount] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
   usePollAssetWalletBalance();
   return (
     <>
@@ -39,13 +36,13 @@ export function SwapCard({
           <div className="mb-4 flex flex-col gap-4">
             <SwapInput
               selected={selectedFrom}
-              setChoosing={setChoosingFrom}
+              selectedTokens={[selectedFrom, selectedTo]}
+              onTokenSelection={setSelectedFrom}
               amount={fromAmount}
               setAmount={(amount) => {
                 setFromAmount(Number(amount));
                 setToAmount(Number(amount) * 2);
               }}
-              setOpen={setOpen}
             />
             <Button
               variant="ghost"
@@ -61,13 +58,13 @@ export function SwapCard({
 
             <SwapInput
               selected={selectedTo}
-              setChoosing={() => setChoosingFrom(false)}
+              selectedTokens={[selectedFrom, selectedTo]}
+              onTokenSelection={setSelectedTo}
               amount={toAmount}
               setAmount={(amount) => {
                 setToAmount(Number(amount));
                 setFromAmount(Number(amount) / 2);
               }}
-              setOpen={setOpen}
               hideBalance
             />
 
@@ -78,19 +75,8 @@ export function SwapCard({
               toAmount={toAmount}
             />
           </div>
-
-          {/* <div className="flex items-center space-x-2">
-            <Switch id="gasless-mode" />
-            <Label htmlFor="airplane-mode">Swap gasless by signature</Label>
-          </div> */}
         </CardContent>
       </Card>
-      <TokenDialog
-        open={open}
-        onSelectedToken={choosingFrom ? setSelectedFrom : setSelectedTo}
-        setOpen={setOpen}
-        selectedTokens={[selectedFrom, selectedTo]}
-      />
     </>
   );
 }

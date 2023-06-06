@@ -9,7 +9,6 @@ import { AlertCircle } from "lucide-react";
 
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import CreatePoolInput from "./create-pool-input";
-import { SettingsPopover } from "./settings-popover";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -43,11 +42,9 @@ export function CreatePool({
 
   return (
     <>
-      <Card>
+      <Card className="max-w-[500px]">
         <CardHeader>
-          <CardTitle className="center flex justify-between">
-            Swap <SettingsPopover />
-          </CardTitle>
+          <CardTitle className="center flex justify-between">Swap</CardTitle>
         </CardHeader>
         <CardContent>
           {tokenWeights.map((tokenWeight, index) => {

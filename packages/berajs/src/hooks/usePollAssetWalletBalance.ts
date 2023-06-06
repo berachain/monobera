@@ -1,15 +1,18 @@
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
+import { formatUnits } from "viem";
 import { erc20ABI, usePublicClient } from "wagmi";
 
-import { useBeraJs } from "../../contexts";
-import { getContracts } from "../contracts";
-import { getTokens, type Token } from "../currency/tokens";
+import { getContracts } from "../api/contracts";
+import { type Token } from "../api/currency/tokens";
+import { useBeraJs } from "../contexts";
+import useTokens from "./useTokens";
 
 const REFRESH_BLOCK_INTERVAL = 2000;
 
 interface BalanceToken extends Token {
   balance: bigint;
+  formattedBalance: string;
 }
 
 interface Call {
@@ -23,16 +26,15 @@ export const usePollAssetWalletBalance = () => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account, error } = useBeraJs();
+  const { tokenList } = useTokens();
   useSWR(
     [account, "assetWalletBalances"],
     async () => {
       if (account && !error) {
-        const assetList: Token[] = getTokens();
-
-        const call: Call[] = assetList.map((item: Token) => ({
+        const call: Call[] = tokenList.map((item: Token) => ({
           address: item.address as `0x${string}`,
           abi: erc20ABI,
-          functionName: "balanceOf(address)",
+          functionName: "balanceOf",
           args: [account],
         }));
         const contracts = getContracts();
@@ -42,23 +44,26 @@ export const usePollAssetWalletBalance = () => {
         });
         const balances = await Promise.all(
           result.map(async (item: any, index: number) => {
-            const token = assetList[index];
+            const token = tokenList[index];
             if (item.error) {
               await mutate([account, token?.address, "assetWalletBalances"], {
                 balance: 0,
+                formattedBalance: "0",
                 ...token,
               });
               return { balance: 0, ...token };
             }
 
+            const resultBalanceToken: BalanceToken = {
+              balance: item.result,
+              formattedBalance: formatUnits(item.result, token?.decimals || 18),
+              ...token,
+            } as BalanceToken;
             await mutate(
               [account, token?.address, "assetWalletBalances"],
-              item.result,
+              resultBalanceToken,
             );
-            return {
-              ...token,
-              balance: item.result,
-            };
+            return resultBalanceToken;
           }),
         );
 

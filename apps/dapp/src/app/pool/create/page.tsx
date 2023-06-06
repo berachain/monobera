@@ -1,15 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import dynamic from "next/dynamic";
 
-import { CreatePool } from "~/components/create-pool";
-import { CreatePoolFeeData } from "~/components/create-pool-feedata";
-import { CreatePoolInitialLiquidity } from "~/components/create-pool-initial-liquidity";
+import { CreatePool } from "~/components/create-pool/create-pool";
+import { CreatePoolFeeData } from "~/components/create-pool/create-pool-feedata";
+import { CreatePoolInitialLiquidity } from "~/components/create-pool/create-pool-initial-liquidity";
+import { CreatePoolPreview } from "~/components/create-pool/create-pool-preview";
 import {
   CreatePoolStepper,
   type IStep,
-} from "~/components/create-pool-stepper";
+} from "~/components/create-pool/create-pool-stepper";
 import useCreateTokenWeights from "~/hooks/useCreateTokenWeights";
+
+const DynamicChart = dynamic(
+  () => import("~/components/create-pool/create-pool-pie-chart"),
+  {
+    loading: () => <p>Loading...</p>,
+    ssr: false,
+  },
+);
 
 const steps: IStep[] = [
   {
@@ -34,6 +43,9 @@ export default function Create() {
     tokenWeights,
     totalWeight,
     error,
+    swapFee,
+    poolName,
+    step,
     onTokenSelection,
     onAddToken,
     onRemove,
@@ -41,17 +53,17 @@ export default function Create() {
     onTokenBalanceChange,
     onLock,
     onUnlock,
+    setSwapFee,
+    setPoolName,
+    setStep,
   } = useCreateTokenWeights();
 
-  const [step, setStep] = useState(0);
-  const [swapFee, setSwapFee] = useState(0);
-
   return (
-    <div className="mx-8 grid grid-cols-5 gap-4">
-      <div className="col-span-1 hidden md:grid">
+    <div className="grid auto-cols-fr grid-flow-col justify-center gap-4">
+      <div className="col-span-1 hidden justify-end xl:flex">
         <CreatePoolStepper step={step} steps={steps} setStep={setStep} />
       </div>
-      <div className="col-span-5 md:col-span-3">
+      <div className="col-span-5 flex items-center justify-center lg:col-span-2 xl:col-span-1">
         {step === 0 && (
           <CreatePool
             tokenWeights={tokenWeights}
@@ -69,6 +81,7 @@ export default function Create() {
         {step === 1 && (
           <CreatePoolFeeData
             swapFee={swapFee}
+            error={error}
             setSwapFee={setSwapFee}
             onContinue={() => !error && setStep(2)}
           />
@@ -81,8 +94,20 @@ export default function Create() {
             onContinue={() => !error && setStep(3)}
           />
         )}
+        {step === 3 && (
+          <CreatePoolPreview
+            tokenWeights={tokenWeights}
+            poolName={poolName}
+            fee={swapFee}
+            setPoolName={setPoolName}
+            onSubmit={() => alert("ree")}
+            error={undefined}
+          />
+        )}
       </div>
-      <div className="col-span-1 hidden md:grid" />
+      <div className="col-span-1 hidden xl:grid">
+        <DynamicChart tokenWeights={tokenWeights} />
+      </div>
     </div>
   );
 }

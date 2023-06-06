@@ -31,7 +31,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <div className="relative flex min-h-screen flex-col overflow-hidden">
               <div className="flex-1">
                 <Header />
-                <main className="w-full pt-40">{props.children}</main>
+                <main className="w-full py-40">{props.children}</main>
                 <Toaster />
               </div>
               <SiteFooter />
