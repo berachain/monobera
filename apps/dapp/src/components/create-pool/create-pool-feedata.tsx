@@ -3,9 +3,9 @@ import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Toggle } from "@bera/ui/toggle";
-import { Icons } from "@bera/ui/icons";
 
 type Props = {
   swapFee: number;
