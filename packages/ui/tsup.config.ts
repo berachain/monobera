@@ -20,6 +20,7 @@ const client = [
   "./src/progress.tsx",
   "./src/scroll-area.tsx",
   "./src/select.tsx",
+  "./src/separator.tsx",
   "./src/sheet.tsx",
   "./src/switch.tsx",
   "./src/tabs.tsx",

@@ -24,7 +24,7 @@ export function MainNav({
           href={{ pathname: item.href }}
           key={`${item.href}-${idx}`}
           className={cn(
-            "hover:text-foregroundSecondary rounded-lg border-2 border-transparent px-2 py-1 text-sm font-medium transition-colors",
+            "rounded-lg border-2 border-transparent px-2 py-1 text-sm font-medium transition-colors hover:text-foregroundSecondary",
             item.href === pathname && " border-border",
           )}
         >

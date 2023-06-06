@@ -1,5 +1,6 @@
+"use client";
+
 import React from "react";
-import Image from "next/image";
 import {
   useBeraJs,
   useSelectedAssetWalletBalance,
@@ -7,26 +8,29 @@ import {
 } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Progress } from "@bera/ui/progress";
 
+import SelectToken from "~/components/select-token";
+
 type Props = {
   selected: Token;
-  setChoosing: (choosing: boolean) => void;
+  selectedTokens: Token[];
   amount: number;
-  setAmount: (amount: number) => void;
-  setOpen: (open: boolean) => void;
   hideBalance?: boolean;
+  selectable?: boolean;
+  onTokenSelection: (token: Token) => void;
+  setAmount: (amount: number) => void;
 };
 
 export default function SwapInput({
   selected,
-  setChoosing,
+  selectedTokens,
   amount,
-  setAmount,
-  setOpen,
   hideBalance = false,
+  selectable = true,
+  onTokenSelection,
+  setAmount,
 }: Props) {
   const [focused, setFocused] = React.useState(false);
   const tokenBalance = Number(
@@ -45,24 +49,12 @@ export default function SwapInput({
           focused && "border-border",
         )}
       >
-        <Button
-          className="hover:text-primary-text flex shrink-0 gap-2 hover:bg-transparent"
-          variant="ghost"
-          onClick={() => {
-            setOpen(true);
-            setChoosing(true);
-          }}
-        >
-          <Image
-            width={24}
-            height={24}
-            src={`/icons/${selected.symbol.toLowerCase()}.jpg`}
-            alt={selected.symbol}
-            className="rounded-full"
-          />
-          {selected.symbol}
-          <Icons.chevronDown className="h-4 w-4" />
-        </Button>
+        <SelectToken
+          token={selected}
+          onTokenSelection={onTokenSelection}
+          selectedTokens={selectedTokens}
+          selectable={selectable}
+        />
         <Input
           type="number"
           step="any"

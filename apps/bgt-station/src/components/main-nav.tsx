@@ -22,7 +22,7 @@ export function MainNav({
           key={`${item.href}-${idx}`}
           className={cn(
             "rounded-lg border-2 border-transparent px-2 py-1 text-sm font-medium text-backgroundSecondary transition-colors",
-            item.href === pathname && "text-foregroundSecondary",
+            item.href === pathname && "text-foreground",
           )}
         >
           {item.title}
