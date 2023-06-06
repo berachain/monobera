@@ -6,6 +6,8 @@ import { defineConfig, type Options } from "tsup";
 // the directive stays a client component and the rest is server...
 const client = [
   "./src/accordion.tsx",
+  "./src/alert.tsx",
+  "./src/alert-dialog.tsx",
   "./src/avatar.tsx",
   "./src/calendar.tsx",
   "./src/checkbox.tsx",

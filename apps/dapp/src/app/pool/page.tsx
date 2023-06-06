@@ -11,7 +11,9 @@ export default function Pool() {
   return (
     <div className="m-auto flex w-full flex-col gap-5">
       <h1 className="text-left text-2xl font-semibold">Pool page</h1>
-      <Button onClick={() => router.push("/pool/new")}>Create new pool</Button>
+      <Button onClick={() => router.push("/pool/create")}>
+        Create new pool
+      </Button>
       <Card className="w-full">
         <PoolsTable />
       </Card>
