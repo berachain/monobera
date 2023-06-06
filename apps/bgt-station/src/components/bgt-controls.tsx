@@ -9,8 +9,7 @@ export function BgtControls() {
   return (
     <div className="mr-5 flex flex-row items-center gap-5">
       <Button variant="outline">
-        <Icons.bgt />
-        <span className="sr-only">Open popover</span>
+        <Icons.honey />
         <span className="ml-3">69</span>
       </Button>
 

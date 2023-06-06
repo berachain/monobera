@@ -1,6 +1,7 @@
 "use client";
 
 import { truncateHash } from "@bera/berajs";
+import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { type Validator } from "../data/validators";
@@ -103,5 +104,65 @@ export const columns: ColumnDef<Validator>[] = [
     header: () => <p className="text-right">Bribe APR</p>,
     enableSorting: true,
     cell: ({ row }) => <p className="text-right">{row.original.bribeAPR}%</p>,
+  },
+];
+
+export const yourColumns: ColumnDef<Validator>[] = [
+  {
+    accessorKey: "name",
+    header: "Validator",
+    cell: ({ row }) => (
+      <div className="flex flex-col">
+        <p>{row.original.name}</p>
+        <p>{truncateHash(row.original.validatorAddress as `0x${string}`)}</p>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "votingPower",
+    header: "Voting power",
+    enableSorting: true,
+    cell: ({ row }) => {
+      return (
+        <>
+          <p>{row.original.votingPower}</p>
+          <span className="block w-full">0.69%</span>
+        </>
+      );
+    },
+  },
+  {
+    accessorKey: "commission",
+    header: () => <p className="text-right">Commission</p>,
+    enableSorting: true,
+    cell: ({ row }) => <p className="text-right">{row.original.commission}%</p>,
+  },
+  {
+    accessorKey: "actions",
+    header: () => <p className="text-center">Actions</p>,
+    cell: ({ row }) => (
+      <div className="flex flex-row items-center justify-center gap-3">
+        <Button
+          size="sm"
+          className="w-[100px]"
+          onClick={() => {
+            // TODO: implement modal
+            console.log(`Redelegate ${row.original.validatorAddress}`);
+          }}
+        >
+          Redelegate
+        </Button>
+        <Button
+          size="sm"
+          className="w-[100px]"
+          onClick={() => {
+            // TODO: implement modal
+            console.log(`Unbond ${row.original.validatorAddress}`);
+          }}
+        >
+          Unbond
+        </Button>
+      </div>
+    ),
   },
 ];
