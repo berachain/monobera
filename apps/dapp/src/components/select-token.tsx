@@ -1,10 +1,10 @@
 import React from "react";
 import { type Token } from "@bera/berajs";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-import TokenDialog from "./token-dialog";
+import TokenDialog from "~/components/token-dialog";
+import { TokenIcon } from "~/components/token-icon";
 
 type Props = {
   token: Token | undefined;
@@ -28,12 +28,7 @@ export default function SelectToken({
       >
         {token ? (
           <>
-            <Avatar className="h-12 w-12">
-              <AvatarImage src={`/icons/${token?.symbol.toLowerCase()}.jpg`} />
-              <AvatarFallback className="font-bold">
-                {token?.symbol.slice(0, 3)}
-              </AvatarFallback>
-            </Avatar>
+            <TokenIcon token={token} />
             {token?.symbol}
             <Icons.chevronDown className="h-4 w-4" />
           </>

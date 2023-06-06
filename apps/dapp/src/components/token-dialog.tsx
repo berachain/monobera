@@ -8,7 +8,6 @@ import {
   type Token,
 } from "@bera/berajs";
 import { cn } from "@bera/ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import {
@@ -21,6 +20,8 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
+
+import { TokenIcon } from "~/components/token-icon";
 
 type Props = {
   open: boolean;
@@ -175,12 +176,7 @@ const TokenDialogRow = ({
       }}
     >
       <div className="relative">
-        <Avatar className="h-12 w-12">
-          <AvatarImage src={`/icons/${token?.symbol.toLowerCase()}.jpg`} />
-          <AvatarFallback className="font-bold">
-            {token.symbol.slice(0, 3)}
-          </AvatarFallback>
-        </Avatar>
+        <TokenIcon token={token} />
         {focusedToken?.address === token.address && (
           <div className="absolute bottom-0 right-0 mr-[-4px] mt-[10px] flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white">
             <Icons.check className="h-3 w-3 " />
@@ -200,11 +196,7 @@ const TokenDialogRow = ({
       </div>
       <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
         <DialogContent className="flex flex-col items-center justify-center gap-2 px-4 sm:max-w-[300px]">
-          <Avatar className="h-12 w-12">
-            <AvatarFallback className="font-bold">
-              {token.symbol.slice(0, 3)}
-            </AvatarFallback>
-          </Avatar>
+          <TokenIcon token={token} />
           <Badge variant="destructive" className="w-fit gap-1">
             <Icons.warning className="h-4 w-4" />
             Warning

@@ -1,9 +1,9 @@
 import React from "react";
 import { cn } from "@bera/ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
 
+import { TokenIcon } from "~/components/token-icon";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 type Props = {
@@ -25,14 +25,7 @@ export default function CreatePoolPreviewInput({ tokenWeight }: Props) {
           variant="ghost"
         >
           <>
-            <Avatar className="h-12 w-12">
-              <AvatarImage
-                src={`/icons/${tokenWeight.token?.symbol.toLowerCase()}.jpg`}
-              />
-              <AvatarFallback className="font-bold">
-                {tokenWeight.token?.symbol.slice(0, 3)}
-              </AvatarFallback>
-            </Avatar>
+            <TokenIcon token={tokenWeight.token} />
             {tokenWeight.token?.symbol}
             <p className="text-xs text-muted-foreground">
               {tokenWeight.weight}%

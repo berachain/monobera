@@ -4,8 +4,8 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
+import CreatePoolInitialLiquidityInput from "~/components/create-pool/create-pool-initial-liquidity-input";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
-import CreatePoolInitialLiquidityInput from "./create-pool-initial-liquidity-input";
 
 type Props = {
   tokenWeights: ITokenWeight[];
