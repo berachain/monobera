@@ -1,6 +1,4 @@
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cn } from "@bera/ui";
 
 export interface IStep {
   name: string;
@@ -19,7 +17,7 @@ export function CreatePoolStepper({ step = 0, steps, setStep }: Props) {
         <li
           onClick={() => stepIdx < step && setStep(stepIdx)}
           key={stepIdx}
-          className={classNames(
+          className={cn(
             stepIdx !== steps.length - 1 ? "pb-10" : "",
             "relative w-8 cursor-pointer",
           )}
@@ -33,7 +31,7 @@ export function CreatePoolStepper({ step = 0, steps, setStep }: Props) {
           <a className="group relative flex items-start" aria-current="step">
             <span className="flex h-9 items-center" aria-hidden="true">
               <span
-                className={classNames(
+                className={cn(
                   "relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary",
                   step === stepIdx ? "bg-primary" : "bg-background",
                 )}

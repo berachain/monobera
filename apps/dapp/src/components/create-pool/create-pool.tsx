@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Progress } from "@bera/ui/progress";
 
+import CreatePoolInput from "~/components/create-pool/create-pool-input";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
-import CreatePoolInput from "./create-pool-input";
 
 type Props = {
   tokenWeights: ITokenWeight[];
