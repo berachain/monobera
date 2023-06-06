@@ -98,15 +98,15 @@ export default function TokenDialog({
   }
 
   const handleOpenChange = () => {
-    if(open) {
+    if (open) {
       setSearch("");
       setAddTokenOpen(false);
-      setOpen(false); 
+      setOpen(false);
     } else {
-      setOpen(true); 
+      setOpen(true);
     }
-  }
-  
+  };
+
   return (
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>

@@ -2,10 +2,10 @@ import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Icons } from "@bera/ui/icons";
 
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import CreatePoolInitialLiquidityInput from "./create-pool-initial-liquidity-input";
-import { Icons } from "@bera/ui/icons";
 
 type Props = {
   tokenWeights: ITokenWeight[];
