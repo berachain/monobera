@@ -1,6 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { useTokenInformation, type Token } from "@bera/berajs";
+import {
+  usePollAssetWalletBalance,
+  useSelectedAssetWalletBalance,
+  useTokenInformation,
+  useTokens,
+  type Token,
+} from "@bera/berajs";
+import { cn } from "@bera/ui";
+import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -8,16 +17,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@bera/ui/dialog";
+import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
-
-import useTokens from "~/hooks/useTokens";
 
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   onSelectedToken: (token: Token) => void;
   selectedTokens: Token[];
+  focusedToken: Token | undefined;
 };
 
 export default function TokenDialog({
@@ -25,12 +35,15 @@ export default function TokenDialog({
   onSelectedToken,
   setOpen,
   selectedTokens,
+  focusedToken = undefined,
 }: Props) {
-  const { tokenList } = useTokens();
+  const [search, setSearch] = useState("");
+  const [addTokenOpen, setAddTokenOpen] = useState(false);
+
+  const { tokenList, addNewToken } = useTokens();
   const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<Token[]>(tokenList);
-
-  const [search, setSearch] = useState("");
+  usePollAssetWalletBalance();
 
   useEffect(() => {
     const filteredTokens = tokenList.filter(
@@ -45,50 +58,160 @@ export default function TokenDialog({
       return;
     }
     setFilteredTokens(filteredTokens);
-  }, [read, search, tokenList]);
+  }, [read, search]); // Include 'filteredTokens' in the dependency array
 
   useEffect(() => {
-    setFilteredTokens([tokenInformation]);
+    if (tokenInformation) {
+      setFilteredTokens([tokenInformation]);
+    }
   }, [tokenInformation]);
 
+  const onTokenSelect = (token: Token) => {
+    console.log;
+    if (!token.default) {
+      setAddTokenOpen(true);
+      return;
+    }
+    onSelectedToken(token);
+    setOpen(false);
+    setSearch("");
+  };
+
+  const onAddToken = (token: Token) => {
+    addNewToken(token);
+    onSelectedToken(token);
+    setSearch("");
+    setAddTokenOpen(false);
+    setOpen(false);
+  };
+
+  const onAddTokenCancel = () => {
+    setSearch("");
+    setAddTokenOpen(false);
+    setOpen(false);
+  };
+
+  function isTokenSelected(token: Token): boolean {
+    return selectedTokens.some(
+      (selectedToken) => selectedToken?.address === token.address,
+    );
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="px-4 sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Token search</DialogTitle>
-        </DialogHeader>
-        <Input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by name, symbol or address"
-        />
-        <div className="grid gap-4 py-4">
-          {filteredTokens
-            .filter((token) => !selectedTokens.includes(token))
-            .map((token, i) => (
-              <Button
-                variant="ghost"
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="px-4 sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Token search</DialogTitle>
+          </DialogHeader>
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name, symbol or address"
+          />
+          <div className="grid gap-4 py-4">
+            {filteredTokens.map((token, i) => (
+              <TokenDialogRow
                 key={i}
-                className="flex items-center justify-start gap-2 px-2 text-left"
-                onClick={() => {
-                  onSelectedToken(token);
-                  setOpen(false);
-                }}
-              >
-                <Image
-                  width={30}
-                  height={30}
-                  src={`/icons/${token?.symbol.toLowerCase()}.jpg`}
-                  alt={token?.symbol}
-                  className="rounded-full"
-                />
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">{token?.symbol}</span>
-                </div>
-              </Button>
+                token={token}
+                isTokenSelected={isTokenSelected(token)}
+                focusedToken={focusedToken}
+                addTokenOpen={addTokenOpen}
+                setAddTokenOpen={setAddTokenOpen}
+                onAddToken={onAddToken}
+                onAddTokenCancel={onAddTokenCancel}
+                onTokenSelect={onTokenSelect}
+              />
             ))}
-        </div>
-      </DialogContent>
-    </Dialog>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
+
+type RowProps = {
+  token: Token;
+  isTokenSelected: boolean;
+  focusedToken: Token | undefined;
+  addTokenOpen: boolean;
+  setAddTokenOpen: (addTokenOpen: boolean) => void;
+  onAddToken: (token: Token) => void;
+  onAddTokenCancel: () => void;
+  onTokenSelect: (token: Token) => void;
+};
+const TokenDialogRow = ({
+  token,
+  isTokenSelected,
+  focusedToken,
+  addTokenOpen,
+  setAddTokenOpen,
+  onAddToken,
+  onAddTokenCancel,
+  onTokenSelect,
+}: RowProps) => {
+  const tokenBalance = Number(
+    useSelectedAssetWalletBalance(token?.address ?? "")?.formattedBalance || 0,
+  );
+  return (
+    <Button
+      variant="ghost"
+      className={cn(
+        "flex w-full items-center justify-start gap-2 px-2 text-left",
+        isTokenSelected && "opacity-50",
+      )}
+      onClick={() => {
+        onTokenSelect(token);
+      }}
+    >
+      <div className="relative">
+        <Avatar className="h-12 w-12">
+          <AvatarImage src={`/icons/${token?.symbol.toLowerCase()}.jpg`} />
+          <AvatarFallback className="font-bold">
+            {token.symbol.slice(0, 3)}
+          </AvatarFallback>
+        </Avatar>
+        {focusedToken?.address === token.address && (
+          <div className="absolute bottom-0 right-0 mr-[-4px] mt-[10px] flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white">
+            <Icons.check className="h-3 w-3 " />
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-col">
+        <span className="text-sm font-medium">{token?.symbol}</span>
+      </div>
+
+      {focusedToken?.address === token.address && (
+        <div className="absolute ml-auto"></div>
+      )}
+      <div className="ml-auto">
+        <p>{tokenBalance}</p>
+      </div>
+      <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
+        <DialogContent className="flex flex-col items-center justify-center gap-2 px-4 sm:max-w-[300px]">
+          <Avatar className="h-12 w-12">
+            <AvatarFallback className="font-bold">
+              {token.symbol.slice(0, 3)}
+            </AvatarFallback>
+          </Avatar>
+          <Badge variant="destructive" className="w-fit gap-1">
+            <Icons.warning className="h-4 w-4" />
+            Warning
+          </Badge>
+          <Balancer className="text-center text-xs">
+            {`This token doesn't appear on the active token list(s). Anyone can
+            create a token, including creating fake versions of existing tokens
+            that claim to represent projects`}
+          </Balancer>
+          <Button onClick={() => onAddToken(token)} size="sm">
+            I understand
+          </Button>
+          <Button size="sm" variant="ghost" onClick={onAddTokenCancel}>
+            cancel
+          </Button>
+        </DialogContent>
+      </Dialog>
+    </Button>
+  );
+};

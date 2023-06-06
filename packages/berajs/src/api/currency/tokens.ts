@@ -49,7 +49,7 @@ const MAINNET_TOKENS = [
   },
 ];
 
-export const getTokens = () => {
-  if (isProduction()) return [MAINNET_TOKENS];
+export const getTokens = (): Token[] => {
+  if (isProduction()) return MAINNET_TOKENS;
   else return TESTNET_TOKENS;
 };

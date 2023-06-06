@@ -7,6 +7,7 @@ import { defineConfig, type Options } from "tsup";
 const client = [
   "./src/accordion.tsx",
   "./src/alert.tsx",
+  "./src/alert-dialog.tsx",
   "./src/avatar.tsx",
   "./src/calendar.tsx",
   "./src/checkbox.tsx",

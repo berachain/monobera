@@ -1,6 +1,12 @@
+"use client";
+
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEffect, useState } from "react";
-import { type Token } from "@bera/berajs";
+import {
+  useCurrentAssetWalletBalances,
+  usePollAssetWalletBalance,
+  type Token,
+} from "@bera/berajs";
 
 export interface ITokenWeight {
   weight: number;
@@ -57,6 +63,16 @@ const useCreateTokenWeights = () => {
 
   const [error, setError] = useState<Error | undefined>(undefined);
 
+  const [poolName, setPoolName] = useState<string>("");
+
+  const [swapFee, setSwapFee] = useState<number>(0);
+
+  const [step, setStep] = useState(0);
+
+  usePollAssetWalletBalance();
+  const tokens = useCurrentAssetWalletBalances();
+
+  // track any errors
   useEffect(() => {
     setError(undefined);
 
@@ -67,6 +83,19 @@ const useCreateTokenWeights = () => {
       (item) => item.token === undefined,
     );
     const isInvalidTokenListLength = tokenWeights.length < 2;
+    const isInvalidInitialLiquidity =
+      step === 2 && !tokenWeights.some((item) => item.initialLiquidity !== 0);
+    const isInitialLiquidityExceedingBalance =
+      step === 2 &&
+      tokenWeights.some((item) => {
+        const foundToken = tokens.find(
+          (t) => t.address === item?.token?.address,
+        );
+        return (
+          Number(foundToken?.formattedBalance ?? 0) < item.initialLiquidity
+        );
+      });
+    const isInvalidSwapFee = (step === 1 && swapFee > 100) || swapFee < 0;
 
     if (hasZeroWeight) {
       setError(new InvalidInputError("Weight cannot be 0"));
@@ -76,22 +105,34 @@ const useCreateTokenWeights = () => {
       setError(new InvalidInputError("Tokens must be selected"));
     } else if (isInvalidTokenListLength) {
       setError(new InvalidInputError("At least 2 tokens must be selected"));
+    } else if (isInvalidInitialLiquidity) {
+      setError(new InvalidInputError("Must add initial liquidity."));
+    } else if (isInitialLiquidityExceedingBalance) {
+      setError(
+        new InvalidInputError("Initial liquidity greater than balance."),
+      );
+    } else if (isInvalidSwapFee) {
+      setError(new InvalidInputError("Invalid swap fee."));
     } else {
       setError(undefined);
     }
-  }, [tokenWeights, totalWeight, setError]);
+  }, [tokenWeights, totalWeight, step, tokens, swapFee]);
 
   // track total weight
   useEffect(() => {
     const weight = tokenWeights.reduce((acc, { weight }) => acc + weight, 0);
-    setTotalWeight(weight);
-  }, [tokenWeights, setTotalWeight]);
+
+    if (weight !== totalWeight) {
+      setTotalWeight(weight);
+    }
+  }, [tokenWeights, totalWeight, setTotalWeight]);
 
   // update weights
   useEffect(() => {
     const updatedTokenWeights: ITokenWeight[] = [...tokenWeights];
     const lockedValueWeights = getTotalWeightOfLockedItems(updatedTokenWeights);
-    const remainingWeight = 100 - lockedValueWeights;
+    const remainingWeight =
+      100 - lockedValueWeights < 0 ? 0 : 100 - lockedValueWeights;
 
     const numberOfUnlockedItems =
       getTotalUnlockedItemsCount(updatedTokenWeights);
@@ -115,6 +156,23 @@ const useCreateTokenWeights = () => {
       setTokenWeights(updatedTokenWeights);
     }
   }, [tokenWeights, setTokenWeights]);
+
+  // update pool name as tokens are selected & changed
+  useEffect(() => {
+    const formattedString = tokenWeights
+      .map(
+        (tokenWeight) =>
+          `${tokenWeight.weight}${tokenWeight.token?.symbol || ""}`,
+      )
+      .join("-");
+
+    setPoolName((prevPoolName) => {
+      if (prevPoolName !== formattedString) {
+        return formattedString;
+      }
+      return prevPoolName;
+    });
+  }, [tokenWeights]);
 
   const onAddToken = () => {
     if (tokenWeights.length >= 8) {
@@ -175,8 +233,19 @@ const useCreateTokenWeights = () => {
 
   const onTokenSelection = (token: Token, index: number) => {
     const updatedTokenWeights: ITokenWeight[] = [...tokenWeights];
-    // @ts-ignore
-    updatedTokenWeights[index].token = token;
+    const selectedTokenIndex = updatedTokenWeights.findIndex(
+      (selectedToken) => selectedToken?.token?.address === token.address,
+    );
+
+    if (selectedTokenIndex === -1) {
+      // @ts-ignore
+      updatedTokenWeights[index].token = token;
+    } else {
+      // @ts-ignore
+      updatedTokenWeights[selectedTokenIndex].token = undefined;
+      // @ts-ignore
+      updatedTokenWeights[index].token = token;
+    }
 
     setTokenWeights(updatedTokenWeights);
   };
@@ -185,6 +254,9 @@ const useCreateTokenWeights = () => {
     tokenWeights,
     totalWeight,
     error,
+    swapFee,
+    poolName,
+    step,
     onTokenSelection,
     onAddToken,
     onRemove,
@@ -192,6 +264,9 @@ const useCreateTokenWeights = () => {
     onTokenBalanceChange,
     onLock,
     onUnlock,
+    setSwapFee,
+    setPoolName,
+    setStep,
   };
 };
 
