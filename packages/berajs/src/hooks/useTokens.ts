@@ -14,7 +14,9 @@ const useTokens = (): IUseTokens => {
   const TOKEN_KEY = "tokens";
   const defaultTokens = useMemo(() => getTokens(), []);
 
-  const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<Token[]>(TOKEN_KEY, []);
+  const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
+    Token[]
+  >(TOKEN_KEY, []);
 
   const addNewToken = (token: Token) => {
     // Indicate that this token is now accepted into the default list of tokens
@@ -24,7 +26,9 @@ const useTokens = (): IUseTokens => {
     };
 
     // Check if the token already exists in tokenList
-    if (localStorageTokenList.some((t) => t.address === acceptedToken.address)) {
+    if (
+      localStorageTokenList.some((t) => t.address === acceptedToken.address)
+    ) {
       return;
     }
 

@@ -97,9 +97,19 @@ export default function TokenDialog({
     );
   }
 
+  const handleOpenChange = () => {
+    if(open) {
+      setSearch("");
+      setAddTokenOpen(false);
+      setOpen(false); 
+    } else {
+      setOpen(true); 
+    }
+  }
+  
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="px-4 sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Token search</DialogTitle>

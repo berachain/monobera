@@ -55,6 +55,13 @@ function getTotalUnlockedItemsCount(tokenWeights: ITokenWeight[]): number {
   }, 0);
 }
 
+export enum Steps {
+  SET_TOKEN_WEIGHTS = 0,
+  SET_SWAP_FEES = 1,
+  SET_INITIAL_LIQUIDITY = 2,
+  CREATE_POOL_PREVIEW = 3,
+}
+
 const useCreateTokenWeights = () => {
   const [tokenWeights, setTokenWeights] =
     useState<ITokenWeight[]>(defaultTokenWeight);
@@ -67,7 +74,7 @@ const useCreateTokenWeights = () => {
 
   const [swapFee, setSwapFee] = useState<number>(0);
 
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState<Steps>(Steps.SET_TOKEN_WEIGHTS);
 
   usePollAssetWalletBalance();
   const tokens = useCurrentAssetWalletBalances();
