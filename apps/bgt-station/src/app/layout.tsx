@@ -5,8 +5,8 @@ import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import { BeraConfig } from "@bera/berajs";
 import { cn } from "@bera/ui";
-import { Toaster } from "@bera/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
+import { Toaster } from "react-hot-toast";
 
 import { Header } from "~/components/header";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
@@ -36,7 +36,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 <main className="container w-full pt-20 lg:pl-52">
                   {props.children}
                 </main>
-                <Toaster />
+                <Toaster position="bottom-right" />
               </div>
             </div>
             <TailwindIndicator />

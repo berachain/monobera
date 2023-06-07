@@ -7,6 +7,7 @@ type TransactionStatus = "pending" | "confirmed" | "failed";
 export interface Transaction {
   hash: string;
   description: string;
+  timestamp: number;
   status: TransactionStatus;
   confirmations?: number;
 }

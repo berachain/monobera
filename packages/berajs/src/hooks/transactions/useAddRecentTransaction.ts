@@ -12,7 +12,6 @@ export function useAddRecentTransaction(): (
   const { account } = useBeraJs();
   const chainId = useChainId();
 
-  console.log(account, chainId);
   return useCallback(
     (transaction: NewTransaction) => {
       if (!account || !chainId) {
