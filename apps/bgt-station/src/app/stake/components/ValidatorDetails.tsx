@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import {
   truncateHash,
   useActiveValidators,
-  useDelegate,
   useGetRedelegations,
   useGetUnbondingDelegation,
   usePollAccountDelegation,
@@ -13,10 +12,13 @@ import {
   useSelectedAccountDelegation,
   useUnDelegate,
 } from "@bera/berajs";
+import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Input } from "@bera/ui/input";
 import { useToast } from "@bera/ui/use-toast";
+
+import { useTxn } from "~/hooks/usTxn";
 
 // Format normal units to base units for use on the EVM
 const formatToBaseUnit = (amount: string, decimals: number): bigint => {
@@ -52,10 +54,9 @@ export default function ValidatorDetails() {
   console.log(unboundingDelegations);
   const redelegations = useGetRedelegations();
 
-  const { delegate, isSuccess: isSuccesfulDelegation } = useDelegate(
-    validator,
-    formatToBaseUnit(input_amount, 18),
-  );
+  const { write, isLoading } = useTxn({
+    message: `Delegate ${input_amount} BGT`,
+  });
 
   const { undelegate, isSuccess: isSuccessfulUnDelegation } = useUnDelegate(
     validator,
@@ -77,18 +78,17 @@ export default function ValidatorDetails() {
       />
       <Button
         onClick={() => {
-          delegate();
-          if (isSuccesfulDelegation) {
-            toast({
-              title: "Congratulations",
-              description: "Successfully delegated",
-              duration: 2000,
-            });
-          }
+          write({
+            address: "0xd9A998CaC66092748FfEc7cFBD155Aae1737C2fF",
+            abi: STAKING_PRECOMPILE_ABI,
+            functionName: "delegate",
+            params: [validator, formatToBaseUnit(input_amount, 18)],
+          });
           setInputAmount("");
         }}
+        disabled={isLoading}
       >
-        Stake
+        {isLoading ? "Loading..." : "Delegate"}
       </Button>
       <Button
         variant="secondary"

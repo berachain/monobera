@@ -10,17 +10,6 @@ export enum CosmosChainId {
   TESTNET = "beradevnet_420-1",
 }
 
-export enum ConnectorNames {
-  Injected = "injected",
-  WalletConnect = "walletconnect",
-  Coinbase = "coinbase",
-  LedgerLive = "ledgerlive",
-  Trezor = "trezor",
-  Keplr = "keplr",
-  // KeplrWc = 'keplrWc', TODO:
-  CosmoStation = "cosmostation",
-}
-
 export interface Address {
   [ChainId.TESTNET]?: string;
   [ChainId.MAINNET]: string;
