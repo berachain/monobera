@@ -55,9 +55,11 @@ interface ChartData {
 interface BeraChartProps {
   chartData: ChartData;
   pool?: string;
-  type?: "line" | "bar" | "pie";
+  type?: "line" | "bar";
   showYAxis?: boolean;
   showXAxis?: boolean;
+  showHeader?: boolean;
+  height?: number;
 }
 
 const BeraChart: React.FC<BeraChartProps> = ({
@@ -65,6 +67,9 @@ const BeraChart: React.FC<BeraChartProps> = ({
   pool,
   type = "line",
   showYAxis = false,
+  showXAxis = false,
+  showHeader = true,
+  height = 100,
 }) => {
   const [selectedXIndex, setSelectedXIndex] = useState<number>(23);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,7 +111,14 @@ const BeraChart: React.FC<BeraChartProps> = ({
       width: 2,
     },
     yaxis: {
-      show: showYAxis,
+      axisBorder: {
+        show: showYAxis,
+      },
+    },
+    xaxis: {
+      axisBorder: {
+        show: showXAxis,
+      },
     },
     colors: ["#4bde80"],
     grid: {
@@ -140,58 +152,30 @@ const BeraChart: React.FC<BeraChartProps> = ({
     },
   };
 
-  const pieOptions: ApexOptions = {
-    series: [33.333, 33.333, 33.333],
-    chart: {
-      width: 380,
-      type: "pie",
-    },
-    labels: ["Team A", "Team B", "Team C"],
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 300,
-          },
-          legend: {
-            position: "bottom",
-          },
-        },
-      },
-    ],
-  };
   return (
     <>
-      {pool && (
+      {showHeader && pool && (
         <h4 className="flex gap-1 align-middle font-medium leading-none">
           {pool}
         </h4>
       )}
-      {type === "pie" ? null : (
-        <h4 className="mt-1 flex gap-1 align-middle text-2xl font-medium leading-none text-muted-foreground">
-          {(
-            chartData?.data[selectedXIndex] || chartData?.data[23]
-          )?.toLocaleString()}
-        </h4>
-      )}
-      {selectedXIndex !== 23 && (
+      {showHeader && selectedXIndex !== 23 && (
         <PercentageDifference
           value1={chartData.data[23] || 1}
           value2={chartData.data[selectedXIndex] || 1}
         />
       )}
-      {selectedXIndex === 23 && (
+      {showHeader && selectedXIndex === 23 && (
         <PercentageDifference
           value1={chartData.data[23] || 1}
           value2={chartData.data[0] || 1}
         />
       )}
       <Chart
-        options={type === "pie" ? pieOptions : options}
-        series={type !== "pie" ? [chartData] : pieOptions.series}
+        options={options}
+        series={[chartData]}
         type={type}
-        height={type === "line" ? 100 : 385}
+        height={type === "line" ? height : 385}
       />
     </>
   );
