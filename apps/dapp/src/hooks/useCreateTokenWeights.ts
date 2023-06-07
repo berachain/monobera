@@ -62,6 +62,10 @@ export enum Steps {
   CREATE_POOL_PREVIEW = 3,
 }
 
+/**
+ *
+ * @brief A state management hook for preparing the creation of a new pool
+ */
 const useCreateTokenWeights = () => {
   const [tokenWeights, setTokenWeights] =
     useState<ITokenWeight[]>(defaultTokenWeight);

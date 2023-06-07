@@ -100,7 +100,6 @@ export default function Create() {
             poolName={poolName}
             fee={swapFee}
             setPoolName={setPoolName}
-            onSubmit={() => alert("ree")}
             error={undefined}
           />
         )}
