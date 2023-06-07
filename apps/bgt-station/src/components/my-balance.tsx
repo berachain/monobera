@@ -35,7 +35,7 @@ export default function MyBalance() {
           </DialogTrigger>
         </div>
       </div>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Redeem preview</DialogTitle>
         </DialogHeader>
