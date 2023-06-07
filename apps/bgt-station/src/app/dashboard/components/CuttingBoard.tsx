@@ -1,7 +1,11 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 
-import CuttingBoardPieChart from "~/components/cutting-board-chart";
+const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
+  loading: () => <p>Loading...</p>,
+  ssr: false,
+});
 
 const items = [
   {
@@ -37,7 +41,7 @@ export function CuttingBoard() {
         <h3>Average weight</h3>
       </CardHeader>
       <CardContent className="flex justify-center">
-        <CuttingBoardPieChart items={items} />
+        <DynamicChart items={items} />
       </CardContent>
     </Card>
   );
