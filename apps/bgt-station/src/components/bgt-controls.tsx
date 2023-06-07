@@ -3,7 +3,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 
-import { BgtActivity } from "./bgt-activity";
+import { History } from "./bgt-activity";
 
 export function BgtControls() {
   return (
@@ -21,7 +21,7 @@ export function BgtControls() {
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-80" align="end">
-          <BgtActivity />
+          <History />
         </PopoverContent>
       </Popover>
     </div>
