@@ -1,4 +1,4 @@
-import { Details } from "./components";
+import { Details } from "./components/Details";
 import { bgtDetails } from "./constants";
 
 export default function Dashboard() {

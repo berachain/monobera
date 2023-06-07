@@ -2,7 +2,11 @@ import React from "react";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 
 import { type bgtDetails } from "../constants";
-import { CuttingBoard, EpochTimeline, Stats, Supply, Validators } from "./";
+import { CuttingBoard } from "./CuttingBoard";
+import { EpochTimeline } from "./EpochTimeline";
+import { Stats } from "./Stats";
+import { Supply } from "./Supply";
+import { Validators } from "./Validators";
 
 export function Details({ details }: { details: typeof bgtDetails }) {
   return (
