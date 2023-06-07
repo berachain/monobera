@@ -12,6 +12,7 @@ type Props = {
   tokenWeight: ITokenWeight;
   index: number;
   selectedTokens: Token[];
+  selectable?: boolean;
   onTokenSelection: (token: Token, index: number) => void;
   onRemove: (index: number) => void;
   onTokenWeightChange: (index: number, weight: number) => void;
@@ -28,6 +29,7 @@ export default function CreatePoolInput({
   onTokenWeightChange,
   onLock,
   onUnlock,
+  selectable = true,
 }: Props) {
   const [focused, setFocused] = React.useState(false);
 
@@ -46,6 +48,7 @@ export default function CreatePoolInput({
           token={tokenWeight.token}
           onTokenSelection={handleTokenSelection}
           selectedTokens={selectedTokens}
+          selectable={selectable}
         />
         <Input
           type="number"

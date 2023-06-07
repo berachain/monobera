@@ -18,6 +18,7 @@ type Props = {
   selectedTokens: Token[];
   amount: number;
   hideBalance?: boolean;
+  selectable?: boolean;
   onTokenSelection: (token: Token) => void;
   setAmount: (amount: number) => void;
 };
@@ -27,6 +28,7 @@ export default function SwapInput({
   selectedTokens,
   amount,
   hideBalance = false,
+  selectable = true,
   onTokenSelection,
   setAmount,
 }: Props) {
@@ -51,6 +53,7 @@ export default function SwapInput({
           token={selected}
           onTokenSelection={onTokenSelection}
           selectedTokens={selectedTokens}
+          selectable={selectable}
         />
         <Input
           type="number"
