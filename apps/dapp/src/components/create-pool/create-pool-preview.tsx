@@ -6,7 +6,9 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
 import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview-input";
+import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
+import { ApproveTokenButton } from "../approve-token-button";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -14,7 +16,6 @@ type Props = {
   poolName: string;
   fee: number;
   setPoolName: (poolName: string) => void;
-  onSubmit: () => void;
 };
 
 export function CreatePoolPreview({
@@ -23,9 +24,11 @@ export function CreatePoolPreview({
   poolName,
   fee,
   setPoolName,
-  onSubmit,
 }: Props) {
   const [editPoolName, setEditPoolName] = useState(false);
+
+  const { needsApproval } = useCreatePool(tokenWeights);
+
   return (
     <Card className="max-w-[500px]">
       <CardHeader>
@@ -74,9 +77,14 @@ export function CreatePoolPreview({
             <AlertDescription>{error && error.message}</AlertDescription>
           </Alert>
         )}
-        <Button className="mt-4 w-full" onClick={onSubmit}>
-          Continue
-        </Button>
+        {needsApproval.length > 0 ? (
+          <ApproveTokenButton
+            token={needsApproval[0]}
+            spender={"0x9D0FbF9349f646F1435072F2b0212084752EF460"}
+          />
+        ) : (
+          <Button>Create Pool</Button>
+        )}
       </CardContent>
     </Card>
   );

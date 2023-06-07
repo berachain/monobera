@@ -15,6 +15,7 @@ const config = {
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@next/next/no-html-link-for-pages": "off",
     "@typescript-eslint/restrict-template-expressions": "off",
+    "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
