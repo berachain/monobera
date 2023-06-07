@@ -1,5 +1,4 @@
 import React from "react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -7,11 +6,6 @@ import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
 import { validator } from "../data/validator";
-
-const DynamicChart = dynamic(() => import("~/components/chart"), {
-  loading: () => <p>Loading...</p>,
-  ssr: false,
-});
 
 export default function ValidatorDetailsPage({
   params: { validatorAddress },
@@ -131,7 +125,8 @@ export default function ValidatorDetailsPage({
               <h3 className="text-center text-lg text-backgroundSecondary">
                 Cutting board
               </h3>
-              <DynamicChart type="pie" chartData={{ name: "test", data: [] }} />
+              {/* Will replace with newly created PieChart component */}
+              {/* <DynamicChart type="pie" chartData={{ name: "test", data: [] }} /> */}
             </div>
           </div>
         </CardContent>

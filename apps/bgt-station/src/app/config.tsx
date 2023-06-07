@@ -11,12 +11,13 @@ export const navItems = [
     href: "/stake",
     title: "Stake",
   },
-  {
-    href: "/governance",
-    title: "Governance",
-  },
-  {
-    href: "/bribes",
-    title: "Bribes",
-  },
+  // TODO integrate for public testnet
+  // {
+  //   href: "/governance",
+  //   title: "Governance",
+  // },
+  // {
+  //   href: "/bribes",
+  //   title: "Bribes",
+  // },
 ];
