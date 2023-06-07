@@ -49,9 +49,11 @@ export default function ValidatorDetailsPage({
           </div>
           <div className="mt-5 flex flex-row flex-wrap gap-2">
             <Button className="w-36">Stake</Button>
-            <Button className="w-36" variant="secondary">
-              Bribe
-            </Button>
+            <Link href={`/stake/${validatorAddress}/bribe`}>
+              <Button className="w-36" variant="secondary">
+                Bribe
+              </Button>
+            </Link>
             <Button className="w-36" variant="secondary">
               Redelegate
             </Button>
