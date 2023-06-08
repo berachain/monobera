@@ -7,7 +7,7 @@ const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
   ssr: false,
 });
 
-const items = [
+export const items = [
   {
     weight: 10,
     detail: {
