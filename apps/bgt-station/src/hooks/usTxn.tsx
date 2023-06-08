@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { useAddRecentTransaction, useBeraContractWrite, type IContractWrite } from "@bera/berajs";
+import {
+  useAddRecentTransaction,
+  useBeraContractWrite,
+  type IContractWrite,
+} from "@bera/berajs";
 import toast from "react-hot-toast";
 
 interface IUseTxn {
