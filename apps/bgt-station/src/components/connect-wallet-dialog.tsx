@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { useBeraJs } from "@bera/berajs";
-import { ConnectorNames } from "@bera/berajs/src/config";
+import { ConnectorNames, useBeraJs } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
