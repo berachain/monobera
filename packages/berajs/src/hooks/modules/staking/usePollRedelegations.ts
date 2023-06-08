@@ -8,10 +8,9 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import abi from "~/config/abi/modules/staking/IStakingModule.abi";
+import { STAKING_PRECOMPILE_ABI, STAKING_PRECOMPILE_ADDRESS } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
-import { STAKING_PRECOMPILE_ADDRESS } from "./constants";
 
 // Returns a list of delegatorAddress's redelegating bonds from srcValidator to dstValidator
 // delegatorAddress: useBeraJs().account
@@ -36,24 +35,21 @@ export const usePollRedelegations = (
   dstValidator: `0x${string}`,
 ) => {
   const publicClient = usePublicClient();
-  // Grab the user account from bera.js
-  const { account: delegatorAddress, error } = useBeraJs();
+  const { account, error } = useBeraJs();
+  const method = "getRedelegations";
+  const QUERY_KEY = [account, method];
   useSWR(
-    [delegatorAddress, "redelegations"],
+    QUERY_KEY,
     async () => {
-      if (delegatorAddress && !error) {
-        const result = (await publicClient
-          .readContract({
-            address: STAKING_PRECOMPILE_ADDRESS,
-            abi,
-            functionName: "getRedelegations",
-            args: [delegatorAddress, srcValidator, dstValidator],
-          })
-          .catch((e) => {
-            console.log(e);
-          })) as Array<RedelegationEntry>;
+      if (account && !error) {
+        const result = await publicClient.readContract({
+          address: STAKING_PRECOMPILE_ADDRESS,
+          abi: STAKING_PRECOMPILE_ABI,
+          functionName: method,
+          args: [account, srcValidator, dstValidator],
+        });
 
-        if (result.length) {
+        if ((result as RedelegationEntry[]).length) {
           return result;
         }
         return [];
@@ -64,13 +60,12 @@ export const usePollRedelegations = (
       refreshInterval: POLLING.FAST,
     },
   );
-};
+  const useGetRedelegations = () => {
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    return data;
+  };
 
-export const useGetRedelegations = () => {
-  const { account: delegatorAddress } = useBeraJs();
-  const { data: redelegations = [] } = useSWRImmutable([
-    delegatorAddress,
-    "redelegations",
-  ]);
-  return redelegations;
+  return {
+    useGetRedelegations,
+  };
 };
