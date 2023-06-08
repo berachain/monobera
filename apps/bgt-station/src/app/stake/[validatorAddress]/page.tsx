@@ -2,13 +2,15 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { cn } from "@bera/ui";
-import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
+import BribesList from "~/components/bribes-list";
 import { items } from "~/app/dashboard/components/CuttingBoard";
+import { ValidatorDescription } from "../components/ValidatorDescription";
 import { validator } from "../data/validator";
+import DelegateButton from "./components/DelegateButton";
 
 const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
   loading: () => <p>Loading...</p>,
@@ -22,7 +24,7 @@ function getRandomBoolean(): boolean {
 export default function ValidatorDetailsPage({
   params: { validatorAddress },
 }: {
-  params: { validatorAddress: string };
+  params: { validatorAddress: `0x{string}` };
 }) {
   return (
     <div className="container mb-10 flex gap-5">
@@ -35,31 +37,10 @@ export default function ValidatorDetailsPage({
             </Link>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col gap-2">
-              <h3 className="flex flex-row items-center gap-5">
-                <Link
-                  href={validator.description.website}
-                  target="_blank"
-                  className="flex flex-row items-center gap-2 font-semibold"
-                >
-                  <span className="text-2xl">Name</span>
-                  <span>
-                    <Icons.external className="h-4 w-4" />
-                  </span>
-                </Link>
-                <span>
-                  <Badge variant="secondary">{validator.status}</Badge>{" "}
-                </span>
-              </h3>
-              <h4 className="text-backgroundSecondary">
-                <span className="font-medium">Operator BECH32 Address:</span>{" "}
-                {validator.operator_address}
-              </h4>
-              <h4 className="text-backgroundSecondary">
-                <span className="font-medium">Hex Address:</span>{" "}
-                {validatorAddress}
-              </h4>
-            </div>
+            <ValidatorDescription
+              validator={validator}
+              validatorAddress={validatorAddress}
+            />
 
             <div className="mt-5">
               <h4 className="text-lg font-medium">Details</h4>
@@ -115,14 +96,7 @@ export default function ValidatorDetailsPage({
                   </p>
                   <div className="mb-3 flex flex-row items-center justify-between border-t border-backgroundSecondary pt-3">
                     <p className="font-medium">Bribe rewards</p>
-                    <div className="flex flex-row">
-                      {Array.from(Array(3), (_, index) => (
-                        <div
-                          key={index}
-                          className="ml-[-15px] h-10 w-10 rounded-full border-2 border-white bg-gray-300"
-                        />
-                      ))}
-                    </div>
+                    <BribesList />
                   </div>
                 </div>
               </div>
@@ -149,18 +123,22 @@ export default function ValidatorDetailsPage({
               </div>
             </div>
             <div className="mt-5 grid grid-cols-4 gap-5">
-              <Button className="w-full">Stake</Button>
+              <DelegateButton
+                validator={validator}
+                validatorAddress={validatorAddress}
+              />
+
+              <Button className="w-full" variant="secondary">
+                Redelegate
+              </Button>
+              <Button className="w-full" variant="secondary">
+                Unbond
+              </Button>
               <Link href={`/stake/${validatorAddress}/bribe`}>
                 <Button className="w-full" variant="secondary">
                   Bribe
                 </Button>
               </Link>
-              <Button className="w-full" variant="secondary">
-                Redelegate
-              </Button>
-              <Button className="w-full" variant="secondary">
-                Undelegate
-              </Button>
             </div>
           </CardContent>
         </Card>

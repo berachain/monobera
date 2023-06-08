@@ -1,4 +1,5 @@
 export interface ValidatorInfo {
+  name: string;
   operator_address: string;
   consensus_pubkey: {
     "@type": "/cosmos.crypto.ed25519.PubKey";
@@ -29,6 +30,7 @@ export interface ValidatorInfo {
 }
 
 export const validator: ValidatorInfo = {
+  name: "Test Validator",
   operator_address: "evmosvaloper1qgnmzn23ksnvg77z33clqqz6sjulw2m37kxtrh",
   consensus_pubkey: {
     "@type": "/cosmos.crypto.ed25519.PubKey",
