@@ -6,4 +6,4 @@ export { default as useTokenApprove } from "./useTokenApprove";
 export * from "./useAuth";
 export * from "./useContractWrite";
 export * from "./transactions";
-export * from "./modules/staking";
+export * from "./modules";
