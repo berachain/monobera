@@ -12,7 +12,7 @@
 //   useSelectedAccountDelegation,
 //   useUnDelegate,
 // } from "@bera/berajs";
-// import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
+// import { STAKING_PRECOMPILE_ABI } from "@bera/berajs";
 // import { Button } from "@bera/ui/button";
 // import { Card } from "@bera/ui/card";
 // import { Input } from "@bera/ui/input";
