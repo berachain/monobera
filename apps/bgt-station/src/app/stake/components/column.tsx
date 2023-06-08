@@ -4,6 +4,7 @@ import { truncateHash } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
 
+import BribesList from "~/components/bribes-list";
 import { type Validator } from "../data/validators";
 
 function getRandomUniqueItems(array: string[], count: number): string[] {
@@ -88,14 +89,9 @@ export const columns: ColumnDef<Validator>[] = [
   {
     accessorKey: "bribes",
     header: () => <p className="text-right">Bribes</p>,
-    cell: ({ row }) => (
+    cell: ({}) => (
       <div className="flex flex-row justify-end">
-        {row.original.bribes.map((bribe) => (
-          <div
-            key={bribe}
-            className="ml-[-15px] h-10 w-10 rounded-full border-2 border-white bg-gray-300"
-          />
-        ))}
+        <BribesList />
       </div>
     ),
   },
@@ -145,7 +141,8 @@ export const yourColumns: ColumnDef<Validator>[] = [
         <Button
           size="sm"
           className="w-[100px]"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             // TODO: implement modal
             console.log(`Redelegate ${row.original.validatorAddress}`);
           }}
@@ -155,7 +152,8 @@ export const yourColumns: ColumnDef<Validator>[] = [
         <Button
           size="sm"
           className="w-[100px]"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             // TODO: implement modal
             console.log(`Unbond ${row.original.validatorAddress}`);
           }}

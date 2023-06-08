@@ -68,12 +68,14 @@ export function SwapCard({
               hideBalance
             />
 
-            <PreviewDialog
-              toToken={selectedTo}
-              fromToken={selectedFrom}
-              fromAmount={fromAmount}
-              toAmount={toAmount}
-            />
+            {selectedFrom && selectedTo ? (
+              <PreviewDialog
+                toToken={selectedTo}
+                fromToken={selectedFrom}
+                fromAmount={fromAmount}
+                toAmount={toAmount}
+              />
+            ) : null}
           </div>
         </CardContent>
       </Card>

@@ -4,6 +4,7 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { Separator } from "@bera/ui/separator";
 
 import SelectToken from "~/components/select-token";
 import { type ITokenBribe } from "./hooks/useCreateTokenBribes";
@@ -32,7 +33,7 @@ export default function BribeTokenInput({
   selectable = true,
 }: Props) {
   const [focused, setFocused] = React.useState(false);
-
+  console.log(tokenBribe);
   const handleTokenSelection = (token: Token) => {
     onTokenSelection(token, index);
   };
@@ -40,58 +41,63 @@ export default function BribeTokenInput({
     <div className="my-4">
       <div
         className={cn(
-          "flex flex-row items-center justify-between gap-3 rounded-lg border border-input bg-input px-4",
+          "flex gap-3 rounded-lg border border-input bg-input px-4",
           focused && "border-border",
         )}
       >
-        <SelectToken
-          token={tokenBribe.token}
-          onTokenSelection={handleTokenSelection}
-          selectedTokens={selectedTokens}
-          selectable={selectable}
-        />
-        <Input
-          type="number"
-          step="any"
-          min="0"
-          placeholder="0.0"
-          className="w-full grow border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-          value={tokenBribe.bribe > 0 ? tokenBribe.bribe : ""}
-          onFocus={() => {
-            setFocused(true);
-          }}
-          onBlur={() => {
-            setFocused(false);
-          }}
-          onChange={(e) => {
-            onTokenBribeChange(index, Number(e.target.value), proposals);
-          }}
-        />
-        <Input
-          type="number"
-          step="any"
-          min="0"
-          placeholder="0.0"
-          className="w-full grow border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-          value={tokenBribe.total > 0 ? tokenBribe.total : ""}
-          onFocus={() => {
-            setFocused(true);
-          }}
-          onBlur={() => {
-            setFocused(false);
-          }}
-          onChange={(e) => {
-            onTokenTotalChange(index, Number(e.target.value), proposals);
-          }}
-        />
+        <div className="flex w-3/4 items-center">
+          <SelectToken
+            token={tokenBribe.token}
+            onTokenSelection={handleTokenSelection}
+            selectedTokens={selectedTokens}
+            selectable={selectable}
+          />
+          <Input
+            type="number"
+            step="any"
+            min="0"
+            placeholder="0.0"
+            className="w-full grow border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+            value={tokenBribe.bribe > 0 ? tokenBribe.bribe : ""}
+            onFocus={() => {
+              setFocused(true);
+            }}
+            onBlur={() => {
+              setFocused(false);
+            }}
+            onChange={(e) => {
+              onTokenBribeChange(index, Number(e.target.value), proposals);
+            }}
+          />
+        </div>
+        <div className="flex w-1/4 items-center">
+          <Separator orientation="vertical" className="mr-3 h-6" />
+          <Input
+            type="number"
+            step="any"
+            min="0"
+            placeholder="0.0"
+            className="w-full grow border-0 p-0 text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+            value={tokenBribe.total > 0 ? tokenBribe.total : ""}
+            onFocus={() => {
+              setFocused(true);
+            }}
+            onBlur={() => {
+              setFocused(false);
+            }}
+            onChange={(e) => {
+              onTokenTotalChange(index, Number(e.target.value), proposals);
+            }}
+          />
 
-        <Button
-          variant="ghost"
-          className="rounded-full p-0 hover:text-red-500"
-          onClick={() => onRemove(index)}
-        >
-          <Icons.trash className="h-4 w-4 " />
-        </Button>
+          <Button
+            variant="ghost"
+            className="rounded-full p-0 hover:text-red-500"
+            onClick={() => onRemove(index)}
+          >
+            <Icons.trash className="h-4 w-4 " />
+          </Button>
+        </div>
       </div>
     </div>
   );

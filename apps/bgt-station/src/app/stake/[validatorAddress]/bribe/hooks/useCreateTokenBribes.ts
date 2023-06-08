@@ -21,9 +21,9 @@ export class InvalidInputError extends Error {
   }
 }
 
-const useCreateTokenWeights = () => {
+const useCreateTokenBribes = () => {
   const [tokenBribes, setTokenBribes] = useState<ITokenBribe[]>([]);
-
+  const [proposals, setProposals] = useState(String(100));
   const [error, setError] = useState<Error | undefined>(undefined);
 
   usePollAssetWalletBalance();
@@ -43,7 +43,7 @@ const useCreateTokenWeights = () => {
     const isTotalBribeExceedingBalance =
       tokenBribes && tokenBribes.length > 0
         ? tokenBribes.some((item) => {
-            const foundToken = tokens.find(
+            const foundToken = tokens?.find(
               (t) => t.address === item?.token?.address,
             );
             return Number(foundToken?.formattedBalance ?? 0) < item.total;
@@ -59,53 +59,45 @@ const useCreateTokenWeights = () => {
     } else {
       setError(undefined);
     }
-  }, [tokenBribes, tokens]);
+  }, [tokenBribes, tokens, proposals]);
 
   const onAddToken = () => {
-    let updatedTokenWeights: ITokenBribe[] = [...tokenBribes];
-    updatedTokenWeights = [
-      ...updatedTokenWeights,
+    let updatedTokenBribes: ITokenBribe[] = [...tokenBribes];
+    updatedTokenBribes = [
+      ...updatedTokenBribes,
       { token: undefined, bribe: 0, total: 0 },
     ];
-    setTokenBribes(updatedTokenWeights);
+    setTokenBribes(updatedTokenBribes);
   };
 
   const onRemove = (index: number) => {
-    const updatedTokenWeights: ITokenBribe[] = [
+    const updatedTokenBribes: ITokenBribe[] = [
       ...tokenBribes.slice(0, index),
       ...tokenBribes.slice(index + 1),
     ];
 
-    setTokenBribes(updatedTokenWeights);
+    setTokenBribes(updatedTokenBribes);
   };
 
-  const onTokenBribeChange = (
-    index: number,
-    bribe: number,
-    numberOfValidators: number,
-  ) => {
+  const onTokenBribeChange = (index: number, bribe: number) => {
     const updatedTokenBribes: ITokenBribe[] = [...tokenBribes];
     // @ts-ignore
-    updatedTokenWeights[index] = {
+    updatedTokenBribes[index] = {
       ...updatedTokenBribes[index],
 
       bribe,
-      total: bribe * numberOfValidators,
+      total: bribe * Number(proposals),
     };
 
     setTokenBribes(updatedTokenBribes);
   };
 
-  const onTokenTotalChange = (
-    index: number,
-    total: number,
-    numberOfValidators: number,
-  ) => {
+  const onTokenTotalChange = (index: number, total: number) => {
     const updatedTokenBribes: ITokenBribe[] = [...tokenBribes];
     // @ts-ignore
-    updatedTokenWeights[index] = {
+    updatedTokenBribes[index] = {
       ...updatedTokenBribes[index],
-      bribe: total / numberOfValidators,
+      bribe: total / Number(proposals),
       total,
     };
 
@@ -113,25 +105,27 @@ const useCreateTokenWeights = () => {
   };
 
   const onTokenSelection = (token: Token, index: number) => {
-    const updatedTokenWeights: ITokenBribe[] = [...tokenBribes];
-    const selectedTokenIndex = updatedTokenWeights.findIndex(
+    const updatedTokenBribes: ITokenBribe[] = [...tokenBribes];
+    const selectedTokenIndex = updatedTokenBribes.findIndex(
       (selectedToken) => selectedToken?.token?.address === token.address,
     );
 
     if (selectedTokenIndex === -1) {
       // @ts-ignore
-      updatedTokenWeights[index].token = token;
+      updatedTokenBribes[index].token = token;
     } else {
       // @ts-ignore
-      updatedTokenWeights[selectedTokenIndex].token = undefined;
+      updatedTokenBribes[selectedTokenIndex].token = undefined;
       // @ts-ignore
-      updatedTokenWeights[index].token = token;
+      updatedTokenBribes[index].token = token;
     }
 
-    setTokenBribes(updatedTokenWeights);
+    setTokenBribes(updatedTokenBribes);
   };
 
   return {
+    proposals,
+    setProposals,
     tokenBribes,
     error,
     onTokenSelection,
@@ -142,4 +136,4 @@ const useCreateTokenWeights = () => {
   };
 };
 
-export default useCreateTokenWeights;
+export default useCreateTokenBribes;
