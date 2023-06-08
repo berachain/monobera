@@ -29,12 +29,12 @@ export default function BribeTokenInputs({ proposals }: { proposals: number }) {
     <div className="rounded-lg border p-4">
       <div>
         <div className="flex gap-4">
-          <p className="flex w-3/4 justify-between">
+          <div className="flex w-3/4 justify-between">
             <p className="font-semibold text-backgroundSecondary">Token</p>
             <p className="text-right font-semibold text-backgroundSecondary">
               Per proposal
             </p>
-          </p>
+          </div>
           <p className="w-1/4 font-semibold text-backgroundSecondary">Total</p>
         </div>
         {tokenBribes.map((tokenBribe: ITokenBribe, index: number) => (
