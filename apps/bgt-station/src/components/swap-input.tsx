@@ -34,7 +34,7 @@ export default function SwapInput({
 }: Props) {
   const [focused, setFocused] = React.useState(false);
   const tokenBalance = Number(
-    useSelectedAssetWalletBalance(selected.address)?.balance || 0,
+    useSelectedAssetWalletBalance(selected?.address)?.balance || 0,
   );
 
   const { account } = useBeraJs();
@@ -45,7 +45,7 @@ export default function SwapInput({
     <>
       <div
         className={cn(
-          "flex flex-row flex-wrap justify-between gap-3 rounded-lg border border-input bg-input p-3 pr-6",
+          "flex flex-row flex-wrap items-center justify-between gap-3 rounded-lg border border-input bg-input p-3 pr-6",
           focused && "border-border",
         )}
       >

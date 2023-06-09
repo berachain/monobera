@@ -34,7 +34,7 @@ export default function SwapInput({
 }: Props) {
   const [focused, setFocused] = React.useState(false);
   const tokenBalance = Number(
-    useSelectedAssetWalletBalance(selected.address)?.balance || 0,
+    useSelectedAssetWalletBalance(selected?.address)?.balance || 0,
   );
 
   const { account } = useBeraJs();
@@ -76,15 +76,14 @@ export default function SwapInput({
           <div className="w-full pl-4">
             {hideBalance ? null : (
               <div className="flex items-center justify-between">
-                <p>
-                  <Button
-                    variant="link"
-                    className="text-md text-default h-8 p-0"
-                    onClick={() => setAmount(tokenBalance || 0)}
-                  >
-                    Balance: {tokenBalance}
-                  </Button>
-                </p>
+                <Button
+                  variant="link"
+                  className="text-md text-default mx-0 h-8 p-0"
+                  onClick={() => setAmount(tokenBalance || 0)}
+                >
+                  Balance: {tokenBalance}
+                </Button>
+
                 <p>${tokenBalance && tokenBalance * 0.69}</p>
               </div>
             )}

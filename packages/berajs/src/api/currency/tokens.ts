@@ -8,15 +8,7 @@ export type Token = {
   default: boolean;
 };
 
-const TESTNET_TOKENS: Token[] = [
-  {
-    address: "0x3945f611Fe77A51C7F3e1f84709C1a2fDcDfAC5B",
-    decimals: 18,
-    symbol: "TK",
-    name: "Token",
-    default: true,
-  },
-];
+const TESTNET_TOKENS: Token[] = [];
 
 const MAINNET_TOKENS = [
   {
