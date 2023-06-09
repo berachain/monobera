@@ -7,24 +7,32 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import BribeTokenInput from "./BribeTokenInput";
-import useCreateTokenWeights, {
-  type ITokenBribe,
-} from "./hooks/useCreateTokenBribes";
+import { type ITokenBribe } from "./hooks/useCreateTokenBribes";
 
-export default function BribeTokenInputs({ proposals }: { proposals: number }) {
-  const {
-    tokenBribes,
-    onAddToken,
-    onRemove,
-    onTokenBribeChange,
-    onTokenTotalChange,
-    onTokenSelection,
-    error,
-  } = useCreateTokenWeights();
+type Props = {
+  tokenBribes: ITokenBribe[];
+  proposals: number;
+  selectedTokens: Token[];
+  selectable?: boolean;
+  onTokenSelection: (token: Token, index: number) => void;
+  onRemove: (index: number) => void;
+  onAddToken: () => void;
+  onTokenBribeChange: (index: number, bribe: number, proposals: number) => void;
+  onTokenTotalChange: (index: number, total: number, proposals: number) => void;
+  error: Error | undefined;
+};
 
-  const selectedTokens = tokenBribes.map((tokenBribe: ITokenBribe) => {
-    return tokenBribe.token;
-  }) as Token[];
+export default function BribeTokenInputs({
+  tokenBribes,
+  proposals,
+  error,
+  selectedTokens,
+  onAddToken,
+  onTokenSelection,
+  onRemove,
+  onTokenBribeChange,
+  onTokenTotalChange,
+}: Props) {
   return (
     <div className="rounded-lg border p-4">
       <div>
@@ -57,7 +65,11 @@ export default function BribeTokenInputs({ proposals }: { proposals: number }) {
             <AlertDescription>{error && error.message}</AlertDescription>
           </Alert>
         )}
-        <Button variant="ghost" className="my-4 px-0" onClick={onAddToken}>
+        <Button
+          variant="ghost"
+          className="my-4 px-0"
+          onClick={() => onAddToken()}
+        >
           <Icons.add className="color-background mr-5 h-5 w-5 rounded-full bg-muted p-1" />
           Add a token
         </Button>

@@ -1,6 +1,6 @@
 export interface Validator {
   name: string;
-  validatorAddress: string;
+  address: `0x${string}`;
   votingPower: string;
   cuttingBoard: number[];
   commission: number;
@@ -11,7 +11,7 @@ export interface Validator {
 export const validators: Validator[] = [
   {
     name: "Validator A",
-    validatorAddress: "0x1234567890",
+    address: "0x1234567890",
     votingPower: "69,420,420.00",
     cuttingBoard: [30, 20, 25, 15, 10],
     commission: 5,
@@ -20,7 +20,7 @@ export const validators: Validator[] = [
   },
   {
     name: "Validator B",
-    validatorAddress: "0x1234567890",
+    address: "0x1234567890",
     votingPower: "69,420,420.00",
     cuttingBoard: [10, 25, 15, 30, 20],
     commission: 7,
@@ -29,7 +29,7 @@ export const validators: Validator[] = [
   },
   {
     name: "Validator C",
-    validatorAddress: "0x1234567890",
+    address: "0x1234567890",
     votingPower: "69,420,420.00",
     cuttingBoard: [20, 30, 10, 15, 25],
     commission: 3,
@@ -38,7 +38,7 @@ export const validators: Validator[] = [
   },
   {
     name: "Validator D",
-    validatorAddress: "0x1234567890",
+    address: "0x1234567890",
     votingPower: "69,420,420.00",
     cuttingBoard: [15, 10, 20, 30, 25],
     commission: 8,
@@ -47,7 +47,7 @@ export const validators: Validator[] = [
   },
   {
     name: "Validator E",
-    validatorAddress: "0x1234567890",
+    address: "0x1234567890",
     votingPower: "69,420,420.00",
     cuttingBoard: [25, 15, 30, 20, 10],
     commission: 6,
@@ -56,7 +56,7 @@ export const validators: Validator[] = [
   },
   {
     name: "Validator F",
-    validatorAddress: "0x1234567890",
+    address: "0x1234567890",
     votingPower: "69,420,420.00",
     cuttingBoard: [20, 25, 10, 30, 15],
     commission: 4,
@@ -65,7 +65,7 @@ export const validators: Validator[] = [
   },
   {
     name: "Validator G",
-    validatorAddress: "0x1234567890",
+    address: "0x1234567890",
     votingPower: "69,420,420.00",
     cuttingBoard: [10, 30, 25, 15, 20],
     commission: 5,
@@ -74,7 +74,7 @@ export const validators: Validator[] = [
   },
   {
     name: "Validator H",
-    validatorAddress: "0x1234567890",
+    address: "0x1234567890",
     votingPower: "69,420,420.00",
     cuttingBoard: [15, 20, 30, 10, 25],
     commission: 6,
@@ -83,7 +83,7 @@ export const validators: Validator[] = [
   },
   {
     name: "Validator I",
-    validatorAddress: "0x1234567890",
+    address: "0x1234567890",
     votingPower: "69,420,420.00",
     cuttingBoard: [30, 15, 10, 25, 20],
     commission: 3,
@@ -92,7 +92,7 @@ export const validators: Validator[] = [
   },
   {
     name: "Validator J",
-    validatorAddress: "0x1234567890",
+    address: "0x1234567890",
     votingPower: "69,420,420.00",
     cuttingBoard: [25, 20, 15, 10, 30],
     commission: 7,

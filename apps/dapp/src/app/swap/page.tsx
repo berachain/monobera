@@ -16,8 +16,8 @@ const DynamicChart = dynamic(() => import("~/components/chart"), {
 export default function Swap() {
   const tokens = getTokens();
   usePollAssetWalletBalance();
-  const bera = tokens.find((token) => token.symbol === "TK") as Token;
-  const honey = tokens.find((token) => token.symbol === "TK") as Token;
+  const bera = tokens?.find((token) => token.symbol === "TK") as Token;
+  const honey = tokens?.find((token) => token.symbol === "TK") as Token;
   const [selectedFrom, setSelectedFrom] = useState(honey);
   const [selectedTo, setSelectedTo] = useState(bera);
 
@@ -37,7 +37,7 @@ export default function Swap() {
           <CardContent className="p-4">
             <DynamicChart
               chartData={generateDataForPast24Hours()}
-              pool={`${selectedFrom.symbol}/${selectedTo.symbol}`}
+              pool={`${selectedFrom?.symbol}/${selectedTo?.symbol}`}
             />
           </CardContent>
         </Card>

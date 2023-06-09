@@ -8,7 +8,13 @@ import {
   TooltipTrigger,
 } from "@bera/ui/tooltip";
 
-export default function BeraTooltip({ text }: { text: string }) {
+export default function BeraTooltip({
+  text,
+  children,
+}: {
+  text: string;
+  children?: React.ReactNode;
+}) {
   const [tooltipOpen, setTooltipOpen] = React.useState(false);
   return (
     <TooltipProvider>
@@ -24,9 +30,7 @@ export default function BeraTooltip({ text }: { text: string }) {
             <span className="sr-only">Tooltip</span>
           </Button>
         </TooltipTrigger>
-        <TooltipContent>
-          <p>{text}</p>
-        </TooltipContent>
+        <TooltipContent>{children ? children : <p>{text}</p>}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
