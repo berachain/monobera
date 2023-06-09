@@ -1,10 +1,14 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { truncateHash } from "@bera/berajs";
+import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import BribesList from "~/components/bribes-list";
+import UnbondButton from "../[validatorAddress]/components/UnbondButton";
+import { validator } from "../data/validator";
 import { type Validator } from "../data/validators";
 
 function getRandomUniqueItems(array: string[], count: number): string[] {
@@ -53,9 +57,14 @@ export const columns: ColumnDef<Validator>[] = [
     accessorKey: "name",
     header: "Validator",
     cell: ({ row }) => (
-      <div className="flex flex-col">
-        <p>{row.original.name}</p>
-        <p>{truncateHash(row.original.validatorAddress as `0x${string}`)}</p>
+      <div className="flex items-center gap-2">
+        <div className="h-10 w-10 rounded-full bg-gray-300" />
+        <div className="flex flex-col">
+          <p>{row.original.name}</p>
+          <Badge variant="secondary">
+            {truncateHash(row.original.address)}
+          </Badge>
+        </div>
       </div>
     ),
   },
@@ -108,9 +117,14 @@ export const yourColumns: ColumnDef<Validator>[] = [
     accessorKey: "name",
     header: "Validator",
     cell: ({ row }) => (
-      <div className="flex flex-col">
-        <p>{row.original.name}</p>
-        <p>{truncateHash(row.original.validatorAddress as `0x${string}`)}</p>
+      <div className="flex items-center gap-2">
+        <div className="h-10 w-10 rounded-full bg-gray-300" />
+        <div className="flex flex-col">
+          <p>{row.original.name}</p>
+          <Badge variant="secondary">
+            {truncateHash(row.original.address)}
+          </Badge>
+        </div>
       </div>
     ),
   },
@@ -136,31 +150,28 @@ export const yourColumns: ColumnDef<Validator>[] = [
   {
     accessorKey: "actions",
     header: () => <p className="text-center">Actions</p>,
-    cell: ({ row }) => (
-      <div className="flex flex-row items-center justify-center gap-3">
-        <Button
-          size="sm"
-          className="w-[100px]"
-          onClick={(e) => {
-            e.stopPropagation();
-            // TODO: implement modal
-            console.log(`Redelegate ${row.original.validatorAddress}`);
-          }}
-        >
-          Redelegate
-        </Button>
-        <Button
-          size="sm"
-          className="w-[100px]"
-          onClick={(e) => {
-            e.stopPropagation();
-            // TODO: implement modal
-            console.log(`Unbond ${row.original.validatorAddress}`);
-          }}
-        >
-          Unbond
-        </Button>
-      </div>
-    ),
+    cell: ({ row }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const router = useRouter();
+      return (
+        <div className="flex flex-row items-center justify-center gap-3">
+          <Button
+            size="sm"
+            className="w-[100px]"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/stake/${row.original.address}/redelegate`);
+            }}
+          >
+            Redelegate
+          </Button>
+          <UnbondButton
+            inList
+            validator={validator}
+            validatorAddress={row.original.address as any}
+          />
+        </div>
+      );
+    },
   },
 ];
