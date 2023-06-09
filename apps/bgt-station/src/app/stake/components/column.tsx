@@ -168,7 +168,9 @@ export const yourColumns: ColumnDef<Validator>[] = [
           <UnbondButton
             inList
             validator={validator}
-            validatorAddress={row.original.address as any}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            validatorAddress={row.original.address}
           />
         </div>
       );
