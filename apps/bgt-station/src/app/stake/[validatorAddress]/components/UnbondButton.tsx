@@ -24,9 +24,14 @@ import { type ValidatorInfo } from "../../data/validator";
 type Props = {
   validator: ValidatorInfo;
   validatorAddress: `0x{string}`;
+  inList?: boolean;
 };
 
-export default function DelegateButton({ validator, validatorAddress }: Props) {
+export default function UnbondButton({
+  validator,
+  validatorAddress,
+  inList = false,
+}: Props) {
   const [open, setOpen] = React.useState(false);
   const [redeemAmount, setRedeemAmount] = React.useState(0);
   usePollAssetWalletBalance();
@@ -34,13 +39,22 @@ export default function DelegateButton({ validator, validatorAddress }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full">Delegate</Button>
+        <Button
+          variant="secondary"
+          className={!inList ? "w-full" : ""}
+          onClick={(e) => inList && e.stopPropagation()}
+        >
+          Unbond
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Delegate details</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-3">
+        <div
+          className=" 
+      flex flex-col gap-3"
+        >
           <div className="my-6 flex items-center gap-2">
             <div className="h-12 w-12 rounded-full bg-gray-300" />
             <div>

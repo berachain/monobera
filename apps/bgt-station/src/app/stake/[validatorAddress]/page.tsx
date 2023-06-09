@@ -11,6 +11,7 @@ import { items } from "~/app/dashboard/components/CuttingBoard";
 import { ValidatorDescription } from "../components/ValidatorDescription";
 import { validator } from "../data/validator";
 import DelegateButton from "./components/DelegateButton";
+import UnbondButton from "./components/UnbondButton";
 
 const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
   loading: () => <p>Loading...</p>,
@@ -127,13 +128,15 @@ export default function ValidatorDetailsPage({
                 validator={validator}
                 validatorAddress={validatorAddress}
               />
-
-              <Button className="w-full" variant="secondary">
-                Redelegate
-              </Button>
-              <Button className="w-full" variant="secondary">
-                Unbond
-              </Button>
+              <Link href={`/stake/${validatorAddress}/redelegate`}>
+                <Button className="w-full" variant="secondary">
+                  Redelegate
+                </Button>
+              </Link>
+              <UnbondButton
+                validator={validator}
+                validatorAddress={validatorAddress}
+              />
               <Link href={`/stake/${validatorAddress}/bribe`}>
                 <Button className="w-full" variant="secondary">
                   Bribe
