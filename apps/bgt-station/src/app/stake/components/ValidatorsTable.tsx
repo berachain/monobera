@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { usePollRawValidators } from "@bera/berajs";
 import {
   Table,
   TableBody,
@@ -33,6 +34,9 @@ export default function ValidatorsTable({
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+  const { useActiveValidators } = usePollRawValidators();
+  const validators = useActiveValidators();
+  console.log(validators);
   const router = useRouter();
   return (
     <div className="p-5">

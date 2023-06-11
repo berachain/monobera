@@ -33,7 +33,7 @@ interface IUsePollAllowances {
  * @param contract the address of the ERC20 token contract
  * @param tokens   the list of tokens to poll allowances for
  */
-const usePollAllowances = ({ contract, tokens }: IUsePollAllowances) => {
+export const usePollAllowances = ({ contract, tokens }: IUsePollAllowances) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account, error } = useBeraJs();
@@ -120,5 +120,3 @@ const usePollAllowances = ({ contract, tokens }: IUsePollAllowances) => {
     useSelectedAllowanceForContract,
   };
 };
-
-export default usePollAllowances;

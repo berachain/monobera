@@ -68,7 +68,6 @@ export default function TokenDialog({
   }, [tokenInformation]);
 
   const onTokenSelect = (token: Token) => {
-    console.log;
     if (!token.default) {
       setAddTokenOpen(true);
       return;

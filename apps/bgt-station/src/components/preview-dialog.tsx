@@ -24,8 +24,8 @@ import { useReadLocalStorage } from "usehooks-ts";
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
 
 type Props = {
-  fromToken: Token;
-  toToken: Token;
+  fromToken: Token | undefined;
+  toToken: Token | undefined;
   fromAmount: number;
   toAmount: number;
 };
@@ -60,7 +60,7 @@ export default function PreviewDialog({
         <div className="grid gap-4 py-4">
           <Card className="border border-border">
             <CardHeader className="rounded-t-lg border-b border-y-border p-3 text-sm text-primary-foreground">
-              Effective price: 1 {fromToken.symbol} = 0.5 {toToken.symbol}
+              Effective price: 1 {fromToken?.symbol} = 0.5 {toToken?.symbol}
             </CardHeader>
             <CardContent className="border-border p-3">
               <div className="relative -mx-3 grid grid-cols-1 divide-y divide-border">
@@ -68,13 +68,13 @@ export default function PreviewDialog({
                   <Image
                     width={36}
                     height={36}
-                    src={`/icons/${fromToken.symbol.toLowerCase()}.jpg}`}
-                    alt={fromToken.name}
+                    src={`/icons/${fromToken?.symbol.toLowerCase()}.jpg}`}
+                    alt={fromToken?.name ?? "token-img"}
                     className="rounded-full"
                   />
                   <div className="flex flex-col">
                     <span className="text-sm font-medium">
-                      {fromAmount} {fromToken.symbol}
+                      {fromAmount} {fromToken?.symbol}
                     </span>
                     <span className="text-xs font-medium text-backgroundSecondary">
                       $420,69.42
@@ -88,13 +88,13 @@ export default function PreviewDialog({
                   <Image
                     width={36}
                     height={36}
-                    src={`/icons/${toToken.symbol.toLowerCase()}.jpg}`}
-                    alt={toToken.name}
+                    src={`/icons/${toToken?.symbol.toLowerCase()}.jpg}`}
+                    alt={toToken?.name ?? "token-img"}
                     className="rounded-full"
                   />
                   <div className="flex flex-col">
                     <span className="text-sm font-medium">
-                      {toAmount} {toToken.symbol}
+                      {toAmount} {toToken?.symbol}
                     </span>
                     <span className="text-xs font-medium text-backgroundSecondary">
                       $69,420.69
@@ -119,11 +119,11 @@ export default function PreviewDialog({
                 <TabsContent value="tokens">
                   <p className="flex justify-between text-sm font-medium text-primary-foreground">
                     Total expected after fees
-                    <span className="text-right">420.69 {toToken.symbol}</span>
+                    <span className="text-right">420.69 {toToken?.symbol}</span>
                   </p>
                   <p className="flex justify-between text-sm text-primary-foreground">
                     The least you’ll get at {slippage}% slippage
-                    <span className="text-right">420.69 {toToken.symbol}</span>
+                    <span className="text-right">420.69 {toToken?.symbol}</span>
                   </p>
                 </TabsContent>
                 <TabsContent value="usd">

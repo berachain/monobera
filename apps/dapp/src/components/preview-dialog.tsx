@@ -1,14 +1,11 @@
 import React from "react";
-import Image from "next/image";
-import { type Token } from "@bera/berajs";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@bera/ui/accordion";
+  DEX_PRECOMPILE_ABI,
+  DEX_PRECOMPILE_ADDRESS,
+  formatUsd,
+  type Token,
+} from "@bera/berajs";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -17,31 +14,47 @@ import {
   DialogTrigger,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { useToast } from "@bera/ui/use-toast";
-import { useReadLocalStorage } from "usehooks-ts";
-
-import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
+import { useTxn } from "~/hooks/usTxn";
+import { TokenIcon } from "./token-icon";
+import { Card, CardHeader, CardContent } from "@bera/ui/card";
 
 type Props = {
-  fromToken: Token;
-  toToken: Token;
+  fromToken: Token | undefined;
+  toToken: Token | undefined;
   fromAmount: number;
   toAmount: number;
+  payload: any[];
 };
+
+function normalizeToRatio(num1: number, num2: number): string {
+  const ratio = num2 / num1;
+
+  return ratio.toFixed(6);
+}
 
 export default function PreviewDialog({
   fromToken,
   toToken,
   fromAmount,
   toAmount,
+  payload,
 }: Props) {
-  const slippage = useReadLocalStorage<number>(
-    LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE,
-  );
   const [open, setOpen] = React.useState(false);
-  const [approved, setApproved] = React.useState(false);
-  const { toast } = useToast();
+
+  const { write, isLoading } = useTxn({
+    message: `Swap ${fromAmount?.toFixed(4)} ${
+      fromToken?.symbol
+    } to ${toAmount?.toFixed(4)} ${toToken?.symbol}`,
+    onSuccess() {
+      setOpen(false);
+    },
+    onError() {
+      setOpen(false);
+    },
+  });
+
+  const ratio = normalizeToRatio(fromAmount, toAmount);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -59,25 +72,19 @@ export default function PreviewDialog({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Card className="border border-border">
-            <CardHeader className="rounded-t-lg border-b border-y-border p-3 text-sm text-primary-foreground">
-              Effective price: 1 {fromToken.symbol} = 0.5 {toToken.symbol}
+            <CardHeader className="rounded-t-lg border-b border-y-border p-3 text-xs text-primary-foreground">
+              Effective price: 1 {fromToken?.symbol} = {ratio} {toToken?.symbol}
             </CardHeader>
             <CardContent className="border-border p-3">
               <div className="relative -mx-3 grid grid-cols-1 divide-y divide-border">
                 <div className="flex items-center justify-start gap-2 px-3 pb-3">
-                  <Image
-                    width={36}
-                    height={36}
-                    src={`/icons/${fromToken.symbol.toLowerCase()}.jpg}`}
-                    alt={fromToken.name}
-                    className="rounded-full"
-                  />
+                  <TokenIcon token={fromToken} />
                   <div className="flex flex-col">
                     <span className="text-sm font-medium">
-                      {fromAmount} {fromToken.symbol}
+                      {fromAmount} {fromToken?.symbol}
                     </span>
                     <span className="text-xs font-medium text-backgroundSecondary">
-                      $420,69.42
+                      {formatUsd((fromAmount ?? 0) * 1)}
                     </span>
                   </div>
                 </div>
@@ -85,19 +92,13 @@ export default function PreviewDialog({
                   <Icons.arrowDown className="h-8 w-8 rounded-full border border-border bg-card p-1" />
                 </div>
                 <div className="flex items-center justify-start gap-2 px-3 pt-3">
-                  <Image
-                    width={36}
-                    height={36}
-                    src={`/icons/${toToken.symbol.toLowerCase()}.jpg}`}
-                    alt={toToken.name}
-                    className="rounded-full"
-                  />
+                  <TokenIcon token={toToken} />
                   <div className="flex flex-col">
                     <span className="text-sm font-medium">
-                      {toAmount} {toToken.symbol}
+                      {toAmount} {toToken?.symbol}
                     </span>
                     <span className="text-xs font-medium text-backgroundSecondary">
-                      $69,420.69
+                      {formatUsd((fromAmount ?? 0) * 1)}
                     </span>
                   </div>
                 </div>
@@ -105,71 +106,19 @@ export default function PreviewDialog({
             </CardContent>
           </Card>
         </div>
-        <div>
-          <Card className="border border-border">
-            <Tabs defaultValue="tokens" className="">
-              <CardHeader className="flex flex-row items-center justify-between rounded-t-lg border-b border-y-border p-3 text-base font-medium text-primary-foreground">
-                Swap from ETH details
-                <TabsList className="p-0">
-                  <TabsTrigger value="tokens">Tokens</TabsTrigger>
-                  <TabsTrigger value="usd">USD</TabsTrigger>
-                </TabsList>
-              </CardHeader>
-              <CardContent className="border-border px-3 pb-4 pt-1">
-                <TabsContent value="tokens">
-                  <p className="flex justify-between text-sm font-medium text-primary-foreground">
-                    Total expected after fees
-                    <span className="text-right">420.69 {toToken.symbol}</span>
-                  </p>
-                  <p className="flex justify-between text-sm text-primary-foreground">
-                    The least you’ll get at {slippage}% slippage
-                    <span className="text-right">420.69 {toToken.symbol}</span>
-                  </p>
-                </TabsContent>
-                <TabsContent value="usd">
-                  <p className="flex justify-between text-sm font-medium text-primary-foreground">
-                    Total expected after fees
-                    <span className="text-right">$420.69 USD</span>
-                  </p>
-                  <p className="flex justify-between text-sm text-primary-foreground">
-                    The least you’ll get at {slippage}% slippage
-                    <span className="text-right">$420.69 USD</span>
-                  </p>
-                </TabsContent>
-              </CardContent>
-            </Tabs>
-          </Card>
-        </div>
         <Button
+          disabled={isLoading}
           onClick={() => {
-            if (!approved) {
-              setApproved(true);
-            } else {
-              toast({
-                title: "Congratulations",
-                description: "You played yourself",
-                duration: 2000,
-              });
-              setOpen(false);
-            }
+            write({
+              address: DEX_PRECOMPILE_ADDRESS,
+              abi: DEX_PRECOMPILE_ABI,
+              functionName: "swap",
+              params: payload,
+            });
           }}
         >
-          {approved ? "Confirm" : "Approve"} swap
+          {isLoading ? "Loading..." : "Swap"}
         </Button>
-        <Accordion
-          type="single"
-          collapsible
-          className="rounded-lg border border-primary"
-        >
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="p-4 text-primary-foreground">
-              Swap route
-            </AccordionTrigger>
-            <AccordionContent className="px-4">
-              You&apos;re getting rugged. You&apos;re getting rugged.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
       </DialogContent>
     </Dialog>
   );

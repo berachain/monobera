@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useReducer } from "react";
-import { usePublicClient, useWalletClient } from "wagmi";
+import {
+  usePublicClient,
+  useWalletClient,
+} from "wagmi";
+import { prepareWriteContract } from "wagmi/actions";
 
 import { isConnectionKeplr } from "~/utils/isConnectionKeplr";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
@@ -39,8 +43,16 @@ const useBeraContractWrite = ({
       onLoading && onLoading();
       let receipt: any | undefined;
       try {
+        const { request } = await prepareWriteContract({
+          address: address,
+          abi: abi,
+          functionName: functionName,
+          args: params,
+        });
+
+        console.log("ERRROR", request);
+
         if (isConnectionKeplr()) {
-          console.log(window.keplr);
           receipt = await keplrWrite({ abi, address, params, functionName });
         } else {
           receipt = await walletClient?.writeContract({
@@ -65,7 +77,7 @@ const useBeraContractWrite = ({
         } else {
           const e = new TransactionFailedError();
           onError && onError(e);
-          throw e;
+          return;
         }
       } catch (e: any) {
         console.log(e);

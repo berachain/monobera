@@ -47,7 +47,6 @@ const BeraConfig: React.FC<IBeraConfig> = ({
 
   // TODO make this configurable
   const config = createConfig({
-    autoConnect: autoConnect,
     connectors: [
       new InjectedConnector({ chains }),
       // new WalletConnectConnector({

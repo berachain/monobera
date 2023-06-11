@@ -5,8 +5,8 @@ import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import { BeraConfig } from "@bera/berajs";
 import { cn } from "@bera/ui";
-import { Toaster } from "@bera/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
+import { Toaster } from "react-hot-toast";
 
 import { SiteFooter } from "~/components/footer";
 import { Header } from "~/components/header";
@@ -32,7 +32,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <div className="flex-1">
                 <Header />
                 <main className="w-full py-40">{props.children}</main>
-                <Toaster />
+                <Toaster position="bottom-right" />
               </div>
               <SiteFooter />
             </div>
