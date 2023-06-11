@@ -13,7 +13,7 @@ const useMultipleTokenApprovals = (
 
   const tokens = tokenInput
     .filter((token: TokenInput) => token !== undefined)
-    .map((token) => token)
+    .map((token) => token);
 
   const { useCurrentAllowancesForContract } = usePollAllowances({
     contract: spender,
