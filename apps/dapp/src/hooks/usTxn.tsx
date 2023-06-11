@@ -8,6 +8,11 @@ import toast from "react-hot-toast";
 
 interface IUseTxn {
   message?: string;
+  disableToast?: boolean;
+  onSuccess?: (hash: string) => void;
+  onError?: (e?: Error) => void;
+  onLoading?: () => void;
+  onSubmission?: () => void;
 }
 
 interface UseTxnApi {
@@ -36,7 +41,14 @@ interface UseTxnApi {
  * @param {IUseTxn} options - Options for the hook.
  * @returns {UseTxnApi} - An object containing transaction-related properties and functions.
  */
-export const useTxn = ({ message = "" }: IUseTxn): UseTxnApi => {
+export const useTxn = ({
+  message = "",
+  disableToast = false,
+  onSuccess,
+  onError,
+  onLoading,
+  onSubmission,
+}: IUseTxn): UseTxnApi => {
   const [identifier, setIdentifier] = useState("");
 
   /**
@@ -55,13 +67,15 @@ export const useTxn = ({ message = "" }: IUseTxn): UseTxnApi => {
      * @param {Error} error - The error object.
      */
     onError: (error) => {
-      console.log(error);
-      toast.remove(`loading-${identifier}`);
-      toast.remove(`submission-${identifier}`);
-      toast.error("Error!", {
-        duration: 3000,
-        id: `error-${identifier}`,
-      });
+      if (!disableToast) {
+        toast.remove(`loading-${identifier}`);
+        toast.remove(`submission-${identifier}`);
+        toast.error("Error!", {
+          duration: 3000,
+          id: `error-${identifier}`,
+        });
+      }
+      onError && onError(error);
     },
 
     /**
@@ -70,37 +84,46 @@ export const useTxn = ({ message = "" }: IUseTxn): UseTxnApi => {
      * @param {string} result - The transaction hash or result.
      */
     onSuccess: (result) => {
-      toast.remove(`submission-${identifier}`);
-      toast.success("Success!", {
-        duration: 3000,
-        id: `success-${identifier}`,
-      });
+      if (!disableToast) {
+        toast.remove(`submission-${identifier}`);
+        toast.success("Success!", {
+          duration: 3000,
+          id: `success-${identifier}`,
+        });
+      }
       addRecentTransaction({
         hash: result,
         description: message,
         timestamp: Date.now(),
       });
+      onSuccess && onSuccess(result);
     },
 
     /**
      * Loading callback function executed when a transaction is loading or in progress.
      */
     onLoading: () => {
-      toast.loading("Waiting for wallet action.", {
-        icon: "⏳",
-        id: `loading-${identifier}`,
-      });
+      if (!disableToast) {
+        toast.loading("Waiting for wallet action.", {
+          icon: "⏳",
+          id: `loading-${identifier}`,
+        });
+      }
+      onLoading && onLoading();
     },
 
     /**
      * Submission callback function executed when a transaction is submitted.
      */
     onSubmission: () => {
-      toast.remove(`loading-${identifier}`);
-      toast("Transaction submitted!", {
-        icon: "⬆️",
-        id: `submission-${identifier}`,
-      });
+      if (!disableToast) {
+        toast.remove(`loading-${identifier}`);
+        toast("Transaction submitted!", {
+          icon: "⬆️",
+          id: `submission-${identifier}`,
+        });
+      }
+      onSubmission && onSubmission();
     },
   });
 

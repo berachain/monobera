@@ -3,6 +3,7 @@
 import React from "react";
 import { useBeraJs } from "@bera/berajs";
 import { ConnectorNames } from "@bera/berajs/src/config";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -39,7 +40,10 @@ const ConnectorAssets: ConnectorAssetsType = {
   },
 };
 
-export default function ConnectWalletDialog() {
+type Props = {
+  className?: string;
+};
+export default function ConnectWalletDialog({ className }: Props) {
   const [open, setOpen] = React.useState(false);
   const [, setConnectorId] = useLocalStorage(
     LOCAL_STORAGE_KEYS.CONNECTOR_ID,
@@ -51,7 +55,7 @@ export default function ConnectWalletDialog() {
     <>
       <Button
         onClick={() => setOpen(true)}
-        className="w-48"
+        className={cn("w-48", className)}
         variant="secondary"
       >
         <Icons.wallet className="mr-2 h-6 w-6" />

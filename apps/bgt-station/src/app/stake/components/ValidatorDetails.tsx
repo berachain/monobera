@@ -78,12 +78,12 @@
 //       />
 //       <Button
 //         onClick={() => {
-//           write({
-//             address: "0xd9A998CaC66092748FfEc7cFBD155Aae1737C2fF",
-//             abi: STAKING_PRECOMPILE_ABI,
-//             functionName: "delegate",
-//             params: [validator, formatToBaseUnit(input_amount, 18)],
-//           });
+//   write({
+//     address: "0xd9A998CaC66092748FfEc7cFBD155Aae1737C2fF",
+//     abi: STAKING_PRECOMPILE_ABI,
+//     functionName: "delegate",
+//     params: [validator, formatToBaseUnit(input_amount, 18)],
+//   });
 //           setInputAmount("");
 //         }}
 //         disabled={isLoading}

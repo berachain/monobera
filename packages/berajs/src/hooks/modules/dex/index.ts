@@ -9,3 +9,4 @@ export * from "./usePollUserDepositedPools";
 export * from "./usePoolData";
 export * from "./usePollPoolTokens";
 export * from "./usePollPreviewSharesForSingleSidedLiquidityRequest";
+export * from "./usePollPreviewSwapExact";
