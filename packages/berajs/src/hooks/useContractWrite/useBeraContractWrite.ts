@@ -1,10 +1,7 @@
 "use client";
 
 import { useCallback, useReducer } from "react";
-import {
-  usePublicClient,
-  useWalletClient,
-} from "wagmi";
+import { usePublicClient, useWalletClient } from "wagmi";
 import { prepareWriteContract } from "wagmi/actions";
 
 import { isConnectionKeplr } from "~/utils/isConnectionKeplr";

@@ -6,6 +6,7 @@ import {
   type Token,
 } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
+import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -14,9 +15,9 @@ import {
   DialogTrigger,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+
 import { useTxn } from "~/hooks/usTxn";
 import { TokenIcon } from "./token-icon";
-import { Card, CardHeader, CardContent } from "@bera/ui/card";
 
 type Props = {
   fromToken: Token | undefined;
