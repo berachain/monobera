@@ -70,6 +70,7 @@ export const useTxn = ({ message = "" }: IUseTxn): UseTxnApi => {
      * @param {string} result - The transaction hash or result.
      */
     onSuccess: (result) => {
+      console.log(result);
       toast.remove(`submission-${identifier}`);
       toast.success("Success!", {
         duration: 3000,

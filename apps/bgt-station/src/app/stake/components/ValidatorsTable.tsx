@@ -66,9 +66,7 @@ export default function ValidatorsTable({
                 key={row.id}
                 className="cursor-pointer "
                 data-state={row.getIsSelected() && "selected"}
-                onClick={() =>
-                  router.push(`/stake/${row.original.validatorAddress}`)
-                }
+                onClick={() => router.push(`/stake/${row.original.address}`)}
               >
                 {row.getVisibleCells().map((cell) => {
                   return (

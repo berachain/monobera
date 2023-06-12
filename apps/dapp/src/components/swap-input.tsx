@@ -11,7 +11,7 @@ import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
 import { Progress } from "@bera/ui/progress";
 
-import SelectToken from "~/components/select-token";
+import SelectToken from "./select-token";
 
 type Props = {
   selected: Token;
@@ -45,7 +45,7 @@ export default function SwapInput({
     <>
       <div
         className={cn(
-          "flex flex-row flex-wrap items-center justify-between gap-3 rounded-lg border border-input bg-input p-3 pr-6",
+          "flex flex-row flex-wrap justify-between gap-3 rounded-lg border border-input bg-input p-3 pr-6",
           focused && "border-border",
         )}
       >
@@ -76,15 +76,14 @@ export default function SwapInput({
           <div className="w-full pl-4">
             {hideBalance ? null : (
               <div className="flex items-center justify-between">
-                <p>
-                  <Button
-                    variant="link"
-                    className="text-md text-default h-8 p-0"
-                    onClick={() => setAmount(tokenBalance || 0)}
-                  >
-                    Balance: {tokenBalance}
-                  </Button>
-                </p>
+                <Button
+                  variant="link"
+                  className="text-md text-default mx-0 h-8 p-0"
+                  onClick={() => setAmount(tokenBalance || 0)}
+                >
+                  Balance: {tokenBalance}
+                </Button>
+
                 <p>${tokenBalance && tokenBalance * 0.69}</p>
               </div>
             )}

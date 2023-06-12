@@ -5,6 +5,14 @@ export enum LOCAL_STORAGE_KEYS {
   USE_SIGNATURES = "USE_SIGNATURES",
 }
 
+export const dummyToken = {
+  address: "0x3945f611Fe77A51C7F3e1f84709C1a2fDcDfAC5B",
+  decimals: 18,
+  default: true,
+  name: "Dummy Token",
+  symbol: "dbgt",
+};
+
 export enum TRANSACTION_TYPES {
   LEGACY = "legacy",
   EIP_1559 = "eip1559",

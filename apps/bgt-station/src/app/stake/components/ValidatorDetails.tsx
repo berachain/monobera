@@ -12,7 +12,7 @@
 //   useSelectedAccountDelegation,
 //   useUnDelegate,
 // } from "@bera/berajs";
-// import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
+// import { STAKING_PRECOMPILE_ABI } from "@bera/berajs";
 // import { Button } from "@bera/ui/button";
 // import { Card } from "@bera/ui/card";
 // import { Input } from "@bera/ui/input";
@@ -78,12 +78,12 @@
 //       />
 //       <Button
 //         onClick={() => {
-//   write({
-//     address: "0xd9A998CaC66092748FfEc7cFBD155Aae1737C2fF",
-//     abi: STAKING_PRECOMPILE_ABI,
-//     functionName: "delegate",
-//     params: [validator, formatToBaseUnit(input_amount, 18)],
-//   });
+//           write({
+//             address: "0xd9A998CaC66092748FfEc7cFBD155Aae1737C2fF",
+//             abi: STAKING_PRECOMPILE_ABI,
+//             functionName: "delegate",
+//             params: [validator, formatToBaseUnit(input_amount, 18)],
+//           });
 //           setInputAmount("");
 //         }}
 //         disabled={isLoading}
