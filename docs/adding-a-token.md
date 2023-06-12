@@ -1,4 +1,4 @@
-# Adding a token to BGT or DEX
+# Adding a token to an app
 
 ## 1. Deploy a multicall contract in Polaris
 
