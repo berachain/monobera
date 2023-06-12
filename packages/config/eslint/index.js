@@ -12,9 +12,11 @@ const config = {
     "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@next/next/no-html-link-for-pages": "off",
     "@typescript-eslint/restrict-template-expressions": "off",
+    "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {

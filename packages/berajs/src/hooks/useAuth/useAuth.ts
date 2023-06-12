@@ -74,6 +74,7 @@ const useAuth = ({
     try {
       logoutCosmos();
       disconnect();
+      localStorage?.removeItem(connectorLocalStorageKey);
     } catch (e: any) {
       onLogoutError && onLogoutError(e);
     } finally {

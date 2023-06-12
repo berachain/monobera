@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useReducer, useState } from "react";
-import { erc20ABI, usePublicClient } from "wagmi";
+import { usePublicClient } from "wagmi";
+import { fetchToken } from "wagmi/actions";
 
-import { getContracts } from "~/api/contracts";
 import { type Token } from "~/api/currency/tokens";
 import { ActionEnum, initialState, reducer } from "../utils/stateReducer";
 
@@ -19,13 +19,6 @@ export interface useTokenInformationApi {
   tokenInformation: Token | undefined;
   error: Error | undefined;
   read: (props: IuseTokenInformation) => Promise<void>;
-}
-
-interface Call {
-  abi: any;
-  address: `0x${string}`;
-  functionName: any;
-  args: [];
 }
 
 const useTokenInformation = (): useTokenInformationApi => {
@@ -44,36 +37,13 @@ const useTokenInformation = (): useTokenInformationApi => {
     }: IuseTokenInformation): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
       try {
-        const call: Call[] = [
-          {
-            abi: erc20ABI,
-            address: address as `0x${string}`,
-            functionName: "decimals",
-            args: [],
-          },
-          {
-            abi: erc20ABI,
-            address: address as `0x${string}`,
-            functionName: "symbol",
-            args: [],
-          },
-          {
-            abi: erc20ABI,
-            address: address as `0x${string}`,
-            functionName: "name",
-            args: [],
-          },
-        ];
-        const result = await publicClient.multicall({
-          contracts: call,
-          multicallAddress: getContracts().multicall as `0x${string}`,
-        });
+        const token = await fetchToken({ address: address as `0x${string}` });
 
         const formattedToken: Token = {
           address: address,
-          decimals: result[0]?.result as unknown as number,
-          symbol: result[1]?.result as unknown as string,
-          name: result[2]?.result as unknown as string,
+          decimals: token.decimals,
+          symbol: token.symbol,
+          name: token.name,
           default: isDefault,
         };
 
