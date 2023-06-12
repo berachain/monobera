@@ -1,12 +1,22 @@
 import React, { useState } from "react";
+import {
+  DEX_PRECOMPILE_ABI,
+  DEX_PRECOMPILE_ADDRESS,
+  ERC2MODULE_PRECOMPILE_ADDRESS,
+  useBeraJs,
+} from "@bera/berajs";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { parseUnits } from "viem";
 
 import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview-input";
+import { useTxn } from "~/hooks/usTxn";
+import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
+import { ApproveTokenButton } from "../approve-token-button";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -14,7 +24,6 @@ type Props = {
   poolName: string;
   fee: number;
   setPoolName: (poolName: string) => void;
-  onSubmit: () => void;
 };
 
 export function CreatePoolPreview({
@@ -23,9 +32,38 @@ export function CreatePoolPreview({
   poolName,
   fee,
   setPoolName,
-  onSubmit,
 }: Props) {
   const [editPoolName, setEditPoolName] = useState(false);
+
+  const { needsApproval } = useCreatePool(tokenWeights);
+
+  const { account } = useBeraJs();
+  const { write } = useTxn({
+    message: `Create ${poolName} pool`,
+  });
+
+  const options = {
+    weights: tokenWeights.map((tokenWeight) => ({
+      asset: tokenWeight.token?.address,
+      weight: 1,
+    })),
+    swapFee: 1n,
+  };
+
+  const payload = [
+    "agoodpool",
+    tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
+    tokenWeights.map((tokenWeight) =>
+      parseUnits(
+        `${tokenWeight.initialLiquidity}`,
+        tokenWeight.token?.decimals ?? 18,
+      ),
+    ),
+    "balancer",
+    options,
+    account,
+  ];
+
   return (
     <Card className="max-w-[500px]">
       <CardHeader>
@@ -74,9 +112,25 @@ export function CreatePoolPreview({
             <AlertDescription>{error && error.message}</AlertDescription>
           </Alert>
         )}
-        <Button className="mt-4 w-full" onClick={onSubmit}>
-          Continue
-        </Button>
+        {needsApproval.length > 0 ? (
+          <ApproveTokenButton
+            token={needsApproval[0]}
+            spender={ERC2MODULE_PRECOMPILE_ADDRESS}
+          />
+        ) : (
+          <Button
+            onClick={() => {
+              write({
+                address: DEX_PRECOMPILE_ADDRESS,
+                abi: DEX_PRECOMPILE_ABI,
+                functionName: "createPool",
+                params: payload,
+              });
+            }}
+          >
+            Create Pool
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

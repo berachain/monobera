@@ -5,18 +5,13 @@ import { Switch } from "@bera/ui/switch";
 import { Toggle } from "@bera/ui/toggle";
 import { useLocalStorage } from "usehooks-ts";
 
-import { LOCAL_STORAGE_KEYS, TRANSACTION_TYPES } from "~/utils/constants";
+import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
 import BeraTooltip from "./bera-tooltip";
 
 export default function SwapSettings() {
   const [slippageTolerance, setSlippageTolerance] = useLocalStorage(
     LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE,
     0.5,
-  );
-
-  const [transactionType, setTransactionType] = useLocalStorage(
-    LOCAL_STORAGE_KEYS.TRANSACTION_TYPE,
-    TRANSACTION_TYPES.LEGACY,
   );
 
   const [useSignatures, setUseSignatures] = useLocalStorage(
@@ -74,27 +69,6 @@ export default function SwapSettings() {
             setSlippageTolerance(Number(e.target.value))
           }
         />
-      </div>
-      <div className="space-y-2">
-        <h4 className="flex items-center gap-1 font-medium leading-none">
-          Transaction type
-        </h4>
-      </div>
-      <div className="grid grid-cols-3 gap-1">
-        <Toggle
-          variant="outline"
-          pressed={transactionType === TRANSACTION_TYPES.LEGACY}
-          onPressedChange={() => setTransactionType(TRANSACTION_TYPES.LEGACY)}
-        >
-          Legacy
-        </Toggle>
-        <Toggle
-          variant="outline"
-          pressed={transactionType === TRANSACTION_TYPES.EIP_1559}
-          onPressedChange={() => setTransactionType(TRANSACTION_TYPES.EIP_1559)}
-        >
-          EIP1559
-        </Toggle>
       </div>
       <div className="space-y-2">
         <h4 className="flex items-center gap-1 font-medium leading-none">

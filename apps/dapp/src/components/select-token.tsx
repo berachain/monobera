@@ -8,21 +8,23 @@ import { TokenIcon } from "~/components/token-icon";
 
 type Props = {
   token: Token | undefined;
-  onTokenSelection: (token: Token) => void;
-  selectedTokens: Token[];
+  onTokenSelection?: (token: Token) => void;
+  selectedTokens?: (Token | undefined)[];
   selectable: boolean;
+  weight?: number;
 };
 
 export default function SelectToken({
   token = undefined,
-  onTokenSelection,
-  selectedTokens,
+  onTokenSelection = undefined,
+  selectedTokens = undefined,
   selectable,
+  weight = undefined,
 }: Props) {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className="my-4 w-[160px]">
+    <div className="my-4 w-fit">
       <Button
         className="hover:text-primary-text flex shrink-0 gap-2 p-0 hover:bg-transparent"
         variant="ghost"
@@ -31,7 +33,8 @@ export default function SelectToken({
         {token ? (
           <>
             <TokenIcon token={token} />
-            {token?.symbol}
+            {token?.symbol}{" "}
+            {weight && <span className="text-muted-foreground">{weight}%</span>}
             {selectable && <Icons.chevronDown className="h-4 w-4" />}
           </>
         ) : (
@@ -45,9 +48,11 @@ export default function SelectToken({
       {selectable && (
         <TokenDialog
           open={open}
-          onSelectedToken={(token: Token) => onTokenSelection(token)}
+          onSelectedToken={(token: Token) =>
+            onTokenSelection && onTokenSelection(token)
+          }
           setOpen={setOpen}
-          selectedTokens={selectedTokens}
+          selectedTokens={selectedTokens ?? []}
           focusedToken={token}
         />
       )}

@@ -1,15 +1,16 @@
+"use client";
+
 import React from "react";
 import dynamic from "next/dynamic";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@bera/ui/accordion";
+  formatUsd,
+  usePollBalance,
+  usePollPools,
+  type Pool,
+} from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
-import { Icons } from "@bera/ui/icons";
 import {
   Table,
   TableBody,
@@ -18,59 +19,84 @@ import {
   TableHeader,
   TableRow,
 } from "@bera/ui/table";
+import { Balancer } from "react-wrap-balancer";
+import { formatUnits } from "viem";
 
-import {
-  liquidityProvisions,
-  poolDetails,
-  swaps,
-  tokens,
-} from "~/utils/constants";
 import { generateDataForPast90Days } from "~/utils/generateData";
-import { truncateWalletAddress } from "~/utils/truncateWalletAddress";
+import { TokenIcon } from "~/components/token-icon";
 
 const DynamicChart = dynamic(() => import("~/components/chart"), {
   loading: () => <p>Loading...</p>,
   ssr: false,
 });
 
-export default function PoolPage({ params }: { params: { poolId: string } }) {
+export default function PoolPage({ params }: { params: { address: string } }) {
+  const router = useRouter();
+  const { useSelectedPool } = usePollPools();
+  const pool: Pool | undefined = useSelectedPool(params.address);
+  const { useBalance } = usePollBalance({ address: pool?.shareAddress });
+  const shareBalance = useBalance();
   return (
-    <div className="m-auto flex w-full flex-col pb-10">
-      <h1 className="text-left text-2xl font-semibold">{params.poolId}</h1>
+    <div className="m-auto flex w-full flex-col px-12 pb-10">
+      <h1 className="pb-2 text-left text-2xl font-semibold">Weighted Pool</h1>
+      <div className="my-4 flex gap-2">
+        {pool?.weights?.map((token) => (
+          <div
+            key={token.address}
+            className="flex w-fit items-center gap-2 rounded bg-primary p-2"
+          >
+            <TokenIcon token={token} className="h-8 w-8 text-xs" />
+            <p>
+              {token.symbol}{" "}
+              <span className="text-xs text-muted-foreground">
+                {token.weight * 100}%
+              </span>
+            </p>
+          </div>
+        ))}
+      </div>
+      <p className="pb-2">
+        Swap Fee:{" "}
+        <span className="text-muted-foreground">
+          {formatUnits(pool?.swapFee ?? "", 0)}%
+        </span>
+      </p>
       <div className="grid gap-5 lg:grid-cols-3 ">
         <div className="flex flex-col gap-5 lg:order-2 lg:col-span-1">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between p-2">
-              <h3>My pool balance</h3>
-              <h4>$420.69</h4>
+              <div className="text-left">
+                <h3 className="text-md">Deposited</h3>
+                <p className="text-xs text-muted-foreground">
+                  Virtual Price (USD)
+                </p>
+              </div>
+              <div className="text-right">
+                <Balancer className="text-md">
+                  {shareBalance?.formattedBalance} {pool?.name}
+                </Balancer>
+                <p className="text-xs text-muted-foreground">
+                  {formatUsd(shareBalance?.formattedBalance ?? "0")}
+                </p>
+              </div>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4 p-4">
-              <Button size="lg" className="grow">
+              <Button
+                size="lg"
+                className="grow"
+                onClick={() =>
+                  router.push(`/pool/${pool?.address}/add-liquidity`)
+                }
+              >
                 Add Liquidity
               </Button>
-              <Button size="lg" variant={"secondary"}>
+              <Button
+                size="lg"
+                variant={"secondary"}
+                onClick={() => router.push(`/pool/${pool?.address}/withdraw`)}
+              >
                 Withdraw
               </Button>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>
-                    <div className="flex items-center gap-5">
-                      <Icons.check className="h-5 w-5 rounded-full border-2 border-positive fill-positive p-1" />{" "}
-                      Lock LP for BGT
-                    </div>
-                  </AccordionTrigger>
-
-                  <AccordionContent>
-                    <p>Locked LP tokens</p>
-                    <p>Unlocked LP tokens</p>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-              <Button variant={"secondary"}>Lock</Button>
             </CardContent>
           </Card>
         </div>
@@ -80,7 +106,7 @@ export default function PoolPage({ params }: { params: { poolId: string } }) {
               <DynamicChart
                 chartData={generateDataForPast90Days()}
                 type="bar"
-                pool={params.poolId}
+                pool={pool?.name}
                 showXAxis
               />
             </CardContent>
@@ -90,61 +116,55 @@ export default function PoolPage({ params }: { params: { poolId: string } }) {
               <CardHeader className="flex flex-row items-center justify-between p-2">
                 <h3>Pool value</h3>
               </CardHeader>
-              <CardContent className="p-2">$207,608,532</CardContent>
+              <CardContent className="p-2">
+                {formatUsd(pool?.totalValue ?? "0")}
+              </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between p-2">
                 <h3>Volume (24h)</h3>
               </CardHeader>
-              <CardContent className="p-2">$2,818,901</CardContent>
+              <CardContent className="p-2">$-</CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between p-2">
                 <h3>Fees (24h)</h3>
               </CardHeader>
-              <CardContent className="p-2">$1,127.56</CardContent>
+              <CardContent className="p-2">$-</CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between p-2">
                 <h3>APR</h3>
               </CardHeader>
-              <CardContent className="p-2">2.89% – 4.54%</CardContent>
+              <CardContent className="p-2">-%</CardContent>
             </Card>
           </div>
           <section>
-            <h2>Pool composition</h2>
-            <h3>Total composition</h3>
-            <Card className="p-2">
+            <h2 className="pb-2 text-lg">Pool Composition</h2>
+            <Card className="">
               <Table className="border-separate border-spacing-y-2 p-2">
                 <TableHeader>
                   <TableRow>
                     <TableHead className="">Token</TableHead>
-                    <TableHead>Weight</TableHead>
                     <TableHead>Balance</TableHead>
                     <TableHead>Value</TableHead>
-                    <TableHead className="text-right">Token %</TableHead>
+                    <TableHead className="text-right">Weight %</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {tokens.map((token) => (
+                  {pool?.weights?.map((token) => (
                     <TableRow
                       key={token.symbol}
                       className="rounded-md outline outline-secondary"
                     >
                       <TableCell className="flex flex-row items-center gap-2 font-medium">
-                        <Image
-                          src={token.icon}
-                          alt={token.name}
-                          width={32}
-                          height={32}
-                        />
+                        <TokenIcon token={token} />
                         {token.name}
                       </TableCell>
-                      <TableCell>{token.weight}</TableCell>
-                      <TableCell>{token.balance}</TableCell>
-                      <TableCell>{token.value}</TableCell>
+                      <TableCell>{token.formattedAmountDeposited}</TableCell>
+                      <TableCell>{formatUsd(token.totalPrice)}</TableCell>
                       <TableCell className="text-right">
-                        {token.tokenP}
+                        {token.weight * 100}%
                       </TableCell>
                     </TableRow>
                   ))}
@@ -152,15 +172,19 @@ export default function PoolPage({ params }: { params: { poolId: string } }) {
               </Table>
             </Card>
           </section>
-          <section>
-            <h2>Liquidity provision</h2>
-            <h3>All liquidity provision</h3>
+          {/* <section>
+            <h2 className="pb-2 text-lg">Liquidity Provision</h2>
             <Card>
               <Table className="border-separate border-spacing-y-2 p-2">
                 <TableHeader>
                   <TableRow>
                     <TableHead className="">Action</TableHead>
-                    <TableHead>Value</TableHead>
+                    <TableHead>
+                      Virtual Price{" "}
+                      <span className="text-xs text-muted-foreground">
+                        (USD)
+                      </span>
+                    </TableHead>
                     <TableHead>Tokens</TableHead>
                     <TableHead className="text-right">Time</TableHead>
                   </TableRow>
@@ -171,7 +195,7 @@ export default function PoolPage({ params }: { params: { poolId: string } }) {
                       key={i}
                       className="rounded-md outline outline-secondary"
                     >
-                      <TableCell className="font-medium">
+                      <TableCell className="w-80 font-medium">
                         {provision.action}
                       </TableCell>
                       <TableCell>{provision.value}</TableCell>
@@ -186,7 +210,7 @@ export default function PoolPage({ params }: { params: { poolId: string } }) {
             </Card>
           </section>
           <section>
-            <h2>Swaps</h2>
+            <h2 className="pb-2 text-lg">Swaps</h2>
             <Card>
               <Table className="border-separate border-spacing-y-2 p-2">
                 <TableHeader>
@@ -203,7 +227,7 @@ export default function PoolPage({ params }: { params: { poolId: string } }) {
                       key={i}
                       className="rounded-md outline outline-secondary"
                     >
-                      <TableCell className="font-medium">
+                      <TableCell className="w-80 font-medium">
                         {truncateWalletAddress(swap.wallet)}
                       </TableCell>
                       <TableCell>{swap.value}</TableCell>
@@ -216,40 +240,8 @@ export default function PoolPage({ params }: { params: { poolId: string } }) {
                 </TableBody>
               </Table>
             </Card>
-          </section>
-          <section>
-            <h2>Pool details</h2>
-            <Card>
-              <div className="grid grid-cols-2 gap-2 p-2">
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-row items-center justify-between">
-                    <h3>Attribute</h3>
-                    <h3>Details</h3>
-                  </div>
-                  <div className="flex flex-row items-center justify-between">
-                    <h3>Pool name</h3>
-                    <h3>{poolDetails.name}</h3>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </section>
-          <section>
-            <h2>Pool management</h2>
-            <p>
-              The attributes of this pool are immutable, except for swap fees
-              which can be edited via Governance.
-            </p>
-          </section>
-          <section>
-            <h2>Pool risks</h2>
-            <p>Liquidity Providers in this pool face the following risks:</p>
-            <ul>
-              <li>Weighted pool risks</li>
-              <li>Mutable attributes risks</li>
-              <li>General Balancer protocol risks</li>
-            </ul>
-          </section>
+          </section> */}
+          <section></section>
         </div>
       </div>
     </div>
