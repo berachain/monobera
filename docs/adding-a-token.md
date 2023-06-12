@@ -10,6 +10,7 @@ Inside `polaris/contracts/src/cosmos/precompile/testing/Multicall3.sol` create a
 
 <details>
 <summary><code>Multicall3.sol</code></summary>
+
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
@@ -229,7 +230,8 @@ bytes callData;
 
 }
 
-````
+```
+
 </details>
 
 Inside the same directory, create a file called `TestERC20.sol` and paste the following code:
@@ -282,7 +284,7 @@ contract TestERC20 is ERC20 {
     }
 }
 
-````
+```
 
 </details>
 
