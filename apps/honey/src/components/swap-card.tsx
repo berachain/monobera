@@ -109,7 +109,7 @@ export function SwapCard() {
       <CardHeader>
         <CardTitle className="center flex justify-between">
           <span>Mint</span>
-          <span className="text-[#4D4D4D]">Static fee of 6.9%</span>
+          <span className="font-normal text-[#4D4D4D]">Static fee of 6.9%</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
