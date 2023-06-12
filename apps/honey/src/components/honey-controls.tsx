@@ -3,7 +3,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 
-import { History } from "./bgt-activity";
+import { History } from "./honey-activity";
 
 export function HoneyControls() {
   return (
