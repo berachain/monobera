@@ -1,5 +1,4 @@
-import { getCosmosChain } from "@bera/berajs";
-import { type NetworkConfig } from "@bera/berajs/src/config";
+import { getCosmosChain, type NetworkConfig } from "@bera/berajs";
 import { type Chain } from "wagmi";
 
 export const BERA = {
