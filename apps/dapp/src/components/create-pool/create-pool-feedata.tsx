@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";

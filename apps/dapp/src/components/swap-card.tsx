@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import {
   ERC2MODULE_PRECOMPILE_ADDRESS,

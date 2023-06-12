@@ -163,7 +163,10 @@ export function SwapCard() {
               payload={payload}
             />
           ) : (
-            <ConnectWalletDialog className="w-full bg-[#333333] text-primary-foreground hover:bg-[#333333] hover:text-primary-foreground" />
+            <ConnectWalletDialog
+              className="w-full bg-[#333333] text-primary-foreground hover:bg-[#333333] hover:text-primary-foreground"
+              size="lg"
+            />
           )}
         </div>
       </CardContent>
