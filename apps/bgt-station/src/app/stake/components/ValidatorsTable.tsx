@@ -32,6 +32,9 @@ export default function ValidatorsTable({ columns }: ValidatorsTableProps) {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+  const { useActiveValidators } = usePollRawValidators();
+  const validators = useActiveValidators();
+  console.log(validators);
   const router = useRouter();
   return (
     <div className="p-5">

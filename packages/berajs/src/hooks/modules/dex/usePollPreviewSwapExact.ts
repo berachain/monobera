@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { type Token } from "~/api";
@@ -8,10 +8,10 @@ import { DEX_PRECOMPILE_ABI, DEX_PRECOMPILE_ADDRESS } from "~/config";
 import POLLING from "~/config/constants/polling";
 
 export const usePollPreviewSwapExact = (
-  poolAddress: `0x${string}`,
-  baseAsset: Token,
+  poolAddress: string,
   baseAssetAmount: number,
-  quoteAsset: Token,
+  baseAsset?: Token,
+  quoteAsset?: Token,
 ) => {
   const publicClient = usePublicClient();
 
@@ -19,27 +19,32 @@ export const usePollPreviewSwapExact = (
 
   const QUERY_KEY = [
     poolAddress,
-    baseAsset.address,
+    baseAsset?.address,
     baseAssetAmount,
-    quoteAsset,
+    quoteAsset?.address,
     method,
   ];
   useSWR(
     QUERY_KEY,
     async () => {
-      const result = await publicClient.readContract({
-        address: DEX_PRECOMPILE_ADDRESS,
-        abi: DEX_PRECOMPILE_ABI,
-        functionName: method,
-        args: [
-          poolAddress,
-          baseAsset.address,
-          parseUnits(`${baseAssetAmount}`, baseAsset.decimals ?? 18),
-          quoteAsset.address,
-        ],
-      });
+      if (baseAsset && quoteAsset) {
+        const result = await publicClient.readContract({
+          address: DEX_PRECOMPILE_ADDRESS,
+          abi: DEX_PRECOMPILE_ABI,
+          functionName: method,
+          args: [
+            poolAddress,
+            baseAsset.address,
+            parseUnits(`${baseAssetAmount}`, baseAsset.decimals ?? 18),
+            quoteAsset.address,
+          ],
+        });
 
-      return result;
+        return Number(
+          formatUnits((result as any[])[1], quoteAsset.decimals ?? 18),
+        );
+      }
+      return undefined;
     },
     {
       refreshInterval: POLLING.FAST,

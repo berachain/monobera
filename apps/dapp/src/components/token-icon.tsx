@@ -9,9 +9,9 @@ type Props = {
 export const TokenIcon = ({ token, className }: Props) => {
   return (
     <Avatar className={cn("h-12 w-12", className)}>
-      <AvatarImage src={`/icons/${token?.symbol.toLowerCase()}.jpg`} />
+      <AvatarImage src={`/icons/${(token?.symbol ?? "").toLowerCase()}.jpg`} />
       <AvatarFallback className="font-bold">
-        {token ? token?.symbol.slice(0, 3) : ""}
+        {token ? (token?.symbol ?? "").slice(0, 3) : ""}
       </AvatarFallback>
     </Avatar>
   );

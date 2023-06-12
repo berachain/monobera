@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type Validator, truncateHash } from "@bera/berajs";
+import { truncateHash, type Validator } from "@bera/berajs";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
@@ -60,9 +60,7 @@ export const columns: ColumnDef<Validator>[] = [
         <div className="h-10 w-10 rounded-full bg-gray-300" />
         <div className="flex flex-col">
           <p>hi</p>
-          <Badge variant="secondary">
-            hi
-          </Badge>
+          <Badge variant="secondary">hi</Badge>
         </div>
       </div>
     ),
@@ -84,8 +82,7 @@ export const columns: ColumnDef<Validator>[] = [
               />
             ))}
           </span> */}
-                      hi
-
+          hi
         </>
       );
     },

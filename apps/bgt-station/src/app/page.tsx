@@ -9,6 +9,7 @@ import { Separator } from "@bera/ui/separator";
 import MyBalance from "~/components/my-balance";
 import { items } from "./dashboard/components/CuttingBoard";
 import ValidatorsTable from "./stake/components/ValidatorsTable";
+
 // import { yourColumns } from "./stake/components/column";
 
 const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {

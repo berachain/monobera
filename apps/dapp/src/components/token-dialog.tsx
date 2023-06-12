@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import {
   usePollAssetWalletBalance,
@@ -27,7 +26,7 @@ type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   onSelectedToken: (token: Token) => void;
-  selectedTokens: Token[];
+  selectedTokens: (Token | undefined)[];
   focusedToken: Token | undefined;
 };
 
@@ -68,7 +67,6 @@ export default function TokenDialog({
   }, [tokenInformation]);
 
   const onTokenSelect = (token: Token) => {
-    console.log;
     if (!token.default) {
       setAddTokenOpen(true);
       return;
