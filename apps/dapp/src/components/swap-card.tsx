@@ -90,6 +90,7 @@ export function SwapCard() {
   }, [previewSwapAmount]);
 
   useEffect(() => {
+    const deadline = block + 10000n
     const payload = [
       swapKind,
       selectedPool?.address,
@@ -97,7 +98,7 @@ export function SwapCard() {
       parseUnits(`${fromAmount ?? 0}`, selectedFrom?.decimals ?? 18),
       selectedTo?.address,
       parseUnits(`${toAmount ?? 0}`, selectedTo?.decimals ?? 18),
-      block + 10000n,
+      deadline
     ];
     setPayload(payload);
   }, [block, swapKind, fromAmount, selectedFrom, toAmount, selectedTo]);
