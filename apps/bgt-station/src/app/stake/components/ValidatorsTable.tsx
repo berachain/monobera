@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { usePollRawValidators, type Validator } from "@bera/berajs";
 import {
   Table,
   TableBody,
@@ -17,19 +18,17 @@ import {
   type ColumnDef,
 } from "@tanstack/react-table";
 
-import { type Validator } from "../data/validators";
 
 interface ValidatorsTableProps {
   columns: ColumnDef<Validator>[];
-  data: Validator[];
 }
 
-export default function ValidatorsTable({
-  columns,
-  data,
-}: ValidatorsTableProps) {
+export default function ValidatorsTable({ columns }: ValidatorsTableProps) {
+  const { useValidators } = usePollRawValidators();
+  const validators: Validator[] = useValidators();
+  console.log(validators);
   const table = useReactTable({
-    data,
+    data: validators,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -38,7 +37,7 @@ export default function ValidatorsTable({
     <div className="p-5">
       <Table className="border-separate border-spacing-y-2 p-1">
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
+          {table?.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
@@ -55,9 +54,9 @@ export default function ValidatorsTable({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+        {/* <TableBody>
+          {table?.getRowModel().rows?.length ? (
+            table?.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
                 className="cursor-pointer "
@@ -83,7 +82,7 @@ export default function ValidatorsTable({
               </TableCell>
             </TableRow>
           )}
-        </TableBody>
+        </TableBody> */}
       </Table>
     </div>
   );

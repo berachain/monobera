@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { truncateHash } from "@bera/berajs";
+import { type Validator, truncateHash } from "@bera/berajs";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
@@ -9,7 +9,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import BribesList from "~/components/bribes-list";
 import UnbondButton from "../[validatorAddress]/components/UnbondButton";
 import { validator } from "../data/validator";
-import { type Validator } from "../data/validators";
 
 function getRandomUniqueItems(array: string[], count: number): string[] {
   if (count > array.length) {
@@ -54,29 +53,29 @@ export const columns: ColumnDef<Validator>[] = [
     ),
   },
   {
-    accessorKey: "name",
+    accessorKey: "description.moniker",
     header: "Validator",
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <div className="h-10 w-10 rounded-full bg-gray-300" />
         <div className="flex flex-col">
-          <p>{row.original.name}</p>
+          <p>hi</p>
           <Badge variant="secondary">
-            {truncateHash(row.original.address)}
+            hi
           </Badge>
         </div>
       </div>
     ),
   },
   {
-    accessorKey: "votingPower",
+    accessorKey: "delegator_shares",
     header: "Voting power",
     enableSorting: true,
     cell: ({ row }) => {
-      const cuttingBoard = row.original.cuttingBoard;
+      // const cuttingBoard = row.original.cuttingBoard;
       return (
         <>
-          <p>{row.original.votingPower}</p>
+          {/* <p>{row.original.votingPower}</p>
           <span className="block w-full">
             {cuttingBoard.map((_, i) => (
               <span
@@ -84,96 +83,99 @@ export const columns: ColumnDef<Validator>[] = [
                 className={`inline-block ${uniqueColors[i]} ${uniquePercents[i]} h-2`}
               />
             ))}
-          </span>
+          </span> */}
+                      hi
+
         </>
       );
     },
   },
   {
-    accessorKey: "commission",
+    accessorKey: "commission.commission_rates.rate",
     header: () => <p className="text-right">Commission</p>,
     enableSorting: true,
-    cell: ({ row }) => <p className="text-right">{row.original.commission}%</p>,
+    cell: ({ row }) => <p className="text-right">%</p>,
   },
   {
     accessorKey: "bribes",
     header: () => <p className="text-right">Bribes</p>,
     cell: ({}) => (
       <div className="flex flex-row justify-end">
-        <BribesList />
+        reee
+        {/* <BribesList /> */}
       </div>
     ),
   },
-  {
-    accessorKey: "bribeAPR",
-    header: () => <p className="text-right">Bribe APR</p>,
-    enableSorting: true,
-    cell: ({ row }) => <p className="text-right">{row.original.bribeAPR}%</p>,
-  },
+  // {
+  //   accessorKey: "bribeAPR",
+  //   header: () => <p className="text-right">Bribe APR</p>,
+  //   enableSorting: true,
+  //   cell: ({ row }) => <p className="text-right">{row.original.bribeAPR}%</p>,
+  // },
 ];
 
-export const yourColumns: ColumnDef<Validator>[] = [
-  {
-    accessorKey: "name",
-    header: "Validator",
-    cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <div className="h-10 w-10 rounded-full bg-gray-300" />
-        <div className="flex flex-col">
-          <p>{row.original.name}</p>
-          <Badge variant="secondary">
-            {truncateHash(row.original.address)}
-          </Badge>
-        </div>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "votingPower",
-    header: "Voting power",
-    enableSorting: true,
-    cell: ({ row }) => {
-      return (
-        <>
-          <p>{row.original.votingPower}</p>
-          <span className="block w-full">0.69%</span>
-        </>
-      );
-    },
-  },
-  {
-    accessorKey: "commission",
-    header: () => <p className="text-right">Commission</p>,
-    enableSorting: true,
-    cell: ({ row }) => <p className="text-right">{row.original.commission}%</p>,
-  },
-  {
-    accessorKey: "actions",
-    header: () => <p className="text-center">Actions</p>,
-    cell: ({ row }) => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const router = useRouter();
-      return (
-        <div className="flex flex-row items-center justify-center gap-3">
-          <Button
-            size="sm"
-            className="w-[100px]"
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`/stake/${row.original.address}/redelegate`);
-            }}
-          >
-            Redelegate
-          </Button>
-          <UnbondButton
-            inList
-            validator={validator}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            validatorAddress={row.original.address}
-          />
-        </div>
-      );
-    },
-  },
-];
+// export const yourColumns: ColumnDef<Validator>[] = [
+//   {
+//     accessorKey: "name",
+//     header: "Validator",
+//     cell: ({ row }) => (
+//       <div className="flex items-center gap-2">
+//         <div className="h-10 w-10 rounded-full bg-gray-300" />
+//         <div className="flex flex-col">
+//           <p>{row.original.name}</p>
+//           <Badge variant="secondary">
+//             {truncateHash(row.original.address)}
+//           </Badge>
+//         </div>
+//       </div>
+//     ),
+//   },
+//   {
+//     accessorKey: "votingPower",
+//     header: "Voting power",
+//     enableSorting: true,
+//     cell: ({ row }) => {
+//       return (
+//         <>
+//           <p>{row.original.votingPower}</p>
+//           <span className="block w-full">0.69%</span>
+//         </>
+//       );
+//     },
+//   },
+//   {
+//     accessorKey: "commission",
+//     header: () => <p className="text-right">Commission</p>,
+//     enableSorting: true,
+//     cell: ({ row }) => <p className="text-right">{row.original.commission}%</p>,
+//   },
+//   {
+//     accessorKey: "actions",
+//     header: () => <p className="text-center">Actions</p>,
+//     cell: ({ row }) => {
+//       // eslint-disable-next-line react-hooks/rules-of-hooks
+//       const router = useRouter();
+//       return (
+//         <div className="flex flex-row items-center justify-center gap-3">
+//           <Button
+//             size="sm"
+//             className="w-[100px]"
+//             onClick={(e) => {
+//               e.stopPropagation();
+//               router.push(`/stake/${row.original.address}/redelegate`);
+//             }}
+//           >
+//             Redelegate
+//           </Button>
+//           <UnbondButton
+//             inList
+//             validator={validator}
+//             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//             // @ts-ignore
+//             validatorAddress={row.original.address}
+//           />
+//         </div>
+//       );
+//     },
+//   },
+// ];

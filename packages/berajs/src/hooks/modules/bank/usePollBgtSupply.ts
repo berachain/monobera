@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BANK_PRECOMPILE_ABI, BANK_PRECOMPILE_ADDRESS } from "~/config";
@@ -21,10 +22,10 @@ export const usePollBgtSupply = () => {
         args: ["abgt"],
       });
 
-      return result;
+      return formatUnits(result as bigint, 18);
     },
     {
-      refreshInterval: POLLING.SLOW,
+      refreshInterval: POLLING.FAST,
     },
   );
 

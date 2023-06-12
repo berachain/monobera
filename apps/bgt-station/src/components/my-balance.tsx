@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { getTokens, usePollAssetWalletBalance, type Token } from "@bera/berajs";
+import { usePollBgtBalance } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -12,14 +12,12 @@ import {
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 
-import { dummyToken } from "~/utils/constants";
-import SwapInput from "./swap-input";
-
 export default function MyBalance() {
   const [open, setOpen] = React.useState(false);
   const [redeemAmount, setRedeemAmount] = React.useState(0);
-  usePollAssetWalletBalance();
-  const tokens = getTokens();
+  const { useBgtBalance } = usePollBgtBalance();
+  const bgtBalance = useBgtBalance();
+  console.log("bgtBalance", bgtBalance);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div>
@@ -27,7 +25,7 @@ export default function MyBalance() {
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-1 text-2xl font-semibold">
             <Icons.bgt className="h-6 w-6 fill-foreground" />
-            420.69
+            {bgtBalance}
           </div>
           <DialogTrigger asChild>
             <Button size="sm" onClick={() => setOpen(true)}>
@@ -41,15 +39,6 @@ export default function MyBalance() {
           <DialogTitle>Redeem preview</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-3">
-          <SwapInput
-            selected={tokens[0] || (dummyToken as Token)}
-            amount={redeemAmount}
-            setAmount={(amount) => setRedeemAmount(amount)}
-            selectable={false}
-            selectedTokens={tokens}
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            onTokenSelection={() => {}}
-          />
           <Button
             onClick={() => {
               // TODO: redeem

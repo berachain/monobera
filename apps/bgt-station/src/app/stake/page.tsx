@@ -4,7 +4,6 @@ import { Input } from "@bera/ui/input";
 
 import ValidatorsTable from "./components/ValidatorsTable";
 import { columns } from "./components/column";
-import { validators } from "./data/validators";
 
 export default function ValidatorList() {
   return (
@@ -14,7 +13,7 @@ export default function ValidatorList() {
           <h3 className="text-lg font-medium">Stake</h3>
           <Input type="text" placeholder="Search" className="w-72" />
         </CardHeader>
-        <ValidatorsTable columns={columns} data={validators} />
+        <ValidatorsTable columns={columns} />
       </Card>
     </div>
   );

@@ -1,7 +1,10 @@
+"use client";
+
 import React from "react";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 
 import { type bgtDetails } from "../constants";
+import { CurrentSupply } from "./CurrentSupply";
 import { CuttingBoard } from "./CuttingBoard";
 import { EpochTimeline } from "./EpochTimeline";
 import { Stats } from "./Stats";
@@ -15,7 +18,7 @@ export function Details({ details }: { details: typeof bgtDetails }) {
         <p className="text-right text-sm font-semibold text-backgroundSecondary">
           Updated {details.lastUpdated} ago
         </p>
-        <EpochTimeline epoch={details.epoch} />
+        <EpochTimeline />
       </div>
       <Validators validators={details.validators} />
       <CuttingBoard />
@@ -47,18 +50,7 @@ export function Details({ details }: { details: typeof bgtDetails }) {
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader>
-              <h3 className="text-md font-semibold text-backgroundSecondary">
-                Current supply
-              </h3>
-            </CardHeader>
-            <CardContent>
-              <h4 className="text-2xl font-medium">
-                {details.currentSupply} BGT
-              </h4>
-            </CardContent>
-          </Card>
+          <CurrentSupply />
         </div>
       </div>
     </div>

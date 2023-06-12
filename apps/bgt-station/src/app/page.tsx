@@ -1,3 +1,5 @@
+"use";
+
 import dynamic from "next/dynamic";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -7,8 +9,7 @@ import { Separator } from "@bera/ui/separator";
 import MyBalance from "~/components/my-balance";
 import { items } from "./dashboard/components/CuttingBoard";
 import ValidatorsTable from "./stake/components/ValidatorsTable";
-import { yourColumns } from "./stake/components/column";
-import { validators } from "./stake/data/validators";
+// import { yourColumns } from "./stake/components/column";
 
 const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
   loading: () => <p>Loading...</p>,
@@ -113,7 +114,7 @@ export default function Home() {
           <Input type="text" placeholder="Search" className="w-72" />
         </CardHeader>
         <CardContent>
-          <ValidatorsTable columns={yourColumns} data={validators} />
+          {/* <ValidatorsTable columns={yourColumns} data={validators} /> */}
         </CardContent>
       </Card>
     </div>
