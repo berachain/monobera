@@ -7,12 +7,13 @@ export const navItems = [
     href: "/mint",
     title: "Mint",
   },
-  {
-    href: "/stats",
-    title: "Stats",
-  },
-  {
-    href: "/docs",
-    title: "Docs",
-  },
+  // Coming thoon
+  // {
+  //   href: "/stats",
+  //   title: "Stats",
+  // },
+  // {
+  //   href: "/docs",
+  //   title: "Docs",
+  // },
 ];
