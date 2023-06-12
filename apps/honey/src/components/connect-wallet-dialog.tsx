@@ -57,6 +57,7 @@ export default function ConnectWalletDialog({ className }: Props) {
         onClick={() => setOpen(true)}
         className={cn("w-48", className)}
         variant="secondary"
+        size="lg"
       >
         <Icons.wallet className="mr-2 h-6 w-6" />
         Connect

@@ -1,4 +1,10 @@
+import { type Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Honey | Berachain",
+  description: "Mo honey mo problems",
+};
 
 export default function Home() {
   return (

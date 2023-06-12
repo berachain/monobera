@@ -57,7 +57,7 @@ export default function SwapInput({
   return (
     <div
       className={cn(
-        "flex flex-col flex-wrap rounded-lg border border-input bg-[#5B5B5B] p-3 pr-6",
+        "flex flex-col flex-wrap rounded-lg border border-input bg-input p-3 pr-6",
         focused && "border-border",
       )}
     >
@@ -75,7 +75,7 @@ export default function SwapInput({
           min="0"
           placeholder="0.0"
           disabled={disabled}
-          className="w-100 grow border-0 bg-[#5B5B5B] p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="w-100 grow border-0 bg-input p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={amount > 0 ? amount : ""}
           onFocus={() => {
             setFocused(true);
