@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
