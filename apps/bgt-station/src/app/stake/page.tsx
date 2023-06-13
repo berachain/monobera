@@ -1,10 +1,16 @@
 import React from "react";
+import { type Metadata } from "next";
 import { Card, CardHeader } from "@bera/ui/card";
 import { Input } from "@bera/ui/input";
 
 import ValidatorsTable from "./components/ValidatorsTable";
 import { columns } from "./components/column";
 import { validators } from "./data/validators";
+
+export const metadata: Metadata = {
+  title: "Stake | BGT Station | Berachain",
+  description: "BGT Station",
+};
 
 export default function ValidatorList() {
   return (
