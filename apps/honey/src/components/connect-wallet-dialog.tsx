@@ -42,8 +42,9 @@ const ConnectorAssets: ConnectorAssetsType = {
 
 type Props = {
   className?: string;
+  size?: "sm" | "default" | "lg";
 };
-export default function ConnectWalletDialog({ className }: Props) {
+export default function ConnectWalletDialog({ className, size }: Props) {
   const [open, setOpen] = React.useState(false);
   const [, setConnectorId] = useLocalStorage(
     LOCAL_STORAGE_KEYS.CONNECTOR_ID,
@@ -57,7 +58,7 @@ export default function ConnectWalletDialog({ className }: Props) {
         onClick={() => setOpen(true)}
         className={cn("w-48", className)}
         variant="secondary"
-        size="lg"
+        size={size}
       >
         <Icons.wallet className="mr-2 h-6 w-6" />
         Connect

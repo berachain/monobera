@@ -1,3 +1,4 @@
+import { type Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
@@ -6,6 +7,11 @@ import Balancer from "react-wrap-balancer";
 
 import { getCurrentDate } from "~/utils/getCurrentDate";
 import { ctaFeatures, partnerships } from "~/app/config";
+
+export const metadata: Metadata = {
+  title: "DEX | Berachain",
+  description: "Decentralized exchange on Berachain",
+};
 
 export default function Home() {
   return (
