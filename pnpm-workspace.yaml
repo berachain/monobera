@@ -1,6 +1,7 @@
 packages:
   - apps/dapp
   - apps/bgt-station
+  - apps/honey
   - packages/config/*
   - packages/ui
   - packages/berajs

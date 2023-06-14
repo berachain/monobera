@@ -11,6 +11,13 @@ import MyBalance from "~/components/my-balance";
 import { items } from "./dashboard/components/CuttingBoard";
 import ValidatorsTable from "./stake/components/ValidatorsTable";
 import { getYourColumns } from "./stake/components/column";
+import { type Metadata } from "next";
+
+
+export const metadata: Metadata = {
+  title: "MyBGT | Berachain",
+  description: "BGT Station",
+};
 
 const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
   loading: () => <p>Loading...</p>,

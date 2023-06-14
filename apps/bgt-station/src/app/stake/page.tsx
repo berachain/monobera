@@ -7,8 +7,14 @@ import { Input } from "@bera/ui/input";
 
 import ValidatorsTable from "./components/ValidatorsTable";
 import { getColumns } from "./components/column";
+import { type Metadata } from "next";
 
 // import { columns } from "./components/column";
+
+export const metadata: Metadata = {
+  title: "Stake | BGT Station | Berachain",
+  description: "BGT Station",
+};
 
 export default function ValidatorList() {
   const { useActiveValidators, useTotalDelegated, useValidatorCuttingBoards } =
