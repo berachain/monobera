@@ -29,13 +29,13 @@ export const usePollBgtBalance = () => {
       return undefined;
     },
     {
-      refreshInterval: POLLING.NORMAL,
+      refreshInterval: POLLING.FAST,
     },
   );
 
   const useBgtBalance = () => {
     const { data = 0 } = useSWRImmutable(QUERY_KEY);
-    return data;
+    return Number(data).toFixed(4);
   };
   return {
     useBgtBalance,

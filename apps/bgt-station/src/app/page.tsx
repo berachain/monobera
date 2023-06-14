@@ -1,6 +1,7 @@
-"use";
+"use client";
 
 import dynamic from "next/dynamic";
+import { usePollActiveValidators, type Validator } from "@bera/berajs";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
@@ -9,8 +10,7 @@ import { Separator } from "@bera/ui/separator";
 import MyBalance from "~/components/my-balance";
 import { items } from "./dashboard/components/CuttingBoard";
 import ValidatorsTable from "./stake/components/ValidatorsTable";
-
-// import { yourColumns } from "./stake/components/column";
+import { getYourColumns } from "./stake/components/column";
 
 const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
   loading: () => <p>Loading...</p>,
@@ -18,13 +18,16 @@ const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
 });
 
 export default function Home() {
+  const { useActiveValidators, useTotalDelegated } = usePollActiveValidators();
+  const validators: Validator[] = useActiveValidators();
+  const totalDelegated: number = useTotalDelegated();
+  const columns = getYourColumns(totalDelegated);
   return (
     <div className="container mb-10 flex flex-col gap-6">
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap gap-5">
             <MyBalance />
-
             <div>
               <Separator
                 orientation="vertical"
@@ -115,7 +118,7 @@ export default function Home() {
           <Input type="text" placeholder="Search" className="w-72" />
         </CardHeader>
         <CardContent>
-          {/* <ValidatorsTable columns={yourColumns} data={validators} /> */}
+          <ValidatorsTable columns={columns} validators={validators} />
         </CardContent>
       </Card>
     </div>

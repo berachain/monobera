@@ -3,10 +3,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEffect, useState } from "react";
 import {
+  ERC2MODULE_PRECOMPILE_ADDRESS,
   useCurrentAssetWalletBalances,
+  usePollAllowances,
   usePollAssetWalletBalance,
+  usePollEpochs,
   type Token,
 } from "@bera/berajs";
+import { parseUnits } from "viem";
 
 export interface ITokenBribe {
   bribe: number;
@@ -21,13 +25,81 @@ export class InvalidInputError extends Error {
   }
 }
 
-const useCreateTokenBribes = () => {
+const useCreateTokenBribes = (validatorAddress: string) => {
+  const { useCurrentEpoch, isLoading } = usePollEpochs();
+
+  const currentEpoch = useCurrentEpoch();
+  const [epoch, setEpoch] = useState<number | undefined>(undefined);
+  const [epochError, setEpochError] = useState<Error | undefined>(undefined);
   const [tokenBribes, setTokenBribes] = useState<ITokenBribe[]>([]);
   const [proposals, setProposals] = useState(String(100));
   const [error, setError] = useState<Error | undefined>(undefined);
+  const [payload, setPayload] = useState<any[]>([]);
+  const [needsApproval, setNeedsApproval] = useState<Token[]>([]);
+
+  const t: Token[] = tokenBribes
+    .filter((tokenWeight: ITokenBribe) => tokenWeight.token !== undefined)
+    .map((tokenWeight) => tokenWeight.token) as Token[];
+
+  const { useCurrentAllowancesForContract } = usePollAllowances({
+    contract: ERC2MODULE_PRECOMPILE_ADDRESS,
+    tokens: t,
+  });
+
+  const allowances = useCurrentAllowancesForContract();
+
+  useEffect(() => {
+    if (allowances) {
+      const needsApproval = allowances
+        ?.map((allowance) => {
+          const token = tokenBribes.find(
+            (tokenWeight: ITokenBribe) =>
+              tokenWeight.token?.address === allowance.address,
+          );
+          if (
+            allowance.formattedAllowance === "0" ||
+            Number(allowance.formattedAllowance) < (token?.total ?? 0)
+          ) {
+            return allowance;
+          }
+        })
+        .filter((token) => token !== undefined) as Token[];
+      setNeedsApproval(needsApproval);
+    }
+  }, [allowances]);
 
   usePollAssetWalletBalance();
   const tokens = useCurrentAssetWalletBalances();
+
+  useEffect(() => {
+    const tokenAddress = tokenBribes.map(
+      (bribe: ITokenBribe) => bribe.token?.address,
+    );
+    const tokenAmounts = tokenBribes.map((bribe: ITokenBribe) =>
+      parseUnits(`${bribe.total}`, bribe.token?.decimals ?? 18),
+    );
+    const newPayload = [
+      validatorAddress,
+      parseUnits(`${Number(epoch ?? 0)}`, 0),
+      parseUnits(`${Number(proposals ?? 0)}`, 0),
+      tokenAddress,
+      tokenAmounts,
+    ];
+    setPayload(newPayload);
+  }, [currentEpoch, epoch, proposals, tokenBribes]);
+
+  // handle epoch state on load and check for epoch errors
+  useEffect(() => {
+    setEpochError(undefined);
+    if (currentEpoch !== undefined) {
+      setEpoch(currentEpoch + 1);
+    } else {
+      const isInvalidEpoch = currentEpoch < currentEpoch + 1;
+      if (isInvalidEpoch) {
+        setEpochError(new InvalidInputError("Invalid Epoch"));
+      }
+    }
+  }, [currentEpoch, isLoading]);
 
   // track any errors
   useEffect(() => {
@@ -125,9 +197,14 @@ const useCreateTokenBribes = () => {
 
   return {
     proposals,
-    setProposals,
     tokenBribes,
     error,
+    epoch,
+    epochError,
+    payload,
+    needsApproval,
+    setEpoch,
+    setProposals,
     onTokenSelection,
     onAddToken,
     onRemove,

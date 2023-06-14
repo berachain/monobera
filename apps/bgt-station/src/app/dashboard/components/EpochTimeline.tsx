@@ -8,7 +8,6 @@ import { Progress } from "@bera/ui/progress";
 export function EpochTimeline() {
   const { useCurrentEpoch } = usePollEpochs();
   const currentEpoch = useCurrentEpoch();
-  console.log(currentEpoch);
   return (
     <Card>
       <CardHeader className="pb-1">
@@ -21,10 +20,10 @@ export function EpochTimeline() {
           <div className="font-semi text-3xl font-semibold">{currentEpoch}</div>
           <div className="flex-1">
             <div className="mb-2 flex justify-between text-sm font-semibold text-backgroundSecondary">
-              {/* <span>{epoch.progress}%</span> */}
+              <span>{50}%</span>
               <span>ETA 1d 4h</span>
             </div>
-            {/* <Progress className="h-2" value={epoch.progress} /> */}
+            <Progress className="h-2" value={50} />
           </div>
           <div className="font-semi text-3xl font-semibold text-backgroundSecondary">
             {currentEpoch + 1}

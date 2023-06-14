@@ -9,18 +9,14 @@ import { CuttingBoard } from "./CuttingBoard";
 import { EpochTimeline } from "./EpochTimeline";
 import { Stats } from "./Stats";
 import { Supply } from "./Supply";
-import { Validators } from "./Validators";
 
 export function Details({ details }: { details: typeof bgtDetails }) {
   return (
     <div className="mb-10 flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <p className="text-right text-sm font-semibold text-backgroundSecondary">
-          Updated {details.lastUpdated} ago
-        </p>
         <EpochTimeline />
       </div>
-      <Validators validators={details.validators} />
+      {/* <Validators validators={details.validators} /> */}
       <CuttingBoard />
       <Stats stats={details.stats} />
       <div className="flex gap-5">

@@ -1,15 +1,22 @@
+"use client";
+
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import {
+  usePollAccountDelegations,
+  usePollActiveValidators,
+  usePollUnbondingDelegations,
+} from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { formatUnits } from "viem";
 
 import BribesList from "~/components/bribes-list";
 import { items } from "~/app/dashboard/components/CuttingBoard";
 import { ValidatorDescription } from "../components/ValidatorDescription";
-import { validator } from "../data/validator";
 import DelegateButton from "./components/DelegateButton";
 import UnbondButton from "./components/UnbondButton";
 
@@ -27,6 +34,14 @@ export default function ValidatorDetailsPage({
 }: {
   params: { validatorAddress: `0x{string}` };
 }) {
+  const { useActiveValidator, useTotalDelegated } = usePollActiveValidators();
+  const validator = useActiveValidator(validatorAddress);
+  const totalDelegated = useTotalDelegated();
+  const { useSelectedAccountDelegation } =
+    usePollAccountDelegations(validatorAddress);
+  const accountDelegation = useSelectedAccountDelegation();
+  const { useTotalUnbonding } = usePollUnbondingDelegations(validatorAddress);
+  const totalUnbonding = useTotalUnbonding();
   return (
     <div className="container mb-10 flex gap-5">
       <div className="flex w-2/3 flex-col gap-5">
@@ -46,22 +61,7 @@ export default function ValidatorDetailsPage({
             <div className="mt-5">
               <h4 className="text-lg font-medium">Details</h4>
               <p className="text-backgroundSecondary">
-                Meet the random blockchain validator, a crucial participant in
-                the world of decentralized networks. This validator tirelessly
-                contributes to the integrity and consensus of the blockchain by
-                diligently verifying transactions and blocks. Armed with
-                computational power and advanced cryptographic algorithms, this
-                validator plays a key role in maintaining the trust and security
-                of the network. Their responsibility lies in independently
-                validating the accuracy and legitimacy of transactions, ensuring
-                that no fraudulent or duplicate activities take place.
-                Collaborating with other validators, they engage in a consensus
-                mechanism, collectively deciding on the validity of new
-                additions to the blockchain. With unwavering dedication to the
-                network&apos;s rules and protocols, this random validator helps
-                maintain the decentralization and immutability of the
-                blockchain, ultimately fostering a transparent and efficient
-                ecosystem.
+                {validator?.description.details ?? ""}
               </p>
             </div>
             <div className="mt-5 flex flex-row flex-wrap gap-5">
@@ -69,31 +69,66 @@ export default function ValidatorDetailsPage({
                 <div className="text-backgroundSecondary">
                   <p className="mb-3 flex flex-row justify-between border-t border-backgroundSecondary pt-3">
                     <span className="font-medium">Voting power</span>
-                    <span>69% (666,666,666 BGT)</span>
+                    <span>
+                      {(
+                        (Number(
+                          formatUnits(validator?.delegatorShares ?? 0n, 18),
+                        ) *
+                          100) /
+                        totalDelegated
+                      ).toFixed(2)}
+                      % ({formatUnits(validator?.delegatorShares ?? 0n, 18)}{" "}
+                      BGT)
+                    </span>
                   </p>
                   <p className="mb-3 flex flex-row justify-between border-t border-backgroundSecondary pt-3">
                     <span className="font-medium">Current commission</span>
-                    <span>{validator.commission.commission_rates.rate}</span>
+                    <span>
+                      {Number(
+                        formatUnits(
+                          validator?.commission.commissionRates.rate ?? 0n,
+                          18,
+                        ),
+                      ) * 100}
+                      %
+                    </span>
                   </p>
                   <p className="mb-3 flex flex-row justify-between border-t border-backgroundSecondary pt-3">
                     <span className="font-medium">Max commission</span>
                     <span>
-                      {validator.commission.commission_rates.max_rate}
+                      {Number(
+                        formatUnits(
+                          validator?.commission.commissionRates.maxRate ?? 0n,
+                          18,
+                        ),
+                      ) * 100}
+                      %
                     </span>
                   </p>
                   <p className="mb-3 flex flex-row justify-between border-t border-backgroundSecondary pt-3">
                     <span className="font-medium">Max daily change</span>
                     <span>
-                      {validator.commission.commission_rates.max_change_rate}
+                      {Number(
+                        formatUnits(
+                          validator?.commission.commissionRates.maxChangeRate ??
+                            0n,
+                          18,
+                        ),
+                      ) * 100}
+                      %
                     </span>
                   </p>
                   <p className="mb-3 flex flex-row justify-between border-t border-backgroundSecondary pt-3">
                     <span className="font-medium">Last changed</span>
-                    <span>{validator.commission.update_time}</span>
+                    <span>
+                      {validator?.commission.updateTime
+                        ? validator.commission.updateTime.toString()
+                        : "-"}
+                    </span>
                   </p>
                   <p className="mb-3 flex flex-row justify-between border-t border-backgroundSecondary pt-3">
                     <span className="font-medium">APR</span>
-                    <span>69%</span>
+                    <span>-%</span>
                   </p>
                   <div className="mb-3 flex flex-row items-center justify-between border-t border-backgroundSecondary pt-3">
                     <p className="font-medium">Bribe rewards</p>
@@ -114,11 +149,11 @@ export default function ValidatorDetailsPage({
                 <div className="text-backgroundSecondary">
                   <p className="mb-3 flex flex-row justify-between border-t border-backgroundSecondary pt-3">
                     <span className="font-medium">Delegated</span>
-                    <span>0</span>
+                    <span>{formatUnits(accountDelegation ?? 0n, 0)}</span>
                   </p>
                   <p className="mb-3 flex flex-row justify-between border-t border-backgroundSecondary pt-3">
-                    <span className="font-medium">Unbonding</span>
-                    <span>0</span>
+                    <span className="font-medium">Pending Unbonding</span>
+                    <span>{totalUnbonding ?? 0}</span>
                   </p>
                 </div>
               </div>

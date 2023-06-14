@@ -1,7 +1,12 @@
 "use client";
 
 import React from "react";
-import { usePollBgtBalance } from "@bera/berajs";
+import {
+  BGT_PRECOMPILES_ADDRESS,
+  BGT_PRECOMPILE_ABI,
+  usePollBgtBalance,
+  type Token,
+} from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -12,12 +17,22 @@ import {
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 
+import { useRedeem } from "~/hooks/useRedeem";
+import { useTxn } from "~/hooks/useTxn";
+import TokenInput from "./token-input";
+
 export default function MyBalance() {
   const [open, setOpen] = React.useState(false);
-  const [redeemAmount, setRedeemAmount] = React.useState(0);
+
   const { useBgtBalance } = usePollBgtBalance();
   const bgtBalance = useBgtBalance();
-  console.log("bgtBalance", bgtBalance);
+
+  const { redeemAmount, payload, setRedeemAmount } = useRedeem();
+
+  const { write, isLoading } = useTxn({
+    onSuccess: () => setOpen(false),
+    onError: () => setOpen(false),
+  });
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div>
@@ -39,9 +54,29 @@ export default function MyBalance() {
           <DialogTitle>Redeem preview</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-3">
+          <TokenInput
+            selected={
+              {
+                address: "bgt",
+                symbol: "BGT",
+                name: "BGT",
+                decimals: 18,
+              } as Token
+            }
+            selectable={false}
+            amount={redeemAmount}
+            balance={Number(bgtBalance)}
+            setAmount={setRedeemAmount}
+          />
           <Button
+            disabled={isLoading}
             onClick={() => {
-              // TODO: redeem
+              write({
+                address: BGT_PRECOMPILES_ADDRESS,
+                abi: BGT_PRECOMPILE_ABI,
+                functionName: "redeemBgtForBera",
+                params: payload,
+              });
             }}
           >
             Confirm

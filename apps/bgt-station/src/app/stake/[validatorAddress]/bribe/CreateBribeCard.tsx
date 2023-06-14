@@ -1,37 +1,50 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { type Token } from "@bera/berajs";
+import { ERC2MODULE_PRECOMPILE_ADDRESS, type Token } from "@bera/berajs";
+import {
+  ERC20BGTMODULE_PRECOMPILE_ADDRESS,
+  ERC20BGT_PRECOMPILE_ABI,
+} from "@bera/berajs/src/config";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
+import { ApproveTokenButton } from "~/components/approve-token-button";
+import { useTxn } from "~/hooks/useTxn";
 import BribeTokenInputs from "./BribeTokenInputs";
 import useCreateTokenBribes, {
   type ITokenBribe,
 } from "./hooks/useCreateTokenBribes";
-
-const CURRENT_EPOCH = 11;
 
 export default function CreateBribeCard({
   validatorAddress,
 }: {
   validatorAddress: string;
 }) {
-  const [epoch, setEpoch] = useState(String(CURRENT_EPOCH + 1));
   const {
     proposals,
-    setProposals,
     tokenBribes,
+    error,
+    epoch,
+    epochError,
+    payload,
+    needsApproval,
+    setEpoch,
+    setProposals,
     onAddToken,
     onRemove,
     onTokenBribeChange,
     onTokenTotalChange,
     onTokenSelection,
-    error,
-  } = useCreateTokenBribes();
+  } = useCreateTokenBribes(validatorAddress);
+
+  console.log(payload);
+  const { write, isLoading } = useTxn({
+    message: "Create Bribe",
+  });
 
   const selectedTokens = tokenBribes.map((tokenBribe: ITokenBribe) => {
     return tokenBribe.token;
@@ -52,8 +65,8 @@ export default function CreateBribeCard({
           <Input
             type="text"
             id="epoch"
-            value={epoch}
-            onChange={(e) => setEpoch(e.target.value)}
+            value={epoch ? epoch : ""}
+            onChange={(e) => setEpoch(Number(e.target.value))}
           />
         </div>
         <div className="mb-6">
@@ -81,10 +94,28 @@ export default function CreateBribeCard({
           />
         </div>
         <div className="mb-6">
-          {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-          <Button className="w-full" onClick={() => {}}>
-            Confirm
-          </Button>
+          {}
+          {needsApproval.length > 0 ? (
+            <ApproveTokenButton
+              token={needsApproval[0]}
+              spender={ERC2MODULE_PRECOMPILE_ADDRESS}
+            />
+          ) : (
+            <Button
+              className="w-full"
+              disabled={isLoading || !!error || !!epochError}
+              onClick={() => {
+                write({
+                  address: ERC20BGTMODULE_PRECOMPILE_ADDRESS,
+                  abi: ERC20BGT_PRECOMPILE_ABI,
+                  functionName: "createBribe",
+                  params: payload,
+                });
+              }}
+            >
+              Confirm
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

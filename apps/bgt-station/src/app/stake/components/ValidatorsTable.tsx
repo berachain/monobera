@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePollRawValidators, type Validator } from "@bera/berajs";
+import { BeravaloperToEth, type Validator } from "@bera/berajs";
 import {
   Table,
   TableBody,
@@ -18,23 +18,20 @@ import {
   type ColumnDef,
 } from "@tanstack/react-table";
 
-
 interface ValidatorsTableProps {
   columns: ColumnDef<Validator>[];
+  validators: Validator[];
 }
 
-export default function ValidatorsTable({ columns }: ValidatorsTableProps) {
-  const { useValidators } = usePollRawValidators();
-  const validators: Validator[] = useValidators();
-  console.log(validators);
+export default function ValidatorsTable({
+  columns,
+  validators,
+}: ValidatorsTableProps) {
   const table = useReactTable({
     data: validators,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-  const { useActiveValidators } = usePollRawValidators();
-  const validators = useActiveValidators();
-  console.log(validators);
   const router = useRouter();
   return (
     <div className="p-5">
@@ -57,14 +54,18 @@ export default function ValidatorsTable({ columns }: ValidatorsTableProps) {
             </TableRow>
           ))}
         </TableHeader>
-        {/* <TableBody>
+        <TableBody>
           {table?.getRowModel().rows?.length ? (
             table?.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
                 className="cursor-pointer "
                 data-state={row.getIsSelected() && "selected"}
-                onClick={() => router.push(`/stake/${row.original.address}`)}
+                onClick={() =>
+                  router.push(
+                    `/stake/${BeravaloperToEth(row.original.operatorAddress)}`,
+                  )
+                }
               >
                 {row.getVisibleCells().map((cell) => {
                   return (
@@ -85,7 +86,7 @@ export default function ValidatorsTable({ columns }: ValidatorsTableProps) {
               </TableCell>
             </TableRow>
           )}
-        </TableBody> */}
+        </TableBody>
       </Table>
     </div>
   );
