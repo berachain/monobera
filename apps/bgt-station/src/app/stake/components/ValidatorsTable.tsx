@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePollRawValidators } from "@bera/berajs";
+import { BeravaloperToEth, type Validator } from "@bera/berajs";
 import {
   Table,
   TableBody,
@@ -18,31 +18,26 @@ import {
   type ColumnDef,
 } from "@tanstack/react-table";
 
-import { type Validator } from "../data/validators";
-
 interface ValidatorsTableProps {
   columns: ColumnDef<Validator>[];
-  data: Validator[];
+  validators: Validator[];
 }
 
 export default function ValidatorsTable({
   columns,
-  data,
+  validators,
 }: ValidatorsTableProps) {
   const table = useReactTable({
-    data,
+    data: validators,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-  const { useActiveValidators } = usePollRawValidators();
-  const validators = useActiveValidators();
-  console.log(validators);
   const router = useRouter();
   return (
     <div className="p-5">
       <Table className="border-separate border-spacing-y-2 p-1">
         <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
+          {table?.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
@@ -60,13 +55,17 @@ export default function ValidatorsTable({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+          {table?.getRowModel().rows?.length ? (
+            table?.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
                 className="cursor-pointer "
                 data-state={row.getIsSelected() && "selected"}
-                onClick={() => router.push(`/stake/${row.original.address}`)}
+                onClick={() =>
+                  router.push(
+                    `/stake/${BeravaloperToEth(row.original.operatorAddress)}`,
+                  )
+                }
               >
                 {row.getVisibleCells().map((cell) => {
                   return (

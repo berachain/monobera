@@ -2,10 +2,14 @@
 
 import React from "react";
 import {
+  STAKING_PRECOMPILE_ABI,
+  STAKING_PRECOMPILE_ADDRESS,
   getTokens,
   truncateHash,
-  usePollAssetWalletBalance,
+  useBeraJs,
+  usePollAccountDelegations,
   type Token,
+  type Validator,
 } from "@bera/berajs";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -16,13 +20,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@bera/ui/dialog";
+import { formatUnits, parseUnits } from "viem";
 
 import { dummyToken } from "~/utils/constants";
-import SwapInput from "~/components/swap-input";
-import { type ValidatorInfo } from "../../data/validator";
+import ConnectWalletDialog from "~/components/connect-wallet-dialog";
+import TokenInput from "~/components/token-input";
+import { useTxn } from "~/hooks/useTxn";
 
 type Props = {
-  validator: ValidatorInfo;
+  validator: Validator | undefined;
   validatorAddress: `0x{string}`;
   inList?: boolean;
 };
@@ -33,9 +39,16 @@ export default function UnbondButton({
   inList = false,
 }: Props) {
   const [open, setOpen] = React.useState(false);
-  const [redeemAmount, setRedeemAmount] = React.useState(0);
-  usePollAssetWalletBalance();
+  const [unbondAmount, setUnbondAmount] = React.useState(0);
   const tokens = getTokens();
+  const { useSelectedAccountDelegation } =
+    usePollAccountDelegations(validatorAddress);
+  const accountDelegation = useSelectedAccountDelegation();
+  const { isConnected } = useBeraJs();
+  const { write, isLoading } = useTxn({
+    onSuccess: () => setOpen(false),
+    onError: () => setOpen(false),
+  });
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -58,28 +71,41 @@ export default function UnbondButton({
           <div className="my-6 flex items-center gap-2">
             <div className="h-12 w-12 rounded-full bg-gray-300" />
             <div>
-              <h3 className="text-lg font-semibold">{validator.name}</h3>
+              <h3 className="text-lg font-semibold">
+                {validator?.description.moniker}
+              </h3>
               <Badge variant="secondary">
                 {truncateHash(validatorAddress)}
               </Badge>
             </div>
           </div>
-          <SwapInput
+          <TokenInput
             selected={tokens[0] || (dummyToken as Token)}
-            amount={redeemAmount}
-            setAmount={(amount) => setRedeemAmount(amount)}
+            amount={unbondAmount}
+            setAmount={(amount) => setUnbondAmount(amount)}
             selectable={false}
             selectedTokens={tokens}
+            balance={Number(formatUnits(accountDelegation ?? 0n, 0))}
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             onTokenSelection={() => {}}
           />
-          <Button
-            onClick={() => {
-              // TODO: delegate
-            }}
-          >
-            Confirm
-          </Button>
+          {isConnected ? (
+            <Button
+              disabled={isLoading}
+              onClick={() => {
+                write({
+                  address: STAKING_PRECOMPILE_ADDRESS,
+                  abi: STAKING_PRECOMPILE_ABI,
+                  functionName: "undelegate",
+                  params: [validatorAddress, parseUnits(`${unbondAmount}`, 18)],
+                });
+              }}
+            >
+              Delegate
+            </Button>
+          ) : (
+            <ConnectWalletDialog className="w-full" />
+          )}
         </div>
       </DialogContent>
     </Dialog>

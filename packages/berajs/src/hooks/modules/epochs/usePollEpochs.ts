@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { EPOCHS_PRECOMPILE_ABI, EPOCHS_PRECOMPILE_ADDRESS } from "~/config";
@@ -12,7 +13,7 @@ export const usePollEpochs = () => {
   const identifierKey = "berachain_epoch_identifier";
   const method = "getCurrentEpoch";
   const QUERY_KEY = [identifierKey, method];
-  useSWR(
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       const result = await publicClient.readContract({
@@ -22,7 +23,7 @@ export const usePollEpochs = () => {
         args: [identifierKey],
       });
 
-      return result;
+      return Number(formatUnits((result as bigint) ?? 0n, 0));
     },
     {
       refreshInterval: POLLING.SLOW * 5, // make it rlly slow
@@ -35,5 +36,6 @@ export const usePollEpochs = () => {
   };
   return {
     useCurrentEpoch,
+    isLoading,
   };
 };

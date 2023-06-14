@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   DEX_PRECOMPILE_ABI,
   DEX_PRECOMPILE_ADDRESS,
@@ -15,9 +16,9 @@ import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 
 import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview-input";
-import { useTxn } from "~/hooks/usTxn";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
+import { useTxn } from "~/hooks/useTxn";
 import { ApproveTokenButton } from "../approve-token-button";
 
 type Props = {
@@ -38,10 +39,14 @@ export function CreatePoolPreview({
   const [editPoolName, setEditPoolName] = useState(false);
 
   const { needsApproval } = useCreatePool(tokenWeights);
+  const router = useRouter();
 
   const { account } = useBeraJs();
   const { write } = useTxn({
     message: `Create ${poolName} pool`,
+    onSuccess: () => {
+      router.push(`/pool`);
+    },
   });
 
   const options = {

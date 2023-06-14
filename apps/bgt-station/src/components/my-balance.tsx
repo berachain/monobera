@@ -1,7 +1,12 @@
 "use client";
 
 import React from "react";
-import { getTokens, usePollAssetWalletBalance, type Token } from "@bera/berajs";
+import {
+  BGT_PRECOMPILES_ADDRESS,
+  BGT_PRECOMPILE_ABI,
+  usePollBgtBalance,
+  type Token,
+} from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -12,14 +17,22 @@ import {
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 
-import { dummyToken } from "~/utils/constants";
-import SwapInput from "./swap-input";
+import { useRedeem } from "~/hooks/useRedeem";
+import { useTxn } from "~/hooks/useTxn";
+import TokenInput from "./token-input";
 
 export default function MyBalance() {
   const [open, setOpen] = React.useState(false);
-  const [redeemAmount, setRedeemAmount] = React.useState(0);
-  usePollAssetWalletBalance();
-  const tokens = getTokens();
+
+  const { useBgtBalance } = usePollBgtBalance();
+  const bgtBalance = useBgtBalance();
+
+  const { redeemAmount, payload, setRedeemAmount } = useRedeem();
+
+  const { write, isLoading } = useTxn({
+    onSuccess: () => setOpen(false),
+    onError: () => setOpen(false),
+  });
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div>
@@ -27,7 +40,7 @@ export default function MyBalance() {
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-1 text-2xl font-semibold">
             <Icons.bgt className="h-6 w-6 fill-foreground" />
-            420.69
+            {bgtBalance}
           </div>
           <DialogTrigger asChild>
             <Button size="sm" onClick={() => setOpen(true)}>
@@ -41,18 +54,29 @@ export default function MyBalance() {
           <DialogTitle>Redeem preview</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-3">
-          <SwapInput
-            selected={tokens[0] || (dummyToken as Token)}
-            amount={redeemAmount}
-            setAmount={(amount) => setRedeemAmount(amount)}
+          <TokenInput
+            selected={
+              {
+                address: "bgt",
+                symbol: "BGT",
+                name: "BGT",
+                decimals: 18,
+              } as Token
+            }
             selectable={false}
-            selectedTokens={tokens}
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            onTokenSelection={() => {}}
+            amount={redeemAmount}
+            balance={Number(bgtBalance)}
+            setAmount={setRedeemAmount}
           />
           <Button
+            disabled={isLoading}
             onClick={() => {
-              // TODO: redeem
+              write({
+                address: BGT_PRECOMPILES_ADDRESS,
+                abi: BGT_PRECOMPILE_ABI,
+                functionName: "redeemBgtForBera",
+                params: payload,
+              });
             }}
           >
             Confirm

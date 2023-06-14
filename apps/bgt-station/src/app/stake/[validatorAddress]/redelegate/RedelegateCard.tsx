@@ -3,10 +3,12 @@
 import React from "react";
 import Link from "next/link";
 import {
+  BeravaloperToEth,
   getTokens,
   truncateHash,
   usePollAssetWalletBalance,
   type Token,
+  type Validator,
 } from "@bera/berajs";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -14,10 +16,9 @@ import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
 import { dummyToken } from "~/utils/constants";
-import SwapInput from "~/components/swap-input";
+import TokenInput from "~/components/token-input";
 import ValidatorDialog from "~/components/validator-dialog";
 import { validator } from "../../data/validator";
-import { type Validator } from "../../data/validators";
 
 export default function CreateBribeCard({
   validatorAddress,
@@ -37,6 +38,7 @@ export default function CreateBribeCard({
         setOpen={setOpen}
         fromAddress={validatorAddress}
         onSelectedValidator={setReceivingValidator}
+        selectedValidators={[validatorAddress]}
       />
       <Card className="w-[600px]">
         <CardHeader>
@@ -68,10 +70,14 @@ export default function CreateBribeCard({
                   <div className="h-12 w-12 rounded-full bg-gray-300" />
                   <div>
                     <h3 className="text-lg font-semibold">
-                      {receivingValidator.name}
+                      {receivingValidator.description.moniker}
                     </h3>
                     <Badge variant="secondary">
-                      {truncateHash(receivingValidator.address)}
+                      {truncateHash(
+                        BeravaloperToEth(
+                          receivingValidator.operatorAddress,
+                        ) as `0x{string}`,
+                      )}
                     </Badge>
                   </div>
                 </div>
@@ -85,7 +91,7 @@ export default function CreateBribeCard({
                 </Button>
               )}
             </div>
-            <SwapInput
+            <TokenInput
               selected={tokens[0] || (dummyToken as Token)}
               amount={redeemAmount}
               setAmount={(amount) => setRedeemAmount(amount)}

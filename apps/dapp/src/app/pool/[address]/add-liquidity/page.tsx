@@ -16,9 +16,9 @@ import { parseUnits } from "viem";
 import { ApproveTokenButton } from "~/components/approve-token-button";
 import { SettingsPopover } from "~/components/settings-popover";
 import SwapInput from "~/components/token-input";
-import { useTxn } from "~/hooks/usTxn";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
+import { useTxn } from "~/hooks/useTxn";
 
 export default function AddLiquidity({
   params,
