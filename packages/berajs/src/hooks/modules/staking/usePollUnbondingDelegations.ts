@@ -42,7 +42,20 @@ export const usePollUnbondingDelegations = (
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };
+
+  const useTotalUnbonding = () => {
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    if (data) {
+      return data.reduce(
+        (total: number, delegation: { balance: any }) =>
+          total + Number(delegation.balance),
+        0,
+      );
+    }
+    return data;
+  };
   return {
     useGetUnbondingDelegation,
+    useTotalUnbonding,
   };
 };

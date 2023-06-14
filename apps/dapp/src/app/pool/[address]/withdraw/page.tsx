@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   DEX_PRECOMPILE_ABI,
   DEX_PRECOMPILE_ADDRESS,
+  ERC2MODULE_PRECOMPILE_ADDRESS,
   useBeraJs,
   usePollBalance,
   usePollPools,
@@ -15,9 +16,11 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { formatUnits, parseUnits } from "viem";
 
+import { ApproveTokenButton } from "~/components/approve-token-button";
 import { SettingsPopover } from "~/components/settings-popover";
 import SwapInput from "~/components/token-input";
-import { useTxn } from "~/hooks/usTxn";
+import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
+import { useTxn } from "~/hooks/useTxn";
 
 export default function Withdraw({ params }: { params: { address: string } }) {
   const [withdrawAmount, setWithdrawAmount] = useState(0);
@@ -35,6 +38,20 @@ export default function Withdraw({ params }: { params: { address: string } }) {
     message: `Withdraw from ${pool?.name}}`,
   });
 
+  const { needsApproval } = useMultipleTokenApprovals(
+    [
+      {
+        address: pool?.shareAddress,
+        decimals: 18,
+        symbol: "Share",
+        name: "Share",
+        amount: withdrawAmount,
+        default: false,
+      },
+    ],
+    ERC2MODULE_PRECOMPILE_ADDRESS,
+  );
+
   const preview = usePreviewBurnShares();
   const payload = [
     pool?.address,
@@ -43,6 +60,7 @@ export default function Withdraw({ params }: { params: { address: string } }) {
     pool?.shareAddress,
     parseUnits(`${withdrawAmount}`, 18),
   ];
+  console.log(payload);
   return (
     <div className="flex w-full items-center justify-center">
       <Card className="mx-6 w-full md:mx-0 md:w-[550px] ">
@@ -88,19 +106,25 @@ export default function Withdraw({ params }: { params: { address: string } }) {
               />
             );
           })}
-
-          <Button
-            onClick={() => {
-              write({
-                address: DEX_PRECOMPILE_ADDRESS,
-                abi: DEX_PRECOMPILE_ABI,
-                functionName: "removeLiquidityBurningShares",
-                params: payload,
-              });
-            }}
-          >
-            Withdraw
-          </Button>
+          {needsApproval.length > 0 ? (
+            <ApproveTokenButton
+              token={needsApproval[0]}
+              spender={ERC2MODULE_PRECOMPILE_ADDRESS}
+            />
+          ) : (
+            <Button
+              onClick={() => {
+                write({
+                  address: DEX_PRECOMPILE_ADDRESS,
+                  abi: DEX_PRECOMPILE_ABI,
+                  functionName: "removeLiquidityBurningShares",
+                  params: payload,
+                });
+              }}
+            >
+              Withdraw
+            </Button>
+          )}
         </CardContent>
       </Card>
     </div>

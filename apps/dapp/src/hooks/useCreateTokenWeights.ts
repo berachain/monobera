@@ -99,7 +99,7 @@ const useCreateTokenWeights = () => {
     const isInitialLiquidityExceedingBalance =
       step === 2 &&
       tokenWeights.some((item) => {
-        const foundToken = tokens.find(
+        const foundToken = tokens?.find(
           (t) => t.address === item?.token?.address,
         );
         return (

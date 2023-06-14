@@ -16,7 +16,7 @@ import {
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 
-import { useTxn } from "~/hooks/usTxn";
+import { useTxn } from "~/hooks/useTxn";
 import { TokenIcon } from "./token-icon";
 
 type Props = {

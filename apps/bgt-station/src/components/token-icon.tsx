@@ -8,7 +8,7 @@ type Props = {
 };
 export const TokenIcon = ({ token, className }: Props) => {
   return (
-    <Avatar className={cn("h-12 w-12", className)}>
+    <Avatar className={cn("h-12 w-12 rounded-full", className)}>
       <AvatarImage
         src={`/icons/${token?.symbol.toLowerCase()}.jpg`}
         className="p-1"
