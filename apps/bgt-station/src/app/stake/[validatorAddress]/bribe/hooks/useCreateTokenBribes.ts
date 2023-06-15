@@ -79,10 +79,10 @@ const useCreateTokenBribes = (validatorAddress: string) => {
       parseUnits(`${bribe.total}`, bribe.token?.decimals ?? 18),
     );
     const newPayload = [
-      validatorAddress,
-      parseUnits(`${Number(epoch ?? 0)}`, 0),
-      parseUnits(`${Number(proposals ?? 0)}`, 0),
-      tokenAddress,
+      validatorAddress as `0x${string}`,
+      BigInt.asIntN(64, parseUnits(`${Number(epoch ?? 0)}`, 0)),
+      BigInt.asUintN(64, parseUnits(`${Number(proposals ?? 0)}`, 0)),
+      tokenAddress as `0x${string}`[],
       tokenAmounts,
     ];
     setPayload(newPayload);

@@ -1,6 +1,9 @@
 import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   truncateHash,
+  useBeraConfig,
   useRecentTransactions,
   type NewTransaction,
 } from "@bera/berajs";
@@ -22,22 +25,29 @@ function formatTimestamp(timestamp: number): string {
 
 export function History() {
   const transactions = useRecentTransactions();
+  const router = useRouter();
+  const { networkConfig } = useBeraConfig();
   return (
     <div className="grid gap-4">
       <h3 className="text-xl font-medium">History</h3>
       {transactions.map((txn: NewTransaction) => (
-        <div
-          className="flex justify-between border-t border-backgroundSecondary pt-2"
-          key={txn.hash}
+        <a
+          target="_blank"
+          href={`http://${networkConfig.chain.blockExplorers?.default.url}/tx/${txn.hash}`}
         >
-          <div className="text-xs">
-            <p className="font-medium">{txn.description}</p>
-            <p className="text-backgroundSecondary">
-              {truncateHash(txn.hash as `0x${string}`)}
-            </p>
+          <div
+            className="flex justify-between border-t border-backgroundSecondary pt-2"
+            key={txn.hash}
+          >
+            <div className="text-xs">
+              <p className="font-medium">{txn.description}</p>
+              <p className="text-backgroundSecondary">
+                {truncateHash(txn.hash as `0x${string}`)}
+              </p>
+            </div>
+            <div className="text-xs">{formatTimestamp(txn.timestamp)}</div>
           </div>
-          <div className="text-xs">{formatTimestamp(txn.timestamp)}</div>
-        </div>
+        </a>
       ))}
     </div>
   );

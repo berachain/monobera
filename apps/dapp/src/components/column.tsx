@@ -1,12 +1,10 @@
 "use client";
 
+import { RewardPool } from "@bera/berajs";
 import { Checkbox } from "@bera/ui/checkbox";
-import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { type Reward } from "~/utils/constants";
-
-export const columns: ColumnDef<Reward>[] = [
+export const columns: ColumnDef<RewardPool>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -16,19 +14,18 @@ export const columns: ColumnDef<Reward>[] = [
         aria-label="Select all"
       />
     ),
-    cell: ({ row }) =>
-      row.getCanExpand() && (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "pool",
+    accessorKey: "name",
     header: "Pools",
   },
   {
@@ -37,22 +34,6 @@ export const columns: ColumnDef<Reward>[] = [
   },
   {
     accessorKey: "claimable",
-    header: "Claimable",
-  },
-  {
-    id: "actions",
-    cell: ({ row }) =>
-      row.getCanExpand() ? (
-        <div className="text-right">
-          <button
-            {...{
-              onClick: row.getToggleExpandedHandler(),
-              style: { cursor: "pointer" },
-            }}
-          >
-            {row.getIsExpanded() ? <Icons.chevronUp /> : <Icons.chevronDown />}
-          </button>
-        </div>
-      ) : null,
+    header: "Claimable (BGT)",
   },
 ];

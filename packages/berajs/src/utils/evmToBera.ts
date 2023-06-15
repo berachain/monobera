@@ -67,6 +67,11 @@ export const BeravaloperToEth = (bech32Address: string): string => {
   return ETH.encoder(data);
 };
 
+export const ethToBeravaloper = (ethAddress: string): string => {
+  const data = ETH.decoder(ethAddress);
+  return BERAVALOPER.encoder(data);
+};
+
 export const beraToEth = (bech32Address: string): string => {
   const data = BERA.decoder(bech32Address);
   return ETH.encoder(data);

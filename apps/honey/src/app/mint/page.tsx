@@ -1,11 +1,6 @@
-import { type Metadata } from "next";
+"use client";
 
 import { SwapCard } from "~/components/swap-card";
-
-export const metadata: Metadata = {
-  title: "Mint | Honey | Berachain",
-  description: "Mo honey mo problems",
-};
 
 export default function Swap() {
   return (

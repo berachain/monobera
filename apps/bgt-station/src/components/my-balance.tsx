@@ -2,8 +2,8 @@
 
 import React from "react";
 import {
-  BGT_PRECOMPILES_ADDRESS,
-  BGT_PRECOMPILE_ABI,
+  ERC20BGTMODULE_PRECOMPILE_ADDRESS,
+  ERC20BGT_PRECOMPILE_ABI,
   usePollBgtBalance,
   type Token,
 } from "@bera/berajs";
@@ -30,6 +30,7 @@ export default function MyBalance() {
   const { redeemAmount, payload, setRedeemAmount } = useRedeem();
 
   const { write, isLoading } = useTxn({
+    message: `Redeem ${redeemAmount} BGT`,
     onSuccess: () => setOpen(false),
     onError: () => setOpen(false),
   });
@@ -72,8 +73,8 @@ export default function MyBalance() {
             disabled={isLoading}
             onClick={() => {
               write({
-                address: BGT_PRECOMPILES_ADDRESS,
-                abi: BGT_PRECOMPILE_ABI,
+                address: ERC20BGTMODULE_PRECOMPILE_ADDRESS,
+                abi: ERC20BGT_PRECOMPILE_ABI,
                 functionName: "redeemBgtForBera",
                 params: payload,
               });

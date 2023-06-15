@@ -42,10 +42,7 @@ export function SwapCard() {
   // eslint-disable-next-line
   const [payload, setPayload] = useState<any[]>([]);
 
-  usePollAssetWalletBalance();
-  const { usePools } = usePollPools();
   const { isConnected } = useBeraJs();
-  const pools = usePools();
 
   const [selectedFrom, setSelectedFrom] = useState<Token | undefined>(
     undefined,
@@ -65,30 +62,6 @@ export function SwapCard() {
     swapKind === SwapKind.GIVEN_IN ? selectedFrom : selectedTo,
     swapKind === SwapKind.GIVEN_IN ? selectedTo : selectedFrom,
   );
-
-  const previewSwapAmount = usePreviewSwapExact();
-
-  useEffect(() => {
-    const selectedPool = pools?.find((pool: Pool) =>
-      pool.weights.some(
-        (w: WeightedToken) => w.address === selectedFrom?.address,
-      ),
-    );
-    if (selectedPool) {
-      setSelectedTo(
-        selectedPool.weights.find(
-          (w: WeightedToken) => w.address !== selectedFrom?.address,
-        ),
-      );
-      setSelectedPool(selectedPool);
-    }
-  }, [selectedFrom]);
-
-  useEffect(() => {
-    swapKind === SwapKind.GIVEN_IN
-      ? setToAmount(previewSwapAmount)
-      : setFromAmount(previewSwapAmount);
-  }, [previewSwapAmount]);
 
   useEffect(() => {
     const deadline = block + 10000n;
@@ -139,7 +112,6 @@ export function SwapCard() {
           <SwapInput
             selected={selectedTo}
             selectedTokens={[selectedFrom, selectedTo]}
-            // onTokenSelection={setSelectedTo}
             amount={toAmount}
             setAmount={(amount) => {
               setSwapKind(SwapKind.GIVEN_OUT);
@@ -159,7 +131,7 @@ export function SwapCard() {
               toToken={selectedTo}
               fromToken={selectedFrom}
               fromAmount={fromAmount ?? 0}
-              toAmount={previewSwapAmount ?? 0}
+              toAmount={0}
               payload={payload}
             />
           ) : (

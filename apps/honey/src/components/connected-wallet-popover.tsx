@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { useBeraJs } from "@bera/berajs";
+import { useRouter } from "next/navigation";
+import { useBeraConfig, useBeraJs } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -11,7 +12,6 @@ import { useReadLocalStorage } from "usehooks-ts";
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
 import { formatConnectorName } from "~/utils/formatConnectorName";
 import { truncateWalletAddress } from "~/utils/truncateWalletAddress";
-import SwapSettings from "./swap-settings";
 
 export default function ConnectedWalletPopover() {
   const [open, setOpen] = React.useState(false);
@@ -19,13 +19,16 @@ export default function ConnectedWalletPopover() {
   const connectorName = useReadLocalStorage<string>(
     LOCAL_STORAGE_KEYS.CONNECTOR_ID,
   );
+  const router = useRouter();
+  const { networkConfig } = useBeraConfig();
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          className="w-48 hover:bg-background hover:text-primary-foreground"
+          className="w-48"
           onClick={() => setOpen(true)}
-          variant="ghost"
+          variant="secondary"
         >
           {truncateWalletAddress(account ?? "")}
         </Button>
@@ -55,7 +58,16 @@ export default function ConnectedWalletPopover() {
               <Button variant="ghost" size="sm" className="ml-2 rounded-full">
                 <Icons.copy className="h-3 w-3" />
               </Button>
-              <Button variant="ghost" size="sm" className="rounded-full">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="rounded-full"
+                onClick={() => {
+                  router.push(
+                    `http://${networkConfig.chain.blockExplorers?.default.url}/address/${account}`,
+                  );
+                }}
+              >
                 <Icons.external className="h-3 w-3" />
               </Button>
             </p>
@@ -64,7 +76,7 @@ export default function ConnectedWalletPopover() {
             </p>
           </div>
         </div>
-        <SwapSettings />
+        {/* <SwapSettings /> */}
       </PopoverContent>
     </Popover>
   );

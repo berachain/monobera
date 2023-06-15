@@ -58,7 +58,7 @@ export function CreatePoolPreview({
   };
 
   const payload = [
-    "agoodpool",
+    poolName,
     tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
     tokenWeights.map((tokenWeight) =>
       parseUnits(

@@ -4,18 +4,17 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
+  Bribe,
   usePollAccountDelegations,
   usePollActiveValidators,
   usePollUnbondingDelegations,
 } from "@bera/berajs";
-import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
 
 import BribesList from "~/components/bribes-list";
-import { items } from "~/app/dashboard/components/CuttingBoard";
 import { ValidatorDescription } from "../components/ValidatorDescription";
 import DelegateButton from "./components/DelegateButton";
 import UnbondButton from "./components/UnbondButton";
@@ -25,23 +24,35 @@ const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
   ssr: false,
 });
 
-function getRandomBoolean(): boolean {
-  return Math.random() < 0.5;
-}
-
 export default function ValidatorDetailsPage({
   params: { validatorAddress },
 }: {
   params: { validatorAddress: `0x{string}` };
 }) {
-  const { useActiveValidator, useTotalDelegated } = usePollActiveValidators();
+  const {
+    useSelectedValidatorActiveBribes,
+    useActiveValidator,
+    useTotalDelegated,
+    usePollSelectedValidatorCuttingBoard,
+  } = usePollActiveValidators();
+  const cuttingBoard = usePollSelectedValidatorCuttingBoard(validatorAddress);
+  console.log("cb", cuttingBoard);
   const validator = useActiveValidator(validatorAddress);
   const totalDelegated = useTotalDelegated();
+  const bribes: Bribe | undefined =
+    useSelectedValidatorActiveBribes(validatorAddress);
+  console.log("bribes", bribes);
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(validatorAddress);
   const accountDelegation = useSelectedAccountDelegation();
   const { useTotalUnbonding } = usePollUnbondingDelegations(validatorAddress);
   const totalUnbonding = useTotalUnbonding();
+  const items = cuttingBoard?.map((cb) => ({
+    weight: parseFloat(cb.weight) * 100,
+    detail: {
+      symbol: cb.symbol,
+    },
+  }));
   return (
     <div className="container mb-10 flex gap-5">
       <div className="flex w-2/3 flex-col gap-5">
@@ -132,7 +143,7 @@ export default function ValidatorDetailsPage({
                   </p>
                   <div className="mb-3 flex flex-row items-center justify-between border-t border-backgroundSecondary pt-3">
                     <p className="font-medium">Bribe rewards</p>
-                    <BribesList />
+                    <BribesList bribes={bribes} />
                   </div>
                 </div>
               </div>
@@ -184,13 +195,13 @@ export default function ValidatorDetailsPage({
       <div className="flex w-1/3 flex-col gap-5">
         <Card>
           <CardHeader>
-            <h2 className="mt-0 text-lg font-medium">Cutting wheel</h2>
+            <h2 className="mt-0 text-lg font-medium">Emission Allocation</h2>
           </CardHeader>
           <CardContent>
             <DynamicChart items={items} />
           </CardContent>
         </Card>
-        <Card>
+        {/* <Card>
           <CardHeader>
             <h2 className="mt-0 text-lg font-medium">Uptime</h2>
           </CardHeader>
@@ -207,7 +218,7 @@ export default function ValidatorDetailsPage({
               ))}
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </div>
   );

@@ -420,9 +420,9 @@ export const ERC20BGT_PRECOMPILE_ABI = [
         type: "address",
       },
       {
-        internalType: "string",
+        internalType: "uint256",
         name: "amount",
-        type: "string",
+        type: "uint256",
       },
     ],
     name: "redeemBgtForBera",
