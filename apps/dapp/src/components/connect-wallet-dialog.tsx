@@ -25,19 +25,19 @@ const ConnectorAssets: ConnectorAssetsType = {
     icon: <Icons.metamask height="50px" width="50px" />,
     name: "Metamask",
   },
-  [ConnectorNames.Coinbase]: {
-    icon: <Icons.coinbase height="50px" width="50px" />,
-    name: "Coinbase",
-  },
+  // [ConnectorNames.Coinbase]: {
+  //   icon: <Icons.coinbase height="50px" width="50px" />,
+  //   name: "Coinbase",
+  // },
 
-  [ConnectorNames.WalletConnect]: {
-    icon: <Icons.walletConnect height="50px" width="50px" />,
-    name: "WalletConnect",
-  },
-  [ConnectorNames.Keplr]: {
-    icon: <Icons.keplr height="50px" width="50px" />,
-    name: "Keplr",
-  },
+  // [ConnectorNames.WalletConnect]: {
+  //   icon: <Icons.walletConnect height="50px" width="50px" />,
+  //   name: "WalletConnect",
+  // },
+  // [ConnectorNames.Keplr]: {
+  //   icon: <Icons.keplr height="50px" width="50px" />,
+  //   name: "Keplr",
+  // },
 };
 
 type Props = {

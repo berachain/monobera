@@ -10,64 +10,6 @@ export enum TRANSACTION_TYPES {
   EIP_1559 = "eip1559",
 }
 
-export type Reward = {
-  id: string;
-  pool: string;
-  deposited?: number;
-  claimable: number;
-  brokenDownRewards?: Reward[];
-};
-
-export const rewards: Reward[] = [
-  {
-    id: "728ed52f",
-    deposited: 100,
-    pool: "Honey / USDC",
-    claimable: 100,
-    brokenDownRewards: [
-      {
-        id: "728ed52f-1",
-        pool: "Honey",
-        deposited: undefined,
-        claimable: 50,
-      },
-      {
-        id: "728ed52f-2",
-        pool: "USDC",
-        deposited: undefined,
-        claimable: 50,
-      },
-      {
-        id: "728ed52f-3",
-        pool: "BGT",
-        deposited: undefined,
-        claimable: 50,
-      },
-    ],
-  },
-  {
-    id: "489e1d42",
-    deposited: 125,
-    pool: "Staked BERA",
-    claimable: 100,
-    brokenDownRewards: [
-      {
-        id: "489e1d42-1",
-        pool: "Staked BERA 1",
-        deposited: undefined,
-        claimable: 50,
-      },
-      {
-        id: "489e1d42-2",
-        pool: "Staked BERA 2",
-        deposited: undefined,
-        claimable: 50,
-      },
-    ],
-  },
-  // ...
-];
-
 export const pools = [
   {
     id: "POOL001",

@@ -3,10 +3,10 @@ export const navItems = [
     href: "/",
     title: "My BGT",
   },
-  {
-    href: "/dashboard",
-    title: "Dashboard",
-  },
+  // {
+  //   href: "/dashboard",
+  //   title: "Dashboard",
+  // },
   {
     href: "/stake",
     title: "Stake",

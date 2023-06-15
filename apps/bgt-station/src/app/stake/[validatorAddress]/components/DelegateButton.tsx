@@ -40,6 +40,7 @@ export default function DelegateButton({ validator, validatorAddress }: Props) {
   const { isConnected } = useBeraJs();
   const tokens = getTokens();
   const { write, isLoading } = useTxn({
+    message: `delegate ${delegateAmount} BGT`,
     onSuccess: () => setOpen(false),
     onError: () => setOpen(false),
   });

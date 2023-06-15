@@ -6,3 +6,4 @@ export * from "./bgt";
 export * from "./berachef";
 export * from "./governance";
 export * from "./erc20bgt";
+export * from "./rewards";

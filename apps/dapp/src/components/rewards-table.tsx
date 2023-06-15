@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { RewardPool } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import {
@@ -20,14 +21,12 @@ import {
   type ExpandedState,
 } from "@tanstack/react-table";
 
-import { type Reward } from "~/utils/constants";
-
 interface DataTableProps {
-  columns: ColumnDef<Reward>[];
-  data: Reward[];
+  columns: ColumnDef<RewardPool>[];
+  data: RewardPool[];
 }
 
-export default function RewardsTable({ columns, data }: DataTableProps) {
+export default function RewardsTable({ columns, data = [] }: DataTableProps) {
   const [expanded, setExpanded] = React.useState<ExpandedState>({});
   const table = useReactTable({
     data,
@@ -38,12 +37,11 @@ export default function RewardsTable({ columns, data }: DataTableProps) {
     onExpandedChange: setExpanded,
     getExpandedRowModel: getExpandedRowModel(),
     getCoreRowModel: getCoreRowModel(),
-    getSubRows: (row) => row.brokenDownRewards,
   });
 
   const someOrAllRowsSelected =
-    table.getRowModel().rows?.length &&
-    table.getRowModel().rows.some((row) => row.getIsSelected());
+    table?.getRowModel().rows?.length &&
+    table?.getRowModel().rows.some((row) => row.getIsSelected());
   return (
     <div className="rounded-md p-4">
       <Table className="border-b">
@@ -66,8 +64,8 @@ export default function RewardsTable({ columns, data }: DataTableProps) {
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
+          {table?.getRowModel().rows?.length ? (
+            table?.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}

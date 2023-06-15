@@ -1,33 +1,50 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { usePollActiveValidators, type Validator } from "@bera/berajs";
+// import dynamic from "next/dynamic";
+import {
+  usePollActiveValidators,
+  usePollDelegatorUnbonding,
+  usePollDelegatorValidators,
+  usePollTotalDelegatorDelegated,
+  type UnbondingDelegationEntry,
+  type Validator,
+} from "@bera/berajs";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
 import { Separator } from "@bera/ui/separator";
+import { formatUnits } from "viem";
 
+import { formatTime } from "~/utils/formatTime";
 import MyBalance from "~/components/my-balance";
-import { items } from "./dashboard/components/CuttingBoard";
 import ValidatorsTable from "./stake/components/ValidatorsTable";
 import { getYourColumns } from "./stake/components/column";
-import { type Metadata } from "next";
 
+// TODO: fix metadata
+// export const metadata: Metadata = {
+//   title: "MyBGT | Berachain",
+//   description: "BGT Station",
+// };
 
-export const metadata: Metadata = {
-  title: "MyBGT | Berachain",
-  description: "BGT Station",
-};
-
-const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
-  loading: () => <p>Loading...</p>,
-  ssr: false,
-});
+// const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
+//   loading: () => <p>Loading...</p>,
+//   ssr: false,
+// });
 
 export default function Home() {
-  const { useActiveValidators, useTotalDelegated } = usePollActiveValidators();
-  const validators: Validator[] = useActiveValidators();
+  const { useTotalDelegated } = usePollActiveValidators();
+  const { useDelegatorValidators } = usePollDelegatorValidators();
+  const { useTotalDelegatorDelegated } = usePollTotalDelegatorDelegated();
+  const { useDelegatorUnbonding, useTotalDelegatorUnbonding } =
+    usePollDelegatorUnbonding();
+
+  const validators: Validator[] = useDelegatorValidators();
+  const totalDelegatorDelegated: number | undefined =
+    useTotalDelegatorDelegated();
   const totalDelegated: number = useTotalDelegated();
+  const totalUnbonding: number | undefined = useTotalDelegatorUnbonding();
+  const unbondingQueue = useDelegatorUnbonding();
+  console.log("unbondingQueue", unbondingQueue);
+  console.log(totalUnbonding);
   const columns = getYourColumns(totalDelegated);
   return (
     <div className="container mb-10 flex flex-col gap-6">
@@ -45,7 +62,7 @@ export default function Home() {
               <h4 className="text-foregroundSecondary">
                 Redelegation cooldown
               </h4>
-              <p className="text-2xl font-semibold">4 days</p>
+              <p className="text-2xl font-semibold">0 days</p>
             </div>
             <div>
               <Separator
@@ -55,20 +72,18 @@ export default function Home() {
             </div>
             <div className="flex grow flex-wrap justify-between gap-3">
               <div>
-                <h4 className="text-foregroundSecondary">Current Warmup</h4>
-                <p className="text-2xl font-semibold">69</p>
+                <h4 className="text-foregroundSecondary">Current Delegated</h4>
+                <p className="text-2xl font-semibold">
+                  {totalDelegatorDelegated ?? 0} BGT
+                </p>
               </div>
               <div>
                 <h4 className="text-foregroundSecondary">Current cooldown</h4>
-                <p className="text-2xl font-semibold">420</p>
+                <p className="text-2xl font-semibold">28 days</p>
               </div>
               <div>
-                <h4 className="text-foregroundSecondary">Commisions</h4>
-                <p className="text-2xl font-semibold">69%</p>
-              </div>
-              <div>
-                <h4 className="text-foregroundSecondary">APY</h4>
-                <p className="text-2xl font-semibold">69%</p>
+                <h4 className="text-foregroundSecondary">APR</h4>
+                <p className="text-2xl font-semibold">-%</p>
               </div>
             </div>
           </div>
@@ -80,8 +95,8 @@ export default function Home() {
             <h3 className="text-lg font-medium">Unbonding Queue</h3>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col gap-5">
-              {Array.from({ length: 5 }).map((_, i) => {
+            <div className="flex flex-col gap-5 overflow-y-scroll">
+              {/* {Array.from({ length: 5 }).map((_, i) => {
                 return (
                   <div
                     key={i}
@@ -102,11 +117,44 @@ export default function Home() {
                     </div>
                   </div>
                 );
-              })}
+              })} */}
+              {(unbondingQueue as unknown as UnbondingDelegationEntry[])?.map(
+                (entry: UnbondingDelegationEntry, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="flex flex-row items-center justify-between gap-3 border-t pt-2"
+                    >
+                      <div className="flex flex-col">
+                        <p className="text-foregroundSecondary">
+                          {formatUnits(entry.balance ?? 0n, 18)} BGT
+                        </p>
+                      </div>
+                      <div className="flex flex-col">
+                        <p className="flex items-center text-foregroundSecondary">
+                          {formatTime(entry.completionTime)}{" "}
+                          <span className="ml-2">
+                            <Icons.external className="h-4 w-4" />
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  );
+                },
+              )}
             </div>
           </CardContent>
         </Card>
         <Card className="col-span-6">
+          <CardHeader className="flex flex-row items-center justify-between pb-0">
+            <h3 className="text-lg font-medium">Your delegates</h3>
+            {/* <Input type="text" placeholder="Search" className="w-72" /> */}
+          </CardHeader>
+          <CardContent>
+            <ValidatorsTable columns={columns} validators={validators} />
+          </CardContent>
+        </Card>
+        {/* <Card className="col-span-6">
           <CardHeader className="flex flex-row items-center justify-between pb-0">
             <h3 className="text-lg font-medium">
               Average weight of your delegates
@@ -117,17 +165,8 @@ export default function Home() {
               <DynamicChart items={items} />
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-0">
-          <h3 className="text-lg font-medium">Your delegates</h3>
-          <Input type="text" placeholder="Search" className="w-72" />
-        </CardHeader>
-        <CardContent>
-          <ValidatorsTable columns={columns} validators={validators} />
-        </CardContent>
-      </Card>
     </div>
   );
 }

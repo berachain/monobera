@@ -46,6 +46,7 @@ export default function UnbondButton({
   const accountDelegation = useSelectedAccountDelegation();
   const { isConnected } = useBeraJs();
   const { write, isLoading } = useTxn({
+    message: `Unbond ${unbondAmount}`,
     onSuccess: () => setOpen(false),
     onError: () => setOpen(false),
   });
@@ -54,8 +55,8 @@ export default function UnbondButton({
       <DialogTrigger asChild>
         <Button
           variant="secondary"
-          className={!inList ? "w-full" : ""}
-          onClick={(e) => inList && e.stopPropagation()}
+          className={!inList ? "w-full" : "z-100"}
+          onClick={(e) => inList && e.preventDefault()}
         >
           Unbond
         </Button>
@@ -101,7 +102,7 @@ export default function UnbondButton({
                 });
               }}
             >
-              Delegate
+              Unbond
             </Button>
           ) : (
             <ConnectWalletDialog className="w-full" />
