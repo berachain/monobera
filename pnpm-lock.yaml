@@ -288,6 +288,9 @@ importers:
       usehooks-ts:
         specifier: ^2.9.1
         version: 2.9.1(react-dom@18.2.0)(react@18.2.0)
+      viem:
+        specifier: ~0.3.35
+        version: 0.3.36(typescript@5.0.4)(zod@3.21.4)
       wagmi:
         specifier: ^1.0.2
         version: 1.0.6(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.36)(zod@3.21.4)
