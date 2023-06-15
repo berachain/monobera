@@ -7,6 +7,9 @@ import {
   useLatestBlock,
   usePollAllowance,
   type Token,
+  HONEY_PRECOMPILE_ABI,
+  HONEY_PRECOMPILE_ADDRESS,
+  usePollBalance,
 } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -16,6 +19,8 @@ import { honey, stgUsd } from "../config/tokens";
 import { ApproveTokenButton } from "./approve-token-button";
 import ConnectWalletDialog from "./connect-wallet-dialog";
 import SwapInput from "./token-input";
+import { parseUnits } from "viem";
+import { useTxn } from "~/hooks/usTxn";
 
 export function SwapCard() {
   const [selectedTo, setSelectedTo] = useState<Token>(honey);
@@ -26,8 +31,16 @@ export function SwapCard() {
 
   const [toAmount, setToAmount] = useState(0);
 
-  const isMint = selectedFrom.address === honey.address;
+  const isMint = selectedFrom.address === stgUsd.address;
 
+  const {useBalance: useFromBalance} = usePollBalance({address: selectedFrom.address});
+
+  const fromBalance = useFromBalance();
+
+  const {useBalance: useToBalance} = usePollBalance({address: selectedTo.address});
+
+  const toBalance = useToBalance();
+  console.log(fromBalance);
   // eslint-disable-next-line
   const [payload, setPayload] = useState<any[]>([]);
 
@@ -45,12 +58,20 @@ export function SwapCard() {
   const fee = 1 - 0.005;
   const fee2 = 1 + 0.005;
 
+  const {write, isLoading} = useTxn({
+    message: isMint ? 'Mint Honey' : 'Redeem Honey'
+  })
   useEffect(() => {
     if (isMint && account) {
-      const payload = [account];
+      const payload = [account, {
+        amount:  parseUnits(`${fromAmount}`, 18),
+        denom: 'stgusdc'
+      }];
+      setPayload(payload);
     }
     if (!isMint && account) {
-      const payload = [account];
+      const payload = [account, parseUnits(`${fromAmount}`, 18), 'stgusdc'];
+      setPayload(payload);
     }
     // const deadline = block + 10000n;
     // const payload = [
@@ -60,9 +81,10 @@ export function SwapCard() {
     //   parseUnits(`${toAmount ?? 0}`, selectedTo?.decimals ?? 18),
     //   deadline,
     // ];
-    setPayload(payload);
   }, [isMint, account, fromAmount, toAmount]);
 
+  console.log(allowance);
+  console.log(payload)
   return (
     <Card className="w-[500px] bg-background/5 backdrop-blur-sm">
       <CardHeader>
@@ -80,7 +102,9 @@ export function SwapCard() {
             selectedTokens={[selectedFrom, selectedTo]}
             onTokenSelection={setSelectedFrom}
             amount={fromAmount ?? 0}
+            balance={fromBalance?.formattedBalance}
             selectable={false}
+            hidePrice
             setAmount={(amount) => {
               setFromAmount(Number(amount));
               setToAmount(Number(amount) * fee);
@@ -106,20 +130,34 @@ export function SwapCard() {
               setToAmount(Number(amount));
               setFromAmount(Number(amount) * fee2);
             }}
-            hideBalance
             selectable={false}
+            hidePrice
+            balance={toBalance?.formattedBalance}
           />
 
-          {(Number(allowance?.formattedAllowance) ?? 0) < fromAmount ? (
+          {false ? (
             <ApproveTokenButton
               token={selectedFrom}
               spender={ERC2MODULE_PRECOMPILE_ADDRESS}
             />
           ) : isConnected ? (
             isMint ? (
-              <Button disabled={toAmount === 0}>Mint</Button>
+              <Button disabled={toAmount === 0 || isLoading}
+              onClick={() =>{ write({
+                address: HONEY_PRECOMPILE_ADDRESS,
+                abi: HONEY_PRECOMPILE_ABI,
+                functionName: 'mint',
+                params: payload
+              })}}
+              >Mint</Button>
             ) : (
-              <Button disabled={toAmount === 0}>Redeem</Button>
+              <Button disabled={toAmount === 0 || isLoading}
+              onClick={() =>{ write({
+                address: HONEY_PRECOMPILE_ADDRESS,
+                abi: HONEY_PRECOMPILE_ABI,
+                functionName: 'redeem',
+                params: payload
+              })}}>Redeem</Button>
             )
           ) : (
             <ConnectWalletDialog

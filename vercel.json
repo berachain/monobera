@@ -1,5 +1,11 @@
 {
   "github": {
     "silent": true
-  }
+  },
+  "rewrites": [
+    {
+        "source": "/api/rpc",
+        "destination": "http://rpc.beraswillmakeit.com:8545"
+    }
+]
 }
