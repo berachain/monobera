@@ -1,5 +1,5 @@
 import { useCallback, useReducer } from "react";
-import { useConnect, useDisconnect } from "wagmi";
+import { useConnect, useDisconnect, useSwitchNetwork } from "wagmi";
 
 import { initialState, reducer } from "~/utils/stateReducer";
 import { ConnectorNames } from "~/config";
@@ -36,8 +36,13 @@ const useAuth = ({
   const { connectAsync, connectors } = useConnect({
     chainId: networkConfig.chain.id,
   });
+  // const { chains, error, isLoading, pendingChainId, switchNetwork } =
+  // useSwitchNetwork({
+  //   chainId: networkConfig.chain.id,
+  // })
   const { disconnect } = useDisconnect();
-  // const { switchNetworkAsync } = useSwitchNetwork();
+  // const { switchNetworkAsync } = useSwitchNetwork({    chainId: networkConfig.chain.id,
+  // });
 
   const login = useCallback(
     async (connectorID: ConnectorNames | string) => {
@@ -59,7 +64,7 @@ const useAuth = ({
         }
         const connector = connectors.find((c) => c.id === connectorID);
         localStorage?.setItem(connectorLocalStorageKey, connectorID);
-        await connectAsync({ connector });
+        await connectAsync({ connector, chainId: networkConfig.chain.id });
         onSuccess && onSuccess();
         return;
       } catch (e: any) {
