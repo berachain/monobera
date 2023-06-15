@@ -36,7 +36,7 @@ export default function AddLiquidity({
     ERC2MODULE_PRECOMPILE_ADDRESS,
   );
   const { write } = useTxn({
-    message: `Add Liquidity to ${pool?.name}}`,
+    message: `Add liquidity to ${pool?.name}}`,
   });
 
   const payload = [
