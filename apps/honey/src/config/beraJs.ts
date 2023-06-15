@@ -14,7 +14,7 @@ export const BGT = {
 };
 
 const PolarisChain: Chain = {
-  id: 711,
+  id: 2061,
   name: "Polaris",
   network: "Polaris",
   nativeCurrency: {
@@ -35,12 +35,12 @@ const PolarisChain: Chain = {
   rpcUrls: {
     default: {
       http: [
-        "http://k8s-guardedt-archive0-706b2d9d3e-0a11fbacff1901c5.elb.us-west-2.amazonaws.com:8545",
+        "https://k8s-guardedt-archive0-706b2d9d3e-0a11fbacff1901c5.elb.us-west-2.amazonaws.com:8545",
       ],
     },
     public: {
       http: [
-        "http://k8s-guardedt-archive0-706b2d9d3e-0a11fbacff1901c5.elb.us-west-2.amazonaws.com:8545",
+        "https://k8s-guardedt-archive0-706b2d9d3e-0a11fbacff1901c5.elb.us-west-2.amazonaws.com:8545",
       ],
     },
   },

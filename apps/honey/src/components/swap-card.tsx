@@ -6,47 +6,32 @@ import {
   useBeraJs,
   useLatestBlock,
   usePollAllowance,
-  usePollAssetWalletBalance,
-  usePollPools,
-  usePollPreviewSwapExact,
-  type Pool,
   type Token,
-  type WeightedToken,
 } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { parseUnits } from "viem";
 
+import { honey, stgUsd } from "../config/tokens";
 import { ApproveTokenButton } from "./approve-token-button";
 import ConnectWalletDialog from "./connect-wallet-dialog";
-import PreviewDialog from "./preview-dialog";
 import SwapInput from "./token-input";
 
-enum SwapKind {
-  GIVEN_IN = 0,
-  GIVEN_OUT = 1,
-}
-
 export function SwapCard() {
-  const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
+  const [selectedTo, setSelectedTo] = useState<Token>(honey);
 
-  const [selectedPool, setSelectedPool] = useState<Pool | undefined>(undefined);
+  const [selectedFrom, setSelectedFrom] = useState<Token>(stgUsd);
 
   const [fromAmount, setFromAmount] = useState(0);
 
   const [toAmount, setToAmount] = useState(0);
 
-  const [swapKind, setSwapKind] = useState<SwapKind>(SwapKind.GIVEN_IN);
+  const isMint = selectedFrom.address === honey.address;
 
   // eslint-disable-next-line
   const [payload, setPayload] = useState<any[]>([]);
 
-  const { isConnected } = useBeraJs();
-
-  const [selectedFrom, setSelectedFrom] = useState<Token | undefined>(
-    undefined,
-  );
+  const { isConnected, account } = useBeraJs();
 
   const { useAllowance } = usePollAllowance({
     contract: ERC2MODULE_PRECOMPILE_ADDRESS,
@@ -56,33 +41,36 @@ export function SwapCard() {
   const allowance = useAllowance();
 
   const block = useLatestBlock();
-  const { usePreviewSwapExact } = usePollPreviewSwapExact(
-    selectedPool?.address ?? "",
-    swapKind === SwapKind.GIVEN_IN ? fromAmount : toAmount,
-    swapKind === SwapKind.GIVEN_IN ? selectedFrom : selectedTo,
-    swapKind === SwapKind.GIVEN_IN ? selectedTo : selectedFrom,
-  );
+
+  const fee = 1 - 0.005;
+  const fee2 = 1 + 0.005;
 
   useEffect(() => {
-    const deadline = block + 10000n;
-    const payload = [
-      swapKind,
-      selectedPool?.address,
-      selectedFrom?.address,
-      parseUnits(`${fromAmount ?? 0}`, selectedFrom?.decimals ?? 18),
-      selectedTo?.address,
-      parseUnits(`${toAmount ?? 0}`, selectedTo?.decimals ?? 18),
-      deadline,
-    ];
+    if (isMint && account) {
+      const payload = [account];
+    }
+    if (!isMint && account) {
+      const payload = [account];
+    }
+    // const deadline = block + 10000n;
+    // const payload = [
+    //   selectedFrom?.address,
+    //   parseUnits(`${fromAmount ?? 0}`, selectedFrom?.decimals ?? 18),
+    //   selectedTo?.address,
+    //   parseUnits(`${toAmount ?? 0}`, selectedTo?.decimals ?? 18),
+    //   deadline,
+    // ];
     setPayload(payload);
-  }, [block, swapKind, fromAmount, selectedFrom, toAmount, selectedTo]);
+  }, [isMint, account, fromAmount, toAmount]);
 
   return (
     <Card className="w-[500px] bg-background/5 backdrop-blur-sm">
       <CardHeader>
         <CardTitle className="center flex justify-between">
           <span>Mint</span>
-          <span className="font-normal text-[#4D4D4D]">Static fee of 6.9%</span>
+          <span className="font-normal text-[#4D4D4D]">
+            Static fee of 0.005%
+          </span>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -92,9 +80,10 @@ export function SwapCard() {
             selectedTokens={[selectedFrom, selectedTo]}
             onTokenSelection={setSelectedFrom}
             amount={fromAmount ?? 0}
+            selectable={false}
             setAmount={(amount) => {
-              setSwapKind(SwapKind.GIVEN_IN);
               setFromAmount(Number(amount));
+              setToAmount(Number(amount) * fee);
             }}
           />
           <Button
@@ -114,8 +103,8 @@ export function SwapCard() {
             selectedTokens={[selectedFrom, selectedTo]}
             amount={toAmount}
             setAmount={(amount) => {
-              setSwapKind(SwapKind.GIVEN_OUT);
               setToAmount(Number(amount));
+              setFromAmount(Number(amount) * fee2);
             }}
             hideBalance
             selectable={false}
@@ -127,13 +116,11 @@ export function SwapCard() {
               spender={ERC2MODULE_PRECOMPILE_ADDRESS}
             />
           ) : isConnected ? (
-            <PreviewDialog
-              toToken={selectedTo}
-              fromToken={selectedFrom}
-              fromAmount={fromAmount ?? 0}
-              toAmount={0}
-              payload={payload}
-            />
+            isMint ? (
+              <Button disabled={toAmount === 0}>Mint</Button>
+            ) : (
+              <Button disabled={toAmount === 0}>Redeem</Button>
+            )
           ) : (
             <ConnectWalletDialog
               className="w-full bg-[#333333] text-primary-foreground hover:bg-[#333333] hover:text-primary-foreground"
