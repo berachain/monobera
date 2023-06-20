@@ -12,6 +12,8 @@
     },
     "lint": {},
     "lint:fix": {},
+    "storybook": {},
+    "storybook:build": {},
     "clean": {
       "cache": false
     },

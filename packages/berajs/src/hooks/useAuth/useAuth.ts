@@ -1,5 +1,5 @@
 import { useCallback, useReducer } from "react";
-import { useConnect, useDisconnect, useSwitchNetwork } from "wagmi";
+import { useConnect, useDisconnect } from "wagmi";
 
 import { initialState, reducer } from "~/utils/stateReducer";
 import { ConnectorNames } from "~/config";

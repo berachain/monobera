@@ -3,24 +3,24 @@
 import React, { useEffect, useState } from "react";
 import {
   ERC2MODULE_PRECOMPILE_ADDRESS,
-  useBeraJs,
-  useLatestBlock,
-  usePollAllowance,
-  type Token,
   HONEY_PRECOMPILE_ABI,
   HONEY_PRECOMPILE_ADDRESS,
+  useBeraJs,
+  // useLatestBlock,
+  usePollAllowance,
   usePollBalance,
+  type Token,
 } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { parseUnits } from "viem";
 
+import { useTxn } from "~/hooks/usTxn";
 import { honey, stgUsd } from "../config/tokens";
 import { ApproveTokenButton } from "./approve-token-button";
 import ConnectWalletDialog from "./connect-wallet-dialog";
 import SwapInput from "./token-input";
-import { parseUnits } from "viem";
-import { useTxn } from "~/hooks/usTxn";
 
 export function SwapCard() {
   const [selectedTo, setSelectedTo] = useState<Token>(honey);
@@ -33,11 +33,15 @@ export function SwapCard() {
 
   const isMint = selectedFrom.address === stgUsd.address;
 
-  const {useBalance: useFromBalance} = usePollBalance({address: selectedFrom.address});
+  const { useBalance: useFromBalance } = usePollBalance({
+    address: selectedFrom.address,
+  });
 
   const fromBalance = useFromBalance();
 
-  const {useBalance: useToBalance} = usePollBalance({address: selectedTo.address});
+  const { useBalance: useToBalance } = usePollBalance({
+    address: selectedTo.address,
+  });
 
   const toBalance = useToBalance();
   console.log(fromBalance);
@@ -53,24 +57,27 @@ export function SwapCard() {
 
   const allowance = useAllowance();
 
-  const block = useLatestBlock();
+  // const block = useLatestBlock();
 
   const fee = 1 - 0.005;
   const fee2 = 1 + 0.005;
 
-  const {write, isLoading} = useTxn({
-    message: isMint ? 'Mint Honey' : 'Redeem Honey'
-  })
+  const { write, isLoading } = useTxn({
+    message: isMint ? "Mint Honey" : "Redeem Honey",
+  });
   useEffect(() => {
     if (isMint && account) {
-      const payload = [account, {
-        amount:  parseUnits(`${fromAmount}`, 18),
-        denom: 'stgusdc'
-      }];
+      const payload = [
+        account,
+        {
+          amount: parseUnits(`${fromAmount}`, 18),
+          denom: "stgusdc",
+        },
+      ];
       setPayload(payload);
     }
     if (!isMint && account) {
-      const payload = [account, parseUnits(`${fromAmount}`, 18), 'stgusdc'];
+      const payload = [account, parseUnits(`${fromAmount}`, 18), "stgusdc"];
       setPayload(payload);
     }
     // const deadline = block + 10000n;
@@ -84,7 +91,7 @@ export function SwapCard() {
   }, [isMint, account, fromAmount, toAmount]);
 
   console.log(allowance);
-  console.log(payload)
+  console.log(payload);
   return (
     <Card className="w-[500px] bg-background/5 backdrop-blur-sm">
       <CardHeader>
@@ -142,22 +149,33 @@ export function SwapCard() {
             />
           ) : isConnected ? (
             isMint ? (
-              <Button disabled={toAmount === 0 || isLoading}
-              onClick={() =>{ write({
-                address: HONEY_PRECOMPILE_ADDRESS,
-                abi: HONEY_PRECOMPILE_ABI,
-                functionName: 'mint',
-                params: payload
-              })}}
-              >Mint</Button>
+              <Button
+                disabled={toAmount === 0 || isLoading}
+                onClick={() => {
+                  write({
+                    address: HONEY_PRECOMPILE_ADDRESS,
+                    abi: HONEY_PRECOMPILE_ABI,
+                    functionName: "mint",
+                    params: payload,
+                  });
+                }}
+              >
+                Mint
+              </Button>
             ) : (
-              <Button disabled={toAmount === 0 || isLoading}
-              onClick={() =>{ write({
-                address: HONEY_PRECOMPILE_ADDRESS,
-                abi: HONEY_PRECOMPILE_ABI,
-                functionName: 'redeem',
-                params: payload
-              })}}>Redeem</Button>
+              <Button
+                disabled={toAmount === 0 || isLoading}
+                onClick={() => {
+                  write({
+                    address: HONEY_PRECOMPILE_ADDRESS,
+                    abi: HONEY_PRECOMPILE_ABI,
+                    functionName: "redeem",
+                    params: payload,
+                  });
+                }}
+              >
+                Redeem
+              </Button>
             )
           ) : (
             <ConnectWalletDialog

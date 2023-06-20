@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+// TODO: remove eslint-disable
 import { useEffect, useState } from "react";
 import { useTokenInformation, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
