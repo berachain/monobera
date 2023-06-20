@@ -4,10 +4,10 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
-  Bribe,
   usePollAccountDelegations,
   usePollActiveValidators,
   usePollUnbondingDelegations,
+  type Bribe,
 } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Bribe } from "@bera/berajs";
+import { type Bribe } from "@bera/berajs";
 
 // import {
 //   Tooltip,

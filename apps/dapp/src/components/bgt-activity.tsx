@@ -29,6 +29,7 @@ export function History() {
       <h3 className="text-xl font-medium">History</h3>
       {transactions.map((txn: NewTransaction) => (
         <a
+          key={txn.hash}
           target="_blank"
           href={`http://${networkConfig.chain.blockExplorers?.default.url}/tx/${txn.hash}`}
         >

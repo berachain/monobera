@@ -2,21 +2,19 @@ import { useMemo } from "react";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
-import { erc20ABI, useAccount, usePublicClient } from "wagmi";
+import { erc20ABI, usePublicClient } from "wagmi";
 
 import { getContracts } from "~/api/contracts";
 import {
   BERACHEF_PRECOMPILE_ABI,
   BERACHEF_PRECOMPILE_ADDRESS,
-  BGT_PRECOMPILES_ADDRESS,
-  BGT_PRECOMPILE_ABI,
   ERC20BGTMODULE_PRECOMPILE_ADDRESS,
   ERC20BGT_PRECOMPILE_ABI,
   STAKING_PRECOMPILE_ABI,
   STAKING_PRECOMPILE_ADDRESS,
 } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { BeravaloperToEth, ethToBeravaloper, truncateHash } from "~/utils";
+import { BeravaloperToEth, ethToBeravaloper } from "~/utils";
 
 export interface Validator {
   operatorAddress: string;
