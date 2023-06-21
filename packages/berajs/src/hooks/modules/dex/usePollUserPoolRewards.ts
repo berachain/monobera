@@ -2,11 +2,10 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { erc20ABI, usePublicClient } from "wagmi";
 
-import { type Token } from "~/api";
 import { getContracts } from "~/api/contracts";
 import { REWARDS_PRECOMPILE_ABI, REWARDS_PRECOMPILE_ADDRESS } from "~/config";
 import { useBeraJs } from "~/contexts";
-import { Pool, usePollPools } from "./usePollPools";
+import { usePollPools, type Pool } from "./usePollPools";
 
 interface Call {
   abi: any[];

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { RewardPool } from "@bera/berajs";
+import { type RewardPool } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import {
