@@ -4,5 +4,6 @@ packages:
   - apps/honey
   - packages/config/*
   - packages/ui
+  - packages/shared-ui
   - packages/berajs
   - packages/api
