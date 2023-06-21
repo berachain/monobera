@@ -6,7 +6,7 @@ import {
   type NewTransaction,
 } from "@bera/berajs";
 
-function formatTimestamp(timestamp: number): string {
+function formatTimestamp(timestamp: number): JSX.Element {
   const date = new Date(timestamp);
 
   const formattedTimestamp = date.toLocaleString(undefined, {
@@ -17,8 +17,14 @@ function formatTimestamp(timestamp: number): string {
     minute: "numeric",
     hour12: true,
   });
-
-  return formattedTimestamp;
+  const [datePart, timePart] = formattedTimestamp.split(", ");
+  return (
+    <p className="text-right">
+      <span className="text-backgroundSecondary">{datePart}</span>
+      <br />
+      <span className="text-backgroundSecondary">{timePart}</span>
+    </p>
+  );
 }
 
 export function History() {
