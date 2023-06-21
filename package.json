@@ -6,6 +6,8 @@
   },
   "packageManager": "pnpm@8.3.1",
   "scripts": {
+    "storybook": "turbo storybook",
+    "storybook:build": "turbo storybook:build",
     "build": "turbo build",
     "clean": "turbo clean",
     "clean:git": "git clean -xdf node_modules",

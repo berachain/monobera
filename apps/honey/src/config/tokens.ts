@@ -1,4 +1,4 @@
-import { Token } from "@bera/berajs";
+import { type Token } from "@bera/berajs";
 
 export const honey: Token = {
   address: "0xc70c2fd8f8e3dbbb6f73502c70952f115bb93929",

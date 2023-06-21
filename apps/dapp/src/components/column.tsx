@@ -1,6 +1,6 @@
 "use client";
 
-import { RewardPool } from "@bera/berajs";
+import { type RewardPool } from "@bera/berajs";
 import { Checkbox } from "@bera/ui/checkbox";
 import { type ColumnDef } from "@tanstack/react-table";
 

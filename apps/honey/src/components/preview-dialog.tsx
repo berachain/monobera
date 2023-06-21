@@ -24,6 +24,7 @@ type Props = {
   toToken: Token | undefined;
   fromAmount: number;
   toAmount: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any[];
 };
 

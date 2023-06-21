@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useReducer, type Reducer } from "react";
 import { type Token } from "@bera/berajs";
 
