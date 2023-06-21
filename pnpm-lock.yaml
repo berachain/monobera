@@ -47,6 +47,9 @@ importers:
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../../packages/berajs
+      '@bera/shared-ui':
+        specifier: 0.1.0
+        version: link:../../packages/shared-ui
       '@bera/tailwind-config':
         specifier: 0.1.0
         version: link:../../packages/config/tailwind
@@ -144,6 +147,9 @@ importers:
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../../packages/berajs
+      '@bera/shared-ui':
+        specifier: 0.1.0
+        version: link:../../packages/shared-ui
       '@bera/tailwind-config':
         specifier: 0.1.0
         version: link:../../packages/config/tailwind
@@ -436,6 +442,43 @@ importers:
       tailwindcss:
         specifier: ^3.3.2
         version: 3.3.2
+
+  packages/shared-ui:
+    dependencies:
+      '@bera/berajs':
+        specifier: 0.1.0
+        version: link:../berajs
+      '@bera/ui':
+        specifier: 0.1.0
+        version: link:../ui
+      react-day-picker:
+        specifier: ^8.7.1
+        version: 8.7.1(date-fns@2.29.3)(react@18.2.0)
+    devDependencies:
+      '@hyrious/esbuild-plugin-commonjs':
+        specifier: 0.2.2
+        version: 0.2.2(esbuild@0.17.18)
+      '@types/react':
+        specifier: ^18.2.0
+        version: 18.2.0
+      '@types/react-dom':
+        specifier: ^18.2.1
+        version: 18.2.1
+      eslint:
+        specifier: ^8.39.0
+        version: 8.39.0
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: 18.2.0
+        version: 18.2.0(react@18.2.0)
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(postcss@8.4.23)(typescript@5.0.4)
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
 
   packages/ui:
     dependencies:
