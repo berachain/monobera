@@ -2,10 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "incremental": false,
+    "baseUrl": "./",
     "paths": {
       "~/*": ["./src/*"]
     }
   },
-  "exclude": ["node_modules", "dist", "build", "coverage", "lib", "esm", "cjs"],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
+  "include": ["src", "*.ts"]
 }
