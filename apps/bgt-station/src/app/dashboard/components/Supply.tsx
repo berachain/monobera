@@ -1,11 +1,5 @@
 import React from "react";
-import dynamic from "next/dynamic";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
-
-const DynamicChart = dynamic(() => import("~/components/chart"), {
-  loading: () => <p>Loading...</p>,
-  ssr: false,
-});
 
 export const generateDataForPast24Hours = () => {
   const timeIntervals = 24; // Number of data points
@@ -34,15 +28,7 @@ export function Supply() {
           BGT Supply
         </h3>
       </CardHeader>
-      <CardContent>
-        <DynamicChart
-          chartData={generateDataForPast24Hours()}
-          pool={`BGT`}
-          showXAxis
-          showHeader={false}
-          height={200}
-        />
-      </CardContent>
+      <CardContent></CardContent>
     </Card>
   );
 }

@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { type ApexOptions } from "apexcharts";
-import Chart from "react-apexcharts";
+import { BeraChart } from "@bera/ui/bera-chart";
 
 export interface IBoardItem {
   weight: number;
@@ -10,70 +9,65 @@ export interface IBoardItem {
   detail: any | undefined;
 }
 
+const allocationColors = [
+  "#ef4444",
+  "#f97316",
+  "#f59e0b",
+  "#eab308",
+  "#84cc16",
+  "#22c55e",
+  "#10b981",
+  "#06b6d4",
+  "#3b82f6",
+];
+
 type Props = {
   items: IBoardItem[];
 };
 
 const CuttingBoardPieChart = ({ items }: Props) => {
   const isSelected = items.some((item) => item.detail !== undefined);
-  const options: ApexOptions = {
-    labels: isSelected
-      ? items
-          .filter((item: IBoardItem) => item.detail !== undefined)
-          .map((item: IBoardItem) => item?.detail?.symbol ?? "")
-      : ["no token selected"],
-    series: isSelected
-      ? items
-          .filter((item: IBoardItem) => item.detail !== undefined)
-          .map((item: IBoardItem) => item?.weight ?? 0)
-      : [100],
-    colors: isSelected ? undefined : ["#756661"],
-    legend: {
-      show: isSelected ? true : false,
-      position: "bottom",
-      labels: {
-        colors: "inherit",
+  const selectedLabels = isSelected
+    ? items
+        .filter((item: IBoardItem) => item.detail !== undefined)
+        .map((item: IBoardItem) => item?.detail?.symbol ?? "")
+    : ["no token selected"];
+
+  const selectedAllocations = isSelected
+    ? items
+        .filter((item: IBoardItem) => item.detail !== undefined)
+        .map((item: IBoardItem) => item?.weight ?? 0)
+    : [100];
+
+  const selectedTokenColors = isSelected
+    ? items
+        .filter((item: IBoardItem) => item.detail !== undefined)
+        .map((_item: IBoardItem, index) => allocationColors[index])
+    : ["#756661"];
+
+  const data = {
+    labels: selectedLabels,
+    datasets: [
+      {
+        data: selectedAllocations,
+        backgroundColor: selectedTokenColors,
       },
-    },
-    plotOptions: {
-      pie: {
-        expandOnClick: false,
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom" as const,
       },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    tooltip: {
-      enabled: false,
-    },
-    states: {
-      active: {
-        filter: {
-          type: "lighten",
-          value: 0.15,
-        },
+      title: {
+        display: false,
       },
-      hover: {
-        filter: {
-          type: "lighten",
-          value: 0.15,
-        },
-      },
-    },
-    stroke: {
-      show: false,
     },
   };
 
-  return (
-    <Chart
-      options={options}
-      series={options.series}
-      type="pie"
-      height={350}
-      width={350}
-    />
-  );
+  return <BeraChart options={options} data={data} type="pie" />;
 };
 
 export default CuttingBoardPieChart;
