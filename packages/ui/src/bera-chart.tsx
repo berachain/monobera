@@ -1,10 +1,13 @@
 import React from "react";
 import {
+  ArcElement,
   BarElement,
   CategoryScale,
   Chart as ChartJS,
   Legend,
+  LineElement,
   LinearScale,
+  PointElement,
   Title,
   Tooltip,
 } from "chart.js";
@@ -17,21 +20,11 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  PointElement,
+  LineElement,
+  ArcElement,
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "Chart.js Bar Chart",
-    },
-  },
-};
-
-export function BeraChart({ data, type }: ChartProps) {
+export function BeraChart({ data, type, options }: ChartProps) {
   return <Chart options={options} data={data} type={type} />;
 }
