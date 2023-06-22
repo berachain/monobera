@@ -36,6 +36,7 @@ const barLineData: ChartData = {
       ),
       backgroundColor: "rgba(255, 99, 132, 0.5)",
       borderColor: "rgb(255, 99, 132)",
+      tension: 0.4,
     },
   ],
 };
@@ -112,6 +113,67 @@ export const Donut: Story = {
     data: pieDonutData,
     options: Options,
     type: "doughnut",
+  },
+  render: (args) => <BeraChart {...args} />,
+};
+
+export const BarWithDataLabel: Story = {
+  args: {
+    data: barLineData,
+    options: Options,
+    type: "bar",
+    showDataOnHover: true,
+  },
+  render: (args) => <BeraChart {...args} />,
+};
+
+export const LineForPool: Story = {
+  args: {
+    data: {
+      ...barLineData,
+      labels: Array.from({ length: 30 }, (_nothing, index) => `${index + 1}`),
+      datasets: [
+        {
+          ...barLineData.datasets[0],
+          data: Array.from({ length: 30 }, () =>
+            faker.datatype.number({ min: 500, max: 1000 }),
+          ),
+        },
+      ],
+    },
+    options: {
+      ...Options,
+      scales: {
+        x: {
+          display: false,
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          display: false,
+          grid: {
+            display: false,
+          },
+        },
+      },
+      plugins: {
+        ...Options.plugins,
+        legend: {
+          display: false,
+        },
+        title: {
+          display: false,
+        },
+      },
+      interaction: {
+        intersect: false,
+        mode: "nearest",
+        axis: "x",
+      },
+    },
+    type: "line",
+    showDataOnHover: true,
   },
   render: (args) => <BeraChart {...args} />,
 };
