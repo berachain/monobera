@@ -8,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function Create() {
-  return <CreatePageContent />;
+  return (
+    <div className="container m-auto flex w-full flex-col gap-5">
+      <CreatePageContent />
+    </div>
+  );
 }

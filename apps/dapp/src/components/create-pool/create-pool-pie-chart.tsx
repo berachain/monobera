@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
+import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent } from "@bera/ui/card";
-import { type ApexOptions } from "apexcharts";
-import Chart from "react-apexcharts";
 
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
@@ -11,73 +10,67 @@ type Props = {
   tokenWeights: ITokenWeight[];
 };
 
+// Pick
+const tokenSplitColors = [
+  "#ef4444",
+  "#f97316",
+  "#f59e0b",
+  "#eab308",
+  "#84cc16",
+  "#22c55e",
+  "#10b981",
+  "#06b6d4",
+  "#3b82f6",
+];
+
 const CreatePoolPieChart = ({ tokenWeights }: Props) => {
   const isSelected = tokenWeights.some(
     (tokenWeight) => tokenWeight.token !== undefined,
   );
-  const options: ApexOptions = {
-    labels: isSelected
-      ? tokenWeights
-          .filter(
-            (tokenWeight: ITokenWeight) => tokenWeight.token !== undefined,
-          )
-          .map((tokenWeight: ITokenWeight) => tokenWeight?.token?.symbol ?? "")
-      : ["no token selected"],
-    series: isSelected
-      ? tokenWeights
-          .filter(
-            (tokenWeight: ITokenWeight) => tokenWeight.token !== undefined,
-          )
-          .map((tokenWeight: ITokenWeight) => tokenWeight?.weight ?? 0)
-      : [100],
-    colors: isSelected ? undefined : ["#756661"],
-    legend: {
-      show: isSelected ? true : false,
-      position: "bottom",
-      labels: {
-        colors: "inherit",
+  const selectedLabels = isSelected
+    ? tokenWeights
+        .filter((tokenWeight: ITokenWeight) => tokenWeight.token !== undefined)
+        .map((tokenWeight: ITokenWeight) => tokenWeight?.token?.symbol ?? "")
+    : ["no token selected"];
+
+  const selectedTokenWeights = isSelected
+    ? tokenWeights
+        .filter((tokenWeight: ITokenWeight) => tokenWeight.token !== undefined)
+        .map((tokenWeight: ITokenWeight) => tokenWeight?.weight ?? 0)
+    : [100];
+
+  const selectedTokenColors = isSelected
+    ? tokenWeights
+        .filter((tokenWeight: ITokenWeight) => tokenWeight.token !== undefined)
+        .map((_tokenWeight: ITokenWeight, index) => tokenSplitColors[index])
+    : ["#756661"];
+
+  const data = {
+    labels: selectedLabels,
+    datasets: [
+      {
+        data: selectedTokenWeights,
+        backgroundColor: selectedTokenColors,
       },
-    },
-    plotOptions: {
-      pie: {
-        expandOnClick: false,
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom" as const,
       },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    tooltip: {
-      enabled: false,
-    },
-    states: {
-      active: {
-        filter: {
-          type: "lighten",
-          value: 0.15,
-        },
+      title: {
+        display: false,
       },
-      hover: {
-        filter: {
-          type: "lighten",
-          value: 0.15,
-        },
-      },
-    },
-    stroke: {
-      show: false,
     },
   };
 
   return (
-    <Card className="flex h-fit max-w-[250px] justify-center">
-      <CardContent className="p-2">
-        <Chart
-          options={options}
-          series={options.series}
-          type="donut"
-          height={250}
-          width={250}
-        />
+    <Card className="flex justify-center md:h-fit md:w-fit">
+      <CardContent className="p-4">
+        <BeraChart type="doughnut" options={options} data={data} />
       </CardContent>
     </Card>
   );
