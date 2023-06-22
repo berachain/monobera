@@ -9,6 +9,7 @@ const client = [
   "./src/alert.tsx",
   "./src/alert-dialog.tsx",
   "./src/avatar.tsx",
+  "./src/bera-chart.tsx",
   "./src/calendar.tsx",
   "./src/checkbox.tsx",
   "./src/command.tsx",
