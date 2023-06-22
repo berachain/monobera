@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
   formatUsd,
@@ -22,13 +21,7 @@ import {
 import { Balancer } from "react-wrap-balancer";
 import { formatUnits } from "viem";
 
-import { generateDataForPast90Days } from "~/utils/generateData";
 import { TokenIcon } from "~/components/token-icon";
-
-const DynamicChart = dynamic(() => import("~/components/chart"), {
-  loading: () => <p>Loading...</p>,
-  ssr: false,
-});
 
 export default function PoolPage({ params }: { params: { address: string } }) {
   const router = useRouter();
@@ -103,12 +96,7 @@ export default function PoolPage({ params }: { params: { address: string } }) {
         <div className="flex flex-col gap-5 lg:order-1 lg:col-span-2">
           <Card>
             <CardContent className="p-4">
-              <DynamicChart
-                chartData={generateDataForPast90Days()}
-                type="bar"
-                pool={pool?.name}
-                showXAxis
-              />
+              <p>Chart data goes here</p>
             </CardContent>
           </Card>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
