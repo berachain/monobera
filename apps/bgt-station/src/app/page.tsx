@@ -154,18 +154,6 @@ export default function Home() {
             <ValidatorsTable columns={columns} validators={validators} />
           </CardContent>
         </Card>
-        {/* <Card className="col-span-6">
-          <CardHeader className="flex flex-row items-center justify-between pb-0">
-            <h3 className="text-lg font-medium">
-              Average weight of your delegates
-            </h3>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-center">
-              <DynamicChart items={items} />
-            </div>
-          </CardContent>
-        </Card> */}
       </div>
     </div>
   );

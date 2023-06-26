@@ -101,6 +101,10 @@
       "import": "./dist/avatar.mjs",
       "types": "./dist/avatar.d.ts"
     },
+    "./bera-chart": {
+      "import": "./dist/bera-chart.mjs",
+      "types": "./dist/bera-chart.d.ts"
+    },
     "./calendar": {
       "import": "./dist/calendar.mjs",
       "types": "./dist/calendar.d.ts"
@@ -290,6 +294,9 @@
       ],
       "separator": [
         "dist/separator.d.ts"
+      ],
+      "bera-chart": [
+        "dist/bera-chart.d.ts"
       ]
     }
   },
