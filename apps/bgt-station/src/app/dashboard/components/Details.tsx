@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader } from "@bera/ui/card";
 
 import { type bgtDetails } from "../constants";
 import { CurrentSupply } from "./CurrentSupply";
-import { CuttingBoard } from "./CuttingBoard";
 import { EpochTimeline } from "./EpochTimeline";
 import { Stats } from "./Stats";
 import { Supply } from "./Supply";
@@ -17,7 +16,7 @@ export function Details({ details }: { details: typeof bgtDetails }) {
         <EpochTimeline />
       </div>
       {/* <Validators validators={details.validators} /> */}
-      <CuttingBoard />
+
       <Stats stats={details.stats} />
       <div className="flex gap-5">
         <div className="flex-1">
