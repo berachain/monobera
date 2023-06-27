@@ -11,7 +11,6 @@ import { Toaster } from "react-hot-toast";
 import { Header } from "~/components/header";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
-import { beraConfig } from "~/config/beraJs";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -28,7 +27,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           fontSans.variable,
         )}
       >
-        <BeraConfig networkConfig={beraConfig} autoConnect={true}>
+        <BeraConfig autoConnect={true}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col overflow-hidden">
               <div className="flex-1">

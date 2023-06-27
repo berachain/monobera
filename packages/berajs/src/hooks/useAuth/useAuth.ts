@@ -2,10 +2,9 @@ import { useCallback, useReducer } from "react";
 import { useConnect, useDisconnect } from "wagmi";
 
 import { initialState, reducer } from "~/utils/stateReducer";
-import { ConnectorNames } from "~/config";
-import { useBeraConfig, useKeplr } from "~/contexts";
+import { type ConnectorNames } from "~/config";
+import { useBeraConfig } from "~/contexts";
 import { connectorLocalStorageKey } from ".";
-import { KeplrNotInstalledError, KeplrOutdatedError } from "./error";
 
 export interface useAuthApi {
   isLoading: boolean;
@@ -31,7 +30,6 @@ const useAuth = ({
   onLogoutSuccess,
 }: IuseAuth = {}) => {
   const [state] = useReducer(reducer, initialState);
-  const { loginCosmos, logoutCosmos } = useKeplr();
   const { networkConfig } = useBeraConfig();
   const { connectAsync, connectors } = useConnect({
     chainId: networkConfig.chain.id,
@@ -48,20 +46,6 @@ const useAuth = ({
     async (connectorID: ConnectorNames | string) => {
       try {
         onLoading && onLoading();
-        if (connectorID === ConnectorNames.Keplr) {
-          // @ts-ignore
-          if (!window.keplr) {
-            throw new KeplrNotInstalledError();
-          }
-          // @ts-ignore
-          if (!window.keplr.experimentalSuggestChain) {
-            throw new KeplrOutdatedError();
-          }
-          loginCosmos();
-          localStorage?.setItem(connectorLocalStorageKey, connectorID);
-          onSuccess && onSuccess();
-          return;
-        }
         const connector = connectors.find((c) => c.id === connectorID);
         localStorage?.setItem(connectorLocalStorageKey, connectorID);
         await connectAsync({ connector, chainId: networkConfig.chain.id });
@@ -72,12 +56,11 @@ const useAuth = ({
         return;
       }
     },
-    [onLoading, connectors, connectAsync, onSuccess, loginCosmos, onError],
+    [onLoading, connectors, connectAsync, onSuccess, onError],
   );
 
   const logout = useCallback(() => {
     try {
-      logoutCosmos();
       disconnect();
       localStorage?.removeItem(connectorLocalStorageKey);
     } catch (e: any) {
@@ -85,7 +68,7 @@ const useAuth = ({
     } finally {
       onLogoutSuccess && onLogoutSuccess();
     }
-  }, [logoutCosmos, disconnect, onLogoutError, onLogoutSuccess]);
+  }, [disconnect, onLogoutError, onLogoutSuccess]);
 
   return {
     isLoading: state.confirmState === "loading",

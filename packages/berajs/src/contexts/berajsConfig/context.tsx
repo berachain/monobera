@@ -1,40 +1,50 @@
 "use client";
 
 import React, { createContext, type PropsWithChildren } from "react";
+import {
+  RainbowKitProvider,
+  connectorsForWallets,
+  lightTheme,
+  darkTheme as rainbowDarkTheme,
+} from "@rainbow-me/rainbowkit";
+import {
+  coinbaseWallet,
+  injectedWallet,
+  metaMaskWallet,
+  phantomWallet,
+  rainbowWallet,
+  safeWallet,
+  walletConnectWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
-// import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
+import { defaultBeraConfig } from "~/config";
 import { type NetworkConfig } from "~/config/types";
 import { BeraJsProvider } from "~/contexts/berajsProvider";
-import { CosmosWalletProvider } from "~/contexts/keplrProvider/context";
 import { TransactionStoreProvider } from "~/hooks/transactions/TransactionStoreContext";
-import useEagerConnect from "~/hooks/useAuth/useEagerConnect";
 
 interface IBeraConfig extends PropsWithChildren {
-  networkConfig: NetworkConfig;
+  networkConfig?: NetworkConfig;
   autoConnect?: boolean;
+  darkTheme?: boolean;
 }
 
 export interface IBeraConfigAPI {
   networkConfig: NetworkConfig;
   autoConnect: boolean;
+  darkTheme?: boolean;
 }
 
 export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
   undefined,
 );
 
-function EagerConnect() {
-  useEagerConnect();
-  return null;
-}
-
 const BeraConfig: React.FC<IBeraConfig> = ({
   children,
-  networkConfig,
+  networkConfig = defaultBeraConfig,
   autoConnect = false,
+  darkTheme = false,
 }) => {
   const { chains, publicClient } = configureChains(
     [networkConfig.chain],
@@ -45,32 +55,44 @@ const BeraConfig: React.FC<IBeraConfig> = ({
     ],
   );
 
+  const appInfo = {
+    appName: "BeraJS",
+  };
+  const projectId = "a65a5eaa1bd1e749813cb6cafeac059a";
+  const connectors = connectorsForWallets([
+    {
+      groupName: "Recommended",
+      wallets: [
+        injectedWallet({ chains }),
+        metaMaskWallet({ chains, projectId }),
+        coinbaseWallet({ chains, appName: appInfo.appName }),
+        walletConnectWallet({ projectId, chains }),
+        phantomWallet({ chains }),
+        rainbowWallet({ projectId, chains }),
+        safeWallet({ chains }),
+      ],
+    },
+  ]);
+
   // TODO make this configurable
   const config = createConfig({
-    connectors: [
-      new InjectedConnector({ chains }),
-      // new WalletConnectConnector({
-      //   chains,
-      //   options: {
-      //     projectId: networkConfig.chain.name,
-      //     isNewChainsStale: true
-      //   },
-      // }),
-    ],
+    autoConnect,
+    connectors,
     publicClient,
   });
 
   return (
     <BeraConfigContext.Provider value={{ networkConfig, autoConnect }}>
       <WagmiConfig config={config}>
-        <CosmosWalletProvider>
+        <RainbowKitProvider
+          appInfo={appInfo}
+          chains={chains}
+          theme={darkTheme ? rainbowDarkTheme() : lightTheme()}
+        >
           <BeraJsProvider>
-            <TransactionStoreProvider>
-              {children}
-              {autoConnect ? <EagerConnect /> : null}
-            </TransactionStoreProvider>
+            <TransactionStoreProvider>{children}</TransactionStoreProvider>
           </BeraJsProvider>
-        </CosmosWalletProvider>
+        </RainbowKitProvider>
       </WagmiConfig>
     </BeraConfigContext.Provider>
   );
