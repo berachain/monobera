@@ -1,11 +1,10 @@
-import type { ChainInfo } from "@keplr-wallet/types";
 import { type Chain } from "wagmi";
 
 interface PrecompileMapping {
   [key: string]: string;
 }
 
-export interface NetworkConfig extends ChainInfo {
+export interface NetworkConfig {
   isTestnet?: boolean;
   chain: Chain;
   precompileAddresses: PrecompileMapping;
