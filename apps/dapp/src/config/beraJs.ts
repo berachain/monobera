@@ -1,4 +1,4 @@
-import { getCosmosChain, type NetworkConfig } from "@bera/berajs";
+import { type NetworkConfig } from "@bera/berajs";
 import { type Chain } from "wagmi";
 
 export const BERA = {
@@ -47,7 +47,6 @@ const PolarisChain: Chain = {
 };
 
 export const beraConfig: NetworkConfig = {
-  ...getCosmosChain(),
   precompileAddresses: {
     multicall: "0x0000",
   },

@@ -4,7 +4,6 @@ import { useCallback, useReducer } from "react";
 import { usePublicClient, useWalletClient } from "wagmi";
 import { prepareWriteContract } from "wagmi/actions";
 
-import { isConnectionKeplr } from "~/utils/isConnectionKeplr";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
 import { TransactionFailedError } from "./error";
@@ -13,9 +12,7 @@ import {
   type IUseContractWrite,
   type useContractWriteApi,
 } from "./types";
-import useKeplrContractWrite from "./useKeplrContractWrite";
 
-// used for writing to contract when both keplr and wagmi connectors are available
 const useBeraContractWrite = ({
   onSuccess,
   onError,
@@ -23,7 +20,7 @@ const useBeraContractWrite = ({
   onSubmission,
 }: IUseContractWrite = {}): useContractWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { write: keplrWrite } = useKeplrContractWrite();
+
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
@@ -34,8 +31,7 @@ const useBeraContractWrite = ({
       abi,
       functionName,
       params,
-    }: // txnName = "",
-    IContractWrite): Promise<void> => {
+    }: IContractWrite): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
       onLoading && onLoading();
       let receipt: any | undefined;
@@ -49,18 +45,15 @@ const useBeraContractWrite = ({
 
         console.log("ERRROR", request);
 
-        if (isConnectionKeplr()) {
-          receipt = await keplrWrite({ abi, address, params, functionName });
-        } else {
-          receipt = await walletClient?.writeContract({
-            address: address,
-            abi: abi,
-            functionName: functionName,
-            args: [...params],
-            account: account,
-            chain: undefined,
-          });
-        }
+        receipt = await walletClient?.writeContract({
+          address: address,
+          abi: abi,
+          functionName: functionName,
+          args: [...params],
+          account: account,
+          chain: undefined,
+        });
+
         onSubmission && onSubmission();
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
@@ -84,7 +77,6 @@ const useBeraContractWrite = ({
       }
     },
     [
-      keplrWrite,
       walletClient,
       account,
       publicClient,

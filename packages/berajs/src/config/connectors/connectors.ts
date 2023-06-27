@@ -4,5 +4,4 @@ export enum ConnectorNames {
   Coinbase = "coinbase",
   // LedgerLive = "ledgerlive",
   // Trezor = "trezor",
-  Keplr = "keplr",
 }
