@@ -19,12 +19,13 @@ import {
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
+import { defaultBeraConfig } from "~/config";
 import { type NetworkConfig } from "~/config/types";
 import { BeraJsProvider } from "~/contexts/berajsProvider";
 import { TransactionStoreProvider } from "~/hooks/transactions/TransactionStoreContext";
 
 interface IBeraConfig extends PropsWithChildren {
-  networkConfig: NetworkConfig;
+  networkConfig?: NetworkConfig;
   autoConnect?: boolean;
   darkTheme?: boolean;
 }
@@ -41,7 +42,7 @@ export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
 
 const BeraConfig: React.FC<IBeraConfig> = ({
   children,
-  networkConfig,
+  networkConfig = defaultBeraConfig,
   autoConnect = false,
   darkTheme = false,
 }) => {
