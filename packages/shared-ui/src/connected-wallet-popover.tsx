@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import { truncateHash, useBeraConfig, useBeraJs } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
@@ -18,7 +17,7 @@ export default function ConnectedWalletPopover() {
   const connectorName = useReadLocalStorage<string>(
     LOCAL_STORAGE_KEYS.CONNECTOR_ID,
   );
-  const router = useRouter();
+
   const { networkConfig } = useBeraConfig();
 
   return (
@@ -62,8 +61,9 @@ export default function ConnectedWalletPopover() {
                 size="sm"
                 className="rounded-full"
                 onClick={() => {
-                  router.push(
+                  window.open(
                     `http://${networkConfig.chain.blockExplorers?.default.url}/address/${account}`,
+                    "_blank",
                   );
                 }}
               >

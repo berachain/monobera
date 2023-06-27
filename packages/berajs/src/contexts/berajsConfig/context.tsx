@@ -8,8 +8,12 @@ import {
   darkTheme as rainbowDarkTheme,
 } from "@rainbow-me/rainbowkit";
 import {
+  coinbaseWallet,
   injectedWallet,
+  metaMaskWallet,
+  phantomWallet,
   rainbowWallet,
+  safeWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
@@ -59,8 +63,12 @@ const BeraConfig: React.FC<IBeraConfig> = ({
       groupName: "Recommended",
       wallets: [
         injectedWallet({ chains }),
-        rainbowWallet({ projectId, chains }),
+        metaMaskWallet({ chains, projectId }),
+        coinbaseWallet({ chains, appName: appInfo.appName }),
         walletConnectWallet({ projectId, chains }),
+        phantomWallet({ chains }),
+        rainbowWallet({ projectId, chains }),
+        safeWallet({ chains }),
       ],
     },
   ]);
