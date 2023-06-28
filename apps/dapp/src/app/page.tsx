@@ -97,6 +97,7 @@ export default function Home() {
                   href={{
                     pathname: feature.href,
                   }}
+                  target="_blank"
                 >
                   <Card className="border border-transparent bg-transparent shadow-none hover:border-border">
                     <CardContent className="flex flex-col items-center justify-center ">

@@ -1,4 +1,5 @@
 import React from "react";
+import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Input } from "@bera/ui/input";
 import { Switch } from "@bera/ui/switch";
@@ -6,7 +7,6 @@ import { Toggle } from "@bera/ui/toggle";
 import { useLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
-import BeraTooltip from "./bera-tooltip";
 
 export default function SwapSettings() {
   const [slippageTolerance, setSlippageTolerance] = useLocalStorage(
@@ -28,7 +28,7 @@ export default function SwapSettings() {
       <div className="space-y-2">
         <h4 className="flex items-center gap-1 font-medium leading-none">
           Slippage tolerance
-          <BeraTooltip text="Add to library" />
+          <Tooltip text="Add to library" />
         </h4>
       </div>
       <div className="grid grid-cols-4 gap-1">
@@ -73,7 +73,7 @@ export default function SwapSettings() {
       <div className="space-y-2">
         <h4 className="flex items-center gap-1 font-medium leading-none">
           Use signatures
-          <BeraTooltip text="Add to library" />
+          <Tooltip text="Add to library" />
         </h4>
       </div>
       <div className="flex items-center space-x-2">
