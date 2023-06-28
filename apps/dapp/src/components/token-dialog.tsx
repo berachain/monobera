@@ -8,6 +8,7 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
+import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -21,8 +22,6 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
-
-import { TokenIcon } from "~/components/token-icon";
 
 type Props = {
   open: boolean;
