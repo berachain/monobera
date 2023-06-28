@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
@@ -317,6 +313,31 @@ importers:
       tailwindcss:
         specifier: ^3.3.2
         version: 3.3.2
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
+  packages/bera-router:
+    dependencies:
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      viem:
+        specifier: ~0.3.35
+        version: 0.3.36(typescript@5.0.4)(zod@3.21.4)
+    devDependencies:
+      '@bera/eslint-config':
+        specifier: 0.1.0
+        version: link:../config/eslint
+      '@hyrious/esbuild-plugin-commonjs':
+        specifier: 0.2.2
+        version: 0.2.2(esbuild@0.17.18)
+      eslint:
+        specifier: ^8.39.0
+        version: 8.39.0
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(postcss@8.4.23)(typescript@5.0.4)
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -14570,3 +14591,7 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

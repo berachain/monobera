@@ -6,4 +6,5 @@ packages:
   - packages/ui
   - packages/shared-ui
   - packages/berajs
+  - packages/bera-router
   - packages/api
