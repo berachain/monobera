@@ -3,12 +3,16 @@
 import React, { useRef, useState } from "react";
 import {
   ArcElement,
+  BarController,
   BarElement,
   CategoryScale,
   Chart as ChartJS,
+  DoughnutController,
   Legend,
+  LineController,
   LineElement,
   LinearScale,
+  PieController,
   PointElement,
   Title,
   Tooltip,
@@ -26,6 +30,10 @@ ChartJS.register(
   PointElement,
   LineElement,
   ArcElement,
+  DoughnutController,
+  PieController,
+  LineController,
+  BarController,
 );
 
 export function BeraChart({

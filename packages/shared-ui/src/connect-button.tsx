@@ -28,11 +28,16 @@ export const ConnectButton = () => {
                 userSelect: "none",
               },
             })}
+            className="flex w-48"
           >
             {(() => {
               if (!connected) {
                 return (
-                  <Button onClick={openConnectModal} type="button">
+                  <Button
+                    onClick={openConnectModal}
+                    type="button"
+                    className="w-full"
+                  >
                     Connect Wallet
                   </Button>
                 );
