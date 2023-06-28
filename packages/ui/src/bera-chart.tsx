@@ -6,6 +6,7 @@ import {
   BarElement,
   CategoryScale,
   Chart as ChartJS,
+  DoughnutController,
   Legend,
   LineElement,
   LinearScale,
@@ -37,7 +38,7 @@ export function BeraChart({
     ChartJS.register(LineElement);
   }
   if (type === "pie" || type === "doughnut") {
-    ChartJS.register(ArcElement);
+    ChartJS.register(ArcElement, DoughnutController);
   }
   const [dataPoint, setDataPoint] = useState<number>(0);
   const chartRef = useRef<ChartJS>(null);
