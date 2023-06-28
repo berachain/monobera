@@ -8,6 +8,7 @@ import {
   usePollPools,
   type Pool,
 } from "@bera/berajs";
+import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import {
@@ -20,8 +21,6 @@ import {
 } from "@bera/ui/table";
 import { Balancer } from "react-wrap-balancer";
 import { formatUnits } from "viem";
-
-import { TokenIcon } from "~/components/token-icon";
 
 export default function PoolPageContent({
   params,

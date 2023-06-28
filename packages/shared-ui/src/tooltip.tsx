@@ -2,17 +2,17 @@ import React from "react";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import {
-  Tooltip,
+  Tooltip as BeraUiTooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@bera/ui/tooltip";
 
-export default function BeraTooltip({ text }: { text: string }) {
+export function Tooltip({ text }: { text: string }) {
   const [tooltipOpen, setTooltipOpen] = React.useState(false);
   return (
     <TooltipProvider>
-      <Tooltip open={tooltipOpen} defaultOpen={false}>
+      <BeraUiTooltip open={tooltipOpen} defaultOpen={false}>
         <TooltipTrigger asChild>
           <Button
             variant="ghost"
@@ -27,7 +27,7 @@ export default function BeraTooltip({ text }: { text: string }) {
         <TooltipContent>
           <p>{text}</p>
         </TooltipContent>
-      </Tooltip>
+      </BeraUiTooltip>
     </TooltipProvider>
   );
 }

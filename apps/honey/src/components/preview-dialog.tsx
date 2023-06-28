@@ -5,6 +5,7 @@ import {
   formatUsd,
   type Token,
 } from "@bera/berajs";
+import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import {
@@ -16,8 +17,7 @@ import {
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 
-import { useTxn } from "~/hooks/usTxn";
-import { TokenIcon } from "./token-icon";
+import { useTxn } from "~/hooks/useTxn";
 
 type Props = {
   fromToken: Token | undefined;
