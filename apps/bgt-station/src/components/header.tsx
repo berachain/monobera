@@ -24,9 +24,9 @@ export function Header() {
       </div>
       <nav className="fixed left-0 right-0 z-50 lg:left-full lg:bg-transparent">
         <div className="mx-auto flex h-16 w-full items-center justify-between px-4 lg:justify-end">
-          <HistoryPopover />
           <MobileDropdown />
           <div className="flex gap-2 lg:mr-8">
+            <HistoryPopover />
             <ThemeToggle />
             <ConnectButton />
           </div>

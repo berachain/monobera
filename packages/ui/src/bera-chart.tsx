@@ -16,24 +16,29 @@ import {
 } from "chart.js";
 import { Chart, type ChartProps } from "react-chartjs-2";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  PointElement,
-  LineElement,
-  ArcElement,
-);
-
 export function BeraChart({
   data,
   type,
   options,
   showDataOnHover,
 }: ChartProps & { showDataOnHover?: boolean }) {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    Title,
+    Tooltip,
+    Legend,
+    PointElement,
+  );
+  if (type === "bar") {
+    ChartJS.register(BarElement);
+  }
+  if (type === "line") {
+    ChartJS.register(LineElement);
+  }
+  if (type === "pie" || type === "doughnut") {
+    ChartJS.register(ArcElement);
+  }
   const [dataPoint, setDataPoint] = useState<number>(0);
   const chartRef = useRef<ChartJS>(null);
   return (
