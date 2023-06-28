@@ -14,7 +14,7 @@ import { honey, stgUsd } from "~/config/tokens";
 import { useFees } from "./useFees";
 import { useTxn } from "./useTxn";
 
-export const useSwap = () => {
+export const usePsm = () => {
   const [selectedTo, setSelectedTo] = useState<Token>(honey);
 
   const [selectedFrom, setSelectedFrom] = useState<Token>(stgUsd);

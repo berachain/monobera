@@ -11,7 +11,7 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
-import { useSwap } from "~/hooks/useSwap";
+import { usePsm } from "~/hooks/usePsm";
 import { ApproveTokenButton } from "./approve-token-button";
 import SwapInput from "./token-input";
 
@@ -35,7 +35,7 @@ export function SwapCard() {
     toBalance,
     fee,
     fee2,
-  } = useSwap();
+  } = usePsm();
 
   console.log(allowance);
   console.log(payload);
