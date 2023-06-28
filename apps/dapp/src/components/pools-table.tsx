@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { formatUsd, usePollPools, type Pool } from "@bera/berajs";
+import { TokenIcon } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import {
   Table,
@@ -12,8 +13,6 @@ import {
   TableHeader,
   TableRow,
 } from "@bera/ui/table";
-
-import { TokenIcon } from "./token-icon";
 
 export default function PoolsTable() {
   const router = useRouter();

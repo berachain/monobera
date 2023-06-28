@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
+import { ConnectButton } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 import { HoneyControls } from "./honey-controls";
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
-import { Wallet } from "./wallet";
 
 export function Header() {
   return (
@@ -22,7 +22,7 @@ export function Header() {
         <MobileDropdown />
         <div className="flex gap-2">
           <HoneyControls />
-          <Wallet />
+          <ConnectButton />
         </div>
       </div>
     </nav>

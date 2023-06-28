@@ -11,6 +11,7 @@ import {
   type Token,
   type Validator,
 } from "@bera/berajs";
+import { ConnectButton } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import {
@@ -23,7 +24,6 @@ import {
 import { formatUnits, parseUnits } from "viem";
 
 import { dummyToken } from "~/utils/constants";
-import ConnectWalletDialog from "~/components/connect-wallet-dialog";
 import TokenInput from "~/components/token-input";
 import { useTxn } from "~/hooks/useTxn";
 
@@ -105,7 +105,7 @@ export default function UnbondButton({
               Unbond
             </Button>
           ) : (
-            <ConnectWalletDialog className="w-full" />
+            <ConnectButton />
           )}
         </div>
       </DialogContent>

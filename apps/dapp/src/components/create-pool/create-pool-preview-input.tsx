@@ -1,9 +1,9 @@
 import React from "react";
+import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
 
-import { TokenIcon } from "~/components/token-icon";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 type Props = {
