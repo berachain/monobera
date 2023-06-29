@@ -85,7 +85,7 @@ export function CreatePoolPreview({
           );
         })}
         <h2 className="text-lg">Pool Options</h2>
-        <div className="flex h-[40px] w-full items-center justify-between align-middle text-sm text-secondary">
+        <div className="flex h-[40px] items-center justify-between align-middle text-sm text-secondary">
           <p>Pool Name</p>
           <div className="flex">
             {editPoolName ? (

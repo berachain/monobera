@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-// TODO: remove eslint-disable
+"use client";
+
 import { useEffect, useState } from "react";
 import { useTokenInformation, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
@@ -10,26 +10,32 @@ type Props = {
   fetch?: boolean;
   className?: string;
 };
+
 export const TokenIcon = ({ token, className, fetch = false }: Props) => {
   const [selectedToken, setSelectedToken] = useState<Token | undefined>(token);
   const { read, tokenInformation } = useTokenInformation();
-  console.log(selectedToken);
+
   useEffect(() => {
-    if (fetch && token) {
-      read({ address: token.address });
-    }
-    if (tokenInformation && fetch) {
-      setSelectedToken(tokenInformation);
-    }
+    const fetchData = async () => {
+      if (fetch && token) {
+        await read({ address: token.address });
+      }
+      if (tokenInformation && fetch) {
+        setSelectedToken(tokenInformation);
+      }
+    };
+
+    void fetchData();
   }, [read, token, fetch, tokenInformation]);
+
   return (
     <Avatar className={cn("h-12 w-12 rounded-full", className)}>
       <AvatarImage
         src={`/icons/${selectedToken?.symbol.toLowerCase()}.jpg`}
-        className="p-1"
+        className="rounded-full p-1"
       />
       <AvatarFallback className="font-bold">
-        {selectedToken ? selectedToken?.symbol.slice(0, 3) : ""}
+        {selectedToken ? selectedToken.symbol.slice(0, 3) : ""}
       </AvatarFallback>
     </Avatar>
   );

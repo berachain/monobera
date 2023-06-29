@@ -1,6 +1,7 @@
 export const formatConnectorName = (connector: string) => {
+  console.log(connector);
   switch (connector) {
-    case "injected":
+    case "metaMask":
       return "MetaMask";
     case "walletconnect":
       return "WalletConnect";
