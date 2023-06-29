@@ -1,20 +1,14 @@
-import { type Address, type PublicClient } from "viem";
+
 import { type RouterConfig } from "~/config";
+import { type SubgraphPoolBase } from "../RouterService/types";
 
 export class PoolService {
-  private pools: any[] = [];
-
-  constructor(
-    private readonly config: RouterConfig,
-  ) {}
+  private pools: SubgraphPoolBase[] = [];
+  public finishedFetching = false;
+  constructor(private readonly config: RouterConfig) {}
 
   public getPools() {}
 
-  public async fetchPools() {}
+  public fetchPools() {}
 
-  private async getSubgraphPools() {}
-
-  private async getPoolInfo(pools: Address[]) {
-    
-  }
 }

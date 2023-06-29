@@ -48,15 +48,15 @@ export interface RouterConfig {
   subgraphUrl: string;
   publicClient: PublicClient;
   contracts: {
-      poolAddress: Address;
-      multicallAddress: Address;
-      connectingTokens: {
-        symbol: string;
-        address: string;
-      }[];
-      blacklistedPools: Address[];
-      honey: Address;
-      wbera: Address;
+    poolAddress: Address;
+    multicallAddress: Address;
+    connectingTokens: {
+      symbol: string;
+      address: string;
+    }[];
+    blacklistedPools: Address[];
+    honey: Address;
+    wbera: Address;
   };
 }
 
@@ -64,16 +64,16 @@ export const defaultConfig: RouterConfig = {
   subgraphUrl: "",
   publicClient: client as PublicClient,
   contracts: {
-      poolAddress: "0x0d5862FDbdd12490f9b4De54c236cff63B038074",
-      multicallAddress: "0xF44791eCf779318C22d6eA7fbb4741aA3b167654",
-      connectingTokens: [
-        {
-          symbol: "wbera",
-          address: "0x0",
-        },
-      ],
-      blacklistedPools: [],
-      honey: "0x0",
-      wbera: "0x0",
+    poolAddress: "0x0d5862FDbdd12490f9b4De54c236cff63B038074",
+    multicallAddress: "0xF44791eCf779318C22d6eA7fbb4741aA3b167654",
+    connectingTokens: [
+      {
+        symbol: "wbera",
+        address: "0x0",
+      },
+    ],
+    blacklistedPools: [],
+    honey: "0x0",
+    wbera: "0x0",
   },
 };

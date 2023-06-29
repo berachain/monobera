@@ -134,6 +134,9 @@ importers:
 
   apps/dapp:
     dependencies:
+      '@bera/bera-router':
+        specifier: 0.1.0
+        version: link:../../packages/bera-router
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../../packages/berajs
@@ -319,6 +322,9 @@ importers:
 
   packages/bera-router:
     dependencies:
+      '@bera/berajs':
+        specifier: 0.1.0
+        version: link:../berajs
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
