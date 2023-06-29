@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import {
+  useBeraJs,
   usePollAssetWalletBalance,
   useSelectedAssetWalletBalance,
   useTokenInformation,
@@ -41,7 +42,8 @@ export function TokenDialog({
 }: Props) {
   const [search, setSearch] = useState("");
   const [addTokenOpen, setAddTokenOpen] = useState(false);
-
+  const [error, setError] = useState<Error | undefined>(undefined);
+  const [pendingAddition, setPendingAddition] = useState<boolean>(false);
   const { tokenList, addNewToken } = useTokens();
   const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<Token[]>(tokenList);
@@ -56,9 +58,13 @@ export function TokenDialog({
     );
 
     if (isAddress(search) && filteredTokens.length === 0) {
-      void read({ address: search });
+      void read({ address: search }).catch((error) => {
+        setError(error);
+      });
+      setPendingAddition(true);
       return;
     }
+    setPendingAddition(false);
     setFilteredTokens(filteredTokens);
   }, [read, search]); // Include 'filteredTokens' in the dependency array
 
@@ -76,18 +82,21 @@ export function TokenDialog({
     onSelectedToken(token);
     setOpen(false);
     setSearch("");
+    setError(undefined);
   };
 
   const onAddToken = (token: Token) => {
     addNewToken(token);
     onSelectedToken(token);
     setSearch("");
+    setError(undefined);
     setAddTokenOpen(false);
     setOpen(false);
   };
 
   const onAddTokenCancel = () => {
     setSearch("");
+    setError(undefined);
     setAddTokenOpen(false);
     setOpen(false);
   };
@@ -111,29 +120,37 @@ export function TokenDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="px-4 sm:max-w-[425px]">
+        <DialogContent className="max-h-[400px] px-4 sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Token search</DialogTitle>
           </DialogHeader>
           <Input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setError(undefined);
+            }}
             placeholder="Search by name, symbol or address"
           />
-          <div className="grid gap-4 py-4">
-            {filteredTokens.map((token, i) => (
-              <TokenDialogRow
-                key={i}
-                token={token}
-                isTokenSelected={isTokenSelected(token)}
-                focusedToken={focusedToken}
-                addTokenOpen={addTokenOpen}
-                setAddTokenOpen={setAddTokenOpen}
-                onAddToken={onAddToken}
-                onAddTokenCancel={onAddTokenCancel}
-                onTokenSelect={onTokenSelect}
-              />
-            ))}
+          <div className="max-h-[300px] gap-4 overflow-y-auto py-4">
+            {!error
+              ? filteredTokens.length
+                ? filteredTokens.map((token, i) => (
+                    <TokenDialogRow
+                      key={i}
+                      token={token}
+                      isTokenSelected={isTokenSelected(token)}
+                      focusedToken={focusedToken}
+                      addTokenOpen={addTokenOpen}
+                      setAddTokenOpen={setAddTokenOpen}
+                      onAddToken={onAddToken}
+                      onAddTokenCancel={onAddTokenCancel}
+                      onTokenSelect={onTokenSelect}
+                      pendingAddition={pendingAddition}
+                    />
+                  ))
+                : "No tokens found"
+              : "Address is invalid"}
           </div>
         </DialogContent>
       </Dialog>
@@ -150,6 +167,7 @@ type RowProps = {
   onAddToken: (token: Token) => void;
   onAddTokenCancel: () => void;
   onTokenSelect: (token: Token) => void;
+  pendingAddition: boolean;
 };
 const TokenDialogRow = ({
   token,
@@ -160,7 +178,9 @@ const TokenDialogRow = ({
   onAddToken,
   onAddTokenCancel,
   onTokenSelect,
+  pendingAddition,
 }: RowProps) => {
+  const { isConnected } = useBeraJs();
   const tokenBalance = Number(
     useSelectedAssetWalletBalance(token?.address ?? "")?.formattedBalance || 0,
   );
@@ -168,7 +188,7 @@ const TokenDialogRow = ({
     <Button
       variant="ghost"
       className={cn(
-        "flex w-full items-center justify-start gap-2 px-2 text-left",
+        "flex h-14 w-full items-center justify-start gap-2 px-2 py-4 text-left",
         isTokenSelected && "opacity-50",
       )}
       onClick={() => {
@@ -191,9 +211,11 @@ const TokenDialogRow = ({
       {focusedToken?.address === token.address && (
         <div className="absolute ml-auto"></div>
       )}
-      <div className="ml-auto">
-        <p>{tokenBalance}</p>
-      </div>
+      {!pendingAddition && isConnected && (
+        <div className="ml-auto">
+          <p>{tokenBalance}</p>
+        </div>
+      )}
       <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
         <DialogContent className="flex flex-col items-center justify-center gap-2 px-4 sm:max-w-[425px]">
           <TokenIcon token={token} />

@@ -95,7 +95,7 @@ const useCreateTokenWeights = () => {
     );
     const isInvalidTokenListLength = tokenWeights.length < 2;
     const isInvalidInitialLiquidity =
-      step === 2 && !tokenWeights.some((item) => item.initialLiquidity !== 0);
+      step === 2 && !tokenWeights.every((item) => item.initialLiquidity !== 0);
     const isInitialLiquidityExceedingBalance =
       step === 2 &&
       tokenWeights.some((item) => {
