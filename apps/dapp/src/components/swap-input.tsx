@@ -6,12 +6,11 @@ import {
   useSelectedAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
+import { SelectToken } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
 import { Progress } from "@bera/ui/progress";
-
-import SelectToken from "./select-token";
 
 type Props = {
   selected: Token;

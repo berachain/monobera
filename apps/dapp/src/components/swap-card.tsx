@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { ERC2MODULE_PRECOMPILE_ADDRESS } from "@bera/berajs";
-import { ConnectButton } from "@bera/shared-ui";
+import { ERC2MODULE_PRECOMPILE_ADDRESS, useBeraJs } from "@bera/berajs";
+import { ConnectButton, TokenInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -11,13 +11,11 @@ import { SwapKind, useSwap } from "~/hooks/useSwap";
 import { ApproveTokenButton } from "./approve-token-button";
 import PreviewDialog from "./preview-dialog";
 import { SettingsPopover } from "./settings-popover";
-import SwapInput from "./token-input";
 
 export function SwapCard() {
   const {
     payload,
     setSwapKind,
-    isConnected,
     setSelectedFrom,
     selectedFrom,
     allowance,
@@ -29,7 +27,7 @@ export function SwapCard() {
     previewSwapAmount,
     setSelectedTo,
   } = useSwap();
-
+  const { isConnected } = useBeraJs();
   console.log("payload", payload);
   return (
     <Card className="w-[500px]">
@@ -40,7 +38,7 @@ export function SwapCard() {
       </CardHeader>
       <CardContent>
         <div className="mb-4 flex flex-col gap-4">
-          <SwapInput
+          <TokenInput
             selected={selectedFrom}
             selectedTokens={[selectedFrom, selectedTo]}
             onTokenSelection={setSelectedFrom}
@@ -62,7 +60,7 @@ export function SwapCard() {
             <Icons.swap className="h-8 w-8" />
           </Button>
 
-          <SwapInput
+          <TokenInput
             selected={selectedTo}
             selectedTokens={[selectedFrom, selectedTo]}
             // onTokenSelection={setSelectedTo}

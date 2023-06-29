@@ -63,7 +63,7 @@ export default function CreatePageContent() {
       <div className="col-span-1 hidden justify-end xl:flex">
         <CreatePoolStepper step={step} steps={steps} setStep={setStep} />
       </div>
-      <div className="col-span-5 flex items-center justify-center lg:col-span-2 xl:col-span-1">
+      <div className="col-span-5 flex items-center justify-center lg:col-span-2 xl:col-span-2">
         {step === Steps.SET_TOKEN_WEIGHTS && (
           <CreatePool
             tokenWeights={tokenWeights}
