@@ -38,36 +38,43 @@ export const usePollAssetWalletBalance = () => {
           args: [account],
         }));
         const contracts = getContracts();
-        const result = await publicClient.multicall({
-          contracts: call,
-          multicallAddress: contracts.multicall as `0x${string}`,
-        });
-        const balances = await Promise.all(
-          result.map(async (item: any, index: number) => {
-            const token = tokenList[index];
-            if (item.error) {
-              await mutate([account, token?.address, "assetWalletBalances"], {
-                balance: 0,
-                formattedBalance: "0",
+        try {
+          const result = await publicClient.multicall({
+            contracts: call,
+            multicallAddress: contracts.multicall as `0x${string}`,
+          });
+
+          const balances = await Promise.all(
+            result.map(async (item: any, index: number) => {
+              const token = tokenList[index];
+              if (item.error) {
+                await mutate([account, token?.address, "assetWalletBalances"], {
+                  balance: 0,
+                  formattedBalance: "0",
+                  ...token,
+                });
+                return { balance: 0, ...token };
+              }
+
+              const resultBalanceToken: BalanceToken = {
+                balance: item.result,
+                formattedBalance: formatUnits(
+                  item.result,
+                  token?.decimals || 18,
+                ),
                 ...token,
-              });
-              return { balance: 0, ...token };
-            }
-
-            const resultBalanceToken: BalanceToken = {
-              balance: item.result,
-              formattedBalance: formatUnits(item.result, token?.decimals || 18),
-              ...token,
-            } as BalanceToken;
-            await mutate(
-              [account, token?.address, "assetWalletBalances"],
-              resultBalanceToken,
-            );
-            return resultBalanceToken;
-          }),
-        );
-
-        return balances;
+              } as BalanceToken;
+              await mutate(
+                [account, token?.address, "assetWalletBalances"],
+                resultBalanceToken,
+              );
+              return resultBalanceToken;
+            }),
+          );
+          return balances;
+        } catch (error) {
+          console.log(error);
+        }
       }
 
       return undefined;

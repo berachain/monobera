@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import {
   ERC2MODULE_PRECOMPILE_ADDRESS,
-  useBeraJs,
   useLatestBlock,
   usePollAllowance,
   usePollAssetWalletBalance,
@@ -36,7 +35,7 @@ export const useSwap = () => {
 
   usePollAssetWalletBalance();
   const { usePools } = usePollPools();
-  const { isConnected } = useBeraJs();
+
   const pools = usePools();
 
   const [selectedFrom, setSelectedFrom] = useState<Token | undefined>(
@@ -98,7 +97,6 @@ export const useSwap = () => {
   return {
     payload,
     setSwapKind,
-    isConnected,
     setSelectedFrom,
     selectedFrom,
     allowance,

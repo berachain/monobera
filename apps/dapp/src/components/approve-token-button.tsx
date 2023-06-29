@@ -1,3 +1,5 @@
+"use client";
+
 import { type Token } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { erc20ABI } from "wagmi";

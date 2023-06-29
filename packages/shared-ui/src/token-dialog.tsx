@@ -8,7 +8,6 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -23,6 +22,8 @@ import { Input } from "@bera/ui/input";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 
+import { TokenIcon } from "./token-icon";
+
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -31,7 +32,7 @@ type Props = {
   focusedToken: Token | undefined;
 };
 
-export default function TokenDialog({
+export function TokenDialog({
   open,
   onSelectedToken,
   setOpen,
@@ -194,7 +195,7 @@ const TokenDialogRow = ({
         <p>{tokenBalance}</p>
       </div>
       <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
-        <DialogContent className="flex flex-col items-center justify-center gap-2 px-4 sm:max-w-[300px]">
+        <DialogContent className="flex flex-col items-center justify-center gap-2 px-4 sm:max-w-[425px]">
           <TokenIcon token={token} />
           <Badge variant="destructive" className="w-fit gap-1">
             <Icons.warning className="h-4 w-4" />
