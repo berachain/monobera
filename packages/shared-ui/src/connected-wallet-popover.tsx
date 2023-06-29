@@ -8,15 +8,12 @@ import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { useReadLocalStorage } from "usehooks-ts";
 
-import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
 import { formatConnectorName } from "~/utils/formatConnectorName";
 
 export default function ConnectedWalletPopover() {
   const [open, setOpen] = React.useState(false);
   const { account, logout } = useBeraJs();
-  const connectorName = useReadLocalStorage<string>(
-    LOCAL_STORAGE_KEYS.CONNECTOR_ID,
-  );
+  const connectorName = useReadLocalStorage<string>("wagmi.wallet");
 
   const { networkConfig } = useBeraConfig();
 
