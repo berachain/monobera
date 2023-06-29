@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@bera/ui/button";
 import { ConnectButton as RainbowConnectButton } from "@rainbow-me/rainbowkit";
 

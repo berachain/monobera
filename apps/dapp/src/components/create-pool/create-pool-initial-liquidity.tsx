@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";

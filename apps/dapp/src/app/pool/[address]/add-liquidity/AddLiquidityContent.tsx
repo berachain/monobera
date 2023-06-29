@@ -9,13 +9,13 @@ import {
   type Pool,
   type Token,
 } from "@bera/berajs";
+import { TokenInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { parseUnits } from "viem";
 
 import { ApproveTokenButton } from "~/components/approve-token-button";
 import { SettingsPopover } from "~/components/settings-popover";
-import SwapInput from "~/components/token-input";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 import { useTxn } from "~/hooks/useTxn";
@@ -58,7 +58,7 @@ export default function AddLiquidityContent({
         <CardContent className="flex flex-col gap-3">
           {pool?.weights?.map((token, i) => {
             return (
-              <SwapInput
+              <TokenInput
                 key={token.address}
                 selected={token as Token}
                 selectable={false}

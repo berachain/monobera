@@ -10,13 +10,13 @@ import {
   type Token,
   type Validator,
 } from "@bera/berajs";
+import { TokenInput } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
 import { dummyToken } from "~/utils/constants";
-import TokenInput from "~/components/token-input";
 import ValidatorDialog from "~/components/validator-dialog";
 import { validator } from "../../data/validator";
 

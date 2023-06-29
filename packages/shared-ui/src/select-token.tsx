@@ -1,10 +1,9 @@
 import React from "react";
 import { type Token } from "@bera/berajs";
-import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-import TokenDialog from "~/components/token-dialog";
+import { TokenDialog, TokenIcon } from "./";
 
 type Props = {
   token: Token | undefined;
@@ -14,7 +13,7 @@ type Props = {
   weight?: number;
 };
 
-export default function SelectToken({
+export function SelectToken({
   token = undefined,
   onTokenSelection = undefined,
   selectedTokens = undefined,
