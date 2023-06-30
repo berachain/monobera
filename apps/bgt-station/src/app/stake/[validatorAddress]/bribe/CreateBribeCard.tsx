@@ -7,6 +7,7 @@ import {
   ERC20BGTMODULE_PRECOMPILE_ADDRESS,
   ERC20BGT_PRECOMPILE_ABI,
 } from "@bera/berajs/src/config";
+import { useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -17,7 +18,6 @@ import BribeTokenInputs from "./BribeTokenInputs";
 import useCreateTokenBribes, {
   type ITokenBribe,
 } from "./hooks/useCreateTokenBribes";
-import { useTxn } from "@bera/shared-ui";
 
 export default function CreateBribeCard({
   validatorAddress,

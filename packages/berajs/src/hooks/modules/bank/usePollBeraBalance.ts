@@ -12,7 +12,7 @@ export const usePollBeraBalance = () => {
   const publicClient = usePublicClient();
   const { isConnected, account } = useBeraJs();
   const method = "getBalance";
-  const denom = 'abera'
+  const denom = "abera";
   const QUERY_KEY = [account, method, denom];
   useSWR(
     QUERY_KEY,
@@ -26,9 +26,8 @@ export const usePollBeraBalance = () => {
             args: [account, denom],
           });
           return formatUnits(result as bigint, 18);
-
-        } catch(e) {
-          console.error(e)
+        } catch (e) {
+          console.error(e);
         }
       }
       return undefined;

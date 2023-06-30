@@ -17,12 +17,7 @@ interface IBaseToast extends PropsWithChildren {
   duration?: number;
 }
 
-const BaseToast = ({
-  title,
-  href,
-  onClose,
-  children,
-}: IBaseToast) => {
+const BaseToast = ({ title, href, onClose, children }: IBaseToast) => {
   return (
     <div
       className="flex-col rounded-md bg-primary p-2"
@@ -37,7 +32,7 @@ const BaseToast = ({
             </Link>
           )}
         </div>
-          <Icons.close className="h-4	w-4" onClick={() => onClose()} />
+        <Icons.close className="h-4	w-4" onClick={() => onClose()} />
       </div>
       <div className="text-xs">{children}</div>
     </div>
@@ -112,6 +107,14 @@ export const SubmissionToast = ({
   );
 };
 
-export const LoadingToast = ({ title = "Loading", message = "", onClose}: IToast) => {
-  return <BaseToast title={title} onClose={onClose}>{message}</BaseToast>;
+export const LoadingToast = ({
+  title = "Loading",
+  message = "",
+  onClose,
+}: IToast) => {
+  return (
+    <BaseToast title={title} onClose={onClose}>
+      {message}
+    </BaseToast>
+  );
 };

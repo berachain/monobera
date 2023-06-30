@@ -9,7 +9,7 @@ import {
   type Pool,
   type Token,
 } from "@bera/berajs";
-import { TokenInput } from "@bera/shared-ui";
+import { TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { parseUnits } from "viem";
@@ -18,7 +18,6 @@ import { ApproveTokenButton } from "~/components/approve-token-button";
 import { SettingsPopover } from "~/components/settings-popover";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
-import { useTxn } from "@bera/shared-ui";
 
 export default function AddLiquidityContent({
   params,
