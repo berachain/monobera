@@ -2,7 +2,7 @@ import { type Token } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { erc20ABI } from "wagmi";
 
-import { useTxn } from "~/hooks/useTxn";
+import { useTxn } from "@bera/shared-ui";
 
 type Props = {
   token: Token | undefined;

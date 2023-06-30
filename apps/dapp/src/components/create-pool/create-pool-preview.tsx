@@ -18,7 +18,7 @@ import { parseUnits } from "viem";
 import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview-input";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
-import { useTxn } from "~/hooks/useTxn";
+import { useTxn } from "@bera/shared-ui";
 import { ApproveTokenButton } from "../approve-token-button";
 
 type Props = {

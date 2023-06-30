@@ -13,11 +13,11 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
 import { ApproveTokenButton } from "~/components/approve-token-button";
-import { useTxn } from "~/hooks/useTxn";
 import BribeTokenInputs from "./BribeTokenInputs";
 import useCreateTokenBribes, {
   type ITokenBribe,
 } from "./hooks/useCreateTokenBribes";
+import { useTxn } from "@bera/shared-ui";
 
 export default function CreateBribeCard({
   validatorAddress,

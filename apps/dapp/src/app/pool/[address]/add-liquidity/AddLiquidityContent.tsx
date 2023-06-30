@@ -18,7 +18,7 @@ import { ApproveTokenButton } from "~/components/approve-token-button";
 import { SettingsPopover } from "~/components/settings-popover";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
-import { useTxn } from "~/hooks/useTxn";
+import { useTxn } from "@bera/shared-ui";
 
 export default function AddLiquidityContent({
   params,

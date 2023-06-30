@@ -24,7 +24,7 @@ import {
 import { parseUnits } from "viem";
 
 import { dummyToken } from "~/utils/constants";
-import { useTxn } from "~/hooks/useTxn";
+import { useTxn } from "@bera/shared-ui";
 
 type Props = {
   validator: Validator | undefined;

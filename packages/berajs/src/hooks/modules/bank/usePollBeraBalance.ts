@@ -8,11 +8,11 @@ import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
 
 // this is going to be slow for now until we have event indexing
-export const usePollBgtBalance = () => {
+export const usePollBeraBalance = () => {
   const publicClient = usePublicClient();
   const { isConnected, account } = useBeraJs();
   const method = "getBalance";
-  const denom = 'abgt'
+  const denom = 'abera'
   const QUERY_KEY = [account, method, denom];
   useSWR(
     QUERY_KEY,
@@ -38,11 +38,11 @@ export const usePollBgtBalance = () => {
     },
   );
 
-  const useBgtBalance = () => {
+  const useBeraBalance = () => {
     const { data = 0 } = useSWRImmutable(QUERY_KEY);
     return Number(data).toFixed(4);
   };
   return {
-    useBgtBalance,
+    useBeraBalance,
   };
 };

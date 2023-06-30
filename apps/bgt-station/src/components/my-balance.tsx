@@ -7,7 +7,7 @@ import {
   usePollBgtBalance,
   type Token,
 } from "@bera/berajs";
-import { TokenInput } from "@bera/shared-ui";
+import { TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -19,7 +19,6 @@ import {
 import { Icons } from "@bera/ui/icons";
 
 import { useRedeem } from "~/hooks/useRedeem";
-import { useTxn } from "~/hooks/useTxn";
 
 export default function MyBalance() {
   const [open, setOpen] = React.useState(false);
