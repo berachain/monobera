@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import { truncateHash, useBeraConfig, useBeraJs } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
@@ -9,16 +8,13 @@ import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { useReadLocalStorage } from "usehooks-ts";
 
-import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
 import { formatConnectorName } from "~/utils/formatConnectorName";
 
 export default function ConnectedWalletPopover() {
   const [open, setOpen] = React.useState(false);
   const { account, logout } = useBeraJs();
-  const connectorName = useReadLocalStorage<string>(
-    LOCAL_STORAGE_KEYS.CONNECTOR_ID,
-  );
-  const router = useRouter();
+  const connectorName = useReadLocalStorage<string>("wagmi.wallet");
+
   const { networkConfig } = useBeraConfig();
 
   return (
@@ -62,8 +58,9 @@ export default function ConnectedWalletPopover() {
                 size="sm"
                 className="rounded-full"
                 onClick={() => {
-                  router.push(
+                  window.open(
                     `http://${networkConfig.chain.blockExplorers?.default.url}/address/${account}`,
+                    "_blank",
                   );
                 }}
               >

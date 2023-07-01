@@ -3,8 +3,7 @@ import { type Token } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-import TokenDialog from "~/components/token-dialog";
-import { TokenIcon } from "~/components/token-icon";
+import { TokenDialog, TokenIcon } from "./";
 
 type Props = {
   token: Token | undefined;
@@ -14,7 +13,7 @@ type Props = {
   weight?: number;
 };
 
-export default function SelectToken({
+export function SelectToken({
   token = undefined,
   onTokenSelection = undefined,
   selectedTokens = undefined,

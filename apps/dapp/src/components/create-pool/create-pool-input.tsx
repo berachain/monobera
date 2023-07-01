@@ -1,11 +1,11 @@
 import React from "react";
 import { type Token } from "@bera/berajs";
+import { SelectToken } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
-import SelectToken from "~/components/select-token";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 type Props = {

@@ -11,6 +11,7 @@ import {
   type Token,
   type Validator,
 } from "@bera/berajs";
+import { ConnectButton, TokenInput } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import {
@@ -23,8 +24,6 @@ import {
 import { parseUnits } from "viem";
 
 import { dummyToken } from "~/utils/constants";
-import ConnectWalletDialog from "~/components/connect-wallet-dialog";
-import TokenInput from "~/components/token-input";
 import { useTxn } from "~/hooks/useTxn";
 
 type Props = {
@@ -91,7 +90,7 @@ export default function DelegateButton({ validator, validatorAddress }: Props) {
               Delegate
             </Button>
           ) : (
-            <ConnectWalletDialog className="w-full" />
+            <ConnectButton />
           )}
         </div>
       </DialogContent>

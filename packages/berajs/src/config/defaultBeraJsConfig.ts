@@ -1,17 +1,6 @@
-import { getCosmosChain, type NetworkConfig } from "@bera/berajs";
 import { type Chain } from "wagmi";
 
-export const BERA = {
-  coinDenom: "bera",
-  coinMinimalDenom: "abera",
-  coinDecimals: 18,
-};
-
-export const BGT = {
-  coinDenom: "bgt",
-  coinMinimalDenom: "abgt",
-  coinDecimals: 18,
-};
+import { type NetworkConfig } from "./types";
 
 const PolarisChain: Chain = {
   id: 2061,
@@ -42,8 +31,7 @@ const PolarisChain: Chain = {
   },
 };
 
-export const beraConfig: NetworkConfig = {
-  ...getCosmosChain(),
+export const defaultBeraConfig: NetworkConfig = {
   precompileAddresses: {
     multicall: "0x0000",
   },

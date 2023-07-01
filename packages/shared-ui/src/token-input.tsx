@@ -12,7 +12,7 @@ import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
 import { Progress } from "@bera/ui/progress";
 
-import SelectToken from "./select-token";
+import { SelectToken } from ".";
 
 type Props = {
   selected: Token | undefined;
@@ -28,7 +28,7 @@ type Props = {
   setAmount?: (amount: number) => void;
 };
 
-export default function SwapInput({
+export function TokenInput({
   selected,
   selectedTokens,
   amount,
@@ -75,7 +75,7 @@ export default function SwapInput({
           min="0"
           placeholder="0.0"
           disabled={disabled}
-          className="w-100 grow border-0 bg-input p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="w-100 grow border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={amount > 0 ? amount : ""}
           onFocus={() => {
             setFocused(true);

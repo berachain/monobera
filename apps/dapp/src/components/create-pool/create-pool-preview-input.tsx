@@ -1,9 +1,9 @@
 import React from "react";
+import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
 
-import { TokenIcon } from "~/components/token-icon";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 type Props = {
@@ -21,7 +21,7 @@ export default function CreatePoolPreviewInput({ tokenWeight }: Props) {
         )}
       >
         <Button
-          className="hover:text-primary-text flex shrink-0 cursor-not-allowed gap-2 hover:bg-transparent"
+          className="hover:text-primary-text flex shrink-0 grow-0 cursor-not-allowed gap-2 pl-0 hover:bg-transparent"
           variant="ghost"
         >
           <>
@@ -37,7 +37,7 @@ export default function CreatePoolPreviewInput({ tokenWeight }: Props) {
           step="any"
           min="0"
           placeholder="0.0"
-          className="w-100 grow border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="flex grow-0 border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={
             tokenWeight.initialLiquidity > 0 ? tokenWeight.initialLiquidity : ""
           }

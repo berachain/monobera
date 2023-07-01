@@ -1,7 +1,9 @@
+"use client";
+
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { HistoryPopover, Wallet } from "@bera/shared-ui";
+import { ConnectButton, HistoryPopover } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 import { MainNav } from "./main-nav";
@@ -27,7 +29,7 @@ export function Header() {
         <div className="flex gap-2">
           <HistoryPopover />
           <ThemeToggle />
-          <Wallet />
+          <ConnectButton />
         </div>
       </div>
     </nav>

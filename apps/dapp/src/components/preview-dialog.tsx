@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import {
@@ -6,6 +8,7 @@ import {
   formatUsd,
   type Token,
 } from "@bera/berajs";
+import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import {
@@ -18,7 +21,6 @@ import {
 import { Icons } from "@bera/ui/icons";
 
 import { useTxn } from "~/hooks/useTxn";
-import { TokenIcon } from "./token-icon";
 
 type Props = {
   fromToken: Token | undefined;
