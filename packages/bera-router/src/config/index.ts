@@ -27,14 +27,10 @@ const PolarisChain: Chain = {
   },
   rpcUrls: {
     default: {
-      http: [
-        "http://k8s-guardedt-archive0-706b2d9d3e-0a11fbacff1901c5.elb.us-west-2.amazonaws.com:8545",
-      ],
+      http: ["http://localhost:8545"],
     },
     public: {
-      http: [
-        "http://k8s-guardedt-archive0-706b2d9d3e-0a11fbacff1901c5.elb.us-west-2.amazonaws.com:8545",
-      ],
+      http: ["http://localhost:8545"],
     },
   },
 };
@@ -65,7 +61,7 @@ export const defaultConfig: RouterConfig = {
   publicClient: client as PublicClient,
   contracts: {
     poolAddress: "0x0d5862FDbdd12490f9b4De54c236cff63B038074",
-    multicallAddress: "0xF44791eCf779318C22d6eA7fbb4741aA3b167654",
+    multicallAddress: "0x0EFa8dc7BbAf439095fc690b723c242c3CA36BB1",
     connectingTokens: [
       {
         symbol: "wbera",

@@ -13,6 +13,7 @@ import { Header } from "~/components/header";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { beraConfig } from "~/config/beraJs";
+import RouterProvider from "~/context/routerContext";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -27,18 +28,20 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
         <BeraConfig networkConfig={beraConfig} autoConnect={true}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="relative flex min-h-screen flex-col overflow-hidden">
-              <div className="flex-1">
-                <Header />
-                <main className="w-full py-40">{props.children}</main>
-                <Toaster position="bottom-right" />
+          <RouterProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <div className="relative flex min-h-screen flex-col overflow-hidden">
+                <div className="flex-1">
+                  <Header />
+                  <main className="w-full py-40">{props.children}</main>
+                  <Toaster position="bottom-right" />
+                </div>
+                <SiteFooter />
               </div>
-              <SiteFooter />
-            </div>
-            <TailwindIndicator />
-          </ThemeProvider>
-          <Analytics />
+              <TailwindIndicator />
+            </ThemeProvider>
+            <Analytics />
+          </RouterProvider>
         </BeraConfig>
       </body>
     </html>

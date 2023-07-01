@@ -1,4 +1,4 @@
-import { type Address } from "viem";
+import { parseUnits, type Address } from "viem";
 
 export enum SwapTypes {
   SwapExactIn,
@@ -157,7 +157,10 @@ export interface PoolBase<D extends PoolPairBase = PoolPairBase> {
 
 export const INFINITY = Infinity as unknown as bigint;
 const priceErrorTolerance = "0.00001";
-export const PRICE_ERROR_TOLERANCE = BigInt(priceErrorTolerance);
+export const PRICE_ERROR_TOLERANCE = parseUnits(
+  `${Number(priceErrorTolerance)}`,
+  18,
+);
 
 export enum PoolFilter {
   All = "All",
@@ -172,7 +175,7 @@ export interface hopDictionary {
 // not zero or the path's limit.
 // It's also used in the calculation of derivatives in pool maths
 // const infinitesimal: string = process.env.INFINITESIMAL || '0.000001';
-const infinitesimal = "0.01"; // Increasing INFINITESIMAL to '0.01' to test derivative sensitivity
-export const INFINITESIMAL = BigInt(infinitesimal);
+const infinitesimal = 10000000000000000n; // Increasing INFINITESIMAL to '0.01' to test derivative sensitivity
+export const INFINITESIMAL = parseUnits(`${Number(infinitesimal)}`, 18);
 
-export const MINIMUM_VALUE = BigInt("0.000000000000000001");
+export const MINIMUM_VALUE = 1n;

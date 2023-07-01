@@ -1,7 +1,7 @@
 {
   "name": "@bera/bera-router",
   "version": "0.1.0",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "deez",
   "license": "MIT",
@@ -14,8 +14,9 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
     "@bera/berajs": "0.1.0",
+    "axios": "^1.4.0",
+    "lodash": "^4.17.21",
     "viem": "~0.3.35"
   },
   "devDependencies": {

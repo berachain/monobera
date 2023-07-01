@@ -8,7 +8,6 @@ import { RouteProposer } from "./routeProposal";
 import {
   SwapTypes,
   type NewPath,
-  type SubgraphPoolBase,
   type Swap,
   type SwapInfo,
   type SwapOptions,
@@ -41,6 +40,17 @@ export class RouterService {
     this.poolService = new PoolService(config);
   }
 
+  public isReady() {
+    return this.poolService.finishedFetching;
+  }
+  public async fetchPools() {
+    await this.poolService.fetchPools();
+  }
+
+  public getPools() {
+    return this.poolService.getPools();
+  }
+
   // new pool service
   // new price service
   // new event service
@@ -61,7 +71,7 @@ export class RouterService {
       ...swapOptions,
     };
     // @ts-ignore
-    const pools: SubgraphPoolBase[] = this.poolService.getPools();
+    const pools: Pool[] = this.poolService.getPools();
 
     const wrappedInfo = getWrappedInfo(
       tokenIn,

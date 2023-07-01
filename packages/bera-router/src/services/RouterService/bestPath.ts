@@ -42,7 +42,8 @@ export const getBestPaths = (
 
   //  Since the sum of the first i highest limits will be less than totalSwapAmount, we remove the difference to the last swapAmount
   //  so we are sure that the sum of swapAmounts will be equal to totalSwapAmount
-  const difference = (sumLimitAmounts[initialNumPaths - 1] ?? 0n) - totalSwapAmount
+  const difference =
+    (sumLimitAmounts[initialNumPaths - 1] ?? 0n) - totalSwapAmount;
   initialSwapAmounts[initialSwapAmounts.length - 1] =
     (initialSwapAmounts[initialSwapAmounts.length - 1] ?? 0n) - difference;
 
@@ -74,15 +75,15 @@ export const getBestPaths = (
 
 export function getHighestLimitAmountsForPaths(
   paths: NewPath[],
-  maxPools: number
+  maxPools: number,
 ): bigint[] {
   if (paths.length === 0) return [];
   const limitAmounts: bigint[] = [];
   for (let i = 0; i < maxPools; i++) {
-      if (i < paths.length) {
-          const limitAmount = paths[i]?.limitAmount;
-          limitAmounts.push(limitAmount ?? 0n);
-      }
+    if (i < paths.length) {
+      const limitAmount = paths[i]?.limitAmount;
+      limitAmounts.push(limitAmount ?? 0n);
+    }
   }
   return limitAmounts;
 }

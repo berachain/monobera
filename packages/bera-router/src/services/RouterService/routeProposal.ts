@@ -47,7 +47,7 @@ export class RouteProposer {
       return cache.paths;
     }
 
-    const poolsAllDict = parseToPoolsDict(pools, swapOptions.timestamp);
+    const poolsAllDict = parseToPoolsDict(pools);
 
     const [directPools, hopsIn, hopsOut] = filterPoolsOfInterest(
       poolsAllDict,
@@ -138,10 +138,7 @@ export class RouteProposer {
   }
 }
 
-export function parseToPoolsDict(
-  pools: SubgraphPoolBase[],
-  timestamp: number,
-): PoolDictionary {
+export function parseToPoolsDict(pools: SubgraphPoolBase[]): PoolDictionary {
   return Object.fromEntries(
     cloneDeep(pools)
       .filter(
@@ -152,9 +149,7 @@ export function parseToPoolsDict(
   );
 }
 
-export function parseNewPool(
-  pool: SubgraphPoolBase
-): WeightedPool | undefined {
+export function parseNewPool(pool: SubgraphPoolBase): WeightedPool | undefined {
   // We're not interested in any pools which don't allow swapping
   if (!pool.swapEnabled) return undefined;
 
