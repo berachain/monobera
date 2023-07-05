@@ -7,13 +7,13 @@ import {
   ERC20BGTMODULE_PRECOMPILE_ADDRESS,
   ERC20BGT_PRECOMPILE_ABI,
 } from "@bera/berajs/src/config";
+import { useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
 import { ApproveTokenButton } from "~/components/approve-token-button";
-import { useTxn } from "~/hooks/useTxn";
 import BribeTokenInputs from "./BribeTokenInputs";
 import useCreateTokenBribes, {
   type ITokenBribe,
