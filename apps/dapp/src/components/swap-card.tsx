@@ -26,6 +26,7 @@ export function SwapCard() {
     setToAmount,
     previewSwapAmount,
     setSelectedTo,
+    setSwapAmount
   } = useSwap();
   const { isConnected } = useBeraJs();
   return (
@@ -44,6 +45,7 @@ export function SwapCard() {
             amount={fromAmount ?? 0}
             setAmount={(amount) => {
               setSwapKind(SwapKind.GIVEN_IN);
+              setSwapAmount(Number(amount));
               setFromAmount(Number(amount));
             }}
           />
@@ -66,6 +68,7 @@ export function SwapCard() {
             amount={toAmount}
             setAmount={(amount) => {
               setSwapKind(SwapKind.GIVEN_OUT);
+              setSwapAmount(Number(amount));
               setToAmount(Number(amount));
             }}
           />

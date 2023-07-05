@@ -54,7 +54,7 @@ export function CreatePoolPreview({
       asset: tokenWeight.token?.address,
       weight: tokenWeight.weight,
     })),
-    swapFee: parseUnits(`${fee}`, 18),
+    swapFee: fee,
   };
 
   const payload = [
@@ -70,7 +70,7 @@ export function CreatePoolPreview({
     options,
     account,
   ];
-
+  console.log(payload)
   return (
     <Card className="max-w-[500px]">
       <CardHeader>

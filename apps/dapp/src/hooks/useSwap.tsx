@@ -14,6 +14,7 @@ import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { useRouter } from "~/context/routerContext";
+import { type SwapInfo } from "@bera/bera-router";
 
 export enum SwapKind {
   GIVEN_IN = 0,
@@ -28,6 +29,8 @@ export const useSwap = () => {
   const [fromAmount, setFromAmount] = useState(0);
 
   const [toAmount, setToAmount] = useState(0);
+
+  const [swapAmount, setSwapAmount] = useState(0);
 
   const [swapKind, setSwapKind] = useState<SwapKind>(SwapKind.GIVEN_IN);
 
@@ -47,18 +50,24 @@ export const useSwap = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (selectedFrom && selectedTo) {
-        const swapAmount = parseUnits(
-          `${fromAmount ?? 0}`,
-          selectedFrom?.decimals ?? 18,
+      if (selectedFrom && selectedTo && swapAmount !== 0) {
+        const parsedSwapAmount = parseUnits(
+          `${swapAmount ?? 0}`,
+          swapKind === SwapKind.GIVEN_IN ? selectedFrom.decimals : selectedTo.decimals,
         );
         try {
-          const t = await router.getSwaps(
+          const t: SwapInfo = await router.getSwaps(
             selectedFrom?.address as Address,
             selectedTo?.address as Address,
             swapKind === SwapKind.GIVEN_IN ? 0 : 1,
-            swapAmount,
+            parsedSwapAmount,
           );
+
+          if (swapKind === SwapKind.GIVEN_IN) {
+            setToAmount(Number(t.returnAmountFromSwaps));
+        } else {
+            setFromAmount(Number(t.returnAmountFromSwaps));
+        }
           console.log(t);
         } catch (error) {
           console.error(error);
@@ -67,7 +76,7 @@ export const useSwap = () => {
     };
 
     void fetchData();
-  }, [selectedFrom, selectedTo, fromAmount, toAmount]);
+  }, [selectedFrom, selectedTo, fromAmount, toAmount, swapAmount]);
 
   const { useAllowance } = usePollAllowance({
     contract: ERC2MODULE_PRECOMPILE_ADDRESS,
@@ -104,6 +113,7 @@ export const useSwap = () => {
     setToAmount,
     swapKind,
     setSelectedTo,
+    setSwapAmount,
     pools,
     selectedPool,
     previewSwapAmount: "0",

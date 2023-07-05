@@ -20,7 +20,7 @@ import {
   type SwapOptions,
   type SwapV2,
 } from "./types";
-import { getWrappedInfo } from "./wrappers";
+import { getWrappedInfo, setWrappedInfo } from "./wrappers";
 
 export const EMPTY_SWAPINFO: SwapInfo = {
   tokenAddresses: [],
@@ -91,7 +91,7 @@ export class RouterService {
       swapAmount,
     );
 
-    const swapInfo: SwapInfo = await this.findPath(
+    let swapInfo: SwapInfo = await this.findPath(
       wrappedInfo.tokenIn.addressForSwaps as Address,
       wrappedInfo.tokenOut.addressForSwaps as Address,
       swapType,
@@ -100,9 +100,9 @@ export class RouterService {
       options,
     );
 
-    // if (swapInfo.returnAmount === 0n) return swapInfo;
+    if (swapInfo.returnAmount === 0n) return swapInfo;
 
-    // swapInfo = setWrappedInfo(swapInfo, wrappedInfo, this.config);
+    swapInfo = setWrappedInfo(swapInfo, wrappedInfo, this.config);
 
     return swapInfo;
   }
@@ -152,11 +152,7 @@ export class RouterService {
     //   },
     // );
 
-    const r = await this.getOnChainBestPaths(
-      paths,
-      swapAmount,
-      swapType,
-    );
+    const r = await this.getOnChainBestPaths(paths, swapAmount, swapType);
 
     console.log("h5", r);
     // TODO: this is used for further optimizing stuff
@@ -208,11 +204,10 @@ export class RouterService {
     swapAmount: bigint,
     swapType: SwapTypes,
   ): Promise<[Swap[][], bigint, string, bigint]> {
-
     const client = this.config.publicClient;
 
     const block = await client.getBlockNumber();
-    const asyncOperations: Promise<
+      const asyncOperations: Promise<
       SimulateContractReturnType<
         any[],
         "batchSwap",
@@ -220,28 +215,56 @@ export class RouterService {
         undefined
       >
     >[] = paths.map((path: NewPath) => {
-      const batchSwapSteps: BatchSwapStep[] = path.swaps.map((swap: Swap, index: number) => {
-        const amountIn = swapType === 0 ? swapAmount : 0n;
-        const amountOut = swapType === 1 ? swapAmount : 0n;
-        const batchSwapStep = {
-          poolId: getAddress(swap.pool),
-          assetIn: getAddress(swap.tokenIn),
-          amountIn: index === 0 ? amountIn : 0n,
-          assetOut: getAddress(swap.tokenOut),
-          amountOut: index === 0 ? amountOut: 0n,
-          userData: "",
-        };
-        return batchSwapStep;
-      });
+      const batchSwapSteps: BatchSwapStep[] = path.swaps.map(
+        (swap: Swap, index: number) => {
+          const amountIn = swapType === 0 ? swapAmount : 0n;
+          const amountOut = swapType === 1 ? swapAmount : 0n;
+          const batchSwapStep = {
+            poolId: getAddress(swap.pool),
+            assetIn: getAddress(swap.tokenIn),
+            amountIn: swapType === 0 && index === 0 ? amountIn : 0n,
+            assetOut: getAddress(swap.tokenOut),
+            amountOut: swapType === 1 && index === path.swaps.length - 1 ? amountOut : 0n,
+            userData: "",
+          };
+          return batchSwapStep;
+        },
+      );
 
       console.log("batchSwapSteps", batchSwapSteps);
-      return client.simulateContract({
-        address: DEX_PRECOMPILE_ADDRESS as Address,
-        abi: DEX_PRECOMPILE_ABI as any[],
-        functionName: "batchSwap",
-        args: [swapType, batchSwapSteps, block + 100000n],
-        account: "0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
-      });
+      console.log('swapType', swapType)
+
+      if(path.swaps.length === 1) {
+        const amountIn = swapType === 0 ? swapAmount : 0n;
+        const amountOut = swapType === 1 ? swapAmount : 0n;
+        const payload = [
+          swapType === SwapTypes.SwapExactIn ? 0 : 1,
+          getAddress(paths[0]?.swaps[0]?.pool ?? ''),
+          getAddress(paths[0]?.swaps[0]?.tokenIn ?? ''),
+          amountIn,
+          getAddress(paths[0]?.swaps[0]?.tokenOut ?? ''),
+          amountOut,
+          block + 100000n,
+        ]
+        console.log('0HOP OPTIONS', payload)
+        return client.simulateContract({
+          address: DEX_PRECOMPILE_ADDRESS as Address,
+          abi: DEX_PRECOMPILE_ABI as any[],
+          functionName: "swap",
+          args: payload,
+          account: "0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
+        });    
+      } else {
+        console.log('over 1 hop')
+        return client.simulateContract({
+          address: DEX_PRECOMPILE_ADDRESS as Address,
+          abi: DEX_PRECOMPILE_ABI as any[],
+          functionName: "batchSwap",
+          args: [swapType, batchSwapSteps, block + 100000n],
+          account: "0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
+        });
+      }
+
     });
 
     const promises = asyncOperations.map(
@@ -259,6 +282,7 @@ export class RouterService {
     console.log(promises);
     const results = await Promise.all(promises);
     console.log("theese", results);
+
 
     return {} as [Swap[][], bigint, string, bigint];
   }
