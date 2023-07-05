@@ -10,7 +10,7 @@ import {
   type Validator,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
-import { parseUnits } from "viem";
+import { getAddress, parseUnits } from "viem";
 
 export const useRedelegate = (fromAddress: `0x{string}`) => {
   console.log("useRedelegate");
@@ -33,8 +33,12 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
     if (dstValidator && srcValidator) {
       console.log(
         "useRedelegate",
-        BeravaloperToEth(srcValidator.operatorAddress).toLowerCase(),
-        BeravaloperToEth(dstValidator.operatorAddress).toLowerCase(),
+        getAddress(
+          BeravaloperToEth(srcValidator.operatorAddress).toLowerCase(),
+        ),
+        getAddress(
+          BeravaloperToEth(dstValidator.operatorAddress).toLowerCase(),
+        ),
         parseUnits(`${redelegateAmount}`, 18),
       );
       try {
@@ -43,8 +47,12 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
           abi: STAKING_PRECOMPILE_ABI,
           functionName: "beginRedelegate",
           params: [
-            BeravaloperToEth(srcValidator.operatorAddress).toLowerCase(),
-            BeravaloperToEth(dstValidator.operatorAddress).toLowerCase(),
+            getAddress(
+              BeravaloperToEth(srcValidator.operatorAddress),
+            ).toLowerCase(),
+            getAddress(
+              BeravaloperToEth(dstValidator.operatorAddress),
+            ).toLowerCase(),
             parseUnits(`${redelegateAmount}`, 18),
           ],
         });

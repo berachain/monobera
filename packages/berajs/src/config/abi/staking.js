@@ -172,17 +172,18 @@ export const STAKING_PRECOMPILE_ABI = [
     name: "Unbond",
     type: "event",
   },
+
   {
     inputs: [
       {
-        internalType: "string",
+        internalType: "address",
         name: "srcValidator",
-        type: "string",
+        type: "address",
       },
       {
-        internalType: "string",
+        internalType: "address",
         name: "dstValidator",
-        type: "string",
+        type: "address",
       },
       {
         internalType: "uint256",
@@ -204,14 +205,14 @@ export const STAKING_PRECOMPILE_ABI = [
   {
     inputs: [
       {
-        internalType: "address",
+        internalType: "string",
         name: "srcValidator",
-        type: "address",
+        type: "string",
       },
       {
-        internalType: "address",
+        internalType: "string",
         name: "dstValidator",
-        type: "address",
+        type: "string",
       },
       {
         internalType: "uint256",
