@@ -20,9 +20,9 @@ function formatTimestamp(timestamp: number): JSX.Element {
   const [datePart, timePart] = formattedTimestamp.split(", ");
   return (
     <p className="text-right">
-      <span className="text-backgroundSecondary">{datePart}</span>
+      <span>{datePart}</span>
       <br />
-      <span className="text-backgroundSecondary">{timePart}</span>
+      <span>{timePart}</span>
     </p>
   );
 }
@@ -33,26 +33,28 @@ export function History() {
   return (
     <div className="grid gap-4">
       <h3 className="text-xl font-medium">History</h3>
-      {transactions.map((txn: NewTransaction) => (
-        <a
-          key={txn.hash}
-          target="_blank"
-          href={`http://${networkConfig.chain.blockExplorers?.default.url}/tx/${txn.hash}`}
-        >
-          <div
-            className="flex justify-between border-t border-backgroundSecondary pt-2"
+      {transactions.length ? (
+        transactions.map((txn: NewTransaction) => (
+          <a
             key={txn.hash}
+            target="_blank"
+            href={`http://${networkConfig.chain.blockExplorers?.default.url}/tx/${txn.hash}`}
           >
-            <div className="text-xs">
-              <p className="font-medium">{txn.description}</p>
-              <p className="text-backgroundSecondary">
-                {truncateHash(txn.hash as `0x${string}`)}
-              </p>
+            <div
+              className="flex justify-between border-t border-backgroundSecondary pt-2"
+              key={txn.hash}
+            >
+              <div className="text-xs">
+                <p className="font-medium">{txn.description}</p>
+                <p>{truncateHash(txn.hash as `0x${string}`)}</p>
+              </div>
+              <div className="text-xs">{formatTimestamp(txn.timestamp)}</div>
             </div>
-            <div className="text-xs">{formatTimestamp(txn.timestamp)}</div>
-          </div>
-        </a>
-      ))}
+          </a>
+        ))
+      ) : (
+        <p>No recent transactions</p>
+      )}
     </div>
   );
 }

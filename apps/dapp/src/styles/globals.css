@@ -4,27 +4,27 @@
 
 @layer base {
   :root {
-    --background: 24deg 26% 96%;
+    --background: 0deg 0% 100%;
     --background-secondary: 27deg 33% 62%;
-    --foreground: 26deg 58% 25%;
+    --foreground: 24deg 10% 10%;
     --foreground-secondary: 27deg 33% 62%;
     --foreground-tetriary: 0deg 0% 60%;
 
-    --muted: 210deg 40% 96.1%;
+    --muted: 0deg 0% 97%;
     --muted-foreground: 215.4deg 16.3% 46.9%;
 
     --popover: 0deg 0% 100%;
     --popover-foreground: 222.2deg 47.4% 11.2%;
 
-    --border: 27deg 28% 55%;
+    --border: 0deg 0% 94%;
     --border-secondary: 27deg 32% 76%;
-    --input: 24deg 26% 96%;
+    --input: 0deg 0% 100%;
 
     --card: 0deg 0% 100%;
     --card-foreground: 222.2deg 47.4% 11.2%;
 
-    --primary: 27deg 32% 76%;
-    --primary-foreground: 26deg 58% 25%;
+    --primary: 43deg 94% 52%;
+    --primary-foreground: 0deg 0% 100%;
 
     --secondary: 32deg 52% 90%;
     --secondary-foreground: 27deg 33% 62%;
@@ -37,7 +37,7 @@
     --destructive: 0deg 96% 64%;
     --destructive-foreground: 210deg 40% 98%;
 
-    --ring: 27deg 32% 76%;
+    --ring: 43deg 94% 52%;
 
     --radius: 0.5rem;
   }

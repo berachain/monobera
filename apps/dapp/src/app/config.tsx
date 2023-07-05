@@ -1,10 +1,6 @@
 export const navItems = [
   {
     href: "/",
-    title: "Overview",
-  },
-  {
-    href: "/swap",
     title: "Swap",
   },
   {
