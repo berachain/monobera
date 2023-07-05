@@ -11,7 +11,7 @@ import {
   type Token,
   type Validator,
 } from "@bera/berajs";
-import { ConnectButton, TokenInput } from "@bera/shared-ui";
+import { ConnectButton, TokenInput, useTxn } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import {
@@ -24,7 +24,6 @@ import {
 import { formatUnits, parseUnits } from "viem";
 
 import { dummyToken } from "~/utils/constants";
-import { useTxn } from "~/hooks/useTxn";
 
 type Props = {
   validator: Validator | undefined;

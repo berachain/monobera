@@ -2,14 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  BeravaloperToEth,
-  getTokens,
-  truncateHash,
-  usePollAssetWalletBalance,
-  type Token,
-  type Validator,
-} from "@bera/berajs";
+import { BeravaloperToEth, truncateHash, type Token } from "@bera/berajs";
 import { TokenInput } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -18,7 +11,7 @@ import { Icons } from "@bera/ui/icons";
 
 import { dummyToken } from "~/utils/constants";
 import ValidatorDialog from "~/components/validator-dialog";
-import { validator } from "../../data/validator";
+import { useRedelegate } from "~/hooks/useRedelegate";
 
 export default function CreateBribeCard({
   validatorAddress,
@@ -26,18 +19,25 @@ export default function CreateBribeCard({
   validatorAddress: `0x{string}`;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [redeemAmount, setRedeemAmount] = React.useState(0);
-  const [receivingValidator, setReceivingValidator] =
-    React.useState<Validator | null>(null);
-  usePollAssetWalletBalance();
-  const tokens = getTokens();
+  const {
+    srcValidator,
+    redelegateAmount,
+    setRedelegateAmount,
+    accountDelegation,
+    dstValidator,
+    setDstValidator,
+    redelegate,
+    tokens,
+  } = useRedelegate(validatorAddress);
+  console.log(accountDelegation);
+
   return (
     <>
       <ValidatorDialog
         open={open}
         setOpen={setOpen}
         fromAddress={validatorAddress}
-        onSelectedValidator={setReceivingValidator}
+        onSelectedValidator={setDstValidator}
         selectedValidators={[validatorAddress]}
       />
       <Card className="w-[600px]">
@@ -56,7 +56,9 @@ export default function CreateBribeCard({
               <div className="my-6 flex items-center gap-2">
                 <div className="h-12 w-12 rounded-full bg-gray-300" />
                 <div>
-                  <h3 className="text-lg font-semibold">{validator.name}</h3>
+                  <h3 className="text-lg font-semibold">
+                    {srcValidator?.description.moniker}
+                  </h3>
                   <Badge variant="secondary">
                     {truncateHash(validatorAddress)}
                   </Badge>
@@ -65,17 +67,17 @@ export default function CreateBribeCard({
               <div className="flex items-center gap-2">
                 <Icons.arrowRight className="h-6 w-6" />
               </div>
-              {receivingValidator ? (
+              {dstValidator ? (
                 <div className="my-6 flex items-center gap-2">
                   <div className="h-12 w-12 rounded-full bg-gray-300" />
                   <div>
                     <h3 className="text-lg font-semibold">
-                      {receivingValidator.description.moniker}
+                      {dstValidator.description.moniker}
                     </h3>
                     <Badge variant="secondary">
                       {truncateHash(
                         BeravaloperToEth(
-                          receivingValidator.operatorAddress,
+                          dstValidator.operatorAddress,
                         ) as `0x{string}`,
                       )}
                     </Badge>
@@ -93,17 +95,24 @@ export default function CreateBribeCard({
             </div>
             <TokenInput
               selected={tokens[0] || (dummyToken as Token)}
-              amount={redeemAmount}
-              setAmount={(amount) => setRedeemAmount(amount)}
+              amount={redelegateAmount}
+              setAmount={(amount) => setRedelegateAmount(amount)}
               selectable={false}
               selectedTokens={tokens}
+              balance={accountDelegation}
               // eslint-disable-next-line @typescript-eslint/no-empty-function
               onTokenSelection={() => {}}
             />
           </div>
           <div className="mt-6">
-            {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-            <Button className="w-full" onClick={() => {}}>
+            <Button
+              className="w-full"
+              disabled={!dstValidator || !redelegateAmount}
+              onClick={() => {
+                console.log("redelegate");
+                redelegate();
+              }}
+            >
               Confirm
             </Button>
           </div>
