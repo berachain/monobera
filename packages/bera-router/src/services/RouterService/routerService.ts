@@ -1,5 +1,12 @@
+import { DEX_PRECOMPILE_ABI, DEX_PRECOMPILE_ADDRESS } from "@bera/berajs";
 import cloneDeep from "lodash";
-import { parseUnits, type Address } from "viem";
+import {
+  getAddress,
+  parseUnits,
+  type Address,
+  type Chain,
+  type SimulateContractReturnType,
+} from "viem";
 
 import { type RouterConfig } from "~/config";
 import { PoolService } from "../PoolService/poolService";
@@ -13,7 +20,7 @@ import {
   type SwapOptions,
   type SwapV2,
 } from "./types";
-import { getWrappedInfo, setWrappedInfo } from "./wrappers";
+import { getWrappedInfo } from "./wrappers";
 
 export const EMPTY_SWAPINFO: SwapInfo = {
   tokenAddresses: [],
@@ -26,6 +33,14 @@ export const EMPTY_SWAPINFO: SwapInfo = {
   marketSpotPrice: 0n.toString(),
 };
 
+interface BatchSwapStep {
+  poolId: Address;
+  assetIn: Address;
+  amountIn: bigint;
+  assetOut: Address;
+  amountOut: bigint;
+  userData: string;
+}
 export class RouterService {
   private routeProposer: RouteProposer;
   private poolService: PoolService;
@@ -51,17 +66,13 @@ export class RouterService {
     return this.poolService.getPools();
   }
 
-  // new pool service
-  // new price service
-  // new event service
-
-  getSwaps(
+  public async getSwaps(
     tokenIn: Address,
     tokenOut: Address,
     swapType: SwapTypes,
     swapAmount: bigint,
     swapOptions?: Partial<any>,
-  ): SwapInfo {
+  ): Promise<SwapInfo> {
     if (!this.poolService.finishedFetching)
       return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
 
@@ -80,8 +91,7 @@ export class RouterService {
       swapAmount,
     );
 
-    let swapInfo: SwapInfo;
-    swapInfo = this.findPath(
+    const swapInfo: SwapInfo = await this.findPath(
       wrappedInfo.tokenIn.addressForSwaps as Address,
       wrappedInfo.tokenOut.addressForSwaps as Address,
       swapType,
@@ -90,22 +100,22 @@ export class RouterService {
       options,
     );
 
-    if (swapInfo.returnAmount === 0n) return swapInfo;
+    // if (swapInfo.returnAmount === 0n) return swapInfo;
 
-    swapInfo = setWrappedInfo(swapInfo, wrappedInfo, this.config);
+    // swapInfo = setWrappedInfo(swapInfo, wrappedInfo, this.config);
 
     return swapInfo;
   }
 
   // Will process swap/pools data and return best swaps
-  private findPath(
+  private async findPath(
     tokenIn: Address,
     tokenOut: Address,
     swapType: SwapTypes,
     swapAmount: bigint,
     pools: any[],
     swapOptions: SwapOptions,
-  ): SwapInfo {
+  ): Promise<SwapInfo> {
     if (pools.length === 0)
       return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
 
@@ -120,26 +130,35 @@ export class RouterService {
     if (paths.length == 0)
       return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
 
-    // Path is guaranteed to contain both tokenIn and tokenOut
-    let tokenInDecimals = 0;
-    let tokenOutDecimals = 0;
-    paths[0]?.swaps.forEach(
-      (swap: {
-        tokenIn: any;
-        tokenInDecimals: any;
-        tokenOut: any;
-        tokenOutDecimals: any;
-      }) => {
-        // Inject token decimals to avoid having to query onchain
-        if (swap.tokenIn === tokenIn) {
-          tokenInDecimals = swap.tokenInDecimals;
-        }
-        if (swap.tokenOut === tokenOut) {
-          tokenOutDecimals = swap.tokenOutDecimals;
-        }
-      },
+    // // Path is guaranteed to contain both tokenIn and tokenOut
+    // let tokenInDecimals = 0;
+    // let tokenOutDecimals = 0;
+    // paths[0]?.swaps.forEach(
+    //   (swap: {
+    //     tokenIn: any;
+    //     tokenInDecimals: any;
+    //     tokenOut: any;
+    //     tokenOutDecimals: any;
+    //   }) => {
+    //     // Inject token decimals to avoid having to query onchain
+
+    //     // TODO: consider an equal address util
+    //     if (swap.tokenIn === tokenIn.toLowerCase()) {
+    //       tokenInDecimals = swap.tokenInDecimals;
+    //     }
+    //     if (swap.tokenOut === tokenOut.toLowerCase()) {
+    //       tokenOutDecimals = swap.tokenOutDecimals;
+    //     }
+    //   },
+    // );
+
+    const r = await this.getOnChainBestPaths(
+      paths,
+      swapAmount,
+      swapType,
     );
 
+    console.log("h5", r);
     // TODO: this is used for further optimizing stuff
 
     // const costOutputToken = await this.getCostOfSwapInToken(
@@ -152,33 +171,97 @@ export class RouterService {
     // );
 
     // Returns list of swaps
-    const [swaps, total, marketSp, totalConsideringFees] = this.getBestPaths(
-      paths,
-      swapAmount,
-      swapType,
-      tokenInDecimals,
-      tokenOutDecimals,
-      0n,
-      swapOptions.maxPools,
-    );
+    // const [swaps, total, marketSp, totalConsideringFees] = this.getBestPaths(
+    //   paths,
+    //   swapAmount,
+    //   swapType,
+    //   tokenInDecimals,
+    //   tokenOutDecimals,
+    //   0n,
+    //   swapOptions.maxPools,
+    // );
 
-    const swapInfo = formatSwaps(
-      swaps,
-      swapType,
-      swapAmount,
-      tokenIn,
-      tokenOut,
-      total,
-      totalConsideringFees,
-      marketSp,
-    );
+    // console.log('SWAPS', swaps)
+    // console.log('TOTAL', total)
+    // console.log('MARKET SP', marketSp)
+    // console.log('TOTAL CONSIDERING FEES', totalConsideringFees)
+    // const swapInfo = formatSwaps(
+    //   swaps,
+    //   swapType,
+    //   swapAmount,
+    //   tokenIn,
+    //   tokenOut,
+    //   total,
+    //   totalConsideringFees,
+    //   marketSp,
+    // );
 
-    return swapInfo;
+    return {} as SwapInfo;
   }
 
   /**
    * Find optimal routes for trade from given candidate paths
    */
+
+  private async getOnChainBestPaths(
+    paths: NewPath[],
+    swapAmount: bigint,
+    swapType: SwapTypes,
+  ): Promise<[Swap[][], bigint, string, bigint]> {
+
+    const client = this.config.publicClient;
+
+    const block = await client.getBlockNumber();
+    const asyncOperations: Promise<
+      SimulateContractReturnType<
+        any[],
+        "batchSwap",
+        Chain | undefined,
+        undefined
+      >
+    >[] = paths.map((path: NewPath) => {
+      const batchSwapSteps: BatchSwapStep[] = path.swaps.map((swap: Swap, index: number) => {
+        const amountIn = swapType === 0 ? swapAmount : 0n;
+        const amountOut = swapType === 1 ? swapAmount : 0n;
+        const batchSwapStep = {
+          poolId: getAddress(swap.pool),
+          assetIn: getAddress(swap.tokenIn),
+          amountIn: index === 0 ? amountIn : 0n,
+          assetOut: getAddress(swap.tokenOut),
+          amountOut: index === 0 ? amountOut: 0n,
+          userData: "",
+        };
+        return batchSwapStep;
+      });
+
+      console.log("batchSwapSteps", batchSwapSteps);
+      return client.simulateContract({
+        address: DEX_PRECOMPILE_ADDRESS as Address,
+        abi: DEX_PRECOMPILE_ABI as any[],
+        functionName: "batchSwap",
+        args: [swapType, batchSwapSteps, block + 100000n],
+        account: "0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
+      });
+    });
+
+    const promises = asyncOperations.map(
+      (
+        operation: Promise<
+          SimulateContractReturnType<
+            any[],
+            "batchSwap",
+            Chain | undefined,
+            undefined
+          >
+        >,
+      ) => operation,
+    );
+    console.log(promises);
+    const results = await Promise.all(promises);
+    console.log("theese", results);
+
+    return {} as [Swap[][], bigint, string, bigint];
+  }
   private getBestPaths(
     paths: NewPath[],
     swapAmount: bigint,
@@ -196,6 +279,8 @@ export class RouterService {
         ? [tokenInDecimals, tokenOutDecimals]
         : [tokenOutDecimals, tokenInDecimals];
 
+    console.log("outputDecimals", outputDecimals);
+    console.log("inputDecimals", inputDecimals);
     const [swaps, total, marketSp, totalConsideringFees] = getBestPaths(
       paths,
       swapType,
@@ -205,6 +290,11 @@ export class RouterService {
       maxPools,
       costOutputToken,
     );
+
+    console.log("swaps", swaps);
+    console.log("total", total);
+    console.log("marketSp", marketSp);
+    console.log("totalConsideringFees", totalConsideringFees);
 
     return [swaps, total, marketSp.toString(), totalConsideringFees];
   }

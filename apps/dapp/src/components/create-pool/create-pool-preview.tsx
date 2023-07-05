@@ -52,9 +52,9 @@ export function CreatePoolPreview({
   const options = {
     weights: tokenWeights.map((tokenWeight) => ({
       asset: tokenWeight.token?.address,
-      weight: 1,
+      weight: tokenWeight.weight,
     })),
-    swapFee: 1n,
+    swapFee: parseUnits(`${fee}`, 18),
   };
 
   const payload = [

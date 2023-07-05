@@ -1,6 +1,8 @@
+import { parseUnits } from "viem";
+
 export const BZERO = BigInt(0);
 export const BONE = BigInt(1);
-export const ONE = BigInt("1000000000000000000"); // 18 decimal places
+export const ONE = parseUnits(`${1}`, 18); // 18 decimal places
 
 const _require = (b: boolean, message: string) => {
   if (!b) throw new Error(message);

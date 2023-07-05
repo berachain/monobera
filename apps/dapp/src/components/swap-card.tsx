@@ -28,7 +28,6 @@ export function SwapCard() {
     setSelectedTo,
   } = useSwap();
   const { isConnected } = useBeraJs();
-  console.log("payload", payload);
   return (
     <Card className="w-[500px]">
       <CardHeader>
@@ -63,14 +62,12 @@ export function SwapCard() {
           <TokenInput
             selected={selectedTo}
             selectedTokens={[selectedFrom, selectedTo]}
-            // onTokenSelection={setSelectedTo}
+            onTokenSelection={setSelectedTo}
             amount={toAmount}
             setAmount={(amount) => {
               setSwapKind(SwapKind.GIVEN_OUT);
               setToAmount(Number(amount));
             }}
-            hideBalance
-            selectable={false}
           />
 
           {(Number(allowance?.formattedAllowance) ?? 0) < fromAmount ? (
@@ -83,7 +80,7 @@ export function SwapCard() {
               toToken={selectedTo}
               fromToken={selectedFrom}
               fromAmount={fromAmount ?? 0}
-              toAmount={previewSwapAmount ?? 0}
+              toAmount={Number(previewSwapAmount) ?? 0}
               payload={payload}
             />
           ) : (

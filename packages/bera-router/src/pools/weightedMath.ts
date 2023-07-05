@@ -1,4 +1,4 @@
-import { formatUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 
 import { BZERO, MathSol } from "./basicOperations";
 import { type WeightedPoolPairData } from "./weighted";
@@ -19,6 +19,7 @@ export function _calcOutGivenIn(
   fee: bigint,
 ): bigint {
   // is it necessary to check ranges of variables? same for the other functions
+  console.log("CALC IN");
   amountIn = subtractFee(amountIn, fee);
   const exponent = MathSol.divDownFixed(weightIn, weightOut);
   const denominator = MathSol.add(balanceIn, amountIn);
@@ -46,7 +47,10 @@ export function _calcInGivenOut(
 }
 
 function subtractFee(amount: bigint, fee: bigint): bigint {
+  console.log("amount", amount);
+  console.log("fee", fee);
   const feeAmount = MathSol.mulUpFixed(amount, fee);
+  console.log("feeAmount", feeAmount);
   return amount - feeAmount;
 }
 
@@ -499,24 +503,22 @@ export function _spotPriceAfterSwapExactTokenInForTokenOut(
 
 // PairType = 'token->token'
 // SwapType = 'swapExactOut'
-export function _spotPriceAfterSwapTokenInForExactTokenOut(
-  amount: bigint,
-  poolPairData: WeightedPoolPairData,
-): bigint {
-  const Bi = BigInt(
-    formatUnits(poolPairData.balanceIn, poolPairData.decimalsIn),
-  );
-  const Bo = BigInt(
-    formatUnits(poolPairData.balanceOut, poolPairData.decimalsOut),
-  );
-  const wi = BigInt(formatUnits(poolPairData.weightIn, 18));
-  const wo = BigInt(formatUnits(poolPairData.weightOut, 18));
-  const Ao = amount;
-  const f = BigInt(formatUnits(poolPairData.swapFee, 18));
-  return -(
-    (Bi * (Bo / (-Ao + Bo)) ** ((wi + wo) / wi) * wo) /
-    (Bo * (-1n + f) * wi)
-  );
+export function _spotPriceAfterSwapTokenInForExactTokenOut(): bigint {
+  // const Bi = BigInt(
+  //   formatUnits(poolPairData.balanceIn, poolPairData.decimalsIn),
+  // );
+  // const Bo = BigInt(
+  //   formatUnits(poolPairData.balanceOut, poolPairData.decimalsOut),
+  // );
+  // const wi = formatUnits(poolPairData.weightIn, 18);
+  // const wo = formatUnits(poolPairData.weightOut, 18);
+  // const Ao = amount;
+  // const f = formatUnits(poolPairData.swapFee, 18);
+  // return -(
+  //   (Bi * (Bo / (-Ao + Bo)) ** ((wi + wo) / wi) * wo) /
+  //   (Bo * (-1n + f) * wi)
+  // );
+  return 0n;
 }
 
 // PairType = 'token->BPT'
@@ -638,17 +640,21 @@ export function _derivativeSpotPriceAfterSwapExactTokenInForTokenOut(
   amount: bigint,
   poolPairData: WeightedPoolPairData,
 ): bigint {
-  const Bi = BigInt(
+  const Bi = Number(
     formatUnits(poolPairData.balanceIn, poolPairData.decimalsIn),
   );
-  const Bo = BigInt(
+  const Bo = Number(
     formatUnits(poolPairData.balanceOut, poolPairData.decimalsOut),
   );
-  const wi = BigInt(formatUnits(poolPairData.weightIn, 18));
-  const wo = BigInt(formatUnits(poolPairData.weightOut, 18));
-  const Ai = amount;
-  const f = BigInt(formatUnits(poolPairData.swapFee, 18));
-  return (wi + wo) / (Bo * (Bi / (Ai + Bi - Ai * f)) ** (wi / wo) * wi);
+
+  const wi = Number(formatUnits(poolPairData.weightIn, 18));
+  const wo = Number(formatUnits(poolPairData.weightOut, 18));
+  const Ai = Number(formatUnits(amount, 18));
+  const f = Number(formatUnits(poolPairData.swapFee, 18));
+
+  const result = (wi + wo) / (Bo * (Bi / (Ai + Bi - Ai * f)) ** (wi / wo) * wi);
+  const bigintResult = parseUnits(`${result}`, 18);
+  return bigintResult;
 }
 
 // PairType = 'token->token'

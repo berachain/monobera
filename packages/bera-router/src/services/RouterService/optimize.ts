@@ -29,11 +29,17 @@ export const optimizeSwapAmounts = (
   // First get the optimal totalReturn to trade 'totalSwapAmount' with
   // one path only (b=1). Then increase the number of pools as long as
   // improvementCondition is true (see more information below)
+  console.log("hi");
   let bestTotalReturnConsideringFees =
     swapType === SwapTypes.SwapExactIn ? INFINITY * -1n : INFINITY;
+
+  console.log("hi2");
   let bestSwapAmounts: bigint[] = [];
   let bestPaths: NewPath[] = [];
   let swapAmounts = initialSwapAmounts.map((amount) => amount);
+  console.log("hi3");
+  console.log("swapAmounts", swapAmounts);
+
   for (let b = initialNumPaths; b <= paths.length; b++) {
     if (b != initialNumPaths) {
       // We already had a previous iteration and are adding another pool this new iteration
@@ -46,13 +52,14 @@ export const optimizeSwapAmounts = (
       // that this value is not higher then the bth limit of the paths available otherwise there
       // won't be any possible path to process this swapAmount:
       const humanTotalSwapAmount = totalSwapAmount;
-
+      console.log("humanTotalSwapAmount", humanTotalSwapAmount);
       const newSwapAmount = BigInt(
         Math.min(
           Number(humanTotalSwapAmount * (1n / BigInt(b))),
           Number(highestLimitAmounts[b - 1]),
         ),
       );
+      console.log("newSwapAmount", newSwapAmount);
       // We need then to multiply all current
       // swapAmounts by 1-newSwapAmount/totalSwapAmount.
 
@@ -75,12 +82,19 @@ export const optimizeSwapAmounts = (
       );
     swapAmounts = bestAmounts;
 
+    console.log("selectedPaths", selectedPaths);
+    console.log("bestAmounts", bestAmounts);
+
+    console.log(" b444444");
     const totalReturn = calcTotalReturn(
       selectedPaths,
       swapType,
       swapAmounts,
       inputDecimals,
     );
+    console.log(" b5555");
+
+    console.log("totalReturn", totalReturn);
 
     // Calculates the number of pools in all the paths to include the gas costs
     const totalNumberOfPools = selectedPaths.reduce(
@@ -255,7 +269,7 @@ export const formatSwaps = (
           pool: path.swaps[i]?.pool ?? "",
           tokenIn: path.swaps[i]?.tokenIn ?? "",
           tokenOut: path.swaps[i]?.tokenOut ?? "",
-          swapAmount: amounts[i]?.toString(),
+          swapAmount: amounts[i],
           tokenInDecimals: path.poolPairData[i]?.decimalsIn ?? 18,
           tokenOutDecimals: path.poolPairData[i]?.decimalsOut ?? 18,
           returnAmount: amounts[amounts.length - 1]?.toString(),
@@ -277,7 +291,7 @@ export const formatSwaps = (
           pool: path.swaps[n - 1 - i]?.pool ?? "",
           tokenIn: path.swaps[n - 1 - i]?.tokenIn ?? "",
           tokenOut: path.swaps[n - 1 - i]?.tokenOut ?? "",
-          swapAmount: amounts[1]?.toString(),
+          swapAmount: amounts[1],
           tokenInDecimals: path.poolPairData[n - 1 - i]?.decimalsIn ?? 18,
           tokenOutDecimals: path.poolPairData[n - 1 - i]?.decimalsOut ?? 18,
           returnAmount: amounts[0]?.toString(),
@@ -814,9 +828,15 @@ export function getOutputAmountSwap(
   swapType: SwapTypes,
   amount: bigint | undefined,
 ): bigint {
+  // if (pool === undefined || poolPairData === undefined || amount === undefined) return 0n;
+  console.log("ngmi");
   if (!pool || !poolPairData || !amount) return 0n;
+  console.log("wagmi");
+
   // TODO: check if necessary to check if amount > limitAmount
   if (swapType === SwapTypes.SwapExactIn) {
+    console.log("in here");
+    console.log("poolPairData", poolPairData);
     return pool._exactTokenInForTokenOut(poolPairData, amount);
   } else {
     if (poolPairData.balanceOut === 0n) {
@@ -839,10 +859,14 @@ export function getOutputAmountSwapForPath(
   amount: bigint,
   inputDecimals: number,
 ): bigint {
-  if (!path || !swapType) return 0n;
+  console.log("QWEQWWE321312QWE");
+  console.log(path, swapType, amount, inputDecimals);
+  if (path === undefined || swapType === undefined) return 0n;
   // First of all check if the amount is above limit, if so, return 0 for
   // 'swapExactIn' or Inf for swapExactOut
-  if (amount > parseUnits(`${Number(path.limitAmount)}`, inputDecimals)) {
+  console.log("QWEQWWEQWE");
+
+  if (amount > path.limitAmount) {
     // @ts-ignore
     if (swapType === SwapTypes.SwapExactIn) {
       return 0n;
@@ -850,12 +874,16 @@ export function getOutputAmountSwapForPath(
       return INFINITY;
     }
   }
-
+  console.log("QWEQWWEQWE");
   const amounts = getAmounts(path, swapType, amount);
+  console.log("amounts", amounts);
   // @ts-ignore
   if (swapType === SwapTypes.SwapExactIn) {
+    console.log("IM IN PATH 1");
     return amounts[amounts.length - 1] ?? 0n;
   } else {
+    console.log("IM IN PATH 2");
+
     return amounts[0] ?? 0n;
   }
 }
@@ -969,6 +997,8 @@ export function getDerivativeSpotPriceAfterSwap(
       return INFINITY;
   }
   if (swapType === SwapTypes.SwapExactIn) {
+    console.log("her123e");
+
     return pool._derivativeSpotPriceAfterSwapExactTokenInForTokenOut(
       poolPairData,
       amount,

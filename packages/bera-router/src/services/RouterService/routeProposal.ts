@@ -1,18 +1,16 @@
 import { cloneDeep } from "lodash";
-import { parseUnits } from "viem";
 
 import { type RouterConfig } from "~/config";
 import { WeightedPool } from "~/pools/weighted";
+import { type Pool } from "../PoolService/types";
 import {
   INFINITY,
-  PoolFilter,
   PoolTypes,
   SwapTypes,
   type NewPath,
   type PoolBase,
   type PoolDictionary,
   type PoolPairBase,
-  type SubgraphPoolBase,
   type Swap,
   type SwapOptions,
   type hopDictionary,
@@ -22,7 +20,6 @@ export class RouteProposer {
   cache: Record<string, { paths: NewPath[] }> = {};
 
   constructor(private readonly config: RouterConfig) {}
-
   /**
    * Given a list of pools and a desired input/output, returns a set of possible paths to route through
    */
@@ -30,22 +27,24 @@ export class RouteProposer {
     tokenIn: string,
     tokenOut: string,
     swapType: SwapTypes,
-    pools: SubgraphPoolBase[],
+    pools: Pool[],
     swapOptions: SwapOptions,
   ): NewPath[] {
     tokenIn = tokenIn.toLowerCase();
     tokenOut = tokenOut.toLowerCase();
+
     if (pools.length === 0) return [];
 
     // If token pair has been processed before that info can be reused to speed up execution
     // If timestamp has not been manually set in `getSwaps` then default (set on instantiation) is used which means cache will be used
-    const cache =
-      this.cache[`${tokenIn}${tokenOut}${swapType}${swapOptions.timestamp}`];
-    // forceRefresh can be set to force fresh processing of paths/prices
-    if (!!cache) {
-      // Using pre-processed data from cache
-      return cache.paths;
-    }
+    // const cache =
+    //   this.cache[`${tokenIn}${tokenOut}${swapType}${swapOptions.timestamp}`];
+
+    // // forceRefresh can be set to force fresh processing of paths/prices
+    // if (!!cache) {
+    //   // Using pre-processed data from cache
+    //   return cache.paths;
+    // }
 
     const poolsAllDict = parseToPoolsDict(pools);
 
@@ -65,28 +64,14 @@ export class RouteProposer {
       poolsAllDict,
     );
 
-    // const boostedPaths = getBoostedPaths(
-    //     tokenIn,
-    //     tokenOut,
-    //     poolsAllDict,
-    //     this.config
-    // );
-
-    // const pathsUsingStaBal = getPathsUsingStaBalPool(
-    //     tokenIn,
-    //     tokenOut,
-    //     poolsAllDict,
-    //     poolsAllDict,
-    //     this.config
-    // );
-
     const combinedPathData = pathData;
-    const [paths] = calculatePathLimits(combinedPathData, swapType);
-
+    // console.log("combinedPathData", combinedPathData)
+    // const [paths] = calculatePathLimits(combinedPathData, swapType);
+    // console.log("paths", paths)
     this.cache[`${tokenIn}${tokenOut}${swapType}${swapOptions.timestamp}`] = {
-      paths: paths,
+      paths: combinedPathData,
     };
-    return paths;
+    return combinedPathData;
   }
 
   /**
@@ -109,6 +94,7 @@ export class RouteProposer {
     tokenOut = tokenOut.toLowerCase();
     if (Object.keys(poolsAllDict).length === 0) return [];
 
+    console.log(poolsAllDict);
     const [directPools, hopsIn, hopsOut] = filterPoolsOfInterest(
       poolsAllDict,
       tokenIn,
@@ -125,50 +111,32 @@ export class RouteProposer {
       poolsAllDict,
     );
 
-    // const boostedPaths = getBoostedPaths(
-    //     tokenIn,
-    //     tokenOut,
-    //     poolsAllDict,
-    //     this.config
-    // );
-
     const combinedPathData = pathData;
     const [paths] = calculatePathLimits(combinedPathData, swapType);
     return paths;
   }
 }
 
-export function parseToPoolsDict(pools: SubgraphPoolBase[]): PoolDictionary {
+export function parseToPoolsDict(pools: Pool[]): PoolDictionary {
   return Object.fromEntries(
     cloneDeep(pools)
       .filter(
-        (pool) => pool.tokensList.length > 0 && pool.tokens[0]?.balance !== 0n,
+        (pool: Pool) =>
+          pool.tokens.length > 0 && pool.tokens[0]?.balance !== 0n,
       )
-      .map((pool) => [pool.id, parseNewPool(pool)])
+      .map((pool) => [pool.pool, parseNewPool(pool)])
       .filter(([, pool]) => pool !== undefined),
   );
 }
 
-export function parseNewPool(pool: SubgraphPoolBase): WeightedPool | undefined {
+export function parseNewPool(pool: Pool): WeightedPool | undefined {
   // We're not interested in any pools which don't allow swapping
-  if (!pool.swapEnabled) return undefined;
+  // if (!pool.swapEnabled) return undefined;
 
   let newPool: WeightedPool;
 
   try {
-    const isLinear = pool.poolType.toString().includes("Linear");
-    if (!isLinear && !(pool.poolType in PoolFilter)) {
-      console.error(`Unsupported pool type: ${pool.poolType} ${pool.id}`);
-      return undefined;
-    }
-    if (pool.poolType === "Weighted" || pool.poolType === "Investment") {
-      newPool = WeightedPool.fromPool(pool, false);
-    } else {
-      console.error(
-        `Unknown pool type or type field missing: ${pool.poolType} ${pool.id}`,
-      );
-      return undefined;
-    }
+    newPool = WeightedPool.fromPool(pool);
   } catch (err: any) {
     console.error(`parseNewPool: ${err.message}`);
     return undefined;
@@ -198,6 +166,7 @@ export function getLimitAmountSwapForPath(
   swapType: SwapTypes,
 ): bigint {
   const poolPairData = path.poolPairData;
+  console.log("poolPairData", poolPairData);
   let limit: bigint;
   if (swapType === SwapTypes.SwapExactIn) {
     limit =
@@ -212,11 +181,13 @@ export function getLimitAmountSwapForPath(
           poolPairData[i],
           SwapTypes.SwapExactIn,
         ) ?? 0n;
+
       const poolLimitExactOut =
         path.pools[i]?.getLimitAmountSwap(
           poolPairData[i],
           SwapTypes.SwapExactOut,
         ) ?? 0n;
+
       if (poolLimitExactOut <= limit) {
         limit = poolLimitExactIn;
       } else {
@@ -230,12 +201,12 @@ export function getLimitAmountSwapForPath(
       }
     }
     if (limit === 0n) return 0n;
-    const result = parseUnits(
-      `${Number(limit)}`,
-      poolPairData[0]?.decimalsIn ?? 18,
-    );
+    // const result = parseUnits(
+    //   `${Number(limit)}`,
+    //   poolPairData[0]?.decimalsIn ?? 18,
+    // );
 
-    return result;
+    return limit;
   } else {
     limit =
       path.pools[0]?.getLimitAmountSwap(
@@ -267,10 +238,11 @@ export function getLimitAmountSwapForPath(
       }
     }
     if (limit === 0n) return 0n;
-    return parseUnits(
-      `${Number(limit)}`,
-      poolPairData[poolPairData.length - 1]?.decimalsOut ?? 18,
-    );
+    // return parseUnits(
+    //   `${Number(limit)}`,
+    //   poolPairData[poolPairData.length - 1]?.decimalsOut ?? 18,
+    // );
+    return limit;
   }
 }
 
@@ -280,26 +252,34 @@ export function getOutputAmountSwap(
   swapType: SwapTypes,
   amount: bigint,
 ): bigint {
-  if (!pool || !poolPairData) return 0n;
+  if (pool === undefined || poolPairData === undefined) return 0n;
   // TODO: check if necessary to check if amount > limitAmount
+  console.log("hh1");
   if (swapType === SwapTypes.SwapExactIn) {
     if (
       poolPairData.poolType !== PoolTypes.Linear &&
       poolPairData.balanceIn === 0n
     ) {
+      console.log("hh2");
+
       return 0n;
     } else {
+      console.log("hh3");
+
       return pool._exactTokenInForTokenOut(poolPairData, amount);
     }
   } else {
     if (poolPairData.balanceOut === 0n) {
+      console.log("hh4");
+
       return 0n;
-    } else if (
-      parseUnits(`${Number(amount)}`, poolPairData.decimalsOut) >=
-      poolPairData.balanceOut
-    ) {
+    } else if (amount >= poolPairData.balanceOut) {
+      console.log("hh5");
+
       return INFINITY;
     } else {
+      console.log("hh6");
+
       return pool._tokenInForExactTokenOut(poolPairData, amount);
     }
   }
@@ -320,11 +300,20 @@ export function filterPoolsOfInterest(
   const hopsIn: hopDictionary = {};
   const hopsOut: hopDictionary = {};
 
+  console.log("allPools", allPools);
+  console.log("tokenIn", tokenIn);
+  console.log("tokenOut", tokenOut);
+  console.log("maxPools", maxPools);
   Object.keys(allPools).forEach((id) => {
     const pool = allPools[id];
     const tokenListSet = new Set(pool?.tokensList);
     const containsTokenIn = tokenListSet.has(tokenIn.toLowerCase());
     const containsTokenOut = tokenListSet.has(tokenOut.toLowerCase());
+
+    console.log("pool", pool);
+    console.log("tokenListSet", tokenListSet);
+    console.log("containsTokenIn", containsTokenIn);
+    console.log("containsTokenOut", containsTokenOut);
 
     // This is a direct pool as has both tokenIn and tokenOut
     if (containsTokenIn && containsTokenOut && pool) {
@@ -378,6 +367,11 @@ export function producePaths(
         const normalizedLiquidity =
           poolIn?.getNormalizedLiquidity(poolPairData);
         // Cannot be strictly greater otherwise highestNormalizedLiquidityPoolId = 0 if hopTokens[i] balance is 0 in this pool.
+        console.log("normalizedLiquidity", normalizedLiquidity);
+        console.log(
+          "highestNormalizedLiquidityFirst",
+          highestNormalizedLiquidityFirst,
+        );
         if (
           normalizedLiquidity &&
           normalizedLiquidity >= highestNormalizedLiquidityFirst

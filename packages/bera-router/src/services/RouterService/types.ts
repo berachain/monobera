@@ -21,7 +21,7 @@ export interface Swap {
   pool: string;
   tokenIn: string;
   tokenOut: string;
-  swapAmount?: string;
+  swapAmount?: bigint;
   limitReturnAmount?: string;
   maxPrice?: string;
   tokenInDecimals: number;
@@ -155,7 +155,7 @@ export interface PoolBase<D extends PoolPairBase = PoolPairBase> {
   ) => bigint;
 }
 
-export const INFINITY = Infinity as unknown as bigint;
+export const INFINITY = BigInt(Number.MAX_SAFE_INTEGER);
 const priceErrorTolerance = "0.00001";
 export const PRICE_ERROR_TOLERANCE = parseUnits(
   `${Number(priceErrorTolerance)}`,

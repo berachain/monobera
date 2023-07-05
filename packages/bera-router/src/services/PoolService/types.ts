@@ -1,14 +1,7 @@
 import { type Address } from "viem";
 
 export type TokenData = {
-  [address: string]: {
-    address: Address;
-    decimals: number;
-    name: string;
-    symbol: string;
-    normalizedWeight: number;
-    liquidity: bigint;
-  };
+  [address: string]: Token;
 };
 
 export interface PoolRecord {
@@ -25,6 +18,7 @@ export interface PoolRecord {
   tokens: TokenData;
   swapFee: string;
   totalSupply: bigint;
+  totalWeight: number;
 }
 
 export interface Token {
@@ -32,8 +26,9 @@ export interface Token {
   decimals: number;
   name: string;
   symbol: string;
+  weight: string;
   normalizedWeight: number;
-  liquidity: bigint;
+  balance: bigint;
 }
 export interface Pool {
   metadata: {
@@ -49,6 +44,7 @@ export interface Pool {
   tokens: Token[];
   swapFee: string;
   totalSupply: bigint;
+  totalWeight: number;
 }
 
 export type PoolRecords = Record<string, PoolRecord>;

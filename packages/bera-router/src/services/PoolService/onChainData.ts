@@ -59,22 +59,7 @@ export class MultiCallPools {
       // this needs share address
       this.call(
         `${pool.pool}.totalSupply`,
-        [
-          {
-            constant: true,
-            inputs: [],
-            name: "totalSupply",
-            outputs: [
-              {
-                name: "",
-                type: "uint256",
-              },
-            ],
-            payable: false,
-            stateMutability: "view",
-            type: "function",
-          },
-        ],
+        ERC20ABI,
         pool.poolShareDenom,
         "totalSupply",
         [],
@@ -151,18 +136,24 @@ export class MultiCallPools {
           const totalWeight = calculateTotalWeight(
             poolData.poolOptions.weights,
           );
+          set(this.rawPools, `${key}.totalWeight`, totalWeight);
           poolData.liquidity[0].forEach((tokenAddress, i) => {
             const weight = poolData.poolOptions.weights.find(
               (weight) => weight.denom === tokenAddress,
             );
             const normalizedWeight = weight
-              ? Number(weight.weight) / totalWeight
+              ? (Number(weight.weight) * 100) / totalWeight
               : 0;
             const swapFee = poolData.poolOptions.swapFee;
             set(
               this.rawPools,
               `${key}.tokens.${tokenAddress}.normalizedWeight`,
-              normalizedWeight,
+              normalizedWeight * 100,
+            );
+            set(
+              this.rawPools,
+              `${key}.tokens.${tokenAddress}.weight`,
+              weight?.weight,
             );
             set(
               this.rawPools,
@@ -171,7 +162,7 @@ export class MultiCallPools {
             );
             set(
               this.rawPools,
-              `${key}.tokens.${tokenAddress}.liquidity`,
+              `${key}.tokens.${tokenAddress}.balance`,
               poolData.liquidity?.[1]?.[i] ?? 0n,
             );
             set(this.rawPools, `${key}.swapFee`, swapFee);

@@ -47,6 +47,9 @@ export const getBestPaths = (
   initialSwapAmounts[initialSwapAmounts.length - 1] =
     (initialSwapAmounts[initialSwapAmounts.length - 1] ?? 0n) - difference;
 
+  console.log("difference", difference);
+  console.log("initialSwapAmounts", initialSwapAmounts);
+  console.log("initialNumPaths", initialNumPaths);
   const [bestPaths, bestSwapAmounts, bestTotalReturnConsideringFees] =
     optimizeSwapAmounts(
       paths,
@@ -61,6 +64,10 @@ export const getBestPaths = (
       costReturnToken,
     );
 
+  console.log("bestPaths", bestPaths);
+  console.log("bestSwapAmounts", bestSwapAmounts);
+  console.log("bestTotalReturnConsideringFees", bestTotalReturnConsideringFees);
+  console.log("hi7");
   const [swaps, bestTotalReturn, marketSp] = formatSwaps(
     bestPaths,
     swapType,

@@ -1,16 +1,15 @@
-import { getAddress, parseUnits } from "viem";
+import { formatUnits, getAddress, parseUnits } from "viem";
 
+import { type Pool, type Token } from "~/services/PoolService/types";
 import {
   PoolTypes,
   SwapTypes,
   type PoolBase,
   type PoolPairBase,
-  type SubgraphPoolBase,
   type SubgraphToken,
 } from "~/services/RouterService/types";
 import {
   MathSol,
-  ONE,
   _computeScalingFactor,
   _downscaleDown,
   _upscale,
@@ -45,7 +44,7 @@ type NoNullableField<T> = {
 };
 
 export type WeightedPoolToken = Pick<
-  NoNullableField<SubgraphToken>,
+  NoNullableField<Token>,
   "address" | "balance" | "decimals" | "weight"
 >;
 
@@ -62,24 +61,23 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
   swapFee: bigint;
   totalShares: bigint;
   tokens: WeightedPoolToken[];
-  totalWeight: bigint;
+  totalWeight: number;
   tokensList: string[];
-  MAX_IN_RATIO = parseUnits("0.3", 18);
-  MAX_OUT_RATIO = parseUnits("0.3", 18);
+  MAX_IN_RATIO = 0.3;
+  MAX_OUT_RATIO = 0.3;
   isLBP = false;
 
-  static fromPool(pool: SubgraphPoolBase, isLBP?: boolean): WeightedPool {
+  static fromPool(pool: Pool): WeightedPool {
     if (!pool.totalWeight) throw new Error("WeightedPool missing totalWeight");
     const weightedPool = new WeightedPool(
-      pool.id,
-      pool.address,
+      pool.pool,
+      pool.pool,
       Number(pool.swapFee),
       Number(pool.totalWeight),
-      Number(pool.totalShares),
+      Number(pool.totalSupply),
       pool.tokens as WeightedPoolToken[],
-      pool.tokensList,
+      pool.tokens.map((t) => t.address.toLowerCase()),
     );
-    if (isLBP) weightedPool.isLBP = true;
     return weightedPool;
   }
 
@@ -98,29 +96,40 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
     this.totalShares = parseUnits(`${totalShares}`, 18);
     this.tokens = tokens;
     this.tokensList = tokensList;
-    this.totalWeight = parseUnits(`${totalWeight}`, 18);
+    this.totalWeight = totalWeight;
   }
 
   parsePoolPairData(tokenIn: string, tokenOut: string): WeightedPoolPairData {
     const tokenIndexIn = this.tokens.findIndex(
-      (t) => getAddress(t.address) === getAddress(tokenIn),
+      (t) =>
+        getAddress(t.address).toLocaleLowerCase() ===
+        getAddress(tokenIn).toLowerCase(),
     );
     if (tokenIndexIn < 0) throw "Pool does not contain tokenIn";
     const tI = this.tokens[tokenIndexIn];
     const balanceIn = tI?.balance;
     const decimalsIn = tI?.decimals;
-    const weightIn =
-      (parseUnits(`${Number(tI?.weight)}`, 18) * ONE) / this.totalWeight;
+    const bigWeightIn = parseUnits(
+      `${Number(tI?.weight) / this.totalWeight}`,
+      18,
+    );
+    const weightIn = bigWeightIn;
 
+    console.log("weightIn", weightIn);
     const tokenIndexOut = this.tokens.findIndex(
-      (t) => getAddress(t.address) === getAddress(tokenOut),
+      (t) =>
+        getAddress(t.address).toLowerCase() ===
+        getAddress(tokenOut).toLowerCase(),
     );
     if (tokenIndexOut < 0) throw "Pool does not contain tokenOut";
     const tO = this.tokens[tokenIndexOut];
     const balanceOut = tO?.balance;
     const decimalsOut = tO?.decimals;
-    const weightOut =
-      (parseUnits(`${Number(tO?.weight)}`, 18) * ONE) / this.totalWeight;
+
+    const weightOut = parseUnits(
+      `${Number(tO?.weight) / this.totalWeight}`,
+      18,
+    );
 
     let pairType: PairTypes;
     if (tokenIn == this.address) {
@@ -130,7 +139,6 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
     } else {
       pairType = PairTypes.TokenToToken;
     }
-
     const poolPairData: WeightedPoolPairData = {
       id: this.id,
       address: this.address,
@@ -139,20 +147,19 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
       tokenOut: tokenOut,
       decimalsIn: Number(decimalsIn),
       decimalsOut: Number(decimalsOut),
-      balanceIn: parseUnits(`${Number(balanceIn)}`, decimalsIn ?? 18),
-      balanceOut: parseUnits(`${Number(balanceOut)}`, decimalsOut ?? 18),
+      balanceIn: balanceIn ?? 0n,
+      balanceOut: balanceOut ?? 0n,
       pairType: pairType,
       weightIn: weightIn,
       weightOut: weightOut,
       swapFee: this.swapFee,
     };
-
     return poolPairData;
   }
 
   getNormalizedWeights(): bigint[] {
-    return this.tokens.map(
-      (t) => parseUnits(`${Number(t.weight)}`, 18) / this.totalWeight,
+    return this.tokens.map((t) =>
+      parseUnits(`${Number(t.weight) / this.totalWeight}`, 18),
     );
   }
 
@@ -174,9 +181,26 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
   ): bigint {
     if (!poolPairData) return 0n;
     if (swapType === SwapTypes.SwapExactIn) {
-      return poolPairData.balanceIn * this.MAX_IN_RATIO;
+      console.log("ree?IN");
+
+      return parseUnits(
+        `${
+          Number(formatUnits(poolPairData.balanceIn, poolPairData.decimalsIn)) *
+          this.MAX_IN_RATIO
+        }`,
+        18,
+      );
     } else {
-      return poolPairData.balanceOut * this.MAX_OUT_RATIO;
+      console.log("ree?OUT");
+
+      return parseUnits(
+        `${
+          Number(
+            formatUnits(poolPairData.balanceOut, poolPairData.decimalsOut),
+          ) * this.MAX_OUT_RATIO
+        }`,
+        18,
+      );
     }
   }
 
@@ -187,7 +211,9 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
       this.updateTotalShares(newBalance);
     }
     // token is underlying in the pool
-    const T = this.tokens.find((t) => t.address === token);
+    const T = this.tokens.find(
+      (t) => t.address.toLowerCase() === token.toLowerCase(),
+    );
     if (!T) throw Error("Pool does not contain this token");
     T.balance = newBalance;
   }
@@ -255,7 +281,7 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
     amount: bigint,
   ): bigint {
     if (!amount) return amount;
-    const amountOut = normalizeBigInt(amount);
+    const amountOut = amount;
     const decimalsIn = poolPairData.decimalsIn;
     const decimalsOut = poolPairData.decimalsOut;
     const balanceIn = parseUnits(
@@ -381,7 +407,7 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
     } else if (poolPairData.pairType === PairTypes.BptToToken) {
       return _spotPriceAfterSwapBPTInForExactTokenOut(amount, poolPairData);
     } else {
-      return _spotPriceAfterSwapTokenInForExactTokenOut(amount, poolPairData);
+      return _spotPriceAfterSwapTokenInForExactTokenOut();
     }
   }
 
@@ -421,9 +447,10 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
 export function universalNormalizedLiquidity(
   derivativeSpotPriceAtZero: bigint,
 ): bigint {
-  const ans = 1n / derivativeSpotPriceAtZero;
-  if (ans === undefined || ans < 0n) return 0n;
-  return ans;
+  console.log("derivativeSpotPriceAtZero", derivativeSpotPriceAtZero);
+  const ans = 1 / Number(formatUnits(derivativeSpotPriceAtZero, 18));
+  if (ans === undefined || ans < 0) return 0n;
+  return parseUnits(`${ans}`, 18);
 }
 
 export function normalizeBigInt(num: bigint) {
