@@ -9,9 +9,8 @@ import {
   usePollAssetWalletBalance,
   type Validator,
 } from "@bera/berajs";
+import { useTxn } from "@bera/shared-ui";
 import { parseUnits } from "viem";
-
-import { useTxn } from "./useTxn";
 
 export const useRedelegate = (fromAddress: `0x{string}`) => {
   console.log("useRedelegate");
