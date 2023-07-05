@@ -188,7 +188,7 @@ const TokenDialogRow = ({
     <Button
       variant="ghost"
       className={cn(
-        "flex h-14 w-full items-center justify-start gap-2 px-2 py-4 text-left",
+        "mb-1 flex h-auto w-full items-center justify-start gap-2 rounded-lg border border-border p-4 text-left drop-shadow-xl",
         isTokenSelected && "opacity-50",
       )}
       onClick={() => {
