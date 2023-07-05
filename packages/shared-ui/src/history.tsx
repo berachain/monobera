@@ -5,6 +5,7 @@ import {
   useRecentTransactions,
   type NewTransaction,
 } from "@bera/berajs";
+import { Icons } from "@bera/ui/icons";
 
 function formatTimestamp(timestamp: number): JSX.Element {
   const date = new Date(timestamp);
@@ -32,7 +33,7 @@ export function History() {
   const { networkConfig } = useBeraConfig();
   return (
     <div className="grid gap-4">
-      <h3 className="text-xl font-medium">History</h3>
+      <h3 className="text-md font-medium">Recent activity</h3>
       {transactions.length ? (
         transactions.map((txn: NewTransaction) => (
           <a
@@ -53,7 +54,12 @@ export function History() {
           </a>
         ))
       ) : (
-        <p>No recent transactions</p>
+        <div className="flex h-24 justify-center align-middle">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <Icons.empty className="h-4 w-4" />
+            <p className="">No recent activity</p>
+          </div>
+        </div>
       )}
     </div>
   );

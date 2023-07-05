@@ -37,14 +37,14 @@ export default function ConnectedWalletPopover() {
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold leading-none">Account</h3>
           <Button
-            variant="destructive"
+            variant="ghost"
             size="sm"
             onClick={() => {
               logout(connectorName as string);
               setOpen(false);
             }}
           >
-            Disconnect
+            <Icons.disconnect className="h-5 w-5 text-destructive" />
           </Button>
         </div>
         <div className="flex items-center py-4">

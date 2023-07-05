@@ -19,10 +19,12 @@ import {
   FileText,
   HelpCircle,
   Image,
+  Inbox,
   Info,
   Laptop,
   Loader2,
   Lock,
+  LogOut,
   Moon,
   MoreVertical,
   Pizza,
@@ -81,6 +83,8 @@ export const Icons = {
   lock: Lock,
   unlock: Unlock,
   trash2: Trash2,
+  empty: Inbox,
+  disconnect: LogOut,
   external: ArrowUpRight,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
