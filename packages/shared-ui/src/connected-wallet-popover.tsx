@@ -8,8 +8,8 @@ import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { useReadLocalStorage } from "usehooks-ts";
 
-import { formatConnectorName } from "~/utils/formatConnectorName";
 import { History } from "./history";
+import { formatConnectorName } from "./utils";
 
 export default function ConnectedWalletPopover() {
   const [open, setOpen] = React.useState(false);

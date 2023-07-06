@@ -185,57 +185,59 @@ const TokenDialogRow = ({
     useSelectedAssetWalletBalance(token?.address ?? "")?.formattedBalance || 0,
   );
   return (
-    <Button
-      variant="ghost"
-      className={cn(
-        "mb-1 flex h-auto w-full items-center justify-start gap-2 rounded-lg border border-border p-4 text-left drop-shadow-xl",
-        isTokenSelected && "opacity-50",
-      )}
-      onClick={() => {
-        onTokenSelect(token);
-      }}
-    >
-      <div className="relative">
-        <TokenIcon token={token} />
+    <div className="mb-1">
+      <Button
+        variant="outline"
+        className={cn(
+          "flex h-auto w-full items-center justify-start gap-2 p-4 text-left shadow",
+          isTokenSelected && "opacity-50",
+        )}
+        onClick={() => {
+          onTokenSelect(token);
+        }}
+      >
+        <div className="relative">
+          <TokenIcon token={token} />
+          {focusedToken?.address === token.address && (
+            <div className="absolute bottom-0 right-0 mr-[-4px] mt-[10px] flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white">
+              <Icons.check className="h-3 w-3 " />
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col">
+          <span className="text-sm font-medium">{token?.symbol}</span>
+        </div>
+
         {focusedToken?.address === token.address && (
-          <div className="absolute bottom-0 right-0 mr-[-4px] mt-[10px] flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white">
-            <Icons.check className="h-3 w-3 " />
+          <div className="absolute ml-auto"></div>
+        )}
+        {!pendingAddition && isConnected && (
+          <div className="ml-auto">
+            <p>{tokenBalance}</p>
           </div>
         )}
-      </div>
-
-      <div className="flex flex-col">
-        <span className="text-sm font-medium">{token?.symbol}</span>
-      </div>
-
-      {focusedToken?.address === token.address && (
-        <div className="absolute ml-auto"></div>
-      )}
-      {!pendingAddition && isConnected && (
-        <div className="ml-auto">
-          <p>{tokenBalance}</p>
-        </div>
-      )}
-      <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
-        <DialogContent className="flex flex-col items-center justify-center gap-2 px-4 sm:max-w-[425px]">
-          <TokenIcon token={token} />
-          <Badge variant="destructive" className="w-fit gap-1">
-            <Icons.warning className="h-4 w-4" />
-            Warning
-          </Badge>
-          <Balancer className="text-center text-xs">
-            {`This token doesn't appear on the active token list(s). Anyone can
+        <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
+          <DialogContent className="flex flex-col items-center justify-center gap-2 px-4 sm:max-w-[425px]">
+            <TokenIcon token={token} />
+            <Badge variant="destructive" className="w-fit gap-1">
+              <Icons.warning className="h-4 w-4" />
+              Warning
+            </Badge>
+            <Balancer className="text-center text-xs">
+              {`This token doesn't appear on the active token list(s). Anyone can
             create a token, including creating fake versions of existing tokens
             that claim to represent projects`}
-          </Balancer>
-          <Button onClick={() => onAddToken(token)} size="sm">
-            I understand
-          </Button>
-          <Button size="sm" variant="ghost" onClick={onAddTokenCancel}>
-            cancel
-          </Button>
-        </DialogContent>
-      </Dialog>
-    </Button>
+            </Balancer>
+            <Button onClick={() => onAddToken(token)} size="sm">
+              I understand
+            </Button>
+            <Button size="sm" variant="ghost" onClick={onAddTokenCancel}>
+              cancel
+            </Button>
+          </DialogContent>
+        </Dialog>
+      </Button>
+    </div>
   );
 };
