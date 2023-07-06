@@ -8,7 +8,8 @@ import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { useReadLocalStorage } from "usehooks-ts";
 
-import { formatConnectorName } from "~/utils/formatConnectorName";
+import { History } from "./history";
+import { formatConnectorName } from "./utils";
 
 export default function ConnectedWalletPopover() {
   const [open, setOpen] = React.useState(false);
@@ -23,8 +24,12 @@ export default function ConnectedWalletPopover() {
         <Button
           className="w-48"
           onClick={() => setOpen(true)}
-          variant="secondary"
+          variant="outline"
         >
+          <Avatar className="mr-2 h-6 w-6">
+            <AvatarImage src="https://github.com/wallet.png" />
+            <AvatarFallback>BR</AvatarFallback>
+          </Avatar>
           {truncateHash(account ?? "0x", 6)}
         </Button>
       </PopoverTrigger>
@@ -32,14 +37,14 @@ export default function ConnectedWalletPopover() {
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold leading-none">Account</h3>
           <Button
-            variant="destructive"
+            variant="ghost"
             size="sm"
             onClick={() => {
               logout(connectorName as string);
               setOpen(false);
             }}
           >
-            Disconnect
+            <Icons.disconnect className="h-5 w-5 text-destructive" />
           </Button>
         </div>
         <div className="flex items-center py-4">
@@ -72,6 +77,7 @@ export default function ConnectedWalletPopover() {
             </p>
           </div>
         </div>
+        <History />
         {/* <SwapSettings /> */}
       </PopoverContent>
     </Popover>

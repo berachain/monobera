@@ -5,7 +5,6 @@ import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
-import { SiteFooter } from "~/components/footer";
 import { Header } from "~/components/header";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import Providers from "./Providers";
@@ -29,7 +28,6 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <main className="w-full py-40">{props.children}</main>
               <Toaster position="bottom-right" />
             </div>
-            <SiteFooter />
           </div>
           <TailwindIndicator />
           <Analytics />
