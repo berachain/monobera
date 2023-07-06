@@ -11,7 +11,7 @@ import {
   type Pool,
   type Token,
 } from "@bera/berajs";
-import { parseUnits, formatUnits } from 'viem';
+import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { useRouter } from "~/context/routerContext";
@@ -62,7 +62,7 @@ export const useSwap = () => {
             : selectedTo.decimals,
         );
         try {
-          console.log('WTFFF')
+          console.log("WTFFF");
           setIsLoading(true);
           const t: SwapInfo = await router.getSwaps(
             selectedFrom?.address as Address,
@@ -71,18 +71,25 @@ export const useSwap = () => {
             parsedSwapAmount,
           );
 
-
           if (swapKind === SwapKind.GIVEN_IN) {
-            setToAmount(Number(formatUnits(t.returnAmount ?? 0n, selectedTo?.decimals ?? 18)));
+            setToAmount(
+              Number(
+                formatUnits(t.returnAmount ?? 0n, selectedTo?.decimals ?? 18),
+              ),
+            );
           } else {
-            setFromAmount(Number(formatUnits(t.returnAmount ?? 0n, selectedFrom?.decimals ?? 18)));
-          } 
+            setFromAmount(
+              Number(
+                formatUnits(t.returnAmount ?? 0n, selectedFrom?.decimals ?? 18),
+              ),
+            );
+          }
           setIsLoading(false);
-          return
+          return;
         } catch (error: any) {
           setError(error);
           setIsLoading(false);
-          return
+          return;
         }
       }
     };
@@ -130,6 +137,6 @@ export const useSwap = () => {
     selectedPool,
     previewSwapAmount: "0",
     isLoading,
-    error
+    error,
   };
 };

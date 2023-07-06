@@ -39,16 +39,12 @@ export interface SwapV2 {
 }
 
 export interface SwapInfo {
-  returnAmountFromSwaps?: bigint;
-  swapAmountForSwaps?: bigint;
   tokenAddresses: string[];
   swaps: Swap[];
   swapAmount: bigint;
   returnAmount: bigint;
-  returnAmountConsideringFees: bigint;
   tokenIn: Address;
   tokenOut: Address;
-  marketSpotPrice: string;
 }
 
 export interface SwapOptions {
@@ -64,7 +60,10 @@ export interface NewPath {
   poolPairData: PoolPairBase[];
   limitAmount: bigint;
   pools: PoolBase[];
-  filterEffectivePrice?: bigint; // TODO: This is just used for filtering, maybe there is a better way to filter?
+}
+
+export interface ResultPath extends NewPath {
+  returnAmount: bigint;
 }
 
 export type PoolPairBase = {

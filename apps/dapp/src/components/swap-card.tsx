@@ -26,7 +26,7 @@ export function SwapCard() {
     setToAmount,
     previewSwapAmount,
     setSelectedTo,
-    setSwapAmount
+    setSwapAmount,
   } = useSwap();
   const { isConnected } = useBeraJs();
   return (
