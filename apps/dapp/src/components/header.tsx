@@ -9,18 +9,21 @@ import { Icons } from "@bera/ui/icons";
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
 
-const ThemeToggle = dynamic(() => import("~/components/theme-toggle"), {
-  ssr: false,
-  loading: () => (
-    <Button
-      variant="ghost"
-      className="gap-1 px-2 text-lg font-semibold md:text-base"
-    >
-      <Icons.sun className="block dark:hidden" />
-      <Icons.moon className="hidden dark:block" />
-    </Button>
-  ),
-});
+const ThemeToggle = dynamic(
+  () => import("@bera/shared-ui").then((mod) => mod.ThemeToggle),
+  {
+    ssr: false,
+    loading: () => (
+      <Button
+        variant="ghost"
+        className="gap-1 px-2 text-lg font-semibold md:text-base"
+      >
+        <Icons.sun className="block dark:hidden" />
+        <Icons.moon className="hidden dark:block" />
+      </Button>
+    ),
+  },
+);
 
 const Connect = dynamic(
   () => import("@bera/shared-ui").then((mod) => mod.ConnectButton),

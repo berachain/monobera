@@ -11,7 +11,7 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { useTheme } from "next-themes";
 
-export default function ThemeToggle(props: {
+export function ThemeToggle(props: {
   align?: "center" | "start" | "end";
   side?: "top" | "bottom";
 }) {
