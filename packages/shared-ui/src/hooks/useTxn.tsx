@@ -8,13 +8,15 @@ import {
 } from "@bera/berajs";
 import toast from "react-hot-toast";
 
+import { ErrorToast, LoadingToast, SubmissionToast, SuccessToast } from "../";
+
 interface IUseTxn {
   message?: string;
   disableToast?: boolean;
   onSuccess?: (hash: string) => void;
   onError?: (e?: Error) => void;
   onLoading?: () => void;
-  onSubmission?: () => void;
+  onSubmission?: (hash: string) => void;
 }
 
 interface UseTxnApi {
@@ -23,6 +25,8 @@ interface UseTxnApi {
   isSuccess: boolean;
   isError: boolean;
 }
+
+const DURATION = 3000;
 
 /**
  * @typedef {Object} IUseTxn
@@ -70,12 +74,20 @@ export const useTxn = ({
      */
     onError: (error) => {
       if (!disableToast) {
+        const toastId = `error-${identifier}`;
         toast.remove(`loading-${identifier}`);
         toast.remove(`submission-${identifier}`);
-        toast.error("Error!", {
-          duration: 3000,
-          id: `error-${identifier}`,
-        });
+        toast.custom(
+          <ErrorToast
+            title={"Transaction failed"}
+            message={error?.message || "unknown error"}
+            onClose={() => toast.remove(toastId)}
+          />,
+          {
+            duration: DURATION,
+            id: toastId,
+          },
+        );
       }
       onError && onError(error);
     },
@@ -87,11 +99,19 @@ export const useTxn = ({
      */
     onSuccess: (result) => {
       if (!disableToast) {
+        const toastId = `success-${identifier}`;
         toast.remove(`submission-${identifier}`);
-        toast.success("Success!", {
-          duration: 3000,
-          id: `success-${identifier}`,
-        });
+        toast.custom(
+          <SuccessToast
+            onClose={() => toast.remove(toastId)}
+            title={"Transaction Success"}
+            message="transaction successfully submitted"
+          />,
+          {
+            duration: DURATION,
+            id: toastId,
+          },
+        );
       }
       addRecentTransaction({
         hash: result,
@@ -106,10 +126,18 @@ export const useTxn = ({
      */
     onLoading: () => {
       if (!disableToast) {
-        toast.loading("Waiting for wallet action.", {
-          icon: "⏳",
-          id: `loading-${identifier}`,
-        });
+        const toastId = `loading-${identifier}`;
+        toast.custom(
+          <LoadingToast
+            title={"Waiting for wallet"}
+            message="waiting for wallet action"
+            onClose={() => toast.remove(toastId)}
+          />,
+          {
+            id: toastId,
+            duration: Infinity,
+          },
+        );
       }
       onLoading && onLoading();
     },
@@ -117,15 +145,22 @@ export const useTxn = ({
     /**
      * Submission callback function executed when a transaction is submitted.
      */
-    onSubmission: () => {
+    onSubmission: (result: string) => {
       if (!disableToast) {
+        const toastId = `submission-${identifier}`;
         toast.remove(`loading-${identifier}`);
-        toast("Transaction submitted!", {
-          icon: "⬆️",
-          id: `submission-${identifier}`,
-        });
+        toast.custom(
+          <SubmissionToast
+            title={"Transaction submitted"}
+            message="waiting for confirmation"
+            onClose={() => toast.remove(toastId)}
+          />,
+          {
+            id: toastId,
+          },
+        );
       }
-      onSubmission && onSubmission();
+      onSubmission && onSubmission(result);
     },
   });
 
