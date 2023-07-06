@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   BeravaloperToEth,
   STAKING_PRECOMPILE_ABI,
   STAKING_PRECOMPILE_ADDRESS,
   getTokens,
+  truncateHash,
   usePollAccountDelegations,
   usePollActiveValidators,
   usePollAssetWalletBalance,
@@ -13,7 +15,6 @@ import { useTxn } from "@bera/shared-ui";
 import { getAddress, parseUnits } from "viem";
 
 export const useRedelegate = (fromAddress: `0x{string}`) => {
-  console.log("useRedelegate");
   const [redelegateAmount, setRedelegateAmount] = useState(0);
   const [dstValidator, setDstValidator] = useState<Validator | null>(null);
   const { useActiveValidator } = usePollActiveValidators();
@@ -23,24 +24,26 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(fromAddress);
   const accountDelegation = useSelectedAccountDelegation();
+  const router = useRouter();
   const { write, isLoading } = useTxn({
-    message: `redelegate ${redelegateAmount} BGT from ${fromAddress} to ${dstValidator?.operatorAddress}`,
-    onSuccess: () => console.log("success"),
-    onError: () => console.log("error"),
+    message: `redelegate ${redelegateAmount} BGT from ${truncateHash(
+      fromAddress,
+    )} to ${
+      dstValidator &&
+      truncateHash(
+        getAddress(
+          BeravaloperToEth(dstValidator.operatorAddress || "").toLowerCase(),
+        ),
+      )
+    }`,
+    onSuccess: () => {
+      void router.push("/");
+    },
+    onError: (e) => console.log(e),
   });
 
   const redelegate = () => {
     if (dstValidator && srcValidator) {
-      console.log(
-        "useRedelegate",
-        getAddress(
-          BeravaloperToEth(srcValidator.operatorAddress).toLowerCase(),
-        ),
-        getAddress(
-          BeravaloperToEth(dstValidator.operatorAddress).toLowerCase(),
-        ),
-        parseUnits(`${redelegateAmount}`, 18),
-      );
       try {
         write({
           address: STAKING_PRECOMPILE_ADDRESS,

@@ -29,7 +29,6 @@ export default function CreateBribeCard({
     redelegate,
     tokens,
   } = useRedelegate(validatorAddress);
-  console.log(accountDelegation);
 
   return (
     <>
