@@ -27,14 +27,14 @@ const PolarisChain: Chain = {
       http: [
         isProduction()
           ? "http://guarded.beraswillmakeit.com:8545"
-          : "http://devnet.beraswillmakeit.com:8545",
+          : "https://devnet.beraswillmakeit.com",
       ],
     },
     public: {
       http: [
         isProduction()
           ? "http://guarded.beraswillmakeit.com:8545"
-          : "http://devnet.beraswillmakeit.com:8545",
+          : "https://devnet.beraswillmakeit.com",
       ],
     },
   },
