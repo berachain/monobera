@@ -61,8 +61,7 @@ export default function PreviewDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          size="lg"
-          disabled={fromAmount === 0 && toAmount === 0}
+          disabled={fromAmount === 0 || toAmount === 0}
           onClick={() => setOpen(true)}
         >
           Preview
