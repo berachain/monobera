@@ -53,6 +53,8 @@ export default function ValidatorDetails({
       symbol: cb.symbol,
     },
   }));
+
+  console.log(formatUnits(validator?.delegatorShares ?? 0n, 36));
   return (
     <div className="container mb-10 flex gap-5">
       <div className="flex w-2/3 flex-col gap-5">
