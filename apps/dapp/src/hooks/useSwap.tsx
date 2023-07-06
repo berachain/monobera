@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { type SwapInfo } from "@bera/bera-router";
 import {
   ERC2MODULE_PRECOMPILE_ADDRESS,
   useLatestBlock,
@@ -10,11 +11,10 @@ import {
   type Pool,
   type Token,
 } from "@bera/berajs";
-import { parseUnits } from "viem";
+import { parseUnits, formatUnits } from 'viem';
 import { type Address } from "wagmi";
 
 import { useRouter } from "~/context/routerContext";
-import { type SwapInfo } from "@bera/bera-router";
 
 export enum SwapKind {
   GIVEN_IN = 0,
@@ -33,6 +33,10 @@ export const useSwap = () => {
   const [swapAmount, setSwapAmount] = useState(0);
 
   const [swapKind, setSwapKind] = useState<SwapKind>(SwapKind.GIVEN_IN);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [error, setError] = useState<string[]>([]);
 
   // eslint-disable-next-line
   const [payload, setPayload] = useState<any[]>([]);
@@ -53,9 +57,13 @@ export const useSwap = () => {
       if (selectedFrom && selectedTo && swapAmount !== 0) {
         const parsedSwapAmount = parseUnits(
           `${swapAmount ?? 0}`,
-          swapKind === SwapKind.GIVEN_IN ? selectedFrom.decimals : selectedTo.decimals,
+          swapKind === SwapKind.GIVEN_IN
+            ? selectedFrom.decimals
+            : selectedTo.decimals,
         );
         try {
+          console.log('WTFFF')
+          setIsLoading(true);
           const t: SwapInfo = await router.getSwaps(
             selectedFrom?.address as Address,
             selectedTo?.address as Address,
@@ -63,14 +71,18 @@ export const useSwap = () => {
             parsedSwapAmount,
           );
 
+
           if (swapKind === SwapKind.GIVEN_IN) {
-            setToAmount(Number(t.returnAmountFromSwaps));
-        } else {
-            setFromAmount(Number(t.returnAmountFromSwaps));
-        }
-          console.log(t);
-        } catch (error) {
-          console.error(error);
+            setToAmount(Number(formatUnits(t.returnAmount ?? 0n, selectedTo?.decimals ?? 18)));
+          } else {
+            setFromAmount(Number(formatUnits(t.returnAmount ?? 0n, selectedFrom?.decimals ?? 18)));
+          } 
+          setIsLoading(false);
+          return
+        } catch (error: any) {
+          setError(error);
+          setIsLoading(false);
+          return
         }
       }
     };
@@ -117,5 +129,7 @@ export const useSwap = () => {
     pools,
     selectedPool,
     previewSwapAmount: "0",
+    isLoading,
+    error
   };
 };

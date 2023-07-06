@@ -70,7 +70,7 @@ export function CreatePoolPreview({
     options,
     account,
   ];
-  console.log(payload)
+  console.log(payload);
   return (
     <Card className="max-w-[500px]">
       <CardHeader>

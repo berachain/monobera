@@ -65,7 +65,7 @@ export class RouteProposer {
     );
 
     const combinedPathData = pathData;
-    console.log('combinedPathData', combinedPathData)
+    console.log("combinedPathData", combinedPathData);
     // console.log("combinedPathData", combinedPathData)
     // const [paths] = calculatePathLimits(combinedPathData, swapType);
     // console.log("paths", paths)
