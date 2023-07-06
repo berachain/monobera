@@ -1,7 +1,7 @@
 import { isProduction } from "../utils/isProduction";
 
 const TESTNET_CONTRACTS = {
-  multicall: "0x687CE42A66963479d05ed4A4Dd32275b669fa08B",
+  multicall: "0x85dd28e1Cd670eD7535a1fB5F13863725e75BF66",
   dummy: "0x459C653FaAE6E13b59cf8E005F5f709C7b2c2EB4",
 };
 
