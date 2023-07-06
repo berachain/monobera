@@ -1,5 +1,4 @@
 export const formatConnectorName = (connector: string) => {
-  console.log(connector);
   switch (connector) {
     case "metaMask":
       return "MetaMask";

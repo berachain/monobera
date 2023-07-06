@@ -8,6 +8,7 @@ import {
   ERC2MODULE_PRECOMPILE_ADDRESS,
   useBeraJs,
 } from "@bera/berajs";
+import { useTxn } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -18,7 +19,6 @@ import { parseUnits } from "viem";
 import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview-input";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
-import { useTxn } from "~/hooks/useTxn";
 import { ApproveTokenButton } from "../approve-token-button";
 
 type Props = {

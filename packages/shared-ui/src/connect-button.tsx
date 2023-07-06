@@ -40,7 +40,7 @@ export const ConnectButton = () => {
                     type="button"
                     className="w-full"
                   >
-                    Connect Wallet
+                    Connect
                   </Button>
                 );
               }
