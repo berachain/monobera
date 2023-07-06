@@ -124,7 +124,7 @@ export const usePollActiveValidators = () => {
           functionName: "getActiveCuttingBoard",
           args: [BeravaloperToEth(val.operatorAddress)],
         }));
-        console.log("alshdjkgjklasgjklagljkh");
+
         const contracts = getContracts();
         const result = await publicClient.multicall({
           contracts: call,

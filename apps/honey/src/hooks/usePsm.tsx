@@ -8,11 +8,11 @@ import {
   usePollBalance,
   type Token,
 } from "@bera/berajs";
+import { useTxn } from "@bera/shared-ui";
 import { parseUnits } from "viem";
 
 import { honey, stgUsd } from "~/config/tokens";
 import { useFees } from "./useFees";
-import { useTxn } from "./useTxn";
 
 export const usePsm = () => {
   const [selectedTo, setSelectedTo] = useState<Token>(honey);

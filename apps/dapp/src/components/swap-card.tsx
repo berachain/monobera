@@ -51,13 +51,12 @@ export function SwapCard() {
           <Button
             variant="ghost"
             size="sm"
-            className="h-10 w-10 rounded-full hover:bg-transparent"
             onClick={() => {
               setSelectedFrom(selectedTo);
               setSelectedTo(selectedFrom);
             }}
           >
-            <Icons.swap className="h-8 w-8" />
+            <Icons.swap className="h-6 w-6" />
           </Button>
 
           <TokenInput

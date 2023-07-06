@@ -35,6 +35,7 @@ export default function ValidatorDialog({
   const [search, setSearch] = useState("");
 
   const validators = useActiveValidators();
+
   const [filteredValidators, setFilteredValidators] = useState<Validator[]>(
     validators.filter(
       (validator: Validator) =>
@@ -48,17 +49,19 @@ export default function ValidatorDialog({
   );
 
   useEffect(() => {
-    const filteredValidators = validators.filter(
-      (validator: Validator) =>
-        validator.description.moniker
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        BeravaloperToEth(validator.operatorAddress)
-          .toLowerCase()
-          .includes(search.toLowerCase()),
-    );
+    if (search.length !== 0) {
+      const filteredValidators = validators.filter(
+        (validator: Validator) =>
+          validator.description.moniker
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
+          BeravaloperToEth(validator.operatorAddress)
+            .toLowerCase()
+            .includes(search.toLowerCase()),
+      );
 
-    setFilteredValidators(filteredValidators);
+      setFilteredValidators(filteredValidators);
+    }
   }, [search]); // Include 'filteredValidators' in the dependency array
 
   const onValidatorSelect = (validator: Validator) => {
@@ -89,13 +92,15 @@ export default function ValidatorDialog({
             placeholder="Search by name or address"
           />
           <div className="grid gap-4 py-4">
-            {filteredValidators.map((validator, i) => (
-              <ValidatorDialogRow
-                key={i}
-                validator={validator}
-                onValidatorSelect={onValidatorSelect}
-              />
-            ))}
+            {filteredValidators.length
+              ? filteredValidators.map((validator, i) => (
+                  <ValidatorDialogRow
+                    key={i}
+                    validator={validator}
+                    onValidatorSelect={onValidatorSelect}
+                  />
+                ))
+              : "No validators found"}
           </div>
         </DialogContent>
       </Dialog>
