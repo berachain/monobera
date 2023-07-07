@@ -37,10 +37,10 @@ export default function CreatePoolInput({
     onTokenSelection(token, index);
   };
   return (
-    <div className="my-4">
+    <div className="mb-4">
       <div
         className={cn(
-          "flex flex-row items-center justify-between gap-3 rounded-lg border border-input bg-input px-4",
+          "flex flex-row items-center justify-between gap-3 rounded-lg border border-border bg-input px-4 shadow-md",
           focused && "border-border",
         )}
       >
@@ -55,7 +55,7 @@ export default function CreatePoolInput({
           step="any"
           min="0"
           placeholder="0.0"
-          className="w-full grow border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="w-full grow border-0 p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={tokenWeight.weight > 0 ? tokenWeight.weight : ""}
           onFocus={() => {
             setFocused(true);
