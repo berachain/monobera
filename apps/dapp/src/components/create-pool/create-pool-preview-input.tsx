@@ -13,16 +13,16 @@ type Props = {
 export default function CreatePoolPreviewInput({ tokenWeight }: Props) {
   const [focused, setFocused] = React.useState(false);
   return (
-    <div className="my-4 cursor-not-allowed">
+    <div className="mb-4 cursor-not-allowed">
       <div
         className={cn(
-          "flex flex-row flex-wrap justify-between gap-3 rounded-lg border border-input bg-input p-3 pr-6",
+          "flex justify-between gap-3 rounded-lg border border-input bg-input",
           focused && "border-border",
         )}
       >
         <Button
-          className="hover:text-primary-text flex shrink-0 grow-0 cursor-not-allowed gap-2 pl-0 hover:bg-transparent"
-          variant="ghost"
+          className="hover:text-primary-text flex shrink-0 grow-0 cursor-not-allowed gap-2 hover:bg-transparent"
+          variant="outline"
         >
           <>
             <TokenIcon token={tokenWeight.token} />
