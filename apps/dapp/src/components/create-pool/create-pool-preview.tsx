@@ -54,7 +54,7 @@ export function CreatePoolPreview({
       asset: tokenWeight.token?.address,
       weight: 1,
     })),
-    swapFee: 1n,
+    swapFee: parseUnits(`${fee}`, 18),
   };
 
   const payload = [
