@@ -86,7 +86,7 @@ export function CreatePoolFeeData({
           </Alert>
         )}
         <Button className="mt-4 w-full" onClick={onContinue}>
-          Continue
+          Next
         </Button>
       </CardContent>
     </Card>
