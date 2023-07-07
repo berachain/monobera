@@ -43,7 +43,7 @@ export function History() {
             href={`http://${networkConfig.chain.blockExplorers?.default.url}/tx/${txn.hash}`}
           >
             <div
-              className="flex justify-between border-t border-backgroundSecondary pt-2"
+              className="flex justify-between border-t border-backgroundSecondary pt-3"
               key={txn.hash}
             >
               <div className="text-xs">
