@@ -442,6 +442,9 @@ importers:
       next:
         specifier: ^13.4.1
         version: 13.4.1(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
+      next-themes:
+        specifier: ^0.2.1
+        version: 0.2.1(next@13.4.1)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -11102,7 +11105,6 @@ packages:
       next: 13.4.1(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-    dev: false
 
   /next@13.4.1(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-JBw2kAIyhKDpjhEWvNVoFeIzNp9xNxg8wrthDOtMctfn3EpqGCmW0FSviNyGgOSOSn6zDaX48pmvbdf6X2W9xA==}
