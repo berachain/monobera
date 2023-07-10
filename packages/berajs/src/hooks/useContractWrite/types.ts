@@ -17,5 +17,5 @@ export interface IUseContractWrite {
   onSuccess?: (hash: string) => void;
   onError?: (e?: Error) => void;
   onLoading?: () => void;
-  onSubmission?: () => void;
+  onSubmission?: (hash: string) => void;
 }

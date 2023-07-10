@@ -1,4 +1,5 @@
 import { cn } from "@bera/ui";
+import { Icons } from "@bera/ui/icons";
 
 export interface IStep {
   name: string;
@@ -12,33 +13,19 @@ type Props = {
 };
 export function CreatePoolStepper({ step = 0, steps, setStep }: Props) {
   return (
-    <ol role="list" className="overflow-hidden">
+    <ol role="list" className="flex justify-center gap-5 overflow-hidden">
       {steps.map((item, stepIdx) => (
-        <li
-          onClick={() => stepIdx < step && setStep(stepIdx)}
-          key={stepIdx}
-          className={cn(
-            stepIdx !== steps.length - 1 ? "pb-10" : "",
-            "relative w-8 cursor-pointer",
-          )}
-        >
-          {stepIdx !== steps.length - 1 ? (
-            <div
-              className="absolute left-4 top-4 -ml-px mt-0.5 h-full w-0.5 bg-primary"
-              aria-hidden="true"
-            />
-          ) : null}
-          <a className="group relative flex items-start" aria-current="step">
-            <span className="flex h-9 items-center" aria-hidden="true">
-              <span
-                className={cn(
-                  "relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-primary",
-                  step === stepIdx ? "bg-primary" : "bg-background",
-                )}
-              >
-                <span className="">{stepIdx + 1}</span>
-              </span>
-            </span>
+        <li onClick={() => stepIdx < step && setStep(stepIdx)} key={stepIdx}>
+          <a
+            className={cn(
+              "relative flex h-12 w-12 cursor-pointer items-center justify-center rounded-lg transition-colors duration-200",
+              step === stepIdx && "bg-muted",
+              step > stepIdx && "bg-positive/25 text-positive",
+              step < stepIdx && "bg-background",
+            )}
+            aria-current="step"
+          >
+            {step > stepIdx ? <Icons.check className="h-4 w-4" /> : stepIdx + 1}
           </a>
         </li>
       ))}

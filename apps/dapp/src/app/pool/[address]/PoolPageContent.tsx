@@ -30,6 +30,7 @@ export default function PoolPageContent({
   const router = useRouter();
   const { useSelectedPool } = usePollPools();
   const pool: Pool | undefined = useSelectedPool(params.address);
+  console.log(pool);
   const { useBalance } = usePollBalance({ address: pool?.shareAddress });
   const shareBalance = useBalance();
   return (
@@ -54,7 +55,7 @@ export default function PoolPageContent({
       <p className="pb-2">
         Swap Fee:{" "}
         <span className="text-muted-foreground">
-          {formatUnits(pool?.swapFee ?? "", 0)}%
+          {formatUnits(pool?.swapFee ?? "", 18)}%
         </span>
       </p>
       <div className="grid gap-5 lg:grid-cols-3 ">

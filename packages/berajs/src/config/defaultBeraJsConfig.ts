@@ -1,5 +1,6 @@
 import { type Chain } from "wagmi";
 
+import { isProduction } from "../api/utils/isProduction";
 import { type NetworkConfig } from "./types";
 
 const PolarisChain: Chain = {
@@ -23,10 +24,18 @@ const PolarisChain: Chain = {
   },
   rpcUrls: {
     default: {
-      http: ["http://localhost:8545"],
+      http: [
+        isProduction()
+          ? "http://guarded.beraswillmakeit.com:8545"
+          : "https://devnet.beraswillmakeit.com",
+      ],
     },
     public: {
-      http: ["http://localhost:8545"],
+      http: [
+        isProduction()
+          ? "http://guarded.beraswillmakeit.com:8545"
+          : "https://devnet.beraswillmakeit.com",
+      ],
     },
   },
 };

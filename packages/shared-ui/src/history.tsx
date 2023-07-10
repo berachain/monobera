@@ -6,6 +6,7 @@ import {
   type NewTransaction,
 } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
+import { Balancer } from "react-wrap-balancer";
 
 function formatTimestamp(timestamp: number): JSX.Element {
   const date = new Date(timestamp);
@@ -42,11 +43,14 @@ export function History() {
             href={`http://${networkConfig.chain.blockExplorers?.default.url}/tx/${txn.hash}`}
           >
             <div
-              className="flex justify-between border-t border-backgroundSecondary pt-2"
+              className="flex justify-between border-t border-backgroundSecondary pt-3"
               key={txn.hash}
             >
               <div className="text-xs">
-                <p className="font-medium">{txn.description}</p>
+                <p className="font-medium">
+                  <Balancer>{txn.description}</Balancer>
+                </p>
+
                 <p>{truncateHash(txn.hash as `0x${string}`)}</p>
               </div>
               <div className="text-xs">{formatTimestamp(txn.timestamp)}</div>

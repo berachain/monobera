@@ -11,7 +11,7 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { useTheme } from "next-themes";
 
-export default function ThemeToggle(props: {
+export function ThemeToggle(props: {
   align?: "center" | "start" | "end";
   side?: "top" | "bottom";
 }) {
@@ -28,7 +28,7 @@ export default function ThemeToggle(props: {
       <DropdownMenuTrigger asChild>
         <Button
           className="gap-1 px-2 text-lg font-semibold md:text-base"
-          variant="secondary"
+          variant="ghost"
         >
           {triggerIcon}
           <span className="sr-only">Toggle theme</span>

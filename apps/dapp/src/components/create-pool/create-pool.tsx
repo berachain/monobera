@@ -41,52 +41,58 @@ export function CreatePool({
   }) as Token[];
 
   return (
-    <>
-      <Card className="max-w-[500px]">
-        <CardHeader>
-          <CardTitle className="center flex justify-between">Swap</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {tokenWeights.map((tokenWeight, index) => {
-            return (
-              <CreatePoolInput
-                key={index}
-                tokenWeight={tokenWeight}
-                index={index}
-                selectedTokens={selectedTokens}
-                onTokenSelection={onTokenSelection}
-                onRemove={onRemove}
-                onTokenWeightChange={onTokenWeightChange}
-                onLock={onLock}
-                onUnlock={onUnlock}
-              />
-            );
-          })}
-          <Button onClick={onAddToken} variant="secondary">
-            Add a token
+    <Card>
+      <CardHeader>
+        <CardTitle className="center flex justify-between">
+          Choose tokens and allocate weights
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {tokenWeights.map((tokenWeight, index) => {
+          return (
+            <CreatePoolInput
+              key={index}
+              tokenWeight={tokenWeight}
+              index={index}
+              selectedTokens={selectedTokens}
+              onTokenSelection={onTokenSelection}
+              onRemove={onRemove}
+              onTokenWeightChange={onTokenWeightChange}
+              onLock={onLock}
+              onUnlock={onUnlock}
+            />
+          );
+        })}
+        <div className="flex justify-center">
+          <Button onClick={onAddToken} variant="ghost">
+            <Icons.add className="h-6 w-6" />
           </Button>
-          {error && (
-            <Alert variant="destructive" className="my-4">
-              <Icons.warning className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{error && error.message}</AlertDescription>
-            </Alert>
-          )}
-          <div className="mt-4 flex justify-between">
-            <p>Total allocated</p>
-            <p className={cn("h-2", exceeding && "text-destructive")}>
-              {totalWeight.toFixed(2)}%
-            </p>
-          </div>
-          <Progress
-            value={exceeding ? 100 : totalWeight}
-            className={cn("h-2", exceeding && "bg-destructive")}
-          />
-          <Button className="mt-4 w-full" onClick={onContinue}>
-            Continue
-          </Button>
-        </CardContent>
-      </Card>
-    </>
+        </div>
+        {error && (
+          <Alert variant="destructive" className="my-4">
+            <Icons.warning className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error && error.message}</AlertDescription>
+          </Alert>
+        )}
+        <div className="mt-4 flex justify-between text-sm">
+          <p>Total allocated</p>
+          <p className={cn("h-2", exceeding && "text-destructive")}>
+            {totalWeight.toFixed(2)}%
+          </p>
+        </div>
+        <Progress
+          value={exceeding ? 100 : totalWeight}
+          className={cn("mt-1 h-2", exceeding && "bg-destructive")}
+        />
+        <Button
+          disabled={error?.message === "Tokens must be selected"}
+          className="mt-4 w-full"
+          onClick={onContinue}
+        >
+          Next
+        </Button>
+      </CardContent>
+    </Card>
   );
 }

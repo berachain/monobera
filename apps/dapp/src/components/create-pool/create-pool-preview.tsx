@@ -54,7 +54,7 @@ export function CreatePoolPreview({
       asset: tokenWeight.token?.address,
       weight: tokenWeight.weight,
     })),
-    swapFee: fee,
+    swapFee: parseUnits(`${fee}`, 18),
   };
 
   const payload = [
@@ -72,7 +72,7 @@ export function CreatePoolPreview({
   ];
   console.log(payload);
   return (
-    <Card className="max-w-[500px]">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="center flex justify-between">
           Preview New Weighted Pool
@@ -85,12 +85,12 @@ export function CreatePoolPreview({
           );
         })}
         <h2 className="text-lg">Pool Options</h2>
-        <div className="flex h-[40px] items-center justify-between align-middle text-sm text-secondary">
+        <div className="flex h-[40px] items-center justify-between align-middle text-sm">
           <p>Pool Name</p>
           <div className="flex">
             {editPoolName ? (
               <Input
-                className="mr-1 w-32 border-none text-right"
+                className="mr-1 border-none text-right"
                 value={poolName}
                 maxLength={120}
                 onChange={(e) => setPoolName(e.target.value)}
@@ -98,17 +98,20 @@ export function CreatePoolPreview({
             ) : (
               <p className="px-3 py-2">{poolName}</p>
             )}
-            <Icons.edit
-              className="h-4 w-4 self-center hover:text-purple-100"
+            <Button
               onClick={() => setEditPoolName(!editPoolName)}
-            />
+              variant="ghost"
+              className="px-0"
+            >
+              <Icons.edit className="h-4 w-4 self-center hover:text-primary" />
+            </Button>
           </div>
         </div>
-        <div className="flex h-[40px] w-full items-center justify-between text-sm text-secondary">
+        <div className="flex h-[40px] w-full items-center justify-between text-sm">
           <p>Pool Type</p>
           <p>Weighted</p>
         </div>
-        <div className="flex h-[40px] w-full items-center justify-between text-sm text-secondary">
+        <div className="flex h-[40px] w-full items-center justify-between text-sm">
           <p>Swap Fee</p>
           <p>{fee}%</p>
         </div>

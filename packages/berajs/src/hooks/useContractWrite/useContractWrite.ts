@@ -44,7 +44,7 @@ const useContractWrite = ({
           account: account,
           chain: undefined,
         });
-        onSubmission && onSubmission();
+        onSubmission && onSubmission(receipt);
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
             hash: receipt,

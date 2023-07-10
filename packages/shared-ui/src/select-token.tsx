@@ -25,8 +25,8 @@ export function SelectToken({
   return (
     <div className="my-4 w-fit">
       <Button
-        className="hover:text-primary-text flex shrink-0 gap-2 p-0 hover:bg-transparent"
-        variant="ghost"
+        className="flex shrink-0 gap-2"
+        variant={token && "outline"}
         onClick={() => selectable && setOpen(true)}
       >
         {token ? (
