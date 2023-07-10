@@ -22,20 +22,36 @@ import {
   TableHeader,
   TableRow,
 } from "@bera/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { Balancer } from "react-wrap-balancer";
 import { formatUnits } from "viem";
 
+type Swap = {
+  metadata: {
+    blockNum: string;
+    txHash: string;
+    blockHash: string;
+    blockTime: string;
+    txIndex: string;
+  };
+  pool: string;
+  input: { denom: string; amount: string };
+  output: { denom: string; amount: string };
+};
+
 export default function PoolPageContent({
   params,
+  swaps,
 }: {
   params: { address: string };
+  swaps: Swap[];
 }) {
   const router = useRouter();
   const { useSelectedPool } = usePollPools();
   const { data: pool, isLoading } = useSelectedPool(params.address);
   const { useBalance } = usePollBalance({ address: pool?.shareAddress });
   const shareBalance = useBalance();
-  console.log(shareBalance);
+
   if (isLoading) {
     // TODO loading skeleton state
     return <p>Loading...</p>;
@@ -94,7 +110,7 @@ export default function PoolPageContent({
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-3 ">
+      <div className="mb-6 grid gap-5 lg:grid-cols-3">
         <div className="col-span-1">
           <Card>
             <Table>
@@ -157,78 +173,52 @@ export default function PoolPageContent({
               <CardContent className="p-2">-%</CardContent>
             </Card>
           </div>
-
-          {/* <section>
-            <h2 className="pb-2 text-lg">Liquidity Provision</h2>
-            <Card>
-              <Table className="border-separate border-spacing-y-2 p-2">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="">Action</TableHead>
-                    <TableHead>
-                      Virtual Price{" "}
-                      <span className="text-xs text-muted-foreground">
-                        (USD)
-                      </span>
-                    </TableHead>
-                    <TableHead>Tokens</TableHead>
-                    <TableHead className="text-right">Time</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {liquidityProvisions.map((provision, i) => (
-                    <TableRow
-                      key={i}
-                      className="rounded-md outline outline-secondary"
-                    >
-                      <TableCell className="w-80 font-medium">
-                        {provision.action}
-                      </TableCell>
-                      <TableCell>{provision.value}</TableCell>
-                      <TableCell>{provision.tokenAmount}</TableCell>
-                      <TableCell className="text-right">
-                        {provision.timeStamp}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Card>
-          </section>
-          <section>
-            <h2 className="pb-2 text-lg">Swaps</h2>
-            <Card>
-              <Table className="border-separate border-spacing-y-2 p-2">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="">Wallet</TableHead>
-                    <TableHead>Value</TableHead>
-                    <TableHead>Details</TableHead>
-                    <TableHead className="text-right">Time</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {swaps.map((swap, i) => (
-                    <TableRow
-                      key={i}
-                      className="rounded-md outline outline-secondary"
-                    >
-                      <TableCell className="w-80 font-medium">
-                        {truncateWalletAddress(swap.wallet)}
-                      </TableCell>
-                      <TableCell>{swap.value}</TableCell>
-                      <TableCell>{swap.fromAmount}</TableCell>
-                      <TableCell className="text-right">
-                        {swap.timeStamp}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Card>
-          </section> */}
         </div>
       </div>
+      <section>
+        <Tabs defaultValue="allTransactions">
+          <TabsList>
+            <TabsTrigger value="allTransactions">All transactions</TabsTrigger>
+            <TabsTrigger value="swaps">Swaps</TabsTrigger>
+            <TabsTrigger value="addsWithdrawals">
+              Swaps &amp; Withdrawals
+            </TabsTrigger>
+          </TabsList>
+          <Card>
+            <TabsContent value="allTransactions">
+              <Table className="border-separate border-spacing-y-2 p-2">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Action</TableHead>
+                    <TableHead>Value</TableHead>
+                    <TableHead>Tokens</TableHead>
+                    <TableHead>Account</TableHead>
+                    <TableHead className="text-right">Time</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {swaps.length
+                    ? swaps.map((swap) => (
+                        <TableRow
+                          key={swap.metadata.txHash}
+                          className="rounded-md outline outline-secondary"
+                        >
+                          <TableCell>Action</TableCell>
+                          <TableCell>value</TableCell>
+                          <TableCell>tokens</TableCell>
+                          <TableCell>account</TableCell>
+                          <TableCell className="text-right">time</TableCell>
+                        </TableRow>
+                      ))
+                    : "No transactions yet"}
+                </TableBody>
+              </Table>
+            </TabsContent>
+            <TabsContent value="swaps">stuff</TabsContent>
+            <TabsContent value="addsWithdrawals">stuff</TabsContent>
+          </Card>
+        </Tabs>
+      </section>
     </div>
   );
 }
