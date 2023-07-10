@@ -31,6 +31,7 @@ export default function WithdrawPageContent({
   const { data: pool } = useSelectedPool(params.address);
   const { useBalance } = usePollBalance({ address: pool?.shareAddress });
   const shareBalance = useBalance();
+  console.log("share balance", shareBalance);
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
     withdrawAmount,
     pool?.address,
