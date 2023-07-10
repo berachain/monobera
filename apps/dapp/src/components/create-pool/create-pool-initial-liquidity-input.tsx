@@ -38,14 +38,11 @@ export default function CreatePoolInitialLiquidityInput({
     <div className="my-4">
       <div
         className={cn(
-          "flex flex-row flex-wrap justify-between gap-3 rounded-lg border border-input bg-input p-3 pr-6",
+          "flex flex-row flex-wrap justify-between gap-3 rounded-lg border border-border bg-input p-3 pr-6 shadow-md",
           focused && "border-border",
         )}
       >
-        <Button
-          className="hover:text-primary-text flex shrink-0 gap-2 hover:bg-transparent"
-          variant="ghost"
-        >
+        <Button className="flex shrink-0 gap-2" variant="outline">
           <>
             <TokenIcon token={tokenWeight.token} />
             {tokenWeight.token?.symbol}
@@ -74,7 +71,7 @@ export default function CreatePoolInitialLiquidityInput({
           }}
         />
         {account ? (
-          <div className="w-full pl-4">
+          <div className="w-full pl-2 text-sm">
             <div className="flex items-center justify-between">
               <p>
                 <Button
