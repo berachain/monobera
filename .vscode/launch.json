@@ -8,14 +8,6 @@
       "command": "pnpm dev",
       "cwd": "${workspaceFolder}/apps/dapp/",
       "skipFiles": ["<node_internals>/**"]
-    },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "debug dapp",
-      "skipFiles": ["<node_internals>/**"],
-      "cwd": "${workspaceFolder}/apps/dapp/",
-      "trace": true
     }
   ]
 }

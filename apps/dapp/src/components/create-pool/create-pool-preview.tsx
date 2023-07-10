@@ -70,7 +70,6 @@ export function CreatePoolPreview({
     options,
     account,
   ];
-  console.log(payload);
   return (
     <Card className="w-full">
       <CardHeader>

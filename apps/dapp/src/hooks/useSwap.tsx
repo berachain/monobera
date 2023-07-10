@@ -7,8 +7,6 @@ import {
   useLatestBlock,
   usePollAllowance,
   usePollAssetWalletBalance,
-  usePollPools,
-  type Pool,
   type Token,
 } from "@bera/berajs";
 import { useReadLocalStorage } from "usehooks-ts";
@@ -26,11 +24,9 @@ export enum SwapKind {
 export const useSwap = () => {
   const slippage = useReadLocalStorage(LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE);
 
-  // const deadline = useReadLocalStorage(LOCAL_STORAGE_KEYS.DEADLINE);
+  const deadline = useReadLocalStorage(LOCAL_STORAGE_KEYS.DEADLINE);
 
   const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
-
-  const [selectedPool] = useState<Pool | undefined>(undefined);
 
   const [fromAmount, setFromAmount] = useState(0);
 
@@ -54,9 +50,6 @@ export const useSwap = () => {
   const [priceImpact, setPriceImpact] = useState<string | undefined>(undefined);
 
   usePollAssetWalletBalance();
-  const { usePools } = usePollPools();
-
-  const pools = usePools();
 
   const { router } = useRouter();
 
@@ -173,14 +166,13 @@ export const useSwap = () => {
   const block = useLatestBlock();
 
   useEffect(() => {
-    // const parsedDeadline: bigint = deadline === 0 ? block + 10000n : (block as bigint) + calculateBlocksInMinute(deadline as number) as bigint
+    const d = deadline === 'auto' ? block + 10000n : block + BigInt(Math.floor((deadline as number) * 60 / 2))
     if (swapInfo !== undefined && swapInfo.batchSwapSteps?.length) {
-      const parsedDeadline = block + 1000n;
       if (slippage === "auto") {
         swapInfo.batchSwapSteps[
           (swapInfo?.batchSwapSteps?.length ?? 1) - 1
         ]!.amountOut = 0n;
-        const payload = [swapKind, swapInfo?.batchSwapSteps, parsedDeadline];
+        const payload = [swapKind, swapInfo?.batchSwapSteps, d];
         setPayload(payload);
       } else {
         const percentage = (100 - (slippage as number)) / 100;
@@ -194,29 +186,26 @@ export const useSwap = () => {
         swapInfo.batchSwapSteps[
           (swapInfo?.batchSwapSteps?.length ?? 1) - 1
         ]!.amountOut = parsedMinAmountOut;
-        const payload = [swapKind, swapInfo?.batchSwapSteps, parsedDeadline];
+        const payload = [swapKind, swapInfo?.batchSwapSteps, d];
         setPayload(payload);
       }
     }
   }, [swapKind, swapInfo, slippage]);
 
   return {
-    payload,
     setSwapKind,
     setSelectedFrom,
+    setFromAmount,
+    setToAmount,
+    setSelectedTo,
+    setSwapAmount,
+    payload,
     selectedFrom,
     allowance,
     selectedTo,
     fromAmount,
-    setFromAmount,
     toAmount,
-    setToAmount,
     swapKind,
-    setSelectedTo,
-    setSwapAmount,
-    pools,
-    selectedPool,
-    previewSwapAmount: "0",
     isLoading,
     error,
     swapInfo,

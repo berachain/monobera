@@ -1,6 +1,5 @@
 import React from "react";
 import { Tooltip } from "@bera/shared-ui";
-import { cn } from "@bera/ui";
 import { Input } from "@bera/ui/input";
 import { Toggle } from "@bera/ui/toggle";
 import { useLocalStorage } from "usehooks-ts";
@@ -49,7 +48,7 @@ export default function SwapSettings() {
           step="any"
           min="0.1"
           max="100"
-          className={cn("text-right", "border-primary-foreground")}
+          className="border-primary-foreground text-right"
           disabled={slippageTolerance === SELECTION.AUTO}
           placeholder="1"
           defaultValue={slippageTolerance > 0 ? slippageTolerance : ""}
@@ -84,7 +83,7 @@ export default function SwapSettings() {
           type="number"
           step="any"
           min="0"
-          className={cn("text-right", "border-primary-foreground")}
+          className="border-primary-foreground text-right"
           placeholder=" 1"
           disabled={deadline === SELECTION.AUTO}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
