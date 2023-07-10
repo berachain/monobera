@@ -2,21 +2,24 @@ import React from "react";
 import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Input } from "@bera/ui/input";
-import { Switch } from "@bera/ui/switch";
 import { Toggle } from "@bera/ui/toggle";
 import { useLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
 
+enum SELECTION {
+  AUTO,
+  CUSTOM,
+}
 export default function SwapSettings() {
   const [slippageTolerance, setSlippageTolerance] = useLocalStorage(
     LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE,
-    0.5,
+    SELECTION.AUTO,
   );
 
-  const [useSignatures, setUseSignatures] = useLocalStorage(
-    LOCAL_STORAGE_KEYS.USE_SIGNATURES,
-    false,
+  const [deadline, setDeadline] = useLocalStorage(
+    LOCAL_STORAGE_KEYS.DEADLINE,
+    SELECTION.AUTO,
   );
 
   function isNotPreset() {
@@ -28,30 +31,64 @@ export default function SwapSettings() {
       <div className="space-y-2">
         <h4 className="flex items-center gap-1 font-medium leading-none">
           Slippage tolerance
-          <Tooltip text="Add to library" />
+          <Tooltip text="Maximum amount of slippage that can occur during a swap" />
         </h4>
       </div>
       <div className="grid grid-cols-4 gap-1">
         <Toggle
           variant="outline"
-          pressed={slippageTolerance === 0.5}
-          onPressedChange={() => setSlippageTolerance(0.5)}
+          pressed={slippageTolerance === SELECTION.AUTO}
+          onPressedChange={() => setSlippageTolerance(SELECTION.AUTO)}
         >
-          0.5%
+          Auto
         </Toggle>
         <Toggle
           variant="outline"
-          pressed={slippageTolerance === 1}
-          onPressedChange={() => setSlippageTolerance(1)}
+          pressed={slippageTolerance !== SELECTION.AUTO}
+          onPressedChange={() => setSlippageTolerance(SELECTION.CUSTOM)}
         >
-          1.0%
+          Custom
+        </Toggle>
+        <Input
+          type="number"
+          step="any"
+          min="0.1"
+          max="100"
+          className={cn(
+            " text-right",
+            isNotPreset() && "border-primary-foreground",
+          )}
+          disabled={slippageTolerance === SELECTION.AUTO}
+          placeholder="1"
+          defaultValue={
+            isNotPreset() && slippageTolerance > 0 ? slippageTolerance : ""
+          }
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSlippageTolerance(Number(e.target.value))
+          }
+        />
+        <p className="self-center text-sm">%</p>
+      </div>
+      <div className="space-y-2">
+        <h4 className="flex items-center gap-1 font-medium leading-none">
+          Transaction deadline
+          <Tooltip text="The maximum amount of time a swap can take. " />
+        </h4>
+      </div>
+      <div className="grid grid-cols-4 gap-1">
+        <Toggle
+          variant="outline"
+          pressed={deadline === SELECTION.AUTO}
+          onPressedChange={() => setDeadline(SELECTION.AUTO)}
+        >
+          Auto
         </Toggle>
         <Toggle
           variant="outline"
-          pressed={slippageTolerance === 2}
-          onPressedChange={() => setSlippageTolerance(2)}
+          pressed={deadline !== SELECTION.AUTO}
+          onPressedChange={() => setDeadline(SELECTION.CUSTOM)}
         >
-          2.0%
+          Custom
         </Toggle>
         <Input
           type="number"
@@ -61,27 +98,16 @@ export default function SwapSettings() {
             " text-right",
             isNotPreset() && "border-primary-foreground",
           )}
-          placeholder="0.1"
+          placeholder=" 1"
+          disabled={deadline === SELECTION.AUTO}
           defaultValue={
             isNotPreset() && slippageTolerance > 0 ? slippageTolerance : ""
           }
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setSlippageTolerance(Number(e.target.value))
+            setDeadline(Number(e.target.value))
           }
         />
-      </div>
-      <div className="space-y-2">
-        <h4 className="flex items-center gap-1 font-medium leading-none">
-          Use signatures
-          <Tooltip text="Add to library" />
-        </h4>
-      </div>
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="use-signatures"
-          checked={useSignatures}
-          onCheckedChange={(checked) => setUseSignatures(checked)}
-        />
+        <p className="self-center text-sm">min</p>
       </div>
     </div>
   );

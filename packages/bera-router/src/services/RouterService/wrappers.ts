@@ -80,7 +80,6 @@ export function getWrappedInfo(
 export function setWrappedInfo(
   swapInfo: SwapInfo,
   wrappedInfo: WrappedInfo,
-  config: RouterConfig,
 ): SwapInfo {
   if (swapInfo.swaps.length === 0) return swapInfo;
 
@@ -101,11 +100,11 @@ export function setWrappedInfo(
     wrappedInfo.tokenIn.wrapType === WrapTypes.ETH ||
     wrappedInfo.tokenOut.wrapType === WrapTypes.ETH
   ) {
-    swapInfo.tokenAddresses = swapInfo.tokenAddresses.map((addr: string) =>
-      addr === config.contracts.wbera
-        ? "0x0000000000000000000000000000000000000000"
-        : addr,
-    );
+    // swapInfo.tokenAddresses = swapInfo.tokenAddresses.map((addr: string) =>
+    //   addr === config.contracts.wbera
+    //     ? "0x0000000000000000000000000000000000000000"
+    //     : addr,
+    // );
   }
 
   return swapInfo;

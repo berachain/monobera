@@ -273,6 +273,8 @@ export const formatSwaps = (
           tokenInDecimals: path.poolPairData[i]?.decimalsIn ?? 18,
           tokenOutDecimals: path.poolPairData[i]?.decimalsOut ?? 18,
           returnAmount: amounts[amounts.length - 1]?.toString(),
+          tokenInObj: undefined,
+          tokenOutObj: undefined,
         };
         pathSwaps.push(swap);
       }
@@ -295,6 +297,8 @@ export const formatSwaps = (
           tokenInDecimals: path.poolPairData[n - 1 - i]?.decimalsIn ?? 18,
           tokenOutDecimals: path.poolPairData[n - 1 - i]?.decimalsOut ?? 18,
           returnAmount: amounts[0]?.toString(),
+          tokenInObj: undefined,
+          tokenOutObj: undefined,
         };
         pathSwaps.unshift(swap);
       }

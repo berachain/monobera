@@ -60,7 +60,7 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
   address: string;
   swapFee: bigint;
   totalShares: bigint;
-  tokens: WeightedPoolToken[];
+  tokens: any[];
   totalWeight: number;
   tokensList: string[];
   MAX_IN_RATIO = 0.3;
@@ -99,6 +99,9 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
     this.totalWeight = totalWeight;
   }
 
+  getTokens(): Token[] {
+    return this.tokens as Token[];
+  }
   parsePoolPairData(tokenIn: string, tokenOut: string): WeightedPoolPairData {
     const tokenIndexIn = this.tokens.findIndex(
       (t) =>

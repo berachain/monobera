@@ -1,6 +1,7 @@
 import { DEX_PRECOMPILE_ABI, DEX_PRECOMPILE_ADDRESS } from "@bera/berajs";
 import cloneDeep from "lodash";
 import {
+  formatUnits,
   getAddress,
   parseUnits,
   type Address,
@@ -15,7 +16,9 @@ import { RouteNotFound } from "./errors";
 import { RouteProposer } from "./routeProposal";
 import {
   SwapTypes,
+  type BatchSwapStep,
   type NewPath,
+  type ResultPath,
   type Swap,
   type SwapInfo,
   type SwapOptions,
@@ -24,22 +27,19 @@ import {
 import { getWrappedInfo, setWrappedInfo } from "./wrappers";
 
 export const EMPTY_SWAPINFO: SwapInfo = {
-  tokenAddresses: [],
   swaps: [],
-  swapAmount: 0n,
   tokenIn: "" as Address,
   tokenOut: "" as Address,
+  swapAmount: 0n,
   returnAmount: 0n,
+  batchSwapSteps: [],
+  tokenInObj: undefined,
+  tokenOutObj: undefined,
+  formattedSwapAmount: "",
+  formattedReturnAmount: "",
+  pools: [],
 };
 
-interface BatchSwapStep {
-  poolId: Address;
-  assetIn: Address;
-  amountIn: bigint;
-  assetOut: Address;
-  amountOut: bigint;
-  userData: string;
-}
 export class RouterService {
   private routeProposer: RouteProposer;
   private poolService: PoolService;
@@ -49,6 +49,7 @@ export class RouterService {
     maxPools: 4,
     timestamp: Math.floor(Date.now() / 1000),
   };
+
   constructor(private readonly config: RouterConfig) {
     this.routeProposer = new RouteProposer(config);
     this.poolService = new PoolService(config);
@@ -76,7 +77,8 @@ export class RouterService {
       console.error("Pools not fetched yet");
       return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
     }
-
+    if (swapAmount === 0n)
+      return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
     // Set any unset options to their defaults
     const options: SwapOptions = {
       ...this.defaultSwapOptions,
@@ -103,7 +105,7 @@ export class RouterService {
 
     if (swapInfo.returnAmount === 0n) return swapInfo;
 
-    swapInfo = setWrappedInfo(swapInfo, wrappedInfo, this.config);
+    swapInfo = setWrappedInfo(swapInfo, wrappedInfo);
 
     return swapInfo;
   }
@@ -129,24 +131,73 @@ export class RouterService {
     );
 
     if (paths.length == 0) throw new RouteNotFound("No route found for swap");
-    const r = await this.getOnChainBestPaths(paths, swapAmount, swapType);
+    const resultPaths = await this.getOnChainBestPaths(
+      paths,
+      swapAmount,
+      swapType,
+    );
 
-    return {} as SwapInfo;
+    const swapInfo = this.getBestPath(resultPaths, swapAmount);
+
+    return swapInfo;
   }
 
+  private getBestPath(resultPaths: ResultPath[], swapAmount: bigint): SwapInfo {
+    if (resultPaths.length === 0)
+      throw new RouteNotFound("No route found for swap");
+
+    let bestPath: ResultPath | undefined;
+    let highestReturnAmount = 0n;
+    let lowestSwapCount = Infinity;
+
+    for (const path of resultPaths) {
+      if (path.returnAmount > highestReturnAmount) {
+        highestReturnAmount = path.returnAmount;
+        lowestSwapCount = path.swaps.length;
+        bestPath = path;
+      } else if (
+        path.returnAmount === highestReturnAmount &&
+        path.swaps.length < lowestSwapCount
+      ) {
+        lowestSwapCount = path.swaps.length;
+        bestPath = path;
+      }
+    }
+
+    if (!bestPath) throw new RouteNotFound("Unable to find optimal route");
+
+    const tokenInObj = bestPath.swaps[0]?.tokenInObj;
+    const tokenOutObj = bestPath.swaps[bestPath.swaps.length - 1]?.tokenOutObj;
+
+    const result: SwapInfo = {
+      swaps: bestPath.swaps,
+      returnAmount: bestPath.returnAmount,
+      tokenIn: bestPath.swaps[0]?.tokenIn as Address,
+      tokenOut: bestPath.swaps[bestPath.swaps.length - 1]?.tokenOut as Address,
+      tokenInObj,
+      tokenOutObj,
+      batchSwapSteps: bestPath.batchSwapSteps,
+      swapAmount,
+      pools: bestPath.pools,
+      formattedSwapAmount: formatUnits(swapAmount, tokenInObj?.decimals ?? 18),
+      formattedReturnAmount: formatUnits(
+        bestPath.returnAmount,
+        tokenOutObj?.decimals ?? 18,
+      ),
+    };
+    return result;
+  }
   /**
    * Find optimal routes for trade from given candidate paths
    */
-
-
   private async getOnChainBestPaths(
     paths: NewPath[],
     swapAmount: bigint,
     swapType: SwapTypes,
-  ): Promise<[Swap[][], bigint, string, bigint]> {
+  ): Promise<ResultPath[]> {
     const client = this.config.publicClient;
-    console.log('newPaths', paths)
     const block = await client.getBlockNumber();
+    const cachedSteps: BatchSwapStep[][] = [];
     const asyncOperations: Promise<
       | SimulateContractReturnType<
           any[],
@@ -174,9 +225,7 @@ export class RouterService {
           return batchSwapStep;
         },
       );
-
-      console.log("batchSwapSteps", batchSwapSteps);
-      console.log("swapType", swapType);
+      cachedSteps.push(batchSwapSteps);
       return client.simulateContract({
         address: DEX_PRECOMPILE_ADDRESS as Address,
         abi: DEX_PRECOMPILE_ABI as any[],
@@ -198,14 +247,16 @@ export class RouterService {
         >,
       ) => operation,
     );
-    console.log(promises);
     const results = await Promise.all(promises);
-    console.log("theese", results);
-    // const resultPaths: ResultPath[] = 
+    const resultPaths: ResultPath[] = paths.map((path: NewPath, i: number) => {
+      return {
+        ...path,
+        batchSwapSteps: cachedSteps[i] ?? [],
+        returnAmount: (results[i]?.result[1] as bigint) ?? 0n,
+      };
+    });
 
-    // parse into swap
-
-    return {} as [Swap[][], bigint, string, bigint];
+    return resultPaths;
   }
   private getBestPaths(
     paths: NewPath[],

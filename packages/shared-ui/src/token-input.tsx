@@ -104,7 +104,7 @@ export function TokenInput({
               {!hidePrice && <p>${tokenBalance && tokenBalance * 0.69}</p>}
             </div>
           )}
-          {!hideBalance && amount !== 0 ? (
+          {!hideBalance ? (
             <Progress
               value={exceeding ? 100 : progress}
               className={cn("h-2", exceeding && "bg-destructive")}

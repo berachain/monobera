@@ -1,3 +1,4 @@
+import { type Token } from "@bera/berajs";
 import { parseUnits, type Address } from "viem";
 
 export enum SwapTypes {
@@ -19,6 +20,8 @@ export enum PoolTypes {
 
 export interface Swap {
   pool: string;
+  tokenInObj: Token | undefined;
+  tokenOutObj: Token | undefined;
   tokenIn: string;
   tokenOut: string;
   swapAmount?: bigint;
@@ -39,12 +42,17 @@ export interface SwapV2 {
 }
 
 export interface SwapInfo {
-  tokenAddresses: string[];
   swaps: Swap[];
-  swapAmount: bigint;
+  pools: PoolBase[];
   returnAmount: bigint;
+  batchSwapSteps: BatchSwapStep[];
+  swapAmount: bigint;
   tokenIn: Address;
+  tokenInObj: Token | undefined;
+  tokenOutObj: Token | undefined;
   tokenOut: Address;
+  formattedSwapAmount: string;
+  formattedReturnAmount: string;
 }
 
 export interface SwapOptions {
@@ -62,8 +70,18 @@ export interface NewPath {
   pools: PoolBase[];
 }
 
+export interface BatchSwapStep {
+  poolId: Address;
+  assetIn: Address;
+  amountIn: bigint;
+  assetOut: Address;
+  amountOut: bigint;
+  userData: string;
+}
+
 export interface ResultPath extends NewPath {
   returnAmount: bigint;
+  batchSwapSteps: BatchSwapStep[];
 }
 
 export type PoolPairBase = {
@@ -116,7 +134,7 @@ export interface PoolBase<D extends PoolPairBase = PoolPairBase> {
   id: string;
   address: string;
   tokensList: string[];
-  tokens: { address: string; balance: bigint; decimals: number }[];
+  tokens: Token[];
   totalShares: bigint;
   mainIndex?: number;
   isLBP?: boolean;

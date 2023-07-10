@@ -2,15 +2,15 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
+import { type SwapInfo } from "@bera/bera-router";
 import {
   DEX_PRECOMPILE_ABI,
   DEX_PRECOMPILE_ADDRESS,
-  formatUsd,
   type Token,
 } from "@bera/berajs";
 import { TokenIcon, useTxn } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -21,11 +21,9 @@ import {
 import { Icons } from "@bera/ui/icons";
 
 type Props = {
-  fromToken: Token | undefined;
-  toToken: Token | undefined;
-  fromAmount: number;
-  toAmount: number;
+  swapInfo: SwapInfo | undefined;
   payload: any[];
+  priceImpact: string | undefined;
 };
 
 function normalizeToRatio(num1: number, num2: number): string {
@@ -34,19 +32,77 @@ function normalizeToRatio(num1: number, num2: number): string {
   return ratio.toFixed(6);
 }
 
+const Route = ({
+  swapInfo,
+  onExpand,
+}: {
+  swapInfo: SwapInfo | undefined;
+  onExpand: () => void;
+}) => {
+  return (
+    <div className="align-center flex flex-row gap-2">
+      {swapInfo?.swaps.map((swap, index) => {
+        return (
+          <div
+            className="align-center flex flex-row gap-2"
+            key={swap.tokenIn + index}
+          >
+            {index === 0 && swap.tokenInObj?.symbol}{" "}
+            {index !== swapInfo?.swaps.length && (
+              <Icons.arrowRight className="w-4" />
+            )}{" "}
+            {swap.tokenOutObj?.symbol}
+          </div>
+        );
+      })}
+      <Icons.expand className="w-4 hover:text-primary" onClick={onExpand} />
+    </div>
+  );
+};
+
+const ExpandedRoute = ({ swapInfo }: { swapInfo: SwapInfo | undefined }) => {
+  return (
+    <div className="align-center flex w-full flex-row justify-between">
+      <TokenIcon token={swapInfo?.tokenInObj} />
+      <Icons.arrowRight className="w-4 self-center" />
+
+      <div className="self-center">
+        <div className="align-center flex w-full flex-row justify-center gap-2">
+          {" "}
+          {/* Updated line */}
+          {swapInfo?.pools.map((pool, index) => {
+            return (
+              <div className="flex w-fit flex-row" key={pool.id + index}>
+                {pool.tokens.map((token: Token, index) => {
+                  return (
+                    <TokenIcon
+                      token={token}
+                      className={cn("", index !== 0 && "ml-[-24px]")}
+                      key={token.address + index}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <Icons.arrowRight className="w-4 self-center" />
+      <TokenIcon token={swapInfo?.tokenOutObj} />
+    </div>
+  );
+};
+
 export default function PreviewDialog({
-  fromToken,
-  toToken,
-  fromAmount,
-  toAmount,
+  swapInfo,
   payload,
+  priceImpact,
 }: Props) {
   const [open, setOpen] = React.useState(false);
 
+  const [expandRoute, setExpandRoute] = React.useState(false);
   const { write, isLoading } = useTxn({
-    message: `Swap ${fromAmount?.toFixed(4)} ${
-      fromToken?.symbol
-    } to ${toAmount?.toFixed(4)} ${toToken?.symbol}`,
+    message: `Swap ${swapInfo?.formattedSwapAmount} ${swapInfo?.tokenInObj?.symbol} to ${swapInfo?.formattedReturnAmount} ${swapInfo?.tokenOutObj?.symbol}`,
     onSuccess() {
       setOpen(false);
     },
@@ -55,65 +111,83 @@ export default function PreviewDialog({
     },
   });
 
-  const ratio = normalizeToRatio(fromAmount, toAmount);
+  const ratio = normalizeToRatio(
+    Number(swapInfo?.formattedSwapAmount),
+    Number(swapInfo?.formattedReturnAmount),
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          disabled={fromAmount === 0 || toAmount === 0}
-          onClick={() => setOpen(true)}
-        >
+        <Button disabled={swapInfo === undefined} onClick={() => setOpen(true)}>
           Preview
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
           <DialogTitle>Preview swap</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <Card className="border border-border">
-            <CardHeader className="rounded-t-lg border-b border-y-border p-3 text-xs text-primary-foreground">
-              Effective price: 1 {fromToken?.symbol} = {ratio} {toToken?.symbol}
-            </CardHeader>
-            <CardContent className="border-border p-3">
-              <div className="relative -mx-3 grid grid-cols-1 divide-y divide-border">
-                <div className="flex items-center justify-start gap-2 px-3 pb-3">
-                  <TokenIcon token={fromToken} />
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium">
-                      {fromAmount} {fromToken?.symbol}
-                    </span>
-                    <span className="text-xs font-medium text-backgroundSecondary">
-                      {formatUsd((fromAmount ?? 0) * 1)}
-                    </span>
-                  </div>
-                </div>
-                <div className="absolute right-4 top-[calc(50%-16px)] border-none bg-card">
-                  <Icons.arrowDown className="h-8 w-8 rounded-full border border-border bg-card p-1" />
-                </div>
-                <div className="flex items-center justify-start gap-2 px-3 pt-3">
-                  <TokenIcon token={toToken} />
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium">
-                      {toAmount} {toToken?.symbol}
-                    </span>
-                    <span className="text-xs font-medium text-backgroundSecondary">
-                      {formatUsd((fromAmount ?? 0) * 1)}
-                    </span>
-                  </div>
-                </div>
+        <div className="flex w-full flex-row items-center justify-between">
+          <div className="flex h-20 w-2/5 flex-row items-center justify-center gap-4 rounded border border-solid border-[#f5f5f4] bg-[#fafaf9]">
+            <TokenIcon token={swapInfo?.tokenInObj} />
+            <div className="flex w-16 shrink-0 flex-col items-stretch justify-start gap-1">
+              <div className="whitespace-nowrap font-medium leading-[24px] text-[#a16207]">
+                {Number(swapInfo?.formattedSwapAmount).toFixed(2)}{" "}
+                {swapInfo?.tokenInObj?.symbol}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
+          <Icons.arrowRight className="min-h-0 w-6 min-w-0 shrink-0" />
+          <div className="flex h-20 w-2/5 flex-row items-center justify-center gap-4 rounded border border-solid border-[#f5f5f4] bg-[#fafaf9]">
+            <TokenIcon token={swapInfo?.tokenOutObj} />
+            <div className="flex w-16 shrink-0 flex-col items-stretch justify-start gap-1">
+              <div className="whitespace-nowrap font-medium leading-[24px] text-[#a16207]">
+                {Number(swapInfo?.formattedReturnAmount).toFixed(2)}{" "}
+                {swapInfo?.tokenOutObj?.symbol}
+              </div>
+            </div>
+          </div>
         </div>
+        <div className="flex w-full flex-col gap-2">
+          <div className="flex flex-row items-center justify-between">
+            <p>Exchange rate</p>
+            <p>
+              1 {swapInfo?.tokenInObj?.symbol} = {ratio}{" "}
+              {swapInfo?.tokenOutObj?.symbol}
+            </p>
+          </div>
+          <div className="flex flex-row items-center justify-between">
+            <p>Swap amount</p>
+            <p>
+              {swapInfo?.formattedSwapAmount} {swapInfo?.tokenInObj?.symbol}
+            </p>
+          </div>
+          <div className="flex flex-row items-center justify-between">
+            <p>Expected output</p>
+            <p>
+              {swapInfo?.formattedReturnAmount} {swapInfo?.tokenOutObj?.symbol}
+            </p>
+          </div>
+          <div className="flex flex-row items-center justify-between">
+            <p>Price Impact</p>
+            <p>{priceImpact ?? 0}%</p>
+          </div>
+          <div className="flex flex-row items-center justify-between">
+            <p>Route</p>
+            <Route
+              swapInfo={swapInfo}
+              onExpand={() => setExpandRoute(!expandRoute)}
+            />
+          </div>
+        </div>
+        {expandRoute && <ExpandedRoute swapInfo={swapInfo} />}
         <Button
           disabled={isLoading}
           onClick={() => {
             write({
               address: DEX_PRECOMPILE_ADDRESS,
               abi: DEX_PRECOMPILE_ABI,
-              functionName: "swap",
+              functionName: "batchSwap",
               params: payload,
             });
           }}

@@ -1,6 +1,11 @@
 "use client";
 
-import React, { createContext, useState, type PropsWithChildren } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  type PropsWithChildren,
+} from "react";
 import { useAccount, useConnect } from "wagmi";
 
 import { useAuth } from "~/hooks";
@@ -21,13 +26,15 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { error: evmError } = useConnect();
   const { address: account } = useAccount();
   const [error, setError] = useState<Error | undefined>(undefined);
+  const [isReady, setIsReady] = useState(false);
 
+  useEffect(() => setIsReady(true), []);
   return (
     <BeraJsContext.Provider
       value={{
         account: account as `0x${string}`,
         error: evmError || error,
-        isConnected: !evmError && account ? true : false,
+        isConnected: !evmError && account && isReady ? true : false,
         login,
         logout,
         setError,

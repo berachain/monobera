@@ -1,4 +1,6 @@
+import { type Token } from "@bera/berajs";
 import { cloneDeep } from "lodash";
+import { getAddress } from "viem";
 
 import { type RouterConfig } from "~/config";
 import { WeightedPool } from "~/pools/weighted";
@@ -65,7 +67,6 @@ export class RouteProposer {
     );
 
     const combinedPathData = pathData;
-    console.log("combinedPathData", combinedPathData);
     // console.log("combinedPathData", combinedPathData)
     // const [paths] = calculatePathLimits(combinedPathData, swapType);
     // console.log("paths", paths)
@@ -134,15 +135,14 @@ export function parseNewPool(pool: Pool): WeightedPool | undefined {
   // We're not interested in any pools which don't allow swapping
   // if (!pool.swapEnabled) return undefined;
 
-  let newPool: WeightedPool;
+  let newPool: any;
 
   try {
     newPool = WeightedPool.fromPool(pool);
   } catch (err: any) {
-    console.error(`parseNewPool: ${err.message}`);
     return undefined;
   }
-  return newPool;
+  return newPool as WeightedPool;
 }
 
 export function calculatePathLimits(
@@ -167,7 +167,6 @@ export function getLimitAmountSwapForPath(
   swapType: SwapTypes,
 ): bigint {
   const poolPairData = path.poolPairData;
-  console.log("poolPairData", poolPairData);
   let limit: bigint;
   if (swapType === SwapTypes.SwapExactIn) {
     limit =
@@ -301,20 +300,11 @@ export function filterPoolsOfInterest(
   const hopsIn: hopDictionary = {};
   const hopsOut: hopDictionary = {};
 
-  console.log("allPools", allPools);
-  console.log("tokenIn", tokenIn);
-  console.log("tokenOut", tokenOut);
-  console.log("maxPools", maxPools);
   Object.keys(allPools).forEach((id) => {
     const pool = allPools[id];
     const tokenListSet = new Set(pool?.tokensList);
     const containsTokenIn = tokenListSet.has(tokenIn.toLowerCase());
     const containsTokenOut = tokenListSet.has(tokenOut.toLowerCase());
-
-    console.log("pool", pool);
-    console.log("tokenListSet", tokenListSet);
-    console.log("containsTokenIn", containsTokenIn);
-    console.log("containsTokenOut", containsTokenOut);
 
     // This is a direct pool as has both tokenIn and tokenOut
     if (containsTokenIn && containsTokenOut && pool) {
@@ -368,11 +358,6 @@ export function producePaths(
         const normalizedLiquidity =
           poolIn?.getNormalizedLiquidity(poolPairData);
         // Cannot be strictly greater otherwise highestNormalizedLiquidityPoolId = 0 if hopTokens[i] balance is 0 in this pool.
-        console.log("normalizedLiquidity", normalizedLiquidity);
-        console.log(
-          "highestNormalizedLiquidityFirst",
-          highestNormalizedLiquidityFirst,
-        );
         if (
           normalizedLiquidity &&
           normalizedLiquidity >= highestNormalizedLiquidityFirst
@@ -435,8 +420,17 @@ export function createPath(
     if (poolPair) poolPairData.push(poolPair);
     id = id + poolPair?.id;
 
+    console.log("poolPair", pools[i]);
     const swap: Swap = {
       pool: pools[i]?.id ?? "",
+      tokenInObj:
+        (pools[i]?.tokens.find(
+          (token) => getAddress(token.address) === getAddress(tI),
+        ) as unknown as Token) ?? undefined,
+      tokenOutObj:
+        (pools[i]?.tokens.find(
+          (token) => getAddress(token.address) === getAddress(tO),
+        ) as unknown as Token) ?? undefined,
       tokenIn: tI,
       tokenOut: tO,
       tokenInDecimals: poolPair?.decimalsIn ?? 18,
