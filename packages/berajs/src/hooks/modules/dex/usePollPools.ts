@@ -151,9 +151,14 @@ export const usePollPools = () => {
     return data;
   };
 
-  const useSelectedPool = (poolAddress: string): Pool => {
-    const { data = undefined } = useSWRImmutable([poolAddress, ...QUERY_KEY]);
-    return data;
+  const useSelectedPool = (
+    poolAddress: string,
+  ): { data: Pool; isLoading: boolean } => {
+    const { data = undefined, isLoading } = useSWRImmutable([
+      poolAddress,
+      ...QUERY_KEY,
+    ]);
+    return { data, isLoading };
   };
   return {
     usePools,

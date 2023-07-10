@@ -63,7 +63,7 @@ export const usePollBalance = ({
           contracts: call,
           multicallAddress: contracts.multicall as `0x${string}`,
         });
-
+        console.log(result);
         const balance: BalanceToken = {
           balance: result[0]?.result as bigint,
           formattedBalance: formatUnits(

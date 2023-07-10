@@ -9,7 +9,6 @@ import {
   usePollBalance,
   usePollPools,
   usePollPreviewBurnShares,
-  type Pool,
   type Token,
 } from "@bera/berajs";
 import { TokenInput, useTxn } from "@bera/shared-ui";
@@ -29,7 +28,7 @@ export default function WithdrawPageContent({
   const [withdrawAmount, setWithdrawAmount] = useState(0);
   const { account = undefined } = useBeraJs();
   const { useSelectedPool } = usePollPools();
-  const pool: Pool | undefined = useSelectedPool(params.address);
+  const { data: pool } = useSelectedPool(params.address);
   const { useBalance } = usePollBalance({ address: pool?.shareAddress });
   const shareBalance = useBalance();
   const { usePreviewBurnShares } = usePollPreviewBurnShares(

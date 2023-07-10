@@ -6,7 +6,6 @@ import {
   ERC2MODULE_PRECOMPILE_ADDRESS,
   useBeraJs,
   usePollPools,
-  type Pool,
   type Token,
 } from "@bera/berajs";
 import { TokenInput, useTxn } from "@bera/shared-ui";
@@ -26,7 +25,7 @@ export default function AddLiquidityContent({
 }) {
   const { account = undefined } = useBeraJs();
   const { useSelectedPool } = usePollPools();
-  const pool: Pool | undefined = useSelectedPool(params.address);
+  const { data: pool } = useSelectedPool(params.address);
   const { tokenInputs, updateTokenAmount } = useMultipleTokenInput(
     pool?.weights ?? [],
   );
