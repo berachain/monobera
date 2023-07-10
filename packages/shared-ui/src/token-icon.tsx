@@ -29,7 +29,7 @@ export const TokenIcon = ({ token, className, fetch = false }: Props) => {
   }, [read, token, fetch, tokenInformation]);
 
   return (
-    <Avatar className={cn("h-12 w-12 rounded-full", className)}>
+    <Avatar className={cn("h-8 w-8 rounded-full", className)}>
       <AvatarImage
         src={`/icons/${selectedToken?.symbol.toLowerCase()}.jpg`}
         className="rounded-full p-1"

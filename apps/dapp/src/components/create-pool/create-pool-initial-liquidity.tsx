@@ -46,7 +46,7 @@ export function CreatePoolInitialLiquidity({
           </Alert>
         )}
         <Button className="mt-4 w-full" onClick={onContinue}>
-          Continue
+          Preview
         </Button>
       </CardContent>
     </Card>
