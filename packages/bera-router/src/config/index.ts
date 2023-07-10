@@ -27,10 +27,10 @@ const PolarisChain: Chain = {
   },
   rpcUrls: {
     default: {
-      http: ["http://localhost:8545"],
+      http: ["https://devnet.beraswillmakeit.com"],
     },
     public: {
-      http: ["http://localhost:8545"],
+      http: ["https://devnet.beraswillmakeit.com"],
     },
   },
 };
@@ -61,7 +61,7 @@ export const defaultConfig: RouterConfig = {
   publicClient: client as PublicClient,
   contracts: {
     poolAddress: "0x0d5862FDbdd12490f9b4De54c236cff63B038074",
-    multicallAddress: "0x18Df82C7E422A42D47345Ed86B0E935E9718eBda",
+    multicallAddress: "0x85dd28e1Cd670eD7535a1fB5F13863725e75BF66",
     connectingTokens: [
       {
         symbol: "wbera",

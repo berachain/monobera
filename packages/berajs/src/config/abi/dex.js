@@ -401,6 +401,67 @@ export const DEX_PRECOMPILE_ABI = [
   {
     inputs: [
       {
+        internalType: "enum IERC20DexModule.SwapKind",
+        name: "kind",
+        type: "uint8",
+      },
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "poolId",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "assetIn",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amountIn",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "assetOut",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "amountOut",
+            type: "uint256",
+          },
+          {
+            internalType: "bytes",
+            name: "userData",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct IERC20DexModule.BatchSwapStep[]",
+        name: "swaps",
+        type: "tuple[]",
+      },
+    ],
+    name: "getPreviewBatchSwap",
+    outputs: [
+      {
+        internalType: "address",
+        name: "asset",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "pool",
         type: "address",

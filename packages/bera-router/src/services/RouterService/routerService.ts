@@ -11,7 +11,6 @@ import {
 
 import { type RouterConfig } from "~/config";
 import { PoolService } from "../PoolService/poolService";
-import { getBestPaths } from "./bestPath";
 import { RouteNotFound } from "./errors";
 import { RouteProposer } from "./routeProposal";
 import {
@@ -196,7 +195,6 @@ export class RouterService {
     swapType: SwapTypes,
   ): Promise<ResultPath[]> {
     const client = this.config.publicClient;
-    const block = await client.getBlockNumber();
     const cachedSteps: BatchSwapStep[][] = [];
     const asyncOperations: Promise<
       | SimulateContractReturnType<
@@ -226,71 +224,27 @@ export class RouterService {
         },
       );
       cachedSteps.push(batchSwapSteps);
-      return client.simulateContract({
+      return client.readContract({
         address: DEX_PRECOMPILE_ADDRESS as Address,
         abi: DEX_PRECOMPILE_ABI as any[],
-        functionName: "batchSwap",
-        args: [swapType, batchSwapSteps, block + 100000n],
-        account: "0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
+        functionName: "getPreviewBatchSwap",
+        args: [swapType, batchSwapSteps],
       });
     });
 
     const promises = asyncOperations.map(
-      (
-        operation: Promise<
-          SimulateContractReturnType<
-            any[],
-            "batchSwap",
-            Chain | undefined,
-            undefined
-          >
-        >,
-      ) => operation,
+      (operation: Promise<any>) => operation,
     );
     const results = await Promise.all(promises);
     const resultPaths: ResultPath[] = paths.map((path: NewPath, i: number) => {
       return {
         ...path,
         batchSwapSteps: cachedSteps[i] ?? [],
-        returnAmount: (results[i]?.result[1] as bigint) ?? 0n,
+        returnAmount: (results[i][1] as bigint) ?? 0n,
       };
     });
 
     return resultPaths;
-  }
-  private getBestPaths(
-    paths: NewPath[],
-    swapAmount: bigint,
-    swapType: SwapTypes,
-    tokenInDecimals: number,
-    tokenOutDecimals: number,
-    costOutputToken: bigint,
-    maxPools: number,
-  ): [Swap[][], bigint, string, bigint] {
-    // swapExactIn - total = total amount swap will return of tokenOut
-    // swapExactOut - total = total amount of tokenIn required for swap
-
-    const [inputDecimals, outputDecimals] =
-      swapType === SwapTypes.SwapExactIn
-        ? [tokenInDecimals, tokenOutDecimals]
-        : [tokenOutDecimals, tokenInDecimals];
-
-    const [swaps, total, marketSp, totalConsideringFees] = getBestPaths(
-      paths,
-      swapType,
-      swapAmount,
-      inputDecimals,
-      outputDecimals,
-      maxPools,
-      costOutputToken,
-    );
-
-    console.log("swaps", swaps);
-    console.log("total", total);
-    console.log("marketSp", marketSp);
-    console.log("totalConsideringFees", totalConsideringFees);
-
-    return [swaps, total, marketSp.toString(), totalConsideringFees];
   }
 }
 

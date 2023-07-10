@@ -112,6 +112,7 @@ export const useSwap = () => {
           if (error instanceof RouteNotFound) {
             setError("Route not found.");
           }
+          console.log(error);
           setIsLoading(false);
           return;
         }
@@ -131,7 +132,6 @@ export const useSwap = () => {
             : selectedTo.decimals,
         );
         try {
-          setError(undefined);
           const result: SwapInfo = await router.getSwaps(
             selectedFrom?.address as Address,
             selectedTo?.address as Address,
@@ -142,9 +142,6 @@ export const useSwap = () => {
           setPriceImpactInfo(result);
           return;
         } catch (error) {
-          if (error instanceof RouteNotFound) {
-            setError("Route not found.");
-          }
           return;
         }
       }
@@ -163,11 +160,9 @@ export const useSwap = () => {
         100
       ).toFixed(4);
       setPriceImpact(percentageDifference);
-      if (Number(percentageDifference) > 25) {
-        setError("Price impact too high!");
-      }
     }
   }, [swapInfo, priceImpactInfo, swapAmount]);
+
   const { useAllowance } = usePollAllowance({
     contract: ERC2MODULE_PRECOMPILE_ADDRESS,
     token: selectedFrom,
@@ -179,15 +174,19 @@ export const useSwap = () => {
 
   useEffect(() => {
     // const parsedDeadline: bigint = deadline === 0 ? block + 10000n : (block as bigint) + calculateBlocksInMinute(deadline as number) as bigint
-    if (swapInfo !== undefined && swapInfo.batchSwapSteps.length) {
+    if (swapInfo !== undefined && swapInfo.batchSwapSteps?.length) {
       const parsedDeadline = block + 1000n;
-      if (slippage === 0) {
+      if (slippage === "auto") {
+        swapInfo.batchSwapSteps[
+          (swapInfo?.batchSwapSteps?.length ?? 1) - 1
+        ]!.amountOut = 0n;
         const payload = [swapKind, swapInfo?.batchSwapSteps, parsedDeadline];
         setPayload(payload);
       } else {
+        const percentage = (100 - (slippage as number)) / 100;
         const minAmountOut =
-          Number(swapInfo?.formattedReturnAmount ?? 0n) *
-          (1 - (slippage as number));
+          Number(swapInfo?.formattedReturnAmount ?? 0n) * percentage;
+
         const parsedMinAmountOut = parseUnits(
           `${minAmountOut}`,
           swapInfo?.tokenOutObj?.decimals ?? 18,
@@ -199,7 +198,7 @@ export const useSwap = () => {
         setPayload(payload);
       }
     }
-  }, [swapKind, swapInfo]);
+  }, [swapKind, swapInfo, slippage]);
 
   return {
     payload,

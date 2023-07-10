@@ -25,7 +25,7 @@ export class PoolService {
   public async fetchPools() {
     try {
       const response = await axios.get(
-        `http://localhost:31003/pool/creation_events`,
+        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/pool/creation_events`,
       );
       this.pools = response.data.result;
       this.poolMulticall.getPoolData(this.pools);

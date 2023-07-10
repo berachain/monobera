@@ -7,24 +7,19 @@ import { useLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
 
-enum SELECTION {
-  AUTO,
-  CUSTOM,
+export enum SELECTION {
+  AUTO = "auto",
+  CUSTOM = "custom",
 }
 export default function SwapSettings() {
   const [slippageTolerance, setSlippageTolerance] = useLocalStorage(
     LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE,
-    SELECTION.AUTO,
+    SELECTION.AUTO as any,
   );
-
   const [deadline, setDeadline] = useLocalStorage(
     LOCAL_STORAGE_KEYS.DEADLINE,
-    SELECTION.AUTO,
+    SELECTION.AUTO as any,
   );
-
-  function isNotPreset() {
-    return ![0.5, 1, 2].includes(slippageTolerance);
-  }
 
   return (
     <div className="grid gap-4">
@@ -45,7 +40,7 @@ export default function SwapSettings() {
         <Toggle
           variant="outline"
           pressed={slippageTolerance !== SELECTION.AUTO}
-          onPressedChange={() => setSlippageTolerance(SELECTION.CUSTOM)}
+          onPressedChange={() => setSlippageTolerance(0)}
         >
           Custom
         </Toggle>
@@ -54,15 +49,10 @@ export default function SwapSettings() {
           step="any"
           min="0.1"
           max="100"
-          className={cn(
-            " text-right",
-            isNotPreset() && "border-primary-foreground",
-          )}
+          className={cn("text-right", "border-primary-foreground")}
           disabled={slippageTolerance === SELECTION.AUTO}
           placeholder="1"
-          defaultValue={
-            isNotPreset() && slippageTolerance > 0 ? slippageTolerance : ""
-          }
+          defaultValue={slippageTolerance > 0 ? slippageTolerance : ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setSlippageTolerance(Number(e.target.value))
           }
@@ -86,7 +76,7 @@ export default function SwapSettings() {
         <Toggle
           variant="outline"
           pressed={deadline !== SELECTION.AUTO}
-          onPressedChange={() => setDeadline(SELECTION.CUSTOM)}
+          onPressedChange={() => setDeadline(0)}
         >
           Custom
         </Toggle>
@@ -94,15 +84,9 @@ export default function SwapSettings() {
           type="number"
           step="any"
           min="0"
-          className={cn(
-            " text-right",
-            isNotPreset() && "border-primary-foreground",
-          )}
+          className={cn("text-right", "border-primary-foreground")}
           placeholder=" 1"
           disabled={deadline === SELECTION.AUTO}
-          defaultValue={
-            isNotPreset() && slippageTolerance > 0 ? slippageTolerance : ""
-          }
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setDeadline(Number(e.target.value))
           }
