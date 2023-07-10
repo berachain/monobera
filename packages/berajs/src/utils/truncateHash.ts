@@ -2,7 +2,7 @@
  * Truncate a transaction or address hash
  */
 export const truncateHash = (
-  address: `0x${string}`,
+  address: `0x${string}` | string,
   startLength = 4,
   endLength = 4,
 ) => {
