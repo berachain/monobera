@@ -8,12 +8,10 @@ import RouterProvider from "~/context/routerContext";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <BeraConfig autoConnect={true}>
-      <RouterProvider>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
-      </RouterProvider>
-    </BeraConfig>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <BeraConfig autoConnect={true}>
+        <RouterProvider>{children}</RouterProvider>
+      </BeraConfig>
+    </ThemeProvider>
   );
 }

@@ -35,15 +35,17 @@ const Connect = dynamic(
 
 export function Header() {
   return (
-    <nav className="fixed left-0 right-0 z-50 bg-background">
+    <section className="fixed left-0 right-0 z-50 bg-background">
       <div className="mx-auto flex h-16 w-full items-center justify-between px-4">
-        <div className="mr-8 hidden items-center md:flex">
-          <span className="mr-10 text-lg font-bold tracking-tight">
-            <Link href={"/"}>
-              <Icons.logo className="h-12 w-12" />
-            </Link>
-          </span>
-          <MainNav />
+        <div className="hidden md:block">
+          <div className="mr-8 flex items-center">
+            <span className="mr-10 text-lg font-bold tracking-tight">
+              <Link href={"/"}>
+                <Icons.logo className="h-12 w-12" />
+              </Link>
+            </span>
+            <MainNav />
+          </div>
         </div>
         <MobileDropdown />
         <div className="flex gap-2">
@@ -51,6 +53,6 @@ export function Header() {
           <Connect />
         </div>
       </div>
-    </nav>
+    </section>
   );
 }
