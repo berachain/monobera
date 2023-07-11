@@ -120,7 +120,7 @@ export function TokenDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="max-h-[400px] px-4 sm:max-w-[425px]">
+        <DialogContent className="max-h-[400px] max-w-[425px] px-4">
           <DialogHeader>
             <DialogTitle>Token search</DialogTitle>
           </DialogHeader>

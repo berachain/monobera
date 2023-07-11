@@ -6,7 +6,7 @@ const TESTNET_CONTRACTS = {
 };
 
 const MAINNET_CONTRACTS = {
-  multicall: "0x687CE42A66963479d05ed4A4Dd32275b669fa08B",
+  multicall: "0x85dd28e1Cd670eD7535a1fB5F13863725e75BF66",
 };
 
 export const getContracts = () => {

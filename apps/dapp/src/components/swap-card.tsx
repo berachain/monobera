@@ -1,20 +1,29 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { ERC2MODULE_PRECOMPILE_ADDRESS, useBeraJs } from "@bera/berajs";
 import { ConnectButton, TokenInput } from "@bera/shared-ui";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
 import { SwapKind, useSwap } from "~/hooks/useSwap";
-import { ApproveTokenButton } from "./approve-token-button";
-import PreviewDialog from "./preview-dialog";
 import { SettingsPopover } from "./settings-popover";
+
+const DynamicPreview = dynamic(() => import("./preview-dialog"), {
+  loading: () => <p>Loading...</p>,
+  ssr: false,
+});
+
+const DynamicApproveButton = dynamic(() => import("./approve-token-button"), {
+  loading: () => <p>Loading...</p>,
+  ssr: false,
+});
 
 export function SwapCard() {
   const {
-    payload,
     setSwapKind,
     setSelectedFrom,
     selectedFrom,
@@ -23,12 +32,15 @@ export function SwapCard() {
     fromAmount,
     setFromAmount,
     toAmount,
+    error,
     setToAmount,
-    previewSwapAmount,
     setSelectedTo,
+    setSwapAmount,
+    swapInfo,
+    payload,
+    priceImpact,
   } = useSwap();
   const { isConnected } = useBeraJs();
-  console.log("payload", payload);
   return (
     <Card className="w-[500px]">
       <CardHeader>
@@ -45,6 +57,7 @@ export function SwapCard() {
             amount={fromAmount ?? 0}
             setAmount={(amount) => {
               setSwapKind(SwapKind.GIVEN_IN);
+              setSwapAmount(Number(amount));
               setFromAmount(Number(amount));
             }}
           />
@@ -62,28 +75,31 @@ export function SwapCard() {
           <TokenInput
             selected={selectedTo}
             selectedTokens={[selectedFrom, selectedTo]}
-            // onTokenSelection={setSelectedTo}
+            onTokenSelection={setSelectedTo}
             amount={toAmount}
             setAmount={(amount) => {
               setSwapKind(SwapKind.GIVEN_OUT);
+              setSwapAmount(Number(amount));
               setToAmount(Number(amount));
             }}
-            hideBalance
-            selectable={false}
           />
-
+          {error && (
+            <Alert variant="destructive" className="my-4">
+              <Icons.warning className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           {(Number(allowance?.formattedAllowance) ?? 0) < fromAmount ? (
-            <ApproveTokenButton
+            <DynamicApproveButton
               token={selectedFrom}
               spender={ERC2MODULE_PRECOMPILE_ADDRESS}
             />
           ) : isConnected ? (
-            <PreviewDialog
-              toToken={selectedTo}
-              fromToken={selectedFrom}
-              fromAmount={fromAmount ?? 0}
-              toAmount={previewSwapAmount ?? 0}
+            <DynamicPreview
+              swapInfo={swapInfo}
               payload={payload}
+              priceImpact={priceImpact}
             />
           ) : (
             <ConnectButton />
