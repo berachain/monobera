@@ -113,7 +113,7 @@ export class MultiCallPools {
         args: call[3] as any[],
       };
     });
-    
+
     const results: any[] = await this.provider.multicall({
       contracts: calls,
       multicallAddress: this.multiAddress as Address,
