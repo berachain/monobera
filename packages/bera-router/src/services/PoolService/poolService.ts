@@ -22,7 +22,7 @@ export class PoolService {
   public getPoolRecords(): PoolRecords {
     return this.poolMulticall.getPoolRecords();
   }
-  
+
   public async fetchPools() {
     try {
       const response = await axios.get(

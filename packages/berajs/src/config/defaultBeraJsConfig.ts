@@ -3,7 +3,7 @@ import { type Chain } from "wagmi";
 import { isProduction } from "../api/utils/isProduction";
 import { type NetworkConfig } from "./types";
 
-const PolarisChain: Chain = {
+const BeraChain: Chain = {
   id: 2061,
   name: "Polaris",
   network: "Polaris",
@@ -44,5 +44,5 @@ export const defaultBeraConfig: NetworkConfig = {
   precompileAddresses: {
     multicall: "0x0000",
   },
-  chain: PolarisChain,
+  chain: BeraChain,
 };
