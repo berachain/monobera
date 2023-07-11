@@ -1,0 +1,29 @@
+{
+  "name": "@bera/bera-router",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "deez",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup src",
+    "clean": "git clean -xdf dist .turbo node_modules",
+    "check-types": "tsc --noEmit",
+    "dev": "tsup src --watch",
+    "lint": "eslint src",
+    "lint:fix": "pnpm lint --fix"
+  },
+  "dependencies": {
+    "@bera/berajs": "0.1.0",
+    "axios": "^1.4.0",
+    "lodash": "^4.17.21",
+    "viem": "~0.3.35"
+  },
+  "devDependencies": {
+    "@bera/eslint-config": "0.1.0",
+    "@hyrious/esbuild-plugin-commonjs": "0.2.2",
+    "eslint": "^8.39.0",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4"
+  }
+}

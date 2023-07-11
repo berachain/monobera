@@ -19,7 +19,7 @@ import { parseUnits } from "viem";
 import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview-input";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
-import { ApproveTokenButton } from "../approve-token-button";
+import ApproveTokenButton from "../approve-token-button";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -52,9 +52,9 @@ export function CreatePoolPreview({
   const options = {
     weights: tokenWeights.map((tokenWeight) => ({
       asset: tokenWeight.token?.address,
-      weight: 1,
+      weight: tokenWeight.weight,
     })),
-    swapFee: parseUnits(`${fee}`, 18),
+    swapFee: fee,
   };
 
   const payload = [
@@ -70,7 +70,6 @@ export function CreatePoolPreview({
     options,
     account,
   ];
-
   return (
     <Card className="w-full">
       <CardHeader>

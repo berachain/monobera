@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
@@ -135,6 +131,9 @@ importers:
 
   apps/dapp:
     dependencies:
+      '@bera/bera-router':
+        specifier: 0.1.0
+        version: link:../../packages/bera-router
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../../packages/berajs
@@ -311,6 +310,37 @@ importers:
       tailwindcss:
         specifier: ^3.3.2
         version: 3.3.2
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
+  packages/bera-router:
+    dependencies:
+      '@bera/berajs':
+        specifier: 0.1.0
+        version: link:../berajs
+      axios:
+        specifier: ^1.4.0
+        version: 1.4.0
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      viem:
+        specifier: ~0.3.35
+        version: 0.3.36(typescript@5.0.4)(zod@3.21.4)
+    devDependencies:
+      '@bera/eslint-config':
+        specifier: 0.1.0
+        version: link:../config/eslint
+      '@hyrious/esbuild-plugin-commonjs':
+        specifier: 0.2.2
+        version: 0.2.2(esbuild@0.17.18)
+      eslint:
+        specifier: ^8.39.0
+        version: 8.39.0
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(postcss@8.4.23)(typescript@5.0.4)
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -7316,6 +7346,16 @@ packages:
       - debug
     dev: false
 
+  /axios@1.4.0:
+    resolution: {integrity: sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==}
+    dependencies:
+      follow-redirects: 1.15.2
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /axobject-query@3.1.1:
     resolution: {integrity: sha512-goKlv8DZrK9hUh975fnHzhNIO4jUnFCfv/dszV5VwUGDFjI6vQ2VwoyjYjYNEbBE8AH87TduWP5uyDR1D+Iteg==}
     dependencies:
@@ -9426,6 +9466,15 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
+
+  /form-data@4.0.0:
+    resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
+    engines: {node: '>= 6'}
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      mime-types: 2.1.35
+    dev: false
 
   /forwarded@0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
@@ -11911,7 +11960,6 @@ packages:
 
   /proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
-    dev: true
 
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
@@ -14401,3 +14449,7 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

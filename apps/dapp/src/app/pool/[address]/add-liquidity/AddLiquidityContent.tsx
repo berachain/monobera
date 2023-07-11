@@ -13,7 +13,7 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { parseUnits } from "viem";
 
-import { ApproveTokenButton } from "~/components/approve-token-button";
+import ApproveTokenButton from "~/components/approve-token-button";
 import { SettingsPopover } from "~/components/settings-popover";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
