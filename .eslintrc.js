@@ -14,7 +14,7 @@ const config = {
   },
   settings: {
     next: {
-      rootDir: ["apps/dapp"],
+      rootDir: ["apps/dex"],
     },
   },
 };
