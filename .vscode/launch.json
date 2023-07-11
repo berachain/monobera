@@ -6,7 +6,7 @@
       "type": "node-terminal",
       "request": "launch",
       "command": "pnpm dev",
-      "cwd": "${workspaceFolder}/apps/dapp/",
+      "cwd": "${workspaceFolder}/apps/dex/",
       "skipFiles": ["<node_internals>/**"]
     }
   ]

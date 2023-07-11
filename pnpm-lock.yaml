@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -16,9 +20,6 @@ importers:
       '@types/prettier':
         specifier: ^2.7.2
         version: 2.7.2
-      dapp:
-        specifier: ^0.0.0
-        version: 0.0.0
       eslint:
         specifier: ^8.39.0
         version: 8.39.0
@@ -129,7 +130,7 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
 
-  apps/dapp:
+  apps/dex:
     dependencies:
       '@bera/bera-router':
         specifier: 0.1.0
@@ -8191,12 +8192,6 @@ packages:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: false
 
-  /dapp@0.0.0:
-    resolution: {integrity: sha512-y1oslZxBgjMx+knESKxgt1Gv2LMs1KU7ariRsgloD71Btr6mJCvXrsfhb0/AnDpkS8gbewkAUTrwAuCib9OK/w==}
-    dependencies:
-      xmlhttprequest: 1.7.0
-    dev: false
-
   /date-fns@2.29.3:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
     engines: {node: '>=0.11'}
@@ -14340,11 +14335,6 @@ packages:
       bufferutil: 4.0.7
       utf-8-validate: 5.0.10
 
-  /xmlhttprequest@1.7.0:
-    resolution: {integrity: sha512-iALKn450gypsTdytqr2qHYRMS5uDY3XyhSOnf8E6S2Ew0UJxIln40ylqZrCiQoW5cZhDpDg9E23aQDfPK7OJ7Q==}
-    engines: {node: '>=0.4.0'}
-    dev: false
-
   /xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
     engines: {node: '>=0.4'}
@@ -14449,7 +14439,3 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
