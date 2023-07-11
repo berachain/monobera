@@ -57,7 +57,8 @@ export interface RouterConfig {
 }
 
 export const defaultConfig: RouterConfig = {
-  subgraphUrl: "http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com",
+  subgraphUrl:
+    "http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com",
   publicClient: client as PublicClient,
   contracts: {
     poolAddress: "0x0d5862FDbdd12490f9b4De54c236cff63B038074",

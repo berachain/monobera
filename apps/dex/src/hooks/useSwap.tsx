@@ -166,7 +166,10 @@ export const useSwap = () => {
   const block = useLatestBlock();
 
   useEffect(() => {
-    const d = deadline === 'auto' ? block + 10000n : block + BigInt(Math.floor((deadline as number) * 60 / 2))
+    const d =
+      deadline === "auto"
+        ? block + 10000n
+        : block + BigInt(Math.floor(((deadline as number) * 60) / 2));
     if (swapInfo !== undefined && swapInfo.batchSwapSteps?.length) {
       if (slippage === "auto") {
         swapInfo.batchSwapSteps[
