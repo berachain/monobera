@@ -15,7 +15,7 @@ export default function ClaimPageContent() {
   const r: RewardPool[] = usePoolUserPoolRewards();
   const { isConnected } = useBeraJs();
   return (
-    <div className="m-auto flex w-full max-w-4xl flex-col items-center justify-center gap-5">
+    <div className="container">
       <Card className="w-full grow">
         <div className="grid grid-cols-2 gap-5">
           <div className="col-span-1 p-3 pb-2">
