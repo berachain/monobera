@@ -26,7 +26,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { Balancer } from "react-wrap-balancer";
 import { formatUnits } from "viem";
 
-type Swap = {
+type LiquidityEvent = {
   metadata: {
     blockNum: string;
     txHash: string;
@@ -41,10 +41,10 @@ type Swap = {
 
 export default function PoolPageContent({
   params,
-  swaps,
+  liquidityEvents,
 }: {
   params: { address: string };
-  swaps: Swap[];
+  liquidityEvents: LiquidityEvent[];
 }) {
   const router = useRouter();
   const { useSelectedPool } = usePollPools();
@@ -56,6 +56,7 @@ export default function PoolPageContent({
     // TODO loading skeleton state
     return <p>Loading...</p>;
   }
+  console.log("LIQUIDITY EVENTS: ", liquidityEvents);
   console.log("POOL: ", pool);
   return (
     <div className="container">
@@ -197,10 +198,10 @@ export default function PoolPageContent({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {swaps.length
-                    ? swaps.map((swap) => (
+                  {liquidityEvents.length
+                    ? liquidityEvents.map((event) => (
                         <TableRow
-                          key={swap.metadata.txHash}
+                          key={event.metadata.txHash}
                           className="rounded-md outline outline-secondary"
                         >
                           <TableCell>Action</TableCell>

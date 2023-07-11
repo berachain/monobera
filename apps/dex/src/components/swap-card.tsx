@@ -42,7 +42,7 @@ export function SwapCard() {
   } = useSwap();
   const { isConnected } = useBeraJs();
   return (
-    <Card className="m-auto max-w-[500px]">
+    <Card className="m-auto w-[500px]">
       <CardHeader>
         <CardTitle className="center flex justify-between">
           Swap <SettingsPopover />

@@ -16,7 +16,7 @@ export function generateMetadata({ params }: Props): Metadata {
 
 async function getData(address: string) {
   const res = await fetch(
-    `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/swap/events/${address}`,
+    `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/liquidity/events?pool=${address}`,
   );
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -35,7 +35,7 @@ export default async function PoolPage({
 }: {
   params: { address: string };
 }) {
-  const swaps = await getData(params.address);
+  const liquidityEvents = await getData(params.address);
 
-  return <PoolPageContent params={params} swaps={swaps} />;
+  return <PoolPageContent params={params} liquidityEvents={liquidityEvents} />;
 }
