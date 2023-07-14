@@ -45,6 +45,8 @@ export interface Pool {
   swapFee: string;
   totalSupply: bigint;
   totalWeight: number;
+  totalValue?: number;
+  volumeForTheDay?: number;
 }
 
 export type PoolRecords = Record<string, PoolRecord>;

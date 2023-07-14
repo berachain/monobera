@@ -1,5 +1,6 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -26,6 +27,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { Balancer } from "react-wrap-balancer";
 import { formatUnits } from "viem";
 
+{
+  /* TODO typesafe this */
+}
+
 type LiquidityEvent = {
   metadata: {
     blockNum: string;
@@ -34,9 +39,10 @@ type LiquidityEvent = {
     blockTime: string;
     txIndex: string;
   };
+  shares: any;
+  liquidity: any;
   pool: string;
-  input: { denom: string; amount: string };
-  output: { denom: string; amount: string };
+  type: string;
 };
 
 export default function PoolPageContent({
@@ -187,7 +193,7 @@ export default function PoolPageContent({
           </TabsList>
           <Card>
             <TabsContent value="allTransactions">
-              <Table className="border-separate border-spacing-y-2 p-2">
+              <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Action</TableHead>
@@ -200,13 +206,21 @@ export default function PoolPageContent({
                 <TableBody>
                   {liquidityEvents.length
                     ? liquidityEvents.map((event) => (
-                        <TableRow
-                          key={event.metadata.txHash}
-                          className="rounded-md outline outline-secondary"
-                        >
-                          <TableCell>Action</TableCell>
+                        <TableRow key={event.metadata.txHash}>
+                          <TableCell>{event.type}</TableCell>
                           <TableCell>value</TableCell>
-                          <TableCell>tokens</TableCell>
+                          <TableCell className="font-medium">
+                            <div className="ml-2 flex flex-row justify-start">
+                              {event.liquidity.map((liquidity: any) => (
+                                <TokenIcon
+                                  key={liquidity.denom}
+                                  address={liquidity.denom}
+                                  fetch
+                                  className="ml-[-15px] h-10 w-10  border-2 border-border "
+                                />
+                              ))}
+                            </div>
+                          </TableCell>
                           <TableCell>account</TableCell>
                           <TableCell className="text-right">time</TableCell>
                         </TableRow>

@@ -317,9 +317,6 @@ importers:
 
   packages/bera-router:
     dependencies:
-      '@bera/berajs':
-        specifier: 0.1.0
-        version: link:../berajs
       axios:
         specifier: ^1.4.0
         version: 1.4.0
@@ -449,6 +446,9 @@ importers:
 
   packages/shared-ui:
     devDependencies:
+      '@bera/bera-router':
+        specifier: 0.1.0
+        version: link:../bera-router
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../berajs

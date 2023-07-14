@@ -261,6 +261,8 @@ const useCreateTokenWeights = () => {
     setTokenWeights(updatedTokenWeights);
   };
 
+  console.log("swap fee", swapFee);
+
   return {
     tokenWeights,
     totalWeight,

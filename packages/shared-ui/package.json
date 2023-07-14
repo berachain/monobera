@@ -15,6 +15,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@bera/bera-router": "0.1.0",
     "@bera/berajs": "0.1.0",
     "@bera/eslint-config": "0.1.0",
     "@bera/tailwind-config": "0.1.0",

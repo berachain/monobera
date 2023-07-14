@@ -218,7 +218,7 @@ const TokenDialogRow = ({
           </div>
         )}
         <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
-          <DialogContent className="flex flex-col items-center justify-center gap-2 px-4 sm:max-w-[425px]">
+          <DialogContent className="flex max-w-[425px] flex-col items-center justify-center gap-2 px-4">
             <TokenIcon token={token} />
             <Badge variant="destructive" className="w-fit gap-1">
               <Icons.warning className="h-4 w-4" />

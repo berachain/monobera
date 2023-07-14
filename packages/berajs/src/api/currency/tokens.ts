@@ -5,7 +5,10 @@ export type Token = {
   decimals: number;
   symbol: string;
   name: string;
-  default: boolean;
+  default?: boolean;
+  normalizedWeight?: number;
+  weight?: string | number;
+  balance?: bigint;
 };
 
 const TESTNET_TOKENS: Token[] = [];

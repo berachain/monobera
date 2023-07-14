@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { RouteNotFound, type SwapInfo } from "@bera/bera-router";
 import {
   ERC2MODULE_PRECOMPILE_ADDRESS,
-  useLatestBlock,
+  // useLatestBlock,
   usePollAllowance,
   usePollAssetWalletBalance,
   type Token,
@@ -24,7 +24,8 @@ export enum SwapKind {
 export const useSwap = () => {
   const slippage = useReadLocalStorage(LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE);
 
-  const deadline = useReadLocalStorage(LOCAL_STORAGE_KEYS.DEADLINE);
+  // TODO figure this out
+  // const deadline = useReadLocalStorage(LOCAL_STORAGE_KEYS.DEADLINE);
 
   const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
 
@@ -163,13 +164,14 @@ export const useSwap = () => {
 
   const allowance = useAllowance();
 
-  const block = useLatestBlock();
+  // TODO figure this out
+  // const block = useLatestBlock();
 
   useEffect(() => {
-    const d =
-      deadline === "auto"
-        ? block + 10000n
-        : block + BigInt(Math.floor(((deadline as number) * 60) / 2));
+    const d = 10000000000000000n;
+    // deadline === "auto"
+    //   ? block + 10000n
+    //   : block + BigInt(Math.floor(((deadline as number) * 60) / 2));
     if (swapInfo !== undefined && swapInfo.batchSwapSteps?.length) {
       if (slippage === "auto") {
         swapInfo.batchSwapSteps[

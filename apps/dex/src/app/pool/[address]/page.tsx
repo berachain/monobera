@@ -37,5 +37,10 @@ export default async function PoolPage({
 }) {
   const liquidityEvents = await getData(params.address);
 
-  return <PoolPageContent params={params} liquidityEvents={liquidityEvents} />;
+  return (
+    <PoolPageContent
+      params={params}
+      liquidityEvents={liquidityEvents["result"]}
+    />
+  );
 }

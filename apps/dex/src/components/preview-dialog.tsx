@@ -119,7 +119,11 @@ export default function PreviewDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button disabled={swapInfo === undefined} onClick={() => setOpen(true)}>
+        <Button
+          disabled={swapInfo === undefined}
+          onClick={() => setOpen(true)}
+          className="w-full"
+        >
           Preview
         </Button>
       </DialogTrigger>
@@ -128,7 +132,7 @@ export default function PreviewDialog({
           <DialogTitle>Preview swap</DialogTitle>
         </DialogHeader>
         <div className="flex w-full flex-row items-center justify-between">
-          <div className="flex h-20 w-2/5 flex-row items-center justify-center gap-4 rounded border border-solid border-[#f5f5f4] bg-[#fafaf9]">
+          <div className="flex h-20 w-2/5 flex-row items-center justify-center gap-4 rounded border bg-primary text-primary-foreground">
             <TokenIcon token={swapInfo?.tokenInObj} />
             <div className="flex w-16 shrink-0 flex-col items-stretch justify-start gap-1">
               <div className="whitespace-nowrap font-medium leading-[24px] text-[#a16207]">
@@ -138,7 +142,7 @@ export default function PreviewDialog({
             </div>
           </div>
           <Icons.arrowRight className="min-h-0 w-6 min-w-0 shrink-0" />
-          <div className="flex h-20 w-2/5 flex-row items-center justify-center gap-4 rounded border border-solid border-[#f5f5f4] bg-[#fafaf9]">
+          <div className="flex h-20 w-2/5 flex-row items-center justify-center gap-4 rounded border bg-primary text-primary-foreground">
             <TokenIcon token={swapInfo?.tokenOutObj} />
             <div className="flex w-16 shrink-0 flex-col items-stretch justify-start gap-1">
               <div className="whitespace-nowrap font-medium leading-[24px] text-[#a16207]">

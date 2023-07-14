@@ -54,9 +54,9 @@ export function CreatePoolPreview({
       asset: tokenWeight.token?.address,
       weight: tokenWeight.weight,
     })),
-    swapFee: fee,
+    swapFee: parseUnits(`${fee / 100}`, 18),
   };
-
+  console.log("options", options);
   const payload = [
     poolName,
     tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
@@ -128,6 +128,7 @@ export function CreatePoolPreview({
           />
         ) : (
           <Button
+            className="w-full"
             onClick={() => {
               write({
                 address: DEX_PRECOMPILE_ADDRESS,

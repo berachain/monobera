@@ -1,5 +1,12 @@
-import { type Token } from "@bera/berajs";
 import { parseUnits, type Address } from "viem";
+
+export type Token = {
+  address: string;
+  decimals: number;
+  symbol: string;
+  name: string;
+  default: boolean;
+};
 
 export enum SwapTypes {
   SwapExactIn,
@@ -76,7 +83,7 @@ export interface BatchSwapStep {
   amountIn: bigint;
   assetOut: Address;
   amountOut: bigint;
-  userData: string;
+  userData: Uint8Array;
 }
 
 export interface ResultPath extends NewPath {

@@ -11,13 +11,12 @@ export enum SELECTION {
   CUSTOM = "custom",
 }
 export default function SwapSettings() {
-  const [slippageTolerance, setSlippageTolerance] = useLocalStorage(
-    LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE,
-    SELECTION.AUTO as any,
-  );
-  const [deadline, setDeadline] = useLocalStorage(
+  const [slippageTolerance, setSlippageTolerance] = useLocalStorage<
+    number | string
+  >(LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE, SELECTION.AUTO);
+  const [deadline, setDeadline] = useLocalStorage<number | string>(
     LOCAL_STORAGE_KEYS.DEADLINE,
-    SELECTION.AUTO as any,
+    SELECTION.AUTO,
   );
 
   return (
@@ -51,7 +50,7 @@ export default function SwapSettings() {
           className="border-primary-foreground text-right"
           disabled={slippageTolerance === SELECTION.AUTO}
           placeholder="1"
-          defaultValue={slippageTolerance > 0 ? slippageTolerance : ""}
+          defaultValue={Number(slippageTolerance) > 0 ? slippageTolerance : ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setSlippageTolerance(Number(e.target.value))
           }
