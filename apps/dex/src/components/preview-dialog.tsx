@@ -39,6 +39,7 @@ const Route = ({
   swapInfo: SwapInfo | undefined;
   onExpand: () => void;
 }) => {
+  console.log(swapInfo);
   return (
     <div className="align-center flex flex-row gap-2">
       {swapInfo?.swaps.map((swap, index) => {
@@ -131,31 +132,17 @@ export default function PreviewDialog({
         <DialogHeader>
           <DialogTitle>Preview swap</DialogTitle>
         </DialogHeader>
-        <div className="flex w-full flex-row items-center justify-between">
-          <div className="flex h-20 w-2/5 flex-row items-center justify-center gap-4 rounded border bg-primary text-primary-foreground">
-            <TokenIcon token={swapInfo?.tokenInObj} />
-            <div className="flex w-16 shrink-0 flex-col items-stretch justify-start gap-1">
-              <div className="whitespace-nowrap font-medium leading-[24px] text-[#a16207]">
-                {Number(swapInfo?.formattedSwapAmount).toFixed(2)}{" "}
-                {swapInfo?.tokenInObj?.symbol}
-              </div>
-            </div>
-          </div>
-          <Icons.arrowRight className="min-h-0 w-6 min-w-0 shrink-0" />
-          <div className="flex h-20 w-2/5 flex-row items-center justify-center gap-4 rounded border bg-primary text-primary-foreground">
-            <TokenIcon token={swapInfo?.tokenOutObj} />
-            <div className="flex w-16 shrink-0 flex-col items-stretch justify-start gap-1">
-              <div className="whitespace-nowrap font-medium leading-[24px] text-[#a16207]">
-                {Number(swapInfo?.formattedReturnAmount).toFixed(2)}{" "}
-                {swapInfo?.tokenOutObj?.symbol}
-              </div>
-            </div>
-          </div>
-        </div>
+
+        <TokenIcon token={swapInfo?.tokenInObj} />
+
+        <Icons.arrowRight className="min-h-0 w-6 min-w-0 shrink-0" />
+
+        <TokenIcon token={swapInfo?.tokenOutObj} />
+
         <div className="flex w-full flex-col gap-2">
           <div className="flex flex-row items-center justify-between">
             <p>Exchange rate</p>
-            <p>
+            <p className="font-semibold">
               1 {swapInfo?.tokenInObj?.symbol} = {ratio}{" "}
               {swapInfo?.tokenOutObj?.symbol}
             </p>

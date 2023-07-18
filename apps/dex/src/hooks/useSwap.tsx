@@ -168,7 +168,8 @@ export const useSwap = () => {
   // const block = useLatestBlock();
 
   useEffect(() => {
-    const d = 10000000000000000n;
+    const d = 100000000000000000000n;
+    // TODO figure this out
     // deadline === "auto"
     //   ? block + 10000n
     //   : block + BigInt(Math.floor(((deadline as number) * 60) / 2));
@@ -183,16 +184,18 @@ export const useSwap = () => {
         const percentage = (100 - (slippage as number)) / 100;
         const minAmountOut =
           Number(swapInfo?.formattedReturnAmount ?? 0n) * percentage;
-
+        // TODO figure this out
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const parsedMinAmountOut = parseUnits(
           `${minAmountOut}`,
           swapInfo?.tokenOutObj?.decimals ?? 18,
         );
         swapInfo.batchSwapSteps[
           (swapInfo?.batchSwapSteps?.length ?? 1) - 1
-        ]!.amountOut = parsedMinAmountOut;
+        ]!.amountOut = 0n;
         const payload = [swapKind, swapInfo?.batchSwapSteps, d];
         setPayload(payload);
+        console.log(payload);
       }
     }
   }, [swapKind, swapInfo, slippage]);

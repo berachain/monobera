@@ -19,7 +19,7 @@ export default function PoolsTable({
   pools,
 }: {
   pools: Pool[];
-  mappedTokens: { [key: string]: string };
+  mappedTokens: { [key: string]: number };
 }) {
   const router = useRouter();
 

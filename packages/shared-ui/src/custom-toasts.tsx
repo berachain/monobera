@@ -1,6 +1,7 @@
 import { type PropsWithChildren } from "react";
 import Link from "next/link";
 import { useBeraConfig } from "@bera/berajs";
+import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 
 interface IToast {
@@ -15,12 +16,19 @@ interface IBaseToast extends PropsWithChildren {
   href?: string;
   onClose: () => void;
   duration?: number;
+  className?: string;
 }
 
-const BaseToast = ({ title, href, onClose, children }: IBaseToast) => {
+const BaseToast = ({
+  title,
+  href,
+  onClose,
+  children,
+  className,
+}: IBaseToast) => {
   return (
     <div
-      className="flex-col rounded-md bg-primary p-2"
+      className={cn("flex-col rounded-md bg-primary p-2", className)}
       style={{ width: "225px" }} // i dont know why this is needed, but we ball 🤮
     >
       <div className="flex justify-between">
@@ -47,6 +55,7 @@ export const SuccessToast = ({
   const { networkConfig } = useBeraConfig();
   return (
     <BaseToast
+      className="bg-positive text-white"
       title={title}
       onClose={onClose}
       href={
@@ -73,6 +82,7 @@ export const ErrorToast = ({
     <BaseToast
       title={title}
       onClose={onClose}
+      className="bg-destructive text-white"
       href={
         hash
           ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
