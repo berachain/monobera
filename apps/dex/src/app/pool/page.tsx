@@ -65,15 +65,12 @@ export default async function Pool() {
       );
 
     pools.map(async (pool) => {
-      const swapsResponse = await fetch(
-        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/pool/historical_volumes/${pool.pool}`,
+      const volumeResponse = await fetch(
+        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=1`,
       );
-      const swaps = await swapsResponse.json();
+      const volume = await volumeResponse.json();
 
-      if (swaps.length === 0) {
-        pool.volumeForTheDay = 0;
-      }
-      console.log("volumes", swaps.result);
+      console.log("volume", volume.result[0]);
       pool.totalValue = pool.tokens.reduce((acc, cur) => {
         const tokenValue = mappedTokens[cur.address];
         const tokenBalance = formatUnits(cur.balance, cur.decimals);
