@@ -70,7 +70,15 @@ export default async function Pool() {
       );
       const volume = await volumeResponse.json();
 
-      console.log("volume", volume.result[0]);
+      pool.dailyVolume = 0;
+      if (
+        volume.result &&
+        volume.result[0] &&
+        volume.result[0].coins &&
+        volume.result[0].coins[0]
+      ) {
+        pool.dailyVolume = volume.result[0].coins[0].amount;
+      }
       pool.totalValue = pool.tokens.reduce((acc, cur) => {
         const tokenValue = mappedTokens[cur.address];
         const tokenBalance = formatUnits(cur.balance, cur.decimals);

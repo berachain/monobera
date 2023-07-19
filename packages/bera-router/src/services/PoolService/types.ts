@@ -47,6 +47,7 @@ export interface Pool {
   totalWeight: number;
   totalValue?: number;
   volumeForTheDay?: number;
+  dailyVolume?: number;
 }
 
 export type PoolRecords = Record<string, PoolRecord>;

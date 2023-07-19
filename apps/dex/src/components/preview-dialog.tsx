@@ -45,7 +45,7 @@ const Route = ({
       {swapInfo?.swaps.map((swap, index) => {
         return (
           <div
-            className="align-center flex flex-row gap-2"
+            className="align-center flex flex-row gap-2 font-semibold"
             key={swap.tokenIn + index}
           >
             {index === 0 && swap.tokenInObj?.symbol}{" "}
@@ -132,12 +132,21 @@ export default function PreviewDialog({
         <DialogHeader>
           <DialogTitle>Preview swap</DialogTitle>
         </DialogHeader>
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex w-1/2 items-center justify-center gap-2 rounded-lg bg-accent p-4">
+            <TokenIcon token={swapInfo?.tokenInObj} />
+            {swapInfo?.formattedSwapAmount}
+            {swapInfo?.tokenInObj?.symbol}
+          </div>
 
-        <TokenIcon token={swapInfo?.tokenInObj} />
+          <Icons.arrowRight className="min-h-0 w-6 min-w-0 shrink-0" />
 
-        <Icons.arrowRight className="min-h-0 w-6 min-w-0 shrink-0" />
-
-        <TokenIcon token={swapInfo?.tokenOutObj} />
+          <div className="flex w-1/2 items-center justify-center gap-2 rounded-lg bg-accent p-4">
+            <TokenIcon token={swapInfo?.tokenOutObj} />
+            {swapInfo?.formattedReturnAmount.substring(0, 6)}
+            {swapInfo?.tokenOutObj?.symbol}
+          </div>
+        </div>
 
         <div className="flex w-full flex-col gap-2">
           <div className="flex flex-row items-center justify-between">
@@ -149,19 +158,19 @@ export default function PreviewDialog({
           </div>
           <div className="flex flex-row items-center justify-between">
             <p>Swap amount</p>
-            <p>
+            <p className="font-semibold">
               {swapInfo?.formattedSwapAmount} {swapInfo?.tokenInObj?.symbol}
             </p>
           </div>
           <div className="flex flex-row items-center justify-between">
             <p>Expected output</p>
-            <p>
+            <p className="font-semibold">
               {swapInfo?.formattedReturnAmount} {swapInfo?.tokenOutObj?.symbol}
             </p>
           </div>
           <div className="flex flex-row items-center justify-between">
             <p>Price Impact</p>
-            <p>{priceImpact ?? 0}%</p>
+            <p className="font-semibold">{priceImpact ?? 0}%</p>
           </div>
           <div className="flex flex-row items-center justify-between">
             <p>Route</p>
