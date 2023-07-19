@@ -27,11 +27,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { Balancer } from "react-wrap-balancer";
 import { formatUnits } from "viem";
 
-{
-  /* TODO typesafe this */
-}
-
-type LiquidityEvent = {
+// TODO typesafe this and make generic for all events
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type Event = {
   metadata: {
     blockNum: string;
     txHash: string;
@@ -47,10 +45,10 @@ type LiquidityEvent = {
 
 export default function PoolPageContent({
   params,
-  liquidityEvents,
+  events,
 }: {
   params: { address: string };
-  liquidityEvents: LiquidityEvent[];
+  events: any[];
 }) {
   const router = useRouter();
   const { useSelectedPool } = usePollPools();
@@ -62,7 +60,7 @@ export default function PoolPageContent({
     // TODO loading skeleton state
     return <p>Loading...</p>;
   }
-  console.log("LIQUIDITY EVENTS: ", liquidityEvents);
+  console.log("EVENTS: ", events);
   console.log("POOL: ", pool);
   return (
     <div className="container">
@@ -204,28 +202,32 @@ export default function PoolPageContent({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {liquidityEvents.length
-                    ? liquidityEvents.map((event) => (
-                        <TableRow key={event.metadata.txHash}>
-                          <TableCell>{event.type}</TableCell>
-                          <TableCell>value</TableCell>
-                          <TableCell className="font-medium">
-                            <div className="ml-2 flex flex-row justify-start">
-                              {event.liquidity.map((liquidity: any) => (
-                                <TokenIcon
-                                  key={liquidity.denom}
-                                  address={liquidity.denom}
-                                  fetch
-                                  className="ml-[-15px] h-10 w-10  border-2 border-border "
-                                />
-                              ))}
-                            </div>
-                          </TableCell>
-                          <TableCell>account</TableCell>
-                          <TableCell className="text-right">time</TableCell>
-                        </TableRow>
-                      ))
-                    : "No transactions yet"}
+                  {events.length ? (
+                    events.map((event) => (
+                      <TableRow key={event.metadata.txHash}>
+                        <TableCell>{event.type}</TableCell>
+                        <TableCell>value</TableCell>
+                        <TableCell className="font-medium">
+                          <div className="ml-2 flex flex-row justify-start">
+                            {event.liquidity.map((liquidity: any) => (
+                              <TokenIcon
+                                key={liquidity.denom}
+                                address={liquidity.denom}
+                                fetch
+                                className="ml-[-15px] h-10 w-10  border-2 border-border "
+                              />
+                            ))}
+                          </div>
+                        </TableCell>
+                        <TableCell>account</TableCell>
+                        <TableCell className="text-right">time</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell>No events</TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TabsContent>

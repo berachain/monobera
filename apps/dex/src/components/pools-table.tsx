@@ -57,7 +57,7 @@ export default function PoolsTable({
                 <TableCell className="font-medium">{pool.poolName}</TableCell>
                 <TableCell>{formatUsd(pool.totalValue || 0)}</TableCell>
                 <TableCell>
-                  {formatUnits(BigInt(Number(pool.dailyVolume)), 18)}
+                  {formatUnits(BigInt(Number(pool.dailyVolume || 0)), 18)}
                 </TableCell>
                 <TableCell className="text-right">
                   {Number(formatUnits(BigInt(pool.swapFee) ?? "", 18)) * 100}%
