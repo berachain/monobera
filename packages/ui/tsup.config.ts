@@ -38,6 +38,7 @@ const server = [
   "./src/card.tsx",
   "./src/table.tsx",
   "./src/toast.tsx",
+  "./src/navigation-menu.tsx",
 ];
 
 export default defineConfig((opts) => {

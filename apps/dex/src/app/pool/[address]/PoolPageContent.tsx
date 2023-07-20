@@ -1,5 +1,6 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -26,7 +27,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { Balancer } from "react-wrap-balancer";
 import { formatUnits } from "viem";
 
-type Swap = {
+// TODO typesafe this and make generic for all events
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type Event = {
   metadata: {
     blockNum: string;
     txHash: string;
@@ -34,17 +37,18 @@ type Swap = {
     blockTime: string;
     txIndex: string;
   };
+  shares: any;
+  liquidity: any;
   pool: string;
-  input: { denom: string; amount: string };
-  output: { denom: string; amount: string };
+  type: string;
 };
 
 export default function PoolPageContent({
   params,
-  swaps,
+  events,
 }: {
   params: { address: string };
-  swaps: Swap[];
+  events: any[];
 }) {
   const router = useRouter();
   const { useSelectedPool } = usePollPools();
@@ -56,6 +60,7 @@ export default function PoolPageContent({
     // TODO loading skeleton state
     return <p>Loading...</p>;
   }
+  console.log("EVENTS: ", events);
   console.log("POOL: ", pool);
   return (
     <div className="container">
@@ -186,7 +191,7 @@ export default function PoolPageContent({
           </TabsList>
           <Card>
             <TabsContent value="allTransactions">
-              <Table className="border-separate border-spacing-y-2 p-2">
+              <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Action</TableHead>
@@ -197,20 +202,32 @@ export default function PoolPageContent({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {swaps.length
-                    ? swaps.map((swap) => (
-                        <TableRow
-                          key={swap.metadata.txHash}
-                          className="rounded-md outline outline-secondary"
-                        >
-                          <TableCell>Action</TableCell>
-                          <TableCell>value</TableCell>
-                          <TableCell>tokens</TableCell>
-                          <TableCell>account</TableCell>
-                          <TableCell className="text-right">time</TableCell>
-                        </TableRow>
-                      ))
-                    : "No transactions yet"}
+                  {events.length ? (
+                    events.map((event) => (
+                      <TableRow key={event.metadata.txHash}>
+                        <TableCell>{event.type}</TableCell>
+                        <TableCell>value</TableCell>
+                        <TableCell className="font-medium">
+                          <div className="ml-2 flex flex-row justify-start">
+                            {event.liquidity.map((liquidity: any) => (
+                              <TokenIcon
+                                key={liquidity.denom}
+                                address={liquidity.denom}
+                                fetch
+                                className="ml-[-15px] h-10 w-10  border-2 border-border "
+                              />
+                            ))}
+                          </div>
+                        </TableCell>
+                        <TableCell>account</TableCell>
+                        <TableCell className="text-right">time</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell>No events</TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </TabsContent>

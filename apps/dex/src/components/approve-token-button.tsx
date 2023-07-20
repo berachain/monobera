@@ -18,6 +18,7 @@ const ApproveTokenButton = ({ token, spender, amount = 1000000n }: Props) => {
 
   return (
     <Button
+      className="w-full"
       onClick={() => {
         write({
           address: token?.address as `0x${string}`,

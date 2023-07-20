@@ -37,7 +37,7 @@ export function Header() {
   return (
     <section className="fixed left-0 right-0 z-50 bg-background">
       <div className="mx-auto flex h-16 w-full items-center justify-between px-4">
-        <div className="hidden md:block">
+        <div>
           <div className="mr-8 flex items-center">
             <span className="mr-10 text-lg font-bold tracking-tight">
               <Link href={"/"}>
@@ -47,10 +47,10 @@ export function Header() {
             <MainNav />
           </div>
         </div>
-        <MobileDropdown />
         <div className="flex gap-2">
           <ThemeToggle />
           <Connect />
+          <MobileDropdown />
         </div>
       </div>
     </section>

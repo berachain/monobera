@@ -62,7 +62,7 @@ export const defaultConfig: RouterConfig = {
   publicClient: client as PublicClient,
   contracts: {
     poolAddress: "0x0d5862FDbdd12490f9b4De54c236cff63B038074",
-    multicallAddress: "0x85dd28e1Cd670eD7535a1fB5F13863725e75BF66",
+    multicallAddress: "0x5C59C83c099F72FcE832208f96a23a1E43737a14",
     connectingTokens: [
       {
         symbol: "wbera",

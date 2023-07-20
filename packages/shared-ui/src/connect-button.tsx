@@ -4,9 +4,11 @@ import { Button } from "@bera/ui/button";
 import { ConnectButton as RainbowConnectButton } from "@rainbow-me/rainbowkit";
 
 import "@rainbow-me/rainbowkit/styles.css";
+import { cn } from "@bera/ui";
+
 import ConnectedWalletPopover from "./connected-wallet-popover";
 
-export const ConnectButton = () => {
+export const ConnectButton = ({ className }: { className?: string }) => {
   return (
     <RainbowConnectButton.Custom>
       {({
@@ -30,7 +32,7 @@ export const ConnectButton = () => {
                 userSelect: "none",
               },
             })}
-            className="flex w-48"
+            className={cn("flex w-48", className)}
           >
             {(() => {
               if (!connected) {

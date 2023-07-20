@@ -37,7 +37,7 @@ export const usePollPreviewBurnShares = (
       return undefined;
     },
     {
-      refreshInterval: POLLING.FAST,
+      refreshInterval: POLLING.SLOW,
     },
   );
 

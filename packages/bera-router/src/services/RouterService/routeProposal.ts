@@ -1,4 +1,3 @@
-import { type Token } from "@bera/berajs";
 import { cloneDeep } from "lodash";
 import { getAddress } from "viem";
 
@@ -17,6 +16,14 @@ import {
   type SwapOptions,
   type hopDictionary,
 } from "./types";
+
+export type Token = {
+  address: string;
+  decimals: number;
+  symbol: string;
+  name: string;
+  default: boolean;
+};
 
 export class RouteProposer {
   cache: Record<string, { paths: NewPath[] }> = {};

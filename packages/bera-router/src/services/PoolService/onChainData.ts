@@ -1,7 +1,7 @@
-import { DEX_PRECOMPILE_ABI, DEX_PRECOMPILE_ADDRESS } from "@bera/berajs";
 import { cloneDeep, set, unset } from "lodash";
 import { type Address, type PublicClient } from "viem";
 
+import { DEX_PRECOMPILE_ABI, DEX_PRECOMPILE_ADDRESS } from "../constants";
 import { ERC20ABI } from "./erc20abi";
 import {
   type Pool,

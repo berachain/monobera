@@ -78,10 +78,10 @@ export default function SwapInput({
                   className="text-md text-default mx-0 h-8 p-0"
                   onClick={() => setAmount(tokenBalance || 0)}
                 >
-                  Balance: {tokenBalance}
+                  Balance: {tokenBalance.toFixed(2)}
                 </Button>
 
-                <p>${tokenBalance && tokenBalance * 0.69}</p>
+                <p>${tokenBalance && (tokenBalance * 0.69).toFixed(2)}</p>
               </div>
             )}
             {!hideBalance && amount ? (

@@ -1,5 +1,6 @@
 import React from "react";
-import { type Token } from "@bera/berajs";
+import { useBeraJs, type Token } from "@bera/berajs";
+import { ConnectButton } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -39,7 +40,7 @@ export function CreatePool({
   const selectedTokens = tokenWeights.map((tokenWeight: ITokenWeight) => {
     return tokenWeight.token;
   }) as Token[];
-
+  const { isConnected } = useBeraJs();
   return (
     <Card>
       <CardHeader>
@@ -85,13 +86,17 @@ export function CreatePool({
           value={exceeding ? 100 : totalWeight}
           className={cn("mt-1 h-2", exceeding && "bg-destructive")}
         />
-        <Button
-          disabled={error?.message === "Tokens must be selected"}
-          className="mt-4 w-full"
-          onClick={onContinue}
-        >
-          Next
-        </Button>
+        {isConnected ? (
+          <Button
+            disabled={error?.message === "Tokens must be selected"}
+            className="mt-4 w-full"
+            onClick={onContinue}
+          >
+            Next
+          </Button>
+        ) : (
+          <ConnectButton className="mt-4 w-full" />
+        )}
       </CardContent>
     </Card>
   );

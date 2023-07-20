@@ -1,5 +1,12 @@
-import { type Token } from "@bera/berajs";
 import { parseUnits, type Address } from "viem";
+
+export type Token = {
+  address: string;
+  decimals: number;
+  symbol: string;
+  name: string;
+  default: boolean;
+};
 
 export enum SwapTypes {
   SwapExactIn,
