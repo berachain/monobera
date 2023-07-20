@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
@@ -27,23 +28,72 @@ export function MobileDropdown() {
           variant="ghost"
           className="mr-2 px-0 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
-          <Icons.logo className="h-12 w-12" />
+          {isOpen ? (
+            <Icons.close className="h-6 w-6" />
+          ) : (
+            <Icons.menu className="h-6 w-6" />
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen animate-none rounded-none border-none transition-transform">
         <ScrollArea className="py-8">
-          {navItems.map(({ href, title }) => (
-            <Link
-              key={href}
-              href={{ pathname: href }}
-              // className="flex items-center mt-2 text-lg font-semibold sm:text-sm"
-              className="flex py-1 text-base font-medium text-muted-foreground transition-colors hover:text-primary"
-            >
-              {title}
-            </Link>
-          ))}
+          {navItems.map(({ href, title, children }) => {
+            if (href === "#" && children) {
+              return (
+                <ul
+                  className="grid w-full gap-3 p-1 md:w-[500px] md:grid-cols-2 lg:w-[600px]"
+                  key={href}
+                >
+                  {children.map((component) => (
+                    <ListItem
+                      key={component.title}
+                      title={component.title}
+                      href={component.href}
+                    >
+                      {component.blurb}
+                    </ListItem>
+                  ))}
+                </ul>
+              );
+            }
+            return (
+              <Link
+                key={href}
+                onClick={() => setIsOpen(false)}
+                href={{ pathname: href }}
+                className="flex p-4 font-medium text-foreground transition-colors hover:text-primary"
+              >
+                {title}
+              </Link>
+            );
+          })}
         </ScrollArea>
       </PopoverContent>
     </Popover>
   );
 }
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <a
+        target="_blank"
+        ref={ref}
+        className={cn(
+          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-primary focus:bg-accent focus:text-primary",
+          className,
+        )}
+        {...props}
+      >
+        <div className="text-sm font-medium leading-none">{title}</div>
+        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          {children}
+        </p>
+      </a>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";

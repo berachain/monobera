@@ -1,4 +1,3 @@
-import { DEX_PRECOMPILE_ABI, DEX_PRECOMPILE_ADDRESS } from "@bera/berajs";
 import cloneDeep from "lodash";
 import {
   formatUnits,
@@ -11,6 +10,7 @@ import {
 
 import { type RouterConfig } from "~/config";
 import { PoolService } from "../PoolService/poolService";
+import { DEX_PRECOMPILE_ABI, DEX_PRECOMPILE_ADDRESS } from "../constants";
 import { RouteNotFound } from "./errors";
 import { RouteProposer } from "./routeProposal";
 import {
@@ -41,7 +41,7 @@ export const EMPTY_SWAPINFO: SwapInfo = {
 
 export class RouterService {
   private routeProposer: RouteProposer;
-  private poolService: PoolService;
+  public poolService: PoolService;
   private readonly defaultSwapOptions: SwapOptions = {
     gasPrice: parseUnits(`${85000}`, 9),
     swapGas: parseUnits(`${85000}`, 18),
@@ -338,7 +338,7 @@ export const formatSequence = (
       assetInIndex,
       assetOutIndex,
       amount: amountScaled,
-      userData: "0x",
+      userData: "",
       returnAmount: returnScaled,
     };
   }) as unknown as SwapV2[];

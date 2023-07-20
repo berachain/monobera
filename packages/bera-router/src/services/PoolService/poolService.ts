@@ -26,7 +26,7 @@ export class PoolService {
   public async fetchPools() {
     try {
       const response = await axios.get(
-        `${this.config.subgraphUrl}/pool/creation_events`,
+        `${this.config.subgraphUrl}/events/dex/pool_created?page=1&per_page=10`,
       );
       this.pools = response.data.result;
       this.poolMulticall.getPoolData(this.pools);

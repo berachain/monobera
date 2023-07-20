@@ -6,19 +6,25 @@ import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 
 type Props = {
-  token: Token | undefined;
+  token?: Token | undefined;
   fetch?: boolean;
   className?: string;
+  address?: string;
 };
 
-export const TokenIcon = ({ token, className, fetch = false }: Props) => {
+export const TokenIcon = ({
+  token,
+  className,
+  fetch = false,
+  address,
+}: Props) => {
   const [selectedToken, setSelectedToken] = useState<Token | undefined>(token);
   const { read, tokenInformation } = useTokenInformation();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (fetch && token) {
-        await read({ address: token.address });
+      if (fetch && address) {
+        await read({ address: address });
       }
       if (tokenInformation && fetch) {
         setSelectedToken(tokenInformation);

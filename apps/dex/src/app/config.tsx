@@ -8,8 +8,30 @@ export const navItems = [
     title: "Pool",
   },
   {
-    href: "/claim",
-    title: "Claim",
+    href: "#",
+    title: "Explore",
+    children: [
+      {
+        href: "https://foundation.berachain.com",
+        title: "Berachain Foundation",
+        blurb: "The homepage of the chain",
+      },
+      {
+        href: "https://honey.berachain.com",
+        title: "Honey",
+        blurb: "Mint or redeem the stablecoin of the Berachain",
+      },
+      {
+        href: "https://bgt.berachain.com",
+        title: "BGT",
+        blurb: "The hub for the governance token of Berachain, BGT",
+      },
+      {
+        href: "https://devnet.beraswillscanit.com",
+        title: "Berascan",
+        blurb: "View all transactions in the Berachain network",
+      },
+    ],
   },
 ];
 

@@ -54,9 +54,9 @@ export function CreatePoolPreview({
       asset: tokenWeight.token?.address,
       weight: tokenWeight.weight,
     })),
-    swapFee: fee,
+    swapFee: parseUnits(`${fee / 100}`, 18),
   };
-
+  console.log("options", options);
   const payload = [
     poolName,
     tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
@@ -89,13 +89,13 @@ export function CreatePoolPreview({
           <div className="flex">
             {editPoolName ? (
               <Input
-                className="mr-1 border-none text-right"
+                className="mr-1 border-none text-right font-semibold"
                 value={poolName}
                 maxLength={120}
                 onChange={(e) => setPoolName(e.target.value)}
               />
             ) : (
-              <p className="px-3 py-2">{poolName}</p>
+              <p className="px-3 py-2 font-semibold">{poolName}</p>
             )}
             <Button
               onClick={() => setEditPoolName(!editPoolName)}
@@ -108,11 +108,11 @@ export function CreatePoolPreview({
         </div>
         <div className="flex h-[40px] w-full items-center justify-between text-sm">
           <p>Pool Type</p>
-          <p>Weighted</p>
+          <p className="font-semibold">Weighted</p>
         </div>
         <div className="flex h-[40px] w-full items-center justify-between text-sm">
           <p>Swap Fee</p>
-          <p>{fee}%</p>
+          <p className="font-semibold">{fee}%</p>
         </div>
         {error && (
           <Alert variant="destructive" className="my-4">
@@ -128,6 +128,7 @@ export function CreatePoolPreview({
           />
         ) : (
           <Button
+            className="w-full"
             onClick={() => {
               write({
                 address: DEX_PRECOMPILE_ADDRESS,

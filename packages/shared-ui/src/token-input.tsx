@@ -2,6 +2,7 @@
 
 import React from "react";
 import {
+  formatUsd,
   useBeraJs,
   usePollAssetWalletBalance,
   useSelectedAssetWalletBalance,
@@ -98,10 +99,14 @@ export function TokenInput({
                   className="text-md text-default h-8 p-0"
                   onClick={() => setAmount && setAmount(tokenBalance || 0)}
                 >
-                  Balance: {tokenBalance}
+                  Balance: {tokenBalance.toFixed(4)}
                 </Button>
               </p>
-              {!hidePrice && <p>${tokenBalance && tokenBalance * 0.69}</p>}
+              {!hidePrice && (
+                <p>
+                  {tokenBalance && formatUsd((tokenBalance * 0.69).toFixed(2))}
+                </p>
+              )}
             </div>
           )}
           {!hideBalance ? (
