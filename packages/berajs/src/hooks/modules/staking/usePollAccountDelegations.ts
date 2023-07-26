@@ -1,14 +1,16 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
-import { usePublicClient } from "wagmi";
+import { usePublicClient, type Address } from "wagmi";
 
-import { STAKING_PRECOMPILE_ABI, STAKING_PRECOMPILE_ADDRESS } from "~/config";
+import { STAKING_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraJs } from "~/contexts";
+import { useBeraConfig, useBeraJs } from "~/contexts";
 
 export const usePollAccountDelegations = (validatorAddress: `0x${string}`) => {
   const { account: address, error } = useBeraJs();
+  const { networkConfig } = useBeraConfig();
+
   const publicClient = usePublicClient();
   const method = "getDelegation";
   const QUERY_KEY = [address, validatorAddress, method];
@@ -17,7 +19,7 @@ export const usePollAccountDelegations = (validatorAddress: `0x${string}`) => {
     async () => {
       if (address && !error) {
         const result = await publicClient.readContract({
-          address: STAKING_PRECOMPILE_ADDRESS,
+          address: networkConfig.precompileAddresses.stakingAddress as Address,
           abi: STAKING_PRECOMPILE_ABI,
           functionName: method,
           args: [address, validatorAddress],

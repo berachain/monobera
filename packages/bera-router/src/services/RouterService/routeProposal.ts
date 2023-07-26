@@ -427,7 +427,6 @@ export function createPath(
     if (poolPair) poolPairData.push(poolPair);
     id = id + poolPair?.id;
 
-    console.log("poolPair", pools[i]);
     const swap: Swap = {
       pool: pools[i]?.id ?? "",
       tokenInObj:

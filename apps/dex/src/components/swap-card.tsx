@@ -2,13 +2,14 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
-import { ERC2MODULE_PRECOMPILE_ADDRESS, useBeraJs } from "@bera/berajs";
+import { useBeraJs } from "@bera/berajs";
 import { ConnectButton, TokenInput } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
+import { erc20ModuleAddress } from "~/config";
 import { SwapKind, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
 
@@ -83,6 +84,7 @@ export function SwapCard() {
               setToAmount(Number(amount));
             }}
           />
+          {(priceImpact ?? 0) > 15 && "Price impact is too high"}
           {error && (
             <Alert variant="destructive" className="my-4">
               <Icons.warning className="h-4 w-4" />
@@ -93,7 +95,7 @@ export function SwapCard() {
           {(Number(allowance?.formattedAllowance) ?? 0) < fromAmount ? (
             <DynamicApproveButton
               token={selectedFrom}
-              spender={ERC2MODULE_PRECOMPILE_ADDRESS}
+              spender={erc20ModuleAddress}
             />
           ) : isConnected ? (
             <DynamicPreview

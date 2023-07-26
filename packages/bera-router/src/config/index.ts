@@ -57,12 +57,11 @@ export interface RouterConfig {
 }
 
 export const defaultConfig: RouterConfig = {
-  subgraphUrl:
-    "http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com",
+  subgraphUrl: process.env.NEXT_PUBLIC_INDEXER_ENDPOINT as string,
   publicClient: client as PublicClient,
   contracts: {
-    poolAddress: "0x0d5862FDbdd12490f9b4De54c236cff63B038074",
-    multicallAddress: "0x5C59C83c099F72FcE832208f96a23a1E43737a14",
+    poolAddress: process.env.NEXT_PUBLIC_ERC20_DEX_ADDRESS as Address,
+    multicallAddress: process.env.NEXT_PUBLIC_MULTICALL_ADDRESS as Address,
     connectingTokens: [
       {
         symbol: "wbera",

@@ -1,11 +1,10 @@
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
-import { erc20ABI, usePublicClient } from "wagmi";
+import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
-import { getContracts } from "~/api/contracts";
 import { type Token } from "~/api/currency/tokens";
-import { useBeraJs } from "~/contexts";
+import { useBeraConfig, useBeraJs } from "~/contexts";
 
 const REFRESH_BLOCK_INTERVAL = 2000;
 
@@ -37,6 +36,7 @@ export const usePollAllowances = ({ contract, tokens }: IUsePollAllowances) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account, error } = useBeraJs();
+  const { networkConfig } = useBeraConfig();
 
   const QUERY_KEY = [account, tokens, contract, "allowances"];
   useSWR(
@@ -50,11 +50,10 @@ export const usePollAllowances = ({ contract, tokens }: IUsePollAllowances) => {
           args: [account, contract],
         }));
 
-        const contracts = getContracts();
-
         const result = await publicClient.multicall({
           contracts: call,
-          multicallAddress: contracts.multicall as `0x${string}`,
+          multicallAddress: networkConfig.precompileAddresses
+            .multicallAddress as Address,
         });
 
         const allowances = await Promise.all(

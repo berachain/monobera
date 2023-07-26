@@ -65,6 +65,10 @@ export class RouterService {
     return this.poolService.getPools();
   }
 
+  public getPool(poolId: string) {
+    return this.poolService.getPools().find((pool) => pool.pool === poolId);
+  }
+
   public async getSwaps(
     tokenIn: Address,
     tokenOut: Address,

@@ -1,12 +1,11 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
-import { erc20ABI, usePublicClient } from "wagmi";
+import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
-import { getContracts } from "~/api/contracts";
 import POLLING from "~/config/constants/polling";
 import { type Token } from "../api/currency/tokens";
-import { useBeraJs } from "../contexts";
+import { useBeraConfig, useBeraJs } from "../contexts";
 
 interface BalanceToken extends Token {
   balance: bigint;
@@ -27,6 +26,8 @@ export const usePollBalance = ({
 }) => {
   const publicClient = usePublicClient();
   const { account, error } = useBeraJs();
+  const { networkConfig } = useBeraConfig();
+
   const QUERY_KEY = [account, address, "balance"];
   useSWR(
     QUERY_KEY,
@@ -58,10 +59,10 @@ export const usePollBalance = ({
             args: [],
           },
         ];
-        const contracts = getContracts();
         const result = await publicClient.multicall({
           contracts: call,
-          multicallAddress: contracts.multicall as `0x${string}`,
+          multicallAddress: networkConfig.precompileAddresses
+            .multicallAddress as Address,
         });
 
         const balance: BalanceToken = {

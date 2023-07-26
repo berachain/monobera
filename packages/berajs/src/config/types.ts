@@ -1,7 +1,7 @@
-import { type Chain } from "wagmi";
+import { type Address, type Chain } from "wagmi";
 
 interface PrecompileMapping {
-  [key: string]: string;
+  [key: string]: Address;
 }
 
 export interface NetworkConfig {

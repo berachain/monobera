@@ -1,11 +1,10 @@
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
-import { erc20ABI, usePublicClient } from "wagmi";
+import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
-import { getContracts } from "../api/contracts";
 import { type Token } from "../api/currency/tokens";
-import { useBeraJs } from "../contexts";
+import { useBeraConfig, useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
 
 const REFRESH_BLOCK_INTERVAL = 2000;
@@ -26,6 +25,7 @@ export const usePollAssetWalletBalance = () => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account, error } = useBeraJs();
+  const { networkConfig } = useBeraConfig();
   const { tokenList } = useTokens();
   useSWR(
     [account, "assetWalletBalances"],
@@ -37,11 +37,11 @@ export const usePollAssetWalletBalance = () => {
           functionName: "balanceOf",
           args: [account],
         }));
-        const contracts = getContracts();
         try {
           const result = await publicClient.multicall({
             contracts: call,
-            multicallAddress: contracts.multicall as `0x${string}`,
+            multicallAddress: networkConfig.precompileAddresses
+              .multicallAddress as Address,
           });
 
           const balances = await Promise.all(

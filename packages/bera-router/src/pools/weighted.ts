@@ -118,7 +118,6 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
     );
     const weightIn = bigWeightIn;
 
-    console.log("weightIn", weightIn);
     const tokenIndexOut = this.tokens.findIndex(
       (t) =>
         getAddress(t.address).toLowerCase() ===

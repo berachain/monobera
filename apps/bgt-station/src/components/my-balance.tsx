@@ -2,10 +2,10 @@
 
 import React from "react";
 import {
-  ERC20BGTMODULE_PRECOMPILE_ADDRESS,
   ERC20BGT_PRECOMPILE_ABI,
   usePollBgtBalance,
   type Token,
+  useBeraConfig,
 } from "@bera/berajs";
 import { TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -19,9 +19,11 @@ import {
 import { Icons } from "@bera/ui/icons";
 
 import { useRedeem } from "~/hooks/useRedeem";
+import { type Address } from "wagmi";
 
 export default function MyBalance() {
   const [open, setOpen] = React.useState(false);
+  const { networkConfig } = useBeraConfig();
 
   const { useBgtBalance } = usePollBgtBalance();
   const bgtBalance = useBgtBalance();
@@ -72,7 +74,7 @@ export default function MyBalance() {
             disabled={isLoading}
             onClick={() => {
               write({
-                address: ERC20BGTMODULE_PRECOMPILE_ADDRESS,
+                address: networkConfig.precompileAddresses.erc20BgtAddress as Address,
                 abi: ERC20BGT_PRECOMPILE_ABI,
                 functionName: "redeemBgtForBera",
                 params: payload,

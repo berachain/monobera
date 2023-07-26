@@ -2,6 +2,7 @@ import {
   Activity,
   AlertTriangle,
   ArrowDown,
+  ArrowDownUp,
   ArrowRight,
   ArrowUpRight,
   Check,
@@ -34,6 +35,8 @@ import {
   Plus,
   Repeat2,
   Settings,
+  SortAsc,
+  SortDesc,
   SunMedium,
   Trash,
   Trash2,
@@ -50,6 +53,9 @@ export type Icon = LucideIcon;
 
 export const Icons = {
   activity: Activity,
+  sortAsc: SortAsc,
+  arrowDownUp: ArrowDownUp,
+  sortDesc: SortDesc,
   command: Command,
   close: X,
   menu: Menu,

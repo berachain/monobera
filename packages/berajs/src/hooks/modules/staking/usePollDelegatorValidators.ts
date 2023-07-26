@@ -1,12 +1,11 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits } from "viem";
+import { formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { getContracts } from "~/api/contracts";
-import { STAKING_PRECOMPILE_ABI, STAKING_PRECOMPILE_ADDRESS } from "~/config";
+import { STAKING_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraJs } from "~/contexts";
+import { useBeraConfig, useBeraJs } from "~/contexts";
 import { ethToBera } from "~/utils";
 import { type Validator } from ".";
 
@@ -28,6 +27,8 @@ export interface UnbondingDelegationEntry {
 export const usePollDelegatorValidators = () => {
   const publicClient = usePublicClient();
   const { account, isConnected } = useBeraJs();
+  const { networkConfig } = useBeraConfig();
+
   const method = "getDelegatorValidators";
   const QUERY_KEY = [account, method];
   useSWR(
@@ -35,7 +36,7 @@ export const usePollDelegatorValidators = () => {
     async () => {
       if (isConnected) {
         const result = await publicClient.readContract({
-          address: STAKING_PRECOMPILE_ADDRESS,
+          address: networkConfig.precompileAddresses.stakingAddress as Address,
           abi: STAKING_PRECOMPILE_ABI,
           functionName: method,
           args: [ethToBera(account as string)],
@@ -62,6 +63,7 @@ export const usePollDelegatorValidators = () => {
 export const usePollTotalDelegatorDelegated = () => {
   const publicClient = usePublicClient();
   const { account, isConnected } = useBeraJs();
+  const { networkConfig } = useBeraConfig();
   const { useDelegatorValidators } = usePollDelegatorValidators();
   const validators: Validator[] = useDelegatorValidators();
   const method = "getDelegation";
@@ -72,16 +74,17 @@ export const usePollTotalDelegatorDelegated = () => {
       if (isConnected && validators.length > 0) {
         const call: Call[] = validators.map((validator: Validator) => {
           return {
-            address: STAKING_PRECOMPILE_ADDRESS,
+            address: networkConfig.precompileAddresses
+              .stakingAddress as Address,
             abi: STAKING_PRECOMPILE_ABI,
             functionName: method,
             args: [ethToBera(account as string), validator.operatorAddress],
           };
         });
-        const contracts = getContracts();
         const result = await publicClient.multicall({
           contracts: call,
-          multicallAddress: contracts.multicall as `0x${string}`,
+          multicallAddress: networkConfig.precompileAddresses
+            .multicallAddress as Address,
         });
         return result?.reduce((sum: number, r: any) => {
           return sum + Number(formatUnits(r.result ?? 0n, 18));
@@ -107,6 +110,7 @@ export const usePollTotalDelegatorDelegated = () => {
 export const usePollDelegatorUnbonding = () => {
   const publicClient = usePublicClient();
   const { account, isConnected } = useBeraJs();
+  const { networkConfig } = useBeraConfig();
   const { useDelegatorValidators } = usePollDelegatorValidators();
   const validators: Validator[] = useDelegatorValidators();
   const method = "getUnbondingDelegation";
@@ -117,16 +121,17 @@ export const usePollDelegatorUnbonding = () => {
       if (isConnected && validators.length > 0) {
         const call: Call[] = validators.map((validator: Validator) => {
           return {
-            address: STAKING_PRECOMPILE_ADDRESS,
+            address: networkConfig.precompileAddresses
+              .stakingAddress as Address,
             abi: STAKING_PRECOMPILE_ABI,
             functionName: method,
             args: [ethToBera(account as string), validator.operatorAddress],
           };
         });
-        const contracts = getContracts();
         const result = await publicClient.multicall({
           contracts: call,
-          multicallAddress: contracts.multicall as `0x${string}`,
+          multicallAddress: networkConfig.precompileAddresses
+            .multicallAddress as Address,
         });
         console.log(result);
         return result?.flatMap((entry) => entry.result);

@@ -1,16 +1,18 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits } from "viem";
+import { formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { BANK_PRECOMPILE_ABI, BANK_PRECOMPILE_ADDRESS } from "~/config";
+import { BANK_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraJs } from "~/contexts";
+import { useBeraConfig, useBeraJs } from "~/contexts";
 
 // this is going to be slow for now until we have event indexing
 export const usePollBeraBalance = () => {
   const publicClient = usePublicClient();
   const { isConnected, account } = useBeraJs();
+  const { networkConfig } = useBeraConfig();
+
   const method = "getBalance";
   const denom = "abera";
   const QUERY_KEY = [account, method, denom];
@@ -20,7 +22,7 @@ export const usePollBeraBalance = () => {
       if (isConnected) {
         try {
           const result = await publicClient.readContract({
-            address: BANK_PRECOMPILE_ADDRESS,
+            address: networkConfig.precompileAddresses.bankAddress as Address,
             abi: BANK_PRECOMPILE_ABI,
             functionName: method,
             args: [account, denom],

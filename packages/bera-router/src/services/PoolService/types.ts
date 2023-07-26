@@ -43,11 +43,24 @@ export interface Pool {
   shareAddress: Address;
   tokens: Token[];
   swapFee: string;
+  formattedSwapFee?: string;
   totalSupply: bigint;
   totalWeight: number;
   totalValue?: number;
-  volumeForTheDay?: number;
   dailyVolume?: number;
+  weeklyVolume?: number[];
+  weeklyVolumeTotal?: number;
+  weeklyFeesTotal?: number;
+  monthlyVolume?: number[];
+  monthlyVolumeTotal?: number;
+  monthlyFeesTotal?: number;
+  monthlyFees?: number[];
+  quarterlyVolume?: number[];
+  quarterlyFees?: number[];
+  quarterlyVolumeTotal?: number;
+  quarterlyFeesTotal?: number;
+  weeklyFees?: number[];
+  dailyFees?: number;
 }
 
 export type PoolRecords = Record<string, PoolRecord>;

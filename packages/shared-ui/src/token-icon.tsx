@@ -34,7 +34,8 @@ export const TokenIcon = ({
     void fetchData();
   }, [read, token, fetch, tokenInformation]);
   return (
-    <Avatar className={cn("h-8 w-8 rounded-full", className)}>
+    <Avatar className={cn("h-10 w-10 rounded-full", className)}>
+      {/* TODO */}
       <AvatarImage
         src={
           selectedToken?.symbol
