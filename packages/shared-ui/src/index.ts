@@ -6,5 +6,7 @@ export { Tooltip } from "./tooltip";
 export { SelectToken } from "./select-token";
 export { TokenInput } from "./token-input";
 export { ThemeToggle } from "./theme-toggle";
+export { DataTable } from "./data-table";
+export { DataTableColumnHeader } from "./data-table-column-header";
 export * from "./custom-toasts";
 export * from "./hooks";

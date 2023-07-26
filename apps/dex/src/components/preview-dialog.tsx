@@ -3,11 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { type SwapInfo } from "@bera/bera-router";
-import {
-  DEX_PRECOMPILE_ABI,
-  DEX_PRECOMPILE_ADDRESS,
-  type Token,
-} from "@bera/berajs";
+import { DEX_PRECOMPILE_ABI, type Token } from "@bera/berajs";
 import { TokenIcon, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -20,10 +16,12 @@ import {
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 
+import { erc20DexAddress } from "~/config";
+
 type Props = {
   swapInfo: SwapInfo | undefined;
   payload: any[];
-  priceImpact: string | undefined;
+  priceImpact: number | undefined;
 };
 
 function normalizeToRatio(num1: number, num2: number): string {
@@ -112,6 +110,7 @@ export default function PreviewDialog({
     },
   });
 
+  console.log(payload);
   const ratio = normalizeToRatio(
     Number(swapInfo?.formattedSwapAmount),
     Number(swapInfo?.formattedReturnAmount),
@@ -143,7 +142,7 @@ export default function PreviewDialog({
 
           <div className="flex w-1/2 items-center justify-center gap-2 rounded-lg bg-accent p-4">
             <TokenIcon token={swapInfo?.tokenOutObj} />
-            {swapInfo?.formattedReturnAmount.substring(0, 6)}
+            {swapInfo?.formattedReturnAmount?.substring(0, 6)}
             {swapInfo?.tokenOutObj?.symbol}
           </div>
         </div>
@@ -185,7 +184,7 @@ export default function PreviewDialog({
           disabled={isLoading}
           onClick={() => {
             write({
-              address: DEX_PRECOMPILE_ADDRESS,
+              address: erc20DexAddress,
               abi: DEX_PRECOMPILE_ABI,
               functionName: "batchSwap",
               params: payload,

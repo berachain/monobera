@@ -64,7 +64,7 @@ export default function ConnectedWalletPopover() {
                 className="rounded-full"
                 onClick={() => {
                   window.open(
-                    `http://${networkConfig.chain.blockExplorers?.default.url}/address/${account}`,
+                    `${process.env.NEXT_PUBLIC_BLOCK_EXPLORER}/address/${account}`,
                     "_blank",
                   );
                 }}

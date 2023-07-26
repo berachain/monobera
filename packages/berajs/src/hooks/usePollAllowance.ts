@@ -31,6 +31,7 @@ export const usePollAllowance = ({ contract, token }: IUsePollAllowances) => {
 
   const method = "allowance";
   const QUERY_KEY = [account, token?.address, contract, method];
+
   useSWR(
     QUERY_KEY,
     async () => {

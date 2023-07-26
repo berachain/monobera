@@ -1,20 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePollAllowances, type Token } from "@bera/berajs";
-import { ERC2MODULE_PRECOMPILE_ADDRESS } from "@bera/berajs/src/config";
+import { usePollAllowances, type Token, useBeraConfig } from "@bera/berajs";
 
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
+import { type Address } from "wagmi";
 
 const useCreatePool = (tokenWeights: ITokenWeight[]) => {
   const [needsApproval, setNeedsApproval] = useState<Token[]>([]);
+  const { networkConfig } = useBeraConfig();
 
   const tokens: Token[] = tokenWeights
     .filter((tokenWeight: ITokenWeight) => tokenWeight.token !== undefined)
     .map((tokenWeight) => tokenWeight.token) as Token[];
 
   const { useCurrentAllowancesForContract } = usePollAllowances({
-    contract: ERC2MODULE_PRECOMPILE_ADDRESS,
+    contract: networkConfig.precompileAddresses.erc20ModuleAddress as Address,
     tokens,
   });
 

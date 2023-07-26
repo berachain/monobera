@@ -2,17 +2,10 @@
 
 import {
   useBeraJs,
-  usePollUserPoolRewards,
-  type RewardPool,
 } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
-import { columns } from "~/components/column";
-import RewardsTable from "~/components/rewards-table";
-
 export default function ClaimPageContent() {
-  const { usePoolUserPoolRewards } = usePollUserPoolRewards();
-  const r: RewardPool[] = usePoolUserPoolRewards();
   const { isConnected } = useBeraJs();
   return (
     <div className="container">
@@ -25,7 +18,7 @@ export default function ClaimPageContent() {
             <h3 className="text-lg font-medium">{isConnected ? 0 : "$0"}</h3>
           </div>
         </div>
-        <RewardsTable columns={columns} data={r} />
+        {/* <RewardsTable columns={columns} data={r} /> */}
       </Card>
     </div>
   );

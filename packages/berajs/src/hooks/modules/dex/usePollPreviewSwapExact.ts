@@ -1,11 +1,12 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, parseUnits } from "viem";
-import { usePublicClient } from "wagmi";
+import { usePublicClient, type Address } from "wagmi";
 
 import { type Token } from "~/api";
-import { DEX_PRECOMPILE_ABI, DEX_PRECOMPILE_ADDRESS } from "~/config";
+import { DEX_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
+import { useBeraConfig } from "~/contexts";
 
 export const usePollPreviewSwapExact = (
   poolAddress: string,
@@ -14,6 +15,7 @@ export const usePollPreviewSwapExact = (
   quoteAsset?: Token,
 ) => {
   const publicClient = usePublicClient();
+  const { networkConfig } = useBeraConfig();
 
   const method = "getPreviewSwapExact";
 
@@ -29,7 +31,7 @@ export const usePollPreviewSwapExact = (
     async () => {
       if (baseAsset && quoteAsset) {
         const result = await publicClient.readContract({
-          address: DEX_PRECOMPILE_ADDRESS,
+          address: networkConfig.precompileAddresses.erc20DexAddress as Address,
           abi: DEX_PRECOMPILE_ABI,
           functionName: method,
           args: [

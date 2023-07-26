@@ -2,18 +2,15 @@ import { useMemo } from "react";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
-import { erc20ABI, usePublicClient } from "wagmi";
+import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
-import { getContracts } from "~/api/contracts";
 import {
   BERACHEF_PRECOMPILE_ABI,
-  BERACHEF_PRECOMPILE_ADDRESS,
-  ERC20BGTMODULE_PRECOMPILE_ADDRESS,
   ERC20BGT_PRECOMPILE_ABI,
   STAKING_PRECOMPILE_ABI,
-  STAKING_PRECOMPILE_ADDRESS,
 } from "~/config";
 import POLLING from "~/config/constants/polling";
+import { useBeraConfig } from "~/contexts";
 import { BeravaloperToEth, ethToBeravaloper } from "~/utils";
 
 export interface Validator {
@@ -76,11 +73,13 @@ interface Call {
 
 export const usePollActiveValidators = () => {
   const publicClient = usePublicClient();
+  const { networkConfig } = useBeraConfig();
+
   useSWR(
     "getValidators",
     async () => {
       const result = await publicClient.readContract({
-        address: STAKING_PRECOMPILE_ADDRESS,
+        address: networkConfig.precompileAddresses.stakingAddress as Address,
         abi: STAKING_PRECOMPILE_ABI,
         functionName: "getValidators",
         args: [],
@@ -116,19 +115,21 @@ export const usePollActiveValidators = () => {
   const useValidatorCuttingBoards = () => {
     const { data: validators = [] } = useSWRImmutable("getValidators");
     const publicClient = usePublicClient();
+    const { networkConfig } = useBeraConfig();
+
     const { data = [] } = useSWR([validators, "getCuttingBoards"], async () => {
       if (validators.length > 0) {
         const call: Call[] = validators.map((val: Validator) => ({
-          address: BERACHEF_PRECOMPILE_ADDRESS as `0x${string}`,
+          address: networkConfig.precompileAddresses.berachefAddress as Address,
           abi: BERACHEF_PRECOMPILE_ABI,
           functionName: "getActiveCuttingBoard",
           args: [BeravaloperToEth(val.operatorAddress)],
         }));
 
-        const contracts = getContracts();
         const result = await publicClient.multicall({
           contracts: call,
-          multicallAddress: contracts.multicall as `0x${string}`,
+          multicallAddress: networkConfig.precompileAddresses
+            .multicallAddress as Address,
         });
         console.log(result);
         return result;
@@ -142,13 +143,16 @@ export const usePollActiveValidators = () => {
     validatorAddress: string | undefined,
   ) => {
     const publicClient = usePublicClient();
+    const { networkConfig } = useBeraConfig();
+
     const { data = [] } = useSWR(
       [validatorAddress, "getCuttingBoards"],
       async () => {
         if (validatorAddress) {
           try {
             const cuttingBoard = await publicClient.readContract({
-              address: BERACHEF_PRECOMPILE_ADDRESS,
+              address: networkConfig.precompileAddresses
+                .berachefAddress as Address,
               abi: BERACHEF_PRECOMPILE_ABI,
               functionName: "getActiveCuttingBoard",
               args: [ethToBeravaloper(validatorAddress)],
@@ -162,10 +166,11 @@ export const usePollActiveValidators = () => {
                 args: [],
               }),
             );
-            const contracts = getContracts();
+
             const result = await publicClient.multicall({
               contracts: call,
-              multicallAddress: contracts.multicall as `0x${string}`,
+              multicallAddress: networkConfig.precompileAddresses
+                .multicallAddress as Address,
             });
             const cb = (cuttingBoard as CuttingBoard)?.weights.map(
               (w: Weight, i) => {
@@ -193,13 +198,16 @@ export const usePollActiveValidators = () => {
     validatorAddress: string | undefined,
   ): Bribe | undefined => {
     const publicClient = usePublicClient();
+    const { networkConfig } = useBeraConfig();
+
     const { data = undefined } = useSWR(
       [validatorAddress, "getBribes"],
       async () => {
         if (validatorAddress) {
           try {
             const bribes: unknown | any[] = await publicClient.readContract({
-              address: ERC20BGTMODULE_PRECOMPILE_ADDRESS,
+              address: networkConfig.precompileAddresses
+                .erc20BgtAddress as Address,
               abi: ERC20BGT_PRECOMPILE_ABI,
               functionName: "getBribesForValidator",
               args: [ethToBeravaloper(validatorAddress)],

@@ -1,50 +1,52 @@
 "use client";
 
 import { useState } from "react";
+import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   DEX_PRECOMPILE_ABI,
-  DEX_PRECOMPILE_ADDRESS,
-  ERC2MODULE_PRECOMPILE_ADDRESS,
   useBeraJs,
   usePollBalance,
-  usePollPools,
   usePollPreviewBurnShares,
   type Token,
+  useBeraConfig,
 } from "@bera/berajs";
 import { TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits } from "viem";
 
 import ApproveTokenButton from "~/components/approve-token-button";
 import { SettingsPopover } from "~/components/settings-popover";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
+import { type Address } from "wagmi";
 
 export default function WithdrawPageContent({
-  params,
+  pool,
 }: {
-  params: { address: string };
+  pool: Pool | undefined;
 }) {
   const [withdrawAmount, setWithdrawAmount] = useState(0);
+  const decimals = 18;
+  const multiplier = 10n ** BigInt(decimals);
+
+  const formattedBigInt = BigInt(withdrawAmount * 10 ** decimals) * multiplier;
   const { account = undefined } = useBeraJs();
-  const { useSelectedPool } = usePollPools();
-  const { data: pool } = useSelectedPool(params.address);
+  const { networkConfig } = useBeraConfig();
   const { useBalance } = usePollBalance({ address: pool?.shareAddress });
   const shareBalance = useBalance();
-  console.log("share balance", shareBalance);
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
     withdrawAmount,
-    pool?.address,
+    pool?.pool,
     pool?.shareAddress,
   );
   const { write } = useTxn({
-    message: `Withdraw from ${pool?.name}}`,
+    message: `Withdraw from ${pool?.poolName}}`,
   });
 
   const { needsApproval } = useMultipleTokenApprovals(
     [
       {
-        address: pool?.shareAddress,
+        address: pool?.shareAddress ?? "",
         decimals: 18,
         symbol: "Share",
         name: "Share",
@@ -52,16 +54,17 @@ export default function WithdrawPageContent({
         default: false,
       },
     ],
-    ERC2MODULE_PRECOMPILE_ADDRESS,
+    networkConfig.precompileAddresses.erc20ModuleAddress as Address,
   );
 
   const preview = usePreviewBurnShares();
+
   const payload = [
-    pool?.address,
+    pool?.pool,
     account,
     account,
     pool?.shareAddress,
-    parseUnits(`${withdrawAmount}`, 18),
+    formattedBigInt,
   ];
   console.log(payload);
   return (
@@ -78,18 +81,18 @@ export default function WithdrawPageContent({
               {
                 address: pool?.shareAddress,
                 decimals: 18,
-                name: pool?.name,
-                symbol: pool?.name,
+                name: pool?.poolName,
+                symbol: pool?.poolName,
               } as Token
             }
-            balance={shareBalance?.formattedBalance}
+            balance={shareBalance?.formattedBalance ?? "0"}
             selectable={false}
             amount={withdrawAmount}
             setAmount={setWithdrawAmount}
             hidePrice
           />
           <p>You receive</p>
-          {pool?.weights?.map((token, i) => {
+          {pool?.tokens?.map((token, i) => {
             return (
               <TokenInput
                 key={token.address}
@@ -112,13 +115,13 @@ export default function WithdrawPageContent({
           {needsApproval.length > 0 ? (
             <ApproveTokenButton
               token={needsApproval[0]}
-              spender={ERC2MODULE_PRECOMPILE_ADDRESS}
+              spender={networkConfig.precompileAddresses.erc20ModuleAddress as Address}
             />
           ) : (
             <Button
               onClick={() => {
                 write({
-                  address: DEX_PRECOMPILE_ADDRESS,
+                  address: networkConfig.precompileAddresses.erc20DexAddress as Address,
                   abi: DEX_PRECOMPILE_ABI,
                   functionName: "removeLiquidityBurningShares",
                   params: payload,

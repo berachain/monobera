@@ -1,14 +1,16 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient } from "wagmi";
+import { usePublicClient, type Address } from "wagmi";
 
-import { BGT_PRECOMPILES_ADDRESS, BGT_PRECOMPILE_ABI } from "~/config";
+import { BGT_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
+import { useBeraConfig } from "~/contexts";
 
 export const usePollActiveBribesForValidator = (
   validatorAddress: `0x${string}`,
 ) => {
   const publicClient = usePublicClient();
+  const { networkConfig } = useBeraConfig();
 
   const method = "getActiveBribesForValidator";
   const QUERY_KEY = [validatorAddress, method];
@@ -16,7 +18,7 @@ export const usePollActiveBribesForValidator = (
     QUERY_KEY,
     async () => {
       const result = await publicClient.readContract({
-        address: BGT_PRECOMPILES_ADDRESS,
+        address: networkConfig.precompileAddresses.erc20BgtAddress as Address,
         abi: BGT_PRECOMPILE_ABI,
         functionName: method,
         args: [validatorAddress],

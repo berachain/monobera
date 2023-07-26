@@ -8,12 +8,15 @@ export default function PoolPageHeader() {
   const router = useRouter();
   return (
     <>
-      <h1 className="text-left text-2xl font-semibold">Pool page</h1>
+      <h1 className="text-center text-5xl font-bold">
+        Create a <span className="text-primary">pool</span> or add <br />{" "}
+        liquidity to an existing one
+      </h1>
       <Button
         onClick={() => router.push("/pool/create")}
-        className="text-md w-[150px]"
+        className="text-md mb-10 w-[150px] self-center"
       >
-        Create pool
+        Get Started
       </Button>
     </>
   );

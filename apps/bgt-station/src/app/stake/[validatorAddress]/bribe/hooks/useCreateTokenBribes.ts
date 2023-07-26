@@ -4,14 +4,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEffect, useState } from "react";
 import {
-  ERC2MODULE_PRECOMPILE_ADDRESS,
   useCurrentAssetWalletBalances,
   usePollAllowances,
   usePollAssetWalletBalance,
   usePollEpochs,
   type Token,
+  useBeraConfig,
 } from "@bera/berajs";
 import { parseUnits } from "viem";
+import { type Address } from "wagmi";
 
 export interface ITokenBribe {
   bribe: number;
@@ -30,6 +31,7 @@ const useCreateTokenBribes = (validatorAddress: string) => {
   const { useCurrentEpoch, isLoading } = usePollEpochs();
 
   const currentEpoch = useCurrentEpoch();
+  const { networkConfig } = useBeraConfig();
   const [epoch, setEpoch] = useState<number | undefined>(undefined);
   const [epochError, setEpochError] = useState<Error | undefined>(undefined);
   const [tokenBribes, setTokenBribes] = useState<ITokenBribe[]>([]);
@@ -43,7 +45,7 @@ const useCreateTokenBribes = (validatorAddress: string) => {
     .map((tokenWeight) => tokenWeight.token) as Token[];
 
   const { useCurrentAllowancesForContract } = usePollAllowances({
-    contract: ERC2MODULE_PRECOMPILE_ADDRESS,
+    contract: networkConfig.precompileAddresses.erc20ModuleAddress as Address,
     tokens: t,
   });
 

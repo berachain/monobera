@@ -36,11 +36,11 @@ export function History() {
     <div className="grid gap-4">
       <h3 className="text-md font-medium">Recent activity</h3>
       {transactions.length ? (
-        transactions.map((txn: NewTransaction) => (
+        transactions.slice(0, 5).map((txn: NewTransaction) => (
           <a
             key={txn.hash}
             target="_blank"
-            href={`http://${networkConfig.chain.blockExplorers?.default.url}/tx/${txn.hash}`}
+            href={`${process.env.NEXT_PUBLIC_BLOCK_EXPLORER}/tx/${txn.hash}`}
           >
             <div
               className="flex justify-between border-t border-backgroundSecondary pt-3"

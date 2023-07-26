@@ -4,8 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   DEX_PRECOMPILE_ABI,
-  DEX_PRECOMPILE_ADDRESS,
-  ERC2MODULE_PRECOMPILE_ADDRESS,
+  useBeraConfig,
   useBeraJs,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
@@ -20,6 +19,7 @@ import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import ApproveTokenButton from "../approve-token-button";
+import { type Address } from "wagmi";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -39,6 +39,8 @@ export function CreatePoolPreview({
   const [editPoolName, setEditPoolName] = useState(false);
 
   const { needsApproval } = useCreatePool(tokenWeights);
+  const { networkConfig } = useBeraConfig();
+
   const router = useRouter();
 
   const { account } = useBeraJs();
@@ -124,14 +126,14 @@ export function CreatePoolPreview({
         {needsApproval.length > 0 ? (
           <ApproveTokenButton
             token={needsApproval[0]}
-            spender={ERC2MODULE_PRECOMPILE_ADDRESS}
+            spender={networkConfig.precompileAddresses.erc20ModuleAddress as Address}
           />
         ) : (
           <Button
             className="w-full"
             onClick={() => {
               write({
-                address: DEX_PRECOMPILE_ADDRESS,
+                address: networkConfig.precompileAddresses.erc20DexAddress as Address,
                 abi: DEX_PRECOMPILE_ABI,
                 functionName: "createPool",
                 params: payload,

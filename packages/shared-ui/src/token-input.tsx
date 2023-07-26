@@ -48,10 +48,11 @@ export function TokenInput({
     useSelectedAssetWalletBalance(selected?.address ?? "")?.formattedBalance ??
       "0",
   );
+
   if (balance !== undefined) {
     tokenBalance = balance;
   }
-  const { account = undefined } = useBeraJs();
+  const { isConnected } = useBeraJs();
 
   const exceeding = amount > tokenBalance;
   const progress = tokenBalance && ((amount / tokenBalance) * 100) | 0;
@@ -89,7 +90,7 @@ export function TokenInput({
           }}
         />
       </div>
-      {account && selected ? (
+      {isConnected && selected ? (
         <div className="w-full pl-4">
           {hideBalance ? null : (
             <div className="flex items-center justify-between">
@@ -99,7 +100,7 @@ export function TokenInput({
                   className="text-md text-default h-8 p-0"
                   onClick={() => setAmount && setAmount(tokenBalance || 0)}
                 >
-                  Balance: {tokenBalance.toFixed(4)}
+                  Balance: {tokenBalance ? tokenBalance : "0"}
                 </Button>
               </p>
               {!hidePrice && (

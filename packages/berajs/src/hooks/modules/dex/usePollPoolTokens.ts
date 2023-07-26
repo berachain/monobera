@@ -1,10 +1,10 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient } from "wagmi";
+import { usePublicClient, type Address } from "wagmi";
 
-import { getContracts } from "~/api/contracts";
-import { DEX_PRECOMPILE_ABI, DEX_PRECOMPILE_ADDRESS } from "~/config";
+import { DEX_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
+import { useBeraConfig } from "~/contexts";
 
 interface Call {
   abi: any[];
@@ -15,6 +15,7 @@ interface Call {
 
 export const usePollPoolTokens = (poolAddress: `0x${string}`) => {
   const publicClient = usePublicClient();
+  const { networkConfig } = useBeraConfig();
 
   const QUERY_KEY = [poolAddress, "poolData"];
   useSWR(
@@ -23,21 +24,22 @@ export const usePollPoolTokens = (poolAddress: `0x${string}`) => {
       const call: Call[] = [
         {
           abi: DEX_PRECOMPILE_ABI,
-          address: DEX_PRECOMPILE_ADDRESS,
+          address: networkConfig.precompileAddresses.erc20DexAddress as Address,
           functionName: "getLiquidity",
           args: [poolAddress],
         },
         {
           abi: DEX_PRECOMPILE_ABI,
-          address: DEX_PRECOMPILE_ADDRESS,
+          address: networkConfig.precompileAddresses.erc20DexAddress as Address,
           functionName: "getTotalShares",
           args: [poolAddress],
         },
       ];
-      const contracts = getContracts();
+
       const result = await publicClient.multicall({
         contracts: call,
-        multicallAddress: contracts.multicall as `0x${string}`,
+        multicallAddress: networkConfig.precompileAddresses
+          .multicallAddress as Address,
       });
       return result;
     },
