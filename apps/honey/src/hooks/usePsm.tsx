@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import {
+  useBeraConfig,
   useBeraJs,
   usePollAllowance,
   usePollBalance,
   type Token,
-  useBeraConfig,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
-import { type Address, parseUnits } from "viem";
+import { parseUnits, type Address } from "viem";
 
 import { honey, stgUsd } from "~/config/tokens";
 import { useFees } from "./useFees";
@@ -41,7 +41,7 @@ export const usePsm = () => {
   const [payload, setPayload] = useState<any[]>([]);
 
   const { isConnected, account } = useBeraJs();
-  const {networkConfig} = useBeraConfig();
+  const { networkConfig } = useBeraConfig();
   const { useAllowance } = usePollAllowance({
     contract: networkConfig.precompileAddresses.erc20ModuleAddress as Address,
     token: selectedFrom,

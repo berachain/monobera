@@ -44,7 +44,7 @@ export interface Pool {
   tokens: Token[];
   swapFee: string;
   formattedSwapFee?: string;
-  totalSupply: bigint;
+  totalSupply: string;
   totalWeight: number;
   totalValue?: number;
   dailyVolume?: number;

@@ -1,17 +1,15 @@
 "use client";
 
 import React from "react";
-import {
-  HONEY_PRECOMPILE_ABI, useBeraConfig,
-} from "@bera/berajs";
+import { HONEY_PRECOMPILE_ABI, useBeraConfig } from "@bera/berajs";
 import { ConnectButton, TokenInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { type Address } from "wagmi";
 
 import { usePsm } from "~/hooks/usePsm";
 import { ApproveTokenButton } from "./approve-token-button";
-import { type Address } from "wagmi";
 
 export function SwapCard() {
   const {
@@ -89,7 +87,9 @@ export function SwapCard() {
           {false ? (
             <ApproveTokenButton
               token={selectedFrom}
-              spender={networkConfig.precompileAddresses.erc20ModuleAddress as Address}
+              spender={
+                networkConfig.precompileAddresses.erc20ModuleAddress as Address
+              }
             />
           ) : isConnected ? (
             isMint ? (
@@ -97,7 +97,8 @@ export function SwapCard() {
                 disabled={toAmount === 0 || isLoading}
                 onClick={() => {
                   write({
-                    address: networkConfig.precompileAddresses.honeyAddress as Address,
+                    address: networkConfig.precompileAddresses
+                      .honeyAddress as Address,
                     abi: HONEY_PRECOMPILE_ABI,
                     functionName: "mint",
                     params: payload,
@@ -111,7 +112,8 @@ export function SwapCard() {
                 disabled={toAmount === 0 || isLoading}
                 onClick={() => {
                   write({
-                    address: networkConfig.precompileAddresses.honeyAddress as Address,
+                    address: networkConfig.precompileAddresses
+                      .honeyAddress as Address,
                     abi: HONEY_PRECOMPILE_ABI,
                     functionName: "redeem",
                     params: payload,

@@ -1,23 +1,41 @@
 "use client";
 
-import { useMemo } from "react";
+import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
-import { getTokens, type Token } from "~/api";
+import { type Token } from "~/api";
+import POLLING from "~/config/constants/polling";
 
 interface IUseTokens {
-  tokenList: Token[];
+  tokenList: Token[] | undefined;
   addNewToken: (token: Token) => void;
 }
 
 const useTokens = (): IUseTokens => {
   const TOKEN_KEY = "tokens";
-  // TODO
-  const defaultTokens = useMemo(() => getTokens(), []);
 
   const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
     Token[]
   >(TOKEN_KEY, []);
+
+  const { data } = useSWRImmutable(
+    ["defaultTokenList", localStorageTokenList],
+    async () => {
+      const tokenList = await fetch(
+        process.env.NEXT_PUBLIC_TOKEN_LIST as string,
+      );
+      const temp = await tokenList.json();
+
+      if (!temp.tokens) return localStorageTokenList;
+      const defaultList = temp.tokens.map((token: any) => {
+        return { ...token, default: true };
+      });
+      return [...defaultList, ...localStorageTokenList];
+    },
+    {
+      refreshInterval: POLLING.NORMAL,
+    },
+  );
 
   const addNewToken = (token: Token) => {
     // Indicate that this token is now accepted into the default list of tokens
@@ -39,7 +57,7 @@ const useTokens = (): IUseTokens => {
   };
 
   return {
-    tokenList: [...defaultTokens, ...localStorageTokenList],
+    tokenList: data,
     addNewToken,
   };
 };

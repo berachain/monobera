@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   useBeraJs,
   usePollAssetWalletBalance,
@@ -46,18 +46,25 @@ export function TokenDialog({
   const [pendingAddition, setPendingAddition] = useState<boolean>(false);
   const { tokenList, addNewToken } = useTokens();
   const { read, tokenInformation } = useTokenInformation();
-  const [filteredTokens, setFilteredTokens] = useState<Token[]>(tokenList);
+  const [filteredTokens, setFilteredTokens] = useState<Token[] | undefined>(
+    tokenList,
+  );
+
+  useEffect(() => {
+    setFilteredTokens(tokenList);
+  }, [tokenList]);
+
   usePollAssetWalletBalance();
 
   useEffect(() => {
-    const filteredTokens = tokenList.filter(
+    const filtered = tokenList?.filter(
       (token) =>
         token.name.toLowerCase().includes(search.toLowerCase()) ||
         token.symbol.toLowerCase().includes(search.toLowerCase()) ||
         token.address.toLowerCase().includes(search.toLowerCase()),
     );
 
-    if (isAddress(search) && filteredTokens.length === 0) {
+    if (isAddress(search) && filtered?.length === 0) {
       void read({ address: search }).catch((error) => {
         setError(error);
       });
@@ -65,7 +72,7 @@ export function TokenDialog({
       return;
     }
     setPendingAddition(false);
-    setFilteredTokens(filteredTokens);
+    setFilteredTokens(filtered);
   }, [read, search]); // Include 'filteredTokens' in the dependency array
 
   useEffect(() => {
@@ -134,8 +141,8 @@ export function TokenDialog({
           />
           <div className="max-h-[300px] gap-4 overflow-y-auto py-4">
             {!error
-              ? filteredTokens.length
-                ? filteredTokens.map((token, i) => (
+              ? filteredTokens?.length
+                ? filteredTokens?.map((token, i) => (
                     <TokenDialogRow
                       key={i}
                       token={token}
@@ -190,10 +197,10 @@ const TokenDialogRow = ({
         variant="outline"
         className={cn(
           "flex h-auto w-full items-center justify-start gap-2 p-4 text-left shadow",
-          isTokenSelected && "opacity-50",
+          isTokenSelected && "cursor-default opacity-50",
         )}
         onClick={() => {
-          onTokenSelect(token);
+          !isTokenSelected && onTokenSelect(token);
         }}
       >
         <div className="relative">

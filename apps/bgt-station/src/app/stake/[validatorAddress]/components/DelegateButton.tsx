@@ -3,13 +3,12 @@
 import React from "react";
 import {
   STAKING_PRECOMPILE_ABI,
-  getTokens,
   truncateHash,
+  useBeraConfig,
   useBeraJs,
   usePollBgtBalance,
   type Token,
   type Validator,
-  useBeraConfig,
 } from "@bera/berajs";
 import { ConnectButton, TokenInput, useTxn } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
@@ -22,9 +21,9 @@ import {
   DialogTrigger,
 } from "@bera/ui/dialog";
 import { parseUnits } from "viem";
+import { type Address } from "wagmi";
 
 import { dummyToken } from "~/utils/constants";
-import { type Address } from "wagmi";
 
 type Props = {
   validator: Validator | undefined;
@@ -78,7 +77,8 @@ export default function DelegateButton({ validator, validatorAddress }: Props) {
               disabled={isLoading}
               onClick={() => {
                 write({
-                  address: networkConfig.precompileAddresses.stakingAddress as Address,
+                  address: networkConfig.precompileAddresses
+                    .stakingAddress as Address,
                   abi: STAKING_PRECOMPILE_ABI,
                   functionName: "delegate",
                   params: [

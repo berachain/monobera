@@ -61,6 +61,11 @@ export class RouterService {
     await this.poolService.fetchPools();
   }
 
+  public async fetchPaginatedPools(page: number, perPage: number) {
+    const result = await this.poolService.fetchPaginatedPools(page, perPage);
+    return result;
+  }
+
   public getPools() {
     return this.poolService.getPools();
   }
@@ -80,8 +85,8 @@ export class RouterService {
       console.error("Pools not fetched yet");
       return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
     }
-    if (swapAmount === 0n)
-      return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
+    // if (swapAmount === 0n)
+    //   return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
     // Set any unset options to their defaults
     const options: SwapOptions = {
       ...this.defaultSwapOptions,

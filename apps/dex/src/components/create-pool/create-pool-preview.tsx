@@ -2,11 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  DEX_PRECOMPILE_ABI,
-  useBeraConfig,
-  useBeraJs,
-} from "@bera/berajs";
+import { DEX_PRECOMPILE_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -14,12 +10,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
+import { type Address } from "wagmi";
 
 import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview-input";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import ApproveTokenButton from "../approve-token-button";
-import { type Address } from "wagmi";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -126,14 +122,17 @@ export function CreatePoolPreview({
         {needsApproval.length > 0 ? (
           <ApproveTokenButton
             token={needsApproval[0]}
-            spender={networkConfig.precompileAddresses.erc20ModuleAddress as Address}
+            spender={
+              networkConfig.precompileAddresses.erc20ModuleAddress as Address
+            }
           />
         ) : (
           <Button
             className="w-full"
             onClick={() => {
               write({
-                address: networkConfig.precompileAddresses.erc20DexAddress as Address,
+                address: networkConfig.precompileAddresses
+                  .erc20DexAddress as Address,
                 abi: DEX_PRECOMPILE_ABI,
                 functionName: "createPool",
                 params: payload,

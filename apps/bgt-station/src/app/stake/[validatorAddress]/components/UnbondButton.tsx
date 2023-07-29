@@ -5,11 +5,11 @@ import {
   STAKING_PRECOMPILE_ABI,
   getTokens,
   truncateHash,
+  useBeraConfig,
   useBeraJs,
   usePollAccountDelegations,
   type Token,
   type Validator,
-  useBeraConfig,
 } from "@bera/berajs";
 import { ConnectButton, TokenInput, useTxn } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
@@ -21,7 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@bera/ui/dialog";
-import { type Address, formatUnits, parseUnits } from "viem";
+import { formatUnits, parseUnits, type Address } from "viem";
 
 import { dummyToken } from "~/utils/constants";
 
@@ -94,7 +94,8 @@ export default function UnbondButton({
               disabled={isLoading}
               onClick={() => {
                 write({
-                  address: networkConfig.precompileAddresses.stakingAddress as Address,
+                  address: networkConfig.precompileAddresses
+                    .stakingAddress as Address,
                   abi: STAKING_PRECOMPILE_ABI,
                   functionName: "undelegate",
                   params: [validatorAddress, parseUnits(`${unbondAmount}`, 18)],

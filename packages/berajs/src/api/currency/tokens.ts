@@ -1,6 +1,7 @@
-import { isProduction } from "../utils/isProduction";
-
 export type Token = {
+  chainId?: number;
+  logoURI?: string;
+  tags?: string[];
   address: string;
   decimals: number;
   symbol: string;
@@ -9,13 +10,4 @@ export type Token = {
   normalizedWeight?: number;
   weight?: string | number;
   balance?: bigint;
-};
-
-const TESTNET_TOKENS: Token[] = [];
-
-const MAINNET_TOKENS: Token[] = [];
-
-export const getTokens = (): Token[] => {
-  if (isProduction()) return MAINNET_TOKENS;
-  else return TESTNET_TOKENS;
 };

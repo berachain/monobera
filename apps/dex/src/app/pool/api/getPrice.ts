@@ -88,7 +88,7 @@ export const getWBeraPriceDictForPoolTokens = async (
 
     mappedTokens =
       allPoolData?.length &&
-      allPoolData.reduce(
+      allPoolData?.reduce(
         (acc, cur) => {
           acc[cur.tokenIn] = cur.formattedReturnAmount;
           return acc;

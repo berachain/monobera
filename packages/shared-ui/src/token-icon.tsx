@@ -18,7 +18,9 @@ export const TokenIcon = ({
   fetch = false,
   address,
 }: Props) => {
-  const [selectedToken, setSelectedToken] = useState<Token | undefined>(token);
+  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
+    undefined,
+  );
   const { read, tokenInformation } = useTokenInformation();
 
   useEffect(() => {
@@ -33,19 +35,17 @@ export const TokenIcon = ({
 
     void fetchData();
   }, [read, token, fetch, tokenInformation]);
+
   return (
     <Avatar className={cn("h-10 w-10 rounded-full", className)}>
-      {/* TODO */}
       <AvatarImage
-        src={
-          selectedToken?.symbol
-            ? `/icons/${selectedToken.symbol.toLowerCase()}.jpg`
-            : ""
-        }
+        src={fetch ? "" : token?.logoURI}
         className="rounded-full p-1"
       />
       <AvatarFallback className="font-bold">
-        {selectedToken?.symbol ? selectedToken.symbol.slice(0, 3) : ""}
+        {fetch
+          ? selectedToken?.symbol?.slice(0, 3)
+          : token?.symbol?.slice(0, 3)}
       </AvatarFallback>
     </Avatar>
   );

@@ -1,6 +1,8 @@
 import { type Metadata } from "next";
 import { RouterService, defaultConfig } from "@bera/bera-router";
-import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
+import {
+  type Pool,
+} from "@bera/bera-router/dist/services/PoolService/types";
 
 import PoolsTable from "~/components/pools-table";
 import PoolPageHeader from "./PoolPageHeader";
@@ -36,21 +38,21 @@ const compareByDailyVolumeDescending = (a: Pool, b: Pool) => {
 
 export default async function Pool() {
   const router = new RouterService(defaultConfig);
+  let pools: Pool[] | undefined = undefined;
   try {
-    await router.fetchPools();
+    pools = await router.fetchPaginatedPools(1, 1);
+    await getWBeraPriceDictForPoolTokens(pools ?? [], router);
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
   }
-  let pools = [];
-  pools = router.getPools();
-  await getWBeraPriceDictForPoolTokens(pools, router);
-  const sortedPools = pools.sort(compareByDailyVolumeDescending);
+  // await getWBeraPriceDictForPoolTokens(pools, router);
+  const sortedPools = pools?.sort(compareByDailyVolumeDescending);
 
   console.log(sortedPools);
   return (
-    <div className="container m-auto flex w-full flex-col gap-5">
+    <div className="-col container m-auto flex flex w-full gap-5">
       <PoolPageHeader />
-      <PoolsTable pools={sortedPools} />
+      <PoolsTable pools={sortedPools ?? []} />
     </div>
   );
 }
