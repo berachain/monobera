@@ -4,7 +4,7 @@ import { RouterService, defaultConfig } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { type Address } from "wagmi";
 
-import { getWBeraPriceDictForPoolTokens } from "./getPrice";
+import { PoolTag, getWBeraPriceDictForPoolTokens } from "./getPrice";
 
 function sortByParameter(
   data: Pool[],
@@ -52,58 +52,28 @@ export async function GET(request: Request) {
   const hotPools = searchParams.get("hotPools");
   const newPools = searchParams.get("newPools");
 
-  let taggedPools: any[] = [];
-  const poolIdsTracker: Set<Address> = new Set();
+  let taggedPools: any[] = pools;
 
   if (hasBgtRewards) {
-    // Assuming pools with bgt rewards are filtered and stored in the "bgtPools" array
-    // for (const pool of []) {
-    //   if (!poolIdsTracker.has(pool.id)) {
-    //     taggedPools.push(pool);
-    //     poolIdsTracker.add(pool.id);
-    //   }
-    // }
+    taggedPools = taggedPools.filter((pool) =>
+      pool.tags?.includes(PoolTag.BGT_REWARDS),
+    );
   }
 
   if (hotPools) {
-    // A HOT POOL IS THE HIGHEST % INCREASE IN VOLUME OVER THE PAST 4 HOURS
-    // Assuming hot pools are filtered and stored in the "hotPools" array
-    // for (const pool of []) {
-    //   if (!poolIdsTracker.has(pool.id)) {
-    //     taggedPools.push(pool);
-    //     poolIdsTracker.add(pool.id);
-    //   }
-    // }
+    taggedPools = taggedPools.filter((pool) =>
+      pool.tags?.includes(PoolTag.HOT),
+    );
   }
 
   if (newPools) {
-    // NEW POOL IS NEW POOL IN PAST 24 HOURS WITH TVL OVER 50K USD
-    // Assuming trending pools are filtered and stored in the "trendingPools" array
-    // Step 1: Get the current time in milliseconds since epoch
-      const currentTime = Date.now();
-
-      // Step 2: Define the time duration for 24 hours in milliseconds
-      const twentyFourHoursInMs = 24 * 60 * 60 * 1000;
-
-      // Step 3: Filter the pools array based on the condition
-      const poolsCreatedInLast24Hours = pools.filter((pool) => {
-        // Get the timestamp of the pool creation time in milliseconds since epoch
-        const poolCreationTime = Date.parse(pool.metadata.blockTime);
-
-        // Check if the pool was created within the last 24 hours
-        return ((currentTime - poolCreationTime <= twentyFourHoursInMs) && ((pool?.totalValue ?? 0) >= 50000));
-      });
-
-    for (const pool of poolsCreatedInLast24Hours) {
-      if (!poolIdsTracker.has(pool.pool)) {
-        taggedPools.push(pool);
-        poolIdsTracker.add(pool.pool);
-      }
-    }
+    taggedPools = taggedPools.filter((pool) =>
+      pool.tags?.includes(PoolTag.NEW),
+    );
   }
 
-  if(!hasBgtRewards && !hotPools && !newPools) taggedPools = pools;
-  
+  if (!hasBgtRewards && !hotPools && !newPools) taggedPools = pools;
+
   // sortables
   const volume = searchParams.get("volume");
   const bgtRewards = searchParams.get("bgtRewards");

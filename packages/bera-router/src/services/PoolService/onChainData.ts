@@ -163,7 +163,10 @@ export class MultiCallPools {
             set(
               this.rawPools,
               `${key}.tokens.${tokenAddress}.balance`,
-             formatUnits( poolData.liquidity?.[1]?.[i] ?? 0n, poolData.tokens?.[tokenAddress]?.decimals ?? 18),
+              formatUnits(
+                poolData.liquidity?.[1]?.[i] ?? 0n,
+                poolData.tokens?.[tokenAddress]?.decimals ?? 18,
+              ),
             );
             set(this.rawPools, `${key}.swapFee`, swapFee);
           });

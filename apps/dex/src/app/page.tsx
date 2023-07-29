@@ -1,5 +1,6 @@
 import { type Metadata } from "next";
 import { createPublicClient, http, isAddress } from "viem";
+
 import { SwapCard } from "~/components/swap-card";
 import { beraJsConfig } from "./config";
 

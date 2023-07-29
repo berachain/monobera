@@ -1,8 +1,6 @@
 import { type Metadata } from "next";
 import { RouterService, defaultConfig } from "@bera/bera-router";
-import {
-  type Pool,
-} from "@bera/bera-router/dist/services/PoolService/types";
+import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 
 import PoolsTable from "~/components/pools-table";
 import PoolPageHeader from "./PoolPageHeader";

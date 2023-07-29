@@ -61,6 +61,7 @@ export interface Pool {
   quarterlyFeesTotal?: number;
   weeklyFees?: number[];
   dailyFees?: number;
+  tags?: string[];
 }
 
 export type PoolRecords = Record<string, PoolRecord>;

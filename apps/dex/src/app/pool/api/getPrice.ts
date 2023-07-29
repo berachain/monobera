@@ -192,8 +192,56 @@ export const getWBeraPriceDictForPoolTokens = async (
         return acc + totalTokenValue;
       }, 0);
     });
+    tagPools(pools);
   }
   return mappedTokens;
+};
+
+export enum PoolTag {
+  HOT = "hot",
+  NEW = "new",
+  BGT_REWARDS = "bgtRewards",
+}
+
+const LIQUIDITY_THRESHOLD = 50000;
+
+// a new pool is a pool created in the past 24 hours with atleast 50k usd in liquidity.
+const isNewPool = (pool: Pool) => {
+  const currentTime = Date.now();
+
+  const twentyFourHoursInMs = 24 * 60 * 60 * 1000;
+  const poolCreationTime = Date.parse(pool.metadata.blockTime);
+
+  return (
+    currentTime - poolCreationTime <= twentyFourHoursInMs &&
+    (pool?.totalValue ?? 0) >= LIQUIDITY_THRESHOLD
+  );
+};
+
+// a hot pool is a pool with atleast xxx liquidity and xxx % increase in volume in the past 24 hours
+const isHotPool = (pool: Pool) => {
+  return true;
+};
+
+// a pool with bgt rewards is a pool with a bgt reward contract
+const hasBgtRewards = (pool: Pool) => {
+  // get the global BGT cutting board
+  // use pool address to get BGT rewards / yr
+  return true;
+};
+
+export const tagPools = (pools: Pool[]) => {
+  pools.forEach((pool) => {
+    if (isNewPool(pool)) {
+      pool.tags = [...(pool.tags ?? []), PoolTag.NEW];
+    }
+    if (isHotPool(pool)) {
+      pool.tags = [...(pool.tags ?? []), PoolTag.HOT];
+    }
+    if (hasBgtRewards(pool)) {
+      pool.tags = [...(pool.tags ?? []), PoolTag.BGT_REWARDS];
+    }
+  });
 };
 
 export const getWBeraPriceForToken = (
