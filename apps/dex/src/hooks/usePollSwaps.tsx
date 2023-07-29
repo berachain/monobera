@@ -27,20 +27,13 @@ export const usePollSwaps = ({
   return useSWR(
     QUERY_KEY,
     async () => {
-      try {
-        const result: SwapInfo = await router.getSwaps(
-          tokenIn,
-          tokenOut,
-          swapKind,
-          amount,
-        );
-        return result;
-      } catch (e) {
-        console.error(e);
-        if (error instanceof RouteNotFound) {
-          throw RouteNotFound;
-        }
-      }
+      const result: SwapInfo = await router.getSwaps(
+        tokenIn,
+        tokenOut,
+        swapKind,
+        amount,
+      );
+      return result;
     },
     {
       refreshInterval: POLLING.FAST,

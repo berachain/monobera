@@ -30,7 +30,7 @@ export const usePollAssetWalletBalance = () => {
   useSWR(
     [account, "assetWalletBalances"],
     async () => {
-      if (account && !error) {
+      if (account && !error && tokenList) {
         const call: Call[] = tokenList.map((item: Token) => ({
           address: item.address as `0x${string}`,
           abi: erc20ABI,

@@ -5,6 +5,8 @@ import {
   useLatestBlock,
   usePollAllowance,
   usePollAssetWalletBalance,
+  useTokenInformation,
+  useTokens,
   type Token,
 } from "@bera/berajs";
 import { useReadLocalStorage } from "usehooks-ts";
@@ -21,12 +23,59 @@ export enum SwapKind {
   GIVEN_OUT = 1,
 }
 
-export const useSwap = () => {
+interface ISwap {
+  inputCurrency?: Address | undefined;
+  outputCurrency?: Address | undefined;
+}
+export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
+  const { read: readInput, tokenInformation: inputToken } =
+    useTokenInformation();
+  const { read: readOutput, tokenInformation: outputToken } =
+    useTokenInformation();
+  const { tokenList, addNewToken } = useTokens();
+
+  useEffect(() => {
+    if (inputCurrency) {
+      const token = tokenList.find((t) => t.address === inputCurrency);
+      if (!token) {
+        void readInput({ address: inputCurrency }).catch(() =>
+          console.error("input currency not a token"),
+        );
+      } else {
+        setSelectedFrom(token);
+      }
+    }
+    if (outputCurrency) {
+      const token = tokenList.find((t) => t.address === outputCurrency);
+      if (!token) {
+        void readOutput({ address: outputCurrency }).catch(() =>
+          console.error("output currency not a token"),
+        );
+      } else {
+        setSelectedTo(token);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (inputToken) {
+      setSelectedFrom(inputToken);
+      addNewToken(inputToken);
+    }
+    if (outputToken) {
+      setSelectedTo(outputToken);
+      addNewToken(outputToken);
+    }
+  }, [inputToken, outputToken]);
+  const [selectedTo, setSelectedTo] = useState<Token | undefined>(outputToken);
+
+  const [selectedFrom, setSelectedFrom] = useState<Token | undefined>(
+    inputToken,
+  );
+
   const slippage = useReadLocalStorage(LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE);
 
   const deadline = useReadLocalStorage(LOCAL_STORAGE_KEYS.DEADLINE);
-
-  const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
 
   const [fromAmount, setFromAmount] = useState(0);
 
@@ -40,10 +89,6 @@ export const useSwap = () => {
   const [payload, setPayload] = useState<any[]>([]);
 
   usePollAssetWalletBalance();
-
-  const [selectedFrom, setSelectedFrom] = useState<Token | undefined>(
-    undefined,
-  );
 
   const {
     data: swapInfo,

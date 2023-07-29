@@ -3,29 +3,27 @@
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   DEX_PRECOMPILE_ABI,
+  useBeraConfig,
   useBeraJs,
   type Token,
-  useBeraConfig,
 } from "@bera/berajs";
 import { TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { parseUnits } from "viem";
+import { type Address } from "wagmi";
 
 import ApproveTokenButton from "~/components/approve-token-button";
 import { SettingsPopover } from "~/components/settings-popover";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 import { type MappedTokens } from "../types";
-import { type Address } from "wagmi";
 
 interface IAddLiquidityContent {
   pool: Pool | undefined;
   prices: MappedTokens;
 }
-export default function AddLiquidityContent({
-  pool,
-}: IAddLiquidityContent) {
+export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   const { account = undefined } = useBeraJs();
   const { networkConfig } = useBeraConfig();
 
@@ -72,13 +70,16 @@ export default function AddLiquidityContent({
           {needsApproval.length > 0 ? (
             <ApproveTokenButton
               token={needsApproval[0]}
-              spender={networkConfig.precompileAddresses.erc20ModuleAddress as Address}
+              spender={
+                networkConfig.precompileAddresses.erc20ModuleAddress as Address
+              }
             />
           ) : (
             <Button
               onClick={() => {
                 write({
-                  address: networkConfig.precompileAddresses.erc20DexAddress as Address,
+                  address: networkConfig.precompileAddresses
+                    .erc20DexAddress as Address,
                   abi: DEX_PRECOMPILE_ABI,
                   functionName: "addLiquidity",
                   params: payload,

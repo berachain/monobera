@@ -59,7 +59,6 @@ export const columns: ColumnDef<Pool>[] = [
       <DataTableColumnHeader column={column} title="Volume(24h)" />
     ),
     cell: ({ row }) => {
-      console.log(row);
       const dailyVolume = formatUsd(row.original.dailyVolume || 0);
       return <div className="flex items-center">{dailyVolume}</div>;
     },

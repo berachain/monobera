@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  useBeraJs,
-} from "@bera/berajs";
+import { useBeraJs } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
 export default function ClaimPageContent() {
