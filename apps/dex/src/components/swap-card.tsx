@@ -2,12 +2,14 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
+import { RouteNotFound } from "@bera/bera-router";
 import { useBeraJs } from "@bera/berajs";
 import { ConnectButton, TokenInput } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { type Address } from "wagmi";
 
 import { erc20ModuleAddress } from "~/config";
 import { SwapKind, useSwap } from "~/hooks/useSwap";
@@ -23,7 +25,11 @@ const DynamicApproveButton = dynamic(() => import("./approve-token-button"), {
   ssr: false,
 });
 
-export function SwapCard() {
+interface ISwapCard {
+  inputCurrency?: Address | undefined;
+  outputCurrency?: Address | undefined;
+}
+export function SwapCard({ inputCurrency, outputCurrency }: ISwapCard) {
   const {
     setSwapKind,
     setSelectedFrom,
@@ -40,7 +46,10 @@ export function SwapCard() {
     swapInfo,
     payload,
     priceImpact,
-  } = useSwap();
+  } = useSwap({
+    inputCurrency,
+    outputCurrency,
+  });
   const { isConnected } = useBeraJs();
   return (
     <Card className="m-auto w-[500px]">
@@ -85,11 +94,11 @@ export function SwapCard() {
             }}
           />
           {(priceImpact ?? 0) > 15 && "Price impact is too high"}
-          {error && (
+          {error instanceof RouteNotFound && (
             <Alert variant="destructive" className="my-4">
               <Icons.warning className="h-4 w-4" />
               <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
+              <AlertDescription>{error.message}</AlertDescription>
             </Alert>
           )}
           {(Number(allowance?.formattedAllowance) ?? 0) < fromAmount ? (

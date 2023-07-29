@@ -4,12 +4,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEffect, useState } from "react";
 import {
+  useBeraConfig,
   useCurrentAssetWalletBalances,
   usePollAllowances,
   usePollAssetWalletBalance,
   usePollEpochs,
   type Token,
-  useBeraConfig,
 } from "@bera/berajs";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";

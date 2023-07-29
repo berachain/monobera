@@ -3,21 +3,19 @@
 import React from "react";
 import Link from "next/link";
 import { useBeraConfig, type Token } from "@bera/berajs";
-import {
-  ERC20BGT_PRECOMPILE_ABI,
-} from "@bera/berajs/src/config";
+import { ERC20BGT_PRECOMPILE_ABI } from "@bera/berajs/src/config";
 import { useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { type Address } from "wagmi";
 
 import { ApproveTokenButton } from "~/components/approve-token-button";
 import BribeTokenInputs from "./BribeTokenInputs";
 import useCreateTokenBribes, {
   type ITokenBribe,
 } from "./hooks/useCreateTokenBribes";
-import { type Address } from "wagmi";
 
 export default function CreateBribeCard({
   validatorAddress,
@@ -98,7 +96,9 @@ export default function CreateBribeCard({
           {needsApproval.length > 0 ? (
             <ApproveTokenButton
               token={needsApproval[0]}
-              spender={networkConfig.precompileAddresses.erc20ModuleAddress as Address}
+              spender={
+                networkConfig.precompileAddresses.erc20ModuleAddress as Address
+              }
             />
           ) : (
             <Button
@@ -106,7 +106,8 @@ export default function CreateBribeCard({
               disabled={isLoading || !!error || !!epochError}
               onClick={() => {
                 write({
-                  address: networkConfig.precompileAddresses.erc20BgtAddress as Address,
+                  address: networkConfig.precompileAddresses
+                    .erc20BgtAddress as Address,
                   abi: ERC20BGT_PRECOMPILE_ABI,
                   functionName: "createBribe",
                   params: payload,

@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import { type RouterConfig } from "~/config";
 import { MultiCallPools } from "./onChainData";
 import { type PoolRecords, type RawPool } from "./types";
@@ -25,10 +23,13 @@ export class PoolService {
 
   public async fetchPools() {
     try {
-      const response = await axios.get(
-        `${this.config.subgraphUrl}/events/dex/pool_created?page=1&per_page=10`,
+      const response = await fetch(
+        `${this.config.subgraphUrl}/events/dex/pool_created`,
+        { cache: "no-store" },
       );
-      this.pools = response.data.result;
+
+      const temp = await response.json();
+      this.pools = temp.result;
       this.poolMulticall.getPoolData(this.pools);
       await this.poolMulticall.execute(this.pools);
 
@@ -40,6 +41,29 @@ export class PoolService {
       this.pools = [];
       console.error(`Error: fetchPools(): ${err}`);
       return false;
+    }
+  }
+
+  public async fetchPaginatedPools(page: number, perPage: number) {
+    try {
+      const response = await fetch(
+        `${this.config.subgraphUrl}/events/dex/pool_created?page=${page}&per_page=${perPage}`,
+        { cache: "no-store" },
+      );
+      const temp = await response.json();
+
+      this.pools = temp.result;
+      this.poolMulticall.getPoolData(this.pools);
+      await this.poolMulticall.execute(this.pools);
+
+      this.finishedFetching = true;
+      return this.poolMulticall.getPools();
+    } catch (err) {
+      // On error clear all caches and return false so user knows to try again.
+      this.finishedFetching = false;
+      this.pools = [];
+      console.error(`Error: fetchPools(): ${err}`);
+      return undefined;
     }
   }
 }

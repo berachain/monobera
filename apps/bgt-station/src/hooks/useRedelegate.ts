@@ -5,14 +5,14 @@ import {
   STAKING_PRECOMPILE_ABI,
   getTokens,
   truncateHash,
+  useBeraConfig,
   usePollAccountDelegations,
   usePollActiveValidators,
   usePollAssetWalletBalance,
   type Validator,
-  useBeraConfig,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
-import { type Address, getAddress, parseUnits } from "viem";
+import { getAddress, parseUnits, type Address } from "viem";
 
 export const useRedelegate = (fromAddress: `0x{string}`) => {
   const [redelegateAmount, setRedelegateAmount] = useState(0);

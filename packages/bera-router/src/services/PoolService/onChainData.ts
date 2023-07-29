@@ -1,5 +1,5 @@
 import { cloneDeep, set, unset } from "lodash";
-import { type Address, type PublicClient } from "viem";
+import { formatUnits, type Address, type PublicClient } from "viem";
 
 import { DEX_PRECOMPILE_ABI, DEX_PRECOMPILE_ADDRESS } from "../constants";
 import { ERC20ABI } from "./erc20abi";
@@ -123,7 +123,6 @@ export class MultiCallPools {
     results.forEach((result, i) =>
       set(rawObj, this.paths[i] ?? "", result.result),
     );
-
     this.rawPools = rawObj;
     this.formatRecords();
     return true;
@@ -164,7 +163,10 @@ export class MultiCallPools {
             set(
               this.rawPools,
               `${key}.tokens.${tokenAddress}.balance`,
-              poolData.liquidity?.[1]?.[i] ?? 0n,
+              formatUnits(
+                poolData.liquidity?.[1]?.[i] ?? 0n,
+                poolData.tokens?.[tokenAddress]?.decimals ?? 18,
+              ),
             );
             set(this.rawPools, `${key}.swapFee`, swapFee);
           });
@@ -203,6 +205,7 @@ function flattenPoolRecords(poolRecords: PoolRecords): Pool[] {
     return [
       {
         ...pool,
+        totalSupply: formatUnits(pool.totalSupply, 18),
         tokens: [...tokens],
       },
     ];

@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePollAllowances, type Token, useBeraConfig } from "@bera/berajs";
+import { useBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
+import { type Address } from "wagmi";
 
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
-import { type Address } from "wagmi";
 
 const useCreatePool = (tokenWeights: ITokenWeight[]) => {
   const [needsApproval, setNeedsApproval] = useState<Token[]>([]);

@@ -123,8 +123,9 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
       {
         data: data,
         labelColor: false,
-        backgroundColor: chart === Chart.VOLUME ? "rgba(255, 99, 132, 0.5)" : 'green',
-        borderColor: chart === Chart.VOLUME ? "rgb(255, 99, 132)" : 'green',
+        backgroundColor:
+          chart === Chart.VOLUME ? "rgba(255, 99, 132, 0.5)" : "green",
+        borderColor: chart === Chart.VOLUME ? "rgb(255, 99, 132)" : "green",
         hoverBackgroundColor: "yellow",
         hoverBorderColor: "yellow",
         tension: 0.4,

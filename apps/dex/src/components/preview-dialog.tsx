@@ -110,7 +110,6 @@ export default function PreviewDialog({
     },
   });
 
-  console.log(payload);
   const ratio = normalizeToRatio(
     Number(swapInfo?.formattedSwapAmount),
     Number(swapInfo?.formattedReturnAmount),
