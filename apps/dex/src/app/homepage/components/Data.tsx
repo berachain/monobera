@@ -11,14 +11,12 @@ function DataCard({
   value: string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg bg-white p-5 shadow-lg">
-      <div className="flex flex-col items-center justify-center">
-        <div className="flex items-center justify-center rounded-full bg-blue-100 p-3">
-          {icon}
-        </div>
-        <div className="mt-4 text-2xl font-bold">{title}</div>
+    <div className="flex flex-col rounded-2xl border-2 bg-[#FAFAF9] p-6">
+      <div className="flex items-center gap-3 text-sm">
+        <div className="text-muted-foreground">{icon}</div>
+        <div className="text-muted-foreground">{title}</div>
       </div>
-      <div className="mt-4 text-4xl font-bold">{value}</div>
+      <div className="mt-2 text-3xl font-bold">{value}</div>
     </div>
   );
 }
@@ -26,7 +24,7 @@ function DataCard({
 export default function Data() {
   return (
     <section className="my-24">
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <DataCard
           title="Total Value Locked"
           value="$0.00"

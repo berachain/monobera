@@ -9,16 +9,13 @@ import { Button } from "@bera/ui/button";
 export default function Hero() {
   const router = useRouter();
   return (
-    <div className="grid grid-cols-12">
-      <div className="col-span-6">
-        <h2 className="text-muted-foreground">
-          Mint honey &amp; stake in boosted pools
-        </h2>
-        <h1>
+    <div className="my-24 grid grid-cols-6 xl:grid-cols-12">
+      <div className="col-span-6 my-12">
+        <h1 className="mb-6 text-5xl font-extrabold">
           <span className="text-primary">Swap Tokens</span> on Your Favorite New
           Dex
         </h1>
-        <div>
+        <div className="mb-6">
           <Button onClick={() => router.push("/swap")} className="mr-4">
             Swap Tokens
           </Button>
@@ -31,7 +28,10 @@ export default function Hero() {
             Add Liquidity to Earn BGT Rewards
           </Badge>
           <Badge variant="outline" className="w-fit">
-            Create your own Liquidity Pools with upto 1.00% Fees
+            Get BGT Emissions for my token
+          </Badge>
+          <Badge variant="outline" className="w-fit">
+            Create your own Liquidity Pools
           </Badge>
         </div>
       </div>
