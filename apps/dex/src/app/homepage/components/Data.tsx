@@ -25,7 +25,7 @@ function DataCard({
 
 export default function Data() {
   return (
-    <div className="container">
+    <section className="my-24">
       <div className="grid grid-cols-4 gap-4">
         <DataCard
           title="Total Value Locked"
@@ -44,6 +44,6 @@ export default function Data() {
         />
         <DataCard title="Bera Price" value="$0.00" icon={<Icons.bera />} />
       </div>
-    </div>
+    </section>
   );
 }

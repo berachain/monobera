@@ -36,7 +36,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="col-span-6">
-        <div className="flex justify-center bg-glow bg-cover bg-no-repeat">
+        <div className="flex justify-center bg-glow bg-cover bg-center bg-no-repeat">
           <Image
             src="/swapModule.png"
             alt="Swap module preview"

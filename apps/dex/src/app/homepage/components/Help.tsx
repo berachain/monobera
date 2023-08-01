@@ -3,7 +3,7 @@ import { Button } from "@bera/ui/button";
 
 export default function Help() {
   return (
-    <div className="container">
+    <section className="my-24">
       <div>
         <h2>
           Help us <span className="text-primary">Build a Better Bera</span>Dex
@@ -29,6 +29,6 @@ export default function Help() {
           <Button>Checkout Docs</Button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
