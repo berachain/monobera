@@ -48,7 +48,7 @@ export default async function Pool() {
 
   console.log(sortedPools);
   return (
-    <div className="-col container m-auto flex flex w-full gap-5">
+    <div className="container m-auto flex w-full flex-col gap-5">
       <PoolPageHeader />
       <PoolsTable pools={sortedPools ?? []} />
     </div>

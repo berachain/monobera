@@ -17,6 +17,9 @@ export default {
       },
     },
     extend: {
+      backgroundImage: {
+        glow: "url('/glow.png')",
+      },
       borderColor: {
         DEFAULT: "hsl(var(--border) / <alpha-value>)",
       },
