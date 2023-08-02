@@ -11,7 +11,7 @@ export default function Hero() {
   return (
     <div className="my-24 grid grid-cols-6 xl:grid-cols-12">
       <div className="col-span-6 my-12">
-        <h1 className="mb-6 text-5xl font-extrabold">
+        <h1 className="mb-4 text-5xl font-extrabold">
           <span className="text-primary">Swap Tokens</span> on Your Favorite New
           Dex
         </h1>
