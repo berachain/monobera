@@ -26,7 +26,7 @@ export default function CreateAPool() {
             className="animate-spin-slower"
           />
         </div>
-        <div className="relative z-50 pt-24 text-center">
+        <div className="relative z-20 pt-24 text-center">
           <h2 className=" mb-2 text-3xl font-semibold">
             Create <span className="text-muted-foreground">a Pool</span>
           </h2>
