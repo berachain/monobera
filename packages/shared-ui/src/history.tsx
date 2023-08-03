@@ -1,7 +1,6 @@
 import React from "react";
 import {
   truncateHash,
-  useBeraConfig,
   useRecentTransactions,
   type NewTransaction,
 } from "@bera/berajs";
@@ -31,7 +30,7 @@ function formatTimestamp(timestamp: number): JSX.Element {
 
 export function History() {
   const transactions = useRecentTransactions();
-  const { networkConfig } = useBeraConfig();
+
   return (
     <div className="grid gap-4">
       <h3 className="text-md font-medium">Recent activity</h3>

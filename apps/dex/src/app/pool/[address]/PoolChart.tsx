@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO fix any
 import { useEffect, useState } from "react";
 import { formatUsd } from "@bera/berajs";
 import { BeraChart } from "@bera/ui/bera-chart";

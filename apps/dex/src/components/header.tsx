@@ -39,7 +39,7 @@ export function Header() {
       <div className="mx-auto flex h-16 w-full items-center justify-between px-4">
         <div>
           <div className="mr-8 flex items-center">
-            <span className="mr-10 text-lg font-bold tracking-tight">
+            <span className="mr-5 text-lg font-bold tracking-tight">
               <Link href={"/"}>
                 <Icons.logo className="h-12 w-12" />
               </Link>
