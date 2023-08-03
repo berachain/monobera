@@ -17,7 +17,7 @@ export const usePollSwaps = ({
   tokenIn,
   tokenOut,
   swapKind,
-  amount
+  amount,
 }: IUsePollSwaps) => {
   const { router } = useRouter();
 
