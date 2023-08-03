@@ -4,6 +4,8 @@ import React from "react";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Badge } from "@bera/ui/badge";
+import { Button } from "@bera/ui/button";
 
 export default function HotPools({ pools }: { pools: Pool[] }) {
   return (
@@ -14,12 +16,13 @@ export default function HotPools({ pools }: { pools: Pool[] }) {
           Leverage our boosted yields to increase your rewards
         </h3>
       </div>
-      <div>
+      <div className="m-auto grid max-w-[1000px] grid-cols-3 gap-6">
         {pools.map((pool) => (
-          <div key={pool.pool} className="mt-12 flex flex-col items-center">
-            <div className="flex flex-col items-center">
-              <div className="flex items-center">{pool.poolName}</div>
-              <div className="mt-2 text-xl font-bold">
+          <div key={pool.pool} className="mt-12 rounded-xl border px-6 py-8">
+            <Badge>Hot Pools</Badge>
+            <div className="mt-6">
+              <div className="mb-2 text-sm">{pool.poolName}</div>
+              <div className="flex flex-row">
                 {pool.tokens.map((token, i) => (
                   <TokenIcon
                     key={token.address}
@@ -32,6 +35,25 @@ export default function HotPools({ pools }: { pools: Pool[] }) {
                 ))}
               </div>
             </div>
+            <div className="mb-6 mt-6 grid grid-cols-2 gap-2">
+              <div className="rounded-xl border bg-muted p-4">
+                <div className="text-sm">APR</div>
+                <div className="text-2xl font-semibold">100%</div>
+              </div>
+              <div className="rounded-xl border bg-muted p-4">
+                <div className="text-sm">APR</div>
+                <div className="text-2xl font-semibold">100%</div>
+              </div>
+              <div className="rounded-xl border bg-muted p-4">
+                <div className="text-sm">APR</div>
+                <div className="text-2xl font-semibold">100%</div>
+              </div>
+              <div className="rounded-xl border bg-muted p-4">
+                <div className="text-sm">APR</div>
+                <div className="text-2xl font-semibold">100%</div>
+              </div>
+            </div>
+            <Button className="w-full">Add Liquidity</Button>
           </div>
         ))}
       </div>
