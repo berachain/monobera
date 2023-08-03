@@ -16,7 +16,7 @@ export default function HotPools({ pools }: { pools: Pool[] }) {
           Leverage our boosted yields to increase your rewards
         </h3>
       </div>
-      <div className="m-auto grid w-[1000px] grid-cols-3 gap-6 overflow-auto whitespace-nowrap">
+      <div className="m-auto grid max-w-[1000px] grid-cols-1 gap-6 lg:grid-cols-3">
         {pools.map((pool) => (
           <div key={pool.pool} className="mt-12 rounded-xl border px-6 py-8">
             <Badge>Hot Pools</Badge>
