@@ -23,7 +23,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
         <Providers>
-          <div className="relative flex min-h-screen flex-col overflow-hidden">
+          <div className="relative flex min-h-screen flex-col">
             <div className="flex-1">
               <Header />
               <main className="w-full py-40">{props.children}</main>

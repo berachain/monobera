@@ -49,8 +49,12 @@ export default async function Homepage() {
     <div className="container">
       <Hero />
       <Data />
+
       <HotPools pools={sortedPools || []} />
-      <CreateAPool />
+
+      <div className="-mx-2 overflow-hidden">
+        <CreateAPool />
+      </div>
       <Help />
     </div>
   );
