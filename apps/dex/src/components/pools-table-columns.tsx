@@ -12,17 +12,21 @@ export const columns: ColumnDef<Pool>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Composition" />
     ),
-    cell: ({ row }) => (
-      <div className="ml-2 flex flex-row justify-start">
-        {row.getValue("tokens").map((token: any, i: number) => (
-          <TokenIcon
-            key={token.address}
-            token={token}
-            className={cn(" border-2 border-border", i !== 0 && "ml-[-15px]")}
-          />
-        ))}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const tokens = row.getValue("tokens") as any[];
+
+      return (
+        <div className="ml-2 flex flex-row justify-start">
+          {tokens.map((token: any, i: number) => (
+            <TokenIcon
+              key={token.address}
+              token={token}
+              className={cn(" border-2 border-border", i !== 0 && "ml-[-15px]")}
+            />
+          ))}
+        </div>
+      );
+    },
     enableSorting: false,
     enableHiding: false,
   },
@@ -46,7 +50,7 @@ export const columns: ColumnDef<Pool>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="BGT Rewards" />
     ),
-    cell: ({ row }) => {
+    cell: () => {
       return <div className="flex w-[100px] items-center">BGT REWARDS</div>;
     },
     filterFn: (row, id, value) => {

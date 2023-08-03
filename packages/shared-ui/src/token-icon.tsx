@@ -37,12 +37,12 @@ export const TokenIcon = ({
   }, [read, token, fetch, tokenInformation]);
 
   return (
-    <Avatar className={cn("h-10 w-10 rounded-full", className)}>
+    <Avatar className={cn("h-6 w-6 rounded-full", className)}>
       <AvatarImage
         src={fetch ? "" : token?.logoURI}
         className="rounded-full p-1"
       />
-      <AvatarFallback className="font-bold">
+      <AvatarFallback className="text-xs font-bold">
         {fetch
           ? selectedToken?.symbol?.slice(0, 3)
           : token?.symbol?.slice(0, 3)}

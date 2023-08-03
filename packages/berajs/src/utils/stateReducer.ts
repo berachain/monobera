@@ -1,15 +1,17 @@
-type LoadingState = "idle" | "loading" | "success" | "fail";
+type LoadingState = "idle" | "loading" | "success" | "fail" | "submitting";
 
 export enum ActionEnum {
   ERROR = "confirm_error",
   SUCCESS = "confirm_receipt",
   LOADING = "confirm_sending",
+  SUBMITTING = "confirm_submitting",
 }
 
 type Action =
   | { type: ActionEnum.LOADING }
   | { type: ActionEnum.SUCCESS }
-  | { type: ActionEnum.ERROR };
+  | { type: ActionEnum.ERROR }
+  | { type: ActionEnum.SUBMITTING };
 
 interface State {
   confirmState: LoadingState;
@@ -39,6 +41,11 @@ export const reducer = (state: State, actions: Action): State => {
       return {
         ...state,
         confirmState: "fail",
+      };
+    case ActionEnum.SUBMITTING:
+      return {
+        ...state,
+        confirmState: "submitting",
       };
     default:
       return state;

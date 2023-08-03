@@ -25,8 +25,8 @@ export function SelectToken({
   return (
     <div className="my-4 w-fit">
       <Button
-        className="flex shrink-0 gap-2"
-        variant={token && "outline"}
+        className="flex h-fit shrink-0 gap-2 rounded-xl p-1 "
+        variant={"outline"}
         onClick={() => selectable && setOpen(true)}
       >
         {token ? (
@@ -37,9 +37,9 @@ export function SelectToken({
             {selectable && <Icons.chevronDown className="h-4 w-4" />}
           </>
         ) : (
-          <p className="flex flex-row items-center whitespace-nowrap">
+          <p className="flex flex-row items-center whitespace-nowrap px-2 py-1 text-sm font-medium">
             {" "}
-            Select Token <Icons.chevronDown className="ml-2 h-4 w-4" />{" "}
+            Select a token <Icons.chevronDown className="ml-2 h-4 w-4" />{" "}
           </p>
         )}
       </Button>

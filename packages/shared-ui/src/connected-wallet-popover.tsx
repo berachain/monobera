@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { truncateHash, useBeraConfig, useBeraJs } from "@bera/berajs";
+import { truncateHash, useBeraJs } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -15,8 +15,6 @@ export default function ConnectedWalletPopover() {
   const [open, setOpen] = React.useState(false);
   const { account, logout } = useBeraJs();
   const connectorName = useReadLocalStorage<string>("wagmi.wallet");
-
-  const { networkConfig } = useBeraConfig();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -78,7 +76,6 @@ export default function ConnectedWalletPopover() {
           </div>
         </div>
         <History />
-        {/* <SwapSettings /> */}
       </PopoverContent>
     </Popover>
   );

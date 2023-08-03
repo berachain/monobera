@@ -1,22 +1,37 @@
 import React from "react";
 import { Tooltip } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Input } from "@bera/ui/input";
-import { Toggle } from "@bera/ui/toggle";
+import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useLocalStorage } from "usehooks-ts";
 
-import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
+import {
+  DEFAULT_DEADLINE,
+  DEFAULT_SLIPPAGE,
+  LOCAL_STORAGE_KEYS,
+} from "~/utils/constants";
 
 export enum SELECTION {
   AUTO = "auto",
   CUSTOM = "custom",
 }
 export default function SwapSettings() {
-  const [slippageTolerance, setSlippageTolerance] = useLocalStorage<
+  const [slippageToleranceType, setSlippageToleranceType] = useLocalStorage<
     number | string
-  >(LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE, SELECTION.AUTO);
-  const [deadline, setDeadline] = useLocalStorage<number | string>(
-    LOCAL_STORAGE_KEYS.DEADLINE,
+  >(LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE_TYPE, SELECTION.AUTO);
+
+  const [slippageToleranceValue, setSlippageToleranceValue] = useLocalStorage<
+    number | string
+  >(LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE_VALUE, DEFAULT_SLIPPAGE);
+
+  const [deadlineType, setDeadlineType] = useLocalStorage<number | string>(
+    LOCAL_STORAGE_KEYS.DEADLINE_TYPE,
     SELECTION.AUTO,
+  );
+
+  const [deadlineValue, setDeadlineValue] = useLocalStorage<number | string>(
+    LOCAL_STORAGE_KEYS.DEADLINE_VALUE,
+    DEFAULT_DEADLINE,
   );
 
   return (
@@ -27,69 +42,81 @@ export default function SwapSettings() {
           <Tooltip text="Maximum amount of slippage that can occur during a swap" />
         </h4>
       </div>
-      <div className="grid grid-cols-4 gap-1">
-        <Toggle
-          variant="outline"
-          pressed={slippageTolerance === SELECTION.AUTO}
-          onPressedChange={() => setSlippageTolerance(SELECTION.AUTO)}
+      <div className="flex h-[40px] flex-row items-center gap-2">
+        <Tabs
+          defaultValue={slippageToleranceType as string}
+          className="w-[120px]"
+          onValueChange={(value: string) => setSlippageToleranceType(value)}
         >
-          Auto
-        </Toggle>
-        <Toggle
-          variant="outline"
-          pressed={slippageTolerance !== SELECTION.AUTO}
-          onPressedChange={() => setSlippageTolerance(0)}
-        >
-          Custom
-        </Toggle>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value={SELECTION.AUTO}>Auto</TabsTrigger>
+            <TabsTrigger value={SELECTION.CUSTOM}>Custom</TabsTrigger>
+          </TabsList>
+        </Tabs>
         <Input
           type="number"
           step="any"
-          min="0.1"
-          max="100"
-          className="border-primary-foreground text-right"
-          disabled={slippageTolerance === SELECTION.AUTO}
+          min={0.1}
+          max={100}
+          className="h-[40px] w-14 pl-1"
+          disabled={slippageToleranceType === SELECTION.AUTO}
           placeholder="1"
-          defaultValue={Number(slippageTolerance) > 0 ? slippageTolerance : ""}
+          defaultValue={slippageToleranceValue}
+          endAdornment={
+            <p
+              className={cn(
+                "mr-2 self-center pl-1 text-xs text-foreground",
+                slippageToleranceType === SELECTION.AUTO && "opacity-50",
+              )}
+            >
+              %
+            </p>
+          }
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setSlippageTolerance(Number(e.target.value))
+            setSlippageToleranceValue(Number(e.target.value))
           }
         />
-        <p className="self-center text-sm">%</p>
       </div>
       <div className="space-y-2">
         <h4 className="flex items-center gap-1 font-medium leading-none">
-          Transaction deadline
-          <Tooltip text="The maximum amount of time a swap can take. " />
+          Transaction Deadline
+          <Tooltip text="Maximum amount of time that can elapse during a swap" />
         </h4>
       </div>
-      <div className="grid grid-cols-4 gap-1">
-        <Toggle
-          variant="outline"
-          pressed={deadline === SELECTION.AUTO}
-          onPressedChange={() => setDeadline(SELECTION.AUTO)}
+      <div className="flex h-[40px] flex-row items-center gap-2">
+        <Tabs
+          defaultValue={deadlineType as string}
+          className="w-[120px]"
+          onValueChange={(value: string) => setDeadlineType(value)}
         >
-          Auto
-        </Toggle>
-        <Toggle
-          variant="outline"
-          pressed={deadline !== SELECTION.AUTO}
-          onPressedChange={() => setDeadline(0)}
-        >
-          Custom
-        </Toggle>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value={SELECTION.AUTO}>Auto</TabsTrigger>
+            <TabsTrigger value={SELECTION.CUSTOM}>Custom</TabsTrigger>
+          </TabsList>
+        </Tabs>
         <Input
           type="number"
           step="any"
-          min="0"
-          className="border-primary-foreground text-right"
-          placeholder=" 1"
-          disabled={deadline === SELECTION.AUTO}
+          min={0.1}
+          max={100}
+          className="h-[40px] w-14 pl-1"
+          disabled={deadlineType === SELECTION.AUTO}
+          placeholder="1"
+          defaultValue={deadlineValue}
+          endAdornment={
+            <p
+              className={cn(
+                "mr-2 self-center pl-1 text-xs text-foreground",
+                deadlineType === SELECTION.AUTO && "opacity-50",
+              )}
+            >
+              min
+            </p>
+          }
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setDeadline(Number(e.target.value))
+            setDeadlineValue(Number(e.target.value))
           }
         />
-        <p className="self-center text-sm">min</p>
       </div>
     </div>
   );

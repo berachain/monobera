@@ -36,14 +36,14 @@ const useBeraContractWrite = ({
       onLoading && onLoading();
       let receipt: any | undefined;
       try {
-        const { request } = await prepareWriteContract({
-          address: address,
-          abi: abi,
-          functionName: functionName,
-          args: params,
-        });
+        // const { request } = await prepareWriteContract({
+        //   address: address,
+        //   abi: abi,
+        //   functionName: functionName,
+        //   args: params,
+        // });
 
-        console.log("REQUEST", request);
+        // console.log("REQUEST", request);
 
         receipt = await walletClient?.writeContract({
           address: address,
@@ -53,6 +53,7 @@ const useBeraContractWrite = ({
           account: account,
           chain: undefined,
         });
+        dispatch({ type: ActionEnum.SUBMITTING });
 
         onSubmission && onSubmission(receipt);
         const confirmationReceipt: any =
@@ -63,17 +64,15 @@ const useBeraContractWrite = ({
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess && onSuccess(receipt);
-          return;
         } else {
+          // TODO: Add error txn hash here
           const e = new TransactionFailedError();
           onError && onError(e);
-          return;
         }
       } catch (e: any) {
         console.log(e);
         dispatch({ type: ActionEnum.ERROR });
         onError && onError(e);
-        return;
       }
     },
     [
@@ -89,6 +88,7 @@ const useBeraContractWrite = ({
 
   return {
     isLoading: state.confirmState === "loading",
+    isSubmitting: state.confirmState === "submitting",
     isSuccess: state.confirmState === "success",
     isError: state.confirmState === "fail",
     write,

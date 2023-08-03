@@ -75,18 +75,23 @@ export class RouterService {
   }
 
   public async getSwaps(
-    tokenIn: Address,
-    tokenOut: Address,
+    tokenIn: Address | undefined,
+    tokenOut: Address | undefined,
     swapType: SwapTypes,
     swapAmount: bigint,
     swapOptions?: Partial<any>,
   ): Promise<SwapInfo> {
+    if (!tokenIn || !tokenOut) throw new Error("no tokens selected");
+
+    if (tokenIn === tokenOut)
+      throw new Error("tokenIn and tokenOut cannot be the same");
+    if (swapAmount === 0n)
+      return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
     if (!this.poolService.finishedFetching) {
       console.error("Pools not fetched yet");
       return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
     }
-    // if (swapAmount === 0n)
-    //   return cloneDeep(EMPTY_SWAPINFO) as unknown as SwapInfo;
+
     // Set any unset options to their defaults
     const options: SwapOptions = {
       ...this.defaultSwapOptions,

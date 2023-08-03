@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
 import { RouterService, defaultConfig } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { type Address } from "wagmi";
 
 import { PoolTag, getWBeraPriceDictForPoolTokens } from "./getPrice";
 

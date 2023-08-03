@@ -1,5 +1,4 @@
-import error from "next/error";
-import { RouteNotFound, type SwapInfo } from "@bera/bera-router";
+import { type SwapInfo } from "@bera/bera-router";
 import { POLLING } from "@bera/shared-ui/src/utils";
 import useSWR from "swr";
 import { type Address } from "wagmi";
@@ -12,6 +11,7 @@ interface IUsePollSwaps {
   tokenOut: Address;
   swapKind: number;
   amount: bigint;
+  lock?: boolean;
 }
 
 export const usePollSwaps = ({
@@ -19,21 +19,28 @@ export const usePollSwaps = ({
   tokenOut,
   swapKind,
   amount,
+  lock = false,
 }: IUsePollSwaps) => {
   const { router } = useRouter();
 
-  const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount];
-
+  const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount, lock];
   return useSWR(
     QUERY_KEY,
     async () => {
-      const result: SwapInfo = await router.getSwaps(
-        tokenIn,
-        tokenOut,
-        swapKind,
-        amount,
-      );
-      return result;
+      try {
+        if (lock) return undefined;
+        const result: SwapInfo = await router.getSwaps(
+          tokenIn,
+          tokenOut,
+          swapKind,
+          amount,
+        );
+        return result;
+      } catch (e) {
+        // TODO: throws so many errors but this is good 4 debug
+        // console.error(e);
+        return undefined;
+      }
     },
     {
       refreshInterval: POLLING.FAST,

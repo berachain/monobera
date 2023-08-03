@@ -8,6 +8,7 @@ export interface IContractWrite {
 
 export interface useContractWriteApi {
   isLoading: boolean;
+  isSubmitting: boolean;
   isSuccess: boolean;
   isError: boolean;
   write: (props: IContractWrite) => void;

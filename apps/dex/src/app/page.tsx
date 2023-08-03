@@ -1,33 +1,27 @@
 import { type Metadata } from "next";
-import { createPublicClient, http, isAddress } from "viem";
+import { isAddress } from "viem";
 
-import { SwapCard } from "~/components/swap-card";
-import { beraJsConfig } from "./config";
+import { SwapContent } from "./swap";
 
 export const metadata: Metadata = {
   title: "Swap | DEX | Berachain",
   description: "Decentralized exchange on Berachain",
 };
 
-export default async function Swap({ searchParams }: { searchParams: any }) {
+export default function Swap({ searchParams }: { searchParams: any }) {
   const { inputCurrency, outputCurrency } = searchParams;
   if (!isAddress(inputCurrency) && !isAddress(outputCurrency)) {
     return (
       <div className="container">
-        <SwapCard />
+        <SwapContent />
       </div>
     );
   }
 
-  const client = createPublicClient({
-    chain: beraJsConfig.chain,
-    transport: http(),
-  });
-
   if (isAddress(inputCurrency) && !isAddress(outputCurrency)) {
     return (
       <div className="container">
-        <SwapCard inputCurrency={inputCurrency} />
+        <SwapContent inputCurrency={inputCurrency} />
       </div>
     );
   }
@@ -35,7 +29,7 @@ export default async function Swap({ searchParams }: { searchParams: any }) {
   if (!isAddress(inputCurrency) && isAddress(outputCurrency)) {
     return (
       <div className="container">
-        <SwapCard outputCurrency={outputCurrency} />
+        <SwapContent outputCurrency={outputCurrency} />
       </div>
     );
   }
@@ -43,7 +37,7 @@ export default async function Swap({ searchParams }: { searchParams: any }) {
   if (isAddress(inputCurrency) && isAddress(outputCurrency)) {
     return (
       <div className="container">
-        <SwapCard
+        <SwapContent
           inputCurrency={inputCurrency}
           outputCurrency={outputCurrency}
         />
