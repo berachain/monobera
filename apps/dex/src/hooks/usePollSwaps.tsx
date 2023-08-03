@@ -11,24 +11,21 @@ interface IUsePollSwaps {
   tokenOut: Address;
   swapKind: number;
   amount: bigint;
-  lock?: boolean;
 }
 
 export const usePollSwaps = ({
   tokenIn,
   tokenOut,
   swapKind,
-  amount,
-  lock = false,
+  amount
 }: IUsePollSwaps) => {
   const { router } = useRouter();
 
-  const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount, lock];
+  const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount];
   return useSWR(
     QUERY_KEY,
     async () => {
       try {
-        if (lock) return undefined;
         const result: SwapInfo = await router.getSwaps(
           tokenIn,
           tokenOut,

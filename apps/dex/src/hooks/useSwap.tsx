@@ -166,7 +166,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   });
 
   useEffect(() => {
-    console.log(swapInfo);
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(
         Number(
@@ -295,7 +294,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     showPriceImpact,
     exchangeRate,
     gasPrice: gasData?.formatted.gasPrice,
-    // TODO
     tokenInPrice:
       tokenInPriceInfo === undefined
         ? selectedFrom?.address === honeyTokenAddress

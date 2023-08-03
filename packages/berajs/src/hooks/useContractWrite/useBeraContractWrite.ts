@@ -36,6 +36,8 @@ const useBeraContractWrite = ({
       onLoading && onLoading();
       let receipt: any | undefined;
       try {
+
+        // TODO: figure out clean way to early detect errors and effectively show them on the UI
         // const { request } = await prepareWriteContract({
         //   address: address,
         //   abi: abi,
@@ -65,7 +67,7 @@ const useBeraContractWrite = ({
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess && onSuccess(receipt);
         } else {
-          // TODO: Add error txn hash here
+          // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
           const e = new TransactionFailedError();
           onError && onError(e);
         }
