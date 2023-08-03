@@ -16,7 +16,7 @@ export function SwapCard() {
     payload,
     isConnected,
     setSelectedFrom,
-    allowance,
+    // allowance,
     isLoading,
     write,
     selectedFrom,

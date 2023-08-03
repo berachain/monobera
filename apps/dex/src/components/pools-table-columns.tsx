@@ -14,6 +14,10 @@ export const columns: ColumnDef<Pool>[] = [
     ),
     cell: ({ row }) => (
       <div className="ml-2 flex flex-row justify-start">
+        {/* TODO fix this */}
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
+        {/* @ts-ignore */}
+
         {row.getValue("tokens").map((token: any, i: number) => (
           <TokenIcon
             key={token.address}
@@ -46,7 +50,7 @@ export const columns: ColumnDef<Pool>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="BGT Rewards" />
     ),
-    cell: ({ row }) => {
+    cell: ({}) => {
       return <div className="flex w-[100px] items-center">BGT REWARDS</div>;
     },
     filterFn: (row, id, value) => {

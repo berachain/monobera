@@ -1,5 +1,4 @@
-import error from "next/error";
-import { RouteNotFound, type SwapInfo } from "@bera/bera-router";
+import { type SwapInfo } from "@bera/bera-router";
 import { POLLING } from "@bera/shared-ui/src/utils";
 import useSWR from "swr";
 import { type Address } from "wagmi";
