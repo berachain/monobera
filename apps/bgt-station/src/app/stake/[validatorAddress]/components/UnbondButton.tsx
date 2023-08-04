@@ -3,11 +3,11 @@
 import React from "react";
 import {
   STAKING_PRECOMPILE_ABI,
-  getTokens,
   truncateHash,
   useBeraConfig,
   useBeraJs,
   usePollAccountDelegations,
+  useTokens,
   type Token,
   type Validator,
 } from "@bera/berajs";
@@ -38,7 +38,7 @@ export default function UnbondButton({
 }: Props) {
   const [open, setOpen] = React.useState(false);
   const [unbondAmount, setUnbondAmount] = React.useState(0);
-  const tokens = getTokens();
+  const { tokenList: tokens } = useTokens();
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(validatorAddress);
   const accountDelegation = useSelectedAccountDelegation();
@@ -80,7 +80,7 @@ export default function UnbondButton({
             </div>
           </div>
           <TokenInput
-            selected={tokens[0] || (dummyToken as Token)}
+            selected={(tokens && tokens[0]) || (dummyToken as Token)}
             amount={unbondAmount}
             setAmount={(amount) => setUnbondAmount(amount)}
             selectable={false}
