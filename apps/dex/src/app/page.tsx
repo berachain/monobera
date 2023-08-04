@@ -1,7 +1,7 @@
 import { type Metadata } from "next";
 import { isAddress } from "viem";
 
-import { SwapCard } from "~/components/swap-card";
+import { SwapContent } from "./swap";
 
 export const metadata: Metadata = {
   title: "Swap | DEX | Berachain",
@@ -20,7 +20,7 @@ export default function Swap({
   if (!isAddress(inputCurrency) && !isAddress(outputCurrency)) {
     return (
       <div className="container">
-        <SwapCard />
+        <SwapContent />
       </div>
     );
   }
@@ -28,7 +28,7 @@ export default function Swap({
   if (isAddress(inputCurrency) && !isAddress(outputCurrency)) {
     return (
       <div className="container">
-        <SwapCard inputCurrency={inputCurrency} />
+        <SwapContent inputCurrency={inputCurrency} />
       </div>
     );
   }
@@ -36,7 +36,7 @@ export default function Swap({
   if (!isAddress(inputCurrency) && isAddress(outputCurrency)) {
     return (
       <div className="container">
-        <SwapCard outputCurrency={outputCurrency} />
+        <SwapContent outputCurrency={outputCurrency} />
       </div>
     );
   }
@@ -44,7 +44,7 @@ export default function Swap({
   if (isAddress(inputCurrency) && isAddress(outputCurrency)) {
     return (
       <div className="container">
-        <SwapCard
+        <SwapContent
           inputCurrency={inputCurrency}
           outputCurrency={outputCurrency}
         />

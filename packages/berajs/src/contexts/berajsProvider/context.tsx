@@ -6,7 +6,7 @@ import React, {
   useState,
   type PropsWithChildren,
 } from "react";
-import { useAccount, useConnect } from "wagmi";
+import { useAccount, useConnect, useNetwork } from "wagmi";
 
 import { useAuth } from "~/hooks";
 
@@ -14,6 +14,7 @@ export interface IBeraJsAPI {
   account: `0x${string}` | undefined;
   error: Error | undefined;
   isConnected: boolean;
+  isWrongNetwork?: boolean;
   login: (connectorID: string) => Promise<void>;
   logout: (connectorID: string) => void;
   setError: (error: Error | undefined) => void;
@@ -27,6 +28,7 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { address: account } = useAccount();
   const [error, setError] = useState<Error | undefined>(undefined);
   const [isReady, setIsReady] = useState(false);
+  const { chain } = useNetwork();
 
   useEffect(() => setIsReady(true), []);
   return (
@@ -35,6 +37,7 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         account: account as `0x${string}`,
         error: evmError || error,
         isConnected: !evmError && account && isReady ? true : false,
+        isWrongNetwork: !chain?.unsupported ? false : true,
         login,
         logout,
         setError,

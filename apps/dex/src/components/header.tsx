@@ -29,7 +29,12 @@ const Connect = dynamic(
   () => import("@bera/shared-ui").then((mod) => mod.ConnectButton),
   {
     ssr: false,
-    loading: () => <Button className="w-full">Connect</Button>,
+    loading: () => (
+      <Button className="w-full gap-2">
+        <Icons.wallet className={"h-4 w-4"} />
+        Connect Wallet
+      </Button>
+    ),
   },
 );
 
@@ -49,7 +54,7 @@ export function Header() {
         </div>
         <div className="flex gap-2">
           <ThemeToggle />
-          <Connect />
+          <Connect isNavItem />
           <MobileDropdown />
         </div>
       </div>

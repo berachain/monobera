@@ -10,3 +10,4 @@ export { DataTable } from "./data-table";
 export { DataTableColumnHeader } from "./data-table-column-header";
 export * from "./custom-toasts";
 export * from "./hooks";
+export { Spinner } from "./spinner";

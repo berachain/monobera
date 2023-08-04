@@ -50,3 +50,9 @@ export const berachefAddress = process.env
 export const honeyAddress = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
 export const rewardsAddress = process.env
   .NEXT_PUBLIC_REWARDS_ADDRESS as Address;
+
+// TOKENS
+export const beraTokenAddress = process.env
+  .NEXT_PUBLIC_WBERA_ADDRESS as Address;
+export const honeyTokenAddress = process.env
+  .NEXT_PUBLIC_HONEY_ADDRESS as Address;

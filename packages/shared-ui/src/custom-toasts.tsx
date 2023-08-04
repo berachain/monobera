@@ -1,8 +1,9 @@
-import { type PropsWithChildren } from "react";
 import Link from "next/link";
 import { useBeraConfig } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
+
+import { Spinner } from "./spinner";
 
 interface IToast {
   title: string;
@@ -11,92 +12,103 @@ interface IToast {
   onClose: () => void;
 }
 
-interface IBaseToast extends PropsWithChildren {
+interface IBaseToast {
   title: string;
   href?: string;
   onClose: () => void;
   duration?: number;
   className?: string;
+  startAdornment?: React.ReactNode;
 }
 
 const BaseToast = ({
   title,
   href,
   onClose,
-  children,
-  className,
+  className = "",
+  startAdornment,
 }: IBaseToast) => {
   return (
     <div
-      className={cn("flex-col rounded-md bg-primary p-2", className)}
-      style={{ width: "225px" }} // i dont know why this is needed, but we ball 🤮
+      className={cn(
+        "flex h-14 flex-row items-center justify-between rounded-md p-4 text-white  shadow",
+        className,
+      )}
+      style={{ width: "350px", background: "#292524" }} // i dont know why this is needed, but we ball 🤮
     >
-      <div className="flex justify-between">
-        <div className="flex text-sm font-medium">
-          {title}
-          {href && (
-            <Link href={href} passHref>
-              <Icons.external className="h-4 w-4" />
-            </Link>
-          )}
-        </div>
-        <Icons.close className="h-4	w-4" onClick={() => onClose()} />
+      <div className="flex flex-row items-center gap-2 text-sm font-semibold">
+        {startAdornment && startAdornment}
+        {title}
       </div>
-      <div className="text-xs">{children}</div>
+      {href ? (
+        <Link href={href} passHref className="flex flex-row gap-2">
+          <p className="text-sm font-normal">View Txn</p>
+          <Icons.external className="h-4 w-4" />
+        </Link>
+      ) : (
+        <Icons.close
+          className="h-4	w-4  bg-muted-foreground"
+          onClick={() => onClose()}
+        />
+      )}
     </div>
   );
 };
 export const SuccessToast = ({
   title = "Success",
-  message = "",
   hash = undefined,
   onClose,
 }: IToast) => {
   const { networkConfig } = useBeraConfig();
+
   return (
     <BaseToast
-      className="bg-positive text-white"
       title={title}
       onClose={onClose}
+      startAdornment={<Icons.checkCircle className="h-6 w-6 text-positive" />}
       href={
         hash
           ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
           : undefined
       }
-    >
-      {message}
-    </BaseToast>
+    />
   );
 };
 
 export const ErrorToast = ({
   title = "Error",
-  message = "",
   hash = undefined,
   onClose,
 }: IToast) => {
   const { networkConfig } = useBeraConfig();
 
   // HANDLE ERROR MESSAGES
+  if (title === "User rejected txn") {
+    return (
+      <BaseToast
+        title={title}
+        onClose={onClose}
+        startAdornment={<Icons.userX className="h-6 w-6 text-destructive" />}
+      />
+    );
+  }
   return (
+    // TODO: txn handle txn hash
     <BaseToast
       title={title}
       onClose={onClose}
-      className="bg-destructive text-white"
-      href={
-        hash
-          ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
-          : undefined
-      }
-    >
-      {message}
-    </BaseToast>
+      startAdornment={<Icons.XOctagon className="h-6 w-6 text-destructive" />}
+      // href={
+      //   hash
+      //     ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
+      //     : undefined
+      // }
+    />
   );
 };
 
 export const SubmissionToast = ({
   title = "Submitting",
-  message = "",
   hash = undefined,
   onClose,
 }: IToast) => {
@@ -106,25 +118,22 @@ export const SubmissionToast = ({
     <BaseToast
       title={title}
       onClose={onClose}
+      startAdornment={<Spinner size={18} color="#f8b613" />}
       href={
         hash
           ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
           : undefined
       }
-    >
-      {message}
-    </BaseToast>
+    />
   );
 };
 
-export const LoadingToast = ({
-  title = "Loading",
-  message = "",
-  onClose,
-}: IToast) => {
+export const LoadingToast = ({ title = "Loading", onClose }: IToast) => {
   return (
-    <BaseToast title={title} onClose={onClose}>
-      {message}
-    </BaseToast>
+    <BaseToast
+      title={title}
+      onClose={onClose}
+      startAdornment={<Spinner size={18} color="#f8b613" />}
+    />
   );
 };

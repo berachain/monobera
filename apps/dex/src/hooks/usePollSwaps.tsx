@@ -22,17 +22,22 @@ export const usePollSwaps = ({
   const { router } = useRouter();
 
   const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount];
-
   return useSWR(
     QUERY_KEY,
     async () => {
-      const result: SwapInfo = await router.getSwaps(
-        tokenIn,
-        tokenOut,
-        swapKind,
-        amount,
-      );
-      return result;
+      try {
+        const result: SwapInfo = await router.getSwaps(
+          tokenIn,
+          tokenOut,
+          swapKind,
+          amount,
+        );
+        return result;
+      } catch (e) {
+        // TODO: throws so many errors but this is good 4 debug
+        // console.error(e);
+        return undefined;
+      }
     },
     {
       refreshInterval: POLLING.FAST,

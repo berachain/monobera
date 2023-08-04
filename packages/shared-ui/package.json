@@ -9,7 +9,9 @@
     "lint": "eslint src",
     "lint:fix": "pnpm lint --fix"
   },
-  "dependencies": {},
+  "dependencies": {
+    "react-spinners": "^0.13.8"
+  },
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

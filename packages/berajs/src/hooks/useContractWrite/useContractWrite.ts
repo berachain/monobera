@@ -79,6 +79,7 @@ const useContractWrite = ({
 
   return {
     isLoading: state.confirmState === "loading",
+    isSubmitting: state.confirmState === "submitting",
     isSuccess: state.confirmState === "success",
     isError: state.confirmState === "fail",
     write,

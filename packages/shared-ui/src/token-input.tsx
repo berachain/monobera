@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   formatUsd,
   useBeraJs,
@@ -9,9 +9,8 @@ import {
   type Token,
 } from "@bera/berajs";
 import { cn } from "@bera/ui";
-import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { Progress } from "@bera/ui/progress";
 
 import { SelectToken } from ".";
 
@@ -27,6 +26,7 @@ type Props = {
   disabled?: boolean;
   onTokenSelection?: (token: Token) => void;
   setAmount?: (amount: number) => void;
+  onExceeding?: (isExceeding: boolean) => void;
 };
 
 export function TokenInput({
@@ -41,8 +41,9 @@ export function TokenInput({
   disabled = false,
   onTokenSelection = undefined,
   setAmount = undefined,
+  onExceeding = undefined,
 }: Props) {
-  const [focused, setFocused] = React.useState(false);
+  const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   usePollAssetWalletBalance();
   let tokenBalance = Number(
     useSelectedAssetWalletBalance(selected?.address ?? "")?.formattedBalance ??
@@ -54,16 +55,25 @@ export function TokenInput({
   }
   const { isConnected } = useBeraJs();
 
-  const exceeding = amount > tokenBalance;
-  const progress = tokenBalance && ((amount / tokenBalance) * 100) | 0;
+  useEffect(() => {
+    if (tokenBalance === 0) return;
+    if (amount > Number.MAX_SAFE_INTEGER) return;
+    if (amount <= tokenBalance) {
+      setExceeding(false);
+      return;
+    }
+    if (amount > tokenBalance) {
+      setExceeding(true);
+      return;
+    }
+  }, [tokenBalance, amount]);
+
+  useEffect(() => {
+    if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
+  }, [exceeding]);
   return (
-    <div
-      className={cn(
-        "flex flex-col flex-wrap rounded-lg border border-border bg-input p-3 pr-6 drop-shadow-sm",
-        focused && "border-border",
-      )}
-    >
-      <div className="flex w-full flex-row items-center justify-between">
+    <li className={"flex flex-col flex-wrap px-4"}>
+      <div className="flex flex-row items-center  ">
         <SelectToken
           token={selected}
           onTokenSelection={onTokenSelection}
@@ -71,58 +81,54 @@ export function TokenInput({
           selectable={selectable}
           weight={weight}
         />
-        <Input
-          type="number"
-          step="any"
-          min="0"
-          placeholder="0.0"
-          disabled={disabled}
-          className="w-100 grow border-0 p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-          value={amount > 0 ? amount : ""}
-          onFocus={() => {
-            setFocused(true);
-          }}
-          onBlur={() => {
-            setFocused(false);
-          }}
-          onChange={(e) => {
-            setAmount && setAmount(Number(e.target.value));
-          }}
-        />
+        <div className="flex w-full flex-col pl-2 sm:pl-0">
+          <Input
+            type="number"
+            step="any"
+            min="0"
+            placeholder="0.0"
+            disabled={disabled}
+            className={cn(
+              "w-full grow border-0 p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
+              exceeding && "text-destructive",
+            )}
+            value={amount > 0 ? amount : ""}
+            onChange={(e) => {
+              setAmount && setAmount(Number(e.target.value));
+            }}
+          />
+        </div>
       </div>
-      {isConnected && selected ? (
-        <div className="w-full pl-4">
+      {isConnected && selected && tokenBalance !== 0 ? (
+        <div className="mb-2 h-fit w-full cursor-default">
           {hideBalance ? null : (
-            <div className="flex items-center justify-between">
-              <p>
-                <Button
-                  variant="link"
-                  className="text-md text-default h-8 p-0"
-                  onClick={() => setAmount && setAmount(tokenBalance || 0)}
-                >
-                  Balance: {tokenBalance ? tokenBalance : "0"}
-                </Button>
-              </p>
-              {!hidePrice && (
-                <p>
-                  {tokenBalance && formatUsd((tokenBalance * 0.69).toFixed(2))}
+            <div className="flex w-full items-center justify-between gap-1">
+              <div className="flex flex-row justify-start gap-1">
+                <Icons.wallet className="h-4 w-4 text-muted-foreground" />
+                <p className="w-12 overflow-hidden truncate p-0 text-xs text-muted-foreground sm:w-14">
+                  {tokenBalance ? tokenBalance : "0"}
                 </p>
-              )}
+                <p
+                  className="cursor-pointer text-xs text-muted-foreground hover:underline"
+                  onClick={() => {
+                    setAmount && setAmount(tokenBalance);
+                  }}
+                >
+                  MAX
+                </p>
+              </div>
+              <div className="flex flex-row gap-1">
+                {!hidePrice && (
+                  <p className="self-center p-0 text-xs text-muted-foreground">
+                    {/* TODO: change to actual values */}
+                    {amount !== 0 && formatUsd((amount * 1).toFixed(2))}
+                  </p>
+                )}
+              </div>
             </div>
           )}
-          {!hideBalance ? (
-            <Progress
-              value={exceeding ? 100 : progress}
-              className={cn("h-2", exceeding && "bg-destructive")}
-            />
-          ) : null}
-          {!hideBalance && exceeding ? (
-            <p className="text-destructive">
-              You&apos;re exceeding your balance
-            </p>
-          ) : null}
         </div>
       ) : null}
-    </div>
+    </li>
   );
 }

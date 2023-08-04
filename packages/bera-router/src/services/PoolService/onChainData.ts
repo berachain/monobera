@@ -56,7 +56,6 @@ export class MultiCallPools {
     this.paths = [];
 
     pools.forEach((pool) => {
-      // this needs share address
       this.call(
         `${pool.pool}.totalSupply`,
         ERC20ABI,
@@ -205,7 +204,6 @@ function flattenPoolRecords(poolRecords: PoolRecords): Pool[] {
     return [
       {
         ...pool,
-        totalSupply: formatUnits(pool.totalSupply, 18),
         tokens: [...tokens],
       },
     ];
