@@ -7,6 +7,7 @@ import {
   useBeraConfig,
   useBeraJs,
   usePollBgtBalance,
+  useTokens,
   type Token,
   type Validator,
 } from "@bera/berajs";
@@ -37,7 +38,7 @@ export default function DelegateButton({ validator, validatorAddress }: Props) {
   const bgtBalance = useBgtBalance();
   const { isConnected } = useBeraJs();
   const { networkConfig } = useBeraConfig();
-  const tokens = getTokens();
+  const { tokenList: tokens } = useTokens();
   const { write, isLoading } = useTxn({
     message: `delegate ${delegateAmount} BGT`,
     onSuccess: () => setOpen(false),
@@ -66,7 +67,7 @@ export default function DelegateButton({ validator, validatorAddress }: Props) {
             </div>
           </div>
           <TokenInput
-            selected={tokens[0] || (dummyToken as Token)}
+            selected={(tokens && tokens[0]) || (dummyToken as Token)}
             amount={delegateAmount}
             setAmount={(amount) => setDelegateAmount(amount)}
             selectable={false}

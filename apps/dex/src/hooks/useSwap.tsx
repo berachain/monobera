@@ -36,7 +36,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   useEffect(() => {
     if (inputCurrency) {
-      const token = tokenList.find((t) => t.address === inputCurrency);
+      const token = tokenList?.find((t) => t.address === inputCurrency);
       if (!token) {
         void readInput({ address: inputCurrency }).catch(() =>
           console.error("input currency not a token"),
@@ -46,7 +46,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       }
     }
     if (outputCurrency) {
-      const token = tokenList.find((t) => t.address === outputCurrency);
+      const token = tokenList?.find((t) => t.address === outputCurrency);
       if (!token) {
         void readOutput({ address: outputCurrency }).catch(() =>
           console.error("output currency not a token"),

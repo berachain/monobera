@@ -3,12 +3,12 @@ import { useRouter } from "next/navigation";
 import {
   BeravaloperToEth,
   STAKING_PRECOMPILE_ABI,
-  getTokens,
   truncateHash,
   useBeraConfig,
   usePollAccountDelegations,
   usePollActiveValidators,
   usePollAssetWalletBalance,
+  useTokens,
   type Validator,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
@@ -20,7 +20,7 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
   const { useActiveValidator } = usePollActiveValidators();
   const srcValidator = useActiveValidator(fromAddress);
   usePollAssetWalletBalance();
-  const tokens = getTokens();
+  const { tokenList: tokens } = useTokens();
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(fromAddress);
   const accountDelegation = useSelectedAccountDelegation();

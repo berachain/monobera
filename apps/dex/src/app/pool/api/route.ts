@@ -30,6 +30,8 @@ function sortByParameter(
 
 const DEFAULT_SIZE = 1;
 
+export const revalidate = 0;
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const router = new RouterService(defaultConfig);
