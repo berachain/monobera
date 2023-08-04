@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
@@ -13,10 +14,11 @@ export const columns: ColumnDef<Pool>[] = [
       <DataTableColumnHeader column={column} title="Composition" />
     ),
     cell: ({ row }) => {
-      const tokens = row.getValue("tokens") as any[];
+      const tokens = row.getValue("tokens") ;
 
       return (
         <div className="ml-2 flex flex-row justify-start">
+          {/* @ts-ignore */}
           {tokens.map((token: any, i: number) => (
             <TokenIcon
               key={token.address}

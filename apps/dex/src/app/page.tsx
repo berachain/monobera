@@ -8,7 +8,14 @@ export const metadata: Metadata = {
   description: "Decentralized exchange on Berachain",
 };
 
-export default function Swap({ searchParams }: { searchParams: any }) {
+export default function Swap({
+  searchParams,
+}: {
+  searchParams: {
+    inputCurrency: string;
+    outputCurrency: string;
+  };
+}) {
   const { inputCurrency, outputCurrency } = searchParams;
   if (!isAddress(inputCurrency) && !isAddress(outputCurrency)) {
     return (

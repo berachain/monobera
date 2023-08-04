@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO fix any
 import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
 import { RouterService, defaultConfig } from "@bera/bera-router";

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO fix any
+
 import { type RouterService } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatUnits, parseUnits } from "viem";
@@ -53,7 +56,7 @@ const formatVolume = (volume: number[], desiredLength: number) => {
   }
   return volume;
 };
-const BERA = "0x9AaDD801144A825B1Dc45fb110DeB96F3E6CdAfd";
+const BERA = process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address;
 
 export const getWBeraPriceDictForPoolTokens = async (
   pools: Pool[],
@@ -61,7 +64,6 @@ export const getWBeraPriceDictForPoolTokens = async (
 ) => {
   let mappedTokens: MappedTokens = {};
   if (pools.length) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const allPoolPromises: any[] = [];
     pools.forEach((pool) => {
       const tokenPromises = pool.tokens
@@ -219,12 +221,12 @@ const isNewPool = (pool: Pool) => {
 };
 
 // a hot pool is a pool with atleast xxx liquidity and xxx % increase in volume in the past 24 hours
-const isHotPool = (pool: Pool) => {
+const isHotPool = (_pool: Pool) => {
   return true;
 };
 
 // a pool with bgt rewards is a pool with a bgt reward contract
-const hasBgtRewards = (pool: Pool) => {
+const hasBgtRewards = (_pool: Pool) => {
   // get the global BGT cutting board
   // use pool address to get BGT rewards / yr
   return true;
