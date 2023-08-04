@@ -93,7 +93,7 @@ export default function CreateBribeCard({
               )}
             </div>
             <TokenInput
-              selected={tokens[0] || (dummyToken as Token)}
+              selected={(tokens && tokens[0]) || (dummyToken as Token)}
               amount={redelegateAmount}
               setAmount={(amount) => setRedelegateAmount(amount)}
               selectable={false}
