@@ -56,7 +56,7 @@ const formatVolume = (volume: number[], desiredLength: number) => {
   }
   return volume;
 };
-const BERA = "0x9AaDD801144A825B1Dc45fb110DeB96F3E6CdAfd";
+const BERA = process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address;
 
 export const getWBeraPriceDictForPoolTokens = async (
   pools: Pool[],
