@@ -27,9 +27,8 @@ export const usePollPriceImpact = ({
   swapKind,
   swapInfo,
   swapAmount,
-  isSwapLoading,
 }: IUsePollSwaps) => {
-  const { data: priceImpactSwapInfo, isLoading } = usePollSwaps({
+  const { data: priceImpactSwapInfo } = usePollSwaps({
     tokenIn: tokenIn,
     tokenOut: tokenOut,
     swapKind,
@@ -43,19 +42,16 @@ export const usePollPriceImpact = ({
     tokenIn,
     tokenOut,
     swapKind,
-    swapInfo,
-    priceImpactSwapInfo,
-    swapAmount,
+    swapInfo?.formattedReturnAmount,
   ];
 
   return useSWR(
     QUERY_KEY,
     () => {
-      if (!swapInfo || !priceImpactSwapInfo || isSwapLoading || isLoading)
-        return 0;
       const bestResult =
-        swapAmount * Number(priceImpactSwapInfo.formattedReturnAmount);
-      const actualResult = Number(swapInfo.formattedReturnAmount);
+        swapAmount * Number(priceImpactSwapInfo?.formattedReturnAmount);
+
+      const actualResult = Number(swapInfo?.formattedReturnAmount);
       const percentageDifference =
         (Math.abs(bestResult - actualResult) / bestResult) * 100;
       return percentageDifference;

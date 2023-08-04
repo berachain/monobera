@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
@@ -12,21 +13,22 @@ export const columns: ColumnDef<Pool>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Composition" />
     ),
-    cell: ({ row }) => (
-      <div className="ml-2 flex flex-row justify-start">
-        {/* TODO fix this */}
-        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment*/}
-        {/* @ts-ignore */}
+    cell: ({ row }) => {
+      const tokens = row.getValue("tokens") ;
 
-        {row.getValue("tokens").map((token: any, i: number) => (
-          <TokenIcon
-            key={token.address}
-            token={token}
-            className={cn(" border-2 border-border", i !== 0 && "ml-[-15px]")}
-          />
-        ))}
-      </div>
-    ),
+      return (
+        <div className="ml-2 flex flex-row justify-start">
+          {/* @ts-ignore */}
+          {tokens.map((token: any, i: number) => (
+            <TokenIcon
+              key={token.address}
+              token={token}
+              className={cn(" border-2 border-border", i !== 0 && "ml-[-15px]")}
+            />
+          ))}
+        </div>
+      );
+    },
     enableSorting: false,
     enableHiding: false,
   },
@@ -50,7 +52,7 @@ export const columns: ColumnDef<Pool>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="BGT Rewards" />
     ),
-    cell: ({}) => {
+    cell: () => {
       return <div className="flex w-[100px] items-center">BGT REWARDS</div>;
     },
     filterFn: (row, id, value) => {

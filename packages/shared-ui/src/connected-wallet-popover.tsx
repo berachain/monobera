@@ -76,7 +76,6 @@ export default function ConnectedWalletPopover() {
           </div>
         </div>
         <History />
-        {/* <SwapSettings /> */}
       </PopoverContent>
     </Popover>
   );

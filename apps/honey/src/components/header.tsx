@@ -22,7 +22,7 @@ export function Header() {
         <MobileDropdown />
         <div className="flex gap-2">
           <HoneyControls />
-          <ConnectButton />
+          <ConnectButton isNavItem={true} />
         </div>
       </div>
     </nav>

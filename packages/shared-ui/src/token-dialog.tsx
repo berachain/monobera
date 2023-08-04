@@ -10,6 +10,7 @@ import {
   type Token,
 } from "@bera/berajs";
 import { cn } from "@bera/ui";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import {
@@ -44,7 +45,14 @@ export function TokenDialog({
   const [addTokenOpen, setAddTokenOpen] = useState(false);
   const [error, setError] = useState<Error | undefined>(undefined);
   const [pendingAddition, setPendingAddition] = useState<boolean>(false);
-  const { tokenList, addNewToken } = useTokens();
+  const [managingTokens, setManagingTokens] = useState<boolean>(false);
+  const {
+    tokenList,
+    customTokenList,
+    featuredTokenList,
+    addNewToken,
+    removeToken,
+  } = useTokens();
   const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<Token[] | undefined>(
     tokenList,
@@ -54,6 +62,11 @@ export function TokenDialog({
     setFilteredTokens(tokenList);
   }, [tokenList]);
 
+  useEffect(() => {
+    setManagingTokens(false);
+    setSearch("");
+    setError(undefined);
+  }, [open]);
   usePollAssetWalletBalance();
 
   useEffect(() => {
@@ -127,39 +140,125 @@ export function TokenDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="max-h-[400px] max-w-[425px] px-4">
-          <DialogHeader>
-            <DialogTitle>Token search</DialogTitle>
-          </DialogHeader>
-          <Input
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setError(undefined);
-            }}
-            placeholder="Search by name, symbol or address"
-          />
-          <div className="max-h-[300px] gap-4 overflow-y-auto py-4">
-            {!error
-              ? filteredTokens?.length
-                ? filteredTokens?.map((token, i) => (
+        {!managingTokens && (
+          <DialogContent className="flex max-h-[400px] max-w-[425px] flex-col gap-4 rounded-2xl px-4">
+            <DialogHeader>
+              <DialogTitle className="text-lg">Select a token</DialogTitle>
+            </DialogHeader>
+            <Input
+              startAdornment={
+                <Icons.search className="h-4 w-4 text-muted-foreground" />
+              }
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setError(undefined);
+              }}
+              placeholder="Search by name, symbol or address"
+            />
+            <div className="flex flex-wrap gap-2">
+              {featuredTokenList?.map((token, i) => {
+                return (
+                  <Badge
+                    key={token.address}
+                    variant={"secondary"}
+                    className={cn(
+                      "w-fit",
+                      isTokenSelected(token) && "opacity-50",
+                    )}
+                    onClick={() =>
+                      !isTokenSelected(token) && onTokenSelect(token)
+                    }
+                  >
+                    <TokenIcon token={token} className="h-6 w-6" />
+                    {token.symbol}
+                  </Badge>
+                );
+              })}
+            </div>
+            <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
+            <div className="max-h-[300px] overflow-y-auto ">
+              {!error ? (
+                filteredTokens?.length ? (
+                  filteredTokens?.map((token, i) => (
                     <TokenDialogRow
                       key={i}
                       token={token}
                       isTokenSelected={isTokenSelected(token)}
                       focusedToken={focusedToken}
                       addTokenOpen={addTokenOpen}
-                      setAddTokenOpen={setAddTokenOpen}
+                      setAddTokenOpen={onAddTokenCancel}
                       onAddToken={onAddToken}
                       onAddTokenCancel={onAddTokenCancel}
                       onTokenSelect={onTokenSelect}
                       pendingAddition={pendingAddition}
                     />
                   ))
-                : "No tokens found"
-              : "Address is invalid"}
-          </div>
-        </DialogContent>
+                ) : (
+                  <Alert variant={"info"}>
+                    <Icons.tooltip className="h-4 w-4 bg-sky-700" />
+                    <AlertTitle>Token not found</AlertTitle>
+                    <AlertDescription>
+                      You can add tokens by searching for their address.
+                    </AlertDescription>
+                  </Alert>
+                )
+              ) : (
+                <Alert variant={"destructive"}>
+                  <Icons.tooltip className="h-4 w-4 bg-sky-700" />
+                  <AlertTitle>Invalid Address</AlertTitle>
+                  <AlertDescription>
+                    try again with a valid token address.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
+            <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
+            <div
+              className="flex flex-row items-center justify-center gap-1 self-center text-xs text-muted-foreground"
+              onClick={() => setManagingTokens(true)}
+            >
+              <Icons.edit className="h-3 w-3" /> Manage Custom Tokens
+            </div>
+          </DialogContent>
+        )}
+        {managingTokens && (
+          <DialogContent className="flex w-full flex-col">
+            <DialogHeader>
+              <DialogTitle className="flex flex-row items-center justify-start gap-2 text-lg">
+                {" "}
+                <Icons.chevronLeft onClick={() => setManagingTokens(false)} />
+                Manage
+              </DialogTitle>
+            </DialogHeader>
+            <p className="self-center text-sm font-medium">Custom Tokens</p>
+            <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
+            <div className="text-xs font-medium text-muted-foreground">
+              ({customTokenList?.length ?? 0}) Custom Tokens
+            </div>
+            <div>
+              {customTokenList?.map((token, i) => {
+                return (
+                  <div
+                    className="flex w-full flex-row items-center justify-between rounded-lg p-2 hover:bg-muted"
+                    key={token.address}
+                  >
+                    <div className="flex flex-row items-center gap-2">
+                      <TokenIcon token={token} className="h-6 w-6" />
+                      <p className="text-sm font-medium text-muted-foreground">
+                        {token.symbol}
+                      </p>
+                    </div>
+                    <Icons.close
+                      className="h-4 w-4"
+                      onClick={() => removeToken(token)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </DialogContent>
+        )}
       </Dialog>
     </>
   );
@@ -183,7 +282,6 @@ const TokenDialogRow = ({
   addTokenOpen,
   setAddTokenOpen,
   onAddToken,
-  onAddTokenCancel,
   onTokenSelect,
   pendingAddition,
 }: RowProps) => {
@@ -192,11 +290,11 @@ const TokenDialogRow = ({
     useSelectedAssetWalletBalance(token?.address ?? "")?.formattedBalance || 0,
   );
   return (
-    <div className="mb-1">
+    <div>
       <Button
-        variant="outline"
+        variant="ghost"
         className={cn(
-          "flex h-auto w-full items-center justify-start gap-2 p-4 text-left shadow",
+          "flex h-auto w-full items-center justify-start gap-2 p-4 text-left shadow ",
           isTokenSelected && "cursor-default opacity-50",
         )}
         onClick={() => {
@@ -220,27 +318,35 @@ const TokenDialogRow = ({
           <div className="absolute ml-auto"></div>
         )}
         {!pendingAddition && isConnected && (
-          <div className="ml-auto">
+          <div className="ml-auto text-muted-foreground ">
             <p>{tokenBalance}</p>
           </div>
         )}
         <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
-          <DialogContent className="flex max-w-[425px] flex-col items-center justify-center gap-2 px-4">
-            <TokenIcon token={token} />
-            <Badge variant="destructive" className="w-fit gap-1">
-              <Icons.warning className="h-4 w-4" />
-              Warning
-            </Badge>
-            <Balancer className="text-center text-xs">
+          <DialogContent className="flex flex-col items-center justify-center gap-3 px-4 md:w-[350px]">
+            <Icons.tooltip
+              style={{ height: "64px", width: "64px", color: "#DC2626 " }}
+            />
+            <p className="text-lg font-semibold">Import Token</p>
+            <Balancer className="text-center text-xs font-medium text-muted-foreground">
               {`This token doesn't appear on the active token list(s). Anyone can
             create a token, including creating fake versions of existing tokens
             that claim to represent projects`}
             </Balancer>
-            <Button onClick={() => onAddToken(token)} size="sm">
-              I understand
-            </Button>
-            <Button size="sm" variant="ghost" onClick={onAddTokenCancel}>
-              cancel
+            <div className="flex w-full flex-col items-center gap-2 rounded-lg bg-muted p-2">
+              <TokenIcon token={token} className="bg-muted-foreground" />
+              <h4 className="text-sm font-semibold">{token?.name}</h4>
+              <Balancer className="text-xs font-normal text-muted-foreground">
+                {token.address}
+              </Balancer>
+              <Badge variant="destructive" className="w-fit gap-1">
+                <Icons.tooltip className="h-4 w-4" />
+                Uknown Source
+              </Badge>
+            </div>
+
+            <Button onClick={() => onAddToken(token)} className="w-full">
+              Import
             </Button>
           </DialogContent>
         </Dialog>

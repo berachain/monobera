@@ -4,11 +4,20 @@ import { Button } from "@bera/ui/button";
 import { ConnectButton as RainbowConnectButton } from "@rainbow-me/rainbowkit";
 
 import "@rainbow-me/rainbowkit/styles.css";
+import { useBeraJs } from "@bera/berajs";
 import { cn } from "@bera/ui";
+import { Icons } from "@bera/ui/icons";
 
 import ConnectedWalletPopover from "./connected-wallet-popover";
 
-export const ConnectButton = ({ className }: { className?: string }) => {
+export const ConnectButton = ({
+  className,
+  isNavItem,
+}: {
+  className?: string;
+  isNavItem?: boolean;
+}) => {
+  const { isConnected } = useBeraJs();
   return (
     <RainbowConnectButton.Custom>
       {({
@@ -20,7 +29,6 @@ export const ConnectButton = ({ className }: { className?: string }) => {
         mounted,
       }) => {
         const ready = mounted && authenticationStatus !== "loading";
-        const connected = ready && account && chain;
 
         return (
           <div
@@ -35,19 +43,26 @@ export const ConnectButton = ({ className }: { className?: string }) => {
             className={cn("flex w-48", className)}
           >
             {(() => {
-              if (!connected) {
+              if (!isConnected) {
                 return (
                   <Button
                     onClick={openConnectModal}
                     type="button"
-                    className="w-full"
+                    variant="outline"
+                    className={cn(
+                      "w-full gap-2",
+                      !isNavItem && "text-lg font-semibold",
+                    )}
                   >
-                    Connect
+                    <Icons.wallet
+                      className={cn("h-4 w-4", !isNavItem && "h-6 w-6")}
+                    />
+                    Connect Wallet
                   </Button>
                 );
               }
 
-              if (chain.unsupported) {
+              if (chain?.unsupported) {
                 return (
                   <Button onClick={openChainModal} type="button">
                     Wrong network
