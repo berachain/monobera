@@ -37,13 +37,13 @@ export const usePsm = () => {
 
   const toBalance = useToBalance();
   console.log(fromBalance);
-  // eslint-disable-next-line
+   
   const [payload, setPayload] = useState<any[]>([]);
 
   const { isConnected, account } = useBeraJs();
   const { networkConfig } = useBeraConfig();
   const { useAllowance } = usePollAllowance({
-    contract: networkConfig.precompileAddresses.erc20ModuleAddress as Address,
+    contract: '0x7B44CdD81a8a25EFc1842AC2A2546C3B6e6A3fE2',
     token: selectedFrom,
   });
 
@@ -60,15 +60,17 @@ export const usePsm = () => {
     if (isMint && account) {
       const payload = [
         account,
-        {
-          amount: parseUnits(`${fromAmount}`, 18),
-          denom: "stgusdc",
-        },
+        stgUsd.address,
+        parseUnits(`${fromAmount}`, 18)
       ];
       setPayload(payload);
     }
     if (!isMint && account) {
-      const payload = [account, parseUnits(`${fromAmount}`, 18), "stgusdc"];
+      const payload = [
+        account,
+        parseUnits(`${fromAmount}`, 18),
+        stgUsd.address,
+      ];      
       setPayload(payload);
     }
     // const deadline = block + 10000n;
@@ -80,6 +82,7 @@ export const usePsm = () => {
     //   deadline,
     // ];
   }, [isMint, account, fromAmount, toAmount]);
+  console.log('payload', allowance)
   return {
     payload,
     isConnected,
