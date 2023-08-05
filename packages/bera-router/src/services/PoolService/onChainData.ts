@@ -26,6 +26,7 @@ export class MultiCallPools {
   private provider: PublicClient;
   private calls: [string, any[], string, unknown[] | undefined][] = [];
   private paths: string[] = [];
+  private tokenMap = {} as Record<string, any>;
   constructor(multiAddress: string, provider: PublicClient) {
     this.multiAddress = multiAddress;
     this.provider = provider;
@@ -43,6 +44,13 @@ export class MultiCallPools {
     return this;
   }
 
+  public setTokenMap = (tokenMap: Record<string, any>) => {
+    this.tokenMap = tokenMap;
+  }
+
+  public getTokenMap = (): Record<string, any> => {
+    return this.tokenMap;
+  }
   public getPoolRecords = (): PoolRecords => {
     return this.poolRecords;
   };
@@ -56,13 +64,13 @@ export class MultiCallPools {
     this.paths = [];
 
     pools.forEach((pool) => {
-      this.call(
-        `${pool.pool}.totalSupply`,
-        ERC20ABI,
-        pool.poolShareDenom,
-        "totalSupply",
-        [],
-      );
+      // this.call(
+      //   `${pool.pool}.totalSupply`,
+      //   DEX_PRECOMPILE_ABI,
+      //   DEX_PRECOMPILE_ADDRESS,
+      //   "getTotalShares",
+      //   [pool.pool],
+      // );
       this.call(
         `${pool.pool}.liquidity`,
         DEX_PRECOMPILE_ABI,
@@ -75,27 +83,29 @@ export class MultiCallPools {
     pools.forEach((pool) => {
       pool.poolOptions.weights.forEach(
         (weight: { denom: string; weight: string }) => {
-          this.call(
-            `${pool.pool}.tokens.${weight.denom}.symbol`,
-            ERC20ABI,
-            weight.denom,
-            "symbol",
-            [],
-          );
-          this.call(
-            `${pool.pool}.tokens.${weight.denom}.decimals`,
-            ERC20ABI,
-            weight.denom,
-            "decimals",
-            [],
-          );
-          this.call(
-            `${pool.pool}.tokens.${weight.denom}.name`,
-            ERC20ABI,
-            weight.denom,
-            "name",
-            [],
-          );
+           if(!this.tokenMap && !this.tokenMap[weight.denom]) {
+            this.call(
+              `${pool.pool}.tokens.${weight.denom}.symbol`,
+              ERC20ABI,
+              weight.denom,
+              "symbol",
+              [],
+            );
+            this.call(
+              `${pool.pool}.tokens.${weight.denom}.decimals`,
+              ERC20ABI,
+              weight.denom,
+              "decimals",
+              [],
+            );
+            this.call(
+              `${pool.pool}.tokens.${weight.denom}.name`,
+              ERC20ABI,
+              weight.denom,
+              "name",
+              [],
+            );
+           }
         },
       );
     });
@@ -144,6 +154,13 @@ export class MultiCallPools {
               ? (Number(weight.weight) * 100) / totalWeight
               : 0;
             const swapFee = poolData.poolOptions.swapFee;
+            if(this.tokenMap && this.tokenMap[tokenAddress]) {
+              set(
+                this.rawPools,
+                `${key}.tokens.${tokenAddress}`,
+                this.tokenMap[tokenAddress],
+              );
+            }
             set(
               this.rawPools,
               `${key}.tokens.${tokenAddress}.normalizedWeight`,
@@ -154,11 +171,10 @@ export class MultiCallPools {
               `${key}.tokens.${tokenAddress}.weight`,
               weight?.weight,
             );
-            set(
-              this.rawPools,
-              `${key}.tokens.${tokenAddress}.address`,
-              tokenAddress,
-            );
+
+            // TODO: figure out this crap
+            set(this.rawPools, `${key}.totalSupply`, 0n);
+
             set(
               this.rawPools,
               `${key}.tokens.${tokenAddress}.balance`,
@@ -179,7 +195,7 @@ export class MultiCallPools {
 
         set(rawPools, `${key}.shareAddress`, poolData?.poolShareDenom);
         unset(rawPools, `${key}.poolShareDenom`);
-        unset(rawPools, `${key}.liquidity`);
+        // unset(rawPools, `${key}.liquidity`);
         unset(rawPools, `${key}.poolOptions`);
       }
     }

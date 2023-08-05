@@ -13,20 +13,73 @@ type Props = {
 };
 export function CreatePoolStepper({ step = 0, steps, setStep }: Props) {
   return (
-    <ol role="list" className="flex justify-center gap-5 overflow-hidden">
-      {steps.map((item, stepIdx) => (
-        <li onClick={() => stepIdx < step && setStep(stepIdx)} key={stepIdx}>
-          <a
-            className={cn(
-              "relative flex h-12 w-12 cursor-pointer items-center justify-center rounded-lg transition-colors duration-200",
-              step === stepIdx && "bg-muted",
-              step > stepIdx && "bg-positive/25 text-positive",
-              step < stepIdx && "bg-background",
-            )}
-            aria-current="step"
-          >
-            {step > stepIdx ? <Icons.check className="h-4 w-4" /> : stepIdx + 1}
-          </a>
+    <ol
+      role="list"
+      className="flex w-48 items-center justify-center	self-center"
+    >
+      {steps.map((s, stepIdx) => (
+        <li
+          key={stepIdx}
+          className={cn(
+            stepIdx !== steps.length - 1 ? "pr-8 sm:pr-20" : "",
+            "relative",
+          )}
+        >
+          {stepIdx > step ? (
+            <>
+              <div
+                className="absolute inset-0 flex items-center"
+                aria-hidden="true"
+              >
+                <div className="h-0.5 w-full bg-border" />
+              </div>
+              <div
+                onClick={() => stepIdx < step && setStep(stepIdx)}
+                className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-muted-foreground bg-background text-muted-foreground transition-colors duration-200"
+              >
+                {/* <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" /> */}
+                <span className="items-center">{stepIdx + 1}</span>
+              </div>
+            </>
+          ) : stepIdx === step ? (
+            <>
+              <div
+                className="absolute inset-0 flex items-center"
+                aria-hidden="true"
+              >
+                <div className="h-0.5 w-full bg-border" />
+              </div>
+              <div
+                onClick={() => stepIdx < step && setStep(stepIdx)}
+                className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-primary bg-white text-primary transition-colors duration-200"
+                aria-current="step"
+              >
+                <span className="items-center rounded-full" aria-hidden="true">
+                  {stepIdx + 1}
+                </span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div
+                className="absolute inset-0 flex items-center"
+                aria-hidden="true"
+              >
+                <div className="h-0.5 w-full bg-primary" />
+              </div>
+              <div
+                className="group relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground transition-colors duration-200"
+                onClick={() => stepIdx < step && setStep(stepIdx)}
+              >
+                <span
+                  className="self-center rounded-full bg-transparent"
+                  aria-hidden="true"
+                >
+                  {stepIdx + 1}
+                </span>
+              </div>
+            </>
+          )}
         </li>
       ))}
     </ol>

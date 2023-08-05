@@ -14,7 +14,7 @@ export interface PoolRecord {
   };
   pool: Address;
   poolName: string;
-  shareAddress: Address;
+  shareAddress: string;
   tokens: TokenData;
   swapFee: string;
   totalSupply: bigint;
@@ -40,11 +40,11 @@ export interface Pool {
   };
   pool: Address;
   poolName: string;
-  shareAddress: Address;
+  shareAddress: string;
   tokens: Token[];
   swapFee: string;
   formattedSwapFee?: string;
-  totalSupply: bigint;
+  totalSupply: bigint | string;
   totalWeight: number;
   totalValue?: number;
   dailyVolume?: number;

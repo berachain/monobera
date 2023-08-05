@@ -1,7 +1,9 @@
 import React from "react";
 import { type Token } from "@bera/berajs";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { useMediaQuery } from "usehooks-ts";
 
 import { TokenDialog, TokenIcon } from "./";
 
@@ -11,6 +13,7 @@ type Props = {
   selectedTokens?: (Token | undefined)[];
   selectable: boolean;
   weight?: number;
+  className?: string;
 };
 
 export function SelectToken({
@@ -19,11 +22,13 @@ export function SelectToken({
   selectedTokens = undefined,
   selectable,
   weight = undefined,
+  className = "",
 }: Props) {
   const [open, setOpen] = React.useState(false);
+  const isMd = useMediaQuery("(min-width: 768px)");
 
   return (
-    <div className="my-4 w-fit">
+    <div className={cn("my-4 w-fit", className)}>
       <Button
         className="flex h-fit shrink-0 gap-2 rounded-xl p-1 "
         variant={"outline"}
@@ -39,7 +44,7 @@ export function SelectToken({
         ) : (
           <p className="flex flex-row items-center whitespace-nowrap px-2 py-1 text-sm font-medium">
             {" "}
-            Select a token <Icons.chevronDown className="ml-2 h-4 w-4" />{" "}
+            {isMd? 'Select a token ': 'Select'}<Icons.chevronDown className="ml-2 h-4 w-4" />{" "}
           </p>
         )}
       </Button>

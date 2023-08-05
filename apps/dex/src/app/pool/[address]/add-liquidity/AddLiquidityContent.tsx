@@ -6,8 +6,9 @@ import {
   useBeraConfig,
   useBeraJs,
   type Token,
+  useTokens
 } from "@bera/berajs";
-import { TokenInput, useTxn } from "@bera/shared-ui";
+import { TokenIcon, TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { parseUnits } from "viem";
@@ -18,6 +19,7 @@ import { SettingsPopover } from "~/components/settings-popover";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 import { type MappedTokens } from "../types";
+import { useState } from "react";
 
 interface IAddLiquidityContent {
   pool: Pool | undefined;
@@ -30,10 +32,16 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   const { tokenInputs, updateTokenAmount } = useMultipleTokenInput(
     pool?.tokens ?? [],
   );
+
+  const [tokens, setTokens] = useState<Token[] | undefined>([]);
   const { needsApproval } = useMultipleTokenApprovals(
     tokenInputs,
     networkConfig.precompileAddresses.erc20ModuleAddress as Address,
   );
+
+  console.log(pool)
+
+  const {tokenDictionary} = useTokens()
   const { write } = useTxn({
     message: `Add liquidity to ${pool?.poolName}}`,
   });
@@ -46,8 +54,17 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       parseUnits(`${tokenInput.amount}`, tokenInput?.decimals ?? 18),
     ),
   ];
+
   return (
     <div className="flex w-full items-center justify-center">
+      <Card>
+        {pool?.tokens?.map((token, i) => {
+          // console.log(tokenDictionary[token.address])
+          return (
+            <TokenIcon token={tokenDictionary && tokenDictionary[token.address] ? tokenDictionary[token.address] : token} key={token.address}/>
+          )
+        })}
+      </Card>
       <Card className="mx-6 w-full md:mx-0 md:w-[550px] ">
         <CardHeader>
           <CardTitle className="center flex justify-between font-bold">

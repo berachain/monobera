@@ -11,6 +11,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
+import Image from "next/image";
 
 import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview-input";
 import useCreatePool from "~/hooks/useCreatePool";
@@ -32,15 +33,13 @@ export function CreatePoolPreview({
   fee,
   setPoolName,
 }: Props) {
-  const [editPoolName, setEditPoolName] = useState(false);
-
   const { needsApproval } = useCreatePool(tokenWeights);
   const { networkConfig } = useBeraConfig();
 
   const router = useRouter();
 
   const { account } = useBeraJs();
-  const { write } = useTxn({
+  const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
     onSuccess: () => {
       router.push(`/pool`);
@@ -54,7 +53,7 @@ export function CreatePoolPreview({
     })),
     swapFee: parseUnits(`${fee / 100}`, 18),
   };
-  console.log("options", options);
+
   const payload = [
     poolName,
     tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
@@ -69,48 +68,50 @@ export function CreatePoolPreview({
     account,
   ];
   return (
-    <Card className="w-full">
+    <Card className="sm:w-[480px] w-[350px]">
+      {ModalPortal}
       <CardHeader>
-        <CardTitle className="center flex justify-between">
-          Preview New Weighted Pool
+        <CardTitle className="center flex justify-between text-lg font-semibold">
+          Create Pool
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
+
+      <Image
+            alt="preview"
+            src="/graphics/create-pool-preview.png"
+            className="self-center bg-gradient-to-b from-stone-50 to-stone-50"
+            width={525}
+            height={150}
+          />
+        <div className="w-full flex flex-col gap-1">
+        <p className="text-sm font-medium ">Give Your Pool a Name</p>
+        <Input
+          className="w-full border-border px-2 text-left font-semibold focus-visible:ring-0"
+          value={poolName}
+          maxLength={120}
+          onChange={(e) => setPoolName(e.target.value)}
+        />
+        </div>
+        <ul
+          role="list"
+          className="divide divide-y divide-border rounded-lg border flex flex-col bg-border "
+        >
         {tokenWeights.map((tokenWeight, index) => {
           return (
             <CreatePoolPreviewInput key={index} tokenWeight={tokenWeight} />
           );
         })}
-        <h2 className="text-lg">Pool Options</h2>
-        <div className="flex h-[40px] items-center justify-between align-middle text-sm">
-          <p>Pool Name</p>
-          <div className="flex">
-            {editPoolName ? (
-              <Input
-                className="mr-1 border-none text-right font-semibold"
-                value={poolName}
-                maxLength={120}
-                onChange={(e) => setPoolName(e.target.value)}
-              />
-            ) : (
-              <p className="px-3 py-2 font-semibold">{poolName}</p>
-            )}
-            <Button
-              onClick={() => setEditPoolName(!editPoolName)}
-              variant="ghost"
-              className="px-0"
-            >
-              <Icons.edit className="h-4 w-4 self-center hover:text-primary" />
-            </Button>
-          </div>
+        </ul>
+        <div className="w-full bg-border rounded-lg p-2">
+        <div className="flex h-[40px] w-full items-center justify-between text-sm">
+          <p className="text-muted-foreground">Pool Type</p>
+          <p >Weighted</p>
         </div>
         <div className="flex h-[40px] w-full items-center justify-between text-sm">
-          <p>Pool Type</p>
-          <p className="font-semibold">Weighted</p>
+          <p className="text-muted-foreground">Swap Fee</p>
+          <p >{fee}%</p>
         </div>
-        <div className="flex h-[40px] w-full items-center justify-between text-sm">
-          <p>Swap Fee</p>
-          <p className="font-semibold">{fee}%</p>
         </div>
         {error && (
           <Alert variant="destructive" className="my-4">

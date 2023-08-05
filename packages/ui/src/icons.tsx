@@ -39,6 +39,7 @@ import {
   MoreVertical,
   Pizza,
   Plus,
+  PlusCircle,
   Repeat2,
   SearchIcon,
   Settings,
@@ -116,6 +117,7 @@ export const Icons = {
   XOctagon: XOctagon,
   helpingHand: HelpingHand,
   checkCircle: CheckCircle2,
+  pluseCircle: PlusCircle,
   candleStick: CandlestickChart,
   medal: Medal,
   system: (props: LucideProps) => (

@@ -20,6 +20,10 @@ export const usePollPreviewBurnShares = (
   useSWR(
     QUERY_KEY,
     async () => {
+      return {
+        address: "0x",
+        output: [],
+      };
       if (poolAddress && shareAddress) {
         const result = await publicClient.readContract({
           address: networkConfig.precompileAddresses.erc20DexAddress as Address,

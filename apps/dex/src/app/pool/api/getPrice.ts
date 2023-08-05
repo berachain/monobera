@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // TODO fix any
 
 import { type RouterService } from "@bera/bera-router";
@@ -27,6 +26,7 @@ const getVolume = (
   volumeData: CoinsData[],
   pool: Pool,
 ) => {
+  if (!volumeData) return { volumeArray: [], volumeTotal: 0 };
   const volumeArray: number[] = [];
   let volumeTotal = 0;
   volumeData?.forEach((data) => {
@@ -38,6 +38,7 @@ const getVolume = (
         BigInt(cur.amount),
         token?.decimals ?? 18,
       );
+
       if (!tokenValue) {
         return 0;
       }
@@ -63,6 +64,7 @@ export const getWBeraPriceDictForPoolTokens = async (
   router: RouterService,
 ) => {
   let mappedTokens: MappedTokens = {};
+
   if (pools.length) {
     const allPoolPromises: any[] = [];
     pools.forEach((pool) => {
@@ -77,16 +79,16 @@ export const getWBeraPriceDictForPoolTokens = async (
               parseUnits(`${1}`, token.decimals),
             )
             .catch(() => {
-              return {
-                tokenIn: token.address,
-              };
+              return undefined;
             }),
         );
 
       allPoolPromises.push(tokenPromises);
     });
 
-    const allPoolData = await Promise.all(allPoolPromises.flat());
+    const allPoolData = (await Promise.all(allPoolPromises.flat())).filter(
+      (pool) => pool !== undefined,
+    );
 
     mappedTokens =
       allPoolData?.length &&
@@ -119,6 +121,7 @@ export const getWBeraPriceDictForPoolTokens = async (
         `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=90`,
         { cache: "no-store" },
       );
+
       const volumePromises = Promise.all([
         dailyVolumeResponse,
         weeklyVolumeResponse,
@@ -145,6 +148,7 @@ export const getWBeraPriceDictForPoolTokens = async (
 
     pools.map((pool, i) => {
       const volumes = responses[i] ?? [];
+
       const { volumeArray: dailyVolumeArray, volumeTotal: dailyVolumeTotal } =
         getVolume(mappedTokens, volumes[0], pool);
       const { volumeArray: weeklyVolumeArray, volumeTotal: weeklyVolumeTotal } =
@@ -160,6 +164,7 @@ export const getWBeraPriceDictForPoolTokens = async (
 
       const swapFee = Number(formatUnits(BigInt(pool.swapFee) ?? "", 18));
       pool.formattedSwapFee = (swapFee * 100).toString();
+
       if (dailyVolumeArray.length) {
         pool.dailyVolume = dailyVolumeTotal;
         pool.dailyFees = (pool?.dailyVolume ?? 0) * swapFee;
@@ -186,7 +191,7 @@ export const getWBeraPriceDictForPoolTokens = async (
       }
       pool.totalValue = pool.tokens.reduce((acc, cur) => {
         const tokenValue = mappedTokens[cur.address];
-        const tokenBalance = formatUnits(cur.balance, cur.decimals);
+        const tokenBalance = cur.balance;
         if (!tokenValue) {
           return acc;
         }
@@ -196,6 +201,7 @@ export const getWBeraPriceDictForPoolTokens = async (
     });
     tagPools(pools);
   }
+
   return mappedTokens;
 };
 

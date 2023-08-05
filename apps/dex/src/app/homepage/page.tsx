@@ -14,6 +14,7 @@ async function getPools() {
   const res = await fetch(
     `${getAbsoluteUrl()}/pool/api?page=1&perPage=3&hotPools=true`,
   );
+
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
     throw new Error("Failed to fetch pools");

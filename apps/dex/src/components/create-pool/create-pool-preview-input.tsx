@@ -11,45 +11,24 @@ type Props = {
 };
 
 export default function CreatePoolPreviewInput({ tokenWeight }: Props) {
-  const [focused, setFocused] = React.useState(false);
   return (
-    <div className="mb-4 cursor-not-allowed">
-      <div
-        className={cn(
-          "flex justify-between gap-3 rounded-lg border border-input bg-input",
-          focused && "border-border",
-        )}
-      >
-        <Button
-          className="hover:text-primary-text flex shrink-0 grow-0 cursor-not-allowed gap-2 hover:bg-transparent"
-          variant="outline"
+    <li className={"flex w-full flex-row justify-between  items-center p-2"}>
+
+        <div
+          className="flex cursor-not-allowed gap-2 items-center justify-center"
         >
           <>
             <TokenIcon token={tokenWeight.token} />
             {tokenWeight.token?.symbol}
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               {tokenWeight.weight}%
             </p>
           </>
-        </Button>
-        <Input
-          type="number"
-          step="any"
-          min="0"
-          placeholder="0.0"
-          className="flex grow-0 border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-          value={
-            tokenWeight.initialLiquidity > 0 ? tokenWeight.initialLiquidity : ""
-          }
-          disabled={true}
-          onFocus={() => {
-            setFocused(true);
-          }}
-          onBlur={() => {
-            setFocused(false);
-          }}
-        />
-      </div>
-    </div>
+        </div>
+        <div           className="flex grow-0 border-0 p-0 text-right text-lg outline-none cursor-not-allowed text-muted-foreground"
+>
+    {tokenWeight.initialLiquidity}
+        </div>
+      </li>
   );
 }

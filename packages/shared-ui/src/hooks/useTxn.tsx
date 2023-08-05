@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactElement, useEffect, useMemo, useReducer, useState } from "react";
+import { type ReactElement, useEffect, useMemo, useReducer, useState } from "react";
 import {
   useAddRecentTransaction,
   useBeraContractWrite,
@@ -18,7 +18,7 @@ import {
 } from "../txn-modals";
 import {
   CLOSE_MODAL,
-  ModalName,
+  type ModalName,
   OPEN_MODAL,
   initialState,
   modalReducer,
