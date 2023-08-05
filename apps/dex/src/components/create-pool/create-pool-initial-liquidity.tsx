@@ -21,7 +21,7 @@ export function CreatePoolInitialLiquidity({
   onContinue,
 }: Props) {
   return (
-    <Card className="sm:w-[480px] w-[350px]">
+    <Card className="w-[350px] sm:w-[480px]">
       <CardHeader>
         <CardTitle className="center flex justify-between">
           Set Initial Liquidity

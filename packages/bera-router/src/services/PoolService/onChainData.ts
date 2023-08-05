@@ -46,11 +46,11 @@ export class MultiCallPools {
 
   public setTokenMap = (tokenMap: Record<string, any>) => {
     this.tokenMap = tokenMap;
-  }
+  };
 
   public getTokenMap = (): Record<string, any> => {
     return this.tokenMap;
-  }
+  };
   public getPoolRecords = (): PoolRecords => {
     return this.poolRecords;
   };
@@ -83,7 +83,7 @@ export class MultiCallPools {
     pools.forEach((pool) => {
       pool.poolOptions.weights.forEach(
         (weight: { denom: string; weight: string }) => {
-           if(!this.tokenMap && !this.tokenMap[weight.denom]) {
+          if (!this.tokenMap && !this.tokenMap[weight.denom]) {
             this.call(
               `${pool.pool}.tokens.${weight.denom}.symbol`,
               ERC20ABI,
@@ -105,7 +105,7 @@ export class MultiCallPools {
               "name",
               [],
             );
-           }
+          }
         },
       );
     });
@@ -154,7 +154,7 @@ export class MultiCallPools {
               ? (Number(weight.weight) * 100) / totalWeight
               : 0;
             const swapFee = poolData.poolOptions.swapFee;
-            if(this.tokenMap && this.tokenMap[tokenAddress]) {
+            if (this.tokenMap && this.tokenMap[tokenAddress]) {
               set(
                 this.rawPools,
                 `${key}.tokens.${tokenAddress}`,

@@ -42,11 +42,15 @@ const useTokens = (): IUseTokens => {
       const defaultList = temp.tokens.map((token: any) => {
         return { ...token, default: true };
       });
-      const defaultFeaturedList = temp.tokens.filter((token: any) => {
-        const isFeatured = (tag: string) => tag==="featured";
-        return token.tags.some(isFeatured)
-        // return { ...token, default: true };
-      }).map((token: any) => {return { ...token, default: true }});
+      const defaultFeaturedList = temp.tokens
+        .filter((token: any) => {
+          const isFeatured = (tag: string) => tag === "featured";
+          return token.tags.some(isFeatured);
+          // return { ...token, default: true };
+        })
+        .map((token: any) => {
+          return { ...token, default: true };
+        });
       const list = [...defaultList, ...localStorageTokenList];
       return {
         list: list,

@@ -5,7 +5,6 @@ import {
   useSelectedAssetWalletBalance,
 } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
-
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";

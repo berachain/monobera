@@ -1,12 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   DEX_PRECOMPILE_ABI,
   useBeraConfig,
   useBeraJs,
+  useTokens,
   type Token,
-  useTokens
 } from "@bera/berajs";
 import { TokenIcon, TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -19,7 +20,6 @@ import { SettingsPopover } from "~/components/settings-popover";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 import { type MappedTokens } from "../types";
-import { useState } from "react";
 
 interface IAddLiquidityContent {
   pool: Pool | undefined;
@@ -39,9 +39,9 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     networkConfig.precompileAddresses.erc20ModuleAddress as Address,
   );
 
-  console.log(pool)
+  console.log(pool);
 
-  const {tokenDictionary} = useTokens()
+  const { tokenDictionary } = useTokens();
   const { write } = useTxn({
     message: `Add liquidity to ${pool?.poolName}}`,
   });
@@ -61,8 +61,15 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
         {pool?.tokens?.map((token, i) => {
           // console.log(tokenDictionary[token.address])
           return (
-            <TokenIcon token={tokenDictionary && tokenDictionary[token.address] ? tokenDictionary[token.address] : token} key={token.address}/>
-          )
+            <TokenIcon
+              token={
+                tokenDictionary && tokenDictionary[token.address]
+                  ? tokenDictionary[token.address]
+                  : token
+              }
+              key={token.address}
+            />
+          );
         })}
       </Card>
       <Card className="mx-6 w-full md:mx-0 md:w-[550px] ">

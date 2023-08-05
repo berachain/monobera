@@ -12,23 +12,17 @@ type Props = {
 
 export default function CreatePoolPreviewInput({ tokenWeight }: Props) {
   return (
-    <li className={"flex w-full flex-row justify-between  items-center p-2"}>
-
-        <div
-          className="flex cursor-not-allowed gap-2 items-center justify-center"
-        >
-          <>
-            <TokenIcon token={tokenWeight.token} />
-            {tokenWeight.token?.symbol}
-            <p className="text-sm text-muted-foreground">
-              {tokenWeight.weight}%
-            </p>
-          </>
-        </div>
-        <div           className="flex grow-0 border-0 p-0 text-right text-lg outline-none cursor-not-allowed text-muted-foreground"
->
-    {tokenWeight.initialLiquidity}
-        </div>
-      </li>
+    <li className={"flex w-full flex-row items-center  justify-between p-2"}>
+      <div className="flex cursor-not-allowed items-center justify-center gap-2">
+        <>
+          <TokenIcon token={tokenWeight.token} />
+          {tokenWeight.token?.symbol}
+          <p className="text-sm text-muted-foreground">{tokenWeight.weight}%</p>
+        </>
+      </div>
+      <div className="flex grow-0 cursor-not-allowed border-0 p-0 text-right text-lg text-muted-foreground outline-none">
+        {tokenWeight.initialLiquidity}
+      </div>
+    </li>
   );
 }

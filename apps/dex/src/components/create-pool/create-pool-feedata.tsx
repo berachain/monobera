@@ -41,9 +41,9 @@ export function CreatePoolFeeData({
     setSwapFee(Number(value));
   };
   return (
-    <Card className="sm:w-[480px] w-[350px]">
+    <Card className="w-[350px] sm:w-[480px]">
       <CardHeader>
-      <CardTitle className="center flex p-0 sm:text-lg text-md font-semibold">
+        <CardTitle className="center text-md flex p-0 font-semibold sm:text-lg">
           Set pool fees
         </CardTitle>
       </CardHeader>
@@ -71,7 +71,10 @@ export function CreatePoolFeeData({
             <TabsTrigger value={VALUES.THIRTY_BPS} className="w-full ">
               0.30%
             </TabsTrigger>
-            <TabsTrigger value={VALUES.ONE_PERCENT} className="w-full  min-w-[30px]">
+            <TabsTrigger
+              value={VALUES.ONE_PERCENT}
+              className="w-full  min-w-[30px]"
+            >
               1%
             </TabsTrigger>
             <TabsTrigger value={VALUES.CUSTOM} className="w-full">

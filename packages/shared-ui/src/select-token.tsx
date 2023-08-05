@@ -44,7 +44,8 @@ export function SelectToken({
         ) : (
           <p className="flex flex-row items-center whitespace-nowrap px-2 py-1 text-sm font-medium">
             {" "}
-            {isMd? 'Select a token ': 'Select'}<Icons.chevronDown className="ml-2 h-4 w-4" />{" "}
+            {isMd ? "Select a token " : "Select"}
+            <Icons.chevronDown className="ml-2 h-4 w-4" />{" "}
           </p>
         )}
       </Button>

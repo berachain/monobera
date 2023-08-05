@@ -26,14 +26,17 @@ export class PoolService {
     try {
       const responsePromise = fetch(
         `${this.config.subgraphUrl}/events/dex/pool_created`,
-        { cache: "no-store" }
+        { cache: "no-store" },
       );
-      
+
       const tokenListPromise = fetch(
         process.env.NEXT_PUBLIC_TOKEN_LIST as string,
-        { cache: "no-store" }
+        { cache: "no-store" },
       );
-      const [response, tokenListResponse] = await Promise.all([responsePromise, tokenListPromise]);
+      const [response, tokenListResponse] = await Promise.all([
+        responsePromise,
+        tokenListPromise,
+      ]);
 
       const poolResponse = await response.json();
       const tokenList = await tokenListResponse.json();

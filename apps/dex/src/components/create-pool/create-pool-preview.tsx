@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { DEX_PRECOMPILE_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
@@ -11,7 +12,6 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
-import Image from "next/image";
 
 import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview-input";
 import useCreatePool from "~/hooks/useCreatePool";
@@ -68,7 +68,7 @@ export function CreatePoolPreview({
     account,
   ];
   return (
-    <Card className="sm:w-[480px] w-[350px]">
+    <Card className="w-[350px] sm:w-[480px]">
       {ModalPortal}
       <CardHeader>
         <CardTitle className="center flex justify-between text-lg font-semibold">
@@ -76,42 +76,41 @@ export function CreatePoolPreview({
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-
-      <Image
-            alt="preview"
-            src="/graphics/create-pool-preview.png"
-            className="self-center bg-gradient-to-b from-stone-50 to-stone-50"
-            width={525}
-            height={150}
-          />
-        <div className="w-full flex flex-col gap-1">
-        <p className="text-sm font-medium ">Give Your Pool a Name</p>
-        <Input
-          className="w-full border-border px-2 text-left font-semibold focus-visible:ring-0"
-          value={poolName}
-          maxLength={120}
-          onChange={(e) => setPoolName(e.target.value)}
+        <Image
+          alt="preview"
+          src="/graphics/create-pool-preview.png"
+          className="self-center bg-gradient-to-b from-stone-50 to-stone-50"
+          width={525}
+          height={150}
         />
+        <div className="flex w-full flex-col gap-1">
+          <p className="text-sm font-medium ">Give Your Pool a Name</p>
+          <Input
+            className="w-full border-border px-2 text-left font-semibold focus-visible:ring-0"
+            value={poolName}
+            maxLength={120}
+            onChange={(e) => setPoolName(e.target.value)}
+          />
         </div>
         <ul
           role="list"
-          className="divide divide-y divide-border rounded-lg border flex flex-col bg-border "
+          className="divide flex flex-col divide-y divide-border rounded-lg border bg-border "
         >
-        {tokenWeights.map((tokenWeight, index) => {
-          return (
-            <CreatePoolPreviewInput key={index} tokenWeight={tokenWeight} />
-          );
-        })}
+          {tokenWeights.map((tokenWeight, index) => {
+            return (
+              <CreatePoolPreviewInput key={index} tokenWeight={tokenWeight} />
+            );
+          })}
         </ul>
-        <div className="w-full bg-border rounded-lg p-2">
-        <div className="flex h-[40px] w-full items-center justify-between text-sm">
-          <p className="text-muted-foreground">Pool Type</p>
-          <p >Weighted</p>
-        </div>
-        <div className="flex h-[40px] w-full items-center justify-between text-sm">
-          <p className="text-muted-foreground">Swap Fee</p>
-          <p >{fee}%</p>
-        </div>
+        <div className="w-full rounded-lg bg-border p-2">
+          <div className="flex h-[40px] w-full items-center justify-between text-sm">
+            <p className="text-muted-foreground">Pool Type</p>
+            <p>Weighted</p>
+          </div>
+          <div className="flex h-[40px] w-full items-center justify-between text-sm">
+            <p className="text-muted-foreground">Swap Fee</p>
+            <p>{fee}%</p>
+          </div>
         </div>
         {error && (
           <Alert variant="destructive" className="my-4">
