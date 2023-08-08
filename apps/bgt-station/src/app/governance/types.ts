@@ -71,14 +71,25 @@ export const ParameterFormSchema = BaseFormSchema.extend({
 
 export const ExecuteFormSchema = BaseFormSchema.extend({
   type: z.literal(ProposalTypeEnum.EXECUTE_CONTRACT),
-  // runAs: z.string().refine((value) => isAddress(value), {
-  //   message: "Invalid address.",
-  // }),
-  // contractAddress: z.string().refine((value) => isAddress(value), {
-  //   message: "Invalid contract address.",
-  // }),
-  // message: z.string(),
-  // amount: z.number().gt(0, "Amount must be greater than 0."),
+  runAs: z
+    .string()
+    .nonempty("Required")
+    .refine((value) => isAddress(value), {
+      message: "Invalid address.",
+    }),
+  contractAddress: z
+    .string()
+    .nonempty("Required")
+    .refine((value) => isAddress(value), {
+      message: "Invalid contract address.",
+    }),
+  message: z.string().nonempty("Required"),
+  amount: z
+    .string()
+    .nonempty("Required")
+    .refine((val) => Number(val) > 0, {
+      message: "Amount must be greater than 0.",
+    }),
 });
 
 export const ProposalFormSchema = z.union([

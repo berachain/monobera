@@ -235,11 +235,11 @@ export default function NewProposal({
             )}
 
             {searchParams.type === ProposalTypeEnum.EXECUTE_CONTRACT && (
-              <ExecuteForm />
+              <ExecuteForm form={form} />
             )}
 
             {searchParams.type === ProposalTypeEnum.PARAMETER_CHANGE && (
-              <ParameterForm />
+              <ParameterForm form={form} />
             )}
 
             <Button type="submit">Submit</Button>
