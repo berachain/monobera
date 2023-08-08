@@ -4,38 +4,48 @@
 
 @layer base {
   :root {
-    --background: 24deg 26% 96%;
+    --background: 60deg 9% 98%;
     --background-secondary: 27deg 33% 62%;
-    --foreground: 26deg 58% 25%;
+
+    --foreground: 12deg 6% 15%;
     --foreground-secondary: 27deg 33% 62%;
     --foreground-tetriary: 0deg 0% 60%;
 
-    --muted: 210deg 40% 96.1%;
-    --muted-foreground: 215.4deg 16.3% 46.9%;
+    --muted: 60deg 5% 96%;
+    --muted-foreground: 25deg 5% 45%;
 
-    --popover: 0deg 0% 100%;
-    --popover-foreground: 222.2deg 47.4% 11.2%;
+    --popover: 60deg 5% 96%;
+    --popover-foreground: 20deg 6% 90%;
 
-    --border: 27deg 28% 55%;
+    --border: 20deg 6% 90%;
     --border-secondary: 27deg 32% 76%;
-    --input: 24deg 26% 96%;
+    --input: 60deg 9% 98%;
 
     --card: 0deg 0% 100%;
     --card-foreground: 222.2deg 47.4% 11.2%;
 
-    --primary: 27deg 32% 76%;
-    --primary-foreground: 26deg 58% 25%;
+    --primary: 30deg 6% 25%;
+    --primary-foreground: 24deg 5% 64%;
 
-    --secondary: 32deg 52% 90%;
-    --secondary-foreground: 27deg 33% 62%;
+    --secondary: 33deg 5% 32%;
+    --secondary-foreground: 24deg 6% 83%;
 
     --accent: 210deg 40% 96.1%;
     --accent-foreground: 28deg 33% 69%;
 
     --positive: 111deg 59% 65%;
 
-    --destructive: 0deg 96% 64%;
-    --destructive-foreground: 210deg 40% 98%;
+    --destructive: 0deg 86% 97%;
+    --destructive-foreground: 0deg 72% 51%;
+
+    --warning: 55deg 92% 95%;
+    --warning-foreground: 41deg 96% 40%;
+
+    --info: 204deg 100% 97%;
+    --info-foreground: 200deg 98% 39%;
+
+    --success: 152deg 81% 96%;
+    --success-foreground: 161deg 94% 30%;
 
     --ring: 27deg 32% 76%;
 
@@ -66,7 +76,7 @@
     --card-foreground: 32deg 52% 90%;
 
     --primary: 27deg 28% 47%;
-    --primary-foreground: 26deg 30% 89%;
+    --primary-foreground: #44403c;
 
     --secondary: 15deg 9% 42%;
     --secondary-foreground: 32deg 52% 90%;
@@ -75,6 +85,15 @@
 
     --destructive: 0deg 96% 64%;
     --destructive-foreground: 210 40% 98%;
+
+    --warning: 55deg 92% 95%;
+    --warning-foreground: 41deg 96% 40%;
+
+    --info: 204deg 100% 97%;
+    --info-foreground: 200deg 98% 39%;
+
+    --success: 152deg 81% 96%;
+    --success-foreground: 161deg 94% 30%;
 
     --ring: 224deg 28% 24%;
 
@@ -130,7 +149,6 @@ input[type="number"] {
 .r-hex:first-child .r-hex-inner:before,
 .r-hex-inner-2 {
   transform: skewX(-30deg) rotate(60deg) skewX(30deg);
-  background: #deccbe;
   content: "";
 }
 
