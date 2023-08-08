@@ -35,19 +35,11 @@ import {
   type MappedTokens,
   type SwapData,
 } from "./types";
+import { usePoolEvents } from "./usePoolEvents";
 
 interface IPoolPageContent {
-  swaps: SwapData[] | undefined;
-  adds: AddLiquidityData[] | undefined;
-  removes: SwapData[] | undefined;
   prices: MappedTokens;
   pool: Pool;
-}
-
-function sortByBlockTime(data: any[]): any[] {
-  return data.sort(
-    (a, b) => parseInt(a.metadata.blockTime) - parseInt(b.metadata.blockTime),
-  );
 }
 
 function isSwapData(obj: any): obj is SwapData {
@@ -132,10 +124,46 @@ const getAction = (event: any) => {
   }
   return <p className="text-destructive">Withdraw</p>;
 };
+
+const getValue = (
+  pool: Pool | undefined,
+  event: SwapData | AddLiquidityData,
+  prices: MappedTokens,
+) => {
+  if (isSwapData(event)) {
+    const decimals = pool?.tokens.find(
+      (token) => token.address === event.swapIn.denom,
+    )?.decimals;
+    const formattedAmount = formatUnits(
+      BigInt(event.swapIn.amount),
+      decimals ?? 18,
+    );
+    return getWBeraPriceForToken(
+      prices,
+      event.swapIn.denom as Address,
+      Number(formattedAmount),
+    );
+  }
+  if (isAddLiquidity(event)) {
+    const value = event.liquidityIn.reduce((acc, cur) => {
+      const token = pool?.tokens.find((token) => token.address === cur.denom);
+      const tokenValue = getWBeraPriceForToken(
+        prices,
+        cur.denom as Address,
+        Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)),
+      );
+      if (!tokenValue) {
+        return acc;
+      }
+      const totalTokenValue = tokenValue;
+      return acc + totalTokenValue;
+    }, 0);
+    return value;
+  }
+  return 0;
+};
+
 export default function PoolPageContent({
-  swaps,
-  adds,
-  removes,
   prices,
   pool,
 }: IPoolPageContent) {
@@ -143,55 +171,25 @@ export default function PoolPageContent({
   const { useBalance } = usePollBalance({ address: pool?.shareAddress });
   const shareBalance = useBalance();
 
-  const sortedTxns = sortByBlockTime([
-    ...(swaps ?? []),
-    ...(adds ?? []),
-    ...(removes ?? []),
-  ]);
+  const {
+       allData,
+        allDataSize,
+        setAllDataSize,
+        isAllDataLoading,
+        swapData,
+        swapDataSize,
+        setSwapDataSize,
+        isSwapDataLoading,
+        provisionData,
+        provisionDataSize,
+        setProvisionDataSize,
+        isProvisionDataLoading
+  } = usePoolEvents(pool?.pool);
 
-  const sortedSwaps = sortByBlockTime(swaps ?? []);
-
-  const sortedLiquidityProvision = sortByBlockTime([
-    ...(adds ?? []),
-    ...(removes ?? []),
-  ]);
-
-  const getValue = (
-    event: SwapData | AddLiquidityData,
-    prices: MappedTokens,
-  ) => {
-    if (isSwapData(event)) {
-      const decimals = pool.tokens.find(
-        (token) => token.address === event.swapIn.denom,
-      )?.decimals;
-      const formattedAmount = formatUnits(
-        BigInt(event.swapIn.amount),
-        decimals ?? 18,
-      );
-      return getWBeraPriceForToken(
-        prices,
-        event.swapIn.denom as Address,
-        Number(formattedAmount),
-      );
-    }
-    if (isAddLiquidity(event)) {
-      const value = event.liquidityIn.reduce((acc, cur) => {
-        const token = pool.tokens.find((token) => token.address === cur.denom);
-        const tokenValue = getWBeraPriceForToken(
-          prices,
-          cur.denom as Address,
-          Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)),
-        );
-        if (!tokenValue) {
-          return acc;
-        }
-        const totalTokenValue = tokenValue;
-        return acc + totalTokenValue;
-      }, 0);
-      return value;
-    }
-    return 0;
-  };
+  console.log('allDatasize', allDataSize)
+  console.log('allData', allData)
+  console.log('swapData', swapData)
+  console.log('provisionData', provisionData)
 
   return (
     <div className="container">
@@ -272,7 +270,7 @@ export default function PoolPageContent({
                     <TableCell className="flex flex-row items-center gap-2 font-medium">
                       <TokenIcon token={token} />
                     </TableCell>
-                    <TableCell>{token.normalizedWeight / 100}%</TableCell>
+                    <TableCell>{token.normalizedWeight}%</TableCell>
                     <TableCell className="text-right">
                       {Number(
                         formatUnits(token.balance, token.decimals),
@@ -362,32 +360,35 @@ export default function PoolPageContent({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {sortedTxns.length ? (
-                    sortedTxns.map((event: SwapData | any) => (
-                      <TableRow
-                        key={event.metadata.txHash}
+                  {allData?.length ? (
+                    allData?.map((event: SwapData | any | undefined, i) => {
+                      if(!event) return null
+                      return (
+                        <TableRow
+                        key={event?.metadata?.txHash}
                         onClick={() =>
                           router.push(
-                            `${blockExplorerUrl}/tx/${event.metadata.txHash}`,
+                            `${blockExplorerUrl}/tx/${event?.metadata?.txHash ?? ''}`,
                           )
                         }
                       >
                         <TableCell>{getAction(event)}</TableCell>
                         <TableCell>
-                          {formatUsd(getValue(event, prices) ?? "")}
+                          {formatUsd(getValue(pool,event, prices) ?? "")}
                         </TableCell>
                         <TableCell className="font-medium">
                           {getTokenDisplay(event, pool)}
                         </TableCell>
-                        <TableCell>{truncateHash(event.sender)}</TableCell>
+                        <TableCell>{truncateHash(event?.sender ?? '')}</TableCell>
                         <TableCell
                           className="text-right"
                           suppressHydrationWarning
                         >
-                          {formatTimeAgo(event.metadata.blockTime)}
+                          {formatTimeAgo(event.metadata?.blockTime ?? 0)}
                         </TableCell>
                       </TableRow>
-                    ))
+                      )
+                    })
                   ) : (
                     <TableRow>
                       <TableCell colSpan={5} className="h-24 text-center">
@@ -398,6 +399,7 @@ export default function PoolPageContent({
                 </TableBody>
               </Table>
             </TabsContent>
+            <Button onClick={() => setAllDataSize(allDataSize + 1)}>Load More</Button>
             <TabsContent value="swaps" className="mt-0">
               <Table>
                 <TableHeader>
@@ -410,32 +412,35 @@ export default function PoolPageContent({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {sortedSwaps?.length ? (
-                    sortedSwaps.map((event: SwapData | any) => (
-                      <TableRow
-                        key={event.metadata.txHash}
+                  {swapData?.length ? (
+                    swapData.map((event: SwapData | any | undefined, i) => {
+                      if(!event) return null
+                      return (
+                        <TableRow
+                        key={event?.metadata?.txHash}
                         onClick={() =>
                           router.push(
-                            `${blockExplorerUrl}/tx/${event.metadata.txHash}`,
+                            `${blockExplorerUrl}/tx/${event?.metadata?.txHash ?? ''}`,
                           )
                         }
                       >
                         <TableCell>Swap</TableCell>
                         <TableCell>
-                          {formatUsd(getValue(event, prices) ?? "")}
+                          {formatUsd(getValue(pool,event, prices) ?? "")}
                         </TableCell>
                         <TableCell className="font-medium">
                           {getTokenDisplay(event, pool)}
                         </TableCell>
-                        <TableCell>{truncateHash(event.sender)}</TableCell>
+                        <TableCell>{truncateHash(event?.sender ?? '')}</TableCell>
                         <TableCell
                           className="text-right"
                           suppressHydrationWarning
                         >
-                          {formatTimeAgo(event.metadata.blockTime)}
+                          {formatTimeAgo(event?.metadata?.blockTime ?? 0)}
                         </TableCell>
                       </TableRow>
-                    ))
+                      )
+                    })
                   ) : (
                     <TableRow>
                       <TableCell colSpan={5} className="h-24 text-center">
@@ -458,32 +463,35 @@ export default function PoolPageContent({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {sortedLiquidityProvision?.length ? (
-                    sortedLiquidityProvision.map((event: SwapData | any) => (
-                      <TableRow
-                        key={event.metadata.txHash}
+                  {provisionData?.length ? (
+                    provisionData.map((event: SwapData | any |undefined, i) => {
+                      if(!event) return null
+                      return (
+                        <TableRow
+                        key={event?.metadata?.txHash}
                         onClick={() =>
                           router.push(
-                            `${blockExplorerUrl}/tx/${event.metadata.txHash}`,
+                            `${blockExplorerUrl}/tx/${event?.metadata?.txHash ?? ''}`,
                           )
                         }
                       >
                         <TableCell>{getAction(event)}</TableCell>
                         <TableCell>
-                          {formatUsd(getValue(event, prices) ?? "")}
+                          {formatUsd(getValue(pool, event, prices) ?? "")}
                         </TableCell>
                         <TableCell className="font-medium">
                           {getTokenDisplay(event, pool)}
                         </TableCell>
-                        <TableCell>{truncateHash(event.sender)}</TableCell>
+                        <TableCell>{truncateHash(event?.sender ?? '')}</TableCell>
                         <TableCell
                           className="text-right"
                           suppressHydrationWarning
                         >
-                          {formatTimeAgo(event.metadata.blockTime)}
+                          {formatTimeAgo(event?.metadata?.blockTime ?? 0)}
                         </TableCell>
                       </TableRow>
-                    ))
+                      )
+                    })
                   ) : (
                     <TableRow>
                       <TableCell colSpan={5} className="h-24 text-center">

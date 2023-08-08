@@ -164,7 +164,7 @@ export class MultiCallPools {
             set(
               this.rawPools,
               `${key}.tokens.${tokenAddress}.normalizedWeight`,
-              normalizedWeight * 100,
+              normalizedWeight,
             );
             set(
               this.rawPools,

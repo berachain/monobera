@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { DEX_PRECOMPILE_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
-import { useTxn } from "@bera/shared-ui";
+import { PreviewToken, TokenList, useTxn } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -13,7 +13,6 @@ import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
-import CreatePoolPreviewInput from "~/components/create-pool/create-pool-preview-input";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import ApproveTokenButton from "../approve-token-button";
@@ -92,16 +91,18 @@ export function CreatePoolPreview({
             onChange={(e) => setPoolName(e.target.value)}
           />
         </div>
-        <ul
-          role="list"
-          className="divide flex flex-col divide-y divide-border rounded-lg border bg-border "
-        >
+        <TokenList className="bg-border ">
           {tokenWeights.map((tokenWeight, index) => {
             return (
-              <CreatePoolPreviewInput key={index} tokenWeight={tokenWeight} />
+              <PreviewToken
+                key={index}
+                token={tokenWeight.token}
+                weight={tokenWeight.weight}
+                value={tokenWeight.initialLiquidity.toString()}
+              />
             );
           })}
-        </ul>
+        </TokenList>
         <div className="w-full rounded-lg bg-border p-2">
           <div className="flex h-[40px] w-full items-center justify-between text-sm">
             <p className="text-muted-foreground">Pool Type</p>

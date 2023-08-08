@@ -19,11 +19,13 @@ type Props = {
   selectedTokens?: (Token | undefined)[];
   amount: number;
   balance?: number;
+  price?: number;
   hideBalance?: boolean;
   hidePrice?: boolean;
   selectable?: boolean;
   weight?: number;
   disabled?: boolean;
+  customTokenList?: Token[];
   onTokenSelection?: (token: Token) => void;
   setAmount?: (amount: number) => void;
   onExceeding?: (isExceeding: boolean) => void;
@@ -33,12 +35,14 @@ export function TokenInput({
   selected,
   selectedTokens,
   amount,
+  price = 1,
   balance = undefined,
   hideBalance = false,
   hidePrice = false,
   selectable = true,
   weight = undefined,
   disabled = false,
+  customTokenList = undefined,
   onTokenSelection = undefined,
   setAmount = undefined,
   onExceeding = undefined,
@@ -80,6 +84,7 @@ export function TokenInput({
           selectedTokens={selectedTokens}
           selectable={selectable}
           weight={weight}
+          customTokenList={customTokenList}
         />
         <div className="flex w-full flex-col pl-2 sm:pl-0">
           <Input
@@ -120,8 +125,7 @@ export function TokenInput({
               <div className="flex flex-row gap-1">
                 {!hidePrice && (
                   <p className="self-center p-0 text-xs text-muted-foreground">
-                    {/* TODO: change to actual values */}
-                    {amount !== 0 && formatUsd((amount * 1).toFixed(2))}
+                    {amount !== 0 && formatUsd((amount * price).toFixed(2))}
                   </p>
                 )}
               </div>

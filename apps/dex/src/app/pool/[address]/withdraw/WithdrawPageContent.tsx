@@ -1,140 +1,230 @@
 "use client";
 
-import { useState } from "react";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   DEX_PRECOMPILE_ABI,
+  formatUsd,
   useBeraConfig,
-  useBeraJs,
-  usePollBalance,
-  usePollPreviewBurnShares,
   type Token,
 } from "@bera/berajs";
-import { TokenInput, useTxn } from "@bera/shared-ui";
+import {
+  InfoBoxList,
+  InfoBoxListItem,
+  PreviewToken,
+  SelectToken,
+  TokenIcon,
+  TokenInput,
+  TokenList,
+  TxnPreview,
+  useTxn,
+} from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Icons } from "@bera/ui/icons";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import ApproveTokenButton from "~/components/approve-token-button";
-import { SettingsPopover } from "~/components/settings-popover";
-import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
+import { type MappedTokens } from "../types";
+import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
 
-export default function WithdrawPageContent({
-  pool,
-}: {
+interface IWithdrawLiquidityContent {
   pool: Pool | undefined;
-}) {
-  const [withdrawAmount, setWithdrawAmount] = useState(0);
-  const decimals = 18;
-  const multiplier = 10n ** BigInt(decimals);
+  prices: MappedTokens;
+}
 
-  const formattedBigInt = BigInt(withdrawAmount * 10 ** decimals) * multiplier;
-  const { account = undefined } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
-  const { useBalance } = usePollBalance({ address: pool?.shareAddress });
-  const shareBalance = useBalance();
-  const { usePreviewBurnShares } = usePollPreviewBurnShares(
-    withdrawAmount,
-    pool?.pool,
-    pool?.shareAddress,
-  );
-  const { write } = useTxn({
-    message: `Withdraw from ${pool?.poolName}}`,
+enum Selection {
+  MULTI_TOKEN = "multi-token",
+  SINGLE_TOKEN = "single-token",
+}
+export default function WithdrawLiquidityContent({
+  pool,
+  prices,
+}: IWithdrawLiquidityContent) {
+  const { write, ModalPortal } = useTxn({
+    message: `Add liquidity to ${pool?.poolName}`,
+    onSuccess: () => {
+      // reset();
+    },
   });
+  const { networkConfig } = useBeraConfig();
 
-  const { needsApproval } = useMultipleTokenApprovals(
-    [
-      {
-        address: pool?.shareAddress ?? "",
-        decimals: 18,
-        symbol: "Share",
-        name: "Share",
-        amount: withdrawAmount,
-        default: false,
-      },
-    ],
-    networkConfig.precompileAddresses.erc20ModuleAddress as Address,
-  );
+  const {
+    tokenDictionary,
+    lpBalance,
+    amount,
+    setAmount,
+    previewOpen,
+    setPreviewOpen,
+    payload,
+    exactOutToken,
+    setExactOutToken,
+    exactOutAmount,
+    setExactOutAmount,
+  } = useWithdrawLiquidity(pool, prices);
 
-  const preview = usePreviewBurnShares();
-
-  const payload = [
-    pool?.pool,
-    account,
-    account,
-    pool?.shareAddress,
-    formattedBigInt,
-  ];
-  console.log(payload);
   return (
-    <div className="flex w-full items-center justify-center">
-      <Card className="mx-6 w-full md:mx-0 md:w-[550px] ">
-        <CardHeader>
-          <CardTitle className="center flex justify-between font-bold">
-            Withdraw from pool <SettingsPopover />
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-          <TokenInput
-            selected={
-              {
-                address: pool?.shareAddress,
-                decimals: 18,
-                name: pool?.poolName,
-                symbol: pool?.poolName,
-              } as Token
-            }
-            balance={shareBalance?.formattedBalance ?? "0"}
-            selectable={false}
-            amount={withdrawAmount}
-            setAmount={setWithdrawAmount}
-            hidePrice
-          />
-          <p>You receive</p>
+    <div className="flex w-full flex-col items-center justify-center gap-4">
+      {ModalPortal}
+      <Card className="mx-6 w-full items-center bg-muted p-4 sm:mx-0 sm:w-[480px]">
+        <p className="mb-4 text-center text-2xl font-semibold">
+          {pool?.poolName}
+        </p>
+        <div className="flex w-full flex-row items-center justify-center rounded-lg bg-card p-2 shadow-md">
           {pool?.tokens?.map((token, i) => {
+            // console.log(tokenDictionary[token.address])
             return (
-              <TokenInput
-                key={token.address}
-                selected={token as Token}
-                selectable={false}
-                hideBalance={true}
-                disabled={true}
-                amount={
-                  preview &&
-                  Number(
-                    formatUnits(
-                      (preview[i]?.output as bigint) ?? 0n,
-                      token.decimals,
-                    ),
-                  )
+              <TokenIcon
+                token={
+                  tokenDictionary && tokenDictionary[token.address]
+                    ? tokenDictionary[token.address]
+                    : token
                 }
+                className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
+                key={token.address}
               />
             );
           })}
-          {needsApproval.length > 0 ? (
-            <ApproveTokenButton
-              token={needsApproval[0]}
-              spender={
-                networkConfig.precompileAddresses.erc20ModuleAddress as Address
-              }
-            />
-          ) : (
-            <Button
-              onClick={() => {
-                write({
-                  address: networkConfig.precompileAddresses
-                    .erc20DexAddress as Address,
-                  abi: DEX_PRECOMPILE_ABI,
-                  functionName: "removeLiquidityBurningShares",
-                  params: payload,
-                });
-              }}
+        </div>
+      </Card>
+      <Card className="mx-6 w-full sm:w-[480px] md:mx-0 ">
+        <CardHeader>
+          <CardTitle className="center flex justify-between font-bold">
+            Withdraw Liquidity
+          </CardTitle>
+        </CardHeader>
+
+        <Tabs defaultValue={Selection.MULTI_TOKEN} className="w-full">
+          <CardContent className="flex flex-col">
+            <TabsList className="mb-3 grid w-full grid-cols-2">
+              <TabsTrigger value={Selection.MULTI_TOKEN}>
+                Multi-token
+              </TabsTrigger>
+              <TabsTrigger value={Selection.SINGLE_TOKEN}>
+                Single token
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent
+              value={Selection.MULTI_TOKEN}
+              className="mt-0 flex w-full flex-col gap-3"
             >
-              Withdraw
-            </Button>
-          )}
-        </CardContent>
+              <TokenList>
+                <p className="text-md w-full py-2 text-center font-medium">
+                  Your Pool Tokens
+                </p>
+                <TokenInput
+                  selected={{
+                    address: "0x599D8d33253361f1dc654e6f9C2813Bd392eC0d5",
+                    symbol: pool?.poolName ?? "",
+                    name: pool?.poolName ?? "",
+                    decimals: 18,
+                    logoURI: "",
+                  }}
+                  balance={Number(lpBalance)}
+                  selectable={false}
+                  amount={amount}
+                  setAmount={setAmount}
+                />
+              </TokenList>
+
+              <TxnPreview
+                open={previewOpen}
+                disabled={false}
+                title={"Confirm LP Withdrawal Details"}
+                imgURI={"/graphics/preview-swap-img.png"}
+                triggerText={"Preview"}
+                setOpen={setPreviewOpen}
+              >
+                <InfoBoxList>
+                  <InfoBoxListItem title={"Expected Shares"} value={"-"} />
+                  <InfoBoxListItem
+                    title={"Approximate Total Value"}
+                    value={"-"}
+                  />
+                </InfoBoxList>
+
+                <Button
+                  onClick={() => {
+                    write({
+                      address: networkConfig.precompileAddresses
+                        .erc20DexAddress as Address,
+                      abi: DEX_PRECOMPILE_ABI,
+                      functionName: "removeLiquidityBurningShares",
+                      params: payload,
+                    });
+                  }}
+                >
+                  Withdraw Liquidity
+                </Button>
+              </TxnPreview>
+            </TabsContent>
+            <TabsContent
+              value={Selection.SINGLE_TOKEN}
+              className="mt-0 flex w-full flex-col gap-3"
+            >
+              <TokenList>
+                <p className="text-md w-full py-2 text-center font-medium">
+                  Your Pool Tokens
+                </p>
+                <TokenInput
+                  selected={{
+                    address: "0x599D8d33253361f1dc654e6f9C2813Bd392eC0d5",
+                    symbol: pool?.poolName ?? "",
+                    name: pool?.poolName ?? "",
+                    decimals: 18,
+                    logoURI: "",
+                  }}
+                  balance={Number(lpBalance)}
+                  selectable={false}
+                  amount={amount}
+                  setAmount={setAmount}
+                />
+                <TokenInput
+                  selected={exactOutToken}
+                  onTokenSelection={setExactOutToken}
+                  selectable={true}
+                  amount={exactOutAmount}
+                  setAmount={setExactOutAmount}
+                  customTokenList={pool?.tokens}
+                />
+              </TokenList>
+
+              <TxnPreview
+                open={previewOpen}
+                disabled={false}
+                title={"Confirm LP Withdrawal Details"}
+                imgURI={"/graphics/preview-swap-img.png"}
+                triggerText={"Preview"}
+                setOpen={setPreviewOpen}
+              >
+                <InfoBoxList>
+                  <InfoBoxListItem title={"Expected Shares"} value={"-"} />
+                  <InfoBoxListItem
+                    title={"Approximate Total Value"}
+                    value={"-"}
+                  />
+                </InfoBoxList>
+
+                <Button
+                  onClick={() => {
+                    write({
+                      address: networkConfig.precompileAddresses
+                        .erc20DexAddress as Address,
+                      abi: DEX_PRECOMPILE_ABI,
+                      functionName: "removeLiquidityBurningShares",
+                      params: payload,
+                    });
+                  }}
+                >
+                  Withdraw Liquidity
+                </Button>
+              </TxnPreview>
+            </TabsContent>
+          </CardContent>
+        </Tabs>
       </Card>
     </div>
   );
