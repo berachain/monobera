@@ -42,6 +42,7 @@
     "faker": "5.5.3",
     "lucide-react": "^0.263.0",
     "react-chartjs-2": "^5.2.0",
+    "shadcn-ui": "^0.3.0",
     "tailwind-merge": "^1.12.0",
     "vite-tsconfig-paths": "^4.2.0"
   },
@@ -125,6 +126,10 @@
     "./dropdown-menu": {
       "import": "./dist/dropdown-menu.mjs",
       "types": "./dist/dropdown-menu.d.ts"
+    },
+    "./form": {
+      "import": "./dist/form.mjs",
+      "types": "./dist/form.d.ts"
     },
     "./input": {
       "import": "./dist/input.mjs",
@@ -312,6 +317,9 @@
       ],
       "text-area": [
         "dist/text-area.d.ts"
+      ],
+      "form": [
+        "dist/form.d.ts"
       ]
     }
   },

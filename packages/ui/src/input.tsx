@@ -27,7 +27,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
           {...props}
         />
         {endAdornment && (
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pl-3 disabled:text-muted-foreground">
+          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center pl-3 text-muted-foreground disabled:text-muted-foreground">
             {endAdornment}
           </div>
         )}
