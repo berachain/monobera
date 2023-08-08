@@ -17,7 +17,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@bera/ui/form";
 import { Icons } from "@bera/ui/icons";
@@ -28,7 +27,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
-import { BaseFormSchema, ProposalFormSchema, ProposalTypeEnum } from "../types";
+import { ProposalFormSchema, ProposalTypeEnum } from "../types";
 import CommunityForm from "./community-pool-spend-form";
 import ExecuteForm from "./execute-contract-form";
 import ParameterForm from "./parameter-change-form";
@@ -51,8 +50,12 @@ export default function NewProposal({
     }
   }, []);
 
-  const form = useForm<z.infer<typeof BaseFormSchema>>({
-    resolver: zodResolver(BaseFormSchema),
+  const form = useForm<z.infer<typeof ProposalFormSchema>>({
+    resolver: zodResolver(ProposalFormSchema),
+    defaultValues: {
+      type: searchParams.type,
+      expedite: false,
+    },
   });
 
   function onSubmit(values: z.infer<typeof proposalFormSchema>) {
@@ -102,9 +105,10 @@ export default function NewProposal({
                   {Object.values(ProposalTypeEnum).map((type: string) => (
                     <DropdownMenuItem
                       key={`proposal-option-${type}`}
-                      onClick={() =>
-                        router.push(`/governance/create?type=${type}`)
-                      }
+                      onClick={() => {
+                        router.push(`/governance/create?type=${type}`);
+                        form.setValue("type", type);
+                      }}
                       className="capitalize"
                     >
                       {type.replaceAll("-", " ")}
@@ -122,70 +126,112 @@ export default function NewProposal({
                   <div className="text-sm font-semibold leading-tight">
                     Title
                   </div>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      id="proposal-title"
-                      placeholder="Ooga booga"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
+                  <div>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        id="proposal-title"
+                        placeholder="Ooga booga"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="mt-2" />
+                  </div>
                 </FormItem>
               )}
             />
 
-            <div className="inline-flex flex-col justify-start gap-2">
-              <div className="text-sm font-semibold leading-tight">
-                Forum discussion link <Tooltip text="test" />
-              </div>
-              <Input
-                type="text"
-                id="forum-discussion-link"
-                placeholder="Paste link here"
-                // value={"forum-discussion-link"}
-                // onChange={(e) => {}}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="forumLink"
+              render={({ field }) => (
+                <FormItem className="inline-flex flex-col justify-start gap-2">
+                  <div className="text-sm font-semibold leading-tight">
+                    Forum discussion link <Tooltip text="test" />
+                  </div>
+                  <div>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        id="forum-discussion-link"
+                        placeholder="Paste link here"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="mt-2" />
+                  </div>
+                </FormItem>
+              )}
+            />
 
-            <div className="inline-flex flex-col justify-start gap-2">
-              <div className="text-sm font-semibold leading-tight">
-                Description
-              </div>
-              <TextArea
-                name="message"
-                id="message"
-                placeholder="Tell us about your proposal"
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="inline-flex flex-col justify-start gap-2">
+                  <div className="text-sm font-semibold leading-tight">
+                    Description
+                  </div>
+                  <div>
+                    <FormControl>
+                      <TextArea
+                        name="proposal-message"
+                        id="proposal-message"
+                        placeholder="Tell us about your proposal"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="mt-2" />
+                  </div>
+                </FormItem>
+              )}
+            />
 
-            <div className="inline-flex flex-col justify-start gap-2">
-              <div className="text-sm font-semibold leading-tight">
-                Expedite <Tooltip text="test" />
-              </div>
-              <Switch
-                id="proposal-expedite"
-                // checked={useSignatures}
-                // onCheckedChange={(checked) => setUseSignatures(checked)}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="expedite"
+              render={({ field }) => (
+                <FormItem className="inline-flex flex-col justify-start gap-2">
+                  <div className="text-sm font-semibold leading-tight">
+                    Expedite <Tooltip text="test" />
+                  </div>
+                  <FormControl>
+                    <Switch
+                      id="proposal-expedite"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
-            <div className="inline-flex flex-col justify-start gap-2">
-              <div className="text-sm font-semibold leading-tight">
-                Initial deposit <Tooltip text="test" />
-              </div>
-              <Input
-                type="number"
-                id="initial-deposit"
-                placeholder="0.0"
-                endAdornment="BGT"
-                // value={"forum-discussion-link"}
-                // onChange={(e) => {}}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="initialDeposit"
+              render={({ field }) => (
+                <FormItem className="inline-flex flex-col justify-start gap-2">
+                  <div className="text-sm font-semibold leading-tight">
+                    Initial deposit <Tooltip text="test" />
+                  </div>
+                  <div>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        id="initial-deposit"
+                        placeholder="0.0"
+                        endAdornment="BGT"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="mt-2" />
+                  </div>
+                </FormItem>
+              )}
+            />
 
             {searchParams.type === ProposalTypeEnum.COMMUNITY_POOL_SPEND && (
-              <CommunityForm />
+              <CommunityForm form={form} />
             )}
 
             {searchParams.type === ProposalTypeEnum.EXECUTE_CONTRACT && (
