@@ -166,6 +166,10 @@
       "import": "./dist/tabs.mjs",
       "types": "./dist/tabs.d.ts"
     },
+    "./text-area": {
+      "import": "./dist/text-area.mjs",
+      "types": "./dist/text-area.d.ts"
+    },
     "./toaster": {
       "import": "./dist/toaster.mjs",
       "types": "./dist/toaster.d.ts"
@@ -305,6 +309,9 @@
       ],
       "navigation-menu": [
         "dist/navigation-menu.d.ts"
+      ],
+      "text-area": [
+        "dist/text-area.d.ts"
       ]
     }
   },

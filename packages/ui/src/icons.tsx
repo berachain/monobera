@@ -189,7 +189,6 @@ export const Icons = {
       </defs>
     </svg>
   ),
-
   metamask: (props: LucideProps) => (
     <svg viewBox="0 0 40 40" {...props}>
       <path
