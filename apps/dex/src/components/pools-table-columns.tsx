@@ -14,7 +14,7 @@ export const columns: ColumnDef<Pool>[] = [
       <DataTableColumnHeader column={column} title="Composition" />
     ),
     cell: ({ row }) => {
-      const tokens = row.getValue("tokens") ;
+      const tokens = row.getValue("tokens");
 
       return (
         <div className="ml-2 flex flex-row justify-start">
