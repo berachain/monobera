@@ -55,6 +55,21 @@ export const usePsm = () => {
   const { write, isLoading } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
   });
+
+  const onSwitch = () => {
+    const tempFromAmount = fromAmount;
+    const tempToAmount = toAmount;
+
+    const tempFrom = selectedFrom;
+    const tempTo = selectedTo;
+
+    setSelectedFrom(tempTo);
+    setSelectedTo(tempFrom);
+
+    setFromAmount(tempToAmount);
+    setToAmount(tempFromAmount);
+  };
+
   useEffect(() => {
     if (isMint && account) {
       const payload = [
@@ -101,5 +116,6 @@ export const usePsm = () => {
     toBalance,
     fee,
     fee2,
+    onSwitch,
   };
 };
