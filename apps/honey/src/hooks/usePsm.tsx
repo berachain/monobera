@@ -13,19 +13,7 @@ import { parseUnits } from "viem";
 import { honey, stgUsd } from "~/config/tokens";
 import { useFees } from "./useFees";
 
-interface IUsePsm {
-  onSuccess?: (hash: string) => void;
-  onError?: (e?: Error) => void;
-  onLoading?: () => void;
-  onSubmission?: (hash: string) => void;
-}
-
-export const usePsm = ({
-  onSuccess,
-  onError,
-  onLoading,
-  onSubmission,
-}: IUsePsm) => {
+export const usePsm = () => {
   const [selectedTo, setSelectedTo] = useState<Token>(honey);
 
   const [selectedFrom, setSelectedFrom] = useState<Token>(stgUsd);
@@ -66,10 +54,6 @@ export const usePsm = ({
 
   const { write, isLoading } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
-    onSuccess,
-    onError,
-    onLoading,
-    onSubmission,
   });
   useEffect(() => {
     if (isMint && account) {

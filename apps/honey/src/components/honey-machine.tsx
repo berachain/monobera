@@ -2,7 +2,7 @@
 
 import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
-import { ConnectButton } from "@bera/shared-ui";
+import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import {
   EventType,
@@ -98,8 +98,6 @@ export function HoneyMachine() {
     isConnected,
     setSelectedFrom,
     allowance,
-    // isLoading,
-    write,
     selectedFrom,
     selectedTo,
     setSelectedTo,
@@ -112,7 +110,10 @@ export function HoneyMachine() {
     toBalance,
     fee,
     fee2,
-  } = usePsm({
+  } = usePsm();
+
+  const { write } = useTxn({
+    message: isMint ? "Mint Honey" : "Redeem Honey",
     onError: () => {
       rejectAction?.fire();
     },

@@ -30,7 +30,7 @@ export function SwapCard() {
     toBalance,
     fee,
     fee2,
-  } = usePsm({});
+  } = usePsm();
 
   console.log("allowance", allowance?.formattedAllowance);
   console.log("payload", payload);
