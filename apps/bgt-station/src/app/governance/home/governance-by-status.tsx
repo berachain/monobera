@@ -3,24 +3,21 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SearchInput } from "@bera/shared-ui";
-import { Button } from "@bera/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@bera/ui/dropdown-menu";
-import { Icons } from "@bera/ui/icons";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-
 import {
   OrderByEnum,
   StatusEnum,
   type OrderByEnum as OrderByEnumT,
   type StatusEnum as StatusEnumT,
-} from "../types";
+} from "@bera/shared-ui/src/types";
+import { Button } from "@bera/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@bera/ui/dropdown-menu";
+import { Icons } from "@bera/ui/icons";
+import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 export default function GovernanceByStatus({
   proposalStatus,
