@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import {
   DropdownMenu,
@@ -90,6 +91,7 @@ export default function GovernanceByStatus({
           </DropdownMenu>
         </div>
       </div>
+      <SearchInput placeholder="Search proposals" className="" />
     </div>
   );
 }
