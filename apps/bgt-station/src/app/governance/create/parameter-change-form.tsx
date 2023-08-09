@@ -15,8 +15,8 @@ export default function ParameterForm({ form }: { form: UseFormReturn }) {
             </div>
             <div>
               <CustomParameterGroup
-                onSubmit={(parameterFrom) =>
-                  form.setValue("parameters2Change", parameterFrom)
+                onSubmit={(parameterForm) =>
+                  form.setValue("parameters2Change", parameterForm)
                 }
               />
               <FormMessage className="mt-[-24px]" />
