@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-import { type StatusEnum } from "../types";
+import { type OrderByEnum, type StatusEnum } from "../types";
 
 export default function GovernanceByStatus({
   proposalStatus,

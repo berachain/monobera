@@ -1,14 +1,24 @@
 import React from "react";
 
-import { type ProposalTypeEnum } from "../types";
+import {
+  ProposalTypeEnum,
+  type ProposalTypeEnum as ProposalTypeEnumT,
+} from "../types";
 import NewProposal from "./new-proposal";
 
 export default function Create({
   searchParams,
 }: {
   searchParams: {
-    type: ProposalTypeEnum;
+    type: ProposalTypeEnumT;
   };
 }) {
-  return <NewProposal type={searchParams.type} />;
+  let type;
+  if (searchParams.type || searchParams.type in ProposalTypeEnum) {
+    type = searchParams.type;
+  } else {
+    type = ProposalTypeEnum.COMMUNITY_POOL_SPEND;
+  }
+
+  return <NewProposal {...{ type }} />;
 }
