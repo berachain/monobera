@@ -24,3 +24,10 @@ export type ParameterChangeLine = {
   key: string;
   value: string;
 };
+
+export type ProposalVotes = {
+  yes: number;
+  no: number;
+  veto: number;
+  abstain: number;
+};
