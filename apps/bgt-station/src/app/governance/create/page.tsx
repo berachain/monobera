@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { usePollBgtBalance } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
@@ -40,14 +41,15 @@ export default function NewProposal({
 }) {
   const router = useRouter();
   const triggerRef = useRef(null);
-  const [contentWidth, setContentWidth] = useState("w-auto");
-
+  const [contentWidth, setContentWidth] = useState("w-[450px]");
+  const { useBgtBalance } = usePollBgtBalance();
+  const userBalance = useBgtBalance();
   useEffect(() => {
     if (triggerRef.current) {
       const width = triggerRef.current.offsetWidth;
       setContentWidth(`w-[${width}px]`);
     }
-  }, []);
+  }, [triggerRef.current && triggerRef.current.offsetWidth]);
 
   const form = useForm<z.infer<typeof ProposalFormSchema>>({
     resolver: zodResolver(ProposalFormSchema),
@@ -57,7 +59,7 @@ export default function NewProposal({
     },
   });
 
-  function onSubmit(values: z.infer<typeof proposalFormSchema>) {
+  function onSubmit(values: z.infer<typeof ProposalFormSchema>) {
     console.log("submit", values);
   }
 
@@ -68,7 +70,7 @@ export default function NewProposal({
           <Card className="mx-auto flex w-full max-w-[500px] flex-col justify-start gap-8 p-6">
             <div className="inline-flex flex-col justify-start gap-3">
               <div className="relative text-lg font-semibold leading-7 text-foreground">
-                New proposal {contentWidth}
+                New proposal
                 <Icons.close
                   className="absolute right-0 top-0 h-5 w-5 hover:cursor-pointer"
                   onClick={() => router.push(`/governance`)}
@@ -101,18 +103,20 @@ export default function NewProposal({
                   align="start"
                   className={`${contentWidth}`}
                 >
-                  {Object.values(ProposalTypeEnum).map((type: string) => (
-                    <DropdownMenuItem
-                      key={`proposal-option-${type}`}
-                      onClick={() => {
-                        router.push(`/governance/create?type=${type}`);
-                        form.setValue("type", type);
-                      }}
-                      className="capitalize"
-                    >
-                      {type.replaceAll("-", " ")}
-                    </DropdownMenuItem>
-                  ))}
+                  {Object.values(ProposalTypeEnum).map(
+                    (type: ProposalTypeEnum) => (
+                      <DropdownMenuItem
+                        key={`proposal-option-${type}`}
+                        onClick={() => {
+                          router.push(`/governance/create?type=${type}`);
+                          form.setValue("type", type);
+                        }}
+                        className="w-full capitalize"
+                      >
+                        {type.replaceAll("-", " ")}
+                      </DropdownMenuItem>
+                    ),
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -121,11 +125,11 @@ export default function NewProposal({
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem className="inline-flex flex-col justify-start gap-2">
+                <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Title
                   </div>
-                  <div>
+                  <span>
                     <FormControl>
                       <Input
                         type="text"
@@ -135,7 +139,7 @@ export default function NewProposal({
                       />
                     </FormControl>
                     <FormMessage className="mt-2" />
-                  </div>
+                  </span>
                 </FormItem>
               )}
             />
@@ -144,7 +148,7 @@ export default function NewProposal({
               control={form.control}
               name="forumLink"
               render={({ field }) => (
-                <FormItem className="inline-flex flex-col justify-start gap-2">
+                <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Forum discussion link <Tooltip text="test" />
                   </div>
@@ -167,14 +171,13 @@ export default function NewProposal({
               control={form.control}
               name="description"
               render={({ field }) => (
-                <FormItem className="inline-flex flex-col justify-start gap-2">
+                <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Description
                   </div>
                   <div>
                     <FormControl>
                       <TextArea
-                        name="proposal-message"
                         id="proposal-message"
                         placeholder="Tell us about your proposal"
                         {...field}
@@ -190,7 +193,7 @@ export default function NewProposal({
               control={form.control}
               name="expedite"
               render={({ field }) => (
-                <FormItem className="inline-flex flex-col justify-start gap-2">
+                <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Expedite <Tooltip text="test" />
                   </div>
@@ -209,11 +212,11 @@ export default function NewProposal({
               control={form.control}
               name="initialDeposit"
               render={({ field }) => (
-                <FormItem className="inline-flex flex-col justify-start gap-2">
+                <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Initial deposit <Tooltip text="test" />
                   </div>
-                  <div>
+                  <div className="relative">
                     <FormControl>
                       <Input
                         type="number"
@@ -224,6 +227,18 @@ export default function NewProposal({
                       />
                     </FormControl>
                     <FormMessage className="mt-2" />
+                    <div className="absolute right-1 mt-2 flex h-3 w-fit items-center gap-1 text-[10px] text-muted-foreground">
+                      <Icons.wallet className="relative inline-block h-3 w-3 " />
+                      {userBalance}
+                      <span
+                        className="underline hover:cursor-pointer"
+                        onClick={() => {
+                          form.setValue("initialDeposit", userBalance);
+                        }}
+                      >
+                        Fill Deposit
+                      </span>
+                    </div>
                   </div>
                 </FormItem>
               )}
