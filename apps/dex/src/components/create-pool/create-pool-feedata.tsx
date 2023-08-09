@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { set } from "husky";
 
 type Props = {
   swapFee: number;
@@ -30,7 +29,6 @@ enum VALUES {
   CUSTOM = "custom",
 }
 export function CreatePoolFeeData({
-  swapFee,
   error,
   setSwapFee,
   onContinue,

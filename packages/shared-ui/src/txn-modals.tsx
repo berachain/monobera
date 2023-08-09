@@ -85,12 +85,11 @@ export const SuccessModal = ({
 
 export const ErrorModal = ({
   title = "Error",
-  hash = undefined,
   message = "",
   onClose,
   open,
 }: IModal) => {
-  const { networkConfig } = useBeraConfig();
+  // const { networkConfig } = useBeraConfig();
 
   if (message === "User rejected txn") {
     return (

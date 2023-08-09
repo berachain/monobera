@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { isAddress, parseUnits, type Address } from "viem";
+import { isAddress, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { DEX_PRECOMPILE_ABI } from "~/config";

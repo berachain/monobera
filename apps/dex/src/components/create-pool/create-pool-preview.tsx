@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { DEX_PRECOMPILE_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
@@ -98,7 +98,7 @@ export function CreatePoolPreview({
                 key={index}
                 token={tokenWeight.token}
                 weight={tokenWeight.weight}
-                value={tokenWeight.initialLiquidity.toString()}
+                value={tokenWeight.initialLiquidity}
               />
             );
           })}

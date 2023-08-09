@@ -1,9 +1,8 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 // TODO fix any
-import React from "react";
-import Link from "next/link";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatUsd, truncateHash, usePollBalance } from "@bera/berajs";
@@ -27,10 +26,11 @@ import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
-import { blockExplorerUrl } from "~/config";
+import { blockExplorerName, blockExplorerUrl } from "~/config";
 import { getWBeraPriceForToken } from "../api/getPrice";
 import { PoolChart } from "./PoolChart";
 import {
+  type WithdrawLiquidityData,
   type AddLiquidityData,
   type MappedTokens,
   type SwapData,
@@ -65,6 +65,20 @@ function isAddLiquidity(obj: any): obj is SwapData {
     "sender" in obj
   );
 }
+
+
+function isRemoveLiquidity(obj: any): obj is SwapData {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "metadata" in obj &&
+    "pool" in obj &&
+    "liquidityOut" in obj &&
+    "sharesIn" in obj &&
+    "sender" in obj
+  );
+}
+
 
 const getTokenDisplay = (event: any, pool: Pool) => {
   if (isSwapData(event)) {
@@ -113,6 +127,21 @@ const getTokenDisplay = (event: any, pool: Pool) => {
         })}
       </div>
     );
+  } else if(isRemoveLiquidity(event)) {
+    return (
+      <div className="space-evenly flex flex-row items-center">
+        {pool.tokens.map((token, i) => {
+          return (
+            <div
+              className={cn("flex flex-row", i !== 0 && "ml-[-10px]")}
+              key={i}
+            >
+              <TokenIcon token={token} />
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 };
 
@@ -127,7 +156,7 @@ const getAction = (event: any) => {
 
 const getValue = (
   pool: Pool | undefined,
-  event: SwapData | AddLiquidityData,
+  event: SwapData | AddLiquidityData | WithdrawLiquidityData,
   prices: MappedTokens,
 ) => {
   if (isSwapData(event)) {
@@ -145,7 +174,23 @@ const getValue = (
     );
   }
   if (isAddLiquidity(event)) {
-    const value = event.liquidityIn.reduce((acc, cur) => {
+    const value = (event as AddLiquidityData).liquidityIn.reduce((acc, cur) => {
+      const token = pool?.tokens.find((token) => token.address === cur.denom);
+      const tokenValue = getWBeraPriceForToken(
+        prices,
+        cur.denom as Address,
+        Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)),
+      );
+      if (!tokenValue) {
+        return acc;
+      }
+      const totalTokenValue = tokenValue;
+      return acc + totalTokenValue;
+    }, 0);
+    return value;
+  }
+  if (isRemoveLiquidity(event)) {
+    const value = (event as WithdrawLiquidityData).liquidityOut.reduce((acc, cur) => {
       const token = pool?.tokens.find((token) => token.address === cur.denom);
       const tokenValue = getWBeraPriceForToken(
         prices,
@@ -163,6 +208,12 @@ const getValue = (
   return 0;
 };
 
+enum Selection {
+  AllTransactions = "allTransactions",
+  Swaps = "swaps",
+  AddsWithdrawals = "addsWithdrawals",
+}
+
 export default function PoolPageContent({
   prices,
   pool,
@@ -171,46 +222,85 @@ export default function PoolPageContent({
   const { useBalance } = usePollBalance({ address: pool?.shareAddress });
   const shareBalance = useBalance();
 
+  const [selectedTab, setSelectedTab] = useState(Selection.AllTransactions);
   const {
        allData,
         allDataSize,
         setAllDataSize,
-        isAllDataLoading,
+        isAllDataLoadingMore,
+        isAllDataReachingEnd,
         swapData,
         swapDataSize,
         setSwapDataSize,
-        isSwapDataLoading,
+        isSwapDataLoadingMore,
+        isSwapDataReachingEnd,
         provisionData,
         provisionDataSize,
         setProvisionDataSize,
-        isProvisionDataLoading
+        isProvisionDataLoadingMore,
+        isProvisionDataReachingEnd
   } = usePoolEvents(pool?.pool);
 
-  console.log('allDatasize', allDataSize)
-  console.log('allData', allData)
-  console.log('swapData', swapData)
-  console.log('provisionData', provisionData)
 
+  const getLoadMoreButton = () => {
+    if(selectedTab === Selection.AllTransactions) {
+      return (
+        <Button
+        onClick={() => setAllDataSize(allDataSize + 1)}
+        disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+      >
+        {isAllDataLoadingMore
+          ? "Loading..."
+          : isAllDataReachingEnd
+          ? "No more transactions"
+          : "Load more"}
+      </Button>
+      )
+    }
+    if(selectedTab === Selection.Swaps) {
+      return (
+        <Button
+        onClick={() => setSwapDataSize(swapDataSize + 1)}
+        disabled={isSwapDataLoadingMore || isSwapDataReachingEnd}
+      >
+        {isSwapDataLoadingMore
+          ? "Loading..."
+          : isSwapDataReachingEnd
+          ? "No more transactions"
+          : "Load more"}
+      </Button>
+      )
+
+
+    }
+    if(selectedTab === Selection.AddsWithdrawals) {
+      return (
+        <Button
+        onClick={() => setProvisionDataSize(provisionDataSize + 1)}
+        disabled={isProvisionDataLoadingMore || isProvisionDataReachingEnd}
+      >
+        {isProvisionDataLoadingMore
+          ? "Loading..."
+          : isProvisionDataReachingEnd
+          ? "No more transactions"
+          : "Load more"}
+      </Button>
+      )
+    }
+  }
   return (
     <div className="container">
       <div className="mb-4 flex flex-wrap items-center justify-between">
         <div>
-          <h1 className="pb-2 text-left text-4xl font-extrabold lg:text-6xl">
+          <p className="text-left text-3xl font-semibold">
             {pool?.poolName}
-          </h1>
-          <div className="mb-2 flex flex-row gap-2">
-            <Badge variant="outline">
-              <Link
-                href={`${blockExplorerUrl}/address/${pool?.pool}`}
-                target="_blank"
-              >
-                <p className="text-left text-sm text-muted-foreground">
-                  {truncateHash(pool?.pool)}
-                  <Icons.external className="ml-1 inline-block h-5 w-5" />
-                </p>
-              </Link>
-            </Badge>
-            <Badge variant="secondary" className="text-sm">
+          </p>
+          <div className="mb-2 flex flex-row gap-2 items-center">
+            <p className="text-xs font-medium hover:underline text-muted-foreground flex flex-row gap-2">
+              <Icons.newspaper className="w-4 h-4"/>
+              See Contract on {blockExplorerName}
+            </p>
+            <Badge variant="secondary" className="text-sm" >
               {Number(formatUnits(BigInt(pool.swapFee) ?? "", 18)) * 100}% swap
               fee
             </Badge>
@@ -233,12 +323,15 @@ export default function PoolPageContent({
               <Button
                 onClick={() => router.push(`/pool/${pool?.pool}/add-liquidity`)}
               >
-                Deposit
+                <Icons.add />
+                Add
               </Button>
               <Button
                 variant={"secondary"}
                 onClick={() => router.push(`/pool/${pool?.pool}/withdraw`)}
               >
+                                <Icons.subtract />
+
                 Withdraw
               </Button>
             </CardContent>
@@ -339,16 +432,16 @@ export default function PoolPageContent({
         </div>
       </div>
       <section>
-        <Tabs defaultValue="allTransactions">
+        <Tabs defaultValue={Selection.AllTransactions} onValueChange={(value: string) => setSelectedTab(value as Selection)}>
           <TabsList>
-            <TabsTrigger value="allTransactions">All transactions</TabsTrigger>
-            <TabsTrigger value="swaps">Swaps</TabsTrigger>
-            <TabsTrigger value="addsWithdrawals">
+            <TabsTrigger value={Selection.AllTransactions}>All transactions</TabsTrigger>
+            <TabsTrigger value={Selection.Swaps}>Swaps</TabsTrigger>
+            <TabsTrigger value={Selection.AddsWithdrawals}>
               Adds &amp; Withdrawals
             </TabsTrigger>
           </TabsList>
           <Card className="mt-4">
-            <TabsContent value="allTransactions" className="mt-0">
+            <TabsContent value={Selection.AllTransactions} className="mt-0">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -361,7 +454,7 @@ export default function PoolPageContent({
                 </TableHeader>
                 <TableBody>
                   {allData?.length ? (
-                    allData?.map((event: SwapData | any | undefined, i) => {
+                    allData?.map((event: SwapData | any | undefined) => {
                       if(!event) return null
                       return (
                         <TableRow
@@ -399,8 +492,7 @@ export default function PoolPageContent({
                 </TableBody>
               </Table>
             </TabsContent>
-            <Button onClick={() => setAllDataSize(allDataSize + 1)}>Load More</Button>
-            <TabsContent value="swaps" className="mt-0">
+            <TabsContent value={Selection.Swaps} className="mt-0">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -413,7 +505,7 @@ export default function PoolPageContent({
                 </TableHeader>
                 <TableBody>
                   {swapData?.length ? (
-                    swapData.map((event: SwapData | any | undefined, i) => {
+                    swapData.map((event: SwapData | any | undefined) => {
                       if(!event) return null
                       return (
                         <TableRow
@@ -451,7 +543,7 @@ export default function PoolPageContent({
                 </TableBody>
               </Table>
             </TabsContent>
-            <TabsContent value="addsWithdrawals" className="mt-0">
+            <TabsContent value={Selection.AddsWithdrawals} className="mt-0">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -464,7 +556,7 @@ export default function PoolPageContent({
                 </TableHeader>
                 <TableBody>
                   {provisionData?.length ? (
-                    provisionData.map((event: SwapData | any |undefined, i) => {
+                    provisionData.map((event: SwapData | any |undefined) => {
                       if(!event) return null
                       return (
                         <TableRow
@@ -503,6 +595,9 @@ export default function PoolPageContent({
               </Table>
             </TabsContent>
           </Card>
+          <div className="flex justify-center mt-4">
+          {getLoadMoreButton()}
+          </div>
         </Tabs>
       </section>
     </div>

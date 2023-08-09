@@ -1,5 +1,4 @@
 import { cn } from "@bera/ui";
-import { Icons } from "@bera/ui/icons";
 
 export interface IStep {
   name: string;

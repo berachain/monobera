@@ -53,14 +53,14 @@ async function getRemoveLiquidity(address: string) {
 
 function sortByBlockTime(data: any[]): any[] {
   return data.sort(
-    (a, b) => parseInt(a.metadata.blockTime) + parseInt(b.metadata.blockTime),
-  );
+    (a, b) => parseInt(a.metadata.blockTime) - parseInt(b.metadata.blockTime),
+  ).reverse();
 }
 
 
 const DEFAULT_SIZE = 10;
 
-export const revalidate = 0;
+export const revalidate = 1000;
 
 export async function GET(
     request: Request,

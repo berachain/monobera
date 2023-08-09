@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
+ import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { RouterService, defaultConfig } from "@bera/bera-router";
 
 import { getWBeraPriceDictForPoolTokens } from "../api/getPrice";
 import PoolPageContent from "./PoolPageContent";
-import { type MappedTokens, type SwapData } from "./types";
+import { type MappedTokens } from "./types";
 
 type Props = {
   params: { address: string };

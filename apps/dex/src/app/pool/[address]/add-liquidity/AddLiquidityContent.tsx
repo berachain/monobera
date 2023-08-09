@@ -161,9 +161,10 @@ export default function AddLiquidityContent({
                       (tokenInput: { amount: number }) =>
                         tokenInput.amount !== 0,
                     )
-                    .map((tokenInput: any, i: any) => {
+                    .map((tokenInput: any) => {
                       return (
                         <PreviewToken
+                        key={tokenInput.address}
                           token={tokenInput}
                           weight={tokenInput?.weight}
                           value={tokenInput?.amount}
@@ -268,7 +269,7 @@ export default function AddLiquidityContent({
                   <Icons.chevronDown className="h-6 w-6 self-center text-muted-foreground" />
                 </div>
                 <TokenList className="bg-border">
-                  {pool?.tokens.map((token, i) => {
+                  {pool?.tokens.map((token) => {
                     const formattedAmount = burnShares
                       ? Number(
                           formatUnits(
@@ -279,6 +280,7 @@ export default function AddLiquidityContent({
                       : 0;
                     return (
                       <PreviewToken
+                        key={token.address}
                         token={token}
                         value={formattedAmount}
                         weight={token.normalizedWeight}

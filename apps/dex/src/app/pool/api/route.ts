@@ -29,7 +29,7 @@ function sortByParameter(
 
 const DEFAULT_SIZE = 1;
 
-export const revalidate = 3600;
+export const revalidate = 1000;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

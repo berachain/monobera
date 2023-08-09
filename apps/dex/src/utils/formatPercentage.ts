@@ -1,4 +1,4 @@
-function formatPercentage(
+export function formatPercentage(
   numerator: number | undefined,
   denominator: number | undefined,
   decimals?: number,

@@ -27,9 +27,6 @@ export default function CreatePoolInitialLiquidityInput({
     useSelectedAssetWalletBalance(tokenWeight.token?.address ?? "")
       ?.formattedBalance || 0,
   );
-  const exceeding = tokenWeight.initialLiquidity > tokenBalance;
-
-  const { account } = useBeraJs();
 
   const { isConnected } = useBeraJs();
 

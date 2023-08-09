@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Pool } from "@bera/bera-router";
-import { Token, useBeraJs, usePollBankBalance, useTokens } from "@bera/berajs";
+import { type Pool } from "@bera/bera-router";
+import { type Token, useBeraJs, usePollBankBalance, useTokens } from "@bera/berajs";
 import { parseUnits } from "viem";
 
-export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
+export const useWithdrawLiquidity = (pool: Pool | undefined, _prices: any) => {
   const { account = undefined } = useBeraJs();
 
   const [amount, setAmount] = useState<number>(0);

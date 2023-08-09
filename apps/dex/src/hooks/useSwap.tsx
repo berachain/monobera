@@ -111,7 +111,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [swapKind, setSwapKind] = useState<SwapKind>(SwapKind.GIVEN_IN);
 
-  // eslint-disable-next-line
   const [payload, setPayload] = useState<any[]>([]);
 
   const [showPriceImpact, setShowPriceImpact] = useState(false);

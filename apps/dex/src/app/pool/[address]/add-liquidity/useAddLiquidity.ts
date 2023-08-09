@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
-  DEX_PRECOMPILE_ABI,
-  formatUsd,
   useBeraConfig,
   useBeraJs,
   usePollAllowance,
@@ -19,6 +16,7 @@ import { type Address } from "wagmi";
 
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
+import { type Pool } from "@bera/bera-router";
 
 export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   const { account = undefined } = useBeraJs();
