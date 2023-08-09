@@ -89,34 +89,45 @@ export default function GovernanceByStatus({
         </div>
       </div>
       <SearchInput placeholder="Search proposals" className="" />
-      <ProposalCard
-        proposalStatus={StatusEnum.ACTIVE}
-        proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
-        proposalTitle={"#000 What would a proposal title look like?"}
-        timestamp={1692076507}
-        expedited
-      />
-      <ProposalCard
-        proposalStatus={StatusEnum.IN_QUEUE}
-        proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
-        proposalTitle={"#001 What would a proposal title look like?"}
-        timestamp={1692076507}
-        expedited
-      />
-      <ProposalCard
-        proposalStatus={StatusEnum.PASSED}
-        proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
-        proposalTitle={"#002 What would a proposal title look like?"}
-        timestamp={1692076507}
-        expedited
-      />
-      <ProposalCard
-        proposalStatus={StatusEnum.REJECTED}
-        proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
-        proposalTitle={"#003 What would a proposal title look like?"}
-        timestamp={1692076507}
-        expedited
-      />
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <ProposalCard
+          proposalStatus={StatusEnum.ACTIVE}
+          proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
+          proposalTitle={"#000 What would a proposal title look like?"}
+          timestamp={1692076507}
+          expedited
+        />
+
+        <ProposalCard
+          proposalStatus={StatusEnum.ACTIVE}
+          proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
+          proposalTitle={"#000 What would a proposal title look like?"}
+          timestamp={1692076507}
+          expedited
+        />
+
+        <ProposalCard
+          proposalStatus={StatusEnum.IN_QUEUE}
+          proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
+          proposalTitle={"#001 What would a proposal title look like?"}
+          timestamp={1692076507}
+          expedited
+        />
+
+        <ProposalCard
+          proposalStatus={StatusEnum.PASSED}
+          proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
+          proposalTitle={"#002 What would a proposal title look like?"}
+          timestamp={1692076507}
+        />
+
+        <ProposalCard
+          proposalStatus={StatusEnum.REJECTED}
+          proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
+          proposalTitle={"#003 What would a proposal title look like?"}
+          timestamp={1692076507}
+        />
+      </div>
     </div>
   );
 }

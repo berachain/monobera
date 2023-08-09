@@ -69,7 +69,13 @@ export function ProposalCard({
   return (
     //design is rounded-18 and p-8
     <div className="rounded-xl border border-border bg-background p-6">
-      <div className="p-2">
+      <div className="relative p-2">
+        {expedited && (
+          <div className="absolute right-0 top-0 flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
+            <Icons.timer className="relative h-4 w-4" />
+            Expedited
+          </div>
+        )}
         <div className="flex h-7 items-center">
           {getBadge(proposalStatus)}
           <div className="text-xs font-medium leading-tight text-stone-500">
