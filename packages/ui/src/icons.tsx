@@ -35,10 +35,12 @@ import {
   LogOut,
   Medal,
   Menu,
+  MinusIcon,
   Moon,
   MoreVertical,
   Pizza,
   Plus,
+  PlusCircle,
   Repeat2,
   SearchIcon,
   Settings,
@@ -85,6 +87,7 @@ export const Icons = {
   ellipsis: MoreVertical,
   expand: Expand,
   add: Plus,
+  minus: MinusIcon,
   warning: AlertTriangle,
   user: User,
   arrowRight: ArrowRight,
@@ -118,6 +121,7 @@ export const Icons = {
   checkCircle: CheckCircle2,
   candleStick: CandlestickChart,
   medal: Medal,
+  plusCircle: PlusCircle,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path

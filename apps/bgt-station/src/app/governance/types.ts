@@ -66,7 +66,19 @@ export const CommunityFormSchema = BaseFormSchema.extend({
 
 export const ParameterFormSchema = BaseFormSchema.extend({
   type: z.literal(ProposalTypeEnum.PARAMETER_CHANGE),
-  // parameters2Change: z.array(parameterChangeLineSchema),
+  parameters2Change: z
+    .array(parameterChangeLineSchema)
+    .nonempty()
+    .refine(
+      (data) =>
+        data.every(
+          (item: ParameterChangeLine) =>
+            item.subspace && item.key && item.value,
+        ),
+      {
+        message: "Imcomplete fields",
+      },
+    ),
 });
 
 export const ExecuteFormSchema = BaseFormSchema.extend({
