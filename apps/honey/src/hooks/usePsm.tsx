@@ -42,7 +42,7 @@ export const usePsm = () => {
   const { isConnected, account } = useBeraJs();
 
   const { useAllowance } = usePollAllowance({
-    contract: "0x7B44CdD81a8a25EFc1842AC2A2546C3B6e6A3fE2",
+    contract: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as string,
     token: selectedFrom,
   });
 
