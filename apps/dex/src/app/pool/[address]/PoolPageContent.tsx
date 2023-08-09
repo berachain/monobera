@@ -319,28 +319,31 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             monthlyFeesTotal={pool.monthlyFeesTotal ?? 0}
             quarterlyFeesTotal={pool.quarterlyFeesTotal ?? 0}
           />
-          <div className="grid gap-5 md:grid-cols-4 grid-cols-2">
+          <div className="grid gap-5 lg:grid-cols-4 grid-cols-2">
             <Card className="p-2">
               <CardHeader className="flex flex-row items-center justify-between p-2">
-                <p className="text-xs font-medium text-muted-foreground">Total liquidity (TVL)</p>
+                <p className="text-xs font-medium text-muted-foreground whitespace-nowrap truncate overflow-hidden">
+                  Total liquidity (TVL)</p>
               </CardHeader>
-              <CardContent className="p-2 text-xl font-semibold">
+              <CardContent className="p-2 text-lg font-semibold whitespace-nowrap truncate overflow-hidden">
                 {formatUsd(pool.totalValue ?? "0")}
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between p-2">
-                <h3>Volume (24h)</h3>
+              <p className="text-xs font-medium text-muted-foreground whitespace-nowrap truncate overflow-hidden">
+                  Volume (24h)</p>
               </CardHeader>
-              <CardContent className="p-2 text-xl font-semibold">
+              <CardContent className="p-2 text-lg font-semibold whitespace-nowrap truncate overflow-hidden">
                 {formatUsd(pool?.dailyVolume ?? "0")}
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between p-2">
-                <h3>Fees (24h)</h3>
+              <p className="text-xs font-medium text-muted-foreground whitespace-nowrap truncate overflow-hidden">
+                  Fees (24h)</p>
               </CardHeader>
-              <CardContent className="p-2 text-xl font-semibold">
+              <CardContent className="p-2 text-lg font-semibold whitespace-nowrap truncate overflow-hidden">
                 {pool.dailyVolume && Number(pool.dailyVolume) !== 0
                   ? formatUsd(
                       (Number(pool.formattedSwapFee) / 100) *
@@ -351,7 +354,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between p-2">
-                <h3>APR</h3>
+              <p className="text-xs font-medium text-muted-foreground whitespace-nowrap truncate overflow-hidden">
+                  APR</p>
               </CardHeader>
               <CardContent className="p-2">-%</CardContent>
             </Card>
