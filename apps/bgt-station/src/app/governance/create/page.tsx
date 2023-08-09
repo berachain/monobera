@@ -1,9 +1,9 @@
 import React from "react";
+
 import {
   ProposalTypeEnum,
   type ProposalTypeEnum as ProposalTypeEnumT,
-} from "@bera/shared-ui/src/types";
-
+} from "../types";
 import NewProposal from "./new-proposal";
 
 export default function Create({

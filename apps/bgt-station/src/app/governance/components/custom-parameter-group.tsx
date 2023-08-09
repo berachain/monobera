@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
-import { type ParameterChangeLine } from "./types";
+import { type ParameterChangeLine } from "../types";
 
 export const CustomParameterGroup = ({
   onSubmit,

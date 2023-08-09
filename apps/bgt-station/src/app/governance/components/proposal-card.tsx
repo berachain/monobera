@@ -1,10 +1,14 @@
 import React from "react";
+import {
+  formatUnixTimestamp,
+  timeDifferenceFromNow,
+} from "@bera/shared-ui/src/utils/times";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
-import { StatusEnum, type ProposalVotes } from "./types";
-import { formatUnixTimestamp, timeDifferenceFromNow } from "./utils";
+import { StatusEnum, type ProposalVotes } from "../types";
+import { ProgressBarChart } from "./progress-bar-chart";
 
 interface ISelectToken {
   proposalStatus: StatusEnum;
@@ -85,7 +89,19 @@ export function ProposalCard({
         <div className="mt-1 text-sm font-semibold leading-tight text-foreground">
           {proposalTitle}
         </div>
-        <div className="mt-4">hji</div>
+        <div className="mt-4">
+          <ProgressBarChart
+            dataList={[
+              { color: "red", width: 20 },
+              { color: "blue", width: 40 },
+              { color: "yellow", width: 70 },
+            ]}
+            labelList={[
+              { label: "Pass threshold", width: 30 },
+              { label: "Quorum", width: 60 },
+            ]}
+          />
+        </div>
       </div>
     </div>
   );

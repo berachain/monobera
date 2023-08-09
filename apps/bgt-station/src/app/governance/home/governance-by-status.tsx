@@ -2,13 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ProposalCard, SearchInput } from "@bera/shared-ui";
-import {
-  OrderByEnum,
-  StatusEnum,
-  type OrderByEnum as OrderByEnumT,
-  type StatusEnum as StatusEnumT,
-} from "@bera/shared-ui/src/types";
+import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import {
   DropdownMenu,
@@ -18,6 +12,14 @@ import {
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+
+import { ProposalCard } from "../components/proposal-card";
+import {
+  OrderByEnum,
+  StatusEnum,
+  type OrderByEnum as OrderByEnumT,
+  type StatusEnum as StatusEnumT,
+} from "../types";
 
 export default function GovernanceByStatus({
   proposalStatus,
