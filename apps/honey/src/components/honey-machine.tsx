@@ -177,7 +177,10 @@ export function HoneyMachine() {
         address: selectedFrom?.address as `0x${string}`,
         abi: erc20ABI as unknown as (typeof erc20ABI)[],
         functionName: "approve",
-        params: ["0x7B44CdD81a8a25EFc1842AC2A2546C3B6e6A3fE2", 1000000n],
+        params: [
+          process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as string,
+          1000000n,
+        ],
       });
       dispatch({ type: "SET_STATE", payload: "minting" });
     } catch (error: any) {
@@ -190,7 +193,7 @@ export function HoneyMachine() {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
       write({
-        address: "0x7B44CdD81a8a25EFc1842AC2A2546C3B6e6A3fE2",
+        address: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
         abi: ERC20_HONEY_ABI,
         functionName: "mint",
         params: payload,
@@ -205,7 +208,7 @@ export function HoneyMachine() {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
       write({
-        address: "0x7B44CdD81a8a25EFc1842AC2A2546C3B6e6A3fE2",
+        address: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
         abi: ERC20_HONEY_ABI,
         functionName: "redeem",
         params: payload,

@@ -89,7 +89,9 @@ export function SwapCard() {
           Number(allowance?.formattedAllowance) < fromAmount ? (
             <ApproveTokenButton
               token={selectedFrom}
-              spender={"0x7B44CdD81a8a25EFc1842AC2A2546C3B6e6A3fE2"}
+              spender={
+                process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`
+              }
             />
           ) : isConnected ? (
             isMint ? (
@@ -97,7 +99,8 @@ export function SwapCard() {
                 disabled={toAmount === 0 || isLoading}
                 onClick={() => {
                   write({
-                    address: "0x7B44CdD81a8a25EFc1842AC2A2546C3B6e6A3fE2",
+                    address: process.env
+                      .NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
                     abi: ERC20_HONEY_ABI,
                     functionName: "mint",
                     params: payload,
@@ -111,7 +114,8 @@ export function SwapCard() {
                 disabled={toAmount === 0 || isLoading}
                 onClick={() => {
                   write({
-                    address: "0x7B44CdD81a8a25EFc1842AC2A2546C3B6e6A3fE2",
+                    address: process.env
+                      .NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
                     abi: ERC20_HONEY_ABI,
                     functionName: "redeem",
                     params: payload,
