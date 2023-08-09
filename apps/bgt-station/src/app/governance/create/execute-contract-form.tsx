@@ -54,12 +54,7 @@ export default function ExecuteForm({ form }: { form: UseFormReturn }) {
             <div className="text-sm font-semibold leading-tight">
               Message <Tooltip text="test" />
             </div>
-            <TextArea
-              name="proposal-message"
-              id="proposal-messag"
-              placeholder="{}"
-              {...field}
-            />
+            <TextArea id="proposal-messag" placeholder="{}" {...field} />
           </FormItem>
         )}
       />

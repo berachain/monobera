@@ -21,7 +21,6 @@ export const ConnectButton = ({
   return (
     <RainbowConnectButton.Custom>
       {({
-        account,
         chain,
         openChainModal,
         openConnectModal,
