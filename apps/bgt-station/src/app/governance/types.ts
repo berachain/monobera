@@ -2,10 +2,10 @@ import { isAddress } from "viem";
 import * as z from "zod";
 
 export enum StatusEnum {
-  Voting = "voting",
-  Pending = "pending",
-  Passed = "passed",
-  Rejected = "rejected",
+  ACTIVE = "active",
+  IN_QUEUE = "in-queue",
+  PASSED = "passed",
+  REJECTED = "rejected",
 }
 
 export enum OrderByEnum {
