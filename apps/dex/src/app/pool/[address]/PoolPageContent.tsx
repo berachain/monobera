@@ -299,76 +299,12 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
           </div>
         </div>
         <div className="flex flex-col gap-5">
-          <Card>
-            <CardContent className="flex items-center gap-4 p-4">
-              <div>
-                <h3 className="mb-2 font-medium">My pool balance</h3>
-                <p className="text-xl font-medium">
-                  {formatUsd(shareBalance?.formattedBalance ?? "0")} -{" "}
-                  {shareBalance?.formattedBalance}
-                </p>
-              </div>
 
-              <div className="text-right">
-                <Balancer className="text-md"></Balancer>
-              </div>
-              <Button
-                onClick={() => router.push(`/pool/${pool?.pool}/add-liquidity`)}
-              >
-                <Icons.add />
-                Add
-              </Button>
-              <Button
-                variant={"secondary"}
-                onClick={() => router.push(`/pool/${pool?.pool}/withdraw`)}
-              >
-                <Icons.subtract />
-                Withdraw
-              </Button>
-            </CardContent>
-          </Card>
         </div>
       </div>
 
-      <div className="mb-6 grid gap-5 lg:grid-cols-3">
-        <div className="col-span-1">
-          <Card>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Token</TableHead>
-                  <TableHead>Weight</TableHead>
-                  <TableHead className="text-right">Liquidity</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {pool?.tokens?.map((token) => (
-                  <TableRow
-                    key={token.symbol}
-                    onClick={() =>
-                      router.push(
-                        `${blockExplorerUrl}/address/${token.address}`,
-                      )
-                    }
-                  >
-                    <TableCell className="flex flex-row items-center gap-2 font-medium">
-                      <TokenIcon token={token} />
-                    </TableCell>
-                    <TableCell>{token.normalizedWeight}%</TableCell>
-                    <TableCell className="text-right">
-                      {Number(
-                        formatUnits(token.balance, token.decimals),
-                      ).toFixed(2)}{" "}
-                      {token.name}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
-        </div>
-
-        <div className="flex flex-col gap-5 lg:col-span-2">
+      <div className="mb-6 grid gap-5 grid-cols-5">
+        <div className="flex flex-col gap-5 md:col-span-3 col-span-5">
           <PoolChart
             weeklyVolume={pool.weeklyVolume ?? []}
             weeklyFees={pool.weeklyFees ?? []}
@@ -383,10 +319,10 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             monthlyFeesTotal={pool.monthlyFeesTotal ?? 0}
             quarterlyFeesTotal={pool.quarterlyFeesTotal ?? 0}
           />
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-5 md:grid-cols-4 grid-cols-2">
             <Card className="p-2">
               <CardHeader className="flex flex-row items-center justify-between p-2">
-                <h3>Total liquidity </h3>
+                <p className="text-xs font-medium text-muted-foreground">Total liquidity (TVL)</p>
               </CardHeader>
               <CardContent className="p-2 text-xl font-semibold">
                 {formatUsd(pool.totalValue ?? "0")}
@@ -420,19 +356,17 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               <CardContent className="p-2">-%</CardContent>
             </Card>
           </div>
-        </div>
-      </div>
-      <section>
+          <section>
         <Tabs
           defaultValue={Selection.AllTransactions}
           onValueChange={(value: string) => setSelectedTab(value as Selection)}
         >
-          <TabsList>
-            <TabsTrigger value={Selection.AllTransactions}>
+          <TabsList className="w-full">
+            <TabsTrigger value={Selection.AllTransactions} className="w-full">
               All transactions
             </TabsTrigger>
-            <TabsTrigger value={Selection.Swaps}>Swaps</TabsTrigger>
-            <TabsTrigger value={Selection.AddsWithdrawals}>
+            <TabsTrigger value={Selection.Swaps} className="w-full">Swaps</TabsTrigger>
+            <TabsTrigger value={Selection.AddsWithdrawals} className="w-full">
               Adds &amp; Withdrawals
             </TabsTrigger>
           </TabsList>
@@ -606,6 +540,39 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
           <div className="mt-4 flex justify-center">{getLoadMoreButton()}</div>
         </Tabs>
       </section>
+        </div>
+        <div className="flex flex-col gap-5 md:col-span-2 col-span-5">
+        <Card>
+            <CardContent className="flex items-center gap-4 p-4">
+              <div>
+                <h3 className="mb-2 font-medium">My pool balance</h3>
+                <p className="text-xl font-medium">
+                  {formatUsd(shareBalance?.formattedBalance ?? "0")} -{" "}
+                  {shareBalance?.formattedBalance}
+                </p>
+              </div>
+
+              <div className="text-right">
+                <Balancer className="text-md"></Balancer>
+              </div>
+              <Button
+                onClick={() => router.push(`/pool/${pool?.pool}/add-liquidity`)}
+              >
+                <Icons.add />
+                Add
+              </Button>
+              <Button
+                variant={"secondary"}
+                onClick={() => router.push(`/pool/${pool?.pool}/withdraw`)}
+              >
+                <Icons.subtract />
+                Withdraw
+              </Button>
+            </CardContent>
+          </Card>
+</div>
+      </div>
+
     </div>
   );
 }

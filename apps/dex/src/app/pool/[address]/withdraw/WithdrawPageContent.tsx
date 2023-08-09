@@ -19,6 +19,7 @@ import { type Address } from "wagmi";
 
 import { type MappedTokens } from "../types";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
+import { Icons } from "@bera/ui/icons";
 
 interface IWithdrawLiquidityContent {
   pool: Pool | undefined;
@@ -172,7 +173,10 @@ export default function WithdrawLiquidityContent({
                   amount={amount}
                   setAmount={setAmount}
                 />
-                <TokenInput
+              </TokenList>
+              <Icons.chevronsDown className="self-center text-secondary-foreground"/>
+              <TokenList>
+              <TokenInput
                   selected={exactOutToken}
                   onTokenSelection={setExactOutToken}
                   selectable={true}
@@ -181,7 +185,6 @@ export default function WithdrawLiquidityContent({
                   customTokenList={pool?.tokens}
                 />
               </TokenList>
-
               <TxnPreview
                 open={previewOpen}
                 disabled={false}

@@ -65,6 +65,7 @@ export default function AddLiquidityContent({
     setPreviewOpen,
     setSingleTokenSetPreviewOpen,
   } = useAddLiquidity(pool, prices);
+  
   const { networkConfig } = useBeraConfig();
 
   const { write, ModalPortal } = useTxn({
