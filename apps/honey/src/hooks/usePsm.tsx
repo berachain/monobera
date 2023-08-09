@@ -82,7 +82,7 @@ export const usePsm = () => {
     //   deadline,
     // ];
   }, [isMint, account, fromAmount, toAmount]);
-  console.log('payload', allowance)
+  console.log('payload', payload)
   return {
     payload,
     isConnected,

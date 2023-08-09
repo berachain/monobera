@@ -86,7 +86,7 @@ export function SwapCard() {
 
 
           {/* fix to check if allowance > amount */}
-          {allowance?.formattedAllowance === '0' ? (
+          {allowance?.formattedAllowance === '0' || Number(allowance?.formattedAllowance) < fromAmount ? (
             <ApproveTokenButton
               token={selectedFrom}
               spender={
