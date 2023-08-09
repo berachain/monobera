@@ -1,6 +1,5 @@
 "use client";
 
- 
 // TODO fix any
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -30,10 +29,10 @@ import { blockExplorerName, blockExplorerUrl } from "~/config";
 import { getWBeraPriceForToken } from "../api/getPrice";
 import { PoolChart } from "./PoolChart";
 import {
-  type WithdrawLiquidityData,
   type AddLiquidityData,
   type MappedTokens,
   type SwapData,
+  type WithdrawLiquidityData,
 } from "./types";
 import { usePoolEvents } from "./usePoolEvents";
 
@@ -66,7 +65,6 @@ function isAddLiquidity(obj: any): obj is SwapData {
   );
 }
 
-
 function isRemoveLiquidity(obj: any): obj is SwapData {
   return (
     typeof obj === "object" &&
@@ -78,7 +76,6 @@ function isRemoveLiquidity(obj: any): obj is SwapData {
     "sender" in obj
   );
 }
-
 
 const getTokenDisplay = (event: any, pool: Pool) => {
   if (isSwapData(event)) {
@@ -127,7 +124,7 @@ const getTokenDisplay = (event: any, pool: Pool) => {
         })}
       </div>
     );
-  } else if(isRemoveLiquidity(event)) {
+  } else if (isRemoveLiquidity(event)) {
     return (
       <div className="space-evenly flex flex-row items-center">
         {pool.tokens.map((token, i) => {
@@ -190,19 +187,22 @@ const getValue = (
     return value;
   }
   if (isRemoveLiquidity(event)) {
-    const value = (event as WithdrawLiquidityData).liquidityOut.reduce((acc, cur) => {
-      const token = pool?.tokens.find((token) => token.address === cur.denom);
-      const tokenValue = getWBeraPriceForToken(
-        prices,
-        cur.denom as Address,
-        Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)),
-      );
-      if (!tokenValue) {
-        return acc;
-      }
-      const totalTokenValue = tokenValue;
-      return acc + totalTokenValue;
-    }, 0);
+    const value = (event as WithdrawLiquidityData).liquidityOut.reduce(
+      (acc, cur) => {
+        const token = pool?.tokens.find((token) => token.address === cur.denom);
+        const tokenValue = getWBeraPriceForToken(
+          prices,
+          cur.denom as Address,
+          Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)),
+        );
+        if (!tokenValue) {
+          return acc;
+        }
+        const totalTokenValue = tokenValue;
+        return acc + totalTokenValue;
+      },
+      0,
+    );
     return value;
   }
   return 0;
@@ -214,93 +214,85 @@ enum Selection {
   AddsWithdrawals = "addsWithdrawals",
 }
 
-export default function PoolPageContent({
-  prices,
-  pool,
-}: IPoolPageContent) {
+export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const router = useRouter();
   const { useBalance } = usePollBalance({ address: pool?.shareAddress });
   const shareBalance = useBalance();
 
   const [selectedTab, setSelectedTab] = useState(Selection.AllTransactions);
   const {
-       allData,
-        allDataSize,
-        setAllDataSize,
-        isAllDataLoadingMore,
-        isAllDataReachingEnd,
-        swapData,
-        swapDataSize,
-        setSwapDataSize,
-        isSwapDataLoadingMore,
-        isSwapDataReachingEnd,
-        provisionData,
-        provisionDataSize,
-        setProvisionDataSize,
-        isProvisionDataLoadingMore,
-        isProvisionDataReachingEnd
+    allData,
+    allDataSize,
+    setAllDataSize,
+    isAllDataLoadingMore,
+    isAllDataReachingEnd,
+    swapData,
+    swapDataSize,
+    setSwapDataSize,
+    isSwapDataLoadingMore,
+    isSwapDataReachingEnd,
+    provisionData,
+    provisionDataSize,
+    setProvisionDataSize,
+    isProvisionDataLoadingMore,
+    isProvisionDataReachingEnd,
   } = usePoolEvents(pool?.pool);
 
-
   const getLoadMoreButton = () => {
-    if(selectedTab === Selection.AllTransactions) {
+    if (selectedTab === Selection.AllTransactions) {
       return (
         <Button
-        onClick={() => setAllDataSize(allDataSize + 1)}
-        disabled={isAllDataLoadingMore || isAllDataReachingEnd}
-      >
-        {isAllDataLoadingMore
-          ? "Loading..."
-          : isAllDataReachingEnd
-          ? "No more transactions"
-          : "Load more"}
-      </Button>
-      )
+          onClick={() => setAllDataSize(allDataSize + 1)}
+          disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+        >
+          {isAllDataLoadingMore
+            ? "Loading..."
+            : isAllDataReachingEnd
+            ? "No more transactions"
+            : "Load more"}
+        </Button>
+      );
     }
-    if(selectedTab === Selection.Swaps) {
+    if (selectedTab === Selection.Swaps) {
       return (
         <Button
-        onClick={() => setSwapDataSize(swapDataSize + 1)}
-        disabled={isSwapDataLoadingMore || isSwapDataReachingEnd}
-      >
-        {isSwapDataLoadingMore
-          ? "Loading..."
-          : isSwapDataReachingEnd
-          ? "No more transactions"
-          : "Load more"}
-      </Button>
-      )
-
-
+          onClick={() => setSwapDataSize(swapDataSize + 1)}
+          disabled={isSwapDataLoadingMore || isSwapDataReachingEnd}
+        >
+          {isSwapDataLoadingMore
+            ? "Loading..."
+            : isSwapDataReachingEnd
+            ? "No more transactions"
+            : "Load more"}
+        </Button>
+      );
     }
-    if(selectedTab === Selection.AddsWithdrawals) {
+    if (selectedTab === Selection.AddsWithdrawals) {
       return (
         <Button
-        onClick={() => setProvisionDataSize(provisionDataSize + 1)}
-        disabled={isProvisionDataLoadingMore || isProvisionDataReachingEnd}
-      >
-        {isProvisionDataLoadingMore
-          ? "Loading..."
-          : isProvisionDataReachingEnd
-          ? "No more transactions"
-          : "Load more"}
-      </Button>
-      )
+          onClick={() => setProvisionDataSize(provisionDataSize + 1)}
+          disabled={isProvisionDataLoadingMore || isProvisionDataReachingEnd}
+        >
+          {isProvisionDataLoadingMore
+            ? "Loading..."
+            : isProvisionDataReachingEnd
+            ? "No more transactions"
+            : "Load more"}
+        </Button>
+      );
     }
-  }
+  };
   return (
     <div className="container">
       <div className="mb-4 flex flex-wrap items-center justify-between">
         <div>
-          <p className="text-left text-3xl font-semibold">
-            {pool?.poolName}
-          </p>
-          <div className="mb-2 flex flex-row gap-2 items-center">
-            <p className="text-xs font-medium hover:underline text-muted-foreground flex flex-row gap-2">
-              <Icons.newspaper className="w-4 h-4"/>
+          <p className="text-left text-3xl font-semibold">{pool?.poolName}</p>
+          <div className="mb-2 flex flex-row items-center gap-2">
+            <p className="flex flex-row gap-2 text-xs font-medium text-muted-foreground hover:underline">
+              <Icons.newspaper className="h-4 w-4" />
               See Contract on {blockExplorerName}
             </p>
-            <Badge variant="secondary" className="text-sm" >
+            <Badge variant="secondary" className="text-sm">
               {Number(formatUnits(BigInt(pool.swapFee) ?? "", 18)) * 100}% swap
               fee
             </Badge>
@@ -330,8 +322,7 @@ export default function PoolPageContent({
                 variant={"secondary"}
                 onClick={() => router.push(`/pool/${pool?.pool}/withdraw`)}
               >
-                                <Icons.subtract />
-
+                <Icons.subtract />
                 Withdraw
               </Button>
             </CardContent>
@@ -432,9 +423,14 @@ export default function PoolPageContent({
         </div>
       </div>
       <section>
-        <Tabs defaultValue={Selection.AllTransactions} onValueChange={(value: string) => setSelectedTab(value as Selection)}>
+        <Tabs
+          defaultValue={Selection.AllTransactions}
+          onValueChange={(value: string) => setSelectedTab(value as Selection)}
+        >
           <TabsList>
-            <TabsTrigger value={Selection.AllTransactions}>All transactions</TabsTrigger>
+            <TabsTrigger value={Selection.AllTransactions}>
+              All transactions
+            </TabsTrigger>
             <TabsTrigger value={Selection.Swaps}>Swaps</TabsTrigger>
             <TabsTrigger value={Selection.AddsWithdrawals}>
               Adds &amp; Withdrawals
@@ -455,32 +451,36 @@ export default function PoolPageContent({
                 <TableBody>
                   {allData?.length ? (
                     allData?.map((event: SwapData | any | undefined) => {
-                      if(!event) return null
+                      if (!event) return null;
                       return (
                         <TableRow
-                        key={event?.metadata?.txHash}
-                        onClick={() =>
-                          router.push(
-                            `${blockExplorerUrl}/tx/${event?.metadata?.txHash ?? ''}`,
-                          )
-                        }
-                      >
-                        <TableCell>{getAction(event)}</TableCell>
-                        <TableCell>
-                          {formatUsd(getValue(pool,event, prices) ?? "")}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {getTokenDisplay(event, pool)}
-                        </TableCell>
-                        <TableCell>{truncateHash(event?.sender ?? '')}</TableCell>
-                        <TableCell
-                          className="text-right"
-                          suppressHydrationWarning
+                          key={event?.metadata?.txHash}
+                          onClick={() =>
+                            router.push(
+                              `${blockExplorerUrl}/tx/${
+                                event?.metadata?.txHash ?? ""
+                              }`,
+                            )
+                          }
                         >
-                          {formatTimeAgo(event.metadata?.blockTime ?? 0)}
-                        </TableCell>
-                      </TableRow>
-                      )
+                          <TableCell>{getAction(event)}</TableCell>
+                          <TableCell>
+                            {formatUsd(getValue(pool, event, prices) ?? "")}
+                          </TableCell>
+                          <TableCell className="font-medium">
+                            {getTokenDisplay(event, pool)}
+                          </TableCell>
+                          <TableCell>
+                            {truncateHash(event?.sender ?? "")}
+                          </TableCell>
+                          <TableCell
+                            className="text-right"
+                            suppressHydrationWarning
+                          >
+                            {formatTimeAgo(event.metadata?.blockTime ?? 0)}
+                          </TableCell>
+                        </TableRow>
+                      );
                     })
                   ) : (
                     <TableRow>
@@ -506,32 +506,36 @@ export default function PoolPageContent({
                 <TableBody>
                   {swapData?.length ? (
                     swapData.map((event: SwapData | any | undefined) => {
-                      if(!event) return null
+                      if (!event) return null;
                       return (
                         <TableRow
-                        key={event?.metadata?.txHash}
-                        onClick={() =>
-                          router.push(
-                            `${blockExplorerUrl}/tx/${event?.metadata?.txHash ?? ''}`,
-                          )
-                        }
-                      >
-                        <TableCell>Swap</TableCell>
-                        <TableCell>
-                          {formatUsd(getValue(pool,event, prices) ?? "")}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {getTokenDisplay(event, pool)}
-                        </TableCell>
-                        <TableCell>{truncateHash(event?.sender ?? '')}</TableCell>
-                        <TableCell
-                          className="text-right"
-                          suppressHydrationWarning
+                          key={event?.metadata?.txHash}
+                          onClick={() =>
+                            router.push(
+                              `${blockExplorerUrl}/tx/${
+                                event?.metadata?.txHash ?? ""
+                              }`,
+                            )
+                          }
                         >
-                          {formatTimeAgo(event?.metadata?.blockTime ?? 0)}
-                        </TableCell>
-                      </TableRow>
-                      )
+                          <TableCell>Swap</TableCell>
+                          <TableCell>
+                            {formatUsd(getValue(pool, event, prices) ?? "")}
+                          </TableCell>
+                          <TableCell className="font-medium">
+                            {getTokenDisplay(event, pool)}
+                          </TableCell>
+                          <TableCell>
+                            {truncateHash(event?.sender ?? "")}
+                          </TableCell>
+                          <TableCell
+                            className="text-right"
+                            suppressHydrationWarning
+                          >
+                            {formatTimeAgo(event?.metadata?.blockTime ?? 0)}
+                          </TableCell>
+                        </TableRow>
+                      );
                     })
                   ) : (
                     <TableRow>
@@ -556,33 +560,37 @@ export default function PoolPageContent({
                 </TableHeader>
                 <TableBody>
                   {provisionData?.length ? (
-                    provisionData.map((event: SwapData | any |undefined) => {
-                      if(!event) return null
+                    provisionData.map((event: SwapData | any | undefined) => {
+                      if (!event) return null;
                       return (
                         <TableRow
-                        key={event?.metadata?.txHash}
-                        onClick={() =>
-                          router.push(
-                            `${blockExplorerUrl}/tx/${event?.metadata?.txHash ?? ''}`,
-                          )
-                        }
-                      >
-                        <TableCell>{getAction(event)}</TableCell>
-                        <TableCell>
-                          {formatUsd(getValue(pool, event, prices) ?? "")}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {getTokenDisplay(event, pool)}
-                        </TableCell>
-                        <TableCell>{truncateHash(event?.sender ?? '')}</TableCell>
-                        <TableCell
-                          className="text-right"
-                          suppressHydrationWarning
+                          key={event?.metadata?.txHash}
+                          onClick={() =>
+                            router.push(
+                              `${blockExplorerUrl}/tx/${
+                                event?.metadata?.txHash ?? ""
+                              }`,
+                            )
+                          }
                         >
-                          {formatTimeAgo(event?.metadata?.blockTime ?? 0)}
-                        </TableCell>
-                      </TableRow>
-                      )
+                          <TableCell>{getAction(event)}</TableCell>
+                          <TableCell>
+                            {formatUsd(getValue(pool, event, prices) ?? "")}
+                          </TableCell>
+                          <TableCell className="font-medium">
+                            {getTokenDisplay(event, pool)}
+                          </TableCell>
+                          <TableCell>
+                            {truncateHash(event?.sender ?? "")}
+                          </TableCell>
+                          <TableCell
+                            className="text-right"
+                            suppressHydrationWarning
+                          >
+                            {formatTimeAgo(event?.metadata?.blockTime ?? 0)}
+                          </TableCell>
+                        </TableRow>
+                      );
                     })
                   ) : (
                     <TableRow>
@@ -595,9 +603,7 @@ export default function PoolPageContent({
               </Table>
             </TabsContent>
           </Card>
-          <div className="flex justify-center mt-4">
-          {getLoadMoreButton()}
-          </div>
+          <div className="mt-4 flex justify-center">{getLoadMoreButton()}</div>
         </Tabs>
       </section>
     </div>

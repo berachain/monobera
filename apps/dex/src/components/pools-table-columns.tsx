@@ -14,7 +14,7 @@ export const columns: ColumnDef<Pool>[] = [
       <DataTableColumnHeader column={column} title="Composition" />
     ),
     cell: ({ row }) => {
-      if(!row) return null;
+      if (!row) return null;
       const tokens = row.getValue("tokens");
 
       return (

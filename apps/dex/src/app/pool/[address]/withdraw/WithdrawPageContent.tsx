@@ -1,10 +1,7 @@
 "use client";
 
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import {
-  DEX_PRECOMPILE_ABI,
-  useBeraConfig,
-} from "@bera/berajs";
+import { DEX_PRECOMPILE_ABI, useBeraConfig } from "@bera/berajs";
 import {
   InfoBoxList,
   InfoBoxListItem,

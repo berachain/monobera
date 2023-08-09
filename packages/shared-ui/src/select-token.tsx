@@ -32,7 +32,7 @@ export function SelectToken({
   return (
     <div className={cn("my-4 w-fit max-w-[150px]", className)}>
       <Button
-        className="flex h-fit shrink-0 gap-2 rounded-xl p-1 w-full"
+        className="flex h-fit w-full shrink-0 gap-2 rounded-xl p-1"
         variant={"outline"}
         onClick={() => selectable && setOpen(true)}
       >

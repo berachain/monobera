@@ -1,4 +1,4 @@
- import React from "react";
+import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { RouterService, defaultConfig } from "@bera/bera-router";
@@ -10,7 +10,6 @@ import { type MappedTokens } from "./types";
 type Props = {
   params: { address: string };
 };
-
 
 export function generateMetadata({ params }: Props): Metadata {
   const { address } = params;
@@ -41,15 +40,9 @@ export default async function PoolPage({
   }
   const prices = getWBeraPriceDictForPoolTokens(pool ? [pool] : [], router);
 
-  const data: IData = await Promise.all([prices]).then(
-    ([prices]) => ({
-      prices: prices as unknown as MappedTokens,
-    }),
-  );
+  const data: IData = await Promise.all([prices]).then(([prices]) => ({
+    prices: prices as unknown as MappedTokens,
+  }));
 
-  return (
-    <PoolPageContent
-      prices={data.prices}
-      pool={pool}    />
-  );
+  return <PoolPageContent prices={data.prices} pool={pool} />;
 }

@@ -1,10 +1,9 @@
-
 import { cloneDeep } from "lodash";
 import { getAddress } from "viem";
 
 import { type RouterConfig } from "~/config";
 import { WeightedPool } from "~/pools/weighted";
-import { type Token, type Pool } from "../PoolService/types";
+import { type Pool, type Token } from "../PoolService/types";
 import {
   INFINITY,
   PoolTypes,
@@ -413,7 +412,7 @@ export function createPath(
   const poolPairData: PoolPairBase[] = [];
   let id = "";
 
-  console.log("createPath", pools)
+  console.log("createPath", pools);
   for (let i = 0; i < pools.length; i++) {
     tI = tokens[i] ?? "";
     tO = tokens[i + 1] ?? "";

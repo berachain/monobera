@@ -28,11 +28,7 @@ enum VALUES {
   ONE_PERCENT = "1",
   CUSTOM = "custom",
 }
-export function CreatePoolFeeData({
-  error,
-  setSwapFee,
-  onContinue,
-}: Props) {
+export function CreatePoolFeeData({ error, setSwapFee, onContinue }: Props) {
   const [type, setType] = useState(Types.VALUE);
   const [customValue, setCustomValue] = useState("0.3");
   const handleFeeChange = (value: string) => {

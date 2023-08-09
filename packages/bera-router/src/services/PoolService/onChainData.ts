@@ -129,7 +129,7 @@ export class MultiCallPools {
       allowFailure: true,
     });
 
-    console.log("results", results)
+    console.log("results", results);
     results.forEach((result, i) =>
       set(rawObj, this.paths[i] ?? "", result.result),
     );
@@ -139,18 +139,18 @@ export class MultiCallPools {
   }
 
   public formatRecords = () => {
-    console.log("formatting records", this.rawPools)
+    console.log("formatting records", this.rawPools);
     for (const key in this.rawPools) {
-      if(key === '0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0') return;
+      if (key === "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0") return;
       if (Object.prototype.hasOwnProperty.call(this.rawPools, key)) {
         const poolData: PoolData | undefined = this.rawPools[key];
-        console.log("pooldata", poolData)
+        console.log("pooldata", poolData);
 
         if (poolData && poolData.liquidity) {
           const totalWeight = calculateTotalWeight(
             poolData.poolOptions.weights,
           );
-          set(this.rawPools, `${key}.totalWeight`, totalWeight);  
+          set(this.rawPools, `${key}.totalWeight`, totalWeight);
           poolData.liquidity[0].forEach((tokenAddress, i) => {
             const weight = poolData.poolOptions.weights.find(
               (weight) => weight.denom === tokenAddress,

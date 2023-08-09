@@ -164,7 +164,7 @@ export default function AddLiquidityContent({
                     .map((tokenInput: any) => {
                       return (
                         <PreviewToken
-                        key={tokenInput.address}
+                          key={tokenInput.address}
                           token={tokenInput}
                           weight={tokenInput?.weight}
                           value={tokenInput?.amount}
