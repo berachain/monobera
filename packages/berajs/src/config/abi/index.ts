@@ -8,3 +8,4 @@ export * from "./governance";
 export * from "./erc20bgt";
 export * from "./rewards";
 export * from "./honey";
+export * from "./erc20-honey";
