@@ -1,11 +1,5 @@
 import { Tooltip } from "@bera/shared-ui";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@bera/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@bera/ui/form";
 import { Input } from "@bera/ui/input";
 import { type UseFormReturn } from "react-hook-form";
 

@@ -8,7 +8,7 @@ export default function ParameterForm({ form }: { form: UseFormReturn }) {
       <FormField
         control={form.control}
         name="parameters2Change"
-        render={({ field }) => (
+        render={({}) => (
           <FormItem className="inline-flex flex-col justify-start gap-2">
             <div className="text-sm font-semibold leading-tight">
               Parameters to change <Tooltip text="test" />

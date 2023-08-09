@@ -5,7 +5,6 @@ import { BeraChart } from "@bera/ui/bera-chart";
 
 export interface IBoardItem {
   weight: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   detail: any | undefined;
 }
 

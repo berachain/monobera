@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";

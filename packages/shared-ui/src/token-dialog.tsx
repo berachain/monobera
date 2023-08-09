@@ -160,7 +160,7 @@ export function TokenDialog({
               {featuredTokenList?.map((token, i) => {
                 return (
                   <Badge
-                    key={token.address}
+                    key={(token.address, i)}
                     variant={"secondary"}
                     className={cn(
                       "w-fit",
@@ -241,7 +241,7 @@ export function TokenDialog({
                 return (
                   <div
                     className="flex w-full flex-row items-center justify-between rounded-lg p-2 hover:bg-muted"
-                    key={token.address}
+                    key={(token.address, i)}
                   >
                     <div className="flex flex-row items-center gap-2">
                       <TokenIcon token={token} className="h-6 w-6" />
