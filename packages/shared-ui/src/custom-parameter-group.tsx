@@ -11,7 +11,7 @@ export type ParameterChangeLine = {
 export const CustomParameterGroup = ({
   onSubmit,
 }: {
-  onSubmit: (parameterFrom: ParameterChangeLine[]) => void;
+  onSubmit: (parameterForm: ParameterChangeLine[]) => void;
 }) => {
   const newLine = { subspace: "", key: "", value: "" };
   const [parameterForm, setParameterForm] = useState<ParameterChangeLine[]>([
