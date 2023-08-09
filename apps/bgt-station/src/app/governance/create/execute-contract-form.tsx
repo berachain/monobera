@@ -1,6 +1,7 @@
 import { usePollBgtBalance } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { FormField, FormItem, FormMessage } from "@bera/ui/form";
+import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
 import { type UseFormReturn } from "react-hook-form";

@@ -157,7 +157,7 @@ export function TokenDialog({
               placeholder="Search by name, symbol or address"
             />
             <div className="flex flex-wrap gap-2">
-              {featuredTokenList?.map((token) => {
+              {featuredTokenList?.map((token, i) => {
                 return (
                   <Badge
                     key={(token.address, i)}
@@ -237,7 +237,7 @@ export function TokenDialog({
               ({customTokenList?.length ?? 0}) Custom Tokens
             </div>
             <div>
-              {customTokenList?.map((token) => {
+              {customTokenList?.map((token, i) => {
                 return (
                   <div
                     className="flex w-full flex-row items-center justify-between rounded-lg p-2 hover:bg-muted"
