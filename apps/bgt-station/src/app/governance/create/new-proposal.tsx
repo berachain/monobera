@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePollBgtBalance } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
+import { ProposalTypeEnum } from "@bera/shared-ui/src/types";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import {
@@ -27,7 +28,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
-import { ProposalFormSchema, ProposalTypeEnum } from "../types";
+import { ProposalFormSchema } from "../types";
 import CommunityForm from "./community-pool-spend-form";
 import ExecuteForm from "./execute-contract-form";
 import ParameterForm from "./parameter-change-form";

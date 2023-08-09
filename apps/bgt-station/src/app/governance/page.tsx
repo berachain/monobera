@@ -1,12 +1,12 @@
 import React from "react";
-
-import GovernanceByStatus from "./home/governance-by-status";
 import {
   OrderByEnum,
   StatusEnum,
   type OrderByEnum as OrderByEnumT,
   type StatusEnum as StatusEnumT,
-} from "./types";
+} from "@bera/shared-ui/src/types";
+
+import GovernanceByStatus from "./home/governance-by-status";
 
 export default function Governance({
   searchParams,
