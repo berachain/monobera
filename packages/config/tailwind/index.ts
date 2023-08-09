@@ -32,6 +32,9 @@ export default {
       },
     },
     extend: {
+      screens: {
+        honey: "1000px",
+      },
       backgroundImage: {
         glow: "url('/glow.png')",
       },
