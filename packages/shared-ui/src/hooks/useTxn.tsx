@@ -1,6 +1,12 @@
 "use client";
 
-import { ReactElement, useEffect, useMemo, useReducer, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+  type ReactElement,
+} from "react";
 import {
   useAddRecentTransaction,
   useBeraContractWrite,
@@ -18,10 +24,10 @@ import {
 } from "../txn-modals";
 import {
   CLOSE_MODAL,
-  ModalName,
   OPEN_MODAL,
   initialState,
   modalReducer,
+  type ModalName,
 } from "../utils/modalsReducer";
 
 interface IUseTxn {

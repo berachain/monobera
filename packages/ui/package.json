@@ -126,6 +126,10 @@
       "import": "./dist/dropdown-menu.mjs",
       "types": "./dist/dropdown-menu.d.ts"
     },
+    "./form": {
+      "import": "./dist/form.mjs",
+      "types": "./dist/form.d.ts"
+    },
     "./input": {
       "import": "./dist/input.mjs",
       "types": "./dist/input.d.ts"
@@ -165,6 +169,10 @@
     "./tabs": {
       "import": "./dist/tabs.mjs",
       "types": "./dist/tabs.d.ts"
+    },
+    "./text-area": {
+      "import": "./dist/text-area.mjs",
+      "types": "./dist/text-area.d.ts"
     },
     "./toaster": {
       "import": "./dist/toaster.mjs",
@@ -305,6 +313,12 @@
       ],
       "navigation-menu": [
         "dist/navigation-menu.d.ts"
+      ],
+      "text-area": [
+        "dist/text-area.d.ts"
+      ],
+      "form": [
+        "dist/form.d.ts"
       ]
     }
   },

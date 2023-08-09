@@ -77,10 +77,10 @@ export const SuccessToast = ({
 
 export const ErrorToast = ({
   title = "Error",
-  hash = undefined,
+  // hash = undefined,
   onClose,
 }: IToast) => {
-  const { networkConfig } = useBeraConfig();
+  // const { networkConfig } = useBeraConfig();
 
   // HANDLE ERROR MESSAGES
   if (title === "User rejected txn") {
