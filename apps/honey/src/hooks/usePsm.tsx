@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from "react";
 import {
-  useBeraConfig,
   useBeraJs,
   usePollAllowance,
   usePollBalance,
   type Token,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
-import { parseUnits, type Address } from "viem";
+import { parseUnits } from "viem";
 
 import { honey, stgUsd } from "~/config/tokens";
 import { useFees } from "./useFees";
@@ -37,13 +36,13 @@ export const usePsm = () => {
 
   const toBalance = useToBalance();
   console.log(fromBalance);
-  // eslint-disable-next-line
+
   const [payload, setPayload] = useState<any[]>([]);
 
   const { isConnected, account } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
+
   const { useAllowance } = usePollAllowance({
-    contract: networkConfig.precompileAddresses.erc20ModuleAddress as Address,
+    contract: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as string,
     token: selectedFrom,
   });
 
@@ -60,15 +59,17 @@ export const usePsm = () => {
     if (isMint && account) {
       const payload = [
         account,
-        {
-          amount: parseUnits(`${fromAmount}`, 18),
-          denom: "stgusdc",
-        },
+        stgUsd.address,
+        parseUnits(`${fromAmount}`, 18),
       ];
       setPayload(payload);
     }
     if (!isMint && account) {
-      const payload = [account, parseUnits(`${fromAmount}`, 18), "stgusdc"];
+      const payload = [
+        account,
+        parseUnits(`${fromAmount}`, 18),
+        stgUsd.address,
+      ];
       setPayload(payload);
     }
     // const deadline = block + 10000n;
@@ -80,6 +81,7 @@ export const usePsm = () => {
     //   deadline,
     // ];
   }, [isMint, account, fromAmount, toAmount]);
+  console.log("payload", payload);
   return {
     payload,
     isConnected,

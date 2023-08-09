@@ -40,7 +40,7 @@ export default function NewProposal({
   };
 }) {
   const router = useRouter();
-  const triggerRef = useRef(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState("w-[450px]");
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
