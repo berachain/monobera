@@ -20,18 +20,13 @@ const fontSans = IBM_Plex_Sans({
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="bg-[#1A1A1A]">
+    <html lang="en">
       <body className={cn("font-sans antialiased", fontSans.variable)}>
         <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-          <div className="relative flex min-h-screen flex-col overflow-hidden bg-[url('/honeybg.jpg')] bg-cover bg-center">
-            <div className="flex-1">
-              <Header />
-              <main className=" w-full py-40">{props.children}</main>
-              <Toaster position="bottom-right" />
-            </div>
-          </div>
+          <Header />
+          <main className="w-full">{props.children}</main>
+          <Toaster position="bottom-right" />
           <TailwindIndicator />
-
           <Analytics />
         </BeraConfig>
       </body>

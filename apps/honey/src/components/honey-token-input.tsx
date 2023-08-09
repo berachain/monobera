@@ -8,11 +8,10 @@ import {
   useSelectedAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
+import { SelectToken } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-
-import { SelectToken } from ".";
 
 type Props = {
   selected: Token | undefined;
@@ -29,7 +28,7 @@ type Props = {
   onExceeding?: (isExceeding: boolean) => void;
 };
 
-export function TokenInput({
+export function HoneyTokenInput({
   selected,
   selectedTokens,
   amount,
@@ -72,7 +71,11 @@ export function TokenInput({
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
   }, [exceeding]);
   return (
-    <li className={"flex flex-col flex-wrap px-4"}>
+    <li
+      className={
+        "flex flex-col flex-wrap rounded-xl border-2 border-black bg-white px-4 py-2"
+      }
+    >
       <div className="flex flex-row items-center">
         <SelectToken
           token={selected}
@@ -100,8 +103,8 @@ export function TokenInput({
         </div>
       </div>
       {isConnected && selected && tokenBalance !== 0 ? (
-        <div className="mb-2 h-fit w-full cursor-default">
-          {hideBalance ? null : (
+        hideBalance ? null : (
+          <div className="mb-2 h-fit w-full cursor-default">
             <div className="flex w-full items-center justify-between gap-1">
               <div className="flex flex-row justify-start gap-1">
                 <Icons.wallet className="h-4 w-4 text-muted-foreground" />
@@ -126,8 +129,8 @@ export function TokenInput({
                 )}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )
       ) : null}
     </li>
   );
