@@ -23,7 +23,7 @@ export default function Governance({
   ) {
     proposalStatus = searchParams.proposalStatus;
   } else {
-    proposalStatus = StatusEnum.Voting;
+    proposalStatus = StatusEnum.ACTIVE;
   }
 
   let orderBy;
