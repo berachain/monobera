@@ -1,25 +1,20 @@
 import React from "react";
 
-import { ListProposals } from "~/app/governance/components/list-proposals";
-import { StatusEnum } from "~/app/governance/types";
-import { Test } from "./components/test";
+import { type OrderByEnum, type StatusEnum } from "~/app/governance/types";
+import GovernanceByStatus from "./home/governance-by-status";
 
-export default function GovernanceByStatus({
+export default function Governance({
   searchParams,
 }: {
   searchParams: {
-    inputCurrency: string;
-    outputCurrency: string;
+    proposalStatus: StatusEnum;
+    orderBy: OrderByEnum;
   };
 }) {
-  const params = searchParams;
-
   return (
-    <div className="container">
-      {params.inputCurrency} {params.outputCurrency}
-      <ListProposals status={StatusEnum.Voting} />
-      <ListProposals status={StatusEnum.Pending} />
-      <Test />
-    </div>
+    <GovernanceByStatus
+      proposalStatus={searchParams.proposalStatus}
+      orderBy={searchParams.orderBy}
+    />
   );
 }

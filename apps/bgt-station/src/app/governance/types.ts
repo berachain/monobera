@@ -8,6 +8,14 @@ export enum StatusEnum {
   Rejected = "rejected",
 }
 
+export enum OrderByEnum {
+  MOST_RECENT = "most-recent",
+  OLDEST = "oldest",
+  NEWEST = "newest",
+  HIGHEST_PARTICIPATION = "highest-participation",
+  LOWEST_PARTICIPATION = "lowest-participation",
+}
+
 export enum ProposalTypeEnum {
   COMMUNITY_POOL_SPEND = "community-pool-spend",
   PARAMETER_CHANGE = "parameter-change",
