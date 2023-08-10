@@ -1,3 +1,5 @@
+"use client";
+
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
@@ -20,10 +22,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en" className="bg-background">
       <body
-        className={cn(
-          "min-w-screen min-h-screen font-sans antialiased",
-          fontSans.variable,
-        )}
+        className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
         <Providers>
           <div className="relative flex min-h-screen flex-col">

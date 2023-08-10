@@ -183,7 +183,6 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
   ): bigint {
     if (!poolPairData) return 0n;
     if (swapType === SwapTypes.SwapExactIn) {
-
       return parseUnits(
         `${
           Number(formatUnits(poolPairData.balanceIn, poolPairData.decimalsIn)) *
@@ -192,7 +191,6 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
         18,
       );
     } else {
-
       return parseUnits(
         `${
           Number(

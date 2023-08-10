@@ -7,3 +7,5 @@ export * from "./usePollRemoveLiquidityExactAmountOut";
 export * from "./usePollPoolTokens";
 export * from "./usePollPreviewSharesForSingleSidedLiquidityRequest";
 export * from "./usePollPreviewSwapExact";
+export * from "./usePollPreviewRemoveLiquidityOneSideOut";
+export * from "./usePollPreviewRemoveLiquidityExactAmountOut";

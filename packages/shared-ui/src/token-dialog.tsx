@@ -306,7 +306,7 @@ const TokenDialogRow = ({
       <Button
         variant="ghost"
         className={cn(
-          "flex h-auto w-full items-center justify-start gap-2 p-4 text-left shadow ",
+          "flex h-auto w-full items-center justify-start gap-2 p-4 text-left shadow-none ",
           isTokenSelected && "cursor-default opacity-50",
         )}
         onClick={() => {

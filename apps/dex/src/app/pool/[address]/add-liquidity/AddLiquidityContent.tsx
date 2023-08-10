@@ -155,7 +155,7 @@ export default function AddLiquidityContent({
                 triggerText={"Preview"}
                 setOpen={setPreviewOpen}
               >
-                <TokenList className="bg-border">
+                <TokenList className="bg-muted">
                   {tokenInputs
                     .filter(
                       (tokenInput: { amount: number }) =>
@@ -251,7 +251,7 @@ export default function AddLiquidityContent({
                 imgURI={"/graphics/preview-swap-img.png"}
                 triggerText={"Preview"}
               >
-                <TokenList className="bg-border">
+                <TokenList className="bg-muted">
                   <PreviewToken
                     token={selectedSingleToken}
                     value={selectedSingleTokenAmount}

@@ -15,7 +15,6 @@ import { type Address } from "wagmi";
 
 import { erc20DexAddress, erc20ModuleAddress } from "~/config";
 import { SwapKind, useSwap } from "~/hooks/useSwap";
-import { BerachainInfo } from "./berachain-info";
 import { SettingsPopover } from "./settings-popover";
 
 const DynamicPreview = dynamic(() => import("./preview-dialog"), {
@@ -29,6 +28,10 @@ const DynamicPreview = dynamic(() => import("./preview-dialog"), {
 
 const DynamicApproveButton = dynamic(() => import("./approve-token-button"), {
   loading: () => <p>Loading...</p>,
+  ssr: false,
+});
+
+const DynamicBerachainInfo = dynamic(() => import("./berachain-info"), {
   ssr: false,
 });
 
@@ -85,7 +88,7 @@ export function SwapCard({
     inputCurrency,
     outputCurrency,
   });
-  const { isConnected, isWrongNetwork } = useBeraJs();
+  const { isConnected } = useBeraJs();
   const [exceedingBalance, setExceedingBalance] = useState(false);
 
   const [openPreview, setOpenPreview] = useState(false);
@@ -230,14 +233,12 @@ export function SwapCard({
                     token={selectedFrom}
                     spender={erc20ModuleAddress}
                   />
-                ) : isConnected || isWrongNetwork ? (
+                ) : isConnected ? (
                   swapInfo !== undefined ? (
                     <DynamicPreview
                       swapInfo={swapInfo}
                       disabled={
-                        !swapInfo?.formattedReturnAmount ||
-                        exceedingBalance ||
-                        (isWrongNetwork ?? true)
+                        !swapInfo?.formattedReturnAmount || exceedingBalance
                       }
                       priceImpact={priceImpact}
                       exchangeRate={exchangeRate}
@@ -273,7 +274,7 @@ export function SwapCard({
             </div>
           </CardContent>
         </Card>
-        {isMainPage && <BerachainInfo />}
+        {isMainPage && <DynamicBerachainInfo />}
       </div>
     </div>
   );

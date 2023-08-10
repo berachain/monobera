@@ -1,6 +1,7 @@
 import { type Metadata } from "next";
 import { RouterService, defaultConfig } from "@bera/bera-router";
 
+import { getWBeraPriceDictForPoolTokens } from "../../api/getPrice";
 import WithdrawPageContent from "./WithdrawPageContent";
 
 type Props = {
@@ -26,6 +27,10 @@ export default async function Withdraw({
     console.log(`Error fetching pools: ${e}`);
   }
   const pool = router.getPool(params.address);
+  const prices = await getWBeraPriceDictForPoolTokens(
+    pool ? [pool] : [],
+    router,
+  );
 
-  return <WithdrawPageContent pool={pool} prices={{}} />;
+  return <WithdrawPageContent pool={pool} prices={prices} />;
 }

@@ -50,7 +50,7 @@ export default function CreatePoolInitialLiquidityInput({
           step="any"
           min="0"
           placeholder="0.0"
-          className="w-full grow border-0 p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="w-full grow border-0 bg-transparent p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={
             tokenWeight.initialLiquidity > 0 ? tokenWeight.initialLiquidity : ""
           }
