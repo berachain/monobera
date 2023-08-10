@@ -42,40 +42,37 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     useTokenInformation();
   const { read: readOutput, tokenInformation: outputToken } =
     useTokenInformation();
-  const { tokenList, addNewToken } = useTokens();
+  const { tokenDictionary, addNewToken } = useTokens();
 
   // TODO: get honey price
   const { data: gasData } = useFeeData();
 
   useEffect(() => {
     if (inputCurrency) {
-      const token = tokenList?.find((t) => t.address === inputCurrency);
+      const token = tokenDictionary && tokenDictionary[inputCurrency];
+
       if (!token) {
-        void readInput({ address: inputCurrency }).catch(() =>
-          console.error("input currency not a token"),
-        );
+        void readInput({ address: inputCurrency });
       } else {
         setSelectedFrom(token);
       }
     }
     if (outputCurrency) {
-      const token = tokenList?.find((t) => t.address === outputCurrency);
+      const token = tokenDictionary && tokenDictionary[outputCurrency];
       if (!token) {
-        void readOutput({ address: outputCurrency }).catch(() =>
-          console.error("output currency not a token"),
-        );
+        void readOutput({ address: outputCurrency });
       } else {
         setSelectedTo(token);
       }
     }
-  }, []);
+  }, [tokenDictionary]);
 
   useEffect(() => {
-    if (inputToken) {
+    if (inputToken && !selectedFrom) {
       setSelectedFrom(inputToken);
       addNewToken(inputToken);
     }
-    if (outputToken) {
+    if (outputToken && !selectedTo) {
       setSelectedTo(outputToken);
       addNewToken(outputToken);
     }

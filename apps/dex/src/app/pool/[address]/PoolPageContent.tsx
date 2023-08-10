@@ -393,9 +393,11 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   return (
     <div className="container">
       <div className="mb-4 flex w-full flex-wrap items-center justify-between">
-        <div>
-          <p className="text-left text-3xl font-semibold">{pool?.poolName}</p>
-          <div className="mb-2 flex flex-col items-start justify-start gap-2 sm:flex-row">
+        <div className="w-full items-center sm:items-start">
+          <p className="w-full text-center text-3xl font-semibold sm:text-left">
+            {pool?.poolName}
+          </p>
+          <div className="mb-2 flex w-full flex-row items-center justify-center gap-2 sm:items-start sm:justify-start">
             <Badge variant="secondary" className="text-xs font-medium">
               {Number(formatUnits(BigInt(pool.swapFee) ?? "", 18)) * 100}% swap
               fee
@@ -404,7 +406,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               0.42% <Icons.chevronsRight className="h-4 w-4" /> 1.58% BGT
             </Badge>
             <p
-              className="flex flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline"
+              className="xs:hidden flex hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex md:flex lg:flex"
               onClick={() =>
                 window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
               }
@@ -414,6 +416,16 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               <Icons.external className="h-3 w-3" />
             </p>
           </div>
+          <p
+            className="xs:flex flex flex flex-row items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:hidden md:hidden lg:hidden"
+            onClick={() =>
+              window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
+            }
+          >
+            <Icons.newspaper className="h-3 w-3" />
+            See Contract on {blockExplorerName}
+            <Icons.external className="h-3 w-3" />
+          </p>
         </div>
         <div className="flex flex-col gap-5"></div>
       </div>
@@ -597,13 +609,17 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
           <SwapCard
             showBear={false}
             isMainPage={false}
-            className="hidden lg:contents "
+            inputCurrency={pool?.tokens[0]?.address}
+            outputCurrency={pool?.tokens[1]?.address}
+            className="hidden lg:contents"
           />
         </div>
       </div>
       <SwapCard
         showBear={true}
         isMainPage={false}
+        inputCurrency={pool?.tokens[0]?.address}
+        outputCurrency={pool?.tokens[1]?.address}
         className="xs:block block sm:hidden md:hidden lg:hidden"
       />
     </div>
