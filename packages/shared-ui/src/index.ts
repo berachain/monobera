@@ -8,7 +8,8 @@ export { TokenInput } from "./token-input";
 export { ThemeToggle } from "./theme-toggle";
 export { DataTable } from "./data-table";
 export { DataTableColumnHeader } from "./data-table-column-header";
-export { CustomParameterGroup } from "./custom-parameter-group";
+export { SearchInput } from "./search-input";
+export { Spinner } from "./spinner";
+
 export * from "./custom-toasts";
 export * from "./hooks";
-export { Spinner } from "./spinner";

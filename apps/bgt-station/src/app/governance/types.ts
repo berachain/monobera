@@ -2,10 +2,18 @@ import { isAddress } from "viem";
 import * as z from "zod";
 
 export enum StatusEnum {
-  Voting = "voting",
-  Pending = "pending",
-  Passed = "passed",
-  Rejected = "rejected",
+  ACTIVE = "active",
+  IN_QUEUE = "in-queue",
+  PASSED = "passed",
+  REJECTED = "rejected",
+}
+
+export enum OrderByEnum {
+  MOST_RECENT = "most-recent",
+  OLDEST = "oldest",
+  NEWEST = "newest",
+  HIGHEST_PARTICIPATION = "highest-participation",
+  LOWEST_PARTICIPATION = "lowest-participation",
 }
 
 export enum ProposalTypeEnum {
@@ -18,6 +26,13 @@ export type ParameterChangeLine = {
   subspace: string;
   key: string;
   value: string;
+};
+
+export type ProposalVotes = {
+  yes: number;
+  no: number;
+  veto: number;
+  abstain: number;
 };
 
 const parameterChangeLineSchema = z.object({
