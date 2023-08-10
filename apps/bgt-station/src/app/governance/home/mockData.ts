@@ -72,3 +72,6 @@ export const data = [
     timestamp: 1679020800,
   },
 ];
+
+export const description =
+  "This proposal intends to upload the Ojo Oracle Contract for use by Comdex. Comdex and Harbor have agreed to begin using Ojo as an oracle provider. Ojo uses a push-model price oracle contract which broadcasts regular price updates. We plan on being the premiere price oracle for Comdex and the rest of the Cosmos; 60+ assets will be added to these feeds over the course of time, many of which are cosmos-native assets such as liquid staking tokens, stablecoins, and LP tokens. This also includes our Smart Oracle offering, which provides contextual data about these price feeds for DeFi to make safer decisions on how to mitigate risk.";
