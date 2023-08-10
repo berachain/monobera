@@ -1,7 +1,7 @@
 import { type Token } from "@bera/berajs";
 
 export const honey: Token = {
-  address: "0xc70c2fd8f8e3dbbb6f73502c70952f115bb93929",
+  address: "0xa85579e75a7ba99d00cce02441a5e21661b63a98",
   decimals: 18,
   symbol: "HONEY",
   name: "Honey",
