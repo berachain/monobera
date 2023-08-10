@@ -170,19 +170,19 @@ export const getWBeraPriceDictForPoolTokens = async (
         pool.dailyFees = (pool?.dailyVolume ?? 0) * swapFee;
       }
       if (weeklyVolumeArray.length) {
-        pool.weeklyVolume = formatVolume(weeklyVolumeArray, 7);
+        pool.weeklyVolume = formatVolume(weeklyVolumeArray.reverse(), 7);
         pool.weeklyFees = pool.weeklyVolume.map((volume) => volume * swapFee);
         pool.weeklyFeesTotal = weeklyVolumeTotal * swapFee;
         pool.weeklyVolumeTotal = weeklyVolumeTotal;
       }
       if (monthlyVolumeArray.length) {
-        pool.monthlyVolume = formatVolume(monthlyVolumeArray, 30);
+        pool.monthlyVolume = formatVolume(monthlyVolumeArray.reverse(), 30);
         pool.monthlyFees = pool.monthlyVolume.map((volume) => volume * swapFee);
         pool.monthlyFeesTotal = monthlyVolumeTotal * swapFee;
         pool.monthlyVolumeTotal = monthlyVolumeTotal;
       }
       if (quarterlyVolumeArray.length) {
-        pool.quarterlyVolume = formatVolume(quarterlyVolumeArray, 90);
+        pool.quarterlyVolume = formatVolume(quarterlyVolumeArray.reverse(), 90);
         pool.quarterlyFees = pool.quarterlyVolume.map(
           (volume) => volume * swapFee,
         );

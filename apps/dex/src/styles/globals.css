@@ -87,7 +87,7 @@
   }
 
   .container {
-    @apply max-sm:px-4;
+    @apply max-sm:px-2;
   }
 }
 

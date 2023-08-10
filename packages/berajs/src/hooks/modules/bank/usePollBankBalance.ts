@@ -25,7 +25,7 @@ export const usePollBankBalance = (denom: string | undefined) => {
             functionName: method,
             args: [account, denom],
           });
-          return formatUnits(result as bigint, 18);
+          return result;
         } catch (e) {
           console.error(e);
         }
@@ -38,10 +38,16 @@ export const usePollBankBalance = (denom: string | undefined) => {
   );
 
   const useBankBalance = () => {
-    const { data = 0 } = useSWRImmutable(QUERY_KEY);
-    return Number(data).toFixed(4);
+    const { data = 0n } = useSWRImmutable(QUERY_KEY);
+    return data;
+  };
+
+  const useFormattedBankBalance = () => {
+    const { data = 0n } = useSWRImmutable(QUERY_KEY);
+    return Number(formatUnits(data, 18)).toFixed(2);
   };
   return {
+    useFormattedBankBalance,
     useBankBalance,
   };
 };

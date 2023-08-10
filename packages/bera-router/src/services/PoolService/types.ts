@@ -62,6 +62,7 @@ export interface Pool {
   weeklyFees?: number[];
   dailyFees?: number;
   tags?: string[];
+  poolShareDenomHex?: string;
 }
 
 export type PoolRecords = Record<string, PoolRecord>;

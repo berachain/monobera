@@ -32,7 +32,6 @@ export const usePollPreviewBurnShares = (
 
   const method = "getPreviewBurnShares";
   const QUERY_KEY = [poolAddress, shareAddress, amount, method];
-  console.log("QUERY_KEY", QUERY_KEY);
   useSWR(
     QUERY_KEY,
     async () => {

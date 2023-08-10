@@ -121,7 +121,15 @@ export async function GET(request: Request) {
   }
 
   if (!page) {
-    return NextResponse.json(sortedPools);
+    return NextResponse.json(
+      JSON.parse(
+        JSON.stringify(
+          sortedPools,
+          (key, value) =>
+            typeof value === "bigint" ? value.toString() : value, // return everything else unchanged
+        ),
+      ),
+    );
   }
   const pageInt = parseInt(page);
   const perPageInt = perPage ? parseInt(perPage) : DEFAULT_SIZE;
@@ -130,5 +138,12 @@ export async function GET(request: Request) {
     pageInt * perPageInt,
   );
 
-  return NextResponse.json(paginatedPools);
+  return NextResponse.json(
+    JSON.parse(
+      JSON.stringify(
+        paginatedPools,
+        (key, value) => (typeof value === "bigint" ? value.toString() : value), // return everything else unchanged
+      ),
+    ),
+  );
 }

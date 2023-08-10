@@ -14,12 +14,12 @@ import {
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { type Address } from "wagmi";
 
 import { type MappedTokens } from "../types";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
-import { Icons } from "@bera/ui/icons";
 
 interface IWithdrawLiquidityContent {
   pool: Pool | undefined;
@@ -65,7 +65,6 @@ export default function WithdrawLiquidityContent({
         </p>
         <div className="flex w-full flex-row items-center justify-center rounded-lg bg-card p-2 shadow-md">
           {pool?.tokens?.map((token, i) => {
-            // console.log(tokenDictionary[token.address])
             return (
               <TokenIcon
                 token={
@@ -174,9 +173,9 @@ export default function WithdrawLiquidityContent({
                   setAmount={setAmount}
                 />
               </TokenList>
-              <Icons.chevronsDown className="self-center text-secondary-foreground"/>
+              <Icons.chevronsDown className="self-center text-secondary-foreground" />
               <TokenList>
-              <TokenInput
+                <TokenInput
                   selected={exactOutToken}
                   onTokenSelection={setExactOutToken}
                   selectable={true}

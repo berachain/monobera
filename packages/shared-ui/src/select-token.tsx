@@ -46,7 +46,10 @@ export function SelectToken({
             {selectable && <Icons.chevronDown className="h-4 w-4" />}
           </>
         ) : (
-          <p className="flex flex-row items-center whitespace-nowrap px-2 py-1 text-sm font-medium">
+          <p
+            className="flex flex-row items-center whitespace-nowrap px-2 py-1 text-sm font-medium"
+            suppressHydrationWarning
+          >
             {" "}
             {isMd ? "Select a token " : "Select"}
             <Icons.chevronDown className="ml-2 h-4 w-4" />{" "}
