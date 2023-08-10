@@ -12,7 +12,7 @@ import HotPools from "./components/HotPools";
 
 async function getPools() {
   const res = await fetch(
-    `${getAbsoluteUrl()}/pool/api?page=1&perPage=3&hotPools=true`,
+    `${getAbsoluteUrl()}/pool/api?page=1&perPage=3&hotPools=true`,{ next: { revalidate: 3600 } }
   );
 
   if (!res.ok) {
