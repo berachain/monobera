@@ -30,6 +30,7 @@ export function SwapCard() {
     toBalance,
     fee,
     fee2,
+    onSwitch,
   } = usePsm();
 
   console.log("allowance", allowance?.formattedAllowance);
@@ -45,45 +46,55 @@ export function SwapCard() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex flex-col gap-4">
-          <TokenInput
-            selected={selectedFrom}
-            selectedTokens={[selectedFrom, selectedTo]}
-            onTokenSelection={setSelectedFrom}
-            amount={fromAmount ?? 0}
-            balance={fromBalance?.formattedBalance}
-            selectable={false}
-            hidePrice
-            setAmount={(amount) => {
-              setFromAmount(Number(amount));
-              setToAmount(Number(amount) * fee);
-            }}
-          />
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-10 w-10 rounded-full hover:bg-transparent"
-            onClick={() => {
-              setSelectedFrom(selectedTo);
-              setSelectedTo(selectedFrom);
-            }}
+        <div className="border-1 flex flex-col gap-2 border-border">
+          <ul
+            role="list"
+            className="di divide-y divide-border rounded-lg border"
           >
-            <Icons.swap className="h-8 w-8" />
-          </Button>
+            <TokenInput
+              selected={selectedFrom}
+              selectedTokens={[selectedFrom, selectedTo]}
+              onTokenSelection={setSelectedFrom}
+              amount={fromAmount ?? 0}
+              balance={fromBalance?.formattedBalance}
+              selectable={false}
+              hidePrice
+              setAmount={(amount) => {
+                setFromAmount(Number(amount));
+                setToAmount(Number(amount) * fee);
+              }}
+            />
+            <div className="relative">
+              <div
+                className="absolute inset-0 flex w-full items-center justify-center"
+                aria-hidden="true"
+              >
+                <Button
+                  type="button"
+                  variant={"outline"}
+                  onClick={() => {
+                    onSwitch();
+                  }}
+                  className="z-10 inline-flex h-fit w-fit items-center rounded-full bg-background p-1 text-sm font-semibold sm:p-2"
+                >
+                  <Icons.swap className="h-3 w-3 sm:h-6 sm:w-6" />
+                </Button>
+              </div>
+            </div>
 
-          <TokenInput
-            selected={selectedTo}
-            selectedTokens={[selectedFrom, selectedTo]}
-            amount={toAmount}
-            setAmount={(amount) => {
-              setToAmount(Number(amount));
-              setFromAmount(Number(amount) * fee2);
-            }}
-            selectable={false}
-            hidePrice
-            balance={toBalance?.formattedBalance}
-          />
-
+            <TokenInput
+              selected={selectedTo}
+              selectedTokens={[selectedFrom, selectedTo]}
+              amount={toAmount}
+              setAmount={(amount) => {
+                setToAmount(Number(amount));
+                setFromAmount(Number(amount) * fee2);
+              }}
+              selectable={false}
+              hidePrice
+              balance={toBalance?.formattedBalance}
+            />
+          </ul>
           {/* fix to check if allowance > amount */}
           {allowance?.formattedAllowance === "0" ||
           Number(allowance?.formattedAllowance) < fromAmount ? (
