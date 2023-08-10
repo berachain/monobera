@@ -14,6 +14,7 @@ async function getPools() {
   const res = await fetch(
     `${getAbsoluteUrl()}/pool/api?page=1&perPage=3&hotPools=true`,
   );
+
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
     throw new Error("Failed to fetch pools");
@@ -29,7 +30,7 @@ export default async function Homepage() {
     <div className="container">
       <Hero />
       <Data />
-      <HotPools pools={pools} />
+      <HotPools pools={Object.values(pools)} />
       <div className="-mx-2 overflow-hidden">
         <CreateAPool />
       </div>

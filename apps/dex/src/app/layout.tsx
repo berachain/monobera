@@ -20,7 +20,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en" className="bg-background">
       <body
-        className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
+        className={cn(
+          "min-w-screen min-h-screen font-sans antialiased",
+          fontSans.variable,
+        )}
       >
         <Providers>
           <div className="relative flex min-h-screen flex-col">

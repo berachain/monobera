@@ -37,7 +37,7 @@ export const TokenIcon = ({
   }, [read, token, fetch, tokenInformation]);
 
   return (
-    <Avatar className={cn("h-6 w-6 rounded-full", className)}>
+    <Avatar className={cn("h-6 w-6 rounded-full bg-muted", className)}>
       <AvatarImage
         src={fetch ? "" : token?.logoURI}
         className="rounded-full p-1"

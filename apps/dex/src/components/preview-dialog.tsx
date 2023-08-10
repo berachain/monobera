@@ -1,6 +1,5 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { type SwapInfo } from "@bera/bera-router";

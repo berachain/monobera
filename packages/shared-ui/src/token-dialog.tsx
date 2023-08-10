@@ -32,6 +32,7 @@ type Props = {
   onSelectedToken: (token: Token) => void;
   selectedTokens: (Token | undefined)[];
   focusedToken: Token | undefined;
+  customTokens?: Token[];
 };
 
 export function TokenDialog({
@@ -40,6 +41,7 @@ export function TokenDialog({
   setOpen,
   selectedTokens,
   focusedToken = undefined,
+  customTokens = undefined,
 }: Props) {
   const [search, setSearch] = useState("");
   const [addTokenOpen, setAddTokenOpen] = useState(false);
@@ -55,11 +57,13 @@ export function TokenDialog({
   } = useTokens();
   const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<Token[] | undefined>(
-    tokenList,
+    customTokens ? customTokens : tokenList,
   );
 
   useEffect(() => {
-    setFilteredTokens(tokenList);
+    if (!customTokens) {
+      setFilteredTokens(tokenList);
+    }
   }, [tokenList]);
 
   useEffect(() => {
@@ -70,22 +74,24 @@ export function TokenDialog({
   usePollAssetWalletBalance();
 
   useEffect(() => {
-    const filtered = tokenList?.filter(
-      (token) =>
-        token.name.toLowerCase().includes(search.toLowerCase()) ||
-        token.symbol.toLowerCase().includes(search.toLowerCase()) ||
-        token.address.toLowerCase().includes(search.toLowerCase()),
-    );
+    if (!customTokens) {
+      const filtered = tokenList?.filter(
+        (token) =>
+          token.name.toLowerCase().includes(search.toLowerCase()) ||
+          token.symbol.toLowerCase().includes(search.toLowerCase()) ||
+          token.address.toLowerCase().includes(search.toLowerCase()),
+      );
 
-    if (isAddress(search) && filtered?.length === 0) {
-      void read({ address: search }).catch((error) => {
-        setError(error);
-      });
-      setPendingAddition(true);
-      return;
+      if (isAddress(search) && filtered?.length === 0) {
+        void read({ address: search }).catch((error) => {
+          setError(error);
+        });
+        setPendingAddition(true);
+        return;
+      }
+      setPendingAddition(false);
+      setFilteredTokens(filtered);
     }
-    setPendingAddition(false);
-    setFilteredTokens(filtered);
   }, [read, search]); // Include 'filteredTokens' in the dependency array
 
   useEffect(() => {
@@ -95,7 +101,7 @@ export function TokenDialog({
   }, [tokenInformation]);
 
   const onTokenSelect = (token: Token) => {
-    if (!token.default) {
+    if (!token.default && !customTokens) {
       setAddTokenOpen(true);
       return;
     }
@@ -145,37 +151,41 @@ export function TokenDialog({
             <DialogHeader>
               <DialogTitle className="text-lg">Select a token</DialogTitle>
             </DialogHeader>
-            <Input
-              startAdornment={
-                <Icons.search className="h-4 w-4 text-muted-foreground" />
-              }
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setError(undefined);
-              }}
-              placeholder="Search by name, symbol or address"
-            />
-            <div className="flex flex-wrap gap-2">
-              {featuredTokenList?.map((token, i) => {
-                return (
-                  <Badge
-                    key={(token.address, i)}
-                    variant={"secondary"}
-                    className={cn(
-                      "w-fit",
-                      isTokenSelected(token) && "opacity-50",
-                    )}
-                    onClick={() =>
-                      !isTokenSelected(token) && onTokenSelect(token)
-                    }
-                  >
-                    <TokenIcon token={token} className="h-6 w-6" />
-                    {token.symbol}
-                  </Badge>
-                );
-              })}
-            </div>
+            {!customTokens && (
+              <Input
+                startAdornment={
+                  <Icons.search className="h-4 w-4 text-muted-foreground" />
+                }
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setError(undefined);
+                }}
+                placeholder="Search by name, symbol or address"
+              />
+            )}
+            {!customTokens && (
+              <div className="flex flex-wrap gap-2">
+                {featuredTokenList?.map((token) => {
+                  return (
+                    <Badge
+                      key={token.address}
+                      variant={"secondary"}
+                      className={cn(
+                        "w-fit",
+                        isTokenSelected(token) && "opacity-50",
+                      )}
+                      onClick={() =>
+                        !isTokenSelected(token) && onTokenSelect(token)
+                      }
+                    >
+                      <TokenIcon token={token} className="h-6 w-6" />
+                      {token.symbol}
+                    </Badge>
+                  );
+                })}
+              </div>
+            )}
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
             <div className="max-h-[300px] overflow-y-auto ">
               {!error ? (
@@ -214,12 +224,14 @@ export function TokenDialog({
               )}
             </div>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
-            <div
-              className="flex flex-row items-center justify-center gap-1 self-center text-xs text-muted-foreground"
-              onClick={() => setManagingTokens(true)}
-            >
-              <Icons.edit className="h-3 w-3" /> Manage Custom Tokens
-            </div>
+            {!customTokens && (
+              <div
+                className="flex flex-row items-center justify-center gap-1 self-center text-xs text-muted-foreground"
+                onClick={() => setManagingTokens(true)}
+              >
+                <Icons.edit className="h-3 w-3" /> Manage Custom Tokens
+              </div>
+            )}
           </DialogContent>
         )}
         {managingTokens && (
@@ -237,11 +249,11 @@ export function TokenDialog({
               ({customTokenList?.length ?? 0}) Custom Tokens
             </div>
             <div>
-              {customTokenList?.map((token, i) => {
+              {customTokenList?.map((token) => {
                 return (
                   <div
                     className="flex w-full flex-row items-center justify-between rounded-lg p-2 hover:bg-muted"
-                    key={(token.address, i)}
+                    key={token.address}
                   >
                     <div className="flex flex-row items-center gap-2">
                       <TokenIcon token={token} className="h-6 w-6" />

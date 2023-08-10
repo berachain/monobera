@@ -23,7 +23,7 @@ export const BerachainInfo = () => {
   if (hasVisitedBefore || hasVisitedBefore === undefined) return null;
 
   return (
-    <Card className="h-[235px] w-full rounded-xl p-2 md:w-fit">
+    <Card className="h-fit w-full rounded-xl p-2 md:w-fit">
       <div className="flex w-full justify-end">
         <Icons.close
           className="h-4 w-4"

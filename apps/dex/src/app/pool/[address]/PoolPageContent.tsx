@@ -1,12 +1,14 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// TODO fix any
-import React from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { formatUsd, truncateHash, usePollBalance } from "@bera/berajs";
+import {
+  formatUsd,
+  truncateHash,
+  usePollBankBalance,
+  usePollPreviewBurnShares,
+} from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
@@ -22,32 +24,25 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { Balancer } from "react-wrap-balancer";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
-import { blockExplorerUrl } from "~/config";
+import { SwapCard } from "~/components/swap-card";
+import { blockExplorerName, blockExplorerUrl } from "~/config";
 import { getWBeraPriceForToken } from "../api/getPrice";
 import { PoolChart } from "./PoolChart";
 import {
   type AddLiquidityData,
   type MappedTokens,
   type SwapData,
+  type WithdrawLiquidityData,
 } from "./types";
+import { usePoolEvents } from "./usePoolEvents";
 
 interface IPoolPageContent {
-  swaps: SwapData[] | undefined;
-  adds: AddLiquidityData[] | undefined;
-  removes: SwapData[] | undefined;
   prices: MappedTokens;
   pool: Pool;
-}
-
-function sortByBlockTime(data: any[]): any[] {
-  return data.sort(
-    (a, b) => parseInt(a.metadata.blockTime) - parseInt(b.metadata.blockTime),
-  );
 }
 
 function isSwapData(obj: any): obj is SwapData {
@@ -70,6 +65,18 @@ function isAddLiquidity(obj: any): obj is SwapData {
     "pool" in obj &&
     "liquidityIn" in obj &&
     "sharesOut" in obj &&
+    "sender" in obj
+  );
+}
+
+function isRemoveLiquidity(obj: any): obj is SwapData {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "metadata" in obj &&
+    "pool" in obj &&
+    "liquidityOut" in obj &&
+    "sharesIn" in obj &&
     "sender" in obj
   );
 }
@@ -121,6 +128,21 @@ const getTokenDisplay = (event: any, pool: Pool) => {
         })}
       </div>
     );
+  } else if (isRemoveLiquidity(event)) {
+    return (
+      <div className="space-evenly flex flex-row items-center">
+        {pool.tokens.map((token, i) => {
+          return (
+            <div
+              className={cn("flex flex-row", i !== 0 && "ml-[-10px]")}
+              key={i}
+            >
+              <TokenIcon token={token} />
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 };
 
@@ -132,51 +154,46 @@ const getAction = (event: any) => {
   }
   return <p className="text-destructive">Withdraw</p>;
 };
-export default function PoolPageContent({
-  swaps,
-  adds,
-  removes,
-  prices,
-  pool,
-}: IPoolPageContent) {
-  const router = useRouter();
-  const { useBalance } = usePollBalance({ address: pool?.shareAddress });
-  const shareBalance = useBalance();
 
-  const sortedTxns = sortByBlockTime([
-    ...(swaps ?? []),
-    ...(adds ?? []),
-    ...(removes ?? []),
-  ]);
-
-  const sortedSwaps = sortByBlockTime(swaps ?? []);
-
-  const sortedLiquidityProvision = sortByBlockTime([
-    ...(adds ?? []),
-    ...(removes ?? []),
-  ]);
-
-  const getValue = (
-    event: SwapData | AddLiquidityData,
-    prices: MappedTokens,
-  ) => {
-    if (isSwapData(event)) {
-      const decimals = pool.tokens.find(
-        (token) => token.address === event.swapIn.denom,
-      )?.decimals;
-      const formattedAmount = formatUnits(
-        BigInt(event.swapIn.amount),
-        decimals ?? 18,
-      );
-      return getWBeraPriceForToken(
+const getValue = (
+  pool: Pool | undefined,
+  event: SwapData | AddLiquidityData | WithdrawLiquidityData,
+  prices: MappedTokens,
+) => {
+  if (isSwapData(event)) {
+    const decimals = pool?.tokens.find(
+      (token) => token.address === event.swapIn.denom,
+    )?.decimals;
+    const formattedAmount = formatUnits(
+      BigInt(event.swapIn.amount),
+      decimals ?? 18,
+    );
+    return getWBeraPriceForToken(
+      prices,
+      event.swapIn.denom as Address,
+      Number(formattedAmount),
+    );
+  }
+  if (isAddLiquidity(event)) {
+    const value = (event as AddLiquidityData).liquidityIn.reduce((acc, cur) => {
+      const token = pool?.tokens.find((token) => token.address === cur.denom);
+      const tokenValue = getWBeraPriceForToken(
         prices,
-        event.swapIn.denom as Address,
-        Number(formattedAmount),
+        cur.denom as Address,
+        Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)),
       );
-    }
-    if (isAddLiquidity(event)) {
-      const value = event.liquidityIn.reduce((acc, cur) => {
-        const token = pool.tokens.find((token) => token.address === cur.denom);
+      if (!tokenValue) {
+        return acc;
+      }
+      const totalTokenValue = tokenValue;
+      return acc + totalTokenValue;
+    }, 0);
+    return value;
+  }
+  if (isRemoveLiquidity(event)) {
+    const value = (event as WithdrawLiquidityData).liquidityOut.reduce(
+      (acc, cur) => {
+        const token = pool?.tokens.find((token) => token.address === cur.denom);
         const tokenValue = getWBeraPriceForToken(
           prices,
           cur.denom as Address,
@@ -187,106 +204,234 @@ export default function PoolPageContent({
         }
         const totalTokenValue = tokenValue;
         return acc + totalTokenValue;
-      }, 0);
-      return value;
-    }
-    return 0;
-  };
+      },
+      0,
+    );
+    return value;
+  }
+  return 0;
+};
 
+enum Selection {
+  AllTransactions = "allTransactions",
+  Swaps = "swaps",
+  AddsWithdrawals = "addsWithdrawals",
+}
+
+export const EventTable = ({
+  pool,
+  prices,
+  events,
+  isLoading,
+}: {
+  pool: Pool;
+  prices: MappedTokens;
+  events: SwapData[] | AddLiquidityData[] | WithdrawLiquidityData[];
+  isLoading: boolean | undefined;
+}) => {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Action</TableHead>
+          <TableHead>Value</TableHead>
+          <TableHead className="xs:hidden	 hidden	 sm:table-cell	 md:table-cell	 lg:table-cell">
+            Tokens
+          </TableHead>
+          <TableHead className="xs:hidden	 hidden	 sm:table-cell	 md:table-cell	 lg:table-cell">
+            Account
+          </TableHead>
+          <TableHead className="text-right">Time</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {events?.length ? (
+          events?.map((event: SwapData | any | undefined) => {
+            if (!event) return null;
+            return (
+              <TableRow
+                key={event?.metadata?.txHash}
+                onClick={() =>
+                  window.open(
+                    `${blockExplorerUrl}/tx/${event?.metadata?.txHash ?? ""}`,
+                    "_blank",
+                  )
+                }
+              >
+                <TableCell>{getAction(event)}</TableCell>
+                <TableCell>
+                  {formatUsd(getValue(pool, event, prices) ?? "")}
+                </TableCell>
+                <TableCell className="xs:hidden	 hidden	 font-medium	 sm:table-cell	 md:table-cell lg:table-cell">
+                  {getTokenDisplay(event, pool)}
+                </TableCell>
+                <TableCell className="xs:hidden	 hidden	 sm:table-cell	 md:table-cell	 lg:table-cell">
+                  {truncateHash(event?.sender ?? "")}
+                </TableCell>
+                <TableCell
+                  className="overflow-hidden truncate whitespace-nowrap text-right "
+                  suppressHydrationWarning
+                >
+                  {formatTimeAgo(event.metadata?.blockTime ?? 0)}
+                </TableCell>
+              </TableRow>
+            );
+          })
+        ) : (
+          <TableRow>
+            <TableCell colSpan={5} className="h-24 text-center">
+              {isLoading && (events === undefined || events.length === 0) ? (
+                <p>Loading...</p>
+              ) : (
+                <p>No transactions found</p>
+              )}
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  );
+};
+export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
+  const router = useRouter();
+  const { useBankBalance } = usePollBankBalance(pool.shareAddress);
+
+  const shareBalance = useBankBalance();
+  const { usePreviewBurnShares } = usePollPreviewBurnShares(
+    shareBalance,
+    pool?.pool,
+    pool?.poolShareDenomHex,
+  );
+
+  const burnShares: Record<string, bigint> = usePreviewBurnShares();
+
+  const [userTotalValue, setUserTotalValue] = useState<number | undefined>(0);
+
+  useEffect(() => {
+    if (burnShares) {
+      const totalValue = pool?.tokens.reduce((acc, token) => {
+        const formattedAmount = burnShares
+          ? Number(formatUnits(burnShares[token.address] ?? 0n, token.decimals))
+          : 0;
+
+        return acc + formattedAmount * (prices[token.address] ?? 0);
+      }, 0);
+      setUserTotalValue(totalValue ?? 0);
+    }
+  }, [burnShares]);
+
+  const [selectedTab, setSelectedTab] = useState(Selection.AllTransactions);
+  const {
+    allData,
+    allDataSize,
+    setAllDataSize,
+    isAllDataLoadingMore,
+    isAllDataReachingEnd,
+    swapData,
+    swapDataSize,
+    setSwapDataSize,
+    isSwapDataLoadingMore,
+    isSwapDataReachingEnd,
+    provisionData,
+    provisionDataSize,
+    setProvisionDataSize,
+    isProvisionDataLoadingMore,
+    isProvisionDataReachingEnd,
+  } = usePoolEvents(pool?.pool);
+
+  const fees = (Number(pool.formattedSwapFee) / 100) * Number(pool.dailyVolume);
+
+  const swapApr = (fees / Number(pool?.totalValue)) * 365 * 100;
+
+  const getLoadMoreButton = () => {
+    if (selectedTab === Selection.AllTransactions) {
+      return (
+        <Button
+          onClick={() => setAllDataSize(allDataSize + 1)}
+          disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+          variant="outline"
+        >
+          {isAllDataLoadingMore
+            ? "Loading..."
+            : isAllDataReachingEnd
+            ? "No more transactions"
+            : "Load more"}
+        </Button>
+      );
+    }
+    if (selectedTab === Selection.Swaps) {
+      return (
+        <Button
+          onClick={() => setSwapDataSize(swapDataSize + 1)}
+          disabled={isSwapDataLoadingMore || isSwapDataReachingEnd}
+          variant="outline"
+        >
+          {isSwapDataLoadingMore
+            ? "Loading..."
+            : isSwapDataReachingEnd
+            ? "No more transactions"
+            : "Load more"}
+        </Button>
+      );
+    }
+    if (selectedTab === Selection.AddsWithdrawals) {
+      return (
+        <Button
+          onClick={() => setProvisionDataSize(provisionDataSize + 1)}
+          disabled={isProvisionDataLoadingMore || isProvisionDataReachingEnd}
+          variant="outline"
+        >
+          {isProvisionDataLoadingMore
+            ? "Loading..."
+            : isProvisionDataReachingEnd
+            ? "No more transactions"
+            : "Load more"}
+        </Button>
+      );
+    }
+  };
   return (
     <div className="container">
-      <div className="mb-4 flex flex-wrap items-center justify-between">
-        <div>
-          <h1 className="pb-2 text-left text-4xl font-extrabold lg:text-6xl">
+      <div className="mb-4 flex w-full flex-wrap items-center justify-between">
+        <div className="w-full items-center sm:items-start">
+          <p className="w-full text-center text-3xl font-semibold sm:text-left">
             {pool?.poolName}
-          </h1>
-          <div className="mb-2 flex flex-row gap-2">
-            <Badge variant="outline">
-              <Link
-                href={`${blockExplorerUrl}/address/${pool?.pool}`}
-                target="_blank"
-              >
-                <p className="text-left text-sm text-muted-foreground">
-                  {truncateHash(pool?.pool)}
-                  <Icons.external className="ml-1 inline-block h-5 w-5" />
-                </p>
-              </Link>
-            </Badge>
-            <Badge variant="secondary" className="text-sm">
+          </p>
+          <div className="mb-2 flex w-full flex-row items-center justify-center gap-2 sm:items-start sm:justify-start">
+            <Badge variant="secondary" className="text-xs font-medium">
               {Number(formatUnits(BigInt(pool.swapFee) ?? "", 18)) * 100}% swap
               fee
             </Badge>
+            <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
+              0.42% <Icons.chevronsRight className="h-4 w-4" /> 1.58% BGT
+            </Badge>
+            <p
+              className="xs:hidden flex hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex md:flex lg:flex"
+              onClick={() =>
+                window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
+              }
+            >
+              <Icons.newspaper className="h-3 w-3" />
+              See Contract on {blockExplorerName}
+              <Icons.external className="h-3 w-3" />
+            </p>
           </div>
+          <p
+            className="xs:flex flex flex flex-row items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:hidden md:hidden lg:hidden"
+            onClick={() =>
+              window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
+            }
+          >
+            <Icons.newspaper className="h-3 w-3" />
+            See Contract on {blockExplorerName}
+            <Icons.external className="h-3 w-3" />
+          </p>
         </div>
-        <div className="flex flex-col gap-5">
-          <Card>
-            <CardContent className="flex items-center gap-4 p-4">
-              <div>
-                <h3 className="mb-2 font-medium">My pool balance</h3>
-                <p className="text-xl font-medium">
-                  {formatUsd(shareBalance?.formattedBalance ?? "0")} -{" "}
-                  {shareBalance?.formattedBalance}
-                </p>
-              </div>
-
-              <div className="text-right">
-                <Balancer className="text-md"></Balancer>
-              </div>
-              <Button
-                onClick={() => router.push(`/pool/${pool?.pool}/add-liquidity`)}
-              >
-                Deposit
-              </Button>
-              <Button
-                variant={"secondary"}
-                onClick={() => router.push(`/pool/${pool?.pool}/withdraw`)}
-              >
-                Withdraw
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+        <div className="flex flex-col gap-5"></div>
       </div>
 
-      <div className="mb-6 grid gap-5 lg:grid-cols-3">
-        <div className="col-span-1">
-          <Card>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Token</TableHead>
-                  <TableHead>Weight</TableHead>
-                  <TableHead className="text-right">Liquidity</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {pool?.tokens?.map((token) => (
-                  <TableRow
-                    key={token.symbol}
-                    onClick={() =>
-                      router.push(
-                        `${blockExplorerUrl}/address/${token.address}`,
-                      )
-                    }
-                  >
-                    <TableCell className="flex flex-row items-center gap-2 font-medium">
-                      <TokenIcon token={token} />
-                    </TableCell>
-                    <TableCell>{token.normalizedWeight / 100}%</TableCell>
-                    <TableCell className="text-right">
-                      {Number(
-                        formatUnits(token.balance, token.decimals),
-                      ).toFixed(2)}{" "}
-                      {token.name}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
-        </div>
-
-        <div className="flex flex-col gap-5 lg:col-span-2">
+      <div className=" mb-6 flex w-full grid-cols-5 flex-col-reverse gap-5 lg:grid">
+        <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-3">
           <PoolChart
             weeklyVolume={pool.weeklyVolume ?? []}
             weeklyFees={pool.weeklyFees ?? []}
@@ -301,202 +446,182 @@ export default function PoolPageContent({
             monthlyFeesTotal={pool.monthlyFeesTotal ?? 0}
             quarterlyFeesTotal={pool.quarterlyFeesTotal ?? 0}
           />
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
             <Card className="p-2">
-              <CardHeader className="flex flex-row items-center justify-between p-2">
-                <h3>Total liquidity </h3>
+              <CardHeader className="flex flex-row items-center justify-between p-1">
+                <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+                  Total liquidity (TVL)
+                </p>
               </CardHeader>
-              <CardContent className="p-2 text-xl font-semibold">
+              <CardContent className="overflow-hidden truncate whitespace-nowrap p-1 text-lg font-semibold">
                 {formatUsd(pool.totalValue ?? "0")}
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between p-2">
-                <h3>Volume (24h)</h3>
+            <Card className="p-2">
+              <CardHeader className="flex flex-row items-center justify-between p-1">
+                <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+                  Volume (24h)
+                </p>
               </CardHeader>
-              <CardContent className="p-2 text-xl font-semibold">
+              <CardContent className="overflow-hidden truncate whitespace-nowrap p-1 text-lg font-semibold">
                 {formatUsd(pool?.dailyVolume ?? "0")}
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between p-2">
-                <h3>Fees (24h)</h3>
+            <Card className="p-2">
+              <CardHeader className="flex flex-row items-center justify-between p-1">
+                <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+                  Fees (24h)
+                </p>
               </CardHeader>
-              <CardContent className="p-2 text-xl font-semibold">
+              <CardContent className="overflow-hidden truncate whitespace-nowrap p-1 text-lg font-semibold">
                 {pool.dailyVolume && Number(pool.dailyVolume) !== 0
-                  ? formatUsd(
-                      (Number(pool.formattedSwapFee) / 100) *
-                        Number(pool.dailyVolume),
-                    )
+                  ? formatUsd(fees)
                   : "$0"}
               </CardContent>{" "}
             </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between p-2">
-                <h3>APR</h3>
+            <Card className="p-2">
+              <CardHeader className="flex flex-row items-center justify-between p-1">
+                <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+                  APR
+                </p>
               </CardHeader>
-              <CardContent className="p-2">-%</CardContent>
+              <CardContent className="overflow-hidden truncate whitespace-nowrap p-1 text-lg font-semibold">
+                {swapApr.toFixed(2)}%
+              </CardContent>
             </Card>
           </div>
+          <section>
+            <Tabs
+              defaultValue={Selection.AllTransactions}
+              onValueChange={(value: string) =>
+                setSelectedTab(value as Selection)
+              }
+            >
+              <TabsList className="w-full">
+                <TabsTrigger
+                  value={Selection.AllTransactions}
+                  className="w-full text-xs sm:text-sm"
+                >
+                  All transactions
+                </TabsTrigger>
+                <TabsTrigger
+                  value={Selection.Swaps}
+                  className="w-full text-xs sm:text-sm"
+                >
+                  Swaps
+                </TabsTrigger>
+                <TabsTrigger
+                  value={Selection.AddsWithdrawals}
+                  className="w-full text-xs sm:text-sm"
+                >
+                  Adds &amp; Withdraws
+                </TabsTrigger>
+              </TabsList>
+              <Card className="mt-4">
+                <TabsContent value={Selection.AllTransactions} className="mt-0">
+                  <EventTable
+                    pool={pool}
+                    prices={prices}
+                    events={allData}
+                    isLoading={isAllDataLoadingMore}
+                  />
+                </TabsContent>
+                <TabsContent value={Selection.Swaps} className="mt-0">
+                  <EventTable
+                    pool={pool}
+                    prices={prices}
+                    events={swapData}
+                    isLoading={isSwapDataLoadingMore}
+                  />
+                </TabsContent>
+                <TabsContent value={Selection.AddsWithdrawals} className="mt-0">
+                  <EventTable
+                    pool={pool}
+                    prices={prices}
+                    events={provisionData}
+                    isLoading={isProvisionDataLoadingMore}
+                  />
+                </TabsContent>
+              </Card>
+              <div className="mt-4 flex justify-center">
+                {getLoadMoreButton()}
+              </div>
+            </Tabs>
+          </section>
+        </div>
+        <div className="col-span-5 flex w-full w-full flex-col gap-5 lg:col-span-2">
+          <Card>
+            <CardContent className="flex items-center justify-between gap-4 p-4">
+              <div>
+                <h3 className="mb-2 text-xs font-medium text-muted-foreground">
+                  Rewards available
+                </h3>
+                <p className="text-lg font-semibold text-foreground">0 BGT</p>
+              </div>
+
+              <Button variant={"outline"}>Claim Rewards</Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="flex items-center justify-between gap-4 p-4">
+              <div className="w-full">
+                <h3 className="mb-2 text-xs font-medium text-muted-foreground">
+                  My pool balance
+                </h3>
+                <p className="text-lg font-semibold text-foreground">
+                  {formatUsd(userTotalValue ?? 0)}
+                </p>
+              </div>
+
+              <div className="flex w-full flex-row items-center justify-end gap-2">
+                <Button
+                  variant={"outline"}
+                  onClick={() =>
+                    router.push(`/pool/${pool?.pool}/add-liquidity`)
+                  }
+                >
+                  <Icons.add />
+                  <span className="xs:hidden hidden sm:block md:block lg:block">
+                    Add
+                  </span>
+                </Button>
+                <Button
+                  variant={"outline"}
+                  onClick={() => router.push(`/pool/${pool?.pool}/withdraw`)}
+                >
+                  <Icons.subtract />
+                  <span className="xs:hidden hidden sm:block md:block lg:block">
+                    Withdraw
+                  </span>
+                </Button>
+                <Button
+                  className="xs:hidden hidden sm:block md:block lg:hidden"
+                  variant={"outline"}
+                  onClick={() =>
+                    router.push(`?inputCurrency=${pool?.tokens[0]?.address}`)
+                  }
+                >
+                  Swap
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+          <SwapCard
+            showBear={false}
+            isMainPage={false}
+            inputCurrency={pool?.tokens[0]?.address}
+            outputCurrency={pool?.tokens[1]?.address}
+            className="hidden lg:contents"
+          />
         </div>
       </div>
-      <section>
-        <Tabs defaultValue="allTransactions">
-          <TabsList>
-            <TabsTrigger value="allTransactions">All transactions</TabsTrigger>
-            <TabsTrigger value="swaps">Swaps</TabsTrigger>
-            <TabsTrigger value="addsWithdrawals">
-              Adds &amp; Withdrawals
-            </TabsTrigger>
-          </TabsList>
-          <Card className="mt-4">
-            <TabsContent value="allTransactions" className="mt-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Action</TableHead>
-                    <TableHead>Value</TableHead>
-                    <TableHead>Tokens</TableHead>
-                    <TableHead>Account</TableHead>
-                    <TableHead className="text-right">Time</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {sortedTxns.length ? (
-                    sortedTxns.map((event: SwapData | any) => (
-                      <TableRow
-                        key={event.metadata.txHash}
-                        onClick={() =>
-                          router.push(
-                            `${blockExplorerUrl}/tx/${event.metadata.txHash}`,
-                          )
-                        }
-                      >
-                        <TableCell>{getAction(event)}</TableCell>
-                        <TableCell>
-                          {formatUsd(getValue(event, prices) ?? "")}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {getTokenDisplay(event, pool)}
-                        </TableCell>
-                        <TableCell>{truncateHash(event.sender)}</TableCell>
-                        <TableCell
-                          className="text-right"
-                          suppressHydrationWarning
-                        >
-                          {formatTimeAgo(event.metadata.blockTime)}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={5} className="h-24 text-center">
-                        No results.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TabsContent>
-            <TabsContent value="swaps" className="mt-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Action</TableHead>
-                    <TableHead>Value</TableHead>
-                    <TableHead>Tokens</TableHead>
-                    <TableHead>Account</TableHead>
-                    <TableHead className="text-right">Time</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {sortedSwaps?.length ? (
-                    sortedSwaps.map((event: SwapData | any) => (
-                      <TableRow
-                        key={event.metadata.txHash}
-                        onClick={() =>
-                          router.push(
-                            `${blockExplorerUrl}/tx/${event.metadata.txHash}`,
-                          )
-                        }
-                      >
-                        <TableCell>Swap</TableCell>
-                        <TableCell>
-                          {formatUsd(getValue(event, prices) ?? "")}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {getTokenDisplay(event, pool)}
-                        </TableCell>
-                        <TableCell>{truncateHash(event.sender)}</TableCell>
-                        <TableCell
-                          className="text-right"
-                          suppressHydrationWarning
-                        >
-                          {formatTimeAgo(event.metadata.blockTime)}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={5} className="h-24 text-center">
-                        No results.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TabsContent>
-            <TabsContent value="addsWithdrawals" className="mt-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Action</TableHead>
-                    <TableHead>Value</TableHead>
-                    <TableHead>Tokens</TableHead>
-                    <TableHead>Account</TableHead>
-                    <TableHead className="text-right">Time</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {sortedLiquidityProvision?.length ? (
-                    sortedLiquidityProvision.map((event: SwapData | any) => (
-                      <TableRow
-                        key={event.metadata.txHash}
-                        onClick={() =>
-                          router.push(
-                            `${blockExplorerUrl}/tx/${event.metadata.txHash}`,
-                          )
-                        }
-                      >
-                        <TableCell>{getAction(event)}</TableCell>
-                        <TableCell>
-                          {formatUsd(getValue(event, prices) ?? "")}
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {getTokenDisplay(event, pool)}
-                        </TableCell>
-                        <TableCell>{truncateHash(event.sender)}</TableCell>
-                        <TableCell
-                          className="text-right"
-                          suppressHydrationWarning
-                        >
-                          {formatTimeAgo(event.metadata.blockTime)}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={5} className="h-24 text-center">
-                        No results.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TabsContent>
-          </Card>
-        </Tabs>
-      </section>
+      <SwapCard
+        showBear={true}
+        isMainPage={false}
+        inputCurrency={pool?.tokens[0]?.address}
+        outputCurrency={pool?.tokens[1]?.address}
+        className="xs:block block sm:hidden md:hidden lg:hidden"
+      />
     </div>
   );
 }

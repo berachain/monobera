@@ -21,23 +21,29 @@ export function CreatePoolInitialLiquidity({
   onContinue,
 }: Props) {
   return (
-    <Card className="max-w-[500px]">
+    <Card className="w-[350px] sm:w-[480px]">
       <CardHeader>
         <CardTitle className="center flex justify-between">
           Set Initial Liquidity
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        {tokenWeights.map((tokenWeight, index) => {
-          return (
-            <CreatePoolInitialLiquidityInput
-              key={index}
-              tokenWeight={tokenWeight}
-              index={index}
-              onTokenBalanceChange={onTokenBalanceChange}
-            />
-          );
-        })}
+      <CardContent className="flex flex-col gap-4">
+        <ul
+          role="list"
+          className="divide divide-y divide-border rounded-lg border"
+        >
+          {tokenWeights.map((tokenWeight, index) => {
+            return (
+              <CreatePoolInitialLiquidityInput
+                key={index}
+                tokenWeight={tokenWeight}
+                index={index}
+                onTokenBalanceChange={onTokenBalanceChange}
+              />
+            );
+          })}
+        </ul>
+
         {error && (
           <Alert variant="destructive" className="my-4">
             <Icons.warning className="h-4 w-4" />
@@ -45,8 +51,12 @@ export function CreatePoolInitialLiquidity({
             <AlertDescription>{error && error.message}</AlertDescription>
           </Alert>
         )}
-        <Button className="mt-4 w-full" onClick={onContinue}>
-          Preview
+        <Button
+          className="mt-4 w-full"
+          onClick={onContinue}
+          disabled={error !== undefined}
+        >
+          Next
         </Button>
       </CardContent>
     </Card>

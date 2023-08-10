@@ -6,6 +6,7 @@ import Image from "next/image";
 import { RouteNotFound } from "@bera/bera-router";
 import { DEX_PRECOMPILE_ABI, useBeraJs } from "@bera/berajs";
 import { TokenInput, useTxn } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -48,11 +49,15 @@ interface ISwapCard {
   inputCurrency?: Address | undefined;
   outputCurrency?: Address | undefined;
   isMainPage?: boolean;
+  showBear?: boolean;
+  className?: string;
 }
 export function SwapCard({
   inputCurrency,
   outputCurrency,
   isMainPage,
+  showBear = true,
+  className,
 }: ISwapCard) {
   const {
     setSwapKind,
@@ -100,17 +105,19 @@ export function SwapCard({
   });
 
   return (
-    <div className="flex w-fit flex-col items-center">
+    <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
-      <Image
-        src="/graphics/bidness-bera.png"
-        className="mb-[-40px] self-start"
-        alt="bidness"
-        width={150}
-        height={200}
-      />
-      <div className="flex flex-col gap-4 md:flex-row">
-        <Card className="m-auto w-full rounded-xl sm:w-[500px]">
+      {showBear && (
+        <Image
+          src="/graphics/bidness-bera.png"
+          className="mb-[-40px] self-start"
+          alt="bidness"
+          width={150}
+          height={200}
+        />
+      )}
+      <div className="flex w-full flex-col gap-4 md:flex-row">
+        <Card className="w-full w-full rounded-xl ">
           <CardHeader className="pb-3 pt-8">
             <CardTitle className="center flex justify-between">
               Swap <SettingsPopover />

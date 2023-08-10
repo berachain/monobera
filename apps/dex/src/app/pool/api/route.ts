@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // TODO fix any
 import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
@@ -30,7 +29,7 @@ function sortByParameter(
 
 const DEFAULT_SIZE = 1;
 
-export const revalidate = 3600;
+export const revalidate = 1000;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -39,11 +38,23 @@ export async function GET(request: Request) {
     await router.fetchPools();
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
+    return;
   }
   const pools = router.getPools();
-  await getWBeraPriceDictForPoolTokens(pools ?? [], router);
 
-  if (!pools) {
+  const totalSupplyStringPools = pools?.map((pool) => {
+    return {
+      ...pool,
+      totalSupply: pool.totalSupply.toString(),
+    };
+  });
+
+  await getWBeraPriceDictForPoolTokens(
+    (totalSupplyStringPools ?? []) as Pool[],
+    router,
+  );
+
+  if (!totalSupplyStringPools) {
     notFound();
   }
   // pages
@@ -55,7 +66,7 @@ export async function GET(request: Request) {
   const hotPools = searchParams.get("hotPools");
   const newPools = searchParams.get("newPools");
 
-  let taggedPools: any[] = pools;
+  let taggedPools: any[] = totalSupplyStringPools;
 
   if (hasBgtRewards) {
     taggedPools = taggedPools.filter((pool) =>
@@ -75,7 +86,8 @@ export async function GET(request: Request) {
     );
   }
 
-  if (!hasBgtRewards && !hotPools && !newPools) taggedPools = pools;
+  if (!hasBgtRewards && !hotPools && !newPools)
+    taggedPools = totalSupplyStringPools;
 
   // sortables
   const volume = searchParams.get("volume");
@@ -109,7 +121,15 @@ export async function GET(request: Request) {
   }
 
   if (!page) {
-    return NextResponse.json(sortedPools);
+    return NextResponse.json(
+      JSON.parse(
+        JSON.stringify(
+          sortedPools,
+          (key, value) =>
+            typeof value === "bigint" ? value.toString() : value, // return everything else unchanged
+        ),
+      ),
+    );
   }
   const pageInt = parseInt(page);
   const perPageInt = perPage ? parseInt(perPage) : DEFAULT_SIZE;
@@ -118,5 +138,12 @@ export async function GET(request: Request) {
     pageInt * perPageInt,
   );
 
-  return NextResponse.json(paginatedPools);
+  return NextResponse.json(
+    JSON.parse(
+      JSON.stringify(
+        paginatedPools,
+        (key, value) => (typeof value === "bigint" ? value.toString() : value), // return everything else unchanged
+      ),
+    ),
+  );
 }
