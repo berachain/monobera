@@ -8,7 +8,7 @@ import {
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 
-import { StatusEnum, type ProposalVotes } from "../types";
+import { StatusEnum, VoteColorMap, type ProposalVotes } from "../types";
 import { ProgressBarChart } from "./progress-bar-chart";
 
 interface ISelectToken {
@@ -69,14 +69,14 @@ const getTimeText = (proposalStatus: StatusEnum, timestamp: number) => {
 
 const getDataList = (proposalVotes: ProposalVotes) => {
   return [
-    { color: "#059669", width: proposalVotes.yes },
-    { color: "#DC2629", width: proposalVotes.yes + proposalVotes.no },
+    { color: VoteColorMap.yes, width: proposalVotes.yes },
+    { color: VoteColorMap.no, width: proposalVotes.yes + proposalVotes.no },
     {
-      color: "#0284C7",
+      color: VoteColorMap.veto,
       width: proposalVotes.yes + proposalVotes.no + proposalVotes.veto,
     },
     {
-      color: "#78716c",
+      color: VoteColorMap.abstain,
       width:
         proposalVotes.yes +
         proposalVotes.no +
