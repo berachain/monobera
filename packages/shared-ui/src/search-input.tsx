@@ -6,13 +6,14 @@ import { Input } from "@bera/ui/input";
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 const SearchInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, onChange, type, ...props }, ref) => {
     return (
       <Input
         startAdornment={<Icons.search className="h-4 w-4" />}
         type={type}
         className={cn("pl-8 text-foreground", className)}
         ref={ref}
+        onChange={onChange}
         {...props}
       />
     );
