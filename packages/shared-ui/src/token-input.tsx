@@ -94,7 +94,7 @@ export function TokenInput({
             placeholder="0.0"
             disabled={disabled}
             className={cn(
-              "w-full grow border-0 p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-none drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent shadow-none border-0",
+              "ring-offset-none w-full grow border-0 border-0 bg-transparent p-0 text-right text-lg font-semibold shadow-none outline-none ring-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
               exceeding && "text-destructive",
             )}
             value={amount > 0 ? amount : ""}

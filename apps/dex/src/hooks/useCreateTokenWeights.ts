@@ -261,7 +261,6 @@ const useCreateTokenWeights = () => {
     setTokenWeights(updatedTokenWeights);
   };
 
-
   return {
     tokenWeights,
     totalWeight,

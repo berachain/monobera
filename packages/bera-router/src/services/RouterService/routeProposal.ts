@@ -257,21 +257,16 @@ export function getOutputAmountSwap(
       poolPairData.poolType !== PoolTypes.Linear &&
       poolPairData.balanceIn === 0n
     ) {
-
       return 0n;
     } else {
-
       return pool._exactTokenInForTokenOut(poolPairData, amount);
     }
   } else {
     if (poolPairData.balanceOut === 0n) {
-
       return 0n;
     } else if (amount >= poolPairData.balanceOut) {
-
       return INFINITY;
     } else {
-
       return pool._tokenInForExactTokenOut(poolPairData, amount);
     }
   }
