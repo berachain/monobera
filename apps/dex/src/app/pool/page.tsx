@@ -46,7 +46,6 @@ export default async function Pool() {
   // await getWBeraPriceDictForPoolTokens(pools, router);
   const sortedPools = pools?.sort(compareByDailyVolumeDescending);
 
-  console.log(sortedPools);
   return (
     <div className="container m-auto flex w-full flex-col gap-5">
       <PoolPageHeader />

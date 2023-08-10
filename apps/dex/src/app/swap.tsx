@@ -14,6 +14,7 @@ export const SwapContent = ({ inputCurrency, outputCurrency }: ISwap) => {
         inputCurrency={inputCurrency}
         outputCurrency={outputCurrency}
         isMainPage
+        className="mx-auto w-fit"
       />
     </div>
   );
