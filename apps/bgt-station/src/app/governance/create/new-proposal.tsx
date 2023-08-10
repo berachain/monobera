@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { usePollBgtBalance } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
@@ -58,21 +59,23 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   }
 
   return (
-    <div className="mx-auto">
+    <div className="mx-auto  w-full max-w-[500px]">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <Card className="mx-auto flex w-full max-w-[500px] flex-col justify-start gap-8 p-6">
-            <div className="inline-flex flex-col justify-start gap-3">
-              <div className="relative text-lg font-semibold leading-7 text-foreground">
-                New proposal
-                <Icons.close
-                  className="absolute right-0 top-0 h-5 w-5 hover:cursor-pointer"
-                  onClick={() => router.push(`/governance`)}
-                />
-              </div>
-              <div className="flex h-[175px] w-full max-w-[452px] items-center justify-center rounded-xl bg-info-foreground text-white">
-                picture place holder
-              </div>
+          <Image
+            className="max-[600px]:mx-auto"
+            src="/bears/proposal-bear.png"
+            alt="proposal-bear"
+            width={269.75}
+            height={174}
+          />
+          <Card className=" flex flex-col justify-start gap-8 p-6">
+            <div className="relative text-lg font-semibold leading-7 text-foreground">
+              New proposal
+              <Icons.close
+                className="absolute right-0 top-0 h-5 w-5 hover:cursor-pointer"
+                onClick={() => router.push(`/governance`)}
+              />
             </div>
 
             <div className="inline-flex flex-col justify-start gap-2">
