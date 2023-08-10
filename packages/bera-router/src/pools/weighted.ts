@@ -183,7 +183,6 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
   ): bigint {
     if (!poolPairData) return 0n;
     if (swapType === SwapTypes.SwapExactIn) {
-      console.log("ree?IN");
 
       return parseUnits(
         `${
@@ -193,7 +192,6 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
         18,
       );
     } else {
-      console.log("ree?OUT");
 
       return parseUnits(
         `${
@@ -449,7 +447,6 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
 export function universalNormalizedLiquidity(
   derivativeSpotPriceAtZero: bigint,
 ): bigint {
-  console.log("derivativeSpotPriceAtZero", derivativeSpotPriceAtZero);
   const ans = 1 / Number(formatUnits(derivativeSpotPriceAtZero, 18));
   if (ans === undefined || ans < 0) return 0n;
   return parseUnits(`${ans}`, 18);
