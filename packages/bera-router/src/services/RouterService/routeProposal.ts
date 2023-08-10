@@ -3,7 +3,7 @@ import { getAddress } from "viem";
 
 import { type RouterConfig } from "~/config";
 import { WeightedPool } from "~/pools/weighted";
-import { type Pool } from "../PoolService/types";
+import { type Pool, type Token } from "../PoolService/types";
 import {
   INFINITY,
   PoolTypes,
@@ -16,14 +16,6 @@ import {
   type SwapOptions,
   type hopDictionary,
 } from "./types";
-
-export type Token = {
-  address: string;
-  decimals: number;
-  symbol: string;
-  name: string;
-  default: boolean;
-};
 
 export class RouteProposer {
   cache: Record<string, { paths: NewPath[] }> = {};
@@ -103,7 +95,6 @@ export class RouteProposer {
     tokenOut = tokenOut.toLowerCase();
     if (Object.keys(poolsAllDict).length === 0) return [];
 
-    console.log(poolsAllDict);
     const [directPools, hopsIn, hopsOut] = filterPoolsOfInterest(
       poolsAllDict,
       tokenIn,
@@ -261,32 +252,21 @@ export function getOutputAmountSwap(
 ): bigint {
   if (pool === undefined || poolPairData === undefined) return 0n;
   // TODO: check if necessary to check if amount > limitAmount
-  console.log("hh1");
   if (swapType === SwapTypes.SwapExactIn) {
     if (
       poolPairData.poolType !== PoolTypes.Linear &&
       poolPairData.balanceIn === 0n
     ) {
-      console.log("hh2");
-
       return 0n;
     } else {
-      console.log("hh3");
-
       return pool._exactTokenInForTokenOut(poolPairData, amount);
     }
   } else {
     if (poolPairData.balanceOut === 0n) {
-      console.log("hh4");
-
       return 0n;
     } else if (amount >= poolPairData.balanceOut) {
-      console.log("hh5");
-
       return INFINITY;
     } else {
-      console.log("hh6");
-
       return pool._tokenInForExactTokenOut(poolPairData, amount);
     }
   }

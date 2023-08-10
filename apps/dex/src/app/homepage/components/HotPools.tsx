@@ -17,13 +17,13 @@ export default function HotPools({ pools }: { pools: Pool[] }) {
         </h3>
       </div>
       <div className="m-auto grid max-w-[1000px] grid-cols-1 gap-6 lg:grid-cols-3">
-        {pools.map((pool) => (
+        {pools?.map((pool) => (
           <div key={pool.pool} className="mt-12 rounded-xl border px-6 py-8">
             <Badge>Hot Pools</Badge>
             <div className="mt-6">
               <div className="mb-2 text-sm">{pool.poolName}</div>
               <div className="flex flex-row">
-                {pool.tokens.map((token, i) => (
+                {Object.values(pool.tokens).map((token, i) => (
                   <TokenIcon
                     key={token.address}
                     token={token}

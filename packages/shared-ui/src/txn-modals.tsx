@@ -85,7 +85,6 @@ export const SuccessModal = ({
 
 export const ErrorModal = ({
   title = "Error",
-  // hash = undefined,
   message = "",
   onClose,
   open,

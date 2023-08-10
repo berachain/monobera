@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { CreatePool } from "~/components/create-pool/create-pool";
 import { CreatePoolFeeData } from "~/components/create-pool/create-pool-feedata";
 import { CreatePoolInitialLiquidity } from "~/components/create-pool/create-pool-initial-liquidity";
@@ -49,8 +51,15 @@ export default function CreatePageContent() {
   } = useCreateTokenWeights();
 
   return (
-    <div className="mx-auto flex max-w-[500px] flex-col gap-5">
-      <div>
+    <div className="flex max-w-[500px] flex-col items-center justify-center gap-5">
+      <Image
+        src="/graphics/bidness-bera.png"
+        className="mb-[-40px] self-start"
+        alt="bidness"
+        width={150}
+        height={200}
+      />
+      <div className="w-full">
         {step === Steps.SET_TOKEN_WEIGHTS && (
           <CreatePool
             tokenWeights={tokenWeights}

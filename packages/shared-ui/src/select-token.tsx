@@ -1,7 +1,9 @@
 import React from "react";
 import { type Token } from "@bera/berajs";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { useMediaQuery } from "usehooks-ts";
 
 import { TokenDialog, TokenIcon } from "./";
 
@@ -9,37 +11,48 @@ type Props = {
   token: Token | undefined;
   onTokenSelection?: (token: Token) => void;
   selectedTokens?: (Token | undefined)[];
+  customTokenList?: Token[];
   selectable: boolean;
   weight?: number;
+  className?: string;
 };
 
 export function SelectToken({
   token = undefined,
   onTokenSelection = undefined,
   selectedTokens = undefined,
+  customTokenList = undefined,
   selectable,
   weight = undefined,
+  className = "",
 }: Props) {
   const [open, setOpen] = React.useState(false);
+  const isMd = useMediaQuery("(min-width: 768px)");
 
   return (
-    <div className="my-4 w-fit">
+    <div className={cn("my-4 w-fit max-w-[150px]", className)}>
       <Button
-        className="flex h-fit shrink-0 gap-2 rounded-xl p-1 "
+        className="flex h-fit w-full shrink-0 gap-2 rounded-xl p-1"
         variant={"outline"}
         onClick={() => selectable && setOpen(true)}
       >
         {token ? (
           <>
             <TokenIcon token={token} />
-            {token?.symbol}{" "}
+            <span className="w-14 max-w-[100px] overflow-hidden truncate">
+              {token?.symbol}{" "}
+            </span>
             {weight && <span className="text-muted-foreground">{weight}%</span>}
             {selectable && <Icons.chevronDown className="h-4 w-4" />}
           </>
         ) : (
-          <p className="flex flex-row items-center whitespace-nowrap px-2 py-1 text-sm font-medium">
+          <p
+            className="flex flex-row items-center whitespace-nowrap px-2 py-1 text-sm font-medium"
+            suppressHydrationWarning
+          >
             {" "}
-            Select a token <Icons.chevronDown className="ml-2 h-4 w-4" />{" "}
+            {isMd ? "Select a token " : "Select"}
+            <Icons.chevronDown className="ml-2 h-4 w-4" />{" "}
           </p>
         )}
       </Button>
@@ -53,6 +66,7 @@ export function SelectToken({
           setOpen={setOpen}
           selectedTokens={selectedTokens ?? []}
           focusedToken={token}
+          customTokens={customTokenList}
         />
       )}
     </div>

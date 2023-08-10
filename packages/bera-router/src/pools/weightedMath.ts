@@ -19,7 +19,6 @@ export function _calcOutGivenIn(
   fee: bigint,
 ): bigint {
   // is it necessary to check ranges of variables? same for the other functions
-  console.log("CALC IN");
   amountIn = subtractFee(amountIn, fee);
   const exponent = MathSol.divDownFixed(weightIn, weightOut);
   const denominator = MathSol.add(balanceIn, amountIn);
@@ -47,10 +46,7 @@ export function _calcInGivenOut(
 }
 
 function subtractFee(amount: bigint, fee: bigint): bigint {
-  console.log("amount", amount);
-  console.log("fee", fee);
   const feeAmount = MathSol.mulUpFixed(amount, fee);
-  console.log("feeAmount", feeAmount);
   return amount - feeAmount;
 }
 

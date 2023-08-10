@@ -42,7 +42,7 @@ const parameterChangeLineSchema = z.object({
 });
 
 export const BaseFormSchema = z.object({
-  type: z.enum(Object.values(ProposalTypeEnum)),
+  type: z.enum(Object.values(ProposalTypeEnum) as any),
   title: z.string().nonempty("Required"),
   forumLink: z
     .string()

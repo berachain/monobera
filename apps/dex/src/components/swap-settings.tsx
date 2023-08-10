@@ -106,7 +106,7 @@ export default function SwapSettings() {
           endAdornment={
             <p
               className={cn(
-                "mr-2 self-center pl-1 text-xs text-foreground",
+                "ml-2 self-center pl-1 text-xs text-foreground",
                 deadlineType === SELECTION.AUTO && "opacity-50",
               )}
             >

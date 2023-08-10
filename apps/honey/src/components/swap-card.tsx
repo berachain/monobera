@@ -1,13 +1,12 @@
 "use client";
 
 import React from "react";
-import { HONEY_PRECOMPILE_ABI, useBeraConfig } from "@bera/berajs";
 import { ConnectButton, TokenInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { type Address } from "wagmi";
 
+import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { ApproveTokenButton } from "./approve-token-button";
 
@@ -16,7 +15,7 @@ export function SwapCard() {
     payload,
     isConnected,
     setSelectedFrom,
-    // allowance,
+    allowance,
     isLoading,
     write,
     selectedFrom,
@@ -31,9 +30,11 @@ export function SwapCard() {
     toBalance,
     fee,
     fee2,
+    onSwitch,
   } = usePsm();
-  const { networkConfig } = useBeraConfig();
 
+  console.log("allowance", allowance?.formattedAllowance);
+  console.log("payload", payload);
   return (
     <Card className="w-[500px] bg-background/5 backdrop-blur-sm">
       <CardHeader>
@@ -45,50 +46,62 @@ export function SwapCard() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex flex-col gap-4">
-          <TokenInput
-            selected={selectedFrom}
-            selectedTokens={[selectedFrom, selectedTo]}
-            onTokenSelection={setSelectedFrom}
-            amount={fromAmount ?? 0}
-            balance={fromBalance?.formattedBalance}
-            selectable={false}
-            hidePrice
-            setAmount={(amount) => {
-              setFromAmount(Number(amount));
-              setToAmount(Number(amount) * fee);
-            }}
-          />
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-10 w-10 rounded-full hover:bg-transparent"
-            onClick={() => {
-              setSelectedFrom(selectedTo);
-              setSelectedTo(selectedFrom);
-            }}
+        <div className="border-1 flex flex-col gap-2 border-border">
+          <ul
+            role="list"
+            className="di divide-y divide-border rounded-lg border"
           >
-            <Icons.swap className="h-8 w-8" />
-          </Button>
+            <TokenInput
+              selected={selectedFrom}
+              selectedTokens={[selectedFrom, selectedTo]}
+              onTokenSelection={setSelectedFrom}
+              amount={fromAmount ?? 0}
+              balance={fromBalance?.formattedBalance}
+              selectable={false}
+              hidePrice
+              setAmount={(amount) => {
+                setFromAmount(Number(amount));
+                setToAmount(Number(amount) * fee);
+              }}
+            />
+            <div className="relative">
+              <div
+                className="absolute inset-0 flex w-full items-center justify-center"
+                aria-hidden="true"
+              >
+                <Button
+                  type="button"
+                  variant={"outline"}
+                  onClick={() => {
+                    onSwitch();
+                  }}
+                  className="z-10 inline-flex h-fit w-fit items-center rounded-full bg-background p-1 text-sm font-semibold sm:p-2"
+                >
+                  <Icons.swap className="h-3 w-3 sm:h-6 sm:w-6" />
+                </Button>
+              </div>
+            </div>
 
-          <TokenInput
-            selected={selectedTo}
-            selectedTokens={[selectedFrom, selectedTo]}
-            amount={toAmount}
-            setAmount={(amount) => {
-              setToAmount(Number(amount));
-              setFromAmount(Number(amount) * fee2);
-            }}
-            selectable={false}
-            hidePrice
-            balance={toBalance?.formattedBalance}
-          />
-
-          {false ? (
+            <TokenInput
+              selected={selectedTo}
+              selectedTokens={[selectedFrom, selectedTo]}
+              amount={toAmount}
+              setAmount={(amount) => {
+                setToAmount(Number(amount));
+                setFromAmount(Number(amount) * fee2);
+              }}
+              selectable={false}
+              hidePrice
+              balance={toBalance?.formattedBalance}
+            />
+          </ul>
+          {/* fix to check if allowance > amount */}
+          {allowance?.formattedAllowance === "0" ||
+          Number(allowance?.formattedAllowance) < fromAmount ? (
             <ApproveTokenButton
               token={selectedFrom}
               spender={
-                networkConfig.precompileAddresses.erc20ModuleAddress as Address
+                process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`
               }
             />
           ) : isConnected ? (
@@ -97,9 +110,9 @@ export function SwapCard() {
                 disabled={toAmount === 0 || isLoading}
                 onClick={() => {
                   write({
-                    address: networkConfig.precompileAddresses
-                      .honeyAddress as Address,
-                    abi: HONEY_PRECOMPILE_ABI,
+                    address: process.env
+                      .NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
+                    abi: ERC20_HONEY_ABI,
                     functionName: "mint",
                     params: payload,
                   });
@@ -112,9 +125,9 @@ export function SwapCard() {
                 disabled={toAmount === 0 || isLoading}
                 onClick={() => {
                   write({
-                    address: networkConfig.precompileAddresses
-                      .honeyAddress as Address,
-                    abi: HONEY_PRECOMPILE_ABI,
+                    address: process.env
+                      .NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
+                    abi: ERC20_HONEY_ABI,
                     functionName: "redeem",
                     params: payload,
                   });

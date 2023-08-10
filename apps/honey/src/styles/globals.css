@@ -4,27 +4,27 @@
 
 @layer base {
   :root {
-    --background: 0deg 0% 20%;
+    --background: 0deg 0% 100%;
     --background-secondary: 27deg 33% 62%;
-    --foreground: 42deg 100% 51%;
+    --foreground: 24deg 10% 10%;
     --foreground-secondary: 27deg 33% 62%;
     --foreground-tetriary: 0deg 0% 60%;
 
-    --muted: 210deg 40% 96.1%;
+    --muted: 0deg 0% 97%;
     --muted-foreground: 215.4deg 16.3% 46.9%;
 
-    --popover: 0deg 0% 20%;
+    --popover: 0deg 0% 100%;
     --popover-foreground: 222.2deg 47.4% 11.2%;
 
-    --border: 42deg 100% 51%;
+    --border: 0deg 0% 94%;
     --border-secondary: 27deg 32% 76%;
-    --input: 20deg 0% 20%;
+    --input: 0deg 0% 100%;
 
-    --card: 0deg 0% 20%;
+    --card: 0deg 0% 100%;
     --card-foreground: 222.2deg 47.4% 11.2%;
 
-    --primary: 0deg 0% 20%;
-    --primary-foreground: 42deg 100% 51%;
+    --primary: 43deg 94% 52%;
+    --primary-foreground: 0deg 0% 100%;
 
     --secondary: 32deg 52% 90%;
     --secondary-foreground: 27deg 33% 62%;
@@ -37,36 +37,36 @@
     --destructive: 0deg 96% 64%;
     --destructive-foreground: 210deg 40% 98%;
 
-    --ring: 27deg 32% 76%;
+    --ring: 43deg 94% 52%;
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 0deg 0% 20%;
+    --background: 240deg 6% 10%;
     --background-secondary: 27deg 28% 47%;
-    --foreground: 42deg 100% 51%;
+    --foreground: 0deg 0% 98%;
     --foreground-secondary: 27deg 33% 62%;
     --foreground-tetriary: 0deg 0% 60%;
 
-    --muted: 223deg 47% 11%;
+    --muted: 240deg 4% 16%;
     --muted-foreground: 215.4 16.3% 56.9%;
 
     --accent: 216deg 34% 17%;
     --accent-foreground: 210 40% 98%;
 
-    --popover: 0deg 0% 20%;
-    --popover-foreground: 215 20.2% 65.1%;
+    --popover: 240deg 6% 10%;
+    --popover-foreground: 215deg 20.2% 65.1%;
 
-    --border: 42deg 100% 51%;
+    --border: 240deg 4% 16%;
     --border-secondary: 224deg 28% 24%;
-    --input: 20deg 0% 20%;
+    --input: 240deg 6% 10%;
 
-    --card: 20deg 0% 20%;
+    --card: 240deg 6% 10%;
     --card-foreground: 32deg 52% 90%;
 
-    --primary: 0deg 0% 20%;
-    --primary-foreground: 42deg 100% 51%;
+    --primary: 48deg 97% 77%;
+    --primary-foreground: 240deg 6% 10%;
 
     --secondary: 15deg 9% 42%;
     --secondary-foreground: 32deg 52% 90%;
@@ -80,9 +80,7 @@
 
     --radius: 0.5rem;
   }
-}
 
-@layer base {
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;

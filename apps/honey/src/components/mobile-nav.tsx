@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -27,7 +28,13 @@ export function MobileDropdown() {
           variant="ghost"
           className="mr-2 px-0 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
-          <Icons.honeyLogo className="h-10 w-10" />
+          <Image
+            src={"/HONEY.png"}
+            width={100}
+            height={100}
+            alt={"Honey Logo"}
+            className="h-10 w-10"
+          />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen animate-none rounded-none border-none transition-transform">
