@@ -1,12 +1,6 @@
 import { parseUnits, type Address } from "viem";
 
-export type Token = {
-  address: string;
-  decimals: number;
-  symbol: string;
-  name: string;
-  default: boolean;
-};
+import { type Token } from "../PoolService/types";
 
 export enum SwapTypes {
   SwapExactIn,

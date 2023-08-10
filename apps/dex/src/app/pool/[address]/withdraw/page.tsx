@@ -27,5 +27,5 @@ export default async function Withdraw({
   }
   const pool = router.getPool(params.address);
 
-  return <WithdrawPageContent pool={pool} />;
+  return <WithdrawPageContent pool={pool} prices={{}} />;
 }

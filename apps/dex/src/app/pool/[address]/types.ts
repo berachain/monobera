@@ -39,3 +39,22 @@ export interface AddLiquidityData {
   };
   sender: string;
 }
+
+export interface WithdrawLiquidityData {
+  metadata: {
+    blockNum: string;
+    txHash: string;
+    blockHash: string;
+    blockTime: string;
+  };
+  pool: string;
+  liquidityOut: {
+    denom: string;
+    amount: string;
+  }[];
+  sharesIn: {
+    denom: string;
+    amount: string;
+  };
+  sender: string;
+}

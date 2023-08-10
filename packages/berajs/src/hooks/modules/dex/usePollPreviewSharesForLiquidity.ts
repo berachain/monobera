@@ -9,7 +9,7 @@ import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 
 export const usePollPreviewSharesForLiquidity = (
-  poolAddress: `0x${string}`,
+  poolAddress: `0x${string}` | undefined,
   assets: Token[],
   amounts: number[],
 ) => {
@@ -25,6 +25,8 @@ export const usePollPreviewSharesForLiquidity = (
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!poolAddress) return;
+
       const result = await publicClient.readContract({
         address: networkConfig.precompileAddresses.erc20DexAddress as Address,
         abi: DEX_PRECOMPILE_ABI,

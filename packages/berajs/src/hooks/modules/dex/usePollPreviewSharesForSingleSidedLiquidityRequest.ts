@@ -8,34 +8,41 @@ import { DEX_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 
+const EMPTY_INFO = [[""], [0n]];
 export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
-  poolAddress: `0x${string}`,
-  asset: Token,
+  poolAddress: `0x${string}` | undefined,
+  asset: Token | undefined,
   amount: number,
 ) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
   const method = "getPreviewSharesForSingleSidedLiquidityRequest";
-  const QUERY_KEY = [poolAddress, asset.address, amount, method];
+  const QUERY_KEY = [poolAddress, asset?.address, amount, method];
   useSWR(
     QUERY_KEY,
     async () => {
-      const result = await publicClient.readContract({
-        address: networkConfig.precompileAddresses.erc20DexAddress as Address,
-        abi: DEX_PRECOMPILE_ABI,
-        functionName: method,
-        args: [
-          poolAddress,
-          asset.address,
-          parseUnits(`${amount}`, asset.decimals),
-        ],
-      });
+      if (!poolAddress || !asset) return EMPTY_INFO;
+      const result = await publicClient
+        .readContract({
+          address: networkConfig.precompileAddresses.erc20DexAddress as Address,
+          abi: DEX_PRECOMPILE_ABI,
+          functionName: method,
+          args: [
+            poolAddress,
+            asset.address,
+            parseUnits(`${amount}`, asset.decimals),
+          ],
+        })
+        .catch(() => {
+          return EMPTY_INFO;
+        });
 
-      return result;
+      return result ?? EMPTY_INFO;
     },
     {
       refreshInterval: POLLING.FAST,
+      fallbackData: EMPTY_INFO,
     },
   );
 
