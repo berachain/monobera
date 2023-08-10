@@ -124,3 +124,10 @@ export const ProposalFormSchema = z.union([
   ParameterFormSchema,
   ExecuteFormSchema,
 ]);
+
+export const VoteColorMap = {
+  yes: "#059669",
+  no: "#DC2629",
+  veto: "#0284C7",
+  abstain: "#78716c",
+};
