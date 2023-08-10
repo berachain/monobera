@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Swap() {
   return (
-    <div className="flex w-full items-center justify-center">
+    <div className="flex w-full items-center justify-center pt-24">
       <SwapCard />
     </div>
   );

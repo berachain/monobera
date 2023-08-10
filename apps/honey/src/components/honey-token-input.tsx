@@ -8,41 +8,36 @@ import {
   useSelectedAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
+import { SelectToken } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-
-import { SelectToken } from ".";
 
 type Props = {
   selected: Token | undefined;
   selectedTokens?: (Token | undefined)[];
   amount: number;
   balance?: number;
-  price?: number;
   hideBalance?: boolean;
   hidePrice?: boolean;
   selectable?: boolean;
   weight?: number;
   disabled?: boolean;
-  customTokenList?: Token[];
   onTokenSelection?: (token: Token) => void;
   setAmount?: (amount: number) => void;
   onExceeding?: (isExceeding: boolean) => void;
 };
 
-export function TokenInput({
+export function HoneyTokenInput({
   selected,
   selectedTokens,
   amount,
-  price = 1,
   balance = undefined,
   hideBalance = false,
   hidePrice = false,
   selectable = true,
   weight = undefined,
   disabled = false,
-  customTokenList = undefined,
   onTokenSelection = undefined,
   setAmount = undefined,
   onExceeding = undefined,
@@ -76,7 +71,11 @@ export function TokenInput({
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
   }, [exceeding]);
   return (
-    <li className={"flex flex-col flex-wrap px-4"}>
+    <li
+      className={
+        "flex flex-col flex-wrap rounded-xl border-2 border-black bg-white px-4 py-2"
+      }
+    >
       <div className="flex flex-row items-center">
         <SelectToken
           token={selected}
@@ -84,7 +83,6 @@ export function TokenInput({
           selectedTokens={selectedTokens}
           selectable={selectable}
           weight={weight}
-          customTokenList={customTokenList}
         />
         <div className="flex w-full flex-col pl-2 sm:pl-0">
           <Input
@@ -94,7 +92,7 @@ export function TokenInput({
             placeholder="0.0"
             disabled={disabled}
             className={cn(
-              "w-full grow border-0 p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-none drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent shadow-none border-0",
+              "w-full grow border-0 p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
               exceeding && "text-destructive",
             )}
             value={amount > 0 ? amount : ""}
@@ -105,8 +103,8 @@ export function TokenInput({
         </div>
       </div>
       {isConnected && selected && tokenBalance !== 0 ? (
-        <div className="mb-2 h-fit w-full cursor-default">
-          {hideBalance ? null : (
+        hideBalance ? null : (
+          <div className="mb-2 h-fit w-full cursor-default">
             <div className="flex w-full items-center justify-between gap-1">
               <div className="flex flex-row justify-start gap-1">
                 <Icons.wallet className="h-4 w-4 text-muted-foreground" />
@@ -125,13 +123,14 @@ export function TokenInput({
               <div className="flex flex-row gap-1">
                 {!hidePrice && (
                   <p className="self-center p-0 text-xs text-muted-foreground">
-                    {amount !== 0 && formatUsd((amount * price).toFixed(2))}
+                    {/* TODO: change to actual values */}
+                    {amount !== 0 && formatUsd((amount * 1).toFixed(2))}
                   </p>
                 )}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )
       ) : null}
     </li>
   );

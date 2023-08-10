@@ -94,6 +94,7 @@ export const Icons = {
   ellipsis: MoreVertical,
   expand: Expand,
   add: Plus,
+  minus: Minus,
   warning: AlertTriangle,
   user: User,
   arrowRight: ArrowRight,
@@ -128,6 +129,7 @@ export const Icons = {
   pluseCircle: PlusCircle,
   candleStick: CandlestickChart,
   medal: Medal,
+  plusCircle: PlusCircle,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
@@ -199,7 +201,6 @@ export const Icons = {
       </defs>
     </svg>
   ),
-
   metamask: (props: LucideProps) => (
     <svg viewBox="0 0 40 40" {...props}>
       <path

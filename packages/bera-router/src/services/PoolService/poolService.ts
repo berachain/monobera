@@ -25,13 +25,11 @@ export class PoolService {
   public async fetchPools() {
     try {
       const responsePromise = fetch(
-        `${this.config.subgraphUrl}/events/dex/pool_created`,
-        { cache: "no-store" },
+        `${this.config.subgraphUrl}/events/dex/pool_created`
       );
 
       const tokenListPromise = fetch(
-        process.env.NEXT_PUBLIC_TOKEN_LIST as string,
-        { cache: "no-store" },
+        process.env.NEXT_PUBLIC_TOKEN_LIST as string
       );
       const [response, tokenListResponse] = await Promise.all([
         responsePromise,
@@ -60,8 +58,7 @@ export class PoolService {
   public async fetchPaginatedPools(page: number, perPage: number) {
     try {
       const response = await fetch(
-        `${this.config.subgraphUrl}/events/dex/pool_created?page=${page}&per_page=${perPage}`,
-        { cache: "no-store" },
+        `${this.config.subgraphUrl}/events/dex/pool_created?page=${page}&per_page=${perPage}`
       );
       const temp = await response.json();
 

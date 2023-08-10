@@ -11,23 +11,23 @@ export interface CustomInputProps extends InputProps {
 const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
   ({ className, startAdornment, endAdornment, type, ...props }, ref) => {
     return (
-      <div className="relative rounded-md">
+      <div className="relative rounded-xl">
         {startAdornment && (
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 disabled:text-muted-foreground">
             {startAdornment}
           </div>
         )}
         <input
           type={type}
           className={cn(
-            "flex h-10 w-full rounded-md border border-border bg-input py-2 pl-10 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-foreground disabled:cursor-not-allowed disabled:opacity-50",
+            "focus:border-1 flex h-10 w-full rounded-xl border border-border bg-muted px-3 py-2 text-sm text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-foreground focus:outline-none disabled:cursor-not-allowed disabled:text-muted-foreground",
             className,
           )}
           ref={ref}
           {...props}
         />
         {endAdornment && (
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pl-3">
+          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center pl-3 text-muted-foreground disabled:text-muted-foreground">
             {endAdornment}
           </div>
         )}

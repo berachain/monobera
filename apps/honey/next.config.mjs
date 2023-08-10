@@ -2,6 +2,7 @@ import "./src/env.mjs";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  crossOrigin: "anonymous",
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
   transpilePackages: ["@bera/ui", "@bera/berajs"],

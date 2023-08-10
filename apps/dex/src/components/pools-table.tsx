@@ -16,7 +16,6 @@ const STEP = 1;
 export default function PoolsTable({ pools }: { pools: Pool[] }) {
   const nextRouter = useNextRouter();
   const { router } = useRouter();
-  console.log("POOLS", pools);
   const { data, size, setSize } = useSWRInfinite(
     (index) => [index + 1],
     async (page: number[]) => {

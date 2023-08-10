@@ -95,7 +95,6 @@ export class RouteProposer {
     tokenOut = tokenOut.toLowerCase();
     if (Object.keys(poolsAllDict).length === 0) return [];
 
-    console.log(poolsAllDict);
     const [directPools, hopsIn, hopsOut] = filterPoolsOfInterest(
       poolsAllDict,
       tokenIn,
@@ -253,31 +252,25 @@ export function getOutputAmountSwap(
 ): bigint {
   if (pool === undefined || poolPairData === undefined) return 0n;
   // TODO: check if necessary to check if amount > limitAmount
-  console.log("hh1");
   if (swapType === SwapTypes.SwapExactIn) {
     if (
       poolPairData.poolType !== PoolTypes.Linear &&
       poolPairData.balanceIn === 0n
     ) {
-      console.log("hh2");
 
       return 0n;
     } else {
-      console.log("hh3");
 
       return pool._exactTokenInForTokenOut(poolPairData, amount);
     }
   } else {
     if (poolPairData.balanceOut === 0n) {
-      console.log("hh4");
 
       return 0n;
     } else if (amount >= poolPairData.balanceOut) {
-      console.log("hh5");
 
       return INFINITY;
     } else {
-      console.log("hh6");
 
       return pool._tokenInForExactTokenOut(poolPairData, amount);
     }
@@ -412,7 +405,6 @@ export function createPath(
   const poolPairData: PoolPairBase[] = [];
   let id = "";
 
-  console.log("createPath", pools);
   for (let i = 0; i < pools.length; i++) {
     tI = tokens[i] ?? "";
     tO = tokens[i + 1] ?? "";

@@ -1,13 +1,12 @@
 "use client";
 
 import React from "react";
-import { HONEY_PRECOMPILE_ABI, useBeraConfig } from "@bera/berajs";
 import { ConnectButton, TokenInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { type Address } from "wagmi";
 
+import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { ApproveTokenButton } from "./approve-token-button";
 
@@ -16,7 +15,7 @@ export function SwapCard() {
     payload,
     isConnected,
     setSelectedFrom,
-    // allowance,
+    allowance,
     isLoading,
     write,
     selectedFrom,
@@ -32,8 +31,9 @@ export function SwapCard() {
     fee,
     fee2,
   } = usePsm();
-  const { networkConfig } = useBeraConfig();
 
+  console.log("allowance", allowance?.formattedAllowance);
+  console.log("payload", payload);
   return (
     <Card className="w-[500px] bg-background/5 backdrop-blur-sm">
       <CardHeader>
@@ -84,11 +84,13 @@ export function SwapCard() {
             balance={toBalance?.formattedBalance}
           />
 
-          {false ? (
+          {/* fix to check if allowance > amount */}
+          {allowance?.formattedAllowance === "0" ||
+          Number(allowance?.formattedAllowance) < fromAmount ? (
             <ApproveTokenButton
               token={selectedFrom}
               spender={
-                networkConfig.precompileAddresses.erc20ModuleAddress as Address
+                process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`
               }
             />
           ) : isConnected ? (
@@ -97,9 +99,9 @@ export function SwapCard() {
                 disabled={toAmount === 0 || isLoading}
                 onClick={() => {
                   write({
-                    address: networkConfig.precompileAddresses
-                      .honeyAddress as Address,
-                    abi: HONEY_PRECOMPILE_ABI,
+                    address: process.env
+                      .NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
+                    abi: ERC20_HONEY_ABI,
                     functionName: "mint",
                     params: payload,
                   });
@@ -112,9 +114,9 @@ export function SwapCard() {
                 disabled={toAmount === 0 || isLoading}
                 onClick={() => {
                   write({
-                    address: networkConfig.precompileAddresses
-                      .honeyAddress as Address,
-                    abi: HONEY_PRECOMPILE_ABI,
+                    address: process.env
+                      .NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
+                    abi: ERC20_HONEY_ABI,
                     functionName: "redeem",
                     params: payload,
                   });

@@ -16,11 +16,11 @@ export function Tooltip({ text }: { text: string }) {
         <TooltipTrigger asChild>
           <Button
             variant="ghost"
-            className="h-5 w-5 rounded-full p-0"
+            className="flex-inline h-5 w-5 rounded-full p-0 align-middle"
             onMouseEnter={() => setTooltipOpen(true)}
             onMouseLeave={() => setTooltipOpen(false)}
           >
-            <Icons.tooltip className="h-3 w-3" />
+            <Icons.tooltip className="h-4 w-4" />
             <span className="sr-only">Tooltip</span>
           </Button>
         </TooltipTrigger>
