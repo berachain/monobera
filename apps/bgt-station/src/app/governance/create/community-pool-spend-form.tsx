@@ -5,7 +5,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { type UseFormReturn } from "react-hook-form";
 
-export default function CommunityForm({ form }: { form: UseFormReturn }) {
+export default function CommunityForm({ form }: { form: UseFormReturn<any> }) {
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   return (
@@ -13,7 +13,7 @@ export default function CommunityForm({ form }: { form: UseFormReturn }) {
       <FormField
         control={form.control}
         name="recipient"
-        render={({ field }) => (
+        render={(field: any) => (
           <FormItem className="inline-flex flex-col justify-start">
             <div className="text-sm font-semibold leading-tight">
               Recipient <Tooltip text="test" />
@@ -36,7 +36,7 @@ export default function CommunityForm({ form }: { form: UseFormReturn }) {
       <FormField
         control={form.control}
         name="amountA"
-        render={({ field }) => (
+        render={(field: any) => (
           <FormItem className="inline-flex flex-col justify-start">
             <div className="text-sm font-semibold leading-tight">Amount</div>
             <div>
@@ -55,7 +55,7 @@ export default function CommunityForm({ form }: { form: UseFormReturn }) {
       <FormField
         control={form.control}
         name="amountB"
-        render={({ field }) => (
+        render={(field: any) => (
           <FormItem className="inline-flex flex-col justify-start">
             <div className="text-sm font-semibold leading-tight">
               Amount <Tooltip text="test" />

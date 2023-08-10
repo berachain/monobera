@@ -36,7 +36,7 @@ export function InputForm() {
         <FormField
           control={form.control}
           name="username"
-          render={({ field }) => (
+          render={(field: any) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>

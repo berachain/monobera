@@ -29,7 +29,7 @@ export default function GovernanceByStatus({
   proposalStatus: StatusEnumT;
   orderBy: OrderByEnumT;
 }) {
-  const [keywords, setKeywords] = React.useState(null);
+  const [keywords, setKeywords] = React.useState<string | null>(null);
 
   const getSum = (item: {
     yes: number;
@@ -105,10 +105,7 @@ export default function GovernanceByStatus({
           Order by
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div
-                variant="outline"
-                className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-xl border border-border p-2 text-sm font-medium capitalize leading-[14px] text-foreground"
-              >
+              <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-xl border border-border p-2 text-sm font-medium capitalize leading-[14px] text-foreground">
                 {orderBy.replaceAll("-", " ")}
                 <Icons.chevronDown className="relative h-3 w-3 text-foreground" />
               </div>
@@ -133,7 +130,9 @@ export default function GovernanceByStatus({
       </div>
       <SearchInput
         placeholder="Search proposals"
-        onChange={(e: Event) => setKeywords(e.target ? e.target.value : null)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setKeywords(e.target.value)
+        }
       />
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {sortedProposalList.map((proposal, index) => (
