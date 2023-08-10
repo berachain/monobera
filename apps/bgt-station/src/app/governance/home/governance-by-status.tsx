@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -20,6 +20,7 @@ import {
   type OrderByEnum as OrderByEnumT,
   type StatusEnum as StatusEnumT,
 } from "../types";
+import { data } from "./mockData";
 
 export default function GovernanceByStatus({
   proposalStatus,
@@ -28,6 +29,46 @@ export default function GovernanceByStatus({
   proposalStatus: StatusEnumT;
   orderBy: OrderByEnumT;
 }) {
+  const [keywords, setKeywords] = React.useState(null);
+
+  const getSum = (item: {
+    yes: number;
+    no: number;
+    veto: number;
+    abstain: number;
+  }) =>
+    Object.values(item).reduce((acc: number, curr: number) => acc + curr, 0);
+
+  const sortedProposalList = useMemo(
+    () =>
+      data
+        .filter((proposal) => proposal.proposalStatus === proposalStatus)
+        .filter((proposal) => {
+          if (!keywords) return true;
+          else
+            return proposal.proposalTitle
+              .toLowerCase()
+              .includes(keywords.toLowerCase());
+        })
+        .sort((a, b) => {
+          switch (orderBy) {
+            case OrderByEnum.HIGHEST_PARTICIPATION:
+              return getSum(b.proposalVotes) - getSum(a.proposalVotes);
+            case OrderByEnum.LOWEST_PARTICIPATION:
+              return getSum(a.proposalVotes) - getSum(b.proposalVotes);
+            case OrderByEnum.MOST_RECENT:
+              return a.timestamp - b.timestamp;
+            case OrderByEnum.NEWEST:
+              return a.timestamp - b.timestamp;
+            case OrderByEnum.OLDEST:
+              return b.timestamp - a.timestamp;
+            default:
+              return 0;
+          }
+        }),
+    [data, proposalStatus, orderBy, keywords],
+  );
+
   const router = useRouter();
   return (
     <div className="container w-full max-w-[926px]">
@@ -90,45 +131,14 @@ export default function GovernanceByStatus({
           </DropdownMenu>
         </div>
       </div>
-      <SearchInput placeholder="Search proposals" className="" />
+      <SearchInput
+        placeholder="Search proposals"
+        onChange={(e: Event) => setKeywords(e.target ? e.target.value : null)}
+      />
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <ProposalCard
-          proposalStatus={StatusEnum.ACTIVE}
-          proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
-          proposalTitle={"#000 What would a proposal title look like?"}
-          timestamp={1692076507}
-          expedited
-        />
-
-        <ProposalCard
-          proposalStatus={StatusEnum.ACTIVE}
-          proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
-          proposalTitle={"#000 What would a proposal title look like?"}
-          timestamp={1692076507}
-          expedited
-        />
-
-        <ProposalCard
-          proposalStatus={StatusEnum.IN_QUEUE}
-          proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
-          proposalTitle={"#001 What would a proposal title look like?"}
-          timestamp={1692076507}
-          expedited
-        />
-
-        <ProposalCard
-          proposalStatus={StatusEnum.PASSED}
-          proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
-          proposalTitle={"#002 What would a proposal title look like?"}
-          timestamp={1692076507}
-        />
-
-        <ProposalCard
-          proposalStatus={StatusEnum.REJECTED}
-          proposalVotes={{ yes: 50, no: 20, veto: 10, abstain: 10 }}
-          proposalTitle={"#003 What would a proposal title look like?"}
-          timestamp={1692076507}
-        />
+        {sortedProposalList.map((proposal, index) => (
+          <ProposalCard {...proposal} key={"proposal" + index} />
+        ))}
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ import {
 } from "@bera/shared-ui/src/utils/times";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
 
 import { StatusEnum, type ProposalVotes } from "../types";
 import { ProgressBarChart } from "./progress-bar-chart";
@@ -16,6 +15,7 @@ interface ISelectToken {
   proposalTitle: string;
   timestamp: number;
   expedited?: boolean;
+  onClick?: () => void;
 }
 
 const getBadge = (proposalStatus: StatusEnum) => {
@@ -63,45 +63,62 @@ const getTimeText = (proposalStatus: StatusEnum, timestamp: number) => {
       return "";
   }
 };
+
+const getDataList = (proposalVotes: ProposalVotes) => {
+  return [
+    { color: "#059669", width: proposalVotes.yes },
+    { color: "#DC2629", width: proposalVotes.yes + proposalVotes.no },
+    {
+      color: "#0284C7",
+      width: proposalVotes.yes + proposalVotes.no + proposalVotes.veto,
+    },
+    {
+      color: "#78716c",
+      width:
+        proposalVotes.yes +
+        proposalVotes.no +
+        proposalVotes.veto +
+        proposalVotes.abstain,
+    },
+  ];
+};
+
 export function ProposalCard({
   proposalStatus,
   proposalVotes,
   proposalTitle,
   timestamp,
   expedited,
+  onClick,
 }: ISelectToken) {
   return (
-    //design is rounded-18 and p-8
-    <div className="rounded-xl border border-border bg-background p-6">
-      <div className="relative p-2">
-        {expedited && (
-          <div className="absolute right-0 top-0 flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
-            <Icons.timer className="relative h-4 w-4" />
-            Expedited
-          </div>
-        )}
-        <div className="flex h-7 items-center">
-          {getBadge(proposalStatus)}
-          <div className="text-xs font-medium leading-tight text-stone-500">
-            {getTimeText(proposalStatus, timestamp)}
-          </div>
+    <div
+      className="hove: relative cursor-pointer rounded-[18px] border border-border bg-background p-8"
+      onClick={onClick}
+    >
+      {expedited && (
+        <div className="absolute right-8 top-8 flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
+          <Icons.timer className="relative h-4 w-4" />
+          Expedited
         </div>
-        <div className="mt-1 text-sm font-semibold leading-tight text-foreground">
-          {proposalTitle}
+      )}
+      <div className="flex h-7 items-center">
+        {getBadge(proposalStatus)}
+        <div className="text-xs font-medium leading-tight text-stone-500">
+          {getTimeText(proposalStatus, timestamp)}
         </div>
-        <div className="mt-4">
-          <ProgressBarChart
-            dataList={[
-              { color: "red", width: 20 },
-              { color: "blue", width: 40 },
-              { color: "yellow", width: 70 },
-            ]}
-            labelList={[
-              { label: "Pass threshold", width: 30 },
-              { label: "Quorum", width: 60 },
-            ]}
-          />
-        </div>
+      </div>
+      <div className="mt-1 text-sm font-semibold leading-tight text-foreground">
+        {proposalTitle}
+      </div>
+      <div className="mt-4">
+        <ProgressBarChart
+          dataList={getDataList(proposalVotes)}
+          labelList={[
+            { label: "Pass threshold", width: 30 },
+            { label: "Quorum", width: 60 },
+          ]}
+        />
       </div>
     </div>
   );
