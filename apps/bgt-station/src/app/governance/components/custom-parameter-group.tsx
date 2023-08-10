@@ -32,7 +32,7 @@ export const CustomParameterGroup = ({
             key={`para-group-${index}-subspace`}
             placeholder="Subspace"
             value={param.subspace}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               parameterForm[index]!.subspace = e.target.value;
               setParameterForm([...parameterForm]);
             }}
@@ -42,7 +42,7 @@ export const CustomParameterGroup = ({
             key={`para-group-${index}-key`}
             placeholder="Key"
             value={param.key}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               parameterForm[index]!.key = e.target.value;
               setParameterForm([...parameterForm]);
             }}
@@ -52,7 +52,7 @@ export const CustomParameterGroup = ({
             key={`para-group-${index}-value`}
             placeholder="Value"
             value={param.value}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               parameterForm[index]!.value = e.target.value;
               setParameterForm([...parameterForm]);
             }}

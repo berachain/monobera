@@ -4,7 +4,7 @@ import { type UseFormReturn } from "react-hook-form";
 
 import { CustomParameterGroup } from "../components/custom-parameter-group";
 
-export default function ParameterForm({ form }: { form: UseFormReturn }) {
+export default function ParameterForm({ form }: { form: UseFormReturn<any> }) {
   return (
     <>
       <FormField

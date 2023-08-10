@@ -34,7 +34,7 @@ import ParameterForm from "./parameter-change-form";
 
 export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const router = useRouter();
-  const triggerRef = useRef(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState("w-[450px]");
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
@@ -43,7 +43,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       const width = triggerRef.current.offsetWidth;
       setContentWidth(`w-[${width}px]`);
     }
-  }, [triggerRef.current && triggerRef.current.offsetWidth]);
+  }, [triggerRef.current, triggerRef.current?.offsetWidth]);
 
   const form = useForm<z.infer<typeof ProposalFormSchema>>({
     resolver: zodResolver(ProposalFormSchema),
@@ -118,7 +118,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="title"
-              render={({ field }) => (
+              render={(field: any) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Title
@@ -141,7 +141,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="forumLink"
-              render={({ field }) => (
+              render={(field: any) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Forum discussion link <Tooltip text="test" />
@@ -164,7 +164,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="description"
-              render={({ field }) => (
+              render={(field: any) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Description
@@ -186,7 +186,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="expedite"
-              render={({ field }) => (
+              render={(field: any) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Expedite <Tooltip text="test" />
@@ -205,7 +205,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="initialDeposit"
-              render={({ field }) => (
+              render={(field: any) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Initial deposit <Tooltip text="test" />
