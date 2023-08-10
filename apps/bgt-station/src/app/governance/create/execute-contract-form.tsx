@@ -6,7 +6,7 @@ import { Input } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
 import { type UseFormReturn } from "react-hook-form";
 
-export default function ExecuteForm({ form }: { form: UseFormReturn }) {
+export default function ExecuteForm({ form }: { form: UseFormReturn<any> }) {
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   return (
@@ -14,7 +14,7 @@ export default function ExecuteForm({ form }: { form: UseFormReturn }) {
       <FormField
         control={form.control}
         name="runAs"
-        render={({ field }) => (
+        render={(field: any) => (
           <FormItem className="inline-flex flex-col justify-start">
             <div className="text-sm font-semibold leading-tight">
               Run as <Tooltip text="test" />

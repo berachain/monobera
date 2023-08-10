@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { usePollBgtBalance } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
@@ -34,7 +35,7 @@ import ParameterForm from "./parameter-change-form";
 
 export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const router = useRouter();
-  const triggerRef = useRef(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState("w-[450px]");
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
@@ -43,7 +44,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       const width = triggerRef.current.offsetWidth;
       setContentWidth(`w-[${width}px]`);
     }
-  }, [triggerRef.current && triggerRef.current.offsetWidth]);
+  }, [triggerRef.current, triggerRef.current?.offsetWidth]);
 
   const form = useForm<z.infer<typeof ProposalFormSchema>>({
     resolver: zodResolver(ProposalFormSchema),
@@ -58,21 +59,23 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   }
 
   return (
-    <div className="mx-auto">
+    <div className="mx-auto  w-full max-w-[500px]">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <Card className="mx-auto flex w-full max-w-[500px] flex-col justify-start gap-8 p-6">
-            <div className="inline-flex flex-col justify-start gap-3">
-              <div className="relative text-lg font-semibold leading-7 text-foreground">
-                New proposal
-                <Icons.close
-                  className="absolute right-0 top-0 h-5 w-5 hover:cursor-pointer"
-                  onClick={() => router.push(`/governance`)}
-                />
-              </div>
-              <div className="flex h-[175px] w-full max-w-[452px] items-center justify-center rounded-xl bg-info-foreground text-white">
-                picture place holder
-              </div>
+          <Image
+            className="max-[600px]:mx-auto"
+            src="/bears/proposal-bear.png"
+            alt="proposal-bear"
+            width={269.75}
+            height={174}
+          />
+          <Card className=" flex flex-col justify-start gap-8 p-6">
+            <div className="relative text-lg font-semibold leading-7 text-foreground">
+              New proposal
+              <Icons.close
+                className="absolute right-0 top-0 h-5 w-5 hover:cursor-pointer"
+                onClick={() => router.push(`/governance`)}
+              />
             </div>
 
             <div className="inline-flex flex-col justify-start gap-2">
@@ -118,7 +121,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="title"
-              render={({ field }) => (
+              render={(field: any) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Title
@@ -141,7 +144,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="forumLink"
-              render={({ field }) => (
+              render={(field: any) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Forum discussion link <Tooltip text="test" />
@@ -164,7 +167,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="description"
-              render={({ field }) => (
+              render={(field: any) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Description
@@ -186,7 +189,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="expedite"
-              render={({ field }) => (
+              render={(field: any) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Expedite <Tooltip text="test" />
@@ -205,7 +208,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="initialDeposit"
-              render={({ field }) => (
+              render={(field: any) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Initial deposit <Tooltip text="test" />
