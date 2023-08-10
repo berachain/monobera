@@ -110,7 +110,7 @@ export function SwapCard({
         height={200}
       />
       <div className="flex flex-col gap-4 md:flex-row">
-        <Card className="m-auto w-full w-full rounded-xl sm:w-[500px]">
+        <Card className="m-auto w-full rounded-xl sm:w-[500px]">
           <CardHeader className="pb-3 pt-8">
             <CardTitle className="center flex justify-between">
               Swap <SettingsPopover />

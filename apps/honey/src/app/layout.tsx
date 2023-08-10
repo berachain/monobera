@@ -8,6 +8,7 @@ import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
+import { Footer } from "~/components/footer";
 import { Header } from "~/components/header";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { beraJsConfig } from "./config";
@@ -26,6 +27,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           <Header />
           <main className="w-full">{props.children}</main>
           <Toaster position="bottom-right" />
+          <Footer />
           <TailwindIndicator />
           <Analytics />
         </BeraConfig>
