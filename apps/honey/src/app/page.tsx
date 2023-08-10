@@ -1,7 +1,9 @@
 import { type Metadata } from "next";
 
 import Data from "~/components/data";
+import Graph from "~/components/graph";
 import { HoneyMachine } from "~/components/honey-machine";
+import HoneyTransactionsTable from "~/components/honey-transactions-table";
 import { SwapCard } from "~/components/swap-card";
 
 export const metadata: Metadata = {
@@ -23,6 +25,8 @@ export default function Home() {
       <div className="honey:bg-gradient-to-b honey:from-[#468DCB] honey:to-background">
         <div className="container">
           <Data />
+          <Graph />
+          <HoneyTransactionsTable />
         </div>
       </div>
     </>

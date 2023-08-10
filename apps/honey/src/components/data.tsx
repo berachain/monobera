@@ -35,7 +35,7 @@ export default function Data() {
           value="$0.00"
           icon={<Icons.candleStick />}
         />
-        <DataCard title="Honey Price" value="$0.00" icon={<Icons.honey />} />
+        <DataCard title="Honey Price" value="$1.00" icon={<Icons.honey />} />
       </div>
     </section>
   );

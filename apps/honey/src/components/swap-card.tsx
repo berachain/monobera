@@ -20,7 +20,6 @@ export function SwapCard() {
     write,
     selectedFrom,
     selectedTo,
-    setSelectedTo,
     fromAmount,
     setFromAmount,
     toAmount,

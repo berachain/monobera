@@ -4,7 +4,6 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { ScrollArea } from "@bera/ui/scroll-area";
 
