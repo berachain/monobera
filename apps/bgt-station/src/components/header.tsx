@@ -35,7 +35,7 @@ const Connect = dynamic(
 
 export function Header() {
   return (
-    <nav className="fixed left-0 right-0 z-50 bg-background">
+    <nav className="fixed left-0 right-0 z-50">
       <div className="mx-auto flex h-16 w-full items-center justify-between px-4">
         <div className="mr-8 hidden items-center md:flex">
           <span className="mr-10 text-lg font-bold tracking-tight">
