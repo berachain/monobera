@@ -136,7 +136,16 @@ export default function GovernanceByStatus({
       />
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {sortedProposalList.map((proposal, index) => (
-          <ProposalCard {...proposal} key={"proposal" + index} />
+          <ProposalCard
+            {...proposal}
+            key={"proposal" + index}
+            onClick={() =>
+              router.push(
+                // replace this with real data
+                `/governance/proposal/${"0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4"}`,
+              )
+            }
+          />
         ))}
       </div>
     </div>
