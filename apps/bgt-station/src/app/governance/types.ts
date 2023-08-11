@@ -137,4 +137,12 @@ export const VoteColorMap = {
   default: "#57534e",
 };
 
-export const VoteTypes = ["yes", "no", "veto", "abstain"];
+export const voteTypes: VOTE_TYPE[] = ["yes", "no", "veto", "abstain"];
+
+export const voterTypes: VOTER_TYPE[] = ["validators", "users"];
+
+export type VOTE_TYPE = "yes" | "no" | "veto" | "abstain";
+
+export type VOTER_TYPE = "validators" | "users";
+
+export type ALL = "all";

@@ -4,7 +4,7 @@ import { Card } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { generateRandomData } from "../home/mockData";
-import { VoteColorMap } from "../types";
+import { VoteColorMap, type ALL, type VOTE_TYPE } from "../types";
 
 const Options = {
   responsive: true,
@@ -66,7 +66,7 @@ const Options = {
 const getChartData = (
   data: {
     amount: number;
-    voteType: string | undefined;
+    voteType: VOTE_TYPE;
     voter: string;
   }[],
 ) => {
@@ -80,16 +80,21 @@ const getChartData = (
         borderColor: data.map((d) => VoteColorMap[d.voteType]),
         tension: 0.4,
         borderRadius: 100,
-
         borderSkipped: false,
       },
     ],
   };
 };
 
-const voteTypes = ["all", "yes", "no", "veto", "abstain"];
+const voteTypes: Array<ALL | VOTE_TYPE> = [
+  "all",
+  "yes",
+  "no",
+  "veto",
+  "abstain",
+];
 export function OverviewChart() {
-  const [voteType, setVoteType] = React.useState<typeof voteTypes>("all");
+  const [voteType, setVoteType] = React.useState<ALL | VOTE_TYPE>("all");
 
   const chartData = useMemo(
     () =>
@@ -105,7 +110,7 @@ export function OverviewChart() {
     <Card className="relative mt-1 h-[234px] p-4">
       <Tabs defaultValue={voteType} className="absolute right-4">
         <TabsList>
-          {voteTypes.map((type) => (
+          {voteTypes.map((type: ALL | VOTE_TYPE) => (
             <TabsTrigger
               value={type}
               key={type}

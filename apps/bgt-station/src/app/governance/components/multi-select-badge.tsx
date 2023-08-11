@@ -4,23 +4,25 @@ import { cn } from "@bera/ui";
 import { VoteColorMap } from "../types";
 
 type IMultiSelectBadge = {
-  onSelect?: (value: string[]) => void;
+  onSelect: (value: SelectedVotes) => void;
   className?: string;
 };
 
-export function MultiSelectBadge({ onSelect, className }: IMultiSelectBadge) {
-  const sharedCN =
-    "flex min-w-[60px] justify-center rounded-full bg-muted px-2 py-1 capitalize hover:cursor-pointer text-xs font-medium leading-tight hover:shadow";
-  const [selected, setSelected] = React.useState([]);
+type SelectedVotes = Array<"yes" | "no" | "veto" | "abstain">;
 
-  const updateSelected = (value: string) => {
+export function MultiSelectBadge({ onSelect, className }: IMultiSelectBadge) {
+  const [selected, setSelected] = React.useState<SelectedVotes>([]);
+
+  const updateSelected = (value: "yes" | "no" | "veto" | "abstain") => {
     const index = selected.findIndex((v) => v === value);
     if (index !== -1) {
       const newSelected = [...selected];
       newSelected.splice(index, 1);
       setSelected(newSelected);
     } else {
-      setSelected([...selected, value]);
+      const newSelected = [...selected];
+      newSelected.push(value);
+      setSelected(newSelected);
     }
   };
 
@@ -31,7 +33,7 @@ export function MultiSelectBadge({ onSelect, className }: IMultiSelectBadge) {
   return (
     <div className={cn("flex gap-2", className)}>
       <div
-        className={sharedCN}
+        className="flex min-w-[60px] justify-center rounded-full bg-muted px-2 py-1 text-xs font-medium capitalize leading-tight hover:cursor-pointer hover:shadow"
         style={
           selected.includes("yes")
             ? {
@@ -45,7 +47,7 @@ export function MultiSelectBadge({ onSelect, className }: IMultiSelectBadge) {
         Yes
       </div>
       <div
-        className={sharedCN}
+        className="flex min-w-[60px] justify-center rounded-full bg-muted px-2 py-1 text-xs font-medium capitalize leading-tight hover:cursor-pointer hover:shadow"
         style={
           selected.includes("no")
             ? {
@@ -59,7 +61,7 @@ export function MultiSelectBadge({ onSelect, className }: IMultiSelectBadge) {
         No
       </div>
       <div
-        className={sharedCN}
+        className="flex min-w-[60px] justify-center rounded-full bg-muted px-2 py-1 text-xs font-medium capitalize leading-tight hover:cursor-pointer hover:shadow"
         style={
           selected.includes("veto")
             ? {
@@ -73,7 +75,7 @@ export function MultiSelectBadge({ onSelect, className }: IMultiSelectBadge) {
         No with veto
       </div>
       <div
-        className={sharedCN}
+        className="flex min-w-[60px] justify-center rounded-full bg-muted px-2 py-1 text-xs font-medium capitalize leading-tight hover:cursor-pointer hover:shadow"
         style={
           selected.includes("abstain")
             ? {
