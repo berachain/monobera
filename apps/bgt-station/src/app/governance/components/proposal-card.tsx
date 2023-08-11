@@ -103,7 +103,7 @@ export function ProposalCard({
       {expedited && (
         <div className="absolute right-8 top-8 flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
           <Icons.timer className="relative h-4 w-4" />
-          Expedited
+          <span className="hidden sm:inline ">Expedited</span>
         </div>
       )}
       <div className="flex h-7 items-center">
