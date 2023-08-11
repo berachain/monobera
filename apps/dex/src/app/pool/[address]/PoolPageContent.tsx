@@ -152,7 +152,7 @@ const getAction = (event: any) => {
   } else if (isAddLiquidity(event)) {
     return <p className="text-positive">Add</p>;
   }
-  return <p className="text-destructive">Withdraw</p>;
+  return <p className="text-destructive-foreground">Withdraw</p>;
 };
 
 const getValue = (

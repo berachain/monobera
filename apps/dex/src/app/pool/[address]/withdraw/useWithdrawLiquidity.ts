@@ -92,7 +92,7 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
     pool?.pool,
     account,
     account,
-    "0x599D8d33253361f1dc654e6f9C2813Bd392eC0d5",
+    pool?.poolShareDenomHex,
     parseUnits(`${amount}`, 18),
   ];
 

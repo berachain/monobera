@@ -25,6 +25,7 @@ import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 
 import { TokenIcon } from "./token-icon";
+import { SearchInput } from "./search-input";
 
 type Props = {
   open: boolean;
@@ -152,17 +153,14 @@ export function TokenDialog({
               <DialogTitle className="text-lg">Select a token</DialogTitle>
             </DialogHeader>
             {!customTokens && (
-              <Input
-                startAdornment={
-                  <Icons.search className="h-4 w-4 text-muted-foreground" />
-                }
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setError(undefined);
-                }}
-                placeholder="Search by name, symbol or address"
-              />
+      
+              <SearchInput               value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setError(undefined);
+              }}
+              placeholder="Search by name, symbol or address"/>
+
             )}
             {!customTokens && (
               <div className="flex flex-wrap gap-2">

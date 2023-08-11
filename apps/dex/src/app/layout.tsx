@@ -3,6 +3,7 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
+import Image from "next/image";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -25,13 +26,28 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
         <Providers>
-          <div className="relative flex min-h-screen flex-col">
-            <div className="flex-1">
+          <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+            <div className="z-10 flex-1">
               <Header />
               <main className="w-full py-40">{props.children}</main>
               <Toaster position="bottom-right" />
               <Footer />
             </div>
+            <Image
+              className="fixed left-1/2 right-0 top-0 -translate-x-1/2 transform"
+              src="/bg/variant.svg"
+              alt="bera banner"
+              width={1078}
+              height={820}
+            />
+
+            <Image
+              className="fixed bottom-0 left-1/2 right-0 -translate-x-1/2 transform"
+              src="/bg/BeraBanner.png"
+              alt="bera banner"
+              width={1280}
+              height={444}
+            />
           </div>
           <TailwindIndicator />
           <Analytics />

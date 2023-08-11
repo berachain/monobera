@@ -27,9 +27,9 @@ function sortByParameter(
   });
 }
 
-const DEFAULT_SIZE = 1;
+const DEFAULT_SIZE = 10;
 
-export const revalidate = 1000;
+export const revalidate = 0;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -66,21 +66,22 @@ export async function GET(request: Request) {
   const hotPools = searchParams.get("hotPools");
   const newPools = searchParams.get("newPools");
 
+  console.log('hotPools', hotPools)
   let taggedPools: any[] = totalSupplyStringPools;
 
-  if (hasBgtRewards) {
+  if (hasBgtRewards == 'true') {
     taggedPools = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.BGT_REWARDS),
     );
   }
 
-  if (hotPools) {
+  if (hotPools == 'true') {
     taggedPools = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.HOT),
     );
   }
 
-  if (newPools) {
+  if (newPools == 'true') {
     taggedPools = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.NEW),
     );
