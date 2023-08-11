@@ -124,3 +124,25 @@ export const ProposalFormSchema = z.union([
   ParameterFormSchema,
   ExecuteFormSchema,
 ]);
+
+export const VoteColorMap = {
+  yes: "#059669",
+  no: "#DC2629",
+  veto: "#0284C7",
+  abstain: "#78716c",
+  yes_secondary: "#ECFDF5",
+  no_secondary: "#FEF2F2",
+  veto_secondary: "#F0F9FF",
+  abstain_secondary: "#E7E5E4",
+  default: "#57534e",
+};
+
+export const voteTypes: VOTE_TYPE[] = ["yes", "no", "veto", "abstain"];
+
+export const voterTypes: VOTER_TYPE[] = ["validators", "users"];
+
+export type VOTE_TYPE = "yes" | "no" | "veto" | "abstain";
+
+export type VOTER_TYPE = "validators" | "users";
+
+export type ALL = "all";

@@ -27,7 +27,7 @@ export const formatTime = (timeString: string): string => {
 export function timeDifferenceFromNow(unixTimestamp: number) {
   const now = Date.now();
   const inputDate = new Date(unixTimestamp * 1000); // Convert to milliseconds
-  let difference = inputDate - now;
+  let difference = Number(inputDate) - now;
 
   const days = Math.floor(difference / (1000 * 60 * 60 * 24));
   difference -= days * (1000 * 60 * 60 * 24);

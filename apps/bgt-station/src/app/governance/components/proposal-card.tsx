@@ -1,4 +1,6 @@
 import React from "react";
+import Image from "next/image";
+import { truncateHash } from "@bera/berajs";
 import {
   formatUnixTimestamp,
   timeDifferenceFromNow,
@@ -6,7 +8,7 @@ import {
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 
-import { StatusEnum, type ProposalVotes } from "../types";
+import { StatusEnum, VoteColorMap, type ProposalVotes } from "../types";
 import { ProgressBarChart } from "./progress-bar-chart";
 
 interface ISelectToken {
@@ -15,6 +17,7 @@ interface ISelectToken {
   proposalTitle: string;
   timestamp: number;
   expedited?: boolean;
+  owner?: `0x${string}`;
   onClick?: () => void;
 }
 
@@ -66,14 +69,14 @@ const getTimeText = (proposalStatus: StatusEnum, timestamp: number) => {
 
 const getDataList = (proposalVotes: ProposalVotes) => {
   return [
-    { color: "#059669", width: proposalVotes.yes },
-    { color: "#DC2629", width: proposalVotes.yes + proposalVotes.no },
+    { color: VoteColorMap.yes, width: proposalVotes.yes },
+    { color: VoteColorMap.no, width: proposalVotes.yes + proposalVotes.no },
     {
-      color: "#0284C7",
+      color: VoteColorMap.veto,
       width: proposalVotes.yes + proposalVotes.no + proposalVotes.veto,
     },
     {
-      color: "#78716c",
+      color: VoteColorMap.abstain,
       width:
         proposalVotes.yes +
         proposalVotes.no +
@@ -89,6 +92,7 @@ export function ProposalCard({
   proposalTitle,
   timestamp,
   expedited,
+  owner,
   onClick,
 }: ISelectToken) {
   return (
@@ -108,7 +112,7 @@ export function ProposalCard({
           {getTimeText(proposalStatus, timestamp)}
         </div>
       </div>
-      <div className="mt-1 text-sm font-semibold leading-tight text-foreground">
+      <div className="mt-1 text-sm font-semibold leading-tight text-foreground min-[600px]:text-2xl min-[600px]:leading-loose">
         {proposalTitle}
       </div>
       <div className="mt-4">
@@ -120,6 +124,28 @@ export function ProposalCard({
           ]}
         />
       </div>
+      {owner && (
+        <div className="mt-[18px] flex h-6 items-center justify-between text-xs font-medium leading-tight text-muted-foreground">
+          <div className="flex items-center gap-2">
+            {" "}
+            <Image
+              alt="proposal owner avatar"
+              className="rounded-full"
+              src="/bears/proposal-bear.png"
+              width={24}
+              height={24}
+            />
+            Submitted by {truncateHash(owner)}
+          </div>
+          <div>
+            {proposalVotes.abstain +
+              proposalVotes.no +
+              proposalVotes.veto +
+              proposalVotes.yes}
+            % participation rate
+          </div>
+        </div>
+      )}
     </div>
   );
 }
