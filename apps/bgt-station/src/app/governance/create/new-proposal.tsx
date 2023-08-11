@@ -59,7 +59,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   }
 
   return (
-    <div className="mx-auto  w-full max-w-[500px]">
+    <div className="mx-auto  w-full max-w-[564px] pb-16">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Image
