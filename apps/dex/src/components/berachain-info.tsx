@@ -9,7 +9,7 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { useLocalStorage } from "usehooks-ts";
 
-export const BerachainInfo = () => {
+const BerachainInfo = () => {
   const [hasVisitedBefore, setHasVisitedBefore] = useLocalStorage<
     boolean | undefined
   >("hasVisitedBefore", undefined);
@@ -58,3 +58,5 @@ export const BerachainInfo = () => {
     </Card>
   );
 };
+
+export default BerachainInfo;

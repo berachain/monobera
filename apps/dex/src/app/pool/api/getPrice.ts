@@ -21,10 +21,6 @@ interface CoinsData {
   coins: Coin[];
 }
 
-const getAPIendPointForDays = (pool: Pool, days: number) => {
-  return `http://${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=${days}`;
-};
-
 const getVolume = (
   prices: MappedTokens,
   volumeData: CoinsData[],
@@ -106,11 +102,31 @@ export const getWBeraPriceDictForPoolTokens = async (
 
     const allPoolVolumePromises: any[] = [];
     pools.forEach((pool) => {
+      const dailyVolumeResponse = fetch(
+        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=1`,
+        { cache: "no-store" },
+      );
+
+      const weeklyVolumeResponse = fetch(
+        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=7`,
+        { cache: "no-store" },
+      );
+
+      const monthlyVolumeResponse = fetch(
+        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=30`,
+        { cache: "no-store" },
+      );
+
+      const quarterlyVolumeResponse = fetch(
+        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=90`,
+        { cache: "no-store" },
+      );
+
       const volumePromises = Promise.all([
-        fetch(getAPIendPointForDays(pool, 1)),
-        fetch(getAPIendPointForDays(pool, 7)),
-        fetch(getAPIendPointForDays(pool, 30)),
-        fetch(getAPIendPointForDays(pool, 90)),
+        dailyVolumeResponse,
+        weeklyVolumeResponse,
+        monthlyVolumeResponse,
+        quarterlyVolumeResponse,
       ]);
       allPoolVolumePromises.push(volumePromises);
     });

@@ -40,14 +40,13 @@ export default function CreatePoolInput({
         onTokenSelection={handleTokenSelection}
         selectedTokens={selectedTokens}
         selectable={selectable}
-        className="w-full"
       />
       <Input
         type="number"
         step="any"
         min="0"
         placeholder="0.0"
-        className="w-full grow self-end border-0 p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="w-full grow self-end border-0 bg-transparent p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
         value={tokenWeight.weight > 0 ? tokenWeight.weight : ""}
         onChange={(e) => {
           onTokenWeightChange(index, Number(e.target.value));

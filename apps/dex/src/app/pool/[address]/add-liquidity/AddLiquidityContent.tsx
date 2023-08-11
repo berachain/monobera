@@ -76,7 +76,7 @@ export default function AddLiquidityContent({
   });
 
   return (
-    <div className="flex w-full max-w-[1200px] flex-col items-center justify-center gap-4">
+    <div className="flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
       <Card className="mx-6 w-full items-center bg-muted p-4 sm:mx-0 sm:w-[480px]">
         <p className="mb-4 text-center text-2xl font-semibold">
@@ -155,7 +155,7 @@ export default function AddLiquidityContent({
                 triggerText={"Preview"}
                 setOpen={setPreviewOpen}
               >
-                <TokenList className="bg-border">
+                <TokenList className="bg-muted">
                   {tokenInputs
                     .filter(
                       (tokenInput: { amount: number }) =>
@@ -251,7 +251,7 @@ export default function AddLiquidityContent({
                 imgURI={"/graphics/preview-swap-img.png"}
                 triggerText={"Preview"}
               >
-                <TokenList className="bg-border">
+                <TokenList className="bg-muted">
                   <PreviewToken
                     token={selectedSingleToken}
                     value={selectedSingleTokenAmount}

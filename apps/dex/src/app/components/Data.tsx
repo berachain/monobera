@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 export function DataCard({
@@ -11,7 +12,7 @@ export function DataCard({
   value: string;
 }) {
   return (
-    <div className="flex min-w-[250px] flex-col rounded-2xl border-2 bg-[#FAFAF9] p-6">
+    <div className="flex min-w-[200px] flex-col rounded-2xl border-2 bg-[#FAFAF9] p-6">
       <div className="flex items-center gap-3 text-sm">
         <div className="text-muted-foreground">{icon}</div>
         <div className="text-muted-foreground">{title}</div>
@@ -23,25 +24,28 @@ export function DataCard({
 
 export default function Data() {
   return (
-    <section className="my-24">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <section className="my-24 flex w-full flex-col items-center">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <DataCard
           title="Total Value Locked"
-          value="$0.00"
+          value="$842,886,669"
           icon={<Icons.lock />}
         />
         <DataCard
           title="24H Volume"
-          value="$0.00"
+          value="$69,420,702"
           icon={<Icons.candleStick />}
         />
         <DataCard
           title="BGT Rewards Distributed"
-          value="$0.00"
+          value="1,690,420 BGT"
           icon={<Icons.medal />}
         />
-        <DataCard title="Bera Price" value="$0.00" icon={<Icons.bera />} />
+        <DataCard title="Bera Price" value="$69.426969" icon={<Icons.bera />} />
       </div>
+      <Button variant="outline" className="mt-4 bg-background">
+        View Analytics
+      </Button>
     </section>
   );
 }

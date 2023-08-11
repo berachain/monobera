@@ -73,7 +73,7 @@ export function CreatePool({
           onClick={onAddToken}
         />
         {error && (
-          <Alert variant="destructive" className="my-4">
+          <Alert className="my-4">
             <Icons.warning className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error && error.message}</AlertDescription>

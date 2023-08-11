@@ -9,20 +9,20 @@ import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 
 const EMPTY_INFO = [[""], [0n]];
-export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
+export const usePollPreviewRemoveLiquidityExactAmountOut = (
   poolAddress: `0x${string}` | undefined,
-  asset: Token | undefined,
-  amount: number,
+  assetIn: Token | undefined,
+  assetAmount: number,
 ) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
-  const method = "getPreviewSharesForSingleSidedLiquidityRequest";
-  const QUERY_KEY = [poolAddress, asset?.address, amount, method];
+  const method = "getRemoveLiquidityExactAmountOut";
+  const QUERY_KEY = [poolAddress, assetIn?.address, assetAmount, method];
   useSWR(
     QUERY_KEY,
     async () => {
-      if (!poolAddress || !asset) return EMPTY_INFO;
+      if (!poolAddress || !assetIn) return EMPTY_INFO;
       const result = await publicClient
         .readContract({
           address: networkConfig.precompileAddresses.erc20DexAddress as Address,
@@ -30,15 +30,12 @@ export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
           functionName: method,
           args: [
             poolAddress,
-            asset.address,
-            parseUnits(`${amount}`, asset.decimals),
+            assetIn.address,
+            parseUnits(`${assetAmount}`, assetIn?.decimals),
           ],
         })
         .catch((e) => {
-          console.log(
-            "usePollPreviewSharesForSingleSidedLiquidityRequest error: ",
-            e,
-          );
+          console.log(e);
           return EMPTY_INFO;
         });
 
@@ -50,11 +47,11 @@ export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
     },
   );
 
-  const usePreviewSharesForSingleSidedLiquidityRequest = () => {
+  const usePreviewRemoveLiquidityExactAmountOut = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };
   return {
-    usePreviewSharesForSingleSidedLiquidityRequest,
+    usePreviewRemoveLiquidityExactAmountOut,
   };
 };

@@ -5,14 +5,33 @@ import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatUsd } from "@bera/berajs";
 import { DataTableColumnHeader, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Badge } from "@bera/ui/badge";
+import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
+
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 export const columns: ColumnDef<Pool>[] = [
   {
-    accessorKey: "tokens",
+    accessorKey: "poolName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Composition" />
+      <DataTableColumnHeader column={column} title="Title" />
     ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("poolName")}
+          </span>
+        </div>
+      );
+    },
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "tokens",
+    header: () => <></>,
     cell: ({ row }) => {
       const tokens = row.getValue("tokens");
 
@@ -33,27 +52,19 @@ export const columns: ColumnDef<Pool>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "poolName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("poolName")}
-          </span>
-        </div>
-      );
-    },
-  },
-  {
     accessorKey: "rewards",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="BGT Rewards" />
     ),
     cell: () => {
-      return <div className="flex w-[100px] items-center">BGT REWARDS</div>;
+      return (
+        <div className="flex w-[160px] items-center">
+          {" "}
+          <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
+            0.42% <Icons.chevronsRight className="h-4 w-4" /> 1.58% BGT
+          </Badge>
+        </div>
+      );
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
@@ -83,6 +94,31 @@ export const columns: ColumnDef<Pool>[] = [
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "btns",
+    header: () => <></>,
+    cell: ({ row }) => {
+      console.log(row);
+      const address = row.original.pool;
+
+      return (
+        <div className="flex flex-row items-center gap-1">
+          <Icons.minusSquare
+            className="h-5 w-5 text-muted-foreground"
+            onClick={() =>
+              window.open(`${getAbsoluteUrl()}/pool/${address}/withdraw`)
+            }
+          />
+          <Icons.plusSquare
+            className="h-5 w-5 text-muted-foreground"
+            onClick={() =>
+              window.open(`${getAbsoluteUrl()}/pool/${address}/add-liquidity`)
+            }
+          />
+        </div>
+      );
     },
   },
 ];

@@ -48,7 +48,7 @@ export default function PoolsTable({ pools }: { pools: Pool[] }) {
         <TabsTrigger value="userPools">My pools</TabsTrigger>
       </TabsList>
       <TabsContent value="allPools" className="flex w-full flex-col">
-        <div className="rounded-lg border border-border shadow-lg">
+        <div className="rounded-lg border border-border ">
           <DataTable
             data={poolTableData ?? []}
             columns={columns}

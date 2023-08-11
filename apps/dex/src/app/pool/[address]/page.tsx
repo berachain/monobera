@@ -40,6 +40,7 @@ export default async function PoolPage({
   }
   const prices = getWBeraPriceDictForPoolTokens(pool ? [pool] : [], router);
 
+  console.log("prices", prices);
   const data: IData = await Promise.all([prices]).then(([prices]) => ({
     prices: prices as unknown as MappedTokens,
   }));
