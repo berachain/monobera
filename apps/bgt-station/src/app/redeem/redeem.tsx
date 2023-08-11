@@ -10,6 +10,7 @@ import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { type Address } from "wagmi";
 
 import { useRedeem } from "../../hooks/useRedeem";
 
@@ -23,7 +24,7 @@ export default function Redeem() {
   const { networkConfig } = useBeraConfig();
 
   return (
-    <div div className="mx-auto w-full max-w-[500px]">
+    <div className="mx-auto w-full max-w-[500px]">
       <Image
         className="max-[600px]:mx-auto"
         src="/bears/redeem-bear.png"
@@ -41,7 +42,9 @@ export default function Redeem() {
             type="number"
             placeholder="0.0"
             endAdornment="BGT"
-            onChange={(e) => setRedeemAmount(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setRedeemAmount(Number(e.target.value))
+            }
             value={redeemAmount}
           />
           <div className="flex w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
@@ -50,7 +53,7 @@ export default function Redeem() {
             <span
               className="underline hover:cursor-pointer"
               onClick={() => {
-                setRedeemAmount(userBalance);
+                setRedeemAmount(Number(userBalance));
               }}
             >
               MAX
