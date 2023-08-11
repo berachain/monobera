@@ -91,7 +91,7 @@ export function CreatePoolPreview({
             onChange={(e) => setPoolName(e.target.value)}
           />
         </div>
-        <TokenList className="bg-border ">
+        <TokenList className="bg-muted ">
           {tokenWeights.map((tokenWeight, index) => {
             return (
               <PreviewToken
@@ -103,13 +103,13 @@ export function CreatePoolPreview({
             );
           })}
         </TokenList>
-        <div className="w-full rounded-lg bg-border p-2">
+        <div className="w-full rounded-lg bg-muted p-2">
           <div className="flex h-[40px] w-full items-center justify-between text-sm">
-            <p className="text-muted-foreground">Pool Type</p>
+            <p className="text-primary">Pool Type</p>
             <p>Weighted</p>
           </div>
           <div className="flex h-[40px] w-full items-center justify-between text-sm">
-            <p className="text-muted-foreground">Swap Fee</p>
+            <p className="text-primary">Swap Fee</p>
             <p>{fee}%</p>
           </div>
         </div>

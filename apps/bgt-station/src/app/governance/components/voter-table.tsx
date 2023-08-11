@@ -66,8 +66,8 @@ export function VoterTable() {
   );
 
   return (
-    <div>
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-col items-center justify-between sm:flex-row">
         <Tabs defaultValue={voterTypes} className="my-4">
           <TabsList>
             {userTypes.map((type: ALL | VOTER_TYPE) => (
@@ -84,7 +84,7 @@ export function VoterTable() {
         </Tabs>
         <MultiSelectBadge onSelect={(value) => setVoteType(value)} />
       </div>
-      <Card className="relative mt-1  ">
+      <Card className="relative ">
         <div className="flex h-11 w-full gap-16 rounded-tl-[18px] rounded-tr-[18px] border-b border-border bg-muted px-5 py-3 text-xs font-medium leading-tight text-muted-foreground">
           {" "}
           <div className="flex flex-grow items-center">Voter</div>

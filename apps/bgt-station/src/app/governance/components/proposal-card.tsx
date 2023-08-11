@@ -97,13 +97,13 @@ export function ProposalCard({
 }: ISelectToken) {
   return (
     <div
-      className="hove: relative cursor-pointer rounded-[18px] border border-border bg-background p-8"
+      className="hove:cursor-pointer relative rounded-[18px] border border-border bg-background p-8"
       onClick={onClick}
     >
       {expedited && (
         <div className="absolute right-8 top-8 flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
           <Icons.timer className="relative h-4 w-4" />
-          Expedited
+          <span className="hidden sm:inline ">Expedited</span>
         </div>
       )}
       <div className="flex h-7 items-center">
@@ -129,7 +129,7 @@ export function ProposalCard({
         />
       </div>
       {owner && (
-        <div className="mt-[18px] flex h-6 items-center justify-between text-xs font-medium leading-tight text-muted-foreground">
+        <div className="mt-[18px] flex flex-col-reverse gap-2 text-xs font-medium leading-tight text-muted-foreground sm:h-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
             {" "}
             <Image

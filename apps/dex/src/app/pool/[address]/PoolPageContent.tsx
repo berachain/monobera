@@ -152,7 +152,7 @@ const getAction = (event: any) => {
   } else if (isAddLiquidity(event)) {
     return <p className="text-positive">Add</p>;
   }
-  return <p className="text-destructive">Withdraw</p>;
+  return <p className="text-destructive-foreground">Withdraw</p>;
 };
 
 const getValue = (
@@ -486,7 +486,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 </p>
               </CardHeader>
               <CardContent className="overflow-hidden truncate whitespace-nowrap p-1 text-lg font-semibold">
-                {swapApr.toFixed(2)}%
+                {(Number.isNaN(swapApr) ? 0 : swapApr).toFixed(2)}%
               </CardContent>
             </Card>
           </div>
@@ -549,7 +549,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             </Tabs>
           </section>
         </div>
-        <div className="col-span-5 flex w-full w-full flex-col gap-5 lg:col-span-2">
+        <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-2">
           <Card>
             <CardContent className="flex items-center justify-between gap-4 p-4">
               <div>

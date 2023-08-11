@@ -92,16 +92,19 @@ export async function GET(
   let sortedData = [];
   if (swap === null && provisions === null) {
     sortedData = sortByBlockTime([
-      ...data.swaps,
-      ...data.adds,
-      ...data.removes,
+      ...(data.swaps ?? []),
+      ...(data.adds ?? []),
+      ...(data.removes ?? []),
     ]);
   }
   if (swap !== null && provisions === null) {
-    sortedData = sortByBlockTime([...data.swaps]);
+    sortedData = sortByBlockTime([...(data.swaps ?? [])]);
   }
   if (swap === null && provisions !== null) {
-    sortedData = sortByBlockTime([...data.adds, ...data.removes]);
+    sortedData = sortByBlockTime([
+      ...(data.adds ?? []),
+      ...(data.removes ?? []),
+    ]);
   }
 
   if (!sortedData) return NextResponse.json({});

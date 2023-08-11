@@ -18,7 +18,7 @@ import {
   DEFAULT_SLIPPAGE,
   LOCAL_STORAGE_KEYS,
 } from "~/utils/constants";
-import { erc20ModuleAddress, honeyTokenAddress } from "~/config";
+import { beraTokenAddress, erc20ModuleAddress } from "~/config";
 import { usePollPriceImpact } from "./usePollPriceImpact";
 import { usePollSwaps } from "./usePollSwaps";
 
@@ -27,6 +27,7 @@ export enum SwapKind {
   GIVEN_OUT = 1,
 }
 
+const QUOTING_TOKEN = beraTokenAddress;
 interface ISwap {
   inputCurrency?: Address | undefined;
   outputCurrency?: Address | undefined;
@@ -149,14 +150,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const { data: tokenInPriceInfo } = usePollSwaps({
     tokenIn: selectedFrom?.address as Address,
-    tokenOut: honeyTokenAddress,
+    tokenOut: QUOTING_TOKEN,
     swapKind: 0,
     amount: parseUnits(`${1n}`, selectedFrom?.decimals ?? 18),
   });
 
   const { data: tokenOutPriceInfo } = usePollSwaps({
     tokenIn: selectedTo?.address as Address,
-    tokenOut: honeyTokenAddress,
+    tokenOut: QUOTING_TOKEN,
     swapKind: 0,
     amount: parseUnits(`${1n}`, selectedTo?.decimals ?? 18),
   });
@@ -292,13 +293,13 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     gasPrice: gasData?.formatted.gasPrice,
     tokenInPrice:
       tokenInPriceInfo === undefined
-        ? selectedFrom?.address === honeyTokenAddress
+        ? selectedFrom?.address === QUOTING_TOKEN
           ? "1"
           : undefined
         : tokenInPriceInfo?.formattedReturnAmount,
     tokenOutPrice:
       tokenOutPriceInfo === undefined
-        ? selectedTo?.address === honeyTokenAddress
+        ? selectedTo?.address === QUOTING_TOKEN
           ? "1"
           : undefined
         : tokenOutPriceInfo?.formattedReturnAmount,

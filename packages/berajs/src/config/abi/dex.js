@@ -183,19 +183,6 @@ export const DEX_PRECOMPILE_ABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "getAllPoolAddresses",
-    outputs: [
-      {
-        internalType: "address[]",
-        name: "",
-        type: "address[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "address",
@@ -574,6 +561,11 @@ export const DEX_PRECOMPILE_ABI = [
   {
     inputs: [
       {
+        internalType: "enum IERC20DexModule.SwapKind",
+        name: "kind",
+        type: "uint8",
+      },
+      {
         internalType: "address",
         name: "pool",
         type: "address",
@@ -627,18 +619,42 @@ export const DEX_PRECOMPILE_ABI = [
         name: "assetAmount",
         type: "uint256",
       },
+    ],
+    name: "getRemoveLiquidityExactAmountOut",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "assets",
+        type: "address[]",
+      },
+      {
+        internalType: "uint256[]",
+        name: "amounts",
+        type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
       {
         internalType: "address",
-        name: "sharesIn",
+        name: "pool",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "assetOut",
         type: "address",
       },
       {
         internalType: "uint256",
-        name: "sharesAmount",
+        name: "sharesIn",
         type: "uint256",
       },
     ],
-    name: "getRemoveLiquidityExactAmountOut",
+    name: "getRemoveLiquidityOneSideOut",
     outputs: [
       {
         internalType: "address[]",

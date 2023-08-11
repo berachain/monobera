@@ -72,17 +72,17 @@ export default function GovernanceByStatus({
   const router = useRouter();
   return (
     <div className="container w-full max-w-[926px]">
-      <div className="text-forergound text-center text-5xl font-bold leading-[48px]">
+      <div className="text-forergound text-center text-3xl font-bold leading-9 sm:text-5xl sm:leading-[48px]">
         🗳️Vote on proposals or <br />
         create your own
       </div>
-      <div className="mb-8 mt-6 flex w-full justify-center gap-3">
+      <div className="mx-auto mb-8 mt-6 flex w-[165px] flex-col justify-center gap-3 sm:w-full sm:flex-row">
         <Button onClick={() => router.push(`/governance/create`)}>
           Create proposal
         </Button>
         <Button variant="outline">Visit forums</Button>
       </div>
-      <div className="flex justify-between py-4">
+      <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 sm:flex-row">
         <Tabs defaultValue={proposalStatus}>
           <TabsList>
             {Object.values(StatusEnum).map((status) => (

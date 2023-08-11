@@ -5,12 +5,21 @@ import { useRouter } from "next/navigation";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-import { DataCard } from "../homepage/components/Data";
+import { DataCard } from "../components/Data";
+import { HotPools } from "./HotPools";
+import { PoolSearch } from "./PoolsTable";
+import { TrendingPools } from "./TrendingPools";
 
 export default function PoolPageHeader() {
   const router = useRouter();
   return (
-    <>
+    <div className="flex w-full flex-col items-center justify-center gap-6">
+      {/* <Image
+        src="/pool-bear.png"
+        alt="bidness"
+        width={150}
+        height={200}
+      /> */}
       <h1 className="text-center text-5xl font-bold">
         Create a <span className="text-secondary">Pool</span>
         <br /> <span className="text-secondary">Or</span> Add Liquidity
@@ -24,8 +33,13 @@ export default function PoolPageHeader() {
         </Button>
         <Button
           variant={"outline"}
-          onClick={() => router.push("/pool/create")}
           className="text-md mb-10 w-[150px] self-center"
+          onClick={() => {
+            const poolSearchElement = document.getElementById("poolSearch");
+            if (poolSearchElement) {
+              poolSearchElement.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
         >
           View Pools
         </Button>
@@ -47,6 +61,11 @@ export default function PoolPageHeader() {
           value={"1,690,420 BGT"}
         />
       </div>
-    </>
+      <HotPools isMainPage={false} />
+      <TrendingPools />
+      <div id="poolSearch" className="w-full max-w-[980px]">
+        <PoolSearch />
+      </div>
+    </div>
   );
 }

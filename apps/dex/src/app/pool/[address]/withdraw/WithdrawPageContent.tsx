@@ -1,10 +1,11 @@
 "use client";
 
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { DEX_PRECOMPILE_ABI, useBeraConfig } from "@bera/berajs";
+import { DEX_PRECOMPILE_ABI, formatUsd, useBeraConfig } from "@bera/berajs";
 import {
   InfoBoxList,
   InfoBoxListItem,
+  PreviewToken,
   TokenIcon,
   TokenInput,
   TokenList,
@@ -16,6 +17,7 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { type MappedTokens } from "../types";
@@ -34,10 +36,18 @@ export default function WithdrawLiquidityContent({
   pool,
   prices,
 }: IWithdrawLiquidityContent) {
+  const reset = () => {
+    setPreviewOpen(false);
+
+    setAmount(0);
+    setExactOutAmount(0);
+    setExactOutToken(undefined);
+    setWithdrawType(0);
+  };
   const { write, ModalPortal } = useTxn({
-    message: `Add liquidity to ${pool?.poolName}`,
+    message: `withdraw liquidity from ${pool?.poolName}`,
     onSuccess: () => {
-      // reset();
+      reset();
     },
   });
   const { networkConfig } = useBeraConfig();
@@ -45,6 +55,11 @@ export default function WithdrawLiquidityContent({
   const {
     tokenDictionary,
     lpBalance,
+    burnShares,
+    withdrawValue,
+    formattedLpBalance,
+    singlePayload,
+    setWithdrawType,
     amount,
     setAmount,
     previewOpen,
@@ -55,6 +70,16 @@ export default function WithdrawLiquidityContent({
     exactOutAmount,
     setExactOutAmount,
   } = useWithdrawLiquidity(pool, prices);
+
+  const handleSingleTokenWithdrawSharesIn = (amount: number): void => {
+    setAmount(amount);
+    setWithdrawType(0);
+  };
+
+  const handleSingleTokenWithdrawAssetOut = (amount: number) => {
+    setExactOutAmount(amount);
+    setWithdrawType(1);
+  };
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
@@ -101,7 +126,7 @@ export default function WithdrawLiquidityContent({
               value={Selection.MULTI_TOKEN}
               className="mt-0 flex w-full flex-col gap-3"
             >
-              <TokenList>
+              <TokenList className="bg-muted">
                 <p className="text-md w-full py-2 text-center font-medium">
                   Your Pool Tokens
                 </p>
@@ -113,13 +138,31 @@ export default function WithdrawLiquidityContent({
                     decimals: 18,
                     logoURI: "",
                   }}
-                  balance={Number(lpBalance)}
+                  hidePrice={true}
+                  balance={Number(formattedLpBalance)}
                   selectable={false}
                   amount={amount}
                   setAmount={setAmount}
                 />
               </TokenList>
 
+              <div className="flex flex-row gap-2">
+                {[25, 50, 75, 100].map((percent) => {
+                  return (
+                    <Button
+                      key={percent}
+                      variant={"outline"}
+                      className="w-full"
+                      onClick={() =>
+                        setAmount(Number(formattedLpBalance) * (percent / 100))
+                      }
+                      disabled={lpBalance === 0n}
+                    >
+                      {percent}%
+                    </Button>
+                  );
+                })}
+              </div>
               <TxnPreview
                 open={previewOpen}
                 disabled={false}
@@ -128,11 +171,32 @@ export default function WithdrawLiquidityContent({
                 triggerText={"Preview"}
                 setOpen={setPreviewOpen}
               >
+                <TokenList className="divide-muted bg-muted">
+                  {pool?.tokens.map((token) => {
+                    const formattedAmount = burnShares
+                      ? Number(
+                          formatUnits(
+                            burnShares[token.address] ?? 0n,
+                            token.decimals,
+                          ),
+                        )
+                      : 0;
+                    return (
+                      <PreviewToken
+                        key={token.address}
+                        token={token}
+                        value={formattedAmount}
+                        weight={token.normalizedWeight}
+                        price={prices[token.address]}
+                      />
+                    );
+                  })}
+                </TokenList>
                 <InfoBoxList>
-                  <InfoBoxListItem title={"Expected Shares"} value={"-"} />
+                  <InfoBoxListItem title={"Total Shares"} value={amount} />
                   <InfoBoxListItem
                     title={"Approximate Total Value"}
-                    value={"-"}
+                    value={formatUsd(withdrawValue)}
                   />
                 </InfoBoxList>
 
@@ -161,18 +225,35 @@ export default function WithdrawLiquidityContent({
                 </p>
                 <TokenInput
                   selected={{
-                    address: "0x599D8d33253361f1dc654e6f9C2813Bd392eC0d5",
+                    address: pool?.poolShareDenomHex ?? "",
                     symbol: pool?.poolName ?? "",
                     name: pool?.poolName ?? "",
                     decimals: 18,
                     logoURI: "",
                   }}
-                  balance={Number(lpBalance)}
+                  balance={Number(formattedLpBalance)}
                   selectable={false}
                   amount={amount}
-                  setAmount={setAmount}
+                  setAmount={handleSingleTokenWithdrawSharesIn}
                 />
               </TokenList>
+              <div className="flex flex-row gap-2">
+                {[25, 50, 75, 100].map((percent) => {
+                  return (
+                    <Button
+                      key={percent}
+                      variant={"outline"}
+                      className="w-full"
+                      onClick={() =>
+                        setAmount(Number(formattedLpBalance) * (percent / 100))
+                      }
+                      disabled={lpBalance === 0n}
+                    >
+                      {percent}%
+                    </Button>
+                  );
+                })}
+              </div>
               <Icons.chevronsDown className="self-center text-secondary-foreground" />
               <TokenList>
                 <TokenInput
@@ -180,7 +261,7 @@ export default function WithdrawLiquidityContent({
                   onTokenSelection={setExactOutToken}
                   selectable={true}
                   amount={exactOutAmount}
-                  setAmount={setExactOutAmount}
+                  setAmount={handleSingleTokenWithdrawAssetOut}
                   customTokenList={pool?.tokens}
                 />
               </TokenList>
@@ -192,22 +273,63 @@ export default function WithdrawLiquidityContent({
                 triggerText={"Preview"}
                 setOpen={setPreviewOpen}
               >
+                <TokenList className="divide-muted bg-muted">
+                  {pool?.tokens.map((token) => {
+                    const formattedAmount = burnShares
+                      ? Number(
+                          formatUnits(
+                            burnShares[token.address] ?? 0n,
+                            token.decimals,
+                          ),
+                        )
+                      : 0;
+                    return (
+                      <PreviewToken
+                        key={token.address}
+                        token={token}
+                        value={formattedAmount}
+                        weight={token.normalizedWeight}
+                        price={prices[token.address]}
+                      />
+                    );
+                  })}
+                </TokenList>
+                <p className="text-center text-xs font-medium text-muted-foreground">
+                  Your Stake of{" "}
+                  <span className="font-bold">
+                    {amount.toFixed(2)} Pool Tokens{" "}
+                  </span>
+                  will be converted and withdrawn from the pool, with the
+                  following breakdown.
+                </p>
+                <div className="flex w-full items-center justify-center">
+                  <Icons.chevronsDown className="self-center text-secondary-foreground" />
+                </div>
+                <TokenList className="bg-muted">
+                  <PreviewToken
+                    token={exactOutToken}
+                    value={exactOutAmount}
+                    price={prices[exactOutToken?.address ?? ""]}
+                  />
+                </TokenList>
                 <InfoBoxList>
-                  <InfoBoxListItem title={"Expected Shares"} value={"-"} />
+                  <InfoBoxListItem title={"Total Shares"} value={amount} />
                   <InfoBoxListItem
                     title={"Approximate Total Value"}
-                    value={"-"}
+                    value={formatUsd(
+                      (prices[exactOutToken?.address ?? ""] ?? 0) *
+                        exactOutAmount,
+                    )}
                   />
                 </InfoBoxList>
-
                 <Button
                   onClick={() => {
                     write({
                       address: networkConfig.precompileAddresses
                         .erc20DexAddress as Address,
                       abi: DEX_PRECOMPILE_ABI,
-                      functionName: "removeLiquidityBurningShares",
-                      params: payload,
+                      functionName: "removeLiquidityExactAmount",
+                      params: singlePayload,
                     });
                   }}
                 >

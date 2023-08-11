@@ -34,7 +34,11 @@ export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
             parseUnits(`${amount}`, asset.decimals),
           ],
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(
+            "usePollPreviewSharesForSingleSidedLiquidityRequest error: ",
+            e,
+          );
           return EMPTY_INFO;
         });
 
