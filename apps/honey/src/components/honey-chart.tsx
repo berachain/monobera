@@ -88,6 +88,7 @@ interface IHoneyChart {
 }
 
 enum TimeFrame {
+  HOURLY = "24H",
   WEEKLY = "7d",
   MONTHLY = "30d",
   QUARTERLY = "90d",
@@ -103,6 +104,7 @@ type TimeFrameToNumber = {
 };
 
 const timeFrameToNumber: TimeFrameToNumber = {
+  [TimeFrame.HOURLY]: 24,
   [TimeFrame.WEEKLY]: 7,
   [TimeFrame.MONTHLY]: 30,
   [TimeFrame.QUARTERLY]: 90,

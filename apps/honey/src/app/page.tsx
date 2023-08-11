@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import { getUnixTime } from "date-fns";
 
 import Data from "~/components/data";
 import Graph from "~/components/graph";
@@ -11,7 +12,50 @@ export const metadata: Metadata = {
   description: "Mo honey mo problems",
 };
 
-export default function Home() {
+type HoneyEntry = {
+  UTCTime: string;
+  amount: string;
+};
+
+type HoneyVolume = {
+  honeyVolume: HoneyEntry[];
+};
+
+type HoneySupply = {
+  honeyTotalSupply: HoneyEntry[];
+};
+
+async function getOverviewData(): Promise<[HoneyVolume, HoneySupply]> {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const volumeRes = await fetch(
+    `${
+      process.env.NEXT_PUBLIC_ANALYTICS
+    }/analytics/honey/volume/daily?to_time=${getUnixTime(
+      new Date(),
+    )}&from_time=${getUnixTime(yesterday)}`,
+  );
+
+  const supplyRes = await fetch(
+    `${
+      process.env.NEXT_PUBLIC_ANALYTICS
+    }/analytics/honey/supply/daily?to_time=${getUnixTime(
+      new Date(),
+    )}&from_time=${getUnixTime(yesterday)}`,
+  );
+
+  if (!volumeRes.ok || !supplyRes.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
+
+  return Promise.all([volumeRes.json(), supplyRes.json()]);
+}
+
+export default async function Home() {
+  const [volume, supply] = await getOverviewData();
+
   return (
     <>
       <div className="honey:bg-[#468DCB]">
@@ -24,9 +68,18 @@ export default function Home() {
       </div>
       <div className="honey:bg-gradient-to-b honey:from-[#468DCB] honey:to-background">
         <div className="container">
-          <Data />
-          <Graph />
-          <HoneyTransactionsTable />
+          <div className="py-12">
+            <Data
+              tvl={supply.honeyTotalSupply[0]?.amount || "0"}
+              dailyVolume={volume.honeyVolume[0]?.amount || "0"}
+            />
+          </div>
+          <div className="py-12">
+            <Graph />
+          </div>
+          <div className="py-12">
+            <HoneyTransactionsTable />
+          </div>
         </div>
       </div>
     </>
