@@ -33,11 +33,15 @@ export const navItems = [
   //   href: "/dashboard",
   //   title: "Dashboard",
   // },
+
   {
     href: "/stake",
     title: "Stake",
   },
-  // TODO integrate for public testnet
+  {
+    href: "/delegate",
+    title: "Delegate",
+  },
   {
     href: "/governance",
     title: "Governance",
