@@ -42,10 +42,10 @@ export const navItems = [
     href: "/governance",
     title: "Governance",
   },
-  // {
-  //   href: "/bribes",
-  //   title: "Bribes",
-  // },
+  {
+    href: "/redeem",
+    title: "Redeem",
+  },
 ];
 
 const chain: Chain = {

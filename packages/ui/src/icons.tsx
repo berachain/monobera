@@ -1,5 +1,6 @@
 import {
   Activity,
+  AlertCircle,
   AlertTriangle,
   ArrowDown,
   ArrowDownUp,
@@ -69,6 +70,7 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
+  alertCircle: AlertCircle,
   activity: Activity,
   sortAsc: SortAsc,
   arrowDownUp: ArrowDownUp,
