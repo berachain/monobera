@@ -21,6 +21,10 @@ interface CoinsData {
   coins: Coin[];
 }
 
+const getAPIendPointForDays = (pool: Pool, days: number) => {
+  return `http://${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=${days}`;
+};
+
 const getVolume = (
   prices: MappedTokens,
   volumeData: CoinsData[],
@@ -102,27 +106,11 @@ export const getWBeraPriceDictForPoolTokens = async (
 
     const allPoolVolumePromises: any[] = [];
     pools.forEach((pool) => {
-      const dailyVolumeResponse = fetch(
-        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=1`,
-      );
-
-      const weeklyVolumeResponse = fetch(
-        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=7`,
-      );
-
-      const monthlyVolumeResponse = fetch(
-        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=30`,
-      );
-
-      const quarterlyVolumeResponse = fetch(
-        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=90`,
-      );
-
       const volumePromises = Promise.all([
-        dailyVolumeResponse,
-        weeklyVolumeResponse,
-        monthlyVolumeResponse,
-        quarterlyVolumeResponse,
+        fetch(getAPIendPointForDays(pool, 1)),
+        fetch(getAPIendPointForDays(pool, 7)),
+        fetch(getAPIendPointForDays(pool, 30)),
+        fetch(getAPIendPointForDays(pool, 90)),
       ]);
       allPoolVolumePromises.push(volumePromises);
     });

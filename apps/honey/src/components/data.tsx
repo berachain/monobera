@@ -1,5 +1,11 @@
+"use client";
+
 import React from "react";
+import { formatUsd } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
+import { formatUnits } from "viem";
+
+import { honey } from "~/config/tokens";
 
 function DataCard({
   icon,
@@ -21,21 +27,34 @@ function DataCard({
   );
 }
 
-export default function Data() {
+export default function Data({
+  tvl,
+  dailyVolume,
+}: {
+  tvl: string;
+  dailyVolume: string;
+}) {
+  const displayTvl = formatUsd(
+    Number(formatUnits(BigInt(tvl) ?? 0n, honey.decimals)),
+  );
+
+  const displayDailyVolume = formatUsd(
+    Number(formatUnits(BigInt(dailyVolume) ?? 0n, honey.decimals)),
+  );
   return (
     <section className="py-24">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <DataCard
           title="Total Value Locked"
-          value="$0.00"
+          value={displayTvl}
           icon={<Icons.lock />}
         />
         <DataCard
           title="24H Volume"
-          value="$0.00"
+          value={displayDailyVolume}
           icon={<Icons.candleStick />}
         />
-        <DataCard title="Honey Price" value="$0.00" icon={<Icons.honey />} />
+        <DataCard title="Honey Price" value="$1.00" icon={<Icons.honey />} />
       </div>
     </section>
   );

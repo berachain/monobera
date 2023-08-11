@@ -92,7 +92,7 @@ export function HoneyTokenInput({
             placeholder="0.0"
             disabled={disabled}
             className={cn(
-              "w-full grow border-0 p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
+              "w-full grow border-0 bg-white p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
               exceeding && "text-destructive",
             )}
             value={amount > 0 ? amount : ""}
