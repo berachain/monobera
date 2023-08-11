@@ -9,11 +9,9 @@ export const useRedeem = () => {
 
   useEffect(() => {
     const newPayload = [account, parseUnits(`${redeemAmount}`, 18)];
-
     setPayload(newPayload);
   }, [account, redeemAmount]);
 
-  console.log(payload);
   return {
     redeemAmount,
     payload,
