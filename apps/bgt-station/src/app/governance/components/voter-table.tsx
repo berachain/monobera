@@ -13,11 +13,11 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { MultiSelectBadge } from "../components/multi-select-badge";
 import { generateRandomData } from "../home/mockData";
-import { type VoteTypes } from "../types";
+import { type ALL, type VOTER_TYPE } from "../types";
 
-const userTypes = ["all", "validators", "users"];
+const userTypes: Array<ALL | VOTER_TYPE> = ["all", "validators", "users"];
 
-const getBadge = (vt: typeof VoteTypes) => {
+const getBadge = (vt: string) => {
   switch (vt) {
     case "veto":
       return (
@@ -49,7 +49,7 @@ const getBadge = (vt: typeof VoteTypes) => {
 };
 
 export function VoterTable() {
-  const [voterTypes, setVoterTypes] = React.useState<typeof userTypes>("all");
+  const [voterTypes, setVoterTypes] = React.useState<ALL | VOTER_TYPE>("all");
   const [voteType, setVoteType] = React.useState<string[]>([]);
 
   const voterData = useMemo(
@@ -70,7 +70,7 @@ export function VoterTable() {
       <div className="flex items-center justify-between">
         <Tabs defaultValue={voterTypes} className="my-4">
           <TabsList>
-            {userTypes.map((type) => (
+            {userTypes.map((type: ALL | VOTER_TYPE) => (
               <TabsTrigger
                 value={type}
                 key={type}
@@ -97,7 +97,7 @@ export function VoterTable() {
         </div>
         <div className="max-h-[800px] overflow-y-scroll p-4">
           {voterData.map((voter) => (
-            <div key={voter} className="flex gap-16">
+            <div key={voter.voter} className="flex gap-16">
               <Accordion type="single" collapsible className="flex-grow">
                 <AccordionItem value="item-1">
                   <AccordionTrigger>
