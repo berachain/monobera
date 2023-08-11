@@ -24,7 +24,7 @@ export default function ProposalDetails({
   if (!isAddress(proposalId)) router.push("/404");
 
   return (
-    <div className="pb-16">
+    <div className="container pb-16">
       <div className="mx-auto h-fit w-full max-w-[830px]">
         <div
           className="flex h-11 w-full justify-between hover:cursor-pointer"
@@ -57,7 +57,7 @@ export default function ProposalDetails({
         </div>
 
         <div className="mt-4 flex gap-4">
-          <Card className="flex w-full flex-col items-center justify-center p-6">
+          <Card className="hidden w-full flex-col items-center justify-center p-6 sm:flex">
             <div className="text-2xl font-semibold leading-loose text-foreground">
               96.23M
             </div>
@@ -69,7 +69,7 @@ export default function ProposalDetails({
           <VoteCard proposalVotes={{ yes: 20, no: 10, veto: 9, abstain: 15 }} />
         </div>
 
-        <div className="mt-16 flex h-fit w-full gap-8">
+        <div className="mt-16 flex h-fit w-full flex-col gap-8 sm:flex-row">
           <div className="flex-1">
             <div className="h-7 text-lg font-semibold leading-7 text-foreground">
               Description
@@ -78,8 +78,8 @@ export default function ProposalDetails({
               {description}
             </Card>
           </div>
-          <div className="w-0.5 flex-1">
-            <div className=" h-7 text-lg font-semibold leading-7 text-foreground">
+          <div className="flex-1 sm:w-0.5">
+            <div className="h-7 text-lg font-semibold leading-7 text-foreground">
               Msg
             </div>
             <Card className="mt-1 h-full max-h-[376px] overflow-scroll break-words bg-muted px-3 py-2 text-sm font-normal leading-normal text-muted-foreground">

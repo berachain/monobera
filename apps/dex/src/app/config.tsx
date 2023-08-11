@@ -31,7 +31,7 @@ import {
 
 export const navItems = [
   {
-    href: "/",
+    href: "/swap",
     title: "Swap",
   },
   {

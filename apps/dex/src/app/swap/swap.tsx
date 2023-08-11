@@ -1,3 +1,5 @@
+"use client";
+
 import { type Address } from "wagmi";
 
 import { SwapCard } from "~/components/swap-card";

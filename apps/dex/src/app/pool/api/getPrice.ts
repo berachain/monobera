@@ -103,19 +103,23 @@ export const getWBeraPriceDictForPoolTokens = async (
     const allPoolVolumePromises: any[] = [];
     pools.forEach((pool) => {
       const dailyVolumeResponse = fetch(
-        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=1`,
+        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=1`,
+        { cache: "no-store" },
       );
 
       const weeklyVolumeResponse = fetch(
-        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=7`,
+        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=7`,
+        { cache: "no-store" },
       );
 
       const monthlyVolumeResponse = fetch(
-        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=30`,
+        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=30`,
+        { cache: "no-store" },
       );
 
       const quarterlyVolumeResponse = fetch(
-        `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=90`,
+        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=90`,
+        { cache: "no-store" },
       );
 
       const volumePromises = Promise.all([

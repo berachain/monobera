@@ -39,7 +39,7 @@ export const ConnectButton = ({
                 userSelect: "none",
               },
             })}
-            className={cn("flex w-48", className)}
+            className={cn("flex w-full", className)}
           >
             {(() => {
               if (!isConnected) {
@@ -47,7 +47,6 @@ export const ConnectButton = ({
                   <Button
                     onClick={openConnectModal}
                     type="button"
-                    variant="outline"
                     className={cn(
                       "w-full gap-2",
                       !isNavItem && "text-lg font-semibold",

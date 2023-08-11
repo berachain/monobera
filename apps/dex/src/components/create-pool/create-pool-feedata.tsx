@@ -86,7 +86,7 @@ export function CreatePoolFeeData({ error, setSwapFee, onContinue }: Props) {
           endAdornment={
             <p
               className={cn(
-                "mr-2 self-center pl-1 text-xs text-foreground",
+                "ml-2 self-center pl-1 text-xs text-foreground",
                 type !== Types.CUSTOM && "opacity-50",
               )}
             >

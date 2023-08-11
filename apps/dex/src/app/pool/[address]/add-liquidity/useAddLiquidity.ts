@@ -115,11 +115,11 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
     singleSidedShares ? singleSidedShares[1][0] : 0n,
     pool?.pool,
-    "0x599D8d33253361f1dc654e6f9C2813Bd392eC0d5",
+    pool?.poolShareDenomHex,
   );
 
   useEffect(() => {
-    if (singleSidedShares)
+    if (singleSidedShares && singleSidedShares[1][0])
       setSingleSidedExpectedShares(formatUnits(singleSidedShares[1][0], 18));
   }, [singleSidedShares]);
 

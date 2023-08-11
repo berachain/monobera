@@ -20,10 +20,10 @@ import {
   DialogTitle,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 
+import { SearchInput } from "./search-input";
 import { TokenIcon } from "./token-icon";
 
 type Props = {
@@ -152,10 +152,7 @@ export function TokenDialog({
               <DialogTitle className="text-lg">Select a token</DialogTitle>
             </DialogHeader>
             {!customTokens && (
-              <Input
-                startAdornment={
-                  <Icons.search className="h-4 w-4 text-muted-foreground" />
-                }
+              <SearchInput
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value);
@@ -306,7 +303,7 @@ const TokenDialogRow = ({
       <Button
         variant="ghost"
         className={cn(
-          "flex h-auto w-full items-center justify-start gap-2 p-4 text-left shadow ",
+          "flex h-auto w-full items-center justify-start gap-2 p-4 text-left shadow-none ",
           isTokenSelected && "cursor-default opacity-50",
         )}
         onClick={() => {
