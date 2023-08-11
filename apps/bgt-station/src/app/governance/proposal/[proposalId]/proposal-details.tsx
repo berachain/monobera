@@ -10,6 +10,7 @@ import { isAddress, stringify } from "viem";
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
 import { VoteCard } from "../../components/vote-card";
+import { VoterTable } from "../../components/voter-table";
 import dataJ from "../../home/data.json";
 import { description } from "../../home/mockData";
 import { StatusEnum } from "../../types";
@@ -23,7 +24,7 @@ export default function ProposalDetails({
   if (!isAddress(proposalId)) router.push("/404");
 
   return (
-    <div className="">
+    <div className="pb-16">
       <div className="mx-auto h-fit w-full max-w-[830px]">
         <div
           className="flex h-11 w-full justify-between hover:cursor-pointer"
@@ -94,11 +95,11 @@ export default function ProposalDetails({
           <OverviewChart />
         </div>
 
-        <div className="mt-16">
-          <div className="h-7 text-lg font-semibold leading-7 text-foreground">
+        <div className="mt-16 ">
+          <div className="mt-4 h-7 text-lg font-semibold leading-7 text-foreground">
             Voters
           </div>
-          <Card className="mt-1 h-[376px] p-4 ">TIM</Card>
+          <VoterTable />
         </div>
       </div>
     </div>
