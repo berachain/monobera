@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { type Pool } from "@bera/bera-router";
 import { usePollUserDepositedPools } from "@bera/berajs";
-import { useState } from "react";
 import useSWRInfinite from "swr/infinite";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
+
 const DEFAULT_SIZE = 6;
 
 export const usePoolTable = () => {
@@ -47,27 +48,29 @@ export const usePoolTable = () => {
 
   const data = allData ? [].concat(...allData) : [];
 
-
-  const {useUserDepositedPools} = usePollUserDepositedPools(`${getAbsoluteUrl()}/pool/api`)
-  const userPools = useUserDepositedPools()
-
+  const { useUserDepositedPools } = usePollUserDepositedPools(
+    `${getAbsoluteUrl()}/pool/api`,
+  );
+  const userPools = useUserDepositedPools();
 
   return {
     data: data?.filter((pool: Pool) => {
-      return search === ''
+      return search === ""
         ? true
-        : (
-          pool.poolName.toLowerCase().includes(search.toLowerCase()) ||
-          (pool.poolShareDenomHex && pool.poolShareDenomHex.toLowerCase().includes(search.toLowerCase()))
-        );
+        : pool.poolName.toLowerCase().includes(search.toLowerCase()) ||
+            (pool.poolShareDenomHex &&
+              pool.poolShareDenomHex
+                .toLowerCase()
+                .includes(search.toLowerCase()));
     }),
     userPools: userPools?.filter((pool: Pool) => {
-      return search === ''
+      return search === ""
         ? true
-        : (
-          pool.poolName.toLowerCase().includes(search.toLowerCase()) ||
-          (pool.poolShareDenomHex && pool.poolShareDenomHex.toLowerCase().includes(search.toLowerCase()))
-        );
+        : pool.poolName.toLowerCase().includes(search.toLowerCase()) ||
+            (pool.poolShareDenomHex &&
+              pool.poolShareDenomHex
+                .toLowerCase()
+                .includes(search.toLowerCase()));
     }),
     allDataSize,
     setAllDataSize,

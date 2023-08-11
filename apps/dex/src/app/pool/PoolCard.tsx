@@ -92,7 +92,7 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
         className="w-full gap-1"
         onClick={() => router.push(`/pool/${pool?.pool}`)}
       >
-        View Pool <Icons.arrowRight className="w-4 h-4" />
+        View Pool <Icons.arrowRight className="h-4 w-4" />
       </Button>
     </div>
   );

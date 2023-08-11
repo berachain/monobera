@@ -1,10 +1,11 @@
-"use client"
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Button } from "@bera/ui/button";
 
 import { CircleBackground } from "~/components/CirceBackground";
-import { Button } from "@bera/ui/button";
 
 export default function CreateAPool() {
   const router = useRouter();
@@ -46,15 +47,15 @@ export default function CreateAPool() {
               height={889}
             />
           </div>
-          <Button variant='outline' className="bg-background"
-                  onClick={() => router.push(`/pool/create`)}
-                  >
-          Create a Pool
-        </Button>
+          <Button
+            variant="outline"
+            className="bg-background"
+            onClick={() => router.push(`/pool/create`)}
+          >
+            Create a Pool
+          </Button>
         </div>
- 
       </div>
-      
     </section>
   );
 }

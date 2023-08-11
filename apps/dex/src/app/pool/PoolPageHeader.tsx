@@ -5,17 +5,16 @@ import { useRouter } from "next/navigation";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
+import { DataCard } from "../components/Data";
 import { HotPools } from "./HotPools";
 import { PoolSearch } from "./PoolsTable";
 import { TrendingPools } from "./TrendingPools";
-import { DataCard } from "../components/Data";
 
 export default function PoolPageHeader() {
   const router = useRouter();
   return (
     <div className="flex w-full flex-col items-center justify-center gap-6">
-
-{/* <Image
+      {/* <Image
         src="/pool-bear.png"
         alt="bidness"
         width={150}
@@ -65,7 +64,7 @@ export default function PoolPageHeader() {
       <HotPools isMainPage={false} />
       <TrendingPools />
       <div id="poolSearch" className="w-full max-w-[980px]">
-      <PoolSearch />
+        <PoolSearch />
       </div>
     </div>
   );

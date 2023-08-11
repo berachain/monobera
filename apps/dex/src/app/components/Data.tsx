@@ -1,6 +1,6 @@
 import React from "react";
-import { Icons } from "@bera/ui/icons";
 import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 
 export function DataCard({
   icon,
@@ -43,7 +43,7 @@ export default function Data() {
         />
         <DataCard title="Bera Price" value="$69.426969" icon={<Icons.bera />} />
       </div>
-      <Button variant='outline' className="mt-4 bg-background" >
+      <Button variant="outline" className="mt-4 bg-background">
         View Analytics
       </Button>
     </section>

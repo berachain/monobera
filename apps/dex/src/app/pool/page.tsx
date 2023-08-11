@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Decentralized exchange on Berachain",
 };
 
-export default  function Pool() {
+export default function Pool() {
   // const router = new RouterService(defaultConfig);
   // let pools: Pool[] | undefined = undefined;
   // try {

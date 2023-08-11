@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { Button } from "@bera/ui/button";
 import useSWRInfinite from "swr/infinite";
 
@@ -7,7 +8,7 @@ import { PoolCard } from "./PoolCard";
 
 const DEFAULT_SIZE = 3;
 
-export const HotPools = ({isMainPage = false}: {isMainPage: boolean}) => {
+export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
   const {
     data: allData,
     size: allDataSize,
@@ -51,26 +52,29 @@ export const HotPools = ({isMainPage = false}: {isMainPage: boolean}) => {
           Leverage our boosted yields to increase your rewards
         </p>
         <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {data.map((pool: any) => {
-              return <PoolCard pool={pool} key={pool?.address + 'hot'}/>;
+              return <PoolCard pool={pool} key={pool?.address + "hot"} />;
             })}
           </div>
-          {!isMainPage && <Button
-            onClick={() => setAllDataSize(allDataSize + 1)}
-            disabled={isAllDataLoadingMore || isAllDataReachingEnd}
-            variant="outline"
-          >
-            {isAllDataLoadingMore
-              ? "Loading..."
-              : isAllDataReachingEnd
-              ? "No more hot pools"
-              : "View More"}
-          </Button>}
-          {isMainPage && 
-            <Button variant='outline' className="mt-8 bg-background">
+          {!isMainPage && (
+            <Button
+              onClick={() => setAllDataSize(allDataSize + 1)}
+              disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+              variant="outline"
+            >
+              {isAllDataLoadingMore
+                ? "Loading..."
+                : isAllDataReachingEnd
+                ? "No more hot pools"
+                : "View More"}
+            </Button>
+          )}
+          {isMainPage && (
+            <Button variant="outline" className="mt-8 bg-background">
               View Pools
-            </Button>}
+            </Button>
+          )}
         </div>
       </div>
     </div>

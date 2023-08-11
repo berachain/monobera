@@ -9,4 +9,4 @@ export * from "./usePollPreviewSharesForSingleSidedLiquidityRequest";
 export * from "./usePollPreviewSwapExact";
 export * from "./usePollPreviewRemoveLiquidityOneSideOut";
 export * from "./usePollPreviewRemoveLiquidityExactAmountOut";
-export * from './usePollUserDepositedPools'
+export * from "./usePollUserDepositedPools";

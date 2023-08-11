@@ -31,7 +31,7 @@ export default function Homepage() {
     <div className="container max-w-[1200px]">
       <Hero />
       <Data />
-      <HotPools isMainPage/>
+      <HotPools isMainPage />
       <div className="-mx-full overflow-hidden">
         <CreateAPool />
       </div>

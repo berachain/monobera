@@ -24,8 +24,8 @@ import { Input } from "@bera/ui/input";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 
-import { TokenIcon } from "./token-icon";
 import { SearchInput } from "./search-input";
+import { TokenIcon } from "./token-icon";
 
 type Props = {
   open: boolean;
@@ -153,14 +153,14 @@ export function TokenDialog({
               <DialogTitle className="text-lg">Select a token</DialogTitle>
             </DialogHeader>
             {!customTokens && (
-      
-              <SearchInput               value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setError(undefined);
-              }}
-              placeholder="Search by name, symbol or address"/>
-
+              <SearchInput
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setError(undefined);
+                }}
+                placeholder="Search by name, symbol or address"
+              />
             )}
             {!customTokens && (
               <div className="flex flex-wrap gap-2">

@@ -33,7 +33,7 @@ export class RouteProposer {
   ): NewPath[] {
     tokenIn = tokenIn.toLowerCase();
     tokenOut = tokenOut.toLowerCase();
-    console.log('direct pools', pools)
+    console.log("direct pools", pools);
 
     if (pools.length === 0) return [];
 
@@ -50,7 +50,7 @@ export class RouteProposer {
 
     const poolsAllDict = parseToPoolsDict(pools);
 
-    console.log('poolsAllDict', poolsAllDict)
+    console.log("poolsAllDict", poolsAllDict);
     const [directPools, hopsIn, hopsOut] = filterPoolsOfInterest(
       poolsAllDict,
       tokenIn,
@@ -58,7 +58,7 @@ export class RouteProposer {
       10,
     );
 
-    console.log('direct pools', directPools)
+    console.log("direct pools", directPools);
 
     const pathData = producePaths(
       tokenIn,
@@ -122,7 +122,7 @@ export class RouteProposer {
 }
 
 export function parseToPoolsDict(pools: Pool[]): PoolDictionary {
-  console.log('WHYYT',pools)
+  console.log("WHYYT", pools);
   return Object.fromEntries(
     cloneDeep(pools)
       .filter(
@@ -291,11 +291,11 @@ export function filterPoolsOfInterest(
   const directPools: PoolDictionary = {};
   const hopsIn: hopDictionary = {};
   const hopsOut: hopDictionary = {};
-  console.log('WTF', allPools)
+  console.log("WTF", allPools);
 
   Object.keys(allPools).forEach((id) => {
     const pool = allPools[id];
-    console.log('pool', pool)
+    console.log("pool", pool);
     const tokenListSet = new Set(pool?.tokensList);
     const containsTokenIn = tokenListSet.has(tokenIn.toLowerCase());
     const containsTokenOut = tokenListSet.has(tokenOut.toLowerCase());

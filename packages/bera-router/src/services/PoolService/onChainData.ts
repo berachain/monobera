@@ -114,7 +114,7 @@ export class MultiCallPools {
   async execute(pools: RawPool[]): Promise<boolean> {
     const rawObj: Record<string, PoolData> = mapPoolsToRecord(pools);
 
-    console.log('token map', this.tokenMap)
+    console.log("token map", this.tokenMap);
     const calls = this.calls.map((call) => {
       return {
         address: call[0] as Address,
@@ -157,7 +157,7 @@ export class MultiCallPools {
               ? (Number(weight.weight) * 100) / totalWeight
               : 0;
             const swapFee = poolData.poolOptions.swapFee;
-            console.log(`${tokenAddress} is in ${this.tokenMap[tokenAddress]}`)
+            console.log(`${tokenAddress} is in ${this.tokenMap[tokenAddress]}`);
 
             if (this.tokenMap && this.tokenMap[tokenAddress]) {
               set(

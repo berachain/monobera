@@ -66,22 +66,22 @@ export async function GET(request: Request) {
   const hotPools = searchParams.get("hotPools");
   const newPools = searchParams.get("newPools");
 
-  console.log('hotPools', hotPools)
+  console.log("hotPools", hotPools);
   let taggedPools: any[] = totalSupplyStringPools;
 
-  if (hasBgtRewards == 'true') {
+  if (hasBgtRewards == "true") {
     taggedPools = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.BGT_REWARDS),
     );
   }
 
-  if (hotPools == 'true') {
+  if (hotPools == "true") {
     taggedPools = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.HOT),
     );
   }
 
-  if (newPools == 'true') {
+  if (newPools == "true") {
     taggedPools = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.NEW),
     );

@@ -8,6 +8,7 @@ import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
+
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 export const columns: ColumnDef<Pool>[] = [
@@ -30,9 +31,7 @@ export const columns: ColumnDef<Pool>[] = [
   },
   {
     accessorKey: "tokens",
-    header: () => (
-      <></>
-    ),
+    header: () => <></>,
     cell: ({ row }) => {
       const tokens = row.getValue("tokens");
 
@@ -58,9 +57,14 @@ export const columns: ColumnDef<Pool>[] = [
       <DataTableColumnHeader column={column} title="BGT Rewards" />
     ),
     cell: () => {
-      return <div className="flex w-[160px] items-center">            <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
-      0.42% <Icons.chevronsRight className="h-4 w-4" /> 1.58% BGT
-    </Badge></div>;
+      return (
+        <div className="flex w-[160px] items-center">
+          {" "}
+          <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
+            0.42% <Icons.chevronsRight className="h-4 w-4" /> 1.58% BGT
+          </Badge>
+        </div>
+      );
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
@@ -94,19 +98,27 @@ export const columns: ColumnDef<Pool>[] = [
   },
   {
     accessorKey: "btns",
-    header: () => (
-      <></>
-    ),
+    header: () => <></>,
     cell: ({ row }) => {
-      console.log(row)
-      const address = row.original.pool
+      console.log(row);
+      const address = row.original.pool;
 
       return (
-        <div className="flex flex-row gap-1 items-center">
-          <Icons.minusSquare className="w-5 h-5 text-muted-foreground" onClick={() => window.open(`${getAbsoluteUrl()}/pool/${address}/withdraw`)}/>
-          <Icons.plusSquare className="w-5 h-5 text-muted-foreground" onClick={() => window.open(`${getAbsoluteUrl()}/pool/${address}/add-liquidity`)}/>
+        <div className="flex flex-row items-center gap-1">
+          <Icons.minusSquare
+            className="h-5 w-5 text-muted-foreground"
+            onClick={() =>
+              window.open(`${getAbsoluteUrl()}/pool/${address}/withdraw`)
+            }
+          />
+          <Icons.plusSquare
+            className="h-5 w-5 text-muted-foreground"
+            onClick={() =>
+              window.open(`${getAbsoluteUrl()}/pool/${address}/add-liquidity`)
+            }
+          />
         </div>
-      )
+      );
     },
   },
 ];
