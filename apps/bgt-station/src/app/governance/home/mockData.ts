@@ -78,17 +78,20 @@ export const description =
 
 export function generateRandomData() {
   const voteTypes = ["yes", "no", "veto", "abstain"];
+  const voterTypes = ["validators", "users"];
   const data = [];
 
   for (let i = 0; i < 100; i++) {
     const randomVoteType =
       voteTypes[Math.floor(Math.random() * voteTypes.length)];
     const randomAmount = Math.floor(Math.random() * 1000);
-
+    const randomVoterType =
+      voterTypes[Math.floor(Math.random() * voterTypes.length)];
     data.push({
       amount: randomAmount,
       voteType: randomVoteType,
       voter: "wally",
+      voterTypes: randomVoterType,
     });
   }
 
