@@ -1,8 +1,10 @@
 import {
   Activity,
+  AlertCircle,
   AlertTriangle,
   ArrowDown,
   ArrowDownUp,
+  ArrowLeft,
   ArrowRight,
   ArrowUpRight,
   CandlestickChart,
@@ -72,11 +74,13 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
+  alertCircle: AlertCircle,
   activity: Activity,
   minusSquare: MinusSquare,
   plusSquare: PlusSquare,
   sortAsc: SortAsc,
   arrowDownUp: ArrowDownUp,
+  arrowLeft: ArrowLeft,
   sortDesc: SortDesc,
   command: Command,
   chevronsRight: ChevronsRight,

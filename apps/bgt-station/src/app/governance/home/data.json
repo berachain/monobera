@@ -1,0 +1,167 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "isActive": true,
+      "lastLogin": "2023-08-07T12:34:56Z"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "isActive": false,
+      "lastLogin": "2023-07-01T10:20:30Z"
+    }
+  ],
+  "products": [
+    {
+      "productId": "A123",
+      "productName": "Laptop",
+      "price": 1200.5
+    },
+    {
+      "productId": "B456",
+      "productName": "Mobile Phone",
+      "price": 800.75
+    }
+  ],
+  "settings": {
+    "theme": "dark",
+    "notifications": true,
+    "language": "en-US"
+  },
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "isActive": true,
+      "lastLogin": "2023-08-07T12:34:56Z"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "isActive": false,
+      "lastLogin": "2023-07-01T10:20:30Z"
+    }
+  ],
+  "products": [
+    {
+      "productId": "A123",
+      "productName": "Laptop",
+      "price": 1200.5
+    },
+    {
+      "productId": "B456",
+      "productName": "Mobile Phone",
+      "price": 800.75
+    }
+  ],
+  "settings": {
+    "theme": "dark",
+    "notifications": true,
+    "language": "en-US"
+  },
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "isActive": true,
+      "lastLogin": "2023-08-07T12:34:56Z"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "isActive": false,
+      "lastLogin": "2023-07-01T10:20:30Z"
+    }
+  ],
+  "products": [
+    {
+      "productId": "A123",
+      "productName": "Laptop",
+      "price": 1200.5
+    },
+    {
+      "productId": "B456",
+      "productName": "Mobile Phone",
+      "price": 800.75
+    }
+  ],
+  "settings": {
+    "theme": "dark",
+    "notifications": true,
+    "language": "en-US"
+  },
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "isActive": true,
+      "lastLogin": "2023-08-07T12:34:56Z"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "isActive": false,
+      "lastLogin": "2023-07-01T10:20:30Z"
+    }
+  ],
+  "products": [
+    {
+      "productId": "A123",
+      "productName": "Laptop",
+      "price": 1200.5
+    },
+    {
+      "productId": "B456",
+      "productName": "Mobile Phone",
+      "price": 800.75
+    }
+  ],
+  "settings": {
+    "theme": "dark",
+    "notifications": true,
+    "language": "en-US"
+  },
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "isActive": true,
+      "lastLogin": "2023-08-07T12:34:56Z"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "isActive": false,
+      "lastLogin": "2023-07-01T10:20:30Z"
+    }
+  ],
+  "products": [
+    {
+      "productId": "A123",
+      "productName": "Laptop",
+      "price": 1200.5
+    },
+    {
+      "productId": "B456",
+      "productName": "Mobile Phone",
+      "price": 800.75
+    }
+  ],
+  "settings": {
+    "theme": "dark",
+    "notifications": true,
+    "language": "en-US"
+  }
+}
