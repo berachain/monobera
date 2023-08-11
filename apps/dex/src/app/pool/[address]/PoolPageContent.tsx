@@ -549,7 +549,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             </Tabs>
           </section>
         </div>
-        <div className="col-span-5 flex w-full w-full flex-col gap-5 lg:col-span-2">
+        <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-2">
           <Card>
             <CardContent className="flex items-center justify-between gap-4 p-4">
               <div>

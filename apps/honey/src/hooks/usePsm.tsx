@@ -35,7 +35,6 @@ export const usePsm = () => {
   });
 
   const toBalance = useToBalance();
-  console.log(fromBalance);
 
   const [payload, setPayload] = useState<any[]>([]);
 
@@ -71,6 +70,8 @@ export const usePsm = () => {
   };
 
   useEffect(() => {
+    console.log("payload", payload);
+    console.log("allowance", allowance);
     if (isMint && account) {
       const payload = [
         account,
@@ -96,7 +97,7 @@ export const usePsm = () => {
     //   deadline,
     // ];
   }, [isMint, account, fromAmount, toAmount]);
-  console.log("payload", payload);
+
   return {
     payload,
     isConnected,
