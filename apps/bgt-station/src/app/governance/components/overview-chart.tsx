@@ -16,6 +16,11 @@ const Options = {
     y: {
       display: false,
     },
+    xAxes: [
+      {
+        barThickness: 12,
+      },
+    ],
   },
   plugins: {
     legend: {
@@ -32,23 +37,26 @@ const Options = {
       interaction: {
         intersect: false,
       },
+      backgroundColor: "#FAFAF9",
+      borderColor: "#E7E5E4",
+      borderRadius: 18,
+      borderWidth: 1,
+      padding: {
+        top: 8,
+        right: 8,
+        bottom: 0,
+        left: 8,
+      },
+      caretSize: 0,
+      titleFontSize: 12,
+      titleColor: "#292524",
+      bodyColor: "#292524",
       callbacks: {
         label: function (context: {
           dataset: { label: string };
           parsed: { y: number | bigint | null };
         }) {
-          let label = context.dataset.label || "";
-
-          if (label) {
-            label += ": ";
-          }
-          if (context.parsed.y !== null) {
-            label += new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(context.parsed.y);
-          }
-          return label;
+          return context.dataset.label || "";
         },
       },
     },
@@ -63,7 +71,7 @@ const getChartData = (
   }[],
 ) => {
   return {
-    labels: data.map((_, index) => `Label ${index + 1}`), // You can customize labels as needed
+    labels: data.map((da, _) => `${da.amount} BGT  ${da.voter}`),
     datasets: [
       {
         data: data.map((d) => d.amount),
@@ -72,6 +80,7 @@ const getChartData = (
         borderColor: data.map((d) => VoteColorMap[d.voteType]),
         tension: 0.4,
         borderRadius: 100,
+
         borderSkipped: false,
       },
     ],

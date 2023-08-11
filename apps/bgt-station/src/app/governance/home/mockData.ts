@@ -90,7 +90,7 @@ export function generateRandomData() {
     data.push({
       amount: randomAmount,
       voteType: randomVoteType,
-      voter: "wally",
+      voter: "Vote Bear",
       voterTypes: randomVoterType,
     });
   }

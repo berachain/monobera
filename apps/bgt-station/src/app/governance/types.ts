@@ -136,3 +136,5 @@ export const VoteColorMap = {
   abstain_secondary: "#E7E5E4",
   default: "#57534e",
 };
+
+export const VoteTypes = ["yes", "no", "veto", "abstain"];
