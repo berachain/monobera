@@ -42,7 +42,7 @@ function sortByBlockTime(data: any[]): any[] {
     .reverse();
 }
 
-const DEFAULT_SIZE = 10;
+const DEFAULT_SIZE = 5;
 
 export const revalidate = 1000;
 

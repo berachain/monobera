@@ -152,7 +152,6 @@ const getTokenDisplay = (event: any) => {
 };
 
 const getValue = (event: MintData | BurnData) => {
-  console.log(event);
   if (isMintData(event)) {
     return formatUnits(BigInt(event.mintAmount), honey?.decimals ?? 18);
   }

@@ -31,9 +31,6 @@ export function SwapCard() {
     fee2,
     onSwitch,
   } = usePsm();
-
-  console.log("allowance", allowance?.formattedAllowance);
-  console.log("payload", payload);
   return (
     <Card className="w-[500px] bg-background/5 backdrop-blur-sm">
       <CardHeader>
