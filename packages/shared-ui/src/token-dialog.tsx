@@ -20,7 +20,6 @@ import {
   DialogTitle,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 

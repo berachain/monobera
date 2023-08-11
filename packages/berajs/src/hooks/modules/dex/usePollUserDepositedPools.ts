@@ -1,11 +1,10 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20ABI, usePublicClient, type Address } from "wagmi";
+import { usePublicClient, type Address } from "wagmi";
 
-import { BANK_PRECOMPILE_ABI, DEX_PRECOMPILE_ABI } from "~/config";
+import { BANK_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig, useBeraJs } from "~/contexts";
-import ERC20ABI from "../../../../../../../polaris-explorer/apps/explorer/app/address/[address]/components/erc20";
 
 interface Call {
   abi: any[];

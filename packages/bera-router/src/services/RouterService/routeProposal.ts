@@ -103,7 +103,7 @@ export class RouteProposer {
       poolsAllDict,
       tokenIn,
       tokenOut,
-      10,
+      maxPools,
     );
 
     const pathData = producePaths(
