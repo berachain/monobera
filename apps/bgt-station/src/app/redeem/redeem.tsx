@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { useBeraConfig, usePollBgtBalance } from "@bera/berajs";
-import { ERC20BGT_PRECOMPILE_ABI } from "@bera/berajs/src/config";
+import { REDEEM_ABI } from "@bera/berajs/src/config";
 import { useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -89,8 +89,8 @@ export default function Redeem() {
             write({
               address: networkConfig.precompileAddresses
                 .erc20BgtAddress as Address,
-              abi: ERC20BGT_PRECOMPILE_ABI,
-              functionName: "redeemBgtForBera",
+              abi: REDEEM_ABI,
+              functionName: "redeem",
               params: payload,
             })
           }
