@@ -112,7 +112,11 @@ export function ProposalCard({
           {getTimeText(proposalStatus, timestamp)}
         </div>
       </div>
-      <div className="mt-1 text-sm font-semibold leading-tight text-foreground min-[600px]:text-2xl min-[600px]:leading-loose">
+      <div
+        className={`mt-1 font-semibold leading-tight text-foreground min-[600px]:leading-loose ${
+          owner ? "text-2xl" : "text-sm"
+        }`}
+      >
         {proposalTitle}
       </div>
       <div className="mt-4">

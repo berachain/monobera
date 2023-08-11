@@ -57,11 +57,11 @@ export default function GovernanceByStatus({
             case OrderByEnum.LOWEST_PARTICIPATION:
               return getSum(a.proposalVotes) - getSum(b.proposalVotes);
             case OrderByEnum.MOST_RECENT:
-              return a.timestamp - b.timestamp;
-            case OrderByEnum.NEWEST:
-              return a.timestamp - b.timestamp;
-            case OrderByEnum.OLDEST:
               return b.timestamp - a.timestamp;
+            case OrderByEnum.NEWEST:
+              return b.timestamp - a.timestamp;
+            case OrderByEnum.OLDEST:
+              return a.timestamp - b.timestamp;
             default:
               return 0;
           }
