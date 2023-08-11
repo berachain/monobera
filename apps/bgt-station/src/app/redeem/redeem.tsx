@@ -24,7 +24,7 @@ export default function Redeem() {
   const { networkConfig } = useBeraConfig();
 
   return (
-    <div className="mx-auto w-full max-w-[500px]">
+    <div className="container mx-auto w-full max-w-[564px]">
       <Image
         className="max-[600px]:mx-auto"
         src="/bears/redeem-bear.png"
