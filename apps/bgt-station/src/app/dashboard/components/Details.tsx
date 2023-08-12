@@ -1,53 +1,50 @@
 "use client";
 
 import React from "react";
+import { usePollActiveValidators, type Validator } from "@bera/berajs";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 
-import { type bgtDetails } from "../constants";
-import { CurrentSupply } from "./CurrentSupply";
-import { EpochTimeline } from "./EpochTimeline";
-import { Stats } from "./Stats";
-import { Supply } from "./Supply";
+import { bgtDetails as details } from "../constants";
+import { CurrentSupply } from "./current-supply";
+import { EpochTimeline } from "./epoch-timeline";
+import { Stats } from "./stats";
 
-export function Details({ details }: { details: typeof bgtDetails }) {
+export function Details() {
+  const { useActiveValidators } = usePollActiveValidators();
+  const validators: Validator[] = useActiveValidators();
+  const generalInfo = [
+    {
+      amount: validators.length,
+      text: "Total validators",
+    },
+    {
+      amount: "34%",
+      text: "Average staker APY",
+    },
+    {
+      amount: "999.99M",
+      text: "Total BGT supply",
+    },
+  ];
   return (
-    <div className="mb-10 flex flex-col gap-5">
-      <div className="flex flex-col gap-1">
-        <EpochTimeline />
-      </div>
-      {/* <Validators validators={details.validators} /> */}
-
-      <Stats stats={details.stats} />
-      <div className="flex gap-5">
-        <div className="flex-1">
-          <Supply />
+    <div className="mb-10 mt-8 flex flex-col gap-5">
+      <div className="flex w-full gap-2">
+        <div className="basis-2/5">
+          <EpochTimeline />
         </div>
-        <div className="flex flex-1 flex-col gap-5">
-          <Card>
-            <CardHeader>
-              <h3 className="text-md font-semibold text-backgroundSecondary">
-                Supply change
-              </h3>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between">
-                <h4 className="text-2xl font-medium">
-                  {details.supplyChange.change}
-                </h4>
-                <div>
-                  <p className="text-right text-sm text-backgroundSecondary">
-                    {details.supplyChange.bgtStaked} BGT staked
-                  </p>
-                  <p className="text-right text-sm text-backgroundSecondary">
-                    {details.supplyChange.bgtIssued} BGT issued
-                  </p>
-                </div>
-              </div>
-            </CardContent>
+        {generalInfo.map((info, index) => (
+          <Card className="basis-1/5 p-8 text-center" key={(info, index)}>
+            <div className="text-2xl font-semibold leading-loose text-foreground">
+              {info.amount}
+            </div>
+            <div className="text-sm font-medium leading-[14px] text-muted-foreground">
+              {info.text}
+            </div>
           </Card>
-          <CurrentSupply />
-        </div>
+        ))}
       </div>
+      <Stats stats={details.stats} />
+      <CurrentSupply />
     </div>
   );
 }
