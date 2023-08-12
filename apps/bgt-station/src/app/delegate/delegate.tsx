@@ -1,10 +1,16 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { DelegateEnum, type DelegateEnum as DelegateEnumT } from "./types";
+import {
+  DelegateEnum,
+  ImageMapEnum,
+  type DelegateEnum as DelegateEnumT,
+} from "./types";
 
 export default function Delegate({ action }: { action: DelegateEnumT }) {
   const router = useRouter();
@@ -26,9 +32,36 @@ export default function Delegate({ action }: { action: DelegateEnumT }) {
         </TabsList>
       </Tabs>
       <Card className="mt-4 flex flex-col gap-3 p-6">
-        <div className="text-lg font-semibold leading-7 text-foreground">
-          Unbond
+        <div className="text-lg font-semibold capitalize leading-7 text-foreground">
+          {action}
         </div>
+        <Image
+          src={ImageMapEnum[action.toUpperCase()]}
+          alt="bera banner"
+          width={452}
+          height={175}
+        />
+
+        <div className="rounded-18 bg-muted p-3 text-muted-foreground">
+          <div className="flex h-8 items-center justify-between">
+            <div>Total</div>
+            <div>0.0 BGT</div>
+          </div>
+          {action === "redelegate" && (
+            <div className="flex h-8 items-center justify-between">
+              <div>Cooldown</div>
+              <div>21/10/2023</div>
+            </div>
+          )}
+          {action === "unbond" && (
+            <div className="flex h-8 items-center justify-between">
+              <div>Unbonding date</div>
+              <div>21/10/2023</div>
+            </div>
+          )}
+        </div>
+
+        <Button>Confirm</Button>
       </Card>
     </div>
   );

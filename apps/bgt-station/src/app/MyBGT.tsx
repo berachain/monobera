@@ -15,8 +15,9 @@ import { formatUnits } from "viem";
 
 import { formatTime } from "~/utils/formatTime";
 import MyBalance from "~/components/my-balance";
-import ValidatorsTable from "./stake/components/ValidatorsTable";
-import { getYourColumns } from "./stake/components/column";
+
+// import ValidatorsTable from "./validators/components/ValidatorsTable";
+// import { getYourColumns } from "./validators/components/column";
 
 export default function MyBGT() {
   const { useTotalDelegated } = usePollActiveValidators();
@@ -33,7 +34,7 @@ export default function MyBGT() {
   const unbondingQueue = useDelegatorUnbonding();
   console.log("unbondingQueue", unbondingQueue);
   console.log(totalUnbonding);
-  const columns = getYourColumns(totalDelegated);
+  // const columns = getYourColumns(totalDelegated);
   return (
     <div className="container mb-10 flex flex-col gap-6">
       <Card>
@@ -139,7 +140,7 @@ export default function MyBGT() {
             {/* <Input type="text" placeholder="Search" className="w-72" /> */}
           </CardHeader>
           <CardContent>
-            <ValidatorsTable columns={columns} validators={validators} />
+            {/* <ValidatorsTable columns={columns} validators={validators} /> */}
           </CardContent>
         </Card>
       </div>
