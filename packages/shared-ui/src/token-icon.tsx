@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTokenInformation, type Token } from "@bera/berajs";
+import { useTokenInformation, useTokens, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 
@@ -23,6 +23,7 @@ export const TokenIcon = ({
   );
   const { read, tokenInformation } = useTokenInformation();
 
+  const { tokenDictionary } = useTokens();
   useEffect(() => {
     const fetchData = async () => {
       if (fetch && address) {
@@ -36,12 +37,25 @@ export const TokenIcon = ({
     void fetchData();
   }, [read, token, fetch, tokenInformation]);
 
+  const getTokenImgUri = () => {
+    if (token && token.logoURI) {
+      return token.logoURI;
+    }
+    if (token && token.logoURI === undefined && tokenDictionary) {
+      return tokenDictionary[token.address]?.logoURI;
+    }
+    if (fetch && address) {
+      if (tokenDictionary && tokenDictionary[address]) {
+        return tokenDictionary[address]?.logoURI;
+      } else {
+        return "";
+      }
+    }
+    return "";
+  };
   return (
     <Avatar className={cn("h-6 w-6 rounded-full bg-muted", className)}>
-      <AvatarImage
-        src={fetch ? "" : token?.logoURI}
-        className="rounded-full p-1"
-      />
+      <AvatarImage src={getTokenImgUri()} className="rounded-full p-1" />
       <AvatarFallback className="text-xs font-bold">
         {fetch
           ? selectedToken?.symbol?.slice(0, 3)

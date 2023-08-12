@@ -45,13 +45,15 @@ export default function AddLiquidityContent({
   const {
     expectedShares,
     singleSidedExpectedShares,
+    isMultipleInputDisabled,
+    isSingleInputDisabled,
     totalValue,
     singleSidedTotalValue,
     selectedSingleToken,
     selectedSingleTokenAmount,
     previewOpen,
     singleTokenPreviewOpen,
-    tokenDictionary,
+    setSingleSharesExceeding,
     tokenInputs,
     needsApproval,
     allowance,
@@ -61,6 +63,7 @@ export default function AddLiquidityContent({
     singleSidedPayload,
     updateTokenAmount,
     setSelectedSingleToken,
+    updateTokenExceeding,
     setSelectedSingleTokenAmount,
     setPreviewOpen,
     setSingleTokenSetPreviewOpen,
@@ -86,11 +89,7 @@ export default function AddLiquidityContent({
           {pool?.tokens?.map((token, i) => {
             return (
               <TokenIcon
-                token={
-                  tokenDictionary && tokenDictionary[token.address]
-                    ? tokenDictionary[token.address]
-                    : token
-                }
+                token={token}
                 className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
                 key={token.address}
               />
@@ -133,6 +132,9 @@ export default function AddLiquidityContent({
                       }
                       weight={token.normalizedWeight}
                       price={prices[token.address]}
+                      onExceeding={(exceeding: boolean) =>
+                        updateTokenExceeding(i, exceeding)
+                      }
                     />
                   );
                 })}
@@ -149,7 +151,7 @@ export default function AddLiquidityContent({
               </InfoBoxList>
               <TxnPreview
                 open={previewOpen}
-                disabled={false}
+                disabled={isMultipleInputDisabled}
                 title={"Confirm LP Details"}
                 imgURI={"/graphics/preview-swap-img.png"}
                 triggerText={"Preview"}
@@ -227,7 +229,7 @@ export default function AddLiquidityContent({
                   setAmount={(amount: number) =>
                     setSelectedSingleTokenAmount(amount)
                   }
-                  // price={prices[token.address]}
+                  onExceeding={setSingleSharesExceeding}
                   customTokenList={pool?.tokens ?? []}
                 />
               </TokenList>
@@ -246,7 +248,7 @@ export default function AddLiquidityContent({
               <TxnPreview
                 open={singleTokenPreviewOpen}
                 setOpen={setSingleTokenSetPreviewOpen}
-                disabled={false}
+                disabled={isSingleInputDisabled}
                 title={"Confirm LP Details"}
                 imgURI={"/graphics/preview-swap-img.png"}
                 triggerText={"Preview"}

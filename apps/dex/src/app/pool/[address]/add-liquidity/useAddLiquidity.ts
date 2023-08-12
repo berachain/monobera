@@ -30,6 +30,8 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   const [totalValue, setTotalValue] = useState<number>(0);
   const [singleSidedTotalValue, setSingleSidedTotalValue] = useState<number>(0);
 
+  const [singleSharesExceeding, setSingleSharesExceeding] =
+    useState<boolean>(false);
   const [selectedSingleToken, setSelectedSingleToken] = useState<
     Token | undefined
   >(undefined);
@@ -39,12 +41,14 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   const [singleTokenPreviewOpen, setSingleTokenSetPreviewOpen] =
     useState<boolean>(false);
 
-  // "0x599D8d33253361f1dc654e6f9C2813Bd392eC0d5" BERA-DEEZ SHARE ADDRESS
-  const { tokenInputs, updateTokenAmount } = useMultipleTokenInput(
-    pool?.tokens ?? [],
-  );
+  const {
+    tokenInputs,
+    updateTokenAmount,
+    areAllInputsEmpty,
+    updateTokenExceeding,
+    areNoInputsExceeding,
+  } = useMultipleTokenInput(pool?.tokens ?? []);
 
-  console.log("TOKEN INPUTS", tokenInputs);
   const { needsApproval } = useMultipleTokenApprovals(
     tokenInputs,
     networkConfig.precompileAddresses.erc20DexAddress as Address,
@@ -97,19 +101,23 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
 
   // const totalSupply = useTotalSupply()
 
-  const { usePreviewSharesForLiquidity } = usePollPreviewSharesForLiquidity(
-    pool?.pool,
-    tokenInputs,
-    tokenInputs.map((tokenInput) => tokenInput.amount),
-  );
+  const { usePreviewSharesForLiquidity, isLoading, isValidating } =
+    usePollPreviewSharesForLiquidity(
+      pool?.pool,
+      tokenInputs,
+      tokenInputs.map((tokenInput) => tokenInput.amount),
+    );
   const shares = usePreviewSharesForLiquidity();
 
-  const { usePreviewSharesForSingleSidedLiquidityRequest } =
-    usePollPreviewSharesForSingleSidedLiquidityRequest(
-      pool?.pool,
-      selectedSingleToken,
-      selectedSingleTokenAmount,
-    );
+  const {
+    usePreviewSharesForSingleSidedLiquidityRequest,
+    isLoading: isSingleSidedLoading,
+    isValidating: isSingleSidedValidating,
+  } = usePollPreviewSharesForSingleSidedLiquidityRequest(
+    pool?.pool,
+    selectedSingleToken,
+    selectedSingleTokenAmount,
+  );
   const singleSidedShares = usePreviewSharesForSingleSidedLiquidityRequest();
 
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
@@ -119,8 +127,17 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   );
 
   useEffect(() => {
-    if (singleSidedShares && singleSidedShares[1][0])
+    if (singleSidedShares && singleSidedShares[1][0]) {
       setSingleSidedExpectedShares(formatUnits(singleSidedShares[1][0], 18));
+    }
+    if (
+      singleSidedShares === undefined &&
+      selectedSingleTokenAmount !== 0 &&
+      !isSingleSidedLoading &&
+      !isSingleSidedValidating
+    ) {
+      setSingleSidedExpectedShares(undefined);
+    }
   }, [singleSidedShares]);
 
   const burnShares: Record<string, bigint> = usePreviewBurnShares();
@@ -159,14 +176,32 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
       const formattedShares = formatUnits(shares[1][0], 18);
       setExpectedShares(formattedShares);
     }
-  }, shares);
+    if (
+      shares === undefined &&
+      !areAllInputsEmpty &&
+      !isLoading &&
+      !isValidating
+    ) {
+      setExpectedShares(undefined);
+    }
+  }, [shares]);
 
   return {
     expectedShares,
+    isMultipleInputDisabled:
+      areAllInputsEmpty ||
+      expectedShares === undefined ||
+      areNoInputsExceeding === false,
+    isSingleInputDisabled:
+      selectedSingleToken === undefined ||
+      selectedSingleTokenAmount === 0 ||
+      singleSidedExpectedShares === undefined ||
+      singleSharesExceeding === true,
     singleSidedExpectedShares,
     totalValue,
     burnShares,
     singleSidedTotalValue,
+    setSingleSharesExceeding,
     selectedSingleToken,
     selectedSingleTokenAmount,
     tokenDictionary,
@@ -179,6 +214,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     payload,
     singleSidedPayload,
     updateTokenAmount,
+    updateTokenExceeding,
     setSelectedSingleToken,
     setSelectedSingleTokenAmount,
     setPreviewOpen,

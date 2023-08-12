@@ -169,12 +169,11 @@ export class WeightedPool implements PoolBase<WeightedPoolPairData> {
     poolPairData: WeightedPoolPairData | undefined,
   ): bigint {
     if (!poolPairData) return 0n;
-    return universalNormalizedLiquidity(
-      this._derivativeSpotPriceAfterSwapExactTokenInForTokenOut(
-        poolPairData,
-        0n,
-      ),
+    const temp = this._derivativeSpotPriceAfterSwapExactTokenInForTokenOut(
+      poolPairData,
+      0n,
     );
+    return universalNormalizedLiquidity(temp);
   }
 
   getLimitAmountSwap(

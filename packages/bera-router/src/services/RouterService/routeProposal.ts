@@ -33,7 +33,6 @@ export class RouteProposer {
   ): NewPath[] {
     tokenIn = tokenIn.toLowerCase();
     tokenOut = tokenOut.toLowerCase();
-    console.log("direct pools", pools);
 
     if (pools.length === 0) return [];
 
@@ -50,15 +49,12 @@ export class RouteProposer {
 
     const poolsAllDict = parseToPoolsDict(pools);
 
-    console.log("poolsAllDict", poolsAllDict);
     const [directPools, hopsIn, hopsOut] = filterPoolsOfInterest(
       poolsAllDict,
       tokenIn,
       tokenOut,
       10,
     );
-
-    console.log("direct pools", directPools);
 
     const pathData = producePaths(
       tokenIn,
@@ -70,9 +66,6 @@ export class RouteProposer {
     );
 
     const combinedPathData = pathData;
-    // console.log("combinedPathData", combinedPathData)
-    // const [paths] = calculatePathLimits(combinedPathData, swapType);
-    // console.log("paths", paths)
     this.cache[`${tokenIn}${tokenOut}${swapType}${swapOptions.timestamp}`] = {
       paths: combinedPathData,
     };
@@ -295,7 +288,6 @@ export function filterPoolsOfInterest(
 
   Object.keys(allPools).forEach((id) => {
     const pool = allPools[id];
-    console.log("pool", pool);
     const tokenListSet = new Set(pool?.tokensList);
     const containsTokenIn = tokenListSet.has(tokenIn.toLowerCase());
     const containsTokenOut = tokenListSet.has(tokenOut.toLowerCase());

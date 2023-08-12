@@ -173,6 +173,7 @@ export function SwapCard({
                     setSwapAmount(Number(amount));
                     setToAmount(Number(amount));
                   }}
+                  showExceeding={false}
                 />
               </ul>
               {swapInfo && (
