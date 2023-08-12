@@ -122,16 +122,15 @@ export class RouteProposer {
 }
 
 export function parseToPoolsDict(pools: Pool[]): PoolDictionary {
-  console.log("WHYYT", pools);
-  return Object.fromEntries(
-    cloneDeep(pools)
-      .filter(
-        (pool: Pool) =>
-          pool.tokens.length > 0 && pool.tokens[0]?.balance !== 0n,
-      )
-      .map((pool) => [pool.pool, parseNewPool(pool)])
-      .filter(([, pool]) => pool !== undefined),
-  );
+  const t1 = cloneDeep(pools).filter((pool: Pool) => {
+    return (
+      pool.tokens.length > 0 &&
+      (pool.tokens[0]?.balance as unknown as string) !== "0"
+    );
+  });
+  const t2 = t1.map((pool) => [pool.pool, parseNewPool(pool)]);
+  const temp = Object.fromEntries(t2.filter(([, pool]) => pool !== undefined));
+  return temp;
 }
 
 export function parseNewPool(pool: Pool): WeightedPool | undefined {
@@ -143,6 +142,7 @@ export function parseNewPool(pool: Pool): WeightedPool | undefined {
   try {
     newPool = WeightedPool.fromPool(pool);
   } catch (err: any) {
+    console.log("Error parsing pool", err);
     return undefined;
   }
   return newPool as WeightedPool;
