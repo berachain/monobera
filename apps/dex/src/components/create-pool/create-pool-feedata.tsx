@@ -5,7 +5,6 @@ import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
-import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
@@ -104,7 +103,6 @@ export function CreatePoolFeeData({ error, setSwapFee, onContinue }: Props) {
         </p>
         {error && (
           <Alert variant="destructive" className="my-4">
-            <Icons.warning className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error && error.message}</AlertDescription>
           </Alert>

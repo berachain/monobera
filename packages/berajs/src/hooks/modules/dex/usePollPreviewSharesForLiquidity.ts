@@ -22,11 +22,9 @@ export const usePollPreviewSharesForLiquidity = (
     parseUnits(`${amount}`, assets[i]?.decimals ?? 18),
   );
   const QUERY_KEY = [poolAddress, ...addresses, ...formattedAmounts, method];
-  useSWR(
+  const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!poolAddress) return;
-
       const result = await publicClient.readContract({
         address: networkConfig.precompileAddresses.erc20DexAddress as Address,
         abi: DEX_PRECOMPILE_ABI,
@@ -47,5 +45,7 @@ export const usePollPreviewSharesForLiquidity = (
   };
   return {
     usePreviewSharesForLiquidity,
+    isLoading,
+    isValidating,
   };
 };

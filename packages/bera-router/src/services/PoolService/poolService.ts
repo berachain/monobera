@@ -6,7 +6,6 @@ export class PoolService {
   private pools: RawPool[] = [];
   public finishedFetching = false;
   private poolMulticall: MultiCallPools;
-  private tokenMap: any = {};
   constructor(private readonly config: RouterConfig) {
     this.poolMulticall = new MultiCallPools(
       config.contracts.multicallAddress,
@@ -28,19 +27,10 @@ export class PoolService {
         `${this.config.subgraphUrl}/events/dex/pool_created`,
       );
 
-      const tokenListPromise = fetch(
-        process.env.NEXT_PUBLIC_TOKEN_LIST as string,
-      );
-      const [response, tokenListResponse] = await Promise.all([
-        responsePromise,
-        tokenListPromise,
-      ]);
+      const [response] = await Promise.all([responsePromise]);
 
       const poolResponse = await response.json();
-      const tokenList = await tokenListResponse.json();
-      this.tokenMap = tokenList.tokenMap;
       this.pools = poolResponse.result;
-      this.poolMulticall.setTokenMap(this.tokenMap);
       this.poolMulticall.getPoolData(this.pools);
       await this.poolMulticall.execute(this.pools);
 

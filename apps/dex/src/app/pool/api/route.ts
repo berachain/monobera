@@ -66,7 +66,6 @@ export async function GET(request: Request) {
   const hotPools = searchParams.get("hotPools");
   const newPools = searchParams.get("newPools");
 
-  console.log("hotPools", hotPools);
   let taggedPools: any[] = totalSupplyStringPools;
 
   if (hasBgtRewards == "true") {

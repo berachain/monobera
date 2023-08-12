@@ -173,6 +173,7 @@ export function SwapCard({
                     setSwapAmount(Number(amount));
                     setToAmount(Number(amount));
                   }}
+                  showExceeding={false}
                 />
               </ul>
               {swapInfo && (
@@ -200,7 +201,6 @@ export function SwapCard({
                   variant="destructive"
                   className="items-center justify-center"
                 >
-                  <Icons.warning className="h-4 w-4" />
                   <AlertTitle>Error</AlertTitle>
                   <AlertDescription>
                     This amount exceeds your total balance
@@ -209,7 +209,6 @@ export function SwapCard({
               )}
               {error instanceof RouteNotFound && (
                 <Alert variant="destructive">
-                  <Icons.warning className="h-4 w-4" />
                   <AlertTitle>Error</AlertTitle>
                   <AlertDescription className="text-xs">
                     {error.message}
@@ -218,7 +217,6 @@ export function SwapCard({
               )}
               {showPriceImpact && (
                 <Alert variant="destructive">
-                  <Icons.warning className="h-4 w-4" />
                   <AlertTitle>Price Impact Error</AlertTitle>
                   <AlertDescription className="text-xs">
                     This swap will result in a high price impact (-
