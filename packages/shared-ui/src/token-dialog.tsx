@@ -203,7 +203,6 @@ export function TokenDialog({
                   ))
                 ) : (
                   <Alert variant={"info"}>
-                    <Icons.tooltip className="h-4 w-4 bg-sky-700" />
                     <AlertTitle>Token not found</AlertTitle>
                     <AlertDescription>
                       You can add tokens by searching for their address.
@@ -212,7 +211,6 @@ export function TokenDialog({
                 )
               ) : (
                 <Alert variant={"destructive"}>
-                  <Icons.tooltip className="h-4 w-4 bg-sky-700" />
                   <AlertTitle>Invalid Address</AlertTitle>
                   <AlertDescription>
                     try again with a valid token address.
