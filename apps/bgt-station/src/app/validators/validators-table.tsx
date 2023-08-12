@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { usePollActiveValidators, type Validator } from "@bera/berajs";
+import { SearchInput } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
@@ -13,17 +14,23 @@ export default function ValidatorsTable() {
   const {
     useActiveValidators,
     useTotalDelegated,
-    useValidatorCuttingBoards,
-    useSelectedValidatorActiveBribes,
+    // useValidatorCuttingBoards,
+    // useSelectedValidatorActiveBribes,
   } = usePollActiveValidators();
 
   const validators: Validator[] = useActiveValidators();
   const totalDelegated: number = useTotalDelegated();
-
+  const [keyword, setKeyword] = React.useState("");
   const validatorTableData = React.useMemo(() => {
     return validators
       .filter((validator) => !validator.jailed)
+      .filter((item) =>
+        Object.values(item).some((value) =>
+          String(value).toLowerCase().includes(keyword.toLowerCase()),
+        ),
+      )
       .map((validator) => ({
+        address: validator.operatorAddress,
         delegate: (
           <div
             className="w-[49px] hover:cursor-pointer"
@@ -72,11 +79,22 @@ export default function ValidatorsTable() {
         ),
         bribes: <div className="flex h-full w-[136px] items-center">hi</div>,
       }));
-  }, [validators]);
+  }, [validators, keyword]);
 
   return (
-    <div>
-      <RT columns={general_validator_columns} data={validatorTableData} />
+    <div className="mt-16">
+      <div className="mb-4">
+        <SearchInput
+          className="w-[400px]"
+          placeholder="Search by name, address, or token"
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+      </div>
+      <RT
+        columns={general_validator_columns}
+        data={validatorTableData}
+        rowOnClick={(row) => router.push(`/validators/${row.original.address}`)}
+      />
     </div>
   );
 }

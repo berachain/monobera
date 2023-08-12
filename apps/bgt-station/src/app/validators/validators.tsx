@@ -2,14 +2,17 @@
 
 import React from "react";
 import Image from "next/image";
+import { usePollActiveValidators, type Validator } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
 import ValidatorsTable from "./validators-table";
 
 export default function Validators() {
+  const { useActiveValidators } = usePollActiveValidators();
+  const validators: Validator[] = useActiveValidators();
   const generalInfo = [
     {
-      amount: "120",
+      amount: validators.length,
       text: "Total validators",
     },
     {
