@@ -67,23 +67,50 @@ const getTimeText = (proposalStatus: StatusEnum, timestamp: number) => {
   }
 };
 
-const getDataList = (proposalVotes: ProposalVotes) => {
-  return [
-    { color: VoteColorMap.yes, width: proposalVotes.yes },
-    { color: VoteColorMap.no, width: proposalVotes.yes + proposalVotes.no },
-    {
-      color: VoteColorMap.veto,
-      width: proposalVotes.yes + proposalVotes.no + proposalVotes.veto,
-    },
-    {
-      color: VoteColorMap.abstain,
-      width:
-        proposalVotes.yes +
-        proposalVotes.no +
-        proposalVotes.veto +
-        proposalVotes.abstain,
-    },
-  ];
+const getDataList = (
+  proposalStatus: StatusEnum,
+  proposalVotes: ProposalVotes,
+) => {
+  if (proposalStatus === StatusEnum.IN_QUEUE) {
+    return [
+      {
+        color: VoteColorMap.abstain,
+        width:
+          proposalVotes.yes +
+          proposalVotes.no +
+          proposalVotes.veto +
+          proposalVotes.abstain,
+      },
+    ];
+  } else if (proposalStatus === StatusEnum.PASSED) {
+    return [
+      {
+        color: VoteColorMap.yes,
+        width:
+          proposalVotes.yes +
+          proposalVotes.no +
+          proposalVotes.veto +
+          proposalVotes.abstain,
+      },
+    ];
+  } else {
+    return [
+      { color: VoteColorMap.yes, width: proposalVotes.yes },
+      { color: VoteColorMap.no, width: proposalVotes.yes + proposalVotes.no },
+      {
+        color: VoteColorMap.veto,
+        width: proposalVotes.yes + proposalVotes.no + proposalVotes.veto,
+      },
+      {
+        color: VoteColorMap.abstain,
+        width:
+          proposalVotes.yes +
+          proposalVotes.no +
+          proposalVotes.veto +
+          proposalVotes.abstain,
+      },
+    ];
+  }
 };
 
 export function ProposalCard({
@@ -119,13 +146,26 @@ export function ProposalCard({
       >
         {proposalTitle}
       </div>
-      <div className="mt-4">
+      <div className="relative mt-4">
+        {proposalStatus === StatusEnum.IN_QUEUE && (
+          <div className="absolute right-0 text-xs font-medium leading-tight text-muted-foreground">
+            {proposalVotes.abstain +
+              proposalVotes.no +
+              proposalVotes.veto +
+              proposalVotes.yes}
+            % of deposit filled
+          </div>
+        )}
         <ProgressBarChart
-          dataList={getDataList(proposalVotes)}
-          labelList={[
-            { label: "Pass threshold", width: 30 },
-            { label: "Quorum", width: 60 },
-          ]}
+          dataList={getDataList(proposalStatus, proposalVotes)}
+          labelList={
+            proposalStatus === StatusEnum.IN_QUEUE
+              ? []
+              : [
+                  { label: "Pass threshold", width: 30 },
+                  { label: "Quorum", width: 60 },
+                ]
+          }
         />
       </div>
       {owner && (

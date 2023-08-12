@@ -27,16 +27,15 @@ import {
 export const navItems = [
   {
     href: "/",
+    title: "Dashboard",
+  },
+  {
+    href: "/my-bgt",
     title: "My BGT",
   },
-  // {
-  //   href: "/dashboard",
-  //   title: "Dashboard",
-  // },
-
   {
-    href: "/stake",
-    title: "Stake",
+    href: "/validators",
+    title: "Validators",
   },
   {
     href: "/delegate",
