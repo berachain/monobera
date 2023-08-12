@@ -22,7 +22,8 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
   );
   const [exactOutAmount, setExactOutAmount] = useState<number>(0);
   const [withdrawValue, setWithdrawValue] = useState<number>(0);
-
+  const [isPoolTokenExceeding, setIsPoolTokenExceeding] =
+    useState<boolean>(false);
   const { useBankBalance, useFormattedBankBalance } = usePollBankBalance(
     pool?.shareAddress,
   );
@@ -107,6 +108,10 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
   ];
 
   return {
+    isMultiTokenDisabled: isPoolTokenExceeding || amount === 0,
+    isSingleTokenDisabled:
+      isPoolTokenExceeding || amount === 0 || exactOutToken === undefined,
+    setIsPoolTokenExceeding,
     lpBalance,
     burnShares,
     withdrawValue,

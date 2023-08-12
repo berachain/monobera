@@ -22,6 +22,8 @@ interface IData {
   prices: MappedTokens;
 }
 
+export const fetchCache = "force-no-store";
+
 export default async function PoolPage({
   params,
 }: {

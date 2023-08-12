@@ -8,7 +8,6 @@ import { DEX_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 
-const EMPTY_INFO = [[""], [0n]];
 export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
   poolAddress: `0x${string}` | undefined,
   asset: Token | undefined,
@@ -19,10 +18,9 @@ export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
 
   const method = "getPreviewSharesForSingleSidedLiquidityRequest";
   const QUERY_KEY = [poolAddress, asset?.address, amount, method];
-  useSWR(
+  const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!poolAddress || !asset) return EMPTY_INFO;
       const result = await publicClient
         .readContract({
           address: networkConfig.precompileAddresses.erc20DexAddress as Address,
@@ -30,23 +28,17 @@ export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
           functionName: method,
           args: [
             poolAddress,
-            asset.address,
-            parseUnits(`${amount}`, asset.decimals),
+            asset?.address,
+            parseUnits(`${amount}`, asset?.decimals ?? 18),
           ],
         })
-        .catch((e) => {
-          console.log(
-            "usePollPreviewSharesForSingleSidedLiquidityRequest error: ",
-            e,
-          );
-          return EMPTY_INFO;
+        .catch(() => {
+          return undefined;
         });
-
-      return result ?? EMPTY_INFO;
+      return result;
     },
     {
       refreshInterval: POLLING.FAST,
-      fallbackData: EMPTY_INFO,
     },
   );
 
@@ -56,5 +48,7 @@ export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
   };
   return {
     usePreviewSharesForSingleSidedLiquidityRequest,
+    isLoading,
+    isValidating,
   };
 };

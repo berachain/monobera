@@ -72,8 +72,6 @@ export default function Redeem() {
         </div>
         {Number(redeemAmount) > Number(userBalance) && (
           <Alert variant="destructive" className="">
-            {" "}
-            <Icons.alertCircle className="relative mr-1 mt-[-4px] inline h-4 w-4 text-destructive-foreground" />
             This amount exceeds your total balance of {userBalance} BGT
           </Alert>
         )}

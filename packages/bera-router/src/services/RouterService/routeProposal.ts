@@ -33,7 +33,6 @@ export class RouteProposer {
   ): NewPath[] {
     tokenIn = tokenIn.toLowerCase();
     tokenOut = tokenOut.toLowerCase();
-    console.log("direct pools", pools);
 
     if (pools.length === 0) return [];
 
@@ -50,15 +49,12 @@ export class RouteProposer {
 
     const poolsAllDict = parseToPoolsDict(pools);
 
-    console.log("poolsAllDict", poolsAllDict);
     const [directPools, hopsIn, hopsOut] = filterPoolsOfInterest(
       poolsAllDict,
       tokenIn,
       tokenOut,
       10,
     );
-
-    console.log("direct pools", directPools);
 
     const pathData = producePaths(
       tokenIn,
@@ -70,9 +66,6 @@ export class RouteProposer {
     );
 
     const combinedPathData = pathData;
-    // console.log("combinedPathData", combinedPathData)
-    // const [paths] = calculatePathLimits(combinedPathData, swapType);
-    // console.log("paths", paths)
     this.cache[`${tokenIn}${tokenOut}${swapType}${swapOptions.timestamp}`] = {
       paths: combinedPathData,
     };
@@ -122,16 +115,15 @@ export class RouteProposer {
 }
 
 export function parseToPoolsDict(pools: Pool[]): PoolDictionary {
-  console.log("WHYYT", pools);
-  return Object.fromEntries(
-    cloneDeep(pools)
-      .filter(
-        (pool: Pool) =>
-          pool.tokens.length > 0 && pool.tokens[0]?.balance !== 0n,
-      )
-      .map((pool) => [pool.pool, parseNewPool(pool)])
-      .filter(([, pool]) => pool !== undefined),
-  );
+  const t1 = cloneDeep(pools).filter((pool: Pool) => {
+    return (
+      pool.tokens.length > 0 &&
+      (pool.tokens[0]?.balance as unknown as string) !== "0"
+    );
+  });
+  const t2 = t1.map((pool) => [pool.pool, parseNewPool(pool)]);
+  const temp = Object.fromEntries(t2.filter(([, pool]) => pool !== undefined));
+  return temp;
 }
 
 export function parseNewPool(pool: Pool): WeightedPool | undefined {
@@ -143,6 +135,7 @@ export function parseNewPool(pool: Pool): WeightedPool | undefined {
   try {
     newPool = WeightedPool.fromPool(pool);
   } catch (err: any) {
+    console.log("Error parsing pool", err);
     return undefined;
   }
   return newPool as WeightedPool;
@@ -295,7 +288,6 @@ export function filterPoolsOfInterest(
 
   Object.keys(allPools).forEach((id) => {
     const pool = allPools[id];
-    console.log("pool", pool);
     const tokenListSet = new Set(pool?.tokensList);
     const containsTokenIn = tokenListSet.has(tokenIn.toLowerCase());
     const containsTokenOut = tokenListSet.has(tokenOut.toLowerCase());

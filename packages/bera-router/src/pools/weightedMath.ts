@@ -636,12 +636,8 @@ export function _derivativeSpotPriceAfterSwapExactTokenInForTokenOut(
   amount: bigint,
   poolPairData: WeightedPoolPairData,
 ): bigint {
-  const Bi = Number(
-    formatUnits(poolPairData.balanceIn, poolPairData.decimalsIn),
-  );
-  const Bo = Number(
-    formatUnits(poolPairData.balanceOut, poolPairData.decimalsOut),
-  );
+  const Bi = Number(poolPairData.balanceIn);
+  const Bo = Number(poolPairData.balanceOut);
 
   const wi = Number(formatUnits(poolPairData.weightIn, 18));
   const wo = Number(formatUnits(poolPairData.weightOut, 18));

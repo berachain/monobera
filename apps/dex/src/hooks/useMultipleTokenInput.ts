@@ -3,6 +3,7 @@ import { type Token } from "@bera/berajs";
 
 export interface TokenInput extends Token {
   amount: number;
+  exceeding: boolean;
 }
 
 interface IState {
@@ -15,6 +16,7 @@ const useMultipleTokenInput = (tokens: Token[]) => {
     tokens: tokens.map((token: Token) => {
       return {
         amount: 0,
+        exceeding: false, // Initialize exceeding status to false
         ...token,
       };
     }),
@@ -22,6 +24,7 @@ const useMultipleTokenInput = (tokens: Token[]) => {
 
   const actionTypes = {
     UPDATE_INPUT: "UPDATE_INPUT",
+    UPDATE_EXCEEDING: "UPDATE_EXCEEDING", // New action type for updating exceeding status
   };
 
   // Reducer function
@@ -35,6 +38,19 @@ const useMultipleTokenInput = (tokens: Token[]) => {
               return {
                 ...token,
                 amount: action.payload.input,
+              };
+            }
+            return token;
+          }),
+        };
+      case actionTypes.UPDATE_EXCEEDING: // Reducer case to update exceeding status
+        return {
+          ...state,
+          tokens: state.tokens.map((token: any, index: any) => {
+            if (index === action.payload.index) {
+              return {
+                ...token,
+                exceeding: action.payload.exceeding,
               };
             }
             return token;
@@ -60,9 +76,26 @@ const useMultipleTokenInput = (tokens: Token[]) => {
     });
   };
 
+  const updateTokenExceeding = (tokenIndex: number, exceeding: boolean) => {
+    dispatch({
+      type: actionTypes.UPDATE_EXCEEDING,
+      payload: {
+        index: tokenIndex,
+        exceeding: exceeding,
+      },
+    });
+  };
+
   return {
     tokenInputs: addLiquidityState.tokens,
     updateTokenAmount,
+    updateTokenExceeding, // Provide the new function
+    areAllInputsEmpty: addLiquidityState.tokens.every(
+      (token: TokenInput) => token.amount === 0,
+    ),
+    areNoInputsExceeding: addLiquidityState.tokens.every(
+      (token: TokenInput) => token.exceeding === false,
+    ),
   };
 };
 

@@ -1,13 +1,13 @@
-"use client";
-
 import React, {
   createContext,
   useContext,
-  useEffect,
   useState,
   type PropsWithChildren,
 } from "react";
 import { RouterService, defaultConfig } from "@bera/bera-router";
+import useSWR from "swr";
+
+import { POLLING } from "~/utils/constants";
 
 export interface IRouter {
   router: RouterService;
@@ -27,13 +27,10 @@ export const useRouter = () => {
 
 const RouterProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [router] = useState<RouterService>(new RouterService(defaultConfig));
-  useEffect(() => {
-    const fetchPools = async () => {
-      await router.fetchPools();
-    };
 
-    void fetchPools();
-  }, []);
+  useSWR("pools", async () => await router.fetchPools(), {
+    refreshInterval: POLLING.SLOW, // Polling interval in milliseconds (e.g., 5000ms = 5 seconds)
+  });
 
   return (
     <RouterContext.Provider value={{ router }}>
@@ -41,4 +38,5 @@ const RouterProvider: React.FC<PropsWithChildren> = ({ children }) => {
     </RouterContext.Provider>
   );
 };
+
 export default RouterProvider;

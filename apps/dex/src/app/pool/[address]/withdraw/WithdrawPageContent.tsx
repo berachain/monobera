@@ -53,14 +53,16 @@ export default function WithdrawLiquidityContent({
   const { networkConfig } = useBeraConfig();
 
   const {
-    tokenDictionary,
     lpBalance,
     burnShares,
     withdrawValue,
+    isMultiTokenDisabled,
+    isSingleTokenDisabled,
     formattedLpBalance,
     singlePayload,
     setWithdrawType,
     amount,
+    setIsPoolTokenExceeding,
     setAmount,
     previewOpen,
     setPreviewOpen,
@@ -92,11 +94,7 @@ export default function WithdrawLiquidityContent({
           {pool?.tokens?.map((token, i) => {
             return (
               <TokenIcon
-                token={
-                  tokenDictionary && tokenDictionary[token.address]
-                    ? tokenDictionary[token.address]
-                    : token
-                }
+                token={token}
                 className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
                 key={token.address}
               />
@@ -143,6 +141,7 @@ export default function WithdrawLiquidityContent({
                   selectable={false}
                   amount={amount}
                   setAmount={setAmount}
+                  onExceeding={setIsPoolTokenExceeding}
                 />
               </TokenList>
 
@@ -165,7 +164,7 @@ export default function WithdrawLiquidityContent({
               </div>
               <TxnPreview
                 open={previewOpen}
-                disabled={false}
+                disabled={isMultiTokenDisabled}
                 title={"Confirm LP Withdrawal Details"}
                 imgURI={"/graphics/preview-swap-img.png"}
                 triggerText={"Preview"}
@@ -235,6 +234,7 @@ export default function WithdrawLiquidityContent({
                   selectable={false}
                   amount={amount}
                   setAmount={handleSingleTokenWithdrawSharesIn}
+                  onExceeding={setIsPoolTokenExceeding}
                 />
               </TokenList>
               <div className="flex flex-row gap-2">
@@ -263,11 +263,12 @@ export default function WithdrawLiquidityContent({
                   amount={exactOutAmount}
                   setAmount={handleSingleTokenWithdrawAssetOut}
                   customTokenList={pool?.tokens}
+                  showExceeding={false}
                 />
               </TokenList>
               <TxnPreview
                 open={previewOpen}
-                disabled={false}
+                disabled={isSingleTokenDisabled}
                 title={"Confirm LP Withdrawal Details"}
                 imgURI={"/graphics/preview-swap-img.png"}
                 triggerText={"Preview"}
