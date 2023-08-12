@@ -15,7 +15,7 @@ import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
 
 import BribesList from "~/components/bribes-list";
-import { ValidatorDescription } from "../components/ValidatorDescription";
+// import { ValidatorDescription } from "../components/ValidatorDescription";
 import DelegateButton from "./components/DelegateButton";
 import UnbondButton from "./components/UnbondButton";
 
@@ -27,7 +27,7 @@ const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
 export default function ValidatorDetails({
   validatorAddress,
 }: {
-  validatorAddress: `0x{string}`;
+  validatorAddress: string;
 }) {
   const {
     useSelectedValidatorActiveBribes,
@@ -36,28 +36,28 @@ export default function ValidatorDetails({
     usePollSelectedValidatorCuttingBoard,
   } = usePollActiveValidators();
   const cuttingBoard = usePollSelectedValidatorCuttingBoard(validatorAddress);
-  console.log("cb", cuttingBoard);
+  console.log("cb", cuttingBoard, validatorAddress);
   const validator = useActiveValidator(validatorAddress);
-  const totalDelegated = useTotalDelegated();
-  const bribes: Bribe | undefined =
-    useSelectedValidatorActiveBribes(validatorAddress);
-  console.log("bribes", bribes);
-  const { useSelectedAccountDelegation } =
-    usePollAccountDelegations(validatorAddress);
-  const accountDelegation = useSelectedAccountDelegation();
-  const { useTotalUnbonding } = usePollUnbondingDelegations(validatorAddress);
-  const totalUnbonding = useTotalUnbonding();
-  const items = cuttingBoard?.map((cb) => ({
-    weight: parseFloat(cb.weight) * 100,
-    detail: {
-      symbol: cb.symbol,
-    },
-  }));
+  // const totalDelegated = useTotalDelegated();
+  // const bribes: Bribe | undefined =
+  //   useSelectedValidatorActiveBribes(validatorAddress);
+  // console.log("bribes", bribes);
+  // const { useSelectedAccountDelegation } =
+  //   usePollAccountDelegations(validatorAddress);
+  // const accountDelegation = useSelectedAccountDelegation();
+  // const { useTotalUnbonding } = usePollUnbondingDelegations(validatorAddress);
+  // const totalUnbonding = useTotalUnbonding();
+  // const items = cuttingBoard?.map((cb) => ({
+  //   weight: parseFloat(cb.weight) * 100,
+  //   detail: {
+  //     symbol: cb.symbol,
+  //   },
+  // }));
 
-  console.log(formatUnits(validator?.delegatorShares ?? 0n, 36));
+  // console.log(formatUnits(validator?.delegatorShares ?? 0n, 36));
   return (
     <div className="container mb-10 flex gap-5">
-      <div className="flex w-2/3 flex-col gap-5">
+      {/* <div className="flex w-2/3 flex-col gap-5">
         <Card>
           <CardHeader>
             <Link href="/stake" className="flex flex-row items-center gap-2">
@@ -66,11 +66,6 @@ export default function ValidatorDetails({
             </Link>
           </CardHeader>
           <CardContent>
-            <ValidatorDescription
-              validator={validator}
-              validatorAddress={validatorAddress}
-            />
-
             <div className="mt-5">
               <h4 className="text-lg font-medium">Details</h4>
               <p className="text-backgroundSecondary">
@@ -193,8 +188,8 @@ export default function ValidatorDetails({
             </div>
           </CardContent>
         </Card>
-      </div>
-      <div className="flex w-1/3 flex-col gap-5">
+      </div> */}
+      {/* <div className="flex w-1/3 flex-col gap-5">
         <Card>
           <CardHeader>
             <h2 className="mt-0 text-lg font-medium">Emission Allocation</h2>
@@ -203,7 +198,7 @@ export default function ValidatorDetails({
             <DynamicChart items={items} />
           </CardContent>
         </Card>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -2,11 +2,19 @@ import React from "react";
 import { Card } from "@bera/ui/card";
 import { useTable } from "react-table";
 
+type Column = {
+  header: React.ReactNode;
+  accessor: string; // accessor is the "key" in the data
+};
+
+export type Columns = Column[];
+
 interface RTProps {
   columns: Columns;
   data: any[];
+  rowOnClick?: (row: any) => void;
 }
-export default function RT({ columns, data }: RTProps) {
+export default function RT({ columns, data, rowOnClick }: RTProps) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
@@ -17,13 +25,13 @@ export default function RT({ columns, data }: RTProps) {
           {headerGroups.map((headerGroup) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}
-              key={headerGroup}
+              key={"headerGroup" + headerGroup.id}
               className="flex justify-between rounded-tl-[18px] rounded-tr-[18px] border border-l-0 border-r-0 border-t-0 border-b-border bg-muted px-8 py-3"
             >
               {headerGroup.headers.map((column) => (
                 <th
                   {...column.getHeaderProps()}
-                  key={column}
+                  key={"headerGroup column" + column.id}
                   className="text-xs font-medium leading-tight text-muted-foreground"
                 >
                   {column.header}
@@ -35,21 +43,21 @@ export default function RT({ columns, data }: RTProps) {
         <tbody {...getTableBodyProps()}>
           {rows.map((row, index) => {
             prepareRow(row, index);
-            console.log(row, index);
             return (
               <tr
-                {...rows[0].getRowProps()}
-                key={row}
-                className={`flex justify-between border border-l-0 border-r-0 border-t-0 bg-background px-8 py-4 border-b-border${
+                {...row.getRowProps()}
+                key={"tableGroup rows" + row.id}
+                className={`flex justify-between border border-l-0 border-r-0 border-t-0 bg-background px-8 py-4 hover:cursor-pointer hover:bg-muted border-b-border${
                   index === rows.length - 1
-                    ? "rounded-bl-[18px] rounded-br-[18px] border-0 "
+                    ? "rounded rounded-18 border-0 "
                     : ""
                 }`}
+                onClick={() => rowOnClick(row)}
               >
-                {rows[0].cells.map((cell) => (
+                {row.cells.map((cell) => (
                   <td
                     {...cell.getCellProps()}
-                    key={cell}
+                    key={"tableGroup cell".id}
                     className="text-xs font-medium leading-tight text-foreground"
                   >
                     {cell.render("Cell")}
