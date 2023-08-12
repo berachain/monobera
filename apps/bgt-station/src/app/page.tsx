@@ -1,12 +1,12 @@
 import { type Metadata } from "next";
 
-import MyBGT from "./MyBGT";
+import Page from "./dashboard/page";
 
 export const metadata: Metadata = {
-  title: "MyBGT | Berachain",
+  title: "DashBoard | Berachain",
   description: "BGT Station",
 };
 
 export default function Home() {
-  return <MyBGT />;
+  return <Page />;
 }
