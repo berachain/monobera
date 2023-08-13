@@ -55,7 +55,7 @@ export const ConnectButton = ({
                     <Icons.wallet
                       className={cn("h-4 w-4", !isNavItem && "h-6 w-6")}
                     />
-                    Connect Wallet
+                    Connect
                   </Button>
                 );
               }
