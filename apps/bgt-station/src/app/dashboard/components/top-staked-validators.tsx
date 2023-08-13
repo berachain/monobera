@@ -6,14 +6,7 @@ import { Badge } from "@bera/ui/badge";
 import { Card } from "@bera/ui/card";
 import { Separator } from "@bera/ui/separator";
 
-export function Validators({
-  validators,
-}: {
-  validators: {
-    name: string;
-    address: string;
-  }[];
-}) {
+export function TopStakedValidators() {
   return (
     <Card className="flex gap-3 p-5">
       <div className="flex flex-col gap-2">
