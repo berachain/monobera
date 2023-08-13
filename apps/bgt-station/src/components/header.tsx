@@ -25,7 +25,7 @@ const ThemeToggle = dynamic(
   },
 );
 
-const Connect = dynamic(
+export const Connect = dynamic(
   () => import("@bera/shared-ui").then((mod) => mod.ConnectButton),
   {
     ssr: false,
