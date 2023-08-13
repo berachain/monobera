@@ -6,8 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
 
+import RT from "../../components/react-table";
 import { general_validator_columns } from "./columns/general-validator-columns";
-import RT from "./components/react-table";
 
 export default function ValidatorsTable() {
   const router = useRouter();

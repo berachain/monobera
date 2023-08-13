@@ -1,11 +1,8 @@
-"use client";
-
 import React from "react";
 import { usePollActiveValidators, type Validator } from "@bera/berajs";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 
 import { bgtDetails as details } from "../constants";
-import { CurrentSupply } from "./current-supply";
 import { EpochTimeline } from "./epoch-timeline";
 import { Stats } from "./stats";
 
@@ -44,7 +41,6 @@ export function Details() {
         ))}
       </div>
       <Stats stats={details.stats} />
-      <CurrentSupply />
     </div>
   );
 }
