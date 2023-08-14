@@ -1,12 +1,9 @@
 "use client";
 
 import {
-  usePollActiveValidators,
   usePollDelegatorUnbonding,
-  usePollDelegatorValidators,
   usePollTotalDelegatorDelegated,
   type UnbondingDelegationEntry,
-  type Validator,
 } from "@bera/berajs";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -16,20 +13,13 @@ import { formatUnits } from "viem";
 import { formatTime } from "~/utils/formatTime";
 import MyBalance from "~/components/my-balance";
 
-// import ValidatorsTable from "./validators/components/ValidatorsTable";
-// import { getYourColumns } from "./validators/components/column";
-
 export default function MyBGT() {
-  const { useTotalDelegated } = usePollActiveValidators();
-  const { useDelegatorValidators } = usePollDelegatorValidators();
   const { useTotalDelegatorDelegated } = usePollTotalDelegatorDelegated();
   const { useDelegatorUnbonding, useTotalDelegatorUnbonding } =
     usePollDelegatorUnbonding();
 
-  const validators: Validator[] = useDelegatorValidators();
   const totalDelegatorDelegated: number | undefined =
     useTotalDelegatorDelegated();
-  const totalDelegated: number = useTotalDelegated();
   const totalUnbonding: number | undefined = useTotalDelegatorUnbonding();
   const unbondingQueue = useDelegatorUnbonding();
   console.log("unbondingQueue", unbondingQueue);

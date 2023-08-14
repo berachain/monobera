@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { type PropsWithChildren } from "react";
 import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 

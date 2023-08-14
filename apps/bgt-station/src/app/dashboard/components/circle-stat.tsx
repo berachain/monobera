@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from "react";
 export function CircleStat({
   label,
   value,
-  valueLabel,
+  // valueLabel,
   percent,
 }: {
   label: string;

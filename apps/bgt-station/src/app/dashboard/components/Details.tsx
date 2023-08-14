@@ -1,6 +1,6 @@
 import React from "react";
 import { usePollActiveValidators, type Validator } from "@bera/berajs";
-import { Card, CardContent, CardHeader } from "@bera/ui/card";
+import { Card } from "@bera/ui/card";
 
 import { bgtDetails as details } from "../constants";
 import { EpochTimeline } from "./epoch-timeline";
@@ -30,7 +30,7 @@ export function Details() {
           <EpochTimeline />
         </div>
         {generalInfo.map((info, index) => (
-          <Card className="basis-1/5 p-8 text-center" key={(info, index)}>
+          <Card className="basis-1/5 p-8 text-center" key={index}>
             <div className="text-2xl font-semibold leading-loose text-foreground">
               {info.amount}
             </div>

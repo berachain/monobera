@@ -1,12 +1,13 @@
-import { usePollBgtSupply } from "@bera/berajs";
-import { Card, CardContent, CardHeader } from "@bera/ui/card";
+// import { usePollBgtSupply } from "@bera/berajs";
+
+// import { Card, CardContent, CardHeader } from "@bera/ui/card";
 
 import RT from "../../../components/react-table";
 import { global_gauge_weight_columns } from "../columns/global-gauge-weight";
 
 export default function GlobalGaugeWeight() {
-  const { useBgtSupply } = usePollBgtSupply();
-  const bgtSupply = useBgtSupply();
+  // const { useBgtSupply } = usePollBgtSupply();
+  // const bgtSupply = useBgtSupply();
   // const validatorTableData = React.useMemo(() => {
   //   return validators
   //     .filter((validator) => !validator.jailed)
