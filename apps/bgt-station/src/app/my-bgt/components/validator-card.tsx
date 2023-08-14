@@ -96,10 +96,10 @@ export default function ValidatorCard(validator: { validator: Validator }) {
       </div>
       <div className="mt-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          {valiInfo.map((item) => (
+          {valiInfo.map((item, index) => (
             <div
               className="flex flex-col items-center gap-1 px-4 py-2"
-              key={item.title}
+              key={index}
             >
               <div className="text-xs font-medium leading-tight text-muted-foreground">
                 {item.title}

@@ -6,13 +6,9 @@ import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import {
-  DelegateEnum,
-  ImageMapEnum,
-  type DelegateEnum as DelegateEnumT,
-} from "./types";
+import { DelegateEnum, ImageMapEnum } from "./types";
 
-export default function Delegate({ action }: { action: DelegateEnumT }) {
+export default function Delegate({ action }: { action: DelegateEnum }) {
   const router = useRouter();
 
   return (
@@ -36,7 +32,7 @@ export default function Delegate({ action }: { action: DelegateEnumT }) {
           {action}
         </div>
         <Image
-          src={ImageMapEnum[action.toUpperCase()]}
+          src={ImageMapEnum[action.toUpperCase() as keyof typeof ImageMapEnum]}
           alt="bera banner"
           width={452}
           height={175}

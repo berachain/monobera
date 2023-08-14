@@ -2,7 +2,7 @@ import React from "react";
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
-import { type Columns } from "./types";
+import { type Columns } from "~/components/react-table";
 
 export const general_validator_columns: Columns = [
   {
