@@ -2,12 +2,17 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { truncateHash, usePollActiveValidators } from "@bera/berajs";
+import { truncateHash } from "@bera/berajs";
+import { Tooltip } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 
+import GlobalGaugeWeight from "~/components/global-gauge-weight";
+import BribeList from "./bribe-list";
+import BribesAndEmissions from "./bribes-and-emissions";
 import Uptime from "./uptime";
+import ValidatorActivitiesTable from "./validator-activities-table";
 import ValidatorDetails from "./validator-details";
 
 // need
@@ -22,9 +27,6 @@ export default function Validator({
   validatorAddress: string;
 }) {
   const router = useRouter();
-  // const { usePollSelectedValidatorCuttingBoard } = usePollActiveValidators();
-  // const cuttingBoard = usePollSelectedValidatorCuttingBoard(validatorAddress);
-  // console.log("cb", cuttingBoard, validatorAddress);
 
   return (
     <div className="container mb-10 flex max-w-[1078px] flex-col gap-16">
@@ -85,6 +87,23 @@ export default function Validator({
           <Uptime />
         </div>
       </div>
+      <BribesAndEmissions />
+
+      <div className="">
+        <div className="mb-4 flex items-center text-lg font-semibold leading-7">
+          Average Gauge Weight <Tooltip title="Bribes and emissions" />
+        </div>
+        <GlobalGaugeWeight />
+      </div>
+
+      <div className="">
+        <div className="mb-4 flex items-center text-lg font-semibold leading-7">
+          Bribes
+        </div>
+        <BribeList />
+      </div>
+
+      <ValidatorActivitiesTable />
     </div>
   );
 }
