@@ -1,12 +1,13 @@
+"use client";
+
 import React from "react";
+import Image from "next/image";
 import { usePollActiveValidators, type Validator } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
-import { bgtDetails as details } from "../constants";
-import { EpochTimeline } from "./epoch-timeline";
-import { Stats } from "./stats";
+import ValidatorsTable from "./validators-table";
 
-export function Details() {
+export default function Validators() {
   const { useActiveValidators } = usePollActiveValidators();
   const validators: Validator[] = useActiveValidators();
   const generalInfo = [
@@ -15,22 +16,35 @@ export function Details() {
       text: "Total validators",
     },
     {
+      amount: "$100M",
+      text: "In bribe rewards",
+    },
+    {
       amount: "34%",
       text: "Average staker APY",
     },
     {
-      amount: "999.99M",
-      text: "Total BGT supply",
+      amount: "213",
+      text: "Active gauges",
     },
   ];
   return (
-    <div className="mb-10 mt-8 flex flex-col gap-5">
-      <div className="flex w-full gap-2">
-        <div className="basis-2/5">
-          <EpochTimeline />
+    <div className="container">
+      <div className="p-8 text-center">
+        <Image
+          className="mx-auto"
+          src="/bears/validator-bear.png"
+          alt="bera banner"
+          width={449.32}
+          height={174}
+        />
+        <div className="text-center text-5xl font-extrabold leading-[48px] text-foreground">
+          Validators
         </div>
+      </div>
+      <div className="flex gap-8">
         {generalInfo.map((info, index) => (
-          <Card className="basis-1/5 p-8 text-center" key={index}>
+          <Card className="flex-1 p-8 text-center" key={info.text + index}>
             <div className="text-2xl font-semibold leading-loose text-foreground">
               {info.amount}
             </div>
@@ -40,7 +54,7 @@ export function Details() {
           </Card>
         ))}
       </div>
-      <Stats stats={details.stats} />
+      <ValidatorsTable />
     </div>
   );
 }

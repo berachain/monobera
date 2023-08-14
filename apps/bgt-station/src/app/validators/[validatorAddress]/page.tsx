@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 
-import ValidatorDetails from "./ValidatorDetails";
+import ValidatorDetails from "./validator-details";
 
 type Props = {
   params: { validatorAddress: string };
@@ -16,7 +16,7 @@ export function generateMetadata({ params }: Props): Metadata {
 export default function ValidatorDetailsPage({
   params: { validatorAddress },
 }: {
-  params: { validatorAddress: `0x{string}` };
+  params: { validatorAddress: string };
 }) {
   return <ValidatorDetails validatorAddress={validatorAddress} />;
 }
