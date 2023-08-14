@@ -2,10 +2,11 @@
 
 import { type Metadata } from "next";
 import Image from "next/image";
-import { Button } from "@bera/ui/button";
+import { usePollActiveValidators, type Validator } from "@bera/berajs";
 
-import { Details } from "./components/details";
-import GlobalGaugeWeight from "./components/global-gauge-weight";
+import GlobalGaugeWeight from "../../components/global-gauge-weight";
+import { Details } from "./components/Details";
+import { ValidatorsList } from "./components/validators-list";
 
 export const metadata: Metadata = {
   title: "Dashboard | BGT Station | Berachain",
@@ -13,6 +14,8 @@ export const metadata: Metadata = {
 };
 
 export default function DashBoard() {
+  const { useActiveValidators } = usePollActiveValidators();
+  const validators: Validator[] = useActiveValidators();
   return (
     <div className="container flex w-full max-w-[926px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">
@@ -32,11 +35,15 @@ export default function DashBoard() {
       </div>
       <GlobalGaugeWeight />
 
-      <div className="mx-auto">
-        <Button variant="outline" className=" w-fit">
-          View More
-        </Button>
-      </div>
+      <ValidatorsList
+        validators={validators}
+        title={"🔥 Top staked validators"}
+      />
+
+      <ValidatorsList
+        validators={validators}
+        title={"💰 Top paying validators"}
+      />
     </div>
   );
 }
