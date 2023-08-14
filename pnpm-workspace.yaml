@@ -8,3 +8,4 @@ packages:
   - packages/berajs
   - packages/bera-router
   - packages/api
+  - packages/proto

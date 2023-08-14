@@ -1,0 +1,14 @@
+{
+  "name": "@berachain/proto",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "@DevLobster",
+  "license": "MIT",
+  "dependencies": {
+    "@cosmjs/proto-signing": "^0.29.5",
+    "@cosmjs/stargate": "^0.29.5",
+    "@cosmjs/tendermint-rpc": "^0.29.5",
+    "sha3": "^2.1.4",
+    "ts-proto": "^1.136.1"
+  }
+}
