@@ -35,7 +35,7 @@ export function SwapCard() {
     <Card className="w-[500px] bg-background/5 backdrop-blur-sm">
       <CardHeader>
         <CardTitle className="center flex justify-between">
-          <span>Mint</span>
+          <span>{isMint ? "Mint" : "Redeem"}</span>
           <span className="font-normal text-[#4D4D4D]">
             Static fee of 0.005%
           </span>
@@ -43,10 +43,7 @@ export function SwapCard() {
       </CardHeader>
       <CardContent>
         <div className="border-1 flex flex-col gap-2 border-border">
-          <ul
-            role="list"
-            className="di divide-y divide-border rounded-lg border"
-          >
+          <ul role="list" className="divide-y divide-border rounded-lg border">
             <TokenInput
               selected={selectedFrom}
               selectedTokens={[selectedFrom, selectedTo]}
