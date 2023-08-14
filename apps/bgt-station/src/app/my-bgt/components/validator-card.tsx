@@ -30,7 +30,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
         </div>
       ),
       value: `${(
-        (Number(formatUnits(validator.validator.delegatorShares, 18)) * 100) /
+        (Number(formatEther(validator.validator.delegatorShares)) * 100) /
         totalDelegated
       ).toFixed(2)}%`,
     },
@@ -42,7 +42,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
       ),
       value: `${(
         Number(
-          formatUnits(validator.validator.commission.commissionRates.rate, 18),
+          formatEther(validator.validator.commission.commissionRates.rate),
         ) * 100
       ).toFixed(2)}%`,
     },
