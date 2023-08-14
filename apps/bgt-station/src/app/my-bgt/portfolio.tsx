@@ -16,7 +16,7 @@ export default function Portfolio() {
   );
 
   return (
-    <div className="container">
+    <div className="container max-w-[1078px]">
       <div className=" flex h-[100px] items-center justify-center text-5xl font-bold leading-[48px] text-foreground">
         👋 Hey {truncateHash(account ?? "0x", 6)} you have...
       </div>
@@ -69,10 +69,10 @@ export default function Portfolio() {
           </Tabs>
         </div>
         {tab === BGTSelectionEnum.YOUR_DELEGATIONS && <YourDelegations />}
-        {tab === BGTSelectionEnum.UNBONDING_QUEUE && <UnbondingQueue />}
         {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
           <AverageGaugeWeight />
         )}
+        {tab === BGTSelectionEnum.UNBONDING_QUEUE && <UnbondingQueue />}
       </div>
     </div>
   );

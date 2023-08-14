@@ -3,8 +3,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Checkbox } from "@bera/ui/checkbox";
 
+import { getColors } from "~/utils/colors";
 import { global_gauge_weight_columns } from "~/columns/global-gauge-weight";
-import { getColors } from "../app/dashboard/components/colors";
 import RT from "./react-table";
 
 const options = {
@@ -96,20 +96,12 @@ export default function GlobalGaugeWeight() {
   };
 
   return (
-    <div>
-      <div className="text-center text-5xl font-bold leading-[48px] text-foreground">
-        🌎 Global gauge weight
+    <div className="mt-8 flex gap-4">
+      <div className="w-1/2 max-w-[380px]">
+        <BeraChart data={dataP} options={options as any} type="pie" />
       </div>
-      <div className="mt-4 text-center text-xl font-semibold leading-7 text-muted-foreground">
-        See what pools validators are incentivizing right now
-      </div>
-      <div className="mt-8 grid grid-cols-10 gap-4">
-        <div className="col-span-4">
-          <BeraChart data={dataP} options={options as any} type="pie" />
-        </div>
-        <div className="col-span-6">
-          <RT columns={global_gauge_weight_columns} data={dataT} />
-        </div>
+      <div className="w-full">
+        <RT columns={global_gauge_weight_columns} data={dataT} />
       </div>
     </div>
   );
