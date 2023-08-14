@@ -8,7 +8,7 @@ export const useRedeem = () => {
   const { account } = useBeraJs();
 
   useEffect(() => {
-    const newPayload = [account, parseUnits(`${redeemAmount}`, 18)];
+    const newPayload = [account, account, parseUnits(`${redeemAmount}`, 18)];
     setPayload(newPayload);
   }, [account, redeemAmount]);
 

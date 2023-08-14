@@ -1,8 +1,7 @@
 import React from "react";
-import { Card, CardContent, CardHeader } from "@bera/ui/card";
-import { Separator } from "@bera/ui/separator";
+import { Card } from "@bera/ui/card";
 
-import { CircleStat } from "./CircleStat";
+import { CircleStat } from "./circle-stat";
 
 export function Stats({
   stats,
@@ -29,32 +28,12 @@ export function Stats({
   };
 }) {
   return (
-    <Card>
-      <CardHeader className="flex-row items-center justify-between">
-        <div className="flex gap-7">
-          <h3>Time frame</h3>
-          <div className="flex gap-3">
-            <div>1 day</div>
-            <div>1 week</div>
-            <div>1 month</div>
-            <div>1 year</div>
-          </div>
-        </div>
-        <div className="flex gap-4">
-          <div>BGT</div>
-          <div>
-            <Separator orientation="vertical" />
-          </div>
-          <div>USD</div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="flex justify-evenly gap-5">
-          {Object.entries(stats).map(([key, object]) => (
-            <CircleStat key={key} {...object} />
-          ))}
-        </div>
-      </CardContent>
+    <Card className="px-16 py-8">
+      <div className="flex justify-evenly gap-5">
+        {Object.entries(stats).map(([key, object]) => (
+          <CircleStat key={key} {...object} />
+        ))}
+      </div>
     </Card>
   );
 }

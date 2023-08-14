@@ -1,12 +1,13 @@
+import React from "react";
 import { type Metadata } from "next";
 
-import DashBoard from "./dashboard";
+import Validators from "./validators";
 
 export const metadata: Metadata = {
-  title: "Dashboard | BGT Station | Berachain",
+  title: "Validators | Berachain",
   description: "BGT Station",
 };
 
 export default function Page() {
-  return <DashBoard />;
+  return <Validators />;
 }
