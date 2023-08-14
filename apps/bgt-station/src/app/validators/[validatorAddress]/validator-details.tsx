@@ -1,28 +1,29 @@
 "use client";
 
 import React from "react";
-import dynamic from "next/dynamic";
-import Link from "next/link";
+// import dynamic from "next/dynamic";
+// import Link from "next/link";
 import {
-  usePollAccountDelegations,
+  // usePollAccountDelegations,
   usePollActiveValidators,
-  usePollUnbondingDelegations,
-  type Bribe,
+  // usePollUnbondingDelegations,
+  // type Bribe,
 } from "@bera/berajs";
-import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader } from "@bera/ui/card";
-import { Icons } from "@bera/ui/icons";
-import { formatUnits } from "viem";
 
-import BribesList from "~/components/bribes-list";
+// import { Button } from "@bera/ui/button";
+// import { Card, CardContent, CardHeader } from "@bera/ui/card";
+// import { Icons } from "@bera/ui/icons";
+// import { formatUnits } from "viem";
+
+// import BribesList from "~/components/bribes-list";
 // import { ValidatorDescription } from "../components/ValidatorDescription";
-import DelegateButton from "./components/DelegateButton";
-import UnbondButton from "./components/UnbondButton";
+// import DelegateButton from "./components/DelegateButton";
+// import UnbondButton from "./components/UnbondButton";
 
-const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
-  loading: () => <p>Loading...</p>,
-  ssr: false,
-});
+// const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
+//   loading: () => <p>Loading...</p>,
+//   ssr: false,
+// });
 
 export default function ValidatorDetails({
   validatorAddress,
@@ -30,14 +31,14 @@ export default function ValidatorDetails({
   validatorAddress: string;
 }) {
   const {
-    useSelectedValidatorActiveBribes,
-    useActiveValidator,
-    useTotalDelegated,
+    // useSelectedValidatorActiveBribes,
+    // useActiveValidator,
+    // useTotalDelegated,
     usePollSelectedValidatorCuttingBoard,
   } = usePollActiveValidators();
   const cuttingBoard = usePollSelectedValidatorCuttingBoard(validatorAddress);
   console.log("cb", cuttingBoard, validatorAddress);
-  const validator = useActiveValidator(validatorAddress);
+  // const validator = useActiveValidator(validatorAddress);
   // const totalDelegated = useTotalDelegated();
   // const bribes: Bribe | undefined =
   //   useSelectedValidatorActiveBribes(validatorAddress);

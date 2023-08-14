@@ -1,6 +1,5 @@
 import React from "react";
-import { Card, CardContent, CardHeader } from "@bera/ui/card";
-import { Separator } from "@bera/ui/separator";
+import { Card } from "@bera/ui/card";
 
 import { CircleStat } from "./circle-stat";
 

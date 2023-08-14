@@ -7,7 +7,7 @@ import YellowCard from "~/components/yellow-card";
 import AverageGaugeWeight from "./components/average-gauge-weight";
 import UnbondingQueue from "./components/unbonding-queue";
 import YourDelegations from "./components/your-delegations";
-import { BGTSelectionEnum, BGTselection } from "./types";
+import { BGTSelectionEnum, type BGTselection } from "./types";
 
 export default function Portfolio() {
   const { account } = useBeraJs();
