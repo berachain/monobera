@@ -58,7 +58,14 @@ export default function ValidatorCard(validator: { validator: Validator }) {
         ))}
       </div>
 
-      <Button variant="secondary" onClick={() => router.push("/delegate")}>
+      <Button
+        variant="secondary"
+        onClick={() =>
+          router.push(
+            `/delegate?action=delegate&&validator=${validator.validator.operatorAddress}`,
+          )
+        }
+      >
         Delegate
       </Button>
     </YellowCard>

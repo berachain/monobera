@@ -8,6 +8,7 @@ export default function Page({
 }: {
   searchParams: {
     action: DelegateEnum;
+    validator: string;
   };
 }) {
   let action;
