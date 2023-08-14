@@ -27,17 +27,20 @@ import {
 export const navItems = [
   {
     href: "/",
+    title: "Dashboard",
+  },
+  {
+    href: "/my-bgt",
     title: "My BGT",
   },
-  // {
-  //   href: "/dashboard",
-  //   title: "Dashboard",
-  // },
   {
-    href: "/stake",
-    title: "Stake",
+    href: "/validators",
+    title: "Validators",
   },
-  // TODO integrate for public testnet
+  {
+    href: "/delegate",
+    title: "Delegate",
+  },
   {
     href: "/governance",
     title: "Governance",

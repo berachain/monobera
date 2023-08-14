@@ -1,12 +1,9 @@
 "use client";
 
 import {
-  usePollActiveValidators,
   usePollDelegatorUnbonding,
-  usePollDelegatorValidators,
   usePollTotalDelegatorDelegated,
   type UnbondingDelegationEntry,
-  type Validator,
 } from "@bera/berajs";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -15,25 +12,19 @@ import { formatUnits } from "viem";
 
 import { formatTime } from "~/utils/formatTime";
 import MyBalance from "~/components/my-balance";
-import ValidatorsTable from "./stake/components/ValidatorsTable";
-import { getYourColumns } from "./stake/components/column";
 
 export default function MyBGT() {
-  const { useTotalDelegated } = usePollActiveValidators();
-  const { useDelegatorValidators } = usePollDelegatorValidators();
   const { useTotalDelegatorDelegated } = usePollTotalDelegatorDelegated();
   const { useDelegatorUnbonding, useTotalDelegatorUnbonding } =
     usePollDelegatorUnbonding();
 
-  const validators: Validator[] = useDelegatorValidators();
   const totalDelegatorDelegated: number | undefined =
     useTotalDelegatorDelegated();
-  const totalDelegated: number = useTotalDelegated();
   const totalUnbonding: number | undefined = useTotalDelegatorUnbonding();
   const unbondingQueue = useDelegatorUnbonding();
   console.log("unbondingQueue", unbondingQueue);
   console.log(totalUnbonding);
-  const columns = getYourColumns(totalDelegated);
+  // const columns = getYourColumns(totalDelegated);
   return (
     <div className="container mb-10 flex flex-col gap-6">
       <Card>
@@ -139,7 +130,7 @@ export default function MyBGT() {
             {/* <Input type="text" placeholder="Search" className="w-72" /> */}
           </CardHeader>
           <CardContent>
-            <ValidatorsTable columns={columns} validators={validators} />
+            {/* <ValidatorsTable columns={columns} validators={validators} /> */}
           </CardContent>
         </Card>
       </div>
