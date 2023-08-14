@@ -44,7 +44,7 @@ export default function Validators() {
       </div>
       <div className="flex gap-8">
         {generalInfo.map((info, index) => (
-          <Card className="flex-1 p-8 text-center" key={(info, index)}>
+          <Card className="flex-1 p-8 text-center" key={info.text + index}>
             <div className="text-2xl font-semibold leading-loose text-foreground">
               {info.amount}
             </div>

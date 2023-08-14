@@ -1,7 +1,7 @@
 import React from "react";
 import { Icons } from "@bera/ui/icons";
 
-import { type Columns } from "./types";
+import { type Columns } from "~/components/react-table";
 
 export const global_gauge_weight_columns: Columns = [
   {

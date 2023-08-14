@@ -22,13 +22,13 @@ export default function RT({ columns, data, rowOnClick }: RTProps) {
     <Card>
       <table {...getTableProps()} className="w-full">
         <thead>
-          {headerGroups.map((headerGroup) => (
+          {headerGroups.map((headerGroup: any) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}
               key={"headerGroup" + headerGroup.id}
               className="flex justify-between rounded-tl-[18px] rounded-tr-[18px] border border-l-0 border-r-0 border-t-0 border-b-border bg-muted px-8 py-3"
             >
-              {headerGroup.headers.map((column) => (
+              {headerGroup.headers.map((column: any) => (
                 <th
                   {...column.getHeaderProps()}
                   key={"headerGroup column" + column.id}
@@ -41,8 +41,8 @@ export default function RT({ columns, data, rowOnClick }: RTProps) {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row, index) => {
-            prepareRow(row, index);
+          {rows.map((row: any, index: number) => {
+            prepareRow(row);
             return (
               <tr
                 {...row.getRowProps()}
@@ -52,12 +52,12 @@ export default function RT({ columns, data, rowOnClick }: RTProps) {
                     ? "rounded rounded-18 border-0 "
                     : ""
                 }`}
-                onClick={() => rowOnClick(row)}
+                onClick={() => rowOnClick && rowOnClick(row)}
               >
-                {row.cells.map((cell) => (
+                {row.cells.map((cell: any) => (
                   <td
                     {...cell.getCellProps()}
-                    key={"tableGroup cell".id}
+                    key={"tableGroup" + cell.id}
                     className="text-xs font-medium leading-tight text-foreground"
                   >
                     {cell.render("Cell")}
