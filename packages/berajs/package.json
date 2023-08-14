@@ -28,6 +28,11 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "sha3": "^2.1.4",
+    "ts-proto": "^1.136.1",
+    "@cosmjs/proto-signing": "^0.29.5",
+    "@cosmjs/stargate": "^0.29.5",
+    "@cosmjs/tendermint-rpc": "^0.29.5",
     "@bera/eslint-config": "0.1.0",
     "@hyrious/esbuild-plugin-commonjs": "0.2.2",
     "@types/react": "^18.2.0",

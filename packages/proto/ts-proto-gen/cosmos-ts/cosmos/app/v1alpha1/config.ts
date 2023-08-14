@@ -1,7 +1,6 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-
 import { Any } from "../../../google/protobuf/any";
 
 export const protobufPackage = "cosmos.app.v1alpha1";
@@ -67,10 +66,7 @@ function createBaseConfig(): Config {
 }
 
 export const Config = {
-  encode(
-    message: Config,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: Config, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.modules) {
       ModuleConfig.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -91,9 +87,7 @@ export const Config = {
           message.modules.push(ModuleConfig.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.golangBindings.push(
-            GolangBinding.decode(reader, reader.uint32()),
-          );
+          message.golangBindings.push(GolangBinding.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -105,9 +99,7 @@ export const Config = {
 
   fromJSON(object: any): Config {
     return {
-      modules: Array.isArray(object?.modules)
-        ? object.modules.map((e: any) => ModuleConfig.fromJSON(e))
-        : [],
+      modules: Array.isArray(object?.modules) ? object.modules.map((e: any) => ModuleConfig.fromJSON(e)) : [],
       golangBindings: Array.isArray(object?.golangBindings)
         ? object.golangBindings.map((e: any) => GolangBinding.fromJSON(e))
         : [],
@@ -117,16 +109,12 @@ export const Config = {
   toJSON(message: Config): unknown {
     const obj: any = {};
     if (message.modules) {
-      obj.modules = message.modules.map((e) =>
-        e ? ModuleConfig.toJSON(e) : undefined,
-      );
+      obj.modules = message.modules.map((e) => e ? ModuleConfig.toJSON(e) : undefined);
     } else {
       obj.modules = [];
     }
     if (message.golangBindings) {
-      obj.golangBindings = message.golangBindings.map((e) =>
-        e ? GolangBinding.toJSON(e) : undefined,
-      );
+      obj.golangBindings = message.golangBindings.map((e) => e ? GolangBinding.toJSON(e) : undefined);
     } else {
       obj.golangBindings = [];
     }
@@ -139,10 +127,8 @@ export const Config = {
 
   fromPartial<I extends Exact<DeepPartial<Config>, I>>(object: I): Config {
     const message = createBaseConfig();
-    message.modules =
-      object.modules?.map((e) => ModuleConfig.fromPartial(e)) || [];
-    message.golangBindings =
-      object.golangBindings?.map((e) => GolangBinding.fromPartial(e)) || [];
+    message.modules = object.modules?.map((e) => ModuleConfig.fromPartial(e)) || [];
+    message.golangBindings = object.golangBindings?.map((e) => GolangBinding.fromPartial(e)) || [];
     return message;
   },
 };
@@ -152,10 +138,7 @@ function createBaseModuleConfig(): ModuleConfig {
 }
 
 export const ModuleConfig = {
-  encode(
-    message: ModuleConfig,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: ModuleConfig, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -182,9 +165,7 @@ export const ModuleConfig = {
           message.config = Any.decode(reader, reader.uint32());
           break;
         case 3:
-          message.golangBindings.push(
-            GolangBinding.decode(reader, reader.uint32()),
-          );
+          message.golangBindings.push(GolangBinding.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -207,35 +188,26 @@ export const ModuleConfig = {
   toJSON(message: ModuleConfig): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.config !== undefined &&
-      (obj.config = message.config ? Any.toJSON(message.config) : undefined);
+    message.config !== undefined && (obj.config = message.config ? Any.toJSON(message.config) : undefined);
     if (message.golangBindings) {
-      obj.golangBindings = message.golangBindings.map((e) =>
-        e ? GolangBinding.toJSON(e) : undefined,
-      );
+      obj.golangBindings = message.golangBindings.map((e) => e ? GolangBinding.toJSON(e) : undefined);
     } else {
       obj.golangBindings = [];
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ModuleConfig>, I>>(
-    base?: I,
-  ): ModuleConfig {
+  create<I extends Exact<DeepPartial<ModuleConfig>, I>>(base?: I): ModuleConfig {
     return ModuleConfig.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<ModuleConfig>, I>>(
-    object: I,
-  ): ModuleConfig {
+  fromPartial<I extends Exact<DeepPartial<ModuleConfig>, I>>(object: I): ModuleConfig {
     const message = createBaseModuleConfig();
     message.name = object.name ?? "";
-    message.config =
-      object.config !== undefined && object.config !== null
-        ? Any.fromPartial(object.config)
-        : undefined;
-    message.golangBindings =
-      object.golangBindings?.map((e) => GolangBinding.fromPartial(e)) || [];
+    message.config = (object.config !== undefined && object.config !== null)
+      ? Any.fromPartial(object.config)
+      : undefined;
+    message.golangBindings = object.golangBindings?.map((e) => GolangBinding.fromPartial(e)) || [];
     return message;
   },
 };
@@ -245,10 +217,7 @@ function createBaseGolangBinding(): GolangBinding {
 }
 
 export const GolangBinding = {
-  encode(
-    message: GolangBinding,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: GolangBinding, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.interfaceType !== "") {
       writer.uint32(10).string(message.interfaceType);
     }
@@ -281,33 +250,23 @@ export const GolangBinding = {
 
   fromJSON(object: any): GolangBinding {
     return {
-      interfaceType: isSet(object.interfaceType)
-        ? String(object.interfaceType)
-        : "",
-      implementation: isSet(object.implementation)
-        ? String(object.implementation)
-        : "",
+      interfaceType: isSet(object.interfaceType) ? String(object.interfaceType) : "",
+      implementation: isSet(object.implementation) ? String(object.implementation) : "",
     };
   },
 
   toJSON(message: GolangBinding): unknown {
     const obj: any = {};
-    message.interfaceType !== undefined &&
-      (obj.interfaceType = message.interfaceType);
-    message.implementation !== undefined &&
-      (obj.implementation = message.implementation);
+    message.interfaceType !== undefined && (obj.interfaceType = message.interfaceType);
+    message.implementation !== undefined && (obj.implementation = message.implementation);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GolangBinding>, I>>(
-    base?: I,
-  ): GolangBinding {
+  create<I extends Exact<DeepPartial<GolangBinding>, I>>(base?: I): GolangBinding {
     return GolangBinding.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<GolangBinding>, I>>(
-    object: I,
-  ): GolangBinding {
+  fromPartial<I extends Exact<DeepPartial<GolangBinding>, I>>(object: I): GolangBinding {
     const message = createBaseGolangBinding();
     message.interfaceType = object.interfaceType ?? "";
     message.implementation = object.implementation ?? "";
@@ -315,33 +274,17 @@ export const GolangBinding = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

@@ -23,14 +23,7 @@ var tsProtoGlobalThis: any = (() => {
   throw "Unable to locate global object";
 })();
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

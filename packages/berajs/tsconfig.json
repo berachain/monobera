@@ -2,11 +2,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "incremental": false,
+    "declaration": false,
     "paths": {
       "~/*": ["./src/*"]
     },
     "typeRoots": ["./src/window.d.ts"]
   },
-  "exclude": ["node_modules", "dist", "build", "coverage", "lib", "esm", "cjs"],
+  "exclude": ["node_modules", "dist", "build", "coverage", "lib", "esm", "cjs", "src/proto/cosmos-ts"],
   "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
 }

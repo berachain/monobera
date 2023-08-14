@@ -1,19 +1,11 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-
 import { Timestamp } from "../../../google/protobuf/timestamp";
 
 export const protobufPackage = "cosmos.query.v1";
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 function fromTimestamp(t: Timestamp): Date {
   let millis = t.seconds.toNumber() * 1_000;

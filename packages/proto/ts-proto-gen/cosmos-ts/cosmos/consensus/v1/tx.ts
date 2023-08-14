@@ -1,12 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-
-import {
-  BlockParams,
-  EvidenceParams,
-  ValidatorParams,
-} from "../../../tendermint/types/params";
+import { BlockParams, EvidenceParams, ValidatorParams } from "../../../tendermint/types/params";
 
 export const protobufPackage = "cosmos.consensus.v1";
 
@@ -32,22 +27,15 @@ export interface MsgUpdateParams {
  * MsgUpdateParamsResponse defines the response structure for executing a
  * MsgUpdateParams message.
  */
-export interface MsgUpdateParamsResponse {}
+export interface MsgUpdateParamsResponse {
+}
 
 function createBaseMsgUpdateParams(): MsgUpdateParams {
-  return {
-    authority: "",
-    block: undefined,
-    evidence: undefined,
-    validator: undefined,
-  };
+  return { authority: "", block: undefined, evidence: undefined, validator: undefined };
 }
 
 export const MsgUpdateParams = {
-  encode(
-    message: MsgUpdateParams,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -55,16 +43,10 @@ export const MsgUpdateParams = {
       BlockParams.encode(message.block, writer.uint32(18).fork()).ldelim();
     }
     if (message.evidence !== undefined) {
-      EvidenceParams.encode(
-        message.evidence,
-        writer.uint32(26).fork(),
-      ).ldelim();
+      EvidenceParams.encode(message.evidence, writer.uint32(26).fork()).ldelim();
     }
     if (message.validator !== undefined) {
-      ValidatorParams.encode(
-        message.validator,
-        writer.uint32(34).fork(),
-      ).ldelim();
+      ValidatorParams.encode(message.validator, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -99,59 +81,39 @@ export const MsgUpdateParams = {
   fromJSON(object: any): MsgUpdateParams {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
-      block: isSet(object.block)
-        ? BlockParams.fromJSON(object.block)
-        : undefined,
-      evidence: isSet(object.evidence)
-        ? EvidenceParams.fromJSON(object.evidence)
-        : undefined,
-      validator: isSet(object.validator)
-        ? ValidatorParams.fromJSON(object.validator)
-        : undefined,
+      block: isSet(object.block) ? BlockParams.fromJSON(object.block) : undefined,
+      evidence: isSet(object.evidence) ? EvidenceParams.fromJSON(object.evidence) : undefined,
+      validator: isSet(object.validator) ? ValidatorParams.fromJSON(object.validator) : undefined,
     };
   },
 
   toJSON(message: MsgUpdateParams): unknown {
     const obj: any = {};
     message.authority !== undefined && (obj.authority = message.authority);
-    message.block !== undefined &&
-      (obj.block = message.block
-        ? BlockParams.toJSON(message.block)
-        : undefined);
+    message.block !== undefined && (obj.block = message.block ? BlockParams.toJSON(message.block) : undefined);
     message.evidence !== undefined &&
-      (obj.evidence = message.evidence
-        ? EvidenceParams.toJSON(message.evidence)
-        : undefined);
+      (obj.evidence = message.evidence ? EvidenceParams.toJSON(message.evidence) : undefined);
     message.validator !== undefined &&
-      (obj.validator = message.validator
-        ? ValidatorParams.toJSON(message.validator)
-        : undefined);
+      (obj.validator = message.validator ? ValidatorParams.toJSON(message.validator) : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(
-    base?: I,
-  ): MsgUpdateParams {
+  create<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(base?: I): MsgUpdateParams {
     return MsgUpdateParams.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(
-    object: I,
-  ): MsgUpdateParams {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(object: I): MsgUpdateParams {
     const message = createBaseMsgUpdateParams();
     message.authority = object.authority ?? "";
-    message.block =
-      object.block !== undefined && object.block !== null
-        ? BlockParams.fromPartial(object.block)
-        : undefined;
-    message.evidence =
-      object.evidence !== undefined && object.evidence !== null
-        ? EvidenceParams.fromPartial(object.evidence)
-        : undefined;
-    message.validator =
-      object.validator !== undefined && object.validator !== null
-        ? ValidatorParams.fromPartial(object.validator)
-        : undefined;
+    message.block = (object.block !== undefined && object.block !== null)
+      ? BlockParams.fromPartial(object.block)
+      : undefined;
+    message.evidence = (object.evidence !== undefined && object.evidence !== null)
+      ? EvidenceParams.fromPartial(object.evidence)
+      : undefined;
+    message.validator = (object.validator !== undefined && object.validator !== null)
+      ? ValidatorParams.fromPartial(object.validator)
+      : undefined;
     return message;
   },
 };
@@ -161,17 +123,11 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 }
 
 export const MsgUpdateParamsResponse = {
-  encode(
-    _: MsgUpdateParamsResponse,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number,
-  ): MsgUpdateParamsResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
@@ -195,15 +151,11 @@ export const MsgUpdateParamsResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(
-    base?: I,
-  ): MsgUpdateParamsResponse {
+  create<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(base?: I): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(
-    _: I,
-  ): MsgUpdateParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(_: I): MsgUpdateParamsResponse {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
@@ -231,47 +183,25 @@ export class MsgClientImpl implements Msg {
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
     const promise = this.rpc.request(this.service, "UpdateParams", data);
-    return promise.then((data) =>
-      MsgUpdateParamsResponse.decode(new _m0.Reader(data)),
-    );
+    return promise.then((data) => MsgUpdateParamsResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array,
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

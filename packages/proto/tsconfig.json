@@ -1,12 +1,18 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "incremental": false,
+    "rootDir": ".",
+    "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
-    },
-    "typeRoots": ["./src/window.d.ts"]
+      "ts-proto-gen": ["ts-proto-gen"] // This mapping is relative to "baseUrl"
+    }
   },
-  "exclude": ["node_modules", "dist", "build", "coverage", "lib", "esm", "cjs"],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
+  
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -1,7 +1,6 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-
 import { Timestamp } from "../../../../google/protobuf/timestamp";
 import { EvidenceList } from "../../../../tendermint/types/evidence";
 import { BlockID, Commit, Data } from "../../../../tendermint/types/types";
@@ -54,12 +53,7 @@ export interface Header {
 }
 
 function createBaseBlock(): Block {
-  return {
-    header: undefined,
-    data: undefined,
-    evidence: undefined,
-    lastCommit: undefined,
-  };
+  return { header: undefined, data: undefined, evidence: undefined, lastCommit: undefined };
 }
 
 export const Block = {
@@ -110,29 +104,19 @@ export const Block = {
     return {
       header: isSet(object.header) ? Header.fromJSON(object.header) : undefined,
       data: isSet(object.data) ? Data.fromJSON(object.data) : undefined,
-      evidence: isSet(object.evidence)
-        ? EvidenceList.fromJSON(object.evidence)
-        : undefined,
-      lastCommit: isSet(object.lastCommit)
-        ? Commit.fromJSON(object.lastCommit)
-        : undefined,
+      evidence: isSet(object.evidence) ? EvidenceList.fromJSON(object.evidence) : undefined,
+      lastCommit: isSet(object.lastCommit) ? Commit.fromJSON(object.lastCommit) : undefined,
     };
   },
 
   toJSON(message: Block): unknown {
     const obj: any = {};
-    message.header !== undefined &&
-      (obj.header = message.header ? Header.toJSON(message.header) : undefined);
-    message.data !== undefined &&
-      (obj.data = message.data ? Data.toJSON(message.data) : undefined);
+    message.header !== undefined && (obj.header = message.header ? Header.toJSON(message.header) : undefined);
+    message.data !== undefined && (obj.data = message.data ? Data.toJSON(message.data) : undefined);
     message.evidence !== undefined &&
-      (obj.evidence = message.evidence
-        ? EvidenceList.toJSON(message.evidence)
-        : undefined);
+      (obj.evidence = message.evidence ? EvidenceList.toJSON(message.evidence) : undefined);
     message.lastCommit !== undefined &&
-      (obj.lastCommit = message.lastCommit
-        ? Commit.toJSON(message.lastCommit)
-        : undefined);
+      (obj.lastCommit = message.lastCommit ? Commit.toJSON(message.lastCommit) : undefined);
     return obj;
   },
 
@@ -142,22 +126,16 @@ export const Block = {
 
   fromPartial<I extends Exact<DeepPartial<Block>, I>>(object: I): Block {
     const message = createBaseBlock();
-    message.header =
-      object.header !== undefined && object.header !== null
-        ? Header.fromPartial(object.header)
-        : undefined;
-    message.data =
-      object.data !== undefined && object.data !== null
-        ? Data.fromPartial(object.data)
-        : undefined;
-    message.evidence =
-      object.evidence !== undefined && object.evidence !== null
-        ? EvidenceList.fromPartial(object.evidence)
-        : undefined;
-    message.lastCommit =
-      object.lastCommit !== undefined && object.lastCommit !== null
-        ? Commit.fromPartial(object.lastCommit)
-        : undefined;
+    message.header = (object.header !== undefined && object.header !== null)
+      ? Header.fromPartial(object.header)
+      : undefined;
+    message.data = (object.data !== undefined && object.data !== null) ? Data.fromPartial(object.data) : undefined;
+    message.evidence = (object.evidence !== undefined && object.evidence !== null)
+      ? EvidenceList.fromPartial(object.evidence)
+      : undefined;
+    message.lastCommit = (object.lastCommit !== undefined && object.lastCommit !== null)
+      ? Commit.fromPartial(object.lastCommit)
+      : undefined;
     return message;
   },
 };
@@ -182,10 +160,7 @@ function createBaseHeader(): Header {
 }
 
 export const Header = {
-  encode(
-    message: Header,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: Header, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.version !== undefined) {
       Consensus.encode(message.version, writer.uint32(10).fork()).ldelim();
     }
@@ -196,10 +171,7 @@ export const Header = {
       writer.uint32(24).int64(message.height);
     }
     if (message.time !== undefined) {
-      Timestamp.encode(
-        toTimestamp(message.time),
-        writer.uint32(34).fork(),
-      ).ldelim();
+      Timestamp.encode(toTimestamp(message.time), writer.uint32(34).fork()).ldelim();
     }
     if (message.lastBlockId !== undefined) {
       BlockID.encode(message.lastBlockId, writer.uint32(42).fork()).ldelim();
@@ -251,9 +223,7 @@ export const Header = {
           message.height = reader.int64() as Long;
           break;
         case 4:
-          message.time = fromTimestamp(
-            Timestamp.decode(reader, reader.uint32()),
-          );
+          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 5:
           message.lastBlockId = BlockID.decode(reader, reader.uint32());
@@ -295,105 +265,62 @@ export const Header = {
 
   fromJSON(object: any): Header {
     return {
-      version: isSet(object.version)
-        ? Consensus.fromJSON(object.version)
-        : undefined,
+      version: isSet(object.version) ? Consensus.fromJSON(object.version) : undefined,
       chainId: isSet(object.chainId) ? String(object.chainId) : "",
       height: isSet(object.height) ? Long.fromValue(object.height) : Long.ZERO,
       time: isSet(object.time) ? fromJsonTimestamp(object.time) : undefined,
-      lastBlockId: isSet(object.lastBlockId)
-        ? BlockID.fromJSON(object.lastBlockId)
-        : undefined,
-      lastCommitHash: isSet(object.lastCommitHash)
-        ? bytesFromBase64(object.lastCommitHash)
-        : new Uint8Array(),
-      dataHash: isSet(object.dataHash)
-        ? bytesFromBase64(object.dataHash)
-        : new Uint8Array(),
-      validatorsHash: isSet(object.validatorsHash)
-        ? bytesFromBase64(object.validatorsHash)
-        : new Uint8Array(),
+      lastBlockId: isSet(object.lastBlockId) ? BlockID.fromJSON(object.lastBlockId) : undefined,
+      lastCommitHash: isSet(object.lastCommitHash) ? bytesFromBase64(object.lastCommitHash) : new Uint8Array(),
+      dataHash: isSet(object.dataHash) ? bytesFromBase64(object.dataHash) : new Uint8Array(),
+      validatorsHash: isSet(object.validatorsHash) ? bytesFromBase64(object.validatorsHash) : new Uint8Array(),
       nextValidatorsHash: isSet(object.nextValidatorsHash)
         ? bytesFromBase64(object.nextValidatorsHash)
         : new Uint8Array(),
-      consensusHash: isSet(object.consensusHash)
-        ? bytesFromBase64(object.consensusHash)
-        : new Uint8Array(),
-      appHash: isSet(object.appHash)
-        ? bytesFromBase64(object.appHash)
-        : new Uint8Array(),
-      lastResultsHash: isSet(object.lastResultsHash)
-        ? bytesFromBase64(object.lastResultsHash)
-        : new Uint8Array(),
-      evidenceHash: isSet(object.evidenceHash)
-        ? bytesFromBase64(object.evidenceHash)
-        : new Uint8Array(),
-      proposerAddress: isSet(object.proposerAddress)
-        ? String(object.proposerAddress)
-        : "",
+      consensusHash: isSet(object.consensusHash) ? bytesFromBase64(object.consensusHash) : new Uint8Array(),
+      appHash: isSet(object.appHash) ? bytesFromBase64(object.appHash) : new Uint8Array(),
+      lastResultsHash: isSet(object.lastResultsHash) ? bytesFromBase64(object.lastResultsHash) : new Uint8Array(),
+      evidenceHash: isSet(object.evidenceHash) ? bytesFromBase64(object.evidenceHash) : new Uint8Array(),
+      proposerAddress: isSet(object.proposerAddress) ? String(object.proposerAddress) : "",
     };
   },
 
   toJSON(message: Header): unknown {
     const obj: any = {};
-    message.version !== undefined &&
-      (obj.version = message.version
-        ? Consensus.toJSON(message.version)
-        : undefined);
+    message.version !== undefined && (obj.version = message.version ? Consensus.toJSON(message.version) : undefined);
     message.chainId !== undefined && (obj.chainId = message.chainId);
-    message.height !== undefined &&
-      (obj.height = (message.height || Long.ZERO).toString());
+    message.height !== undefined && (obj.height = (message.height || Long.ZERO).toString());
     message.time !== undefined && (obj.time = message.time.toISOString());
     message.lastBlockId !== undefined &&
-      (obj.lastBlockId = message.lastBlockId
-        ? BlockID.toJSON(message.lastBlockId)
-        : undefined);
+      (obj.lastBlockId = message.lastBlockId ? BlockID.toJSON(message.lastBlockId) : undefined);
     message.lastCommitHash !== undefined &&
       (obj.lastCommitHash = base64FromBytes(
-        message.lastCommitHash !== undefined
-          ? message.lastCommitHash
-          : new Uint8Array(),
+        message.lastCommitHash !== undefined ? message.lastCommitHash : new Uint8Array(),
       ));
     message.dataHash !== undefined &&
-      (obj.dataHash = base64FromBytes(
-        message.dataHash !== undefined ? message.dataHash : new Uint8Array(),
-      ));
+      (obj.dataHash = base64FromBytes(message.dataHash !== undefined ? message.dataHash : new Uint8Array()));
     message.validatorsHash !== undefined &&
       (obj.validatorsHash = base64FromBytes(
-        message.validatorsHash !== undefined
-          ? message.validatorsHash
-          : new Uint8Array(),
+        message.validatorsHash !== undefined ? message.validatorsHash : new Uint8Array(),
       ));
     message.nextValidatorsHash !== undefined &&
       (obj.nextValidatorsHash = base64FromBytes(
-        message.nextValidatorsHash !== undefined
-          ? message.nextValidatorsHash
-          : new Uint8Array(),
+        message.nextValidatorsHash !== undefined ? message.nextValidatorsHash : new Uint8Array(),
       ));
     message.consensusHash !== undefined &&
       (obj.consensusHash = base64FromBytes(
-        message.consensusHash !== undefined
-          ? message.consensusHash
-          : new Uint8Array(),
+        message.consensusHash !== undefined ? message.consensusHash : new Uint8Array(),
       ));
     message.appHash !== undefined &&
-      (obj.appHash = base64FromBytes(
-        message.appHash !== undefined ? message.appHash : new Uint8Array(),
-      ));
+      (obj.appHash = base64FromBytes(message.appHash !== undefined ? message.appHash : new Uint8Array()));
     message.lastResultsHash !== undefined &&
       (obj.lastResultsHash = base64FromBytes(
-        message.lastResultsHash !== undefined
-          ? message.lastResultsHash
-          : new Uint8Array(),
+        message.lastResultsHash !== undefined ? message.lastResultsHash : new Uint8Array(),
       ));
     message.evidenceHash !== undefined &&
       (obj.evidenceHash = base64FromBytes(
-        message.evidenceHash !== undefined
-          ? message.evidenceHash
-          : new Uint8Array(),
+        message.evidenceHash !== undefined ? message.evidenceHash : new Uint8Array(),
       ));
-    message.proposerAddress !== undefined &&
-      (obj.proposerAddress = message.proposerAddress);
+    message.proposerAddress !== undefined && (obj.proposerAddress = message.proposerAddress);
     return obj;
   },
 
@@ -403,20 +330,17 @@ export const Header = {
 
   fromPartial<I extends Exact<DeepPartial<Header>, I>>(object: I): Header {
     const message = createBaseHeader();
-    message.version =
-      object.version !== undefined && object.version !== null
-        ? Consensus.fromPartial(object.version)
-        : undefined;
+    message.version = (object.version !== undefined && object.version !== null)
+      ? Consensus.fromPartial(object.version)
+      : undefined;
     message.chainId = object.chainId ?? "";
-    message.height =
-      object.height !== undefined && object.height !== null
-        ? Long.fromValue(object.height)
-        : Long.ZERO;
+    message.height = (object.height !== undefined && object.height !== null)
+      ? Long.fromValue(object.height)
+      : Long.ZERO;
     message.time = object.time ?? undefined;
-    message.lastBlockId =
-      object.lastBlockId !== undefined && object.lastBlockId !== null
-        ? BlockID.fromPartial(object.lastBlockId)
-        : undefined;
+    message.lastBlockId = (object.lastBlockId !== undefined && object.lastBlockId !== null)
+      ? BlockID.fromPartial(object.lastBlockId)
+      : undefined;
     message.lastCommitHash = object.lastCommitHash ?? new Uint8Array();
     message.dataHash = object.dataHash ?? new Uint8Array();
     message.validatorsHash = object.validatorsHash ?? new Uint8Array();
@@ -474,33 +398,17 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function toTimestamp(date: Date): Timestamp {
   const seconds = numberToLong(date.getTime() / 1_000);
