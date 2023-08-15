@@ -44,13 +44,8 @@ const parameterChangeLineSchema = z.object({
 export const BaseFormSchema = z.object({
   type: z.enum(Object.values(ProposalTypeEnum) as any),
   title: z.string().nonempty("Required"),
-  forumLink: z
-    .string()
-    .nonempty("Required")
-    .url("Forum link must be a valid URL."),
-  description: z.string().nonempty("Required").min(10, {
-    message: "Description must be at least 10 characters.",
-  }),
+  forumLink: z.string().nonempty("Required"),
+  description: z.string().nonempty("Required"),
   expedite: z.boolean(),
   initialDeposit: z
     .string()
@@ -62,16 +57,14 @@ export const BaseFormSchema = z.object({
 
 export const CommunityFormSchema = BaseFormSchema.extend({
   type: z.literal(ProposalTypeEnum.COMMUNITY_POOL_SPEND),
-  recipient: z.string().refine((value) => isAddress(value), {
-    message: "Invalid recipient address.",
-  }),
-  amountA: z
-    .string()
-    .nonempty("Required")
-    .refine((val) => Number(val) > 0, {
-      message: "Amount must be greater than 0.",
-    }),
-  amountB: z
+  recipient: z.string().nonempty("Required"),
+  // amountA: z
+  //   .string()
+  //   .nonempty("Required")
+  //   .refine((val) => Number(val) > 0, {
+  //     message: "Amount must be greater than 0.",
+  //   }),
+  amount: z
     .string()
     .nonempty("Required")
     .refine((val) => Number(val) > 0, {

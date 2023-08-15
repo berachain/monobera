@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",
@@ -7,12 +7,7 @@
       "ts-proto-gen": ["ts-proto-gen"] // This mapping is relative to "baseUrl"
     }
   },
-  
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }

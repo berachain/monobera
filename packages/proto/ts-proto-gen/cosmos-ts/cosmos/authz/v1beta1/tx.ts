@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+
 import { Any } from "../../../google/protobuf/any";
 import { Grant } from "./authz";
 
@@ -39,8 +40,7 @@ export interface MsgExec {
 }
 
 /** MsgGrantResponse defines the Msg/MsgGrant response type. */
-export interface MsgGrantResponse {
-}
+export interface MsgGrantResponse {}
 
 /**
  * MsgRevoke revokes any authorization with the provided sdk.Msg type on the
@@ -53,15 +53,17 @@ export interface MsgRevoke {
 }
 
 /** MsgRevokeResponse defines the Msg/MsgRevokeResponse response type. */
-export interface MsgRevokeResponse {
-}
+export interface MsgRevokeResponse {}
 
 function createBaseMsgGrant(): MsgGrant {
   return { granter: "", grantee: "", grant: undefined };
 }
 
 export const MsgGrant = {
-  encode(message: MsgGrant, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgGrant,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
     }
@@ -110,7 +112,8 @@ export const MsgGrant = {
     const obj: any = {};
     message.granter !== undefined && (obj.granter = message.granter);
     message.grantee !== undefined && (obj.grantee = message.grantee);
-    message.grant !== undefined && (obj.grant = message.grant ? Grant.toJSON(message.grant) : undefined);
+    message.grant !== undefined &&
+      (obj.grant = message.grant ? Grant.toJSON(message.grant) : undefined);
     return obj;
   },
 
@@ -122,7 +125,10 @@ export const MsgGrant = {
     const message = createBaseMsgGrant();
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
-    message.grant = (object.grant !== undefined && object.grant !== null) ? Grant.fromPartial(object.grant) : undefined;
+    message.grant =
+      object.grant !== undefined && object.grant !== null
+        ? Grant.fromPartial(object.grant)
+        : undefined;
     return message;
   },
 };
@@ -132,7 +138,10 @@ function createBaseMsgExecResponse(): MsgExecResponse {
 }
 
 export const MsgExecResponse = {
-  encode(message: MsgExecResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgExecResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     for (const v of message.results) {
       writer.uint32(10).bytes(v!);
     }
@@ -158,24 +167,34 @@ export const MsgExecResponse = {
   },
 
   fromJSON(object: any): MsgExecResponse {
-    return { results: Array.isArray(object?.results) ? object.results.map((e: any) => bytesFromBase64(e)) : [] };
+    return {
+      results: Array.isArray(object?.results)
+        ? object.results.map((e: any) => bytesFromBase64(e))
+        : [],
+    };
   },
 
   toJSON(message: MsgExecResponse): unknown {
     const obj: any = {};
     if (message.results) {
-      obj.results = message.results.map((e) => base64FromBytes(e !== undefined ? e : new Uint8Array()));
+      obj.results = message.results.map((e) =>
+        base64FromBytes(e !== undefined ? e : new Uint8Array()),
+      );
     } else {
       obj.results = [];
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgExecResponse>, I>>(base?: I): MsgExecResponse {
+  create<I extends Exact<DeepPartial<MsgExecResponse>, I>>(
+    base?: I,
+  ): MsgExecResponse {
     return MsgExecResponse.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgExecResponse>, I>>(object: I): MsgExecResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgExecResponse>, I>>(
+    object: I,
+  ): MsgExecResponse {
     const message = createBaseMsgExecResponse();
     message.results = object.results?.map((e) => e) || [];
     return message;
@@ -187,7 +206,10 @@ function createBaseMsgExec(): MsgExec {
 }
 
 export const MsgExec = {
-  encode(message: MsgExec, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgExec,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.grantee !== "") {
       writer.uint32(10).string(message.grantee);
     }
@@ -221,7 +243,9 @@ export const MsgExec = {
   fromJSON(object: any): MsgExec {
     return {
       grantee: isSet(object.grantee) ? String(object.grantee) : "",
-      msgs: Array.isArray(object?.msgs) ? object.msgs.map((e: any) => Any.fromJSON(e)) : [],
+      msgs: Array.isArray(object?.msgs)
+        ? object.msgs.map((e: any) => Any.fromJSON(e))
+        : [],
     };
   },
 
@@ -229,7 +253,7 @@ export const MsgExec = {
     const obj: any = {};
     message.grantee !== undefined && (obj.grantee = message.grantee);
     if (message.msgs) {
-      obj.msgs = message.msgs.map((e) => e ? Any.toJSON(e) : undefined);
+      obj.msgs = message.msgs.map((e) => (e ? Any.toJSON(e) : undefined));
     } else {
       obj.msgs = [];
     }
@@ -253,7 +277,10 @@ function createBaseMsgGrantResponse(): MsgGrantResponse {
 }
 
 export const MsgGrantResponse = {
-  encode(_: MsgGrantResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgGrantResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
@@ -281,11 +308,15 @@ export const MsgGrantResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(base?: I): MsgGrantResponse {
+  create<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(
+    base?: I,
+  ): MsgGrantResponse {
     return MsgGrantResponse.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(_: I): MsgGrantResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(
+    _: I,
+  ): MsgGrantResponse {
     const message = createBaseMsgGrantResponse();
     return message;
   },
@@ -296,7 +327,10 @@ function createBaseMsgRevoke(): MsgRevoke {
 }
 
 export const MsgRevoke = {
-  encode(message: MsgRevoke, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgRevoke,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
     }
@@ -353,7 +387,9 @@ export const MsgRevoke = {
     return MsgRevoke.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgRevoke>, I>>(object: I): MsgRevoke {
+  fromPartial<I extends Exact<DeepPartial<MsgRevoke>, I>>(
+    object: I,
+  ): MsgRevoke {
     const message = createBaseMsgRevoke();
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
@@ -367,7 +403,10 @@ function createBaseMsgRevokeResponse(): MsgRevokeResponse {
 }
 
 export const MsgRevokeResponse = {
-  encode(_: MsgRevokeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgRevokeResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
@@ -395,11 +434,15 @@ export const MsgRevokeResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgRevokeResponse>, I>>(base?: I): MsgRevokeResponse {
+  create<I extends Exact<DeepPartial<MsgRevokeResponse>, I>>(
+    base?: I,
+  ): MsgRevokeResponse {
     return MsgRevokeResponse.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgRevokeResponse>, I>>(_: I): MsgRevokeResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgRevokeResponse>, I>>(
+    _: I,
+  ): MsgRevokeResponse {
     const message = createBaseMsgRevokeResponse();
     return message;
   },
@@ -440,7 +483,9 @@ export class MsgClientImpl implements Msg {
   Grant(request: MsgGrant): Promise<MsgGrantResponse> {
     const data = MsgGrant.encode(request).finish();
     const promise = this.rpc.request(this.service, "Grant", data);
-    return promise.then((data) => MsgGrantResponse.decode(new _m0.Reader(data)));
+    return promise.then((data) =>
+      MsgGrantResponse.decode(new _m0.Reader(data)),
+    );
   }
 
   Exec(request: MsgExec): Promise<MsgExecResponse> {
@@ -452,12 +497,18 @@ export class MsgClientImpl implements Msg {
   Revoke(request: MsgRevoke): Promise<MsgRevokeResponse> {
     const data = MsgRevoke.encode(request).finish();
     const promise = this.rpc.request(this.service, "Revoke", data);
-    return promise.then((data) => MsgRevokeResponse.decode(new _m0.Reader(data)));
+    return promise.then((data) =>
+      MsgRevokeResponse.decode(new _m0.Reader(data)),
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array,
+  ): Promise<Uint8Array>;
 }
 
 declare var self: any | undefined;
@@ -504,17 +555,33 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

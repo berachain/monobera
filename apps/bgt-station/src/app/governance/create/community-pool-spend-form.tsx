@@ -13,7 +13,7 @@ export default function CommunityForm({ form }: { form: UseFormReturn<any> }) {
       <FormField
         control={form.control}
         name="recipient"
-        render={(field: any) => (
+        render={({ field }) => (
           <FormItem className="inline-flex flex-col justify-start">
             <div className="text-sm font-semibold leading-tight">
               Recipient <Tooltip text="test" />
@@ -33,7 +33,7 @@ export default function CommunityForm({ form }: { form: UseFormReturn<any> }) {
         )}
       />
 
-      <FormField
+      {/* <FormField
         control={form.control}
         name="amountA"
         render={(field: any) => (
@@ -50,12 +50,12 @@ export default function CommunityForm({ form }: { form: UseFormReturn<any> }) {
             </div>
           </FormItem>
         )}
-      />
+      /> */}
 
       <FormField
         control={form.control}
-        name="amountB"
-        render={(field: any) => (
+        name="amount"
+        render={({ field }) => (
           <FormItem className="inline-flex flex-col justify-start">
             <div className="text-sm font-semibold leading-tight">
               Amount <Tooltip text="test" />

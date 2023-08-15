@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+
 import { ParamChange } from "./params";
 
 export const protobufPackage = "cosmos.params.v1beta1";
@@ -25,8 +26,7 @@ export interface QueryParamsResponse {
  *
  * Since: cosmos-sdk 0.46
  */
-export interface QuerySubspacesRequest {
-}
+export interface QuerySubspacesRequest {}
 
 /**
  * QuerySubspacesResponse defines the response types for querying for all
@@ -54,7 +54,10 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 
 export const QueryParamsRequest = {
-  encode(message: QueryParamsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: QueryParamsRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.subspace !== "") {
       writer.uint32(10).string(message.subspace);
     }
@@ -99,11 +102,15 @@ export const QueryParamsRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(base?: I): QueryParamsRequest {
+  create<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(
+    base?: I,
+  ): QueryParamsRequest {
     return QueryParamsRequest.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(object: I): QueryParamsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(
+    object: I,
+  ): QueryParamsRequest {
     const message = createBaseQueryParamsRequest();
     message.subspace = object.subspace ?? "";
     message.key = object.key ?? "";
@@ -116,7 +123,10 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 
 export const QueryParamsResponse = {
-  encode(message: QueryParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: QueryParamsResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.param !== undefined) {
       ParamChange.encode(message.param, writer.uint32(10).fork()).ldelim();
     }
@@ -142,24 +152,36 @@ export const QueryParamsResponse = {
   },
 
   fromJSON(object: any): QueryParamsResponse {
-    return { param: isSet(object.param) ? ParamChange.fromJSON(object.param) : undefined };
+    return {
+      param: isSet(object.param)
+        ? ParamChange.fromJSON(object.param)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryParamsResponse): unknown {
     const obj: any = {};
-    message.param !== undefined && (obj.param = message.param ? ParamChange.toJSON(message.param) : undefined);
+    message.param !== undefined &&
+      (obj.param = message.param
+        ? ParamChange.toJSON(message.param)
+        : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(base?: I): QueryParamsResponse {
+  create<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(
+    base?: I,
+  ): QueryParamsResponse {
     return QueryParamsResponse.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(object: I): QueryParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(
+    object: I,
+  ): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
-    message.param = (object.param !== undefined && object.param !== null)
-      ? ParamChange.fromPartial(object.param)
-      : undefined;
+    message.param =
+      object.param !== undefined && object.param !== null
+        ? ParamChange.fromPartial(object.param)
+        : undefined;
     return message;
   },
 };
@@ -169,11 +191,17 @@ function createBaseQuerySubspacesRequest(): QuerySubspacesRequest {
 }
 
 export const QuerySubspacesRequest = {
-  encode(_: QuerySubspacesRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: QuerySubspacesRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySubspacesRequest {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): QuerySubspacesRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySubspacesRequest();
@@ -197,11 +225,15 @@ export const QuerySubspacesRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QuerySubspacesRequest>, I>>(base?: I): QuerySubspacesRequest {
+  create<I extends Exact<DeepPartial<QuerySubspacesRequest>, I>>(
+    base?: I,
+  ): QuerySubspacesRequest {
     return QuerySubspacesRequest.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<QuerySubspacesRequest>, I>>(_: I): QuerySubspacesRequest {
+  fromPartial<I extends Exact<DeepPartial<QuerySubspacesRequest>, I>>(
+    _: I,
+  ): QuerySubspacesRequest {
     const message = createBaseQuerySubspacesRequest();
     return message;
   },
@@ -212,14 +244,20 @@ function createBaseQuerySubspacesResponse(): QuerySubspacesResponse {
 }
 
 export const QuerySubspacesResponse = {
-  encode(message: QuerySubspacesResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: QuerySubspacesResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     for (const v of message.subspaces) {
       Subspace.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QuerySubspacesResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): QuerySubspacesResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySubspacesResponse();
@@ -239,27 +277,36 @@ export const QuerySubspacesResponse = {
 
   fromJSON(object: any): QuerySubspacesResponse {
     return {
-      subspaces: Array.isArray(object?.subspaces) ? object.subspaces.map((e: any) => Subspace.fromJSON(e)) : [],
+      subspaces: Array.isArray(object?.subspaces)
+        ? object.subspaces.map((e: any) => Subspace.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: QuerySubspacesResponse): unknown {
     const obj: any = {};
     if (message.subspaces) {
-      obj.subspaces = message.subspaces.map((e) => e ? Subspace.toJSON(e) : undefined);
+      obj.subspaces = message.subspaces.map((e) =>
+        e ? Subspace.toJSON(e) : undefined,
+      );
     } else {
       obj.subspaces = [];
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QuerySubspacesResponse>, I>>(base?: I): QuerySubspacesResponse {
+  create<I extends Exact<DeepPartial<QuerySubspacesResponse>, I>>(
+    base?: I,
+  ): QuerySubspacesResponse {
     return QuerySubspacesResponse.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<QuerySubspacesResponse>, I>>(object: I): QuerySubspacesResponse {
+  fromPartial<I extends Exact<DeepPartial<QuerySubspacesResponse>, I>>(
+    object: I,
+  ): QuerySubspacesResponse {
     const message = createBaseQuerySubspacesResponse();
-    message.subspaces = object.subspaces?.map((e) => Subspace.fromPartial(e)) || [];
+    message.subspaces =
+      object.subspaces?.map((e) => Subspace.fromPartial(e)) || [];
     return message;
   },
 };
@@ -269,7 +316,10 @@ function createBaseSubspace(): Subspace {
 }
 
 export const Subspace = {
-  encode(message: Subspace, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Subspace,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.subspace !== "") {
       writer.uint32(10).string(message.subspace);
     }
@@ -303,7 +353,9 @@ export const Subspace = {
   fromJSON(object: any): Subspace {
     return {
       subspace: isSet(object.subspace) ? String(object.subspace) : "",
-      keys: Array.isArray(object?.keys) ? object.keys.map((e: any) => String(e)) : [],
+      keys: Array.isArray(object?.keys)
+        ? object.keys.map((e: any) => String(e))
+        : [],
     };
   },
 
@@ -357,31 +409,55 @@ export class QueryClientImpl implements Query {
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Params", data);
-    return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
+    return promise.then((data) =>
+      QueryParamsResponse.decode(new _m0.Reader(data)),
+    );
   }
 
   Subspaces(request: QuerySubspacesRequest): Promise<QuerySubspacesResponse> {
     const data = QuerySubspacesRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Subspaces", data);
-    return promise.then((data) => QuerySubspacesResponse.decode(new _m0.Reader(data)));
+    return promise.then((data) =>
+      QuerySubspacesResponse.decode(new _m0.Reader(data)),
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array,
+  ): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

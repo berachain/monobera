@@ -141,12 +141,21 @@ function createBaseModuleOptions(): ModuleOptions {
 }
 
 export const ModuleOptions = {
-  encode(message: ModuleOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ModuleOptions,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.tx !== undefined) {
-      ServiceCommandDescriptor.encode(message.tx, writer.uint32(10).fork()).ldelim();
+      ServiceCommandDescriptor.encode(
+        message.tx,
+        writer.uint32(10).fork(),
+      ).ldelim();
     }
     if (message.query !== undefined) {
-      ServiceCommandDescriptor.encode(message.query, writer.uint32(18).fork()).ldelim();
+      ServiceCommandDescriptor.encode(
+        message.query,
+        writer.uint32(18).fork(),
+      ).ldelim();
     }
     return writer;
   },
@@ -162,7 +171,10 @@ export const ModuleOptions = {
           message.tx = ServiceCommandDescriptor.decode(reader, reader.uint32());
           break;
         case 2:
-          message.query = ServiceCommandDescriptor.decode(reader, reader.uint32());
+          message.query = ServiceCommandDescriptor.decode(
+            reader,
+            reader.uint32(),
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -174,31 +186,46 @@ export const ModuleOptions = {
 
   fromJSON(object: any): ModuleOptions {
     return {
-      tx: isSet(object.tx) ? ServiceCommandDescriptor.fromJSON(object.tx) : undefined,
-      query: isSet(object.query) ? ServiceCommandDescriptor.fromJSON(object.query) : undefined,
+      tx: isSet(object.tx)
+        ? ServiceCommandDescriptor.fromJSON(object.tx)
+        : undefined,
+      query: isSet(object.query)
+        ? ServiceCommandDescriptor.fromJSON(object.query)
+        : undefined,
     };
   },
 
   toJSON(message: ModuleOptions): unknown {
     const obj: any = {};
-    message.tx !== undefined && (obj.tx = message.tx ? ServiceCommandDescriptor.toJSON(message.tx) : undefined);
+    message.tx !== undefined &&
+      (obj.tx = message.tx
+        ? ServiceCommandDescriptor.toJSON(message.tx)
+        : undefined);
     message.query !== undefined &&
-      (obj.query = message.query ? ServiceCommandDescriptor.toJSON(message.query) : undefined);
+      (obj.query = message.query
+        ? ServiceCommandDescriptor.toJSON(message.query)
+        : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ModuleOptions>, I>>(base?: I): ModuleOptions {
+  create<I extends Exact<DeepPartial<ModuleOptions>, I>>(
+    base?: I,
+  ): ModuleOptions {
     return ModuleOptions.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<ModuleOptions>, I>>(object: I): ModuleOptions {
+  fromPartial<I extends Exact<DeepPartial<ModuleOptions>, I>>(
+    object: I,
+  ): ModuleOptions {
     const message = createBaseModuleOptions();
-    message.tx = (object.tx !== undefined && object.tx !== null)
-      ? ServiceCommandDescriptor.fromPartial(object.tx)
-      : undefined;
-    message.query = (object.query !== undefined && object.query !== null)
-      ? ServiceCommandDescriptor.fromPartial(object.query)
-      : undefined;
+    message.tx =
+      object.tx !== undefined && object.tx !== null
+        ? ServiceCommandDescriptor.fromPartial(object.tx)
+        : undefined;
+    message.query =
+      object.query !== undefined && object.query !== null
+        ? ServiceCommandDescriptor.fromPartial(object.query)
+        : undefined;
     return message;
   },
 };
@@ -208,7 +235,10 @@ function createBaseServiceCommandDescriptor(): ServiceCommandDescriptor {
 }
 
 export const ServiceCommandDescriptor = {
-  encode(message: ServiceCommandDescriptor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ServiceCommandDescriptor,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.service !== "") {
       writer.uint32(10).string(message.service);
     }
@@ -216,12 +246,18 @@ export const ServiceCommandDescriptor = {
       RpcCommandOptions.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     Object.entries(message.subCommands).forEach(([key, value]) => {
-      ServiceCommandDescriptor_SubCommandsEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).ldelim();
+      ServiceCommandDescriptor_SubCommandsEntry.encode(
+        { key: key as any, value },
+        writer.uint32(26).fork(),
+      ).ldelim();
     });
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ServiceCommandDescriptor {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): ServiceCommandDescriptor {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseServiceCommandDescriptor();
@@ -232,10 +268,15 @@ export const ServiceCommandDescriptor = {
           message.service = reader.string();
           break;
         case 2:
-          message.rpcCommandOptions.push(RpcCommandOptions.decode(reader, reader.uint32()));
+          message.rpcCommandOptions.push(
+            RpcCommandOptions.decode(reader, reader.uint32()),
+          );
           break;
         case 3:
-          const entry3 = ServiceCommandDescriptor_SubCommandsEntry.decode(reader, reader.uint32());
+          const entry3 = ServiceCommandDescriptor_SubCommandsEntry.decode(
+            reader,
+            reader.uint32(),
+          );
           if (entry3.value !== undefined) {
             message.subCommands[entry3.key] = entry3.value;
           }
@@ -252,16 +293,17 @@ export const ServiceCommandDescriptor = {
     return {
       service: isSet(object.service) ? String(object.service) : "",
       rpcCommandOptions: Array.isArray(object?.rpcCommandOptions)
-        ? object.rpcCommandOptions.map((e: any) => RpcCommandOptions.fromJSON(e))
+        ? object.rpcCommandOptions.map((e: any) =>
+            RpcCommandOptions.fromJSON(e),
+          )
         : [],
       subCommands: isObject(object.subCommands)
-        ? Object.entries(object.subCommands).reduce<{ [key: string]: ServiceCommandDescriptor }>(
-          (acc, [key, value]) => {
+        ? Object.entries(object.subCommands).reduce<{
+            [key: string]: ServiceCommandDescriptor;
+          }>((acc, [key, value]) => {
             acc[key] = ServiceCommandDescriptor.fromJSON(value);
             return acc;
-          },
-          {},
-        )
+          }, {})
         : {},
     };
   },
@@ -270,7 +312,9 @@ export const ServiceCommandDescriptor = {
     const obj: any = {};
     message.service !== undefined && (obj.service = message.service);
     if (message.rpcCommandOptions) {
-      obj.rpcCommandOptions = message.rpcCommandOptions.map((e) => e ? RpcCommandOptions.toJSON(e) : undefined);
+      obj.rpcCommandOptions = message.rpcCommandOptions.map((e) =>
+        e ? RpcCommandOptions.toJSON(e) : undefined,
+      );
     } else {
       obj.rpcCommandOptions = [];
     }
@@ -283,23 +327,28 @@ export const ServiceCommandDescriptor = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ServiceCommandDescriptor>, I>>(base?: I): ServiceCommandDescriptor {
+  create<I extends Exact<DeepPartial<ServiceCommandDescriptor>, I>>(
+    base?: I,
+  ): ServiceCommandDescriptor {
     return ServiceCommandDescriptor.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<ServiceCommandDescriptor>, I>>(object: I): ServiceCommandDescriptor {
+  fromPartial<I extends Exact<DeepPartial<ServiceCommandDescriptor>, I>>(
+    object: I,
+  ): ServiceCommandDescriptor {
     const message = createBaseServiceCommandDescriptor();
     message.service = object.service ?? "";
-    message.rpcCommandOptions = object.rpcCommandOptions?.map((e) => RpcCommandOptions.fromPartial(e)) || [];
-    message.subCommands = Object.entries(object.subCommands ?? {}).reduce<{ [key: string]: ServiceCommandDescriptor }>(
-      (acc, [key, value]) => {
-        if (value !== undefined) {
-          acc[key] = ServiceCommandDescriptor.fromPartial(value);
-        }
-        return acc;
-      },
-      {},
-    );
+    message.rpcCommandOptions =
+      object.rpcCommandOptions?.map((e) => RpcCommandOptions.fromPartial(e)) ||
+      [];
+    message.subCommands = Object.entries(object.subCommands ?? {}).reduce<{
+      [key: string]: ServiceCommandDescriptor;
+    }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = ServiceCommandDescriptor.fromPartial(value);
+      }
+      return acc;
+    }, {});
     return message;
   },
 };
@@ -309,17 +358,26 @@ function createBaseServiceCommandDescriptor_SubCommandsEntry(): ServiceCommandDe
 }
 
 export const ServiceCommandDescriptor_SubCommandsEntry = {
-  encode(message: ServiceCommandDescriptor_SubCommandsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ServiceCommandDescriptor_SubCommandsEntry,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
     if (message.value !== undefined) {
-      ServiceCommandDescriptor.encode(message.value, writer.uint32(18).fork()).ldelim();
+      ServiceCommandDescriptor.encode(
+        message.value,
+        writer.uint32(18).fork(),
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ServiceCommandDescriptor_SubCommandsEntry {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): ServiceCommandDescriptor_SubCommandsEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseServiceCommandDescriptor_SubCommandsEntry();
@@ -330,7 +388,10 @@ export const ServiceCommandDescriptor_SubCommandsEntry = {
           message.key = reader.string();
           break;
         case 2:
-          message.value = ServiceCommandDescriptor.decode(reader, reader.uint32());
+          message.value = ServiceCommandDescriptor.decode(
+            reader,
+            reader.uint32(),
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -343,7 +404,9 @@ export const ServiceCommandDescriptor_SubCommandsEntry = {
   fromJSON(object: any): ServiceCommandDescriptor_SubCommandsEntry {
     return {
       key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? ServiceCommandDescriptor.fromJSON(object.value) : undefined,
+      value: isSet(object.value)
+        ? ServiceCommandDescriptor.fromJSON(object.value)
+        : undefined,
     };
   },
 
@@ -351,24 +414,27 @@ export const ServiceCommandDescriptor_SubCommandsEntry = {
     const obj: any = {};
     message.key !== undefined && (obj.key = message.key);
     message.value !== undefined &&
-      (obj.value = message.value ? ServiceCommandDescriptor.toJSON(message.value) : undefined);
+      (obj.value = message.value
+        ? ServiceCommandDescriptor.toJSON(message.value)
+        : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ServiceCommandDescriptor_SubCommandsEntry>, I>>(
-    base?: I,
-  ): ServiceCommandDescriptor_SubCommandsEntry {
+  create<
+    I extends Exact<DeepPartial<ServiceCommandDescriptor_SubCommandsEntry>, I>,
+  >(base?: I): ServiceCommandDescriptor_SubCommandsEntry {
     return ServiceCommandDescriptor_SubCommandsEntry.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<ServiceCommandDescriptor_SubCommandsEntry>, I>>(
-    object: I,
-  ): ServiceCommandDescriptor_SubCommandsEntry {
+  fromPartial<
+    I extends Exact<DeepPartial<ServiceCommandDescriptor_SubCommandsEntry>, I>,
+  >(object: I): ServiceCommandDescriptor_SubCommandsEntry {
     const message = createBaseServiceCommandDescriptor_SubCommandsEntry();
     message.key = object.key ?? "";
-    message.value = (object.value !== undefined && object.value !== null)
-      ? ServiceCommandDescriptor.fromPartial(object.value)
-      : undefined;
+    message.value =
+      object.value !== undefined && object.value !== null
+        ? ServiceCommandDescriptor.fromPartial(object.value)
+        : undefined;
     return message;
   },
 };
@@ -391,7 +457,10 @@ function createBaseRpcCommandOptions(): RpcCommandOptions {
 }
 
 export const RpcCommandOptions = {
-  encode(message: RpcCommandOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: RpcCommandOptions,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.rpcMethod !== "") {
       writer.uint32(10).string(message.rpcMethod);
     }
@@ -420,7 +489,10 @@ export const RpcCommandOptions = {
       writer.uint32(74).string(message.version);
     }
     Object.entries(message.flagOptions).forEach(([key, value]) => {
-      RpcCommandOptions_FlagOptionsEntry.encode({ key: key as any, value }, writer.uint32(82).fork()).ldelim();
+      RpcCommandOptions_FlagOptionsEntry.encode(
+        { key: key as any, value },
+        writer.uint32(82).fork(),
+      ).ldelim();
     });
     for (const v of message.positionalArgs) {
       PositionalArgDescriptor.encode(v!, writer.uint32(90).fork()).ldelim();
@@ -466,13 +538,18 @@ export const RpcCommandOptions = {
           message.version = reader.string();
           break;
         case 10:
-          const entry10 = RpcCommandOptions_FlagOptionsEntry.decode(reader, reader.uint32());
+          const entry10 = RpcCommandOptions_FlagOptionsEntry.decode(
+            reader,
+            reader.uint32(),
+          );
           if (entry10.value !== undefined) {
             message.flagOptions[entry10.key] = entry10.value;
           }
           break;
         case 11:
-          message.positionalArgs.push(PositionalArgDescriptor.decode(reader, reader.uint32()));
+          message.positionalArgs.push(
+            PositionalArgDescriptor.decode(reader, reader.uint32()),
+          );
           break;
         case 12:
           message.skip = reader.bool();
@@ -492,18 +569,26 @@ export const RpcCommandOptions = {
       long: isSet(object.long) ? String(object.long) : "",
       short: isSet(object.short) ? String(object.short) : "",
       example: isSet(object.example) ? String(object.example) : "",
-      alias: Array.isArray(object?.alias) ? object.alias.map((e: any) => String(e)) : [],
-      suggestFor: Array.isArray(object?.suggestFor) ? object.suggestFor.map((e: any) => String(e)) : [],
+      alias: Array.isArray(object?.alias)
+        ? object.alias.map((e: any) => String(e))
+        : [],
+      suggestFor: Array.isArray(object?.suggestFor)
+        ? object.suggestFor.map((e: any) => String(e))
+        : [],
       deprecated: isSet(object.deprecated) ? String(object.deprecated) : "",
       version: isSet(object.version) ? String(object.version) : "",
       flagOptions: isObject(object.flagOptions)
-        ? Object.entries(object.flagOptions).reduce<{ [key: string]: FlagOptions }>((acc, [key, value]) => {
-          acc[key] = FlagOptions.fromJSON(value);
-          return acc;
-        }, {})
+        ? Object.entries(object.flagOptions).reduce<{
+            [key: string]: FlagOptions;
+          }>((acc, [key, value]) => {
+            acc[key] = FlagOptions.fromJSON(value);
+            return acc;
+          }, {})
         : {},
       positionalArgs: Array.isArray(object?.positionalArgs)
-        ? object.positionalArgs.map((e: any) => PositionalArgDescriptor.fromJSON(e))
+        ? object.positionalArgs.map((e: any) =>
+            PositionalArgDescriptor.fromJSON(e),
+          )
         : [],
       skip: isSet(object.skip) ? Boolean(object.skip) : false,
     };
@@ -535,7 +620,9 @@ export const RpcCommandOptions = {
       });
     }
     if (message.positionalArgs) {
-      obj.positionalArgs = message.positionalArgs.map((e) => e ? PositionalArgDescriptor.toJSON(e) : undefined);
+      obj.positionalArgs = message.positionalArgs.map((e) =>
+        e ? PositionalArgDescriptor.toJSON(e) : undefined,
+      );
     } else {
       obj.positionalArgs = [];
     }
@@ -543,11 +630,15 @@ export const RpcCommandOptions = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RpcCommandOptions>, I>>(base?: I): RpcCommandOptions {
+  create<I extends Exact<DeepPartial<RpcCommandOptions>, I>>(
+    base?: I,
+  ): RpcCommandOptions {
     return RpcCommandOptions.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<RpcCommandOptions>, I>>(object: I): RpcCommandOptions {
+  fromPartial<I extends Exact<DeepPartial<RpcCommandOptions>, I>>(
+    object: I,
+  ): RpcCommandOptions {
     const message = createBaseRpcCommandOptions();
     message.rpcMethod = object.rpcMethod ?? "";
     message.use = object.use ?? "";
@@ -558,16 +649,18 @@ export const RpcCommandOptions = {
     message.suggestFor = object.suggestFor?.map((e) => e) || [];
     message.deprecated = object.deprecated ?? "";
     message.version = object.version ?? "";
-    message.flagOptions = Object.entries(object.flagOptions ?? {}).reduce<{ [key: string]: FlagOptions }>(
-      (acc, [key, value]) => {
-        if (value !== undefined) {
-          acc[key] = FlagOptions.fromPartial(value);
-        }
-        return acc;
-      },
-      {},
-    );
-    message.positionalArgs = object.positionalArgs?.map((e) => PositionalArgDescriptor.fromPartial(e)) || [];
+    message.flagOptions = Object.entries(object.flagOptions ?? {}).reduce<{
+      [key: string]: FlagOptions;
+    }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = FlagOptions.fromPartial(value);
+      }
+      return acc;
+    }, {});
+    message.positionalArgs =
+      object.positionalArgs?.map((e) =>
+        PositionalArgDescriptor.fromPartial(e),
+      ) || [];
     message.skip = object.skip ?? false;
     return message;
   },
@@ -578,7 +671,10 @@ function createBaseRpcCommandOptions_FlagOptionsEntry(): RpcCommandOptions_FlagO
 }
 
 export const RpcCommandOptions_FlagOptionsEntry = {
-  encode(message: RpcCommandOptions_FlagOptionsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: RpcCommandOptions_FlagOptionsEntry,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -588,7 +684,10 @@ export const RpcCommandOptions_FlagOptionsEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): RpcCommandOptions_FlagOptionsEntry {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): RpcCommandOptions_FlagOptionsEntry {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRpcCommandOptions_FlagOptionsEntry();
@@ -612,14 +711,19 @@ export const RpcCommandOptions_FlagOptionsEntry = {
   fromJSON(object: any): RpcCommandOptions_FlagOptionsEntry {
     return {
       key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? FlagOptions.fromJSON(object.value) : undefined,
+      value: isSet(object.value)
+        ? FlagOptions.fromJSON(object.value)
+        : undefined,
     };
   },
 
   toJSON(message: RpcCommandOptions_FlagOptionsEntry): unknown {
     const obj: any = {};
     message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value ? FlagOptions.toJSON(message.value) : undefined);
+    message.value !== undefined &&
+      (obj.value = message.value
+        ? FlagOptions.toJSON(message.value)
+        : undefined);
     return obj;
   },
 
@@ -629,14 +733,15 @@ export const RpcCommandOptions_FlagOptionsEntry = {
     return RpcCommandOptions_FlagOptionsEntry.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<RpcCommandOptions_FlagOptionsEntry>, I>>(
-    object: I,
-  ): RpcCommandOptions_FlagOptionsEntry {
+  fromPartial<
+    I extends Exact<DeepPartial<RpcCommandOptions_FlagOptionsEntry>, I>,
+  >(object: I): RpcCommandOptions_FlagOptionsEntry {
     const message = createBaseRpcCommandOptions_FlagOptionsEntry();
     message.key = object.key ?? "";
-    message.value = (object.value !== undefined && object.value !== null)
-      ? FlagOptions.fromPartial(object.value)
-      : undefined;
+    message.value =
+      object.value !== undefined && object.value !== null
+        ? FlagOptions.fromPartial(object.value)
+        : undefined;
     return message;
   },
 };
@@ -655,7 +760,10 @@ function createBaseFlagOptions(): FlagOptions {
 }
 
 export const FlagOptions = {
-  encode(message: FlagOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: FlagOptions,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -727,10 +835,16 @@ export const FlagOptions = {
       name: isSet(object.name) ? String(object.name) : "",
       shorthand: isSet(object.shorthand) ? String(object.shorthand) : "",
       usage: isSet(object.usage) ? String(object.usage) : "",
-      defaultValue: isSet(object.defaultValue) ? String(object.defaultValue) : "",
-      noOptDefaultValue: isSet(object.noOptDefaultValue) ? String(object.noOptDefaultValue) : "",
+      defaultValue: isSet(object.defaultValue)
+        ? String(object.defaultValue)
+        : "",
+      noOptDefaultValue: isSet(object.noOptDefaultValue)
+        ? String(object.noOptDefaultValue)
+        : "",
       deprecated: isSet(object.deprecated) ? String(object.deprecated) : "",
-      shorthandDeprecated: isSet(object.shorthandDeprecated) ? String(object.shorthandDeprecated) : "",
+      shorthandDeprecated: isSet(object.shorthandDeprecated)
+        ? String(object.shorthandDeprecated)
+        : "",
       hidden: isSet(object.hidden) ? Boolean(object.hidden) : false,
     };
   },
@@ -740,10 +854,13 @@ export const FlagOptions = {
     message.name !== undefined && (obj.name = message.name);
     message.shorthand !== undefined && (obj.shorthand = message.shorthand);
     message.usage !== undefined && (obj.usage = message.usage);
-    message.defaultValue !== undefined && (obj.defaultValue = message.defaultValue);
-    message.noOptDefaultValue !== undefined && (obj.noOptDefaultValue = message.noOptDefaultValue);
+    message.defaultValue !== undefined &&
+      (obj.defaultValue = message.defaultValue);
+    message.noOptDefaultValue !== undefined &&
+      (obj.noOptDefaultValue = message.noOptDefaultValue);
     message.deprecated !== undefined && (obj.deprecated = message.deprecated);
-    message.shorthandDeprecated !== undefined && (obj.shorthandDeprecated = message.shorthandDeprecated);
+    message.shorthandDeprecated !== undefined &&
+      (obj.shorthandDeprecated = message.shorthandDeprecated);
     message.hidden !== undefined && (obj.hidden = message.hidden);
     return obj;
   },
@@ -752,7 +869,9 @@ export const FlagOptions = {
     return FlagOptions.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<FlagOptions>, I>>(object: I): FlagOptions {
+  fromPartial<I extends Exact<DeepPartial<FlagOptions>, I>>(
+    object: I,
+  ): FlagOptions {
     const message = createBaseFlagOptions();
     message.name = object.name ?? "";
     message.shorthand = object.shorthand ?? "";
@@ -771,7 +890,10 @@ function createBasePositionalArgDescriptor(): PositionalArgDescriptor {
 }
 
 export const PositionalArgDescriptor = {
-  encode(message: PositionalArgDescriptor, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PositionalArgDescriptor,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.protoField !== "") {
       writer.uint32(10).string(message.protoField);
     }
@@ -781,7 +903,10 @@ export const PositionalArgDescriptor = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PositionalArgDescriptor {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): PositionalArgDescriptor {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePositionalArgDescriptor();
@@ -816,11 +941,15 @@ export const PositionalArgDescriptor = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PositionalArgDescriptor>, I>>(base?: I): PositionalArgDescriptor {
+  create<I extends Exact<DeepPartial<PositionalArgDescriptor>, I>>(
+    base?: I,
+  ): PositionalArgDescriptor {
     return PositionalArgDescriptor.fromPartial(base ?? {});
   },
 
-  fromPartial<I extends Exact<DeepPartial<PositionalArgDescriptor>, I>>(object: I): PositionalArgDescriptor {
+  fromPartial<I extends Exact<DeepPartial<PositionalArgDescriptor>, I>>(
+    object: I,
+  ): PositionalArgDescriptor {
     const message = createBasePositionalArgDescriptor();
     message.protoField = object.protoField ?? "";
     message.varargs = object.varargs ?? false;
@@ -828,17 +957,33 @@ export const PositionalArgDescriptor = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

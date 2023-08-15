@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { usePollBgtBalance } from "@bera/berajs";
-import { Tooltip } from "@bera/shared-ui";
+import { GOVERNANCE_PRECOMPILE_ABI, usePollBgtBalance } from "@bera/berajs";
+import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import {
@@ -32,6 +32,8 @@ import { ProposalFormSchema, ProposalTypeEnum } from "../types";
 import CommunityForm from "./community-pool-spend-form";
 import ExecuteForm from "./execute-contract-form";
 import ParameterForm from "./parameter-change-form";
+import { useCreateProposal } from "./useCreateProposal";
+import { governanceAddress } from "~/config";
 
 export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const router = useRouter();
@@ -39,6 +41,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const [contentWidth, setContentWidth] = useState("w-[450px]");
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
+
   useEffect(() => {
     if (triggerRef.current) {
       const width = triggerRef.current.offsetWidth;
@@ -54,8 +57,21 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     },
   });
 
+  const {createPayload} = useCreateProposal();
+
+  const { write, isLoading } = useTxn({
+    message: "Submit Proposal",
+  });
+
   function onSubmit(values: z.infer<typeof ProposalFormSchema>) {
-    console.log("submit", values);
+    const payload = createPayload(values);
+    console.log(payload)
+    write({
+      address: governanceAddress,
+      abi:GOVERNANCE_PRECOMPILE_ABI as any[],
+      functionName: "submitProposal",
+      params: payload as any,
+    });
   }
 
   return (
@@ -121,7 +137,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="title"
-              render={(field: any) => (
+              render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Title
@@ -144,7 +160,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="forumLink"
-              render={(field: any) => (
+              render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Forum discussion link <Tooltip text="test" />
@@ -167,7 +183,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="description"
-              render={(field: any) => (
+              render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Description
@@ -189,7 +205,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="expedite"
-              render={(field: any) => (
+              render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Expedite <Tooltip text="test" />
@@ -208,7 +224,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="initialDeposit"
-              render={(field: any) => (
+              render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Initial deposit <Tooltip text="test" />
