@@ -96,12 +96,16 @@ export default function GlobalGaugeWeight() {
   };
 
   return (
-    <div className="mt-8 flex flex-col items-center gap-4 md:flex-row ">
-      <div className="flex w-[380px] items-center justify-center">
+    <div className="mt-8 flex w-full flex-col items-center gap-4 md:flex-row ">
+      <div className="flex w-[350px] items-center justify-center">
         <BeraChart data={dataP} options={options as any} type="pie" />
       </div>
       <div className="w-full">
-        <RT columns={global_gauge_weight_columns} data={dataT} />
+        <RT
+          columns={global_gauge_weight_columns}
+          data={dataT}
+          className="min-w-[490px]"
+        />
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { Card } from "@bera/ui/card";
 
 export default function Uptime() {
   return (
-    <div className="flex w-2/5 min-w-[353px] flex-col gap-4 text-lg font-semibold leading-7">
+    <div className="flex w-full flex-col gap-4 text-lg font-semibold leading-7 md:w-2/5 md:min-w-[353px]">
       <div className="flex items-center gap-1">
         Uptime <Tooltip text="uptime" />
       </div>

@@ -136,7 +136,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             )
           }
         >
-          Delegate <Icons.add className="relative ml-1 h-4 w-4" />
+          <Icons.add className="relative h-4 w-4" />
         </Button>
         <Button
           size="sm"
@@ -147,7 +147,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             )
           }
         >
-          Redelegate <Icons.redo className="relative ml-1 h-4 w-4" />
+          <Icons.redo className="relative h-4 w-4" />
         </Button>
         <Button
           size="sm"
@@ -158,7 +158,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             )
           }
         >
-          Unbond <Icons.minus className="relative ml-1 h-4 w-4" />
+          <Icons.minus className="relative h-4 w-4" />
         </Button>
       </div>
     </Card>

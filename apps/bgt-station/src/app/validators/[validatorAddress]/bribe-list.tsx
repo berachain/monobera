@@ -27,7 +27,7 @@ const list = [
 
 export default function BribeList() {
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col gap-4 md:flex-row">
       {list.map((item, index) => (
         <Card key={index} className="flex flex-1 flex-col gap-3 p-8">
           <div className="flex items-center gap-2">

@@ -136,6 +136,7 @@ const ValidatorModal = ({
               onSelect(value.original.address);
               onClose();
             }}
+            className="min-w-[1000px]"
           />
         </div>
       </DialogContent>
