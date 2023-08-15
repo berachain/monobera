@@ -211,9 +211,9 @@ export function TokenDialog({
                 )
               ) : (
                 <Alert variant={"destructive"}>
-                  <AlertTitle>Invalid Address</AlertTitle>
+                  <AlertTitle>Invalid address</AlertTitle>
                   <AlertDescription>
-                    try again with a valid token address.
+                    Try again with a valid token address.
                   </AlertDescription>
                 </Alert>
               )}
@@ -224,7 +224,7 @@ export function TokenDialog({
                 className="flex flex-row items-center justify-center gap-1 self-center text-xs text-muted-foreground"
                 onClick={() => setManagingTokens(true)}
               >
-                <Icons.edit className="h-3 w-3" /> Manage Custom Tokens
+                <Icons.edit className="h-3 w-3" /> Manage custom tokens
               </div>
             )}
           </DialogContent>
@@ -238,10 +238,10 @@ export function TokenDialog({
                 Manage
               </DialogTitle>
             </DialogHeader>
-            <p className="self-center text-sm font-medium">Custom Tokens</p>
+            <p className="self-center text-sm font-medium">Custom tokens</p>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
             <div className="text-xs font-medium text-muted-foreground">
-              ({customTokenList?.length ?? 0}) Custom Tokens
+              ({customTokenList?.length ?? 0}) Custom tokens
             </div>
             <div>
               {customTokenList?.map((token) => {
@@ -334,7 +334,7 @@ const TokenDialogRow = ({
             <Icons.tooltip
               style={{ height: "64px", width: "64px", color: "#DC2626 " }}
             />
-            <p className="text-lg font-semibold">Import Token</p>
+            <p className="text-lg font-semibold">Import token</p>
             <Balancer className="text-center text-xs font-medium text-muted-foreground">
               {`This token doesn't appear on the active token list(s). Anyone can
             create a token, including creating fake versions of existing tokens
@@ -348,7 +348,7 @@ const TokenDialogRow = ({
               </Balancer>
               <Badge variant="destructive" className="w-fit gap-1">
                 <Icons.tooltip className="h-4 w-4" />
-                Uknown Source
+                Unknown source
               </Badge>
             </div>
 
