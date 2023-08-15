@@ -28,10 +28,10 @@ export default function MyBGT() {
             width={535}
             height={285}
           />
-          <div className="text-center text-5xl font-bold leading-[48px] text-foreground">
+          <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
             Connect your wallet
           </div>
-          <div className="text-center text-xl font-semibold leading-7 text-muted-foreground">
+          <div className="text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
             You need to connect your wallet to see delegations and rewards
           </div>
           <Connect className="mx-auto w-[130px]" />

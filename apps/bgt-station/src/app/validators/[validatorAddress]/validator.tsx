@@ -40,7 +40,7 @@ export default function Validator({
             Validators
           </div>
 
-          <div className="flex w-full items-center justify-center gap-2 text-5xl font-bold leading-[48px] ">
+          <div className="flex w-full items-center justify-center gap-2 text-3xl font-bold leading-[48px] md:text-5xl ">
             <Avatar className="h-12 w-12">
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback className="font-bold">
@@ -65,7 +65,7 @@ export default function Validator({
             </div>
           </div>
         </div>
-        <div className="flex gap-4">
+        <div className="mt-8 flex flex-col gap-16 md:flex-row md:gap-4">
           <ValidatorDetails
             address={validatorAddress}
             decription={

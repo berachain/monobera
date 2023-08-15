@@ -28,13 +28,14 @@ export default function ValidatorActivitiesTable() {
           ))}
         </TabsList>
       </Tabs>
-      <SearchInput />
+      <SearchInput placeholder="Search" />
       <div className="w-full">
         <RT
           columns={
             tab === "recent-votes" ? recent_votes_columns : delegators_columns
           }
           data={[]}
+          className="min-w-[926px]"
         />
       </div>
     </div>

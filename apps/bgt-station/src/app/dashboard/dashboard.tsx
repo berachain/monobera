@@ -28,17 +28,17 @@ export default function DashBoard() {
         <div className="text-5xl font-bold leading-[48px] text-foreground">
           BGT Station
         </div>
-        <div className="text-xl font-semibold leading-7 text-muted-foreground">
+        <div className="text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
           A place for all your BGT
         </div>
         <Details />
       </div>
 
       <div>
-        <div className="text-center text-5xl font-bold leading-[48px] text-foreground">
+        <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
           🌎 Global gauge weight
         </div>
-        <div className="mt-4 text-center text-xl font-semibold leading-7 text-muted-foreground">
+        <div className="mt-4 text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
           See what pools validators are incentivizing right now
         </div>
         <GlobalGaugeWeight />

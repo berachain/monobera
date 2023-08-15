@@ -58,7 +58,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
 
   return (
     <Card className="p-6 ">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-center sm:justify-between">
         <div className="flex items-center gap-3">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
@@ -66,11 +66,11 @@ export default function ValidatorCard(validator: { validator: Validator }) {
               validator avatar
             </AvatarFallback>
           </Avatar>
-          <div className="text-2xl font-semibold leading-loose text-foreground">
+          <div className="text-lg font-semibold leading-loose text-foreground sm:text-2xl">
             {validator.validator.description.moniker}
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="hidden items-center gap-4 sm:flex">
           <Button
             size="sm"
             variant="secondary"
@@ -106,23 +106,60 @@ export default function ValidatorCard(validator: { validator: Validator }) {
           </Button>
         </div>
       </div>
-      <div className="mt-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+
+      <div className="mt-4 flex flex-col items-center sm:flex-row sm:justify-between">
+        <div className="flex w-full flex-col items-center sm:flex-row sm:gap-4">
           {valiInfo.map((item, index) => (
             <div
-              className="flex flex-col items-center gap-1 px-4 py-2"
+              className="flex w-full items-center justify-between gap-1 py-1 sm:w-fit sm:flex-col sm:justify-center sm:px-4 sm:py-2"
               key={index}
             >
               <div className="text-xs font-medium leading-tight text-muted-foreground">
                 {item.title}
               </div>
-              <div className="w-full text-left text-base font-medium leading-normal">
+              <div className="text-left text-base font-medium leading-normal sm:w-full">
                 {item.value}
               </div>
             </div>
           ))}
         </div>
         <div className="flex items-center gap-4">icon group</div>
+      </div>
+
+      <div className="flex items-center justify-center gap-4 sm:hidden">
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() =>
+            router.push(
+              `/delegate?action=delegate&&validator=${validator.validator.operatorAddress}`,
+            )
+          }
+        >
+          <Icons.add className="relative h-4 w-4" />
+        </Button>
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() =>
+            router.push(
+              `/delegate?action=redelegate&&validator=${validator.validator.operatorAddress}`,
+            )
+          }
+        >
+          <Icons.redo className="relative h-4 w-4" />
+        </Button>
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() =>
+            router.push(
+              `/delegate?action=unbond&&validator=${validator.validator.operatorAddress}`,
+            )
+          }
+        >
+          <Icons.minus className="relative h-4 w-4" />
+        </Button>
       </div>
     </Card>
   );
