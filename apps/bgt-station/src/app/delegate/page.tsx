@@ -8,6 +8,8 @@ export default function Page({
 }: {
   searchParams: {
     action: DelegateEnum;
+    validator: string;
+    redelegateValidator: string;
   };
 }) {
   let action;
@@ -16,5 +18,11 @@ export default function Page({
   } else {
     action = DelegateEnum.DELEGATE;
   }
-  return <Delegate action={action} />;
+  return (
+    <Delegate
+      action={action}
+      validator={searchParams.validator}
+      redelegateValidator={searchParams.redelegateValidator}
+    />
+  );
 }

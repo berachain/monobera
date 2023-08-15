@@ -5,15 +5,20 @@ import Image from "next/image";
 import { useBeraJs } from "@bera/berajs";
 
 import { Connect } from "~/components/header";
+import Nothing from "./nothing";
 import Portfolio from "./portfolio";
 
 export default function MyBGT() {
   const { isConnected } = useBeraJs();
-
+  const noDelegatorFound = false;
   return (
     <>
       {isConnected ? (
-        <Portfolio />
+        noDelegatorFound ? (
+          <Nothing />
+        ) : (
+          <Portfolio />
+        )
       ) : (
         <div className="container flex flex-col gap-4">
           <Image

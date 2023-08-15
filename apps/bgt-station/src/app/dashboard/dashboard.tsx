@@ -2,10 +2,11 @@
 
 import { type Metadata } from "next";
 import Image from "next/image";
-import { Button } from "@bera/ui/button";
+import { usePollActiveValidators, type Validator } from "@bera/berajs";
 
-import { Details } from "./components/Details";
-import GlobalGaugeWeight from "./components/global-gauge-weight";
+import GlobalGaugeWeight from "../../components/global-gauge-weight";
+import { Details } from "./components/details";
+import { ValidatorsList } from "./components/validators-list";
 
 export const metadata: Metadata = {
   title: "Dashboard | BGT Station | Berachain",
@@ -13,8 +14,10 @@ export const metadata: Metadata = {
 };
 
 export default function DashBoard() {
+  const { useActiveValidators } = usePollActiveValidators();
+  const validators: Validator[] = useActiveValidators();
   return (
-    <div className="container flex w-full max-w-[926px] flex-col gap-24 pb-24">
+    <div className="container flex w-full max-w-[1078px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">
         <Image
           src="/bears/bee.png"
@@ -30,13 +33,26 @@ export default function DashBoard() {
         </div>
         <Details />
       </div>
-      <GlobalGaugeWeight />
 
-      <div className="mx-auto">
-        <Button variant="outline" className=" w-fit">
-          View More
-        </Button>
+      <div>
+        <div className="text-center text-5xl font-bold leading-[48px] text-foreground">
+          🌎 Global gauge weight
+        </div>
+        <div className="mt-4 text-center text-xl font-semibold leading-7 text-muted-foreground">
+          See what pools validators are incentivizing right now
+        </div>
+        <GlobalGaugeWeight />
       </div>
+
+      <ValidatorsList
+        validators={validators}
+        title={"🔥 Top staked validators"}
+      />
+
+      <ValidatorsList
+        validators={validators}
+        title={"💰 Top paying validators"}
+      />
     </div>
   );
 }

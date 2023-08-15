@@ -5,7 +5,7 @@ import { type Columns } from "~/components/react-table";
 
 export const global_gauge_weight_columns: Columns = [
   {
-    header: <div className="w-[129px]">Pool or Address</div>,
+    header: <div className="w-[129px] text-left">Pool or Address</div>,
     accessor: "poolOrAddress",
   },
   {
@@ -28,6 +28,6 @@ export const global_gauge_weight_columns: Columns = [
   },
   {
     header: <div className=" w-[27px]">Hide</div>,
-    accessor: "commission",
+    accessor: "hide",
   },
 ];

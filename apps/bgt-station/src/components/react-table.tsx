@@ -54,10 +54,10 @@ export default function RT({ columns, data, rowOnClick }: RTProps) {
                 }`}
                 onClick={() => rowOnClick && rowOnClick(row)}
               >
-                {row.cells.map((cell: any) => (
+                {row.cells.map((cell: any, index: number) => (
                   <td
                     {...cell.getCellProps()}
-                    key={"tableGroup" + cell.id}
+                    key={"tableGroup" + index}
                     className="text-xs font-medium leading-tight text-foreground"
                   >
                     {cell.render("Cell")}

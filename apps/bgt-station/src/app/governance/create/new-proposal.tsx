@@ -121,7 +121,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="title"
-              render={(field: any) => (
+              render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Title
@@ -144,7 +144,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="forumLink"
-              render={(field: any) => (
+              render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Forum discussion link <Tooltip text="test" />
@@ -167,7 +167,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="description"
-              render={(field: any) => (
+              render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Description
@@ -189,7 +189,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="expedite"
-              render={(field: any) => (
+              render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Expedite <Tooltip text="test" />
@@ -208,7 +208,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             <FormField
               control={form.control}
               name="initialDeposit"
-              render={(field: any) => (
+              render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
                     Initial deposit <Tooltip text="test" />
