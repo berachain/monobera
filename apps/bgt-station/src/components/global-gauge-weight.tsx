@@ -96,8 +96,8 @@ export default function GlobalGaugeWeight() {
   };
 
   return (
-    <div className="mt-8 flex gap-4">
-      <div className="w-1/2 max-w-[380px]">
+    <div className="mt-8 flex flex-col items-center gap-4 md:flex-row ">
+      <div className="flex w-[380px] items-center justify-center">
         <BeraChart data={dataP} options={options as any} type="pie" />
       </div>
       <div className="w-full">

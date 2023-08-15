@@ -20,14 +20,14 @@ export function CircleStat({
     }
   }, [percent]);
   return (
-    <div className="relative h-[107px]">
-      <div className="relative mb-[-60px] h-[77px] w-[154px] overflow-hidden">
-        <div className="absolute top-12 w-full text-center text-xl font-semibold leading-7">
+    <div className="relative h-[90px] sm:h-[107px]">
+      <div className="relative mb-[-60px] h-[45px] w-[90px] overflow-hidden sm:h-[77px] sm:w-[154px]">
+        <div className="absolute top-6 w-full text-center text-sm font-semibold leading-7 sm:top-12 sm:text-xl">
           {value}
         </div>
         <div
           ref={barRef}
-          className="absolute left-0 top-0 box-border h-[154px] w-[154px] rounded-full border-8 border-[#FBBF24] border-b-[border] border-r-border"
+          className="absolute left-0 top-0 box-border h-[90px] w-[90px] rounded-full border-8 border-[#FBBF24] border-b-[border] border-r-border sm:h-[154px] sm:w-[154px]"
         />
       </div>
       <div className="absolute bottom-0 w-full text-center text-xs font-medium leading-tight text-muted-foreground">
