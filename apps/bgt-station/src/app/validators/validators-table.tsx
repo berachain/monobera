@@ -85,7 +85,7 @@ export default function ValidatorsTable() {
     <div className="mt-16">
       <div className="mb-4">
         <SearchInput
-          className="w-[400px]"
+          className="w-full md:w-[400px]"
           placeholder="Search by name, address, or token"
           onChange={(e) => setKeyword(e.target.value)}
         />
@@ -94,6 +94,7 @@ export default function ValidatorsTable() {
         columns={general_validator_columns}
         data={validatorTableData}
         rowOnClick={(row) => router.push(`/validators/${row.original.address}`)}
+        className="min-w-[1000px]"
       />
     </div>
   );

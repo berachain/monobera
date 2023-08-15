@@ -54,13 +54,13 @@ export default function YourDelegations() {
   );
   return (
     <div>
-      <div className="mb-4 flex justify-between">
+      <div className="mb-4 flex flex-col-reverse items-center  gap-4 md:flex-row md:justify-between">
         <SearchInput
-          className="w-[400px]"
+          className="w-full md:w-[400px]"
           onChange={(e) => setKeywords(e.target.value)}
           placeholder="Search by name, address, or token"
         />
-        <div className="flex items-center gap-2 text-sm font-medium leading-[14px] text-stone-500">
+        <div className="flex items-center gap-2 text-sm font-medium leading-[14px] text-muted-foreground md:w-[330px]">
           Order by
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

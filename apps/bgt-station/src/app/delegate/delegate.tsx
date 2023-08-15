@@ -24,7 +24,7 @@ export default function Delegate({
   const router = useRouter();
   const [amount, setAmount] = React.useState("0.0");
   return (
-    <div className="mx-auto w-full max-w-[500px]">
+    <div className="container mx-auto w-full max-w-[500px] pb-20">
       <Tabs defaultValue={action}>
         <TabsList className="w-full">
           {Object.values(DelegateEnum).map((status) => (
@@ -34,7 +34,9 @@ export default function Delegate({
               className="flex-1 capitalize"
               onClick={() =>
                 router.push(
-                  `/delegate?action=${status}&&validator=${validator}`,
+                  validator
+                    ? `/delegate?action=${status}&&validator=${validator}`
+                    : `/delegate?action=${status}`,
                 )
               }
             >

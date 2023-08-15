@@ -119,7 +119,7 @@ export default function BribesAndEmissions() {
             Total value
           </div>
         </YellowCard>
-        <Card className="w-3/4 min-w-[666px] p-4">
+        <Card className="hidden w-3/4 min-w-[666px] p-4 md:block">
           <div className="relative flex h-10 w-full items-center justify-end gap-2 text-sm font-medium leading-[14px] text-muted-foreground">
             Time frame
             <DropdownMenu>

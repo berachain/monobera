@@ -24,13 +24,13 @@ export function Details() {
     },
   ];
   return (
-    <div className="mb-10 mt-8 flex flex-col gap-5">
-      <div className="flex w-full gap-2">
-        <div className="basis-2/5">
+    <div className="mb-10 mt-8 flex w-full flex-col gap-5">
+      <div className="flex w-full flex-col gap-2 md:flex-row">
+        <div className="md:w-[360px] ">
           <EpochTimeline />
         </div>
         {generalInfo.map((info, index) => (
-          <Card className="basis-1/5 p-8 text-center" key={index}>
+          <Card key={index} className="h-full flex-1 p-8 text-center">
             <div className="text-2xl font-semibold leading-loose text-foreground">
               {info.amount}
             </div>

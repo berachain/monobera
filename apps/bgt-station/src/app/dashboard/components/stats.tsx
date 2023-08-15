@@ -28,8 +28,8 @@ export function Stats({
   };
 }) {
   return (
-    <Card className="px-16 py-8">
-      <div className="flex justify-evenly gap-5">
+    <Card className="px-4 py-8 sm:px-16">
+      <div className="flex justify-between">
         {Object.entries(stats).map(([key, object]) => (
           <CircleStat key={key} {...object} />
         ))}

@@ -30,7 +30,7 @@ export default function ProposalDetails({
           className="flex h-11 w-full justify-between hover:cursor-pointer"
           onClick={() => router.push("/governance")}
         >
-          <div className="[]: flex items-center gap-1 text-sm font-medium leading-[14px] text-primary-foreground">
+          <div className="flex items-center gap-1 text-sm font-medium leading-[14px] text-primary-foreground">
             <Icons.arrowLeft className="relative h-4 w-4" />
             Governance
           </div>

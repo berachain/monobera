@@ -20,13 +20,13 @@ export function ValidatorsList({
   );
   return (
     <div>
-      <div className="text-center text-5xl font-bold leading-[48px] text-foreground">
+      <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
         {title}
       </div>
-      <div className="text-muted-forergound mt-4 text-center text-xl font-semibold leading-7">
+      <div className="text-muted-forergound mt-4 text-center text-lg font-semibold leading-7 sm:text-xl">
         Stake your BGT with the most popular validators
       </div>
-      <div className="mt-8 grid grid-cols-3 gap-4">
+      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
         {showingValidators.map((validator, index) => (
           <ValidatorCard validator={validator} key={index} />
         ))}
