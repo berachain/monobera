@@ -17,5 +17,5 @@ export default function Page({
   } else {
     action = DelegateEnum.DELEGATE;
   }
-  return <Delegate action={action} />;
+  return <Delegate action={action} validator={searchParams.validator} />;
 }

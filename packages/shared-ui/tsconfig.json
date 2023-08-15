@@ -11,6 +11,7 @@
     "src",
     "*.ts",
     "../../apps/bgt-station/src/app/governance/components/progress-bar-chart.tsx",
-    "../../apps/bgt-station/src/app/governance/components/custom-parameter-group.tsx"
+    "../../apps/bgt-station/src/app/governance/components/custom-parameter-group.tsx",
+    "../../apps/bgt-station/src/components/validator-selector.tsx"
   ]
 }

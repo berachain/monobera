@@ -6,9 +6,16 @@ import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
+import ValidatorSelector from "~/components/validator-selector";
 import { DelegateEnum, ImageMapEnum } from "./types";
 
-export default function Delegate({ action }: { action: DelegateEnum }) {
+export default function Delegate({
+  action,
+  validator,
+}: {
+  action: DelegateEnum;
+  validator: string;
+}) {
   const router = useRouter();
 
   return (
@@ -37,7 +44,12 @@ export default function Delegate({ action }: { action: DelegateEnum }) {
           width={452}
           height={175}
         />
-
+        <ValidatorSelector
+          validatorAddress={validator}
+          onSelectValidator={(address) =>
+            router.push(`/delegate?action=${action}&&validator=${address}`)
+          }
+        />
         <div className="rounded-18 bg-muted p-3 text-muted-foreground">
           <div className="flex h-8 items-center justify-between">
             <div>Total</div>
