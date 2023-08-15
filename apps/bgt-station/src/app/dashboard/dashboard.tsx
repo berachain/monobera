@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePollActiveValidators, type Validator } from "@bera/berajs";
 
 import GlobalGaugeWeight from "../../components/global-gauge-weight";
-import { Details } from "./components/Details";
+import { Details } from "./components/details";
 import { ValidatorsList } from "./components/validators-list";
 
 export const metadata: Metadata = {

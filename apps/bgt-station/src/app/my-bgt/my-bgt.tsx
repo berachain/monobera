@@ -10,7 +10,7 @@ import Portfolio from "./portfolio";
 
 export default function MyBGT() {
   const { isConnected } = useBeraJs();
-  const noDelegatorFound = true;
+  const noDelegatorFound = false;
   return (
     <>
       {isConnected ? (

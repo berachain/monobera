@@ -1,9 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { truncateHash, usePollActiveValidators } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
-import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -17,7 +14,7 @@ export default function ValidatorDetails({
   website,
 }: {
   address: string;
-  decription: ReactNode;
+  decription: React.ReactNode;
   commissions: string;
   uptime: string;
   votingPower: string;

@@ -91,7 +91,7 @@ export default function Validator({
 
       <div className="">
         <div className="mb-4 flex items-center text-lg font-semibold leading-7">
-          Average Gauge Weight <Tooltip title="Bribes and emissions" />
+          Average Gauge Weight <Tooltip text="Bribes and emissions" />
         </div>
         <GlobalGaugeWeight />
       </div>

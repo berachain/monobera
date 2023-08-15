@@ -78,7 +78,6 @@ const Options = {
 const getChartData = (
   data: {
     amount: number;
-    voteType: VOTE_TYPE;
     voter: string;
   }[],
 ) => {
@@ -109,7 +108,7 @@ export default function BribesAndEmissions() {
   return (
     <div className="">
       <div className="flex items-center text-lg font-semibold leading-7">
-        Bribes and emissions <Tooltip title="Bribes and emissions" />
+        Bribes and emissions <Tooltip text="Bribes and emissions" />
       </div>
       <div className="mt-4 flex gap-4">
         <YellowCard className="flex w-full justify-center p-8">

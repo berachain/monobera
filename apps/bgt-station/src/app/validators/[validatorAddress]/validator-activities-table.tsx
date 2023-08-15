@@ -16,7 +16,7 @@ export default function ValidatorActivitiesTable() {
     <div className="flex flex-col gap-4">
       <Tabs defaultValue={tab} className="mx-auto w-fit">
         <TabsList className="w-full">
-          {["recent-votes", "delegators"].map((value) => (
+          {(["recent-votes", "delegators"] as const).map((value) => (
             <TabsTrigger
               value={value}
               key={value}

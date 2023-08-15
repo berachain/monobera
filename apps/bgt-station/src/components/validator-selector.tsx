@@ -52,7 +52,7 @@ export default function ValidatorSelector({
       <ValidatorModal
         open={open}
         validators={validators}
-        onSelect={(validator) => onSelectValidator(validator.original.address)}
+        onSelect={(address) => onSelectValidator && onSelectValidator(address)}
         onClose={() => setOpen(false)}
       />
     </div>
@@ -68,7 +68,7 @@ const ValidatorModal = ({
   onClose: () => void;
   open: boolean;
   validators: Validator[];
-  onSelect: (validator) => void;
+  onSelect: (address: string) => void;
 }) => {
   const tableV = React.useMemo(
     () =>
@@ -133,7 +133,7 @@ const ValidatorModal = ({
             columns={validator_table_columns}
             data={tableV}
             rowOnClick={(value) => {
-              onSelect(value);
+              onSelect(value.original.address);
               onClose();
             }}
           />
