@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
+import { useFetchDelegatedValidatorAmount } from "~/hooks/useFetchDelegatedValidatorAmount";
 import { DelegateEnum } from "../app/delegate/types";
 import ValidatorSelector from "./validator-selector";
 
@@ -15,6 +16,7 @@ export default function ValidatorInput({
   validatorAddress,
   redelegate,
   redelegateValidatorAddress,
+  showDelegated, //when this is true, the validator list will only show the validators user delegated
 }: {
   action: DelegateEnum;
   amount: string;
@@ -22,11 +24,14 @@ export default function ValidatorInput({
   validatorAddress?: string;
   redelegate?: boolean;
   redelegateValidatorAddress?: string;
+  showDelegated?: boolean;
 }) {
   const router = useRouter();
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
-  const bgtDelegated = "300";
+
+  const { data: bgtDelegated } =
+    useFetchDelegatedValidatorAmount(validatorAddress);
   return (
     <div className="relative">
       <Input
@@ -46,11 +51,12 @@ export default function ValidatorInput({
                 }${redelegate ? `&&redelegateValidator=${address}` : ""}`,
               )
             }
+            showDelegated={showDelegated}
           />
         }
       />
 
-      {action === "delegate" && (
+      {action === DelegateEnum.DELEGATE && (
         <div className=" mt-2 flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
           {userBalance}
@@ -65,10 +71,10 @@ export default function ValidatorInput({
         </div>
       )}
 
-      {action !== "delegate" &&
+      {action !== DelegateEnum.DELEGATE &&
         !redelegate &&
         validatorAddress &&
-        bgtDelegated && (
+        Boolean(bgtDelegated) && (
           <div className="absolute bottom-3 right-4 h-3 text-[10px] text-muted-foreground">
             <div className="flex items-center gap-1">
               <Avatar className="h-3 w-3">
@@ -77,11 +83,11 @@ export default function ValidatorInput({
                   validator avatar
                 </AvatarFallback>
               </Avatar>
-              {bgtDelegated}
+              {bgtDelegated?.toString()}
               <span
                 className="underline hover:cursor-pointer"
                 onClick={() => {
-                  onAmountChange(bgtDelegated);
+                  if (bgtDelegated) onAmountChange(bgtDelegated.toString());
                 }}
               >
                 MAX

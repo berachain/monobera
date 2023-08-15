@@ -26,7 +26,7 @@ export default function DashBoard() {
           height={168}
         />
         <div className="text-5xl font-bold leading-[48px] text-foreground">
-          BGT Station
+          🐝GT Station
         </div>
         <div className="text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
           A place for all your BGT
