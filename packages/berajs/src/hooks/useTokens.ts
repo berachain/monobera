@@ -52,8 +52,13 @@ const useTokens = (): IUseTokens => {
           return { ...token, default: true };
         });
       const list = [...defaultList, ...localStorageTokenList];
+      // Make it unique
+      const uniqueList = list.filter(
+        (item, index) =>
+          list.findIndex((i) => i.address === item.address) === index,
+      );
       return {
-        list: list,
+        list: uniqueList,
         customList: [...localStorageTokenList],
         dictionary: temp.tokenMap ?? tokenListToDict(list),
         featured: defaultFeaturedList ?? [],
