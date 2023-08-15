@@ -331,7 +331,8 @@ export const EventTable = ({
                   {formatDistance(
                     new Date(event.metadata?.blockTime * 1000 ?? 0),
                     new Date(),
-                  )}
+                  )}{" "}
+                  ago
                 </TableCell>
               </TableRow>
             );
