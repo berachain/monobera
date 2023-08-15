@@ -74,21 +74,33 @@ export default function ValidatorCard(validator: { validator: Validator }) {
           <Button
             size="sm"
             variant="secondary"
-            onClick={() => router.push("/delegate?action=delegate")}
+            onClick={() =>
+              router.push(
+                `/delegate?action=delegate&&validator=${validator.validator.operatorAddress}`,
+              )
+            }
           >
             Delegate <Icons.add className="relative ml-1 h-4 w-4" />
           </Button>
           <Button
             size="sm"
             variant="secondary"
-            onClick={() => router.push("/delegate?action=redelegate")}
+            onClick={() =>
+              router.push(
+                `/delegate?action=redelegate&&validator=${validator.validator.operatorAddress}`,
+              )
+            }
           >
             Redelegate <Icons.redo className="relative ml-1 h-4 w-4" />
           </Button>
           <Button
             size="sm"
             variant="secondary"
-            onClick={() => router.push("/delegate?action=unbond")}
+            onClick={() =>
+              router.push(
+                `/delegate?action=unbond&&validator=${validator.validator.operatorAddress}`,
+              )
+            }
           >
             Unbond <Icons.minus className="relative ml-1 h-4 w-4" />
           </Button>

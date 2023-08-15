@@ -109,7 +109,7 @@
   }
 
   .container {
-    @apply max-sm:px-4;
+    @apply max-[958px]:px-4;
   }
 }
 

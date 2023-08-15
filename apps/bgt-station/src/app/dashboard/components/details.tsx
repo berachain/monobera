@@ -3,8 +3,8 @@ import { usePollActiveValidators, type Validator } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
 import { bgtDetails as details } from "../constants";
-import { Stats } from "./Stats";
 import { EpochTimeline } from "./epoch-timeline";
+import { Stats } from "./stats";
 
 export function Details() {
   const { useActiveValidators } = usePollActiveValidators();
