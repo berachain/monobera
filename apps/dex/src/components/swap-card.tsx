@@ -130,7 +130,7 @@ export function SwapCard({
             <div className="border-1 flex flex-col gap-2 border-border">
               <ul
                 role="list"
-                className="di divide-y divide-border rounded-lg border"
+                className="divide-y divide-border rounded-lg border"
               >
                 <TokenInput
                   selected={selectedFrom}

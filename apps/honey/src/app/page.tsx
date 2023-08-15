@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "Mo honey mo problems",
 };
 
-type HoneyEntry = {
+export type HoneyEntry = {
   UTCTime: string;
   amount: string;
 };
@@ -32,7 +32,7 @@ async function getOverviewData(): Promise<[HoneyVolume, HoneySupply]> {
   const volumeRes = await fetch(
     `${
       process.env.NEXT_PUBLIC_ANALYTICS
-    }/analytics/honey/volume/daily?to_time=${getUnixTime(
+    }/analytics/honey/volume/hourly?to_time=${getUnixTime(
       new Date(),
     )}&from_time=${getUnixTime(yesterday)}`,
   );
@@ -40,7 +40,7 @@ async function getOverviewData(): Promise<[HoneyVolume, HoneySupply]> {
   const supplyRes = await fetch(
     `${
       process.env.NEXT_PUBLIC_ANALYTICS
-    }/analytics/honey/supply/daily?to_time=${getUnixTime(
+    }/analytics/honey/supply/hourly?to_time=${getUnixTime(
       new Date(),
     )}&from_time=${getUnixTime(yesterday)}`,
   );
@@ -75,7 +75,10 @@ export default async function Home() {
             />
           </div>
           <div className="py-12">
-            <Graph />
+            <Graph
+              hourlySupply={supply.honeyTotalSupply}
+              hourlyVolume={volume.honeyVolume}
+            />
           </div>
           <div className="py-12">
             <HoneyTransactionsTable />
