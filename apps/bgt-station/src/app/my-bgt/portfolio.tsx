@@ -17,10 +17,10 @@ export default function Portfolio() {
 
   return (
     <div className="container max-w-[1078px]">
-      <div className=" flex h-[100px] items-center justify-center text-5xl font-bold leading-[48px] text-foreground">
+      <div className="mb-8 flex h-[100px] items-center justify-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
         👋 Hey {truncateHash(account ?? "0x", 6)} you have...
       </div>
-      <div className="flex gap-8">
+      <div className="flex flex-col gap-8 sm:flex-row">
         <YellowCard tooltip="sample1" className="flex-1">
           <div className="text-5xl font-bold leading-[48px] text-foreground">
             6,666

@@ -6,14 +6,14 @@ export default function Nothing() {
   const router = useRouter();
   return (
     <div className="container flex max-w-[764px] flex-col gap-8">
-      <div className="text-center text-5xl font-bold leading-[48px] text-foreground">
+      <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
         👋 There’s nothing here yet...
       </div>
-      <div className="text-center text-xl font-semibold leading-7 text-muted-foreground">
+      <div className="text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
         This page will be populated with your delegations and rewards once you
         have delegated to some validators.{" "}
       </div>
-      <div className="flex justify-center gap-4">
+      <div className="flex flex-col justify-center gap-4 sm:flex-row">
         <Card className="flex-1 px-12 py-8">
           <div className="flex h-12 items-center gap-3 text-lg font-semibold leading-7 text-secondary">
             {" "}
