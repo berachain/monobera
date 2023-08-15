@@ -13,6 +13,7 @@ import { formatConnectorName } from "./utils";
 
 export default function ConnectedWalletPopover() {
   const [open, setOpen] = React.useState(false);
+  const [copied, setCopied] = React.useState(false);
   const { account, logout } = useBeraJs();
   const connectorName = useReadLocalStorage<string>("wagmi.wallet");
 
@@ -53,8 +54,26 @@ export default function ConnectedWalletPopover() {
           <div className="flex flex-col">
             <p className="flex items-center text-lg font-semibold leading-none">
               {truncateHash(account ?? "0x", 6)}
-              <Button variant="ghost" size="sm" className="ml-2 rounded-full">
-                <Icons.copy className="h-3 w-3" />
+              <Button
+                variant="ghost"
+                size="sm"
+                className="ml-2 rounded-full"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(account ?? "0x");
+                    setCopied(true);
+                  } catch (error) {
+                    console.error(error);
+                  } finally {
+                    setTimeout(() => setCopied(false), 1000);
+                  }
+                }}
+              >
+                {copied ? (
+                  <Icons.check className="h-3 w-3 text-positive" />
+                ) : (
+                  <Icons.copy className="h-3 w-3" />
+                )}
               </Button>
               <Button
                 variant="ghost"
