@@ -120,13 +120,13 @@ export function SwapCard({
         />
       )}
       <div className="flex w-full flex-col gap-4 md:flex-row">
-        <Card className="w-full w-full rounded-xl ">
+        <Card className="w-full rounded-xl ">
           <CardHeader className="pb-3 pt-8">
             <CardTitle className="center flex justify-between">
               Swap <SettingsPopover />
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="mt-4">
             <div className="border-1 flex flex-col gap-2 border-border">
               <ul
                 role="list"
@@ -142,8 +142,8 @@ export function SwapCard({
                   }
                   setAmount={(amount) => {
                     setSwapKind(SwapKind.GIVEN_IN);
-                    setSwapAmount(Number(amount));
-                    setFromAmount(Number(amount));
+                    setSwapAmount(amount);
+                    setFromAmount(amount);
                   }}
                 />
                 <div className="relative">
@@ -170,8 +170,8 @@ export function SwapCard({
                   amount={toAmount}
                   setAmount={(amount) => {
                     setSwapKind(SwapKind.GIVEN_OUT);
-                    setSwapAmount(Number(amount));
-                    setToAmount(Number(amount));
+                    setSwapAmount(amount);
+                    setToAmount(amount);
                   }}
                   showExceeding={false}
                 />
@@ -260,7 +260,7 @@ export function SwapCard({
                     <Button
                       disabled={true}
                       variant={"outline"}
-                      className="w-full"
+                      className="mt-4 w-full"
                     >
                       Select Token & Enter Amount
                     </Button>
