@@ -26,7 +26,11 @@ export default function ValidatorSelector({
   const [open, setOpen] = React.useState(false);
   return (
     <div>
-      <Button variant="secondary" onClick={() => setOpen(true)}>
+      <Button
+        variant="secondary"
+        className="bg-background shadow"
+        onClick={() => setOpen(true)}
+      >
         {validValidator ? (
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
             <Avatar className="h-6 w-6">
@@ -79,6 +83,11 @@ const ValidatorModal = ({
               </AvatarFallback>
             </Avatar>
             {validator.description.moniker}
+          </div>
+        ),
+        bgt_delegated: (
+          <div className="flex h-full w-24 items-center justify-center">
+            300
           </div>
         ),
         vp: <div className="flex h-full w-24 items-center">69.42M (0.69%)</div>,

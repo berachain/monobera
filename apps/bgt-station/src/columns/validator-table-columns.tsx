@@ -11,6 +11,15 @@ export const validator_table_columns: Columns = [
   },
   {
     header: (
+      <div className="flex w-[106px] items-center gap-1">
+        BGT delegated
+        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+      </div>
+    ),
+    accessor: "bgt_delegated",
+  },
+  {
+    header: (
       <div className="flex w-24 items-center gap-1">
         Voting power
         <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
