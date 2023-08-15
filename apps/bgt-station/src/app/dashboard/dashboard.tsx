@@ -4,7 +4,7 @@ import { type Metadata } from "next";
 import Image from "next/image";
 import { Button } from "@bera/ui/button";
 
-import { Details } from "./components/details";
+import { Details } from "./components/Details";
 import GlobalGaugeWeight from "./components/global-gauge-weight";
 
 export const metadata: Metadata = {
