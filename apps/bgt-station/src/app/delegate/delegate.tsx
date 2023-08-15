@@ -78,6 +78,7 @@ export default function Delegate({
           amount={amount}
           onAmountChange={setAmount}
           validatorAddress={validator}
+          showDelegated={action !== DelegateEnum.DELEGATE}
         />
         {action === DelegateEnum.REDELEGATE && (
           <>
