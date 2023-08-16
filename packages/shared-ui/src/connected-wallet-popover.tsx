@@ -21,12 +21,12 @@ export default function ConnectedWalletPopover() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          className="w-48"
+          className="w-48 text-sm font-medium leading-normal"
           onClick={() => setOpen(true)}
           variant="outline"
         >
           <Avatar className="mr-2 h-6 w-6">
-            <AvatarImage src="https://github.com/wallet.png" />
+            <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>BR</AvatarFallback>
           </Avatar>
           {truncateHash(account ?? "0x", 6)}
@@ -52,7 +52,7 @@ export default function ConnectedWalletPopover() {
             <AvatarFallback>BR</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <p className="flex items-center text-lg font-semibold leading-none">
+            <p className="flex items-center text-sm font-medium leading-normal">
               {truncateHash(account ?? "0x", 6)}
               <Button
                 variant="ghost"

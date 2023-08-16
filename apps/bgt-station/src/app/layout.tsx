@@ -34,17 +34,16 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <Image
               className="fixed left-1/2 right-0 top-0 -translate-x-1/2 transform"
               src="/bg/variant.svg"
-              alt="bera banner"
+              alt="bera variant"
               width={1078}
               height={820}
             />
-
             <Image
-              className="fixed bottom-0 left-1/2 right-0 -translate-x-1/2 transform"
+              className="fixed bottom-0 left-1/2 right-0 h-[300px] -translate-x-1/2 transform object-cover"
               src="/bg/BeraBanner.png"
               alt="bera banner"
-              width={1280}
-              height={444}
+              width={2000}
+              height={300}
             />
           </div>
           <TailwindIndicator />
