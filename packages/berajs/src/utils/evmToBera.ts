@@ -57,14 +57,13 @@ export const BERA = bech32Chain("BERA", "bera");
 
 export const BERAVALOPER = bech32Chain("BERA", "beravaloper");
 
+export const COSMOS = bech32Chain("COSMOS", "cosmos");
+
+export const COSMOSVALOPER = bech32Chain("COSMOS", "cosmosvaloper");
+
 export const ethToBera = (ethAddress: string): string => {
   const data = ETH.decoder(ethAddress);
   return BERA.encoder(data);
-};
-
-export const BeravaloperToEth = (bech32Address: string): string => {
-  const data = BERAVALOPER.decoder(bech32Address);
-  return ETH.encoder(data);
 };
 
 export const ethToBeravaloper = (ethAddress: string): string => {
@@ -72,7 +71,22 @@ export const ethToBeravaloper = (ethAddress: string): string => {
   return BERAVALOPER.encoder(data);
 };
 
+export const BeravaloperToEth = (bech32Address: string): string => {
+  const data = BERAVALOPER.decoder(bech32Address);
+  return ETH.encoder(data);
+};
+
 export const beraToEth = (bech32Address: string): string => {
   const data = BERA.decoder(bech32Address);
+  return ETH.encoder(data);
+};
+
+export const cosmosvaloperToEth = (bech32Address: string): string => {
+  const data = COSMOSVALOPER.decoder(bech32Address);
+  return ETH.encoder(data);
+};
+
+export const cosmosToEth = (bech32Address: string): string => {
+  const data = COSMOS.decoder(bech32Address);
   return ETH.encoder(data);
 };

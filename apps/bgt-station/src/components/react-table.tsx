@@ -60,7 +60,7 @@ export default function RT({ columns, data, rowOnClick, className }: RTProps) {
                   <td
                     {...cell.getCellProps()}
                     key={"tableGroup" + index}
-                    className="text-xs font-medium leading-tight text-foreground"
+                    className="flex items-center text-xs font-medium leading-tight text-foreground"
                   >
                     {cell.render("Cell")}
                   </td>

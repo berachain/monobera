@@ -53,7 +53,7 @@ export const delegators_columns: Columns = [
   },
   {
     header: (
-      <div className="flex w-[108px] gap-1">
+      <div className="flex w-[110px] gap-1">
         Delegated Since{" "}
         <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
       </div>

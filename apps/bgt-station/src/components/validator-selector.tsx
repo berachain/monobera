@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { usePollActiveValidators, type Validator } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -6,15 +6,19 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 
+import IconList from "~/components/icon-list";
 import { validator_table_columns } from "~/columns/validator-table-columns";
+import { useFetchDelegatedValidatorAmount } from "~/hooks/useFetchDelegatedValidatorAmount";
 import RT from "./react-table";
 
 export default function ValidatorSelector({
   validatorAddress,
   onSelectValidator,
+  showDelegated = false,
 }: {
   validatorAddress?: string;
   onSelectValidator?: (address: string) => void;
+  showDelegated?: boolean;
 }) {
   const { useActiveValidators } = usePollActiveValidators();
   const validators: Validator[] = useActiveValidators();
@@ -24,6 +28,11 @@ export default function ValidatorSelector({
       validatorAddress?.toLowerCase(),
   );
   const [open, setOpen] = React.useState(false);
+
+  const filteredValidators = useMemo(
+    () => validators,
+    [validators, showDelegated],
+  );
   return (
     <div>
       <Button
@@ -51,7 +60,7 @@ export default function ValidatorSelector({
       </Button>
       <ValidatorModal
         open={open}
-        validators={validators}
+        validators={filteredValidators}
         onSelect={(address) => onSelectValidator && onSelectValidator(address)}
         onClose={() => setOpen(false)}
       />
@@ -86,9 +95,7 @@ const ValidatorModal = ({
           </div>
         ),
         bgt_delegated: (
-          <div className="flex h-full w-24 items-center justify-center">
-            300
-          </div>
+          <BGTDelegated operatorAddress={validator.operatorAddress} />
         ),
         vp: <div className="flex h-full w-24 items-center">69.42M (0.69%)</div>,
         commission: (
@@ -102,7 +109,18 @@ const ValidatorModal = ({
         ),
         bribes: (
           <div className="flex w-[136px] items-center justify-center gap-1">
-            bribs icon list
+            <IconList
+              showCount={4}
+              iconList={[
+                "/icons/eth-icons.svg",
+                "/icons/atom-icons.svg",
+                "/icons/usdc-icons.svg",
+                "/icons/usdt-icons.svg",
+                "/icons/btc-icons.svg",
+                "/icons/honey-icons.svg",
+                "/icons/bera-icons.svg",
+              ]}
+            />
           </div>
         ),
       })),
@@ -110,17 +128,17 @@ const ValidatorModal = ({
   );
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className=" w-full  items-center justify-center gap-4 p-6">
-        <div className="flex w-[1000px] flex-col  gap-4 ">
+      <DialogContent className="w-full justify-center sm:max-w-fit">
+        <div className="flex w-[100vw] flex-col gap-4 p-6 sm:w-fit">
           <div className="text-lg font-semibold leading-7">
             Validator select
           </div>
           <div className="flex justify-between">
             <SearchInput
               placeholder="Search by name, address, or token"
-              className="w-[400px]"
+              className="w-full md:w-[400px]"
             />
-            <div className="flex gap-2">
+            <div className="hidden gap-2 md:flex ">
               <Button size="sm" variant="secondary">
                 Filter by bribe
               </Button>
@@ -141,5 +159,18 @@ const ValidatorModal = ({
         </div>
       </DialogContent>
     </Dialog>
+  );
+};
+
+const BGTDelegated = ({ operatorAddress }: { operatorAddress: string }) => {
+  const { data, isLoading } = useFetchDelegatedValidatorAmount(operatorAddress);
+  return (
+    <div className="flex h-full w-24 items-center justify-center">
+      {isLoading
+        ? "Loading"
+        : data && Number(data) === 0
+        ? ""
+        : data!.toString()}
+    </div>
   );
 };
