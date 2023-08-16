@@ -6,6 +6,7 @@ import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
+import { Footer } from "~/components/footer";
 import { Header } from "~/components/header";
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import Providers from "./Providers";
@@ -28,6 +29,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Header />
               <main className="w-full pt-40">{props.children}</main>
               <Toaster position="bottom-right" />
+              <Footer />
             </div>
             <Image
               className="fixed left-1/2 right-0 top-0 -translate-x-1/2 transform"
