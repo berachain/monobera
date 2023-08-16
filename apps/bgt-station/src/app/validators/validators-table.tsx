@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
 
+import IconList from "~/components/icon-list";
 import RT from "~/components/react-table";
 import { general_validator_columns } from "~/columns/general-validator-columns";
 
@@ -77,7 +78,22 @@ export default function ValidatorsTable() {
             Pool name or address
           </div>
         ),
-        bribes: <div className="flex h-full w-[136px] items-center">hi</div>,
+        bribes: (
+          <div className="flex h-full w-[136px] items-center">
+            <IconList
+              showCount={4}
+              iconList={[
+                "/icons/eth-icons.svg",
+                "/icons/atom-icons.svg",
+                "/icons/usdc-icons.svg",
+                "/icons/usdt-icons.svg",
+                "/icons/btc-icons.svg",
+                "/icons/honey-icons.svg",
+                "/icons/bera-icons.svg",
+              ]}
+            />
+          </div>
+        ),
       }));
   }, [validators, keyword]);
 

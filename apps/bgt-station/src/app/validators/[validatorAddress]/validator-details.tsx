@@ -64,7 +64,7 @@ export default function ValidatorDetails({
           </a>
         </div>
         <div
-          className="mt-4 flex flex-col justify-between gap-4 sm:flex-col"
+          className="mt-4 flex flex-col justify-between gap-4 sm:flex-row"
           onClick={() =>
             router.push(`/delegate?action=delegate&&validator=${address}`)
           }

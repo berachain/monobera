@@ -13,5 +13,6 @@ export { Spinner } from "./spinner";
 export * from "./custom-toasts";
 export * from "./hooks";
 export { TxnPreview } from "./txn-preview";
+export * from "./time-block";
 export * from "./preview-token-list";
 export * from "./info-box";

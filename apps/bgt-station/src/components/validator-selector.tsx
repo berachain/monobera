@@ -6,6 +6,7 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 
+import IconList from "~/components/icon-list";
 import { validator_table_columns } from "~/columns/validator-table-columns";
 import { useFetchDelegatedValidatorAmount } from "~/hooks/useFetchDelegatedValidatorAmount";
 import RT from "./react-table";
@@ -108,7 +109,18 @@ const ValidatorModal = ({
         ),
         bribes: (
           <div className="flex w-[136px] items-center justify-center gap-1">
-            bribs icon list
+            <IconList
+              showCount={4}
+              iconList={[
+                "/icons/eth-icons.svg",
+                "/icons/atom-icons.svg",
+                "/icons/usdc-icons.svg",
+                "/icons/usdt-icons.svg",
+                "/icons/btc-icons.svg",
+                "/icons/honey-icons.svg",
+                "/icons/bera-icons.svg",
+              ]}
+            />
           </div>
         ),
       })),

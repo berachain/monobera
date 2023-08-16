@@ -7,6 +7,8 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { formatEther } from "viem";
 
+import IconList from "~/components/icon-list";
+
 export default function ValidatorCard(validator: { validator: Validator }) {
   const router = useRouter();
   const { useTotalDelegated } = usePollActiveValidators();
@@ -123,7 +125,20 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-4">icon group</div>
+        <div className="mr-4 flex items-center gap-4">
+          <IconList
+            size={48}
+            iconList={[
+              "/icons/eth-icons.svg",
+              "/icons/atom-icons.svg",
+              "/icons/usdc-icons.svg",
+              // "/icons/usdt-icons.svg",
+              "/icons/btc-icons.svg",
+              // "/icons/honey-icons.svg",
+              "/icons/bera-icons.svg",
+            ]}
+          />
+        </div>
       </div>
 
       <div className="flex items-center justify-center gap-4 sm:hidden">
