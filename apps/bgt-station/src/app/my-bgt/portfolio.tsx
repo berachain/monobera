@@ -3,6 +3,7 @@ import { truncateHash, useBeraJs } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
+import IconList from "~/components/icon-list";
 import YellowCard from "~/components/yellow-card";
 import AverageGaugeWeight from "./components/average-gauge-weight";
 import UnbondingQueue from "./components/unbonding-queue";
@@ -37,7 +38,18 @@ export default function Portfolio() {
             $3,000
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
-            in claimable rewards
+            {/* this is so hard coded!! i hate myself */}
+            <IconList
+              iconList={[
+                "/icons/eth-icons.svg",
+                "/icons/atom-icons.svg",
+                "/icons/usdc-icons.svg",
+                "/icons/usdt-icons.svg",
+                "/icons/btc-icons.svg",
+                "/icons/honey-icons.svg",
+                "/icons/bera-icons.svg",
+              ]}
+            />
           </div>
           <Button className="w-full max-w-[223px]">Claim</Button>
         </YellowCard>
@@ -46,7 +58,7 @@ export default function Portfolio() {
             1,200
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
-            in claimable rewards
+            BGT unbonding acroos 4 validators
           </div>
           <Button variant="outline">See my queue</Button>
         </YellowCard>
