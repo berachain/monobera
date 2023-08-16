@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
+import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useTheme } from "next-themes";
 
 export function ThemeToggle(props: {
@@ -17,37 +18,25 @@ export function ThemeToggle(props: {
 }) {
   const { setTheme, theme } = useTheme();
 
-  const triggerIcon = {
-    light: <Icons.sun className="h-6 w-6" />,
-    dark: <Icons.moon className="h-6 w-6" />,
-    system: <Icons.system className="h-6 w-6" />,
-  }[theme as "light" | "dark" | "system"];
-
+  const themeList = [
+    { theme: "system", icon: <Icons.laptop className="h-4 w-4" /> },
+    { theme: "light", icon: <Icons.sun className="h-4 w-4" /> },
+    { theme: "dark", icon: <Icons.moon className="h-4 w-4" /> },
+  ];
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          className="gap-1 px-2 text-lg font-semibold md:text-base"
-          variant="ghost"
-        >
-          {triggerIcon}
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align={props.align} side={props.side}>
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          <Icons.sun className="mr-2 h-4 w-4" />
-          <span>Light</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          <Icons.moon className="mr-2 h-4 w-4" />
-          <span>Dark</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          <Icons.system className="mr-2 h-4 w-4" />
-          <span>System</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Tabs defaultValue={themeList[0]!.theme}>
+      <TabsList className="rounded-full shadow">
+        {themeList.map((t, index) => (
+          <TabsTrigger
+            value={t.theme}
+            key={index}
+            className="flex-1 rounded-full capitalize"
+            onClick={() => setTheme(t.theme)}
+          >
+            {t.icon}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
   );
 }
