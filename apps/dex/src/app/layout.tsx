@@ -4,13 +4,13 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Image from "next/image";
+import { TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
 import { Footer } from "~/components/footer";
 import { Header } from "~/components/header";
-import { TailwindIndicator } from "~/components/tailwind-indicator";
 import Providers from "./Providers";
 
 const fontSans = IBM_Plex_Sans({
