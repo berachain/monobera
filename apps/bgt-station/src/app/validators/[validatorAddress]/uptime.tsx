@@ -1,5 +1,5 @@
 import React from "react";
-import { Tooltip } from "@bera/shared-ui";
+import { Timeblock, Tooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 
 export default function Uptime() {
@@ -8,11 +8,17 @@ export default function Uptime() {
       <div className="flex items-center gap-1">
         Uptime <Tooltip text="uptime" />
       </div>
-      <Card className="flex flex-col p-8">
-        <div className=" text-sm font-normal leading-normal text-muted-foreground">
-          no idea what this is
+      <Card className="flex flex-col items-center gap-4 p-8">
+        <div className="grid w-[278px] grid-cols-10 gap-4 text-sm font-normal leading-normal text-muted-foreground">
+          {Array.from({ length: 100 }, (_, i) => i + 1).map((number) => (
+            <Timeblock
+              key={number}
+              text="March 21, 2023"
+              blockDown={Boolean(Math.random() >= 0.95)}
+            />
+          ))}
         </div>
-        <div className="w-full text-sm font-normal leading-normal text-muted-foreground">
+        <div className="w-[278px] text-right text-sm font-normal leading-normal text-muted-foreground">
           Last 100 blocks
         </div>
       </Card>

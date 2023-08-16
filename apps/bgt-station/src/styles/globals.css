@@ -156,3 +156,36 @@ input[type="number"] {
   background-position-y: 200px;
   background-position-x: center;
 }
+
+/* belows are cutomization for react date picker */
+.react-datepicker__header {
+  background-color: transparent !important;
+  border-bottom: none !important;
+  padding-top: 0 !important;
+  /* padding-bottom: 1rem !important; */
+}
+
+.react-datepicker {
+  font-family: inherit !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.react-datepicker__current-month {
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  line-height: 20px !important;
+}
+
+.react-datepicker__day-name {
+  color: #78716c !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: #059669 !important;
+  border-radius: 8px !important;
+}
+
+.react-datepicker__navigation {
+  top: 0 !important;
+}

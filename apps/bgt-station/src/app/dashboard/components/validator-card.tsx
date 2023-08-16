@@ -6,6 +6,7 @@ import { type Validator } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 
+import IconList from "~/components/icon-list";
 import YellowCard from "~/components/yellow-card";
 
 export default function ValidatorCard(validator: { validator: Validator }) {
@@ -42,8 +43,20 @@ export default function ValidatorCard(validator: { validator: Validator }) {
           {validator.validator.description.moniker}
         </div>
       </div>
-      <div> icon list</div>
-
+      {/* this is so hard coded!! i hate myself */}
+      <div className="w-full">
+        <IconList
+          iconList={[
+            // "/icons/eth-icons.svg",
+            "/icons/atom-icons.svg",
+            "/icons/usdc-icons.svg",
+            "/icons/usdt-icons.svg",
+            "/icons/btc-icons.svg",
+            // "/icons/honey-icons.svg",
+            "/icons/bera-icons.svg",
+          ]}
+        />
+      </div>
       <div className="grid w-full grid-cols-2 gap-4">
         {" "}
         {info.map((value, index) => (
@@ -59,6 +72,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
       </div>
 
       <Button
+        className="w-full"
         variant="secondary"
         onClick={() =>
           router.push(

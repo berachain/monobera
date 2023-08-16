@@ -51,17 +51,17 @@ const options = {
 
 export default function GlobalGaugeWeight() {
   const mockData = [
-    { label: "Red", amount: 12 },
-    { label: "Blue", amount: 19 },
-    { label: "Yellow", amount: 3 },
-    { label: "Green", amount: 5 },
-    { label: "Purple", amount: 2 },
+    { label: "ETH-10/BERA-20", amount: 12 },
+    { label: "BTC-10/BERA-20", amount: 19 },
+    { label: "USDC-10/BERA-20", amount: 3 },
+    { label: "USDT-10/BERA-20", amount: 5 },
+    { label: "ATOM-10/BERA-20", amount: 2 },
   ];
 
   const dataT = React.useMemo(() => {
     return mockData.map((data, index: number) => ({
       poolOrAddress: (
-        <div className="flex h-full w-[129px] items-center gap-1">
+        <div className="flex h-full w-[150px] items-center gap-1">
           <Avatar className="h-6 w-6">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>{data.label}</AvatarFallback>
