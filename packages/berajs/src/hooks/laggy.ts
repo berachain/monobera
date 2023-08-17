@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useRef } from "react";
 
 // This is a SWR middleware for keeping the data even if key changes.

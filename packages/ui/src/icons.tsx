@@ -36,6 +36,7 @@ import {
   InfoIcon,
   Laptop,
   LayoutDashboard,
+  LineChart,
   List,
   Loader2,
   Lock,
@@ -47,6 +48,7 @@ import {
   Moon,
   MoreVertical,
   Newspaper,
+  PieChart,
   Pizza,
   Plus,
   PlusCircle,
@@ -76,6 +78,8 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
+  lineChart: LineChart,
+  pieChart: PieChart,
   alertCircle: AlertCircle,
   activity: Activity,
   minusSquare: MinusSquare,
