@@ -1,22 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@bera/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useTheme } from "next-themes";
 
-export function ThemeToggle(props: {
-  align?: "center" | "start" | "end";
-  side?: "top" | "bottom";
-}) {
-  const { setTheme, theme } = useTheme();
+export function ThemeToggle() {
+  //   props: {
+  //   align?: "center" | "start" | "end";
+  //   side?: "top" | "bottom";
+  // }
+
+  const { setTheme } = useTheme();
 
   const themeList = [
     { theme: "system", icon: <Icons.laptop className="h-4 w-4" /> },
