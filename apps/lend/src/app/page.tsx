@@ -3,6 +3,7 @@ import React from "react";
 import { Header } from "~/components/header";
 import HoneyBanner from "~/components/honey-banner";
 import RewardBanner from "~/components/reward-banner";
+import StatusBanner from "~/components/status-banner";
 
 export default function Home() {
   return (
@@ -14,6 +15,8 @@ export default function Home() {
         <HoneyBanner />
         <br />
         <RewardBanner />
+        <br />
+        <StatusBanner />
       </div>
     </>
   );
