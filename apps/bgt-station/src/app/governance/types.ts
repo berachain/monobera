@@ -8,6 +8,13 @@ export enum StatusEnum {
   REJECTED = "rejected",
 }
 
+export const mappedStatusEnum = {
+  [StatusEnum.ACTIVE]: 2,
+  [StatusEnum.IN_QUEUE]: 1,
+  [StatusEnum.PASSED]: 3,
+  [StatusEnum.REJECTED]: 4,
+};
+
 export enum OrderByEnum {
   MOST_RECENT = "most-recent",
   OLDEST = "oldest",
@@ -44,7 +51,7 @@ const parameterChangeLineSchema = z.object({
 export const BaseFormSchema = z.object({
   type: z.enum(Object.values(ProposalTypeEnum) as any),
   title: z.string().nonempty("Required"),
-  forumLink: z.string().nonempty("Required"),
+  // forumLink: z.string().nonempty("Required"),
   description: z.string().nonempty("Required"),
   expedite: z.boolean(),
   initialDeposit: z

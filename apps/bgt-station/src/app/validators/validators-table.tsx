@@ -1,6 +1,10 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePollActiveValidators, type Validator } from "@bera/berajs";
+import {
+  BeravaloperToEth,
+  usePollActiveValidators,
+  type Validator,
+} from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Icons } from "@bera/ui/icons";
@@ -93,7 +97,9 @@ export default function ValidatorsTable() {
       <RT
         columns={general_validator_columns}
         data={validatorTableData}
-        rowOnClick={(row) => router.push(`/validators/${row.original.address}`)}
+        rowOnClick={(row) =>
+          router.push(`/validators/${BeravaloperToEth(row.original.address)}`)
+        }
       />
     </div>
   );

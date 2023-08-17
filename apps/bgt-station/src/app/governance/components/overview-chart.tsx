@@ -16,11 +16,11 @@ const Options = {
     y: {
       display: false,
     },
-    xAxes: [
-      {
-        barThickness: 12,
-      },
-    ],
+    // xAxis: [
+    //   {
+    //     barThickness: 12,
+    //   },
+    // ],
   },
   plugins: {
     legend: {

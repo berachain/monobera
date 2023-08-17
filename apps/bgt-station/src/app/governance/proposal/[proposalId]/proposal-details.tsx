@@ -1,59 +1,69 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePollProposal, type Proposal } from "@bera/berajs";
+import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1beta1/gov";
 import { Tooltip } from "@bera/shared-ui";
-import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { isAddress, stringify } from "viem";
 
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
 import { VoteCard } from "../../components/vote-card";
+import { VoteDialog } from "../../components/vote-dialog";
 import { VoterTable } from "../../components/voter-table";
-import dataJ from "../../home/data.json";
 import { description } from "../../home/mockData";
-import { StatusEnum } from "../../types";
+import { useProposalDetails } from "./useProposalDetails";
 
 export default function ProposalDetails({
   proposalId,
 }: {
-  proposalId: `0x${string}`;
+  proposalId: number;
 }) {
-  const router = useRouter();
-  if (!isAddress(proposalId)) router.push("/404");
+  const { useProposal } = usePollProposal(proposalId);
+  const proposal: Proposal | undefined = useProposal();
 
+  const {
+    open,
+    setOpen,
+    votingPower,
+    comment,
+    setComment,
+    selected,
+    setSelected,
+  } = useProposalDetails();
+
+  console.log(proposal);
   return (
     <div className="container pb-16">
       <div className="mx-auto h-fit w-full max-w-[830px]">
         <div
           className="flex h-11 w-full justify-between hover:cursor-pointer"
-          onClick={() => router.push("/governance")}
+          // onClick={() => router.push("/governance")}
         >
           <div className="[]: flex items-center gap-1 text-sm font-medium leading-[14px] text-primary-foreground">
             <Icons.arrowLeft className="relative h-4 w-4" />
             Governance
           </div>
           <div className="flex items-center gap-3">
-            <Button>Vote</Button>
-            {/* <Button>Change Vote</Button>
-            <Button>Deposit</Button> */}
-            {/* <Button variant="outline">Cancel</Button> */}
+            {proposal?.status ===
+              ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD && (
+              <VoteDialog
+                open={open}
+                setOpen={setOpen}
+                votingPower={votingPower}
+                comment={comment}
+                setComment={setComment}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
+            {proposal?.status ===
+              ProposalStatus.PROPOSAL_STATUS_DEPOSIT_PERIOD && <></>}
           </div>
         </div>
 
         <div className="mt-4 rounded-[18px] shadow">
-          <ProposalCard
-            {...{
-              proposalStatus: StatusEnum.IN_QUEUE,
-              proposalVotes: { yes: 20, no: 10, veto: 9, abstain: 15 },
-              proposalTitle:
-                "#101 Security Protocols with Quantum-Resistant Algorithms",
-              timestamp: 1678416000,
-              expedited: true,
-              owner: proposalId,
-            }}
-          />
+          {proposal && <ProposalCard {...proposal} />}
         </div>
 
         <div className="mt-4 flex gap-4">
@@ -83,7 +93,7 @@ export default function ProposalDetails({
               Msg
             </div>
             <Card className="mt-1 h-full max-h-[376px] overflow-scroll break-words bg-muted px-3 py-2 text-sm font-normal leading-normal text-muted-foreground">
-              {stringify(dataJ)}
+              reeee
             </Card>
           </div>
         </div>

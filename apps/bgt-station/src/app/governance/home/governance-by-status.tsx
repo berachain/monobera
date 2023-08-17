@@ -2,6 +2,11 @@
 
 import React, { useMemo } from "react";
 import { useRouter } from "next/navigation";
+import {
+  usePollAllProposals,
+  type Proposal,
+  type TallyResult,
+} from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import {
@@ -17,10 +22,10 @@ import { ProposalCard } from "../components/proposal-card";
 import {
   OrderByEnum,
   StatusEnum,
+  mappedStatusEnum,
   type OrderByEnum as OrderByEnumT,
   type StatusEnum as StatusEnumT,
 } from "../types";
-import { data } from "./mockData";
 
 export default function GovernanceByStatus({
   proposalStatus,
@@ -31,37 +36,39 @@ export default function GovernanceByStatus({
 }) {
   const [keywords, setKeywords] = React.useState<string | null>(null);
 
-  const getSum = (item: {
-    yes: number;
-    no: number;
-    veto: number;
-    abstain: number;
-  }) =>
-    Object.values(item).reduce((acc: number, curr: number) => acc + curr, 0);
+  const getSum = (item: TallyResult) =>
+    Object.values(item).reduce(
+      (acc: number, curr: string) => acc + Number(curr),
+      0,
+    );
 
-  const sortedProposalList = useMemo(
+  const { useAllProposals } = usePollAllProposals(
+    mappedStatusEnum[proposalStatus],
+  );
+  const data = useAllProposals();
+  console.log(data);
+  const sortedProposalList: Proposal[] = useMemo(
     () =>
       data
-        .filter((proposal) => proposal.proposalStatus === proposalStatus)
-        .filter((proposal) => {
+        ?.filter((proposal: Proposal) => {
           if (!keywords) return true;
           else
-            return proposal.proposalTitle
+            return proposal.title
               .toLowerCase()
               .includes(keywords.toLowerCase());
         })
-        .sort((a, b) => {
+        .sort((a: Proposal, b: Proposal) => {
           switch (orderBy) {
             case OrderByEnum.HIGHEST_PARTICIPATION:
-              return getSum(b.proposalVotes) - getSum(a.proposalVotes);
+              return getSum(b.finalTallyResult) - getSum(a.finalTallyResult);
             case OrderByEnum.LOWEST_PARTICIPATION:
-              return getSum(a.proposalVotes) - getSum(b.proposalVotes);
+              return getSum(a.finalTallyResult) - getSum(b.finalTallyResult);
             case OrderByEnum.MOST_RECENT:
-              return b.timestamp - a.timestamp;
+              return Number(b.submitTime - a.submitTime);
             case OrderByEnum.NEWEST:
-              return b.timestamp - a.timestamp;
+              return Number(b.submitTime - a.submitTime);
             case OrderByEnum.OLDEST:
-              return a.timestamp - b.timestamp;
+              return Number(a.submitTime - b.submitTime);
             default:
               return 0;
           }
@@ -135,14 +142,14 @@ export default function GovernanceByStatus({
         }
       />
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {sortedProposalList.map((proposal, index) => (
+        {sortedProposalList?.map((proposal: Proposal, index: number) => (
           <ProposalCard
             {...proposal}
             key={"proposal" + index}
             onClick={() =>
               router.push(
                 // replace this with real data
-                `/governance/proposal/${"0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4"}`,
+                `/governance/proposal/${Number(proposal.id)}`,
               )
             }
           />

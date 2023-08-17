@@ -53,9 +53,9 @@ const bech32Chain = (name: string, prefix: string) => ({
   name,
 });
 
-export const BERA = bech32Chain("BERA", "bera");
+export const BERA = bech32Chain("BERA", "cosmos");
 
-export const BERAVALOPER = bech32Chain("BERA", "beravaloper");
+export const BERAVALOPER = bech32Chain("BERA", "cosmosvaloper");
 
 export const ethToBera = (ethAddress: string): string => {
   const data = ETH.decoder(ethAddress);

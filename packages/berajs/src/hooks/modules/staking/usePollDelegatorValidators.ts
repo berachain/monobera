@@ -7,7 +7,7 @@ import { STAKING_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig, useBeraJs } from "~/contexts";
 import { ethToBera } from "~/utils";
-import { type Validator } from ".";
+import { usePollActiveValidators, type Validator } from ".";
 
 interface Call {
   abi: any[];
@@ -102,8 +102,19 @@ export const usePollTotalDelegatorDelegated = () => {
     return data;
   };
 
+  const usePercentageVotingPower = (): number | undefined => {
+    const { useTotalDelegated } = usePollActiveValidators();
+    const totalDelegated = useTotalDelegated();
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+
+    if (totalDelegated && data) {
+      return (data / totalDelegated) * 100;
+    }
+    return undefined;
+  };
   return {
     useTotalDelegatorDelegated,
+    usePercentageVotingPower,
   };
 };
 

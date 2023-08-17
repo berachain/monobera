@@ -28,12 +28,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
+import { governanceAddress } from "~/config";
 import { ProposalFormSchema, ProposalTypeEnum } from "../types";
 import CommunityForm from "./community-pool-spend-form";
 import ExecuteForm from "./execute-contract-form";
 import ParameterForm from "./parameter-change-form";
 import { useCreateProposal } from "./useCreateProposal";
-import { governanceAddress } from "~/config";
 
 export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const router = useRouter();
@@ -57,18 +57,20 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     },
   });
 
-  const {createPayload} = useCreateProposal();
+  const { createPayload } = useCreateProposal();
 
-  const { write, isLoading } = useTxn({
+  const { write, ModalPortal } = useTxn({
     message: "Submit Proposal",
+    onSuccess: () => {
+      router.push(`/governance`);
+    },
   });
 
   function onSubmit(values: z.infer<typeof ProposalFormSchema>) {
     const payload = createPayload(values);
-    console.log(payload)
     write({
       address: governanceAddress,
-      abi:GOVERNANCE_PRECOMPILE_ABI as any[],
+      abi: GOVERNANCE_PRECOMPILE_ABI as any[],
       functionName: "submitProposal",
       params: payload as any,
     });
@@ -76,6 +78,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
 
   return (
     <div className="mx-auto  w-full max-w-[564px] pb-16">
+      {ModalPortal}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Image
@@ -156,7 +159,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                 </FormItem>
               )}
             />
-
+            {/* 
             <FormField
               control={form.control}
               name="forumLink"
@@ -178,7 +181,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                   </div>
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}

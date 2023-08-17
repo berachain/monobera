@@ -6,7 +6,7 @@ import { GOVERNANCE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 
-export const usePollProposal = (proposalId: string) => {
+export const usePollProposal = (proposalId: number) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 

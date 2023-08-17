@@ -5,23 +5,30 @@ import { usePublicClient, type Address } from "wagmi";
 import { GOVERNANCE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
+import { type Proposal } from "./types";
 
-export const usePollAllProposals = (proposalStatus: string) => {
+export const usePollAllProposals = (proposalStatus: number) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
   const method = "getProposals";
   const QUERY_KEY = [proposalStatus, method];
+  console.log("QUERY_KEY", QUERY_KEY);
   useSWR(
     QUERY_KEY,
     async () => {
-      const result = await publicClient.readContract({
-        address: networkConfig.precompileAddresses
-          .erc20GovernanceAddress as Address,
-        abi: GOVERNANCE_PRECOMPILE_ABI,
-        functionName: method,
-        args: [proposalStatus],
-      });
+      const result = await publicClient
+        .readContract({
+          address: networkConfig.precompileAddresses
+            .governanceAddress as Address,
+          abi: GOVERNANCE_PRECOMPILE_ABI,
+          functionName: method,
+          args: [BigInt(proposalStatus)],
+        })
+        .catch((e) => {
+          console.log(e);
+          return undefined;
+        });
 
       return result;
     },
@@ -30,7 +37,7 @@ export const usePollAllProposals = (proposalStatus: string) => {
     },
   );
 
-  const useAllProposals = () => {
+  const useAllProposals = (): Proposal[] => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };

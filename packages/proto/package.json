@@ -10,8 +10,5 @@
     "@cosmjs/tendermint-rpc": "^0.29.5",
     "sha3": "^2.1.4",
     "ts-proto": "^1.136.1"
-  },
-  "devDependencies": {
-    "@types/node": "^18.11.17"
   }
 }
