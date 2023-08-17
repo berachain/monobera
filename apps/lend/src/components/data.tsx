@@ -3,9 +3,6 @@
 import React from "react";
 import { formatUsd } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits } from "viem";
-
-import { honey } from "~/config/tokens";
 
 function DataCard({
   icon,
@@ -28,33 +25,29 @@ function DataCard({
 }
 
 export default function Data({
-  tvl,
-  dailyVolume,
+  totalMarketSize = 1900000000,
+  totalBorrowed = 1000000000,
 }: {
-  tvl: string;
-  dailyVolume: string;
+  totalMarketSize?: number;
+  totalBorrowed?: number;
 }) {
-  const displayTvl = formatUsd(
-    Number(formatUnits(BigInt(tvl) ?? 0n, honey.decimals)),
-  );
+  const displayMarketSize = formatUsd(totalMarketSize);
 
-  const displayDailyVolume = formatUsd(
-    Number(formatUnits(BigInt(dailyVolume) ?? 0n, honey.decimals)),
-  );
+  const displayBorrowed = formatUsd(Number(totalBorrowed));
+
   return (
-    <section className="py-24">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <section className="m-auto max-w-[800px] py-24">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <DataCard
-          title="Total Value Locked"
-          value={displayTvl}
-          icon={<Icons.lock />}
+          title="Total Market Size"
+          value={displayMarketSize}
+          icon={<Icons.lineChart />}
         />
         <DataCard
-          title="24H Volume"
-          value={displayDailyVolume}
-          icon={<Icons.candleStick />}
+          title="Total borrows"
+          value={displayBorrowed}
+          icon={<Icons.helpingHand />}
         />
-        <DataCard title="Honey Price" value="$1.00" icon={<Icons.honey />} />
       </div>
     </section>
   );

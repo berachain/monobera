@@ -1,22 +1,26 @@
 import React from "react";
 
+import Data from "~/components/data";
 import { Header } from "~/components/header";
-import HoneyBanner from "~/components/honey-banner";
-import RewardBanner from "~/components/reward-banner";
-import StatusBanner from "~/components/status-banner";
+import Help from "~/components/help";
+import Hero from "~/components/hero";
+import HowItWorks from "~/components/how-it-works";
+import Markets from "~/components/markets";
 
 export default function Home() {
   return (
     <>
       <Header />
-      <br />
-      <div className="container pt-14">
-        Earn Interest And Rewards By Supplying Your Assets And Borrowing Honey
-        <HoneyBanner />
-        <br />
-        <RewardBanner />
-        <br />
-        <StatusBanner />
+      <div className="container mt-14 bg-lend bg-contain bg-no-repeat">
+        <Hero />
+      </div>
+      <div className="container">
+        <Data />
+      </div>
+      <Markets />
+      <div className="container">
+        <HowItWorks />
+        <Help />
       </div>
     </>
   );
