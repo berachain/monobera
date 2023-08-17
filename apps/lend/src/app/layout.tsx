@@ -20,7 +20,9 @@ const fontSans = IBM_Plex_Sans({
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={cn("font-sans antialiased", fontSans.variable)}>
+      <body
+        className={cn("bg-background font-sans antialiased", fontSans.variable)}
+      >
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
             <main className="w-full">{props.children}</main>
