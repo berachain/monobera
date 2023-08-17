@@ -1,3 +1,5 @@
+"use client";
+
 import React, { type PropsWithChildren } from "react";
 import { formatUsd, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
