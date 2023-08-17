@@ -93,7 +93,6 @@ export const Icons = {
   command: Command,
   chevronsRight: ChevronsRight,
   list: List,
-  lineChart: LineChart,
   layoutDashboard: LayoutDashboard,
   close: X,
   coins: Coins,
