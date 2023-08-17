@@ -10,6 +10,7 @@ export { DataTable } from "./data-table";
 export { DataTableColumnHeader } from "./data-table-column-header";
 export { SearchInput } from "./search-input";
 export { Spinner } from "./spinner";
+export { TailwindIndicator } from "./tailwind-indicator";
 export * from "./custom-toasts";
 export * from "./hooks";
 export { TxnPreview } from "./txn-preview";
