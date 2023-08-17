@@ -3,7 +3,7 @@ import { Icons } from "@bera/ui/icons";
 
 export default function HoneyBanner() {
   return (
-    <div className="rounded-spacing-4 relative hidden h-[197px] items-center rounded-lg border border-amber-500 bg-honey-gradient p-4 md:flex">
+    <div className="rounded-spacing-4 relative hidden h-[197px] items-center rounded-18 border border-amber-500 bg-honey-gradient p-4 md:flex">
       <Image
         src="/beras/business-bear.png"
         width={194}
