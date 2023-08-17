@@ -32,7 +32,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
   ];
   return (
     <YellowCard className="flex flex-1 flex-col gap-8 p-6">
-      <div className="flex w-full gap-1">
+      <div className="flex w-full gap-2">
         <Avatar className="h-8 w-8">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>
@@ -47,12 +47,12 @@ export default function ValidatorCard(validator: { validator: Validator }) {
       <div className="w-full">
         <IconList
           iconList={[
-            // "/icons/eth-icons.svg",
+            "/icons/eth-icons.svg",
             "/icons/atom-icons.svg",
             "/icons/usdc-icons.svg",
             "/icons/usdt-icons.svg",
             "/icons/btc-icons.svg",
-            // "/icons/honey-icons.svg",
+            "/icons/honey-icons.svg",
             "/icons/bera-icons.svg",
           ]}
         />

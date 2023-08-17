@@ -109,14 +109,14 @@ export default function ValidatorCard(validator: { validator: Validator }) {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-col items-center sm:flex-row sm:justify-between">
+      <div className="mt-4 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
         <div className="flex w-full flex-col items-center sm:flex-row sm:gap-4">
           {valiInfo.map((item, index) => (
             <div
               className="flex w-full items-center justify-between gap-1 py-1 sm:w-fit sm:flex-col sm:justify-center sm:px-4 sm:py-2"
               key={index}
             >
-              <div className="text-xs font-medium leading-tight text-muted-foreground">
+              <div className="w-full text-xs font-medium leading-tight text-muted-foreground">
                 {item.title}
               </div>
               <div className="text-left text-base font-medium leading-normal sm:w-full">
@@ -132,49 +132,48 @@ export default function ValidatorCard(validator: { validator: Validator }) {
               "/icons/eth-icons.svg",
               "/icons/atom-icons.svg",
               "/icons/usdc-icons.svg",
-              // "/icons/usdt-icons.svg",
+              "/icons/usdt-icons.svg",
               "/icons/btc-icons.svg",
-              // "/icons/honey-icons.svg",
+              "/icons/honey-icons.svg",
               "/icons/bera-icons.svg",
             ]}
           />
         </div>
-      </div>
-
-      <div className="flex items-center justify-center gap-4 sm:hidden">
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() =>
-            router.push(
-              `/delegate?action=delegate&&validator=${validator.validator.operatorAddress}`,
-            )
-          }
-        >
-          <Icons.add className="relative h-4 w-4" />
-        </Button>
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() =>
-            router.push(
-              `/delegate?action=redelegate&&validator=${validator.validator.operatorAddress}`,
-            )
-          }
-        >
-          <Icons.redo className="relative h-4 w-4" />
-        </Button>
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() =>
-            router.push(
-              `/delegate?action=unbond&&validator=${validator.validator.operatorAddress}`,
-            )
-          }
-        >
-          <Icons.minus className="relative h-4 w-4" />
-        </Button>
+        <div className="flex items-center justify-center gap-4 sm:hidden">
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() =>
+              router.push(
+                `/delegate?action=delegate&&validator=${validator.validator.operatorAddress}`,
+              )
+            }
+          >
+            <Icons.add className="relative h-4 w-4" />
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() =>
+              router.push(
+                `/delegate?action=redelegate&&validator=${validator.validator.operatorAddress}`,
+              )
+            }
+          >
+            <Icons.redo className="relative h-4 w-4" />
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() =>
+              router.push(
+                `/delegate?action=unbond&&validator=${validator.validator.operatorAddress}`,
+              )
+            }
+          >
+            <Icons.minus className="relative h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </Card>
   );

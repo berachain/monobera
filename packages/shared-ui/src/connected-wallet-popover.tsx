@@ -34,7 +34,7 @@ export default function ConnectedWalletPopover() {
       </PopoverTrigger>
       <PopoverContent className="w-80" align="end">
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold leading-none">Account</h3>
+          <h3 className="text-sm font-semibold leading-none">Account</h3>
           <Button
             variant="ghost"
             size="sm"
@@ -43,11 +43,11 @@ export default function ConnectedWalletPopover() {
               setOpen(false);
             }}
           >
-            <Icons.disconnect className="h-5 w-5 text-destructive" />
+            <Icons.disconnect className="h-4 w-4 text-destructive-foreground" />
           </Button>
         </div>
-        <div className="flex items-center py-4">
-          <Avatar className="mr-2 h-10 w-10">
+        <div className="flex items-center pb-4">
+          <Avatar className="mr-2 h-12 w-12">
             <AvatarImage src="https://github.com/wallet.png" />
             <AvatarFallback>BR</AvatarFallback>
           </Avatar>
@@ -89,7 +89,7 @@ export default function ConnectedWalletPopover() {
                 <Icons.external className="h-3 w-3" />
               </Button>
             </p>
-            <p className="text-sm leading-none ">
+            <p className="text-sm leading-none text-muted-foreground">
               {formatConnectorName(connectorName as string)}
             </p>
           </div>

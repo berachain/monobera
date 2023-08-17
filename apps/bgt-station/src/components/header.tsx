@@ -40,7 +40,7 @@ export function Header() {
   const userBalance = useBgtBalance();
   return (
     <nav className="bg-bg fixed left-0 right-0 z-50 bg-background">
-      <div className="mx-auto flex h-16 w-full items-center justify-between px-4">
+      <div className="mx-auto flex h-16 w-full items-center justify-end px-4">
         <div className="mr-8 hidden items-center md:flex">
           <span className="mr-10 text-lg font-bold tracking-tight">
             <Link href={"/"}>
@@ -49,16 +49,16 @@ export function Header() {
           </span>
           <MainNav />
         </div>
-        <MobileDropdown />
-        <div className="flex gap-2">
+        <div className="mr-2 flex gap-2">
           {isConnected && (
-            <div className="flex-no-wrap flex h-10 w-fit gap-1 rounded-full border border-yellow-600 bg-yellow-50 px-4 py-2 text-sm font-medium">
+            <div className="flex-no-wrap hidden h-10 w-fit gap-1 rounded-full border border-yellow-600 bg-yellow-50 px-4 py-2 text-sm font-medium md:flex">
               {userBalance} <span>BGT</span>
             </div>
           )}
           <ThemeToggle />
           <Connect />
         </div>
+        <MobileDropdown />
       </div>
     </nav>
   );

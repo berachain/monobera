@@ -23,7 +23,7 @@ export function ValidatorsList({
       <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
         {title}
       </div>
-      <div className="text-muted-forergound mt-4 text-center text-lg font-semibold leading-7 sm:text-xl">
+      <div className="mt-4 text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
         Stake your BGT with the most popular validators
       </div>
       <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">

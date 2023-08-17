@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { ScrollArea } from "@bera/ui/scroll-area";
@@ -23,12 +22,7 @@ export function MobileDropdown() {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          className="mr-2 px-0 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
-        >
-          <Icons.logo className="h-12 w-12" />
-        </Button>
+        <Icons.menu className="h-8 w-8 text-secondary-foreground " />
       </PopoverTrigger>
       <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen animate-none rounded-none border-none transition-transform">
         <ScrollArea className="py-8">
@@ -36,7 +30,6 @@ export function MobileDropdown() {
             <Link
               key={href}
               href={{ pathname: href }}
-              // className="flex items-center mt-2 text-lg font-semibold sm:text-sm"
               className="flex py-1 text-base font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               {title}

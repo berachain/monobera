@@ -33,7 +33,7 @@ export function History() {
 
   return (
     <div className="grid gap-4">
-      <h3 className="text-md font-medium">Recent activity</h3>
+      <h3 className="text-xs font-medium">Recent activity</h3>
       {transactions.length ? (
         transactions.slice(0, 5).map((txn: NewTransaction) => (
           <a
@@ -58,9 +58,9 @@ export function History() {
         ))
       ) : (
         <div className="flex h-24 justify-center align-middle">
-          <div className="flex flex-col items-center justify-center gap-4">
+          <div className="flex flex-col items-center justify-center ">
             <Icons.empty className="h-4 w-4" />
-            <p className="">No recent activity</p>
+            <div className="">No recent activity</div>
           </div>
         </div>
       )}
