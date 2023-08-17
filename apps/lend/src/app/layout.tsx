@@ -9,7 +9,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
 import { Footer } from "~/components/footer";
-import { Header } from "~/components/header";
 import Providers from "./Providers";
 
 const fontSans = IBM_Plex_Sans({
@@ -20,18 +19,13 @@ const fontSans = IBM_Plex_Sans({
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="bg-background">
-      <body
-        className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
-      >
+    <html lang="en">
+      <body className={cn("font-sans antialiased", fontSans.variable)}>
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-            <div className="z-10 flex-1">
-              <Header />
-              <main className="w-full py-40">{props.children}</main>
-              <Toaster position="bottom-right" />
-              <Footer />
-            </div>
+            <main className="w-full">{props.children}</main>
+            <Toaster position="bottom-right" />
+            <Footer />
           </div>
           <TailwindIndicator />
           <Analytics />
