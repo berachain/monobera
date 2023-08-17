@@ -104,7 +104,9 @@ interface MarketColumnProps {
 function MarketColumn({
   className,
   markets,
-  marketClassName,
+  // @ts-expect-error - No types
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  marketClassName = () => {},
   msPerPixel = 0,
 }: MarketColumnProps) {
   const columnRef = useRef<HTMLDivElement | null>(null);
@@ -135,7 +137,6 @@ function MarketColumn({
         <Market
           key={marketIndex}
           aria-hidden={marketIndex >= markets.length}
-          // @ts-expect-error - No types
           className={marketClassName(marketIndex % markets.length)}
           {...market}
         />
