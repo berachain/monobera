@@ -116,8 +116,6 @@ export default function Delegate({
             This amount exceeds your total balance of {bgtBalance} BGT
           </Alert>
         )}
-
-        {String(Number(amount) > Number(bgtBalance))}
         <Button
           disabled={
             !validator || // no validator selected

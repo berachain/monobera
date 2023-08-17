@@ -9,8 +9,8 @@ export function EpochTimeline() {
   const { useCurrentEpoch } = usePollEpochs();
   const currentEpoch = useCurrentEpoch();
   return (
-    <Card className="w-full px-8 py-[40.5px]">
-      <div className="flex items-center gap-3">
+    <Card className=" w-full p-8 py-[39px]">
+      <div className="flex h-8 items-center gap-3">
         <div className="font-semi text-3xl font-semibold">{currentEpoch}</div>
         <div className="flex-1">
           <div className="mb-1 flex justify-between text-xs font-medium text-muted-foreground">

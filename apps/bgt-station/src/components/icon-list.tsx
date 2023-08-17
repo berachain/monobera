@@ -17,7 +17,7 @@ export default function IconList({
   }
 
   return (
-    <div className="ml-[6px] flex items-center">
+    <div className="ml-[5px] flex items-center">
       {iconList.map((icon, index) => (
         <Image
           key={index}
@@ -25,7 +25,7 @@ export default function IconList({
           height={size}
           src={icon}
           alt="icon"
-          className="ml-[-6px]"
+          className="ml-[-5px]"
         />
       ))}
       {showCount && length > showCount && (

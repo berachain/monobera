@@ -73,7 +73,12 @@ export default function GlobalGaugeWeight() {
         <div className="flex h-full w-[100px] items-center">69.12K (6.9%)</div>
       ),
       tvl: <div className="flex h-full w-[53px] items-center">69.42M%</div>,
-      hide: <Checkbox id={`dashboard-checkbox-${index}`} className="mx-auto" />,
+      hide: (
+        <div className="flex w-[27px] justify-center">
+          {" "}
+          <Checkbox id={`dashboard-checkbox-${index}`} className="mx-auto" />
+        </div>
+      ),
     }));
   }, [mockData]);
 
@@ -96,7 +101,7 @@ export default function GlobalGaugeWeight() {
   };
 
   return (
-    <div className="mt-8 flex w-full flex-col items-center gap-4 md:flex-row ">
+    <div className="mt-8 flex w-full flex-col items-center gap-16 md:flex-row ">
       <div className="flex w-[350px] items-center justify-center">
         <BeraChart data={dataP} options={options as any} type="pie" />
       </div>
