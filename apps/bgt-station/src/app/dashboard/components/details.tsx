@@ -31,7 +31,7 @@ export function Details() {
         </div>
         {generalInfo.map((info, index) => (
           <Card key={index} className="h-full flex-1 p-8 text-center">
-            <div className="text-2xl font-semibold leading-loose text-foreground">
+            <div className="flex h-8 items-center justify-center text-2xl font-semibold leading-loose text-foreground">
               {info.amount}
             </div>
             <div className="text-sm font-medium leading-[14px] text-muted-foreground">

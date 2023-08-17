@@ -40,7 +40,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             />
             <Image
               className="fixed bottom-0 left-1/2 right-0 h-[300px] -translate-x-1/2 transform object-cover"
-              src="/bg/BeraBanner.png"
+              src="/bg/bera-banner.png"
               alt="bera banner"
               width={2000}
               height={300}
