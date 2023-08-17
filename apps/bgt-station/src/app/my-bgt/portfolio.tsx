@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 import { truncateHash, useBeraJs } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -11,6 +12,7 @@ import YourDelegations from "./components/your-delegations";
 import { BGTSelectionEnum, type BGTselection } from "./types";
 
 export default function Portfolio() {
+  const router = useRouter();
   const { account } = useBeraJs();
   const [tab, setTab] = React.useState<BGTselection>(
     BGTSelectionEnum.YOUR_DELEGATIONS,
@@ -22,7 +24,10 @@ export default function Portfolio() {
         👋 Hey {truncateHash(account ?? "0x", 6)} you have...
       </div>
       <div className="flex flex-col gap-8 sm:flex-row">
-        <YellowCard tooltip="sample1" className="flex-1">
+        <YellowCard
+          tooltip="sample1"
+          className="justify-betwee flex flex-1 flex-col"
+        >
           <div className="text-5xl font-bold leading-[48px] text-foreground">
             6,666
           </div>
@@ -31,9 +36,14 @@ export default function Portfolio() {
             <br />
             across 3 validators
           </div>
-          <Button variant="outline">Manage delegations</Button>
+          <Button
+            variant="outline"
+            onClick={() => router.push("/delegate?action=redelegate")}
+          >
+            Manage delegations
+          </Button>
         </YellowCard>
-        <YellowCard className="flex-1">
+        <YellowCard className="justify-betwee flex flex-1 flex-col">
           <div className="text-5xl font-bold leading-[48px] text-foreground">
             $3,000
           </div>
@@ -53,19 +63,27 @@ export default function Portfolio() {
           </div>
           <Button className="w-full max-w-[223px]">Claim</Button>
         </YellowCard>
-        <YellowCard tooltip="sample1" className="flex-1">
+        <YellowCard
+          tooltip="sample1"
+          className="flex flex-1 flex-col justify-between"
+        >
           <div className="text-5xl font-bold leading-[48px] text-foreground">
             1,200
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
             BGT unbonding acroos 4 validators
           </div>
-          <Button variant="outline">See my queue</Button>
+          <Button
+            variant="outline"
+            onClick={() => setTab(BGTSelectionEnum.UNBONDING_QUEUE)}
+          >
+            See my queue
+          </Button>
         </YellowCard>
       </div>
       <div className="mt-16 flex flex-col gap-4">
         <div className="mx-auto">
-          <Tabs defaultValue={tab}>
+          <Tabs value={tab}>
             <TabsList>
               {Object.values(BGTSelectionEnum).map((selection) => (
                 <TabsTrigger
