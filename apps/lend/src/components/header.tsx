@@ -40,7 +40,7 @@ const Connect = dynamic(
 
 export function Header() {
   return (
-    <section className="fixed left-0 right-0 z-50 bg-transparent">
+    <section className="fixed left-0 right-0 z-50 bg-background shadow">
       <div className="mx-auto flex h-16 w-full items-center justify-between px-4">
         <div>
           <div className="mr-8 flex items-center">
