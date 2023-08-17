@@ -37,17 +37,17 @@ export const BGT_PRECOMPILE_ABI = [
         type: "address",
       },
       {
-        internalType: "uint64",
+        internalType: "uint256",
         name: "amount",
-        type: "uint64",
+        type: "uint256",
       },
     ],
     name: "redeem",
     outputs: [
       {
-        internalType: "uint64",
+        internalType: "uint256",
         name: "",
-        type: "uint64",
+        type: "uint256",
       },
     ],
     stateMutability: "nonpayable",
