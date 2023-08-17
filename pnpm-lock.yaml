@@ -345,6 +345,100 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
 
+  apps/lend:
+    dependencies:
+      '@bera/bera-router':
+        specifier: 0.1.0
+        version: link:../../packages/bera-router
+      '@bera/berajs':
+        specifier: 0.1.0
+        version: link:../../packages/berajs
+      '@bera/shared-ui':
+        specifier: 0.1.0
+        version: link:../../packages/shared-ui
+      '@bera/tailwind-config':
+        specifier: 0.1.0
+        version: link:../../packages/config/tailwind
+      '@bera/ui':
+        specifier: 0.1.0
+        version: link:../../packages/ui
+      '@t3-oss/env-nextjs':
+        specifier: ^0.2.2
+        version: 0.2.2(zod@3.21.4)
+      '@vercel/analytics':
+        specifier: ^1.0.1
+        version: 1.0.1
+      next:
+        specifier: ^13.4.1
+        version: 13.4.1(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
+      next-themes:
+        specifier: ^0.2.1
+        version: 0.2.1(next@13.4.1)(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-day-picker:
+        specifier: ^8.7.1
+        version: 8.7.1(date-fns@2.29.3)(react@18.2.0)
+      react-dom:
+        specifier: 18.2.0
+        version: 18.2.0(react@18.2.0)
+      react-wrap-balancer:
+        specifier: ^0.5.0
+        version: 0.5.0(react@18.2.0)
+      recharts:
+        specifier: ^2.5.0
+        version: 2.5.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+      superjson:
+        specifier: 1.9.1
+        version: 1.9.1
+      swr:
+        specifier: ^2.1.5
+        version: 2.1.5(react@18.2.0)
+      tailwindcss-animate:
+        specifier: ^1.0.5
+        version: 1.0.5(tailwindcss@3.3.2)
+      usehooks-ts:
+        specifier: ^2.9.1
+        version: 2.9.1(react-dom@18.2.0)(react@18.2.0)
+      wagmi:
+        specifier: ^1.0.2
+        version: 1.0.6(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.36)(zod@3.21.4)
+      zod:
+        specifier: ^3.21.4
+        version: 3.21.4
+    devDependencies:
+      '@bera/eslint-config':
+        specifier: 0.1.0
+        version: link:../../packages/config/eslint
+      '@types/node':
+        specifier: ^18.16.6
+        version: 18.16.6
+      '@types/react':
+        specifier: ^18.2.0
+        version: 18.2.0
+      '@types/react-dom':
+        specifier: ^18.2.1
+        version: 18.2.1
+      autoprefixer:
+        specifier: ^10.4.14
+        version: 10.4.14(postcss@8.4.23)
+      dotenv-cli:
+        specifier: ^7.2.1
+        version: 7.2.1
+      eslint:
+        specifier: ^8.39.0
+        version: 8.39.0
+      postcss:
+        specifier: ^8.4.23
+        version: 8.4.23
+      tailwindcss:
+        specifier: ^3.3.2
+        version: 3.3.2
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
   packages/bera-router:
     dependencies:
       axios:
@@ -853,7 +947,7 @@ packages:
       '@babel/compat-data': 7.21.7
       '@babel/core': 7.21.8
       '@babel/helper-validator-option': 7.21.0
-      browserslist: 4.21.5
+      browserslist: 4.21.10
       lru-cache: 5.1.1
       semver: 6.3.0
 
@@ -877,7 +971,7 @@ packages:
       '@babel/compat-data': 7.22.5
       '@babel/core': 7.21.8
       '@babel/helper-validator-option': 7.22.5
-      browserslist: 4.21.5
+      browserslist: 4.21.10
       lru-cache: 5.1.1
       semver: 6.3.0
     dev: true
@@ -891,7 +985,7 @@ packages:
       '@babel/compat-data': 7.22.5
       '@babel/core': 7.22.10
       '@babel/helper-validator-option': 7.22.5
-      browserslist: 4.21.5
+      browserslist: 4.21.10
       lru-cache: 5.1.1
       semver: 6.3.0
     dev: true
@@ -8550,6 +8644,7 @@ packages:
       electron-to-chromium: 1.4.394
       node-releases: 2.0.10
       update-browserslist-db: 1.0.11(browserslist@4.21.5)
+    dev: true
 
   /bs58@4.0.1:
     resolution: {integrity: sha512-Ok3Wdf5vOIlBrgCvTq96gBkJw+JUEzdBgyaza5HLtPm7yTHkjRy8+JzNyHF7BHa0bNWOQIp3m5YF0nnFcOIKLw==}
@@ -8685,6 +8780,7 @@ packages:
 
   /caniuse-lite@1.0.30001486:
     resolution: {integrity: sha512-uv7/gXuHi10Whlj0pp5q/tsK/32J2QSqVRKQhs2j8VsDCjgyruAh/eEXHF822VqO9yT6iZKw3nRwZRSPBE9OQg==}
+    dev: true
 
   /caniuse-lite@1.0.30001519:
     resolution: {integrity: sha512-0QHgqR+Jv4bxHMp8kZ1Kn8CH55OikjKJ6JmKkZYP1F3D7w+lnFXF70nG5eNfsZS89jadi5Ywy5UCSKLAglIRkg==}
@@ -8987,7 +9083,7 @@ packages:
   /core-js-compat@3.31.0:
     resolution: {integrity: sha512-hM7YCu1cU6Opx7MXNu0NuumM0ezNeAeRKadixyiQELWY3vT3De9S4J5ZBMraWV2vZnrE1Cirl0GtFtDtMUXzPw==}
     dependencies:
-      browserslist: 4.21.5
+      browserslist: 4.21.10
     dev: true
 
   /core-util-is@1.0.3:
@@ -9463,6 +9559,7 @@ packages:
 
   /electron-to-chromium@1.4.394:
     resolution: {integrity: sha512-0IbC2cfr8w5LxTz+nmn2cJTGafsK9iauV2r5A5scfzyovqLrxuLoxOHE5OBobP3oVIggJT+0JfKnw9sm87c8Hw==}
+    dev: true
 
   /electron-to-chromium@1.4.488:
     resolution: {integrity: sha512-Dv4sTjiW7t/UWGL+H8ZkgIjtUAVZDgb/PwGWvMsCT7jipzUV/u5skbLXPFKb6iV0tiddVi/bcS2/kUrczeWgIQ==}
@@ -12152,7 +12249,7 @@ packages:
       '@next/env': 13.4.1
       '@swc/helpers': 0.5.1
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001486
+      caniuse-lite: 1.0.30001519
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -12208,6 +12305,7 @@ packages:
 
   /node-releases@2.0.10:
     resolution: {integrity: sha512-5GFldHPXVG/YZmFzJvKK2zDSzPKhEp0+ZR5SVaoSag9fsL5YgHbUHDfnG5494ISANDcK4KwPXAx2xqVEydmd7w==}
+    dev: true
 
   /node-releases@2.0.13:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
@@ -14880,6 +14978,7 @@ packages:
       browserslist: 4.21.5
       escalade: 3.1.1
       picocolors: 1.0.0
+    dev: true
 
   /uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
