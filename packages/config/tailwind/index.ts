@@ -37,6 +37,8 @@ export default {
       },
       backgroundImage: {
         glow: "url('/glow.png')",
+        "honey-gradient":
+          "linear-gradient(180deg, #FFFCF2 19.89%, #FFF2D0 100%)",
       },
       borderColor: {
         DEFAULT: "hsl(var(--border) / <alpha-value>)",
