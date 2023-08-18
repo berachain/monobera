@@ -68,7 +68,7 @@ export function CreatePool({
             );
           })}
         </ul>
-        <Icons.pluseCircle
+        <Icons.plusCircle
           className="mt-4 h-6 w-6 self-center text-muted-foreground"
           onClick={onAddToken}
         />
