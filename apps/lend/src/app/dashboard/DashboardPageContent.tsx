@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { formatUsd } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -15,6 +16,7 @@ import { useMarkets } from "~/hooks/useMarkets";
 export default function DashboardPageContent() {
   const [useTableView, setUseTableView] = React.useState(false);
   const markets = useMarkets();
+  const router = useRouter();
   return (
     <>
       <div className="mb-12">
@@ -112,7 +114,14 @@ export default function DashboardPageContent() {
                     <Icons.plusCircle className="mr-2" /> Supply
                   </Button>
                   <Button variant={"secondary"}>Borrow</Button>
-                  <Button variant={"secondary"}>
+                  <Button
+                    variant={"secondary"}
+                    onClick={() =>
+                      router.push(
+                        "/individual-market-analytics?address=0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
+                      )
+                    }
+                  >
                     <Icons.info />
                   </Button>
                 </div>

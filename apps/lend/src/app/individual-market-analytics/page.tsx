@@ -9,5 +9,9 @@ export default function Page({
     address: `0x${string}`;
   };
 }) {
-  return <IndividualMarketAnalytics address={searchParams.address} />;
+  return (
+    <div className="container my-28">
+      <IndividualMarketAnalytics address={searchParams.address} />
+    </div>
+  );
 }
