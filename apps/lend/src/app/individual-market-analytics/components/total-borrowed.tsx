@@ -82,21 +82,18 @@ export default function TotalBorrowed() {
         </div>
 
         <div>
-          <div className="mb-4 font-medium">
-            Collateral Usage
-            {/* <span className="text-xs font-medium leading-tight text-success-foreground">
-              <Icons.check className="ml-3 mr-1 inline h-4 w-4" />
-              Can be used as collateral
-            </span> */}
-          </div>
+          <div className="mb-4 font-medium">Collateral Usage</div>
           <div className="flex flex-col gap-4 md:flex-row">
             {info.map((item) => (
-              <Card className="flex-1 bg-muted px-4 py-2" key={item.title}>
-                <div className="flex items-center gap-[6px] text-sm text-muted-foreground">
+              <Card
+                className="flex flex-1 justify-between bg-muted px-4 py-2 md:flex-col"
+                key={item.title}
+              >
+                <div className="flex items-center gap-[6px] text-xs text-muted-foreground md:text-sm">
                   {item.title}
                   {item.tooltip && <Tooltip text={item.tooltip} />}
                 </div>
-                <div className=" mt-[6px] text-lg font-semibold leading-7">
+                <div className="text-lg font-semibold leading-7 md:mt-[6px]">
                   {item.value}
                 </div>
               </Card>

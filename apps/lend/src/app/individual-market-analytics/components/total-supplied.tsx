@@ -10,13 +10,13 @@ export default function TotalSupplied() {
   const info = [
     {
       title: "Max LTV",
-      value: "$570.64 Million",
+      value: "$570.64M",
       tooltip:
         "The Maximum LTV ratio represents the maximum borrowing power of a specific collateral. For example, if a collateral has an LTV of 75%, the user can borrow up to 0.75 worth of ETH in the principal currency for every 1 ETH worth of collateral.",
     },
     {
       title: "Liquidation Threshold",
-      value: "$300.64 Million",
+      value: "$300.64M",
       tooltip:
         "This represents the threshold at which a borrow position will be considered undercollateralized and subject to liquidation for each collateral. For example, if a collateral has a liquidation threshold of 80%, it means that the position will be liquidated when the debt value is worth 80% of the collateral value.",
     },
@@ -29,7 +29,7 @@ export default function TotalSupplied() {
   ];
   const color = "#059669";
   return (
-    <div className="w-full">
+    <div>
       <div className="text-2xl font-semibold leading-loose">
         Total Supplied {ticker}
       </div>
@@ -80,12 +80,15 @@ export default function TotalSupplied() {
           </div>
           <div className="flex flex-col gap-4 md:flex-row">
             {info.map((item) => (
-              <Card className="flex-1 bg-muted px-4 py-2" key={item.title}>
-                <div className="flex items-center gap-[6px] text-sm text-muted-foreground">
+              <Card
+                className="flex flex-1 justify-between bg-muted px-4 py-2 md:flex-col"
+                key={item.title}
+              >
+                <div className="flex items-center gap-[6px] text-xs text-muted-foreground md:text-sm">
                   {item.title}
                   <Tooltip text={item.tooltip} />{" "}
                 </div>
-                <div className=" mt-[6px] text-lg font-semibold leading-7">
+                <div className=" text-lg font-semibold leading-7 md:mt-[6px]">
                   {item.value}
                 </div>
               </Card>
