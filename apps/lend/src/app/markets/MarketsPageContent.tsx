@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { formatUsd } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -42,7 +43,7 @@ export default function MarketsPageContent() {
           <Switch
             id="use-tableview"
             checked={useTableView}
-            onCheckedChange={(checked) => setUseTableView(checked)}
+            onCheckedChange={(checked: boolean) => setUseTableView(checked)}
           />
         </div>
       </div>
@@ -83,7 +84,7 @@ export default function MarketsPageContent() {
                       {market.title}
                     </p>
                     <p className="text-lg font-bold">
-                      8.28M <Tooltip text={market.totalSupply} />
+                      $8.28M <Tooltip text={market.totalSupply} />
                     </p>
                   </div>
                 </div>
@@ -125,7 +126,9 @@ export default function MarketsPageContent() {
                     <p className="text-xs leading-5 text-muted-foreground">
                       Total borrows
                     </p>
-                    <p className="text-xl font-bold">{market.dailyBorrows}</p>
+                    <p className="text-xl font-bold">
+                      {formatUsd(market.dailyBorrows)}
+                    </p>
                   </div>
                 </div>
               </div>
