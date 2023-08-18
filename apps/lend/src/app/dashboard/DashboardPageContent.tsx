@@ -11,6 +11,7 @@ import { Switch } from "@bera/ui/switch";
 
 import RewardBanner from "~/components/reward-banner";
 import StatusBanner from "~/components/status-banner";
+import SupplyBtn from "~/components/supply-button";
 import { useMarkets } from "~/hooks/useMarkets";
 
 export default function DashboardPageContent() {
@@ -110,9 +111,7 @@ export default function DashboardPageContent() {
               </div>
               <div>
                 <div className="grow-1 flex items-center gap-2">
-                  <Button>
-                    <Icons.plusCircle className="mr-2" /> Supply
-                  </Button>
+                  <SupplyBtn />
                   <Button variant={"secondary"}>Borrow</Button>
                   <Button
                     variant={"secondary"}
