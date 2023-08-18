@@ -445,8 +445,8 @@ export const Icons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(8.00396 8.00006) scale(195.333 3578.88)"
         >
-          <stop stop-color="#694715" />
-          <stop offset="0.114583" stop-color="#A89A86" />
+          <stop stopColor="#694715" />
+          <stop offset="0.114583" stopColor="#A89A86" />
         </radialGradient>
       </defs>
     </svg>
