@@ -2,12 +2,12 @@
 <circle cx="539" cy="281" r="539" fill="url(#paint0_radial_1481_112983)" fill-opacity="0.35"/>
 <defs>
 <radialGradient id="paint0_radial_1481_112983" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(539 281) rotate(90) scale(539)">
-<stop stop-color="#FFE2AA"/>
-<stop offset="0.9999" stop-color="#D8D8D7" stop-opacity="0.0104167"/>
-<stop offset="1" stop-color="#D9D9D9" stop-opacity="0"/>
-<stop offset="1" stop-color="#8B673D" stop-opacity="0"/>
-<stop offset="1" stop-color="#F3F4F6" stop-opacity="0"/>
-<stop offset="1" stop-color="#FFE2AA" stop-opacity="0"/>
+<stop stopColor="#FFE2AA"/>
+<stop offset="0.9999" stopColor="#D8D8D7" stop-opacity="0.0104167"/>
+<stop offset="1" stopColor="#D9D9D9" stop-opacity="0"/>
+<stop offset="1" stopColor="#8B673D" stop-opacity="0"/>
+<stop offset="1" stopColor="#F3F4F6" stop-opacity="0"/>
+<stop offset="1" stopColor="#FFE2AA" stop-opacity="0"/>
 </radialGradient>
 </defs>
 </svg>
