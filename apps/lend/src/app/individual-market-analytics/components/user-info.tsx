@@ -8,7 +8,7 @@ export default function UserInfo() {
   const ticker = "ETH";
 
   return (
-    <div className="w-full lg:w-[378px]">
+    <div className="w-full flex-shrink-0 lg:w-[378px]">
       <div className="text-2xl font-semibold leading-loose">Your Info</div>
       <Card className="p-6">
         <div className="flex items-center gap-4 border-b border-border pb-4">

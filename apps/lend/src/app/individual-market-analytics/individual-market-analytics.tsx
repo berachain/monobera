@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { Icons } from "@bera/ui/icons";
 import { isAddress } from "viem";
 
+import InterestRateOvertime from "./components/interest-rate-overtime";
 import TokenInfoCard from "./components/token-info-card";
+import TotalBorrowed from "./components/total-borrowed";
+import TotalSupplied from "./components/total-supplied";
 import UserInfo from "./components/user-info";
 
 export default function IndividualMarketAnalytics({
@@ -35,9 +38,13 @@ export default function IndividualMarketAnalytics({
 
       <TokenInfoCard />
 
-      <div className="flex flex-col lg:flex-row">
+      <div className="mt-9 flex flex-col gap-8 lg:flex-row">
         <UserInfo />
-        <UserInfo />
+        <div className="flex w-full flex-col gap-8">
+          <TotalSupplied />
+          <TotalBorrowed />
+          <InterestRateOvertime />
+        </div>
       </div>
     </div>
   );
