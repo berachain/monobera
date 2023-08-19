@@ -85,7 +85,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div
-                    className="inline-flex h-[42px] w-full flex-col items-start justify-start hover:cursor-pointer"
+                    className="inline-flex h-[42px] w-[500px] flex-col items-start justify-start hover:cursor-pointer"
                     ref={triggerRef}
                   >
                     <div className=" inline-flex w-full items-center justify-start gap-2.5 rounded-xl border border-gray-200 px-3 py-2">

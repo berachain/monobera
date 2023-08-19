@@ -138,14 +138,14 @@ const ValidatorModal = ({
               placeholder="Search by name, address, or token"
               className="w-full md:w-[400px]"
             />
-            <div className="hidden gap-2 md:flex ">
+            {/* <div className="hidden gap-2 md:flex ">
               <Button size="sm" variant="secondary">
                 Filter by bribe
               </Button>
               <Button size="sm" variant="secondary">
                 Filter by pool
               </Button>
-            </div>
+            </div> */}
           </div>
           <RT
             columns={validator_table_columns}

@@ -71,7 +71,7 @@ export default function Portfolio() {
             1,200
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
-            BGT unbonding acroos 4 validators
+            BGT unbonding across 4 validators
           </div>
           <Button
             variant="outline"
