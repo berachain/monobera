@@ -5,6 +5,7 @@ export interface Market {
   dailyPercentChange: number;
   dailyBorrows: number;
 }
+
 const markets: Market[] = [
   {
     title: "Bitcoin",
