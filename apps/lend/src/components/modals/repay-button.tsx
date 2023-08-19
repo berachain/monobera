@@ -2,20 +2,34 @@ import { useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-export default function BorrowModalContent() {
-  const maxBorrowAmout = 10000;
-  const apyOptions = { stable: "10.69", variable: "6.69" };
+export default function RepayBtn() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)} className="px-3 py-2">
+        <Icons.reply className="mr-1 h-6 w-6" />
+        Pay back
+      </Button>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="w-fit p-8">
+          <RepayModalContent />
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
 
-  const [apySelected, setApySelected] = useState(apyOptions.variable);
+const RepayModalContent = () => {
+  const userBalance = 420.69;
   const [amount, setAmount] = useState(0);
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-lg font-semibold leading-7">Borrow</div>
+      <div className="text-lg font-semibold leading-7">Repay</div>
 
       <Image
         src={"/supply.png"}
@@ -24,19 +38,6 @@ export default function BorrowModalContent() {
         width={100}
         height={100}
       />
-      <Tabs
-        defaultValue={apyOptions.variable}
-        onValueChange={(value: string) => setApySelected(value)}
-      >
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value={apyOptions.stable}>
-            Stable APY: {apyOptions.stable}%
-          </TabsTrigger>
-          <TabsTrigger value={apyOptions.variable}>
-            Variable APY: {apyOptions.variable}%
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-1 text-sm font-semibold leading-tight">
@@ -52,10 +53,10 @@ export default function BorrowModalContent() {
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {maxBorrowAmout}
+          {userBalance}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() => setAmount(maxBorrowAmout)}
+            onClick={() => setAmount(userBalance)}
           >
             MAX
           </span>
@@ -64,23 +65,23 @@ export default function BorrowModalContent() {
 
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
-          <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="">0 {"<->"} 1.69</div>
-          {/* i didnt make this cause design doesnt make sense 2 me */}
-        </div>
-        <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
           <div className="">$12,669.42</div>
         </div>
         <div className="flex justify-between  text-sm leading-tight">
-          <div className="text-muted-foreground ">Variable Borrow APY</div>
-          <div className="text-yellow-600">{apySelected}%</div>
+          <div className="text-muted-foreground ">Supply APY</div>
+          <div className="text-success-foreground">6.69%</div>
+        </div>
+        <div className="flex justify-between  text-sm leading-tight">
+          <div className="text-muted-foreground ">LTV Health Ratio</div>
+          <div className="">0 {"<->"} infinite</div>
+          {/* i didnt make this cause design doesnt make sense 2 me */}
         </div>
       </div>
 
-      <Button disabled={amount === 0 || amount > maxBorrowAmout}>
-        {amount === 0 ? "Enter Amount" : "Borrow"}
+      <Button disabled={amount === 0 || amount > userBalance}>
+        {amount === 0 ? "Enter Amount" : "Withdraw"}
       </Button>
     </div>
   );
-}
+};

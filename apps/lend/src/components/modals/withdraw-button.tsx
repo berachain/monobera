@@ -2,16 +2,33 @@ import { useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
-export default function SupplyModalContent() {
+export default function WithdrawBtn() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)} className="px-3 py-2">
+        <Icons.minus className="h-6 w-6" />
+      </Button>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="w-fit p-8">
+          <WithdrawModalContent />
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+const WithdrawModalContent = () => {
   const userBalance = 420.69;
   const [amount, setAmount] = useState(0);
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-lg font-semibold leading-7">Supply</div>
+      <div className="text-lg font-semibold leading-7">Withdraw</div>
 
       <Image
         src={"/supply.png"}
@@ -62,8 +79,8 @@ export default function SupplyModalContent() {
       </div>
 
       <Button disabled={amount === 0 || amount > userBalance}>
-        {amount === 0 ? "Enter Amount" : "Supply"}
+        {amount === 0 ? "Enter Amount" : "Withdraw"}
       </Button>
     </div>
   );
-}
+};

@@ -32,7 +32,7 @@ export default function DashboardPageContent() {
         </div>
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-6 lg:flex-row">
         <div className="flex flex-1 flex-col gap-4">
           <div className="text-2xl font-semibold leading-loose">
             Your Supplies
@@ -40,7 +40,7 @@ export default function DashboardPageContent() {
           <div className=" text-muted-foreground">
             You must supply in order to borrow funds.
           </div>
-          {markets.slice(0, 5).map((market: Market, index) => (
+          {markets.slice(0, 5).map((market, index) => (
             <UserTokenCard market={market} key={index} type="user-supply" />
           ))}
         </div>
@@ -51,18 +51,18 @@ export default function DashboardPageContent() {
           <div className="text-muted-foreground">
             These assets are borrowed against your supplied collateral.
           </div>
-          {markets.slice(5, 10).map((market: Market, index) => (
+          {markets.slice(5, 10).map((market, index) => (
             <UserTokenCard market={market} key={index} type="user-borrow" />
           ))}
         </div>
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-6 lg:flex-row">
         <div className="flex flex-1 flex-col gap-4">
           <div className="text-2xl font-semibold leading-loose">
             Available to Supply
           </div>
-          {markets.slice(10, 15).map((market: Market, index) => (
+          {markets.slice(10, 15).map((market, index) => (
             <UserTokenCard market={market} key={index} type="supply" />
           ))}
         </div>
@@ -70,7 +70,7 @@ export default function DashboardPageContent() {
           <div className="text-2xl font-semibold leading-loose">
             Your Borrows
           </div>
-          {markets.slice(15, 20).map((market: Market, index) => (
+          {markets.slice(15, 20).map((market, index) => (
             <UserTokenCard market={market} key={index} type="borrow" />
           ))}
         </div>
