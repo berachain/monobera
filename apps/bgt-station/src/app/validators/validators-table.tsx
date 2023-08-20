@@ -75,7 +75,7 @@ export default function ValidatorsTable() {
         ),
         mostWeightedGauge: (
           <div className="flex h-full w-[141px] items-center justify-center">
-            Pool name or address
+            ETH-10/BERA-20
           </div>
         ),
         bribes: (

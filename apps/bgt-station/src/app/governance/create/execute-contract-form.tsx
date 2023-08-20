@@ -67,7 +67,7 @@ export default function ExecuteForm({ form }: { form: UseFormReturn<any> }) {
         control={form.control}
         name="amount"
         render={({ field }) => (
-          <FormItem className="relative inline-flex flex-col justify-start">
+          <FormItem className="relative flex flex-col justify-start">
             <div className="text-sm font-semibold leading-tight">
               Amount <Tooltip text="test" />
             </div>
