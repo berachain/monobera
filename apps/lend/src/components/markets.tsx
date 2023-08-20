@@ -7,7 +7,7 @@ import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
 
-import { useMarkets, type Market } from "~/app/hooks/useMarkets";
+import { useMarkets, type Market } from "~/hooks/useMarkets";
 
 interface MarketProps extends Market {
   className?: string;

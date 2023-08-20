@@ -1,12 +1,11 @@
 import React from "react";
 
-import HoneyBanner from "~/components/honey-banner";
+import DashboardPageContent from "./DashboardPageContent";
 
 export default function DashboardPage() {
   return (
-    <div>
-      <HoneyBanner />
-      DashboardPage
+    <div className="container my-28">
+      <DashboardPageContent />
     </div>
   );
 }

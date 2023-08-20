@@ -31,7 +31,7 @@ export default function Hero() {
         <div className="flex flex-col gap-2">
           <Badge
             variant="outline"
-            className="w-fit gap-1 bg-muted"
+            className="w-fit cursor-pointer gap-1 bg-muted"
             onClick={() => router.push("/pool")}
           >
             <Icons.info className="h-3 w-3" /> Add Liquidity to Earn BGT Rewards{" "}
@@ -39,7 +39,7 @@ export default function Hero() {
           </Badge>
           <Badge
             variant="outline"
-            className="w-fit gap-1 bg-muted"
+            className="w-fit cursor-pointer gap-1 bg-muted"
             onClick={() => router.push("/")}
           >
             <Icons.info className="h-3 w-3" />
@@ -48,7 +48,7 @@ export default function Hero() {
           </Badge>
           <Badge
             variant="outline"
-            className="w-fit gap-1 bg-muted"
+            className="w-fit cursor-pointer gap-1 bg-muted"
             onClick={() => router.push("/pool/create")}
           >
             <Icons.info className="h-3 w-3" /> Create your own Liquidity Pools{" "}
