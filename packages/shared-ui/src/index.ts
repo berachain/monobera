@@ -18,3 +18,5 @@ export * from "./time-block";
 export * from "./preview-token-list";
 export * from "./info-box";
 export * from "./dropdown";
+export * from "./honey-banner";
+export * from "./reward-banner";

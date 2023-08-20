@@ -1,10 +1,9 @@
 "use client";
 
 import React from "react";
-import { Dropdown, SearchInput } from "@bera/shared-ui";
+import { Dropdown, HoneyBanner, SearchInput } from "@bera/shared-ui";
 import { Switch } from "@bera/ui/switch";
 
-import HoneyBanner from "~/components/honey-banner";
 import StatusBanner from "~/components/status-banner";
 import TokenCard from "~/components/token-card";
 import { useMarkets, type Market } from "~/hooks/useMarkets";

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-export default function RewardBanner() {
+export const RewardBanner = () => {
   return (
     <div className="relative flex items-center rounded-18 border border-amber-500 bg-honey-gradient p-4 px-8 py-6 md:h-40 md:p-4">
       <Image
@@ -58,4 +58,4 @@ export default function RewardBanner() {
       </div>
     </div>
   );
-}
+};

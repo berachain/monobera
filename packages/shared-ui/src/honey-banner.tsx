@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Icons } from "@bera/ui/icons";
 
-export default function HoneyBanner() {
+export const HoneyBanner = () => {
   return (
     <div className="rounded-spacing-4 relative flex items-center rounded-18 border border-amber-500 bg-honey-gradient px-8 py-6 md:h-36 md:p-4">
       <Image
@@ -77,4 +77,4 @@ export default function HoneyBanner() {
       </div>
     </div>
   );
-}
+};
