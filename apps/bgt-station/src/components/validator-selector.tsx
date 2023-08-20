@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { usePollActiveValidators, type Validator } from "@bera/berajs";
-import { SearchInput } from "@bera/shared-ui";
+import { RT, SearchInput } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -9,7 +9,6 @@ import { Icons } from "@bera/ui/icons";
 import IconList from "~/components/icon-list";
 import { validator_table_columns } from "~/columns/validator-table-columns";
 import { useFetchDelegatedValidatorAmount } from "~/hooks/useFetchDelegatedValidatorAmount";
-import RT from "./react-table";
 
 export default function ValidatorSelector({
   validatorAddress,

@@ -16,7 +16,7 @@ interface RTProps {
   data: any[];
   rowOnClick?: (row: any) => void;
 }
-export default function RT({ columns, data, rowOnClick, className }: RTProps) {
+export function RT({ columns, data, rowOnClick, className }: RTProps) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 

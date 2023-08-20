@@ -1,7 +1,6 @@
 import React from "react";
+import { type Columns } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
-
-import { type Columns } from "~/components/react-table";
 
 export const recent_votes_columns: Columns = [
   {
