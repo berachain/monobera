@@ -4,7 +4,10 @@ export interface Market {
   totalSupply: number;
   dailyPercentChange: number;
   dailyBorrows: number;
+  supplyBalance?: number;
+  borrowBalance?: number;
 }
+
 const markets: Market[] = [
   {
     title: "Bitcoin",
@@ -12,6 +15,7 @@ const markets: Market[] = [
     totalSupply: 21000000,
     dailyPercentChange: 5.2,
     dailyBorrows: 1200000,
+    supplyBalance: 100000,
   },
   {
     title: "Ethereum",
@@ -19,6 +23,7 @@ const markets: Market[] = [
     totalSupply: 118237548,
     dailyPercentChange: 3.8,
     dailyBorrows: 750000,
+    supplyBalance: 100000,
   },
   {
     title: "Cardano",
@@ -26,6 +31,7 @@ const markets: Market[] = [
     totalSupply: 45000000000,
     dailyPercentChange: 2.1,
     dailyBorrows: 24000,
+    borrowBalance: 0,
   },
   {
     title: "Binance Coin",
@@ -171,14 +177,14 @@ const markets: Market[] = [
     title: "Aave",
     icon: "/honey.png",
     totalSupply: 16000000,
-    dailyPercentChange: 5.9,
+    dailyPercentChange: -5.9,
     dailyBorrows: 62000,
   },
   {
     title: "Cosmos",
     icon: "/honey.png",
     totalSupply: 268409076,
-    dailyPercentChange: 3.3,
+    dailyPercentChange: -3.3,
     dailyBorrows: 58000,
   },
   {

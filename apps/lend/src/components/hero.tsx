@@ -25,8 +25,11 @@ export default function Hero() {
           </span>{" "}
           Honey
         </h1>
-        <Button className="mt-8 w-full sm:w-auto">
-          <Icons.helpingHand className="mr-2 h-5 w-5" /> Borrow Funds
+        <Button
+          className="mt-8 w-full rounded-18 text-lg font-semibold leading-7 sm:w-auto"
+          size={"lg"}
+        >
+          <Icons.helpingHand className="mr-1 h-6 w-6" /> Borrow Funds
         </Button>
       </div>
     </div>

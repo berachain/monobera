@@ -39,10 +39,6 @@ export const navItems = [
     title: "Markets",
   },
   {
-    href: "/stake",
-    title: "Stake",
-  },
-  {
     href: "#",
     title: "More",
     children: [

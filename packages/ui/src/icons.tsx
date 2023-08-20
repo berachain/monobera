@@ -56,6 +56,7 @@ import {
   PlusSquare,
   Redo,
   Repeat2,
+  Reply,
   SearchIcon,
   Settings,
   SortAsc,
@@ -83,6 +84,7 @@ export const Icons = {
   pieChart: PieChart,
   alertCircle: AlertCircle,
   activity: Activity,
+  reply: Reply,
   minusSquare: MinusSquare,
   plusSquare: PlusSquare,
   sortAsc: SortAsc,
@@ -150,7 +152,7 @@ export const Icons = {
   XOctagon: XOctagon,
   helpingHand: HelpingHand,
   checkCircle: CheckCircle2,
-  pluseCircle: PlusCircle,
+  plus: Plus,
   candleStick: CandlestickChart,
   medal: Medal,
   plusCircle: PlusCircle,
@@ -445,8 +447,8 @@ export const Icons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(8.00396 8.00006) scale(195.333 3578.88)"
         >
-          <stop stop-color="#694715" />
-          <stop offset="0.114583" stop-color="#A89A86" />
+          <stop stopColor="#694715" />
+          <stop offset="0.114583" stopColor="#A89A86" />
         </radialGradient>
       </defs>
     </svg>
