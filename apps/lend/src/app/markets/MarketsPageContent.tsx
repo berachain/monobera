@@ -19,6 +19,7 @@ import { useMarkets, type Market } from "~/hooks/useMarkets";
 export default function MarketsPageContent() {
   const [useTableView, setUseTableView] = React.useState(false);
   const markets = useMarkets();
+
   return (
     <>
       <div className="mb-12">

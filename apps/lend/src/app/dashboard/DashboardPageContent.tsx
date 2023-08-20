@@ -1,6 +1,11 @@
 "use client";
 
 import React from "react";
+// import Image from "next/image";
+// import { useRouter } from "next/navigation";
+// import { Tooltip } from "@bera/shared-ui";
+// import { Button } from "@bera/ui/button";
+// import { Icons } from "@bera/ui/icons";
 import { Switch } from "@bera/ui/switch";
 
 import RewardBanner from "~/components/reward-banner";
@@ -10,8 +15,24 @@ import { useMarkets } from "~/hooks/useMarkets";
 
 export default function DashboardPageContent() {
   const [useTableView, setUseTableView] = React.useState(false);
+  // const [useHideZeros, setUseHideZeros] = React.useState(true);
+  // const [collapseSupply, setCollapseSupply] = React.useState(false);
+  // const [collapseBorrow, setCollapseBorrow] = React.useState(false);
   const markets = useMarkets();
+  // const suppliedMarkets = markets.filter(
+  //   (market) => market.supplyBalance || 0 > 0,
+  // );
+  // const borrowedMarkets = markets.filter(
+  //   (market) => market.borrowBalance || 0 > 0,
+  // );
+  // const availableToSupply = markets.filter(
+  //   (market) => market.supplyBalance || 0 === 0,
+  // );
 
+  // const availableToBorrow = markets.filter(
+  //   (market) => market.borrowBalance || 0 === 0,
+  // );
+  // const router = useRouter();
   return (
     <div className="flex flex-col gap-9 md:gap-6">
       <RewardBanner />

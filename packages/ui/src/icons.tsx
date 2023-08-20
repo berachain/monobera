@@ -152,7 +152,7 @@ export const Icons = {
   XOctagon: XOctagon,
   helpingHand: HelpingHand,
   checkCircle: CheckCircle2,
-  pluseCircle: PlusCircle,
+  plus: Plus,
   candleStick: CandlestickChart,
   medal: Medal,
   plusCircle: PlusCircle,
