@@ -62,7 +62,7 @@ export default function LineChart({ data, labels }: LineChartProps) {
   return (
     <div>
       <div className="mb-6 flex items-end justify-between md:items-center">
-        <div className="flex flex-col gap-2 md:flex-row md:gap-8">
+        <div className="flex h-full flex-col items-center gap-2 md:flex-row md:gap-8">
           {data.map((d) => (
             <div className="flex items-center gap-2 font-medium" key={d.title}>
               <div
@@ -90,7 +90,7 @@ export default function LineChart({ data, labels }: LineChartProps) {
         <div className="block md:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-xl border border-border bg-muted p-2 text-sm font-medium capitalize leading-[14px] text-foreground">
+              <div className="flex h-[38px] w-fit items-center justify-center gap-1 rounded-xl border border-border bg-muted p-2 text-sm font-medium capitalize leading-[14px] text-foreground">
                 {time.replaceAll("-", " ")}
                 <Icons.chevronDown className="relative h-3 w-3 text-foreground" />
               </div>

@@ -10,9 +10,12 @@ export default function RepayBtn() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="px-3 py-2">
-        <Icons.reply className="mr-1 h-6 w-6" />
-        Pay back
+      <Button
+        variant={"secondary"}
+        onClick={() => setOpen(true)}
+        className="flex-1 px-3 py-2 md:w-[120px]"
+      >
+        Pay Back
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">

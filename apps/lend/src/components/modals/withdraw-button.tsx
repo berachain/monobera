@@ -10,8 +10,8 @@ export default function WithdrawBtn() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="px-3 py-2">
-        <Icons.minus className="h-6 w-6" />
+      <Button onClick={() => setOpen(true)} className="flex-1 px-3 py-2">
+        Withdraw
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">

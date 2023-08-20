@@ -1,8 +1,8 @@
 import { Tooltip } from "@bera/shared-ui";
-import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import Card from "~/components/card";
+import SupplyBtn from "~/components/modals/supply-button";
 
 export default function UserInfo() {
   const ticker = "ETH";
@@ -23,7 +23,7 @@ export default function UserInfo() {
           </div>
         </div>
         <div className="mt-4">
-          <div className=" flex items-center justify-between">
+          <div className="flex items-center justify-between">
             <div>
               <div className="text-xs font-medium leading-tight">
                 Available to Supply{" "}
@@ -36,7 +36,10 @@ export default function UserInfo() {
                 $0.00
               </div>
             </div>
-            <Button>Supply</Button>
+            <div>
+              {" "}
+              <SupplyBtn />
+            </div>
           </div>
 
           <div className="mt-4 flex items-center justify-between">
@@ -52,7 +55,10 @@ export default function UserInfo() {
                 $0.00
               </div>
             </div>
-            <Button>Supply</Button>
+            <div>
+              {" "}
+              <SupplyBtn />
+            </div>
           </div>
         </div>
       </Card>

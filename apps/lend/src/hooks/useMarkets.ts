@@ -172,14 +172,14 @@ const markets: Market[] = [
     title: "Aave",
     icon: "/honey.png",
     totalSupply: 16000000,
-    dailyPercentChange: 5.9,
+    dailyPercentChange: -5.9,
     dailyBorrows: 62000,
   },
   {
     title: "Cosmos",
     icon: "/honey.png",
     totalSupply: 268409076,
-    dailyPercentChange: 3.3,
+    dailyPercentChange: -3.3,
     dailyBorrows: 58000,
   },
   {

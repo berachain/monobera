@@ -13,7 +13,7 @@ export default function DashboardPageContent() {
   const markets = useMarkets();
 
   return (
-    <div className="flex flex-col gap-9">
+    <div className="flex flex-col gap-9 md:gap-6">
       <RewardBanner />
 
       <StatusBanner />
@@ -22,7 +22,7 @@ export default function DashboardPageContent() {
         <div>
           <h2 className="mb-2 text-3xl font-bold">Account Status</h2>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="hidden items-center gap-4 md:flex">
           <p className="text-sm text-muted-foreground">Switch to table view</p>
           <Switch
             id="use-tableview"

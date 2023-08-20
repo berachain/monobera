@@ -11,7 +11,7 @@ export default function BorrowBtn() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button variant={"secondary"} onClick={() => setOpen(true)}>
+      <Button onClick={() => setOpen(true)} className="flex-1">
         Borrow
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>

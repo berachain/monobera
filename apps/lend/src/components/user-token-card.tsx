@@ -74,27 +74,26 @@ export default function UserTokenCard({
         )}
       </div>
 
-      <div>
-        <div className="grow-1 flex items-center gap-2">
-          {type === "user-supply" && <SupplyBtn />}
-          {type === "user-supply" && <WithdrawBtn />}
-          {type === "user-borrow" && <RepayBtn />}
-          {type === "supply" && <SupplyBtn />}
+      <div className="grow-1 flex w-full items-center gap-2 md:w-fit">
+        {type === "user-supply" && <SupplyBtn />}
+        {type === "user-supply" && <WithdrawBtn />}
+        {type === "user-borrow" && <BorrowBtn />}
+        {type === "user-borrow" && <RepayBtn />}
+        {type === "supply" && <SupplyBtn />}
+        {type === "borrow" && <BorrowBtn />}
 
-          {type === "borrow" && <BorrowBtn />}
-          {(type === "borrow" || type === "supply") && (
-            <Button
-              variant={"secondary"}
-              onClick={() =>
-                router.push(
-                  "/markets/address=0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
-                )
-              }
-            >
-              <Icons.info />
-            </Button>
-          )}
-        </div>
+        {(type === "borrow" || type === "supply") && (
+          <Button
+            variant={"secondary"}
+            onClick={() =>
+              router.push(
+                "/markets/address=0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
+              )
+            }
+          >
+            <Icons.info />
+          </Button>
+        )}
       </div>
     </Card>
   );

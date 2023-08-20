@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Input } from "@bera/ui/input";
+import { SearchInput } from "@bera/shared-ui";
 import {
   Select,
   SelectContent,
@@ -44,7 +44,7 @@ export default function MarketsPageContent() {
         </div>
       </div>
       <div className="mt-6 flex gap-4">
-        <Input type="text" placeholder="Search" className="grow-1" />
+        <SearchInput placeholder="Search for BAAVE Markets..." />
         <div className="flex shrink-0 items-center gap-2">
           <p>Sort by</p>
           <Select>

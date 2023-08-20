@@ -5,92 +5,95 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import { type Market } from "~/hooks/useMarkets";
+import Card from "./card";
 import BorrowBtn from "./modals/borrow-button";
 import SupplyBtn from "./modals/supply-button";
 
 export default function TokenCard(market: { market: Market }) {
   const router = useRouter();
   return (
-    <div
-      className="flex items-center justify-between rounded-2xl border bg-background p-4 shadow"
+    <Card
+      className="div-4 flex flex-col items-center justify-between gap-6 p-4 lg:flex-row"
       key={market.market.title}
     >
-      <div className="flex">
-        <div className="mr-10 flex items-center gap-4">
+      <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:gap-6 lg:justify-start">
+        <div className="mb-[22px] flex w-[160px] items-center gap-4 md:mb-0">
           <Image
             src={"/honey.png"}
             alt={market.market.title}
             className="rounded-full"
-            width={32}
-            height={32}
+            width={48}
+            height={48}
           />
           <div>
-            <p className="text-xs	leading-5 text-muted-foreground">
+            <div className="text-xs	leading-5 text-muted-foreground">
               {market.market.title}
-            </p>
-            <p className="text-lg font-bold">
+            </div>
+            <div className="flex items-center gap-1 text-lg font-bold">
               $8.28M <Tooltip text={market.market.totalSupply} />
-            </p>
+            </div>
           </div>
         </div>
 
-        <div className="grow-1 flex gap-6">
-          <div className="flex flex-col gap-1">
-            <p className="text-xs leading-5 text-muted-foreground">
-              Deposit APY
-            </p>
-            <p className="text-lg font-bold">
-              {market.market.dailyPercentChange > 0 ? (
-                <span className="text-positive">
-                  +{market.market.dailyPercentChange}%
-                </span>
-              ) : (
-                <span className="text-negative">
-                  -{market.market.dailyPercentChange}%
-                </span>
-              )}
-            </p>
+        <div className="flex justify-between md:flex-col">
+          <div className="flex items-center text-xs leading-5 text-muted-foreground ">
+            Deposit APY
           </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-xs leading-5 text-muted-foreground">
-              Variable Borrow APR
-            </p>
-            <p className="text-xl font-bold">
-              {market.market.dailyPercentChange}%
-            </p>
+          <div className="font-bold md:text-lg">
+            {market.market.dailyPercentChange > 0 ? (
+              <span className="text-success-foreground">
+                {market.market.dailyPercentChange}%
+              </span>
+            ) : (
+              <span className="text-destructive-foreground">
+                {market.market.dailyPercentChange}%
+              </span>
+            )}
           </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-xs leading-5 text-muted-foreground">
-              Stable Borrow APR
-            </p>
-            <p className="text-xl font-bold">
-              {market.market.dailyPercentChange}%
-            </p>
+        </div>
+
+        <div className="flex justify-between text-muted-foreground md:flex-col">
+          <div className="flex items-center text-xs leading-5">
+            Variable Borrow APR
           </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-xs leading-5 text-muted-foreground">
-              Total borrows
-            </p>
-            <p className="text-xl font-bold">{market.market.dailyBorrows}</p>
+          <div className="font-bold md:text-lg">
+            {market.market.dailyPercentChange}%
+          </div>
+        </div>
+
+        <div className="flex justify-between text-muted-foreground md:flex-col">
+          <div className="flex items-center text-xs leading-5">
+            Stable Borrow APR
+          </div>
+          <div className="font-bold md:text-lg">
+            {market.market.dailyPercentChange}%
+          </div>
+        </div>
+
+        <div className="flex justify-between text-muted-foreground md:flex-col">
+          <div className="flex items-center text-xs leading-5 ">
+            Total borrows
+          </div>
+          <div className="font-bold md:text-lg">
+            {market.market.dailyBorrows}
           </div>
         </div>
       </div>
-      <div>
-        <div className="grow-1 flex items-center gap-2">
-          <SupplyBtn />
-          <BorrowBtn />
-          <Button
-            variant={"secondary"}
-            onClick={() =>
-              router.push(
-                "/markets/address=0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
-              )
-            }
-          >
-            <Icons.info />
-          </Button>
-        </div>
+
+      <div className="flex w-full items-center gap-2 lg:w-fit">
+        <SupplyBtn />
+        <BorrowBtn />
+        <Button
+          variant={"secondary"}
+          onClick={() =>
+            router.push(
+              "/markets/address=0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
+            )
+          }
+        >
+          <Icons.info />
+        </Button>
       </div>
-    </div>
+    </Card>
   );
 }

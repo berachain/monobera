@@ -31,40 +31,44 @@ export default function TotalBorrowed() {
         Total Borrowed {ticker}
       </div>
       <Card className="flex flex-col gap-8 p-9">
-        <div className="flex gap-8">
-          <DonutChart percentage={16.85} color={color} />
+        <div className="flex flex-col gap-8 md:flex-row">
+          <div className="flex gap-8">
+            <DonutChart percentage={16.85} color={color} />
 
-          <div className="flex flex-col gap-[6px]">
-            <div className="text-sm font-normal leading-normal text-muted-foreground">
-              Total Borrowed
-            </div>
-            <div className=" text-xl font-semibold leading-7">
-              $303.21K of 1.80M
-            </div>
-            <div className="text-xs font-medium leading-tight text-muted-foreground">
-              $570.07M of 3.38B
+            <div className="flex flex-col gap-[6px]">
+              <div className="text-sm font-normal leading-normal text-muted-foreground">
+                Total Borrowed
+              </div>
+              <div className=" font-semibold leading-7 md:text-xl">
+                $303.21K of 1.80M
+              </div>
+              <div className="text-xs font-medium leading-tight text-muted-foreground">
+                $570.07M of 3.38B
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-[6px]">
-            <div className="text-sm font-normal leading-normal text-muted-foreground">
-              Borrow cap
-              <Tooltip text="?" />
+          <div className="flex gap-8">
+            <div className="flex flex-col gap-[6px]">
+              <div className="text-sm font-normal leading-normal text-muted-foreground">
+                Borrow cap
+                <Tooltip text="?" />
+              </div>
+              <div className="font-semibold leading-7 md:text-xl">
+                $1.49 Million
+              </div>
+              <div className="text-xs font-medium leading-tight text-muted-foreground">
+                $2.63 Bollion
+              </div>
             </div>
-            <div className=" text-xl font-semibold leading-7">
-              $1.49 Million
-            </div>
-            <div className="text-xs font-medium leading-tight text-muted-foreground">
-              $2.63 Bollion
-            </div>
-          </div>
 
-          <div className="flex flex-col gap-[6px]">
-            <div className="text-sm font-normal leading-normal text-muted-foreground">
-              APY, variable
-              <Tooltip text="Variable interest rate will fluctuate based on the market conditions. Recommended for short-term positions." />
+            <div className="flex flex-col gap-[6px]">
+              <div className="text-sm font-normal leading-normal text-muted-foreground">
+                APY, variable
+                <Tooltip text="Variable interest rate will fluctuate based on the market conditions. Recommended for short-term positions." />
+              </div>
+              <div className="font-semibold leading-7 md:text-xl">3.69%</div>
             </div>
-            <div className="text-xl font-semibold leading-7">3.69%</div>
           </div>
         </div>
 

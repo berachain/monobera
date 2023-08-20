@@ -10,8 +10,8 @@ export default function SupplyBtn() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)}>
-        <Icons.add className="mr-1" /> Supply
+      <Button onClick={() => setOpen(true)} className="flex-1">
+        Supply
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
