@@ -1,14 +1,7 @@
 "use client";
 
 import React from "react";
-import { SearchInput } from "@bera/shared-ui";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@bera/ui/select";
+import { Dropdown, SearchInput } from "@bera/shared-ui";
 import { Switch } from "@bera/ui/switch";
 
 import HoneyBanner from "~/components/honey-banner";
@@ -19,7 +12,8 @@ import { useMarkets, type Market } from "~/hooks/useMarkets";
 export default function MarketsPageContent() {
   const [useTableView, setUseTableView] = React.useState(false);
   const markets = useMarkets();
-
+  const sortOptions = ["Deposit-APY", "Total-Borrows", "Systems"];
+  const [sortBy, setSortBy] = React.useState<string>(sortOptions[2]!);
   return (
     <>
       <div className="mb-12">
@@ -35,7 +29,7 @@ export default function MarketsPageContent() {
             You must supply collateral in order to borrow funds.
           </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="hidden items-center gap-4 md:flex ">
           <p className="text-sm text-muted-foreground">Switch to table view</p>
           <Switch
             id="use-tableview"
@@ -44,21 +38,16 @@ export default function MarketsPageContent() {
           />
         </div>
       </div>
-      <div className="mt-6 flex gap-4">
-        <SearchInput placeholder="Search for BAAVE Markets..." />
-        <div className="flex shrink-0 items-center gap-2">
-          <p>Sort by</p>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Deposit APY" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="depositAPY">Deposit APY</SelectItem>
-              <SelectItem value="totalBorrows">Total borrows</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
+      <div className="mt-6 flex justify-between gap-4">
+        <div className="flex-1">
+          <SearchInput placeholder="Search for BAAVE Markets..." />
         </div>
+        <Dropdown
+          selected={sortBy}
+          selectionList={sortOptions}
+          onSelect={setSortBy}
+          className="hidden md:block"
+        />
       </div>
       <div className="">
         <div className="mt-6 grid grid-cols-1 gap-4">

@@ -4,12 +4,13 @@ import { Button } from "@bera/ui/button";
 export default function HowItWorks() {
   return (
     <section className="my-24">
-      <div className="mb-12 p-6 text-center">
+      <div className="p-6 text-center">
         <h2 className="mb-4 text-3xl font-bold">
           How <span className="text-amber-400">Lending</span> Works
         </h2>
       </div>
-      <div className="grid grid-cols-1 gap-8 rounded-2xl border-2 bg-[#FAFAF9]  p-6 lg:grid-cols-3">
+
+      <div className="grid grid-cols-1 gap-8 rounded-2xl border-2 bg-muted  p-6 lg:grid-cols-3">
         <div className="flex flex-col">
           <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full border bg-background p-2 text-xl font-semibold">
             1

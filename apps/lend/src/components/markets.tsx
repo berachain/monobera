@@ -157,7 +157,7 @@ function MarketGrid() {
   return (
     <div
       ref={containerRef}
-      className="relative -mx-4 mt-16 grid h-[49rem] max-h-[150vh] grid-cols-1 items-start gap-8 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3"
+      className="relative -mx-4 mt-16 grid h-[49rem] max-h-[150vh] grid-cols-1 items-start gap-8 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3 "
     >
       {isInView && (
         <>
@@ -216,7 +216,7 @@ export default function Markets() {
       className="pb-16 pt-20 sm:pb-24 sm:pt-32"
     >
       <div className="container">
-        <h2 className="mt-2 text-center text-3xl font-extrabold leading-8 tracking-tight text-foreground sm:text-4xl">
+        <h2 className="mt-2 text-center text-5xl font-extrabold leading-8 tracking-tight text-foreground sm:text-4xl">
           <span className="bg-gradient-to-b from-yellow-300 to-orange-600 bg-clip-text text-transparent">
             BAAVE
           </span>{" "}
