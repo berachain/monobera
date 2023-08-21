@@ -1,38 +1,32 @@
 "use client";
 
-import React from "react";
-// import Image from "next/image";
-// import { useRouter } from "next/navigation";
-// import { Tooltip } from "@bera/shared-ui";
-// import { Button } from "@bera/ui/button";
-// import { Icons } from "@bera/ui/icons";
+import React, { useEffect } from "react";
+import { RewardBanner } from "@bera/shared-ui";
 import { Switch } from "@bera/ui/switch";
 
-import RewardBanner from "~/components/reward-banner";
 import StatusBanner from "~/components/status-banner";
-import UserTokenCard from "~/components/user-token-card";
 import { useMarkets } from "~/hooks/useMarkets";
+import AvailableBorrows from "./available-borrows";
+import AvailableSupply from "./available-supply";
+import UserBorrows from "./user-borrows";
+import UserSupply from "./user-supply";
 
 export default function DashboardPageContent() {
-  const [useTableView, setUseTableView] = React.useState(false);
-  // const [useHideZeros, setUseHideZeros] = React.useState(true);
-  // const [collapseSupply, setCollapseSupply] = React.useState(false);
-  // const [collapseBorrow, setCollapseBorrow] = React.useState(false);
+  const [tableView, setUseTableView] = React.useState(false);
   const markets = useMarkets();
-  // const suppliedMarkets = markets.filter(
-  //   (market) => market.supplyBalance || 0 > 0,
-  // );
-  // const borrowedMarkets = markets.filter(
-  //   (market) => market.borrowBalance || 0 > 0,
-  // );
-  // const availableToSupply = markets.filter(
-  //   (market) => market.supplyBalance || 0 === 0,
-  // );
 
-  // const availableToBorrow = markets.filter(
-  //   (market) => market.borrowBalance || 0 === 0,
-  // );
-  // const router = useRouter();
+  useEffect(() => {
+    const handleResize = () => {
+      if (tableView && window.innerWidth < 1024) {
+        setUseTableView(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [tableView]);
+
   return (
     <div className="flex flex-col gap-9 md:gap-6">
       <RewardBanner />
@@ -47,7 +41,8 @@ export default function DashboardPageContent() {
           <p className="text-sm text-muted-foreground">Switch to table view</p>
           <Switch
             id="use-tableview"
-            checked={useTableView}
+            className="hidden lg:block"
+            checked={tableView}
             onCheckedChange={(checked: boolean) => setUseTableView(checked)}
           />
         </div>
@@ -55,45 +50,19 @@ export default function DashboardPageContent() {
 
       <div className="flex flex-col gap-6 lg:flex-row">
         <div className="flex flex-1 flex-col gap-4">
-          <div className="text-2xl font-semibold leading-loose">
-            Your Supplies
-          </div>
-          <div className=" text-muted-foreground">
-            You must supply in order to borrow funds.
-          </div>
-          {markets.slice(0, 5).map((market, index) => (
-            <UserTokenCard market={market} key={index} type="user-supply" />
-          ))}
+          <UserSupply markets={markets} tableView={tableView} />
         </div>
         <div className="flex flex-1 flex-col gap-4">
-          <div className="text-2xl font-semibold leading-loose">
-            Your Borrows
-          </div>
-          <div className="text-muted-foreground">
-            These assets are borrowed against your supplied collateral.
-          </div>
-          {markets.slice(5, 10).map((market, index) => (
-            <UserTokenCard market={market} key={index} type="user-borrow" />
-          ))}
+          <UserBorrows markets={markets} tableView={tableView} />
         </div>
       </div>
 
       <div className="flex flex-col gap-6 lg:flex-row">
         <div className="flex flex-1 flex-col gap-4">
-          <div className="text-2xl font-semibold leading-loose">
-            Available to Supply
-          </div>
-          {markets.slice(10, 15).map((market, index) => (
-            <UserTokenCard market={market} key={index} type="supply" />
-          ))}
+          <AvailableSupply markets={markets} tableView={tableView} />
         </div>
         <div className="flex flex-1 flex-col gap-4">
-          <div className="text-2xl font-semibold leading-loose">
-            Your Borrows
-          </div>
-          {markets.slice(15, 20).map((market, index) => (
-            <UserTokenCard market={market} key={index} type="borrow" />
-          ))}
+          <AvailableBorrows markets={markets} tableView={tableView} />
         </div>
       </div>
     </div>

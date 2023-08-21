@@ -1,10 +1,9 @@
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import { type Market } from "~/hooks/useMarkets";
 import Card from "./card";
+import InfoButton from "./info-button";
 import BorrowBtn from "./modals/borrow-button";
 import RepayBtn from "./modals/repay-button";
 import SupplyBtn from "./modals/supply-button";
@@ -17,8 +16,6 @@ export default function UserTokenCard({
   market: Market;
   type: "user-supply" | "user-borrow" | "supply" | "borrow";
 }) {
-  const router = useRouter();
-
   return (
     <Card
       key={market.title}
@@ -83,16 +80,7 @@ export default function UserTokenCard({
         {type === "borrow" && <BorrowBtn />}
 
         {(type === "borrow" || type === "supply") && (
-          <Button
-            variant={"secondary"}
-            onClick={() =>
-              router.push(
-                "/markets/address=0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
-              )
-            }
-          >
-            <Icons.info />
-          </Button>
+          <InfoButton address="0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4" />
         )}
       </div>
     </Card>

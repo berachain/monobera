@@ -1,12 +1,6 @@
 import { useState } from "react";
+import { Dropdown } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@bera/ui/dropdown-menu";
-import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 export interface LineChartProps {
@@ -88,25 +82,11 @@ export default function LineChart({ data, labels }: LineChartProps) {
           </TabsList>
         </Tabs>
         <div className="block md:hidden">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div className="flex h-[38px] w-fit items-center justify-center gap-1 rounded-xl border border-border bg-muted p-2 text-sm font-medium capitalize leading-[14px] text-foreground">
-                {time.replaceAll("-", " ")}
-                <Icons.chevronDown className="relative h-3 w-3 text-foreground" />
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              {Object.values(timeFrame).map((t) => (
-                <DropdownMenuCheckboxItem
-                  checked={time === t}
-                  key={t}
-                  onClick={() => setTime(t)}
-                >
-                  {t.replaceAll("-", " ")}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Dropdown
+            selected={time}
+            selectionList={timeFrame}
+            onSelect={setTime}
+          />
         </div>
       </div>
       <div className="h-[180px] w-full">

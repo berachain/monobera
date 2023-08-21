@@ -7,6 +7,7 @@ export default {
     "src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "../../packages/ui/src/*.{ts,tsx}",
+    "../../packages/shared-ui/src/*.{ts,tsx}",
   ],
   theme: {
     fontSize: {
