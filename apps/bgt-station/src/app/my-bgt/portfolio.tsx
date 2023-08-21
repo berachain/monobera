@@ -1,10 +1,10 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { truncateHash, useBeraJs } from "@bera/berajs";
+import { IconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import IconList from "~/components/icon-list";
 import YellowCard from "~/components/yellow-card";
 import AverageGaugeWeight from "./components/average-gauge-weight";
 import UnbondingQueue from "./components/unbonding-queue";

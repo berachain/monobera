@@ -39,6 +39,10 @@ export const navItems = [
     title: "Pool",
   },
   {
+    href: "/rewards",
+    title: "rewards",
+  },
+  {
     href: "#",
     title: "Explore",
     children: [

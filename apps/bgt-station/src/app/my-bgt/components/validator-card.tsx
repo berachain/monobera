@@ -1,13 +1,11 @@
 import { useRouter } from "next/navigation";
 import { usePollActiveValidators, type Validator } from "@bera/berajs";
-import { Tooltip } from "@bera/shared-ui";
+import { IconList, Tooltip } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { formatEther } from "viem";
-
-import IconList from "~/components/icon-list";
 
 export default function ValidatorCard(validator: { validator: Validator }) {
   const router = useRouter();
