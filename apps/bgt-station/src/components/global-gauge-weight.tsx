@@ -1,11 +1,11 @@
 import React from "react";
+import { RT } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Checkbox } from "@bera/ui/checkbox";
 
 import { getColors } from "~/utils/colors";
 import { global_gauge_weight_columns } from "~/columns/global-gauge-weight";
-import RT from "./react-table";
 
 const options = {
   plugins: {

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { RT } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import DatePicker from "react-datepicker";
 
-import RT from "~/components/react-table";
 import { global_gauge_weight_columns } from "~/columns/global-gauge-weight";
 import "react-datepicker/dist/react-datepicker.css";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";

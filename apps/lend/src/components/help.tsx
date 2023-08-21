@@ -17,9 +17,9 @@ export default function Help() {
         </h3>
       </div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <div className="mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-[#FAFAF9] p-6 text-center md:max-w-[350px] lg:max-w-full lg:items-start lg:text-left">
-          <p className="mb-2 text-lg font-semibold text-secondary">
-            📋 Feedback Form
+        <div className=" mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-muted p-6 text-center md:max-w-[350px] md:px-12 md:py-8 lg:max-w-full lg:items-start lg:text-left">
+          <p className="mb-2 flex items-center gap-2 text-lg font-semibold text-muted-foreground">
+            <span className="text-3xl ">📋 </span> Feedback Form
           </p>
           <p className="mb-8 text-2xl font-semibold">
             Drop us some feedback now! You&apos;ll automatically get whitelisted
@@ -29,9 +29,9 @@ export default function Help() {
             Provide Feedback
           </Button>
         </div>
-        <div className="mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-[#FAFAF9] p-6 text-center md:max-w-[350px]  lg:max-w-full  lg:items-start lg:text-left">
-          <p className="mb-2 text-lg font-semibold text-secondary">
-            📜 BAAVE Docs
+        <div className=" mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-muted p-6 text-center md:max-w-[350px] md:px-12 md:py-8  lg:max-w-full  lg:items-start lg:text-left">
+          <p className="mb-2 flex items-center gap-2 text-lg font-semibold text-muted-foreground">
+            <span className="text-3xl ">📜 </span> BAAVE Docs
           </p>
           <p className="mb-8 text-2xl font-semibold">
             Are you a fellow builder in the making? Check out our docs and start
