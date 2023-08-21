@@ -8,19 +8,18 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary:
-          "bg-primary text-primary-foreground border border-primary hover:opacity-90",
+        primary: "bg-primary text-primary-foreground hover:opacity-90",
         outline:
-          "text-secondary-foreground border border-secondary-foreground hover:bg-secondary",
+          "bg-transparent text-secondary-foreground border border-secondary-foreground hover:bg-secondary",
         ghost: "text-muted-foreground hover:bg-muted",
         link: "underline-offset-4 hover:underline text-primary",
         destructive:
-          "bg-destructive-foreground text-accent-foreground border border-destructive-foreground hover:opacity-90",
+          "bg-destructive-foreground text-accent-foreground hover:opacity-90",
         warning:
-          "bg-warning-foreground text-accent-foreground border border-warning-foreground hover:opacity-90",
+          "bg-warning-foreground text-accent-foreground hover:opacity-90",
         success:
-          "bg-success-foreground text-success-foreground border border-success-foreground hover:opacity-90",
-        info: "bg-info-foreground text-info-foreground border border-info-foreground hover:opacity-90",
+          "bg-success-foreground text-accent-foreground hover:opacity-90",
+        info: "bg-info-foreground text-accent-foreground hover:opacity-90",
       },
       size: {
         lg: "px-4 py-3 rounded-xl text-lg font-semibold",

@@ -158,9 +158,12 @@ export const PoolSearch = () => {
             {!isList && (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-                  {userPools?.map((pool: any) => {
-                    return <PoolCard pool={pool} key={"search" + pool?.pool} />;
-                  })}
+                  {userPools &&
+                    userPools.map((pool: any) => {
+                      return (
+                        <PoolCard pool={pool} key={"search" + pool?.pool} />
+                      );
+                    })}
                 </div>
               </div>
             )}
