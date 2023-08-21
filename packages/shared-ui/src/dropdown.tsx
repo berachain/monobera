@@ -21,7 +21,7 @@ export const Dropdown = ({
   className?: string;
 }) => {
   return (
-    <div {...props} className={cn("w-fit", className)}>
+    <div {...props} className={cn("w-fit flex-shrink-0", className)}>
       <div className="flex items-center text-muted-foreground md:gap-1">
         <div className="hidden text-sm font-medium md:block">Sort by</div> 
         <DropdownMenu>

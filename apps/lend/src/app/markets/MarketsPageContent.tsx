@@ -121,9 +121,7 @@ export default function MarketsPageContent() {
         </div>
       </div>
       <div className="mt-6 flex justify-between gap-4">
-        <div className="flex-1">
-          <SearchInput placeholder="Search for BAAVE Markets..." />
-        </div>
+        <SearchInput placeholder="Search for BAAVE Markets..." />
         <Dropdown
           selected={sortBy}
           selectionList={sortOptions}

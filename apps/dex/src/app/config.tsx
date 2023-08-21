@@ -40,7 +40,7 @@ export const navItems = [
   },
   {
     href: "/rewards",
-    title: "rewards",
+    title: "Rewards",
   },
   {
     href: "#",
