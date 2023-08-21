@@ -7,7 +7,7 @@ export default function InfoButton({ address }: { address: string }) {
   const router = useRouter();
   return (
     <Button
-      variant={"secondary"}
+      variant={"outline"}
       onClick={() => router.push(`/markets/address=${address}`)}
     >
       <Icons.info />

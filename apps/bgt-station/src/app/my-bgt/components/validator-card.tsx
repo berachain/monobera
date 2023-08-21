@@ -73,7 +73,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
         <div className="hidden items-center gap-4 sm:flex">
           <Button
             size="sm"
-            variant="secondary"
+            variant="outline"
             onClick={() =>
               router.push(
                 `/delegate?action=delegate&&validator=${validator.validator.operatorAddress}`,
@@ -84,7 +84,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
           </Button>
           <Button
             size="sm"
-            variant="secondary"
+            variant="outline"
             onClick={() =>
               router.push(
                 `/delegate?action=redelegate&&validator=${validator.validator.operatorAddress}`,
@@ -95,7 +95,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
           </Button>
           <Button
             size="sm"
-            variant="secondary"
+            variant="outline"
             onClick={() =>
               router.push(
                 `/delegate?action=unbond&&validator=${validator.validator.operatorAddress}`,
@@ -140,7 +140,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
         <div className="flex items-center justify-center gap-4 sm:hidden">
           <Button
             size="sm"
-            variant="secondary"
+            variant="outline"
             onClick={() =>
               router.push(
                 `/delegate?action=delegate&&validator=${validator.validator.operatorAddress}`,
@@ -151,7 +151,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
           </Button>
           <Button
             size="sm"
-            variant="secondary"
+            variant="outline"
             onClick={() =>
               router.push(
                 `/delegate?action=redelegate&&validator=${validator.validator.operatorAddress}`,
@@ -162,7 +162,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
           </Button>
           <Button
             size="sm"
-            variant="secondary"
+            variant="outline"
             onClick={() =>
               router.push(
                 `/delegate?action=unbond&&validator=${validator.validator.operatorAddress}`,

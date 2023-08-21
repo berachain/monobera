@@ -11,7 +11,7 @@ export default function RepayBtn() {
   return (
     <>
       <Button
-        variant={"secondary"}
+        variant={"outline"}
         onClick={() => setOpen(true)}
         className="flex-1 px-3 py-2 md:w-[120px]"
       >

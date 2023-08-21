@@ -73,7 +73,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
 
       <Button
         className="w-full"
-        variant="secondary"
+        variant="outline"
         onClick={() =>
           router.push(
             `/delegate?action=delegate&&validator=${validator.validator.operatorAddress}`,
