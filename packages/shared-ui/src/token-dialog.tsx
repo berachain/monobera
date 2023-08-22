@@ -147,7 +147,7 @@ export function TokenDialog({
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         {!managingTokens && (
-          <DialogContent className="flex max-h-[400px] max-w-[425px] flex-col gap-4 rounded-2xl px-4">
+          <DialogContent className="flex max-w-[425px] flex-col gap-4 rounded-2xl px-4">
             <DialogHeader>
               <DialogTitle className="text-lg">Select a token</DialogTitle>
             </DialogHeader>
@@ -169,7 +169,7 @@ export function TokenDialog({
                       key={token.address}
                       variant={"secondary"}
                       className={cn(
-                        "w-fit",
+                        "w-fit hover:cursor-pointer",
                         isTokenSelected(token) && "opacity-50",
                       )}
                       onClick={() =>
@@ -184,7 +184,7 @@ export function TokenDialog({
               </div>
             )}
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
-            <div className="max-h-[300px] overflow-y-auto ">
+            <div className="overflow-y-scoll max-h-[600px] ">
               {!error ? (
                 filteredTokens?.length ? (
                   filteredTokens?.map((token, i) => (
@@ -221,7 +221,7 @@ export function TokenDialog({
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
             {!customTokens && (
               <div
-                className="flex flex-row items-center justify-center gap-1 self-center text-xs text-muted-foreground"
+                className="flex flex-row items-center justify-center gap-1 self-center text-xs text-muted-foreground hover:cursor-pointer hover:underline"
                 onClick={() => setManagingTokens(true)}
               >
                 <Icons.edit className="h-3 w-3" /> Manage custom tokens

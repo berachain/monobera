@@ -32,14 +32,14 @@ export function SelectToken({
   return (
     <div className={cn("my-4 w-fit max-w-[150px]", className)}>
       <Button
-        className="border-1 flex h-fit w-full shrink-0 gap-2 rounded-xl border-border bg-background p-1 shadow-none"
+        className="flex w-full shrink-0 gap-1 rounded-xl border-border bg-background p-1 text-secondary-foreground shadow"
         variant={"outline"}
         onClick={() => selectable && setOpen(true)}
       >
         {token ? (
           <>
             <TokenIcon token={token} />
-            <span className="w-14 max-w-[100px] overflow-hidden truncate">
+            <span className="w-fit max-w-[140px] overflow-hidden truncate">
               {token?.symbol}{" "}
             </span>
             {weight && <span className="text-muted-foreground">{weight}%</span>}

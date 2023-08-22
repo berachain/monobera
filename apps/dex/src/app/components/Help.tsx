@@ -10,7 +10,7 @@ export default function Help() {
           <span className="whitespace-nowrap text-accent">
             Build a Better Bera
           </span>{" "}
-          <span className="hidden md:block">Dex For You</span>
+          <span className="hidden md:inline">Dex For You</span>
         </h2>
         <h3 className="text-base font-semibold text-muted-foreground md:text-xl">
           Give us feedback now! And get whitelisted as a power user

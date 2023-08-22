@@ -78,7 +78,7 @@ export function TokenInput({
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
   }, [exceeding]);
   return (
-    <li className={"flex flex-col flex-wrap px-4"}>
+    <li className={"flex flex-col flex-wrap px-3"}>
       <div className="flex flex-row items-center">
         <SelectToken
           token={selected}
@@ -116,16 +116,16 @@ export function TokenInput({
         </div>
       </div>
       {isConnected && selected && tokenBalance !== 0 ? (
-        <div className="mb-2 h-fit w-full cursor-default">
+        <div className="mb-4 h-fit w-full cursor-default">
           {hideBalance ? null : (
-            <div className="flex w-full items-center justify-between gap-1">
-              <div className="flex flex-row justify-start gap-1">
-                <Icons.wallet className="h-4 w-4 text-muted-foreground" />
-                <p className="w-12 overflow-hidden truncate p-0 text-xs text-muted-foreground sm:w-14">
+            <div className="mt-[-10px] flex w-full items-center justify-between gap-1">
+              <div className="flex flex-row items-center justify-start gap-1 px-3">
+                <Icons.wallet className="h-3 w-3 text-muted-foreground" />
+                <p className="w-fit max-w-[60px] overflow-hidden truncate p-0 text-xs text-muted-foreground">
                   {tokenBalance ? tokenBalance : "0"}
                 </p>
                 <p
-                  className="cursor-pointer text-xs text-muted-foreground hover:underline"
+                  className="cursor-pointer text-xs text-muted-foreground underline hover:text-foreground"
                   onClick={() => {
                     setAmount && setAmount(tokenBalance);
                   }}

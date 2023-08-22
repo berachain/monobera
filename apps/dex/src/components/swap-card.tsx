@@ -9,7 +9,7 @@ import { TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "wagmi";
 
@@ -19,7 +19,7 @@ import { SettingsPopover } from "./settings-popover";
 
 const DynamicPreview = dynamic(() => import("./preview-dialog"), {
   loading: () => (
-    <Button className="w-full gap-1" variant="outline">
+    <Button className="w-full gap-1">
       Preview <Icons.arrowRight className="h-3 w-3" />
     </Button>
   ),
@@ -120,17 +120,16 @@ export function SwapCard({
         />
       )}
       <div className="flex w-full flex-col gap-4 md:flex-row">
-        <Card className="w-full rounded-xl ">
-          <CardHeader className="pb-3 pt-8">
-            <CardTitle className="center flex justify-between">
-              Swap <SettingsPopover />
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="mt-4">
+        <Card className="w-full rounded-2xl px-6 py-8">
+          <CardTitle className="center flex items-center justify-between px-2">
+            Swap <SettingsPopover />
+          </CardTitle>
+
+          <div className="mt-3">
             <div className="border-1 flex flex-col gap-2 border-border">
               <ul
                 role="list"
-                className="divide-y divide-border rounded-lg border"
+                className="divide-y divide-border rounded-2xl border"
               >
                 <TokenInput
                   selected={selectedFrom}
@@ -157,9 +156,9 @@ export function SwapCard({
                       onClick={() => {
                         onSwitch();
                       }}
-                      className="z-10 inline-flex h-fit w-fit items-center rounded-full bg-background p-1 text-sm font-semibold sm:p-2"
+                      className="z-10 inline-flex h-6 w-6 items-center rounded-full bg-background p-0.5 text-sm font-semibold text-muted-foreground md:h-8 md:w-8 md:p-1"
                     >
-                      <Icons.swap className="h-3 w-3 sm:h-6 sm:w-6" />
+                      <Icons.swap className="h-3 w-3 md:h-6 md:w-6" />
                     </Button>
                   </div>
                 </div>
@@ -177,7 +176,7 @@ export function SwapCard({
                 />
               </ul>
               {swapInfo && (
-                <div className="mt-4 flex w-full flex-col gap-2 rounded-lg bg-muted p-3">
+                <div className="mt-4 flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
                   <div className="flex w-full flex-row justify-between">
                     <p className="text-xs font-medium text-muted-foreground sm:text-sm">
                       Exchange rate
@@ -217,7 +216,11 @@ export function SwapCard({
               )}
               {showPriceImpact && (
                 <Alert variant="destructive">
-                  <AlertTitle>Price Impact Error</AlertTitle>
+                  <AlertTitle>
+                    {" "}
+                    <Icons.tooltip className="mt-[-4px] inline h-4 w-4" /> Price
+                    Impact Error
+                  </AlertTitle>
                   <AlertDescription className="text-xs">
                     This swap will result in a high price impact (-
                     {priceImpact?.toFixed(2)}%)
@@ -270,7 +273,7 @@ export function SwapCard({
                 )}
               </div>
             </div>
-          </CardContent>
+          </div>
         </Card>
         {isMainPage && <DynamicBerachainInfo />}
       </div>

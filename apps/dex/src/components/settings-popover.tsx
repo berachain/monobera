@@ -9,7 +9,10 @@ export function SettingsPopover() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className="h-6 w-6 rounded-full p-0">
+        <Button
+          variant="ghost"
+          className="h-6 w-6 rounded-full p-0 text-primary"
+        >
           <Icons.settings />
           <span className="sr-only">Open popover</span>
         </Button>
