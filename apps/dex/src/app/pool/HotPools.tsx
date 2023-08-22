@@ -47,8 +47,8 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
   return (
     <div className="w-full flex-col items-center justify-center">
       <div className="w-full text-center ">
-        <p className="text-5xl font-extrabold">🔥 Hot Pools</p>
-        <p className="text-lg font-semibold text-muted-foreground">
+        <p className="text-3xl font-extrabold">🔥 Hottest Yields in Defi 💰</p>
+        <p className="text-lg font-semibold leading-7 text-muted-foreground">
           Leverage our boosted yields to increase your rewards
         </p>
         <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
@@ -71,7 +71,7 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
             </Button>
           )}
           {isMainPage && (
-            <Button variant="outline" className="mt-8 bg-background">
+            <Button variant="outline" className="mt-8">
               View Pools
             </Button>
           )}

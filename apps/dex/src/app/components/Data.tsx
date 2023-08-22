@@ -12,9 +12,9 @@ export function DataCard({
   value: string;
 }) {
   return (
-    <div className="flex min-w-[200px] flex-col rounded-2xl border-2 bg-[#FAFAF9] p-6">
-      <div className="flex items-center gap-3 text-sm">
-        <div className="text-muted-foreground">{icon}</div>
+    <div className="flex min-w-[200px] flex-col rounded-2xl border-2 bg-muted p-6">
+      <div className="flex items-center gap-2 text-sm">
+        <div className="h-6 w-6 text-muted-foreground">{icon}</div>
         <div className="text-muted-foreground">{title}</div>
       </div>
       <div className="mt-2 text-xl font-bold">{value}</div>
@@ -41,9 +41,13 @@ export default function Data() {
           value="1,690,420 BGT"
           icon={<Icons.medal />}
         />
-        <DataCard title="Bera Price" value="$69.426969" icon={<Icons.bera />} />
+        <DataCard
+          title="Bera Price"
+          value="$69.426969"
+          icon={<Icons.bera className="mt-[2px]" />}
+        />
       </div>
-      <Button variant="outline" className="mt-4 bg-background">
+      <Button variant="outline" className="mt-4">
         View Analytics
       </Button>
     </section>
