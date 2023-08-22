@@ -1,34 +1,110 @@
 "use client";
 
 import React from "react";
+import { formatUnits } from "viem";
 
 import { type HoneyEntry } from "~/app/page";
+import { honey } from "~/config/tokens";
 import { HoneyChart } from "./honey-chart";
 
 export default function Graph({
   hourlySupply,
   hourlyVolume,
-}: {
+  weeklyVolume,
+  // weeklySupply,
+  monthlyVolume,
+  // monthlySupply,
+  quarterlyVolume,
+}: // quarterlySupply,
+{
   hourlySupply: HoneyEntry[];
   hourlyVolume: HoneyEntry[];
+  weeklyVolume: HoneyEntry[];
+  weeklySupply: HoneyEntry[];
+  monthlyVolume: HoneyEntry[];
+  monthlySupply: HoneyEntry[];
+  quarterlyVolume: HoneyEntry[];
+  quarterlySupply: HoneyEntry[];
 }) {
-  const honey = {} as any;
   return (
     <HoneyChart
       hourlySupply={hourlySupply ?? []}
       hourlyVolume={hourlyVolume ?? []}
-      weeklyVolume={honey.weeklyVolume ?? []}
-      weeklyFees={honey.weeklyFees ?? []}
-      weeklyVolumeTotal={honey.weeklyVolumeTotal ?? 0}
-      monthlyVolume={honey.monthlyVolume ?? []}
-      monthlyFees={honey.monthlyFees ?? []}
-      monthlyVolumeTotal={honey.monthlyVolumeTotal ?? 0}
-      quarterlyVolume={honey.quarterlyVolume ?? []}
-      quarterlyFees={honey.quarterlyFees ?? []}
-      quarterlyVolumeTotal={honey.quarterlyVolumeTotal ?? 0}
-      weeklyFeesTotal={honey.weeklyFeesTotal ?? 0}
-      monthlyFeesTotal={honey.monthlyFeesTotal ?? 0}
-      quarterlyFeesTotal={honey.quarterlyFeesTotal ?? 0}
+      weeklyVolume={
+        weeklyVolume.map((honeyEntry) =>
+          Number(formatUnits(BigInt(honeyEntry.amount), honey.decimals)),
+        ) ?? []
+      }
+      weeklyFees={
+        weeklyVolume.map(
+          (honeyEntry) =>
+            Number(formatUnits(BigInt(honeyEntry.amount), honey.decimals)) *
+            0.01,
+        ) ?? []
+      }
+      monthlyVolume={
+        monthlyVolume.map((honeyEntry) =>
+          Number(formatUnits(BigInt(honeyEntry.amount), honey.decimals)),
+        ) ?? []
+      }
+      monthlyFees={
+        monthlyVolume.map(
+          (honeyEntry) =>
+            Number(formatUnits(BigInt(honeyEntry.amount), honey.decimals)) *
+            0.01,
+        ) ?? []
+      }
+      quarterlyVolume={
+        quarterlyVolume.map((honeyEntry) =>
+          Number(formatUnits(BigInt(honeyEntry.amount), honey.decimals)),
+        ) ?? []
+      }
+      quarterlyFees={
+        quarterlyVolume.map(
+          (honeyEntry) =>
+            Number(formatUnits(BigInt(honeyEntry.amount), honey.decimals)) *
+            0.01,
+        ) ?? []
+      }
+      weeklyVolumeTotal={
+        weeklyVolume.reduce(
+          (a, b) => a + Number(formatUnits(BigInt(b.amount), honey.decimals)),
+          0,
+        ) ?? 0
+      }
+      weeklyFeesTotal={
+        weeklyVolume.reduce(
+          (a, b) =>
+            a + Number(formatUnits(BigInt(b.amount), honey.decimals)) * 0.01,
+          0,
+        ) ?? 0
+      }
+      monthlyVolumeTotal={
+        monthlyVolume.reduce(
+          (a, b) => a + Number(formatUnits(BigInt(b.amount), honey.decimals)),
+          0,
+        ) ?? 0
+      }
+      monthlyFeesTotal={
+        monthlyVolume.reduce(
+          (a, b) =>
+            a + Number(formatUnits(BigInt(b.amount), honey.decimals)) * 0.01,
+          0,
+        ) ?? 0
+      }
+      quarterlyVolumeTotal={
+        quarterlyVolume.reduce(
+          (a, b) => a + Number(formatUnits(BigInt(b.amount), honey.decimals)),
+          0,
+        ) ?? 0
+      }
+      quarterlyFeesTotal={
+        quarterlyVolume.reduce(
+          (a, b) =>
+            a + Number(formatUnits(BigInt(b.amount), honey.decimals)) * 0.01,
+          0,
+        ) ?? 0
+      }
     />
   );
 }

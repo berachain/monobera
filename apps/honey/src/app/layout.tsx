@@ -21,7 +21,7 @@ const fontSans = IBM_Plex_Sans({
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={cn("font-sans antialiased", fontSans.variable)}>
         <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
           <Header />
