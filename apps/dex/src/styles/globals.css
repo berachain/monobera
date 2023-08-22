@@ -163,3 +163,8 @@ input[type="number"] {
   background-position-y: 200px;
   background-position-x: center;
 }
+
+@keyframes moveUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
