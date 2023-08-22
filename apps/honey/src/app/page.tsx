@@ -3,6 +3,7 @@ import { getUnixTime } from "date-fns";
 
 import Data from "~/components/data";
 import Graph from "~/components/graph";
+import Hero from "~/components/hero";
 import { HoneyMachine } from "~/components/honey-machine";
 import HoneyTransactionsTable from "~/components/honey-transactions-table";
 import { SwapCard } from "~/components/swap-card";
@@ -128,7 +129,10 @@ export default async function Home() {
           <HoneyMachine />
         </div>
         <div className="flex justify-center px-6 py-36 honey:hidden">
-          <SwapCard />
+          <div>
+            <Hero />
+            <SwapCard />
+          </div>
         </div>
       </div>
       <div className="honey:bg-gradient-to-b honey:from-[#468DCB] honey:to-background">
