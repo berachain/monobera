@@ -20,7 +20,7 @@ const selection = [
 export const Rewards = () => {
   const [sortBy, setSortBy] = useState("Most-BGT-earned");
   return (
-    <div className="container">
+    <div className="container max-w-[980px]">
       <Banner /> <br />
       <div className="flex flex-col gap-3">
         <div className="flex w-full flex-col-reverse items-center justify-between gap-4 md:flex-row">

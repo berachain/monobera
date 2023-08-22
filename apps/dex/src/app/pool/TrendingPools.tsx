@@ -44,9 +44,9 @@ export const TrendingPools = () => {
   console.log(data);
 
   return (
-    <div className="w-full flex-col items-center justify-center">
+    <div className="mt-[72px] w-full flex-col items-center justify-center">
       <div className="w-full text-center ">
-        <p className="text-5xl font-extrabold">🚀 New Pools</p>
+        <p className="text-5xl font-extrabold">🚀 Trending Pools</p>
         <p className="text-lg font-semibold text-muted-foreground">
           Leverage our boosted yields to increase your rewards
         </p>

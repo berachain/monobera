@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import useSWRInfinite from "swr/infinite";
 
@@ -45,7 +46,12 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
   const data = allData ? [].concat(...allData) : [];
 
   return (
-    <div className="w-full flex-col items-center justify-center">
+    <div
+      className={cn(
+        "w-full flex-col items-center justify-center",
+        isMainPage ? "" : "mt-[72px]",
+      )}
+    >
       <div className="w-full text-center ">
         <p className="text-3xl font-extrabold">
           🔥 Hottest Yields <span className="hidden md:inline">in Defi 💰</span>
@@ -55,7 +61,7 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
           <span className="hidden md:inline">to increase your rewards</span>
         </p>
         <div className="mt-6 flex w-full flex-col items-center justify-center gap-4 md:mt-12">
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 ">
             {data.map((pool: any) => {
               return <PoolCard pool={pool} key={pool?.address + "hot"} />;
             })}

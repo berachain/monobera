@@ -21,19 +21,20 @@ export default function PoolPageHeader() {
         height={200}
       /> */}
       <h1 className="text-center text-5xl font-bold">
-        Create a <span className="text-secondary">Pool</span>
-        <br /> <span className="text-secondary">Or</span> Add Liquidity
+        Create a <span className="text-secondary-foreground">Pool</span>
+        <br /> <span className="text-secondary-foreground">Or</span> Add
+        Liquidity
       </h1>
       <div className="flex flex-row gap-2 self-center">
         <Button
           onClick={() => router.push("/pool/create")}
-          className="text-md mb-10 w-[150px] self-center"
+          className="text-md mb-10 self-center"
         >
           Create a Pool
         </Button>
         <Button
           variant={"outline"}
-          className="text-md mb-10 w-[150px] self-center"
+          className="text-md mb-10 self-center"
           onClick={() => {
             const poolSearchElement = document.getElementById("poolSearch");
             if (poolSearchElement) {
@@ -44,7 +45,7 @@ export default function PoolPageHeader() {
           View Pools
         </Button>
       </div>
-      <div className="flex w-full flex-col items-center justify-center gap-2 self-center md:flex-row">
+      <div className="flex w-full max-w-[980px] flex-col items-center justify-center gap-6 self-center md:flex-row">
         <DataCard
           icon={<Icons.lock />}
           title={"Total Value Locked"}
@@ -63,7 +64,7 @@ export default function PoolPageHeader() {
       </div>
       <HotPools isMainPage={false} />
       <TrendingPools />
-      <div id="poolSearch" className="w-full max-w-[980px]">
+      <div id="poolSearch" className="mt-[72px] w-full max-w-[980px]">
         <PoolSearch />
       </div>
     </div>

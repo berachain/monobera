@@ -110,172 +110,175 @@ export function SwapCard({
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
-      {showBear && (
-        <Image
-          src="/graphics/bidness-bera.png"
-          className="mb-[-40px] self-start"
-          alt="bidness"
-          width={150}
-          height={200}
-        />
-      )}
-      <div className="flex w-full flex-col gap-4 md:flex-row">
-        <Card className="w-full rounded-2xl px-6 py-8">
-          <CardTitle className="center flex items-center justify-between px-2">
-            Swap <SettingsPopover />
-          </CardTitle>
+      <div className="mx-auto">
+        {showBear && (
+          <Image
+            src="/graphics/bidness-bera.png"
+            className="mb-[-40px] self-start"
+            alt="bidness"
+            width={150}
+            height={200}
+          />
+        )}
+        <div className="flex w-full flex-col gap-4 md:flex-row">
+          <Card className="w-full rounded-2xl px-6 py-8 md:w-[450px]">
+            <CardTitle className="center flex items-center justify-between px-2">
+              Swap <SettingsPopover />
+            </CardTitle>
 
-          <div className="mt-3">
-            <div className="border-1 flex flex-col gap-2 border-border">
-              <ul
-                role="list"
-                className="divide-y divide-border rounded-2xl border"
-              >
-                <TokenInput
-                  selected={selectedFrom}
-                  selectedTokens={[selectedFrom, selectedTo]}
-                  onTokenSelection={setSelectedFrom}
-                  amount={fromAmount ?? 0}
-                  onExceeding={(isExceeding: boolean) =>
-                    setExceedingBalance(isExceeding)
-                  }
-                  setAmount={(amount) => {
-                    setSwapKind(SwapKind.GIVEN_IN);
-                    setSwapAmount(amount);
-                    setFromAmount(amount);
-                  }}
-                />
-                <div className="relative">
-                  <div
-                    className="absolute inset-0 flex w-full items-center justify-center"
-                    aria-hidden="true"
-                  >
-                    <Button
-                      type="button"
-                      variant={"outline"}
-                      onClick={() => {
-                        onSwitch();
-                      }}
-                      className="z-10 inline-flex h-6 w-6 items-center rounded-full bg-background p-0.5 text-sm font-semibold text-muted-foreground md:h-8 md:w-8 md:p-1"
-                    >
-                      <Icons.swap className="h-3 w-3 md:h-6 md:w-6" />
-                    </Button>
-                  </div>
-                </div>
-                <TokenInput
-                  selected={selectedTo}
-                  selectedTokens={[selectedFrom, selectedTo]}
-                  onTokenSelection={setSelectedTo}
-                  amount={toAmount}
-                  setAmount={(amount) => {
-                    setSwapKind(SwapKind.GIVEN_OUT);
-                    setSwapAmount(amount);
-                    setToAmount(amount);
-                  }}
-                  showExceeding={false}
-                />
-              </ul>
-              {swapInfo && (
-                <div className="mt-4 flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
-                  <div className="flex w-full flex-row justify-between">
-                    <p className="text-xs font-medium text-muted-foreground sm:text-sm">
-                      Exchange rate
-                    </p>
-                    <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                      {exchangeRate ?? "-"}
-                    </p>
-                  </div>
-                  <div className="flex w-full flex-row justify-between">
-                    <p className="text-xs font-medium text-muted-foreground sm:text-sm">
-                      Gas fee
-                    </p>
-                    <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                      {gasPrice} BERA
-                    </p>
-                  </div>
-                </div>
-              )}
-              {exceedingBalance && (
-                <Alert
-                  variant="destructive"
-                  className="items-center justify-center"
+            <div className="mt-3">
+              <div className="border-1 flex flex-col gap-2 border-border">
+                <ul
+                  role="list"
+                  className="divide-y divide-border rounded-2xl border"
                 >
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>
-                    This amount exceeds your total balance
-                  </AlertDescription>
-                </Alert>
-              )}
-              {error instanceof RouteNotFound && (
-                <Alert variant="destructive">
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription className="text-xs">
-                    {error.message}
-                  </AlertDescription>
-                </Alert>
-              )}
-              {showPriceImpact && (
-                <Alert variant="destructive">
-                  <AlertTitle>
-                    {" "}
-                    <Icons.tooltip className="mt-[-4px] inline h-4 w-4" /> Price
-                    Impact Error
-                  </AlertTitle>
-                  <AlertDescription className="text-xs">
-                    This swap will result in a high price impact (-
-                    {priceImpact?.toFixed(2)}%)
-                  </AlertDescription>
-                </Alert>
-              )}
-              <div className="w-full">
-                {(Number(allowance?.formattedAllowance) ?? 0) < fromAmount &&
-                !exceedingBalance ? (
-                  <DynamicApproveButton
-                    token={selectedFrom}
-                    spender={erc20ModuleAddress}
+                  <TokenInput
+                    selected={selectedFrom}
+                    selectedTokens={[selectedFrom, selectedTo]}
+                    onTokenSelection={setSelectedFrom}
+                    amount={fromAmount ?? 0}
+                    onExceeding={(isExceeding: boolean) =>
+                      setExceedingBalance(isExceeding)
+                    }
+                    setAmount={(amount) => {
+                      setSwapKind(SwapKind.GIVEN_IN);
+                      setSwapAmount(amount);
+                      setFromAmount(amount);
+                    }}
+                    showBalance
                   />
-                ) : isConnected ? (
-                  swapInfo !== undefined ? (
-                    <DynamicPreview
-                      swapInfo={swapInfo}
-                      disabled={
-                        !swapInfo?.formattedReturnAmount || exceedingBalance
-                      }
-                      priceImpact={priceImpact}
-                      exchangeRate={exchangeRate}
-                      tokenIn={selectedFrom}
-                      tokenOut={selectedTo}
-                      tokenInPrice={tokenInPrice}
-                      tokenOutPrice={tokenOutPrice}
-                      open={openPreview}
-                      setOpen={setOpenPreview}
-                      write={() => {
-                        write({
-                          address: erc20DexAddress,
-                          abi: DEX_PRECOMPILE_ABI,
-                          functionName: "batchSwap",
-                          params: payload,
-                        });
-                      }}
-                      isLoading={isLoading}
-                    />
-                  ) : (
-                    <Button
-                      disabled={true}
-                      variant={"outline"}
-                      className="mt-4 w-full"
+                  <div className="relative">
+                    <div
+                      className="absolute inset-0 flex w-full items-center justify-center"
+                      aria-hidden="true"
                     >
-                      Select Token & Enter Amount
-                    </Button>
-                  )
-                ) : (
-                  <Connect />
+                      <Button
+                        type="button"
+                        variant={"outline"}
+                        onClick={() => {
+                          onSwitch();
+                        }}
+                        className="z-10 inline-flex h-6 w-6 items-center rounded-full bg-background p-0.5 text-sm font-semibold text-muted-foreground md:h-8 md:w-8 md:p-1"
+                      >
+                        <Icons.swap className="h-3 w-3 md:h-6 md:w-6" />
+                      </Button>
+                    </div>
+                  </div>
+                  <TokenInput
+                    selected={selectedTo}
+                    selectedTokens={[selectedFrom, selectedTo]}
+                    onTokenSelection={setSelectedTo}
+                    amount={toAmount}
+                    setAmount={(amount) => {
+                      setSwapKind(SwapKind.GIVEN_OUT);
+                      setSwapAmount(amount);
+                      setToAmount(amount);
+                    }}
+                    showExceeding={false}
+                  />
+                </ul>
+                {swapInfo && (
+                  <div className="mt-4 flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
+                    <div className="flex w-full flex-row justify-between">
+                      <p className="text-xs font-medium text-muted-foreground sm:text-sm">
+                        Exchange rate
+                      </p>
+                      <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
+                        {exchangeRate ?? "-"}
+                      </p>
+                    </div>
+                    <div className="flex w-full flex-row justify-between">
+                      <p className="text-xs font-medium text-muted-foreground sm:text-sm">
+                        Gas fee
+                      </p>
+                      <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
+                        {gasPrice} BERA
+                      </p>
+                    </div>
+                  </div>
                 )}
+                {exceedingBalance && (
+                  <Alert
+                    variant="destructive"
+                    className="items-center justify-center"
+                  >
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                      This amount exceeds your total balance
+                    </AlertDescription>
+                  </Alert>
+                )}
+                {error instanceof RouteNotFound && (
+                  <Alert variant="destructive">
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription className="text-xs">
+                      {error.message}
+                    </AlertDescription>
+                  </Alert>
+                )}
+                {showPriceImpact && (
+                  <Alert variant="destructive">
+                    <AlertTitle>
+                      {" "}
+                      <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
+                      Price Impact Error
+                    </AlertTitle>
+                    <AlertDescription className="text-xs">
+                      This swap will result in a high price impact (-
+                      {priceImpact?.toFixed(2)}%)
+                    </AlertDescription>
+                  </Alert>
+                )}
+                <div className="w-full">
+                  {(Number(allowance?.formattedAllowance) ?? 0) < fromAmount &&
+                  !exceedingBalance ? (
+                    <DynamicApproveButton
+                      token={selectedFrom}
+                      spender={erc20ModuleAddress}
+                    />
+                  ) : isConnected ? (
+                    swapInfo !== undefined ? (
+                      <DynamicPreview
+                        swapInfo={swapInfo}
+                        disabled={
+                          !swapInfo?.formattedReturnAmount || exceedingBalance
+                        }
+                        priceImpact={priceImpact}
+                        exchangeRate={exchangeRate}
+                        tokenIn={selectedFrom}
+                        tokenOut={selectedTo}
+                        tokenInPrice={tokenInPrice}
+                        tokenOutPrice={tokenOutPrice}
+                        open={openPreview}
+                        setOpen={setOpenPreview}
+                        write={() => {
+                          write({
+                            address: erc20DexAddress,
+                            abi: DEX_PRECOMPILE_ABI,
+                            functionName: "batchSwap",
+                            params: payload,
+                          });
+                        }}
+                        isLoading={isLoading}
+                      />
+                    ) : (
+                      <Button
+                        disabled={true}
+                        variant={"outline"}
+                        className="mt-4 w-full"
+                      >
+                        Select Token & Enter Amount
+                      </Button>
+                    )
+                  ) : (
+                    <Connect />
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </Card>
-        {isMainPage && <DynamicBerachainInfo />}
+          </Card>
+          {isMainPage && <DynamicBerachainInfo />}
+        </div>
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
   return (
     <div
       key={pool?.pool}
-      className="col-span-1 w-[275px] rounded-xl border border-border bg-background px-6 py-8"
+      className="col-span-1 w-full rounded-xl border border-border bg-background px-6 py-8"
     >
       <div className="flex flex-row flex-wrap">
         {pool?.tags?.map((tag) => {

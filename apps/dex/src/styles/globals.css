@@ -10,7 +10,7 @@
     --background-secondary: 27deg 33% 62%; /* deprecated */
 
     --foreground: 12deg 6% 15%;
-    --foreground-secondary: 27deg 33% 62%; /* deprecated */
+    --foreground-secondary: 33deg 5% 32%; /* deprecated */
     --foreground-tetriary: 0deg 0% 60%; /* deprecated */
 
     --popover: 60deg 9% 98%;
@@ -26,8 +26,8 @@
     --primary-foreground: 60deg 9% 98%;
 
     --secondary: 20deg 6% 90%;
-    --secondary-foreground: 33, 5%, 32%;
-
+    --secondary-foreground: 33deg 5% 32%;
+    /* 33deg 3% 38% */
     --accent: 43deg 96% 56%;
     --accent-foreground: 60deg 9% 98%;
 
@@ -78,7 +78,7 @@
     --primary-foreground: 27deg 10% 11%;
 
     --secondary: 18deg 5% 21%;
-    --secondary-foreground: 0deg, 3%, 81%;
+    --secondary-foreground: 0deg 3% 81%;
 
     --accent: 43deg 96% 56%;
     --accent-foreground: 18deg 25% 97%;
