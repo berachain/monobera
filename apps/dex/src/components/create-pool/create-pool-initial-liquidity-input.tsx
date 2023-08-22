@@ -31,18 +31,18 @@ export default function CreatePoolInitialLiquidityInput({
   const { isConnected } = useBeraJs();
 
   return (
-    <li className={"flex w-full flex-col  items-center p-2"}>
+    <li className={"flex w-full flex-col  items-center p-3"}>
       <div className="flex w-full flex-row justify-between">
         <Button
-          className="flex h-fit w-fit items-center gap-1 self-start p-2"
-          variant="outline"
+          className="flex h-fit w-fit items-center gap-1 self-start border-border bg-background text-base text-foreground shadow"
+          variant="secondary"
         >
           <>
             <TokenIcon token={tokenWeight.token} />
             {tokenWeight.token?.symbol}
-            <p className="text-sm text-muted-foreground">
+            <div className=" h-fit text-base text-foreground">
               {tokenWeight.weight}%
-            </p>
+            </div>
           </>
         </Button>
         <Input
@@ -50,7 +50,7 @@ export default function CreatePoolInitialLiquidityInput({
           step="any"
           min="0"
           placeholder="0.0"
-          className="w-full grow border-0 bg-transparent p-0 text-right text-lg outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={
             tokenWeight.initialLiquidity > 0 ? tokenWeight.initialLiquidity : ""
           }

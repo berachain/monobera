@@ -26,5 +26,6 @@ export { HoneyBanner } from "./honey-banner";
 export { RewardBanner } from "./reward-banner";
 export { RT, type Columns } from "./react-table";
 export { IconList } from "./icon-list";
+export { TokenChip } from "./token-chip";
 
 export * from "./hooks";

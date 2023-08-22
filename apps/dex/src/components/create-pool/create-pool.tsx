@@ -2,9 +2,9 @@ import React from "react";
 import { useBeraJs, type Token } from "@bera/berajs";
 import { ConnectButton } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
+import { Alert, AlertDescription } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
 import CreatePoolInput from "~/components/create-pool/create-pool-input";
@@ -41,13 +41,12 @@ export function CreatePool({
   }) as Token[];
   const { isConnected, isWrongNetwork } = useBeraJs();
   return (
-    <Card className="w-[350px] sm:w-[480px]">
-      <CardHeader>
-        <CardTitle className="center text-md flex self-center p-0 font-semibold sm:text-lg">
-          Choose tokens and allocate weights
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+    <Card className="sm:w-[480px w-[350px] px-6 py-8 shadow-lg">
+      <CardTitle className="center text-md mb-3 flex w-full self-center p-0 text-center font-semibold sm:text-lg">
+        Choose tokens and allocate weights
+      </CardTitle>
+
+      <div className="flex flex-col gap-4">
         <ul
           role="list"
           className="divide divide-y divide-border rounded-lg border"
@@ -73,16 +72,23 @@ export function CreatePool({
           onClick={onAddToken}
         />
         {error && (
-          <Alert className="my-4">
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error && error.message}</AlertDescription>
+          <Alert variant="destructive">
+            <AlertDescription>
+              {" "}
+              <Icons.info className="mr-1 mt-[-4px] inline h-4 w-4" />
+              {error && error.message}
+            </AlertDescription>
           </Alert>
         )}
-        <div className="mt-4 flex justify-between text-sm">
-          <p>Total allocated</p>
-          <p className={cn("h-2", exceeding && "text-destructive")}>
-            {totalWeight.toFixed(2)}%
-          </p>
+        <div className="flex-col items-center justify-center rounded-2xl bg-muted p-3">
+          <div className="flex items-center justify-between ">
+            <div className="text-sm font-normal leading-normal text-stone-400">
+              Total allocated
+            </div>
+            <div className="text-right text-sm font-medium leading-normal">
+              {totalWeight.toFixed(2)}%
+            </div>
+          </div>
         </div>
         {isConnected && !isWrongNetwork ? (
           <Button
@@ -95,7 +101,7 @@ export function CreatePool({
         ) : (
           <ConnectButton className="mt-4 w-full" />
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 }

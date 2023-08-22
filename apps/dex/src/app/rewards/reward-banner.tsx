@@ -16,7 +16,7 @@ export const Banner = () => {
           src="/happy-bea.png"
           width={100}
           height={100}
-          className="absolute right-0 hidden w-[485px] lg:bottom-0 lg:block"
+          className="absolute right-0 hidden w-[420px] lg:bottom-0 lg:block"
           alt="happy bear"
         />
         <div className="w-full text-center text-xl font-bold md:text-3xl md:leading-10 lg:text-left">

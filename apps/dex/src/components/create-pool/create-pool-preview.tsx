@@ -8,6 +8,7 @@ import { PreviewToken, TokenList, useTxn } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
@@ -22,6 +23,7 @@ type Props = {
   poolName: string;
   fee: number;
   setPoolName: (poolName: string) => void;
+  onBack: () => void;
 };
 
 export function CreatePoolPreview({
@@ -30,6 +32,7 @@ export function CreatePoolPreview({
   poolName,
   fee,
   setPoolName,
+  onBack,
 }: Props) {
   const { needsApproval } = useCreatePool(tokenWeights);
   const { networkConfig } = useBeraConfig();
@@ -66,10 +69,14 @@ export function CreatePoolPreview({
     account,
   ];
   return (
-    <Card className="w-[350px] sm:w-[480px]">
+    <Card className="w-[350px] shadow-lg sm:w-[480px]">
       {ModalPortal}
       <CardHeader>
-        <CardTitle className="center flex justify-between text-lg font-semibold">
+        <CardTitle className="center flex items-center text-lg font-semibold">
+          <Icons.chevronLeft
+            className="block h-6 w-6 hover:cursor-pointer"
+            onClick={onBack}
+          />{" "}
           Create Pool
         </CardTitle>
       </CardHeader>
@@ -82,7 +89,7 @@ export function CreatePoolPreview({
           height={150}
         />
         <div className="flex w-full flex-col gap-1">
-          <p className="text-sm font-medium ">Give Your Pool a Name</p>
+          <p className="pl-1 text-sm font-medium">Give Your Pool a Name</p>
           <Input
             className="w-full border-border px-2 text-left font-semibold focus-visible:ring-0"
             value={poolName}

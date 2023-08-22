@@ -19,7 +19,13 @@ const getBadgeContent = (tag: string) => {
       return "hot";
   }
 };
-export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
+export const PoolCard = ({
+  pool,
+  addLp = false,
+}: {
+  pool: Pool | undefined;
+  addLp?: boolean;
+}) => {
   const fees =
     (Number(pool?.formattedSwapFee) / 100) * Number(pool?.dailyVolume);
   const swapApr = (fees / Number(pool?.totalValue)) * 365 * 100;
@@ -98,13 +104,22 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
           </div>
         </div>
       </div>
-      <Button
-        className="w-full gap-1"
-        onClick={() => router.push(`/pool/${pool?.pool}`)}
-      >
-        {/* should go to this add Liquidity place for this pool instead of pool details */}
-        <Icons.add className="h-6 w-6" /> Add Liquidity
-      </Button>
+      {addLp ? (
+        <Button
+          className="w-full gap-1"
+          onClick={() => router.push(`/pool/${pool?.pool}/add-liquidity`)}
+        >
+          <Icons.add className="h-6 w-6" /> Add Liquidity
+        </Button>
+      ) : (
+        <Button
+          className="w-full gap-1"
+          onClick={() => router.push(`/pool/${pool?.pool}`)}
+        >
+          {/* should go to this add Liquidity place for this pool instead of pool details */}
+          Details <Icons.arrowRight className="h-4 w-4" />
+        </Button>
+      )}
     </div>
   );
 };

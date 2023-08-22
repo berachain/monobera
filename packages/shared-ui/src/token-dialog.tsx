@@ -24,6 +24,7 @@ import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 
 import { SearchInput } from "./search-input";
+import { TokenChip } from "./token-chip";
 import { TokenIcon } from "./token-icon";
 
 type Props = {
@@ -147,7 +148,7 @@ export function TokenDialog({
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         {!managingTokens && (
-          <DialogContent className="flex max-w-[425px] flex-col gap-4 rounded-2xl px-4">
+          <DialogContent className="flex max-w-[425px] flex-col gap-4 rounded-2xl px-6">
             <DialogHeader>
               <DialogTitle className="text-lg">Select a token</DialogTitle>
             </DialogHeader>
@@ -161,28 +162,29 @@ export function TokenDialog({
                 placeholder="Search by name, symbol or address"
               />
             )}
-            {!customTokens && (
-              <div className="flex flex-wrap gap-2">
-                {featuredTokenList?.map((token) => {
-                  return (
-                    <Badge
-                      key={token.address}
-                      variant={"secondary"}
-                      className={cn(
-                        "w-fit hover:cursor-pointer",
-                        isTokenSelected(token) && "opacity-50",
-                      )}
-                      onClick={() =>
-                        !isTokenSelected(token) && onTokenSelect(token)
-                      }
-                    >
-                      <TokenIcon token={token} className="h-6 w-6" />
-                      {token.symbol}
-                    </Badge>
-                  );
-                })}
+            <div>
+              <div className=" mb-2 text-sm font-medium leading-normal">
+                Favourite Tokens
               </div>
-            )}
+              {!customTokens && (
+                <div className="flex flex-wrap gap-2">
+                  {featuredTokenList?.map((token) => {
+                    return (
+                      <TokenChip
+                        key={token.address}
+                        selected={isTokenSelected(token)}
+                        onClick={() =>
+                          !isTokenSelected(token) && onTokenSelect(token)
+                        }
+                      >
+                        <TokenIcon token={token} className="h-4 w-4" />
+                        {token.symbol}
+                      </TokenChip>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
             <div className="overflow-y-scoll max-h-[600px] ">
               {!error ? (

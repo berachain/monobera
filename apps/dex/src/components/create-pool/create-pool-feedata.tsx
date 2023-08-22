@@ -5,6 +5,7 @@ import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
@@ -13,6 +14,7 @@ type Props = {
   error: Error | undefined;
   setSwapFee: (feeData: number) => void;
   onContinue: () => void;
+  onBack: () => void;
 };
 
 enum Types {
@@ -27,20 +29,27 @@ enum VALUES {
   ONE_PERCENT = "1",
   CUSTOM = "custom",
 }
-export function CreatePoolFeeData({ error, setSwapFee, onContinue }: Props) {
+export function CreatePoolFeeData({
+  error,
+  setSwapFee,
+  onContinue,
+  onBack,
+}: Props) {
   const [type, setType] = useState(Types.VALUE);
   const [customValue, setCustomValue] = useState("0.3");
   const handleFeeChange = (value: string) => {
     setSwapFee(Number(value));
   };
   return (
-    <Card className="w-[350px] sm:w-[480px]">
-      <CardHeader>
-        <CardTitle className="center text-md flex p-0 font-semibold sm:text-lg">
-          Set pool fees
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+    <Card className="w-[350px]  px-6 py-8 shadow-lg  sm:w-[480px]">
+      <CardTitle className="center text-md mb-3 flex items-center p-0 font-semibold sm:text-lg">
+        <Icons.chevronLeft
+          className="block h-6 w-6 hover:cursor-pointer"
+          onClick={onBack}
+        />
+        Set pool fees
+      </CardTitle>
+      <div className="flex flex-col gap-4">
         <Tabs
           defaultValue={VALUES.THIRTY_BPS}
           onValueChange={(value: string) => {
@@ -114,7 +123,7 @@ export function CreatePoolFeeData({ error, setSwapFee, onContinue }: Props) {
         >
           Next
         </Button>
-      </CardContent>
+      </div>
     </Card>
   );
 }

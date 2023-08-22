@@ -135,6 +135,7 @@ export default function AddLiquidityContent({
                       onExceeding={(exceeding: boolean) =>
                         updateTokenExceeding(i, exceeding)
                       }
+                      showBalance
                     />
                   );
                 })}
