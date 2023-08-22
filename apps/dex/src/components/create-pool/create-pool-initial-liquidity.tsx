@@ -1,7 +1,7 @@
 import React from "react";
-import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
+import { Alert, AlertDescription } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
 import CreatePoolInitialLiquidityInput from "~/components/create-pool/create-pool-initial-liquidity-input";

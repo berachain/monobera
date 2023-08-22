@@ -1,7 +1,6 @@
 import React from "react";
 import { useBeraJs, type Token } from "@bera/berajs";
 import { ConnectButton } from "@bera/shared-ui";
-import { cn } from "@bera/ui";
 import { Alert, AlertDescription } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardTitle } from "@bera/ui/card";
@@ -35,7 +34,7 @@ export function CreatePool({
   onLock,
   onUnlock,
 }: Props) {
-  const exceeding = totalWeight > 100;
+  // const exceeding = totalWeight > 100;
   const selectedTokens = tokenWeights.map((tokenWeight: ITokenWeight) => {
     return tokenWeight.token;
   }) as Token[];

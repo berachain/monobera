@@ -3,7 +3,6 @@ import { type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { useMediaQuery } from "usehooks-ts";
 
 import { TokenDialog, TokenIcon } from "./";
 
