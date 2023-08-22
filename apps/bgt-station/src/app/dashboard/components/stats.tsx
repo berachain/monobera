@@ -44,7 +44,7 @@ export function Stats() {
           label="of BGT staked"
         />
         <SemiCircleProgress
-          percentage={beraToBgtRatio}
+          percentage={Number.isNaN(beraToBgtRatio) ? 0 : beraToBgtRatio}
           size={{
             width: 200,
             height: 200,

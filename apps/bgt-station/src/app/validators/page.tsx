@@ -28,5 +28,5 @@ export default async function Page() {
     }),
   );
 
-  return <Validators activeGauges={data.cuttingBoard.length} />;
+  return <Validators activeGauges={data.cuttingBoard?.length ?? 0} />;
 }

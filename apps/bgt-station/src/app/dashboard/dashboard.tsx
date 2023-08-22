@@ -23,7 +23,6 @@ interface Props {
 export default function DashBoard({ globalCuttingBoard }: Props) {
   const { useActiveValidators } = usePollActiveValidators();
   const validators: Validator[] = useActiveValidators();
-  console.log(globalCuttingBoard);
   return (
     <div className="container flex w-full max-w-[1078px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">

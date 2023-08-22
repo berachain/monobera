@@ -25,7 +25,7 @@ export default function RT({
   className,
 }: RTProps) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+    useTable({ columns: columns ?? [], data: data ?? [] });
 
   return (
     <Card className="overflow-x-scroll">

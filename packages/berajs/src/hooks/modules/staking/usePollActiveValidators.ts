@@ -84,6 +84,8 @@ export const usePollActiveValidators = () => {
         abi: STAKING_PRECOMPILE_ABI,
         functionName: "getValidators",
         args: [],
+      }).catch((e) => {
+        console.log(e);
       });
       return result;
     },

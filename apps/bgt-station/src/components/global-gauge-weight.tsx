@@ -43,7 +43,7 @@ const options = {
           dataset: { label: string };
           parsed: { y: number | bigint | null };
         }) {
-          return context.dataset.label || "";
+          return context?.dataset?.label || "";
         },
       },
     },
@@ -65,7 +65,7 @@ export default function GlobalGaugeWeight({ globalCuttingBoard }: Props) {
   };
 
   useEffect(() => {
-    const temp = globalCuttingBoard.map((data: CuttingBoard) => {
+    const temp = globalCuttingBoard?.map((data: CuttingBoard) => {
       return {
         label: data.address,
         amount: Number(data.percentage),
@@ -75,7 +75,7 @@ export default function GlobalGaugeWeight({ globalCuttingBoard }: Props) {
   }, []);
 
   const dataT = React.useMemo(() => {
-    return cuttingBoardData.map((data, index: number) => ({
+    return cuttingBoardData?.map((data, index: number) => ({
       poolOrAddress: (
         <div className="flex h-full w-[150px] items-center gap-1">
           <Avatar className="h-6 w-6">
@@ -103,21 +103,21 @@ export default function GlobalGaugeWeight({ globalCuttingBoard }: Props) {
   }, [cuttingBoardData]);
 
   const pieData = React.useMemo(() => {
-    const filteredData = cuttingBoardData.filter((data) => !filter[data.label]);
+    const filteredData = cuttingBoardData?.filter((data) => !filter[data.label]);
 
-    return filteredData.map((data) => ({
+    return filteredData?.map((data) => ({
       label: truncateHash(data.label),
       amount: data.amount,
     }));
   }, [cuttingBoardData, filter]);
 
   const dataP = {
-    labels: pieData.map((d) => d.label),
+    labels: pieData?.map((d) => d.label) ?? [],
     datasets: [
       {
-        data: pieData.map((d) => d.amount),
-        backgroundColor: getColors(pieData.length),
-        borderColor: getColors(pieData.length),
+        data: pieData?.map((d) => d.amount),
+        backgroundColor: getColors(pieData?.length ?? 0),
+        borderColor: getColors(pieData?.length ?? 0),
         borderWidth: 1,
       },
     ],
@@ -126,12 +126,12 @@ export default function GlobalGaugeWeight({ globalCuttingBoard }: Props) {
   return (
     <div className="mt-8 flex w-full flex-col items-center gap-16 md:flex-row ">
       <div className="flex w-[350px] items-center justify-center">
-        <BeraChart data={dataP} options={options as any} type="pie" />
+        <BeraChart data={dataP ?? []} options={options as any} type="pie" />
       </div>
       <div className="w-full">
         <RT
           columns={global_gauge_weight_columns}
-          data={dataT}
+          data={dataT ?? []}
           className="min-w-[490px]"
         />
       </div>
