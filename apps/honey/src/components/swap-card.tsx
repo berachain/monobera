@@ -30,9 +30,11 @@ export function SwapCard() {
     fee,
     fee2,
     onSwitch,
+    ModalPortal,
   } = usePsm();
   return (
     <Card className="w-[500px] bg-background/5 backdrop-blur-sm">
+      {ModalPortal}
       <CardHeader>
         <CardTitle className="center flex justify-between">
           <span>{isMint ? "Mint" : "Redeem"}</span>

@@ -51,7 +51,7 @@ export const usePsm = () => {
 
   const [fee, fee2] = useFees();
 
-  const { write, isLoading } = useTxn({
+  const { write, isLoading, ModalPortal } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
   });
 
@@ -70,8 +70,6 @@ export const usePsm = () => {
   };
 
   useEffect(() => {
-    console.log("payload", payload);
-    console.log("allowance", allowance);
     if (isMint && account) {
       const payload = [
         account,
@@ -118,5 +116,6 @@ export const usePsm = () => {
     fee,
     fee2,
     onSwitch,
+    ModalPortal,
   };
 };

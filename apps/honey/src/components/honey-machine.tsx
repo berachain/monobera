@@ -110,6 +110,7 @@ export function HoneyMachine() {
     toBalance,
     fee,
     fee2,
+    ModalPortal,
   } = usePsm();
 
   const { write } = useTxn({
@@ -233,7 +234,6 @@ export function HoneyMachine() {
 
   // Perform the contract calls based on the current state
   useEffect(() => {
-    console.log("STATE", state.currentState);
     switch (state.currentState) {
       case "approval":
         performApproval();
@@ -252,6 +252,7 @@ export function HoneyMachine() {
 
   return (
     <div className="relative bg-[#468DCB] pb-12">
+      {ModalPortal}
       <div
         className={cn(
           "absolute bottom-0 z-30 m-6 w-[30%] max-w-[300px] rounded-2xl border-4 border-black bg-[#b4b4b4] p-3",
