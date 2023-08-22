@@ -6,35 +6,45 @@ export default function Help() {
     <section className="my-24">
       <div className="mb-12 p-6 text-center">
         <h2 className="mb-4 text-3xl font-bold">
-          🐻 Help us <span className="text-amber-400">Build a Better Bera</span>{" "}
-          Dex For You
+          🐻 Help us <br className="block md:hidden" />
+          <span className="whitespace-nowrap text-accent">
+            Build a Better Bera
+          </span>{" "}
+          <span className="hidden md:block">Dex For You</span>
         </h2>
-        <h3 className="text-xl font-semibold text-muted-foreground">
+        <h3 className="text-base font-semibold text-muted-foreground md:text-xl">
           Give us feedback now! And get whitelisted as a power user
         </h3>
       </div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <div className="mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-[#FAFAF9] p-6 text-center md:max-w-[350px] lg:max-w-full lg:items-start lg:text-left">
-          <p className="mb-2 text-lg font-semibold text-secondary">
-            📋 Feedback Form
+        <div className="mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-accent-foreground px-12 py-8 text-center md:max-w-[350px] lg:max-w-full lg:items-start lg:text-left">
+          <p className="mb-2 flex flex-col items-center text-lg font-semibold text-secondary-foreground md:flex-row md:gap-3">
+            <span className="text-3xl">📋</span> Feedback Form
           </p>
           <p className="mb-8 text-2xl font-semibold">
-            Drop us some feedback now! You&apos;ll automatically get whitelisted
-            as a candidate for usability testing.
+            Drop us some feedback now!
+            <span className="hidden md:block">
+              {" "}
+              You&apos;ll automatically get whitelisted as a candidate for
+              usability testing.
+            </span>
           </p>
-          <Button className="w-fit" variant="outline">
+          <Button className="w-fit" variant="secondary">
             Provide Feedback
           </Button>
         </div>
-        <div className="mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-[#FAFAF9] p-6 text-center md:max-w-[350px]  lg:max-w-full  lg:items-start lg:text-left">
-          <p className="mb-2 text-lg font-semibold text-secondary">
-            📜 BeraDex Docs
+        <div className="mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-accent-foreground px-12 py-8  text-center md:max-w-[350px]  lg:max-w-full  lg:items-start lg:text-left">
+          <p className="mb-2 flex items-center gap-3 text-lg font-semibold text-secondary-foreground">
+            <span className="text-3xl">📜</span> BeraDex Docs
           </p>
           <p className="mb-8 text-2xl font-semibold">
-            Are you a fellow builder in the making? Check out our docs and start
-            building on BeraChain today.
+            <span className="hidden md:block">
+              Are you a fellow builder in the making?{" "}
+            </span>{" "}
+            Check out our docs and start building{" "}
+            <span className="hidden md:block">on BeraChain today.</span>
           </p>
-          <Button className="w-fit" variant="outline">
+          <Button className="w-fit" variant="secondary">
             Checkout Docs
           </Button>
         </div>

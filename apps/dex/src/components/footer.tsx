@@ -3,14 +3,14 @@ import { Icons } from "@bera/ui/icons";
 
 const navigation = {
   solutions: [
-    { name: "Marketing", href: "#" },
-    { name: "Analytics", href: "#" },
-    { name: "Commerce", href: "#" },
-    { name: "Insights", href: "#" },
+    { name: "BGT Station", href: "#" },
+    { name: "Bera Perpetuals", href: "#" },
+    { name: "BeraDocs", href: "#" },
+    { name: "Polaris EVM", href: "#" },
   ],
   support: [
-    { name: "Pricing", href: "#" },
-    { name: "Documentation", href: "#" },
+    { name: "Berachain foundation", href: "#" },
+    { name: "Bera Lend/Borrow", href: "#" },
     { name: "Guides", href: "#" },
     { name: "API Status", href: "#" },
   ],
@@ -141,7 +141,7 @@ export function Footer() {
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div>
               <h3 className="text-sm font-semibold leading-6 text-gray-900">
-                Solutions
+                BeraChain Ecosystem
               </h3>
               <ul role="list" className="mt-6 space-y-4">
                 {navigation.solutions.map((item) => (

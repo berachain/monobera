@@ -47,11 +47,14 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
   return (
     <div className="w-full flex-col items-center justify-center">
       <div className="w-full text-center ">
-        <p className="text-3xl font-extrabold">🔥 Hottest Yields in Defi 💰</p>
-        <p className="text-lg font-semibold leading-7 text-muted-foreground">
-          Leverage our boosted yields to increase your rewards
+        <p className="text-3xl font-extrabold">
+          🔥 Hottest Yields <span className="hidden md:inline">in Defi 💰</span>
         </p>
-        <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
+        <p className="text-lg font-semibold leading-7 text-muted-foreground">
+          Leverage our boosted yields{" "}
+          <span className="hidden md:inline">to increase your rewards</span>
+        </p>
+        <div className="mt-6 flex w-full flex-col items-center justify-center gap-4 md:mt-12">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {data.map((pool: any) => {
               return <PoolCard pool={pool} key={pool?.address + "hot"} />;

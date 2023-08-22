@@ -33,11 +33,9 @@ export default function CreateAPool() {
           />
         </div>
         <div className="relative z-20 pt-24 text-center">
-          <h2 className=" mb-2 text-3xl font-semibold">
-            Create <span className="text-muted-foreground">a Pool</span>
-          </h2>
-          <h3 className="mb-6 text-xl font-semibold text-muted-foreground">
-            Create your own custom recipe
+          <h2 className=" mb-2 text-3xl font-semibold">Create a Pool</h2>
+          <h3 className="mb-6 text-base font-semibold text-muted-foreground md:text-xl">
+            Create your own custom recipe 🧾
           </h3>
           <div className="m-auto max-w-[400px]">
             <Image
@@ -48,8 +46,8 @@ export default function CreateAPool() {
             />
           </div>
           <Button
+            className="mt-8"
             variant="outline"
-            className="bg-background"
             onClick={() => router.push(`/pool/create`)}
           >
             Create a Pool

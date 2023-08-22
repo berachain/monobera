@@ -11,9 +11,10 @@ export default function Hero() {
   return (
     <div className="my-24 grid grid-cols-6 md:grid-cols-12">
       <div className="col-span-6 my-12">
-        <h1 className="mb-4 text-5xl font-extrabold">
-          <span className="text-accent">Swap Tokens</span> on Your Favorite New
-          Dex
+        <h1 className="md:leading-14 mb-6 text-center text-3xl font-extrabold leading-9 md:text-left md:text-5xl">
+          <span className="text-accent">Swap Tokens</span> on{" "}
+          <br className="hidden md:block" /> Your Favorite{" "}
+          <br className="block md:hidden" /> New Dex
         </h1>
         <div className="mb-6">
           <Button onClick={() => router.push("/swap")} className="mr-3">
