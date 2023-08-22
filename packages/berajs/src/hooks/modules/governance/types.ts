@@ -32,3 +32,29 @@ export interface Proposal {
   message: string;
   summary: string;
 }
+
+type Deposit = {
+  denom: string;
+  amount: string;
+};
+
+type VotingParams = {
+  voting_period: string;
+};
+
+type DepositParams = {
+  min_deposit: Deposit[];
+  max_deposit_period: string;
+};
+
+type TallyParams = {
+  quorum: string;
+  threshold: string;
+  veto_threshold: string;
+};
+
+export type DepositParamsResponse = {
+  voting_params: VotingParams;
+  deposit_params: DepositParams;
+  tally_params: TallyParams;
+};

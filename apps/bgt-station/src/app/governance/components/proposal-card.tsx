@@ -14,6 +14,7 @@ import {
 } from "@bera/shared-ui/src/utils/times";
 import { Badge } from "@bera/ui/badge";
 
+import { sumTally } from "~/utils/sumTally";
 import { StatusEnum, VoteColorMap, mappedStatusEnum } from "../types";
 import { ProgressBarChart } from "./progress-bar-chart";
 
@@ -71,22 +72,14 @@ const getDataList = (proposalStatus: number, proposalVotes: TallyResult) => {
     return [
       {
         color: VoteColorMap.abstain,
-        width:
-          Number(proposalVotes.yesCount) +
-          Number(proposalVotes.noCount) +
-          Number(proposalVotes.noWithVetoCount) +
-          Number(proposalVotes.abstainCount),
+        width: sumTally(proposalVotes),
       },
     ];
   } else if (proposalStatus === mappedStatusEnum[StatusEnum.PASSED]) {
     return [
       {
         color: VoteColorMap.yes,
-        width:
-          Number(proposalVotes.yesCount) +
-          Number(proposalVotes.noCount) +
-          Number(proposalVotes.noWithVetoCount) +
-          Number(proposalVotes.abstainCount),
+        width: sumTally(proposalVotes),
       },
     ];
   } else {
@@ -105,11 +98,7 @@ const getDataList = (proposalStatus: number, proposalVotes: TallyResult) => {
       },
       {
         color: VoteColorMap.abstain,
-        width:
-          Number(proposalVotes.yesCount) +
-          Number(proposalVotes.noCount) +
-          Number(proposalVotes.noWithVetoCount) +
-          Number(proposalVotes.abstainCount),
+        width: sumTally(proposalVotes),
       },
     ];
   }
@@ -150,11 +139,7 @@ export function ProposalCard({
       <div className="relative mt-4">
         {status === mappedStatusEnum[StatusEnum.IN_QUEUE] && (
           <div className="absolute right-0 text-xs font-medium leading-tight text-muted-foreground">
-            {Number(finalTallyResult.abstainCount) +
-              Number(finalTallyResult.noCount) +
-              Number(finalTallyResult.noWithVetoCount) +
-              Number(finalTallyResult.yesCount)}
-            % of deposit filled
+            {sumTally(finalTallyResult)}% of deposit filled
           </div>
         )}
         <ProgressBarChart
@@ -182,13 +167,7 @@ export function ProposalCard({
             />
             Submitted by {truncateHash(beraToEth(proposer), 6, 4)}
           </div>
-          <div>
-            {Number(finalTallyResult.abstainCount) +
-              Number(finalTallyResult.noCount) +
-              Number(finalTallyResult.noWithVetoCount) +
-              Number(finalTallyResult.yesCount)}
-            % participation rate
-          </div>
+          <div>{sumTally(finalTallyResult)}% participation rate</div>
         </div>
       )}
     </div>

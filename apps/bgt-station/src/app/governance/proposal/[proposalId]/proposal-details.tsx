@@ -1,17 +1,24 @@
 "use client";
 
-import { usePollProposal, type Proposal } from "@bera/berajs";
+import {
+  GOVERNANCE_PRECOMPILE_ABI,
+  usePollProposal,
+  usePollTotalDelegatorDelegated,
+  type Proposal,
+} from "@bera/berajs";
+import { formatter } from "@bera/berajs/src/utils/formatAmount";
 import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1beta1/gov";
-import { Tooltip } from "@bera/shared-ui";
+import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { type Address } from "viem";
 
+import { sumTally } from "~/utils/sumTally";
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
 import { VoteCard } from "../../components/vote-card";
 import { VoteDialog } from "../../components/vote-dialog";
 import { VoterTable } from "../../components/voter-table";
-import { description } from "../../home/mockData";
 import { useProposalDetails } from "./useProposalDetails";
 
 export default function ProposalDetails({
@@ -22,25 +29,26 @@ export default function ProposalDetails({
   const { useProposal } = usePollProposal(proposalId);
   const proposal: Proposal | undefined = useProposal();
 
-  const {
-    open,
-    setOpen,
-    votingPower,
-    comment,
-    setComment,
-    selected,
-    setSelected,
-  } = useProposalDetails();
+  const { open, setOpen, comment, setComment, selected, setSelected } =
+    useProposalDetails();
 
   console.log(proposal);
+  const { usePercentageVotingPower } = usePollTotalDelegatorDelegated();
+  const userVotingPower = usePercentageVotingPower();
+  const { write, ModalPortal } = useTxn({
+    message: `Voting for proposal ${proposalId}`,
+  });
+  const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
+  console.log(payload);
   return (
     <div className="container pb-16">
+      {ModalPortal}
       <div className="mx-auto h-fit w-full max-w-[830px]">
         <div
           className="flex h-11 w-full justify-between hover:cursor-pointer"
           // onClick={() => router.push("/governance")}
         >
-          <div className="[]: flex items-center gap-1 text-sm font-medium leading-[14px] text-primary-foreground">
+          <div className="flex items-center gap-1 text-sm font-medium leading-[14px] text-primary-foreground">
             <Icons.arrowLeft className="relative h-4 w-4" />
             Governance
           </div>
@@ -50,11 +58,20 @@ export default function ProposalDetails({
               <VoteDialog
                 open={open}
                 setOpen={setOpen}
-                votingPower={votingPower}
+                votingPower={userVotingPower}
                 comment={comment}
                 setComment={setComment}
                 selected={selected}
                 setSelected={setSelected}
+                onSubmit={() => {
+                  write({
+                    address: process.env
+                      .NEXT_PUBLIC_GOVERNANCE_ADDRESS as Address,
+                    abi: GOVERNANCE_PRECOMPILE_ABI,
+                    functionName: "vote",
+                    params: payload,
+                  });
+                }}
               />
             )}
             {proposal?.status ===
@@ -69,14 +86,14 @@ export default function ProposalDetails({
         <div className="mt-4 flex gap-4">
           <Card className="hidden w-full flex-col items-center justify-center p-6 sm:flex">
             <div className="text-2xl font-semibold leading-loose text-foreground">
-              96.23M
+              {formatter.format(sumTally(proposal?.finalTallyResult))}
             </div>
             <div className="mt-[-4px] flex items-center gap-0.5 text-sm font-medium leading-[14px] text-muted-foreground">
               Total votes
               <Tooltip text="no" />
             </div>
           </Card>
-          <VoteCard proposalVotes={{ yes: 20, no: 10, veto: 9, abstain: 15 }} />
+          <VoteCard proposalVotes={proposal?.finalTallyResult} />
         </div>
 
         <div className="mt-16 flex h-fit w-full flex-col gap-8 sm:flex-row">
@@ -85,7 +102,7 @@ export default function ProposalDetails({
               Description
             </div>
             <Card className="mt-1 h-full max-h-[376px] overflow-y-scroll bg-background p-8 text-sm font-normal leading-normal text-muted-foreground">
-              {description}
+              {proposal?.summary ?? ""}
             </Card>
           </div>
           <div className="flex-1 sm:w-0.5">
@@ -93,7 +110,7 @@ export default function ProposalDetails({
               Msg
             </div>
             <Card className="mt-1 h-full max-h-[376px] overflow-scroll break-words bg-muted px-3 py-2 text-sm font-normal leading-normal text-muted-foreground">
-              reeee
+              {proposal?.message ?? "{ }"}
             </Card>
           </div>
         </div>

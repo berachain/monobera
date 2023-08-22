@@ -2,12 +2,21 @@
 
 import React from "react";
 
+import { type HoneyEntry } from "~/app/page";
 import { HoneyChart } from "./honey-chart";
 
-export default function Graph() {
+export default function Graph({
+  hourlySupply,
+  hourlyVolume,
+}: {
+  hourlySupply: HoneyEntry[];
+  hourlyVolume: HoneyEntry[];
+}) {
   const honey = {} as any;
   return (
     <HoneyChart
+      hourlySupply={hourlySupply ?? []}
+      hourlyVolume={hourlyVolume ?? []}
       weeklyVolume={honey.weeklyVolume ?? []}
       weeklyFees={honey.weeklyFees ?? []}
       weeklyVolumeTotal={honey.weeklyVolumeTotal ?? 0}

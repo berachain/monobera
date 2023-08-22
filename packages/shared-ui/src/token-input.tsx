@@ -46,7 +46,7 @@ export function TokenInput({
   customTokenList = undefined,
   onTokenSelection = undefined,
   setAmount = undefined,
-  showExceeding = true,
+  // showExceeding = true,
   onExceeding = undefined,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
@@ -96,12 +96,21 @@ export function TokenInput({
             placeholder="0.0"
             disabled={disabled}
             className={cn(
-              "ring-offset-none w-full grow border-0 border-0 bg-transparent p-0 text-right text-lg font-semibold shadow-none outline-none ring-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
-              exceeding && showExceeding && "text-destructive-foreground",
+              "ring-offset-none w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold shadow-none outline-none ring-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
+              exceeding && "text-destructive-foreground",
             )}
             value={amount > 0 ? amount : ""}
             onChange={(e) => {
-              setAmount && setAmount(Number(e.target.value));
+              const inputValue = e.target.value;
+
+              // Allow only digits and periods (decimal points)
+              const filteredValue = inputValue.replace(/[^0-9.]/g, "");
+
+              // Ensure there's only one period
+              const periodsCount = filteredValue.split(".").length - 1;
+              if (periodsCount <= 1) {
+                setAmount && setAmount(Number(filteredValue));
+              }
             }}
           />
         </div>

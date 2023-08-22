@@ -59,6 +59,25 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
         type: "uint64",
       },
       {
+        indexed: true,
+        internalType: "address",
+        name: "proposalSender",
+        type: "address",
+      },
+    ],
+    name: "ProposalSubmitted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint64",
+        name: "proposalId",
+        type: "uint64",
+      },
+      {
         indexed: false,
         internalType: "string",
         name: "option",
@@ -69,16 +88,10 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
     type: "event",
   },
   {
-    anonymous: false,
-    inputs: [],
-    name: "SubmitProposal",
-    type: "event",
-  },
-  {
     inputs: [
       {
         internalType: "uint64",
-        name: "proposalId",
+        name: "id",
         type: "uint64",
       },
     ],
@@ -102,7 +115,7 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
     inputs: [
       {
         internalType: "uint64",
-        name: "proposalId",
+        name: "id",
         type: "uint64",
       },
     ],
@@ -116,9 +129,9 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
             type: "uint64",
           },
           {
-            internalType: "bytes",
-            name: "message",
-            type: "bytes",
+            internalType: "bytes[]",
+            name: "messages",
+            type: "bytes[]",
           },
           {
             internalType: "int32",
@@ -236,9 +249,9 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
             type: "uint64",
           },
           {
-            internalType: "bytes",
-            name: "message",
-            type: "bytes",
+            internalType: "bytes[]",
+            name: "messages",
+            type: "bytes[]",
           },
           {
             internalType: "int32",
@@ -342,12 +355,7 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
     inputs: [
       {
         internalType: "bytes",
-        name: "proposal",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "message",
+        name: "proposalMsg",
         type: "bytes",
       },
     ],
@@ -395,7 +403,7 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
     inputs: [
       {
         internalType: "uint64",
-        name: "proposalId",
+        name: "id",
         type: "uint64",
       },
       {

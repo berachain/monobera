@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, type Address } from "viem";
@@ -6,7 +7,7 @@ import { usePublicClient } from "wagmi";
 import { STAKING_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig, useBeraJs } from "~/contexts";
-import { ethToBera } from "~/utils";
+import { BeravaloperToEth } from "~/utils";
 import { usePollActiveValidators, type Validator } from ".";
 
 interface Call {
@@ -35,12 +36,17 @@ export const usePollDelegatorValidators = () => {
     QUERY_KEY,
     async () => {
       if (isConnected) {
-        const result = await publicClient.readContract({
-          address: networkConfig.precompileAddresses.stakingAddress as Address,
-          abi: STAKING_PRECOMPILE_ABI,
-          functionName: method,
-          args: [ethToBera(account as string)],
-        });
+        const result = await publicClient
+          .readContract({
+            address: networkConfig.precompileAddresses
+              .stakingAddress as Address,
+            abi: STAKING_PRECOMPILE_ABI,
+            functionName: method,
+            args: [account as Address],
+          })
+          .catch(() => {
+            console.log("unable to fetch delegator validators");
+          });
         return result;
       }
       return undefined;
@@ -78,14 +84,19 @@ export const usePollTotalDelegatorDelegated = () => {
               .stakingAddress as Address,
             abi: STAKING_PRECOMPILE_ABI,
             functionName: method,
-            args: [ethToBera(account as string), validator.operatorAddress],
+            args: [account, BeravaloperToEth(validator.operatorAddress)],
           };
         });
-        const result = await publicClient.multicall({
-          contracts: call,
-          multicallAddress: networkConfig.precompileAddresses
-            .multicallAddress as Address,
-        });
+        const result = await publicClient
+          .multicall({
+            contracts: call,
+            multicallAddress: networkConfig.precompileAddresses
+              .multicallAddress as Address,
+          })
+          .catch(() => {
+            console.log("failed to fetch delegations");
+          });
+
         return result?.reduce((sum: number, r: any) => {
           return sum + Number(formatUnits(r.result ?? 0n, 18));
         }, 0);
@@ -105,12 +116,16 @@ export const usePollTotalDelegatorDelegated = () => {
   const usePercentageVotingPower = (): number | undefined => {
     const { useTotalDelegated } = usePollActiveValidators();
     const totalDelegated = useTotalDelegated();
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    const data = useTotalDelegatorDelegated();
 
-    if (totalDelegated && data) {
-      return (data / totalDelegated) * 100;
-    }
-    return undefined;
+    const percentage = useMemo(() => {
+      if (totalDelegated && data) {
+        return (data / totalDelegated) * 100;
+      } else {
+        return undefined;
+      }
+    }, [totalDelegated, data]);
+    return percentage;
   };
   return {
     useTotalDelegatorDelegated,
@@ -136,7 +151,10 @@ export const usePollDelegatorUnbonding = () => {
               .stakingAddress as Address,
             abi: STAKING_PRECOMPILE_ABI,
             functionName: method,
-            args: [ethToBera(account as string), validator.operatorAddress],
+            args: [
+              account as string,
+              BeravaloperToEth(validator.operatorAddress),
+            ],
           };
         });
         const result = await publicClient.multicall({
@@ -144,7 +162,6 @@ export const usePollDelegatorUnbonding = () => {
           multicallAddress: networkConfig.precompileAddresses
             .multicallAddress as Address,
         });
-        console.log(result);
         return result?.flatMap((entry) => entry.result);
       }
       return undefined;
@@ -161,8 +178,9 @@ export const usePollDelegatorUnbonding = () => {
 
   const useTotalDelegatorUnbonding = (): number | undefined => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    console.log(data);
     return data?.reduce((sum: number, unbond: UnbondingDelegationEntry) => {
-      return sum + Number(formatUnits(unbond.balance, 18));
+      return sum + Number(formatUnits(unbond?.balance, 18));
     }, 0);
   };
 

@@ -8,12 +8,6 @@ import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@bera/ui/dropdown-menu";
-import {
   Form,
   FormControl,
   FormField,
@@ -29,16 +23,13 @@ import { useForm } from "react-hook-form";
 import type * as z from "zod";
 
 import { governanceAddress } from "~/config";
-import { ProposalFormSchema, ProposalTypeEnum } from "../types";
-import CommunityForm from "./community-pool-spend-form";
-import ExecuteForm from "./execute-contract-form";
-import ParameterForm from "./parameter-change-form";
+import { ProposalFormSchema } from "../types";
 import { useCreateProposal } from "./useCreateProposal";
 
-export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
+export default function NewProposal() {
   const router = useRouter();
   const triggerRef = useRef<HTMLDivElement>(null);
-  const [contentWidth, setContentWidth] = useState("w-[450px]");
+  const [_contentWidth, setContentWidth] = useState("w-[450px]");
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
 
@@ -52,7 +43,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const form = useForm<z.infer<typeof ProposalFormSchema>>({
     resolver: zodResolver(ProposalFormSchema),
     defaultValues: {
-      type: type,
       expedite: false,
     },
   });
@@ -97,46 +87,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
               />
             </div>
 
-            <div className="inline-flex flex-col justify-start gap-2">
-              <div className="text-sm font-semibold leading-tight">
-                Type <Tooltip text="test" />
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <div
-                    className="inline-flex h-[42px] w-full flex-col items-start justify-start hover:cursor-pointer"
-                    ref={triggerRef}
-                  >
-                    <div className=" inline-flex w-full items-center justify-start gap-2.5 rounded-xl border border-gray-200 px-3 py-2">
-                      <div className="relative shrink grow basis-0 caption-top text-sm font-normal capitalize leading-normal text-stone-700">
-                        {type.replaceAll("-", " ")}
-                        <Icons.chevronDown className="absolute right-0 top-1 h-4 w-4" />
-                      </div>
-                    </div>
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="start"
-                  className={`${contentWidth}`}
-                >
-                  {Object.values(ProposalTypeEnum).map(
-                    (type: ProposalTypeEnum) => (
-                      <DropdownMenuItem
-                        key={`proposal-option-${type}`}
-                        onClick={() => {
-                          router.push(`/governance/create?type=${type}`);
-                          form.setValue("type", type);
-                        }}
-                        className="w-full capitalize"
-                      >
-                        {type.replaceAll("-", " ")}
-                      </DropdownMenuItem>
-                    ),
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
             <FormField
               control={form.control}
               name="title"
@@ -159,29 +109,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                 </FormItem>
               )}
             />
-            {/* 
-            <FormField
-              control={form.control}
-              name="forumLink"
-              render={({ field }) => (
-                <FormItem className="inline-flex flex-col justify-start">
-                  <div className="text-sm font-semibold leading-tight">
-                    Forum discussion link <Tooltip text="test" />
-                  </div>
-                  <div>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        id="forum-discussion-link"
-                        placeholder="Paste link here"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="mt-2" />
-                  </div>
-                </FormItem>
-              )}
-            /> */}
 
             <FormField
               control={form.control}
@@ -259,19 +186,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                 </FormItem>
               )}
             />
-
-            {type === ProposalTypeEnum.COMMUNITY_POOL_SPEND && (
-              <CommunityForm form={form} />
-            )}
-
-            {type === ProposalTypeEnum.EXECUTE_CONTRACT && (
-              <ExecuteForm form={form} />
-            )}
-
-            {type === ProposalTypeEnum.PARAMETER_CHANGE && (
-              <ParameterForm form={form} />
-            )}
-
             <Button type="submit">Submit</Button>
           </Card>
         </form>

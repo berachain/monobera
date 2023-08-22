@@ -57,7 +57,7 @@ const formatVolume = (volume: number[], desiredLength: number) => {
   }
   return volume;
 };
-const BERA = process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address;
+const BASE_TOKEN = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
 
 export const getWBeraPriceDictForPoolTokens = async (
   pools: Pool[],
@@ -69,12 +69,12 @@ export const getWBeraPriceDictForPoolTokens = async (
     const allPoolPromises: any[] = [];
     pools.forEach((pool) => {
       const tokenPromises = pool.tokens
-        .filter((token) => token.address !== BERA)
+        .filter((token) => token.address !== BASE_TOKEN)
         .map((token) =>
           router
             .getSwaps(
               token.address,
-              BERA,
+              BASE_TOKEN,
               0,
               parseUnits(`${1}`, token.decimals),
             )
@@ -97,7 +97,7 @@ export const getWBeraPriceDictForPoolTokens = async (
           acc[cur.tokenIn] = cur.formattedReturnAmount;
           return acc;
         },
-        { [BERA]: "1" },
+        { [BASE_TOKEN]: "1" },
       );
 
     const allPoolVolumePromises: any[] = [];

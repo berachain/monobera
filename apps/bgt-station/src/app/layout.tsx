@@ -1,13 +1,16 @@
+"use client";
+
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Image from "next/image";
+import { TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
+import { Footer } from "~/components/footer";
 import { Header } from "~/components/header";
-import { TailwindIndicator } from "~/components/tailwind-indicator";
 import Providers from "./Providers";
 
 const fontSans = IBM_Plex_Sans({
@@ -28,21 +31,21 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Header />
               <main className="w-full pt-40">{props.children}</main>
               <Toaster position="bottom-right" />
+              <Footer />
             </div>
             <Image
               className="fixed left-1/2 right-0 top-0 -translate-x-1/2 transform"
               src="/bg/variant.svg"
-              alt="bera banner"
+              alt="bera variant"
               width={1078}
               height={820}
             />
-
             <Image
-              className="fixed bottom-0 left-1/2 right-0 -translate-x-1/2 transform"
-              src="/bg/BeraBanner.png"
+              className="fixed bottom-0 left-1/2 right-0 h-[300px] -translate-x-1/2 transform object-cover"
+              src="/bg/bera-banner.png"
               alt="bera banner"
-              width={1280}
-              height={444}
+              width={2000}
+              height={300}
             />
           </div>
           <TailwindIndicator />

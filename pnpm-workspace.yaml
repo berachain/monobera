@@ -2,6 +2,7 @@ packages:
   - apps/dex
   - apps/bgt-station
   - apps/honey
+  - apps/lend
   - packages/config/*
   - packages/ui
   - packages/shared-ui

@@ -36,7 +36,7 @@ const BaseToast = ({
       )}
       style={{ width: "350px", background: "#292524" }} // i dont know why this is needed, but we ball 🤮
     >
-      <div className="flex flex-row items-center gap-2 text-sm font-semibold">
+      <div className="flex flex-row items-center gap-2 text-sm font-semibold text-white">
         {startAdornment && startAdornment}
         {title}
       </div>

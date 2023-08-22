@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
-import { erc20ABI, usePublicClient, type Address } from "wagmi";
+import { usePublicClient, type Address } from "wagmi";
 
 import {
   BERACHEF_PRECOMPILE_ABI,
@@ -12,6 +12,7 @@ import {
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 import { BeravaloperToEth, ethToBeravaloper } from "~/utils";
+import { usePollBgtSupply } from "../bank";
 
 export interface Validator {
   operatorAddress: string;
@@ -45,9 +46,9 @@ export interface ValidatorCommission {
 }
 
 export interface CuttingBoard {
-  consAddr: string;
-  weights: Weight[];
-  startEpoch: number;
+  address: Address;
+  amount: string;
+  percentage: string;
 }
 
 export interface Weight {
@@ -95,21 +96,50 @@ export const usePollActiveValidators = () => {
     return data;
   };
 
-  const useActiveValidator = (address: string): Validator | undefined => {
+  const useActiveValidator = (
+    address: string | undefined,
+  ): Validator | undefined => {
     const { data = [] } = useSWRImmutable("getValidators");
-    return data?.find(
-      (v: Validator) => BeravaloperToEth(v.operatorAddress) === address,
-    );
+    return useMemo(() => {
+      if (!address) return undefined;
+      return data?.find(
+        (v: Validator) => BeravaloperToEth(v.operatorAddress) === address,
+      );
+    }, [data, address]);
   };
 
   const useTotalDelegated = (): number => {
     const { data = [] } = useSWRImmutable("getValidators");
     const total = useMemo(() => {
       return data?.reduce((sum: number, validator: Validator) => {
-        return sum + Number(formatUnits(validator.delegatorShares, 18));
+        return sum + Number(formatUnits(BigInt(validator.tokens), 18));
       }, 0);
     }, [data]);
+    console.log(total);
     return total ?? 0;
+  };
+
+  const usePercentOfStakedBGT = (): number => {
+    const total = useTotalDelegated();
+    const { useBgtSupply } = usePollBgtSupply();
+    const bgtSupply = useBgtSupply();
+    if (total && bgtSupply) {
+      return (total / Number(bgtSupply)) * 100;
+    }
+    return 0;
+  };
+
+  const usePercentageDelegated = (address: string): number | undefined => {
+    const total = useTotalDelegated();
+    const validator = useActiveValidator(address);
+    return useMemo(() => {
+      if (total && validator) {
+        return (
+          (Number(formatUnits(BigInt(validator.tokens), 18)) / total) * 100
+        );
+      }
+      return undefined;
+    }, [total, validator]);
   };
 
   const useValidatorCuttingBoards = () => {
@@ -139,60 +169,60 @@ export const usePollActiveValidators = () => {
     return data;
   };
 
-  const usePollSelectedValidatorCuttingBoard = (
-    validatorAddress: string | undefined,
-  ) => {
-    const publicClient = usePublicClient();
-    const { networkConfig } = useBeraConfig();
+  // const usePollSelectedValidatorCuttingBoard = (
+  //   validatorAddress: string | undefined,
+  // ) => {
+  //   const publicClient = usePublicClient();
+  //   const { networkConfig } = useBeraConfig();
 
-    const { data = [] } = useSWR(
-      [validatorAddress, "getCuttingBoards"],
-      async () => {
-        if (validatorAddress) {
-          try {
-            const cuttingBoard = await publicClient.readContract({
-              address: networkConfig.precompileAddresses
-                .berachefAddress as Address,
-              abi: BERACHEF_PRECOMPILE_ABI,
-              functionName: "getActiveCuttingBoard",
-              args: [ethToBeravaloper(validatorAddress)],
-            });
+  //   const { data = [] } = useSWR(
+  //     [validatorAddress, "getCuttingBoards"],
+  //     async () => {
+  //       if (validatorAddress) {
+  //         try {
+  //           const cuttingBoard = await publicClient.readContract({
+  //             address: networkConfig.precompileAddresses
+  //               .berachefAddress as Address,
+  //             abi: BERACHEF_PRECOMPILE_ABI,
+  //             functionName: "getActiveCuttingBoard",
+  //             args: [ethToBeravaloper(validatorAddress)],
+  //           });
 
-            const call: Call[] = (cuttingBoard as CuttingBoard)?.weights.map(
-              (w: Weight) => ({
-                address: w.receiverAddress as `0x${string}`,
-                abi: erc20ABI as unknown as any[],
-                functionName: "symbol",
-                args: [],
-              }),
-            );
+  //           const call: Call[] = (cuttingBoard as CuttingBoard)?.weights.map(
+  //             (w: Weight) => ({
+  //               address: w.receiverAddress as `0x${string}`,
+  //               abi: erc20ABI as unknown as any[],
+  //               functionName: "symbol",
+  //               args: [],
+  //             }),
+  //           );
 
-            const result = await publicClient.multicall({
-              contracts: call,
-              multicallAddress: networkConfig.precompileAddresses
-                .multicallAddress as Address,
-            });
-            const cb = (cuttingBoard as CuttingBoard)?.weights.map(
-              (w: Weight, i) => {
-                return {
-                  address: w.receiverAddress as `0x${string}`,
-                  weight: formatUnits(w.percentageNumerator, 18),
-                  symbol: result[i]?.error
-                    ? w.receiverAddress
-                    : result[i]?.result,
-                };
-              },
-            );
-            return cb;
-          } catch (e) {
-            console.log(e);
-          }
-        }
-        return undefined;
-      },
-    );
-    return data;
-  };
+  //           const result = await publicClient.multicall({
+  //             contracts: call,
+  //             multicallAddress: networkConfig.precompileAddresses
+  //               .multicallAddress as Address,
+  //           });
+  //           const cb = (cuttingBoard as CuttingBoard)?.weights.map(
+  //             (w: Weight, i) => {
+  //               return {
+  //                 address: w.receiverAddress as `0x${string}`,
+  //                 weight: formatUnits(w.percentageNumerator, 18),
+  //                 symbol: result[i]?.error
+  //                   ? w.receiverAddress
+  //                   : result[i]?.result,
+  //               };
+  //             },
+  //           );
+  //           return cb;
+  //         } catch (e) {
+  //           console.log(e);
+  //         }
+  //       }
+  //       return undefined;
+  //     },
+  //   );
+  //   return data;
+  // };
 
   const useSelectedValidatorActiveBribes = (
     validatorAddress: string | undefined,
@@ -227,8 +257,10 @@ export const usePollActiveValidators = () => {
     useActiveValidators,
     useActiveValidator,
     useTotalDelegated,
+    usePercentageDelegated,
     useValidatorCuttingBoards,
     useSelectedValidatorActiveBribes,
-    usePollSelectedValidatorCuttingBoard,
+    usePercentOfStakedBGT,
+    // usePollSelectedValidatorCuttingBoard,
   };
 };

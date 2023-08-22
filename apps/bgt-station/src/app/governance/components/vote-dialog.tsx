@@ -22,6 +22,7 @@ interface Props {
   setComment: (comment: string) => void;
   selected: VoteOption | undefined;
   setSelected: (selected: VoteOption) => void;
+  onSubmit: () => void;
 }
 
 export function VoteDialog({
@@ -32,8 +33,8 @@ export function VoteDialog({
   setComment,
   selected,
   setSelected,
+  onSubmit,
 }: Props) {
-  console.log(selected);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -49,14 +50,16 @@ export function VoteDialog({
         <DialogHeader>
           <DialogTitle className="mb-3">Vote</DialogTitle>
         </DialogHeader>
-        <div className="flex w-full items-center justify-center">
-          <p className="text-3xl font-semibold">{votingPower}</p>
+        <div className="flex w-full flex-col items-center justify-center">
+          <p className="text-3xl font-semibold">
+            {votingPower ? votingPower.toFixed(2) + "%" : "0%"}
+          </p>
           <p className="text-sm font-medium">
             Voting Power <Tooltip text={"your voting power"} />
           </p>
         </div>
 
-        <div className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center gap-4">
           <Button
             variant="outline"
             onClick={() => setSelected(VoteOption.VOTE_OPTION_YES)}
@@ -71,10 +74,10 @@ export function VoteDialog({
           </Button>
           <Button
             variant="outline"
-            onClick={() => setSelected(VoteOption.VOTE_OPTION_YES)}
+            onClick={() => setSelected(VoteOption.VOTE_OPTION_NO)}
             className={cn(
               "w-full",
-              selected === VoteOption.VOTE_OPTION_YES
+              selected === VoteOption.VOTE_OPTION_NO
                 ? "opacity-100"
                 : "opacity-50",
             )}
@@ -83,10 +86,10 @@ export function VoteDialog({
           </Button>
           <Button
             variant="outline"
-            onClick={() => setSelected(VoteOption.VOTE_OPTION_YES)}
+            onClick={() => setSelected(VoteOption.VOTE_OPTION_NO_WITH_VETO)}
             className={cn(
               "w-full",
-              selected === VoteOption.VOTE_OPTION_YES
+              selected === VoteOption.VOTE_OPTION_NO_WITH_VETO
                 ? "opacity-100"
                 : "opacity-50",
             )}
@@ -95,10 +98,10 @@ export function VoteDialog({
           </Button>
           <Button
             variant="outline"
-            onClick={() => setSelected(VoteOption.VOTE_OPTION_YES)}
+            onClick={() => setSelected(VoteOption.VOTE_OPTION_ABSTAIN)}
             className={cn(
               "w-full",
-              selected === VoteOption.VOTE_OPTION_YES
+              selected === VoteOption.VOTE_OPTION_ABSTAIN
                 ? "opacity-100"
                 : "opacity-50",
             )}
@@ -110,6 +113,7 @@ export function VoteDialog({
             onChange={(e) => setComment(e.target.value)}
           />
         </div>
+        <Button onClick={onSubmit}>Submit</Button>
       </DialogContent>
     </Dialog>
   );

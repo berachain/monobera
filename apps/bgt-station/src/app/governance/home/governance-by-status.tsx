@@ -46,7 +46,6 @@ export default function GovernanceByStatus({
     mappedStatusEnum[proposalStatus],
   );
   const data = useAllProposals();
-  console.log(data);
   const sortedProposalList: Proposal[] = useMemo(
     () =>
       data
@@ -99,7 +98,7 @@ export default function GovernanceByStatus({
                 className="capitalize"
                 onClick={() =>
                   router.push(
-                    `/governance?proposalStatus=${status}&&orderBy=${orderBy}`,
+                    `/governance?proposalStatus=${status}&orderBy=${orderBy}`,
                   )
                 }
               >
@@ -124,7 +123,7 @@ export default function GovernanceByStatus({
                   key={order}
                   onClick={() =>
                     router.push(
-                      `/governance?proposalStatus=${proposalStatus}&&orderBy=${order}`,
+                      `/governance?proposalStatus=${proposalStatus}&orderBy=${order}`,
                     )
                   }
                 >

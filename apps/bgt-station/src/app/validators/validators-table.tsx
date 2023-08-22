@@ -6,21 +6,18 @@ import {
   type Validator,
 } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
 
-import RT from "../../components/react-table";
-import { general_validator_columns } from "./columns/general-validator-columns";
+import { formatCommission } from "~/utils/formatCommission";
+import IconList from "~/components/icon-list";
+import RT from "~/components/react-table";
+import { general_validator_columns } from "~/columns/general-validator-columns";
 
 export default function ValidatorsTable() {
   const router = useRouter();
-  const {
-    useActiveValidators,
-    useTotalDelegated,
-    // useValidatorCuttingBoards,
-    // useSelectedValidatorActiveBribes,
-  } = usePollActiveValidators();
+  const { useActiveValidators, useTotalDelegated } = usePollActiveValidators();
 
   const validators: Validator[] = useActiveValidators();
   const totalDelegated: number = useTotalDelegated();
@@ -45,17 +42,17 @@ export default function ValidatorsTable() {
         ),
         validator: (
           <div className="flex h-full w-[137px] items-center gap-1">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>{validator.description.moniker}</AvatarFallback>
-            </Avatar>
+            <ValidatorIcon
+              address={BeravaloperToEth(validator.operatorAddress)}
+              className="h-8 w-8"
+            />
             {validator.description.moniker}
           </div>
         ),
         votingPower: (
           <div className="flex h-full w-[96px] items-center justify-center">
             {(
-              (Number(formatUnits(validator.delegatorShares, 18)) * 100) /
+              (Number(formatUnits(BigInt(validator?.tokens), 18)) * 100) /
               totalDelegated
             ).toFixed(2)}
             %
@@ -63,12 +60,7 @@ export default function ValidatorsTable() {
         ),
         commission: (
           <div className="flex h-full w-[91px] items-center justify-center">
-            {(
-              Number(
-                formatUnits(validator.commission.commissionRates.rate, 18),
-              ) * 100
-            ).toFixed(2)}
-            %
+            {formatCommission(validator.commission.commissionRates.rate)}%
           </div>
         ),
         vAPY: (
@@ -81,7 +73,22 @@ export default function ValidatorsTable() {
             Pool name or address
           </div>
         ),
-        bribes: <div className="flex h-full w-[136px] items-center">hi</div>,
+        bribes: (
+          <div className="flex h-full w-[136px] items-center">
+            <IconList
+              showCount={4}
+              iconList={[
+                "/icons/eth-icons.svg",
+                "/icons/atom-icons.svg",
+                "/icons/usdc-icons.svg",
+                "/icons/usdt-icons.svg",
+                "/icons/btc-icons.svg",
+                "/icons/honey-icons.svg",
+                "/icons/bera-icons.svg",
+              ]}
+            />
+          </div>
+        ),
       }));
   }, [validators, keyword]);
 
@@ -89,7 +96,7 @@ export default function ValidatorsTable() {
     <div className="mt-16">
       <div className="mb-4">
         <SearchInput
-          className="w-[400px]"
+          className="w-full md:w-[400px]"
           placeholder="Search by name, address, or token"
           onChange={(e) => setKeyword(e.target.value)}
         />

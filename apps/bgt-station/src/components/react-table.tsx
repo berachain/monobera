@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "@bera/ui";
 import { Card } from "@bera/ui/card";
 import { useTable } from "react-table";
 
@@ -10,17 +11,25 @@ type Column = {
 export type Columns = Column[];
 
 interface RTProps {
+  className?: string;
   columns: Columns;
   data: any[];
+  emptyMessage?: string;
   rowOnClick?: (row: any) => void;
 }
-export default function RT({ columns, data, rowOnClick }: RTProps) {
+export default function RT({
+  columns,
+  data,
+  rowOnClick,
+  emptyMessage = "No data found.",
+  className,
+}: RTProps) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
   return (
-    <Card>
-      <table {...getTableProps()} className="w-full">
+    <Card className="overflow-x-scroll">
+      <table {...getTableProps()} className={cn("w-full", className)}>
         <thead>
           {headerGroups.map((headerGroup: any) => (
             <tr
@@ -41,7 +50,7 @@ export default function RT({ columns, data, rowOnClick }: RTProps) {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row: any, index: number) => {
+          {rows?.map((row: any, index: number) => {
             prepareRow(row);
             return (
               <tr
@@ -54,11 +63,11 @@ export default function RT({ columns, data, rowOnClick }: RTProps) {
                 }`}
                 onClick={() => rowOnClick && rowOnClick(row)}
               >
-                {row.cells.map((cell: any) => (
+                {row.cells.map((cell: any, index: number) => (
                   <td
                     {...cell.getCellProps()}
-                    key={"tableGroup" + cell.id}
-                    className="text-xs font-medium leading-tight text-foreground"
+                    key={"tableGroup" + index}
+                    className="flex items-center text-xs font-medium leading-tight text-foreground"
                   >
                     {cell.render("Cell")}
                   </td>
@@ -66,6 +75,11 @@ export default function RT({ columns, data, rowOnClick }: RTProps) {
               </tr>
             );
           })}
+          {rows.length === 0 && (
+            <p className="my-4 w-full self-center text-center text-lg font-semibold text-muted-foreground">
+              {emptyMessage}
+            </p>
+          )}
         </tbody>
       </table>
     </Card>

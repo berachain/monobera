@@ -7,7 +7,7 @@ import { Card } from "@bera/ui/card";
 
 import ValidatorsTable from "./validators-table";
 
-export default function Validators() {
+export default function Validators({ activeGauges }: { activeGauges: number }) {
   const { useActiveValidators } = usePollActiveValidators();
   const validators: Validator[] = useActiveValidators();
   const generalInfo = [
@@ -24,12 +24,14 @@ export default function Validators() {
       text: "Average staker APY",
     },
     {
-      amount: "213",
+      amount: `${activeGauges}`,
       text: "Active gauges",
     },
   ];
+
+  console.log(validators);
   return (
-    <div className="container">
+    <div className="container mb-10 max-w-[1078px]">
       <div className="p-8 text-center">
         <Image
           className="mx-auto"
@@ -38,13 +40,13 @@ export default function Validators() {
           width={449.32}
           height={174}
         />
-        <div className="text-center text-5xl font-extrabold leading-[48px] text-foreground">
+        <div className="text-center text-3xl font-extrabold leading-[48px] text-foreground md:text-5xl">
           Validators
         </div>
       </div>
-      <div className="flex gap-8">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
         {generalInfo.map((info, index) => (
-          <Card className="flex-1 p-8 text-center" key={info.text + index}>
+          <Card className="p-8 text-center" key={info.text + index}>
             <div className="text-2xl font-semibold leading-loose text-foreground">
               {info.amount}
             </div>

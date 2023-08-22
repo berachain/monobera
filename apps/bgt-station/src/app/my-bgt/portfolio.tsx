@@ -1,60 +1,104 @@
 import React from "react";
-import { truncateHash, useBeraJs } from "@bera/berajs";
+import { useRouter } from "next/navigation";
+import {
+  truncateHash,
+  useBeraJs,
+  usePollDelegatorUnbonding,
+  usePollTotalDelegatorDelegated,
+} from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
+import IconList from "~/components/icon-list";
 import YellowCard from "~/components/yellow-card";
-import AverageGaugeWeight from "./components/average-gauge-weight";
 import UnbondingQueue from "./components/unbonding-queue";
 import YourDelegations from "./components/your-delegations";
 import { BGTSelectionEnum, type BGTselection } from "./types";
 
 export default function Portfolio() {
+  const router = useRouter();
   const { account } = useBeraJs();
   const [tab, setTab] = React.useState<BGTselection>(
     BGTSelectionEnum.YOUR_DELEGATIONS,
   );
 
+  const { useTotalDelegatorDelegated } = usePollTotalDelegatorDelegated();
+
+  const { useDelegatorUnbonding, useTotalDelegatorUnbonding } =
+    usePollDelegatorUnbonding();
+
+  const totalUnbonding = useTotalDelegatorUnbonding();
+  const unbondingQueue = useDelegatorUnbonding();
+  const totalDelegated = useTotalDelegatorDelegated();
+
+  console.log(unbondingQueue);
   return (
-    <div className="container">
-      <div className=" flex h-[100px] items-center justify-center text-5xl font-bold leading-[48px] text-foreground">
+    <div className="container max-w-[1078px]">
+      <div className="mb-8 flex h-[100px] items-center justify-center text-3xl font-bold leading-[48px] text-foreground md:text-5xl">
         👋 Hey {truncateHash(account ?? "0x", 6)} you have...
       </div>
-      <div className="flex gap-8">
-        <YellowCard tooltip="sample1" className="flex-1">
+      <div className="flex flex-col gap-8 md:flex-row">
+        <YellowCard
+          tooltip="Total amount of BGT delegated across all validators"
+          className="justify-betwee flex flex-1 flex-col"
+        >
           <div className="text-5xl font-bold leading-[48px] text-foreground">
-            6,666
+            {totalDelegated?.toFixed(2) ?? 0}
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
             BGT delegated
             <br />
             across 3 validators
           </div>
-          <Button variant="outline">Manage delegations</Button>
+          <Button
+            variant="outline"
+            onClick={() => router.push("/delegate?action=redelegate")}
+          >
+            Manage delegations
+          </Button>
         </YellowCard>
-        <YellowCard className="flex-1">
+        <YellowCard className="justify-betwee flex flex-1 flex-col">
           <div className="text-5xl font-bold leading-[48px] text-foreground">
             $3,000
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
-            in claimable rewards
+            {/* this is so hard coded!! i hate myself */}
+            <IconList
+              iconList={[
+                "/icons/eth-icons.svg",
+                "/icons/atom-icons.svg",
+                "/icons/usdc-icons.svg",
+                "/icons/usdt-icons.svg",
+                "/icons/btc-icons.svg",
+                "/icons/honey-icons.svg",
+                "/icons/bera-icons.svg",
+              ]}
+            />
           </div>
           <Button className="w-full max-w-[223px]">Claim</Button>
         </YellowCard>
-        <YellowCard tooltip="sample1" className="flex-1">
+        <YellowCard
+          tooltip="Total amount of BGT unbonding across all validators"
+          className="flex flex-1 flex-col justify-between"
+        >
           <div className="text-5xl font-bold leading-[48px] text-foreground">
-            1,200
+            {totalUnbonding?.toFixed(2) ?? 0}
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
-            in claimable rewards
+            BGT unbonding across 4 validators
           </div>
-          <Button variant="outline">See my queue</Button>
+          <Button
+            variant="outline"
+            onClick={() => setTab(BGTSelectionEnum.UNBONDING_QUEUE)}
+          >
+            See my queue
+          </Button>
         </YellowCard>
       </div>
       <div className="mt-16 flex flex-col gap-4">
         <div className="mx-auto">
-          <Tabs defaultValue={tab}>
-            <TabsList>
+          <Tabs value={tab}>
+            <TabsList className="w-full">
               {Object.values(BGTSelectionEnum).map((selection) => (
                 <TabsTrigger
                   value={selection}
@@ -62,16 +106,22 @@ export default function Portfolio() {
                   className="capitalize"
                   onClick={() => setTab(selection)}
                 >
-                  {selection.replaceAll("-", " ")}
+                  <p className="w-24 overflow-hidden text-ellipsis sm:w-full">
+                    {" "}
+                    {selection.replaceAll("-", " ")}
+                  </p>
                 </TabsTrigger>
               ))}
             </TabsList>
           </Tabs>
         </div>
         {tab === BGTSelectionEnum.YOUR_DELEGATIONS && <YourDelegations />}
-        {tab === BGTSelectionEnum.UNBONDING_QUEUE && <UnbondingQueue />}
         {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
-          <AverageGaugeWeight />
+          // <AverageGaugeWeight />
+          <></>
+        )}
+        {tab === BGTSelectionEnum.UNBONDING_QUEUE && (
+          <UnbondingQueue unbondingQueue={unbondingQueue} />
         )}
       </div>
     </div>

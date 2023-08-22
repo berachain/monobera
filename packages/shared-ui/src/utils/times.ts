@@ -47,3 +47,14 @@ export function formatUnixTimestamp(unixTimestamp: number) {
     monthNames[date.getMonth()]
   } ${day}${daySuffix}, ${date.getFullYear()}`;
 }
+
+export function get7daysLater() {
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() + 7);
+
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // January is 0!
+  const year = currentDate.getFullYear();
+
+  return day + "/" + month + "/" + year;
+}

@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
-import { usePollActiveValidators, type Validator } from "@bera/berajs";
-import { SearchInput } from "@bera/shared-ui";
+import { usePollDelegatorValidators, type Validator } from "@bera/berajs";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -13,21 +12,20 @@ import { ValidatorSortEnum } from "../types";
 import ValidatorCard from "./validator-card";
 
 export default function YourDelegations() {
-  const { useActiveValidators } = usePollActiveValidators();
+  const { useDelegatorValidators } = usePollDelegatorValidators();
   const [sort, setSort] = React.useState(
     ValidatorSortEnum.HIGHEST_VOTING_POWER,
   );
-  const [keywords, setKeywords] = React.useState("");
-  const validators: Validator[] = useActiveValidators();
+  const validators: Validator[] = useDelegatorValidators();
 
   const validValidators = useMemo(
     () =>
       validators
-        .filter((validator) =>
-          Object.values(validator).some((value) =>
-            String(value).toLowerCase().includes(keywords.toLowerCase()),
-          ),
-        )
+        // .filter((validator) =>
+        //   Object.values(validator).some((value) =>
+        //     String(value).toLowerCase().includes(keywords.toLowerCase()),
+        //   ),
+        // )
         .sort((a, b) => {
           switch (sort) {
             case ValidatorSortEnum.HIGHEST_VOTING_POWER:
@@ -50,17 +48,17 @@ export default function YourDelegations() {
               return 0;
           }
         }),
-    [validators, keywords, sort],
+    [validators, sort],
   );
   return (
     <div>
-      <div className="mb-4 flex justify-between">
-        <SearchInput
-          className="w-[400px]"
+      <div className="mb-4 flex flex-col-reverse items-center  gap-4 md:flex-row md:justify-between">
+        {/* <SearchInput
+          className="w-full md:w-[400px]"
           onChange={(e) => setKeywords(e.target.value)}
           placeholder="Search by name, address, or token"
-        />
-        <div className="flex items-center gap-2 text-sm font-medium leading-[14px] text-stone-500">
+        /> */}
+        <div className="flex items-center gap-2 text-sm font-medium leading-[14px] text-muted-foreground md:w-[330px]">
           Order by
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -84,12 +82,17 @@ export default function YourDelegations() {
         </div>
       </div>
       <div className="flex flex-col gap-3">
-        {validValidators.map((validator: Validator) => (
+        {validValidators?.map((validator: Validator) => (
           <ValidatorCard
             validator={validator}
             key={validator.operatorAddress}
           />
         ))}
+        {validValidators.length === 0 && (
+          <p className="mt-4 self-center text-xl font-semibold">
+            No BGT Delegated.
+          </p>
+        )}
       </div>
     </div>
   );

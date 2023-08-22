@@ -1,4 +1,3 @@
-import { isAddress } from "viem";
 import * as z from "zod";
 
 export enum StatusEnum {
@@ -25,6 +24,7 @@ export enum OrderByEnum {
 
 export enum ProposalTypeEnum {
   COMMUNITY_POOL_SPEND = "community-pool-spend",
+
   PARAMETER_CHANGE = "parameter-change",
   EXECUTE_CONTRACT = "execute-contract",
 }
@@ -42,14 +42,8 @@ export type ProposalVotes = {
   abstain: number;
 };
 
-const parameterChangeLineSchema = z.object({
-  subspace: z.string(),
-  key: z.string(),
-  value: z.string(),
-});
-
 export const BaseFormSchema = z.object({
-  type: z.enum(Object.values(ProposalTypeEnum) as any),
+  // type: z.enum(Object.values(ProposalTypeEnum) as any),
   title: z.string().nonempty("Required"),
   // forumLink: z.string().nonempty("Required"),
   description: z.string().nonempty("Required"),
@@ -62,68 +56,64 @@ export const BaseFormSchema = z.object({
     }),
 });
 
-export const CommunityFormSchema = BaseFormSchema.extend({
-  type: z.literal(ProposalTypeEnum.COMMUNITY_POOL_SPEND),
-  recipient: z.string().nonempty("Required"),
-  // amountA: z
-  //   .string()
-  //   .nonempty("Required")
-  //   .refine((val) => Number(val) > 0, {
-  //     message: "Amount must be greater than 0.",
-  //   }),
-  amount: z
-    .string()
-    .nonempty("Required")
-    .refine((val) => Number(val) > 0, {
-      message: "Amount must be greater than 0.",
-    }),
-});
+// export const CommunityFormSchema = BaseFormSchema.extend({
+//   // type: z.literal(ProposalTypeEnum.COMMUNITY_POOL_SPEND),
+//   recipient: z.string().nonempty("Required"),
+//   // amountA: z
+//   //   .string()
+//   //   .nonempty("Required")
+//   //   .refine((val) => Number(val) > 0, {
+//   //     message: "Amount must be greater than 0.",
+//   //   }),
+//   amount: z
+//     .string()
+//     .nonempty("Required")
+//     .refine((val) => Number(val) > 0, {
+//       message: "Amount must be greater than 0.",
+//     }),
+// });
 
-export const ParameterFormSchema = BaseFormSchema.extend({
-  type: z.literal(ProposalTypeEnum.PARAMETER_CHANGE),
-  parameters2Change: z
-    .array(parameterChangeLineSchema)
-    .nonempty()
-    .refine(
-      (data) =>
-        data.every(
-          (item: ParameterChangeLine) =>
-            item.subspace && item.key && item.value,
-        ),
-      {
-        message: "Imcomplete fields",
-      },
-    ),
-});
+// export const ParameterFormSchema = BaseFormSchema.extend({
+//   type: z.literal(ProposalTypeEnum.PARAMETER_CHANGE),
+//   parameters2Change: z
+//     .array(parameterChangeLineSchema)
+//     .nonempty()
+//     .refine(
+//       (data) =>
+//         data.every(
+//           (item: ParameterChangeLine) =>
+//             item.subspace && item.key && item.value,
+//         ),
+//       {
+//         message: "Imcomplete fields",
+//       },
+//     ),
+// });
 
-export const ExecuteFormSchema = BaseFormSchema.extend({
-  type: z.literal(ProposalTypeEnum.EXECUTE_CONTRACT),
-  runAs: z
-    .string()
-    .nonempty("Required")
-    .refine((value) => isAddress(value), {
-      message: "Invalid address.",
-    }),
-  contractAddress: z
-    .string()
-    .nonempty("Required")
-    .refine((value) => isAddress(value), {
-      message: "Invalid contract address.",
-    }),
-  message: z.string().nonempty("Required"),
-  amount: z
-    .string()
-    .nonempty("Required")
-    .refine((val) => Number(val) > 0, {
-      message: "Amount must be greater than 0.",
-    }),
-});
+// export const ExecuteFormSchema = BaseFormSchema.extend({
+//   type: z.literal(ProposalTypeEnum.EXECUTE_CONTRACT),
+//   runAs: z
+//     .string()
+//     .nonempty("Required")
+//     .refine((value) => isAddress(value), {
+//       message: "Invalid address.",
+//     }),
+//   contractAddress: z
+//     .string()
+//     .nonempty("Required")
+//     .refine((value) => isAddress(value), {
+//       message: "Invalid contract address.",
+//     }),
+//   message: z.string().nonempty("Required"),
+//   amount: z
+//     .string()
+//     .nonempty("Required")
+//     .refine((val) => Number(val) > 0, {
+//       message: "Amount must be greater than 0.",
+//     }),
+// });
 
-export const ProposalFormSchema = z.union([
-  CommunityFormSchema,
-  ParameterFormSchema,
-  ExecuteFormSchema,
-]);
+export const ProposalFormSchema = BaseFormSchema;
 
 export const VoteColorMap = {
   yes: "#059669",

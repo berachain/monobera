@@ -8,6 +8,25 @@ export const metadata: Metadata = {
   description: "BGT Station",
 };
 
-export default function Page() {
-  return <Validators />;
+async function getGlobalCuttingBoard() {
+  try {
+    const res = await fetch(
+      `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/bgt/rewards`,
+    );
+    const jsonRes = await res.json();
+    return jsonRes.result;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export default async function Page() {
+  const cuttingBoard = getGlobalCuttingBoard();
+  const data: any = await Promise.all([cuttingBoard]).then(
+    ([cuttingBoard]) => ({
+      cuttingBoard: cuttingBoard,
+    }),
+  );
+
+  return <Validators activeGauges={data.cuttingBoard.length} />;
 }

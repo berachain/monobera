@@ -1,4 +1,5 @@
 import { bech32 } from "bech32";
+import { type Address } from "viem";
 
 import {
   isValidChecksumAddress,
@@ -53,26 +54,64 @@ const bech32Chain = (name: string, prefix: string) => ({
   name,
 });
 
-export const BERA = bech32Chain("BERA", "cosmos");
+const prefix = process.env.NEXT_PUBLIC_BECH32_PREFIX as string;
 
-export const BERAVALOPER = bech32Chain("BERA", "cosmosvaloper");
+export const BERA = bech32Chain("BERA", prefix);
 
-export const ethToBera = (ethAddress: string): string => {
+export const BERAVALOPER = bech32Chain("BERA", prefix + "valoper");
+
+export const COSMOS = bech32Chain("COSMOS", prefix);
+
+export const COSMOSVALOPER = bech32Chain("COSMOS", prefix + "valoper");
+
+export const ethToBera = (ethAddress: string | undefined): Address => {
+  if (!ethAddress) {
+    return "" as Address;
+  }
   const data = ETH.decoder(ethAddress);
-  return BERA.encoder(data);
+  return BERA.encoder(data) as Address;
 };
 
-export const BeravaloperToEth = (bech32Address: string): string => {
+export const ethToBeravaloper = (ethAddress: string | undefined): Address => {
+  if (!ethAddress) {
+    return "" as Address;
+  }
+  const data = ETH.decoder(ethAddress);
+  return BERAVALOPER.encoder(data) as Address;
+};
+
+export const BeravaloperToEth = (
+  bech32Address: string | undefined,
+): Address => {
+  if (!bech32Address) {
+    return "" as Address;
+  }
   const data = BERAVALOPER.decoder(bech32Address);
-  return ETH.encoder(data);
+  return ETH.encoder(data) as Address;
 };
 
-export const ethToBeravaloper = (ethAddress: string): string => {
-  const data = ETH.decoder(ethAddress);
-  return BERAVALOPER.encoder(data);
-};
-
-export const beraToEth = (bech32Address: string): string => {
+export const beraToEth = (bech32Address: string | undefined): Address => {
+  if (!bech32Address) {
+    return "" as Address;
+  }
   const data = BERA.decoder(bech32Address);
-  return ETH.encoder(data);
+  return ETH.encoder(data) as Address;
+};
+
+export const cosmosvaloperToEth = (
+  bech32Address: string | undefined,
+): string => {
+  if (!bech32Address) {
+    return "";
+  }
+  const data = COSMOSVALOPER.decoder(bech32Address);
+  return ETH.encoder(data) as Address;
+};
+
+export const cosmosToEth = (bech32Address: string | undefined): Address => {
+  if (!bech32Address) {
+    return "" as Address;
+  }
+  const data = COSMOS.decoder(bech32Address);
+  return ETH.encoder(data) as Address;
 };

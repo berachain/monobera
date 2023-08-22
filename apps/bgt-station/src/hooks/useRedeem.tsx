@@ -12,7 +12,6 @@ export const useRedeem = () => {
     setPayload(newPayload);
   }, [account, redeemAmount]);
 
-  console.log(payload);
   return {
     redeemAmount,
     payload,
