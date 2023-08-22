@@ -81,11 +81,9 @@ export default function AddLiquidityContent({
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
-      <Card className="mx-6 w-full items-center bg-muted p-4 sm:mx-0 sm:w-[480px]">
-        <p className="mb-4 text-center text-2xl font-semibold">
-          {pool?.poolName}
-        </p>
-        <div className="flex w-full flex-row items-center justify-center rounded-lg bg-card p-2 shadow-md">
+      <Card className="mx-6 w-full items-center bg-background p-4 sm:mx-0 sm:w-[480px]">
+        <p className="text-center text-2xl font-semibold">{pool?.poolName}</p>
+        <div className="flex w-full flex-row items-center justify-center rounded-lg p-4">
           {pool?.tokens?.map((token, i) => {
             return (
               <TokenIcon
@@ -95,6 +93,11 @@ export default function AddLiquidityContent({
               />
             );
           })}
+        </div>
+        {/* onclick back to pool details page */}
+        <div className="flex items-center justify-center text-sm font-normal leading-tight text-muted-foreground hover:cursor-pointer hover:underline">
+          View Pool Details
+          <Icons.arrowRight className="W-4 h-4" />
         </div>
       </Card>
       <Card className="mx-6 w-full sm:w-[480px] md:mx-0 ">

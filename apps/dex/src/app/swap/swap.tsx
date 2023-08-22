@@ -11,7 +11,7 @@ interface ISwap {
 
 export const SwapContent = ({ inputCurrency, outputCurrency }: ISwap) => {
   return (
-    <div className="flex flex-row justify-center">
+    <div className="mx-auto md:w-[450px]">
       <SwapCard
         inputCurrency={inputCurrency}
         outputCurrency={outputCurrency}

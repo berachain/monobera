@@ -110,18 +110,18 @@ export function SwapCard({
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
-      <div className="mx-auto">
+      <div className="w-full">
         {showBear && (
           <Image
             src="/graphics/bidness-bera.png"
-            className="mb-[-40px] self-start"
+            className="mx-auto mb-[-40px] self-start md:mx-0"
             alt="bidness"
             width={150}
             height={200}
           />
         )}
         <div className="flex w-full flex-col gap-4 md:flex-row">
-          <Card className="w-full rounded-2xl px-6 py-8 md:w-[450px]">
+          <Card className="w-full rounded-2xl px-6 py-8">
             <CardTitle className="center flex items-center justify-between px-2">
               Swap <SettingsPopover />
             </CardTitle>

@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react";
 import { formatUsd } from "@bera/berajs";
+import { Dropdown } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@bera/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 const Options = {
@@ -95,6 +89,7 @@ enum TimeFrame {
 
 enum Chart {
   VOLUME = "volume",
+  TVL = "TVL",
   FEES = "fees",
 }
 
@@ -232,15 +227,17 @@ export const PoolChart = ({
         defaultValue={Chart.VOLUME}
         onValueChange={(value: string) => setChart(value as Chart)}
       >
-        <CardHeader className="flex w-full flex-col items-center justify-start p-4 sm:flex-row sm:justify-between">
-          <div className="flex w-full flex-row items-center gap-3">
+        <CardHeader className="flex w-full flex-col items-center justify-start px-6 py-4 sm:flex-row sm:justify-between">
+          <div className="flex w-full flex-row items-end gap-3">
             <div className="w-fit text-xl font-semibold">
               {formatUsd(total)}
             </div>
             <div
               className={cn(
                 "w-full text-sm font-normal",
-                difference >= 0 ? "text-positive" : "text-destructive",
+                difference >= 0
+                  ? "text-success-foreground"
+                  : "text-destructive-foreground",
               )}
             >
               {difference.toFixed(2)}%
@@ -250,9 +247,10 @@ export const PoolChart = ({
           <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
             <TabsList>
               <TabsTrigger value={Chart.VOLUME}>Volume</TabsTrigger>
+              <TabsTrigger value={Chart.TVL}>TVL</TabsTrigger>
               <TabsTrigger value={Chart.FEES}>Fees</TabsTrigger>
             </TabsList>
-            <Select
+            {/* <Select
               onValueChange={(value: string) =>
                 setTimeFrame(value as TimeFrame)
               }
@@ -263,12 +261,19 @@ export const PoolChart = ({
                   defaultValue={TimeFrame.WEEKLY}
                 />
               </SelectTrigger>
+
               <SelectContent>
                 <SelectItem value={TimeFrame.WEEKLY}>7d</SelectItem>
                 <SelectItem value={TimeFrame.MONTHLY}>30d</SelectItem>
                 <SelectItem value={TimeFrame.QUARTERLY}>90d</SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
+            <Dropdown
+              selected={TimeFrame.WEEKLY}
+              onSelect={(value: string) => setTimeFrame(value as TimeFrame)}
+              selectionList={Object.values(TimeFrame)}
+              sortby={false}
+            />
           </div>
         </CardHeader>
         <TabsContent value={Chart.VOLUME}>
