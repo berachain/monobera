@@ -2,6 +2,7 @@
 
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
+import dynamic from "next/dynamic";
 import { IBM_Plex_Sans } from "next/font/google";
 import Image from "next/image";
 import { Footer, Header, TailwindIndicator } from "@bera/shared-ui";
@@ -10,6 +11,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
 import { footerNavigation, navItems } from "~/app/config";
+import { cloudinaryUrl } from "~/config";
 import Providers from "./Providers";
 
 const fontSans = IBM_Plex_Sans({
@@ -17,6 +19,14 @@ const fontSans = IBM_Plex_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
 });
+
+const Gradient = dynamic(
+  () => import("@bera/shared-ui").then((mod) => mod.Gradient),
+  {
+    ssr: false,
+    loading: () => <></>,
+  },
+);
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
@@ -32,20 +42,17 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Toaster position="bottom-right" />
               <Footer navItem={footerNavigation} />
             </div>
-            <Image
-              className="fixed left-1/2 right-0 top-0 -translate-x-1/2"
-              src="/bg/variant.svg"
-              alt="bera banner"
-              width={1078}
-              height={820}
-            />
 
+            <Gradient
+              lightUrl={`${cloudinaryUrl}/shared/xrvkmr8yhvvyckxznty2`}
+              darkUrl={`${cloudinaryUrl}/shared/klszfo1j2sz9yk7lin87`}
+            />
             <Image
-              className="fixed bottom-0 left-1/2 right-0 -translate-x-1/2"
-              src="/bg/BeraBanner.png"
+              className="fixed bottom-0 left-1/2 right-0 h-[300px] -translate-x-1/2 object-cover"
+              src={`${cloudinaryUrl}/shared/qfyewc7lo2ujtktbimd8`}
               alt="bera banner"
-              width={1280}
-              height={444}
+              width={2000}
+              height={300}
             />
           </div>
           <TailwindIndicator />

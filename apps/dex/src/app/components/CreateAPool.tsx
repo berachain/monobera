@@ -16,7 +16,6 @@ export default function CreateAPool() {
   return (
     <section className="my-24">
       <div className="relative m-auto h-[900px] bg-glow bg-cover bg-center bg-no-repeat">
-        {theme}?{systemTheme}
         <div className="absolute left-[50%] top-0 z-10 translate-x-[-50%]">
           <CircleBackground color="#CA8A04" className="animate-spin-slower" />
         </div>
