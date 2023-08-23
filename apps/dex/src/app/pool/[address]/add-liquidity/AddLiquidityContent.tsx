@@ -28,6 +28,7 @@ import { type Address } from "wagmi";
 import ApproveTokenButton from "~/components/approve-token-button";
 import { type MappedTokens } from "../types";
 import { useAddLiquidity } from "./useAddLiquidity";
+import { useRouter } from "next/navigation";
 
 interface IAddLiquidityContent {
   pool: Pool | undefined;
@@ -42,6 +43,8 @@ export default function AddLiquidityContent({
   pool,
   prices,
 }: IAddLiquidityContent) {
+  const router = useRouter();
+
   const {
     expectedShares,
     singleSidedExpectedShares,
@@ -94,8 +97,9 @@ export default function AddLiquidityContent({
             );
           })}
         </div>
-        {/* onclick back to pool details page */}
-        <div className="flex items-center justify-center text-sm font-normal leading-tight text-muted-foreground hover:cursor-pointer hover:underline">
+        <div 
+        onClick={() => router.push(`/pool/${pool?.pool}`)}
+        className="flex items-center justify-center text-sm font-normal leading-tight text-muted-foreground hover:cursor-pointer hover:underline">
           View Pool Details
           <Icons.arrowRight className="W-4 h-4" />
         </div>

@@ -62,13 +62,12 @@ export function TokenInput({
   const { isConnected } = useBeraJs();
 
   useEffect(() => {
-    if (tokenBalance === 0) return;
     if (amount > Number.MAX_SAFE_INTEGER) return;
     if (amount <= tokenBalance) {
       setExceeding(false);
       return;
     }
-    if (amount > tokenBalance) {
+    if (amount > tokenBalance || (Number(tokenBalance) == 0)) {
       setExceeding(true);
       return;
     }
