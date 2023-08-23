@@ -5,16 +5,18 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
+import { useTheme } from "next-themes";
 
 import { CircleBackground } from "~/components/CirceBackground";
 import { cloudinaryUrl } from "~/config";
 
 export default function CreateAPool() {
   const router = useRouter();
-
+  const { theme, systemTheme } = useTheme();
   return (
     <section className="my-24">
       <div className="relative m-auto h-[900px] bg-glow bg-cover bg-center bg-no-repeat">
+        {theme}?{systemTheme}
         <div className="absolute left-[50%] top-0 z-10 translate-x-[-50%]">
           <CircleBackground color="#CA8A04" className="animate-spin-slower" />
         </div>
@@ -99,14 +101,23 @@ export default function CreateAPool() {
               />
               <AvatarFallback>usdt</AvatarFallback>
             </Avatar>
-
-            <Image
-              className="mx-auto"
-              src="/create-a-pool-new.png"
-              alt="Create a pool screenshot"
-              width={400}
-              height={889}
-            />
+            {(theme === "system" ? systemTheme : theme) === "light" ? (
+              <Image
+                className="mx-auto"
+                src={`${cloudinaryUrl}/DEX/tj8udvfskyrcanuxfq47`}
+                alt="Create a pool screenshot"
+                width={400}
+                height={889}
+              />
+            ) : (
+              <Image
+                className="mx-auto"
+                src={`${cloudinaryUrl}/DEX/ebq1kd6ucdrultjqysnk`}
+                alt="Create a pool screenshot"
+                width={400}
+                height={889}
+              />
+            )}
           </div>
         </div>
         <div className="mt-8 w-full text-center">

@@ -13,7 +13,7 @@ import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "wagmi";
 
-import { erc20DexAddress, erc20ModuleAddress } from "~/config";
+import { cloudinaryUrl, erc20DexAddress, erc20ModuleAddress } from "~/config";
 import { SwapKind, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
 
@@ -108,8 +108,8 @@ export function SwapCard({
       <div className="w-full">
         {showBear && (
           <Image
-            src="/graphics/bidness-bera.png"
-            className="mx-auto mb-[-40px] self-start md:mx-0"
+            src={`${cloudinaryUrl}/bears/qsmspkwyjoeh1cwb6fz7`}
+            className="mx-auto self-start md:mx-0"
             alt="bidness"
             width={150}
             height={200}

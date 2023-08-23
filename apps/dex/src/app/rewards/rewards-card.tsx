@@ -20,7 +20,7 @@ export default function RewardsCard() {
 
   const title = "ETH-10/BERA-20 USDC-30/UNI-20/DOGE-20";
   return (
-    <div className="flex w-full items-center justify-between rounded-2xl border border-stone-200 bg-background p-4 md:p-6">
+    <div className="flex w-full items-center justify-between rounded-2xl border border-border bg-background p-4 md:p-6">
       <div className="flex flex-col gap-3">
         <div className="whitespace-nowrap text-xs font-medium leading-tight md:text-sm">
           {mobile && title.length > 19 ? title.slice(0, 19) + "..." : title}
