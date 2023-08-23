@@ -18,6 +18,7 @@ import { Icons } from "@bera/ui/icons";
 import { useReadLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
+import { cloudinaryUrl } from "~/config";
 
 type Props = {
   swapInfo: SwapInfo | undefined;
@@ -140,7 +141,7 @@ export default function PreviewDialog({
           <DialogTitle className="mb-3">Preview swap</DialogTitle>
           <Image
             alt="preview"
-            src="/graphics/preview-swap-img.png"
+            src={`${cloudinaryUrl}/bears/placeholder/preview-swap-img_ucrnla`}
             className="self-center"
             width={525}
             height={150}

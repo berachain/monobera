@@ -3,8 +3,13 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
-import Image from "next/image";
-import { Footer, Gradient, Header, TailwindIndicator } from "@bera/shared-ui";
+import {
+  BearBG,
+  Footer,
+  Gradient,
+  Header,
+  TailwindIndicator,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -37,12 +42,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               lightUrl={`${cloudinaryUrl}/shared/xrvkmr8yhvvyckxznty2`}
               darkUrl={`${cloudinaryUrl}/shared/klszfo1j2sz9yk7lin87`}
             />
-            <Image
-              className="fixed bottom-0 left-1/2 right-0 h-[300px] -translate-x-1/2 object-cover"
-              src={`${cloudinaryUrl}/shared/qfyewc7lo2ujtktbimd8`}
-              alt="bera banner"
-              width={2000}
-              height={300}
+            <BearBG
+              lightUrl={`${cloudinaryUrl}/shared/qfyewc7lo2ujtktbimd8`}
+              darkUrl={`${cloudinaryUrl}/shared/banner-bears-dark`}
             />
           </div>
           <TailwindIndicator />

@@ -31,5 +31,6 @@ export { Header } from "./header";
 export { Footer } from "./footer";
 export { ErrorPage } from "./error";
 export { Gradient } from "./gradient";
+export { BearBG } from "./bear-bg";
 
 export * from "./hooks";

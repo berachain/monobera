@@ -13,6 +13,7 @@ import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { cloudinaryUrl } from "~/config";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import ApproveTokenButton from "../approve-token-button";
@@ -83,8 +84,8 @@ export function CreatePoolPreview({
       <CardContent className="flex flex-col gap-4">
         <Image
           alt="preview"
-          src="/graphics/create-pool-preview.png"
-          className="self-center bg-gradient-to-b from-stone-50 to-stone-50"
+          src={`${cloudinaryUrl}/bears/placeholder/preview-swap-img_ucrnla`}
+          className="self-center"
           width={525}
           height={150}
         />
