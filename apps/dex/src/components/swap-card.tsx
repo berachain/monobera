@@ -139,7 +139,6 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setFromAmount(amount);
                     }}
-                    showBalance
                   />
                   <div className="relative">
                     <div
@@ -160,6 +159,7 @@ export function SwapCard({
                   </div>
                   <TokenInput
                     selected={selectedTo}
+                    hideBalance
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedTo}
                     amount={toAmount}

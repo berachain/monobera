@@ -146,59 +146,67 @@ export const getWBeraPriceDictForPoolTokens = async (
         .flat(),
     );
 
-    pools.map((pool, i) => {
-      const volumes = responses[i] ?? [];
+    if (pools)
+      pools.map((pool, i) => {
+        const volumes = responses[i] ?? [];
 
-      const { volumeArray: dailyVolumeArray, volumeTotal: dailyVolumeTotal } =
-        getVolume(mappedTokens, volumes[0], pool);
-      const { volumeArray: weeklyVolumeArray, volumeTotal: weeklyVolumeTotal } =
-        getVolume(mappedTokens, volumes[1], pool);
-      const {
-        volumeArray: monthlyVolumeArray,
-        volumeTotal: monthlyVolumeTotal,
-      } = getVolume(mappedTokens, volumes[2], pool);
-      const {
-        volumeArray: quarterlyVolumeArray,
-        volumeTotal: quarterlyVolumeTotal,
-      } = getVolume(mappedTokens, volumes[1], pool);
+        const { volumeArray: dailyVolumeArray, volumeTotal: dailyVolumeTotal } =
+          getVolume(mappedTokens, volumes[0], pool);
+        const {
+          volumeArray: weeklyVolumeArray,
+          volumeTotal: weeklyVolumeTotal,
+        } = getVolume(mappedTokens, volumes[1], pool);
+        const {
+          volumeArray: monthlyVolumeArray,
+          volumeTotal: monthlyVolumeTotal,
+        } = getVolume(mappedTokens, volumes[2], pool);
+        const {
+          volumeArray: quarterlyVolumeArray,
+          volumeTotal: quarterlyVolumeTotal,
+        } = getVolume(mappedTokens, volumes[1], pool);
 
-      const swapFee = Number(formatUnits(BigInt(pool.swapFee) ?? "", 18));
-      pool.formattedSwapFee = (swapFee * 100).toString();
+        const swapFee = Number(formatUnits(BigInt(pool.swapFee) ?? "", 18));
+        pool.formattedSwapFee = (swapFee * 100).toString();
 
-      if (dailyVolumeArray.length) {
-        pool.dailyVolume = dailyVolumeTotal;
-        pool.dailyFees = (pool?.dailyVolume ?? 0) * swapFee;
-      }
-      if (weeklyVolumeArray.length) {
-        pool.weeklyVolume = formatVolume(weeklyVolumeArray.reverse(), 7);
-        pool.weeklyFees = pool.weeklyVolume.map((volume) => volume * swapFee);
-        pool.weeklyFeesTotal = weeklyVolumeTotal * swapFee;
-        pool.weeklyVolumeTotal = weeklyVolumeTotal;
-      }
-      if (monthlyVolumeArray.length) {
-        pool.monthlyVolume = formatVolume(monthlyVolumeArray.reverse(), 30);
-        pool.monthlyFees = pool.monthlyVolume.map((volume) => volume * swapFee);
-        pool.monthlyFeesTotal = monthlyVolumeTotal * swapFee;
-        pool.monthlyVolumeTotal = monthlyVolumeTotal;
-      }
-      if (quarterlyVolumeArray.length) {
-        pool.quarterlyVolume = formatVolume(quarterlyVolumeArray.reverse(), 90);
-        pool.quarterlyFees = pool.quarterlyVolume.map(
-          (volume) => volume * swapFee,
-        );
-        pool.quarterlyFeesTotal = quarterlyVolumeTotal * swapFee;
-        pool.monthlyVolumeTotal = quarterlyVolumeTotal;
-      }
-      pool.totalValue = pool.tokens.reduce((acc, cur) => {
-        const tokenValue = mappedTokens[cur.address];
-        const tokenBalance = cur.balance;
-        if (!tokenValue) {
-          return acc;
+        if (dailyVolumeArray.length) {
+          pool.dailyVolume = dailyVolumeTotal;
+          pool.dailyFees = (pool?.dailyVolume ?? 0) * swapFee;
         }
-        const totalTokenValue = tokenValue * Number(tokenBalance);
-        return acc + totalTokenValue;
-      }, 0);
-    });
+        if (weeklyVolumeArray.length) {
+          pool.weeklyVolume = formatVolume(weeklyVolumeArray.reverse(), 7);
+          pool.weeklyFees = pool.weeklyVolume.map((volume) => volume * swapFee);
+          pool.weeklyFeesTotal = weeklyVolumeTotal * swapFee;
+          pool.weeklyVolumeTotal = weeklyVolumeTotal;
+        }
+        if (monthlyVolumeArray.length) {
+          pool.monthlyVolume = formatVolume(monthlyVolumeArray.reverse(), 30);
+          pool.monthlyFees = pool.monthlyVolume.map(
+            (volume) => volume * swapFee,
+          );
+          pool.monthlyFeesTotal = monthlyVolumeTotal * swapFee;
+          pool.monthlyVolumeTotal = monthlyVolumeTotal;
+        }
+        if (quarterlyVolumeArray.length) {
+          pool.quarterlyVolume = formatVolume(
+            quarterlyVolumeArray.reverse(),
+            90,
+          );
+          pool.quarterlyFees = pool.quarterlyVolume.map(
+            (volume) => volume * swapFee,
+          );
+          pool.quarterlyFeesTotal = quarterlyVolumeTotal * swapFee;
+          pool.monthlyVolumeTotal = quarterlyVolumeTotal;
+        }
+        pool.totalValue = pool.tokens.reduce((acc, cur) => {
+          const tokenValue = mappedTokens[cur.address];
+          const tokenBalance = cur.balance;
+          if (!tokenValue) {
+            return acc;
+          }
+          const totalTokenValue = tokenValue * Number(tokenBalance);
+          return acc + totalTokenValue;
+        }, 0);
+      });
     tagPools(pools);
   }
 
