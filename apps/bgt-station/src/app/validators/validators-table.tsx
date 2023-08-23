@@ -1,13 +1,12 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { BeravaloperToEth, usePollActiveValidators } from "@bera/berajs";
-import { SearchInput } from "@bera/shared-ui";
+import { IconList, SearchInput } from "@bera/shared-ui";
 import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
 
 import { formatCommission } from "~/utils/formatCommission";
-import IconList from "~/components/icon-list";
 import RT from "~/components/react-table";
 import { general_validator_columns } from "~/columns/general-validator-columns";
 

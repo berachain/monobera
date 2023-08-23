@@ -13,7 +13,7 @@ import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader } from "@bera/ui/card";
+import { Card, CardContent } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import {
   Table,
@@ -391,13 +391,13 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     }
   };
   return (
-    <div className="container">
+    <div className="container p-[52px]">
       <div className="mb-4 flex w-full flex-wrap items-center justify-between">
         <div className="w-full items-center sm:items-start">
-          <p className="w-full text-center text-3xl font-semibold sm:text-left">
+          <p className="mb-3 w-full text-center text-3xl font-semibold sm:text-left">
             {pool?.poolName}
           </p>
-          <div className="mb-2 flex w-full flex-row items-center justify-center gap-2 sm:items-start sm:justify-start">
+          <div className="mb-2 flex w-full flex-row items-center justify-center gap-2 sm:items-center sm:justify-start">
             <Badge variant="secondary" className="text-xs font-medium">
               {Number(formatUnits(BigInt(pool.swapFee) ?? "", 18)) * 100}% swap
               fee
@@ -405,8 +405,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
               0.42% <Icons.chevronsRight className="h-4 w-4" /> 1.58% BGT
             </Badge>
-            <p
-              className="xs:hidden flex hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex md:flex lg:flex"
+            <div
+              className="xs:hidden flex flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex md:flex lg:flex"
               onClick={() =>
                 window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
               }
@@ -414,7 +414,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               <Icons.newspaper className="h-3 w-3" />
               See Contract on {blockExplorerName}
               <Icons.external className="h-3 w-3" />
-            </p>
+            </div>
           </div>
           <p
             className="xs:flex flex flex flex-row items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:hidden md:hidden lg:hidden"
@@ -427,11 +427,10 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             <Icons.external className="h-3 w-3" />
           </p>
         </div>
-        <div className="flex flex-col gap-5"></div>
       </div>
 
-      <div className=" mb-6 flex w-full grid-cols-5 flex-col-reverse gap-5 lg:grid">
-        <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-3">
+      <div className=" mb-6 flex w-full grid-cols-5 flex-col-reverse gap-4 lg:grid">
+        <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">
           <PoolChart
             weeklyVolume={pool.weeklyVolume ?? []}
             weeklyFees={pool.weeklyFees ?? []}
@@ -446,48 +445,48 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             monthlyFeesTotal={pool.monthlyFeesTotal ?? 0}
             quarterlyFeesTotal={pool.quarterlyFeesTotal ?? 0}
           />
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-            <Card className="p-2">
-              <CardHeader className="flex flex-row items-center justify-between p-1">
-                <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+          <div className="mb-3 grid grid-cols-2 gap-4 lg:grid-cols-4">
+            <Card className="p-4">
+              <div className="flex flex-row items-center justify-between">
+                <div className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
                   Total liquidity (TVL)
-                </p>
-              </CardHeader>
-              <CardContent className="overflow-hidden truncate whitespace-nowrap p-1 text-lg font-semibold">
+                </div>
+              </div>
+              <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
                 {formatUsd(pool.totalValue ?? "0")}
-              </CardContent>
+              </div>
             </Card>
-            <Card className="p-2">
-              <CardHeader className="flex flex-row items-center justify-between p-1">
-                <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+            <Card className="p-4">
+              <div className="flex flex-row items-center justify-between">
+                <div className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
                   Volume (24h)
-                </p>
-              </CardHeader>
-              <CardContent className="overflow-hidden truncate whitespace-nowrap p-1 text-lg font-semibold">
+                </div>
+              </div>
+              <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
                 {formatUsd(pool?.dailyVolume ?? "0")}
-              </CardContent>
+              </div>
             </Card>
-            <Card className="p-2">
-              <CardHeader className="flex flex-row items-center justify-between p-1">
-                <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+            <Card className="p-4">
+              <div className="flex flex-row items-center justify-between">
+                <div className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
                   Fees (24h)
-                </p>
-              </CardHeader>
-              <CardContent className="overflow-hidden truncate whitespace-nowrap p-1 text-lg font-semibold">
+                </div>
+              </div>
+              <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
                 {pool.dailyVolume && Number(pool.dailyVolume) !== 0
                   ? formatUsd(fees)
                   : "$0"}
-              </CardContent>{" "}
+              </div>{" "}
             </Card>
-            <Card className="p-2">
-              <CardHeader className="flex flex-row items-center justify-between p-1">
+            <Card className="p-4">
+              <div className="flex flex-row items-center justify-between">
                 <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
                   APR
                 </p>
-              </CardHeader>
-              <CardContent className="overflow-hidden truncate whitespace-nowrap p-1 text-lg font-semibold">
+              </div>
+              <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
                 {(Number.isNaN(swapApr) ? 0 : swapApr).toFixed(2)}%
-              </CardContent>
+              </div>
             </Card>
           </div>
           <section>
@@ -553,19 +552,19 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
           <Card>
             <CardContent className="flex items-center justify-between gap-4 p-4">
               <div>
-                <h3 className="mb-2 text-xs font-medium text-muted-foreground">
+                <h3 className="text-xs font-medium text-muted-foreground">
                   Rewards available
                 </h3>
                 <p className="text-lg font-semibold text-foreground">0 BGT</p>
               </div>
 
-              <Button variant={"outline"}>Claim Rewards</Button>
+              <Button variant={"secondary"}>Claim Rewards</Button>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="flex items-center justify-between gap-4 p-4">
               <div className="w-full">
-                <h3 className="mb-2 text-xs font-medium text-muted-foreground">
+                <h3 className="text-xs font-medium text-muted-foreground">
                   My pool balance
                 </h3>
                 <p className="text-lg font-semibold text-foreground">
@@ -575,7 +574,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
 
               <div className="flex w-full flex-row items-center justify-end gap-2">
                 <Button
-                  variant={"outline"}
+                  variant={"secondary"}
                   onClick={() =>
                     router.push(`/pool/${pool?.pool}/add-liquidity`)
                   }
@@ -586,7 +585,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                   </span>
                 </Button>
                 <Button
-                  variant={"outline"}
+                  variant={"secondary"}
                   onClick={() => router.push(`/pool/${pool?.pool}/withdraw`)}
                 >
                   <Icons.subtract />

@@ -4,12 +4,12 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { BeravaloperToEth, type Validator } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
+import { IconList } from "@bera/shared-ui";
 import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
 import { Button } from "@bera/ui/button";
 import { formatUnits } from "viem";
 
 import { formatCommission } from "~/utils/formatCommission";
-import IconList from "~/components/icon-list";
 import YellowCard from "~/components/yellow-card";
 
 export default function ValidatorCard(validator: { validator: Validator }) {
@@ -79,7 +79,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
 
       <Button
         className="w-full"
-        variant="secondary"
+        variant="outline"
         onClick={() =>
           router.push(
             `/delegate?action=delegate&validator=${validator.validator.operatorAddress}`,

@@ -8,7 +8,7 @@ import {
   type Validator,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
-import { SearchInput } from "@bera/shared-ui";
+import { IconList, SearchInput } from "@bera/shared-ui";
 import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -16,7 +16,6 @@ import { Icons } from "@bera/ui/icons";
 import { formatUnits, getAddress } from "viem";
 
 import { formatCommission } from "~/utils/formatCommission";
-import IconList from "~/components/icon-list";
 import { validator_table_columns } from "~/columns/validator-table-columns";
 import RT from "./react-table";
 
@@ -48,7 +47,7 @@ export default function ValidatorSelector({
   return (
     <div>
       <Button
-        variant="secondary"
+        variant="outline"
         className="bg-background shadow"
         onClick={() => setOpen(true)}
       >

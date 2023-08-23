@@ -6,10 +6,10 @@ import {
   usePollDelegatorUnbonding,
   usePollTotalDelegatorDelegated,
 } from "@bera/berajs";
+import { IconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import IconList from "~/components/icon-list";
 import YellowCard from "~/components/yellow-card";
 import UnbondingQueue from "./components/unbonding-queue";
 import YourDelegations from "./components/your-delegations";

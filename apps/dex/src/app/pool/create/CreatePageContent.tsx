@@ -10,6 +10,7 @@ import {
   CreatePoolStepper,
   type IStep,
 } from "~/components/create-pool/create-pool-stepper";
+import { cloudinaryUrl } from "~/config";
 import useCreateTokenWeights, { Steps } from "~/hooks/useCreateTokenWeights";
 
 const steps: IStep[] = [
@@ -51,13 +52,13 @@ export default function CreatePageContent() {
   } = useCreateTokenWeights();
 
   return (
-    <div className="flex max-w-[500px] flex-col items-center justify-center gap-5">
+    <div className="flex max-w-[500px] flex-col items-center justify-center gap-8">
       <Image
-        src="/graphics/bidness-bera.png"
-        className="mb-[-40px] self-start"
+        src={`${cloudinaryUrl}/bears/tqocfijesxhp3lqjmrdv`}
+        className="mx-auto mb-[-60px] self-start"
         alt="bidness"
-        width={150}
-        height={200}
+        width={196}
+        height={257}
       />
       <div className="w-full">
         {step === Steps.SET_TOKEN_WEIGHTS && (
@@ -80,6 +81,7 @@ export default function CreatePageContent() {
             error={error}
             setSwapFee={setSwapFee}
             onContinue={() => !error && setStep(Steps.SET_INITIAL_LIQUIDITY)}
+            onBack={() => setStep(Steps.SET_TOKEN_WEIGHTS)}
           />
         )}
         {step === Steps.SET_INITIAL_LIQUIDITY && (
@@ -88,6 +90,7 @@ export default function CreatePageContent() {
             error={error}
             onTokenBalanceChange={onTokenBalanceChange}
             onContinue={() => !error && setStep(Steps.CREATE_POOL_PREVIEW)}
+            onBack={() => setStep(Steps.SET_SWAP_FEES)}
           />
         )}
         {step === Steps.CREATE_POOL_PREVIEW && (
@@ -97,6 +100,7 @@ export default function CreatePageContent() {
             fee={swapFee}
             setPoolName={setPoolName}
             error={undefined}
+            onBack={() => setStep(Steps.SET_INITIAL_LIQUIDITY)}
           />
         )}
       </div>

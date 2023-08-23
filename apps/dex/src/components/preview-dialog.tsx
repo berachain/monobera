@@ -6,7 +6,6 @@ import { type SwapInfo } from "@bera/bera-router";
 import { formatUsd, type Token } from "@bera/berajs";
 import { Spinner, TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
-import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import {
   Dialog,
@@ -51,10 +50,15 @@ const PreviewToken = ({
       <p className="text-sm font-medium text-muted-foreground">{title}</p>
       <div className="flex w-full items-center justify-between">
         <h4 className="text-xl font-semibold ">{Number(amount).toFixed(2)}</h4>
-        <Badge key={token?.address} variant={"secondary"} className={"w-fit"}>
+        <div
+          key={token?.address}
+          className={
+            "flex items-center gap-2 rounded-full bg-muted px-2 py-1 text-sm font-medium leading-tight"
+          }
+        >
           <TokenIcon token={token} className="h-6 w-6" />
           {token?.symbol}
-        </Badge>
+        </div>
       </div>
       <p className="text-xs font-medium text-muted-foreground">
         {formatUsd(Number(price) * Number(amount))}
@@ -127,7 +131,6 @@ export default function PreviewDialog({
             setInitialSwapInfo(swapInfo);
           }}
           className="w-full gap-1"
-          variant="outline"
         >
           Preview <Icons.arrowRight className="h-3 w-3" />
         </Button>
@@ -180,7 +183,11 @@ export default function PreviewDialog({
             variant="destructive"
             className="my-4 items-center justify-center"
           >
-            <AlertTitle>Price Change</AlertTitle>
+            <AlertTitle>
+              {" "}
+              <Icons.tooltip className="mt-[-4px] inline h-4 w-4" /> Price
+              Change
+            </AlertTitle>
             <AlertDescription>
               The swap price has changed by more than 5%.
             </AlertDescription>

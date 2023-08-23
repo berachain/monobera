@@ -4,28 +4,35 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils/cn";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
+  "inline-flex h-fit items-center justify-center transition-duration-300 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-30 disabled:pointer-events-none ring-offset-background",
   {
     variants: {
       variant: {
-        default: "bg-primary text-muted hover:bg-primary/90 shadow-sm",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "hover:bg-muted border drop-shadow-sm shadow-sm",
+        primary: "bg-primary text-primary-foreground hover:opacity-90",
         secondary:
-          "bg-muted text-foreground border border-secondary-foreground hover:bg-muted/80",
-        ghost: " hover:bg-muted",
+          "bg-muted border border-border text-muted-foreground hover:text-foreground",
+        outline:
+          "bg-transparent text-secondary-foreground border border-secondary-foreground hover:bg-secondary",
+        ghost: "text-muted-foreground hover:bg-muted",
         link: "underline-offset-4 hover:underline text-primary",
+        destructive:
+          "bg-destructive-foreground text-accent-foreground hover:opacity-90",
+        warning:
+          "bg-warning-foreground text-accent-foreground hover:opacity-90",
+        success:
+          "bg-success-foreground text-accent-foreground hover:opacity-90",
+        info: "bg-info-foreground text-accent-foreground hover:opacity-90",
       },
       size: {
-        default: "h-10 py-2 px-4 rounded-xl text-lg font-semibold leading-7",
-        sm: "h-8 px-3 rounded-xl text-sm font-medium leading-[14px]",
         lg: "px-4 py-3 rounded-xl text-lg font-semibold",
+        md: "px-4 py-2 rounded-xl text-lg font-semibold leading-7",
+        sm: "px-2 py-1 rounded-lg text-sm font-semibold leading-tight",
+        xs: "px-1 py-1/2 rounded-lg text-xs font-medium leading-tight",
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: "primary",
+      size: "md",
     },
   },
 );

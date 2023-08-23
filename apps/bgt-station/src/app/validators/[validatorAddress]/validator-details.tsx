@@ -74,7 +74,7 @@ export default function ValidatorDetails({
           </Button>
           <Button
             className="flex-1"
-            variant="secondary"
+            variant="outline"
             onClick={() =>
               router.push(`/delegate?action=redelegate&validator=${address}`)
             }
@@ -85,7 +85,7 @@ export default function ValidatorDetails({
           </Button>
           <Button
             className="flex-1"
-            variant="secondary"
+            variant="outline"
             onClick={() =>
               router.push(`/delegate?action=unbond&validator=${address}`)
             }

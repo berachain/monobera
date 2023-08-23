@@ -21,8 +21,8 @@ const FilterBadge = ({
   return (
     <Badge
       className={cn(
-        "border-border bg-muted font-medium text-muted-foreground hover:bg-sky-50",
-        active ? "opacity-100" : "opacity-50",
+        "border-border bg-muted font-medium text-muted-foreground hover:cursor-pointer hover:bg-info",
+        active ? "bg-info text-info-foreground" : "",
       )}
       onClick={onClick}
     >
@@ -96,7 +96,7 @@ export const PoolSearch = () => {
             </div>
             <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
               <FilterBadge
-                text={"🚀 New Pools"}
+                text={"🚀 Trending Pools"}
                 active={isNewPool}
                 onClick={() => setIsNewPool(!isNewPool)}
               />
@@ -141,26 +141,31 @@ export const PoolSearch = () => {
                 />
               </div>
             )}
-            <Button
-              className="mt-12"
-              onClick={() => setAllDataSize(allDataSize + 1)}
-              disabled={isAllDataLoadingMore || isAllDataReachingEnd}
-              variant="outline"
-            >
-              {isAllDataLoadingMore
-                ? "Loading..."
-                : isAllDataReachingEnd
-                ? "No more pools"
-                : "View More"}
-            </Button>
+            {!isList && (
+              <Button
+                className="mt-12"
+                onClick={() => setAllDataSize(allDataSize + 1)}
+                disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+                variant="outline"
+              >
+                {isAllDataLoadingMore
+                  ? "Loading..."
+                  : isAllDataReachingEnd
+                  ? "No more pools"
+                  : "View More"}
+              </Button>
+            )}
           </TabsContent>
           <TabsContent value="userPools">
             {!isList && (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-                  {userPools?.map((pool: any) => {
-                    return <PoolCard pool={pool} key={"search" + pool?.pool} />;
-                  })}
+                  {userPools &&
+                    userPools.map((pool: any) => {
+                      return (
+                        <PoolCard pool={pool} key={"search" + pool?.pool} />
+                      );
+                    })}
                 </div>
               </div>
             )}

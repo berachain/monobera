@@ -225,7 +225,7 @@ export default function Markets() {
 
         <MarketGrid />
         <div className="mt-16 flex justify-center">
-          <Button variant={"secondary"}>View all markets</Button>
+          <Button variant={"outline"}>View all markets</Button>
         </div>
       </div>
     </section>

@@ -49,7 +49,7 @@ export const ConnectButton = ({
                     type="button"
                     className={cn(
                       "w-full gap-2",
-                      !isNavItem && "text-lg font-semibold",
+                      !isNavItem && "font-semibold",
                     )}
                   >
                     <Icons.wallet

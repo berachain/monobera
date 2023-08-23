@@ -6,11 +6,8 @@ interface IconsListProps {
   size?: number;
   showCount?: number;
 }
-export default function IconList({
-  iconList,
-  size = 32,
-  showCount,
-}: IconsListProps) {
+
+export function IconList({ iconList, size = 32, showCount }: IconsListProps) {
   const length = iconList.length;
   if (showCount && showCount < length) {
     iconList = iconList.slice(0, showCount);
