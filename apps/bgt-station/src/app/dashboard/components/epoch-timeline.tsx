@@ -23,9 +23,9 @@ export function EpochTimeline() {
           <div className="mb-1 flex justify-between text-xs font-medium text-muted-foreground">
             {/* <span>{0.toFixed(2)}%</span> */}
             <span>
-              {currentEpoch
+              {/* {currentEpoch
                 ? duration(currentEpoch.endTime - currentEpoch.startTime)
-                : "0d"}{" "}
+                : "0d"}{" "} */}
               remaining
             </span>
           </div>

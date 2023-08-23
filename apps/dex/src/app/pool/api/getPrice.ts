@@ -1,5 +1,3 @@
-// TODO fix any
-
 import { type RouterService } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatUnits, parseUnits } from "viem";

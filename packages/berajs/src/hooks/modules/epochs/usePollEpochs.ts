@@ -30,7 +30,6 @@ export const usePollEpochs = () => {
         args: [identifierKey],
       })) as any[];
 
-      console.log(result);
       return {
         current: Number(result[0]),
         startTime: Number(result[1]),

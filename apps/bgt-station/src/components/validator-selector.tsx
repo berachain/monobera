@@ -37,7 +37,7 @@ export default function ValidatorSelector({
   const [open, setOpen] = React.useState(false);
 
   const { useDelegatorValidators } = usePollDelegatorValidators();
-  const delegatedValidators: Validator[] = useDelegatorValidators();
+  const delegatedValidators: Validator[] | undefined = useDelegatorValidators();
 
   const filteredValidators = useMemo(
     () => (showDelegated ? delegatedValidators : validators),
