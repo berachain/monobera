@@ -42,7 +42,7 @@ const ConnectorAssets: ConnectorAssetsType = {
 
 type Props = {
   className?: string;
-  size?: "sm" | "default" | "lg";
+  size?: "sm" | "md" | "lg";
 };
 export default function ConnectWalletDialog({ className, size }: Props) {
   const [open, setOpen] = React.useState(false);
@@ -57,7 +57,7 @@ export default function ConnectWalletDialog({ className, size }: Props) {
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-48", className)}
-        variant="secondary"
+        variant="outline"
         size={size}
       >
         <Icons.wallet className="mr-2 h-6 w-6" />

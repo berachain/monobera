@@ -34,7 +34,7 @@ export function ValidatorsList({
       <div className="mt-8 flex justify-center">
         {linesCount * 3 < validators.length && (
           <Button
-            variant="secondary"
+            variant="outline"
             onClick={() => setLinesCount(linesCount + 1)}
           >
             View More

@@ -81,7 +81,7 @@ export default function MarketsPageContent() {
         ),
         details: (
           <Button
-            variant={"secondary"}
+            variant={"outline"}
             onClick={() =>
               router.push(
                 "/markets/address=0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
@@ -121,9 +121,7 @@ export default function MarketsPageContent() {
         </div>
       </div>
       <div className="mt-6 flex justify-between gap-4">
-        <div className="flex-1">
-          <SearchInput placeholder="Search for BAAVE Markets..." />
-        </div>
+        <SearchInput placeholder="Search for BAAVE Markets..." />
         <Dropdown
           selected={sortBy}
           selectionList={sortOptions}

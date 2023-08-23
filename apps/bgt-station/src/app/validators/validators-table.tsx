@@ -1,12 +1,11 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { usePollActiveValidators, type Validator } from "@bera/berajs";
-import { RT, SearchInput } from "@bera/shared-ui";
+import { IconList, RT, SearchInput } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
 
-import IconList from "~/components/icon-list";
 import { general_validator_columns } from "~/columns/general-validator-columns";
 
 export default function ValidatorsTable() {

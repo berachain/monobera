@@ -3,10 +3,10 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { type Validator } from "@bera/berajs";
+import { IconList } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 
-import IconList from "~/components/icon-list";
 import YellowCard from "~/components/yellow-card";
 
 export default function ValidatorCard(validator: { validator: Validator }) {
@@ -73,7 +73,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
 
       <Button
         className="w-full"
-        variant="secondary"
+        variant="outline"
         onClick={() =>
           router.push(
             `/delegate?action=delegate&&validator=${validator.validator.operatorAddress}`,

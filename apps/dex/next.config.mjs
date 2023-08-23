@@ -24,6 +24,7 @@ const config = {
         pathname: "/static/img/coins/**",
       },
     ],
+    domains: ["res.cloudinary.com", "github.com"],
   },
 };
 
