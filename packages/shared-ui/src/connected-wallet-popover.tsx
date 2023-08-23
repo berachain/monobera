@@ -2,13 +2,13 @@
 
 import React from "react";
 import { truncateHash, useBeraJs } from "@bera/berajs";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { useReadLocalStorage } from "usehooks-ts";
 
 import { History } from "./history";
+import Identicon from "./identicon";
 import { formatConnectorName } from "./utils";
 
 export default function ConnectedWalletPopover() {
@@ -21,14 +21,11 @@ export default function ConnectedWalletPopover() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          className="w-fit border-border text-sm font-medium leading-normal text-muted-foreground"
+          className="flex w-fit flex-row items-center justify-center border-border text-sm font-medium leading-normal text-muted-foreground"
           onClick={() => setOpen(true)}
           variant="outline"
         >
-          <Avatar className="mr-2 h-6 w-6">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>BR</AvatarFallback>
-          </Avatar>
+          <Identicon account={account ?? ""} className="mr-2 flex" />
           {truncateHash(account ?? "0x", 6)}
         </Button>
       </PopoverTrigger>
@@ -47,10 +44,7 @@ export default function ConnectedWalletPopover() {
           </Button>
         </div>
         <div className="flex items-center pb-4">
-          <Avatar className="mr-2 h-12 w-12">
-            <AvatarImage src="https://github.com/wallet.png" />
-            <AvatarFallback>BR</AvatarFallback>
-          </Avatar>
+          <Identicon account={account ?? ""} className="mr-2 flex" size={42} />
           <div className="flex flex-col">
             <p className="flex items-center text-sm font-medium leading-normal">
               {truncateHash(account ?? "0x", 6)}

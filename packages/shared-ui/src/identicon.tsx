@@ -1,12 +1,15 @@
 import { useLayoutEffect, useMemo, useRef } from "react";
+import { cn } from "@bera/ui";
 import jazzicon from "@metamask/jazzicon";
 
 export default function Identicon({
   account,
   size,
+  className,
 }: {
   account: string;
   size?: number;
+  className?: string;
 }) {
   const iconSize = size ?? 24;
 
@@ -30,9 +33,5 @@ export default function Identicon({
     return;
   }, [icon, iconRef]);
 
-  return (
-    <div className="h-full w-full rounded-full ">
-      <span ref={iconRef} />
-    </div>
-  );
+  return <span ref={iconRef} className={cn("rounded-full", className)} />;
 }

@@ -13,7 +13,7 @@ export default function Validators({ activeGauges }: { activeGauges: number }) {
   const totalValidators: number = useTotalValidators();
   const generalInfo = [
     {
-      amount: totalValidators,
+      amount: Number.isNaN(totalValidators) ? 0 : totalValidators,
       text: "Total validators",
     },
     {

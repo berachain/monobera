@@ -37,7 +37,7 @@ export const useInfiniteValidatorDelegations = (
         })
         .catch(() => {
           return undefined;
-        })) as unknown as any[];
+        })) as any[];
       return result[0];
     },
   );

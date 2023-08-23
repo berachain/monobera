@@ -94,7 +94,7 @@ export const usePollActiveValidators = () => {
         })
         .catch(() => {
           return undefined;
-        })) as unknown as any[];
+        })) as any[];
       return {
         validators: result ? result[0] : undefined,
         nextKey: result ? result[1].nextKey : undefined,
