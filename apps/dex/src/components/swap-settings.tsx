@@ -42,13 +42,13 @@ export default function SwapSettings() {
           <Tooltip text="Maximum amount of slippage that can occur during a swap" />
         </h4>
       </div>
-      <div className="flex h-[40px] flex-row items-center gap-2">
+      <div className="flex h-[40px] w-full items-center justify-between gap-4">
         <Tabs
+          className=" flex-shrink-0"
           defaultValue={slippageToleranceType as string}
-          className="w-[120px]"
           onValueChange={(value: string) => setSlippageToleranceType(value)}
         >
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList>
             <TabsTrigger value={SELECTION.AUTO}>Auto</TabsTrigger>
             <TabsTrigger value={SELECTION.CUSTOM}>Custom</TabsTrigger>
           </TabsList>
@@ -58,14 +58,14 @@ export default function SwapSettings() {
           step="any"
           min={0.1}
           max={100}
-          className="h-[40px] w-14 pl-1"
+          className="h-[40px] pr-8 text-right"
           disabled={slippageToleranceType === SELECTION.AUTO}
           placeholder="1"
           defaultValue={slippageToleranceValue}
           endAdornment={
             <p
               className={cn(
-                "mr-2 self-center pl-1 text-xs text-foreground",
+                "mr-2 self-center text-xs text-foreground",
                 slippageToleranceType === SELECTION.AUTO && "opacity-50",
               )}
             >
@@ -83,13 +83,12 @@ export default function SwapSettings() {
           <Tooltip text="Maximum amount of time that can elapse during a swap" />
         </h4>
       </div>
-      <div className="flex h-[40px] flex-row items-center gap-2">
+      <div className="flex h-[40px] flex-row items-center gap-4">
         <Tabs
           defaultValue={deadlineType as string}
-          className="w-[120px]"
           onValueChange={(value: string) => setDeadlineType(value)}
         >
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="flex-shrink-0">
             <TabsTrigger value={SELECTION.AUTO}>Auto</TabsTrigger>
             <TabsTrigger value={SELECTION.CUSTOM}>Custom</TabsTrigger>
           </TabsList>
@@ -99,7 +98,7 @@ export default function SwapSettings() {
           step="any"
           min={0.1}
           max={100}
-          className="h-[40px] w-14 pl-1"
+          className="h-[40px] pl-1 pr-9 text-right"
           disabled={deadlineType === SELECTION.AUTO}
           placeholder="1"
           defaultValue={deadlineValue}

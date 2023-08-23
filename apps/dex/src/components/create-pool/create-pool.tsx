@@ -40,7 +40,7 @@ export function CreatePool({
   }) as Token[];
   const { isConnected, isWrongNetwork } = useBeraJs();
   return (
-    <Card className="sm:w-[480px w-[350px] px-6 py-8 shadow-lg">
+    <Card className="w-[350px] px-6 py-8 shadow-lg sm:w-[480px]">
       <CardTitle className="center text-md mb-3 flex w-full self-center p-0 text-center font-semibold sm:text-lg">
         Choose tokens and allocate weights
       </CardTitle>
