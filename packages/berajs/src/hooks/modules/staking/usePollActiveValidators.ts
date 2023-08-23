@@ -72,7 +72,7 @@ interface Call {
   args: any[];
 }
 
-interface ValidatorListResponse {
+export interface ValidatorListResponse {
   validators: Validator[];
   nextKey: string;
   total: bigint;
@@ -92,7 +92,8 @@ export const usePollActiveValidators = () => {
           functionName: "getValidators",
           args: [defaultPagination],
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
           return undefined;
         })) as any[];
       return {
@@ -125,7 +126,6 @@ export const usePollActiveValidators = () => {
 
   const useTotalValidators = (): number => {
     const { data } = useSWRImmutable<ValidatorListResponse>("getValidators");
-    console.log(data);
     return Number(data?.total) ?? 0;
   };
 

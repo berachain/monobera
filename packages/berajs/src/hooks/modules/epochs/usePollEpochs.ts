@@ -1,12 +1,17 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
+import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { EPOCHS_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 
+export interface IEpoch {
+  current: number;
+  startTime: number;
+  endTime: number;
+}
 // this is going to be slow for now until we have event indexing
 export const usePollEpochs = () => {
   const publicClient = usePublicClient();
@@ -18,17 +23,22 @@ export const usePollEpochs = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
-      const result = await publicClient.readContract({
+      const result = (await publicClient.readContract({
         address: networkConfig.precompileAddresses.epochsAddress as Address,
         abi: EPOCHS_PRECOMPILE_ABI,
         functionName: method,
         args: [identifierKey],
-      });
+      })) as any[];
 
-      return Number(formatUnits((result as bigint) ?? 0n, 0));
+      console.log(result);
+      return {
+        current: Number(result[0]),
+        startTime: Number(result[1]),
+        endTime: Number(result[2]),
+      };
     },
     {
-      refreshInterval: POLLING.SLOW * 5, // make it rlly slow
+      refreshInterval: POLLING.FAST, // make it rlly slow TODO CHANGE
     },
   );
 

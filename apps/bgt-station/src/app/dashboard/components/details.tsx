@@ -3,7 +3,6 @@ import {
   formatter,
   usePollActiveValidators,
   usePollBgtSupply,
-  type Validator,
 } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
@@ -11,13 +10,13 @@ import { EpochTimeline } from "./epoch-timeline";
 import { Stats } from "./stats";
 
 export function Details() {
-  const { useActiveValidators } = usePollActiveValidators();
-  const validators: Validator[] = useActiveValidators();
+  const { useTotalValidators } = usePollActiveValidators();
+  const total = useTotalValidators();
   const { useBgtSupply } = usePollBgtSupply();
   const bgtSupply = useBgtSupply();
   const generalInfo = [
     {
-      amount: validators.length,
+      amount: total,
       text: "Total validators",
     },
     {

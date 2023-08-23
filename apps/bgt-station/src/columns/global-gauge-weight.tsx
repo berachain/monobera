@@ -30,3 +30,24 @@ export const global_gauge_weight_columns: Columns = [
     accessor: "hide",
   },
 ];
+
+export const unbonding_queue_columns: Columns = [
+  {
+    header: <div className="w-[150px] text-left">Pool or Address</div>,
+    accessor: "validator",
+  },
+  {
+    header: <div className="flex w-[100px] gap-1">BGT Unbonding</div>,
+    accessor: "unbondingAmount",
+  },
+  {
+    header: <div className="flex w-[120px] gap-1">Time Remaining</div>,
+    accessor: "timeRemaining",
+  },
+  {
+    header: (
+      <div className=" flex w-[27px] items-center text-center">Cancel</div>
+    ),
+    accessor: "hide",
+  },
+];

@@ -4,7 +4,7 @@ import {
   truncateHash,
   useBeraJs,
   usePollDelegatorUnbonding,
-  usePollTotalDelegatorDelegated,
+  usePollDelegatorValidators,
 } from "@bera/berajs";
 import { IconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -22,16 +22,21 @@ export default function Portfolio() {
     BGTSelectionEnum.YOUR_DELEGATIONS,
   );
 
-  const { useTotalDelegatorDelegated } = usePollTotalDelegatorDelegated();
+  const { useDelegatorTotalDelegated, useTotalValidatorsDelegated } =
+    usePollDelegatorValidators();
 
-  const { useDelegatorUnbonding, useTotalDelegatorUnbonding } =
-    usePollDelegatorUnbonding();
+  const total = useDelegatorTotalDelegated();
+  const totalValidators = useTotalValidatorsDelegated();
+  const {
+    useDelegatorUnbondingQueue,
+    useDelegatorTotalUnbonding,
+    useDelegatorTotalUnbondingValidators,
+  } = usePollDelegatorUnbonding();
 
-  const totalUnbonding = useTotalDelegatorUnbonding();
-  const unbondingQueue = useDelegatorUnbonding();
-  const totalDelegated = useTotalDelegatorDelegated();
+  const totalUnbonding = useDelegatorTotalUnbonding();
+  const unbondingQueue = useDelegatorUnbondingQueue();
+  const unbondingValidatorCount = useDelegatorTotalUnbondingValidators();
 
-  console.log(unbondingQueue);
   return (
     <div className="container max-w-[1078px]">
       <div className="mb-8 flex h-[100px] items-center justify-center text-3xl font-bold leading-[48px] text-foreground md:text-5xl">
@@ -43,12 +48,12 @@ export default function Portfolio() {
           className="justify-betwee flex flex-1 flex-col"
         >
           <div className="text-5xl font-bold leading-[48px] text-foreground">
-            {totalDelegated?.toFixed(2) ?? 0}
+            {total?.toFixed(2) ?? 0}
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
             BGT delegated
             <br />
-            across 3 validators
+            across {totalValidators} validators
           </div>
           <Button
             variant="outline"
@@ -85,7 +90,7 @@ export default function Portfolio() {
             {totalUnbonding?.toFixed(2) ?? 0}
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
-            BGT unbonding across 4 validators
+            BGT unbonding across {unbondingValidatorCount} validators
           </div>
           <Button
             variant="outline"
