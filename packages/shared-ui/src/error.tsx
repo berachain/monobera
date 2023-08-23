@@ -25,6 +25,7 @@ export function ErrorPage({
         <br />
         Would you like to return to the homepage?
       </div>
+
       {onBack && (
         <Button onClick={onBack} className="mx-auto w-fit">
           {" "}

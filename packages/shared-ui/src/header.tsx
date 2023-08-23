@@ -7,8 +7,6 @@ import { Icons } from "@bera/ui/icons";
 
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
-import { ThemeToggle } from "./theme-toggle";
-import { ThemeToggleMobile } from "./theme-toggle-mobile";
 
 const ConnectBtn = dynamic(
   () => import("./connect-button").then((mod) => mod.ConnectButton),
@@ -21,6 +19,22 @@ const ConnectBtn = dynamic(
         Loading
       </Button>
     ),
+  },
+);
+
+const ThemeToggle = dynamic(
+  () => import("./theme-toggle").then((mod) => mod.ThemeToggle),
+  {
+    ssr: false,
+    loading: () => <></>,
+  },
+);
+
+const ThemeToggleMobile = dynamic(
+  () => import("./theme-toggle-mobile").then((mod) => mod.ThemeToggleMobile),
+  {
+    ssr: false,
+    loading: () => <></>,
   },
 );
 
