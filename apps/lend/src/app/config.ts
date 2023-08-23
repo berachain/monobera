@@ -31,16 +31,16 @@ import {
 
 export const navItems = [
   {
-    href: "/swap",
-    title: "Swap",
+    href: "/dashboard",
+    title: "Dashboard",
   },
   {
-    href: "/pool",
-    title: "Pool",
+    href: "/markets",
+    title: "Markets",
   },
   {
     href: "#",
-    title: "Explore",
+    title: "More",
     children: [
       {
         href: homePageUrl,

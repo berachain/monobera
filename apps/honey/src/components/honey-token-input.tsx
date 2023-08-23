@@ -73,7 +73,7 @@ export function HoneyTokenInput({
   return (
     <li
       className={
-        "flex flex-col flex-wrap rounded-xl border-2 border-black bg-white px-4 py-2"
+        "flex flex-col flex-wrap rounded-xl border-2 border-black bg-white px-4"
       }
     >
       <div className="flex flex-row items-center">

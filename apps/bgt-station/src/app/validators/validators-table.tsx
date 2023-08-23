@@ -9,10 +9,10 @@ import { SearchInput } from "@bera/shared-ui";
 import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
+import RT from "~/components/react-table";
 
 import { formatCommission } from "~/utils/formatCommission";
 import IconList from "~/components/icon-list";
-import RT from "~/components/react-table";
 import { general_validator_columns } from "~/columns/general-validator-columns";
 
 export default function ValidatorsTable() {
@@ -70,7 +70,7 @@ export default function ValidatorsTable() {
         ),
         mostWeightedGauge: (
           <div className="flex h-full w-[141px] items-center justify-center">
-            Pool name or address
+            ETH-10/BERA-20
           </div>
         ),
         bribes: (

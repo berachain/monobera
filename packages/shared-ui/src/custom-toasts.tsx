@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { useBeraConfig } from "@bera/berajs";
 import { cn } from "@bera/ui";

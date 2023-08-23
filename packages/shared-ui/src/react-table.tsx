@@ -1,9 +1,7 @@
 import React from "react";
+import { cn } from "@bera/ui";
 import { Card } from "@bera/ui/card";
 import { useTable } from "react-table";
-
-// go to bgt-station seach RT to find a live sample
-// some styles might not working properly here idk why
 
 type Column = {
   header: React.ReactNode;
@@ -13,25 +11,26 @@ type Column = {
 export type Columns = Column[];
 
 interface RTProps {
+  className?: string;
   columns: Columns;
   data: any[];
   rowOnClick?: (row: any) => void;
 }
-export default function RT({ columns, data, rowOnClick }: RTProps) {
+export function RT({ columns, data, rowOnClick, className }: RTProps) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
   return (
-    <Card>
-      <table {...getTableProps()} className="w-full">
+    <Card className="overflow-x-scroll">
+      <table {...getTableProps()} className={cn("w-full", className)}>
         <thead>
-          {headerGroups.map((headerGroup) => (
+          {headerGroups.map((headerGroup: any) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}
               key={"headerGroup" + headerGroup.id}
               className="flex justify-between rounded-tl-[18px] rounded-tr-[18px] border border-l-0 border-r-0 border-t-0 border-b-border bg-muted px-8 py-3"
             >
-              {headerGroup.headers.map((column) => (
+              {headerGroup.headers.map((column: any) => (
                 <th
                   {...column.getHeaderProps()}
                   key={"headerGroup column" + column.id}
@@ -44,8 +43,8 @@ export default function RT({ columns, data, rowOnClick }: RTProps) {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row, index) => {
-            prepareRow(row, index);
+          {rows.map((row: any, index: number) => {
+            prepareRow(row);
             return (
               <tr
                 {...row.getRowProps()}
@@ -55,13 +54,13 @@ export default function RT({ columns, data, rowOnClick }: RTProps) {
                     ? "rounded rounded-18 border-0 "
                     : ""
                 }`}
-                onClick={() => rowOnClick(row)}
+                onClick={() => rowOnClick && rowOnClick(row)}
               >
-                {row.cells.map((cell) => (
+                {row.cells.map((cell: any, index: number) => (
                   <td
                     {...cell.getCellProps()}
-                    key={"tableGroup cell".id}
-                    className="text-xs font-medium leading-tight text-foreground"
+                    key={"tableGroup" + index}
+                    className="flex items-center text-xs font-medium leading-tight text-foreground"
                   >
                     {cell.render("Cell")}
                   </td>

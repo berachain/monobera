@@ -3,6 +3,7 @@ import { getUnixTime } from "date-fns";
 
 import Data from "~/components/data";
 import Graph from "~/components/graph";
+import Hero from "~/components/hero";
 import { HoneyMachine } from "~/components/honey-machine";
 import HoneyTransactionsTable from "~/components/honey-transactions-table";
 import { SwapCard } from "~/components/swap-card";
@@ -28,34 +29,99 @@ type HoneySupply = {
 async function getOverviewData(): Promise<[HoneyVolume, HoneySupply]> {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-
-  const volumeRes = await fetch(
+  console.log(
     `${
       process.env.NEXT_PUBLIC_ANALYTICS
     }/analytics/honey/volume/hourly?to_time=${getUnixTime(
       new Date(),
     )}&from_time=${getUnixTime(yesterday)}`,
   );
+  try {
+    const volumeRes = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_ANALYTICS
+      }/analytics/honey/volume/hourly?to_time=${getUnixTime(
+        new Date(),
+      )}&from_time=${getUnixTime(yesterday)}`,
+    );
 
-  const supplyRes = await fetch(
+    const supplyRes = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_ANALYTICS
+      }/analytics/honey/supply/hourly?to_time=${getUnixTime(
+        new Date(),
+      )}&from_time=${getUnixTime(yesterday)}`,
+    );
+
+    if (!volumeRes.ok || !supplyRes.ok) {
+      // This will activate the closest `error.js` Error Boundary
+      throw new Error("Failed to fetch data");
+    }
+    return Promise.all([volumeRes.json(), supplyRes.json()]);
+  } catch (e) {
+    console.error(e);
+
+    return [[], []] as [any, any];
+  }
+}
+
+async function getPastDays(days: number): Promise<[HoneyVolume, HoneySupply]> {
+  const daysAgo = new Date();
+  daysAgo.setDate(daysAgo.getDate() - days);
+  console.log(
     `${
       process.env.NEXT_PUBLIC_ANALYTICS
-    }/analytics/honey/supply/hourly?to_time=${getUnixTime(
+    }/analytics/honey/volume/daily?to_time=${getUnixTime(
       new Date(),
-    )}&from_time=${getUnixTime(yesterday)}`,
+    )}&from_time=${getUnixTime(daysAgo)}`,
   );
+  try {
+    const volumeRes = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_ANALYTICS
+      }/analytics/honey/volume/hourly?to_time=${getUnixTime(
+        new Date(),
+      )}&from_time=${getUnixTime(daysAgo)}`,
+    );
 
-  if (!volumeRes.ok || !supplyRes.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
+    const supplyRes = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_ANALYTICS
+      }/analytics/honey/supply/hourly?to_time=${getUnixTime(
+        new Date(),
+      )}&from_time=${getUnixTime(daysAgo)}`,
+    );
+
+    if (!volumeRes.ok || !supplyRes.ok) {
+      // This will activate the closest `error.js` Error Boundary
+      throw new Error("Failed to fetch data");
+    }
+    return Promise.all([volumeRes.json(), supplyRes.json()]);
+  } catch (e) {
+    console.error(e);
+
+    return [[], []] as [any, any];
   }
-
-  return Promise.all([volumeRes.json(), supplyRes.json()]);
 }
 
 export default async function Home() {
   const [volume, supply] = await getOverviewData();
+  const [weeklyVolume, weeklySupply] = await getPastDays(7);
+  const [monthlyVolume, monthlySupply] = await getPastDays(30);
+  const [quarterlyVolume, quarterlySupply] = await getPastDays(90);
 
+  if (
+    !volume.honeyVolume ||
+    !supply.honeyTotalSupply ||
+    !weeklyVolume.honeyVolume ||
+    !weeklySupply.honeyTotalSupply ||
+    !monthlyVolume.honeyVolume ||
+    !monthlySupply.honeyTotalSupply ||
+    !quarterlyVolume.honeyVolume ||
+    !quarterlySupply.honeyTotalSupply
+  ) {
+    return null;
+  }
   return (
     <>
       <div className="honey:bg-[#468DCB]">
@@ -63,7 +129,10 @@ export default async function Home() {
           <HoneyMachine />
         </div>
         <div className="flex justify-center px-6 py-36 honey:hidden">
-          <SwapCard />
+          <div>
+            <Hero />
+            <SwapCard />
+          </div>
         </div>
       </div>
       <div className="honey:bg-gradient-to-b honey:from-[#468DCB] honey:to-background">
@@ -78,6 +147,12 @@ export default async function Home() {
             <Graph
               hourlySupply={supply.honeyTotalSupply}
               hourlyVolume={volume.honeyVolume}
+              weeklyVolume={weeklyVolume.honeyVolume}
+              weeklySupply={weeklySupply.honeyTotalSupply}
+              monthlyVolume={monthlyVolume.honeyVolume}
+              monthlySupply={monthlySupply.honeyTotalSupply}
+              quarterlyVolume={quarterlyVolume.honeyVolume}
+              quarterlySupply={quarterlySupply.honeyTotalSupply}
             />
           </div>
           <div className="py-12">

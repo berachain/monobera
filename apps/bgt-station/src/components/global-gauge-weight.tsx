@@ -3,10 +3,10 @@ import { truncateHash, type CuttingBoard } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Checkbox } from "@bera/ui/checkbox";
+import RT from "~/components/react-table";
 
 import { getColors } from "~/utils/colors";
 import { global_gauge_weight_columns } from "~/columns/global-gauge-weight";
-import RT from "./react-table";
 
 const options = {
   plugins: {

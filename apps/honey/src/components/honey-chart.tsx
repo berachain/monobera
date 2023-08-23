@@ -111,6 +111,7 @@ type TimeFrameToNumber = {
 };
 
 function isHoneyData(data: any): data is HoneyEntry {
+  if (typeof data !== "object") return false;
   return "amount" in data && "UTCTime" in data;
 }
 
@@ -293,7 +294,7 @@ export const HoneyChart = ({
       }
     }
   }, [timeFrame, chart]);
-  console.log(data);
+
   return (
     <Card className="p-0">
       <Tabs

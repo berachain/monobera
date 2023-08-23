@@ -22,7 +22,7 @@ export function MobileDropdown() {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Icons.menu className="h-8 w-8 text-secondary-foreground " />
+        <Icons.menu className="block h-8 w-8 text-secondary-foreground md:hidden " />
       </PopoverTrigger>
       <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen animate-none rounded-none border-none transition-transform">
         <ScrollArea className="py-8">

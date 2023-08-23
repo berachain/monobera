@@ -34,14 +34,14 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Footer />
             </div>
             <Image
-              className="fixed left-1/2 right-0 top-0 -translate-x-1/2 transform"
+              className="fixed left-1/2 right-0 top-0 -translate-x-1/2"
               src="/bg/variant.svg"
               alt="bera variant"
               width={1078}
               height={820}
             />
             <Image
-              className="fixed bottom-0 left-1/2 right-0 h-[300px] -translate-x-1/2 transform object-cover"
+              className="fixed bottom-0 left-1/2 right-0 h-[300px] -translate-x-1/2 object-cover"
               src="/bg/bera-banner.png"
               alt="bera banner"
               width={2000}

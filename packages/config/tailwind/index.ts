@@ -7,6 +7,7 @@ export default {
     "src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "../../packages/ui/src/*.{ts,tsx}",
+    "../../packages/shared-ui/src/*.{ts,tsx}",
   ],
   theme: {
     fontSize: {
@@ -37,11 +38,13 @@ export default {
       },
       backgroundImage: {
         glow: "url('/glow.png')",
+        "honey-gradient":
+          "linear-gradient(180deg, #FFFCF2 19.89%, #FFF2D0 100%)",
+        lend: "url('/heroBgnd.png')",
       },
       borderColor: {
         DEFAULT: "hsl(var(--border) / <alpha-value>)",
       },
-
       colors: {
         border: "hsl(var(--border) / <alpha-value>)",
         borderSecondary: "hsl(var(--border-secondary) / <alpha-value>)",
@@ -107,6 +110,14 @@ export default {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       keyframes: {
+        "fade-in": {
+          from: {
+            opacity: "0",
+          },
+          to: {
+            opacity: "1",
+          },
+        },
         "fade-up": {
           "0%": {
             opacity: "0",
@@ -133,6 +144,11 @@ export default {
             transform: "translateY(0px)",
           },
         },
+        marquee: {
+          "100%": {
+            transform: "translateY(-50%)",
+          },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -149,6 +165,7 @@ export default {
       },
       animation: {
         marquee: "marquee var(--marquee-duration) linear infinite",
+        "fade-in": "fade-in 0.5s linear forwards",
         "fade-up": "fade-up 0.5s",
         "fade-down": "fade-down 0.5s",
         "accordion-down": "accordion-down 0.2s ease-out",
