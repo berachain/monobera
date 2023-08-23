@@ -54,7 +54,7 @@ export function Header({ navItems }: { navItems: any[] }) {
           <MainNav navItems={navItems} />
         </div>
       </div>
-      <div className="flex h-full items-center gap-2">
+      <div className="flex h-full items-center gap-4">
         {isConnected && userBalance && (
           <div className="flex-no-wrap hidden h-10 w-fit items-center gap-1 rounded-full border border-warning-foreground bg-warning px-4 py-2 text-sm font-medium text-warning-foreground lg:flex">
             <Icons.wallet className="block h-4 w-4" />

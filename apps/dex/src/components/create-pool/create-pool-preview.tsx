@@ -84,7 +84,7 @@ export function CreatePoolPreview({
       <CardContent className="flex flex-col gap-4">
         <Image
           alt="preview"
-          src={`${cloudinaryUrl}/bears/placeholder/preview-swap-img_ucrnla`}
+          src={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
           className="self-center"
           width={525}
           height={150}

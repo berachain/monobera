@@ -34,7 +34,7 @@ export function CreatePoolStepper({ step = 0, steps, setStep }: Props) {
               </div>
               <div
                 onClick={() => stepIdx < step && setStep(stepIdx)}
-                className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-muted-foreground bg-background text-muted-foreground transition-colors duration-200"
+                className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-muted-foreground bg-background text-muted-foreground transition-colors duration-200"
               >
                 {/* <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" /> */}
                 <span className="items-center">{stepIdx + 1}</span>
@@ -50,7 +50,7 @@ export function CreatePoolStepper({ step = 0, steps, setStep }: Props) {
               </div>
               <div
                 onClick={() => stepIdx < step && setStep(stepIdx)}
-                className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-primary bg-white text-primary transition-colors duration-200"
+                className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-primary bg-white text-primary transition-colors duration-200"
                 aria-current="step"
               >
                 <span className="items-center rounded-full" aria-hidden="true">
@@ -67,7 +67,7 @@ export function CreatePoolStepper({ step = 0, steps, setStep }: Props) {
                 <div className="h-0.5 w-full bg-primary" />
               </div>
               <div
-                className="group relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-primary bg-primary text-primary-foreground transition-colors duration-200"
+                className="group relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-primary bg-primary text-primary-foreground transition-colors duration-200"
                 onClick={() => stepIdx < step && setStep(stepIdx)}
               >
                 <span

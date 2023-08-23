@@ -67,7 +67,7 @@ export default function CreateAPool() {
 
             <Avatar
               className={
-                "absolute bottom-20 right-0 hidden h-12 w-12 animate-[spin_10s_linear_infinite] blur-sm lg:block"
+                "absolute bottom-40 right-10 hidden h-12 w-12 animate-[bounce_7s_ease_infinite] blur-sm lg:block"
               }
             >
               <AvatarImage
@@ -79,7 +79,7 @@ export default function CreateAPool() {
 
             <Avatar
               className={
-                "absolute right-[200px] top-[100px] hidden h-16 w-16 animate-[spin_10s_linear_infinite] lg:block"
+                "absolute right-[200px] top-[100px] hidden h-16 w-16 animate-[bounce_4s_ease_infinite] lg:block"
               }
             >
               <AvatarImage

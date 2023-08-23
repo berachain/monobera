@@ -1,4 +1,3 @@
-import { type SVGProps } from "react";
 import { type NetworkConfig } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
 import { type Chain } from "wagmi";

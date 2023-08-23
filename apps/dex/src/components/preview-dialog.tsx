@@ -141,7 +141,7 @@ export default function PreviewDialog({
           <DialogTitle className="mb-3">Preview swap</DialogTitle>
           <Image
             alt="preview"
-            src={`${cloudinaryUrl}/bears/placeholder/preview-swap-img_ucrnla`}
+            src={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
             className="self-center"
             width={525}
             height={150}
