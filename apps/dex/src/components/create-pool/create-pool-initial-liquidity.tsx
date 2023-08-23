@@ -1,7 +1,8 @@
 import React from "react";
-import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
+import { Alert, AlertDescription } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Card, CardTitle } from "@bera/ui/card";
+import { Icons } from "@bera/ui/icons";
 
 import CreatePoolInitialLiquidityInput from "~/components/create-pool/create-pool-initial-liquidity-input";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
@@ -11,6 +12,7 @@ type Props = {
   error: Error | undefined;
   onTokenBalanceChange: (index: number, amount: number) => void;
   onContinue: () => void;
+  onBack: () => void;
 };
 
 export function CreatePoolInitialLiquidity({
@@ -18,15 +20,18 @@ export function CreatePoolInitialLiquidity({
   error,
   onTokenBalanceChange,
   onContinue,
+  onBack,
 }: Props) {
   return (
-    <Card className="w-[350px] sm:w-[480px]">
-      <CardHeader>
-        <CardTitle className="center flex justify-between">
-          Set Initial Liquidity
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+    <Card className="w-[350px]  px-6 py-8 shadow-lg sm:w-[480px]">
+      <CardTitle className="center mb-3 flex items-center">
+        <Icons.chevronLeft
+          className="block h-6 w-6 hover:cursor-pointer"
+          onClick={onBack}
+        />{" "}
+        Set Initial Liquidity
+      </CardTitle>
+      <div className="flex flex-col gap-4">
         <ul
           role="list"
           className="divide divide-y divide-border rounded-lg border"
@@ -44,9 +49,11 @@ export function CreatePoolInitialLiquidity({
         </ul>
 
         {error && (
-          <Alert className="my-4">
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error && error.message}</AlertDescription>
+          <Alert className="my-4" variant="destructive">
+            <AlertDescription>
+              <Icons.info className="mr-1 mt-[-4px] inline h-4 w-4" />
+              {error && error.message}
+            </AlertDescription>
           </Alert>
         )}
         <Button
@@ -56,7 +63,7 @@ export function CreatePoolInitialLiquidity({
         >
           Next
         </Button>
-      </CardContent>
+      </div>
     </Card>
   );
 }
