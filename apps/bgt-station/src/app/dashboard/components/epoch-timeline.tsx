@@ -22,7 +22,7 @@ export function EpochTimeline() {
           <Progress className="h-2" value={50} />
         </div>
         <div className="font-semi text-3xl font-semibold text-muted-foreground">
-          {currentEpoch ? currentEpoch + 1 : ''}
+          {currentEpoch ? currentEpoch + 1 : ""}
         </div>
       </div>
     </Card>

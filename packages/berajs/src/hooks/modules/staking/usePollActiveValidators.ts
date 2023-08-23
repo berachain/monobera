@@ -79,14 +79,16 @@ export const usePollActiveValidators = () => {
   useSWR(
     "getValidators",
     async () => {
-      const result = await publicClient.readContract({
-        address: networkConfig.precompileAddresses.stakingAddress as Address,
-        abi: STAKING_PRECOMPILE_ABI,
-        functionName: "getValidators",
-        args: [],
-      }).catch((e) => {
-        console.log(e);
-      });
+      const result = await publicClient
+        .readContract({
+          address: networkConfig.precompileAddresses.stakingAddress as Address,
+          abi: STAKING_PRECOMPILE_ABI,
+          functionName: "getValidators",
+          args: [],
+        })
+        .catch((e) => {
+          console.log(e);
+        });
       return result;
     },
     {

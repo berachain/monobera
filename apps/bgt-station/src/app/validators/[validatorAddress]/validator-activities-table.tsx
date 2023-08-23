@@ -2,8 +2,8 @@ import React from "react";
 import { usePollActiveValidators, type Validator } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import RT from "~/components/react-table";
 
+import RT from "~/components/react-table";
 import {
   delegators_columns,
   recent_votes_columns,
