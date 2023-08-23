@@ -21,7 +21,7 @@ export default function ConnectedWalletPopover() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          className="w-48 text-sm font-medium leading-normal"
+          className="w-fit border-border text-sm font-medium leading-normal text-muted-foreground"
           onClick={() => setOpen(true)}
           variant="outline"
         >

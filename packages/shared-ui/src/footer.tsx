@@ -6,7 +6,7 @@ export function Footer({
   navItem: { solutions: any[]; support: any[]; social: any[] };
 }) {
   return (
-    <footer className="bg-white" aria-labelledby="footer-heading">
+    <footer className="bg-background" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
@@ -14,7 +14,7 @@ export function Footer({
         <div className="xl:grid xl:grid-cols-4 xl:gap-8">
           <div className="col-span-2 space-y-8">
             <Icons.logo className="h-10 w-auto" />
-            <p className="text-sm leading-6 text-gray-600">
+            <p className="text-sm leading-6 text-secondary-foreground">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
               ornare cursus sed nunc eget dictum Sed ornare cursus sed nunc eget
               dictumd nunc eget dictum Sed ornare cursus sed nunc eget dictum
@@ -24,7 +24,7 @@ export function Footer({
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-gray-400 hover:text-gray-500"
+                  className="text-muted-foreground hover:text-secondary-foreground"
                 >
                   <span className="sr-only">{item.name}</span>
                   <item.icon className="h-6 w-6" aria-hidden="true" />
@@ -34,7 +34,7 @@ export function Footer({
           </div>
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div>
-              <h3 className="text-sm font-semibold leading-6 text-gray-900">
+              <h3 className="text-sm font-semibold leading-6 text-foreground">
                 Solutions
               </h3>
               <ul role="list" className="mt-6 space-y-4">
@@ -42,7 +42,7 @@ export function Footer({
                   <li key={item.name}>
                     <a
                       href={item.href}
-                      className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                      className="text-sm leading-6 text-secondary-foreground hover:text-foreground"
                     >
                       {item.name}
                     </a>
@@ -51,7 +51,7 @@ export function Footer({
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-semibold leading-6 text-gray-900">
+              <h3 className="text-sm font-semibold leading-6 text-foreground">
                 Support
               </h3>
               <ul role="list" className="mt-6 space-y-4">
@@ -59,7 +59,7 @@ export function Footer({
                   <li key={item.name}>
                     <a
                       href={item.href}
-                      className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                      className="text-sm leading-6 text-secondary-foreground hover:text-foreground"
                     >
                       {item.name}
                     </a>
@@ -69,8 +69,8 @@ export function Footer({
             </div>
           </div>
         </div>
-        <div className="mt-16 flex justify-between border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
-          <p className="text-xs leading-5 text-gray-500">
+        <div className="mt-16 flex justify-between border-t border-border pt-8 sm:mt-20 lg:mt-24">
+          <p className="text-xs leading-5 text-secondary-foreground">
             &copy; {new Date().getFullYear()} BeraChain | All rights reserved
             (not really)
           </p>
