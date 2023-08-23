@@ -1,10 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import {
-  BeravaloperToEth,
-  usePollActiveValidators,
-  type Validator,
-} from "@bera/berajs";
+import { BeravaloperToEth, usePollActiveValidators } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
 import { Icons } from "@bera/ui/icons";
@@ -19,12 +15,12 @@ export default function ValidatorsTable() {
   const router = useRouter();
   const { useActiveValidators, useTotalDelegated } = usePollActiveValidators();
 
-  const validators: Validator[] = useActiveValidators();
+  const validators = useActiveValidators();
   const totalDelegated: number = useTotalDelegated();
   const [keyword, setKeyword] = React.useState("");
   const validatorTableData = React.useMemo(() => {
     return validators
-      .filter((validator) => !validator.jailed)
+      ?.filter((validator) => !validator.jailed)
       .filter((item) =>
         Object.values(item).some((value) =>
           String(value).toLowerCase().includes(keyword.toLowerCase()),
@@ -103,7 +99,7 @@ export default function ValidatorsTable() {
       </div>
       <RT
         columns={general_validator_columns}
-        data={validatorTableData}
+        data={validatorTableData ?? []}
         rowOnClick={(row) =>
           router.push(`/validators/${BeravaloperToEth(row.original.address)}`)
         }

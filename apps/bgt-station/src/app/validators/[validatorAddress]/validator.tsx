@@ -105,7 +105,7 @@ export default function Validator({
         <BribeList />
       </div>
 
-      <ValidatorActivitiesTable />
+      <ValidatorActivitiesTable validatorAddress={validatorAddress} />
     </div>
   );
 }

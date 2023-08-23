@@ -11,7 +11,7 @@ import {
 } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
-import { BeravaloperToEth, ethToBeravaloper } from "~/utils";
+import { BeravaloperToEth, defaultPagination, ethToBeravaloper } from "~/utils";
 import { usePollBgtSupply } from "../bank";
 
 export interface Validator {
@@ -72,6 +72,12 @@ interface Call {
   args: any[];
 }
 
+interface ValidatorListResponse {
+  validators: Validator[];
+  nextKey: string;
+  total: bigint;
+}
+
 export const usePollActiveValidators = () => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
@@ -79,47 +85,57 @@ export const usePollActiveValidators = () => {
   useSWR(
     "getValidators",
     async () => {
-      const result = await publicClient
+      const result = (await publicClient
         .readContract({
           address: networkConfig.precompileAddresses.stakingAddress as Address,
           abi: STAKING_PRECOMPILE_ABI,
           functionName: "getValidators",
-          args: [],
+          args: [defaultPagination],
         })
-        .catch((e) => {
-          console.log(e);
-        });
-      return result;
+        .catch(() => {
+          return undefined;
+        })) as unknown as any[];
+      return {
+        validators: result ? result[0] : undefined,
+        nextKey: result ? result[1].nextKey : undefined,
+        total: result ? result[1].total : undefined,
+      };
     },
     {
       refreshInterval: POLLING.NORMAL,
     },
   );
-  const useActiveValidators = (): Validator[] => {
-    const { data = [] } = useSWRImmutable("getValidators");
-    return data;
+  const useActiveValidators = (): Validator[] | undefined => {
+    const { data } = useSWRImmutable<ValidatorListResponse>("getValidators");
+    const validators = data?.validators ?? undefined;
+    return validators;
   };
 
   const useActiveValidator = (
     address: string | undefined,
   ): Validator | undefined => {
-    const { data = [] } = useSWRImmutable("getValidators");
+    const { data } = useSWRImmutable<ValidatorListResponse>("getValidators");
     return useMemo(() => {
-      if (!address) return undefined;
-      return data?.find(
+      if (!address || !data?.validators) return undefined;
+      return data?.validators.find(
         (v: Validator) => BeravaloperToEth(v.operatorAddress) === address,
       );
     }, [data, address]);
   };
 
+  const useTotalValidators = (): number => {
+    const { data } = useSWRImmutable<ValidatorListResponse>("getValidators");
+    console.log(data);
+    return Number(data?.total) ?? 0;
+  };
+
   const useTotalDelegated = (): number => {
-    const { data = [] } = useSWRImmutable("getValidators");
+    const { data } = useSWRImmutable<ValidatorListResponse>("getValidators");
     const total = useMemo(() => {
-      return data?.reduce((sum: number, validator: Validator) => {
+      return data?.validators?.reduce((sum: number, validator: Validator) => {
         return sum + Number(formatUnits(BigInt(validator.tokens), 18));
       }, 0);
     }, [data]);
-    console.log(total);
     return total ?? 0;
   };
 
@@ -147,18 +163,19 @@ export const usePollActiveValidators = () => {
   };
 
   const useValidatorCuttingBoards = () => {
-    const { data: validators = [] } = useSWRImmutable("getValidators");
+    const { data: validators } =
+      useSWRImmutable<ValidatorListResponse>("getValidators");
     const publicClient = usePublicClient();
     const { networkConfig } = useBeraConfig();
 
     const { data = [] } = useSWR([validators, "getCuttingBoards"], async () => {
-      if (validators.length > 0) {
-        const call: Call[] = validators.map((val: Validator) => ({
+      if ((validators?.validators?.length ?? 0) > 0) {
+        const call: Call[] = validators?.validators.map((val: Validator) => ({
           address: networkConfig.precompileAddresses.berachefAddress as Address,
           abi: BERACHEF_PRECOMPILE_ABI,
           functionName: "getActiveCuttingBoard",
           args: [BeravaloperToEth(val.operatorAddress)],
-        }));
+        })) as Call[];
 
         const result = await publicClient.multicall({
           contracts: call,
@@ -265,6 +282,7 @@ export const usePollActiveValidators = () => {
     useValidatorCuttingBoards,
     useSelectedValidatorActiveBribes,
     usePercentOfStakedBGT,
+    useTotalValidators,
     // usePollSelectedValidatorCuttingBoard,
   };
 };

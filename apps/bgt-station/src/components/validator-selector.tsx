@@ -32,7 +32,7 @@ export default function ValidatorSelector({
   emptyMessage?: string;
 }) {
   const { useActiveValidators, useActiveValidator } = usePollActiveValidators();
-  const validators: Validator[] = useActiveValidators();
+  const validators: Validator[] | undefined = useActiveValidators();
 
   const validValidator = useActiveValidator(validatorAddress);
   const [open, setOpen] = React.useState(false);
@@ -70,7 +70,7 @@ export default function ValidatorSelector({
       </Button>
       <ValidatorModal
         open={open}
-        validators={filteredValidators}
+        validators={filteredValidators ?? []}
         onSelect={(address) => onSelectValidator && onSelectValidator(address)}
         onClose={() => setOpen(false)}
         emptyMessage={emptyMessage}

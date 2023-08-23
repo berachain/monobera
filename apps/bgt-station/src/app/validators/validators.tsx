@@ -8,11 +8,12 @@ import { Card } from "@bera/ui/card";
 import ValidatorsTable from "./validators-table";
 
 export default function Validators({ activeGauges }: { activeGauges: number }) {
-  const { useActiveValidators } = usePollActiveValidators();
-  const validators: Validator[] = useActiveValidators();
+  const { useActiveValidators, useTotalValidators } = usePollActiveValidators();
+  const validators: Validator[] | undefined = useActiveValidators();
+  const totalValidators: number = useTotalValidators();
   const generalInfo = [
     {
-      amount: validators.length,
+      amount: totalValidators,
       text: "Total validators",
     },
     {

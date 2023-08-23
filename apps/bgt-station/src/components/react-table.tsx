@@ -28,14 +28,14 @@ export default function RT({
     useTable({ columns: columns ?? [], data: data ?? [] });
 
   return (
-    <Card className="overflow-x-scroll">
+    <Card className="w-full overflow-x-scroll">
       <table {...getTableProps()} className={cn("w-full", className)}>
         <thead>
           {headerGroups.map((headerGroup: any) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}
               key={"headerGroup" + headerGroup.id}
-              className="flex justify-between rounded-tl-[18px] rounded-tr-[18px] border border-l-0 border-r-0 border-t-0 border-b-border bg-muted px-8 py-3"
+              className="flex w-full justify-between rounded-tl-[18px] rounded-tr-[18px] border border-l-0 border-r-0 border-t-0 border-b-border bg-muted px-8 py-3"
             >
               {headerGroup.headers.map((column: any) => (
                 <th
@@ -56,7 +56,7 @@ export default function RT({
               <tr
                 {...row.getRowProps()}
                 key={"tableGroup rows" + row.id}
-                className={`flex justify-between border border-l-0 border-r-0 border-t-0 bg-background px-8 py-4 hover:cursor-pointer hover:bg-muted border-b-border${
+                className={`flex w-full justify-between border border-l-0 border-r-0 border-t-0 bg-background px-8 py-4 hover:cursor-pointer hover:bg-muted border-b-border${
                   index === rows.length - 1
                     ? "rounded rounded-18 border-0 "
                     : ""
