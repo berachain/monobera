@@ -44,7 +44,7 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
     (allData && allData[allData.length - 1]?.length < DEFAULT_SIZE);
 
   const data = allData ? [].concat(...allData) : [];
-
+  console.log(data, "data");
   return (
     <div
       className={cn(
@@ -62,15 +62,17 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
         </p>
         <div className="mt-6 flex w-full flex-col items-center justify-center gap-4 md:mt-12">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 ">
-            {data.map((pool: any) => {
-              return (
-                <PoolCard
-                  pool={pool}
-                  key={pool?.address + "hot"}
-                  addLp={!isMainPage}
-                />
-              );
-            })}
+            {data &&
+              data[0] &&
+              data.map((pool: any) => {
+                return (
+                  <PoolCard
+                    pool={pool}
+                    key={pool?.address + "hot"}
+                    addLp={!isMainPage}
+                  />
+                );
+              })}
           </div>
           {!isMainPage && (
             <Button

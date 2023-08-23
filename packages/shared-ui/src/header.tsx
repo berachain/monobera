@@ -1,13 +1,28 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useBeraJs, usePollBgtBalance } from "@bera/berajs";
+import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-import { ConnectButton } from "./connect-button";
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
 import { ThemeToggle } from "./theme-toggle";
 import { ThemeToggleMobile } from "./theme-toggle-mobile";
+
+const ConnectBtn = dynamic(
+  () => import("./connect-button").then((mod) => mod.ConnectButton),
+  {
+    ssr: false,
+    loading: () => (
+      <Button>
+        {" "}
+        <Icons.spinner className="relative mr-1 h-6 w-6 animate-spin" />
+        Loading
+      </Button>
+    ),
+  },
+);
 
 export function Header({ navItems }: { navItems: any[] }) {
   const { isConnected } = useBeraJs();
@@ -26,7 +41,7 @@ export function Header({ navItems }: { navItems: any[] }) {
         </div>
       </div>
       <div className=" flex h-full items-center gap-2">
-        {isConnected && (
+        {isConnected && userBalance && (
           <div className="flex-no-wrap hidden h-10 w-fit items-center gap-1 rounded-full border border-warning-foreground bg-warning px-4 py-2 text-sm font-medium text-warning-foreground lg:flex">
             <Icons.wallet className="block h-4 w-4" />
             {Number(userBalance).toFixed(2)} <span>BGT</span>
@@ -34,7 +49,7 @@ export function Header({ navItems }: { navItems: any[] }) {
         )}
         <ThemeToggleMobile />
         <ThemeToggle />
-        <ConnectButton />
+        <ConnectBtn />
         <MobileDropdown navItems={navItems} />
       </div>
     </nav>
