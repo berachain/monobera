@@ -31,10 +31,6 @@ const DynamicApproveButton = dynamic(() => import("./approve-token-button"), {
   ssr: false,
 });
 
-const DynamicBerachainInfo = dynamic(() => import("./berachain-info"), {
-  ssr: false,
-});
-
 const Connect = dynamic(
   () => import("@bera/shared-ui").then((mod) => mod.ConnectButton),
   {
@@ -58,7 +54,6 @@ interface ISwapCard {
 export function SwapCard({
   inputCurrency,
   outputCurrency,
-  isMainPage,
   showBear = true,
   className,
 }: ISwapCard) {
@@ -125,7 +120,6 @@ export function SwapCard({
             <CardTitle className="center flex items-center justify-between px-2">
               Swap <SettingsPopover />
             </CardTitle>
-
             <div className="mt-3">
               <div className="border-1 flex flex-col gap-2 border-border">
                 <ul
@@ -277,7 +271,6 @@ export function SwapCard({
               </div>
             </div>
           </Card>
-          {isMainPage && <DynamicBerachainInfo />}
         </div>
       </div>
     </div>
