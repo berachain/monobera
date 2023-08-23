@@ -8,9 +8,7 @@ import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { ScrollArea } from "@bera/ui/scroll-area";
 
-import { navItems } from "~/app/config";
-
-export function MobileDropdown() {
+export function MobileDropdown({ navItems }: { navItems: any[] }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -44,7 +42,7 @@ export function MobileDropdown() {
                   className="grid w-full gap-3 p-1 md:w-[500px] md:grid-cols-2 lg:w-[600px]"
                   key={href}
                 >
-                  {children.map((component) => (
+                  {children.map((component: any) => (
                     <ListItem
                       key={component.title}
                       title={component.title}

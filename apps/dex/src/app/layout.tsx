@@ -4,13 +4,12 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Image from "next/image";
-import { TailwindIndicator } from "@bera/shared-ui";
+import { Footer, Header, TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
-import { Footer } from "~/components/footer";
-import { Header } from "~/components/header";
+import { footerNavigation, navItems } from "~/app/config";
 import Providers from "./Providers";
 
 const fontSans = IBM_Plex_Sans({
@@ -28,10 +27,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
             <div className="z-10 flex-1">
-              <Header />
+              <Header navItems={navItems} />
               <main className="w-full py-20">{props.children}</main>
               <Toaster position="bottom-right" />
-              <Footer />
+              <Footer navItem={footerNavigation} />
             </div>
             <Image
               className="fixed left-1/2 right-0 top-0 -translate-x-1/2"

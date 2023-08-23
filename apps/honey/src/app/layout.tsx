@@ -4,14 +4,12 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import { BeraConfig } from "@bera/berajs";
-import { TailwindIndicator } from "@bera/shared-ui";
+import { Footer, Header, TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
-import { Footer } from "~/components/footer";
-import { Header } from "~/components/header";
-import { beraJsConfig } from "./config";
+import { beraJsConfig, footNavigation, navItems } from "./config";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -24,10 +22,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en">
       <body className={cn("font-sans antialiased", fontSans.variable)}>
         <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-          <Header />
+          <Header navItems={navItems} />
           <main className="w-full">{props.children}</main>
           <Toaster position="bottom-right" />
-          <Footer />
+          <Footer navItem={footNavigation} />
           <TailwindIndicator />
           <Analytics />
         </BeraConfig>

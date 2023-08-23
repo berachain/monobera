@@ -1,5 +1,3 @@
-"use client";
-
 import { forwardRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,12 +11,14 @@ import {
   NavigationMenuTrigger,
 } from "@bera/ui/navigation-menu";
 
-import { navItems } from "~/app/config";
-
 export function MainNav({
+  navItems,
   className,
   ...props
-}: React.HTMLAttributes<HTMLElement>) {
+}: {
+  navItems: any[];
+  className?: string;
+}) {
   const pathname = usePathname();
   return (
     <nav
@@ -37,7 +37,7 @@ export function MainNav({
                   <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                      {item.children.map((component) => (
+                      {item.children.map((component: any) => (
                         <ListItem
                           key={component.title}
                           title={component.title}
