@@ -32,13 +32,31 @@ import {
 
 export const navItems = [
   {
-    href: "/dashboard",
-    title: "Dashboard",
+    href: "/portfolio",
+    title: "Portfolio",
+  },
+  {
+    href: "/berpetuals",
+    title: "Berpetuals",
   },
   {
     href: "/markets",
     title: "Markets",
   },
+  {
+    href: "/vault",
+    title: "Vault",
+  },
+
+  {
+    href: "/rewards",
+    title: "Rewards",
+  },
+  {
+    href: "/competition",
+    title: "Competition",
+  },
+
   {
     href: "#",
     title: "More",
