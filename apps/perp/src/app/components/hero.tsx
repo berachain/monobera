@@ -26,7 +26,7 @@ export default function Hero() {
         <Button onClick={() => router.push("/berpetuals")} className="mr-4">
           Start Trading
         </Button>
-        <Button variant="outline" onClick={() => router.push("/markets")}>
+        <Button variant="secondary" onClick={() => router.push("/markets")}>
           Explore Markets
         </Button>
       </div>

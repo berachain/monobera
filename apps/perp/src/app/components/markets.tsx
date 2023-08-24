@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-// import Image from "next/image";
 import { formatUsd } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
@@ -14,15 +13,7 @@ interface MarketProps extends Market {
   className?: string;
 }
 
-function Market({
-  title,
-  // icon,
-  totalSupply,
-  dailyPercentChange,
-  dailyBorrows,
-  className,
-  ...props
-}: MarketProps) {
+function Market({ title, dailyBorrows, className, ...props }: MarketProps) {
   const animationDelay = useMemo(() => {
     const possibleAnimationDelays = [
       "0s",
@@ -40,39 +31,32 @@ function Market({
   return (
     <figure
       className={clsx(
-        "rounded-xl border border-border bg-background p-4",
+        "h-[146px] w-[152px] flex-shrink-0 rounded-2xl border border-border bg-background p-4",
         className,
       )}
       style={{ animationDelay }}
       {...props}
     >
       <blockquote className="text-foreground">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1">
           <Avatar className="h-4 w-4">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>token icon</AvatarFallback>
           </Avatar>
-          <p className="text-xl text-muted-foreground">{title}</p>
+          <div className="text-sm font-medium leading-normal text-muted-foreground">
+            {title}
+          </div>
+        </div>
+        <div className="text-2xl font-semibold leading-normal text-popover-foreground">
+          {formatUsd(15.56)}
         </div>
 
-        <p className="mt-8 text-3xl font-bold leading-6">
-          {formatUsd(totalSupply)}
-        </p>
-        <p className="mt-2">
-          {dailyPercentChange > 0 ? (
-            <span className="flex items-center gap-2 text-green-500">
-              +{dailyPercentChange}% (24H)
-            </span>
-          ) : (
-            <span className="flex items-center gap-2 text-red-500">
-              -{dailyPercentChange}% (24H)
-            </span>
-          )}
-        </p>
-        <p className="mt-4 text-sm text-muted-foreground">Borrows (24H)</p>
-        <p className="mt-1 text-sm font-bold text-muted-foreground">
+        <div className="mt-4 text-lg font-semibold leading-7 text-popover-foreground">
           {formatUsd(dailyBorrows)}
-        </p>
+        </div>
+        <div className="text-xs font-normal leading-3 text-muted-foreground">
+          Open Interest (24H)
+        </div>
       </blockquote>
     </figure>
   );
@@ -84,40 +68,36 @@ function splitArray<T>(array: T[], numParts: number): T[][] {
     const index = i % numParts;
     if (!result[index]) {
       result[index] = [];
-    }
-
-    // @ts-expect-error - No types
+    } // @ts-expect-error - No types
     result[index].push(array[i]);
   }
   return result;
 }
 
-interface MarketColumnProps {
+interface MarketRowProps {
   className?: string;
   markets: Market[];
   marketClassName?: (index: number) => string;
   msPerPixel?: number;
 }
 
-function MarketColumn({
+function MarketRow({
   className,
   markets,
-  // @ts-expect-error - No types
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  marketClassName = () => {},
+  marketClassName,
   msPerPixel = 0,
-}: MarketColumnProps) {
-  const columnRef = useRef<HTMLDivElement | null>(null);
-  const [columnHeight, setColumnHeight] = useState(0);
-  const duration = `${columnHeight * msPerPixel}ms`;
+}: MarketRowProps) {
+  const rowRef = useRef<HTMLDivElement | null>(null);
+  const [rowWidth, setRowWidth] = useState(0);
+  const duration = `${rowWidth * 4 * msPerPixel}ms`;
 
   useEffect(() => {
-    if (!columnRef.current) return;
+    if (!rowRef.current) return;
     const resizeObserver = new window.ResizeObserver(() => {
-      setColumnHeight(columnRef.current?.offsetHeight || 0);
+      setRowWidth(rowRef.current?.offsetWidth || 0);
     });
 
-    resizeObserver.observe(columnRef.current);
+    resizeObserver.observe(rowRef.current);
 
     return () => {
       resizeObserver.disconnect();
@@ -126,16 +106,20 @@ function MarketColumn({
 
   return (
     <div
-      ref={columnRef}
-      className={clsx("animate-marquee space-y-8 py-4", className)}
-      // @ts-expect-error - No types
-      style={{ "--marquee-duration": duration }}
+      ref={rowRef}
+      className={clsx("flex animate-marquee-x space-x-4", className)}
+      style={{
+        // @ts-expect-error - No types
+        "--marquee-duration": duration,
+      }}
     >
       {markets.concat(markets).map((market, marketIndex) => (
         <Market
           key={marketIndex}
           aria-hidden={marketIndex >= markets.length}
-          className={marketClassName(marketIndex % markets.length)}
+          className={
+            marketClassName && marketClassName(marketIndex % markets.length)
+          }
           {...market}
         />
       ))}
@@ -146,62 +130,49 @@ function MarketColumn({
 function MarketGrid() {
   const containerRef = useRef(null);
   const markets = useMarkets();
-
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
-  let columns = splitArray(markets, 3);
-  // @ts-expect-error - No types
-  columns = [columns[0], columns[1], splitArray(columns[2], 2)];
+  const rows = splitArray(markets, 2);
 
   return (
     <div
       ref={containerRef}
-      className="relative -mx-4 mt-16 grid h-[49rem] max-h-[150vh] grid-cols-1 items-start gap-8 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3 "
+      className="relative flex flex-col gap-4 overflow-hidden "
     >
       {isInView && (
         <>
-          <MarketColumn
+          <MarketRow
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            markets={[...columns[0], ...columns[2].flat(), ...columns[1]]}
+            markets={[...rows[0], ...rows[1]]}
             marketClassName={(marketIndex) =>
               clsx(
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                marketIndex >= columns[0].length + columns[2][0].length &&
-                  "md:hidden",
-
+                marketIndex >= rows[0].length && "md:hidden",
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                marketIndex >= columns[0].length && "lg:hidden",
+                marketIndex >= rows[0].length && "lg:hidden",
               )
             }
             msPerPixel={10}
           />
-          <MarketColumn
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            markets={[...columns[1], ...columns[2][1]]}
-            className="hidden md:block"
+
+          <MarketRow
+            markets={[...rows[1], ...rows[0]]}
+            className="hidden md:flex"
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             marketClassName={(marketIndex) =>
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
-              marketIndex >= columns[1].length && "lg:hidden"
+              marketIndex >= rows[1].length && "lg:hidden"
             }
             msPerPixel={15}
           />
-          <MarketColumn
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            markets={columns[2].flat()}
-            className="hidden lg:block"
-            msPerPixel={10}
-          />
         </>
       )}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-gray-50" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-gray-50" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 h-full w-[120px] bg-gradient-to-l from-background" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 h-full w-[120px] bg-gradient-to-r from-background" />
     </div>
   );
 }
@@ -216,13 +187,14 @@ export default function Markets() {
         </span>{" "}
         Done Right!
       </h2>
-      <div className="text-center text-base font-medium leading-normal text-muted-foreground">
+      <div className="mb-4 text-center text-base font-medium leading-normal text-muted-foreground">
         Featuring a wide variety of high volume assets, with new tokens added on
         a regular basis.
       </div>
+
       <MarketGrid />
-      <div className="mt-16 flex justify-center">
-        <Button variant={"outline"}>View All Markets</Button>
+      <div className="mt-8 flex justify-center">
+        <Button variant="secondary">View All Markets</Button>
       </div>
     </section>
   );

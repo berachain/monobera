@@ -11,11 +11,13 @@ export default function Help() {
       <div className="mb-8 text-center">
         <h2 className="mb-4 text-5xl font-bold">
           🐻 Help us <br className="block md:hidden" />
-          <span className="whitespace-nowrap text-accent">
+          <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
             Build a Better Bera
           </span>{" "}
           <br />
-          <span className="hidden md:inline">Berpes Platform For You</span>
+          <span className="hidden md:inline">
+            <span className="text-[#FFB571]">B</span>erpes Platform For You
+          </span>
         </h2>
         <div className="text-center text-base font-medium leading-normal text-muted-foreground">
           Give us feedback now! And get whitelisted as a power user.

@@ -19,7 +19,7 @@ export default function GeneralInfo() {
     },
   ];
   return (
-    <div className="flex h-36 w-full max-w-[1078px] items-center justify-between rounded-2xl border border-border bg-stone-900 bg-opacity-20 shadow">
+    <div className="flex h-36 w-full max-w-[1078px] items-center justify-between rounded-2xl border border-border bg-stone-900 bg-opacity-20 shadow-dark-shadow">
       {info.map((item, index) => (
         <div
           key={index}

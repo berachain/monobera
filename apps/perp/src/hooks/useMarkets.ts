@@ -34,7 +34,7 @@ const markets: Market[] = [
     borrowBalance: 0,
   },
   {
-    title: "Binance Coin",
+    title: "Binance",
     icon: "/honey.png",
     totalSupply: 168137036,
     dailyPercentChange: 4.5,
@@ -90,7 +90,7 @@ const markets: Market[] = [
     dailyBorrows: 112000,
   },
   {
-    title: "Crypto.com Coin",
+    title: "Crypto",
     icon: "/honey.png",
     totalSupply: 30915631534,
     dailyPercentChange: 3.7,
@@ -118,7 +118,7 @@ const markets: Market[] = [
     dailyBorrows: 82000,
   },
   {
-    title: "Ethereum Classic",
+    title: "Ethereum",
     icon: "/honey.png",
     totalSupply: 210700000,
     dailyPercentChange: 1.5,
