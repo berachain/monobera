@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { Button } from "@bera/ui/button";
 
 export default function Help() {
-  const router = useRouter();
+  // const router = useRouter();
   return (
     <section>
       <div className="mb-8 text-center">

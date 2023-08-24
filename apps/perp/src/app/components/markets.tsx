@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import { formatUsd } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
@@ -16,7 +16,7 @@ interface MarketProps extends Market {
 
 function Market({
   title,
-  icon,
+  // icon,
   totalSupply,
   dailyPercentChange,
   dailyBorrows,
