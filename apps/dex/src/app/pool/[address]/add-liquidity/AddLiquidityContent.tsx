@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   DEX_PRECOMPILE_ABI,
@@ -28,7 +29,6 @@ import { type Address } from "wagmi";
 import ApproveTokenButton from "~/components/approve-token-button";
 import { type MappedTokens } from "../types";
 import { useAddLiquidity } from "./useAddLiquidity";
-import { useRouter } from "next/navigation";
 
 interface IAddLiquidityContent {
   pool: Pool | undefined;
@@ -97,9 +97,10 @@ export default function AddLiquidityContent({
             );
           })}
         </div>
-        <div 
-        onClick={() => router.push(`/pool/${pool?.pool}`)}
-        className="flex items-center justify-center text-sm font-normal leading-tight text-muted-foreground hover:cursor-pointer hover:underline">
+        <div
+          onClick={() => router.push(`/pool/${pool?.pool}`)}
+          className="flex items-center justify-center text-sm font-normal leading-tight text-muted-foreground hover:cursor-pointer hover:underline"
+        >
           View Pool Details
           <Icons.arrowRight className="W-4 h-4" />
         </div>

@@ -67,7 +67,7 @@ export function TokenInput({
       setExceeding(false);
       return;
     }
-    if (amount > tokenBalance || (Number(tokenBalance) == 0)) {
+    if (amount > tokenBalance || Number(tokenBalance) == 0) {
       setExceeding(true);
       return;
     }

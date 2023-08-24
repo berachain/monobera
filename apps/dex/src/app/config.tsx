@@ -228,7 +228,7 @@ export const footerNavigation = {
     {
       name: "Telegram",
       href: "#",
-      icon: Icons.telegram,
+      icon: () => <Icons.telegram className="h-6 w-6 text-background" />,
     },
     {
       name: "X",
