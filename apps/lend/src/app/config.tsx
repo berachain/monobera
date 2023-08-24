@@ -126,6 +126,7 @@ export const footerNavigation = {
     { name: "Guides", href: "#" },
     { name: "API Status", href: "#" },
   ],
+
   social: [
     {
       name: "Telegram",
