@@ -39,7 +39,7 @@ function Market({
   return (
     <figure
       className={clsx(
-        "rounded-3xl bg-white p-6 shadow-md shadow-foreground/5",
+        "rounded-3xl bg-background p-6 shadow-md shadow-foreground/5",
         className,
       )}
       style={{ animationDelay }}
@@ -62,11 +62,11 @@ function Market({
         </p>
         <p className="mt-2">
           {dailyPercentChange > 0 ? (
-            <span className="flex items-center gap-2 text-green-500">
+            <span className="flex items-center gap-2 text-success-foreground">
               +{dailyPercentChange}% (24H)
             </span>
           ) : (
-            <span className="flex items-center gap-2 text-red-500">
+            <span className="flex items-center gap-2 text-destructive-foreground">
               -{dailyPercentChange}% (24H)
             </span>
           )}
@@ -104,9 +104,6 @@ interface MarketColumnProps {
 function MarketColumn({
   className,
   markets,
-  // @ts-expect-error - No types
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  marketClassName = () => {},
   msPerPixel = 0,
 }: MarketColumnProps) {
   const columnRef = useRef<HTMLDivElement | null>(null);
@@ -137,7 +134,9 @@ function MarketColumn({
         <Market
           key={marketIndex}
           aria-hidden={marketIndex >= markets.length}
-          className={marketClassName(marketIndex % markets.length)}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          className={marketIndex % markets.length}
           {...market}
         />
       ))}
