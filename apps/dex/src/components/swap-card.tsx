@@ -13,7 +13,7 @@ import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "wagmi";
 
-import { erc20DexAddress, erc20ModuleAddress } from "~/config";
+import { cloudinaryUrl, erc20DexAddress, erc20ModuleAddress } from "~/config";
 import { SwapKind, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
 
@@ -108,8 +108,8 @@ export function SwapCard({
       <div className="w-full">
         {showBear && (
           <Image
-            src="/graphics/bidness-bera.png"
-            className="mx-auto mb-[-40px] self-start md:mx-0"
+            src={`${cloudinaryUrl}/bears/qsmspkwyjoeh1cwb6fz7`}
+            className="mx-auto self-start md:mx-0"
             alt="bidness"
             width={150}
             height={200}
@@ -121,7 +121,7 @@ export function SwapCard({
               Swap <SettingsPopover />
             </CardTitle>
             <div className="mt-3">
-              <div className="border-1 flex flex-col gap-2 border-border">
+              <div className="border-1 flex flex-col gap-6 border-border">
                 <ul
                   role="list"
                   className="divide-y divide-border rounded-2xl border"
@@ -139,7 +139,6 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setFromAmount(amount);
                     }}
-                    showBalance
                   />
                   <div className="relative">
                     <div
@@ -160,6 +159,7 @@ export function SwapCard({
                   </div>
                   <TokenInput
                     selected={selectedTo}
+                    hideBalance
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedTo}
                     amount={toAmount}
@@ -171,58 +171,60 @@ export function SwapCard({
                     showExceeding={false}
                   />
                 </ul>
-                {swapInfo && (
-                  <div className="mt-4 flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
-                    <div className="flex w-full flex-row justify-between">
-                      <p className="text-xs font-medium text-muted-foreground sm:text-sm">
-                        Exchange rate
-                      </p>
-                      <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                        {exchangeRate ?? "-"}
-                      </p>
+                <div className="flex flex-col gap-2">
+                  {swapInfo && (
+                    <div className="flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
+                      <div className="flex w-full flex-row justify-between">
+                        <p className="text-xs font-medium text-muted-foreground sm:text-sm">
+                          Exchange rate
+                        </p>
+                        <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
+                          {exchangeRate ?? "-"}
+                        </p>
+                      </div>
+                      <div className="flex w-full flex-row justify-between">
+                        <p className="text-xs font-medium text-muted-foreground sm:text-sm">
+                          Gas fee
+                        </p>
+                        <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
+                          {gasPrice} BERA
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex w-full flex-row justify-between">
-                      <p className="text-xs font-medium text-muted-foreground sm:text-sm">
-                        Gas fee
-                      </p>
-                      <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                        {gasPrice} BERA
-                      </p>
-                    </div>
-                  </div>
-                )}
-                {exceedingBalance && (
-                  <Alert
-                    variant="destructive"
-                    className="items-center justify-center"
-                  >
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>
-                      This amount exceeds your total balance
-                    </AlertDescription>
-                  </Alert>
-                )}
-                {error instanceof RouteNotFound && (
-                  <Alert variant="destructive">
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription className="text-xs">
-                      {error.message}
-                    </AlertDescription>
-                  </Alert>
-                )}
-                {showPriceImpact && (
-                  <Alert variant="destructive">
-                    <AlertTitle>
-                      {" "}
-                      <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
-                      Price Impact Error
-                    </AlertTitle>
-                    <AlertDescription className="text-xs">
-                      This swap will result in a high price impact (-
-                      {priceImpact?.toFixed(2)}%)
-                    </AlertDescription>
-                  </Alert>
-                )}
+                  )}
+                  {exceedingBalance && (
+                    <Alert
+                      variant="destructive"
+                      className="items-center justify-center"
+                    >
+                      <AlertTitle>Error</AlertTitle>
+                      <AlertDescription>
+                        This amount exceeds your total balance
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  {error instanceof RouteNotFound && (
+                    <Alert variant="destructive">
+                      <AlertTitle>Error</AlertTitle>
+                      <AlertDescription className="text-xs">
+                        {error.message}
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  {showPriceImpact && (
+                    <Alert variant="destructive">
+                      <AlertTitle>
+                        {" "}
+                        <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
+                        Price Impact Error
+                      </AlertTitle>
+                      <AlertDescription className="text-xs">
+                        This swap will result in a high price impact (-
+                        {priceImpact?.toFixed(2)}%)
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                </div>
                 <div className="w-full">
                   {(Number(allowance?.formattedAllowance) ?? 0) < fromAmount &&
                   !exceedingBalance ? (

@@ -1,20 +1,22 @@
 import Image from "next/image";
 import { Icons } from "@bera/ui/icons";
 
+import { cloudinaryUrl } from "~/config";
+
 export const Banner = () => {
   return (
-    <div>
+    <div className="mt-16">
       <Image
-        src="/happy-bea.png"
-        width={100}
+        src={`${cloudinaryUrl}/bears/v3mi8ggx68n0mapznaju`}
+        width={320}
         height={100}
         className=" mx-auto block w-[320px] lg:bottom-0 lg:hidden"
         alt="happy bear"
       />
-      <div className="relative flex flex-col items-start gap-4 rounded-18 border border-amber-500 bg-honey-gradient px-6 py-6 lg:px-8 lg:py-12 ">
+      <div className="relative flex flex-col items-start gap-4 rounded-18 border border-border bg-honey-gradient px-6 py-6 dark:bg-gradient-to-l dark:from-stone-950  dark:to-stone-950 lg:px-8 lg:py-12">
         <Image
-          src="/happy-bea.png"
-          width={100}
+          src={`${cloudinaryUrl}/bears/v3mi8ggx68n0mapznaju`}
+          width={420}
           height={100}
           className="absolute right-0 hidden w-[420px] lg:bottom-0 lg:block"
           alt="happy bear"
