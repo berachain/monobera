@@ -284,7 +284,6 @@ export function filterPoolsOfInterest(
   const directPools: PoolDictionary = {};
   const hopsIn: hopDictionary = {};
   const hopsOut: hopDictionary = {};
-  console.log("WTF", allPools);
 
   Object.keys(allPools).forEach((id) => {
     const pool = allPools[id];

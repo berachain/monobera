@@ -4,25 +4,12 @@ import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 export interface MappedTokens {
-    [key: string]: number;
-  }
-async function parseResponse(response: any) {
-  const json = await response.json();
-  return json;
-}
-
-interface Coin {
-  denom: string;
-  amount: string;
-}
-
-interface CoinsData {
-  coins: Coin[];
+  [key: string]: number;
 }
 
 const BASE_TOKEN = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
 
-export const getWBeraPriceDictForPoolTokens = async (
+export const getBaseTokenPrice = async (
   pools: Pool[],
   router: RouterService,
 ) => {
@@ -32,8 +19,8 @@ export const getWBeraPriceDictForPoolTokens = async (
     const allPoolPromises: any[] = [];
     pools.forEach((pool) => {
       const tokenPromises = pool.tokens
-        .filter((token: { address: string; }) => token.address !== BASE_TOKEN)
-        .map((token: { address: any; decimals: number; }) =>
+        .filter((token: { address: string }) => token.address !== BASE_TOKEN)
+        .map((token: { address: any; decimals: number }) =>
           router
             .getSwaps(
               token.address,
@@ -64,7 +51,7 @@ export const getWBeraPriceDictForPoolTokens = async (
       );
   }
 
-  return mappedTokens;
+  return mappedTokens === 0 ? undefined : mappedTokens;
 };
 
 export const getWBeraPriceForToken = (

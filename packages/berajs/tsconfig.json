@@ -18,5 +18,11 @@
     "cjs",
     "src/proto/cosmos-ts"
   ],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.cjs",
+    "**/*.mjs",
+    "../../apps/bgt-station/src/hooks/usePollPrices.ts"
+  ]
 }

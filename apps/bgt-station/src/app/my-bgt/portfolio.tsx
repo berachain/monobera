@@ -11,6 +11,7 @@ import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import YellowCard from "~/components/yellow-card";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import UnbondingQueue from "./components/unbonding-queue";
 import YourDelegations from "./components/your-delegations";
 import { BGTSelectionEnum, type BGTselection } from "./types";
@@ -18,6 +19,8 @@ import { BGTSelectionEnum, type BGTselection } from "./types";
 export default function Portfolio() {
   const router = useRouter();
   const { account } = useBeraJs();
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
   const [tab, setTab] = React.useState<BGTselection>(
     BGTSelectionEnum.YOUR_DELEGATIONS,
   );

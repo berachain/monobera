@@ -11,6 +11,7 @@ import {
   chainName,
   epochsAddress,
   erc20BgtAddress,
+  erc20BribeModule,
   erc20DexAddress,
   erc20ModuleAddress,
   gasTokenDecimals,
@@ -94,6 +95,7 @@ export const beraJsConfig: NetworkConfig = {
     berachefAddress,
     honeyAddress,
     rewardsAddress,
+    erc20BribeModule,
   },
   chain: chain,
 };
