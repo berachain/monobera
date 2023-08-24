@@ -39,7 +39,7 @@ function Market({
   return (
     <figure
       className={clsx(
-        "rounded-3xl bg-background p-6 shadow-md shadow-foreground/5",
+        "rounded-xl border border-border bg-background p-4",
         className,
       )}
       style={{ animationDelay }}
@@ -62,11 +62,11 @@ function Market({
         </p>
         <p className="mt-2">
           {dailyPercentChange > 0 ? (
-            <span className="flex items-center gap-2 text-success-foreground">
+            <span className="flex items-center gap-2 text-green-500">
               +{dailyPercentChange}% (24H)
             </span>
           ) : (
-            <span className="flex items-center gap-2 text-destructive-foreground">
+            <span className="flex items-center gap-2 text-red-500">
               -{dailyPercentChange}% (24H)
             </span>
           )}
@@ -210,23 +210,21 @@ function MarketGrid() {
 
 export default function Markets() {
   return (
-    <section
-      id="markets"
-      aria-labelledby="markets-title"
-      className="pb-16 pt-20 sm:pb-24 sm:pt-32"
-    >
-      <div className="container">
-        <h2 className="mt-2 text-center text-5xl font-extrabold leading-8 tracking-tight text-foreground sm:text-4xl">
-          <span className="bg-gradient-to-b from-yellow-300 to-orange-600 bg-clip-text text-transparent">
-            BAAVE
-          </span>{" "}
-          Markets
-        </h2>
-
-        <MarketGrid />
-        <div className="mt-16 flex justify-center">
-          <Button variant={"outline"}>View all markets</Button>
-        </div>
+    <section className="flex flex-col gap-4">
+      <h2 className="leading-14 text-center text-5xl font-extrabold tracking-tight text-foreground">
+        <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
+          On-Chain <br />
+          Perpetuals
+        </span>{" "}
+        Done Right!
+      </h2>
+      <div className="text-center text-base font-medium leading-normal text-muted-foreground">
+        Featuring a wide variety of high volume assets, with new tokens added on
+        a regular basis.
+      </div>
+      <MarketGrid />
+      <div className="mt-16 flex justify-center">
+        <Button variant={"outline"}>View All Markets</Button>
       </div>
     </section>
   );
