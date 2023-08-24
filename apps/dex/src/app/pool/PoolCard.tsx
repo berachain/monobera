@@ -55,7 +55,7 @@ export const PoolCard = ({
               key={token.address}
               token={token}
               className={cn(
-                " border-2 border-border ",
+                " border border-border ",
                 i !== 0 && "ml-[-15px]",
               )}
             />

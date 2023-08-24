@@ -26,7 +26,7 @@ export const SwapContent = ({ inputCurrency, outputCurrency }: ISwap) => {
           outputCurrency={outputCurrency}
         />
       </div>
-      <span className="hidden pt-[84px] md:block">
+      <span className="hidden pt-[64px] md:block">
         <DynamicBerachainInfo />
       </span>
     </div>

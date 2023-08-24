@@ -11,7 +11,7 @@ export function ThemeToggle() {
   //   side?: "top" | "bottom";
   // }
 
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
 
   const themeList = [
     { theme: "system", icon: <Icons.laptop className="h-4 w-4" /> },
@@ -19,7 +19,7 @@ export function ThemeToggle() {
     { theme: "dark", icon: <Icons.moon className="h-4 w-4" /> },
   ];
   return (
-    <Tabs defaultValue={themeList[1]!.theme} className="hidden lg:block">
+    <Tabs defaultValue={theme} className="hidden lg:block">
       <TabsList className="rounded-full">
         {themeList.map((t, index) => (
           <TabsTrigger

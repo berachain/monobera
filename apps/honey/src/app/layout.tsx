@@ -9,7 +9,7 @@ import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
-import { beraJsConfig, footNavigation, navItems } from "./config";
+import { beraJsConfig, footerNavigation, navItems } from "./config";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -37,7 +37,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           <Header navItems={navItems} isHoney />
           <main className="w-full">{props.children}</main>
           <Toaster position="bottom-right" />
-          <Footer navItem={footNavigation} />
+          <Footer navItem={footerNavigation} />
           <TailwindIndicator />
           <Analytics />
         </BeraConfig>

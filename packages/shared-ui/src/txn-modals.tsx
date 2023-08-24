@@ -68,7 +68,7 @@ export const SuccessModal = ({
         <Image
           width={64}
           height={64}
-          src={`/graphics/green-check.png`}
+          src={`https://res.cloudinary.com/duv0g402y/image/upload/f_auto,q_auto/v1/shared/wanb54qn8spfnfw9r3hy`}
           alt={"user-x"}
         />
       }
@@ -101,7 +101,7 @@ export const ErrorModal = ({
           <Image
             width={64}
             height={64}
-            src={`/graphics/user-x.png`}
+            src={`https://res.cloudinary.com/duv0g402y/image/upload/f_auto,q_auto/v1/shared/o19qbcofjpagywj9i7xc`}
             alt={"user-x"}
           />
         }
@@ -119,7 +119,7 @@ export const ErrorModal = ({
         <Image
           width={64}
           height={64}
-          src={`/graphics/red-x.png`}
+          src={`https://res.cloudinary.com/duv0g402y/image/upload/f_auto,q_auto/v1/shared/e6jziojwz3j3hewudeam`}
           alt={"user-x"}
         />
       }

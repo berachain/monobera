@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   DEX_PRECOMPILE_ABI,
@@ -42,6 +43,8 @@ export default function AddLiquidityContent({
   pool,
   prices,
 }: IAddLiquidityContent) {
+  const router = useRouter();
+
   const {
     expectedShares,
     singleSidedExpectedShares,
@@ -94,8 +97,10 @@ export default function AddLiquidityContent({
             );
           })}
         </div>
-        {/* onclick back to pool details page */}
-        <div className="flex items-center justify-center text-sm font-normal leading-tight text-muted-foreground hover:cursor-pointer hover:underline">
+        <div
+          onClick={() => router.push(`/pool/${pool?.pool}`)}
+          className="flex items-center justify-center text-sm font-normal leading-tight text-muted-foreground hover:cursor-pointer hover:underline"
+        >
           View Pool Details
           <Icons.arrowRight className="W-4 h-4" />
         </div>
@@ -138,7 +143,6 @@ export default function AddLiquidityContent({
                       onExceeding={(exceeding: boolean) =>
                         updateTokenExceeding(i, exceeding)
                       }
-                      showBalance
                     />
                   );
                 })}

@@ -42,7 +42,7 @@ export const columns: ColumnDef<Pool>[] = [
             <TokenIcon
               key={token.address}
               token={token}
-              className={cn(" border-2 border-border", i !== 0 && "ml-[-15px]")}
+              className={cn(" border border-border", i !== 0 && "ml-[-15px]")}
             />
           ))}
         </div>

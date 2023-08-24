@@ -45,6 +45,9 @@ export default {
       borderColor: {
         DEFAULT: "hsl(var(--border) / <alpha-value>)",
       },
+      boxShadow: {
+        "dark-shadow": "0px 12px 250px 0px #A571239E",
+      },
       colors: {
         hover: "hsl(var(--hover) / <alpha-value>)",
         background: "hsl(var(--background) / <alpha-value>)",
@@ -153,6 +156,11 @@ export default {
             transform: "translateY(-50%)",
           },
         },
+        "marquee-x": {
+          "100%": {
+            transform: "translateX(-50%)",
+          },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -169,6 +177,7 @@ export default {
       },
       animation: {
         marquee: "marquee var(--marquee-duration) linear infinite",
+        "marquee-x": "marquee-x var(--marquee-duration) linear infinite",
         "fade-in": "fade-in 0.5s linear forwards",
         "fade-up": "fade-up 0.5s",
         "fade-down": "fade-down 0.5s",

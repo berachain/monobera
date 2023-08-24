@@ -30,7 +30,6 @@ type Props = {
   onTokenSelection?: (token: Token) => void;
   setAmount?: (amount: number) => void;
   onExceeding?: (isExceeding: boolean) => void;
-  showBalance?: boolean; //show token balance? should not show balance when token is the target token
 };
 
 export function TokenInput({
@@ -49,7 +48,6 @@ export function TokenInput({
   setAmount = undefined,
   // showExceeding = true,
   onExceeding = undefined,
-  showBalance = false,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   usePollAssetWalletBalance();
@@ -64,13 +62,12 @@ export function TokenInput({
   const { isConnected } = useBeraJs();
 
   useEffect(() => {
-    if (tokenBalance === 0) return;
     if (amount > Number.MAX_SAFE_INTEGER) return;
     if (amount <= tokenBalance) {
       setExceeding(false);
       return;
     }
-    if (amount > tokenBalance) {
+    if (amount > tokenBalance || Number(tokenBalance) == 0) {
       setExceeding(true);
       return;
     }
@@ -117,7 +114,7 @@ export function TokenInput({
           />
         </div>
       </div>
-      {showBalance && isConnected && selected && tokenBalance !== 0 ? (
+      {isConnected && selected && tokenBalance !== 0 ? (
         <div className="mb-4 h-fit w-full cursor-default">
           {hideBalance ? null : (
             <div className="mt-[-10px] flex w-full items-center justify-between gap-1">
