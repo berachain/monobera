@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { ConnectButton, TokenInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -8,11 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
+import { honey } from "~/config/tokens";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { ApproveTokenButton } from "./approve-token-button";
 
 export function SwapCard({ showBear = true }: { showBear?: boolean }) {
+  const [tabValue, setTabValue] = useState<"mint" | "burn">("mint");
   const {
     payload,
     isConnected,
@@ -39,13 +41,13 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
       {showBear && (
         <Image
           src="/kingBear.png"
-          className="mb-[-5px] w-[400px] self-start"
+          className="relative z-0 m-auto mb-[-25px] w-[500px] self-center"
           alt="king"
           width={150}
           height={200}
         />
       )}
-      <Card className="w-[500px] bg-background/5 backdrop-blur-sm">
+      <Card className="relative z-10 m-auto block max-w-[500px] bg-background">
         {ModalPortal}
         <CardHeader>
           <CardTitle className="center flex justify-between">
@@ -56,12 +58,13 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue={"mint"} className="mb-6">
+          <Tabs defaultValue={tabValue} value={tabValue} className="mb-6">
             <TabsList className="w-full">
               <TabsTrigger
                 value={"mint"}
                 className="flex-1 capitalize"
                 onClick={() => {
+                  setTabValue("mint");
                   if (!isMint) {
                     onSwitch();
                   }
@@ -73,6 +76,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 value={"burn"}
                 className="flex-1 capitalize"
                 onClick={() => {
+                  setTabValue("burn");
                   if (isMint) {
                     onSwitch();
                   }
@@ -82,7 +86,8 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
               </TabsTrigger>
             </TabsList>
           </Tabs>
-          <div className="border-1 flex flex-col gap-2 border-border">
+
+          <div className="border-1 flex flex-col gap-6 border-border">
             <ul
               role="list"
               className="divide-y divide-border rounded-lg border"
@@ -93,8 +98,9 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 onTokenSelection={setSelectedFrom}
                 amount={fromAmount ?? 0}
                 balance={fromBalance?.formattedBalance}
-                selectable={false}
+                selectable={selectedFrom.address !== honey.address}
                 hidePrice
+                showBalance
                 setAmount={(amount) => {
                   setFromAmount(Number(amount));
                   setToAmount(Number(amount) * fee);
@@ -109,6 +115,11 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                     type="button"
                     variant={"outline"}
                     onClick={() => {
+                      if (isMint) {
+                        setTabValue("burn");
+                      } else {
+                        setTabValue("mint");
+                      }
                       onSwitch();
                     }}
                     className="z-10 inline-flex h-fit w-fit items-center rounded-full bg-background p-1 text-sm font-semibold sm:p-2"
@@ -126,9 +137,10 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                   setToAmount(Number(amount));
                   setFromAmount(Number(amount) * fee2);
                 }}
-                selectable={false}
+                selectable={selectedTo.address !== honey.address}
                 hidePrice
                 balance={toBalance?.formattedBalance}
+                showBalance={false}
               />
             </ul>
             {/* fix to check if allowance > amount */}

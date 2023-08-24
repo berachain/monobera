@@ -42,7 +42,7 @@ export default function Data({
     Number(formatUnits(BigInt(dailyVolume) ?? 0n, honey.decimals)),
   );
   return (
-    <section className="py-24">
+    <section className="py-4 lg:py-24">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <DataCard
           title="Total Value Locked"

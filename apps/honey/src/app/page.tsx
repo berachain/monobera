@@ -1,9 +1,11 @@
 import { type Metadata } from "next";
+import Image from "next/image";
 import { getUnixTime } from "date-fns";
 
 import Data from "~/components/data";
 import Graph from "~/components/graph";
 import Hero from "~/components/hero";
+import HoneyBanner from "~/components/honey-banner";
 import { HoneyMachine } from "~/components/honey-machine";
 import HoneyTransactionsTable from "~/components/honey-transactions-table";
 import { SwapCard } from "~/components/swap-card";
@@ -127,9 +129,10 @@ export default async function Home() {
       <div className="honey:bg-[#468DCB]">
         <div className="m-auto hidden max-w-[1000px] honey:block">
           <HoneyMachine />
+          <HoneyBanner />
         </div>
-        <div className="flex justify-center px-6 py-36 honey:hidden">
-          <div>
+        <div className="flex justify-center py-12 honey:hidden">
+          <div className="container">
             <Hero />
             <SwapCard />
           </div>
@@ -137,13 +140,23 @@ export default async function Home() {
       </div>
       <div className="honey:bg-gradient-to-b honey:from-[#468DCB] honey:to-background">
         <div className="container">
-          <div className="py-12">
+          <div className="py-4 lg:py-12">
             <Data
               tvl={supply.honeyTotalSupply[0]?.amount || "0"}
               dailyVolume={volume.honeyVolume[0]?.amount || "0"}
             />
           </div>
-          <div className="py-12">
+          <div className="py-4 lg:py-12">
+            <h3 className="mb-4 flex items-center gap-4 bg-gradient-to-r from-[#292524] via-[#875100] via-30% to-[#292524] bg-clip-text text-lg font-extrabold text-transparent">
+              <Image
+                src="/honeyCoin.png"
+                className="w-8"
+                alt="honey"
+                width={24}
+                height={24}
+              />
+              Total Honey Supply
+            </h3>
             <Graph
               hourlySupply={supply.honeyTotalSupply}
               hourlyVolume={volume.honeyVolume}
@@ -155,7 +168,7 @@ export default async function Home() {
               quarterlySupply={quarterlySupply.honeyTotalSupply}
             />
           </div>
-          <div className="py-12">
+          <div className="py-4 lg:py-12">
             <HoneyTransactionsTable />
           </div>
         </div>
