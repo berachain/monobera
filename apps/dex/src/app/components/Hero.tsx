@@ -6,6 +6,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import { SwapCard } from "~/components/swap-card";
+import { bgtDappUrl } from "~/config";
 
 export default function Hero() {
   const router = useRouter();
@@ -35,9 +36,7 @@ export default function Hero() {
           </div>
           <div
             className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-            onClick={() =>
-              window.open("https://bgt-station.vercel.app/", "_blank")
-            }
+            onClick={() => window.open(bgtDappUrl, "_blank")}
           >
             🐝 Get BGT Emissions for my token{" "}
             <Icons.arrowRight className="h-3 w-3" />
