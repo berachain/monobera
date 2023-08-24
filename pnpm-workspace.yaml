@@ -3,6 +3,7 @@ packages:
   - apps/bgt-station
   - apps/honey
   - apps/lend
+  - apps/perp
   - packages/config/*
   - packages/ui
   - packages/shared-ui

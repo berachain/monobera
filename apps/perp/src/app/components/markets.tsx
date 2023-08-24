@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { formatUsd } from "@bera/berajs";
+import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
@@ -47,13 +48,10 @@ function Market({
     >
       <blockquote className="text-foreground">
         <div className="flex items-center gap-4">
-          <Image
-            src={icon}
-            alt={title}
-            className="rounded-full"
-            width={32}
-            height={32}
-          />
+          <Avatar className="h-4 w-4">
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>token icon</AvatarFallback>
+          </Avatar>
           <p className="text-xl text-muted-foreground">{title}</p>
         </div>
 
