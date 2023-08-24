@@ -1,18 +1,24 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
-import { useTheme } from "next-themes";
 
 import { CircleBackground } from "~/components/CirceBackground";
 import { cloudinaryUrl } from "~/config";
 
+const WeRBack = dynamic(
+  () => import("./we-are-back").then((mod) => mod.WeRBack),
+  {
+    loading: () => <></>,
+    ssr: false,
+  },
+);
+
 export default function CreateAPool() {
   const router = useRouter();
-  const { theme, systemTheme } = useTheme();
   return (
     <section className="my-24">
       <div className="relative m-auto h-[900px] bg-glow bg-cover bg-center bg-no-repeat">
@@ -100,23 +106,7 @@ export default function CreateAPool() {
               />
               <AvatarFallback>usdt</AvatarFallback>
             </Avatar>
-            {(theme === "system" ? systemTheme : theme) === "light" ? (
-              <Image
-                className="mx-auto"
-                src={`${cloudinaryUrl}/DEX/tj8udvfskyrcanuxfq47`}
-                alt="Create a pool screenshot"
-                width={400}
-                height={889}
-              />
-            ) : (
-              <Image
-                className="mx-auto"
-                src={`${cloudinaryUrl}/DEX/ebq1kd6ucdrultjqysnk`}
-                alt="Create a pool screenshot"
-                width={400}
-                height={889}
-              />
-            )}
+            <WeRBack />
           </div>
         </div>
         <div className="mt-8 w-full text-center">
