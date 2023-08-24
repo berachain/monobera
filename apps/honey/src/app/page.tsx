@@ -138,8 +138,8 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="honey:bg-gradient-to-b honey:from-[#468DCB] honey:to-background">
-        <div className="container">
+      <div className=" honey:bg-gradient-to-b honey:from-[#468DCB] honey:to-background">
+        <div className="container honey:max-w-[1050px] honey:text-blue-900">
           <div className="py-4 lg:py-12">
             <Data
               tvl={supply.honeyTotalSupply[0]?.amount || "0"}
@@ -147,7 +147,7 @@ export default async function Home() {
             />
           </div>
           <div className="py-4 lg:py-12">
-            <h3 className="mb-4 flex items-center gap-4 bg-gradient-to-r from-[#292524] via-[#875100] via-30% to-[#292524] bg-clip-text text-lg font-extrabold text-transparent">
+            <h3 className="mb-4 flex items-center gap-4 bg-gradient-to-r from-[#292524] via-[#875100] via-30% to-[#292524] bg-clip-text text-3xl font-extrabold text-transparent">
               <Image
                 src="/honeyCoin.png"
                 className="w-8"

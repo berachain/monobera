@@ -34,7 +34,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         )}
       >
         <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-          <Header navItems={navItems} />
+          <Header navItems={navItems} isHoney />
           <main className="w-full">{props.children}</main>
           <Toaster position="bottom-right" />
           <Footer navItem={footNavigation} />

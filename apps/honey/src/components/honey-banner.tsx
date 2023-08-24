@@ -4,7 +4,7 @@ import { Icons } from "@bera/ui/icons";
 
 export default function HoneyBanner() {
   return (
-    <div className="mt-20 grid grid-cols-6 gap-4">
+    <div className="mt-20 grid grid-cols-6 items-center gap-4 p-4">
       <div className="col-span-3">
         <div className="mb-4 max-w-[250px]">
           <Image src={"/coinIcons.png"} alt="Coins" width={811} height={151} />

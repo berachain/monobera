@@ -17,10 +17,10 @@ function DataCard({
   value: string;
 }) {
   return (
-    <div className="flex flex-col rounded-2xl border-2 bg-card p-6">
+    <div className="flex flex-col rounded-2xl border-2 bg-card p-6 honey:border-dashed honey:border-blue-900">
       <div className="flex items-center gap-3 text-sm">
-        <div className="text-muted-foreground">{icon}</div>
-        <div className="text-muted-foreground">{title}</div>
+        <div className="text-muted-foreground honey:text-blue-900">{icon}</div>
+        <div className="text-muted-foreground honey:text-blue-900">{title}</div>
       </div>
       <div className="mt-2 text-3xl font-bold">{value}</div>
     </div>
