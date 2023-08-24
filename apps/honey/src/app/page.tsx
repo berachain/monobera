@@ -125,7 +125,7 @@ export default async function Home() {
     return null;
   }
   return (
-    <>
+    <div className=" honey:font-honey">
       <div className="honey:bg-[#468DCB]">
         <div className="m-auto hidden max-w-[1000px] honey:block">
           <HoneyMachine />
@@ -173,6 +173,6 @@ export default async function Home() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

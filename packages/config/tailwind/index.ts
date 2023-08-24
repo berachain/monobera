@@ -111,6 +111,7 @@ export default {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        honey: ["var(--font-honey)", ...fontFamily.sans],
       },
       keyframes: {
         "fade-in": {
