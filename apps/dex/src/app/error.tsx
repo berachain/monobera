@@ -2,11 +2,13 @@
 
 // Error components must be Client Components
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { ErrorPage } from "@bera/shared-ui";
 
 export default function Error({
   error,
-  reset,
-}: {
+}: // reset,
+{
   error: Error & { digest?: string };
   reset: () => void;
 }) {
@@ -15,17 +17,10 @@ export default function Error({
     console.error(error);
   }, [error]);
 
+  const router = useRouter();
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
-        Try again
-      </button>
+    <div className="my-[100px]">
+      <ErrorPage onBack={() => router.push("/")} />
     </div>
   );
 }
