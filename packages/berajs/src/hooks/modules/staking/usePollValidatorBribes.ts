@@ -2,7 +2,7 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient, type Address } from "wagmi";
 
-import { BRIBE_PRECOMPILE_ABI, GOVERNANCE_PRECOMPILE_ABI } from "~/config";
+import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 
@@ -30,7 +30,7 @@ export const usePollValidatorBribes = (
           console.log(e);
           return undefined;
         });
-        console.log(result);
+      console.log(result);
       return result;
     },
     {

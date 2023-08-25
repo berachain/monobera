@@ -11,7 +11,7 @@ import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import YellowCard from "~/components/yellow-card";
-import { usePollPrices } from "~/hooks/usePollPrices";
+import AverageGaugeWeight from "./components/average-gauge-weight";
 import UnbondingQueue from "./components/unbonding-queue";
 import YourDelegations from "./components/your-delegations";
 import { BGTSelectionEnum, type BGTselection } from "./types";
@@ -19,8 +19,6 @@ import { BGTSelectionEnum, type BGTselection } from "./types";
 export default function Portfolio() {
   const router = useRouter();
   const { account } = useBeraJs();
-  // const { usePrices } = usePollPrices();
-  // const prices = usePrices();
   const [tab, setTab] = React.useState<BGTselection>(
     BGTSelectionEnum.YOUR_DELEGATIONS,
   );
@@ -56,7 +54,8 @@ export default function Portfolio() {
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
             BGT delegated
             <br />
-            across {totalValidators} validators
+            across {Number.isNaN(totalValidators) ? 0 : totalValidators}{" "}
+            validators
           </div>
           <Button
             variant="outline"
@@ -125,8 +124,7 @@ export default function Portfolio() {
         </div>
         {tab === BGTSelectionEnum.YOUR_DELEGATIONS && <YourDelegations />}
         {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
-          // <AverageGaugeWeight />
-          <></>
+          <AverageGaugeWeight />
         )}
         {tab === BGTSelectionEnum.UNBONDING_QUEUE && (
           <UnbondingQueue unbondingQueue={unbondingQueue} />

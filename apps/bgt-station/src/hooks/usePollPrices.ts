@@ -1,10 +1,8 @@
-import { usePollActiveValidators, usePollValidatorBribes } from "@bera/berajs";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
 
-import { getAbsoluteUrl } from "~/utils/vercel-utils";
-import { type MappedTokens } from "~/app/api/getPrice";
+import { type MappedTokens } from "../app/api/getPrice";
+import { getAbsoluteUrl } from "../utils/vercel-utils";
 
 export const usePollPrices = () => {
   const QUERY_KEY = ["prices"];
@@ -32,46 +30,44 @@ export const usePollPrices = () => {
     return data[tokenAddress] ?? 0;
   };
 
-  const useValidatorBribesTotalValue = (
-    validatorAddress: string,
-  ): number | undefined => {
-    // const prices = usePrices();
-    const { useValidatorBribes } = usePollValidatorBribes(
-      validatorAddress as Address,
-    );
-    const bribes = useValidatorBribes();
-    return undefined;
-  };
+  // const useValidatorBribesTotalValue = (
+  //   validatorAddress: string,
+  // ): number | undefined => {
+  //   // const prices = usePrices();
+  //   const { useValidatorBribes } = usePollValidatorBribes(
+  //     validatorAddress as Address,
+  //   );
+  //   const bribes = useValidatorBribes();
+  //   return undefined;
+  // };
 
-  const useValidatorTVL = (validatorAddress: string): number | undefined => {
-    const { useActiveValidator } = usePollActiveValidators();
-    const activeValidator = useActiveValidator(validatorAddress);
-    const BGTPrice = usePrice(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
-    const totalBGT = Number(
-      formatUnits(BigInt(activeValidator?.tokens ?? "0"), 18),
-    );
-    return BGTPrice * totalBGT;
-  };
-  const useValidatorApr = (validatorAddress: string) => {
-    const { useActiveValidator, useEstimatedBlocksPerYear } =
-      usePollActiveValidators();
-    const { useValidatorBribes } = usePollValidatorBribes(
-      validatorAddress as Address,
-    );
-    const prices = usePrices();
-    const validatorTVL = useValidatorTVL(validatorAddress);
-    const bribesTotalValue = useValidatorBribesTotalValue(validatorAddress);
-    const blocksPerYear = useEstimatedBlocksPerYear(validatorAddress);
-    const { data } = useSWR(["getValidatorAPR", validatorAddress], async () => {
-      if (!bribesTotalValue || !blocksPerYear) return undefined;
-      return undefined;
-    });
-  };
+  // const useValidatorTVL = (validatorAddress: string): number | undefined => {
+  //   const { useActiveValidator } = usePollActiveValidators();
+  //   const activeValidator = useActiveValidator(validatorAddress);
+  //   const BGTPrice = usePrice(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
+  //   const totalBGT = Number(
+  //     formatUnits(BigInt(activeValidator?.tokens ?? "0"), 18),
+  //   );
+  //   return BGTPrice * totalBGT;
+  // };
+  // const useValidatorApr = (validatorAddress: string) => {
+  //   const { useActiveValidator, useEstimatedBlocksPerYear } =
+  //     usePollActiveValidators();
+  //   const { useValidatorBribes } = usePollValidatorBribes(
+  //     validatorAddress as Address,
+  //   );
+  //   const prices = usePrices();
+  //   const validatorTVL = useValidatorTVL(validatorAddress);
+  //   const bribesTotalValue = useValidatorBribesTotalValue(validatorAddress);
+  //   const blocksPerYear = useEstimatedBlocksPerYear(validatorAddress);
+  //   const { data } = useSWR(["getValidatorAPR", validatorAddress], async () => {
+  //     if (!bribesTotalValue || !blocksPerYear) return undefined;
+  //     return undefined;
+  //   });
+  // };
   return {
     usePrices,
     usePrice,
-    useValidatorApr,
-    useValidatorBribesTotalValue,
     isLoading,
   };
 };

@@ -1,6 +1,5 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEffect, useState } from "react";
 import {
   useBeraConfig,

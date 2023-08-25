@@ -37,7 +37,7 @@ export default function ValidatorDialog({
   const validators = useActiveValidators();
 
   const [filteredValidators, setFilteredValidators] = useState<Validator[]>(
-    validators.filter(
+    validators?.filter(
       (validator: Validator) =>
         BeravaloperToEth(validator.operatorAddress) !== fromAddress &&
         !selectedValidators?.some(
@@ -45,12 +45,12 @@ export default function ValidatorDialog({
             selectedValidatorAddress ===
             BeravaloperToEth(validator.operatorAddress),
         ),
-    ),
+    ) ?? [],
   );
 
   useEffect(() => {
     if (search.length !== 0) {
-      const filteredValidators = validators.filter(
+      const filteredValidators = validators?.filter(
         (validator: Validator) =>
           validator.description.moniker
             .toLowerCase()
@@ -60,7 +60,7 @@ export default function ValidatorDialog({
             .includes(search.toLowerCase()),
       );
 
-      setFilteredValidators(filteredValidators);
+      setFilteredValidators(filteredValidators ?? []);
     }
   }, [search]); // Include 'filteredValidators' in the dependency array
 

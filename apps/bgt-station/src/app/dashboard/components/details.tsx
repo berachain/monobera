@@ -16,8 +16,8 @@ export function Details() {
   const bgtSupply = useBgtSupply();
   const generalInfo = [
     {
-      amount: total,
-      text: "Total validators",
+      amount: Number.isNaN(total) ? 0 : total,
+      text: "Active validators",
     },
     {
       amount: "34%",

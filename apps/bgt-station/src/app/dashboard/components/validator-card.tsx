@@ -66,7 +66,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
       <div className="grid w-full grid-cols-2 gap-4">
         {" "}
         {info.map((value, index) => (
-          <YellowCard className="w-full gap-0 px-4 py-2" key={index}>
+          <YellowCard className="w-full gap-0 bg-muted px-4 py-2" key={index}>
             <div className="w-full text-xs font-medium leading-tight text-muted-foreground">
               {value.text}
             </div>
@@ -78,7 +78,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
       </div>
 
       <Button
-        className="w-full"
+        className="w-full border-border bg-muted text-foreground"
         variant="outline"
         onClick={() =>
           router.push(

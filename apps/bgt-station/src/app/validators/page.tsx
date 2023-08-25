@@ -8,25 +8,46 @@ export const metadata: Metadata = {
   description: "BGT Station",
 };
 
-async function getGlobalCuttingBoard() {
+async function getBGTSupply() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
+      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/supply?num_of_days=1`,
     );
     const jsonRes = await res.json();
-    return jsonRes.result;
+    console.log(jsonRes);
+    return jsonRes;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function getUniqueGauges() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/cuttingboards/unique`,
+    );
+    const jsonRes = await res.json();
+    return jsonRes.count;
   } catch (e) {
     console.log(e);
   }
 }
 
 export default async function Page() {
-  const cuttingBoard = getGlobalCuttingBoard();
-  const data: any = await Promise.all([cuttingBoard]).then(
-    ([cuttingBoard]) => ({
-      cuttingBoard: cuttingBoard,
+  const uniqueGauges = getUniqueGauges();
+  const bgtSupply = getBGTSupply();
+  const data: any = await Promise.all([uniqueGauges, bgtSupply]).then(
+    ([uniqueGauges, bgtSupply]) => ({
+      uniqueGauges: uniqueGauges,
+      bgtSupply: bgtSupply,
     }),
   );
 
-  return <Validators activeGauges={data.cuttingBoard?.length ?? 0} />;
+  console.log(data);
+  return (
+    <Validators
+      activeGauges={data.uniqueGauges ?? 0}
+      oldBgtSupply={data.supply ?? undefined}
+    />
+  );
 }

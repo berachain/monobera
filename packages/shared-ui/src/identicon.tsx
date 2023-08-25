@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useLayoutEffect, useMemo, useRef } from "react";
 import { cn } from "@bera/ui";
 import jazzicon from "@metamask/jazzicon";

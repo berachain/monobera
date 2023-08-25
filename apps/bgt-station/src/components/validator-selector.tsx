@@ -16,6 +16,7 @@ import { Icons } from "@bera/ui/icons";
 import { formatUnits, getAddress } from "viem";
 
 import { formatCommission } from "~/utils/formatCommission";
+import { ValidatorGauge } from "~/app/validators/validators-table";
 import { validator_table_columns } from "~/columns/validator-table-columns";
 import RT from "./react-table";
 
@@ -78,7 +79,7 @@ export default function ValidatorSelector({
   );
 }
 
-const VP = ({ validator }: { validator: Validator }) => {
+export const VP = ({ validator }: { validator: Validator }) => {
   const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(
     cosmosvaloperToEth(validator.operatorAddress),
@@ -130,9 +131,9 @@ const ValidatorModal = ({
         ),
         vapy: <div className="flex h-full w-[67px] items-center">6.9%</div>,
         mwg: (
-          <div className="flex h-full w-[141px] items-center">
-            Most weighted gauge, pool name
-          </div>
+          <ValidatorGauge
+            address={BeravaloperToEth(validator.operatorAddress)}
+          />
         ),
         bribes: (
           <div className="flex w-[136px] items-center justify-center gap-1">

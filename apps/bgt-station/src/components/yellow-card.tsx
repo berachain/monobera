@@ -15,7 +15,7 @@ export default function YellowCard({
   return (
     <div
       className={cn(
-        "to-transaparent relative inline-flex flex-col items-center justify-start gap-4 rounded-[18px] border border-amber-200 bg-gradient-to-b from-amber-100 p-8",
+        "to-transaparent relative inline-flex flex-col items-center justify-start gap-4 rounded-[18px] border border-border bg-card p-8",
         className,
       )}
     >

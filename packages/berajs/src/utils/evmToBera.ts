@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { bech32 } from "bech32";
 import { type Address } from "viem";
 

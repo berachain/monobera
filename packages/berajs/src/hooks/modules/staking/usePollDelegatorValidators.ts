@@ -9,17 +9,10 @@ import POLLING from "~/config/constants/polling";
 import { useBeraConfig, useBeraJs } from "~/contexts";
 import { defaultPagination } from "~/utils";
 import {
-  ValidatorListResponse,
   usePollActiveValidators,
   type Validator,
+  type ValidatorListResponse,
 } from ".";
-
-interface Call {
-  abi: any[];
-  address: `0x${string}`;
-  functionName: string;
-  args: any[];
-}
 
 export interface UnbondingDelegationEntry {
   creationHeight: number;
@@ -35,7 +28,7 @@ export const usePollDelegatorValidators = () => {
   const { networkConfig } = useBeraConfig();
   const method = "getDelegatorValidators";
   const QUERY_KEY = [account, method];
-  useSWR(
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       if (isConnected) {
@@ -106,6 +99,7 @@ export const usePollDelegatorValidators = () => {
     useTotalValidatorsDelegated,
     useDelegatorTotalDelegated,
     usePercentageVotingPower,
+    isLoading,
   };
 };
 

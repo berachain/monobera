@@ -9,6 +9,7 @@ import {
   formatter,
   truncateHash,
   useBeraConfig,
+  usePollDelegatorUnbonding,
   type EntryData,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
@@ -18,12 +19,15 @@ import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import RT from "~/components/react-table";
+import Nothing from "../nothing";
 
 export default function UnbondingQueue({
   unbondingQueue,
 }: {
   unbondingQueue: EntryData[];
 }) {
+  const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
+  const total = useDelegatorTotalUnbonding();
   const { networkConfig } = useBeraConfig();
   const { write, ModalPortal } = useTxn({
     message: `Cancel Unbonding`,
@@ -91,22 +95,28 @@ export default function UnbondingQueue({
   }, [unbondingQueue]);
   return (
     <div className="mt-8 flex w-full flex-col gap-8 md:flex-row ">
-      {ModalPortal}
-      <Card className="h-fit w-fit p-6">
-        <Calendar
-          mode="multiple"
-          selected={dateArray}
-          defaultMonth={dateArray[0]}
-        />
-      </Card>
-      <div className="w-full ">
-        <RT
-          columns={unbonding_queue_columns}
-          data={dataT}
-          className="min-w-[490px]"
-          emptyMessage="No BGT unbonding queue"
-        />
-      </div>
+      {total !== 0 ? (
+        <>
+          {ModalPortal}
+          <Card className="h-fit w-fit p-6">
+            <Calendar
+              mode="multiple"
+              selected={dateArray}
+              defaultMonth={dateArray[0]}
+            />
+          </Card>
+          <div className="w-full ">
+            <RT
+              columns={unbonding_queue_columns}
+              data={dataT}
+              className="min-w-[490px]"
+              emptyMessage="No BGT unbonding queue"
+            />
+          </div>
+        </>
+      ) : (
+        <Nothing message="This section will be populated once you have unbonded BGT from validators. " />
+      )}
     </div>
   );
 }

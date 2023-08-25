@@ -38,7 +38,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
       title: (
         <div>
           Voting power{" "}
-          <Tooltip text="represents a validator's influence in consensus decisions." />
+          <Tooltip text="represents a delegator's influence in validator decisions." />
         </div>
       ),
       value: `${percentageDelegated?.toFixed(2) ?? 0}%`,

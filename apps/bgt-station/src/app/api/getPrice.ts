@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { type RouterService } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { parseUnits } from "viem";
@@ -40,18 +41,18 @@ export const getBaseTokenPrice = async (
       (pool) => pool !== undefined,
     );
 
-    mappedTokens =
-      allPoolData?.length &&
-      allPoolData?.reduce(
-        (acc, cur) => {
-          acc[cur.tokenIn] = cur.formattedReturnAmount;
-          return acc;
-        },
-        { [BASE_TOKEN]: "1" },
-      );
+    mappedTokens = allPoolData?.length
+      ? allPoolData?.reduce(
+          (acc, cur) => {
+            acc[cur.tokenIn] = cur.formattedReturnAmount;
+            return acc;
+          },
+          { [BASE_TOKEN]: "1" },
+        )
+      : undefined;
   }
 
-  return mappedTokens === 0 ? undefined : mappedTokens;
+  return mappedTokens;
 };
 
 export const getWBeraPriceForToken = (

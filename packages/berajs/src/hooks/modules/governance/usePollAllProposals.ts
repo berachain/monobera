@@ -8,17 +8,22 @@ import { useBeraConfig } from "~/contexts";
 import { defaultPagination } from "~/utils";
 import { type Proposal } from "./types";
 
+export interface ProposalListResponse {
+  proposals: Proposal[];
+  nextKey: string;
+  total: bigint;
+}
+
 export const usePollAllProposals = (proposalStatus: number) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
   const method = "getProposals";
   const QUERY_KEY = [proposalStatus, method];
-  console.log("QUERY_KEY", QUERY_KEY);
   useSWR(
     QUERY_KEY,
     async () => {
-      const result = await publicClient
+      const result = (await publicClient
         .readContract({
           address: networkConfig.precompileAddresses
             .governanceAddress as Address,
@@ -29,9 +34,13 @@ export const usePollAllProposals = (proposalStatus: number) => {
         .catch((e) => {
           console.log(e);
           return undefined;
-        });
+        })) as any[];
 
-      return result;
+      return {
+        proposals: result ? result[0] : undefined,
+        nextKey: result ? result[1].nextKey : undefined,
+        total: result ? result[1].total : undefined,
+      };
     },
     {
       refreshInterval: POLLING.SLOW,
@@ -39,8 +48,8 @@ export const usePollAllProposals = (proposalStatus: number) => {
   );
 
   const useAllProposals = (): Proposal[] => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
+    const { data } = useSWRImmutable<ProposalListResponse>(QUERY_KEY);
+    return data?.proposals ?? [];
   };
   return {
     useAllProposals,

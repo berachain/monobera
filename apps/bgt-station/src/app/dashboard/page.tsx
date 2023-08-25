@@ -28,5 +28,14 @@ export default async function Page() {
     }),
   );
 
-  return <DashBoard globalCuttingBoard={data.cuttingBoard as CuttingBoard[]} />;
+  return (
+    <DashBoard
+      globalCuttingBoard={
+        data.cuttingBoard.sort(
+          (a: { percentage: string }, b: { percentage: string }) =>
+            parseFloat(b.percentage) - parseFloat(a.percentage),
+        ) as CuttingBoard[]
+      }
+    />
+  );
 }

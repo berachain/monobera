@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { usePollTotalDelegatorDelegated } from "@bera/berajs";
 import { type VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 
 export const useProposalDetails = () => {
@@ -8,8 +7,7 @@ export const useProposalDetails = () => {
   const [comment, setComment] = useState("");
   const [selected, setSelected] = useState<VoteOption | undefined>(undefined);
 
-  const { usePercentageVotingPower } = usePollTotalDelegatorDelegated();
-  const votingPower = usePercentageVotingPower();
+  const votingPower = 0;
 
   return {
     open,

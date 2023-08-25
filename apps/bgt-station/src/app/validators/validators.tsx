@@ -2,15 +2,63 @@
 
 import React from "react";
 import Image from "next/image";
-import { usePollActiveValidators, type Validator } from "@bera/berajs";
+import { usePollActiveValidators, usePollBgtSupply } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
 import ValidatorsTable from "./validators-table";
 
-export default function Validators({ activeGauges }: { activeGauges: number }) {
-  const { useActiveValidators, useTotalValidators } = usePollActiveValidators();
-  const validators: Validator[] | undefined = useActiveValidators();
+function calculatePercentageChange(
+  oldValue: number | undefined,
+  newValue: number | undefined,
+) {
+  if (
+    oldValue === undefined ||
+    newValue === undefined ||
+    oldValue === 0 ||
+    newValue === 0
+  ) {
+    return "0%";
+  }
+  if (oldValue === 0) {
+    if (newValue > 0) {
+      return "+∞%";
+    } else if (newValue < 0) {
+      return "-∞%";
+    } else {
+      return "0%";
+    }
+  }
+
+  const percentageChange = ((newValue - oldValue) / Math.abs(oldValue)) * 100;
+
+  if (percentageChange > 0) {
+    return `+${percentageChange.toFixed(2)}%`;
+  } else if (percentageChange < 0) {
+    return `${percentageChange.toFixed(2)}%`;
+  } else {
+    return "0%";
+  }
+}
+
+// Example usage
+const oldValue = 50;
+const newValue = 75;
+const percentageChange = calculatePercentageChange(oldValue, newValue);
+console.log(`Percentage Change: ${percentageChange}`);
+
+export default function Validators({
+  activeGauges,
+  oldBgtSupply,
+}: {
+  activeGauges: number;
+  oldBgtSupply: number | undefined;
+}) {
+  const { useTotalValidators } = usePollActiveValidators();
   const totalValidators: number = useTotalValidators();
+  const { useBgtSupply } = usePollBgtSupply();
+  const currentSupply = useBgtSupply();
+
+  const percentage = calculatePercentageChange(oldBgtSupply, currentSupply);
   const generalInfo = [
     {
       amount: Number.isNaN(totalValidators) ? 0 : totalValidators,
@@ -21,8 +69,8 @@ export default function Validators({ activeGauges }: { activeGauges: number }) {
       text: "In bribe rewards",
     },
     {
-      amount: "34%",
-      text: "Average staker APY",
+      amount: percentage,
+      text: "BGT inflation rate",
     },
     {
       amount: `${activeGauges}`,
@@ -30,7 +78,6 @@ export default function Validators({ activeGauges }: { activeGauges: number }) {
     },
   ];
 
-  console.log(validators);
   return (
     <div className="container mb-10 max-w-[1078px]">
       <div className="p-8 text-center">

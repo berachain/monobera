@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { truncateHash, type CuttingBoard } from "@bera/berajs";
+import {
+  formatter,
+  truncateHash,
+  useTokens,
+  type CuttingBoard,
+} from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Checkbox } from "@bera/ui/checkbox";
@@ -7,7 +12,6 @@ import { Checkbox } from "@bera/ui/checkbox";
 import { getColors } from "~/utils/colors";
 import RT from "~/components/react-table";
 import { global_gauge_weight_columns } from "~/columns/global-gauge-weight";
-import { formatter } from "@bera/berajs";
 
 const options = {
   plugins: {
@@ -54,6 +58,28 @@ const options = {
 interface Props {
   globalCuttingBoard: CuttingBoard[] | undefined;
 }
+
+const Gauge = ({ address }: { address: string | undefined }) => {
+  const { gaugeDictionary } = useTokens();
+  const value =
+    address === undefined || gaugeDictionary === undefined
+      ? ""
+      : gaugeDictionary[address]?.name ?? truncateHash(address);
+  const logo =
+    address === undefined || gaugeDictionary === undefined
+      ? ""
+      : gaugeDictionary[address]?.logoURI ?? "https://github.com/shadcn.png";
+
+  return (
+    <div className="flex h-full w-[150px] items-center gap-1">
+      <Avatar className="h-6 w-6">
+        <AvatarImage src={logo} />
+        <AvatarFallback></AvatarFallback>
+      </Avatar>
+      {value}
+    </div>
+  );
+};
 export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
@@ -70,7 +96,7 @@ export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
       return {
         label: data.address,
         percentage: Number(data.percentage),
-        amount: Number(data.amount)
+        amount: Number(data.amount),
       };
     });
     setCuttingBoardData(temp);
@@ -78,17 +104,11 @@ export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
 
   const dataT = React.useMemo(() => {
     return cuttingBoardData?.map((data, index: number) => ({
-      poolOrAddress: (
-        <div className="flex h-full w-[150px] items-center gap-1">
-          <Avatar className="h-6 w-6">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>{truncateHash(data.label)}</AvatarFallback>
-          </Avatar>
-          {truncateHash(data.label)}
-        </div>
-      ),
+      poolOrAddress: <Gauge address={data.label} />,
       bgtIncentive: (
-        <div className="flex h-full w-[100px] items-center">{formatter.format(data.amount)}</div>
+        <div className="flex h-full w-[100px] items-center">
+          {formatter.format(data.amount)} ({data.percentage}%)
+        </div>
       ),
       tvl: <div className="flex h-full w-[53px] items-center">69.42M%</div>,
       hide: (

@@ -2,8 +2,6 @@ import { type Metadata } from "next";
 import { type Address } from "viem";
 
 import Validator from "./validator";
-import { RouterService, defaultConfig } from "@bera/bera-router";
-import { MappedTokens, getBaseTokenPrice } from "~/app/api/getPrice";
 
 type Props = {
   params: { validatorAddress: string };
@@ -28,30 +26,11 @@ async function getCuttingBoard(address: string) {
   }
 }
 
-async function getPools(address: string[]) {
-  const router = new RouterService(defaultConfig);
-  try {
-    await router.fetchPools();
-  } catch (e) {
-    console.log(`Error fetching pools: ${e}`);
-    return;
-  }
-  const pools = router.getPools() ?? [];
-
-  const mappedTokens: MappedTokens | undefined = await getBaseTokenPrice(
-    pools,
-    router,
-  );
-
-  
-}
-
 export default async function Page({
   params,
 }: {
   params: { validatorAddress: string };
 }) {
-
   const { validatorAddress } = params;
   const cuttingBoard = getCuttingBoard(params?.validatorAddress);
   const data: any = await Promise.all([cuttingBoard]).then(
@@ -62,7 +41,12 @@ export default async function Page({
   return (
     <Validator
       validatorAddress={validatorAddress as Address}
-      cuttingBoard={data.cuttingBoard[0].weights ?? undefined}
+      cuttingBoard={
+        data.cuttingBoard[0].weights.sort(
+          (a: { percentage: string }, b: { percentage: string }) =>
+            parseFloat(b.percentage) - parseFloat(a.percentage),
+        ) ?? undefined
+      }
     />
   );
 }

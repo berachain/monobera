@@ -3,7 +3,6 @@
 import {
   GOVERNANCE_PRECOMPILE_ABI,
   usePollProposal,
-  usePollTotalDelegatorDelegated,
   type Proposal,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils/formatAmount";
@@ -33,8 +32,7 @@ export default function ProposalDetails({
     useProposalDetails();
 
   console.log(proposal);
-  const { usePercentageVotingPower } = usePollTotalDelegatorDelegated();
-  const userVotingPower = usePercentageVotingPower();
+  const userVotingPower = 0;
   const { write, ModalPortal } = useTxn({
     message: `Voting for proposal ${proposalId}`,
   });

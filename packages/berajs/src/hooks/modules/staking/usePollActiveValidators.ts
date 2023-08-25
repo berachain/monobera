@@ -4,14 +4,10 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { usePublicClient, type Address } from "wagmi";
 
-import {
-  BERACHEF_PRECOMPILE_ABI,
-  ERC20BGT_PRECOMPILE_ABI,
-  STAKING_PRECOMPILE_ABI,
-} from "~/config";
+import { STAKING_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
-import { BeravaloperToEth, defaultPagination, ethToBeravaloper } from "~/utils";
+import { BeravaloperToEth, defaultPagination } from "~/utils";
 import { usePollBgtSupply } from "../bank";
 
 export interface Validator {
@@ -64,14 +60,6 @@ export interface Bribe {
   proposers: string[];
   amounts: bigint[];
 }
-
-interface Call {
-  abi: any[];
-  address: `0x${string}`;
-  functionName: string;
-  args: any[];
-}
-
 export interface ValidatorListResponse {
   validators: Validator[];
   nextKey: string;
