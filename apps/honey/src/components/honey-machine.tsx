@@ -246,12 +246,16 @@ export function HoneyMachine() {
   const performRedeeming = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      write({
-        address: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
-        abi: ERC20_HONEY_ABI,
-        functionName: "redeem",
-        params: payload,
-      });
+      if (Number(payload[2] > 0)) {
+        write({
+          address: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
+          abi: ERC20_HONEY_ABI,
+          functionName: "redeem",
+          params: payload,
+        });
+      } else {
+        rejectAction?.fire();
+      }
     } catch (error: any) {
       dispatch({ type: "SET_STATE", payload: "idle" });
       dispatch({ type: "SET_ERROR", payload: error.message });

@@ -129,16 +129,16 @@ export default async function Home() {
       <div className="honey:bg-[#468DCB]">
         <div className="m-auto hidden max-w-[1000px] honey:block">
           <HoneyMachine />
-          {/* <HoneyBanner /> */}
+          <HoneyBanner />
         </div>
-        {/* <div className="flex justify-center py-12 honey:hidden">
+        <div className="flex justify-center py-12 honey:hidden">
           <div className="container">
             <Hero />
             <SwapCard />
           </div>
-        </div> */}
+        </div>
       </div>
-      {/* <div className=" honey:bg-gradient-to-b honey:from-[#468DCB] honey:to-background">
+      <div className=" honey:bg-gradient-to-b honey:from-[#468DCB] honey:to-background">
         <div className="container honey:max-w-[1050px] honey:text-blue-900">
           <div className="py-4 lg:py-12">
             <Data
@@ -172,7 +172,7 @@ export default async function Home() {
             <HoneyTransactionsTable />
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
