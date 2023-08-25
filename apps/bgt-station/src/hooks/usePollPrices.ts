@@ -1,10 +1,10 @@
 import { usePollActiveValidators, usePollValidatorBribes } from "@bera/berajs";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { Address, formatUnits } from "viem";
+import { formatUnits, type Address } from "viem";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
-import { MappedTokens } from "~/app/api/getPrice";
+import { type MappedTokens } from "~/app/api/getPrice";
 
 export const usePollPrices = () => {
   const QUERY_KEY = ["prices"];
@@ -35,7 +35,7 @@ export const usePollPrices = () => {
   const useValidatorBribesTotalValue = (
     validatorAddress: string,
   ): number | undefined => {
-    const prices = usePrices();
+    // const prices = usePrices();
     const { useValidatorBribes } = usePollValidatorBribes(
       validatorAddress as Address,
     );

@@ -19,8 +19,8 @@ import { BGTSelectionEnum, type BGTselection } from "./types";
 export default function Portfolio() {
   const router = useRouter();
   const { account } = useBeraJs();
-  const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  // const { usePrices } = usePollPrices();
+  // const prices = usePrices();
   const [tab, setTab] = React.useState<BGTselection>(
     BGTSelectionEnum.YOUR_DELEGATIONS,
   );

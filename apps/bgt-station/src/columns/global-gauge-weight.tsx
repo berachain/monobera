@@ -1,5 +1,5 @@
 import React from "react";
-import { type Columns } from "@bera/shared-ui";
+import { Tooltip, type Columns } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 export const global_gauge_weight_columns: Columns = [
@@ -9,9 +9,9 @@ export const global_gauge_weight_columns: Columns = [
   },
   {
     header: (
-      <div className="flex w-[100px] gap-1">
+      <div className="flex flex-row w-[120px] gap-1 items-center">
         BGT Incentive
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+        <Tooltip text={'BGT directed per year'} />
       </div>
     ),
     accessor: "bgtIncentive",
@@ -20,7 +20,7 @@ export const global_gauge_weight_columns: Columns = [
     header: (
       <div className="flex w-[53px] gap-1">
         TVL{" "}
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+        {/* <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" /> */}
       </div>
     ),
     accessor: "tvl",

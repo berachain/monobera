@@ -30,7 +30,7 @@ export const usePollValidatorBribes = (
           console.log(e);
           return undefined;
         });
-
+        console.log(result);
       return result;
     },
     {

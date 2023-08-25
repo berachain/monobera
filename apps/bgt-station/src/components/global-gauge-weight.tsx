@@ -7,6 +7,7 @@ import { Checkbox } from "@bera/ui/checkbox";
 import { getColors } from "~/utils/colors";
 import RT from "~/components/react-table";
 import { global_gauge_weight_columns } from "~/columns/global-gauge-weight";
+import { formatter } from "@bera/berajs";
 
 const options = {
   plugins: {
@@ -51,9 +52,9 @@ const options = {
 };
 
 interface Props {
-  globalCuttingBoard: CuttingBoard[];
+  globalCuttingBoard: CuttingBoard[] | undefined;
 }
-export default function GlobalGaugeWeight({ globalCuttingBoard }: Props) {
+export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
 
@@ -68,7 +69,8 @@ export default function GlobalGaugeWeight({ globalCuttingBoard }: Props) {
     const temp = globalCuttingBoard?.map((data: CuttingBoard) => {
       return {
         label: data.address,
-        amount: Number(data.percentage),
+        percentage: Number(data.percentage),
+        amount: Number(data.amount)
       };
     });
     setCuttingBoardData(temp);
@@ -86,7 +88,7 @@ export default function GlobalGaugeWeight({ globalCuttingBoard }: Props) {
         </div>
       ),
       bgtIncentive: (
-        <div className="flex h-full w-[100px] items-center">69.12K (6.9%)</div>
+        <div className="flex h-full w-[100px] items-center">{formatter.format(data.amount)}</div>
       ),
       tvl: <div className="flex h-full w-[53px] items-center">69.42M%</div>,
       hide: (

@@ -10,9 +10,6 @@ export function EpochTimeline() {
   const { useCurrentEpoch } = usePollEpochs();
   const currentEpoch = useCurrentEpoch();
 
-  const duration = (s: number) =>
-    formatDistance(0, s, { includeSeconds: true });
-
   return (
     <Card className=" w-full p-8 py-[39px]">
       <div className="flex h-8 items-center gap-3">

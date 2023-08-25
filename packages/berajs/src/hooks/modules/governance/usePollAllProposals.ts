@@ -5,6 +5,7 @@ import { usePublicClient, type Address } from "wagmi";
 import { GOVERNANCE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
+import { defaultPagination } from "~/utils";
 import { type Proposal } from "./types";
 
 export const usePollAllProposals = (proposalStatus: number) => {
@@ -23,7 +24,7 @@ export const usePollAllProposals = (proposalStatus: number) => {
             .governanceAddress as Address,
           abi: GOVERNANCE_PRECOMPILE_ABI,
           functionName: method,
-          args: [BigInt(proposalStatus)],
+          args: [BigInt(proposalStatus), defaultPagination],
         })
         .catch((e) => {
           console.log(e);

@@ -10,7 +10,7 @@ export function ValidatorsList({
   validators,
   title,
 }: {
-  validators: Validator[];
+  validators: Validator[] | undefined;
   title: ReactNode;
 }) {
   const [linesCount, setLinesCount] = React.useState(1);
@@ -32,7 +32,7 @@ export function ValidatorsList({
         ))}
       </div>
       <div className="mt-8 flex justify-center">
-        {linesCount * 3 < validators?.length && (
+        {linesCount * 3 <( validators?.length ?? 0) && (
           <Button
             variant="outline"
             onClick={() => setLinesCount(linesCount + 1)}

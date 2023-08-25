@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 async function getGlobalCuttingBoard() {
   try {
     const res = await fetch(
-      `http://k8s-devnet-apinlb-25cc83ec5c-24b3d2c710b46250.elb.us-east-2.amazonaws.com/bgt/rewards`,
+      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
     );
     const jsonRes = await res.json();
     return jsonRes.result;

@@ -15,6 +15,8 @@ import BribesAndEmissions from "./bribes-and-emissions";
 import Uptime from "./uptime";
 import ValidatorActivitiesTable from "./validator-activities-table";
 import ValidatorDetails from "./validator-details";
+import { CuttingBoard } from "@bera/berajs";
+import { usePollValidatorBribes } from "@bera/berajs";
 
 // need
 // const DynamicChart = dynamic(() => import("~/components/cutting-board-chart"), {
@@ -27,13 +29,17 @@ export default function Validator({
   cuttingBoard,
 }: {
   validatorAddress: Address;
-  cuttingBoard: any;
+  cuttingBoard: CuttingBoard | undefined;
 }) {
   const router = useRouter();
 
-  console.log("cuttingBoard", cuttingBoard);
   const { useActiveValidator, usePercentageDelegated } =
     usePollActiveValidators();
+
+  const {useValidatorBribes} = usePollValidatorBribes(validatorAddress);
+  const bribes = useValidatorBribes();
+
+  console.log(bribes);
   const validator = useActiveValidator(validatorAddress);
   const percentageDelegated = usePercentageDelegated(validatorAddress);
   return (
@@ -50,7 +56,7 @@ export default function Validator({
 
           <div className="flex w-full items-center justify-center gap-2 text-3xl font-bold leading-[48px] md:text-5xl ">
             <ValidatorIcon address={validatorAddress} className="h-12 w-12" />
-            {validator?.description.moniker}
+            {validator?.description.moniker ?? 'Loading...'}
           </div>
 
           <div className="flex items-center justify-center gap-1">
@@ -95,7 +101,7 @@ export default function Validator({
         <div className="mb-4 flex items-center text-lg font-semibold leading-7">
           Average Gauge Weight <Tooltip text="Bribes and emissions" />
         </div>
-        <GlobalGaugeWeight globalCuttingBoard={[]} />
+        <GlobalGaugeWeight globalCuttingBoard={cuttingBoard as unknown as CuttingBoard[]} />
       </div>
 
       <div className="">

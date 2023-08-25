@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { RouterService, defaultConfig } from "@bera/bera-router";
 
-import { MappedTokens, getBaseTokenPrice } from "./getPrice";
+import { getBaseTokenPrice, type MappedTokens } from "./getPrice";
 
 export const revalidate = 300; // revalidate at most every hour
 
-export async function GET(request: Request) {
+export async function GET() {
   const router = new RouterService(defaultConfig);
   try {
     await router.fetchPools();
