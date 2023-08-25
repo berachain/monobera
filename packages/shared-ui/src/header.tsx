@@ -67,8 +67,8 @@ export function Header({
             {Number(userBalance).toFixed(2)} <span>BGT</span>
           </div>
         )}
-        <ThemeToggleMobile />
-        <ThemeToggle />
+        {!isHoney && <ThemeToggleMobile />}
+        {!isHoney && <ThemeToggle />}
         <ConnectBtn />
         <MobileDropdown navItems={navItems} />
       </div>

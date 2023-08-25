@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
+import { TransactionExecutionError } from "@bera/berajs";
 import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import {
@@ -67,7 +68,7 @@ function reducer(state: State, action: Action): State {
 export function HoneyMachine() {
   const STATE_MACHINE_NAME = "honeyMachineSquare";
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  console.log("reducer state", state);
   const { RiveComponent, rive } = useRive({
     src: "/honeyMachineSquare.riv",
     stateMachines: STATE_MACHINE_NAME,
@@ -77,6 +78,7 @@ export function HoneyMachine() {
   });
 
   const rejectAction = useStateMachineInput(rive, STATE_MACHINE_NAME, "reject");
+
   const txnSubmitAction = useStateMachineInput(
     rive,
     STATE_MACHINE_NAME,
@@ -92,6 +94,7 @@ export function HoneyMachine() {
     STATE_MACHINE_NAME,
     "redeemTxnSuccess",
   );
+  const txnFail = useStateMachineInput(rive, STATE_MACHINE_NAME, "txnFail");
 
   const {
     payload,
@@ -113,10 +116,29 @@ export function HoneyMachine() {
     ModalPortal,
   } = usePsm();
 
+  // console.log(
+  //   payload[2],
+  //   fromAmount,
+  //   toAmount,
+  //   fromBalance.formattedBalance,
+  //   toBalance.formattedBalance,
+  // );
+
   const { write } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
-    onError: () => {
+    onError: (e: Error) => {
+      // console.log("did this even catch anything??", e);
+      // when user rejects the transaction, we need to reset the state machine
+      // if (e instanceof TransactionExecutionError) {
+      //   console.log("user rejected, catched!!!!", e.message);
+      // } else {
+      //   console.log("other error, catched!!!!", e.message);
+      // }
+      // rejection should be triggered when transaction fails(after metamask popup)
       rejectAction?.fire();
+      // rejection should be triggered when user reject or input amount 0( before metamask popup)
+      txnFail?.fire();
+      //but this works so i am ok w it :ppp
     },
     onSuccess: () => {
       if (isMint) {
@@ -149,27 +171,39 @@ export function HoneyMachine() {
 
   useEffect(() => {
     if (rive) {
+      console.log("trigger rive effect", rive);
       rive.on(EventType.StateChange, (event: any) => {
+        console.log("rive state change", event.type, event.data);
         if (event.data[0] === "wallet") {
+          console.log("wallet event", payload);
           if (
             allowance?.formattedAllowance === "0" ||
             Number(allowance?.formattedAllowance) < fromAmount
           ) {
             dispatch({ type: "SET_STATE", payload: "approval" });
-          }
-
-          if (isMint) {
-            console.log("mint", payload);
-
-            dispatch({ type: "SET_STATE", payload: "minting" });
           } else {
-            console.log("burn", payload);
-            dispatch({ type: "SET_STATE", payload: "redeeming" });
+            if (isMint) {
+              console.log("mint", payload);
+              dispatch({ type: "SET_STATE", payload: "minting" });
+            } else {
+              console.log("burn", payload);
+              dispatch({ type: "SET_STATE", payload: "redeeming" });
+            }
+          }
+        } else {
+          console.log(
+            "event change but not wallet: !!",
+            event.data[0],
+            "!!",
+            state,
+          );
+          if (event.data[0] === "machineIdle") {
+            dispatch({ type: "SET_STATE", payload: "idle" });
           }
         }
       });
     }
-  }, [payload]);
+  }, [payload, rive]);
 
   const performApproval = () => {
     try {
@@ -193,12 +227,16 @@ export function HoneyMachine() {
   const performMinting = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      write({
-        address: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
-        abi: ERC20_HONEY_ABI,
-        functionName: "mint",
-        params: payload,
-      });
+      if (Number(payload[2] > 0)) {
+        write({
+          address: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
+          abi: ERC20_HONEY_ABI,
+          functionName: "mint",
+          params: payload,
+        });
+      } else {
+        rejectAction?.fire();
+      }
     } catch (error: any) {
       dispatch({ type: "SET_STATE", payload: "idle" });
       dispatch({ type: "SET_ERROR", payload: error.message });

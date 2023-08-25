@@ -69,6 +69,7 @@ export const usePsm = () => {
     setToAmount(tempFromAmount);
   };
 
+  console.log("fromBalance", fromAmount);
   useEffect(() => {
     if (isMint && account) {
       const payload = [
@@ -86,6 +87,7 @@ export const usePsm = () => {
       ];
       setPayload(payload);
     }
+    console.log("payload", payload);
     // const deadline = block + 10000n;
     // const payload = [
     //   selectedFrom?.address,
