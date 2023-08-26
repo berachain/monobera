@@ -5,7 +5,7 @@ import { cloudinaryUrl } from "~/config";
 import GeneralInfo from "./components/general-info";
 import Help from "./components/help";
 import Hero from "./components/hero";
-import Markets from "./components/markets";
+import Markets from "./components/positions";
 import Tutorial from "./components/tutorial";
 
 export default function Home() {

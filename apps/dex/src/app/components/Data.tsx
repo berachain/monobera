@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 export function DataCard({
@@ -47,9 +46,9 @@ export default function Data() {
           icon={<Icons.bera className="mt-[2px] h-3 w-3 md:h-6 md:w-6" />}
         />
       </div>
-      <Button variant="outline" className="mt-8">
+      {/* <Button variant="outline" className="mt-8">
         View Analytics
-      </Button>
+      </Button> */}
     </section>
   );
 }
