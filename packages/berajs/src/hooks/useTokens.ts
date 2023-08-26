@@ -11,6 +11,7 @@ interface IUseTokens {
   customTokenList: Token[] | undefined;
   tokenDictionary: { [key: string]: Token } | undefined;
   featuredTokenList: Token[] | undefined;
+  gaugeDictionary: { [key: string]: any } | undefined;
   addNewToken: (token: Token) => void;
   removeToken: (token: Token) => void;
 }
@@ -61,6 +62,7 @@ const useTokens = (): IUseTokens => {
         list: uniqueList,
         customList: [...localStorageTokenList],
         dictionary: temp.tokenMap ?? tokenListToDict(list),
+        gaugeDictionary: temp.gaugeMap ?? undefined,
         featured: defaultFeaturedList ?? [],
       };
     },
@@ -100,6 +102,7 @@ const useTokens = (): IUseTokens => {
     customTokenList: data?.customList ?? [],
     tokenDictionary: data?.dictionary ?? {},
     featuredTokenList: data?.featured ?? [],
+    gaugeDictionary: data?.gaugeDictionary ?? {},
     addNewToken,
     removeToken,
   };

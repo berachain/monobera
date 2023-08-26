@@ -1,36 +1,50 @@
 import React, { useMemo } from "react";
-import { usePollActiveValidators, type Validator } from "@bera/berajs";
-import { IconList, RT, SearchInput } from "@bera/shared-ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import {
+  BeravaloperToEth,
+  cosmosvaloperToEth,
+  usePollAccountDelegations,
+  usePollActiveValidators,
+  usePollDelegatorValidators,
+  type Validator,
+} from "@bera/berajs";
+import { formatter } from "@bera/berajs/src/utils";
+import { IconList, SearchInput } from "@bera/shared-ui";
+import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { formatUnits, getAddress } from "viem";
 
+import { formatCommission } from "~/utils/formatCommission";
+import { ValidatorGauge } from "~/app/validators/validators-table";
 import { validator_table_columns } from "~/columns/validator-table-columns";
-import { useFetchDelegatedValidatorAmount } from "~/hooks/useFetchDelegatedValidatorAmount";
+import RT from "./react-table";
 
 export default function ValidatorSelector({
   validatorAddress,
   onSelectValidator,
   showDelegated = false,
+  emptyMessage,
 }: {
   validatorAddress?: string;
   onSelectValidator?: (address: string) => void;
   showDelegated?: boolean;
+  emptyMessage?: string;
 }) {
-  const { useActiveValidators } = usePollActiveValidators();
-  const validators: Validator[] = useActiveValidators();
-  const validValidator = validators.find(
-    (validator) =>
-      validator.operatorAddress.toLowerCase() ===
-      validatorAddress?.toLowerCase(),
-  );
+  const { useActiveValidators, useActiveValidator } = usePollActiveValidators();
+  const validators: Validator[] | undefined = useActiveValidators();
+
+  const validValidator = useActiveValidator(validatorAddress);
   const [open, setOpen] = React.useState(false);
 
+  const { useDelegatorValidators } = usePollDelegatorValidators();
+  const delegatedValidators: Validator[] | undefined = useDelegatorValidators();
+
   const filteredValidators = useMemo(
-    () => validators,
+    () => (showDelegated ? delegatedValidators : validators),
     [validators, showDelegated],
   );
+
   return (
     <div>
       <Button
@@ -40,12 +54,10 @@ export default function ValidatorSelector({
       >
         {validValidator ? (
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
-            <Avatar className="h-6 w-6">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback className="font-bold">
-                validator avatar
-              </AvatarFallback>
-            </Avatar>
+            <ValidatorIcon
+              address={BeravaloperToEth(validValidator.operatorAddress)}
+              className="h-8 w-8"
+            />
             {validValidator.description.moniker}
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
@@ -58,24 +70,41 @@ export default function ValidatorSelector({
       </Button>
       <ValidatorModal
         open={open}
-        validators={filteredValidators}
+        validators={filteredValidators ?? []}
         onSelect={(address) => onSelectValidator && onSelectValidator(address)}
         onClose={() => setOpen(false)}
+        emptyMessage={emptyMessage}
       />
     </div>
   );
 }
+
+export const VP = ({ validator }: { validator: Validator }) => {
+  const { usePercentageDelegated } = usePollActiveValidators();
+  const percentageDelegated = usePercentageDelegated(
+    cosmosvaloperToEth(validator.operatorAddress),
+  );
+
+  return (
+    <div className="flex h-full w-24 items-center">
+      {formatter.format(Number(formatUnits(BigInt(validator.tokens), 18)))} (
+      {percentageDelegated?.toFixed(2)}%)
+    </div>
+  );
+};
 
 const ValidatorModal = ({
   onClose,
   open,
   validators,
   onSelect,
+  emptyMessage,
 }: {
   onClose: () => void;
   open: boolean;
   validators: Validator[];
   onSelect: (address: string) => void;
+  emptyMessage?: string;
 }) => {
   const tableV = React.useMemo(
     () =>
@@ -83,27 +112,28 @@ const ValidatorModal = ({
         address: validator.operatorAddress,
         validator: (
           <div className="flex w-[137px] items-center gap-1">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback className="font-bold">
-                {validator.description.moniker}
-              </AvatarFallback>
-            </Avatar>
+            <ValidatorIcon
+              address={BeravaloperToEth(validator.operatorAddress)}
+              className="h-8 w-8"
+            />
             {validator.description.moniker}
           </div>
         ),
         bgt_delegated: (
           <BGTDelegated operatorAddress={validator.operatorAddress} />
         ),
-        vp: <div className="flex h-full w-24 items-center">69.42M (0.69%)</div>,
+        vp: <VP validator={validator} />,
         commission: (
-          <div className="flex h-full w-[91px] items-center">20%</div>
+          <div className="flex h-full w-[91px] items-center">
+            {" "}
+            {formatCommission(validator.commission.commissionRates.rate)}%
+          </div>
         ),
         vapy: <div className="flex h-full w-[67px] items-center">6.9%</div>,
         mwg: (
-          <div className="flex h-full w-[141px] items-center">
-            Most weighted gauge, pool name
-          </div>
+          <ValidatorGauge
+            address={BeravaloperToEth(validator.operatorAddress)}
+          />
         ),
         bribes: (
           <div className="flex w-[136px] items-center justify-center gap-1">
@@ -149,10 +179,11 @@ const ValidatorModal = ({
             columns={validator_table_columns}
             data={tableV}
             rowOnClick={(value) => {
-              onSelect(value.original.address);
+              onSelect(cosmosvaloperToEth(value.original.address));
               onClose();
             }}
             className="min-w-[1000px]"
+            emptyMessage={emptyMessage}
           />
         </div>
       </DialogContent>
@@ -161,14 +192,17 @@ const ValidatorModal = ({
 };
 
 const BGTDelegated = ({ operatorAddress }: { operatorAddress: string }) => {
-  const { data, isLoading } = useFetchDelegatedValidatorAmount(operatorAddress);
+  const { useSelectedAccountDelegation, isLoading } = usePollAccountDelegations(
+    getAddress(cosmosvaloperToEth(operatorAddress)),
+  );
+  const bgtDelegated = useSelectedAccountDelegation();
   return (
     <div className="flex h-full w-24 items-center justify-center">
       {isLoading
         ? "Loading"
-        : data && Number(data) === 0
-        ? ""
-        : data!.toString()}
+        : bgtDelegated && Number(bgtDelegated) === 0
+        ? "0 BGT"
+        : Number(bgtDelegated ?? 0).toFixed(2)}
     </div>
   );
 };

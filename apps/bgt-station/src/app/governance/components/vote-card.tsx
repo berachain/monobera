@@ -1,10 +1,9 @@
 import React from "react";
+import { type TallyResult } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
-import { type ProposalVotes } from "../types";
-
 interface IVoteCard {
-  proposalVotes: ProposalVotes;
+  proposalVotes: TallyResult | undefined;
 }
 
 export function VoteCard({ proposalVotes }: IVoteCard) {
@@ -12,7 +11,7 @@ export function VoteCard({ proposalVotes }: IVoteCard) {
     <Card className="flex w-full p-6">
       <div className="flex flex-1 flex-col items-center gap-2 border-r border-border sm:w-[140px]">
         <div className="text-lg font-semibold leading-9 text-success-foreground sm:text-3xl">
-          {proposalVotes.yes}%
+          {proposalVotes?.yesCount ?? 0}%
         </div>
         <div className="flex items-center gap-0.5 text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
           Yes
@@ -20,7 +19,7 @@ export function VoteCard({ proposalVotes }: IVoteCard) {
       </div>
       <div className="flex flex-1 flex-col items-center gap-2 border-r border-border sm:w-[140px]">
         <div className="text-lg font-semibold leading-9 text-destructive-foreground sm:text-3xl">
-          {proposalVotes.no}%
+          {proposalVotes?.noCount ?? 0}%
         </div>
         <div className="flex items-center gap-0.5 text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
           No
@@ -28,7 +27,7 @@ export function VoteCard({ proposalVotes }: IVoteCard) {
       </div>
       <div className="flex flex-1 flex-col items-center gap-2 border-r border-border sm:w-[140px]">
         <div className="text-lg font-semibold leading-9 text-info-foreground sm:text-3xl">
-          {proposalVotes.veto}%
+          {proposalVotes?.noWithVetoCount ?? 0}%
         </div>
         <div className="flex items-center gap-0.5 text-center text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
           No with veto
@@ -36,7 +35,7 @@ export function VoteCard({ proposalVotes }: IVoteCard) {
       </div>
       <div className="flex flex-1 flex-col items-center gap-2 sm:w-[140px]">
         <div className="text-lg font-semibold leading-9 text-muted-foreground sm:text-3xl">
-          {proposalVotes.abstain}%
+          {proposalVotes?.abstainCount ?? 0}%
         </div>
         <div className="flex items-center gap-0.5 text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
           Abstain

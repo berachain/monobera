@@ -10,12 +10,12 @@ export function ValidatorsList({
   validators,
   title,
 }: {
-  validators: Validator[];
+  validators: Validator[] | undefined;
   title: ReactNode;
 }) {
   const [linesCount, setLinesCount] = React.useState(1);
   const showingValidators = useMemo(
-    () => validators.slice(0, linesCount * 3),
+    () => validators?.slice(0, linesCount * 3),
     [validators, linesCount],
   );
   return (
@@ -27,12 +27,12 @@ export function ValidatorsList({
         Stake your BGT with the most popular validators
       </div>
       <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-        {showingValidators.map((validator, index) => (
+        {showingValidators?.map((validator, index) => (
           <ValidatorCard validator={validator} key={index} />
         ))}
       </div>
       <div className="mt-8 flex justify-center">
-        {linesCount * 3 < validators.length && (
+        {linesCount * 3 < (validators?.length ?? 0) && (
           <Button
             variant="outline"
             onClick={() => setLinesCount(linesCount + 1)}

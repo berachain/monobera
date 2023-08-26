@@ -66,7 +66,7 @@ export default function ValidatorDetails({
         <div
           className="mt-4 flex flex-col justify-between gap-4 sm:flex-row"
           onClick={() =>
-            router.push(`/delegate?action=delegate&&validator=${address}`)
+            router.push(`/delegate?action=delegate&validator=${address}`)
           }
         >
           <Button className="flex-1">
@@ -76,7 +76,7 @@ export default function ValidatorDetails({
             className="flex-1"
             variant="outline"
             onClick={() =>
-              router.push(`/delegate?action=redelegate&&validator=${address}`)
+              router.push(`/delegate?action=redelegate&validator=${address}`)
             }
           >
             {" "}
@@ -87,7 +87,7 @@ export default function ValidatorDetails({
             className="flex-1"
             variant="outline"
             onClick={() =>
-              router.push(`/delegate?action=unbond&&validator=${address}`)
+              router.push(`/delegate?action=unbond&validator=${address}`)
             }
           >
             {" "}

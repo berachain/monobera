@@ -33,7 +33,7 @@ export const general_validator_columns: Columns = [
     header: (
       <div className="flex w-[67px] items-center gap-1">
         vAPY
-        <Tooltip text="?" />
+        <Tooltip text="Estimated bribe rewards" />
         <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
       </div>
     ),
@@ -43,7 +43,6 @@ export const general_validator_columns: Columns = [
     header: (
       <div className="flex w-[141px] items-center gap-1">
         Most weighted gauge
-        <Tooltip text="?" />
       </div>
     ),
     accessor: "mostWeightedGauge",
@@ -52,7 +51,7 @@ export const general_validator_columns: Columns = [
     header: (
       <div className="flex w-[136px] items-center gap-1">
         Bribes
-        <Tooltip text="?" />
+        <Tooltip text="Bribes emitted by this validator" />
       </div>
     ),
     accessor: "bribes",

@@ -1,11 +1,11 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePollBgtBalance } from "@bera/berajs";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import { usePollAccountDelegations, usePollBgtBalance } from "@bera/berajs";
+import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { type Address } from "wagmi";
 
-import { useFetchDelegatedValidatorAmount } from "~/hooks/useFetchDelegatedValidatorAmount";
 import { DelegateEnum } from "../app/delegate/types";
 import ValidatorSelector from "./validator-selector";
 
@@ -16,28 +16,35 @@ export default function ValidatorInput({
   validatorAddress,
   redelegate,
   redelegateValidatorAddress,
+  disabled = false,
   showDelegated, //when this is true, the validator list will only show the validators user delegated
+  emptyMessage = "No validators available",
 }: {
   action: DelegateEnum;
   amount: string;
   onAmountChange: (amount: string) => void;
-  validatorAddress?: string;
+  validatorAddress: Address | undefined;
   redelegate?: boolean;
   redelegateValidatorAddress?: string;
+  disabled?: boolean;
   showDelegated?: boolean;
+  emptyMessage?: string;
 }) {
   const router = useRouter();
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
 
-  const { data: bgtDelegated } =
-    useFetchDelegatedValidatorAmount(validatorAddress);
+  const { useSelectedAccountDelegation } =
+    usePollAccountDelegations(validatorAddress);
+  const bgtDelegated = useSelectedAccountDelegation();
+
   return (
     <div className="relative">
       <Input
         type="number"
         className="h-[73px] p-4 text-right text-lg font-semibold leading-7"
         value={amount}
+        disabled={disabled}
         onChange={(e) => onAmountChange(e.target.value)}
         startAdornment={
           <ValidatorSelector
@@ -46,12 +53,13 @@ export default function ValidatorInput({
             }
             onSelectValidator={(address) =>
               router.push(
-                `/delegate?action=${action}&&validator=${
+                `/delegate?action=${action}&validator=${
                   redelegate ? validatorAddress : address
-                }${redelegate ? `&&redelegateValidator=${address}` : ""}`,
+                }${redelegate ? `&redelegateValidator=${address}` : ""}`,
               )
             }
             showDelegated={showDelegated}
+            emptyMessage={emptyMessage}
           />
         }
       />
@@ -66,7 +74,7 @@ export default function ValidatorInput({
               onAmountChange(userBalance);
             }}
           >
-            Fill Deposit
+            MAX
           </span>
         </div>
       )}
@@ -77,12 +85,7 @@ export default function ValidatorInput({
         Boolean(bgtDelegated) && (
           <div className="absolute bottom-3 right-4 h-3 text-[10px] text-muted-foreground">
             <div className="flex items-center gap-1">
-              <Avatar className="h-3 w-3">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback className="font-bold">
-                  validator avatar
-                </AvatarFallback>
-              </Avatar>
+              <ValidatorIcon className="h-3 w-3" address={validatorAddress} />
               {bgtDelegated?.toString()}
               <span
                 className="underline hover:cursor-pointer"

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 "use client";
 
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";

@@ -11,7 +11,17 @@ export const EPOCHS_PRECOMPILE_ABI = [
     outputs: [
       {
         internalType: "int64",
-        name: "",
+        name: "epochNumber",
+        type: "int64",
+      },
+      {
+        internalType: "int64",
+        name: "startTimestamp",
+        type: "int64",
+      },
+      {
+        internalType: "int64",
+        name: "endTimestamp",
         type: "int64",
       },
     ],

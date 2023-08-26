@@ -52,3 +52,5 @@ export const honeyAddress = process.env
   .NEXT_PUBLIC_HONEY_PRECOMPILE_ADDRESS as Address;
 export const rewardsAddress = process.env
   .NEXT_PUBLIC_REWARDS_ADDRESS as Address;
+export const erc20BribeModule = process.env
+  .NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address;

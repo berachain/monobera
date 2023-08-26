@@ -1,9 +1,11 @@
+import { notFound } from "next/navigation";
+
 import ProposalDetails from "./proposal-details";
 
-export default function Proposal({
-  params,
-}: {
-  params: { proposalId: `0x${string}` };
-}) {
+export default function Page({ params }: { params: { proposalId: number } }) {
+  if (!params.proposalId) {
+    return notFound();
+  }
+
   return <ProposalDetails proposalId={params.proposalId} />;
 }

@@ -2,16 +2,12 @@ import { useRouter } from "next/navigation";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 
-export default function Nothing() {
+export default function Nothing({ message }: { message: string }) {
   const router = useRouter();
   return (
     <div className="container flex max-w-[764px] flex-col gap-8">
-      <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
-        👋 There’s nothing here yet...
-      </div>
       <div className="text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
-        This page will be populated with your delegations and rewards once you
-        have delegated to some validators.{" "}
+        {message}{" "}
       </div>
       <div className="flex flex-col justify-center gap-4 sm:flex-row">
         <Card className="flex-1 px-12 py-8">

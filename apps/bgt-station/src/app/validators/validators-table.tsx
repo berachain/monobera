@@ -1,28 +1,67 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePollActiveValidators, type Validator } from "@bera/berajs";
-import { IconList, RT, SearchInput } from "@bera/shared-ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import {
+  BeravaloperToEth,
+  cosmosvaloperToEth,
+  formatter,
+  truncateHash,
+  usePollActiveValidators,
+  usePollValidatorCuttingBoard,
+  useTokens,
+  type Validator,
+} from "@bera/berajs";
+import { IconList, SearchInput } from "@bera/shared-ui";
+import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits } from "viem";
+import { formatUnits, type Address } from "viem";
 
+import { formatCommission } from "~/utils/formatCommission";
+import RT from "~/components/react-table";
 import { general_validator_columns } from "~/columns/general-validator-columns";
 
+export const ValidatorGauge = ({ address }: { address: string }) => {
+  const { useValidatorCuttingBoard } = usePollValidatorCuttingBoard(
+    address as Address,
+  );
+  const cuttingBoard = useValidatorCuttingBoard();
+
+  const highestVotedGauge = React.useMemo(() => {
+    return cuttingBoard ? cuttingBoard[0].address : undefined;
+  }, [cuttingBoard]);
+  const { gaugeDictionary } = useTokens();
+  const value =
+    highestVotedGauge === undefined || gaugeDictionary === undefined
+      ? ""
+      : gaugeDictionary[highestVotedGauge]?.name ??
+        truncateHash(highestVotedGauge);
+  return (
+    <div className="flex h-full w-[141px] items-center justify-center">
+      {value}
+    </div>
+  );
+};
 export default function ValidatorsTable() {
   const router = useRouter();
-  const {
-    useActiveValidators,
-    useTotalDelegated,
-    // useValidatorCuttingBoards,
-    // useSelectedValidatorActiveBribes,
-  } = usePollActiveValidators();
-
-  const validators: Validator[] = useActiveValidators();
-  const totalDelegated: number = useTotalDelegated();
+  const { useActiveValidators } = usePollActiveValidators();
+  const validators = useActiveValidators();
   const [keyword, setKeyword] = React.useState("");
+
+  const VP = ({ validator }: { validator: Validator }) => {
+    const { usePercentageDelegated } = usePollActiveValidators();
+    const percentageDelegated = usePercentageDelegated(
+      cosmosvaloperToEth(validator.operatorAddress),
+    );
+
+    return (
+      <div className="flex h-full w-24 items-center">
+        {formatter.format(Number(formatUnits(BigInt(validator.tokens), 18)))} (
+        {percentageDelegated?.toFixed(2)}%)
+      </div>
+    );
+  };
   const validatorTableData = React.useMemo(() => {
     return validators
-      .filter((validator) => !validator.jailed)
+      ?.filter((validator) => !validator.jailed)
       .filter((item) =>
         Object.values(item).some((value) =>
           String(value).toLowerCase().includes(keyword.toLowerCase()),
@@ -40,30 +79,17 @@ export default function ValidatorsTable() {
         ),
         validator: (
           <div className="flex h-full w-[137px] items-center gap-1">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>{validator.description.moniker}</AvatarFallback>
-            </Avatar>
+            <ValidatorIcon
+              address={BeravaloperToEth(validator.operatorAddress)}
+              className="h-8 w-8"
+            />
             {validator.description.moniker}
           </div>
         ),
-        votingPower: (
-          <div className="flex h-full w-[96px] items-center justify-center">
-            {(
-              (Number(formatUnits(validator.delegatorShares, 18)) * 100) /
-              totalDelegated
-            ).toFixed(2)}
-            %
-          </div>
-        ),
+        votingPower: <VP validator={validator} />,
         commission: (
           <div className="flex h-full w-[91px] items-center justify-center">
-            {(
-              Number(
-                formatUnits(validator.commission.commissionRates.rate, 18),
-              ) * 100
-            ).toFixed(2)}
-            %
+            {formatCommission(validator.commission.commissionRates.rate)}%
           </div>
         ),
         vAPY: (
@@ -72,9 +98,9 @@ export default function ValidatorsTable() {
           </div>
         ),
         mostWeightedGauge: (
-          <div className="flex h-full w-[141px] items-center justify-center">
-            ETH-10/BERA-20
-          </div>
+          <ValidatorGauge
+            address={BeravaloperToEth(validator.operatorAddress)}
+          />
         ),
         bribes: (
           <div className="flex h-full w-[136px] items-center">
@@ -106,9 +132,10 @@ export default function ValidatorsTable() {
       </div>
       <RT
         columns={general_validator_columns}
-        data={validatorTableData}
-        rowOnClick={(row) => router.push(`/validators/${row.original.address}`)}
-        className="min-w-[1000px]"
+        data={validatorTableData ?? []}
+        rowOnClick={(row) =>
+          router.push(`/validators/${BeravaloperToEth(row.original.address)}`)
+        }
       />
     </div>
   );

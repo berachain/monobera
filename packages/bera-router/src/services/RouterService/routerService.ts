@@ -143,7 +143,6 @@ export class RouterService {
       swapOptions,
     );
 
-    console.log("paths", paths);
     if (paths.length == 0) throw new RouteNotFound("No route found for swap");
     const resultPaths = await this.getOnChainBestPaths(
       paths,

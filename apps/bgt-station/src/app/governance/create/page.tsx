@@ -17,7 +17,7 @@ export default function Create({
   if (searchParams.type || searchParams.type in ProposalTypeEnum) {
     type = searchParams.type;
   } else {
-    type = ProposalTypeEnum.COMMUNITY_POOL_SPEND;
+    type = ProposalTypeEnum.TEXT_PROPOSAL;
   }
 
   return <NewProposal {...{ type }} />;
