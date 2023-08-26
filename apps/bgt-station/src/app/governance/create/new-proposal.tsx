@@ -8,6 +8,12 @@ import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@bera/ui/dropdown-menu";
+import {
   Form,
   FormControl,
   FormField,
@@ -20,32 +26,28 @@ import { Switch } from "@bera/ui/switch";
 import { TextArea } from "@bera/ui/text-area";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import type * as z from "zod";
+import { isAddress } from "viem";
+import * as z from "zod";
 
 import { governanceAddress } from "~/config";
-import { ProposalFormSchema } from "../types";
+import { ProposalTypeEnum } from "../types";
+import NewGaugeForm from "./gauge-proposal-form";
+import NewCollateralForm from "./new-collateral-form";
 import { useCreateProposal } from "./useCreateProposal";
 
-export default function NewProposal() {
+export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const router = useRouter();
   const triggerRef = useRef<HTMLDivElement>(null);
   const [_contentWidth, setContentWidth] = useState("w-[450px]");
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
-
+  const minDeposit = Number(process.env.NEXT_PUBLIC_GOVERNANCE_MIN_DEPOSIT);
   useEffect(() => {
     if (triggerRef.current) {
       const width = triggerRef.current.offsetWidth;
       setContentWidth(`w-[${width}px]`);
     }
   }, [triggerRef.current, triggerRef.current?.offsetWidth]);
-
-  const form = useForm<z.infer<typeof ProposalFormSchema>>({
-    resolver: zodResolver(ProposalFormSchema),
-    defaultValues: {
-      expedite: false,
-    },
-  });
 
   const { createPayload } = useCreateProposal();
 
@@ -66,6 +68,54 @@ export default function NewProposal() {
     });
   }
 
+  const BaseFormSchema = z.object({
+    title: z.string().nonempty("Required"),
+    description: z.string().nonempty("Required"),
+    expedite: z.boolean(),
+    initialDeposit: z
+      .string()
+      .nonempty("Required")
+      .refine((val) => Number(val) > 0, {
+        message: "Initial deposit must be greater than 0.",
+      })
+      .refine((val) => Number(val) >= minDeposit, {
+        message: `Inital deposit must be at least ${minDeposit} BGT.`,
+      })
+      .refine((val) => Number(val) < Number(userBalance), {
+        message: "Insufficient BGT balance.",
+      }),
+  });
+
+  const NewGaugeProposal = BaseFormSchema.extend({
+    gaugeAddress: z
+      .string()
+      .nonempty("Required")
+      .refine((value) => isAddress(value), {
+        message: "Invalid address.",
+      }),
+  });
+
+  const NewCollateralProposal = BaseFormSchema.extend({
+    collateralAddress: z
+      .string()
+      .nonempty("Required")
+      .refine((value) => isAddress(value), {
+        message: "Invalid address.",
+      }),
+  });
+
+  const ProposalFormSchema = z.union([
+    BaseFormSchema,
+    NewGaugeProposal,
+    NewCollateralProposal,
+  ]) as any;
+
+  const form = useForm<z.infer<typeof ProposalFormSchema>>({
+    resolver: zodResolver(ProposalFormSchema),
+    defaultValues: {
+      expedite: false,
+    },
+  });
   return (
     <div className="mx-auto  w-full max-w-[564px] pb-16">
       {ModalPortal}
@@ -86,7 +136,42 @@ export default function NewProposal() {
                 onClick={() => router.push(`/governance`)}
               />
             </div>
-
+            <div className="inline-flex flex-col justify-start gap-2">
+              <div className="text-sm font-semibold leading-tight">
+                Type <Tooltip text="test" />
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div
+                    className="inline-flex h-[42px] w-[500px] flex-col items-start justify-start hover:cursor-pointer"
+                    ref={triggerRef}
+                  >
+                    <div className=" inline-flex w-full items-center justify-start gap-2.5 rounded-xl border border-gray-200 px-3 py-2">
+                      <div className="relative shrink grow basis-0 caption-top text-sm font-normal capitalize leading-normal text-stone-700">
+                        {type.replaceAll("-", " ")}
+                        <Icons.chevronDown className="absolute right-0 top-1 h-4 w-4" />
+                      </div>
+                    </div>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-full">
+                  {Object.values(ProposalTypeEnum).map(
+                    (type: ProposalTypeEnum) => (
+                      <DropdownMenuItem
+                        key={`proposal-option-${type}`}
+                        onClick={() => {
+                          router.push(`/governance/create?type=${type}`);
+                          // form.setValue("type", type);
+                        }}
+                        className="w-full capitalize"
+                      >
+                        {type.replaceAll("-", " ")}
+                      </DropdownMenuItem>
+                    ),
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <FormField
               control={form.control}
               name="title"
@@ -186,6 +271,12 @@ export default function NewProposal() {
                 </FormItem>
               )}
             />
+            {type === ProposalTypeEnum.NEW_GAUGE_PROPOSAL && (
+              <NewGaugeForm form={form} />
+            )}
+            {type === ProposalTypeEnum.NEW_COLLATERAL_PROPOSAL && (
+              <NewCollateralForm form={form} />
+            )}
             <Button type="submit">Submit</Button>
           </Card>
         </form>
