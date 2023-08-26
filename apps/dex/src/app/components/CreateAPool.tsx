@@ -5,13 +5,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
+import { useTheme } from "next-themes";
 
 import { CircleBackground } from "~/components/CirceBackground";
 import { cloudinaryUrl } from "~/config";
 
 export default function CreateAPool() {
   const router = useRouter();
-
+  const { theme, systemTheme } = useTheme();
   return (
     <section className="my-24">
       <div className="relative m-auto h-[900px] bg-glow bg-cover bg-center bg-no-repeat">
@@ -66,7 +67,7 @@ export default function CreateAPool() {
 
             <Avatar
               className={
-                "absolute bottom-20 right-0 hidden h-12 w-12 animate-[spin_10s_linear_infinite] blur-sm lg:block"
+                "absolute bottom-40 right-10 hidden h-12 w-12 animate-[bounce_7s_ease_infinite] blur-sm lg:block"
               }
             >
               <AvatarImage
@@ -78,7 +79,7 @@ export default function CreateAPool() {
 
             <Avatar
               className={
-                "absolute right-[200px] top-[100px] hidden h-16 w-16 animate-[spin_10s_linear_infinite] lg:block"
+                "absolute right-[200px] top-[100px] hidden h-16 w-16 animate-[bounce_4s_ease_infinite] lg:block"
               }
             >
               <AvatarImage
@@ -99,14 +100,23 @@ export default function CreateAPool() {
               />
               <AvatarFallback>usdt</AvatarFallback>
             </Avatar>
-
-            <Image
-              className="mx-auto"
-              src="/create-a-pool-new.png"
-              alt="Create a pool screenshot"
-              width={400}
-              height={889}
-            />
+            {(theme === "system" ? systemTheme : theme) === "light" ? (
+              <Image
+                className="mx-auto"
+                src={`${cloudinaryUrl}/DEX/tj8udvfskyrcanuxfq47`}
+                alt="Create a pool screenshot"
+                width={400}
+                height={889}
+              />
+            ) : (
+              <Image
+                className="mx-auto"
+                src={`${cloudinaryUrl}/DEX/ebq1kd6ucdrultjqysnk`}
+                alt="Create a pool screenshot"
+                width={400}
+                height={889}
+              />
+            )}
           </div>
         </div>
         <div className="mt-8 w-full text-center">

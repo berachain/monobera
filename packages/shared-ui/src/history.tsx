@@ -44,12 +44,15 @@ export function History() {
             href={`${process.env.NEXT_PUBLIC_BLOCK_EXPLORER}/tx/${txn.hash}`}
           >
             <div
-              className="flex justify-between border-t border-backgroundSecondary pt-3"
+              className="flex justify-between border-t border-border pt-3"
               key={txn.hash}
             >
               <div className="text-xs">
                 <p className="font-medium">
-                  <Balancer>{txn.description}</Balancer>
+                  <Balancer>
+                    {txn.description}{" "}
+                    <Icons.external className="inline h-3 w-3" />
+                  </Balancer>
                 </p>
 
                 <p>{truncateHash(txn.hash as `0x${string}`)}</p>

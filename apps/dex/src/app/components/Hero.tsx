@@ -25,7 +25,7 @@ export default function Hero() {
             View Pools
           </Button>
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col items-center gap-3 md:items-start">
           <div
             className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
             onClick={() => router.push("/pool")}

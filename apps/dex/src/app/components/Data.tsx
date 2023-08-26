@@ -12,7 +12,7 @@ export function DataCard({
   value: string;
 }) {
   return (
-    <div className="flex w-full flex-col rounded-2xl border-2 bg-muted p-4 md:p-6">
+    <div className="flex w-full flex-col rounded-2xl border bg-muted p-4 md:p-6">
       <div className="flex items-center gap-2 text-xs md:text-sm">
         <div className="text-muted-foreground">{icon}</div>
         <div className="whitespace-nowrap text-muted-foreground">{title}</div>

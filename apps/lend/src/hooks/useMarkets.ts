@@ -118,7 +118,7 @@ const markets: Market[] = [
     dailyBorrows: 82000,
   },
   {
-    title: "Ethereum Classic",
+    title: "Ethereum",
     icon: "/honey.png",
     totalSupply: 210700000,
     dailyPercentChange: 1.5,
@@ -132,7 +132,7 @@ const markets: Market[] = [
     dailyBorrows: 81000,
   },
   {
-    title: "Wrapped Bitcoin",
+    title: "Bitcoin",
     icon: "/honey.png",
     totalSupply: 128478,
     dailyPercentChange: 4.2,

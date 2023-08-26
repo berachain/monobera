@@ -447,6 +447,100 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
 
+  apps/perp:
+    dependencies:
+      '@bera/bera-router':
+        specifier: 0.1.0
+        version: link:../../packages/bera-router
+      '@bera/berajs':
+        specifier: 0.1.0
+        version: link:../../packages/berajs
+      '@bera/shared-ui':
+        specifier: 0.1.0
+        version: link:../../packages/shared-ui
+      '@bera/tailwind-config':
+        specifier: 0.1.0
+        version: link:../../packages/config/tailwind
+      '@bera/ui':
+        specifier: 0.1.0
+        version: link:../../packages/ui
+      '@t3-oss/env-nextjs':
+        specifier: ^0.2.2
+        version: 0.2.2(zod@3.21.4)
+      '@vercel/analytics':
+        specifier: ^1.0.1
+        version: 1.0.1
+      framer-motion:
+        specifier: ^10.15.0
+        version: 10.15.0(react-dom@18.2.0)(react@18.2.0)
+      next:
+        specifier: ^13.4.1
+        version: 13.4.1(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
+      next-themes:
+        specifier: ^0.2.1
+        version: 0.2.1(next@13.4.1)(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: 18.2.0
+        version: 18.2.0(react@18.2.0)
+      react-wrap-balancer:
+        specifier: ^0.5.0
+        version: 0.5.0(react@18.2.0)
+      recharts:
+        specifier: ^2.5.0
+        version: 2.5.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+      superjson:
+        specifier: 1.9.1
+        version: 1.9.1
+      swr:
+        specifier: ^2.1.5
+        version: 2.1.5(react@18.2.0)
+      tailwindcss-animate:
+        specifier: ^1.0.5
+        version: 1.0.5(tailwindcss@3.3.2)
+      usehooks-ts:
+        specifier: ^2.9.1
+        version: 2.9.1(react-dom@18.2.0)(react@18.2.0)
+      wagmi:
+        specifier: ^1.0.2
+        version: 1.0.6(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.36)(zod@3.21.4)
+      zod:
+        specifier: ^3.21.4
+        version: 3.21.4
+    devDependencies:
+      '@bera/eslint-config':
+        specifier: 0.1.0
+        version: link:../../packages/config/eslint
+      '@types/node':
+        specifier: ^18.16.6
+        version: 18.16.6
+      '@types/react':
+        specifier: ^18.2.0
+        version: 18.2.0
+      '@types/react-dom':
+        specifier: ^18.2.1
+        version: 18.2.1
+      autoprefixer:
+        specifier: ^10.4.14
+        version: 10.4.14(postcss@8.4.23)
+      dotenv-cli:
+        specifier: ^7.2.1
+        version: 7.2.1
+      eslint:
+        specifier: ^8.39.0
+        version: 8.39.0
+      postcss:
+        specifier: ^8.4.23
+        version: 8.4.23
+      tailwindcss:
+        specifier: ^3.3.2
+        version: 3.3.2
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
   packages/bera-router:
     dependencies:
       axios:
