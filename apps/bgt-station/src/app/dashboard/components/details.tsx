@@ -1,25 +1,30 @@
 import React from "react";
-import { usePollActiveValidators, type Validator } from "@bera/berajs";
+import {
+  formatter,
+  usePollActiveValidators,
+  usePollBgtSupply,
+} from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
-import { bgtDetails as details } from "../constants";
 import { EpochTimeline } from "./epoch-timeline";
 import { Stats } from "./stats";
 
 export function Details() {
-  const { useActiveValidators } = usePollActiveValidators();
-  const validators: Validator[] = useActiveValidators();
+  const { useTotalValidators } = usePollActiveValidators();
+  const total = useTotalValidators();
+  const { useBgtSupply } = usePollBgtSupply();
+  const bgtSupply = useBgtSupply();
   const generalInfo = [
     {
-      amount: validators.length,
-      text: "Total validators",
+      amount: Number.isNaN(total) ? 0 : total,
+      text: "Active validators",
     },
     {
       amount: "34%",
-      text: "Average staker APY",
+      text: "Average APY",
     },
     {
-      amount: "999.99M",
+      amount: `${formatter.format(Number(bgtSupply ?? 0))} BGT`,
       text: "Total BGT supply",
     },
   ];
@@ -40,7 +45,7 @@ export function Details() {
           </Card>
         ))}
       </div>
-      <Stats stats={details.stats} />
+      <Stats />
     </div>
   );
 }

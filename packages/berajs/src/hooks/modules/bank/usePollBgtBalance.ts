@@ -7,14 +7,13 @@ import { BANK_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig, useBeraJs } from "~/contexts";
 
-// this is going to be slow for now until we have event indexing
 export const usePollBgtBalance = () => {
   const publicClient = usePublicClient();
   const { isConnected, account } = useBeraJs();
   const { networkConfig } = useBeraConfig();
 
   const method = "getBalance";
-  const denom = "abgt";
+  const denom = process.env.NEXT_PUBLIC_STAKING_TOKEN;
   const QUERY_KEY = [account, method, denom];
   useSWR(
     QUERY_KEY,

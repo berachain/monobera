@@ -2,8 +2,11 @@
 
 import React from "react";
 import Image from "next/image";
-import { useBeraConfig, usePollBgtBalance } from "@bera/berajs";
-import { REDEEM_ABI } from "@bera/berajs/src/config";
+import {
+  BGT_PRECOMPILE_ABI,
+  useBeraConfig,
+  usePollBgtBalance,
+} from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -18,13 +21,14 @@ export default function Redeem() {
   const { useBgtBalance } = usePollBgtBalance();
   const { redeemAmount, payload, setRedeemAmount } = useRedeem();
   const userBalance = useBgtBalance();
-  const { write, isLoading } = useTxn({
+  const { write, isLoading, ModalPortal } = useTxn({
     message: "Redeem BERA",
   });
   const { networkConfig } = useBeraConfig();
 
   return (
     <div className="container mx-auto w-full max-w-[564px]">
+      {ModalPortal}
       <Image
         className="max-[600px]:mx-auto"
         src="/bears/redeem-bear.png"
@@ -60,7 +64,7 @@ export default function Redeem() {
             </span>
           </div>
         </div>
-        <div className="flex flex-col gap-2 rounded-18 bg-muted p-3">
+        {/* <div className="flex flex-col gap-2 rounded-18 bg-muted p-3">
           <div className="flex justify-between text-sm font-medium leading-normal text-muted-foreground">
             <div>BGT Burned</div>
             <div className="text-foreground">0.0 BGT</div>
@@ -69,7 +73,7 @@ export default function Redeem() {
             <div>BERA Redeemed</div>
             <div className="text-foreground">0.0 BERA</div>
           </div>
-        </div>
+        </div> */}
         {Number(redeemAmount) > Number(userBalance) && (
           <Alert variant="destructive" className="">
             This amount exceeds your total balance of {userBalance} BGT
@@ -87,7 +91,7 @@ export default function Redeem() {
             write({
               address: networkConfig.precompileAddresses
                 .erc20BgtAddress as Address,
-              abi: REDEEM_ABI,
+              abi: BGT_PRECOMPILE_ABI,
               functionName: "redeem",
               params: payload,
             })

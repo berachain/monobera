@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { usePollBgtBalance } from "@bera/berajs";
-import { Tooltip } from "@bera/shared-ui";
+import { GOVERNANCE_PRECOMPILE_ABI, usePollBgtBalance } from "@bera/berajs";
+import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import {
@@ -26,19 +26,22 @@ import { Switch } from "@bera/ui/switch";
 import { TextArea } from "@bera/ui/text-area";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import type * as z from "zod";
+import { isAddress } from "viem";
+import * as z from "zod";
 
-import { ProposalFormSchema, ProposalTypeEnum } from "../types";
-import CommunityForm from "./community-pool-spend-form";
-import ExecuteForm from "./execute-contract-form";
-import ParameterForm from "./parameter-change-form";
+import { governanceAddress } from "~/config";
+import { ProposalTypeEnum } from "../types";
+import NewGaugeForm from "./gauge-proposal-form";
+import NewCollateralForm from "./new-collateral-form";
+import { useCreateProposal } from "./useCreateProposal";
 
 export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const router = useRouter();
   const triggerRef = useRef<HTMLDivElement>(null);
-  const [contentWidth, setContentWidth] = useState("w-[450px]");
+  const [_contentWidth, setContentWidth] = useState("w-[450px]");
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
+  const minDeposit = Number(process.env.NEXT_PUBLIC_GOVERNANCE_MIN_DEPOSIT);
   useEffect(() => {
     if (triggerRef.current) {
       const width = triggerRef.current.offsetWidth;
@@ -46,20 +49,76 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     }
   }, [triggerRef.current, triggerRef.current?.offsetWidth]);
 
-  const form = useForm<z.infer<typeof ProposalFormSchema>>({
-    resolver: zodResolver(ProposalFormSchema),
-    defaultValues: {
-      type: type,
-      expedite: false,
+  const { createPayload } = useCreateProposal();
+
+  const { write, ModalPortal } = useTxn({
+    message: "Submit Proposal",
+    onSuccess: () => {
+      router.push(`/governance`);
     },
   });
 
   function onSubmit(values: z.infer<typeof ProposalFormSchema>) {
-    console.log("submit", values);
+    const payload = createPayload(values);
+    write({
+      address: governanceAddress,
+      abi: GOVERNANCE_PRECOMPILE_ABI as any[],
+      functionName: "submitProposal",
+      params: payload as any,
+    });
   }
 
+  const BaseFormSchema = z.object({
+    title: z.string().nonempty("Required"),
+    description: z.string().nonempty("Required"),
+    expedite: z.boolean(),
+    initialDeposit: z
+      .string()
+      .nonempty("Required")
+      .refine((val) => Number(val) > 0, {
+        message: "Initial deposit must be greater than 0.",
+      })
+      .refine((val) => Number(val) >= minDeposit, {
+        message: `Inital deposit must be at least ${minDeposit} BGT.`,
+      })
+      .refine((val) => Number(val) < Number(userBalance), {
+        message: "Insufficient BGT balance.",
+      }),
+  });
+
+  const NewGaugeProposal = BaseFormSchema.extend({
+    gaugeAddress: z
+      .string()
+      .nonempty("Required")
+      .refine((value) => isAddress(value), {
+        message: "Invalid address.",
+      }),
+  });
+
+  const NewCollateralProposal = BaseFormSchema.extend({
+    collateralAddress: z
+      .string()
+      .nonempty("Required")
+      .refine((value) => isAddress(value), {
+        message: "Invalid address.",
+      }),
+  });
+
+  const ProposalFormSchema = z.union([
+    BaseFormSchema,
+    NewGaugeProposal,
+    NewCollateralProposal,
+  ]) as any;
+
+  const form = useForm<z.infer<typeof ProposalFormSchema>>({
+    resolver: zodResolver(ProposalFormSchema),
+    defaultValues: {
+      expedite: false,
+    },
+  });
   return (
     <div className="mx-auto  w-full max-w-[564px] pb-16">
+      {ModalPortal}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Image
@@ -77,7 +136,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                 onClick={() => router.push(`/governance`)}
               />
             </div>
-
             <div className="inline-flex flex-col justify-start gap-2">
               <div className="text-sm font-semibold leading-tight">
                 Type <Tooltip text="test" />
@@ -96,17 +154,14 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                     </div>
                   </div>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="start"
-                  className={`${contentWidth}`}
-                >
+                <DropdownMenuContent align="start" className="w-full">
                   {Object.values(ProposalTypeEnum).map(
                     (type: ProposalTypeEnum) => (
                       <DropdownMenuItem
                         key={`proposal-option-${type}`}
                         onClick={() => {
                           router.push(`/governance/create?type=${type}`);
-                          form.setValue("type", type);
+                          // form.setValue("type", type);
                         }}
                         className="w-full capitalize"
                       >
@@ -117,7 +172,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-
             <FormField
               control={form.control}
               name="title"
@@ -137,29 +191,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                     </FormControl>
                     <FormMessage className="mt-2" />
                   </span>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="forumLink"
-              render={({ field }) => (
-                <FormItem className="inline-flex flex-col justify-start">
-                  <div className="text-sm font-semibold leading-tight">
-                    Forum discussion link <Tooltip text="test" />
-                  </div>
-                  <div>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        id="forum-discussion-link"
-                        placeholder="Paste link here"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="mt-2" />
-                  </div>
                 </FormItem>
               )}
             />
@@ -240,19 +271,12 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                 </FormItem>
               )}
             />
-
-            {type === ProposalTypeEnum.COMMUNITY_POOL_SPEND && (
-              <CommunityForm form={form} />
+            {type === ProposalTypeEnum.NEW_GAUGE_PROPOSAL && (
+              <NewGaugeForm form={form} />
             )}
-
-            {type === ProposalTypeEnum.EXECUTE_CONTRACT && (
-              <ExecuteForm form={form} />
+            {type === ProposalTypeEnum.NEW_COLLATERAL_PROPOSAL && (
+              <NewCollateralForm form={form} />
             )}
-
-            {type === ProposalTypeEnum.PARAMETER_CHANGE && (
-              <ParameterForm form={form} />
-            )}
-
             <Button type="submit">Submit</Button>
           </Card>
         </form>

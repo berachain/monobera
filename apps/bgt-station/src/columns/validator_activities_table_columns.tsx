@@ -42,21 +42,16 @@ export const delegators_columns: Columns = [
     accessor: "delegator_address",
   },
   {
-    header: (
-      <div className="flex w-[88px] gap-1">
-        BGT amount
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
-    ),
+    header: <div className="flex w-[88px] gap-1">BGT amount</div>,
     accessor: "bgt_amount",
   },
-  {
-    header: (
-      <div className="flex w-[110px] gap-1">
-        Delegated Since{" "}
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
-    ),
-    accessor: "delegated_since",
-  },
+  // {
+  //   header: (
+  //     <div className="flex w-[110px] gap-1">
+  //       Delegated Since{" "}
+  //       <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+  //     </div>
+  //   ),
+  //   accessor: "delegated_since",
+  // },
 ];

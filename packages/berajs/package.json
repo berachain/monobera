@@ -29,6 +29,9 @@
   },
   "devDependencies": {
     "@bera/eslint-config": "0.1.0",
+    "@cosmjs/proto-signing": "^0.29.5",
+    "@cosmjs/stargate": "^0.29.5",
+    "@cosmjs/tendermint-rpc": "^0.29.5",
     "@hyrious/esbuild-plugin-commonjs": "0.2.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
@@ -37,6 +40,7 @@
     "react": "18.2.0",
     "react-day-picker": "^8.7.1",
     "react-dom": "18.2.0",
+    "ts-proto": "^1.136.1",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   }

@@ -42,12 +42,14 @@ export async function GET(request: Request) {
   }
   const pools = router.getPools() ?? [];
 
-  const totalSupplyStringPools = pools.map((pool) => {
-    return {
-      ...pool,
-      totalSupply: pool.totalSupply.toString(),
-    };
-  });
+  const totalSupplyStringPools = pools
+    ? pools?.map((pool) => {
+        return {
+          ...pool,
+          totalSupply: pool.totalSupply.toString(),
+        };
+      })
+    : [];
 
   await getWBeraPriceDictForPoolTokens(
     (totalSupplyStringPools ?? []) as Pool[],

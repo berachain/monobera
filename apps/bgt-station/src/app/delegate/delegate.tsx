@@ -4,18 +4,18 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  cosmosvaloperToEth,
   useBeraConfig,
+  usePollAccountDelegations,
   usePollBgtBalance,
 } from "@bera/berajs";
 import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
 import { useTxn } from "@bera/shared-ui";
-import { get7daysLater } from "@bera/shared-ui/src/utils";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import ValidatorInput from "~/components/validator-input";
@@ -27,15 +27,66 @@ export default function Delegate({
   redelegateValidator,
 }: {
   action: DelegateEnum;
-  validator: string;
+  validator: Address;
   redelegateValidator: string;
 }) {
   const router = useRouter();
   const [amount, setAmount] = React.useState("0.0");
+  const [activeAction, setActiveAction] = React.useState<DelegateEnum>(action);
   const { networkConfig } = useBeraConfig();
 
-  const { write, isLoading: isDelegatingLoading } = useTxn({
-    message: "delegate validator",
+  const { useSelectedAccountDelegation } = usePollAccountDelegations(validator);
+  const bgtDelegated = useSelectedAccountDelegation();
+
+  const getExceeding = () => {
+    if (activeAction === DelegateEnum.DELEGATE) {
+      return Number(amount) > Number(bgtBalance);
+    }
+    if (
+      activeAction === DelegateEnum.REDELEGATE ||
+      activeAction === DelegateEnum.UNBOND
+    ) {
+      return Number(amount) > Number(bgtDelegated);
+    }
+  };
+
+  const getDisabled = () => {
+    if (activeAction === DelegateEnum.DELEGATE) {
+      return Number(amount) > Number(bgtBalance) || amount === "0.0";
+    }
+    if (activeAction === DelegateEnum.REDELEGATE) {
+      return (
+        Number(amount) > Number(bgtDelegated) ||
+        !redelegateValidator ||
+        amount === "0.0"
+      );
+    }
+    if (activeAction === DelegateEnum.UNBOND) {
+      return Number(amount) > Number(bgtDelegated) || amount === "0.0";
+    }
+  };
+  const {
+    write,
+    isLoading: isDelegatingLoading,
+    ModalPortal,
+  } = useTxn({
+    message: `Delegating ${amount} BGT to Validator`,
+  });
+
+  const {
+    write: unbondWrite,
+    isLoading: isUnbondLoading,
+    ModalPortal: UnBondModalPortal,
+  } = useTxn({
+    message: "Unbonding from Validator",
+  });
+
+  const {
+    write: unbondRedelegate,
+    isLoading: isRedelegateLoading,
+    ModalPortal: RedelegateModalPortal,
+  } = useTxn({
+    message: "Unbonding from Validator",
   });
 
   const { useBgtBalance } = usePollBgtBalance();
@@ -43,7 +94,10 @@ export default function Delegate({
 
   return (
     <div className="container mx-auto w-full max-w-[500px] pb-20">
-      <Tabs defaultValue={action}>
+      <Tabs
+        defaultValue={action}
+        onValueChange={(value) => setActiveAction(value as DelegateEnum)}
+      >
         <TabsList className="w-full">
           {Object.values(DelegateEnum).map((status) => (
             <TabsTrigger
@@ -53,7 +107,7 @@ export default function Delegate({
               onClick={() =>
                 router.push(
                   validator
-                    ? `/delegate?action=${status}&&validator=${validator}`
+                    ? `/delegate?action=${status}&validator=${validator}`
                     : `/delegate?action=${status}`,
                 )
               }
@@ -63,6 +117,9 @@ export default function Delegate({
           ))}
         </TabsList>
       </Tabs>
+      {ModalPortal}
+      {UnBondModalPortal}
+      {RedelegateModalPortal}
       <Card className="mt-4 flex flex-col gap-3 p-6">
         <div className="text-lg font-semibold capitalize leading-7 text-foreground">
           {action}
@@ -79,6 +136,11 @@ export default function Delegate({
           onAmountChange={setAmount}
           validatorAddress={validator}
           showDelegated={action !== DelegateEnum.DELEGATE}
+          emptyMessage={
+            action !== DelegateEnum.DELEGATE
+              ? "No BGT delegated"
+              : "No Validators found"
+          }
         />
         {action === DelegateEnum.REDELEGATE && (
           <>
@@ -87,13 +149,14 @@ export default function Delegate({
               action={action}
               amount={amount}
               onAmountChange={setAmount}
+              disabled={true}
               validatorAddress={validator}
               redelegate
               redelegateValidatorAddress={redelegateValidator}
             />
           </>
         )}
-        <div className="rounded-18 bg-muted p-3 text-muted-foreground">
+        {/* <div className="rounded-18 bg-muted p-3 text-muted-foreground">
           <div className="flex h-8 items-center justify-between">
             <div>Total</div>
             <div className="text-foreground">{amount} BGT</div>
@@ -109,19 +172,22 @@ export default function Delegate({
               <div className="text-foreground">{get7daysLater()}</div>
             </div>
           )}
-        </div>
+        </div> */}
 
-        {Number(amount) > Number(bgtBalance) && (
+        {getExceeding() && (
           <Alert variant="destructive">
-            This amount exceeds your total balance of {bgtBalance} BGT
+            {activeAction === DelegateEnum.DELEGATE
+              ? `This amount exceeds your total balance of ${bgtBalance} BGT`
+              : "Insufficient BGT delegated"}
           </Alert>
         )}
         <Button
           disabled={
             !validator || // no validator selected
-            !amount || // no amount entered
             isDelegatingLoading || // delegate action processing
-            Number(amount) > Number(bgtBalance) // wrong amount
+            isUnbondLoading || // unbond action processing
+            isRedelegateLoading || // redelegate action processing
+            getDisabled()
           }
           onClick={() => {
             switch (action) {
@@ -131,14 +197,31 @@ export default function Delegate({
                     .stakingAddress as Address,
                   abi: STAKING_PRECOMPILE_ABI,
                   functionName: "delegate",
-                  params: [cosmosvaloperToEth(validator), Number(amount)],
+                  params: [validator, parseUnits(`${Number(amount)}`, 18)],
                 });
                 break;
               case DelegateEnum.REDELEGATE:
+                unbondRedelegate({
+                  address: networkConfig.precompileAddresses
+                    .stakingAddress as Address,
+                  abi: STAKING_PRECOMPILE_ABI,
+                  functionName: "beginRedelegate",
+                  params: [
+                    validator,
+                    redelegateValidator,
+                    parseUnits(`${Number(amount)}`, 18),
+                  ],
+                });
                 // write(redelegateValidator, amount);
                 break;
               case DelegateEnum.UNBOND:
-                // write(validator, "0");
+                unbondWrite({
+                  address: networkConfig.precompileAddresses
+                    .stakingAddress as Address,
+                  abi: STAKING_PRECOMPILE_ABI,
+                  functionName: "undelegate",
+                  params: [validator, parseUnits(`${Number(amount)}`, 18)],
+                });
                 break;
             }
           }}

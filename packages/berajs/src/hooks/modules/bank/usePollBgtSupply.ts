@@ -21,7 +21,7 @@ export const usePollBgtSupply = () => {
         address: networkConfig.precompileAddresses.bankAddress as Address,
         abi: BANK_PRECOMPILE_ABI,
         functionName: method,
-        args: ["abgt"],
+        args: [process.env.NEXT_PUBLIC_STAKING_TOKEN],
       });
 
       return formatUnits(result as bigint, 18);

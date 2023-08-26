@@ -64,11 +64,7 @@ export const getColumns = (totalDelegated: number): ColumnDef<Validator>[] => {
             <div className="flex flex-col">
               <p>{row?.original?.description?.moniker}</p>
               <Badge variant="secondary">
-                {truncateHash(
-                  BeravaloperToEth(
-                    row?.original?.operatorAddress,
-                  ) as `0x${string}`,
-                )}
+                {truncateHash(BeravaloperToEth(row?.original?.operatorAddress))}
               </Badge>
             </div>
           </div>
@@ -163,9 +159,7 @@ export const getYourColumns = (
         <div className="flex flex-col">
           <p>{row.original.description.moniker}</p>
           <Badge variant="secondary">
-            {truncateHash(
-              BeravaloperToEth(row.original.operatorAddress) as `0x${string}`,
-            )}
+            {truncateHash(BeravaloperToEth(row.original.operatorAddress))}
           </Badge>
         </div>
       </div>
