@@ -2,7 +2,6 @@
 
 import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
-import { TransactionExecutionError } from "@bera/berajs";
 import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import {
@@ -68,7 +67,7 @@ function reducer(state: State, action: Action): State {
 export function HoneyMachine() {
   const STATE_MACHINE_NAME = "honeyMachineSquare";
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log("reducer state", state);
+
   const { RiveComponent, rive } = useRive({
     src: "/honeyMachineSquare.riv",
     stateMachines: STATE_MACHINE_NAME,
@@ -77,13 +76,29 @@ export function HoneyMachine() {
     layout: new Layout({ fit: Fit.Cover }),
   });
 
+  // user manually reject the transaction or input value 0
   const rejectAction = useStateMachineInput(rive, STATE_MACHINE_NAME, "reject");
 
+  // submit metamask transaction approval/mint/redeem
   const txnSubmitAction = useStateMachineInput(
     rive,
     STATE_MACHINE_NAME,
     "txnSubmitted",
   );
+
+  // triggered when submit the transaction for mint/redeem
+  const clawDownAction = useStateMachineInput(
+    rive,
+    STATE_MACHINE_NAME,
+    "toClawDown",
+  );
+
+  const approvalTxnSuccess = useStateMachineInput(
+    rive,
+    STATE_MACHINE_NAME,
+    "userApproval",
+  );
+
   const mintTxnSuccess = useStateMachineInput(
     rive,
     STATE_MACHINE_NAME,
@@ -94,13 +109,14 @@ export function HoneyMachine() {
     STATE_MACHINE_NAME,
     "redeemTxnSuccess",
   );
+
   const txnFail = useStateMachineInput(rive, STATE_MACHINE_NAME, "txnFail");
 
   const {
     payload,
     isConnected,
     setSelectedFrom,
-    allowance,
+    // allowance,
     selectedFrom,
     selectedTo,
     setSelectedTo,
@@ -114,44 +130,56 @@ export function HoneyMachine() {
     fee,
     fee2,
     ModalPortal,
+    needsApproval,
   } = usePsm();
 
   // console.log(
+  //   payload,
   //   payload[2],
   //   fromAmount,
-  //   toAmount,
-  //   fromBalance.formattedBalance,
-  //   toBalance.formattedBalance,
+  //   allowance?.formattedAllowance,
+  //   needsApproval,
+  // fromBalance?.balance,
+  //   fromBalance?.formattedBalance,
+  //   toBalance?.formattedBalance,
   // );
 
   const { write } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
-    onError: (e: Error) => {
-      // console.log("did this even catch anything??", e);
-      // when user rejects the transaction, we need to reset the state machine
-      // if (e instanceof TransactionExecutionError) {
-      //   console.log("user rejected, catched!!!!", e.message);
-      // } else {
-      //   console.log("other error, catched!!!!", e.message);
-      // }
-      // rejection should be triggered when transaction fails(after metamask popup)
-      rejectAction?.fire();
-      // rejection should be triggered when user reject or input amount 0( before metamask popup)
-      txnFail?.fire();
-      //but this works so i am ok w it :ppp
-    },
-    onSuccess: () => {
-      if (isMint) {
-        mintTxnSuccess?.fire();
+    onError: (e: any) => {
+      if (e.name === "TransactionExecutionError") {
+        // rejection should be triggered when transaction fails(after metamask popup)
+        rejectAction?.fire();
       } else {
-        redeemTxnSuccess?.fire();
+        // rejection should be triggered when user reject or input amount 0( before metamask popup)
+        txnFail?.fire();
       }
     },
-    onLoading: () => {
-      txnSubmitAction?.fire();
+    onSuccess: () => {
+      // console.log("onSuccess", "approval", "isMint", isMint);
+      if (needsApproval) {
+        approvalTxnSuccess?.fire();
+        // console.log("fire approval success");
+      } else {
+        if (isMint) {
+          mintTxnSuccess?.fire();
+          // console.log("fire mint success");
+        } else {
+          redeemTxnSuccess?.fire();
+          // console.log("fire redeem success");
+        }
+      }
     },
+    // onLoading: () => {
+    //   console.log("onLoading" );
+    // },
     onSubmission: () => {
-      txnSubmitAction?.fire();
+      // console.log("onSubmission", "txnSubmitAction");
+      if (needsApproval) {
+        txnSubmitAction?.fire();
+      } else {
+        clawDownAction?.fire();
+      }
     },
   });
 
@@ -171,39 +199,26 @@ export function HoneyMachine() {
 
   useEffect(() => {
     if (rive) {
-      console.log("trigger rive effect", rive);
       rive.on(EventType.StateChange, (event: any) => {
-        console.log("rive state change", event.type, event.data);
+        // console.log(event.data, event.eventType);
         if (event.data[0] === "wallet") {
-          console.log("wallet event", payload);
-          if (
-            allowance?.formattedAllowance === "0" ||
-            Number(allowance?.formattedAllowance) < fromAmount
-          ) {
+          if (needsApproval) {
             dispatch({ type: "SET_STATE", payload: "approval" });
           } else {
             if (isMint) {
-              console.log("mint", payload);
               dispatch({ type: "SET_STATE", payload: "minting" });
             } else {
-              console.log("burn", payload);
               dispatch({ type: "SET_STATE", payload: "redeeming" });
             }
           }
         } else {
-          console.log(
-            "event change but not wallet: !!",
-            event.data[0],
-            "!!",
-            state,
-          );
           if (event.data[0] === "machineIdle") {
             dispatch({ type: "SET_STATE", payload: "idle" });
           }
         }
       });
     }
-  }, [payload, rive]);
+  }, [payload, rive, needsApproval]);
 
   const performApproval = () => {
     try {
@@ -217,7 +232,6 @@ export function HoneyMachine() {
           1000000n,
         ],
       });
-      dispatch({ type: "SET_STATE", payload: "minting" });
     } catch (error: any) {
       dispatch({ type: "SET_STATE", payload: "idle" });
       dispatch({ type: "SET_ERROR", payload: error.message });
@@ -227,7 +241,12 @@ export function HoneyMachine() {
   const performMinting = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      if (Number(payload[2] > 0)) {
+      // console.log(payload[2], Number(fromBalance.formattedBalance));
+      if (Number(payload[2]) > 0 && payload[2] <= fromBalance.balance) {
+        // console.log(
+        //   Number(payload[2].toString),
+        //   Number(fromBalance.formattedBalance),
+        // );
         write({
           address: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
           abi: ERC20_HONEY_ABI,
@@ -246,7 +265,7 @@ export function HoneyMachine() {
   const performRedeeming = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      if (Number(payload[2] > 0)) {
+      if (Number(payload[1]) > 0 && payload[1] <= fromBalance.balance) {
         write({
           address: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
           abi: ERC20_HONEY_ABI,
@@ -303,7 +322,7 @@ export function HoneyMachine() {
       >
         {isConnected ? (
           <>
-            <h1 className="mb-4 text-2xl font-semibold text-white">
+            <h1 className="mb-4 text-2xl font-semibold text-foreground">
               {isMint ? "Mint" : "Redeem"}
             </h1>
             <ul role="list">

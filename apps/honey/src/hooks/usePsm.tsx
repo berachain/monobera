@@ -69,7 +69,6 @@ export const usePsm = () => {
     setToAmount(tempFromAmount);
   };
 
-  console.log("fromBalance", fromAmount);
   useEffect(() => {
     if (isMint && account) {
       const payload = [
@@ -87,17 +86,25 @@ export const usePsm = () => {
       ];
       setPayload(payload);
     }
-    console.log("payload", payload);
-    // const deadline = block + 10000n;
-    // const payload = [
-    //   selectedFrom?.address,
-    //   parseUnits(`${fromAmount ?? 0}`, selectedFrom?.decimals ?? 18),
-    //   selectedTo?.address,
-    //   parseUnits(`${toAmount ?? 0}`, selectedTo?.decimals ?? 18),
-    //   deadline,
-    // ];
   }, [isMint, account, fromAmount, toAmount]);
 
+  const [needsApproval, setNeedsApproval] = useState(false);
+
+  const validInput = Boolean(
+    Number(payload[2] > 0) &&
+      Number(payload[2]) <= Number(fromBalance?.formattedBalance),
+  );
+
+  useEffect(() => {
+    if (
+      allowance?.formattedAllowance === "0" ||
+      Number(allowance?.formattedAllowance) < fromAmount
+    ) {
+      if (!needsApproval) setNeedsApproval(true);
+    } else {
+      if (needsApproval) setNeedsApproval(false);
+    }
+  }, [fromAmount, allowance]);
   return {
     payload,
     isConnected,
@@ -119,5 +126,7 @@ export const usePsm = () => {
     fee2,
     onSwitch,
     ModalPortal,
+    needsApproval,
+    validInput,
   };
 };
