@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Button } from "@bera/ui/button";
 import useSWRInfinite from "swr/infinite";
 
@@ -43,7 +44,8 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
     (allData && allData[allData.length - 1]?.length < DEFAULT_SIZE);
 
   const data = allData ? [].concat(...allData) : [];
-  console.log(data, "data");
+
+  const router = useRouter();
   return (
     <div className={"mt-[72px] w-full flex-col items-center justify-center"}>
       <div className="w-full text-center ">
@@ -82,7 +84,11 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
             </Button>
           )}
           {isMainPage && (
-            <Button variant="outline" className="mt-8">
+            <Button
+              variant="outline"
+              className="mt-8"
+              onClick={() => router.push("/pool")}
+            >
               View Pools
             </Button>
           )}

@@ -7,13 +7,19 @@ import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
 
-import { useMarkets, type Market } from "~/hooks/useMarkets";
+import { usePositions, type Position } from "~/hooks/usePositions";
 
-interface MarketProps extends Market {
+interface PositionProps extends Position {
   className?: string;
 }
 
-function Market({ title, dailyBorrows, className, ...props }: MarketProps) {
+function Position({
+  assets,
+  current_price,
+  position_size,
+  className,
+  ...props
+}: PositionProps) {
   const animationDelay = useMemo(() => {
     const possibleAnimationDelays = [
       "0s",
@@ -44,15 +50,15 @@ function Market({ title, dailyBorrows, className, ...props }: MarketProps) {
             <AvatarFallback>token icon</AvatarFallback>
           </Avatar>
           <div className="text-sm font-medium leading-normal text-muted-foreground">
-            {title}
+            {assets}
           </div>
         </div>
         <div className="text-2xl font-semibold leading-normal text-popover-foreground">
-          {formatUsd(15.56)}
+          {formatUsd(current_price)}
         </div>
 
         <div className="mt-4 text-lg font-semibold leading-7 text-popover-foreground">
-          {formatUsd(dailyBorrows)}
+          {formatUsd(current_price * position_size)}
         </div>
         <div className="text-xs font-normal leading-3 text-muted-foreground">
           Open Interest (24H)
@@ -74,19 +80,19 @@ function splitArray<T>(array: T[], numParts: number): T[][] {
   return result;
 }
 
-interface MarketRowProps {
+interface PositionRowProps {
   className?: string;
-  markets: Market[];
-  marketClassName?: (index: number) => string;
+  positions: Position[];
+  positionClassName?: (index: number) => string;
   msPerPixel?: number;
 }
 
-function MarketRow({
+function PositionRow({
   className,
-  markets,
-  marketClassName,
+  positions,
+  positionClassName,
   msPerPixel = 0,
-}: MarketRowProps) {
+}: PositionRowProps) {
   const rowRef = useRef<HTMLDivElement | null>(null);
   const [rowWidth, setRowWidth] = useState(0);
   const duration = `${rowWidth * 4 * msPerPixel}ms`;
@@ -113,25 +119,26 @@ function MarketRow({
         "--marquee-duration": duration,
       }}
     >
-      {markets.concat(markets).map((market, marketIndex) => (
-        <Market
-          key={marketIndex}
-          aria-hidden={marketIndex >= markets.length}
+      {positions.concat(positions).map((position, positionIndex) => (
+        <Position
+          key={positionIndex}
+          aria-hidden={positionIndex >= positions.length}
           className={
-            marketClassName && marketClassName(marketIndex % markets.length)
+            positionClassName &&
+            positionClassName(positionIndex % positions.length)
           }
-          {...market}
+          {...position}
         />
       ))}
     </div>
   );
 }
 
-function MarketGrid() {
+function PositionGrid() {
   const containerRef = useRef(null);
-  const markets = useMarkets();
+  const positions = usePositions();
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
-  const rows = splitArray(markets, 2);
+  const rows = splitArray(positions, 2);
 
   return (
     <div
@@ -140,32 +147,32 @@ function MarketGrid() {
     >
       {isInView && (
         <>
-          <MarketRow
+          <PositionRow
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            markets={[...rows[0], ...rows[1]]}
-            marketClassName={(marketIndex) =>
+            positions={[...rows[0], ...rows[1]]}
+            positionClassName={(positionIndex) =>
               clsx(
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                marketIndex >= rows[0].length && "md:hidden",
+                positionIndex >= rows[0].length && "md:hidden",
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                marketIndex >= rows[0].length && "lg:hidden",
+                positionIndex >= rows[0].length && "lg:hidden",
               )
             }
             msPerPixel={10}
           />
 
-          <MarketRow
-            markets={[...rows[1], ...rows[0]]}
+          <PositionRow
+            positions={[...rows[1], ...rows[0]]}
             className="hidden md:flex"
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            marketClassName={(marketIndex) =>
+            positionClassName={(positionIndex) =>
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
-              marketIndex >= rows[1].length && "lg:hidden"
+              positionIndex >= rows[1].length && "lg:hidden"
             }
             msPerPixel={15}
           />
@@ -177,7 +184,7 @@ function MarketGrid() {
   );
 }
 
-export default function Markets() {
+export default function Positions() {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="leading-14 text-center text-5xl font-extrabold tracking-tight text-foreground">
@@ -192,9 +199,9 @@ export default function Markets() {
         a regular basis.
       </div>
 
-      <MarketGrid />
+      <PositionGrid />
       <div className="mt-8 flex justify-center">
-        <Button variant="secondary">View All Markets</Button>
+        <Button variant="secondary">View All Positions</Button>
       </div>
     </section>
   );
