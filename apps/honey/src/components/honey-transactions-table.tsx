@@ -234,24 +234,24 @@ export default function HoneyTransactionsTable() {
         defaultValue={Selection.AllTransactions}
         onValueChange={(value: string) => setSelectedTab(value as Selection)}
       >
-        <TabsList className="w-full">
+        <TabsList className=" w-full rounded-xl border-2 border-dashed border-blue-900 bg-blue-50">
           <TabsTrigger
             value={Selection.AllTransactions}
-            className="w-full text-xs sm:text-sm"
+            className="w-full text-xs text-stone-700 data-[state=active]:bg-red-600 sm:text-sm"
           >
-            All transactions
+            🧾 All txns
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Mints}
-            className="w-full text-xs sm:text-sm"
+            className="w-full text-xs text-stone-700 data-[state=active]:bg-red-600 sm:text-sm"
           >
-            Mints
+            🪙 Mints
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Burns}
-            className="w-full text-xs sm:text-sm"
+            className="w-full text-xs text-stone-700 data-[state=active]:bg-red-600 sm:text-sm"
           >
-            Burns
+            🔥 Burns
           </TabsTrigger>
         </TabsList>
         <Card className="mt-4">
@@ -294,12 +294,16 @@ export const EventTable = ({
   return (
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead>Action</TableHead>
-          <TableHead>Value</TableHead>
-          <TableHead className="hidden sm:table-cell">Tokens</TableHead>
-          <TableHead className="hidden sm:table-cell">Account</TableHead>
-          <TableHead className="text-right">Time</TableHead>
+        <TableRow className="rounded border-2 border-blue-300 bg-blue-100 text-blue-600">
+          <TableHead className="text-blue-600">Action</TableHead>
+          <TableHead className="text-blue-600">Value</TableHead>
+          <TableHead className="hidden text-blue-600 sm:table-cell">
+            Tokens
+          </TableHead>
+          <TableHead className="hidden text-blue-600 sm:table-cell">
+            Account
+          </TableHead>
+          <TableHead className="text-right text-blue-600">Time</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

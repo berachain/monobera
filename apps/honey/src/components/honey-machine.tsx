@@ -312,77 +312,90 @@ export function HoneyMachine() {
   }, [state.currentState]);
 
   return (
-    <div className="relative bg-[#468DCB] pb-12">
-      {ModalPortal}
-      <div
-        className={cn(
-          "absolute bottom-0 z-30 m-6 w-[30%] max-w-[300px] rounded-2xl border-4 border-black bg-[#b4b4b4] p-3",
-          !isConnected && "bottom-12",
-        )}
-      >
-        {isConnected ? (
-          <>
-            <h1 className="mb-4 text-2xl font-semibold text-foreground">
-              {isMint ? "Mint" : "Redeem"}
-            </h1>
-            <ul role="list">
-              <HoneyTokenInput
-                selected={selectedFrom}
-                selectedTokens={[selectedFrom, selectedTo]}
-                onTokenSelection={setSelectedFrom}
-                amount={fromAmount ?? 0}
-                balance={fromBalance?.formattedBalance}
-                selectable={false}
-                hidePrice
-                setAmount={(amount) => {
-                  setFromAmount(Number(amount));
-                  setToAmount(Number(amount) * fee);
-                }}
-              />
-              <div className="flex justify-center py-1">
-                <motion.div
-                  animate={{ rotate }}
-                  transition={{ type: "spring", stiffness: 100, damping: 7 }}
-                >
-                  <button
-                    onClick={() => {
-                      setSelectedFrom(selectedTo);
-                      setSelectedTo(selectedFrom);
-                      setRotate(rotate + 180);
-                    }}
-                  >
-                    <Image
-                      src={"/SWAP.png"}
-                      width={50}
-                      height={50}
-                      alt="Swap icon"
-                    />
-                  </button>
-                </motion.div>
-              </div>
-              <HoneyTokenInput
-                selected={selectedTo}
-                selectedTokens={[selectedFrom, selectedTo]}
-                amount={toAmount}
-                setAmount={(amount) => {
-                  setToAmount(Number(amount));
-                  setFromAmount(Number(amount) * fee2);
-                }}
-                selectable={false}
-                hidePrice
-                hideBalance
-                balance={toBalance?.formattedBalance}
-              />
-            </ul>
-          </>
-        ) : (
-          <ConnectButton className="w-full" />
-        )}
-      </div>
+    <>
+      <div className="relative bg-[#468DCB] pb-12">
+        {ModalPortal}
 
-      <div className="aspect-square w-full pt-16">
-        <RiveComponent />
+        {rive ? (
+          <div
+            className={cn(
+              "absolute bottom-0 z-30 m-6 w-[30%] max-w-[300px] rounded-2xl border-4 border-black bg-[#b4b4b4] p-3",
+              !isConnected && "bottom-12",
+            )}
+          >
+            {isConnected ? (
+              <>
+                <h1 className="mb-4 text-2xl font-semibold text-foreground">
+                  {isMint ? "Mint" : "Redeem"}
+                </h1>
+                <ul role="list">
+                  <HoneyTokenInput
+                    selected={selectedFrom}
+                    selectedTokens={[selectedFrom, selectedTo]}
+                    onTokenSelection={setSelectedFrom}
+                    amount={fromAmount ?? 0}
+                    balance={fromBalance?.formattedBalance}
+                    selectable={false}
+                    hidePrice
+                    setAmount={(amount) => {
+                      setFromAmount(Number(amount));
+                      setToAmount(Number(amount) * fee);
+                    }}
+                  />
+                  <div className="flex justify-center py-1">
+                    <motion.div
+                      animate={{ rotate }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 7,
+                      }}
+                    >
+                      <button
+                        onClick={() => {
+                          setSelectedFrom(selectedTo);
+                          setSelectedTo(selectedFrom);
+                          setRotate(rotate + 180);
+                        }}
+                      >
+                        <Image
+                          src={"/SWAP.png"}
+                          width={50}
+                          height={50}
+                          alt="Swap icon"
+                        />
+                      </button>
+                    </motion.div>
+                  </div>
+                  <HoneyTokenInput
+                    selected={selectedTo}
+                    selectedTokens={[selectedFrom, selectedTo]}
+                    amount={toAmount}
+                    setAmount={(amount) => {
+                      setToAmount(Number(amount));
+                      setFromAmount(Number(amount) * fee2);
+                    }}
+                    selectable={false}
+                    hidePrice
+                    hideBalance
+                    balance={toBalance?.formattedBalance}
+                  />
+                </ul>
+              </>
+            ) : (
+              <ConnectButton className="w-full" />
+            )}
+          </div>
+        ) : (
+          <div className=" absolute top-0 flex h-[1048px] w-full items-center justify-center text-3xl text-white">
+            Loading...
+          </div>
+        )}
+
+        <div className="aspect-square w-full pt-16">
+          <RiveComponent />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -31,13 +31,6 @@ type HoneySupply = {
 async function getOverviewData(): Promise<[HoneyVolume, HoneySupply]> {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  console.log(
-    `${
-      process.env.NEXT_PUBLIC_ANALYTICS
-    }/analytics/honey/volume/hourly?to_time=${getUnixTime(
-      new Date(),
-    )}&from_time=${getUnixTime(yesterday)}`,
-  );
   try {
     const volumeRes = await fetch(
       `${
@@ -62,7 +55,6 @@ async function getOverviewData(): Promise<[HoneyVolume, HoneySupply]> {
     return Promise.all([volumeRes.json(), supplyRes.json()]);
   } catch (e) {
     console.error(e);
-
     return [[], []] as [any, any];
   }
 }
@@ -70,13 +62,6 @@ async function getOverviewData(): Promise<[HoneyVolume, HoneySupply]> {
 async function getPastDays(days: number): Promise<[HoneyVolume, HoneySupply]> {
   const daysAgo = new Date();
   daysAgo.setDate(daysAgo.getDate() - days);
-  console.log(
-    `${
-      process.env.NEXT_PUBLIC_ANALYTICS
-    }/analytics/honey/volume/daily?to_time=${getUnixTime(
-      new Date(),
-    )}&from_time=${getUnixTime(daysAgo)}`,
-  );
   try {
     const volumeRes = await fetch(
       `${
@@ -101,7 +86,6 @@ async function getPastDays(days: number): Promise<[HoneyVolume, HoneySupply]> {
     return Promise.all([volumeRes.json(), supplyRes.json()]);
   } catch (e) {
     console.error(e);
-
     return [[], []] as [any, any];
   }
 }
@@ -111,6 +95,8 @@ export default async function Home() {
   const [weeklyVolume, weeklySupply] = await getPastDays(7);
   const [monthlyVolume, monthlySupply] = await getPastDays(30);
   const [quarterlyVolume, quarterlySupply] = await getPastDays(90);
+
+  console.log("volume", volume.honeyVolume, "supply", supply);
 
   if (
     !volume.honeyVolume ||
@@ -131,7 +117,7 @@ export default async function Home() {
           <HoneyMachine />
           <HoneyBanner />
         </div>
-        <div className="flex justify-center py-12 honey:hidden">
+        <div className="flex justify-center honey:hidden">
           <div className="container">
             <Hero />
             <SwapCard />
@@ -140,20 +126,20 @@ export default async function Home() {
       </div>
       <div className=" honey:bg-gradient-to-b honey:from-[#468DCB] honey:to-background">
         <div className="container honey:max-w-[1050px] honey:text-blue-900">
-          <div className="py-4 lg:py-12">
+          <div className="py-4 lg:py-0">
             <Data
               tvl={supply.honeyTotalSupply[0]?.amount || "0"}
               dailyVolume={volume.honeyVolume[0]?.amount || "0"}
             />
           </div>
-          <div className="py-4 lg:py-12">
-            <h3 className="mb-4 flex items-center gap-4 bg-gradient-to-r from-[#292524] via-[#875100] via-30% to-[#292524] bg-clip-text text-3xl font-extrabold text-transparent">
+          <div className="py-4">
+            <h3 className="mb-4 flex items-center gap-4 text-3xl text-blue-900 ">
               <Image
                 src="/honeyCoin.png"
                 className="w-8"
                 alt="honey"
-                width={24}
-                height={24}
+                width={32}
+                height={32}
               />
               Total Honey Supply
             </h3>

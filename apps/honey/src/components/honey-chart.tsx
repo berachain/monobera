@@ -296,47 +296,79 @@ export const HoneyChart = ({
   }, [timeFrame, chart]);
 
   return (
-    <Card className="p-0">
+    <Card className="border-2 border-dashed border-blue-500 p-0">
       <Tabs
         defaultValue={Chart.VOLUME}
         onValueChange={(value: string) => setChart(value as Chart)}
       >
-        <CardHeader className="flex w-full flex-col items-center justify-start p-4 sm:flex-row sm:justify-between">
-          <div className="flex w-full flex-row items-center gap-3">
-            <div className="w-fit text-xl font-semibold">
+        <CardHeader className="flex w-full flex-col items-center justify-start px-6 py-4 sm:flex-row sm:justify-between">
+          <div className="flex w-full flex-col items-start gap-1">
+            <div className=" text-2xl font-normal leading-9 text-blue-900">
               {formatUsd(total)}
             </div>
             <div
               className={cn(
-                "w-full text-sm font-normal",
-                difference >= 0 ? "text-positive" : "text-destructive",
+                "text-xs font-normal leading-none",
+                difference >= 0
+                  ? "text-success-foreground"
+                  : "text-destructive-foreground",
               )}
             >
               {difference.toFixed(2)}%
             </div>
           </div>
 
-          <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
-            <TabsList>
-              <TabsTrigger value={Chart.VOLUME}>Volume</TabsTrigger>
-              <TabsTrigger value={Chart.FEES}>Fees</TabsTrigger>
+          <div className="flex w-full flex-row items-center justify-start gap-2  sm:justify-end">
+            <TabsList className="rounded-xl border-2 border-blue-900 bg-blue-100">
+              <TabsTrigger
+                value={Chart.VOLUME}
+                className="text-blue-900 data-[state=active]:bg-blue-900"
+              >
+                Volume
+              </TabsTrigger>
+              <TabsTrigger
+                value={Chart.FEES}
+                className="text-blue-900 data-[state=active]:bg-blue-900"
+              >
+                Fees
+              </TabsTrigger>
             </TabsList>
             <Select
               onValueChange={(value: string) =>
                 setTimeFrame(value as TimeFrame)
               }
             >
-              <SelectTrigger className="w-[90px]">
+              <SelectTrigger className="w-fit justify-start gap-1 rounded-xl border-2 border-blue-900 bg-blue-100 text-blue-900">
                 <SelectValue
                   placeholder={TimeFrame.HOURLY}
                   defaultValue={TimeFrame.HOURLY}
                 />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={TimeFrame.HOURLY}>24h</SelectItem>
-                <SelectItem value={TimeFrame.WEEKLY}>7d</SelectItem>
-                <SelectItem value={TimeFrame.MONTHLY}>30d</SelectItem>
-                <SelectItem value={TimeFrame.QUARTERLY}>90d</SelectItem>
+              <SelectContent className="rounded-xl border-2 border-blue-900 bg-blue-100 text-blue-900">
+                <SelectItem
+                  value={TimeFrame.HOURLY}
+                  className="hover:text-boue-100 cursor-pointer rounded-xl text-blue-900 hover:bg-blue-900"
+                >
+                  24h
+                </SelectItem>
+                <SelectItem
+                  value={TimeFrame.WEEKLY}
+                  className="hover:text-boue-100 cursor-pointer rounded-xl text-blue-900 hover:bg-blue-900"
+                >
+                  7d
+                </SelectItem>
+                <SelectItem
+                  value={TimeFrame.MONTHLY}
+                  className="hover:text-boue-100 cursor-pointer rounded-xl text-blue-900 hover:bg-blue-900"
+                >
+                  30d
+                </SelectItem>
+                <SelectItem
+                  value={TimeFrame.QUARTERLY}
+                  className="hover:text-boue-100 cursor-pointer rounded-xl text-blue-900 hover:bg-blue-900"
+                >
+                  90d
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
