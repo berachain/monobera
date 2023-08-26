@@ -3,7 +3,7 @@
 import React from "react";
 import { formatUnits } from "viem";
 
-import { type HoneyEntry } from "~/app/page";
+import { type HoneyEntry } from "~/app/type";
 import { honey } from "~/config/tokens";
 import { HoneyChart } from "./honey-chart";
 

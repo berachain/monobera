@@ -49,7 +49,7 @@ export function Header({
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   return (
-    <nav className="h-18 fixed left-0 right-0 z-50 flex w-full items-end justify-between bg-background bg-opacity-20 px-6 py-3 shadow backdrop-blur-2xl lg:gap-8">
+    <nav className="h-18 fixed left-0 right-0 top-0 z-50 flex w-full items-end justify-between bg-background bg-opacity-20 px-6 py-3 shadow backdrop-blur-2xl lg:gap-8">
       <div>
         <div className="mr-8 flex items-center">
           <span className="mr-5 text-lg font-bold tracking-tight">

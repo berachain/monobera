@@ -4,7 +4,6 @@ import { useState } from "react";
 import { formatUsd, truncateHash } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import {
   Table,
@@ -86,9 +85,9 @@ function isBurnData(obj: any): obj is BurnData {
 
 const getAction = (event: any) => {
   if (isMintData(event)) {
-    return <p className="text-positive">Mint</p>;
+    return <p className="text-success-foreground">Mint</p>;
   } else if (isBurnData(event)) {
-    return <p className="text-destructive">Burn</p>;
+    return <p className="text-destructive-foreground">Burn</p>;
   }
   return <p>IDK</p>;
 };
@@ -182,48 +181,42 @@ export default function HoneyTransactionsTable() {
   } = useHoneyEvents();
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {
-      return (
+      return !isAllDataReachingEnd ? (
         <Button
           onClick={() => setAllDataSize(allDataSize + 1)}
           disabled={isAllDataLoadingMore || isAllDataReachingEnd}
           variant="outline"
         >
-          {isAllDataLoadingMore
-            ? "Loading..."
-            : isAllDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+          {isAllDataLoadingMore ? "Loading..." : "Load more"}
         </Button>
+      ) : (
+        <></>
       );
     }
     if (selectedTab === Selection.Mints) {
-      return (
+      return !isMintDataReachingEnd ? (
         <Button
           onClick={() => setMintDataSize(mintDataSize + 1)}
           disabled={isMintDataLoadingMore || isMintDataReachingEnd}
           variant="outline"
         >
-          {isMintDataLoadingMore
-            ? "Loading..."
-            : isMintDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+          {isMintDataLoadingMore ? "Loading..." : "Load more"}
         </Button>
+      ) : (
+        <></>
       );
     }
     if (selectedTab === Selection.Burns) {
-      return (
+      return !isBurnDataReachingEnd ? (
         <Button
           onClick={() => setBurnDataSize(burnDataSize + 1)}
           disabled={isBurnDataLoadingMore || isBurnDataReachingEnd}
           variant="outline"
         >
-          {isBurnDataLoadingMore
-            ? "Loading..."
-            : isBurnDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+          {isBurnDataLoadingMore ? "Loading..." : "Load more"}
         </Button>
+      ) : (
+        <></>
       );
     }
   };
@@ -234,7 +227,7 @@ export default function HoneyTransactionsTable() {
         defaultValue={Selection.AllTransactions}
         onValueChange={(value: string) => setSelectedTab(value as Selection)}
       >
-        <TabsList className=" w-full rounded-xl border-2 border-dashed border-blue-900 bg-blue-50">
+        <TabsList className="w-full rounded-xl border-2 border-dashed border-blue-900 bg-blue-50">
           <TabsTrigger
             value={Selection.AllTransactions}
             className="w-full text-xs text-stone-700 data-[state=active]:bg-red-600 sm:text-sm"
@@ -254,7 +247,7 @@ export default function HoneyTransactionsTable() {
             🔥 Burns
           </TabsTrigger>
         </TabsList>
-        <Card className="mt-4">
+        <div className="mt-4 overflow-hidden rounded-xl border border-blue-300 bg-blue-50">
           <TabsContent value={Selection.AllTransactions} className="mt-0">
             <EventTable
               prices={prices}
@@ -276,7 +269,7 @@ export default function HoneyTransactionsTable() {
               isLoading={isBurnDataLoadingMore}
             />
           </TabsContent>
-        </Card>
+        </div>
         <div className="mt-4 flex justify-center">{getLoadMoreButton()}</div>
       </Tabs>
     </section>
@@ -294,7 +287,7 @@ export const EventTable = ({
   return (
     <Table>
       <TableHeader>
-        <TableRow className="rounded border-2 border-blue-300 bg-blue-100 text-blue-600">
+        <TableRow className="border-b border-blue-300 bg-blue-100 text-blue-600 hover:bg-blue-100">
           <TableHead className="text-blue-600">Action</TableHead>
           <TableHead className="text-blue-600">Value</TableHead>
           <TableHead className="hidden text-blue-600 sm:table-cell">
@@ -312,6 +305,7 @@ export const EventTable = ({
             if (!event) return null;
             return (
               <TableRow
+                className="hover:cursor-pointer hover:bg-blue-200"
                 key={event?.metadata?.txHash}
                 onClick={() =>
                   window.open(

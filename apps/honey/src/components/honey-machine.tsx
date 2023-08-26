@@ -73,7 +73,7 @@ export function HoneyMachine() {
     stateMachines: STATE_MACHINE_NAME,
     artboard: "honeyMachineSquare",
     autoplay: false,
-    layout: new Layout({ fit: Fit.Cover }),
+    layout: new Layout({ fit: Fit.Contain }),
   });
 
   // user manually reject the transaction or input value 0
@@ -319,14 +319,17 @@ export function HoneyMachine() {
         {rive ? (
           <div
             className={cn(
-              "absolute bottom-0 z-30 m-6 w-[30%] max-w-[300px] rounded-2xl border-4 border-black bg-[#b4b4b4] p-3",
+              "absolute bottom-[50px] left-[45px] z-30 m-6 h-[250px] w-[30%] max-w-[230px] overflow-hidden",
               !isConnected && "bottom-12",
             )}
           >
             {isConnected ? (
               <>
-                <h1 className="mb-4 text-2xl font-semibold text-foreground">
+                <h1 className="relative mb-1 text-2xl font-semibold text-foreground">
                   {isMint ? "Mint" : "Redeem"}
+                  <div className="absolute right-0 top-1 text-sm text-muted-foreground">
+                    Static fee of 69%
+                  </div>
                 </h1>
                 <ul role="list">
                   <HoneyTokenInput
@@ -342,7 +345,7 @@ export function HoneyMachine() {
                       setToAmount(Number(amount) * fee);
                     }}
                   />
-                  <div className="flex justify-center py-1">
+                  <div className="flex justify-center">
                     <motion.div
                       animate={{ rotate }}
                       transition={{
@@ -363,6 +366,7 @@ export function HoneyMachine() {
                           width={50}
                           height={50}
                           alt="Swap icon"
+                          className="pt-1"
                         />
                       </button>
                     </motion.div>
@@ -392,7 +396,7 @@ export function HoneyMachine() {
           </div>
         )}
 
-        <div className="aspect-square w-full pt-16">
+        <div className="h-[1000px] w-[1000px]">
           <RiveComponent />
         </div>
       </div>

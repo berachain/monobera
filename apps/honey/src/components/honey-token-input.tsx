@@ -8,10 +8,11 @@ import {
   useSelectedAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
-import { SelectToken } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+
+import { SelectToken } from "~/components/honey-select-token";
 
 type Props = {
   selected: Token | undefined;
@@ -73,10 +74,10 @@ export function HoneyTokenInput({
   return (
     <li
       className={
-        "flex flex-col flex-wrap rounded-xl border-2 border-black bg-white px-4"
+        "relative flex h-[70px] flex-col flex-wrap rounded-lg border-[3px] border-black bg-white pl-2 pr-4"
       }
     >
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-start">
         <SelectToken
           token={selected}
           onTokenSelection={onTokenSelection}
@@ -84,7 +85,7 @@ export function HoneyTokenInput({
           selectable={selectable}
           weight={weight}
         />
-        <div className="flex w-full flex-col pl-2 sm:pl-0">
+        <div className="flex w-full flex-col pl-2 pt-2 sm:pl-0">
           <Input
             type="number"
             step="any"
@@ -104,15 +105,15 @@ export function HoneyTokenInput({
       </div>
       {isConnected && selected && tokenBalance !== 0 ? (
         hideBalance ? null : (
-          <div className="mb-2 h-fit w-full cursor-default">
+          <div className="absolute bottom-[6px] right-0 h-fit cursor-default">
             <div className="flex w-full items-center justify-between gap-1">
-              <div className="flex flex-row justify-start gap-1">
-                <Icons.wallet className="h-4 w-4 text-muted-foreground" />
-                <p className="w-12 overflow-hidden truncate p-0 text-xs text-muted-foreground sm:w-14">
+              <div className="flex cursor-pointer flex-row  items-center justify-start text-xs text-muted-foreground">
+                <Icons.wallet className=" mr-[2px] mt-[-3px] h-3 w-3" />
+                <p className="max-w-10 w-fit overflow-hidden truncate p-0 text-xs sm:w-14">
                   {tokenBalance ? tokenBalance : "0"}
                 </p>
                 <p
-                  className="cursor-pointer text-xs text-muted-foreground hover:underline"
+                  className="cursor-pointer hover:underline"
                   onClick={() => {
                     setAmount && setAmount(tokenBalance);
                   }}

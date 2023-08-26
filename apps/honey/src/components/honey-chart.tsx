@@ -14,7 +14,7 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { format } from "date-fns";
 import { formatUnits } from "viem";
 
-import { type HoneyEntry } from "~/app/page";
+import { type HoneyEntry } from "~/app/type";
 import { honey } from "~/config/tokens";
 
 const Options = {

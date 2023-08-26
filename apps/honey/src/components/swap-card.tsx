@@ -100,7 +100,6 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 balance={fromBalance?.formattedBalance}
                 selectable={selectedFrom.address !== honey.address}
                 hidePrice
-                showBalance
                 setAmount={(amount) => {
                   setFromAmount(Number(amount));
                   setToAmount(Number(amount) * fee);
@@ -140,7 +139,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 selectable={selectedTo.address !== honey.address}
                 hidePrice
                 balance={toBalance?.formattedBalance}
-                showBalance={false}
+                hideBalance
               />
             </ul>
             {/* fix to check if allowance > amount */}
