@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { cn } from "@bera/ui";
 
@@ -32,17 +32,25 @@ export default function HoneyPage({
   monthlySupply: HoneySupply;
   quarterlySupply: HoneySupply;
 }) {
-  const [mode, setMode] = useState<"pro" | "arcade">("arcade");
+  const [mode, setMode] = useState<"pro" | "arcade">("pro");
+  const arcade = mode === "arcade";
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (arcade && window.innerWidth < 1000) {
+        setMode("pro");
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [mode]);
 
   return (
-    <div
-      className={cn(
-        "pt-[72px]",
-        mode === "arcade" ? "bg-[#468DCB] font-honey" : "",
-      )}
-    >
-      <div className="h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline">
-        {mode === "arcade" ? (
+    <div className={cn("pt-[72px]", arcade ? "bg-[#468DCB] font-honey" : "")}>
+      <div className="hidden h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline honey:block">
+        {arcade ? (
           <div onClick={() => setMode("pro")}>🍯 Enter Honey Pro Mode</div>
         ) : (
           <div onClick={() => setMode("arcade")}>
@@ -52,14 +60,14 @@ export default function HoneyPage({
       </div>
       <div>
         <div>
-          {mode === "arcade" ? (
-            <div className="m-auto hidden max-w-[1000px] honey:block">
+          {arcade ? (
+            <div className="m-auto block max-w-[1000px]">
               <HoneyMachine />
               <HoneyBanner />
             </div>
           ) : (
-            <div className="flex justify-center honey:hidden">
-              <div className="container">
+            <div className="flex justify-center md:justify-start">
+              <div className="container flex max-w-[1000px] flex-col items-center justify-between md:flex-row">
                 <Hero />
                 <SwapCard />
               </div>
@@ -69,20 +77,31 @@ export default function HoneyPage({
 
         <div
           className={cn(
-            mode === "arcade"
-              ? "bg-gradient-to-b from-[#468DCB] honey:to-background"
-              : "",
+            arcade ? "bg-gradient-to-b from-[#468DCB] honey:to-background" : "",
           )}
         >
-          <div className="container honey:max-w-[1050px] honey:text-blue-900">
+          <div
+            className={cn(
+              "container max-w-[1050px]",
+              arcade ? "text-blue-900" : "",
+            )}
+          >
             <div className="py-4 lg:py-0">
               <Data
                 tvl={supply.honeyTotalSupply[0]?.amount || "0"}
                 dailyVolume={volume.honeyVolume[0]?.amount || "0"}
+                arcade={arcade}
               />
             </div>
             <div className="py-4">
-              <h3 className="mb-4 flex items-center gap-4 text-3xl text-blue-900 ">
+              <h3
+                className={cn(
+                  "mb-4 flex items-center gap-3 text-lg md:text-3xl",
+                  arcade
+                    ? "text-blue-900"
+                    : "bg-gradient-to-r from-[#292524] via-[#875100] via-30% to-[#292524] bg-clip-text font-semibold text-transparent",
+                )}
+              >
                 <Image
                   src="/honeyCoin.png"
                   className="w-8"
@@ -101,9 +120,10 @@ export default function HoneyPage({
                 monthlySupply={monthlySupply?.honeyTotalSupply ?? []}
                 quarterlyVolume={quarterlyVolume?.honeyVolume ?? []}
                 quarterlySupply={quarterlySupply?.honeyTotalSupply ?? []}
+                arcade={arcade}
               />
             </div>
-            <HoneyTransactionsTable />
+            <HoneyTransactionsTable arcade={arcade} />
           </div>
         </div>
       </div>

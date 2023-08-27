@@ -51,6 +51,9 @@ const Options = {
     tooltip: {
       displayColors: false,
       position: "nearest",
+      borderRadius: 18,
+      caretSize: 0,
+
       interaction: {
         intersect: false,
       },
@@ -92,6 +95,7 @@ interface IHoneyChart {
   quarterlyFees: number[];
   quarterlyVolumeTotal: number;
   quarterlyFeesTotal: number;
+  arcade: boolean;
 }
 
 enum TimeFrame {
@@ -225,6 +229,7 @@ export const HoneyChart = ({
   quarterlyFees,
   quarterlyVolumeTotal,
   quarterlyFeesTotal,
+  arcade,
 }: IHoneyChart) => {
   const [total, setTotal] = useState(weeklyVolumeTotal);
   const [difference, setDifference] = useState(0);
@@ -296,14 +301,32 @@ export const HoneyChart = ({
   }, [timeFrame, chart]);
 
   return (
-    <Card className="border-2 border-dashed border-blue-500 p-0">
+    <Card
+      className={cn(
+        "border-2 p-0",
+        arcade
+          ? "border-dashed border-blue-500"
+          : "border-border bg-background",
+      )}
+    >
       <Tabs
         defaultValue={Chart.VOLUME}
         onValueChange={(value: string) => setChart(value as Chart)}
       >
         <CardHeader className="flex w-full flex-col items-center justify-start px-6 py-4 sm:flex-row sm:justify-between">
-          <div className="flex w-full flex-col items-start gap-1">
-            <div className=" text-2xl font-normal leading-9 text-blue-900">
+          <div
+            className={cn(
+              "flex w-full gap-1",
+              arcade ? "flex-col items-start" : "flex-row items-center",
+            )}
+          >
+            <div
+              className={cn(
+                arcade
+                  ? "text-2xl font-normal leading-9 text-blue-900"
+                  : "text-xl font-semibold leading-7",
+              )}
+            >
               {formatUsd(total)}
             </div>
             <div
@@ -318,19 +341,27 @@ export const HoneyChart = ({
             </div>
           </div>
 
-          <div className="flex w-full flex-row items-center justify-start gap-2  sm:justify-end">
-            <TabsList className="rounded-xl border-2 border-blue-900 bg-blue-100">
+          <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
+            <TabsList
+              className={cn(
+                arcade && "rounded-xl border-2 border-blue-900 bg-blue-100",
+              )}
+            >
               <TabsTrigger
                 value={Chart.VOLUME}
-                className="text-blue-900 data-[state=active]:bg-blue-900"
+                className={cn(
+                  arcade && "text-blue-900 data-[state=active]:bg-blue-900",
+                )}
               >
                 Volume
               </TabsTrigger>
               <TabsTrigger
                 value={Chart.FEES}
-                className="text-blue-900 data-[state=active]:bg-blue-900"
+                className={cn(
+                  arcade && "text-blue-900 data-[state=active]:bg-blue-900",
+                )}
               >
-                Fees
+                Supply
               </TabsTrigger>
             </TabsList>
             <Select
@@ -338,36 +369,68 @@ export const HoneyChart = ({
                 setTimeFrame(value as TimeFrame)
               }
             >
-              <SelectTrigger className="w-fit justify-start gap-1 rounded-xl border-2 border-blue-900 bg-blue-100 text-blue-900">
+              <SelectTrigger
+                className={cn(
+                  "w-fit justify-start gap-1 rounded-xl",
+                  arcade
+                    ? "border-2 border-blue-900 bg-blue-100 text-blue-900"
+                    : "border border-border bg-muted text-foreground",
+                )}
+              >
                 <SelectValue
                   placeholder={TimeFrame.HOURLY}
                   defaultValue={TimeFrame.HOURLY}
                 />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-2 border-blue-900 bg-blue-100 text-blue-900">
+              <SelectContent
+                className={cn(
+                  arcade &&
+                    "rounded-xl border-2 border-blue-900 bg-blue-100 text-blue-900",
+                )}
+              >
                 <SelectItem
                   value={TimeFrame.HOURLY}
-                  className="hover:text-boue-100 cursor-pointer rounded-xl text-blue-900 hover:bg-blue-900"
+                  className={cn(
+                    "cursor-pointer rounded-xl",
+                    arcade
+                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 focus:text-blue-100"
+                      : "hover:bg-muted hover:text-foreground focus:text-foreground",
+                  )}
                 >
-                  24h
+                  24H
                 </SelectItem>
                 <SelectItem
                   value={TimeFrame.WEEKLY}
-                  className="hover:text-boue-100 cursor-pointer rounded-xl text-blue-900 hover:bg-blue-900"
+                  className={cn(
+                    "cursor-pointer rounded-xl",
+                    arcade
+                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 focus:text-blue-100"
+                      : "hover:bg-muted hover:text-foreground focus:text-foreground",
+                  )}
                 >
-                  7d
+                  7D
                 </SelectItem>
                 <SelectItem
                   value={TimeFrame.MONTHLY}
-                  className="hover:text-boue-100 cursor-pointer rounded-xl text-blue-900 hover:bg-blue-900"
+                  className={cn(
+                    "cursor-pointer rounded-xl",
+                    arcade
+                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 focus:text-blue-100"
+                      : "hover:bg-muted hover:text-foreground focus:text-foreground",
+                  )}
                 >
-                  30d
+                  30D
                 </SelectItem>
                 <SelectItem
                   value={TimeFrame.QUARTERLY}
-                  className="hover:text-boue-100 cursor-pointer rounded-xl text-blue-900 hover:bg-blue-900"
+                  className={cn(
+                    "cursor-pointer rounded-xl",
+                    arcade
+                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 focus:text-blue-100"
+                      : "hover:bg-muted hover:text-foreground focus:text-foreground",
+                  )}
                 >
-                  90d
+                  90D
                 </SelectItem>
               </SelectContent>
             </Select>

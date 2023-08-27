@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  formatUsd,
   useBeraJs,
   usePollAssetWalletBalance,
   useSelectedAssetWalletBalance,
@@ -35,7 +34,6 @@ export function HoneyTokenInput({
   amount,
   balance = undefined,
   hideBalance = false,
-  hidePrice = false,
   selectable = true,
   weight = undefined,
   disabled = false,
@@ -94,7 +92,7 @@ export function HoneyTokenInput({
             disabled={disabled}
             className={cn(
               "w-full grow border-0 bg-white p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
-              exceeding && "text-destructive",
+              exceeding && !hideBalance && "text-destructive-foreground",
             )}
             value={amount > 0 ? amount : ""}
             onChange={(e) => {
@@ -104,35 +102,34 @@ export function HoneyTokenInput({
         </div>
       </div>
       {isConnected && selected && tokenBalance !== 0 ? (
-        hideBalance ? null : (
-          <div className="absolute bottom-[6px] right-0 h-fit cursor-default">
-            <div className="flex w-full items-center justify-between gap-1">
-              <div className="flex cursor-pointer flex-row  items-center justify-start text-xs text-muted-foreground">
-                <Icons.wallet className=" mr-[2px] mt-[-3px] h-3 w-3" />
-                <p className="max-w-10 w-fit overflow-hidden truncate p-0 text-xs sm:w-14">
-                  {tokenBalance ? tokenBalance : "0"}
-                </p>
-                <p
-                  className="cursor-pointer hover:underline"
-                  onClick={() => {
-                    setAmount && setAmount(tokenBalance);
-                  }}
-                >
-                  MAX
-                </p>
-              </div>
-              <div className="flex flex-row gap-1">
-                {!hidePrice && (
-                  <p className="self-center p-0 text-xs text-muted-foreground">
-                    {/* TODO: change to actual values */}
-                    {amount !== 0 && formatUsd((amount * 1).toFixed(2))}
-                  </p>
-                )}
-              </div>
+        <div className="absolute bottom-[6px] right-2 h-fit cursor-default">
+          {/* <div className="flex w-full items-center justify-between gap-1"> */}
+          <div className="flex flex-row items-center justify-end gap-1 text-xs text-muted-foreground">
+            <div className="w-16 overflow-hidden truncate p-0 text-right text-xs">
+              <Icons.wallet className="mr-[2px] mt-[-3px] inline h-3 w-3" />
+              {tokenBalance ? tokenBalance : "0"}
             </div>
+            {!hideBalance && (
+              <p
+                className="cursor-pointer hover:underline"
+                onClick={() => {
+                  setAmount && setAmount(tokenBalance);
+                }}
+              >
+                MAX
+              </p>
+            )}
           </div>
-        )
-      ) : null}
+          {/* <div className="flex flex-row gap-1">
+              {!hidePrice && (
+                <p className="self-center p-0 text-xs text-muted-foreground">
+                  {amount !== 0 && formatUsd((amount * 1).toFixed(2))}
+                </p>
+              )}
+            </div> */}
+        </div>
+      ) : // </div>
+      null}
     </li>
   );
 }

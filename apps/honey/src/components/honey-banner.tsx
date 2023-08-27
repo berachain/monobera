@@ -10,10 +10,10 @@ export default function HoneyBanner() {
           <Image src={"/coinIcons.png"} alt="Coins" width={811} height={151} />
         </div>
         <h1 className="mb-3 text-5xl text-blue-900">Switch To Honey</h1>
-        <p className="text-lg text-blue-900">
+        <p className="text-lg leading-normal text-blue-900">
           Turn your favorite stables into Honey.
         </p>
-        <p className="text-lg text-blue-900">
+        <p className="text-lg leading-normal  text-blue-900">
           Leverage liquidity incentives on various platforms.
         </p>
       </div>

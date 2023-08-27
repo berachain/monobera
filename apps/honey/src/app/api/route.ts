@@ -14,11 +14,11 @@ async function getMints(page: number, perPage: number) {
       throw new Error("Failed to fetch honey mint data");
     }
     return jsonRes;
-    console.log(
-      "getMints",
-      jsonRes,
-      `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
-    );
+    // console.log(
+    //   "getMints",
+    //   jsonRes,
+    //   `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
+    // );
   } catch (e) {
     notFound();
   }
@@ -35,11 +35,11 @@ async function getBurns(page: number, perPage: number) {
     if (!jsonRes) {
       throw new Error("Failed to fetch add liquidity data");
     }
-    console.log(
-      "getBurns",
-      jsonRes,
-      `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
-    );
+    // console.log(
+    //   "getBurns",
+    //   jsonRes,
+    //   `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
+    // );
     return jsonRes;
   } catch (e) {
     notFound();

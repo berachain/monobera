@@ -2,12 +2,14 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { ConnectButton, TokenInput } from "@bera/shared-ui";
+import { ConnectButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
+import { TokenInput } from "~/components/token-input";
+import { cloudinaryUrl } from "~/config";
 import { honey } from "~/config/tokens";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
@@ -37,28 +39,25 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     ModalPortal,
   } = usePsm();
   return (
-    <>
+    <div>
       {showBear && (
         <Image
-          src="/kingBear.png"
-          className="relative z-0 m-auto mb-[-25px] w-[500px] self-center"
+          src={`${cloudinaryUrl}/bears/rtayxajtu9if9phn0ozu`}
+          className="relative z-0 m-auto self-center"
           alt="king"
-          width={150}
-          height={200}
+          width={382}
+          height={60}
         />
       )}
       <Card className="relative z-10 m-auto block max-w-[500px] bg-background">
         {ModalPortal}
-        <CardHeader>
-          <CardTitle className="center flex justify-between">
+        <CardHeader className="pb-3">
+          <CardTitle>
             <span>{isMint ? "Mint" : "Redeem"}</span>
-            <span className="font-normal text-[#4D4D4D]">
-              Static fee of 0.005%
-            </span>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue={tabValue} value={tabValue} className="mb-6">
+          <Tabs defaultValue={tabValue} value={tabValue} className="mb-3">
             <TabsList className="w-full">
               <TabsTrigger
                 value={"mint"}
@@ -90,7 +89,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
           <div className="border-1 flex flex-col gap-6 border-border">
             <ul
               role="list"
-              className="divide-y divide-border rounded-lg border"
+              className="divide-y divide-border rounded-2xl border"
             >
               <TokenInput
                 selected={selectedFrom}
@@ -193,6 +192,6 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
           </div>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }

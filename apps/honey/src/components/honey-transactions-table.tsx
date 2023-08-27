@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { formatUsd, truncateHash } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import {
@@ -160,7 +161,11 @@ const getValue = (event: MintData | BurnData) => {
   return 0;
 };
 
-export default function HoneyTransactionsTable() {
+export default function HoneyTransactionsTable({
+  arcade,
+}: {
+  arcade: boolean;
+}) {
   const [selectedTab, setSelectedTab] = useState(Selection.AllTransactions);
   const {
     allData,
@@ -227,32 +232,52 @@ export default function HoneyTransactionsTable() {
         defaultValue={Selection.AllTransactions}
         onValueChange={(value: string) => setSelectedTab(value as Selection)}
       >
-        <TabsList className="w-full rounded-xl border-2 border-dashed border-blue-900 bg-blue-50">
+        <TabsList
+          className={cn(
+            "w-full rounded-xl ",
+            arcade && "border-2 border-dashed border-blue-900 bg-blue-50",
+          )}
+        >
           <TabsTrigger
             value={Selection.AllTransactions}
-            className="w-full text-xs text-stone-700 data-[state=active]:bg-red-600 sm:text-sm"
+            className={cn(
+              "w-full text-xs text-stone-700  sm:text-sm",
+              arcade && "data-[state=active]:bg-red-600",
+            )}
           >
-            🧾 All txns
+            🧾 All {arcade ? "txns" : "transactions"}
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Mints}
-            className="w-full text-xs text-stone-700 data-[state=active]:bg-red-600 sm:text-sm"
+            className={cn(
+              "w-full text-xs text-stone-700  sm:text-sm",
+              arcade && "data-[state=active]:bg-red-600",
+            )}
           >
             🪙 Mints
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Burns}
-            className="w-full text-xs text-stone-700 data-[state=active]:bg-red-600 sm:text-sm"
+            className={cn(
+              "w-full text-xs text-stone-700  sm:text-sm",
+              arcade && "data-[state=active]:bg-red-600",
+            )}
           >
             🔥 Burns
           </TabsTrigger>
         </TabsList>
-        <div className="mt-4 overflow-hidden rounded-xl border border-blue-300 bg-blue-50">
+        <div
+          className={cn(
+            "mt-4 overflow-hidden rounded-xl border ",
+            arcade && "border-blue-300 bg-blue-50",
+          )}
+        >
           <TabsContent value={Selection.AllTransactions} className="mt-0">
             <EventTable
               prices={prices}
               events={allData}
               isLoading={isAllDataLoadingMore}
+              arcade={arcade}
             />
           </TabsContent>
           <TabsContent value={Selection.Mints} className="mt-0">
@@ -260,6 +285,7 @@ export default function HoneyTransactionsTable() {
               prices={prices}
               events={mintData}
               isLoading={isMintDataLoadingMore}
+              arcade={arcade}
             />
           </TabsContent>
           <TabsContent value={Selection.Burns} className="mt-0">
@@ -267,6 +293,7 @@ export default function HoneyTransactionsTable() {
               prices={prices}
               events={burnData}
               isLoading={isBurnDataLoadingMore}
+              arcade={arcade}
             />
           </TabsContent>
         </div>
@@ -279,24 +306,39 @@ export default function HoneyTransactionsTable() {
 export const EventTable = ({
   events,
   isLoading,
+  arcade,
 }: {
   prices: MappedTokens;
   events: MintData[] | BurnData[];
   isLoading: boolean | undefined;
+  arcade: boolean;
 }) => {
   return (
     <Table>
       <TableHeader>
-        <TableRow className="border-b border-blue-300 bg-blue-100 text-blue-600 hover:bg-blue-100">
-          <TableHead className="text-blue-600">Action</TableHead>
-          <TableHead className="text-blue-600">Value</TableHead>
-          <TableHead className="hidden text-blue-600 sm:table-cell">
+        <TableRow
+          className={cn(
+            arcade &&
+              "border-b border-blue-300 bg-blue-100 text-blue-600 hover:bg-blue-100",
+          )}
+        >
+          <TableHead className={cn(arcade && "text-blue-600")}>
+            Action
+          </TableHead>
+          <TableHead className={cn(arcade && "text-blue-600")}>Value</TableHead>
+          <TableHead
+            className={cn("hidden sm:table-cell", arcade && "text-blue-600")}
+          >
             Tokens
           </TableHead>
-          <TableHead className="hidden text-blue-600 sm:table-cell">
+          <TableHead
+            className={cn("hidden sm:table-cell", arcade && "text-blue-600")}
+          >
             Account
           </TableHead>
-          <TableHead className="text-right text-blue-600">Time</TableHead>
+          <TableHead className={cn("text-center", arcade && "text-blue-600")}>
+            Time
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -305,7 +347,10 @@ export const EventTable = ({
             if (!event) return null;
             return (
               <TableRow
-                className="hover:cursor-pointer hover:bg-blue-200"
+                className={cn(
+                  "hover:cursor-pointer",
+                  arcade ? "hover:bg-blue-200" : "hover:bg-muted",
+                )}
                 key={event?.metadata?.txHash}
                 onClick={() =>
                   window.open(

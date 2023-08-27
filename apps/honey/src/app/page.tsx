@@ -78,7 +78,7 @@ export default async function Home() {
   const [quarterlyVolume, quarterlySupply] = await getPastDays(90);
 
   // const [proMode, setProMode] = useState(false);
-  console.log("volume", volume.honeyVolume, "supply", supply);
+  // console.log("volume", volume.honeyVolume, "supply", supply);
 
   if (
     !volume.honeyVolume ||

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { formatUsd } from "@bera/berajs";
+import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
 
@@ -11,18 +12,32 @@ function DataCard({
   icon,
   title,
   value,
+  arcade,
 }: {
   icon: React.ReactNode;
   title: string;
   value: string;
+  arcade: boolean;
 }) {
   return (
-    <div className="flex flex-col rounded-2xl border-[4px] bg-card p-6 honey:border-dashed honey:border-blue-900">
-      <div className="flex items-center gap-3 text-sm">
-        <div className="text-muted-foreground honey:text-blue-900">{icon}</div>
-        <div className="text-muted-foreground honey:text-blue-900">{title}</div>
+    <div
+      className={cn(
+        "flex flex-col rounded-2xl bg-card p-6",
+        arcade
+          ? "border-[4px] border-dashed border-blue-900 text-blue-900"
+          : "border-2 border-border",
+      )}
+    >
+      <div
+        className={cn(
+          "flex items-center gap-2 text-sm",
+          !arcade && "text-muted-foreground",
+        )}
+      >
+        <div>{icon}</div>
+        <div>{title}</div>
       </div>
-      <div className="mt-2 text-3xl font-bold">{value}</div>
+      <div className="text-3xl font-bold">{value}</div>
     </div>
   );
 }
@@ -30,9 +45,11 @@ function DataCard({
 export default function Data({
   tvl,
   dailyVolume,
+  arcade,
 }: {
   tvl: string;
   dailyVolume: string;
+  arcade: boolean;
 }) {
   const displayTvl = formatUsd(
     Number(formatUnits(BigInt(tvl) ?? 0n, honey.decimals)),
@@ -45,16 +62,23 @@ export default function Data({
     <section className="py-4 lg:py-16">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <DataCard
-          title="Total Value Locked"
+          title="Total Honey Supply"
           value={displayTvl}
           icon={<Icons.lock />}
+          arcade={arcade}
         />
         <DataCard
           title="24H Volume"
           value={displayDailyVolume}
           icon={<Icons.candleStick />}
+          arcade={arcade}
         />
-        <DataCard title="Honey Price" value="$1.00" icon={<Icons.honey />} />
+        <DataCard
+          title="Honey Price"
+          value="$1.00"
+          icon={<Icons.honey />}
+          arcade={arcade}
+        />
       </div>
     </section>
   );

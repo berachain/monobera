@@ -8,6 +8,7 @@ import { honey } from "~/config/tokens";
 import { HoneyChart } from "./honey-chart";
 
 export default function Graph({
+  arcade,
   hourlySupply,
   hourlyVolume,
   weeklyVolume,
@@ -17,6 +18,7 @@ export default function Graph({
   quarterlyVolume,
 }: // quarterlySupply,
 {
+  arcade: boolean;
   hourlySupply: HoneyEntry[];
   hourlyVolume: HoneyEntry[];
   weeklyVolume: HoneyEntry[];
@@ -28,6 +30,7 @@ export default function Graph({
 }) {
   return (
     <HoneyChart
+      arcade={arcade}
       hourlySupply={hourlySupply ?? []}
       hourlyVolume={hourlyVolume ?? []}
       weeklyVolume={
