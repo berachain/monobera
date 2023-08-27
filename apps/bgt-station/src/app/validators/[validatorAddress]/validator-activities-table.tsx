@@ -31,7 +31,6 @@ export default function ValidatorActivitiesTable({
   const { useActiveValidators, useActiveValidator } = usePollActiveValidators();
   const validators: Validator[] | undefined = useActiveValidators();
   const router = useRouter();
-
   const validator = useActiveValidator(validatorAddress);
 
   const { data, size, isLoading, isReachingEnd, setSize } =

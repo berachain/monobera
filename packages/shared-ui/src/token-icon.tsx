@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTokenInformation, useTokens, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -18,24 +18,18 @@ export const TokenIcon = ({
   fetch = false,
   address,
 }: Props) => {
-  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
-    undefined,
-  );
   const { read, tokenInformation } = useTokenInformation();
 
   const { tokenDictionary } = useTokens();
-  useEffect(() => {
+  useMemo(() => {
     const fetchData = async () => {
-      if (fetch && address) {
+      if (fetch && address && !tokenInformation) {
         await read({ address: address });
-      }
-      if (tokenInformation && fetch) {
-        setSelectedToken(tokenInformation);
       }
     };
 
     void fetchData();
-  }, [read, token, fetch, tokenInformation]);
+  }, [token]);
 
   const getTokenImgUri = () => {
     if (token && token.logoURI) {
@@ -59,7 +53,7 @@ export const TokenIcon = ({
       <AvatarImage src={getTokenImgUri()} className="rounded-full" />
       <AvatarFallback className="text-xs font-bold">
         {fetch
-          ? selectedToken?.symbol?.slice(0, 3)
+          ? tokenInformation?.symbol?.slice(0, 3)
           : token?.symbol?.slice(0, 3)}
       </AvatarFallback>
     </Avatar>

@@ -20,7 +20,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    ".next/types/**/*.ts",
-    "src/hooks/usePollPrices.ts"
+    ".next/types/**/*.ts"
   ]
 }

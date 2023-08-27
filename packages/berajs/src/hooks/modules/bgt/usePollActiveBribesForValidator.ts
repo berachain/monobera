@@ -2,7 +2,7 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient, type Address } from "wagmi";
 
-import { BGT_PRECOMPILE_ABI } from "~/config";
+import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 
@@ -12,18 +12,24 @@ export const usePollActiveBribesForValidator = (
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
-  const method = "getActiveBribesForValidator";
+  const method = "getActiveValidatorBribes";
   const QUERY_KEY = [validatorAddress, method];
   useSWR(
     QUERY_KEY,
     async () => {
-      const result = await publicClient.readContract({
-        address: networkConfig.precompileAddresses.erc20BgtAddress as Address,
-        abi: BGT_PRECOMPILE_ABI,
-        functionName: method,
-        args: [validatorAddress],
-      });
-
+      if (!validatorAddress) return undefined;
+      const result = await publicClient
+        .readContract({
+          address: networkConfig.precompileAddresses
+            .erc20BribeModule as Address,
+          abi: BRIBE_PRECOMPILE_ABI,
+          functionName: method,
+          args: [validatorAddress],
+        })
+        .catch((e) => {
+          console.log(e);
+          return undefined;
+        });
       return result;
     },
     {

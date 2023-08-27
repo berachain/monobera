@@ -31,10 +31,6 @@ export default function Validator({
 
   const { useActiveValidator, usePercentageDelegated } =
     usePollActiveValidators();
-
-  // const { useValidatorBribes } = usePollValidatorBribes(validatorAddress);
-  // const bribes = useValidatorBribes();
-
   const validator = useActiveValidator(validatorAddress);
   const percentageDelegated = usePercentageDelegated(validatorAddress);
   return (
@@ -90,7 +86,7 @@ export default function Validator({
           <Uptime />
         </div>
       </div>
-      <BribesAndEmissions />
+      <BribesAndEmissions validatorAddress={validatorAddress} />
 
       <div className="">
         <div className="mb-4 flex items-center text-lg font-semibold leading-7">
@@ -105,7 +101,7 @@ export default function Validator({
         <div className="mb-4 flex items-center text-lg font-semibold leading-7">
           Bribes
         </div>
-        <BribeList />
+        <BribeList validatorAddress={validatorAddress} />
       </div>
 
       <ValidatorActivitiesTable validatorAddress={validatorAddress} />
