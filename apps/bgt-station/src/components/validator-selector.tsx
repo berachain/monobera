@@ -5,6 +5,7 @@ import {
   usePollAccountDelegations,
   usePollActiveValidators,
   usePollDelegatorValidators,
+  usePollGlobalValidatorBribes,
   type Validator,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
@@ -18,6 +19,7 @@ import { formatUnits, getAddress } from "viem";
 import { formatCommission } from "~/utils/formatCommission";
 import { ValidatorGauge } from "~/app/validators/validators-table";
 import { validator_table_columns } from "~/columns/validator-table-columns";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import RT from "./react-table";
 
 export default function ValidatorSelector({
@@ -31,8 +33,7 @@ export default function ValidatorSelector({
   showDelegated?: boolean;
   emptyMessage?: string;
 }) {
-  const { useActiveValidators, useActiveValidator } = usePollActiveValidators();
-  const validators: Validator[] | undefined = useActiveValidators();
+  const { useActiveValidator } = usePollActiveValidators();
 
   const validValidator = useActiveValidator(validatorAddress);
   const [open, setOpen] = React.useState(false);
@@ -40,8 +41,18 @@ export default function ValidatorSelector({
   const { useDelegatorValidators } = usePollDelegatorValidators();
   const delegatedValidators: Validator[] | undefined = useDelegatorValidators();
 
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const { usePolValidators, useDelegatorPolValidators, isLoading } =
+    usePollGlobalValidatorBribes(prices);
+  const [keyword, setKeyword] = React.useState("");
+  const validators = usePolValidators();
+  const delegatorPolValidators = useDelegatorPolValidators(
+    delegatedValidators?.map((d) => d.operatorAddress),
+  );
+
   const filteredValidators = useMemo(
-    () => (showDelegated ? delegatedValidators : validators),
+    () => (showDelegated ? delegatorPolValidators : validators),
     [validators, showDelegated],
   );
 

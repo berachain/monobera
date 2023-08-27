@@ -75,7 +75,7 @@ export const usePollActiveValidators = () => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
-  useSWR(
+  const { isLoading } = useSWR(
     "getValidators",
     async () => {
       const result = (await publicClient
@@ -179,5 +179,6 @@ export const usePollActiveValidators = () => {
     useEstimatedBlocksPerYear,
     useValidatorTokens,
     useValidatorAddresses,
+    isLoading,
   };
 };

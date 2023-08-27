@@ -20,13 +20,14 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
   );
   const cuttingBoard = useValidatorCuttingBoard();
 
+  console.log("cuttingBoard", cuttingBoard);
   const highestVotedGauge = React.useMemo(() => {
     return cuttingBoard ? cuttingBoard[0].address : undefined;
   }, [cuttingBoard]);
   const { gaugeDictionary } = useTokens();
   const value =
     highestVotedGauge === undefined || gaugeDictionary === undefined
-      ? ""
+      ? "no gauges"
       : gaugeDictionary[getAddress(highestVotedGauge)]?.name ??
         truncateHash(highestVotedGauge);
   return (
@@ -39,7 +40,7 @@ export default function ValidatorsTable() {
   const router = useRouter();
   const { usePrices } = usePollPrices();
   const prices = usePrices();
-  const { usePolValidators } = usePollGlobalValidatorBribes(prices);
+  const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
   const [keyword, setKeyword] = React.useState("");
   const validators = usePolValidators();
 
@@ -64,13 +65,17 @@ export default function ValidatorsTable() {
           onChange={(e) => setKeyword(e.target.value)}
         />
       </div>
-      <DataTable
-        columns={general_validator_columns}
-        data={filteredValidators ?? []}
-        onRowClick={(row: any) =>
-          router.push(`/validators/${BeravaloperToEth(row.original.address)}`)
-        }
-      />
+      {isLoading ? (
+        <>loading...</>
+      ) : (
+        <DataTable
+          columns={general_validator_columns}
+          data={filteredValidators ?? []}
+          onRowClick={(row: any) =>
+            router.push(`/validators/${BeravaloperToEth(row.original.address)}`)
+          }
+        />
+      )}
     </div>
   );
 }

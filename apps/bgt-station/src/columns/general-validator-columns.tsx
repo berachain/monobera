@@ -1,6 +1,6 @@
 import React from "react";
 import { BeravaloperToEth, type PoLValidator } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { formatCommission } from "~/utils/formatCommission";
@@ -65,10 +65,11 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     ),
     cell: ({ row }) => {
       const vApy = row.original.vApy;
+      console.log(vApy);
       return (
         <div className="flex h-full w-[91px] items-center">
           {" "}
-          {Number(vApy).toFixed(2)}%
+          {Number(vApy ?? 0).toFixed(2)}%
         </div>
       );
     },
@@ -93,7 +94,7 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     ),
     cell: ({ row }) => {
       const tokens = row.original.bribeTokenList;
-      return <>{tokens}</>;
+      return <TokenIconList tokenList={tokens ?? []} size={24} showCount={3} />;
     },
     accessorKey: "bribes",
     enableSorting: false,

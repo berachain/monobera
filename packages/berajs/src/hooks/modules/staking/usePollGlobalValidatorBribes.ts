@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import useSWR, { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, getAddress } from "viem";
@@ -48,6 +49,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
     useActiveValidators,
     useTotalDelegated,
     useTotalValidators,
+    isLoading: isLoadingValidators,
   } = usePollActiveValidators();
   const validatorAddresses = useValidatorAddresses();
   const validators = useActiveValidators();
@@ -68,7 +70,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
 
   const GLOBAL_BRIBES_KEY = "globalBribes";
   const GLOBAL_AVG_VAPY = "globalAvgVAPY";
-  useSWR(
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       if (!validatorAddresses || !validators || !prices) return undefined;
@@ -162,6 +164,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
           0,
         );
 
+        console.log(bribeTokenList);
         mutate(
           [
             ACTIVE_BRIBES_TOTAL_AMOUNT_KEY,
@@ -180,7 +183,9 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
         // calculate vAPY
         const estimatedUsdPerYear =
           totalPerProposalUsdAmount * estimatedValidatorBlocksPerYear;
-        const vAPY = estimatedUsdPerYear / validatorTVL;
+        const vAPY = Number.isNaN(estimatedUsdPerYear / validatorTVL)
+          ? 0
+          : (estimatedUsdPerYear / validatorTVL) * 100;
         mutate(
           [VALIDATOR_VAPY_KEY, BeravaloperToEth(validator.operatorAddress)],
           vAPY,
@@ -236,7 +241,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
   };
 
   const useValidatorvAPY = (address: string) => {
-    const { data = undefined } = useSWRImmutable([VALIDATOR_VAPY_KEY, address]);
+    const { data = 0 } = useSWRImmutable([VALIDATOR_VAPY_KEY, address]);
     return data;
   };
 
@@ -255,6 +260,16 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
     return data;
   };
 
+  const useDelegatorPolValidators = (addresses: string[] | undefined) => {
+    const { data = [] } = useSWRImmutable([POL_VALIDATOR_LIST_KEY]);
+
+    return useMemo(() => {
+      if (!data || addresses?.length === 0 || !addresses) return [];
+      return data.filter((validator: PoLValidator) => {
+        return addresses.includes(validator.operatorAddress);
+      });
+    }, [addresses, data]);
+  };
   return {
     useGlobalActiveBribeValue,
     useGlobalAvgApy,
@@ -263,5 +278,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
     useValidatorActiveBribes,
     usePolValidators,
     usePolValidator,
+    useDelegatorPolValidators,
+    isLoading: isLoadingValidators || isLoading || prices === undefined,
   };
 };
