@@ -1,59 +1,102 @@
 import React from "react";
-import { Tooltip, type Columns } from "@bera/shared-ui";
-import { Icons } from "@bera/ui/icons";
+import { BeravaloperToEth, type PoLValidator } from "@bera/berajs";
+import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
+import { type ColumnDef } from "@tanstack/react-table";
 
-export const general_validator_columns: Columns = [
+import { formatCommission } from "~/utils/formatCommission";
+import { VP } from "~/components/validator-selector";
+import { ValidatorGauge } from "~/app/validators/validators-table";
+
+export const general_validator_columns: ColumnDef<PoLValidator>[] = [
   {
-    header: <div className="w-[49px]">Delegate</div>,
-    accessor: "delegate",
-  },
-  {
-    header: <div className="w-[137px] text-left">Validator</div>,
-    accessor: "validator",
-  },
-  {
-    header: (
-      <div className="flex w-[96px] items-center gap-1">
-        Voting Power{" "}
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Rank" />
     ),
-    accessor: "votingPower",
+    cell: ({ row }) => {
+      const rank = row.original.rank;
+      return <div className="flex h-full w-[91px] items-center">{rank}</div>;
+    },
+    accessorKey: "delegate",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[91px] items-center gap-1">
-        Commission{" "}
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Validator" />
     ),
-    accessor: "commission",
+    cell: ({ row }) => {
+      const moniker = row.original.description.moniker;
+
+      return <>{moniker}</>;
+    },
+    accessorKey: "description",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[67px] items-center gap-1">
-        vAPY
-        <Tooltip text="Estimated bribe rewards" />
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Voting Power" />
     ),
-    accessor: "vAPY",
+    cell: ({ row }) => {
+      const operatorAddress = row.original.operatorAddress;
+      const tokens = row.original.tokens;
+      return <VP operatorAddress={operatorAddress} tokens={tokens} />;
+    },
+    accessorKey: "tokens",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[141px] items-center gap-1">
-        Most weighted gauge
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Commission" />
     ),
-    accessor: "mostWeightedGauge",
+    cell: ({ row }) => {
+      const commission = row.original.commission.commissionRates.rate;
+      return (
+        <div className="flex h-full w-[91px] items-center">
+          {" "}
+          {formatCommission(commission)}%
+        </div>
+      );
+    },
+    accessorKey: "commission",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[136px] items-center gap-1">
-        Bribes
-        <Tooltip text="Bribes emitted by this validator" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="vApy" />
     ),
-    accessor: "bribes",
+    cell: ({ row }) => {
+      const vApy = row.original.vApy;
+      console.log(vApy);
+      return (
+        <div className="flex h-full w-[91px] items-center">
+          {" "}
+          {Number(vApy ?? 0).toFixed(2)}%
+        </div>
+      );
+    },
+    accessorKey: "vApy",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
+    ),
+    cell: ({ row }) => {
+      const operatorAddress = row.original.operatorAddress;
+      console.log(operatorAddress);
+      return <ValidatorGauge address={BeravaloperToEth(operatorAddress)} />;
+    },
+    accessorKey: "mostWeightedGauge",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Bribes" />
+    ),
+    cell: ({ row }) => {
+      const tokens = row.original.bribeTokenList;
+      return <TokenIconList tokenList={tokens ?? []} size={24} showCount={3} />;
+    },
+    accessorKey: "bribes",
+    enableSorting: false,
   },
 ];

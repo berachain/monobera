@@ -2,7 +2,11 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { BeravaloperToEth, type Validator } from "@bera/berajs";
+import {
+  BeravaloperToEth,
+  usePollGlobalValidatorBribes,
+  type Validator,
+} from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
 import { IconList } from "@bera/shared-ui";
 import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
@@ -11,13 +15,23 @@ import { formatUnits } from "viem";
 
 import { formatCommission } from "~/utils/formatCommission";
 import YellowCard from "~/components/yellow-card";
+import { usePollPrices } from "~/hooks/usePollPrices";
 
 export default function ValidatorCard(validator: { validator: Validator }) {
   const router = useRouter();
-
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const { useValidatorvAPY, useValidatorTotalActiveBribeValue } =
+    usePollGlobalValidatorBribes(prices);
+  const bribeValue = useValidatorTotalActiveBribeValue(
+    BeravaloperToEth(validator.validator.operatorAddress),
+  );
+  const vApy = useValidatorvAPY(
+    BeravaloperToEth(validator.validator.operatorAddress),
+  );
   const info = [
     {
-      amount: "$69K",
+      amount: `$${formatter.format(Number(bribeValue ?? 0))}`,
       text: "Bribe value",
     },
     {
@@ -34,7 +48,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
       text: "Commission",
     },
     {
-      amount: "213%",
+      amount: `${vApy?.toFixed(2) ?? 0}%`,
       text: "vAPY",
     },
   ];

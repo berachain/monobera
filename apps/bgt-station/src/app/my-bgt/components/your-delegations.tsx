@@ -13,7 +13,7 @@ export default function YourDelegations() {
 
   return (
     <div>
-      {total !== 0 ? (
+      {total !== 0 && !Number.isNaN(total) ? (
         <div className="flex flex-col gap-3">
           {validValidators?.map((validator: Validator) => (
             <ValidatorCard

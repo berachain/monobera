@@ -3,9 +3,11 @@ import {
   formatter,
   usePollActiveValidators,
   usePollBgtSupply,
+  usePollGlobalValidatorBribes,
 } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
+import { usePollPrices } from "~/hooks/usePollPrices";
 import { EpochTimeline } from "./epoch-timeline";
 import { Stats } from "./stats";
 
@@ -14,13 +16,17 @@ export function Details() {
   const total = useTotalValidators();
   const { useBgtSupply } = usePollBgtSupply();
   const bgtSupply = useBgtSupply();
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const { useGlobalAvgApy } = usePollGlobalValidatorBribes(prices);
+  const avgApy = useGlobalAvgApy();
   const generalInfo = [
     {
       amount: Number.isNaN(total) ? 0 : total,
       text: "Active validators",
     },
     {
-      amount: "34%",
+      amount: `${avgApy?.toFixed(2) ?? 0}%`,
       text: "Average APY",
     },
     {

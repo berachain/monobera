@@ -52,6 +52,7 @@ const useTokenInformation = (): useTokenInformationApi => {
         });
         setTokenInformation(formattedToken);
       } catch (e: any) {
+        console.log(e);
         setError(e);
         dispatch({
           type: ActionEnum.ERROR,

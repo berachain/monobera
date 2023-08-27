@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { formatUsd, usePollValidatorBribes } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card } from "@bera/ui/card";
@@ -9,9 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
+import { type Address } from "viem";
 
 import YellowCard from "~/components/yellow-card";
 import { generateRandomData } from "~/app/governance/home/mockData";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import { TimeFrameEnum } from "./types";
 
 const Options = {
@@ -97,7 +100,16 @@ const getChartData = (
   };
 };
 
-export default function BribesAndEmissions() {
+export default function BribesAndEmissions({
+  validatorAddress,
+}: {
+  validatorAddress: Address | undefined;
+}) {
+  const { useActiveValidatorBribesTotalValue } =
+    usePollValidatorBribes(validatorAddress);
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const bribesTotalValue = useActiveValidatorBribesTotalValue(prices);
   const [timeframe, setTimeframe] = React.useState(TimeFrameEnum.ALL_TIME);
 
   const chartData = useMemo(
@@ -113,7 +125,7 @@ export default function BribesAndEmissions() {
       <div className="mt-4 flex gap-4">
         <YellowCard className="flex w-full justify-center p-8">
           <div className="text-3xl font-semibold leading-9 text-foreground">
-            $2,000
+            {formatUsd(bribesTotalValue ?? 0)}
           </div>
           <div className="text-sm font-medium leading-[14px] text-muted-foreground">
             Total value

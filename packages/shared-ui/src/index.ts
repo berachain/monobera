@@ -34,3 +34,4 @@ export { Gradient } from "./gradient";
 export { BearBG } from "./bear-bg";
 
 export * from "./hooks";
+export * from "./token-icon-list";
