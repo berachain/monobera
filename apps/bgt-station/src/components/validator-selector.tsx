@@ -79,15 +79,21 @@ export default function ValidatorSelector({
   );
 }
 
-export const VP = ({ validator }: { validator: Validator }) => {
+export const VP = ({
+  operatorAddress,
+  tokens,
+}: {
+  operatorAddress: string;
+  tokens: string;
+}) => {
   const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(
-    cosmosvaloperToEth(validator.operatorAddress),
+    cosmosvaloperToEth(operatorAddress),
   );
 
   return (
     <div className="flex h-full w-24 items-center">
-      {formatter.format(Number(formatUnits(BigInt(validator.tokens), 18)))} (
+      {formatter.format(Number(formatUnits(BigInt(tokens), 18)))} (
       {percentageDelegated?.toFixed(2)}%)
     </div>
   );
@@ -122,7 +128,8 @@ const ValidatorModal = ({
         bgt_delegated: (
           <BGTDelegated operatorAddress={validator.operatorAddress} />
         ),
-        vp: <VP validator={validator} />,
+        // vp: <VP validator={validator} />,
+        vp: undefined,
         commission: (
           <div className="flex h-full w-[91px] items-center">
             {" "}

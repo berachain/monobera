@@ -6,3 +6,4 @@ export * from "./usePollDelegatorValidators";
 export * from "./useInfiniteValidatorDelegations";
 export * from "./usePollValidatorBribes";
 export * from "./usePollValidatorCuttingBoard";
+export * from "./usePollGlobalValidatorBribes";

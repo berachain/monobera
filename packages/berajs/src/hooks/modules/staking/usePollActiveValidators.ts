@@ -9,6 +9,11 @@ import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 import { BeravaloperToEth, defaultPagination } from "~/utils";
 import { usePollBgtSupply } from "../bank";
+import {
+  getEstimatedBlocksPerYear,
+  getPercentageGlobalVotingPower,
+  getValidatorTotalDelegated,
+} from "./utils";
 
 export interface Validator {
   operatorAddress: string;
@@ -112,6 +117,11 @@ export const usePollActiveValidators = () => {
     }, [data, address]);
   };
 
+  const useValidatorTokens = (address: string | undefined): number => {
+    const validator = useActiveValidator(address);
+    return getValidatorTotalDelegated(validator);
+  };
+
   const useTotalValidators = (): number => {
     const { data } = useSWRImmutable<ValidatorListResponse>("getValidators");
     return Number(data?.total) ?? 0;
@@ -141,22 +151,24 @@ export const usePollActiveValidators = () => {
     const total = useTotalDelegated();
     const validator = useActiveValidator(address);
     return useMemo(() => {
-      if (total && validator) {
-        return (
-          (Number(formatUnits(BigInt(validator.tokens), 18)) / total) * 100
-        );
-      }
-      return undefined;
+      return getPercentageGlobalVotingPower(validator, total);
     }, [total, validator]);
   };
 
   const useEstimatedBlocksPerYear = (address: string) => {
     const percentDelegated = usePercentageDelegated(address);
-    const blockTime = Number(process.env.NEXT_PUBLIC_BLOCKTIME);
-    const blocksPerYear = (365 * 24 * 60 * 60) / blockTime;
-    return percentDelegated ? (percentDelegated * blocksPerYear) / 100 : 0;
+    return getEstimatedBlocksPerYear(percentDelegated);
   };
 
+  const useValidatorAddresses = (): string[] | undefined => {
+    const validators = useActiveValidators();
+    return useMemo(() => {
+      if (!validators) return undefined;
+      return validators.map((v: Validator) =>
+        BeravaloperToEth(v.operatorAddress),
+      );
+    }, [validators]);
+  };
   return {
     useActiveValidators,
     useActiveValidator,
@@ -165,5 +177,7 @@ export const usePollActiveValidators = () => {
     usePercentOfStakedBGT,
     useTotalValidators,
     useEstimatedBlocksPerYear,
+    useValidatorTokens,
+    useValidatorAddresses,
   };
 };
