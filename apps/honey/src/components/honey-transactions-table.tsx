@@ -342,7 +342,7 @@ export const EventTable = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {events?.length ? (
+        {events?.length && events[0] && Object.keys(events[0]).length !== 0 ? (
           events?.map((event: MintData | any | undefined) => {
             if (!event) return null;
             return (
