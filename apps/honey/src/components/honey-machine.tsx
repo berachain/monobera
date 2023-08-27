@@ -14,6 +14,7 @@ import {
 import { motion } from "framer-motion";
 import { erc20ABI } from "wagmi";
 
+import { cloudinaryUrl } from "~/config";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { HoneyTokenInput } from "./honey-token-input";
@@ -362,7 +363,7 @@ export function HoneyMachine() {
                         }}
                       >
                         <Image
-                          src={"/SWAP.png"}
+                          src={`${cloudinaryUrl}/honey/xf16svjytnrzqbgmlafk`}
                           width={50}
                           height={50}
                           alt="Swap icon"
