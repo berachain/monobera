@@ -14,24 +14,21 @@ import { SwapCard } from "~/components/swap-card";
 import { type HoneySupply, type HoneyVolume } from "./type";
 
 export default function HoneyPage({
-  volume,
-  weeklyVolume,
-  monthlyVolume,
-  quarterlyVolume,
-  supply,
-  weeklySupply,
-  monthlySupply,
-  quarterlySupply,
+  data,
+  weeklyData,
+  monthlyData,
+  quarterlyData,
 }: {
-  volume: HoneyVolume;
-  weeklyVolume: HoneyVolume;
-  monthlyVolume: HoneyVolume;
-  quarterlyVolume: HoneyVolume;
-  supply: HoneySupply;
-  weeklySupply: HoneySupply;
-  monthlySupply: HoneySupply;
-  quarterlySupply: HoneySupply;
+  data: [HoneyVolume, HoneySupply];
+  weeklyData: [HoneyVolume, HoneySupply];
+  monthlyData: [HoneyVolume, HoneySupply];
+  quarterlyData: [HoneyVolume, HoneySupply];
 }) {
+  const [volume, supply] = data;
+  const [weeklyVolume, weeklySupply] = weeklyData;
+  const [monthlyVolume, monthlySupply] = monthlyData;
+  const [quarterlyVolume, quarterlySupply] = quarterlyData;
+
   const [mode, setMode] = useState<"pro" | "arcade">("pro");
   const arcade = mode === "arcade";
 
@@ -90,8 +87,8 @@ export default function HoneyPage({
           >
             <div className="py-4 lg:py-0">
               <Data
-                tvl={supply.honeyTotalSupply[0]?.amount || "0"}
-                dailyVolume={volume.honeyVolume[0]?.amount || "0"}
+                dailyVolume={volume.honeyVolume?.[0]?.amount ?? "0"}
+                tvl={supply.honeyTotalSupply?.[0]?.amount ?? "0"}
                 arcade={arcade}
               />
             </div>
@@ -114,14 +111,14 @@ export default function HoneyPage({
                 Total Honey Supply
               </h3>
               <Graph
-                hourlySupply={supply?.honeyTotalSupply ?? []}
-                hourlyVolume={volume?.honeyVolume ?? []}
-                weeklyVolume={weeklyVolume?.honeyVolume ?? []}
-                weeklySupply={weeklySupply?.honeyTotalSupply ?? []}
-                monthlyVolume={monthlyVolume?.honeyVolume ?? []}
-                monthlySupply={monthlySupply?.honeyTotalSupply ?? []}
-                quarterlyVolume={quarterlyVolume?.honeyVolume ?? []}
-                quarterlySupply={quarterlySupply?.honeyTotalSupply ?? []}
+                hourlySupply={supply.honeyTotalSupply ?? []}
+                hourlyVolume={volume.honeyVolume ?? []}
+                weeklyVolume={weeklyVolume.honeyVolume ?? []}
+                weeklySupply={weeklySupply.honeyTotalSupply ?? []}
+                monthlyVolume={monthlyVolume.honeyVolume ?? []}
+                monthlySupply={monthlySupply.honeyTotalSupply ?? []}
+                quarterlyVolume={quarterlyVolume.honeyVolume ?? []}
+                quarterlySupply={quarterlySupply.honeyTotalSupply ?? []}
                 arcade={arcade}
               />
             </div>
