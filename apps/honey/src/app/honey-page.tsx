@@ -51,7 +51,9 @@ export default function HoneyPage({
     <div className={cn("pt-[72px]", arcade ? "bg-[#468DCB] font-honey" : "")}>
       <div className="hidden h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline honey:block">
         {arcade ? (
-          <div onClick={() => setMode("pro")}>🍯 Enter Honey Pro Mode</div>
+          <div onClick={() => setMode("pro")} className="font-honey">
+            🍯 Enter Honey Pro Mode
+          </div>
         ) : (
           <div onClick={() => setMode("arcade")}>
             🕹️ Enter Honey Arcade Mode
