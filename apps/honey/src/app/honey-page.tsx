@@ -35,6 +35,11 @@ export default function HoneyPage({
 
   const arcade = mode === "arcade";
   const router = useRouter();
+
+  if (arcade && window && window.innerWidth < 1000) {
+    router.push("/?mode=pro");
+  }
+
   useEffect(() => {
     const handleResize = () => {
       if (arcade && window.innerWidth < 1000) {
