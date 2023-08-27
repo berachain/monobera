@@ -218,7 +218,7 @@ export const Icons = {
       x="0px"
       y="0px"
       viewBox="0 0 3238.5 1608"
-      enable-background="new 0 0 3238.5 1608"
+      enableBackground="new 0 0 3238.5 1608"
       xmlSpace="preserve"
       {...props}
     >

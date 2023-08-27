@@ -30,10 +30,6 @@ export const navItems = [
     href: "/",
     title: "Home",
   },
-  {
-    href: "/mint",
-    title: "Mint",
-  },
   // Coming thoon
   // {
   //   href: "/stats",
