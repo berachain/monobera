@@ -4,38 +4,41 @@
 
 @layer base {
   :root {
+    --hover: 20deg 6% 90%;
+
     --background: 60deg 9% 98%;
-    --background-secondary: 27deg 33% 62%;
+    --background-secondary: 27deg 33% 62%; /* deprecated */
 
     --foreground: 12deg 6% 15%;
-    --foreground-secondary: 27deg 33% 62%;
-    --foreground-tetriary: 0deg 0% 60%;
+    --foreground-secondary: 33deg 5% 32%; /* deprecated */
+    --foreground-tetriary: 0deg 0% 60%; /* deprecated */
+
+    --popover: 60deg 9% 98%;
+    --popover-foreground: 12deg 6% 15%;
+
+    --card: 60deg 9% 98%;
+    --card-foreground: 12deg 6% 15%;
 
     --muted: 60deg 5% 96%;
     --muted-foreground: 25deg 5% 45%;
 
-    --popover: 60deg 5% 96%;
-    --popover-foreground: 20deg 6% 90%;
+    --primary: 12deg 6% 15%;
+    --primary-foreground: 60deg 9% 98%;
+
+    --secondary: 20deg 6% 90%;
+    --secondary-foreground: 33deg 5% 32%;
+    /* 33deg 3% 38% */
+    --accent: 43deg 96% 56%;
+    --accent-foreground: 60deg 9% 98%;
 
     --border: 20deg 6% 90%;
-    --border-secondary: 27deg 32% 76%;
-    --input: 60deg 9% 98%;
+    --border-secondary: 27deg 32% 76%; /* deprecated */
 
-    --card: 0deg 0% 100%;
-    --card-foreground: 222.2deg 47.4% 11.2%;
+    --input: 60deg 5% 96%;
 
-    --primary: 30deg 6% 25%;
-    --primary-foreground: 24deg 5% 64%;
+    --positive: 111deg 59% 65%; /* deprecated */
 
-    --secondary: 33deg 5% 32%;
-    --secondary-foreground: 24deg 6% 83%;
-
-    --accent: 210deg 40% 96.1%;
-    --accent-foreground: 28deg 33% 69%;
-
-    --positive: 111deg 59% 65%;
-
-    --destructive: 0deg 96% 64%;
+    --destructive: 0deg 86% 97%;
     --destructive-foreground: 0deg 72% 51%;
 
     --warning: 55deg 92% 95%;
@@ -47,44 +50,48 @@
     --success: 152deg 81% 96%;
     --success-foreground: 161deg 94% 30%;
 
-    --ring: 27deg 32% 76%;
+    --ring: 27deg 32% 76%; /* deprecated */
 
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 223deg 27% 13%;
-    --background-secondary: 27deg 28% 47%;
-    --foreground: 26deg 30% 89%;
-    --foreground-secondary: 27deg 33% 62%;
-    --foreground-tetriary: 0deg 0% 60%;
+    --hover: 20deg 6% 90%;
 
-    --muted: 223deg 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
+    --background: 60deg 9% 98%;
+    --background-secondary: 27deg 33% 62%; /* deprecated */
 
-    --accent: 216deg 34% 17%;
-    --accent-foreground: 210 40% 98%;
+    --foreground: 12deg 6% 15%;
+    --foreground-secondary: 33deg 5% 32%; /* deprecated */
+    --foreground-tetriary: 0deg 0% 60%; /* deprecated */
 
-    --popover: 223deg 27% 13%;
-    --popover-foreground: 215 20.2% 65.1%;
+    --popover: 60deg 9% 98%;
+    --popover-foreground: 12deg 6% 15%;
 
-    --border: 26deg 30% 89%;
-    --border-secondary: 224deg 28% 24%;
-    --input: 216 34% 17%;
+    --card: 60deg 9% 98%;
+    --card-foreground: 12deg 6% 15%;
 
-    --card: 224deg 24% 22%;
-    --card-foreground: 32deg 52% 90%;
+    --muted: 60deg 5% 96%;
+    --muted-foreground: 25deg 5% 45%;
 
-    --primary: 27deg 28% 47%;
-    --primary-foreground: #44403c;
+    --primary: 12deg 6% 15%;
+    --primary-foreground: 60deg 9% 98%;
 
-    --secondary: 15deg 9% 42%;
-    --secondary-foreground: 32deg 52% 90%;
+    --secondary: 20deg 6% 90%;
+    --secondary-foreground: 33deg 5% 32%;
+    /* 33deg 3% 38% */
+    --accent: 43deg 96% 56%;
+    --accent-foreground: 60deg 9% 98%;
 
-    --positive: 111deg 59% 65%;
+    --border: 20deg 6% 90%;
+    --border-secondary: 27deg 32% 76%; /* deprecated */
 
-    --destructive: 0deg 96% 64%;
-    --destructive-foreground: 210 40% 98%;
+    --input: 60deg 5% 96%;
+
+    --positive: 111deg 59% 65%; /* deprecated */
+
+    --destructive: 0deg 86% 97%;
+    --destructive-foreground: 0deg 72% 51%;
 
     --warning: 55deg 92% 95%;
     --warning-foreground: 41deg 96% 40%;
@@ -95,7 +102,7 @@
     --success: 152deg 81% 96%;
     --success-foreground: 161deg 94% 30%;
 
-    --ring: 224deg 28% 24%;
+    --ring: 27deg 32% 76%; /* deprecated */
 
     --radius: 0.5rem;
   }
@@ -155,4 +162,14 @@ input[type="number"] {
 .home-background {
   background-position-y: 200px;
   background-position-x: center;
+}
+
+@keyframes moveUpDown {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }

@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
 
-const endpoint = process.env.NEXT_PUBLIC_INDEXER_ENDPOINT;
+import { indexerUrl } from "~/config";
+
 async function getMints(page: number, perPage: number) {
   try {
     const res: any = await fetch(
-      `${endpoint}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
+      `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
       { cache: "no-store" },
     );
     const jsonRes = await res.json();
@@ -13,6 +14,11 @@ async function getMints(page: number, perPage: number) {
       throw new Error("Failed to fetch honey mint data");
     }
     return jsonRes;
+    // console.log(
+    //   "getMints",
+    //   jsonRes,
+    //   `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
+    // );
   } catch (e) {
     notFound();
   }
@@ -21,13 +27,19 @@ async function getMints(page: number, perPage: number) {
 async function getBurns(page: number, perPage: number) {
   try {
     const res: any = await fetch(
-      `${endpoint}/events/pol/honey_redeemed?num_of_days=1000000&page=${page}&per_page=${perPage}`,
+      `${indexerUrl}/events/pol/honey_redeemed?num_of_days=1000000&page=${page}&per_page=${perPage}`,
       { cache: "no-store" },
     );
     const jsonRes = await res.json();
+
     if (!jsonRes) {
       throw new Error("Failed to fetch add liquidity data");
     }
+    // console.log(
+    //   "getBurns",
+    //   jsonRes,
+    //   `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
+    // );
     return jsonRes;
   } catch (e) {
     notFound();
@@ -44,7 +56,7 @@ function sortByBlockTime(data: any[]): any[] {
 
 const DEFAULT_SIZE = 5;
 
-export const revalidate = 1000;
+export const revalidate = 600;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -61,10 +73,12 @@ export async function GET(request: Request) {
 
   const data: any = await Promise.all([mints, burns])
     .then(([mints, burns]) => ({
-      mints: mints.result,
-      burns: burns.result,
+      mints: mints.result ?? [],
+      burns: burns.result ?? [],
     }))
     .catch(() => undefined);
+
+  console.log("budatarns", data);
 
   if (!data) return NextResponse.json({});
 

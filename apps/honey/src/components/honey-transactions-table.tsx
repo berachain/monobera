@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { formatUsd, truncateHash } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import {
   Table,
@@ -86,9 +86,9 @@ function isBurnData(obj: any): obj is BurnData {
 
 const getAction = (event: any) => {
   if (isMintData(event)) {
-    return <p className="text-positive">Mint</p>;
+    return <p className="text-success-foreground">Mint</p>;
   } else if (isBurnData(event)) {
-    return <p className="text-destructive">Burn</p>;
+    return <p className="text-destructive-foreground">Burn</p>;
   }
   return <p>IDK</p>;
 };
@@ -161,7 +161,11 @@ const getValue = (event: MintData | BurnData) => {
   return 0;
 };
 
-export default function HoneyTransactionsTable() {
+export default function HoneyTransactionsTable({
+  arcade,
+}: {
+  arcade: boolean;
+}) {
   const [selectedTab, setSelectedTab] = useState(Selection.AllTransactions);
   const {
     allData,
@@ -182,48 +186,42 @@ export default function HoneyTransactionsTable() {
   } = useHoneyEvents();
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {
-      return (
+      return !isAllDataReachingEnd ? (
         <Button
           onClick={() => setAllDataSize(allDataSize + 1)}
           disabled={isAllDataLoadingMore || isAllDataReachingEnd}
           variant="outline"
         >
-          {isAllDataLoadingMore
-            ? "Loading..."
-            : isAllDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+          {isAllDataLoadingMore ? "Loading..." : "Load more"}
         </Button>
+      ) : (
+        <></>
       );
     }
     if (selectedTab === Selection.Mints) {
-      return (
+      return !isMintDataReachingEnd ? (
         <Button
           onClick={() => setMintDataSize(mintDataSize + 1)}
           disabled={isMintDataLoadingMore || isMintDataReachingEnd}
           variant="outline"
         >
-          {isMintDataLoadingMore
-            ? "Loading..."
-            : isMintDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+          {isMintDataLoadingMore ? "Loading..." : "Load more"}
         </Button>
+      ) : (
+        <></>
       );
     }
     if (selectedTab === Selection.Burns) {
-      return (
+      return !isBurnDataReachingEnd ? (
         <Button
           onClick={() => setBurnDataSize(burnDataSize + 1)}
           disabled={isBurnDataLoadingMore || isBurnDataReachingEnd}
           variant="outline"
         >
-          {isBurnDataLoadingMore
-            ? "Loading..."
-            : isBurnDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+          {isBurnDataLoadingMore ? "Loading..." : "Load more"}
         </Button>
+      ) : (
+        <></>
       );
     }
   };
@@ -234,32 +232,52 @@ export default function HoneyTransactionsTable() {
         defaultValue={Selection.AllTransactions}
         onValueChange={(value: string) => setSelectedTab(value as Selection)}
       >
-        <TabsList className="w-full">
+        <TabsList
+          className={cn(
+            "w-full rounded-xl ",
+            arcade && "border-2 border-dashed border-blue-900 bg-blue-50",
+          )}
+        >
           <TabsTrigger
             value={Selection.AllTransactions}
-            className="w-full text-xs sm:text-sm"
+            className={cn(
+              "w-full text-xs text-stone-700  sm:text-sm",
+              arcade && "data-[state=active]:bg-red-600",
+            )}
           >
-            All transactions
+            🧾 All {arcade ? "txns" : "transactions"}
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Mints}
-            className="w-full text-xs sm:text-sm"
+            className={cn(
+              "w-full text-xs text-stone-700  sm:text-sm",
+              arcade && "data-[state=active]:bg-red-600",
+            )}
           >
-            Mints
+            🪙 Mints
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Burns}
-            className="w-full text-xs sm:text-sm"
+            className={cn(
+              "w-full text-xs text-stone-700  sm:text-sm",
+              arcade && "data-[state=active]:bg-red-600",
+            )}
           >
-            Burns
+            🔥 Burns
           </TabsTrigger>
         </TabsList>
-        <Card className="mt-4">
+        <div
+          className={cn(
+            "mt-4 overflow-hidden rounded-xl border ",
+            arcade && "border-blue-300 bg-blue-50",
+          )}
+        >
           <TabsContent value={Selection.AllTransactions} className="mt-0">
             <EventTable
               prices={prices}
               events={allData}
               isLoading={isAllDataLoadingMore}
+              arcade={arcade}
             />
           </TabsContent>
           <TabsContent value={Selection.Mints} className="mt-0">
@@ -267,6 +285,7 @@ export default function HoneyTransactionsTable() {
               prices={prices}
               events={mintData}
               isLoading={isMintDataLoadingMore}
+              arcade={arcade}
             />
           </TabsContent>
           <TabsContent value={Selection.Burns} className="mt-0">
@@ -274,9 +293,10 @@ export default function HoneyTransactionsTable() {
               prices={prices}
               events={burnData}
               isLoading={isBurnDataLoadingMore}
+              arcade={arcade}
             />
           </TabsContent>
-        </Card>
+        </div>
         <div className="mt-4 flex justify-center">{getLoadMoreButton()}</div>
       </Tabs>
     </section>
@@ -286,20 +306,39 @@ export default function HoneyTransactionsTable() {
 export const EventTable = ({
   events,
   isLoading,
+  arcade,
 }: {
   prices: MappedTokens;
   events: MintData[] | BurnData[];
   isLoading: boolean | undefined;
+  arcade: boolean;
 }) => {
   return (
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead>Action</TableHead>
-          <TableHead>Value</TableHead>
-          <TableHead className="hidden sm:table-cell">Tokens</TableHead>
-          <TableHead className="hidden sm:table-cell">Account</TableHead>
-          <TableHead className="text-right">Time</TableHead>
+        <TableRow
+          className={cn(
+            arcade &&
+              "border-b border-blue-300 bg-blue-100 text-blue-600 hover:bg-blue-100",
+          )}
+        >
+          <TableHead className={cn(arcade && "text-blue-600")}>
+            Action
+          </TableHead>
+          <TableHead className={cn(arcade && "text-blue-600")}>Value</TableHead>
+          <TableHead
+            className={cn("hidden sm:table-cell", arcade && "text-blue-600")}
+          >
+            Tokens
+          </TableHead>
+          <TableHead
+            className={cn("hidden sm:table-cell", arcade && "text-blue-600")}
+          >
+            Account
+          </TableHead>
+          <TableHead className={cn("text-center", arcade && "text-blue-600")}>
+            Time
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -308,6 +347,10 @@ export const EventTable = ({
             if (!event) return null;
             return (
               <TableRow
+                className={cn(
+                  "hover:cursor-pointer",
+                  arcade ? "hover:bg-blue-200" : "hover:bg-muted",
+                )}
                 key={event?.metadata?.txHash}
                 onClick={() =>
                   window.open(
