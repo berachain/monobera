@@ -2,12 +2,19 @@ import React from "react";
 import Image from "next/image";
 import { Icons } from "@bera/ui/icons";
 
+import { cloudinaryUrl } from "~/config";
+
 export default function HoneyBanner() {
   return (
     <div className="mt-10 grid grid-cols-6 items-center gap-4 p-4">
       <div className="col-span-3">
         <div className="mb-4 max-w-[250px]">
-          <Image src={"/coinIcons.png"} alt="Coins" width={811} height={151} />
+          <Image
+            src={`${cloudinaryUrl}/honey/b0wxccnmqzvt2vkzjdm5`}
+            alt="Coins"
+            width={811}
+            height={151}
+          />
         </div>
         <h1 className="mb-3 text-5xl text-blue-900">Switch To Honey</h1>
         <p className="text-lg leading-normal text-blue-900">
