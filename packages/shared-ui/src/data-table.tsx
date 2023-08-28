@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { cn } from "@bera/ui";
 import {
   Table,
   TableBody,
@@ -27,7 +28,7 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onRowClick: any;
+  onRowClick?: (row: TData) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -92,7 +93,8 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table?.getRowModel().rows.map((row) => (
                 <TableRow
-                  onClick={() => onRowClick(row)}
+                  className={cn(onRowClick && "hover:cursor-pointer")}
+                  onClick={() => onRowClick && onRowClick(row as any)}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

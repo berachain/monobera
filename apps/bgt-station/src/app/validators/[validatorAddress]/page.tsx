@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
-import { type Address } from "viem";
 
+import { indexerUrl } from "~/config";
 import Validator from "./validator";
 
 type Props = {
@@ -16,8 +16,9 @@ export function generateMetadata({ params }: Props): Metadata {
 
 async function getCuttingBoard(address: string) {
   try {
+    // const res = await fetch(`${indexerUrl}/bgt/rewards/delegator/${address}`);
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/cuttingboards/active?validators=${address}`,
+      `${indexerUrl}/cuttingboards/active?validators=${address}`,
     );
     const jsonRes = await res.json();
     return jsonRes.result;
@@ -29,24 +30,11 @@ async function getCuttingBoard(address: string) {
 export default async function Page({
   params,
 }: {
-  params: { validatorAddress: string };
+  params: { validatorAddress: `0x${string}` };
 }) {
   const { validatorAddress } = params;
-  const cuttingBoard = getCuttingBoard(params?.validatorAddress);
-  const data: any = await Promise.all([cuttingBoard]).then(
-    ([cuttingBoard]) => ({
-      cuttingBoard: cuttingBoard,
-    }),
-  );
-  return (
-    <Validator
-      validatorAddress={validatorAddress as Address}
-      cuttingBoard={
-        data.cuttingBoard[0].weights.sort(
-          (a: { percentage: string }, b: { percentage: string }) =>
-            parseFloat(b.percentage) - parseFloat(a.percentage),
-        ) ?? undefined
-      }
-    />
-  );
+
+  const [cuttingBoard] = await Promise.all([getCuttingBoard(validatorAddress)]);
+
+  return <Validator {...{ validatorAddress, cuttingBoard }} />;
 }

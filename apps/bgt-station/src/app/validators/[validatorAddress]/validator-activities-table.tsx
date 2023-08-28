@@ -1,5 +1,4 @@
 import React from "react";
-import { useRouter } from "next/navigation";
 import {
   formatter,
   truncateHash,
@@ -7,13 +6,13 @@ import {
   usePollActiveValidators,
   type Validator,
 } from "@bera/berajs";
+import { DataTable } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
-import RT from "~/components/react-table";
 import {
   delegators_columns,
   recent_votes_columns,
@@ -30,19 +29,22 @@ export default function ValidatorActivitiesTable({
   );
   const { useActiveValidators, useActiveValidator } = usePollActiveValidators();
   const validators: Validator[] | undefined = useActiveValidators();
-  const router = useRouter();
   const validator = useActiveValidator(validatorAddress);
 
   const { data, size, isLoading, isReachingEnd, setSize } =
     useInfiniteValidatorDelegations(validatorAddress);
 
+  function getRandomTimestamp(start = new Date(2000, 0, 1), end = new Date()) {
+    return Math.floor(
+      start.getTime() + Math.random() * (end.getTime() - start.getTime()),
+    );
+  }
+
   const proposalData = validators?.map(() => ({
-    proposal: (
-      <div className="w-[350px]">What would a proposal title look like?</div>
-    ),
-    address: <div className="flex w-[88px]">0x0000...0000</div>,
-    stance: <div className="flex w-[60px] gap-1">stance</div>,
-    time: <div className="flex w-[126px] gap-1">2022-03-27 22:20:06</div>,
+    proposal: "What would a proposal title look like?",
+    address: "0x0000...0000",
+    stance: "stance",
+    time: getRandomTimestamp(),
   }));
 
   const getDelegatorPercentage = (shares: bigint) => {
@@ -50,6 +52,7 @@ export default function ValidatorActivitiesTable({
     const total = Number(formatUnits(validator?.delegatorShares ?? 0n, 18));
     return (s / total).toFixed(2);
   };
+
   const delegatorData = data?.map(
     (data: { delegator: Address; shares: bigint }) => ({
       delegator_address: (
@@ -85,25 +88,22 @@ export default function ValidatorActivitiesTable({
         </TabsList>
       </Tabs>
       {/* <SearchInput placeholder="Search" /> */}
-      <div className="w-full">
+      <div className="w-full min-w-[926px]">
         {tab === "recent-votes" ? (
-          <RT
-            columns={recent_votes_columns}
-            data={proposalData ?? []}
-            className="min-w-[926px]"
-          />
+          <DataTable columns={recent_votes_columns} data={proposalData ?? []} />
         ) : (
           <div className="flex w-full flex-col items-center gap-4">
-            <RT
+            <DataTable
               columns={delegators_columns}
               data={delegatorData ?? []}
-              rowOnClick={(row) => {
-                router.push(
+              onRowClick={(row) =>
+                window.open(
                   `${blockExplorerUrl}/address/${
                     data[Number(row.id)]?.delegator ?? ""
                   }`,
-                );
-              }}
+                  "_blank",
+                )
+              }
             />
 
             <Button

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -19,8 +21,6 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
     address as Address,
   );
   const cuttingBoard = useValidatorCuttingBoard();
-
-  console.log("cuttingBoard", cuttingBoard);
   const highestVotedGauge = React.useMemo(() => {
     return cuttingBoard ? cuttingBoard[0].address : undefined;
   }, [cuttingBoard]);
@@ -56,6 +56,7 @@ export default function ValidatorsTable() {
       );
     });
   }, [validators, keyword]);
+
   return (
     <div className="mt-16">
       <div className="mb-4">
@@ -64,6 +65,18 @@ export default function ValidatorsTable() {
           placeholder="Search by name or address"
           onChange={(e) => setKeyword(e.target.value)}
         />
+        <div
+          onClick={() =>
+            router.push(
+              `/validators/${BeravaloperToEth(
+                `cosmosvaloper1gy3nz5n6k8uhm5yqsg6sss3hkzfhfpdgfup7mr`,
+              )}`,
+            )
+          }
+        >
+          {" "}
+          go 2
+        </div>
       </div>
       {isLoading ? (
         <>loading...</>
@@ -71,9 +84,16 @@ export default function ValidatorsTable() {
         <DataTable
           columns={general_validator_columns}
           data={filteredValidators ?? []}
-          onRowClick={(row: any) =>
-            router.push(`/validators/${BeravaloperToEth(row.original.address)}`)
-          }
+          onRowClick={(row: any) => {
+            router.push(
+              `/validators/${BeravaloperToEth(row.original.address)}`,
+            );
+            console.log(
+              "hiiii",
+              row.original.address,
+              BeravaloperToEth(row.original.address),
+            );
+          }}
         />
       )}
     </div>

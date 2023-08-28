@@ -29,7 +29,7 @@ import { useForm } from "react-hook-form";
 import { isAddress } from "viem";
 import * as z from "zod";
 
-import { governanceAddress } from "~/config";
+import { governanceAddress, governanceMinDeposit } from "~/config";
 import { ProposalTypeEnum } from "../types";
 import NewGaugeForm from "./gauge-proposal-form";
 import NewCollateralForm from "./new-collateral-form";
@@ -41,7 +41,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const [_contentWidth, setContentWidth] = useState("w-[450px]");
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
-  const minDeposit = Number(process.env.NEXT_PUBLIC_GOVERNANCE_MIN_DEPOSIT);
+  const minDeposit = governanceMinDeposit;
   useEffect(() => {
     if (triggerRef.current) {
       const width = triggerRef.current.offsetWidth;

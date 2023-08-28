@@ -1,65 +1,94 @@
 import React from "react";
-import { Tooltip, type Columns } from "@bera/shared-ui";
-import { Icons } from "@bera/ui/icons";
+import { DataTableColumnHeader } from "@bera/shared-ui";
+import { type ColumnDef } from "@tanstack/react-table";
 
-export const validator_table_columns: Columns = [
+import { formatCommission } from "~/utils/formatCommission";
+
+export const validator_table_columns: ColumnDef<any>[] = [
   {
-    header: <div className="w-[137px] text-left">Validator</div>,
-    accessor: "validator",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Validator" />
+    ),
+    cell: ({ row }) => row.original.validator,
+    accessorKey: "validator",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[106px] items-center gap-1">
-        BGT delegated
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="BGT delegated" />
     ),
-    accessor: "bgt_delegated",
+    cell: ({ row }) => {
+      return (
+        <div className="flex w-[106px] items-center gap-1">
+          {row.original.bgt_delegated}
+        </div>
+      );
+    },
+    accessorKey: "bgt_delegated",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-24 items-center gap-1">
-        Voting power
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Voting power" />
     ),
-    accessor: "vp",
+    cell: ({ row }) => (
+      <div className="flex w-24 items-center">{row.original.vp}%</div>
+    ),
+    accessorKey: "vp",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[91px] items-center gap-1">
-        Commission
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Commission" />
     ),
-    accessor: "commission",
+    cell: ({ row }) => {
+      return (
+        <div className="flex w-[91px] items-center gap-1">
+          {formatCommission(row.original.commission)}%
+        </div>
+      );
+    },
+    accessorKey: "commission",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[67px] items-center gap-1">
-        vAPY
-        <Tooltip text="vAPY" />
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="vAPY" />
     ),
-    accessor: "vapy",
+    cell: ({ row }) => {
+      return (
+        <div className="flex w-[67px] items-center gap-1">
+          {row.original.vapy}%
+        </div>
+      );
+    },
+    accessorKey: "vapy",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[141px] items-center gap-1">
-        Most weighted gauge
-        <Tooltip text="vAPY" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Most weighted gauge" />
     ),
-    accessor: "mwg",
+    cell: ({ row }) => {
+      return (
+        <div className="flex w-[141px] items-center">{row.original.mwg}</div>
+      );
+    },
+    accessorKey: "mwg",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[136px] items-center justify-center gap-1">
-        Bribes
-        <Tooltip text="vAPY" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Bribes" />
     ),
-    accessor: "bribes",
+    cell: ({ row }) => {
+      return (
+        <div className="flex w-[136px] items-center justify-center gap-1">
+          {row.original.bribes}
+        </div>
+      );
+    },
+    accessorKey: "bribes",
+    enableSorting: false,
   },
 ];

@@ -22,6 +22,7 @@ export function TokenIconList({
     <div className="ml-[5px] flex items-center">
       {tokenList?.map((icon, index) => (
         <TokenIcon
+          key={index}
           address={icon}
           fetch={true}
           className={`ml-[-5px] w-[${size}px] h-[${size}px]`}

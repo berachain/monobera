@@ -1,17 +1,15 @@
 import React, { useEffect } from "react";
-import {
-  formatter,
-  truncateHash,
-  useTokens,
-  type CuttingBoard,
-} from "@bera/berajs";
+import { truncateHash, useTokens, type CuttingBoard } from "@bera/berajs";
+import { DataTable } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Checkbox } from "@bera/ui/checkbox";
 
 import { getColors } from "~/utils/colors";
-import RT from "~/components/react-table";
-import { global_gauge_weight_columns } from "~/columns/global-gauge-weight";
+import {
+  global_gauge_weight_columns,
+  type GlobalGaugeColumns,
+} from "~/columns/global-gauge-weight";
 
 const options = {
   plugins: {
@@ -102,26 +100,22 @@ export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
     setCuttingBoardData(temp);
   }, []);
 
-  const dataT = React.useMemo(() => {
-    return cuttingBoardData?.map((data, index: number) => ({
-      poolOrAddress: <Gauge address={data.label} />,
-      bgtIncentive: (
-        <div className="flex h-full w-[100px] items-center">
-          {formatter.format(data.amount)} ({data.percentage}%)
-        </div>
-      ),
-      tvl: <div className="flex h-full w-[53px] items-center">69.42M%</div>,
-      hide: (
-        <div className="flex w-[27px] justify-center">
-          {" "}
+  const dataT: GlobalGaugeColumns[] = React.useMemo(() => {
+    return (
+      cuttingBoardData?.map((data, index: number) => ({
+        gauge: <Gauge address={data.label} />,
+        incentiveAmount: data.amount,
+        incentivePercentage: data.percentage,
+        tvl: 694200000 * (index + 1),
+        hide: (
           <Checkbox
             id={`dashboard-checkbox-${index}`}
             className="mx-auto"
             onClick={() => handleCheckboxChange(data)}
           />
-        </div>
-      ),
-    }));
+        ),
+      })) ?? []
+    );
   }, [cuttingBoardData]);
 
   const pieData = React.useMemo(() => {
@@ -150,13 +144,12 @@ export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
   return (
     <div className="mt-8 flex w-full flex-col items-center gap-16 md:flex-row ">
       <div className="flex w-[350px] items-center justify-center">
-        <BeraChart data={dataP ?? []} options={options as any} type="pie" />
+        <BeraChart data={dataP} options={options as any} type="pie" />
       </div>
-      <div className="w-full">
-        <RT
-          columns={global_gauge_weight_columns}
+      <div className="w-full min-w-[490px]">
+        <DataTable
+          columns={global_gauge_weight_columns as any}
           data={dataT ?? []}
-          className="min-w-[490px]"
         />
       </div>
     </div>

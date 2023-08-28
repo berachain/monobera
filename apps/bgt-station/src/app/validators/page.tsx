@@ -1,6 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 
+import { indexerUrl } from "~/config";
 import Validators from "./validators";
 
 export const metadata: Metadata = {
@@ -10,9 +11,7 @@ export const metadata: Metadata = {
 
 async function getBGTSupply() {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/supply?num_of_days=1`,
-    );
+    const res = await fetch(`${indexerUrl}/bgt/supply?num_of_days=1`);
     const jsonRes = await res.json();
     console.log(jsonRes);
     return jsonRes;
@@ -23,9 +22,7 @@ async function getBGTSupply() {
 
 async function getUniqueGauges() {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/cuttingboards/unique`,
-    );
+    const res = await fetch(`${indexerUrl}/cuttingboards/unique`);
     const jsonRes = await res.json();
     return jsonRes.count;
   } catch (e) {

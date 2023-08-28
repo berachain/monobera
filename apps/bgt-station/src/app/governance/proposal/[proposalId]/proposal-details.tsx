@@ -10,9 +10,9 @@ import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { type Address } from "viem";
 
 import { sumTally } from "~/utils/sumTally";
+import { governanceAddress } from "~/config";
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
 import { VoteCard } from "../../components/vote-card";
@@ -63,8 +63,7 @@ export default function ProposalDetails({
                 setSelected={setSelected}
                 onSubmit={() => {
                   write({
-                    address: process.env
-                      .NEXT_PUBLIC_GOVERNANCE_ADDRESS as Address,
+                    address: governanceAddress,
                     abi: GOVERNANCE_PRECOMPILE_ABI,
                     functionName: "vote",
                     params: payload,
