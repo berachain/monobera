@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { formatUsd, truncateHash } from "@bera/berajs";
+import { formatUsd, truncateHash, useTokens } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -20,7 +20,6 @@ import { formatUnits } from "viem";
 
 import { useHoneyEvents } from "~/app/api/useHoneyEvents";
 import { blockExplorerUrl } from "~/config";
-import { honey, stgUsd } from "~/config/tokens";
 
 enum Selection {
   AllTransactions = "allTransactions",
@@ -94,6 +93,7 @@ const getAction = (event: any) => {
 };
 
 const getTokenDisplay = (event: any) => {
+  const {tokenDictionary} = useTokens();
   if (isMintData(event)) {
     const tokenIn = stgUsd;
     const tokenOut = honey;

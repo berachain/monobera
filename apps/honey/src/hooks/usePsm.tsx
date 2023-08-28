@@ -5,33 +5,63 @@ import {
   useBeraJs,
   usePollAllowance,
   usePollBalance,
+  usePollHoneyParams,
+  usePollPreviewMint,
+  usePollPreviewRedeem,
+  useTokens,
   type Token,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
-import { parseUnits } from "viem";
-
-import { honey, stgUsd } from "~/config/tokens";
-import { useFees } from "./useFees";
+import { parseUnits, type Address } from "viem";
 
 export const usePsm = () => {
-  const [selectedTo, setSelectedTo] = useState<Token>(honey);
+  const { tokenDictionary, tokenList } = useTokens();
+  const collateralList = tokenList?.filter((token: any) =>
+    token.tags?.includes("collateral"),
+  );
 
-  const [selectedFrom, setSelectedFrom] = useState<Token>(stgUsd);
+  const defaultCollateral = collateralList?.find((token: any) =>
+    token.tags.includes("defaultCollateral"),
+  );
+  const honey = tokenDictionary
+    ? tokenDictionary[process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address]
+    : undefined;
+
+  const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
+
+  const [selectedFrom, setSelectedFrom] = useState<Token | undefined>(
+    undefined,
+  );
+
+  const [_givenIn, setGivenIn] = useState<boolean>(true);
+  useEffect(() => {
+    if (
+      defaultCollateral &&
+      honey &&
+      selectedFrom === undefined &&
+      selectedTo === undefined
+    ) {
+      setSelectedFrom(defaultCollateral);
+      setSelectedTo(honey);
+    }
+  }, [collateralList, honey]);
 
   const [fromAmount, setFromAmount] = useState(0);
 
   const [toAmount, setToAmount] = useState(0);
 
-  const isMint = selectedFrom.address === stgUsd.address;
+  const isMint = selectedFrom?.address !== honey?.address;
+
+  const collateral = isMint ? selectedFrom : selectedTo;
 
   const { useBalance: useFromBalance } = usePollBalance({
-    address: selectedFrom.address,
+    address: selectedFrom?.address,
   });
 
   const fromBalance = useFromBalance();
 
   const { useBalance: useToBalance } = usePollBalance({
-    address: selectedTo.address,
+    address: selectedTo?.address,
   });
 
   const toBalance = useToBalance();
@@ -47,13 +77,39 @@ export const usePsm = () => {
 
   const allowance = useAllowance();
 
+  const { useHoneyParams } = usePollHoneyParams();
+
+  const params = useHoneyParams(
+    collateral ? (collateral.address as Address) : undefined,
+  );
+
+  const fee = params ? (isMint ? params.mintFee : params.redeemFee) : undefined;
   // const block = useLatestBlock();
 
-  const [fee, fee2] = useFees();
+  // const [fee, fee2] = useFees();
 
   const { write, isLoading, ModalPortal } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
   });
+
+  const { usePreviewMint } = usePollPreviewMint(collateral, fromAmount);
+  const previewMint = usePreviewMint();
+
+  const { usePreviewRedeem } = usePollPreviewRedeem(collateral, fromAmount);
+  const previewRedeem = usePreviewRedeem();
+
+  // const { usePreviewRedeem: usePreviewMintGivenOut } = usePollPreviewRedeem(collateral, collateralAmountGivenOut);
+  // const previewRedeemGivenOut = usePreviewMintGivenOut()
+  // console.log('prgo',previewRedeemGivenOut)
+
+  useEffect(() => {
+    if (isMint) {
+      setToAmount(Number(previewMint));
+    }
+    if (!isMint) {
+      setToAmount(Number(previewRedeem));
+    }
+  }, [previewMint, previewRedeem]);
 
   const onSwitch = () => {
     const tempFromAmount = fromAmount;
@@ -73,7 +129,7 @@ export const usePsm = () => {
     if (isMint && account) {
       const payload = [
         account,
-        stgUsd.address,
+        selectedFrom?.address,
         parseUnits(`${fromAmount}`, 18),
       ];
       setPayload(payload);
@@ -82,7 +138,7 @@ export const usePsm = () => {
       const payload = [
         account,
         parseUnits(`${fromAmount}`, 18),
-        stgUsd.address,
+        selectedTo?.address,
       ];
       setPayload(payload);
     }
@@ -105,6 +161,7 @@ export const usePsm = () => {
       if (needsApproval) setNeedsApproval(false);
     }
   }, [fromAmount, allowance]);
+
   return {
     payload,
     isConnected,
@@ -114,6 +171,7 @@ export const usePsm = () => {
     write,
     selectedFrom,
     selectedTo,
+    fee,
     setSelectedTo,
     fromAmount,
     setFromAmount,
@@ -122,11 +180,12 @@ export const usePsm = () => {
     isMint,
     fromBalance,
     toBalance,
-    fee,
-    fee2,
     onSwitch,
     ModalPortal,
+    setGivenIn,
     needsApproval,
     validInput,
+    honey,
+    collateralList,
   };
 };

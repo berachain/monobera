@@ -10,7 +10,6 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { TokenInput } from "~/components/token-input";
 import { cloudinaryUrl } from "~/config";
-import { honey } from "~/config/tokens";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { ApproveTokenButton } from "./approve-token-button";
@@ -33,10 +32,11 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     isMint,
     fromBalance,
     toBalance,
-    fee,
-    fee2,
+    setGivenIn,
     onSwitch,
     ModalPortal,
+    honey,
+    collateralList,
   } = usePsm();
   return (
     <div>
@@ -97,11 +97,13 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 onTokenSelection={setSelectedFrom}
                 amount={fromAmount ?? 0}
                 balance={fromBalance?.formattedBalance}
-                selectable={selectedFrom.address !== honey.address}
+                selectable={selectedFrom?.address !== honey?.address}
+                customTokenList={collateralList}
                 hidePrice
                 setAmount={(amount) => {
+                  setGivenIn(true);
                   setFromAmount(Number(amount));
-                  setToAmount(Number(amount) * fee);
+                  setToAmount(Number(amount));
                 }}
               />
               <div className="relative">
@@ -132,10 +134,12 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 selectedTokens={[selectedFrom, selectedTo]}
                 amount={toAmount}
                 setAmount={(amount) => {
+                  setGivenIn(false);
                   setToAmount(Number(amount));
-                  setFromAmount(Number(amount) * fee2);
+                  setFromAmount(Number(amount));
                 }}
-                selectable={selectedTo.address !== honey.address}
+                selectable={selectedTo?.address !== honey?.address}
+                customTokenList={collateralList}
                 hidePrice
                 balance={toBalance?.formattedBalance}
                 hideBalance
