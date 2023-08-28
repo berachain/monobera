@@ -94,11 +94,12 @@ export default function UnbondingQueue({
               defaultMonth={dateArray[0]}
             />
           </Card>
-          <div className="w-full min-w-[490px]">
+          <div className="w-full">
             <DataTable
               columns={unbonding_queue_columns}
               data={dataT}
               // emptyMessage="No BGT unbonding queue"
+              className="min-w-[490px]"
             />
           </div>
         </>

@@ -29,12 +29,14 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: TData) => void;
+  className?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   onRowClick,
+  className,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -67,11 +69,11 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="w-full space-y-4 rounded-lg bg-background">
-      {/* <DataTableToolbar table={table} /> */}
-      <div className="rounded-md border">
+    <div className="space-y-4 overflow-x-auto rounded-lg border border-border bg-background">
+      <div className={cn(className)}>
+        {/* <DataTableToolbar table={table} /> */}
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -120,8 +122,8 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+        {/* <DataTablePagination table={table} /> */}
       </div>
-      {/* <DataTablePagination table={table} /> */}
     </div>
   );
 }

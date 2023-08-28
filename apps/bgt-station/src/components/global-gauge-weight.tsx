@@ -146,10 +146,11 @@ export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
       <div className="flex w-[350px] items-center justify-center">
         <BeraChart data={dataP} options={options as any} type="pie" />
       </div>
-      <div className="w-full min-w-[490px]">
+      <div className="w-full">
         <DataTable
           columns={global_gauge_weight_columns as any}
           data={dataT ?? []}
+          className="min-w-[490px]"
         />
       </div>
     </div>

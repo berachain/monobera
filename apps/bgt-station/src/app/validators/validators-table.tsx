@@ -77,6 +77,7 @@ export default function ValidatorsTable() {
         <DataTable
           columns={general_validator_columns}
           data={filteredValidators ?? []}
+          className="min-w-[900px]"
           onRowClick={(row: any) =>
             router.push(
               `/validators/${BeravaloperToEth(row.original.operatorAddress)}`,

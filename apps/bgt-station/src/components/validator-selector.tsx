@@ -171,7 +171,7 @@ const ValidatorModal = ({
           <div className="text-lg font-semibold leading-7">
             Validator select
           </div>
-          <div className="flex min-w-[1000px] justify-between">
+          <div className="flex justify-between">
             <SearchInput
               placeholder="Search by name, address, or token"
               className="w-full md:w-[400px]"
@@ -192,6 +192,7 @@ const ValidatorModal = ({
               onSelect(cosmosvaloperToEth(value.original.address));
               onClose();
             }}
+            className="min-w-[1000px]"
             // emptyMessage={emptyMessage}
           />
         </div>
