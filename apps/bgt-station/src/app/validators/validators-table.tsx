@@ -11,6 +11,7 @@ import {
   type PoLValidator,
 } from "@bera/berajs";
 import { DataTable, SearchInput } from "@bera/shared-ui";
+import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress, type Address } from "viem";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
@@ -65,35 +66,22 @@ export default function ValidatorsTable() {
           placeholder="Search by name or address"
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <div
-          onClick={() =>
-            router.push(
-              `/validators/${BeravaloperToEth(
-                `cosmosvaloper1gy3nz5n6k8uhm5yqsg6sss3hkzfhfpdgfup7mr`,
-              )}`,
-            )
-          }
-        >
-          {" "}
-          go 2
-        </div>
       </div>
       {isLoading ? (
-        <>loading...</>
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+        </div>
       ) : (
         <DataTable
           columns={general_validator_columns}
           data={filteredValidators ?? []}
-          onRowClick={(row: any) => {
+          onRowClick={(row: any) =>
             router.push(
-              `/validators/${BeravaloperToEth(row.original.address)}`,
-            );
-            console.log(
-              "hiiii",
-              row.original.address,
-              BeravaloperToEth(row.original.address),
-            );
-          }}
+              `/validators/${BeravaloperToEth(row.original.operatorAddress)}`,
+            )
+          }
         />
       )}
     </div>

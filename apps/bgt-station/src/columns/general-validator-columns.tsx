@@ -63,16 +63,12 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="vApy" />
     ),
-    cell: ({ row }) => {
-      const vApy = row.original.vApy;
-      console.log(vApy);
-      return (
-        <div className="flex h-full w-[91px] items-center">
-          {" "}
-          {Number(vApy ?? 0).toFixed(2)}%
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="flex h-full w-[91px] items-center">
+        {" "}
+        {Number(row.original.vApy ?? 0).toFixed(2)}%
+      </div>
+    ),
     accessorKey: "vApy",
     enableSorting: true,
   },
@@ -80,11 +76,11 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
     ),
-    cell: ({ row }) => {
-      const operatorAddress = row.original.operatorAddress;
-      console.log(operatorAddress);
-      return <ValidatorGauge address={BeravaloperToEth(operatorAddress)} />;
-    },
+    cell: ({ row }) => (
+      <ValidatorGauge
+        address={BeravaloperToEth(row.original.operatorAddress)}
+      />
+    ),
     accessorKey: "mostWeightedGauge",
     enableSorting: false,
   },

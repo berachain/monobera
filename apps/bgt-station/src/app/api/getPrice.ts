@@ -1,10 +1,8 @@
-// @ts-nocheck
-import { type RouterService } from "@bera/bera-router";
-import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
+import { type Pool, type RouterService } from "@bera/bera-router";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
-import { honeyAddress } from "~/config";
+import { honeyAddress } from "../../config";
 
 export interface MappedTokens {
   [key: string]: number;

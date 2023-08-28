@@ -31,13 +31,13 @@ export default function ProposalDetails({
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 
-  console.log(proposal);
+  // console.log(proposal);
   const userVotingPower = 0;
   const { write, ModalPortal } = useTxn({
     message: `Voting for proposal ${proposalId}`,
   });
   const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
-  console.log(payload);
+  // console.log(payload);
   return (
     <div className="container pb-16">
       {ModalPortal}

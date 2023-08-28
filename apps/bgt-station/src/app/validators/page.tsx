@@ -13,7 +13,7 @@ async function getBGTSupply() {
   try {
     const res = await fetch(`${indexerUrl}/bgt/supply?num_of_days=1`);
     const jsonRes = await res.json();
-    console.log(jsonRes);
+    // console.log(jsonRes);
     return jsonRes;
   } catch (e) {
     console.log(e);
@@ -40,7 +40,6 @@ export default async function Page() {
     }),
   );
 
-  console.log(data);
   return (
     <Validators
       activeGauges={data.uniqueGauges ?? 0}

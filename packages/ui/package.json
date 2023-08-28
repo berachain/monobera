@@ -217,6 +217,10 @@
     "./navigation-menu": {
       "import": "./dist/navigation-menu.mjs",
       "types": "./dist/navigation-menu.d.ts"
+    },
+    "./skeleton": {
+      "import": "./dist/skeleton.mjs",
+      "types": "./dist/skeleton.d.ts"
     }
   },
   "typesVersions": {
@@ -319,6 +323,9 @@
       ],
       "form": [
         "dist/form.d.ts"
+      ],
+      "skeleton": [
+        "dist/skeleton.d.ts"
       ]
     }
   },

@@ -19,5 +19,9 @@ export async function GET() {
     pools,
     router,
   );
+  if (!mappedTokens) {
+    return NextResponse.json({ error: "No mapped tokens found" });
+  }
+
   return NextResponse.json(mappedTokens);
 }
