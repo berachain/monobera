@@ -24,12 +24,12 @@ export default function ValidatorSelector({
   validatorAddress,
   onSelectValidator,
   showDelegated = false,
-  emptyMessage,
-}: {
+}: // emptyMessage,
+{
   validatorAddress?: string;
   onSelectValidator?: (address: string) => void;
   showDelegated?: boolean;
-  emptyMessage?: string;
+  // emptyMessage?: string;
 }) {
   const { useActiveValidator } = usePollActiveValidators();
 
@@ -82,7 +82,7 @@ export default function ValidatorSelector({
         validators={filteredValidators ?? []}
         onSelect={(address) => onSelectValidator && onSelectValidator(address)}
         onClose={() => setOpen(false)}
-        emptyMessage={emptyMessage}
+        // emptyMessage={emptyMessage}
       />
     </div>
   );
