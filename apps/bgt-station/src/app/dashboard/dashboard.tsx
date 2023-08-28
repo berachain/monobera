@@ -8,6 +8,7 @@ import {
   type Validator,
 } from "@bera/berajs";
 
+import { cloudinaryUrl } from "~/config";
 import GlobalGaugeWeight from "../../components/global-gauge-weight";
 import { Details } from "./components/details";
 import { ValidatorsList } from "./components/validators-list";
@@ -27,7 +28,7 @@ export default function DashBoard({ globalCuttingBoard }: Props) {
     <div className="container flex w-full max-w-[1078px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">
         <Image
-          src="/bears/bee.png"
+          src={`${cloudinaryUrl}/bears/wy6muyafchlo5wjidall`}
           alt="dashboard bee"
           width={164}
           height={168}

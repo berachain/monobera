@@ -43,9 +43,9 @@ export function EpochTimeline() {
   );
 
   return (
-    <Card className=" w-full p-8 py-[39px]">
+    <Card className=" w-full px-6 py-[39px]">
       <div className="flex h-8 items-center gap-3">
-        <div className="font-semi text-3xl font-semibold">
+        <div className="font-semi text-xl font-semibold">
           {currentEpoch?.current ?? 0}
         </div>
         <div className="flex-1">
@@ -55,7 +55,7 @@ export function EpochTimeline() {
           </div>
           <Progress className="h-2" value={progressPercentage} />
         </div>
-        <div className="font-semi text-3xl font-semibold text-muted-foreground">
+        <div className="font-semi text-xl font-semibold text-muted-foreground">
           {currentEpoch?.current ? currentEpoch?.current + 1 : "0"}
         </div>
       </div>

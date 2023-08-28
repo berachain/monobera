@@ -2,14 +2,9 @@
 
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
+import dynamic from "next/dynamic";
 import { IBM_Plex_Sans } from "next/font/google";
-import {
-  BearBG,
-  Footer,
-  Gradient,
-  Header,
-  TailwindIndicator,
-} from "@bera/shared-ui";
+import { Footer, Header, TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -23,6 +18,22 @@ const fontSans = IBM_Plex_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
 });
+
+const Gradient = dynamic(
+  () => import("@bera/shared-ui").then((mod) => mod.Gradient),
+  {
+    ssr: false,
+    loading: () => <></>,
+  },
+);
+
+const BearBG = dynamic(
+  () => import("@bera/shared-ui").then((mod) => mod.BearBG),
+  {
+    ssr: false,
+    loading: () => <></>,
+  },
+);
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
