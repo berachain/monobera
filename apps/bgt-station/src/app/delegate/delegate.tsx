@@ -136,11 +136,11 @@ export default function Delegate({
           onAmountChange={setAmount}
           validatorAddress={validator}
           showDelegated={action !== DelegateEnum.DELEGATE}
-          emptyMessage={
-            action !== DelegateEnum.DELEGATE
-              ? "No BGT delegated"
-              : "No Validators found"
-          }
+          // emptyMessage={
+          //   action !== DelegateEnum.DELEGATE
+          //     ? "No BGT delegated"
+          //     : "No Validators found"
+          // }
         />
         {action === DelegateEnum.REDELEGATE && (
           <>

@@ -6,8 +6,7 @@ import {
   usePollActiveValidators,
   type Validator,
 } from "@bera/berajs";
-import { IconList, Tooltip } from "@bera/shared-ui";
-import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
+import { IconList, Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -83,7 +82,9 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=delegate&validator=${validator.validator.operatorAddress}`,
+                `/delegate?action=delegate&validator=${BeravaloperToEth(
+                  validator.validator.operatorAddress,
+                )}`,
               )
             }
           >
@@ -94,7 +95,9 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=redelegate&validator=${validator.validator.operatorAddress}`,
+                `/delegate?action=redelegate&validator=${BeravaloperToEth(
+                  validator.validator.operatorAddress,
+                )}`,
               )
             }
           >
@@ -105,7 +108,9 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=unbond&validator=${validator.validator.operatorAddress}`,
+                `/delegate?action=unbond&validator=${BeravaloperToEth(
+                  validator.validator.operatorAddress,
+                )}`,
               )
             }
           >
@@ -150,7 +155,9 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=delegate&validator=${validator.validator.operatorAddress}`,
+                `/delegate?action=delegate&validator=${BeravaloperToEth(
+                  validator.validator.operatorAddress,
+                )}`,
               )
             }
           >
@@ -161,7 +168,9 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=redelegate&validator=${validator.validator.operatorAddress}`,
+                `/delegate?action=redelegate&validator=${BeravaloperToEth(
+                  validator.validator.operatorAddress,
+                )}`,
               )
             }
           >
@@ -172,7 +181,9 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=unbond&validator=${validator.validator.operatorAddress}`,
+                `/delegate?action=unbond&validator=${BeravaloperToEth(
+                  validator.validator.operatorAddress,
+                )}`,
               )
             }
           >

@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { usePollAccountDelegations, usePollBgtBalance } from "@bera/berajs";
-import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
+import { ValidatorIcon } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { type Address } from "wagmi";
@@ -18,8 +18,8 @@ export default function ValidatorInput({
   redelegateValidatorAddress,
   disabled = false,
   showDelegated, //when this is true, the validator list will only show the validators user delegated
-  emptyMessage = "No validators available",
-}: {
+}: // emptyMessage = "No validators available",
+{
   action: DelegateEnum;
   amount: string;
   onAmountChange: (amount: string) => void;
@@ -28,7 +28,7 @@ export default function ValidatorInput({
   redelegateValidatorAddress?: string;
   disabled?: boolean;
   showDelegated?: boolean;
-  emptyMessage?: string;
+  // emptyMessage?: string;
 }) {
   const router = useRouter();
   const { useBgtBalance } = usePollBgtBalance();
@@ -59,7 +59,7 @@ export default function ValidatorInput({
               )
             }
             showDelegated={showDelegated}
-            emptyMessage={emptyMessage}
+            // emptyMessage={emptyMessage}
           />
         }
       />

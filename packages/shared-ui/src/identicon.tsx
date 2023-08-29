@@ -34,5 +34,10 @@ export default function Identicon({
     return;
   }, [icon, iconRef]);
 
-  return <span ref={iconRef} className={cn("rounded-full", className)} />;
+  return (
+    <span
+      ref={iconRef}
+      className={cn("flex items-center rounded-full", className)}
+    />
+  );
 }

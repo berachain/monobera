@@ -1,3 +1,5 @@
+import { useTheme } from "next-themes";
+
 type ISemiCircleProgress = {
   strokeWidth: number;
   strokeLinecap?: "butt" | "round" | "square" | "inherit";
@@ -54,6 +56,8 @@ const SemiCircleProgress = ({
   const bgStrokeDashoffset = circumference - 1 * circumference;
   const pathDescription = "M5,64 a1,1 0 0,1 90,0";
 
+  const { theme, systemTheme } = useTheme();
+  const dark = (theme === "system" ? systemTheme : theme) === "dark";
   return (
     <>
       <svg
@@ -106,16 +110,16 @@ const SemiCircleProgress = ({
 
         <text
           x="52%"
-          y="55%"
+          y="60%"
           dominantBaseline="middle"
           textAnchor="middle"
-          fontSize="18"
           fontFamily="Arial"
-          fill="#04001b"
+          fill={dark ? "#eae8e6" : "#292524"}
           style={{
             fontStyle: "normal",
             fontWeight: "600",
             lineHeight: "20px",
+            fontSize: "12px",
           }}
         >
           {percentage.toFixed(2)}
@@ -128,7 +132,7 @@ const SemiCircleProgress = ({
           textAnchor="middle"
           fill="hsl(var(--muted-foreground) / var(--tw-text-opacity))"
           style={{
-            fontSize: "10px",
+            fontSize: "8px",
             fontStyle: "normal",
             fontWeight: "600",
             lineHeight: "20px",

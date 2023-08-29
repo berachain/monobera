@@ -1,50 +1,77 @@
 import React from "react";
-import { type Columns } from "@bera/shared-ui";
-import { Icons } from "@bera/ui/icons";
+import { DataTableColumnHeader } from "@bera/shared-ui";
+import { type ColumnDef } from "@tanstack/react-table";
 
-export const recent_votes_columns: Columns = [
+export const recent_votes_columns: ColumnDef<any>[] = [
   {
-    header: <div className="w-[350px]">Proposal</div>,
-    accessor: "proposal",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Proposal" />
+    ),
+    cell: ({ row }) => {
+      return <div className="w-[350px]">{row.original.proposal}</div>;
+    },
+    accessorKey: "proposal",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[88px] gap-1">
-        Address
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Address" />
     ),
-    accessor: "address",
+    cell: ({ row }) => {
+      return <div className="flex w-[88px] gap-1">{row.original.address}</div>;
+    },
+    accessorKey: "address",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[60px] gap-1">
-        Stance{" "}
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Stance" />
     ),
-    accessor: "stance",
+    cell: ({ row }) => {
+      return (
+        <div className="flex w-[60px] items-center">{row.original.stance}</div>
+      );
+    },
+    accessorKey: "stance",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[126px] gap-1">
-        Time submitted{" "}
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-      </div>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Time submitted" />
     ),
-    accessor: "time",
+    cell: ({ row }) => {
+      return (
+        <div className="flex w-[160px] items-center">
+          {new Date(row.original.time).toUTCString()}
+        </div>
+      );
+    },
+    accessorKey: "time",
+    enableSorting: true,
   },
 ];
 
-export const delegators_columns: Columns = [
+export const delegators_columns: ColumnDef<any>[] = [
   {
-    header: <div className="w-[145px]">Delegator address</div>,
-    accessor: "delegator_address",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Delegator address" />
+    ),
+    cell: ({ row }) => row.original.delegator_address,
+    accessorKey: "delegator_address",
+    enableSorting: true,
   },
+
   {
-    header: <div className="flex w-[88px] gap-1">BGT amount</div>,
-    accessor: "bgt_amount",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="BGT amount" />
+    ),
+    cell: ({ row }) => {
+      return <div className="w-[200px]">{row.original.bgt_amount}</div>;
+    },
+    accessorKey: "bgt_amount",
+    enableSorting: true,
   },
+
   // {
   //   header: (
   //     <div className="flex w-[110px] gap-1">

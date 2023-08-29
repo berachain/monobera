@@ -1,6 +1,10 @@
 import React from "react";
 import { BeravaloperToEth, type PoLValidator } from "@bera/berajs";
-import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
+import {
+  DataTableColumnHeader,
+  TokenIconList,
+  ValidatorIcon,
+} from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { formatCommission } from "~/utils/formatCommission";
@@ -26,7 +30,15 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     cell: ({ row }) => {
       const moniker = row.original.description.moniker;
 
-      return <>{moniker}</>;
+      return (
+        <div className="flex items-center gap-2">
+          <ValidatorIcon
+            address={BeravaloperToEth(row.original.operatorAddress)}
+            className="h-8 w-8"
+          />
+          {moniker}{" "}
+        </div>
+      );
     },
     accessorKey: "description",
     enableSorting: true,
@@ -63,15 +75,12 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="vApy" />
     ),
-    cell: ({ row }) => {
-      const vApy = row.original.vApy;
-      return (
-        <div className="flex h-full w-[91px] items-center">
-          {" "}
-          {Number(vApy ?? 0).toFixed(2)}%
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="flex h-full w-[91px] items-center">
+        {" "}
+        {Number(row.original.vApy ?? 0).toFixed(2)}%
+      </div>
+    ),
     accessorKey: "vApy",
     enableSorting: true,
   },
@@ -79,10 +88,11 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
     ),
-    cell: ({ row }) => {
-      const operatorAddress = row.original.operatorAddress;
-      return <ValidatorGauge address={BeravaloperToEth(operatorAddress)} />;
-    },
+    cell: ({ row }) => (
+      <ValidatorGauge
+        address={BeravaloperToEth(row.original.operatorAddress)}
+      />
+    ),
     accessorKey: "mostWeightedGauge",
     enableSorting: false,
   },

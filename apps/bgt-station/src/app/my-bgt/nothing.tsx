@@ -11,7 +11,7 @@ export default function Nothing({ message }: { message: string }) {
       </div>
       <div className="flex flex-col justify-center gap-4 sm:flex-row">
         <Card className="flex-1 px-12 py-8">
-          <div className="flex h-12 items-center gap-3 text-lg font-semibold leading-7 text-secondary">
+          <div className="flex h-12 items-center gap-3 text-lg font-semibold leading-7 text-muted-foreground">
             {" "}
             <div className="text-[31.12px]">📜</div>How to delegate
           </div>
@@ -21,7 +21,7 @@ export default function Nothing({ message }: { message: string }) {
           <Button className="w-full"> Checkout Docs</Button>
         </Card>
         <Card className="flex-1 px-12 py-8">
-          <div className="flex h-12 items-center gap-3 text-lg font-semibold leading-7 text-secondary">
+          <div className="flex h-12 items-center gap-3 text-lg font-semibold leading-7 text-muted-foreground">
             {" "}
             <div className="text-[31.12px]">🤝</div>Delegate now
           </div>

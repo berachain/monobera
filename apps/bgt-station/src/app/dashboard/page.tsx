@@ -1,6 +1,7 @@
 import { type Metadata } from "next";
 import { type CuttingBoard } from "@bera/berajs";
 
+import { indexerUrl } from "~/config";
 import DashBoard from "./dashboard";
 
 export const metadata: Metadata = {
@@ -10,9 +11,7 @@ export const metadata: Metadata = {
 
 async function getGlobalCuttingBoard() {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
-    );
+    const res = await fetch(`${indexerUrl}/bgt/rewards`);
     const jsonRes = await res.json();
     return jsonRes.result;
   } catch (e) {

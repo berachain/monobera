@@ -32,6 +32,6 @@ export { Footer } from "./footer";
 export { ErrorPage } from "./error";
 export { Gradient } from "./gradient";
 export { BearBG } from "./bear-bg";
-
+export { ValidatorIcon } from "./validator-icon";
 export * from "./hooks";
 export * from "./token-icon-list";

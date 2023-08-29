@@ -1,14 +1,14 @@
-// @ts-nocheck
-import { type RouterService } from "@bera/bera-router";
-import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
+import { type Pool, type RouterService } from "@bera/bera-router";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
+
+import { honeyAddress } from "../../config";
 
 export interface MappedTokens {
   [key: string]: number;
 }
 
-const BASE_TOKEN = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
+const BASE_TOKEN = honeyAddress;
 
 export const getBaseTokenPrice = async (
   pools: Pool[],
