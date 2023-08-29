@@ -31,11 +31,32 @@ const DEFAULT_SIZE = 10;
 
 export const revalidate = 0;
 
+async function getGlobalCuttingBoard() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
+    );
+    const jsonRes = await res.json();
+    return jsonRes.result;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const router = new RouterService(defaultConfig);
+  const globalCuttingBoard = getGlobalCuttingBoard();
+  let data = undefined;
   try {
-    await router.fetchPools();
+    const fetchPools = router.fetchPools();
+
+    data = await Promise.all([fetchPools, globalCuttingBoard]).then(
+      ([fetchPools, globalCuttingBoard]) => ({
+        fetchPools: fetchPools,
+        globalCuttingBoard: globalCuttingBoard,
+      }),
+    );
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
     return;
@@ -53,6 +74,7 @@ export async function GET(request: Request) {
 
   await getWBeraPriceDictForPoolTokens(
     (totalSupplyStringPools ?? []) as Pool[],
+    data?.globalCuttingBoard,
     router,
   );
 
@@ -67,8 +89,17 @@ export async function GET(request: Request) {
   const hasBgtRewards = searchParams.get("hasBgtRewards");
   const hotPools = searchParams.get("hotPools");
   const newPools = searchParams.get("newPools");
+  const searchKeyword = searchParams.get("search") ?? "";
 
-  let taggedPools: any[] = totalSupplyStringPools;
+  let taggedPools: any[] = totalSupplyStringPools?.filter((pool: Pool) => {
+    return searchKeyword === ""
+      ? true
+      : pool.poolName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+          (pool.poolShareDenomHex &&
+            pool.poolShareDenomHex
+              .toLowerCase()
+              .includes(searchKeyword.toLowerCase()));
+  });
 
   if (hasBgtRewards == "true") {
     taggedPools = taggedPools.filter((pool) =>

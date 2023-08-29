@@ -57,7 +57,6 @@ export const PoolSearch = () => {
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,
-    // isAllDataEmpty,
     isAllDataReachingEnd,
     search,
     setSearch,
@@ -96,7 +95,7 @@ export const PoolSearch = () => {
             </div>
             <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
               <FilterBadge
-                text={"🚀 Trending Pools"}
+                text={"🚀 New Pools"}
                 active={isNewPool}
                 onClick={() => setIsNewPool(!isNewPool)}
               />
@@ -139,26 +138,26 @@ export const PoolSearch = () => {
             {isList && (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 <DataTable
-                  data={data && data[0] ? data : []}
+                  key={data.length}
+                  data={data ?? []}
                   columns={columns}
                   onRowClick={(state: any) => console.log(state)}
                 />
               </div>
             )}
-            {!isList && (
-              <Button
-                className="mt-12"
-                onClick={() => setAllDataSize(allDataSize + 1)}
-                disabled={isAllDataLoadingMore || isAllDataReachingEnd}
-                variant="outline"
-              >
-                {isAllDataLoadingMore
-                  ? "Loading..."
-                  : isAllDataReachingEnd
-                  ? "No more pools"
-                  : "View More"}
-              </Button>
-            )}
+
+            <Button
+              className="mt-12"
+              onClick={() => setAllDataSize(allDataSize + 1)}
+              disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+              variant="outline"
+            >
+              {isAllDataLoadingMore
+                ? "Loading..."
+                : isAllDataReachingEnd
+                ? "No more pools"
+                : "View More"}
+            </Button>
           </TabsContent>
           <TabsContent value="userPools">
             {!isList && (

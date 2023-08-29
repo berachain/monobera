@@ -24,6 +24,7 @@ export const usePollHoneyParams = () => {
         args: [],
       })) as any[];
 
+      console.log(result);
       return result;
     },
     {

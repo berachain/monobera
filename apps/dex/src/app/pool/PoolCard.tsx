@@ -1,8 +1,7 @@
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router";
 import { formatUsd } from "@bera/berajs";
-import { IconList } from "@bera/shared-ui";
-// import { IconList, TokenIcon } from "@bera/shared-ui";
+import { TokenIconList } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -26,10 +25,6 @@ export const PoolCard = ({
   pool: Pool | undefined;
   addLp?: boolean;
 }) => {
-  const fees =
-    (Number(pool?.formattedSwapFee) / 100) * Number(pool?.dailyVolume);
-  const swapApr = (fees / Number(pool?.totalValue)) * 365 * 100;
-
   const router = useRouter();
   return (
     <div
@@ -61,16 +56,8 @@ export const PoolCard = ({
             />
           ))} */}
           {/* maybe consider using this */}
-          <IconList
-            iconList={[
-              "/icons/eth-icons.svg",
-              "/icons/atom-icons.svg",
-              "/icons/usdc-icons.svg",
-              "/icons/usdt-icons.svg",
-              "/icons/btc-icons.svg",
-              "/icons/honey-icons.svg",
-              "/icons/bera-icons.svg",
-            ]}
+          <TokenIconList
+            tokenList={pool?.tokens?.map((t) => t.address) ?? []}
             size={24}
           />
         </div>
@@ -79,7 +66,7 @@ export const PoolCard = ({
         <div className="rounded-2xl border-border bg-muted px-4 py-2">
           <div className="text-left text-xs">APR</div>
           <div className="overflow-hidden truncate whitespace-nowrap text-left text-sm font-semibold ">
-            {(Number.isNaN(swapApr) ? 0 : swapApr).toFixed(2)}%
+            {(pool?.totalApy ?? 0).toFixed(2)}%
           </div>
         </div>
         <div className="rounded-2xl border-border bg-muted px-4 py-2">
@@ -99,7 +86,7 @@ export const PoolCard = ({
           <div className="overflow-hidden truncate whitespace-nowrap text-left text-sm font-semibold ">
             {" "}
             {pool?.dailyVolume && Number(pool?.dailyVolume) !== 0
-              ? formatUsd(fees)
+              ? formatUsd(pool?.fees ?? "0")
               : "$0"}
           </div>
         </div>

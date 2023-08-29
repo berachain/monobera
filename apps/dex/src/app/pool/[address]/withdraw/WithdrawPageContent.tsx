@@ -20,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { cloudinaryUrl } from "~/config";
 import { type MappedTokens } from "../types";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
 
@@ -166,7 +167,7 @@ export default function WithdrawLiquidityContent({
                 open={previewOpen}
                 disabled={isMultiTokenDisabled}
                 title={"Confirm LP Withdrawal Details"}
-                imgURI={"/graphics/preview-swap-img.png"}
+                imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
                 triggerText={"Preview"}
                 setOpen={setPreviewOpen}
               >
@@ -270,7 +271,7 @@ export default function WithdrawLiquidityContent({
                 open={previewOpen}
                 disabled={isSingleTokenDisabled}
                 title={"Confirm LP Withdrawal Details"}
-                imgURI={"/graphics/preview-swap-img.png"}
+                imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
                 triggerText={"Preview"}
                 setOpen={setPreviewOpen}
               >
