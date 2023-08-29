@@ -47,6 +47,7 @@ const Connect = dynamic(
 interface ISwapCard {
   inputCurrency?: Address | undefined;
   outputCurrency?: Address | undefined;
+  addTokensOnLoad?: boolean;
   isMainPage?: boolean;
   showBear?: boolean;
   className?: string;

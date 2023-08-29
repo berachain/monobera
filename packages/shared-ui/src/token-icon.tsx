@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { useTokenInformation, useTokens, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import { getAddress } from "viem";
 
 type Props = {
   token?: Token | undefined;
@@ -36,7 +37,7 @@ export const TokenIcon = ({
       return token.logoURI;
     }
     if (token && token.logoURI === undefined && tokenDictionary) {
-      return tokenDictionary[token.address]?.logoURI;
+      return tokenDictionary[getAddress(token.address)]?.logoURI;
     }
     if (fetch && address) {
       if (tokenDictionary && tokenDictionary[address]) {

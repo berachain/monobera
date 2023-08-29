@@ -43,7 +43,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     useTokenInformation();
   const { read: readOutput, tokenInformation: outputToken } =
     useTokenInformation();
-  const { tokenDictionary, addNewToken } = useTokens();
+  const { tokenDictionary } = useTokens();
 
   // TODO: get honey price
   const { data: gasData } = useFeeData();
@@ -71,11 +71,11 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   useEffect(() => {
     if (inputToken && !selectedFrom) {
       setSelectedFrom(inputToken);
-      addNewToken(inputToken);
+      // addNewToken(inputToken);
     }
     if (outputToken && !selectedTo) {
       setSelectedTo(outputToken);
-      addNewToken(outputToken);
+      // addNewToken(outputToken);
     }
   }, [inputToken, outputToken]);
 

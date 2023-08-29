@@ -2,8 +2,10 @@
 
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatUsd } from "@bera/berajs";
-import { DataTableColumnHeader, TokenIcon } from "@bera/shared-ui";
-import { cn } from "@bera/ui";
+import {
+  DataTableColumnHeader,
+  TokenIconList,
+} from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
@@ -32,18 +34,12 @@ export const columns: ColumnDef<Pool>[] = [
     accessorKey: "tokens",
     header: () => <></>,
     cell: ({ row }) => {
-      const tokens = row.getValue("tokens");
-
       return (
         <div className="ml-2 flex flex-row justify-start">
-          {/* @ts-ignore */}
-          {tokens.map((token: any, i: number) => (
-            <TokenIcon
-              key={token.address}
-              token={token}
-              className={cn(" border border-border", i !== 0 && "ml-[-15px]")}
-            />
-          ))}
+          <TokenIconList
+            tokenList={row.original.tokens.map((t) => t.address)}
+            size={24}
+          />
         </div>
       );
     },
@@ -55,12 +51,12 @@ export const columns: ColumnDef<Pool>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="BGT Rewards" />
     ),
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="flex w-[160px] items-center">
           {" "}
           <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
-            0.42% <Icons.chevronsRight className="h-4 w-4" /> 1.58% BGT
+            {row.original.bgtApy}% BGT
           </Badge>
         </div>
       );
@@ -99,7 +95,6 @@ export const columns: ColumnDef<Pool>[] = [
     accessorKey: "btns",
     header: () => <></>,
     cell: ({ row }) => {
-      console.log(row);
       const address = row.original.pool;
 
       return (

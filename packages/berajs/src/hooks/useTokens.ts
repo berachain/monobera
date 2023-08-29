@@ -79,7 +79,11 @@ const useTokens = (): IUseTokens => {
     };
 
     // Check if the token already exists in tokenList
-    if (data?.list.some((t) => t.address === acceptedToken.address)) {
+    if (
+      data?.list.some(
+        (t) => t.address.toLowerCase() === acceptedToken.address.toLowerCase(),
+      )
+    ) {
       return;
     }
 

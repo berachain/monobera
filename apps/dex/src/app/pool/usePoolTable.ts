@@ -11,7 +11,7 @@ export const usePoolTable = () => {
   const [search, setSearch] = useState("");
   const [hasBgtRewards, setHasBgtRewards] = useState(false);
   const [isNewPool, setIsNewPool] = useState(false);
-  const [isHotPool, setIsHotPool] = useState(true);
+  const [isHotPool, setIsHotPool] = useState(false);
   const [isList, setIsList] = useState(false);
   const {
     data: allData,
@@ -19,12 +19,21 @@ export const usePoolTable = () => {
     setSize: setAllDataSize,
     isLoading: isAllDataLoading,
   } = useSWRInfinite(
-    (index) => ["search", index, search, hasBgtRewards, isHotPool, isNewPool],
+    (index) => [
+      "search",
+      index,
+      search,
+      hasBgtRewards,
+      isHotPool,
+      isNewPool,
+      search,
+    ],
     async (key: any[]) => {
       const page = key[1] + 1;
+      console.log("page", page);
       try {
         const res = await fetch(
-          `${getAbsoluteUrl()}/pool/api?page=${page}&perPage=${DEFAULT_SIZE}&hasBgtRewards=${hasBgtRewards}&hotPools=${isHotPool}&newPools=${isNewPool}`,
+          `${getAbsoluteUrl()}/pool/api?page=${page}&perPage=${DEFAULT_SIZE}&hasBgtRewards=${hasBgtRewards}&hotPools=${isHotPool}&newPools=${isNewPool}&search=${search}`,
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -54,15 +63,7 @@ export const usePoolTable = () => {
   const userPools = useUserDepositedPools();
 
   return {
-    data: data?.filter((pool: Pool) => {
-      return search === ""
-        ? true
-        : pool.poolName.toLowerCase().includes(search.toLowerCase()) ||
-            (pool.poolShareDenomHex &&
-              pool.poolShareDenomHex
-                .toLowerCase()
-                .includes(search.toLowerCase()));
-    }),
+    data: data,
     userPools: userPools?.filter((pool: Pool) => {
       return search === ""
         ? true

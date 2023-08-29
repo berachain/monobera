@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter as useNextRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
+import { usePollGlobalCuttingBoard } from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -16,12 +17,18 @@ const STEP = 1;
 export default function PoolsTable({ pools }: { pools: Pool[] }) {
   const nextRouter = useNextRouter();
   const { router } = useRouter();
+  const { useGlobalCuttingBoard } = usePollGlobalCuttingBoard();
+  const globalCuttingBoard = useGlobalCuttingBoard();
   const { data, size, setSize } = useSWRInfinite(
     (index) => [index + 1],
     async (page: number[]) => {
       try {
         const pools = await router.fetchPaginatedPools(page[0] ?? 1, STEP);
-        await getWBeraPriceDictForPoolTokens(pools ?? [], router);
+        await getWBeraPriceDictForPoolTokens(
+          pools ?? [],
+          globalCuttingBoard,
+          router,
+        );
         return pools;
       } catch (e) {
         console.error(e);
