@@ -4,9 +4,6 @@ import React from "react";
 import { formatUsd } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits } from "viem";
-
-import { honey } from "~/config/tokens";
 
 function DataCard({
   icon,
@@ -51,25 +48,18 @@ export default function Data({
   dailyVolume: string;
   arcade: boolean;
 }) {
-  const displayTvl = formatUsd(
-    Number(formatUnits(BigInt(tvl) ?? 0n, honey.decimals)),
-  );
-
-  const displayDailyVolume = formatUsd(
-    Number(formatUnits(BigInt(dailyVolume) ?? 0n, honey.decimals)),
-  );
   return (
     <section className="py-4 lg:py-16">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <DataCard
           title="Total Honey Supply"
-          value={displayTvl}
+          value={formatUsd(tvl)}
           icon={<Icons.lock />}
           arcade={arcade}
         />
         <DataCard
           title="24H Volume"
-          value={displayDailyVolume}
+          value={formatUsd(dailyVolume)}
           icon={<Icons.candleStick />}
           arcade={arcade}
         />

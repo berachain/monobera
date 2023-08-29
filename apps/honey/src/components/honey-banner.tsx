@@ -27,7 +27,7 @@ export default function HoneyBanner() {
       <div className="col-span-1">
         <div className="rounded-xl bg-yellow-200 p-4 text-center">
           <h3 className="m-auto mb-4 w-[60px] text-sm text-yellow-900">
-            Lend HONEY on Baave
+            Lend HONEY on 🅱️end
           </h3>
           <a
             href=""
@@ -58,7 +58,7 @@ export default function HoneyBanner() {
       <div className="col-span-1">
         <div className="rounded-xl bg-red-200 p-4 text-center">
           <h3 className="m-auto mb-4 w-[86px] text-sm text-red-900">
-            Provide Collateral for Perpetuals
+            Provide Collateral for 🅱️erbetuals
           </h3>
           <a
             href=""
