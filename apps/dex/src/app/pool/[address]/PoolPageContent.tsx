@@ -24,7 +24,7 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { formatUnits } from "viem";
+import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
@@ -89,6 +89,8 @@ const getTokenDisplay = (event: any, pool: Pool) => {
     const tokenOut = pool.tokens.find(
       (token) => token.address === event.swapOut.denom,
     );
+
+    console.log(tokenIn, tokenOut);
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -597,7 +599,11 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                   className="xs:hidden hidden sm:block md:block lg:hidden"
                   variant={"outline"}
                   onClick={() =>
-                    router.push(`?inputCurrency=${pool?.tokens[0]?.address}`)
+                    router.push(
+                      `?inputCurrency=${getAddress(
+                        pool?.tokens[0]?.address as string,
+                      )}`,
+                    )
                   }
                 >
                   Swap
@@ -608,8 +614,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
           <SwapCard
             showBear={false}
             isMainPage={false}
-            inputCurrency={pool?.tokens[0]?.address}
-            outputCurrency={pool?.tokens[1]?.address}
+            inputCurrency={getAddress(pool?.tokens[0]?.address as string)}
+            outputCurrency={getAddress(pool?.tokens[1]?.address as string)}
             className="hidden lg:contents"
           />
         </div>
@@ -617,8 +623,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
       <SwapCard
         showBear={true}
         isMainPage={false}
-        inputCurrency={pool?.tokens[0]?.address}
-        outputCurrency={pool?.tokens[1]?.address}
+        inputCurrency={getAddress(pool?.tokens[0]?.address as string)}
+        outputCurrency={getAddress(pool?.tokens[1]?.address as string)}
         className="xs:block block sm:hidden md:hidden lg:hidden"
       />
     </div>

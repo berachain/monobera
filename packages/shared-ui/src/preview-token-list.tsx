@@ -25,8 +25,8 @@ export function PreviewToken({ token, weight, value, price }: PreviewToken) {
       </div>
       <div className="flex grow-0 cursor-not-allowed flex-col border-0 p-0 text-right text-sm text-muted-foreground outline-none">
         {value}
-        {value && price && (
-          <span className="text-xs">{formatUsd(value * price)}</span>
+        {value !== undefined && price !== undefined && (
+          <span className="text-xs">({formatUsd(value * price)})</span>
         )}
       </div>
     </li>

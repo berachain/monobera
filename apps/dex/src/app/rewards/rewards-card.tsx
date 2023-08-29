@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { IconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 
 export default function RewardsCard() {
@@ -25,7 +24,7 @@ export default function RewardsCard() {
         <div className="whitespace-nowrap text-xs font-medium leading-tight md:text-sm">
           {mobile && title.length > 19 ? title.slice(0, 19) + "..." : title}
         </div>
-        <IconList
+        {/* <IconList
           iconList={[
             "/icons/eth-icons.svg",
             "/icons/atom-icons.svg",
@@ -36,7 +35,7 @@ export default function RewardsCard() {
             "/icons/bera-icons.svg",
           ]}
           size={mobile ? 16 : 32}
-        />
+        /> */}
       </div>
 
       <div className="hidden flex-col gap-1 md:flex">
@@ -53,12 +52,12 @@ export default function RewardsCard() {
         </div>
       </div>
 
-      <div className="hidden flex-col gap-1 md:flex">
+      {/* <div className="hidden flex-col gap-1 md:flex">
         <div className="text-lg font-semibold leading-7">$690</div>
         <div className="text-sm font-medium leading-tight text-muted-foreground">
           Fees earned
         </div>
-      </div>
+      </div> */}
 
       <div className="flex items-center gap-4">
         <div className="flex min-w-[65px] flex-col gap-1">

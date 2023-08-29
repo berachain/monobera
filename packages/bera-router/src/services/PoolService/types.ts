@@ -63,6 +63,10 @@ export interface Pool {
   dailyFees?: number;
   tags?: string[];
   poolShareDenomHex?: string;
+  bgtApy?: number;
+  totalApy?: number;
+  feeApy?: number;
+  fees?: number;
 }
 
 export type PoolRecords = Record<string, PoolRecord>;

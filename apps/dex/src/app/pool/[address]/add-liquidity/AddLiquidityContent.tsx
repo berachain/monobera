@@ -27,6 +27,7 @@ import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import ApproveTokenButton from "~/components/approve-token-button";
+import { cloudinaryUrl } from "~/config";
 import { type MappedTokens } from "../types";
 import { useAddLiquidity } from "./useAddLiquidity";
 
@@ -161,7 +162,7 @@ export default function AddLiquidityContent({
                 open={previewOpen}
                 disabled={isMultipleInputDisabled}
                 title={"Confirm LP Details"}
-                imgURI={"/graphics/preview-swap-img.png"}
+                imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
                 triggerText={"Preview"}
                 setOpen={setPreviewOpen}
               >
@@ -258,7 +259,7 @@ export default function AddLiquidityContent({
                 setOpen={setSingleTokenSetPreviewOpen}
                 disabled={isSingleInputDisabled}
                 title={"Confirm LP Details"}
-                imgURI={"/graphics/preview-swap-img.png"}
+                imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
                 triggerText={"Preview"}
               >
                 <TokenList className="bg-muted">
@@ -308,11 +309,11 @@ export default function AddLiquidityContent({
                     title={"Approximate Total Value"}
                     value={formatUsd(singleSidedTotalValue ?? 0) ?? "-"}
                   />
-                  {/* TODO: impl */}
+                  {/* TODO: impl
                   <InfoBoxListItem
                     title={"Percentage of Pool"}
                     value={"0.0000069%"}
-                  />
+                  /> */}
                 </InfoBoxList>
                 {(Number(allowance?.formattedAllowance) ?? 0) <
                 selectedSingleTokenAmount ? (

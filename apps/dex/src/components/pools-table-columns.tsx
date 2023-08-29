@@ -99,7 +99,6 @@ export const columns: ColumnDef<Pool>[] = [
     accessorKey: "btns",
     header: () => <></>,
     cell: ({ row }) => {
-      console.log(row);
       const address = row.original.pool;
 
       return (

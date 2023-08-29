@@ -1,5 +1,6 @@
 import { type RouterService } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
+import { type CuttingBoard } from "@bera/berajs";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -59,6 +60,7 @@ const BASE_TOKEN = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
 
 export const getWBeraPriceDictForPoolTokens = async (
   pools: Pool[],
+  globalCuttingBoard: CuttingBoard[] | undefined,
   router: RouterService,
 ) => {
   let mappedTokens: MappedTokens = {};
@@ -204,6 +206,26 @@ export const getWBeraPriceDictForPoolTokens = async (
           const totalTokenValue = tokenValue * Number(tokenBalance);
           return acc + totalTokenValue;
         }, 0);
+
+        const cuttingBoard = globalCuttingBoard?.find(
+          (board) => board.address.toLowerCase() === pool.pool.toLowerCase(),
+        );
+        const bgtPrice =
+          mappedTokens[process.env.NEXT_PUBLIC_WBERA_ADDRESS as string];
+
+        let poolApy = 0;
+        if (cuttingBoard && bgtPrice) {
+          const totalCuttingBoardValue =
+            Number(cuttingBoard.amount) * Number(bgtPrice);
+          poolApy = (totalCuttingBoardValue / pool.totalValue) * 100;
+        }
+        const fees =
+          (Number(pool?.formattedSwapFee) / 100) * Number(pool?.dailyVolume);
+        const swapApr = (fees / Number(pool?.totalValue)) * 365 * 100;
+        pool.fees = fees;
+        pool.feeApy = Number.isNaN(swapApr) ? 0 : swapApr;
+        pool.bgtApy = Number.isNaN(poolApy) ? 0 : poolApy;
+        pool.totalApy = pool.bgtApy + pool.feeApy;
       });
     tagPools(pools);
   }
