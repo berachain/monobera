@@ -57,7 +57,7 @@ export const PoolCard = ({
           ))} */}
           {/* maybe consider using this */}
           <TokenIconList
-            tokenList={pool?.tokens.map((t) => t.address) ?? []}
+            tokenList={pool?.tokens?.map((t) => t.address) ?? []}
             size={24}
           />
         </div>

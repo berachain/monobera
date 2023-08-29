@@ -33,7 +33,7 @@ const BaseToast = ({
   return (
     <div
       className={cn(
-        "flex h-14 flex-row items-center justify-between rounded-md p-4 text-white  shadow",
+        "z-50 flex h-14 flex-row items-center justify-between rounded-md p-4  text-white shadow	",
         className,
       )}
       style={{ width: "350px", background: "#292524" }} // i dont know why this is needed, but we ball 🤮

@@ -1,7 +1,7 @@
 import { type RouterService } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { type CuttingBoard } from "@bera/berajs";
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits, getAddress, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { type MappedTokens } from "../[address]/types";
@@ -31,8 +31,10 @@ const getVolume = (
   volumeData?.forEach((data) => {
     if (!data.coins) return;
     const total = data.coins?.reduce((acc, cur) => {
-      const token = pool.tokens.find((token) => token.address === cur.denom);
-      const tokenValue = prices[cur.denom];
+      const token = pool.tokens.find(
+        (token) => token.address.toLowerCase() === cur.denom.toLowerCase(),
+      );
+      const tokenValue = prices[getAddress(cur.denom)] ?? 0;
       const tokenBalance = formatUnits(
         BigInt(cur.amount),
         token?.decimals ?? 18,
@@ -47,6 +49,7 @@ const getVolume = (
     volumeArray.push(total);
     volumeTotal += total;
   });
+
   return { volumeArray, volumeTotal };
 };
 
@@ -94,31 +97,47 @@ export const getWBeraPriceDictForPoolTokens = async (
       allPoolData?.length &&
       allPoolData?.reduce(
         (acc, cur) => {
-          acc[cur.tokenIn] = cur.formattedReturnAmount;
+          acc[getAddress(cur.tokenIn)] = cur.formattedReturnAmount;
           return acc;
         },
-        { [BASE_TOKEN]: "1" },
+        { [getAddress(BASE_TOKEN)]: "1" },
       );
 
     const allPoolVolumePromises: any[] = [];
     pools.forEach((pool) => {
       const dailyVolumeResponse = fetch(
-        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=1`,
+        `${
+          process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
+        }/events/dex/historical_volumes?pool=${getAddress(
+          pool.pool,
+        )}&num_of_days=1`,
         { cache: "no-store" },
       );
 
       const weeklyVolumeResponse = fetch(
-        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=7`,
+        `${
+          process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
+        }/events/dex/historical_volumes?pool=${getAddress(
+          pool.pool,
+        )}&num_of_days=7`,
         { cache: "no-store" },
       );
 
       const monthlyVolumeResponse = fetch(
-        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=30`,
+        `${
+          process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
+        }/events/dex/historical_volumes?pool=${getAddress(
+          pool.pool,
+        )}&num_of_days=30`,
         { cache: "no-store" },
       );
 
       const quarterlyVolumeResponse = fetch(
-        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/events/dex/historical_volumes?pool=${pool.pool}&num_of_days=90`,
+        `${
+          process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
+        }/events/dex/historical_volumes?pool=${getAddress(
+          pool.pool,
+        )}&num_of_days=90`,
         { cache: "no-store" },
       );
 
@@ -163,7 +182,7 @@ export const getWBeraPriceDictForPoolTokens = async (
         const {
           volumeArray: quarterlyVolumeArray,
           volumeTotal: quarterlyVolumeTotal,
-        } = getVolume(mappedTokens, volumes[1], pool);
+        } = getVolume(mappedTokens, volumes[3], pool);
 
         const swapFee = Number(formatUnits(BigInt(pool.swapFee) ?? "", 18));
         pool.formattedSwapFee = (swapFee * 100).toString();
@@ -218,6 +237,7 @@ export const getWBeraPriceDictForPoolTokens = async (
           const totalCuttingBoardValue =
             Number(cuttingBoard.amount) * Number(bgtPrice);
           poolApy = (totalCuttingBoardValue / pool.totalValue) * 100;
+          pool.bgtPerYear = Number(cuttingBoard.amount);
         }
         const fees =
           (Number(pool?.formattedSwapFee) / 100) * Number(pool?.dailyVolume);
@@ -239,14 +259,17 @@ export enum PoolTag {
   BGT_REWARDS = "bgtRewards",
 }
 
-const LIQUIDITY_THRESHOLD = 50000;
+const LIQUIDITY_THRESHOLD = 50000; // 50k usd
+const PERCENTAGE_INCREASE_THRESHOLD = 50; // 50% increase
 
 // a new pool is a pool created in the past 24 hours with atleast 50k usd in liquidity.
 const isNewPool = (pool: Pool) => {
-  const currentTime = Date.now();
+  const currentTime = Date.now() / 1000;
 
-  const twentyFourHoursInMs = 24 * 60 * 60 * 1000;
-  const poolCreationTime = Date.parse(pool.metadata.blockTime);
+  const twentyFourHoursInMs = 24 * 60 * 60;
+  const blockTime = Number(pool.metadata.blockTime);
+
+  const poolCreationTime = new Date(blockTime).getTime();
 
   return (
     currentTime - poolCreationTime <= twentyFourHoursInMs &&
@@ -254,16 +277,31 @@ const isNewPool = (pool: Pool) => {
   );
 };
 
+const getVolumeIncrease = (pool: Pool) => {
+  const weeklyVolume = pool.weeklyVolume;
+  const today = weeklyVolume ? weeklyVolume[weeklyVolume.length - 1] ?? 0 : 0;
+  const yesterday = weeklyVolume
+    ? weeklyVolume[weeklyVolume.length - 2] ?? 0
+    : 0;
+  if (yesterday !== 0) {
+    const percentageDifference = ((today - yesterday) / yesterday) * 100;
+    if (percentageDifference > PERCENTAGE_INCREASE_THRESHOLD) {
+      return true;
+    }
+  }
+
+  return false;
+};
 // a hot pool is a pool with atleast xxx liquidity and xxx % increase in volume in the past 24 hours
-const isHotPool = (_pool: Pool) => {
-  return true;
+const isHotPool = (pool: Pool) => {
+  return (
+    (pool?.totalValue ?? 0) >= LIQUIDITY_THRESHOLD && getVolumeIncrease(pool)
+  );
 };
 
 // a pool with bgt rewards is a pool with a bgt reward contract
-const hasBgtRewards = (_pool: Pool) => {
-  // get the global BGT cutting board
-  // use pool address to get BGT rewards / yr
-  return true;
+const hasBgtRewards = (pool: Pool) => {
+  return pool.bgtPerYear !== 0 && pool.bgtPerYear !== undefined;
 };
 
 export const tagPools = (pools: Pool[]) => {

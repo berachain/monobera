@@ -90,7 +90,6 @@ const getTokenDisplay = (event: any, pool: Pool) => {
       (token) => token.address === event.swapOut.denom,
     );
 
-    console.log(tokenIn, tokenOut);
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -341,10 +340,6 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     isProvisionDataReachingEnd,
   } = usePoolEvents(pool?.pool);
 
-  const fees = (Number(pool.formattedSwapFee) / 100) * Number(pool.dailyVolume);
-
-  const swapApr = (fees / Number(pool?.totalValue)) * 365 * 100;
-
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {
       return (
@@ -405,7 +400,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               fee
             </Badge>
             <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
-              0.42% <Icons.chevronsRight className="h-4 w-4" /> 1.58% BGT
+              {pool?.bgtApy?.toFixed(2)}% BGT APY
             </Badge>
             <div
               className="xs:hidden flex flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex md:flex lg:flex"
@@ -476,7 +471,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
                 {pool.dailyVolume && Number(pool.dailyVolume) !== 0
-                  ? formatUsd(fees)
+                  ? formatUsd(pool.fees ?? "0")
                   : "$0"}
               </div>{" "}
             </Card>
@@ -487,7 +482,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 </p>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                {(Number.isNaN(swapApr) ? 0 : swapApr).toFixed(2)}%
+                {(pool?.totalApy ?? 0).toFixed(2)}%
               </div>
             </Card>
           </div>

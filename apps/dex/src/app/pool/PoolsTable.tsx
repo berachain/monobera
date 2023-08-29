@@ -95,7 +95,7 @@ export const PoolSearch = () => {
             </div>
             <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
               <FilterBadge
-                text={"🚀 Trending Pools"}
+                text={"🚀 New Pools"}
                 active={isNewPool}
                 onClick={() => setIsNewPool(!isNewPool)}
               />

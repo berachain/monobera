@@ -89,8 +89,17 @@ export async function GET(request: Request) {
   const hasBgtRewards = searchParams.get("hasBgtRewards");
   const hotPools = searchParams.get("hotPools");
   const newPools = searchParams.get("newPools");
+  const searchKeyword = searchParams.get("search") ?? "";
 
-  let taggedPools: any[] = totalSupplyStringPools;
+  let taggedPools: any[] = totalSupplyStringPools?.filter((pool: Pool) => {
+    return searchKeyword === ""
+      ? true
+      : pool.poolName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+          (pool.poolShareDenomHex &&
+            pool.poolShareDenomHex
+              .toLowerCase()
+              .includes(searchKeyword.toLowerCase()));
+  });
 
   if (hasBgtRewards == "true") {
     taggedPools = taggedPools.filter((pool) =>
