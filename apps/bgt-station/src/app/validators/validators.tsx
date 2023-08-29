@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePollActiveValidators, usePollBgtSupply } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
+import { cloudinaryUrl } from "~/config";
 import ValidatorsTable from "./validators-table";
 
 function calculatePercentageChange(
@@ -83,7 +84,7 @@ export default function Validators({
       <div className="p-8 text-center">
         <Image
           className="mx-auto"
-          src="/bears/validator-bear.png"
+          src={`${cloudinaryUrl}/bears/n0irsbetrzmredmmu82c`}
           alt="bera banner"
           width={449.32}
           height={174}

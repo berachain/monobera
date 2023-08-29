@@ -15,6 +15,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { type Address } from "wagmi";
 
+import { cloudinaryUrl } from "~/config";
 import { useRedeem } from "../../hooks/useRedeem";
 
 export default function Redeem() {
@@ -31,7 +32,7 @@ export default function Redeem() {
       {ModalPortal}
       <Image
         className="max-[600px]:mx-auto"
-        src="/bears/redeem-bear.png"
+        src={`${cloudinaryUrl}/bears/l9oaplrgfkrqw8y6noyp`}
         alt="proposal-bear"
         width={240}
         height={174}

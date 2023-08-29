@@ -11,6 +11,7 @@ import { Badge } from "@bera/ui/badge";
 import { Card } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
+import { cloudinaryUrl } from "~/config";
 import { MultiSelectBadge } from "../components/multi-select-badge";
 import { generateRandomData } from "../home/mockData";
 import { type ALL, type VOTER_TYPE } from "../types";
@@ -21,25 +22,37 @@ const getBadge = (vt: string) => {
   switch (vt) {
     case "veto":
       return (
-        <Badge variant="info" className="px-2 py-1 capitalize">
+        <Badge
+          variant="info"
+          className="w-20 justify-center border-none px-2 py-1 text-sm capitalize"
+        >
           {vt}
         </Badge>
       );
     case "abstain":
       return (
-        <Badge variant="secondary" className="px-2 py-1">
+        <Badge
+          variant="secondary"
+          className="w-20 justify-center border-none px-2 py-1 text-sm"
+        >
           {vt}
         </Badge>
       );
     case "yes":
       return (
-        <Badge variant="success" className="px-2 py-1 capitalize">
+        <Badge
+          variant="success"
+          className="w-20 justify-center border-none px-2 py-1 text-sm capitalize"
+        >
           {vt}
         </Badge>
       );
     case "no":
       return (
-        <Badge variant="destructive" className="px-2 py-1 capitalize">
+        <Badge
+          variant="destructive"
+          className="w-20 justify-center border-none px-2 py-1 text-sm capitalize"
+        >
           {vt}
         </Badge>
       );
@@ -105,7 +118,7 @@ export function VoterTable() {
                       <Image
                         alt="proposal owner avatar"
                         className="rounded-full"
-                        src="/bears/proposal-bear.png"
+                        src={`${cloudinaryUrl}/bears/pgnhgjsm1si8gb2bdm1m`}
                         width={32}
                         height={32}
                       />
