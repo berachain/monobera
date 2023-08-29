@@ -1,6 +1,10 @@
 import { type Metadata } from "next";
 
-import { getOverviewData, getPastDays } from "~/utils/getServerSideData";
+import {
+  getDaily,
+  getOverviewData,
+  getPastHours,
+} from "~/utils/getServerSideData";
 import HoneyPage from "./honey-page";
 
 export const metadata: Metadata = {
@@ -15,15 +19,19 @@ export default async function Home({
     mode: "arcade" | "pro";
   };
 }) {
-  const [data, weeklyData, monthlyData, quarterlyData] = await Promise.all([
-    getOverviewData(),
-    getPastDays(7),
-    getPastDays(30),
-    getPastDays(90),
-  ]);
+  const [data, weeklyData, monthlyData, quarterlyData, hourlyData] =
+    await Promise.all([
+      getOverviewData(),
+      getDaily(7),
+      getDaily(30),
+      getDaily(90),
+      getPastHours(24),
+    ]);
+
+  console.log("data", weeklyData);
   return (
     <HoneyPage
-      {...{ data, weeklyData, monthlyData, quarterlyData }}
+      {...{ data, weeklyData, monthlyData, quarterlyData, hourlyData }}
       mode={mode === "pro" ? "pro" : "arcade"}
     />
   );

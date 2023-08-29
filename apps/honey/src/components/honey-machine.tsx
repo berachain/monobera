@@ -129,7 +129,6 @@ export function HoneyMachine() {
     fromBalance,
     toBalance,
     fee,
-    fee2,
     ModalPortal,
     needsApproval,
   } = usePsm();
@@ -329,7 +328,7 @@ export function HoneyMachine() {
                 <h1 className="relative mb-1 text-2xl font-semibold text-foreground">
                   {isMint ? "Mint" : "Redeem"}
                   <div className="absolute right-0 top-1 text-sm text-muted-foreground">
-                    Static fee of 69%
+                    Static fee of {fee?.toFixed(3)}%
                   </div>
                 </h1>
                 <ul role="list">
@@ -343,7 +342,6 @@ export function HoneyMachine() {
                     hidePrice
                     setAmount={(amount) => {
                       setFromAmount(Number(amount));
-                      setToAmount(Number(amount) * fee);
                     }}
                   />
                   <div className="flex justify-center">
@@ -378,7 +376,6 @@ export function HoneyMachine() {
                     amount={toAmount}
                     setAmount={(amount) => {
                       setToAmount(Number(amount));
-                      setFromAmount(Number(amount) * fee2);
                     }}
                     selectable={false}
                     hidePrice

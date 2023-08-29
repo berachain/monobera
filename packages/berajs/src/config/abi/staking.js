@@ -289,7 +289,7 @@ export const STAKING_PRECOMPILE_ABI = [
         type: "tuple",
       },
     ],
-    name: "getActiveValidators",
+    name: "getBondedValidators",
     outputs: [
       {
         internalType: "address[]",
@@ -312,6 +312,19 @@ export const STAKING_PRECOMPILE_ABI = [
         internalType: "struct Cosmos.PageResponse",
         name: "",
         type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getBondedValidatorsByPower",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
       },
     ],
     stateMutability: "view",
@@ -993,6 +1006,11 @@ export const STAKING_PRECOMPILE_ABI = [
           },
           {
             internalType: "uint256",
+            name: "balance",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
             name: "shares",
             type: "uint256",
           },
@@ -1230,6 +1248,25 @@ export const STAKING_PRECOMPILE_ABI = [
       },
     ],
     stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "consAddress",
+        type: "bytes",
+      },
+    ],
+    name: "valAddressFromConsAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "pure",
     type: "function",
   },
 ];

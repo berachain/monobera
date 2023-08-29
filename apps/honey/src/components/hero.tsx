@@ -35,7 +35,7 @@ export default function Hero() {
             onClick={() => router.push("/pool")}
           >
             <Icons.info className="h-3 w-3" />
-            Lend HONEY on Baave <Icons.arrowRight className="h-3 w-3" />
+            Lend HONEY on 🅱️end <Icons.arrowRight className="h-3 w-3" />
           </div>
           <div
             className="flex h-8 w-fit items-center gap-1 rounded-2xl bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
@@ -49,8 +49,8 @@ export default function Hero() {
             className="flex h-8 w-fit items-center gap-1 rounded-2xl bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
             onClick={() => router.push("/pool/create")}
           >
-            <Icons.info className="h-3 w-3" /> Provide Collateral for Perpetuals{" "}
-            <Icons.arrowRight className="h-3 w-3" />
+            <Icons.info className="h-3 w-3" /> Provide Collateral for
+            🅱️er🅱️etuals <Icons.arrowRight className="h-3 w-3" />
           </div>
         </div>
       </div>
