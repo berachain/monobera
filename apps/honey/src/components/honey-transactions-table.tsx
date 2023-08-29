@@ -93,10 +93,13 @@ const getAction = (event: any) => {
 };
 
 const getTokenDisplay = (event: any, tokenDictionary: any) => {
-  const tokenIn = tokenDictionary && tokenDictionary["0x1d0f659fF50d1830e449dD88E533cb11FB7a25E4"];
-  const tokenOut =  tokenDictionary && tokenDictionary["0xa85579e75a7ba99d00cce02441a5e21661b63a98"];
+  const tokenIn =
+    tokenDictionary &&
+    tokenDictionary["0x1d0f659fF50d1830e449dD88E533cb11FB7a25E4"];
+  const tokenOut =
+    tokenDictionary &&
+    tokenDictionary["0xa85579e75a7ba99d00cce02441a5e21661b63a98"];
   if (isMintData(event)) {
-
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -311,7 +314,7 @@ export const EventTable = ({
   isLoading: boolean | undefined;
   arcade: boolean;
 }) => {
-  const {tokenDictionary} = useTokens();
+  const { tokenDictionary } = useTokens();
 
   return (
     <Table>

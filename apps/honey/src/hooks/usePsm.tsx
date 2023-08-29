@@ -83,6 +83,8 @@ export const usePsm = () => {
     collateral ? (collateral.address as Address) : undefined,
   );
 
+  console.log("params", params);
+
   const fee = params ? (isMint ? params.mintFee : params.redeemFee) : undefined;
   // const block = useLatestBlock();
 

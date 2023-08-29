@@ -18,13 +18,11 @@ export const usePollPreviewMint = (
 
   const method = "previewMint";
   const QUERY_KEY = [method, collateral, amount];
-  console.log("QUERY_KEY", QUERY_KEY)
   useSWR(
     QUERY_KEY,
     async () => {
       try {
         if (collateral === undefined || amount === 0) return undefined;
-        console.log('REEEEEe')
         const formattedAmount = parseUnits(
           `${amount}`,
           collateral.decimals ?? 18,
