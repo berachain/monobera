@@ -9,29 +9,31 @@ import {
   type Validator,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
-import { IconList, SearchInput } from "@bera/shared-ui";
-import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
+import {
+  DataTable,
+  IconList,
+  SearchInput,
+  ValidatorIcon,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits, getAddress } from "viem";
 
-import { formatCommission } from "~/utils/formatCommission";
 import { ValidatorGauge } from "~/app/validators/validators-table";
 import { validator_table_columns } from "~/columns/validator-table-columns";
 import { usePollPrices } from "~/hooks/usePollPrices";
-import RT from "./react-table";
 
 export default function ValidatorSelector({
   validatorAddress,
   onSelectValidator,
   showDelegated = false,
-  emptyMessage,
-}: {
+}: // emptyMessage,
+{
   validatorAddress?: string;
   onSelectValidator?: (address: string) => void;
   showDelegated?: boolean;
-  emptyMessage?: string;
+  // emptyMessage?: string;
 }) {
   const { useActiveValidator } = usePollActiveValidators();
 
@@ -83,7 +85,7 @@ export default function ValidatorSelector({
         validators={filteredValidators ?? []}
         onSelect={(address) => onSelectValidator && onSelectValidator(address)}
         onClose={() => setOpen(false)}
-        emptyMessage={emptyMessage}
+        // emptyMessage={emptyMessage}
       />
     </div>
   );
@@ -114,20 +116,20 @@ const ValidatorModal = ({
   open,
   validators,
   onSelect,
-  emptyMessage,
-}: {
+}: // emptyMessage,
+{
   onClose: () => void;
   open: boolean;
   validators: Validator[];
   onSelect: (address: string) => void;
-  emptyMessage?: string;
+  // emptyMessage?: string;
 }) => {
   const tableV = React.useMemo(
     () =>
       validators.map((validator: Validator) => ({
         address: validator.operatorAddress,
         validator: (
-          <div className="flex w-[137px] items-center gap-1">
+          <div className="flex w-[100px] items-center gap-1">
             <ValidatorIcon
               address={BeravaloperToEth(validator.operatorAddress)}
               className="h-8 w-8"
@@ -139,38 +141,32 @@ const ValidatorModal = ({
           <BGTDelegated operatorAddress={validator.operatorAddress} />
         ),
         // vp: <VP validator={validator} />,
-        vp: undefined,
-        commission: (
-          <div className="flex h-full w-[91px] items-center">
-            {" "}
-            {formatCommission(validator.commission.commissionRates.rate)}%
-          </div>
-        ),
-        vapy: <div className="flex h-full w-[67px] items-center">6.9%</div>,
+        vp: 420,
+        commission: validator.commission.commissionRates.rate,
+        vapy: 6.9,
         mwg: (
           <ValidatorGauge
             address={BeravaloperToEth(validator.operatorAddress)}
           />
         ),
         bribes: (
-          <div className="flex w-[136px] items-center justify-center gap-1">
-            <IconList
-              showCount={4}
-              iconList={[
-                "/icons/eth-icons.svg",
-                "/icons/atom-icons.svg",
-                "/icons/usdc-icons.svg",
-                "/icons/usdt-icons.svg",
-                "/icons/btc-icons.svg",
-                "/icons/honey-icons.svg",
-                "/icons/bera-icons.svg",
-              ]}
-            />
-          </div>
+          <IconList
+            showCount={3}
+            iconList={[
+              "/icons/eth-icons.svg",
+              "/icons/atom-icons.svg",
+              "/icons/usdc-icons.svg",
+              "/icons/usdt-icons.svg",
+              "/icons/btc-icons.svg",
+              "/icons/honey-icons.svg",
+              "/icons/bera-icons.svg",
+            ]}
+          />
         ),
       })),
     [validators],
   );
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="w-full justify-center sm:max-w-fit">
@@ -192,15 +188,15 @@ const ValidatorModal = ({
               </Button>
             </div> */}
           </div>
-          <RT
+          <DataTable
             columns={validator_table_columns}
             data={tableV}
-            rowOnClick={(value) => {
+            onRowClick={(value: any) => {
               onSelect(cosmosvaloperToEth(value.original.address));
               onClose();
             }}
             className="min-w-[1000px]"
-            emptyMessage={emptyMessage}
+            // emptyMessage={emptyMessage}
           />
         </div>
       </DialogContent>

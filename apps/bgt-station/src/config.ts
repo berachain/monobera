@@ -25,10 +25,14 @@ export const jsonRpcUrl = process.env.NEXT_PUBLIC_JSON_RPC_URL as string;
 // Bera token information
 export const gasTokenSymbol = process.env
   .NEXT_PUBLIC_NETWORK_CURRENCY as string;
+export const stakingToken = process.env.NEXT_PUBLIC_STAKING_TOKEN as string;
 export const gasTokenName = process.env
   .NEXT_PUBLIC_NETWORK_CURRENCY_NAME as string;
 export const gasTokenDecimals = Number(
   process.env.NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS as string,
+);
+export const governanceMinDeposit = Number(
+  process.env.NEXT_PUBLIC_GOVERNANCE_MIN_DEPOSIT as string,
 );
 
 // Precompiles & contracts

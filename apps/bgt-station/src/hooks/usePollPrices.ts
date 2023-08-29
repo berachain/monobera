@@ -11,7 +11,7 @@ export const usePollPrices = () => {
     async () => {
       const res = await fetch(`${getAbsoluteUrl()}/api`);
       const data: MappedTokens = await res.json();
-      console.log(data);
+      // console.log(data);
       return data;
     },
     {

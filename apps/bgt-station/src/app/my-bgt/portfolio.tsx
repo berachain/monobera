@@ -39,7 +39,7 @@ export default function Portfolio() {
   const unbondingValidatorCount = useDelegatorTotalUnbondingValidators();
 
   return (
-    <div className="container max-w-[1078px]">
+    <div className="container mb-[80px] max-w-[1078px]">
       <div className="mb-8 flex h-[100px] items-center justify-center text-3xl font-bold leading-[48px] text-foreground md:text-5xl">
         👋 Hey {truncateHash(account ?? "0x", 6)} you have...
       </div>
@@ -122,13 +122,15 @@ export default function Portfolio() {
             </TabsList>
           </Tabs>
         </div>
-        {tab === BGTSelectionEnum.YOUR_DELEGATIONS && <YourDelegations />}
-        {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
-          <AverageGaugeWeight />
-        )}
-        {tab === BGTSelectionEnum.UNBONDING_QUEUE && (
-          <UnbondingQueue unbondingQueue={unbondingQueue} />
-        )}
+        <div className="mt-8">
+          {tab === BGTSelectionEnum.YOUR_DELEGATIONS && <YourDelegations />}
+          {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
+            <AverageGaugeWeight />
+          )}
+          {tab === BGTSelectionEnum.UNBONDING_QUEUE && (
+            <UnbondingQueue unbondingQueue={unbondingQueue} />
+          )}
+        </div>
       </div>
     </div>
   );

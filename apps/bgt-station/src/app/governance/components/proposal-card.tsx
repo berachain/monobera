@@ -15,6 +15,7 @@ import {
 import { Badge } from "@bera/ui/badge";
 
 import { sumTally } from "~/utils/sumTally";
+import { cloudinaryUrl } from "~/config";
 import { StatusEnum, VoteColorMap, mappedStatusEnum } from "../types";
 import { ProgressBarChart } from "./progress-bar-chart";
 
@@ -25,25 +26,34 @@ const getBadge = (proposalStatus: number) => {
   switch (proposalStatus) {
     case mappedStatusEnum[StatusEnum.ACTIVE]:
       return (
-        <Badge variant="info" className="px-2 py-1 capitalize">
+        <Badge
+          variant="info"
+          className="border-none px-2 py-1 text-xs capitalize"
+        >
           {StatusEnum.ACTIVE}
         </Badge>
       );
     case mappedStatusEnum[StatusEnum.IN_QUEUE]:
       return (
-        <Badge variant="info" className="px-2 py-1">
+        <Badge variant="info" className="border-none px-2 py-1 text-xs">
           In queue
         </Badge>
       );
     case mappedStatusEnum[StatusEnum.PASSED]:
       return (
-        <Badge variant="success" className="px-2 py-1 capitalize">
+        <Badge
+          variant="success"
+          className="border-none px-2 py-1 text-xs capitalize"
+        >
           {StatusEnum.PASSED}
         </Badge>
       );
     case mappedStatusEnum[StatusEnum.REJECTED]:
       return (
-        <Badge variant="destructive" className="px-2 py-1 capitalize">
+        <Badge
+          variant="destructive"
+          className="border-none px-2 py-1 text-xs capitalize"
+        >
           {StatusEnum.REJECTED}
         </Badge>
       );
@@ -123,7 +133,7 @@ export function ProposalCard({
           <span className="hidden sm:inline ">Expedited</span>
         </div>
       )} */}
-      <div className="flex h-7 items-center">
+      <div className="flex h-7 items-center gap-1">
         {getBadge(status)}
         <div className="text-xs font-medium leading-tight text-stone-500">
           {getTimeText(status, Number(submitTime))}
@@ -161,7 +171,7 @@ export function ProposalCard({
             <Image
               alt="proposal owner avatar"
               className="rounded-full"
-              src="/bears/proposal-bear.png"
+              src={`${cloudinaryUrl}/bears/pgnhgjsm1si8gb2bdm1m`}
               width={24}
               height={24}
             />

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -9,6 +11,7 @@ import {
   type PoLValidator,
 } from "@bera/berajs";
 import { DataTable, SearchInput } from "@bera/shared-ui";
+import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress, type Address } from "viem";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
@@ -19,8 +22,6 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
     address as Address,
   );
   const cuttingBoard = useValidatorCuttingBoard();
-
-  console.log("cuttingBoard", cuttingBoard);
   const highestVotedGauge = React.useMemo(() => {
     return cuttingBoard ? cuttingBoard[0].address : undefined;
   }, [cuttingBoard]);
@@ -56,6 +57,7 @@ export default function ValidatorsTable() {
       );
     });
   }, [validators, keyword]);
+
   return (
     <div className="mt-16">
       <div className="mb-4">
@@ -66,13 +68,20 @@ export default function ValidatorsTable() {
         />
       </div>
       {isLoading ? (
-        <>loading...</>
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+        </div>
       ) : (
         <DataTable
           columns={general_validator_columns}
           data={filteredValidators ?? []}
+          className="min-w-[900px]"
           onRowClick={(row: any) =>
-            router.push(`/validators/${BeravaloperToEth(row.original.address)}`)
+            router.push(
+              `/validators/${BeravaloperToEth(row.original.operatorAddress)}`,
+            )
           }
         />
       )}

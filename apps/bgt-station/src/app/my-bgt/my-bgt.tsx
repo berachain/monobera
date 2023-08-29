@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useBeraJs } from "@bera/berajs";
 
 import { Connect } from "~/components/header";
+import { cloudinaryUrl } from "~/config";
 import Portfolio from "./portfolio";
 
 export default function MyBGT() {
@@ -17,7 +18,7 @@ export default function MyBGT() {
         <div className="container flex flex-col gap-4">
           <Image
             className="mx-auto"
-            src="/bears/wallet-connect-bear.png"
+            src={`${cloudinaryUrl}/bears/exrpxwn6fmll2x0c0jlr`}
             alt="wallet-connect-bear"
             width={535}
             height={285}

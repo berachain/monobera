@@ -6,19 +6,15 @@ import { unbonding_queue_columns } from "~/columns/global-gauge-weight";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   STAKING_PRECOMPILE_ABI,
-  formatter,
   truncateHash,
   useBeraConfig,
   usePollDelegatorUnbonding,
   type EntryData,
 } from "@bera/berajs";
-import { useTxn } from "@bera/shared-ui";
-import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
+import { DataTable, ValidatorIcon, useTxn } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
-import RT from "~/components/react-table";
 import Nothing from "../nothing";
 
 export default function UnbondingQueue({
@@ -61,19 +57,11 @@ export default function UnbondingQueue({
           {truncateHash(queue.validatorAddress as Address)}
         </div>
       ),
-      unbondingAmount: (
-        <div className="flex h-full w-[100px] items-center justify-center">
-          {formatter.format(Number(formatUnits(queue.balance, 18)))}
-        </div>
-      ),
-      timeRemaining: (
-        <div className="flex h-full w-[120px] flex-row items-center justify-center">
-          {getDateString(queue.completionTime)}
-        </div>
-      ),
+      unbondingAmount: queue.balance,
+      timeRemaining: getDateString(queue.completionTime),
       hide: (
         <div
-          className=" flex w-[27px] items-center justify-center"
+          className="flex w-[27px] items-center justify-center"
           onClick={() => {
             write({
               address: networkConfig.precompileAddresses
@@ -94,7 +82,7 @@ export default function UnbondingQueue({
     }));
   }, [unbondingQueue]);
   return (
-    <div className="mt-8 flex w-full flex-col gap-8 md:flex-row ">
+    <div className="flex w-full flex-col gap-8 md:flex-row ">
       {total !== 0 ? (
         <>
           {ModalPortal}
@@ -105,12 +93,12 @@ export default function UnbondingQueue({
               defaultMonth={dateArray[0]}
             />
           </Card>
-          <div className="w-full ">
-            <RT
+          <div className="w-full">
+            <DataTable
               columns={unbonding_queue_columns}
               data={dataT}
+              // emptyMessage="No BGT unbonding queue"
               className="min-w-[490px]"
-              emptyMessage="No BGT unbonding queue"
             />
           </div>
         </>

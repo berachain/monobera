@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
   usePollProposal,
@@ -10,9 +11,9 @@ import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { type Address } from "viem";
 
 import { sumTally } from "~/utils/sumTally";
+import { governanceAddress } from "~/config";
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
 import { VoteCard } from "../../components/vote-card";
@@ -27,26 +28,26 @@ export default function ProposalDetails({
 }) {
   const { useProposal } = usePollProposal(proposalId);
   const proposal: Proposal | undefined = useProposal();
-
+  const router = useRouter();
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 
-  console.log(proposal);
+  // console.log(proposal);
   const userVotingPower = 0;
   const { write, ModalPortal } = useTxn({
     message: `Voting for proposal ${proposalId}`,
   });
   const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
-  console.log(payload);
+  // console.log(payload);
   return (
     <div className="container pb-16">
       {ModalPortal}
       <div className="mx-auto h-fit w-full max-w-[830px]">
         <div
           className="flex h-11 w-full justify-between hover:cursor-pointer"
-          // onClick={() => router.push("/governance")}
+          onClick={() => router.push("/governance")}
         >
-          <div className="flex items-center gap-1 text-sm font-medium leading-[14px] text-primary-foreground">
+          <div className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground">
             <Icons.arrowLeft className="relative h-4 w-4" />
             Governance
           </div>
@@ -63,8 +64,7 @@ export default function ProposalDetails({
                 setSelected={setSelected}
                 onSubmit={() => {
                   write({
-                    address: process.env
-                      .NEXT_PUBLIC_GOVERNANCE_ADDRESS as Address,
+                    address: governanceAddress,
                     abi: GOVERNANCE_PRECOMPILE_ABI,
                     functionName: "vote",
                     params: payload,

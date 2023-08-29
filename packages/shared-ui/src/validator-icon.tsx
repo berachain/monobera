@@ -21,8 +21,9 @@ export const ValidatorIcon = ({
       <AvatarFallback className="font-bold">
         <Image
           src="/icons/validator-icon.png"
-          width={24}
-          height={24}
+          width={100}
+          height={100}
+          className="h-full w-full"
           alt={"validator-icon"}
         />
       </AvatarFallback>

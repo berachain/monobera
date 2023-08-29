@@ -1,12 +1,20 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import {
   usePollActiveValidators,
   usePollBgtSupply,
   usePollTotalSupply,
 } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
+import { Skeleton } from "@bera/ui/skeleton";
 
-import { SemiCircleProgress } from "./circle-stat";
+const SemiCircleProgress = dynamic(
+  () => import("./circle-stat").then((mod) => mod.SemiCircleProgress),
+  {
+    ssr: false,
+    loading: () => <Skeleton className="h-[200px] w-[200px]" />,
+  },
+);
 
 export function Stats() {
   const { usePercentOfStakedBGT } = usePollActiveValidators();

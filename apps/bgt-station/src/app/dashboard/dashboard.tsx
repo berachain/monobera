@@ -1,13 +1,16 @@
 "use client";
 
+import { useMemo } from "react";
 import { type Metadata } from "next";
 import Image from "next/image";
 import {
-  usePollActiveValidators,
+  usePollGlobalValidatorBribes,
   type CuttingBoard,
-  type Validator,
+  type PoLValidator,
 } from "@bera/berajs";
 
+import { cloudinaryUrl } from "~/config";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import GlobalGaugeWeight from "../../components/global-gauge-weight";
 import { Details } from "./components/details";
 import { ValidatorsList } from "./components/validators-list";
@@ -21,13 +24,33 @@ interface Props {
   globalCuttingBoard: CuttingBoard[];
 }
 export default function DashBoard({ globalCuttingBoard }: Props) {
-  const { useActiveValidators } = usePollActiveValidators();
-  const validators: Validator[] | undefined = useActiveValidators();
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
+  const validators: PoLValidator[] = usePolValidators();
+  const topStakeValidators = useMemo(
+    () =>
+      validators
+        ? validators
+            .sort((a: PoLValidator, b: PoLValidator) => b.rank - a.rank)
+            .slice(0, validators.length > 6 ? 6 : validators.length)
+        : [],
+    [validators],
+  );
+  const topPayingValidators = useMemo(
+    () =>
+      validators
+        ? validators
+            .sort((a: PoLValidator, b: PoLValidator) => b.rank - a.rank)
+            .slice(0, validators.length > 6 ? 6 : validators.length)
+        : [],
+    [validators],
+  );
   return (
     <div className="container flex w-full max-w-[1078px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">
         <Image
-          src="/bears/bee.png"
+          src={`${cloudinaryUrl}/bears/wy6muyafchlo5wjidall`}
           alt="dashboard bee"
           width={164}
           height={168}
@@ -52,13 +75,15 @@ export default function DashBoard({ globalCuttingBoard }: Props) {
       </div>
 
       <ValidatorsList
-        validators={validators}
+        validators={topStakeValidators}
         title={"🔥 Top staked validators"}
+        isLoading={isLoading}
       />
 
       <ValidatorsList
-        validators={validators}
+        validators={topPayingValidators}
         title={"💰 Top paying validators"}
+        isLoading={isLoading}
       />
     </div>
   );
