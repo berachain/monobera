@@ -8,13 +8,11 @@ import {
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-import { honey } from "~/config/tokens";
-
 export function HoneyControls() {
   usePollAssetWalletBalance();
   const tokenBalance = Number(
-    useSelectedAssetWalletBalance(honey?.address ?? "")?.formattedBalance ??
-      "0",
+    useSelectedAssetWalletBalance(process.env.NEXT_PUBLIC_HONEY_ADDRESS ?? "")
+      ?.formattedBalance ?? "0",
   );
   return (
     <div className="flex flex-row items-center gap-5">

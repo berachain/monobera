@@ -12,10 +12,8 @@ import {
 } from "@bera/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { format } from "date-fns";
-import { formatUnits } from "viem";
 
 import { type HoneyEntry } from "~/app/type";
-import { honey } from "~/config/tokens";
 
 const Options = {
   responsive: true,
@@ -81,8 +79,8 @@ const Options = {
 };
 
 interface IHoneyChart {
-  hourlySupply: HoneyEntry[];
-  hourlyVolume: HoneyEntry[];
+  hourlySupply: number[];
+  hourlyVolume: number[];
   weeklyVolume: number[];
   weeklyFees: number[];
   weeklyVolumeTotal: number;
@@ -142,11 +140,7 @@ function getDateListFromDaysAgo(daysAgo: number): string[] {
 
   return dateList.reverse();
 }
-const getData = (
-  data: number[] | HoneyEntry[],
-  timeFrame: TimeFrame,
-  chart: Chart,
-) => {
+const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
   if (isHoneyData(data[0])) {
     return {
       labels: data.map((entry: any) => {
@@ -156,9 +150,7 @@ const getData = (
 
       datasets: [
         {
-          data: data.map((entry: any) =>
-            Number(formatUnits(BigInt(entry.amount), honey.decimals)),
-          ),
+          data: data.map((entry: any) => entry),
           // data: data.map((entry: any) => entry.amount),
           labelColor: false,
           backgroundColor: chart === Chart.VOLUME ? "#e4e4e4" : "#7fc516",
@@ -176,7 +168,7 @@ const getData = (
     labels: getDateListFromDaysAgo(timeFrameToNumber[timeFrame]),
     datasets: [
       {
-        data: data as number[],
+        data: data,
         labelColor: false,
         backgroundColor: chart === Chart.VOLUME ? "#e4e4e4" : "#7fc516",
         borderColor: chart === Chart.VOLUME ? "#e4e4e4" : "#7fc516",
@@ -241,16 +233,10 @@ export const HoneyChart = ({
     if (timeFrame === TimeFrame.HOURLY) {
       if (chart === Chart.VOLUME) {
         setData(getData(hourlyVolume, timeFrame, chart));
-        setDifference(
-          calculatePercentageDifference(
-            hourlyVolume.map((entry: any) =>
-              Number(formatUnits(BigInt(entry.amount), honey.decimals)),
-            ),
-          ),
-        );
+        setDifference(calculatePercentageDifference(hourlyVolume));
         setTotal(
           hourlyVolume.reduce(
-            (a, b) => a + Number(formatUnits(BigInt(b.amount), honey.decimals)),
+            (a, b) => a + b,
 
             0,
           ),

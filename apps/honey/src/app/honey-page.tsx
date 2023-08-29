@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cn } from "@bera/ui";
+import { formatUnits } from "viem";
 
 import Data from "~/components/data";
 import Graph from "~/components/graph";
@@ -13,28 +14,33 @@ import { HoneyMachine } from "~/components/honey-machine";
 import HoneyTransactionsTable from "~/components/honey-transactions-table";
 import { SwapCard } from "~/components/swap-card";
 import { cloudinaryUrl } from "~/config";
-import { type HoneySupply, type HoneyVolume } from "./type";
 
 export default function HoneyPage({
   data,
   weeklyData,
   monthlyData,
   quarterlyData,
+  hourlyData,
   mode,
 }: {
-  data: [HoneyVolume, HoneySupply];
-  weeklyData: [HoneyVolume, HoneySupply];
-  monthlyData: [HoneyVolume, HoneySupply];
-  quarterlyData: [HoneyVolume, HoneySupply];
+  data: any;
+  weeklyData: any;
+  monthlyData: any;
+  quarterlyData: any;
+  hourlyData: any;
   mode: "arcade" | "pro";
 }) {
-  const [volume, supply] = data;
-  const [weeklyVolume, weeklySupply] = weeklyData;
-  const [monthlyVolume, monthlySupply] = monthlyData;
-  const [quarterlyVolume, quarterlySupply] = quarterlyData;
+  const { volume, supply } = data;
+  const { volume: weeklyVolume, supply: weeklySupply } = weeklyData;
+  const { volume: monthlyVolume, supply: monthlySupply } = monthlyData;
+  const { volume: quarterlyVolume, supply: quarterlySupply } = quarterlyData;
 
+  console.log("hourly", hourlyData);
   const arcade = mode === "arcade";
   const router = useRouter();
+
+  const formattedVolume = formatUnits(BigInt(volume), 18);
+  const formattedSupply = formatUnits(BigInt(supply), 18);
 
   if (arcade && window && window.innerWidth < 1000) {
     router.push("/?mode=pro");
@@ -42,7 +48,7 @@ export default function HoneyPage({
 
   useEffect(() => {
     const handleResize = () => {
-      if (arcade && window.innerWidth < 1000) {
+      if (arcade && window?.innerWidth < 1000) {
         router.push("/?mode=pro");
       }
     };
@@ -95,8 +101,8 @@ export default function HoneyPage({
           >
             <div className="py-4 lg:py-0">
               <Data
-                dailyVolume={volume.honeyVolume?.[0]?.amount ?? "0"}
-                tvl={supply.honeyTotalSupply?.[0]?.amount ?? "0"}
+                dailyVolume={formattedVolume}
+                tvl={formattedSupply}
                 arcade={arcade}
               />
             </div>
@@ -119,14 +125,14 @@ export default function HoneyPage({
                 Total Honey Supply
               </h3>
               <Graph
-                hourlySupply={supply.honeyTotalSupply ?? []}
-                hourlyVolume={volume.honeyVolume ?? []}
-                weeklyVolume={weeklyVolume.honeyVolume ?? []}
-                weeklySupply={weeklySupply.honeyTotalSupply ?? []}
-                monthlyVolume={monthlyVolume.honeyVolume ?? []}
-                monthlySupply={monthlySupply.honeyTotalSupply ?? []}
-                quarterlyVolume={quarterlyVolume.honeyVolume ?? []}
-                quarterlySupply={quarterlySupply.honeyTotalSupply ?? []}
+                hourlySupply={[]}
+                hourlyVolume={[]}
+                weeklyVolume={weeklyVolume ?? []}
+                weeklySupply={weeklySupply ?? []}
+                monthlyVolume={monthlyVolume ?? []}
+                monthlySupply={monthlySupply ?? []}
+                quarterlyVolume={quarterlyVolume ?? []}
+                quarterlySupply={quarterlySupply ?? []}
                 arcade={arcade}
               />
             </div>

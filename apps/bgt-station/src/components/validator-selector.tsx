@@ -47,7 +47,6 @@ export default function ValidatorSelector({
   const prices = usePrices();
   const { usePolValidators, useDelegatorPolValidators } =
     usePollGlobalValidatorBribes(prices);
-  // const [keyword, setKeyword] = React.useState("");
   const validators = usePolValidators();
   const delegatorPolValidators = useDelegatorPolValidators(
     delegatedValidators?.map((d) => d.operatorAddress),

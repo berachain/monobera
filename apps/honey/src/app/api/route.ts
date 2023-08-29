@@ -78,8 +78,6 @@ export async function GET(request: Request) {
     }))
     .catch(() => undefined);
 
-  console.log("budatarns", data);
-
   if (!data) return NextResponse.json({});
 
   let sortedData = [];

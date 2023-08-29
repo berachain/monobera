@@ -10,7 +10,6 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { TokenInput } from "~/components/token-input";
 import { cloudinaryUrl } from "~/config";
-import { honey } from "~/config/tokens";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { ApproveTokenButton } from "./approve-token-button";
@@ -29,14 +28,14 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     fromAmount,
     setFromAmount,
     toAmount,
-    setToAmount,
     isMint,
     fromBalance,
     toBalance,
-    fee,
-    fee2,
+    setGivenIn,
     onSwitch,
     ModalPortal,
+    honey,
+    collateralList,
   } = usePsm();
   return (
     <div>
@@ -97,11 +96,12 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 onTokenSelection={setSelectedFrom}
                 amount={fromAmount ?? 0}
                 balance={fromBalance?.formattedBalance}
-                selectable={selectedFrom.address !== honey.address}
+                selectable={selectedFrom?.address !== honey?.address}
+                customTokenList={collateralList}
                 hidePrice
                 setAmount={(amount) => {
+                  setGivenIn(true);
                   setFromAmount(Number(amount));
-                  setToAmount(Number(amount) * fee);
                 }}
               />
               <div className="relative">
@@ -132,10 +132,11 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 selectedTokens={[selectedFrom, selectedTo]}
                 amount={toAmount}
                 setAmount={(amount) => {
-                  setToAmount(Number(amount));
-                  setFromAmount(Number(amount) * fee2);
+                  setGivenIn(false);
+                  setFromAmount(Number(amount));
                 }}
-                selectable={selectedTo.address !== honey.address}
+                selectable={selectedTo?.address !== honey?.address}
+                customTokenList={collateralList}
                 hidePrice
                 balance={toBalance?.formattedBalance}
                 hideBalance

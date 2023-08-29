@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { formatUsd, truncateHash } from "@bera/berajs";
+import { formatUsd, truncateHash, useTokens } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -20,7 +20,6 @@ import { formatUnits } from "viem";
 
 import { useHoneyEvents } from "~/app/api/useHoneyEvents";
 import { blockExplorerUrl } from "~/config";
-import { honey, stgUsd } from "~/config/tokens";
 
 enum Selection {
   AllTransactions = "allTransactions",
@@ -93,10 +92,14 @@ const getAction = (event: any) => {
   return <p>IDK</p>;
 };
 
-const getTokenDisplay = (event: any) => {
+const getTokenDisplay = (event: any, tokenDictionary: any) => {
+  const tokenIn =
+    tokenDictionary &&
+    tokenDictionary["0x1d0f659fF50d1830e449dD88E533cb11FB7a25E4"];
+  const tokenOut =
+    tokenDictionary &&
+    tokenDictionary["0xa85579e75a7ba99d00cce02441a5e21661b63a98"];
   if (isMintData(event)) {
-    const tokenIn = stgUsd;
-    const tokenOut = honey;
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -122,8 +125,6 @@ const getTokenDisplay = (event: any) => {
       </div>
     );
   } else if (isBurnData(event)) {
-    const tokenIn = honey;
-    const tokenOut = stgUsd;
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -153,10 +154,10 @@ const getTokenDisplay = (event: any) => {
 
 const getValue = (event: MintData | BurnData) => {
   if (isMintData(event)) {
-    return formatUnits(BigInt(event.mintAmount), honey?.decimals ?? 18);
+    return formatUnits(BigInt(event.mintAmount), 18);
   }
   if (isBurnData(event)) {
-    return formatUnits(BigInt(event.redeemAmount), stgUsd?.decimals ?? 18);
+    return formatUnits(BigInt(event.redeemAmount), 18);
   }
   return 0;
 };
@@ -313,6 +314,8 @@ export const EventTable = ({
   isLoading: boolean | undefined;
   arcade: boolean;
 }) => {
+  const { tokenDictionary } = useTokens();
+
   return (
     <Table>
       <TableHeader>
@@ -362,7 +365,7 @@ export const EventTable = ({
                 <TableCell>{getAction(event)}</TableCell>
                 <TableCell>{formatUsd(getValue(event) ?? "")}</TableCell>
                 <TableCell className="hidden font-medium sm:table-cell">
-                  {getTokenDisplay(event)}
+                  {getTokenDisplay(event, tokenDictionary)}
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
                   {truncateHash(event?.from ?? "")}
