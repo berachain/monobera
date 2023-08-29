@@ -7,7 +7,6 @@ import { type Token } from "~/api";
 import { HONEY_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
-import { laggy } from "~/hooks/laggy";
 
 // this is going to be slow for now until we have event indexing
 export const usePollPreviewMint = (
@@ -19,11 +18,13 @@ export const usePollPreviewMint = (
 
   const method = "previewMint";
   const QUERY_KEY = [method, collateral, amount];
+  console.log("QUERY_KEY", QUERY_KEY)
   useSWR(
     QUERY_KEY,
     async () => {
       try {
         if (collateral === undefined || amount === 0) return undefined;
+        console.log('REEEEEe')
         const formattedAmount = parseUnits(
           `${amount}`,
           collateral.decimals ?? 18,
@@ -43,7 +44,6 @@ export const usePollPreviewMint = (
     },
     {
       refreshInterval: POLLING.FAST, // make it rlly slow TODO CHANGE
-      use: [laggy],
     },
   );
 

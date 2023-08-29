@@ -102,6 +102,8 @@ export const usePsm = () => {
   // const previewRedeemGivenOut = usePreviewMintGivenOut()
   // console.log('prgo',previewRedeemGivenOut)
 
+  console.log("previewMint", previewMint);
+  console.log("previewRedeem", previewRedeem);
   useEffect(() => {
     if (isMint) {
       setToAmount(Number(previewMint));

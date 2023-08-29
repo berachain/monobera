@@ -65,7 +65,6 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     ),
     cell: ({ row }) => {
       const vApy = row.original.vApy;
-      console.log(vApy);
       return (
         <div className="flex h-full w-[91px] items-center">
           {" "}
@@ -82,7 +81,6 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     ),
     cell: ({ row }) => {
       const operatorAddress = row.original.operatorAddress;
-      console.log(operatorAddress);
       return <ValidatorGauge address={BeravaloperToEth(operatorAddress)} />;
     },
     accessorKey: "mostWeightedGauge",

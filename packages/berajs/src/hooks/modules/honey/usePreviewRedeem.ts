@@ -7,7 +7,6 @@ import { type Token } from "~/api";
 import { HONEY_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
-import { laggy } from "~/hooks/laggy";
 
 // this is going to be slow for now until we have event indexing
 export const usePollPreviewRedeem = (
@@ -44,7 +43,6 @@ export const usePollPreviewRedeem = (
     },
     {
       refreshInterval: POLLING.FAST, // make it rlly slow TODO CHANGE
-      use: [laggy],
     },
   );
 

@@ -48,7 +48,7 @@ export default function HoneyPage({
 
   useEffect(() => {
     const handleResize = () => {
-      if (arcade && window.innerWidth < 1000) {
+      if (arcade && window?.innerWidth < 1000) {
         router.push("/?mode=pro");
       }
     };

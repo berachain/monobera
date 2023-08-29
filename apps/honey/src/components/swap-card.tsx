@@ -28,7 +28,6 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     fromAmount,
     setFromAmount,
     toAmount,
-    setToAmount,
     isMint,
     fromBalance,
     toBalance,
@@ -103,7 +102,6 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 setAmount={(amount) => {
                   setGivenIn(true);
                   setFromAmount(Number(amount));
-                  setToAmount(Number(amount));
                 }}
               />
               <div className="relative">
@@ -135,7 +133,6 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 amount={toAmount}
                 setAmount={(amount) => {
                   setGivenIn(false);
-                  setToAmount(Number(amount));
                   setFromAmount(Number(amount));
                 }}
                 selectable={selectedTo?.address !== honey?.address}
