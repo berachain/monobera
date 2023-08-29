@@ -1,4 +1,5 @@
 import { usePollDelegatorValidators } from "@bera/berajs";
+import { Skeleton } from "@bera/ui/skeleton";
 
 import GlobalGaugeWeight from "~/components/global-gauge-weight";
 import { useUserGaugeWeight } from "~/hooks/useUserGaugeWeight";
@@ -10,10 +11,16 @@ export default function AverageGaugeWeight() {
   const { data, isLoading } = useUserGaugeWeight();
   return (
     <div>
-      {total !== 0 ? (
+      {total ? (
         <>
           {isLoading ? (
-            <div>Loading</div>
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
           ) : (
             <GlobalGaugeWeight
               globalCuttingBoard={data?.result ? data.result : []}

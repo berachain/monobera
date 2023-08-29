@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { usePollAccountDelegations, usePollBgtBalance } from "@bera/berajs";
-import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
+import { ValidatorIcon } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { type Address } from "wagmi";

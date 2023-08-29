@@ -7,8 +7,7 @@ import {
   usePollActiveValidators,
   type CuttingBoard,
 } from "@bera/berajs";
-import { Tooltip } from "@bera/shared-ui";
-import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
+import { Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits, type Address } from "viem";
@@ -34,34 +33,53 @@ export default function Validator({
   const validator = useActiveValidator(validatorAddress);
   const percentageDelegated = usePercentageDelegated(validatorAddress);
   return (
-    <div className="container mb-10 flex max-w-[1078px] flex-col gap-16">
+    <div className="container relative mb-10 flex max-w-[1078px] flex-col gap-16">
       <div>
         <div className="flex flex-col gap-3">
           <div
-            className="flex items-center gap-1 text-sm font-medium leading-[14px] text-primary-foreground hover:cursor-pointer"
+            className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground hover:cursor-pointer"
             onClick={() => router.push("/validators")}
           >
             <Icons.arrowLeft className="relative h-4 w-4" />
             Validators
           </div>
-
+          <div className="absolute right-0 top-0">
+            {validator?.status === "BOND_STATUS_BONDED" ? (
+              <Badge
+                variant="success"
+                className="border-none bg-success px-2 py-1 text-xs"
+              >
+                Active
+              </Badge>
+            ) : (
+              <Badge
+                variant="secondary"
+                className="border-none bg-muted px-2 py-1 text-xs"
+              >
+                Inactive
+              </Badge>
+            )}
+          </div>
           <div className="flex w-full items-center justify-center gap-2 text-3xl font-bold leading-[48px] md:text-5xl ">
             <ValidatorIcon address={validatorAddress} className="h-12 w-12" />
             {validator?.description.moniker ?? "Loading..."}
           </div>
 
-          <div className="flex items-center justify-center gap-1">
-            {validator?.status === "BOND_STATUS_BONDED" ? (
-              <Badge variant="success" className="px-2 py-1">
-                Active
-              </Badge>
-            ) : (
-              <Badge variant="secondary" className="px-2 py-1">
-                Inactive
-              </Badge>
-            )}
-            <div className="text-sm font-medium leading-[14px] text-muted-foreground">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <div className="text-sm font-medium leading-none text-muted-foreground">
               Hex address: {truncateHash(validatorAddress, 6)}
+            </div>
+            <div className="text-sm font-medium leading-none text-muted-foreground">
+              operator address:{" "}
+              {validator
+                ? truncateHash(validator?.operatorAddress, 6)
+                : "Loading..."}
+            </div>
+            <div className="text-sm font-medium leading-none text-muted-foreground">
+              Concensus address:{" "}
+              {validator
+                ? truncateHash(validator?.consensusPubkey, 6)
+                : "Loading..."}
             </div>
           </div>
         </div>
@@ -83,7 +101,7 @@ export default function Validator({
             votingPower={`${percentageDelegated?.toFixed(2) ?? 0}%`}
             website={validator?.description.website ?? ""}
           />
-          <Uptime />
+          <Uptime address={validatorAddress} />
         </div>
       </div>
       <BribesAndEmissions validatorAddress={validatorAddress} />

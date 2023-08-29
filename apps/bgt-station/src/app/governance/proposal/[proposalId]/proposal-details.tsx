@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
   usePollProposal,
@@ -27,7 +28,7 @@ export default function ProposalDetails({
 }) {
   const { useProposal } = usePollProposal(proposalId);
   const proposal: Proposal | undefined = useProposal();
-
+  const router = useRouter();
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 
@@ -44,9 +45,9 @@ export default function ProposalDetails({
       <div className="mx-auto h-fit w-full max-w-[830px]">
         <div
           className="flex h-11 w-full justify-between hover:cursor-pointer"
-          // onClick={() => router.push("/governance")}
+          onClick={() => router.push("/governance")}
         >
-          <div className="flex items-center gap-1 text-sm font-medium leading-[14px] text-primary-foreground">
+          <div className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground">
             <Icons.arrowLeft className="relative h-4 w-4" />
             Governance
           </div>

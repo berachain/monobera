@@ -122,13 +122,15 @@ export default function Portfolio() {
             </TabsList>
           </Tabs>
         </div>
-        {tab === BGTSelectionEnum.YOUR_DELEGATIONS && <YourDelegations />}
-        {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
-          <AverageGaugeWeight />
-        )}
-        {tab === BGTSelectionEnum.UNBONDING_QUEUE && (
-          <UnbondingQueue unbondingQueue={unbondingQueue} />
-        )}
+        <div className="mt-8">
+          {tab === BGTSelectionEnum.YOUR_DELEGATIONS && <YourDelegations />}
+          {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
+            <AverageGaugeWeight />
+          )}
+          {tab === BGTSelectionEnum.UNBONDING_QUEUE && (
+            <UnbondingQueue unbondingQueue={unbondingQueue} />
+          )}
+        </div>
       </div>
     </div>
   );

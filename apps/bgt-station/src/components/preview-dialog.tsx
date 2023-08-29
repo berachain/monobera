@@ -59,7 +59,7 @@ export default function PreviewDialog({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Card className="border border-border">
-            <CardHeader className="rounded-t-lg border-b border-y-border p-3 text-sm text-primary-foreground">
+            <CardHeader className="rounded-t-lg border-b border-y-border p-3 text-sm text-foreground">
               Effective price: 1 {fromToken?.symbol} = 0.5 {toToken?.symbol}
             </CardHeader>
             <CardContent className="border-border p-3">
@@ -108,7 +108,7 @@ export default function PreviewDialog({
         <div>
           <Card className="border border-border">
             <Tabs defaultValue="tokens" className="">
-              <CardHeader className="flex flex-row items-center justify-between rounded-t-lg border-b border-y-border p-3 text-base font-medium text-primary-foreground">
+              <CardHeader className="flex flex-row items-center justify-between rounded-t-lg border-b border-y-border p-3 text-base font-medium text-foreground">
                 Swap from ETH details
                 <TabsList className="p-0">
                   <TabsTrigger value="tokens">Tokens</TabsTrigger>
@@ -117,21 +117,21 @@ export default function PreviewDialog({
               </CardHeader>
               <CardContent className="border-border px-3 pb-4 pt-1">
                 <TabsContent value="tokens">
-                  <p className="flex justify-between text-sm font-medium text-primary-foreground">
+                  <p className="flex justify-between text-sm font-medium text-foreground">
                     Total expected after fees
                     <span className="text-right">420.69 {toToken?.symbol}</span>
                   </p>
-                  <p className="flex justify-between text-sm text-primary-foreground">
+                  <p className="flex justify-between text-sm text-foreground">
                     The least you’ll get at {slippage}% slippage
                     <span className="text-right">420.69 {toToken?.symbol}</span>
                   </p>
                 </TabsContent>
                 <TabsContent value="usd">
-                  <p className="flex justify-between text-sm font-medium text-primary-foreground">
+                  <p className="flex justify-between text-sm font-medium text-foreground">
                     Total expected after fees
                     <span className="text-right">$420.69 USD</span>
                   </p>
-                  <p className="flex justify-between text-sm text-primary-foreground">
+                  <p className="flex justify-between text-sm text-foreground">
                     The least you’ll get at {slippage}% slippage
                     <span className="text-right">$420.69 USD</span>
                   </p>
@@ -162,7 +162,7 @@ export default function PreviewDialog({
           className="rounded-lg border border-primary"
         >
           <AccordionItem value="item-1">
-            <AccordionTrigger className="p-4 text-primary-foreground">
+            <AccordionTrigger className="p-4 text-foreground">
               Swap route
             </AccordionTrigger>
             <AccordionContent className="px-4">

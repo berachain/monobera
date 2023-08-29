@@ -27,7 +27,7 @@ export default function Redeem() {
   const { networkConfig } = useBeraConfig();
 
   return (
-    <div className="container mx-auto w-full max-w-[564px]">
+    <div className="container mx-auto mb-20 w-full max-w-[564px]">
       {ModalPortal}
       <Image
         className="max-[600px]:mx-auto"

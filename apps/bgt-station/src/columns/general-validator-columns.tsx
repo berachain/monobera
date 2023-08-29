@@ -1,6 +1,10 @@
 import React from "react";
 import { BeravaloperToEth, type PoLValidator } from "@bera/berajs";
-import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
+import {
+  DataTableColumnHeader,
+  TokenIconList,
+  ValidatorIcon,
+} from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { formatCommission } from "~/utils/formatCommission";
@@ -26,7 +30,15 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     cell: ({ row }) => {
       const moniker = row.original.description.moniker;
 
-      return <>{moniker}</>;
+      return (
+        <div className="flex items-center gap-2">
+          <ValidatorIcon
+            address={BeravaloperToEth(row.original.operatorAddress)}
+            className="h-8 w-8"
+          />
+          {moniker}{" "}
+        </div>
+      );
     },
     accessorKey: "description",
     enableSorting: true,

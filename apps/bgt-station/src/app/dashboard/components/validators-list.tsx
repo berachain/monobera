@@ -1,17 +1,19 @@
 "use client";
 
 import React, { useMemo, type ReactNode } from "react";
-import { type Validator } from "@bera/berajs";
+import { type PoLValidator } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 
-import ValidatorCard from "./validator-card";
+import ValidatorCard, { SkeletonValidatorCard } from "./validator-card";
 
 export function ValidatorsList({
   validators,
   title,
+  isLoading,
 }: {
-  validators: Validator[] | undefined;
+  validators: PoLValidator[] | undefined;
   title: ReactNode;
+  isLoading?: boolean;
 }) {
   const [linesCount, setLinesCount] = React.useState(1);
   const showingValidators = useMemo(
@@ -27,9 +29,11 @@ export function ValidatorsList({
         Stake your BGT with the most popular validators
       </div>
       <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-        {showingValidators?.map((validator, index) => (
-          <ValidatorCard validator={validator} key={index} />
-        ))}
+        {isLoading
+          ? [0, 0, 0].map((_, index) => <SkeletonValidatorCard key={index} />)
+          : showingValidators?.map((validator, index) => (
+              <ValidatorCard validator={validator} key={index} />
+            ))}
       </div>
       <div className="mt-8 flex justify-center">
         {linesCount * 3 < (validators?.length ?? 0) && (

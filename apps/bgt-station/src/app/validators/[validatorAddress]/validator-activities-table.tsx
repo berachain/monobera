@@ -90,7 +90,11 @@ export default function ValidatorActivitiesTable({
       {/* <SearchInput placeholder="Search" /> */}
       <div className="w-full">
         {tab === "recent-votes" ? (
-          <DataTable columns={recent_votes_columns} data={proposalData ?? []} className="min-w-[926px]"/>
+          <DataTable
+            columns={recent_votes_columns}
+            data={proposalData ?? []}
+            className="min-w-[926px]"
+          />
         ) : (
           <div className="flex w-full flex-col items-center gap-4">
             <DataTable

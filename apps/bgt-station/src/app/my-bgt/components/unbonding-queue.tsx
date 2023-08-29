@@ -11,8 +11,7 @@ import {
   usePollDelegatorUnbonding,
   type EntryData,
 } from "@bera/berajs";
-import { DataTable, useTxn } from "@bera/shared-ui";
-import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
+import { DataTable, ValidatorIcon, useTxn } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "wagmi";
 
@@ -83,7 +82,7 @@ export default function UnbondingQueue({
     }));
   }, [unbondingQueue]);
   return (
-    <div className="mt-8 flex w-full flex-col gap-8 md:flex-row ">
+    <div className="flex w-full flex-col gap-8 md:flex-row ">
       {total !== 0 ? (
         <>
           {ModalPortal}

@@ -183,10 +183,6 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 </Button>
               )
             ) : (
-              // <ConnectWalletDialog
-              //   className="w-full bg-[#333333] text-primary-foreground hover:bg-[#333333] hover:text-primary-foreground"
-              //   size="lg"
-              // />
               <ConnectButton />
             )}
           </div>

@@ -9,8 +9,12 @@ import {
   type Validator,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
-import { DataTable, IconList, SearchInput } from "@bera/shared-ui";
-import { ValidatorIcon } from "@bera/shared-ui/src/validator-icon";
+import {
+  DataTable,
+  IconList,
+  SearchInput,
+  ValidatorIcon,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -126,7 +130,7 @@ const ValidatorModal = ({
       validators.map((validator: Validator) => ({
         address: validator.operatorAddress,
         validator: (
-          <div className="flex w-[137px] items-center gap-1">
+          <div className="flex w-[100px] items-center gap-1">
             <ValidatorIcon
               address={BeravaloperToEth(validator.operatorAddress)}
               className="h-8 w-8"
@@ -148,7 +152,7 @@ const ValidatorModal = ({
         ),
         bribes: (
           <IconList
-            showCount={4}
+            showCount={3}
             iconList={[
               "/icons/eth-icons.svg",
               "/icons/atom-icons.svg",
