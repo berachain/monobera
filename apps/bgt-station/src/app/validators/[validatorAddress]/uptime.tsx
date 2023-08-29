@@ -18,13 +18,15 @@ export default function Uptime({ address }: { address: Address }) {
         <div className="grid w-[278px] grid-cols-10 gap-4 text-sm font-normal leading-normal text-muted-foreground">
           {!isLoading && data && data.result ? (
             <>
-              {data.result.map((data:{block:number, status:boolean}, index:number) => (
-                <Timeblock
-                  key={index}
-                  text={`block: ${data.block}`}
-                  blockDown={data.status}
-                />
-              ))}
+              {data.result.map(
+                (data: { block: number; status: boolean }, index: number) => (
+                  <Timeblock
+                    key={index}
+                    text={`block: ${data.block}`}
+                    blockDown={data.status}
+                  />
+                ),
+              )}
             </>
           ) : (
             <>
