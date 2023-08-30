@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  BeravaloperToEth,
   truncateHash,
   usePollActiveValidators,
   type Validator,
@@ -39,11 +38,10 @@ export default function ValidatorDialog({
   const [filteredValidators, setFilteredValidators] = useState<Validator[]>(
     validators?.filter(
       (validator: Validator) =>
-        BeravaloperToEth(validator.operatorAddress) !== fromAddress &&
+        validator.operatorAddr !== fromAddress &&
         !selectedValidators?.some(
           (selectedValidatorAddress: string) =>
-            selectedValidatorAddress ===
-            BeravaloperToEth(validator.operatorAddress),
+            selectedValidatorAddress === validator.operatorAddr,
         ),
     ) ?? [],
   );
@@ -55,9 +53,7 @@ export default function ValidatorDialog({
           validator.description.moniker
             .toLowerCase()
             .includes(search.toLowerCase()) ||
-          BeravaloperToEth(validator.operatorAddress)
-            .toLowerCase()
-            .includes(search.toLowerCase()),
+          validator.operatorAddr.toLowerCase().includes(search.toLowerCase()),
       );
 
       setFilteredValidators(filteredValidators ?? []);
@@ -128,9 +124,7 @@ const ValidatorDialogRow = ({ validator, onValidatorSelect }: RowProps) => {
             {validator.description.moniker}
           </h3>
           <Badge variant="secondary">
-            {truncateHash(
-              BeravaloperToEth(validator.operatorAddress) as `0x{string}`,
-            )}
+            {truncateHash(validator.operatorAddr as `0x{string}`)}
           </Badge>
         </div>
       </div>

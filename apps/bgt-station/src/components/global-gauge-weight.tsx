@@ -82,7 +82,6 @@ export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
 
-  console.log("globalCuttingBoard", globalCuttingBoard);
   const handleCheckboxChange = (data: any) => {
     setFilter((prev) => ({
       ...prev,

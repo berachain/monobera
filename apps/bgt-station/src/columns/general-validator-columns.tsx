@@ -1,11 +1,12 @@
 import React from "react";
-import { BeravaloperToEth, type PoLValidator } from "@bera/berajs";
+import { type PoLValidator } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   TokenIconList,
   ValidatorIcon,
 } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
+import { type Address } from "wagmi";
 
 import { formatCommission } from "~/utils/formatCommission";
 import { VP } from "~/components/validator-selector";
@@ -33,7 +34,7 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
       return (
         <div className="flex items-center gap-2">
           <ValidatorIcon
-            address={BeravaloperToEth(row.original.operatorAddress)}
+            address={row.original.operatorAddr as Address}
             className="h-8 w-8"
           />
           {moniker}{" "}
@@ -48,9 +49,9 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
       <DataTableColumnHeader column={column} title="Voting Power" />
     ),
     cell: ({ row }) => {
-      const operatorAddress = row.original.operatorAddress;
+      const operatorAddr = row.original.operatorAddr;
       const tokens = row.original.tokens;
-      return <VP operatorAddress={operatorAddress} tokens={tokens} />;
+      return <VP operatorAddr={operatorAddr} tokens={tokens} />;
     },
     accessorKey: "tokens",
     enableSorting: true,
@@ -88,11 +89,7 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
     ),
-    cell: ({ row }) => (
-      <ValidatorGauge
-        address={BeravaloperToEth(row.original.operatorAddress)}
-      />
-    ),
+    cell: ({ row }) => <ValidatorGauge address={row.original.operatorAddr} />,
     accessorKey: "mostWeightedGauge",
     enableSorting: false,
   },

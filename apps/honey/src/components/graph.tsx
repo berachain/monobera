@@ -26,7 +26,6 @@ export default function Graph({
   quarterlyVolume: number[];
   quarterlySupply: number[];
 }) {
-  console.log(weeklyVolume, weeklySupply);
   return (
     <HoneyChart
       arcade={arcade}

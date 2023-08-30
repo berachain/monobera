@@ -58,7 +58,7 @@ export const delegators_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => row.original.delegator_address,
     accessorKey: "delegator_address",
-    enableSorting: true,
+    enableSorting: false,
   },
 
   {
@@ -66,10 +66,12 @@ export const delegators_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader column={column} title="BGT amount" />
     ),
     cell: ({ row }) => {
-      return <div className="w-[200px]">{row.original.bgt_amount}</div>;
+      return (
+        <div className="w-[200px] text-right">{row.original.bgt_amount}</div>
+      );
     },
     accessorKey: "bgt_amount",
-    enableSorting: true,
+    enableSorting: false,
   },
 
   // {

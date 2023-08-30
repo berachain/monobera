@@ -162,7 +162,7 @@ export interface Description {
  */
 export interface Validator {
   /** operator_address defines the address of the validator's operator; bech encoded in JSON. */
-  operatorAddress: string;
+  operatorAddr: string;
   /** consensus_pubkey is the consensus public key of the validator, as a Protobuf Any. */
   consensusPubkey?: Any;
   /** jailed defined whether the validator has been jailed from bonded status or not. */
@@ -722,7 +722,7 @@ export const Description = {
 
 function createBaseValidator(): Validator {
   return {
-    operatorAddress: "",
+    operatorAddr: "",
     consensusPubkey: undefined,
     jailed: false,
     status: 0,
@@ -743,8 +743,8 @@ export const Validator = {
     message: Validator,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
-    if (message.operatorAddress !== "") {
-      writer.uint32(10).string(message.operatorAddress);
+    if (message.operatorAddr !== "") {
+      writer.uint32(10).string(message.operatorAddr);
     }
     if (message.consensusPubkey !== undefined) {
       Any.encode(message.consensusPubkey, writer.uint32(18).fork()).ldelim();
@@ -801,7 +801,7 @@ export const Validator = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.operatorAddress = reader.string();
+          message.operatorAddr = reader.string();
           break;
         case 2:
           message.consensusPubkey = Any.decode(reader, reader.uint32());
@@ -858,8 +858,8 @@ export const Validator = {
 
   fromJSON(object: any): Validator {
     return {
-      operatorAddress: isSet(object.operatorAddress)
-        ? String(object.operatorAddress)
+      operatorAddr: isSet(object.operatorAddr)
+        ? String(object.operatorAddr)
         : "",
       consensusPubkey: isSet(object.consensusPubkey)
         ? Any.fromJSON(object.consensusPubkey)
@@ -896,8 +896,8 @@ export const Validator = {
 
   toJSON(message: Validator): unknown {
     const obj: any = {};
-    message.operatorAddress !== undefined &&
-      (obj.operatorAddress = message.operatorAddress);
+    message.operatorAddr !== undefined &&
+      (obj.operatorAddr = message.operatorAddr);
     message.consensusPubkey !== undefined &&
       (obj.consensusPubkey = message.consensusPubkey
         ? Any.toJSON(message.consensusPubkey)
@@ -944,7 +944,7 @@ export const Validator = {
     object: I,
   ): Validator {
     const message = createBaseValidator();
-    message.operatorAddress = object.operatorAddress ?? "";
+    message.operatorAddr = object.operatorAddr ?? "";
     message.consensusPubkey =
       object.consensusPubkey !== undefined && object.consensusPubkey !== null
         ? Any.fromPartial(object.consensusPubkey)

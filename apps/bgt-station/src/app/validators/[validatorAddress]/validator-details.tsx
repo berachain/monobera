@@ -4,12 +4,14 @@ import { Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { type Address } from "viem";
+
+import { useFetchValidatorUptime } from "~/hooks/useFetchValidatorUptime";
 
 export default function ValidatorDetails({
   address,
   decription,
   commissions,
-  uptime,
   votingPower,
   website,
 }: {
@@ -21,6 +23,7 @@ export default function ValidatorDetails({
   website: string;
 }) {
   const router = useRouter();
+  const { data } = useFetchValidatorUptime(address as Address);
 
   return (
     <div className="flex w-full flex-col gap-4 text-lg font-semibold leading-7">
@@ -41,7 +44,9 @@ export default function ValidatorDetails({
           <div>
             Uptime <Tooltip text="Uptime" />
           </div>
-          <div className="text-muted-foreground">{uptime}</div>
+          <div className="text-muted-foreground">
+            {data?.uptime ? data?.uptime : 0}%
+          </div>
         </div>
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">

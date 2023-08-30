@@ -111,7 +111,12 @@ export const getWBeraPriceDictForPoolTokens = async (
         }/events/dex/historical_volumes?pool=${getAddress(
           pool.pool,
         )}&num_of_days=1`,
-        { cache: "no-store" },
+        {
+          cache: "force-cache",
+          next: {
+            revalidate: 60,
+          },
+        },
       );
 
       const weeklyVolumeResponse = fetch(
@@ -120,7 +125,12 @@ export const getWBeraPriceDictForPoolTokens = async (
         }/events/dex/historical_volumes?pool=${getAddress(
           pool.pool,
         )}&num_of_days=7`,
-        { cache: "no-store" },
+        {
+          cache: "force-cache",
+          next: {
+            revalidate: 60,
+          },
+        },
       );
 
       const monthlyVolumeResponse = fetch(
@@ -129,7 +139,12 @@ export const getWBeraPriceDictForPoolTokens = async (
         }/events/dex/historical_volumes?pool=${getAddress(
           pool.pool,
         )}&num_of_days=30`,
-        { cache: "no-store" },
+        {
+          cache: "force-cache",
+          next: {
+            revalidate: 60,
+          },
+        },
       );
 
       const quarterlyVolumeResponse = fetch(
@@ -138,7 +153,12 @@ export const getWBeraPriceDictForPoolTokens = async (
         }/events/dex/historical_volumes?pool=${getAddress(
           pool.pool,
         )}&num_of_days=90`,
-        { cache: "no-store" },
+        {
+          cache: "force-cache",
+          next: {
+            revalidate: 60,
+          },
+        },
       );
 
       const volumePromises = Promise.all([
@@ -230,7 +250,9 @@ export const getWBeraPriceDictForPoolTokens = async (
           (board) => board.address.toLowerCase() === pool.pool.toLowerCase(),
         );
         const bgtPrice =
-          mappedTokens[process.env.NEXT_PUBLIC_WBERA_ADDRESS as string];
+          mappedTokens[
+            getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
+          ];
 
         let poolApy = 0;
         if (cuttingBoard && bgtPrice) {
@@ -239,6 +261,7 @@ export const getWBeraPriceDictForPoolTokens = async (
           poolApy = (totalCuttingBoardValue / pool.totalValue) * 100;
           pool.bgtPerYear = Number(cuttingBoard.amount);
         }
+
         const fees =
           (Number(pool?.formattedSwapFee) / 100) * Number(pool?.dailyVolume);
         const swapApr = (fees / Number(pool?.totalValue)) * 365 * 100;

@@ -32,7 +32,7 @@ export interface QueryValidatorDistributionInfoRequest {
 /** QueryValidatorDistributionInfoResponse is the response type for the Query/ValidatorDistributionInfo RPC method. */
 export interface QueryValidatorDistributionInfoResponse {
   /** operator_address defines the validator operator address. */
-  operatorAddress: string;
+  operatorAddr: string;
   /** self_bond_rewards defines the self delegations rewards. */
   selfBondRewards: DecCoin[];
   /** commission defines the commission the validator received. */
@@ -372,7 +372,7 @@ export const QueryValidatorDistributionInfoRequest = {
 };
 
 function createBaseQueryValidatorDistributionInfoResponse(): QueryValidatorDistributionInfoResponse {
-  return { operatorAddress: "", selfBondRewards: [], commission: [] };
+  return { operatorAddr: "", selfBondRewards: [], commission: [] };
 }
 
 export const QueryValidatorDistributionInfoResponse = {
@@ -380,8 +380,8 @@ export const QueryValidatorDistributionInfoResponse = {
     message: QueryValidatorDistributionInfoResponse,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
-    if (message.operatorAddress !== "") {
-      writer.uint32(10).string(message.operatorAddress);
+    if (message.operatorAddr !== "") {
+      writer.uint32(10).string(message.operatorAddr);
     }
     for (const v of message.selfBondRewards) {
       DecCoin.encode(v!, writer.uint32(18).fork()).ldelim();
@@ -403,7 +403,7 @@ export const QueryValidatorDistributionInfoResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.operatorAddress = reader.string();
+          message.operatorAddr = reader.string();
           break;
         case 2:
           message.selfBondRewards.push(DecCoin.decode(reader, reader.uint32()));
@@ -421,8 +421,8 @@ export const QueryValidatorDistributionInfoResponse = {
 
   fromJSON(object: any): QueryValidatorDistributionInfoResponse {
     return {
-      operatorAddress: isSet(object.operatorAddress)
-        ? String(object.operatorAddress)
+      operatorAddr: isSet(object.operatorAddr)
+        ? String(object.operatorAddr)
         : "",
       selfBondRewards: Array.isArray(object?.selfBondRewards)
         ? object.selfBondRewards.map((e: any) => DecCoin.fromJSON(e))
@@ -435,8 +435,8 @@ export const QueryValidatorDistributionInfoResponse = {
 
   toJSON(message: QueryValidatorDistributionInfoResponse): unknown {
     const obj: any = {};
-    message.operatorAddress !== undefined &&
-      (obj.operatorAddress = message.operatorAddress);
+    message.operatorAddr !== undefined &&
+      (obj.operatorAddr = message.operatorAddr);
     if (message.selfBondRewards) {
       obj.selfBondRewards = message.selfBondRewards.map((e) =>
         e ? DecCoin.toJSON(e) : undefined,
@@ -464,7 +464,7 @@ export const QueryValidatorDistributionInfoResponse = {
     I extends Exact<DeepPartial<QueryValidatorDistributionInfoResponse>, I>,
   >(object: I): QueryValidatorDistributionInfoResponse {
     const message = createBaseQueryValidatorDistributionInfoResponse();
-    message.operatorAddress = object.operatorAddress ?? "";
+    message.operatorAddr = object.operatorAddr ?? "";
     message.selfBondRewards =
       object.selfBondRewards?.map((e) => DecCoin.fromPartial(e)) || [];
     message.commission =

@@ -56,7 +56,7 @@ function sortByBlockTime(data: any[]): any[] {
 
 const DEFAULT_SIZE = 5;
 
-export const revalidate = 600;
+export const revalidate = 60;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

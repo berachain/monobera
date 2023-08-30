@@ -1,4 +1,6 @@
 import { type Metadata } from "next";
+import { type CuttingBoard } from "@bera/berajs";
+import { getAddress } from "viem";
 
 import { indexerUrl } from "~/config";
 import Validator from "./validator";
@@ -27,6 +29,24 @@ async function getCuttingBoard(address: string) {
   }
 }
 
+const getPoolTvl = async (address: string) => {
+  console.log("address", address);
+  try {
+    // const res = await fetch(`${indexerUrl}/bgt/rewards/delegator/${address}`);
+
+    // TODO: narrow window to past day reee
+    const res = await fetch(
+      `${indexerUrl}/analytics/tvldaily?from_time=1&to_time=1699260000&pool=${getAddress(
+        address,
+      )}`,
+    );
+    const jsonRes = await res.json();
+    console.log("jsonRes", jsonRes);
+    return jsonRes.result;
+  } catch (e) {
+    console.log(e);
+  }
+};
 export default async function Page({
   params,
 }: {
@@ -36,5 +56,13 @@ export default async function Page({
 
   const [cuttingBoard] = await Promise.all([getCuttingBoard(validatorAddress)]);
 
-  return <Validator {...{ validatorAddress, cuttingBoard }} />;
+  const cb: CuttingBoard[] = cuttingBoard[0].weights;
+  const promiseArray = cb.map((w: CuttingBoard) => getPoolTvl(w.address));
+
+  const cbTvlData = (await Promise.all(promiseArray)).filter(
+    (p) => p !== undefined,
+  );
+
+  console.log("cbTvlData", cbTvlData);
+  return <Validator {...{ validatorAddress, cuttingBoard, cbTvlData }} />;
 }

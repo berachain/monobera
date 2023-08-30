@@ -1,6 +1,11 @@
 import React from "react";
-import { usePollDelegatorValidators, type Validator } from "@bera/berajs";
+import {
+  usePollDelegatorValidators,
+  usePollGlobalValidatorBribes,
+  type PoLValidator,
+} from "@bera/berajs";
 
+import { usePollPrices } from "~/hooks/usePollPrices";
 import Nothing from "../nothing";
 import ValidatorCard from "./validator-card";
 
@@ -8,20 +13,23 @@ export default function YourDelegations() {
   const { useDelegatorValidators, useTotalValidatorsDelegated } =
     usePollDelegatorValidators();
   const total = useTotalValidatorsDelegated();
-  const validators = useDelegatorValidators();
-  const validValidators = validators;
+  const delegatedValidators = useDelegatorValidators();
+
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const { useDelegatorPolValidators } = usePollGlobalValidatorBribes(prices);
+  const delegatorPolValidators = useDelegatorPolValidators(
+    delegatedValidators?.map((d: any) => d.operatorAddr),
+  );
 
   return (
     <div>
       {total !== 0 && !Number.isNaN(total) ? (
         <div className="flex flex-col gap-3">
-          {validValidators?.map((validator: Validator) => (
-            <ValidatorCard
-              validator={validator}
-              key={validator.operatorAddress}
-            />
+          {delegatorPolValidators?.map((validator: PoLValidator) => (
+            <ValidatorCard validator={validator} key={validator.operatorAddr} />
           ))}
-          {validValidators?.length === 0 && (
+          {delegatorPolValidators?.length === 0 && (
             <p className="mt-4 self-center text-xl font-semibold">
               No BGT Delegated.
             </p>

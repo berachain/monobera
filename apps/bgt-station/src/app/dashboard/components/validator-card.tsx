@@ -2,16 +2,13 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import {
-  BeravaloperToEth,
-  usePollGlobalValidatorBribes,
-  type PoLValidator,
-} from "@bera/berajs";
+import { usePollGlobalValidatorBribes, type PoLValidator } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
 import { TokenIconList, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
+import { type Address } from "wagmi";
 
 import { formatCommission } from "~/utils/formatCommission";
 import YellowCard from "~/components/yellow-card";
@@ -27,10 +24,8 @@ export default function ValidatorCard({
   const prices = usePrices();
   const { useValidatorvAPY, useValidatorTotalActiveBribeValue } =
     usePollGlobalValidatorBribes(prices);
-  const bribeValue = useValidatorTotalActiveBribeValue(
-    BeravaloperToEth(validator.operatorAddress),
-  );
-  const vApy = useValidatorvAPY(BeravaloperToEth(validator.operatorAddress));
+  const bribeValue = useValidatorTotalActiveBribeValue(validator.operatorAddr);
+  const vApy = useValidatorvAPY(validator.operatorAddr);
   const info = [
     {
       amount: `$${formatter.format(Number(bribeValue ?? 0))}`,
@@ -55,7 +50,7 @@ export default function ValidatorCard({
     <YellowCard className="flex flex-1 flex-col gap-8 p-6">
       <div className="flex w-full gap-2">
         <ValidatorIcon
-          address={BeravaloperToEth(validator.operatorAddress)}
+          address={validator.operatorAddr as Address}
           className="h-8 w-8"
         />
         <div className="text-lg font-semibold leading-7 text-foreground">
@@ -84,9 +79,7 @@ export default function ValidatorCard({
         variant="outline"
         onClick={() =>
           router.push(
-            `/delegate?action=delegate&validator=${BeravaloperToEth(
-              validator.operatorAddress,
-            )}`,
+            `/delegate?action=delegate&validator=${validator.operatorAddr}`,
           )
         }
       >

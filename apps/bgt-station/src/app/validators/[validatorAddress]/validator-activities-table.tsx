@@ -54,7 +54,7 @@ export default function ValidatorActivitiesTable({
   };
 
   const delegatorData = data?.map(
-    (data: { delegator: Address; shares: bigint }) => ({
+    (data: { delegator: Address; shares: bigint; balance: bigint }) => ({
       delegator_address: (
         <div className="flex w-[145px] items-center gap-2">
           <Identicon account={data.delegator} />
@@ -63,7 +63,7 @@ export default function ValidatorActivitiesTable({
       ),
       bgt_amount: (
         <div className="flex w-[88px]">
-          {formatter.format(Number(formatUnits(data.shares, 18)))} (
+          {formatter.format(Number(formatUnits(data.balance, 18)))} (
           {getDelegatorPercentage(data.shares)}%)
         </div>
       ),

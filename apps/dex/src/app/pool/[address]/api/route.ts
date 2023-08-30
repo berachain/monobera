@@ -6,7 +6,12 @@ async function getSwaps(address: string) {
   try {
     const res: any = await fetch(
       `${endpoint}/events/dex/swap?pool=${address}`,
-      { cache: "no-store" },
+      {
+        cache: "force-cache",
+        next: {
+          revalidate: 30,
+        },
+      },
     );
     const jsonRes = await res.json();
     if (!jsonRes) {
@@ -22,7 +27,12 @@ async function getAddLiquidity(address: string) {
   try {
     const res: any = await fetch(
       `${endpoint}/events/dex/add_liquidity?pool=${address}`,
-      { cache: "no-store" },
+      {
+        cache: "force-cache",
+        next: {
+          revalidate: 30,
+        },
+      },
     );
     const jsonRes = await res.json();
     if (!jsonRes) {
@@ -38,7 +48,12 @@ async function getRemoveLiquidity(address: string) {
   try {
     const res: any = await fetch(
       `${endpoint}/events/dex/remove_liquidity?pool=${address}`,
-      { cache: "no-store" },
+      {
+        cache: "force-cache",
+        next: {
+          revalidate: 30,
+        },
+      },
     );
     const jsonRes = await res.json();
     if (!jsonRes) {
@@ -60,7 +75,7 @@ function sortByBlockTime(data: any[]): any[] {
 
 const DEFAULT_SIZE = 10;
 
-export const revalidate = 1000;
+export const revalidate = 30;
 
 export async function GET(
   request: Request,

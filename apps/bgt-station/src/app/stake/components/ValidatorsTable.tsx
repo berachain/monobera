@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { BeravaloperToEth, type Validator } from "@bera/berajs";
+import { type Validator } from "@bera/berajs";
 import {
   Table,
   TableBody,
@@ -62,9 +62,7 @@ export default function ValidatorsTable({
                 className="cursor-pointer "
                 data-state={row.getIsSelected() && "selected"}
                 onClick={() =>
-                  router.push(
-                    `/stake/${BeravaloperToEth(row.original.operatorAddress)}`,
-                  )
+                  router.push(`/stake/${row.original.operatorAddr}`)
                 }
               >
                 {row.getVisibleCells().map((cell) => {

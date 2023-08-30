@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  BeravaloperToEth,
   STAKING_PRECOMPILE_ABI,
   truncateHash,
   useBeraConfig,
@@ -31,12 +30,7 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
     message: `redelegate ${redelegateAmount} BGT from ${truncateHash(
       fromAddress,
     )} to ${
-      dstValidator &&
-      truncateHash(
-        getAddress(
-          BeravaloperToEth(dstValidator.operatorAddress || "").toLowerCase(),
-        ),
-      )
+      dstValidator && truncateHash(getAddress(dstValidator.operatorAddr))
     }`,
     onSuccess: () => {
       void router.push("/");
@@ -52,12 +46,8 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
           abi: STAKING_PRECOMPILE_ABI,
           functionName: "beginRedelegate",
           params: [
-            getAddress(
-              BeravaloperToEth(srcValidator.operatorAddress),
-            ).toLowerCase(),
-            getAddress(
-              BeravaloperToEth(dstValidator.operatorAddress),
-            ).toLowerCase(),
+            getAddress(srcValidator.operatorAddr).toLowerCase(),
+            getAddress(dstValidator.operatorAddr).toLowerCase(),
             parseUnits(`${redelegateAmount}`, 18),
           ],
         });

@@ -86,13 +86,8 @@ export default function BribeList({
 }: {
   validatorAddress: Address;
 }) {
-  const { useActiveValidatorBribes, useValidatorVApy } =
-    usePollValidatorBribes(validatorAddress);
+  const { useActiveValidatorBribes } = usePollValidatorBribes(validatorAddress);
   const bribes = useActiveValidatorBribes();
-  const { usePrices } = usePollPrices();
-  const price = usePrices();
-  const vapy = useValidatorVApy(price);
-  console.log("vapy", vapy);
   return (
     <div className="flex flex-col gap-4 md:flex-row">
       {bribes?.map((item: any) => {

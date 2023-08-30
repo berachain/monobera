@@ -1,7 +1,5 @@
 import React, { useMemo } from "react";
 import {
-  BeravaloperToEth,
-  cosmosvaloperToEth,
   usePollAccountDelegations,
   usePollActiveValidators,
   usePollDelegatorValidators,
@@ -18,7 +16,7 @@ import {
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits, getAddress } from "viem";
+import { formatUnits, getAddress, type Address } from "viem";
 
 import { ValidatorGauge } from "~/app/validators/validators-table";
 import { validator_table_columns } from "~/columns/validator-table-columns";
@@ -49,7 +47,7 @@ export default function ValidatorSelector({
     usePollGlobalValidatorBribes(prices);
   const validators = usePolValidators();
   const delegatorPolValidators = useDelegatorPolValidators(
-    delegatedValidators?.map((d) => d.operatorAddress),
+    delegatedValidators?.map((d) => d.operatorAddr),
   );
 
   const filteredValidators = useMemo(
@@ -67,7 +65,7 @@ export default function ValidatorSelector({
         {validValidator ? (
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
             <ValidatorIcon
-              address={BeravaloperToEth(validValidator.operatorAddress)}
+              address={validValidator.operatorAddr as Address}
               className="h-8 w-8"
             />
             {validValidator.description.moniker}
@@ -92,20 +90,18 @@ export default function ValidatorSelector({
 }
 
 export const VP = ({
-  operatorAddress,
+  operatorAddr,
   tokens,
 }: {
-  operatorAddress: string;
-  tokens: string;
+  operatorAddr: string;
+  tokens: bigint;
 }) => {
   const { usePercentageDelegated } = usePollActiveValidators();
-  const percentageDelegated = usePercentageDelegated(
-    cosmosvaloperToEth(operatorAddress),
-  );
+  const percentageDelegated = usePercentageDelegated(operatorAddr);
 
   return (
     <div className="flex h-full w-24 items-center">
-      {formatter.format(Number(formatUnits(BigInt(tokens), 18)))} (
+      {formatter.format(Number(formatUnits(tokens, 18)))} (
       {percentageDelegated?.toFixed(2)}%)
     </div>
   );
@@ -127,28 +123,22 @@ const ValidatorModal = ({
   const tableV = React.useMemo(
     () =>
       validators.map((validator: Validator) => ({
-        address: validator.operatorAddress,
+        address: validator.operatorAddr,
         validator: (
           <div className="flex w-[100px] items-center gap-1">
             <ValidatorIcon
-              address={BeravaloperToEth(validator.operatorAddress)}
+              address={validator.operatorAddr as Address}
               className="h-8 w-8"
             />
             {validator.description.moniker}
           </div>
         ),
-        bgt_delegated: (
-          <BGTDelegated operatorAddress={validator.operatorAddress} />
-        ),
+        bgt_delegated: <BGTDelegated operatorAddr={validator.operatorAddr} />,
         // vp: <VP validator={validator} />,
         vp: 420,
         commission: validator.commission.commissionRates.rate,
         vapy: 6.9,
-        mwg: (
-          <ValidatorGauge
-            address={BeravaloperToEth(validator.operatorAddress)}
-          />
-        ),
+        mwg: <ValidatorGauge address={validator.operatorAddr} />,
         bribes: (
           <IconList
             showCount={3}
@@ -192,7 +182,7 @@ const ValidatorModal = ({
             columns={validator_table_columns}
             data={tableV}
             onRowClick={(value: any) => {
-              onSelect(cosmosvaloperToEth(value.original.address));
+              onSelect(value.original.address);
               onClose();
             }}
             className="min-w-[1000px]"
@@ -204,9 +194,9 @@ const ValidatorModal = ({
   );
 };
 
-const BGTDelegated = ({ operatorAddress }: { operatorAddress: string }) => {
+const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
   const { useSelectedAccountDelegation, isLoading } = usePollAccountDelegations(
-    getAddress(cosmosvaloperToEth(operatorAddress)),
+    getAddress(operatorAddr),
   );
   const bgtDelegated = useSelectedAccountDelegation();
   return (

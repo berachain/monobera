@@ -2,10 +2,16 @@
 
 import React from "react";
 import Image from "next/image";
-import { usePollActiveValidators, usePollBgtSupply } from "@bera/berajs";
+import {
+  formatter,
+  usePollActiveValidators,
+  usePollBgtSupply,
+  usePollGlobalValidatorBribes,
+} from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
 import { cloudinaryUrl } from "~/config";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import ValidatorsTable from "./validators-table";
 
 function calculatePercentageChange(
@@ -58,7 +64,10 @@ export default function Validators({
   const totalValidators: number = useTotalValidators();
   const { useBgtSupply } = usePollBgtSupply();
   const currentSupply = useBgtSupply();
-
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const { useGlobalActiveBribeValue } = usePollGlobalValidatorBribes(prices);
+  const totalBribeValue = useGlobalActiveBribeValue();
   const percentage = calculatePercentageChange(oldBgtSupply, currentSupply);
   const generalInfo = [
     {
@@ -66,7 +75,9 @@ export default function Validators({
       text: "Total validators",
     },
     {
-      amount: "$100M",
+      amount: `$${
+        totalBribeValue === undefined ? 0 : formatter.format(totalBribeValue)
+      }`,
       text: "In bribe rewards",
     },
     {

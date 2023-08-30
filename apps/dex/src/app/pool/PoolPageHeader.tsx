@@ -6,9 +6,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import { DataCard } from "../components/Data";
-import { HotPools } from "./HotPools";
 import { PoolSearch } from "./PoolsTable";
-import { TrendingPools } from "./TrendingPools";
 
 export default function PoolPageHeader() {
   const router = useRouter();
@@ -56,8 +54,8 @@ export default function PoolPageHeader() {
           value={"1,690,420 BGT"}
         />
       </div>
-      <HotPools isMainPage={false} />
-      <TrendingPools />
+      {/* <HotPools isMainPage={false} />
+      <TrendingPools /> */}
       <div id="poolSearch" className="mt-[72px] w-full max-w-[980px]">
         <PoolSearch />
       </div>
