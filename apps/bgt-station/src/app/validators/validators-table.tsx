@@ -3,7 +3,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import {
-  BeravaloperToEth,
   truncateHash,
   usePollGlobalValidatorBribes,
   usePollValidatorCuttingBoard,
@@ -51,9 +50,7 @@ export default function ValidatorsTable() {
         validator.description.moniker
           .toLowerCase()
           .includes(keyword.toLowerCase()) ||
-        BeravaloperToEth(validator.operatorAddress)
-          .toLowerCase()
-          .includes(keyword.toLowerCase())
+        validator.operatorAddr.toLowerCase().includes(keyword.toLowerCase())
       );
     });
   }, [validators, keyword]);
@@ -79,9 +76,7 @@ export default function ValidatorsTable() {
           data={filteredValidators ?? []}
           className="min-w-[900px]"
           onRowClick={(row: any) =>
-            router.push(
-              `/validators/${BeravaloperToEth(row.original.operatorAddress)}`,
-            )
+            router.push(`/validators/${row.original.operatorAddr}`)
           }
         />
       )}

@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import { getAddress } from "viem";
 
 import { type MappedTokens } from "../app/api/getPrice";
 import { getAbsoluteUrl } from "../utils/vercel-utils";
@@ -11,7 +12,6 @@ export const usePollPrices = () => {
     async () => {
       const res = await fetch(`${getAbsoluteUrl()}/api`);
       const data: MappedTokens = await res.json();
-      // console.log(data);
       return data;
     },
     {
@@ -27,7 +27,7 @@ export const usePollPrices = () => {
   const usePrice = (tokenAddress: string): number => {
     const { data = undefined } = useSWRImmutable<MappedTokens>(QUERY_KEY);
     if (!data) return 0;
-    return data[tokenAddress] ?? 0;
+    return data[getAddress(tokenAddress)] ?? 0;
   };
 
   // const useValidatorBribesTotalValue = (

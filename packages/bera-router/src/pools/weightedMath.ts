@@ -1,4 +1,4 @@
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits } from "viem";
 
 import { BZERO, MathSol } from "./basicOperations";
 import { type WeightedPoolPairData } from "./weighted";
@@ -641,12 +641,24 @@ export function _derivativeSpotPriceAfterSwapExactTokenInForTokenOut(
 
   const wi = Number(formatUnits(poolPairData.weightIn, 18));
   const wo = Number(formatUnits(poolPairData.weightOut, 18));
-  const Ai = Number(formatUnits(amount, 18));
-  const f = Number(formatUnits(poolPairData.swapFee, 18));
+  const Ai = Number(amount);
+  const f = Number(
+    formatUnits(BigInt(formatUnits(poolPairData.swapFee, 18)), 18),
+  );
 
+  // console.log(wi);
+  // console.log(wo);
+  // console.log(Bo);
+  // console.log(Bi);
+  // console.log(Ai);
+  // console.log(f);
   const result = (wi + wo) / (Bo * (Bi / (Ai + Bi - Ai * f)) ** (wi / wo) * wi);
-  const bigintResult = parseUnits(`${result}`, 18);
-  return bigintResult;
+  // console.log('result', result)
+  // Convert the decimal value to a BigInt by scaling
+  const scalingFactor = 10n ** BigInt(18);
+  const bigintValue = BigInt(Math.round(result * Number(scalingFactor)));
+  // console.log('bigintva', bigintValue)
+  return bigintValue;
 }
 
 // PairType = 'token->token'

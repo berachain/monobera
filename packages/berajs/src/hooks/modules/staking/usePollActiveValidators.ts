@@ -7,7 +7,7 @@ import { usePublicClient, type Address } from "wagmi";
 import { STAKING_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
-import { BeravaloperToEth, defaultPagination } from "~/utils";
+import { defaultPagination } from "~/utils";
 import { usePollBgtSupply } from "../bank";
 import {
   getEstimatedBlocksPerYear,
@@ -16,15 +16,15 @@ import {
 } from "./utils";
 
 export interface Validator {
-  operatorAddress: string;
-  consensusPubkey: string;
+  operatorAddr: string;
+  consAddr: string;
   delegatorShares: bigint;
   jailed: boolean;
   description: ValidatorDescription;
   commission: ValidatorCommission;
-  minSelfDelegation: string;
+  minSelfDelegation: bigint;
   status: string;
-  tokens: string;
+  tokens: bigint;
   unbondingHeight: number;
   unbondingTime: Date;
 }
@@ -112,7 +112,7 @@ export const usePollActiveValidators = () => {
     return useMemo(() => {
       if (!address || !data?.validators) return undefined;
       return data?.validators.find(
-        (v: Validator) => BeravaloperToEth(v.operatorAddress) === address,
+        (v: Validator) => v.operatorAddr === address,
       );
     }, [data, address]);
   };
@@ -164,9 +164,7 @@ export const usePollActiveValidators = () => {
     const validators = useActiveValidators();
     return useMemo(() => {
       if (!validators) return undefined;
-      return validators.map((v: Validator) =>
-        BeravaloperToEth(v.operatorAddress),
-      );
+      return validators.map((v: Validator) => v.operatorAddr);
     }, [validators]);
   };
   return {

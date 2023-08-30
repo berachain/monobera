@@ -5,8 +5,8 @@ import Image from "next/image";
 import {
   beraToEth,
   truncateHash,
+  usePollProposal,
   type Proposal,
-  type TallyResult,
 } from "@bera/berajs";
 import {
   formatUnixTimestamp,
@@ -14,12 +14,12 @@ import {
 } from "@bera/shared-ui/src/utils/times";
 import { Badge } from "@bera/ui/badge";
 
-import { sumTally } from "~/utils/sumTally";
 import { cloudinaryUrl } from "~/config";
 import { StatusEnum, VoteColorMap, mappedStatusEnum } from "../types";
 import { ProgressBarChart } from "./progress-bar-chart";
 
-type ProposalCard = Proposal & {
+type ProposalCard = {
+  proposal: Proposal;
   onClick?: () => void;
 };
 const getBadge = (proposalStatus: number) => {
@@ -62,66 +62,75 @@ const getBadge = (proposalStatus: number) => {
   }
 };
 
-const getTimeText = (proposalStatus: number, timestamp: number) => {
-  switch (proposalStatus) {
+const getTimeText = (proposal: Proposal) => {
+  switch (proposal.status) {
     case mappedStatusEnum[StatusEnum.ACTIVE]:
-      return `Voting ends in ${timeDifferenceFromNow(timestamp)}`;
+      return `Voting ends in ${timeDifferenceFromNow(
+        Number(proposal.votingEndTime),
+      )}`;
     case mappedStatusEnum[StatusEnum.IN_QUEUE]:
-      return `Depositing ends in ${timeDifferenceFromNow(timestamp)}`;
+      return `Depositing ends in ${timeDifferenceFromNow(
+        Number(proposal.depositEndTime),
+      )}`;
     case mappedStatusEnum[StatusEnum.PASSED]:
-      return `Submitted ${formatUnixTimestamp(timestamp)}`;
+      return `Submitted ${formatUnixTimestamp(Number(proposal.submitTime))}`;
     case mappedStatusEnum[StatusEnum.REJECTED]:
-      return `Submitted ${formatUnixTimestamp(timestamp)}`;
+      return `Submitted ${formatUnixTimestamp(Number(proposal.submitTime))}`;
     default:
       return "";
   }
 };
 
-const getDataList = (proposalStatus: number, proposalVotes: TallyResult) => {
+const getDataList = (
+  proposalStatus: number,
+  globalAbstainPercentage: number,
+  globalNoPercentage: number,
+  globalYesPercentage: number,
+  globalVetoPercentage: number,
+) => {
   if (proposalStatus === mappedStatusEnum[StatusEnum.IN_QUEUE]) {
     return [
       {
         color: VoteColorMap.abstain,
-        width: sumTally(proposalVotes),
+        width: 100,
       },
     ];
   } else if (proposalStatus === mappedStatusEnum[StatusEnum.PASSED]) {
     return [
       {
         color: VoteColorMap.yes,
-        width: sumTally(proposalVotes),
+        width: 100,
+      },
+    ];
+  } else if (proposalStatus === mappedStatusEnum[StatusEnum.REJECTED]) {
+    return [
+      {
+        color: VoteColorMap.no,
+        width: 100,
       },
     ];
   } else {
     return [
-      { color: VoteColorMap.yes, width: Number(proposalVotes.yesCount) },
+      { color: VoteColorMap.yes, width: globalYesPercentage },
       {
         color: VoteColorMap.no,
-        width: Number(proposalVotes.yesCount) + Number(proposalVotes.noCount),
+        width: globalYesPercentage + globalNoPercentage,
       },
       {
         color: VoteColorMap.veto,
-        width:
-          Number(proposalVotes.yesCount) +
-          Number(proposalVotes.noCount) +
-          Number(proposalVotes.noWithVetoCount),
+        width: globalYesPercentage + globalNoPercentage + globalVetoPercentage,
       },
       {
         color: VoteColorMap.abstain,
-        width: sumTally(proposalVotes),
+        width: 100,
       },
     ];
   }
 };
 
-export function ProposalCard({
-  status,
-  finalTallyResult,
-  title,
-  submitTime,
-  proposer,
-  onClick,
-}: ProposalCard) {
+export function ProposalCard({ proposal, onClick }: ProposalCard) {
+  const { useNormalizedTallyResult } = usePollProposal(Number(proposal.id));
+  const normalizedTally = useNormalizedTallyResult();
   return (
     <div
       className="hove:cursor-pointer relative rounded-[18px] border border-border bg-background p-8"
@@ -134,9 +143,9 @@ export function ProposalCard({
         </div>
       )} */}
       <div className="flex h-7 items-center gap-1">
-        {getBadge(status)}
+        {getBadge(proposal.status)}
         <div className="text-xs font-medium leading-tight text-stone-500">
-          {getTimeText(status, Number(submitTime))}
+          {getTimeText(proposal)}
         </div>
       </div>
       <div
@@ -144,18 +153,24 @@ export function ProposalCard({
           true ? "text-2xl" : "text-sm"
         }`}
       >
-        {title}
+        {proposal.title}
       </div>
       <div className="relative mt-4">
-        {status === mappedStatusEnum[StatusEnum.IN_QUEUE] && (
+        {proposal.status === mappedStatusEnum[StatusEnum.IN_QUEUE] && (
           <div className="absolute right-0 text-xs font-medium leading-tight text-muted-foreground">
-            {sumTally(finalTallyResult)}% of deposit filled
+            {}% of deposit filled
           </div>
         )}
         <ProgressBarChart
-          dataList={getDataList(status, finalTallyResult)}
+          dataList={getDataList(
+            proposal.status,
+            normalizedTally?.globalAbstainPercentage ?? 0,
+            normalizedTally?.globalNoPercentage ?? 0,
+            normalizedTally?.globalYesPercentage ?? 0,
+            normalizedTally?.globalVetoPercentage ?? 0,
+          )}
           labelList={
-            status === mappedStatusEnum[StatusEnum.IN_QUEUE]
+            proposal.status === mappedStatusEnum[StatusEnum.IN_QUEUE]
               ? []
               : [
                   { label: "Pass threshold", width: 30 },
@@ -175,9 +190,12 @@ export function ProposalCard({
               width={24}
               height={24}
             />
-            Submitted by {truncateHash(beraToEth(proposer), 6, 4)}
+            Submitted by {truncateHash(beraToEth(proposal.proposer), 6, 4)}
           </div>
-          <div>{sumTally(finalTallyResult)}% participation rate</div>
+          <div>
+            {(normalizedTally?.participationRate ?? 0).toFixed(2)}%
+            participation rate
+          </div>
         </div>
       )}
     </div>

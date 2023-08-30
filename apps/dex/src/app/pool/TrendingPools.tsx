@@ -41,7 +41,6 @@ export const TrendingPools = () => {
     (allData && allData[allData.length - 1]?.length < DEFAULT_SIZE);
 
   const data = allData ? [].concat(...allData) : [];
-  console.log(data);
 
   return (
     <div className="mt-[72px] w-full flex-col items-center justify-center">

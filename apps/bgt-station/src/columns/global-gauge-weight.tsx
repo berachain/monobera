@@ -39,7 +39,8 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
       return (
         <div className="flex w-[120px] flex-row items-center">
           {" "}
-          {formatter.format(incentiveAmount)} ({incentivePercentage * 100}%)
+          {formatter.format(incentiveAmount)} (
+          {(incentivePercentage * 100).toFixed(2)}%)
         </div>
       );
     },

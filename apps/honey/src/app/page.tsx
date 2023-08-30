@@ -28,7 +28,6 @@ export default async function Home({
       getPastHours(24),
     ]);
 
-  console.log("data", weeklyData);
   return (
     <HoneyPage
       {...{ data, weeklyData, monthlyData, quarterlyData, hourlyData }}

@@ -1,6 +1,6 @@
 "use client";
 
-import { BeravaloperToEth, truncateHash, type Validator } from "@bera/berajs";
+import { truncateHash, type Validator } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Badge } from "@bera/ui/badge";
@@ -64,7 +64,7 @@ export const getColumns = (totalDelegated: number): ColumnDef<Validator>[] => {
             <div className="flex flex-col">
               <p>{row?.original?.description?.moniker}</p>
               <Badge variant="secondary">
-                {truncateHash(BeravaloperToEth(row?.original?.operatorAddress))}
+                {truncateHash(row?.original?.operatorAddr)}
               </Badge>
             </div>
           </div>
@@ -159,7 +159,7 @@ export const getYourColumns = (
         <div className="flex flex-col">
           <p>{row.original.description.moniker}</p>
           <Badge variant="secondary">
-            {truncateHash(BeravaloperToEth(row.original.operatorAddress))}
+            {truncateHash(row.original.operatorAddr)}
           </Badge>
         </div>
       </div>
@@ -213,7 +213,7 @@ export const getYourColumns = (
   //             e.stopPropagation();
   //             router.push(
   //               `/stake/${BeravaloperToEth(
-  //                 row?.original.operatorAddress,
+  //                 row?.original.operatorAddr,
   //               )}/redelegate`,
   //             );
   //           }}
@@ -225,7 +225,7 @@ export const getYourColumns = (
   //           validator={row?.original}
   //           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //           // @ts-ignore
-  //           validatorAddress={BeravaloperToEth(row?.original.operatorAddress)}
+  //           validatorAddress={BeravaloperToEth(row?.original.operatorAddr)}
   //         />
   //       </div>
   //     );

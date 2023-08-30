@@ -2,10 +2,7 @@
 
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatUsd } from "@bera/berajs";
-import {
-  DataTableColumnHeader,
-  TokenIconList,
-} from "@bera/shared-ui";
+import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";

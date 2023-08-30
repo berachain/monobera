@@ -72,14 +72,12 @@ export default function Validator({
             <div className="text-sm font-medium leading-none text-muted-foreground">
               operator address:{" "}
               {validator
-                ? truncateHash(validator?.operatorAddress, 6)
+                ? truncateHash(validator?.operatorAddr, 6)
                 : "Loading..."}
             </div>
             <div className="text-sm font-medium leading-none text-muted-foreground">
               Concensus address:{" "}
-              {validator
-                ? truncateHash(validator?.consensusPubkey, 6)
-                : "Loading..."}
+              {validator ? truncateHash(validator?.consAddr, 6) : "Loading..."}
             </div>
           </div>
         </div>
@@ -111,7 +109,9 @@ export default function Validator({
           Average Gauge Weight <Tooltip text="Bribes and emissions" />
         </div>
         <GlobalGaugeWeight
-          globalCuttingBoard={cuttingBoard as unknown as CuttingBoard[]}
+          globalCuttingBoard={
+            (cuttingBoard as unknown as any[])[0].weights as CuttingBoard[]
+          }
         />
       </div>
 

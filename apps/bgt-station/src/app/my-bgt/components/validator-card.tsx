@@ -1,26 +1,24 @@
 import { useRouter } from "next/navigation";
 import {
-  BeravaloperToEth,
-  cosmosvaloperToEth,
   usePollAccountDelegations,
   usePollActiveValidators,
-  type Validator,
+  type PoLValidator,
 } from "@bera/berajs";
-import { IconList, Tooltip, ValidatorIcon } from "@bera/shared-ui";
+import { TokenIconList, Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { formatEther, type Address } from "viem";
 
-export default function ValidatorCard(validator: { validator: Validator }) {
+export default function ValidatorCard(validator: { validator: PoLValidator }) {
   const router = useRouter();
   const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(
-    cosmosvaloperToEth(validator.validator.operatorAddress),
+    validator.validator.operatorAddr as Address,
   );
 
   const { useSelectedAccountDelegation } = usePollAccountDelegations(
-    cosmosvaloperToEth(validator.validator.operatorAddress) as Address,
+    validator.validator.operatorAddr as Address,
   );
   const userDelegated = useSelectedAccountDelegation();
   const valiInfo = [
@@ -61,7 +59,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
           vAPY <Tooltip text="projected measure of potential yearly earnings" />
         </div>
       ),
-      value: "6.9%",
+      value: `${Number(validator.validator.vApy).toFixed(2)}%`,
     },
   ];
 
@@ -70,7 +68,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
       <div className="flex items-center justify-center md:justify-between">
         <div className="flex items-center gap-3">
           <ValidatorIcon
-            address={BeravaloperToEth(validator.validator.operatorAddress)}
+            address={validator.validator.operatorAddr as Address}
           />
           <div className="text-lg font-semibold leading-loose text-foreground md:text-2xl">
             {validator.validator.description.moniker}
@@ -82,9 +80,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=delegate&validator=${BeravaloperToEth(
-                  validator.validator.operatorAddress,
-                )}`,
+                `/delegate?action=delegate&validator=${validator.validator.operatorAddr}`,
               )
             }
           >
@@ -95,9 +91,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=redelegate&validator=${BeravaloperToEth(
-                  validator.validator.operatorAddress,
-                )}`,
+                `/delegate?action=redelegate&validator=${validator.validator.operatorAddr}`,
               )
             }
           >
@@ -108,9 +102,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=unbond&validator=${BeravaloperToEth(
-                  validator.validator.operatorAddress,
-                )}`,
+                `/delegate?action=unbond&validator=${validator.validator.operatorAddr}`,
               )
             }
           >
@@ -136,17 +128,11 @@ export default function ValidatorCard(validator: { validator: Validator }) {
           ))}
         </div>
         <div className="mr-4 flex items-center gap-4">
-          <IconList
+          <TokenIconList
             size={48}
-            iconList={[
-              "/icons/eth-icons.svg",
-              "/icons/atom-icons.svg",
-              "/icons/usdc-icons.svg",
-              "/icons/usdt-icons.svg",
-              "/icons/btc-icons.svg",
-              "/icons/honey-icons.svg",
-              "/icons/bera-icons.svg",
-            ]}
+            tokenList={validator.validator?.bribeTokenList?.map(
+              (token: any) => token,
+            )}
           />
         </div>
         <div className="flex items-center justify-center gap-4 md:hidden">
@@ -155,9 +141,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=delegate&validator=${BeravaloperToEth(
-                  validator.validator.operatorAddress,
-                )}`,
+                `/delegate?action=delegate&validator=${validator.validator.operatorAddr}`,
               )
             }
           >
@@ -168,9 +152,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=redelegate&validator=${BeravaloperToEth(
-                  validator.validator.operatorAddress,
-                )}`,
+                `/delegate?action=redelegate&validator=${validator.validator.operatorAddr}`,
               )
             }
           >
@@ -181,9 +163,7 @@ export default function ValidatorCard(validator: { validator: Validator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=unbond&validator=${BeravaloperToEth(
-                  validator.validator.operatorAddress,
-                )}`,
+                `/delegate?action=unbond&validator=${validator.validator.operatorAddr}`,
               )
             }
           >

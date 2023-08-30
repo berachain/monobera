@@ -511,13 +511,13 @@ export const STAKING_PRECOMPILE_ABI = [
       {
         components: [
           {
-            internalType: "string",
-            name: "operatorAddress",
-            type: "string",
+            internalType: "address",
+            name: "operatorAddr",
+            type: "address",
           },
           {
             internalType: "bytes",
-            name: "consensusPubkey",
+            name: "consAddr",
             type: "bytes",
           },
           {
@@ -826,13 +826,13 @@ export const STAKING_PRECOMPILE_ABI = [
       {
         components: [
           {
-            internalType: "string",
-            name: "operatorAddress",
-            type: "string",
+            internalType: "address",
+            name: "operatorAddr",
+            type: "address",
           },
           {
             internalType: "bytes",
-            name: "consensusPubkey",
+            name: "consAddr",
             type: "bytes",
           },
           {
@@ -1080,13 +1080,13 @@ export const STAKING_PRECOMPILE_ABI = [
       {
         components: [
           {
-            internalType: "string",
-            name: "operatorAddress",
-            type: "string",
+            internalType: "address",
+            name: "operatorAddr",
+            type: "address",
           },
           {
             internalType: "bytes",
-            name: "consensusPubkey",
+            name: "consAddr",
             type: "bytes",
           },
           {
@@ -1254,7 +1254,7 @@ export const STAKING_PRECOMPILE_ABI = [
     inputs: [
       {
         internalType: "bytes",
-        name: "consAddress",
+        name: "consAddr",
         type: "bytes",
       },
     ],

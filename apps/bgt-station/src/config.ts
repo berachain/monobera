@@ -52,8 +52,7 @@ export const erc20BgtAddress = process.env
   .NEXT_PUBLIC_ERC20_BGT_ADDRESS as Address;
 export const berachefAddress = process.env
   .NEXT_PUBLIC_BERACHEF_ADDRESS as Address;
-export const honeyAddress = process.env
-  .NEXT_PUBLIC_HONEY_PRECOMPILE_ADDRESS as Address;
+export const honeyAddress = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
 export const rewardsAddress = process.env
   .NEXT_PUBLIC_REWARDS_ADDRESS as Address;
 export const erc20BribeModule = process.env
