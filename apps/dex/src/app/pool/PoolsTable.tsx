@@ -22,7 +22,7 @@ const FilterBadge = ({
     <Badge
       className={cn(
         "border-border bg-muted font-medium text-muted-foreground hover:cursor-pointer hover:bg-info",
-        active ? "bg-info text-info-foreground" : "",
+        active ? "border-info-foreground bg-info text-info-foreground" : "",
       )}
       onClick={onClick}
     >

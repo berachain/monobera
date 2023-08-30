@@ -43,12 +43,20 @@ const BerachainInfo = () => {
           <span className="text-lg font-semibold">Create a Wallet</span>
           <Icons.external className="h-4 w-4" />
         </div>
-        <div className="flex flex-row items-center gap-1 hover:cursor-pointer hover:text-foreground">
+        <div
+          onClick={() =>
+            window.open(process.env.NEXT_PUBLIC_HONEY_URL, "_blank")
+          }
+          className="flex flex-row items-center gap-1 hover:cursor-pointer hover:text-foreground"
+        >
           {/* <Icons.hammer className="h-4 w-4" /> */}
           <span className="text-lg font-semibold">Mint Honey</span>
           <Icons.external className="h-4 w-4" />
         </div>
-        <div className="flex flex-row items-center gap-1 hover:cursor-pointer hover:text-foreground">
+        <div
+          onClick={() => window.open(process.env.NEXT_PUBLIC_BGT_URL, "_blank")}
+          className="flex flex-row items-center gap-1 hover:cursor-pointer hover:text-foreground"
+        >
           {/* <Icons.helpingHand className="h-4 w-4" /> */}
           <span className="text-lg font-semibold">Stake on BGT Station</span>
           <Icons.external className="h-4 w-4" />

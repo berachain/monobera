@@ -99,6 +99,7 @@ export function TokenInput({
               exceeding && "text-destructive-foreground",
             )}
             value={amount > 0 ? amount : ""}
+            onKeyDown={(e) => e.key === "-" && e.preventDefault()}
             onChange={(e) => {
               const inputValue = e.target.value;
 
