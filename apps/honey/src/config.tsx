@@ -55,4 +55,5 @@ export const rewardsAddress = process.env
   .NEXT_PUBLIC_REWARDS_ADDRESS as Address;
 export const erc20HoneyAddress = process.env
   .NEXT_PUBLIC_ERC20_HONEY_ADDRESS as Address;
-export const honeyTokenAddress = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
+export const honeyTokenAddress = process.env
+  .NEXT_PUBLIC_HONEY_ADDRESS as Address;

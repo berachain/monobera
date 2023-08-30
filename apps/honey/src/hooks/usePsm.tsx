@@ -12,7 +12,8 @@ import {
   type Token,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
-import { parseUnits, type Address, getAddress } from "viem";
+import { getAddress, parseUnits, type Address } from "viem";
+
 import { honeyTokenAddress } from "~/config";
 
 export const usePsm = () => {
@@ -25,7 +26,7 @@ export const usePsm = () => {
     token.tags.includes("defaultCollateral"),
   );
   const honey = tokenDictionary
-    ? tokenDictionary[getAddress(honeyTokenAddress) ]
+    ? tokenDictionary[getAddress(honeyTokenAddress)]
     : undefined;
 
   const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
