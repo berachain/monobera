@@ -12,7 +12,8 @@ import {
   type Token,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
-import { parseUnits, type Address } from "viem";
+import { parseUnits, type Address, getAddress } from "viem";
+import { erc20HoneyAddress } from "~/config";
 
 export const usePsm = () => {
   const { tokenDictionary, tokenList } = useTokens();
@@ -24,7 +25,7 @@ export const usePsm = () => {
     token.tags.includes("defaultCollateral"),
   );
   const honey = tokenDictionary
-    ? tokenDictionary[process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address]
+    ? tokenDictionary[getAddress(erc20HoneyAddress) as Address]
     : undefined;
 
   const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
@@ -71,7 +72,7 @@ export const usePsm = () => {
   const { isConnected, account } = useBeraJs();
 
   const { useAllowance } = usePollAllowance({
-    contract: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as string,
+    contract: erc20HoneyAddress,
     token: selectedFrom,
   });
 
