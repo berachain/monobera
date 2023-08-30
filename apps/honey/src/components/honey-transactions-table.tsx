@@ -232,7 +232,7 @@ export default function HoneyTransactionsTable({
       );
     }
   };
-  console.log("allData", allData);
+  // console.log("allData", allData);
   return (
     <section>
       <Tabs

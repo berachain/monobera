@@ -17,8 +17,6 @@ export default async function Home({
   };
 }) {
   const [
-    supplyOverall,
-    volumeOverall,
     supply24H,
     volume24H,
     supply7D,
@@ -28,8 +26,6 @@ export default async function Home({
     supply90D,
     volume90D,
   ] = await Promise.all([
-    getHoneyData("supply"),
-    getHoneyData("volume"),
     getHoneyData("supply", HoneyTimeFrame.HOURLY),
     getHoneyData("volume", HoneyTimeFrame.HOURLY),
     getHoneyData("supply", HoneyTimeFrame.WEEKLY),
@@ -42,8 +38,6 @@ export default async function Home({
   return (
     <HoneyPage
       {...{
-        supplyOverall,
-        volumeOverall,
         supply24H,
         volume24H,
         supply7D,

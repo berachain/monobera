@@ -32,20 +32,28 @@ export async function getHoneyData(
       break;
     case HoneyTimeFrame.QUARTERLY:
       fromTimeInSeconds =
-        currentTimeInseconds - timeFrameToNumber[HoneyTimeFrame.MONTHLY];
+        currentTimeInseconds - timeFrameToNumber[HoneyTimeFrame.QUARTERLY];
       break;
     default:
       break;
   }
 
   const api = `${publicAnalyticsUrl}/analytics/honey/${dataType}/${timeGap}?from_time=${fromTimeInSeconds}&to_time=${toTimeInSeconds}`;
+  console.log("api reee", api);
   const responce = await fetch(api);
   const responceJson = await responce.json();
   try {
     if (!responce.ok) throw new Error("Failed to fetch data");
-    return dataType === "supply"
-      ? responceJson.honeyTotalSupply
-      : responceJson.honeyVolume;
+    const data =
+      dataType === "supply"
+        ? responceJson.honeyTotalSupply
+        : responceJson.honeyVolume;
+    if (
+      data.length >= 2 &&
+      Number(data[0].UTCTime) > Number(data[data.length - 1].UTCTime)
+    )
+      return data.reverse();
+    else return data;
   } catch (e) {
     console.error(e);
     return [];

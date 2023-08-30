@@ -13,7 +13,7 @@ import {
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
 import { parseUnits, type Address, getAddress } from "viem";
-import { erc20HoneyAddress } from "~/config";
+import { honeyTokenAddress } from "~/config";
 
 export const usePsm = () => {
   const { tokenDictionary, tokenList } = useTokens();
@@ -25,7 +25,7 @@ export const usePsm = () => {
     token.tags.includes("defaultCollateral"),
   );
   const honey = tokenDictionary
-    ? tokenDictionary[getAddress(erc20HoneyAddress) as Address]
+    ? tokenDictionary[getAddress(honeyTokenAddress) ]
     : undefined;
 
   const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
@@ -35,6 +35,10 @@ export const usePsm = () => {
   );
 
   const [_givenIn, setGivenIn] = useState<boolean>(true);
+
+  // console.log('h',honey);
+  // console.log('bbb',collateralList);
+  // console.log('cas',defaultCollateral);
   useEffect(() => {
     if (
       defaultCollateral &&
@@ -72,7 +76,7 @@ export const usePsm = () => {
   const { isConnected, account } = useBeraJs();
 
   const { useAllowance } = usePollAllowance({
-    contract: erc20HoneyAddress,
+    contract: honeyTokenAddress,
     token: selectedFrom,
   });
 
@@ -84,7 +88,7 @@ export const usePsm = () => {
     collateral ? (collateral.address as Address) : undefined,
   );
 
-  console.log("params", params);
+  // console.log("params", params);
 
   const fee = params ? (isMint ? params.mintFee : params.redeemFee) : undefined;
   // const block = useLatestBlock();
@@ -105,8 +109,8 @@ export const usePsm = () => {
   // const previewRedeemGivenOut = usePreviewMintGivenOut()
   // console.log('prgo',previewRedeemGivenOut)
 
-  console.log("previewMint", previewMint);
-  console.log("previewRedeem", previewRedeem);
+  // console.log("previewMint", previewMint);
+  // console.log("previewRedeem", previewRedeem);
   useEffect(() => {
     if (isMint) {
       setToAmount(Number(previewMint));

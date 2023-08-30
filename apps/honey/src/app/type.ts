@@ -25,8 +25,8 @@ export type TimeFrameInSeconds = {
 export const timeFrameToNumber: TimeFrameInSeconds = {
   [HoneyTimeFrame.HOURLY]: 24 * 3600,
   [HoneyTimeFrame.WEEKLY]: 7 * 24 * 3600,
-  [HoneyTimeFrame.MONTHLY]: 30 * 24 * 2600,
-  [HoneyTimeFrame.QUARTERLY]: 90 * 24 * 2600,
+  [HoneyTimeFrame.MONTHLY]: 30 * 24 * 3600,
+  [HoneyTimeFrame.QUARTERLY]: 90 * 24 * 3600,
 };
 
 export const barColors = {

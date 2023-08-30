@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cn } from "@bera/ui";
-import { formatUnits } from "viem";
+import { formatEther } from "viem";
 
 import Data from "~/components/data";
 import Hero from "~/components/hero";
@@ -17,8 +17,6 @@ import { cloudinaryUrl } from "~/config";
 import { type HoneyEntry } from "./type";
 
 export default function HoneyPage({
-  supplyOverall,
-  volumeOverall,
   supply24H,
   volume24H,
   supply7D,
@@ -29,8 +27,6 @@ export default function HoneyPage({
   volume90D,
   mode,
 }: {
-  supplyOverall: HoneyEntry[];
-  volumeOverall: HoneyEntry[];
   supply24H: HoneyEntry[];
   volume24H: HoneyEntry[];
   supply7D: HoneyEntry[];
@@ -43,11 +39,12 @@ export default function HoneyPage({
 }) {
   const arcade = mode === "arcade";
   const router = useRouter();
-  const volume = volumeOverall[0]?.amount ?? 0;
-  const supply = supplyOverall[0]?.amount ?? 0;
-  const formattedVolume = formatUnits(BigInt(volume), 18);
-  const formattedSupply = formatUnits(BigInt(supply), 18);
-
+  const formatted24HVolume = formatEther(
+    BigInt(volume7D[volume7D.length - 1]?.amount ?? "0"),
+  );
+  const formattedTotalSupply = formatEther(
+    BigInt(supply24H[supply24H.length - 1]?.amount ?? "0"),
+  );
   if (arcade && typeof window !== "undefined" && window?.innerWidth < 1000) {
     router.push("/?mode=pro");
   }
@@ -107,8 +104,8 @@ export default function HoneyPage({
           >
             <div className="py-4 lg:py-0">
               <Data
-                dailyVolume={formattedVolume}
-                tvl={formattedSupply}
+                dailyVolume={formatted24HVolume}
+                tvl={formattedTotalSupply}
                 arcade={arcade}
               />
             </div>

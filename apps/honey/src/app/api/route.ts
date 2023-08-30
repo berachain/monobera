@@ -68,8 +68,8 @@ export async function GET(request: Request) {
   const mint = searchParams.get("mint");
   const burn = searchParams.get("burn");
 
-  const mints = getMints(Number(page || 0), Number(perPage));
-  const burns = getBurns(Number(page || 0), Number(perPage));
+  const mints = getMints(Number(page || 1), Number(perPage));
+  const burns = getBurns(Number(page || 1), Number(perPage));
 
   const data: any = await Promise.all([mints, burns])
     .then(([mints, burns]) => ({
