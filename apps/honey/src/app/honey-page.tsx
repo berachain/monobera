@@ -42,7 +42,7 @@ export default function HoneyPage({
   const formattedVolume = formatUnits(BigInt(volume), 18);
   const formattedSupply = formatUnits(BigInt(supply), 18);
 
-  if (arcade && window && window.innerWidth < 1000) {
+  if (arcade && typeof window !== "undefined" && window?.innerWidth < 1000) {
     router.push("/?mode=pro");
   }
 
