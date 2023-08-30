@@ -30,7 +30,6 @@ export const usePoolTable = () => {
     ],
     async (key: any[]) => {
       const page = key[1] + 1;
-      console.log("page", page);
       try {
         const res = await fetch(
           `${getAbsoluteUrl()}/pool/api?page=${page}&perPage=${DEFAULT_SIZE}&hasBgtRewards=${hasBgtRewards}&hotPools=${isHotPool}&newPools=${isNewPool}&search=${search}`,

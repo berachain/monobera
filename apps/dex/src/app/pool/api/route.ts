@@ -29,12 +29,18 @@ function sortByParameter(
 
 const DEFAULT_SIZE = 10;
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 async function getGlobalCuttingBoard() {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
+      {
+        cache: "force-cache",
+        next: {
+          revalidate: 60,
+        },
+      },
     );
     const jsonRes = await res.json();
     return jsonRes.result;
@@ -101,20 +107,23 @@ export async function GET(request: Request) {
               .includes(searchKeyword.toLowerCase()));
   });
 
+  let filteredBgtRewards,
+    filteredHotPools,
+    filteredNewPools = [];
   if (hasBgtRewards == "true") {
-    taggedPools = taggedPools.filter((pool) =>
+    filteredBgtRewards = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.BGT_REWARDS),
     );
   }
 
   if (hotPools == "true") {
-    taggedPools = taggedPools.filter((pool) =>
+    filteredHotPools = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.HOT),
     );
   }
 
   if (newPools == "true") {
-    taggedPools = taggedPools.filter((pool) =>
+    filteredNewPools = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.NEW),
     );
   }
@@ -127,7 +136,17 @@ export async function GET(request: Request) {
   const bgtRewards = searchParams.get("bgtRewards");
   const tvl = searchParams.get("tvl");
 
-  let sortedPools = taggedPools;
+  const isFilterApplied =
+    hasBgtRewards == "true" || hotPools == "true" || newPools == "true";
+  let sortedPools = isFilterApplied
+    ? [
+        ...new Set([
+          ...(filteredBgtRewards ?? []),
+          ...(filteredHotPools ?? []),
+          ...(filteredNewPools ?? []),
+        ]),
+      ]
+    : taggedPools;
   if (!volume && !bgtRewards && !tvl) {
     sortedPools = sortByParameter(sortedPools, "dailyVolume", "desc");
   }

@@ -7,7 +7,6 @@ import { usePublicClient, type Address } from "wagmi";
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
-import { BeravaloperToEth } from "~/utils";
 import { usePollEpochs } from "../epochs";
 import {
   usePollActiveValidators,
@@ -42,6 +41,7 @@ export interface PoLValidator extends Validator {
   rank: number;
 }
 export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
+  console.log(prices);
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
   const {
@@ -114,10 +114,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
         const bribes = result[index]?.filter(
           (bribe: any) => Number(bribe.startEpoch) <= currentEpoch?.current,
         );
-        mutate(
-          [ACTIVE_BRIBES_KEY, BeravaloperToEth(validator.operatorAddress)],
-          bribes,
-        );
+        mutate([ACTIVE_BRIBES_KEY, validator.operatorAddr], bribes);
 
         const bribeTokenList: any[] = [];
         const totalPerProposalUsdAmount = bribes?.reduce(
@@ -129,7 +126,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
                 );
                 const tokenAddress = bribe.bribePerProposal.tokens[index];
                 bribeTokenList.push(tokenAddress);
-                const price = prices[tokenAddress] ?? 0;
+                const price = prices[getAddress(tokenAddress)] ?? 0;
                 const bribeValue = Number(formattedBribeAmount) * price;
                 return total + bribeValue;
               },
@@ -166,17 +163,11 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
 
         console.log(bribeTokenList);
         mutate(
-          [
-            ACTIVE_BRIBES_TOTAL_AMOUNT_KEY,
-            BeravaloperToEth(validator.operatorAddress),
-          ],
+          [ACTIVE_BRIBES_TOTAL_AMOUNT_KEY, validator.operatorAddr],
           totalActiveBribeUsdAmount,
         );
         mutate(
-          [
-            ACTIVE_BRIBES_PER_PROPOSAL_AMOUNT_KEY,
-            BeravaloperToEth(validator.operatorAddress),
-          ],
+          [ACTIVE_BRIBES_PER_PROPOSAL_AMOUNT_KEY, validator.operatorAddr],
           totalPerProposalUsdAmount,
         );
 
@@ -185,11 +176,8 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
           totalPerProposalUsdAmount * estimatedValidatorBlocksPerYear;
         const vAPY = Number.isNaN(estimatedUsdPerYear / validatorTVL)
           ? 0
-          : (estimatedUsdPerYear / validatorTVL) * 100;
-        mutate(
-          [VALIDATOR_VAPY_KEY, BeravaloperToEth(validator.operatorAddress)],
-          vAPY,
-        );
+          : estimatedUsdPerYear / validatorTVL;
+        mutate([VALIDATOR_VAPY_KEY, validator.operatorAddr], vAPY);
 
         globalBribeUsdAmount += totalActiveBribeUsdAmount;
         globalVapy += vAPY;
@@ -203,10 +191,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
           totalPerProposalUsdAmount,
           rank: index + 1,
         };
-        mutate(
-          [POL_VALIDATOR_KEY, BeravaloperToEth(validator.operatorAddress)],
-          polValidator,
-        );
+        mutate([POL_VALIDATOR_KEY, validator.operatorAddr], polValidator);
         polValidators.push(polValidator);
       });
 
@@ -266,7 +251,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
     return useMemo(() => {
       if (!data || addresses?.length === 0 || !addresses) return [];
       return data.filter((validator: PoLValidator) => {
-        return addresses.includes(validator.operatorAddress);
+        return addresses.includes(validator.operatorAddr);
       });
     }, [addresses, data]);
   };

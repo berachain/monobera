@@ -32,16 +32,21 @@ export default function DashBoard({ globalCuttingBoard }: Props) {
     () =>
       validators
         ? validators
-            .sort((a: PoLValidator, b: PoLValidator) => b.rank - a.rank)
+            .sort(
+              (a: PoLValidator, b: PoLValidator) =>
+                Number(b.tokens) - Number(a.tokens),
+            )
             .slice(0, validators.length > 6 ? 6 : validators.length)
         : [],
     [validators],
   );
+
+  console.log(topStakeValidators);
   const topPayingValidators = useMemo(
     () =>
       validators
         ? validators
-            .sort((a: PoLValidator, b: PoLValidator) => b.rank - a.rank)
+            .sort((a: PoLValidator, b: PoLValidator) => b.vApy - a.vApy)
             .slice(0, validators.length > 6 ? 6 : validators.length)
         : [],
     [validators],
@@ -77,12 +82,16 @@ export default function DashBoard({ globalCuttingBoard }: Props) {
       <ValidatorsList
         validators={topStakeValidators}
         title={"🔥 Top staked validators"}
+        message={"Stake your BGT with the most popular validators"}
         isLoading={isLoading}
       />
 
       <ValidatorsList
         validators={topPayingValidators}
         title={"💰 Top paying validators"}
+        message={
+          "Stake your BGT with the best validators to maximize your rewards"
+        }
         isLoading={isLoading}
       />
     </div>

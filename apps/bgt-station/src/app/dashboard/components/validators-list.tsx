@@ -9,10 +9,12 @@ import ValidatorCard, { SkeletonValidatorCard } from "./validator-card";
 export function ValidatorsList({
   validators,
   title,
+  message,
   isLoading,
 }: {
   validators: PoLValidator[] | undefined;
   title: ReactNode;
+  message: string;
   isLoading?: boolean;
 }) {
   const [linesCount, setLinesCount] = React.useState(1);
@@ -26,7 +28,7 @@ export function ValidatorsList({
         {title}
       </div>
       <div className="mt-4 text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
-        Stake your BGT with the most popular validators
+        {message}
       </div>
       <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
         {isLoading
