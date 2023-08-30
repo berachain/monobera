@@ -58,7 +58,6 @@ export const useHoneyEvents = () => {
     (index) => ["burnData", index],
     async (key: any[]) => {
       const page = key[1] + 1;
-
       try {
         const res = await fetch(
           `${getAbsoluteUrl()}/api?page=${

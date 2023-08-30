@@ -185,6 +185,7 @@ export default function HoneyTransactionsTable({
     isBurnDataReachingEnd,
     setBurnDataSize,
   } = useHoneyEvents();
+
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {
       return (

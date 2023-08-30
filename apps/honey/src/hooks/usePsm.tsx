@@ -14,7 +14,7 @@ import {
 import { useTxn } from "@bera/shared-ui";
 import { getAddress, parseUnits, type Address } from "viem";
 
-import { honeyTokenAddress } from "~/config";
+import { erc20HoneyAddress, honeyTokenAddress } from "~/config";
 
 export const usePsm = () => {
   const { tokenDictionary, tokenList } = useTokens();
@@ -77,7 +77,7 @@ export const usePsm = () => {
   const { isConnected, account } = useBeraJs();
 
   const { useAllowance } = usePollAllowance({
-    contract: honeyTokenAddress,
+    contract: erc20HoneyAddress,
     token: selectedFrom,
   });
 

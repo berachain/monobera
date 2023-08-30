@@ -5,6 +5,10 @@ import { indexerUrl } from "~/config";
 
 async function getMints(page: number, perPage: number) {
   try {
+    console.log(
+      "getMints",
+      `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
+    );
     const res: any = await fetch(
       `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
       { cache: "no-store" },
@@ -14,11 +18,6 @@ async function getMints(page: number, perPage: number) {
       throw new Error("Failed to fetch honey mint data");
     }
     return jsonRes;
-    // console.log(
-    //   "getMints",
-    //   jsonRes,
-    //   `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
-    // );
   } catch (e) {
     notFound();
   }
