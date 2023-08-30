@@ -187,46 +187,52 @@ export default function HoneyTransactionsTable({
   } = useHoneyEvents();
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {
-      return !isAllDataReachingEnd ? (
+      return (
         <Button
           onClick={() => setAllDataSize(allDataSize + 1)}
-          disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+          disabled={isAllDataLoadingMore}
           variant="outline"
         >
-          {isAllDataLoadingMore ? "Loading..." : "Load more"}
+          {isAllDataLoadingMore
+            ? "Loading..."
+            : isAllDataReachingEnd
+            ? "No more transactions"
+            : "Load more"}
         </Button>
-      ) : (
-        <></>
       );
     }
     if (selectedTab === Selection.Mints) {
-      return !isMintDataReachingEnd ? (
+      return (
         <Button
           onClick={() => setMintDataSize(mintDataSize + 1)}
           disabled={isMintDataLoadingMore || isMintDataReachingEnd}
           variant="outline"
         >
-          {isMintDataLoadingMore ? "Loading..." : "Load more"}
+          {isMintDataLoadingMore
+            ? "Loading..."
+            : isMintDataReachingEnd
+            ? "No more transactions"
+            : "Load more"}
         </Button>
-      ) : (
-        <></>
       );
     }
     if (selectedTab === Selection.Burns) {
-      return !isBurnDataReachingEnd ? (
+      return (
         <Button
           onClick={() => setBurnDataSize(burnDataSize + 1)}
           disabled={isBurnDataLoadingMore || isBurnDataReachingEnd}
           variant="outline"
         >
-          {isBurnDataLoadingMore ? "Loading..." : "Load more"}
+          {isBurnDataLoadingMore
+            ? "Loading..."
+            : isBurnDataReachingEnd
+            ? "No more transactions"
+            : "Load more"}
         </Button>
-      ) : (
-        <></>
       );
     }
   };
-
+  console.log("allData", allData);
   return (
     <section>
       <Tabs

@@ -7,38 +7,44 @@ import { cn } from "@bera/ui";
 import { formatUnits } from "viem";
 
 import Data from "~/components/data";
-import Graph from "~/components/graph";
 import Hero from "~/components/hero";
 import HoneyBanner from "~/components/honey-banner";
+import { HoneyChart } from "~/components/honey-chart";
 import { HoneyMachine } from "~/components/honey-machine";
 import HoneyTransactionsTable from "~/components/honey-transactions-table";
 import { SwapCard } from "~/components/swap-card";
 import { cloudinaryUrl } from "~/config";
+import { type HoneyEntry } from "./type";
 
 export default function HoneyPage({
-  data,
-  weeklyData,
-  monthlyData,
-  quarterlyData,
-  hourlyData,
+  supplyOverall,
+  volumeOverall,
+  supply24H,
+  volume24H,
+  supply7D,
+  volume7D,
+  supply30D,
+  volume30D,
+  supply90D,
+  volume90D,
   mode,
 }: {
-  data: any;
-  weeklyData: any;
-  monthlyData: any;
-  quarterlyData: any;
-  hourlyData: any;
+  supplyOverall: HoneyEntry[];
+  volumeOverall: HoneyEntry[];
+  supply24H: HoneyEntry[];
+  volume24H: HoneyEntry[];
+  supply7D: HoneyEntry[];
+  volume7D: HoneyEntry[];
+  supply30D: HoneyEntry[];
+  volume30D: HoneyEntry[];
+  supply90D: HoneyEntry[];
+  volume90D: HoneyEntry[];
   mode: "arcade" | "pro";
 }) {
-  const { volume, supply } = data;
-  const { volume: weeklyVolume, supply: weeklySupply } = weeklyData;
-  const { volume: monthlyVolume, supply: monthlySupply } = monthlyData;
-  const { volume: quarterlyVolume, supply: quarterlySupply } = quarterlyData;
-
-  console.log("hourly", hourlyData);
   const arcade = mode === "arcade";
   const router = useRouter();
-
+  const volume = volumeOverall[0]?.amount ?? 0;
+  const supply = supplyOverall[0]?.amount ?? 0;
   const formattedVolume = formatUnits(BigInt(volume), 18);
   const formattedSupply = formatUnits(BigInt(supply), 18);
 
@@ -124,15 +130,17 @@ export default function HoneyPage({
                 />
                 Total Honey Supply
               </h3>
-              <Graph
-                hourlySupply={[]}
-                hourlyVolume={[]}
-                weeklyVolume={weeklyVolume ?? []}
-                weeklySupply={weeklySupply ?? []}
-                monthlyVolume={monthlyVolume ?? []}
-                monthlySupply={monthlySupply ?? []}
-                quarterlyVolume={quarterlyVolume ?? []}
-                quarterlySupply={quarterlySupply ?? []}
+              <HoneyChart
+                {...{
+                  supply24H,
+                  volume24H,
+                  supply7D,
+                  volume7D,
+                  supply30D,
+                  volume30D,
+                  supply90D,
+                  volume90D,
+                }}
                 arcade={arcade}
               />
             </div>
