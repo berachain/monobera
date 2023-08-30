@@ -12,19 +12,21 @@ import {
   type Token,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
-import { parseUnits, type Address } from "viem";
+import { parseUnits, type Address, getAddress } from "viem";
 
 export const usePsm = () => {
   const { tokenDictionary, tokenList } = useTokens();
+  console.log("tokenList", tokenList)
   const collateralList = tokenList?.filter((token: any) =>
     token.tags?.includes("collateral"),
   );
 
+  console.log("collateralList", collateralList)
   const defaultCollateral = collateralList?.find((token: any) =>
     token.tags.includes("defaultCollateral"),
   );
   const honey = tokenDictionary
-    ? tokenDictionary[process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address]
+    ? tokenDictionary[getAddress(process.env.NEXT_PUBLIC_HONEY_ADDRESS as string) as Address]
     : undefined;
 
   const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
@@ -34,6 +36,8 @@ export const usePsm = () => {
   );
 
   const [_givenIn, setGivenIn] = useState<boolean>(true);
+  console.log("defaultCollateral", defaultCollateral)
+  console.log("honey", honey)
   useEffect(() => {
     if (
       defaultCollateral &&
@@ -41,6 +45,9 @@ export const usePsm = () => {
       selectedFrom === undefined &&
       selectedTo === undefined
     ) {
+      console.log("setting default collateral")
+      console.log("defaultCollateral", defaultCollateral)
+      console.log("honey", honey)
       setSelectedFrom(defaultCollateral);
       setSelectedTo(honey);
     }
