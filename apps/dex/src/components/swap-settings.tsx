@@ -62,6 +62,7 @@ export default function SwapSettings() {
           disabled={slippageToleranceType === SELECTION.AUTO}
           placeholder="1"
           defaultValue={slippageToleranceValue}
+          onKeyDown={(e) => e.key === "-" && e.preventDefault()}
           endAdornment={
             <p
               className={cn(
@@ -102,6 +103,7 @@ export default function SwapSettings() {
           disabled={deadlineType === SELECTION.AUTO}
           placeholder="1"
           defaultValue={deadlineValue}
+          onKeyDown={(e) => e.key === "-" && e.preventDefault()}
           endAdornment={
             <p
               className={cn(

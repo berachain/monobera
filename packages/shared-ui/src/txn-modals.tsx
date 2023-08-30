@@ -34,7 +34,7 @@ const BaseModal = ({
 }: IBaseModal) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="flex flex-col items-center justify-center gap-3 sm:max-w-[420px]">
+      <DialogContent className="flex flex-col items-center justify-center gap-3 py-12 sm:max-w-[420px]">
         <div className="flex h-fit w-full flex-row justify-center">{icon}</div>
         <p className="text-lg font-semibold">{title}</p>
         <Balancer className="text-xs font-medium">{message}</Balancer>

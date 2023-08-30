@@ -1,12 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 type Props = {
@@ -26,20 +24,22 @@ enum VALUES {
   FIVE_BPS = "0.05",
   TEN_BPS = "0.10",
   THIRTY_BPS = "0.30",
-  ONE_PERCENT = "1",
+  ONE_PERCENT = "1.00",
   CUSTOM = "custom",
 }
 export function CreatePoolFeeData({
+  swapFee,
   error,
   setSwapFee,
   onContinue,
   onBack,
 }: Props) {
-  const [type, setType] = useState(Types.VALUE);
-  const [customValue, setCustomValue] = useState("0.3");
+  const [_type, setType] = useState(Types.VALUE);
+  const [customValue, _setCustomValue] = useState(swapFee);
   const handleFeeChange = (value: string) => {
     setSwapFee(Number(value));
   };
+  console.log("swapFee", swapFee);
   return (
     <Card className="w-[350px]  px-6 py-8 shadow-lg  sm:w-[480px]">
       <CardTitle className="center text-md mb-3 flex items-center p-0 font-semibold sm:text-lg">
@@ -51,7 +51,7 @@ export function CreatePoolFeeData({
       </CardTitle>
       <div className="flex flex-col gap-4">
         <Tabs
-          defaultValue={VALUES.THIRTY_BPS}
+          defaultValue={swapFee.toFixed(2)}
           onValueChange={(value: string) => {
             if (value === Types.CUSTOM) {
               setType(Types.CUSTOM);
@@ -77,19 +77,19 @@ export function CreatePoolFeeData({
               value={VALUES.ONE_PERCENT}
               className="w-full  min-w-[30px]"
             >
-              1%
+              1.00%
             </TabsTrigger>
-            <TabsTrigger value={VALUES.CUSTOM} className="w-full">
+            {/* <TabsTrigger value={VALUES.CUSTOM} className="w-full">
               Custom
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
         </Tabs>
-        <Input
+        {/* <Input
           type="number"
           step="any"
           className="h-[40px] w-full pl-1 pr-6 text-right"
           disabled={type !== Types.CUSTOM}
-          placeholder={customValue}
+          placeholder={customValue.toString()}
           defaultValue={customValue}
           endAdornment={
             <p
@@ -106,7 +106,7 @@ export function CreatePoolFeeData({
             setCustomValue(e.target.value);
             handleFeeChange(e.target.value);
           }}
-        />
+        /> */}
         <p className="text-sm font-medium text-muted-foreground">
           0.05% to 0.10% is recommended for stable pairings
         </p>
