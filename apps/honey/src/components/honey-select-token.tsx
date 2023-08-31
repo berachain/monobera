@@ -40,7 +40,7 @@ export function SelectToken({
               {token?.symbol}{" "}
             </span>
             {weight && <span className="text-muted-foreground">{weight}%</span>}
-            {selectable && <Icons.chevronDown className="h-4 w-4" />}
+            {selectable && <Icons.chevronDown className="-ml-1 h-4 w-4" />}
           </>
         ) : (
           <p

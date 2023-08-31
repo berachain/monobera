@@ -5,6 +5,10 @@ import { indexerUrl } from "~/config";
 
 async function getMints(page: number, perPage: number) {
   try {
+    // console.log(
+    //   "getMints",
+    //   `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
+    // );
     const res: any = await fetch(
       `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
       { cache: "no-store" },
@@ -14,11 +18,6 @@ async function getMints(page: number, perPage: number) {
       throw new Error("Failed to fetch honey mint data");
     }
     return jsonRes;
-    // console.log(
-    //   "getMints",
-    //   jsonRes,
-    //   `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
-    // );
   } catch (e) {
     notFound();
   }
@@ -54,22 +53,21 @@ function sortByBlockTime(data: any[]): any[] {
     .reverse();
 }
 
-const DEFAULT_SIZE = 5;
+// const DEFAULT_SIZE = 5;
 
 export const revalidate = 60;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  // pages
   const page = searchParams.get("page");
   const perPage = searchParams.get("perPage");
 
   const mint = searchParams.get("mint");
   const burn = searchParams.get("burn");
 
-  const mints = getMints(Number(page || 0), Number(perPage));
-  const burns = getBurns(Number(page || 0), Number(perPage));
+  const mints = getMints(Number(page || 1), Number(perPage));
+  const burns = getBurns(Number(page || 1), Number(perPage));
 
   const data: any = await Promise.all([mints, burns])
     .then(([mints, burns]) => ({
@@ -83,32 +81,16 @@ export async function GET(request: Request) {
   let sortedData = [];
   if (mint === null && burn === null) {
     sortedData = sortByBlockTime([...data.mints, ...data.burns]);
-  }
-  if (mint !== null && burn === null) {
+  } else if (mint !== null && burn === null) {
     sortedData = sortByBlockTime([...data.mints]);
-  }
-  if (mint === null && burn !== null) {
+  } else if (mint === null && burn !== null) {
     sortedData = sortByBlockTime([...data.burns]);
+  } else {
+    sortedData = sortByBlockTime([...data.mints, ...data.burns]);
   }
 
   if (!sortedData) return NextResponse.json({});
-
-  let paginatedData = sortedData;
-  if (page && !perPage) {
-    paginatedData = paginatedData.slice(
-      (parseInt(page) - 1) * DEFAULT_SIZE,
-      parseInt(page) * DEFAULT_SIZE,
-    );
+  else {
+    return NextResponse.json(sortedData);
   }
-  if (!page && perPage) {
-    paginatedData = paginatedData.slice(0, parseInt(perPage));
-  }
-  if (page && perPage) {
-    paginatedData = paginatedData.slice(
-      (parseInt(page) - 1) * parseInt(perPage),
-      parseInt(page) * parseInt(perPage),
-    );
-  }
-
-  return NextResponse.json(paginatedData);
 }

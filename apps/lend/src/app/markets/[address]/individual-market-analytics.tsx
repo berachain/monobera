@@ -19,8 +19,8 @@ export default function IndividualMarketAnalytics({
   const router = useRouter();
   useEffect(() => {
     if (!address || !isAddress(address)) {
-      // router.push("/404");
-      console.log("404");
+      router.push("/404");
+      // console.log("404");
     }
   }, []);
 

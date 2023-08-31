@@ -23,6 +23,7 @@ type Props = {
   selectable?: boolean;
   weight?: number;
   disabled?: boolean;
+  customTokenList?: Token[];
   onTokenSelection?: (token: Token) => void;
   setAmount?: (amount: number) => void;
   onExceeding?: (isExceeding: boolean) => void;
@@ -37,6 +38,7 @@ export function HoneyTokenInput({
   selectable = true,
   weight = undefined,
   disabled = false,
+  customTokenList = undefined,
   onTokenSelection = undefined,
   setAmount = undefined,
   onExceeding = undefined,
@@ -82,6 +84,7 @@ export function HoneyTokenInput({
           selectedTokens={selectedTokens}
           selectable={selectable}
           weight={weight}
+          customTokenList={customTokenList}
         />
         <div className="flex w-full flex-col pl-2 pt-2 sm:pl-0">
           <Input
