@@ -11,7 +11,7 @@ import { PoolSearch } from "./PoolsTable";
 export default function PoolPageHeader() {
   const router = useRouter();
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-6">
+    <div className="mt-16 flex w-full flex-col items-center justify-center gap-6">
       <h1 className="text-center text-5xl font-bold">
         Create a <span className="text-secondary-foreground">Pool</span>
         <br /> <span className="text-secondary-foreground">Or</span> Add

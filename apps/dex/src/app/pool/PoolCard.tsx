@@ -29,12 +29,12 @@ export const PoolCard = ({
   return (
     <div
       key={pool?.pool}
-      className="col-span-1 w-full rounded-xl border border-border bg-background px-6 py-8"
+      className="col-span-1 flex w-full max-w-[275px] flex-col justify-end rounded-xl border border-border bg-background px-6 py-8"
     >
-      <div className="flex flex-row flex-wrap">
+      <div className="flex h-12 flex-row flex-wrap">
         {pool?.tags?.map((tag) => {
           return (
-            <Badge key={tag} variant="info" className="mr-2 ">
+            <Badge key={tag} variant={"info"}>
               {getBadgeContent(tag)}
             </Badge>
           );

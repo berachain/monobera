@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useBeraConfig } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
@@ -17,7 +16,7 @@ interface IToast {
 interface IBaseToast {
   title: string;
   href?: string;
-  onClose: () => void;
+  onClose?: () => void;
   duration?: number;
   className?: string;
   startAdornment?: React.ReactNode;
@@ -26,7 +25,6 @@ interface IBaseToast {
 const BaseToast = ({
   title,
   href,
-  onClose,
   className = "",
   startAdornment,
 }: IBaseToast) => {
@@ -42,16 +40,11 @@ const BaseToast = ({
         {startAdornment && startAdornment}
         {title}
       </div>
-      {href ? (
-        <Link href={href} passHref className="flex flex-row gap-2">
+      {href && (
+        <a href={href} className="flex flex-row gap-2">
           <p className="text-sm font-normal">View Txn</p>
           <Icons.external className="h-4 w-4" />
-        </Link>
-      ) : (
-        <Icons.close
-          className="h-4	w-4  bg-muted-foreground"
-          onClick={() => onClose()}
-        />
+        </a>
       )}
     </div>
   );
