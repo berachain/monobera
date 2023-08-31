@@ -9,23 +9,6 @@ export const metadata: Metadata = {
   description: "BGT Station",
 };
 
-async function getGlobalCuttingBoard() {
-  try {
-    const res = await fetch(`${indexerUrl}/bgt/rewards`);
-    const jsonRes = await res.json();
-    return jsonRes.result;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-export default async function Page() {
-  const cuttingBoard = getGlobalCuttingBoard();
-  const data: any = await Promise.all([cuttingBoard]).then(
-    ([cuttingBoard]) => ({
-      cuttingBoard: cuttingBoard,
-    }),
-  );
-
-  return <DashBoard globalCuttingBoard={data.cuttingBoard as CuttingBoard[]} />;
+export default function Page() {
+  return <DashBoard />;
 }

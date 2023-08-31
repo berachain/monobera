@@ -41,7 +41,6 @@ export interface PoLValidator extends Validator {
   rank: number;
 }
 export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
-  console.log(prices);
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
   const {

@@ -3,6 +3,8 @@ import { RouterService, defaultConfig } from "@bera/bera-router";
 
 import { getBaseTokenPrice, type MappedTokens } from "./getPrice";
 
+export const fetchCache = "force-cache";
+
 export const revalidate = 300; // revalidate at most every hour
 
 export async function GET() {
