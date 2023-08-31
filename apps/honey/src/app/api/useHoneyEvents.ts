@@ -16,7 +16,7 @@ export const useHoneyEvents = () => {
       const page = key[1] ?? 0 + 1;
       try {
         const res = await fetch(
-          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&mint=true&burn=true`,
+          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}`,
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -37,7 +37,7 @@ export const useHoneyEvents = () => {
       const page = key[1] ?? 0 + 1;
       try {
         const res = await fetch(
-          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&mint=true&burn=false`,
+          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&mint`,
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -58,7 +58,7 @@ export const useHoneyEvents = () => {
       const page = key[1] ?? 0 + 1;
       try {
         const res = await fetch(
-          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&mint=false&burn=true`,
+          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&burn`,
         );
         const jsonRes = await res.json();
         return jsonRes;

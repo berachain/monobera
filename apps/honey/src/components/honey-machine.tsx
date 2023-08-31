@@ -132,18 +132,18 @@ export function HoneyMachine() {
     ModalPortal,
     needsApproval,
     honey,
-    collateralList
+    collateralList,
   } = usePsm();
 
   // console.log(
-    // payload,
-    // payload[2],
-    // fromAmount,
-    // allowance?.formattedAllowance,
-    // needsApproval,
-    // fromBalance?.balance,
-    //   fromBalance?.formattedBalance,
-    //   toBalance?.formattedBalance,
+  // payload,
+  // payload[2],
+  // fromAmount,
+  // allowance?.formattedAllowance,
+  // needsApproval,
+  // fromBalance?.balance,
+  //   fromBalance?.formattedBalance,
+  //   toBalance?.formattedBalance,
   // );
 
   const { write } = useTxn({

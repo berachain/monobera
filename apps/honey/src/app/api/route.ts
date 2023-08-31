@@ -53,14 +53,13 @@ function sortByBlockTime(data: any[]): any[] {
     .reverse();
 }
 
-const DEFAULT_SIZE = 5;
+// const DEFAULT_SIZE = 5;
 
 export const revalidate = 60;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  // pages
   const page = searchParams.get("page");
   const perPage = searchParams.get("perPage");
 
@@ -80,34 +79,18 @@ export async function GET(request: Request) {
   if (!data) return NextResponse.json({});
 
   let sortedData = [];
-  if (mint === "true" && burn === "true") {
+  if (mint === null && burn === null) {
     sortedData = sortByBlockTime([...data.mints, ...data.burns]);
-  }
-  if (mint === "true" && burn === "false") {
+  } else if (mint !== null && burn === null) {
     sortedData = sortByBlockTime([...data.mints]);
-  }
-  if (mint === "false" && burn === "true") {
+  } else if (mint === null && burn !== null) {
     sortedData = sortByBlockTime([...data.burns]);
+  } else {
+    sortedData = sortByBlockTime([...data.mints, ...data.burns]);
   }
 
   if (!sortedData) return NextResponse.json({});
-
-  let paginatedData = sortedData;
-  if (page && !perPage) {
-    paginatedData = paginatedData.slice(
-      (parseInt(page) - 1) * DEFAULT_SIZE,
-      parseInt(page) * DEFAULT_SIZE,
-    );
+  else {
+    return NextResponse.json(sortedData);
   }
-  if (!page && perPage) {
-    paginatedData = paginatedData.slice(0, parseInt(perPage));
-  }
-  if (page && perPage) {
-    paginatedData = paginatedData.slice(
-      (parseInt(page) - 1) * parseInt(perPage),
-      parseInt(page) * parseInt(perPage),
-    );
-  }
-
-  return NextResponse.json(paginatedData);
 }
