@@ -28,21 +28,22 @@ async function getCuttingBoard(address: string) {
     console.log(e);
   }
 }
-
 const getPoolTvl = async (address: string) => {
-  console.log("address", address);
   try {
     // const res = await fetch(`${indexerUrl}/bgt/rewards/delegator/${address}`);
 
     // TODO: narrow window to past day reee
+    const now = Math.floor(Date.now() / 1000);
+    const yesterday = now - 12000000;
     const res = await fetch(
-      `${indexerUrl}/analytics/tvldaily?from_time=1&to_time=1699260000&pool=${getAddress(
+      `${
+        process.env.NEXT_PUBLIC_ANALYTICS
+      }/analytics/tvldaily?from_time=${yesterday}&to_time=${now}&pool=${getAddress(
         address,
       )}`,
     );
     const jsonRes = await res.json();
-    console.log("jsonRes", jsonRes);
-    return jsonRes.result;
+    return jsonRes.result[jsonRes.result.length - 1] ?? undefined;
   } catch (e) {
     console.log(e);
   }
@@ -59,10 +60,7 @@ export default async function Page({
   const cb: CuttingBoard[] = cuttingBoard[0].weights;
   const promiseArray = cb.map((w: CuttingBoard) => getPoolTvl(w.address));
 
-  const cbTvlData = (await Promise.all(promiseArray)).filter(
-    (p) => p !== undefined,
-  );
+  const cbTvlData = await Promise.all(promiseArray);
 
-  console.log("cbTvlData", cbTvlData);
   return <Validator {...{ validatorAddress, cuttingBoard, cbTvlData }} />;
 }

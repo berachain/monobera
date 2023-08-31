@@ -53,7 +53,7 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex w-[53px] gap-1">
-        {formatter.format(row.original.tvl)}
+        ${formatter.format(row.original.tvl)}
       </div>
     ),
     accessorKey: "tvl",

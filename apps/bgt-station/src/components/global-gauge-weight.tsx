@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { truncateHash, useTokens, type CuttingBoard } from "@bera/berajs";
+import { truncateHash, useTokens } from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { BeraChart } from "@bera/ui/bera-chart";
@@ -10,6 +10,7 @@ import {
   global_gauge_weight_columns,
   type GlobalGaugeColumns,
 } from "~/columns/global-gauge-weight";
+import { type GaugeWeight } from "~/hooks/useGaugeWeights";
 
 const options = {
   plugins: {
@@ -54,7 +55,7 @@ const options = {
 };
 
 interface Props {
-  globalCuttingBoard: CuttingBoard[] | undefined;
+  gaugeWeights: GaugeWeight[] | undefined;
 }
 
 const Gauge = ({ address }: { address: string | undefined }) => {
@@ -78,7 +79,7 @@ const Gauge = ({ address }: { address: string | undefined }) => {
     </div>
   );
 };
-export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
+export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
 
@@ -90,15 +91,16 @@ export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
   };
 
   useEffect(() => {
-    const temp = globalCuttingBoard?.map((data: CuttingBoard) => {
+    const temp = gaugeWeights?.map((data: GaugeWeight) => {
       return {
         label: data.address,
-        percentage: Number(data.percentage),
-        amount: Number(data.amount),
+        percentage: data.percentage,
+        amount: data.amount,
+        tvl: data.tvl,
       };
     });
     setCuttingBoardData(temp);
-  }, []);
+  }, [gaugeWeights]);
 
   const dataT: GlobalGaugeColumns[] = React.useMemo(() => {
     return (
@@ -106,7 +108,7 @@ export default function GlobalGaugeWeight({ globalCuttingBoard = [] }: Props) {
         gauge: <Gauge address={data.label} />,
         incentiveAmount: data.amount,
         incentivePercentage: data.percentage,
-        tvl: 694200000 * (index + 1),
+        tvl: data.tvl,
         hide: (
           <Checkbox
             id={`dashboard-checkbox-${index}`}
