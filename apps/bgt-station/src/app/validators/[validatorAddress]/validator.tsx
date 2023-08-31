@@ -5,33 +5,34 @@ import { useRouter } from "next/navigation";
 import {
   truncateHash,
   usePollActiveValidators,
-  type CuttingBoard,
+  usePollGlobalValidatorBribes,
 } from "@bera/berajs";
 import { Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits, type Address } from "viem";
 
-import GlobalGaugeWeight from "~/components/global-gauge-weight";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import BribeList from "./bribe-list";
 import BribesAndEmissions from "./bribes-and-emissions";
 import Uptime from "./uptime";
 import ValidatorActivitiesTable from "./validator-activities-table";
 import ValidatorDetails from "./validator-details";
+import ValidatorGaugeWeightInfo from "./validator-gauge-weight";
 
 export default function Validator({
   validatorAddress,
-  cuttingBoard,
 }: {
   validatorAddress: Address;
-  cuttingBoard: CuttingBoard | undefined;
 }) {
   const router = useRouter();
-
-  const { useActiveValidator, usePercentageDelegated } =
-    usePollActiveValidators();
-  const validator = useActiveValidator(validatorAddress);
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const { usePolValidator } = usePollGlobalValidatorBribes(prices);
+  const validator = usePolValidator(validatorAddress);
+  const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(validatorAddress);
+
   return (
     <div className="container relative mb-10 flex max-w-[1078px] flex-col gap-16">
       <div>
@@ -76,7 +77,7 @@ export default function Validator({
                 : "Loading..."}
             </div>
             <div className="text-sm font-medium leading-none text-muted-foreground">
-              Concensus address:{" "}
+              Consensus address:{" "}
               {validator ? truncateHash(validator?.consAddr, 6) : "Loading..."}
             </div>
           </div>
@@ -106,13 +107,10 @@ export default function Validator({
 
       <div className="">
         <div className="mb-4 flex items-center text-lg font-semibold leading-7">
-          Average Gauge Weight <Tooltip text="Bribes and emissions" />
+          Cutting Board{" "}
+          <Tooltip text="Where this validator's block rewards are being directed" />
         </div>
-        <GlobalGaugeWeight
-          globalCuttingBoard={
-            (cuttingBoard as unknown as any[])[0].weights as CuttingBoard[]
-          }
-        />
+        <ValidatorGaugeWeightInfo validatorAddress={validatorAddress} />
       </div>
 
       <div className="">

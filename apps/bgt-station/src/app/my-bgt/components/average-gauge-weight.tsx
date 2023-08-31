@@ -2,7 +2,7 @@ import { usePollDelegatorValidators } from "@bera/berajs";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import GlobalGaugeWeight from "~/components/global-gauge-weight";
-import { useUserGaugeWeight } from "~/hooks/useUserGaugeWeight";
+import { useUserGaugeWeight } from "~/hooks/useGaugeWeights";
 import Nothing from "../nothing";
 
 export default function AverageGaugeWeight() {
@@ -22,9 +22,7 @@ export default function AverageGaugeWeight() {
               <Skeleton className="h-10 w-full" />
             </div>
           ) : (
-            <GlobalGaugeWeight
-              globalCuttingBoard={data?.result ? data.result : []}
-            />
+            <GlobalGaugeWeight gaugeWeights={data ?? []} />
           )}
         </>
       ) : (

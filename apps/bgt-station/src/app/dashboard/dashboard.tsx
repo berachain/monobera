@@ -3,16 +3,12 @@
 import { useMemo } from "react";
 import { type Metadata } from "next";
 import Image from "next/image";
-import {
-  usePollGlobalValidatorBribes,
-  type CuttingBoard,
-  type PoLValidator,
-} from "@bera/berajs";
+import { usePollGlobalValidatorBribes, type PoLValidator } from "@bera/berajs";
 
 import { cloudinaryUrl } from "~/config";
 import { usePollPrices } from "~/hooks/usePollPrices";
-import GlobalGaugeWeight from "../../components/global-gauge-weight";
 import { Details } from "./components/details";
+import GlobalGaugeWeightInfo from "./components/global-gauge-weight";
 import { ValidatorsList } from "./components/validators-list";
 
 export const metadata: Metadata = {
@@ -20,10 +16,7 @@ export const metadata: Metadata = {
   description: "BGT Station",
 };
 
-interface Props {
-  globalCuttingBoard: CuttingBoard[];
-}
-export default function DashBoard({ globalCuttingBoard }: Props) {
+export default function DashBoard() {
   const { usePrices } = usePollPrices();
   const prices = usePrices();
   const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
@@ -41,7 +34,6 @@ export default function DashBoard({ globalCuttingBoard }: Props) {
     [validators],
   );
 
-  console.log(topStakeValidators);
   const topPayingValidators = useMemo(
     () =>
       validators
@@ -51,6 +43,7 @@ export default function DashBoard({ globalCuttingBoard }: Props) {
         : [],
     [validators],
   );
+
   return (
     <div className="container flex w-full max-w-[1078px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">
@@ -76,7 +69,7 @@ export default function DashBoard({ globalCuttingBoard }: Props) {
         <div className="mt-4 text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
           See what pools validators are incentivizing right now
         </div>
-        <GlobalGaugeWeight globalCuttingBoard={globalCuttingBoard} />
+        <GlobalGaugeWeightInfo />
       </div>
 
       <ValidatorsList

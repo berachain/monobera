@@ -120,7 +120,8 @@ export default function BribesAndEmissions({
   return (
     <div className="">
       <div className="flex items-center text-lg font-semibold leading-7">
-        Bribes and emissions <Tooltip text="Bribes and emissions" />
+        Bribes
+        <Tooltip text="Bribes on this validator" />
       </div>
       <div className="mt-4 flex gap-4">
         <YellowCard className="flex w-full justify-center p-8">
