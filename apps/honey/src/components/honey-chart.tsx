@@ -12,8 +12,9 @@ import {
 } from "@bera/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { format } from "date-fns";
+import { formatEther } from "viem";
 
-import { type HoneyEntry } from "~/app/type";
+import { HoneyTimeFrame, barColors, type HoneyEntry } from "~/app/type";
 
 const Options = {
   responsive: true,
@@ -79,212 +80,125 @@ const Options = {
 };
 
 interface IHoneyChart {
-  hourlySupply: number[];
-  hourlyVolume: number[];
-  weeklyVolume: number[];
-  weeklyFees: number[];
-  weeklyVolumeTotal: number;
-  weeklyFeesTotal: number;
-  monthlyVolume: number[];
-  monthlyFees: number[];
-  monthlyVolumeTotal: number;
-  monthlyFeesTotal: number;
-  quarterlyVolume: number[];
-  quarterlyFees: number[];
-  quarterlyVolumeTotal: number;
-  quarterlyFeesTotal: number;
+  supply24H: HoneyEntry[];
+  volume24H: HoneyEntry[];
+  supply7D: HoneyEntry[];
+  volume7D: HoneyEntry[];
+  supply30D: HoneyEntry[];
+  volume30D: HoneyEntry[];
+  supply90D: HoneyEntry[];
+  volume90D: HoneyEntry[];
   arcade: boolean;
-}
-
-enum TimeFrame {
-  HOURLY = "24H",
-  WEEKLY = "7d",
-  MONTHLY = "30d",
-  QUARTERLY = "90d",
 }
 
 enum Chart {
   VOLUME = "volume",
-  FEES = "fees",
+  FEES = "supply",
 }
 
-type TimeFrameToNumber = {
-  [K in TimeFrame]: number;
-};
-
-function isHoneyData(data: any): data is HoneyEntry {
-  if (typeof data !== "object") return false;
-  return "amount" in data && "UTCTime" in data;
-}
-
-const timeFrameToNumber: TimeFrameToNumber = {
-  [TimeFrame.HOURLY]: 24,
-  [TimeFrame.WEEKLY]: 7,
-  [TimeFrame.MONTHLY]: 30,
-  [TimeFrame.QUARTERLY]: 90,
-};
-function getDateListFromDaysAgo(daysAgo: number): string[] {
-  const dateList: string[] = [];
-  const today = new Date();
-
-  for (let i = 0; i < daysAgo; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() - i);
-    const dateString = date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    dateList.push(dateString);
-  }
-
-  return dateList.reverse();
-}
-const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
-  if (isHoneyData(data[0])) {
-    return {
-      labels: data.map((entry: any) => {
-        const utcDate = new Date(entry.UTCTime * 1000);
-        return format(utcDate, "eeee HH:mm");
-      }),
-
-      datasets: [
-        {
-          data: data.map((entry: any) => entry),
-          // data: data.map((entry: any) => entry.amount),
-          labelColor: false,
-          backgroundColor: chart === Chart.VOLUME ? "#e4e4e4" : "#7fc516",
-          borderColor: chart === Chart.VOLUME ? "#e4e4e4" : "#7fc516",
-          hoverBackgroundColor: "yellow",
-          hoverBorderColor: "yellow",
-          tension: 0.4,
-          borderRadius: 100,
-          borderSkipped: false,
-        },
-      ],
-    };
-  }
-  const barLineData = {
-    labels: getDateListFromDaysAgo(timeFrameToNumber[timeFrame]),
+const getData = (data: HoneyEntry[], arcade: boolean) => {
+  return {
+    labels: data.map((entry: any) => {
+      const utcDate = new Date(entry.UTCTime * 1000);
+      return [
+        format(utcDate, "eeee HH:mm"),
+        utcDate.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+      ];
+    }),
     datasets: [
       {
-        data: data,
+        data: data.map((entry: any) =>
+          Number(formatEther(BigInt(entry.amount))),
+        ),
         labelColor: false,
-        backgroundColor: chart === Chart.VOLUME ? "#e4e4e4" : "#7fc516",
-        borderColor: chart === Chart.VOLUME ? "#e4e4e4" : "#7fc516",
-        hoverBackgroundColor: "yellow",
-        hoverBorderColor: "yellow",
+        backgroundColor: arcade ? barColors.arcade : barColors.pro,
+        borderColor: arcade ? barColors.arcade : barColors.pro,
+        hoverBackgroundColor: arcade
+          ? barColors.arcadeHover
+          : barColors.proHover,
+        hoverBorderColor: arcade ? barColors.arcadeHover : barColors.proHover,
         tension: 0.4,
         borderRadius: 100,
         borderSkipped: false,
+        maxBarThickness: 20,
       },
     ],
   };
-  return barLineData;
 };
 
-function calculatePercentageDifference(numbers: number[]): number {
-  if (numbers.length < 2) {
+function calculatePercentageDifference(entries: HoneyEntry[]): number {
+  if (entries.length < 2) {
     return 0; // Not enough numbers to calculate the difference
+  } else {
+    let firstNumberIndex = 0;
+    while (
+      entries[firstNumberIndex] &&
+      Number(formatEther(BigInt(entries[firstNumberIndex]!.amount))) === 0
+    ) {
+      firstNumberIndex++;
+    }
+
+    if (firstNumberIndex >= entries.length) {
+      return 0; // All numbers are zero, cannot calculate percentage difference
+    }
+
+    const firstNumber = Number(
+      formatEther(BigInt(entries[firstNumberIndex]!.amount)),
+    );
+    const lastNumber = Number(
+      formatEther(BigInt(entries[entries.length - 1]!.amount)),
+    );
+
+    const difference = lastNumber - firstNumber;
+    const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
+
+    return percentageDifference;
   }
-
-  let firstNumberIndex = 0;
-  while (firstNumberIndex < numbers.length && numbers[firstNumberIndex] === 0) {
-    firstNumberIndex++;
-  }
-
-  if (firstNumberIndex >= numbers.length) {
-    return 0; // All numbers are zero, cannot calculate percentage difference
-  }
-
-  const firstNumber = numbers[firstNumberIndex] as number;
-  const lastNumber = numbers[numbers.length - 1] as number;
-
-  const difference = lastNumber - firstNumber;
-  const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
-
-  return percentageDifference;
 }
 
+const getTotalAmount = (data: HoneyEntry[]): number =>
+  data.reduce(
+    (acc, entry) => acc + Number(formatEther(BigInt(entry.amount))),
+    0,
+  );
+
 export const HoneyChart = ({
-  // hourlySupply,
-  hourlyVolume,
-  weeklyVolume,
-  weeklyFees,
-  weeklyVolumeTotal,
-  weeklyFeesTotal,
-  monthlyVolume,
-  monthlyFees,
-  monthlyVolumeTotal,
-  monthlyFeesTotal,
-  quarterlyVolume,
-  quarterlyFees,
-  quarterlyVolumeTotal,
-  quarterlyFeesTotal,
+  supply24H,
+  volume24H,
+  supply7D,
+  volume7D,
+  supply30D,
+  volume30D,
+  supply90D,
+  volume90D,
   arcade,
 }: IHoneyChart) => {
-  const [total, setTotal] = useState(weeklyVolumeTotal);
+  const DATA = {
+    supply24H,
+    volume24H,
+    supply7D,
+    volume7D,
+    supply30D,
+    volume30D,
+    supply90D,
+    volume90D,
+  };
+  // console.log("DATA", DATA);
   const [difference, setDifference] = useState(0);
-  const [timeFrame, setTimeFrame] = useState(TimeFrame.HOURLY);
+  const [total, setTotal] = useState(getTotalAmount(DATA.volume24H));
+  const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.HOURLY);
   const [chart, setChart] = useState(Chart.VOLUME);
-  const [data, setData] = useState(getData(hourlyVolume, timeFrame, chart));
+  const [data, setData] = useState(getData(DATA.volume24H, arcade));
 
   useEffect(() => {
-    if (timeFrame === TimeFrame.HOURLY) {
-      if (chart === Chart.VOLUME) {
-        setData(getData(hourlyVolume, timeFrame, chart));
-        setDifference(calculatePercentageDifference(hourlyVolume));
-        setTotal(
-          hourlyVolume.reduce(
-            (a, b) => a + b,
-
-            0,
-          ),
-        );
-      }
-      if (chart === Chart.FEES) {
-        setData(getData(weeklyFees, timeFrame, chart));
-        setDifference(calculatePercentageDifference(weeklyFees));
-        setTotal(weeklyFeesTotal);
-      }
-    }
-    if (timeFrame === TimeFrame.WEEKLY) {
-      if (chart === Chart.VOLUME) {
-        setData(getData(weeklyVolume, timeFrame, chart));
-        setDifference(calculatePercentageDifference(weeklyVolume));
-        setTotal(weeklyVolumeTotal);
-      }
-      if (chart === Chart.FEES) {
-        setData(getData(weeklyFees, timeFrame, chart));
-        setDifference(calculatePercentageDifference(weeklyFees));
-        setTotal(weeklyFeesTotal);
-      }
-    }
-    if (timeFrame === TimeFrame.MONTHLY) {
-      if (chart === Chart.VOLUME) {
-        setData(getData(monthlyVolume, timeFrame, chart));
-        setDifference(calculatePercentageDifference(monthlyVolume));
-        setTotal(monthlyVolumeTotal);
-      }
-      if (chart === Chart.FEES) {
-        setData(getData(monthlyFees, timeFrame, chart));
-        setDifference(calculatePercentageDifference(monthlyFees));
-        setTotal(monthlyFeesTotal);
-      }
-    }
-    if (timeFrame === TimeFrame.QUARTERLY) {
-      if (chart === Chart.VOLUME) {
-        setData(getData(quarterlyVolume, timeFrame, chart));
-        setDifference(calculatePercentageDifference(quarterlyVolume));
-        setTotal(quarterlyVolumeTotal);
-      }
-      if (chart === Chart.FEES) {
-        setData(getData(quarterlyFees, timeFrame, chart));
-        setDifference(calculatePercentageDifference(quarterlyFees));
-        setTotal(quarterlyFeesTotal);
-      }
-    }
-  }, [timeFrame, chart]);
+    setData(getData(DATA[`${chart}${timeFrame}`], arcade));
+    setDifference(calculatePercentageDifference(DATA[`${chart}${timeFrame}`]));
+    setTotal(getTotalAmount(DATA[`${chart}${timeFrame}`]));
+  }, [timeFrame, chart, arcade]);
 
   return (
     <Card
@@ -352,7 +266,7 @@ export const HoneyChart = ({
             </TabsList>
             <Select
               onValueChange={(value: string) =>
-                setTimeFrame(value as TimeFrame)
+                setTimeFrame(value as HoneyTimeFrame)
               }
             >
               <SelectTrigger
@@ -364,8 +278,8 @@ export const HoneyChart = ({
                 )}
               >
                 <SelectValue
-                  placeholder={TimeFrame.HOURLY}
-                  defaultValue={TimeFrame.HOURLY}
+                  placeholder={HoneyTimeFrame.HOURLY}
+                  defaultValue={HoneyTimeFrame.HOURLY}
                 />
               </SelectTrigger>
               <SelectContent
@@ -375,7 +289,7 @@ export const HoneyChart = ({
                 )}
               >
                 <SelectItem
-                  value={TimeFrame.HOURLY}
+                  value={HoneyTimeFrame.HOURLY}
                   className={cn(
                     "cursor-pointer rounded-xl",
                     arcade
@@ -386,7 +300,7 @@ export const HoneyChart = ({
                   24H
                 </SelectItem>
                 <SelectItem
-                  value={TimeFrame.WEEKLY}
+                  value={HoneyTimeFrame.WEEKLY}
                   className={cn(
                     "cursor-pointer rounded-xl",
                     arcade
@@ -397,7 +311,7 @@ export const HoneyChart = ({
                   7D
                 </SelectItem>
                 <SelectItem
-                  value={TimeFrame.MONTHLY}
+                  value={HoneyTimeFrame.MONTHLY}
                   className={cn(
                     "cursor-pointer rounded-xl",
                     arcade
@@ -408,7 +322,7 @@ export const HoneyChart = ({
                   30D
                 </SelectItem>
                 <SelectItem
-                  value={TimeFrame.QUARTERLY}
+                  value={HoneyTimeFrame.QUARTERLY}
                   className={cn(
                     "cursor-pointer rounded-xl",
                     arcade

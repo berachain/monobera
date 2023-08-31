@@ -1,11 +1,8 @@
 import { type Metadata } from "next";
 
-import {
-  getDaily,
-  getOverviewData,
-  getPastHours,
-} from "~/utils/getServerSideData";
+import { getHoneyData } from "~/utils/getServerSideData";
 import HoneyPage from "./honey-page";
+import { HoneyTimeFrame } from "./type";
 
 export const metadata: Metadata = {
   title: "Honey | Berachain",
@@ -19,18 +16,37 @@ export default async function Home({
     mode: "arcade" | "pro";
   };
 }) {
-  const [data, weeklyData, monthlyData, quarterlyData, hourlyData] =
-    await Promise.all([
-      getOverviewData(),
-      getDaily(7),
-      getDaily(30),
-      getDaily(90),
-      getPastHours(24),
-    ]);
-
+  const [
+    supply24H,
+    volume24H,
+    supply7D,
+    volume7D,
+    supply30D,
+    volume30D,
+    supply90D,
+    volume90D,
+  ] = await Promise.all([
+    getHoneyData("supply", HoneyTimeFrame.HOURLY),
+    getHoneyData("volume", HoneyTimeFrame.HOURLY),
+    getHoneyData("supply", HoneyTimeFrame.WEEKLY),
+    getHoneyData("volume", HoneyTimeFrame.WEEKLY),
+    getHoneyData("supply", HoneyTimeFrame.MONTHLY),
+    getHoneyData("volume", HoneyTimeFrame.MONTHLY),
+    getHoneyData("supply", HoneyTimeFrame.QUARTERLY),
+    getHoneyData("volume", HoneyTimeFrame.QUARTERLY),
+  ]);
   return (
     <HoneyPage
-      {...{ data, weeklyData, monthlyData, quarterlyData, hourlyData }}
+      {...{
+        supply24H,
+        volume24H,
+        supply7D,
+        volume7D,
+        supply30D,
+        volume30D,
+        supply90D,
+        volume90D,
+      }}
       mode={mode === "pro" ? "pro" : "arcade"}
     />
   );

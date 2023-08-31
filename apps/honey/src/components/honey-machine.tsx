@@ -14,7 +14,7 @@ import {
 import { motion } from "framer-motion";
 import { erc20ABI } from "wagmi";
 
-import { cloudinaryUrl } from "~/config";
+import { cloudinaryUrl, erc20HoneyAddress } from "~/config";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { HoneyTokenInput } from "./honey-token-input";
@@ -131,14 +131,16 @@ export function HoneyMachine() {
     fee,
     ModalPortal,
     needsApproval,
+    honey,
+    collateralList,
   } = usePsm();
 
   // console.log(
-  //   payload,
-  //   payload[2],
-  //   fromAmount,
-  //   allowance?.formattedAllowance,
-  //   needsApproval,
+  // payload,
+  // payload[2],
+  // fromAmount,
+  // allowance?.formattedAllowance,
+  // needsApproval,
   // fromBalance?.balance,
   //   fromBalance?.formattedBalance,
   //   toBalance?.formattedBalance,
@@ -227,10 +229,7 @@ export function HoneyMachine() {
         address: selectedFrom?.address as `0x${string}`,
         abi: erc20ABI as unknown as (typeof erc20ABI)[],
         functionName: "approve",
-        params: [
-          process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as string,
-          1000000n,
-        ],
+        params: [erc20HoneyAddress, 1000000000000000000n],
       });
     } catch (error: any) {
       dispatch({ type: "SET_STATE", payload: "idle" });
@@ -248,7 +247,7 @@ export function HoneyMachine() {
         //   Number(fromBalance.formattedBalance),
         // );
         write({
-          address: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
+          address: erc20HoneyAddress,
           abi: ERC20_HONEY_ABI,
           functionName: "mint",
           params: payload,
@@ -267,7 +266,7 @@ export function HoneyMachine() {
       dispatch({ type: "SET_LOADING", payload: true });
       if (Number(payload[1]) > 0 && payload[1] <= fromBalance.balance) {
         write({
-          address: process.env.NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
+          address: erc20HoneyAddress,
           abi: ERC20_HONEY_ABI,
           functionName: "redeem",
           params: payload,
@@ -338,7 +337,8 @@ export function HoneyMachine() {
                     onTokenSelection={setSelectedFrom}
                     amount={fromAmount ?? 0}
                     balance={fromBalance?.formattedBalance}
-                    selectable={false}
+                    selectable={selectedFrom?.address !== honey?.address}
+                    customTokenList={collateralList}
                     hidePrice
                     setAmount={(amount) => {
                       setFromAmount(Number(amount));
@@ -377,7 +377,8 @@ export function HoneyMachine() {
                     setAmount={(amount) => {
                       setToAmount(Number(amount));
                     }}
-                    selectable={false}
+                    selectable={selectedTo?.address !== honey?.address}
+                    customTokenList={collateralList}
                     hidePrice
                     hideBalance
                     balance={toBalance?.formattedBalance}
