@@ -187,7 +187,7 @@ export const HoneyChart = ({
     supply90D,
     volume90D,
   };
-  console.log("DATA", DATA);
+  // console.log("DATA", DATA);
   const [difference, setDifference] = useState(0);
   const [total, setTotal] = useState(getTotalAmount(DATA.volume24H));
   const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.HOURLY);

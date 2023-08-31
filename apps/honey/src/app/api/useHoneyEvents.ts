@@ -13,10 +13,10 @@ export const useHoneyEvents = () => {
   } = useSWRInfinite(
     (index) => ["allHoneyData", index],
     async (key: any[]) => {
-      const page = key[1] + 1;
+      const page = key[1] ?? 0 + 1;
       try {
         const res = await fetch(
-          `${getAbsoluteUrl()}/api?page=${page ?? 1}&perPage=${DEFAULT_SIZE}`,
+          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&mint=true&burn=true`,
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -34,12 +34,10 @@ export const useHoneyEvents = () => {
   } = useSWRInfinite(
     (index) => ["mintData", index],
     async (key: any[]) => {
-      const page = key[1] + 1;
+      const page = key[1] ?? 0 + 1;
       try {
         const res = await fetch(
-          `${getAbsoluteUrl()}/api?page=${
-            page ?? 1
-          }&perPage=${DEFAULT_SIZE}&mint`,
+          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&mint=true&burn=false`,
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -57,12 +55,10 @@ export const useHoneyEvents = () => {
   } = useSWRInfinite(
     (index) => ["burnData", index],
     async (key: any[]) => {
-      const page = key[1] + 1;
+      const page = key[1] ?? 0 + 1;
       try {
         const res = await fetch(
-          `${getAbsoluteUrl()}/api?page=${
-            page ?? 1
-          }&perPage=${DEFAULT_SIZE}&burn`,
+          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&mint=false&burn=true`,
         );
         const jsonRes = await res.json();
         return jsonRes;

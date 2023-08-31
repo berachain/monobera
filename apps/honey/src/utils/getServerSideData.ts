@@ -39,7 +39,7 @@ export async function getHoneyData(
   }
 
   const api = `${publicAnalyticsUrl}/analytics/honey/${dataType}/${timeGap}?from_time=${fromTimeInSeconds}&to_time=${toTimeInSeconds}`;
-  console.log("api reee", api);
+  // console.log("api reee", api);
   const responce = await fetch(api);
   const responceJson = await responce.json();
   try {

@@ -117,7 +117,7 @@ export function HoneyMachine() {
     payload,
     isConnected,
     setSelectedFrom,
-    allowance,
+    // allowance,
     selectedFrom,
     selectedTo,
     setSelectedTo,
@@ -131,18 +131,20 @@ export function HoneyMachine() {
     fee,
     ModalPortal,
     needsApproval,
+    honey,
+    collateralList
   } = usePsm();
 
-  console.log(
+  // console.log(
     // payload,
     // payload[2],
     // fromAmount,
-    allowance?.formattedAllowance,
-    needsApproval,
+    // allowance?.formattedAllowance,
+    // needsApproval,
     // fromBalance?.balance,
     //   fromBalance?.formattedBalance,
     //   toBalance?.formattedBalance,
-  );
+  // );
 
   const { write } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
@@ -335,7 +337,8 @@ export function HoneyMachine() {
                     onTokenSelection={setSelectedFrom}
                     amount={fromAmount ?? 0}
                     balance={fromBalance?.formattedBalance}
-                    selectable={false}
+                    selectable={selectedFrom?.address !== honey?.address}
+                    customTokenList={collateralList}
                     hidePrice
                     setAmount={(amount) => {
                       setFromAmount(Number(amount));
@@ -374,7 +377,8 @@ export function HoneyMachine() {
                     setAmount={(amount) => {
                       setToAmount(Number(amount));
                     }}
-                    selectable={false}
+                    selectable={selectedTo?.address !== honey?.address}
+                    customTokenList={collateralList}
                     hidePrice
                     hideBalance
                     balance={toBalance?.formattedBalance}

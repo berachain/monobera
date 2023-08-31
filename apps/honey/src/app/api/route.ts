@@ -5,10 +5,10 @@ import { indexerUrl } from "~/config";
 
 async function getMints(page: number, perPage: number) {
   try {
-    console.log(
-      "getMints",
-      `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
-    );
+    // console.log(
+    //   "getMints",
+    //   `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
+    // );
     const res: any = await fetch(
       `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
       { cache: "no-store" },
@@ -80,13 +80,13 @@ export async function GET(request: Request) {
   if (!data) return NextResponse.json({});
 
   let sortedData = [];
-  if (mint === null && burn === null) {
+  if (mint === "true" && burn === "true") {
     sortedData = sortByBlockTime([...data.mints, ...data.burns]);
   }
-  if (mint !== null && burn === null) {
+  if (mint === "true" && burn === "false") {
     sortedData = sortByBlockTime([...data.mints]);
   }
-  if (mint === null && burn !== null) {
+  if (mint === "false" && burn === "true") {
     sortedData = sortByBlockTime([...data.burns]);
   }
 
