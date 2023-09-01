@@ -171,6 +171,30 @@ export const HONEY_PRECOMPILE_ABI = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "amountOut",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "assetOut",
+        type: "address",
+      },
+    ],
+    name: "previewExactOutCollateral",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "contract IERC20",
         name: "collateral",
         type: "address",
@@ -206,6 +230,30 @@ export const HONEY_PRECOMPILE_ABI = [
       },
     ],
     name: "previewRedeem",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "honeyOut",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "assetIn",
+        type: "address",
+      },
+    ],
+    name: "previewRequiredCollateral",
     outputs: [
       {
         internalType: "uint256",

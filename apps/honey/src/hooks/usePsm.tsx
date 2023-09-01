@@ -7,7 +7,9 @@ import {
   usePollBalance,
   usePollHoneyParams,
   usePollPreviewMint,
+  usePollPreviewMintGivenOut,
   usePollPreviewRedeem,
+  usePollPreviewRedeemGivenOut,
   useTokens,
   type Token,
 } from "@bera/berajs";
@@ -34,7 +36,7 @@ export const usePsm = () => {
     undefined,
   );
 
-  const [_givenIn, setGivenIn] = useState<boolean>(true);
+  const [givenIn, setGivenIn] = useState<boolean>(true);
 
   // console.log('h',honey);
   // console.log('bbb',collateralList);
@@ -101,7 +103,16 @@ export const usePsm = () => {
 
   const { usePreviewMint } = usePollPreviewMint(collateral, fromAmount);
   const previewMint = usePreviewMint();
-
+  const { usePreviewMintGivenOut } = usePollPreviewMintGivenOut(
+    collateral,
+    toAmount,
+  );
+  const previewMintGivenOut = usePreviewMintGivenOut();
+  const { usePreviewRedeemGivenOut } = usePollPreviewRedeemGivenOut(
+    collateral,
+    toAmount,
+  );
+  const previewRedeemGivenOut = usePreviewRedeemGivenOut();
   const { usePreviewRedeem } = usePollPreviewRedeem(collateral, fromAmount);
   const previewRedeem = usePreviewRedeem();
 
@@ -112,13 +123,49 @@ export const usePsm = () => {
   // console.log("previewMint", previewMint);
   // console.log("previewRedeem", previewRedeem);
   useEffect(() => {
-    if (isMint) {
+    if (isMint && givenIn && previewMint !== undefined) {
       setToAmount(Number(previewMint));
+    } else if (
+      previewMint === undefined &&
+      fromAmount === 0 &&
+      isMint &&
+      givenIn
+    ) {
+      setToAmount(Number(0));
     }
-    if (!isMint) {
+    if (!isMint && givenIn && previewRedeem !== undefined) {
       setToAmount(Number(previewRedeem));
+    } else if (
+      previewRedeem === undefined &&
+      fromAmount === 0 &&
+      !isMint &&
+      givenIn
+    ) {
+      setToAmount(Number(0));
     }
-  }, [previewMint, previewRedeem]);
+
+    if (isMint && givenIn === false && previewMintGivenOut !== undefined) {
+      setFromAmount(Number(previewMintGivenOut));
+    } else if (
+      previewMintGivenOut === undefined &&
+      toAmount === 0 &&
+      isMint &&
+      givenIn === false
+    ) {
+      setFromAmount(Number(0));
+    }
+
+    if (!isMint && givenIn === false && previewRedeemGivenOut !== undefined) {
+      setFromAmount(Number(previewRedeemGivenOut));
+    } else if (
+      previewRedeemGivenOut === undefined &&
+      fromAmount === 0 &&
+      !isMint &&
+      givenIn
+    ) {
+      setFromAmount(Number(0));
+    }
+  }, [previewMint, previewRedeem, previewMintGivenOut, previewRedeemGivenOut]);
 
   const onSwitch = () => {
     const tempFromAmount = fromAmount;
