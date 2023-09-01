@@ -23,7 +23,6 @@ export const usePsm = () => {
   const collateralList = tokenList?.filter((token: any) =>
     token.tags?.includes("collateral"),
   );
-
   const defaultCollateral = collateralList?.find((token: any) =>
     token.tags.includes("defaultCollateral"),
   );
