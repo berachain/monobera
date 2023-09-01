@@ -52,12 +52,12 @@ export const TokenIcon = ({
   return (
     <Avatar
       className={cn(
-        "block flex aspect-square h-8 w-8 items-center justify-center rounded-full border border-primary bg-muted-foreground",
+        " flex aspect-square h-8 w-8 items-center justify-center rounded-full",
         className,
       )}
     >
       <AvatarImage src={getTokenImgUri()} className="rounded-full" />
-      <AvatarFallback className="h-8 w-8 bg-muted-foreground text-xs font-bold text-white">
+      <AvatarFallback className="h-8 w-8 bg-muted text-xs font-bold text-white">
         {fetch
           ? tokenInformation?.symbol?.slice(0, 3).toUpperCase()
           : token?.symbol?.slice(0, 3).toUpperCase()}
