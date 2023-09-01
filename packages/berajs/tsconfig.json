@@ -16,13 +16,13 @@
     "lib",
     "esm",
     "cjs",
-    "src/proto/cosmos-ts"
+    "src/proto/cosmos-ts",
+    "src/config/abi/*"
   ],
   "include": [
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "../../apps/bgt-station/src/hooks/usePollPrices.ts"
   ]
 }

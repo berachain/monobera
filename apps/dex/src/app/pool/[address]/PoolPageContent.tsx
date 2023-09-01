@@ -297,6 +297,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const router = useRouter();
   const { useBankBalance } = usePollBankBalance(pool.shareAddress);
 
+  console.log("pool", pool)
+  
   const shareBalance = useBankBalance();
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
     shareBalance,

@@ -68,6 +68,7 @@ export interface Pool {
   feeApy?: number;
   fees?: number;
   bgtPerYear?: number;
+  userDeposited?: number;
 }
 
 export type PoolRecords = Record<string, PoolRecord>;

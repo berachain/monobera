@@ -269,7 +269,7 @@ export const PoolChart = ({
               </SelectContent>
             </Select> */}
             <Dropdown
-              selected={TimeFrame.WEEKLY}
+              selected={timeFrame}
               onSelect={(value: string) => setTimeFrame(value as TimeFrame)}
               selectionList={Object.values(TimeFrame)}
               sortby={false}

@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import { formatUnits } from "viem";
 import { usePublicClient, type Address } from "wagmi";
 
 import { BANK_PRECOMPILE_ABI } from "~/config";
@@ -42,16 +43,21 @@ export const usePollUserDepositedPools = (endpoint: string) => {
           multicallAddress: networkConfig.precompileAddresses
             .multicallAddress as Address,
         });
-        const deposited = pool.filter(
-          (pool: any, i: number) =>
-            result[i] !== undefined &&
-            (result[i]?.result as unknown as bigint) !== 0n,
-        );
+        // result[i] !== undefined &&
+        // (result[i]?.result as unknown as bigint) !== 0n,
+        const deposited = pool.map((pool: any, i: number) => {
+          return (
+            {
+              ...pool,
+              userDeposited: Number(formatUnits((result[i]?.result as unknown as bigint ?? 0n), 18)),
+            }
+          )
+        }
+        ).filter((pool: any) => pool.userDeposited !== 0);
         return deposited;
       } catch (e) {
         return undefined;
       }
-      return undefined;
     },
     {
       refreshInterval: POLLING.FAST,
@@ -62,7 +68,13 @@ export const usePollUserDepositedPools = (endpoint: string) => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };
+
+  const useUserBgtDepositedPools = () => {
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    return data?.filter((pool: any) => pool.bgtApy !== 0);
+  }
   return {
     useUserDepositedPools,
+    useUserBgtDepositedPools
   };
 };
