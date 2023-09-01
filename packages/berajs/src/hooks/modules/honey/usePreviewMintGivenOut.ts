@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, parseUnits, type Address } from "viem";
+import { parseUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { type Token } from "~/api";
@@ -10,14 +10,14 @@ import { useBeraConfig } from "~/contexts";
 import { laggy } from "~/hooks/laggy";
 
 // this is going to be slow for now until we have event indexing
-export const usePollPreviewMint = (
+export const usePollPreviewMintGivenOut = (
   collateral: Token | undefined,
   amount: number,
 ) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
-  const method = "previewMint";
+  const method = "previewRequiredCollateral";
   const QUERY_KEY = [method, collateral, amount];
   useSWR(
     QUERY_KEY,
@@ -33,7 +33,7 @@ export const usePollPreviewMint = (
             .erc20HoneyAddress as Address,
           abi: HONEY_PRECOMPILE_ABI,
           functionName: method,
-          args: [collateral.address, formattedAmount],
+          args: [formattedAmount, collateral.address],
         });
         return result;
       } catch (e) {
@@ -47,13 +47,11 @@ export const usePollPreviewMint = (
     },
   );
 
-  const usePreviewMint = () => {
+  const usePreviewMintGivenOut = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data
-      ? Number(formatUnits(data, collateral?.decimals ?? 18))
-      : undefined;
+    return data ? Number(data) : undefined;
   };
   return {
-    usePreviewMint,
+    usePreviewMintGivenOut,
   };
 };
