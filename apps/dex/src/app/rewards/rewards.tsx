@@ -1,42 +1,39 @@
 "use client";
 
-import { useState } from "react";
-import { Dropdown, SearchInput } from "@bera/shared-ui";
+import { type Pool } from "@bera/bera-router";
+import { usePollUserDepositedPools } from "@bera/berajs";
 
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { Banner } from "./reward-banner";
 import RewardsCard from "./rewards-card";
 
-const selection = [
-  "Highest-TVL",
-  "Lowest-TVL",
-  "Highest-APY",
-  "Lowest-APY",
-  "Most-fees-earned",
-  "Least-fees-earned",
-  "Most-BGT-earned",
-  "Least-BGT-earned",
-];
+// TODO: loading state and empty state
 
 export const Rewards = () => {
-  const [sortBy, setSortBy] = useState("Most-BGT-earned");
+  const { useUserDepositedPools } = usePollUserDepositedPools(
+    `${getAbsoluteUrl()}/pool/api`,
+  );
+  const userPools = useUserDepositedPools();
+
+  console.log(userPools);
   return (
     <div className="container max-w-[980px]">
       <Banner /> <br />
       <div className="flex flex-col gap-3">
         <div className="flex w-full flex-col-reverse items-center justify-between gap-4 md:flex-row">
-          <SearchInput
+          {/* <SearchInput
             placeholder="Search by pool name, address, or token"
             className="md:w-[400px]"
-          />
-          <Dropdown
+          /> */}
+          {/* <Dropdown
             selected={sortBy}
             onSelect={setSortBy}
             selectionList={selection}
             className="block flex-shrink-0"
-          />
+          /> */}
         </div>
-        {new Array(10).fill(null).map((_, i) => (
-          <RewardsCard key={i} />
+        {userPools?.map((pool: Pool) => (
+          <RewardsCard pool={pool} key={pool.pool} />
         ))}
       </div>
     </div>
