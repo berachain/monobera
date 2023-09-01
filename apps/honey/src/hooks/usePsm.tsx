@@ -113,7 +113,6 @@ export const usePsm = () => {
     toAmount,
   );
   const previewRedeemGivenOut = usePreviewRedeemGivenOut();
-  console.log("assaf", previewRedeemGivenOut);
   const { usePreviewRedeem } = usePollPreviewRedeem(collateral, fromAmount);
   const previewRedeem = usePreviewRedeem();
 
