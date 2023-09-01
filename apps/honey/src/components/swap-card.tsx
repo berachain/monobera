@@ -27,6 +27,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     selectedTo,
     fromAmount,
     setFromAmount,
+    setToAmount,
     toAmount,
     isMint,
     fromBalance,
@@ -133,7 +134,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 amount={toAmount}
                 setAmount={(amount) => {
                   setGivenIn(false);
-                  setFromAmount(Number(amount));
+                  setToAmount(Number(amount));
                 }}
                 selectable={selectedTo?.address !== honey?.address}
                 customTokenList={collateralList}
