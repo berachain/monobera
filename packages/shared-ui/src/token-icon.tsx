@@ -50,9 +50,14 @@ export const TokenIcon = ({
   };
 
   return (
-    <Avatar className={cn("block h-8 w-8 rounded-full flex items-center justify-center aspect-square border border-primary bg-muted-foreground", className)}>
+    <Avatar
+      className={cn(
+        "block flex aspect-square h-8 w-8 items-center justify-center rounded-full border border-primary bg-muted-foreground",
+        className,
+      )}
+    >
       <AvatarImage src={getTokenImgUri()} className="rounded-full" />
-      <AvatarFallback className="h-8 w-8 text-xs font-bold bg-muted-foreground text-white">
+      <AvatarFallback className="h-8 w-8 bg-muted-foreground text-xs font-bold text-white">
         {fetch
           ? tokenInformation?.symbol?.slice(0, 3).toUpperCase()
           : token?.symbol?.slice(0, 3).toUpperCase()}

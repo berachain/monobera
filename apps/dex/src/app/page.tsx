@@ -11,16 +11,16 @@ import Help from "./components/Help";
 import Hero from "./components/Hero";
 
 // async function getPools() {
-  // const res = await fetch(
-  //   `${getAbsoluteUrl()}/pool/api?page=1&perPage=3&hotPools=true`,{ next: { revalidate: 3600 } }
-  // );
+// const res = await fetch(
+//   `${getAbsoluteUrl()}/pool/api?page=1&perPage=3&hotPools=true`,{ next: { revalidate: 3600 } }
+// );
 
-  // if (!res.ok) {
-  //   // This will activate the closest `error.js` Error Boundary
-  //   throw new Error("Failed to fetch pools");
-  // }
+// if (!res.ok) {
+//   // This will activate the closest `error.js` Error Boundary
+//   throw new Error("Failed to fetch pools");
+// }
 
-  // return res.json();
+// return res.json();
 // }
 
 // const getTvl = async () => {

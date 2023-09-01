@@ -19,10 +19,5 @@
     "src/proto/cosmos-ts",
     "src/config/abi/*"
   ],
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.cjs",
-    "**/*.mjs",
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
 }

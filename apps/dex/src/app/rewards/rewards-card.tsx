@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Button } from "@bera/ui/button";
 import { type Pool } from "@bera/bera-router";
+import { Button } from "@bera/ui/button";
 
-export default function RewardsCard({pool}: {pool: Pool}) {
+export default function RewardsCard({ pool }: { pool: Pool }) {
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -18,7 +18,7 @@ export default function RewardsCard({pool}: {pool: Pool}) {
     };
   }, []);
 
-  const title = pool.poolName ?? '';
+  const title = pool.poolName ?? "";
   return (
     <div className="flex w-full items-center justify-between rounded-2xl border border-border bg-background p-4 md:p-6">
       <div className="flex flex-col gap-3">
@@ -47,7 +47,9 @@ export default function RewardsCard({pool}: {pool: Pool}) {
       </div>
 
       <div className="hidden flex-col gap-1 md:flex">
-        <div className="text-lg font-semibold leading-7">{pool.bgtApy ?? 0}%</div>
+        <div className="text-lg font-semibold leading-7">
+          {pool.bgtApy ?? 0}%
+        </div>
         <div className="text-sm font-medium leading-tight text-muted-foreground">
           Est. APY
         </div>

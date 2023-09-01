@@ -14,7 +14,10 @@ function countTrueStatus(blocks: any): number {
   return trueCount;
 }
 
-export const useHistoricalBribes = (epochs: number, validatorAddress: string) => {
+export const useHistoricalBribes = (
+  epochs: number,
+  validatorAddress: string,
+) => {
   const QUERY_KEY = ["validator-historical-bribes", epochs, validatorAddress];
   return useSWR(
     QUERY_KEY,

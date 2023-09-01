@@ -1,8 +1,10 @@
 "use client";
+
 import React from "react";
-import { Icons } from "@bera/ui/icons";
-import { usePollPrices } from "~/hooks/usePollPrices";
 import { formatUsd } from "@bera/berajs";
+import { Icons } from "@bera/ui/icons";
+
+import { usePollPrices } from "~/hooks/usePollPrices";
 
 export function DataCard({
   icon,
@@ -25,7 +27,7 @@ export function DataCard({
 }
 
 export default function Data() {
-  const {usePrice} = usePollPrices();
+  const { usePrice } = usePollPrices();
   const beraPrice = usePrice(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
   return (
     <section className="my-24 flex w-full flex-col items-center">

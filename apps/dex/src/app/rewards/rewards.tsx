@@ -1,12 +1,13 @@
 "use client";
 
+import { type Pool } from "@bera/bera-router";
+import { usePollUserDepositedPools } from "@bera/berajs";
+
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { Banner } from "./reward-banner";
 import RewardsCard from "./rewards-card";
-import { getAbsoluteUrl } from "~/utils/vercel-utils";
-import { usePollUserDepositedPools } from "@bera/berajs";
-import { type Pool } from "@bera/bera-router";
-// TODO: loading state and empty state
 
+// TODO: loading state and empty state
 
 export const Rewards = () => {
   const { useUserDepositedPools } = usePollUserDepositedPools(
@@ -14,7 +15,7 @@ export const Rewards = () => {
   );
   const userPools = useUserDepositedPools();
 
-  console.log(userPools)
+  console.log(userPools);
   return (
     <div className="container max-w-[980px]">
       <Banner /> <br />

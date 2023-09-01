@@ -45,15 +45,16 @@ export const usePollUserDepositedPools = (endpoint: string) => {
         });
         // result[i] !== undefined &&
         // (result[i]?.result as unknown as bigint) !== 0n,
-        const deposited = pool.map((pool: any, i: number) => {
-          return (
-            {
+        const deposited = pool
+          .map((pool: any, i: number) => {
+            return {
               ...pool,
-              userDeposited: Number(formatUnits((result[i]?.result as unknown as bigint ?? 0n), 18)),
-            }
-          )
-        }
-        ).filter((pool: any) => pool.userDeposited !== 0);
+              userDeposited: Number(
+                formatUnits((result[i]?.result as unknown as bigint) ?? 0n, 18),
+              ),
+            };
+          })
+          .filter((pool: any) => pool.userDeposited !== 0);
         return deposited;
       } catch (e) {
         return undefined;
@@ -72,9 +73,9 @@ export const usePollUserDepositedPools = (endpoint: string) => {
   const useUserBgtDepositedPools = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data?.filter((pool: any) => pool.bgtApy !== 0);
-  }
+  };
   return {
     useUserDepositedPools,
-    useUserBgtDepositedPools
+    useUserBgtDepositedPools,
   };
 };
