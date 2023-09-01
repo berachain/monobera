@@ -147,24 +147,24 @@ export async function GET(request: Request) {
         ]),
       ]
     : taggedPools;
-  if (!volume && !bgtRewards && !tvl) {
+  if (volume == "false" && bgtRewards == "false" && tvl == "false") {
     sortedPools = sortByParameter(sortedPools, "dailyVolume", "desc");
   }
-  if (volume) {
+  if (volume == "true") {
     sortedPools = sortByParameter(
       sortedPools,
       "dailyVolume",
       volume as "asc" | "desc",
     );
   }
-  if (bgtRewards) {
+  if (bgtRewards == "true") {
     sortedPools = sortByParameter(
       sortedPools,
       "dailyVolume",
       bgtRewards as "asc" | "desc",
     );
   }
-  if (tvl) {
+  if (tvl == "true") {
     sortedPools = sortByParameter(
       sortedPools,
       "totalValue",

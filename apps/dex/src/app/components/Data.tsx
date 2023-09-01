@@ -1,5 +1,10 @@
+"use client";
+
 import React from "react";
+import { formatUsd } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
+
+import { usePollPrices } from "~/hooks/usePollPrices";
 
 export function DataCard({
   icon,
@@ -22,6 +27,8 @@ export function DataCard({
 }
 
 export default function Data() {
+  const { usePrice } = usePollPrices();
+  const beraPrice = usePrice(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
   return (
     <section className="my-24 flex w-full flex-col items-center">
       <div className="grid w-full grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
@@ -42,7 +49,7 @@ export default function Data() {
         />
         <DataCard
           title="Bera Price"
-          value="$69.426969"
+          value={formatUsd(beraPrice)}
           icon={<Icons.bera className="mt-[2px] h-3 w-3 md:h-6 md:w-6" />}
         />
       </div>

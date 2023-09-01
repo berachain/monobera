@@ -44,7 +44,7 @@ export default function CreateAPool() {
         <div className="relative z-20 pt-24 text-center">
           <h2 className=" mb-2 text-3xl font-semibold">Create a Pool</h2>
           <h3 className="mb-6 text-base font-semibold text-muted-foreground md:text-xl">
-            Create your own custom recipe 🧾
+            Create your own custom recipe 🧑🏿‍🍳
           </h3>
           <div className="relative mx-auto w-full max-w-[1000px]">
             <Avatar
