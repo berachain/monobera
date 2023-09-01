@@ -16,10 +16,10 @@ import {
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatDistance } from "date-fns";
-import { formatUnits } from "viem";
+import { formatUnits, getAddress } from "viem";
 
 import { useHoneyEvents } from "~/app/api/useHoneyEvents";
-import { blockExplorerUrl } from "~/config";
+import { blockExplorerUrl, honeyTokenAddress } from "~/config";
 
 enum Selection {
   AllTransactions = "allTransactions",
@@ -93,13 +93,14 @@ const getAction = (event: any) => {
 };
 
 const getTokenDisplay = (event: any, tokenDictionary: any) => {
-  const tokenIn =
-    tokenDictionary &&
-    tokenDictionary["0x1d0f659fF50d1830e449dD88E533cb11FB7a25E4"];
-  const tokenOut =
-    tokenDictionary &&
-    tokenDictionary["0xa85579e75a7ba99d00cce02441a5e21661b63a98"];
+  const honey =
+    tokenDictionary && tokenDictionary[getAddress(honeyTokenAddress)];
+
   if (isMintData(event)) {
+    // this should be fixed once backend updated
+    const tokenIn =
+      tokenDictionary &&
+      tokenDictionary["0x1d0f659fF50d1830e449dD88E533cb11FB7a25E4"];
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -115,26 +116,27 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
-          <TokenIcon token={tokenOut} />
+          <TokenIcon token={honey} />
           <p className="ml-2">
             {Number(
-              formatUnits(BigInt(event.mintAmount), tokenOut?.decimals ?? 18),
+              formatUnits(BigInt(event.mintAmount), honey?.decimals ?? 18),
             ).toFixed(4)}
           </p>
         </div>
       </div>
     );
   } else if (isBurnData(event)) {
+    // this should be fixed once backend updated
+    const tokenOut =
+      tokenDictionary &&
+      tokenDictionary["0x1d0f659fF50d1830e449dD88E533cb11FB7a25E4"];
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
-          <TokenIcon token={tokenIn} />
+          <TokenIcon token={honey} />
           <p className="ml-2">
             {Number(
-              formatUnits(
-                BigInt(event.redeemAmountOut.amount),
-                tokenIn?.decimals ?? 18,
-              ),
+              formatUnits(BigInt(event.redeemAmount), honey?.decimals ?? 18),
             ).toFixed(4)}
           </p>
         </div>
@@ -143,7 +145,10 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
           <TokenIcon token={tokenOut} />
           <p className="ml-2">
             {Number(
-              formatUnits(BigInt(event.redeemAmount), tokenOut?.decimals ?? 18),
+              formatUnits(
+                BigInt(event.redeemAmountOut.amount),
+                tokenOut?.decimals ?? 18,
+              ),
             ).toFixed(4)}
           </p>
         </div>
@@ -322,7 +327,7 @@ export const EventTable = ({
   arcade: boolean;
 }) => {
   const { tokenDictionary } = useTokens();
-
+  console.log("tokenDictionary", tokenDictionary, events);
   return (
     <Table>
       <TableHeader>
