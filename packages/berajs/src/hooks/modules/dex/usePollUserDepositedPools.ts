@@ -19,7 +19,7 @@ export const usePollUserDepositedPools = (endpoint: string) => {
   const { account } = useBeraJs();
   const { networkConfig } = useBeraConfig();
   const QUERY_KEY = [account, "depositedPool", endpoint];
-  useSWR(
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       try {
@@ -77,5 +77,6 @@ export const usePollUserDepositedPools = (endpoint: string) => {
   return {
     useUserDepositedPools,
     useUserBgtDepositedPools,
+    isLoading,
   };
 };

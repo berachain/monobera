@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { type Pool } from "@bera/bera-router";
+import { formatUsd } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 
 export default function RewardsCard({ pool }: { pool: Pool }) {
@@ -21,36 +22,26 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
   const title = pool.poolName ?? "";
   return (
     <div className="flex w-full items-center justify-between rounded-2xl border border-border bg-background p-4 md:p-6">
-      <div className="flex flex-col gap-3">
+      <div className="flex w-[200px] flex-col gap-3">
         <div className="whitespace-nowrap text-xs font-medium leading-tight md:text-sm">
           {mobile && title.length > 19 ? title.slice(0, 19) + "..." : title}
         </div>
-        {/* <IconList
-          iconList={[
-            "/icons/eth-icons.svg",
-            "/icons/atom-icons.svg",
-            "/icons/usdc-icons.svg",
-            "/icons/usdt-icons.svg",
-            "/icons/btc-icons.svg",
-            "/icons/honey-icons.svg",
-            "/icons/bera-icons.svg",
-          ]}
-          size={mobile ? 16 : 32}
-        /> */}
       </div>
 
-      <div className="hidden flex-col gap-1 md:flex">
-        <div className="text-lg font-semibold leading-7">$420K</div>
-        <div className="text-sm font-medium leading-tight text-muted-foreground">
+      <div className="flex min-w-[65px] flex-col gap-1">
+        <div className=" text-right text-sm font-semibold leading-tight md:text-lg md:leading-7">
+          {formatUsd(pool.userDeposited ?? 0)}
+        </div>
+        <div className="text-right text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
           My TVL
         </div>
       </div>
 
-      <div className="hidden flex-col gap-1 md:flex">
-        <div className="text-lg font-semibold leading-7">
-          {pool.bgtApy ?? 0}%
+      <div className="flex min-w-[65px] flex-col gap-1">
+        <div className=" text-right text-sm font-semibold leading-tight md:text-lg md:leading-7">
+          {pool.bgtApy?.toFixed(2) ?? 0}%
         </div>
-        <div className="text-sm font-medium leading-tight text-muted-foreground">
+        <div className="text-right text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
           Est. APY
         </div>
       </div>
