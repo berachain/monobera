@@ -24,8 +24,9 @@ export function TokenIconList({
         <TokenIcon
           key={icon}
           address={icon}
-          fetch={true}
-          className={`ml-[-5px] w-[${size}px] h-[${size}px]`}
+          fetch
+          size={size}
+          className="ml-[-5px]"
         />
       ))}
       {showCount && length > showCount && (

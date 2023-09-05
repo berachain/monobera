@@ -145,9 +145,6 @@ export const PoolSearch = () => {
                 />
               </div>
             )}
-
-            {isAllDataLoadingMore && <>LOADING...</>}
-
             <Button
               className="mt-12"
               onClick={() => setAllDataSize(allDataSize + 1)}

@@ -10,6 +10,7 @@ type Props = {
   token?: Token | undefined;
   fetch?: boolean;
   className?: string;
+  size?: number;
   address?: string;
 };
 
@@ -17,6 +18,7 @@ export const TokenIcon = ({
   token,
   className,
   fetch = false,
+  size = 32,
   address,
 }: Props) => {
   const { read, tokenInformation } = useTokenInformation();
@@ -52,12 +54,18 @@ export const TokenIcon = ({
   return (
     <Avatar
       className={cn(
-        " flex aspect-square h-8 w-8 items-center justify-center rounded-full",
+        "flex aspect-square h-8 w-8 items-center justify-center rounded-full",
+        `h-[${size}px] w-[${size}px]`,
         className,
       )}
     >
       <AvatarImage src={getTokenImgUri()} className="rounded-full" />
-      <AvatarFallback className="h-8 w-8 bg-muted text-xs font-bold text-white">
+      <AvatarFallback
+        className={cn(
+          "h-full w-full border border-foreground bg-background font-bold text-foreground",
+          `text-[${8 + (size - 24) / 4}px]`,
+        )}
+      >
         {fetch
           ? tokenInformation?.symbol?.slice(0, 3).toUpperCase()
           : token?.symbol?.slice(0, 3).toUpperCase()}
