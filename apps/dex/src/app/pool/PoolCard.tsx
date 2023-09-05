@@ -53,7 +53,7 @@ export const PoolCard = ({
         <div className="flex flex-row">
           <TokenIconList
             tokenList={pool?.tokens?.map((t) => t.address) ?? []}
-            size={24}
+            size="lg"
           />
         </div>
       </div>

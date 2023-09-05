@@ -4,14 +4,14 @@ import { TokenIcon } from "./token-icon";
 
 interface ITokenIconList {
   tokenList: string[];
-  size?: number;
+  size?: "3xl" | "2xl" | "xl" | "lg" | "md" | "sm" | "xs";
   showCount?: number;
 }
 
 export function TokenIconList({
   tokenList,
-  size = 32,
   showCount,
+  size = "lg",
 }: ITokenIconList) {
   const length = tokenList?.length;
   if (showCount && showCount < length) {
@@ -25,8 +25,8 @@ export function TokenIconList({
           key={icon}
           address={icon}
           fetch
-          size={size}
           className="ml-[-5px]"
+          size={size}
         />
       ))}
       {showCount && length > showCount && (
