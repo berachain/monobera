@@ -1,17 +1,27 @@
 import { useRouter } from "next/navigation";
 import {
+  BRIBE_PRECOMPILE_ABI,
+  useBeraJs,
   usePollAccountDelegations,
   usePollActiveValidators,
+  usePollBribes,
   type PoLValidator,
 } from "@bera/berajs";
-import { TokenIconList, Tooltip, ValidatorIcon } from "@bera/shared-ui";
+import { formatUsd } from "@bera/berajs/src/utils";
+import { TokenIconList, Tooltip, ValidatorIcon, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { useSWRConfig } from "swr";
 import { formatEther, type Address } from "viem";
+
+import { usePollPrices } from "~/hooks/usePollPrices";
 
 export default function ValidatorCard(validator: { validator: PoLValidator }) {
   const router = useRouter();
+  const { mutate } = useSWRConfig();
+  const { account } = useBeraJs();
+
   const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(
     validator.validator.operatorAddr as Address,
@@ -21,6 +31,24 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
     validator.validator.operatorAddr as Address,
   );
   const userDelegated = useSelectedAccountDelegation();
+
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const { useValidatorBribes, useValidatorBribeTokens, QUERY_KEY } =
+    usePollBribes();
+  const bribeTotal = useValidatorBribes(
+    validator.validator.operatorAddr,
+    prices,
+  );
+  const bribeTokenList = useValidatorBribeTokens(
+    validator.validator.operatorAddr,
+  );
+  const { write, ModalPortal } = useTxn({
+    message: "Claiming bribes",
+    onSuccess: () => {
+      void mutate(QUERY_KEY);
+    },
+  });
   const valiInfo = [
     {
       title: (
@@ -61,10 +89,29 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
       ),
       value: `${Number(validator.validator.vApy).toFixed(2)}%`,
     },
+    {
+      title: (
+        <div>
+          Bribes Earned{" "}
+          <Tooltip text="total bribes earned from delegating to this validator" />
+        </div>
+      ),
+      value: `${formatUsd(bribeTotal ?? 0)}`,
+    },
   ];
 
+  const claimBribe = () => {
+    console.log(account, validator.validator.operatorAddr);
+    write({
+      address: process.env.NEXT_PUBLIC_ERC20_BRIBE_ADDRESS as Address,
+      abi: BRIBE_PRECOMPILE_ABI,
+      functionName: "withdrawBribeRewards",
+      params: [account, validator.validator.operatorAddr],
+    });
+  };
   return (
     <Card className="p-6 ">
+      {ModalPortal}
       <div className="flex items-center justify-center md:justify-between">
         <div className="flex items-center gap-3">
           <ValidatorIcon
@@ -108,6 +155,9 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
           >
             Unbond <Icons.minus className="relative ml-1 h-4 w-4" />
           </Button>
+          <Button size="sm" onClick={claimBribe}>
+            Claim Bribes
+          </Button>
         </div>
       </div>
 
@@ -128,12 +178,7 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
           ))}
         </div>
         <div className="mr-4 flex items-center gap-4">
-          <TokenIconList
-            size={48}
-            tokenList={validator.validator?.bribeTokenList?.map(
-              (token: any) => token,
-            )}
-          />
+          <TokenIconList size={48} tokenList={bribeTokenList} />
         </div>
         <div className="flex items-center justify-center gap-4 md:hidden">
           <Button
@@ -168,6 +213,9 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
             }
           >
             <Icons.minus className="relative h-4 w-4" />
+          </Button>
+          <Button size="sm" onClick={claimBribe}>
+            Claim Bribes
           </Button>
         </div>
       </div>

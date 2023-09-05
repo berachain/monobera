@@ -12,6 +12,7 @@ export interface Coin {
 }
 
 export interface TvlData {
+  data: any;
   UTCTime: string;
   coins: Coin[];
 }
@@ -20,6 +21,7 @@ export const getTvlPrices = (
   tvlData: (TvlData | undefined)[],
   prices: MappedTokens | undefined,
 ) => {
+  console.log("deez", tvlData);
   if (!prices) return new Array(tvlData.length).fill(0);
   const resultArray: number[] = [];
   tvlData?.forEach((tvl) => {
@@ -27,11 +29,17 @@ export const getTvlPrices = (
       resultArray.push(0);
       return;
     } else {
-      const total = tvl.coins.reduce((acc, cur) => {
-        const price = prices[getAddress(cur.denom)] ?? 0;
-        const value = Number(formatUnits(BigInt(cur.amount), 18)) * price;
-        return acc + value;
-      }, 0);
+      const total = tvl.data.reduce(
+        (
+          acc: number,
+          cur: { denom: string; amount: string | number | bigint | boolean },
+        ) => {
+          const price = prices[getAddress(cur.denom)] ?? 0;
+          const value = Number(formatUnits(BigInt(cur.amount), 18)) * price;
+          return acc + value;
+        },
+        0,
+      );
       resultArray.push(total);
     }
   });
@@ -109,6 +117,8 @@ export const useUserGaugeWeight = () => {
 export const useValidatorGaugeWeight = (address: string) => {
   const { usePrices } = usePollPrices();
   const prices = usePrices();
+  console.log(address);
+  console.log(prices);
   const QUERY_KEY = ["user-gauge-weight", address, prices];
   return useSWR(
     QUERY_KEY,
@@ -125,6 +135,7 @@ export const useValidatorGaugeWeight = (address: string) => {
         const cbTvlData = await Promise.all(promiseArray);
         console.log(cbTvlData);
         const tvl = getTvlPrices(cbTvlData, prices);
+        console.log(tvl);
         const gaugeWeightArray: GaugeWeight[] = result[0].weights.map(
           (w: any, i: number) => {
             return {

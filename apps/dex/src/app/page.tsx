@@ -23,48 +23,47 @@ import Hero from "./components/Hero";
 // return res.json();
 // }
 
-// const getTvl = async () => {
-//   const res = await fetch(
-//     `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`
-//   );
+const getTvl = async () => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
+  );
 
-//   if (!res.ok) {
-//     // This will activate the closest `error.js` Error Boundary
-//     throw new Error("Failed to fetch pools");
-//   }
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch pools");
+  }
 
-//   const result = await res.json();
-//   return result;
-// }
+  const result = await res.json();
+  return result;
+};
 
-// const getVolume = async () => {
-//   const res = await fetch(
-//     `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`
-//   );
+const getVolume = async () => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
+  );
 
-//   if (!res.ok) {
-//     // This will activate the closest `error.js` Error Boundary
-//     throw new Error("Failed to fetch pools");
-//   }
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch pools");
+  }
 
-//   const result = await res.json();
-//   return result;
-// }
+  const result = await res.json();
+  return result;
+};
 
-export default function Homepage() {
+export default async function Homepage() {
   // const pools: Pool[] = await getPools();
-  // const tvl = getTvl();
-  // const volume = getVolume();
-  // const data: any = await Promise.all([tvl, volume]).then(
-  //   ([tvl, volume]) => ({
-  //     tvl: tvl,
-  //     volume: volume,
-  //   }),
-  // );
+  const tvl = getTvl();
+  const volume = getVolume();
+  const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
+    tvl: tvl,
+    volume: volume,
+  }));
+
   return (
     <div className="container max-w-[1200px]">
       <Hero />
-      <Data />
+      <Data tvl={data?.tvl?.result} volume={data?.volume?.result} />
       {/* <HotPools isMainPage /> */}
       <div className="-mx-full overflow-hidden">
         <CreateAPool />
