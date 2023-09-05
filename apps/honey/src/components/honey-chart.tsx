@@ -293,7 +293,7 @@ export const HoneyChart = ({
                   className={cn(
                     "cursor-pointer rounded-xl",
                     arcade
-                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 focus:text-blue-100"
+                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
                       : "hover:bg-muted hover:text-foreground focus:text-foreground",
                   )}
                 >
@@ -304,7 +304,7 @@ export const HoneyChart = ({
                   className={cn(
                     "cursor-pointer rounded-xl",
                     arcade
-                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 focus:text-blue-100"
+                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
                       : "hover:bg-muted hover:text-foreground focus:text-foreground",
                   )}
                 >
@@ -315,7 +315,7 @@ export const HoneyChart = ({
                   className={cn(
                     "cursor-pointer rounded-xl",
                     arcade
-                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 focus:text-blue-100"
+                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
                       : "hover:bg-muted hover:text-foreground focus:text-foreground",
                   )}
                 >
@@ -326,7 +326,7 @@ export const HoneyChart = ({
                   className={cn(
                     "cursor-pointer rounded-xl",
                     arcade
-                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 focus:text-blue-100"
+                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
                       : "hover:bg-muted hover:text-foreground focus:text-foreground",
                   )}
                 >
