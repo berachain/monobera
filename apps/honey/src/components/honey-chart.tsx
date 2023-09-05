@@ -189,7 +189,7 @@ export const HoneyChart = ({
   };
   // console.log("DATA", DATA);
   const [difference, setDifference] = useState(0);
-  const [total, setTotal] = useState(getTotalAmount(DATA.volume24H));
+  const [total, setTotal] = useState<any>(getTotalAmount(DATA.volume24H));
   const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.HOURLY);
   const [chart, setChart] = useState(Chart.VOLUME);
   const [data, setData] = useState(getData(DATA.volume24H, arcade));
@@ -197,7 +197,19 @@ export const HoneyChart = ({
   useEffect(() => {
     setData(getData(DATA[`${chart}${timeFrame}`], arcade));
     setDifference(calculatePercentageDifference(DATA[`${chart}${timeFrame}`]));
-    setTotal(getTotalAmount(DATA[`${chart}${timeFrame}`]));
+    if (chart === Chart.FEES) {
+      setTotal(
+        formatEther(
+          BigInt(
+            DATA[`${chart}${timeFrame}`][
+              DATA[`${chart}${timeFrame}`].length - 1
+            ]?.amount ?? 0,
+          ),
+        ),
+      );
+    } else {
+      setTotal(getTotalAmount(DATA[`${chart}${timeFrame}`]));
+    }
   }, [timeFrame, chart, arcade]);
 
   return (
