@@ -10,12 +10,11 @@ import RewardsCard from "./rewards-card";
 // TODO: loading state and empty state
 
 export const Rewards = () => {
-  const { useUserDepositedPools } = usePollUserDepositedPools(
+  const { useUserBgtDepositedPools, isLoading } = usePollUserDepositedPools(
     `${getAbsoluteUrl()}/pool/api`,
   );
-  const userPools = useUserDepositedPools();
+  const userPools = useUserBgtDepositedPools();
 
-  console.log(userPools);
   return (
     <div className="container max-w-[980px]">
       <Banner /> <br />
@@ -32,9 +31,11 @@ export const Rewards = () => {
             className="block flex-shrink-0"
           /> */}
         </div>
-        {userPools?.map((pool: Pool) => (
-          <RewardsCard pool={pool} key={pool.pool} />
-        ))}
+        {!isLoading &&
+          userPools?.map((pool: Pool) => (
+            <RewardsCard pool={pool} key={pool.pool} />
+          ))}
+        {isLoading && <>Loading...</>}
       </div>
     </div>
   );

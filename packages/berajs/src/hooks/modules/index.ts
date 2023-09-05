@@ -6,3 +6,4 @@ export * from "./epochs";
 export * from "./governance";
 export * from "./staking";
 export * from "./honey";
+export * from "./bribes";

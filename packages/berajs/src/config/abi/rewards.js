@@ -105,7 +105,49 @@ export const REWARDS_PRECOMPILE_ABI = [
     type: "event",
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "address",
+        name: "depositor",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "receiver",
+        type: "address",
+      },
+    ],
+    name: "getCurrentRewards",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
+        internalType: "struct Cosmos.Coin[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "depositor",
+        type: "address",
+      },
+    ],
     name: "getDepositorWithdrawAddress",
     outputs: [
       {

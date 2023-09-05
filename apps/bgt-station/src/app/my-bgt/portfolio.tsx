@@ -3,14 +3,17 @@ import { useRouter } from "next/navigation";
 import {
   truncateHash,
   useBeraJs,
+  usePollBribes,
   usePollDelegatorUnbonding,
   usePollDelegatorValidators,
 } from "@bera/berajs";
-import { IconList } from "@bera/shared-ui";
+import { formatUsd } from "@bera/berajs/src/utils";
+import { TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import YellowCard from "~/components/yellow-card";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import AverageGaugeWeight from "./components/average-gauge-weight";
 import UnbondingQueue from "./components/unbonding-queue";
 import YourDelegations from "./components/your-delegations";
@@ -38,6 +41,11 @@ export default function Portfolio() {
   const unbondingQueue = useDelegatorUnbondingQueue();
   const unbondingValidatorCount = useDelegatorTotalUnbondingValidators();
 
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const { useTotalBribes, useBribeTokens } = usePollBribes();
+  const totalBribes = useTotalBribes(prices);
+  const bribeTokenList = useBribeTokens();
   return (
     <div className="container mb-[80px] max-w-[1078px]">
       <div className="mb-8 flex h-[100px] items-center justify-center text-3xl font-bold leading-[48px] text-foreground md:text-5xl">
@@ -66,21 +74,11 @@ export default function Portfolio() {
         </YellowCard>
         <YellowCard className="justify-betwee flex flex-1 flex-col">
           <div className="text-5xl font-bold leading-[48px] text-foreground">
-            $3,000
+            {formatUsd(totalBribes ?? 0)}
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
             {/* this is so hard coded!! i hate myself */}
-            <IconList
-              iconList={[
-                "/icons/eth-icons.svg",
-                "/icons/atom-icons.svg",
-                "/icons/usdc-icons.svg",
-                "/icons/usdt-icons.svg",
-                "/icons/btc-icons.svg",
-                "/icons/honey-icons.svg",
-                "/icons/bera-icons.svg",
-              ]}
-            />
+            <TokenIconList size={32} tokenList={bribeTokenList} />
           </div>
           <Button className="w-full max-w-[223px]">Claim</Button>
         </YellowCard>
