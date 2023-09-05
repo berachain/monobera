@@ -33,7 +33,6 @@ const FilterBadge = ({
 
 const Toggle = ({
   icon,
-  active,
   onClick,
 }: {
   icon: any;
@@ -42,7 +41,9 @@ const Toggle = ({
 }) => {
   return (
     <div
-      className={cn("", active ? "text-foreground" : "text-muted-foreground")}
+      className={
+        "cursor-pointer rounded-full p-2 text-foreground hover:bg-hover"
+      }
       onClick={onClick}
     >
       {icon}
@@ -68,6 +69,7 @@ export const PoolSearch = () => {
     setIsHotPool,
     isList,
     setIsList,
+    isUserPoolsLoading,
   } = usePoolTable();
   return (
     <div
@@ -91,6 +93,7 @@ export const PoolSearch = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by name or address"
+                id="all-pool-search"
               />
             </div>
             <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
@@ -110,13 +113,8 @@ export const PoolSearch = () => {
                 onClick={() => setHasBgtRewards(!hasBgtRewards)}
               />
               <Toggle
-                icon={<Icons.list />}
+                icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
                 active={isList}
-                onClick={() => setIsList(!isList)}
-              />
-              <Toggle
-                icon={<Icons.layoutDashboard />}
-                active={!isList}
                 onClick={() => setIsList(!isList)}
               />
             </div>
@@ -124,7 +122,7 @@ export const PoolSearch = () => {
           <TabsContent value="allPools">
             {!isList && (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                   {data &&
                     data[0] &&
                     data.map((pool: any) => {
@@ -180,6 +178,12 @@ export const PoolSearch = () => {
                   onRowClick={(state: any) => console.log(state)}
                 />
               </div>
+            )}
+            {isUserPoolsLoading && (
+              <Button className="mt-12" disabled variant="outline">
+                {" "}
+                Loading...
+              </Button>
             )}
           </TabsContent>
         </div>
