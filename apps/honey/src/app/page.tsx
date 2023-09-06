@@ -1,14 +1,14 @@
 import { type Metadata } from "next";
 
 import { getHoneyData } from "~/utils/getServerSideData";
+import { getMetaTitle } from "~/utils/metadata";
 import HoneyPage from "./honey-page";
 import { HoneyTimeFrame } from "./type";
 
 export const metadata: Metadata = {
-  title: "Honey | Berachain",
-  description: "Mo honey mo problems",
+  title: getMetaTitle("Honey"),
+  description: `Mint & Burn Honey`,
 };
-
 export default async function Home({
   searchParams: { mode },
 }: {

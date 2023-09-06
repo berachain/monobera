@@ -154,6 +154,9 @@ export default function GovernanceByStatus({
               }
             />
           ))}
+        {!isLoading && sortedProposalList.length === 0 && (
+          <>No Proposals found.</>
+        )}
         {isLoading && <>LOADING...</>}
       </div>
     </div>

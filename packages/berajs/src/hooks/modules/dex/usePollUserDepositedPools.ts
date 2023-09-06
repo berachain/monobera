@@ -61,7 +61,7 @@ export const usePollUserDepositedPools = (endpoint: string) => {
       }
     },
     {
-      refreshInterval: POLLING.FAST,
+      refreshInterval: POLLING.NORMAL,
     },
   );
 
