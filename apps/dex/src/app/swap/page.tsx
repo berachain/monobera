@@ -1,11 +1,12 @@
 import { type Metadata } from "next";
 import { isAddress } from "viem";
 
+import { getMetaTitle } from "~/utils/metadata";
 import { SwapContent } from "./swap";
 
 export const metadata: Metadata = {
-  title: "Swap | DEX | Berachain",
-  description: "Decentralized exchange on Berachain",
+  title: getMetaTitle("Swap"),
+  description: "Swap tokens on Berachain",
 };
 
 export default function Swap({

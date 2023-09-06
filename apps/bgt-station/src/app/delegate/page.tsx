@@ -1,9 +1,15 @@
 import React from "react";
+import { type Metadata } from "next";
 import { type Address } from "viem";
 
+import { getMetaTitle } from "~/utils/metadata";
 import Delegate from "./delegate";
 import { DelegateEnum } from "./types";
 
+export const metadata: Metadata = {
+  title: getMetaTitle("Delegate"),
+  description: `Delegate, Redelegate, or Undelegate your BGT`,
+};
 export default function Page({
   searchParams,
 }: {
