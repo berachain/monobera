@@ -144,8 +144,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
               />
             </ul>
             {/* fix to check if allowance > amount */}
-            {allowance?.formattedAllowance === "0" ||
-            Number(allowance?.formattedAllowance) < fromAmount ? (
+            {Number(allowance?.formattedAllowance) < fromAmount ? (
               <ApproveTokenButton
                 token={selectedFrom}
                 spender={
@@ -155,7 +154,12 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
             ) : isConnected ? (
               isMint ? (
                 <Button
-                  disabled={toAmount === 0 || isLoading}
+                  disabled={
+                    fromAmount === 0 ||
+                    toAmount === 0 ||
+                    isLoading ||
+                    !allowance
+                  }
                   onClick={() => {
                     write({
                       address: process.env
@@ -170,7 +174,12 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 </Button>
               ) : (
                 <Button
-                  disabled={toAmount === 0 || isLoading}
+                  disabled={
+                    fromAmount === 0 ||
+                    toAmount === 0 ||
+                    isLoading ||
+                    !allowance
+                  }
                   onClick={() => {
                     write({
                       address: process.env
