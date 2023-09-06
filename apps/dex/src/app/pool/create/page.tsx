@@ -1,10 +1,11 @@
 import { type Metadata } from "next";
 
+import { getMetaTitle } from "~/utils/metadata";
 import CreatePageContent from "./CreatePageContent";
 
 export const metadata: Metadata = {
-  title: "Create pool | DEX | Berachain",
-  description: "Decentralized exchange on Berachain",
+  title: getMetaTitle("Create Pool"),
+  description: "Create a custom pool",
 };
 
 export default function Create() {

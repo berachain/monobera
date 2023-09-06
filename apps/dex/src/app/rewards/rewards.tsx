@@ -15,6 +15,8 @@ export const Rewards = () => {
   );
   const userPools = useUserBgtDepositedPools();
 
+  console.log("userPools", userPools);
+  console.log("isLoading", isLoading);
   return (
     <div className="container max-w-[980px]">
       <Banner /> <br />
@@ -35,6 +37,9 @@ export const Rewards = () => {
           userPools?.map((pool: Pool) => (
             <RewardsCard pool={pool} key={pool.pool} />
           ))}
+        {!isLoading && userPools === undefined && (
+          <>Not Deposited to any pools with BGT Rewards</>
+        )}
         {isLoading && <>Loading...</>}
       </div>
     </div>

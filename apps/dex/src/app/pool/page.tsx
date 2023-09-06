@@ -1,11 +1,12 @@
 import { type Metadata } from "next";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 
+import { getMetaTitle } from "~/utils/metadata";
 import PoolPageHeader from "./PoolPageHeader";
 
 export const metadata: Metadata = {
-  title: "Pools | DEX | Berachain",
-  description: "Decentralized exchange on Berachain",
+  title: getMetaTitle("Pools"),
+  description: "View pools",
 };
 
 export default function Pool() {

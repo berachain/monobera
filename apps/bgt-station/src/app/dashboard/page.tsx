@@ -1,12 +1,12 @@
 import { type Metadata } from "next";
 
+import { getMetaTitle } from "~/utils/metadata";
 import DashBoard from "./dashboard";
 
 export const metadata: Metadata = {
-  title: "Dashboard | BGT Station | Berachain",
-  description: "BGT Station",
+  title: getMetaTitle("Dashboard"),
+  description: `View global BGT statistics`,
 };
-
 export default function Page() {
   return <DashBoard />;
 }

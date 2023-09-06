@@ -2,6 +2,7 @@ import { type Metadata } from "next";
 import { type CuttingBoard } from "@bera/berajs";
 import { getAddress } from "viem";
 
+import { getMetaTitle } from "~/utils/metadata";
 import { indexerUrl } from "~/config";
 import Validator from "./validator";
 
@@ -12,7 +13,8 @@ type Props = {
 export function generateMetadata({ params }: Props): Metadata {
   const { validatorAddress } = params;
   return {
-    title: `${validatorAddress} Validator | DEX | Berachain`,
+    title: getMetaTitle("Validator Details"),
+    description: `Validator details for ${validatorAddress}`,
   };
 }
 

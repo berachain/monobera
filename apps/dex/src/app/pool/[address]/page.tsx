@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { RouterService, defaultConfig } from "@bera/bera-router";
 import { type CuttingBoard } from "@bera/berajs";
 
+import { getMetaTitle } from "~/utils/metadata";
 import { getWBeraPriceDictForPoolTokens } from "../api/getPrice";
 import PoolPageContent from "./PoolPageContent";
 
@@ -14,7 +15,8 @@ type Props = {
 export function generateMetadata({ params }: Props): Metadata {
   const { address } = params;
   return {
-    title: `${address} Pool | DEX | Berachain`,
+    title: getMetaTitle("Pool Details"),
+    description: `View pool details for ${address}`,
   };
 }
 

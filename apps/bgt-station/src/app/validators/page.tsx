@@ -1,12 +1,13 @@
 import React from "react";
 import { type Metadata } from "next";
 
+import { getMetaTitle } from "~/utils/metadata";
 import { indexerUrl } from "~/config";
 import Validators from "./validators";
 
 export const metadata: Metadata = {
-  title: "Validators | Berachain",
-  description: "BGT Station",
+  title: getMetaTitle("Validators"),
+  description: `View active validators on Berachain`,
 };
 
 async function getBGTSupply() {

@@ -1,5 +1,7 @@
 import React from "react";
+import { type Metadata } from "next";
 
+import { getMetaTitle } from "~/utils/metadata";
 import GovernanceByStatus from "./home/governance-by-status";
 import {
   OrderByEnum,
@@ -7,6 +9,11 @@ import {
   type OrderByEnum as OrderByEnumT,
   type StatusEnum as StatusEnumT,
 } from "./types";
+
+export const metadata: Metadata = {
+  title: getMetaTitle("Governance"),
+  description: `View Governance proposals on Berachain`,
+};
 
 export default function Governance({
   searchParams,

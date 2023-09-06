@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { RouterService, defaultConfig } from "@bera/bera-router";
 import { type CuttingBoard } from "@bera/berajs";
 
+import { getMetaTitle } from "~/utils/metadata";
 import { getWBeraPriceDictForPoolTokens } from "../../api/getPrice";
 import { type MappedTokens } from "../types";
 import AddLiquidityContent from "./AddLiquidityContent";
@@ -14,7 +15,8 @@ type Props = {
 export function generateMetadata({ params }: Props): Metadata {
   const { address } = params;
   return {
-    title: `Add liquidity to ${address} Pool | DEX | Berachain`,
+    title: getMetaTitle("Add Liquidity"),
+    description: `Add liquidity from pool ${address}`,
   };
 }
 
