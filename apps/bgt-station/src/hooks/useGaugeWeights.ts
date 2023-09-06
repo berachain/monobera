@@ -21,7 +21,6 @@ export const getTvlPrices = (
   tvlData: (TvlData | undefined)[],
   prices: MappedTokens | undefined,
 ) => {
-  console.log("deez", tvlData);
   if (!prices) return new Array(tvlData.length).fill(0);
   const resultArray: number[] = [];
   tvlData?.forEach((tvl) => {
@@ -133,9 +132,7 @@ export const useValidatorGaugeWeight = (address: string) => {
           getPoolTvl(w.address),
         );
         const cbTvlData = await Promise.all(promiseArray);
-        console.log(cbTvlData);
         const tvl = getTvlPrices(cbTvlData, prices);
-        console.log(tvl);
         const gaugeWeightArray: GaugeWeight[] = result[0].weights.map(
           (w: any, i: number) => {
             return {

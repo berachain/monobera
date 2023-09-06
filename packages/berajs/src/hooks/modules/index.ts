@@ -7,3 +7,4 @@ export * from "./governance";
 export * from "./staking";
 export * from "./honey";
 export * from "./bribes";
+export * from "./rewards";

@@ -20,7 +20,7 @@ export const usePollAllProposals = (proposalStatus: number) => {
 
   const method = "getProposals";
   const QUERY_KEY = [proposalStatus, method];
-  useSWR(
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       const result = (await publicClient
@@ -53,5 +53,6 @@ export const usePollAllProposals = (proposalStatus: number) => {
   };
   return {
     useAllProposals,
+    isLoading,
   };
 };

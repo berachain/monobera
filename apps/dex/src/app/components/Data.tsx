@@ -27,8 +27,7 @@ export function DataCard({
 }
 
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
-  console.log("tvl", tvl);
-  console.log("volume", volume);
+  console.log(tvl, volume);
   const { usePrice } = usePollPrices();
   const beraPrice = usePrice(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
   return (

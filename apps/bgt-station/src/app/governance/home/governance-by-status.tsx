@@ -42,7 +42,7 @@ export default function GovernanceByStatus({
       0,
     );
 
-  const { useAllProposals } = usePollAllProposals(
+  const { useAllProposals, isLoading } = usePollAllProposals(
     mappedStatusEnum[proposalStatus],
   );
   const data = useAllProposals();
@@ -141,18 +141,20 @@ export default function GovernanceByStatus({
         }
       />
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {sortedProposalList?.map((proposal: Proposal, index: number) => (
-          <ProposalCard
-            proposal={proposal}
-            key={"proposal" + index}
-            onClick={() =>
-              router.push(
-                // replace this with real data
-                `/governance/proposal/${Number(proposal.id)}`,
-              )
-            }
-          />
-        ))}
+        {!isLoading &&
+          sortedProposalList?.map((proposal: Proposal, index: number) => (
+            <ProposalCard
+              proposal={proposal}
+              key={"proposal" + index}
+              onClick={() =>
+                router.push(
+                  // replace this with real data
+                  `/governance/proposal/${Number(proposal.id)}`,
+                )
+              }
+            />
+          ))}
+        {isLoading && <>LOADING...</>}
       </div>
     </div>
   );
