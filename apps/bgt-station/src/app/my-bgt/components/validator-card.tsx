@@ -178,7 +178,7 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
           ))}
         </div>
         <div className="mr-4 flex items-center gap-4">
-          <TokenIconList size={48} tokenList={bribeTokenList} />
+          <TokenIconList size="2xl" tokenList={bribeTokenList} />
         </div>
         <div className="flex items-center justify-center gap-4 md:hidden">
           <Button

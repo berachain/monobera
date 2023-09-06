@@ -19,15 +19,7 @@ export const usePoolTable = () => {
     setSize: setAllDataSize,
     isLoading: isAllDataLoading,
   } = useSWRInfinite(
-    (index) => [
-      "search",
-      index,
-      search,
-      hasBgtRewards,
-      isHotPool,
-      isNewPool,
-      search,
-    ],
+    (index) => ["search", index, hasBgtRewards, isHotPool, isNewPool, search],
     async (key: any[]) => {
       const page = key[1] + 1;
       try {
@@ -56,7 +48,7 @@ export const usePoolTable = () => {
 
   const data = allData ? [].concat(...allData) : [];
 
-  const { useUserDepositedPools } = usePollUserDepositedPools(
+  const { useUserDepositedPools, isLoading } = usePollUserDepositedPools(
     `${getAbsoluteUrl()}/pool/api`,
   );
   const userPools = useUserDepositedPools();
@@ -72,6 +64,7 @@ export const usePoolTable = () => {
                 .toLowerCase()
                 .includes(search.toLowerCase()));
     }),
+    isUserPoolsLoading: isLoading,
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,

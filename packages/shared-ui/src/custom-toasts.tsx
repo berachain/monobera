@@ -41,7 +41,7 @@ const BaseToast = ({
         {title}
       </div>
       {href && (
-        <a href={href} className="flex flex-row gap-2">
+        <a href={href} className="flex flex-row gap-2" target="_blank">
           <p className="text-sm font-normal">View Txn</p>
           <Icons.external className="h-4 w-4" />
         </a>
