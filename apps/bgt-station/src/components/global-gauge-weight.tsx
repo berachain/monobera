@@ -4,8 +4,8 @@ import { DataTable } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Checkbox } from "@bera/ui/checkbox";
+import uniqolor from "uniqolor";
 
-import { getColors } from "~/utils/colors";
 import {
   global_gauge_weight_columns,
   type GlobalGaugeColumns,
@@ -136,8 +136,8 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
     datasets: [
       {
         data: pieData?.map((d) => d.amount),
-        backgroundColor: getColors(pieData?.length ?? 0),
-        borderColor: getColors(pieData?.length ?? 0),
+        backgroundColor: pieData?.map((d) => uniqolor(d.label).color),
+        borderColor: pieData?.map((d) => uniqolor(d.label).color),
         borderWidth: 1,
       },
     ],
