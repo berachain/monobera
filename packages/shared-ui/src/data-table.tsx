@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4 overflow-x-auto rounded-lg border border-border bg-background">
+    <div className="w-full space-y-4 overflow-x-auto rounded-lg border border-border bg-background">
       <div className={cn(className)}>
         {/* <DataTableToolbar table={table} /> */}
         <Table>

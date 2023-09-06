@@ -11,7 +11,7 @@ export function WeRBack() {
   return light ? (
     <Image
       className="mx-auto"
-      src={`${cloudinaryUrl}/DEX/tj8udvfskyrcanuxfq47`}
+      src={`${cloudinaryUrl}/DEX/create-pool-lightcreate-pool_e7mlfb`}
       alt="Create a pool screenshot"
       width={400}
       height={889}
@@ -19,7 +19,7 @@ export function WeRBack() {
   ) : (
     <Image
       className="mx-auto"
-      src={`${cloudinaryUrl}/DEX/ebq1kd6ucdrultjqysnk`}
+      src={`${cloudinaryUrl}/DEX/create-pool-darkcreate-pool_yiaqb5`}
       alt="Create a pool screenshot"
       width={400}
       height={889}

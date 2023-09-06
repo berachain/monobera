@@ -13,7 +13,7 @@ export const columns: ColumnDef<Pool>[] = [
   {
     accessorKey: "poolName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+      <DataTableColumnHeader column={column} title="Pool name" />
     ),
     cell: ({ row }) => {
       return (
@@ -29,13 +29,15 @@ export const columns: ColumnDef<Pool>[] = [
   },
   {
     accessorKey: "tokens",
-    header: () => <></>,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Pool composition" />
+    ),
     cell: ({ row }) => {
       return (
         <div className="ml-2 flex flex-row justify-start">
           <TokenIconList
             tokenList={row.original.tokens.map((t) => t.address)}
-            size={24}
+            size="lg"
           />
         </div>
       );
@@ -52,8 +54,8 @@ export const columns: ColumnDef<Pool>[] = [
       return (
         <div className="flex w-[160px] items-center">
           {" "}
-          <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
-            {row.original.bgtApy}% BGT
+          <Badge className="flex flex-row items-center gap-1 bg-warning text-xs font-medium text-warning-foreground">
+            {row.original.bgtApy?.toFixed(2)}% BGT
           </Badge>
         </div>
       );
@@ -90,26 +92,29 @@ export const columns: ColumnDef<Pool>[] = [
   },
   {
     accessorKey: "btns",
-    header: () => <></>,
-    cell: ({ row }) => {
-      const address = row.original.pool;
-
-      return (
-        <div className="flex flex-row items-center gap-1">
-          <Icons.minusSquare
-            className="h-5 w-5 text-muted-foreground"
-            onClick={() =>
-              window.open(`${getAbsoluteUrl()}/pool/${address}/withdraw`)
-            }
-          />
-          <Icons.plusSquare
-            className="h-5 w-5 text-muted-foreground"
-            onClick={() =>
-              window.open(`${getAbsoluteUrl()}/pool/${address}/add-liquidity`)
-            }
-          />
-        </div>
-      );
-    },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Actions" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex flex-row items-center gap-1">
+        <Icons.minusSquare
+          className="h-5 w-5 text-muted-foreground"
+          onClick={() =>
+            window.open(
+              `${getAbsoluteUrl()}/pool/${row.original.pool}/withdraw`,
+            )
+          }
+        />
+        <Icons.plusSquare
+          className="h-5 w-5 text-muted-foreground"
+          onClick={() =>
+            window.open(
+              `${getAbsoluteUrl()}/pool/${row.original.pool}/add-liquidity`,
+            )
+          }
+        />
+      </div>
+    ),
+    enableSorting: false,
   },
 ];

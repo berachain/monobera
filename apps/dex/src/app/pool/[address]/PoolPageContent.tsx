@@ -405,7 +405,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               {pool?.bgtApy?.toFixed(2)}% BGT APY
             </Badge>
             <div
-              className="xs:hidden flex flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex md:flex lg:flex"
+              className="hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex"
               onClick={() =>
                 window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
               }
@@ -416,7 +416,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             </div>
           </div>
           <p
-            className="xs:flex flex flex flex-row items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:hidden md:hidden lg:hidden"
+            className="flex flex-row items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:hidden"
             onClick={() =>
               window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
             }

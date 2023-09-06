@@ -4,34 +4,54 @@ import { useMemo } from "react";
 import { useTokenInformation, useTokens, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import { cva, type VariantProps } from "class-variance-authority";
 import { getAddress } from "viem";
 
-type Props = {
+const IconVariants = cva(
+  "aspect-square flex items-center justify-center rounded-full text-foreground",
+  {
+    variants: {
+      size: {
+        "3xl": "w-16 h-16 text-lg font-semibold leading-7",
+        "2xl": "w-12 h-12 text-[14px] font-semibold leading-tight",
+        xl: "w-8 h-8 text-xs font-normal leading-3",
+        lg: "w-6 h-6 text-[8px]",
+        md: "w-4 h-4 text-[6px]",
+        sm: "w-3 h-3 text-[4px]",
+        xs: "w-2 h-2 text-[3px]",
+      },
+    },
+    defaultVariants: {
+      size: "lg",
+    },
+  },
+);
+
+export interface IconProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof IconVariants> {
   token?: Token | undefined;
   fetch?: boolean;
-  className?: string;
   address?: string;
-};
+}
 
 export const TokenIcon = ({
   token,
-  className,
   fetch = false,
   address,
-}: Props) => {
+  className,
+  size,
+  ...props
+}: IconProps) => {
   const { read, tokenInformation } = useTokenInformation();
-
   const { tokenDictionary } = useTokens();
   useMemo(() => {
     const fetchData = async () => {
-      if (fetch && address && !tokenInformation) {
+      if (fetch && address && !tokenInformation)
         await read({ address: address });
-      }
     };
-
     void fetchData();
   }, [token]);
-
   const getTokenImgUri = () => {
     if (token && token.logoURI) {
       return token.logoURI;
@@ -50,14 +70,9 @@ export const TokenIcon = ({
   };
 
   return (
-    <Avatar
-      className={cn(
-        " flex aspect-square h-8 w-8 items-center justify-center rounded-full",
-        className,
-      )}
-    >
+    <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage src={getTokenImgUri()} className="rounded-full" />
-      <AvatarFallback className="h-8 w-8 bg-muted text-xs font-bold text-white">
+      <AvatarFallback className="h-full w-full border border-foreground bg-background text-inherit">
         {fetch
           ? tokenInformation?.symbol?.slice(0, 3).toUpperCase()
           : token?.symbol?.slice(0, 3).toUpperCase()}

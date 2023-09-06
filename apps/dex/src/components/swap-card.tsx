@@ -193,7 +193,7 @@ export function SwapCard({
                       </div>
                     </div>
                   )}
-                  {exceedingBalance && (
+                  {isConnected && exceedingBalance && (
                     <Alert
                       variant="destructive"
                       className="items-center justify-center"
