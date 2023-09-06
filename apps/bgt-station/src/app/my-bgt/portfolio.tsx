@@ -78,7 +78,7 @@ export default function Portfolio() {
           </div>
           <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
             {/* this is so hard coded!! i hate myself */}
-            <TokenIconList size={32} tokenList={bribeTokenList} />
+            <TokenIconList size="xl" tokenList={bribeTokenList} />
           </div>
           <Button className="w-full max-w-[223px]">Claim</Button>
         </YellowCard>

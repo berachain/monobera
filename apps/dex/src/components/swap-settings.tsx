@@ -61,7 +61,11 @@ export default function SwapSettings() {
           className="h-[40px] pr-8 text-right"
           disabled={slippageToleranceType === SELECTION.AUTO}
           placeholder="1"
-          defaultValue={slippageToleranceValue}
+          value={
+            slippageToleranceType === SELECTION.AUTO
+              ? DEFAULT_SLIPPAGE
+              : slippageToleranceValue
+          }
           onKeyDown={(e) => e.key === "-" && e.preventDefault()}
           endAdornment={
             <p
@@ -102,7 +106,9 @@ export default function SwapSettings() {
           className="h-[40px] pl-1 pr-9 text-right"
           disabled={deadlineType === SELECTION.AUTO}
           placeholder="1"
-          defaultValue={deadlineValue}
+          value={
+            deadlineType === SELECTION.AUTO ? DEFAULT_DEADLINE : deadlineValue
+          }
           onKeyDown={(e) => e.key === "-" && e.preventDefault()}
           endAdornment={
             <p

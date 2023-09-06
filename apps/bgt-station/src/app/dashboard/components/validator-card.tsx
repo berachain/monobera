@@ -58,7 +58,7 @@ export default function ValidatorCard({
         </div>
       </div>
       <div className="w-full">
-        <TokenIconList tokenList={validator.bribeTokenList ?? []} />
+        <TokenIconList tokenList={validator.bribeTokenList ?? []} size="xl" />
       </div>
       <div className="grid w-full grid-cols-2 gap-4">
         {" "}

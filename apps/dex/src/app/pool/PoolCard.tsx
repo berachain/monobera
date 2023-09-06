@@ -32,33 +32,28 @@ export const PoolCard = ({
       className="col-span-1 flex w-full max-w-[275px] flex-col justify-end rounded-xl border border-border bg-background px-6 py-8"
     >
       <div className="flex h-12 flex-row flex-wrap">
-        {pool?.tags?.map((tag) => {
-          return (
-            <Badge key={tag} variant={"info"}>
-              {getBadgeContent(tag)}
-            </Badge>
-          );
-        })}
+        {pool && pool.tags ? (
+          pool.tags.map((tag) => {
+            return (
+              <Badge key={tag} variant={"info"}>
+                {getBadgeContent(tag)}
+              </Badge>
+            );
+          })
+        ) : (
+          <Badge key={"pool"} variant={"info"}>
+            🐻 Bera Pools
+          </Badge>
+        )}
       </div>
       <div className="mt-6">
         <div className="mb-2 text-left text-sm font-medium">
           {pool?.poolName}
         </div>
         <div className="flex flex-row">
-          {/* {pool?.tokens?.map((token, i) => (
-            <TokenIcon
-              key={token.address}
-              token={token}
-              className={cn(
-                " border border-border ",
-                i !== 0 && "ml-[-15px]",
-              )}
-            />
-          ))} */}
-          {/* maybe consider using this */}
           <TokenIconList
             tokenList={pool?.tokens?.map((t) => t.address) ?? []}
-            size={24}
+            size="lg"
           />
         </div>
       </div>

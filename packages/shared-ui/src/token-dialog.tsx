@@ -177,7 +177,7 @@ export function TokenDialog({
                           !isTokenSelected(token) && onTokenSelect(token)
                         }
                       >
-                        <TokenIcon token={token} className="h-4 w-4" />
+                        <TokenIcon token={token} size="md" />
                         {token.symbol}
                       </TokenChip>
                     );
@@ -253,7 +253,7 @@ export function TokenDialog({
                     key={token.address}
                   >
                     <div className="flex flex-row items-center gap-2">
-                      <TokenIcon token={token} className="h-6 w-6" />
+                      <TokenIcon token={token} />
                       <p className="text-sm font-medium text-muted-foreground">
                         {token.symbol}
                       </p>
@@ -343,7 +343,7 @@ const TokenDialogRow = ({
             that claim to represent projects`}
             </Balancer>
             <div className="flex w-full flex-col items-center gap-2 rounded-lg bg-muted p-2">
-              <TokenIcon token={token} className="bg-muted-foreground" />
+              <TokenIcon token={token} />
               <h4 className="text-sm font-semibold">{token?.name}</h4>
               <Balancer className="text-xs font-normal text-muted-foreground">
                 {token.address}
