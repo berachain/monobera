@@ -217,7 +217,7 @@ export const HoneyChart = ({
       className={cn(
         "border-2 p-0",
         arcade
-          ? "border-dashed border-blue-500"
+          ? "border-dashed border-blue-900"
           : "border-border bg-background",
       )}
     >

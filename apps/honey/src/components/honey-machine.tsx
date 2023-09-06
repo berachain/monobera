@@ -133,11 +133,12 @@ export function HoneyMachine() {
     needsApproval,
     honey,
     collateralList,
+    allowance,
   } = usePsm();
 
   // console.log(
-  // payload,
-  // payload[2],
+  //   payload,
+  //   BigInt(payload[2] ?? 0n),
   // fromAmount,
   // allowance?.formattedAllowance,
   // needsApproval,
@@ -225,15 +226,21 @@ export function HoneyMachine() {
   const performApproval = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      write({
-        address: selectedFrom?.address as `0x${string}`,
-        abi: erc20ABI as unknown as (typeof erc20ABI)[],
-        functionName: "approve",
-        params: [erc20HoneyAddress, 1000000000000000000n],
-      });
+      const enterAmount = isMint ? payload[2] : payload[1];
+      if (allowance && allowance.balance && allowance.balance >= enterAmount) {
+        write({
+          address: selectedFrom?.address as `0x${string}`,
+          abi: erc20ABI as unknown as (typeof erc20ABI)[],
+          functionName: "approve",
+          params: [erc20HoneyAddress, 1000000000000000000n],
+        });
+      } else {
+        rejectAction?.fire();
+      }
     } catch (error: any) {
       dispatch({ type: "SET_STATE", payload: "idle" });
       dispatch({ type: "SET_ERROR", payload: error.message });
+      rejectAction?.fire();
     }
   };
 
@@ -258,6 +265,7 @@ export function HoneyMachine() {
     } catch (error: any) {
       dispatch({ type: "SET_STATE", payload: "idle" });
       dispatch({ type: "SET_ERROR", payload: error.message });
+      rejectAction?.fire();
     }
   };
 
@@ -277,6 +285,7 @@ export function HoneyMachine() {
     } catch (error: any) {
       dispatch({ type: "SET_STATE", payload: "idle" });
       dispatch({ type: "SET_ERROR", payload: error.message });
+      rejectAction?.fire();
     }
   };
 
