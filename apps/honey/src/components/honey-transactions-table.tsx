@@ -327,7 +327,7 @@ export const EventTable = ({
   arcade: boolean;
 }) => {
   const { tokenDictionary } = useTokens();
-  console.log("tokenDictionary", tokenDictionary, events);
+  // console.log("tokenDictionary", tokenDictionary, events);
   return (
     <Table>
       <TableHeader>
