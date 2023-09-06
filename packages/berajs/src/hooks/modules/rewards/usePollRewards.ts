@@ -7,22 +7,28 @@ import { REWARDS_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
 
-export const usePollBgtRewards = () => {
+export const usePollBgtRewards = (receiver: string) => {
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
 
-  const method = "getAllBribeRewards";
-  const QUERY_KEY = [method, account];
+  const method = "getCurrentRewards";
+  const QUERY_KEY = [method, account, receiver];
+  console.log(QUERY_KEY);
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
-      const result = (await publicClient.readContract({
-        address: process.env.NEXT_PUBLIC_REWARDS_ADDRESS as Address,
-        abi: REWARDS_PRECOMPILE_ABI,
-        functionName: method,
-        args: [account],
-      })) as any[];
-      return result;
+      try {
+        const result = (await publicClient.readContract({
+          address: process.env.NEXT_PUBLIC_ERC20_REWARDS_ADDRESS as Address,
+          abi: REWARDS_PRECOMPILE_ABI,
+          functionName: method,
+          args: [account, receiver],
+        })) as any[];
+        return result;
+      } catch (e) {
+        console.log(e);
+        return undefined;
+      }
     },
     {
       refreshInterval: POLLING.NORMAL, // make it rlly slow TODO CHANGE

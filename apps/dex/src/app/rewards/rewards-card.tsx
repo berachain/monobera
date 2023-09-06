@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import { type Pool } from "@bera/bera-router";
-import { formatUsd } from "@bera/berajs";
+import {
+  REWARDS_PRECOMPILE_ABI,
+  formatUsd,
+  useBeraJs,
+  // usePollBgtRewards,
+} from "@bera/berajs";
+import { useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import { type Address } from "wagmi";
 
 export default function RewardsCard({ pool }: { pool: Pool }) {
+  const { account } = useBeraJs();
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -19,9 +27,17 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
     };
   }, []);
 
+  // const { useBgtRewards } = usePollBgtRewards(pool.pool);
+  // const bgtRewards = useBgtRewards();
+
+  const { write, isLoading, ModalPortal } = useTxn({
+    message: "Claiming BGT Rewards",
+  });
+
   const title = pool.poolName ?? "";
   return (
     <div className="flex w-full items-center justify-between rounded-2xl border border-border bg-background p-4 md:p-6">
+      {ModalPortal}
       <div className="flex w-[200px] flex-col gap-3">
         <div className="whitespace-nowrap text-xs font-medium leading-tight md:text-sm">
           {mobile && title.length > 19 ? title.slice(0, 19) + "..." : title}
@@ -65,7 +81,16 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
 
         <Button
           variant={"warning"}
+          disabled={isLoading}
           className="px-2 text-sm leading-none md:px-4 md:text-lg md:leading-7"
+          onClick={() => {
+            write({
+              address: process.env.NEXT_PUBLIC_ERC20_REWARDS_ADDRESS as Address,
+              abi: REWARDS_PRECOMPILE_ABI,
+              functionName: "withdrawDepositorRewards",
+              params: [account, pool.pool],
+            });
+          }}
         >
           Claim
         </Button>

@@ -4,13 +4,14 @@ import {
   usePollActiveValidators,
   usePollDelegatorValidators,
   usePollGlobalValidatorBribes,
+  type PoLValidator,
   type Validator,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
 import {
   DataTable,
-  IconList,
   SearchInput,
+  TokenIconList,
   ValidatorIcon,
 } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -116,13 +117,13 @@ const ValidatorModal = ({
 {
   onClose: () => void;
   open: boolean;
-  validators: Validator[];
+  validators: PoLValidator[];
   onSelect: (address: string) => void;
   // emptyMessage?: string;
 }) => {
   const tableV = React.useMemo(
     () =>
-      validators.map((validator: Validator) => ({
+      validators.map((validator: PoLValidator) => ({
         address: validator.operatorAddr,
         validator: (
           <div className="flex w-[100px] items-center gap-1">
@@ -140,18 +141,7 @@ const ValidatorModal = ({
         vapy: 6.9,
         mwg: <ValidatorGauge address={validator.operatorAddr} />,
         bribes: (
-          <IconList
-            showCount={3}
-            iconList={[
-              "/icons/eth-icons.svg",
-              "/icons/atom-icons.svg",
-              "/icons/usdc-icons.svg",
-              "/icons/usdt-icons.svg",
-              "/icons/btc-icons.svg",
-              "/icons/honey-icons.svg",
-              "/icons/bera-icons.svg",
-            ]}
-          />
+          <TokenIconList showCount={3} tokenList={validator.bribeTokenList} />
         ),
       })),
     [validators],

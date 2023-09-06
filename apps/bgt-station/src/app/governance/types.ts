@@ -21,9 +21,10 @@ export enum OrderByEnum {
 }
 
 export enum ProposalTypeEnum {
+  TEXT_PROPOSAL = "text",
   NEW_GAUGE_PROPOSAL = "new-gauge-proposal",
   NEW_COLLATERAL_PROPOSAL = "new-collateral-proposal",
-  TEXT_PROPOSAL = "text",
+  NEW_MARKET_COLLATERAL_PROPOSAL = "new-market-collateral-proposal",
 }
 
 export type ParameterChangeLine = {
@@ -41,9 +42,13 @@ export type ProposalVotes = {
 
 export const VoteColorMap = {
   yes: "#059669",
+  1: "#059669",
   no: "#DC2629",
+  2: "#DC2629",
   veto: "#0284C7",
+  4: "#0284C7",
   abstain: "#78716c",
+  3: "#78716c",
   yes_secondary: "#ECFDF5",
   no_secondary: "#FEF2F2",
   veto_secondary: "#F0F9FF",

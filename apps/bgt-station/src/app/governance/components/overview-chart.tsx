@@ -1,10 +1,11 @@
 import React, { useMemo } from "react";
+import { formatter, truncateHash, type IVote } from "@bera/berajs";
+import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { generateRandomData } from "../home/mockData";
-import { VoteColorMap, type ALL, type VOTE_TYPE } from "../types";
+import { VoteColorMap } from "../types";
 
 const Options = {
   responsive: true,
@@ -63,21 +64,18 @@ const Options = {
   },
 };
 
-const getChartData = (
-  data: {
-    amount: number;
-    voteType: VOTE_TYPE;
-    voter: string;
-  }[],
-) => {
+const getChartData = (data: IVote[]) => {
   return {
-    labels: data.map((da, _) => `${da.amount} BGT  ${da.voter}`),
+    labels: data.map(
+      (da, _) =>
+        `${formatter.format(da.delegation)} BGT  ${truncateHash(da.voter)}`,
+    ),
     datasets: [
       {
-        data: data.map((d) => d.amount),
+        data: data.map((d) => d.delegation),
         labelColor: false,
-        backgroundColor: data.map((d) => VoteColorMap[d.voteType]),
-        borderColor: data.map((d) => VoteColorMap[d.voteType]),
+        backgroundColor: data.map((d) => (VoteColorMap as any)[d.option]),
+        borderColor: data.map((d) => (VoteColorMap as any)[d.option]),
         tension: 0.4,
         borderRadius: 100,
         borderSkipped: false,
@@ -86,31 +84,41 @@ const getChartData = (
   };
 };
 
-const voteTypes: Array<ALL | VOTE_TYPE> = [
-  "all",
-  "yes",
-  "no",
-  "veto",
-  "abstain",
-];
-export function OverviewChart() {
-  const [voteType, setVoteType] = React.useState<ALL | VOTE_TYPE>("all");
+const voteTypes: Array<any> = ["all", "yes", "no", "veto", "abstain"];
+
+const helperMap = {
+  yes: VoteOption.VOTE_OPTION_YES,
+  no: VoteOption.VOTE_OPTION_NO,
+  veto: VoteOption.VOTE_OPTION_NO_WITH_VETO,
+  abstain: VoteOption.VOTE_OPTION_ABSTAIN,
+};
+export function OverviewChart({
+  votes,
+  isLoading,
+}: {
+  votes: IVote[];
+  isLoading: boolean;
+}) {
+  console.log(isLoading);
+  const [voteType, setVoteType] = React.useState<any>("all");
 
   const chartData = useMemo(
     () =>
       getChartData(
-        generateRandomData().filter((data) =>
-          voteType === "all" ? true : data.voteType === voteType,
+        votes?.filter((data) =>
+          voteType === "all"
+            ? true
+            : data.option === (helperMap as any)[voteType],
         ),
       ),
-    [voteType],
+    [voteType, votes],
   );
 
   return (
     <Card className="relative mt-1 h-[234px] p-4">
-      <Tabs defaultValue={voteType} className="absolute right-4">
+      <Tabs defaultValue={voteType.toString()} className="absolute right-4">
         <TabsList>
-          {voteTypes.map((type: ALL | VOTE_TYPE) => (
+          {voteTypes.map((type: any) => (
             <TabsTrigger
               value={type}
               key={type}

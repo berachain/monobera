@@ -37,6 +37,7 @@ import {
 import { ProposalTypeEnum } from "../types";
 import NewGaugeForm from "./gauge-proposal-form";
 import NewCollateralForm from "./new-collateral-form";
+import NewMarketCollateralForm from "./new-market-form";
 import { useCreateProposal } from "./useCreateProposal";
 
 export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
@@ -108,10 +109,20 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       }),
   });
 
+  const NewMarketCollateralProposal = BaseFormSchema.extend({
+    marketCollateralAddress: z
+      .string()
+      .nonempty("Required")
+      .refine((value) => isAddress(value), {
+        message: "Invalid address.",
+      }),
+  });
+
   const ProposalFormSchema = z.union([
     BaseFormSchema,
     NewGaugeProposal,
     NewCollateralProposal,
+    NewMarketCollateralProposal,
   ]) as any;
 
   const form = useForm<z.infer<typeof ProposalFormSchema>>({
@@ -280,6 +291,9 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             )}
             {type === ProposalTypeEnum.NEW_COLLATERAL_PROPOSAL && (
               <NewCollateralForm form={form} />
+            )}
+            {type === ProposalTypeEnum.NEW_MARKET_COLLATERAL_PROPOSAL && (
+              <NewMarketCollateralForm form={form} />
             )}
             <Button type="submit">Submit</Button>
           </Card>
