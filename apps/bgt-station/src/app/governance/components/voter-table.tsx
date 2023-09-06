@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
-import Image from "next/image";
-import { truncateHash } from "@bera/berajs";
+import { formatter, truncateHash, type IVote } from "@bera/berajs";
+import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
+import Identicon from "@bera/shared-ui/src/identicon";
 import {
   Accordion,
   AccordionContent,
@@ -10,50 +11,49 @@ import {
 import { Badge } from "@bera/ui/badge";
 import { Card } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { getAddress } from "viem";
 
-import { cloudinaryUrl } from "~/config";
 import { MultiSelectBadge } from "../components/multi-select-badge";
-import { generateRandomData } from "../home/mockData";
 import { type ALL, type VOTER_TYPE } from "../types";
 
 const userTypes: Array<ALL | VOTER_TYPE> = ["all", "validators", "users"];
 
-const getBadge = (vt: string) => {
+const getBadge = (vt: number) => {
   switch (vt) {
-    case "veto":
+    case VoteOption.VOTE_OPTION_NO_WITH_VETO:
       return (
         <Badge
           variant="info"
           className="w-20 justify-center border-none px-2 py-1 text-sm capitalize"
         >
-          {vt}
+          veto
         </Badge>
       );
-    case "abstain":
+    case VoteOption.VOTE_OPTION_ABSTAIN:
       return (
         <Badge
           variant="secondary"
           className="w-20 justify-center border-none px-2 py-1 text-sm"
         >
-          {vt}
+          abstain
         </Badge>
       );
-    case "yes":
+    case VoteOption.VOTE_OPTION_YES:
       return (
         <Badge
           variant="success"
           className="w-20 justify-center border-none px-2 py-1 text-sm capitalize"
         >
-          {vt}
+          yes
         </Badge>
       );
-    case "no":
+    case VoteOption.VOTE_OPTION_NO:
       return (
         <Badge
           variant="destructive"
           className="w-20 justify-center border-none px-2 py-1 text-sm capitalize"
         >
-          {vt}
+          no
         </Badge>
       );
     default:
@@ -61,21 +61,27 @@ const getBadge = (vt: string) => {
   }
 };
 
-export function VoterTable() {
+export function VoterTable({
+  votes,
+  isLoading,
+}: {
+  votes: IVote[];
+  isLoading: boolean;
+}) {
   const [voterTypes, setVoterTypes] = React.useState<ALL | VOTER_TYPE>("all");
-  const [voteType, setVoteType] = React.useState<string[]>([]);
+  const [voteType, setVoteType] = React.useState<number[]>([]);
 
   const voterData = useMemo(
     () =>
-      generateRandomData()
-        .filter((data) =>
-          voterTypes === "all" ? true : data.voterTypes === voterTypes,
-        )
+      votes
+        // .filter((data) =>
+        //   voterTypes === "all" ? true : data.voterTypes === voterTypes,
+        // )
         .filter(
-          (data) => voteType.includes(data.voteType) || voteType.length === 0,
+          (data) => voteType.length === 0 || voteType.includes(data.option),
         ),
 
-    [voteType, voterTypes],
+    [voteType, voterTypes, votes],
   );
 
   return (
@@ -109,46 +115,40 @@ export function VoterTable() {
           </div>
         </div>
         <div className="max-h-[800px] overflow-y-scroll p-4">
-          {voterData.map((voter) => (
+          {voterData?.map((voter) => (
             <div key={voter.voter} className="flex gap-16">
-              <Accordion type="single" collapsible className="flex-grow">
+              <Accordion
+                type="single"
+                collapsible
+                className="flex-grow"
+                disabled={voter?.metadata === undefined}
+              >
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>
+                  <AccordionTrigger disabled={voter?.metadata === undefined}>
                     <div className="flex items-center gap-2 text-sm">
-                      <Image
-                        alt="proposal owner avatar"
-                        className="rounded-full"
-                        src={`${cloudinaryUrl}/bears/pgnhgjsm1si8gb2bdm1m`}
-                        width={32}
-                        height={32}
-                      />
-                      {truncateHash(
-                        "0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
-                      )}
+                      <Identicon account={getAddress(voter.voter)} />
+                      {truncateHash(voter.voter, 6, 4)}
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="max-w-[436px] pl-10 text-xs font-medium leading-tight text-muted-foreground">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nullam tincidunt dui vitae metus feugiat rhoncus. Fusce quis
-                    mattis dolor.Lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit. Nullam tincidunt dui vitae metus feugiat
-                    rhoncus. Fusce quis mattis dolor.
+                    {voter?.metadata}
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
               <div className="flex h-[56px] w-[60px] items-center justify-center">
-                {getBadge(voter.voteType)}
+                {getBadge(voter.option)}
               </div>
               <div className="flex h-[56px] w-[100px] items-center justify-center text-xs font-medium leading-tight text-foreground">
                 {" "}
-                69.42M(6.9%)
+                {formatter.format(voter.delegation)}
               </div>
             </div>
           ))}
+          {isLoading && <>LOADING...</>}
         </div>
       </Card>
       <div className="mt-4 w-full text-right text-xs font-medium leading-tight text-muted-foreground">
-        {voterData.length} addresses
+        {votes.length} addresses
       </div>
     </div>
   );

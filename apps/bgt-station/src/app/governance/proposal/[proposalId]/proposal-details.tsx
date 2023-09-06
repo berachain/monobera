@@ -5,6 +5,7 @@ import {
   GOVERNANCE_PRECOMPILE_ABI,
   usePollProposal,
   usePollProposalVotes,
+  type IVote,
   type Proposal,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils/formatAmount";
@@ -26,13 +27,18 @@ export default function ProposalDetails({
 }: {
   proposalId: number;
 }) {
-  const { useProposal, useNormalizedTallyResult } = usePollProposal(proposalId);
+  const { useProposal } = usePollProposal(proposalId);
   const proposal: Proposal | undefined = useProposal();
-  const normalizedTally = useNormalizedTallyResult();
 
-  const { useProposalVotes } = usePollProposalVotes(proposalId);
+  const {
+    useProposalVotes,
+    useTotalProposalVotes,
+    isLoading,
+    useNormalizedTallyResult,
+  } = usePollProposalVotes(proposalId);
   const votes = useProposalVotes();
-  console.log(votes);
+  const totalVotes = useTotalProposalVotes();
+  const normalizedTally = useNormalizedTallyResult();
   const router = useRouter();
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
@@ -42,7 +48,6 @@ export default function ProposalDetails({
     message: `Voting for proposal ${proposalId}`,
   });
   const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
-  console.log(proposal);
   return (
     <div className="container pb-16">
       {ModalPortal}
@@ -88,9 +93,7 @@ export default function ProposalDetails({
         <div className="mt-4 flex gap-4">
           <Card className="hidden w-full flex-col items-center justify-center p-6 sm:flex">
             <div className="text-2xl font-semibold leading-loose text-foreground">
-              {normalizedTally !== undefined
-                ? formatter.format(normalizedTally.totalVotes)
-                : 0}
+              {normalizedTally !== undefined ? formatter.format(totalVotes) : 0}
             </div>
             <div className="mt-[-4px] flex items-center gap-0.5 text-sm font-medium leading-[14px] text-muted-foreground">
               Total votes
@@ -128,14 +131,14 @@ export default function ProposalDetails({
           <div className="h-7 text-lg font-semibold leading-7 text-foreground">
             Overview
           </div>
-          <OverviewChart />
+          <OverviewChart votes={votes as IVote[]} isLoading={isLoading} />
         </div>
 
         <div className="mt-16 ">
           <div className="mt-4 h-7 text-lg font-semibold leading-7 text-foreground">
             Voters
           </div>
-          <VoterTable />
+          <VoterTable votes={votes as IVote[]} isLoading={isLoading} />
         </div>
       </div>
     </div>

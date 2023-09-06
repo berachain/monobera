@@ -16,7 +16,7 @@ export const usePollProposal = (proposalId: number) => {
 
   const method = "getProposal";
   const QUERY_KEY = [proposalId, method];
-  useSWR(
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       const result = await publicClient.readContract({
@@ -104,6 +104,7 @@ export const usePollProposal = (proposalId: number) => {
   };
   return {
     useProposal,
+    isLoading,
     useNormalizedTallyResult,
   };
 };

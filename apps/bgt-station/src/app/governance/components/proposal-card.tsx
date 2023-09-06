@@ -1,20 +1,20 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import {
   beraToEth,
   truncateHash,
   usePollProposal,
   type Proposal,
 } from "@bera/berajs";
+import Identicon from "@bera/shared-ui/src/identicon";
 import {
   formatUnixTimestamp,
   timeDifferenceFromNow,
 } from "@bera/shared-ui/src/utils/times";
 import { Badge } from "@bera/ui/badge";
+import { getAddress } from "viem";
 
-import { cloudinaryUrl } from "~/config";
 import { StatusEnum, VoteColorMap, mappedStatusEnum } from "../types";
 import { ProgressBarChart } from "./progress-bar-chart";
 
@@ -183,13 +183,7 @@ export function ProposalCard({ proposal, onClick }: ProposalCard) {
         <div className="mt-[18px] flex flex-col-reverse gap-2 text-xs font-medium leading-tight text-muted-foreground sm:h-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
             {" "}
-            <Image
-              alt="proposal owner avatar"
-              className="rounded-full"
-              src={`${cloudinaryUrl}/bears/pgnhgjsm1si8gb2bdm1m`}
-              width={24}
-              height={24}
-            />
+            <Identicon account={getAddress(beraToEth(proposal.proposer))} />
             Submitted by {truncateHash(beraToEth(proposal.proposer), 6, 4)}
           </div>
           <div>
