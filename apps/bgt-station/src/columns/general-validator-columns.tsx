@@ -99,7 +99,11 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     ),
     cell: ({ row }) => {
       const tokens = row.original.bribeTokenList;
-      return <TokenIconList tokenList={tokens ?? []} size="lg" showCount={3} />;
+      return tokens.length !== 0 ? (
+        <TokenIconList tokenList={tokens ?? []} size="lg" showCount={3} />
+      ) : (
+        <p>no bribes</p>
+      );
     },
     accessorKey: "bribes",
     enableSorting: false,

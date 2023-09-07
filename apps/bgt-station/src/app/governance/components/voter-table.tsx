@@ -144,6 +144,7 @@ export function VoterTable({
               </div>
             </div>
           ))}
+          {voterData.length === 0 && <>No Votes</>}
           {isLoading && <>LOADING...</>}
         </div>
       </Card>

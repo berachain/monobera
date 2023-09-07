@@ -1,5 +1,4 @@
 import { type NetworkConfig } from "@bera/berajs";
-import { Icons } from "@bera/ui/icons";
 import { type Chain } from "viem";
 
 import {
@@ -98,42 +97,4 @@ export const beraJsConfig: NetworkConfig = {
     erc20BribeModule,
   },
   chain: chain,
-};
-
-export const footerNavigation = {
-  solutions: [
-    { name: "Marketing", href: "#" },
-    { name: "Analytics", href: "#" },
-    { name: "Commerce", href: "#" },
-    { name: "Insights", href: "#" },
-  ],
-  support: [
-    { name: "Pricing", href: "#" },
-    { name: "Documentation", href: "#" },
-    { name: "Guides", href: "#" },
-    { name: "API Status", href: "#" },
-  ],
-
-  social: [
-    {
-      name: "Telegram",
-      href: "#",
-      icon: () => <Icons.telegram className="h-6 w-6 text-background" />,
-    },
-    {
-      name: "X",
-      href: "#",
-      icon: Icons.elonMusk,
-    },
-    {
-      name: "GitHub",
-      href: "#",
-      icon: Icons.gitHub,
-    },
-    {
-      name: "Discord",
-      href: "#",
-      icon: Icons.discord,
-    },
-  ],
 };

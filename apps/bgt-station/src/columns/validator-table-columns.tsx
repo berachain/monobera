@@ -32,7 +32,7 @@ export const validator_table_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader column={column} title="Voting power" />
     ),
     cell: ({ row }) => (
-      <div className="flex w-24 items-center">{row.original.vp}%</div>
+      <div className="flex w-24 items-center">{row.original.vp}</div>
     ),
     accessorKey: "vp",
     enableSorting: true,

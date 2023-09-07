@@ -31,7 +31,7 @@ const AccordionTrigger = React.forwardRef<
     >
       {children}
       {!disabled && (
-        <ChevronDown className="h-4 w-4 transition-transform duration-200" />
+        <ChevronDown className="mt-1 h-4 w-4 transition-transform duration-200" />
       )}
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
