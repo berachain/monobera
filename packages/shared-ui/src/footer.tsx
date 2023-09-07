@@ -1,10 +1,64 @@
 import { Icons } from "@bera/ui/icons";
 
-export function Footer({
-  navItem,
-}: {
-  navItem: { solutions: any[]; support: any[]; social: any[] };
-}) {
+export const footerNavigation = {
+  ecosystem: [
+    {
+      name: process.env.NEXT_PUBLIC_DEX_NAME,
+      href: process.env.NEXT_PUBLIC_DEX_URL,
+    },
+    {
+      name: process.env.NEXT_PUBLIC_BGT_NAME,
+      href: process.env.NEXT_PUBLIC_BGT_URL,
+    },
+    {
+      name: process.env.NEXT_PUBLIC_HONEY_NAME,
+      href: process.env.NEXT_PUBLIC_HONEY_URL,
+    },
+    {
+      name: process.env.NEXT_PUBLIC_LEND_NAME,
+      href: process.env.NEXT_PUBLIC_LEND_URL,
+    },
+    {
+      name: process.env.NEXT_PUBLIC_PERPS_NAME,
+      href: process.env.NEXT_PUBLIC_PERPS_NAME,
+    },
+    {
+      name: process.env.NEXT_PUBLIC_BLOCK_EXPLORER_NAME,
+      href: process.env.NEXT_PUBLIC_BLOCK_EXPLORER,
+    },
+  ],
+  resources: [
+    { name: "Foundation", href: process.env.NEXT_PUBLIC_HOMEPAGE_URL },
+    { name: "Docs", href: process.env.NEXT_PUBLIC_DOCS_URL },
+    { name: "Careers", href: process.env.NEXT_PUBLIC_CAREERS_URL },
+    { name: "Press Kit", href: process.env.NEXT_PUBLIC_PRESS_KIT },
+  ],
+
+  social: [
+    // {
+    //   name: "Telegram",
+    //   href: process.env.NEXT_PUBLIC_TELEGRAM,
+    //   icon: () => <Icons.telegram className="h-6 w-6 text-background" />,
+    // },
+    {
+      name: "X",
+      href: process.env.NEXT_PUBLIC_TWITTER,
+      icon: Icons.elonMusk,
+    },
+    {
+      name: "GitHub",
+      href: process.env.NEXT_PUBLIC_GITHUB,
+      icon: Icons.gitHub,
+    },
+    {
+      name: "Discord",
+      href: process.env.NEXT_PUBLIC_DISCORD,
+      icon: Icons.discord,
+    },
+  ],
+};
+
+export function Footer() {
   return (
     <footer className="bg-background" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
@@ -15,12 +69,14 @@ export function Footer({
           <div className="col-span-2 space-y-8">
             <Icons.logo className="h-10 w-auto" />
             <p className="text-sm leading-6 text-secondary-foreground">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              ornare cursus sed nunc eget dictum Sed ornare cursus sed nunc eget
-              dictumd nunc eget dictum Sed ornare cursus sed nunc eget dictum
+              Berachain is a high-performance EVM-compatible blockchain built on
+              Proof-of-Liquidity consensus. Proof-of-Liquidity is a novel
+              consensus mechanism that aims to align network incentives,
+              creating strong synergy between Berachain validators and the
+              ecosystem of projects.
             </p>
             <div className="flex space-x-6">
-              {navItem.social.map((item) => (
+              {footerNavigation.social.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
@@ -38,10 +94,10 @@ export function Footer({
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div>
               <h3 className="text-sm font-semibold leading-6 text-foreground">
-                Solutions
+                Ecosystem
               </h3>
               <ul role="list" className="mt-6 space-y-4">
-                {navItem.solutions.map((item) => (
+                {footerNavigation.ecosystem.map((item) => (
                   <li key={item.name}>
                     <a
                       href={item.href}
@@ -55,10 +111,10 @@ export function Footer({
             </div>
             <div>
               <h3 className="text-sm font-semibold leading-6 text-foreground">
-                Support
+                Resurces
               </h3>
               <ul role="list" className="mt-6 space-y-4">
-                {navItem.support.map((item) => (
+                {footerNavigation.resources.map((item) => (
                   <li key={item.name}>
                     <a
                       href={item.href}
@@ -74,10 +130,10 @@ export function Footer({
         </div>
         <div className="mt-16 flex justify-between border-t border-border pt-8 sm:mt-20 lg:mt-24">
           <p className="text-xs leading-5 text-secondary-foreground">
-            &copy; {new Date().getFullYear()} BeraChain | All rights reserved
+            &copy; {new Date().getFullYear()} Berachain | All rights reserved
             (not really)
           </p>
-          <p className="text-xs">Made W/❤️ at the 🐻BeraDen</p>
+          <p className="text-xs">Made W/❤️ at the 🐻Beraden</p>
         </div>
       </div>
     </footer>

@@ -10,7 +10,7 @@ import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
-import { footerNavigation, navItems } from "~/app/config";
+import { navItems } from "~/app/config";
 import { cloudinaryUrl } from "~/config";
 import Providers from "./Providers";
 
@@ -42,7 +42,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 {props.children}
               </main>
               <Toaster position="bottom-right" />
-              <Footer navItem={footerNavigation} />
+              <Footer />
             </div>
 
             <Gradient

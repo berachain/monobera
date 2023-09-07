@@ -42,7 +42,7 @@ export default function Help() {
           </div>
           <div className="w-72 text-sm font-normal leading-normal text-muted-foreground">
             Are you a fellow builder in the making? Check out our docs and start
-            building on BeraChain today.
+            building on Berachain today.
           </div>
           <Button className="mt-8 w-fit">Checkout Docs</Button>
         </div>

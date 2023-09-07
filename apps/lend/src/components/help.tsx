@@ -35,7 +35,7 @@ export default function Help() {
           </p>
           <p className="mb-8 text-2xl font-semibold">
             Are you a fellow builder in the making? Check out our docs and start
-            building on BeraChain today.
+            building on Berachain today.
           </p>
           <Button className="w-fit" variant="outline">
             Checkout Docs

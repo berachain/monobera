@@ -42,7 +42,7 @@ export default function HowItWorks() {
           </h3>
           <p>
             Now that you&apos;ve got some interest bearing tokens you can use
-            these across the BeraChain&apos;s Defi ecosystem.
+            these across the Berachain&apos;s Defi ecosystem.
           </p>
         </div>
       </div>

@@ -12,13 +12,13 @@ export const usePollBribes = () => {
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
 
-  const method = "getAllBribeRewards";
+  const method = "previewClaimValidatorBribes";
   const QUERY_KEY = [method, account];
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       const result = (await publicClient.readContract({
-        address: process.env.NEXT_PUBLIC_ERC20_BRIBE_ADDRESS as Address,
+        address: process.env.NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address,
         abi: BRIBE_PRECOMPILE_ABI,
         functionName: method,
         args: [account],
@@ -70,7 +70,7 @@ export const usePollBribes = () => {
       return [...new Set(list.flat())];
     }, [data]);
   };
-  const useValidatorBribes = (validatorAddress: string, prices: any) => {
+  const useValidatorBribeTotal = (validatorAddress: string, prices: any) => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return useMemo(() => {
       if (data === undefined || prices === undefined) return 0;
@@ -91,7 +91,7 @@ export const usePollBribes = () => {
     }, [data, validatorAddress, prices]);
   };
 
-  const useValidatorBribeTokens = (validatorAddress: string) => {
+  const useValidatorUserBribes = (validatorAddress: string) => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return useMemo(() => {
       if (data === undefined) return [];
@@ -103,12 +103,13 @@ export const usePollBribes = () => {
       return entry.reward?.map((bribe: { token: string }) => bribe.token);
     }, [data]);
   };
+
   return {
     useBribes,
     useTotalBribes,
     useBribeTokens,
-    useValidatorBribes,
-    useValidatorBribeTokens,
+    useValidatorBribeTotal,
+    useValidatorUserBribes,
     isLoading,
     QUERY_KEY,
   };

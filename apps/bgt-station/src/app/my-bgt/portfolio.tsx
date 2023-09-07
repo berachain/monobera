@@ -72,13 +72,17 @@ export default function Portfolio() {
             Manage delegations
           </Button>
         </YellowCard>
-        <YellowCard className="justify-betwee flex flex-1 flex-col">
+        <YellowCard className="flex flex-1 flex-col justify-between">
           <div className="text-5xl font-bold leading-[48px] text-foreground">
             {formatUsd(totalBribes ?? 0)}
           </div>
-          <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
-            {/* this is so hard coded!! i hate myself */}
+          <div className="flex flex-col items-center py-[8px] text-center text-sm font-semibold leading-tight text-muted-foreground">
             <TokenIconList size="xl" tokenList={bribeTokenList} />
+            <p className="mt-1">
+              {bribeTokenList.length > 0
+                ? "in claimable rewards"
+                : "you have no rewards"}
+            </p>
           </div>
           <Button className="w-full max-w-[223px]">Claim</Button>
         </YellowCard>
