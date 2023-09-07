@@ -17,38 +17,39 @@ import { formatEther, type Address } from "viem";
 
 import { usePollPrices } from "~/hooks/usePollPrices";
 
-export default function ValidatorCard(validator: { validator: PoLValidator }) {
+export default function ValidatorCard({
+  validator,
+}: {
+  validator: PoLValidator;
+}) {
   const router = useRouter();
   const { mutate } = useSWRConfig();
   const { account } = useBeraJs();
 
   const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(
-    validator.validator.operatorAddr as Address,
+    validator.operatorAddr as Address,
   );
 
   const { useSelectedAccountDelegation } = usePollAccountDelegations(
-    validator.validator.operatorAddr as Address,
+    validator.operatorAddr as Address,
   );
   const userDelegated = useSelectedAccountDelegation();
 
   const { usePrices } = usePollPrices();
   const prices = usePrices();
-  const { useValidatorBribes, useValidatorBribeTokens, QUERY_KEY } =
+  const { useValidatorBribeTotal, useValidatorUserBribes, QUERY_KEY } =
     usePollBribes();
-  const bribeTotal = useValidatorBribes(
-    validator.validator.operatorAddr,
-    prices,
-  );
-  const bribeTokenList = useValidatorBribeTokens(
-    validator.validator.operatorAddr,
-  );
+
+  const bribeTotal = useValidatorBribeTotal(validator.operatorAddr, prices);
+  const userBribeTokenList = useValidatorUserBribes(validator.operatorAddr);
   const { write, ModalPortal } = useTxn({
     message: "Claiming bribes",
     onSuccess: () => {
       void mutate(QUERY_KEY);
     },
   });
+
   const valiInfo = [
     {
       title: (
@@ -76,9 +77,7 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
         </div>
       ),
       value: `${(
-        Number(
-          formatEther(validator.validator.commission.commissionRates.rate),
-        ) * 100
+        Number(formatEther(validator.commission.commissionRates.rate)) * 100
       ).toFixed(2)}%`,
     },
     {
@@ -87,7 +86,7 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
           vAPY <Tooltip text="projected measure of potential yearly earnings" />
         </div>
       ),
-      value: `${Number(validator.validator.vApy).toFixed(2)}%`,
+      value: `${Number(validator.vApy).toFixed(2)}%`,
     },
     {
       title: (
@@ -101,12 +100,12 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
   ];
 
   const claimBribe = () => {
-    console.log(account, validator.validator.operatorAddr);
+    console.log(account, validator.operatorAddr);
     write({
-      address: process.env.NEXT_PUBLIC_ERC20_BRIBE_ADDRESS as Address,
+      address: process.env.NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address,
       abi: BRIBE_PRECOMPILE_ABI,
-      functionName: "withdrawBribeRewards",
-      params: [account, validator.validator.operatorAddr],
+      functionName: "claimValidatorBribes",
+      params: [account, validator.operatorAddr],
     });
   };
   return (
@@ -114,11 +113,9 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
       {ModalPortal}
       <div className="flex items-center justify-center md:justify-between">
         <div className="flex items-center gap-3">
-          <ValidatorIcon
-            address={validator.validator.operatorAddr as Address}
-          />
+          <ValidatorIcon address={validator.operatorAddr as Address} />
           <div className="text-lg font-semibold leading-loose text-foreground md:text-2xl">
-            {validator.validator.description.moniker}
+            {validator.description.moniker}
           </div>
         </div>
         <div className="hidden items-center gap-4 md:flex">
@@ -127,7 +124,7 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=delegate&validator=${validator.validator.operatorAddr}`,
+                `/delegate?action=delegate&validator=${validator.operatorAddr}`,
               )
             }
           >
@@ -138,7 +135,7 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=redelegate&validator=${validator.validator.operatorAddr}`,
+                `/delegate?action=redelegate&validator=${validator.operatorAddr}`,
               )
             }
           >
@@ -149,13 +146,17 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=unbond&validator=${validator.validator.operatorAddr}`,
+                `/delegate?action=unbond&validator=${validator.operatorAddr}`,
               )
             }
           >
             Unbond <Icons.minus className="relative ml-1 h-4 w-4" />
           </Button>
-          <Button size="sm" onClick={claimBribe}>
+          <Button
+            disabled={userBribeTokenList.length === 0}
+            size="sm"
+            onClick={claimBribe}
+          >
             Claim Bribes
           </Button>
         </div>
@@ -178,7 +179,7 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
           ))}
         </div>
         <div className="mr-4 flex items-center gap-4">
-          <TokenIconList size="2xl" tokenList={bribeTokenList} />
+          <TokenIconList size="2xl" tokenList={validator.bribeTokenList} />
         </div>
         <div className="flex items-center justify-center gap-4 md:hidden">
           <Button
@@ -186,7 +187,7 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=delegate&validator=${validator.validator.operatorAddr}`,
+                `/delegate?action=delegate&validator=${validator.operatorAddr}`,
               )
             }
           >
@@ -197,7 +198,7 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=redelegate&validator=${validator.validator.operatorAddr}`,
+                `/delegate?action=redelegate&validator=${validator.operatorAddr}`,
               )
             }
           >
@@ -208,13 +209,17 @@ export default function ValidatorCard(validator: { validator: PoLValidator }) {
             variant="outline"
             onClick={() =>
               router.push(
-                `/delegate?action=unbond&validator=${validator.validator.operatorAddr}`,
+                `/delegate?action=unbond&validator=${validator.operatorAddr}`,
               )
             }
           >
             <Icons.minus className="relative h-4 w-4" />
           </Button>
-          <Button size="sm" onClick={claimBribe}>
+          <Button
+            disabled={userBribeTokenList.length === 0}
+            size="sm"
+            onClick={claimBribe}
+          >
             Claim Bribes
           </Button>
         </div>

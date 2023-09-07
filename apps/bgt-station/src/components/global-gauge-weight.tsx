@@ -82,6 +82,18 @@ const Gauge = ({ address }: { address: string | undefined }) => {
 export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
+  const [disableChecks, setDisableChecks] = React.useState<boolean>(false);
+
+  useEffect(() => {
+    console.log("updas");
+    setDisableChecks(
+      Object.values(filter).reduce(
+        (acc, curr) => acc + (curr === true ? 1 : 0),
+        0,
+      ) ===
+        cuttingBoardData.length - 1,
+    );
+  }, [JSON.stringify(filter)]);
 
   const handleCheckboxChange = (data: any) => {
     setFilter((prev) => ({
@@ -113,17 +125,23 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
           <Checkbox
             id={`dashboard-checkbox-${index}`}
             className="mx-auto"
+            disabled={
+              disableChecks &&
+              (filter[data.label] === undefined || filter[data.label] === false)
+            }
             onClick={() => handleCheckboxChange(data)}
           />
         ),
       })) ?? []
     );
-  }, [cuttingBoardData]);
+  }, [cuttingBoardData, disableChecks]);
 
   const pieData = React.useMemo(() => {
     const filteredData = cuttingBoardData?.filter(
       (data) => !filter[data.label],
     );
+
+    console.log(filteredData);
 
     return filteredData?.map((data) => ({
       label: truncateHash(data.label),
@@ -136,13 +154,20 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
     datasets: [
       {
         data: pieData?.map((d) => d.amount),
-        backgroundColor: pieData?.map((d) => uniqolor(d.label).color),
-        borderColor: pieData?.map((d) => uniqolor(d.label).color),
+        backgroundColor: pieData?.map(
+          (d) =>
+            uniqolor(d.label.slice(d.label.length - 4, d.label.length)).color,
+        ),
+        borderColor: pieData?.map(
+          (d) =>
+            uniqolor(d.label.slice(d.label.length - 4, d.label.length)).color,
+        ),
         borderWidth: 1,
       },
     ],
   };
 
+  console.log(dataP);
   return (
     <div className="mt-8 flex w-full flex-col items-center gap-16 md:flex-row ">
       <div className="flex w-[350px] items-center justify-center">

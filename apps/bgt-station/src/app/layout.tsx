@@ -11,7 +11,7 @@ import { Toaster } from "react-hot-toast";
 
 import { cloudinaryUrl } from "~/config";
 import Providers from "./Providers";
-import { footerNavigation, navItems } from "./config";
+import { navItems } from "./config";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -49,7 +49,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 {props.children}
               </main>
               <Toaster position="bottom-right" />
-              <Footer navItem={footerNavigation} />
+              <Footer />
             </div>
             <Gradient
               lightUrl={`${cloudinaryUrl}/shared/xrvkmr8yhvvyckxznty2`}

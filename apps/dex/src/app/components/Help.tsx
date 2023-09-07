@@ -42,7 +42,7 @@ export default function Help() {
               Are you a fellow builder in the making?{" "}
             </span>{" "}
             Check out our docs and start building{" "}
-            <span className="hidden md:block">on BeraChain today.</span>
+            <span className="hidden md:block">on Berachain today.</span>
           </p>
           <Button className="w-fit" variant="secondary">
             Checkout Docs

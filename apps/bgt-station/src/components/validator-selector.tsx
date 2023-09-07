@@ -121,30 +121,48 @@ const ValidatorModal = ({
   onSelect: (address: string) => void;
   // emptyMessage?: string;
 }) => {
+  const [search, setSearch] = React.useState("");
+
   const tableV = React.useMemo(
     () =>
-      validators.map((validator: PoLValidator) => ({
-        address: validator.operatorAddr,
-        validator: (
-          <div className="flex w-[100px] items-center gap-1">
-            <ValidatorIcon
-              address={validator.operatorAddr as Address}
-              className="h-8 w-8"
+      validators
+        .filter(
+          (v) =>
+            v.operatorAddr.includes(search) ||
+            v.description.moniker.includes(search),
+        )
+        .map((validator: PoLValidator) => ({
+          address: validator.operatorAddr,
+          validator: (
+            <div className="flex w-[100px] items-center gap-1">
+              <ValidatorIcon
+                address={validator.operatorAddr as Address}
+                className="h-8 w-8"
+              />
+              {validator.description.moniker}
+            </div>
+          ),
+          bgt_delegated: <BGTDelegated operatorAddr={validator.operatorAddr} />,
+          vp: (
+            <VP
+              operatorAddr={validator.operatorAddr}
+              tokens={validator.tokens}
             />
-            {validator.description.moniker}
-          </div>
-        ),
-        bgt_delegated: <BGTDelegated operatorAddr={validator.operatorAddr} />,
-        // vp: <VP validator={validator} />,
-        vp: 420,
-        commission: validator.commission.commissionRates.rate,
-        vapy: 6.9,
-        mwg: <ValidatorGauge address={validator.operatorAddr} />,
-        bribes: (
-          <TokenIconList showCount={3} tokenList={validator.bribeTokenList} />
-        ),
-      })),
-    [validators],
+          ),
+          commission: validator.commission.commissionRates.rate,
+          vapy: validator.vApy,
+          mwg: <ValidatorGauge address={validator.operatorAddr} />,
+          bribes:
+            validator.bribeTokenList.length !== 0 ? (
+              <TokenIconList
+                showCount={3}
+                tokenList={validator.bribeTokenList}
+              />
+            ) : (
+              <p>No bribes</p>
+            ),
+        })),
+    [validators, search],
   );
 
   return (
@@ -158,6 +176,8 @@ const ValidatorModal = ({
             <SearchInput
               placeholder="Search by name, address, or token"
               className="w-full md:w-[400px]"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
             {/* <div className="hidden gap-2 md:flex ">
               <Button size="sm" variant="secondary">

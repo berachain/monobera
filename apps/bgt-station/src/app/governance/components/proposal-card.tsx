@@ -4,7 +4,7 @@ import React from "react";
 import {
   beraToEth,
   truncateHash,
-  usePollProposal,
+  usePollProposalVotes,
   type Proposal,
 } from "@bera/berajs";
 import Identicon from "@bera/shared-ui/src/identicon";
@@ -129,7 +129,9 @@ const getDataList = (
 };
 
 export function ProposalCard({ proposal, onClick }: ProposalCard) {
-  const { useNormalizedTallyResult } = usePollProposal(Number(proposal.id));
+  const { useNormalizedTallyResult } = usePollProposalVotes(
+    Number(proposal.id),
+  );
   const normalizedTally = useNormalizedTallyResult();
   return (
     <div
