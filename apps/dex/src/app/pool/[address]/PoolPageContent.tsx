@@ -411,7 +411,19 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               }
             >
               <Icons.newspaper className="h-3 w-3" />
-              See Contract on {blockExplorerName}
+              See Pool on {blockExplorerName}
+              <Icons.external className="h-3 w-3" />
+            </div>
+            <div
+              className="hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex"
+              onClick={() =>
+                window.open(
+                  `${blockExplorerUrl}/address/${pool?.poolShareDenomHex}`,
+                )
+              }
+            >
+              <Icons.newspaper className="h-3 w-3" />
+              See LP Token on {blockExplorerName}
               <Icons.external className="h-3 w-3" />
             </div>
           </div>

@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import YellowCard from "~/components/yellow-card";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import AverageGaugeWeight from "./components/average-gauge-weight";
+import { ClaimBribesDialog } from "./components/claim-bribes-dialog";
 import UnbondingQueue from "./components/unbonding-queue";
 import YourDelegations from "./components/your-delegations";
 import { BGTSelectionEnum, type BGTselection } from "./types";
@@ -25,7 +26,7 @@ export default function Portfolio() {
   const [tab, setTab] = React.useState<BGTselection>(
     BGTSelectionEnum.YOUR_DELEGATIONS,
   );
-
+  const [open, setOpen] = React.useState(false);
   const { useDelegatorTotalDelegated, useTotalValidatorsDelegated } =
     usePollDelegatorValidators();
 
@@ -43,9 +44,10 @@ export default function Portfolio() {
 
   const { usePrices } = usePollPrices();
   const prices = usePrices();
-  const { useTotalBribes, useBribeTokens } = usePollBribes();
+  const { useTotalBribes, useBribeTokens, useBribes } = usePollBribes();
   const totalBribes = useTotalBribes(prices);
   const bribeTokenList = useBribeTokens();
+  const bribes = useBribes();
   return (
     <div className="container mb-[80px] max-w-[1078px]">
       <div className="mb-8 flex h-[100px] items-center justify-center text-3xl font-bold leading-[48px] text-foreground md:text-5xl">
@@ -84,7 +86,13 @@ export default function Portfolio() {
                 : "you have no rewards"}
             </p>
           </div>
-          <Button className="w-full max-w-[223px]">Claim</Button>
+          <ClaimBribesDialog
+            open={open}
+            setOpen={setOpen}
+            disabled={bribeTokenList.length === 0}
+            totalValue={totalBribes}
+            bribes={bribes}
+          />
         </YellowCard>
         <YellowCard
           tooltip="Total amount of BGT unbonding across all validators"

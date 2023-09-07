@@ -7,6 +7,25 @@ import { usePublicClient } from "wagmi";
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
+import { usePollActiveValidators } from "../staking";
+
+export interface RawBribe {
+  validator: string;
+  reward: {
+    amount: bigint;
+    token: string;
+  }[];
+}
+
+export interface FormattedBribe {
+  validatorName: string | undefined;
+  validatorAddress: string | undefined;
+  totalValue: number;
+  rewards: {
+    amount: number;
+    token: string;
+  }[];
+}
 
 export const usePollBribes = () => {
   const publicClient = usePublicClient();
@@ -26,7 +45,7 @@ export const usePollBribes = () => {
       return result;
     },
     {
-      refreshInterval: POLLING.NORMAL, // make it rlly slow TODO CHANGE
+      refreshInterval: POLLING.NORMAL,
     },
   );
 
@@ -104,12 +123,59 @@ export const usePollBribes = () => {
     }, [data]);
   };
 
+  const useFormattedValidatorUserBribes = (prices: any) => {
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    const { useActiveValidators } = usePollActiveValidators();
+    const activeValidators = useActiveValidators();
+    return useMemo(() => {
+      if (
+        data === undefined ||
+        prices === undefined ||
+        activeValidators === undefined
+      )
+        return [];
+      return data.map((bribe: RawBribe) => {
+        const validator = activeValidators.find(
+          (validator: any) =>
+            validator.operatorAddr.toLowerCase() ===
+            bribe.validator.toLowerCase(),
+        );
+        const total = bribe.reward?.reduce(
+          (acc: number, bribe: { amount: bigint; token: string }) => {
+            return (
+              acc +
+              Number(formatUnits(bribe.amount, 18)) *
+                prices[getAddress(bribe.token)]
+            );
+          },
+          0,
+        );
+
+        const formattedRewards = bribe.reward?.map(
+          (bribe: { amount: bigint; token: string }) => {
+            return {
+              amount: Number(formatUnits(bribe.amount, 18)),
+              token: bribe.token,
+              price: prices[getAddress(bribe.token)],
+            };
+          },
+        );
+        return {
+          validatorName: validator?.description.moniker,
+          validatorAddress: validator?.operatorAddr,
+          totalValue: total,
+          rewards: formattedRewards,
+        };
+      });
+    }, [data, prices, activeValidators]);
+  };
   return {
     useBribes,
     useTotalBribes,
     useBribeTokens,
     useValidatorBribeTotal,
     useValidatorUserBribes,
+    useFormattedValidatorUserBribes,
     isLoading,
     QUERY_KEY,
   };
