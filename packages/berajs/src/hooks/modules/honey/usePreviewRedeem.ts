@@ -35,7 +35,6 @@ export const usePollPreviewRedeem = (
           functionName: method,
           args: [collateral.address, formattedAmount],
         })) as any[];
-
         return result;
       } catch (e) {
         console.log("error", e);
@@ -51,7 +50,7 @@ export const usePollPreviewRedeem = (
   const usePreviewRedeem = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data
-      ? Number(formatUnits(data, collateral?.decimals ?? 18))
+      ? Number(formatUnits(data, (collateral?.decimals ?? 18) + 18))
       : undefined;
   };
   return {

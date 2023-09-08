@@ -39,8 +39,8 @@ export const usePollHoneyParams = () => {
       return p.collateral === collateral;
     });
     if (!honeyParams) return undefined;
-    const mintRate = formatUnits(honeyParams.mintRate, 18);
-    const redeemRate = formatUnits(honeyParams.redemptionRate, 18);
+    const mintRate = formatUnits(honeyParams.mintRate, 36);
+    const redeemRate = formatUnits(honeyParams.redemptionRate, 36);
     const mintFee = 1 - Number(mintRate);
     const redeemFee = 1 - Number(redeemRate);
     return {

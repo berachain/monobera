@@ -24,6 +24,9 @@ export const useHoneyEvents = () => {
         console.error(e);
       }
     },
+    {
+      refreshInterval: 10000,
+    },
   );
 
   const {

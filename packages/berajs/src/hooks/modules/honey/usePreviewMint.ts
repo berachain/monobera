@@ -50,7 +50,7 @@ export const usePollPreviewMint = (
   const usePreviewMint = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data
-      ? Number(formatUnits(data, collateral?.decimals ?? 18))
+      ? Number(formatUnits(data, (collateral?.decimals ?? 18) + 18))
       : undefined;
   };
   return {

@@ -23,7 +23,7 @@ export function MainNav({
   return (
     <nav
       className={cn(
-        "hidden items-center space-x-4 md:flex lg:space-x-2",
+        "hidden items-center space-x-4 lg:flex lg:space-x-2",
         className,
       )}
       {...props}

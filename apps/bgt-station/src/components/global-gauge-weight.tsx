@@ -140,11 +140,9 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
     const filteredData = cuttingBoardData?.filter(
       (data) => !filter[data.label],
     );
-
-    console.log(filteredData);
-
     return filteredData?.map((data) => ({
       label: truncateHash(data.label),
+      originalLabel: data.label,
       amount: data.amount,
     }));
   }, [cuttingBoardData, filter]);
@@ -154,14 +152,8 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
     datasets: [
       {
         data: pieData?.map((d) => d.amount),
-        backgroundColor: pieData?.map(
-          (d) =>
-            uniqolor(d.label.slice(d.label.length - 4, d.label.length)).color,
-        ),
-        borderColor: pieData?.map(
-          (d) =>
-            uniqolor(d.label.slice(d.label.length - 4, d.label.length)).color,
-        ),
+        backgroundColor: pieData?.map((d) => uniqolor(d.originalLabel).color),
+        borderColor: pieData?.map((d) => uniqolor(d.originalLabel).color),
         borderWidth: 1,
       },
     ],
