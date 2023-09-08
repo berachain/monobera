@@ -10,7 +10,7 @@ interface ITokenIconList {
 
 export function TokenIconList({
   tokenList,
-  showCount,
+  showCount = 3,
   size = "lg",
 }: ITokenIconList) {
   const length = tokenList?.length;
