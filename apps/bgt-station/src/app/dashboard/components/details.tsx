@@ -11,7 +11,11 @@ import { usePollPrices } from "~/hooks/usePollPrices";
 import { EpochTimeline } from "./epoch-timeline";
 import { Stats } from "./stats";
 
-export function Details() {
+export function Details({
+  avgValidatorUptime,
+}: {
+  avgValidatorUptime: string;
+}) {
   const { useTotalValidators } = usePollActiveValidators();
   const total = useTotalValidators();
   const { useBgtSupply } = usePollBgtSupply();
@@ -53,7 +57,7 @@ export function Details() {
           ))}
         </div>
       </div>
-      <Stats />
+      <Stats avgValidatorUptime={avgValidatorUptime} />
     </div>
   );
 }

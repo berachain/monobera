@@ -66,11 +66,11 @@ export default function Validator({
           </div>
 
           <div className="flex flex-col items-center justify-center gap-2">
-            <div className="text-sm font-medium leading-none text-muted-foreground">
+            {/* <div className="text-sm font-medium leading-none text-muted-foreground">
               Hex address: {truncateHash(validatorAddress, 6)}
-            </div>
+            </div> */}
             <div className="text-sm font-medium leading-none text-muted-foreground">
-              operator address:{" "}
+              Operator address:{" "}
               {validator
                 ? truncateHash(validator?.operatorAddr, 6)
                 : "Loading..."}

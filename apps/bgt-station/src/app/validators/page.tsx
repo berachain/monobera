@@ -41,6 +41,7 @@ export default async function Page() {
     }),
   );
 
+  console.log(data);
   return (
     <Validators
       activeGauges={data.uniqueGauges ?? 0}

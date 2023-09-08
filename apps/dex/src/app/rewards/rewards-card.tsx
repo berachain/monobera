@@ -4,10 +4,11 @@ import {
   REWARDS_PRECOMPILE_ABI,
   formatUsd,
   useBeraJs,
-  // usePollBgtRewards,
+  usePollBgtRewards,
 } from "@bera/berajs";
-import { useTxn } from "@bera/shared-ui";
+import { TokenIconList, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import { mutate } from "swr";
 import { type Address } from "wagmi";
 
 export default function RewardsCard({ pool }: { pool: Pool }) {
@@ -27,61 +28,58 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
     };
   }, []);
 
-  // const { useBgtRewards } = usePollBgtRewards(pool.pool);
-  // const bgtRewards = useBgtRewards();
+  const { useBgtRewards, QUERY_KEY } = usePollBgtRewards(pool.pool);
+  const bgtRewards = useBgtRewards();
 
   const { write, isLoading, ModalPortal } = useTxn({
     message: "Claiming BGT Rewards",
+    onSuccess: () => {
+      void mutate(QUERY_KEY);
+    },
   });
 
   const title = pool.poolName ?? "";
   return (
-    <div className="flex w-full items-center justify-between rounded-2xl border border-border bg-background p-4 md:p-6">
+    <div className="flex w-full flex-col items-center justify-between gap-4 rounded-2xl border border-border bg-background p-4 md:p-6 lg:flex-row">
       {ModalPortal}
-      <div className="flex w-[200px] flex-col gap-3">
+      <div className="flex w-full flex-row gap-3">
+        <TokenIconList tokenList={pool.tokens.map((t) => t.address)} />
         <div className="whitespace-nowrap text-xs font-medium leading-tight md:text-sm">
           {mobile && title.length > 19 ? title.slice(0, 19) + "..." : title}
         </div>
       </div>
 
-      <div className="flex min-w-[65px] flex-col gap-1">
-        <div className=" text-right text-sm font-semibold leading-tight md:text-lg md:leading-7">
-          {formatUsd(pool.userDeposited ?? 0)}
-        </div>
-        <div className="text-right text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
-          My TVL
-        </div>
-      </div>
-
-      <div className="flex min-w-[65px] flex-col gap-1">
-        <div className=" text-right text-sm font-semibold leading-tight md:text-lg md:leading-7">
-          {pool.bgtApy?.toFixed(2) ?? 0}%
-        </div>
-        <div className="text-right text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
-          Est. APY
-        </div>
-      </div>
-
-      {/* <div className="hidden flex-col gap-1 md:flex">
-        <div className="text-lg font-semibold leading-7">$690</div>
-        <div className="text-sm font-medium leading-tight text-muted-foreground">
-          Fees earned
-        </div>
-      </div> */}
-
-      <div className="flex items-center gap-4">
+      <div className="flex w-full flex-col justify-between gap-4 sm:flex-row md:justify-between">
         <div className="flex min-w-[65px] flex-col gap-1">
-          <div className=" text-right text-sm font-semibold leading-tight text-warning-foreground md:text-lg md:leading-7">
-            420.69
+          <div className=" text-left text-sm font-semibold leading-tight md:text-lg md:leading-7">
+            {formatUsd(pool.userDeposited ?? 0)}
           </div>
-          <div className="text-right text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
-            BGT earned
+          <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
+            My TVL
           </div>
         </div>
 
+        <div className="flex min-w-[65px] flex-col gap-1">
+          <div className=" text-left text-sm font-semibold leading-tight md:text-lg md:leading-7">
+            {pool.bgtApy?.toFixed(2) ?? 0}%
+          </div>
+          <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
+            Est. APY
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex min-w-[65px] flex-col gap-1">
+            <div className=" text-left text-sm font-semibold leading-tight text-warning-foreground md:text-lg md:leading-7">
+              {bgtRewards.toFixed(2)}
+            </div>
+            <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
+              BGT earned
+            </div>
+          </div>
+        </div>
         <Button
           variant={"warning"}
-          disabled={isLoading}
+          disabled={isLoading || bgtRewards === 0}
           className="px-2 text-sm leading-none md:px-4 md:text-lg md:leading-7"
           onClick={() => {
             write({

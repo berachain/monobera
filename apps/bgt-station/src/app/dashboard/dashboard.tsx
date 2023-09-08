@@ -16,7 +16,11 @@ export const metadata: Metadata = {
   description: "BGT Station",
 };
 
-export default function DashBoard() {
+export default function DashBoard({
+  avgValidatorUptime,
+}: {
+  avgValidatorUptime: string;
+}) {
   const { usePrices } = usePollPrices();
   const prices = usePrices();
   const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
@@ -59,7 +63,7 @@ export default function DashBoard() {
         <div className="text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
           A place for all your BGT
         </div>
-        <Details />
+        <Details avgValidatorUptime={avgValidatorUptime} />
       </div>
 
       <div>
