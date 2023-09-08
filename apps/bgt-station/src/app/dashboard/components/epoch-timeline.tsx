@@ -35,7 +35,12 @@ export function EpochTimeline() {
       const dateObject = new Date(unixTimestamp * 1000); // Convert to milliseconds
 
       const formatted = formatDistanceToNow(dateObject, { addSuffix: false });
-      setDuration(formatted);
+      console.log(formatted);
+      if (formatted === "less than a minute") {
+        setDuration(" <1 minute");
+      } else {
+        setDuration(formatted);
+      }
     },
     {
       refreshInterval: 5000,
@@ -50,7 +55,7 @@ export function EpochTimeline() {
         </div>
         <div className="flex-1">
           <div className="mb-1 flex justify-between text-xs font-medium text-muted-foreground">
-            <span>{progressPercentage.toFixed(2)}%</span>
+            <span>{progressPercentage.toFixed(0)}%</span>
             <span>{currentEpoch ? duration : "0d"} </span>
           </div>
           <Progress className="h-2" value={progressPercentage} />

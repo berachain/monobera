@@ -98,7 +98,7 @@ export default function ValidatorCard({
       value: `${formatUsd(bribeTotal ?? 0)}`,
     },
   ];
-
+  console.log("validator.bribeTokenList ", validator.bribeTokenList.length);
   const claimBribe = () => {
     console.log(account, validator.operatorAddr);
     write({
@@ -178,8 +178,13 @@ export default function ValidatorCard({
             </div>
           ))}
         </div>
-        <div className="mr-4 flex items-center gap-4">
-          <TokenIconList size="2xl" tokenList={validator.bribeTokenList} />
+        <div className="mr-4 flex flex-shrink-0 items-center gap-4">
+          {!validator.bribeTokenList ||
+          validator.bribeTokenList.length === 0 ? (
+            <div className="text-muted-foreground">~ No bribes ~</div>
+          ) : (
+            <TokenIconList size="2xl" tokenList={validator.bribeTokenList} />
+          )}
         </div>
         <div className="flex items-center justify-center gap-4 md:hidden">
           <Button

@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   truncateHash,
   useBeraJs,
@@ -21,7 +21,6 @@ import YourDelegations from "./components/your-delegations";
 import { BGTSelectionEnum, type BGTselection } from "./types";
 
 export default function Portfolio() {
-  const router = useRouter();
   const { account } = useBeraJs();
   const [tab, setTab] = React.useState<BGTselection>(
     BGTSelectionEnum.YOUR_DELEGATIONS,
@@ -67,12 +66,9 @@ export default function Portfolio() {
             across {Number.isNaN(totalValidators) ? 0 : totalValidators}{" "}
             validators
           </div>
-          <Button
-            variant="outline"
-            onClick={() => router.push("/delegate?action=redelegate")}
-          >
-            Manage delegations
-          </Button>
+          <Link href="/delegate?action=redelegate">
+            <Button variant="outline">Manage delegations</Button>
+          </Link>
         </YellowCard>
         <YellowCard className="flex flex-1 flex-col justify-between">
           <div className="text-5xl font-bold leading-[48px] text-foreground">
@@ -116,19 +112,48 @@ export default function Portfolio() {
         <div className="mx-auto">
           <Tabs value={tab}>
             <TabsList className="w-full">
-              {Object.values(BGTSelectionEnum).map((selection) => (
-                <TabsTrigger
-                  value={selection}
-                  key={selection}
-                  className="capitalize"
-                  onClick={() => setTab(selection)}
-                >
-                  <p className="w-24 overflow-hidden text-ellipsis sm:w-full">
-                    {" "}
-                    {selection.replaceAll("-", " ")}
-                  </p>
-                </TabsTrigger>
-              ))}
+              <TabsTrigger
+                value={BGTSelectionEnum.YOUR_DELEGATIONS}
+                className="capitalize"
+                onClick={() => setTab(BGTSelectionEnum.YOUR_DELEGATIONS)}
+              >
+                <p className="hidden text-ellipsis sm:block">
+                  {" "}
+                  {BGTSelectionEnum.YOUR_DELEGATIONS.replaceAll("-", " ")}
+                </p>
+                <p className="w-22 block overflow-hidden text-ellipsis sm:hidden">
+                  {" "}
+                  {BGTSelectionEnum.YOUR_DELEGATIONS.split("-")[1]}
+                </p>
+              </TabsTrigger>
+              <TabsTrigger
+                value={BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT}
+                className="capitalize"
+                onClick={() => setTab(BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT)}
+              >
+                <p className="hidden text-ellipsis sm:block">
+                  {" "}
+                  {BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT.replaceAll("-", " ")}
+                </p>
+                <p className="w-22 block overflow-hidden text-ellipsis sm:hidden">
+                  {" "}
+                  {BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT.split("-")[1]}
+                </p>
+              </TabsTrigger>
+              <TabsTrigger
+                value={BGTSelectionEnum.UNBONDING_QUEUE}
+                className="capitalize"
+                onClick={() => setTab(BGTSelectionEnum.UNBONDING_QUEUE)}
+              >
+                <p className="hidden text-ellipsis sm:block">
+                  {" "}
+                  {BGTSelectionEnum.UNBONDING_QUEUE.replaceAll("-", " ")}
+                </p>
+                <p className="w-22 block overflow-hidden text-ellipsis sm:hidden">
+                  {" "}
+                  {BGTSelectionEnum.UNBONDING_QUEUE.split("-")[0]}
+                </p>
+              </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
