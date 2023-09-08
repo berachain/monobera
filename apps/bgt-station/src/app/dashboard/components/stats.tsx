@@ -16,7 +16,7 @@ const SemiCircleProgress = dynamic(
   },
 );
 
-export function Stats() {
+export function Stats({ avgValidatorUptime }: { avgValidatorUptime: string }) {
   const { usePercentOfStakedBGT } = usePollActiveValidators();
   const percentOfStakedBGT = usePercentOfStakedBGT();
 
@@ -29,7 +29,7 @@ export function Stats() {
     <Card className="px-4 py-8 sm:px-16">
       <div className="flex flex-col items-center justify-between sm:flex-row">
         <SemiCircleProgress
-          percentage={80}
+          percentage={Number(avgValidatorUptime)}
           size={{
             width: 200,
             height: 200,

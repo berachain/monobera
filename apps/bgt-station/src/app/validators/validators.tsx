@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import {
   formatter,
@@ -11,6 +11,7 @@ import {
 import { Card } from "@bera/ui/card";
 
 import { cloudinaryUrl } from "~/config";
+import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import ValidatorsTable from "./validators-table";
 
@@ -55,7 +56,6 @@ console.log(`Percentage Change: ${percentageChange}`);
 
 export default function Validators({
   activeGauges,
-  oldBgtSupply,
 }: {
   activeGauges: number;
   oldBgtSupply: number | undefined;
@@ -68,7 +68,17 @@ export default function Validators({
   const prices = usePrices();
   const { useGlobalActiveBribeValue } = usePollGlobalValidatorBribes(prices);
   const totalBribeValue = useGlobalActiveBribeValue();
-  const percentage = calculatePercentageChange(oldBgtSupply, currentSupply);
+  const { data } = useGlobalValidatorGaugeWeight();
+
+  const inflation = useMemo(() => {
+    if (data === undefined || currentSupply === undefined) return 0;
+    const projectedBGTPerYear = data?.reduce((acc, cur) => {
+      return acc + cur.amount;
+    }, 0);
+    const inflation = ((projectedBGTPerYear ?? 0) / currentSupply) * 100;
+    return inflation;
+  }, [data, currentSupply]);
+
   const generalInfo = [
     {
       amount: Number.isNaN(totalValidators) ? 0 : totalValidators,
@@ -76,12 +86,14 @@ export default function Validators({
     },
     {
       amount: `$${
-        totalBribeValue === undefined ? 0 : formatter.format(totalBribeValue)
+        Number.isNaN(formatter.format(totalBribeValue))
+          ? 0
+          : formatter.format(totalBribeValue)
       }`,
       text: "In bribe rewards",
     },
     {
-      amount: percentage,
+      amount: inflation.toFixed(4) + "%",
       text: "BGT inflation rate",
     },
     {

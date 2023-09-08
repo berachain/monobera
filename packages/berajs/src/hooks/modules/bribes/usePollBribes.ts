@@ -24,6 +24,8 @@ export interface FormattedBribe {
   rewards: {
     amount: number;
     token: string;
+    price: number;
+    value: number;
   }[];
 }
 
@@ -36,13 +38,18 @@ export const usePollBribes = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
-      const result = (await publicClient.readContract({
-        address: process.env.NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address,
-        abi: BRIBE_PRECOMPILE_ABI,
-        functionName: method,
-        args: [account],
-      })) as any[];
-      return result;
+      try {
+        const result = (await publicClient.readContract({
+          address: process.env.NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address,
+          abi: BRIBE_PRECOMPILE_ABI,
+          functionName: method,
+          args: [account],
+        })) as any[];
+        return result;
+      } catch (e) {
+        console.log(e);
+        return undefined;
+      }
     },
     {
       refreshInterval: POLLING.NORMAL,
@@ -112,6 +119,7 @@ export const usePollBribes = () => {
 
   const useValidatorUserBribes = (validatorAddress: string) => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    console.log(data);
     return useMemo(() => {
       if (data === undefined) return [];
       const entry = data.find(
@@ -157,6 +165,9 @@ export const usePollBribes = () => {
               amount: Number(formatUnits(bribe.amount, 18)),
               token: bribe.token,
               price: prices[getAddress(bribe.token)],
+              value:
+                Number(formatUnits(bribe.amount, 18)) *
+                prices[getAddress(bribe.token)],
             };
           },
         );

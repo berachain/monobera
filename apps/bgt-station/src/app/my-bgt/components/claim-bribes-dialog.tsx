@@ -1,12 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  formatUsd,
-  usePollBribes,
-  useTokens,
-  type FormattedBribe,
-} from "@bera/berajs";
+import { formatUsd, usePollBribes, type FormattedBribe } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import {
   Accordion,
@@ -22,7 +17,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@bera/ui/dialog";
-import { getAddress } from "viem";
 
 import { usePollPrices } from "~/hooks/usePollPrices";
 
@@ -45,7 +39,6 @@ export function ClaimBribesDialog({
   const { useFormattedValidatorUserBribes } = usePollBribes();
   const formattedBribes: FormattedBribe[] =
     useFormattedValidatorUserBribes(prices);
-  const { tokenDictionary } = useTokens();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -71,10 +64,17 @@ export function ClaimBribesDialog({
             </span>
           </div>
         </div>
-        <Accordion type="multiple" className="flex-grow">
-          {formattedBribes.map((bribe: FormattedBribe) => {
+        <Accordion
+          type="multiple"
+          className="h-full"
+          defaultValue={formattedBribes.map((_, i) => i.toString())}
+        >
+          {formattedBribes.map((bribe: FormattedBribe, index) => {
             return (
-              <AccordionItem value="item-1" key={bribe.validatorAddress}>
+              <AccordionItem
+                value={index.toString()}
+                key={bribe.validatorAddress ?? `item-${index}`}
+              >
                 <AccordionTrigger>
                   <div className="flex w-full flex-row items-center justify-between text-sm">
                     {/* <Identicon account={getAddress(voter.voter)} />
@@ -85,20 +85,15 @@ export function ClaimBribesDialog({
                 </AccordionTrigger>
                 <AccordionContent className="flex w-full flex-col gap-4 text-xs font-medium leading-tight text-muted-foreground">
                   {bribe.rewards.map((reward) => {
-                    const token =
-                      tokenDictionary &&
-                      tokenDictionary[getAddress(reward.token)];
-                    const tokenAddress = token ? token.address : reward.token;
-                    console.log(tokenAddress);
                     return (
                       <div
                         className="mt-2 flex w-full flex-row justify-between"
                         key={reward.token}
                       >
                         <div>
-                          <TokenIcon address={tokenAddress} fetch size="xl" />
+                          <TokenIcon address={reward.token} fetch size="xl" />
                         </div>
-                        <p>{formatUsd(reward.amount)}</p>
+                        <p>{formatUsd(reward.value)}</p>
                       </div>
                     );
                   })}

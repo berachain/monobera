@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Icons } from "@bera/ui/icons";
 
-import { cloudinaryUrl } from "~/config";
+import { bgtDappUrl, cloudinaryUrl } from "~/config";
 
 export const Banner = () => {
   return (
@@ -30,15 +30,36 @@ export const Banner = () => {
 
         <div className="flex w-full justify-center gap-4 lg:justify-start">
           <div className="flex items-center gap-1 text-sm font-semibold leading-7 hover:cursor-pointer md:text-lg">
-            🐝 <span className="hover:underline"> Stake</span>
+            🐝{" "}
+            <span
+              className="hover:underline"
+              onClick={() => window.open(`${bgtDappUrl}/delegate`, "_blank")}
+            >
+              {" "}
+              Stake
+            </span>
             <Icons.external className="h-4 w-4" />
           </div>
           <div className="flex items-center gap-1 text-sm font-semibold leading-7 hover:cursor-pointer md:text-lg">
-            🔥 <span className="hover:underline"> Burn</span>{" "}
+            🔥{" "}
+            <span
+              className="hover:underline"
+              onClick={() => window.open(`${bgtDappUrl}/redeem`, "_blank")}
+            >
+              {" "}
+              Burn
+            </span>{" "}
             <Icons.external className="h-4 w-4" />
           </div>
           <div className="flex items-center gap-1 text-sm font-semibold leading-7 hover:cursor-pointer md:text-lg">
-            🗳️ <span className="hover:underline"> Vote</span>{" "}
+            🗳️{" "}
+            <span
+              className="hover:underline"
+              onClick={() => window.open(`${bgtDappUrl}/governance`, "_blank")}
+            >
+              {" "}
+              Vote
+            </span>{" "}
             <Icons.external className="h-4 w-4" />
           </div>
         </div>

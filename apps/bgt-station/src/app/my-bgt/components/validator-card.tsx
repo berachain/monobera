@@ -50,6 +50,7 @@ export default function ValidatorCard({
     },
   });
 
+  console.log(userBribeTokenList);
   const valiInfo = [
     {
       title: (

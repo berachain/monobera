@@ -15,24 +15,10 @@ export const Rewards = () => {
   );
   const userPools = useUserBgtDepositedPools();
 
-  console.log("userPools", userPools);
-  console.log("isLoading", isLoading);
   return (
     <div className="container max-w-[980px]">
       <Banner /> <br />
       <div className="flex flex-col gap-3">
-        <div className="flex w-full flex-col-reverse items-center justify-between gap-4 md:flex-row">
-          {/* <SearchInput
-            placeholder="Search by pool name, address, or token"
-            className="md:w-[400px]"
-          /> */}
-          {/* <Dropdown
-            selected={sortBy}
-            onSelect={setSortBy}
-            selectionList={selection}
-            className="block flex-shrink-0"
-          /> */}
-        </div>
         {!isLoading &&
           userPools?.map((pool: Pool) => (
             <RewardsCard pool={pool} key={pool.pool} />
