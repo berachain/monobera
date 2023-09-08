@@ -116,8 +116,6 @@ export const useUserGaugeWeight = () => {
 export const useValidatorGaugeWeight = (address: string) => {
   const { usePrices } = usePollPrices();
   const prices = usePrices();
-  console.log(address);
-  console.log(prices);
   const QUERY_KEY = ["user-gauge-weight", address, prices];
   return useSWR(
     QUERY_KEY,

@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "viem";
+import { formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { REWARDS_PRECOMPILE_ABI } from "~/config";
@@ -13,31 +13,31 @@ export const usePollBgtRewards = (receiver: string) => {
 
   const method = "getCurrentRewards";
   const QUERY_KEY = [method, account, receiver];
-  console.log(QUERY_KEY);
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       try {
         const result = (await publicClient.readContract({
-          address: process.env.NEXT_PUBLIC_ERC20_REWARDS_ADDRESS as Address,
+          address: process.env.NEXT_PUBLIC_REWARDS_ADDRESS as Address,
           abi: REWARDS_PRECOMPILE_ABI,
           functionName: method,
           args: [account, receiver],
         })) as any[];
-        return result;
+        return result[0].amount;
       } catch (e) {
         console.log(e);
         return undefined;
       }
     },
     {
-      refreshInterval: POLLING.NORMAL, // make it rlly slow TODO CHANGE
+      refreshInterval: POLLING.NORMAL,
     },
   );
 
   const useBgtRewards = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
+
+    return data === undefined ? 0 : Number(formatUnits(data, 18));
   };
 
   return {

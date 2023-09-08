@@ -30,6 +30,8 @@ export const usePollUserDepositedPools = (endpoint: string) => {
         const shareDenomArray: Address[] = pool.map(
           (item: any) => item.shareAddress,
         );
+
+        console.log(shareDenomArray);
         const call: Call[] = shareDenomArray.map((item: Address) => {
           return {
             abi: BANK_PRECOMPILE_ABI,
@@ -43,6 +45,7 @@ export const usePollUserDepositedPools = (endpoint: string) => {
           multicallAddress: networkConfig.precompileAddresses
             .multicallAddress as Address,
         });
+        console.log(result);
         // result[i] !== undefined &&
         // (result[i]?.result as unknown as bigint) !== 0n,
         const deposited = pool
@@ -55,6 +58,8 @@ export const usePollUserDepositedPools = (endpoint: string) => {
             };
           })
           .filter((pool: any) => pool.userDeposited !== 0);
+
+        console.log(deposited);
         return deposited;
       } catch (e) {
         return undefined;

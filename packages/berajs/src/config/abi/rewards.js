@@ -1,16 +1,108 @@
 export const REWARDS_PRECOMPILE_ABI = [
   {
-    inputs: [],
-    name: "erc20Module",
-    outputs: [
+    anonymous: false,
+    inputs: [
       {
-        internalType: "contract IERC20Module",
-        name: "",
+        indexed: true,
+        internalType: "address",
+        name: "caller",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "depositor",
+        type: "address",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
+        indexed: false,
+        internalType: "struct Cosmos.Coin[]",
+        name: "assets",
+        type: "tuple[]",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
+        indexed: false,
+        internalType: "struct Cosmos.Coin",
+        name: "shares",
+        type: "tuple",
+      },
+    ],
+    name: "InitializeDeposit",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "depositor",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "withdrawAddress",
         type: "address",
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    name: "SetDepositorWithdrawAddress",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "withdrawer",
+        type: "address",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
+        indexed: false,
+        internalType: "struct Cosmos.Coin[]",
+        name: "rewardAmount",
+        type: "tuple[]",
+      },
+    ],
+    name: "WithdrawDepositRewards",
+    type: "event",
   },
   {
     inputs: [
@@ -28,14 +120,21 @@ export const REWARDS_PRECOMPILE_ABI = [
     name: "getCurrentRewards",
     outputs: [
       {
-        internalType: "address[]",
-        name: "assets",
-        type: "address[]",
-      },
-      {
-        internalType: "uint256[]",
-        name: "amounts",
-        type: "uint256[]",
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
+        internalType: "struct Cosmos.Coin[]",
+        name: "",
+        type: "tuple[]",
       },
     ],
     stateMutability: "view",
@@ -53,19 +152,6 @@ export const REWARDS_PRECOMPILE_ABI = [
     outputs: [
       {
         internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "rewardsModule",
-    outputs: [
-      {
-        internalType: "contract IRewardsModule",
         name: "",
         type: "address",
       },
@@ -108,14 +194,21 @@ export const REWARDS_PRECOMPILE_ABI = [
     name: "withdrawDepositorRewards",
     outputs: [
       {
-        internalType: "address[]",
-        name: "assets",
-        type: "address[]",
-      },
-      {
-        internalType: "uint256[]",
-        name: "amounts",
-        type: "uint256[]",
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
+        internalType: "struct Cosmos.Coin[]",
+        name: "",
+        type: "tuple[]",
       },
     ],
     stateMutability: "nonpayable",

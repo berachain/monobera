@@ -85,7 +85,6 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
   const [disableChecks, setDisableChecks] = React.useState<boolean>(false);
 
   useEffect(() => {
-    console.log("updas");
     setDisableChecks(
       Object.values(filter).reduce(
         (acc, curr) => acc + (curr === true ? 1 : 0),
@@ -141,8 +140,6 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
       (data) => !filter[data.label],
     );
 
-    console.log(filteredData);
-
     return filteredData?.map((data) => ({
       label: truncateHash(data.label),
       amount: data.amount,
@@ -167,7 +164,6 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
     ],
   };
 
-  console.log(dataP);
   return (
     <div className="mt-8 flex w-full flex-col items-center gap-16 md:flex-row ">
       <div className="flex w-[350px] items-center justify-center">
