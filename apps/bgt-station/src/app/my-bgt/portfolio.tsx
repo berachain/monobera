@@ -1,5 +1,4 @@
-import React from "react";
-import Link from "next/link";
+import React, { useRef } from "react";
 import {
   truncateHash,
   useBeraJs,
@@ -21,6 +20,7 @@ import YourDelegations from "./components/your-delegations";
 import { BGTSelectionEnum, type BGTselection } from "./types";
 
 export default function Portfolio() {
+  const tabRef = useRef(null);
   const { account } = useBeraJs();
   const [tab, setTab] = React.useState<BGTselection>(
     BGTSelectionEnum.YOUR_DELEGATIONS,
@@ -47,6 +47,7 @@ export default function Portfolio() {
   const totalBribes = useTotalBribes(prices);
   const bribeTokenList = useBribeTokens();
   const bribes = useBribes();
+
   return (
     <div className="container mb-[80px] max-w-[1078px]">
       <div className="mb-8 flex h-[100px] items-center justify-center text-3xl font-bold leading-[48px] text-foreground md:text-5xl">
@@ -66,9 +67,16 @@ export default function Portfolio() {
             across {Number.isNaN(totalValidators) ? 0 : totalValidators}{" "}
             validators
           </div>
-          <Link href="/delegate?action=redelegate">
-            <Button variant="outline">Manage delegations</Button>
-          </Link>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setTab(BGTSelectionEnum.YOUR_DELEGATIONS);
+              tabRef.current && //@ts-ignore
+                tabRef.current.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            Manage delegations
+          </Button>
         </YellowCard>
         <YellowCard className="flex flex-1 flex-col justify-between">
           <div className="text-5xl font-bold leading-[48px] text-foreground">
@@ -102,7 +110,11 @@ export default function Portfolio() {
           </div>
           <Button
             variant="outline"
-            onClick={() => setTab(BGTSelectionEnum.UNBONDING_QUEUE)}
+            onClick={() => {
+              setTab(BGTSelectionEnum.UNBONDING_QUEUE);
+              tabRef.current && //@ts-ignore
+                tabRef.current.scrollIntoView({ behavior: "smooth" });
+            }}
           >
             See my queue
           </Button>
@@ -110,7 +122,7 @@ export default function Portfolio() {
       </div>
       <div className="mt-16 flex flex-col gap-4">
         <div className="mx-auto">
-          <Tabs value={tab}>
+          <Tabs value={tab} ref={tabRef}>
             <TabsList className="w-full">
               <TabsTrigger
                 value={BGTSelectionEnum.YOUR_DELEGATIONS}

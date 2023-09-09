@@ -111,14 +111,7 @@ export default function Validator({
         </div>
         <ValidatorGaugeWeightInfo validatorAddress={validatorAddress} />
       </div>
-
-      <div className="">
-        <div className="mb-4 flex items-center text-lg font-semibold leading-7">
-          Bribes
-        </div>
-        <BribeList validatorAddress={validatorAddress} />
-      </div>
-
+      <BribeList validatorAddress={validatorAddress} />
       <ValidatorActivitiesTable validatorAddress={validatorAddress} />
     </div>
   );

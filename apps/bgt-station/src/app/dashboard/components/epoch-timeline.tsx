@@ -33,9 +33,7 @@ export function EpochTimeline() {
       }
       const unixTimestamp = currentEpoch?.endTime || 0;
       const dateObject = new Date(unixTimestamp * 1000); // Convert to milliseconds
-
       const formatted = formatDistanceToNow(dateObject, { addSuffix: false });
-      console.log(formatted);
       if (formatted === "less than a minute") {
         setDuration(" <1 minute");
       } else {
