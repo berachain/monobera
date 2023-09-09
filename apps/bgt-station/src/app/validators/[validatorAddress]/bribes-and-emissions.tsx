@@ -13,7 +13,7 @@ import { Icons } from "@bera/ui/icons";
 import { type Address } from "viem";
 
 import YellowCard from "~/components/yellow-card";
-import { generateRandomData } from "~/app/governance/home/mockData";
+import { type FormattedHistoricalBribes } from "~/hooks/useHistoricalBribes";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import { TimeFrameEnum } from "./types";
 
@@ -78,17 +78,12 @@ const Options = {
   },
 };
 
-const getChartData = (
-  data: {
-    amount: number;
-    voter: string;
-  }[],
-) => {
+const getChartData = (data: FormattedHistoricalBribes[]) => {
   return {
-    labels: data.map((da, _) => `${da.amount} BGT  ${da.voter}`),
+    labels: data?.map((da, _) => `${da.value} BGT  ${da.epoch}`),
     datasets: [
       {
-        data: data.map((d) => d.amount),
+        data: data?.map((d) => d.value),
         labelColor: false,
         backgroundColor: "#78716C",
         borderColor: "#78716C",
@@ -100,10 +95,33 @@ const getChartData = (
   };
 };
 
+const getHistoryInterval = (
+  historicalBribes: FormattedHistoricalBribes[],
+  timeframe: TimeFrameEnum,
+) => {
+  if (historicalBribes === undefined) return [];
+  let historyInterval = [...historicalBribes];
+  if (timeframe === TimeFrameEnum.ONE_HUNDERED_EPOCHS) {
+    historyInterval = historyInterval.slice(0, 100);
+  }
+  if (timeframe === TimeFrameEnum.FIFTY_EPOCHS) {
+    historyInterval = historyInterval.slice(0, 50);
+  }
+  if (timeframe === TimeFrameEnum.TEN_EPOCHS) {
+    historyInterval = historyInterval.slice(0, 10);
+  }
+  console.log(historyInterval);
+
+  return historyInterval.reverse();
+};
 export default function BribesAndEmissions({
   validatorAddress,
+  historicalBribes,
+  isLoading,
 }: {
   validatorAddress: Address | undefined;
+  historicalBribes: FormattedHistoricalBribes[];
+  isLoading: boolean;
 }) {
   const { useActiveValidatorBribesTotalValue } =
     usePollValidatorBribes(validatorAddress);
@@ -113,8 +131,8 @@ export default function BribesAndEmissions({
   const [timeframe, setTimeframe] = React.useState(TimeFrameEnum.ALL_TIME);
 
   const chartData = useMemo(
-    () => getChartData(generateRandomData()),
-    [timeframe],
+    () => getChartData(getHistoryInterval(historicalBribes, timeframe)),
+    [timeframe, historicalBribes],
   );
 
   return (
@@ -156,7 +174,10 @@ export default function BribesAndEmissions({
             </DropdownMenu>
           </div>
           <div className="mt-4 h-[142px]">
-            <BeraChart data={chartData} options={Options as any} type="bar" />
+            {!isLoading && (
+              <BeraChart data={chartData} options={Options as any} type="bar" />
+            )}
+            {isLoading && <>Loading...</>}
           </div>
         </Card>
       </div>

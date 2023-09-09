@@ -63,11 +63,17 @@ export const delegators_columns: ColumnDef<any>[] = [
 
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="BGT amount" />
+      <DataTableColumnHeader
+        column={column}
+        title="BGT amount"
+        className="flex justify-end"
+      />
     ),
     cell: ({ row }) => {
       return (
-        <div className="w-[200px] text-right">{row.original.bgt_amount}</div>
+        <div className="flex w-full justify-end text-right">
+          {row.original.bgt_amount}
+        </div>
       );
     },
     accessorKey: "bgt_amount",

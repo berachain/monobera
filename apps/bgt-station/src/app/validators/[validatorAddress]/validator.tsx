@@ -12,6 +12,10 @@ import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits, type Address } from "viem";
 
+import {
+  useHistoricalBribes,
+  type FormattedHistoricalBribes,
+} from "~/hooks/useHistoricalBribes";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import BribeList from "./bribe-list";
 import BribesAndEmissions from "./bribes-and-emissions";
@@ -22,8 +26,10 @@ import ValidatorGaugeWeightInfo from "./validator-gauge-weight";
 
 export default function Validator({
   validatorAddress,
+  allEpochs,
 }: {
   validatorAddress: Address;
+  allEpochs: any;
 }) {
   const router = useRouter();
   const { usePrices } = usePollPrices();
@@ -32,6 +38,7 @@ export default function Validator({
   const validator = usePolValidator(validatorAddress);
   const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(validatorAddress);
+  const { data, isLoading } = useHistoricalBribes(allEpochs);
 
   return (
     <div className="container relative mb-10 flex max-w-[1078px] flex-col gap-16">
@@ -99,11 +106,16 @@ export default function Validator({
             uptime={"99%"}
             votingPower={`${percentageDelegated?.toFixed(2) ?? 0}%`}
             website={validator?.description.website ?? ""}
+            vApy={validator?.vApy ? validator.vApy.toFixed(2) : "0"}
           />
           <Uptime address={validatorAddress} />
         </div>
       </div>
-      <BribesAndEmissions validatorAddress={validatorAddress} />
+      <BribesAndEmissions
+        validatorAddress={validatorAddress}
+        historicalBribes={data as FormattedHistoricalBribes[]}
+        isLoading={isLoading}
+      />
 
       <div className="">
         <div className="mb-4 flex items-center text-lg font-semibold leading-7">

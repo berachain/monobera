@@ -1,5 +1,5 @@
 import { type Pool, type RouterService } from "@bera/bera-router";
-import { parseUnits } from "viem";
+import { getAddress, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { honeyAddress } from "../../config";
@@ -8,7 +8,7 @@ export interface MappedTokens {
   [key: string]: number;
 }
 
-const BASE_TOKEN = honeyAddress;
+const BASE_TOKEN = getAddress(honeyAddress);
 
 export const getBaseTokenPrice = async (
   pools: Pool[],

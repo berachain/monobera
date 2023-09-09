@@ -99,7 +99,6 @@ export function OverviewChart({
   votes: IVote[];
   isLoading: boolean;
 }) {
-  console.log(isLoading);
   const [voteType, setVoteType] = React.useState<any>("all");
 
   const chartData = useMemo(
@@ -132,7 +131,10 @@ export function OverviewChart({
       </Tabs>
 
       <div className="mt-[50px] h-[152px] w-full">
-        <BeraChart data={chartData} options={Options as any} type="bar" />
+        {!isLoading && (
+          <BeraChart data={chartData} options={Options as any} type="bar" />
+        )}
+        {isLoading && <p>Loading...</p>}
       </div>
     </Card>
   );
