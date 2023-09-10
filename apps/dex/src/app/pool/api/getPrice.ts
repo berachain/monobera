@@ -161,6 +161,22 @@ export const getWBeraPriceDictForPoolTokens = async (
         },
       );
 
+      // const fromTime = Math.floor(Date.now() / 1000) - 86400 * 90;
+      // const now = Math.floor(Date.now() / 1000);
+      // const quarterlyTvlResponse = fetch(
+      //   `${
+      //     process.env.NEXT_PUBLIC_ANALYTICS
+      //   }/analytics/tvldaily?pool=${getAddress(
+      //     pool.pool,
+      //   )}&fromTime=${fromTime}&toTime=${now}`,
+      //   {
+      //     cache: "force-cache",
+      //     next: {
+      //       revalidate: 60,
+      //     },
+      //   },
+      // );
+
       const volumePromises = Promise.all([
         dailyVolumeResponse,
         weeklyVolumeResponse,

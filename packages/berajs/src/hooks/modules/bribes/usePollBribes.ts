@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, getAddress, type Address } from "viem";
-import { usePublicClient } from "wagmi";
+import { formatUnits, getAddress } from "viem";
+import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraJs } from "~/contexts";
+import { useBeraConfig, useBeraJs } from "~/contexts";
 import { usePollActiveValidators } from "../staking";
 
 export interface RawBribe {
@@ -96,6 +96,61 @@ export const usePollBribes = () => {
       return [...new Set(list.flat())];
     }, [data]);
   };
+
+  interface Call {
+    abi: typeof erc20ABI;
+    address: `0x${string}`;
+    functionName: string;
+    args: any[];
+  }
+
+  const useBribeTokensSymbol = () => {
+    const tokens = useBribeTokens();
+    const { networkConfig } = useBeraConfig();
+    const QUERY_KEY = ["useBribeTokensSymbol", tokens];
+    const { data, isLoading } = useSWRImmutable(QUERY_KEY, async () => {
+      if (tokens === undefined || tokens.length === 0) return [];
+      const call: Call[] = tokens?.map((address: string) => ({
+        address: address as Address,
+        abi: erc20ABI,
+        functionName: "symbol",
+        args: [],
+      }));
+
+      const result = await publicClient.multicall({
+        contracts: call,
+        multicallAddress: networkConfig.precompileAddresses
+          .multicallAddress as Address,
+      });
+
+      const symbolDictionary: Record<string, string> = {};
+      result.forEach((res: any, index) => {
+        symbolDictionary[tokens[index]] = res.result;
+      });
+
+      return symbolDictionary;
+    });
+    return { data, isLoading };
+    // const publicClient = usePublicClient();
+    // const { networkConfig } = useBeraConfig();
+    // return useMemo(async () => {
+    // console.log(tokens);
+    //   const call: Call[] = tokens?.map((address: string) => ({
+    //     address: address as `0x${string}`,
+    //     abi: erc20ABI,
+    //     functionName: "symbol",
+    //     args: [address],
+    //   }));
+    //     const result = await publicClient.multicall({
+    //       contracts: call,
+    //       multicallAddress: networkConfig.precompileAddresses
+    //         .multicallAddress as Address,
+    //     });
+
+    //   console.log(result);
+
+    // }, [tokens])
+  };
   const useValidatorBribeTotal = (validatorAddress: string, prices: any) => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return useMemo(() => {
@@ -119,7 +174,6 @@ export const usePollBribes = () => {
 
   const useValidatorUserBribes = (validatorAddress: string) => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    console.log(data);
     return useMemo(() => {
       if (data === undefined) return [];
       const entry = data.find(
@@ -187,6 +241,7 @@ export const usePollBribes = () => {
     useValidatorBribeTotal,
     useValidatorUserBribes,
     useFormattedValidatorUserBribes,
+    useBribeTokensSymbol,
     isLoading,
     QUERY_KEY,
   };
