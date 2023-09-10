@@ -247,7 +247,7 @@ export const PoolChart = ({
           <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
             <TabsList>
               <TabsTrigger value={Chart.VOLUME}>Volume</TabsTrigger>
-              <TabsTrigger value={Chart.TVL}>TVL</TabsTrigger>
+              {/* <TabsTrigger value={Chart.TVL}>TVL</TabsTrigger> */}
               <TabsTrigger value={Chart.FEES}>Fees</TabsTrigger>
             </TabsList>
             {/* <Select

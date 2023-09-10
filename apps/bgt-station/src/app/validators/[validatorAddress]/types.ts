@@ -1,7 +1,6 @@
 export enum TimeFrameEnum {
-  TWENTY_FOUR_HOURS = "24-hours",
-  SEVEN_DAYS = "7-days",
-  ONE_MONTH = "1-month",
-  ONE_YEAR = "1-year",
-  ALL_TIME = "all-time",
+  TEN_EPOCHS = "10-Epochs",
+  FIFTY_EPOCHS = "50-Epochs",
+  ONE_HUNDERED_EPOCHS = "100-Epochs",
+  ALL_TIME = "All-Time",
 }

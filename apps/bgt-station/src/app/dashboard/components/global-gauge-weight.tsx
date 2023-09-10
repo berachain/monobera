@@ -8,7 +8,6 @@ export default function GlobalGaugeWeightInfo() {
   const { usePrices } = usePollPrices();
   const prices = usePrices();
   const { data, isLoading } = useGlobalValidatorGaugeWeight();
-  console.log(data);
   return (
     <div>
       <>

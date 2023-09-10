@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import {
+  BRIBE_PRECOMPILE_ABI,
   truncateHash,
   useBeraJs,
   usePollBribes,
@@ -8,9 +9,10 @@ import {
   usePollDelegatorValidators,
 } from "@bera/berajs";
 import { formatUsd } from "@bera/berajs/src/utils";
-import { TokenIconList } from "@bera/shared-ui";
+import { TokenIconList, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { type Address } from "viem";
 
 import YellowCard from "~/components/yellow-card";
 import { usePollPrices } from "~/hooks/usePollPrices";
@@ -48,8 +50,16 @@ export default function Portfolio() {
   const totalBribes = useTotalBribes(prices);
   const bribeTokenList = useBribeTokens();
   const bribes = useBribes();
+  const { write, isLoading, ModalPortal } = useTxn({
+    message: `Claiming all bribes`,
+    onSuccess: () => {
+      setOpen(false);
+    },
+  });
+
   return (
     <div className="container mb-[80px] max-w-[1078px]">
+      {ModalPortal}
       <div className="mb-8 flex h-[100px] items-center justify-center text-3xl font-bold leading-[48px] text-foreground md:text-5xl">
         👋 Hey {truncateHash(account ?? "0x", 6)} you have...
       </div>
@@ -92,6 +102,16 @@ export default function Portfolio() {
             disabled={bribeTokenList.length === 0}
             totalValue={totalBribes}
             bribes={bribes}
+            write={() => {
+              write({
+                address: process.env
+                  .NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address,
+                abi: BRIBE_PRECOMPILE_ABI,
+                functionName: "claimAllBribes",
+                params: [account],
+              });
+            }}
+            isLoading={isLoading}
           />
         </YellowCard>
         <YellowCard

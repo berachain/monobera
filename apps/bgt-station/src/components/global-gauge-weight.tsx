@@ -86,11 +86,12 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
 
   useEffect(() => {
     setDisableChecks(
-      Object.values(filter).reduce(
-        (acc, curr) => acc + (curr === true ? 1 : 0),
-        0,
-      ) ===
-        cuttingBoardData.length - 1,
+      cuttingBoardData.length === 1 ||
+        Object.values(filter).reduce(
+          (acc, curr) => acc + (curr === true ? 1 : 0),
+          0,
+        ) ===
+          cuttingBoardData.length - 1,
     );
   }, [JSON.stringify(filter)]);
 
