@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
   usePollProposal,
@@ -39,7 +39,7 @@ export default function ProposalDetails({
   const votes = useProposalVotes();
   const totalVotes = useTotalProposalVotes();
   const normalizedTally = useNormalizedTallyResult();
-  const router = useRouter();
+
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 
@@ -53,13 +53,13 @@ export default function ProposalDetails({
       {ModalPortal}
       <div className="mx-auto h-fit w-full max-w-[830px]">
         <div className="flex h-11 w-full justify-between hover:cursor-pointer">
-          <div
+          <Link
+            href="/governance"
             className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground"
-            onClick={() => router.push("/governance")}
           >
             <Icons.arrowLeft className="relative h-4 w-4" />
             Governance
-          </div>
+          </Link>
           <div className="flex items-center gap-3">
             {proposal?.status ===
               ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD && (

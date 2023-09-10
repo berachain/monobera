@@ -21,10 +21,10 @@ export enum OrderByEnum {
 }
 
 export enum ProposalTypeEnum {
-  TEXT_PROPOSAL = "text",
-  NEW_GAUGE_PROPOSAL = "new-gauge-proposal",
-  NEW_COLLATERAL_PROPOSAL = "new-collateral-proposal",
-  NEW_MARKET_COLLATERAL_PROPOSAL = "new-market-collateral-proposal",
+  TEXT_PROPOSAL = "text-proposal",
+  GAUGE_PROPOSAL = "gauge-proposal",
+  COLLATERAL_PROPOSAL = "collateral-proposal",
+  MARKET_COLLATERAL_PROPOSAL = "market-collateral-proposal",
 }
 
 export type ParameterChangeLine = {

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   usePollAllProposals,
@@ -83,19 +84,19 @@ export default function GovernanceByStatus({
         create your own
       </div>
       <div className="mx-auto mb-8 mt-6 flex w-[165px] flex-col justify-center gap-3 sm:w-full sm:flex-row">
-        <Button onClick={() => router.push(`/governance/create`)}>
-          Create proposal
-        </Button>
+        <Link href="/governance/create">
+          <Button>Create proposal</Button>
+        </Link>
         <Button variant="outline">Visit forums</Button>
       </div>
       <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 sm:flex-row">
-        <Tabs defaultValue={proposalStatus}>
-          <TabsList>
+        <Tabs defaultValue={proposalStatus} className="w-full sm:w-fit">
+          <TabsList className="w-full sm:w-fit">
             {Object.values(StatusEnum).map((status) => (
               <TabsTrigger
                 value={status}
                 key={status}
-                className="capitalize"
+                className="flex-1 capitalize"
                 onClick={() =>
                   router.push(
                     `/governance?proposalStatus=${status}&orderBy=${orderBy}`,
@@ -111,7 +112,7 @@ export default function GovernanceByStatus({
           Order by
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-xl border border-border p-2 text-sm font-medium capitalize leading-[14px] text-foreground">
+              <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-xl border border-border bg-background p-2 text-sm font-medium capitalize leading-[14px] text-foreground hover:cursor-pointer">
                 {orderBy.replaceAll("-", " ")}
                 <Icons.chevronDown className="relative h-3 w-3 text-foreground" />
               </div>
@@ -119,6 +120,7 @@ export default function GovernanceByStatus({
             <DropdownMenuContent className="w-56">
               {Object.values(OrderByEnum).map((order) => (
                 <DropdownMenuCheckboxItem
+                  className="hover:text-foreground"
                   checked={order === orderBy}
                   key={order}
                   onClick={() =>

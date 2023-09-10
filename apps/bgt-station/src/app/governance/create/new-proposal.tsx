@@ -2,15 +2,20 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { GOVERNANCE_PRECOMPILE_ABI, usePollBgtBalance } from "@bera/berajs";
-import { Tooltip, useTxn } from "@bera/shared-ui";
+import {
+  GOVERNANCE_PRECOMPILE_ABI,
+  useBeraJs,
+  usePollBgtBalance,
+} from "@bera/berajs";
+import { ConnectButton, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
 import {
@@ -42,6 +47,7 @@ import { useCreateProposal } from "./useCreateProposal";
 
 export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const router = useRouter();
+  const { isConnected } = useBeraJs();
   const triggerRef = useRef<HTMLDivElement>(null);
   const [_contentWidth, setContentWidth] = useState("w-[450px]");
   const { useBgtBalance } = usePollBgtBalance();
@@ -135,21 +141,20 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     <div className="mx-auto  w-full max-w-[564px] pb-16">
       {ModalPortal}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} id="proposal">
           <Image
             className="max-[600px]:mx-auto"
             src={`${cloudinaryUrl}/bears/pgnhgjsm1si8gb2bdm1m`}
             alt="proposal-bear"
-            width={269.75}
+            width={350}
             height={174}
           />
           <Card className=" flex flex-col justify-start gap-8 p-6">
             <div className="relative text-lg font-semibold leading-7 text-foreground">
               New proposal
-              <Icons.close
-                className="absolute right-0 top-0 h-5 w-5 hover:cursor-pointer"
-                onClick={() => router.push(`/governance`)}
-              />
+              <Link href="/governance">
+                <Icons.close className="absolute right-0 top-0 h-5 w-5 hover:cursor-pointer" />
+              </Link>
             </div>
             <div className="inline-flex flex-col justify-start gap-2">
               <div className="text-sm font-semibold leading-tight">
@@ -171,17 +176,18 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-full">
                   {Object.values(ProposalTypeEnum).map(
-                    (type: ProposalTypeEnum) => (
-                      <DropdownMenuItem
-                        key={`proposal-option-${type}`}
+                    (typeT: ProposalTypeEnum) => (
+                      <DropdownMenuCheckboxItem
+                        key={`proposal-option-${typeT}`}
                         onClick={() => {
-                          router.push(`/governance/create?type=${type}`);
+                          router.push(`/governance/create?type=${typeT}`);
                           // form.setValue("type", type);
                         }}
-                        className="w-full capitalize"
+                        checked={type === typeT}
+                        className="w-full capitalize hover:text-foreground"
                       >
-                        {type.replaceAll("-", " ")}
-                      </DropdownMenuItem>
+                        {typeT.replaceAll("-", " ")}
+                      </DropdownMenuCheckboxItem>
                     ),
                   )}
                 </DropdownMenuContent>
@@ -270,32 +276,38 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                       />
                     </FormControl>
                     <FormMessage className="mt-2" />
-                    <div className="absolute right-1 mt-2 flex h-3 w-fit items-center gap-1 text-[10px] text-muted-foreground">
-                      <Icons.wallet className="relative inline-block h-3 w-3 " />
-                      {userBalance}
-                      <span
-                        className="underline hover:cursor-pointer"
-                        onClick={() => {
-                          form.setValue("initialDeposit", userBalance);
-                        }}
-                      >
-                        Fill Deposit
-                      </span>
-                    </div>
+                    {isConnected && (
+                      <div className="absolute right-1 mt-2 flex h-3 w-fit items-center gap-1 text-[10px] text-muted-foreground">
+                        <Icons.wallet className="relative inline-block h-3 w-3 " />
+                        {userBalance}
+                        <span
+                          className="underline hover:cursor-pointer"
+                          onClick={() => {
+                            form.setValue("initialDeposit", userBalance);
+                          }}
+                        >
+                          Fill Deposit
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </FormItem>
               )}
             />
-            {type === ProposalTypeEnum.NEW_GAUGE_PROPOSAL && (
+            {type === ProposalTypeEnum.GAUGE_PROPOSAL && (
               <NewGaugeForm form={form} />
             )}
-            {type === ProposalTypeEnum.NEW_COLLATERAL_PROPOSAL && (
+            {type === ProposalTypeEnum.COLLATERAL_PROPOSAL && (
               <NewCollateralForm form={form} />
             )}
-            {type === ProposalTypeEnum.NEW_MARKET_COLLATERAL_PROPOSAL && (
+            {type === ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL && (
               <NewMarketCollateralForm form={form} />
             )}
-            <Button type="submit">Submit</Button>
+            {isConnected ? (
+              <Button type="submit">Submit</Button>
+            ) : (
+              <ConnectButton />
+            )}
           </Card>
         </form>
       </Form>
