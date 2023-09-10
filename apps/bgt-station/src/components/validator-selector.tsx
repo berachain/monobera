@@ -60,7 +60,7 @@ export default function ValidatorSelector({
     <div>
       <Button
         variant="outline"
-        className="bg-background shadow"
+        className="border-border bg-background shadow"
         onClick={() => setOpen(true)}
       >
         {validValidator ? (

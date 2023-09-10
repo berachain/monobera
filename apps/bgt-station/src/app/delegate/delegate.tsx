@@ -5,11 +5,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   useBeraConfig,
+  useBeraJs,
   usePollAccountDelegations,
   usePollBgtBalance,
 } from "@bera/berajs";
 import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
-import { useTxn } from "@bera/shared-ui";
+import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
@@ -30,6 +31,7 @@ export default function Delegate({
   validator: Address;
   redelegateValidator: string;
 }) {
+  const { isConnected } = useBeraJs();
   const router = useRouter();
   const [amount, setAmount] = React.useState("0.0");
   const [activeAction, setActiveAction] = React.useState<DelegateEnum>(action);
@@ -144,7 +146,7 @@ export default function Delegate({
         />
         {action === DelegateEnum.REDELEGATE && (
           <>
-            <Icons.chevronsDown className=" relative mx-auto h-6 w-6 text-primary-foreground" />
+            <Icons.chevronsDown className="relative mx-auto h-6 w-6 text-border" />
             <ValidatorInput
               action={action}
               amount={amount}
@@ -174,60 +176,65 @@ export default function Delegate({
           )}
         </div> */}
 
-        {getExceeding() && (
+        {getExceeding() && isConnected && (
           <Alert variant="destructive">
             {activeAction === DelegateEnum.DELEGATE
               ? `This amount exceeds your total balance of ${bgtBalance} BGT`
               : "Insufficient BGT delegated"}
           </Alert>
         )}
-        <Button
-          disabled={
-            !validator || // no validator selected
-            isDelegatingLoading || // delegate action processing
-            isUnbondLoading || // unbond action processing
-            isRedelegateLoading || // redelegate action processing
-            getDisabled()
-          }
-          onClick={() => {
-            switch (action) {
-              case DelegateEnum.DELEGATE:
-                write({
-                  address: networkConfig.precompileAddresses
-                    .stakingAddress as Address,
-                  abi: STAKING_PRECOMPILE_ABI,
-                  functionName: "delegate",
-                  params: [validator, parseUnits(`${Number(amount)}`, 18)],
-                });
-                break;
-              case DelegateEnum.REDELEGATE:
-                unbondRedelegate({
-                  address: networkConfig.precompileAddresses
-                    .stakingAddress as Address,
-                  abi: STAKING_PRECOMPILE_ABI,
-                  functionName: "beginRedelegate",
-                  params: [
-                    validator,
-                    redelegateValidator,
-                    parseUnits(`${Number(amount)}`, 18),
-                  ],
-                });
-                // write(redelegateValidator, amount);
-                break;
-              case DelegateEnum.UNBOND:
-                unbondWrite({
-                  address: networkConfig.precompileAddresses
-                    .stakingAddress as Address,
-                  abi: STAKING_PRECOMPILE_ABI,
-                  functionName: "undelegate",
-                  params: [validator, parseUnits(`${Number(amount)}`, 18)],
-                });
-                break;
+
+        {isConnected ? (
+          <Button
+            disabled={
+              !validator || // no validator selected
+              isDelegatingLoading || // delegate action processing
+              isUnbondLoading || // unbond action processing
+              isRedelegateLoading || // redelegate action processing
+              getDisabled()
             }
-          }}
-        >
-          Confirm
-        </Button>
+            onClick={() => {
+              switch (action) {
+                case DelegateEnum.DELEGATE:
+                  write({
+                    address: networkConfig.precompileAddresses
+                      .stakingAddress as Address,
+                    abi: STAKING_PRECOMPILE_ABI,
+                    functionName: "delegate",
+                    params: [validator, parseUnits(`${Number(amount)}`, 18)],
+                  });
+                  break;
+                case DelegateEnum.REDELEGATE:
+                  unbondRedelegate({
+                    address: networkConfig.precompileAddresses
+                      .stakingAddress as Address,
+                    abi: STAKING_PRECOMPILE_ABI,
+                    functionName: "beginRedelegate",
+                    params: [
+                      validator,
+                      redelegateValidator,
+                      parseUnits(`${Number(amount)}`, 18),
+                    ],
+                  });
+                  // write(redelegateValidator, amount);
+                  break;
+                case DelegateEnum.UNBOND:
+                  unbondWrite({
+                    address: networkConfig.precompileAddresses
+                      .stakingAddress as Address,
+                    abi: STAKING_PRECOMPILE_ABI,
+                    functionName: "undelegate",
+                    params: [validator, parseUnits(`${Number(amount)}`, 18)],
+                  });
+                  break;
+              }
+            }}
+          >
+            Confirm
+          </Button>
+        ) : (
+          <ConnectButton />
+        )}
       </Card>
     </div>
   );
