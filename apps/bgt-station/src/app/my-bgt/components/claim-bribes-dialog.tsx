@@ -21,6 +21,8 @@ interface Props {
   disabled: boolean;
   totalValue: number;
   bribes: any[];
+  write: () => void;
+  isLoading: boolean;
 }
 
 export function ClaimBribesDialog({
@@ -28,6 +30,8 @@ export function ClaimBribesDialog({
   setOpen,
   disabled,
   totalValue,
+  write,
+  isLoading,
 }: Props) {
   const { usePrices } = usePollPrices();
   const prices = usePrices();
@@ -36,8 +40,7 @@ export function ClaimBribesDialog({
   const formattedBribes: FormattedBribe[] =
     useFormattedValidatorUserBribes(prices);
 
-  const bribeTokensSymbol = useBribeTokensSymbol();
-  console.log(bribeTokensSymbol);
+  const { data: symbols } = useBribeTokensSymbol();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -55,7 +58,7 @@ export function ClaimBribesDialog({
         <DialogHeader>
           <DialogTitle className="mb-3">Reward Breakdown</DialogTitle>
         </DialogHeader>
-        <div className="flex h-full w-full flex-col items-center gap-2">
+        <div className="flex h-full w-full flex-col items-center gap-4">
           <div className="flex w-full flex-col items-center">
             <div className="flex flex-col self-center text-5xl font-bold leading-[48px] text-foreground">
               {formatUsd(totalValue ?? 0)}
@@ -82,7 +85,7 @@ export function ClaimBribesDialog({
                     <p>{formatUsd(bribe.totalValue)}</p>
                   </div>
                 </div>
-                <div className="flex h-fit w-full flex-col gap-4 text-xs font-medium leading-tight text-muted-foreground">
+                <div className="flex h-fit w-full flex-col gap-2 text-xs font-medium leading-tight text-muted-foreground">
                   {bribe.rewards.map((reward) => {
                     return (
                       <div
@@ -92,9 +95,15 @@ export function ClaimBribesDialog({
                         <div className="flex flex-row items-center justify-center gap-1">
                           <TokenIcon address={reward.token} fetch size="xl" />
                           <p>{reward.amount.toFixed(2)}</p>
-                          {/* <p>{tokenInformation?.symbol}</p> */}
+                          <p>
+                            {symbols
+                              ? (symbols as Record<string, string>)[
+                                  reward.token
+                                ]
+                              : ""}
+                          </p>
                         </div>
-                        <p>{formatUsd(reward.value)}</p>
+                        <p className="self-center">{formatUsd(reward.value)}</p>
                       </div>
                     );
                   })}
@@ -102,6 +111,13 @@ export function ClaimBribesDialog({
               </div>
             );
           })}
+          <Button
+            onClick={() => write()}
+            disabled={isLoading}
+            className="mt-4 w-full"
+          >
+            Claim all
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

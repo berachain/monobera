@@ -109,20 +109,26 @@ export const usePollBribes = () => {
     const { networkConfig } = useBeraConfig();
     const QUERY_KEY = ["useBribeTokensSymbol", tokens];
     const { data, isLoading } = useSWRImmutable(QUERY_KEY, async () => {
-      console.log(tokens);
+      if (tokens === undefined || tokens.length === 0) return [];
       const call: Call[] = tokens?.map((address: string) => ({
         address: address as Address,
         abi: erc20ABI,
         functionName: "symbol",
-        args: [address],
+        args: [],
       }));
+
       const result = await publicClient.multicall({
         contracts: call,
         multicallAddress: networkConfig.precompileAddresses
           .multicallAddress as Address,
       });
 
-      console.log(result);
+      const symbolDictionary: Record<string, string> = {};
+      result.forEach((res: any, index) => {
+        symbolDictionary[tokens[index]] = res.result;
+      });
+
+      return symbolDictionary;
     });
     return { data, isLoading };
     // const publicClient = usePublicClient();
