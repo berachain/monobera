@@ -35,7 +35,6 @@ export const usePollPreviewRedeem = (
           functionName: method,
           args: [collateral.address, formattedAmount],
         })) as any[];
-
         return result;
       } catch (e) {
         console.log("error", e);

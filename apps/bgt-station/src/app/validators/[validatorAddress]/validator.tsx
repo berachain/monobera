@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   truncateHash,
   usePollActiveValidators,
@@ -31,7 +31,6 @@ export default function Validator({
   validatorAddress: Address;
   allEpochs: any;
 }) {
-  const router = useRouter();
   const { usePrices } = usePollPrices();
   const prices = usePrices();
   const { usePolValidator } = usePollGlobalValidatorBribes(prices);
@@ -44,13 +43,13 @@ export default function Validator({
     <div className="container relative mb-10 flex max-w-[1078px] flex-col gap-16">
       <div>
         <div className="flex flex-col gap-3">
-          <div
+          <Link
             className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground hover:cursor-pointer"
-            onClick={() => router.push("/validators")}
+            href="/validators"
           >
             <Icons.arrowLeft className="relative h-4 w-4" />
             Validators
-          </div>
+          </Link>
           <div className="absolute right-0 top-0">
             {validator?.status === "BOND_STATUS_BONDED" ? (
               <Badge
@@ -124,14 +123,7 @@ export default function Validator({
         </div>
         <ValidatorGaugeWeightInfo validatorAddress={validatorAddress} />
       </div>
-
-      <div className="">
-        <div className="mb-4 flex items-center text-lg font-semibold leading-7">
-          Bribes
-        </div>
-        <BribeList validatorAddress={validatorAddress} />
-      </div>
-
+      <BribeList validatorAddress={validatorAddress} />
       <ValidatorActivitiesTable validatorAddress={validatorAddress} />
     </div>
   );

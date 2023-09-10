@@ -39,21 +39,23 @@ export function Details({
     },
   ];
   return (
-    <div className="mb-10 mt-8 flex w-full flex-col gap-5">
-      <div className="flex w-full flex-col gap-2 md:flex-row">
-        <div className="md:w-[360px] ">
+    <div className="mb-10 mt-8 flex w-full flex-col gap-2 lg:gap-5">
+      <div className="flex w-full flex-col gap-2 lg:flex-row ">
+        <div className="flex-shrink-0 lg:w-[360px]">
           <EpochTimeline />
         </div>
-        {generalInfo.map((info, index) => (
-          <Card key={index} className="h-full flex-1 p-8 text-center">
-            <div className="flex h-8 items-center justify-center text-2xl font-semibold leading-loose text-foreground">
-              {info.amount}
-            </div>
-            <div className="text-sm font-medium leading-[14px] text-muted-foreground">
-              {info.text}
-            </div>
-          </Card>
-        ))}
+        <div className="flex w-full flex-col gap-2 sm:flex-row">
+          {generalInfo.map((info, index) => (
+            <Card key={index} className="h-full flex-1 p-8 text-center">
+              <div className="flex h-8 items-center justify-center text-2xl font-semibold leading-loose text-foreground">
+                {info.amount}
+              </div>
+              <div className="text-sm font-medium leading-[14px] text-muted-foreground">
+                {info.text}
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
       <Stats avgValidatorUptime={avgValidatorUptime} />
     </div>

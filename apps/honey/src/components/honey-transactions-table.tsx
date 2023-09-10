@@ -196,7 +196,7 @@ export default function HoneyTransactionsTable({
       return (
         <Button
           onClick={() => setAllDataSize(allDataSize + 1)}
-          disabled={isAllDataLoadingMore}
+          disabled={isAllDataLoadingMore || isAllDataReachingEnd}
           variant="outline"
         >
           {isAllDataLoadingMore

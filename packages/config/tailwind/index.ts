@@ -36,6 +36,9 @@ export default {
       screens: {
         honey: "1000px",
       },
+      minHeight: {
+        minimun: "calc(100vh - 587px)",
+      },
       backgroundImage: {
         glow: "url('/glow.png')",
         "honey-gradient":

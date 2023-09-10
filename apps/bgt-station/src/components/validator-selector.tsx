@@ -60,7 +60,7 @@ export default function ValidatorSelector({
     <div>
       <Button
         variant="outline"
-        className="bg-background shadow"
+        className="border-border bg-background shadow"
         onClick={() => setOpen(true)}
       >
         {validValidator ? (
@@ -101,7 +101,7 @@ export const VP = ({
   const percentageDelegated = usePercentageDelegated(operatorAddr);
 
   return (
-    <div className="flex h-full w-24 items-center">
+    <div className="flex h-full w-full flex-shrink-0 items-center">
       {formatter.format(Number(formatUnits(tokens, 18)))} (
       {percentageDelegated?.toFixed(2)}%)
     </div>

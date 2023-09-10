@@ -30,7 +30,7 @@ export const Connect = dynamic(
   () => import("@bera/shared-ui").then((mod) => mod.ConnectButton),
   {
     ssr: false,
-    loading: () => <Button className="w-full">Loading</Button>,
+    loading: () => <Button className="w-full">Loading...</Button>,
   },
 );
 

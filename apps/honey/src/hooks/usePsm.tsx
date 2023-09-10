@@ -38,9 +38,6 @@ export const usePsm = () => {
 
   const [givenIn, setGivenIn] = useState<boolean>(true);
 
-  // console.log('h',honey);
-  // console.log('bbb',collateralList);
-  // console.log('cas',defaultCollateral);
   useEffect(() => {
     if (
       defaultCollateral &&
@@ -90,12 +87,7 @@ export const usePsm = () => {
     collateral ? (collateral.address as Address) : undefined,
   );
 
-  // console.log("params", params);
-
-  const fee = params ? (isMint ? params.mintFee : params.redeemFee) : undefined;
-  // const block = useLatestBlock();
-
-  // const [fee, fee2] = useFees();
+  const fee = params ? (isMint ? params.mintFee : params.redeemFee) : 0;
 
   const { write, isLoading, ModalPortal } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
@@ -112,16 +104,11 @@ export const usePsm = () => {
     collateral,
     toAmount,
   );
+
   const previewRedeemGivenOut = usePreviewRedeemGivenOut();
   const { usePreviewRedeem } = usePollPreviewRedeem(collateral, fromAmount);
   const previewRedeem = usePreviewRedeem();
 
-  // const { usePreviewRedeem: usePreviewMintGivenOut } = usePollPreviewRedeem(collateral, collateralAmountGivenOut);
-  // const previewRedeemGivenOut = usePreviewMintGivenOut()
-  // console.log('prgo',previewRedeemGivenOut)
-
-  // console.log("previewMint", previewMint);
-  // console.log("previewRedeem", previewRedeem);
   useEffect(() => {
     if (isMint && givenIn && previewMint !== undefined) {
       setToAmount(Number(previewMint));
