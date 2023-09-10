@@ -11,7 +11,7 @@ export const recent_votes_columns: ColumnDef<any>[] = [
       return <div className="w-[350px]">{row.original.proposal}</div>;
     },
     accessorKey: "proposal",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   truncateHash,
@@ -14,6 +15,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress, type Address } from "viem";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
+import { blockExplorerUrl } from "~/config";
 import { usePollPrices } from "~/hooks/usePollPrices";
 
 export const ValidatorGauge = ({ address }: { address: string }) => {
@@ -25,15 +27,22 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
     return cuttingBoard ? cuttingBoard[0].address : undefined;
   }, [cuttingBoard]);
   const { gaugeDictionary } = useTokens();
-  const value =
-    highestVotedGauge === undefined || gaugeDictionary === undefined
-      ? "no gauges"
-      : gaugeDictionary[getAddress(highestVotedGauge)]?.name ??
-        truncateHash(highestVotedGauge);
   return (
-    <div className="flex h-full w-[141px] items-center justify-center">
-      {value}
-    </div>
+    <>
+      {highestVotedGauge === undefined || gaugeDictionary === undefined ? (
+        "no gauges"
+      ) : (
+        <Link
+          className="flex h-full w-[141px] items-center justify-center hover:underline"
+          href={`${blockExplorerUrl}/address/${getAddress(highestVotedGauge)}`}
+          target="_blank"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {gaugeDictionary[getAddress(highestVotedGauge)]?.name ??
+            truncateHash(highestVotedGauge)}
+        </Link>
+      )}
+    </>
   );
 };
 export default function ValidatorsTable() {

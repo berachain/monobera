@@ -111,17 +111,17 @@ export default function BribeList({
   validatorAddress: Address;
 }) {
   const { useActiveValidatorBribes } = usePollValidatorBribes(validatorAddress);
-  const { bribes, isLoading } = useActiveValidatorBribes();
+  const bribes = useActiveValidatorBribes();
+  // console.log("bribes isLoading", bribes);
   return (
     <div className="">
-      {isLoading ||
-        (bribes && (
-          <div className="mb-4 flex items-center text-lg font-semibold leading-7">
-            Active Bribes
-          </div>
-        ))}
+      {(true || bribes) && (
+        <div className="mb-4 flex items-center text-lg font-semibold leading-7">
+          Active Bribes
+        </div>
+      )}
       <div className="flex flex-col gap-4 md:flex-row">
-        {isLoading ? (
+        {true ? (
           <>
             {[0, 0, 0].map((_: any, index: number) => (
               <BribeCardLoading key={index} />
