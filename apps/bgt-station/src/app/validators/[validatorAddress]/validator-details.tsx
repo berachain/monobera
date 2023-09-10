@@ -14,6 +14,7 @@ export default function ValidatorDetails({
   commissions,
   votingPower,
   website,
+  vApy,
 }: {
   address: string;
   decription: React.ReactNode;
@@ -21,6 +22,7 @@ export default function ValidatorDetails({
   uptime: string;
   votingPower: string;
   website: string;
+  vApy: string;
 }) {
   const { data } = useFetchValidatorUptime(address as Address);
 
@@ -53,6 +55,13 @@ export default function ValidatorDetails({
             Voting Power <Tooltip text="Voting Power" />
           </div>
           <div className="text-muted-foreground">{votingPower}</div>
+        </div>
+
+        <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
+          <div>
+            vApy <Tooltip text="Voting Power" />
+          </div>
+          <div className="text-muted-foreground">{vApy}%</div>
         </div>
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">

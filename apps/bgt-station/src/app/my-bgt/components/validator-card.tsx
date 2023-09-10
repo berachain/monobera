@@ -50,7 +50,6 @@ export default function ValidatorCard({
     },
   });
 
-  console.log(userBribeTokenList);
   const valiInfo = [
     {
       title: (
@@ -101,7 +100,6 @@ export default function ValidatorCard({
   ];
   console.log("validator.bribeTokenList ", validator.bribeTokenList.length);
   const claimBribe = () => {
-    console.log(account, validator.operatorAddr);
     write({
       address: process.env.NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address,
       abi: BRIBE_PRECOMPILE_ABI,

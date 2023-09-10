@@ -18,6 +18,19 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
+// async function getVotes(address: string) {
+//   try {
+//     // const res = await fetch(`${indexerUrl}/bgt/rewards/delegator/${address}`);
+//     const res = await fetch(
+//       `${indexerUrl}/events/gov/votes?voter=${proposalId}`,
+//     );
+//     const jsonRes = await res.json();
+//     return jsonRes.result;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
+
 async function getCuttingBoard(address: string) {
   try {
     // const res = await fetch(`${indexerUrl}/bgt/rewards/delegator/${address}`);
@@ -30,6 +43,23 @@ async function getCuttingBoard(address: string) {
     console.log(e);
   }
 }
+
+async function getHistoricalBribeEpochs(
+  address: string,
+  num_of_epochs: number,
+) {
+  try {
+    // const res = await fetch(`${indexerUrl}/bgt/rewards/delegator/${address}`);
+    const res = await fetch(
+      `${indexerUrl}/historicalbribes?validators=${address}&num_of_epochs=${num_of_epochs}`,
+    );
+    const jsonRes = await res.json();
+    return jsonRes.result;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 const getPoolTvl = async (address: string) => {
   try {
     // const res = await fetch(`${indexerUrl}/bgt/rewards/delegator/${address}`);
@@ -57,12 +87,20 @@ export default async function Page({
 }) {
   const { validatorAddress } = params;
 
-  const [cuttingBoard] = await Promise.all([getCuttingBoard(validatorAddress)]);
+  const [cuttingBoard, allEpochs] = await Promise.all([
+    getCuttingBoard(validatorAddress),
+    getHistoricalBribeEpochs(validatorAddress, 1000),
+  ]);
 
   const cb: CuttingBoard[] = cuttingBoard[0].weights;
   const promiseArray = cb.map((w: CuttingBoard) => getPoolTvl(w.address));
 
   const cbTvlData = await Promise.all(promiseArray);
 
-  return <Validator {...{ validatorAddress, cuttingBoard, cbTvlData }} />;
+  return (
+    <Validator
+      {...{ validatorAddress, cuttingBoard, cbTvlData }}
+      allEpochs={allEpochs}
+    />
+  );
 }

@@ -18,7 +18,7 @@ export const usePollValidatorBribes = (
 
   const method = "getValidatorBribes";
   const QUERY_KEY = [validatorAddress, method];
-  useSWR(
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       if (!validatorAddress) return undefined;
@@ -130,5 +130,6 @@ export const usePollValidatorBribes = (
     useActiveValidatorBribesTotalValue,
     useActiveValidatorsBribesTotalValuePerProposal,
     useValidatorVApy,
+    isLoading,
   };
 };
