@@ -17,7 +17,7 @@ import { SelectToken } from ".";
 type Props = {
   selected: Token | undefined;
   selectedTokens?: (Token | undefined)[];
-  amount: number;
+  amount: number | undefined;
   balance?: number;
   price?: number;
   hideBalance?: boolean;
@@ -35,7 +35,7 @@ type Props = {
 export function TokenInput({
   selected,
   selectedTokens,
-  amount,
+  amount = 0,
   price = 1,
   balance = undefined,
   hideBalance = false,

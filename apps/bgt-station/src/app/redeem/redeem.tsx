@@ -5,9 +5,10 @@ import Image from "next/image";
 import {
   BGT_PRECOMPILE_ABI,
   useBeraConfig,
+  useBeraJs,
   usePollBgtBalance,
 } from "@bera/berajs";
-import { useTxn } from "@bera/shared-ui";
+import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
@@ -19,6 +20,7 @@ import { cloudinaryUrl } from "~/config";
 import { useRedeem } from "../../hooks/useRedeem";
 
 export default function Redeem() {
+  const { isConnected } = useBeraJs();
   const { useBgtBalance } = usePollBgtBalance();
   const { redeemAmount, payload, setRedeemAmount } = useRedeem();
   const userBalance = useBgtBalance();
@@ -45,25 +47,27 @@ export default function Redeem() {
           <div className="leading-tigh text-sm font-semibold">Amount</div>
           <Input
             type="number"
-            placeholder="0.0"
+            placeholder="0.00"
             endAdornment="BGT"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setRedeemAmount(Number(e.target.value))
             }
             value={redeemAmount}
           />
-          <div className="flex w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-            <Icons.wallet className="relative inline-block h-3 w-3 " />
-            {userBalance}
-            <span
-              className="underline hover:cursor-pointer"
-              onClick={() => {
-                setRedeemAmount(Number(userBalance));
-              }}
-            >
-              MAX
-            </span>
-          </div>
+          {isConnected && (
+            <div className="flex w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
+              <Icons.wallet className="relative inline-block h-3 w-3 " />
+              {userBalance}
+              <span
+                className="underline hover:cursor-pointer"
+                onClick={() => {
+                  setRedeemAmount(Number(userBalance));
+                }}
+              >
+                MAX
+              </span>
+            </div>
+          )}
         </div>
         {/* <div className="flex flex-col gap-2 rounded-18 bg-muted p-3">
           <div className="flex justify-between text-sm font-medium leading-normal text-muted-foreground">
@@ -75,31 +79,35 @@ export default function Redeem() {
             <div className="text-foreground">0.0 BERA</div>
           </div>
         </div> */}
-        {Number(redeemAmount) > Number(userBalance) && (
+        {Number(redeemAmount) > Number(userBalance) && isConnected && (
           <Alert variant="destructive" className="">
             This amount exceeds your total balance of {userBalance} BGT
           </Alert>
         )}
-        <Button
-          className=""
-          disabled={
-            Number(redeemAmount) <= 0 ||
-            Number(redeemAmount) > Number(userBalance) ||
-            !payload ||
-            isLoading
-          }
-          onClick={() =>
-            write({
-              address: networkConfig.precompileAddresses
-                .erc20BgtAddress as Address,
-              abi: BGT_PRECOMPILE_ABI,
-              functionName: "redeem",
-              params: payload,
-            })
-          }
-        >
-          Confirm
-        </Button>
+        {isConnected ? (
+          <Button
+            className=""
+            disabled={
+              Number(redeemAmount) <= 0 ||
+              Number(redeemAmount) > Number(userBalance) ||
+              !payload ||
+              isLoading
+            }
+            onClick={() =>
+              write({
+                address: networkConfig.precompileAddresses
+                  .erc20BgtAddress as Address,
+                abi: BGT_PRECOMPILE_ABI,
+                functionName: "redeem",
+                params: payload,
+              })
+            }
+          >
+            Confirm
+          </Button>
+        ) : (
+          <ConnectButton />
+        )}
       </Card>
     </div>
   );
