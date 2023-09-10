@@ -9,7 +9,7 @@ export const honeyDappName = process.env.NEXT_PUBLIC_HONEY_NAME as string;
 export const bgtDappUrl = process.env.NEXT_PUBLIC_BGT_URL as string;
 export const bgtDappName = process.env.NEXT_PUBLIC_BGT_NAME as string;
 export const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
-
+export const docsUrl = process.env.NEXT_PUBLIC_DOCS_URL as string;
 // Block Explorer
 export const blockExplorerUrl = process.env
   .NEXT_PUBLIC_BLOCK_EXPLORER as string;

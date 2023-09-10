@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
+import { formatEther, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { HONEY_PRECOMPILE_ABI } from "~/config";
@@ -23,7 +23,6 @@ export const usePollHoneyParams = () => {
         functionName: method,
         args: [],
       })) as any[];
-
       console.log(result);
       return result;
     },
@@ -39,8 +38,8 @@ export const usePollHoneyParams = () => {
       return p.collateral === collateral;
     });
     if (!honeyParams) return undefined;
-    const mintRate = formatUnits(honeyParams.mintRate, 18);
-    const redeemRate = formatUnits(honeyParams.redemptionRate, 18);
+    const mintRate = formatEther(honeyParams.mintRate);
+    const redeemRate = formatEther(honeyParams.redemptionRate);
     const mintFee = 1 - Number(mintRate);
     const redeemFee = 1 - Number(redeemRate);
     return {

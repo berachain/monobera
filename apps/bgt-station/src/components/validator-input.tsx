@@ -1,6 +1,10 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePollAccountDelegations, usePollBgtBalance } from "@bera/berajs";
+import {
+  useBeraJs,
+  usePollAccountDelegations,
+  usePollBgtBalance,
+} from "@bera/berajs";
 import { ValidatorIcon } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
@@ -33,7 +37,7 @@ export default function ValidatorInput({
   const router = useRouter();
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
-
+  const { isConnected } = useBeraJs();
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(validatorAddress);
   const bgtDelegated = useSelectedAccountDelegation();
@@ -64,7 +68,7 @@ export default function ValidatorInput({
         }
       />
 
-      {action === DelegateEnum.DELEGATE && (
+      {action === DelegateEnum.DELEGATE && isConnected && (
         <div className=" mt-2 flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
           {userBalance}

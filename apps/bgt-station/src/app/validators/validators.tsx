@@ -9,6 +9,7 @@ import {
   usePollGlobalValidatorBribes,
 } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
+import { Skeleton } from "@bera/ui/skeleton";
 
 import { cloudinaryUrl } from "~/config";
 import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
@@ -81,23 +82,35 @@ export default function Validators({
 
   const generalInfo = [
     {
-      amount: Number.isNaN(totalValidators) ? 0 : totalValidators,
+      amount: Number.isNaN(totalValidators) ? (
+        <Skeleton className="mb-2 h-10 w-full" />
+      ) : (
+        totalValidators
+      ),
       text: "Total validators",
     },
     {
-      amount: `$${
-        Number.isNaN(formatter.format(totalBribeValue))
-          ? 0
-          : formatter.format(totalBribeValue)
-      }`,
+      amount: totalBribeValue ? (
+        <Skeleton className="mb-2 h-10 w-full" />
+      ) : (
+        "$" + formatter.format(totalBribeValue)
+      ),
       text: "In bribe rewards",
     },
     {
-      amount: inflation.toFixed(4) + "%",
+      amount: inflation ? (
+        <Skeleton className="mb-2 h-10 w-full" />
+      ) : (
+        inflation.toFixed(4) + "%"
+      ),
       text: "BGT inflation rate",
     },
     {
-      amount: `${activeGauges}`,
+      amount: activeGauges ? (
+        <Skeleton className="mb-2 h-10 w-full" />
+      ) : (
+        activeGauges
+      ),
       text: "Active gauges",
     },
   ];
@@ -116,7 +129,7 @@ export default function Validators({
           Validators
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {generalInfo.map((info, index) => (
           <Card className="p-8 text-center" key={info.text + index}>
             <div className="text-2xl font-semibold leading-loose text-foreground">

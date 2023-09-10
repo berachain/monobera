@@ -42,10 +42,10 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     <div>
       {showBear && (
         <Image
-          src={`${cloudinaryUrl}/bears/rtayxajtu9if9phn0ozu`}
+          src={`${cloudinaryUrl}/bears/l9oaplrgfkrqw8y6noyp`}
           className="relative z-0 m-auto self-center"
           alt="king"
-          width={382}
+          width={300}
           height={60}
         />
       )}

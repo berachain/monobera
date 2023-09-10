@@ -24,7 +24,7 @@ export function MobileDropdown({ navItems }: { navItems: any[] }) {
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          className="mr-2 px-0 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+          className="mr-2 px-0 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
         >
           {isOpen ? (
             <Icons.close className="h-6 w-6" />

@@ -19,7 +19,9 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     ),
     cell: ({ row }) => {
       const rank = row.original.rank;
-      return <div className="flex h-full w-[91px] items-center">{rank}</div>;
+      return (
+        <div className="flex h-full items-center justify-center">{rank}</div>
+      );
     },
     accessorKey: "delegate",
     enableSorting: false,
@@ -48,11 +50,12 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Voting Power" />
     ),
-    cell: ({ row }) => {
-      const operatorAddr = row.original.operatorAddr;
-      const tokens = row.original.tokens;
-      return <VP operatorAddr={operatorAddr} tokens={tokens} />;
-    },
+    cell: ({ row }) => (
+      <VP
+        operatorAddr={row.original.operatorAddr}
+        tokens={row.original.tokens}
+      />
+    ),
     accessorKey: "tokens",
     enableSorting: true,
   },

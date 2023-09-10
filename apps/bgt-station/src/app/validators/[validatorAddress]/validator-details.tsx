@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
@@ -24,7 +24,6 @@ export default function ValidatorDetails({
   website: string;
   vApy: string;
 }) {
-  const router = useRouter();
   const { data } = useFetchValidatorUptime(address as Address);
 
   return (
@@ -77,37 +76,35 @@ export default function ValidatorDetails({
             {website}
           </a>
         </div>
-        <div
-          className="mt-4 flex flex-col justify-between gap-4 sm:flex-row"
-          onClick={() =>
-            router.push(`/delegate?action=delegate&validator=${address}`)
-          }
-        >
-          <Button className="flex-1">
-            Delegate <Icons.add className="relative ml-1 h-4 w-4" />
-          </Button>
-          <Button
+        <div className="mt-4 flex flex-col justify-between gap-4 sm:flex-row">
+          <Link
+            href={`/delegate?action=delegate&validator=${address}`}
             className="flex-1"
-            variant="outline"
-            onClick={() =>
-              router.push(`/delegate?action=redelegate&validator=${address}`)
-            }
           >
-            {" "}
-            Redelegate
-            <Icons.redo className="relative ml-1 h-4 w-4" />
-          </Button>
-          <Button
+            <Button className="w-full">
+              Delegate <Icons.add className="relative ml-1 h-4 w-4" />
+            </Button>
+          </Link>
+          <Link
+            href={`/delegate?action=redelegate&validator=${address}`}
             className="flex-1"
-            variant="outline"
-            onClick={() =>
-              router.push(`/delegate?action=unbond&validator=${address}`)
-            }
           >
-            {" "}
-            Unbond
-            <Icons.minus className="relative ml-1 h-4 w-4" />
-          </Button>
+            <Button className="w-full" variant="outline">
+              {" "}
+              Redelegate
+              <Icons.redo className="relative ml-1 h-4 w-4" />
+            </Button>
+          </Link>
+          <Link
+            href={`/delegate?action=unbond&validator=${address}`}
+            className="flex-1"
+          >
+            <Button className="w-full" variant="outline">
+              {" "}
+              Unbond
+              <Icons.minus className="relative ml-1 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </Card>
     </div>

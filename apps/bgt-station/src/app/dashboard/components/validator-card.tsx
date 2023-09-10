@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { usePollGlobalValidatorBribes, type PoLValidator } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
 import { TokenIconList, ValidatorIcon } from "@bera/shared-ui";
@@ -19,7 +19,6 @@ export default function ValidatorCard({
 }: {
   validator: PoLValidator;
 }) {
-  const router = useRouter();
   const { usePrices } = usePollPrices();
   const prices = usePrices();
   const { useValidatorvAPY, useValidatorTotalActiveBribeValue } =
@@ -58,7 +57,11 @@ export default function ValidatorCard({
         </div>
       </div>
       <div className="w-full">
-        <TokenIconList tokenList={validator.bribeTokenList ?? []} size="xl" />
+        {!validator.bribeTokenList || validator.bribeTokenList.length === 0 ? (
+          <div className="h-8"> ~ No bribes ~</div>
+        ) : (
+          <TokenIconList tokenList={validator.bribeTokenList ?? []} size="xl" />
+        )}
       </div>
       <div className="grid w-full grid-cols-2 gap-4">
         {" "}
@@ -73,18 +76,17 @@ export default function ValidatorCard({
           </YellowCard>
         ))}
       </div>
-
-      <Button
-        className="w-full border-border bg-muted text-foreground"
-        variant="outline"
-        onClick={() =>
-          router.push(
-            `/delegate?action=delegate&validator=${validator.operatorAddr}`,
-          )
-        }
+      <Link
+        className="w-full"
+        href={`/delegate?action=delegate&validator=${validator.operatorAddr}`}
       >
-        Delegate
-      </Button>
+        <Button
+          className="w-full border-border bg-muted text-foreground"
+          variant="outline"
+        >
+          Delegate
+        </Button>
+      </Link>
     </YellowCard>
   );
 }
