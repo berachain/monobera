@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import Image from "next/image";
 import { formatter, truncateHash, type IVote } from "@bera/berajs";
 import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 import Identicon from "@bera/shared-ui/src/identicon";
@@ -10,9 +11,11 @@ import {
 } from "@bera/ui/accordion";
 import { Badge } from "@bera/ui/badge";
 import { Card } from "@bera/ui/card";
+import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { getAddress } from "viem";
 
+import { cloudinaryUrl } from "~/config";
 import { MultiSelectBadge } from "../components/multi-select-badge";
 import { type ALL, type VOTER_TYPE } from "../types";
 
@@ -115,37 +118,56 @@ export function VoterTable({
           </div>
         </div>
         <div className="max-h-[800px] overflow-y-scroll p-4">
-          {voterData?.map((voter) => (
-            <div key={voter.voter} className="flex gap-16">
-              <Accordion
-                type="single"
-                collapsible
-                className="flex-grow"
-                disabled={voter?.metadata === undefined}
-              >
-                <AccordionItem value="item-1">
-                  <AccordionTrigger disabled={voter?.metadata === undefined}>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Identicon account={getAddress(voter.voter)} />
-                      {truncateHash(voter.voter, 6, 4)}
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="max-w-[436px] pl-10 text-xs font-medium leading-tight text-muted-foreground">
-                    {voter?.metadata}
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-              <div className="flex h-[56px] w-[60px] items-center justify-center">
-                {getBadge(voter.option)}
-              </div>
-              <div className="flex h-[56px] w-[100px] items-center justify-center text-xs font-medium leading-tight text-foreground">
-                {" "}
-                {formatter.format(voter.delegation)}
+          {isLoading ? (
+            <div className="flex flex-col gap-4">
+              {" "}
+              {[0, 0, 0, 0, 0, 0].map((_, index) => (
+                <Skeleton key={index} className="h-10 w-full" />
+              ))}{" "}
+            </div>
+          ) : voterData.length === 0 ? (
+            <div className="mx-auto w-fit">
+              <Image
+                src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
+                alt="not found bear"
+                width={345.35}
+                height={200}
+              />
+              <div className="my-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
+                No recent votes found.{" "}
               </div>
             </div>
-          ))}
-          {voterData.length === 0 && <>No Votes</>}
-          {isLoading && <>LOADING...</>}
+          ) : (
+            voterData?.map((voter) => (
+              <div key={voter.voter} className="flex gap-16">
+                <Accordion
+                  type="single"
+                  collapsible
+                  className="flex-grow"
+                  disabled={voter?.metadata === undefined}
+                >
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger disabled={voter?.metadata === undefined}>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Identicon account={getAddress(voter.voter)} />
+                        {truncateHash(voter.voter, 6, 4)}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="max-w-[436px] pl-10 text-xs font-medium leading-tight text-muted-foreground">
+                      {voter?.metadata}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                <div className="flex h-[56px] w-[60px] items-center justify-center">
+                  {getBadge(voter.option)}
+                </div>
+                <div className="flex h-[56px] w-[100px] items-center justify-center text-xs font-medium leading-tight text-foreground">
+                  {" "}
+                  {formatter.format(voter.delegation)}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </Card>
       <div className="mt-4 w-full text-right text-xs font-medium leading-tight text-muted-foreground">
