@@ -46,7 +46,7 @@ export function TokenInput({
   customTokenList = undefined,
   onTokenSelection = undefined,
   setAmount = undefined,
-  // showExceeding = true,
+  showExceeding = true,
   onExceeding = undefined,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
@@ -96,7 +96,7 @@ export function TokenInput({
             disabled={disabled}
             className={cn(
               "ring-offset-none w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold shadow-none outline-none ring-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
-              exceeding && "text-destructive-foreground",
+              exceeding && showExceeding && "text-destructive-foreground",
             )}
             value={amount > 0 ? amount : ""}
             onKeyDown={(e) => e.key === "-" && e.preventDefault()}

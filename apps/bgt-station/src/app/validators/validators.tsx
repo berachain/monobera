@@ -61,15 +61,15 @@ export default function Validators({
   activeGauges: number;
   oldBgtSupply: number | undefined;
 }) {
-  const { useTotalValidators } = usePollActiveValidators();
+  const { useTotalValidators, isLoading: isActiveValidatorsLoading } = usePollActiveValidators();
   const totalValidators: number = useTotalValidators();
   const { useBgtSupply } = usePollBgtSupply();
   const currentSupply = useBgtSupply();
   const { usePrices } = usePollPrices();
   const prices = usePrices();
-  const { useGlobalActiveBribeValue } = usePollGlobalValidatorBribes(prices);
+  const { useGlobalActiveBribeValue, isLoading: isGlobalBribeLoading } = usePollGlobalValidatorBribes(prices);
   const totalBribeValue = useGlobalActiveBribeValue();
-  const { data } = useGlobalValidatorGaugeWeight();
+  const { data, isLoading } = useGlobalValidatorGaugeWeight();
 
   const inflation = useMemo(() => {
     if (data === undefined || currentSupply === undefined) return 0;
@@ -81,39 +81,36 @@ export default function Validators({
   }, [data, currentSupply]);
 
   const generalInfo = [
-    {
-      amount: Number.isNaN(totalValidators) ? (
-        <Skeleton className="mb-2 h-10 w-full" />
-      ) : (
-        totalValidators
-      ),
-      text: "Total validators",
-    },
-    {
-      amount: totalBribeValue ? (
-        <Skeleton className="mb-2 h-10 w-full" />
-      ) : (
-        "$" + formatter.format(totalBribeValue)
-      ),
-      text: "In bribe rewards",
-    },
-    {
-      amount: inflation ? (
-        <Skeleton className="mb-2 h-10 w-full" />
-      ) : (
-        inflation.toFixed(4) + "%"
-      ),
-      text: "BGT inflation rate",
-    },
-    {
-      amount: activeGauges ? (
-        <Skeleton className="mb-2 h-10 w-full" />
-      ) : (
-        activeGauges
-      ),
-      text: "Active gauges",
-    },
-  ];
+      {
+        amount: isActiveValidatorsLoading ? (
+          <Skeleton className="mb-2 h-10 w-full" />
+        ) : (
+          totalValidators
+        ),
+        text: "Total validators",
+      },
+      {
+        amount: isGlobalBribeLoading ? (
+          <Skeleton className="mb-2 h-10 w-full" />
+        ) : (
+          "$" +( totalBribeValue === undefined ? '0.00' : formatter.format(totalBribeValue))
+        ),
+        text: "In bribe rewards",
+      },
+      {
+        amount: isLoading ? (
+          <Skeleton className="mb-2 h-10 w-full" />
+        ) : (
+          inflation.toFixed(4) + "%"
+        ),
+        text: "BGT inflation rate",
+      },
+      {
+        amount: 
+          activeGauges,
+        text: "Active gauges",
+      },
+    ];
 
   return (
     <div className="container mb-10 max-w-[1078px]">
