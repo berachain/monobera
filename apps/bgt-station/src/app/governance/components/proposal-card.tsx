@@ -13,6 +13,7 @@ import {
   timeDifferenceFromNow,
 } from "@bera/shared-ui/src/utils/times";
 import { Badge } from "@bera/ui/badge";
+import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress } from "viem";
 
 import { StatusEnum, VoteColorMap, mappedStatusEnum } from "../types";
@@ -146,7 +147,7 @@ export function ProposalCard({ proposal, onClick }: ProposalCard) {
       )} */}
       <div className="flex h-7 items-center gap-1">
         {getBadge(proposal.status)}
-        <div className="text-xs font-medium leading-tight text-stone-500">
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
           {getTimeText(proposal)}
         </div>
       </div>
@@ -194,6 +195,19 @@ export function ProposalCard({ proposal, onClick }: ProposalCard) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+export function ProposalCardSkeleton() {
+  return (
+    <div className="hove:cursor-pointer relative rounded-[18px] border border-border bg-background p-8">
+      <div className="mb-2 flex h-7 items-center gap-1">
+        <Skeleton className="h-full w-12" />
+        <Skeleton className="h-full w-full" />
+      </div>
+      <Skeleton className="mb-4 h-5 w-full" />
+      <Skeleton className="h-9 w-full" />
     </div>
   );
 }

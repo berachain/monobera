@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -19,7 +20,11 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { ProposalCard } from "../components/proposal-card";
+import { cloudinaryUrl } from "~/config";
+import {
+  ProposalCard,
+  ProposalCardSkeleton,
+} from "../components/proposal-card";
 import {
   OrderByEnum,
   StatusEnum,
@@ -143,24 +148,34 @@ export default function GovernanceByStatus({
         }
       />
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {!isLoading &&
-          sortedProposalList?.map((proposal: Proposal, index: number) => (
-            <ProposalCard
-              proposal={proposal}
-              key={"proposal" + index}
-              onClick={() =>
-                router.push(
-                  // replace this with real data
-                  `/governance/proposal/${Number(proposal.id)}`,
-                )
-              }
-            />
-          ))}
-        {!isLoading && sortedProposalList.length === 0 && (
-          <>No Proposals found.</>
-        )}
-        {isLoading && <>LOADING...</>}
+        {isLoading
+          ? [0, 0, 0, 0].map((_, index) => <ProposalCardSkeleton key={index} />)
+          : sortedProposalList?.map((proposal: Proposal, index: number) => (
+              <ProposalCard
+                proposal={proposal}
+                key={"proposal" + index}
+                onClick={() =>
+                  router.push(
+                    // replace this with real data
+                    `/governance/proposal/${Number(proposal.id)}`,
+                  )
+                }
+              />
+            ))}
       </div>
+      {!isLoading && sortedProposalList.length === 0 && (
+        <div className="mx-auto w-fit">
+          <Image
+            src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
+            alt="not found bear"
+            width={345.35}
+            height={200}
+          />
+          <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
+            No Proposals found.{" "}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
