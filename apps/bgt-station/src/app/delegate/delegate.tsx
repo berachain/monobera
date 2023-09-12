@@ -15,6 +15,7 @@ import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useTheme } from "next-themes";
 import { parseUnits } from "viem";
@@ -129,7 +130,7 @@ export default function Delegate({
         <div className="text-lg font-semibold capitalize leading-7 text-foreground">
           {action}
         </div>
-        {t && (
+        {t ? (
           <Image
             src={
               ImageMapEnum[action.toUpperCase() as keyof typeof ImageMapEnum][
@@ -142,6 +143,8 @@ export default function Delegate({
             priority
             loading="eager"
           />
+        ) : (
+          <Skeleton className="h-[175px] w-full" />
         )}
         {/* // https://blurred.dev/ */}
 

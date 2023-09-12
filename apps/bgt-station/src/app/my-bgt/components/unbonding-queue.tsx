@@ -37,7 +37,10 @@ function Nothing() {
             Confused about unbonding? Check out our documentation for more
             information.
           </div>
-          <Link href={`${docsUrl}/getting-started/bgt-station-bgt.html#unbonding-bgt`} target="_blank">
+          <Link
+            href={`${docsUrl}/getting-started/bgt-station-bgt.html#unbonding-bgt`}
+            target="_blank"
+          >
             <Button className="w-full">How to unbond</Button>
           </Link>
         </Card>
