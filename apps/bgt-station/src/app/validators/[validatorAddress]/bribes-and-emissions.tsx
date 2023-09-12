@@ -174,10 +174,11 @@ export default function BribesAndEmissions({
             </DropdownMenu>
           </div>
           <div className="mt-4 h-[142px]">
-            {!isLoading && (
+            {isLoading ? (
+              <Icons.spinner className="mx-auto h-8 w-8 animate-spin" />
+            ) : (
               <BeraChart data={chartData} options={Options as any} type="bar" />
             )}
-            {isLoading && <>Loading...</>}
           </div>
         </Card>
       </div>
