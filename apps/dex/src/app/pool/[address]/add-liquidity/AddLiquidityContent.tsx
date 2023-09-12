@@ -9,6 +9,7 @@ import {
   type Token,
 } from "@bera/berajs";
 import {
+  ActionButton,
   InfoBoxList,
   InfoBoxListItem,
   PreviewToken,
@@ -40,6 +41,7 @@ enum Selection {
   MULTI_TOKEN = "multi-token",
   SINGLE_TOKEN = "single-token",
 }
+
 export default function AddLiquidityContent({
   pool,
   prices,
@@ -208,19 +210,22 @@ export default function AddLiquidityContent({
                     }
                   />
                 ) : (
-                  <Button
-                    onClick={() => {
-                      write({
-                        address: networkConfig.precompileAddresses
-                          .erc20DexAddress as Address,
-                        abi: DEX_PRECOMPILE_ABI,
-                        functionName: "addLiquidity",
-                        params: payload,
-                      });
-                    }}
-                  >
-                    Add Liquidity
-                  </Button>
+                  <ActionButton>
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        write({
+                          address: networkConfig.precompileAddresses
+                            .erc20DexAddress as Address,
+                          abi: DEX_PRECOMPILE_ABI,
+                          functionName: "addLiquidity",
+                          params: payload,
+                        });
+                      }}
+                    >
+                      Add Liquidity
+                    </Button>
+                  </ActionButton>
                 )}
               </TxnPreview>
             </TabsContent>
@@ -325,19 +330,22 @@ export default function AddLiquidityContent({
                     }
                   />
                 ) : (
-                  <Button
-                    onClick={() => {
-                      write({
-                        address: networkConfig.precompileAddresses
-                          .erc20DexAddress as Address,
-                        abi: DEX_PRECOMPILE_ABI,
-                        functionName: "addLiquidity",
-                        params: singleSidedPayload,
-                      });
-                    }}
-                  >
-                    Add Liquidity
-                  </Button>
+                  <ActionButton>
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        write({
+                          address: networkConfig.precompileAddresses
+                            .erc20DexAddress as Address,
+                          abi: DEX_PRECOMPILE_ABI,
+                          functionName: "addLiquidity",
+                          params: singleSidedPayload,
+                        });
+                      }}
+                    >
+                      Add Liquidity
+                    </Button>
+                  </ActionButton>
                 )}
               </TxnPreview>
             </TabsContent>

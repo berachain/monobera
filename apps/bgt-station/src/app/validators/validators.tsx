@@ -61,13 +61,15 @@ export default function Validators({
   activeGauges: number;
   oldBgtSupply: number | undefined;
 }) {
-  const { useTotalValidators, isLoading: isActiveValidatorsLoading } = usePollActiveValidators();
+  const { useTotalValidators, isLoading: isActiveValidatorsLoading } =
+    usePollActiveValidators();
   const totalValidators: number = useTotalValidators();
   const { useBgtSupply } = usePollBgtSupply();
   const currentSupply = useBgtSupply();
   const { usePrices } = usePollPrices();
   const prices = usePrices();
-  const { useGlobalActiveBribeValue, isLoading: isGlobalBribeLoading } = usePollGlobalValidatorBribes(prices);
+  const { useGlobalActiveBribeValue, isLoading: isGlobalBribeLoading } =
+    usePollGlobalValidatorBribes(prices);
   const totalBribeValue = useGlobalActiveBribeValue();
   const { data, isLoading } = useGlobalValidatorGaugeWeight();
 
@@ -81,36 +83,38 @@ export default function Validators({
   }, [data, currentSupply]);
 
   const generalInfo = [
-      {
-        amount: isActiveValidatorsLoading ? (
-          <Skeleton className="mb-2 h-10 w-full" />
-        ) : (
-          totalValidators
-        ),
-        text: "Total validators",
-      },
-      {
-        amount: isGlobalBribeLoading ? (
-          <Skeleton className="mb-2 h-10 w-full" />
-        ) : (
-          "$" +( totalBribeValue === undefined ? '0.00' : formatter.format(totalBribeValue))
-        ),
-        text: "In bribe rewards",
-      },
-      {
-        amount: isLoading ? (
-          <Skeleton className="mb-2 h-10 w-full" />
-        ) : (
-          inflation.toFixed(4) + "%"
-        ),
-        text: "BGT inflation rate",
-      },
-      {
-        amount: 
-          activeGauges,
-        text: "Active gauges",
-      },
-    ];
+    {
+      amount: isActiveValidatorsLoading ? (
+        <Skeleton className="mb-2 h-10 w-full" />
+      ) : (
+        totalValidators
+      ),
+      text: "Total validators",
+    },
+    {
+      amount: isGlobalBribeLoading ? (
+        <Skeleton className="mb-2 h-10 w-full" />
+      ) : (
+        "$" +
+        (totalBribeValue === undefined
+          ? "0.00"
+          : formatter.format(totalBribeValue))
+      ),
+      text: "In bribe rewards",
+    },
+    {
+      amount: isLoading ? (
+        <Skeleton className="mb-2 h-10 w-full" />
+      ) : (
+        inflation.toFixed(4) + "%"
+      ),
+      text: "BGT inflation rate",
+    },
+    {
+      amount: activeGauges,
+      text: "Active gauges",
+    },
+  ];
 
   return (
     <div className="container mb-10 max-w-[1078px]">

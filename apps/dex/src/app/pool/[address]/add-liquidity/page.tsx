@@ -32,6 +32,8 @@ async function getGlobalCuttingBoard() {
   }
 }
 
+export const fetchCache = "force-no-store";
+
 export default async function AddLiquidity({
   params,
 }: {
@@ -48,6 +50,9 @@ export default async function AddLiquidity({
       }),
     );
     const pool = router.getPool(params.address);
+    if (!pool) {
+      notFound();
+    }
     const prices = await getWBeraPriceDictForPoolTokens(
       pool ? [pool] : [],
       data?.globalCuttingBoard as CuttingBoard[],

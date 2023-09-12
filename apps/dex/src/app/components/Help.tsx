@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Button } from "@bera/ui/button";
 
@@ -35,7 +37,8 @@ export default function Help() {
         </div>
         <div className="mx-auto flex flex-col items-center justify-between rounded-2xl border bg-background px-12 py-8  text-center md:max-w-[350px]  lg:max-w-full  lg:items-start lg:text-left">
           <p className="mb-2 flex items-center gap-3 text-lg font-semibold text-secondary-foreground">
-            <span className="text-3xl">📜</span> BeraDex Docs
+            <span className="text-3xl">📜</span>{" "}
+            {process.env.NEXT_PUBLIC_DEX_NAME} Docs
           </p>
           <p className="mb-8 text-2xl font-semibold">
             <span className="hidden md:block">
@@ -44,7 +47,13 @@ export default function Help() {
             Check out our docs and start building{" "}
             <span className="hidden md:block">on Berachain today.</span>
           </p>
-          <Button className="w-fit" variant="secondary">
+          <Button
+            onClick={() =>
+              window.open(process.env.NEXT_PUBLIC_DOCS_URL, "_blank")
+            }
+            className="w-fit"
+            variant="secondary"
+          >
             Checkout Docs
           </Button>
         </div>

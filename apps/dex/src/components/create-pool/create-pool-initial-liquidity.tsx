@@ -1,4 +1,5 @@
 import React from "react";
+import { ActionButton } from "@bera/shared-ui";
 import { Alert, AlertDescription } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardTitle } from "@bera/ui/card";
@@ -56,13 +57,15 @@ export function CreatePoolInitialLiquidity({
             </AlertDescription>
           </Alert>
         )}
-        <Button
-          className="mt-4 w-full"
-          onClick={onContinue}
-          disabled={error !== undefined}
-        >
-          Next
-        </Button>
+        <ActionButton>
+          <Button
+            className="mt-4 w-full"
+            onClick={onContinue}
+            disabled={error !== undefined}
+          >
+            Next
+          </Button>
+        </ActionButton>
       </div>
     </Card>
   );

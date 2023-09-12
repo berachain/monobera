@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { ActionButton } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardTitle } from "@bera/ui/card";
@@ -116,13 +117,15 @@ export function CreatePoolFeeData({
             <AlertDescription>{error && error.message}</AlertDescription>
           </Alert>
         )}
-        <Button
-          className="w-full"
-          onClick={onContinue}
-          disabled={error !== undefined}
-        >
-          Next
-        </Button>
+        <ActionButton>
+          <Button
+            className="w-full"
+            onClick={onContinue}
+            disabled={error !== undefined}
+          >
+            Next
+          </Button>
+        </ActionButton>
       </div>
     </Card>
   );

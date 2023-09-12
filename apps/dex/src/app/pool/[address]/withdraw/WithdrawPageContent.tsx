@@ -3,6 +3,7 @@
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { DEX_PRECOMPILE_ABI, formatUsd, useBeraConfig } from "@bera/berajs";
 import {
+  ActionButton,
   InfoBoxList,
   InfoBoxListItem,
   PreviewToken,
@@ -200,19 +201,22 @@ export default function WithdrawLiquidityContent({
                   />
                 </InfoBoxList>
 
-                <Button
-                  onClick={() => {
-                    write({
-                      address: networkConfig.precompileAddresses
-                        .erc20DexAddress as Address,
-                      abi: DEX_PRECOMPILE_ABI,
-                      functionName: "removeLiquidityBurningShares",
-                      params: payload,
-                    });
-                  }}
-                >
-                  Withdraw Liquidity
-                </Button>
+                <ActionButton>
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      write({
+                        address: networkConfig.precompileAddresses
+                          .erc20DexAddress as Address,
+                        abi: DEX_PRECOMPILE_ABI,
+                        functionName: "removeLiquidityBurningShares",
+                        params: payload,
+                      });
+                    }}
+                  >
+                    Withdraw Liquidity
+                  </Button>
+                </ActionButton>
               </TxnPreview>
             </TabsContent>
             <TabsContent
@@ -232,6 +236,7 @@ export default function WithdrawLiquidityContent({
                     logoURI: "",
                   }}
                   balance={Number(formattedLpBalance)}
+                  hidePrice={true}
                   selectable={false}
                   amount={amount}
                   setAmount={handleSingleTokenWithdrawSharesIn}
@@ -324,19 +329,22 @@ export default function WithdrawLiquidityContent({
                     )}
                   />
                 </InfoBoxList>
-                <Button
-                  onClick={() => {
-                    write({
-                      address: networkConfig.precompileAddresses
-                        .erc20DexAddress as Address,
-                      abi: DEX_PRECOMPILE_ABI,
-                      functionName: "removeLiquidityExactAmount",
-                      params: singlePayload,
-                    });
-                  }}
-                >
-                  Withdraw Liquidity
-                </Button>
+                <ActionButton>
+                  <Button
+                    className="w-full"
+                    onClick={() => {
+                      write({
+                        address: networkConfig.precompileAddresses
+                          .erc20DexAddress as Address,
+                        abi: DEX_PRECOMPILE_ABI,
+                        functionName: "removeLiquidityExactAmount",
+                        params: singlePayload,
+                      });
+                    }}
+                  >
+                    Withdraw Liquidity
+                  </Button>
+                </ActionButton>
               </TxnPreview>
             </TabsContent>
           </CardContent>

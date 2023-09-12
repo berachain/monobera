@@ -1,12 +1,12 @@
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, multicall3Abi } from "viem";
+import { formatUnits } from "viem";
 import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
+import { MULTICALL3_ABI } from "..";
 import { type Token } from "../api/currency/tokens";
 import { useBeraConfig, useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
-import { MULTICALL3_ABI } from "..";
 
 const REFRESH_BLOCK_INTERVAL = 2000;
 
@@ -33,20 +33,21 @@ export const usePollAssetWalletBalance = () => {
     async () => {
       if (account && !error && tokenList) {
         const call: Call[] = tokenList.map((item: Token) => {
-          if(item.address === '0x0000000000000000000000000000000000000000') {
+          if (item.address === "0x0000000000000000000000000000000000000000") {
             return {
-              address: networkConfig.precompileAddresses.multicallAddress as Address,
+              address: networkConfig.precompileAddresses
+                .multicallAddress as Address,
               abi: MULTICALL3_ABI,
-              functionName: 'getEthBalance',
+              functionName: "getEthBalance",
               args: [account],
-            }
+            };
           }
           return {
             address: item.address as `0x${string}`,
             abi: erc20ABI,
-            functionName: 'balanceOf',
+            functionName: "balanceOf",
             args: [account],
-          }
+          };
         });
         try {
           const result = await publicClient.multicall({

@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { DEX_PRECOMPILE_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
-import { PreviewToken, TokenList, useTxn } from "@bera/shared-ui";
+import { ActionButton, PreviewToken, TokenList, useTxn } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -134,20 +134,22 @@ export function CreatePoolPreview({
             }
           />
         ) : (
-          <Button
-            className="w-full"
-            onClick={() => {
-              write({
-                address: networkConfig.precompileAddresses
-                  .erc20DexAddress as Address,
-                abi: DEX_PRECOMPILE_ABI,
-                functionName: "createPool",
-                params: payload,
-              });
-            }}
-          >
-            Create Pool
-          </Button>
+          <ActionButton>
+            <Button
+              className="w-full"
+              onClick={() => {
+                write({
+                  address: networkConfig.precompileAddresses
+                    .erc20DexAddress as Address,
+                  abi: DEX_PRECOMPILE_ABI,
+                  functionName: "createPool",
+                  params: payload,
+                });
+              }}
+            >
+              Create Pool
+            </Button>
+          </ActionButton>
         )}
       </CardContent>
     </Card>

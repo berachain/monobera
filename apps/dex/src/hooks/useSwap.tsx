@@ -123,16 +123,16 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   usePollAssetWalletBalance();
 
-useEffect(() => {
-  if(isWrap) {
-    if(swapKind === SwapKind.GIVEN_IN) {
-      setToAmount(fromAmount)
+  useEffect(() => {
+    if (isWrap) {
+      if (swapKind === SwapKind.GIVEN_IN) {
+        setToAmount(fromAmount);
+      }
+      if (swapKind === SwapKind.GIVEN_OUT) {
+        setFromAmount(toAmount);
+      }
     }
-    if(swapKind === SwapKind.GIVEN_OUT) {
-      setFromAmount(toAmount)
-    }
-  }
-}, [swapAmount]);
+  }, [swapAmount]);
   const {
     data: swapInfo,
     error: getSwapError,
@@ -158,34 +158,34 @@ useEffect(() => {
     isSwapLoading: isLoading,
   });
 
-
   const isBeratoken = (token: Token | undefined) => {
-    if(token === undefined) return false;
-    if(token.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS || token.address === process.env.NEXT_PUBLIC_BERA_ADDRESS) return true;
+    if (token === undefined) return false;
+    if (
+      token.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS ||
+      token.address === process.env.NEXT_PUBLIC_BERA_ADDRESS
+    )
+      return true;
     return false;
-
-  }
+  };
   useEffect(() => {
-    if(
+    if (
       selectedTo !== undefined &&
       selectedFrom !== undefined &&
       isBeratoken(selectedTo) &&
       isBeratoken(selectedFrom)
     ) {
-      setIsWrap(true)
-      if(selectedTo.address === process.env.NEXT_PUBLIC_BERA_ADDRESS) {
-        setWrapType(WRAP_TYPE.WRAP)
+      setIsWrap(true);
+      if (selectedTo.address === process.env.NEXT_PUBLIC_BERA_ADDRESS) {
+        setWrapType(WRAP_TYPE.WRAP);
       }
-      if(selectedFrom.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS) {
-        setWrapType(WRAP_TYPE.UNWRAP)
+      if (selectedFrom.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS) {
+        setWrapType(WRAP_TYPE.UNWRAP);
       }
-
     } else {
       setIsWrap(false);
       setWrapType(undefined);
     }
   }, [selectedTo, selectedFrom]);
-
 
   useMemo(() => {
     if (priceImpact && priceImpact > 15) {
@@ -210,7 +210,7 @@ useEffect(() => {
   });
 
   useEffect(() => {
-    if(isWrap) return
+    if (isWrap) return;
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(
         Number(
@@ -317,11 +317,11 @@ useEffect(() => {
       setSwapAmount(toAmount);
     }
 
-    if(isWrap) {
-      if(wrapType === WRAP_TYPE.WRAP) {
-        setWrapType(WRAP_TYPE.UNWRAP)
+    if (isWrap) {
+      if (wrapType === WRAP_TYPE.WRAP) {
+        setWrapType(WRAP_TYPE.UNWRAP);
       } else {
-        setWrapType(WRAP_TYPE.WRAP)
+        setWrapType(WRAP_TYPE.WRAP);
       }
     }
   };

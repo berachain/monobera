@@ -1,10 +1,10 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { RouterService, defaultConfig } from "@bera/bera-router";
+import { RouterService, defaultConfig, type Pool } from "@bera/bera-router";
 import { type CuttingBoard } from "@bera/berajs";
+import { getAddress } from "viem";
 
-import { getMetaTitle } from "~/utils/metadata";
 import { getWBeraPriceDictForPoolTokens } from "../api/getPrice";
 import PoolPageContent from "./PoolPageContent";
 
@@ -15,8 +15,7 @@ type Props = {
 export function generateMetadata({ params }: Props): Metadata {
   const { address } = params;
   return {
-    title: getMetaTitle("Pool Details"),
-    description: `View pool details for ${address}`,
+    title: `${address} Pool | DEX | Berachain`,
   };
 }
 
@@ -51,16 +50,23 @@ export default async function PoolPage({
         globalCuttingBoard: globalCuttingBoard,
       }),
     );
-    const pool = router.getPool(params.address);
+    const pools = router.getPools();
 
-    if (!pool) {
+    if (!pools) {
       notFound();
     }
     const prices = await getWBeraPriceDictForPoolTokens(
-      pool ? [pool] : [],
+      pools ?? [],
       data?.globalCuttingBoard as CuttingBoard[],
       router,
     );
+
+    const pool = pools.find(
+      (pool: Pool) => getAddress(pool.pool) === getAddress(params.address),
+    );
+    if (!pool) {
+      notFound();
+    }
     return <PoolPageContent prices={prices} pool={pool} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);

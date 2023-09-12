@@ -265,6 +265,7 @@ export const getWBeraPriceDictForPoolTokens = async (
         const cuttingBoard = globalCuttingBoard?.find(
           (board) => board.address.toLowerCase() === pool.pool.toLowerCase(),
         );
+
         const bgtPrice =
           mappedTokens[
             getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
@@ -281,6 +282,7 @@ export const getWBeraPriceDictForPoolTokens = async (
         const fees =
           (Number(pool?.formattedSwapFee) / 100) * Number(pool?.dailyVolume);
         const swapApr = (fees / Number(pool?.totalValue)) * 365 * 100;
+
         pool.fees = fees;
         pool.feeApy = Number.isNaN(swapApr) ? 0 : swapApr;
         pool.bgtApy = Number.isNaN(poolApy) ? 0 : poolApy;
