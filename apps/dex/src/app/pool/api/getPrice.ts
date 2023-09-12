@@ -20,19 +20,53 @@ interface CoinsData {
   coins: Coin[];
 }
 
+const getTvl = (
+  prices: MappedTokens,
+  tvlData: CoinsData[],
+  pool: Pool,
+  entries: number,
+) => {
+  if (!tvlData) return [];
+  const tvlArray: number[] = [];
+
+  tvlData?.slice(0, entries).forEach((data) => {
+    if (!data.coins) return;
+    const total = data.coins?.reduce((acc, cur) => {
+      const token = pool.tokens.find(
+        (token: { address: string }) =>
+          token.address.toLowerCase() === cur.denom.toLowerCase(),
+      );
+      const tokenValue = prices[getAddress(cur.denom)] ?? 0;
+      const tokenBalance = formatUnits(
+        BigInt(cur.amount),
+        token?.decimals ?? 18,
+      );
+
+      if (!tokenValue) {
+        return 0;
+      }
+      const totalTokenValue = tokenValue * Number(tokenBalance);
+      return acc + totalTokenValue;
+    }, 0);
+    tvlArray.push(total);
+  });
+  return tvlArray;
+};
 const getVolume = (
   prices: MappedTokens,
   volumeData: CoinsData[],
   pool: Pool,
+  entries: number,
 ) => {
   if (!volumeData) return { volumeArray: [], volumeTotal: 0 };
   const volumeArray: number[] = [];
   let volumeTotal = 0;
-  volumeData?.forEach((data) => {
+  volumeData?.slice(0, entries).forEach((data) => {
     if (!data.coins) return;
     const total = data.coins?.reduce((acc, cur) => {
       const token = pool.tokens.find(
-        (token) => token.address.toLowerCase() === cur.denom.toLowerCase(),
+        (token: { address: string }) =>
+          token.address.toLowerCase() === cur.denom.toLowerCase(),
       );
       const tokenValue = prices[getAddress(cur.denom)] ?? 0;
       const tokenBalance = formatUnits(
@@ -59,6 +93,20 @@ const formatVolume = (volume: number[], desiredLength: number) => {
   }
   return volume;
 };
+
+const formatTvl = (
+  tvl: number[],
+  desiredLength: number,
+  currentTvl: number,
+) => {
+  tvl[tvl.length] = currentTvl;
+
+  while (tvl.length < desiredLength) {
+    tvl.unshift(0);
+  }
+  return tvl;
+};
+
 const BASE_TOKEN = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
 
 const BERA_TOKEN_ADDRESS = process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address;
@@ -82,8 +130,8 @@ export const getWBeraPriceDictForPoolTokens = async (
     if (pools.length > 1) {
       pools.forEach((pool) => {
         const tokenPromises = pool.tokens
-          .filter((token) => token.address !== BASE_TOKEN)
-          .map((token) =>
+          .filter((token: { address: string }) => token.address !== BASE_TOKEN)
+          .map((token: { address: any; decimals: number }) =>
             router
               .getSwaps(
                 token.address,
@@ -134,48 +182,6 @@ export const getWBeraPriceDictForPoolTokens = async (
 
     const allPoolVolumePromises: any[] = [];
     pools.forEach((pool) => {
-      const dailyVolumeResponse = fetch(
-        `${
-          process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
-        }/events/dex/historical_volumes?pool=${getAddress(
-          pool.pool,
-        )}&num_of_days=1`,
-        {
-          cache: "force-cache",
-          next: {
-            revalidate: 60,
-          },
-        },
-      );
-
-      const weeklyVolumeResponse = fetch(
-        `${
-          process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
-        }/events/dex/historical_volumes?pool=${getAddress(
-          pool.pool,
-        )}&num_of_days=7`,
-        {
-          cache: "force-cache",
-          next: {
-            revalidate: 60,
-          },
-        },
-      );
-
-      const monthlyVolumeResponse = fetch(
-        `${
-          process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
-        }/events/dex/historical_volumes?pool=${getAddress(
-          pool.pool,
-        )}&num_of_days=30`,
-        {
-          cache: "force-cache",
-          next: {
-            revalidate: 60,
-          },
-        },
-      );
-
       const quarterlyVolumeResponse = fetch(
         `${
           process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
@@ -190,27 +196,21 @@ export const getWBeraPriceDictForPoolTokens = async (
         },
       );
 
-      // const fromTime = Math.floor(Date.now() / 1000) - 86400 * 90;
-      // const now = Math.floor(Date.now() / 1000);
-      // const quarterlyTvlResponse = fetch(
-      //   `${
-      //     process.env.NEXT_PUBLIC_ANALYTICS
-      //   }/analytics/tvldaily?pool=${getAddress(
-      //     pool.pool,
-      //   )}&fromTime=${fromTime}&toTime=${now}`,
-      //   {
-      //     cache: "force-cache",
-      //     next: {
-      //       revalidate: 60,
-      //     },
-      //   },
-      // );
+      const quarterlyTvlResponse = fetch(
+        `${
+          process.env.NEXT_PUBLIC_ANALYTICS
+        }/analytics/tvldaily?pool=${getAddress(pool.pool)}&num_of_days=90`,
+        {
+          cache: "force-cache",
+          next: {
+            revalidate: 60,
+          },
+        },
+      );
 
       const volumePromises = Promise.all([
-        dailyVolumeResponse,
-        weeklyVolumeResponse,
-        monthlyVolumeResponse,
         quarterlyVolumeResponse,
+        quarterlyTvlResponse,
       ]);
       allPoolVolumePromises.push(volumePromises);
     });
@@ -232,43 +232,80 @@ export const getWBeraPriceDictForPoolTokens = async (
 
     if (pools)
       pools.map((pool, i) => {
-        const volumes = responses[i] ?? [];
+        const data = responses[i] ?? [];
+        const volumeData = data[0];
+        const tvlData = data[1];
 
         const { volumeArray: dailyVolumeArray, volumeTotal: dailyVolumeTotal } =
-          getVolume(mappedTokens, volumes[0], pool);
+          getVolume(mappedTokens, volumeData, pool, 1);
         const {
           volumeArray: weeklyVolumeArray,
           volumeTotal: weeklyVolumeTotal,
-        } = getVolume(mappedTokens, volumes[1], pool);
+        } = getVolume(mappedTokens, volumeData, pool, 7);
         const {
           volumeArray: monthlyVolumeArray,
           volumeTotal: monthlyVolumeTotal,
-        } = getVolume(mappedTokens, volumes[2], pool);
+        } = getVolume(mappedTokens, volumeData, pool, 30);
         const {
           volumeArray: quarterlyVolumeArray,
           volumeTotal: quarterlyVolumeTotal,
-        } = getVolume(mappedTokens, volumes[3], pool);
+        } = getVolume(mappedTokens, volumeData, pool, 90);
+
+        pool.totalValue = pool.tokens.reduce(
+          (acc: number, cur: { address: string | number; balance: any }) => {
+            const tokenValue = mappedTokens[cur.address];
+            const tokenBalance = cur.balance;
+            if (!tokenValue) {
+              return acc;
+            }
+            const totalTokenValue = tokenValue * Number(tokenBalance);
+            return acc + totalTokenValue;
+          },
+          0,
+        );
+
+        const weeklyTvlArray = getTvl(mappedTokens, tvlData, pool, 7);
+        const monthlyTvlArray = getTvl(mappedTokens, tvlData, pool, 30);
+        const quarterlyTvlArray = getTvl(mappedTokens, tvlData, pool, 90);
 
         const swapFee = Number(formatUnits(BigInt(pool.swapFee) ?? "", 18));
         pool.formattedSwapFee = (swapFee * 100).toString();
 
+        // daily tvl is live from chain
         if (dailyVolumeArray.length) {
           pool.dailyVolume = dailyVolumeTotal;
           pool.dailyFees = (pool?.dailyVolume ?? 0) * swapFee;
         }
+
         if (weeklyVolumeArray.length) {
           pool.weeklyVolume = formatVolume(weeklyVolumeArray.reverse(), 7);
-          pool.weeklyFees = pool.weeklyVolume.map((volume) => volume * swapFee);
+          pool.weeklyFees = pool.weeklyVolume.map(
+            (volume: number) => volume * swapFee,
+          );
           pool.weeklyFeesTotal = weeklyVolumeTotal * swapFee;
           pool.weeklyVolumeTotal = weeklyVolumeTotal;
+        }
+        if (weeklyTvlArray.length) {
+          pool.weeklyTvl = formatTvl(
+            weeklyTvlArray.reverse(),
+            7,
+            pool.totalValue,
+          );
         }
         if (monthlyVolumeArray.length) {
           pool.monthlyVolume = formatVolume(monthlyVolumeArray.reverse(), 30);
           pool.monthlyFees = pool.monthlyVolume.map(
-            (volume) => volume * swapFee,
+            (volume: number) => volume * swapFee,
           );
           pool.monthlyFeesTotal = monthlyVolumeTotal * swapFee;
           pool.monthlyVolumeTotal = monthlyVolumeTotal;
+        }
+        if (monthlyTvlArray.length) {
+          pool.monthlyTvl = formatTvl(
+            monthlyTvlArray.reverse(),
+            30,
+            pool.totalValue,
+          );
         }
         if (quarterlyVolumeArray.length) {
           pool.quarterlyVolume = formatVolume(
@@ -276,20 +313,18 @@ export const getWBeraPriceDictForPoolTokens = async (
             90,
           );
           pool.quarterlyFees = pool.quarterlyVolume.map(
-            (volume) => volume * swapFee,
+            (volume: number) => volume * swapFee,
           );
           pool.quarterlyFeesTotal = quarterlyVolumeTotal * swapFee;
-          pool.monthlyVolumeTotal = quarterlyVolumeTotal;
+          pool.quarterlyVolumeTotal = quarterlyVolumeTotal;
         }
-        pool.totalValue = pool.tokens.reduce((acc, cur) => {
-          const tokenValue = mappedTokens[cur.address];
-          const tokenBalance = cur.balance;
-          if (!tokenValue) {
-            return acc;
-          }
-          const totalTokenValue = tokenValue * Number(tokenBalance);
-          return acc + totalTokenValue;
-        }, 0);
+        if (quarterlyTvlArray.length) {
+          pool.quarterlyTvl = formatTvl(
+            quarterlyTvlArray.reverse(),
+            90,
+            pool.totalValue,
+          );
+        }
 
         const cuttingBoard = globalCuttingBoard?.find(
           (board) => board.address.toLowerCase() === pool.pool.toLowerCase(),

@@ -67,14 +67,18 @@ const Options = {
 };
 
 interface IPoolChart {
+  currentTvl: number;
+  weeklyTvl: number[];
   weeklyVolume: number[];
   weeklyFees: number[];
   weeklyVolumeTotal: number;
   weeklyFeesTotal: number;
+  monthlyTvl: number[];
   monthlyVolume: number[];
   monthlyFees: number[];
   monthlyVolumeTotal: number;
   monthlyFeesTotal: number;
+  quarterlyTvl: number[];
   quarterlyVolume: number[];
   quarterlyFees: number[];
   quarterlyVolumeTotal: number;
@@ -163,14 +167,18 @@ function calculatePercentageDifference(numbers: number[]): number {
 }
 
 export const PoolChart = ({
+  currentTvl,
+  weeklyTvl,
   weeklyVolume,
   weeklyFees,
   weeklyVolumeTotal,
   weeklyFeesTotal,
+  monthlyTvl,
   monthlyVolume,
   monthlyFees,
   monthlyVolumeTotal,
   monthlyFeesTotal,
+  quarterlyTvl,
   quarterlyVolume,
   quarterlyFees,
   quarterlyVolumeTotal,
@@ -182,12 +190,19 @@ export const PoolChart = ({
   const [chart, setChart] = useState(Chart.VOLUME);
   const [data, setData] = useState(getData(weeklyVolume, timeFrame, chart));
 
+  console.log("data", data);
+  console.log("chart", chart);
   useEffect(() => {
     if (timeFrame === TimeFrame.WEEKLY) {
       if (chart === Chart.VOLUME) {
         setData(getData(weeklyVolume, timeFrame, chart));
         setDifference(calculatePercentageDifference(weeklyVolume));
         setTotal(weeklyVolumeTotal);
+      }
+      if (chart === Chart.TVL) {
+        setData(getData(weeklyTvl, timeFrame, chart));
+        setDifference(calculatePercentageDifference(weeklyTvl));
+        setTotal(currentTvl);
       }
       if (chart === Chart.FEES) {
         setData(getData(weeklyFees, timeFrame, chart));
@@ -201,6 +216,11 @@ export const PoolChart = ({
         setDifference(calculatePercentageDifference(monthlyVolume));
         setTotal(monthlyVolumeTotal);
       }
+      if (chart === Chart.TVL) {
+        setData(getData(monthlyTvl, timeFrame, chart));
+        setDifference(calculatePercentageDifference(monthlyTvl));
+        setTotal(currentTvl);
+      }
       if (chart === Chart.FEES) {
         setData(getData(monthlyFees, timeFrame, chart));
         setDifference(calculatePercentageDifference(monthlyFees));
@@ -212,6 +232,11 @@ export const PoolChart = ({
         setData(getData(quarterlyVolume, timeFrame, chart));
         setDifference(calculatePercentageDifference(quarterlyVolume));
         setTotal(quarterlyVolumeTotal);
+      }
+      if (chart === Chart.TVL) {
+        setData(getData(quarterlyTvl, timeFrame, chart));
+        setDifference(calculatePercentageDifference(quarterlyTvl));
+        setTotal(currentTvl);
       }
       if (chart === Chart.FEES) {
         setData(getData(quarterlyFees, timeFrame, chart));
@@ -247,7 +272,7 @@ export const PoolChart = ({
           <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
             <TabsList>
               <TabsTrigger value={Chart.VOLUME}>Volume</TabsTrigger>
-              {/* <TabsTrigger value={Chart.TVL}>TVL</TabsTrigger> */}
+              <TabsTrigger value={Chart.TVL}>TVL</TabsTrigger>
               <TabsTrigger value={Chart.FEES}>Fees</TabsTrigger>
             </TabsList>
             {/* <Select
@@ -279,6 +304,11 @@ export const PoolChart = ({
         <TabsContent value={Chart.VOLUME}>
           <CardContent className="relative min-h-[250px] w-full">
             <BeraChart data={data} options={Options as any} type="bar" />
+          </CardContent>
+        </TabsContent>
+        <TabsContent value={Chart.TVL}>
+          <CardContent className="relative min-h-[250px] w-full">
+            <BeraChart data={data} options={Options as any} type="line" />
           </CardContent>
         </TabsContent>
         <TabsContent value={Chart.FEES}>

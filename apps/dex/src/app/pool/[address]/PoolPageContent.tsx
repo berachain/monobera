@@ -453,12 +453,16 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
       <div className=" mb-6 flex w-full grid-cols-5 flex-col-reverse gap-4 lg:grid">
         <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">
           <PoolChart
+            currentTvl={pool.totalValue ?? 0}
+            weeklyTvl={pool.weeklyTvl ?? []}
             weeklyVolume={pool.weeklyVolume ?? []}
             weeklyFees={pool.weeklyFees ?? []}
             weeklyVolumeTotal={pool.weeklyVolumeTotal ?? 0}
+            monthlyTvl={pool.monthlyTvl ?? []}
             monthlyVolume={pool.monthlyVolume ?? []}
             monthlyFees={pool.monthlyFees ?? []}
             monthlyVolumeTotal={pool.monthlyVolumeTotal ?? 0}
+            quarterlyTvl={pool.quarterlyTvl ?? []}
             quarterlyVolume={pool.quarterlyVolume ?? []}
             quarterlyFees={pool.quarterlyFees ?? []}
             quarterlyVolumeTotal={pool.quarterlyVolumeTotal ?? 0}
@@ -578,7 +582,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                     Rewards available
                   </h3>
                   <p className="text-lg font-semibold text-foreground">
-                    {bgtRewards ?? 0} BGT
+                    {bgtRewards.toFixed(2) ?? 0} BGT
                   </p>
                 </div>
 
