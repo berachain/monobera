@@ -1,4 +1,6 @@
-import { DataTable, SearchInput } from "@bera/shared-ui";
+import Image from "next/image";
+import { useBeraJs } from "@bera/berajs";
+import { ConnectButton, DataTable, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -7,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { columns } from "~/components/pools-table-columns";
+import { cloudinaryUrl } from "~/config";
 import { PoolCard } from "./PoolCard";
 import { usePoolTable } from "./usePoolTable";
 
@@ -75,6 +78,7 @@ export const PoolSearch = () => {
     setKeyword,
   } = usePoolTable();
 
+  const { isReady } = useBeraJs();
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -174,7 +178,7 @@ export const PoolSearch = () => {
             </Button>
           </TabsContent>
           <TabsContent value="userPools">
-            {!isList && (
+            {!isList && isReady && userPools !== undefined && (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
                   {userPools &&
@@ -187,7 +191,7 @@ export const PoolSearch = () => {
                 </div>
               </div>
             )}
-            {isList && (
+            {isList && isReady && userPools !== undefined && (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 <DataTable
                   data={userPools ?? []}
@@ -196,7 +200,31 @@ export const PoolSearch = () => {
                 />
               </div>
             )}
-            {isUserPoolsLoading && (
+            {!isReady && (
+              <div className="container flex flex-col gap-4">
+                <Image
+                  className="mx-auto"
+                  src={`${cloudinaryUrl}/bears/exrpxwn6fmll2x0c0jlr`}
+                  alt="wallet-connect-bear"
+                  width={535}
+                  height={285}
+                />
+                <div className="text-center text-3xl font-bold leading-[48px] text-foreground md:text-5xl">
+                  Connect your wallet
+                </div>
+                <div className="text-center text-lg font-semibold leading-7 text-muted-foreground md:text-xl">
+                  You need to connect your wallet to see deposited pools and
+                  rewards
+                </div>
+                <div className="max-w-[130px] self-center">
+                  <ConnectButton className="mx-auto max-w-[130px]" />
+                </div>
+              </div>
+            )}
+            {isReady &&
+              (userPools === undefined || userPools.length === 0) &&
+              !isUserPoolsLoading && <>FUCKING REEEEE</>}
+            {isUserPoolsLoading && isReady && (
               <Button className="mt-12" disabled variant="outline">
                 {" "}
                 Loading...
