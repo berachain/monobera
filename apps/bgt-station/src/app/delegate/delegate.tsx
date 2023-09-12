@@ -16,6 +16,7 @@ import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { useTheme } from "next-themes";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -32,6 +33,8 @@ export default function Delegate({
   redelegateValidator: string;
 }) {
   const { isConnected } = useBeraJs();
+  const { theme, systemTheme } = useTheme();
+  const t = theme === "system" ? systemTheme : theme;
   const router = useRouter();
   const [amount, setAmount] = React.useState("0.0");
   const [activeAction, setActiveAction] = React.useState<DelegateEnum>(action);
@@ -126,23 +129,28 @@ export default function Delegate({
         <div className="text-lg font-semibold capitalize leading-7 text-foreground">
           {action}
         </div>
-        <Image
-          src={ImageMapEnum[action.toUpperCase() as keyof typeof ImageMapEnum]}
-          alt="bera banner"
-          width={452}
-          height={175}
-        />
+        {t && (
+          <Image
+            src={
+              ImageMapEnum[action.toUpperCase() as keyof typeof ImageMapEnum][
+                t as "light" | "dark"
+              ]
+            }
+            alt="bera banner"
+            width={452}
+            height={175}
+            priority
+            loading="eager"
+          />
+        )}
+        {/* // https://blurred.dev/ */}
+
         <ValidatorInput
           action={action}
           amount={amount}
           onAmountChange={setAmount}
           validatorAddress={validator}
           showDelegated={action !== DelegateEnum.DELEGATE}
-          // emptyMessage={
-          //   action !== DelegateEnum.DELEGATE
-          //     ? "No BGT delegated"
-          //     : "No Validators found"
-          // }
         />
         {action === DelegateEnum.REDELEGATE && (
           <>
@@ -158,24 +166,6 @@ export default function Delegate({
             />
           </>
         )}
-        {/* <div className="rounded-18 bg-muted p-3 text-muted-foreground">
-          <div className="flex h-8 items-center justify-between">
-            <div>Total</div>
-            <div className="text-foreground">{amount} BGT</div>
-          </div>
-
-          {action !== DelegateEnum.DELEGATE && (
-            <div className="flex h-8 items-center justify-between">
-              <div>
-                {action === DelegateEnum.REDELEGATE
-                  ? "Cooldown"
-                  : "Unbonding date"}
-              </div>
-              <div className="text-foreground">{get7daysLater()}</div>
-            </div>
-          )}
-        </div> */}
-
         {getExceeding() && isConnected && (
           <Alert variant="destructive">
             {activeAction === DelegateEnum.DELEGATE

@@ -37,24 +37,8 @@ function Nothing() {
             Confused about unbonding? Check out our documentation for more
             information.
           </div>
-          <Link href={docsUrl} target="_blank">
+          <Link href={`${docsUrl}/getting-started/bgt-station-bgt.html#unbonding-bgt`} target="_blank">
             <Button className="w-full">How to unbond</Button>
-          </Link>
-        </Card>
-        <Card className="flex-1 px-12 py-8">
-          <div className="flex h-12 items-center gap-3 text-lg font-semibold leading-7 text-muted-foreground">
-            {" "}
-            <div className="text-[31.12px]">🤝</div>Unbonding Period
-          </div>
-          <div className="mb-8 text-xl font-semibold leading-7">
-            Unbonding your assets requires a wait period, during which your
-            assets will be locked.
-          </div>
-          <Link href="/validators">
-            <Button className="w-full" variant="outline">
-              {" "}
-              Learn about wait times
-            </Button>
           </Link>
         </Card>
       </div>

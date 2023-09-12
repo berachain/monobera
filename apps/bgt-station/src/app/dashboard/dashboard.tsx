@@ -24,7 +24,19 @@ export default function DashBoard({
   const prices = usePrices();
   const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
   const validators: PoLValidator[] = usePolValidators();
-
+  const validatorSession = [
+    {
+      sortingAttr: "tokens",
+      title: "🔥 Top staked validators",
+      message: "Stake your BGT with the most popular validators",
+    },
+    {
+      sortingAttr: "vApy",
+      title: "💰 Top paying validators",
+      message:
+        "Stake your BGT with the best validators to maximize your rewards",
+    },
+  ];
   return (
     <div className="container flex w-full max-w-[1078px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">
@@ -42,7 +54,6 @@ export default function DashBoard({
         </div>
         <Details avgValidatorUptime={avgValidatorUptime} />
       </div>
-
       <div>
         <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
           🌎 Global gauge weight
@@ -52,26 +63,14 @@ export default function DashBoard({
         </div>
         <GlobalGaugeWeightInfo />
       </div>
-
-      <ValidatorsList
-        key="top-stake-validators"
-        validators={validators}
-        sortingAttr={"tokens"}
-        title={"🔥 Top staked validators"}
-        message={"Stake your BGT with the most popular validators"}
-        isLoading={isLoading}
-      />
-
-      <ValidatorsList
-        key="top-paying-validators"
-        validators={validators}
-        sortingAttr={"vApy"}
-        title={"💰 Top paying validators"}
-        message={
-          "Stake your BGT with the best validators to maximize your rewards"
-        }
-        isLoading={isLoading}
-      />
+      {validatorSession.map((info) => (
+        <ValidatorsList
+          key={info.sortingAttr + info.title}
+          validators={validators}
+          isLoading={isLoading}
+          {...info}
+        />
+      ))}
     </div>
   );
 }
