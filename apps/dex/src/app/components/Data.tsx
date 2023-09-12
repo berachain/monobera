@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import { formatUsd, useLatestBlock } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+
 import { sumPrices } from "~/utils/sumPrices";
 import { usePollPrices } from "~/hooks/usePollPrices";
 
@@ -11,7 +12,7 @@ export function DataCard({
   icon,
   title,
   value,
-  isLoading
+  isLoading,
 }: {
   icon: React.ReactNode;
   title: string;
@@ -24,7 +25,11 @@ export function DataCard({
         <div className="text-muted-foreground">{icon}</div>
         <div className="whitespace-nowrap text-muted-foreground">{title}</div>
       </div>
-      {isLoading === false ? <div className="mt-2 text-base font-bold md:text-2xl">{value}</div> :   <Skeleton className="h-10 w-full rounded-lg" />}
+      {isLoading === false ? (
+        <div className="mt-2 text-base font-bold md:text-2xl">{value}</div>
+      ) : (
+        <Skeleton className="h-10 w-full rounded-lg" />
+      )}
     </div>
   );
 }
@@ -46,8 +51,8 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
   const block = useLatestBlock();
   const beraPrice = usePrice(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
   const isDataReady = useMemo(() => {
-    return !isLoading && block !== 0n 
-  }, [isLoading, block]) 
+    return !isLoading && block !== 0n;
+  }, [isLoading, block]);
 
   return (
     <section className="my-24 flex w-full flex-col items-center">
