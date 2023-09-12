@@ -1,15 +1,43 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { formatUsd, useLatestBlock } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
+import { sumPrices } from "~/utils/sumPrices";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import { DataCard } from "../components/Data";
 import { PoolSearch } from "./PoolsTable";
 
-export default function PoolPageHeader() {
+export default function PoolPageHeader({
+  tvl,
+  volume,
+}: {
+  tvl: any;
+  volume: any;
+}) {
   const router = useRouter();
+  const { usePrices, isLoading } = usePollPrices();
+
+  const prices = usePrices();
+  const tvlValue = useMemo(() => {
+    if (!prices || !tvl || !tvl[0]) return 0;
+    return sumPrices(prices, tvl[0].data);
+  }, [tvl, prices]);
+
+  const volumeValue = useMemo(() => {
+    if (!prices || !volume || !volume[0]) return 0;
+    return sumPrices(prices, volume[0].data);
+  }, [volume, prices]);
+
+  const block = useLatestBlock();
+
+  const isDataReady = useMemo(() => {
+    return !isLoading && block !== 0n;
+  }, [isLoading, block]);
+
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-6">
       <h1 className="text-center text-5xl font-bold">
@@ -41,17 +69,20 @@ export default function PoolPageHeader() {
         <DataCard
           icon={<Icons.lock />}
           title={"Total Value Locked"}
-          value={"$842,886,669"}
+          isLoading={!isDataReady}
+          value={formatUsd(tvlValue)}
         />
         <DataCard
           icon={<Icons.candleStick />}
           title={"24H Volume"}
-          value={"$69,420,702"}
+          isLoading={!isDataReady}
+          value={formatUsd(volumeValue)}
         />
         <DataCard
           icon={<Icons.medal />}
           title={"BGT Rewards Distributed"}
-          value={"1,690,420 BGT"}
+          isLoading={!isDataReady}
+          value={`${(Number(block) * 0.0042).toFixed(2)} BGT`}
         />
       </div>
       {/* <HotPools isMainPage={false} />

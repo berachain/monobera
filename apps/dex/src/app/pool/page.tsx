@@ -9,20 +9,45 @@ export const metadata: Metadata = {
   description: "View pools",
 };
 
-export default function Pool() {
-  // const router = new RouterService(defaultConfig);
-  // let pools: Pool[] | undefined = undefined;
-  // try {
-  //   pools = await router.fetchPaginatedPools(1, 1);
-  //   await getWBeraPriceDictForPoolTokens(pools ?? [], router);
-  // } catch (e) {
-  //   console.log(`Error fetching pools: ${e}`);
-  // }
-  // await getWBeraPriceDictForPoolTokens(pools, router);
+const getTvl = async () => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
+  );
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch pools");
+  }
+
+  const result = await res.json();
+  return result;
+};
+
+const getVolume = async () => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
+  );
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch pools");
+  }
+
+  const result = await res.json();
+  return result;
+};
+
+export default async function Pool() {
+  const tvl = getTvl();
+  const volume = getVolume();
+  const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
+    tvl: tvl,
+    volume: volume,
+  }));
 
   return (
     <div className="container m-auto flex w-full flex-col gap-5">
-      <PoolPageHeader />
+      <PoolPageHeader tvl={data?.tvl?.result} volume={data?.volume?.result} />
       {/* <PoolsTable pools={sortedPools ?? []} /> */}
     </div>
   );

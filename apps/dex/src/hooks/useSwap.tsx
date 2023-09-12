@@ -85,6 +85,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     inputToken,
   );
 
+  const [isWrap, setIsWrap] = useState(false);
+
+  enum WRAP_TYPE {
+    WRAP = "wrap",
+    UNWRAP = "unwrap",
+  }
+  const [wrapType, setWrapType] = useState<WRAP_TYPE | undefined>(undefined);
+
   const slippageType = useReadLocalStorage(
     LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE_TYPE,
   );
@@ -113,8 +121,18 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [showPriceImpact, setShowPriceImpact] = useState(false);
 
-  usePollAssetWalletBalance();
+  const { isLoading: isBalanceLoading } = usePollAssetWalletBalance();
 
+  useEffect(() => {
+    if (isWrap) {
+      if (swapKind === SwapKind.GIVEN_IN) {
+        setToAmount(fromAmount);
+      }
+      if (swapKind === SwapKind.GIVEN_OUT) {
+        setFromAmount(toAmount);
+      }
+    }
+  }, [swapAmount]);
   const {
     data: swapInfo,
     error: getSwapError,
@@ -140,6 +158,35 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     isSwapLoading: isLoading,
   });
 
+  const isBeratoken = (token: Token | undefined) => {
+    if (token === undefined) return false;
+    if (
+      token.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS ||
+      token.address === process.env.NEXT_PUBLIC_BERA_ADDRESS
+    )
+      return true;
+    return false;
+  };
+  useEffect(() => {
+    if (
+      selectedTo !== undefined &&
+      selectedFrom !== undefined &&
+      isBeratoken(selectedTo) &&
+      isBeratoken(selectedFrom)
+    ) {
+      setIsWrap(true);
+      if (selectedTo.address === process.env.NEXT_PUBLIC_BERA_ADDRESS) {
+        setWrapType(WRAP_TYPE.WRAP);
+      }
+      if (selectedFrom.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS) {
+        setWrapType(WRAP_TYPE.UNWRAP);
+      }
+    } else {
+      setIsWrap(false);
+      setWrapType(undefined);
+    }
+  }, [selectedTo, selectedFrom]);
+
   useMemo(() => {
     if (priceImpact && priceImpact > 15) {
       setShowPriceImpact(true);
@@ -163,6 +210,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   });
 
   useEffect(() => {
+    if (isWrap) return;
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(
         Number(
@@ -268,6 +316,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       setSwapKind(SwapKind.GIVEN_IN);
       setSwapAmount(toAmount);
     }
+
+    if (isWrap) {
+      if (wrapType === WRAP_TYPE.WRAP) {
+        setWrapType(WRAP_TYPE.UNWRAP);
+      } else {
+        setWrapType(WRAP_TYPE.WRAP);
+      }
+    }
   };
 
   return {
@@ -291,6 +347,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     showPriceImpact,
     exchangeRate,
     gasPrice: gasData?.formatted.gasPrice,
+    isWrap,
+    wrapType,
+    isBalanceLoading,
     tokenInPrice:
       tokenInPriceInfo === undefined
         ? selectedFrom?.address === QUOTING_TOKEN

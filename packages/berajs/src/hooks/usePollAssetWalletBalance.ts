@@ -3,6 +3,7 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
+import { MULTICALL3_ABI } from "..";
 import { type Token } from "../api/currency/tokens";
 import { useBeraConfig, useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
@@ -15,7 +16,7 @@ interface BalanceToken extends Token {
 }
 
 interface Call {
-  abi: typeof erc20ABI;
+  abi: any;
   address: `0x${string}`;
   functionName: string;
   args: any[];
@@ -27,16 +28,28 @@ export const usePollAssetWalletBalance = () => {
   const { account, error } = useBeraJs();
   const { networkConfig } = useBeraConfig();
   const { tokenList } = useTokens();
-  useSWR(
+  const { isLoading, isValidating } = useSWR(
     [account, "assetWalletBalances"],
     async () => {
+      if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {
-        const call: Call[] = tokenList.map((item: Token) => ({
-          address: item.address as `0x${string}`,
-          abi: erc20ABI,
-          functionName: "balanceOf",
-          args: [account],
-        }));
+        const call: Call[] = tokenList.map((item: Token) => {
+          if (item.address === "0x0000000000000000000000000000000000000000") {
+            return {
+              address: networkConfig.precompileAddresses
+                .multicallAddress as Address,
+              abi: MULTICALL3_ABI,
+              functionName: "getEthBalance",
+              args: [account],
+            };
+          }
+          return {
+            address: item.address as `0x${string}`,
+            abi: erc20ABI,
+            functionName: "balanceOf",
+            args: [account],
+          };
+        });
         try {
           const result = await publicClient.multicall({
             contracts: call,
@@ -76,13 +89,15 @@ export const usePollAssetWalletBalance = () => {
           console.log(error);
         }
       }
-
-      return undefined;
     },
     {
       refreshInterval: REFRESH_BLOCK_INTERVAL,
     },
   );
+  return {
+    isLoading,
+    isValidating,
+  };
 };
 
 export const useCurrentAssetWalletBalances = (): BalanceToken[] => {

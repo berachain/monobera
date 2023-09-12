@@ -47,6 +47,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     areAllInputsEmpty,
     updateTokenExceeding,
     areNoInputsExceeding,
+    areAllInputsPopulated,
   } = useMultipleTokenInput(pool?.tokens ?? []);
 
   const { needsApproval } = useMultipleTokenApprovals(
@@ -101,23 +102,20 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
 
   // const totalSupply = useTotalSupply()
 
-  const { usePreviewSharesForLiquidity, isLoading, isValidating } =
-    usePollPreviewSharesForLiquidity(
-      pool?.pool,
-      tokenInputs,
-      tokenInputs.map((tokenInput) => tokenInput.amount),
-    );
+  const { usePreviewSharesForLiquidity } = usePollPreviewSharesForLiquidity(
+    pool?.pool,
+    tokenInputs,
+    tokenInputs.map((tokenInput) => tokenInput.amount),
+  );
   const shares = usePreviewSharesForLiquidity();
 
-  const {
-    usePreviewSharesForSingleSidedLiquidityRequest,
-    isLoading: isSingleSidedLoading,
-    isValidating: isSingleSidedValidating,
-  } = usePollPreviewSharesForSingleSidedLiquidityRequest(
-    pool?.pool,
-    selectedSingleToken,
-    selectedSingleTokenAmount,
-  );
+  console.log("AHSARSA", shares);
+  const { usePreviewSharesForSingleSidedLiquidityRequest } =
+    usePollPreviewSharesForSingleSidedLiquidityRequest(
+      pool?.pool,
+      selectedSingleToken,
+      selectedSingleTokenAmount,
+    );
   const singleSidedShares = usePreviewSharesForSingleSidedLiquidityRequest();
 
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
@@ -130,12 +128,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     if (singleSidedShares && singleSidedShares[1][0]) {
       setSingleSidedExpectedShares(formatUnits(singleSidedShares[1][0], 18));
     }
-    if (
-      singleSidedShares === undefined &&
-      selectedSingleTokenAmount !== 0 &&
-      !isSingleSidedLoading &&
-      !isSingleSidedValidating
-    ) {
+    if (singleSidedShares === undefined) {
       setSingleSidedExpectedShares(undefined);
     }
   }, [singleSidedShares]);
@@ -172,16 +165,11 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   }, [selectedSingleToken, selectedSingleTokenAmount]);
 
   useEffect(() => {
-    if (shares) {
+    if (shares !== undefined) {
       const formattedShares = formatUnits(shares[1][0], 18);
       setExpectedShares(formattedShares);
     }
-    if (
-      shares === undefined &&
-      !areAllInputsEmpty &&
-      !isLoading &&
-      !isValidating
-    ) {
+    if (shares === undefined) {
       setExpectedShares(undefined);
     }
   }, [shares]);
@@ -191,12 +179,14 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     isMultipleInputDisabled:
       areAllInputsEmpty ||
       expectedShares === undefined ||
-      areNoInputsExceeding === false,
+      areNoInputsExceeding === false ||
+      areAllInputsPopulated === false,
     isSingleInputDisabled:
       selectedSingleToken === undefined ||
       selectedSingleTokenAmount === 0 ||
       singleSidedExpectedShares === undefined ||
-      singleSharesExceeding === true,
+      singleSharesExceeding === true ||
+      (burnShares !== undefined && Object.keys(burnShares).length === 0),
     singleSidedExpectedShares,
     totalValue,
     burnShares,

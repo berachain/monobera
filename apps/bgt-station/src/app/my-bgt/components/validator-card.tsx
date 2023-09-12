@@ -98,7 +98,6 @@ export default function ValidatorCard({
       value: `${formatUsd(bribeTotal ?? 0)}`,
     },
   ];
-  console.log("validator.bribeTokenList ", validator.bribeTokenList.length);
   const claimBribe = () => {
     write({
       address: process.env.NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address,

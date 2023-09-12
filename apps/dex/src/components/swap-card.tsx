@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { RouteNotFound } from "@bera/bera-router";
 import { DEX_PRECOMPILE_ABI, useBeraJs } from "@bera/berajs";
-import { TokenInput, useTxn } from "@bera/shared-ui";
+import { ActionButton, TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -80,6 +80,8 @@ export function SwapCard({
     gasPrice,
     tokenInPrice,
     tokenOutPrice,
+    isWrap,
+    wrapType,
   } = useSwap({
     inputCurrency,
     outputCurrency,
@@ -103,6 +105,57 @@ export function SwapCard({
     },
   });
 
+  const getSwapButton = () => {
+    if (
+      (Number(allowance?.formattedAllowance) ?? 0) < fromAmount &&
+      !exceedingBalance &&
+      !isWrap
+    ) {
+      return (
+        <DynamicApproveButton
+          token={selectedFrom}
+          spender={erc20ModuleAddress}
+        />
+      );
+    }
+    if (isConnected) {
+      if (isWrap) {
+        return <Button className="w-full">{wrapType}</Button>;
+      }
+      if (swapInfo !== undefined) {
+        return (
+          <DynamicPreview
+            swapInfo={swapInfo}
+            disabled={!swapInfo?.formattedReturnAmount || exceedingBalance}
+            priceImpact={priceImpact}
+            exchangeRate={exchangeRate}
+            tokenIn={selectedFrom}
+            tokenOut={selectedTo}
+            tokenInPrice={tokenInPrice}
+            tokenOutPrice={tokenOutPrice}
+            open={openPreview}
+            setOpen={setOpenPreview}
+            write={() => {
+              write({
+                address: erc20DexAddress,
+                abi: DEX_PRECOMPILE_ABI,
+                functionName: "batchSwap",
+                params: payload,
+              });
+            }}
+            isLoading={isLoading}
+          />
+        );
+      } else {
+        return (
+          <Button disabled={true} variant={"outline"} className="mt-4 w-full">
+            Select Token & Enter Amount
+          </Button>
+        );
+      }
+    }
+    return <Connect />;
+  };
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
@@ -173,7 +226,7 @@ export function SwapCard({
                   />
                 </ul>
                 <div className="flex flex-col gap-2">
-                  {swapInfo && (
+                  {swapInfo && !isWrap && (
                     <div className="flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
                       <div className="flex w-full flex-row justify-between">
                         <p className="text-xs font-medium text-muted-foreground sm:text-sm">
@@ -226,51 +279,7 @@ export function SwapCard({
                     </Alert>
                   )}
                 </div>
-                <div className="w-full">
-                  {(Number(allowance?.formattedAllowance) ?? 0) < fromAmount &&
-                  !exceedingBalance ? (
-                    <DynamicApproveButton
-                      token={selectedFrom}
-                      spender={erc20ModuleAddress}
-                    />
-                  ) : isConnected ? (
-                    swapInfo !== undefined ? (
-                      <DynamicPreview
-                        swapInfo={swapInfo}
-                        disabled={
-                          !swapInfo?.formattedReturnAmount || exceedingBalance
-                        }
-                        priceImpact={priceImpact}
-                        exchangeRate={exchangeRate}
-                        tokenIn={selectedFrom}
-                        tokenOut={selectedTo}
-                        tokenInPrice={tokenInPrice}
-                        tokenOutPrice={tokenOutPrice}
-                        open={openPreview}
-                        setOpen={setOpenPreview}
-                        write={() => {
-                          write({
-                            address: erc20DexAddress,
-                            abi: DEX_PRECOMPILE_ABI,
-                            functionName: "batchSwap",
-                            params: payload,
-                          });
-                        }}
-                        isLoading={isLoading}
-                      />
-                    ) : (
-                      <Button
-                        disabled={true}
-                        variant={"outline"}
-                        className="mt-4 w-full"
-                      >
-                        Select Token & Enter Amount
-                      </Button>
-                    )
-                  ) : (
-                    <Connect />
-                  )}
-                </div>
+                <ActionButton>{getSwapButton()}</ActionButton>
               </div>
             </div>
           </Card>

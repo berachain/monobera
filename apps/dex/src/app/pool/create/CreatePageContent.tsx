@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 import { CreatePool } from "~/components/create-pool/create-pool";
 import { CreatePoolFeeData } from "~/components/create-pool/create-pool-feedata";
 import { CreatePoolInitialLiquidity } from "~/components/create-pool/create-pool-initial-liquidity";
@@ -10,7 +8,6 @@ import {
   CreatePoolStepper,
   type IStep,
 } from "~/components/create-pool/create-pool-stepper";
-import { cloudinaryUrl } from "~/config";
 import useCreateTokenWeights, { Steps } from "~/hooks/useCreateTokenWeights";
 
 const steps: IStep[] = [
@@ -53,14 +50,7 @@ export default function CreatePageContent() {
 
   return (
     <div className="flex max-w-[500px] flex-col items-center justify-center gap-8">
-      <Image
-        src={`${cloudinaryUrl}/bears/tqocfijesxhp3lqjmrdv`}
-        className="mx-auto mb-[-60px] self-start"
-        alt="bidness"
-        width={196}
-        height={257}
-      />
-      <div className="w-full">
+      <div className="mt-8 w-full">
         {step === Steps.SET_TOKEN_WEIGHTS && (
           <CreatePool
             tokenWeights={tokenWeights}

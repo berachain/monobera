@@ -12,16 +12,15 @@ import ConnectedWalletPopover from "./connected-wallet-popover";
 
 export const ConnectButton = ({
   className,
-  isNavItem,
+  isNavItem = false,
 }: {
   className?: string;
   isNavItem?: boolean;
 }) => {
-  const { isConnected } = useBeraJs();
+  const { isConnected, isWrongNetwork } = useBeraJs();
   return (
     <RainbowConnectButton.Custom>
       {({
-        chain,
         openChainModal,
         openConnectModal,
         authenticationStatus,
@@ -60,9 +59,13 @@ export const ConnectButton = ({
                 );
               }
 
-              if (chain?.unsupported) {
+              if (isWrongNetwork) {
                 return (
-                  <Button onClick={openChainModal} type="button">
+                  <Button
+                    onClick={openChainModal}
+                    type="button"
+                    className="w-full"
+                  >
                     Wrong network
                   </Button>
                 );

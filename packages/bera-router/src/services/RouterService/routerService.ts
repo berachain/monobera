@@ -71,7 +71,9 @@ export class RouterService {
   }
 
   public getPool(poolId: string) {
-    return this.poolService.getPools().find((pool) => pool.pool === poolId);
+    return this.poolService
+      .getPools()
+      .find((pool) => getAddress(pool.pool) == getAddress(poolId));
   }
 
   public async getSwaps(

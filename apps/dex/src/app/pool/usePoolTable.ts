@@ -13,13 +13,14 @@ export const usePoolTable = () => {
   const [isNewPool, setIsNewPool] = useState(false);
   const [isHotPool, setIsHotPool] = useState(false);
   const [isList, setIsList] = useState(false);
+  const [keyword, setKeyword] = useState("");
   const {
     data: allData,
     size: allDataSize,
     setSize: setAllDataSize,
     isLoading: isAllDataLoading,
   } = useSWRInfinite(
-    (index) => ["search", index, hasBgtRewards, isHotPool, isNewPool, search],
+    (index) => ["search", index, hasBgtRewards, isHotPool, isNewPool, keyword],
     async (key: any[]) => {
       const page = key[1] + 1;
       try {
@@ -53,6 +54,11 @@ export const usePoolTable = () => {
   );
   const userPools = useUserDepositedPools();
 
+  const handleEnter = (e: any) => {
+    if (e.key === "Enter") {
+      setKeyword(search);
+    }
+  };
   return {
     data: data,
     userPools: userPools?.filter((pool: Pool) => {
@@ -80,5 +86,7 @@ export const usePoolTable = () => {
     setIsHotPool,
     isList,
     setIsList,
+    handleEnter,
+    setKeyword,
   };
 };

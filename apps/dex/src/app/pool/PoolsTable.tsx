@@ -1,10 +1,14 @@
-import { DataTable, SearchInput } from "@bera/shared-ui";
+"use client";
+
+import { useBeraJs } from "@bera/berajs";
+import { ConnectWalletBear, DataTable, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { columns } from "~/components/pools-table-columns";
 import { PoolCard } from "./PoolCard";
 import { usePoolTable } from "./usePoolTable";
@@ -70,7 +74,11 @@ export const PoolSearch = () => {
     isList,
     setIsList,
     isUserPoolsLoading,
+    handleEnter,
+    setKeyword,
   } = usePoolTable();
+
+  const { isReady } = useBeraJs();
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -91,8 +99,16 @@ export const PoolSearch = () => {
               </TabsList>
               <SearchInput
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value === "") {
+                    setKeyword("");
+                    setSearch("");
+                  } else {
+                    setSearch(e.target.value);
+                  }
+                }}
                 placeholder="Search by name or address"
+                onKeyDown={handleEnter}
                 id="all-pool-search"
               />
             </div>
@@ -139,7 +155,12 @@ export const PoolSearch = () => {
                   key={data.length}
                   data={data ?? []}
                   columns={columns}
-                  onRowClick={(state: any) => console.log(state)}
+                  onRowClick={(state: any) =>
+                    window.open(
+                      `${getAbsoluteUrl()}/pool/${state.original.pool}`,
+                      "_blank",
+                    )
+                  }
                 />
               </div>
             )}
@@ -157,7 +178,7 @@ export const PoolSearch = () => {
             </Button>
           </TabsContent>
           <TabsContent value="userPools">
-            {!isList && (
+            {!isList && isReady && userPools !== undefined && (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
                   {userPools &&
@@ -170,7 +191,7 @@ export const PoolSearch = () => {
                 </div>
               </div>
             )}
-            {isList && (
+            {isList && isReady && userPools !== undefined && (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 <DataTable
                   data={userPools ?? []}
@@ -179,7 +200,16 @@ export const PoolSearch = () => {
                 />
               </div>
             )}
-            {isUserPoolsLoading && (
+            {!isReady && (
+              <ConnectWalletBear
+                message="You need to connect your wallet to see deposited pools and
+              rewards"
+              />
+            )}
+            {isReady &&
+              (userPools === undefined || userPools.length === 0) &&
+              !isUserPoolsLoading && <>FUCKING REEEEE</>}
+            {isUserPoolsLoading && isReady && (
               <Button className="mt-12" disabled variant="outline">
                 {" "}
                 Loading...
