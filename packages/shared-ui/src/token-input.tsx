@@ -46,7 +46,7 @@ export function TokenInput({
   customTokenList = undefined,
   onTokenSelection = undefined,
   setAmount = undefined,
-  showExceeding = true,
+  showExceeding,
   onExceeding = undefined,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);

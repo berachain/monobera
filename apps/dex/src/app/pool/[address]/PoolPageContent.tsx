@@ -6,6 +6,7 @@ import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   REWARDS_PRECOMPILE_ABI,
   formatUsd,
+  formatter,
   truncateHash,
   useBeraJs,
   usePollBankBalance,
@@ -234,6 +235,7 @@ export const EventTable = ({
   events: SwapData[] | AddLiquidityData[] | WithdrawLiquidityData[];
   isLoading: boolean | undefined;
 }) => {
+  console.log(pool);
   return (
     <Table>
       <TableHeader>
@@ -472,7 +474,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                {formatUsd(pool.totalValue ?? "0")}
+                ${formatter.format(pool?.totalValue ?? 0)}
               </div>
             </Card>
             <Card className="p-4">
@@ -482,7 +484,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                {formatUsd(pool?.dailyVolume ?? "0")}
+                ${formatter.format(pool?.dailyVolume ?? 0)}
               </div>
             </Card>
             <Card className="p-4">

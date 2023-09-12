@@ -5,6 +5,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { columns } from "~/components/pools-table-columns";
 import { PoolCard } from "./PoolCard";
 import { usePoolTable } from "./usePoolTable";
@@ -70,7 +71,10 @@ export const PoolSearch = () => {
     isList,
     setIsList,
     isUserPoolsLoading,
+    handleEnter,
+    setKeyword,
   } = usePoolTable();
+
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -91,8 +95,16 @@ export const PoolSearch = () => {
               </TabsList>
               <SearchInput
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value === "") {
+                    setKeyword("");
+                    setSearch("");
+                  } else {
+                    setSearch(e.target.value);
+                  }
+                }}
                 placeholder="Search by name or address"
+                onKeyDown={handleEnter}
                 id="all-pool-search"
               />
             </div>
@@ -139,7 +151,12 @@ export const PoolSearch = () => {
                   key={data.length}
                   data={data ?? []}
                   columns={columns}
-                  onRowClick={(state: any) => console.log(state)}
+                  onRowClick={(state: any) =>
+                    window.open(
+                      `${getAbsoluteUrl()}/pool/${state.original.pool}`,
+                      "_blank",
+                    )
+                  }
                 />
               </div>
             )}

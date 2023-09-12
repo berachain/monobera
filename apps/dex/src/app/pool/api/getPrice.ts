@@ -1,6 +1,6 @@
 import { type RouterService } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { type CuttingBoard } from "@bera/berajs";
+import { type CuttingBoard, type Token } from "@bera/berajs";
 import { formatUnits, getAddress, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -61,6 +61,14 @@ const formatVolume = (volume: number[], desiredLength: number) => {
 };
 const BASE_TOKEN = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
 
+const BERA_TOKEN_ADDRESS = process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address;
+
+const beraToken: Token = {
+  address: BERA_TOKEN_ADDRESS,
+  decimals: 18,
+  symbol: "BERA",
+  name: "Berachain",
+};
 export const getWBeraPriceDictForPoolTokens = async (
   pools: Pool[],
   globalCuttingBoard: CuttingBoard[] | undefined,
@@ -70,13 +78,35 @@ export const getWBeraPriceDictForPoolTokens = async (
 
   if (pools.length) {
     const allPoolPromises: any[] = [];
-    pools.forEach((pool) => {
-      const tokenPromises = pool.tokens
+
+    if (pools.length > 1) {
+      pools.forEach((pool) => {
+        const tokenPromises = pool.tokens
+          .filter((token) => token.address !== BASE_TOKEN)
+          .map((token) =>
+            router
+              .getSwaps(
+                token.address,
+                BASE_TOKEN,
+                0,
+                parseUnits(`${1}`, token.decimals),
+              )
+              .catch(() => {
+                return undefined;
+              }),
+          );
+
+        allPoolPromises.push(tokenPromises);
+      });
+    }
+    if (pools && pools.length === 1) {
+      const pool = pools[0];
+      const tokenPromises = [...(pool?.tokens as Token[]), beraToken]
         .filter((token) => token.address !== BASE_TOKEN)
         .map((token) =>
           router
             .getSwaps(
-              token.address,
+              token.address as Address,
               BASE_TOKEN,
               0,
               parseUnits(`${1}`, token.decimals),
@@ -85,9 +115,8 @@ export const getWBeraPriceDictForPoolTokens = async (
               return undefined;
             }),
         );
-
       allPoolPromises.push(tokenPromises);
-    });
+    }
 
     const allPoolData = (await Promise.all(allPoolPromises.flat())).filter(
       (pool) => pool !== undefined,

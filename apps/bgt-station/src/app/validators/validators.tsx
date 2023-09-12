@@ -16,45 +16,6 @@ import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import ValidatorsTable from "./validators-table";
 
-function calculatePercentageChange(
-  oldValue: number | undefined,
-  newValue: number | undefined,
-) {
-  if (
-    oldValue === undefined ||
-    newValue === undefined ||
-    oldValue === 0 ||
-    newValue === 0
-  ) {
-    return "0%";
-  }
-  if (oldValue === 0) {
-    if (newValue > 0) {
-      return "+∞%";
-    } else if (newValue < 0) {
-      return "-∞%";
-    } else {
-      return "0%";
-    }
-  }
-
-  const percentageChange = ((newValue - oldValue) / Math.abs(oldValue)) * 100;
-
-  if (percentageChange > 0) {
-    return `+${percentageChange.toFixed(2)}%`;
-  } else if (percentageChange < 0) {
-    return `${percentageChange.toFixed(2)}%`;
-  } else {
-    return "0%";
-  }
-}
-
-// Example usage
-const oldValue = 50;
-const newValue = 75;
-const percentageChange = calculatePercentageChange(oldValue, newValue);
-console.log(`Percentage Change: ${percentageChange}`);
-
 export default function Validators({
   activeGauges,
 }: {

@@ -85,7 +85,7 @@ export default function AddLiquidityContent({
   });
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4">
+    <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
       <Card className="mx-6 w-full items-center bg-background p-4 sm:mx-0 sm:w-[480px]">
         <p className="text-center text-2xl font-semibold">{pool?.poolName}</p>

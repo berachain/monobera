@@ -121,7 +121,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [showPriceImpact, setShowPriceImpact] = useState(false);
 
-  usePollAssetWalletBalance();
+  const { isLoading: isBalanceLoading } = usePollAssetWalletBalance();
 
   useEffect(() => {
     if (isWrap) {
@@ -349,6 +349,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     gasPrice: gasData?.formatted.gasPrice,
     isWrap,
     wrapType,
+    isBalanceLoading,
     tokenInPrice:
       tokenInPriceInfo === undefined
         ? selectedFrom?.address === QUOTING_TOKEN

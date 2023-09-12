@@ -1,9 +1,8 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { RouterService, defaultConfig, type Pool } from "@bera/bera-router";
+import { RouterService, defaultConfig } from "@bera/bera-router";
 import { type CuttingBoard } from "@bera/berajs";
-import { getAddress } from "viem";
 
 import { getWBeraPriceDictForPoolTokens } from "../api/getPrice";
 import PoolPageContent from "./PoolPageContent";
@@ -50,23 +49,18 @@ export default async function PoolPage({
         globalCuttingBoard: globalCuttingBoard,
       }),
     );
-    const pools = router.getPools();
 
-    if (!pools) {
+    const pool = router.getPool(params.address);
+
+    if (!pool) {
       notFound();
     }
     const prices = await getWBeraPriceDictForPoolTokens(
-      pools ?? [],
+      pool ? [pool] : [],
       data?.globalCuttingBoard as CuttingBoard[],
       router,
     );
 
-    const pool = pools.find(
-      (pool: Pool) => getAddress(pool.pool) === getAddress(params.address),
-    );
-    if (!pool) {
-      notFound();
-    }
     return <PoolPageContent prices={prices} pool={pool} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);

@@ -28,9 +28,10 @@ export const usePollAssetWalletBalance = () => {
   const { account, error } = useBeraJs();
   const { networkConfig } = useBeraConfig();
   const { tokenList } = useTokens();
-  useSWR(
+  const { isLoading, isValidating } = useSWR(
     [account, "assetWalletBalances"],
     async () => {
+      if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {
         const call: Call[] = tokenList.map((item: Token) => {
           if (item.address === "0x0000000000000000000000000000000000000000") {
@@ -88,13 +89,15 @@ export const usePollAssetWalletBalance = () => {
           console.log(error);
         }
       }
-
-      return undefined;
     },
     {
       refreshInterval: REFRESH_BLOCK_INTERVAL,
     },
   );
+  return {
+    isLoading,
+    isValidating,
+  };
 };
 
 export const useCurrentAssetWalletBalances = (): BalanceToken[] => {
