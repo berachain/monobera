@@ -12,7 +12,7 @@ import { mutate } from "swr";
 import { type Address } from "wagmi";
 
 export default function RewardsCard({ pool }: { pool: Pool }) {
-  const { account } = useBeraJs();
+  const { account, isReady } = useBeraJs();
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -79,7 +79,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
         </div>
         <Button
           variant={"warning"}
-          disabled={isLoading || bgtRewards === 0}
+          disabled={isLoading || bgtRewards === 0 || !isReady}
           className="px-2 text-sm leading-none md:px-4 md:text-lg md:leading-7"
           onClick={() => {
             write({

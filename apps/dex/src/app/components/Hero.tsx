@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
@@ -9,7 +9,6 @@ import { SwapCard } from "~/components/swap-card";
 import { bgtDappUrl } from "~/config";
 
 export default function Hero() {
-  const router = useRouter();
   return (
     <div className="my-24 flex w-full flex-col items-center justify-between gap-4 md:flex-row">
       <div className="flex-1">
@@ -19,21 +18,21 @@ export default function Hero() {
           <br className="block md:hidden" /> New Dex
         </h1>
         <div className="mb-6 text-center md:text-left">
-          <Button onClick={() => router.push("/swap")} className="mr-3">
-            Enter App
-          </Button>
-          <Button variant="outline" onClick={() => router.push("/pool")}>
-            View Pools
-          </Button>
+          <Link href={"/swap"}>
+            <Button className="mr-3">Enter App</Button>
+          </Link>
+          <Link href={"/pool"}>
+            <Button variant="outline">View Pools</Button>
+          </Link>
         </div>
         <div className="flex flex-col items-center gap-3 md:items-start">
-          <div
+          <Link
             className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-            onClick={() => router.push("/pool")}
+            href={"/pool"}
           >
             💧 Add Liquidity to Earn BGT Rewards{" "}
             <Icons.arrowRight className="h-3 w-3" />
-          </div>
+          </Link>
           <div
             className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
             onClick={() => window.open(bgtDappUrl, "_blank")}
@@ -41,13 +40,13 @@ export default function Hero() {
             🐝 Get BGT Emissions for my token{" "}
             <Icons.arrowRight className="h-3 w-3" />
           </div>
-          <div
+          <Link
             className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-            onClick={() => router.push("/pool/create")}
+            href={"/pool/create"}
           >
             🏖️ Create your own Liquidity Pools{" "}
             <Icons.arrowRight className="h-3 w-3" />
-          </div>
+          </Link>
         </div>
       </div>
       <div className="flex-1">

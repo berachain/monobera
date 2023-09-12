@@ -11,3 +11,4 @@ export * from "./honey";
 export * from "./erc20-honey";
 export * from "./redeem";
 export * from "./bribe";
+export * from "./multicall";

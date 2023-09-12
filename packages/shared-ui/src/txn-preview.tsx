@@ -12,6 +12,8 @@ import {
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 
+import { ActionButton } from "./action-btn-wrapper";
+
 interface Props extends PropsWithChildren {
   open: boolean;
   disabled?: boolean;
@@ -33,16 +35,18 @@ export function TxnPreview({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          disabled={disabled}
-          onClick={() => {
-            setOpen(true);
-          }}
-          className="w-full gap-1"
-          variant="outline"
-        >
-          {triggerText} <Icons.arrowRight className="h-3 w-3" />
-        </Button>
+        <ActionButton>
+          <Button
+            disabled={disabled}
+            onClick={() => {
+              setOpen(true);
+            }}
+            className="w-full gap-1"
+            variant="outline"
+          >
+            {triggerText} <Icons.arrowRight className="h-3 w-3" />
+          </Button>
+        </ActionButton>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[420px]">
         <DialogHeader>

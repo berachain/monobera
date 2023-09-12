@@ -110,8 +110,6 @@ const getHistoryInterval = (
   if (timeframe === TimeFrameEnum.TEN_EPOCHS) {
     historyInterval = historyInterval.slice(0, 10);
   }
-  console.log(historyInterval);
-
   return historyInterval.reverse();
 };
 export default function BribesAndEmissions({

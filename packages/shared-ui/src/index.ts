@@ -35,3 +35,5 @@ export { BearBG } from "./bear-bg";
 export { ValidatorIcon } from "./validator-icon";
 export * from "./hooks";
 export * from "./token-icon-list";
+export * from "./action-btn-wrapper";
+export * from "./connect-wallet-bear";

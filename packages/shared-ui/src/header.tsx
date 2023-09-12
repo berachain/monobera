@@ -69,7 +69,7 @@ export function Header({
         )}
         {!isHoney && <ThemeToggleMobile />}
         {!isHoney && <ThemeToggle />}
-        <ConnectBtn />
+        <ConnectBtn isNavItem={true} />
         <MobileDropdown navItems={navItems} />
       </div>
     </nav>

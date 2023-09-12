@@ -4,12 +4,16 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
+  REWARDS_PRECOMPILE_ABI,
   formatUsd,
+  formatter,
   truncateHash,
+  useBeraJs,
   usePollBankBalance,
+  usePollBgtRewards,
   usePollPreviewBurnShares,
 } from "@bera/berajs";
-import { TokenIcon } from "@bera/shared-ui";
+import { TokenIcon, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -24,6 +28,7 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { mutate } from "swr";
 import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
@@ -230,6 +235,7 @@ export const EventTable = ({
   events: SwapData[] | AddLiquidityData[] | WithdrawLiquidityData[];
   isLoading: boolean | undefined;
 }) => {
+  console.log(pool);
   return (
     <Table>
       <TableHeader>
@@ -297,7 +303,20 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const router = useRouter();
   const { useBankBalance } = usePollBankBalance(pool.shareAddress);
 
-  console.log("pool", pool);
+  const { useBgtRewards, isLoading, QUERY_KEY } = usePollBgtRewards(pool?.pool);
+  const bgtRewards = useBgtRewards();
+  const { account, isReady } = useBeraJs();
+
+  const {
+    write,
+    isLoading: isTxnLoading,
+    ModalPortal,
+  } = useTxn({
+    message: "Claiming BGT Rewards",
+    onSuccess: () => {
+      void mutate(QUERY_KEY);
+    },
+  });
 
   const shareBalance = useBankBalance();
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
@@ -391,6 +410,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   };
   return (
     <div className="container p-[52px]">
+      {ModalPortal}
       <div className="mb-4 flex w-full flex-wrap items-center justify-between">
         <div className="w-full items-center sm:items-start">
           <p className="mb-3 w-full text-center text-3xl font-semibold sm:text-left">
@@ -407,23 +427,13 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             <div
               className="hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex"
               onClick={() =>
-                window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
-              }
-            >
-              <Icons.newspaper className="h-3 w-3" />
-              See Pool on {blockExplorerName}
-              <Icons.external className="h-3 w-3" />
-            </div>
-            <div
-              className="hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex"
-              onClick={() =>
                 window.open(
                   `${blockExplorerUrl}/address/${pool?.poolShareDenomHex}`,
                 )
               }
             >
               <Icons.newspaper className="h-3 w-3" />
-              See LP Token on {blockExplorerName}
+              View LP Token on {blockExplorerName}
               <Icons.external className="h-3 w-3" />
             </div>
           </div>
@@ -443,12 +453,16 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
       <div className=" mb-6 flex w-full grid-cols-5 flex-col-reverse gap-4 lg:grid">
         <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">
           <PoolChart
+            currentTvl={pool.totalValue ?? 0}
+            weeklyTvl={pool.weeklyTvl ?? []}
             weeklyVolume={pool.weeklyVolume ?? []}
             weeklyFees={pool.weeklyFees ?? []}
             weeklyVolumeTotal={pool.weeklyVolumeTotal ?? 0}
+            monthlyTvl={pool.monthlyTvl ?? []}
             monthlyVolume={pool.monthlyVolume ?? []}
             monthlyFees={pool.monthlyFees ?? []}
             monthlyVolumeTotal={pool.monthlyVolumeTotal ?? 0}
+            quarterlyTvl={pool.quarterlyTvl ?? []}
             quarterlyVolume={pool.quarterlyVolume ?? []}
             quarterlyFees={pool.quarterlyFees ?? []}
             quarterlyVolumeTotal={pool.quarterlyVolumeTotal ?? 0}
@@ -464,7 +478,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                {formatUsd(pool.totalValue ?? "0")}
+                ${formatter.format(pool?.totalValue ?? 0)}
               </div>
             </Card>
             <Card className="p-4">
@@ -474,7 +488,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                {formatUsd(pool?.dailyVolume ?? "0")}
+                ${formatter.format(pool?.dailyVolume ?? 0)}
               </div>
             </Card>
             <Card className="p-4">
@@ -560,18 +574,38 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
           </section>
         </div>
         <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-2">
-          <Card>
-            <CardContent className="flex items-center justify-between gap-4 p-4">
-              <div>
-                <h3 className="text-xs font-medium text-muted-foreground">
-                  Rewards available
-                </h3>
-                <p className="text-lg font-semibold text-foreground">0 BGT</p>
-              </div>
+          {pool.bgtApy !== 0 && (
+            <Card>
+              <CardContent className="flex items-center justify-between gap-4 p-4">
+                <div>
+                  <h3 className="text-xs font-medium text-muted-foreground">
+                    Rewards available
+                  </h3>
+                  <p className="text-lg font-semibold text-foreground">
+                    {bgtRewards.toFixed(2) ?? 0} BGT
+                  </p>
+                </div>
 
-              <Button variant={"secondary"}>Claim Rewards</Button>
-            </CardContent>
-          </Card>
+                <Button
+                  variant={"secondary"}
+                  disabled={
+                    isLoading || bgtRewards === 0 || isTxnLoading || !isReady
+                  }
+                  onClick={() => {
+                    write({
+                      address: process.env
+                        .NEXT_PUBLIC_ERC20_REWARDS_ADDRESS as Address,
+                      abi: REWARDS_PRECOMPILE_ABI,
+                      functionName: "withdrawDepositorRewards",
+                      params: [account, pool.pool],
+                    });
+                  }}
+                >
+                  Claim Rewards
+                </Button>
+              </CardContent>
+            </Card>
+          )}
           <Card>
             <CardContent className="flex items-center justify-between gap-4 p-4">
               <div className="w-full">

@@ -3,6 +3,7 @@
 import React, {
   createContext,
   useEffect,
+  useMemo,
   useState,
   type PropsWithChildren,
 } from "react";
@@ -15,6 +16,7 @@ export interface IBeraJsAPI {
   error: Error | undefined;
   isConnected: boolean;
   isWrongNetwork?: boolean;
+  isReady?: boolean;
   login: (connectorID: string) => Promise<void>;
   logout: (connectorID: string) => void;
   setError: (error: Error | undefined) => void;
@@ -27,17 +29,22 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { error: evmError } = useConnect();
   const { address: account } = useAccount();
   const [error, setError] = useState<Error | undefined>(undefined);
-  const [isReady, setIsReady] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const { chain } = useNetwork();
 
-  useEffect(() => setIsReady(true), []);
+  useEffect(() => setIsMounted(true), []);
   return (
     <BeraJsContext.Provider
       value={{
         account: account as `0x${string}`,
         error: evmError || error,
-        isConnected: !evmError && account && isReady ? true : false,
+        isConnected: !evmError && account && isMounted ? true : false,
         isWrongNetwork: !chain?.unsupported ? false : true,
+        isReady: useMemo(() => {
+          return (
+            !evmError && account && isMounted && chain?.unsupported === false
+          );
+        }, [evmError, account, isMounted, chain?.unsupported]),
         login,
         logout,
         setError,

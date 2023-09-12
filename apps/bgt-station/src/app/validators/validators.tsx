@@ -16,60 +16,23 @@ import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import ValidatorsTable from "./validators-table";
 
-function calculatePercentageChange(
-  oldValue: number | undefined,
-  newValue: number | undefined,
-) {
-  if (
-    oldValue === undefined ||
-    newValue === undefined ||
-    oldValue === 0 ||
-    newValue === 0
-  ) {
-    return "0%";
-  }
-  if (oldValue === 0) {
-    if (newValue > 0) {
-      return "+∞%";
-    } else if (newValue < 0) {
-      return "-∞%";
-    } else {
-      return "0%";
-    }
-  }
-
-  const percentageChange = ((newValue - oldValue) / Math.abs(oldValue)) * 100;
-
-  if (percentageChange > 0) {
-    return `+${percentageChange.toFixed(2)}%`;
-  } else if (percentageChange < 0) {
-    return `${percentageChange.toFixed(2)}%`;
-  } else {
-    return "0%";
-  }
-}
-
-// Example usage
-const oldValue = 50;
-const newValue = 75;
-const percentageChange = calculatePercentageChange(oldValue, newValue);
-console.log(`Percentage Change: ${percentageChange}`);
-
 export default function Validators({
   activeGauges,
 }: {
   activeGauges: number;
   oldBgtSupply: number | undefined;
 }) {
-  const { useTotalValidators } = usePollActiveValidators();
+  const { useTotalValidators, isLoading: isActiveValidatorsLoading } =
+    usePollActiveValidators();
   const totalValidators: number = useTotalValidators();
   const { useBgtSupply } = usePollBgtSupply();
   const currentSupply = useBgtSupply();
   const { usePrices } = usePollPrices();
   const prices = usePrices();
-  const { useGlobalActiveBribeValue } = usePollGlobalValidatorBribes(prices);
+  const { useGlobalActiveBribeValue, isLoading: isGlobalBribeLoading } =
+    usePollGlobalValidatorBribes(prices);
   const totalBribeValue = useGlobalActiveBribeValue();
-  const { data } = useGlobalValidatorGaugeWeight();
+  const { data, isLoading } = useGlobalValidatorGaugeWeight();
 
   const inflation = useMemo(() => {
     if (data === undefined || currentSupply === undefined) return 0;
@@ -82,7 +45,7 @@ export default function Validators({
 
   const generalInfo = [
     {
-      amount: Number.isNaN(totalValidators) ? (
+      amount: isActiveValidatorsLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
         totalValidators
@@ -90,15 +53,18 @@ export default function Validators({
       text: "Total validators",
     },
     {
-      amount: totalBribeValue ? (
+      amount: isGlobalBribeLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
-        "$" + formatter.format(totalBribeValue)
+        "$" +
+        (totalBribeValue === undefined
+          ? "0.00"
+          : formatter.format(totalBribeValue))
       ),
       text: "In bribe rewards",
     },
     {
-      amount: inflation ? (
+      amount: isLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
         inflation.toFixed(4) + "%"
@@ -106,11 +72,7 @@ export default function Validators({
       text: "BGT inflation rate",
     },
     {
-      amount: activeGauges ? (
-        <Skeleton className="mb-2 h-10 w-full" />
-      ) : (
-        activeGauges
-      ),
+      amount: activeGauges,
       text: "Active gauges",
     },
   ];

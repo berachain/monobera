@@ -59,7 +59,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Homepage() {
-  // const pools: Pool[] = await getPools();
   const tvl = getTvl();
   const volume = getVolume();
   const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
@@ -67,8 +66,6 @@ export default async function Homepage() {
     volume: volume,
   }));
 
-  console.log("data tvl", data.tvl);
-  console.log("data volume", data.volume);
   return (
     <div className="container max-w-[1200px]">
       <Hero />

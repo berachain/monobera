@@ -48,13 +48,16 @@ export interface Pool {
   totalWeight: number;
   totalValue?: number;
   dailyVolume?: number;
+  weeklyTvl?: number[];
   weeklyVolume?: number[];
   weeklyVolumeTotal?: number;
   weeklyFeesTotal?: number;
+  monthlyTvl?: number[];
   monthlyVolume?: number[];
   monthlyVolumeTotal?: number;
   monthlyFeesTotal?: number;
   monthlyFees?: number[];
+  quarterlyTvl?: number[];
   quarterlyVolume?: number[];
   quarterlyFees?: number[];
   quarterlyVolumeTotal?: number;
