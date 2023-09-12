@@ -10,6 +10,7 @@ import {
 import { Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits, type Address } from "viem";
 
 import {
@@ -69,7 +70,9 @@ export default function Validator({
           </div>
           <div className="flex w-full items-center justify-center gap-2 text-3xl font-bold leading-[48px] md:text-5xl ">
             <ValidatorIcon address={validatorAddress} className="h-12 w-12" />
-            {validator?.description.moniker ?? "Loading..."}
+            {validator?.description.moniker ?? (
+              <Skeleton className="inline-block h-12 w-[100px]" />
+            )}
           </div>
 
           <div className="flex flex-col items-center justify-center gap-2">
@@ -78,20 +81,26 @@ export default function Validator({
             </div> */}
             <div className="text-sm font-medium leading-none text-muted-foreground">
               Operator address:{" "}
-              {validator
-                ? truncateHash(validator?.operatorAddr, 6)
-                : "Loading..."}
+              {validator ? (
+                truncateHash(validator?.operatorAddr, 6)
+              ) : (
+                <Skeleton className="inline-block h-[14px] w-[100px]" />
+              )}
             </div>
             <div className="text-sm font-medium leading-none text-muted-foreground">
               Consensus address:{" "}
-              {validator ? truncateHash(validator?.consAddr, 6) : "Loading..."}
+              {validator ? (
+                truncateHash(validator?.consAddr, 6)
+              ) : (
+                <Skeleton className="inline-block h-[14px] w-[100px]" />
+              )}
             </div>
           </div>
         </div>
         <div className="mt-8 flex flex-col gap-16 md:flex-row md:gap-4">
           <ValidatorDetails
             address={validatorAddress}
-            decription={<>{validator?.description.details}</>}
+            decription={validator?.description.details}
             commissions={
               (
                 Number(

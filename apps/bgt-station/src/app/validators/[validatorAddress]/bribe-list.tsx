@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   formatUsd,
   usePollValidatorBribes,
@@ -7,10 +8,12 @@ import {
   type Token,
 } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
+import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits, type Address } from "viem";
 
+import { cloudinaryUrl } from "~/config";
 import { usePollPrices } from "~/hooks/usePollPrices";
 
 const BribeCard = ({
@@ -56,7 +59,7 @@ const BribeCard = ({
   const formattedTotalInUsd = formattedTotal * price;
   const formattedProposalsLeft = Number(proposalsLeft ?? 0);
   return (
-    <Card className="flex flex-1 flex-col gap-3 p-8">
+    <Card className="flex w-full flex-1 flex-col gap-3 p-8">
       <div className="flex items-center gap-2">
         <TokenIcon token={token} />
         <div>
@@ -87,20 +90,12 @@ const BribeCardLoading = () => {
     <Card className="flex flex-1 flex-col gap-3 p-8">
       <div className="flex items-center gap-2">
         <Skeleton className="h-8 w-8 rounded-full" />
-        <div>
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-        </div>
+        <Skeleton className="h-8 w-[50px]" />
+        <Skeleton className="h-4 w-[100px]" />
       </div>
-      <div className=" flex flex-col gap-2 text-sm font-medium leading-tight text-muted-foreground">
-        <Skeleton className="h-10 w-full" />
-      </div>
-      <div className="flex justify-between text-sm font-medium leading-tight text-muted-foreground">
-        <Skeleton className="h-10 w-full" />
-      </div>
-      <div className="flex justify-between text-sm font-medium leading-tight text-muted-foreground">
-        <Skeleton className="h-10 w-full" />
-      </div>
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
     </Card>
   );
 };
@@ -110,43 +105,73 @@ export default function BribeList({
 }: {
   validatorAddress: Address;
 }) {
-  const { useActiveValidatorBribes } = usePollValidatorBribes(validatorAddress);
-  const bribes = useActiveValidatorBribes();
-  // console.log("bribes isLoading", bribes);
+  const { useActiveValidatorBribes, isLoading } =
+    usePollValidatorBribes(validatorAddress);
+  const bribes = [useActiveValidatorBribes() ?? []];
+  const [lineCount, setLineCount] = useState(1);
+  console.log(bribes);
+  const bribesList =
+    isLoading && bribes && bribes[0] && bribes[0][0]
+      ? bribes
+          .map((bribe, index) =>
+            bribe.bribePerProposal.amounts.map((amount: any, i: number) => ({
+              key: `${index}bribe${i}`,
+              amountPerProposal: amount,
+              tokenAddress: bribe.bribePerProposal.tokens[i],
+              startEpoch: bribe.startEpoch,
+              proposalsLeft: bribe.numBlockProposals,
+            })),
+          )
+          .flat()
+      : [];
+
   return (
     <div className="">
-      {(true || bribes) && (
-        <div className="mb-4 flex items-center text-lg font-semibold leading-7">
-          Active Bribes
-        </div>
-      )}
-      <div className="flex flex-col gap-4 md:flex-row">
-        {true ? (
-          <>
+      <div className="mb-4 flex items-center text-lg font-semibold leading-7">
+        Active Bribes
+      </div>
+      <div>
+        {isLoading ? (
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
             {[0, 0, 0].map((_: any, index: number) => (
               <BribeCardLoading key={index} />
             ))}
-          </>
+          </div>
+        ) : bribesList.length !== 0 ? (
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+            {bribesList
+              ?.slice(
+                0,
+                lineCount * 3 < bribesList.length
+                  ? lineCount * 3
+                  : bribesList.length,
+              )
+              .map((item: any) => (
+                <BribeCard key={item.key} {...item} />
+              ))}
+          </div>
         ) : (
-          <>
-            {bribes?.map((item: any) => {
-              return item.bribePerProposal.amounts.map(
-                (amount: any, index: number) => {
-                  return (
-                    <BribeCard
-                      key={index}
-                      amountPerProposal={amount}
-                      tokenAddress={item.bribePerProposal.tokens[index]}
-                      startEpoch={item.startEpoch}
-                      proposalsLeft={item.numBlockProposals}
-                    />
-                  );
-                },
-              );
-            })}
-          </>
+          <div className="mx-auto w-fit">
+            <Image
+              src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
+              alt="not found bear"
+              width={345.35}
+              height={200}
+            />
+            <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
+              The Validator has no bribes
+            </div>
+          </div>
         )}
       </div>
+      {lineCount * 3 < bribesList.length && (
+        <div className="mt-3 w-full text-center">
+          <Button variant="outline" onClick={() => setLineCount(lineCount + 1)}>
+            {" "}
+            Load More{" "}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

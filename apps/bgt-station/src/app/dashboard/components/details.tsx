@@ -6,6 +6,7 @@ import {
   usePollGlobalValidatorBribes,
 } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
+import { Skeleton } from "@bera/ui/skeleton";
 
 import { usePollPrices } from "~/hooks/usePollPrices";
 import { EpochTimeline } from "./epoch-timeline";
@@ -24,17 +25,33 @@ export function Details({
   const prices = usePrices();
   const { useGlobalAvgApy } = usePollGlobalValidatorBribes(prices);
   const avgApy = useGlobalAvgApy();
+
   const generalInfo = [
     {
-      amount: Number.isNaN(total) ? 0 : total,
+      amount:
+        total === undefined || Number.isNaN(total) ? (
+          <Skeleton className="h-8 w-20" />
+        ) : (
+          total
+        ),
       text: "Active validators",
     },
     {
-      amount: `${avgApy?.toFixed(2) ?? 0}%`,
+      amount:
+        avgApy === undefined ? (
+          <Skeleton className="h-8 w-20" />
+        ) : (
+          `${avgApy?.toFixed(2)}%`
+        ),
       text: "Average APY",
     },
     {
-      amount: `${formatter.format(Number(bgtSupply ?? 0))} BGT`,
+      amount:
+        bgtSupply === undefined ? (
+          <Skeleton className="h-8 w-20" />
+        ) : (
+          `${formatter.format(Number(bgtSupply))} BGT`
+        ),
       text: "Total BGT supply",
     },
   ];

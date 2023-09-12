@@ -41,7 +41,10 @@ export default function Redeem() {
       />
       <Card className="flex w-full flex-col gap-3 p-6">
         <div className="text-lg font-semibold leading-7 text-foreground">
-          Redeem
+          Redeem BGT for BERA
+        </div>
+        <div className="text-sm text-muted-foreground">
+          Exchange your BGT for BERA at a 1:1 ratio.
         </div>
         <div className="relative flex flex-col gap-2">
           <div className="leading-tigh text-sm font-semibold">Amount</div>
@@ -79,6 +82,9 @@ export default function Redeem() {
             <div className="text-foreground">0.0 BERA</div>
           </div>
         </div> */}
+        <Alert variant="warning">
+          Redeeming your BGT into BERA is an irreversible action.
+        </Alert>
         {Number(redeemAmount) > Number(userBalance) && isConnected && (
           <Alert variant="destructive" className="">
             This amount exceeds your total balance of {userBalance} BGT
