@@ -19,6 +19,8 @@ export function BearBG({
       alt="bera banner"
       width={2000}
       height={300}
+      style={{ width: "auto" }}
+      priority={false}
     />
   ) : (
     <Image
@@ -27,6 +29,8 @@ export function BearBG({
       alt="bera banner"
       width={2000}
       height={300}
+      priority={false}
+      style={{ width: "auto" }}
     />
   );
 }

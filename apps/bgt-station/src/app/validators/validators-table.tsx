@@ -11,6 +11,7 @@ import {
   type PoLValidator,
 } from "@bera/berajs";
 import { DataTable, SearchInput } from "@bera/shared-ui";
+import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress, type Address } from "viem";
 
@@ -27,19 +28,31 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
     return cuttingBoard ? cuttingBoard[0].address : undefined;
   }, [cuttingBoard]);
   const { gaugeDictionary } = useTokens();
+
   return (
     <>
       {highestVotedGauge === undefined || gaugeDictionary === undefined ? (
         "no gauges"
       ) : (
         <Link
-          className="flex h-full w-[141px] items-center justify-center hover:underline"
+          className="flex  h-full w-[160px] items-center justify-center gap-1"
           href={`${blockExplorerUrl}/address/${getAddress(highestVotedGauge)}`}
           target="_blank"
           onClick={(e) => e.stopPropagation()}
         >
-          {gaugeDictionary[getAddress(highestVotedGauge)]?.name ??
-            truncateHash(highestVotedGauge)}
+          <Avatar className="h-6 w-6">
+            <AvatarImage
+              src={gaugeDictionary[getAddress(highestVotedGauge)]?.logoURI}
+              className="rounded-full"
+            />
+            <AvatarFallback>
+              {truncateHash(highestVotedGauge).slice(0, 3)}
+            </AvatarFallback>
+          </Avatar>
+          <span className=" hover:underline">
+            {gaugeDictionary[getAddress(highestVotedGauge)]?.name ??
+              truncateHash(highestVotedGauge)}
+          </span>
         </Link>
       )}
     </>

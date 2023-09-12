@@ -4,6 +4,7 @@ import { Card } from "@bera/ui/card";
 
 import { unbonding_queue_columns } from "~/columns/global-gauge-weight";
 import "react-datepicker/dist/react-datepicker.css";
+import Link from "next/link";
 import {
   STAKING_PRECOMPILE_ABI,
   truncateHash,
@@ -12,10 +13,54 @@ import {
   type EntryData,
 } from "@bera/berajs";
 import { DataTable, ValidatorIcon, useTxn } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
+import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "wagmi";
 
-import Nothing from "../nothing";
+import { docsUrl } from "~/config";
+
+function Nothing() {
+  return (
+    <div className="container flex max-w-[764px] flex-col gap-8">
+      <div className="text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
+        Once you unbond BGT, you’ll be able to view your unbonding queue right
+        here.
+      </div>
+      <div className="flex flex-col justify-center gap-4 sm:flex-row">
+        <Card className="flex-1 px-12 py-8">
+          <div className="flex h-12 items-center gap-3 text-lg font-semibold leading-7 text-muted-foreground">
+            {" "}
+            <div className="text-[31.12px]">📜</div>What is Unbonding?
+          </div>
+          <div className="mb-8 text-xl font-semibold leading-7">
+            Confused about unbonding? Check out our documentation for more
+            information.
+          </div>
+          <Link href={docsUrl} target="_blank">
+            <Button className="w-full">How to unbond</Button>
+          </Link>
+        </Card>
+        <Card className="flex-1 px-12 py-8">
+          <div className="flex h-12 items-center gap-3 text-lg font-semibold leading-7 text-muted-foreground">
+            {" "}
+            <div className="text-[31.12px]">🤝</div>Unbonding Period
+          </div>
+          <div className="mb-8 text-xl font-semibold leading-7">
+            Unbonding your assets requires a wait period, during which your
+            assets will be locked.
+          </div>
+          <Link href="/validators">
+            <Button className="w-full" variant="outline">
+              {" "}
+              Learn about wait times
+            </Button>
+          </Link>
+        </Card>
+      </div>
+    </div>
+  );
+}
 
 export default function UnbondingQueue({
   unbondingQueue,
@@ -29,9 +74,9 @@ export default function UnbondingQueue({
     message: `Cancel Unbonding`,
   });
 
-  const dateArray: Date[] = Object.values(unbondingQueue ?? [])?.map(
-    (unbondingInfo: any) => new Date(unbondingInfo.completionTime),
-  );
+  const dateArray: Date[] = Object.values(unbondingQueue ?? [])
+    ?.map((unbondingInfo: any) => new Date(unbondingInfo.completionTime))
+    .sort((a: Date, b: Date) => a.getTime() - b.getTime());
 
   const getDateString = (dateString: string) => {
     const date = new Date(dateString);
@@ -81,6 +126,11 @@ export default function UnbondingQueue({
       ),
     }));
   }, [unbondingQueue]);
+
+  const [currentMonth, setCurrentMonth] = React.useState(dateArray[0]);
+  const disableLeft =
+    currentMonth?.getMonth() === dateArray[0]?.getMonth() &&
+    currentMonth?.getFullYear() === dateArray[0]?.getFullYear();
   return (
     <div className="flex w-full flex-col gap-8 md:flex-row ">
       {total !== 0 ? (
@@ -90,7 +140,15 @@ export default function UnbondingQueue({
             <Calendar
               mode="multiple"
               selected={dateArray}
-              defaultMonth={dateArray[0]}
+              month={currentMonth}
+              onMonthChange={(month: Date) => setCurrentMonth(month)}
+              classNames={{
+                nav_button_previous: cn(
+                  "absolute left-1",
+                  disableLeft &&
+                    "cursor-not-allowed hidden pointer-events-none",
+                ),
+              }}
             />
           </Card>
           <div className="w-full">
@@ -103,7 +161,7 @@ export default function UnbondingQueue({
           </div>
         </>
       ) : (
-        <Nothing message="This section will be populated once you have unbonded BGT from validators. " />
+        <Nothing />
       )}
     </div>
   );

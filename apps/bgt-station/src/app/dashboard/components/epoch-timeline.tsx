@@ -4,6 +4,7 @@ import React from "react";
 import { usePollEpochs } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 import { Progress } from "@bera/ui/progress";
+import { Skeleton } from "@bera/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
 import useSWR from "swr";
 
@@ -11,7 +12,7 @@ export function EpochTimeline() {
   const [duration, setDuration] = React.useState("0d");
   const [progressPercentage, setProgressPercentage] = React.useState(0);
 
-  const { useCurrentEpoch } = usePollEpochs();
+  const { useCurrentEpoch, isLoading } = usePollEpochs();
   const currentEpoch = useCurrentEpoch();
   useSWR(
     [currentEpoch],
@@ -48,19 +49,29 @@ export function EpochTimeline() {
   return (
     <Card className=" w-full px-6 py-[39px]">
       <div className="flex h-8 items-center gap-3">
-        <div className="font-semi text-xl font-semibold">
-          {currentEpoch?.current ?? 0}
-        </div>
-        <div className="flex-1">
-          <div className="mb-1 flex justify-between text-xs font-medium text-muted-foreground">
-            <span>{progressPercentage.toFixed(0)}%</span>
-            <span>{currentEpoch ? duration : "0d"} </span>
-          </div>
-          <Progress className="h-2" value={progressPercentage} />
-        </div>
-        <div className="font-semi text-xl font-semibold text-muted-foreground">
-          {currentEpoch?.current ? currentEpoch?.current + 1 : "0"}
-        </div>
+        {isLoading ? (
+          <>
+            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-8" />
+          </>
+        ) : (
+          <>
+            <div className="font-semi text-xl font-semibold">
+              {currentEpoch?.current ?? 0}
+            </div>
+            <div className="flex-1">
+              <div className="mb-1 flex justify-between text-xs font-medium text-muted-foreground">
+                <span>{progressPercentage.toFixed(0)}%</span>
+                <span>{currentEpoch ? duration : "0d"} </span>
+              </div>
+              <Progress className="h-2" value={progressPercentage} />
+            </div>
+            <div className="font-semi text-xl font-semibold text-muted-foreground">
+              {currentEpoch?.current ? currentEpoch?.current + 1 : "0"}
+            </div>
+          </>
+        )}
       </div>
     </Card>
   );

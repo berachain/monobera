@@ -110,11 +110,11 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
 
         // calculate amount of bribes emitted per proposal in usd and add to global total of "active" bribes
 
-        console.log("current epoch", currentEpoch?.current);
+        // console.log("current epoch", currentEpoch?.current);
         const bribes = result[index]?.filter(
           (bribe: any) => Number(bribe.startEpoch) <= currentEpoch?.current,
         );
-        console.log("active bribes", bribes);
+        // console.log("active bribes", bribes);
         mutate([ACTIVE_BRIBES_KEY, validator.operatorAddr], bribes);
 
         const bribeTokenList: any[] = [];

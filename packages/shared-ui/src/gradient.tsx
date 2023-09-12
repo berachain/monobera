@@ -19,6 +19,8 @@ export function Gradient({
       alt="bera banner"
       width={1078}
       height={820}
+      priority={false}
+      style={{ height: "auto" }}
     />
   ) : (
     <Image
@@ -27,6 +29,8 @@ export function Gradient({
       alt="bera banner"
       width={1078}
       height={820}
+      priority={false}
+      style={{ height: "auto" }}
     />
   );
 }
