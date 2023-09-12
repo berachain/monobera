@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
 
+import { sumPrices } from "~/utils/sumPrices";
 import { usePollPrices } from "~/hooks/usePollPrices";
 
 export function DataCard({
@@ -27,20 +28,30 @@ export function DataCard({
 }
 
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
-  console.log(tvl, volume);
-  const { usePrice } = usePollPrices();
+  const { usePrice, usePrices } = usePollPrices();
+
+  const prices = usePrices();
+  const tvlValue = useMemo(() => {
+    if (!prices || !tvl || !tvl[0]) return 0;
+    return sumPrices(prices, tvl[0].data);
+  }, [tvl, prices]);
+
+  const volumeValue = useMemo(() => {
+    if (!prices || !volume || !volume[0]) return 0;
+    return sumPrices(prices, volume[0].data);
+  }, [volume, prices]);
   const beraPrice = usePrice(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
   return (
     <section className="my-24 flex w-full flex-col items-center">
       <div className="grid w-full grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
         <DataCard
           title="Total Value Locked"
-          value="$842,886,669"
+          value={formatUsd(tvlValue)}
           icon={<Icons.lock className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard
           title="24H Volume"
-          value="$69,420,702"
+          value={formatUsd(volumeValue)}
           icon={<Icons.candleStick className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard
