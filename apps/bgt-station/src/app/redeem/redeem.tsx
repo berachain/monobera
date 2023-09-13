@@ -8,7 +8,7 @@ import {
   useBeraJs,
   usePollBgtBalance,
 } from "@bera/berajs";
-import { ConnectButton, useTxn } from "@bera/shared-ui";
+import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
@@ -20,7 +20,7 @@ import { cloudinaryUrl } from "~/config";
 import { useRedeem } from "../../hooks/useRedeem";
 
 export default function Redeem() {
-  const { isConnected } = useBeraJs();
+  const { isReady } = useBeraJs();
   const { useBgtBalance } = usePollBgtBalance();
   const { redeemAmount, payload, setRedeemAmount } = useRedeem();
   const userBalance = useBgtBalance();
@@ -57,7 +57,7 @@ export default function Redeem() {
             }
             value={redeemAmount}
           />
-          {isConnected && (
+          {isReady && (
             <div className="flex w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
               <Icons.wallet className="relative inline-block h-3 w-3 " />
               {userBalance}
@@ -85,14 +85,14 @@ export default function Redeem() {
         <Alert variant="warning">
           Redeeming your BGT into BERA is an irreversible action.
         </Alert>
-        {Number(redeemAmount) > Number(userBalance) && isConnected && (
+        {Number(redeemAmount) > Number(userBalance) && isReady && (
           <Alert variant="destructive" className="">
             This amount exceeds your total balance of {userBalance} BGT
           </Alert>
         )}
-        {isConnected ? (
+        <ActionButton>
           <Button
-            className=""
+            className="w-full"
             disabled={
               Number(redeemAmount) <= 0 ||
               Number(redeemAmount) > Number(userBalance) ||
@@ -111,9 +111,7 @@ export default function Redeem() {
           >
             Confirm
           </Button>
-        ) : (
-          <ConnectButton />
-        )}
+        </ActionButton>
       </Card>
     </div>
   );

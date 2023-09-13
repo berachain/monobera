@@ -1,5 +1,8 @@
 import { usePollEpochs } from "@bera/berajs";
 import useSWRImmutable from "swr/immutable";
+import { formatUnits, getAddress } from "viem";
+
+import { usePollPrices } from "./usePollPrices";
 
 interface EpochBribe {
   bribePerProposal: {
@@ -15,13 +18,20 @@ export interface FormattedHistoricalBribes {
   epoch: number;
   value: number;
 }
+
 export const useHistoricalBribes = (epochs: EpochBribe[]) => {
   const { useCurrentEpoch } = usePollEpochs();
   const currentEpoch = useCurrentEpoch();
-
-  const QUERY_KEY = ["validator-historical-bribes", epochs, currentEpoch];
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const QUERY_KEY = [
+    "validator-historical-bribes",
+    epochs,
+    currentEpoch,
+    prices,
+  ];
   return useSWRImmutable(QUERY_KEY, () => {
-    if (epochs.length === 0 || !currentEpoch) return [];
+    if (epochs.length === 0 || !currentEpoch || !prices) return [];
     const epoch = currentEpoch.current || 0;
     let history: EpochBribe[] = [];
     if (epochs.length > epoch) {
@@ -29,10 +39,28 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
     }
 
     const result: FormattedHistoricalBribes[] = history.map(
-      (bribe: any, index) => {
+      (historicalBribe: any, index) => {
+        let value = 0;
+        if (Object.keys(historicalBribe).length !== 0) {
+          value = historicalBribe.bribePerProposal.reduce(
+            (total: number, bribe: any) => {
+              const formattedBribeAmount = Number(
+                formatUnits(BigInt(bribe.amount), 18),
+              );
+              const tokenAddress = getAddress(bribe.address);
+              const price = prices[getAddress(tokenAddress)] ?? 0;
+              const bribeValue =
+                Number(formattedBribeAmount) *
+                price *
+                Number(historicalBribe.numBlockProposals);
+              return total + bribeValue;
+            },
+            0,
+          );
+        }
         return {
           epoch: epoch - index,
-          value: bribe?.bribePerProposal ? 100 : 0,
+          value: value,
         };
       },
     );

@@ -20,7 +20,7 @@ export const ValidatorIcon = ({
       <AvatarImage src={validatorImg} />
       <AvatarFallback className="font-bold">
         <Image
-          src="/icons/validator-icon.png"
+          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/xejwtgtnspkrwf3bdgep`}
           width={100}
           height={100}
           className="h-full w-full"

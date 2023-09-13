@@ -75,7 +75,17 @@ const Gauge = ({ address }: { address: string | undefined }) => {
         <AvatarImage src={logo} />
         <AvatarFallback></AvatarFallback>
       </Avatar>
-      {value}
+      <div
+        className="cursor-pointer hover:underline"
+        onClick={() =>
+          window.open(
+            `${process.env.NEXT_PUBLIC_DEX_URL}/pool/${address}`,
+            "_blank",
+          )
+        }
+      >
+        {value}
+      </div>
     </div>
   );
 };
@@ -116,23 +126,26 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
 
   const dataT: GlobalGaugeColumns[] = React.useMemo(() => {
     return (
-      cuttingBoardData?.map((data, index: number) => ({
-        gauge: <Gauge address={data.label} />,
-        incentiveAmount: data.amount,
-        incentivePercentage: data.percentage,
-        tvl: data.tvl,
-        hide: (
-          <Checkbox
-            id={`dashboard-checkbox-${index}`}
-            className="mx-auto"
-            disabled={
-              disableChecks &&
-              (filter[data.label] === undefined || filter[data.label] === false)
-            }
-            onClick={() => handleCheckboxChange(data)}
-          />
-        ),
-      })) ?? []
+      cuttingBoardData
+        ?.map((data, index: number) => ({
+          gauge: <Gauge address={data.label} />,
+          incentiveAmount: data.amount,
+          incentivePercentage: data.percentage,
+          tvl: data.tvl,
+          hide: (
+            <Checkbox
+              id={`dashboard-checkbox-${index}`}
+              className="mx-auto"
+              disabled={
+                disableChecks &&
+                (filter[data.label] === undefined ||
+                  filter[data.label] === false)
+              }
+              onClick={() => handleCheckboxChange(data)}
+            />
+          ),
+        }))
+        ?.sort((a, b) => b.incentivePercentage - a.incentivePercentage) ?? []
     );
   }, [cuttingBoardData, disableChecks]);
 

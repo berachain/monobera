@@ -212,5 +212,6 @@ export const usePollDelegatorUnbonding = () => {
     useDelegatorTotalUnbonding,
     useDelegatorTotalUnbondingValidators,
     useDelegatorUnbondingQueue,
+    QUERY_KEY,
   };
 };
