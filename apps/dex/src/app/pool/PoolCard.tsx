@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router";
-import { formatUsd } from "@bera/berajs";
+import { formatAmountBig, formatUsd } from "@bera/berajs";
 import { TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -42,7 +42,7 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
             TVL
           </div>
           <div className="overflow-hidden truncate whitespace-nowrap text-left text-sm font-medium">
-            {formatUsd(pool?.totalValue ?? "0")}
+            ${formatAmountBig(pool?.totalValue ?? "0")}
           </div>
         </div>
         <div className="rounded-2xl border border-border bg-muted px-4 py-2">

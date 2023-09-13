@@ -13,10 +13,13 @@ export default function Hero() {
     <div className="my-24 flex w-full flex-col items-center justify-between gap-4 md:flex-row">
       <div className="flex-1">
         <h1 className="md:leading-14 mb-6 text-center text-3xl font-extrabold leading-9 md:text-left md:text-5xl">
-          <span className="text-accent">Swap Tokens</span> on{" "}
-          <br className="hidden md:block" /> Your Favorite{" "}
+          <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
+            Swap Tokens
+          </span>{" "}
+          on <br className="hidden md:block" /> Your Favorite{" "}
           <br className="block md:hidden" /> New Dex
         </h1>
+
         <div className="mb-6 text-center md:text-left">
           <Link href={"/swap"}>
             <Button className="mr-3">Enter App</Button>
