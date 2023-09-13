@@ -425,7 +425,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               {pool?.bgtApy?.toFixed(2)}% BGT APY
             </Badge>
             <div
-              className="hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:flex"
+              className="hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:cursor-pointer hover:underline sm:flex"
               onClick={() =>
                 window.open(
                   `${blockExplorerUrl}/address/${pool?.poolShareDenomHex}`,

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatUsd } from "@bera/berajs";
 import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
@@ -8,6 +9,7 @@ import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
+import { TagList } from "./tag-list";
 
 export const columns: ColumnDef<Pool>[] = [
   {
@@ -15,15 +17,14 @@ export const columns: ColumnDef<Pool>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Pool name" />
     ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("poolName")}
-          </span>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="flex items-center gap-1">
+        <TagList tagList={row.original.tags ?? []} />
+        <span className="w-[150px] truncate text-left font-medium">
+          {row.getValue("poolName")}
+        </span>
+      </div>
+    ),
     enableSorting: false,
     enableHiding: false,
   },
@@ -51,6 +52,7 @@ export const columns: ColumnDef<Pool>[] = [
       <DataTableColumnHeader column={column} title="BGT Rewards" />
     ),
     cell: ({ row }) => {
+      console.log(row, row.original);
       return (
         <div className="flex w-[160px] items-center">
           {" "}
@@ -60,9 +62,14 @@ export const columns: ColumnDef<Pool>[] = [
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.bgtApy ?? 0;
+      const b = rowB.original.bgtApy ?? 0;
+      if (a < b) return -1;
+      else if (a > b) return 1;
+      else return 0;
     },
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
   {
     accessorKey: "dailyVolume",
@@ -97,22 +104,14 @@ export const columns: ColumnDef<Pool>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex flex-row items-center gap-1">
-        <Icons.minusSquare
-          className="h-5 w-5 text-muted-foreground"
-          onClick={() =>
-            window.open(
-              `${getAbsoluteUrl()}/pool/${row.original.pool}/withdraw`,
-            )
-          }
-        />
-        <Icons.plusSquare
-          className="h-5 w-5 text-muted-foreground"
-          onClick={() =>
-            window.open(
-              `${getAbsoluteUrl()}/pool/${row.original.pool}/add-liquidity`,
-            )
-          }
-        />
+        <Link href={`${getAbsoluteUrl()}/pool/${row.original.pool}/withdraw`}>
+          <Icons.minusSquare className="h-5 w-5 text-muted-foreground  hover:text-foreground" />
+        </Link>
+        <Link
+          href={`${getAbsoluteUrl()}/pool/${row.original.pool}/add-liquidity`}
+        >
+          <Icons.plusSquare className="h-5 w-5 text-muted-foreground hover:text-foreground" />
+        </Link>
       </div>
     ),
     enableSorting: false,

@@ -189,9 +189,6 @@ export const PoolChart = ({
   const [timeFrame, setTimeFrame] = useState(TimeFrame.WEEKLY);
   const [chart, setChart] = useState(Chart.VOLUME);
   const [data, setData] = useState(getData(weeklyVolume, timeFrame, chart));
-
-  console.log("data", data);
-  console.log("chart", chart);
   useEffect(() => {
     if (timeFrame === TimeFrame.WEEKLY) {
       if (chart === Chart.VOLUME) {
@@ -275,24 +272,6 @@ export const PoolChart = ({
               <TabsTrigger value={Chart.TVL}>TVL</TabsTrigger>
               <TabsTrigger value={Chart.FEES}>Fees</TabsTrigger>
             </TabsList>
-            {/* <Select
-              onValueChange={(value: string) =>
-                setTimeFrame(value as TimeFrame)
-              }
-            >
-              <SelectTrigger className="w-[90px]">
-                <SelectValue
-                  placeholder={TimeFrame.WEEKLY}
-                  defaultValue={TimeFrame.WEEKLY}
-                />
-              </SelectTrigger>
-
-              <SelectContent>
-                <SelectItem value={TimeFrame.WEEKLY}>7d</SelectItem>
-                <SelectItem value={TimeFrame.MONTHLY}>30d</SelectItem>
-                <SelectItem value={TimeFrame.QUARTERLY}>90d</SelectItem>
-              </SelectContent>
-            </Select> */}
             <Dropdown
               selected={timeFrame}
               onSelect={(value: string) => setTimeFrame(value as TimeFrame)}
