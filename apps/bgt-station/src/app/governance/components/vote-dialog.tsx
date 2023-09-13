@@ -2,7 +2,7 @@
 
 import React from "react";
 import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
-import { Tooltip } from "@bera/shared-ui";
+import { ActionButton, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import {
@@ -113,7 +113,11 @@ export function VoteDialog({
             onChange={(e) => setComment(e.target.value)}
           />
         </div>
-        <Button onClick={onSubmit}>Submit</Button>
+        <ActionButton>
+          <Button onClick={onSubmit} className="w-full">
+            Submit
+          </Button>
+        </ActionButton>
       </DialogContent>
     </Dialog>
   );

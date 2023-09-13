@@ -10,7 +10,7 @@ import {
   usePollBgtBalance,
 } from "@bera/berajs";
 import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
-import { ConnectButton, useTxn } from "@bera/shared-ui";
+import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
@@ -92,7 +92,7 @@ export default function Delegate({
     isLoading: isRedelegateLoading,
     ModalPortal: RedelegateModalPortal,
   } = useTxn({
-    message: "Unbonding from Validator",
+    message: "Redelegating BGT",
   });
 
   const { useBgtBalance } = usePollBgtBalance();
@@ -176,9 +176,9 @@ export default function Delegate({
               : "Insufficient BGT delegated"}
           </Alert>
         )}
-
-        {isConnected ? (
+        <ActionButton>
           <Button
+            className="w-full"
             disabled={
               !validator || // no validator selected
               isDelegatingLoading || // delegate action processing
@@ -225,9 +225,7 @@ export default function Delegate({
           >
             Confirm
           </Button>
-        ) : (
-          <ConnectButton />
-        )}
+        </ActionButton>
       </Card>
     </div>
   );
