@@ -19,33 +19,20 @@ export function formatAmountBig(input: string | number): string {
     num = input;
   }
 
+  const config = { maximumFractionDigits: 2 };
   if (num >= 1000000000000) {
     return (
-      new Intl.NumberFormat("en-US", { maximumSignificantDigits: 5 }).format(
-        num / 1000000000000,
-      ) + "T"
+      new Intl.NumberFormat("en-US", config).format(num / 1000000000000) + "T"
     );
   } else if (num >= 1000000000) {
     return (
-      new Intl.NumberFormat("en-US", { maximumSignificantDigits: 5 }).format(
-        num / 1000000000,
-      ) + "B"
+      new Intl.NumberFormat("en-US", config).format(num / 1000000000) + "B"
     );
   } else if (num >= 1000000) {
-    return (
-      new Intl.NumberFormat("en-US", { maximumSignificantDigits: 5 }).format(
-        num / 1000000,
-      ) + "M"
-    );
+    return new Intl.NumberFormat("en-US", config).format(num / 1000000) + "M";
   } else if (num >= 1000) {
-    return (
-      new Intl.NumberFormat("en-US", { maximumSignificantDigits: 5 }).format(
-        num / 1000,
-      ) + "K"
-    );
+    return new Intl.NumberFormat("en-US", config).format(num / 1000) + "K";
   } else {
-    return new Intl.NumberFormat("en-US", {
-      maximumSignificantDigits: 5,
-    }).format(num);
+    return new Intl.NumberFormat("en-US", config).format(num);
   }
 }

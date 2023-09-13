@@ -10,77 +10,65 @@ import { TagList } from "~/components/tag-list";
 
 export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
   const router = useRouter();
+  const poolName = pool?.poolName ?? "";
+  const dataList = [
+    { title: "TVL", amount: `$${formatAmountBig(pool?.totalValue ?? "0")}` },
+    { title: "Volume (24H)", amount: formatUsd(pool?.dailyVolume ?? "0") },
+    {
+      title: "Fees (24H)",
+      amount:
+        pool?.dailyVolume && Number(pool?.dailyVolume) !== 0
+          ? formatUsd(pool?.fees ?? "0")
+          : "$0",
+    },
+  ];
   return (
     <div
       key={pool?.pool}
-      className="col-span-1 flex w-full max-w-[275px] flex-col justify-end gap-9 rounded-xl border border-border bg-background px-6 py-8"
+      className="col-span-1 flex w-full max-w-[275px] flex-col justify-end rounded-xl border border-border bg-background"
     >
-      <div>
-        <div className="flex items-center justify-center gap-2">
-          <TagList tagList={pool?.tags ?? []} />
-          <div className="mb-2 line-clamp-2 flex h-12 w-full overflow-hidden text-left text-sm">
-            {pool?.poolName}
-          </div>
-        </div>
+      <div className="flex flex-col items-center justify-center gap-1 px-6 pb-4 pt-10">
         <TokenIconList
           tokenList={pool?.tokens?.map((t) => t.address) ?? []}
           size="lg"
         />
-      </div>
-
-      <div className="grid grid-cols-2 gap-2">
-        <div className="rounded-2xl border border-border bg-muted px-4 py-2">
-          <div className="text-left text-xs font-medium text-muted-foreground">
-            APR
-          </div>
-          <div className="overflow-hidden truncate whitespace-nowrap text-left text-sm font-medium">
-            {(pool?.totalApy ?? 0).toFixed(2)}%
-          </div>
+        <div className="flex h-12 w-full items-center justify-center text-sm font-medium text-muted-foreground">
+          {poolName.length > 60 ? `${poolName.slice(0, 60)}...` : poolName}
         </div>
-        <div className="rounded-2xl border border-border bg-muted px-4 py-2">
-          <div className="text-left text-xs font-medium text-muted-foreground">
-            TVL
-          </div>
-          <div className="overflow-hidden truncate whitespace-nowrap text-left text-sm font-medium">
-            ${formatAmountBig(pool?.totalValue ?? "0")}
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border bg-muted px-4 py-2">
-          <div className="text-left text-xs font-medium text-muted-foreground">
-            24H Volume
-          </div>
-          <div className="overflow-hidden truncate whitespace-nowrap text-left text-sm font-medium">
-            {formatUsd(pool?.dailyVolume ?? "0")}
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border bg-muted px-4 py-2">
-          <div className="text-left text-xs font-medium text-muted-foreground">
-            Fees (24H)
-          </div>
-          <div className="overflow-hidden truncate whitespace-nowrap text-left text-sm font-medium">
-            {" "}
-            {pool?.dailyVolume && Number(pool?.dailyVolume) !== 0
-              ? formatUsd(pool?.fees ?? "0")
-              : "$0"}
-          </div>
+        <div className="flex h-7 gap-2 text-center text-xl font-semibold">
+          {(pool?.totalApy ?? 0).toFixed(2)}% APY{" "}
+          <TagList tagList={pool?.tags ?? []} className="inline-block" />
         </div>
       </div>
 
-      <div className="flex gap-1">
-        <Button
-          className="w-fit py-[10px]"
-          onClick={() => router.push(`/pool/${pool?.pool}/add-liquidity`)}
-        >
-          <Icons.add className="h-6 w-6" />
-        </Button>
+      <div className="flex flex-col gap-1 bg-muted px-6 py-3">
+        {dataList.map((data, index) => (
+          <div key={index} className=" flex justify-between">
+            <div className="text-sm font-medium text-muted-foreground">
+              {data.title}
+            </div>
+            <div className="text-sm font-medium">{data.amount}</div>
+          </div>
+        ))}
+      </div>
 
-        <Button
-          className="h-11 w-full"
-          variant={"secondary"}
-          onClick={() => router.push(`/pool/${pool?.pool}`)}
-        >
-          View Pools
-        </Button>
+      <div className="w-full bg-muted p-3">
+        <div className="flex gap-1">
+          <Button
+            className="w-fit py-[10px]"
+            onClick={() => router.push(`/pool/${pool?.pool}/add-liquidity`)}
+          >
+            <Icons.add className="h-6 w-6" />
+          </Button>
+
+          <Button
+            className="h-11 w-full"
+            variant={"secondary"}
+            onClick={() => router.push(`/pool/${pool?.pool}`)}
+          >
+            View Pools
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -88,7 +76,7 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
 
 export const PoolCardLoading = () => {
   return (
-    <div className="col-span-1 flex w-full max-w-[275px] flex-col gap-8 rounded-xl bg-border p-8">
+    <div className="col-span-1 flex w-full max-w-[275px] flex-col gap-8 rounded-xl bg-muted p-8">
       <div className="flex gap-2">
         <Skeleton className="h-8 w-8 flex-shrink-0 rounded-full" />
         <Skeleton className="h-8 w-full" />
