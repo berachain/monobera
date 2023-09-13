@@ -150,7 +150,7 @@ const ValidatorModal = ({
             />
           ),
           commission: validator.commission.commissionRates.rate,
-          vapy: validator.vApy,
+          vapy: validator.vApy.toFixed(2),
           mwg: <ValidatorGauge address={validator.operatorAddr} />,
           bribes:
             validator.bribeTokenList.length !== 0 ? (

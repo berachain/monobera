@@ -37,7 +37,7 @@ export default function ValidatorDetails({
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
-            Commission <Tooltip text="Commission" />
+            Commission <Tooltip text="amount of validator rewards retained by this validator." />
           </div>
           <div className="text-muted-foreground">{commissions}</div>
         </div>
@@ -53,14 +53,14 @@ export default function ValidatorDetails({
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
-            Voting Power <Tooltip text="Voting Power" />
+            Voting Power <Tooltip text="represents a delegator's influence in validator decisions." />
           </div>
           <div className="text-muted-foreground">{votingPower}</div>
         </div>
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
-            vApy <Tooltip text="Voting Power" />
+            vApy <Tooltip text="projected measure of potential yearly earnings" />
           </div>
           <div className="text-muted-foreground">{vApy}%</div>
         </div>
