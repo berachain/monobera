@@ -18,8 +18,8 @@ export const ConnectWalletBear = ({ message }: { message: string }) => {
       <div className="text-center text-lg font-semibold leading-7 text-muted-foreground md:text-xl">
         {message}
       </div>
-      <div className="max-w-[130px] self-center">
-        <ConnectButton className="mx-auto max-w-[130px]" />
+      <div className="max-w-[1=80px] self-center">
+        <ConnectButton className="mx-auto w-full" />
       </div>
     </div>
   );

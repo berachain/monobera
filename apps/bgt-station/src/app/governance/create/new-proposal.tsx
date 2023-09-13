@@ -9,7 +9,7 @@ import {
   useBeraJs,
   usePollBgtBalance,
 } from "@bera/berajs";
-import { ConnectButton, Tooltip, useTxn } from "@bera/shared-ui";
+import { ActionButton, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import {
@@ -47,7 +47,7 @@ import { useCreateProposal } from "./useCreateProposal";
 
 export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const router = useRouter();
-  const { isConnected } = useBeraJs();
+  const { isReady } = useBeraJs();
   const triggerRef = useRef<HTMLDivElement>(null);
   const [_contentWidth, setContentWidth] = useState("w-[450px]");
   const { useBgtBalance } = usePollBgtBalance();
@@ -276,7 +276,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                       />
                     </FormControl>
                     <FormMessage className="mt-2" />
-                    {isConnected && (
+                    {isReady && (
                       <div className="absolute right-1 mt-2 flex h-3 w-fit items-center gap-1 text-[10px] text-muted-foreground">
                         <Icons.wallet className="relative inline-block h-3 w-3 " />
                         {userBalance}
@@ -303,11 +303,11 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             {type === ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL && (
               <NewMarketCollateralForm form={form} />
             )}
-            {isConnected ? (
-              <Button type="submit">Submit</Button>
-            ) : (
-              <ConnectButton />
-            )}
+            <ActionButton>
+              <Button type="submit" className="w-full">
+                Submit
+              </Button>
+            </ActionButton>
           </Card>
         </form>
       </Form>

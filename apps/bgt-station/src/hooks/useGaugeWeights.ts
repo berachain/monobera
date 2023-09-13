@@ -28,7 +28,7 @@ export const getTvlPrices = (
       resultArray.push(0);
       return;
     } else {
-      const total = tvl.data.reduce(
+      const total = tvl.coins.reduce(
         (
           acc: number,
           cur: { denom: string; amount: string | number | bigint | boolean },
@@ -47,17 +47,8 @@ export const getTvlPrices = (
 
 export const getPoolTvl = async (address: string) => {
   try {
-    // const res = await fetch(`${indexerUrl}/bgt/rewards/delegator/${address}`);
-
-    // TODO: narrow window to past day reee
-    const now = Math.floor(Date.now() / 1000);
-    const yesterday = now - 12000000;
     const res = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_ANALYTICS
-      }/analytics/tvldaily?from_time=${yesterday}&to_time=${now}&pool=${getAddress(
-        address,
-      )}`,
+      `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily?pool=${address}&num_of_days=1`,
     );
     const jsonRes = await res.json();
     return jsonRes.result[jsonRes.result.length - 1] ?? undefined;
@@ -164,8 +155,8 @@ export const useGlobalValidatorGaugeWeight = () => {
       try {
         if (!prices) return undefined;
         const response = await fetch(`${indexerUrl}/bgt/rewards`);
-
         const result = await response.json().then((res) => res.result);
+
         const promiseArray = result.map((w: any) => getPoolTvl(w.address));
         const cbTvlData = await Promise.all(promiseArray);
         const tvl = getTvlPrices(cbTvlData, prices);

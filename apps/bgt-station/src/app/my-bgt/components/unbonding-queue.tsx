@@ -16,6 +16,7 @@ import { DataTable, ValidatorIcon, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { mutate } from "swr";
 import { type Address } from "wagmi";
 
 import { docsUrl } from "~/config";
@@ -54,11 +55,14 @@ export default function UnbondingQueue({
 }: {
   unbondingQueue: EntryData[];
 }) {
-  const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
+  const { useDelegatorTotalUnbonding, QUERY_KEY } = usePollDelegatorUnbonding();
   const total = useDelegatorTotalUnbonding();
   const { networkConfig } = useBeraConfig();
   const { write, ModalPortal } = useTxn({
     message: `Cancel Unbonding`,
+    onSuccess: () => {
+      void mutate(QUERY_KEY);
+    },
   });
 
   const dateArray: Date[] = Object.values(unbondingQueue ?? [])
@@ -93,7 +97,7 @@ export default function UnbondingQueue({
       timeRemaining: getDateString(queue.completionTime),
       hide: (
         <div
-          className="flex w-[27px] items-center justify-center"
+          className="flex w-full items-center justify-center"
           onClick={() => {
             write({
               address: networkConfig.precompileAddresses
@@ -108,7 +112,7 @@ export default function UnbondingQueue({
             });
           }}
         >
-          <Icons.close className="relative h-4 w-4 rounded-sm border border-border text-secondary" />
+          <Icons.close className="h-4 w-4 self-center rounded-sm border border-border text-secondary-foreground" />
         </div>
       ),
     }));
