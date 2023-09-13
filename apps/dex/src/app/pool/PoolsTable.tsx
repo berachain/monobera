@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useBeraJs } from "@bera/berajs";
 import { ConnectWalletBear, DataTable, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -10,7 +11,6 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { columns } from "~/components/pools-table-columns";
 import { cloudinaryUrl } from "~/config";
 import { PoolCard, PoolCardLoading } from "./PoolCard";
@@ -99,7 +99,7 @@ export const PoolSearch = () => {
   } = usePoolTable();
 
   const { isConnected } = useBeraJs();
-
+  const router = useRouter();
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -169,10 +169,7 @@ export const PoolSearch = () => {
                     data={data ?? []}
                     columns={columns}
                     onRowClick={(state: any) =>
-                      window.open(
-                        `${getAbsoluteUrl()}/pool/${state.original.pool}`,
-                        "_blank",
-                      )
+                      router.push(`/pool/${state.original.pool}`)
                     }
                   />
                 </div>
@@ -224,7 +221,9 @@ export const PoolSearch = () => {
                 <DataTable
                   data={userPools ?? []}
                   columns={columns}
-                  onRowClick={(state: any) => console.log(state)}
+                  onRowClick={(state: any) =>
+                    router.push(`/pool/${state.original.pool}`)
+                  }
                 />
               </div>
             ) : (

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatUsd } from "@bera/berajs";
 import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
@@ -103,22 +104,14 @@ export const columns: ColumnDef<Pool>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex flex-row items-center gap-1">
-        <Icons.minusSquare
-          className="h-5 w-5 text-muted-foreground"
-          onClick={() =>
-            window.open(
-              `${getAbsoluteUrl()}/pool/${row.original.pool}/withdraw`,
-            )
-          }
-        />
-        <Icons.plusSquare
-          className="h-5 w-5 text-muted-foreground"
-          onClick={() =>
-            window.open(
-              `${getAbsoluteUrl()}/pool/${row.original.pool}/add-liquidity`,
-            )
-          }
-        />
+        <Link href={`${getAbsoluteUrl()}/pool/${row.original.pool}/withdraw`}>
+          <Icons.minusSquare className="h-5 w-5 text-muted-foreground  hover:text-foreground" />
+        </Link>
+        <Link
+          href={`${getAbsoluteUrl()}/pool/${row.original.pool}/add-liquidity`}
+        >
+          <Icons.plusSquare className="h-5 w-5 text-muted-foreground hover:text-foreground" />
+        </Link>
       </div>
     ),
     enableSorting: false,
