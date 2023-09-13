@@ -70,7 +70,6 @@ export default async function Homepage() {
     <div className="container max-w-[1200px]">
       <Hero />
       <Data tvl={data?.tvl?.result} volume={data?.volume?.result} />
-      {/* <HotPools isMainPage /> */}
       <div className="-mx-full overflow-hidden">
         <CreateAPool />
       </div>

@@ -61,13 +61,7 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
             {data &&
               data[0] &&
               data.map((pool: any) => {
-                return (
-                  <PoolCard
-                    pool={pool}
-                    key={pool?.address + "hot"}
-                    addLp={!isMainPage}
-                  />
-                );
+                return <PoolCard pool={pool} key={pool?.address + "hot"} />;
               })}
           </div>
           {!isMainPage && (
