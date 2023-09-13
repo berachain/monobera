@@ -1,16 +1,19 @@
 "use client";
 
+import Image from "next/image";
 import { useBeraJs } from "@bera/berajs";
 import { ConnectWalletBear, DataTable, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { columns } from "~/components/pools-table-columns";
-import { PoolCard } from "./PoolCard";
+import { cloudinaryUrl } from "~/config";
+import { PoolCard, PoolCardLoading } from "./PoolCard";
 import { usePoolTable } from "./usePoolTable";
 
 const FilterBadge = ({
@@ -55,6 +58,23 @@ const Toggle = ({
   );
 };
 
+const TableViewLoading = () => (
+  <div className="flex flex-col items-center gap-4">
+    <Skeleton className="h-[150px] w-[238px]" />
+    <Skeleton className="h-7 w-[300px]" />
+    <Skeleton className="h-7 w-[451px]" />
+    <Skeleton className="h-7 w-[130px]" />
+  </div>
+);
+
+const CardViewLoading = () => (
+  <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+    {[0, 0, 0].map((_, index) => (
+      <PoolCardLoading key={index} />
+    ))}
+  </div>
+);
+
 export const PoolSearch = () => {
   const {
     data,
@@ -78,7 +98,8 @@ export const PoolSearch = () => {
     setKeyword,
   } = usePoolTable();
 
-  const { isReady } = useBeraJs();
+  const { isConnected } = useBeraJs();
+
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -136,49 +157,77 @@ export const PoolSearch = () => {
             </div>
           </div>
           <TabsContent value="allPools">
-            {!isList && (
+            {isAllDataLoadingMore ? (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                  {data &&
-                    data[0] &&
-                    data.map((pool: any) => {
-                      return (
-                        <PoolCard pool={pool} key={"search" + pool?.pool} />
-                      );
-                    })}
-                </div>
+                {isList ? <TableViewLoading /> : <CardViewLoading />}
               </div>
+            ) : data && data.length ? (
+              isList ? (
+                <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
+                  <DataTable
+                    key={data.length}
+                    data={data ?? []}
+                    columns={columns}
+                    onRowClick={(state: any) =>
+                      window.open(
+                        `${getAbsoluteUrl()}/pool/${state.original.pool}`,
+                        "_blank",
+                      )
+                    }
+                  />
+                </div>
+              ) : (
+                <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
+                  <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    {data &&
+                      data[0] &&
+                      data.map((pool: any) => {
+                        return (
+                          <PoolCard pool={pool} key={"search" + pool?.pool} />
+                        );
+                      })}
+                  </div>
+                </div>
+              )
+            ) : (
+              <Nothing />
             )}
-            {isList && (
+
+            {!isAllDataLoadingMore && data && data?.length > 0 && (
+              <Button
+                className="mt-8"
+                onClick={() => setAllDataSize(allDataSize + 1)}
+                disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+                variant="outline"
+              >
+                {isAllDataReachingEnd ? "No more pools" : "View More"}
+              </Button>
+            )}
+          </TabsContent>
+
+          <TabsContent value="userPools">
+            {!isConnected ? (
+              <ConnectWalletBear
+                message="You need to connect your wallet to see deposited pools and
+            rewards"
+              />
+            ) : isUserPoolsLoading ? (
+              isList ? (
+                <TableViewLoading />
+              ) : (
+                <CardViewLoading />
+              )
+            ) : userPools === undefined || userPools.length === 0 ? (
+              <Nothing />
+            ) : isList ? (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 <DataTable
-                  key={data.length}
-                  data={data ?? []}
+                  data={userPools ?? []}
                   columns={columns}
-                  onRowClick={(state: any) =>
-                    window.open(
-                      `${getAbsoluteUrl()}/pool/${state.original.pool}`,
-                      "_blank",
-                    )
-                  }
+                  onRowClick={(state: any) => console.log(state)}
                 />
               </div>
-            )}
-            <Button
-              className="mt-12"
-              onClick={() => setAllDataSize(allDataSize + 1)}
-              disabled={isAllDataLoadingMore || isAllDataReachingEnd}
-              variant="outline"
-            >
-              {isAllDataLoadingMore
-                ? "Loading..."
-                : isAllDataReachingEnd
-                ? "No more pools"
-                : "View More"}
-            </Button>
-          </TabsContent>
-          <TabsContent value="userPools">
-            {!isList && isReady && userPools !== undefined && (
+            ) : (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
                   {userPools &&
@@ -191,33 +240,23 @@ export const PoolSearch = () => {
                 </div>
               </div>
             )}
-            {isList && isReady && userPools !== undefined && (
-              <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-                <DataTable
-                  data={userPools ?? []}
-                  columns={columns}
-                  onRowClick={(state: any) => console.log(state)}
-                />
-              </div>
-            )}
-            {!isReady && (
-              <ConnectWalletBear
-                message="You need to connect your wallet to see deposited pools and
-              rewards"
-              />
-            )}
-            {isReady &&
-              (userPools === undefined || userPools.length === 0) &&
-              !isUserPoolsLoading && <>FUCKING REEEEE</>}
-            {isUserPoolsLoading && isReady && (
-              <Button className="mt-12" disabled variant="outline">
-                {" "}
-                Loading...
-              </Button>
-            )}
           </TabsContent>
         </div>
       </Tabs>
     </div>
   );
 };
+
+const Nothing = () => (
+  <div className="mx-auto w-fit">
+    <Image
+      src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
+      alt="not found bear"
+      width={345.35}
+      height={200}
+    />
+    <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
+      No Pools found.
+    </div>
+  </div>
+);

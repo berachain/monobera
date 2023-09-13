@@ -48,7 +48,6 @@ export default async function Pool() {
   return (
     <div className="container m-auto flex w-full flex-col gap-5">
       <PoolPageHeader tvl={data?.tvl?.result} volume={data?.volume?.result} />
-      {/* <PoolsTable pools={sortedPools ?? []} /> */}
     </div>
   );
 }
