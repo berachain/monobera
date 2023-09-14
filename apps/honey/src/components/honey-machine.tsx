@@ -14,7 +14,7 @@ import {
 import { motion } from "framer-motion";
 import { erc20ABI } from "wagmi";
 
-import { cloudinaryUrl, erc20HoneyAddress } from "~/config";
+import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { HoneyTokenInput } from "./honey-token-input";

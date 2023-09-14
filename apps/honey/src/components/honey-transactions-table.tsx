@@ -19,7 +19,7 @@ import { formatDistance } from "date-fns";
 import { formatUnits, getAddress } from "viem";
 
 import { useHoneyEvents } from "~/app/api/useHoneyEvents";
-import { blockExplorerUrl, honeyTokenAddress } from "~/config";
+import { blockExplorerUrl, honeyTokenAddress } from "@bera/config";
 
 enum Selection {
   AllTransactions = "allTransactions",

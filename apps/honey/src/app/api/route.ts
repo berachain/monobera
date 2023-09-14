@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
 
-import { indexerUrl } from "~/config";
+import { indexerUrl } from "@bera/config";
 
 async function getMints(page: number, perPage: number) {
   try {

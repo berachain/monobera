@@ -9,7 +9,7 @@ import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { TokenInput } from "~/components/token-input";
-import { cloudinaryUrl } from "~/config";
+import { cloudinaryUrl } from "@bera/config";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { ApproveTokenButton } from "./approve-token-button";

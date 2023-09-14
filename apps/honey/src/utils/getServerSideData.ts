@@ -4,7 +4,7 @@ import {
   type HoneyEntry,
   type HoneyTimeFrame as HoneyTimeFrameType,
 } from "~/app/type";
-import { publicAnalyticsUrl } from "~/config";
+import { publicAnalyticsUrl } from "@bera/config";
 
 //if timeframe is undefined, return overall data
 export async function getHoneyData(

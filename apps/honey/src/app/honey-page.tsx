@@ -13,7 +13,7 @@ import { HoneyChart } from "~/components/honey-chart";
 import { HoneyMachine } from "~/components/honey-machine";
 import HoneyTransactionsTable from "~/components/honey-transactions-table";
 import { SwapCard } from "~/components/swap-card";
-import { cloudinaryUrl } from "~/config";
+import { cloudinaryUrl } from "@bera/config";
 import { type HoneyEntry } from "./type";
 
 export default function HoneyPage({

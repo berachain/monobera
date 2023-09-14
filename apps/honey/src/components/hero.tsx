@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Icons } from "@bera/ui/icons";
 
-import { cloudinaryUrl } from "~/config";
+import { cloudinaryUrl } from "@bera/config";
 
 export default function Hero() {
   const router = useRouter();
