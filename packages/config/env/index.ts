@@ -1,4 +1,4 @@
-import { type Address } from "wagmi";
+type Address = `0x${string}`;
 
 // endpoints & websites
 export const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_ENDPOINT as string;
@@ -9,7 +9,7 @@ export const honeyDappName = process.env.NEXT_PUBLIC_HONEY_NAME as string;
 export const bgtDappUrl = process.env.NEXT_PUBLIC_BGT_URL as string;
 export const bgtDappName = process.env.NEXT_PUBLIC_BGT_NAME as string;
 export const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
-
+export const docsUrl = process.env.NEXT_PUBLIC_DOCS_URL as string;
 // Block Explorer
 export const blockExplorerUrl = process.env
   .NEXT_PUBLIC_BLOCK_EXPLORER as string;
@@ -25,10 +25,14 @@ export const jsonRpcUrl = process.env.NEXT_PUBLIC_JSON_RPC_URL as string;
 // Bera token information
 export const gasTokenSymbol = process.env
   .NEXT_PUBLIC_NETWORK_CURRENCY as string;
+export const stakingToken = process.env.NEXT_PUBLIC_STAKING_TOKEN as string;
 export const gasTokenName = process.env
   .NEXT_PUBLIC_NETWORK_CURRENCY_NAME as string;
 export const gasTokenDecimals = Number(
   process.env.NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS as string,
+);
+export const governanceMinDeposit = Number(
+  process.env.NEXT_PUBLIC_GOVERNANCE_MIN_DEPOSIT as string,
 );
 
 // Precompiles & contracts
@@ -48,10 +52,11 @@ export const erc20BgtAddress = process.env
   .NEXT_PUBLIC_ERC20_BGT_ADDRESS as Address;
 export const berachefAddress = process.env
   .NEXT_PUBLIC_BERACHEF_ADDRESS as Address;
-export const honeyAddress = process.env
-  .NEXT_PUBLIC_HONEY_PRECOMPILE_ADDRESS as Address;
+export const honeyAddress = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
 export const rewardsAddress = process.env
   .NEXT_PUBLIC_REWARDS_ADDRESS as Address;
+export const erc20BribeModule = process.env
+  .NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address;
 
 // TOKENS
 export const beraTokenAddress = process.env

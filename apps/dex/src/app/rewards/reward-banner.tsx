@@ -1,7 +1,6 @@
 import Image from "next/image";
+import { bgtDappUrl, cloudinaryUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
-
-import { bgtDappUrl, cloudinaryUrl } from "~/config";
 
 export const Banner = () => {
   return (

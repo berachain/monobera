@@ -31,15 +31,6 @@ export const navItems = [
     href: "/",
     title: "Home",
   },
-  // Coming thoon
-  // {
-  //   href: "/stats",
-  //   title: "Stats",
-  // },
-  // {
-  //   href: "/docs",
-  //   title: "Docs",
-  // },
 ];
 
 const chain: Chain = {

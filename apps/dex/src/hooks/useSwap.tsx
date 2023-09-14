@@ -9,6 +9,7 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
+import { beraTokenAddress, erc20ModuleAddress } from "@bera/config";
 import { useReadLocalStorage } from "usehooks-ts";
 import { formatUnits, parseUnits } from "viem";
 import { useFeeData, type Address } from "wagmi";
@@ -18,7 +19,6 @@ import {
   DEFAULT_SLIPPAGE,
   LOCAL_STORAGE_KEYS,
 } from "~/utils/constants";
-import { beraTokenAddress, erc20ModuleAddress } from "~/config";
 import { usePollPriceImpact } from "./usePollPriceImpact";
 import { usePollSwaps } from "./usePollSwaps";
 

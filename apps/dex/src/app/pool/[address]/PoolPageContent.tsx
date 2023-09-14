@@ -13,6 +13,7 @@ import {
   usePollBgtRewards,
   usePollPreviewBurnShares,
 } from "@bera/berajs";
+import { blockExplorerName, blockExplorerUrl } from "@bera/config";
 import { TokenIcon, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
@@ -34,7 +35,6 @@ import { type Address } from "wagmi";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import { SwapCard } from "~/components/swap-card";
-import { blockExplorerName, blockExplorerUrl } from "~/config";
 import { getWBeraPriceForToken } from "../api/getPrice";
 import { PoolChart } from "./PoolChart";
 import {

@@ -2,11 +2,11 @@
 
 import React from "react";
 import Link from "next/link";
+import { bgtDappUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import { SwapCard } from "~/components/swap-card";
-import { bgtDappUrl } from "~/config";
 
 export default function Hero() {
   return (
