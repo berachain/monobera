@@ -44,6 +44,7 @@ export function MainNav({
                           key={component.title}
                           title={component.title}
                           href={component.href}
+                          type={component.type}
                         >
                           {component.blurb}
                         </ListItem>
@@ -75,12 +76,12 @@ export function MainNav({
 const ListItem = forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
+>(({ className, title, type, children, ...props }, ref) => {
   return (
     <li>
       <NavigationMenuLink asChild>
         <a
-          target="_blank"
+          target={type === "external" ? "_blank" : "_self"}
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-muted hover:text-primary focus:bg-muted focus:text-primary",

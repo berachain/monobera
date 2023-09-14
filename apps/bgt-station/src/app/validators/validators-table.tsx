@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -12,6 +13,7 @@ import {
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable, SearchInput } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress, type Address } from "viem";
@@ -19,6 +21,42 @@ import { getAddress, type Address } from "viem";
 import { general_validator_columns } from "~/columns/general-validator-columns";
 import { usePollPrices } from "~/hooks/usePollPrices";
 
+export const GaugeIcon = ({
+  address,
+  className,
+}: {
+  address: string;
+  className?: string;
+}) => {
+  const { gaugeDictionary } = useTokens();
+
+  return (
+    <Avatar className={cn("h-8 w-8", className)}>
+      <AvatarImage
+        src={(gaugeDictionary as any)[getAddress(address)]?.logoURI}
+        className="rounded-full"
+      />
+      <AvatarFallback>
+        {/* DARK MODE */}
+        <Image
+          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/s8kfq1dupk8buydgjxdf`}
+          width={100}
+          height={100}
+          className="hidden h-full w-full dark:block"
+          alt={"gauge-icon"}
+        />
+        {/* LIGHT MODE  */}
+        <Image
+          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/ocaxgutrs2voe8umwxxc`}
+          width={100}
+          height={100}
+          className="block h-full w-full dark:hidden"
+          alt={"gauge-icon"}
+        />
+      </AvatarFallback>
+    </Avatar>
+  );
+};
 export const ValidatorGauge = ({ address }: { address: string }) => {
   const { useValidatorCuttingBoard } = usePollValidatorCuttingBoard(
     address as Address,
@@ -35,20 +73,12 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
         "no gauges"
       ) : (
         <Link
-          className="flex  h-full w-[160px] items-start justify-start gap-1"
+          className="flex  h-full w-[160px] items-center justify-start gap-2"
           href={`${blockExplorerUrl}/address/${getAddress(highestVotedGauge)}`}
           target="_blank"
           onClick={(e) => e.stopPropagation()}
         >
-          <Avatar className="h-6 w-6">
-            <AvatarImage
-              src={gaugeDictionary[getAddress(highestVotedGauge)]?.logoURI}
-              className="rounded-full"
-            />
-            <AvatarFallback>
-              {truncateHash(highestVotedGauge).slice(0, 3)}
-            </AvatarFallback>
-          </Avatar>
+          <GaugeIcon address={highestVotedGauge} />
           <span className=" hover:underline">
             {gaugeDictionary[getAddress(highestVotedGauge)]?.name ??
               truncateHash(highestVotedGauge)}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -27,7 +28,6 @@ import {
   type OrderByEnum as OrderByEnumT,
   type StatusEnum as StatusEnumT,
 } from "../types";
-import Image from "next/image";
 
 export default function GovernanceByStatus({
   proposalStatus,

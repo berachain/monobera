@@ -226,11 +226,9 @@ export const PoolSearch = () => {
             rewards"
               />
             ) : isUserPoolsLoading ? (
-              isList ? (
-                <TableViewLoading />
-              ) : (
-                <CardViewLoading />
-              )
+              <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
+                {isList ? <TableViewLoading /> : <CardViewLoading />}
+              </div>
             ) : userPools === undefined || userPools.length === 0 ? (
               <NotFoundBear title="No Pools found." />
             ) : isList ? (

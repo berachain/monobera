@@ -2,12 +2,10 @@
 
 import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { cloudinaryUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
 export default function Hero() {
-  const router = useRouter();
   return (
     <div className="my-16 flex flex-col">
       <div className="my-12 text-center md:text-left">
@@ -31,25 +29,33 @@ export default function Hero() {
         <div className="mt-6 flex flex-col items-center justify-center gap-3 md:items-start">
           <div
             className="flex h-8 w-fit items-center gap-1 rounded-2xl bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-            onClick={() => router.push("/pool")}
+            onClick={() =>
+              window.open(process.env.NEXT_PUBLIC_LEND_URL, "_blank")
+            }
           >
             <Icons.info className="h-3 w-3" />
-            Lend HONEY on 🅱️end <Icons.arrowRight className="h-3 w-3" />
-          </div>
-          <div
-            className="flex h-8 w-fit items-center gap-1 rounded-2xl bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-            onClick={() => router.push("/")}
-          >
-            <Icons.info className="h-3 w-3" />
-            Add Liquidity to HONEY Pools{" "}
+            Lend Honey on {process.env.NEXT_PUBLIC_LEND_NAME}{" "}
             <Icons.arrowRight className="h-3 w-3" />
           </div>
           <div
             className="flex h-8 w-fit items-center gap-1 rounded-2xl bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-            onClick={() => router.push("/pool/create")}
+            onClick={() =>
+              window.open(process.env.NEXT_PUBLIC_DEX_URL + "/pool", "_blank")
+            }
+          >
+            <Icons.info className="h-3 w-3" />
+            Add Liquidity on {process.env.NEXT_PUBLIC_DEX_NAME}{" "}
+            <Icons.arrowRight className="h-3 w-3" />
+          </div>
+          <div
+            className="flex h-8 w-fit items-center gap-1 rounded-2xl bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
+            onClick={() =>
+              window.open(process.env.NEXT_PUBLIC_PERPS_URL, "_blank")
+            }
           >
             <Icons.info className="h-3 w-3" /> Provide Collateral for
-            🅱️er🅱️etuals <Icons.arrowRight className="h-3 w-3" />
+            {process.env.NEXT_PUBLIC_PERPS_NAME}{" "}
+            <Icons.arrowRight className="h-3 w-3" />
           </div>
         </div>
       </div>
