@@ -16,7 +16,7 @@ export function TagList({
         <Badge
           key={tag}
           variant={"info"}
-          className="-ml-2 flex h-6 w-6 items-center justify-center rounded-full p-0 pt-1 pr-1/2 text-[10px]"
+          className="pt-1/2 pr-1/2 -ml-2 flex h-6 w-6 items-center justify-center rounded-full p-0 text-[10px]"
         >
           {getBadgeContent(tag)}
         </Badge>

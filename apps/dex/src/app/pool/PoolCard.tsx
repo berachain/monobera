@@ -82,7 +82,7 @@ export const PoolCardLoading = () => {
         <Skeleton className="h-12 w-full" />
         <Skeleton className="h-7 w-full" />
       </div>
-      <div className="bg-muted px-6 py-3 gap-1 flex flex-col">
+      <div className="flex flex-col gap-1 bg-muted px-6 py-3">
         <Skeleton className="h-6 w-full" />
         <Skeleton className="h-6 w-full" />
         <Skeleton className="h-6 w-full" />
