@@ -131,7 +131,7 @@ export default function BribesAndEmissions({
   console.log("cbv", cumulativeBribeValue);
   return (
     <div className="">
-      <div className="flex items-center text-lg font-semibold leading-7">
+      <div className="flex items-center gap-1 text-lg font-semibold leading-7">
         Bribes
         <Tooltip text="Overview of bribe information on this validator" />
       </div>

@@ -128,7 +128,7 @@ export default function Validator({
       />
 
       <div className="">
-        <div className="mb-4 flex items-center text-lg font-semibold leading-7">
+        <div className="mb-4 flex items-center gap-1 text-lg font-semibold leading-7">
           Cutting Board{" "}
           <Tooltip text="Where this validator's block rewards are being directed" />
         </div>
