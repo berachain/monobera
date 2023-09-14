@@ -54,9 +54,7 @@ export const TrendingPools = () => {
             {data &&
               data[0] &&
               data.map((pool: any) => {
-                return (
-                  <PoolCard pool={pool} key={pool?.pool + "trend"} addLp />
-                );
+                return <PoolCard pool={pool} key={pool?.pool + "trend"} />;
               })}
           </div>
           <Button

@@ -20,15 +20,15 @@ export function DataCard({
   isLoading?: boolean;
 }) {
   return (
-    <div className="flex w-full flex-col rounded-2xl border bg-muted p-4 md:p-6">
+    <div className="flex w-full flex-col rounded-2xl border bg-background p-4 md:p-6">
       <div className="flex items-center gap-2 text-xs md:text-sm">
         <div className="text-muted-foreground">{icon}</div>
         <div className="whitespace-nowrap text-muted-foreground">{title}</div>
       </div>
-      {isLoading === false ? (
+      {!isLoading ? (
         <div className="mt-2 text-base font-bold md:text-2xl">{value}</div>
       ) : (
-        <Skeleton className="h-10 w-full rounded-lg" />
+        <Skeleton className="mt-2 h-8 w-[200px] rounded-lg" />
       )}
     </div>
   );

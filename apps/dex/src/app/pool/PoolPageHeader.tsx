@@ -85,8 +85,6 @@ export default function PoolPageHeader({
           value={`${(Number(block) * 0.0042).toFixed(2)} BGT`}
         />
       </div>
-      {/* <HotPools isMainPage={false} />
-      <TrendingPools /> */}
       <div id="poolSearch" className="mt-[72px] w-full max-w-[980px]">
         <PoolSearch />
       </div>
