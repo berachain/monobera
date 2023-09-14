@@ -34,6 +34,7 @@ export const usePollValidatorBribes = (
           console.log(e);
           return undefined;
         });
+      console.log("VALLY BIRBES", result);
       return result;
     },
     {

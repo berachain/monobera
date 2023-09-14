@@ -45,9 +45,6 @@ export const usePollUserDepositedPools = (endpoint: string) => {
           multicallAddress: networkConfig.precompileAddresses
             .multicallAddress as Address,
         });
-        console.log(result);
-        // result[i] !== undefined &&
-        // (result[i]?.result as unknown as bigint) !== 0n,
         const deposited = pool
           .map((pool: any, i: number) => {
             return {

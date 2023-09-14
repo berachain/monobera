@@ -1,10 +1,13 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
+  usePollActiveValidators,
   usePollProposal,
   usePollProposalVotes,
+  usePollTotalDelegated,
   type IVote,
   type Proposal,
 } from "@bera/berajs";
@@ -28,7 +31,12 @@ export default function ProposalDetails({
   proposalId: number;
 }) {
   const { useProposal } = usePollProposal(proposalId);
+  const { useTotalDelegated } = usePollActiveValidators();
+  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
   const proposal: Proposal | undefined = useProposal();
+
+  const globalTotal = useTotalDelegated();
+  const userTotal = useTotalDelegatorDelegated();
 
   const {
     useProposalVotes,
@@ -36,6 +44,7 @@ export default function ProposalDetails({
     isLoading,
     useNormalizedTallyResult,
   } = usePollProposalVotes(proposalId);
+
   const votes = useProposalVotes();
   const totalVotes = useTotalProposalVotes();
   const normalizedTally = useNormalizedTallyResult();
@@ -43,11 +52,17 @@ export default function ProposalDetails({
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 
-  const userVotingPower = 0;
   const { write, ModalPortal } = useTxn({
     message: `Voting for proposal ${proposalId}`,
   });
   const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
+
+  const votingPower = useMemo(() => {
+    if (userTotal && globalTotal) {
+      return userTotal / globalTotal;
+    }
+    return 0;
+  }, [userTotal, globalTotal]);
   return (
     <div className="container pb-16">
       {ModalPortal}
@@ -66,7 +81,7 @@ export default function ProposalDetails({
               <VoteDialog
                 open={open}
                 setOpen={setOpen}
-                votingPower={userVotingPower}
+                votingPower={votingPower}
                 comment={comment}
                 setComment={setComment}
                 selected={selected}

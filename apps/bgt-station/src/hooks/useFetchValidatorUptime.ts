@@ -24,7 +24,7 @@ export const useFetchValidatorUptime = (address: Address) => {
       const data = await res.json();
       const uptime = countTrueStatus(data.result);
       return {
-        data: data.result,
+        data: data.result.reverse(),
         uptime: uptime,
       };
     },

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { formatUsd, usePollValidatorBribes } from "@bera/berajs";
+import { formatUsd, formatter } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card } from "@bera/ui/card";
@@ -10,11 +10,9 @@ import {
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
-import { type Address } from "viem";
 
 import YellowCard from "~/components/yellow-card";
 import { type FormattedHistoricalBribes } from "~/hooks/useHistoricalBribes";
-import { usePollPrices } from "~/hooks/usePollPrices";
 import { TimeFrameEnum } from "./types";
 
 const Options = {
@@ -80,7 +78,9 @@ const Options = {
 
 const getChartData = (data: FormattedHistoricalBribes[]) => {
   return {
-    labels: data?.map((da, _) => `${da.value} BGT  ${da.epoch}`),
+    labels: data?.map(
+      (da, _) => `Value: ${formatUsd(da.value)}\nEpoch: ${da.epoch}`,
+    ),
     datasets: [
       {
         data: data?.map((d) => d.value),
@@ -113,19 +113,14 @@ const getHistoryInterval = (
   return historyInterval.reverse();
 };
 export default function BribesAndEmissions({
-  validatorAddress,
   historicalBribes,
+  cumulativeBribeValue,
   isLoading,
 }: {
-  validatorAddress: Address | undefined;
   historicalBribes: FormattedHistoricalBribes[];
+  cumulativeBribeValue: number;
   isLoading: boolean;
 }) {
-  const { useActiveValidatorBribesTotalValue } =
-    usePollValidatorBribes(validatorAddress);
-  const { usePrices } = usePollPrices();
-  const prices = usePrices();
-  const bribesTotalValue = useActiveValidatorBribesTotalValue(prices);
   const [timeframe, setTimeframe] = React.useState(TimeFrameEnum.ALL_TIME);
 
   const chartData = useMemo(
@@ -133,19 +128,20 @@ export default function BribesAndEmissions({
     [timeframe, historicalBribes],
   );
 
+  console.log("cbv", cumulativeBribeValue);
   return (
     <div className="">
       <div className="flex items-center text-lg font-semibold leading-7">
         Bribes
-        <Tooltip text="Bribes on this validator" />
+        <Tooltip text="Overview of bribe information on this validator" />
       </div>
       <div className="mt-4 flex gap-4">
         <YellowCard className="flex w-full justify-center p-8">
           <div className="text-3xl font-semibold leading-9 text-foreground">
-            {formatUsd(bribesTotalValue ?? 0)}
+            ${formatter.format(cumulativeBribeValue)}
           </div>
           <div className="text-sm font-medium leading-[14px] text-muted-foreground">
-            Total value
+            Cumulative bribe total value
           </div>
         </YellowCard>
         <Card className="hidden w-3/4 min-w-[666px] p-4 md:block">

@@ -103,7 +103,7 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
         ) ===
           cuttingBoardData.length - 1,
     );
-  }, [JSON.stringify(filter)]);
+  }, [JSON.stringify(filter), cuttingBoardData]);
 
   const handleCheckboxChange = (data: any) => {
     setFilter((prev) => ({

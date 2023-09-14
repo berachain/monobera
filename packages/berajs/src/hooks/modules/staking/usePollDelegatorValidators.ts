@@ -1,7 +1,8 @@
 import { useMemo } from "react";
+import lodash from "lodash";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
+import { formatUnits, getAddress, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { STAKING_PRECOMPILE_ABI } from "~/config";
@@ -64,16 +65,6 @@ export const usePollDelegatorValidators = () => {
     return validators;
   };
 
-  const useDelegatorTotalDelegated = (): number => {
-    const { data } = useSWRImmutable<ValidatorListResponse>(QUERY_KEY);
-    const total = useMemo(() => {
-      return data?.validators?.reduce((sum: number, validator: Validator) => {
-        return sum + Number(formatUnits(BigInt(validator.tokens), 18));
-      }, 0);
-    }, [data]);
-    return total ?? 0;
-  };
-
   const useTotalValidatorsDelegated = (): number => {
     const { data } = useSWRImmutable<ValidatorListResponse>(QUERY_KEY);
     return Number(data?.total) ?? 0;
@@ -82,8 +73,8 @@ export const usePollDelegatorValidators = () => {
   const usePercentageVotingPower = (): number | undefined => {
     const { useTotalDelegated } = usePollActiveValidators();
     const totalDelegated = useTotalDelegated();
-    const data = useDelegatorTotalDelegated();
-
+    const { useTotalDelegatorDelegated } = usePollTotalDelegated();
+    const data = useTotalDelegatorDelegated();
     const percentage = useMemo(() => {
       if (totalDelegated && data) {
         return (data / totalDelegated) * 100;
@@ -97,9 +88,89 @@ export const usePollDelegatorValidators = () => {
   return {
     useDelegatorValidators,
     useTotalValidatorsDelegated,
-    useDelegatorTotalDelegated,
     usePercentageVotingPower,
     isLoading,
+  };
+};
+
+interface Call {
+  abi: any;
+  address: `0x${string}`;
+  functionName: string;
+  args: any[];
+}
+
+export const usePollTotalDelegated = () => {
+  const publicClient = usePublicClient();
+  const { account, isConnected } = useBeraJs();
+  const { networkConfig } = useBeraConfig();
+  const { useDelegatorValidators } = usePollDelegatorValidators();
+  const delegatorValidators = useDelegatorValidators();
+  const method = "getDelegation";
+  const QUERY_KEY = [account, method, delegatorValidators];
+  const { isLoading } = useSWR(
+    QUERY_KEY,
+    async () => {
+      if (isConnected && delegatorValidators) {
+        const call: Call[] = delegatorValidators.map((validator) => {
+          return {
+            address: networkConfig.precompileAddresses
+              .stakingAddress as Address,
+            abi: STAKING_PRECOMPILE_ABI,
+            functionName: method,
+            args: [account, validator.operatorAddr],
+          };
+        });
+        const result = await publicClient.multicall({
+          contracts: call,
+          multicallAddress: networkConfig.precompileAddresses
+            .multicallAddress as Address,
+        });
+
+        const totals = result.map((res: any) => formatUnits(res.result, 18));
+
+        const totalDelegated = totals.reduce(
+          (acc: number, curr: string) => acc + Number(curr),
+          0,
+        );
+        const delegationMap: Record<string, number> = {};
+
+        delegatorValidators.forEach((validator, index) => {
+          lodash.set(
+            delegationMap,
+            getAddress(validator.operatorAddr),
+            totals[index],
+          );
+        });
+
+        return {
+          totalDelegated,
+          delegationMap,
+        };
+      } else {
+        return undefined;
+      }
+    },
+    {
+      refreshInterval: POLLING.NORMAL,
+    },
+  );
+
+  const useTotalDelegatorDelegated = () => {
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    return data === undefined ? undefined : data.totalDelegated;
+  };
+
+  const useValidatorDelegation = (validatorAddress: string) => {
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    return data === undefined
+      ? undefined
+      : data.delegationMap[validatorAddress];
+  };
+  return {
+    isLoading,
+    useTotalDelegatorDelegated,
+    useValidatorDelegation,
   };
 };
 
