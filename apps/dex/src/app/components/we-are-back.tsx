@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { cloudinaryUrl } from "@bera/config";
 import { useTheme } from "next-themes";
-
-import { cloudinaryUrl } from "~/config";
 
 export function WeRBack() {
   const { theme, systemTheme } = useTheme();

@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import { cloudinaryUrl } from "@bera/config";
 
-import { cloudinaryUrl } from "~/config";
 import GeneralInfo from "./components/general-info";
 import Help from "./components/help";
 import Hero from "./components/hero";

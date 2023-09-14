@@ -1,9 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useBeraJs } from "@bera/berajs";
-import { ConnectWalletBear, DataTable, SearchInput } from "@bera/shared-ui";
+import {
+  ConnectWalletBear,
+  DataTable,
+  NotFoundBear,
+  SearchInput,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -12,7 +16,6 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { columns } from "~/components/pools-table-columns";
-import { cloudinaryUrl } from "~/config";
 import { PoolCard, PoolCardLoading } from "./PoolCard";
 import { usePoolTable } from "./usePoolTable";
 
@@ -41,16 +44,18 @@ const FilterBadge = ({
 const Toggle = ({
   icon,
   onClick,
+  className,
 }: {
   icon: any;
-  active: boolean;
+  className?: string;
   onClick: any;
 }) => {
   return (
     <div
-      className={
-        "cursor-pointer rounded-full p-2 text-foreground hover:bg-hover"
-      }
+      className={cn(
+        "cursor-pointer rounded-full p-2 text-foreground hover:bg-hover",
+        className,
+      )}
       onClick={onClick}
     >
       {icon}
@@ -97,8 +102,7 @@ export const PoolSearch = () => {
     handleEnter,
     setKeyword,
   } = usePoolTable();
-
-  const { isConnected } = useBeraJs();
+  const { isReady } = useBeraJs();
   const router = useRouter();
   return (
     <div
@@ -112,28 +116,40 @@ export const PoolSearch = () => {
             Leverage our boosted yields to increase your rewards
           </p>
 
-          <div className="mt-12 flex w-full flex-col items-center justify-center gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex w-full flex-row items-center gap-2">
-              <TabsList>
-                <TabsTrigger value="allPools">All pools</TabsTrigger>
-                <TabsTrigger value="userPools">My pools</TabsTrigger>
+          <div className="mt-12 flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex w-full flex-col items-center justify-center gap-2 sm:flex-row lg:justify-start">
+              <TabsList className="w-[300px] sm:w-fit">
+                <TabsTrigger value="allPools" className="w-full sm:w-fit">
+                  All pools
+                </TabsTrigger>
+                <TabsTrigger value="userPools" className="w-full sm:w-fit">
+                  My pools
+                </TabsTrigger>
               </TabsList>
-              <SearchInput
-                value={search}
-                onChange={(e) => {
-                  if (e.target.value === "") {
-                    setKeyword("");
-                    setSearch("");
-                  } else {
-                    setSearch(e.target.value);
-                  }
-                }}
-                placeholder="Search by name or address"
-                onKeyDown={handleEnter}
-                id="all-pool-search"
-              />
+              <div className="flex gap-1">
+                <SearchInput
+                  value={search}
+                  onChange={(e) => {
+                    if (e.target.value === "") {
+                      setKeyword("");
+                      setSearch("");
+                    } else {
+                      setSearch(e.target.value);
+                    }
+                  }}
+                  placeholder="Search by name or address"
+                  onKeyDown={handleEnter}
+                  id="all-pool-search"
+                  className="min-w-[250px]"
+                />
+                <Toggle
+                  icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
+                  onClick={() => setIsList(!isList)}
+                  className="block sm:hidden"
+                />
+              </div>
             </div>
-            <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
+            <div className="flex w-full flex-row items-center justify-center gap-2 lg:justify-end">
               <FilterBadge
                 text={"🚀 New Pools"}
                 active={isNewPool}
@@ -151,11 +167,12 @@ export const PoolSearch = () => {
               />
               <Toggle
                 icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
-                active={isList}
                 onClick={() => setIsList(!isList)}
+                className="hidden sm:block"
               />
             </div>
           </div>
+
           <TabsContent value="allPools">
             {isAllDataLoadingMore ? (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
@@ -187,7 +204,7 @@ export const PoolSearch = () => {
                 </div>
               )
             ) : (
-              <Nothing />
+              <NotFoundBear title="No Pools found." />
             )}
 
             {!isAllDataLoadingMore && data && data?.length > 0 && (
@@ -203,19 +220,17 @@ export const PoolSearch = () => {
           </TabsContent>
 
           <TabsContent value="userPools">
-            {!isConnected ? (
+            {!isReady ? (
               <ConnectWalletBear
                 message="You need to connect your wallet to see deposited pools and
             rewards"
               />
             ) : isUserPoolsLoading ? (
-              isList ? (
-                <TableViewLoading />
-              ) : (
-                <CardViewLoading />
-              )
+              <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
+                {isList ? <TableViewLoading /> : <CardViewLoading />}
+              </div>
             ) : userPools === undefined || userPools.length === 0 ? (
-              <Nothing />
+              <NotFoundBear title="No Pools found." />
             ) : isList ? (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 <DataTable
@@ -245,17 +260,3 @@ export const PoolSearch = () => {
     </div>
   );
 };
-
-const Nothing = () => (
-  <div className="mx-auto w-fit">
-    <Image
-      src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
-      alt="not found bear"
-      width={345.35}
-      height={200}
-    />
-    <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
-      No Pools found.
-    </div>
-  </div>
-);

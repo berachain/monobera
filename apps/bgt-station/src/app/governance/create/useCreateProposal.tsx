@@ -1,8 +1,7 @@
 import { ethToBera, useBeraJs } from "@bera/berajs";
+import { stakingToken } from "@bera/config";
 import { MsgSubmitProposal } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/tx";
 import { bytesToHex, parseUnits } from "viem";
-
-import { stakingToken } from "~/config";
 
 export const useCreateProposal = () => {
   const { account } = useBeraJs();

@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
+import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
 import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import {
@@ -14,7 +15,6 @@ import {
 import { motion } from "framer-motion";
 import { erc20ABI } from "wagmi";
 
-import { cloudinaryUrl, erc20HoneyAddress } from "~/config";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { HoneyTokenInput } from "./honey-token-input";

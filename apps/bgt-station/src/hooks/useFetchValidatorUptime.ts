@@ -1,7 +1,6 @@
+import { indexerUrl } from "@bera/config";
 import useSWR from "swr";
 import { type Address } from "viem";
-
-import { indexerUrl } from "~/config";
 
 function countTrueStatus(blocks: any): number {
   let trueCount = 0;

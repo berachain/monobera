@@ -1,7 +1,4 @@
 import { type NetworkConfig } from "@bera/berajs";
-import { Icons } from "@bera/ui/icons";
-import { type Chain } from "viem";
-
 import {
   bankAddress,
   berachefAddress,
@@ -24,22 +21,15 @@ import {
   networkName,
   rewardsAddress,
   stakingAddress,
-} from "~/config";
+} from "@bera/config";
+import { Icons } from "@bera/ui/icons";
+import { type Chain } from "viem";
 
 export const navItems = [
   {
     href: "/",
     title: "Home",
   },
-  // Coming thoon
-  // {
-  //   href: "/stats",
-  //   title: "Stats",
-  // },
-  // {
-  //   href: "/docs",
-  //   title: "Docs",
-  // },
 ];
 
 const chain: Chain = {

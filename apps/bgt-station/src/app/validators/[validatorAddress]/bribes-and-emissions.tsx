@@ -138,7 +138,7 @@ export default function BribesAndEmissions({
       <div className="mt-4 flex gap-4">
         <YellowCard className="flex w-full justify-center p-8">
           <div className="text-3xl font-semibold leading-9 text-foreground">
-            ${formatter.format(cumulativeBribeValue)}
+            ${formatter.format(cumulativeBribeValue ?? 0)}
           </div>
           <div className="text-sm font-medium leading-[14px] text-muted-foreground">
             Cumulative bribe total value

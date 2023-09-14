@@ -20,7 +20,6 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { cloudinaryUrl } from "~/config";
 import { ProposalCard } from "../components/proposal-card";
 import {
   OrderByEnum,
@@ -162,7 +161,7 @@ export default function GovernanceByStatus({
       {((!isLoading && sortedProposalList.length === 0) || isLoading) && (
         <div className="mx-auto w-fit">
           <Image
-            src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
+            src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/bears/e6monhixzv21jy0fqes1`}
             alt="not found bear"
             width={345.35}
             height={200}

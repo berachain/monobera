@@ -1,6 +1,4 @@
 import { type NetworkConfig } from "@bera/berajs";
-import { type Chain } from "viem";
-
 import {
   bankAddress,
   berachefAddress,
@@ -23,7 +21,8 @@ import {
   networkName,
   rewardsAddress,
   stakingAddress,
-} from "~/config";
+} from "@bera/config";
+import { type Chain } from "viem";
 
 export const navItems = [
   {

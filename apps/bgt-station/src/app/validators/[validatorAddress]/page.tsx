@@ -1,9 +1,9 @@
 import { type Metadata } from "next";
 import { type CuttingBoard } from "@bera/berajs";
+import { indexerUrl } from "@bera/config";
 import { getAddress } from "viem";
 
 import { getMetaTitle } from "~/utils/metadata";
-import { indexerUrl } from "~/config";
 import Validator from "./validator";
 
 type Props = {
@@ -92,10 +92,16 @@ export default async function Page({
     getHistoricalBribeEpochs(validatorAddress, 10000),
   ]);
 
-  const cb: CuttingBoard[] = cuttingBoard[0].weights;
-  const promiseArray = cb.map((w: CuttingBoard) => getPoolTvl(w.address));
+  const cb: CuttingBoard[] =
+    cuttingBoard?.length !== 0 && cuttingBoard !== undefined
+      ? cuttingBoard[0].weights
+      : undefined;
+  const promiseArray = cb?.map((w: CuttingBoard) => getPoolTvl(w.address));
 
-  const cbTvlData = await Promise.all(promiseArray);
+  const cbTvlData =
+    promiseArray !== undefined && promiseArray.length !== 0
+      ? await Promise.all(promiseArray)
+      : undefined;
 
   return (
     <Validator

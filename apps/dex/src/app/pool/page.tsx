@@ -1,5 +1,6 @@
 import { type Metadata } from "next";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
+import { publicAnalyticsUrl } from "@bera/config";
 
 import { getMetaTitle } from "~/utils/metadata";
 import PoolPageHeader from "./PoolPageHeader";
@@ -10,9 +11,7 @@ export const metadata: Metadata = {
 };
 
 const getTvl = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
-  );
+  const res = await fetch(`${publicAnalyticsUrl}/analytics/tvldaily/global`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -24,9 +23,7 @@ const getTvl = async () => {
 };
 
 const getVolume = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
-  );
+  const res = await fetch(`${publicAnalyticsUrl}/analytics/volumedaily/global`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary

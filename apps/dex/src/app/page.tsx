@@ -1,34 +1,15 @@
-// This will be the home page - just don't want to cause a merge conflict while homepage is used as `/swap`
-// TODO Error Boundary + Loading State
 import React from "react";
 import { type Metadata } from "next";
+import { publicAnalyticsUrl } from "@bera/config";
 
 import { getMetaTitle } from "~/utils/metadata";
-// import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-
-// import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import CreateAPool from "./components/CreateAPool";
 import Data from "./components/Data";
 import Help from "./components/Help";
 import Hero from "./components/Hero";
 
-// async function getPools() {
-// const res = await fetch(
-//   `${getAbsoluteUrl()}/pool/api?page=1&perPage=3&hotPools=true`,{ next: { revalidate: 3600 } }
-// );
-
-// if (!res.ok) {
-//   // This will activate the closest `error.js` Error Boundary
-//   throw new Error("Failed to fetch pools");
-// }
-
-// return res.json();
-// }
-
 const getTvl = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
-  );
+  const res = await fetch(`${publicAnalyticsUrl}/analytics/tvldaily/global`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -40,9 +21,7 @@ const getTvl = async () => {
 };
 
 const getVolume = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
-  );
+  const res = await fetch(`${publicAnalyticsUrl}/analytics/volumedaily/global`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary

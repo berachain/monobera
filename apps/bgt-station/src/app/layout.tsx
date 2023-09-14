@@ -4,12 +4,12 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import dynamic from "next/dynamic";
 import { IBM_Plex_Sans } from "next/font/google";
+import { cloudinaryUrl } from "@bera/config";
 import { Footer, Header, TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
-import { cloudinaryUrl } from "~/config";
 import Providers from "./Providers";
 import { navItems } from "./config";
 

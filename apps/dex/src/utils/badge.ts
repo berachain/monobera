@@ -5,7 +5,7 @@ export const getBadgeContent = (tag: string) => {
     case "new":
       return "🚀";
     case "bgtRewards":
-      return "📈";
+      return "🐝";
     default:
       return "";
   }
