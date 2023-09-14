@@ -3,6 +3,7 @@ import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 
 import { getMetaTitle } from "~/utils/metadata";
 import PoolPageHeader from "./PoolPageHeader";
+import { publicAnalyticsUrl } from "@bera/config";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Pools"),
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 
 const getTvl = async () => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
+    `${publicAnalyticsUrl}/analytics/tvldaily/global`,
   );
 
   if (!res.ok) {
@@ -25,7 +26,7 @@ const getTvl = async () => {
 
 const getVolume = async () => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
+    `${publicAnalyticsUrl}/analytics/volumedaily/global`,
   );
 
   if (!res.ok) {
