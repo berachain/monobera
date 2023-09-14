@@ -12,14 +12,13 @@ import {
   usePollDelegatorUnbonding,
   type EntryData,
 } from "@bera/berajs";
+import { docsUrl } from "@bera/config";
 import { DataTable, ValidatorIcon, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { mutate } from "swr";
 import { type Address } from "wagmi";
-
-import { docsUrl } from "~/config";
 
 function Nothing() {
   return (

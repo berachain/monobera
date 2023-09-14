@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -43,6 +47,9 @@ importers:
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../../packages/berajs
+      '@bera/config':
+        specifier: 0.1.0
+        version: link:../../packages/config/env
       '@bera/proto':
         specifier: 0.1.0
         version: link:../../packages/proto
@@ -164,6 +171,9 @@ importers:
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../../packages/berajs
+      '@bera/config':
+        specifier: 0.1.0
+        version: link:../../packages/config/env
       '@bera/shared-ui':
         specifier: 0.1.0
         version: link:../../packages/shared-ui
@@ -255,6 +265,9 @@ importers:
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../../packages/berajs
+      '@bera/config':
+        specifier: 0.1.0
+        version: link:../../packages/config/env
       '@bera/shared-ui':
         specifier: 0.1.0
         version: link:../../packages/shared-ui
@@ -361,6 +374,9 @@ importers:
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../../packages/berajs
+      '@bera/config':
+        specifier: 0.1.0
+        version: link:../../packages/config/env
       '@bera/shared-ui':
         specifier: 0.1.0
         version: link:../../packages/shared-ui
@@ -458,6 +474,9 @@ importers:
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../../packages/berajs
+      '@bera/config':
+        specifier: 0.1.0
+        version: link:../../packages/config/env
       '@bera/shared-ui':
         specifier: 0.1.0
         version: link:../../packages/shared-ui
@@ -644,6 +663,8 @@ importers:
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
+
+  packages/config/env: {}
 
   packages/config/eslint:
     dependencies:
@@ -16017,7 +16038,3 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

@@ -3,8 +3,8 @@
 import { type Metadata } from "next";
 import Image from "next/image";
 import { usePollGlobalValidatorBribes, type PoLValidator } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
 
-import { cloudinaryUrl } from "~/config";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import { Details } from "./components/details";
 import GlobalGaugeWeightInfo from "./components/global-gauge-weight";
@@ -37,7 +37,6 @@ export default function DashBoard({
         "Stake your BGT with the best validators to maximize your rewards",
     },
   ];
-  console.log(validators);
   return (
     <div className="container flex w-full max-w-[1078px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">

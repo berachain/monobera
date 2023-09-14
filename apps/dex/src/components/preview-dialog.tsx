@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { type SwapInfo } from "@bera/bera-router";
 import { formatUsd, type Token } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
 import { Spinner, TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -18,7 +19,6 @@ import { Icons } from "@bera/ui/icons";
 import { useReadLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
-import { cloudinaryUrl } from "~/config";
 
 type Props = {
   swapInfo: SwapInfo | undefined;

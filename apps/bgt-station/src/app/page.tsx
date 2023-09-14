@@ -1,7 +1,7 @@
 import { type Metadata } from "next";
+import { indexerUrl } from "@bera/config";
 
 import { getMetaTitle } from "~/utils/metadata";
-import { indexerUrl } from "~/config";
 import DashBoard from "./dashboard/dashboard";
 
 export const metadata: Metadata = {

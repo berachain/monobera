@@ -3,6 +3,7 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { RouterService, defaultConfig } from "@bera/bera-router";
 import { type CuttingBoard } from "@bera/berajs";
+import { indexerUrl } from "@bera/config";
 
 import { getWBeraPriceDictForPoolTokens } from "../api/getPrice";
 import PoolPageContent from "./PoolPageContent";
@@ -22,9 +23,7 @@ export const fetchCache = "force-no-store";
 
 async function getGlobalCuttingBoard() {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
-    );
+    const res = await fetch(`${indexerUrl}/bgt/rewards`);
     const jsonRes = await res.json();
     return jsonRes.result;
   } catch (e) {

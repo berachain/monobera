@@ -33,6 +33,7 @@ export { ErrorPage } from "./error";
 export { Gradient } from "./gradient";
 export { BearBG } from "./bear-bg";
 export { ValidatorIcon } from "./validator-icon";
+export { NotFoundBear } from "./not-found-bear";
 export * from "./hooks";
 export * from "./token-icon-list";
 export * from "./action-btn-wrapper";

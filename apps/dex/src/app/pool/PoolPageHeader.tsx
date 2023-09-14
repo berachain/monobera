@@ -41,9 +41,14 @@ export default function PoolPageHeader({
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-6">
       <h1 className="text-center text-5xl font-bold">
-        Create a <span className="text-secondary-foreground">Pool</span>
-        <br /> <span className="text-secondary-foreground">Or</span> Add
-        Liquidity
+        <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
+          Create
+        </span>{" "}
+        a Pool
+        <br /> Or{" "}
+        <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
+          Add Liquidity
+        </span>
       </h1>
       <div className="flex flex-row gap-2 self-center">
         <Button

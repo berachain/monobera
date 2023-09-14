@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import {
   formatUsd,
   formatter,
@@ -8,13 +7,12 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { TokenIcon } from "@bera/shared-ui";
+import { NotFoundBear, TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits, type Address } from "viem";
 
-import { cloudinaryUrl } from "~/config";
 import { usePollPrices } from "~/hooks/usePollPrices";
 
 const BribeCard = ({
@@ -165,17 +163,7 @@ export default function BribeList({
               ))}
           </div>
         ) : (
-          <div className="mx-auto w-fit">
-            <Image
-              src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
-              alt="not found bear"
-              width={345.35}
-              height={200}
-            />
-            <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
-              The Validator has no bribes
-            </div>
-          </div>
+          <NotFoundBear title="The Validator has no bribes" />
         )}
       </div>
       {lineCount * 3 < bribesList.length && (

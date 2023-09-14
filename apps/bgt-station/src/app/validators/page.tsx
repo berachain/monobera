@@ -1,8 +1,8 @@
 import React from "react";
 import { type Metadata } from "next";
+import { indexerUrl } from "@bera/config";
 
 import { getMetaTitle } from "~/utils/metadata";
-import { indexerUrl } from "~/config";
 import Validators from "./validators";
 
 export const metadata: Metadata = {

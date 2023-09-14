@@ -8,6 +8,7 @@ import {
   useBeraConfig,
   type Token,
 } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
 import {
   ActionButton,
   InfoBoxList,
@@ -28,7 +29,6 @@ import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import ApproveTokenButton from "~/components/approve-token-button";
-import { cloudinaryUrl } from "~/config";
 import { type MappedTokens } from "../types";
 import { useAddLiquidity } from "./useAddLiquidity";
 
