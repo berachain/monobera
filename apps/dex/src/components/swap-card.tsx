@@ -5,6 +5,11 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { RouteNotFound } from "@bera/bera-router";
 import { DEX_PRECOMPILE_ABI, useBeraJs } from "@bera/berajs";
+import {
+  cloudinaryUrl,
+  erc20DexAddress,
+  erc20ModuleAddress,
+} from "@bera/config";
 import { ActionButton, TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -13,7 +18,6 @@ import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "wagmi";
 
-import { cloudinaryUrl, erc20DexAddress, erc20ModuleAddress } from "~/config";
 import { SwapKind, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
 

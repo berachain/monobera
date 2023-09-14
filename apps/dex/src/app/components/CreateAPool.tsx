@@ -3,11 +3,11 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { cloudinaryUrl } from "@bera/config";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 
 import { CircleBackground } from "~/components/CirceBackground";
-import { cloudinaryUrl } from "~/config";
 
 const WeRBack = dynamic(
   () => import("./we-are-back").then((mod) => mod.WeRBack),

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
-import Image from "next/image";
 import { formatter, truncateHash, type IVote } from "@bera/berajs";
 import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
+import { NotFoundBear } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import {
   Accordion,
@@ -15,7 +15,6 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { getAddress } from "viem";
 
-import { cloudinaryUrl } from "~/config";
 import { MultiSelectBadge } from "../components/multi-select-badge";
 import { type ALL, type VOTER_TYPE } from "../types";
 
@@ -126,17 +125,7 @@ export function VoterTable({
               ))}{" "}
             </div>
           ) : voterData.length === 0 ? (
-            <div className="mx-auto w-fit">
-              <Image
-                src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
-                alt="not found bear"
-                width={345.35}
-                height={200}
-              />
-              <div className="my-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
-                No recent votes found.{" "}
-              </div>
-            </div>
+            <NotFoundBear title="No recent votes found." />
           ) : (
             voterData?.map((voter) => (
               <div key={voter.voter} className="flex gap-16">

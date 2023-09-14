@@ -13,10 +13,9 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
+import { erc20HoneyAddress, honeyTokenAddress } from "@bera/config";
 import { useTxn } from "@bera/shared-ui";
 import { getAddress, parseUnits, type Address } from "viem";
-
-import { erc20HoneyAddress, honeyTokenAddress } from "~/config";
 
 export const usePsm = () => {
   const { tokenDictionary, tokenList } = useTokens();

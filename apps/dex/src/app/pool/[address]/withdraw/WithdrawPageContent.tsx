@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { DEX_PRECOMPILE_ABI, formatUsd, useBeraConfig } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
 import {
   ActionButton,
   InfoBoxList,
@@ -22,7 +23,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
-import { cloudinaryUrl } from "~/config";
 import { type MappedTokens } from "../types";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
 

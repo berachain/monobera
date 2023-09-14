@@ -9,6 +9,11 @@ import {
   useBeraJs,
   usePollBgtBalance,
 } from "@bera/berajs";
+import {
+  cloudinaryUrl,
+  governanceAddress,
+  governanceMinDeposit,
+} from "@bera/config";
 import { ActionButton, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
@@ -34,11 +39,6 @@ import { useForm } from "react-hook-form";
 import { isAddress } from "viem";
 import * as z from "zod";
 
-import {
-  cloudinaryUrl,
-  governanceAddress,
-  governanceMinDeposit,
-} from "~/config";
 import { ProposalTypeEnum } from "../types";
 import NewGaugeForm from "./gauge-proposal-form";
 import NewCollateralForm from "./new-collateral-form";
