@@ -29,7 +29,7 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
     >
       <div className="flex flex-col items-center justify-center gap-1 p-6 pb-4">
         <TokenIconList
-          tokenList={pool?.tokens?.map((t) => t.address) ?? []}
+          tokenList={pool?.tokens?.map((t: any) => t.address) ?? []}
           size="lg"
         />
         <div className="flex h-12 w-full items-center justify-center text-sm font-medium text-muted-foreground">

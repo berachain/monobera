@@ -22,13 +22,13 @@ const ConnectBtn = dynamic(
   },
 );
 
-const ThemeToggle = dynamic(
-  () => import("./theme-toggle").then((mod) => mod.ThemeToggle),
-  {
-    ssr: false,
-    loading: () => <></>,
-  },
-);
+// const ThemeToggle = dynamic(
+//   () => import("./theme-toggle").then((mod) => mod.ThemeToggle),
+//   {
+//     ssr: false,
+//     loading: () => <></>,
+//   },
+// );
 
 const ThemeToggleMobile = dynamic(
   () => import("./theme-toggle-mobile").then((mod) => mod.ThemeToggleMobile),
@@ -49,9 +49,9 @@ export function Header({
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   return (
-    <nav className="h-18 fixed left-0 right-0 top-0 z-50 flex w-full items-end justify-between bg-background bg-opacity-20 px-6 py-3 shadow backdrop-blur-2xl lg:gap-8">
+    <nav className="h-18 fixed left-0 right-0 top-0 z-50 flex w-full items-end justify-between bg-background bg-opacity-20 px-6 py-3 shadow backdrop-blur-2xl">
       <div>
-        <div className="mr-8 flex items-center">
+        <div className="flex items-center">
           <span className="text-lg font-bold tracking-tight lg:mr-5">
             <Link href={"/"}>
               <Icons.logo className="h-12 w-12 text-foreground" />
@@ -60,7 +60,7 @@ export function Header({
           <MainNav navItems={navItems} />
         </div>
       </div>
-      <div className="flex h-full items-center gap-2 sm:gap-4">
+      <div className="flex h-full items-center gap-2 xl:gap-4">
         {isConnected && userBalance && !isHoney && (
           <div className="flex-no-wrap hidden h-10 w-fit items-center gap-1 rounded-full border border-warning-foreground bg-warning px-4 py-2 text-sm font-medium text-warning-foreground lg:flex">
             <Icons.wallet className="block h-4 w-4" />
@@ -68,7 +68,7 @@ export function Header({
           </div>
         )}
         {!isHoney && <ThemeToggleMobile />}
-        {!isHoney && <ThemeToggle />}
+        {/* {!isHoney && <ThemeToggle />} */}
         <ConnectBtn isNavItem={true} />
         <MobileDropdown navItems={navItems} />
       </div>

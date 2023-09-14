@@ -2,6 +2,8 @@ import { type NetworkConfig } from "@bera/berajs";
 import {
   bankAddress,
   berachefAddress,
+  bgtName,
+  bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
   chainId,
@@ -15,10 +17,18 @@ import {
   gasTokenName,
   gasTokenSymbol,
   governanceAddress,
+  homepageName,
+  homepageUrl,
   honeyAddress,
+  honeyName,
+  honeyUrl,
   jsonRpcUrl,
+  lendName,
+  lendUrl,
   multicallAddress,
   networkName,
+  perpsName,
+  perpsUrl,
   rewardsAddress,
   stakingAddress,
 } from "@bera/config";
@@ -26,12 +36,20 @@ import { type Chain } from "viem";
 
 export const navItems = [
   {
-    href: "/",
-    title: "Dashboard",
-  },
-  {
     href: "/my-bgt",
     title: "My BGT",
+  },
+  {
+    href: "/validators",
+    title: "Validators",
+  },
+  {
+    href: "/delegate",
+    title: "Delegate",
+  },
+  {
+    href: "/governance",
+    title: "Governance",
   },
   {
     href: "/redeem",
@@ -39,58 +57,45 @@ export const navItems = [
   },
   {
     href: "#",
-    title: "Validators",
+    title: "Explore",
     children: [
       {
-        href: "/validators",
-        type: "internal",
-        title: "Validators",
-        blurb: `View all validators on the ${chainName} network`,
+        href: homepageUrl,
+        title: homepageName,
+        blurb: "The homepage of the chain",
       },
       {
-        href: "/delegate",
-        type: "internal",
-        title: "Delegate",
-        blurb: "Delegate, redelegate, and unbond from Validators",
+        href: honeyUrl,
+        title: honeyName,
+        blurb: "Mint or redeem the stablecoin of the Berachain",
       },
       {
-        href: "/governance",
-        type: "internal",
-        title: "Governance",
-        blurb: "Vote on proposals and participate in governance",
+        href: bgtUrl,
+        title: bgtName,
+        blurb: "The hub for the governance token of Berachain, BGT",
+      },
+      {
+        href: blockExplorerUrl,
+        type: "external",
+        title: blockExplorerName,
+        blurb: "View all transactions in the Berachain network",
+      },
+      {
+        href: lendUrl,
+        type: "external",
+        title: lendName,
+        blurb:
+          "Earn Interest And Rewards By Supplying Your Assets And Borrowing Honey",
+      },
+      {
+        href: perpsUrl,
+        type: "external",
+        title: perpsName,
+        blurb:
+          "Trade All Your Favourite Pairs With Deep Liquidity and Market Diversity",
       },
     ],
   },
-  // {
-  //   href: "#",
-  //   title: "Explore",
-  //   children: [
-  //     {
-  //       href: homePageUrl,
-  //       type: 'external',
-  //       title: "Berachain Foundation",
-  //       blurb: "The homepage of the chain",
-  //     },
-  //     {
-  //       href: honeyDappUrl,
-  //       type: 'external',
-  //       title: honeyDappName,
-  //       blurb: "Mint or redeem the stablecoin of the Berachain",
-  //     },
-  //     {
-  //       href: bgtDappUrl,
-  //       type: 'external',
-  //       title: bgtDappName,
-  //       blurb: "The hub for the governance token of Berachain, BGT",
-  //     },
-  //     {
-  //       href: blockExplorerUrl,
-  //       type: 'external',
-  //       title: blockExplorerName,
-  //       blurb: "View all transactions in the Berachain network",
-  //     },
-  //   ],
-  // },
 ];
 
 const chain: Chain = {
