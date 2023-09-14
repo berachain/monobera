@@ -259,6 +259,11 @@ export const BRIBE_PRECOMPILE_ABI = [
             type: "uint64",
           },
           {
+            internalType: "uint64",
+            name: "numBlockProposalsBribed",
+            type: "uint64",
+          },
+          {
             components: [
               {
                 internalType: "address[]",

@@ -35,7 +35,7 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
         "no gauges"
       ) : (
         <Link
-          className="flex  h-full w-[160px] items-center justify-center gap-1"
+          className="flex  h-full w-[160px] items-start justify-start gap-1"
           href={`${blockExplorerUrl}/address/${getAddress(highestVotedGauge)}`}
           target="_blank"
           onClick={(e) => e.stopPropagation()}

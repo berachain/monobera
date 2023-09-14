@@ -4,7 +4,6 @@ import {
   truncateHash,
   useInfiniteValidatorDelegations,
   usePollActiveValidators,
-  type Validator,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable } from "@bera/shared-ui";
@@ -27,25 +26,11 @@ export default function ValidatorActivitiesTable({
   const [tab, setTab] = React.useState<"recent-votes" | "delegators">(
     "recent-votes",
   );
-  const { useActiveValidators, useActiveValidator } = usePollActiveValidators();
-  const validators: Validator[] | undefined = useActiveValidators();
+  const { useActiveValidator } = usePollActiveValidators();
   const validator = useActiveValidator(validatorAddress);
 
   const { data, size, isLoading, isReachingEnd, setSize } =
     useInfiniteValidatorDelegations(validatorAddress);
-
-  function getRandomTimestamp(start = new Date(2000, 0, 1), end = new Date()) {
-    return Math.floor(
-      start.getTime() + Math.random() * (end.getTime() - start.getTime()),
-    );
-  }
-
-  const proposalData = validators?.map(() => ({
-    proposal: "What would a proposal title look like?",
-    address: "0x0000...0000",
-    stance: "stance",
-    time: getRandomTimestamp(),
-  }));
 
   const getDelegatorPercentage = (shares: bigint) => {
     const s = Number(formatUnits(shares, 18));
@@ -62,9 +47,11 @@ export default function ValidatorActivitiesTable({
         </div>
       ),
       bgt_amount: (
-        <div className="flex w-[88px]">
-          {formatter.format(Number(formatUnits(data.balance, 18)))} (
-          {getDelegatorPercentage(data.shares)}%)
+        <div className="flex w-[88px] flex-col">
+          <div>
+            {formatter.format(Number(formatUnits(data.balance, 18)))} BGT
+          </div>
+          <div>({getDelegatorPercentage(data.shares)}%)</div>
         </div>
       ),
       // delegated_since: <div className="flex w-[108px] gap-1">21 days ago</div>,
@@ -92,7 +79,7 @@ export default function ValidatorActivitiesTable({
         {tab === "recent-votes" ? (
           <DataTable
             columns={recent_votes_columns}
-            data={proposalData ?? []}
+            data={[]}
             className="min-w-[926px]"
           />
         ) : (
