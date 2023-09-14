@@ -203,7 +203,7 @@ export function HoneyMachine() {
   useEffect(() => {
     if (rive) {
       rive.on(EventType.StateChange, (event: any) => {
-        // console.log(event.data, event.eventType);
+        console.log(event.data, event.eventType);
         if (event.data[0] === "wallet") {
           if (needsApproval) {
             dispatch({ type: "SET_STATE", payload: "approval" });

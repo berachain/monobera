@@ -304,6 +304,9 @@ importers:
       react-day-picker:
         specifier: ^8.7.1
         version: 8.7.1(date-fns@2.29.3)(react@18.2.0)
+      react-device-detect:
+        specifier: ^2.2.3
+        version: 2.2.3(react-dom@18.2.0)(react@18.2.0)
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
