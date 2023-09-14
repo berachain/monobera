@@ -1,7 +1,4 @@
 import { type NetworkConfig } from "@bera/berajs";
-import { Icons } from "@bera/ui/icons";
-import { type Chain } from "wagmi";
-
 import {
   bankAddress,
   berachefAddress,
@@ -29,6 +26,8 @@ import {
   rewardsAddress,
   stakingAddress,
 } from "@bera/config";
+import { Icons } from "@bera/ui/icons";
+import { type Chain } from "wagmi";
 
 export const navItems = [
   {
