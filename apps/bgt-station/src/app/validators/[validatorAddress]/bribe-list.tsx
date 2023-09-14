@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   formatUsd,
+  formatter,
   usePollValidatorBribes,
   useTokenInformation,
   useTokens,
@@ -21,11 +22,13 @@ const BribeCard = ({
   tokenAddress,
   startEpoch,
   proposalsLeft,
+  numBlockProposals,
 }: {
   amountPerProposal: bigint;
   tokenAddress: any;
   startEpoch: bigint;
   proposalsLeft: bigint;
+  numBlockProposals: bigint;
 }) => {
   const [token, setToken] = useState<Token | undefined>(undefined);
   const { tokenDictionary } = useTokens();
@@ -58,15 +61,18 @@ const BribeCard = ({
   const formattedTotal = Number(formatUnits(total, token?.decimals ?? 18));
   const formattedTotalInUsd = formattedTotal * price;
   const formattedProposalsLeft = Number(proposalsLeft ?? 0);
+  const formattedTotalProposals = Number(numBlockProposals ?? 0);
+
   return (
     <Card className="flex w-full flex-1 flex-col gap-3 p-8">
       <div className="flex items-center gap-2">
         <TokenIcon token={token} />
         <div>
-          {formattedTotal} {token?.symbol}{" "}
-          <span className="text-xs text-muted-foreground">
-            tokens remaining
-          </span>
+          <div>
+            {" "}
+            {formatter.format(formattedTotalInUsd)} {token?.symbol}{" "}
+          </div>
+          <div className="text-xs text-muted-foreground">tokens remaining</div>
         </div>
       </div>
       <div className=" flex flex-col gap-2 text-sm font-medium leading-tight text-muted-foreground">
@@ -76,7 +82,9 @@ const BribeCard = ({
         </div>
       </div>
       <div className="flex justify-between text-sm font-medium leading-tight text-muted-foreground">
-        <div>{formattedProposalsLeft} proposals left</div>
+        <div>
+          {formattedProposalsLeft} / {formattedTotalProposals} proposals left
+        </div>
       </div>
       <div className="flex justify-between text-sm font-medium leading-tight text-muted-foreground">
         <div>start epoch: {Number(startEpoch ?? 0)}</div>
@@ -109,22 +117,28 @@ export default function BribeList({
     usePollValidatorBribes(validatorAddress);
   const bribes = [useActiveValidatorBribes() ?? []];
   const [lineCount, setLineCount] = useState(1);
-  console.log(bribes);
   const bribesList =
-    isLoading && bribes && bribes[0] && bribes[0][0]
+    !isLoading && bribes && bribes[0] && bribes[0][0]
       ? bribes
-          .map((bribe, index) =>
-            bribe.bribePerProposal.amounts.map((amount: any, i: number) => ({
-              key: `${index}bribe${i}`,
-              amountPerProposal: amount,
-              tokenAddress: bribe.bribePerProposal.tokens[i],
-              startEpoch: bribe.startEpoch,
-              proposalsLeft: bribe.numBlockProposals,
-            })),
-          )
+          .map((bribe, index) => {
+            const bribeObj = bribe[0];
+            return bribeObj.bribePerProposal?.amounts.map(
+              (amount: any, i: number) => {
+                return {
+                  key: `${index}bribe${i}`,
+                  amountPerProposal: amount,
+                  tokenAddress: bribeObj.bribePerProposal.tokens[i],
+                  startEpoch: bribeObj.startEpoch,
+                  proposalsLeft:
+                    bribeObj.numBlockProposals -
+                    bribeObj.numBlockProposalsBribed,
+                  numBlockProposals: bribeObj.numBlockProposals,
+                };
+              },
+            );
+          })
           .flat()
       : [];
-
   return (
     <div className="">
       <div className="mb-4 flex items-center text-lg font-semibold leading-7">
@@ -146,8 +160,8 @@ export default function BribeList({
                   ? lineCount * 3
                   : bribesList.length,
               )
-              .map((item: any) => (
-                <BribeCard key={item.key} {...item} />
+              .map((item: any, index) => (
+                <BribeCard key={index} {...item} />
               ))}
           </div>
         ) : (

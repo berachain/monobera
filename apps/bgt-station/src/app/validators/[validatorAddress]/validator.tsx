@@ -40,6 +40,7 @@ export default function Validator({
   const percentageDelegated = usePercentageDelegated(validatorAddress);
   const { data, isLoading } = useHistoricalBribes(allEpochs);
 
+  console.log("data", data);
   return (
     <div className="container relative mb-10 flex max-w-[1078px] flex-col gap-16">
       <div>
@@ -111,7 +112,6 @@ export default function Validator({
                 ) * 100
               ).toString() + "%"
             }
-            uptime={"99%"}
             votingPower={`${percentageDelegated?.toFixed(2) ?? 0}%`}
             website={validator?.description.website ?? ""}
             vApy={validator?.vApy ? validator.vApy.toFixed(2) : "0"}
@@ -120,8 +120,10 @@ export default function Validator({
         </div>
       </div>
       <BribesAndEmissions
-        validatorAddress={validatorAddress}
-        historicalBribes={data as FormattedHistoricalBribes[]}
+        historicalBribes={
+          (data as any)?.historicalBribes as FormattedHistoricalBribes[]
+        }
+        cumulativeBribeValue={(data as any)?.cumulativeBribeTotal}
         isLoading={isLoading}
       />
 

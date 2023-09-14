@@ -17,7 +17,7 @@ export const ConnectButton = ({
   className?: string;
   isNavItem?: boolean;
 }) => {
-  const { isConnected, isWrongNetwork } = useBeraJs();
+  const { isConnected, isWrongNetwork, isReady } = useBeraJs();
   return (
     <RainbowConnectButton.Custom>
       {({
@@ -40,39 +40,24 @@ export const ConnectButton = ({
             })}
             className={cn("flex w-full", className)}
           >
-            {(() => {
-              if (!isConnected) {
-                return (
-                  <Button
-                    onClick={openConnectModal}
-                    type="button"
-                    className={cn(
-                      "w-full gap-2",
-                      !isNavItem && "font-semibold",
-                    )}
-                  >
-                    <Icons.wallet
-                      className={cn("h-4 w-4", !isNavItem && "h-6 w-6")}
-                    />
-                    Connect
-                  </Button>
-                );
-              }
-
-              if (isWrongNetwork) {
-                return (
-                  <Button
-                    onClick={openChainModal}
-                    type="button"
-                    className="w-full"
-                  >
-                    Wrong network
-                  </Button>
-                );
-              }
-
-              return <ConnectedWalletPopover />;
-            })()}
+            {!isConnected && (
+              <Button
+                onClick={openConnectModal}
+                type="button"
+                className={cn("w-full gap-2", !isNavItem && "font-semibold")}
+              >
+                <Icons.wallet
+                  className={cn("h-4 w-4", !isNavItem && "h-6 w-6")}
+                />
+                Connect
+              </Button>
+            )}
+            {isWrongNetwork && (
+              <Button onClick={openChainModal} type="button" className="w-full">
+                Wrong network
+              </Button>
+            )}
+            {isReady && <ConnectedWalletPopover />}
           </div>
         );
       }}

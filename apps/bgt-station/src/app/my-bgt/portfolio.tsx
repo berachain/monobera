@@ -6,6 +6,7 @@ import {
   usePollBribes,
   usePollDelegatorUnbonding,
   usePollDelegatorValidators,
+  usePollTotalDelegated,
 } from "@bera/berajs";
 import { formatUsd } from "@bera/berajs/src/utils";
 import { TokenIconList, useTxn } from "@bera/shared-ui";
@@ -28,10 +29,11 @@ export default function Portfolio() {
     BGTSelectionEnum.YOUR_DELEGATIONS,
   );
   const [open, setOpen] = React.useState(false);
-  const { useDelegatorTotalDelegated, useTotalValidatorsDelegated } =
-    usePollDelegatorValidators();
+  const { useTotalValidatorsDelegated } = usePollDelegatorValidators();
 
-  const total = useDelegatorTotalDelegated();
+  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
+  const total = useTotalDelegatorDelegated();
+
   const totalValidators = useTotalValidatorsDelegated();
   const {
     useDelegatorUnbondingQueue,
@@ -42,7 +44,6 @@ export default function Portfolio() {
   const totalUnbonding = useDelegatorTotalUnbonding();
   const unbondingQueue = useDelegatorUnbondingQueue();
   const unbondingValidatorCount = useDelegatorTotalUnbondingValidators();
-
   const { usePrices } = usePollPrices();
   const prices = usePrices();
   const { useTotalBribes, useBribeTokens, useBribes } = usePollBribes();
