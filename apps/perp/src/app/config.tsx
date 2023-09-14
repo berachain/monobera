@@ -28,7 +28,7 @@ import {
   networkName,
   rewardsAddress,
   stakingAddress,
-} from "../config";
+} from "@bera/config";
 
 export const navItems = [
   {

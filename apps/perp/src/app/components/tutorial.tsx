@@ -3,10 +3,9 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { cloudinaryUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-
-import { cloudinaryUrl } from "~/config";
 
 export default function Tutorial() {
   const router = useRouter();
