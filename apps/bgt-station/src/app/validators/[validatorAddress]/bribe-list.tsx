@@ -66,7 +66,7 @@ const BribeCard = ({
   return (
     <Card className="flex w-full flex-1 flex-col gap-3 p-8">
       <div className="flex items-center gap-2">
-        <TokenIcon token={token} />
+        <TokenIcon token={token} className="h-8 w-8" />
         <div>
           <div>
             {" "}

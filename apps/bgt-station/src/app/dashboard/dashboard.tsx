@@ -37,7 +37,6 @@ export default function DashBoard({
         "Stake your BGT with the best validators to maximize your rewards",
     },
   ];
-  console.log(validators);
   return (
     <div className="container flex w-full max-w-[1078px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">
@@ -67,7 +66,7 @@ export default function DashBoard({
       {validatorSession.map((info) => (
         <ValidatorsList
           key={info.sortingAttr + info.title}
-          validators={validators}
+          validators={validators?.slice(0, 3)}
           isLoading={isLoading}
           {...info}
         />
