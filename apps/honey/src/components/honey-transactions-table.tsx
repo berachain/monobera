@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { formatUsd, truncateHash, useTokens } from "@bera/berajs";
+import { blockExplorerUrl, honeyTokenAddress } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -19,7 +20,6 @@ import { formatDistance } from "date-fns";
 import { formatUnits, getAddress } from "viem";
 
 import { useHoneyEvents } from "~/app/api/useHoneyEvents";
-import { blockExplorerUrl, honeyTokenAddress } from "@bera/config";
 
 enum Selection {
   AllTransactions = "allTransactions",

@@ -1,8 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import { Icons } from "@bera/ui/icons";
-
 import { cloudinaryUrl } from "@bera/config";
+import { Icons } from "@bera/ui/icons";
 
 export default function HoneyBanner() {
   return (

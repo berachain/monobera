@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { cloudinaryUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { formatEther } from "viem";
 
@@ -13,7 +14,6 @@ import { HoneyChart } from "~/components/honey-chart";
 import { HoneyMachine } from "~/components/honey-machine";
 import HoneyTransactionsTable from "~/components/honey-transactions-table";
 import { SwapCard } from "~/components/swap-card";
-import { cloudinaryUrl } from "@bera/config";
 import { type HoneyEntry } from "./type";
 
 export default function HoneyPage({
