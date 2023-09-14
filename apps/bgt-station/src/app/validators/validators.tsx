@@ -32,6 +32,7 @@ export default function Validators({
   const { useGlobalActiveBribeValue, isLoading: isGlobalBribeLoading } =
     usePollGlobalValidatorBribes(prices);
   const totalBribeValue = useGlobalActiveBribeValue();
+  console.log("totalBribeValue", totalBribeValue);
   const { data, isLoading } = useGlobalValidatorGaugeWeight();
 
   const inflation = useMemo(() => {
@@ -57,7 +58,7 @@ export default function Validators({
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
         "$" +
-        (totalBribeValue === undefined
+        (totalBribeValue === undefined || Number.isNaN(totalBribeValue)
           ? "0.00"
           : formatter.format(totalBribeValue))
       ),

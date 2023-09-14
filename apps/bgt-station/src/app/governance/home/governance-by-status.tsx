@@ -21,10 +21,7 @@ import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { cloudinaryUrl } from "~/config";
-import {
-  ProposalCard,
-  ProposalCardSkeleton,
-} from "../components/proposal-card";
+import { ProposalCard } from "../components/proposal-card";
 import {
   OrderByEnum,
   StatusEnum,

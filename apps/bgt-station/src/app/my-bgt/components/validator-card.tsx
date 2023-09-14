@@ -2,9 +2,9 @@ import { useRouter } from "next/navigation";
 import {
   BRIBE_PRECOMPILE_ABI,
   useBeraJs,
-  usePollAccountDelegations,
   usePollActiveValidators,
   usePollBribes,
+  usePollTotalDelegated,
   type PoLValidator,
 } from "@bera/berajs";
 import { formatUsd } from "@bera/berajs/src/utils";
@@ -31,10 +31,8 @@ export default function ValidatorCard({
     validator.operatorAddr as Address,
   );
 
-  const { useSelectedAccountDelegation } = usePollAccountDelegations(
-    validator.operatorAddr as Address,
-  );
-  const userDelegated = useSelectedAccountDelegation();
+  const { useValidatorDelegation } = usePollTotalDelegated();
+  const userDelegated = useValidatorDelegation(validator.operatorAddr);
 
   const { usePrices } = usePollPrices();
   const prices = usePrices();
@@ -179,7 +177,7 @@ export default function ValidatorCard({
         <div className="mr-4 flex flex-shrink-0 items-center gap-4">
           {!validator.bribeTokenList ||
           validator.bribeTokenList.length === 0 ? (
-            <div className="text-muted-foreground">No bribes</div>
+            <div className="text-muted-foreground">No active bribes</div>
           ) : (
             <TokenIconList size="2xl" tokenList={validator.bribeTokenList} />
           )}

@@ -89,7 +89,7 @@ export default async function Page({
 
   const [cuttingBoard, allEpochs] = await Promise.all([
     getCuttingBoard(validatorAddress),
-    getHistoricalBribeEpochs(validatorAddress, 1000),
+    getHistoricalBribeEpochs(validatorAddress, 10000),
   ]);
 
   const cb: CuttingBoard[] = cuttingBoard[0].weights;

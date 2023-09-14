@@ -5,9 +5,9 @@ import Link from "next/link";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
   usePollActiveValidators,
-  usePollDelegatorValidators,
   usePollProposal,
   usePollProposalVotes,
+  usePollTotalDelegated,
   type IVote,
   type Proposal,
 } from "@bera/berajs";
@@ -32,11 +32,11 @@ export default function ProposalDetails({
 }) {
   const { useProposal } = usePollProposal(proposalId);
   const { useTotalDelegated } = usePollActiveValidators();
-  const { useDelegatorTotalDelegated } = usePollDelegatorValidators();
+  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
   const proposal: Proposal | undefined = useProposal();
 
   const globalTotal = useTotalDelegated();
-  const userTotal = useDelegatorTotalDelegated();
+  const userTotal = useTotalDelegatorDelegated();
 
   const {
     useProposalVotes,

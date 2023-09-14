@@ -31,14 +31,21 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
     prices,
   ];
   return useSWRImmutable(QUERY_KEY, () => {
-    if (epochs.length === 0 || !currentEpoch || !prices) return [];
+    if (
+      epochs.length === 0 ||
+      currentEpoch === undefined ||
+      prices === undefined
+    )
+      return [];
     const epoch = currentEpoch.current || 0;
     let history: EpochBribe[] = [];
     if (epochs.length > epoch) {
       history = [...epochs.slice(0, epoch)];
+    } else {
+      history = [...epochs];
     }
-
-    const result: FormattedHistoricalBribes[] = history.map(
+    let cumulativeBribeTotal = 0;
+    const historicalBribes: FormattedHistoricalBribes[] = history.map(
       (historicalBribe: any, index) => {
         let value = 0;
         if (Object.keys(historicalBribe).length !== 0) {
@@ -53,6 +60,7 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
                 Number(formattedBribeAmount) *
                 price *
                 Number(historicalBribe.numBlockProposals);
+              cumulativeBribeTotal += bribeValue;
               return total + bribeValue;
             },
             0,
@@ -64,6 +72,9 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
         };
       },
     );
-    return result;
+    return {
+      historicalBribes,
+      cumulativeBribeTotal,
+    };
   });
 };

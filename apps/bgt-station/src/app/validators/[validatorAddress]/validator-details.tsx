@@ -20,7 +20,6 @@ export default function ValidatorDetails({
   address: string;
   decription: React.ReactNode;
   commissions: string;
-  uptime: string;
   votingPower: string;
   website: string;
   vApy: string;
@@ -37,14 +36,15 @@ export default function ValidatorDetails({
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
-            Commission <Tooltip text="amount of validator rewards retained by this validator." />
+            Commission{" "}
+            <Tooltip text="Amount of validator rewards retained by this validator." />
           </div>
           <div className="text-muted-foreground">{commissions}</div>
         </div>
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
-            Uptime <Tooltip text="Uptime" />
+            Uptime <Tooltip text="Percentage uptime over the last 100 blocks" />
           </div>
           <div className="text-muted-foreground">
             {data?.uptime ? data?.uptime : 0}%
@@ -53,22 +53,22 @@ export default function ValidatorDetails({
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
-            Voting Power <Tooltip text="represents a delegator's influence in validator decisions." />
+            Voting Power{" "}
+            <Tooltip text="Represents a delegator's influence in validator decisions." />
           </div>
           <div className="text-muted-foreground">{votingPower}</div>
         </div>
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
-            vApy <Tooltip text="projected measure of potential yearly earnings" />
+            vApy{" "}
+            <Tooltip text="Projected measure of potential yearly earnings" />
           </div>
           <div className="text-muted-foreground">{vApy}%</div>
         </div>
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
-          <div>
-            Website <Tooltip text="Commission" />
-          </div>
+          <div>Website</div>
           <a
             className="text-info-foreground hover:underline"
             href={website}
