@@ -1,9 +1,9 @@
 import { type Metadata } from "next";
 import { type CuttingBoard } from "@bera/berajs";
+import { indexerUrl } from "@bera/config";
 import { getAddress } from "viem";
 
 import { getMetaTitle } from "~/utils/metadata";
-import { indexerUrl } from "~/config";
 import Validator from "./validator";
 
 type Props = {

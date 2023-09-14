@@ -10,13 +10,13 @@ import {
   useTokens,
   type PoLValidator,
 } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
 import { DataTable, SearchInput } from "@bera/shared-ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress, type Address } from "viem";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
-import { blockExplorerUrl } from "~/config";
 import { usePollPrices } from "~/hooks/usePollPrices";
 
 export const ValidatorGauge = ({ address }: { address: string }) => {

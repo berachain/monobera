@@ -3,8 +3,8 @@
 import { type Metadata } from "next";
 import Image from "next/image";
 import { usePollGlobalValidatorBribes, type PoLValidator } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
 
-import { cloudinaryUrl } from "~/config";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import { Details } from "./components/details";
 import GlobalGaugeWeightInfo from "./components/global-gauge-weight";

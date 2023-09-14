@@ -8,6 +8,7 @@ import {
   useBeraJs,
   usePollBgtBalance,
 } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -16,7 +17,6 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { type Address } from "wagmi";
 
-import { cloudinaryUrl } from "~/config";
 import { useRedeem } from "../../hooks/useRedeem";
 
 export default function Redeem() {

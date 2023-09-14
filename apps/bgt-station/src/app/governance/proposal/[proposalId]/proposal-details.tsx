@@ -9,12 +9,12 @@ import {
   type Proposal,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils/formatAmount";
+import { governanceAddress } from "@bera/config";
 import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1beta1/gov";
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
-import { governanceAddress } from "~/config";
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
 import { VoteCard } from "../../components/vote-card";

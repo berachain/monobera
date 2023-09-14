@@ -8,10 +8,10 @@ import {
   usePollBgtSupply,
   usePollGlobalValidatorBribes,
 } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { cloudinaryUrl } from "~/config";
 import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import ValidatorsTable from "./validators-table";

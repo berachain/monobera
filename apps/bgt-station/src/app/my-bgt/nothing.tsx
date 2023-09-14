@@ -1,8 +1,7 @@
 import Link from "next/link";
+import { docsUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
-
-import { docsUrl } from "~/config";
 
 export default function Nothing({ message }: { message: string }) {
   return (

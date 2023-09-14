@@ -1,8 +1,7 @@
 import { type Pool, type RouterService } from "@bera/bera-router";
+import { honeyAddress } from "@bera/config";
 import { getAddress, parseUnits } from "viem";
 import { type Address } from "wagmi";
-
-import { honeyAddress } from "../../config";
 
 export interface MappedTokens {
   [key: string]: number;

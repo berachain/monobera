@@ -6,6 +6,7 @@ import {
   usePollActiveValidators,
   type Validator,
 } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
 import { DataTable } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { Button } from "@bera/ui/button";
@@ -17,7 +18,6 @@ import {
   delegators_columns,
   recent_votes_columns,
 } from "~/columns/validator_activities_table_columns";
-import { blockExplorerUrl } from "~/config";
 
 export default function ValidatorActivitiesTable({
   validatorAddress,

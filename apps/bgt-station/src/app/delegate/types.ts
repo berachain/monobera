@@ -1,4 +1,4 @@
-import { cloudinaryUrl } from "~/config";
+import { cloudinaryUrl } from "@bera/config";
 
 export enum DelegateEnum {
   DELEGATE = "delegate",
