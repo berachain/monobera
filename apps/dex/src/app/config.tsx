@@ -64,6 +64,7 @@ export const navItems = [
       },
       {
         href: blockExplorerUrl,
+        type: "external",
         title: blockExplorerName,
         blurb: "View all transactions in the Berachain network",
       },

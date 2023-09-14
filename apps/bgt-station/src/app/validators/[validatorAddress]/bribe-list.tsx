@@ -7,7 +7,7 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { NotFoundBear, TokenIcon } from "@bera/shared-ui";
+import { NotFoundBear, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -64,7 +64,7 @@ const BribeCard = ({
   return (
     <Card className="flex w-full flex-1 flex-col gap-3 p-8">
       <div className="flex items-center gap-2">
-        <TokenIcon token={token} />
+        <TokenIcon token={token} className="h-8 w-8" />
         <div>
           <div>
             {" "}
@@ -139,8 +139,9 @@ export default function BribeList({
       : [];
   return (
     <div className="">
-      <div className="mb-4 flex items-center text-lg font-semibold leading-7">
-        Active Bribes
+      <div className="mb-4 flex items-center gap-1 text-lg font-semibold leading-7">
+        Active Bribes{" "}
+        <Tooltip text="A list of active bribes from this validator." />
       </div>
       <div>
         {isLoading ? (

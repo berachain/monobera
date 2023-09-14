@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { truncateHash, useTokens } from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Checkbox } from "@bera/ui/checkbox";
 import uniqolor from "uniqolor";
 
+import { GaugeIcon } from "~/app/validators/validators-table";
 import {
   global_gauge_weight_columns,
   type GlobalGaugeColumns,
@@ -64,17 +64,10 @@ const Gauge = ({ address }: { address: string | undefined }) => {
     address === undefined || gaugeDictionary === undefined
       ? ""
       : gaugeDictionary[address]?.name ?? truncateHash(address);
-  const logo =
-    address === undefined || gaugeDictionary === undefined
-      ? ""
-      : gaugeDictionary[address]?.logoURI ?? "https://github.com/shadcn.png";
 
   return (
-    <div className="flex h-full w-[150px] items-center gap-1">
-      <Avatar className="h-6 w-6">
-        <AvatarImage src={logo} />
-        <AvatarFallback></AvatarFallback>
-      </Avatar>
+    <div className="flex h-full w-[150px] items-center gap-2">
+      <GaugeIcon address={address ?? ""} />
       <div
         className="cursor-pointer hover:underline"
         onClick={() =>
