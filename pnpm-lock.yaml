@@ -739,6 +739,9 @@ importers:
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../berajs
+      '@bera/config':
+        specifier: 0.1.0
+        version: link:../config/env
       '@bera/eslint-config':
         specifier: 0.1.0
         version: link:../config/eslint

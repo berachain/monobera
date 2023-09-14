@@ -2,8 +2,8 @@ import { type NetworkConfig } from "@bera/berajs";
 import {
   bankAddress,
   berachefAddress,
-  bgtDappName,
-  bgtDappUrl,
+  bgtName,
+  bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
   chainId,
@@ -16,10 +16,10 @@ import {
   gasTokenName,
   gasTokenSymbol,
   governanceAddress,
-  homePageUrl,
+  homepageUrl,
   honeyAddress,
-  honeyDappName,
-  honeyDappUrl,
+  honeyName,
+  honeyUrl,
   jsonRpcUrl,
   multicallAddress,
   networkName,
@@ -61,18 +61,18 @@ export const navItems = [
     title: "More",
     children: [
       {
-        href: homePageUrl,
+        href: homepageUrl,
         title: "Berachain Foundation",
         blurb: "The homepage of the chain",
       },
       {
-        href: honeyDappUrl,
-        title: honeyDappName,
+        href: honeyUrl,
+        title: honeyName,
         blurb: "Mint or redeem the stablecoin of the Berachain",
       },
       {
-        href: bgtDappUrl,
-        title: bgtDappName,
+        href: bgtUrl,
+        title: bgtName,
         blurb: "The hub for the governance token of Berachain, BGT",
       },
       {
