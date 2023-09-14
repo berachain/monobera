@@ -48,21 +48,25 @@ export const navItems = [
     children: [
       {
         href: homePageUrl,
+        type: "external",
         title: "Berachain Foundation",
         blurb: "The homepage of the chain",
       },
       {
         href: honeyDappUrl,
+        type: "external",
         title: honeyDappName,
         blurb: "Mint or redeem the stablecoin of the Berachain",
       },
       {
         href: bgtDappUrl,
+        type: "external",
         title: bgtDappName,
         blurb: "The hub for the governance token of Berachain, BGT",
       },
       {
         href: blockExplorerUrl,
+        type: "external",
         title: blockExplorerName,
         blurb: "View all transactions in the Berachain network",
       },

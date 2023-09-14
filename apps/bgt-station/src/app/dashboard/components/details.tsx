@@ -30,7 +30,7 @@ export function Details({
     {
       amount:
         total === undefined || Number.isNaN(total) ? (
-          <Skeleton className="h-8 w-20" />
+          <Skeleton className="mb-2 h-8 w-20" />
         ) : (
           total
         ),
@@ -39,7 +39,7 @@ export function Details({
     {
       amount:
         avgApy === undefined ? (
-          <Skeleton className="h-8 w-20" />
+          <Skeleton className="mb-2 h-8 w-20" />
         ) : (
           `${avgApy?.toFixed(2)}%`
         ),
@@ -48,7 +48,7 @@ export function Details({
     {
       amount:
         bgtSupply === undefined ? (
-          <Skeleton className="h-8 w-20" />
+          <Skeleton className="mb-2 h-8 w-20" />
         ) : (
           `${formatter.format(Number(bgtSupply))} BGT`
         ),
