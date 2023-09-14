@@ -66,7 +66,7 @@ export default function DashBoard({
       {validatorSession.map((info) => (
         <ValidatorsList
           key={info.sortingAttr + info.title}
-          validators={validators}
+          validators={validators?.slice(0, 3)}
           isLoading={isLoading}
           {...info}
         />

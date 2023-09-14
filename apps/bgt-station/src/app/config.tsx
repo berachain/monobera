@@ -34,21 +34,63 @@ export const navItems = [
     title: "My BGT",
   },
   {
-    href: "/validators",
-    title: "Validators",
-  },
-  {
-    href: "/delegate",
-    title: "Delegate",
-  },
-  {
-    href: "/governance",
-    title: "Governance",
-  },
-  {
     href: "/redeem",
     title: "Redeem",
   },
+  {
+    href: "#",
+    title: "Validators",
+    children: [
+      {
+        href: "/validators",
+        type: "internal",
+        title: "Validators",
+        blurb: `View all validators on the ${chainName} network`,
+      },
+      {
+        href: "/delegate",
+        type: "internal",
+        title: "Delegate",
+        blurb: "Delegate, redelegate, and unbond from Validators",
+      },
+      {
+        href: "/governance",
+        type: "internal",
+        title: "Governance",
+        blurb: "Vote on proposals and participate in governance",
+      },
+    ],
+  },
+  // {
+  //   href: "#",
+  //   title: "Explore",
+  //   children: [
+  //     {
+  //       href: homePageUrl,
+  //       type: 'external',
+  //       title: "Berachain Foundation",
+  //       blurb: "The homepage of the chain",
+  //     },
+  //     {
+  //       href: honeyDappUrl,
+  //       type: 'external',
+  //       title: honeyDappName,
+  //       blurb: "Mint or redeem the stablecoin of the Berachain",
+  //     },
+  //     {
+  //       href: bgtDappUrl,
+  //       type: 'external',
+  //       title: bgtDappName,
+  //       blurb: "The hub for the governance token of Berachain, BGT",
+  //     },
+  //     {
+  //       href: blockExplorerUrl,
+  //       type: 'external',
+  //       title: blockExplorerName,
+  //       blurb: "View all transactions in the Berachain network",
+  //     },
+  //   ],
+  // },
 ];
 
 const chain: Chain = {

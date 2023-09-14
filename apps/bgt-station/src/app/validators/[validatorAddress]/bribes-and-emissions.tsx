@@ -131,14 +131,14 @@ export default function BribesAndEmissions({
   console.log("cbv", cumulativeBribeValue);
   return (
     <div className="">
-      <div className="flex items-center text-lg font-semibold leading-7">
+      <div className="flex items-center gap-1 text-lg font-semibold leading-7">
         Bribes
         <Tooltip text="Overview of bribe information on this validator" />
       </div>
       <div className="mt-4 flex gap-4">
         <YellowCard className="flex w-full justify-center p-8">
           <div className="text-3xl font-semibold leading-9 text-foreground">
-            ${formatter.format(cumulativeBribeValue)}
+            ${formatter.format(cumulativeBribeValue ?? 0)}
           </div>
           <div className="text-sm font-medium leading-[14px] text-muted-foreground">
             Cumulative bribe total value
