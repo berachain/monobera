@@ -44,6 +44,9 @@ export default async function Pool() {
     volume: volume,
   }));
 
+  console.log(data?.tvl);
+  console.log(data?.volume);
+
   return (
     <div className="container m-auto flex w-full flex-col gap-5">
       <PoolPageHeader tvl={data?.tvl?.result} volume={data?.volume?.result} />
