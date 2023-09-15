@@ -33,13 +33,18 @@ export function ValidatorsList({
           ? [0, 0, 0, 0].map((_, index) => (
               <SkeletonValidatorCard key={index} />
             ))
-          : validators?.map((validator: PoLValidator) => (
-              <ValidatorCard
-                validator={validator}
-                key={validator.operatorAddr + sortingAttr}
-                keyword={keyword}
-              />
-            ))}
+          : validators
+              ?.slice(
+                0,
+                validators && validators.length <= 4 ? validators.length : 4,
+              )
+              .map((validator: PoLValidator) => (
+                <ValidatorCard
+                  validator={validator}
+                  key={validator.operatorAddr + sortingAttr}
+                  keyword={keyword}
+                />
+              ))}
       </div>
       {/* <div className="mt-8 flex justify-center">
         {(linesCount * 3 < (validators?.length ?? 0) ||

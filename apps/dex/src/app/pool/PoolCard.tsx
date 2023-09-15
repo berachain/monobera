@@ -21,11 +21,15 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
           ? formatUsd(pool?.fees ?? "0")
           : "$0",
     },
+    {
+      title: "vAPY",
+      amount: (pool?.totalApy ?? 0).toFixed(2) + "%",
+    },
   ];
   return (
     <div
       key={pool?.pool}
-      className="col-span-1 flex w-full max-w-[275px] flex-col justify-end rounded-xl border border-border bg-background"
+      className="col-span-1 flex w-full max-w-[275px] flex-col justify-end overflow-hidden rounded-xl border border-border bg-background"
     >
       <div className="flex flex-col items-center justify-center gap-1 p-6 pb-4">
         <TokenIconList
@@ -35,9 +39,9 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
         <div className="flex h-12 w-full items-center justify-center text-sm font-medium text-muted-foreground">
           {poolName.length > 60 ? `${poolName.slice(0, 60)}...` : poolName}
         </div>
-        <div className="flex h-7 gap-2 text-center text-xl font-semibold">
+        <div className="flex h-7 gap-2 text-center text-xl font-semibold whitespace-nowrap flex-shrink-0">
           {(pool?.totalApy ?? 0).toFixed(2)}% APY{" "}
-          <TagList tagList={pool?.tags ?? []} className="inline-block" />
+          <TagList tagList={pool?.tags ?? []} className="inline-flex" />
         </div>
       </div>
 
@@ -66,7 +70,7 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
             variant={"secondary"}
             onClick={() => router.push(`/pool/${pool?.pool}`)}
           >
-            View Pools
+            View Pool
           </Button>
         </div>
       </div>
