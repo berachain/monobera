@@ -39,7 +39,7 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
         <div className="flex h-12 w-full items-center justify-center text-sm font-medium text-muted-foreground">
           {poolName.length > 60 ? `${poolName.slice(0, 60)}...` : poolName}
         </div>
-        <div className="flex h-7 gap-2 text-center text-xl font-semibold whitespace-nowrap flex-shrink-0">
+        <div className="flex h-7 flex-shrink-0 gap-2 whitespace-nowrap text-center text-xl font-semibold">
           {(pool?.totalApy ?? 0).toFixed(2)}% APY{" "}
           <TagList tagList={pool?.tags ?? []} className="inline-flex" />
         </div>
