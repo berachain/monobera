@@ -57,7 +57,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
   const method = "globalValidatorBribes";
   const { useCurrentEpoch } = usePollEpochs();
   const currentEpoch = useCurrentEpoch();
-  const QUERY_KEY = [method, prices, validators];
+  const QUERY_KEY = [method, prices, validators, currentEpoch];
 
   const ACTIVE_BRIBES_KEY = "activeBribes";
   const ACTIVE_BRIBES_TOTAL_AMOUNT_KEY = "activeBribesTotalAmount";
@@ -202,7 +202,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
       return undefined;
     },
     {
-      refreshInterval: POLLING.SLOW * 10,
+      refreshInterval: POLLING.NORMAL,
     },
   );
 
