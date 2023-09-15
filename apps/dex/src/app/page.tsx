@@ -45,6 +45,8 @@ export const metadata: Metadata = {
   description: `Welcome to ${process.env.NEXT_PUBLIC_DEX_NAME}!`,
 };
 
+export const fetchCache = 'force-no-store'
+
 export default async function Homepage() {
   const tvl = getTvl();
   const volume = getVolume();
