@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "View pools",
 };
 
-const getTvl = async () => {
+const getTvl2 = async () => {
   const res = await fetch(`${publicAnalyticsUrl}/analytics/tvldaily/global`);
 
   if (!res.ok) {
@@ -22,7 +22,7 @@ const getTvl = async () => {
   return result;
 };
 
-const getVolume = async () => {
+const getVolume2 = async () => {
   const res = await fetch(`${publicAnalyticsUrl}/analytics/volumedaily/global`);
 
   if (!res.ok) {
@@ -35,16 +35,16 @@ const getVolume = async () => {
 };
 
 export default async function Pool() {
-  const tvl = getTvl();
-  const volume = getVolume();
-  const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
-    tvl: tvl,
-    volume: volume,
-  }));
+  const tvl = await getTvl2();
+  const volume = await getVolume2();
+  // const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
+  //   tvl: tvl,
+  //   volume: volume,
+  // }));
 
   return (
     <div className="container m-auto flex w-full flex-col gap-5">
-      <PoolPageHeader tvl={data?.tvl?.result} volume={data?.volume?.result} />
+      <PoolPageHeader tvl={tvl?.result} volume={volume?.result} />
     </div>
   );
 }
