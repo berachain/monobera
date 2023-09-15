@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useBeraJs, usePollBgtBalance } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
@@ -36,7 +37,7 @@ export const Connect = dynamic(
 
 export function Header() {
   const { isConnected } = useBeraJs();
-  const { useBgtBalance } = usePollBgtBalance();
+  const { useBgtBalance, isLoading } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   return (
     <nav className="bg-bg fixed left-0 right-0 z-50 bg-background">
@@ -52,7 +53,12 @@ export function Header() {
         <div className="mr-2 flex items-center gap-2">
           {isConnected && (
             <div className="flex-no-wrap hidden h-10 w-fit gap-1 rounded-full border border-yellow-600 bg-yellow-50 px-4 py-2 text-sm font-medium md:flex">
-              {Number(userBalance).toFixed(2)} <span>BGT</span>
+              {isLoading ? (
+                <Skeleton className="h-10 w-20" />
+              ) : (
+                Number(userBalance).toFixed(2)
+              )}{" "}
+              <span>BGT</span>
             </div>
           )}
           <ThemeToggle />

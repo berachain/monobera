@@ -97,7 +97,7 @@ export default function GovernanceByStatus({
               <TabsTrigger
                 value={status}
                 key={status}
-                className="flex-1 capitalize"
+                className="flex-1 capitalize hover:text-foreground"
                 onClick={() =>
                   router.push(
                     `/governance?proposalStatus=${status}&orderBy=${orderBy}`,

@@ -35,25 +35,26 @@ export default function ValidatorActivitiesTable({
   const getDelegatorPercentage = (shares: bigint) => {
     const s = Number(formatUnits(shares, 18));
     const total = Number(formatUnits(validator?.delegatorShares ?? 0n, 18));
-    return (s / total).toFixed(2);
+    return s / total;
   };
 
   const delegatorData = data?.map(
     (data: { delegator: Address; shares: bigint; balance: bigint }) => ({
       delegator_address: (
-        <div className="flex w-[145px] items-center gap-2">
+        <div className="flex w-[145px] items-center gap-2 hover:underline">
           <Identicon account={data.delegator} />
           {truncateHash(data.delegator)}
         </div>
       ),
       bgt_amount: (
-        <div className="flex w-[88px] flex-col">
+        <div className="flex gap-1">
           <div>
             {formatter.format(Number(formatUnits(data.balance, 18)))} BGT
           </div>
-          <div>({getDelegatorPercentage(data.shares)}%)</div>
+          <div>({(getDelegatorPercentage(data.shares) * 100).toFixed(2)}%)</div>
         </div>
       ),
+      bgt: data.balance,
       // delegated_since: <div className="flex w-[108px] gap-1">21 days ago</div>,
     }),
   );
