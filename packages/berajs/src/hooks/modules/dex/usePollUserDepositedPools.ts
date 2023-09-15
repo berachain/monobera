@@ -44,6 +44,8 @@ export const usePollUserDepositedPools = (endpoint: string) => {
           multicallAddress: networkConfig.precompileAddresses
             .multicallAddress as Address,
         });
+
+        console.log('RES', result)
         const deposited = pool
           .map((pool: any, i: number) => {
             return {
@@ -53,10 +55,16 @@ export const usePollUserDepositedPools = (endpoint: string) => {
               ),
             };
           })
-          .filter((pool: any) => pool.userDeposited !== 0);
 
-        return deposited;
+
+        console.log('DEPOSITED', deposited)
+        const filteredDeposted = deposited
+          .filter((pool: any) => pool.userDepositedShares !== 0);
+
+          console.log('FILTERED', filteredDeposted)
+        return filteredDeposted;
       } catch (e) {
+        console.log(e)
         return undefined;
       }
     },
