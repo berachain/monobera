@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 };
 
 const getTvl2 = async () => {
-  console.log(`${publicAnalyticsUrl}/analytics/tvldaily/global`)
   const res = await fetch(`${publicAnalyticsUrl}/analytics/tvldaily/global`);
 
   if (!res.ok) {
@@ -24,7 +23,6 @@ const getTvl2 = async () => {
 };
 
 const getVolume2 = async () => {
-  console.log(`${publicAnalyticsUrl}/analytics/volumedaily/global`)
   const res = await fetch(`${publicAnalyticsUrl}/analytics/volumedaily/global`);
 
   if (!res.ok) {
@@ -37,16 +35,16 @@ const getVolume2 = async () => {
 };
 
 export default async function Pool() {
-  const tvl = await getTvl2();
-  const volume = await getVolume2();
-  // const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
-  //   tvl: tvl,
-  //   volume: volume,
-  // }));
+  const tvl = getTvl();
+  const volume = getVolume();
+  const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
+    tvl: tvl,
+    volume: volume,
+  }));
 
   return (
     <div className="container m-auto flex w-full flex-col gap-5">
-      <PoolPageHeader tvl={tvl?.result} volume={volume?.result} />
+      <PoolPageHeader tvl={data?.tvl?.result} volume={data?.volume?.result} />
     </div>
   );
 }

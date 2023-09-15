@@ -8,8 +8,7 @@ import Help from "./components/Help";
 import Hero from "./components/Hero";
 import { notFound } from "next/navigation";
 
-const getTvl1 = async () => {
-  console.log(`${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`)
+const getTvl = async () => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
   );
@@ -23,8 +22,7 @@ const getTvl1 = async () => {
   return result;
 };
 
-const getVolume1 = async () => {
-  console.log(`${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`)
+const getVolume = async () => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
   );
@@ -44,18 +42,18 @@ export const metadata: Metadata = {
 };
 
 export default async function Homepage() {
-
+  const tvl = getTvl();
+  const volume = getVolume();
   try {
-    // const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
-    //   tvl: tvl,
-    //   volume: volume,
-    // }));
-    const tvl = await getTvl1();
-    const volume = await getVolume1();
+    const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
+      tvl: tvl,
+      volume: volume,
+    }));
+
   return (
     <div className="container max-w-[1200px]">
       <Hero />
-      <Data tvl={tvl?.result} volume={volume?.result} />
+      <Data tvl={data?.tvl?.result} volume={data?.volume?.result} />
       <div className="-mx-full overflow-hidden">
         <CreateAPool />
       </div>
