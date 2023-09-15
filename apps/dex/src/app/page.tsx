@@ -6,6 +6,7 @@ import CreateAPool from "./components/CreateAPool";
 import Data from "./components/Data";
 import Help from "./components/Help";
 import Hero from "./components/Hero";
+import { notFound } from "next/navigation";
 
 const getTvl = async () => {
   const res = await fetch(
@@ -43,10 +44,11 @@ export const metadata: Metadata = {
 export default async function Homepage() {
   const tvl = getTvl();
   const volume = getVolume();
-  const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
-    tvl: tvl,
-    volume: volume,
-  }));
+  try {
+    const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
+      tvl: tvl,
+      volume: volume,
+    }));
 
   return (
     <div className="container max-w-[1200px]">
@@ -58,4 +60,9 @@ export default async function Homepage() {
       <Help />
     </div>
   );
+  } catch(e) {
+    console.log(e)
+    notFound()
+  }
+
 }
