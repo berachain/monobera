@@ -594,7 +594,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                   onClick={() => {
                     write({
                       address: process.env
-                        .NEXT_PUBLIC_ERC20_REWARDS_ADDRESS as Address,
+                        .NEXT_PUBLIC_REWARDS_ADDRESS as Address,
                       abi: REWARDS_PRECOMPILE_ABI,
                       functionName: "withdrawDepositorRewards",
                       params: [account, pool.pool],

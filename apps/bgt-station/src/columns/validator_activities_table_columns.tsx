@@ -71,22 +71,19 @@ export const delegators_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex w-full justify-end text-right">
+        <div className="flex w-full flex-shrink-0 justify-end whitespace-nowrap text-right">
           {row.original.bgt_amount}
         </div>
       );
     },
     accessorKey: "bgt_amount",
-    enableSorting: false,
+    enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.bgt ?? 0;
+      const b = rowB.original.bgt ?? 0;
+      if (a < b) return -1;
+      else if (a > b) return 1;
+      else return 0;
+    },
   },
-
-  // {
-  //   header: (
-  //     <div className="flex w-[110px] gap-1">
-  //       Delegated Since{" "}
-  //       <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-  //     </div>
-  //   ),
-  //   accessor: "delegated_since",
-  // },
 ];

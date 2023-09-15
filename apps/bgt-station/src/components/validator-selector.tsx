@@ -53,7 +53,7 @@ export default function ValidatorSelector({
 
   const filteredValidators = useMemo(
     () => (showDelegated ? delegatorPolValidators : validators),
-    [validators, showDelegated],
+    [validators, showDelegated, delegatorPolValidators, prices],
   );
 
   return (

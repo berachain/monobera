@@ -166,8 +166,8 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                     className="inline-flex h-[42px] w-[500px] flex-col items-start justify-start hover:cursor-pointer"
                     ref={triggerRef}
                   >
-                    <div className=" inline-flex w-full items-center justify-start gap-2.5 rounded-xl border border-gray-200 px-3 py-2">
-                      <div className="relative shrink grow basis-0 caption-top text-sm font-normal capitalize leading-normal text-stone-700">
+                    <div className=" inline-flex w-full items-center justify-start gap-2.5 rounded-xl border border-border px-3 py-2">
+                      <div className="relative shrink grow basis-0 caption-top text-sm font-normal capitalize leading-normal text-muted-foreground">
                         {type.replaceAll("-", " ")}
                         <Icons.chevronDown className="absolute right-0 top-1 h-4 w-4" />
                       </div>

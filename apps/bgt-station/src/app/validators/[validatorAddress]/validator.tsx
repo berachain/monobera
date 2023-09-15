@@ -39,8 +39,6 @@ export default function Validator({
   const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(validatorAddress);
   const { data, isLoading } = useHistoricalBribes(allEpochs);
-
-  console.log("data", data);
   return (
     <div className="container relative mb-10 flex max-w-[1078px] flex-col gap-16">
       <div>
@@ -52,7 +50,7 @@ export default function Validator({
             <Icons.arrowLeft className="relative h-4 w-4" />
             Validators
           </Link>
-          <div className="absolute right-0 top-0">
+          <div className="text-center">
             {validator?.status === "BOND_STATUS_BONDED" ? (
               <Badge
                 variant="success"
@@ -77,9 +75,6 @@ export default function Validator({
           </div>
 
           <div className="flex flex-col items-center justify-center gap-2">
-            {/* <div className="text-sm font-medium leading-none text-muted-foreground">
-              Hex address: {truncateHash(validatorAddress, 6)}
-            </div> */}
             <div className="text-sm font-medium leading-none text-muted-foreground">
               Operator address:{" "}
               {validator ? (

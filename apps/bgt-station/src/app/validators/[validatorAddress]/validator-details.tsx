@@ -30,7 +30,7 @@ export default function ValidatorDetails({
     <div className="flex w-full flex-col gap-4 text-lg font-semibold leading-7">
       Details
       <Card className="flex flex-col p-8">
-        <div className="text-sm font-normal leading-normal text-muted-foreground md:flex md:h-[60px] md:items-end md:overflow-y-scroll">
+        <div className="text-sm font-normal leading-normal text-muted-foreground md:flex md:h-[60px] md:items-end md:overflow-y-auto">
           {decription ? decription : <Skeleton className=" h-[14px] w-full" />}
         </div>
 

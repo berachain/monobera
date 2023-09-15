@@ -38,6 +38,9 @@ export default function PoolPageHeader({
     return !isLoading && block !== 0n;
   }, [isLoading, block]);
 
+  console.log(tvl);
+  console.log(volume);
+  console.log(tvlValue, volumeValue, block);
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-6">
       <h1 className="text-center text-5xl font-bold">
@@ -90,7 +93,7 @@ export default function PoolPageHeader({
           value={`${(Number(block) * 0.0042).toFixed(2)} BGT`}
         />
       </div>
-      <div id="poolSearch" className="mt-[72px] w-full max-w-[980px]">
+      <div id="poolSearch" className="mt-[72px] w-full max-w-[1100px]">
         <PoolSearch />
       </div>
     </div>

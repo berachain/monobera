@@ -24,7 +24,9 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
       <DataTableColumnHeader column={column} title="Pool or Address" />
     ),
     cell: ({ row }) => (
-      <div className="w-[150px] text-left">{row.original.gauge}</div>
+      <div className="w-[250px] truncate whitespace-nowrap text-left">
+        {row.original.gauge}
+      </div>
     ),
     accessorKey: "gauge",
     enableSorting: false,

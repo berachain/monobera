@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import { isMobile } from "react-device-detect";
 
 import { getHoneyData } from "~/utils/getServerSideData";
 import { getMetaTitle } from "~/utils/metadata";
@@ -35,6 +36,7 @@ export default async function Home({
     getHoneyData("supply", HoneyTimeFrame.QUARTERLY),
     getHoneyData("volume", HoneyTimeFrame.QUARTERLY),
   ]);
+
   return (
     <HoneyPage
       {...{

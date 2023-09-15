@@ -1,37 +1,58 @@
+import {
+  bgtName,
+  bgtUrl,
+  blockExplorerName,
+  blockExplorerUrl,
+  careersUrl,
+  dexName,
+  dexUrl,
+  discord,
+  docsUrl,
+  github,
+  homepageUrl,
+  honeyName,
+  honeyUrl,
+  lendName,
+  lendUrl,
+  perpsName,
+  perpsUrl,
+  pressKit,
+  twitter,
+} from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
 export const footerNavigation = {
   ecosystem: [
     {
-      name: process.env.NEXT_PUBLIC_DEX_NAME,
-      href: process.env.NEXT_PUBLIC_DEX_URL,
+      name: dexName,
+      href: dexUrl,
     },
     {
-      name: process.env.NEXT_PUBLIC_BGT_NAME,
-      href: process.env.NEXT_PUBLIC_BGT_URL,
+      name: bgtName,
+      href: bgtUrl,
     },
     {
-      name: process.env.NEXT_PUBLIC_HONEY_NAME,
-      href: process.env.NEXT_PUBLIC_HONEY_URL,
+      name: honeyName,
+      href: honeyUrl,
     },
     {
-      name: process.env.NEXT_PUBLIC_LEND_NAME,
-      href: process.env.NEXT_PUBLIC_LEND_URL,
+      name: lendName,
+      href: lendUrl,
     },
     {
-      name: process.env.NEXT_PUBLIC_PERPS_NAME,
-      href: process.env.NEXT_PUBLIC_PERPS_NAME,
+      name: perpsName,
+      href: perpsUrl,
     },
     {
-      name: process.env.NEXT_PUBLIC_BLOCK_EXPLORER_NAME,
-      href: process.env.NEXT_PUBLIC_BLOCK_EXPLORER,
+      name: blockExplorerName,
+      href: blockExplorerUrl,
     },
   ],
   resources: [
-    { name: "Foundation", href: process.env.NEXT_PUBLIC_HOMEPAGE_URL },
-    { name: "Docs", href: process.env.NEXT_PUBLIC_DOCS_URL },
-    { name: "Careers", href: process.env.NEXT_PUBLIC_CAREERS_URL },
-    { name: "Press Kit", href: process.env.NEXT_PUBLIC_PRESS_KIT },
+    { name: "Foundation", href: homepageUrl },
+    { name: "Docs", href: docsUrl },
+    { name: "Careers", href: careersUrl },
+    { name: "Press Kit", href: pressKit },
   ],
 
   social: [
@@ -42,17 +63,17 @@ export const footerNavigation = {
     // },
     {
       name: "X",
-      href: process.env.NEXT_PUBLIC_TWITTER,
+      href: twitter,
       icon: Icons.elonMusk,
     },
     {
       name: "GitHub",
-      href: process.env.NEXT_PUBLIC_GITHUB,
+      href: github,
       icon: Icons.gitHub,
     },
     {
       name: "Discord",
-      href: process.env.NEXT_PUBLIC_DISCORD,
+      href: discord,
       icon: Icons.discord,
     },
   ],
