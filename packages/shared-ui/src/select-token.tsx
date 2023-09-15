@@ -3,6 +3,7 @@ import { type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { type Address } from "viem";
 
 import { TokenDialog, TokenIcon } from "./";
 
@@ -13,6 +14,7 @@ type Props = {
   customTokenList?: Token[];
   selectable: boolean;
   weight?: number;
+  filter?: Address[];
   className?: string;
 };
 
@@ -23,6 +25,7 @@ export function SelectToken({
   customTokenList = undefined,
   selectable,
   weight = undefined,
+  filter = [],
   className = "",
 }: Props) {
   const [open, setOpen] = React.useState(false);
@@ -65,6 +68,7 @@ export function SelectToken({
           selectedTokens={selectedTokens ?? []}
           focusedToken={token}
           customTokens={customTokenList}
+          filter={filter}
         />
       )}
     </div>

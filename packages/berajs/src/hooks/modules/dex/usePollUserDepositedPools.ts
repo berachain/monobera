@@ -31,7 +31,6 @@ export const usePollUserDepositedPools = (endpoint: string) => {
           (item: any) => item.shareAddress,
         );
 
-        console.log(shareDenomArray);
         const call: Call[] = shareDenomArray.map((item: Address) => {
           return {
             abi: BANK_PRECOMPILE_ABI,
@@ -49,14 +48,13 @@ export const usePollUserDepositedPools = (endpoint: string) => {
           .map((pool: any, i: number) => {
             return {
               ...pool,
-              userDeposited: Number(
+              userDepositedShares: Number(
                 formatUnits((result[i]?.result as unknown as bigint) ?? 0n, 18),
               ),
             };
           })
           .filter((pool: any) => pool.userDeposited !== 0);
 
-        console.log(deposited);
         return deposited;
       } catch (e) {
         return undefined;
