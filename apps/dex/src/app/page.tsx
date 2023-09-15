@@ -9,6 +9,7 @@ import Hero from "./components/Hero";
 import { notFound } from "next/navigation";
 
 const getTvl1 = async () => {
+  console.log(`${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`)
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
   );
@@ -23,6 +24,7 @@ const getTvl1 = async () => {
 };
 
 const getVolume1 = async () => {
+  console.log(`${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`)
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
   );
