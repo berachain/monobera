@@ -67,50 +67,54 @@ export function ClaimBribesDialog({
               </span>
             </div>
           </div>
-          {formattedBribes.map((bribe: FormattedBribe, index) => {
-            return (
-              <div
-                className="w-full"
-                key={bribe.validatorAddress ?? `item-${index}`}
-              >
-                <div>
-                  <div className="flex w-full flex-row items-center justify-between text-sm font-semibold">
-                    <div className="flex flex-row items-center justify-center gap-1">
-                      <ValidatorIcon
-                        address={bribe.validatorAddress as Address}
-                        className="h-8 w-8"
-                      />
-                      <p>{bribe.validatorName}</p>
+          {formattedBribes
+            .filter((reward) => reward.totalValue !== 0)
+            .map((bribe: FormattedBribe, index) => {
+              return (
+                <div
+                  className="w-full"
+                  key={bribe.validatorAddress ?? `item-${index}`}
+                >
+                  <div>
+                    <div className="flex w-full flex-row items-center justify-between text-sm font-semibold">
+                      <div className="flex flex-row items-center justify-center gap-1">
+                        <ValidatorIcon
+                          address={bribe.validatorAddress as Address}
+                          className="h-8 w-8"
+                        />
+                        <p>{bribe.validatorName}</p>
+                      </div>
+                      <p>{formatUsd(bribe.totalValue)}</p>
                     </div>
-                    <p>{formatUsd(bribe.totalValue)}</p>
                   </div>
-                </div>
-                <div className="flex h-fit w-full flex-col gap-2 text-xs font-medium leading-tight text-muted-foreground">
-                  {bribe.rewards.map((reward) => {
-                    return (
-                      <div
-                        className="mt-2 flex w-full flex-row justify-between"
-                        key={reward.token}
-                      >
-                        <div className="flex flex-row items-center justify-center gap-1">
-                          <TokenIcon address={reward.token} fetch size="xl" />
-                          <p>{reward.amount.toFixed(2)}</p>
-                          <p>
-                            {symbols
-                              ? (symbols as Record<string, string>)[
-                                  reward.token
-                                ]
-                              : ""}
+                  <div className="flex h-fit w-full flex-col gap-2 text-xs font-medium leading-tight text-muted-foreground">
+                    {bribe.rewards.map((reward) => {
+                      return (
+                        <div
+                          className="mt-2 flex w-full flex-row justify-between"
+                          key={reward.token}
+                        >
+                          <div className="flex flex-row items-center justify-center gap-1">
+                            <TokenIcon address={reward.token} fetch size="xl" />
+                            <p>{reward.amount.toFixed(2)}</p>
+                            <p>
+                              {symbols
+                                ? (symbols as Record<string, string>)[
+                                    reward.token
+                                  ]
+                                : ""}
+                            </p>
+                          </div>
+                          <p className="self-center">
+                            {formatUsd(reward.value)}
                           </p>
                         </div>
-                        <p className="self-center">{formatUsd(reward.value)}</p>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
           <Button
             onClick={() => write()}
             disabled={isLoading}
