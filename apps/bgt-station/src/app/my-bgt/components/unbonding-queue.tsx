@@ -24,11 +24,11 @@ function Nothing() {
   return (
     <div className="container flex max-w-[764px] flex-col gap-8">
       <div className="text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
-        Once you unbond BGT, you’ll be able to view your unbonding queue right
-        here.
+        Once you unbond BGT,
+        <br /> you’ll be able to view your unbonding queue right here.
       </div>
       <div className="flex flex-col justify-center gap-4 sm:flex-row">
-        <Card className="flex-1 px-12 py-8">
+        <Card className="w-full max-w-[500px] flex-1 px-12 py-8">
           <div className="flex h-12 items-center gap-3 text-lg font-semibold leading-7 text-muted-foreground">
             {" "}
             <div className="text-[31.12px]">📜</div>What is Unbonding?

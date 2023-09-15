@@ -73,8 +73,8 @@ const TableViewLoading = () => (
 );
 
 const CardViewLoading = () => (
-  <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-    {[0, 0, 0].map((_, index) => (
+  <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+    {[0, 0, 0, 0].map((_, index) => (
       <PoolCardLoading key={index} />
     ))}
   </div>
@@ -192,7 +192,7 @@ export const PoolSearch = () => {
                 </div>
               ) : (
                 <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-                  <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                     {data &&
                       data[0] &&
                       data.map((pool: any) => {
@@ -243,7 +243,7 @@ export const PoolSearch = () => {
               </div>
             ) : (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
                   {userPools &&
                     userPools[0] &&
                     userPools.map((pool: any) => {

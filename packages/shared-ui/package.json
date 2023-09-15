@@ -19,6 +19,7 @@
   "devDependencies": {
     "@bera/bera-router": "0.1.0",
     "@bera/berajs": "0.1.0",
+    "@bera/config": "0.1.0",
     "@bera/eslint-config": "0.1.0",
     "@bera/tailwind-config": "0.1.0",
     "@bera/ui": "0.1.0",

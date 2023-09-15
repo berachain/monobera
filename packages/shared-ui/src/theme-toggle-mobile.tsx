@@ -24,7 +24,7 @@ export function ThemeToggleMobile(props: {
   }[theme as "light" | "dark" | "system"];
 
   return (
-    <div className="block lg:hidden">
+    <div className="">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

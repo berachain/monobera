@@ -15,7 +15,7 @@ export const validator_table_columns: ColumnDef<any>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="BGT delegated" />
+      <DataTableColumnHeader column={column} title="My Delegation" />
     ),
     cell: ({ row }) => {
       return (
@@ -29,10 +29,16 @@ export const validator_table_columns: ColumnDef<any>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Voting power" />
+      <DataTableColumnHeader
+        column={column}
+        title="Voting power"
+        tooltip="Total amount of BGT Delegated"
+      />
     ),
     cell: ({ row }) => (
-      <div className="flex w-24 items-center">{row.original.vp}</div>
+      <div className="flex w-24 flex-shrink-0 items-center whitespace-nowrap">
+        {row.original.vp}
+      </div>
     ),
     accessorKey: "vp",
     enableSorting: true,

@@ -90,7 +90,7 @@ export default function PoolPageHeader({
           value={`${(Number(block) * 0.0042).toFixed(2)} BGT`}
         />
       </div>
-      <div id="poolSearch" className="mt-[72px] w-full max-w-[980px]">
+      <div id="poolSearch" className="mt-[72px] w-full max-w-[1100px]">
         <PoolSearch />
       </div>
     </div>
