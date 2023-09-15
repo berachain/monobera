@@ -11,7 +11,11 @@ type Props = {
   amount?: bigint;
 };
 
-const ApproveTokenButton = ({ token, spender, amount = 1000000n }: Props) => {
+const ApproveTokenButton = ({
+  token,
+  spender,
+  amount = 1000000000000000000000000000n,
+}: Props) => {
   const { write, isLoading } = useTxn({
     message: `Approve ${token?.name}`,
   });

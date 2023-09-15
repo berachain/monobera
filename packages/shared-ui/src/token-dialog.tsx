@@ -34,6 +34,7 @@ type Props = {
   selectedTokens: (Token | undefined)[];
   focusedToken: Token | undefined;
   customTokens?: Token[];
+  filter?: string[];
 };
 
 export function TokenDialog({
@@ -43,6 +44,7 @@ export function TokenDialog({
   selectedTokens,
   focusedToken = undefined,
   customTokens = undefined,
+  filter = [],
 }: Props) {
   const [search, setSearch] = useState("");
   const [addTokenOpen, setAddTokenOpen] = useState(false);
@@ -58,12 +60,16 @@ export function TokenDialog({
   } = useTokens();
   const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<Token[] | undefined>(
-    customTokens ? customTokens : tokenList,
+    customTokens
+      ? customTokens
+      : tokenList?.filter((token) => !filter.includes(token.address)),
   );
 
   useEffect(() => {
     if (!customTokens) {
-      setFilteredTokens(tokenList);
+      setFilteredTokens(
+        tokenList?.filter((token) => !filter.includes(token.address)),
+      );
     }
   }, [tokenList]);
 
@@ -168,20 +174,22 @@ export function TokenDialog({
               </div>
               {!customTokens && (
                 <div className="flex flex-wrap gap-2">
-                  {featuredTokenList?.map((token) => {
-                    return (
-                      <TokenChip
-                        key={token.address}
-                        selected={isTokenSelected(token)}
-                        onClick={() =>
-                          !isTokenSelected(token) && onTokenSelect(token)
-                        }
-                      >
-                        <TokenIcon token={token} size="md" />
-                        {token.symbol}
-                      </TokenChip>
-                    );
-                  })}
+                  {featuredTokenList
+                    ?.filter((token) => !filter.includes(token.address))
+                    ?.map((token) => {
+                      return (
+                        <TokenChip
+                          key={token.address}
+                          selected={isTokenSelected(token)}
+                          onClick={() =>
+                            !isTokenSelected(token) && onTokenSelect(token)
+                          }
+                        >
+                          <TokenIcon token={token} size="md" />
+                          {token.symbol}
+                        </TokenChip>
+                      );
+                    })}
                 </div>
               )}
             </div>

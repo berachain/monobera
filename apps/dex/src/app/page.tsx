@@ -1,6 +1,5 @@
 import React from "react";
 import { type Metadata } from "next";
-import { publicAnalyticsUrl } from "@bera/config";
 
 import { getMetaTitle } from "~/utils/metadata";
 import CreateAPool from "./components/CreateAPool";
@@ -9,7 +8,9 @@ import Help from "./components/Help";
 import Hero from "./components/Hero";
 
 const getTvl = async () => {
-  const res = await fetch(`${publicAnalyticsUrl}/analytics/tvldaily/global`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
+  );
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -21,7 +22,9 @@ const getTvl = async () => {
 };
 
 const getVolume = async () => {
-  const res = await fetch(`${publicAnalyticsUrl}/analytics/volumedaily/global`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
+  );
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary

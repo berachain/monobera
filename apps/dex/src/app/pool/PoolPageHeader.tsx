@@ -38,6 +38,9 @@ export default function PoolPageHeader({
     return !isLoading && block !== 0n;
   }, [isLoading, block]);
 
+  console.log(tvl);
+  console.log(volume);
+  console.log(tvlValue, volumeValue, block);
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-6">
       <h1 className="text-center text-5xl font-bold">
