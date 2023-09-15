@@ -17,8 +17,10 @@ import { usePollPrices } from "~/hooks/usePollPrices";
 
 export default function ValidatorCard({
   validator,
+  keyword,
 }: {
   validator: PoLValidator;
+  keyword: string;
 }) {
   const { usePrices } = usePollPrices();
   const prices = usePrices();
@@ -41,9 +43,13 @@ export default function ValidatorCard({
       amount: formatCommission(validator.commission.commissionRates.rate) + "%",
       text: "Commission",
     },
+    {
+      amount: String(vApy?.toFixed(2) ?? 0) + "%",
+      text: "vAPY",
+    },
   ];
   return (
-    <div className="col-span-1 flex w-full max-w-[275px] flex-col justify-end rounded-xl border border-border bg-background">
+    <div className="col-span-1 flex w-full max-w-[275px] flex-col justify-end overflow-hidden rounded-xl border border-border bg-background">
       <div className="flex flex-col items-center justify-center gap-1 p-6 pb-4">
         <ValidatorIcon
           address={validator.operatorAddr as Address}
@@ -63,7 +69,7 @@ export default function ValidatorCard({
         )}
 
         <div className="flex h-7 gap-2 text-center text-xl font-semibold">
-          {vApy?.toFixed(2) ?? 0}% APY{" "}
+          {info.find((data) => data.text === keyword)?.amount ?? "0"}
         </div>
       </div>
 

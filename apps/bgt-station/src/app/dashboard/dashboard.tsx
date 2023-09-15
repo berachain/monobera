@@ -29,16 +29,18 @@ export default function DashBoard({
       sortingAttr: "tokens",
       title: "🔥 Top staked validators",
       message: "Stake your BGT with the most popular validators",
+      keyword: "Voting power",
     },
     {
       sortingAttr: "vApy",
       title: "💰 Top paying validators",
       message:
         "Stake your BGT with the best validators to maximize your rewards",
+      keyword: "Bribe value",
     },
   ];
   return (
-    <div className="container flex w-full max-w-[1078px] flex-col gap-24 pb-24">
+    <div className="container flex w-full max-w-[1200px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">
         <Image
           src={`${cloudinaryUrl}/bears/wy6muyafchlo5wjidall`}
@@ -66,7 +68,7 @@ export default function DashBoard({
       {validatorSession.map((info) => (
         <ValidatorsList
           key={info.sortingAttr + info.title}
-          validators={validators?.slice(0, 3)}
+          validators={validators}
           isLoading={isLoading}
           {...info}
         />
