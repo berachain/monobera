@@ -7,7 +7,10 @@ import {
   useBeraConfig,
   useBeraJs,
   usePollAccountDelegations,
+  usePollActiveValidators,
   usePollBgtBalance,
+  usePollDelegatorValidators,
+  usePollGlobalValidatorBribes,
 } from "@bera/berajs";
 import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
@@ -22,6 +25,7 @@ import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import ValidatorInput from "~/components/validator-input";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import { DelegateEnum, ImageMapEnum } from "./types";
 
 export default function Delegate({
@@ -42,6 +46,17 @@ export default function Delegate({
   const { networkConfig } = useBeraConfig();
 
   const { useSelectedAccountDelegation } = usePollAccountDelegations(validator);
+  usePollActiveValidators();
+  usePollDelegatorValidators();
+
+  const { usePrices } = usePollPrices();
+  const prices = usePrices();
+  const { useDelegatorPolValidators } = usePollGlobalValidatorBribes(prices);
+  const { useDelegatorValidators } = usePollDelegatorValidators();
+  const delegatedValidators = useDelegatorValidators();
+  const _ = useDelegatorPolValidators(
+    delegatedValidators?.map((d: any) => d.operatorAddr),
+  );
   const bgtDelegated = useSelectedAccountDelegation();
 
   const getExceeding = () => {

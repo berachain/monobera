@@ -113,7 +113,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
           className="px-2 text-sm leading-none md:px-4 md:text-lg md:leading-7"
           onClick={() => {
             write({
-              address: process.env.NEXT_PUBLIC_ERC20_REWARDS_ADDRESS as Address,
+              address: process.env.NEXT_PUBLIC_REWARDS_ADDRESS as Address,
               abi: REWARDS_PRECOMPILE_ABI,
               functionName: "withdrawDepositorRewards",
               params: [account, pool.pool],
