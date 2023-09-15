@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "View pools",
 };
 
-const getTvl2 = async () => {
+const getTvl = async () => {
   const res = await fetch(`${publicAnalyticsUrl}/analytics/tvldaily/global`);
 
   if (!res.ok) {
@@ -22,7 +22,7 @@ const getTvl2 = async () => {
   return result;
 };
 
-const getVolume2 = async () => {
+const getVolume = async () => {
   const res = await fetch(`${publicAnalyticsUrl}/analytics/volumedaily/global`);
 
   if (!res.ok) {
