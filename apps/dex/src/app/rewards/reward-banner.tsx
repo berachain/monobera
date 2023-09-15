@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { bgtDappUrl, cloudinaryUrl } from "@bera/config";
+import { bgtUrl, cloudinaryUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
 export const Banner = () => {
@@ -32,7 +32,7 @@ export const Banner = () => {
             🐝{" "}
             <span
               className="hover:underline"
-              onClick={() => window.open(`${bgtDappUrl}/delegate`, "_blank")}
+              onClick={() => window.open(`${bgtUrl}/delegate`, "_blank")}
             >
               {" "}
               Stake
@@ -43,7 +43,7 @@ export const Banner = () => {
             🔥{" "}
             <span
               className="hover:underline"
-              onClick={() => window.open(`${bgtDappUrl}/redeem`, "_blank")}
+              onClick={() => window.open(`${bgtUrl}/redeem`, "_blank")}
             >
               {" "}
               Burn
@@ -54,7 +54,7 @@ export const Banner = () => {
             🗳️{" "}
             <span
               className="hover:underline"
-              onClick={() => window.open(`${bgtDappUrl}/governance`, "_blank")}
+              onClick={() => window.open(`${bgtUrl}/governance`, "_blank")}
             >
               {" "}
               Vote

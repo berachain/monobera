@@ -9,19 +9,28 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { type Column } from "@tanstack/react-table";
 
+import { Tooltip } from "./tooltip";
+
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
   title: string;
+  tooltip?: string;
 }
 
 export function DataTableColumnHeader<TData, TValue>({
   column,
   title,
   className,
+  tooltip,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>;
+    return (
+      <div className={cn(className)}>
+        {title}
+        {tooltip && <Tooltip text={tooltip} />}
+      </div>
+    );
   }
 
   return (
@@ -33,7 +42,10 @@ export function DataTableColumnHeader<TData, TValue>({
             size="sm"
             className="-ml-3 h-8 text-sm hover:bg-hover data-[state=open]:bg-hover"
           >
-            <span>{title}</span>
+            <span>
+              {title}
+              {tooltip && <Tooltip text={tooltip} />}
+            </span>
             {column.getIsSorted() === "desc" ? (
               <Icons.sortDesc className="ml-2 h-4 w-4" />
             ) : column.getIsSorted() === "asc" ? (

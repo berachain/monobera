@@ -5,7 +5,7 @@ import useSWRInfinite from "swr/infinite";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
-const DEFAULT_SIZE = 6;
+const DEFAULT_SIZE = 8;
 
 export const usePoolTable = () => {
   const [search, setSearch] = useState("");

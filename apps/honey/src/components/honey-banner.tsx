@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import { cloudinaryUrl } from "@bera/config";
+import Link from "next/link";
+import { cloudinaryUrl, dexUrl, lendUrl, perpsUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
 export default function HoneyBanner() {
@@ -28,14 +29,14 @@ export default function HoneyBanner() {
           <h3 className="m-auto mb-4 w-[60px] text-sm text-yellow-900">
             Lend HONEY on 🅱️end
           </h3>
-          <a
-            href=""
+          <Link
+            href={lendUrl}
             target="_blank"
             className="inline-flex gap-2 rounded-full bg-yellow-600 px-4 py-2 text-sm text-white"
           >
             <Icons.helpingHand />
             Lend
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -44,14 +45,14 @@ export default function HoneyBanner() {
           <h3 className="m-auto mb-4 w-[80px] text-sm text-green-900">
             Add Liquidity to HONEY Pools
           </h3>
-          <a
-            href=""
+          <Link
+            href={`${dexUrl}/pool`}
             target="_blank"
             className="inline-flex gap-2 rounded-full bg-green-600 px-4 py-2 text-sm text-white"
           >
             <Icons.plus />
             Add
-          </a>
+          </Link>
         </div>
       </div>
       <div className="col-span-1">
@@ -59,14 +60,14 @@ export default function HoneyBanner() {
           <h3 className="m-auto mb-4 w-[86px] text-sm text-red-900">
             Provide Collateral for 🅱️erbetuals
           </h3>
-          <a
-            href=""
+          <Link
+            href={perpsUrl}
             target="_blank"
             className="inline-flex gap-2 rounded-full bg-red-600 px-4 py-2 text-sm text-white"
           >
             <Icons.plus />
             Provide
-          </a>
+          </Link>
         </div>
       </div>
     </div>

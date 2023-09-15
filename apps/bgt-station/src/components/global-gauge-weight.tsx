@@ -69,7 +69,7 @@ const Gauge = ({ address }: { address: string | undefined }) => {
     <div className="flex h-full w-[150px] items-center gap-2">
       <GaugeIcon address={address ?? ""} />
       <div
-        className="cursor-pointer hover:underline"
+        className="min-w-[150px] cursor-pointer truncate whitespace-nowrap hover:underline"
         onClick={() =>
           window.open(
             `${process.env.NEXT_PUBLIC_DEX_URL}/pool/${address}`,
@@ -86,6 +86,7 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
   const [disableChecks, setDisableChecks] = React.useState<boolean>(false);
+  const { gaugeDictionary } = useTokens();
 
   useEffect(() => {
     setDisableChecks(
@@ -154,7 +155,9 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
   }, [cuttingBoardData, filter]);
 
   const dataP = {
-    labels: pieData?.map((d) => d.label) ?? [],
+    labels: pieData?.map((d) =>
+      gaugeDictionary ? gaugeDictionary[d.originalLabel]?.name ?? d.label : "",
+    ),
     datasets: [
       {
         data: pieData?.map((d) => d.amount),
