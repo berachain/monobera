@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const getTvl = async () => {
-  console.log(`${publicAnalyticsUrl}/analytics/tvldaily/global`)
+  console.log(`${publicAnalyticsUrl}/analytics/tvldaily/global`);
   const res = await fetch(`${publicAnalyticsUrl}/analytics/tvldaily/global`);
 
   if (!res.ok) {
@@ -24,7 +24,7 @@ const getTvl = async () => {
 };
 
 const getVolume = async () => {
-  console.log(`${publicAnalyticsUrl}/analytics/volumedaily/global`)
+  console.log(`${publicAnalyticsUrl}/analytics/volumedaily/global`);
   const res = await fetch(`${publicAnalyticsUrl}/analytics/volumedaily/global`);
 
   if (!res.ok) {
