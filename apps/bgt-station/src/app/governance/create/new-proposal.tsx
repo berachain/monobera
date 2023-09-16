@@ -50,7 +50,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const { isReady } = useBeraJs();
   const triggerRef = useRef<HTMLDivElement>(null);
   const [_contentWidth, setContentWidth] = useState("w-[450px]");
-  const { useBgtBalance } = usePollBgtBalance();
+  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   const minDeposit = governanceMinDeposit;
   useEffect(() => {
@@ -64,6 +64,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
 
   const { write, ModalPortal } = useTxn({
     message: "Submit Proposal",
+    disableToast: true,
     onSuccess: () => {
       router.push(`/governance`);
     },
@@ -270,6 +271,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                       <Input
                         type="number"
                         id="initial-deposit"
+                        disabled={isBalanceLoading}
                         placeholder="0.0"
                         endAdornment="BGT"
                         {...field}

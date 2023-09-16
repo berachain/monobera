@@ -36,7 +36,6 @@ async function getGlobalCuttingBoard() {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
       {
-        cache: "force-cache",
         next: {
           revalidate: 60,
         },
@@ -48,6 +47,7 @@ async function getGlobalCuttingBoard() {
     console.log(e);
   }
 }
+
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

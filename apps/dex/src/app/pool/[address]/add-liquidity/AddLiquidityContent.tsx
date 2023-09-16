@@ -79,6 +79,7 @@ export default function AddLiquidityContent({
 
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
+    disableToast: true,
     onSuccess: () => {
       reset();
     },
@@ -179,7 +180,7 @@ export default function AddLiquidityContent({
                         <PreviewToken
                           key={tokenInput.address}
                           token={tokenInput}
-                          weight={tokenInput?.weight}
+                          weight={tokenInput?.normalizedWeight}
                           value={tokenInput?.amount}
                           price={prices[tokenInput?.address ?? ""]}
                         />
@@ -196,10 +197,10 @@ export default function AddLiquidityContent({
                     value={formatUsd(totalValue ?? 0) ?? "-"}
                   />
                   {/* TODO: impl */}
-                  <InfoBoxListItem
+                  {/* <InfoBoxListItem
                     title={"Percentage of Pool"}
                     value={"0.0000069%"}
-                  />
+                  /> */}
                 </InfoBoxList>
                 {needsApproval.length > 0 ? (
                   <ApproveTokenButton
@@ -299,7 +300,7 @@ export default function AddLiquidityContent({
                         key={token.address}
                         token={token}
                         value={formattedAmount}
-                        weight={token.normalizedWeight}
+                        // weight={token.normalizedWeight}
                         price={prices[token.address]}
                       />
                     );

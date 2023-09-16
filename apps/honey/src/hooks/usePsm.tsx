@@ -90,6 +90,7 @@ export const usePsm = () => {
 
   const { write, isLoading, ModalPortal } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
+    disableToast: true,
   });
 
   const { usePreviewMint } = usePollPreviewMint(collateral, fromAmount);

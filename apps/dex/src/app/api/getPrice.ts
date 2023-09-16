@@ -42,7 +42,7 @@ export const getBaseTokenPrice = async (
     mappedTokens = allPoolData?.length
       ? allPoolData?.reduce(
           (acc, cur) => {
-            acc[cur.tokenIn] = cur.formattedReturnAmount;
+            acc[getAddress(cur.tokenIn)] = cur.formattedReturnAmount;
             return acc;
           },
           { [BASE_TOKEN]: "1" },

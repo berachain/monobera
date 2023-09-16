@@ -49,7 +49,7 @@ export function TokenInput({
   onExceeding = undefined,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
-  usePollAssetWalletBalance();
+  const {isLoading: isBalancesLoading} = usePollAssetWalletBalance();
   let tokenBalance = Number(
     useSelectedAssetWalletBalance(selected?.address ?? "")?.formattedBalance ??
       "0",
@@ -66,7 +66,7 @@ export function TokenInput({
       setExceeding(false);
       return;
     }
-    if (amount > tokenBalance || Number(tokenBalance) == 0) {
+    if (!isBalancesLoading && (amount > tokenBalance || Number(tokenBalance) == 0 )) {
       setExceeding(true);
       return;
     }

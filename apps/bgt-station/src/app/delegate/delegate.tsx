@@ -110,7 +110,7 @@ export default function Delegate({
     message: "Redelegating BGT",
   });
 
-  const { useBgtBalance } = usePollBgtBalance();
+  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const bgtBalance = useBgtBalance();
 
   return (
@@ -184,7 +184,7 @@ export default function Delegate({
             />
           </>
         )}
-        {getExceeding() && isConnected && (
+        {getExceeding() && isConnected && !isBalanceLoading && (
           <Alert variant="destructive">
             {activeAction === DelegateEnum.DELEGATE
               ? `This amount exceeds your total balance of ${bgtBalance} BGT`

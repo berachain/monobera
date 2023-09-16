@@ -25,11 +25,11 @@ interface Call {
 export const usePollAssetWalletBalance = () => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
-  const { account, error } = useBeraJs();
+  const { account, isConnected, error } = useBeraJs();
   const { networkConfig } = useBeraConfig();
   const { tokenList } = useTokens();
   const { isLoading, isValidating } = useSWR(
-    [account, "assetWalletBalances"],
+    [account,isConnected,tokenList, "assetWalletBalances"],
     async () => {
       if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {

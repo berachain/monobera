@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { RouteNotFound } from "@bera/bera-router";
-import { DEX_PRECOMPILE_ABI, useBeraJs } from "@bera/berajs";
+import { DEX_PRECOMPILE_ABI, useBeraJs, usePollAssetWalletBalance } from "@bera/berajs";
 import {
   cloudinaryUrl,
   erc20DexAddress,
@@ -101,6 +101,7 @@ export function SwapCard({
     } to ${Number(swapInfo?.formattedReturnAmount).toFixed(4)} ${
       selectedTo?.symbol
     }`,
+    disableToast: true,
     onSuccess: () => {
       setOpenPreview(false);
     },
@@ -109,6 +110,9 @@ export function SwapCard({
     },
   });
 
+  const {isLoading: isBalancesLoading} = usePollAssetWalletBalance();
+
+  console.log(isBalancesLoading, "isBalancesLoading")
   const getSwapButton = () => {
     if (
       (Number(allowance?.formattedAllowance) ?? 0) < fromAmount &&
@@ -189,6 +193,7 @@ export function SwapCard({
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedFrom}
                     amount={fromAmount ?? 0}
+                    showExceeding={true}
                     onExceeding={(isExceeding: boolean) =>
                       setExceedingBalance(isExceeding)
                     }
@@ -250,7 +255,7 @@ export function SwapCard({
                       </div>
                     </div>
                   )}
-                  {isConnected && exceedingBalance && (
+                  {isConnected && exceedingBalance && !isBalancesLoading && (
                     <Alert
                       variant="destructive"
                       className="items-center justify-center"

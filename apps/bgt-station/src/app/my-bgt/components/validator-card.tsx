@@ -43,6 +43,7 @@ export default function ValidatorCard({
   const userBribeTokenList = useValidatorUserBribes(validator.operatorAddr);
   const { write, ModalPortal } = useTxn({
     message: "Claiming bribes",
+    disableToast: true,
     onSuccess: () => {
       void mutate(QUERY_KEY);
     },

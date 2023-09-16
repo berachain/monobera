@@ -49,6 +49,7 @@ export default function WithdrawLiquidityContent({
   };
   const { write, ModalPortal } = useTxn({
     message: `withdraw liquidity from ${pool?.poolName}`,
+    disableToast: true,
     onSuccess: () => {
       reset();
     },
