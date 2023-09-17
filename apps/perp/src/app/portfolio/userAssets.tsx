@@ -2,19 +2,21 @@
 
 import { formatUsd, formatter } from "@bera/berajs";
 import { cn } from "@bera/ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Icons } from "@bera/ui/icons";
 
 import { usePositions, type Position } from "~/hooks/usePositions";
+import { PositionTitle } from "../components/position-title";
 
 export default function UserAssets() {
-  const positions = usePositions();
+  const { generatepositionData } = usePositions();
   return (
     <div className="flex flex-col gap-4">
       <AsesetTitle />
-      {positions.slice(0, 5).map((position, index) => (
-        <AsesetCard key={index} position={position} />
-      ))}
+      {generatepositionData()
+        .slice(0, 5)
+        .map((position, index) => (
+          <AsesetCard key={index} position={position} />
+        ))}
     </div>
   );
 }
@@ -38,21 +40,7 @@ function AsesetTitle() {
 function AsesetCard({ position }: { position: Position }) {
   return (
     <div className="flex items-center justify-between rounded-2xl border border-border bg-background px-6 py-4">
-      <div className="flex w-[112px] items-center gap-2">
-        <Avatar className="h-6 w-6">
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>{position.assets}</AvatarFallback>
-        </Avatar>
-        <div>
-          <div className="text-sm font-semibold leading-tight text-foreground">
-            {position.assets}
-          </div>
-          <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
-            {position.assets}-{position.counter}
-          </div>
-        </div>
-      </div>
-
+      <PositionTitle position={position} />
       <div
         className={cn(
           "w-[55px] text-xs font-medium capitalize leading-tight",
@@ -131,7 +119,7 @@ function AsesetCard({ position }: { position: Position }) {
       </div>
 
       <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-border bg-muted">
-        <Icons.close className=" h-4 w-4 text-destructive-foreground" />
+        <Icons.close className="-ml-[2px] h-4 w-4 text-destructive-foreground" />
       </div>
     </div>
   );

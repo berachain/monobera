@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 export interface Position {
   icon: string;
   assets: string;
@@ -17,7 +19,7 @@ export interface Position {
   open_interest_short: number;
 }
 
-const generatepositionData = (): Position[] => {
+export const usePositions = () => {
   const assetsOptions = [
     "BTC",
     "ETH",
@@ -30,6 +32,7 @@ const generatepositionData = (): Position[] => {
     "XLM",
     "USDT",
   ];
+
   const counterOptions = ["USDT", "ETH", "BTC", "ADA", "DOT"];
 
   const getRandomItem = (arr: any[]) =>
@@ -54,8 +57,9 @@ const generatepositionData = (): Position[] => {
     open_interest_short: parseFloat((Math.random() * 0.01).toFixed(4)),
   });
 
-  return Array.from({ length: 30 }, generateRandomposition);
-};
-export const usePositions = () => {
-  return generatepositionData();
+  const generatepositionData = useCallback((): Position[] => {
+    return Array.from({ length: 30 }, generateRandomposition);
+  }, []);
+
+  return { generatepositionData };
 };
