@@ -50,6 +50,7 @@ export default {
       },
       boxShadow: {
         "dark-shadow": "0px 12px 250px 0px #A571239E",
+        "light-shadow": "0px 12px 250px 0px #FFE1C91A",
       },
       colors: {
         hover: "hsl(var(--hover) / <alpha-value>)",

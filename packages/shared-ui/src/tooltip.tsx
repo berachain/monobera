@@ -16,7 +16,7 @@ export function Tooltip({ text }: { text: any }) {
         <TooltipTrigger asChild>
           <Button
             variant="ghost"
-            className="flex-inline h-5 w-5 rounded-full p-0 align-middle"
+            className="flex-inline h-5 w-5 rounded-full p-0 align-middle hover:bg-transparent"
             onMouseEnter={() => setTooltipOpen(true)}
             onMouseLeave={() => setTooltipOpen(false)}
           >

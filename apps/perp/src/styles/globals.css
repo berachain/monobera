@@ -117,7 +117,7 @@
   }
 
   .container {
-    @apply max-sm:p-4;
+    @apply max-sm:p-0;
   }
 }
 
