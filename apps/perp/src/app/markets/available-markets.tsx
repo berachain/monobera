@@ -10,7 +10,7 @@ export default function AvailableMarket() {
   const positions: Position[] = generatepositionData();
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex w-full flex-col justify-between md:flex-row">
+      <div className="flex w-full flex-col justify-between gap-2 md:flex-row">
         <div className="flex-shrink-0 text-lg font-semibold leading-7">
           Available Markets
         </div>

@@ -137,9 +137,9 @@ function PositionRow({
 
 function PositionGrid() {
   const containerRef = useRef(null);
-  const positions = usePositions();
+  const { generatepositionData } = usePositions();
+  const positions = generatepositionData();
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
-  //@ts-ignore
   const rows = splitArray(positions, 2);
 
   return (
