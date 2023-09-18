@@ -37,5 +37,6 @@ export { NotFoundBear } from "./not-found-bear";
 export { TokenIconList } from "./token-icon-list";
 export { ActionButton } from "./action-btn-wrapper";
 export { ConnectWalletBear } from "./connect-wallet-bear";
+export { UpTimeStatus } from "./up-time-status";
 
 export { useTxn } from "./hooks";

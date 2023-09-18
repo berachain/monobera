@@ -29,6 +29,7 @@ import {
   File,
   FileText,
   Frame,
+  Fuel,
   Hammer,
   HeartHandshake,
   HelpCircle,
@@ -164,6 +165,7 @@ export const Icons = {
   penSquare: PenSquare,
   heartHandShake: HeartHandshake,
   calendarClock: CalendarClock,
+  fuel: Fuel,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
