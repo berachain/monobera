@@ -328,6 +328,7 @@ export const getWBeraPriceDictForPoolTokens = async (
           (board) => board.address.toLowerCase() === pool.pool.toLowerCase(),
         );
 
+        console.log("LOOKING FOR", cuttingBoard);
         const bgtPrice =
           mappedTokens[
             getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)

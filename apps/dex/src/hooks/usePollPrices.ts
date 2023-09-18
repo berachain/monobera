@@ -11,7 +11,7 @@ export const usePollPrices = () => {
     QUERY_KEY,
     async () => {
       const absoluteUrl = getAbsoluteUrl();
-      console.log("absoluteUrl", absoluteUrl)
+      console.log("absoluteUrl", absoluteUrl);
       const res = await fetch(`${absoluteUrl}/api`);
       const data: MappedTokens = await res.json();
       return data;

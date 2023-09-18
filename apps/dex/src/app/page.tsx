@@ -57,8 +57,8 @@ export default async function Homepage() {
         volume: volume,
       }),
     );
-    console.log('TVL VOLUME:', data?.tvl);
-    console.log('SERVER VOLUME:', data?.volume);
+    console.log("TVL VOLUME:", data?.tvl);
+    console.log("SERVER VOLUME:", data?.volume);
     return (
       <div className="container max-w-[1200px]">
         <Hero />
