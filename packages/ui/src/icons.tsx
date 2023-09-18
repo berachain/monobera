@@ -74,6 +74,7 @@ import {
   Wallet,
   X,
   XOctagon,
+  PenSquare,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
@@ -158,6 +159,7 @@ export const Icons = {
   candleStick: CandlestickChart,
   medal: Medal,
   plusCircle: PlusCircle,
+  penSquare: PenSquare,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
