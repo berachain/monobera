@@ -44,7 +44,7 @@ export const usePollBankBalance = (denom: string | undefined) => {
 
   const useFormattedBankBalance = () => {
     const { data = 0n } = useSWRImmutable(QUERY_KEY);
-    return Number(formatUnits(data, 18)).toFixed(2);
+    return formatUnits(data, 18);
   };
   return {
     useFormattedBankBalance,

@@ -35,7 +35,7 @@ const getVolume = async () => {
   const result = await res.json();
   return result;
 };
-export const fetchCache = 'force-no-store'
+export const fetchCache = "force-no-store";
 
 export default async function Pool() {
   const tvl = getTvl();

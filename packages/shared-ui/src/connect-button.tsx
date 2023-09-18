@@ -40,7 +40,7 @@ export const ConnectButton = ({
             })}
             className={cn("flex w-full", className)}
           >
-            {!isConnected && (
+            {isConnected === false && (
               <Button
                 onClick={openConnectModal}
                 type="button"

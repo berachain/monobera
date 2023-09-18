@@ -16,6 +16,7 @@ import {
   useTxn,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -48,7 +49,8 @@ export default function WithdrawLiquidityContent({
     setWithdrawType(0);
   };
   const { write, ModalPortal } = useTxn({
-    message: `withdraw liquidity from ${pool?.poolName}`,
+    message: `Withdraw liquidity from ${pool?.poolName}`,
+    disableToast: true,
     onSuccess: () => {
       reset();
     },
@@ -171,6 +173,10 @@ export default function WithdrawLiquidityContent({
                   );
                 })}
               </div>
+              <Alert variant="warning">
+                All outstanding BGT Rewards will be claimed upon withdrawing all
+                liquidity.
+              </Alert>
               <TxnPreview
                 open={previewOpen}
                 disabled={isMultiTokenDisabled}
@@ -207,7 +213,6 @@ export default function WithdrawLiquidityContent({
                     value={formatUsd(withdrawValue)}
                   />
                 </InfoBoxList>
-
                 <ActionButton>
                   <Button
                     className="w-full"
@@ -277,8 +282,13 @@ export default function WithdrawLiquidityContent({
                   setAmount={handleSingleTokenWithdrawAssetOut}
                   customTokenList={pool?.tokens}
                   showExceeding={false}
+                  price={prices[exactOutToken?.address ?? ""] ?? 0}
                 />
               </TokenList>
+              <Alert variant="warning">
+                All outstanding BGT Rewards will be claimed upon withdrawing all
+                liquidity.
+              </Alert>
               <TxnPreview
                 open={previewOpen}
                 disabled={isSingleTokenDisabled}

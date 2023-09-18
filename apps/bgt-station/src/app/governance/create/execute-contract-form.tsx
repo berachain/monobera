@@ -7,7 +7,7 @@ import { TextArea } from "@bera/ui/text-area";
 import { type UseFormReturn } from "react-hook-form";
 
 export default function ExecuteForm({ form }: { form: UseFormReturn<any> }) {
-  const { useBgtBalance } = usePollBgtBalance();
+  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   return (
     <>
@@ -74,6 +74,7 @@ export default function ExecuteForm({ form }: { form: UseFormReturn<any> }) {
             <Input
               type="number"
               id="proposal-execute-amount"
+              disabled={isBalanceLoading}
               placeholder="0.0"
               endAdornment="BGT"
               {...field}

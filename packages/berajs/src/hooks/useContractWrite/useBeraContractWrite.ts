@@ -30,6 +30,7 @@ const useBeraContractWrite = ({
       abi,
       functionName,
       params,
+      value = 0n,
     }: IContractWrite): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
       onLoading && onLoading();
@@ -49,6 +50,7 @@ const useBeraContractWrite = ({
           address: address,
           abi: abi,
           functionName: functionName,
+          value: value,
           args: [...params],
           account: account,
           chain: undefined,
