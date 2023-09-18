@@ -8,6 +8,7 @@ import {
   ArrowRight,
   ArrowUpDown,
   ArrowUpRight,
+  CalendarClock,
   CandlestickChart,
   Check,
   CheckCircle2,
@@ -29,6 +30,7 @@ import {
   FileText,
   Frame,
   Hammer,
+  HeartHandshake,
   HelpCircle,
   HelpingHand,
   Image,
@@ -160,6 +162,8 @@ export const Icons = {
   medal: Medal,
   plusCircle: PlusCircle,
   penSquare: PenSquare,
+  heartHandShake: HeartHandshake,
+  calendarClock: CalendarClock,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
