@@ -46,6 +46,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
   const { usePrices } = usePollPrices();
   const prices = usePrices();
 
+  console.log(pool);
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
     parseUnits(`${Number(pool?.userDepositedShares)}`, 18) ?? 0n,
     pool?.pool,
