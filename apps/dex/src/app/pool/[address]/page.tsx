@@ -19,7 +19,9 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export const fetchCache = "force-no-store";
+// export const fetchCache = "force-no-store";
+
+export const revalidate = 60;
 
 async function getGlobalCuttingBoard() {
   try {
@@ -48,6 +50,8 @@ export default async function PoolPage({
         globalCuttingBoard: globalCuttingBoard,
       }),
     );
+
+    console.log("DATA", data?.globalCuttingBoard);
 
     const pool = router.getPool(params.address);
 

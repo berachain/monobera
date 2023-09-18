@@ -189,7 +189,6 @@ export const getWBeraPriceDictForPoolTokens = async (
           pool.pool,
         )}&num_of_days=90`,
         {
-          cache: "force-cache",
           next: {
             revalidate: 60,
           },
@@ -201,7 +200,6 @@ export const getWBeraPriceDictForPoolTokens = async (
           process.env.NEXT_PUBLIC_ANALYTICS
         }/analytics/tvldaily?pool=${getAddress(pool.pool)}&num_of_days=90`,
         {
-          cache: "force-cache",
           next: {
             revalidate: 60,
           },
@@ -330,6 +328,7 @@ export const getWBeraPriceDictForPoolTokens = async (
           (board) => board.address.toLowerCase() === pool.pool.toLowerCase(),
         );
 
+        console.log("LOOKING FOR", cuttingBoard);
         const bgtPrice =
           mappedTokens[
             getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
