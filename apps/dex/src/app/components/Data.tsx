@@ -41,6 +41,8 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
   console.log('TVL', tvl);
   console.log('VOLUME', volume);
   const prices = usePrices();
+
+  console.log('I AM GETTING PRICES')
   const tvlValue = useMemo(() => {
     if (!prices || !tvl || !tvl[0]) return 0;
     return sumPrices(prices, tvl[0].data);

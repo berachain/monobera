@@ -10,6 +10,7 @@ export const usePollPrices = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      console.log('ROUTE API URL: ', `${getAbsoluteUrl()}/api`)
       const res = await fetch(`${getAbsoluteUrl()}/api`);
       const data: MappedTokens = await res.json();
       return data;
