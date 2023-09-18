@@ -190,6 +190,10 @@
       "import": "./dist/use-toast.mjs",
       "types": "./dist/use-toast.d.ts"
     },
+    "./navigation-menu": {
+      "import": "./dist/navigation-menu.mjs",
+      "types": "./dist/navigation-menu.d.ts"
+    },
     "./badge": {
       "import": "./dist/badge.mjs",
       "types": "./dist/badge.d.ts"
@@ -213,10 +217,6 @@
     "./toast": {
       "import": "./dist/toast.mjs",
       "types": "./dist/toast.d.ts"
-    },
-    "./navigation-menu": {
-      "import": "./dist/navigation-menu.mjs",
-      "types": "./dist/navigation-menu.d.ts"
     },
     "./skeleton": {
       "import": "./dist/skeleton.mjs",

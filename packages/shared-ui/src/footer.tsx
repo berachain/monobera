@@ -56,11 +56,6 @@ export const footerNavigation = {
   ],
 
   social: [
-    // {
-    //   name: "Telegram",
-    //   href: process.env.NEXT_PUBLIC_TELEGRAM,
-    //   icon: () => <Icons.telegram className="h-6 w-6 text-background" />,
-    // },
     {
       name: "X",
       href: twitter,

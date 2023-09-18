@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { cloudinaryUrl } from "@bera/config";
+import { Footer } from "@bera/shared-ui";
 
 import GeneralInfo from "./components/general-info";
 import Help from "./components/help";
@@ -26,6 +27,7 @@ export default function Home() {
         <Tutorial />
         <Help />
       </div>
+      <Footer />
     </div>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { type PropsWithChildren } from "react";
 import { useBeraJs } from "@bera/berajs";
 import { cn } from "@bera/ui";

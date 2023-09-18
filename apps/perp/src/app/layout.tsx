@@ -3,7 +3,7 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
-import { Footer, Header, TailwindIndicator } from "@bera/shared-ui";
+import { Header, TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -28,7 +28,6 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <Header navItems={navItems} />
             <main className="w-full py-[72px]">{props.children}</main>
             <Toaster position="bottom-right" />
-            <Footer />
           </div>
           <TailwindIndicator />
           <Analytics />
