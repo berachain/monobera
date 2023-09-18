@@ -70,9 +70,7 @@ export default function DepositWithdraw() {
                 <div className="mt-1 flex h-3 w-full items-center justify-end gap-1 text-xs text-muted-foreground">
                   <Icons.wallet className="relative inline-block h-3 w-3 " />
                   {userBalance}
-                  <span className="cursor-pointer underline">
-                    MAX
-                  </span>
+                  <span className="cursor-pointer underline">MAX</span>
                 </div>
               )}
             </div>
@@ -100,9 +98,7 @@ export default function DepositWithdraw() {
                 <div className="mt-1 flex h-3 w-full items-center justify-end gap-1 text-xs text-muted-foreground">
                   <Icons.wallet className="relative inline-block h-3 w-3 " />
                   {userBalance}
-                  <span className="cursor-pointer underline">
-                    MAX
-                  </span>
+                  <span className="cursor-pointer underline">MAX</span>
                 </div>
               )}
             </div>
