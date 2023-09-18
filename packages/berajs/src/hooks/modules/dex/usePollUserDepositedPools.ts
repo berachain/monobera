@@ -46,12 +46,18 @@ export const usePollUserDepositedPools = (endpoint: string) => {
         });
 
         console.log("RES", result);
+        console.log();
         const deposited = pool.map((pool: any, i: number) => {
+          const formattedUserDeposited = formatUnits(
+            (result[i]?.result as unknown as bigint) ?? 0n,
+            18,
+          );
+          const value = Number(formattedUserDeposited).toString().includes("e")
+            ? 0
+            : Number(formattedUserDeposited);
           return {
             ...pool,
-            userDepositedShares: Number(
-              formatUnits((result[i]?.result as unknown as bigint) ?? 0n, 18),
-            ),
+            userDepositedShares: value,
           };
         });
 

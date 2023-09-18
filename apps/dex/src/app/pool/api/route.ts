@@ -35,11 +35,6 @@ async function getGlobalCuttingBoard() {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
-      {
-        next: {
-          revalidate: 60,
-        },
-      },
     );
     const jsonRes = await res.json();
     return jsonRes.result;
@@ -66,6 +61,7 @@ export async function GET(request: Request) {
     console.log(`Error fetching pools: ${e}`);
     return;
   }
+
   const pools = router.getPools() ?? [];
 
   const totalSupplyStringPools = pools

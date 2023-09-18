@@ -27,6 +27,7 @@ export default function CreatePoolInitialLiquidityInput({
     useSelectedAssetWalletBalance(tokenWeight.token?.address ?? "")
       ?.formattedBalance || 0,
   );
+
   const { isConnected } = useBeraJs();
 
   return (

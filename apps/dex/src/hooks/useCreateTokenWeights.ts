@@ -6,6 +6,7 @@ import {
   usePollAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
+import { getAddress } from "viem";
 
 export interface ITokenWeight {
   weight: number;
@@ -95,18 +96,26 @@ const useCreateTokenWeights = () => {
     const isInvalidTokenListLength = tokenWeights.length < 2;
     const isInvalidInitialLiquidity =
       step === 2 && !tokenWeights.every((item) => item.initialLiquidity !== 0);
+
+    console.log("isInvalidInitialLiquidity", tokens);
     const isInitialLiquidityExceedingBalance =
       step === 2 &&
       tokenWeights.some((item) => {
         const foundToken = tokens?.find(
-          (t) => t.address === item?.token?.address,
+          (t) =>
+            getAddress(t.address) === getAddress(item?.token?.address ?? ""),
         );
+
         return (
           Number(foundToken?.formattedBalance ?? 0) < item.initialLiquidity
         );
       });
     const isInvalidSwapFee = (step === 1 && swapFee > 100) || swapFee < 0;
 
+    console.log(
+      "isInitialLiquidityExceedingBalance",
+      isInitialLiquidityExceedingBalance,
+    );
     if (hasZeroWeight) {
       setError(new InvalidInputError("Weight cannot be 0"));
     } else if (isInvalidTotalWeight) {
