@@ -49,6 +49,7 @@ import {
   Moon,
   MoreVertical,
   Newspaper,
+  PenSquare,
   PieChart,
   Pizza,
   Play,
@@ -74,7 +75,6 @@ import {
   Wallet,
   X,
   XOctagon,
-  PenSquare,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";

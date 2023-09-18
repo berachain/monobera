@@ -130,7 +130,7 @@ function AsesetCard({ position }: { position: Position }) {
         </span>
       </div>
 
-      <div className="w-[74px] flex gap-1">
+      <div className="flex w-[74px] gap-1">
         <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-border bg-muted">
           <Icons.penSquare className="h-4 h-4 text-foreground" />
         </div>
