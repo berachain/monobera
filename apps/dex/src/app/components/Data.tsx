@@ -19,6 +19,7 @@ export function DataCard({
   value: string;
   isLoading?: boolean;
 }) {
+  console.log('DATA CARD VALUE', title, 'reeee',  value)
   return (
     <div className="flex w-full flex-col rounded-2xl border bg-background p-4 md:p-6">
       <div className="flex items-center gap-2 text-xs md:text-sm">
