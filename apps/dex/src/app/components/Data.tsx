@@ -37,7 +37,8 @@ export function DataCard({
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
   const { usePrice, usePrices, isLoading } = usePollPrices();
 
-  console.log(tvl, volume);
+  console.log('TVL', tvl);
+  console.log('VOLUME', volume);
   const prices = usePrices();
   const tvlValue = useMemo(() => {
     if (!prices || !tvl || !tvl[0]) return 0;
