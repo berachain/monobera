@@ -61,11 +61,11 @@ export const Options = {
 
 export const chartColor = {
   default: {
-    light: "red",
-    dark: "blue",
+    light: "#E7E5E4",
+    dark: "#373332",
   },
   hover: {
-    light: "yellow",
-    dark: "yellow",
+    light: "#57534E",
+    dark: "#CFCCCC",
   },
 };
