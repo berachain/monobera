@@ -34,12 +34,7 @@ export const revalidate = 60;
 async function getGlobalCuttingBoard() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
-      {
-        next: {
-          revalidate: 60,
-        },
-      },
+      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`
     );
     const jsonRes = await res.json();
     return jsonRes.result;
