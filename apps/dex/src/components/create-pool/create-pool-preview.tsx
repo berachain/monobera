@@ -43,6 +43,7 @@ export function CreatePoolPreview({
   const { account } = useBeraJs();
   const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
+    disableToast: true,
     onSuccess: () => {
       router.push(`/pool`);
     },

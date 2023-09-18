@@ -54,6 +54,7 @@ export default function ProposalDetails({
 
   const { write, ModalPortal } = useTxn({
     message: `Voting for proposal ${proposalId}`,
+    disableToast: true,
   });
   const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
 

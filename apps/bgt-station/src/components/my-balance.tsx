@@ -25,7 +25,7 @@ export default function MyBalance() {
   const [open, setOpen] = React.useState(false);
   const { networkConfig } = useBeraConfig();
 
-  const { useBgtBalance } = usePollBgtBalance();
+  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const bgtBalance = useBgtBalance();
 
   const { redeemAmount, payload, setRedeemAmount } = useRedeem();
@@ -65,6 +65,7 @@ export default function MyBalance() {
                 decimals: 18,
               } as Token
             }
+            disabled={isBalanceLoading}
             selectable={false}
             amount={redeemAmount}
             balance={Number(bgtBalance)}

@@ -313,6 +313,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     ModalPortal,
   } = useTxn({
     message: "Claiming BGT Rewards",
+    disableToast: true,
     onSuccess: () => {
       void mutate(QUERY_KEY);
     },
@@ -619,6 +620,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
 
               <div className="flex w-full flex-row items-center justify-end gap-2">
                 <Button
+                  size={"sm"}
                   variant={"secondary"}
                   onClick={() =>
                     router.push(`/pool/${pool?.pool}/add-liquidity`)
@@ -630,6 +632,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                   </span>
                 </Button>
                 <Button
+                  size={"sm"}
                   variant={"secondary"}
                   onClick={() => router.push(`/pool/${pool?.pool}/withdraw`)}
                 >
@@ -639,6 +642,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                   </span>
                 </Button>
                 <Button
+                  size={"sm"}
                   className="xs:hidden hidden sm:block md:block lg:hidden"
                   variant={"outline"}
                   onClick={() =>

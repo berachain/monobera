@@ -35,7 +35,7 @@ export default function ValidatorInput({
   // emptyMessage?: string;
 }) {
   const router = useRouter();
-  const { useBgtBalance } = usePollBgtBalance();
+  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   const { isReady } = useBeraJs();
   const { useSelectedAccountDelegation } =
@@ -48,7 +48,7 @@ export default function ValidatorInput({
         type="number"
         className="h-[73px] p-4 text-right text-lg font-semibold leading-7"
         value={amount}
-        disabled={disabled}
+        disabled={disabled || isBalanceLoading}
         onChange={(e) => onAmountChange(e.target.value)}
         startAdornment={
           <ValidatorSelector

@@ -45,26 +45,25 @@ export const usePollUserDepositedPools = (endpoint: string) => {
             .multicallAddress as Address,
         });
 
-        console.log('RES', result)
-        const deposited = pool
-          .map((pool: any, i: number) => {
-            return {
-              ...pool,
-              userDepositedShares: Number(
-                formatUnits((result[i]?.result as unknown as bigint) ?? 0n, 18),
-              ),
-            };
-          })
+        console.log("RES", result);
+        const deposited = pool.map((pool: any, i: number) => {
+          return {
+            ...pool,
+            userDepositedShares: Number(
+              formatUnits((result[i]?.result as unknown as bigint) ?? 0n, 18),
+            ),
+          };
+        });
 
+        console.log("DEPOSITED", deposited);
+        const filteredDeposted = deposited.filter(
+          (pool: any) => pool.userDepositedShares !== 0,
+        );
 
-        console.log('DEPOSITED', deposited)
-        const filteredDeposted = deposited
-          .filter((pool: any) => pool.userDepositedShares !== 0);
-
-          console.log('FILTERED', filteredDeposted)
+        console.log("FILTERED", filteredDeposted);
         return filteredDeposted;
       } catch (e) {
-        console.log(e)
+        console.log(e);
         return undefined;
       }
     },

@@ -14,7 +14,7 @@ export const usePollBgtBalance = () => {
 
   const method = "getBalance";
   const denom = process.env.NEXT_PUBLIC_STAKING_TOKEN;
-  const QUERY_KEY = [account, method, denom];
+  const QUERY_KEY = [account, method, denom, isConnected];
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {

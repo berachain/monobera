@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { type Pool } from "@bera/bera-router";
 import {
   useBeraConfig,
@@ -21,6 +21,11 @@ import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   const { account = undefined } = useBeraJs();
   const { networkConfig } = useBeraConfig();
+  const [error, setError] = useState<string | undefined>("");
+  const [singleSidedError, setSingleSidedError] = useState<string | undefined>(
+    "",
+  );
+
   const [expectedShares, setExpectedShares] = useState<string | undefined>(
     undefined,
   );
@@ -44,7 +49,6 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   const {
     tokenInputs,
     updateTokenAmount,
-    areAllInputsEmpty,
     updateTokenExceeding,
     areNoInputsExceeding,
     areAllInputsPopulated,
@@ -102,20 +106,26 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
 
   // const totalSupply = useTotalSupply()
 
-  const { usePreviewSharesForLiquidity } = usePollPreviewSharesForLiquidity(
+  const {
+    usePreviewSharesForLiquidity,
+    isLoading: isSharesLoading,
+    isValidating: isSharesValidating,
+  } = usePollPreviewSharesForLiquidity(
     pool?.pool,
     tokenInputs,
     tokenInputs.map((tokenInput) => tokenInput.amount),
   );
   const shares = usePreviewSharesForLiquidity();
 
-  console.log("AHSARSA", shares);
-  const { usePreviewSharesForSingleSidedLiquidityRequest } =
-    usePollPreviewSharesForSingleSidedLiquidityRequest(
-      pool?.pool,
-      selectedSingleToken,
-      selectedSingleTokenAmount,
-    );
+  const {
+    usePreviewSharesForSingleSidedLiquidityRequest,
+    isLoading: isSingleSidedLoading,
+    isValidating: isSingleSidedValidating,
+  } = usePollPreviewSharesForSingleSidedLiquidityRequest(
+    pool?.pool,
+    selectedSingleToken,
+    selectedSingleTokenAmount,
+  );
   const singleSidedShares = usePreviewSharesForSingleSidedLiquidityRequest();
 
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
@@ -125,6 +135,9 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   );
 
   useEffect(() => {
+    if (isSingleSidedLoading || isSingleSidedValidating) {
+      return;
+    }
     if (singleSidedShares && singleSidedShares[1][0]) {
       setSingleSidedExpectedShares(formatUnits(singleSidedShares[1][0], 18));
     }
@@ -157,6 +170,9 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   }, [tokenInputs]);
 
   useEffect(() => {
+    if (isSingleSidedLoading || isSingleSidedValidating) {
+      return;
+    }
     if (selectedSingleToken && selectedSingleTokenAmount) {
       setTotalValue(
         selectedSingleTokenAmount * (prices[selectedSingleToken?.address] ?? 0),
@@ -165,28 +181,90 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   }, [selectedSingleToken, selectedSingleTokenAmount]);
 
   useEffect(() => {
-    if (shares !== undefined) {
+    if (isSharesLoading || isSharesValidating) {
+      return;
+    }
+    if (shares !== undefined && areAllInputsPopulated) {
       const formattedShares = formatUnits(shares[1][0], 18);
       setExpectedShares(formattedShares);
     }
     if (shares === undefined) {
       setExpectedShares(undefined);
     }
-  }, [shares]);
+  }, [shares, areAllInputsPopulated]);
+
+  useMemo(() => {
+    if (isSharesLoading || isSharesValidating) {
+      return;
+    }
+    if (
+      shares === undefined &&
+      areAllInputsPopulated &&
+      !isSharesLoading &&
+      !isSharesValidating
+    ) {
+      setError("Unable to perform transaction.");
+    } else if (!areNoInputsExceeding) {
+      setError("Input exceeds balance");
+    } else if (!areAllInputsPopulated) {
+      setError("Missing token input");
+    }
+
+    if (shares !== undefined && areAllInputsPopulated && areNoInputsExceeding) {
+      setError(undefined);
+    }
+  }, [
+    shares,
+    areAllInputsPopulated,
+    areNoInputsExceeding,
+    isSharesLoading,
+    isSharesValidating,
+    shares,
+  ]);
+
+  useMemo(() => {
+    if (isSingleSidedLoading || isSingleSidedValidating) {
+      return;
+    }
+    if (
+      singleSidedShares === undefined &&
+      selectedSingleTokenAmount !== 0 &&
+      selectedSingleToken !== undefined &&
+      !isSingleSidedLoading &&
+      !isSingleSidedValidating
+    ) {
+      setSingleSidedError("Unable to perform transaction.");
+    } else if (selectedSingleToken === undefined) {
+      setSingleSidedError("Please select a token");
+    } else if (selectedSingleTokenAmount === 0) {
+      setSingleSidedError("Please input token");
+    } else if (singleSharesExceeding) {
+      setSingleSidedError("Input exceeds balance");
+    }
+
+    if (
+      singleSidedShares !== undefined &&
+      selectedSingleToken !== undefined &&
+      selectedSingleTokenAmount !== 0 &&
+      !singleSharesExceeding
+    ) {
+      setSingleSidedError(undefined);
+    }
+  }, [
+    singleSidedShares,
+    areAllInputsPopulated,
+    areNoInputsExceeding,
+    isSingleSidedLoading,
+    isSingleSidedValidating,
+    shares,
+  ]);
 
   return {
     expectedShares,
-    isMultipleInputDisabled:
-      areAllInputsEmpty ||
-      expectedShares === undefined ||
-      areNoInputsExceeding === false ||
-      areAllInputsPopulated === false,
-    isSingleInputDisabled:
-      selectedSingleToken === undefined ||
-      selectedSingleTokenAmount === 0 ||
-      singleSidedExpectedShares === undefined ||
-      singleSharesExceeding === true ||
-      (burnShares !== undefined && Object.keys(burnShares).length === 0),
+    error,
+    singleSidedError,
+    isMultipleInputDisabled: error !== undefined,
+    isSingleInputDisabled: singleSidedError !== undefined,
     singleSidedExpectedShares,
     totalValue,
     burnShares,

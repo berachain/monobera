@@ -38,6 +38,11 @@ function normalizeToRatio(num1: number, num2: number): string {
   return ratio.toFixed(6);
 }
 
+export enum WRAP_TYPE {
+  WRAP = "wrap",
+  UNWRAP = "unwrap",
+}
+
 export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { read: readInput, tokenInformation: inputToken } =
     useTokenInformation();
@@ -87,10 +92,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [isWrap, setIsWrap] = useState(false);
 
-  enum WRAP_TYPE {
-    WRAP = "wrap",
-    UNWRAP = "unwrap",
-  }
   const [wrapType, setWrapType] = useState<WRAP_TYPE | undefined>(undefined);
 
   const slippageType = useReadLocalStorage(
@@ -175,7 +176,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       isBeratoken(selectedFrom)
     ) {
       setIsWrap(true);
-      if (selectedTo.address === process.env.NEXT_PUBLIC_BERA_ADDRESS) {
+      if (selectedFrom.address === process.env.NEXT_PUBLIC_BERA_ADDRESS) {
         setWrapType(WRAP_TYPE.WRAP);
       }
       if (selectedFrom.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS) {
@@ -334,6 +335,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setSelectedTo,
     setSwapAmount,
     onSwitch,
+    swapAmount,
     payload,
     selectedFrom,
     allowance,

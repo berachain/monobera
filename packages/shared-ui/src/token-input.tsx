@@ -27,6 +27,7 @@ type Props = {
   disabled?: boolean;
   customTokenList?: Token[];
   showExceeding?: boolean;
+  hideMax?: boolean;
   onTokenSelection?: (token: Token) => void;
   setAmount?: (amount: number) => void;
   onExceeding?: (isExceeding: boolean) => void;
@@ -48,9 +49,10 @@ export function TokenInput({
   setAmount = undefined,
   showExceeding,
   onExceeding = undefined,
+  hideMax = false,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
-  usePollAssetWalletBalance();
+  const { isLoading: isBalancesLoading } = usePollAssetWalletBalance();
   let tokenBalance = Number(
     useSelectedAssetWalletBalance(selected?.address ?? "")?.formattedBalance ??
       "0",
@@ -67,11 +69,14 @@ export function TokenInput({
       setExceeding(false);
       return;
     }
-    if (amount > tokenBalance || Number(tokenBalance) == 0) {
+    if (
+      !isBalancesLoading &&
+      (amount > tokenBalance || Number(tokenBalance) == 0)
+    ) {
       setExceeding(true);
       return;
     }
-  }, [tokenBalance, amount]);
+  }, [tokenBalance, amount, isBalancesLoading]);
 
   useEffect(() => {
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
@@ -124,14 +129,16 @@ export function TokenInput({
                 <p className="w-fit max-w-[60px] overflow-hidden truncate p-0 text-xs text-muted-foreground">
                   {tokenBalance ? tokenBalance : "0"}
                 </p>
-                <p
-                  className="cursor-pointer text-xs text-muted-foreground underline hover:text-foreground"
-                  onClick={() => {
-                    setAmount && setAmount(tokenBalance);
-                  }}
-                >
-                  MAX
-                </p>
+                {!hideMax && (
+                  <p
+                    className="cursor-pointer text-xs text-muted-foreground underline hover:text-foreground"
+                    onClick={() => {
+                      setAmount && setAmount(tokenBalance);
+                    }}
+                  >
+                    MAX
+                  </p>
+                )}
               </div>
               <div className="flex flex-row gap-1">
                 {!hidePrice && (
