@@ -55,7 +55,9 @@ export function FundModal({
           </div>
         </div>
 
-        <Button className="w-full" onClick={()=>onOpenChange(false)}>Enter Amount</Button>
+        <Button className="w-full" onClick={() => onOpenChange(false)}>
+          Enter Amount
+        </Button>
       </DialogContent>
     </Dialog>
   );

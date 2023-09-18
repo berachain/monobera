@@ -83,7 +83,10 @@ export function OneClickBanner() {
         </div>
       )}
       {status !== BannerEnuem.OFF && (
-        <div className="text-sm font-semibold" onClick={()=>setFundModalOpen(true)}>
+        <div
+          className="text-sm font-semibold"
+          onClick={() => setFundModalOpen(true)}
+        >
           <span className="cursor-pointer underline">Fund 1 click Wallet</span>{" "}
           |
         </div>
