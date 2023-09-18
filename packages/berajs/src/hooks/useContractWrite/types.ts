@@ -4,6 +4,7 @@ export interface IContractWrite {
   functionName: string;
   params: any[];
   txnName?: string;
+  value?: bigint;
 }
 
 export interface useContractWriteApi {

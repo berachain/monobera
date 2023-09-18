@@ -11,6 +11,8 @@ import {
 } from "@bera/berajs";
 import { formatUnits, parseUnits } from "viem";
 
+import { toFixedNoRounding } from "~/utils/toFixedNoRounding";
+
 export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
   const { account = undefined } = useBeraJs();
 
@@ -115,7 +117,7 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
     lpBalance,
     burnShares,
     withdrawValue,
-    formattedLpBalance,
+    formattedLpBalance: toFixedNoRounding(Number(formattedLpBalance), 6),
     setWithdrawType,
     tokenDictionary,
     amount,

@@ -29,7 +29,7 @@ export const usePollAssetWalletBalance = () => {
   const { networkConfig } = useBeraConfig();
   const { tokenList } = useTokens();
   const { isLoading, isValidating } = useSWR(
-    [account,isConnected,tokenList, "assetWalletBalances"],
+    [account, isConnected, tokenList, "assetWalletBalances"],
     async () => {
       if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {

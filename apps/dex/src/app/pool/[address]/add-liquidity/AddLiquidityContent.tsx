@@ -21,6 +21,7 @@ import {
   useTxn,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -49,6 +50,8 @@ export default function AddLiquidityContent({
   const router = useRouter();
 
   const {
+    error,
+    singleSidedError,
     expectedShares,
     singleSidedExpectedShares,
     isMultipleInputDisabled,
@@ -147,6 +150,7 @@ export default function AddLiquidityContent({
                       onExceeding={(exceeding: boolean) =>
                         updateTokenExceeding(i, exceeding)
                       }
+                      showExceeding={true}
                     />
                   );
                 })}
@@ -161,6 +165,14 @@ export default function AddLiquidityContent({
                   value={formatUsd(totalValue ?? 0) ?? "-"}
                 />
               </InfoBoxList>
+              {error && (
+                <Alert variant="destructive">
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription className="text-xs">
+                    {error}
+                  </AlertDescription>
+                </Alert>
+              )}
               <TxnPreview
                 open={previewOpen}
                 disabled={isMultipleInputDisabled}
@@ -259,7 +271,14 @@ export default function AddLiquidityContent({
                   value={formatUsd(totalValue ?? 0) ?? "-"}
                 />
               </InfoBoxList>
-
+              {singleSidedError && (
+                <Alert variant="destructive">
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription className="text-xs">
+                    {singleSidedError}
+                  </AlertDescription>
+                </Alert>
+              )}
               <TxnPreview
                 open={singleTokenPreviewOpen}
                 setOpen={setSingleTokenSetPreviewOpen}

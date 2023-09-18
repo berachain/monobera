@@ -41,8 +41,16 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         isConnected: !evmError && account && isMounted ? true : false,
         isWrongNetwork: !chain?.unsupported ? false : true,
         isReady: useMemo(() => {
-          console.log("isReady", !evmError, account, isMounted, chain?.unsupported)
-          console.log(!evmError && account && isMounted && chain?.unsupported === false)
+          console.log(
+            "isReady",
+            !evmError,
+            account,
+            isMounted,
+            chain?.unsupported,
+          );
+          console.log(
+            !evmError && account && isMounted && chain?.unsupported === false,
+          );
           return (
             !evmError && account && isMounted && chain?.unsupported === false
           );

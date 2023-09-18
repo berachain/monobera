@@ -48,7 +48,6 @@ async function getGlobalCuttingBoard() {
   }
 }
 
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const router = new RouterService(defaultConfig);

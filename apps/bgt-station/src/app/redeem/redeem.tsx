@@ -87,11 +87,13 @@ export default function Redeem() {
         <Alert variant="warning">
           Redeeming your BGT into BERA is an irreversible action.
         </Alert>
-        {Number(redeemAmount) > Number(userBalance) && isReady && !isBalanceLoading && (
-          <Alert variant="destructive" className="">
-            This amount exceeds your total balance of {userBalance} BGT
-          </Alert>
-        )}
+        {Number(redeemAmount) > Number(userBalance) &&
+          isReady &&
+          !isBalanceLoading && (
+            <Alert variant="destructive" className="">
+              This amount exceeds your total balance of {userBalance} BGT
+            </Alert>
+          )}
         <ActionButton>
           <Button
             className="w-full"
