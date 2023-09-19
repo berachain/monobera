@@ -27,7 +27,6 @@ import {
   rewardsAddress,
   stakingAddress,
 } from "@bera/config";
-import { Icons } from "@bera/ui/icons";
 import { type Chain } from "wagmi";
 
 export const navItems = [
@@ -209,42 +208,4 @@ export const beraJsConfig: NetworkConfig = {
     rewardsAddress,
   },
   chain: chain,
-};
-
-export const footerNavigation = {
-  solutions: [
-    { name: "Marketing", href: "#" },
-    { name: "Analytics", href: "#" },
-    { name: "Commerce", href: "#" },
-    { name: "Insights", href: "#" },
-  ],
-  support: [
-    { name: "Pricing", href: "#" },
-    { name: "Documentation", href: "#" },
-    { name: "Guides", href: "#" },
-    { name: "API Status", href: "#" },
-  ],
-
-  social: [
-    {
-      name: "Telegram",
-      href: "#",
-      icon: () => <Icons.telegram className="h-6 w-6 text-background" />,
-    },
-    {
-      name: "X",
-      href: "#",
-      icon: Icons.elonMusk,
-    },
-    {
-      name: "GitHub",
-      href: "#",
-      icon: Icons.gitHub,
-    },
-    {
-      name: "Discord",
-      href: "#",
-      icon: Icons.discord,
-    },
-  ],
 };
