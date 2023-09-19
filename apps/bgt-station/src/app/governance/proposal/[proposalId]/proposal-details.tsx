@@ -34,7 +34,7 @@ export default function ProposalDetails({
   const { useProposal, isLoading: isProposalLoading } =
     usePollProposal(proposalId);
   const { useTotalDelegated } = usePollActiveValidators();
-  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
+  const { useTotalDelegatorDelegated, isLoading: isUserVotingPowerLoading } = usePollTotalDelegated();
   const proposal: Proposal | undefined = useProposal();
 
   const globalTotal = useTotalDelegated();
@@ -54,7 +54,7 @@ export default function ProposalDetails({
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 
-  const { write, ModalPortal } = useTxn({
+  const { write, ModalPortal, isLoading: isTxnLoading } = useTxn({
     message: `Voting for proposal ${proposalId}`,
     disableToast: true,
   });
@@ -97,6 +97,8 @@ export default function ProposalDetails({
                     params: payload,
                   });
                 }}
+                isLoading={isTxnLoading}
+                isVotingPowerLoading={isUserVotingPowerLoading}
               />
             )}
             {proposal?.status ===
