@@ -62,20 +62,28 @@ export default function HoneyPage({
   }, [mode]);
 
   return (
-    <div className={cn("pt-[72px]", arcade ? "bg-[#468DCB] font-honey" : "")}>
-      <div className="hidden h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline honey:block">
+    <div
+      className={cn(
+        "pt-[72px] honey:pt-[112px]",
+        arcade ? "bg-[#468DCB] font-honey" : "",
+      )}
+    >
+      <div className="absolute top-0 hidden h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline honey:block">
         {arcade ? (
           <div onClick={() => router.push("/?mode=pro")} className="font-honey">
-            🍯 Enter Honey Pro Mode
+            🍯 Enter Pro Mode
           </div>
         ) : (
-          <div onClick={() => router.push("/?mode=arcade")}>
-            🕹️ Enter Honey Arcade Mode
+          <div
+            onClick={() => router.push("/?mode=arcade")}
+            className="font-honey"
+          >
+            🕹️ Enter Arcade Mode
           </div>
         )}
       </div>
       <div>
-        <div>
+        <section id="mint">
           {arcade ? (
             <div className="m-auto block max-w-[1000px]">
               <HoneyMachine />
@@ -89,7 +97,7 @@ export default function HoneyPage({
               </div>
             </div>
           )}
-        </div>
+        </section>
 
         <div
           className={cn(
@@ -125,7 +133,7 @@ export default function HoneyPage({
                   width={32}
                   height={32}
                 />
-                Total Honey Supply
+                Total Honey Supply & Volume
               </h3>
               <HoneyChart
                 {...{

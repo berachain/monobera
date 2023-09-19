@@ -326,7 +326,7 @@ export function HoneyMachine() {
 
   return (
     <>
-      <div className="relative bg-[#468DCB] pb-12">
+      <div className="relative bg-[#468DCB] pb-12" id="mint-and-burn">
         {ModalPortal}
 
         {rive ? (
@@ -341,7 +341,7 @@ export function HoneyMachine() {
                 <h1 className="relative mb-1 text-2xl font-semibold text-foreground">
                   {isMint ? "Mint" : "Redeem"}
                   <div className="absolute right-0 top-1 text-sm text-muted-foreground">
-                    Static fee of {fee?.toFixed(2)}%
+                    Static fee of {(Number(fee ?? 0) * 100).toPrecision(2)}%
                   </div>
                 </h1>
                 <ul role="list">

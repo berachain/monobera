@@ -69,7 +69,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                   }
                 }}
               >
-                🪙 Mint
+                🍯 Mint
               </TabsTrigger>
               <TabsTrigger
                 value={"burn"}

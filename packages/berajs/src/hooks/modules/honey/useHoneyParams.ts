@@ -23,7 +23,6 @@ export const usePollHoneyParams = () => {
         functionName: method,
         args: [],
       })) as any[];
-      console.log(result);
       return result;
     },
     {

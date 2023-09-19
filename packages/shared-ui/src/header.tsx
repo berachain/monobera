@@ -2,6 +2,7 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { formatter, useBeraJs, usePollBgtBalance } from "@bera/berajs";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -41,9 +42,14 @@ export function Header({
   const { isConnected } = useBeraJs();
   const { useBgtBalance, isLoading } = usePollBgtBalance();
   const userBalance = useBgtBalance();
-  console.log("userBalance", userBalance, "isLoading", isLoading);
+
   return (
-    <nav className="h-18 fixed left-0 right-0 top-0 z-50 flex w-full items-end justify-between bg-background bg-opacity-20 px-6 py-3 shadow backdrop-blur-2xl">
+    <nav
+      className={cn(
+        "h-18 fixed left-0 right-0 top-0 z-50 flex w-full items-end justify-between bg-background bg-opacity-20 px-6 py-3 shadow backdrop-blur-2xl",
+        isHoney && "honey:top-10",
+      )}
+    >
       <div>
         <div className="flex items-center">
           <span className="text-lg font-bold tracking-tight lg:mr-5">

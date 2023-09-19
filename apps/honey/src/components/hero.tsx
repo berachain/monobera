@@ -7,7 +7,7 @@ import { Icons } from "@bera/ui/icons";
 
 export default function Hero() {
   return (
-    <div className="my-16 flex flex-col">
+    <div className="my-16 flex flex-col" id="mint-and-burn">
       <div className="my-12 text-center md:text-left">
         <div className="mx-auto mb-3 flex max-w-[250px] md:mx-0">
           <Image

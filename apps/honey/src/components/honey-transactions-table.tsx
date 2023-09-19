@@ -240,7 +240,7 @@ export default function HoneyTransactionsTable({
   };
   // console.log("allData", allData);
   return (
-    <section>
+    <section id="transactions">
       <Tabs
         defaultValue={Selection.AllTransactions}
         onValueChange={(value: string) => setSelectedTab(value as Selection)}
@@ -349,7 +349,7 @@ export const EventTable = ({
           <TableHead
             className={cn("hidden sm:table-cell", arcade && "text-blue-600")}
           >
-            Account
+            TxnHash
           </TableHead>
           <TableHead className={cn("text-center", arcade && "text-blue-600")}>
             Time
@@ -380,7 +380,7 @@ export const EventTable = ({
                   {getTokenDisplay(event, tokenDictionary)}
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
-                  {truncateHash(event?.from ?? "")}
+                  {truncateHash(event?.metadata?.txHash ?? "")}
                 </TableCell>
                 <TableCell
                   className="overflow-hidden truncate whitespace-nowrap text-right "
