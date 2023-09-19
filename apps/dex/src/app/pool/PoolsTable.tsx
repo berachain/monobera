@@ -161,7 +161,7 @@ export const PoolSearch = () => {
                 onClick={() => setIsHotPool(!isHotPool)}
               />
               <FilterBadge
-                text={"📈 BGT Rewards"}
+                text={"🐝 BGT Rewards"}
                 active={hasBgtRewards}
                 onClick={() => setHasBgtRewards(!hasBgtRewards)}
               />

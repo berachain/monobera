@@ -39,8 +39,8 @@ function normalizeToRatio(num1: number, num2: number): string {
 }
 
 export enum WRAP_TYPE {
-  WRAP = "wrap",
-  UNWRAP = "unwrap",
+  WRAP = "Wrap",
+  UNWRAP = "Unwrap",
 }
 
 export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
