@@ -301,9 +301,7 @@ export const EventTable = ({
 };
 export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const router = useRouter();
-  const { useBankBalance } = usePollBankBalance(
-    pool.shareAddress,
-  );
+  const { useBankBalance } = usePollBankBalance(pool.shareAddress);
 
   const { useBgtRewards, isLoading, QUERY_KEY } = usePollBgtRewards(pool?.pool);
   const bgtRewards = useBgtRewards();
@@ -322,8 +320,11 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   });
 
   const shareBalance = useBankBalance();
-  const { usePreviewBurnShares } =
-    usePollPreviewBurnShares(shareBalance, pool?.pool, pool?.poolShareDenomHex);
+  const { usePreviewBurnShares } = usePollPreviewBurnShares(
+    shareBalance,
+    pool?.pool,
+    pool?.poolShareDenomHex,
+  );
 
   const burnShares: Record<string, bigint> = usePreviewBurnShares();
 
