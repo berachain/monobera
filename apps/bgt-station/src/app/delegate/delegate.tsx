@@ -59,6 +59,7 @@ export default function Delegate({
   );
   const bgtDelegated = useSelectedAccountDelegation();
 
+  const isBadRedelegate = validator === redelegateValidator;
   const getExceeding = () => {
     if (activeAction === DelegateEnum.DELEGATE) {
       return Number(amount) > Number(bgtBalance);
@@ -191,6 +192,11 @@ export default function Delegate({
               : "Insufficient BGT delegated"}
           </Alert>
         )}
+        {isBadRedelegate && (
+          <Alert variant="destructive">
+            Cannot redelegate to the same validator
+          </Alert>
+        )}
         <ActionButton>
           <Button
             className="w-full"
@@ -199,7 +205,8 @@ export default function Delegate({
               isDelegatingLoading || // delegate action processing
               isUnbondLoading || // unbond action processing
               isRedelegateLoading || // redelegate action processing
-              getDisabled()
+              getDisabled() ||
+              isBadRedelegate
             }
             onClick={() => {
               switch (action) {

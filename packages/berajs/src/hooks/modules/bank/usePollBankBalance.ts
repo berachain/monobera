@@ -14,7 +14,7 @@ export const usePollBankBalance = (denom: string | undefined) => {
 
   const method = "getBalance";
   const QUERY_KEY = [account, method, denom];
-  useSWR(
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       if (isConnected && denom) {
@@ -49,5 +49,6 @@ export const usePollBankBalance = (denom: string | undefined) => {
   return {
     useFormattedBankBalance,
     useBankBalance,
+    isLoading,
   };
 };

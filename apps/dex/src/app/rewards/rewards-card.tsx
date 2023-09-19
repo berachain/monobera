@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { type Pool } from "@bera/bera-router";
 import {
   REWARDS_PRECOMPILE_ABI,
@@ -76,9 +77,12 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
       {ModalPortal}
       <div className="flex w-full flex-row gap-3">
         <TokenIconList tokenList={pool.tokens.map((t) => t.address)} />
-        <div className="whitespace-nowrap text-xs font-medium leading-tight md:text-sm">
+        <Link
+          href={`/pool/${pool?.pool}`}
+          className="whitespace-nowrap text-xs font-medium leading-tight hover:underline md:text-sm"
+        >
           {mobile && title.length > 19 ? title.slice(0, 19) + "..." : title}
-        </div>
+        </Link>
       </div>
 
       <div className="flex w-full flex-col justify-between gap-4 sm:flex-row md:justify-between">

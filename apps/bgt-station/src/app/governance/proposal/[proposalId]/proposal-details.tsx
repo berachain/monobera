@@ -17,6 +17,7 @@ import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
@@ -30,7 +31,8 @@ export default function ProposalDetails({
 }: {
   proposalId: number;
 }) {
-  const { useProposal } = usePollProposal(proposalId);
+  const { useProposal, isLoading: isProposalLoading } =
+    usePollProposal(proposalId);
   const { useTotalDelegated } = usePollActiveValidators();
   const { useTotalDelegatorDelegated } = usePollTotalDelegated();
   const proposal: Proposal | undefined = useProposal();
@@ -103,7 +105,11 @@ export default function ProposalDetails({
         </div>
 
         <div className="mt-4 rounded-[18px] shadow">
-          {proposal && <ProposalCard proposal={proposal} />}
+          {isProposalLoading ? (
+            <Skeleton className="h-[235px] w-full rounded-[18px]" />
+          ) : (
+            proposal && <ProposalCard proposal={proposal} />
+          )}
         </div>
 
         <div className="mt-4 flex gap-4">
