@@ -44,9 +44,11 @@ export default function Validators({
     return inflation;
   }, [data, currentSupply]);
 
+  const isDataLoading =
+    isActiveValidatorsLoading || isLoading || isGlobalBribeLoading;
   const generalInfo = [
     {
-      amount: isActiveValidatorsLoading ? (
+      amount: isDataLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
         totalValidators
@@ -54,7 +56,7 @@ export default function Validators({
       text: "Total validators",
     },
     {
-      amount: isGlobalBribeLoading ? (
+      amount: isDataLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
         "$" +
@@ -65,7 +67,7 @@ export default function Validators({
       text: "In bribe rewards",
     },
     {
-      amount: isLoading ? (
+      amount: isDataLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
         inflation.toFixed(4) + "%"
@@ -73,7 +75,11 @@ export default function Validators({
       text: "BGT inflation rate",
     },
     {
-      amount: activeGauges,
+      amount: isDataLoading ? (
+        <Skeleton className="mb-2 h-10 w-full" />
+      ) : (
+        activeGauges
+      ),
       text: "Active gauges",
     },
   ];

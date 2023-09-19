@@ -1,11 +1,10 @@
 import { useMemo } from "react";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, getAddress } from "viem";
 import { usePublicClient, type Address } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
-import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 import { usePollEpochs } from "../epochs";
 import {
@@ -69,142 +68,132 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
 
   const GLOBAL_BRIBES_KEY = "globalBribes";
   const GLOBAL_AVG_VAPY = "globalAvgVAPY";
-  const { isLoading } = useSWR(
-    QUERY_KEY,
-    async () => {
-      if (!validatorAddresses || !validators || !prices) return undefined;
+  const { isLoading } = useSWRImmutable(QUERY_KEY, async () => {
+    if (!validatorAddresses || !validators || !prices) return undefined;
 
-      // build multicall payload for getting brubes
-      const bribeCalls: Call[] = validatorAddresses.map((validatorAddress) => ({
-        address: networkConfig.precompileAddresses.erc20BribeModule as Address,
-        abi: BRIBE_PRECOMPILE_ABI,
-        functionName: "getValidatorBribes",
-        args: [validatorAddress],
-      }));
+    // build multicall payload for getting brubes
+    const bribeCalls: Call[] = validatorAddresses.map((validatorAddress) => ({
+      address: networkConfig.precompileAddresses.erc20BribeModule as Address,
+      abi: BRIBE_PRECOMPILE_ABI,
+      functionName: "getValidatorBribes",
+      args: [validatorAddress],
+    }));
 
-      const response = await publicClient.multicall({
-        contracts: bribeCalls,
-        multicallAddress: networkConfig.precompileAddresses
-          .multicallAddress as Address,
-      });
+    const response = await publicClient.multicall({
+      contracts: bribeCalls,
+      multicallAddress: networkConfig.precompileAddresses
+        .multicallAddress as Address,
+    });
 
-      const result = response.map((res: any) => res.result);
-      const beraAddress = process.env.NEXT_PUBLIC_WBERA_ADDRESS as string;
-      const beraPrice = prices[getAddress(beraAddress)];
+    const result = response.map((res: any) => res.result);
+    const beraAddress = process.env.NEXT_PUBLIC_WBERA_ADDRESS as string;
+    const beraPrice = prices[getAddress(beraAddress)];
 
-      let globalBribeUsdAmount = 0;
-      let globalVapy = 0;
+    let globalBribeUsdAmount = 0;
+    let globalVapy = 0;
 
-      const polValidators: PoLValidator[] = [];
-      validators.forEach((validator: Validator, index: number) => {
-        // calculate validator related information
-        const validatorTotalDelegated = getValidatorTotalDelegated(validator);
-        const validatorTVL = validatorTotalDelegated * beraPrice;
-        const validatorPercentageVotingPower = getPercentageGlobalVotingPower(
-          validator,
-          globalBGTDelegated,
-        );
-        const estimatedValidatorBlocksPerYear = getEstimatedBlocksPerYear(
-          validatorPercentageVotingPower,
-        );
+    const polValidators: PoLValidator[] = [];
+    validators.forEach((validator: Validator, index: number) => {
+      // calculate validator related information
+      const validatorTotalDelegated = getValidatorTotalDelegated(validator);
+      const validatorTVL = validatorTotalDelegated * beraPrice;
+      const validatorPercentageVotingPower = getPercentageGlobalVotingPower(
+        validator,
+        globalBGTDelegated,
+      );
+      const estimatedValidatorBlocksPerYear = getEstimatedBlocksPerYear(
+        validatorPercentageVotingPower,
+      );
 
-        // calculate amount of bribes emitted per proposal in usd and add to global total of "active" bribes
+      // calculate amount of bribes emitted per proposal in usd and add to global total of "active" bribes
 
-        // console.log("current epoch", currentEpoch?.current);
-        const bribes = result[index]?.filter(
-          (bribe: any) => Number(bribe.startEpoch) <= currentEpoch?.current,
-        );
-        // console.log("active bribes", bribes);
-        mutate([ACTIVE_BRIBES_KEY, validator.operatorAddr], bribes);
+      // console.log("current epoch", currentEpoch?.current);
+      const bribes = result[index]?.filter(
+        (bribe: any) => Number(bribe.startEpoch) <= currentEpoch?.current,
+      );
+      // console.log("active bribes", bribes);
+      mutate([ACTIVE_BRIBES_KEY, validator.operatorAddr], bribes);
 
-        const bribeTokenList: any[] = [];
-        const totalPerProposalUsdAmount = bribes?.reduce(
-          (total: number, bribe: any) => {
-            const perProposalUsdAmount = bribe.bribePerProposal.amounts.reduce(
-              (total: number, bribeAmount: any, index: number) => {
-                const formattedBribeAmount = Number(
-                  formatUnits(bribeAmount, 18),
-                );
-                const tokenAddress = bribe.bribePerProposal.tokens[index];
-                bribeTokenList.push(tokenAddress);
-                const price = prices[getAddress(tokenAddress)] ?? 0;
-                const bribeValue = Number(formattedBribeAmount) * price;
-                return total + bribeValue;
-              },
-              0,
-            );
+      const bribeTokenList: any[] = [];
+      const totalPerProposalUsdAmount = bribes?.reduce(
+        (total: number, bribe: any) => {
+          const perProposalUsdAmount = bribe.bribePerProposal.amounts.reduce(
+            (total: number, bribeAmount: any, index: number) => {
+              const formattedBribeAmount = Number(formatUnits(bribeAmount, 18));
+              const tokenAddress = bribe.bribePerProposal.tokens[index];
+              bribeTokenList.push(tokenAddress);
+              const price = prices[getAddress(tokenAddress)] ?? 0;
+              const bribeValue = Number(formattedBribeAmount) * price;
+              return total + bribeValue;
+            },
+            0,
+          );
 
-            const totalValue = perProposalUsdAmount;
-            return total + totalValue;
-          },
-          0,
-        );
+          const totalValue = perProposalUsdAmount;
+          return total + totalValue;
+        },
+        0,
+      );
 
-        const totalActiveBribeUsdAmount = bribes?.reduce(
-          (total: number, bribe: any) => {
-            const numBlockProposals = Number(bribe.numBlockProposals);
-            const perProposalUsdAmount = bribe.bribePerProposal.amounts.reduce(
-              (total: number, bribeAmount: any, index: number) => {
-                const formattedBribeAmount = Number(
-                  formatUnits(bribeAmount, 18),
-                );
-                const tokenAddress = bribe.bribePerProposal.tokens[index];
-                const price = prices[tokenAddress] ?? 0;
-                const bribeValue = Number(formattedBribeAmount) * price;
-                return total + bribeValue;
-              },
-              0,
-            );
+      const totalActiveBribeUsdAmount = bribes?.reduce(
+        (total: number, bribe: any) => {
+          const numBlockProposals = Number(bribe.numBlockProposals);
+          const perProposalUsdAmount = bribe.bribePerProposal.amounts.reduce(
+            (total: number, bribeAmount: any, index: number) => {
+              const formattedBribeAmount = Number(formatUnits(bribeAmount, 18));
+              const tokenAddress = bribe.bribePerProposal.tokens[index];
+              const price = prices[tokenAddress] ?? 0;
+              const bribeValue = Number(formattedBribeAmount) * price;
+              return total + bribeValue;
+            },
+            0,
+          );
 
-            const totalValue = perProposalUsdAmount * numBlockProposals;
-            return total + totalValue;
-          },
-          0,
-        );
+          const totalValue = perProposalUsdAmount * numBlockProposals;
+          return total + totalValue;
+        },
+        0,
+      );
 
-        mutate(
-          [ACTIVE_BRIBES_TOTAL_AMOUNT_KEY, validator.operatorAddr],
-          totalActiveBribeUsdAmount,
-        );
-        mutate(
-          [ACTIVE_BRIBES_PER_PROPOSAL_AMOUNT_KEY, validator.operatorAddr],
-          totalPerProposalUsdAmount,
-        );
+      mutate(
+        [ACTIVE_BRIBES_TOTAL_AMOUNT_KEY, validator.operatorAddr],
+        totalActiveBribeUsdAmount,
+      );
+      mutate(
+        [ACTIVE_BRIBES_PER_PROPOSAL_AMOUNT_KEY, validator.operatorAddr],
+        totalPerProposalUsdAmount,
+      );
 
-        const estimatedUsdPerYear =
-          totalPerProposalUsdAmount * estimatedValidatorBlocksPerYear;
-        const vAPY = Number.isNaN(estimatedUsdPerYear / validatorTVL)
-          ? 0
-          : estimatedUsdPerYear / validatorTVL;
-        mutate([VALIDATOR_VAPY_KEY, validator.operatorAddr], vAPY);
+      const estimatedUsdPerYear =
+        totalPerProposalUsdAmount * estimatedValidatorBlocksPerYear;
+      const vAPY = Number.isNaN(estimatedUsdPerYear / validatorTVL)
+        ? 0
+        : estimatedUsdPerYear / validatorTVL;
+      mutate([VALIDATOR_VAPY_KEY, validator.operatorAddr], vAPY);
 
-        globalBribeUsdAmount += totalActiveBribeUsdAmount;
-        globalVapy += vAPY;
+      globalBribeUsdAmount += totalActiveBribeUsdAmount;
+      globalVapy += vAPY;
 
-        const polValidator = {
-          ...validator,
-          activeBribes: bribes,
-          bribeTokenList: [...new Set(bribeTokenList)],
-          vApy: vAPY,
-          totalActiveBribeUsdAmount,
-          totalPerProposalUsdAmount,
-          rank: index + 1,
-        };
-        mutate([POL_VALIDATOR_KEY, validator.operatorAddr], polValidator);
-        polValidators.push(polValidator);
-      });
+      const polValidator = {
+        ...validator,
+        activeBribes: bribes,
+        bribeTokenList: [...new Set(bribeTokenList)],
+        vApy: vAPY,
+        totalActiveBribeUsdAmount,
+        totalPerProposalUsdAmount,
+        rank: index + 1,
+      };
+      mutate([POL_VALIDATOR_KEY, validator.operatorAddr], polValidator);
+      polValidators.push(polValidator);
+    });
 
-      const globalAvgVapy = globalVapy / totalValidators;
-      mutate([GLOBAL_BRIBES_KEY], globalBribeUsdAmount);
-      mutate([GLOBAL_AVG_VAPY], globalAvgVapy);
-      mutate([POL_VALIDATOR_LIST_KEY], polValidators);
+    const globalAvgVapy = globalVapy / totalValidators;
+    mutate([GLOBAL_BRIBES_KEY], globalBribeUsdAmount);
+    mutate([GLOBAL_AVG_VAPY], globalAvgVapy);
+    mutate([POL_VALIDATOR_LIST_KEY], polValidators);
 
-      return undefined;
-    },
-    {
-      refreshInterval: POLLING.NORMAL,
-    },
-  );
+    return undefined;
+  });
 
   const useGlobalActiveBribeValue = () => {
     const { data = undefined } = useSWRImmutable([GLOBAL_BRIBES_KEY]);

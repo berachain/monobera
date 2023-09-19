@@ -32,7 +32,7 @@ export const usePollPreviewBurnShares = (
 
   const method = "getPreviewBurnShares";
   const QUERY_KEY = [poolAddress, shareAddress, amount, method];
-  useSWR(
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       if (!poolAddress || !shareAddress || !isAddress(shareAddress))
@@ -64,5 +64,6 @@ export const usePollPreviewBurnShares = (
   };
   return {
     usePreviewBurnShares,
+    isLoading,
   };
 };
