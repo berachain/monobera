@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { CustomizeInput } from "./customize-input";
+import { LeverageSlider } from "./leverage-slider";
 
 export function PositionSettings() {
   const [optionType, setOptionType] = useState<"market" | "limit">("market");
@@ -90,6 +91,7 @@ export function PositionSettings() {
           />
         )}
       </div>
+      <LeverageSlider />
     </div>
   );
 }

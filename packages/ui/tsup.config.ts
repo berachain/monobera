@@ -32,6 +32,7 @@ const client = [
   "./src/tooltip.tsx",
   "./src/use-toast.tsx",
   "./src/navigation-menu.tsx",
+  "./src/slider.tsx",
 ];
 
 const server = [
