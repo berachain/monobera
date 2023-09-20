@@ -39,6 +39,9 @@ export default {
       minHeight: {
         minimun: "calc(100vh - 587px)",
       },
+      height: {
+        "screen-250": "calc(100vh - 254px)",
+      },
       backgroundImage: {
         glow: "url('/glow.png')",
         "honey-gradient":

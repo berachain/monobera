@@ -32,14 +32,15 @@ const OneClickSiwtch = ({ on, ...props }: { on: boolean }) => {
       className="flex cursor-pointer gap-2 text-sm  font-semibold"
       {...props}
     >
-      <div className="flex items-center text-center text-xs">
+      {on ? "Disable" : "Enable One Click Trade"}
+      <div className="flex items-center text-center text-[10px]">
         <div
           className={cn(
             "h-4 w-5 rounded-l-full bg-primary",
             on && "opacity-20",
           )}
         >
-          🐢
+          <span className="-mt-1 block">🐢</span>
         </div>
         <div
           className={cn(
@@ -47,10 +48,9 @@ const OneClickSiwtch = ({ on, ...props }: { on: boolean }) => {
             !on && "opacity-20",
           )}
         >
-          ⚡
+          <span className="-mt-[2px] block">⚡</span>
         </div>
       </div>
-      {on ? "Disable" : "Enable One Click Trade"}
     </div>
   );
 };
@@ -68,7 +68,7 @@ export function OneClickBanner() {
   return (
     <div
       className={cn(
-        "flex w-full justify-end gap-2 px-4 py-2",
+        "flex w-full justify-end gap-2 border-y border-border px-4 py-2",
         getStatusColor(status),
       )}
     >
