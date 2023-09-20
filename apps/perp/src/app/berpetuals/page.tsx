@@ -1,8 +1,8 @@
 import React from "react";
 
-import { InstrumentDropdown } from "./components/instrument-dropdown";
 import { GeneralInfoBanner } from "./components/general-info-banner";
-import PanelLeft from "./panel-left";
+import { InstrumentDropdown } from "./components/instrument-dropdown";
+import CreatePosition from "./create-position";
 
 export default function Home() {
   return (
@@ -11,10 +11,10 @@ export default function Home() {
         <div className="w-full flex-shrink-0 flex-grow-0 lg:w-[400px]">
           <InstrumentDropdown />
         </div>
-        <GeneralInfoBanner/>
+        <GeneralInfoBanner />
       </div>
       <div className="flex w-full">
-        <PanelLeft />
+        <CreatePosition />
         <div className="h-full w-full">Right</div>
       </div>{" "}
     </div>
