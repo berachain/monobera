@@ -34,7 +34,8 @@ export default function ProposalDetails({
   const { useProposal, isLoading: isProposalLoading } =
     usePollProposal(proposalId);
   const { useTotalDelegated } = usePollActiveValidators();
-  const { useTotalDelegatorDelegated, isLoading: isUserVotingPowerLoading } = usePollTotalDelegated();
+  const { useTotalDelegatorDelegated, isLoading: isUserVotingPowerLoading } =
+    usePollTotalDelegated();
   const proposal: Proposal | undefined = useProposal();
 
   const globalTotal = useTotalDelegated();
@@ -54,7 +55,11 @@ export default function ProposalDetails({
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 
-  const { write, ModalPortal, isLoading: isTxnLoading } = useTxn({
+  const {
+    write,
+    ModalPortal,
+    isLoading: isTxnLoading,
+  } = useTxn({
     message: `Voting for proposal ${proposalId}`,
     disableToast: true,
   });
@@ -121,7 +126,7 @@ export default function ProposalDetails({
             </div>
             <div className="mt-[-4px] flex items-center gap-0.5 text-sm font-medium leading-[14px] text-muted-foreground">
               Total votes
-              <Tooltip text="no" />
+              <Tooltip text="Total amount of BGT used to vote on this proposal" />
             </div>
           </Card>
           <VoteCard

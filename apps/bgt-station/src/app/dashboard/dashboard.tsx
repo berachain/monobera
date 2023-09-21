@@ -27,15 +27,14 @@ export default function DashBoard({
   const validatorSession = [
     {
       sortingAttr: "tokens",
-      title: "🔥 Top staked validators",
+      title: "🔥 Top Staked Validators",
       message: "Stake your BGT with the most popular validators",
       keyword: "Voting power",
     },
     {
       sortingAttr: "vApy",
-      title: "💰 Top paying validators",
-      message:
-        "Stake your BGT with the best validators to maximize your rewards",
+      title: "💰 Top Paying Validators",
+      message: "Stake your BGT with the most rewarding validators",
       keyword: "Bribe value",
     },
   ];
@@ -58,10 +57,10 @@ export default function DashBoard({
       </div>
       <div>
         <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
-          🌎 Global gauge weight
+          🌎 Global Gauge Weight
         </div>
         <div className="mt-4 text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
-          See what pools validators are incentivizing right now
+          See what pools & addresses validators are incentivizing right now
         </div>
         <GlobalGaugeWeightInfo />
       </div>

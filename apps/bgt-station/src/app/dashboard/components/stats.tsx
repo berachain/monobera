@@ -37,7 +37,7 @@ export function Stats({ avgValidatorUptime }: { avgValidatorUptime: string }) {
           strokeWidth={10}
           hasBackground={true}
           strokeColor="#FBBF24"
-          label="avg validator uptime"
+          label="Avg Validator Uptime"
         />
 
         <SemiCircleProgress
@@ -49,7 +49,7 @@ export function Stats({ avgValidatorUptime }: { avgValidatorUptime: string }) {
           strokeWidth={10}
           hasBackground={true}
           strokeColor="#FBBF24"
-          label="of BGT staked"
+          label="% of BGT Staked"
         />
         <SemiCircleProgress
           percentage={Number.isNaN(beraToBgtRatio) ? 0 : beraToBgtRatio}
@@ -60,7 +60,7 @@ export function Stats({ avgValidatorUptime }: { avgValidatorUptime: string }) {
           strokeWidth={10}
           hasBackground={true}
           strokeColor="#FBBF24"
-          label="BERA to BGT ratio"
+          label="BERA to BGT Ratio"
         />
       </div>
     </Card>

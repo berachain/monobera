@@ -113,7 +113,7 @@ export const PoolSearch = () => {
         <div className="w-full text-center ">
           <p className="text-5xl font-extrabold">🔍 Search All Pools</p>
           <p className="text-lg font-semibold text-muted-foreground">
-            Leverage our boosted yields to increase your rewards
+            Maximize your rewards with our boosted yields
           </p>
 
           <div className="mt-12 flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:items-center lg:justify-between">

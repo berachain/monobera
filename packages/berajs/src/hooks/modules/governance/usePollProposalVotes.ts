@@ -39,7 +39,7 @@ export const usePollProposalVotes = (proposalId: number) => {
     );
     const result: any[] = await temp.json().then((res) => res.result);
 
-    console.log("VOTRES", result);
+    if (!result) return false;
     const resultObj: Record<string, unknown> = {};
 
     result.forEach((item) => {
