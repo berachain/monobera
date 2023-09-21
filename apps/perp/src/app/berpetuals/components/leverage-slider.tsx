@@ -12,7 +12,7 @@ export function LeverageSlider() {
           defaultValue={sliderValue}
           value={sliderValue}
           max={150}
-          markers={[20, 40, 60, 80, 100, 120, 150]}
+          markers={[25, 50, 75, 100, 125, 150]}
           onValueChange={setSliderValue}
           className="w-full"
         />
