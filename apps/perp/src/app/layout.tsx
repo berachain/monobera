@@ -26,7 +26,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
             <Header navItems={navItems} />
-            <main className="w-full py-[72px]">{props.children}</main>
+            <main className="w-full pt-[72px]">{props.children}</main>
             <Toaster position="bottom-right" />
           </div>
           <TailwindIndicator />

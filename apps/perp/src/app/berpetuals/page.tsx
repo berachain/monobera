@@ -7,8 +7,8 @@ import CreatePosition from "./create-position";
 export default function Home() {
   return (
     <div>
-      <div className="flex w-full flex-col lg:flex-row">
-        <div className="w-full flex-shrink-0 flex-grow-0 lg:w-[400px]">
+      <div className="flex h-fit w-full flex-col lg:flex-row">
+        <div className="h-fit w-full flex-shrink-0 flex-grow-0 lg:w-[400px]">
           <InstrumentDropdown />
         </div>
         <GeneralInfoBanner />

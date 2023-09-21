@@ -20,7 +20,7 @@ export default function Home() {
         width={1280}
         height={100}
       />
-      <div className="relative z-10 flex flex-col gap-[128px] bg-lend bg-contain bg-no-repeat pt-20 md:pt-[116px] lg:pt-[140px]">
+      <div className="relative z-10 flex flex-col gap-[128px] bg-lend bg-contain bg-no-repeat pb-[72px] pt-20 md:pt-[116px] lg:pt-[140px]">
         <Hero />
         <GeneralInfo />
         <Markets />
