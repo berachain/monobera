@@ -42,6 +42,9 @@ export default {
       height: {
         "screen-250": "calc(100vh - 254px)",
       },
+      width: {
+        "screen-w-400": "calc(100vw - 400px)",
+      },
       backgroundImage: {
         glow: "url('/glow.png')",
         "honey-gradient":

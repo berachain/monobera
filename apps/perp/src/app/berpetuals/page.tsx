@@ -2,6 +2,8 @@ import React from "react";
 
 import { GeneralInfoBanner } from "./components/general-info-banner";
 import { InstrumentDropdown } from "./components/instrument-dropdown";
+import { OrderChart } from "./components/order-chart";
+import { OrderHistory } from "./components/order-history";
 import CreatePosition from "./create-position";
 
 export default function Home() {
@@ -13,9 +15,12 @@ export default function Home() {
         </div>
         <GeneralInfoBanner />
       </div>
-      <div className="flex w-full">
+      <div className="flex w-full flex-col lg:flex-row">
         <CreatePosition />
-        <div className="h-full w-full">Right</div>
+        <div className="h-full w-full pb-[32px] lg:w-screen-w-400">
+          <OrderChart />
+          <OrderHistory />
+        </div>
       </div>{" "}
     </div>
   );

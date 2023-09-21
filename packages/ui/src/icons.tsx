@@ -27,6 +27,7 @@ import {
   Edit,
   Expand,
   File,
+  FileEdit,
   FileText,
   Frame,
   Fuel,
@@ -85,6 +86,7 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
+  fileEdit: FileEdit,
   lineChart: LineChart,
   pieChart: PieChart,
   alertCircle: AlertCircle,
