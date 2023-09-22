@@ -2,6 +2,7 @@ import React from "react";
 import { formatUsd, formatter } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
@@ -128,6 +129,143 @@ export const positions_columns: ColumnDef<Position>[] = [
     ),
     cell: ({}) => (
       <div className="flex items-center gap-1">
+        <UpdatePositionModal
+          trigger={
+            <Icons.fileEdit className="h-4 w-4 cursor-pointer text-muted-foreground" />
+          }
+        />
+        <ClosePositionModal
+          trigger={
+            <Icons.close className="h-6 w-6 cursor-pointer text-destructive-foreground" />
+          }
+        />
+      </div>
+    ),
+    accessorKey: "manage",
+    enableSorting: false,
+  },
+];
+
+export const orders_columns: ColumnDef<Position>[] = [
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Time" />
+    ),
+    cell: ({}) => {
+      const date = new Date();
+      return (
+        <div>
+          <div className="text-sm font-semibold leading-tight text-foreground ">
+            {date.toLocaleDateString()}
+          </div>
+          <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
+            {date.toLocaleTimeString()}
+          </div>
+        </div>
+      );
+    },
+    accessorKey: "time",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Type" />
+    ),
+    cell: ({}) => (
+      <div className=" text-xs font-medium uppercase text-muted-foreground">
+        LIMIT
+      </div>
+    ),
+    accessorKey: "type",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Market / Action" />
+    ),
+    cell: ({ row }) => <PositionTitle position={row.original} />,
+    accessorKey: "assets",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Amount" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-xs font-medium leading-tight text-foreground">
+        {row.original.position_size} {row.original.assets}
+      </div>
+    ),
+
+    accessorKey: "position_size",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Price" />
+    ),
+    cell: ({ row }) => <div>{formatUsd(row.original.unrealized_pnl)}</div>,
+    accessorKey: "entry_price",
+    enableSorting: false,
+  },
+
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Total" />
+    ),
+    cell: ({ row }) => (
+      <div>
+        <div className={"text-sm font-semibold leading-5 text-foreground"}>
+          {row.original.realized_pnl} <br />
+        </div>
+        <div className="text-[10px] uppercase leading-[10px]">Honey</div>
+      </div>
+    ),
+    accessorKey: "total",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Filled" />
+    ),
+    cell: ({ row }) => (
+      <div>
+        <div className={"text-sm font-semibold leading-5 text-foreground"}>
+          {row.original.position_size} {row.original.assets}
+        </div>
+        <div className="text-[10px] leading-[10px]">(0.00%)</div>
+      </div>
+    ),
+    accessorKey: "filled",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="UnFilled" />
+    ),
+    cell: ({ row }) => (
+      <div className={"text-sm font-semibold leading-5 text-foreground"}>
+        {row.original.position_size} {row.original.assets}
+      </div>
+    ),
+    accessorKey: "unfilled",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title={
+          <div className="flex justify-end">
+            <Button className="bg-destructive px-2 py-1 text-sm font-semibold leading-5 text-destructive-foreground">
+              Cancel All Orders
+            </Button>
+          </div>
+        }
+      />
+    ),
+    cell: ({}) => (
+      <div className="flex items-center justify-end gap-1">
         <UpdatePositionModal
           trigger={
             <Icons.fileEdit className="h-4 w-4 cursor-pointer text-muted-foreground" />

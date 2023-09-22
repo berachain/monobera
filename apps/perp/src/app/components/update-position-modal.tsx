@@ -7,7 +7,7 @@ import { TPSL } from "../berpetuals/components/tpsl";
 
 export function UpdatePositionModal({
   trigger,
-  className="",
+  className = "",
 }: {
   trigger: any;
   className?: string;

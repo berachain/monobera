@@ -6,7 +6,7 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 
 export function ClosePositionModal({
   trigger,
-  className="",
+  className = "",
 }: {
   trigger: any;
   className?: string;

@@ -1,35 +1,33 @@
-import { useState } from "react";
 import { cn } from "@bera/ui";
 
-export function OrderHistorHeader() {
-  const headers = [
-    {
-      title: "Positions",
-      counts: 5,
-    },
-    {
-      title: "Open Orders",
-      counts: 2,
-    },
-    {
-      title: "History",
-    },
-    {
-      title: "Realized PnL",
-    },
-  ];
-  const [selected, setSelected] = useState<number>(0);
+export function OrderHistorHeader({
+  headers,
+  tabType,
+  setTabType,
+}: {
+  headers: {
+    title: string;
+    counts?: number;
+    type: string;
+  }[];
+  tabType: "positions" | "orders" | "history" | "pnl";
+  setTabType: (type: "positions" | "orders" | "history" | "pnl") => void;
+}) {
   return (
     <div>
       <div className="flex w-full flex-col items-center justify-between border-y border-border bg-muted px-6 py-4 sm:flex-row">
         <div className=" flex gap-10 text-foreground">
           {headers.map((header, index) => (
             <div
-              onClick={() => setSelected(index)}
+              onClick={() =>
+                setTabType(
+                  header.type as "positions" | "orders" | "history" | "pnl",
+                )
+              }
               key={index}
               className={cn(
                 "flex cursor-pointer items-center gap-2",
-                index === selected
+                tabType === header.type
                   ? "text-sm font-semibold"
                   : "text-xs font-medium text-muted-foreground",
               )}
@@ -37,7 +35,7 @@ export function OrderHistorHeader() {
               <div
                 className={cn(
                   "hover:underline",
-                  index === selected
+                  tabType === header.type
                     ? "text-sm font-semibold"
                     : "text-xs font-medium text-muted-foreground",
                 )}
