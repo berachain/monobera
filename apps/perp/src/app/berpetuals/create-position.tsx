@@ -117,6 +117,7 @@ export default function CreatePosition() {
           }
         />
         <TPSL
+          className="my-8"
           tpslOnChange={(value) =>
             setForm({ ...form, tp: value.tp, sl: value.sl })
           }

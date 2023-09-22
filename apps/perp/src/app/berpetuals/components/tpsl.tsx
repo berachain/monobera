@@ -48,24 +48,26 @@ const InputSelect = ({
 
 export function TPSL({
   tpslOnChange,
+  className,
 }: {
-  tpslOnChange: ({
+  tpslOnChange?: ({
     tp,
     sl,
   }: {
     tp: number | undefined;
     sl: number | undefined;
   }) => void;
+  className?: string;
 }) {
   const [tpsl, setTpsl] = useState<{
     tp: number | undefined;
     sl: number | undefined;
   }>({ tp: undefined, sl: undefined });
   useEffect(() => {
-    tpslOnChange(tpsl);
+    tpslOnChange?.(tpsl);
   }, [tpsl]);
   return (
-    <div className="my-8">
+    <div className={className}>
       <div className="mb-2 text-xs font-medium">Take Profit</div>
       <InputSelect
         bracket={[25, 50, 100, 150]}

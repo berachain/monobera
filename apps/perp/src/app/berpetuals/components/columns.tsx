@@ -5,7 +5,9 @@ import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
+import { ClosePositionModal } from "~/app/components/close-position-modal";
 import { PositionTitle } from "~/app/components/position-title";
+import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { type Position } from "~/hooks/usePositions";
 
 export const positions_columns: ColumnDef<Position>[] = [
@@ -126,8 +128,16 @@ export const positions_columns: ColumnDef<Position>[] = [
     ),
     cell: ({}) => (
       <div className="flex items-center gap-1">
-        <Icons.fileEdit className="h-4 w-4 cursor-pointer text-muted-foreground" />
-        <Icons.close className="h-6 w-6 cursor-pointer text-destructive-foreground" />
+        <UpdatePositionModal
+          trigger={
+            <Icons.fileEdit className="h-4 w-4 cursor-pointer text-muted-foreground" />
+          }
+        />
+        <ClosePositionModal
+          trigger={
+            <Icons.close className="h-6 w-6 cursor-pointer text-destructive-foreground" />
+          }
+        />
       </div>
     ),
     accessorKey: "manage",
