@@ -82,7 +82,7 @@ export default function CreatePosition() {
           />
           <CustomizeInput
             title="Quantity"
-            subTitle={`Leverage: ${10.0}x`}
+            subTitle={`Leverage: ${form.leverage}x`}
             endAdornment={
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
                 {" "}
@@ -111,7 +111,11 @@ export default function CreatePosition() {
             />
           )}
         </div>
-        <LeverageSlider />
+        <LeverageSlider
+          onValueChange={(value: number) =>
+            setForm({ ...form, leverage: value })
+          }
+        />
         <TPSL
           tpslOnChange={(value) =>
             setForm({ ...form, tp: value.tp, sl: value.sl })
