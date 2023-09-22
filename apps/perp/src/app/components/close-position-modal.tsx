@@ -4,12 +4,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 
-export function ClosePositionModal({ trigger }: { trigger: any }) {
+export function ClosePositionModal({
+  trigger,
+  className="",
+}: {
+  trigger: any;
+  className?: string;
+}) {
   const [open, setOpen] = useState<boolean>(false);
   const withdrawTier = [25, 50, 75, 100];
   const [selectedTier, setSelectedTier] = useState<number>(25);
   return (
-    <div>
+    <div className={className}>
       <div onClick={() => setOpen(true)}>{trigger}</div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-[342px]">

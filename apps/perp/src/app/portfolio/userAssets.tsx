@@ -6,7 +6,9 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import { usePositions, type Position } from "~/hooks/usePositions";
+import { ClosePositionModal } from "../components/close-position-modal";
 import { PositionTitle, PositionTitleSM } from "../components/position-title";
+import { UpdatePositionModal } from "../components/update-position-modal";
 
 export default function UserAssets() {
   const { generatepositionData } = usePositions();
@@ -211,12 +213,21 @@ export function AsesetCardMobile({ position }: { position: Position }) {
       </div>
 
       <div className="flex gap-4">
-        <Button className="w-14 flex-shrink-0 bg-primary ">
-          <Icons.penSquare className="h-6 h-6 text-primary-foreground" />
-        </Button>
-        <Button className=" w-full bg-destructive text-destructive-foreground">
-          Close Position
-        </Button>
+        <UpdatePositionModal
+          trigger={
+            <Button className="w-14 flex-shrink-0 bg-primary ">
+              <Icons.penSquare className="h-6 h-6 text-primary-foreground" />
+            </Button>
+          }
+        />
+        <ClosePositionModal
+          className="w-full"
+          trigger={
+            <Button className="w-full bg-destructive text-destructive-foreground">
+              Close Position
+            </Button>
+          }
+        />
       </div>
     </div>
   );

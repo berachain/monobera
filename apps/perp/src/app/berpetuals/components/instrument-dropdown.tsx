@@ -66,7 +66,7 @@ export function InstrumentDropdown({
           className="w-full rounded-none border-none"
           placeholder="Search for a market"
         />
-        <div className="flex h-screen-250 flex-col gap-1 overflow-y-scroll border-t border-border">
+        <div className="h-screen-250 flex flex-col gap-1 overflow-y-scroll border-t border-border">
           {instrumentsList.map((instrument, index) => (
             <DropdownMenuItem
               key={index}

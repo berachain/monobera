@@ -5,10 +5,16 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 
 import { TPSL } from "../berpetuals/components/tpsl";
 
-export function UpdatePositionModal({ trigger }: { trigger: any }) {
+export function UpdatePositionModal({
+  trigger,
+  className="",
+}: {
+  trigger: any;
+  className?: string;
+}) {
   const [open, setOpen] = useState<boolean>(false);
   return (
-    <div>
+    <div className={className}>
       <div onClick={() => setOpen(true)}>{trigger}</div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-[342px]">
