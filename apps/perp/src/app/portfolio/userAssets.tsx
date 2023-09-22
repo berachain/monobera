@@ -2,12 +2,11 @@
 
 import { formatUsd, formatter } from "@bera/berajs";
 import { cn } from "@bera/ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import { usePositions, type Position } from "~/hooks/usePositions";
-import { PositionTitle } from "../components/position-title";
+import { PositionTitle, PositionTitleSM } from "../components/position-title";
 
 export default function UserAssets() {
   const { generatepositionData } = usePositions();
@@ -142,33 +141,10 @@ function AsesetCard({ position }: { position: Position }) {
   );
 }
 
-function AsesetCardMobile({ position }: { position: Position }) {
+export function AsesetCardMobile({ position }: { position: Position }) {
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-border bg-background p-4 lg:hidden">
-      <div className={"flex w-full justify-between"}>
-        <div className="flex items-center gap-2">
-          <Avatar className="h-6 w-6">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>{position.assets}</AvatarFallback>
-          </Avatar>
-          <div className="text-sm font-semibold leading-tight text-muted-foreground">
-            {position.assets}-{position.counter} /{" "}
-            <span
-              className={cn(
-                "capitalize",
-                position.option_type === "long"
-                  ? "text-success-foreground"
-                  : "text-destructive-foreground",
-              )}
-            >
-              {position.option_type}
-            </span>
-          </div>
-        </div>
-        <div className="text-lg font-semibold leading-7 text-muted-foreground">
-          {position.position_size} {position.assets}
-        </div>
-      </div>
+      <PositionTitleSM position={position} />
 
       <div className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
         <div className="flex justify-between leading-5">
@@ -238,7 +214,7 @@ function AsesetCardMobile({ position }: { position: Position }) {
         <Button className="w-14 flex-shrink-0 bg-primary ">
           <Icons.penSquare className="h-6 h-6 text-primary-foreground" />
         </Button>
-        <Button className=" w-full bg-destructive-foreground text-accent-foreground">
+        <Button className=" w-full bg-destructive text-destructive-foreground">
           Close Position
         </Button>
       </div>

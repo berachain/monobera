@@ -38,9 +38,7 @@ export default {
       },
       minHeight: {
         minimun: "calc(100vh - 587px)",
-      },
-      height: {
-        "screen-250": "calc(100vh - 254px)",
+        "screen-250": "calc(100vh - 214px)",
       },
       width: {
         "screen-w-400": "calc(100vw - 400px)",

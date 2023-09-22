@@ -49,11 +49,9 @@ export default function Portfolio() {
   const [tabType, setTabType] = React.useState<"Volume" | "PnL">("Volume");
   const [timeFrame, setTimeFrame] = React.useState(TimeFrame.QUARTERLY);
   return (
-    <div className="flex gap-4 flex-col lg:flex-row">
+    <div className="flex flex-col gap-4 lg:flex-row">
       <UserGeneralInfo />
-      <div
-        className="flex w-full flex-col justify-between rounded-xl border border-border bg-muted px-4 py-6"
-      >
+      <div className="flex w-full flex-col justify-between rounded-xl border border-border bg-muted px-4 py-6">
         <div className="flex w-full justify-between">
           <div className="text-xl font-semibold leading-7">
             $6.9M
