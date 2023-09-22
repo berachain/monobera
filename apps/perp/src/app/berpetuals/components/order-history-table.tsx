@@ -1,6 +1,11 @@
 import { AsesetCardMobile } from "~/app/portfolio/userAssets";
 import { usePositions } from "~/hooks/usePositions";
-import { orders_columns, positions_columns, history_columns, pnl_columns } from "./columns";
+import {
+  history_columns,
+  orders_columns,
+  pnl_columns,
+  positions_columns,
+} from "./columns";
 import { DataTable } from "./data-table";
 
 export function OrderHistorTable({
