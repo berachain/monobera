@@ -41,7 +41,7 @@ export default function Delegate({
   const { theme, systemTheme } = useTheme();
   const t = theme === "system" ? systemTheme : theme;
   const router = useRouter();
-  const [amount, setAmount] = React.useState("0.0");
+  const [amount, setAmount] = React.useState<number | undefined>(undefined);
   const [activeAction, setActiveAction] = React.useState<DelegateEnum>(action);
   const { networkConfig } = useBeraConfig();
 
@@ -59,10 +59,7 @@ export default function Delegate({
   );
   const bgtDelegated = useSelectedAccountDelegation();
 
-  const isBadRedelegate =
-    validator === redelegateValidator &&
-    (redelegateValidator as string) !== "" &&
-    (validator as string) !== "";
+  const isBadRedelegate = validator === redelegateValidator && (validator as string)!=="" && (redelegateValidator as string)!=="";
   const getExceeding = () => {
     if (activeAction === DelegateEnum.DELEGATE) {
       return Number(amount) > Number(bgtBalance);
@@ -77,17 +74,26 @@ export default function Delegate({
 
   const getDisabled = () => {
     if (activeAction === DelegateEnum.DELEGATE) {
-      return Number(amount) > Number(bgtBalance) || amount === "0.0";
+      return (
+        Number(amount) > Number(bgtBalance) ||
+        amount === undefined ||
+        amount === 0
+      );
     }
     if (activeAction === DelegateEnum.REDELEGATE) {
       return (
         Number(amount) > Number(bgtDelegated) ||
         !redelegateValidator ||
-        amount === "0.0"
+        amount === undefined ||
+        amount === 0
       );
     }
     if (activeAction === DelegateEnum.UNBOND) {
-      return Number(amount) > Number(bgtDelegated) || amount === "0.0";
+      return (
+        Number(amount) > Number(bgtDelegated) ||
+        amount === undefined ||
+        amount === 0
+      );
     }
   };
   const {
@@ -195,7 +201,7 @@ export default function Delegate({
               : "Insufficient BGT delegated"}
           </Alert>
         )}
-        {isBadRedelegate && action === DelegateEnum.REDELEGATE && (
+        {isBadRedelegate && (
           <Alert variant="destructive">
             Cannot redelegate to the same validator
           </Alert>

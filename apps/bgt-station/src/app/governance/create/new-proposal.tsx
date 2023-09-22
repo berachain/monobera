@@ -65,7 +65,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
 
   const { write, ModalPortal } = useTxn({
     message: "Submit Proposal",
-    disableToast: true,
     onSuccess: () => {
       router.push(`/governance`);
     },

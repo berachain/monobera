@@ -38,7 +38,6 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
 
   const { write, isLoading, ModalPortal } = useTxn({
     message: "Claiming BGT Rewards",
-    disableToast: true,
     onSuccess: () => {
       void mutate(QUERY_KEY);
     },

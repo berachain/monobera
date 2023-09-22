@@ -26,7 +26,6 @@ export default function Redeem() {
   const userBalance = useBgtBalance();
   const { write, isLoading, ModalPortal } = useTxn({
     message: "Redeem BERA",
-    disableToast: true,
   });
   const { networkConfig } = useBeraConfig();
 

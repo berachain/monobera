@@ -61,7 +61,6 @@ export default function ProposalDetails({
     isLoading: isTxnLoading,
   } = useTxn({
     message: `Voting for proposal ${proposalId}`,
-    disableToast: true,
   });
   const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
 

@@ -108,7 +108,6 @@ export function SwapCard({
     } to ${Number(swapInfo?.formattedReturnAmount).toFixed(4)} ${
       selectedTo?.symbol
     }`,
-    disableToast: true,
     onSuccess: () => {
       setOpenPreview(false);
     },
@@ -126,14 +125,13 @@ export function SwapCard({
       wrapType === WRAP_TYPE.WRAP
         ? `Wrapping ${swapAmount} BERA to WBERA`
         : `Unwrapping ${swapAmount} WBERA to BERA`,
-    disableToast: true,
   });
 
   const { isLoading: isBalancesLoading } = usePollAssetWalletBalance();
 
   const getSwapButton = () => {
     if (
-      (Number(allowance?.formattedAllowance) ?? 0) < fromAmount &&
+      (Number(allowance?.formattedAllowance) ?? 0) < (fromAmount ?? 0) &&
       !exceedingBalance &&
       !isWrap
     ) {
