@@ -25,8 +25,8 @@ export default function ValidatorInput({
 }: // emptyMessage = "No validators available",
 {
   action: DelegateEnum;
-  amount: string;
-  onAmountChange: (amount: string) => void;
+  amount: number | undefined;
+  onAmountChange: (amount: number) => void;
   validatorAddress: Address | undefined;
   redelegate?: boolean;
   redelegateValidatorAddress?: string;
@@ -48,8 +48,9 @@ export default function ValidatorInput({
         type="number"
         className="h-[73px] p-4 text-right text-lg font-semibold leading-7"
         value={amount}
+        placeholder="0"
         disabled={disabled || isBalanceLoading}
-        onChange={(e) => onAmountChange(e.target.value)}
+        onChange={(e) => onAmountChange(Number(e.target.value))}
         startAdornment={
           <ValidatorSelector
             validatorAddress={
@@ -75,7 +76,7 @@ export default function ValidatorInput({
           <span
             className="underline hover:cursor-pointer"
             onClick={() => {
-              onAmountChange(userBalance);
+              onAmountChange(Number(userBalance));
             }}
           >
             MAX

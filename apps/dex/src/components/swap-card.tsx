@@ -133,7 +133,7 @@ export function SwapCard({
 
   const getSwapButton = () => {
     if (
-      (Number(allowance?.formattedAllowance) ?? 0) < fromAmount &&
+      (Number(allowance?.formattedAllowance) ?? 0) < (fromAmount ?? 0) &&
       !exceedingBalance &&
       !isWrap
     ) {
