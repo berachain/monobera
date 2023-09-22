@@ -2,8 +2,12 @@ import { useState } from "react";
 import { Input } from "@bera/ui/input";
 import { Slider } from "@bera/ui/slider";
 
-export function LeverageSlider() {
-  const [sliderValue, setSliderValue] = useState([0]);
+export function LeverageSlider({
+  defaultValue = 0,
+}: {
+  defaultValue?: number;
+}) {
+  const [sliderValue, setSliderValue] = useState([defaultValue]);
   return (
     <div className="mt-8">
       <div className="text-xs font-medium">Leverage Slider</div>
