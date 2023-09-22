@@ -282,3 +282,146 @@ export const orders_columns: ColumnDef<Position>[] = [
     enableSorting: false,
   },
 ];
+
+export const history_columns: ColumnDef<Position>[] = [
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Time" />
+    ),
+    cell: ({}) => {
+      const date = new Date();
+      return (
+        <div>
+          <div className="text-sm font-semibold leading-tight text-foreground ">
+            {date.toLocaleDateString()}
+          </div>
+          <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
+            {date.toLocaleTimeString()}
+          </div>
+        </div>
+      );
+    },
+    accessorKey: "time",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Market / Action" />
+    ),
+    cell: ({ row }) => <PositionTitle position={row.original} />,
+    accessorKey: "assets",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Type" />
+    ),
+    cell: ({}) => {
+      const num = Math.random();
+      return (
+        <div className=" text-xs font-medium uppercase text-muted-foreground">
+          {num > 0.5 ? "LIMIT" : "MARKET"}
+        </div>
+      );
+    },
+    accessorKey: "type",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Avg. Price" />
+    ),
+    cell: ({ row }) => <div>{formatUsd(row.original.unrealized_pnl)}</div>,
+    accessorKey: "entry_price",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Amount" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-xs font-medium leading-tight text-foreground">
+        {row.original.position_size} {row.original.assets}
+      </div>
+    ),
+
+    accessorKey: "amount",
+    enableSorting: false,
+  },
+
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Total" />
+    ),
+    cell: ({ row }) => (
+      <div>
+        <div className={"text-sm font-semibold leading-5 text-foreground"}>
+          {row.original.realized_pnl} <br />
+        </div>
+        <div className="text-[10px] uppercase leading-[10px]">Honey</div>
+      </div>
+    ),
+    accessorKey: "total",
+    enableSorting: true,
+  },
+];
+
+export const pnl_columns: ColumnDef<Position>[] = [
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Time" />
+    ),
+    cell: ({}) => {
+      const date = new Date();
+      return (
+        <div>
+          <div className="text-sm font-semibold leading-tight text-foreground ">
+            {date.toLocaleDateString()}
+          </div>
+          <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
+            {date.toLocaleTimeString()}
+          </div>
+        </div>
+      );
+    },
+    accessorKey: "time",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Market / Action" />
+    ),
+    cell: ({ row }) => <PositionTitle position={row.original} />,
+    accessorKey: "assets",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Entry Price" />
+    ),
+    cell: ({ row }) => <div>{formatUsd(row.original.current_price)}</div>,
+    accessorKey: "entry_price",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Exit Price" />
+    ),
+    cell: ({ row }) => <div>{formatUsd(row.original.current_price)}</div>,
+    accessorKey: "entry_price",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Size" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-xs font-medium leading-tight text-foreground">
+        {row.original.position_size} {row.original.assets}
+      </div>
+    ),
+
+    accessorKey: "position_size",
+    enableSorting: true,
+  },
+];
