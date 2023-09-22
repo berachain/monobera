@@ -1,5 +1,5 @@
-import { cloudinaryUrl } from "@bera/config";
 import Image from "next/image";
+import { cloudinaryUrl } from "@bera/config";
 
 export default function HoneyVault() {
   const content = [
@@ -16,18 +16,18 @@ export default function HoneyVault() {
     { title: "Vault APR%", value: "69,420%", subtitle: "In HONEY Yields" },
   ];
   return (
-    <div className="w-full rounded-xl border border-border p-8 bg-gradient-to-r from-[#180B01] to-[#3B220F] overflow-hidden relative">
-        <Image
-          src={`${cloudinaryUrl}/BERPS/ly3o2bc8rdjscoeqbe3w`}
-          alt="vault-bear"
-          width={300}
-          height={400}
-          className=" absolute -right-12 -bottom-[125px] z-0"
-        />
+    <div className="relative w-full overflow-hidden rounded-xl border border-border bg-gradient-to-r from-[#180B01] to-[#3B220F] p-8">
+      <Image
+        src={`${cloudinaryUrl}/BERPS/ly3o2bc8rdjscoeqbe3w`}
+        alt="vault-bear"
+        width={300}
+        height={400}
+        className=" absolute -bottom-[125px] -right-12 z-0"
+      />
       <div className="mb-8 text-3xl font-semibold leading-9">
         🍯 Honey Vault
       </div>
-      <div className="flex flex-col gap-4 sm:flex-row sm:gap-8 relative z-10">
+      <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:gap-8">
         {content.map((item, index) => (
           <div key={index}>
             <div className=" text-xs font-medium leading-tight text-muted-foreground">
