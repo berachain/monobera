@@ -424,4 +424,24 @@ export const pnl_columns: ColumnDef<Position>[] = [
     accessorKey: "position_size",
     enableSorting: true,
   },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="PnL" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="text-success-foreground">
+          <div className="text-sm font-semibold leading-tight ">
+            +
+            {formatUsd(row.original.position_size * row.original.current_price)}
+          </div>
+          <div className="mt-1 font-medium leading-tight text-[px]">
+            (6.69%)
+          </div>
+        </div>
+      );
+    },
+    accessorKey: "pnl",
+    enableSorting: true,
+  },
 ];

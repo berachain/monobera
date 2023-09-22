@@ -15,10 +15,15 @@ export default function Home() {
         </div>
         <GeneralInfoBanner />
       </div>
+      <span className="block lg:hidden">
+        <OrderChart />
+      </span>
       <div className="flex w-full flex-col lg:flex-row">
         <CreatePosition />
         <div className="h-full w-full pb-[34px] lg:w-screen-w-400">
-          <OrderChart />
+          <span className="hidden lg:block">
+            <OrderChart />
+          </span>
           <OrderHistory />
         </div>
       </div>{" "}

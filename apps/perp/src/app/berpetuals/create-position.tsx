@@ -27,7 +27,10 @@ export default function CreatePosition() {
 
   return (
     <div className="w-full flex-shrink-0 pb-10 lg:min-h-screen-250 lg:w-[400px] lg:border-r lg:border-border">
-      <LongShortTab />
+      <LongShortTab
+        value={form.orderType}
+        valueOnChange={(value) => setForm({ ...form, orderType: value })}
+      />
       <div className="w-full px-4 py-6">
         <Tabs
           defaultValue={form.optionType}

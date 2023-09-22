@@ -1,21 +1,16 @@
-import { useState } from "react";
 import { cn } from "@bera/ui";
 
 export function LongShortTab({
-  defaultValue = "long",
+  value = "long",
   valueOnChange,
 }: {
-  defaultValue?: "short" | "long";
+  value?: "short" | "long";
   valueOnChange?: (value: "short" | "long") => void;
 }) {
-  const [value, setValue] = useState<"short" | "long">(defaultValue);
   return (
     <div className="flex h-12 cursor-pointer bg-muted text-muted-foreground">
       <div
-        onClick={() => {
-          setValue("long");
-          valueOnChange?.("long");
-        }}
+        onClick={() => valueOnChange?.("long")}
         className={cn(
           "flex h-full w-1/2 flex-shrink-0 flex-grow-0 items-center justify-center border-b border-border hover:border-success-foreground",
           value === "long" &&
@@ -25,10 +20,7 @@ export function LongShortTab({
         Long
       </div>
       <div
-        onClick={() => {
-          setValue("short");
-          valueOnChange?.("short");
-        }}
+        onClick={() => valueOnChange?.("short")}
         className={cn(
           "flex h-full w-1/2 flex-shrink-0 flex-grow-0 items-center justify-center border-b border-border hover:border-destructive-foreground",
           value === "short" &&

@@ -54,7 +54,7 @@ export function PlaceOrder({ form }: { form: OrderType }) {
       </div>
       <Button
         className={cn(
-          "mt-4 hover:opacity-80",
+          "mt-4 capitalize hover:opacity-80",
           form.orderType === "long"
             ? "bg-success text-success-foreground"
             : "bg-destructive text-destructive-foreground",

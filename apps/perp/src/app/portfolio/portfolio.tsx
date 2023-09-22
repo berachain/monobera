@@ -52,7 +52,7 @@ export default function Portfolio() {
     <div className="flex flex-col gap-4 lg:flex-row">
       <UserGeneralInfo />
       <div className="flex w-full flex-col justify-between rounded-xl border border-border bg-muted px-4 py-6">
-        <div className="flex w-full justify-between">
+        <div className="flex w-full flex-col-reverse justify-between gap-9 sm:flex-row sm:gap-0">
           <div className="text-xl font-semibold leading-7">
             $6.9M
             <span className="ml-1 text-sm leading-tight text-success-foreground">
@@ -63,13 +63,14 @@ export default function Portfolio() {
             <Tabs
               defaultValue={tabType}
               onValueChange={(value) => setTabType(value as "Volume" | "PnL")}
+              className="w-full sm:w-fit"
             >
-              <TabsList>
+              <TabsList className="w-full sm:w-fit">
                 {["Volume", "PnL"].map((status) => (
                   <TabsTrigger
                     value={status}
                     key={status}
-                    className="flex-1 capitalize"
+                    className="w-full flex-1 capitalize sm:w-fit"
                     onClick={() => setTabType(status as "Volume" | "PnL")}
                   >
                     {status} <Tooltip text="tooltip text" />
