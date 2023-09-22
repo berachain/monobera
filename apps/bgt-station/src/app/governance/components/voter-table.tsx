@@ -152,7 +152,7 @@ export function VoterTable({
                 </div>
                 <div className="flex h-[56px] w-[100px] items-center justify-center text-xs font-medium leading-tight text-foreground">
                   {" "}
-                  {formatter.format(voter.delegation)}
+                  {formatter.format(voter.delegation)} BGT
                 </div>
               </div>
             ))

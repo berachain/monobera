@@ -21,7 +21,7 @@ export default function Uptime({ address }: { address: Address }) {
                 (data: { block: number; status: boolean }, index: number) => (
                   <Timeblock
                     key={index}
-                    text={`block: ${data.block}`}
+                    text={`Block: ${data.block}`}
                     blockDown={!data.status}
                   />
                 ),

@@ -475,7 +475,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             <Card className="p-4">
               <div className="flex flex-row items-center justify-between">
                 <div className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
-                  Total liquidity (TVL)
+                  TVL
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">

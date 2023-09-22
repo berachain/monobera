@@ -154,7 +154,6 @@ export function Footer() {
         <div className="mt-16 flex justify-between border-t border-border pt-8 sm:mt-20 lg:mt-24">
           <p className="text-xs leading-5 text-secondary-foreground">
             &copy; {new Date().getFullYear()} Berachain | All rights reserved
-            (not really)
           </p>
           <p className="text-xs">Made W/❤️ at the 🐻Beraden</p>
         </div>

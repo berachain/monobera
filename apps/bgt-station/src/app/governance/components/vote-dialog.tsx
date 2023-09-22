@@ -64,7 +64,12 @@ export function VoteDialog({
             </p>
           )}
           <p className="text-sm font-medium">
-            Voting Power <Tooltip text={"your voting power"} />
+            Voting Power{" "}
+            <Tooltip
+              text={
+                "Represents the influence in network governance based on amount delegated to this validator"
+              }
+            />
           </p>
         </div>
 

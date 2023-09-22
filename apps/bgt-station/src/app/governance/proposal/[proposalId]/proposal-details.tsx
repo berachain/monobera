@@ -126,7 +126,7 @@ export default function ProposalDetails({
             </div>
             <div className="mt-[-4px] flex items-center gap-0.5 text-sm font-medium leading-[14px] text-muted-foreground">
               Total votes
-              <Tooltip text="no" />
+              <Tooltip text="Total amount of BGT used to vote on this proposal" />
             </div>
           </Card>
           <VoteCard

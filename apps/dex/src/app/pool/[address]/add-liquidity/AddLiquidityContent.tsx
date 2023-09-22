@@ -176,7 +176,7 @@ export default function AddLiquidityContent({
               <TxnPreview
                 open={previewOpen}
                 disabled={isMultipleInputDisabled}
-                title={"Confirm LP Details"}
+                title={"Confirm LP Addition Details"}
                 imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
                 triggerText={"Preview"}
                 setOpen={setPreviewOpen}
@@ -283,7 +283,7 @@ export default function AddLiquidityContent({
                 open={singleTokenPreviewOpen}
                 setOpen={setSingleTokenSetPreviewOpen}
                 disabled={isSingleInputDisabled}
-                title={"Confirm LP Details"}
+                title={"Confirm LP Addition Details"}
                 imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
                 triggerText={"Preview"}
               >
@@ -302,9 +302,9 @@ export default function AddLiquidityContent({
                   will be converted and deposited with the following breakdown
                 </p>
                 <div className="flex w-full items-center justify-center">
-                  <Icons.chevronDown className="h-6 w-6 self-center text-muted-foreground" />
+                  <Icons.chevronsDown className="h-6 w-6 self-center text-muted-foreground" />
                 </div>
-                <TokenList className="bg-border">
+                <TokenList className="bg-muted">
                   {pool?.tokens.map((token) => {
                     const formattedAmount = burnShares
                       ? Number(

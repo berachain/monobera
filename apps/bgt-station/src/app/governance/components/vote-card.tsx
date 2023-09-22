@@ -37,7 +37,7 @@ export function VoteCard({
           {vetoPercentage ?? 0}%
         </div>
         <div className="flex items-center gap-0.5 text-center text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
-          No with veto
+          No With Veto
         </div>
       </div>
       <div className="flex flex-1 flex-col items-center gap-2 sm:w-[140px]">

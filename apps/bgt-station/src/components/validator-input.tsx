@@ -5,7 +5,7 @@ import {
   usePollAccountDelegations,
   usePollBgtBalance,
 } from "@bera/berajs";
-import { ValidatorIcon } from "@bera/shared-ui";
+import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { type Address } from "wagmi";
@@ -90,7 +90,12 @@ export default function ValidatorInput({
         Boolean(bgtDelegated) && (
           <div className="absolute bottom-3 right-4 h-3 text-[10px] text-muted-foreground">
             <div className="flex items-center gap-1">
-              <ValidatorIcon className="h-3 w-3" address={validatorAddress} />
+              {/* <ValidatorIcon className="h-6 w-6" address={validatorAddress} /> */}
+              <Tooltip
+                text="Amount of BGT delegated to this validator"
+                className="h-3 w-3"
+              />
+
               {bgtDelegated?.toString()}
               <span
                 className="underline hover:cursor-pointer"
