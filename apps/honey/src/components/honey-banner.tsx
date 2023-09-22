@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { cloudinaryUrl, dexUrl, lendUrl, perpsUrl } from "@bera/config";
+import { cloudinaryUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
 export default function HoneyBanner() {
@@ -27,47 +26,50 @@ export default function HoneyBanner() {
       <div className="col-span-1">
         <div className="rounded-xl bg-yellow-200 p-4 text-center">
           <h3 className="m-auto mb-4 w-[60px] text-sm text-yellow-900">
-            Lend HONEY on 🅱️end
+            Lend Honey on {process.env.NEXT_PUBLIC_LEND_NAME}{" "}
           </h3>
-          <Link
-            href={lendUrl}
-            target="_blank"
+          <div
+            onClick={() =>
+              window.open(process.env.NEXT_PUBLIC_LEND_URL, "_blank")
+            }
             className="inline-flex gap-2 rounded-full bg-yellow-600 px-4 py-2 text-sm text-white"
           >
             <Icons.helpingHand />
             Lend
-          </Link>
+          </div>
         </div>
       </div>
 
       <div className="col-span-1">
         <div className="rounded-xl bg-green-200 p-4 text-center">
           <h3 className="m-auto mb-4 w-[80px] text-sm text-green-900">
-            Add Liquidity to HONEY Pools
+            Add Liquidity to Earn BGT Rewards{" "}
           </h3>
-          <Link
-            href={`${dexUrl}/pool`}
-            target="_blank"
+          <div
+            onClick={() =>
+              window.open(process.env.NEXT_PUBLIC_DEX_URL + "/pool", "_blank")
+            }
             className="inline-flex gap-2 rounded-full bg-green-600 px-4 py-2 text-sm text-white"
           >
             <Icons.plus />
             Add
-          </Link>
+          </div>
         </div>
       </div>
       <div className="col-span-1">
         <div className="rounded-xl bg-red-200 p-4 text-center">
           <h3 className="m-auto mb-4 w-[86px] text-sm text-red-900">
-            Provide Collateral for 🅱️erbetuals
+            Provide Collateral for {process.env.NEXT_PUBLIC_PERPS_NAME}
           </h3>
-          <Link
-            href={perpsUrl}
-            target="_blank"
+          <div
+            onClick={() =>
+              window.open(process.env.NEXT_PUBLIC_PERPS_URL, "_blank")
+            }
             className="inline-flex gap-2 rounded-full bg-red-600 px-4 py-2 text-sm text-white"
           >
             <Icons.plus />
             Provide
-          </Link>
+          </div>
         </div>
       </div>
     </div>

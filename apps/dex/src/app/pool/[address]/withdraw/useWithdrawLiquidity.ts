@@ -94,14 +94,12 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
   const payload = [
     pool?.pool,
     account,
-    account,
     pool?.poolShareDenomHex,
     parseUnits(`${amount}`, 18),
   ];
 
   const singlePayload = [
     pool?.pool,
-    account,
     account,
     exactOutToken?.address,
     parseUnits(`${exactOutAmount}`, exactOutToken?.decimals ?? 18),

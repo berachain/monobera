@@ -63,10 +63,14 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Hide" />
+      <DataTableColumnHeader
+        column={column}
+        title="Hide"
+        className="w-full items-center text-center"
+      />
     ),
     cell: ({ row }) => (
-      <div className="w-[27px] text-center">{row.original.hide}</div>
+      <div className="flex w-full justify-center">{row.original.hide}</div>
     ),
     accessorKey: "hide",
     enableSorting: false,
@@ -76,7 +80,7 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
 export const unbonding_queue_columns: ColumnDef<UnbondingQueueColumns>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Pool or Address" />
+      <DataTableColumnHeader column={column} title="Validator" />
     ),
     cell: ({ row }) => {
       return (
@@ -95,7 +99,8 @@ export const unbonding_queue_columns: ColumnDef<UnbondingQueueColumns>[] = [
         <div className="w-[100px]">
           {formatter.format(
             Number(formatUnits(row.original.unbondingAmount, 18)),
-          )}
+          )}{" "}
+          BGT
         </div>
       );
     },

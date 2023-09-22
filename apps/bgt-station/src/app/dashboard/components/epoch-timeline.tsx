@@ -63,7 +63,7 @@ export function EpochTimeline() {
             <div className="flex-1">
               <div className="mb-1 flex justify-between text-xs font-medium text-muted-foreground">
                 <span>{progressPercentage.toFixed(0)}%</span>
-                <span>{currentEpoch ? duration : "0d"} till next epoch </span>
+                <span>{currentEpoch ? duration : "0d"} to next epoch </span>
               </div>
               <Progress className="h-2" value={progressPercentage} />
             </div>

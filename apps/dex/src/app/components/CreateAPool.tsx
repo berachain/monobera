@@ -43,9 +43,14 @@ export default function CreateAPool() {
         </div>
         <div className="relative z-20 pt-24 text-center">
           <h2 className=" mb-2 text-3xl font-semibold">Create a Pool</h2>
-          <h3 className="mb-6 text-base font-semibold text-muted-foreground md:text-xl">
-            Create your own custom recipe 🧑🏿‍🍳
+          <h3 className="mb-2 text-base font-semibold text-muted-foreground md:text-xl">
+            Create your own custom recipe 🍝
           </h3>
+          <div className="mb-12 mt-6 w-full text-center">
+            <Button onClick={() => router.push(`/pool/create`)}>
+              Learn More
+            </Button>
+          </div>
           <div className="relative mx-auto w-full max-w-[1000px]">
             <Avatar
               className={
@@ -108,11 +113,6 @@ export default function CreateAPool() {
             </Avatar>
             <WeRBack />
           </div>
-        </div>
-        <div className="mt-8 w-full text-center">
-          <Button variant="outline" onClick={() => router.push(`/pool/create`)}>
-            Create a Pool
-          </Button>
         </div>
       </div>
     </section>

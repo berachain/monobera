@@ -141,7 +141,7 @@ export default function WithdrawLiquidityContent({
                 </p>
                 <TokenInput
                   selected={{
-                    address: "0x599D8d33253361f1dc654e6f9C2813Bd392eC0d5",
+                    address: "",
                     symbol: pool?.poolName ?? "",
                     name: pool?.poolName ?? "",
                     decimals: 18,
@@ -152,6 +152,7 @@ export default function WithdrawLiquidityContent({
                   selectable={false}
                   amount={amount}
                   setAmount={setAmount}
+                  showExceeding={true}
                   onExceeding={setIsPoolTokenExceeding}
                 />
               </TokenList>
@@ -251,6 +252,7 @@ export default function WithdrawLiquidityContent({
                   hidePrice={true}
                   selectable={false}
                   amount={amount}
+                  showExceeding={true}
                   setAmount={handleSingleTokenWithdrawSharesIn}
                   onExceeding={setIsPoolTokenExceeding}
                 />

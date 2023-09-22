@@ -129,7 +129,6 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
           hide: (
             <Checkbox
               id={`dashboard-checkbox-${index}`}
-              className="mx-auto"
               disabled={
                 disableChecks &&
                 (filter[data.label] === undefined ||

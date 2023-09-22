@@ -30,7 +30,7 @@ export function CreatePoolInitialLiquidity({
           className="block h-6 w-6 hover:cursor-pointer"
           onClick={onBack}
         />{" "}
-        Set Initial Liquidity
+        Set initial liquidity
       </CardTitle>
       <div className="flex flex-col gap-4">
         <ul

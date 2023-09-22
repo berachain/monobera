@@ -23,6 +23,7 @@ const ApproveTokenButton = ({
   return (
     <Button
       className="w-full"
+      disabled={!token || isLoading}
       onClick={() => {
         write({
           address: token?.address as `0x${string}`,
