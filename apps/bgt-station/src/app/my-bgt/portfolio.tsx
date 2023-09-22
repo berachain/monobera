@@ -9,6 +9,7 @@ import {
   usePollTotalDelegated,
 } from "@bera/berajs";
 import { formatUsd } from "@bera/berajs/src/utils";
+import { blockExplorerUrl } from "@bera/config";
 import { TokenIconList, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -62,7 +63,16 @@ export default function Portfolio() {
     <div className="container mb-[80px] max-w-[1078px]">
       {ModalPortal}
       <div className="mb-8 flex h-[100px] items-center justify-center text-3xl font-bold leading-[48px] text-foreground md:text-5xl">
-        👋 Hey {truncateHash(account ?? "0x", 6)} you have...
+        👋 Hey{" "}
+        <span
+          onClick={() => {
+            window.open(blockExplorerUrl + "/address/" + account, "_blank");
+          }}
+          className="mx-2 cursor-pointer hover:underline"
+        >
+          {truncateHash(account ?? "0x", 6)}
+        </span>{" "}
+        you have...
       </div>
       <div className="flex flex-col gap-8 md:flex-row">
         <YellowCard

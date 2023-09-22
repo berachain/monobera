@@ -25,6 +25,7 @@ export const usePollUserDepositedPools = (endpoint: string) => {
       try {
         const response = await fetch(endpoint);
         const temp = await response.json();
+        if (!temp) return false;
         const pool = temp;
 
         const shareDenomArray: Address[] = pool.map(
@@ -45,8 +46,6 @@ export const usePollUserDepositedPools = (endpoint: string) => {
             .multicallAddress as Address,
         });
 
-        console.log("RES", result);
-        console.log();
         const deposited = pool.map((pool: any, i: number) => {
           const formattedUserDeposited = formatUnits(
             (result[i]?.result as unknown as bigint) ?? 0n,

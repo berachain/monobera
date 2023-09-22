@@ -15,7 +15,7 @@ export default function Help() {
           <span className="hidden md:inline">Dex For You</span>
         </h2>
         <h3 className="text-base font-semibold text-muted-foreground md:text-xl">
-          Give us feedback now! And get whitelisted as a power user
+          Give us feedback now!
         </h3>
       </div>
       <div className="grid grid-cols-1 gap-8  lg:grid-cols-2">

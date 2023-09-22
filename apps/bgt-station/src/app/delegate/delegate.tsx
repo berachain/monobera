@@ -59,7 +59,10 @@ export default function Delegate({
   );
   const bgtDelegated = useSelectedAccountDelegation();
 
-  const isBadRedelegate = validator === redelegateValidator;
+  const isBadRedelegate =
+    validator === redelegateValidator &&
+    (redelegateValidator as string) !== "" &&
+    (validator as string) !== "";
   const getExceeding = () => {
     if (activeAction === DelegateEnum.DELEGATE) {
       return Number(amount) > Number(bgtBalance);
@@ -192,7 +195,7 @@ export default function Delegate({
               : "Insufficient BGT delegated"}
           </Alert>
         )}
-        {isBadRedelegate && (
+        {isBadRedelegate && action === DelegateEnum.REDELEGATE && (
           <Alert variant="destructive">
             Cannot redelegate to the same validator
           </Alert>

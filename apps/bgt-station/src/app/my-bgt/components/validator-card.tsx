@@ -54,7 +54,7 @@ export default function ValidatorCard({
       title: (
         <div>
           BGT Delegated{" "}
-          <Tooltip text="amount of BGT that you delegated to this validator." />
+          <Tooltip text="Amount of BGT that you delegated to this validator." />
         </div>
       ),
       value: `${Number(userDelegated ?? 0).toFixed(2)}`,
@@ -63,7 +63,7 @@ export default function ValidatorCard({
       title: (
         <div>
           Voting power{" "}
-          <Tooltip text="represents a delegator's influence in validator decisions." />
+          <Tooltip text="Represents the influence in network governance based on amount delegated to this validator" />
         </div>
       ),
       value: `${percentageDelegated?.toFixed(2) ?? 0}%`,
@@ -72,7 +72,7 @@ export default function ValidatorCard({
       title: (
         <div>
           Commision{" "}
-          <Tooltip text="amount of validator rewards retained by this validator." />
+          <Tooltip text="Amount of validator rewards retained by this validator" />
         </div>
       ),
       value: `${(
@@ -82,7 +82,7 @@ export default function ValidatorCard({
     {
       title: (
         <div>
-          vAPY <Tooltip text="projected measure of potential yearly earnings" />
+          vAPY <Tooltip text="Projected yearly rewards" />
         </div>
       ),
       value: `${Number(validator.vApy).toFixed(2)}%`,
@@ -91,7 +91,7 @@ export default function ValidatorCard({
       title: (
         <div>
           Bribes Earned{" "}
-          <Tooltip text="total bribes earned from delegating to this validator" />
+          <Tooltip text="Total amount of bribes accrued from this validator" />
         </div>
       ),
       value: `${formatUsd(bribeTotal ?? 0)}`,

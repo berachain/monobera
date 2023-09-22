@@ -2,12 +2,12 @@ import { type NetworkConfig } from "@bera/berajs";
 import {
   bankAddress,
   berachefAddress,
-  bgtName,
-  bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
   chainId,
   chainName,
+  dexName,
+  dexUrl,
   epochsAddress,
   erc20BgtAddress,
   erc20BribeModule,
@@ -62,23 +62,24 @@ export const navItems = [
       {
         href: homepageUrl,
         title: homepageName,
-        blurb: "The homepage of the chain",
+        blurb: "Explore Berachain and learn more about our vision",
       },
       {
         href: honeyUrl,
         title: honeyName,
-        blurb: "Mint or redeem the stablecoin of the Berachain",
+        blurb: "Mint or redeem Honey, the stablecoin of Berachain",
       },
       {
-        href: bgtUrl,
-        title: bgtName,
-        blurb: "The hub for the governance token of Berachain, BGT",
+        href: dexUrl,
+        title: dexName,
+        blurb: "Swap tokens and provide liquidity to earn BGT rewards",
       },
       {
         href: blockExplorerUrl,
         type: "external",
         title: blockExplorerName,
-        blurb: "View all transactions in the Berachain network",
+        blurb:
+          "View all transactions and blockchain information on the Berachain network",
       },
       {
         href: lendUrl,
