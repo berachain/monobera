@@ -82,7 +82,6 @@ export default function AddLiquidityContent({
 
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
-    disableToast: true,
     onSuccess: () => {
       reset();
     },

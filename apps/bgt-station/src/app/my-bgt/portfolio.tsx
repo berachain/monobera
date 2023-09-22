@@ -53,7 +53,6 @@ export default function Portfolio() {
   const bribes = useBribes();
   const { write, isLoading, ModalPortal } = useTxn({
     message: `Claiming all bribes`,
-    disableToast: true,
     onSuccess: () => {
       setOpen(false);
     },

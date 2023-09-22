@@ -77,7 +77,9 @@ export const ErrorToast = ({ title = "Error", onClose }: IToast) => {
       <BaseToast
         title={title}
         onClose={onClose}
-        startAdornment={<Icons.userX className="h-6 w-6 text-destructive" />}
+        startAdornment={
+          <Icons.userX className="h-6 w-6 text-destructive-foreground" />
+        }
       />
     );
   }
@@ -86,7 +88,9 @@ export const ErrorToast = ({ title = "Error", onClose }: IToast) => {
     <BaseToast
       title={title}
       onClose={onClose}
-      startAdornment={<Icons.XOctagon className="h-6 w-6 text-destructive" />}
+      startAdornment={
+        <Icons.XOctagon className="h-6 w-6 text-destructive-foreground" />
+      }
       // href={
       //   hash
       //     ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
