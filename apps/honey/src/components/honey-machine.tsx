@@ -203,7 +203,7 @@ export function HoneyMachine() {
   useEffect(() => {
     if (rive) {
       rive.on(EventType.StateChange, (event: any) => {
-        // console.log(event.data, event.eventType, needsApproval);
+        console.log(event.data, event.eventType, needsApproval);
         if (event.data[0] === "wallet") {
           if (needsApproval) {
             // console.log("approval");
@@ -228,16 +228,17 @@ export function HoneyMachine() {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
       const enterAmount = isMint ? payload[2] : payload[1];
+      console.log(allowance?.allowance, enterAmount);
       if (
         allowance &&
-        allowance.allowance &&
-        allowance.allowance < enterAmount
+        // allowance.allowance &&
+        needsApproval
       ) {
         write({
           address: selectedFrom?.address as `0x${string}`,
           abi: erc20ABI as unknown as (typeof erc20ABI)[],
           functionName: "approve",
-          params: [erc20HoneyAddress, 1000000000000000000n],
+          params: [erc20HoneyAddress, 1000000000000000000000000000n],
         });
       } else {
         rejectAction?.fire();

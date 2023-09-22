@@ -59,7 +59,12 @@ export default function Delegate({
   );
   const bgtDelegated = useSelectedAccountDelegation();
 
-  const isBadRedelegate = validator === redelegateValidator && (validator as string)!=="" && (redelegateValidator as string)!=="";
+  console.log("vally", validator);
+  console.log("revally", redelegateValidator);
+  const isBadRedelegate =
+    validator === redelegateValidator &&
+    (validator as string) !== undefined &&
+    (redelegateValidator as string) !== undefined;
   const getExceeding = () => {
     if (activeAction === DelegateEnum.DELEGATE) {
       return Number(amount) > Number(bgtBalance);
