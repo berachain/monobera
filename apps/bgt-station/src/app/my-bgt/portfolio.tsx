@@ -56,6 +56,9 @@ export default function Portfolio() {
     onSuccess: () => {
       setOpen(false);
     },
+    onError: (e) => {
+      console.log(e);
+    }
   });
 
   return (
