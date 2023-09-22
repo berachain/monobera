@@ -62,16 +62,11 @@ export default function HoneyPage({
   }, [mode]);
 
   return (
-    <div
-      className={cn(
-        "pt-[72px] honey:pt-[112px]",
-        arcade ? "bg-[#468DCB] font-honey" : "",
-      )}
-    >
-      <div className="absolute top-0 hidden h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline honey:block">
+    <div className={cn("pt-[72px]", arcade ? "bg-[#468DCB] font-honey" : "")}>
+      <div className="hidden h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline honey:block">
         {arcade ? (
           <div onClick={() => router.push("/?mode=pro")} className="font-honey">
-            🍯 Enter Pro Mode
+            🍯 Enter Simple Mode
           </div>
         ) : (
           <div
