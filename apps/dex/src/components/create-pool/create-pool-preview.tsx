@@ -42,7 +42,6 @@ export function CreatePoolPreview({
 
   const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
-    disableToast: true,
     onSuccess: () => {
       router.push(`/pool`);
     },

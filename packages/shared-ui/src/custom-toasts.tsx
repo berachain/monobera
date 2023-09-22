@@ -31,10 +31,10 @@ const BaseToast = ({
   return (
     <div
       className={cn(
-        "z-[100] flex h-14 flex-row items-center justify-between rounded-md p-4  text-white shadow	",
+        "z-50 flex h-14 flex-row items-center justify-between rounded-md  p-4 text-white shadow",
         className,
       )}
-      style={{ width: "350px", background: "#292524" }} // i dont know why this is needed, but we ball 🤮
+      style={{ width: "350px", background: "#292524", zIndex: 500 }} // i dont know why this is needed, but we ball 🤮
     >
       <div className="flex flex-row items-center gap-2 text-sm font-semibold text-white">
         {startAdornment && startAdornment}
@@ -77,7 +77,9 @@ export const ErrorToast = ({ title = "Error", onClose }: IToast) => {
       <BaseToast
         title={title}
         onClose={onClose}
-        startAdornment={<Icons.userX className="h-6 w-6 text-destructive" />}
+        startAdornment={
+          <Icons.userX className="h-6 w-6 text-destructive-foreground" />
+        }
       />
     );
   }
@@ -86,7 +88,9 @@ export const ErrorToast = ({ title = "Error", onClose }: IToast) => {
     <BaseToast
       title={title}
       onClose={onClose}
-      startAdornment={<Icons.XOctagon className="h-6 w-6 text-destructive" />}
+      startAdornment={
+        <Icons.XOctagon className="h-6 w-6 text-destructive-foreground" />
+      }
       // href={
       //   hash
       //     ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`

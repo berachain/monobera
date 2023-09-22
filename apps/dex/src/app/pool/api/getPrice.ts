@@ -335,6 +335,7 @@ export const getWBeraPriceDictForPoolTokens = async (
           ];
 
         let poolApy = 0;
+        console.log("BGT PRICE", bgtPrice);
         if (cuttingBoard && bgtPrice) {
           const totalCuttingBoardValue =
             Number(cuttingBoard.amount) * Number(bgtPrice);

@@ -36,12 +36,14 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       >
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+            <div className="z-[100]">
+              <Toaster position="bottom-right" />
+            </div>
             <div className="z-10 flex-1">
               <Header navItems={navItems} />
               <main className="min-h-screen w-full py-20">
                 {props.children}
               </main>
-              <Toaster position="bottom-right" />
               <Footer />
             </div>
 

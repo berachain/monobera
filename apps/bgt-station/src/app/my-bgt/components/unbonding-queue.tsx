@@ -59,7 +59,6 @@ export default function UnbondingQueue({
   const { networkConfig } = useBeraConfig();
   const { write, ModalPortal } = useTxn({
     message: `Cancel Unbonding`,
-    disableToast: true,
     onSuccess: () => {
       void mutate(QUERY_KEY);
     },

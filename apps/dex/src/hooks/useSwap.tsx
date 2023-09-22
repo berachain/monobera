@@ -106,9 +106,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const deadlineValue = useReadLocalStorage(LOCAL_STORAGE_KEYS.DEADLINE_VALUE);
 
-  const [fromAmount, setFromAmount] = useState(0);
+  const [fromAmount, setFromAmount] = useState<number | undefined>();
 
-  const [toAmount, setToAmount] = useState(0);
+  const [toAmount, setToAmount] = useState<number | undefined>();
 
   const [swapAmount, setSwapAmount] = useState(0);
 
@@ -168,6 +168,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       return true;
     return false;
   };
+
+  console.log("is wrap", isWrap);
+  console.log("selected to", selectedTo);
+  console.log("selected from", selectedFrom);
   useEffect(() => {
     if (
       selectedTo !== undefined &&
@@ -287,7 +291,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
       if (swapKind === SwapKind.GIVEN_OUT) {
         swapInfo.batchSwapSteps[0]!.amountIn = parseUnits(
-          `${fromAmount}`,
+          `${fromAmount ?? 0}`,
           selectedTo?.decimals ?? 18,
         );
       }
@@ -312,10 +316,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
     if (swapKind === SwapKind.GIVEN_IN) {
       setSwapKind(SwapKind.GIVEN_OUT);
-      setSwapAmount(fromAmount);
+      setSwapAmount(fromAmount ?? 0);
     } else {
       setSwapKind(SwapKind.GIVEN_IN);
-      setSwapAmount(toAmount);
+      setSwapAmount(toAmount ?? 0);
     }
 
     if (isWrap) {
