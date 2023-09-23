@@ -33,16 +33,16 @@ import { type Chain } from "wagmi";
 
 export const navItems = [
   {
-    href: "/markets",
-    title: "Markets",
+    href: "/berpetuals",
+    title: "Berpetuals",
   },
   {
     href: "/portfolio",
     title: "Portfolio",
   },
   {
-    href: "/berpetuals",
-    title: "Berpetuals",
+    href: "/markets",
+    title: "Markets",
   },
   {
     href: "/vault",

@@ -181,7 +181,7 @@ function PositionGrid() {
   );
 }
 
-export default function Positions() {
+export default function Positions({ showBtn = false }: { showBtn?: boolean }) {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="md:leading-14 px-8 text-center text-3xl font-extrabold leading-9 tracking-tight text-foreground md:text-5xl">
@@ -197,9 +197,11 @@ export default function Positions() {
       </div>
 
       <PositionGrid />
-      <Link className="mt-8 flex justify-center" href="/markets">
-        <Button variant="secondary">View All Markets</Button>
-      </Link>
+      {showBtn && (
+        <Link className="mt-8 flex justify-center" href="/markets">
+          <Button variant="secondary">View All Markets</Button>
+        </Link>
+      )}
     </section>
   );
 }

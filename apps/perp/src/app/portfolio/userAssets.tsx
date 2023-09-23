@@ -132,12 +132,21 @@ function AsesetCard({ position }: { position: Position }) {
       </div>
 
       <div className="flex w-[74px] gap-1">
-        <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-border bg-muted">
-          <Icons.penSquare className="h-4 h-4 text-foreground" />
-        </div>
-        <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-border bg-muted">
-          <Icons.close className="-ml-[2px] h-4 w-4 text-destructive-foreground" />
-        </div>
+        <UpdatePositionModal
+          trigger={
+            <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-border bg-muted">
+              <Icons.penSquare className="h-4 h-4 text-foreground" />
+            </div>
+          }
+        />
+        <ClosePositionModal
+          className="w-full"
+          trigger={
+            <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-border bg-muted">
+              <Icons.close className="-ml-[2px] h-4 w-4 text-destructive-foreground" />
+            </div>
+          }
+        />
       </div>
     </div>
   );

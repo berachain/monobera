@@ -23,7 +23,7 @@ export default function Home() {
       <div className="relative z-10 flex flex-col gap-[128px] bg-lend bg-contain bg-no-repeat pb-[72px] pt-20 md:pt-[116px] lg:pt-[140px]">
         <Hero />
         <GeneralInfo />
-        <Markets />
+        <Markets showBtn />
         <Tutorial />
         <Help />
       </div>
