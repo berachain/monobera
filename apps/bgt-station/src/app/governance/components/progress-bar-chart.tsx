@@ -13,7 +13,6 @@ interface IProgressBarProps {
 }
 
 export function ProgressBarChart({ dataList, labelList }: IProgressBarProps) {
-  console.log("dataList", dataList);
   return (
     <div>
       <div className="relative h-[25px]">

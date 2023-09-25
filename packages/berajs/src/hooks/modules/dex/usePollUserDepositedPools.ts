@@ -60,12 +60,10 @@ export const usePollUserDepositedPools = (endpoint: string) => {
           };
         });
 
-        console.log("DEPOSITED", deposited);
         const filteredDeposted = deposited.filter(
           (pool: any) => pool.userDepositedShares !== 0,
         );
 
-        console.log("FILTERED", filteredDeposted);
         return filteredDeposted;
       } catch (e) {
         console.log(e);

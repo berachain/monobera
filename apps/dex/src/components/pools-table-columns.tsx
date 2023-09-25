@@ -52,7 +52,6 @@ export const columns: ColumnDef<Pool>[] = [
       <DataTableColumnHeader column={column} title="BGT Rewards" />
     ),
     cell: ({ row }) => {
-      console.log(row, row.original);
       return (
         <div className="flex w-[160px] items-center">
           {" "}

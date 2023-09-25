@@ -48,9 +48,6 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
             isMounted,
             chain?.unsupported,
           );
-          console.log(
-            !evmError && account && isMounted && chain?.unsupported === false,
-          );
           return (
             !evmError && account && isMounted && chain?.unsupported === false
           );

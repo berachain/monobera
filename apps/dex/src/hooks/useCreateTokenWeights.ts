@@ -97,7 +97,6 @@ const useCreateTokenWeights = () => {
     const isInvalidInitialLiquidity =
       step === 2 && !tokenWeights.every((item) => item.initialLiquidity !== 0);
 
-    console.log("isInvalidInitialLiquidity", tokens);
     const isInitialLiquidityExceedingBalance =
       step === 2 &&
       tokenWeights.some((item) => {
@@ -112,10 +111,6 @@ const useCreateTokenWeights = () => {
       });
     const isInvalidSwapFee = (step === 1 && swapFee > 100) || swapFee < 0;
 
-    console.log(
-      "isInitialLiquidityExceedingBalance",
-      isInitialLiquidityExceedingBalance,
-    );
     if (hasZeroWeight) {
       setError(new InvalidInputError("Weight cannot be 0"));
     } else if (isInvalidTotalWeight) {
