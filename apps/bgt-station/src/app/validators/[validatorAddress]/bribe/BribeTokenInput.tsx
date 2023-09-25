@@ -33,7 +33,6 @@ export default function BribeTokenInput({
   selectable = true,
 }: Props) {
   const [focused, setFocused] = React.useState(false);
-  // console.log(tokenBribe);
   const handleTokenSelection = (token: Token) => {
     onTokenSelection(token, index);
   };

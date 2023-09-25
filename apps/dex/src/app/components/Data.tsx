@@ -19,7 +19,6 @@ export function DataCard({
   value: string;
   isLoading?: boolean;
 }) {
-  console.log("DATA CARD VALUE", title, "reeee", value);
   return (
     <div className="flex w-full flex-col rounded-2xl border bg-background p-4 md:p-6">
       <div className="flex items-center gap-2 text-xs md:text-sm">
@@ -38,23 +37,18 @@ export function DataCard({
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
   const { usePrice, usePrices, isLoading } = usePollPrices();
 
-  console.log("TVL", tvl);
-  console.log("VOLUME", volume);
   const prices = usePrices();
 
-  console.log("I AM GETTING PRICES", prices);
   const tvlValue = useMemo(() => {
     if (!prices || !tvl || !tvl[0]) return 0;
     return sumPrices(prices, tvl[0].data);
   }, [tvl, prices]);
 
-  console.log(prices, tvlValue);
   const volumeValue = useMemo(() => {
     if (!prices || !volume || !volume[0]) return 0;
     return sumPrices(prices, volume[0].data);
   }, [volume, prices]);
 
-  console.log(volumeValue, tvlValue, prices);
   const block = useLatestBlock();
   const beraPrice = usePrice(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
   const isDataReady = useMemo(() => {

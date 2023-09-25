@@ -9,7 +9,6 @@ import Help from "./components/Help";
 import Hero from "./components/Hero";
 
 const getTvl = async () => {
-  console.log(`${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
   );
@@ -24,9 +23,6 @@ const getTvl = async () => {
 };
 
 const getVolume = async () => {
-  console.log(
-    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
-  );
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
   );
@@ -57,8 +53,6 @@ export default async function Homepage() {
         volume: volume,
       }),
     );
-    console.log("TVL VOLUME:", data?.tvl);
-    console.log("SERVER VOLUME:", data?.volume);
     return (
       <div className="container max-w-[1200px]">
         <Hero />

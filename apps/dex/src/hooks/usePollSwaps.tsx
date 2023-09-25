@@ -34,7 +34,7 @@ export const usePollSwaps = ({
         );
         return result;
       } catch (e) {
-        console.log(e);
+        // console.log(e);
         // TODO: throws so many errors but this is good 4 debug
         // console.error(e);
         return undefined;

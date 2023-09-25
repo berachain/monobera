@@ -328,14 +328,12 @@ export const getWBeraPriceDictForPoolTokens = async (
           (board) => board.address.toLowerCase() === pool.pool.toLowerCase(),
         );
 
-        console.log("LOOKING FOR", cuttingBoard);
         const bgtPrice =
           mappedTokens[
             getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
           ];
 
         let poolApy = 0;
-        console.log("BGT PRICE", bgtPrice);
         if (cuttingBoard && bgtPrice) {
           const totalCuttingBoardValue =
             Number(cuttingBoard.amount) * Number(bgtPrice);

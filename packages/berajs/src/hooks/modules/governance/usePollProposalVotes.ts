@@ -94,8 +94,6 @@ export const usePollProposalVotes = (proposalId: number) => {
         .multicallAddress as Address,
     });
 
-    console.log(voterDelegations);
-
     delegatedPaths.forEach((path, index) => {
       const delegation =
         (voterDelegations[index]?.result as unknown as bigint) ?? 0n;
