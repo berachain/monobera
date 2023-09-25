@@ -57,7 +57,6 @@ const getHealthyRpc: any = async (rpcUrls: string[], depth: number) => {
     }
     return "";
   } catch (err) {
-    console.log(`${depth} RPC failed, trying different endpoint`);
     if (depth < rpcUrls.length) {
       return getHealthyRpc(rpcUrls, depth + 1);
     }

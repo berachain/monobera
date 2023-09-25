@@ -40,7 +40,6 @@ export function CreatePoolFeeData({
   const handleFeeChange = (value: string) => {
     setSwapFee(Number(value));
   };
-  console.log("swapFee", swapFee);
   return (
     <Card className="w-[350px]  px-6 py-8 shadow-lg  sm:w-[480px]">
       <CardTitle className="center text-md mb-3 flex items-center p-0 font-semibold sm:text-lg">

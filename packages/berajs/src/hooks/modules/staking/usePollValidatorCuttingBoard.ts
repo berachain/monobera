@@ -18,7 +18,6 @@ export const usePollValidatorCuttingBoard = (
       );
       const temp = await response.json();
       const cuttingBoard = temp;
-      console.log(cuttingBoard);
       return cuttingBoard.result[0].weights.sort(
         (a: { percentage: string }, b: { percentage: string }) =>
           parseFloat(b.percentage) - parseFloat(a.percentage),

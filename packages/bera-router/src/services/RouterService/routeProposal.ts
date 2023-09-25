@@ -135,7 +135,6 @@ export function parseNewPool(pool: Pool): WeightedPool | undefined {
   try {
     newPool = WeightedPool.fromPool(pool);
   } catch (err: any) {
-    console.log("Error parsing pool", err);
     return undefined;
   }
   return newPool as WeightedPool;
