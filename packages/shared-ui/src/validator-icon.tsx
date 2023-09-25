@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { useValidators } from "@bera/berajs";
 import { cn } from "@bera/ui";

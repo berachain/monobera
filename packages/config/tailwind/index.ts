@@ -38,6 +38,10 @@ export default {
       },
       minHeight: {
         minimun: "calc(100vh - 587px)",
+        "screen-250": "calc(100vh - 214px)",
+      },
+      width: {
+        "screen-w-400": "calc(100vw - 400px)",
       },
       backgroundImage: {
         glow: "url('/glow.png')",
@@ -50,6 +54,7 @@ export default {
       },
       boxShadow: {
         "dark-shadow": "0px 12px 250px 0px #A571239E",
+        "light-shadow": "0px 12px 250px 0px #FFE1C91A",
       },
       colors: {
         hover: "hsl(var(--hover) / <alpha-value>)",
