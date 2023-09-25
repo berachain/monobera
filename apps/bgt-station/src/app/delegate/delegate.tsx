@@ -41,7 +41,7 @@ export default function Delegate({
   const { theme, systemTheme } = useTheme();
   const t = theme === "system" ? systemTheme : theme;
   const router = useRouter();
-  const [amount, setAmount] = React.useState("0.0");
+  const [amount, setAmount] = React.useState<number | undefined>(undefined);
   const [activeAction, setActiveAction] = React.useState<DelegateEnum>(action);
   const { networkConfig } = useBeraConfig();
 
@@ -59,6 +59,12 @@ export default function Delegate({
   );
   const bgtDelegated = useSelectedAccountDelegation();
 
+  console.log("vally", validator);
+  console.log("revally", redelegateValidator);
+  const isBadRedelegate =
+    validator === redelegateValidator &&
+    (validator as string) !== undefined &&
+    (redelegateValidator as string) !== undefined;
   const getExceeding = () => {
     if (activeAction === DelegateEnum.DELEGATE) {
       return Number(amount) > Number(bgtBalance);
@@ -73,17 +79,26 @@ export default function Delegate({
 
   const getDisabled = () => {
     if (activeAction === DelegateEnum.DELEGATE) {
-      return Number(amount) > Number(bgtBalance) || amount === "0.0";
+      return (
+        Number(amount) > Number(bgtBalance) ||
+        amount === undefined ||
+        amount === 0
+      );
     }
     if (activeAction === DelegateEnum.REDELEGATE) {
       return (
         Number(amount) > Number(bgtDelegated) ||
         !redelegateValidator ||
-        amount === "0.0"
+        amount === undefined ||
+        amount === 0
       );
     }
     if (activeAction === DelegateEnum.UNBOND) {
-      return Number(amount) > Number(bgtDelegated) || amount === "0.0";
+      return (
+        Number(amount) > Number(bgtDelegated) ||
+        amount === undefined ||
+        amount === 0
+      );
     }
   };
   const {
@@ -110,7 +125,7 @@ export default function Delegate({
     message: "Redelegating BGT",
   });
 
-  const { useBgtBalance } = usePollBgtBalance();
+  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const bgtBalance = useBgtBalance();
 
   return (
@@ -184,11 +199,16 @@ export default function Delegate({
             />
           </>
         )}
-        {getExceeding() && isConnected && (
+        {getExceeding() && isConnected && !isBalanceLoading && (
           <Alert variant="destructive">
             {activeAction === DelegateEnum.DELEGATE
               ? `This amount exceeds your total balance of ${bgtBalance} BGT`
               : "Insufficient BGT delegated"}
+          </Alert>
+        )}
+        {isBadRedelegate && (
+          <Alert variant="destructive">
+            Cannot redelegate to the same validator
           </Alert>
         )}
         <ActionButton>
@@ -199,7 +219,8 @@ export default function Delegate({
               isDelegatingLoading || // delegate action processing
               isUnbondLoading || // unbond action processing
               isRedelegateLoading || // redelegate action processing
-              getDisabled()
+              getDisabled() ||
+              isBadRedelegate
             }
             onClick={() => {
               switch (action) {

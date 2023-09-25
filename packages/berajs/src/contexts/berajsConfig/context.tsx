@@ -4,17 +4,12 @@ import React, { createContext, type PropsWithChildren } from "react";
 import {
   RainbowKitProvider,
   connectorsForWallets,
-  lightTheme,
-  darkTheme as rainbowDarkTheme,
+  getDefaultWallets,
 } from "@rainbow-me/rainbowkit";
 import {
-  coinbaseWallet,
-  injectedWallet,
-  metaMaskWallet,
-  phantomWallet,
-  rainbowWallet,
-  safeWallet,
-  walletConnectWallet,
+  argentWallet,
+  ledgerWallet,
+  trustWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
@@ -44,7 +39,6 @@ const BeraConfig: React.FC<IBeraConfig> = ({
   children,
   networkConfig = defaultBeraConfig,
   autoConnect = false,
-  darkTheme = false,
 }) => {
   const { chains, publicClient } = configureChains(
     [networkConfig.chain],
@@ -55,39 +49,42 @@ const BeraConfig: React.FC<IBeraConfig> = ({
     ],
   );
 
-  const appInfo = {
-    appName: "BeraJS",
-  };
-  const projectId = "a65a5eaa1bd1e749813cb6cafeac059a";
+  const projectId = "berachain";
+  const { wallets } = getDefaultWallets({
+    appName: "My RainbowKit App",
+    projectId,
+    chains,
+  });
   const connectors = connectorsForWallets([
+    ...wallets,
     {
       groupName: "Recommended",
       wallets: [
-        injectedWallet({ chains }),
-        metaMaskWallet({ chains, projectId }),
-        coinbaseWallet({ chains, appName: appInfo.appName }),
-        walletConnectWallet({ projectId, chains }),
-        phantomWallet({ chains }),
-        rainbowWallet({ projectId, chains }),
-        safeWallet({ chains }),
+        argentWallet({ projectId, chains }),
+        trustWallet({ projectId, chains }),
+        ledgerWallet({ projectId, chains }),
       ],
     },
   ]);
 
-  // TODO make this configurable
+  // // TODO make this configurable
+  // const config = createConfig({
+  //   autoConnect,
+  //   connectors,
+  //   publicClient,
+  // });
+
   const config = createConfig({
-    autoConnect,
-    connectors,
+    autoConnect: autoConnect,
+    connectors: connectors,
     publicClient,
   });
-
   return (
     <BeraConfigContext.Provider value={{ networkConfig, autoConnect }}>
       <WagmiConfig config={config}>
         <RainbowKitProvider
-          appInfo={appInfo}
           chains={chains}
-          theme={darkTheme ? rainbowDarkTheme() : lightTheme()}
+          // theme={darkTheme ? rainbowDarkTheme() : lightTheme()}
         >
           <BeraJsProvider>
             <TransactionStoreProvider>{children}</TransactionStoreProvider>

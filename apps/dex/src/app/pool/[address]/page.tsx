@@ -19,7 +19,9 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export const fetchCache = "force-no-store";
+// export const fetchCache = "force-no-store";
+
+export const revalidate = 60;
 
 async function getGlobalCuttingBoard() {
   try {

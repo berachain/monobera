@@ -189,7 +189,6 @@ export const getWBeraPriceDictForPoolTokens = async (
           pool.pool,
         )}&num_of_days=90`,
         {
-          cache: "force-cache",
           next: {
             revalidate: 60,
           },
@@ -201,7 +200,6 @@ export const getWBeraPriceDictForPoolTokens = async (
           process.env.NEXT_PUBLIC_ANALYTICS
         }/analytics/tvldaily?pool=${getAddress(pool.pool)}&num_of_days=90`,
         {
-          cache: "force-cache",
           next: {
             revalidate: 60,
           },

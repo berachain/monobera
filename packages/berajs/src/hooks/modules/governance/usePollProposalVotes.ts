@@ -39,7 +39,7 @@ export const usePollProposalVotes = (proposalId: number) => {
     );
     const result: any[] = await temp.json().then((res) => res.result);
 
-    console.log("VOTRES", result);
+    if (!result) return false;
     const resultObj: Record<string, unknown> = {};
 
     result.forEach((item) => {
@@ -93,8 +93,6 @@ export const usePollProposalVotes = (proposalId: number) => {
       multicallAddress: networkConfig.precompileAddresses
         .multicallAddress as Address,
     });
-
-    console.log(voterDelegations);
 
     delegatedPaths.forEach((path, index) => {
       const delegation =

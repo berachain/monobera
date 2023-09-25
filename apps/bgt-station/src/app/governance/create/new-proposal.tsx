@@ -15,6 +15,7 @@ import {
   governanceMinDeposit,
 } from "@bera/config";
 import { ActionButton, Tooltip, useTxn } from "@bera/shared-ui";
+import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import {
@@ -50,7 +51,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const { isReady } = useBeraJs();
   const triggerRef = useRef<HTMLDivElement>(null);
   const [_contentWidth, setContentWidth] = useState("w-[450px]");
-  const { useBgtBalance } = usePollBgtBalance();
+  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   const minDeposit = governanceMinDeposit;
   useEffect(() => {
@@ -124,6 +125,14 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       }),
   });
 
+  const ProposalTypeInformationEnum = {
+    [ProposalTypeEnum.GAUGE_PROPOSAL]:
+      "New gauge proposal will propose a new gauge be whitelisted to receive BGT rewards.",
+    [ProposalTypeEnum.COLLATERAL_PROPOSAL]:
+      "New collateral proposal will propose a new stablecoin collateral be added to Honey's PSM.",
+    [ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL]: `New market proposal will propose a new market be added to ${process.env.NEXT_PUBLIC_LEND_NAME} for the proposed collateral.`,
+  };
+
   const ProposalFormSchema = z.union([
     BaseFormSchema,
     NewGaugeProposal,
@@ -157,13 +166,11 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
               </Link>
             </div>
             <div className="inline-flex flex-col justify-start gap-2">
-              <div className="text-sm font-semibold leading-tight">
-                Type <Tooltip text="test" />
-              </div>
+              <div className="text-sm font-semibold leading-tight">Type</div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div
-                    className="inline-flex h-[42px] w-[500px] flex-col items-start justify-start hover:cursor-pointer"
+                    className="inline-flex h-[42px] w-full flex-col items-start justify-start hover:cursor-pointer"
                     ref={triggerRef}
                   >
                     <div className=" inline-flex w-full items-center justify-start gap-2.5 rounded-xl border border-border px-3 py-2">
@@ -192,6 +199,11 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
+              {type !== ProposalTypeEnum.TEXT_PROPOSAL && (
+                <Alert variant="warning">
+                  {ProposalTypeInformationEnum[type]}
+                </Alert>
+              )}
             </div>
             <FormField
               control={form.control}
@@ -244,7 +256,8 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
               render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
-                    Expedite <Tooltip text="test" />
+                    Expedite{" "}
+                    <Tooltip text="Speed up your proposal voting time" />
                   </div>
                   <FormControl>
                     <Switch
@@ -263,13 +276,15 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
               render={({ field }) => (
                 <FormItem className="inline-flex flex-col justify-start">
                   <div className="text-sm font-semibold leading-tight">
-                    Initial deposit <Tooltip text="test" />
+                    Initial deposit{" "}
+                    <Tooltip text="Required collateral to propose changes or amendments to the network" />
                   </div>
                   <div className="relative">
                     <FormControl>
                       <Input
                         type="number"
                         id="initial-deposit"
+                        disabled={isBalanceLoading}
                         placeholder="0.0"
                         endAdornment="BGT"
                         {...field}

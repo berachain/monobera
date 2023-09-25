@@ -16,6 +16,7 @@ import {
   useTxn,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -48,7 +49,7 @@ export default function WithdrawLiquidityContent({
     setWithdrawType(0);
   };
   const { write, ModalPortal } = useTxn({
-    message: `withdraw liquidity from ${pool?.poolName}`,
+    message: `Withdraw liquidity from ${pool?.poolName}`,
     onSuccess: () => {
       reset();
     },
@@ -139,7 +140,7 @@ export default function WithdrawLiquidityContent({
                 </p>
                 <TokenInput
                   selected={{
-                    address: "0x599D8d33253361f1dc654e6f9C2813Bd392eC0d5",
+                    address: "",
                     symbol: pool?.poolName ?? "",
                     name: pool?.poolName ?? "",
                     decimals: 18,
@@ -150,6 +151,7 @@ export default function WithdrawLiquidityContent({
                   selectable={false}
                   amount={amount}
                   setAmount={setAmount}
+                  showExceeding={true}
                   onExceeding={setIsPoolTokenExceeding}
                 />
               </TokenList>
@@ -171,6 +173,10 @@ export default function WithdrawLiquidityContent({
                   );
                 })}
               </div>
+              <Alert variant="warning">
+                All outstanding BGT Rewards will be claimed upon withdrawing all
+                liquidity.
+              </Alert>
               <TxnPreview
                 open={previewOpen}
                 disabled={isMultiTokenDisabled}
@@ -207,7 +213,6 @@ export default function WithdrawLiquidityContent({
                     value={formatUsd(withdrawValue)}
                   />
                 </InfoBoxList>
-
                 <ActionButton>
                   <Button
                     className="w-full"
@@ -246,6 +251,7 @@ export default function WithdrawLiquidityContent({
                   hidePrice={true}
                   selectable={false}
                   amount={amount}
+                  showExceeding={true}
                   setAmount={handleSingleTokenWithdrawSharesIn}
                   onExceeding={setIsPoolTokenExceeding}
                 />
@@ -277,8 +283,13 @@ export default function WithdrawLiquidityContent({
                   setAmount={handleSingleTokenWithdrawAssetOut}
                   customTokenList={pool?.tokens}
                   showExceeding={false}
+                  price={prices[exactOutToken?.address ?? ""] ?? 0}
                 />
               </TokenList>
+              <Alert variant="warning">
+                All outstanding BGT Rewards will be claimed upon withdrawing all
+                liquidity.
+              </Alert>
               <TxnPreview
                 open={previewOpen}
                 disabled={isSingleTokenDisabled}

@@ -21,6 +21,7 @@ import {
   useTxn,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -49,6 +50,8 @@ export default function AddLiquidityContent({
   const router = useRouter();
 
   const {
+    error,
+    singleSidedError,
     expectedShares,
     singleSidedExpectedShares,
     isMultipleInputDisabled,
@@ -146,6 +149,7 @@ export default function AddLiquidityContent({
                       onExceeding={(exceeding: boolean) =>
                         updateTokenExceeding(i, exceeding)
                       }
+                      showExceeding={true}
                     />
                   );
                 })}
@@ -160,10 +164,18 @@ export default function AddLiquidityContent({
                   value={formatUsd(totalValue ?? 0) ?? "-"}
                 />
               </InfoBoxList>
+              {error && (
+                <Alert variant="destructive">
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription className="text-xs">
+                    {error}
+                  </AlertDescription>
+                </Alert>
+              )}
               <TxnPreview
                 open={previewOpen}
                 disabled={isMultipleInputDisabled}
-                title={"Confirm LP Details"}
+                title={"Confirm LP Addition Details"}
                 imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
                 triggerText={"Preview"}
                 setOpen={setPreviewOpen}
@@ -179,7 +191,7 @@ export default function AddLiquidityContent({
                         <PreviewToken
                           key={tokenInput.address}
                           token={tokenInput}
-                          weight={tokenInput?.weight}
+                          weight={tokenInput?.normalizedWeight}
                           value={tokenInput?.amount}
                           price={prices[tokenInput?.address ?? ""]}
                         />
@@ -196,10 +208,10 @@ export default function AddLiquidityContent({
                     value={formatUsd(totalValue ?? 0) ?? "-"}
                   />
                   {/* TODO: impl */}
-                  <InfoBoxListItem
+                  {/* <InfoBoxListItem
                     title={"Percentage of Pool"}
                     value={"0.0000069%"}
-                  />
+                  /> */}
                 </InfoBoxList>
                 {needsApproval.length > 0 ? (
                   <ApproveTokenButton
@@ -258,12 +270,19 @@ export default function AddLiquidityContent({
                   value={formatUsd(totalValue ?? 0) ?? "-"}
                 />
               </InfoBoxList>
-
+              {singleSidedError && (
+                <Alert variant="destructive">
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription className="text-xs">
+                    {singleSidedError}
+                  </AlertDescription>
+                </Alert>
+              )}
               <TxnPreview
                 open={singleTokenPreviewOpen}
                 setOpen={setSingleTokenSetPreviewOpen}
                 disabled={isSingleInputDisabled}
-                title={"Confirm LP Details"}
+                title={"Confirm LP Addition Details"}
                 imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
                 triggerText={"Preview"}
               >
@@ -282,9 +301,9 @@ export default function AddLiquidityContent({
                   will be converted and deposited with the following breakdown
                 </p>
                 <div className="flex w-full items-center justify-center">
-                  <Icons.chevronDown className="h-6 w-6 self-center text-muted-foreground" />
+                  <Icons.chevronsDown className="h-6 w-6 self-center text-muted-foreground" />
                 </div>
-                <TokenList className="bg-border">
+                <TokenList className="bg-muted">
                   {pool?.tokens.map((token) => {
                     const formattedAmount = burnShares
                       ? Number(
@@ -299,7 +318,7 @@ export default function AddLiquidityContent({
                         key={token.address}
                         token={token}
                         value={formattedAmount}
-                        weight={token.normalizedWeight}
+                        // weight={token.normalizedWeight}
                         price={prices[token.address]}
                       />
                     );

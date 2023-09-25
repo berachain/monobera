@@ -4,7 +4,12 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { RouteNotFound } from "@bera/bera-router";
-import { DEX_PRECOMPILE_ABI, useBeraJs } from "@bera/berajs";
+import {
+  DEX_PRECOMPILE_ABI,
+  WBERA_ABI,
+  useBeraJs,
+  usePollAssetWalletBalance,
+} from "@bera/berajs";
 import {
   cloudinaryUrl,
   erc20DexAddress,
@@ -16,9 +21,10 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
-import { SwapKind, useSwap } from "~/hooks/useSwap";
+import { SwapKind, WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
 
 const DynamicPreview = dynamic(() => import("./preview-dialog"), {
@@ -70,6 +76,7 @@ export function SwapCard({
     selectedTo,
     fromAmount,
     setFromAmount,
+    swapAmount,
     toAmount,
     error,
     setToAmount,
@@ -109,9 +116,22 @@ export function SwapCard({
     },
   });
 
+  const {
+    write: wrapWrite,
+    isLoading: isWrapLoading,
+    ModalPortal: WrapModalPortal,
+  } = useTxn({
+    message:
+      wrapType === WRAP_TYPE.WRAP
+        ? `Wrapping ${swapAmount} BERA to WBERA`
+        : `Unwrapping ${swapAmount} WBERA to BERA`,
+  });
+
+  const { isLoading: isBalancesLoading } = usePollAssetWalletBalance();
+
   const getSwapButton = () => {
     if (
-      (Number(allowance?.formattedAllowance) ?? 0) < fromAmount &&
+      (Number(allowance?.formattedAllowance) ?? 0) < (fromAmount ?? 0) &&
       !exceedingBalance &&
       !isWrap
     ) {
@@ -124,7 +144,30 @@ export function SwapCard({
     }
     if (isConnected) {
       if (isWrap) {
-        return <Button className="w-full">{wrapType}</Button>;
+        return (
+          <Button
+            className="w-full"
+            disabled={isWrapLoading}
+            onClick={() => {
+              wrapWrite({
+                address: process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address,
+                abi: WBERA_ABI,
+                functionName:
+                  wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",
+                params:
+                  wrapType === WRAP_TYPE.WRAP
+                    ? []
+                    : [parseUnits(`${swapAmount}`, 18)],
+                value:
+                  wrapType === WRAP_TYPE.WRAP
+                    ? parseUnits(`${swapAmount}`, 18)
+                    : 0n,
+              });
+            }}
+          >
+            {wrapType}
+          </Button>
+        );
       }
       if (swapInfo !== undefined) {
         return (
@@ -163,6 +206,7 @@ export function SwapCard({
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
+      {WrapModalPortal}
       <div className="w-full">
         {showBear && (
           <Image
@@ -189,6 +233,7 @@ export function SwapCard({
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedFrom}
                     amount={fromAmount ?? 0}
+                    showExceeding={true}
                     onExceeding={(isExceeding: boolean) =>
                       setExceedingBalance(isExceeding)
                     }
@@ -217,10 +262,10 @@ export function SwapCard({
                   </div>
                   <TokenInput
                     selected={selectedTo}
-                    hideBalance
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedTo}
                     amount={toAmount}
+                    hideMax={true}
                     setAmount={(amount) => {
                       setSwapKind(SwapKind.GIVEN_OUT);
                       setSwapAmount(amount);
@@ -250,7 +295,7 @@ export function SwapCard({
                       </div>
                     </div>
                   )}
-                  {isConnected && exceedingBalance && (
+                  {isConnected && exceedingBalance && !isBalancesLoading && (
                     <Alert
                       variant="destructive"
                       className="items-center justify-center"

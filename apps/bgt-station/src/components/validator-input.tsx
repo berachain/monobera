@@ -5,7 +5,7 @@ import {
   usePollAccountDelegations,
   usePollBgtBalance,
 } from "@bera/berajs";
-import { ValidatorIcon } from "@bera/shared-ui";
+import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { type Address } from "wagmi";
@@ -25,8 +25,8 @@ export default function ValidatorInput({
 }: // emptyMessage = "No validators available",
 {
   action: DelegateEnum;
-  amount: string;
-  onAmountChange: (amount: string) => void;
+  amount: number | undefined;
+  onAmountChange: (amount: number) => void;
   validatorAddress: Address | undefined;
   redelegate?: boolean;
   redelegateValidatorAddress?: string;
@@ -35,7 +35,7 @@ export default function ValidatorInput({
   // emptyMessage?: string;
 }) {
   const router = useRouter();
-  const { useBgtBalance } = usePollBgtBalance();
+  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   const { isReady } = useBeraJs();
   const { useSelectedAccountDelegation } =
@@ -48,8 +48,9 @@ export default function ValidatorInput({
         type="number"
         className="h-[73px] p-4 text-right text-lg font-semibold leading-7"
         value={amount}
-        disabled={disabled}
-        onChange={(e) => onAmountChange(e.target.value)}
+        placeholder="0"
+        disabled={disabled || isBalanceLoading}
+        onChange={(e) => onAmountChange(Number(e.target.value))}
         startAdornment={
           <ValidatorSelector
             validatorAddress={
@@ -75,7 +76,7 @@ export default function ValidatorInput({
           <span
             className="underline hover:cursor-pointer"
             onClick={() => {
-              onAmountChange(userBalance);
+              onAmountChange(Number(userBalance));
             }}
           >
             MAX
@@ -89,7 +90,12 @@ export default function ValidatorInput({
         Boolean(bgtDelegated) && (
           <div className="absolute bottom-3 right-4 h-3 text-[10px] text-muted-foreground">
             <div className="flex items-center gap-1">
-              <ValidatorIcon className="h-3 w-3" address={validatorAddress} />
+              {/* <ValidatorIcon className="h-6 w-6" address={validatorAddress} /> */}
+              <Tooltip
+                text="Amount of BGT delegated to this validator"
+                className="h-3 w-3"
+              />
+
               {bgtDelegated?.toString()}
               <span
                 className="underline hover:cursor-pointer"

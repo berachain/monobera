@@ -21,7 +21,7 @@ import { useRedeem } from "../../hooks/useRedeem";
 
 export default function Redeem() {
   const { isReady } = useBeraJs();
-  const { useBgtBalance } = usePollBgtBalance();
+  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const { redeemAmount, payload, setRedeemAmount } = useRedeem();
   const userBalance = useBgtBalance();
   const { write, isLoading, ModalPortal } = useTxn({
@@ -51,6 +51,7 @@ export default function Redeem() {
           <Input
             type="number"
             placeholder="0.00"
+            disabled={isBalanceLoading}
             endAdornment="BGT"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setRedeemAmount(Number(e.target.value))
@@ -85,11 +86,13 @@ export default function Redeem() {
         <Alert variant="warning">
           Redeeming your BGT into BERA is an irreversible action.
         </Alert>
-        {Number(redeemAmount) > Number(userBalance) && isReady && (
-          <Alert variant="destructive" className="">
-            This amount exceeds your total balance of {userBalance} BGT
-          </Alert>
-        )}
+        {Number(redeemAmount) > Number(userBalance) &&
+          isReady &&
+          !isBalanceLoading && (
+            <Alert variant="destructive" className="">
+              This amount exceeds your total balance of {userBalance} BGT
+            </Alert>
+          )}
         <ActionButton>
           <Button
             className="w-full"

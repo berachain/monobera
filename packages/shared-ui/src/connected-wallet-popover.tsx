@@ -7,7 +7,7 @@ import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { useReadLocalStorage } from "usehooks-ts";
 
-import { History } from "./history";
+// import { History } from "./history";
 import Identicon from "./identicon";
 import { formatConnectorName } from "./utils";
 
@@ -88,7 +88,7 @@ export default function ConnectedWalletPopover() {
             </p>
           </div>
         </div>
-        <History />
+        {/* <History /> */}
       </PopoverContent>
     </Popover>
   );

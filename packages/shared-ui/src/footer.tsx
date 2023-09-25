@@ -94,6 +94,7 @@ export function Footer() {
             <div className="flex space-x-6">
               {footerNavigation.social.map((item) => (
                 <a
+                  target="_blank"
                   key={item.name}
                   href={item.href}
                   className="text-muted-foreground hover:text-secondary-foreground"
@@ -116,6 +117,7 @@ export function Footer() {
                 {footerNavigation.ecosystem.map((item) => (
                   <li key={item.name}>
                     <a
+                      target="_blank"
                       href={item.href}
                       className="text-sm leading-6 text-secondary-foreground hover:text-foreground"
                     >
@@ -147,7 +149,6 @@ export function Footer() {
         <div className="mt-16 flex justify-between border-t border-border pt-8 sm:mt-20 lg:mt-24">
           <p className="text-xs leading-5 text-secondary-foreground">
             &copy; {new Date().getFullYear()} Berachain | All rights reserved
-            (not really)
           </p>
           <p className="text-xs">Made W/❤️ at the 🐻Beraden</p>
         </div>

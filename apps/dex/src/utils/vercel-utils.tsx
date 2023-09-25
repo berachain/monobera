@@ -1,7 +1,10 @@
 // utils/vercel-utils.tsx
 export const IS_SERVER = typeof window === "undefined";
 export function getProtocol() {
-  const isProd = process.env.VERCEL_ENV === "production";
+  const isProd =
+    process.env.VERCEL_ENV === "production" ||
+    process.env.VERCEL_ENV === "preview" ||
+    process.env.VERCEL_ENV === "development";
   if (isProd) return "https://";
   return "http://";
 }

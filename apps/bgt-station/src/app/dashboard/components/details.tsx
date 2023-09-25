@@ -34,7 +34,7 @@ export function Details({
         ) : (
           total
         ),
-      text: "Active validators",
+      text: "Active Validators",
     },
     {
       amount:
@@ -52,7 +52,7 @@ export function Details({
         ) : (
           `${formatter.format(Number(bgtSupply))} BGT`
         ),
-      text: "Total BGT supply",
+      text: "Total BGT Supply",
     },
   ];
   return (

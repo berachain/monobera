@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@bera/ui/dialog";
+import { Skeleton } from "@bera/ui/skeleton";
 import { TextArea } from "@bera/ui/text-area";
 
 interface Props {
@@ -23,6 +24,8 @@ interface Props {
   selected: VoteOption | undefined;
   setSelected: (selected: VoteOption) => void;
   onSubmit: () => void;
+  isVotingPowerLoading: boolean;
+  isLoading: boolean;
 }
 
 export function VoteDialog({
@@ -34,6 +37,8 @@ export function VoteDialog({
   selected,
   setSelected,
   onSubmit,
+  isVotingPowerLoading,
+  isLoading,
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -51,11 +56,20 @@ export function VoteDialog({
           <DialogTitle className="mb-3">Vote</DialogTitle>
         </DialogHeader>
         <div className="flex w-full flex-col items-center justify-center">
-          <p className="text-3xl font-semibold">
-            {votingPower ? votingPower.toFixed(2) + "%" : "0%"}
-          </p>
+          {isVotingPowerLoading ? (
+            <Skeleton className="h-20 w-20" />
+          ) : (
+            <p className="text-3xl font-semibold">
+              {votingPower ? votingPower.toFixed(2) + "%" : "0%"}
+            </p>
+          )}
           <p className="text-sm font-medium">
-            Voting Power <Tooltip text={"your voting power"} />
+            Voting Power{" "}
+            <Tooltip
+              text={
+                "Represents the influence in network governance based on amount delegated to this validator"
+              }
+            />
           </p>
         </div>
 
@@ -114,7 +128,11 @@ export function VoteDialog({
           />
         </div>
         <ActionButton>
-          <Button onClick={onSubmit} className="w-full">
+          <Button
+            onClick={onSubmit}
+            className="w-full"
+            disabled={isLoading || isVotingPowerLoading || votingPower === 0}
+          >
             Submit
           </Button>
         </ActionButton>

@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import {
@@ -8,7 +9,13 @@ import {
   TooltipTrigger,
 } from "@bera/ui/tooltip";
 
-export function Tooltip({ text }: { text: any }) {
+export function Tooltip({
+  text,
+  className,
+}: {
+  text: any;
+  className?: string;
+}) {
   const [tooltipOpen, setTooltipOpen] = React.useState(false);
   return (
     <TooltipProvider>
@@ -16,7 +23,10 @@ export function Tooltip({ text }: { text: any }) {
         <TooltipTrigger asChild>
           <Button
             variant="ghost"
-            className="flex-inline h-5 w-5 rounded-full p-0 align-middle hover:bg-transparent"
+            className={cn(
+              "flex-inline h-5 w-5 rounded-full p-0 align-middle hover:bg-transparent",
+              className,
+            )}
             onMouseEnter={() => setTooltipOpen(true)}
             onMouseLeave={() => setTooltipOpen(false)}
           >

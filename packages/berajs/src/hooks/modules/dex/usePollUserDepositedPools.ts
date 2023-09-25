@@ -25,6 +25,7 @@ export const usePollUserDepositedPools = (endpoint: string) => {
       try {
         const response = await fetch(endpoint);
         const temp = await response.json();
+        if (!temp) return false;
         const pool = temp;
 
         const shareDenomArray: Address[] = pool.map(
@@ -44,19 +45,28 @@ export const usePollUserDepositedPools = (endpoint: string) => {
           multicallAddress: networkConfig.precompileAddresses
             .multicallAddress as Address,
         });
-        const deposited = pool
-          .map((pool: any, i: number) => {
-            return {
-              ...pool,
-              userDepositedShares: Number(
-                formatUnits((result[i]?.result as unknown as bigint) ?? 0n, 18),
-              ),
-            };
-          })
-          .filter((pool: any) => pool.userDeposited !== 0);
 
-        return deposited;
+        const deposited = pool.map((pool: any, i: number) => {
+          const formattedUserDeposited = formatUnits(
+            (result[i]?.result as unknown as bigint) ?? 0n,
+            18,
+          );
+          const value = Number(formattedUserDeposited).toString().includes("e")
+            ? 0
+            : Number(formattedUserDeposited);
+          return {
+            ...pool,
+            userDepositedShares: value,
+          };
+        });
+
+        const filteredDeposted = deposited.filter(
+          (pool: any) => pool.userDepositedShares !== 0,
+        );
+
+        return filteredDeposted;
       } catch (e) {
+        console.log(e);
         return undefined;
       }
     },

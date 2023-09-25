@@ -37,20 +37,18 @@ export function DataCard({
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
   const { usePrice, usePrices, isLoading } = usePollPrices();
 
-  console.log(tvl, volume);
   const prices = usePrices();
+
   const tvlValue = useMemo(() => {
     if (!prices || !tvl || !tvl[0]) return 0;
     return sumPrices(prices, tvl[0].data);
   }, [tvl, prices]);
 
-  console.log(prices, tvlValue);
   const volumeValue = useMemo(() => {
     if (!prices || !volume || !volume[0]) return 0;
     return sumPrices(prices, volume[0].data);
   }, [volume, prices]);
 
-  console.log(volumeValue, tvlValue, prices);
   const block = useLatestBlock();
   const beraPrice = usePrice(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
   const isDataReady = useMemo(() => {

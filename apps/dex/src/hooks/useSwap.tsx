@@ -38,6 +38,11 @@ function normalizeToRatio(num1: number, num2: number): string {
   return ratio.toFixed(6);
 }
 
+export enum WRAP_TYPE {
+  WRAP = "Wrap",
+  UNWRAP = "Unwrap",
+}
+
 export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { read: readInput, tokenInformation: inputToken } =
     useTokenInformation();
@@ -87,10 +92,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [isWrap, setIsWrap] = useState(false);
 
-  enum WRAP_TYPE {
-    WRAP = "wrap",
-    UNWRAP = "unwrap",
-  }
   const [wrapType, setWrapType] = useState<WRAP_TYPE | undefined>(undefined);
 
   const slippageType = useReadLocalStorage(
@@ -105,9 +106,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const deadlineValue = useReadLocalStorage(LOCAL_STORAGE_KEYS.DEADLINE_VALUE);
 
-  const [fromAmount, setFromAmount] = useState(0);
+  const [fromAmount, setFromAmount] = useState<number | undefined>();
 
-  const [toAmount, setToAmount] = useState(0);
+  const [toAmount, setToAmount] = useState<number | undefined>();
 
   const [swapAmount, setSwapAmount] = useState(0);
 
@@ -167,6 +168,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       return true;
     return false;
   };
+
   useEffect(() => {
     if (
       selectedTo !== undefined &&
@@ -175,7 +177,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       isBeratoken(selectedFrom)
     ) {
       setIsWrap(true);
-      if (selectedTo.address === process.env.NEXT_PUBLIC_BERA_ADDRESS) {
+      if (selectedFrom.address === process.env.NEXT_PUBLIC_BERA_ADDRESS) {
         setWrapType(WRAP_TYPE.WRAP);
       }
       if (selectedFrom.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS) {
@@ -286,7 +288,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
       if (swapKind === SwapKind.GIVEN_OUT) {
         swapInfo.batchSwapSteps[0]!.amountIn = parseUnits(
-          `${fromAmount}`,
+          `${fromAmount ?? 0}`,
           selectedTo?.decimals ?? 18,
         );
       }
@@ -311,10 +313,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
     if (swapKind === SwapKind.GIVEN_IN) {
       setSwapKind(SwapKind.GIVEN_OUT);
-      setSwapAmount(fromAmount);
+      setSwapAmount(fromAmount ?? 0);
     } else {
       setSwapKind(SwapKind.GIVEN_IN);
-      setSwapAmount(toAmount);
+      setSwapAmount(toAmount ?? 0);
     }
 
     if (isWrap) {
@@ -334,6 +336,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setSelectedTo,
     setSwapAmount,
     onSwitch,
+    swapAmount,
     payload,
     selectedFrom,
     allowance,

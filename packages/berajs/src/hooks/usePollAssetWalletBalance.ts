@@ -1,6 +1,6 @@
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits } from "viem";
+import { formatUnits, getAddress } from "viem";
 import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
 import { MULTICALL3_ABI } from "..";
@@ -25,11 +25,11 @@ interface Call {
 export const usePollAssetWalletBalance = () => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
-  const { account, error } = useBeraJs();
+  const { account, isConnected, error } = useBeraJs();
   const { networkConfig } = useBeraConfig();
   const { tokenList } = useTokens();
   const { isLoading, isValidating } = useSWR(
-    [account, "assetWalletBalances"],
+    [account, isConnected, tokenList, "assetWalletBalances"],
     async () => {
       if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {
@@ -61,11 +61,18 @@ export const usePollAssetWalletBalance = () => {
             result.map(async (item: any, index: number) => {
               const token = tokenList[index];
               if (item.error) {
-                await mutate([account, token?.address, "assetWalletBalances"], {
-                  balance: 0,
-                  formattedBalance: "0",
-                  ...token,
-                });
+                await mutate(
+                  [
+                    account,
+                    getAddress(token?.address ?? ""),
+                    "assetWalletBalances",
+                  ],
+                  {
+                    balance: 0,
+                    formattedBalance: "0",
+                    ...token,
+                  },
+                );
                 return { balance: 0, ...token };
               }
 
@@ -101,10 +108,12 @@ export const usePollAssetWalletBalance = () => {
 };
 
 export const useCurrentAssetWalletBalances = (): BalanceToken[] => {
-  const { account } = useBeraJs();
-
+  const { account, isConnected } = useBeraJs();
+  const { tokenList } = useTokens();
   const { data: assetWalletBalances = undefined } = useSWRImmutable([
     account,
+    isConnected,
+    tokenList,
     "assetWalletBalances",
   ]);
   return assetWalletBalances;

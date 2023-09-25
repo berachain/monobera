@@ -10,7 +10,8 @@ export const usePollPrices = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
-      const res = await fetch(`${getAbsoluteUrl()}/api`);
+      const absoluteUrl = getAbsoluteUrl();
+      const res = await fetch(`${absoluteUrl}/api`);
       const data: MappedTokens = await res.json();
       return data;
     },

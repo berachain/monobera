@@ -9,7 +9,6 @@ import Help from "./components/Help";
 import Hero from "./components/Hero";
 
 const getTvl = async () => {
-  console.log(`${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
   );
@@ -24,9 +23,6 @@ const getTvl = async () => {
 };
 
 const getVolume = async () => {
-  console.log(
-    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
-  );
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
   );
@@ -45,6 +41,8 @@ export const metadata: Metadata = {
   description: `Welcome to ${process.env.NEXT_PUBLIC_DEX_NAME}!`,
 };
 
+export const fetchCache = "force-no-store";
+
 export default async function Homepage() {
   const tvl = getTvl();
   const volume = getVolume();
@@ -55,8 +53,6 @@ export default async function Homepage() {
         volume: volume,
       }),
     );
-    console.log(data?.tvl);
-    console.log(data?.volume);
     return (
       <div className="container max-w-[1200px]">
         <Hero />

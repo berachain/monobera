@@ -8,7 +8,7 @@ export const DEX_PRECOMPILE_ABI = [
       },
       {
         internalType: "address",
-        name: "account",
+        name: "receiver",
         type: "address",
       },
       {
@@ -164,11 +164,6 @@ export const DEX_PRECOMPILE_ABI = [
         internalType: "struct IERC20DexModule.PoolOptions",
         name: "options",
         type: "tuple",
-      },
-      {
-        internalType: "address",
-        name: "creator",
-        type: "address",
       },
     ],
     name: "createPool",
@@ -703,12 +698,7 @@ export const DEX_PRECOMPILE_ABI = [
       },
       {
         internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "receiver",
+        name: "withdrawAddress",
         type: "address",
       },
       {
@@ -747,12 +737,7 @@ export const DEX_PRECOMPILE_ABI = [
       },
       {
         internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "receiver",
+        name: "withdrawAddress",
         type: "address",
       },
       {

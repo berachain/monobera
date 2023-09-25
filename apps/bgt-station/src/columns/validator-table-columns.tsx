@@ -32,7 +32,7 @@ export const validator_table_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader
         column={column}
         title="Voting power"
-        tooltip="Total amount of BGT Delegated"
+        tooltip="Represents the influence in network governance based on amount delegated to this validator"
       />
     ),
     cell: ({ row }) => (

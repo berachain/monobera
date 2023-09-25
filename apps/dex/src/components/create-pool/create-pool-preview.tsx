@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { DEX_PRECOMPILE_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
+import { DEX_PRECOMPILE_ABI, useBeraConfig } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { ActionButton, PreviewToken, TokenList, useTxn } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -40,7 +40,6 @@ export function CreatePoolPreview({
 
   const router = useRouter();
 
-  const { account } = useBeraJs();
   const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
     onSuccess: () => {
@@ -67,7 +66,6 @@ export function CreatePoolPreview({
     ),
     "balancer",
     options,
-    account,
   ];
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
@@ -78,7 +76,7 @@ export function CreatePoolPreview({
             className="block h-6 w-6 hover:cursor-pointer"
             onClick={onBack}
           />{" "}
-          Create Pool
+          Create pool
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
@@ -90,7 +88,7 @@ export function CreatePoolPreview({
           height={150}
         />
         <div className="flex w-full flex-col gap-1">
-          <p className="pl-1 text-sm font-medium">Give Your Pool a Name</p>
+          <p className="pl-1 text-sm font-medium">Give your pool a name</p>
           <Input
             className="w-full border-border px-2 text-left font-semibold focus-visible:ring-0"
             value={poolName}

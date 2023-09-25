@@ -128,7 +128,6 @@ export default function BribesAndEmissions({
     [timeframe, historicalBribes],
   );
 
-  console.log("cbv", cumulativeBribeValue);
   return (
     <div className="">
       <div className="flex items-center gap-1 text-lg font-semibold leading-7">
@@ -141,7 +140,7 @@ export default function BribesAndEmissions({
             ${formatter.format(cumulativeBribeValue ?? 0)}
           </div>
           <div className="text-sm font-medium leading-[14px] text-muted-foreground">
-            Cumulative bribe total value
+            Cumulative bribe value
           </div>
         </YellowCard>
         <Card className="hidden w-3/4 min-w-[666px] p-4 md:block">

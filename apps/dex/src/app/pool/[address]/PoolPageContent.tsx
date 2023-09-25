@@ -235,7 +235,6 @@ export const EventTable = ({
   events: SwapData[] | AddLiquidityData[] | WithdrawLiquidityData[];
   isLoading: boolean | undefined;
 }) => {
-  console.log(pool);
   return (
     <Table>
       <TableHeader>
@@ -474,7 +473,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             <Card className="p-4">
               <div className="flex flex-row items-center justify-between">
                 <div className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
-                  Total liquidity (TVL)
+                  TVL
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
@@ -619,6 +618,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
 
               <div className="flex w-full flex-row items-center justify-end gap-2">
                 <Button
+                  size={"sm"}
                   variant={"secondary"}
                   onClick={() =>
                     router.push(`/pool/${pool?.pool}/add-liquidity`)
@@ -630,6 +630,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                   </span>
                 </Button>
                 <Button
+                  size={"sm"}
                   variant={"secondary"}
                   onClick={() => router.push(`/pool/${pool?.pool}/withdraw`)}
                 >
@@ -639,6 +640,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                   </span>
                 </Button>
                 <Button
+                  size={"sm"}
                   className="xs:hidden hidden sm:block md:block lg:hidden"
                   variant={"outline"}
                   onClick={() =>

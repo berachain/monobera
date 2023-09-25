@@ -83,50 +83,30 @@ const getTimeText = (proposal: Proposal) => {
 };
 
 const getDataList = (
-  proposalStatus: number,
   globalAbstainPercentage: number,
   globalNoPercentage: number,
   globalYesPercentage: number,
   globalVetoPercentage: number,
 ) => {
-  if (proposalStatus === mappedStatusEnum[StatusEnum.IN_QUEUE]) {
-    return [
-      {
-        color: VoteColorMap.abstain,
-        width: 100,
-      },
-    ];
-  } else if (proposalStatus === mappedStatusEnum[StatusEnum.PASSED]) {
-    return [
-      {
-        color: VoteColorMap.yes,
-        width: 100,
-      },
-    ];
-  } else if (proposalStatus === mappedStatusEnum[StatusEnum.REJECTED]) {
-    return [
-      {
-        color: VoteColorMap.no,
-        width: 100,
-      },
-    ];
-  } else {
-    return [
-      { color: VoteColorMap.yes, width: globalYesPercentage },
-      {
-        color: VoteColorMap.no,
-        width: globalYesPercentage + globalNoPercentage,
-      },
-      {
-        color: VoteColorMap.veto,
-        width: globalYesPercentage + globalNoPercentage + globalVetoPercentage,
-      },
-      {
-        color: VoteColorMap.abstain,
-        width: 100,
-      },
-    ];
-  }
+  return [
+    { color: VoteColorMap.yes, width: globalYesPercentage },
+    {
+      color: VoteColorMap.no,
+      width: globalYesPercentage + globalNoPercentage,
+    },
+    {
+      color: VoteColorMap.veto,
+      width: globalYesPercentage + globalNoPercentage + globalVetoPercentage,
+    },
+    {
+      color: VoteColorMap.abstain,
+      width:
+        globalYesPercentage +
+        globalNoPercentage +
+        globalVetoPercentage +
+        globalAbstainPercentage,
+    },
+  ];
 };
 
 export function ProposalCard({ proposal, onClick }: ProposalCard) {
@@ -166,7 +146,6 @@ export function ProposalCard({ proposal, onClick }: ProposalCard) {
         )}
         <ProgressBarChart
           dataList={getDataList(
-            proposal.status,
             normalizedTally?.globalAbstainPercentage ?? 0,
             normalizedTally?.globalNoPercentage ?? 0,
             normalizedTally?.globalYesPercentage ?? 0,

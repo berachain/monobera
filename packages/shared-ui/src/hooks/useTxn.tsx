@@ -43,6 +43,7 @@ interface IUseTxn {
 interface UseTxnApi {
   write: (props: IContractWrite) => void;
   isLoading: boolean;
+  isSubmitting: boolean;
   isSuccess: boolean;
   isError: boolean;
   ModalPortal: ReactElement<any, any>;
@@ -287,6 +288,7 @@ export const useTxn = ({
   return {
     write,
     isLoading,
+    isSubmitting,
     isSuccess,
     isError,
     ModalPortal: memoizedModalPortal as ReactElement<any, any>,

@@ -187,7 +187,6 @@ export const HoneyChart = ({
     supply90D,
     volume90D,
   };
-  // console.log("DATA", DATA);
   const [difference, setDifference] = useState(0);
   const [total, setTotal] = useState<any>(getTotalAmount(DATA.volume24H));
   const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.HOURLY);
@@ -213,150 +212,152 @@ export const HoneyChart = ({
   }, [timeFrame, chart, arcade]);
 
   return (
-    <Card
-      className={cn(
-        "border-2 p-0",
-        arcade
-          ? "border-dashed border-blue-900"
-          : "border-border bg-background",
-      )}
-    >
-      <Tabs
-        defaultValue={Chart.VOLUME}
-        onValueChange={(value: string) => setChart(value as Chart)}
+    <section id="supply">
+      <Card
+        className={cn(
+          "border-2 p-0",
+          arcade
+            ? "border-dashed border-blue-900"
+            : "border-border bg-background",
+        )}
       >
-        <CardHeader className="flex w-full flex-col items-center justify-start px-6 py-4 sm:flex-row sm:justify-between">
-          <div
-            className={cn(
-              "flex w-full gap-1",
-              arcade ? "flex-col items-start" : "flex-row items-center",
-            )}
-          >
+        <Tabs
+          defaultValue={Chart.VOLUME}
+          onValueChange={(value: string) => setChart(value as Chart)}
+        >
+          <CardHeader className="flex w-full flex-col items-center justify-start px-6 py-4 sm:flex-row sm:justify-between">
             <div
               className={cn(
-                arcade
-                  ? "text-2xl font-normal leading-9 text-blue-900"
-                  : "text-xl font-semibold leading-7",
+                "flex w-full gap-1",
+                arcade ? "flex-col items-start" : "flex-row items-center",
               )}
             >
-              {formatUsd(total)}
-            </div>
-            <div
-              className={cn(
-                "text-xs font-normal leading-none",
-                difference >= 0
-                  ? "text-success-foreground"
-                  : "text-destructive-foreground",
-              )}
-            >
-              {difference.toFixed(2)}%
-            </div>
-          </div>
-
-          <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
-            <TabsList
-              className={cn(
-                arcade && "rounded-xl border-2 border-blue-900 bg-blue-100",
-              )}
-            >
-              <TabsTrigger
-                value={Chart.VOLUME}
+              <div
                 className={cn(
-                  arcade && "text-blue-900 data-[state=active]:bg-blue-900",
-                )}
-              >
-                Volume
-              </TabsTrigger>
-              <TabsTrigger
-                value={Chart.FEES}
-                className={cn(
-                  arcade && "text-blue-900 data-[state=active]:bg-blue-900",
-                )}
-              >
-                Supply
-              </TabsTrigger>
-            </TabsList>
-            <Select
-              onValueChange={(value: string) =>
-                setTimeFrame(value as HoneyTimeFrame)
-              }
-            >
-              <SelectTrigger
-                className={cn(
-                  "w-fit justify-start gap-1 rounded-xl",
                   arcade
-                    ? "border-2 border-blue-900 bg-blue-100 text-blue-900"
-                    : "border border-border bg-muted text-foreground",
+                    ? "text-2xl font-normal leading-9 text-blue-900"
+                    : "text-xl font-semibold leading-7",
                 )}
               >
-                <SelectValue
-                  placeholder={HoneyTimeFrame.HOURLY}
-                  defaultValue={HoneyTimeFrame.HOURLY}
-                />
-              </SelectTrigger>
-              <SelectContent
+                {formatUsd(total)}
+              </div>
+              <div
                 className={cn(
-                  arcade &&
-                    "rounded-xl border-2 border-blue-900 bg-blue-100 text-blue-900",
+                  "text-xs font-normal leading-none",
+                  difference >= 0
+                    ? "text-success-foreground"
+                    : "text-destructive-foreground",
                 )}
               >
-                <SelectItem
-                  value={HoneyTimeFrame.HOURLY}
-                  className={cn(
-                    "cursor-pointer rounded-xl",
-                    arcade
-                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
-                      : "hover:bg-muted hover:text-foreground focus:text-foreground",
-                  )}
-                >
-                  24H
-                </SelectItem>
-                <SelectItem
-                  value={HoneyTimeFrame.WEEKLY}
-                  className={cn(
-                    "cursor-pointer rounded-xl",
-                    arcade
-                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
-                      : "hover:bg-muted hover:text-foreground focus:text-foreground",
-                  )}
-                >
-                  7D
-                </SelectItem>
-                <SelectItem
-                  value={HoneyTimeFrame.MONTHLY}
-                  className={cn(
-                    "cursor-pointer rounded-xl",
-                    arcade
-                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
-                      : "hover:bg-muted hover:text-foreground focus:text-foreground",
-                  )}
-                >
-                  30D
-                </SelectItem>
-                <SelectItem
-                  value={HoneyTimeFrame.QUARTERLY}
-                  className={cn(
-                    "cursor-pointer rounded-xl",
-                    arcade
-                      ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
-                      : "hover:bg-muted hover:text-foreground focus:text-foreground",
-                  )}
-                >
-                  90D
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardHeader>
+                {difference.toFixed(2)}%
+              </div>
+            </div>
 
-        <CardContent className="relative min-h-[250px] w-full">
-          <BeraChart
-            data={data}
-            options={Options as any}
-            type={chart === Chart.VOLUME ? "bar" : "line"}
-          />
-        </CardContent>
-      </Tabs>
-    </Card>
+            <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
+              <TabsList
+                className={cn(
+                  arcade && "rounded-xl border-2 border-blue-900 bg-blue-100",
+                )}
+              >
+                <TabsTrigger
+                  value={Chart.VOLUME}
+                  className={cn(
+                    arcade && "text-blue-900 data-[state=active]:bg-blue-900",
+                  )}
+                >
+                  Volume
+                </TabsTrigger>
+                <TabsTrigger
+                  value={Chart.FEES}
+                  className={cn(
+                    arcade && "text-blue-900 data-[state=active]:bg-blue-900",
+                  )}
+                >
+                  Supply
+                </TabsTrigger>
+              </TabsList>
+              <Select
+                onValueChange={(value: string) =>
+                  setTimeFrame(value as HoneyTimeFrame)
+                }
+              >
+                <SelectTrigger
+                  className={cn(
+                    "w-fit justify-start gap-1 rounded-xl",
+                    arcade
+                      ? "border-2 border-blue-900 bg-blue-100 text-blue-900"
+                      : "border border-border bg-muted text-foreground",
+                  )}
+                >
+                  <SelectValue
+                    placeholder={HoneyTimeFrame.HOURLY}
+                    defaultValue={HoneyTimeFrame.HOURLY}
+                  />
+                </SelectTrigger>
+                <SelectContent
+                  className={cn(
+                    arcade &&
+                      "rounded-xl border-2 border-blue-900 bg-blue-100 text-blue-900",
+                  )}
+                >
+                  <SelectItem
+                    value={HoneyTimeFrame.HOURLY}
+                    className={cn(
+                      "cursor-pointer rounded-xl",
+                      arcade
+                        ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
+                        : "hover:bg-muted hover:text-foreground focus:text-foreground",
+                    )}
+                  >
+                    24H
+                  </SelectItem>
+                  <SelectItem
+                    value={HoneyTimeFrame.WEEKLY}
+                    className={cn(
+                      "cursor-pointer rounded-xl",
+                      arcade
+                        ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
+                        : "hover:bg-muted hover:text-foreground focus:text-foreground",
+                    )}
+                  >
+                    7D
+                  </SelectItem>
+                  <SelectItem
+                    value={HoneyTimeFrame.MONTHLY}
+                    className={cn(
+                      "cursor-pointer rounded-xl",
+                      arcade
+                        ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
+                        : "hover:bg-muted hover:text-foreground focus:text-foreground",
+                    )}
+                  >
+                    30D
+                  </SelectItem>
+                  <SelectItem
+                    value={HoneyTimeFrame.QUARTERLY}
+                    className={cn(
+                      "cursor-pointer rounded-xl",
+                      arcade
+                        ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
+                        : "hover:bg-muted hover:text-foreground focus:text-foreground",
+                    )}
+                  >
+                    90D
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </CardHeader>
+
+          <CardContent className="relative min-h-[250px] w-full">
+            <BeraChart
+              data={data}
+              options={Options as any}
+              type={chart === Chart.VOLUME ? "bar" : "line"}
+            />
+          </CardContent>
+        </Tabs>
+      </Card>
+    </section>
   );
 };

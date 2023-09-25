@@ -17,14 +17,12 @@ export const usePollBgtRewards = (receiver: string) => {
     QUERY_KEY,
     async () => {
       try {
-        console.log("QUERY_KEY", QUERY_KEY);
         const result = (await publicClient.readContract({
           address: process.env.NEXT_PUBLIC_REWARDS_ADDRESS as Address,
           abi: REWARDS_PRECOMPILE_ABI,
           functionName: method,
           args: [account, receiver],
         })) as any[];
-        console.log("RESULT", result);
         return result[0].amount;
       } catch (e) {
         console.log(e);

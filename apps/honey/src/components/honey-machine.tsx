@@ -203,7 +203,6 @@ export function HoneyMachine() {
   useEffect(() => {
     if (rive) {
       rive.on(EventType.StateChange, (event: any) => {
-        // console.log(event.data, event.eventType, needsApproval);
         if (event.data[0] === "wallet") {
           if (needsApproval) {
             // console.log("approval");
@@ -227,17 +226,17 @@ export function HoneyMachine() {
   const performApproval = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      const enterAmount = isMint ? payload[2] : payload[1];
+      // const enterAmount = isMint ? payload[2] : payload[1];
       if (
         allowance &&
-        allowance.allowance &&
-        allowance.allowance < enterAmount
+        // allowance.allowance &&
+        needsApproval
       ) {
         write({
           address: selectedFrom?.address as `0x${string}`,
           abi: erc20ABI as unknown as (typeof erc20ABI)[],
           functionName: "approve",
-          params: [erc20HoneyAddress, 1000000000000000000n],
+          params: [erc20HoneyAddress, 1000000000000000000000000000n],
         });
       } else {
         rejectAction?.fire();
@@ -326,7 +325,7 @@ export function HoneyMachine() {
 
   return (
     <>
-      <div className="relative bg-[#468DCB] pb-12">
+      <div className="relative bg-[#468DCB] pb-12" id="mint-and-burn">
         {ModalPortal}
 
         {rive ? (
@@ -341,7 +340,7 @@ export function HoneyMachine() {
                 <h1 className="relative mb-1 text-2xl font-semibold text-foreground">
                   {isMint ? "Mint" : "Redeem"}
                   <div className="absolute right-0 top-1 text-sm text-muted-foreground">
-                    Static fee of {fee?.toFixed(2)}%
+                    Static fee of {(Number(fee ?? 0) * 100).toPrecision(2)}%
                   </div>
                 </h1>
                 <ul role="list">

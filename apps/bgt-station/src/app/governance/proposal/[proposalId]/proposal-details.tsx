@@ -17,6 +17,7 @@ import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
@@ -30,9 +31,11 @@ export default function ProposalDetails({
 }: {
   proposalId: number;
 }) {
-  const { useProposal } = usePollProposal(proposalId);
+  const { useProposal, isLoading: isProposalLoading } =
+    usePollProposal(proposalId);
   const { useTotalDelegated } = usePollActiveValidators();
-  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
+  const { useTotalDelegatorDelegated, isLoading: isUserVotingPowerLoading } =
+    usePollTotalDelegated();
   const proposal: Proposal | undefined = useProposal();
 
   const globalTotal = useTotalDelegated();
@@ -52,7 +55,11 @@ export default function ProposalDetails({
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 
-  const { write, ModalPortal } = useTxn({
+  const {
+    write,
+    ModalPortal,
+    isLoading: isTxnLoading,
+  } = useTxn({
     message: `Voting for proposal ${proposalId}`,
   });
   const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
@@ -94,6 +101,8 @@ export default function ProposalDetails({
                     params: payload,
                   });
                 }}
+                isLoading={isTxnLoading}
+                isVotingPowerLoading={isUserVotingPowerLoading}
               />
             )}
             {proposal?.status ===
@@ -102,7 +111,11 @@ export default function ProposalDetails({
         </div>
 
         <div className="mt-4 rounded-[18px] shadow">
-          {proposal && <ProposalCard proposal={proposal} />}
+          {isProposalLoading ? (
+            <Skeleton className="h-[235px] w-full rounded-[18px]" />
+          ) : (
+            proposal && <ProposalCard proposal={proposal} />
+          )}
         </div>
 
         <div className="mt-4 flex gap-4">
@@ -112,7 +125,7 @@ export default function ProposalDetails({
             </div>
             <div className="mt-[-4px] flex items-center gap-0.5 text-sm font-medium leading-[14px] text-muted-foreground">
               Total votes
-              <Tooltip text="no" />
+              <Tooltip text="Total amount of BGT used to vote on this proposal" />
             </div>
           </Card>
           <VoteCard

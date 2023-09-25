@@ -38,15 +38,17 @@ export function ProgressBarChart({ dataList, labelList }: IProgressBarProps) {
       </div>
       <div className="relative">
         <div className="h-2 w-full rounded-full bg-secondary-foreground" />
-        {dataList
-          .sort((a, b) => b.width - a.width)
-          .map((data) => (
-            <div
-              key={(data.width, data.color)}
-              className={`absolute left-0 top-0 h-2 rounded-full`}
-              style={{ width: `${data.width}%`, backgroundColor: data.color }}
-            />
-          ))}
+        {dataList.map((data, i) => (
+          <div
+            key={(data.width, data.color)}
+            className={`absolute left-0 top-0 h-2 rounded-full`}
+            style={{
+              width: `${data.width}%`,
+              backgroundColor: data.color,
+              zIndex: 50 - i * 10,
+            }}
+          />
+        ))}
       </div>
     </div>
   );

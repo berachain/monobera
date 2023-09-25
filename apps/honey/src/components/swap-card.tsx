@@ -69,7 +69,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                   }
                 }}
               >
-                🪙 Mint
+                🍯 Mint
               </TabsTrigger>
               <TabsTrigger
                 value={"burn"}
@@ -139,8 +139,8 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 selectable={selectedTo?.address !== honey?.address}
                 customTokenList={collateralList}
                 hidePrice
+                hideMax={true}
                 balance={toBalance?.formattedBalance}
-                hideBalance
               />
             </ul>
             {/* fix to check if allowance > amount */}

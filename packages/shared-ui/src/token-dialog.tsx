@@ -169,9 +169,9 @@ export function TokenDialog({
               />
             )}
             <div>
-              <div className=" mb-2 text-sm font-medium leading-normal">
+              {/* <div className=" mb-2 text-sm font-medium leading-normal">
                 Favourite Tokens
-              </div>
+              </div> */}
               {!customTokens && (
                 <div className="flex flex-wrap gap-2">
                   {featuredTokenList
