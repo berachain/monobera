@@ -8,6 +8,7 @@ import {
   ArrowRight,
   ArrowUpDown,
   ArrowUpRight,
+  CalendarClock,
   CandlestickChart,
   Check,
   CheckCircle2,
@@ -26,9 +27,12 @@ import {
   Edit,
   Expand,
   File,
+  FileEdit,
   FileText,
   Frame,
+  Fuel,
   Hammer,
+  HeartHandshake,
   HelpCircle,
   HelpingHand,
   Image,
@@ -49,6 +53,7 @@ import {
   Moon,
   MoreVertical,
   Newspaper,
+  PenSquare,
   PieChart,
   Pizza,
   Play,
@@ -81,6 +86,7 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
+  fileEdit: FileEdit,
   lineChart: LineChart,
   pieChart: PieChart,
   alertCircle: AlertCircle,
@@ -158,6 +164,10 @@ export const Icons = {
   candleStick: CandlestickChart,
   medal: Medal,
   plusCircle: PlusCircle,
+  penSquare: PenSquare,
+  heartHandShake: HeartHandshake,
+  calendarClock: CalendarClock,
+  fuel: Fuel,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path

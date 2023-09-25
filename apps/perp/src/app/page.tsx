@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { cloudinaryUrl } from "@bera/config";
+import { Footer } from "@bera/shared-ui";
 
 import GeneralInfo from "./components/general-info";
 import Help from "./components/help";
@@ -10,23 +11,23 @@ import Tutorial from "./components/tutorial";
 
 export default function Home() {
   return (
-    <div className="container relative">
+    <div className="relative">
       <Image
         src={`${cloudinaryUrl}/BERPS/grid-hero_ht7fz0`}
         alt="dashboard"
-        className="absolute z-0 w-full max-w-[1280px]"
+        priority
+        className="absolute left-1/2 z-0 w-full max-w-[1280px] -translate-x-1/2 transform opacity-20 dark:opacity-100"
         width={1280}
         height={100}
       />
-      <div className="relative z-10 mt-14 flex flex-col gap-[128px] bg-lend bg-contain bg-no-repeat">
+      <div className="relative z-10 flex flex-col gap-[128px] bg-lend bg-contain bg-no-repeat pb-[72px] pt-20 md:pt-[116px] lg:pt-[140px]">
         <Hero />
-        <div className="flex justify-center">
-          <GeneralInfo />
-        </div>
-        <Markets />
+        <GeneralInfo />
+        <Markets showBtn />
         <Tutorial />
         <Help />
       </div>
+      <Footer />
     </div>
   );
 }
