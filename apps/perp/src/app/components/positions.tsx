@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { formatUsd } from "@bera/berajs";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
@@ -136,7 +137,8 @@ function PositionRow({
 
 function PositionGrid() {
   const containerRef = useRef(null);
-  const positions = usePositions();
+  const { generatepositionData } = usePositions();
+  const positions = generatepositionData();
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
   const rows = splitArray(positions, 2);
 
@@ -148,15 +150,13 @@ function PositionGrid() {
       {isInView && (
         <>
           <PositionRow
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             positions={[...rows[0], ...rows[1]]}
             positionClassName={(positionIndex) =>
               clsx(
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 positionIndex >= rows[0].length && "md:hidden",
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
                 // @ts-ignore
                 positionIndex >= rows[0].length && "lg:hidden",
               )
@@ -166,11 +166,8 @@ function PositionGrid() {
 
           <PositionRow
             positions={[...rows[1], ...rows[0]]}
-            className="hidden md:flex"
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             positionClassName={(positionIndex) =>
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               positionIndex >= rows[1].length && "lg:hidden"
             }
@@ -184,25 +181,27 @@ function PositionGrid() {
   );
 }
 
-export default function Positions() {
+export default function Positions({ showBtn = false }: { showBtn?: boolean }) {
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="leading-14 text-center text-5xl font-extrabold tracking-tight text-foreground">
+      <h2 className="md:leading-14 px-8 text-center text-3xl font-extrabold leading-9 tracking-tight text-foreground md:text-5xl">
         <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
           On-Chain <br />
           Perpetuals
         </span>{" "}
         Done Right!
       </h2>
-      <div className="mb-4 text-center text-base font-medium leading-normal text-muted-foreground">
+      <div className="mb-4 px-8 text-center text-base font-medium leading-normal text-muted-foreground md:text-sm">
         Featuring a wide variety of high volume assets, with new tokens added on
         a regular basis.
       </div>
 
       <PositionGrid />
-      <div className="mt-8 flex justify-center">
-        <Button variant="secondary">View All Positions</Button>
-      </div>
+      {showBtn && (
+        <Link className="mt-8 flex justify-center" href="/markets">
+          <Button variant="secondary">View All Markets</Button>
+        </Link>
+      )}
     </section>
   );
 }

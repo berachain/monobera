@@ -8,6 +8,8 @@ import {
   blockExplorerUrl,
   chainId,
   chainName,
+  dexName,
+  dexUrl,
   epochsAddress,
   erc20BgtAddress,
   erc20DexAddress,
@@ -30,12 +32,12 @@ import { type Chain } from "wagmi";
 
 export const navItems = [
   {
-    href: "/portfolio",
-    title: "Portfolio",
-  },
-  {
     href: "/berpetuals",
     title: "Berpetuals",
+  },
+  {
+    href: "/portfolio",
+    title: "Portfolio",
   },
   {
     href: "/markets",
@@ -45,14 +47,9 @@ export const navItems = [
     href: "/vault",
     title: "Vault",
   },
-
   {
-    href: "/rewards",
-    title: "Rewards",
-  },
-  {
-    href: "/competition",
-    title: "Competition",
+    href: "/history",
+    title: "History",
   },
 
   {
@@ -73,6 +70,11 @@ export const navItems = [
         href: bgtUrl,
         title: bgtName,
         blurb: "The hub for the governance token of Berachain, BGT",
+      },
+      {
+        href: dexUrl,
+        title: dexName,
+        blurb: "Mint or redeem the stablecoin of the Berachain",
       },
       {
         href: blockExplorerUrl,

@@ -31,6 +31,8 @@ const client = [
   "./src/toggle.tsx",
   "./src/tooltip.tsx",
   "./src/use-toast.tsx",
+  "./src/navigation-menu.tsx",
+  "./src/slider.tsx",
 ];
 
 const server = [
@@ -40,7 +42,6 @@ const server = [
   "./src/card.tsx",
   "./src/table.tsx",
   "./src/toast.tsx",
-  "./src/navigation-menu.tsx",
   "./src/skeleton.tsx",
 ];
 
