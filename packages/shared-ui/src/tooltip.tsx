@@ -24,7 +24,7 @@ export function Tooltip({
           <Button
             variant="ghost"
             className={cn(
-              "flex-inline h-5 w-5 rounded-full p-0 align-middle",
+              "flex-inline h-5 w-5 rounded-full p-0 align-middle hover:bg-transparent",
               className,
             )}
             onMouseEnter={() => setTooltipOpen(true)}
