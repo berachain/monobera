@@ -17,7 +17,7 @@ export default function HowItWorks() {
           </div>
           <h3 className="mb-2 text-lg font-semibold">Supply Assets</h3>
           <p>
-            Supply your assets like BERA, HONEY, ETH & BTC on BAAVE and start
+            Supply your assets like BERA, HONEY, ETH & BTC on BEND and start
             generating some Yield
           </p>
         </div>

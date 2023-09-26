@@ -134,7 +134,6 @@ function MarketColumn({
         <Market
           key={marketIndex}
           aria-hidden={marketIndex >= markets.length}
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           className={marketIndex % markets.length}
           {...market}
@@ -161,17 +160,14 @@ function MarketGrid() {
       {isInView && (
         <>
           <MarketColumn
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             markets={[...columns[0], ...columns[2].flat(), ...columns[1]]}
             marketClassName={(marketIndex) =>
               clsx(
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 marketIndex >= columns[0].length + columns[2][0].length &&
                   "md:hidden",
 
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 marketIndex >= columns[0].length && "lg:hidden",
               )
@@ -179,21 +175,17 @@ function MarketGrid() {
             msPerPixel={10}
           />
           <MarketColumn
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             markets={[...columns[1], ...columns[2][1]]}
             className="hidden md:block"
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             marketClassName={(marketIndex) =>
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               marketIndex >= columns[1].length && "lg:hidden"
             }
             msPerPixel={15}
           />
           <MarketColumn
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             markets={columns[2].flat()}
             className="hidden lg:block"
@@ -217,7 +209,7 @@ export default function Markets() {
       <div className="container">
         <h2 className="mt-2 text-center text-5xl font-extrabold leading-8 tracking-tight text-foreground sm:text-4xl">
           <span className="bg-gradient-to-b from-yellow-300 to-orange-600 bg-clip-text text-transparent">
-            BAAVE
+            BEND
           </span>{" "}
           Markets
         </h2>

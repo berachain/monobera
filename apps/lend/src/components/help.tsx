@@ -8,7 +8,7 @@ export default function Help() {
         <h2 className="mb-4 text-3xl font-bold">
           🐻 Join us in{" "}
           <span className="bg-gradient-to-r from-yellow-300 to-orange-600 bg-clip-text text-transparent">
-            Building a Better BAAVE
+            Building a Better BEND
           </span>{" "}
           For You!
         </h2>
@@ -31,7 +31,7 @@ export default function Help() {
         </div>
         <div className=" mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-muted p-6 text-center md:max-w-[350px] md:px-12 md:py-8  lg:max-w-full  lg:items-start lg:text-left">
           <p className="mb-2 flex items-center gap-2 text-lg font-semibold text-muted-foreground">
-            <span className="text-3xl ">📜 </span> BAAVE Docs
+            <span className="text-3xl ">📜 </span> BEND Docs
           </p>
           <p className="mb-8 text-2xl font-semibold">
             Are you a fellow builder in the making? Check out our docs and start
