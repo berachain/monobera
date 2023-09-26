@@ -12,7 +12,20 @@ import TokenCard from "~/components/token-card";
 import { useMarkets, type Market } from "~/hooks/useMarkets";
 import { market_table_columns } from "./market-table-column";
 
-export default function MarketsPageContent() {
+interface MarketsProps {
+  assets: any[];
+  borrowedAssets: any[];
+  suppliedAssets: any[];
+  borrowAPR: any[];
+  supplyAPR: any[];
+}
+export default function MarketsPageContent({
+  assets,
+  borrowedAssets,
+  suppliedAssets,
+  borrowAPR,
+  supplyAPR,
+}: MarketsProps) {
   const [tableView, setUseTableView] = React.useState(false);
   const markets = useMarkets();
   const sortOptions = ["Deposit-APY", "Total-Borrows", "Systems"];
@@ -34,7 +47,7 @@ export default function MarketsPageContent() {
 
   const marketData = React.useMemo(
     () =>
-      markets.map((market) => ({
+      assets.map((asset) => ({
         market: (
           <div className="flex w-[130px] items-center gap-2 text-sm font-medium leading-none">
             <Avatar className="h-8 w-8">

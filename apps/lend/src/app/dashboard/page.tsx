@@ -1,6 +1,11 @@
 import React from "react";
 
-import DashboardPageContent from "./DashboardPageContent";
+import DashboardPageContent from "./dashboard-page-content";
+
+export const metadata: Metadata = {
+  title: `Home | ${lendName}`,
+  description: `Welcome to ${lendName}!`,
+};
 
 export default function DashboardPage() {
   return (

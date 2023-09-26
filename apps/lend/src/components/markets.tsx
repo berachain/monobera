@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { formatUsd } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
@@ -215,9 +216,9 @@ export default function Markets() {
         </h2>
 
         <MarketGrid />
-        <div className="mt-16 flex justify-center">
+        <Link className="mt-16 flex justify-center" href={"/markets"}>
           <Button variant={"outline"}>View all markets</Button>
-        </div>
+        </Link>
       </div>
     </section>
   );
