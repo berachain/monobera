@@ -1,7 +1,7 @@
-import { type Token } from "@bera/berajs";
+import { type Address } from "wagmi";
 
 export type Asset = {
-  token: Token;
+  address: Address;
   totalSupplied: number;
   totalBorrowed: number | undefined;
   supplyAPR: number;

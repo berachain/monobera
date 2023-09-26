@@ -16,15 +16,16 @@ export const metadata: Metadata = {
   description: `Welcome to ${lendName}!`, // need text
 };
 
-export default function MarketsPage() {
+export default async function MarketsPage() {
   const [assets, borrowedAssets, suppliedAssets, borrowAPR, supplyAPR] =
-    Promise.all([
+    await Promise.all([
       getAssets(),
       getAssetsBorrowed(),
       getAssetsSupplied(),
       getBorrowAPR(),
       getSupplyAPR(),
     ]);
+
   return (
     <div className="container my-28">
       <MarketsPageContent

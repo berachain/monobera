@@ -7,11 +7,19 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-export default function BorrowBtn() {
+export default function BorrowBtn({
+  disabled = false,
+}: {
+  disabled?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="flex-1">
+      <Button
+        onClick={() => setOpen(true)}
+        className="flex-1"
+        disabled={disabled}
+      >
         Borrow
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>

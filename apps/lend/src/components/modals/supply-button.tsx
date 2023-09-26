@@ -6,11 +6,19 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
-export default function SupplyBtn() {
+export default function SupplyBtn({
+  disabled = false,
+}: {
+  disabled?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="flex-1">
+      <Button
+        onClick={() => setOpen(true)}
+        className="flex-1"
+        disabled={disabled}
+      >
         Supply
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>

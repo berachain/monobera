@@ -1,59 +1,95 @@
 import React from "react";
-import { type Columns } from "@bera/shared-ui";
-import { Icons } from "@bera/ui/icons";
+import { formatter } from "@bera/berajs";
+import { DataTableColumnHeader } from "@bera/shared-ui";
+import { type ColumnDef } from "@tanstack/react-table";
 
-export const market_table_columns: Columns = [
+export const market_table_columns: ColumnDef<any>[] = [
   {
-    header: <div className="w-[130px] text-left">Market</div>,
-    accessor: "market",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Market" />
+    ),
+    cell: ({ row }) => <>{row.original.token}</>,
+    accessorKey: "token",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[156px] gap-1">
-        Total Supplied
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Total Supplied" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex flex-col pl-1">
+        <div className="font-base text-base font-medium">
+          {formatter.format(row.original.totalSupplied)}
+        </div>
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
+          $
+          {formatter.format(
+            row.original.totalSupplied * row.original.dollarValue,
+          )}
+        </div>
       </div>
     ),
-    accessor: "total_supplied",
+    accessorKey: "totalSupplied",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[85px] gap-1">
-        Supply APY
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Supply APY" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-success-foreground">
+        {row.original.supplyAPR * 100}%
       </div>
     ),
-    accessor: "supply_apy",
+    accessorKey: "supplyAPR",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[156px] gap-1">
-        Total Borrowed
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Total Borrowed" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex flex-col pl-1 text-base">
+        <div>{row.original.totalBorrowed}</div>
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
+          $
+          {formatter.format(
+            row.original.totalBorrowed * row.original.dollarValue,
+          )}
+        </div>
       </div>
     ),
-    accessor: "total_borrowed",
+    accessorKey: "totalBorrowed",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[138px] gap-1">
-        Borrow APY Variable
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Borrow APY Variable" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-[138px] pl-4 text-base text-success-foreground">
+        {(row.original.borrowAPR ?? 0) * 100}%
       </div>
     ),
-    accessor: "borrow_apy_variable",
+    accessorKey: "supplyAPR",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[138px] gap-1">
-        Borrow APY Stable
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Borrow APY Stable" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-[138px] pl-4 text-base text-success-foreground">
+        {(row.original.borrowAPR ?? 0) * 100}%
       </div>
     ),
-    accessor: "borrow_apy_stable",
+    accessorKey: "supplyAPR",
+    enableSorting: true,
   },
   {
-    header: <div className="h-1 w-[91px]" />,
-    accessor: "details",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
+    cell: ({ row }) => <>{row.original.details}</>,
+    accessorKey: "details",
+    enableSorting: false,
   },
 ];
