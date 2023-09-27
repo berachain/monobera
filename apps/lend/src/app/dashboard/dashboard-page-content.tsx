@@ -1,16 +1,34 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Switch } from "@bera/ui/switch";
 
+import { getAssetDictionary } from "~/utils/getAssetDictionary";
 import StatusBanner from "~/components/status-banner";
 import { useMarkets } from "~/hooks/useMarkets";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
 import UserBorrows from "./user-borrows";
 import UserSupply from "./user-supply";
+import {type AssetItem, type AmountItem, type RateItem} from '~/utils/getServerSideData'
 
-export default function DashboardPageContent() {
+interface DashboardProps {
+  assets: AssetItem[];
+  borrowedAssets: AmountItem[];
+  suppliedAssets: AmountItem[];
+  borrowStableAPR: RateItem[];
+  borrowVariableAPR: RateItem[];
+  supplyStableAPR: RateItem[];
+}
+
+export default function DashboardPageContent({
+  assets,
+  borrowedAssets,
+  suppliedAssets,
+  borrowStableAPR,
+  borrowVariableAPR,
+  supplyStableAPR,
+}: DashboardProps) {
   const [tableView, setUseTableView] = React.useState(false);
   const markets = useMarkets();
 
@@ -25,6 +43,26 @@ export default function DashboardPageContent() {
       window.removeEventListener("resize", handleResize);
     };
   }, [tableView]);
+
+  const assetDictionary = useMemo(
+    () =>
+      getAssetDictionary(
+        assets,
+        borrowedAssets,
+        suppliedAssets,
+        borrowStableAPR,
+        borrowVariableAPR,
+        supplyStableAPR,
+      ),
+    [
+      assets,
+      borrowedAssets,
+      suppliedAssets,
+      borrowStableAPR,
+      borrowVariableAPR,
+      supplyStableAPR,
+    ],
+  );
 
   return (
     <div className="flex flex-col gap-9 md:gap-6">

@@ -7,7 +7,7 @@ import { DataTable, Dropdown, SearchInput, TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Switch } from "@bera/ui/switch";
 
-import { getAssetsList } from "~/utils/getMarketList";
+import { getAssetDictionary } from "~/utils/getAssetDictionary";
 import {
   type AmountItem,
   type AssetItem,
@@ -25,7 +25,6 @@ interface MarketsProps {
   borrowStableAPR: RateItem[];
   borrowVariableAPR: RateItem[];
   supplyStableAPR: RateItem[];
-  supplyVariableAPR: RateItem[];
 }
 export default function MarketsPageContent({
   assets,
@@ -34,7 +33,6 @@ export default function MarketsPageContent({
   borrowStableAPR,
   borrowVariableAPR,
   supplyStableAPR,
-  supplyVariableAPR,
 }: MarketsProps) {
   const { tokenDictionary } = useTokens();
   const [tableView, setUseTableView] = React.useState(false);
@@ -54,49 +52,47 @@ export default function MarketsPageContent({
     };
   }, [tableView]);
 
-  const assetsList = React.useMemo(
-    () =>
-      getAssetsList(
-        assets,
-        borrowedAssets,
-        suppliedAssets,
-        borrowStableAPR,
-        borrowVariableAPR,
-        supplyStableAPR,
-        supplyVariableAPR,
-      )
-        .filter((asset: Asset) => {
-          if (!keywords || keywords === "") return true;
-          else
-            return Object.values(asset).some((value) =>
-              typeof value !== "string"
-                ? String(value).toLowerCase().includes(keywords.toLowerCase())
-                : value.toLowerCase().includes(keywords.toLowerCase()),
-            );
-        })
-        .sort((a: Asset, b: Asset) => {
-          switch (sortBy) {
-            case "Deposit-APY":
-              return b.supplyStableAPR - a.supplyStableAPR;
-            case "Total-Borrows":
-              return (b.borrowed ?? 0) - (a.borrowed ?? 0);
-            case "Systems":
-              return b.asset_address.localeCompare(a.asset_address);
-            default:
-              return 0;
-          }
-        }),
-    [
+  const assetsList = React.useMemo(() => {
+    const assetDictionary = getAssetDictionary(
       assets,
       borrowedAssets,
       suppliedAssets,
       borrowStableAPR,
       borrowVariableAPR,
       supplyStableAPR,
-      supplyVariableAPR,
-      sortOptions,
-    ],
-  );
+    );
+    return Object.keys(assetDictionary)
+      .map((key) => assetDictionary[key as any] as Asset)
+      .filter((asset: Asset) => {
+        if (!keywords || keywords === "") return true;
+        else
+          return Object.values(asset).some((value) =>
+            typeof value !== "string"
+              ? String(value).toLowerCase().includes(keywords.toLowerCase())
+              : value.toLowerCase().includes(keywords.toLowerCase()),
+          );
+      })
+      .sort((a: Asset, b: Asset) => {
+        switch (sortBy) {
+          case "Deposit-APY":
+            return b.supplyStableAPR - a.supplyStableAPR;
+          case "Total-Borrows":
+            return (b.borrowed ?? 0) - (a.borrowed ?? 0);
+          case "Systems":
+            return b.asset_address.localeCompare(a.asset_address);
+          default:
+            return 0;
+        }
+      });
+  }, [
+    assets,
+    borrowedAssets,
+    suppliedAssets,
+    borrowStableAPR,
+    borrowVariableAPR,
+    supplyStableAPR,
+    sortOptions,
+  ]);
 
   const assetsData = React.useMemo(
     () =>

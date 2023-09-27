@@ -9,7 +9,6 @@ import {
   getBorrowStableAPR,
   getBorrowVariableAPR,
   getSupplyStableAPR,
-  getSupplyVariableAPR,
 } from "~/utils/getServerSideData";
 import MarketsPageContent from "./markets-page-content";
 
@@ -26,7 +25,6 @@ export default async function MarketsPage() {
     borrowStableAPR,
     borrowVariableAPR,
     supplyStableAPR,
-    supplyVariableAPR,
   ] = await Promise.all([
     getAssets(),
     getAssetsBorrowed(),
@@ -34,7 +32,6 @@ export default async function MarketsPage() {
     getBorrowStableAPR(),
     getBorrowVariableAPR(),
     getSupplyStableAPR(),
-    getSupplyVariableAPR(),
   ]);
 
   return (
@@ -47,7 +44,6 @@ export default async function MarketsPage() {
           borrowStableAPR,
           borrowVariableAPR,
           supplyStableAPR,
-          supplyVariableAPR,
         }}
       />
     </div>

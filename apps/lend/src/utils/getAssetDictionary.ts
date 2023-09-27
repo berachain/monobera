@@ -3,17 +3,16 @@ import {
   type AssetItem,
   type RateItem,
 } from "~/utils/getServerSideData";
-import { type Asset } from "./types";
+import { type Asset, type AssetDictionary } from "./types";
 
-export function getAssetsList(
+export function getAssetDictionary(
   assets: AssetItem[],
   borrowedAssets: AmountItem[],
   suppliedAssets: AmountItem[],
   borrowStableAPR: RateItem[],
   borrowVariableAPR: RateItem[],
   supplyStableAPR: RateItem[],
-  supplyVariableAPR: RateItem[],
-): Asset[] {
+): AssetDictionary {
   const assetDictionary: { [key: string]: Partial<Asset> } = {};
   assets.forEach((asset: AssetItem) => {
     assetDictionary[asset.asset_address] = asset;
@@ -35,12 +34,5 @@ export function getAssetsList(
   supplyStableAPR.forEach((asset: RateItem) => {
     assetDictionary[asset.asset_address]!.supplyStableAPR = Number(asset.rate);
   });
-  supplyVariableAPR.forEach((asset: RateItem) => {
-    assetDictionary[asset.asset_address]!.supplyVariableAPR = Number(
-      asset.rate,
-    );
-  });
-  return Object.keys(assetDictionary).map(
-    (key) => assetDictionary[key] as Asset,
-  );
+  return assetDictionary;
 }
