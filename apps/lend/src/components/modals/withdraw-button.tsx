@@ -10,7 +10,7 @@ export default function WithdrawBtn() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="flex-1 px-3 py-2">
+      <Button onClick={() => setOpen(true)} className="w-fit">
         Withdraw
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>

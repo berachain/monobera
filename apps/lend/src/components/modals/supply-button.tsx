@@ -16,7 +16,7 @@ export default function SupplyBtn({
     <>
       <Button
         onClick={() => setOpen(true)}
-        className="flex-1"
+        className="w-fit"
         disabled={disabled}
       >
         Supply

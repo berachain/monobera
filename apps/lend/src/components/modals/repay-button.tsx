@@ -13,7 +13,7 @@ export default function RepayBtn() {
       <Button
         variant={"outline"}
         onClick={() => setOpen(true)}
-        className="flex-1 px-3 py-2 md:w-[120px]"
+        className="w-fit"
       >
         Pay Back
       </Button>

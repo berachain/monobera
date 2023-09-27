@@ -45,7 +45,7 @@ export default function DashboardPageContent() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-6 lg:flex-row">
+      <div className="flex flex-col gap-6 xl:flex-row">
         <div className="flex flex-1 flex-col gap-4">
           <UserSupply markets={markets} tableView={tableView} />
         </div>
@@ -54,7 +54,7 @@ export default function DashboardPageContent() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-6 lg:flex-row">
+      <div className="flex flex-col gap-6 xl:flex-row">
         <div className="flex flex-1 flex-col gap-4">
           <AvailableSupply markets={markets} tableView={tableView} />
         </div>

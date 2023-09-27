@@ -17,7 +17,7 @@ export default function BorrowBtn({
     <>
       <Button
         onClick={() => setOpen(true)}
-        className="flex-1"
+        className="w-fit"
         disabled={disabled}
       >
         Borrow
