@@ -28,13 +28,17 @@ export function getAssetsList(
     assetDictionary[asset.asset_address]!.borrowStableAPR = Number(asset.rate);
   });
   borrowVariableAPR.forEach((asset: RateItem) => {
-    assetDictionary[asset.asset_address]!.borrowVariableAPR = Number(asset.rate);
+    assetDictionary[asset.asset_address]!.borrowVariableAPR = Number(
+      asset.rate,
+    );
   });
   supplyStableAPR.forEach((asset: RateItem) => {
     assetDictionary[asset.asset_address]!.supplyStableAPR = Number(asset.rate);
   });
   supplyVariableAPR.forEach((asset: RateItem) => {
-    assetDictionary[asset.asset_address]!.supplyVariableAPR = Number(asset.rate);
+    assetDictionary[asset.asset_address]!.supplyVariableAPR = Number(
+      asset.rate,
+    );
   });
   return Object.keys(assetDictionary).map(
     (key) => assetDictionary[key] as Asset,

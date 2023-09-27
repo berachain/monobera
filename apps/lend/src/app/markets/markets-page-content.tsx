@@ -41,7 +41,7 @@ export default function MarketsPageContent({
   const sortOptions = ["Deposit-APY", "Total-Borrows", "Systems"];
   const [sortBy, setSortBy] = React.useState<string>(sortOptions[2]!);
   const ref = useRef(null);
-
+  const [keywords, setKeywords] = React.useState<string>("");
   useEffect(() => {
     const handleResize = () => {
       if (tableView && window.innerWidth < 1024) {
@@ -64,18 +64,28 @@ export default function MarketsPageContent({
         borrowVariableAPR,
         supplyStableAPR,
         supplyVariableAPR,
-      ).sort((a: Asset, b: Asset) => {
-        switch (sortBy) {
-          case "Deposit-APY":
-            return b.supplyStableAPR - a.supplyStableAPR;
-          case "Total-Borrows":
-            return (b.borrowed ?? 0) - (a.borrowed ?? 0);
-          case "Systems":
-            return b.asset_address.localeCompare(a.asset_address);
-          default:
-            return 0;
-        }
-      }),
+      )
+        .filter((asset: Asset) => {
+          if (!keywords || keywords === "") return true;
+          else
+            return Object.values(asset).some((value) =>
+              typeof value !== "string"
+                ? String(value).toLowerCase().includes(keywords.toLowerCase())
+                : value.toLowerCase().includes(keywords.toLowerCase()),
+            );
+        })
+        .sort((a: Asset, b: Asset) => {
+          switch (sortBy) {
+            case "Deposit-APY":
+              return b.supplyStableAPR - a.supplyStableAPR;
+            case "Total-Borrows":
+              return (b.borrowed ?? 0) - (a.borrowed ?? 0);
+            case "Systems":
+              return b.asset_address.localeCompare(a.asset_address);
+            default:
+              return 0;
+          }
+        }),
     [
       assets,
       borrowedAssets,
@@ -88,7 +98,6 @@ export default function MarketsPageContent({
     ],
   );
 
-  console.log(assetsList, tokenDictionary);
   const assetsData = React.useMemo(
     () =>
       assetsList.map((asset: Asset) => ({
@@ -146,6 +155,8 @@ export default function MarketsPageContent({
         <SearchInput
           placeholder="Search for BEND Markets..."
           className="w-full"
+          value={keywords}
+          onChange={(e) => setKeywords(e.target.value)}
         />
         <Dropdown
           selected={sortBy}
