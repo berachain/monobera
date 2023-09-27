@@ -86,6 +86,8 @@ export const erc20BribeAddress = process.env
   .NEXT_PUBLIC_ERC20_BRIBE_ADDRESS as Address;
 export const erc20RewardsAddress = process.env
   .NEXT_PUBLIC_REWARDS_ADDRESS as Address;
+export const lendPoolProxyAddress = process.env
+  .NEXT_PUBLIC_LEND_POOL_PROXY_ADDRESS as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env

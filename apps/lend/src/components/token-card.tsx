@@ -16,18 +16,18 @@ export default function TokenCard({ asset }: { asset: Asset }) {
       {tokenDictionary ? (
         <Card
           className="div-4 flex flex-col items-center justify-between gap-6 p-4 lg:flex-row"
-          key={asset.address}
+          key={asset.asset_address}
         >
           <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:gap-6 lg:justify-start">
             <div className="mb-[22px] flex w-[250px] items-center gap-4 md:mb-0">
               <TokenIcon
-                token={tokenDictionary[asset.address]}
+                token={tokenDictionary[asset.asset_address]}
                 size="2xl"
-                key={asset.address}
+                key={asset.asset_address}
               />
               <div>
                 <div className="text-xs	font-medium leading-5 text-muted-foreground">
-                  {tokenDictionary[asset.address]?.name}{" "}
+                  {tokenDictionary[asset.asset_address]?.name}{" "}
                   <Tooltip
                     text={
                       "The data values below showcase the total assets supplied and their respective USD values."
@@ -35,21 +35,21 @@ export default function TokenCard({ asset }: { asset: Asset }) {
                   />
                 </div>
                 <div className="text-lg font-bold leading-[22px]">
-                  {formatter.format(asset.totalSupplied)}{" "}
-                  {tokenDictionary[asset.address]?.symbol}
+                  {formatter.format(asset.supplied)}{" "}
+                  {tokenDictionary[asset.asset_address]?.symbol}
                 </div>
                 <div className=" text-xs font-medium leading-5">
-                  ${formatter.format(asset.totalSupplied * asset.dollarValue)}
+                  ${formatter.format(asset.supplied * asset.dollarValue)}
                 </div>
               </div>
             </div>
 
             <div className="flex justify-between md:flex-col md:justify-center">
               <div className="flex items-center text-xs font-medium leading-5 text-muted-foreground">
-                Supply APY
+                Supply APR
               </div>
               <div className="font-bold text-success-foreground md:text-lg">
-                {asset.supplyAPR * 100}%
+                {(asset.supplyStableAPR * 100).toFixed(2)}%
               </div>
             </div>
 
@@ -58,7 +58,9 @@ export default function TokenCard({ asset }: { asset: Asset }) {
                 Variable Borrow APR
               </div>
               <div className="font-bold md:text-lg">
-                {asset.borrowAPR ? `${asset.borrowAPR * 100}%` : "~~"}
+                {asset.borrowVariableAPR
+                  ? `${(asset.borrowVariableAPR * 100).toFixed(2)}%`
+                  : "~~"}
               </div>
             </div>
 
@@ -67,7 +69,9 @@ export default function TokenCard({ asset }: { asset: Asset }) {
                 Stable Borrow APR
               </div>
               <div className="font-bold md:text-lg">
-                {asset.borrowAPR ? `${asset.borrowAPR * 100}%` : "~~"}
+                {asset.borrowStableAPR
+                  ? `${(asset.borrowStableAPR * 100).toFixed(2)}%`
+                  : "~~"}
               </div>
             </div>
 
@@ -76,17 +80,15 @@ export default function TokenCard({ asset }: { asset: Asset }) {
                 Total borrows
               </div>
               <div className="font-bold md:text-lg">
-                {asset.totalBorrowed
-                  ? formatter.format(asset.totalBorrowed)
-                  : "~~"}
+                {asset.borrowed ? formatter.format(asset.borrowed) : "~~"}
               </div>
             </div>
           </div>
 
           <div className="flex w-full items-center gap-2 lg:w-fit">
             <SupplyBtn />
-            <BorrowBtn disabled={!asset.totalBorrowed} />
-            <Link href={`/markets/address=${asset.address}`}>
+            <BorrowBtn disabled={!asset.borrowed} />
+            <Link href={`/markets/address=${asset.asset_address}`}>
               <Button variant={"outline"}>
                 <Icons.info />
               </Button>

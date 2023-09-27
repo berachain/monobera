@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { RewardBanner } from "@bera/shared-ui";
 import { Switch } from "@bera/ui/switch";
 
 import StatusBanner from "~/components/status-banner";
@@ -29,10 +28,8 @@ export default function DashboardPageContent() {
 
   return (
     <div className="flex flex-col gap-9 md:gap-6">
-      <RewardBanner />
-
+      {/* <RewardBanner /> */}
       <StatusBanner />
-
       <div className="flex flex-row justify-between">
         <div>
           <h2 className="mb-2 text-3xl font-bold">Account Status</h2>

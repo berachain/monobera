@@ -1,32 +1,42 @@
-import { type Address } from "wagmi";
-
+import {
+  type AmountItem,
+  type AssetItem,
+  type RateItem,
+} from "~/utils/getServerSideData";
 import { type Asset } from "./types";
 
 export function getAssetsList(
-  assets: any[],
-  borrowedAssets: any[],
-  suppliedAssets: any[],
-  borrowAPR: any[],
-  supplyAPR: any[],
+  assets: AssetItem[],
+  borrowedAssets: AmountItem[],
+  suppliedAssets: AmountItem[],
+  borrowStableAPR: RateItem[],
+  borrowVariableAPR: RateItem[],
+  supplyStableAPR: RateItem[],
+  supplyVariableAPR: RateItem[],
 ): Asset[] {
-  if (
-    !assets ||
-    assets.length === 0 ||
-    !borrowAPR ||
-    !supplyAPR ||
-    !borrowedAssets ||
-    !suppliedAssets
-  )
-    return [];
-
-  // honey address hard coded ;()
-  // hard code af, waiting for new api
-  return assets.map((asset, index) => ({
-    address: "0x3a995543A9c6a9c5FE56d2d9024195aE7f3373e8" as Address,
-    totalSupplied: Number(suppliedAssets[index].amount),
-    totalBorrowed: Number(borrowedAssets[index].amount),
-    supplyAPR: Number(supplyAPR[index].rate),
-    borrowAPR: Number(borrowAPR[index].rate),
-    dollarValue: 1,
-  }));
+  const assetDictionary: { [key: string]: Partial<Asset> } = {};
+  assets.forEach((asset: AssetItem) => {
+    assetDictionary[asset.asset_address] = asset;
+  });
+  borrowedAssets.forEach((asset: AmountItem) => {
+    assetDictionary[asset.asset_address]!.borrowed = Number(asset.amount);
+  });
+  suppliedAssets.forEach((asset: AmountItem) => {
+    assetDictionary[asset.asset_address]!.supplied = Number(asset.amount);
+  });
+  borrowStableAPR.forEach((asset: RateItem) => {
+    assetDictionary[asset.asset_address]!.borrowStableAPR = Number(asset.rate);
+  });
+  borrowVariableAPR.forEach((asset: RateItem) => {
+    assetDictionary[asset.asset_address]!.borrowVariableAPR = Number(asset.rate);
+  });
+  supplyStableAPR.forEach((asset: RateItem) => {
+    assetDictionary[asset.asset_address]!.supplyStableAPR = Number(asset.rate);
+  });
+  supplyVariableAPR.forEach((asset: RateItem) => {
+    assetDictionary[asset.asset_address]!.supplyVariableAPR = Number(asset.rate);
+  });
+  return Object.keys(assetDictionary).map(
+    (key) => assetDictionary[key] as Asset,
+  );
 }

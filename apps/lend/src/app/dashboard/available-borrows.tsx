@@ -54,7 +54,9 @@ export default function AvailableBorrows({
   );
   return (
     <>
-      <div className="text-2xl font-semibold leading-loose">Your Borrows</div>
+      <div className="text-2xl font-semibold leading-loose">
+        Available Borrows
+      </div>
       {
         <>
           {tableView ? (

@@ -1,10 +1,11 @@
-import { type Address } from "wagmi";
+import { type AssetItem } from "./getServerSideData";
 
-export type Asset = {
-  address: Address;
-  totalSupplied: number;
-  totalBorrowed: number | undefined;
-  supplyAPR: number;
-  borrowAPR: number | undefined;
+export type Asset = AssetItem & {
+  borrowed?: number;
+  supplied: number;
+  borrowStableAPR?: number;
+  borrowVariableAPR?: number;
+  supplyStableAPR: number;
+  supplyVariableAPR: number;
   dollarValue: number;
 };

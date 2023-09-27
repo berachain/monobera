@@ -3,35 +3,38 @@
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useTokens } from "@bera/berajs";
-import {
-  DataTable,
-  Dropdown,
-  HoneyBanner,
-  SearchInput,
-  TokenIcon,
-} from "@bera/shared-ui";
+import { DataTable, Dropdown, SearchInput, TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Switch } from "@bera/ui/switch";
 
 import { getAssetsList } from "~/utils/getMarketList";
+import {
+  type AmountItem,
+  type AssetItem,
+  type RateItem,
+} from "~/utils/getServerSideData";
 import { type Asset } from "~/utils/types";
 import StatusBanner from "~/components/status-banner";
 import TokenCard from "~/components/token-card";
 import { market_table_columns } from "./market-table-column";
 
 interface MarketsProps {
-  assets: any[];
-  borrowedAssets: any[];
-  suppliedAssets: any[];
-  borrowAPR: any[];
-  supplyAPR: any[];
+  assets: AssetItem[];
+  borrowedAssets: AmountItem[];
+  suppliedAssets: AmountItem[];
+  borrowStableAPR: RateItem[];
+  borrowVariableAPR: RateItem[];
+  supplyStableAPR: RateItem[];
+  supplyVariableAPR: RateItem[];
 }
 export default function MarketsPageContent({
   assets,
   borrowedAssets,
   suppliedAssets,
-  borrowAPR,
-  supplyAPR,
+  borrowStableAPR,
+  borrowVariableAPR,
+  supplyStableAPR,
+  supplyVariableAPR,
 }: MarketsProps) {
   const { tokenDictionary } = useTokens();
   const [tableView, setUseTableView] = React.useState(false);
@@ -57,37 +60,51 @@ export default function MarketsPageContent({
         assets,
         borrowedAssets,
         suppliedAssets,
-        borrowAPR,
-        supplyAPR,
-      ).sort((a, b) => {
+        borrowStableAPR,
+        borrowVariableAPR,
+        supplyStableAPR,
+        supplyVariableAPR,
+      ).sort((a: Asset, b: Asset) => {
         switch (sortBy) {
           case "Deposit-APY":
-            return b.supplyAPR - a.supplyAPR;
+            return b.supplyStableAPR - a.supplyStableAPR;
           case "Total-Borrows":
-            return (b.totalBorrowed ?? 0) - (a.totalBorrowed ?? 0);
+            return (b.borrowed ?? 0) - (a.borrowed ?? 0);
           case "Systems":
-            return 0;
+            return b.asset_address.localeCompare(a.asset_address);
           default:
             return 0;
         }
       }),
-    [assets, borrowedAssets, suppliedAssets, borrowAPR, supplyAPR, sortOptions],
+    [
+      assets,
+      borrowedAssets,
+      suppliedAssets,
+      borrowStableAPR,
+      borrowVariableAPR,
+      supplyStableAPR,
+      supplyVariableAPR,
+      sortOptions,
+    ],
   );
 
+  console.log(assetsList, tokenDictionary);
   const assetsData = React.useMemo(
     () =>
       assetsList.map((asset: Asset) => ({
         ...asset,
         token: (
           <>
-            {tokenDictionary && Object.keys(tokenDictionary).length !== 0 ? (
+            {tokenDictionary &&
+            Object.keys(tokenDictionary).length !== 0 &&
+            tokenDictionary[asset.asset_address] ? (
               <div className="flex items-center gap-2 text-sm font-medium leading-none">
                 <TokenIcon
-                  token={tokenDictionary[asset.address]}
+                  token={tokenDictionary[asset.asset_address]}
                   size="lg"
-                  key={asset.address}
+                  key={asset.asset_address}
                 />
-                {tokenDictionary[asset.address]!.name}
+                {tokenDictionary[asset.asset_address]!.name}
               </div>
             ) : (
               <>Loading</>
@@ -95,7 +112,7 @@ export default function MarketsPageContent({
           </>
         ),
         details: (
-          <Link href={`/markets/address=${asset.address}`}>
+          <Link href={`/markets/address=${asset.asset_address}`}>
             <Button variant={"outline"}>details </Button>
           </Link>
         ),
@@ -105,9 +122,6 @@ export default function MarketsPageContent({
 
   return (
     <>
-      <div className="mb-12">
-        <HoneyBanner />
-      </div>
       <div className="mb-12">
         <StatusBanner />
       </div>

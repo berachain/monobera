@@ -19,13 +19,10 @@ export const market_table_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-base text-base font-medium">
-          {formatter.format(row.original.totalSupplied)}
+          {formatter.format(row.original.supplied)}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          $
-          {formatter.format(
-            row.original.totalSupplied * row.original.dollarValue,
-          )}
+          ${formatter.format(row.original.supplied * row.original.dollarValue)}
         </div>
       </div>
     ),
@@ -38,7 +35,7 @@ export const market_table_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-success-foreground">
-        {row.original.supplyAPR * 100}%
+        {(row.original.supplyStableAPR * 100).toFixed(2)}%
       </div>
     ),
     accessorKey: "supplyAPR",
@@ -50,13 +47,19 @@ export const market_table_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex flex-col pl-1 text-base">
-        <div>{row.original.totalBorrowed}</div>
-        <div className="text-xs font-medium leading-tight text-muted-foreground">
-          $
-          {formatter.format(
-            row.original.totalBorrowed * row.original.dollarValue,
-          )}
-        </div>
+        {row.original.borrowed ? (
+          <>
+            <div>{formatter.format(row.original.borrowed)}</div>
+            <div className="text-xs font-medium leading-tight text-muted-foreground">
+              $
+              {formatter.format(
+                row.original.totalBorrowed * row.original.dollarValue,
+              )}
+            </div>
+          </>
+        ) : (
+          "~~"
+        )}
       </div>
     ),
     accessorKey: "totalBorrowed",
@@ -67,8 +70,12 @@ export const market_table_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader column={column} title="Borrow APY Variable" />
     ),
     cell: ({ row }) => (
-      <div className="w-[138px] pl-4 text-base text-success-foreground">
-        {(row.original.borrowAPR ?? 0) * 100}%
+      <div className="pl-4 text-base text-success-foreground">
+        {row.original.borrowVariableAPR ? (
+          <>{(row.original.borrowVariableAPR * 100).toFixed(2)}%</>
+        ) : (
+          "~~"
+        )}
       </div>
     ),
     accessorKey: "supplyAPR",
@@ -79,8 +86,12 @@ export const market_table_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader column={column} title="Borrow APY Stable" />
     ),
     cell: ({ row }) => (
-      <div className="w-[138px] pl-4 text-base text-success-foreground">
-        {(row.original.borrowAPR ?? 0) * 100}%
+      <div className="pl-4 text-base text-success-foreground">
+        {row.original.borrowVariableAPR ? (
+          <>{(row.original.borrowStableAPR * 100).toFixed(2)}%</>
+        ) : (
+          "~~"
+        )}
       </div>
     ),
     accessorKey: "supplyAPR",

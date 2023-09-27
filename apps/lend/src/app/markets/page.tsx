@@ -6,8 +6,10 @@ import {
   getAssets,
   getAssetsBorrowed,
   getAssetsSupplied,
-  getBorrowAPR,
-  getSupplyAPR,
+  getBorrowStableAPR,
+  getBorrowVariableAPR,
+  getSupplyStableAPR,
+  getSupplyVariableAPR,
 } from "~/utils/getServerSideData";
 import MarketsPageContent from "./markets-page-content";
 
@@ -17,24 +19,35 @@ export const metadata: Metadata = {
 };
 
 export default async function MarketsPage() {
-  const [assets, borrowedAssets, suppliedAssets, borrowAPR, supplyAPR] =
-    await Promise.all([
-      getAssets(),
-      getAssetsBorrowed(),
-      getAssetsSupplied(),
-      getBorrowAPR(),
-      getSupplyAPR(),
-    ]);
+  const [
+    assets,
+    borrowedAssets,
+    suppliedAssets,
+    borrowStableAPR,
+    borrowVariableAPR,
+    supplyStableAPR,
+    supplyVariableAPR,
+  ] = await Promise.all([
+    getAssets(),
+    getAssetsBorrowed(),
+    getAssetsSupplied(),
+    getBorrowStableAPR(),
+    getBorrowVariableAPR(),
+    getSupplyStableAPR(),
+    getSupplyVariableAPR(),
+  ]);
 
   return (
     <div className="container my-28">
       <MarketsPageContent
         {...{
           assets,
-          borrowedAssets: [borrowedAssets],
-          suppliedAssets: [suppliedAssets],
-          borrowAPR: [borrowAPR],
-          supplyAPR: [supplyAPR],
+          borrowedAssets,
+          suppliedAssets,
+          borrowStableAPR,
+          borrowVariableAPR,
+          supplyStableAPR,
+          supplyVariableAPR,
         }}
       />
     </div>
