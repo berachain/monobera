@@ -4,13 +4,17 @@ import React, { useEffect, useMemo } from "react";
 import { Switch } from "@bera/ui/switch";
 
 import { getAssetDictionary } from "~/utils/getAssetDictionary";
+import {
+  type AmountItem,
+  type AssetItem,
+  type RateItem,
+} from "~/utils/getServerSideData";
 import StatusBanner from "~/components/status-banner";
 import { useMarkets } from "~/hooks/useMarkets";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
 import UserBorrows from "./user-borrows";
 import UserSupply from "./user-supply";
-import {type AssetItem, type AmountItem, type RateItem} from '~/utils/getServerSideData'
 
 interface DashboardProps {
   assets: AssetItem[];
@@ -66,7 +70,6 @@ export default function DashboardPageContent({
 
   return (
     <div className="flex flex-col gap-9 md:gap-6">
-      {/* <RewardBanner /> */}
       <StatusBanner />
       <div className="flex flex-row justify-between">
         <div>
