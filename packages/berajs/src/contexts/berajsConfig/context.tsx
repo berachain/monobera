@@ -79,6 +79,9 @@ const BeraConfig: React.FC<IBeraConfig> = ({
     connectors: connectors,
     publicClient,
   });
+
+  console.log(config)
+  console.log(chains)
   return (
     <BeraConfigContext.Provider value={{ networkConfig, autoConnect }}>
       <WagmiConfig config={config}>

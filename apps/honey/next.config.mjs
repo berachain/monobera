@@ -6,9 +6,9 @@ const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
   transpilePackages: ["@bera/ui", "@bera/berajs"],
-  // experimental: {
-  //   esmExternals: "loose",
-  // },
+  experimental: {
+    esmExternals: "loose",
+  },
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
