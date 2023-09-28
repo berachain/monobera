@@ -1,119 +1,236 @@
 import React from "react";
-import { Tooltip, type Columns } from "@bera/shared-ui";
-import { Icons } from "@bera/ui/icons";
+import { formatter } from "@bera/berajs";
+import { DataTableColumnHeader } from "@bera/shared-ui";
+import { type ColumnDef } from "@tanstack/react-table";
 
-export const user_supply_columns: Columns = [
+export const user_supply_columns: ColumnDef<any>[] = [
   {
-    header: <div className="w-[100px] text-left">Market</div>,
-    accessor: "market",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Market" />
+    ),
+    cell: ({ row }) => <>{row.original.market}</>,
+    accessorKey: "market",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[114px] gap-1">
-        Wallet Balance
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Wallet Balance"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="flex flex-col pl-1">
+        <div className="font-medium">
+          {formatter.format(row.original.walletBalance)}
+        </div>
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
+          ${formatter.format(row.original.walletBalanceUS)}
+        </div>
       </div>
     ),
-    accessor: "wallet_balance",
+    accessorKey: "walletBalanceUS",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[114px] gap-1">
-        Supply APY
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Supply APY"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="text-success-foreground">
+        {(row.original.supplyStableAPR * 100).toFixed(2)}%
       </div>
     ),
-    accessor: "supply_apy",
+    accessorKey: "supplyStableAPR",
+    enableSorting: true,
   },
   {
-    header: <div className="h-1 w-[150px]" />,
-    accessor: "action",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
+    cell: ({ row }) => <>{row.original.action}</>,
+    accessorKey: "action",
+    enableSorting: false,
   },
 ];
 
-export const user_borrows_columns: Columns = [
+export const user_borrows_columns: ColumnDef<any>[] = [
   {
-    header: <div className="w-[100px] text-left">Market</div>,
-    accessor: "market",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Market" />
+    ),
+    cell: ({ row }) => <>{row.original.market}</>,
+    accessorKey: "market",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[114px] gap-1">
-        Wallet Balance
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Debt Amount"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="flex flex-col pl-1">
+        <div className="font-medium">
+          {formatter.format(row.original.debtBalance)}
+        </div>
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
+          ${formatter.format(row.original.debtBalanceUS)}
+        </div>
       </div>
     ),
-    accessor: "wallet_balance",
+    accessorKey: "debtBalanceUS",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[114px] gap-1">
-        Borrow APY
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Loan APY"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="text-warning-foreground">
+        {(row.original.loanAPY * 100).toFixed(2)}%
       </div>
     ),
-    accessor: "borrow_apy",
+    accessorKey: "loanAPY",
+    enableSorting: true,
   },
   {
-    header: <div className="h-1 w-[120px]" />,
-    accessor: "action",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
+    cell: ({ row }) => <>{row.original.action}</>,
+    accessorKey: "action",
+    enableSorting: false,
   },
 ];
 
-export const available_supply_columns: Columns = [
+export const available_supply_columns: ColumnDef<any>[] = [
   {
-    header: <div className="w-[100px] text-left">Market</div>,
-    accessor: "market",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Market" />
+    ),
+    cell: ({ row }) => <>{row.original.market}</>,
+    accessorKey: "market",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[114px] gap-1">
-        Wallet Balance
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Wallet Balance"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="flex flex-col pl-1">
+        <div className="font-medium">
+          {formatter.format(row.original.walletBalance)}
+        </div>
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
+          ${formatter.format(row.original.walletBalanceUS)}
+        </div>
       </div>
     ),
-    accessor: "wallet_balance",
+    accessorKey: "walletBalanceUS",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[114px] gap-1">
-        Estimated APY
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Supply APY"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="text-success-foreground">
+        {(row.original.supplyStableAPR * 100).toFixed(2)}%
       </div>
     ),
-    accessor: "estimated_apy",
+    accessorKey: "supplyStableAPR",
+    enableSorting: true,
   },
   {
-    header: <div className="h-1 w-[150px]" />,
-    accessor: "action",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
+    cell: ({ row }) => <>{row.original.action}</>,
+    accessorKey: "action",
+    enableSorting: false,
   },
 ];
 
-export const available_borrows_columns: Columns = [
+export const available_borrows_columns: ColumnDef<any>[] = [
   {
-    header: <div className="w-[100px] text-left">Market</div>,
-    accessor: "market",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Market" />
+    ),
+    cell: ({ row }) => <>{row.original.market}</>,
+    accessorKey: "market",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[114px] gap-1">
-        Available
-        <Tooltip text="Borrow APY" />
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Avaliable"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="flex flex-col pl-1">
+        <div className="font-medium">
+          {formatter.format(row.original.avaliable)}
+        </div>
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
+          ${formatter.format(row.original.avaliableUS)}
+        </div>
       </div>
     ),
-    accessor: "available",
+    accessorKey: "avaliableUS",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[114px] gap-1">
-        Borrow APY
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Stable APY"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="text-warning-foreground">
+        {(row.original.borrowStableAPR * 100).toFixed(2)}%
       </div>
     ),
-    accessor: "borrow_apy",
+    accessorKey: "borrowStableAPR",
+    enableSorting: true,
   },
   {
-    header: <div className="h-1 w-[150px]" />,
-    accessor: "action",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Variable APY"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="text-warning-foreground">
+        {(row.original.borrowVariableAPR * 100).toFixed(2)}%
+      </div>
+    ),
+    accessorKey: "borrowVariableAPR",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
+    cell: ({ row }) => <>{row.original.action}</>,
+    accessorKey: "action",
+    enableSorting: false,
   },
 ];

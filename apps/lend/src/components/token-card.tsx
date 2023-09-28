@@ -86,8 +86,8 @@ export default function TokenCard({ asset }: { asset: Asset }) {
           </div>
 
           <div className="flex w-full items-center gap-2 lg:w-fit">
-            <SupplyBtn />
-            <BorrowBtn disabled={!asset.borrowed} />
+            <SupplyBtn asset={asset} />
+            <BorrowBtn disabled={!asset.borrowed} asset={asset} />
             <Link href={`/markets/address=${asset.asset_address}`}>
               <Button variant={"outline"}>
                 <Icons.info />

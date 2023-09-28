@@ -15,36 +15,53 @@ import { lendPoolImplementationABI } from "~/hooks/abi";
 export default function SupplyBtn({
   asset,
   disabled = false,
+  variant = "primary",
 }: {
   asset: Asset;
   disabled?: boolean;
+  variant?: "primary" | "outline";
 }) {
   const [open, setOpen] = useState(false);
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const { write, isLoading, ModalPortal } = useTxn({
+    message: `Supplying ${amount} ${asset.symbol}`,
+  });
+
   return (
     <>
+      {" "}
+      {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-fit"
-        disabled={disabled}
+        className="w-fit text-sm leading-5"
+        disabled={disabled || isLoading}
+        variant={variant}
       >
-        Supply
+        {isLoading ? "Loading" : "Supply"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
-          <SupplyModalContent asset={asset} />
+          <SupplyModalContent {...{ asset, amount, setAmount, write }} />
         </DialogContent>
       </Dialog>
     </>
   );
 }
 
-const SupplyModalContent = ({ asset }: { asset: Asset }) => {
+const SupplyModalContent = ({
+  asset,
+  amount,
+  setAmount,
+  write,
+}: {
+  asset: Asset;
+  amount: number | undefined;
+  setAmount: (amount: number | undefined) => void;
+  write: (arg0: any) => void;
+}) => {
   const userBalance = 420.69;
-  const [amount, setAmount] = useState<number | undefined>(undefined);
-  const { write, isLoading, ModalPortal } = useTxn({
-    message: `Supplying ${amount} ${asset.symbol}`,
-  });
   const { account } = useBeraJs();
+
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Supply</div>
@@ -87,9 +104,7 @@ const SupplyModalContent = ({ asset }: { asset: Asset }) => {
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div>
-            ${formatter.format(amount??0 * asset.dollarValue ?? 1)}
-          </div>
+          <div>${formatter.format(amount ?? 0 * asset.dollarValue ?? 1)}</div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Supply APY</div>
@@ -105,7 +120,7 @@ const SupplyModalContent = ({ asset }: { asset: Asset }) => {
       </div>
 
       <Button
-        disabled={!amount ||amount === 0 || amount > userBalance}
+        disabled={!amount || amount === 0 || amount > userBalance}
         onClick={() => {
           write({
             address: lendPoolImplementationAddress,
@@ -122,7 +137,6 @@ const SupplyModalContent = ({ asset }: { asset: Asset }) => {
       >
         {amount === 0 ? "Enter Amount" : "Supply"}
       </Button>
-      {ModalPortal}
     </div>
   );
 };

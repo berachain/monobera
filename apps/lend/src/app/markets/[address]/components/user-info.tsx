@@ -2,7 +2,8 @@ import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 import Card from "~/components/card";
-import SupplyBtn from "~/components/modals/supply-button";
+
+// import SupplyBtn from "~/components/modals/supply-button";
 
 export default function UserInfo() {
   const ticker = "ETH";
@@ -36,10 +37,7 @@ export default function UserInfo() {
                 $0.00
               </div>
             </div>
-            <div>
-              {" "}
-              <SupplyBtn />
-            </div>
+            <div> {/* <SupplyBtn /> */}</div>
           </div>
 
           <div className="mt-4 flex items-center justify-between">
@@ -55,10 +53,7 @@ export default function UserInfo() {
                 $0.00
               </div>
             </div>
-            <div>
-              {" "}
-              <SupplyBtn />
-            </div>
+            <div> {/* <SupplyBtn asset={ass}/> */}</div>
           </div>
         </div>
       </Card>

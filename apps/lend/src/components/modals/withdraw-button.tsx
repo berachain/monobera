@@ -15,35 +15,51 @@ import { lendPoolImplementationABI } from "~/hooks/abi";
 export default function WithdrawBtn({
   asset,
   disabled = false,
+  variant = "outline",
 }: {
   asset: Asset;
   disabled?: boolean;
+  variant?: "primary" | "outline";
 }) {
   const [open, setOpen] = useState(false);
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const { write, isLoading, ModalPortal } = useTxn({
+    message: `Supplying ${amount} ${asset.symbol}`,
+  });
   return (
     <>
+      {" "}
+      {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-fit"
-        disabled={disabled}
+        className="w-fit text-sm leading-5"
+        disabled={disabled || isLoading}
+        variant={variant}
       >
-        Withdraw
+        {isLoading ? "Loading" : "Withdraw"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
-          <WithdrawModalContent asset={asset} />
+          <WithdrawModalContent {...{ asset, amount, setAmount, write }} />
         </DialogContent>
       </Dialog>
     </>
   );
 }
 
-const WithdrawModalContent = ({ asset }: { asset: Asset }) => {
+const WithdrawModalContent = ({
+  asset,
+  amount,
+  setAmount,
+  write,
+}: {
+  asset: Asset;
+  amount: number | undefined;
+  setAmount: (amount: number | undefined) => void;
+  write: (arg0: any) => void;
+}) => {
   const userBalance = 420.69;
-  const [amount, setAmount] = useState<number | undefined>(undefined);
-  const { write, isLoading, ModalPortal } = useTxn({
-    message: `Supplying ${amount} ${asset.symbol}`,
-  });
+
   const { account } = useBeraJs();
 
   return (

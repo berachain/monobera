@@ -8,6 +8,7 @@ export default function InfoButton({ address }: { address: string }) {
   return (
     <Button
       variant={"outline"}
+      className="w-fit text-sm leading-5"
       onClick={() => router.push(`/markets/address=${address}`)}
     >
       <Icons.info />

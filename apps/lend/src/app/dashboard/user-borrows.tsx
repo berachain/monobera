@@ -1,11 +1,12 @@
 import React from "react";
-import { RT } from "@bera/shared-ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import { DataTable, TokenIcon } from "@bera/shared-ui";
 
+import { type Asset } from "~/utils/types";
 import RepayBtn from "~/components/modals/repay-button";
+// import BorrowBtn from "~/components/modals/borrow-button";
 import UserTokenCard from "~/components/user-token-card";
 import { user_borrows_columns } from "./column";
-import { type Asset } from "~/utils/types";
+
 export default function UserBorrows({
   assets,
   tableView = false,
@@ -13,6 +14,29 @@ export default function UserBorrows({
   assets: Asset[];
   tableView?: boolean;
 }) {
+  const data = React.useMemo(
+    () =>
+      assets.map((asset) => ({
+        ...asset,
+        market: (
+          <div className="flex items-center gap-2 text-sm font-medium leading-none">
+            <TokenIcon address={asset.asset_address} fetch size="lg" />
+            {asset.symbol}
+          </div>
+        ),
+        debtBalance: 100,
+        debtBalanceUS: 100 * asset.dollarValue,
+        loanAPY: true ? asset.supplyStableAPR : asset.supplyVariableAPR,
+        action: (
+          <div className="flex gap-2">
+            {/* <BorrowBtn asset={asset} /> */}
+            <RepayBtn asset={asset} />
+          </div>
+        ),
+      })),
+    [assets],
+  );
+
   // const data = React.useMemo(
   //   () =>
   //     markets.slice(2, 4).map((market) => ({
@@ -52,8 +76,8 @@ export default function UserBorrows({
       <div className="text-muted-foreground">
         These assets are borrowed against your supplied collateral.
       </div>
-      {tableView ? (<div>table view</div>
-        // <RT columns={user_borrows_columns} data={data} />
+      {tableView ? (
+        <DataTable columns={user_borrows_columns} data={data} />
       ) : (
         <>
           {assets.map((asset, index) => (

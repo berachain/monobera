@@ -1,26 +1,25 @@
 import React, { useEffect } from "react";
+import { honeyAddress } from "@bera/config";
 import { Switch } from "@bera/ui/switch";
 
-import { type AssetDictionary } from "~/utils/types";
+import { type Asset, type AssetDictionary } from "~/utils/types";
 import StatusBanner from "~/components/status-banner";
-import { useMarkets } from "~/hooks/useMarkets";
-import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
+// import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
 import UserBorrows from "./user-borrows";
 import UserSupply from "./user-supply";
-import { honeyAddress } from "@bera/config";
+
 export default function Dashboard({
   assetDictionary,
 }: {
   assetDictionary: AssetDictionary;
 }) {
   const [tableView, setUseTableView] = React.useState(false);
-  const markets = useMarkets();
 
-  const { useUserAccountData } = usePollUserAccountData();
-  const { data, isLoading } = useUserAccountData();
-//   console.log("useUserAccountData", data, isLoading);
+  // const { useUserAccountData } = usePollUserAccountData();
+  // const { data, isLoading } = useUserAccountData();
+  //   console.log("useUserAccountData", data, isLoading);
 
   useEffect(() => {
     const handleResize = () => {
@@ -34,10 +33,12 @@ export default function Dashboard({
     };
   }, [tableView]);
 
-  const availableSupply = Object.keys(assetDictionary).map(
-    (key) => assetDictionary[key],
+  const availableSupply: Asset[] = Object.keys(assetDictionary).map(
+    (key) => assetDictionary[key as keyof typeof assetDictionary] as Asset,
   );
-  const availableBorrow = [assetDictionary[honeyAddress]]
+  const availableBorrow: Asset[] = assetDictionary[honeyAddress]
+    ? [assetDictionary[honeyAddress] as Asset]
+    : [];
 
   return (
     <div className="flex flex-col gap-9 md:gap-6">
@@ -57,7 +58,7 @@ export default function Dashboard({
         </div>
       </div>
 
-      <div className="flex flex-col gap-6 xl:flex-row">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <div className="flex flex-1 flex-col gap-4">
           <UserSupply assets={availableSupply} tableView={tableView} />
         </div>
@@ -66,7 +67,7 @@ export default function Dashboard({
         </div>
       </div>
 
-      <div className="flex flex-col gap-6 xl:flex-row">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <div className="flex flex-1 flex-col gap-4">
           <AvailableSupply assets={availableSupply} tableView={tableView} />
         </div>

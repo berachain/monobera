@@ -1,5 +1,3 @@
-import Image from "next/image";
-import { useTokens } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
@@ -18,40 +16,33 @@ export default function UserTokenCard({
   asset: Asset;
   type: "user-supply" | "user-borrow" | "supply" | "borrow";
 }) {
-  const { tokenDictionary } = useTokens();
   return (
     <Card
       key={asset.symbol}
       className="flex flex-col items-center justify-between gap-6 p-4 md:h-[86px] md:flex-row md:gap-4"
     >
       <div className="flex flex-shrink-0 items-center gap-4 ">
-        {tokenDictionary ? (
-          <TokenIcon
-            toke={tokenDictionary[asset.asset_address]}
-            address={asset.asset_address}
-            fetch
-            size="2xl"
-          />
-        ) : (
-          <div>loading</div>
-        )}
+        <TokenIcon address={asset.asset_address} fetch size="2xl" />
         <div>
           {type === "supply" && (
-            <div className="flex items-center gap-1 text-xs font-medium leading-tight text-foreground">
+            <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
               <Icons.wallet className="relative h-3 w-3 rounded-lg" />
               Wallet Balance
             </div>
           )}
-          <div className="h-8 text-lg font-bold uppercase">
-            ?? {asset.symbol}
-          </div>
+          {type === "borrow" && (
+            <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
+              {asset.symbol} Avaliable
+            </div>
+          )}
+          <div className="h-8 text-lg font-bold uppercase">??</div>
           <div className="text-xs font-medium leading-tight">$??</div>
         </div>
       </div>
 
       {(type === "user-supply" || type === "supply") && (
         <div className="flex flex-shrink-0 flex-col">
-          <div className="text-xs font-medium leading-5 text-foreground">
+          <div className="text-xs font-medium leading-5 text-muted-foreground">
             Supply APY
           </div>
           <div className="text-lg font-bold text-success-foreground">
@@ -62,7 +53,7 @@ export default function UserTokenCard({
 
       {(type === "user-borrow" || type === "borrow") && (
         <div className="flex flex-shrink-0 flex-col">
-          <div className="text-xs font-medium leading-5 text-foreground">
+          <div className="text-xs font-medium leading-5 text-muted-foreground">
             Stable APY
           </div>
           <div className="text-lg font-bold text-warning-foreground">
@@ -77,7 +68,7 @@ export default function UserTokenCard({
 
       {(type === "user-borrow" || type === "borrow") && (
         <div className="flex flex-shrink-0 flex-col">
-          <div className="text-xs font-medium leading-5 text-foreground">
+          <div className="text-xs font-medium leading-5 text-muted-foreground">
             Variable APY
           </div>
           <div className="text-lg font-bold text-warning-foreground">

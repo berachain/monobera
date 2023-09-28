@@ -1,8 +1,9 @@
-import { useBeraConfig, useBeraJs } from "@bera/berajs";
-import { lendPoolImplementationAddress } from "@bera/config";
-import useSWR, { useSWRConfig } from "swr";
+import { useBeraJs } from "@bera/berajs";
+import { lendPoolImplementationAddress, multicallAddress } from "@bera/config";
+// import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits } from "viem";
+// import { formatUnits } from "viem";
 import { usePublicClient, type Address } from "wagmi";
 
 import { lendPoolImplementationABI } from "./abi";
@@ -17,9 +18,9 @@ const REFRESH_BLOCK_INTERVAL = 2000;
 
 export const usePollUserAccountData = () => {
   const publicClient = usePublicClient();
-  const { mutate } = useSWRConfig();
+  // const { mutate } = useSWRConfig();
   const { account, error } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
+  // const { networkConfig } = useBeraConfig();
 
   const QUERY_KEY = [account, "getUserAccountData"];
   useSWR(
@@ -35,18 +36,18 @@ export const usePollUserAccountData = () => {
           },
         ];
         const result = await publicClient.multicall({
+          //@ts-ignore
           contracts: call,
-          multicallAddress: networkConfig.precompileAddresses
-            .multicallAddress as Address,
+          multicallAddress: multicallAddress,
         });
         if (result[0]?.status === "success") {
           return {
-            totalCollateralBase: result[0].result[0],
-            totalDebtBase: result[0].result[1],
-            availableBorrowsBase: result[0].result[2],
-            currentLiquidationThreshold: result[0].result[3],
-            ltv: result[0].result[4],
-            healthFactor: result[0].result[5],
+            totalCollateralBase: (result[0].result as any[])[0],
+            totalDebtBase: (result[0].result as any[])[1],
+            availableBorrowsBase: (result[0].result as any[])[2],
+            currentLiquidationThreshold: (result[0].result as any[])[3],
+            ltv: (result[0].result as any[])[4],
+            healthFactor: (result[0].result as any[])[5],
           };
         } else {
           return undefined;

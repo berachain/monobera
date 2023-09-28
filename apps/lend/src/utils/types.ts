@@ -1,5 +1,6 @@
-import { type AssetItem } from "./getServerSideData";
 import { type Address } from "wagmi";
+
+import { type AssetItem } from "./getServerSideData";
 
 export type AssetDictionary = { [key: Address]: Partial<Asset> };
 export type Asset = AssetItem & {
