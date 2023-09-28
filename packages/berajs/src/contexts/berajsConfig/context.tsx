@@ -14,7 +14,6 @@ import {
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
-import { defaultBeraConfig } from "~/config";
 import { type NetworkConfig } from "~/config/types";
 import { BeraJsProvider } from "~/contexts/berajsProvider";
 import { TransactionStoreProvider } from "~/hooks/transactions/TransactionStoreContext";
@@ -37,14 +36,18 @@ export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
 
 const BeraConfig: React.FC<IBeraConfig> = ({
   children,
-  networkConfig = defaultBeraConfig,
+  networkConfig,
   autoConnect = false,
 }) => {
+
+  if(!networkConfig) {
+    return <>{children}</>
+  }
   const { chains, publicClient } = configureChains(
     [networkConfig.chain],
     [
       jsonRpcProvider({
-        rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] || "" }),
+        rpc: (chain: any) => ({ http: chain.rpcUrls.default.http[0] || "" }),
       }),
     ],
   );
