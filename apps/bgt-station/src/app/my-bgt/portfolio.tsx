@@ -58,7 +58,7 @@ export default function Portfolio() {
     },
     onError: (e) => {
       console.log(e);
-    }
+    },
   });
 
   return (

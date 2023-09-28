@@ -169,9 +169,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     return false;
   };
 
-  console.log("is wrap", isWrap);
-  console.log("selected to", selectedTo);
-  console.log("selected from", selectedFrom);
   useEffect(() => {
     if (
       selectedTo !== undefined &&

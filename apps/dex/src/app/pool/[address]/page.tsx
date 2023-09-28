@@ -51,8 +51,6 @@ export default async function PoolPage({
       }),
     );
 
-    console.log("DATA", data?.globalCuttingBoard);
-
     const pool = router.getPool(params.address);
 
     if (!pool) {

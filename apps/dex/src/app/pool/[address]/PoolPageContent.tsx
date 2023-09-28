@@ -235,7 +235,6 @@ export const EventTable = ({
   events: SwapData[] | AddLiquidityData[] | WithdrawLiquidityData[];
   isLoading: boolean | undefined;
 }) => {
-  console.log(pool);
   return (
     <Table>
       <TableHeader>
