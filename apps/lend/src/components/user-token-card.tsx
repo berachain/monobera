@@ -1,7 +1,9 @@
 import Image from "next/image";
+import { useTokens } from "@bera/berajs";
+import { TokenIcon } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
-import { type Market } from "~/hooks/useMarkets";
+import { type Asset } from "~/utils/types";
 import Card from "./card";
 import InfoButton from "./info-button";
 import BorrowBtn from "./modals/borrow-button";
@@ -10,25 +12,29 @@ import SupplyBtn from "./modals/supply-button";
 import WithdrawBtn from "./modals/withdraw-button";
 
 export default function UserTokenCard({
-  market,
+  asset,
   type,
 }: {
-  market: Market;
+  asset: Asset;
   type: "user-supply" | "user-borrow" | "supply" | "borrow";
 }) {
+  const { tokenDictionary } = useTokens();
   return (
     <Card
-      key={market.title}
+      key={asset.symbol}
       className="flex flex-col items-center justify-between gap-6 p-4 md:h-[86px] md:flex-row md:gap-4"
     >
       <div className="flex flex-shrink-0 items-center gap-4 ">
-        <Image
-          src={"/honey.png"}
-          alt={market.title}
-          className="rounded-full"
-          width={48}
-          height={48}
-        />
+        {tokenDictionary ? (
+          <TokenIcon
+            toke={tokenDictionary[asset.asset_address]}
+            address={asset.asset_address}
+            fetch
+            size="2xl"
+          />
+        ) : (
+          <div>loading</div>
+        )}
         <div>
           {type === "supply" && (
             <div className="flex items-center gap-1 text-xs font-medium leading-tight text-foreground">
@@ -36,8 +42,10 @@ export default function UserTokenCard({
               Wallet Balance
             </div>
           )}
-          <div className="h-8 text-lg font-bold">$8.28M ETH</div>
-          <div className="text-xs font-medium leading-tight">$69.6K</div>
+          <div className="h-8 text-lg font-bold uppercase">
+            ?? {asset.symbol}
+          </div>
+          <div className="text-xs font-medium leading-tight">$??</div>
         </div>
       </div>
 
@@ -46,7 +54,9 @@ export default function UserTokenCard({
           <div className="text-xs font-medium leading-5 text-foreground">
             Supply APY
           </div>
-          <div className="text-lg font-bold text-success-foreground">6.69%</div>
+          <div className="text-lg font-bold text-success-foreground">
+            {(asset.supplyStableAPR * 100).toFixed(2)}%
+          </div>
         </div>
       )}
 
@@ -55,7 +65,13 @@ export default function UserTokenCard({
           <div className="text-xs font-medium leading-5 text-foreground">
             Stable APY
           </div>
-          <div className="text-lg font-bold text-yellow-600">10.69%</div>
+          <div className="text-lg font-bold text-warning-foreground">
+            {asset.borrowStableAPR ? (
+              <>{(asset.borrowStableAPR * 100).toFixed(2)}%</>
+            ) : (
+              "~~"
+            )}
+          </div>
         </div>
       )}
 
@@ -64,20 +80,27 @@ export default function UserTokenCard({
           <div className="text-xs font-medium leading-5 text-foreground">
             Variable APY
           </div>
-          <div className="text-lg font-bold text-yellow-600">10.69%</div>
+          <div className="text-lg font-bold text-warning-foreground">
+            {asset.borrowVariableAPR ? (
+              <>{(asset.borrowVariableAPR * 100).toFixed(2)}%</>
+            ) : (
+              "~~"
+            )}
+          </div>
         </div>
       )}
 
       <div className="grow-1 flex w-full items-center gap-2 md:w-fit">
-        {type === "user-supply" && <SupplyBtn />}
-        {type === "user-supply" && <WithdrawBtn />}
-        {type === "user-borrow" && <BorrowBtn />}
-        {type === "user-borrow" && <RepayBtn />}
-        {type === "supply" && <SupplyBtn />}
-        {type === "borrow" && <BorrowBtn />}
-
+        {(type === "user-supply" || type === "supply") && (
+          <SupplyBtn asset={asset} />
+        )}
+        {type === "user-supply" && <WithdrawBtn asset={asset} />}
+        {(type === "user-borrow" || type === "borrow") && (
+          <BorrowBtn asset={asset} />
+        )}
+        {type === "user-borrow" && <RepayBtn asset={asset} />}
         {(type === "borrow" || type === "supply") && (
-          <InfoButton address="0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4" />
+          <InfoButton address={asset.asset_address} />
         )}
       </div>
     </Card>

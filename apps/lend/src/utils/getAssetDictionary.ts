@@ -16,6 +16,7 @@ export function getAssetDictionary(
   const assetDictionary: { [key: string]: Partial<Asset> } = {};
   assets.forEach((asset: AssetItem) => {
     assetDictionary[asset.asset_address] = asset;
+    assetDictionary[asset.asset_address]!.dollarValue = 1;
   });
   borrowedAssets.forEach((asset: AmountItem) => {
     assetDictionary[asset.asset_address]!.borrowed = Number(asset.amount);

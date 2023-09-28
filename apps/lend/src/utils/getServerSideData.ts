@@ -3,8 +3,8 @@ import { type Address } from "wagmi";
 
 export interface AssetItem {
   asset_address: Address;
-  name: string;
-  decimal: number;
+  symbol: string;
+  decimals: number;
 }
 
 export interface AmountItem {

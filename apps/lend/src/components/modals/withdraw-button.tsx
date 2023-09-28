@@ -1,35 +1,54 @@
 import { useState } from "react";
 import Image from "next/image";
-import { Tooltip } from "@bera/shared-ui";
+import { formatter, useBeraJs } from "@bera/berajs";
+import { lendPoolImplementationAddress } from "@bera/config";
+import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { parseUnits } from "viem";
 
-export default function WithdrawBtn() {
+import { type Asset } from "~/utils/types";
+import { lendPoolImplementationABI } from "~/hooks/abi";
+
+export default function WithdrawBtn({
+  asset,
+  disabled = false,
+}: {
+  asset: Asset;
+  disabled?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="w-fit">
+      <Button
+        onClick={() => setOpen(true)}
+        className="w-fit"
+        disabled={disabled}
+      >
         Withdraw
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
-          <WithdrawModalContent />
+          <WithdrawModalContent asset={asset} />
         </DialogContent>
       </Dialog>
     </>
   );
 }
 
-const WithdrawModalContent = () => {
+const WithdrawModalContent = ({ asset }: { asset: Asset }) => {
   const userBalance = 420.69;
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const { write, isLoading, ModalPortal } = useTxn({
+    message: `Supplying ${amount} ${asset.symbol}`,
+  });
+  const { account } = useBeraJs();
 
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Withdraw</div>
-
       <Image
         src={"/supply.png"}
         alt="supply-img"
@@ -46,9 +65,13 @@ const WithdrawModalContent = () => {
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={"ETH"}
+          endAdornment={asset.symbol}
           value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e) =>
+            setAmount(
+              Number(e.target.value) === 0 ? undefined : Number(e.target.value),
+            )
+          }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
@@ -65,11 +88,16 @@ const WithdrawModalContent = () => {
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="">$12,669.42</div>
+          <div className="">
+            {" "}
+            ${formatter.format(amount ?? 0 * asset.dollarValue ?? 1)}
+          </div>
         </div>
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Supply APY</div>
-          <div className="text-success-foreground">6.69%</div>
+          <div className="text-success-foreground">
+            {(asset.supplyStableAPR * 100).toFixed(2)}%
+          </div>
         </div>
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
@@ -78,7 +106,21 @@ const WithdrawModalContent = () => {
         </div>
       </div>
 
-      <Button disabled={amount === 0 || amount > userBalance}>
+      <Button
+        disabled={!amount || amount === 0 || amount > userBalance}
+        onClick={() => {
+          write({
+            address: lendPoolImplementationAddress,
+            abi: lendPoolImplementationABI,
+            functionName: "withdraw",
+            params: [
+              asset.asset_address,
+              parseUnits(`${Number(amount)}`, asset.decimals),
+              account,
+            ],
+          });
+        }}
+      >
         {amount === 0 ? "Enter Amount" : "Withdraw"}
       </Button>
     </div>

@@ -1,15 +1,22 @@
 import { useState } from "react";
 import Image from "next/image";
-import { Tooltip } from "@bera/shared-ui";
+import { formatter, useBeraJs } from "@bera/berajs";
+import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { parseUnits } from "viem";
+import { type Asset } from "~/utils/types";
+import { lendPoolImplementationABI } from "~/hooks/abi";
+import { lendPoolImplementationAddress } from "@bera/config";
 
 export default function BorrowBtn({
+  asset,
   disabled = false,
 }: {
+  asset: Asset;
   disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
@@ -24,24 +31,30 @@ export default function BorrowBtn({
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
-          <BorrowModalContent />
+          <BorrowModalContent asset={asset} />
         </DialogContent>
       </Dialog>
     </>
   );
 }
 
-const BorrowModalContent = () => {
-  const maxBorrowAmout = 10000;
-  const apyOptions = { stable: "10.69", variable: "6.69" };
+const BorrowModalContent = ({ asset }: { asset: Asset }) => {
+  const maxBorrowAmout = asset.supplied ?? 1000;
+  const apyOptions = {
+    stable: asset.borrowStableAPR ?? 0 * 100,
+    variable: asset.borrowVariableAPR ?? 1 * 100,
+  };
 
-  const [apySelected, setApySelected] = useState(apyOptions.variable);
-  const [amount, setAmount] = useState(0);
-
+  const [apySelected, setApySelected] = useState<"stable"|"variable">("stable");
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const { account } = useBeraJs();
+  const { write, isLoading, ModalPortal } = useTxn({
+    message: `Borrowing ${amount} ${asset.symbol}`,
+  });
+  console.log("asset", asset.asset_address)
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Borrow</div>
-
       <Image
         src={"/supply.png"}
         alt="supply-img"
@@ -50,15 +63,15 @@ const BorrowModalContent = () => {
         height={100}
       />
       <Tabs
-        defaultValue={apyOptions.variable}
+        defaultValue={apySelected}
         onValueChange={(value: string) => setApySelected(value)}
       >
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value={apyOptions.stable}>
-            Stable APY: {apyOptions.stable}%
+          <TabsTrigger value={"stable"}>
+            Stable APY: {apyOptions.stable.toFixed(2)}%
           </TabsTrigger>
-          <TabsTrigger value={apyOptions.variable}>
-            Variable APY: {apyOptions.variable}%
+          <TabsTrigger value={"variable"}>
+            Variable APY: {apyOptions.variable.toFixed(2)}%
           </TabsTrigger>
         </TabsList>
       </Tabs>
@@ -71,9 +84,13 @@ const BorrowModalContent = () => {
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={"ETH"}
+          endAdornment={asset.symbol}
           value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e) =>
+            setAmount(
+              Number(e.target.value) === 0 ? undefined : Number(e.target.value),
+            )
+          }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
@@ -88,22 +105,40 @@ const BorrowModalContent = () => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <div className="flex justify-between  text-sm leading-tight">
-          <div className="text-muted-foreground ">LTV Health Ratio</div>
+        <div className="flex justify-between text-sm leading-tight">
+          <div className="text-muted-foreground">LTV Health Ratio</div>
           <div className="">0 {"<->"} 1.69</div>
           {/* i didnt make this cause design doesnt make sense 2 me */}
         </div>
         <div className="flex justify-between  text-sm leading-tight">
-          <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="">$12,669.42</div>
+          <div className="text-muted-foreground">Estimated Value</div>
+          <div className="">
+            ${formatter.format(amount ?? 0 * asset.dollarValue ?? 1)}
+          </div>
         </div>
-        <div className="flex justify-between  text-sm leading-tight">
-          <div className="text-muted-foreground ">Variable Borrow APY</div>
-          <div className="text-yellow-600">{apySelected}%</div>
+        <div className="flex justify-between text-sm leading-tight">
+          <div className="text-muted-foreground">Variable Borrow APY</div>
+          <div className="text-warning-foreground">{apyOptions[apySelected]}%</div>
         </div>
       </div>
 
-      <Button disabled={amount === 0 || amount > maxBorrowAmout}>
+      <Button
+        disabled={!amount || amount === 0 || amount > maxBorrowAmout}
+        onClick={() => {
+          write({
+            address: lendPoolImplementationAddress,
+            abi: lendPoolImplementationABI,
+            functionName: "borrow",
+            params: [
+              asset.asset_address,
+              parseUnits(`${Number(amount??0)}`, asset.decimals),
+              apySelected === "stable" ? 1 : 2,
+              parseUnits("0", asset.decimals),
+              account,
+            ],
+          });
+        }}
+      >
         {amount === 0 ? "Enter Amount" : "Borrow"}
       </Button>
     </div>
