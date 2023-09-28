@@ -1,3 +1,4 @@
+import { formatter } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
@@ -12,9 +13,11 @@ import WithdrawBtn from "./modals/withdraw-button";
 export default function UserTokenCard({
   asset,
   type,
+  balance,
 }: {
   asset: Asset;
   type: "user-supply" | "user-borrow" | "supply" | "borrow";
+  balance?: string | number;
 }) {
   return (
     <Card
@@ -24,19 +27,24 @@ export default function UserTokenCard({
       <div className="flex flex-shrink-0 items-center gap-4 ">
         <TokenIcon address={asset.asset_address} fetch size="2xl" />
         <div>
-          {type === "supply" && (
-            <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
-              <Icons.wallet className="relative h-3 w-3 rounded-lg" />
-              Wallet Balance
-            </div>
-          )}
-          {type === "borrow" && (
-            <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
-              {asset.symbol} Avaliable
-            </div>
-          )}
-          <div className="h-8 text-lg font-bold uppercase">??</div>
-          <div className="text-xs font-medium leading-tight">$??</div>
+          <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
+            {type === "user-supply" && <>{asset.symbol} Supplied</>}
+            {type === "user-borrow" && <>{asset.symbol} Debt</>}
+            {type === "supply" && (
+              <>
+                <Icons.wallet className="relative h-3 w-3 rounded-lg" />
+                Wallet Balance{" "}
+              </>
+            )}
+            {type === "borrow" && <>{asset.symbol} Avaliable</>}
+          </div>
+
+          <div className="h-8 text-lg font-bold uppercase">
+            {formatter.format(Number(balance))}
+          </div>
+          <div className="text-xs font-medium leading-tight">
+            ${formatter.format(Number(balance) * asset.dollarValue)}
+          </div>
         </div>
       </div>
 

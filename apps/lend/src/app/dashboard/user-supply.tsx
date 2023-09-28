@@ -1,5 +1,6 @@
 import React from "react";
 import { DataTable, TokenIcon } from "@bera/shared-ui";
+// import { formatUnits } from "viem";
 
 import { type Asset } from "~/utils/types";
 import SupplyBtn from "~/components/modals/supply-button";
@@ -14,25 +15,36 @@ export default function UserSupply({
   assets: Asset[];
   tableView?: boolean;
 }) {
+  // const supplyBalance = [];
   const data = React.useMemo(
     () =>
-      assets.map((asset) => ({
-        ...asset,
-        market: (
-          <div className="flex items-center gap-2 text-sm font-medium leading-none">
-            <TokenIcon address={asset.asset_address} fetch size="lg" />
-            {asset.symbol}
-          </div>
-        ),
-        walletBalance: 100,
-        walletBalanceUS: 100 * asset.dollarValue,
-        action: (
-          <div className="flex gap-2">
-            <SupplyBtn asset={asset} />
-            <WithdrawBtn asset={asset} />
-          </div>
-        ),
-      })),
+      assets.map((asset) => {
+        const balance = 1;
+        // const balance = formatUnits(
+        //   supplyBalance.find(
+        //     (token) =>
+        //       token.address.toLowerCase() === asset.asset_address.toLowerCase(),
+        //   )?.balance ?? "0",
+        //   asset.decimals,
+        // );
+        return {
+          ...asset,
+          market: (
+            <div className="flex items-center gap-2 text-sm font-medium leading-none">
+              <TokenIcon address={asset.asset_address} fetch size="lg" />
+              {asset.symbol}
+            </div>
+          ),
+          walletBalance: Number(balance),
+          walletBalanceUS: Number(balance) * asset.dollarValue,
+          action: (
+            <div className="flex gap-2">
+              <SupplyBtn asset={asset} />
+              <WithdrawBtn asset={asset} />
+            </div>
+          ),
+        };
+      }),
     [assets],
   );
 
@@ -47,7 +59,19 @@ export default function UserSupply({
       ) : (
         <>
           {assets.map((asset, index) => (
-            <UserTokenCard asset={asset} key={index} type="user-supply" />
+            <UserTokenCard
+              asset={asset}
+              key={index}
+              type="user-supply"
+              // balance={formatUnits(
+              //   supplyBalance.find(
+              //     (token: any) =>
+              //       token.address.toLowerCase() ===
+              //       asset.asset_address.toLowerCase(),
+              //   )?.balance ?? "0",
+              //   asset.decimals,
+              // )}
+            />
           ))}
         </>
       )}

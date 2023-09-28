@@ -60,19 +60,19 @@ export default function Dashboard({
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <div className="flex flex-1 flex-col gap-4">
-          <UserSupply assets={availableSupply} tableView={tableView} />
+          <UserSupply {...{ assets: availableSupply, tableView }} />
         </div>
         <div className="flex flex-1 flex-col gap-4">
-          <UserBorrows assets={availableSupply} tableView={tableView} />
+          <UserBorrows {...{ assets: availableSupply, tableView }} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <div className="flex flex-1 flex-col gap-4">
-          <AvailableSupply assets={availableSupply} tableView={tableView} />
+          <AvailableSupply {...{ assets: availableSupply, tableView }} />
         </div>
         <div className="flex flex-1 flex-col gap-4">
-          <AvailableBorrows assets={availableBorrow} tableView={tableView} />
+          <AvailableBorrows {...{ assets: availableBorrow, tableView }} />
         </div>
       </div>
     </div>

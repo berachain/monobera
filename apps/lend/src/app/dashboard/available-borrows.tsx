@@ -24,8 +24,6 @@ export default function AvailableBorrows({
             {asset.symbol}
           </div>
         ),
-        avaliable: 100,
-        avaliableUS: 100 * asset.dollarValue,
         action: (
           <div className="flex gap-2">
             <BorrowBtn asset={asset} />
@@ -48,7 +46,12 @@ export default function AvailableBorrows({
           ) : (
             <>
               {assets.map((asset, index) => (
-                <UserTokenCard asset={asset} key={index} type="borrow" />
+                <UserTokenCard
+                  asset={asset}
+                  key={index}
+                  type="borrow"
+                  balance={asset.supplied}
+                />
               ))}
             </>
           )}
