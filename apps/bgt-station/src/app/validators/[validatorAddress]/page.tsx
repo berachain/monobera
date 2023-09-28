@@ -5,6 +5,7 @@ import { getAddress } from "viem";
 
 import { getMetaTitle } from "~/utils/metadata";
 import Validator from "./validator";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 type Props = {
   params: { validatorAddress: string };
@@ -15,6 +16,10 @@ export function generateMetadata({ params }: Props): Metadata {
   return {
     title: getMetaTitle("Validator Details"),
     description: `Validator details for ${validatorAddress}`,
+    openGraph: {
+      images: '/opengraph-image.png'
+    },
+    metadataBase: new URL(getAbsoluteUrl())
   };
 }
 

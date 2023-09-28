@@ -3,10 +3,15 @@ import { indexerUrl } from "@bera/config";
 
 import { getMetaTitle } from "~/utils/metadata";
 import DashBoard from "./dashboard";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Dashboard"),
   description: `View global BGT statistics`,
+  openGraph: {
+    images: '/opengraph-image.png'
+  },
+  metadataBase: new URL(getAbsoluteUrl())
 };
 
 async function getAvgValidatorUptime() {

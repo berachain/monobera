@@ -3,10 +3,15 @@ import { indexerUrl } from "@bera/config";
 
 import { getMetaTitle } from "~/utils/metadata";
 import DashBoard from "./dashboard/dashboard";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Home"),
   description: `Welcome to ${process.env.NEXT_PUBLIC_BGT_NAME}!`,
+  openGraph: {
+    images: '/opengraph-image.png'
+  },
+  metadataBase: new URL(getAbsoluteUrl())
 };
 
 async function getAvgValidatorUptime() {
@@ -21,9 +26,6 @@ async function getAvgValidatorUptime() {
 }
 
 export default async function Page() {
-  console.log("GMMMM")
   const avgValidatorUptime = await getAvgValidatorUptime();
-  console.log("GMMMM22222")
-
   return <DashBoard avgValidatorUptime={avgValidatorUptime.uptime ?? 0} />;
 }

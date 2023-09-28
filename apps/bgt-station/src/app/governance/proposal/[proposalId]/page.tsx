@@ -3,12 +3,17 @@ import { notFound } from "next/navigation";
 
 import { getMetaTitle } from "~/utils/metadata";
 import ProposalDetails from "./proposal-details";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 export function generateMetadata({ params }: any): Metadata {
   const { proposalId } = params;
   return {
     title: getMetaTitle("Proposal Details"),
     description: `View proposal details for proposal ${proposalId} on Berachain`,
+    openGraph: {
+      images: '/opengraph-image.png'
+    },
+    metadataBase: new URL(getAbsoluteUrl())
   };
 }
 

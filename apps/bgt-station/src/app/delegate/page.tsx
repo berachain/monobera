@@ -5,10 +5,15 @@ import { type Address } from "viem";
 import { getMetaTitle } from "~/utils/metadata";
 import Delegate from "./delegate";
 import { DelegateEnum } from "./types";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Delegate"),
   description: `Delegate, Redelegate, or Undelegate your BGT`,
+  openGraph: {
+    images: '/opengraph-image.png'
+  },
+  metadataBase: new URL(getAbsoluteUrl())
 };
 export default function Page({
   searchParams,

@@ -9,10 +9,15 @@ import {
   type OrderByEnum as OrderByEnumT,
   type StatusEnum as StatusEnumT,
 } from "./types";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Governance"),
   description: `View Governance proposals on Berachain`,
+  openGraph: {
+    images: '/opengraph-image.png'
+  },
+  metadataBase: new URL(getAbsoluteUrl())
 };
 
 export default function Governance({

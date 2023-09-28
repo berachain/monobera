@@ -7,10 +7,15 @@ import {
   type ProposalTypeEnum as ProposalTypeEnumT,
 } from "../types";
 import NewProposal from "./new-proposal";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Create Proposal"),
   description: `Create a new proposal on Berachain`,
+  openGraph: {
+    images: '/opengraph-image.png'
+  },
+  metadataBase: new URL(getAbsoluteUrl())
 };
 export default function Create({
   searchParams,

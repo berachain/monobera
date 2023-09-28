@@ -4,10 +4,15 @@ import { indexerUrl } from "@bera/config";
 
 import { getMetaTitle } from "~/utils/metadata";
 import Validators from "./validators";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Validators"),
   description: `View active validators on Berachain`,
+  openGraph: {
+    images: '/opengraph-image.png'
+  },
+  metadataBase: new URL(getAbsoluteUrl())
 };
 
 async function getBGTSupply() {
