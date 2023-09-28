@@ -2,6 +2,9 @@
   "name": "@bera/bgt-station",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "build": "pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
