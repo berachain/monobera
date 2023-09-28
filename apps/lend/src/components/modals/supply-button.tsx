@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { formatter, useBeraJs } from "@bera/berajs";
+import {
+  formatter,
+  useBeraJs,
+  usePollAllowance,
+  useSelectedAssetWalletBalance,
+  type Token,
+} from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -11,6 +17,7 @@ import { parseUnits } from "viem";
 
 import { type Asset } from "~/utils/types";
 import { lendPoolImplementationABI } from "~/hooks/abi";
+import ApproveButton from "../approve-button";
 
 export default function SupplyBtn({
   asset,
@@ -23,9 +30,11 @@ export default function SupplyBtn({
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
-  const { write, isLoading, ModalPortal } = useTxn({
+  const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Supplying ${amount} ${asset.symbol}`,
   });
+
+  useEffect(() => setOpen(false), [isSuccess]);
 
   return (
     <>
@@ -59,9 +68,14 @@ const SupplyModalContent = ({
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const userBalance = 420.69;
   const { account } = useBeraJs();
-
+  const balance = useSelectedAssetWalletBalance(asset.asset_address);
+  const { useAllowance } = usePollAllowance({
+    contract: lendPoolImplementationAddress,
+    token: { address: asset.asset_address, decimals: asset.decimals } as Token,
+  });
+  const allowance = useAllowance();
+  console.log(allowance);
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Supply</div>
@@ -91,10 +105,16 @@ const SupplyModalContent = ({
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {userBalance}
+          {balance.formattedBalance}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() => setAmount(userBalance)}
+            onClick={() =>
+              setAmount(
+                Number(balance.formattedBalance) === 0
+                  ? undefined
+                  : Number(balance.formattedBalance),
+              )
+            }
           >
             MAX
           </span>
@@ -119,24 +139,39 @@ const SupplyModalContent = ({
         </div>
       </div>
 
-      <Button
-        disabled={!amount || amount === 0 || amount > userBalance}
-        onClick={() => {
-          write({
-            address: lendPoolImplementationAddress,
-            abi: lendPoolImplementationABI,
-            functionName: "supply",
-            params: [
-              asset.asset_address,
-              parseUnits(`${Number(amount)}`, asset.decimals),
-              account,
-              parseUnits("0", asset.decimals),
-            ],
-          });
-        }}
-      >
-        {amount === 0 ? "Enter Amount" : "Supply"}
-      </Button>
+      {allowance && Number(allowance.formattedAllowance) > (amount ?? 0) ? (
+        <Button
+          disabled={
+            !amount || amount === 0 || amount > Number(balance.formattedBalance)
+          }
+          onClick={() => {
+            write({
+              address: lendPoolImplementationAddress,
+              abi: lendPoolImplementationABI,
+              functionName: "supply",
+              params: [
+                asset.asset_address,
+                parseUnits(`${Number(amount)}`, asset.decimals),
+                account,
+                parseUnits("0", asset.decimals),
+              ],
+            });
+          }}
+        >
+          {amount === 0 ? "Enter Amount" : "Supply"}
+        </Button>
+      ) : (
+        <ApproveButton
+          token={
+            {
+              ...asset,
+              address: asset.asset_address,
+              name: asset.symbol,
+            } as Token
+          }
+          spender={lendPoolImplementationAddress}
+        />
+      )}
     </div>
   );
 };
