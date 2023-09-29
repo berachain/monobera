@@ -14,14 +14,14 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
-    "@rainbow-me/rainbowkit": "^1.0.11",
+    "@rainbow-me/rainbowkit": "^1.0.3",
     "bech32": "^2.0.0",
     "lodash": "^4.17.21",
     "react-device-detect": "^2.2.3",
     "sha3": "^2.1.4",
     "swr": "^2.1.5",
-    "viem": "~1.12.1",
-    "wagmi": "^1.4.2"
+    "viem": "~0.3.35",
+    "wagmi": "^1.0.2"
   },
   "peerDependencies": {
     "react": "^18.2.0",
