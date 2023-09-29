@@ -35,7 +35,7 @@ export const market_table_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-success-foreground">
-        {(row.original.supplyStableAPR * 100).toFixed(2)}%
+        {(row.original.supplyAPR * 100).toFixed(2)}%
       </div>
     ),
     accessorKey: "supplyAPR",

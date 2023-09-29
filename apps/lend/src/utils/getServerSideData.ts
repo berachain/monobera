@@ -5,6 +5,9 @@ export interface AssetItem {
   asset_address: Address;
   symbol: string;
   decimals: number;
+  atoken_address: Address;
+  stable_debt_token_address: Address;
+  variable_debt_token_address: Address;
 }
 
 export interface AmountItem {
@@ -38,33 +41,19 @@ export async function getAssetsBorrowed(): Promise<AmountItem[]> {
 }
 
 export async function getBorrowStableAPR(): Promise<RateItem[]> {
-  const res = await fetch(
-    `${lendEndpointUrl}/interest?side=borrow&type=stable`,
-  );
+  const res = await fetch(`${lendEndpointUrl}/interest?rate_type=stable`);
   if (!res.ok) throw new Error("Failed to fetch data");
   return res.json();
 }
 
 export async function getBorrowVariableAPR(): Promise<RateItem[]> {
-  const res = await fetch(
-    `${lendEndpointUrl}/interest?side=borrow&type=variable`,
-  );
+  const res = await fetch(`${lendEndpointUrl}/interest?rate_type=variable`);
   if (!res.ok) throw new Error("Failed to fetch data");
   return res.json();
 }
 
-export async function getSupplyStableAPR(): Promise<RateItem[]> {
-  const res = await fetch(
-    `${lendEndpointUrl}/interest?side=supply&type=stable`,
-  );
-  if (!res.ok) throw new Error("Failed to fetch data");
-  return res.json();
-}
-
-export async function getSupplyVariableAPR(): Promise<RateItem[]> {
-  const res = await fetch(
-    `${lendEndpointUrl}/interest?side=supply&type=variable`,
-  );
+export async function getSupplyAPR(): Promise<RateItem[]> {
+  const res = await fetch(`${lendEndpointUrl}/interest?rate_type=supply`);
   if (!res.ok) throw new Error("Failed to fetch data");
   return res.json();
 }

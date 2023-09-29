@@ -11,7 +11,7 @@ export function getAssetDictionary(
   suppliedAssets: AmountItem[],
   borrowStableAPR: RateItem[],
   borrowVariableAPR: RateItem[],
-  supplyStableAPR: RateItem[],
+  supplyAPR: RateItem[],
 ): AssetDictionary {
   const assetDictionary: { [key: string]: Partial<Asset> } = {};
   assets.forEach((asset: AssetItem) => {
@@ -32,8 +32,8 @@ export function getAssetDictionary(
       asset.rate,
     );
   });
-  supplyStableAPR.forEach((asset: RateItem) => {
-    assetDictionary[asset.asset_address]!.supplyStableAPR = Number(asset.rate);
+  supplyAPR.forEach((asset: RateItem) => {
+    assetDictionary[asset.asset_address]!.supplyAPR = Number(asset.rate);
   });
   return assetDictionary;
 }

@@ -54,7 +54,7 @@ export default function UserTokenCard({
             Supply APY
           </div>
           <div className="text-lg font-bold text-success-foreground">
-            {(asset.supplyStableAPR * 100).toFixed(2)}%
+            {(asset.supplyAPR * 100).toPrecision(4)}%
           </div>
         </div>
       )}
@@ -66,7 +66,7 @@ export default function UserTokenCard({
           </div>
           <div className="text-lg font-bold text-warning-foreground">
             {asset.borrowStableAPR ? (
-              <>{(asset.borrowStableAPR * 100).toFixed(2)}%</>
+              <>{(asset.borrowStableAPR * 100).toPrecision(4)}%</>
             ) : (
               "~~"
             )}
@@ -81,7 +81,7 @@ export default function UserTokenCard({
           </div>
           <div className="text-lg font-bold text-warning-foreground">
             {asset.borrowVariableAPR ? (
-              <>{(asset.borrowVariableAPR * 100).toFixed(2)}%</>
+              <>{(asset.borrowVariableAPR * 100).toPrecision(4)}%</>
             ) : (
               "~~"
             )}

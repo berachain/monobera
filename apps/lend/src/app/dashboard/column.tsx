@@ -16,21 +16,21 @@ export const user_supply_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Wallet Balance"
+        title="Token Supplied"
         className="whitespace-nowrap"
       />
     ),
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-medium">
-          {formatter.format(row.original.walletBalance)}
+          {formatter.format(row.original.aTokenBalance)}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          ${formatter.format(row.original.walletBalanceUS)}
+          ${formatter.format(row.original.aTokenBalanceUS)}
         </div>
       </div>
     ),
-    accessorKey: "walletBalanceUS",
+    accessorKey: "aTokenBalanceUS",
     enableSorting: true,
   },
   {
@@ -43,10 +43,10 @@ export const user_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-success-foreground">
-        {(row.original.supplyStableAPR * 100).toFixed(2)}%
+        {(row.original.supplyAPR * 100).toFixed(2)}%
       </div>
     ),
-    accessorKey: "supplyStableAPR",
+    accessorKey: "supplyAPR",
     enableSorting: true,
   },
   {
@@ -151,10 +151,10 @@ export const available_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-success-foreground">
-        {(row.original.supplyStableAPR * 100).toFixed(2)}%
+        {(row.original.supplyAPR * 100).toFixed(2)}%
       </div>
     ),
-    accessorKey: "supplyStableAPR",
+    accessorKey: "supplyAPR",
     enableSorting: true,
   },
   {

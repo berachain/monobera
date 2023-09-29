@@ -1,10 +1,18 @@
 import React, { useEffect } from "react";
-import { honeyAddress } from "@bera/config";
+import {
+  useCurrentAssetWalletBalances,
+  usePollAssetWalletBalance,
+} from "@bera/berajs";
 import { Switch } from "@bera/ui/switch";
 
-import { type Asset, type AssetDictionary } from "~/utils/types";
+import {
+  WalletTokenListToAssetDictionary,
+  assetDictionaryToExternalTokenList,
+  getAssetList,
+} from "~/utils/lendTokenHelper";
+import { type AssetDictionary } from "~/utils/types";
 import StatusBanner from "~/components/status-banner";
-// import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
+import { usePollUserStableAPR } from "~/hooks/usePollUserStableAPR";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
 import UserBorrows from "./user-borrows";
@@ -16,11 +24,6 @@ export default function Dashboard({
   assetDictionary: AssetDictionary;
 }) {
   const [tableView, setUseTableView] = React.useState(false);
-
-  // const { useUserAccountData } = usePollUserAccountData();
-  // const { data, isLoading } = useUserAccountData();
-  //   console.log("useUserAccountData", data, isLoading);
-
   useEffect(() => {
     const handleResize = () => {
       if (tableView && window.innerWidth < 1024) {
@@ -33,13 +36,17 @@ export default function Dashboard({
     };
   }, [tableView]);
 
-  const availableSupply: Asset[] = Object.keys(assetDictionary).map(
-    (key) => assetDictionary[key as keyof typeof assetDictionary] as Asset,
+  usePollAssetWalletBalance(
+    assetDictionaryToExternalTokenList(assetDictionary),
   );
-  const availableBorrow: Asset[] = assetDictionary[honeyAddress]
-    ? [assetDictionary[honeyAddress] as Asset]
-    : [];
-
+  const { useUserStableAPR } = usePollUserStableAPR();
+  const { data: userStableAPR } = useUserStableAPR();
+  const assets = WalletTokenListToAssetDictionary(
+    assetDictionary,
+    useCurrentAssetWalletBalances() ?? [],
+    userStableAPR,
+  );
+  const assetsDictionary = getAssetList(assets);
   return (
     <div className="flex flex-col gap-9 md:gap-6">
       <StatusBanner />
@@ -60,19 +67,23 @@ export default function Dashboard({
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <div className="flex flex-1 flex-col gap-4">
-          <UserSupply {...{ assets: availableSupply, tableView }} />
+          <UserSupply {...{ assets: assetsDictionary.supplied, tableView }} />
         </div>
         <div className="flex flex-1 flex-col gap-4">
-          <UserBorrows {...{ assets: availableSupply, tableView }} />
+          <UserBorrows {...{ assets: assetsDictionary.borrowed, tableView }} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <div className="flex flex-1 flex-col gap-4">
-          <AvailableSupply {...{ assets: availableSupply, tableView }} />
+          <AvailableSupply
+            {...{ assets: assetsDictionary.available_supply, tableView }}
+          />
         </div>
         <div className="flex flex-1 flex-col gap-4">
-          <AvailableBorrows {...{ assets: availableBorrow, tableView }} />
+          <AvailableBorrows
+            {...{ assets: assetsDictionary.available_borrow, tableView }}
+          />
         </div>
       </div>
     </div>

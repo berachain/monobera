@@ -1,3 +1,4 @@
+import { type Token } from "@bera/berajs";
 import { type Address } from "wagmi";
 
 import { type AssetItem } from "./getServerSideData";
@@ -8,7 +9,10 @@ export type Asset = AssetItem & {
   supplied: number;
   borrowStableAPR?: number;
   borrowVariableAPR?: number;
-  supplyStableAPR: number;
-  supplyVariableAPR: number;
+  supplyAPR: number;
   dollarValue: number;
+  token?: Token;
+  atoken?: Token;
+  stable_debt_token?: Token;
+  variable_debt_token?: Token;
 };

@@ -16,14 +16,14 @@ const ApproveButton = ({
   spender,
   amount = 1000000000000000000000000000n,
 }: Props) => {
-  const { write, isLoading } = useTxn({
+  const { write, isLoading, isSuccess } = useTxn({
     message: `Approve ${token?.name}`,
   });
 
   return (
     <Button
       className="w-full"
-      disabled={!token || isLoading}
+      disabled={!token || isLoading || isSuccess}
       onClick={() => {
         write({
           address: token?.address as `0x${string}`,

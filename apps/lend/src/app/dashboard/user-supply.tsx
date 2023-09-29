@@ -20,14 +20,7 @@ export default function UserSupply({
   const data = React.useMemo(
     () =>
       assets.map((asset) => {
-        const balance = 1;
-        // const balance = formatUnits(
-        //   supplyBalance.find(
-        //     (token) =>
-        //       token.address.toLowerCase() === asset.asset_address.toLowerCase(),
-        //   )?.balance ?? "0",
-        //   asset.decimals,
-        // );
+        const balance = asset.atoken?.formattedBalance ?? "0";
         return {
           ...asset,
           market: (
@@ -36,8 +29,8 @@ export default function UserSupply({
               {asset.symbol}
             </div>
           ),
-          walletBalance: Number(balance),
-          walletBalanceUS: Number(balance) * asset.dollarValue,
+          aTokenBalance: Number(balance),
+          aTokenBalanceUS: Number(balance) * asset.dollarValue,
           action: (
             <div className="flex gap-2">
               <SupplyBtn asset={asset} />
@@ -64,14 +57,7 @@ export default function UserSupply({
               asset={asset}
               key={index}
               type="user-supply"
-              // balance={formatUnits(
-              //   supplyBalance.find(
-              //     (token: any) =>
-              //       token.address.toLowerCase() ===
-              //       asset.asset_address.toLowerCase(),
-              //   )?.balance ?? "0",
-              //   asset.decimals,
-              // )}
+              balance={asset.atoken?.formattedBalance ?? "0"}
             />
           ))}
         </>

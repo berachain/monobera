@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  useCurrentAssetWalletBalances,
-  usePollAssetWalletBalance,
-} from "@bera/berajs";
 import { DataTable, TokenIcon } from "@bera/shared-ui";
-import { formatUnits } from "viem";
 
 import { type Asset } from "~/utils/types";
 import InfoButton from "~/components/info-button";
@@ -19,18 +14,10 @@ export default function AvailableSupply({
   assets: Asset[];
   tableView?: boolean;
 }) {
-  usePollAssetWalletBalance();
-  const walletBalance = useCurrentAssetWalletBalances() ?? [];
   const data = React.useMemo(
     () =>
       assets.map((asset) => {
-        const balance = formatUnits(
-          walletBalance.find(
-            (token) =>
-              token.address.toLowerCase() === asset.asset_address.toLowerCase(),
-          )?.balance ?? BigInt(0),
-          asset.decimals,
-        );
+        const balance = asset.token?.formattedBalance ?? "0";
         return {
           ...asset,
           market: (
@@ -65,14 +52,7 @@ export default function AvailableSupply({
               asset={asset}
               key={index}
               type="supply"
-              balance={formatUnits(
-                walletBalance.find(
-                  (token: any) =>
-                    token.address.toLowerCase() ===
-                    asset.asset_address.toLowerCase(),
-                )?.balance ?? BigInt(0),
-                asset.decimals,
-              )}
+              balance={asset.token?.formattedBalance ?? "0"}
             />
           ))}
         </>

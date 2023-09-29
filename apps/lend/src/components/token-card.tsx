@@ -49,7 +49,7 @@ export default function TokenCard({ asset }: { asset: Asset }) {
                 Supply APR
               </div>
               <div className="font-bold text-success-foreground md:text-lg">
-                {(asset.supplyStableAPR * 100).toFixed(2)}%
+                {(asset.supplyAPR * 100).toFixed(2)}%
               </div>
             </div>
 

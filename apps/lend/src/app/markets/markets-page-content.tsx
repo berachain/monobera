@@ -24,7 +24,7 @@ interface MarketsProps {
   suppliedAssets: AmountItem[];
   borrowStableAPR: RateItem[];
   borrowVariableAPR: RateItem[];
-  supplyStableAPR: RateItem[];
+  supplyAPR: RateItem[];
 }
 export default function MarketsPageContent({
   assets,
@@ -32,7 +32,7 @@ export default function MarketsPageContent({
   suppliedAssets,
   borrowStableAPR,
   borrowVariableAPR,
-  supplyStableAPR,
+  supplyAPR,
 }: MarketsProps) {
   const { tokenDictionary } = useTokens();
   const [tableView, setUseTableView] = React.useState(false);
@@ -59,7 +59,7 @@ export default function MarketsPageContent({
       suppliedAssets,
       borrowStableAPR,
       borrowVariableAPR,
-      supplyStableAPR,
+      supplyAPR,
     );
     return Object.keys(assetDictionary)
       .map((key) => assetDictionary[key as any] as Asset)
@@ -75,7 +75,7 @@ export default function MarketsPageContent({
       .sort((a: Asset, b: Asset) => {
         switch (sortBy) {
           case "Deposit-APY":
-            return b.supplyStableAPR - a.supplyStableAPR;
+            return b.supplyAPR - a.supplyAPR;
           case "Total-Borrows":
             return (b.borrowed ?? 0) - (a.borrowed ?? 0);
           case "Systems":
@@ -90,7 +90,7 @@ export default function MarketsPageContent({
     suppliedAssets,
     borrowStableAPR,
     borrowVariableAPR,
-    supplyStableAPR,
+    supplyAPR,
     sortOptions,
   ]);
 

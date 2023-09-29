@@ -17,7 +17,7 @@ interface DashboardProps {
   suppliedAssets: AmountItem[];
   borrowStableAPR: RateItem[];
   borrowVariableAPR: RateItem[];
-  supplyStableAPR: RateItem[];
+  supplyAPR: RateItem[];
 }
 
 export default function DashboardPageContent({
@@ -26,7 +26,7 @@ export default function DashboardPageContent({
   suppliedAssets,
   borrowStableAPR,
   borrowVariableAPR,
-  supplyStableAPR,
+  supplyAPR,
 }: DashboardProps) {
   const { isReady } = useBeraJs();
   const [tableView, setUseTableView] = React.useState(false);
@@ -51,7 +51,7 @@ export default function DashboardPageContent({
         suppliedAssets,
         borrowStableAPR,
         borrowVariableAPR,
-        supplyStableAPR,
+        supplyAPR,
       ),
     [
       assets,
@@ -59,7 +59,7 @@ export default function DashboardPageContent({
       suppliedAssets,
       borrowStableAPR,
       borrowVariableAPR,
-      supplyStableAPR,
+      supplyAPR,
     ],
   );
 

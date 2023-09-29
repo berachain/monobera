@@ -1,7 +1,6 @@
 import { useBeraJs } from "@bera/berajs";
 import { lendPoolImplementationAddress, multicallAddress } from "@bera/config";
-// import useSWR, { useSWRConfig } from "swr";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 // import { formatUnits } from "viem";
 import { usePublicClient, type Address } from "wagmi";
@@ -18,7 +17,7 @@ const REFRESH_BLOCK_INTERVAL = 2000;
 
 export const usePollUserAccountData = () => {
   const publicClient = usePublicClient();
-  // const { mutate } = useSWRConfig();
+  const { mutate } = useSWRConfig();
   const { account, error } = useBeraJs();
   // const { networkConfig } = useBeraConfig();
 
@@ -64,6 +63,7 @@ export const usePollUserAccountData = () => {
   };
 
   return {
+    mutate,
     useUserAccountData,
   };
 };

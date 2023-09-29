@@ -1,5 +1,7 @@
 import { Icons } from "@bera/ui/icons";
 
+// import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
+
 export default function StatusBanner() {
   const status = [
     {
@@ -28,6 +30,9 @@ export default function StatusBanner() {
       amount: "$420.69m",
     },
   ];
+  // const { useUserAccountData } = usePollUserAccountData();
+  // const { data, isLoading } = useUserAccountData();
+  //   console.log("useUserAccountData", data, isLoading);
   return (
     <div className="border-boder flex w-full flex-col justify-between gap-8 rounded-18 border bg-muted p-4 md:flex-row ">
       <div className="flex flex-col gap-6 md:flex-row ">
