@@ -75,7 +75,7 @@ const SupplyModalContent = ({
     token: { address: asset.asset_address, decimals: asset.decimals } as Token,
   });
   const allowance = useAllowance();
-  console.log(allowance);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Supply</div>

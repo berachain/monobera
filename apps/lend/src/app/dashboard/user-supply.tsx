@@ -1,5 +1,6 @@
 import React from "react";
 import { DataTable, TokenIcon } from "@bera/shared-ui";
+
 // import { formatUnits } from "viem";
 
 import { type Asset } from "~/utils/types";
