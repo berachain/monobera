@@ -5,7 +5,6 @@ import { lendPoolImplementationAddress } from "@bera/config";
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
-import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 
@@ -58,7 +57,7 @@ const WithdrawModalContent = ({
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const userBalance = 420.69;
+  const userBalance = Number(asset.atoken?.formattedBalance ?? "0");
 
   const { account } = useBeraJs();
 
@@ -90,11 +89,12 @@ const WithdrawModalContent = ({
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {userBalance}
+          Supply balance: {userBalance}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() => setAmount(userBalance)}
+            onClick={() =>
+              setAmount(userBalance === 0 ? undefined : userBalance)
+            }
           >
             MAX
           </span>

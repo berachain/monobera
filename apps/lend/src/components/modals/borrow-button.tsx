@@ -58,10 +58,10 @@ const BorrowModalContent = ({
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const maxBorrowAmout = asset.supplied ?? 1000;
+  const maxBorrowAmout = 1000;
   const apyOptions = {
-    stable: asset.borrowStableAPR ?? 0 * 100,
-    variable: asset.borrowVariableAPR ?? 1 * 100,
+    stable: (asset.borrowStableAPR ?? 0) * 100,
+    variable: (asset.borrowVariableAPR ?? 0) * 100,
   };
   const [apySelected, setApySelected] = useState<"stable" | "variable">(
     "stable",
@@ -85,10 +85,10 @@ const BorrowModalContent = ({
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value={"stable"}>
-            Stable APY: {apyOptions.stable.toFixed(2)}%
+            Stable APY: {apyOptions.stable.toPrecision(4)}%
           </TabsTrigger>
           <TabsTrigger value={"variable"}>
-            Variable APY: {apyOptions.variable.toFixed(2)}%
+            Variable APY: {apyOptions.variable.toPrecision(4)}%
           </TabsTrigger>
         </TabsList>
       </Tabs>
