@@ -32,7 +32,8 @@ export default function StatusBanner() {
   ];
   // const { useUserAccountData } = usePollUserAccountData();
   // const { data, isLoading } = useUserAccountData();
-  //   console.log("useUserAccountData", data, isLoading);
+  // console.log("useUserAccountData", data, isLoading);
+
   return (
     <div className="border-boder flex w-full flex-col justify-between gap-8 rounded-18 border bg-muted p-4 md:flex-row ">
       <div className="flex flex-col gap-6 md:flex-row ">

@@ -1,43 +1,58 @@
-import { Tooltip } from "@bera/shared-ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import Link from "next/link";
+import { formatUsd, formatter, type Token } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
+import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 import Card from "~/components/card";
 
-export default function TokenInfoCard() {
+export default function TokenInfoCard({
+  token,
+  reserve,
+  liquidity,
+  utilization,
+  oraclePrice,
+}: {
+  token: Token;
+  reserve: number;
+  liquidity: number;
+  utilization: number;
+  oraclePrice: number;
+}) {
   const info = [
     {
       title: "Reserve Size",
-      amount: "$2.5K",
+      amount: `$${formatter.format(reserve * oraclePrice)}`,
     },
     {
       title: "Available Liquidity",
-      amount: "$300.64M",
+      amount: `$${formatter.format(liquidity * oraclePrice)}`,
     },
     {
       title: "Utilization Ratio",
-      amount: "42.69%",
+      amount: `${(utilization * 100).toPrecision(4)}%`,
       tooltip: "Utilization Ratio",
     },
     {
       title: "Oracle Price",
-      amount: "$1880.69",
+      amount: `${formatUsd(oraclePrice)}`,
     },
   ];
   return (
     <Card className="flex flex-col gap-6 lg:flex-row lg:justify-between">
       <div className="flex items-center gap-4">
-        <Avatar className="h-12 w-12">
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>ticker</AvatarFallback>
-        </Avatar>
+        <TokenIcon token={token} size="2xl" />
         <div className="text-center text-3xl font-semibold leading-9">
-          Ethereum
+          {token.name}
         </div>
         <div className="flex gap-2">
-          <div className="h-fit w-fit rounded-full border border-border bg-muted p-2 hover:cursor-pointer md:rounded-xl">
+          <Link
+            className="h-fit w-fit rounded-full border border-border bg-muted p-2 hover:cursor-pointer md:rounded-xl"
+            href={`${blockExplorerUrl}/address/${token.address}`}
+            target="_blank"
+          >
             <Icons.external className="relative h-4 w-4 text-muted-foreground" />
-          </div>
+          </Link>
           <div className="h-fit w-fit rounded-full border border-border bg-muted p-2 hover:cursor-pointer md:rounded-xl">
             <Icons.wallet className="relative h-4 w-4 text-muted-foreground" />
           </div>

@@ -2,9 +2,12 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useTokens } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
 import { isAddress } from "viem";
+import { type Address } from "wagmi";
 
+import { type AmountItem, type RateItem } from "~/utils/getServerSideData";
 import InterestRateOvertime from "./components/interest-rate-overtime";
 import TokenInfoCard from "./components/token-info-card";
 import TotalBorrowed from "./components/total-borrowed";
@@ -13,16 +16,41 @@ import UserInfo from "./components/user-info";
 
 export default function IndividualMarketAnalytics({
   address,
+  assetInfo,
 }: {
-  address: `0x${string}`;
+  address: Address;
+  assetInfo: {
+    supplied: AmountItem;
+    borrowed: AmountItem;
+    volume: AmountItem;
+    utilization: RateItem;
+    supplyAPR: RateItem;
+    borrowVariableAPR: RateItem;
+    supplyAPR1D: RateItem[];
+    supplyAPR7D: RateItem[];
+    supplyAPR30D: RateItem[];
+    borrowVariableAPR1D: RateItem[];
+    borrowVariableAPR7D: RateItem[];
+    borrowVariableAPR30D: RateItem[];
+  };
 }) {
+  const { tokenDictionary } = useTokens();
   const router = useRouter();
   useEffect(() => {
     if (!address || !isAddress(address)) {
       router.push("/404");
-      // console.log("404");
     }
   }, []);
+
+  useEffect(() => {
+    if (
+      tokenDictionary &&
+      Object.keys(tokenDictionary).length > 0 &&
+      !tokenDictionary[address]
+    ) {
+      router.push("/404");
+    }
+  }, [tokenDictionary]);
 
   return (
     <div>
@@ -36,7 +64,19 @@ export default function IndividualMarketAnalytics({
         </div>
       </div>
 
-      <TokenInfoCard />
+      {tokenDictionary && tokenDictionary[address] ? (
+        <TokenInfoCard
+          {...{
+            token: tokenDictionary[address]!,
+            reserve: 1,
+            liquidity: Number(assetInfo.supplied.amount),
+            utilization: Number(assetInfo.utilization.rate),
+            oraclePrice: 2,
+          }}
+        />
+      ) : (
+        <div>loading...</div>
+      )}
 
       <div className="mt-9 flex flex-col gap-8 lg:flex-row">
         <UserInfo />
