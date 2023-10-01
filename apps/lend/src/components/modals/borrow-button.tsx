@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { formatter, useBeraJs } from "@bera/berajs";
+import { formatter, useBeraJs, type Token } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -8,39 +8,41 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 
-import { type Asset } from "~/utils/types";
 import { lendPoolImplementationABI } from "~/hooks/abi";
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 
 export default function BorrowBtn({
-  asset,
+  token,
   disabled = false,
   variant = "primary",
 }: {
-  asset: Asset;
+  token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
 }) {
+  const { isReady } = useBeraJs();
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
-  const { write, isLoading, ModalPortal } = useTxn({
-    message: `Borrowing ${amount} ${asset.symbol}`,
+  const { write, isLoading, ModalPortal, isSuccess } = useTxn({
+    message: `Borrowing ${amount} ${token.symbol}`,
   });
+  useEffect(() => setOpen(false), [isSuccess]);
   return (
     <>
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
         className="w-fit text-sm leading-5"
-        disabled={disabled || isLoading}
+        disabled={disabled || isLoading || !isReady}
         variant={variant}
       >
         {isLoading ? "Loading" : "Borrow"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
-          <BorrowModalContent {...{ asset, amount, setAmount, write }} />
+          <BorrowModalContent {...{ token, amount, setAmount, write }} />
         </DialogContent>
       </Dialog>
     </>
@@ -48,25 +50,32 @@ export default function BorrowBtn({
 }
 
 const BorrowModalContent = ({
-  asset,
+  token,
   amount,
   setAmount,
   write,
 }: {
-  asset: Asset;
+  token: Token;
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const maxBorrowAmout = 1000;
-  const apyOptions = {
-    stable: (asset.borrowStableAPR ?? 0) * 100,
-    variable: (asset.borrowVariableAPR ?? 0) * 100,
-  };
+
   const [apySelected, setApySelected] = useState<"stable" | "variable">(
     "stable",
   );
   const { account } = useBeraJs();
+  const { useSelectedReserveData } = usePollReservesDataList();
+  const { data: reserveData } = useSelectedReserveData(token.address);
+  const apyOptions = {
+    stable:
+      (Number(formatUnits(reserveData.currentStableBorrowRate, 18)) * 100 ??
+        0) * 100,
+    variable:
+      (Number(formatUnits(reserveData.currentVariableBorrowRate, 18)) ?? 0) *
+      100,
+  };
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Borrow</div>
@@ -85,10 +94,10 @@ const BorrowModalContent = ({
       >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value={"stable"}>
-            Stable APY: {apyOptions.stable.toPrecision(4)}%
+            Stable APY: {apyOptions.stable.toFixed(2)} %
           </TabsTrigger>
           <TabsTrigger value={"variable"}>
-            Variable APY: {apyOptions.variable.toPrecision(4)}%
+            Variable APY: {apyOptions.variable.toFixed(2)} %
           </TabsTrigger>
         </TabsList>
       </Tabs>
@@ -101,7 +110,7 @@ const BorrowModalContent = ({
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={asset.symbol}
+          endAdornment={token.symbol}
           value={amount}
           onChange={(e) =>
             setAmount(
@@ -125,13 +134,10 @@ const BorrowModalContent = ({
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">LTV Health Ratio</div>
           <div className="">0 {"<->"} 1.69</div>
-          {/* i didnt make this cause design doesnt make sense 2 me */}
         </div>
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground">Estimated Value</div>
-          <div className="">
-            ${formatter.format(amount ?? 0 * asset.dollarValue ?? 1)}
-          </div>
+          <div className="">${formatter.format(amount ?? 0 * 1)}</div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">Variable Borrow APY</div>
@@ -149,10 +155,10 @@ const BorrowModalContent = ({
             abi: lendPoolImplementationABI,
             functionName: "borrow",
             params: [
-              asset.asset_address,
-              parseUnits(`${Number(amount ?? 0)}`, asset.decimals),
+              token.address,
+              parseUnits(`${Number(amount ?? 0)}`, token.decimals),
               apySelected === "stable" ? 1 : 2,
-              parseUnits("0", asset.decimals),
+              parseUnits("0", token.decimals),
               account,
             ],
           });

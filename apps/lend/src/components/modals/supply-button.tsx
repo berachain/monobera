@@ -13,44 +13,43 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 
-import { type Asset } from "~/utils/types";
 import { lendPoolImplementationABI } from "~/hooks/abi";
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import ApproveButton from "../approve-button";
 
 export default function SupplyBtn({
-  asset,
+  token,
   disabled = false,
   variant = "primary",
 }: {
-  asset: Asset;
+  token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `Supplying ${amount} ${asset.symbol}`,
+    message: `Supplying ${amount} ${token.symbol}`,
   });
-
+  const { isReady } = useBeraJs();
   useEffect(() => setOpen(false), [isSuccess]);
 
   return (
     <>
-      {" "}
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
         className="w-fit text-sm leading-5"
-        disabled={disabled || isLoading}
+        disabled={disabled || isLoading || !isReady}
         variant={variant}
       >
         {isLoading ? "Loading" : "Supply"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
-          <SupplyModalContent {...{ asset, amount, setAmount, write }} />
+          <SupplyModalContent {...{ token, amount, setAmount, write }} />
         </DialogContent>
       </Dialog>
     </>
@@ -58,23 +57,26 @@ export default function SupplyBtn({
 }
 
 const SupplyModalContent = ({
-  asset,
+  token,
   amount,
   setAmount,
   write,
 }: {
-  asset: Asset;
+  token: Token;
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const { account } = useBeraJs();
-  const balance = useSelectedAssetWalletBalance(asset.asset_address);
+  const balance = useSelectedAssetWalletBalance(token.address);
   const { useAllowance } = usePollAllowance({
     contract: lendPoolImplementationAddress,
-    token: { address: asset.asset_address, decimals: asset.decimals } as Token,
+    token,
   });
+
   const allowance = useAllowance();
+  const { useSelectedReserveData } = usePollReservesDataList();
+  const { data: reserveData } = useSelectedReserveData(token.address);
 
   return (
     <div className="flex flex-col gap-6">
@@ -95,7 +97,7 @@ const SupplyModalContent = ({
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={asset.symbol}
+          endAdornment={token.symbol}
           value={amount}
           onChange={(e) =>
             setAmount(
@@ -105,14 +107,14 @@ const SupplyModalContent = ({
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {balance.formattedBalance}
+          {balance?.formattedBalance}
           <span
             className="underline hover:cursor-pointer"
             onClick={() =>
               setAmount(
-                Number(balance.formattedBalance) === 0
+                Number(balance?.formattedBalance) === 0
                   ? undefined
-                  : Number(balance.formattedBalance),
+                  : Number(balance?.formattedBalance),
               )
             }
           >
@@ -124,18 +126,20 @@ const SupplyModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div>${formatter.format(amount ?? 0 * asset.dollarValue ?? 1)}</div>
+          <div>${formatter.format(amount ?? 0 * 1)}</div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Supply APY</div>
           <div className="text-success-foreground">
-            {(asset.supplyAPR * 100).toFixed(2)}%
+            {(
+              Number(formatUnits(reserveData.currentLiquidityRate, 18)) * 100
+            ).toFixed(2)}
+            %
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
           <div className="">0 {"<->"} infinite</div>
-          {/* i didnt make this cause design doesnt make sense 2 me */}
         </div>
       </div>
 
@@ -150,10 +154,10 @@ const SupplyModalContent = ({
               abi: lendPoolImplementationABI,
               functionName: "supply",
               params: [
-                asset.asset_address,
-                parseUnits(`${Number(amount)}`, asset.decimals),
+                token.address,
+                parseUnits(`${Number(amount)}`, token.decimals),
                 account,
-                parseUnits("0", asset.decimals),
+                parseUnits("0", token.decimals),
               ],
             });
           }}
@@ -161,16 +165,7 @@ const SupplyModalContent = ({
           {amount === 0 ? "Enter Amount" : "Supply"}
         </Button>
       ) : (
-        <ApproveButton
-          token={
-            {
-              ...asset,
-              address: asset.asset_address,
-              name: asset.symbol,
-            } as Token
-          }
-          spender={lendPoolImplementationAddress}
-        />
+        <ApproveButton token={token} spender={lendPoolImplementationAddress} />
       )}
     </div>
   );

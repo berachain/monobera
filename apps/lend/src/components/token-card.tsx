@@ -1,33 +1,33 @@
 import Link from "next/link";
-import { formatter, useTokens } from "@bera/berajs";
+import { formatter, useTokens, type Token } from "@bera/berajs";
 import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { formatUnits } from "viem";
 
-import { type Asset } from "~/utils/types";
+import InfoButton from "~/components/info-button";
 import Card from "./card";
 import BorrowBtn from "./modals/borrow-button";
 import SupplyBtn from "./modals/supply-button";
 
-export default function TokenCard({ asset }: { asset: Asset }) {
+export default function TokenCard({
+  reserveData,
+  token,
+}: {
+  reserveData: any;
+  token: Token;
+}) {
   const { tokenDictionary } = useTokens();
   return (
     <>
       {tokenDictionary ? (
-        <Card
-          className="div-4 flex flex-col items-center justify-between gap-6 p-4 lg:flex-row"
-          key={asset.asset_address}
-        >
+        <Card className="div-4 flex flex-col items-center justify-between gap-6 p-4 lg:flex-row">
           <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:gap-6 lg:justify-start">
             <div className="mb-[22px] flex w-[250px] items-center gap-4 md:mb-0">
-              <TokenIcon
-                token={tokenDictionary[asset.asset_address]}
-                size="2xl"
-                key={asset.asset_address}
-              />
+              <TokenIcon token={token} size="2xl" />
               <div>
                 <div className="text-xs	font-medium leading-5 text-muted-foreground">
-                  {tokenDictionary[asset.asset_address]?.name}{" "}
+                  {token?.name}
                   <Tooltip
                     text={
                       "The data values below showcase the total assets supplied and their respective USD values."
@@ -35,12 +35,10 @@ export default function TokenCard({ asset }: { asset: Asset }) {
                   />
                 </div>
                 <div className="text-lg font-bold leading-[22px]">
-                  {formatter.format(asset.supplied)}{" "}
-                  {tokenDictionary[asset.asset_address]?.symbol}
+                  ??
+                  {token.symbol}
                 </div>
-                <div className=" text-xs font-medium leading-5">
-                  ${formatter.format(asset.supplied * asset.dollarValue)}
-                </div>
+                <div className=" text-xs font-medium leading-5">$??</div>
               </div>
             </div>
 
@@ -49,7 +47,10 @@ export default function TokenCard({ asset }: { asset: Asset }) {
                 Supply APR
               </div>
               <div className="font-bold text-success-foreground md:text-lg">
-                {(asset.supplyAPR * 100).toFixed(2)}%
+                {Number(
+                  formatUnits(reserveData.currentLiquidityRate, 18) * 100,
+                ).toFixed(2)}
+                %
               </div>
             </div>
 
@@ -58,9 +59,10 @@ export default function TokenCard({ asset }: { asset: Asset }) {
                 Variable Borrow APR
               </div>
               <div className="font-bold md:text-lg">
-                {asset.borrowVariableAPR
-                  ? `${(asset.borrowVariableAPR * 100).toFixed(2)}%`
-                  : "~~"}
+                {Number(
+                  formatUnits(reserveData.currentVariableBorrowRate, 18) * 100,
+                ).toFixed(2)}
+                %
               </div>
             </div>
 
@@ -69,9 +71,10 @@ export default function TokenCard({ asset }: { asset: Asset }) {
                 Stable Borrow APR
               </div>
               <div className="font-bold md:text-lg">
-                {asset.borrowStableAPR
-                  ? `${(asset.borrowStableAPR * 100).toFixed(2)}%`
-                  : "~~"}
+                {Number(
+                  formatUnits(reserveData.currentStableBorrowRate, 18) * 100,
+                ).toFixed(2)}
+                %
               </div>
             </div>
 
@@ -79,20 +82,14 @@ export default function TokenCard({ asset }: { asset: Asset }) {
               <div className="flex items-center text-xs font-medium leading-5">
                 Total borrows
               </div>
-              <div className="font-bold md:text-lg">
-                {asset.borrowed ? formatter.format(asset.borrowed) : "~~"}
-              </div>
+              <div className="font-bold md:text-lg">{"~~"}</div>
             </div>
           </div>
 
           <div className="flex w-full items-center gap-2 lg:w-fit">
-            <SupplyBtn asset={asset} />
-            <BorrowBtn disabled={!asset.borrowed} asset={asset} />
-            <Link href={`/markets/address=${asset.asset_address}`}>
-              <Button variant={"outline"}>
-                <Icons.info />
-              </Button>
-            </Link>
+            <SupplyBtn token={token} />
+            <BorrowBtn token={token} />
+            <InfoButton address={token.address} />
           </div>
         </Card>
       ) : (

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
-import { useTokens } from "@bera/berajs";
+import { usePollAssetWalletBalance, useTokens } from "@bera/berajs";
 import { DataTable, Dropdown, SearchInput, TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Switch } from "@bera/ui/switch";
@@ -16,6 +16,7 @@ import {
 import { type Asset } from "~/utils/types";
 import StatusBanner from "~/components/status-banner";
 import TokenCard from "~/components/token-card";
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { market_table_columns } from "./market-table-column";
 
 interface MarketsProps {
@@ -34,7 +35,6 @@ export default function MarketsPageContent({
   borrowVariableAPR,
   supplyAPR,
 }: MarketsProps) {
-  const { tokenDictionary } = useTokens();
   const [tableView, setUseTableView] = React.useState(false);
   const sortOptions = ["Deposit-APY", "Total-Borrows", "Systems"];
   const [sortBy, setSortBy] = React.useState<string>(sortOptions[2]!);
@@ -51,6 +51,12 @@ export default function MarketsPageContent({
       window.removeEventListener("resize", handleResize);
     };
   }, [tableView]);
+
+  usePollAssetWalletBalance();
+  const { tokenDictionary } = useTokens();
+  const { useReservesDataList } = usePollReservesDataList();
+  const { data: reservesDataList, isLoading: isReservesDataListLoading } =
+    useReservesDataList();
 
   const assetsList = React.useMemo(() => {
     const assetDictionary = getAssetDictionary(
@@ -161,17 +167,33 @@ export default function MarketsPageContent({
           className="hidden md:block"
         />
       </div>
-      <div className="mt-6">
-        {tableView ? (
-          <DataTable columns={market_table_columns} data={assetsData} />
-        ) : (
-          <div className="grid grid-cols-1 gap-4">
-            {assetsList.map((asset: Asset, index) => (
-              <TokenCard asset={asset} key={index} />
-            ))}
-          </div>
-        )}
-      </div>
+      {tokenDictionary &&
+      Object.keys(tokenDictionary).length !== 0 &&
+      !isReservesDataListLoading ? (
+        <div className="mt-6">
+          {tableView ? (
+            <DataTable columns={market_table_columns} data={assetsData} />
+          ) : (
+            <div className="grid grid-cols-1 gap-4">
+              {Object.keys(reservesDataList).map((address, index) => (
+                <>
+                  {tokenDictionary[address] ? (
+                    <TokenCard
+                      reserveData={reservesDataList[address]}
+                      token={tokenDictionary[address]}
+                      key={index}
+                    />
+                  ) : (
+                    <>Token not exist {address} </>
+                  )}
+                </>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div>Loading</div>
+      )}
     </>
   );
 }

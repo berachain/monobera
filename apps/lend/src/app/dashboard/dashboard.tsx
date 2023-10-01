@@ -12,7 +12,7 @@ import {
 } from "~/utils/lendTokenHelper";
 import { type AssetDictionary } from "~/utils/types";
 import StatusBanner from "~/components/status-banner";
-import { usePollUserStableAPR } from "~/hooks/usePollUserStableAPR";
+import { usePollUserStableAPR } from "~/hooks/usePollReservesDataList";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
 import UserBorrows from "./user-borrows";
