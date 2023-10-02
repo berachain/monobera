@@ -138,6 +138,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 }}
                 selectable={selectedTo?.address !== honey?.address}
                 customTokenList={collateralList}
+                showExceeding={false}
                 hidePrice
                 hideMax={true}
                 balance={toBalance?.formattedBalance}
