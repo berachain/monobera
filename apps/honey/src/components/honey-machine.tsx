@@ -354,6 +354,7 @@ export function HoneyMachine() {
                     customTokenList={collateralList}
                     hidePrice
                     setAmount={(amount) => {
+                      setGivenIn(true);
                       setFromAmount(Number(amount));
                     }}
                   />
