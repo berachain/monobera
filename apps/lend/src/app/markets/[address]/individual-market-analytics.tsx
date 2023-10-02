@@ -13,28 +13,31 @@ import InterestRateOvertime from "./components/interest-rate-overtime";
 import TokenInfoCard from "./components/token-info-card";
 import TotalBorrowed from "./components/total-borrowed";
 import TotalSupplied from "./components/total-supplied";
-
-// import UserInfo from "./components/user-info";
+import UserInfo from "./components/user-info";
 
 export default function IndividualMarketAnalytics({
   address,
-  assetInfo,
+  supplyAPR1D,
+  supplyAPR7D,
+  supplyAPR30D,
+  borrowVariableAPR1D,
+  borrowVariableAPR7D,
+  borrowVariableAPR30D,
 }: {
   address: Address;
-  assetInfo: {
-    supplyAPR1D: RateItem[];
-    supplyAPR7D: RateItem[];
-    supplyAPR30D: RateItem[];
-    borrowVariableAPR1D: RateItem[];
-    borrowVariableAPR7D: RateItem[];
-    borrowVariableAPR30D: RateItem[];
-  };
+  supplyAPR1D: RateItem[];
+  supplyAPR7D: RateItem[];
+  supplyAPR30D: RateItem[];
+  borrowVariableAPR1D: RateItem[];
+  borrowVariableAPR7D: RateItem[];
+  borrowVariableAPR30D: RateItem[];
 }) {
+  console.log(supplyAPR30D);
   usePollAssetWalletBalance();
   const { tokenDictionary } = useTokens();
   const { useSelectedReserveData } = usePollReservesDataList();
   const { data: reserveData } = useSelectedReserveData(address);
-  console.log(assetInfo, reserveData);
+  // console.log(assetInfo, reserveData);
   const router = useRouter();
   useEffect(() => {
     if (!address || !isAddress(address)) {
@@ -79,11 +82,43 @@ export default function IndividualMarketAnalytics({
       )}
 
       <div className="mt-9 flex flex-col gap-8 lg:flex-row">
-        {/* <UserInfo token={tokenDictionary[address]!} /> */}
+        <UserInfo token={tokenDictionary && tokenDictionary[address]} />
         <div className="flex w-full flex-col gap-8">
-          <TotalSupplied />
-          <TotalBorrowed />
-          <InterestRateOvertime />
+          <TotalSupplied
+            reserveData={reserveData}
+            graphData={{
+              "24H": supplyAPR1D,
+              "7D": supplyAPR7D,
+              "30D": supplyAPR30D,
+              ALL_TIME: supplyAPR30D,
+            }}
+          />
+          <TotalBorrowed
+            reserveData={reserveData}
+            graphData={{
+              "24H": borrowVariableAPR1D,
+              "7D": borrowVariableAPR7D,
+              "30D": borrowVariableAPR30D,
+              ALL_TIME: borrowVariableAPR30D,
+            }}
+          />
+          <InterestRateOvertime
+            reserveData={reserveData}
+            graphData={{
+              borrow: {
+                "24H": borrowVariableAPR1D,
+                "7D": borrowVariableAPR7D,
+                "30D": borrowVariableAPR30D,
+                ALL_TIME: borrowVariableAPR30D,
+              },
+              utilization: {
+                "24H": supplyAPR1D,
+                "7D": supplyAPR7D,
+                "30D": supplyAPR30D,
+                ALL_TIME: supplyAPR30D,
+              },
+            }}
+          />
         </div>
       </div>
     </div>

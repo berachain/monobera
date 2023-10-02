@@ -17,7 +17,6 @@ export default function UserTokenCard({
   asset: any;
   type: "user-supply" | "user-borrow" | "supply" | "borrow";
 }) {
-  console.log("asset", asset);
   const originalToken = useSelectedAssetWalletBalance(
     asset.reserveData.address,
   );

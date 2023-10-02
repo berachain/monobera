@@ -1,9 +1,26 @@
 import { Tooltip } from "@bera/shared-ui";
 
+import { type RateItem } from "~/utils/getServerSideData";
 import Card from "~/components/card";
 import LineChart from "~/components/line-chart";
 
-export default function InterestRateOvertime() {
+type graph = {
+  "24H": RateItem[];
+  "7D": RateItem[];
+  "30D": RateItem[];
+  ALL_TIME: RateItem[];
+};
+
+export default function InterestRateOvertime({
+  reserveData,
+  graphData,
+}: {
+  reserveData: any;
+  graphData: {
+    borrow: graph;
+    utilization: graph;
+  };
+}) {
   return (
     <div className="w-full">
       <div className="text-2xl font-semibold leading-loose">
@@ -16,21 +33,21 @@ export default function InterestRateOvertime() {
             <div className="text-sm font-normal leading-normal text-muted-foreground">
               Total Borrowed <Tooltip text="" />
             </div>
+            {reserveData.borrowVariableAPR}
             <div className=" text-xl font-semibold leading-7">54.29%</div>
           </div>
         </div>
 
         <div>
           <LineChart
-            labels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"]}
             data={[
               {
-                data: [-60, -20, -60, 60, 0, 20, -20],
+                data: graphData.borrow,
                 title: "Borrow APR, Variable",
                 color: "#292524",
               },
               {
-                data: [0, 20, 0, -20, -60, -20, 20],
+                data: graphData.utilization,
                 title: "Utilization Rate",
                 color: "#059669",
               },

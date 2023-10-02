@@ -1,11 +1,26 @@
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
+import { formatEther } from "viem";
 
+import { type RateItem } from "~/utils/getServerSideData";
 import Card from "~/components/card";
 import DonutChart from "~/components/donut-chart";
 import LineChart from "~/components/line-chart";
 
-export default function TotalBorrowed() {
+export default function TotalBorrowed({
+  reserveData,
+  graphData,
+}: {
+  reserveData: any;
+  graphData: {
+    "24H": RateItem[];
+    "7D": RateItem[];
+    "30D": RateItem[];
+    ALL_TIME: RateItem[];
+  };
+}) {
+  console.log(reserveData);
   const ticker = "ETH";
   const info = [
     {
@@ -67,17 +82,25 @@ export default function TotalBorrowed() {
                 APY, variable
                 <Tooltip text="Variable interest rate will fluctuate based on the market conditions. Recommended for short-term positions." />
               </div>
-              <div className="font-semibold leading-7 md:text-xl">3.69%</div>
+              {reserveData ? (
+                <div className="font-semibold leading-7 md:text-xl">
+                  {Number(
+                    formatEther(reserveData.currentVariableBorrowRate),
+                  ).toFixed(2)}
+                  %
+                </div>
+              ) : (
+                <Skeleton className="h-7 w-20" />
+              )}
             </div>
           </div>
         </div>
 
         <div>
           <LineChart
-            labels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"]}
             data={[
               {
-                data: [-60, -20, -60, 60, 0, 20, -20],
+                data: graphData,
                 title: "Borrow APR, Variable",
                 color: color,
               },

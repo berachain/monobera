@@ -29,20 +29,18 @@ export default async function Page({
     getAssetBorrowVariableAPRInterval(params.address, "7D"),
     getAssetBorrowVariableAPRInterval(params.address, "30D"),
   ]);
-  const assetInfo = {
-    supplyAPR1D,
-    supplyAPR7D,
-    supplyAPR30D,
-    borrowVariableAPR1D,
-    borrowVariableAPR7D,
-    borrowVariableAPR30D,
-  };
-  console.log(assetInfo);
   return (
     <div className="container my-28">
       <IndividualMarketAnalytics
-        address={params.address}
-        assetInfo={assetInfo}
+        {...{
+          address: params.address,
+          supplyAPR1D,
+          supplyAPR7D,
+          supplyAPR30D,
+          borrowVariableAPR1D,
+          borrowVariableAPR7D,
+          borrowVariableAPR30D,
+        }}
       />
     </div>
   );

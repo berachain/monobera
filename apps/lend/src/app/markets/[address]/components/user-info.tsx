@@ -3,11 +3,13 @@ import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 import Card from "~/components/card";
+import BorrowBtn from "~/components/modals/borrow-button";
+import SupplyBtn from "~/components/modals/supply-button";
 
 // import SupplyBtn from "~/components/modals/supply-button";
 
-export default function UserInfo({ token }: { token: Token }) {
-  const tokenBalance = useSelectedAssetWalletBalance(token?.address);
+export default function UserInfo({ token }: { token: Token | undefined }) {
+  const tokenBalance = useSelectedAssetWalletBalance(token?.address ?? "");
 
   return (
     <div className="w-full flex-shrink-0 lg:w-[378px]">
@@ -45,7 +47,7 @@ export default function UserInfo({ token }: { token: Token }) {
                     $0.00
                   </div>
                 </div>
-                <div> {/* <SupplyBtn /> */}</div>
+                <SupplyBtn token={token} />
               </div>
 
               <div className="mt-4 flex items-center justify-between">
@@ -61,7 +63,7 @@ export default function UserInfo({ token }: { token: Token }) {
                     $0.00
                   </div>
                 </div>
-                <div> {/* <SupplyBtn asset={ass}/> */}</div>
+                <BorrowBtn token={token} />
               </div>
             </div>
           </Card>
