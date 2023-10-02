@@ -46,13 +46,13 @@ export const usePollReservesDataList = () => {
         multicallAddress: multicallAddress,
       });
 
-      const stableAPRDictionary = {};
+      const reservesDictionary = {};
 
       await Promise.all(
         reserveDataList.map(async (reserveData, index) => {
           if (reserveData.status === "success") {
             //@ts-ignore
-            stableAPRDictionary[reserveAddressList[index]] = reserveData.result;
+            reservesDictionary[reserveAddressList[index]] = reserveData.result;
             await mutate(
               [...QUERY_KEY, reserveAddressList[index]],
               reserveData.result,
@@ -63,7 +63,7 @@ export const usePollReservesDataList = () => {
         }),
       );
 
-      return stableAPRDictionary;
+      return reservesDictionary;
     } else {
       return {};
     }

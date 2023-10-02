@@ -39,7 +39,6 @@ export const usePollUserAccountData = () => {
           contracts: call,
           multicallAddress: multicallAddress,
         });
-        console.log(result);
         if (result[0]?.status === "success") {
           return {
             totalCollateralBase: (result[0].result as any[])[0],

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
-import { formatter, useBeraJs } from "@bera/berajs";
+import { formatter, useBeraJs, type Token } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -8,22 +8,21 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 
-import { type Asset } from "~/utils/types";
 import { lendPoolImplementationABI } from "~/hooks/abi";
 
 export default function WithdrawBtn({
-  asset,
+  token,
   disabled = false,
   variant = "outline",
 }: {
-  asset: Asset;
+  token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const { write, isLoading, ModalPortal } = useTxn({
-    message: `Supplying ${amount} ${asset.symbol}`,
+    message: `Supplying ${amount} ${token.symbol}`,
   });
   return (
     <>
@@ -39,7 +38,7 @@ export default function WithdrawBtn({
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
-          <WithdrawModalContent {...{ asset, amount, setAmount, write }} />
+          <WithdrawModalContent {...{ token, amount, setAmount, write }} />
         </DialogContent>
       </Dialog>
     </>
@@ -47,17 +46,17 @@ export default function WithdrawBtn({
 }
 
 const WithdrawModalContent = ({
-  asset,
+  token,
   amount,
   setAmount,
   write,
 }: {
-  asset: Asset;
+  token: Token;
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const userBalance = Number(asset.atoken?.formattedBalance ?? "0");
+  const userBalance = Number(token.formattedBalance ?? "0");
 
   const { account } = useBeraJs();
 
@@ -80,7 +79,7 @@ const WithdrawModalContent = ({
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={asset.symbol}
+          endAdornment={token.symbol}
           value={amount}
           onChange={(e) =>
             setAmount(
@@ -89,7 +88,7 @@ const WithdrawModalContent = ({
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          Supply balance: {userBalance}
+          Supply balance: {userBalance.toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() =>
@@ -104,15 +103,12 @@ const WithdrawModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="">
-            {" "}
-            ${formatter.format(amount ?? 0 * asset.dollarValue ?? 1)}
-          </div>
+          <div className=""> ${formatter.format(amount ?? 0 * 1)}</div>
         </div>
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Supply APY</div>
           <div className="text-success-foreground">
-            {(asset.supplyAPR * 100).toFixed(2)}%
+            {/* {(token.supplyAPR * 100).toFixed(2)}% */}
           </div>
         </div>
         <div className="flex justify-between  text-sm leading-tight">
@@ -130,8 +126,8 @@ const WithdrawModalContent = ({
             abi: lendPoolImplementationABI,
             functionName: "withdraw",
             params: [
-              asset.asset_address,
-              parseUnits(`${Number(amount)}`, asset.decimals),
+              token.address,
+              parseUnits(`${Number(amount)}`, token.decimals),
               account,
             ],
           });

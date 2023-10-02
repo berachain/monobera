@@ -1,40 +1,17 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import Link from "next/link";
 import { usePollAssetWalletBalance, useTokens } from "@bera/berajs";
-import { DataTable, Dropdown, SearchInput, TokenIcon } from "@bera/shared-ui";
-import { Button } from "@bera/ui/button";
+import { DataTable, Dropdown, SearchInput } from "@bera/shared-ui";
 import { Switch } from "@bera/ui/switch";
 
-import { getAssetDictionary } from "~/utils/getAssetDictionary";
-import {
-  type AmountItem,
-  type AssetItem,
-  type RateItem,
-} from "~/utils/getServerSideData";
-import { type Asset } from "~/utils/types";
 import StatusBanner from "~/components/status-banner";
 import TokenCard from "~/components/token-card";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { market_table_columns } from "./market-table-column";
 
-interface MarketsProps {
-  assets: AssetItem[];
-  borrowedAssets: AmountItem[];
-  suppliedAssets: AmountItem[];
-  borrowStableAPR: RateItem[];
-  borrowVariableAPR: RateItem[];
-  supplyAPR: RateItem[];
-}
-export default function MarketsPageContent({
-  assets,
-  borrowedAssets,
-  suppliedAssets,
-  borrowStableAPR,
-  borrowVariableAPR,
-  supplyAPR,
-}: MarketsProps) {
+export default function MarketsPageContent() {
+  usePollAssetWalletBalance();
   const [tableView, setUseTableView] = React.useState(false);
   const sortOptions = ["Deposit-APY", "Total-Borrows", "Systems"];
   const [sortBy, setSortBy] = React.useState<string>(sortOptions[2]!);
@@ -52,84 +29,46 @@ export default function MarketsPageContent({
     };
   }, [tableView]);
 
-  usePollAssetWalletBalance();
   const { tokenDictionary } = useTokens();
+  const isTokenDictionaryLoading =
+    !tokenDictionary || Object.keys(tokenDictionary).length === 0;
   const { useReservesDataList } = usePollReservesDataList();
-  const { data: reservesDataList, isLoading: isReservesDataListLoading } =
+  const { data: reservesDictionary, isLoading: isReservesDictionaryLoading } =
     useReservesDataList();
 
-  const assetsList = React.useMemo(() => {
-    const assetDictionary = getAssetDictionary(
-      assets,
-      borrowedAssets,
-      suppliedAssets,
-      borrowStableAPR,
-      borrowVariableAPR,
-      supplyAPR,
-    );
-    return Object.keys(assetDictionary)
-      .map((key) => assetDictionary[key as any] as Asset)
-      .filter((asset: Asset) => {
-        if (!keywords || keywords === "") return true;
-        else
-          return Object.values(asset).some((value) =>
-            typeof value !== "string"
-              ? String(value).toLowerCase().includes(keywords.toLowerCase())
-              : value.toLowerCase().includes(keywords.toLowerCase()),
-          );
-      })
-      .sort((a: Asset, b: Asset) => {
-        switch (sortBy) {
-          case "Deposit-APY":
-            return b.supplyAPR - a.supplyAPR;
-          case "Total-Borrows":
-            return (b.borrowed ?? 0) - (a.borrowed ?? 0);
-          case "Systems":
-            return b.asset_address.localeCompare(a.asset_address);
-          default:
-            return 0;
-        }
-      });
-  }, [
-    assets,
-    borrowedAssets,
-    suppliedAssets,
-    borrowStableAPR,
-    borrowVariableAPR,
-    supplyAPR,
-    sortOptions,
-  ]);
-
-  const assetsData = React.useMemo(
-    () =>
-      assetsList.map((asset: Asset) => ({
-        ...asset,
-        token: (
-          <>
-            {tokenDictionary &&
-            Object.keys(tokenDictionary).length !== 0 &&
-            tokenDictionary[asset.asset_address] ? (
-              <div className="flex items-center gap-2 text-sm font-medium leading-none">
-                <TokenIcon
-                  token={tokenDictionary[asset.asset_address]}
-                  size="lg"
-                  key={asset.asset_address}
-                />
-                {tokenDictionary[asset.asset_address]!.name}
-              </div>
-            ) : (
-              <>Loading</>
-            )}
-          </>
-        ),
-        details: (
-          <Link href={`/markets/address=${asset.asset_address}`}>
-            <Button variant={"outline"}>details </Button>
-          </Link>
-        ),
-      })),
-    [assetsList, tokenDictionary],
-  );
+  const reservesList = React.useMemo(() => {
+    return !isReservesDictionaryLoading && !isTokenDictionaryLoading
+      ? Object.keys(reservesDictionary)
+          .map((key) => ({
+            ...reservesDictionary[key as any],
+            ...tokenDictionary[key as any],
+          }))
+          .filter((reserve) => {
+            if (!reserve.address) return false;
+            if (!keywords || keywords === "") return true;
+            else
+              return Object.values(reserve).some((value) =>
+                typeof value !== "string"
+                  ? String(value).toLowerCase().includes(keywords.toLowerCase())
+                  : value.toLowerCase().includes(keywords.toLowerCase()),
+              );
+          })
+          .sort((a, b) => {
+            switch (sortBy) {
+              case "Deposit-APY":
+                return Number(
+                  BigInt(b.currentLiquidityRate - a.currentLiquidityRate),
+                );
+              case "Total-Borrows":
+                return (b.borrowed ?? 1) - (a.borrowed ?? 0);
+              case "Systems":
+                return b.address.localeCompare(a.address);
+              default:
+                return 0;
+            }
+          })
+      : [];
+  }, [reservesDictionary, tokenDictionary, keywords, sortOptions]);
 
   return (
     <>
@@ -167,26 +106,14 @@ export default function MarketsPageContent({
           className="hidden md:block"
         />
       </div>
-      {tokenDictionary &&
-      Object.keys(tokenDictionary).length !== 0 &&
-      !isReservesDataListLoading ? (
+      {!isTokenDictionaryLoading && !isReservesDictionaryLoading ? (
         <div className="mt-6">
           {tableView ? (
-            <DataTable columns={market_table_columns} data={assetsData} />
+            <DataTable columns={market_table_columns} data={reservesList} />
           ) : (
             <div className="grid grid-cols-1 gap-4">
-              {Object.keys(reservesDataList).map((address, index) => (
-                <>
-                  {tokenDictionary[address] ? (
-                    <TokenCard
-                      reserveData={reservesDataList[address]}
-                      token={tokenDictionary[address]}
-                      key={index}
-                    />
-                  ) : (
-                    <>Token not exist {address} </>
-                  )}
-                </>
+              {reservesList.map((reserve: any) => (
+                <TokenCard reserveData={reserve} key={reserve.address} />
               ))}
             </div>
           )}

@@ -1,52 +1,29 @@
-import React, { useEffect } from "react";
-import {
-  useCurrentAssetWalletBalances,
-  usePollAssetWalletBalance,
-} from "@bera/berajs";
+import React from "react";
+import { useCurrentAssetWalletBalances } from "@bera/berajs";
 import { Switch } from "@bera/ui/switch";
 
-import {
-  WalletTokenListToAssetDictionary,
-  assetDictionaryToExternalTokenList,
-  getAssetList,
-} from "~/utils/lendTokenHelper";
-import { type AssetDictionary } from "~/utils/types";
+import { getAssetList } from "~/utils/lendTokenHelper";
 import StatusBanner from "~/components/status-banner";
-import { usePollUserStableAPR } from "~/hooks/usePollReservesDataList";
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
 import UserBorrows from "./user-borrows";
 import UserSupply from "./user-supply";
 
-export default function Dashboard({
-  assetDictionary,
+export function Dashboard({
+  tableView,
+  setUseTableView,
 }: {
-  assetDictionary: AssetDictionary;
+  tableView: boolean;
+  setUseTableView: (tableView: boolean) => void;
 }) {
-  const [tableView, setUseTableView] = React.useState(false);
-  useEffect(() => {
-    const handleResize = () => {
-      if (tableView && window.innerWidth < 1024) {
-        setUseTableView(false);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [tableView]);
-
-  usePollAssetWalletBalance(
-    assetDictionaryToExternalTokenList(assetDictionary),
+  const { useReservesDataList } = usePollReservesDataList();
+  const { data: reservesDictionary } = useReservesDataList();
+  const BalanceToken = useCurrentAssetWalletBalances();
+  const assetsDictionary = getAssetList(
+    reservesDictionary ?? {},
+    BalanceToken ?? [],
   );
-  const { useUserStableAPR } = usePollUserStableAPR();
-  const { data: userStableAPR } = useUserStableAPR();
-  const assets = WalletTokenListToAssetDictionary(
-    assetDictionary,
-    useCurrentAssetWalletBalances() ?? [],
-    userStableAPR,
-  );
-  const assetsDictionary = getAssetList(assets);
   return (
     <div className="flex flex-col gap-9 md:gap-6">
       <StatusBanner />

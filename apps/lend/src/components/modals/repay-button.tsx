@@ -15,23 +15,22 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 
-import { type Asset } from "~/utils/types";
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import ApproveButton from "../approve-button";
 
 export default function RepayBtn({
-  asset,
+  token,
   disabled = false,
   variant = "outline",
 }: {
-  asset: Asset;
+  token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `Supplying ${amount} ${asset.symbol}`,
+    message: `Supplying ${amount} ${token.symbol}`,
   });
   useEffect(() => setOpen(false), [isSuccess]);
 
@@ -48,7 +47,7 @@ export default function RepayBtn({
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
-          <RepayModalContent {...{ asset, amount, setAmount, write }} />
+          <RepayModalContent {...{ token, amount, setAmount, write }} />
         </DialogContent>
       </Dialog>
     </>
@@ -56,21 +55,21 @@ export default function RepayBtn({
 }
 
 const RepayModalContent = ({
-  asset,
+  token,
   amount,
   setAmount,
   write,
 }: {
-  asset: Asset;
+  token: Token;
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const balance = useSelectedAssetWalletBalance(asset.asset_address);
+  const balance = useSelectedAssetWalletBalance(token.address);
   const { account } = useBeraJs();
   const { useAllowance } = usePollAllowance({
     contract: lendPoolImplementationAddress,
-    token: { address: asset.asset_address, decimals: asset.decimals } as Token,
+    token: { address: token.address, decimals: token.decimals } as Token,
   });
   const allowance = useAllowance();
 
@@ -93,7 +92,7 @@ const RepayModalContent = ({
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={asset.symbol}
+          endAdornment={token.symbol}
           value={amount}
           onChange={(e) =>
             setAmount(
@@ -122,12 +121,12 @@ const RepayModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div>${formatter.format(amount ?? 0 * asset.dollarValue ?? 1)}</div>
+          <div>${formatter.format(amount ?? 0 * 1)}</div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Supply APY</div>
           <div className="text-success-foreground">
-            {(asset.supplyAPR * 100).toFixed(2)}%
+            {/* {(token.supplyAPR * 100).toFixed(2)}% */}
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
@@ -147,8 +146,8 @@ const RepayModalContent = ({
               abi: lendPoolImplementationABI,
               functionName: "repay",
               params: [
-                asset.asset_address,
-                parseUnits(`${Number(amount)}`, asset.decimals),
+                token.address,
+                parseUnits(`${Number(amount)}`, token.decimals),
                 1,
                 account,
               ],
@@ -158,16 +157,7 @@ const RepayModalContent = ({
           {amount === 0 ? "Enter Amount" : "Withdraw"}
         </Button>
       ) : (
-        <ApproveButton
-          token={
-            {
-              ...asset,
-              address: asset.asset_address,
-              name: asset.symbol,
-            } as Token
-          }
-          spender={lendPoolImplementationAddress}
-        />
+        <ApproveButton token={token} spender={lendPoolImplementationAddress} />
       )}
     </div>
   );

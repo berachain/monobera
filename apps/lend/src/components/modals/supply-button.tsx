@@ -35,7 +35,6 @@ export default function SupplyBtn({
   });
   const { isReady } = useBeraJs();
   useEffect(() => setOpen(false), [isSuccess]);
-
   return (
     <>
       {ModalPortal}

@@ -1,33 +1,13 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
-import { useBeraJs } from "@bera/berajs";
+import React, { useEffect } from "react";
+import { useBeraJs, usePollAssetWalletBalance, useTokens } from "@bera/berajs";
 
-import { getAssetDictionary } from "~/utils/getAssetDictionary";
-import {
-  type AmountItem,
-  type AssetItem,
-  type RateItem,
-} from "~/utils/getServerSideData";
-import Dashboard from "./dashboard";
+import { dictionaryToExternalTokenList } from "~/utils/lendTokenHelper";
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
+import { Dashboard } from "./dashboard";
 
-interface DashboardProps {
-  assets: AssetItem[];
-  borrowedAssets: AmountItem[];
-  suppliedAssets: AmountItem[];
-  borrowStableAPR: RateItem[];
-  borrowVariableAPR: RateItem[];
-  supplyAPR: RateItem[];
-}
-
-export default function DashboardPageContent({
-  assets,
-  borrowedAssets,
-  suppliedAssets,
-  borrowStableAPR,
-  borrowVariableAPR,
-  supplyAPR,
-}: DashboardProps) {
+export default function DashboardPageContent() {
   const { isReady } = useBeraJs();
   const [tableView, setUseTableView] = React.useState(false);
 
@@ -43,30 +23,21 @@ export default function DashboardPageContent({
     };
   }, [tableView]);
 
-  const assetDictionary = useMemo(
-    () =>
-      getAssetDictionary(
-        assets,
-        borrowedAssets,
-        suppliedAssets,
-        borrowStableAPR,
-        borrowVariableAPR,
-        supplyAPR,
-      ),
-    [
-      assets,
-      borrowedAssets,
-      suppliedAssets,
-      borrowStableAPR,
-      borrowVariableAPR,
-      supplyAPR,
-    ],
+  const { useReservesDataList } = usePollReservesDataList();
+  const { data: reservesDictionary } = useReservesDataList();
+  const { tokenDictionary } = useTokens();
+
+  usePollAssetWalletBalance(
+    dictionaryToExternalTokenList(
+      reservesDictionary ?? {},
+      tokenDictionary ?? {},
+    ),
   );
 
   return (
     <>
       {isReady ? (
-        <Dashboard assetDictionary={assetDictionary} />
+        <Dashboard tableView={tableView} setUseTableView={setUseTableView} />
       ) : (
         <div>not connect or wrong network</div>
       )}

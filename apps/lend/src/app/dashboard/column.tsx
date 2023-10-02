@@ -1,14 +1,26 @@
 import React from "react";
 import { formatter } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { DataTableColumnHeader, TokenIcon } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
+import { formatEther } from "viem";
+
+import InfoButton from "~/components/info-button";
+import BorrowBtn from "~/components/modals/borrow-button";
+import RepayBtn from "~/components/modals/repay-button";
+import SupplyBtn from "~/components/modals/supply-button";
+import WithdrawBtn from "~/components/modals/withdraw-button";
 
 export const user_supply_columns: ColumnDef<any>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Market" />
     ),
-    cell: ({ row }) => <>{row.original.market}</>,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2 text-sm font-medium leading-none">
+        <TokenIcon token={row.original} size="lg" />
+        {row.original.symbol}
+      </div>
+    ),
     accessorKey: "market",
     enableSorting: false,
   },
@@ -23,14 +35,14 @@ export const user_supply_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-medium">
-          {formatter.format(row.original.aTokenBalance)}
+          {formatter.format(Number(row.original.formattedBalance))}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          ${formatter.format(row.original.aTokenBalanceUS)}
+          ${formatter.format(Number(row.original.formattedBalance))}
         </div>
       </div>
     ),
-    accessorKey: "aTokenBalanceUS",
+    accessorKey: "balance",
     enableSorting: true,
   },
   {
@@ -43,7 +55,11 @@ export const user_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-success-foreground">
-        {(row.original.supplyAPR * 100).toFixed(2)}%
+        {(
+          Number(formatEther(row.original.reserveData.currentLiquidityRate)) *
+          100
+        ).toFixed(2)}
+        %
       </div>
     ),
     accessorKey: "supplyAPR",
@@ -51,7 +67,12 @@ export const user_supply_columns: ColumnDef<any>[] = [
   },
   {
     header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
-    cell: ({ row }) => <>{row.original.action}</>,
+    cell: ({ row }) => (
+      <div className="flex gap-2">
+        <SupplyBtn token={row.original} />
+        <WithdrawBtn token={row.original} />
+      </div>
+    ),
     accessorKey: "action",
     enableSorting: false,
   },
@@ -62,7 +83,12 @@ export const user_borrows_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Market" />
     ),
-    cell: ({ row }) => <>{row.original.market}</>,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2 text-sm font-medium leading-none">
+        <TokenIcon token={row.original} size="lg" />
+        {row.original.symbol}
+      </div>
+    ),
     accessorKey: "market",
     enableSorting: false,
   },
@@ -77,14 +103,14 @@ export const user_borrows_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-medium">
-          {formatter.format(row.original.debtBalance)}
+          {formatter.format(Number(row.original.formattedBalance))}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          ${formatter.format(row.original.debtBalanceUS)}
+          ${formatter.format(Number(row.original.formattedBalance))}
         </div>
       </div>
     ),
-    accessorKey: "debtBalanceUS",
+    accessorKey: "balance",
     enableSorting: true,
   },
   {
@@ -97,7 +123,12 @@ export const user_borrows_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-warning-foreground">
-        {(row.original.loanAPY * 100).toFixed(2)}%
+        {(
+          Number(
+            formatEther(row.original.reserveData.currentStableBorrowRate),
+          ) * 100
+        ).toFixed(2)}
+        %
       </div>
     ),
     accessorKey: "loanAPY",
@@ -105,7 +136,12 @@ export const user_borrows_columns: ColumnDef<any>[] = [
   },
   {
     header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
-    cell: ({ row }) => <>{row.original.action}</>,
+    cell: ({ row }) => (
+      <div className="flex gap-2">
+        <BorrowBtn token={row.original} />
+        <RepayBtn token={row.original} />
+      </div>
+    ),
     accessorKey: "action",
     enableSorting: false,
   },
@@ -116,7 +152,12 @@ export const available_supply_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Market" />
     ),
-    cell: ({ row }) => <>{row.original.market}</>,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2 text-sm font-medium leading-none">
+        <TokenIcon token={row.original} size="lg" />
+        {row.original.symbol}
+      </div>
+    ),
     accessorKey: "market",
     enableSorting: false,
   },
@@ -131,10 +172,10 @@ export const available_supply_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-medium">
-          {formatter.format(row.original.walletBalance)}
+          {formatter.format(Number(row.original.formattedBalance))}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          ${formatter.format(row.original.walletBalanceUS)}
+          ${formatter.format(Number(row.original.formattedBalance))}
         </div>
       </div>
     ),
@@ -151,7 +192,11 @@ export const available_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-success-foreground">
-        {(row.original.supplyAPR * 100).toFixed(2)}%
+        {(
+          Number(formatEther(row.original.reserveData.currentLiquidityRate)) *
+          100
+        ).toFixed(2)}
+        %
       </div>
     ),
     accessorKey: "supplyAPR",
@@ -159,7 +204,12 @@ export const available_supply_columns: ColumnDef<any>[] = [
   },
   {
     header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
-    cell: ({ row }) => <>{row.original.action}</>,
+    cell: ({ row }) => (
+      <div className="flex gap-2">
+        <SupplyBtn token={row.original} />
+        <InfoButton address={row.original.address} />
+      </div>
+    ),
     accessorKey: "action",
     enableSorting: false,
   },
@@ -170,7 +220,12 @@ export const available_borrows_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Market" />
     ),
-    cell: ({ row }) => <>{row.original.market}</>,
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2 text-sm font-medium leading-none">
+        <TokenIcon token={row.original} size="lg" />
+        {row.original.symbol}
+      </div>
+    ),
     accessorKey: "market",
     enableSorting: false,
   },
@@ -188,7 +243,8 @@ export const available_borrows_columns: ColumnDef<any>[] = [
           {formatter.format(row.original.supplied)}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          ${formatter.format(row.original.supplied * row.original.dollarValue)}
+          {/* ${formatter.format(row.original.supplied * row.original.dollarValue)} */}
+          ??
         </div>
       </div>
     ),
@@ -205,10 +261,15 @@ export const available_borrows_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-warning-foreground">
-        {(row.original.borrowStableAPR * 100).toFixed(2)}%
+        {(
+          Number(
+            formatEther(row.original.reserveData.currentStableBorrowRate),
+          ) * 100
+        ).toFixed(2)}
+        %
       </div>
     ),
-    accessorKey: "borrowStableAPR",
+    accessorKey: "currentStableBorrowRate",
     enableSorting: true,
   },
   {
@@ -221,15 +282,25 @@ export const available_borrows_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-warning-foreground">
-        {(row.original.borrowVariableAPR * 100).toFixed(2)}%
+        {(
+          Number(
+            formatEther(row.original.reserveData.currentStableBorrowRate),
+          ) * 100
+        ).toFixed(2)}
+        %
       </div>
     ),
-    accessorKey: "borrowVariableAPR",
+    accessorKey: "currentStableBorrowRate",
     enableSorting: true,
   },
   {
     header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
-    cell: ({ row }) => <>{row.original.action}</>,
+    cell: ({ row }) => (
+      <div className="flex gap-2">
+        <BorrowBtn token={row.original} />
+        <InfoButton address={row.original.address} />
+      </div>
+    ),
     accessorKey: "action",
     enableSorting: false,
   },
