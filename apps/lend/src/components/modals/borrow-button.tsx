@@ -55,26 +55,30 @@ const BorrowModalContent = ({
   setAmount,
   write,
 }: {
-  token: Token;
+  token: Token & {
+    source_token?: string;
+    debtType?: "variable" | "stable";
+  };
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const maxBorrowAmout = 1000;
-
   const [apySelected, setApySelected] = useState<"stable" | "variable">(
-    "stable",
+    token.debtType && token.debtType === "variable" ? "variable" : "stable",
   );
   const { account } = useBeraJs();
   const { useSelectedReserveData } = usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(token.address);
+  const { data: reserveData } = useSelectedReserveData(
+    token.source_token ? token.source_token : token.address,
+  );
   const apyOptions = {
     stable:
-      (Number(formatUnits(reserveData.currentStableBorrowRate, 18)) * 100 ??
-        0) * 100,
+      (Number(formatUnits(reserveData?.currentStableBorrowRate ?? "0", 18)) *
+        100 ?? 0) * 100,
     variable:
-      (Number(formatUnits(reserveData.currentVariableBorrowRate, 18)) ?? 0) *
-      100,
+      (Number(formatUnits(reserveData?.currentVariableBorrowRate ?? "0", 18)) ??
+        0) * 100,
   };
   return (
     <div className="flex flex-col gap-6">
@@ -150,15 +154,22 @@ const BorrowModalContent = ({
       <Button
         disabled={!amount || amount === 0 || amount > maxBorrowAmout}
         onClick={() => {
+          console.log([
+            token.address,
+            parseUnits(`${Number(amount ?? 0)}`, token.decimals),
+            apySelected === "stable" ? 1 : 2,
+            parseUnits("0", token.decimals),
+            account,
+          ]);
           write({
             address: lendPoolImplementationAddress,
             abi: lendPoolImplementationABI,
             functionName: "borrow",
             params: [
-              token.address,
+              token.source_token ? token.source_token : token.address,
               parseUnits(`${Number(amount ?? 0)}`, token.decimals),
               apySelected === "stable" ? 1 : 2,
-              parseUnits("0", token.decimals),
+              0,
               account,
             ],
           });

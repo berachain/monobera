@@ -126,7 +126,8 @@ const WithdrawModalContent = ({
             abi: lendPoolImplementationABI,
             functionName: "withdraw",
             params: [
-              token.address,
+              //@ts-ignore
+              token.source_token ? token.source_token : token.address,
               parseUnits(`${Number(amount)}`, token.decimals),
               account,
             ],

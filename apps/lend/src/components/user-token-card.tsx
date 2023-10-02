@@ -20,6 +20,9 @@ export default function UserTokenCard({
   const originalToken = useSelectedAssetWalletBalance(
     asset.reserveData.address,
   );
+  const isDebtTypeStable = () => {
+    return asset.name.split(" ")[0] === "Stable";
+  };
   return (
     <Card
       key={asset.symbol}
@@ -66,7 +69,7 @@ export default function UserTokenCard({
         </div>
       )}
 
-      {(type === "user-borrow" || type === "borrow") && (
+      {type === "borrow" && (
         <div className="flex flex-shrink-0 flex-col">
           <div className="text-xs font-medium leading-5 text-muted-foreground">
             Stable APY
@@ -81,7 +84,7 @@ export default function UserTokenCard({
         </div>
       )}
 
-      {(type === "user-borrow" || type === "borrow") && (
+      {type === "borrow" && (
         <div className="flex flex-shrink-0 flex-col">
           <div className="text-xs font-medium leading-5 text-muted-foreground">
             Variable APY
@@ -92,6 +95,37 @@ export default function UserTokenCard({
               100
             ).toFixed(2)}
             %
+          </div>
+        </div>
+      )}
+
+      {type === "user-borrow" && (
+        <div className="flex flex-shrink-0 flex-col">
+          <div className="text-xs font-medium leading-5 text-muted-foreground">
+            Loan APY
+          </div>
+          <div className="text-lg font-bold text-warning-foreground">
+            {(
+              Number(
+                formatEther(
+                  isDebtTypeStable()
+                    ? asset.reserveData.currentStableBorrowRate
+                    : asset.reserveData.currentVariableBorrowRate,
+                ),
+              ) * 100
+            ).toFixed(2)}
+            %
+          </div>
+        </div>
+      )}
+
+      {type === "user-borrow" && (
+        <div className="flex flex-shrink-0 flex-col">
+          <div className="text-xs font-medium leading-5 text-muted-foreground">
+            APY Type
+          </div>
+          <div className="text-lg font-bold text-foreground">
+            {isDebtTypeStable() ? "Stable" : "Variable"}
           </div>
         </div>
       )}

@@ -22,7 +22,10 @@ export default function StatusBanner() {
     {
       icon: <Icons.warning className="h-8 w-8" />,
       title: "Account Health",
-      amount: formatter.format(Number(formatEther(data?.healthFactor || "0"))),
+      amount:
+        Number(formatEther(data?.healthFactor || "0")) > 1000000000000
+          ? "∞"
+          : formatter.format(Number(formatEther(data?.healthFactor || "0"))),
     },
   ];
   const info = [

@@ -3,7 +3,6 @@ import Image from "next/image";
 import {
   formatter,
   useBeraJs,
-  usePollAllowance,
   useSelectedAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
@@ -13,10 +12,10 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { parseUnits } from "viem";
+import { formatEther, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
-import ApproveButton from "../approve-button";
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 
 export default function RepayBtn({
   token,
@@ -60,19 +59,20 @@ const RepayModalContent = ({
   setAmount,
   write,
 }: {
-  token: Token;
+  token: Token & {
+    source_token?: string;
+    debtType?: "variable" | "stable";
+  };
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const balance = useSelectedAssetWalletBalance(token.address);
   const { account } = useBeraJs();
-  const { useAllowance } = usePollAllowance({
-    contract: lendPoolImplementationAddress,
-    token: { address: token.address, decimals: token.decimals } as Token,
-  });
-  const allowance = useAllowance();
-
+  const { useSelectedReserveData } = usePollReservesDataList();
+  const { data: reserveData } = useSelectedReserveData(
+    token.source_token ? token.source_token : token.address,
+  );
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Repay</div>
@@ -102,7 +102,7 @@ const RepayModalContent = ({
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {balance.formattedBalance}
+          {Number(balance.formattedBalance).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() =>
@@ -124,41 +124,50 @@ const RepayModalContent = ({
           <div>${formatter.format(amount ?? 0 * 1)}</div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Supply APY</div>
-          <div className="text-success-foreground">
-            {/* {(token.supplyAPR * 100).toFixed(2)}% */}
+          <div className="text-muted-foreground ">Loan APY</div>
+          <div className="text-warning-foreground">
+            {(
+              Number(
+                formatEther(
+                  token.debtType === "variable"
+                    ? reserveData.currentVariableBorrowRate
+                    : reserveData.currentStableBorrowRate,
+                ),
+              ) * 100
+            ).toFixed(2)}
+            %
           </div>
+        </div>
+        <div className="flex justify-between text-sm leading-tight">
+          <div className="text-muted-foreground ">Debt Type</div>
+          <div className="capitalize text-foreground">{token.debtType}</div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
           <div className="">0 {"<->"} infinite</div>
-          {/* i didnt make this cause design doesnt make sense 2 me */}
         </div>
       </div>
-      {allowance && Number(allowance.formattedAllowance) > (amount ?? 0) ? (
-        <Button
-          disabled={
-            !amount || amount === 0 || amount > Number(balance.formattedBalance)
-          }
-          onClick={() => {
-            write({
-              address: lendPoolImplementationAddress,
-              abi: lendPoolImplementationABI,
-              functionName: "repay",
-              params: [
-                token.address,
-                parseUnits(`${Number(amount)}`, token.decimals),
-                1,
-                account,
-              ],
-            });
-          }}
-        >
-          {amount === 0 ? "Enter Amount" : "Withdraw"}
-        </Button>
-      ) : (
-        <ApproveButton token={token} spender={lendPoolImplementationAddress} />
-      )}
+
+      <Button
+        disabled={
+          !amount || amount === 0 || amount > Number(balance.formattedBalance)
+        }
+        onClick={() => {
+          write({
+            address: lendPoolImplementationAddress,
+            abi: lendPoolImplementationABI,
+            functionName: "repay",
+            params: [
+              token.source_token ? token.source_token : token.address,
+              parseUnits(`${Number(amount)}`, token.decimals),
+              token.debtType === "variable" ? 2 : 1,
+              account,
+            ],
+          });
+        }}
+      >
+        {amount === 0 ? "Enter Amount" : "Withdraw"}
+      </Button>
     </div>
   );
 };

@@ -13,16 +13,21 @@ export function dictionaryToExternalTokenList(
       externalTokenList.push({
         ...tokenDictionary[key],
         address: reservesDictionary[key].aTokenAddress,
+        source_token: key,
         name: `Supplied ${tokenDictionary[key].symbol}`,
       });
       externalTokenList.push({
         ...tokenDictionary[key],
         address: reservesDictionary[key].stableDebtTokenAddress,
+        source_token: key,
+        debtType: "stable",
         name: `Borrowed ${tokenDictionary[key].symbol} Stable`,
       });
       externalTokenList.push({
         ...tokenDictionary[key],
         address: reservesDictionary[key].variableDebtTokenAddress,
+        source_token: key,
+        debtType: "variable",
         name: `Borrowed ${tokenDictionary[key].symbol} Variable`,
       });
     }
@@ -61,6 +66,7 @@ export function getAssetList(reservesDictionary: any, BalanceToken: any[]) {
     if (stableDebtToken && stableDebtToken.balance > 0n) {
       borrowed.push({
         ...stableDebtToken,
+
         reserveData: { ...reservesDictionary[key], address: key },
       });
     }
@@ -72,6 +78,7 @@ export function getAssetList(reservesDictionary: any, BalanceToken: any[]) {
     if (variableDebtToken && variableDebtToken.balance > 0n) {
       borrowed.push({
         ...variableDebtToken,
+
         reserveData: { ...reservesDictionary[key], address: key },
       });
     }
