@@ -117,23 +117,23 @@ export function HoneyMachine() {
     payload,
     isConnected,
     setSelectedFrom,
-    // allowance,
+    allowance,
     selectedFrom,
     selectedTo,
-    setSelectedTo,
     fromAmount,
     setFromAmount,
-    toAmount,
     setToAmount,
+    toAmount,
     isMint,
     fromBalance,
     toBalance,
+    setGivenIn,
     fee,
-    ModalPortal,
+    onSwitch,
     needsApproval,
+    ModalPortal,
     honey,
     collateralList,
-    allowance,
   } = usePsm();
 
   // console.log(
@@ -354,6 +354,7 @@ export function HoneyMachine() {
                     customTokenList={collateralList}
                     hidePrice
                     setAmount={(amount) => {
+                      setGivenIn(true);
                       setFromAmount(Number(amount));
                     }}
                   />
@@ -368,8 +369,7 @@ export function HoneyMachine() {
                     >
                       <button
                         onClick={() => {
-                          setSelectedFrom(selectedTo);
-                          setSelectedTo(selectedFrom);
+                          onSwitch();
                           setRotate(rotate + 180);
                         }}
                       >
@@ -388,6 +388,7 @@ export function HoneyMachine() {
                     selectedTokens={[selectedFrom, selectedTo]}
                     amount={toAmount}
                     setAmount={(amount) => {
+                      setGivenIn(false);
                       setToAmount(Number(amount));
                     }}
                     selectable={selectedTo?.address !== honey?.address}

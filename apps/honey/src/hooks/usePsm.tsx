@@ -108,6 +108,7 @@ export const usePsm = () => {
   const { usePreviewRedeem } = usePollPreviewRedeem(collateral, fromAmount);
   const previewRedeem = usePreviewRedeem();
 
+  console.log();
   useEffect(() => {
     if (isMint && givenIn && previewMint !== undefined) {
       setToAmount(Number(previewMint));

@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { parseUnits, type Address } from "viem";
+import { formatUnits, parseUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { type Token } from "~/api";
@@ -35,7 +35,7 @@ export const usePollPreviewRedeemGivenOut = (
           functionName: method,
           args: [formattedAmount, collateral.address],
         });
-        return result;
+        return formatUnits(result as bigint, collateral.decimals ?? 18);
       } catch (e) {
         console.log("error", e);
         return undefined;
