@@ -38,7 +38,11 @@ export const user_supply_columns: ColumnDef<any>[] = [
           {formatter.format(Number(row.original.formattedBalance))}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          ${formatter.format(Number(row.original.formattedBalance))}
+          $
+          {formatter.format(
+            Number(row.original.formattedBalance) *
+              Number(row.original.formattedPrice),
+          )}
         </div>
       </div>
     ),
@@ -106,7 +110,11 @@ export const user_borrows_columns: ColumnDef<any>[] = [
           {formatter.format(Number(row.original.formattedBalance))}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          ${formatter.format(Number(row.original.formattedBalance))}
+          $
+          {formatter.format(
+            Number(row.original.formattedBalance) *
+              Number(row.original.formattedPrice),
+          )}
         </div>
       </div>
     ),
@@ -175,7 +183,11 @@ export const available_supply_columns: ColumnDef<any>[] = [
           {formatter.format(Number(row.original.formattedBalance))}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          ${formatter.format(Number(row.original.formattedBalance))}
+          $
+          {formatter.format(
+            Number(row.original.formattedBalance) *
+              Number(row.original.formattedPrice),
+          )}
         </div>
       </div>
     ),
@@ -244,7 +256,7 @@ export const available_borrows_columns: ColumnDef<any>[] = [
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
           {/* ${formatter.format(row.original.supplied * row.original.dollarValue)} */}
-          ??
+          {Number(row.original.formattedPrice)}
         </div>
       </div>
     ),

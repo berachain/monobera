@@ -88,6 +88,8 @@ export const erc20RewardsAddress = process.env
   .NEXT_PUBLIC_REWARDS_ADDRESS as Address;
 export const lendPoolImplementationAddress = process.env
   .NEXT_PUBLIC_LEND_POOL_IMPLEMENTATION_ADDRESS as Address;
+export const lendOracleAddress = process.env
+  .NEXT_PUBLIC_LEND_ORACLE_ADDRESS as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env

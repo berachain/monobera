@@ -5,6 +5,7 @@ import { Switch } from "@bera/ui/switch";
 import { getAssetList } from "~/utils/lendTokenHelper";
 import StatusBanner from "~/components/status-banner";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
+import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
 import UserBorrows from "./user-borrows";
@@ -17,13 +18,17 @@ export function Dashboard({
   tableView: boolean;
   setUseTableView: (tableView: boolean) => void;
 }) {
+  const { useReservesPrices } = usePollReservesPrices();
+  const { data: reservesPrices } = useReservesPrices();
   const { useReservesDataList } = usePollReservesDataList();
   const { data: reservesDictionary } = useReservesDataList();
   const BalanceToken = useCurrentAssetWalletBalances();
   const assetsDictionary = getAssetList(
     reservesDictionary ?? {},
     BalanceToken ?? [],
+    reservesPrices ?? {},
   );
+  // console.log(assetsDictionary.available_borrow)
   return (
     <div className="flex flex-col gap-9 md:gap-6">
       <StatusBanner />

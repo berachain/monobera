@@ -2,11 +2,14 @@ import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { formatEther } from "viem";
 
 import InfoButton from "~/components/info-button";
+import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
 import Card from "./card";
 import BorrowBtn from "./modals/borrow-button";
 import SupplyBtn from "./modals/supply-button";
 
 export default function TokenCard({ reserveData }: { reserveData: any }) {
+  const { useSelectedReservePrice } = usePollReservesPrices();
+  const { data: reservePrice } = useSelectedReservePrice(reserveData.address);
   return (
     <Card className="div-4 flex flex-col items-center justify-between gap-6 p-4 lg:flex-row">
       <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:gap-6 lg:justify-start">
@@ -25,7 +28,9 @@ export default function TokenCard({ reserveData }: { reserveData: any }) {
               ??
               {reserveData.symbol}
             </div>
-            <div className=" text-xs font-medium leading-5">$??</div>
+            <div className=" text-xs font-medium leading-5">
+              ${reservePrice?.formattedPrice}
+            </div>
           </div>
         </div>
 

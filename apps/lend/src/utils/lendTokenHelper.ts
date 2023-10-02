@@ -35,7 +35,11 @@ export function dictionaryToExternalTokenList(
   return externalTokenList;
 }
 
-export function getAssetList(reservesDictionary: any, BalanceToken: any[]) {
+export function getAssetList(
+  reservesDictionary: any,
+  BalanceToken: any[],
+  reservesPrices: any,
+) {
   const supplied: any[] = [];
   const borrowed: any[] = [];
   const available_supply: any[] = [];
@@ -50,11 +54,13 @@ export function getAssetList(reservesDictionary: any, BalanceToken: any[]) {
         supplied.push({
           ...suppliedToken,
           reserveData: { ...reservesDictionary[key], address: key },
+          ...reservesPrices[key],
         });
       } else {
         available_supply.push({
           ...BalanceToken.find((token) => token.address === key),
           reserveData: { ...reservesDictionary[key], address: key },
+          ...reservesPrices[key],
         });
       }
     }
@@ -66,8 +72,8 @@ export function getAssetList(reservesDictionary: any, BalanceToken: any[]) {
     if (stableDebtToken && stableDebtToken.balance > 0n) {
       borrowed.push({
         ...stableDebtToken,
-
         reserveData: { ...reservesDictionary[key], address: key },
+        ...reservesPrices[key],
       });
     }
 
@@ -78,8 +84,8 @@ export function getAssetList(reservesDictionary: any, BalanceToken: any[]) {
     if (variableDebtToken && variableDebtToken.balance > 0n) {
       borrowed.push({
         ...variableDebtToken,
-
         reserveData: { ...reservesDictionary[key], address: key },
+        ...reservesPrices[key],
       });
     }
   });
@@ -92,6 +98,7 @@ export function getAssetList(reservesDictionary: any, BalanceToken: any[]) {
         ...reservesDictionary[honeyAddress],
         address: honeyAddress,
       },
+      ...reservesPrices[honeyAddress],
     });
   }
 

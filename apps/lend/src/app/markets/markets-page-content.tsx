@@ -8,6 +8,7 @@ import { Switch } from "@bera/ui/switch";
 import StatusBanner from "~/components/status-banner";
 import TokenCard from "~/components/token-card";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
+import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
 import { market_table_columns } from "./market-table-column";
 
 export default function MarketsPageContent() {
@@ -30,6 +31,8 @@ export default function MarketsPageContent() {
   }, [tableView]);
 
   const { tokenDictionary } = useTokens();
+  const { useReservesPrices } = usePollReservesPrices();
+  const { data: reservesPrices } = useReservesPrices();
   const isTokenDictionaryLoading =
     !tokenDictionary || Object.keys(tokenDictionary).length === 0;
   const { useReservesDataList } = usePollReservesDataList();
@@ -42,6 +45,7 @@ export default function MarketsPageContent() {
           .map((key) => ({
             ...reservesDictionary[key as any],
             ...tokenDictionary[key as any],
+            ...reservesPrices[key as any],
           }))
           .filter((reserve) => {
             if (!reserve.address) return false;
@@ -68,7 +72,13 @@ export default function MarketsPageContent() {
             }
           })
       : [];
-  }, [reservesDictionary, tokenDictionary, keywords, sortOptions]);
+  }, [
+    reservesDictionary,
+    tokenDictionary,
+    keywords,
+    sortOptions,
+    reservesPrices,
+  ]);
 
   return (
     <>

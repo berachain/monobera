@@ -49,7 +49,7 @@ export default function UserTokenCard({
           <div className="text-xs font-medium leading-tight">
             $
             {formatter.format(
-              Number(asset.formattedBalance) * asset.dollarValue,
+              Number(asset.formattedBalance) * Number(asset.formattedPrice),
             )}
           </div>
         </div>
