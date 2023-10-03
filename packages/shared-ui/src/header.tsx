@@ -48,7 +48,7 @@ export function Header({
   return (
     <nav
       className={cn(
-        "h-18 fixed left-0 right-0 top-0 z-50 flex w-full items-end justify-between bg-background bg-opacity-20 px-6 py-3 shadow backdrop-blur-2xl",
+        "h-18 fixed left-0 right-0 top-0 z-50 flex w-full items-end justify-between bg-background bg-opacity-20 px-6 py-3 shadow-lg backdrop-blur-2xl",
       )}
     >
       <div>

@@ -90,6 +90,10 @@ export const lendPoolImplementationAddress = process.env
   .NEXT_PUBLIC_LEND_POOL_IMPLEMENTATION_ADDRESS as Address;
 export const lendOracleAddress = process.env
   .NEXT_PUBLIC_LEND_ORACLE_ADDRESS as Address;
+export const lendUIDataProviderAddress = process.env
+  .NEXT_PUBLIC_LEND_UI_DATA_PROVIDER_ADDRESS as Address;
+export const lendPoolAddressProviderAddress = process.env
+  .NEXT_PUBLIC_LEND_POOL_ADDRESS_PROVIDER as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env

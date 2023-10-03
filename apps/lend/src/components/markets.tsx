@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatUsd } from "@bera/berajs";
+import { formatUsd, formatter } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
@@ -40,7 +40,7 @@ function Market({
   return (
     <figure
       className={clsx(
-        "rounded-3xl bg-background p-6 shadow-md shadow-foreground/5",
+        "rounded-xl border border-border bg-muted p-6 shadow-md shadow-foreground/5 ",
         className,
       )}
       style={{ animationDelay }}
@@ -55,11 +55,11 @@ function Market({
             width={32}
             height={32}
           />
-          <p className="text-xl text-muted-foreground">{title}</p>
+          <p className="text-xl font-semibold text-muted-foreground">{title}</p>
         </div>
 
-        <p className="mt-8 text-3xl font-bold leading-6">
-          {formatUsd(totalSupply)}
+        <p className="mt-4 text-3xl font-bold leading-6">
+          ${formatter.format(totalSupply)}
         </p>
         <p className="mt-2">
           {dailyPercentChange > 0 ? (
@@ -127,7 +127,7 @@ function MarketColumn({
   return (
     <div
       ref={columnRef}
-      className={clsx("animate-marquee space-y-8 py-4", className)}
+      className={clsx("animate-marquee space-y-4 py-2", className)}
       // @ts-expect-error - No types
       style={{ "--marquee-duration": duration }}
     >
@@ -156,7 +156,7 @@ function MarketGrid() {
   return (
     <div
       ref={containerRef}
-      className="relative -mx-4 mt-16 grid h-[49rem] max-h-[150vh] grid-cols-1 items-start gap-8 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3 "
+      className="relative -mx-4 mt-16 grid h-[472px] max-h-[100vh] grid-cols-1 items-start gap-4 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3 "
     >
       {isInView && (
         <>
@@ -194,8 +194,8 @@ function MarketGrid() {
           />
         </>
       )}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-gray-50" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-gray-50" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-gray-50 dark:from-stone-950" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-gray-50 dark:from-stone-950" />
     </div>
   );
 }
@@ -207,7 +207,7 @@ export default function Markets() {
       aria-labelledby="markets-title"
       className="pb-16 pt-20 sm:pb-24 sm:pt-32"
     >
-      <div className="container">
+      <div className="container max-w-[1000px] ">
         <h2 className="mt-2 text-center text-5xl font-extrabold leading-8 tracking-tight text-foreground sm:text-4xl">
           <span className="bg-gradient-to-b from-yellow-300 to-orange-600 bg-clip-text text-transparent">
             BEND
