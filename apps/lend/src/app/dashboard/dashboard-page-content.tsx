@@ -2,8 +2,10 @@
 
 import React, { useEffect } from "react";
 import { useBeraJs, usePollAssetWalletBalance, useTokens } from "@bera/berajs";
+import { ConnectWalletBear } from "@bera/shared-ui";
 
 import { dictionaryToExternalTokenList } from "~/utils/lendTokenHelper";
+import StatusBanner from "~/components/status-banner";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { Dashboard } from "./dashboard";
 
@@ -35,12 +37,16 @@ export default function DashboardPageContent() {
   );
 
   return (
-    <>
+    <div className="flex flex-col gap-9 md:gap-6">
+      <StatusBanner />
       {isReady ? (
-        <Dashboard tableView={tableView} setUseTableView={setUseTableView} />
+        <Dashboard
+          tableView={tableView}
+          setUseTableView={setUseTableView}
+        />
       ) : (
-        <div>not connect or wrong network</div>
+        <ConnectWalletBear message="Connect your wallet to view your supplies, borrows, and open positions." />
       )}
-    </>
+    </div>
   );
 }

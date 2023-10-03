@@ -17,6 +17,7 @@ export default function UserSupply({
       <div className=" text-muted-foreground">
         You must supply in order to borrow funds.
       </div>
+
       {tableView ? (
         <DataTable columns={user_supply_columns} data={assets} />
       ) : (
