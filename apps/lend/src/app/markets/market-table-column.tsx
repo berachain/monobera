@@ -50,7 +50,7 @@ export const market_table_columns: ColumnDef<any>[] = [
         %
       </div>
     ),
-    accessorKey: "supplyAPR",
+    accessorKey: "currentLiquidityRate",
     enableSorting: true,
   },
   {
@@ -90,24 +90,24 @@ export const market_table_columns: ColumnDef<any>[] = [
         %
       </div>
     ),
-    accessorKey: "supplyAPR",
+    accessorKey: "currentVariableBorrowRate",
     enableSorting: true,
   },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Borrow APY Stable" />
-    ),
-    cell: ({ row }) => (
-      <div className="pl-4 text-base text-success-foreground">
-        {(
-          Number(formatEther(row.original.currentStableBorrowRate)) * 100
-        ).toFixed(2)}
-        %
-      </div>
-    ),
-    accessorKey: "supplyAPR",
-    enableSorting: true,
-  },
+  // {
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Borrow APY Stable" />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div className="pl-4 text-base text-success-foreground">
+  //       {(
+  //         Number(formatEther(row.original.currentStableBorrowRate)) * 100
+  //       ).toFixed(2)}
+  //       %
+  //     </div>
+  //   ),
+  //   accessorKey: "supplyAPR",
+  //   enableSorting: true,
+  // },
   {
     header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
     cell: ({ row }) => <InfoButton address={row.original.address} />,

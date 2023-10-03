@@ -36,7 +36,7 @@ export default function BorrowBtn({
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-fit text-sm leading-5"
+        className="w-full text-sm leading-5 xl:w-fit"
         disabled={disabled || isLoading || !isReady}
         variant={variant}
       >

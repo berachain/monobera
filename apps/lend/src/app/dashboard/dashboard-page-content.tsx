@@ -40,10 +40,7 @@ export default function DashboardPageContent() {
     <div className="flex flex-col gap-9 md:gap-6">
       <StatusBanner />
       {isReady ? (
-        <Dashboard
-          tableView={tableView}
-          setUseTableView={setUseTableView}
-        />
+        <Dashboard tableView={tableView} setUseTableView={setUseTableView} />
       ) : (
         <ConnectWalletBear message="Connect your wallet to view your supplies, borrows, and open positions." />
       )}

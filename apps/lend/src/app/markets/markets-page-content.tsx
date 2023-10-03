@@ -6,7 +6,7 @@ import { DataTable, Dropdown, SearchInput } from "@bera/shared-ui";
 import { Switch } from "@bera/ui/switch";
 
 import StatusBanner from "~/components/status-banner";
-import TokenCard from "~/components/token-card";
+import TokenCard, { TokenLoading } from "~/components/token-card";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
 import { market_table_columns } from "./market-table-column";
@@ -32,7 +32,8 @@ export default function MarketsPageContent() {
 
   const { tokenDictionary } = useTokens();
   const { useReservesPrices } = usePollReservesPrices();
-  const { data: reservesPrices } = useReservesPrices();
+  const { data: reservesPrices, isLoading: isReservesPricesLoading } =
+    useReservesPrices();
   const isTokenDictionaryLoading =
     !tokenDictionary || Object.keys(tokenDictionary).length === 0;
   const { useReservesDataList } = usePollReservesDataList();
@@ -40,7 +41,9 @@ export default function MarketsPageContent() {
     useReservesDataList();
 
   const reservesList = React.useMemo(() => {
-    return !isReservesDictionaryLoading && !isTokenDictionaryLoading
+    return !isReservesDictionaryLoading &&
+      !isTokenDictionaryLoading &&
+      !isReservesPricesLoading
       ? Object.keys(reservesDictionary)
           .map((key) => ({
             ...reservesDictionary[key as any],
@@ -116,12 +119,14 @@ export default function MarketsPageContent() {
           className="hidden md:block"
         />
       </div>
-      {!isTokenDictionaryLoading && !isReservesDictionaryLoading ? (
+      {!isTokenDictionaryLoading &&
+      !isReservesDictionaryLoading &&
+      !isReservesPricesLoading ? (
         <div className="mt-6">
           {tableView ? (
             <DataTable columns={market_table_columns} data={reservesList} />
           ) : (
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-1">
               {reservesList.map((reserve: any) => (
                 <TokenCard reserveData={reserve} key={reserve.address} />
               ))}
@@ -129,7 +134,11 @@ export default function MarketsPageContent() {
           )}
         </div>
       ) : (
-        <div>Loading</div>
+        <div className="mt-6 grid grid-cols-2 gap-4 xl:grid-cols-1">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <TokenLoading key={i} />
+          ))}
+        </div>
       )}
     </>
   );
