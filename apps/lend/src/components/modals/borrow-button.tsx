@@ -12,6 +12,8 @@ import { formatUnits, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
+import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
+import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 
 export default function BorrowBtn({
   token,
@@ -63,7 +65,6 @@ const BorrowModalContent = ({
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const maxBorrowAmout = 1000;
   const [apySelected, setApySelected] = useState<"stable" | "variable">(
     token.debtType && token.debtType === "variable" ? "variable" : "stable",
   );
@@ -72,6 +73,17 @@ const BorrowModalContent = ({
   const { data: reserveData } = useSelectedReserveData(
     token.source_token ? token.source_token : token.address,
   );
+  const { useSelectedReservePrice } = usePollReservesPrices();
+  const { data: Price } = useSelectedReservePrice(
+    token.source_token ? token.source_token : token.address,
+  );
+  const { useUserAccountData } = usePollUserAccountData();
+  const { data } = useUserAccountData();
+
+  const maxBorrowAmout = BigInt(
+    data.availableBorrowsBase / Price.price,
+  ).toString();
+
   const apyOptions = {
     stable:
       (Number(formatUnits(reserveData?.currentStableBorrowRate ?? "0", 18)) *
@@ -127,7 +139,7 @@ const BorrowModalContent = ({
           {maxBorrowAmout}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() => setAmount(maxBorrowAmout)}
+            onClick={() => setAmount(Number(maxBorrowAmout))}
           >
             MAX
           </span>
@@ -152,7 +164,7 @@ const BorrowModalContent = ({
       </div>
 
       <Button
-        disabled={!amount || amount === 0 || amount > maxBorrowAmout}
+        disabled={!amount || amount === 0 || amount > Number(maxBorrowAmout)}
         onClick={() => {
           console.log([
             token.address,

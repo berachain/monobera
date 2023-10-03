@@ -101,6 +101,5 @@ export function getAssetList(
       ...reservesPrices[honeyAddress],
     });
   }
-
   return { supplied, borrowed, available_supply, available_borrow };
 }
