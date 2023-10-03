@@ -2,9 +2,11 @@
 
 import React, { useEffect, useRef } from "react";
 import { usePollAssetWalletBalance, useTokens } from "@bera/berajs";
+import { honeyAddress } from "@bera/config";
 import { DataTable, Dropdown, SearchInput } from "@bera/shared-ui";
 import { Switch } from "@bera/ui/switch";
 
+import HoneyTokenCard from "~/components/honey-token-card";
 import StatusBanner from "~/components/status-banner";
 import TokenCard, { TokenLoading } from "~/components/token-card";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
@@ -51,7 +53,8 @@ export default function MarketsPageContent() {
             ...reservesPrices[key as any],
           }))
           .filter((reserve) => {
-            if (!reserve.address) return false;
+            if (!reserve.address || reserve.address === honeyAddress)
+              return false;
             if (!keywords || keywords === "") return true;
             else
               return Object.values(reserve).some((value) =>
@@ -119,10 +122,11 @@ export default function MarketsPageContent() {
           className="hidden md:block"
         />
       </div>
+      <HoneyTokenCard />
       {!isTokenDictionaryLoading &&
       !isReservesDictionaryLoading &&
       !isReservesPricesLoading ? (
-        <div className="mt-6">
+        <div className="mt-4">
           {tableView ? (
             <DataTable columns={market_table_columns} data={reservesList} />
           ) : (
@@ -134,7 +138,7 @@ export default function MarketsPageContent() {
           )}
         </div>
       ) : (
-        <div className="mt-6 grid grid-cols-2 gap-4 xl:grid-cols-1">
+        <div className="mt-4 grid grid-cols-2 gap-4 xl:grid-cols-1">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <TokenLoading key={i} />
           ))}
