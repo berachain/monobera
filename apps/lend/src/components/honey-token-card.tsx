@@ -20,7 +20,7 @@ export default function HoneyTokenCard() {
   const { useSelectedReserveData } = usePollReservesDataList();
   const { data: honey } = useSelectedReserveData(honeyAddress);
   const { tokenDictionary } = useTokens();
-  console.log(honeyPrice, honey);
+  // console.log(honeyPrice, honey);
   return (
     <Card className="mt-6 flex flex-col justify-between gap-6 p-4 md:p-6 lg:flex-row lg:items-center">
       <div className="flex  flex-row justify-between md:flex-col md:gap-8">

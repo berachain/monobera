@@ -41,19 +41,22 @@ export default function MarketsPageContent() {
   const { useReservesDataList } = usePollReservesDataList();
   const { data: reservesDictionary, isLoading: isReservesDictionaryLoading } =
     useReservesDataList();
-
+  // if (reservesDictionary) console.log(reservesDictionary);
   const reservesList = React.useMemo(() => {
     return !isReservesDictionaryLoading &&
-      !isTokenDictionaryLoading &&
-      !isReservesPricesLoading
+      reservesDictionary &&
+      !isReservesPricesLoading &&
+      reservesPrices
       ? Object.keys(reservesDictionary)
           .map((key) => ({
             ...reservesDictionary[key as any],
-            ...tokenDictionary[key as any],
             ...reservesPrices[key as any],
           }))
           .filter((reserve) => {
-            if (!reserve.address || reserve.address === honeyAddress)
+            if (
+              !reserve.underlyingAsset ||
+              reserve.underlyingAsset === honeyAddress
+            )
               return false;
             if (!keywords || keywords === "") return true;
             else
@@ -72,7 +75,7 @@ export default function MarketsPageContent() {
               case "Total-Borrows":
                 return (b.borrowed ?? 1) - (a.borrowed ?? 0);
               case "Systems":
-                return b.address.localeCompare(a.address);
+                return b.underlyingAsset.localeCompare(a.underlyingAsset);
               default:
                 return 0;
             }
@@ -123,7 +126,7 @@ export default function MarketsPageContent() {
         />
       </div>
       <HoneyTokenCard />
-      {!isTokenDictionaryLoading &&
+      {/* {!isTokenDictionaryLoading &&
       !isReservesDictionaryLoading &&
       !isReservesPricesLoading ? (
         <div className="mt-4">
@@ -143,7 +146,7 @@ export default function MarketsPageContent() {
             <TokenLoading key={i} />
           ))}
         </div>
-      )}
+      )} */}
     </>
   );
 }

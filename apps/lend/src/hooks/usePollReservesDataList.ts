@@ -1,16 +1,14 @@
-import { lendPoolImplementationAddress, multicallAddress } from "@bera/config";
+import { formatReserves } from "@aave/math-utils";
+import {
+  lendPoolAddressProviderAddress,
+  lendUIDataProviderAddress,
+} from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient, type Address } from "wagmi";
+import { usePublicClient } from "wagmi";
 
-import { lendPoolImplementationABI } from "./abi";
-
-interface Call {
-  abi: typeof lendPoolImplementationABI;
-  address: Address;
-  functionName: string;
-  args: any[];
-}
+import { getReservesHumanized } from "~/utils/aave-reserve-helper";
+import { lendUIDataProviderABI } from "./abi";
 
 export const usePollReservesDataList = () => {
   const publicClient = usePublicClient();
@@ -18,53 +16,41 @@ export const usePollReservesDataList = () => {
 
   const QUERY_KEY = ["getReservesDataList"];
   useSWR(QUERY_KEY, async () => {
-    const call: Call[] = [
-      {
-        address: lendPoolImplementationAddress,
-        abi: lendPoolImplementationABI,
-        functionName: "getReservesList",
-        args: [],
-      },
-    ];
-    const result = await publicClient.multicall({
-      //@ts-ignore
-      contracts: call,
-      multicallAddress: multicallAddress,
-    });
-    const reserveAddressList = result[0]?.result as Address[];
-    if (result[0]?.status === "success" && reserveAddressList.length > 0) {
-      const calls: Call[] = reserveAddressList.map((address: Address) => ({
-        address: lendPoolImplementationAddress,
-        abi: lendPoolImplementationABI,
-        functionName: "getReserveData",
-        args: [address],
-      }));
-
-      const reserveDataList = await publicClient.multicall({
-        //@ts-ignore
-        contracts: calls,
-        multicallAddress: multicallAddress,
+    try {
+      const result = await publicClient.readContract({
+        address: lendUIDataProviderAddress,
+        abi: lendUIDataProviderABI,
+        functionName: "getReservesData",
+        args: [lendPoolAddressProviderAddress],
       });
 
-      const reservesDictionary = {};
-
-      await Promise.all(
-        reserveDataList.map(async (reserveData, index) => {
-          if (reserveData.status === "success") {
-            //@ts-ignore
-            reservesDictionary[reserveAddressList[index]] = reserveData.result;
-            await mutate(
-              [...QUERY_KEY, reserveAddressList[index]],
-              reserveData.result,
-            );
-          } else {
-            await mutate([...QUERY_KEY, reserveAddressList[index]], undefined);
-          }
-        }),
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      const { reservesData, baseCurrencyData } = getReservesHumanized(
+        result[0],
+        result[1],
       );
 
+      await mutate([...QUERY_KEY, "baseCurrencyData"], baseCurrencyData);
+      const formattedReserves = formatReserves({
+        reserves: reservesData,
+        currentTimestamp,
+        marketReferenceCurrencyDecimals:
+          baseCurrencyData.marketReferenceCurrencyDecimals,
+        marketReferencePriceInUsd:
+          baseCurrencyData.marketReferenceCurrencyPriceInUsd,
+      });
+      const reservesDictionary = {};
+      await formattedReserves.map(async (formattedReserve) => {
+        await mutate(
+          [...QUERY_KEY, formattedReserve.underlyingAsset],
+          formattedReserve,
+        );
+        reservesDictionary[formattedReserve.underlyingAsset] = formattedReserve;
+      });
+
       return reservesDictionary;
-    } else {
+    } catch (e) {
+      console.log(e);
       return {};
     }
   });
@@ -77,9 +63,14 @@ export const usePollReservesDataList = () => {
     return useSWRImmutable([...QUERY_KEY, address]);
   };
 
+  const useBaseCurrencyData = () => {
+    return useSWRImmutable([...QUERY_KEY, "baseCurrencyData"]);
+  };
+
   return {
     mutate,
     useReservesDataList,
     useSelectedReserveData,
+    useBaseCurrencyData,
   };
 };
