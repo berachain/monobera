@@ -65,33 +65,31 @@ const BorrowModalContent = ({
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const [apySelected, setApySelected] = useState<"stable" | "variable">(
-    token.debtType && token.debtType === "variable" ? "variable" : "stable",
-  );
   const { account } = useBeraJs();
-  const { useSelectedReserveData } = usePollReservesDataList();
+  const { useSelectedReserveData, useBaseCurrencyData } =
+    usePollReservesDataList();
   const { data: reserveData } = useSelectedReserveData(
     token.source_token ? token.source_token : token.address,
   );
-  const { useSelectedReservePrice } = usePollReservesPrices();
-  const { data: Price } = useSelectedReservePrice(
-    token.source_token ? token.source_token : token.address,
-  );
+  const { data: baseCurrencyData } = useBaseCurrencyData();
   const { useUserAccountData } = usePollUserAccountData();
-  const { data } = useUserAccountData();
+  const { data: userAccountData } = useUserAccountData();
 
-  const maxBorrowAmout = BigInt(
-    data.availableBorrowsBase / Price.price,
-  ).toString();
+  const borrowPower =
+    Number(
+      formatUnits(
+        userAccountData?.availableBorrowsBase ?? "0",
+        baseCurrencyData?.networkBaseTokenPriceDecimals,
+      ),
+    ) / Number(reserveData?.formattedPriceInMarketReferenceCurrency);
 
-  const apyOptions = {
-    stable:
-      (Number(formatUnits(reserveData?.currentStableBorrowRate ?? "0", 18)) *
-        100 ?? 0) * 100,
-    variable:
-      (Number(formatUnits(reserveData?.currentVariableBorrowRate ?? "0", 18)) ??
-        0) * 100,
-  };
+  const availableLiquidity =
+    Number(reserveData?.totalLiquidity) *
+    Number(reserveData?.formattedPriceInMarketReferenceCurrency) *
+    Number(1 - reserveData?.borrowUsageRatio);
+
+  const borrowAmout =
+    borrowPower > availableLiquidity ? availableLiquidity : borrowPower;
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Borrow</div>
@@ -102,21 +100,6 @@ const BorrowModalContent = ({
         width={100}
         height={100}
       />
-      <Tabs
-        defaultValue={apySelected}
-        onValueChange={(value: string) =>
-          setApySelected(value as "stable" | "variable")
-        }
-      >
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value={"stable"}>
-            Stable APY: {apyOptions.stable.toFixed(2)} %
-          </TabsTrigger>
-          <TabsTrigger value={"variable"}>
-            Variable APY: {apyOptions.variable.toFixed(2)} %
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-1 text-sm font-semibold leading-tight">
@@ -136,10 +119,10 @@ const BorrowModalContent = ({
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {maxBorrowAmout}
+          {borrowAmout.toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() => setAmount(Number(maxBorrowAmout))}
+            onClick={() => setAmount(borrowAmout)}
           >
             MAX
           </span>
@@ -158,21 +141,14 @@ const BorrowModalContent = ({
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">Variable Borrow APY</div>
           <div className="text-warning-foreground">
-            {apyOptions[apySelected]}%
+            {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
           </div>
         </div>
       </div>
 
       <Button
-        disabled={!amount || amount === 0 || amount > Number(maxBorrowAmout)}
+        disabled={!amount || amount === 0 || amount > borrowAmout}
         onClick={() => {
-          console.log([
-            token.address,
-            parseUnits(`${Number(amount ?? 0)}`, token.decimals),
-            apySelected === "stable" ? 1 : 2,
-            parseUnits("0", token.decimals),
-            account,
-          ]);
           write({
             address: lendPoolImplementationAddress,
             abi: lendPoolImplementationABI,
@@ -180,7 +156,7 @@ const BorrowModalContent = ({
             params: [
               token.source_token ? token.source_token : token.address,
               parseUnits(`${Number(amount ?? 0)}`, token.decimals),
-              apySelected === "stable" ? 1 : 2,
+              2,
               0,
               account,
             ],

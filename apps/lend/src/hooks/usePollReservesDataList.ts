@@ -23,13 +23,12 @@ export const usePollReservesDataList = () => {
         functionName: "getReservesData",
         args: [lendPoolAddressProviderAddress],
       });
-
       const currentTimestamp = Math.floor(Date.now() / 1000);
       const { reservesData, baseCurrencyData } = getReservesHumanized(
         result[0],
         result[1],
       );
-      // console.log(result[0]);
+      // console.log(reservesData, baseCurrencyData);
       await mutate([...QUERY_KEY, "baseCurrencyData"], baseCurrencyData);
       const formattedReserves = formatReserves({
         reserves: reservesData,
@@ -39,6 +38,7 @@ export const usePollReservesDataList = () => {
         marketReferencePriceInUsd:
           baseCurrencyData.marketReferenceCurrencyPriceInUsd,
       });
+      // console.log("formattedReserves", formattedReserves);
       const reservesDictionary = {};
       formattedReserves.map(async (formattedReserve) => {
         await mutate(

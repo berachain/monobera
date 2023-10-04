@@ -8,6 +8,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import Card from "./card";
+import InfoButton from "./info-button";
 import BorrowBtn from "./modals/borrow-button";
 import SupplyBtn from "./modals/supply-button";
 
@@ -15,7 +16,7 @@ export default function HoneyTokenCard() {
   const { useSelectedReserveData } = usePollReservesDataList();
   const { data: honey } = useSelectedReserveData(honeyAddress);
   const { tokenDictionary } = useTokens();
-  console.log(honey);
+
   return (
     <Card className="mt-6 flex flex-col justify-between gap-6 p-4 md:p-6 lg:flex-row lg:items-center">
       <div className="flex  flex-row justify-between md:flex-col md:gap-8">
@@ -49,11 +50,13 @@ export default function HoneyTokenCard() {
               token={tokenDictionary[honeyAddress] as Token}
               variant="outline"
             />
+            <InfoButton address={honeyAddress} />
           </div>
         ) : (
           <div className="hidden gap-2 lg:flex">
             <Skeleton className="h-8 w-[76px]" />
             <Skeleton className="h-8 w-[76px]" />
+            <Skeleton className="h-8 w-16" />
           </div>
         )}
         <div className="block md:hidden">

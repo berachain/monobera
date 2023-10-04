@@ -71,8 +71,13 @@ export default function IndividualMarketAnalytics({
         <TokenInfoCard
           {...{
             token: tokenDictionary[address]!,
-            reserve: Number(reserveData?.totalLiquidityUSD),
-            liquidity: Number(reserveData?.availableLiquidityUSD),
+            reserve:
+              Number(reserveData?.totalLiquidity) *
+              Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+            liquidity:
+              Number(reserveData?.totalLiquidity) *
+              Number(reserveData?.formattedPriceInMarketReferenceCurrency) *
+              Number(1 - reserveData?.borrowUsageRatio),
             utilization: Number(reserveData?.borrowUsageRatio),
             oraclePrice: Number(
               reserveData?.formattedPriceInMarketReferenceCurrency,

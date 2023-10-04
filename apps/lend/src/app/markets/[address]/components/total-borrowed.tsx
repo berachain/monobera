@@ -4,7 +4,6 @@ import { blockExplorerUrl } from "@bera/config";
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatEther } from "viem";
 
 import { type RateItem } from "~/utils/getServerSideData";
 import Card from "~/components/card";
@@ -35,7 +34,7 @@ export default function TotalBorrowed({
       title: "Collector contract",
       value: (
         <Link
-          href={`${blockExplorerUrl}/address/${reserveData.underlyingAsset}`}
+          href={`${blockExplorerUrl}/address/${reserveData?.underlyingAsset}`}
           target="_blank"
         >
           View Contract{" "}
@@ -85,10 +84,20 @@ export default function TotalBorrowed({
                 Available to Borrow <Tooltip text="?" />
               </div>
               <div className="font-semibold leading-7 md:text-xl">
-                {formatter.format(Number(reserveData?.availableLiquidity))}
+                {formatter.format(
+                  Number(reserveData?.totalLiquidity) *
+                    Number(1 - reserveData?.borrowUsageRatio),
+                )}
               </div>
               <div className="text-xs font-medium leading-tight text-muted-foreground">
-                ${formatter.format(Number(reserveData?.availableLiquidityUSD))}
+                ${" "}
+                {formatter.format(
+                  Number(reserveData?.totalLiquidity) *
+                    Number(
+                      reserveData?.formattedPriceInMarketReferenceCurrency,
+                    ) *
+                    Number(1 - reserveData?.borrowUsageRatio),
+                )}
               </div>
             </div>
 
