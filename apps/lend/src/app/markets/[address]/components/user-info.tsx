@@ -27,7 +27,7 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                 </div>
                 <div className="text-muted-foreground">
                   <b className="text-foreground">
-                    {tokenBalance?.formattedBalance}
+                    {Number(tokenBalance?.formattedBalance).toLocaleString()}
                   </b>{" "}
                   {token.symbol}
                 </div>

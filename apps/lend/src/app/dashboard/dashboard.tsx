@@ -4,7 +4,6 @@ import { Switch } from "@bera/ui/switch";
 
 import { getAssetList } from "~/utils/lendTokenHelper";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
 import PageLoading from "./page-loading";
@@ -18,9 +17,6 @@ export function Dashboard({
   tableView: boolean;
   setUseTableView: (tableView: boolean) => void;
 }) {
-  const { useReservesPrices } = usePollReservesPrices();
-  const { data: reservesPrices, isLoading: isReservesPricesLoading } =
-    useReservesPrices();
   const { useReservesDataList } = usePollReservesDataList();
   const { data: reservesDictionary, isLoading: isReservesDataLoading } =
     useReservesDataList();
@@ -28,7 +24,6 @@ export function Dashboard({
   const assetsDictionary = getAssetList(
     reservesDictionary ?? {},
     BalanceToken ?? [],
-    reservesPrices ?? {},
   );
 
   return (
@@ -49,10 +44,7 @@ export function Dashboard({
       </div>
 
       {/* need refactor after data pulling method update */}
-      {BalanceToken &&
-      BalanceToken.length > 0 &&
-      !isReservesPricesLoading &&
-      !isReservesDataLoading ? (
+      {BalanceToken && BalanceToken.length > 0 && !isReservesDataLoading ? (
         <>
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
             <div className="flex flex-1 flex-col gap-4">

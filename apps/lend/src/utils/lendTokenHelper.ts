@@ -16,13 +16,13 @@ export function dictionaryToExternalTokenList(
         source_token: key,
         name: `Supplied ${tokenDictionary[key].symbol}`,
       });
-      externalTokenList.push({
-        ...tokenDictionary[key],
-        address: reservesDictionary[key].stableDebtTokenAddress,
-        source_token: key,
-        debtType: "stable",
-        name: `Borrowed ${tokenDictionary[key].symbol} Stable`,
-      });
+      // externalTokenList.push({
+      //   ...tokenDictionary[key],
+      //   address: reservesDictionary[key].stableDebtTokenAddress,
+      //   source_token: key,
+      //   debtType: "stable",
+      //   name: `Borrowed ${tokenDictionary[key].symbol} Stable`,
+      // });
       externalTokenList.push({
         ...tokenDictionary[key],
         address: reservesDictionary[key].variableDebtTokenAddress,
@@ -35,11 +35,7 @@ export function dictionaryToExternalTokenList(
   return externalTokenList;
 }
 
-export function getAssetList(
-  reservesDictionary: any,
-  BalanceToken: any[],
-  reservesPrices: any,
-) {
+export function getAssetList(reservesDictionary: any, BalanceToken: any[]) {
   const supplied: any[] = [];
   const borrowed: any[] = [];
   const available_supply: any[] = [];
@@ -53,28 +49,14 @@ export function getAssetList(
       if (suppliedToken.balance > 0n) {
         supplied.push({
           ...suppliedToken,
-          reserveData: { ...reservesDictionary[key], address: key },
-          ...reservesPrices[key],
+          reserveData: reservesDictionary[key],
         });
       } else {
         available_supply.push({
           ...BalanceToken.find((token) => token.address === key),
-          reserveData: { ...reservesDictionary[key], address: key },
-          ...reservesPrices[key],
+          reserveData: reservesDictionary[key],
         });
       }
-    }
-
-    const stableDebtToken = BalanceToken.find(
-      (token) =>
-        token.address === reservesDictionary[key].stableDebtTokenAddress,
-    );
-    if (stableDebtToken && stableDebtToken.balance > 0n) {
-      borrowed.push({
-        ...stableDebtToken,
-        reserveData: { ...reservesDictionary[key], address: key },
-        ...reservesPrices[key],
-      });
     }
 
     const variableDebtToken = BalanceToken.find(
@@ -84,8 +66,7 @@ export function getAssetList(
     if (variableDebtToken && variableDebtToken.balance > 0n) {
       borrowed.push({
         ...variableDebtToken,
-        reserveData: { ...reservesDictionary[key], address: key },
-        ...reservesPrices[key],
+        reserveData: reservesDictionary[key],
       });
     }
   });
@@ -94,11 +75,7 @@ export function getAssetList(
   if (Honey) {
     available_borrow.push({
       ...Honey,
-      reserveData: {
-        ...reservesDictionary[honeyAddress],
-        address: honeyAddress,
-      },
-      ...reservesPrices[honeyAddress],
+      reserveData: reservesDictionary[honeyAddress],
     });
   }
   return { supplied, borrowed, available_supply, available_borrow };

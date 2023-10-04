@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { formatter } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -20,22 +23,24 @@ export default function TotalBorrowed({
     ALL_TIME: RateItem[];
   };
 }) {
-  console.log(reserveData);
   const ticker = "ETH";
   const info = [
     {
       title: "Reserve factor",
-      value: "15.00%",
+      value: `${Number(reserveData?.reserveFactor) * 100}%`,
       tooltip:
         "The Maximum LTV ratio represents the maximum borrowing power of a specific collateral. For example, if a collateral has an LTV of 75%, the user can borrow up to 0.75 worth of ETH in the principal currency for every 1 ETH worth of collateral.",
     },
     {
       title: "Collector contract",
       value: (
-        <>
+        <Link
+          href={`${blockExplorerUrl}/address/${reserveData.underlyingAsset}`}
+          target="_blank"
+        >
           View Contract{" "}
           <Icons.external className="inline h-4 w-4 text-muted-foreground hover:cursor-pointer" />
-        </>
+        </Link>
       ),
     },
   ];
@@ -48,17 +53,28 @@ export default function TotalBorrowed({
       <Card className="flex flex-col gap-8 p-9">
         <div className="flex flex-col gap-8 md:flex-row">
           <div className="flex gap-8">
-            <DonutChart percentage={16.85} color={color} />
+            <DonutChart
+              percentage={
+                Number(reserveData?.borrowCap) !== 0
+                  ? (Number(reserveData?.totalDebt) /
+                      Number(reserveData?.borrowCap)) *
+                    100
+                  : 0
+              }
+              color={color}
+            />
 
             <div className="flex flex-col gap-[6px]">
               <div className="text-sm font-normal leading-normal text-muted-foreground">
                 Total Borrowed
               </div>
               <div className=" font-semibold leading-7 md:text-xl">
-                $303.21K of 1.80M
+                {formatter.format(Number(reserveData?.totalDebt))} of{" "}
+                {formatter.format(Number(reserveData?.borrowCap))}
               </div>
               <div className="text-xs font-medium leading-tight text-muted-foreground">
-                $570.07M of 3.38B
+                ${formatter.format(Number(reserveData?.totalDebtUSD))} of $
+                {formatter.format(Number(reserveData?.borrowCapUSD))}
               </div>
             </div>
           </div>
@@ -66,14 +82,13 @@ export default function TotalBorrowed({
           <div className="flex gap-8">
             <div className="flex flex-col gap-[6px]">
               <div className="text-sm font-normal leading-normal text-muted-foreground">
-                Borrow cap
-                <Tooltip text="?" />
+                Available to Borrow <Tooltip text="?" />
               </div>
               <div className="font-semibold leading-7 md:text-xl">
-                $1.49 Million
+                {formatter.format(Number(reserveData?.availableLiquidity))}
               </div>
               <div className="text-xs font-medium leading-tight text-muted-foreground">
-                $2.63 Bollion
+                ${formatter.format(Number(reserveData?.availableLiquidityUSD))}
               </div>
             </div>
 
@@ -84,10 +99,7 @@ export default function TotalBorrowed({
               </div>
               {reserveData ? (
                 <div className="font-semibold leading-7 md:text-xl">
-                  {Number(
-                    formatEther(reserveData.currentVariableBorrowRate),
-                  ).toFixed(2)}
-                  %
+                  {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
                 </div>
               ) : (
                 <Skeleton className="h-7 w-20" />

@@ -106,7 +106,7 @@ const SupplyModalContent = ({
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {balance?.formattedBalance}
+          {Number(balance?.formattedBalance).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() =>
@@ -125,15 +125,18 @@ const SupplyModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div>${formatter.format(amount ?? 0 * 1)}</div>
+          <div>
+            $
+            {formatter.format(
+              (amount ?? 0) *
+                Number(reserveData.formattedPriceInMarketReferenceCurrency),
+            )}
+          </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Supply APY</div>
           <div className="text-success-foreground">
-            {(
-              Number(formatUnits(reserveData.currentLiquidityRate, 18)) * 100
-            ).toFixed(2)}
-            %
+            {(Number(reserveData.supplyAPY) * 100).toFixed(2)}%
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">

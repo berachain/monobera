@@ -31,10 +31,11 @@ export default function InterestRateOvertime({
           <div className="flex flex-col gap-[6px]">
             <div className="font-medium">Interest Rate Modal</div>
             <div className="text-sm font-normal leading-normal text-muted-foreground">
-              Total Borrowed <Tooltip text="" />
+              Utilization Rate <Tooltip text="" />
             </div>
-            {reserveData.borrowVariableAPR}
-            <div className=" text-xl font-semibold leading-7">54.29%</div>
+            <div className=" text-xl font-semibold leading-7">
+              {(Number(reserveData?.borrowUsageRatio) * 100).toFixed(2)}%
+            </div>
           </div>
         </div>
 

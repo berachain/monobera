@@ -59,11 +59,7 @@ export const user_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-success-foreground">
-        {(
-          Number(formatEther(row.original.reserveData.currentLiquidityRate)) *
-          100
-        ).toFixed(2)}
-        %
+        {(Number(row.original.supplyAPY) * 100).toFixed(2)}%
       </div>
     ),
     accessorKey: "supplyAPR",
@@ -204,11 +200,7 @@ export const available_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-success-foreground">
-        {(
-          Number(formatEther(row.original.reserveData.currentLiquidityRate)) *
-          100
-        ).toFixed(2)}
-        %
+        {(Number(row.original.supplyAPY) * 100).toFixed(2)}%
       </div>
     ),
     accessorKey: "supplyAPR",

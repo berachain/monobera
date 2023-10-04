@@ -4,7 +4,7 @@ export function getReservesHumanized(
 ) {
   const reservesData = reservesRaw.map((reserveRaw) => ({
     id: `${1111}-${reserveRaw.underlyingAsset}`.toLowerCase(),
-    underlyingAsset: reserveRaw.underlyingAsset.toLowerCase(),
+    underlyingAsset: reserveRaw.underlyingAsset,
     name: reserveRaw.name,
     symbol: reserveRaw.symbol,
     decimals: Number(reserveRaw.decimals),

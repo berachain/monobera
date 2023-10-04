@@ -10,7 +10,6 @@ import HoneyTokenCard from "~/components/honey-token-card";
 import StatusBanner from "~/components/status-banner";
 import TokenCard, { TokenLoading } from "~/components/token-card";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
 import { market_table_columns } from "./market-table-column";
 
 export default function MarketsPageContent() {
@@ -33,29 +32,30 @@ export default function MarketsPageContent() {
   }, [tableView]);
 
   const { tokenDictionary } = useTokens();
-  const { useReservesPrices } = usePollReservesPrices();
-  const { data: reservesPrices, isLoading: isReservesPricesLoading } =
-    useReservesPrices();
+
   const isTokenDictionaryLoading =
     !tokenDictionary || Object.keys(tokenDictionary).length === 0;
   const { useReservesDataList } = usePollReservesDataList();
   const { data: reservesDictionary, isLoading: isReservesDictionaryLoading } =
     useReservesDataList();
-  // if (reservesDictionary) console.log(reservesDictionary);
+
+  const isLoading =
+    isReservesDictionaryLoading ||
+    !reservesDictionary ||
+    isTokenDictionaryLoading ||
+    !tokenDictionary;
   const reservesList = React.useMemo(() => {
-    return !isReservesDictionaryLoading &&
-      reservesDictionary &&
-      !isReservesPricesLoading &&
-      reservesPrices
+    return !isLoading
       ? Object.keys(reservesDictionary)
           .map((key) => ({
             ...reservesDictionary[key as any],
-            ...reservesPrices[key as any],
+            token: tokenDictionary[key as any],
           }))
           .filter((reserve) => {
             if (
               !reserve.underlyingAsset ||
-              reserve.underlyingAsset === honeyAddress
+              reserve.underlyingAsset === honeyAddress ||
+              !reserve.token
             )
               return false;
             if (!keywords || keywords === "") return true;
@@ -83,10 +83,11 @@ export default function MarketsPageContent() {
       : [];
   }, [
     reservesDictionary,
+    isReservesDictionaryLoading,
     tokenDictionary,
+    isTokenDictionaryLoading,
     keywords,
     sortOptions,
-    reservesPrices,
   ]);
 
   return (
@@ -126,9 +127,7 @@ export default function MarketsPageContent() {
         />
       </div>
       <HoneyTokenCard />
-      {/* {!isTokenDictionaryLoading &&
-      !isReservesDictionaryLoading &&
-      !isReservesPricesLoading ? (
+      {!isLoading ? (
         <div className="mt-4">
           {tableView ? (
             <DataTable columns={market_table_columns} data={reservesList} />
@@ -141,12 +140,12 @@ export default function MarketsPageContent() {
           )}
         </div>
       ) : (
-        <div className="mt-4 grid grid-cols-2 gap-4 xl:grid-cols-1">
+        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-1">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <TokenLoading key={i} />
           ))}
         </div>
-      )} */}
+      )}
     </>
   );
 }

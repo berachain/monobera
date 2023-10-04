@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatUsd, formatter, type Token } from "@bera/berajs";
+import { formatter, type Token } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
@@ -16,26 +16,26 @@ export default function TokenInfoCard({
   token: Token;
   reserve: number;
   liquidity: number;
-  utilization: number;
+  utilization: nubmer;
   oraclePrice: number;
 }) {
   const info = [
     {
       title: "Reserve Size",
-      amount: `$${formatter.format(reserve * oraclePrice)}`,
+      amount: `$${formatter.format(reserve)}`,
     },
     {
       title: "Available Liquidity",
-      amount: `$${formatter.format(liquidity * oraclePrice)}`,
+      amount: `$${formatter.format(liquidity)}`,
     },
     {
       title: "Utilization Ratio",
-      amount: `${(utilization * 100).toPrecision(4)}%`,
+      amount: `${(utilization * 100).toFixed(2)}%`,
       tooltip: "Utilization Ratio",
     },
     {
       title: "Oracle Price",
-      amount: `${formatUsd(oraclePrice)}`,
+      amount: `$${formatter.format(oraclePrice)}`,
     },
   ];
   return (
