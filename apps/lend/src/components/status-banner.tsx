@@ -3,13 +3,13 @@ import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatEther } from "viem";
-
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 
 export default function StatusBanner() {
   const { useUserAccountData } = usePollUserAccountData();
   const { data, isLoading } = useUserAccountData();
   const { isReady } = useBeraJs();
+
   const status = [
     {
       icon: <Icons.wallet className="h-8 w-8" />,
@@ -39,11 +39,11 @@ export default function StatusBanner() {
   const info = [
     {
       title: "You can Borrow Upto",
-      amount: "$269.69m",
+      amount: formatUsd(formatEther(data?.availableBorrowsBase||'0')),
     },
     {
       title: "Funds Eligible for deposit",
-      amount: "$420.69m",
+      amount: formatUsd(formatEther(data?.totalCollateralBase||'0')),
     },
   ];
 

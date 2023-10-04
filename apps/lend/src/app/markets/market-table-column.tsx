@@ -1,6 +1,7 @@
 import React from "react";
-import { formatter } from "@bera/berajs";
+import { formatUsd, formatter } from "@bera/berajs";
 import { DataTableColumnHeader, TokenIcon } from "@bera/shared-ui";
+import { Skeleton } from "@bera/ui/skeleton";
 import { type ColumnDef } from "@tanstack/react-table";
 import { formatEther } from "viem";
 
@@ -13,8 +14,16 @@ export const market_table_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
-        <TokenIcon token={row.original} size="lg" key={row.original.address} />
-        {row.original.name}
+        {row.original.token ? (
+          <TokenIcon
+            token={row.original.token}
+            size="lg"
+            key={row.original.address}
+          />
+        ) : (
+          <Skeleton className="h-6 w-6" />
+        )}
+        {row.original.token.name}
       </div>
     ),
     accessorKey: "token",
@@ -27,15 +36,17 @@ export const market_table_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-base text-base font-medium">
-          {formatter.format(row.original.supplied)}
+          {formatter.format(row.original.totalLiquidity)}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          {/* ${formatter.format(row.original.supplied * row.original.dollarValue)} */}
-          $??
+          {formatUsd(
+            Number(row.original.totalLiquidity) *
+              Number(row.original.formattedPriceInMarketReferenceCurrency),
+          )}
         </div>
       </div>
     ),
-    accessorKey: "totalSupplied",
+    accessorKey: "totalLiquidity",
     enableSorting: true,
   },
   {
@@ -43,14 +54,11 @@ export const market_table_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader column={column} title="Supply APY" />
     ),
     cell: ({ row }) => (
-      <div className="text-success-foreground">
-        {(Number(formatEther(row.original.currentLiquidityRate)) * 100).toFixed(
-          2,
-        )}
-        %
+      <div className="text-base text-success-foreground">
+        {(Number(row.original.supplyAPY) * 100).toFixed(2)}%
       </div>
     ),
-    accessorKey: "currentLiquidityRate",
+    accessorKey: "supplyAPY",
     enableSorting: true,
   },
   {
@@ -59,20 +67,15 @@ export const market_table_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex flex-col pl-1 text-base">
-        {row.original.borrowed ? (
-          <>
-            {/* <div>{formatter.format(row.original.borrowed)}</div> */}
-            ???
-            <div className="text-xs font-medium leading-tight text-muted-foreground">
-              $ ??
-              {/* {formatter.format(
-                row.original.totalBorrowed * row.original.dollarValue,
-              )} */}
-            </div>
-          </>
-        ) : (
-          "~~"
-        )}
+        {formatter.format(Number(row.original.totalDebt))}
+
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
+          $
+          {formatter.format(
+            row.original.totalDebt *
+              row.original.formattedPriceInMarketReferenceCurrency,
+          )}
+        </div>
       </div>
     ),
     accessorKey: "totalBorrowed",
@@ -84,33 +87,16 @@ export const market_table_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="pl-4 text-base text-success-foreground">
-        {(
-          Number(formatEther(row.original.currentVariableBorrowRate)) * 100
-        ).toFixed(2)}
+        {(Number(formatEther(row.original.variableBorrowAPY)) * 100).toFixed(2)}
         %
       </div>
     ),
     accessorKey: "currentVariableBorrowRate",
     enableSorting: true,
   },
-  // {
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Borrow APY Stable" />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className="pl-4 text-base text-success-foreground">
-  //       {(
-  //         Number(formatEther(row.original.currentStableBorrowRate)) * 100
-  //       ).toFixed(2)}
-  //       %
-  //     </div>
-  //   ),
-  //   accessorKey: "supplyAPR",
-  //   enableSorting: true,
-  // },
   {
     header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
-    cell: ({ row }) => <InfoButton address={row.original.address} />,
+    cell: ({ row }) => <InfoButton address={row.original.underlyingAsset} />,
     accessorKey: "details",
     enableSorting: false,
   },

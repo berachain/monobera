@@ -27,7 +27,10 @@ export default function TokenCard({ reserveData }: { reserveData: any }) {
               {reserveData.token?.symbol}
             </div>
             <div className=" text-xs font-medium leading-5">
-              {formatUsd(reserveData.totalLiquidityUSD)}
+              {formatUsd(
+                Number(reserveData.totalLiquidity) *
+                  Number(reserveData.formattedPriceInMarketReferenceCurrency),
+              )}{" "}
             </div>
           </div>
         </div>
