@@ -95,7 +95,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       .refine((value) => isAddress(value), {
         message: "Invalid address.",
       }),
-    enableOrDisable: z.boolean()
+    enableOrDisable: z.boolean(),
   });
 
   const NewCollateralProposal = BaseFormSchema.extend({
@@ -135,7 +135,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     resolver: zodResolver(ProposalFormSchema),
     defaultValues: {
       expedite: false,
-      enableOrDisable: true
+      enableOrDisable: true,
     },
   });
 
@@ -313,48 +313,49 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             />
             {type === ProposalTypeEnum.GAUGE_PROPOSAL && (
               <>
-                                  <FormField
-                    control={form.control}
-                    name="gaugeAddress"
-                    render={({ field }) => (
-                      <FormItem className="inline-flex flex-col justify-start">
-                        <div className="text-sm font-semibold leading-tight">
-                          Gauge Address <Tooltip text="the address receiving rewards" />
-                        </div>
-                        <div>
-                          <FormControl>
-                            <Input
-                              type="text"
-                              id="forum-discussion-link"
-                              placeholder="0x0000...0000"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage className="mt-2" />
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                  
-            <FormField
-            control={form.control}
-            name="enableOrDisable"
-            render={({ field }) => (
-              <FormItem className="inline-flex flex-col justify-start">
-                <div className="text-sm font-semibold leading-tight">
-                  Enable Gauge{" "}
-                  <Tooltip text="If enabled, will propose this address to be whitelisted. If disabled, will propose this address to be removed from the whitelist." />
-                </div>
-                <FormControl>
-                  <Switch
-                    id="proposal-expedite"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+                <FormField
+                  control={form.control}
+                  name="gaugeAddress"
+                  render={({ field }) => (
+                    <FormItem className="inline-flex flex-col justify-start">
+                      <div className="text-sm font-semibold leading-tight">
+                        Gauge Address{" "}
+                        <Tooltip text="the address receiving rewards" />
+                      </div>
+                      <div>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            id="forum-discussion-link"
+                            placeholder="0x0000...0000"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className="mt-2" />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="enableOrDisable"
+                  render={({ field }) => (
+                    <FormItem className="inline-flex flex-col justify-start">
+                      <div className="text-sm font-semibold leading-tight">
+                        Enable Gauge{" "}
+                        <Tooltip text="If enabled, will propose this address to be whitelisted. If disabled, will propose this address to be removed from the whitelist." />
+                      </div>
+                      <FormControl>
+                        <Switch
+                          id="proposal-expedite"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </>
             )}
             {type === ProposalTypeEnum.COLLATERAL_PROPOSAL && (
