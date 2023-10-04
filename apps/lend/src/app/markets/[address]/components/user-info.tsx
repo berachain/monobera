@@ -42,7 +42,7 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
 
   const borrowAmout =
     borrowPower > availableLiquidity ? availableLiquidity : borrowPower;
-    
+
   return (
     <div className="w-full flex-shrink-0 lg:w-[378px]">
       {token ? (
