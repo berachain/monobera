@@ -3,6 +3,7 @@ import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatEther } from "viem";
+
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 
 export default function StatusBanner() {
@@ -39,11 +40,11 @@ export default function StatusBanner() {
   const info = [
     {
       title: "You can Borrow Upto",
-      amount: formatUsd(formatEther(data?.availableBorrowsBase||'0')),
+      amount: formatUsd(formatEther(data?.availableBorrowsBase || "0")),
     },
     {
       title: "Funds Eligible for deposit",
-      amount: formatUsd(formatEther(data?.totalCollateralBase||'0')),
+      amount: formatUsd(formatEther(data?.totalCollateralBase || "0")),
     },
   ];
 

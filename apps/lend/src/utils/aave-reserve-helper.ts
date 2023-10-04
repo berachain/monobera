@@ -1,6 +1,6 @@
 export function getReservesHumanized(
   reservesRaw: any[],
-  poolBaseCurrencyRaw: any[],
+  poolBaseCurrencyRaw: any,
 ) {
   const reservesData = reservesRaw.map((reserveRaw) => ({
     id: `${1111}-${reserveRaw.underlyingAsset}`.toLowerCase(),

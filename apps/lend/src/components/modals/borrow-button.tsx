@@ -7,12 +7,10 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 
 export default function BorrowBtn({

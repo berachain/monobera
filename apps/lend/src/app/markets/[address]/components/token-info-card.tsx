@@ -16,7 +16,7 @@ export default function TokenInfoCard({
   token: Token;
   reserve: number;
   liquidity: number;
-  utilization: nubmer;
+  utilization: number;
   oraclePrice: number;
 }) {
   const info = [

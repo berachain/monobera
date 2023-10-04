@@ -17,12 +17,12 @@ export const usePollReservesDataList = () => {
   const QUERY_KEY = ["getReservesDataList"];
   useSWR(QUERY_KEY, async () => {
     try {
-      const result = await publicClient.readContract({
+      const result = (await publicClient.readContract({
         address: lendUIDataProviderAddress,
         abi: lendUIDataProviderABI,
         functionName: "getReservesData",
         args: [lendPoolAddressProviderAddress],
-      });
+      })) as [any[], any];
       const currentTimestamp = Math.floor(Date.now() / 1000);
       const { reservesData, baseCurrencyData } = getReservesHumanized(
         result[0],
@@ -45,6 +45,8 @@ export const usePollReservesDataList = () => {
           [...QUERY_KEY, formattedReserve.underlyingAsset],
           formattedReserve,
         );
+
+        //@ts-ignore
         reservesDictionary[formattedReserve.underlyingAsset] = formattedReserve;
       });
 
