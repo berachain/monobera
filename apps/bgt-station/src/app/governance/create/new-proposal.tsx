@@ -70,16 +70,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof ProposalFormSchema>) {
-    const payload = createPayload(values);
-    write({
-      address: governanceAddress,
-      abi: GOVERNANCE_PRECOMPILE_ABI as any[],
-      functionName: "submitProposal",
-      params: payload as any,
-    });
-  }
-
   const BaseFormSchema = z.object({
     title: z.string().nonempty("Required"),
     description: z.string().nonempty("Required"),
@@ -105,6 +95,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       .refine((value) => isAddress(value), {
         message: "Invalid address.",
       }),
+    enableOrDisable: z.boolean()
   });
 
   const NewCollateralProposal = BaseFormSchema.extend({
@@ -144,8 +135,19 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     resolver: zodResolver(ProposalFormSchema),
     defaultValues: {
       expedite: false,
+      enableOrDisable: true
     },
   });
+
+  function onSubmit(values: z.infer<typeof ProposalFormSchema>) {
+    const payload = createPayload(form.getValues(), type);
+    write({
+      address: governanceAddress,
+      abi: GOVERNANCE_PRECOMPILE_ABI as any[],
+      functionName: "submitProposal",
+      params: payload as any,
+    });
+  }
   return (
     <div className="mx-auto  w-full max-w-[564px] pb-16">
       {ModalPortal}
@@ -310,7 +312,50 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
               )}
             />
             {type === ProposalTypeEnum.GAUGE_PROPOSAL && (
-              <NewGaugeForm form={form} />
+              <>
+                                  <FormField
+                    control={form.control}
+                    name="gaugeAddress"
+                    render={({ field }) => (
+                      <FormItem className="inline-flex flex-col justify-start">
+                        <div className="text-sm font-semibold leading-tight">
+                          Gauge Address <Tooltip text="the address receiving rewards" />
+                        </div>
+                        <div>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              id="forum-discussion-link"
+                              placeholder="0x0000...0000"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage className="mt-2" />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  
+            <FormField
+            control={form.control}
+            name="enableOrDisable"
+            render={({ field }) => (
+              <FormItem className="inline-flex flex-col justify-start">
+                <div className="text-sm font-semibold leading-tight">
+                  Enable Gauge{" "}
+                  <Tooltip text="If enabled, will propose this address to be whitelisted. If disabled, will propose this address to be removed from the whitelist." />
+                </div>
+                <FormControl>
+                  <Switch
+                    id="proposal-expedite"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+              </>
             )}
             {type === ProposalTypeEnum.COLLATERAL_PROPOSAL && (
               <NewCollateralForm form={form} />

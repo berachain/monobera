@@ -1,7 +1,6 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-
 import { Duration } from "../../../google/protobuf/duration";
 import { Timestamp } from "../../../google/protobuf/timestamp";
 
@@ -13,24 +12,27 @@ export const protobufPackage = "cosmos.slashing.v1beta1";
  */
 export interface ValidatorSigningInfo {
   address: string;
-  /** Height at which validator was first a candidate OR was unjailed */
+  /** Height at which validator was first a candidate OR was un-jailed */
   startHeight: Long;
   /**
-   * Index which is incremented each time the validator was a bonded
-   * in a block and may have signed a precommit or not. This in conjunction with the
-   * `SignedBlocksWindow` param determines the index in the `MissedBlocksBitArray`.
+   * Index which is incremented every time a validator is bonded in a block and
+   * _may_ have signed a pre-commit or not. This in conjunction with the
+   * signed_blocks_window param determines the index in the missed block bitmap.
    */
   indexOffset: Long;
   /** Timestamp until which the validator is jailed due to liveness downtime. */
-  jailedUntil?: Date;
+  jailedUntil?:
+    | Date
+    | undefined;
   /**
-   * Whether or not a validator has been tombstoned (killed out of validator set). It is set
-   * once the validator commits an equivocation or for any other configured misbehiavor.
+   * Whether or not a validator has been tombstoned (killed out of validator
+   * set). It is set once the validator commits an equivocation or for any other
+   * configured misbehavior.
    */
   tombstoned: boolean;
   /**
-   * A counter kept to avoid unnecessary array reads.
-   * Note that `Sum(MissedBlocksBitArray)` always equals `MissedBlocksCounter`.
+   * A counter of missed (unsigned) blocks. It is used to avoid unnecessary
+   * reads in the missed block bitmap.
    */
   missedBlocksCounter: Long;
 }
@@ -39,7 +41,7 @@ export interface ValidatorSigningInfo {
 export interface Params {
   signedBlocksWindow: Long;
   minSignedPerWindow: Uint8Array;
-  downtimeJailDuration?: Duration;
+  downtimeJailDuration?: Duration | undefined;
   slashFractionDoubleSign: Uint8Array;
   slashFractionDowntime: Uint8Array;
 }
@@ -56,10 +58,7 @@ function createBaseValidatorSigningInfo(): ValidatorSigningInfo {
 }
 
 export const ValidatorSigningInfo = {
-  encode(
-    message: ValidatorSigningInfo,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: ValidatorSigningInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -70,10 +69,7 @@ export const ValidatorSigningInfo = {
       writer.uint32(24).int64(message.indexOffset);
     }
     if (message.jailedUntil !== undefined) {
-      Timestamp.encode(
-        toTimestamp(message.jailedUntil),
-        writer.uint32(34).fork(),
-      ).ldelim();
+      Timestamp.encode(toTimestamp(message.jailedUntil), writer.uint32(34).fork()).ldelim();
     }
     if (message.tombstoned === true) {
       writer.uint32(40).bool(message.tombstoned);
@@ -84,40 +80,60 @@ export const ValidatorSigningInfo = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number,
-  ): ValidatorSigningInfo {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): ValidatorSigningInfo {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseValidatorSigningInfo();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.address = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.startHeight = reader.int64() as Long;
-          break;
+          continue;
         case 3:
+          if (tag !== 24) {
+            break;
+          }
+
           message.indexOffset = reader.int64() as Long;
-          break;
+          continue;
         case 4:
-          message.jailedUntil = fromTimestamp(
-            Timestamp.decode(reader, reader.uint32()),
-          );
-          break;
+          if (tag !== 34) {
+            break;
+          }
+
+          message.jailedUntil = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          continue;
         case 5:
+          if (tag !== 40) {
+            break;
+          }
+
           message.tombstoned = reader.bool();
-          break;
+          continue;
         case 6:
+          if (tag !== 48) {
+            break;
+          }
+
           message.missedBlocksCounter = reader.int64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -125,65 +141,54 @@ export const ValidatorSigningInfo = {
   fromJSON(object: any): ValidatorSigningInfo {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      startHeight: isSet(object.startHeight)
-        ? Long.fromValue(object.startHeight)
-        : Long.ZERO,
-      indexOffset: isSet(object.indexOffset)
-        ? Long.fromValue(object.indexOffset)
-        : Long.ZERO,
-      jailedUntil: isSet(object.jailedUntil)
-        ? fromJsonTimestamp(object.jailedUntil)
-        : undefined,
+      startHeight: isSet(object.startHeight) ? Long.fromValue(object.startHeight) : Long.ZERO,
+      indexOffset: isSet(object.indexOffset) ? Long.fromValue(object.indexOffset) : Long.ZERO,
+      jailedUntil: isSet(object.jailedUntil) ? fromJsonTimestamp(object.jailedUntil) : undefined,
       tombstoned: isSet(object.tombstoned) ? Boolean(object.tombstoned) : false,
-      missedBlocksCounter: isSet(object.missedBlocksCounter)
-        ? Long.fromValue(object.missedBlocksCounter)
-        : Long.ZERO,
+      missedBlocksCounter: isSet(object.missedBlocksCounter) ? Long.fromValue(object.missedBlocksCounter) : Long.ZERO,
     };
   },
 
   toJSON(message: ValidatorSigningInfo): unknown {
     const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
-    message.startHeight !== undefined &&
-      (obj.startHeight = (message.startHeight || Long.ZERO).toString());
-    message.indexOffset !== undefined &&
-      (obj.indexOffset = (message.indexOffset || Long.ZERO).toString());
-    message.jailedUntil !== undefined &&
-      (obj.jailedUntil = message.jailedUntil.toISOString());
-    message.tombstoned !== undefined && (obj.tombstoned = message.tombstoned);
-    message.missedBlocksCounter !== undefined &&
-      (obj.missedBlocksCounter = (
-        message.missedBlocksCounter || Long.ZERO
-      ).toString());
+    if (message.address !== "") {
+      obj.address = message.address;
+    }
+    if (!message.startHeight.isZero()) {
+      obj.startHeight = (message.startHeight || Long.ZERO).toString();
+    }
+    if (!message.indexOffset.isZero()) {
+      obj.indexOffset = (message.indexOffset || Long.ZERO).toString();
+    }
+    if (message.jailedUntil !== undefined) {
+      obj.jailedUntil = message.jailedUntil.toISOString();
+    }
+    if (message.tombstoned === true) {
+      obj.tombstoned = message.tombstoned;
+    }
+    if (!message.missedBlocksCounter.isZero()) {
+      obj.missedBlocksCounter = (message.missedBlocksCounter || Long.ZERO).toString();
+    }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ValidatorSigningInfo>, I>>(
-    base?: I,
-  ): ValidatorSigningInfo {
-    return ValidatorSigningInfo.fromPartial(base ?? {});
+  create<I extends Exact<DeepPartial<ValidatorSigningInfo>, I>>(base?: I): ValidatorSigningInfo {
+    return ValidatorSigningInfo.fromPartial(base ?? ({} as any));
   },
-
-  fromPartial<I extends Exact<DeepPartial<ValidatorSigningInfo>, I>>(
-    object: I,
-  ): ValidatorSigningInfo {
+  fromPartial<I extends Exact<DeepPartial<ValidatorSigningInfo>, I>>(object: I): ValidatorSigningInfo {
     const message = createBaseValidatorSigningInfo();
     message.address = object.address ?? "";
-    message.startHeight =
-      object.startHeight !== undefined && object.startHeight !== null
-        ? Long.fromValue(object.startHeight)
-        : Long.ZERO;
-    message.indexOffset =
-      object.indexOffset !== undefined && object.indexOffset !== null
-        ? Long.fromValue(object.indexOffset)
-        : Long.ZERO;
+    message.startHeight = (object.startHeight !== undefined && object.startHeight !== null)
+      ? Long.fromValue(object.startHeight)
+      : Long.ZERO;
+    message.indexOffset = (object.indexOffset !== undefined && object.indexOffset !== null)
+      ? Long.fromValue(object.indexOffset)
+      : Long.ZERO;
     message.jailedUntil = object.jailedUntil ?? undefined;
     message.tombstoned = object.tombstoned ?? false;
-    message.missedBlocksCounter =
-      object.missedBlocksCounter !== undefined &&
-      object.missedBlocksCounter !== null
-        ? Long.fromValue(object.missedBlocksCounter)
-        : Long.ZERO;
+    message.missedBlocksCounter = (object.missedBlocksCounter !== undefined && object.missedBlocksCounter !== null)
+      ? Long.fromValue(object.missedBlocksCounter)
+      : Long.ZERO;
     return message;
   },
 };
@@ -191,18 +196,15 @@ export const ValidatorSigningInfo = {
 function createBaseParams(): Params {
   return {
     signedBlocksWindow: Long.ZERO,
-    minSignedPerWindow: new Uint8Array(),
+    minSignedPerWindow: new Uint8Array(0),
     downtimeJailDuration: undefined,
-    slashFractionDoubleSign: new Uint8Array(),
-    slashFractionDowntime: new Uint8Array(),
+    slashFractionDoubleSign: new Uint8Array(0),
+    slashFractionDowntime: new Uint8Array(0),
   };
 }
 
 export const Params = {
-  encode(
-    message: Params,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.signedBlocksWindow.isZero()) {
       writer.uint32(8).int64(message.signedBlocksWindow);
     }
@@ -210,10 +212,7 @@ export const Params = {
       writer.uint32(18).bytes(message.minSignedPerWindow);
     }
     if (message.downtimeJailDuration !== undefined) {
-      Duration.encode(
-        message.downtimeJailDuration,
-        writer.uint32(26).fork(),
-      ).ldelim();
+      Duration.encode(message.downtimeJailDuration, writer.uint32(26).fork()).ldelim();
     }
     if (message.slashFractionDoubleSign.length !== 0) {
       writer.uint32(34).bytes(message.slashFractionDoubleSign);
@@ -225,118 +224,116 @@ export const Params = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Params {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.signedBlocksWindow = reader.int64() as Long;
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.minSignedPerWindow = reader.bytes();
-          break;
+          continue;
         case 3:
-          message.downtimeJailDuration = Duration.decode(
-            reader,
-            reader.uint32(),
-          );
-          break;
+          if (tag !== 26) {
+            break;
+          }
+
+          message.downtimeJailDuration = Duration.decode(reader, reader.uint32());
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.slashFractionDoubleSign = reader.bytes();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.slashFractionDowntime = reader.bytes();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): Params {
     return {
-      signedBlocksWindow: isSet(object.signedBlocksWindow)
-        ? Long.fromValue(object.signedBlocksWindow)
-        : Long.ZERO,
+      signedBlocksWindow: isSet(object.signedBlocksWindow) ? Long.fromValue(object.signedBlocksWindow) : Long.ZERO,
       minSignedPerWindow: isSet(object.minSignedPerWindow)
         ? bytesFromBase64(object.minSignedPerWindow)
-        : new Uint8Array(),
+        : new Uint8Array(0),
       downtimeJailDuration: isSet(object.downtimeJailDuration)
         ? Duration.fromJSON(object.downtimeJailDuration)
         : undefined,
       slashFractionDoubleSign: isSet(object.slashFractionDoubleSign)
         ? bytesFromBase64(object.slashFractionDoubleSign)
-        : new Uint8Array(),
+        : new Uint8Array(0),
       slashFractionDowntime: isSet(object.slashFractionDowntime)
         ? bytesFromBase64(object.slashFractionDowntime)
-        : new Uint8Array(),
+        : new Uint8Array(0),
     };
   },
 
   toJSON(message: Params): unknown {
     const obj: any = {};
-    message.signedBlocksWindow !== undefined &&
-      (obj.signedBlocksWindow = (
-        message.signedBlocksWindow || Long.ZERO
-      ).toString());
-    message.minSignedPerWindow !== undefined &&
-      (obj.minSignedPerWindow = base64FromBytes(
-        message.minSignedPerWindow !== undefined
-          ? message.minSignedPerWindow
-          : new Uint8Array(),
-      ));
-    message.downtimeJailDuration !== undefined &&
-      (obj.downtimeJailDuration = message.downtimeJailDuration
-        ? Duration.toJSON(message.downtimeJailDuration)
-        : undefined);
-    message.slashFractionDoubleSign !== undefined &&
-      (obj.slashFractionDoubleSign = base64FromBytes(
-        message.slashFractionDoubleSign !== undefined
-          ? message.slashFractionDoubleSign
-          : new Uint8Array(),
-      ));
-    message.slashFractionDowntime !== undefined &&
-      (obj.slashFractionDowntime = base64FromBytes(
-        message.slashFractionDowntime !== undefined
-          ? message.slashFractionDowntime
-          : new Uint8Array(),
-      ));
+    if (!message.signedBlocksWindow.isZero()) {
+      obj.signedBlocksWindow = (message.signedBlocksWindow || Long.ZERO).toString();
+    }
+    if (message.minSignedPerWindow.length !== 0) {
+      obj.minSignedPerWindow = base64FromBytes(message.minSignedPerWindow);
+    }
+    if (message.downtimeJailDuration !== undefined) {
+      obj.downtimeJailDuration = Duration.toJSON(message.downtimeJailDuration);
+    }
+    if (message.slashFractionDoubleSign.length !== 0) {
+      obj.slashFractionDoubleSign = base64FromBytes(message.slashFractionDoubleSign);
+    }
+    if (message.slashFractionDowntime.length !== 0) {
+      obj.slashFractionDowntime = base64FromBytes(message.slashFractionDowntime);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<Params>, I>>(base?: I): Params {
-    return Params.fromPartial(base ?? {});
+    return Params.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
     const message = createBaseParams();
-    message.signedBlocksWindow =
-      object.signedBlocksWindow !== undefined &&
-      object.signedBlocksWindow !== null
-        ? Long.fromValue(object.signedBlocksWindow)
-        : Long.ZERO;
-    message.minSignedPerWindow = object.minSignedPerWindow ?? new Uint8Array();
-    message.downtimeJailDuration =
-      object.downtimeJailDuration !== undefined &&
-      object.downtimeJailDuration !== null
-        ? Duration.fromPartial(object.downtimeJailDuration)
-        : undefined;
-    message.slashFractionDoubleSign =
-      object.slashFractionDoubleSign ?? new Uint8Array();
-    message.slashFractionDowntime =
-      object.slashFractionDowntime ?? new Uint8Array();
+    message.signedBlocksWindow = (object.signedBlocksWindow !== undefined && object.signedBlocksWindow !== null)
+      ? Long.fromValue(object.signedBlocksWindow)
+      : Long.ZERO;
+    message.minSignedPerWindow = object.minSignedPerWindow ?? new Uint8Array(0);
+    message.downtimeJailDuration = (object.downtimeJailDuration !== undefined && object.downtimeJailDuration !== null)
+      ? Duration.fromPartial(object.downtimeJailDuration)
+      : undefined;
+    message.slashFractionDoubleSign = object.slashFractionDoubleSign ?? new Uint8Array(0);
+    message.slashFractionDowntime = object.slashFractionDowntime ?? new Uint8Array(0);
     return message;
   },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
+declare const self: any | undefined;
+declare const window: any | undefined;
+declare const global: any | undefined;
+const tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }
@@ -377,33 +374,17 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function toTimestamp(date: Date): Timestamp {
   const seconds = numberToLong(date.getTime() / 1_000);
@@ -412,8 +393,8 @@ function toTimestamp(date: Date): Timestamp {
 }
 
 function fromTimestamp(t: Timestamp): Date {
-  let millis = t.seconds.toNumber() * 1_000;
-  millis += t.nanos / 1_000_000;
+  let millis = (t.seconds.toNumber() || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
   return new Date(millis);
 }
 

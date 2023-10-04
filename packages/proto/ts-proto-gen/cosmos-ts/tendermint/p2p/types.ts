@@ -17,14 +17,14 @@ export interface ProtocolVersion {
 }
 
 export interface DefaultNodeInfo {
-  protocolVersion?: ProtocolVersion;
+  protocolVersion?: ProtocolVersion | undefined;
   defaultNodeId: string;
   listenAddr: string;
   network: string;
   version: string;
   channels: Uint8Array;
   moniker: string;
-  other?: DefaultNodeInfoOther;
+  other?: DefaultNodeInfoOther | undefined;
 }
 
 export interface DefaultNodeInfoOther {
@@ -37,10 +37,7 @@ function createBaseNetAddress(): NetAddress {
 }
 
 export const NetAddress = {
-  encode(
-    message: NetAddress,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: NetAddress, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -54,25 +51,38 @@ export const NetAddress = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): NetAddress {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseNetAddress();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.id = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.ip = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 24) {
+            break;
+          }
+
           message.port = reader.uint32();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -87,19 +97,22 @@ export const NetAddress = {
 
   toJSON(message: NetAddress): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.ip !== undefined && (obj.ip = message.ip);
-    message.port !== undefined && (obj.port = Math.round(message.port));
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.ip !== "") {
+      obj.ip = message.ip;
+    }
+    if (message.port !== 0) {
+      obj.port = Math.round(message.port);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<NetAddress>, I>>(base?: I): NetAddress {
-    return NetAddress.fromPartial(base ?? {});
+    return NetAddress.fromPartial(base ?? ({} as any));
   },
-
-  fromPartial<I extends Exact<DeepPartial<NetAddress>, I>>(
-    object: I,
-  ): NetAddress {
+  fromPartial<I extends Exact<DeepPartial<NetAddress>, I>>(object: I): NetAddress {
     const message = createBaseNetAddress();
     message.id = object.id ?? "";
     message.ip = object.ip ?? "";
@@ -113,10 +126,7 @@ function createBaseProtocolVersion(): ProtocolVersion {
 }
 
 export const ProtocolVersion = {
-  encode(
-    message: ProtocolVersion,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: ProtocolVersion, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (!message.p2p.isZero()) {
       writer.uint32(8).uint64(message.p2p);
     }
@@ -130,25 +140,38 @@ export const ProtocolVersion = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ProtocolVersion {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProtocolVersion();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.p2p = reader.uint64() as Long;
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.block = reader.uint64() as Long;
-          break;
+          continue;
         case 3:
+          if (tag !== 24) {
+            break;
+          }
+
           message.app = reader.uint64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -163,37 +186,26 @@ export const ProtocolVersion = {
 
   toJSON(message: ProtocolVersion): unknown {
     const obj: any = {};
-    message.p2p !== undefined &&
-      (obj.p2p = (message.p2p || Long.UZERO).toString());
-    message.block !== undefined &&
-      (obj.block = (message.block || Long.UZERO).toString());
-    message.app !== undefined &&
-      (obj.app = (message.app || Long.UZERO).toString());
+    if (!message.p2p.isZero()) {
+      obj.p2p = (message.p2p || Long.UZERO).toString();
+    }
+    if (!message.block.isZero()) {
+      obj.block = (message.block || Long.UZERO).toString();
+    }
+    if (!message.app.isZero()) {
+      obj.app = (message.app || Long.UZERO).toString();
+    }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ProtocolVersion>, I>>(
-    base?: I,
-  ): ProtocolVersion {
-    return ProtocolVersion.fromPartial(base ?? {});
+  create<I extends Exact<DeepPartial<ProtocolVersion>, I>>(base?: I): ProtocolVersion {
+    return ProtocolVersion.fromPartial(base ?? ({} as any));
   },
-
-  fromPartial<I extends Exact<DeepPartial<ProtocolVersion>, I>>(
-    object: I,
-  ): ProtocolVersion {
+  fromPartial<I extends Exact<DeepPartial<ProtocolVersion>, I>>(object: I): ProtocolVersion {
     const message = createBaseProtocolVersion();
-    message.p2p =
-      object.p2p !== undefined && object.p2p !== null
-        ? Long.fromValue(object.p2p)
-        : Long.UZERO;
-    message.block =
-      object.block !== undefined && object.block !== null
-        ? Long.fromValue(object.block)
-        : Long.UZERO;
-    message.app =
-      object.app !== undefined && object.app !== null
-        ? Long.fromValue(object.app)
-        : Long.UZERO;
+    message.p2p = (object.p2p !== undefined && object.p2p !== null) ? Long.fromValue(object.p2p) : Long.UZERO;
+    message.block = (object.block !== undefined && object.block !== null) ? Long.fromValue(object.block) : Long.UZERO;
+    message.app = (object.app !== undefined && object.app !== null) ? Long.fromValue(object.app) : Long.UZERO;
     return message;
   },
 };
@@ -205,22 +217,16 @@ function createBaseDefaultNodeInfo(): DefaultNodeInfo {
     listenAddr: "",
     network: "",
     version: "",
-    channels: new Uint8Array(),
+    channels: new Uint8Array(0),
     moniker: "",
     other: undefined,
   };
 }
 
 export const DefaultNodeInfo = {
-  encode(
-    message: DefaultNodeInfo,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: DefaultNodeInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.protocolVersion !== undefined) {
-      ProtocolVersion.encode(
-        message.protocolVersion,
-        writer.uint32(10).fork(),
-      ).ldelim();
+      ProtocolVersion.encode(message.protocolVersion, writer.uint32(10).fork()).ldelim();
     }
     if (message.defaultNodeId !== "") {
       writer.uint32(18).string(message.defaultNodeId);
@@ -241,124 +247,142 @@ export const DefaultNodeInfo = {
       writer.uint32(58).string(message.moniker);
     }
     if (message.other !== undefined) {
-      DefaultNodeInfoOther.encode(
-        message.other,
-        writer.uint32(66).fork(),
-      ).ldelim();
+      DefaultNodeInfoOther.encode(message.other, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): DefaultNodeInfo {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDefaultNodeInfo();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.protocolVersion = ProtocolVersion.decode(
-            reader,
-            reader.uint32(),
-          );
-          break;
+          if (tag !== 10) {
+            break;
+          }
+
+          message.protocolVersion = ProtocolVersion.decode(reader, reader.uint32());
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.defaultNodeId = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.listenAddr = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.network = reader.string();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.version = reader.string();
-          break;
+          continue;
         case 6:
+          if (tag !== 50) {
+            break;
+          }
+
           message.channels = reader.bytes();
-          break;
+          continue;
         case 7:
+          if (tag !== 58) {
+            break;
+          }
+
           message.moniker = reader.string();
-          break;
+          continue;
         case 8:
+          if (tag !== 66) {
+            break;
+          }
+
           message.other = DefaultNodeInfoOther.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): DefaultNodeInfo {
     return {
-      protocolVersion: isSet(object.protocolVersion)
-        ? ProtocolVersion.fromJSON(object.protocolVersion)
-        : undefined,
-      defaultNodeId: isSet(object.defaultNodeId)
-        ? String(object.defaultNodeId)
-        : "",
+      protocolVersion: isSet(object.protocolVersion) ? ProtocolVersion.fromJSON(object.protocolVersion) : undefined,
+      defaultNodeId: isSet(object.defaultNodeId) ? String(object.defaultNodeId) : "",
       listenAddr: isSet(object.listenAddr) ? String(object.listenAddr) : "",
       network: isSet(object.network) ? String(object.network) : "",
       version: isSet(object.version) ? String(object.version) : "",
-      channels: isSet(object.channels)
-        ? bytesFromBase64(object.channels)
-        : new Uint8Array(),
+      channels: isSet(object.channels) ? bytesFromBase64(object.channels) : new Uint8Array(0),
       moniker: isSet(object.moniker) ? String(object.moniker) : "",
-      other: isSet(object.other)
-        ? DefaultNodeInfoOther.fromJSON(object.other)
-        : undefined,
+      other: isSet(object.other) ? DefaultNodeInfoOther.fromJSON(object.other) : undefined,
     };
   },
 
   toJSON(message: DefaultNodeInfo): unknown {
     const obj: any = {};
-    message.protocolVersion !== undefined &&
-      (obj.protocolVersion = message.protocolVersion
-        ? ProtocolVersion.toJSON(message.protocolVersion)
-        : undefined);
-    message.defaultNodeId !== undefined &&
-      (obj.defaultNodeId = message.defaultNodeId);
-    message.listenAddr !== undefined && (obj.listenAddr = message.listenAddr);
-    message.network !== undefined && (obj.network = message.network);
-    message.version !== undefined && (obj.version = message.version);
-    message.channels !== undefined &&
-      (obj.channels = base64FromBytes(
-        message.channels !== undefined ? message.channels : new Uint8Array(),
-      ));
-    message.moniker !== undefined && (obj.moniker = message.moniker);
-    message.other !== undefined &&
-      (obj.other = message.other
-        ? DefaultNodeInfoOther.toJSON(message.other)
-        : undefined);
+    if (message.protocolVersion !== undefined) {
+      obj.protocolVersion = ProtocolVersion.toJSON(message.protocolVersion);
+    }
+    if (message.defaultNodeId !== "") {
+      obj.defaultNodeId = message.defaultNodeId;
+    }
+    if (message.listenAddr !== "") {
+      obj.listenAddr = message.listenAddr;
+    }
+    if (message.network !== "") {
+      obj.network = message.network;
+    }
+    if (message.version !== "") {
+      obj.version = message.version;
+    }
+    if (message.channels.length !== 0) {
+      obj.channels = base64FromBytes(message.channels);
+    }
+    if (message.moniker !== "") {
+      obj.moniker = message.moniker;
+    }
+    if (message.other !== undefined) {
+      obj.other = DefaultNodeInfoOther.toJSON(message.other);
+    }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<DefaultNodeInfo>, I>>(
-    base?: I,
-  ): DefaultNodeInfo {
-    return DefaultNodeInfo.fromPartial(base ?? {});
+  create<I extends Exact<DeepPartial<DefaultNodeInfo>, I>>(base?: I): DefaultNodeInfo {
+    return DefaultNodeInfo.fromPartial(base ?? ({} as any));
   },
-
-  fromPartial<I extends Exact<DeepPartial<DefaultNodeInfo>, I>>(
-    object: I,
-  ): DefaultNodeInfo {
+  fromPartial<I extends Exact<DeepPartial<DefaultNodeInfo>, I>>(object: I): DefaultNodeInfo {
     const message = createBaseDefaultNodeInfo();
-    message.protocolVersion =
-      object.protocolVersion !== undefined && object.protocolVersion !== null
-        ? ProtocolVersion.fromPartial(object.protocolVersion)
-        : undefined;
+    message.protocolVersion = (object.protocolVersion !== undefined && object.protocolVersion !== null)
+      ? ProtocolVersion.fromPartial(object.protocolVersion)
+      : undefined;
     message.defaultNodeId = object.defaultNodeId ?? "";
     message.listenAddr = object.listenAddr ?? "";
     message.network = object.network ?? "";
     message.version = object.version ?? "";
-    message.channels = object.channels ?? new Uint8Array();
+    message.channels = object.channels ?? new Uint8Array(0);
     message.moniker = object.moniker ?? "";
-    message.other =
-      object.other !== undefined && object.other !== null
-        ? DefaultNodeInfoOther.fromPartial(object.other)
-        : undefined;
+    message.other = (object.other !== undefined && object.other !== null)
+      ? DefaultNodeInfoOther.fromPartial(object.other)
+      : undefined;
     return message;
   },
 };
@@ -368,10 +392,7 @@ function createBaseDefaultNodeInfoOther(): DefaultNodeInfoOther {
 }
 
 export const DefaultNodeInfoOther = {
-  encode(
-    message: DefaultNodeInfoOther,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: DefaultNodeInfoOther, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.txIndex !== "") {
       writer.uint32(10).string(message.txIndex);
     }
@@ -381,26 +402,32 @@ export const DefaultNodeInfoOther = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number,
-  ): DefaultNodeInfoOther {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): DefaultNodeInfoOther {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDefaultNodeInfoOther();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.txIndex = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.rpcAddress = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -414,20 +441,19 @@ export const DefaultNodeInfoOther = {
 
   toJSON(message: DefaultNodeInfoOther): unknown {
     const obj: any = {};
-    message.txIndex !== undefined && (obj.txIndex = message.txIndex);
-    message.rpcAddress !== undefined && (obj.rpcAddress = message.rpcAddress);
+    if (message.txIndex !== "") {
+      obj.txIndex = message.txIndex;
+    }
+    if (message.rpcAddress !== "") {
+      obj.rpcAddress = message.rpcAddress;
+    }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<DefaultNodeInfoOther>, I>>(
-    base?: I,
-  ): DefaultNodeInfoOther {
-    return DefaultNodeInfoOther.fromPartial(base ?? {});
+  create<I extends Exact<DeepPartial<DefaultNodeInfoOther>, I>>(base?: I): DefaultNodeInfoOther {
+    return DefaultNodeInfoOther.fromPartial(base ?? ({} as any));
   },
-
-  fromPartial<I extends Exact<DeepPartial<DefaultNodeInfoOther>, I>>(
-    object: I,
-  ): DefaultNodeInfoOther {
+  fromPartial<I extends Exact<DeepPartial<DefaultNodeInfoOther>, I>>(object: I): DefaultNodeInfoOther {
     const message = createBaseDefaultNodeInfoOther();
     message.txIndex = object.txIndex ?? "";
     message.rpcAddress = object.rpcAddress ?? "";
@@ -435,10 +461,10 @@ export const DefaultNodeInfoOther = {
   },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
+declare const self: any | undefined;
+declare const window: any | undefined;
+declare const global: any | undefined;
+const tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }
@@ -479,33 +505,17 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
