@@ -1,9 +1,8 @@
-import { formatter, useSelectedAssetWalletBalance } from "@bera/berajs";
+import { formatter } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatEther } from "viem";
 
 import Card from "./card";
 import InfoButton from "./info-button";
@@ -19,12 +18,6 @@ export default function UserTokenCard({
   asset: any;
   type: "user-supply" | "user-borrow" | "supply" | "borrow";
 }) {
-  const originalToken = useSelectedAssetWalletBalance(
-    asset.reserveData.address,
-  );
-  const isDebtTypeStable = () => {
-    return asset.name.split(" ")[0] === "Stable";
-  };
   return (
     <Card key={asset.symbol} className="p-4">
       <div className="flex flex-col items-center justify-between gap-6 md:flex-row md:gap-4">
@@ -49,7 +42,10 @@ export default function UserTokenCard({
             <div className="text-xs font-medium leading-tight">
               $
               {formatter.format(
-                Number(asset.formattedBalance) * Number(asset.formattedPrice),
+                Number(asset.formattedBalance) *
+                  Number(
+                    asset.reserveData.formattedPriceInMarketReferenceCurrency,
+                  ),
               )}
             </div>
           </div>
@@ -58,32 +54,13 @@ export default function UserTokenCard({
         {(type === "user-supply" || type === "supply") && (
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
-              Loan APY
+              Supply APY
             </div>
             <div className="text-lg font-bold text-success-foreground">
-              {(
-                Number(formatEther(asset.reserveData.currentLiquidityRate)) *
-                100
-              ).toFixed(2)}
-              %
+              {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
             </div>
           </div>
         )}
-
-        {/* {type === "borrow" && (
-        <div className="flex flex-shrink-0 flex-col">
-          <div className="text-xs font-medium leading-5 text-muted-foreground">
-            Stable APY
-          </div>
-          <div className="text-lg font-bold text-warning-foreground">
-            {(
-              Number(formatEther(asset.reserveData?.currentStableBorrowRate??"0")) *
-              100
-            ).toFixed(2)}
-            %
-          </div>
-        </div>
-      )} */}
 
         {type === "borrow" && (
           <div className="flex flex-shrink-0 flex-col">
@@ -91,12 +68,7 @@ export default function UserTokenCard({
               Variable APY
             </div>
             <div className="text-lg font-bold text-warning-foreground">
-              {(
-                Number(
-                  formatEther(asset.reserveData.currentVariableBorrowRate),
-                ) * 100
-              ).toFixed(2)}
-              %
+              {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
             </div>
           </div>
         )}
@@ -107,34 +79,14 @@ export default function UserTokenCard({
               Loan APY
             </div>
             <div className="text-lg font-bold text-warning-foreground">
-              {(
-                Number(
-                  formatEther(
-                    isDebtTypeStable()
-                      ? asset.reserveData.currentStableBorrowRate
-                      : asset.reserveData.currentVariableBorrowRate,
-                  ),
-                ) * 100
-              ).toFixed(2)}
-              %
+              {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
             </div>
           </div>
         )}
 
-        {/* {type === "user-borrow" && (
-        <div className="flex flex-shrink-0 flex-col">
-          <div className="text-xs font-medium leading-5 text-muted-foreground">
-            APY Type
-          </div>
-          <div className="text-lg font-bold text-foreground">
-            {isDebtTypeStable() ? "Stable" : "Variable"}
-          </div>
-        </div>
-      )} */}
-
         <div className="grow-1 flex w-full items-center gap-2 md:w-fit">
           {(type === "user-supply" || type === "supply") && (
-            <SupplyBtn token={originalToken} />
+            <SupplyBtn token={asset} />
           )}
           {type === "user-supply" && <WithdrawBtn token={asset} />}
           {(type === "user-borrow" || type === "borrow") && (

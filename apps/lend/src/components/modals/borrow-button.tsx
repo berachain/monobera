@@ -5,7 +5,6 @@ import { lendPoolImplementationAddress } from "@bera/config";
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
-import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { formatUnits, parseUnits } from "viem";
 
@@ -90,7 +89,7 @@ const BorrowModalContent = ({
     borrowPower > availableLiquidity ? availableLiquidity : borrowPower;
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-lg font-semibold leading-7">Borrow</div>
+      <div className="text-lg font-semibold leading-7">Borrow </div>
       <Image
         src={"/supply.png"}
         alt="supply-img"
@@ -116,8 +115,7 @@ const BorrowModalContent = ({
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {borrowAmout.toFixed(2)}
+          Availabe to borrow: {borrowAmout.toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() => setAmount(borrowAmout)}

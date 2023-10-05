@@ -2,7 +2,6 @@ import React from "react";
 import { formatter } from "@bera/berajs";
 import { DataTableColumnHeader, TokenIcon } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
-import { formatEther } from "viem";
 
 import InfoButton from "~/components/info-button";
 import BorrowBtn from "~/components/modals/borrow-button";
@@ -41,7 +40,10 @@ export const user_supply_columns: ColumnDef<any>[] = [
           $
           {formatter.format(
             Number(row.original.formattedBalance) *
-              Number(row.original.formattedPrice),
+              Number(
+                row.original.reserveData
+                  .formattedPriceInMarketReferenceCurrency,
+              ),
           )}
         </div>
       </div>
@@ -59,7 +61,7 @@ export const user_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-success-foreground">
-        {(Number(row.original.supplyAPY) * 100).toFixed(2)}%
+        {(Number(row.original.reserveData.supplyAPY) * 100).toFixed(2)}%
       </div>
     ),
     accessorKey: "supplyAPR",
@@ -109,7 +111,10 @@ export const user_borrows_columns: ColumnDef<any>[] = [
           $
           {formatter.format(
             Number(row.original.formattedBalance) *
-              Number(row.original.formattedPrice),
+              Number(
+                row.original.reserveData
+                  .formattedPriceInMarketReferenceCurrency,
+              ),
           )}
         </div>
       </div>
@@ -127,15 +132,10 @@ export const user_borrows_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-warning-foreground">
-        {(
-          Number(
-            formatEther(row.original.reserveData.currentStableBorrowRate),
-          ) * 100
-        ).toFixed(2)}
-        %
+        {(Number(row.original.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
       </div>
     ),
-    accessorKey: "loanAPY",
+    accessorKey: "variableBorrowAPY",
     enableSorting: true,
   },
   {
@@ -182,7 +182,10 @@ export const available_supply_columns: ColumnDef<any>[] = [
           $
           {formatter.format(
             Number(row.original.formattedBalance) *
-              Number(row.original.formattedPrice),
+              Number(
+                row.original.reserveData
+                  .formattedPriceInMarketReferenceCurrency,
+              ),
           )}
         </div>
       </div>
@@ -200,7 +203,7 @@ export const available_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-success-foreground">
-        {(Number(row.original.supplyAPY) * 100).toFixed(2)}%
+        {(Number(row.original.reserveData.supplyAPY) * 100).toFixed(2)}%
       </div>
     ),
     accessorKey: "supplyAPR",
@@ -247,33 +250,18 @@ export const available_borrows_columns: ColumnDef<any>[] = [
           {formatter.format(row.original.supplied)}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          {/* ${formatter.format(row.original.supplied * row.original.dollarValue)} */}
-          {Number(row.original.formattedPrice)}
+          $
+          {formatter.format(
+            row.original.supplied *
+              Number(
+                row.original.reserveData
+                  .formattedPriceInMarketReferenceCurrency,
+              ),
+          )}
         </div>
       </div>
     ),
     accessorKey: "avaliableUS",
-    enableSorting: true,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Stable APY"
-        className="whitespace-nowrap"
-      />
-    ),
-    cell: ({ row }) => (
-      <div className="text-warning-foreground">
-        {(
-          Number(
-            formatEther(row.original.reserveData.currentStableBorrowRate),
-          ) * 100
-        ).toFixed(2)}
-        %
-      </div>
-    ),
-    accessorKey: "currentStableBorrowRate",
     enableSorting: true,
   },
   {
@@ -286,15 +274,10 @@ export const available_borrows_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="text-warning-foreground">
-        {(
-          Number(
-            formatEther(row.original.reserveData.currentStableBorrowRate),
-          ) * 100
-        ).toFixed(2)}
-        %
+        {(Number(row.original.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
       </div>
     ),
-    accessorKey: "currentStableBorrowRate",
+    accessorKey: "variableBorrowAPY",
     enableSorting: true,
   },
   {

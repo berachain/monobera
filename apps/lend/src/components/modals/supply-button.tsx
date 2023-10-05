@@ -31,7 +31,7 @@ export default function SupplyBtn({
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `Supplying ${amount} ${token.symbol}`,
+    message: `Supplying ${amount} ${token?.symbol}`,
   });
   const { isReady } = useBeraJs();
   useEffect(() => setOpen(false), [isSuccess]);
@@ -61,13 +61,17 @@ const SupplyModalContent = ({
   setAmount,
   write,
 }: {
-  token: Token;
+  token: Token & {
+    source_token?: string;
+  };
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const { account } = useBeraJs();
-  const balance = useSelectedAssetWalletBalance(token.address);
+  const balance = useSelectedAssetWalletBalance(
+    token.source_token ? token.source_token : token.address,
+  );
   const { useAllowance } = usePollAllowance({
     contract: lendPoolImplementationAddress,
     token,
@@ -75,7 +79,9 @@ const SupplyModalContent = ({
 
   const allowance = useAllowance();
   const { useSelectedReserveData } = usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(token.address);
+  const { data: reserveData } = useSelectedReserveData(
+    token.source_token ? token.source_token : token.address,
+  );
 
   return (
     <div className="flex flex-col gap-6">

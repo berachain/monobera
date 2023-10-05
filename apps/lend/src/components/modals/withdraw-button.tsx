@@ -15,7 +15,9 @@ export default function WithdrawBtn({
   disabled = false,
   variant = "outline",
 }: {
-  token: Token;
+  token: Token & {
+    source_token?: string;
+  };
   disabled?: boolean;
   variant?: "primary" | "outline";
 }) {

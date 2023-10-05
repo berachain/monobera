@@ -12,7 +12,7 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatEther, parseUnits } from "viem";
+import { parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
@@ -67,12 +67,19 @@ const RepayModalContent = ({
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const balance = useSelectedAssetWalletBalance(token.address);
+  const debtBalance = useSelectedAssetWalletBalance(token.address);
+  const tokenBalance = useSelectedAssetWalletBalance(
+    token.source_token ? token.source_token : token.address,
+  );
   const { account } = useBeraJs();
   const { useSelectedReserveData } = usePollReservesDataList();
   const { data: reserveData } = useSelectedReserveData(
     token.source_token ? token.source_token : token.address,
   );
+  const balance =
+    Number(debtBalance.formattedBalance) > Number(tokenBalance.formattedBalance)
+      ? Number(tokenBalance.formattedBalance)
+      : Number(debtBalance.formattedBalance);
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Repay</div>
@@ -102,16 +109,10 @@ const RepayModalContent = ({
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {Number(balance.formattedBalance).toFixed(2)}
+          {balance.toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() =>
-              setAmount(
-                Number(balance.formattedBalance) === 0
-                  ? undefined
-                  : Number(balance.formattedBalance),
-              )
-            }
+            onClick={() => setAmount(balance === 0 ? undefined : balance)}
           >
             MAX
           </span>
@@ -121,26 +122,19 @@ const RepayModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div>${formatter.format(amount ?? 0 * 1)}</div>
+          <div>
+            $
+            {formatter.format(
+              (amount ?? 0) *
+                Number(reserveData.formattedPriceInMarketReferenceCurrency),
+            )}
+          </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Loan APY</div>
           <div className="text-warning-foreground">
-            {(
-              Number(
-                formatEther(
-                  token.debtType === "variable"
-                    ? reserveData.currentVariableBorrowRate
-                    : reserveData.currentStableBorrowRate,
-                ),
-              ) * 100
-            ).toFixed(2)}
-            %
+            {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
           </div>
-        </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Debt Type</div>
-          <div className="capitalize text-foreground">{token.debtType}</div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
@@ -149,9 +143,7 @@ const RepayModalContent = ({
       </div>
 
       <Button
-        disabled={
-          !amount || amount === 0 || amount > Number(balance.formattedBalance)
-        }
+        disabled={!amount || amount === 0 || amount > balance}
         onClick={() => {
           write({
             address: lendPoolImplementationAddress,
@@ -166,7 +158,7 @@ const RepayModalContent = ({
           });
         }}
       >
-        {amount === 0 ? "Enter Amount" : "Withdraw"}
+        {amount === 0 ? "Enter Amount" : "Repay"}
       </Button>
     </div>
   );

@@ -35,7 +35,6 @@ export default function DashboardPageContent() {
       tokenDictionary ?? {},
     ),
   );
-
   return (
     <div className="flex flex-col gap-9 md:gap-6">
       <StatusBanner />
