@@ -11,7 +11,6 @@ export default function UserSupply({
   assets: any[];
   tableView?: boolean;
 }) {
-  console.log("assets", assets);
   return (
     <>
       <div className="text-2xl font-semibold leading-loose">Your Supplies</div>
