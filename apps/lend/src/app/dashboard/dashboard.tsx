@@ -4,6 +4,7 @@ import { Switch } from "@bera/ui/switch";
 
 import { getAssetList } from "~/utils/lendTokenHelper";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
+import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
 import PageLoading from "./page-loading";
@@ -20,12 +21,18 @@ export function Dashboard({
   const { useReservesDataList } = usePollReservesDataList();
   const { data: reservesDictionary, isLoading: isReservesDataLoading } =
     useReservesDataList();
+  const { useUserReservesData } = usePollUserReservesData();
+  const { data: userReservesData, isLoading: isUserReserveDataLoading } =
+    useUserReservesData();
   const BalanceToken = useCurrentAssetWalletBalances();
+
   const assetsDictionary = getAssetList(
     reservesDictionary ?? {},
+    userReservesData ?? {},
     BalanceToken ?? [],
   );
-
+  
+  console.log("assetsDictionary", assetsDictionary);
   return (
     <div className="flex flex-col gap-9 md:gap-6">
       <div className="flex flex-row justify-between">
@@ -43,8 +50,10 @@ export function Dashboard({
         </div>
       </div>
 
-      {/* need refactor after data pulling method update */}
-      {BalanceToken && BalanceToken.length > 0 && !isReservesDataLoading ? (
+      {BalanceToken &&
+      BalanceToken.length > 0 &&
+      !isReservesDataLoading &&
+      !isUserReserveDataLoading ? (
         <>
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
             <div className="flex flex-1 flex-col gap-4">
