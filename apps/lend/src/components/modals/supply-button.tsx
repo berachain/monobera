@@ -1,35 +1,85 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Tooltip } from "@bera/shared-ui";
+import {
+  formatter,
+  useBeraJs,
+  usePollAllowance,
+  useSelectedAssetWalletBalance,
+  type Token,
+} from "@bera/berajs";
+import { lendPoolImplementationAddress } from "@bera/config";
+import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { parseUnits } from "viem";
 
-export default function SupplyBtn() {
+import { lendPoolImplementationABI } from "~/hooks/abi";
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
+import ApproveButton from "../approve-button";
+
+export default function SupplyBtn({
+  token,
+  disabled = false,
+  variant = "primary",
+}: {
+  token: Token;
+  disabled?: boolean;
+  variant?: "primary" | "outline";
+}) {
   const [open, setOpen] = useState(false);
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const { write, isLoading, ModalPortal, isSuccess } = useTxn({
+    message: `Supplying ${amount} ${token.symbol}`,
+  });
+  const { isReady } = useBeraJs();
+  useEffect(() => setOpen(false), [isSuccess]);
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="flex-1">
-        Supply
+      {ModalPortal}
+      <Button
+        onClick={() => setOpen(true)}
+        className="w-full text-sm leading-5 xl:w-fit"
+        disabled={disabled || isLoading || !isReady}
+        variant={variant}
+      >
+        {isLoading ? "Loading" : "Supply"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
-          <SupplyModalContent />
+          <SupplyModalContent {...{ token, amount, setAmount, write }} />
         </DialogContent>
       </Dialog>
     </>
   );
 }
 
-const SupplyModalContent = () => {
-  const userBalance = 420.69;
-  const [amount, setAmount] = useState(0);
+const SupplyModalContent = ({
+  token,
+  amount,
+  setAmount,
+  write,
+}: {
+  token: Token;
+  amount: number | undefined;
+  setAmount: (amount: number | undefined) => void;
+  write: (arg0: any) => void;
+}) => {
+  const { account } = useBeraJs();
+  const balance = useSelectedAssetWalletBalance(token.address);
+  const { useAllowance } = usePollAllowance({
+    contract: lendPoolImplementationAddress,
+    token,
+  });
+
+  const allowance = useAllowance();
+  const { useSelectedReserveData } = usePollReservesDataList();
+  const { data: reserveData } = useSelectedReserveData(token.address);
 
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Supply</div>
-
       <Image
         src={"/supply.png"}
         alt="supply-img"
@@ -46,16 +96,26 @@ const SupplyModalContent = () => {
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={"ETH"}
+          endAdornment={token.symbol}
           value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e) =>
+            setAmount(
+              Number(e.target.value) === 0 ? undefined : Number(e.target.value),
+            )
+          }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {userBalance}
+          {Number(balance?.formattedBalance).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() => setAmount(userBalance)}
+            onClick={() =>
+              setAmount(
+                Number(balance?.formattedBalance) === 0
+                  ? undefined
+                  : Number(balance?.formattedBalance),
+              )
+            }
           >
             MAX
           </span>
@@ -65,22 +125,50 @@ const SupplyModalContent = () => {
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="">$12,669.42</div>
+          <div>
+            $
+            {formatter.format(
+              (amount ?? 0) *
+                Number(reserveData.formattedPriceInMarketReferenceCurrency),
+            )}
+          </div>
         </div>
-        <div className="flex justify-between  text-sm leading-tight">
+        <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Supply APY</div>
-          <div className="text-success-foreground">6.69%</div>
+          <div className="text-success-foreground">
+            {(Number(reserveData.supplyAPY) * 100).toFixed(2)}%
+          </div>
         </div>
-        <div className="flex justify-between  text-sm leading-tight">
+        <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
           <div className="">0 {"<->"} infinite</div>
-          {/* i didnt make this cause design doesnt make sense 2 me */}
         </div>
       </div>
 
-      <Button disabled={amount === 0 || amount > userBalance}>
-        {amount === 0 ? "Enter Amount" : "Supply"}
-      </Button>
+      {allowance && Number(allowance.formattedAllowance) > (amount ?? 0) ? (
+        <Button
+          disabled={
+            !amount || amount === 0 || amount > Number(balance.formattedBalance)
+          }
+          onClick={() => {
+            write({
+              address: lendPoolImplementationAddress,
+              abi: lendPoolImplementationABI,
+              functionName: "supply",
+              params: [
+                token.address,
+                parseUnits(`${Number(amount)}`, token.decimals),
+                account,
+                parseUnits("0", token.decimals),
+              ],
+            });
+          }}
+        >
+          {amount === 0 ? "Enter Amount" : "Supply"}
+        </Button>
+      ) : (
+        <ApproveButton token={token} spender={lendPoolImplementationAddress} />
+      )}
     </div>
   );
 };

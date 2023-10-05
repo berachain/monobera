@@ -18,7 +18,7 @@ export const HoneyBanner = () => {
               src="/icons/baave.svg"
               width={32}
               height={32}
-              alt="baave"
+              alt="bend"
               className="block h-8 w-8 md:hidden"
             />{" "}
             Supply & Borrow Honey
@@ -38,7 +38,7 @@ export const HoneyBanner = () => {
               src="/icons/baave.svg"
               width={56}
               height={60}
-              alt="baave"
+              alt="bend"
               className="hidden h-8 w-8 md:block lg:h-14 lg:w-14"
             />
             <div className="flex gap-3">
