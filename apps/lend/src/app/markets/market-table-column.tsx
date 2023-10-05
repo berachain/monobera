@@ -1,59 +1,103 @@
 import React from "react";
-import { type Columns } from "@bera/shared-ui";
-import { Icons } from "@bera/ui/icons";
+import { formatUsd, formatter } from "@bera/berajs";
+import { DataTableColumnHeader, TokenIcon } from "@bera/shared-ui";
+import { Skeleton } from "@bera/ui/skeleton";
+import { type ColumnDef } from "@tanstack/react-table";
+import { formatEther } from "viem";
 
-export const market_table_columns: Columns = [
+import InfoButton from "~/components/info-button";
+
+export const market_table_columns: ColumnDef<any>[] = [
   {
-    header: <div className="w-[130px] text-left">Market</div>,
-    accessor: "market",
-  },
-  {
-    header: (
-      <div className="flex w-[156px] gap-1">
-        Total Supplied
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Market" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2 text-sm font-medium leading-none">
+        {row.original.token ? (
+          <TokenIcon
+            token={row.original.token}
+            size="lg"
+            key={row.original.address}
+          />
+        ) : (
+          <Skeleton className="h-6 w-6" />
+        )}
+        {row.original.token.name}
       </div>
     ),
-    accessor: "total_supplied",
+    accessorKey: "token",
+    enableSorting: false,
   },
   {
-    header: (
-      <div className="flex w-[85px] gap-1">
-        Supply APY
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Total Supplied" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex flex-col pl-1">
+        <div className="font-base text-base font-medium">
+          {formatter.format(row.original.totalLiquidity)}
+        </div>
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
+          {formatUsd(
+            Number(row.original.totalLiquidity) *
+              Number(row.original.formattedPriceInMarketReferenceCurrency),
+          )}
+        </div>
       </div>
     ),
-    accessor: "supply_apy",
+    accessorKey: "totalLiquidity",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[156px] gap-1">
-        Total Borrowed
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Supply APY" />
+    ),
+    cell: ({ row }) => (
+      <div className="text-base text-success-foreground">
+        {(Number(row.original.supplyAPY) * 100).toFixed(2)}%
       </div>
     ),
-    accessor: "total_borrowed",
+    accessorKey: "supplyAPY",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[138px] gap-1">
-        Borrow APY Variable
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Total Borrowed" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex flex-col pl-1 text-base">
+        {formatter.format(Number(row.original.totalDebt))}
+
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
+          $
+          {formatter.format(
+            row.original.totalDebt *
+              row.original.formattedPriceInMarketReferenceCurrency,
+          )}
+        </div>
       </div>
     ),
-    accessor: "borrow_apy_variable",
+    accessorKey: "totalBorrowed",
+    enableSorting: true,
   },
   {
-    header: (
-      <div className="flex w-[138px] gap-1">
-        Borrow APY Stable
-        <Icons.arrowUpDown className="relative h-4 w-4 text-muted-foreground hover:cursor-pointer" />
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Borrow APY Variable" />
+    ),
+    cell: ({ row }) => (
+      <div className="pl-4 text-base text-success-foreground">
+        {(Number(formatEther(row.original.variableBorrowAPY)) * 100).toFixed(2)}
+        %
       </div>
     ),
-    accessor: "borrow_apy_stable",
+    accessorKey: "currentVariableBorrowRate",
+    enableSorting: true,
   },
   {
-    header: <div className="h-1 w-[91px]" />,
-    accessor: "details",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
+    cell: ({ row }) => <InfoButton address={row.original.underlyingAsset} />,
+    accessorKey: "details",
+    enableSorting: false,
   },
 ];

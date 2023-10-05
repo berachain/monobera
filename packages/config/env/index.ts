@@ -10,6 +10,7 @@ export const blockExplorerUrl = process.env
   .NEXT_PUBLIC_BLOCK_EXPLORER as string;
 export const blockExplorerName = process.env
   .NEXT_PUBLIC_BLOCK_EXPLORER_NAME as string;
+export const lendEndpointUrl = process.env.NEXT_PUBLIC_LEND_ENDPOINT as string;
 
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;
@@ -85,6 +86,14 @@ export const erc20BribeAddress = process.env
   .NEXT_PUBLIC_ERC20_BRIBE_ADDRESS as Address;
 export const erc20RewardsAddress = process.env
   .NEXT_PUBLIC_REWARDS_ADDRESS as Address;
+export const lendPoolImplementationAddress = process.env
+  .NEXT_PUBLIC_LEND_POOL_IMPLEMENTATION_ADDRESS as Address;
+export const lendOracleAddress = process.env
+  .NEXT_PUBLIC_LEND_ORACLE_ADDRESS as Address;
+export const lendUIDataProviderAddress = process.env
+  .NEXT_PUBLIC_LEND_UI_DATA_PROVIDER_ADDRESS as Address;
+export const lendPoolAddressProviderAddress = process.env
+  .NEXT_PUBLIC_LEND_POOL_ADDRESS_PROVIDER as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env

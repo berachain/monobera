@@ -13,6 +13,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@aave/math-utils": "^1.20.0",
     "@bera/bera-router": "0.1.0",
     "@bera/berajs": "0.1.0",
     "@bera/config": "0.1.0",
