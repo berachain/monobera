@@ -84,7 +84,9 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                     )}
                   </div>
                 </div>
-                <SupplyBtn token={token} disabled={supplyAmount === 0} />
+                <div>
+                  <SupplyBtn token={token} disabled={supplyAmount === 0} />
+                </div>
               </div>
 
               <div className="mt-4 flex items-center justify-between">
@@ -105,7 +107,9 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                     )}
                   </div>
                 </div>
-                <BorrowBtn token={token} disabled={borrowAmout === 0} />
+                <div>
+                  <BorrowBtn token={token} disabled={borrowAmout === 0} />
+                </div>
               </div>
             </div>
           </Card>
