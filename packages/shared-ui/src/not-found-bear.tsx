@@ -23,6 +23,7 @@ export function NotFoundBear({
         alt="not found bear"
         width={345.35}
         height={200}
+        className="mx-auto"
       />
       <div>
         {title && (
@@ -31,7 +32,7 @@ export function NotFoundBear({
           </div>
         )}
         {subtitle && (
-          <div className="text-center leading-7 text-muted-foreground">
+          <div className="text-center font-medium leading-7 text-muted-foreground">
             {subtitle}
           </div>
         )}

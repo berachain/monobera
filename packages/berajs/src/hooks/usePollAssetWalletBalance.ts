@@ -22,7 +22,7 @@ interface Call {
   args: any[];
 }
 
-export const usePollAssetWalletBalance = () => {
+export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account, isConnected, error } = useBeraJs();
@@ -33,7 +33,8 @@ export const usePollAssetWalletBalance = () => {
     async () => {
       if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {
-        const call: Call[] = tokenList.map((item: Token) => {
+        const fullTokenList = [...tokenList, ...(externalTokenList ?? [])];
+        const call: Call[] = fullTokenList.map((item: Token) => {
           if (item.address === "0x0000000000000000000000000000000000000000") {
             return {
               address: networkConfig.precompileAddresses
@@ -50,6 +51,7 @@ export const usePollAssetWalletBalance = () => {
             args: [account],
           };
         });
+
         try {
           const result = await publicClient.multicall({
             contracts: call,
@@ -59,7 +61,7 @@ export const usePollAssetWalletBalance = () => {
 
           const balances = await Promise.all(
             result.map(async (item: any, index: number) => {
-              const token = tokenList[index];
+              const token = fullTokenList[index];
               if (item.error) {
                 await mutate(
                   [
