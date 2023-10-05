@@ -1,6 +1,6 @@
 version: v1
 plugins:
-  - plugin: buf.build/community/stephenh-ts-proto:v1.156.2
+  - remote: buf.build/stephenh/plugins/ts-proto
     out: .
     opt:
       - esModuleInterop=true
