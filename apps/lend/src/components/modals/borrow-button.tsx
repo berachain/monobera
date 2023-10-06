@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import { formatter, useBeraJs, type Token } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import { Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Input } from "@bera/ui/input";
-import { formatUnits, parseUnits } from "viem";
+import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
@@ -54,10 +55,7 @@ const BorrowModalContent = ({
   setAmount,
   write,
 }: {
-  token: Token & {
-    source_token?: string;
-    debtType?: "variable" | "stable";
-  };
+  token: Token;
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
@@ -65,9 +63,7 @@ const BorrowModalContent = ({
   const { account } = useBeraJs();
   const { useSelectedReserveData, useBaseCurrencyData } =
     usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(
-    token.source_token ? token.source_token : token.address,
-  );
+  const { data: reserveData } = useSelectedReserveData(token.address);
   const { data: baseCurrencyData } = useBaseCurrencyData();
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
@@ -87,9 +83,30 @@ const BorrowModalContent = ({
 
   const borrowAmout =
     borrowPower > availableLiquidity ? availableLiquidity : borrowPower;
+
+  const currentHealthFactor =
+    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
+      ? "∞"
+      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+
+  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
+    collateralBalanceMarketReferenceCurrency: formatEther(
+      userAccountData.totalCollateralBase,
+    ),
+    borrowBalanceMarketReferenceCurrency:
+      Number(formatEther(userAccountData.totalDebtBase)) +
+      (amount ?? 0) *
+        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+
+    currentLiquidationThreshold: formatUnits(
+      userAccountData.currentLiquidationThreshold,
+      4,
+    ),
+  });
+
   return (
     <div className="flex flex-col gap-6">
-      <div className="text-lg font-semibold leading-7">Borrow </div>
+      <div className="text-lg font-semibold leading-7">Borrow</div>
       <Image
         src={"/supply.png"}
         alt="supply-img"
@@ -128,11 +145,22 @@ const BorrowModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">LTV Health Ratio</div>
-          <div className="">0 {"<->"} 1.69</div>
+          <div className="">
+            {currentHealthFactor} {"->"}{" "}
+            {Number(newHealthFactor.toFixed(2)) < 0
+              ? "∞"
+              : newHealthFactor.toFixed(2)}
+          </div>
         </div>
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground">Estimated Value</div>
-          <div className="">${formatter.format(amount ?? 0 * 1)}</div>
+          <div className="">
+            $
+            {formatter.format(
+              (amount ?? 0) *
+                Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+            )}
+          </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">Variable Borrow APY</div>
@@ -150,8 +178,8 @@ const BorrowModalContent = ({
             abi: lendPoolImplementationABI,
             functionName: "borrow",
             params: [
-              token.source_token ? token.source_token : token.address,
-              parseUnits(`${Number(amount ?? 0)}`, token.decimals),
+              token.address,
+              parseUnits(`${Number(amount)}`, token.decimals),
               2,
               0,
               account,

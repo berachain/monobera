@@ -31,8 +31,7 @@ export function Dashboard({
     userReservesData ?? {},
     BalanceToken ?? [],
   );
-  
-  console.log("assetsDictionary", assetsDictionary);
+
   return (
     <div className="flex flex-col gap-9 md:gap-6">
       <div className="flex flex-row justify-between">

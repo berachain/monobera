@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   formatter,
   useBeraJs,
@@ -13,10 +14,11 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { parseUnits } from "viem";
+import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
+import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 import ApproveButton from "../approve-button";
 
 export default function SupplyBtn({
@@ -61,17 +63,13 @@ const SupplyModalContent = ({
   setAmount,
   write,
 }: {
-  token: Token & {
-    source_token?: string;
-  };
+  token: Token;
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const { account } = useBeraJs();
-  const balance = useSelectedAssetWalletBalance(
-    token.source_token ? token.source_token : token.address,
-  );
+  const balance = useSelectedAssetWalletBalance(token.address);
   const { useAllowance } = usePollAllowance({
     contract: lendPoolImplementationAddress,
     token,
@@ -79,9 +77,28 @@ const SupplyModalContent = ({
 
   const allowance = useAllowance();
   const { useSelectedReserveData } = usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(
-    token.source_token ? token.source_token : token.address,
-  );
+  const { data: reserveData } = useSelectedReserveData(token.address);
+  const { useUserAccountData } = usePollUserAccountData();
+  const { data: userAccountData } = useUserAccountData();
+
+  const currentHealthFactor =
+    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
+      ? "∞"
+      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+
+  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
+    collateralBalanceMarketReferenceCurrency:
+      Number(formatEther(userAccountData.totalCollateralBase)) +
+      (amount ?? 0) *
+        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+    borrowBalanceMarketReferenceCurrency: formatEther(
+      userAccountData.totalDebtBase,
+    ),
+    currentLiquidationThreshold: formatUnits(
+      userAccountData.currentLiquidationThreshold,
+      4,
+    ),
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -147,7 +164,12 @@ const SupplyModalContent = ({
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="">0 {"<->"} infinite</div>
+          <div className="">
+            {currentHealthFactor} {"->"}{" "}
+            {Number(newHealthFactor.toFixed(2)) < 0
+              ? "∞"
+              : newHealthFactor.toFixed(2)}
+          </div>
         </div>
       </div>
 
