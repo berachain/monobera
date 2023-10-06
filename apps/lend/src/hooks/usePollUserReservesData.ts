@@ -50,7 +50,7 @@ export const usePollUserReservesData = () => {
   };
 
   return {
-    mutate,
+    refetch: () => void mutate(QUERY_KEY),
     useUserReservesData,
     useSelectedUserReservesData,
   };

@@ -19,6 +19,7 @@ import { maxUint256 } from "~/utils/constants";
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
+import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function RepayBtn({
   token,
@@ -32,8 +33,18 @@ export default function RepayBtn({
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `Supplying ${amount} ${token.symbol}`,
+    message: `Repaying ${amount} ${token.symbol}`,
+    onSuccess: () => {
+      userAccountRefetch();
+      reservesDataRefetch();
+      userReservesRefetch();
+    },
   });
+
+  const { refetch: userAccountRefetch } = usePollUserAccountData();
+  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: userReservesRefetch } = usePollUserReservesData();
+
   useEffect(() => setOpen(false), [isSuccess]);
   return (
     <>
@@ -76,7 +87,6 @@ const RepayModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  console.log(reserveData);
   const balance =
     Number(debtBalance) > Number(tokenBalance) ? tokenBalance : debtBalance;
 

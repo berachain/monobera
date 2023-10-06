@@ -13,6 +13,7 @@ import { formatEther, formatUnits, parseUnits } from "viem";
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
+import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function WithdrawBtn({
   token,
@@ -26,8 +27,17 @@ export default function WithdrawBtn({
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `Supplying ${amount} ${token.symbol}`,
+    message: `Withdrawing ${amount} ${token.symbol}`,
+    onSuccess: () => {
+      userAccountRefetch();
+      reservesDataRefetch();
+      userReservesRefetch();
+    },
   });
+  const { refetch: userAccountRefetch } = usePollUserAccountData();
+  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: userReservesRefetch } = usePollUserReservesData();
+  
   useEffect(() => setOpen(false), [isSuccess]);
   return (
     <>
