@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import { formatter, useBeraJs, type Token } from "@bera/berajs";
@@ -25,9 +25,10 @@ export default function WithdrawBtn({
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
-  const { write, isLoading, ModalPortal } = useTxn({
+  const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Supplying ${amount} ${token.symbol}`,
   });
+  useEffect(() => setOpen(false), [isSuccess]);
   return (
     <>
       {" "}

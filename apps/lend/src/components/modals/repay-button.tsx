@@ -35,7 +35,6 @@ export default function RepayBtn({
     message: `Supplying ${amount} ${token.symbol}`,
   });
   useEffect(() => setOpen(false), [isSuccess]);
-
   return (
     <>
       {ModalPortal}
