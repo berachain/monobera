@@ -99,7 +99,7 @@ export default function UserTokenCard({
         </div>
       </div>
       {type === "borrow" && Number(asset.formattedBalance) === 0 && (
-        <Alert variant="destructive" className="">
+        <Alert variant="destructive" className="mt-4">
           <AlertTitle>
             {" "}
             <Icons.info className="mr-1 inline-block h-4 w-4" />

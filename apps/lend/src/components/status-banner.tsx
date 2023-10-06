@@ -111,7 +111,7 @@ export default function StatusBanner() {
         ))}
       </div>
 
-      <div className="hidden gap-4 lg:flex">
+      <div className="hidden gap-4 xl:flex">
         {info.map((item, index) => (
           <div key={index + item.title} className="flex flex-col">
             <div className="text-sm font-normal leading-normal text-muted-foreground">

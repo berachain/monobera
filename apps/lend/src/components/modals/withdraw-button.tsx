@@ -6,6 +6,7 @@ import { lendPoolImplementationAddress } from "@bera/config";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
+import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
@@ -131,20 +132,24 @@ const WithdrawModalContent = ({
       </div>
 
       <div className="flex flex-col gap-2">
-        <div className="flex justify-between  text-sm leading-tight">
+        <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className=""> ${formatter.format(amount ?? 0 * 1)}</div>
+          <div className="font-semibold">
+            {" "}
+            ${formatter.format(amount ?? 0 * 1)}
+          </div>
         </div>
-        <div className="flex justify-between  text-sm leading-tight">
+        <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Supply APY</div>
-          <div className="text-success-foreground">
+          <div className="font-semibold text-success-foreground">
             {(reserveData.supplyAPR * 100).toFixed(2)}%
           </div>
         </div>
-        <div className="flex justify-between  text-sm leading-tight">
+        <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="">
-            {currentHealthFactor} {"->"}{" "}
+          <div className="flex items-center gap-1 font-semibold">
+            {currentHealthFactor}{" "}
+            <Icons.moveRight className="inline-block h-6 w-6" />{" "}
             {Number(newHealthFactor.toFixed(2)) < 0
               ? "∞"
               : newHealthFactor.toFixed(2)}

@@ -1,5 +1,6 @@
 import React from "react";
 import { DataTable } from "@bera/shared-ui";
+import { parseEther } from "viem";
 
 import UserTokenCard from "~/components/user-token-card";
 import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
@@ -18,17 +19,15 @@ export default function AvailableBorrows({
   const { useUserAccountData } = usePollUserAccountData();
   const { data } = useUserAccountData();
   assets.forEach((asset) => {
-    if (
-      reservesPrices &&
-      data &&
-      reservesPrices[asset.address] &&
-      data.availableBorrowsBase
-    ) {
-      asset.balance =
-        data.availableBorrowsBase / reservesPrices[asset.address].price;
+    if (reservesPrices && data && reservesPrices[asset.address]) {
+      const tokenPrice = parseEther(
+        asset.reserveData.formattedPriceInMarketReferenceCurrency,
+      );
+      asset.balance = data.availableBorrowsBase / tokenPrice;
       asset.formattedBalance = BigInt(asset.balance).toString();
     }
   });
+
   return (
     <>
       <div className="text-2xl font-semibold leading-loose">

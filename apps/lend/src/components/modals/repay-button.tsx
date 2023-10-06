@@ -77,6 +77,7 @@ const RepayModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
+  console.log(reserveData);
   const balance =
     Number(debtBalance) > Number(tokenBalance) ? tokenBalance : debtBalance;
 
@@ -132,7 +133,7 @@ const RepayModalContent = ({
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {balance}
+          {Number(balance).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() =>
@@ -147,27 +148,29 @@ const RepayModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div>
+          <div className="flex items-center font-semibold">
             $
             {formatter.format(
-              Number(amount) *
+              Number(amount ?? 0) *
                 Number(reserveData.formattedPriceInMarketReferenceCurrency),
             )}
           </div>
         </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Loan APY</div>
-          <div className="text-warning-foreground">
-            {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
-          </div>
-        </div>
+
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="">
-            {currentHealthFactor} {"->"}{" "}
+          <div className="flex items-center gap-1 gap-2 font-semibold">
+            {currentHealthFactor}{" "}
+            <Icons.moveRight className="inline-block h-6 w-6" />{" "}
             {Number(newHealthFactor.toFixed(2)) < 0
               ? "∞"
               : newHealthFactor.toFixed(2)}
+          </div>
+        </div>
+        <div className="flex justify-between text-sm leading-tight">
+          <div className="text-muted-foreground ">Loan APY</div>
+          <div className="font-semibold text-warning-foreground">
+            {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
           </div>
         </div>
       </div>
