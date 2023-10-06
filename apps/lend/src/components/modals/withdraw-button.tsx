@@ -37,7 +37,7 @@ export default function WithdrawBtn({
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
   const { refetch: userReservesRefetch } = usePollUserReservesData();
-  
+
   useEffect(() => setOpen(false), [isSuccess]);
   return (
     <>
@@ -45,7 +45,7 @@ export default function WithdrawBtn({
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-fit text-sm leading-5"
+        className="w-full text-sm leading-5 xl:w-fit"
         disabled={disabled || isLoading}
         variant={variant}
       >

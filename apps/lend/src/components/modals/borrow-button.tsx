@@ -8,6 +8,7 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import bigDecimal from "js-big-decimal";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
@@ -26,7 +27,7 @@ export default function BorrowBtn({
 }) {
   const { isReady } = useBeraJs();
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const [amount, setAmount] = useState<string | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Borrowing ${amount} ${token.symbol}`,
     onSuccess: () => {
@@ -68,8 +69,8 @@ const BorrowModalContent = ({
   write,
 }: {
   token: Token;
-  amount: number | undefined;
-  setAmount: (amount: number | undefined) => void;
+  amount: string | undefined;
+  setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const { account } = useBeraJs();
@@ -80,26 +81,31 @@ const BorrowModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  const borrowPower =
-    Number(
-      formatUnits(
-        userAccountData?.availableBorrowsBase ?? "0",
-        baseCurrencyData?.networkBaseTokenPriceDecimals,
-      ),
-    ) / Number(reserveData?.formattedPriceInMarketReferenceCurrency);
-
-  const availableLiquidity =
-    Number(reserveData?.totalLiquidity) *
-    Number(reserveData?.formattedPriceInMarketReferenceCurrency) *
-    Number(1 - reserveData?.borrowUsageRatio);
+  const borrowPower = bigDecimal.divide(
+    formatUnits(
+      userAccountData?.availableBorrowsBase ?? "0",
+      baseCurrencyData?.networkBaseTokenPriceDecimals,
+    ),
+    reserveData?.formattedPriceInMarketReferenceCurrency,
+    token.decimals,
+  );
+  const availableLiquidity = bigDecimal.multiply(
+    formatUnits(reserveData?.availableLiquidity, token.decimals),
+    reserveData?.formattedPriceInMarketReferenceCurrency,
+  );
 
   const borrowAmout =
-    borrowPower > availableLiquidity ? availableLiquidity : borrowPower;
+    bigDecimal.compareTo(borrowPower, availableLiquidity) === 1
+      ? availableLiquidity
+      : borrowPower;
 
   const currentHealthFactor =
-    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
+    bigDecimal.compareTo(
+      formatEther(userAccountData?.healthFactor || "0"),
+      1000000000000,
+    ) === 1
       ? "∞"
-      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+      : bigDecimal.round(formatEther(userAccountData.healthFactor), 2);
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency: formatEther(
@@ -107,7 +113,7 @@ const BorrowModalContent = ({
     ),
     borrowBalanceMarketReferenceCurrency:
       Number(formatEther(userAccountData.totalDebtBase)) +
-      (amount ?? 0) *
+      (Number(amount) ?? 0) *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
 
     currentLiquidationThreshold: formatUnits(
@@ -143,13 +149,11 @@ const BorrowModalContent = ({
           }
           value={amount}
           onChange={(e) =>
-            setAmount(
-              Number(e.target.value) === 0 ? undefined : Number(e.target.value),
-            )
+            setAmount(Number(e.target.value) === 0 ? undefined : e.target.value)
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          Availabe to borrow: {borrowAmout.toFixed(2)}
+          Availabe to borrow: {bigDecimal.round(borrowAmout, 2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() => setAmount(borrowAmout)}
@@ -175,7 +179,7 @@ const BorrowModalContent = ({
           <div className="font-semibold">
             $
             {formatter.format(
-              (amount ?? 0) *
+              (Number(amount) ?? 0) *
                 Number(reserveData?.formattedPriceInMarketReferenceCurrency),
             )}
           </div>
@@ -189,7 +193,11 @@ const BorrowModalContent = ({
       </div>
 
       <Button
-        disabled={!amount || amount === 0 || amount > borrowAmout}
+        disabled={
+          !amount ||
+          Number(amount) === 0 ||
+          Number(amount) > Number(borrowAmout)
+        }
         onClick={() => {
           write({
             address: lendPoolImplementationAddress,
@@ -197,7 +205,7 @@ const BorrowModalContent = ({
             functionName: "borrow",
             params: [
               token.address,
-              parseUnits(`${Number(amount)}`, token.decimals),
+              parseUnits(`${amount}` as `${number}`, token.decimals),
               2,
               0,
               account,
@@ -205,7 +213,7 @@ const BorrowModalContent = ({
           });
         }}
       >
-        {amount === 0 ? "Enter Amount" : "Borrow"}
+        {!amount ? "Enter Amount" : "Borrow"}
       </Button>
     </div>
   );
