@@ -26,7 +26,11 @@ export default function TotalBorrowed({
   const info = [
     {
       title: "Reserve factor",
-      value: `${Number(reserveData?.reserveFactor) * 100}%`,
+      value: reserveData ? (
+        `${Number(reserveData?.reserveFactor) * 100}%`
+      ) : (
+        <Skeleton className="h-7 w-20" />
+      ),
       tooltip:
         "The Maximum LTV ratio represents the maximum borrowing power of a specific collateral. For example, if a collateral has an LTV of 75%, the user can borrow up to 0.75 worth of ETH in the principal currency for every 1 ETH worth of collateral.",
     },
@@ -67,14 +71,22 @@ export default function TotalBorrowed({
               <div className="text-sm font-normal leading-normal text-muted-foreground">
                 Total Borrowed
               </div>
-              <div className=" font-semibold leading-7 md:text-xl">
-                {formatter.format(Number(reserveData?.totalDebt))} of{" "}
-                {formatter.format(Number(reserveData?.borrowCap))}
-              </div>
-              <div className="text-xs font-medium leading-tight text-muted-foreground">
-                ${formatter.format(Number(reserveData?.totalDebtUSD))} of $
-                {formatter.format(Number(reserveData?.borrowCapUSD))}
-              </div>
+              {reserveData ? (
+                <div className=" font-semibold leading-7 md:text-xl">
+                  {formatter.format(Number(reserveData?.totalDebt))} of{" "}
+                  {formatter.format(Number(reserveData?.borrowCap))}
+                </div>
+              ) : (
+                <Skeleton className="h-7 w-[150px]" />
+              )}
+              {reserveData ? (
+                <div className="text-xs font-medium leading-tight text-muted-foreground">
+                  ${formatter.format(Number(reserveData?.totalDebtUSD))} of $
+                  {formatter.format(Number(reserveData?.borrowCapUSD))}
+                </div>
+              ) : (
+                <Skeleton className="h-4 w-[150px]" />
+              )}
             </div>
           </div>
 
@@ -83,22 +95,30 @@ export default function TotalBorrowed({
               <div className="text-sm font-normal leading-normal text-muted-foreground">
                 Available to Borrow <Tooltip text="?" />
               </div>
-              <div className="font-semibold leading-7 md:text-xl">
-                {formatter.format(
-                  Number(reserveData?.totalLiquidity) *
-                    Number(1 - reserveData?.borrowUsageRatio),
-                )}
-              </div>
-              <div className="text-xs font-medium leading-tight text-muted-foreground">
-                ${" "}
-                {formatter.format(
-                  Number(reserveData?.totalLiquidity) *
-                    Number(
-                      reserveData?.formattedPriceInMarketReferenceCurrency,
-                    ) *
-                    Number(1 - reserveData?.borrowUsageRatio),
-                )}
-              </div>
+              {reserveData ? (
+                <div className="font-semibold leading-7 md:text-xl">
+                  {formatter.format(
+                    Number(reserveData?.totalLiquidity) *
+                      Number(1 - reserveData?.borrowUsageRatio),
+                  )}
+                </div>
+              ) : (
+                <Skeleton className="h-7 w-[100px]" />
+              )}
+              {reserveData ? (
+                <div className="text-xs font-medium leading-tight text-muted-foreground">
+                  ${" "}
+                  {formatter.format(
+                    Number(reserveData?.totalLiquidity) *
+                      Number(
+                        reserveData?.formattedPriceInMarketReferenceCurrency,
+                      ) *
+                      Number(1 - reserveData?.borrowUsageRatio),
+                  )}
+                </div>
+              ) : (
+                <Skeleton className="h-4 w-[100px]" />
+              )}
             </div>
 
             <div className="flex flex-col gap-[6px]">

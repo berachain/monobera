@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import { formatter, useBeraJs, type Token } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { Tooltip, useTxn } from "@bera/shared-ui";
+import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatUnits, parseUnits } from "viem";
+import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
@@ -55,10 +56,7 @@ const BorrowModalContent = ({
   setAmount,
   write,
 }: {
-  token: Token & {
-    source_token?: string;
-    debtType?: "variable" | "stable";
-  };
+  token: Token;
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   write: (arg0: any) => void;
@@ -66,9 +64,7 @@ const BorrowModalContent = ({
   const { account } = useBeraJs();
   const { useSelectedReserveData, useBaseCurrencyData } =
     usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(
-    token.source_token ? token.source_token : token.address,
-  );
+  const { data: reserveData } = useSelectedReserveData(token.address);
   const { data: baseCurrencyData } = useBaseCurrencyData();
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
@@ -88,6 +84,27 @@ const BorrowModalContent = ({
 
   const borrowAmout =
     borrowPower > availableLiquidity ? availableLiquidity : borrowPower;
+
+  const currentHealthFactor =
+    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
+      ? "∞"
+      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+
+  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
+    collateralBalanceMarketReferenceCurrency: formatEther(
+      userAccountData.totalCollateralBase,
+    ),
+    borrowBalanceMarketReferenceCurrency:
+      Number(formatEther(userAccountData.totalDebtBase)) +
+      (amount ?? 0) *
+        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+
+    currentLiquidationThreshold: formatUnits(
+      userAccountData.currentLiquidationThreshold,
+      4,
+    ),
+  });
+
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Borrow</div>
@@ -107,7 +124,12 @@ const BorrowModalContent = ({
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={token.symbol}
+          endAdornment={
+            <div className="flex items-center gap-1">
+              <TokenIcon token={token} size={"md"} />
+              {token.symbol}
+            </div>
+          }
           value={amount}
           onChange={(e) =>
             setAmount(
@@ -116,8 +138,7 @@ const BorrowModalContent = ({
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {borrowAmout.toFixed(2)}
+          Availabe to borrow: {borrowAmout.toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() => setAmount(borrowAmout)}
@@ -130,15 +151,27 @@ const BorrowModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">LTV Health Ratio</div>
-          <div className="">0 {"<->"} 1.69</div>
+          <div className="flex items-center gap-1 font-semibold">
+            {currentHealthFactor}{" "}
+            <Icons.moveRight className="inline-block h-6 w-6" />{" "}
+            {Number(newHealthFactor.toFixed(2)) < 0
+              ? "∞"
+              : newHealthFactor.toFixed(2)}
+          </div>
         </div>
-        <div className="flex justify-between  text-sm leading-tight">
+        <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">Estimated Value</div>
-          <div className="">${formatter.format(amount ?? 0 * 1)}</div>
+          <div className="font-semibold">
+            $
+            {formatter.format(
+              (amount ?? 0) *
+                Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+            )}
+          </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">Variable Borrow APY</div>
-          <div className="text-warning-foreground">
+          <div className="font-semibold text-warning-foreground">
             {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
           </div>
         </div>
@@ -152,8 +185,8 @@ const BorrowModalContent = ({
             abi: lendPoolImplementationABI,
             functionName: "borrow",
             params: [
-              token.source_token ? token.source_token : token.address,
-              parseUnits(`${Number(amount ?? 0)}`, token.decimals),
+              token.address,
+              parseUnits(`${Number(amount)}`, token.decimals),
               2,
               0,
               account,

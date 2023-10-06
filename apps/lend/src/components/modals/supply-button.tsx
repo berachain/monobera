@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   formatter,
   useBeraJs,
@@ -8,15 +9,16 @@ import {
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { Tooltip, useTxn } from "@bera/shared-ui";
+import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { parseUnits } from "viem";
+import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
+import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 import ApproveButton from "../approve-button";
 
 export default function SupplyBtn({
@@ -31,7 +33,7 @@ export default function SupplyBtn({
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `Supplying ${amount} ${token.symbol}`,
+    message: `Supplying ${amount} ${token?.symbol}`,
   });
   const { isReady } = useBeraJs();
   useEffect(() => setOpen(false), [isSuccess]);
@@ -76,6 +78,27 @@ const SupplyModalContent = ({
   const allowance = useAllowance();
   const { useSelectedReserveData } = usePollReservesDataList();
   const { data: reserveData } = useSelectedReserveData(token.address);
+  const { useUserAccountData } = usePollUserAccountData();
+  const { data: userAccountData } = useUserAccountData();
+
+  const currentHealthFactor =
+    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
+      ? "∞"
+      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+
+  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
+    collateralBalanceMarketReferenceCurrency:
+      Number(formatEther(userAccountData.totalCollateralBase)) +
+      (amount ?? 0) *
+        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+    borrowBalanceMarketReferenceCurrency: formatEther(
+      userAccountData.totalDebtBase,
+    ),
+    currentLiquidationThreshold: formatUnits(
+      userAccountData.currentLiquidationThreshold,
+      4,
+    ),
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -96,7 +119,12 @@ const SupplyModalContent = ({
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={token.symbol}
+          endAdornment={
+            <div className="flex items-center gap-1">
+              <TokenIcon token={token} size={"md"} />
+              {token.symbol}
+            </div>
+          }
           value={amount}
           onChange={(e) =>
             setAmount(
@@ -125,7 +153,7 @@ const SupplyModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div>
+          <div className="font-semibold">
             $
             {formatter.format(
               (amount ?? 0) *
@@ -135,13 +163,19 @@ const SupplyModalContent = ({
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Supply APY</div>
-          <div className="text-success-foreground">
+          <div className="font-semibold text-success-foreground">
             {(Number(reserveData.supplyAPY) * 100).toFixed(2)}%
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="">0 {"<->"} infinite</div>
+          <div className="flex items-center gap-1 font-semibold">
+            {currentHealthFactor}{" "}
+            <Icons.moveRight className="inline-block h-6 w-6" />
+            {Number(newHealthFactor.toFixed(2)) < 0
+              ? "∞"
+              : newHealthFactor.toFixed(2)}
+          </div>
         </div>
       </div>
 

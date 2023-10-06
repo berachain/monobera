@@ -24,25 +24,37 @@ export default function TotalSupplied({
   const info = [
     {
       title: "Max LTV",
-      value: `${(
-        Number(reserveData?.formattedBaseLTVasCollateral) * 100
-      ).toFixed(2)}%`,
+      value: reserveData ? (
+        `${(Number(reserveData?.formattedBaseLTVasCollateral) * 100).toFixed(
+          2,
+        )}%`
+      ) : (
+        <Skeleton className="h-7 w-20" />
+      ),
       tooltip:
         "The Maximum LTV ratio represents the maximum borrowing power of a specific collateral. For example, if a collateral has an LTV of 75%, the user can borrow up to 0.75 worth of ETH in the principal currency for every 1 ETH worth of collateral.",
     },
     {
       title: "Liquidation Threshold",
-      value: `${(
-        Number(reserveData?.formattedReserveLiquidationThreshold) * 100
-      ).toFixed(2)}%`,
+      value: reserveData ? (
+        `${(
+          Number(reserveData?.formattedReserveLiquidationThreshold) * 100
+        ).toFixed(2)}%`
+      ) : (
+        <Skeleton className="h-7 w-20" />
+      ),
       tooltip:
         "This represents the threshold at which a borrow position will be considered undercollateralized and subject to liquidation for each collateral. For example, if a collateral has a liquidation threshold of 80%, it means that the position will be liquidated when the debt value is worth 80% of the collateral value.",
     },
     {
       title: "Liquidation Penalty",
-      value: `${(
-        Number(reserveData?.formattedReserveLiquidationBonus) * 100
-      ).toFixed(2)}%`,
+      value: reserveData ? (
+        `${(
+          Number(reserveData?.formattedReserveLiquidationBonus) * 100
+        ).toFixed(2)}%`
+      ) : (
+        <Skeleton className="h-7 w-20" />
+      ),
       tooltip:
         "When a liquidation occurs, liquidators repay up to 50% of the outstanding borrowed amount on behalf of the borrower. In return, they can buy the collateral at a discount and keep the difference as a bonus.",
     },
@@ -70,14 +82,22 @@ export default function TotalSupplied({
             <div className="text-xs font-normal leading-normal text-muted-foreground md:text-sm">
               Total Supplied
             </div>
-            <div className="font-semibold leading-7 md:text-xl">
-              {formatter.format(Number(reserveData?.totalLiquidity))} of{" "}
-              {formatter.format(Number(reserveData?.supplyCap))}
-            </div>
-            <div className="text-xs font-medium leading-tight text-muted-foreground">
-              ${formatter.format(Number(reserveData?.totalLiquidityUSD))} of $
-              {formatter.format(Number(reserveData?.supplyCapUSD))}
-            </div>
+            {reserveData ? (
+              <div className="font-semibold leading-7 md:text-xl">
+                {formatter.format(Number(reserveData?.totalLiquidity))} of{" "}
+                {formatter.format(Number(reserveData?.supplyCap))}
+              </div>
+            ) : (
+              <Skeleton className="h-7 w-[150px]" />
+            )}
+            {reserveData ? (
+              <div className="text-xs font-medium leading-tight text-muted-foreground">
+                ${formatter.format(Number(reserveData?.totalLiquidityUSD))} of $
+                {formatter.format(Number(reserveData?.supplyCapUSD))}
+              </div>
+            ) : (
+              <Skeleton className="h-4 w-[100px]" />
+            )}
           </div>
 
           <div className="flex flex-col gap-[6px]">
