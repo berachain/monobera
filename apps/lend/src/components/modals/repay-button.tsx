@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   formatter,
   useBeraJs,
@@ -7,15 +8,17 @@ import {
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { Tooltip, useTxn } from "@bera/shared-ui";
+import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatEther, parseUnits } from "viem";
+import { formatEther, formatUnits, parseUnits } from "viem";
 
+import { maxUint256 } from "~/utils/constants";
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
+import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 
 export default function RepayBtn({
   token,
@@ -27,7 +30,7 @@ export default function RepayBtn({
   variant?: "primary" | "outline";
 }) {
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const [amount, setAmount] = useState<string | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Supplying ${amount} ${token.symbol}`,
   });
@@ -59,20 +62,45 @@ const RepayModalContent = ({
   setAmount,
   write,
 }: {
-  token: Token & {
-    source_token?: string;
-    debtType?: "variable" | "stable";
-  };
-  amount: number | undefined;
-  setAmount: (amount: number | undefined) => void;
+  token: Token;
+  amount: string | undefined;
+  setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const balance = useSelectedAssetWalletBalance(token.address);
+  const debtBalance = token.formattedBalance;
+  const tokenB = useSelectedAssetWalletBalance(token.address);
+  const tokenBalance = tokenB.formattedBalance;
+
   const { account } = useBeraJs();
   const { useSelectedReserveData } = usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(
-    token.source_token ? token.source_token : token.address,
-  );
+  const { data: reserveData } = useSelectedReserveData(token.address);
+  const { useUserAccountData } = usePollUserAccountData();
+  const { data: userAccountData } = useUserAccountData();
+
+  console.log(reserveData);
+  const balance =
+    Number(debtBalance) > Number(tokenBalance) ? tokenBalance : debtBalance;
+
+  const currentHealthFactor =
+    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
+      ? "∞"
+      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+
+  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
+    collateralBalanceMarketReferenceCurrency: formatEther(
+      userAccountData.totalCollateralBase,
+    ),
+    borrowBalanceMarketReferenceCurrency:
+      Number(formatEther(userAccountData.totalDebtBase)) -
+      (Number(amount) ?? 0) *
+        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+
+    currentLiquidationThreshold: formatUnits(
+      userAccountData.currentLiquidationThreshold,
+      4,
+    ),
+  });
+
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Repay</div>
@@ -92,25 +120,24 @@ const RepayModalContent = ({
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={token.symbol}
+          endAdornment={
+            <div className="flex items-center gap-1">
+              <TokenIcon token={token} size={"md"} />
+              {token.symbol}
+            </div>
+          }
           value={amount}
           onChange={(e) =>
-            setAmount(
-              Number(e.target.value) === 0 ? undefined : Number(e.target.value),
-            )
+            setAmount(Number(e.target.value) === 0 ? undefined : e.target.value)
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {Number(balance.formattedBalance).toFixed(2)}
+          {Number(balance).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() =>
-              setAmount(
-                Number(balance.formattedBalance) === 0
-                  ? undefined
-                  : Number(balance.formattedBalance),
-              )
+              setAmount(Number(balance) === 0 ? undefined : balance)
             }
           >
             MAX
@@ -121,36 +148,36 @@ const RepayModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div>${formatter.format(amount ?? 0 * 1)}</div>
+          <div className="flex items-center font-semibold">
+            $
+            {formatter.format(
+              Number(amount ?? 0) *
+                Number(reserveData.formattedPriceInMarketReferenceCurrency),
+            )}
+          </div>
         </div>
+
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Loan APY</div>
-          <div className="text-warning-foreground">
-            {(
-              Number(
-                formatEther(
-                  token.debtType === "variable"
-                    ? reserveData.currentVariableBorrowRate
-                    : reserveData.currentStableBorrowRate,
-                ),
-              ) * 100
-            ).toFixed(2)}
-            %
+          <div className="text-muted-foreground ">LTV Health Ratio</div>
+          <div className="flex items-center gap-1 gap-2 font-semibold">
+            {currentHealthFactor}{" "}
+            <Icons.moveRight className="inline-block h-6 w-6" />{" "}
+            {Number(newHealthFactor.toFixed(2)) < 0
+              ? "∞"
+              : newHealthFactor.toFixed(2)}
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Debt Type</div>
-          <div className="capitalize text-foreground">{token.debtType}</div>
-        </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="">0 {"<->"} infinite</div>
+          <div className="text-muted-foreground ">Loan APY</div>
+          <div className="font-semibold text-warning-foreground">
+            {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
+          </div>
         </div>
       </div>
 
       <Button
         disabled={
-          !amount || amount === 0 || amount > Number(balance.formattedBalance)
+          !amount || Number(amount) === 0 || Number(amount) > Number(balance)
         }
         onClick={() => {
           write({
@@ -158,15 +185,17 @@ const RepayModalContent = ({
             abi: lendPoolImplementationABI,
             functionName: "repay",
             params: [
-              token.source_token ? token.source_token : token.address,
-              parseUnits(`${Number(amount)}`, token.decimals),
-              token.debtType === "variable" ? 2 : 1,
+              token.address,
+              Number(amount) === Number(debtBalance)
+                ? maxUint256
+                : parseUnits(amount as `${number}`, token.decimals),
+              2,
               account,
             ],
           });
         }}
       >
-        {amount === 0 ? "Enter Amount" : "Withdraw"}
+        {Number(amount) === 0 ? "Enter Amount" : "Repay"}
       </Button>
     </div>
   );

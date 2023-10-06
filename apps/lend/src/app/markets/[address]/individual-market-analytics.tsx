@@ -21,17 +21,29 @@ export default function IndividualMarketAnalytics({
   supplyAPR1D,
   supplyAPR7D,
   supplyAPR30D,
+  supplyAPRALL,
   borrowVariableAPR1D,
   borrowVariableAPR7D,
   borrowVariableAPR30D,
+  borrowVariableAPRALL,
+  utilizationRate1D,
+  utilizationRate7D,
+  utilizationRate30D,
+  utilizationRateALL,
 }: {
   address: Address;
   supplyAPR1D: RateItem[];
   supplyAPR7D: RateItem[];
   supplyAPR30D: RateItem[];
+  supplyAPRALL: RateItem[];
   borrowVariableAPR1D: RateItem[];
   borrowVariableAPR7D: RateItem[];
   borrowVariableAPR30D: RateItem[];
+  borrowVariableAPRALL: RateItem[];
+  utilizationRate1D: RateItem[];
+  utilizationRate7D: RateItem[];
+  utilizationRate30D: RateItem[];
+  utilizationRateALL: RateItem[];
 }) {
   usePollAssetWalletBalance();
   const { tokenDictionary } = useTokens();
@@ -67,26 +79,22 @@ export default function IndividualMarketAnalytics({
         </div>
       </div>
 
-      {tokenDictionary && tokenDictionary[address] ? (
-        <TokenInfoCard
-          {...{
-            token: tokenDictionary[address]!,
-            reserve:
-              Number(reserveData?.totalLiquidity) *
-              Number(reserveData?.formattedPriceInMarketReferenceCurrency),
-            liquidity:
-              Number(reserveData?.totalLiquidity) *
-              Number(reserveData?.formattedPriceInMarketReferenceCurrency) *
-              Number(1 - reserveData?.borrowUsageRatio),
-            utilization: Number(reserveData?.borrowUsageRatio),
-            oraclePrice: Number(
-              reserveData?.formattedPriceInMarketReferenceCurrency,
-            ),
-          }}
-        />
-      ) : (
-        <div>loading...</div>
-      )}
+      <TokenInfoCard
+        {...{
+          token: tokenDictionary && tokenDictionary[address],
+          reserve:
+            Number(reserveData?.totalLiquidity) *
+            Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+          liquidity:
+            Number(reserveData?.totalLiquidity) *
+            Number(reserveData?.formattedPriceInMarketReferenceCurrency) *
+            Number(1 - reserveData?.borrowUsageRatio),
+          utilization: Number(reserveData?.borrowUsageRatio),
+          oraclePrice: Number(
+            reserveData?.formattedPriceInMarketReferenceCurrency,
+          ),
+        }}
+      />
 
       <div className="mt-9 flex flex-col gap-8 lg:flex-row">
         <UserInfo token={tokenDictionary && tokenDictionary[address]} />
@@ -97,7 +105,7 @@ export default function IndividualMarketAnalytics({
               "24H": supplyAPR1D,
               "7D": supplyAPR7D,
               "30D": supplyAPR30D,
-              ALL_TIME: supplyAPR30D,
+              ALL_TIME: supplyAPRALL,
             }}
           />
           {address === honeyAddress && (
@@ -107,7 +115,7 @@ export default function IndividualMarketAnalytics({
                 "24H": borrowVariableAPR1D,
                 "7D": borrowVariableAPR7D,
                 "30D": borrowVariableAPR30D,
-                ALL_TIME: borrowVariableAPR30D,
+                ALL_TIME: borrowVariableAPRALL,
               }}
             />
           )}
@@ -119,13 +127,13 @@ export default function IndividualMarketAnalytics({
                   "24H": borrowVariableAPR1D,
                   "7D": borrowVariableAPR7D,
                   "30D": borrowVariableAPR30D,
-                  ALL_TIME: borrowVariableAPR30D,
+                  ALL_TIME: borrowVariableAPRALL,
                 },
                 utilization: {
-                  "24H": supplyAPR1D,
-                  "7D": supplyAPR7D,
-                  "30D": supplyAPR30D,
-                  ALL_TIME: supplyAPR30D,
+                  "24H": utilizationRate1D,
+                  "7D": utilizationRate7D,
+                  "30D": utilizationRate30D,
+                  ALL_TIME: utilizationRateALL,
                 },
               }}
             />

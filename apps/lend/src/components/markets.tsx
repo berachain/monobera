@@ -1,28 +1,30 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { formatUsd, formatter } from "@bera/berajs";
+import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
 
-import { useMarkets, type Market } from "~/hooks/useMarkets";
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 
-interface MarketProps extends Market {
+interface MarketColumnProps {
   className?: string;
+  markets: any[];
+  marketClassName?: (index: number) => string;
+  msPerPixel?: number;
 }
 
 function Market({
-  title,
-  icon,
-  totalSupply,
-  dailyPercentChange,
-  dailyBorrows,
+  market,
   className,
   ...props
-}: MarketProps) {
+}: {
+  market: any;
+  className?: string;
+}) {
   const animationDelay = useMemo(() => {
     const possibleAnimationDelays = [
       "0s",
@@ -47,59 +49,34 @@ function Market({
       {...props}
     >
       <blockquote className="text-foreground">
-        <div className="flex items-center gap-4">
-          <Image
-            src={icon}
-            alt={title}
-            className="rounded-full"
-            width={32}
-            height={32}
-          />
-          <p className="text-xl font-semibold text-muted-foreground">{title}</p>
+        <div className="flex items-center gap-2">
+          <TokenIcon address={market.underlyingAsset} fetch size="xl" />
+          <p className="text-xl font-semibold uppercase text-muted-foreground">
+            {market.symbol}
+          </p>
         </div>
 
         <p className="mt-4 text-3xl font-bold leading-6">
-          ${formatter.format(totalSupply)}
-        </p>
-        <p className="mt-2">
-          {dailyPercentChange > 0 ? (
-            <span className="flex items-center gap-2 text-success-foreground">
-              +{dailyPercentChange}% (24H)
-            </span>
-          ) : (
-            <span className="flex items-center gap-2 text-destructive-foreground">
-              -{dailyPercentChange}% (24H)
-            </span>
+          $
+          {formatter.format(
+            Number(market.totalLiquidity) *
+              Number(market.formattedPriceInMarketReferenceCurrency),
           )}
         </p>
-        <p className="mt-4 text-sm text-muted-foreground">Borrows (24H)</p>
+        <p className="mt-2">
+          <span className="flex items-center gap-2 uppercase text-foreground">
+            {Number(market.totalLiquidity).toLocaleString()} {market.symbol}
+          </span>
+        </p>
+        <p className="mt-4 text-sm text-muted-foreground">
+          Current Token Price
+        </p>
         <p className="mt-1 text-sm font-bold text-muted-foreground">
-          {formatUsd(dailyBorrows)}
+          {formatUsd(Number(market.formattedPriceInMarketReferenceCurrency))}
         </p>
       </blockquote>
     </figure>
   );
-}
-
-function splitArray<T>(array: T[], numParts: number): T[][] {
-  const result: T[][] = [];
-  for (let i = 0; i < array.length; i++) {
-    const index = i % numParts;
-    if (!result[index]) {
-      result[index] = [];
-    }
-
-    // @ts-expect-error - No types
-    result[index].push(array[i]);
-  }
-  return result;
-}
-
-interface MarketColumnProps {
-  className?: string;
-  markets: Market[];
-  marketClassName?: (index: number) => string;
-  msPerPixel?: number;
 }
 
 function MarketColumn({
@@ -116,9 +93,7 @@ function MarketColumn({
     const resizeObserver = new window.ResizeObserver(() => {
       setColumnHeight(columnRef.current?.offsetHeight || 0);
     });
-
     resizeObserver.observe(columnRef.current);
-
     return () => {
       resizeObserver.disconnect();
     };
@@ -131,64 +106,55 @@ function MarketColumn({
       // @ts-expect-error - No types
       style={{ "--marquee-duration": duration }}
     >
-      {markets.concat(markets).map((market, marketIndex) => (
+      {markets.map((market, marketIndex) => (
         <Market
           key={marketIndex}
           aria-hidden={marketIndex >= markets.length}
           // @ts-ignore
           className={marketIndex % markets.length}
-          {...market}
+          market={market}
         />
       ))}
     </div>
   );
 }
 
+function generateArrays(originalArray: any[], length: number) {
+  const result = [];
+  for (let i = 0; i < originalArray.length; i++) {
+    const newArray = [];
+    for (let j = 0; j < length; j++) {
+      newArray.push(originalArray[(i + j) % originalArray.length]);
+    }
+    result.push(newArray);
+  }
+
+  return result;
+}
+
 function MarketGrid() {
   const containerRef = useRef(null);
-  const markets = useMarkets();
-
+  const { useReservesDataList } = usePollReservesDataList();
+  const { data } = useReservesDataList();
+  const markets = Object.keys(data ?? {}).map((key) => data[key]);
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
-  let columns = splitArray(markets, 3);
-  // @ts-expect-error - No types
-  columns = [columns[0], columns[1], splitArray(columns[2], 2)];
+  const columns = generateArrays(markets, 20) as [any[], any[], any[]];
 
   return (
     <div
       ref={containerRef}
       className="relative -mx-4 mt-16 grid h-[472px] max-h-[100vh] grid-cols-1 items-start gap-4 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3 "
     >
-      {isInView && (
+      {isInView && markets.length > 0 && (
         <>
+          <MarketColumn markets={columns[0]} msPerPixel={10} />
           <MarketColumn
-            // @ts-ignore
-            markets={[...columns[0], ...columns[2].flat(), ...columns[1]]}
-            marketClassName={(marketIndex) =>
-              clsx(
-                // @ts-ignore
-                marketIndex >= columns[0].length + columns[2][0].length &&
-                  "md:hidden",
-
-                // @ts-ignore
-                marketIndex >= columns[0].length && "lg:hidden",
-              )
-            }
-            msPerPixel={10}
-          />
-          <MarketColumn
-            // @ts-ignore
-            markets={[...columns[1], ...columns[2][1]]}
+            markets={columns[1]}
             className="hidden md:block"
-            // @ts-ignore
-            marketClassName={(marketIndex) =>
-              // @ts-ignore
-              marketIndex >= columns[1].length && "lg:hidden"
-            }
             msPerPixel={15}
           />
           <MarketColumn
-            // @ts-ignore
-            markets={columns[2].flat()}
+            markets={columns[2]}
             className="hidden lg:block"
             msPerPixel={10}
           />
