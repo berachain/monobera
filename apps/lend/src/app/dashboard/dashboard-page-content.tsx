@@ -30,7 +30,9 @@ export default function DashboardPageContent() {
       {isReady ? (
         <Dashboard tableView={tableView} setUseTableView={setUseTableView} />
       ) : (
-        <ConnectWalletBear message="Connect your wallet to view your supplies, borrows, and open positions." />
+        <div className="mt-20">
+          <ConnectWalletBear message="Connect your wallet to view your supplies, borrows, and open positions." />
+        </div>
       )}
     </div>
   );

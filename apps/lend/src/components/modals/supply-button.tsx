@@ -9,7 +9,7 @@ import {
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { Tooltip, useTxn } from "@bera/shared-ui";
+import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -119,7 +119,12 @@ const SupplyModalContent = ({
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={token.symbol}
+          endAdornment={
+            <div className="flex items-center gap-1">
+              <TokenIcon token={token} size={"md"} />
+              {token.symbol}
+            </div>
+          }
           value={amount}
           onChange={(e) =>
             setAmount(

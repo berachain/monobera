@@ -50,7 +50,10 @@ export function getAssetList(
     const token = BalanceToken.find((token) => token.address === key);
 
     if (token) {
-      if (userReservesData[key].scaledATokenBalance > 0n) {
+      if (
+        userReservesData[key] &&
+        userReservesData[key].scaledATokenBalance > 0n
+      ) {
         const suppliedToken = {
           ...token,
           balance: userReservesData[key].scaledATokenBalance,
@@ -70,7 +73,10 @@ export function getAssetList(
         });
       }
 
-      if (userReservesData[key].scaledVariableDebt > 0n) {
+      if (
+        userReservesData[key] &&
+        userReservesData[key].scaledVariableDebt > 0n
+      ) {
         const variableDebtToken = {
           ...token,
           balance: userReservesData[key].scaledVariableDebt,
