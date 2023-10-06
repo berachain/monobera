@@ -8,8 +8,7 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import bigDecimal from "js-big-decimal";
-import { formatEther, formatUnits, parseUnits } from "viem";
+import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
@@ -81,31 +80,39 @@ const BorrowModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  const borrowPower = bigDecimal.divide(
-    formatUnits(
-      userAccountData?.availableBorrowsBase ?? "0",
+  const borrowPower = formatUnits(
+    parseUnits(
+      BigInt(
+        userAccountData?.availableBorrowsBase ?? "0",
+      ).toString() as `${number}`,
       baseCurrencyData?.networkBaseTokenPriceDecimals,
-    ),
-    reserveData?.formattedPriceInMarketReferenceCurrency,
-    token.decimals,
+    ) /
+      parseUnits(
+        reserveData?.formattedPriceInMarketReferenceCurrency,
+        baseCurrencyData?.networkBaseTokenPriceDecimals,
+      ),
+    baseCurrencyData?.networkBaseTokenPriceDecimals,
   );
-  const availableLiquidity = bigDecimal.multiply(
-    formatUnits(reserveData?.availableLiquidity, token.decimals),
-    reserveData?.formattedPriceInMarketReferenceCurrency,
+
+  const availableLiquidity = formatUnits(
+    BigInt(reserveData?.availableLiquidity ?? "0") *
+      parseUnits(
+        reserveData?.formattedPriceInMarketReferenceCurrency,
+        token.decimals,
+      ),
+    token.decimals * 2,
   );
 
   const borrowAmout =
-    bigDecimal.compareTo(borrowPower, availableLiquidity) === 1
+    parseEther(borrowPower as `${number}`) >
+    parseEther(availableLiquidity as `${number}`)
       ? availableLiquidity
       : borrowPower;
 
   const currentHealthFactor =
-    bigDecimal.compareTo(
-      formatEther(userAccountData?.healthFactor || "0"),
-      1000000000000,
-    ) === 1
+    BigInt(userAccountData?.healthFactor || "0") > parseEther("1000000000000")
       ? "∞"
-      : bigDecimal.round(formatEther(userAccountData.healthFactor), 2);
+      : formatEther(userAccountData.healthFactor);
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency: formatEther(
@@ -113,7 +120,7 @@ const BorrowModalContent = ({
     ),
     borrowBalanceMarketReferenceCurrency:
       Number(formatEther(userAccountData.totalDebtBase)) +
-      (Number(amount) ?? 0) *
+      Number(amount ?? "0") *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
 
     currentLiquidationThreshold: formatUnits(
@@ -153,7 +160,7 @@ const BorrowModalContent = ({
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          Availabe to borrow: {bigDecimal.round(borrowAmout, 2)}
+          Availabe to borrow: {Number(borrowAmout).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() => setAmount(borrowAmout)}
@@ -167,7 +174,7 @@ const BorrowModalContent = ({
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">LTV Health Ratio</div>
           <div className="flex items-center gap-1 font-semibold">
-            {currentHealthFactor}{" "}
+            {Number(currentHealthFactor).toFixed(2)}{" "}
             <Icons.moveRight className="inline-block h-6 w-6" />{" "}
             {Number(newHealthFactor.toFixed(2)) < 0
               ? "∞"
@@ -179,7 +186,7 @@ const BorrowModalContent = ({
           <div className="font-semibold">
             $
             {formatter.format(
-              (Number(amount) ?? 0) *
+              Number(amount ?? "0") *
                 Number(reserveData?.formattedPriceInMarketReferenceCurrency),
             )}
           </div>

@@ -401,9 +401,6 @@ importers:
       framer-motion:
         specifier: ^10.15.0
         version: 10.15.0(react-dom@18.2.0)(react@18.2.0)
-      js-big-decimal:
-        specifier: ^2.0.4
-        version: 2.0.4
       next:
         specifier: ^13.4.1
         version: 13.4.1(@babel/core@7.23.0)(react-dom@18.2.0)(react@18.2.0)
@@ -12815,10 +12812,6 @@ packages:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
     engines: {node: '>=10'}
     dev: true
-
-  /js-big-decimal@2.0.4:
-    resolution: {integrity: sha512-y2IkNqwCqJyUVkiW/ddqxDAzCojoIKKBHIXBGEprtEs+93Zk64Y2ZWHt1MzTRM+ASpKdOurYLcss4BX25bkGyQ==}
-    dev: false
 
   /js-sdsl@4.4.2:
     resolution: {integrity: sha512-dwXFwByc/ajSV6m5bcKAPwe4yDDF6D614pxmIi5odytzxRlwqF6nwoiCek80Ixc7Cvma5awClxrzFtxCQvcM8w==}
