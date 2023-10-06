@@ -3,6 +3,7 @@ import { formatter, type Token } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 
 import Card from "~/components/card";
 
@@ -13,7 +14,7 @@ export default function TokenInfoCard({
   utilization,
   oraclePrice,
 }: {
-  token: Token;
+  token: Token | undefined;
   reserve: number;
   liquidity: number;
   utilization: number;
@@ -22,33 +23,53 @@ export default function TokenInfoCard({
   const info = [
     {
       title: "Reserve Size",
-      amount: `$${formatter.format(reserve)}`,
+      amount: !isNaN(reserve) ? (
+        `$${formatter.format(reserve)}`
+      ) : (
+        <Skeleton className="h-8 w-16 " />
+      ),
     },
     {
       title: "Available Liquidity",
-      amount: `$${formatter.format(liquidity)}`,
+      amount: !isNaN(liquidity) ? (
+        `$${formatter.format(liquidity)}`
+      ) : (
+        <Skeleton className="h-8 w-16 " />
+      ),
     },
     {
       title: "Utilization Ratio",
-      amount: `${(utilization * 100).toFixed(2)}%`,
+      amount: !isNaN(utilization) ? (
+        `${(utilization * 100).toFixed(2)}%`
+      ) : (
+        <Skeleton className="h-8 w-16 " />
+      ),
       tooltip: "Utilization Ratio",
     },
     {
       title: "Oracle Price",
-      amount: `$${formatter.format(oraclePrice)}`,
+      amount: oraclePrice ? (
+        `$${formatter.format(oraclePrice)}`
+      ) : (
+        <Skeleton className="h-8 w-16 " />
+      ),
     },
   ];
   return (
     <Card className="flex flex-col gap-6 lg:flex-row lg:justify-between">
       <div className="flex items-center gap-4">
-        <TokenIcon token={token} size="2xl" />
+        {token ? (
+          <TokenIcon token={token} size="2xl" />
+        ) : (
+          <Skeleton className="h-12 w-12 rounded-full" />
+        )}
         <div className="text-center text-3xl font-semibold leading-9">
-          {token.name}
+          {token ? token.name : <Skeleton className="h-9 w-[200px]" />}
         </div>
         <div className="flex gap-2">
           <Link
             className="h-fit w-fit rounded-full border border-border bg-muted p-2 hover:cursor-pointer md:rounded-xl"
-            href={`${blockExplorerUrl}/address/${token.address}`}
+            href={`${blockExplorerUrl}/address/${token?.address}`}
             target="_blank"
           >
             <Icons.external className="relative h-4 w-4 text-muted-foreground" />
