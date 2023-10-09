@@ -61,7 +61,7 @@ const useTokens = (): IUseTokens => {
       return {
         list: uniqueList,
         customList: [...localStorageTokenList],
-        dictionary: temp.tokenMap ?? tokenListToDict(list),
+        dictionary: tokenListToDict(list),
         gaugeDictionary: temp.gaugeMap ?? undefined,
         featured: defaultFeaturedList ?? [],
       };

@@ -1,11 +1,8 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { RouterService, defaultConfig } from "@bera/bera-router";
-import { type CuttingBoard } from "@bera/berajs";
-import { indexerUrl } from "@bera/config";
 
-import { getWBeraPriceDictForPoolTokens } from "../api/getPrice";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import PoolPageContent from "./PoolPageContent";
 
 type Props = {
@@ -23,44 +20,19 @@ export function generateMetadata({ params }: Props): Metadata {
 
 export const revalidate = 60;
 
-async function getGlobalCuttingBoard() {
-  try {
-    const res = await fetch(`${indexerUrl}/bgt/rewards`);
-    const jsonRes = await res.json();
-    return jsonRes.result;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 export default async function PoolPage({
   params,
 }: {
   params: { address: string };
 }) {
   try {
-    const router = new RouterService(defaultConfig);
-
-    const globalCuttingBoard = getGlobalCuttingBoard();
-
-    const fetchPools = router.fetchPools();
-    const data: any = await Promise.all([fetchPools, globalCuttingBoard]).then(
-      ([fetchPools, globalCuttingBoard]) => ({
-        fetchPools: fetchPools,
-        globalCuttingBoard: globalCuttingBoard,
-      }),
+    const poolResponse = await fetch(
+      `${getAbsoluteUrl()}/api/getSelectedPool/api?address=${params.address}`,
     );
+    const pricesResponse = await fetch(`${getAbsoluteUrl()}/api/getPrices/api`);
 
-    const pool = router.getPool(params.address);
-
-    if (!pool) {
-      notFound();
-    }
-    const prices = await getWBeraPriceDictForPoolTokens(
-      pool ? [pool] : [],
-      data?.globalCuttingBoard as CuttingBoard[],
-      router,
-    );
+    const pool = await poolResponse.json();
+    const prices = await pricesResponse.json();
 
     return <PoolPageContent prices={prices} pool={pool} />;
   } catch (e) {

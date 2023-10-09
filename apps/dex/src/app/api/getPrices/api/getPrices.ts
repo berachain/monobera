@@ -6,6 +6,30 @@ export interface MappedTokens {
   [key: string]: number;
 }
 
+export const getSwap = async (
+  tokenIn: Address,
+  tokenOut: Address,
+  swapType: number,
+  amount: number,
+) => {
+  try {
+    const type = swapType === 0 ? "given_in" : "given_out";
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
+      }/dex/route?quote_asset=${tokenOut}&base_asset=${tokenIn}&amount=${parseUnits(
+        `${amount}`,
+        18,
+      )}&swap_type=${type}`,
+    );
+
+    const result = await response.json();
+    return result;
+    console.log(response);
+  } catch (e) {
+    return 0;
+  }
+};
 const BASE_TOKEN = getAddress(process.env.NEXT_PUBLIC_HONEY_ADDRESS as string);
 
 export const getBaseTokenPrice = async (
@@ -21,12 +45,7 @@ export const getBaseTokenPrice = async (
         .filter((token: { address: string }) => token.address !== BASE_TOKEN)
         .map((token: { address: any; decimals: number }) =>
           router
-            .getSwaps(
-              token.address,
-              BASE_TOKEN,
-              0,
-              parseUnits(`${1}`, token.decimals),
-            )
+            .getSwaps(token.address, BASE_TOKEN, 0, parseUnits(`${1}`, 18))
             .catch(() => {
               return undefined;
             }),
