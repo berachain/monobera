@@ -10,7 +10,7 @@ import { getParsedPools } from "./getPools";
 
 // export const fetchCache = "force-cache";
 
-export const revalidate = 60;
+export const revalidate = 60 * 2;
 
 async function getGlobalCuttingBoard() {
   try {
