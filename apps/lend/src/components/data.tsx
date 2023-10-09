@@ -3,6 +3,9 @@
 import React from "react";
 import { formatUsd } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
+
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 
 function DataCard({
   icon,
@@ -11,7 +14,7 @@ function DataCard({
 }: {
   icon: React.ReactNode;
   title: string;
-  value: string;
+  value: number;
 }) {
   return (
     <div className="flex flex-col rounded-2xl border-2 bg-card p-6">
@@ -19,21 +22,25 @@ function DataCard({
         <div className="text-muted-foreground">{icon}</div>
         <div className="text-muted-foreground">{title}</div>
       </div>
-      <div className="mt-2 text-3xl font-bold">{value}</div>
+      {value ? (
+        <div className="mt-2 text-3xl font-bold">{formatUsd(value)}</div>
+      ) : (
+        <Skeleton className="mt-2 h-12 w-full" />
+      )}
     </div>
   );
 }
 
-export default function Data({
-  totalMarketSize = 1900000000,
-  totalBorrowed = 1000000000,
-}: {
-  totalMarketSize?: number;
-  totalBorrowed?: number;
-}) {
-  const displayMarketSize = formatUsd(totalMarketSize);
+export default function Data() {
+  const { useReservesDataList } = usePollReservesDataList();
+  const { data } = useReservesDataList();
 
-  const displayBorrowed = formatUsd(Number(totalBorrowed));
+  let displayMarketSize = 0;
+  let displayBorrowed = 0;
+  Object.keys(data ?? {}).forEach((key) => {
+    displayMarketSize += Number(data[key].totalLiquidity);
+    displayBorrowed += Number(data[key].totalDebt);
+  });
 
   return (
     <section className="m-auto max-w-[800px] py-24">
