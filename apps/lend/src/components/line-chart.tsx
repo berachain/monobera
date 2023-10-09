@@ -3,55 +3,26 @@ import { Dropdown } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { type RateItem } from "~/utils/getServerSideData";
-
 export interface LineChartProps {
   data: LineChartDataProps[];
+  labels: string[];
 }
 export interface LineChartDataProps {
   title: any;
-  data: {
-    "24H": RateItem[];
-    "7D": RateItem[];
-    "30D": RateItem[];
-    ALL_TIME: RateItem[];
-  };
+  data: any[];
   color: string;
 }
-const timeFrame = ["24H", "7D", "30D", "ALL_TIME"];
-export default function LineChart({ data }: LineChartProps) {
-  const [time, setTime] = useState<"24H" | "7D" | "30D" | "ALL_TIME">(
-    "ALL_TIME",
-  );
-
-  const trimTimeString = (timeString: string) => {
-    switch (time) {
-      case "24H":
-        return timeString.slice(11, 16);
-      case "7D":
-      case "30D":
-        return timeString.slice(5, 10);
-      case "ALL_TIME":
-        return timeString.slice(0, 10);
-      default:
-        return timeString;
-    }
-  };
-
-  const labels = data[0]!.data[time].map((item: RateItem) =>
-    trimTimeString(item.time),
-  );
-
+const timeFrame = ["24H", "7d", "30d", "all-time"];
+export default function LineChart({ data, labels }: LineChartProps) {
+  const [time, setTime] = useState("all-time");
   const dataG = {
     labels,
-    datasets: data.map((d: LineChartDataProps) => {
-      return {
-        label: d.title,
-        data: d.data[time].map((item) => Number(item.rate) * 100),
-        borderColor: d.color,
-        backgroundColor: d.color,
-      };
-    }),
+    datasets: data.map((d) => ({
+      label: d.title,
+      data: d.data.map((v) => v),
+      borderColor: d.color,
+      backgroundColor: d.color,
+    })),
   };
 
   const Options = {
@@ -103,9 +74,9 @@ export default function LineChart({ data }: LineChartProps) {
                 value={t}
                 key={t}
                 className="capitalize"
-                onClick={() => setTime(t as "24H" | "7D" | "30D" | "ALL_TIME")}
+                onClick={() => setTime(t)}
               >
-                {t.replaceAll("_", " ").toUpperCase()}
+                {t.replaceAll("-", " ").toUpperCase()}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -114,9 +85,7 @@ export default function LineChart({ data }: LineChartProps) {
           <Dropdown
             selected={time}
             selectionList={timeFrame}
-            onSelect={(t: string) =>
-              setTime(t as "24H" | "7D" | "30D" | "ALL_TIME")
-            }
+            onSelect={setTime}
           />
         </div>
       </div>

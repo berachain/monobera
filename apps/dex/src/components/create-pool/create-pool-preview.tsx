@@ -14,7 +14,6 @@ import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
-import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import ApproveTokenButton from "../approve-token-button";
@@ -44,7 +43,6 @@ export function CreatePoolPreview({
   const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
     onSuccess: () => {
-      void onCreatePool();
       router.push(`/pool`);
     },
   });

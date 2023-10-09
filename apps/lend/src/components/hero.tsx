@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
@@ -26,14 +25,12 @@ export default function Hero() {
           </span>{" "}
           Honey
         </h1>
-        <Link href={"/markets"}>
-          <Button
-            className="mt-8 w-full rounded-18 text-lg font-semibold leading-7 sm:w-auto"
-            size={"lg"}
-          >
-            <Icons.helpingHand className="mr-1 h-6 w-6" /> Borrow Funds
-          </Button>
-        </Link>
+        <Button
+          className="mt-8 w-full rounded-18 text-lg font-semibold leading-7 sm:w-auto"
+          size={"lg"}
+        >
+          <Icons.helpingHand className="mr-1 h-6 w-6" /> Borrow Funds
+        </Button>
       </div>
     </div>
   );

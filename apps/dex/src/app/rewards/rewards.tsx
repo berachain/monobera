@@ -11,7 +11,7 @@ import RewardsCard from "./rewards-card";
 
 export const Rewards = () => {
   const { useUserBgtDepositedPools, isLoading } = usePollUserDepositedPools(
-    `${getAbsoluteUrl()}/api/getPools/api`,
+    `${getAbsoluteUrl()}/pool/api`,
   );
   const userPools = useUserBgtDepositedPools();
   const { isReady } = useBeraJs();

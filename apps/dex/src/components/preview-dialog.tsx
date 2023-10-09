@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { type SwapInfo } from "@bera/bera-router";
 import { formatUsd, type Token } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { Spinner, TokenIcon } from "@bera/shared-ui";
@@ -18,10 +19,9 @@ import { Icons } from "@bera/ui/icons";
 import { useReadLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
-import { type SwapInfoV2 } from "~/hooks/usePollSwaps";
 
 type Props = {
-  swapInfo: SwapInfoV2 | undefined;
+  swapInfo: SwapInfo | undefined;
   priceImpact: number | undefined;
   exchangeRate: string | undefined;
   tokenIn: Token | undefined;
@@ -83,9 +83,9 @@ export default function PreviewDialog({
   setOpen,
   write,
 }: Props) {
-  const [initialSwapInfo, setInitialSwapInfo] = useState<
-    SwapInfoV2 | undefined
-  >(undefined);
+  const [initialSwapInfo, setInitialSwapInfo] = useState<SwapInfo | undefined>(
+    undefined,
+  );
 
   const [priceChangeWarning, setPriceChangeWarning] = useState<
     boolean | undefined

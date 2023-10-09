@@ -2,7 +2,7 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { getAddress } from "viem";
 
-import { type MappedTokens } from "~/app/api/getPrices/api/getPrices";
+import { type MappedTokens } from "../app/api/getPrice";
 import { getAbsoluteUrl } from "../utils/vercel-utils";
 
 export const usePollPrices = () => {
@@ -10,8 +10,7 @@ export const usePollPrices = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
-      const absoluteUrl = getAbsoluteUrl();
-      const res = await fetch(`${absoluteUrl}/api/getPrices/api`);
+      const res = await fetch(`${getAbsoluteUrl()}/api`);
       const data: MappedTokens = await res.json();
       return data;
     },

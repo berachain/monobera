@@ -10,5 +10,4 @@ export type Token = {
   normalizedWeight?: number;
   weight?: string | number;
   balance?: bigint;
-  formattedBalance?: string;
 };

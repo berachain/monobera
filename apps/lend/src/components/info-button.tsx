@@ -1,14 +1,16 @@
 import React from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 export default function InfoButton({ address }: { address: string }) {
+  const router = useRouter();
   return (
-    <Link href={`/markets/${address}`}>
-      <Button variant={"outline"} className="w-fit py-[5px] text-sm leading-5">
-        <Icons.info />
-      </Button>
-    </Link>
+    <Button
+      variant={"outline"}
+      onClick={() => router.push(`/markets/address=${address}`)}
+    >
+      <Icons.info />
+    </Button>
   );
 }

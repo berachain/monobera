@@ -173,9 +173,7 @@ export function SwapCard({
         return (
           <DynamicPreview
             swapInfo={swapInfo}
-            disabled={
-              swapInfo?.formattedReturnAmount === "0" || exceedingBalance
-            }
+            disabled={!swapInfo?.formattedReturnAmount || exceedingBalance}
             priceImpact={priceImpact}
             exchangeRate={exchangeRate}
             tokenIn={selectedFrom}

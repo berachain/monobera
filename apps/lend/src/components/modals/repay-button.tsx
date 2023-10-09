@@ -1,81 +1,39 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import {
-  formatter,
-  useBeraJs,
-  useSelectedAssetWalletBalance,
-  type Token,
-} from "@bera/berajs";
-import { lendPoolImplementationAddress } from "@bera/config";
-import { Tooltip, useTxn } from "@bera/shared-ui";
+import { Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatEther, parseUnits } from "viem";
 
-import { lendPoolImplementationABI } from "~/hooks/abi";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-
-export default function RepayBtn({
-  token,
-  disabled = false,
-  variant = "outline",
-}: {
-  token: Token;
-  disabled?: boolean;
-  variant?: "primary" | "outline";
-}) {
+export default function RepayBtn() {
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState<number | undefined>(undefined);
-  const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `Supplying ${amount} ${token.symbol}`,
-  });
-  useEffect(() => setOpen(false), [isSuccess]);
-
   return (
     <>
-      {ModalPortal}
       <Button
+        variant={"outline"}
         onClick={() => setOpen(true)}
-        className="w-fit text-sm leading-5"
-        disabled={disabled || isLoading}
-        variant={variant}
+        className="flex-1 px-3 py-2 md:w-[120px]"
       >
-        {isLoading ? "Loading" : "Repay"}
+        Pay Back
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">
-          <RepayModalContent {...{ token, amount, setAmount, write }} />
+          <RepayModalContent />
         </DialogContent>
       </Dialog>
     </>
   );
 }
 
-const RepayModalContent = ({
-  token,
-  amount,
-  setAmount,
-  write,
-}: {
-  token: Token & {
-    source_token?: string;
-    debtType?: "variable" | "stable";
-  };
-  amount: number | undefined;
-  setAmount: (amount: number | undefined) => void;
-  write: (arg0: any) => void;
-}) => {
-  const balance = useSelectedAssetWalletBalance(token.address);
-  const { account } = useBeraJs();
-  const { useSelectedReserveData } = usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(
-    token.source_token ? token.source_token : token.address,
-  );
+const RepayModalContent = () => {
+  const userBalance = 420.69;
+  const [amount, setAmount] = useState(0);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Repay</div>
+
       <Image
         src={"/supply.png"}
         alt="supply-img"
@@ -92,26 +50,16 @@ const RepayModalContent = ({
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={token.symbol}
+          endAdornment={"ETH"}
           value={amount}
-          onChange={(e) =>
-            setAmount(
-              Number(e.target.value) === 0 ? undefined : Number(e.target.value),
-            )
-          }
+          onChange={(e) => setAmount(Number(e.target.value))}
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {Number(balance.formattedBalance).toFixed(2)}
+          {userBalance}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() =>
-              setAmount(
-                Number(balance.formattedBalance) === 0
-                  ? undefined
-                  : Number(balance.formattedBalance),
-              )
-            }
+            onClick={() => setAmount(userBalance)}
           >
             MAX
           </span>
@@ -121,51 +69,20 @@ const RepayModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div>${formatter.format(amount ?? 0 * 1)}</div>
+          <div className="">$12,669.42</div>
         </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Loan APY</div>
-          <div className="text-warning-foreground">
-            {(
-              Number(
-                formatEther(
-                  token.debtType === "variable"
-                    ? reserveData.currentVariableBorrowRate
-                    : reserveData.currentStableBorrowRate,
-                ),
-              ) * 100
-            ).toFixed(2)}
-            %
-          </div>
+        <div className="flex justify-between  text-sm leading-tight">
+          <div className="text-muted-foreground ">Supply APY</div>
+          <div className="text-success-foreground">6.69%</div>
         </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Debt Type</div>
-          <div className="capitalize text-foreground">{token.debtType}</div>
-        </div>
-        <div className="flex justify-between text-sm leading-tight">
+        <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
           <div className="">0 {"<->"} infinite</div>
+          {/* i didnt make this cause design doesnt make sense 2 me */}
         </div>
       </div>
 
-      <Button
-        disabled={
-          !amount || amount === 0 || amount > Number(balance.formattedBalance)
-        }
-        onClick={() => {
-          write({
-            address: lendPoolImplementationAddress,
-            abi: lendPoolImplementationABI,
-            functionName: "repay",
-            params: [
-              token.source_token ? token.source_token : token.address,
-              parseUnits(`${Number(amount)}`, token.decimals),
-              token.debtType === "variable" ? 2 : 1,
-              account,
-            ],
-          });
-        }}
-      >
+      <Button disabled={amount === 0 || amount > userBalance}>
         {amount === 0 ? "Enter Amount" : "Withdraw"}
       </Button>
     </div>

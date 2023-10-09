@@ -174,7 +174,7 @@ export const PoolSearch = () => {
           </div>
 
           <TabsContent value="allPools">
-            {isAllDataLoadingMore && data?.length === 0 ? (
+            {isAllDataLoadingMore ? (
               <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
                 {isList ? <TableViewLoading /> : <CardViewLoading />}
               </div>

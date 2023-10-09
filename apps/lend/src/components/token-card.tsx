@@ -1,106 +1,99 @@
-import { formatUsd, formatter } from "@bera/berajs";
-import { TokenIcon, Tooltip } from "@bera/shared-ui";
-import { Skeleton } from "@bera/ui/skeleton";
-import { formatEther } from "viem";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Tooltip } from "@bera/shared-ui";
+import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 
-import InfoButton from "~/components/info-button";
+import { type Market } from "~/hooks/useMarkets";
 import Card from "./card";
+import BorrowBtn from "./modals/borrow-button";
 import SupplyBtn from "./modals/supply-button";
 
-export default function TokenCard({ reserveData }: { reserveData: any }) {
+export default function TokenCard(market: { market: Market }) {
+  const router = useRouter();
   return (
-    <Card className="div-4 flex flex-col items-center justify-between gap-6 p-4 xl:flex-row">
-      <div className="flex w-full flex-col justify-between gap-2 xl:flex-row xl:justify-start xl:gap-6">
-        <div className="mb-5 flex w-[250px] items-center gap-4 xl:mb-0">
-          <TokenIcon token={reserveData.token} fetch size="2xl" />
+    <Card
+      className="div-4 flex flex-col items-center justify-between gap-6 p-4 lg:flex-row"
+      key={market.market.title}
+    >
+      <div className="flex w-full flex-col justify-between gap-2 md:flex-row md:gap-6 lg:justify-start">
+        <div className="mb-[22px] flex w-[160px] items-center gap-4 md:mb-0">
+          <Image
+            src={"/honey.png"}
+            alt={market.market.title}
+            className="rounded-full"
+            width={48}
+            height={48}
+          />
           <div>
-            <div className="text-xs	font-medium leading-5 text-muted-foreground">
-              {reserveData.token?.name}
-              <Tooltip
-                text={
-                  "The data values below showcase the total assets supplied and their respective USD values."
-                }
-              />
+            <div className="text-xs	leading-5 text-muted-foreground">
+              {market.market.title}
             </div>
-            <div className="text-lg font-bold leading-[22px]">
-              {formatter.format(reserveData.totalLiquidity)}{" "}
-              {reserveData.token?.symbol}
-            </div>
-            <div className=" text-xs font-medium leading-5">
-              {formatUsd(
-                Number(reserveData.totalLiquidity) *
-                  Number(reserveData.formattedPriceInMarketReferenceCurrency),
-              )}{" "}
+            <div className="flex items-center gap-1 text-lg font-bold">
+              $8.28M <Tooltip text={market.market.totalSupply} />
             </div>
           </div>
         </div>
 
-        <div className="flex justify-between xl:w-[150px] xl:flex-col xl:justify-center">
-          <div className="flex items-center text-xs font-medium leading-5 text-muted-foreground">
-            Supply APR
+        <div className="flex justify-between md:flex-col">
+          <div className="flex items-center text-xs leading-5 text-muted-foreground ">
+            Deposit APY
           </div>
-          <div className="font-bold text-success-foreground xl:text-lg">
-            {(Number(reserveData.supplyAPY) * 100).toFixed(2)}%
+          <div className="font-bold md:text-lg">
+            {market.market.dailyPercentChange > 0 ? (
+              <span className="text-success-foreground">
+                {market.market.dailyPercentChange}%
+              </span>
+            ) : (
+              <span className="text-destructive-foreground">
+                {market.market.dailyPercentChange}%
+              </span>
+            )}
           </div>
         </div>
 
-        <div className="flex justify-between text-muted-foreground xl:w-[150px] xl:flex-col xl:justify-center">
-          <div className="flex items-center text-xs font-medium leading-5">
+        <div className="flex justify-between text-muted-foreground md:flex-col">
+          <div className="flex items-center text-xs leading-5">
             Variable Borrow APR
           </div>
-          <div className="font-bold xl:text-lg">
-            {(Number(formatEther(reserveData.variableBorrowAPY)) * 100).toFixed(
-              2,
-            )}
-            %
+          <div className="font-bold md:text-lg">
+            {market.market.dailyPercentChange}%
           </div>
         </div>
-        <div className="flex justify-between text-muted-foreground xl:w-[150px] xl:flex-col xl:justify-center">
-          <div className="flex items-center text-xs font-medium leading-5">
+
+        <div className="flex justify-between text-muted-foreground md:flex-col">
+          <div className="flex items-center text-xs leading-5">
+            Stable Borrow APR
+          </div>
+          <div className="font-bold md:text-lg">
+            {market.market.dailyPercentChange}%
+          </div>
+        </div>
+
+        <div className="flex justify-between text-muted-foreground md:flex-col">
+          <div className="flex items-center text-xs leading-5 ">
             Total borrows
           </div>
-          <div className="font-bold xl:text-lg">
-            {formatter.format(Number(reserveData.totalDebt))}
+          <div className="font-bold md:text-lg">
+            {market.market.dailyBorrows}
           </div>
         </div>
       </div>
 
-      <div className="flex w-full items-center gap-2 xl:w-fit">
-        <SupplyBtn token={reserveData.token} />
-        <InfoButton address={reserveData.underlyingAsset} />
+      <div className="flex w-full items-center gap-2 lg:w-fit">
+        <SupplyBtn />
+        <BorrowBtn />
+        <Button
+          variant={"outline"}
+          onClick={() =>
+            router.push(
+              "/markets/address=0x20f33CE90A13a4b5E7697E3544c3083B8F8A51D4",
+            )
+          }
+        >
+          <Icons.info />
+        </Button>
       </div>
     </Card>
-  );
-}
-
-export function TokenLoading() {
-  return (
-    <div className="flex items-center justify-between rounded-2xl border border-border px-6 py-4">
-      <div className=" flex gap-4">
-        <Skeleton className="h-12 w-12 rounded-full" />
-        <div className="flex flex-col gap-1">
-          <Skeleton className="h-3 w-[92px]" />
-          <Skeleton className="h-5 w-[128px]" />
-          <Skeleton className="h-3 w-[92px]" />
-        </div>
-      </div>
-      <div className="flex flex-col gap-1">
-        <Skeleton className="h-3 w-[128px]" />
-        <Skeleton className="h-5 w-[92px]" />
-      </div>
-      <div className="flex flex-col gap-1">
-        <Skeleton className="h-3 w-[128px]" />
-        <Skeleton className="h-5 w-[92px]" />
-      </div>
-      <div className="flex flex-col gap-1">
-        <Skeleton className="h-3 w-[128px]" />
-        <Skeleton className="h-5 w-[92px]" />
-      </div>
-      <div className="flex gap-2">
-        <Skeleton className="h-8 w-20" />
-        <Skeleton className="h-8 w-20" />
-        <Skeleton className="h-8 w-8" />
-      </div>
-    </div>
   );
 }

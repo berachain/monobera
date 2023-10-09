@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { RouterService, defaultConfig } from "@bera/bera-router";
 
-import { getBaseTokenPrice, type MappedTokens } from "./getPrices";
+import { getBaseTokenPrice, type MappedTokens } from "./getPrice";
 
 // export const fetchCache = "force-cache";
 
-export const revalidate = 60 * 5;
+export const revalidate = 60;
 
 export async function GET() {
   const router = new RouterService(defaultConfig);
@@ -17,16 +17,13 @@ export async function GET() {
   }
   const pools = router.getPools() ?? [];
 
-  try {
-    const mappedTokens: MappedTokens | undefined = await getBaseTokenPrice(
-      pools,
-    );
-    if (!mappedTokens) {
-      return NextResponse.json({ error: "No mapped tokens found" });
-    }
-
-    return NextResponse.json(mappedTokens);
-  } catch (e) {
-    console.log(e);
+  const mappedTokens: MappedTokens | undefined = await getBaseTokenPrice(
+    pools,
+    router,
+  );
+  if (!mappedTokens) {
+    return NextResponse.json({ error: "No mapped tokens found" });
   }
+
+  return NextResponse.json(mappedTokens);
 }

@@ -25,7 +25,7 @@ export const usePoolTable = () => {
       const page = key[1] + 1;
       try {
         const res = await fetch(
-          `${getAbsoluteUrl()}/api/getFilteredPools/api?page=${page}&perPage=${DEFAULT_SIZE}&hasBgtRewards=${hasBgtRewards}&hotPools=${isHotPool}&newPools=${isNewPool}&search=${search}&tvl=true&volume=false&bgtRewards=false`,
+          `${getAbsoluteUrl()}/pool/api?page=${page}&perPage=${DEFAULT_SIZE}&hasBgtRewards=${hasBgtRewards}&hotPools=${isHotPool}&newPools=${isNewPool}&search=${search}&tvl=true&volume=false&bgtRewards=false`,
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -50,7 +50,7 @@ export const usePoolTable = () => {
   const data = allData ? [].concat(...allData) : [];
 
   const { useUserDepositedPools, isLoading } = usePollUserDepositedPools(
-    `${getAbsoluteUrl()}/api/getPools/api`,
+    `${getAbsoluteUrl()}/pool/api`,
   );
   const userPools = useUserDepositedPools();
 
@@ -71,7 +71,6 @@ export const usePoolTable = () => {
                 .includes(search.toLowerCase()));
     }),
     isUserPoolsLoading: isLoading,
-    isFirstLoad: isLoading && isAllDataEmpty,
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,
