@@ -45,7 +45,6 @@ export async function GET() {
     const pools = router.getPools() ?? [];
 
 
-    console.log(data)
     const mappedTokens = await data.pricesResponse.json();
 
     const parsedPools = await getParsedPools(
