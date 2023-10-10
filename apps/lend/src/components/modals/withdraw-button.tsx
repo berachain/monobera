@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import { formatter, useBeraJs, type Token } from "@bera/berajs";
@@ -13,6 +13,7 @@ import { formatEther, formatUnits, parseUnits } from "viem";
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
+import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function WithdrawBtn({
   token,
@@ -25,16 +26,26 @@ export default function WithdrawBtn({
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
-  const { write, isLoading, ModalPortal } = useTxn({
-    message: `Supplying ${amount} ${token.symbol}`,
+  const { write, isLoading, ModalPortal, isSuccess } = useTxn({
+    message: `Withdrawing ${amount} ${token.symbol}`,
+    onSuccess: () => {
+      userAccountRefetch();
+      reservesDataRefetch();
+      userReservesRefetch();
+    },
   });
+  const { refetch: userAccountRefetch } = usePollUserAccountData();
+  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: userReservesRefetch } = usePollUserReservesData();
+
+  useEffect(() => setOpen(false), [isSuccess]);
   return (
     <>
       {" "}
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-fit text-sm leading-5"
+        className="w-full text-sm leading-5 xl:w-fit"
         disabled={disabled || isLoading}
         variant={variant}
       >

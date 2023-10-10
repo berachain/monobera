@@ -247,12 +247,12 @@ export const available_borrows_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-medium">
-          {formatter.format(row.original.supplied)}
+          {formatter.format(Number(row.original.formattedBalance))}
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
           $
           {formatter.format(
-            row.original.supplied *
+            Number(row.original.formattedBalance) *
               Number(
                 row.original.reserveData
                   .formattedPriceInMarketReferenceCurrency,
