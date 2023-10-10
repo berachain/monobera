@@ -113,48 +113,45 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
               </div>
             </div>
 
-            <div className="mt-4 flex items-center justify-between">
-              <div>
-                <div className="text-xs font-medium leading-tight">
-                  Available to Borrow{" "}
-                  <Tooltip text="This is the total amount available for you to borrow. You can borrow based on your collateral and until the borrow cap is reached." />
-                </div>
-                <div className="mt-[-2px] leading-7 text-muted-foreground">
-                  <b>
-                    {!isNaN(borrowAmout) ? (
-                      formatter.format(borrowAmout)
+            {token && token.address === honeyAddress && (
+              <div className="mt-4 flex items-center justify-between">
+                <div>
+                  <div className="text-xs font-medium leading-tight">
+                    Available to Borrow{" "}
+                    <Tooltip text="This is the total amount available for you to borrow. You can borrow based on your collateral and until the borrow cap is reached." />
+                  </div>
+                  <div className="mt-[-2px] leading-7 text-muted-foreground">
+                    <b>
+                      {!isNaN(borrowAmout) ? (
+                        formatter.format(borrowAmout)
+                      ) : (
+                        <Skeleton className="inline-block h-7 w-20" />
+                      )}
+                    </b>{" "}
+                    {token ? (
+                      token.symbol
                     ) : (
                       <Skeleton className="inline-block h-7 w-20" />
                     )}
-                  </b>{" "}
+                  </div>
+                  <div className="text-xs font-medium leading-tight text-muted-foreground">
+                    $
+                    {formatter.format(
+                      Number(
+                        reserveData?.formattedPriceInMarketReferenceCurrency,
+                      ) * borrowAmout,
+                    )}
+                  </div>
+                </div>
+                <div>
                   {token ? (
-                    token.symbol
+                    <BorrowBtn token={token} disabled={borrowAmout === 0} />
                   ) : (
-                    <Skeleton className="inline-block h-7 w-20" />
-                  )}
-                </div>
-                <div className="text-xs font-medium leading-tight text-muted-foreground">
-                  $
-                  {formatter.format(
-                    Number(
-                      reserveData?.formattedPriceInMarketReferenceCurrency,
-                    ) * borrowAmout,
+                    <Skeleton className="h-9 w-20" />
                   )}
                 </div>
               </div>
-              <div>
-                {token ? (
-                  <BorrowBtn
-                    token={token}
-                    disabled={
-                      borrowAmout === 0 || token.address !== honeyAddress
-                    }
-                  />
-                ) : (
-                  <Skeleton className="h-9 w-20" />
-                )}
-              </div>
-            </div>
+            )}
           </div>
         </Card>
       </div>

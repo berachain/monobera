@@ -85,22 +85,22 @@ export function TokenLoading() {
           <Skeleton className="h-3 w-[92px]" />
         </div>
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="hidden flex-col gap-1 sm:flex">
         <Skeleton className="h-3 w-[128px]" />
         <Skeleton className="h-5 w-[92px]" />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="hidden flex-col gap-1 xl:flex ">
         <Skeleton className="h-3 w-[128px]" />
         <Skeleton className="h-5 w-[92px]" />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="hidden flex-col gap-1 lg:flex">
         <Skeleton className="h-3 w-[128px]" />
         <Skeleton className="h-5 w-[92px]" />
       </div>
       <div className="flex gap-2">
+        <Skeleton className="xs:block hidden h-8 w-20" />
         <Skeleton className="h-8 w-20" />
-        <Skeleton className="h-8 w-20" />
-        <Skeleton className="h-8 w-8" />
+        <Skeleton className="xs:block hidden h-8 w-8" />
       </div>
     </div>
   );

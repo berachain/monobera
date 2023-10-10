@@ -73,7 +73,7 @@ export const usePollReservesDataList = () => {
   };
 
   return {
-    mutate,
+    refetch: () => void mutate(QUERY_KEY),
     useReservesDataList,
     useSelectedReserveData,
     useBaseCurrencyData,

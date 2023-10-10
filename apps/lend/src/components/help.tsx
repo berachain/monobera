@@ -17,7 +17,7 @@ export default function Help() {
         </h3>
       </div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <div className=" mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-muted p-6 text-center md:max-w-[350px] md:px-12 md:py-8 lg:max-w-full lg:items-start lg:text-left">
+        <div className="mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-muted p-6 text-center md:px-12 md:py-8 lg:max-w-full lg:items-start lg:text-left">
           <p className="mb-2 flex items-center gap-2 text-lg font-semibold text-muted-foreground">
             <span className="text-3xl ">📋 </span> Feedback Form
           </p>
@@ -29,7 +29,7 @@ export default function Help() {
             Provide Feedback
           </Button>
         </div>
-        <div className=" mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-muted p-6 text-center md:max-w-[350px] md:px-12 md:py-8  lg:max-w-full  lg:items-start lg:text-left">
+        <div className=" mx-auto flex flex-col items-center justify-between rounded-2xl border-2 bg-muted p-6 text-center md:px-12 md:py-8  lg:max-w-full  lg:items-start lg:text-left">
           <p className="mb-2 flex items-center gap-2 text-lg font-semibold text-muted-foreground">
             <span className="text-3xl ">📜 </span> BEND Docs
           </p>

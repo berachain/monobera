@@ -13,7 +13,7 @@ export default function DashboardPageContent() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (tableView && window.innerWidth < 1024) {
+      if (tableView && window.innerWidth < 768) {
         setUseTableView(false);
       }
     };

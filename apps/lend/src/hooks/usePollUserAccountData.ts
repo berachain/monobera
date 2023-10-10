@@ -63,7 +63,7 @@ export const usePollUserAccountData = () => {
   };
 
   return {
-    mutate,
+    refetch: () => void mutate(QUERY_KEY),
     useUserAccountData,
   };
 };

@@ -42,7 +42,6 @@ export function Dashboard({
           <p className="text-sm text-muted-foreground">Switch to table view</p>
           <Switch
             id="use-tableview"
-            className="hidden lg:block"
             checked={tableView}
             onCheckedChange={(checked: boolean) => setUseTableView(checked)}
           />
