@@ -44,6 +44,8 @@ export async function GET() {
     }));
     const pools = router.getPools() ?? [];
 
+
+    console.log(data)
     const mappedTokens = await data.pricesResponse.json();
 
     const parsedPools = await getParsedPools(
@@ -51,6 +53,7 @@ export async function GET() {
       data.globalCuttingBoard,
       mappedTokens,
     );
+
     if (!parsedPools) {
       return NextResponse.json({ error: "Unable to fetch pools" });
     }
@@ -61,3 +64,11 @@ export async function GET() {
     return NextResponse.json({ error: "Unable to fetch pools" });
   }
 }
+
+
+export async function generateStaticParams() {
+  const _pricesResponse = await fetch(`${getAbsoluteUrl()}/api/getPrices/api`);
+ 
+  return []
+}
+ 
