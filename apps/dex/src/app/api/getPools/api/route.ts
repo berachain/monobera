@@ -25,36 +25,39 @@ async function getGlobalCuttingBoard() {
 }
 
 export async function GET() {
-  const router = new RouterService(defaultConfig);
-  const globalCuttingBoard = getGlobalCuttingBoard();
+  try {
+    const router = new RouterService(defaultConfig);
+    const globalCuttingBoard = getGlobalCuttingBoard();
 
-  const fetchPools = router.fetchPools();
+    const fetchPools = router.fetchPools();
 
-  const pricesResponse = fetch(`${getAbsoluteUrl()}/api/getPrices/api`);
+    const pricesResponse = fetch(`${getAbsoluteUrl()}/api/getPrices/api`);
 
-  const data = await Promise.all([
-    fetchPools,
-    globalCuttingBoard,
-    pricesResponse,
-  ]).then(([fetchPools, globalCuttingBoard, pricesResponse]) => ({
-    fetchPools: fetchPools,
-    globalCuttingBoard: globalCuttingBoard,
-    pricesResponse: pricesResponse,
-  }));
-  const pools = router.getPools() ?? [];
+    const data = await Promise.all([
+      fetchPools,
+      globalCuttingBoard,
+      pricesResponse,
+    ]).then(([fetchPools, globalCuttingBoard, pricesResponse]) => ({
+      fetchPools: fetchPools,
+      globalCuttingBoard: globalCuttingBoard,
+      pricesResponse: pricesResponse,
+    }));
+    const pools = router.getPools() ?? [];
 
-  const mappedTokens = await data.pricesResponse.json();
+    const mappedTokens = await data.pricesResponse.json();
 
-  const parsedPools = await getParsedPools(
-    pools,
-    data.globalCuttingBoard,
-    mappedTokens,
-  );
-  if (!parsedPools) {
+    const parsedPools = await getParsedPools(
+      pools,
+      data.globalCuttingBoard,
+      mappedTokens,
+    );
+    if (!parsedPools) {
+      return NextResponse.json({ error: "Unable to fetch pools" });
+    }
+
+    return NextResponse.json(parseBigIntToString(parsedPools));
+  } catch (e) {
+    console.log(e);
     return NextResponse.json({ error: "Unable to fetch pools" });
   }
-
-  console.log(parsedPools);
-
-  return NextResponse.json(parseBigIntToString(parsedPools));
 }
