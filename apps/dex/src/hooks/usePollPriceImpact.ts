@@ -1,12 +1,9 @@
-import { type SwapInfo } from "@bera/bera-router";
 import { POLLING } from "@bera/shared-ui/src/utils";
 import useSWR from "swr";
-import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { laggy } from "./laggy";
-import { usePollSwaps } from "./usePollSwaps";
-import { SwapKind } from "./useSwap";
+import { usePollSwaps, type SwapInfoV2 } from "./usePollSwaps";
 
 interface IUsePollSwaps {
   tokenIn: Address;
@@ -14,7 +11,7 @@ interface IUsePollSwaps {
   tokenInDecimals: number;
   tokenOutDecimals: number;
   swapKind: number;
-  swapInfo: SwapInfo | undefined;
+  swapInfo: SwapInfoV2 | undefined;
   swapAmount: number;
   isSwapLoading: boolean;
 }
@@ -22,8 +19,6 @@ interface IUsePollSwaps {
 export const usePollPriceImpact = ({
   tokenIn,
   tokenOut,
-  tokenInDecimals,
-  tokenOutDecimals,
   swapKind,
   swapInfo,
   swapAmount,
@@ -32,10 +27,7 @@ export const usePollPriceImpact = ({
     tokenIn: tokenIn,
     tokenOut: tokenOut,
     swapKind,
-    amount: parseUnits(
-      `${1}`,
-      swapKind === SwapKind.GIVEN_IN ? tokenInDecimals : tokenOutDecimals,
-    ),
+    amount: 1,
   });
 
   const QUERY_KEY = [
