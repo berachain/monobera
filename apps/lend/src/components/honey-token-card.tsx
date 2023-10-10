@@ -146,6 +146,7 @@ export default function HoneyTokenCard() {
             token={tokenDictionary[honeyAddress] as Token}
             variant="outline"
           />
+          <InfoButton address={honeyAddress} />
         </div>
       )}
     </Card>
