@@ -70,16 +70,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof ProposalFormSchema>) {
-    const payload = createPayload(values);
-    write({
-      address: governanceAddress,
-      abi: GOVERNANCE_PRECOMPILE_ABI as any[],
-      functionName: "submitProposal",
-      params: payload as any,
-    });
-  }
-
   const BaseFormSchema = z.object({
     title: z.string().nonempty("Required"),
     description: z.string().nonempty("Required"),
@@ -144,8 +134,21 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     resolver: zodResolver(ProposalFormSchema),
     defaultValues: {
       expedite: false,
+      enableOrDisableGauge: true,
     },
   });
+
+  function onSubmit() {
+    const values = form.getValues();
+    const payload = createPayload(values);
+    write({
+      address: governanceAddress,
+      abi: GOVERNANCE_PRECOMPILE_ABI as any[],
+      functionName: "submitProposal",
+      params: payload as any,
+    });
+  }
+
   return (
     <div className="mx-auto  w-full max-w-[564px] pb-16">
       {ModalPortal}

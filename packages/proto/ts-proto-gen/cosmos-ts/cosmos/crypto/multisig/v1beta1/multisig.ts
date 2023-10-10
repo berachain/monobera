@@ -29,7 +29,10 @@ function createBaseMultiSignature(): MultiSignature {
 }
 
 export const MultiSignature = {
-  encode(message: MultiSignature, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MultiSignature,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     for (const v of message.signatures) {
       writer.uint32(10).bytes(v!);
     }
@@ -37,7 +40,8 @@ export const MultiSignature = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MultiSignature {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMultiSignature();
     while (reader.pos < end) {
@@ -61,7 +65,9 @@ export const MultiSignature = {
 
   fromJSON(object: any): MultiSignature {
     return {
-      signatures: Array.isArray(object?.signatures) ? object.signatures.map((e: any) => bytesFromBase64(e)) : [],
+      signatures: Array.isArray(object?.signatures)
+        ? object.signatures.map((e: any) => bytesFromBase64(e))
+        : [],
     };
   },
 
@@ -73,10 +79,14 @@ export const MultiSignature = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MultiSignature>, I>>(base?: I): MultiSignature {
+  create<I extends Exact<DeepPartial<MultiSignature>, I>>(
+    base?: I,
+  ): MultiSignature {
     return MultiSignature.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MultiSignature>, I>>(object: I): MultiSignature {
+  fromPartial<I extends Exact<DeepPartial<MultiSignature>, I>>(
+    object: I,
+  ): MultiSignature {
     const message = createBaseMultiSignature();
     message.signatures = object.signatures?.map((e) => e) || [];
     return message;
@@ -88,7 +98,10 @@ function createBaseCompactBitArray(): CompactBitArray {
 }
 
 export const CompactBitArray = {
-  encode(message: CompactBitArray, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: CompactBitArray,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.extraBitsStored !== 0) {
       writer.uint32(8).uint32(message.extraBitsStored);
     }
@@ -99,7 +112,8 @@ export const CompactBitArray = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): CompactBitArray {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCompactBitArray();
     while (reader.pos < end) {
@@ -130,8 +144,12 @@ export const CompactBitArray = {
 
   fromJSON(object: any): CompactBitArray {
     return {
-      extraBitsStored: isSet(object.extraBitsStored) ? Number(object.extraBitsStored) : 0,
-      elems: isSet(object.elems) ? bytesFromBase64(object.elems) : new Uint8Array(0),
+      extraBitsStored: isSet(object.extraBitsStored)
+        ? Number(object.extraBitsStored)
+        : 0,
+      elems: isSet(object.elems)
+        ? bytesFromBase64(object.elems)
+        : new Uint8Array(0),
     };
   },
 
@@ -146,10 +164,14 @@ export const CompactBitArray = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<CompactBitArray>, I>>(base?: I): CompactBitArray {
+  create<I extends Exact<DeepPartial<CompactBitArray>, I>>(
+    base?: I,
+  ): CompactBitArray {
     return CompactBitArray.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<CompactBitArray>, I>>(object: I): CompactBitArray {
+  fromPartial<I extends Exact<DeepPartial<CompactBitArray>, I>>(
+    object: I,
+  ): CompactBitArray {
     const message = createBaseCompactBitArray();
     message.extraBitsStored = object.extraBitsStored ?? 0;
     message.elems = object.elems ?? new Uint8Array(0);
@@ -201,17 +223,33 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

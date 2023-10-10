@@ -100,7 +100,10 @@ function createBasePermissions(): Permissions {
 }
 
 export const Permissions = {
-  encode(message: Permissions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Permissions,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.level !== 0) {
       writer.uint32(8).int32(message.level);
     }
@@ -111,7 +114,8 @@ export const Permissions = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Permissions {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePermissions();
     while (reader.pos < end) {
@@ -143,7 +147,9 @@ export const Permissions = {
   fromJSON(object: any): Permissions {
     return {
       level: isSet(object.level) ? permissions_LevelFromJSON(object.level) : 0,
-      limitTypeUrls: Array.isArray(object?.limitTypeUrls) ? object.limitTypeUrls.map((e: any) => String(e)) : [],
+      limitTypeUrls: Array.isArray(object?.limitTypeUrls)
+        ? object.limitTypeUrls.map((e: any) => String(e))
+        : [],
     };
   },
 
@@ -161,7 +167,9 @@ export const Permissions = {
   create<I extends Exact<DeepPartial<Permissions>, I>>(base?: I): Permissions {
     return Permissions.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Permissions>, I>>(object: I): Permissions {
+  fromPartial<I extends Exact<DeepPartial<Permissions>, I>>(
+    object: I,
+  ): Permissions {
     const message = createBasePermissions();
     message.level = object.level ?? 0;
     message.limitTypeUrls = object.limitTypeUrls?.map((e) => e) || [];
@@ -174,18 +182,28 @@ function createBaseGenesisAccountPermissions(): GenesisAccountPermissions {
 }
 
 export const GenesisAccountPermissions = {
-  encode(message: GenesisAccountPermissions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: GenesisAccountPermissions,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     if (message.permissions !== undefined) {
-      Permissions.encode(message.permissions, writer.uint32(18).fork()).ldelim();
+      Permissions.encode(
+        message.permissions,
+        writer.uint32(18).fork(),
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): GenesisAccountPermissions {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): GenesisAccountPermissions {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisAccountPermissions();
     while (reader.pos < end) {
@@ -217,7 +235,9 @@ export const GenesisAccountPermissions = {
   fromJSON(object: any): GenesisAccountPermissions {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      permissions: isSet(object.permissions) ? Permissions.fromJSON(object.permissions) : undefined,
+      permissions: isSet(object.permissions)
+        ? Permissions.fromJSON(object.permissions)
+        : undefined,
     };
   },
 
@@ -232,15 +252,20 @@ export const GenesisAccountPermissions = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GenesisAccountPermissions>, I>>(base?: I): GenesisAccountPermissions {
+  create<I extends Exact<DeepPartial<GenesisAccountPermissions>, I>>(
+    base?: I,
+  ): GenesisAccountPermissions {
     return GenesisAccountPermissions.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GenesisAccountPermissions>, I>>(object: I): GenesisAccountPermissions {
+  fromPartial<I extends Exact<DeepPartial<GenesisAccountPermissions>, I>>(
+    object: I,
+  ): GenesisAccountPermissions {
     const message = createBaseGenesisAccountPermissions();
     message.address = object.address ?? "";
-    message.permissions = (object.permissions !== undefined && object.permissions !== null)
-      ? Permissions.fromPartial(object.permissions)
-      : undefined;
+    message.permissions =
+      object.permissions !== undefined && object.permissions !== null
+        ? Permissions.fromPartial(object.permissions)
+        : undefined;
     return message;
   },
 };
@@ -250,7 +275,10 @@ function createBaseGenesisState(): GenesisState {
 }
 
 export const GenesisState = {
-  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: GenesisState,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     for (const v of message.accountPermissions) {
       GenesisAccountPermissions.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -261,7 +289,8 @@ export const GenesisState = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
     while (reader.pos < end) {
@@ -272,7 +301,9 @@ export const GenesisState = {
             break;
           }
 
-          message.accountPermissions.push(GenesisAccountPermissions.decode(reader, reader.uint32()));
+          message.accountPermissions.push(
+            GenesisAccountPermissions.decode(reader, reader.uint32()),
+          );
           continue;
         case 2:
           if (tag !== 18) {
@@ -293,7 +324,9 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     return {
       accountPermissions: Array.isArray(object?.accountPermissions)
-        ? object.accountPermissions.map((e: any) => GenesisAccountPermissions.fromJSON(e))
+        ? object.accountPermissions.map((e: any) =>
+            GenesisAccountPermissions.fromJSON(e),
+          )
         : [],
       disabledTypeUrls: Array.isArray(object?.disabledTypeUrls)
         ? object.disabledTypeUrls.map((e: any) => String(e))
@@ -304,7 +337,9 @@ export const GenesisState = {
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     if (message.accountPermissions?.length) {
-      obj.accountPermissions = message.accountPermissions.map((e) => GenesisAccountPermissions.toJSON(e));
+      obj.accountPermissions = message.accountPermissions.map((e) =>
+        GenesisAccountPermissions.toJSON(e),
+      );
     }
     if (message.disabledTypeUrls?.length) {
       obj.disabledTypeUrls = message.disabledTypeUrls;
@@ -312,28 +347,51 @@ export const GenesisState = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GenesisState>, I>>(base?: I): GenesisState {
+  create<I extends Exact<DeepPartial<GenesisState>, I>>(
+    base?: I,
+  ): GenesisState {
     return GenesisState.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(
+    object: I,
+  ): GenesisState {
     const message = createBaseGenesisState();
-    message.accountPermissions = object.accountPermissions?.map((e) => GenesisAccountPermissions.fromPartial(e)) || [];
+    message.accountPermissions =
+      object.accountPermissions?.map((e) =>
+        GenesisAccountPermissions.fromPartial(e),
+      ) || [];
     message.disabledTypeUrls = object.disabledTypeUrls?.map((e) => e) || [];
     return message;
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

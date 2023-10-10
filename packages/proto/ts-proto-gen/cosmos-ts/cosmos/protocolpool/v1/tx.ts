@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+
 import { Coin } from "../../base/v1beta1/coin";
 
 export const protobufPackage = "cosmos.protocolpool.v1";
@@ -17,8 +18,7 @@ export interface MsgFundCommunityPool {
 }
 
 /** MsgFundCommunityPoolResponse defines the Msg/FundCommunityPool response type. */
-export interface MsgFundCommunityPoolResponse {
-}
+export interface MsgFundCommunityPoolResponse {}
 
 /**
  * MsgCommunityPoolSpend defines a message for sending tokens from the community
@@ -40,15 +40,17 @@ export interface MsgCommunityPoolSpend {
  *
  * Since: cosmos-sdk 0.50
  */
-export interface MsgCommunityPoolSpendResponse {
-}
+export interface MsgCommunityPoolSpendResponse {}
 
 function createBaseMsgFundCommunityPool(): MsgFundCommunityPool {
   return { amount: [], depositor: "" };
 }
 
 export const MsgFundCommunityPool = {
-  encode(message: MsgFundCommunityPool, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgFundCommunityPool,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -58,8 +60,12 @@ export const MsgFundCommunityPool = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFundCommunityPool {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): MsgFundCommunityPool {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgFundCommunityPool();
     while (reader.pos < end) {
@@ -90,7 +96,9 @@ export const MsgFundCommunityPool = {
 
   fromJSON(object: any): MsgFundCommunityPool {
     return {
-      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      amount: Array.isArray(object?.amount)
+        ? object.amount.map((e: any) => Coin.fromJSON(e))
+        : [],
       depositor: isSet(object.depositor) ? String(object.depositor) : "",
     };
   },
@@ -106,10 +114,14 @@ export const MsgFundCommunityPool = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgFundCommunityPool>, I>>(base?: I): MsgFundCommunityPool {
+  create<I extends Exact<DeepPartial<MsgFundCommunityPool>, I>>(
+    base?: I,
+  ): MsgFundCommunityPool {
     return MsgFundCommunityPool.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgFundCommunityPool>, I>>(object: I): MsgFundCommunityPool {
+  fromPartial<I extends Exact<DeepPartial<MsgFundCommunityPool>, I>>(
+    object: I,
+  ): MsgFundCommunityPool {
     const message = createBaseMsgFundCommunityPool();
     message.amount = object.amount?.map((e) => Coin.fromPartial(e)) || [];
     message.depositor = object.depositor ?? "";
@@ -122,12 +134,19 @@ function createBaseMsgFundCommunityPoolResponse(): MsgFundCommunityPoolResponse 
 }
 
 export const MsgFundCommunityPoolResponse = {
-  encode(_: MsgFundCommunityPoolResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgFundCommunityPoolResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgFundCommunityPoolResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): MsgFundCommunityPoolResponse {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgFundCommunityPoolResponse();
     while (reader.pos < end) {
@@ -151,10 +170,14 @@ export const MsgFundCommunityPoolResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgFundCommunityPoolResponse>, I>>(base?: I): MsgFundCommunityPoolResponse {
+  create<I extends Exact<DeepPartial<MsgFundCommunityPoolResponse>, I>>(
+    base?: I,
+  ): MsgFundCommunityPoolResponse {
     return MsgFundCommunityPoolResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgFundCommunityPoolResponse>, I>>(_: I): MsgFundCommunityPoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgFundCommunityPoolResponse>, I>>(
+    _: I,
+  ): MsgFundCommunityPoolResponse {
     const message = createBaseMsgFundCommunityPoolResponse();
     return message;
   },
@@ -165,7 +188,10 @@ function createBaseMsgCommunityPoolSpend(): MsgCommunityPoolSpend {
 }
 
 export const MsgCommunityPoolSpend = {
-  encode(message: MsgCommunityPoolSpend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgCommunityPoolSpend,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -178,8 +204,12 @@ export const MsgCommunityPoolSpend = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCommunityPoolSpend {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): MsgCommunityPoolSpend {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCommunityPoolSpend();
     while (reader.pos < end) {
@@ -219,7 +249,9 @@ export const MsgCommunityPoolSpend = {
     return {
       authority: isSet(object.authority) ? String(object.authority) : "",
       recipient: isSet(object.recipient) ? String(object.recipient) : "",
-      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      amount: Array.isArray(object?.amount)
+        ? object.amount.map((e: any) => Coin.fromJSON(e))
+        : [],
     };
   },
 
@@ -237,10 +269,14 @@ export const MsgCommunityPoolSpend = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCommunityPoolSpend>, I>>(base?: I): MsgCommunityPoolSpend {
+  create<I extends Exact<DeepPartial<MsgCommunityPoolSpend>, I>>(
+    base?: I,
+  ): MsgCommunityPoolSpend {
     return MsgCommunityPoolSpend.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgCommunityPoolSpend>, I>>(object: I): MsgCommunityPoolSpend {
+  fromPartial<I extends Exact<DeepPartial<MsgCommunityPoolSpend>, I>>(
+    object: I,
+  ): MsgCommunityPoolSpend {
     const message = createBaseMsgCommunityPoolSpend();
     message.authority = object.authority ?? "";
     message.recipient = object.recipient ?? "";
@@ -254,12 +290,19 @@ function createBaseMsgCommunityPoolSpendResponse(): MsgCommunityPoolSpendRespons
 }
 
 export const MsgCommunityPoolSpendResponse = {
-  encode(_: MsgCommunityPoolSpendResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgCommunityPoolSpendResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCommunityPoolSpendResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): MsgCommunityPoolSpendResponse {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCommunityPoolSpendResponse();
     while (reader.pos < end) {
@@ -283,10 +326,14 @@ export const MsgCommunityPoolSpendResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCommunityPoolSpendResponse>, I>>(base?: I): MsgCommunityPoolSpendResponse {
+  create<I extends Exact<DeepPartial<MsgCommunityPoolSpendResponse>, I>>(
+    base?: I,
+  ): MsgCommunityPoolSpendResponse {
     return MsgCommunityPoolSpendResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgCommunityPoolSpendResponse>, I>>(_: I): MsgCommunityPoolSpendResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCommunityPoolSpendResponse>, I>>(
+    _: I,
+  ): MsgCommunityPoolSpendResponse {
     const message = createBaseMsgCommunityPoolSpendResponse();
     return message;
   },
@@ -300,7 +347,9 @@ export interface Msg {
    *
    * Since: cosmos-sdk 0.50
    */
-  FundCommunityPool(request: MsgFundCommunityPool): Promise<MsgFundCommunityPoolResponse>;
+  FundCommunityPool(
+    request: MsgFundCommunityPool,
+  ): Promise<MsgFundCommunityPoolResponse>;
   /**
    * CommunityPoolSpend defines a governance operation for sending tokens from
    * the community pool in the x/protocolpool module to another account, which
@@ -309,7 +358,9 @@ export interface Msg {
    *
    * Since: cosmos-sdk 0.50
    */
-  CommunityPoolSpend(request: MsgCommunityPoolSpend): Promise<MsgCommunityPoolSpendResponse>;
+  CommunityPoolSpend(
+    request: MsgCommunityPoolSpend,
+  ): Promise<MsgCommunityPoolSpendResponse>;
 }
 
 export const MsgServiceName = "cosmos.protocolpool.v1.Msg";
@@ -322,34 +373,62 @@ export class MsgClientImpl implements Msg {
     this.FundCommunityPool = this.FundCommunityPool.bind(this);
     this.CommunityPoolSpend = this.CommunityPoolSpend.bind(this);
   }
-  FundCommunityPool(request: MsgFundCommunityPool): Promise<MsgFundCommunityPoolResponse> {
+  FundCommunityPool(
+    request: MsgFundCommunityPool,
+  ): Promise<MsgFundCommunityPoolResponse> {
     const data = MsgFundCommunityPool.encode(request).finish();
     const promise = this.rpc.request(this.service, "FundCommunityPool", data);
-    return promise.then((data) => MsgFundCommunityPoolResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgFundCommunityPoolResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
-  CommunityPoolSpend(request: MsgCommunityPoolSpend): Promise<MsgCommunityPoolSpendResponse> {
+  CommunityPoolSpend(
+    request: MsgCommunityPoolSpend,
+  ): Promise<MsgCommunityPoolSpendResponse> {
     const data = MsgCommunityPoolSpend.encode(request).finish();
     const promise = this.rpc.request(this.service, "CommunityPoolSpend", data);
-    return promise.then((data) => MsgCommunityPoolSpendResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgCommunityPoolSpendResponse.decode(_m0.Reader.create(data)),
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array,
+  ): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

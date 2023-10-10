@@ -47,7 +47,10 @@ function createBaseMsgInit(): MsgInit {
 }
 
 export const MsgInit = {
-  encode(message: MsgInit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgInit,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
@@ -61,7 +64,8 @@ export const MsgInit = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgInit {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInit();
     while (reader.pos < end) {
@@ -101,7 +105,9 @@ export const MsgInit = {
     return {
       sender: isSet(object.sender) ? String(object.sender) : "",
       accountType: isSet(object.accountType) ? String(object.accountType) : "",
-      message: isSet(object.message) ? bytesFromBase64(object.message) : new Uint8Array(0),
+      message: isSet(object.message)
+        ? bytesFromBase64(object.message)
+        : new Uint8Array(0),
     };
   },
 
@@ -136,7 +142,10 @@ function createBaseMsgInitResponse(): MsgInitResponse {
 }
 
 export const MsgInitResponse = {
-  encode(message: MsgInitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgInitResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.accountAddress !== "") {
       writer.uint32(10).string(message.accountAddress);
     }
@@ -147,7 +156,8 @@ export const MsgInitResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgInitResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgInitResponse();
     while (reader.pos < end) {
@@ -178,8 +188,12 @@ export const MsgInitResponse = {
 
   fromJSON(object: any): MsgInitResponse {
     return {
-      accountAddress: isSet(object.accountAddress) ? String(object.accountAddress) : "",
-      response: isSet(object.response) ? bytesFromBase64(object.response) : new Uint8Array(0),
+      accountAddress: isSet(object.accountAddress)
+        ? String(object.accountAddress)
+        : "",
+      response: isSet(object.response)
+        ? bytesFromBase64(object.response)
+        : new Uint8Array(0),
     };
   },
 
@@ -194,10 +208,14 @@ export const MsgInitResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgInitResponse>, I>>(base?: I): MsgInitResponse {
+  create<I extends Exact<DeepPartial<MsgInitResponse>, I>>(
+    base?: I,
+  ): MsgInitResponse {
     return MsgInitResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgInitResponse>, I>>(object: I): MsgInitResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgInitResponse>, I>>(
+    object: I,
+  ): MsgInitResponse {
     const message = createBaseMsgInitResponse();
     message.accountAddress = object.accountAddress ?? "";
     message.response = object.response ?? new Uint8Array(0);
@@ -210,7 +228,10 @@ function createBaseMsgExecute(): MsgExecute {
 }
 
 export const MsgExecute = {
-  encode(message: MsgExecute, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgExecute,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
@@ -224,7 +245,8 @@ export const MsgExecute = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgExecute {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExecute();
     while (reader.pos < end) {
@@ -264,7 +286,9 @@ export const MsgExecute = {
     return {
       sender: isSet(object.sender) ? String(object.sender) : "",
       target: isSet(object.target) ? String(object.target) : "",
-      message: isSet(object.message) ? bytesFromBase64(object.message) : new Uint8Array(0),
+      message: isSet(object.message)
+        ? bytesFromBase64(object.message)
+        : new Uint8Array(0),
     };
   },
 
@@ -285,7 +309,9 @@ export const MsgExecute = {
   create<I extends Exact<DeepPartial<MsgExecute>, I>>(base?: I): MsgExecute {
     return MsgExecute.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgExecute>, I>>(object: I): MsgExecute {
+  fromPartial<I extends Exact<DeepPartial<MsgExecute>, I>>(
+    object: I,
+  ): MsgExecute {
     const message = createBaseMsgExecute();
     message.sender = object.sender ?? "";
     message.target = object.target ?? "";
@@ -299,7 +325,10 @@ function createBaseMsgExecuteResponse(): MsgExecuteResponse {
 }
 
 export const MsgExecuteResponse = {
-  encode(message: MsgExecuteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgExecuteResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.response.length !== 0) {
       writer.uint32(10).bytes(message.response);
     }
@@ -307,7 +336,8 @@ export const MsgExecuteResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgExecuteResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExecuteResponse();
     while (reader.pos < end) {
@@ -330,7 +360,11 @@ export const MsgExecuteResponse = {
   },
 
   fromJSON(object: any): MsgExecuteResponse {
-    return { response: isSet(object.response) ? bytesFromBase64(object.response) : new Uint8Array(0) };
+    return {
+      response: isSet(object.response)
+        ? bytesFromBase64(object.response)
+        : new Uint8Array(0),
+    };
   },
 
   toJSON(message: MsgExecuteResponse): unknown {
@@ -341,10 +375,14 @@ export const MsgExecuteResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgExecuteResponse>, I>>(base?: I): MsgExecuteResponse {
+  create<I extends Exact<DeepPartial<MsgExecuteResponse>, I>>(
+    base?: I,
+  ): MsgExecuteResponse {
     return MsgExecuteResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgExecuteResponse>, I>>(object: I): MsgExecuteResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgExecuteResponse>, I>>(
+    object: I,
+  ): MsgExecuteResponse {
     const message = createBaseMsgExecuteResponse();
     message.response = object.response ?? new Uint8Array(0);
     return message;
@@ -372,18 +410,26 @@ export class MsgClientImpl implements Msg {
   Init(request: MsgInit): Promise<MsgInitResponse> {
     const data = MsgInit.encode(request).finish();
     const promise = this.rpc.request(this.service, "Init", data);
-    return promise.then((data) => MsgInitResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgInitResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
   Execute(request: MsgExecute): Promise<MsgExecuteResponse> {
     const data = MsgExecute.encode(request).finish();
     const promise = this.rpc.request(this.service, "Execute", data);
-    return promise.then((data) => MsgExecuteResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgExecuteResponse.decode(_m0.Reader.create(data)),
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array,
+  ): Promise<Uint8Array>;
 }
 
 declare const self: any | undefined;
@@ -430,17 +476,33 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

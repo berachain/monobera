@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+
 import { Any } from "../../../google/protobuf/any";
 import { Grant } from "./authz";
 
@@ -19,8 +20,7 @@ export interface MsgGrant {
 }
 
 /** MsgGrantResponse defines the Msg/MsgGrant response type. */
-export interface MsgGrantResponse {
-}
+export interface MsgGrantResponse {}
 
 /**
  * MsgExec attempts to execute the provided messages using
@@ -53,15 +53,17 @@ export interface MsgRevoke {
 }
 
 /** MsgRevokeResponse defines the Msg/MsgRevokeResponse response type. */
-export interface MsgRevokeResponse {
-}
+export interface MsgRevokeResponse {}
 
 function createBaseMsgGrant(): MsgGrant {
   return { granter: "", grantee: "", grant: undefined };
 }
 
 export const MsgGrant = {
-  encode(message: MsgGrant, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgGrant,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
     }
@@ -75,7 +77,8 @@ export const MsgGrant = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrant {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgGrant();
     while (reader.pos < end) {
@@ -140,7 +143,10 @@ export const MsgGrant = {
     const message = createBaseMsgGrant();
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
-    message.grant = (object.grant !== undefined && object.grant !== null) ? Grant.fromPartial(object.grant) : undefined;
+    message.grant =
+      object.grant !== undefined && object.grant !== null
+        ? Grant.fromPartial(object.grant)
+        : undefined;
     return message;
   },
 };
@@ -150,12 +156,16 @@ function createBaseMsgGrantResponse(): MsgGrantResponse {
 }
 
 export const MsgGrantResponse = {
-  encode(_: MsgGrantResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgGrantResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgGrantResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgGrantResponse();
     while (reader.pos < end) {
@@ -179,10 +189,14 @@ export const MsgGrantResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(base?: I): MsgGrantResponse {
+  create<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(
+    base?: I,
+  ): MsgGrantResponse {
     return MsgGrantResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(_: I): MsgGrantResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(
+    _: I,
+  ): MsgGrantResponse {
     const message = createBaseMsgGrantResponse();
     return message;
   },
@@ -193,7 +207,10 @@ function createBaseMsgExec(): MsgExec {
 }
 
 export const MsgExec = {
-  encode(message: MsgExec, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgExec,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.grantee !== "") {
       writer.uint32(10).string(message.grantee);
     }
@@ -204,7 +221,8 @@ export const MsgExec = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgExec {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExec();
     while (reader.pos < end) {
@@ -236,7 +254,9 @@ export const MsgExec = {
   fromJSON(object: any): MsgExec {
     return {
       grantee: isSet(object.grantee) ? String(object.grantee) : "",
-      msgs: Array.isArray(object?.msgs) ? object.msgs.map((e: any) => Any.fromJSON(e)) : [],
+      msgs: Array.isArray(object?.msgs)
+        ? object.msgs.map((e: any) => Any.fromJSON(e))
+        : [],
     };
   },
 
@@ -267,7 +287,10 @@ function createBaseMsgExecResponse(): MsgExecResponse {
 }
 
 export const MsgExecResponse = {
-  encode(message: MsgExecResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgExecResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     for (const v of message.results) {
       writer.uint32(10).bytes(v!);
     }
@@ -275,7 +298,8 @@ export const MsgExecResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgExecResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgExecResponse();
     while (reader.pos < end) {
@@ -298,7 +322,11 @@ export const MsgExecResponse = {
   },
 
   fromJSON(object: any): MsgExecResponse {
-    return { results: Array.isArray(object?.results) ? object.results.map((e: any) => bytesFromBase64(e)) : [] };
+    return {
+      results: Array.isArray(object?.results)
+        ? object.results.map((e: any) => bytesFromBase64(e))
+        : [],
+    };
   },
 
   toJSON(message: MsgExecResponse): unknown {
@@ -309,10 +337,14 @@ export const MsgExecResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgExecResponse>, I>>(base?: I): MsgExecResponse {
+  create<I extends Exact<DeepPartial<MsgExecResponse>, I>>(
+    base?: I,
+  ): MsgExecResponse {
     return MsgExecResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgExecResponse>, I>>(object: I): MsgExecResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgExecResponse>, I>>(
+    object: I,
+  ): MsgExecResponse {
     const message = createBaseMsgExecResponse();
     message.results = object.results?.map((e) => e) || [];
     return message;
@@ -324,7 +356,10 @@ function createBaseMsgRevoke(): MsgRevoke {
 }
 
 export const MsgRevoke = {
-  encode(message: MsgRevoke, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgRevoke,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.granter !== "") {
       writer.uint32(10).string(message.granter);
     }
@@ -338,7 +373,8 @@ export const MsgRevoke = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgRevoke {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRevoke();
     while (reader.pos < end) {
@@ -399,7 +435,9 @@ export const MsgRevoke = {
   create<I extends Exact<DeepPartial<MsgRevoke>, I>>(base?: I): MsgRevoke {
     return MsgRevoke.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgRevoke>, I>>(object: I): MsgRevoke {
+  fromPartial<I extends Exact<DeepPartial<MsgRevoke>, I>>(
+    object: I,
+  ): MsgRevoke {
     const message = createBaseMsgRevoke();
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
@@ -413,12 +451,16 @@ function createBaseMsgRevokeResponse(): MsgRevokeResponse {
 }
 
 export const MsgRevokeResponse = {
-  encode(_: MsgRevokeResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgRevokeResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgRevokeResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRevokeResponse();
     while (reader.pos < end) {
@@ -442,10 +484,14 @@ export const MsgRevokeResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgRevokeResponse>, I>>(base?: I): MsgRevokeResponse {
+  create<I extends Exact<DeepPartial<MsgRevokeResponse>, I>>(
+    base?: I,
+  ): MsgRevokeResponse {
     return MsgRevokeResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgRevokeResponse>, I>>(_: I): MsgRevokeResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgRevokeResponse>, I>>(
+    _: I,
+  ): MsgRevokeResponse {
     const message = createBaseMsgRevokeResponse();
     return message;
   },
@@ -487,24 +533,34 @@ export class MsgClientImpl implements Msg {
   Grant(request: MsgGrant): Promise<MsgGrantResponse> {
     const data = MsgGrant.encode(request).finish();
     const promise = this.rpc.request(this.service, "Grant", data);
-    return promise.then((data) => MsgGrantResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgGrantResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
   Exec(request: MsgExec): Promise<MsgExecResponse> {
     const data = MsgExec.encode(request).finish();
     const promise = this.rpc.request(this.service, "Exec", data);
-    return promise.then((data) => MsgExecResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgExecResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
   Revoke(request: MsgRevoke): Promise<MsgRevokeResponse> {
     const data = MsgRevoke.encode(request).finish();
     const promise = this.rpc.request(this.service, "Revoke", data);
-    return promise.then((data) => MsgRevokeResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgRevokeResponse.decode(_m0.Reader.create(data)),
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array,
+  ): Promise<Uint8Array>;
 }
 
 declare const self: any | undefined;
@@ -551,17 +607,33 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

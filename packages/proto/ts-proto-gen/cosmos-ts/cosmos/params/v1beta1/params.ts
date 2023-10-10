@@ -26,7 +26,10 @@ function createBaseParameterChangeProposal(): ParameterChangeProposal {
 }
 
 export const ParameterChangeProposal = {
-  encode(message: ParameterChangeProposal, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ParameterChangeProposal,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
@@ -39,8 +42,12 @@ export const ParameterChangeProposal = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ParameterChangeProposal {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): ParameterChangeProposal {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParameterChangeProposal();
     while (reader.pos < end) {
@@ -80,7 +87,9 @@ export const ParameterChangeProposal = {
     return {
       title: isSet(object.title) ? String(object.title) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      changes: Array.isArray(object?.changes) ? object.changes.map((e: any) => ParamChange.fromJSON(e)) : [],
+      changes: Array.isArray(object?.changes)
+        ? object.changes.map((e: any) => ParamChange.fromJSON(e))
+        : [],
     };
   },
 
@@ -98,14 +107,19 @@ export const ParameterChangeProposal = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ParameterChangeProposal>, I>>(base?: I): ParameterChangeProposal {
+  create<I extends Exact<DeepPartial<ParameterChangeProposal>, I>>(
+    base?: I,
+  ): ParameterChangeProposal {
     return ParameterChangeProposal.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ParameterChangeProposal>, I>>(object: I): ParameterChangeProposal {
+  fromPartial<I extends Exact<DeepPartial<ParameterChangeProposal>, I>>(
+    object: I,
+  ): ParameterChangeProposal {
     const message = createBaseParameterChangeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
-    message.changes = object.changes?.map((e) => ParamChange.fromPartial(e)) || [];
+    message.changes =
+      object.changes?.map((e) => ParamChange.fromPartial(e)) || [];
     return message;
   },
 };
@@ -115,7 +129,10 @@ function createBaseParamChange(): ParamChange {
 }
 
 export const ParamChange = {
-  encode(message: ParamChange, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ParamChange,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.subspace !== "") {
       writer.uint32(10).string(message.subspace);
     }
@@ -129,7 +146,8 @@ export const ParamChange = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ParamChange {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParamChange();
     while (reader.pos < end) {
@@ -190,7 +208,9 @@ export const ParamChange = {
   create<I extends Exact<DeepPartial<ParamChange>, I>>(base?: I): ParamChange {
     return ParamChange.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ParamChange>, I>>(object: I): ParamChange {
+  fromPartial<I extends Exact<DeepPartial<ParamChange>, I>>(
+    object: I,
+  ): ParamChange {
     const message = createBaseParamChange();
     message.subspace = object.subspace ?? "";
     message.key = object.key ?? "";
@@ -199,17 +219,33 @@ export const ParamChange = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

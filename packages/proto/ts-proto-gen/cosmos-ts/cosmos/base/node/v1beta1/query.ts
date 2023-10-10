@@ -1,13 +1,13 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+
 import { Timestamp } from "../../../../google/protobuf/timestamp";
 
 export const protobufPackage = "cosmos.base.node.v1beta1";
 
 /** ConfigRequest defines the request structure for the Config gRPC query. */
-export interface ConfigRequest {
-}
+export interface ConfigRequest {}
 
 /** ConfigResponse defines the response structure for the Config gRPC query. */
 export interface ConfigResponse {
@@ -18,8 +18,7 @@ export interface ConfigResponse {
 }
 
 /** StateRequest defines the request structure for the status of a node. */
-export interface StatusRequest {
-}
+export interface StatusRequest {}
 
 /** StateResponse defines the response structure for the status of a node. */
 export interface StatusResponse {
@@ -28,9 +27,7 @@ export interface StatusResponse {
   /** current block height */
   height: Long;
   /** block height timestamp */
-  timestamp?:
-    | Date
-    | undefined;
+  timestamp?: Date | undefined;
   /** app hash of the current block */
   appHash: Uint8Array;
   /** validator hash provided by the consensus header */
@@ -42,12 +39,16 @@ function createBaseConfigRequest(): ConfigRequest {
 }
 
 export const ConfigRequest = {
-  encode(_: ConfigRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: ConfigRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ConfigRequest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConfigRequest();
     while (reader.pos < end) {
@@ -71,10 +72,14 @@ export const ConfigRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ConfigRequest>, I>>(base?: I): ConfigRequest {
+  create<I extends Exact<DeepPartial<ConfigRequest>, I>>(
+    base?: I,
+  ): ConfigRequest {
     return ConfigRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ConfigRequest>, I>>(_: I): ConfigRequest {
+  fromPartial<I extends Exact<DeepPartial<ConfigRequest>, I>>(
+    _: I,
+  ): ConfigRequest {
     const message = createBaseConfigRequest();
     return message;
   },
@@ -85,7 +90,10 @@ function createBaseConfigResponse(): ConfigResponse {
 }
 
 export const ConfigResponse = {
-  encode(message: ConfigResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ConfigResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.minimumGasPrice !== "") {
       writer.uint32(10).string(message.minimumGasPrice);
     }
@@ -99,7 +107,8 @@ export const ConfigResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ConfigResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConfigResponse();
     while (reader.pos < end) {
@@ -137,9 +146,15 @@ export const ConfigResponse = {
 
   fromJSON(object: any): ConfigResponse {
     return {
-      minimumGasPrice: isSet(object.minimumGasPrice) ? String(object.minimumGasPrice) : "",
-      pruningKeepRecent: isSet(object.pruningKeepRecent) ? String(object.pruningKeepRecent) : "",
-      pruningInterval: isSet(object.pruningInterval) ? String(object.pruningInterval) : "",
+      minimumGasPrice: isSet(object.minimumGasPrice)
+        ? String(object.minimumGasPrice)
+        : "",
+      pruningKeepRecent: isSet(object.pruningKeepRecent)
+        ? String(object.pruningKeepRecent)
+        : "",
+      pruningInterval: isSet(object.pruningInterval)
+        ? String(object.pruningInterval)
+        : "",
     };
   },
 
@@ -157,10 +172,14 @@ export const ConfigResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ConfigResponse>, I>>(base?: I): ConfigResponse {
+  create<I extends Exact<DeepPartial<ConfigResponse>, I>>(
+    base?: I,
+  ): ConfigResponse {
     return ConfigResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ConfigResponse>, I>>(object: I): ConfigResponse {
+  fromPartial<I extends Exact<DeepPartial<ConfigResponse>, I>>(
+    object: I,
+  ): ConfigResponse {
     const message = createBaseConfigResponse();
     message.minimumGasPrice = object.minimumGasPrice ?? "";
     message.pruningKeepRecent = object.pruningKeepRecent ?? "";
@@ -174,12 +193,16 @@ function createBaseStatusRequest(): StatusRequest {
 }
 
 export const StatusRequest = {
-  encode(_: StatusRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: StatusRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): StatusRequest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStatusRequest();
     while (reader.pos < end) {
@@ -203,10 +226,14 @@ export const StatusRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<StatusRequest>, I>>(base?: I): StatusRequest {
+  create<I extends Exact<DeepPartial<StatusRequest>, I>>(
+    base?: I,
+  ): StatusRequest {
     return StatusRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<StatusRequest>, I>>(_: I): StatusRequest {
+  fromPartial<I extends Exact<DeepPartial<StatusRequest>, I>>(
+    _: I,
+  ): StatusRequest {
     const message = createBaseStatusRequest();
     return message;
   },
@@ -223,7 +250,10 @@ function createBaseStatusResponse(): StatusResponse {
 }
 
 export const StatusResponse = {
-  encode(message: StatusResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: StatusResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (!message.earliestStoreHeight.isZero()) {
       writer.uint32(8).uint64(message.earliestStoreHeight);
     }
@@ -231,7 +261,10 @@ export const StatusResponse = {
       writer.uint32(16).uint64(message.height);
     }
     if (message.timestamp !== undefined) {
-      Timestamp.encode(toTimestamp(message.timestamp), writer.uint32(26).fork()).ldelim();
+      Timestamp.encode(
+        toTimestamp(message.timestamp),
+        writer.uint32(26).fork(),
+      ).ldelim();
     }
     if (message.appHash.length !== 0) {
       writer.uint32(34).bytes(message.appHash);
@@ -243,7 +276,8 @@ export const StatusResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): StatusResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseStatusResponse();
     while (reader.pos < end) {
@@ -268,7 +302,9 @@ export const StatusResponse = {
             break;
           }
 
-          message.timestamp = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.timestamp = fromTimestamp(
+            Timestamp.decode(reader, reader.uint32()),
+          );
           continue;
         case 4:
           if (tag !== 34) {
@@ -295,18 +331,28 @@ export const StatusResponse = {
 
   fromJSON(object: any): StatusResponse {
     return {
-      earliestStoreHeight: isSet(object.earliestStoreHeight) ? Long.fromValue(object.earliestStoreHeight) : Long.UZERO,
+      earliestStoreHeight: isSet(object.earliestStoreHeight)
+        ? Long.fromValue(object.earliestStoreHeight)
+        : Long.UZERO,
       height: isSet(object.height) ? Long.fromValue(object.height) : Long.UZERO,
-      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
-      appHash: isSet(object.appHash) ? bytesFromBase64(object.appHash) : new Uint8Array(0),
-      validatorHash: isSet(object.validatorHash) ? bytesFromBase64(object.validatorHash) : new Uint8Array(0),
+      timestamp: isSet(object.timestamp)
+        ? fromJsonTimestamp(object.timestamp)
+        : undefined,
+      appHash: isSet(object.appHash)
+        ? bytesFromBase64(object.appHash)
+        : new Uint8Array(0),
+      validatorHash: isSet(object.validatorHash)
+        ? bytesFromBase64(object.validatorHash)
+        : new Uint8Array(0),
     };
   },
 
   toJSON(message: StatusResponse): unknown {
     const obj: any = {};
     if (!message.earliestStoreHeight.isZero()) {
-      obj.earliestStoreHeight = (message.earliestStoreHeight || Long.UZERO).toString();
+      obj.earliestStoreHeight = (
+        message.earliestStoreHeight || Long.UZERO
+      ).toString();
     }
     if (!message.height.isZero()) {
       obj.height = (message.height || Long.UZERO).toString();
@@ -323,17 +369,24 @@ export const StatusResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<StatusResponse>, I>>(base?: I): StatusResponse {
+  create<I extends Exact<DeepPartial<StatusResponse>, I>>(
+    base?: I,
+  ): StatusResponse {
     return StatusResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<StatusResponse>, I>>(object: I): StatusResponse {
+  fromPartial<I extends Exact<DeepPartial<StatusResponse>, I>>(
+    object: I,
+  ): StatusResponse {
     const message = createBaseStatusResponse();
-    message.earliestStoreHeight = (object.earliestStoreHeight !== undefined && object.earliestStoreHeight !== null)
-      ? Long.fromValue(object.earliestStoreHeight)
-      : Long.UZERO;
-    message.height = (object.height !== undefined && object.height !== null)
-      ? Long.fromValue(object.height)
-      : Long.UZERO;
+    message.earliestStoreHeight =
+      object.earliestStoreHeight !== undefined &&
+      object.earliestStoreHeight !== null
+        ? Long.fromValue(object.earliestStoreHeight)
+        : Long.UZERO;
+    message.height =
+      object.height !== undefined && object.height !== null
+        ? Long.fromValue(object.height)
+        : Long.UZERO;
     message.timestamp = object.timestamp ?? undefined;
     message.appHash = object.appHash ?? new Uint8Array(0);
     message.validatorHash = object.validatorHash ?? new Uint8Array(0);
@@ -362,18 +415,26 @@ export class ServiceClientImpl implements Service {
   Config(request: ConfigRequest): Promise<ConfigResponse> {
     const data = ConfigRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Config", data);
-    return promise.then((data) => ConfigResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      ConfigResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
   Status(request: StatusRequest): Promise<StatusResponse> {
     const data = StatusRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Status", data);
-    return promise.then((data) => StatusResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      StatusResponse.decode(_m0.Reader.create(data)),
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array,
+  ): Promise<Uint8Array>;
 }
 
 declare const self: any | undefined;
@@ -420,17 +481,33 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 function toTimestamp(date: Date): Timestamp {
   const seconds = numberToLong(date.getTime() / 1_000);

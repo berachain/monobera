@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+
 import { PageRequest, PageResponse } from "../../base/query/v1beta1/pagination";
 import { GenesisAccountPermissions, Permissions } from "./types";
 
@@ -30,8 +31,7 @@ export interface AccountsResponse {
 }
 
 /** QueryDisableListRequest is the request type for the Query/DisabledList RPC method. */
-export interface QueryDisabledListRequest {
-}
+export interface QueryDisabledListRequest {}
 
 /** DisabledListResponse is the response type for the Query/DisabledList RPC method. */
 export interface DisabledListResponse {
@@ -43,7 +43,10 @@ function createBaseQueryAccountRequest(): QueryAccountRequest {
 }
 
 export const QueryAccountRequest = {
-  encode(message: QueryAccountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: QueryAccountRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
@@ -51,7 +54,8 @@ export const QueryAccountRequest = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountRequest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountRequest();
     while (reader.pos < end) {
@@ -85,10 +89,14 @@ export const QueryAccountRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryAccountRequest>, I>>(base?: I): QueryAccountRequest {
+  create<I extends Exact<DeepPartial<QueryAccountRequest>, I>>(
+    base?: I,
+  ): QueryAccountRequest {
     return QueryAccountRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryAccountRequest>, I>>(object: I): QueryAccountRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountRequest>, I>>(
+    object: I,
+  ): QueryAccountRequest {
     const message = createBaseQueryAccountRequest();
     message.address = object.address ?? "";
     return message;
@@ -100,7 +108,10 @@ function createBaseAccountResponse(): AccountResponse {
 }
 
 export const AccountResponse = {
-  encode(message: AccountResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: AccountResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.permission !== undefined) {
       Permissions.encode(message.permission, writer.uint32(10).fork()).ldelim();
     }
@@ -108,7 +119,8 @@ export const AccountResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): AccountResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAccountResponse();
     while (reader.pos < end) {
@@ -131,7 +143,11 @@ export const AccountResponse = {
   },
 
   fromJSON(object: any): AccountResponse {
-    return { permission: isSet(object.permission) ? Permissions.fromJSON(object.permission) : undefined };
+    return {
+      permission: isSet(object.permission)
+        ? Permissions.fromJSON(object.permission)
+        : undefined,
+    };
   },
 
   toJSON(message: AccountResponse): unknown {
@@ -142,14 +158,19 @@ export const AccountResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<AccountResponse>, I>>(base?: I): AccountResponse {
+  create<I extends Exact<DeepPartial<AccountResponse>, I>>(
+    base?: I,
+  ): AccountResponse {
     return AccountResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AccountResponse>, I>>(object: I): AccountResponse {
+  fromPartial<I extends Exact<DeepPartial<AccountResponse>, I>>(
+    object: I,
+  ): AccountResponse {
     const message = createBaseAccountResponse();
-    message.permission = (object.permission !== undefined && object.permission !== null)
-      ? Permissions.fromPartial(object.permission)
-      : undefined;
+    message.permission =
+      object.permission !== undefined && object.permission !== null
+        ? Permissions.fromPartial(object.permission)
+        : undefined;
     return message;
   },
 };
@@ -159,15 +180,22 @@ function createBaseQueryAccountsRequest(): QueryAccountsRequest {
 }
 
 export const QueryAccountsRequest = {
-  encode(message: QueryAccountsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: QueryAccountsRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountsRequest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): QueryAccountsRequest {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountsRequest();
     while (reader.pos < end) {
@@ -190,7 +218,11 @@ export const QueryAccountsRequest = {
   },
 
   fromJSON(object: any): QueryAccountsRequest {
-    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+    return {
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryAccountsRequest): unknown {
@@ -201,14 +233,19 @@ export const QueryAccountsRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryAccountsRequest>, I>>(base?: I): QueryAccountsRequest {
+  create<I extends Exact<DeepPartial<QueryAccountsRequest>, I>>(
+    base?: I,
+  ): QueryAccountsRequest {
     return QueryAccountsRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryAccountsRequest>, I>>(object: I): QueryAccountsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountsRequest>, I>>(
+    object: I,
+  ): QueryAccountsRequest {
     const message = createBaseQueryAccountsRequest();
-    message.pagination = (object.pagination !== undefined && object.pagination !== null)
-      ? PageRequest.fromPartial(object.pagination)
-      : undefined;
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
@@ -218,18 +255,25 @@ function createBaseAccountsResponse(): AccountsResponse {
 }
 
 export const AccountsResponse = {
-  encode(message: AccountsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: AccountsResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     for (const v of message.accounts) {
       GenesisAccountPermissions.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork(),
+      ).ldelim();
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): AccountsResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAccountsResponse();
     while (reader.pos < end) {
@@ -240,7 +284,9 @@ export const AccountsResponse = {
             break;
           }
 
-          message.accounts.push(GenesisAccountPermissions.decode(reader, reader.uint32()));
+          message.accounts.push(
+            GenesisAccountPermissions.decode(reader, reader.uint32()),
+          );
           continue;
         case 2:
           if (tag !== 18) {
@@ -263,14 +309,18 @@ export const AccountsResponse = {
       accounts: Array.isArray(object?.accounts)
         ? object.accounts.map((e: any) => GenesisAccountPermissions.fromJSON(e))
         : [],
-      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
     };
   },
 
   toJSON(message: AccountsResponse): unknown {
     const obj: any = {};
     if (message.accounts?.length) {
-      obj.accounts = message.accounts.map((e) => GenesisAccountPermissions.toJSON(e));
+      obj.accounts = message.accounts.map((e) =>
+        GenesisAccountPermissions.toJSON(e),
+      );
     }
     if (message.pagination !== undefined) {
       obj.pagination = PageResponse.toJSON(message.pagination);
@@ -278,15 +328,22 @@ export const AccountsResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<AccountsResponse>, I>>(base?: I): AccountsResponse {
+  create<I extends Exact<DeepPartial<AccountsResponse>, I>>(
+    base?: I,
+  ): AccountsResponse {
     return AccountsResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AccountsResponse>, I>>(object: I): AccountsResponse {
+  fromPartial<I extends Exact<DeepPartial<AccountsResponse>, I>>(
+    object: I,
+  ): AccountsResponse {
     const message = createBaseAccountsResponse();
-    message.accounts = object.accounts?.map((e) => GenesisAccountPermissions.fromPartial(e)) || [];
-    message.pagination = (object.pagination !== undefined && object.pagination !== null)
-      ? PageResponse.fromPartial(object.pagination)
-      : undefined;
+    message.accounts =
+      object.accounts?.map((e) => GenesisAccountPermissions.fromPartial(e)) ||
+      [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
@@ -296,12 +353,19 @@ function createBaseQueryDisabledListRequest(): QueryDisabledListRequest {
 }
 
 export const QueryDisabledListRequest = {
-  encode(_: QueryDisabledListRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: QueryDisabledListRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryDisabledListRequest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): QueryDisabledListRequest {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryDisabledListRequest();
     while (reader.pos < end) {
@@ -325,10 +389,14 @@ export const QueryDisabledListRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<QueryDisabledListRequest>, I>>(base?: I): QueryDisabledListRequest {
+  create<I extends Exact<DeepPartial<QueryDisabledListRequest>, I>>(
+    base?: I,
+  ): QueryDisabledListRequest {
     return QueryDisabledListRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<QueryDisabledListRequest>, I>>(_: I): QueryDisabledListRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryDisabledListRequest>, I>>(
+    _: I,
+  ): QueryDisabledListRequest {
     const message = createBaseQueryDisabledListRequest();
     return message;
   },
@@ -339,15 +407,22 @@ function createBaseDisabledListResponse(): DisabledListResponse {
 }
 
 export const DisabledListResponse = {
-  encode(message: DisabledListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DisabledListResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     for (const v of message.disabledList) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): DisabledListResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): DisabledListResponse {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDisabledListResponse();
     while (reader.pos < end) {
@@ -370,7 +445,11 @@ export const DisabledListResponse = {
   },
 
   fromJSON(object: any): DisabledListResponse {
-    return { disabledList: Array.isArray(object?.disabledList) ? object.disabledList.map((e: any) => String(e)) : [] };
+    return {
+      disabledList: Array.isArray(object?.disabledList)
+        ? object.disabledList.map((e: any) => String(e))
+        : [],
+    };
   },
 
   toJSON(message: DisabledListResponse): unknown {
@@ -381,10 +460,14 @@ export const DisabledListResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<DisabledListResponse>, I>>(base?: I): DisabledListResponse {
+  create<I extends Exact<DeepPartial<DisabledListResponse>, I>>(
+    base?: I,
+  ): DisabledListResponse {
     return DisabledListResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<DisabledListResponse>, I>>(object: I): DisabledListResponse {
+  fromPartial<I extends Exact<DeepPartial<DisabledListResponse>, I>>(
+    object: I,
+  ): DisabledListResponse {
     const message = createBaseDisabledListResponse();
     message.disabledList = object.disabledList?.map((e) => e) || [];
     return message;
@@ -398,7 +481,9 @@ export interface Query {
   /** Account returns account permissions. */
   Accounts(request: QueryAccountsRequest): Promise<AccountsResponse>;
   /** DisabledList returns a list of disabled message urls */
-  DisabledList(request: QueryDisabledListRequest): Promise<DisabledListResponse>;
+  DisabledList(
+    request: QueryDisabledListRequest,
+  ): Promise<DisabledListResponse>;
 }
 
 export const QueryServiceName = "cosmos.circuit.v1.Query";
@@ -415,37 +500,65 @@ export class QueryClientImpl implements Query {
   Account(request: QueryAccountRequest): Promise<AccountResponse> {
     const data = QueryAccountRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Account", data);
-    return promise.then((data) => AccountResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      AccountResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
   Accounts(request: QueryAccountsRequest): Promise<AccountsResponse> {
     const data = QueryAccountsRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Accounts", data);
-    return promise.then((data) => AccountsResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      AccountsResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
-  DisabledList(request: QueryDisabledListRequest): Promise<DisabledListResponse> {
+  DisabledList(
+    request: QueryDisabledListRequest,
+  ): Promise<DisabledListResponse> {
     const data = QueryDisabledListRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "DisabledList", data);
-    return promise.then((data) => DisabledListResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      DisabledListResponse.decode(_m0.Reader.create(data)),
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array,
+  ): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

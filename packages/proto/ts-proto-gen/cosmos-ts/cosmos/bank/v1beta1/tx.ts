@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+
 import { Coin } from "../../base/v1beta1/coin";
 import { Input, Output, Params, SendEnabled } from "./bank";
 
@@ -14,8 +15,7 @@ export interface MsgSend {
 }
 
 /** MsgSendResponse defines the Msg/Send response type. */
-export interface MsgSendResponse {
-}
+export interface MsgSendResponse {}
 
 /** MsgMultiSend represents an arbitrary multi-in, multi-out send message. */
 export interface MsgMultiSend {
@@ -28,8 +28,7 @@ export interface MsgMultiSend {
 }
 
 /** MsgMultiSendResponse defines the Msg/MultiSend response type. */
-export interface MsgMultiSendResponse {
-}
+export interface MsgMultiSendResponse {}
 
 /**
  * MsgUpdateParams is the Msg/UpdateParams request type.
@@ -53,8 +52,7 @@ export interface MsgUpdateParams {
  *
  * Since: cosmos-sdk 0.47
  */
-export interface MsgUpdateParamsResponse {
-}
+export interface MsgUpdateParamsResponse {}
 
 /**
  * MsgSetSendEnabled is the Msg/SetSendEnabled request type.
@@ -84,8 +82,7 @@ export interface MsgSetSendEnabled {
  *
  * Since: cosmos-sdk 0.47
  */
-export interface MsgSetSendEnabledResponse {
-}
+export interface MsgSetSendEnabledResponse {}
 
 /**
  * MsgBurn defines a message for burning coins.
@@ -102,15 +99,17 @@ export interface MsgBurn {
  *
  * Since: cosmos-sdk 0.51
  */
-export interface MsgBurnResponse {
-}
+export interface MsgBurnResponse {}
 
 function createBaseMsgSend(): MsgSend {
   return { fromAddress: "", toAddress: "", amount: [] };
 }
 
 export const MsgSend = {
-  encode(message: MsgSend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgSend,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.fromAddress !== "") {
       writer.uint32(10).string(message.fromAddress);
     }
@@ -124,7 +123,8 @@ export const MsgSend = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgSend {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSend();
     while (reader.pos < end) {
@@ -164,7 +164,9 @@ export const MsgSend = {
     return {
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
       toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
-      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      amount: Array.isArray(object?.amount)
+        ? object.amount.map((e: any) => Coin.fromJSON(e))
+        : [],
     };
   },
 
@@ -199,12 +201,16 @@ function createBaseMsgSendResponse(): MsgSendResponse {
 }
 
 export const MsgSendResponse = {
-  encode(_: MsgSendResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgSendResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgSendResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSendResponse();
     while (reader.pos < end) {
@@ -228,10 +234,14 @@ export const MsgSendResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgSendResponse>, I>>(base?: I): MsgSendResponse {
+  create<I extends Exact<DeepPartial<MsgSendResponse>, I>>(
+    base?: I,
+  ): MsgSendResponse {
     return MsgSendResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgSendResponse>, I>>(_: I): MsgSendResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSendResponse>, I>>(
+    _: I,
+  ): MsgSendResponse {
     const message = createBaseMsgSendResponse();
     return message;
   },
@@ -242,7 +252,10 @@ function createBaseMsgMultiSend(): MsgMultiSend {
 }
 
 export const MsgMultiSend = {
-  encode(message: MsgMultiSend, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgMultiSend,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     for (const v of message.inputs) {
       Input.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -253,7 +266,8 @@ export const MsgMultiSend = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgMultiSend {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgMultiSend();
     while (reader.pos < end) {
@@ -284,8 +298,12 @@ export const MsgMultiSend = {
 
   fromJSON(object: any): MsgMultiSend {
     return {
-      inputs: Array.isArray(object?.inputs) ? object.inputs.map((e: any) => Input.fromJSON(e)) : [],
-      outputs: Array.isArray(object?.outputs) ? object.outputs.map((e: any) => Output.fromJSON(e)) : [],
+      inputs: Array.isArray(object?.inputs)
+        ? object.inputs.map((e: any) => Input.fromJSON(e))
+        : [],
+      outputs: Array.isArray(object?.outputs)
+        ? object.outputs.map((e: any) => Output.fromJSON(e))
+        : [],
     };
   },
 
@@ -300,10 +318,14 @@ export const MsgMultiSend = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgMultiSend>, I>>(base?: I): MsgMultiSend {
+  create<I extends Exact<DeepPartial<MsgMultiSend>, I>>(
+    base?: I,
+  ): MsgMultiSend {
     return MsgMultiSend.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgMultiSend>, I>>(object: I): MsgMultiSend {
+  fromPartial<I extends Exact<DeepPartial<MsgMultiSend>, I>>(
+    object: I,
+  ): MsgMultiSend {
     const message = createBaseMsgMultiSend();
     message.inputs = object.inputs?.map((e) => Input.fromPartial(e)) || [];
     message.outputs = object.outputs?.map((e) => Output.fromPartial(e)) || [];
@@ -316,12 +338,19 @@ function createBaseMsgMultiSendResponse(): MsgMultiSendResponse {
 }
 
 export const MsgMultiSendResponse = {
-  encode(_: MsgMultiSendResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgMultiSendResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgMultiSendResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): MsgMultiSendResponse {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgMultiSendResponse();
     while (reader.pos < end) {
@@ -345,10 +374,14 @@ export const MsgMultiSendResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgMultiSendResponse>, I>>(base?: I): MsgMultiSendResponse {
+  create<I extends Exact<DeepPartial<MsgMultiSendResponse>, I>>(
+    base?: I,
+  ): MsgMultiSendResponse {
     return MsgMultiSendResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgMultiSendResponse>, I>>(_: I): MsgMultiSendResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgMultiSendResponse>, I>>(
+    _: I,
+  ): MsgMultiSendResponse {
     const message = createBaseMsgMultiSendResponse();
     return message;
   },
@@ -359,7 +392,10 @@ function createBaseMsgUpdateParams(): MsgUpdateParams {
 }
 
 export const MsgUpdateParams = {
-  encode(message: MsgUpdateParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgUpdateParams,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -370,7 +406,8 @@ export const MsgUpdateParams = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
@@ -417,15 +454,20 @@ export const MsgUpdateParams = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(base?: I): MsgUpdateParams {
+  create<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(
+    base?: I,
+  ): MsgUpdateParams {
     return MsgUpdateParams.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(object: I): MsgUpdateParams {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(
+    object: I,
+  ): MsgUpdateParams {
     const message = createBaseMsgUpdateParams();
     message.authority = object.authority ?? "";
-    message.params = (object.params !== undefined && object.params !== null)
-      ? Params.fromPartial(object.params)
-      : undefined;
+    message.params =
+      object.params !== undefined && object.params !== null
+        ? Params.fromPartial(object.params)
+        : undefined;
     return message;
   },
 };
@@ -435,12 +477,19 @@ function createBaseMsgUpdateParamsResponse(): MsgUpdateParamsResponse {
 }
 
 export const MsgUpdateParamsResponse = {
-  encode(_: MsgUpdateParamsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgUpdateParamsResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): MsgUpdateParamsResponse {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
@@ -464,10 +513,14 @@ export const MsgUpdateParamsResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(base?: I): MsgUpdateParamsResponse {
+  create<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(
+    base?: I,
+  ): MsgUpdateParamsResponse {
     return MsgUpdateParamsResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(_: I): MsgUpdateParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(
+    _: I,
+  ): MsgUpdateParamsResponse {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
@@ -478,7 +531,10 @@ function createBaseMsgSetSendEnabled(): MsgSetSendEnabled {
 }
 
 export const MsgSetSendEnabled = {
-  encode(message: MsgSetSendEnabled, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgSetSendEnabled,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.authority !== "") {
       writer.uint32(10).string(message.authority);
     }
@@ -492,7 +548,8 @@ export const MsgSetSendEnabled = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetSendEnabled {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetSendEnabled();
     while (reader.pos < end) {
@@ -534,7 +591,9 @@ export const MsgSetSendEnabled = {
       sendEnabled: Array.isArray(object?.sendEnabled)
         ? object.sendEnabled.map((e: any) => SendEnabled.fromJSON(e))
         : [],
-      useDefaultFor: Array.isArray(object?.useDefaultFor) ? object.useDefaultFor.map((e: any) => String(e)) : [],
+      useDefaultFor: Array.isArray(object?.useDefaultFor)
+        ? object.useDefaultFor.map((e: any) => String(e))
+        : [],
     };
   },
 
@@ -552,13 +611,18 @@ export const MsgSetSendEnabled = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgSetSendEnabled>, I>>(base?: I): MsgSetSendEnabled {
+  create<I extends Exact<DeepPartial<MsgSetSendEnabled>, I>>(
+    base?: I,
+  ): MsgSetSendEnabled {
     return MsgSetSendEnabled.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgSetSendEnabled>, I>>(object: I): MsgSetSendEnabled {
+  fromPartial<I extends Exact<DeepPartial<MsgSetSendEnabled>, I>>(
+    object: I,
+  ): MsgSetSendEnabled {
     const message = createBaseMsgSetSendEnabled();
     message.authority = object.authority ?? "";
-    message.sendEnabled = object.sendEnabled?.map((e) => SendEnabled.fromPartial(e)) || [];
+    message.sendEnabled =
+      object.sendEnabled?.map((e) => SendEnabled.fromPartial(e)) || [];
     message.useDefaultFor = object.useDefaultFor?.map((e) => e) || [];
     return message;
   },
@@ -569,12 +633,19 @@ function createBaseMsgSetSendEnabledResponse(): MsgSetSendEnabledResponse {
 }
 
 export const MsgSetSendEnabledResponse = {
-  encode(_: MsgSetSendEnabledResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgSetSendEnabledResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetSendEnabledResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): MsgSetSendEnabledResponse {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetSendEnabledResponse();
     while (reader.pos < end) {
@@ -598,10 +669,14 @@ export const MsgSetSendEnabledResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgSetSendEnabledResponse>, I>>(base?: I): MsgSetSendEnabledResponse {
+  create<I extends Exact<DeepPartial<MsgSetSendEnabledResponse>, I>>(
+    base?: I,
+  ): MsgSetSendEnabledResponse {
     return MsgSetSendEnabledResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgSetSendEnabledResponse>, I>>(_: I): MsgSetSendEnabledResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSetSendEnabledResponse>, I>>(
+    _: I,
+  ): MsgSetSendEnabledResponse {
     const message = createBaseMsgSetSendEnabledResponse();
     return message;
   },
@@ -612,7 +687,10 @@ function createBaseMsgBurn(): MsgBurn {
 }
 
 export const MsgBurn = {
-  encode(message: MsgBurn, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgBurn,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.fromAddress !== "") {
       writer.uint32(10).string(message.fromAddress);
     }
@@ -623,7 +701,8 @@ export const MsgBurn = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgBurn {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBurn();
     while (reader.pos < end) {
@@ -655,7 +734,9 @@ export const MsgBurn = {
   fromJSON(object: any): MsgBurn {
     return {
       fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
-      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      amount: Array.isArray(object?.amount)
+        ? object.amount.map((e: any) => Coin.fromJSON(e))
+        : [],
     };
   },
 
@@ -686,12 +767,16 @@ function createBaseMsgBurnResponse(): MsgBurnResponse {
 }
 
 export const MsgBurnResponse = {
-  encode(_: MsgBurnResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgBurnResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgBurnResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgBurnResponse();
     while (reader.pos < end) {
@@ -715,10 +800,14 @@ export const MsgBurnResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgBurnResponse>, I>>(base?: I): MsgBurnResponse {
+  create<I extends Exact<DeepPartial<MsgBurnResponse>, I>>(
+    base?: I,
+  ): MsgBurnResponse {
     return MsgBurnResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MsgBurnResponse>, I>>(_: I): MsgBurnResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgBurnResponse>, I>>(
+    _: I,
+  ): MsgBurnResponse {
     const message = createBaseMsgBurnResponse();
     return message;
   },
@@ -751,7 +840,9 @@ export interface Msg {
    *
    * Since: cosmos-sdk 0.47
    */
-  SetSendEnabled(request: MsgSetSendEnabled): Promise<MsgSetSendEnabledResponse>;
+  SetSendEnabled(
+    request: MsgSetSendEnabled,
+  ): Promise<MsgSetSendEnabledResponse>;
 }
 
 export const MsgServiceName = "cosmos.bank.v1beta1.Msg";
@@ -770,49 +861,81 @@ export class MsgClientImpl implements Msg {
   Send(request: MsgSend): Promise<MsgSendResponse> {
     const data = MsgSend.encode(request).finish();
     const promise = this.rpc.request(this.service, "Send", data);
-    return promise.then((data) => MsgSendResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgSendResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
   MultiSend(request: MsgMultiSend): Promise<MsgMultiSendResponse> {
     const data = MsgMultiSend.encode(request).finish();
     const promise = this.rpc.request(this.service, "MultiSend", data);
-    return promise.then((data) => MsgMultiSendResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgMultiSendResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
   Burn(request: MsgBurn): Promise<MsgBurnResponse> {
     const data = MsgBurn.encode(request).finish();
     const promise = this.rpc.request(this.service, "Burn", data);
-    return promise.then((data) => MsgBurnResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgBurnResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
     const promise = this.rpc.request(this.service, "UpdateParams", data);
-    return promise.then((data) => MsgUpdateParamsResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgUpdateParamsResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
-  SetSendEnabled(request: MsgSetSendEnabled): Promise<MsgSetSendEnabledResponse> {
+  SetSendEnabled(
+    request: MsgSetSendEnabled,
+  ): Promise<MsgSetSendEnabledResponse> {
     const data = MsgSetSendEnabled.encode(request).finish();
     const promise = this.rpc.request(this.service, "SetSendEnabled", data);
-    return promise.then((data) => MsgSetSendEnabledResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      MsgSetSendEnabledResponse.decode(_m0.Reader.create(data)),
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array,
+  ): Promise<Uint8Array>;
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

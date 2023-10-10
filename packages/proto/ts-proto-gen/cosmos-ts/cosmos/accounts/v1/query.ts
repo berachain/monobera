@@ -23,7 +23,10 @@ function createBaseAccountQueryRequest(): AccountQueryRequest {
 }
 
 export const AccountQueryRequest = {
-  encode(message: AccountQueryRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: AccountQueryRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.target !== "") {
       writer.uint32(10).string(message.target);
     }
@@ -34,7 +37,8 @@ export const AccountQueryRequest = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): AccountQueryRequest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAccountQueryRequest();
     while (reader.pos < end) {
@@ -66,7 +70,9 @@ export const AccountQueryRequest = {
   fromJSON(object: any): AccountQueryRequest {
     return {
       target: isSet(object.target) ? String(object.target) : "",
-      request: isSet(object.request) ? bytesFromBase64(object.request) : new Uint8Array(0),
+      request: isSet(object.request)
+        ? bytesFromBase64(object.request)
+        : new Uint8Array(0),
     };
   },
 
@@ -81,10 +87,14 @@ export const AccountQueryRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<AccountQueryRequest>, I>>(base?: I): AccountQueryRequest {
+  create<I extends Exact<DeepPartial<AccountQueryRequest>, I>>(
+    base?: I,
+  ): AccountQueryRequest {
     return AccountQueryRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AccountQueryRequest>, I>>(object: I): AccountQueryRequest {
+  fromPartial<I extends Exact<DeepPartial<AccountQueryRequest>, I>>(
+    object: I,
+  ): AccountQueryRequest {
     const message = createBaseAccountQueryRequest();
     message.target = object.target ?? "";
     message.request = object.request ?? new Uint8Array(0);
@@ -97,15 +107,22 @@ function createBaseAccountQueryResponse(): AccountQueryResponse {
 }
 
 export const AccountQueryResponse = {
-  encode(message: AccountQueryResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: AccountQueryResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.response.length !== 0) {
       writer.uint32(10).bytes(message.response);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): AccountQueryResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): AccountQueryResponse {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAccountQueryResponse();
     while (reader.pos < end) {
@@ -128,7 +145,11 @@ export const AccountQueryResponse = {
   },
 
   fromJSON(object: any): AccountQueryResponse {
-    return { response: isSet(object.response) ? bytesFromBase64(object.response) : new Uint8Array(0) };
+    return {
+      response: isSet(object.response)
+        ? bytesFromBase64(object.response)
+        : new Uint8Array(0),
+    };
   },
 
   toJSON(message: AccountQueryResponse): unknown {
@@ -139,10 +160,14 @@ export const AccountQueryResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<AccountQueryResponse>, I>>(base?: I): AccountQueryResponse {
+  create<I extends Exact<DeepPartial<AccountQueryResponse>, I>>(
+    base?: I,
+  ): AccountQueryResponse {
     return AccountQueryResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AccountQueryResponse>, I>>(object: I): AccountQueryResponse {
+  fromPartial<I extends Exact<DeepPartial<AccountQueryResponse>, I>>(
+    object: I,
+  ): AccountQueryResponse {
     const message = createBaseAccountQueryResponse();
     message.response = object.response ?? new Uint8Array(0);
     return message;
@@ -167,12 +192,18 @@ export class QueryClientImpl implements Query {
   AccountQuery(request: AccountQueryRequest): Promise<AccountQueryResponse> {
     const data = AccountQueryRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "AccountQuery", data);
-    return promise.then((data) => AccountQueryResponse.decode(_m0.Reader.create(data)));
+    return promise.then((data) =>
+      AccountQueryResponse.decode(_m0.Reader.create(data)),
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array,
+  ): Promise<Uint8Array>;
 }
 
 declare const self: any | undefined;
@@ -219,17 +250,33 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

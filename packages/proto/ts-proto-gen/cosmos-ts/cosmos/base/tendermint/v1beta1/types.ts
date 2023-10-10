@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+
 import { Timestamp } from "../../../../google/protobuf/timestamp";
 import { EvidenceList } from "../../../../tendermint/types/evidence";
 import { BlockID, Commit, Data } from "../../../../tendermint/types/types";
@@ -25,13 +26,9 @@ export interface Header {
   version?: Consensus | undefined;
   chainId: string;
   height: Long;
-  time?:
-    | Date
-    | undefined;
+  time?: Date | undefined;
   /** prev block info */
-  lastBlockId?:
-    | BlockID
-    | undefined;
+  lastBlockId?: BlockID | undefined;
   /** hashes of block data */
   lastCommitHash: Uint8Array;
   /** transactions */
@@ -57,7 +54,12 @@ export interface Header {
 }
 
 function createBaseBlock(): Block {
-  return { header: undefined, data: undefined, evidence: undefined, lastCommit: undefined };
+  return {
+    header: undefined,
+    data: undefined,
+    evidence: undefined,
+    lastCommit: undefined,
+  };
 }
 
 export const Block = {
@@ -78,7 +80,8 @@ export const Block = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Block {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBlock();
     while (reader.pos < end) {
@@ -125,8 +128,12 @@ export const Block = {
     return {
       header: isSet(object.header) ? Header.fromJSON(object.header) : undefined,
       data: isSet(object.data) ? Data.fromJSON(object.data) : undefined,
-      evidence: isSet(object.evidence) ? EvidenceList.fromJSON(object.evidence) : undefined,
-      lastCommit: isSet(object.lastCommit) ? Commit.fromJSON(object.lastCommit) : undefined,
+      evidence: isSet(object.evidence)
+        ? EvidenceList.fromJSON(object.evidence)
+        : undefined,
+      lastCommit: isSet(object.lastCommit)
+        ? Commit.fromJSON(object.lastCommit)
+        : undefined,
     };
   },
 
@@ -152,16 +159,22 @@ export const Block = {
   },
   fromPartial<I extends Exact<DeepPartial<Block>, I>>(object: I): Block {
     const message = createBaseBlock();
-    message.header = (object.header !== undefined && object.header !== null)
-      ? Header.fromPartial(object.header)
-      : undefined;
-    message.data = (object.data !== undefined && object.data !== null) ? Data.fromPartial(object.data) : undefined;
-    message.evidence = (object.evidence !== undefined && object.evidence !== null)
-      ? EvidenceList.fromPartial(object.evidence)
-      : undefined;
-    message.lastCommit = (object.lastCommit !== undefined && object.lastCommit !== null)
-      ? Commit.fromPartial(object.lastCommit)
-      : undefined;
+    message.header =
+      object.header !== undefined && object.header !== null
+        ? Header.fromPartial(object.header)
+        : undefined;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Data.fromPartial(object.data)
+        : undefined;
+    message.evidence =
+      object.evidence !== undefined && object.evidence !== null
+        ? EvidenceList.fromPartial(object.evidence)
+        : undefined;
+    message.lastCommit =
+      object.lastCommit !== undefined && object.lastCommit !== null
+        ? Commit.fromPartial(object.lastCommit)
+        : undefined;
     return message;
   },
 };
@@ -186,7 +199,10 @@ function createBaseHeader(): Header {
 }
 
 export const Header = {
-  encode(message: Header, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Header,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.version !== undefined) {
       Consensus.encode(message.version, writer.uint32(10).fork()).ldelim();
     }
@@ -197,7 +213,10 @@ export const Header = {
       writer.uint32(24).int64(message.height);
     }
     if (message.time !== undefined) {
-      Timestamp.encode(toTimestamp(message.time), writer.uint32(34).fork()).ldelim();
+      Timestamp.encode(
+        toTimestamp(message.time),
+        writer.uint32(34).fork(),
+      ).ldelim();
     }
     if (message.lastBlockId !== undefined) {
       BlockID.encode(message.lastBlockId, writer.uint32(42).fork()).ldelim();
@@ -233,7 +252,8 @@ export const Header = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Header {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHeader();
     while (reader.pos < end) {
@@ -265,7 +285,9 @@ export const Header = {
             break;
           }
 
-          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.time = fromTimestamp(
+            Timestamp.decode(reader, reader.uint32()),
+          );
           continue;
         case 5:
           if (tag !== 42) {
@@ -348,22 +370,42 @@ export const Header = {
 
   fromJSON(object: any): Header {
     return {
-      version: isSet(object.version) ? Consensus.fromJSON(object.version) : undefined,
+      version: isSet(object.version)
+        ? Consensus.fromJSON(object.version)
+        : undefined,
       chainId: isSet(object.chainId) ? String(object.chainId) : "",
       height: isSet(object.height) ? Long.fromValue(object.height) : Long.ZERO,
       time: isSet(object.time) ? fromJsonTimestamp(object.time) : undefined,
-      lastBlockId: isSet(object.lastBlockId) ? BlockID.fromJSON(object.lastBlockId) : undefined,
-      lastCommitHash: isSet(object.lastCommitHash) ? bytesFromBase64(object.lastCommitHash) : new Uint8Array(0),
-      dataHash: isSet(object.dataHash) ? bytesFromBase64(object.dataHash) : new Uint8Array(0),
-      validatorsHash: isSet(object.validatorsHash) ? bytesFromBase64(object.validatorsHash) : new Uint8Array(0),
+      lastBlockId: isSet(object.lastBlockId)
+        ? BlockID.fromJSON(object.lastBlockId)
+        : undefined,
+      lastCommitHash: isSet(object.lastCommitHash)
+        ? bytesFromBase64(object.lastCommitHash)
+        : new Uint8Array(0),
+      dataHash: isSet(object.dataHash)
+        ? bytesFromBase64(object.dataHash)
+        : new Uint8Array(0),
+      validatorsHash: isSet(object.validatorsHash)
+        ? bytesFromBase64(object.validatorsHash)
+        : new Uint8Array(0),
       nextValidatorsHash: isSet(object.nextValidatorsHash)
         ? bytesFromBase64(object.nextValidatorsHash)
         : new Uint8Array(0),
-      consensusHash: isSet(object.consensusHash) ? bytesFromBase64(object.consensusHash) : new Uint8Array(0),
-      appHash: isSet(object.appHash) ? bytesFromBase64(object.appHash) : new Uint8Array(0),
-      lastResultsHash: isSet(object.lastResultsHash) ? bytesFromBase64(object.lastResultsHash) : new Uint8Array(0),
-      evidenceHash: isSet(object.evidenceHash) ? bytesFromBase64(object.evidenceHash) : new Uint8Array(0),
-      proposerAddress: isSet(object.proposerAddress) ? String(object.proposerAddress) : "",
+      consensusHash: isSet(object.consensusHash)
+        ? bytesFromBase64(object.consensusHash)
+        : new Uint8Array(0),
+      appHash: isSet(object.appHash)
+        ? bytesFromBase64(object.appHash)
+        : new Uint8Array(0),
+      lastResultsHash: isSet(object.lastResultsHash)
+        ? bytesFromBase64(object.lastResultsHash)
+        : new Uint8Array(0),
+      evidenceHash: isSet(object.evidenceHash)
+        ? bytesFromBase64(object.evidenceHash)
+        : new Uint8Array(0),
+      proposerAddress: isSet(object.proposerAddress)
+        ? String(object.proposerAddress)
+        : "",
     };
   },
 
@@ -419,17 +461,20 @@ export const Header = {
   },
   fromPartial<I extends Exact<DeepPartial<Header>, I>>(object: I): Header {
     const message = createBaseHeader();
-    message.version = (object.version !== undefined && object.version !== null)
-      ? Consensus.fromPartial(object.version)
-      : undefined;
+    message.version =
+      object.version !== undefined && object.version !== null
+        ? Consensus.fromPartial(object.version)
+        : undefined;
     message.chainId = object.chainId ?? "";
-    message.height = (object.height !== undefined && object.height !== null)
-      ? Long.fromValue(object.height)
-      : Long.ZERO;
+    message.height =
+      object.height !== undefined && object.height !== null
+        ? Long.fromValue(object.height)
+        : Long.ZERO;
     message.time = object.time ?? undefined;
-    message.lastBlockId = (object.lastBlockId !== undefined && object.lastBlockId !== null)
-      ? BlockID.fromPartial(object.lastBlockId)
-      : undefined;
+    message.lastBlockId =
+      object.lastBlockId !== undefined && object.lastBlockId !== null
+        ? BlockID.fromPartial(object.lastBlockId)
+        : undefined;
     message.lastCommitHash = object.lastCommitHash ?? new Uint8Array(0);
     message.dataHash = object.dataHash ?? new Uint8Array(0);
     message.validatorsHash = object.validatorsHash ?? new Uint8Array(0);
@@ -487,17 +532,33 @@ function base64FromBytes(arr: Uint8Array): string {
   }
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 function toTimestamp(date: Date): Timestamp {
   const seconds = numberToLong(date.getTime() / 1_000);
