@@ -44,7 +44,6 @@ export async function GET() {
     }));
     const pools = router.getPools() ?? [];
 
-
     const mappedTokens = await data.pricesResponse.json();
 
     const parsedPools = await getParsedPools(
@@ -64,10 +63,8 @@ export async function GET() {
   }
 }
 
-
 export async function generateStaticParams() {
   const _pricesResponse = await fetch(`${getAbsoluteUrl()}/api/getPrices/api`);
- 
-  return []
+
+  return [];
 }
- 
