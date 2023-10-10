@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-export default function onCreatePool() {
+/* eslint-disable */
+export default async function onCreatePool() {
   revalidatePath("/api/getPools/api");
 }
