@@ -3,7 +3,6 @@ import { formatUsd, formatter } from "@bera/berajs";
 import { DataTableColumnHeader, TokenIcon } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type ColumnDef } from "@tanstack/react-table";
-import { formatEther } from "viem";
 
 import InfoButton from "~/components/info-button";
 
@@ -65,16 +64,15 @@ export const market_table_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Total Borrowed" />
     ),
-    cell: ({ row }) => (
+    cell: ({}) => (
       <div className="flex flex-col pl-1 text-base">
-        {formatter.format(Number(row.original.totalDebt))}
-
+        {/* {formatter.format(Number(row.original.totalDebt))} */} ~~
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          $
-          {formatter.format(
+          {/* $ ~~ */}
+          {/* {formatter.format(
             row.original.totalDebt *
               row.original.formattedPriceInMarketReferenceCurrency,
-          )}
+          )} */}
         </div>
       </div>
     ),
@@ -85,10 +83,11 @@ export const market_table_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Borrow APY Variable" />
     ),
-    cell: ({ row }) => (
+    cell: ({}) => (
       <div className="pl-4 text-base text-success-foreground">
-        {(Number(formatEther(row.original.variableBorrowAPY)) * 100).toFixed(2)}
-        %
+        {/* {(Number(formatEther(row.original.variableBorrowAPY)) * 100).toFixed(2)}
+        % */}
+        ~~
       </div>
     ),
     accessorKey: "currentVariableBorrowRate",

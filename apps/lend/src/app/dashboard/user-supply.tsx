@@ -22,9 +22,13 @@ export default function UserSupply({
         <DataTable columns={user_supply_columns} data={assets} />
       ) : (
         <>
-          {assets.map((asset, index) => (
-            <UserTokenCard asset={asset} key={index} type="user-supply" />
-          ))}
+          {assets
+            .sort(
+              (a, b) => Number(b.formattedBalance) - Number(a.formattedBalance),
+            )
+            .map((asset, index) => (
+              <UserTokenCard asset={asset} key={index} type="user-supply" />
+            ))}
         </>
       )}
     </>

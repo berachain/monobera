@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import { formatter, useBeraJs, type Token } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { Tooltip, useTxn } from "@bera/shared-ui";
+import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
+import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { parseUnits } from "viem";
+import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
+import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
+import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function WithdrawBtn({
   token,
@@ -21,16 +26,26 @@ export default function WithdrawBtn({
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<number | undefined>(undefined);
-  const { write, isLoading, ModalPortal } = useTxn({
-    message: `Supplying ${amount} ${token.symbol}`,
+  const { write, isLoading, ModalPortal, isSuccess } = useTxn({
+    message: `Withdrawing ${amount} ${token.symbol}`,
+    onSuccess: () => {
+      userAccountRefetch();
+      reservesDataRefetch();
+      userReservesRefetch();
+    },
   });
+  const { refetch: userAccountRefetch } = usePollUserAccountData();
+  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: userReservesRefetch } = usePollUserReservesData();
+
+  useEffect(() => setOpen(false), [isSuccess]);
   return (
     <>
       {" "}
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-fit text-sm leading-5"
+        className="w-full text-sm leading-5 xl:w-fit"
         disabled={disabled || isLoading}
         variant={variant}
       >
@@ -57,8 +72,30 @@ const WithdrawModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const userBalance = Number(token.formattedBalance ?? "0");
-
+  const { useSelectedReserveData } = usePollReservesDataList();
+  const { data: reserveData } = useSelectedReserveData(token.address);
   const { account } = useBeraJs();
+  const { useUserAccountData } = usePollUserAccountData();
+  const { data: userAccountData } = useUserAccountData();
+
+  const currentHealthFactor =
+    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
+      ? "∞"
+      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+
+  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
+    collateralBalanceMarketReferenceCurrency:
+      Number(formatEther(userAccountData.totalCollateralBase)) -
+      (amount ?? 0) *
+        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+    borrowBalanceMarketReferenceCurrency: formatEther(
+      userAccountData.totalDebtBase,
+    ),
+    currentLiquidationThreshold: formatUnits(
+      userAccountData.currentLiquidationThreshold,
+      4,
+    ),
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -79,7 +116,12 @@ const WithdrawModalContent = ({
           type="number"
           id="forum-discussion-link"
           placeholder="0.0"
-          endAdornment={token.symbol}
+          endAdornment={
+            <div className="flex items-center gap-1">
+              <TokenIcon token={token} size={"md"} />
+              {token.symbol}
+            </div>
+          }
           value={amount}
           onChange={(e) =>
             setAmount(
@@ -101,20 +143,28 @@ const WithdrawModalContent = ({
       </div>
 
       <div className="flex flex-col gap-2">
-        <div className="flex justify-between  text-sm leading-tight">
+        <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className=""> ${formatter.format(amount ?? 0 * 1)}</div>
-        </div>
-        <div className="flex justify-between  text-sm leading-tight">
-          <div className="text-muted-foreground ">Supply APY</div>
-          <div className="text-success-foreground">
-            {/* {(token.supplyAPR * 100).toFixed(2)}% */}
+          <div className="font-semibold">
+            {" "}
+            ${formatter.format(amount ?? 0 * 1)}
           </div>
         </div>
-        <div className="flex justify-between  text-sm leading-tight">
+        <div className="flex justify-between text-sm leading-tight">
+          <div className="text-muted-foreground ">Supply APY</div>
+          <div className="font-semibold text-success-foreground">
+            {(reserveData.supplyAPR * 100).toFixed(2)}%
+          </div>
+        </div>
+        <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="">0 {"<->"} infinite</div>
-          {/* i didnt make this cause design doesnt make sense 2 me */}
+          <div className="flex items-center gap-1 font-semibold">
+            {currentHealthFactor}{" "}
+            <Icons.moveRight className="inline-block h-6 w-6" />{" "}
+            {Number(newHealthFactor.toFixed(2)) < 0
+              ? "∞"
+              : newHealthFactor.toFixed(2)}
+          </div>
         </div>
       </div>
 
@@ -126,8 +176,7 @@ const WithdrawModalContent = ({
             abi: lendPoolImplementationABI,
             functionName: "withdraw",
             params: [
-              //@ts-ignore
-              token.source_token ? token.source_token : token.address,
+              token.address,
               parseUnits(`${Number(amount)}`, token.decimals),
               account,
             ],

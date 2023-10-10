@@ -1,9 +1,9 @@
-import { formatter, useSelectedAssetWalletBalance } from "@bera/berajs";
+import { formatter } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatEther } from "viem";
+import { formatUnits } from "viem";
 
 import Card from "./card";
 import InfoButton from "./info-button";
@@ -19,15 +19,20 @@ export default function UserTokenCard({
   asset: any;
   type: "user-supply" | "user-borrow" | "supply" | "borrow";
 }) {
-  const originalToken = useSelectedAssetWalletBalance(
-    asset.reserveData.address,
-  );
-  const isDebtTypeStable = () => {
-    return asset.name.split(" ")[0] === "Stable";
-  };
+  let balance;
+  if (type === "borrow") {
+    balance =
+      Number(
+        formatUnits(asset.reserveData.availableLiquidity, asset.decimals),
+      ) > Number(asset.formattedBalance)
+        ? asset.formattedBalance
+        : formatUnits(asset.reserveData.availableLiquidity, asset.decimals);
+  } else {
+    balance = asset.formattedBalance;
+  }
   return (
     <Card key={asset.symbol} className="p-4">
-      <div className="flex flex-col items-center justify-between gap-6 md:flex-row md:gap-4">
+      <div className="flex flex-row items-center justify-between gap-6">
         <div className="flex flex-shrink-0 items-center gap-4 ">
           <TokenIcon token={asset} fetch size="2xl" />
           <div>
@@ -44,12 +49,15 @@ export default function UserTokenCard({
             </div>
 
             <div className="h-8 text-lg font-bold uppercase">
-              {formatter.format(Number(asset.formattedBalance))}
+              {formatter.format(Number(balance))}
             </div>
             <div className="text-xs font-medium leading-tight">
               $
               {formatter.format(
-                Number(asset.formattedBalance) * Number(asset.formattedPrice),
+                Number(balance) *
+                  Number(
+                    asset.reserveData.formattedPriceInMarketReferenceCurrency,
+                  ),
               )}
             </div>
           </div>
@@ -58,32 +66,13 @@ export default function UserTokenCard({
         {(type === "user-supply" || type === "supply") && (
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
-              Loan APY
+              Supply APY
             </div>
             <div className="text-lg font-bold text-success-foreground">
-              {(
-                Number(formatEther(asset.reserveData.currentLiquidityRate)) *
-                100
-              ).toFixed(2)}
-              %
+              {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
             </div>
           </div>
         )}
-
-        {/* {type === "borrow" && (
-        <div className="flex flex-shrink-0 flex-col">
-          <div className="text-xs font-medium leading-5 text-muted-foreground">
-            Stable APY
-          </div>
-          <div className="text-lg font-bold text-warning-foreground">
-            {(
-              Number(formatEther(asset.reserveData?.currentStableBorrowRate??"0")) *
-              100
-            ).toFixed(2)}
-            %
-          </div>
-        </div>
-      )} */}
 
         {type === "borrow" && (
           <div className="flex flex-shrink-0 flex-col">
@@ -91,12 +80,7 @@ export default function UserTokenCard({
               Variable APY
             </div>
             <div className="text-lg font-bold text-warning-foreground">
-              {(
-                Number(
-                  formatEther(asset.reserveData.currentVariableBorrowRate),
-                ) * 100
-              ).toFixed(2)}
-              %
+              {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
             </div>
           </div>
         )}
@@ -107,34 +91,14 @@ export default function UserTokenCard({
               Loan APY
             </div>
             <div className="text-lg font-bold text-warning-foreground">
-              {(
-                Number(
-                  formatEther(
-                    isDebtTypeStable()
-                      ? asset.reserveData.currentStableBorrowRate
-                      : asset.reserveData.currentVariableBorrowRate,
-                  ),
-                ) * 100
-              ).toFixed(2)}
-              %
+              {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
             </div>
           </div>
         )}
 
-        {/* {type === "user-borrow" && (
-        <div className="flex flex-shrink-0 flex-col">
-          <div className="text-xs font-medium leading-5 text-muted-foreground">
-            APY Type
-          </div>
-          <div className="text-lg font-bold text-foreground">
-            {isDebtTypeStable() ? "Stable" : "Variable"}
-          </div>
-        </div>
-      )} */}
-
-        <div className="grow-1 flex w-full items-center gap-2 md:w-fit">
+        <div className="grow-1 hidden w-full items-center gap-2 md:flex md:w-fit">
           {(type === "user-supply" || type === "supply") && (
-            <SupplyBtn token={originalToken} />
+            <SupplyBtn token={asset} />
           )}
           {type === "user-supply" && <WithdrawBtn token={asset} />}
           {(type === "user-borrow" || type === "borrow") && (
@@ -146,18 +110,45 @@ export default function UserTokenCard({
           )}
         </div>
       </div>
+      <div className="grow-1 mt-8 flex w-full items-center gap-2 md:hidden md:w-fit">
+        {(type === "user-supply" || type === "supply") && (
+          <SupplyBtn token={asset} />
+        )}
+        {type === "user-supply" && <WithdrawBtn token={asset} />}
+        {(type === "user-borrow" || type === "borrow") && (
+          <BorrowBtn token={asset} />
+        )}
+        {type === "user-borrow" && <RepayBtn token={asset} />}
+        {(type === "borrow" || type === "supply") && (
+          <InfoButton address={asset.address} />
+        )}
+      </div>
       {type === "borrow" && Number(asset.formattedBalance) === 0 && (
-        <Alert variant="destructive" className="">
+        <Alert variant="warning" className="mt-4">
           <AlertTitle>
             {" "}
             <Icons.info className="mr-1 inline-block h-4 w-4" />
-            Borrow Cap Reached
+            You Must supply To Borrow
           </AlertTitle>
-          Borrowing more HONEY is not possible right now, as the Pool has
-          reached its maximum borrowing capacity. You&apos;ll be able to borrow
-          more HONEY when the pool ratio is healthier.
+          Your available-to-borrow balance is based on the amounts of assets you
+          have supplied. It only updates when you supply assets.
         </Alert>
       )}
+      {type === "borrow" &&
+        Number(
+          formatUnits(asset.reserveData.availableLiquidity, asset.decimals),
+        ) === 0 && (
+          <Alert variant="destructive" className="mt-4">
+            <AlertTitle>
+              {" "}
+              <Icons.info className="mr-1 inline-block h-4 w-4" />
+              Borrow Cap Reached
+            </AlertTitle>
+            Borrowing more HONEY is not possible right now, as the Pool has
+            reached its maximum borrowing capacity. You&apos;ll be able to
+            borrow more HONEY when the pool ratio is healthier.
+          </Alert>
+        )}
     </Card>
   );
 }

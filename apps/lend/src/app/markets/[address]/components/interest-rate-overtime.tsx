@@ -1,4 +1,5 @@
 import { Tooltip } from "@bera/shared-ui";
+import { Skeleton } from "@bera/ui/skeleton";
 
 import { type RateItem } from "~/utils/getServerSideData";
 import Card from "~/components/card";
@@ -33,9 +34,13 @@ export default function InterestRateOvertime({
             <div className="text-sm font-normal leading-normal text-muted-foreground">
               Utilization Rate <Tooltip text="" />
             </div>
-            <div className=" text-xl font-semibold leading-7">
-              {(Number(reserveData?.borrowUsageRatio) * 100).toFixed(2)}%
-            </div>
+            {reserveData ? (
+              <div className=" text-xl font-semibold leading-7">
+                {(Number(reserveData?.borrowUsageRatio) * 100).toFixed(2)}%
+              </div>
+            ) : (
+              <Skeleton className="h-7 w-20" />
+            )}
           </div>
         </div>
 

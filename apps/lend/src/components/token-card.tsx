@@ -1,7 +1,6 @@
 import { formatUsd, formatter } from "@bera/berajs";
 import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatEther } from "viem";
 
 import InfoButton from "~/components/info-button";
 import Card from "./card";
@@ -49,10 +48,11 @@ export default function TokenCard({ reserveData }: { reserveData: any }) {
             Variable Borrow APR
           </div>
           <div className="font-bold xl:text-lg">
-            {(Number(formatEther(reserveData.variableBorrowAPY)) * 100).toFixed(
+            ~~
+            {/* {(Number(formatEther(reserveData.variableBorrowAPY)) * 100).toFixed(
               2,
             )}
-            %
+            % */}
           </div>
         </div>
         <div className="flex justify-between text-muted-foreground xl:w-[150px] xl:flex-col xl:justify-center">
@@ -60,7 +60,8 @@ export default function TokenCard({ reserveData }: { reserveData: any }) {
             Total borrows
           </div>
           <div className="font-bold xl:text-lg">
-            {formatter.format(Number(reserveData.totalDebt))}
+            ~~
+            {/* {formatter.format(Number(reserveData.totalDebt))} */}
           </div>
         </div>
       </div>
@@ -84,22 +85,22 @@ export function TokenLoading() {
           <Skeleton className="h-3 w-[92px]" />
         </div>
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="hidden flex-col gap-1 sm:flex">
         <Skeleton className="h-3 w-[128px]" />
         <Skeleton className="h-5 w-[92px]" />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="hidden flex-col gap-1 xl:flex ">
         <Skeleton className="h-3 w-[128px]" />
         <Skeleton className="h-5 w-[92px]" />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="hidden flex-col gap-1 lg:flex">
         <Skeleton className="h-3 w-[128px]" />
         <Skeleton className="h-5 w-[92px]" />
       </div>
       <div className="flex gap-2">
+        <Skeleton className="xs:block hidden h-8 w-20" />
         <Skeleton className="h-8 w-20" />
-        <Skeleton className="h-8 w-20" />
-        <Skeleton className="h-8 w-8" />
+        <Skeleton className="xs:block hidden h-8 w-8" />
       </div>
     </div>
   );

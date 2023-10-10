@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 import { honeyAddress } from "@bera/config";
+import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 export function dictionaryToExternalTokenList(
@@ -35,42 +36,61 @@ export function dictionaryToExternalTokenList(
   return externalTokenList;
 }
 
-export function getAssetList(reservesDictionary: any, BalanceToken: any[]) {
+export function getAssetList(
+  reservesDictionary: any,
+  userReservesData: any,
+  BalanceToken: any[],
+) {
   const supplied: any[] = [];
   const borrowed: any[] = [];
   const available_supply: any[] = [];
   const available_borrow: any[] = [];
 
   Object.keys(reservesDictionary).forEach((key: Address) => {
-    const suppliedToken = BalanceToken.find(
-      (token) => token.address === reservesDictionary[key].aTokenAddress,
-    );
-    if (suppliedToken) {
-      if (suppliedToken.balance > 0n) {
+    const token = BalanceToken.find((token) => token.address === key);
+
+    if (token) {
+      if (
+        userReservesData[key] &&
+        userReservesData[key].scaledATokenBalance > 0n
+      ) {
+        const suppliedToken = {
+          ...token,
+          balance: userReservesData[key].scaledATokenBalance,
+          formattedBalance: formatUnits(
+            userReservesData[key].scaledATokenBalance,
+            token.decimals,
+          ),
+        };
         supplied.push({
           ...suppliedToken,
           reserveData: reservesDictionary[key],
         });
-      } else {
-        available_supply.push({
-          ...BalanceToken.find((token) => token.address === key),
+      }
+      available_supply.push({
+        ...token,
+        reserveData: reservesDictionary[key],
+      });
+
+      if (
+        userReservesData[key] &&
+        userReservesData[key].scaledVariableDebt > 0n
+      ) {
+        const variableDebtToken = {
+          ...token,
+          balance: userReservesData[key].scaledVariableDebt,
+          formattedBalance: formatUnits(
+            userReservesData[key].scaledVariableDebt,
+            token.decimals,
+          ),
+        };
+        borrowed.push({
+          ...variableDebtToken,
           reserveData: reservesDictionary[key],
         });
       }
     }
-
-    const variableDebtToken = BalanceToken.find(
-      (token) =>
-        token.address === reservesDictionary[key].variableDebtTokenAddress,
-    );
-    if (variableDebtToken && variableDebtToken.balance > 0n) {
-      borrowed.push({
-        ...variableDebtToken,
-        reserveData: reservesDictionary[key],
-      });
-    }
   });
-
   const Honey = BalanceToken.find((token) => token.address === honeyAddress);
   if (Honey) {
     available_borrow.push({

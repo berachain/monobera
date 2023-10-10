@@ -2,14 +2,53 @@ import { formatUsd, formatter, useBeraJs } from "@bera/berajs";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatEther } from "viem";
+import { formatEther, formatUnits } from "viem";
 
+import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
+import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function StatusBanner() {
   const { useUserAccountData } = usePollUserAccountData();
   const { data, isLoading } = useUserAccountData();
   const { isReady } = useBeraJs();
+
+  const { useUserReservesData } = usePollUserReservesData();
+  const { data: userReservesDictionary } = useUserReservesData();
+  const { useReservesDataList } = usePollReservesDataList();
+  const { data: reservesDictionary } = useReservesDataList();
+
+  let positiveProportion = 0;
+  let negativeProportion = 0;
+  if (reservesDictionary && userReservesDictionary) {
+    Object.keys(reservesDictionary).forEach((address) => {
+      if (reservesDictionary[address] && userReservesDictionary[address]) {
+        const useReserve = userReservesDictionary[address];
+        const reserve = reservesDictionary[address];
+        positiveProportion +=
+          Number(
+            formatUnits(useReserve.scaledATokenBalance, reserve.decimals),
+          ) *
+          Number(reserve.supplyAPY) *
+          Number(reserve.formattedPriceInMarketReferenceCurrency);
+        negativeProportion +=
+          Number(formatUnits(useReserve.scaledVariableDebt, reserve.decimals)) *
+          Number(reserve.variableBorrowAPY) *
+          Number(reserve.formattedPriceInMarketReferenceCurrency);
+      }
+    });
+  }
+  const totalLiquidityUSD = Number(
+    formatEther(data?.totalCollateralBase || "1"),
+  );
+  const totalBorrowsUSD = Number(formatEther(data?.totalDebtBase || "1"));
+  const netWorthUSD = totalLiquidityUSD - totalBorrowsUSD;
+  const earnedAPY = positiveProportion / totalLiquidityUSD;
+  const debtAPY = negativeProportion / totalBorrowsUSD;
+  const netAPY =
+    ((earnedAPY || 0) * totalLiquidityUSD) /
+      (netWorthUSD !== 0 ? netWorthUSD : 1) -
+    ((debtAPY || 0) * totalBorrowsUSD) / (netWorthUSD !== 0 ? netWorthUSD : 1);
 
   const status = [
     {
@@ -20,7 +59,7 @@ export default function StatusBanner() {
     {
       icon: <Icons.lineChart className="h-8 w-8" />,
       title: "Net APY",
-      amount: "??.43%",
+      amount: netAPY === 0 ? "~~" : (netAPY * 100).toFixed(2) + "%",
     },
     {
       icon: <Icons.warning className="h-8 w-8" />,
@@ -72,7 +111,7 @@ export default function StatusBanner() {
         ))}
       </div>
 
-      <div className="hidden gap-4 lg:flex">
+      <div className="hidden gap-4 xl:flex">
         {info.map((item, index) => (
           <div key={index + item.title} className="flex flex-col">
             <div className="text-sm font-normal leading-normal text-muted-foreground">

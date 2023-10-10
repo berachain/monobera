@@ -40,15 +40,18 @@ export const usePollReservesDataList = () => {
       });
       // console.log("formattedReserves", formattedReserves);
       const reservesDictionary = {};
-      formattedReserves.map(async (formattedReserve) => {
-        await mutate(
-          [...QUERY_KEY, formattedReserve.underlyingAsset],
-          formattedReserve,
-        );
+      await Promise.all(
+        formattedReserves.map(async (formattedReserve) => {
+          await mutate(
+            [...QUERY_KEY, formattedReserve.underlyingAsset],
+            formattedReserve,
+          );
 
-        //@ts-ignore
-        reservesDictionary[formattedReserve.underlyingAsset] = formattedReserve;
-      });
+          //@ts-ignore
+          reservesDictionary[formattedReserve.underlyingAsset] =
+            formattedReserve;
+        }),
+      );
 
       return reservesDictionary;
     } catch (e) {
@@ -70,7 +73,7 @@ export const usePollReservesDataList = () => {
   };
 
   return {
-    mutate,
+    refetch: () => void mutate(QUERY_KEY),
     useReservesDataList,
     useSelectedReserveData,
     useBaseCurrencyData,
