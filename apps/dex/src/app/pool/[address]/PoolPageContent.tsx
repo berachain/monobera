@@ -35,7 +35,7 @@ import { type Address } from "wagmi";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import { SwapCard } from "~/components/swap-card";
-import { getWBeraPriceForToken } from "../api/getPrice";
+import { getWBeraPriceForToken } from "~/app/api/getPrices/api/getPrices";
 import { PoolChart } from "./PoolChart";
 import {
   type AddLiquidityData,
