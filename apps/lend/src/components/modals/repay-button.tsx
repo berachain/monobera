@@ -4,7 +4,7 @@ import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   formatter,
   useBeraJs,
-  useSelectedAssetWalletBalance,
+  usePollAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
@@ -78,8 +78,9 @@ const RepayModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const debtBalance = token.formattedBalance;
-  const tokenB = useSelectedAssetWalletBalance(token.address);
-  const tokenBalance = tokenB.formattedBalance;
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: tokenB } = useSelectedAssetWalletBalance(token.address);
+  const tokenBalance = tokenB?.formattedBalance;
 
   const { account } = useBeraJs();
   const { useSelectedReserveData } = usePollReservesDataList();

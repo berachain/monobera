@@ -5,10 +5,12 @@ import { truncateHash, useBeraJs } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useReadLocalStorage } from "usehooks-ts";
 
 import { History } from "./history";
 import Identicon from "./identicon";
+import { TokenList } from "./token-list";
 import { formatConnectorName } from "./utils";
 import { WalletBalanceInUs } from "./wallet-balance-in-us";
 
@@ -107,7 +109,29 @@ export default function ConnectedWalletPopover() {
           </div>
         </div>
         <WalletBalanceInUs />
-        <History />
+        <Tabs defaultValue="tokens">
+          <TabsList className="mb-4 w-full" variant="ghost">
+            <TabsTrigger value="tokens" className="flex-1" variant="ghost">
+              Tokens
+            </TabsTrigger>
+            <TabsTrigger value="history" className="flex-1" variant="ghost">
+              History
+            </TabsTrigger>
+            <TabsTrigger value="bgt" className="flex-1" variant="ghost">
+              BGT
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="tokens" className="h-[400px] overflow-y-auto">
+            <TokenList />
+          </TabsContent>
+          <TabsContent value="history" className="h-[400px] overflow-y-auto">
+            <History />
+          </TabsContent>
+          <TabsContent
+            value="bgt"
+            className="h-[400px] overflow-y-auto"
+          ></TabsContent>
+        </Tabs>
       </PopoverContent>
     </Popover>
   );

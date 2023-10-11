@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   useBeraJs,
   usePollAssetWalletBalance,
-  useSelectedAssetWalletBalance,
   useTokenInformation,
   useTokens,
   type Token,
@@ -78,7 +77,6 @@ export function TokenDialog({
     setSearch("");
     setError(undefined);
   }, [open]);
-  usePollAssetWalletBalance();
 
   useEffect(() => {
     if (!customTokens) {
@@ -303,9 +301,9 @@ const TokenDialogRow = ({
   pendingAddition,
 }: RowProps) => {
   const { isConnected } = useBeraJs();
-  const tokenBalance = Number(
-    useSelectedAssetWalletBalance(token?.address ?? "")?.formattedBalance || 0,
-  );
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: t } = useSelectedAssetWalletBalance(token?.address ?? "");
+  const tokenBalance = Number(t?.formattedBalance || 0);
   return (
     <div>
       <Button
