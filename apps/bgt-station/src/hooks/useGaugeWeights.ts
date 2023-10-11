@@ -3,7 +3,7 @@ import { indexerUrl } from "@bera/config";
 import useSWR from "swr";
 import { formatUnits, getAddress } from "viem";
 
-import { type MappedTokens } from "~/app/api/getPrice";
+import { type MappedTokens } from "~/app/api/getPrices/api/getPrices";
 import { usePollPrices } from "./usePollPrices";
 
 export interface Coin {

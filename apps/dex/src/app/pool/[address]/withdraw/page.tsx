@@ -1,10 +1,8 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { RouterService, defaultConfig } from "@bera/bera-router";
-import { type CuttingBoard } from "@bera/berajs";
 
 import { getMetaTitle } from "~/utils/metadata";
-import { getWBeraPriceDictForPoolTokens } from "../../api/getPrice";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import WithdrawPageContent from "./WithdrawPageContent";
 
 type Props = {
@@ -19,18 +17,6 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-async function getGlobalCuttingBoard() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
-    );
-    const jsonRes = await res.json();
-    return jsonRes.result;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 export const fetchCache = "force-no-store";
 
 export default async function Withdraw({
@@ -38,22 +24,15 @@ export default async function Withdraw({
 }: {
   params: { address: string };
 }) {
-  const router = new RouterService(defaultConfig);
-  const globalCuttingBoard = getGlobalCuttingBoard();
   try {
-    const fetchPools = router.fetchPools();
-    const data: any = await Promise.all([fetchPools, globalCuttingBoard]).then(
-      ([fetchPools, globalCuttingBoard]) => ({
-        fetchPools: fetchPools,
-        globalCuttingBoard: globalCuttingBoard,
-      }),
+    const poolResponse = await fetch(
+      `${getAbsoluteUrl()}/api/getSelectedPool/api?address=${params.address}`,
     );
-    const pool = router.getPool(params.address);
-    const prices = await getWBeraPriceDictForPoolTokens(
-      pool ? [pool] : [],
-      data?.globalCuttingBoard as CuttingBoard[],
-      router,
-    );
+    const pricesResponse = await fetch(`${getAbsoluteUrl()}/api/getPrices/api`);
+
+    const pool = await poolResponse.json();
+    const prices = await pricesResponse.json();
+
     return <WithdrawPageContent pool={pool} prices={prices} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
