@@ -1,15 +1,27 @@
 "use client";
 
 import React from "react";
-import { formatter, usePollAssetWalletBalance } from "@bera/berajs";
-import { blockExplorerUrl } from "@bera/config";
+import {
+  formatUsd,
+  formatter,
+  usePollAssetWalletBalance,
+  usePollPrices,
+} from "@bera/berajs";
+import {
+  beraTokenAddress,
+  blockExplorerUrl,
+  nativeTokenAddress,
+} from "@bera/config";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 
 import { TokenIcon } from "./token-icon";
 
 export function TokenList() {
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { data: assets } = useCurrentAssetWalletBalances();
+  const { usePrices, isLoading } = usePollPrices();
+  const { data: prices } = usePrices();
 
   return (
     <div className="grid gap-4">
@@ -37,7 +49,19 @@ export function TokenList() {
                 </div>
               </div>
             </div>
-            <div className="whitespace-nowrap text-sm font-medium">$1.0</div>
+            <div className="whitespace-nowrap text-sm font-medium">
+              {isLoading || !prices ? (
+                <Skeleton className="h-8 w-16" />
+              ) : (
+                formatUsd(
+                  prices[
+                    asset.address === nativeTokenAddress
+                      ? beraTokenAddress
+                      : asset.address
+                  ] ?? "0",
+                )
+              )}
+            </div>
           </div>
         ))
       ) : (
