@@ -7,9 +7,10 @@ import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { useReadLocalStorage } from "usehooks-ts";
 
-// import { History } from "./history";
+import { History } from "./history";
 import Identicon from "./identicon";
 import { formatConnectorName } from "./utils";
+import { WalletBalanceInUs } from "./wallet-balance-in-us";
 
 export default function ConnectedWalletPopover() {
   const [open, setOpen] = React.useState(false);
@@ -29,47 +30,42 @@ export default function ConnectedWalletPopover() {
           {truncateHash(account ?? "0x", 6)}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80" align="end">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold leading-none">Account</h3>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              logout(connectorName as string);
-              setOpen(false);
-            }}
-          >
-            <Icons.disconnect className="h-4 w-4 text-destructive-foreground" />
-          </Button>
-        </div>
-        <div className="flex items-center pb-4">
-          <Identicon account={account ?? ""} className="mr-2 flex" size={42} />
-          <div className="flex flex-col">
-            <p className="flex items-center text-sm font-medium leading-normal">
-              {truncateHash(account ?? "0x", 6)}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="ml-2 rounded-full"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(account ?? "0x");
-                    setCopied(true);
-                  } catch (error) {
-                    console.error(error);
-                  } finally {
-                    setTimeout(() => setCopied(false), 1000);
-                  }
-                }}
-              >
-                {copied ? (
-                  <Icons.check className="h-3 w-3 text-positive" />
-                ) : (
-                  <Icons.copy className="h-3 w-3" />
-                )}
-              </Button>
-              <Button
+      <PopoverContent
+        className="flex w-[390px] flex-col gap-8 rounded-lg p-8"
+        align="end"
+      >
+        <div className="flex justify-between">
+          <div className="flex items-center">
+            <Identicon
+              account={account ?? ""}
+              className="mr-2 flex"
+              size={48}
+            />
+            <div className="flex flex-col">
+              <p className="flex items-center font-medium leading-6">
+                {truncateHash(account ?? "0x", 6)}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="ml-1 rounded-full"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(account ?? "0x");
+                      setCopied(true);
+                    } catch (error) {
+                      console.error(error);
+                    } finally {
+                      setTimeout(() => setCopied(false), 1000);
+                    }
+                  }}
+                >
+                  {copied ? (
+                    <Icons.check className="h-4 w-4 text-positive" />
+                  ) : (
+                    <Icons.copy className="h-4 w-4" />
+                  )}
+                </Button>
+                {/* <Button
                 variant="ghost"
                 size="sm"
                 className="rounded-full"
@@ -81,14 +77,37 @@ export default function ConnectedWalletPopover() {
                 }}
               >
                 <Icons.external className="h-3 w-3" />
-              </Button>
-            </p>
-            <p className="text-sm leading-none text-muted-foreground">
-              {formatConnectorName(connectorName as string)}
-            </p>
+              </Button> */}
+              </p>
+              <p className="text-xs font-medium leading-5 text-muted-foreground">
+                {formatConnectorName(connectorName as string)}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              variant="ghost"
+              size="xs"
+              // onClick={() => {}}
+            >
+              <Icons.settings className="h-4 w-4 text-muted-foreground" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="xs"
+              onClick={() => {
+                logout(connectorName as string);
+                setOpen(false);
+              }}
+            >
+              <Icons.disconnect className="h-4 w-4 text-destructive-foreground" />
+            </Button>
           </div>
         </div>
-        {/* <History /> */}
+        <WalletBalanceInUs />
+        <History />
       </PopoverContent>
     </Popover>
   );
