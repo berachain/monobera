@@ -1,10 +1,9 @@
 // TODO fix any
-import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
-import { RouterService, defaultConfig } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 
-import { PoolTag, getWBeraPriceDictForPoolTokens } from "./getPrice";
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
+import { PoolTag } from "../../getPools/api/getPools";
 
 function sortByParameter(
   data: Pool[],
@@ -31,57 +30,12 @@ const DEFAULT_SIZE = 10;
 
 export const revalidate = 60;
 
-async function getGlobalCuttingBoard() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
-    );
-    const jsonRes = await res.json();
-    return jsonRes.result;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const router = new RouterService(defaultConfig);
-  const globalCuttingBoard = getGlobalCuttingBoard();
-  let data = undefined;
-  try {
-    const fetchPools = router.fetchPools();
 
-    data = await Promise.all([fetchPools, globalCuttingBoard]).then(
-      ([fetchPools, globalCuttingBoard]) => ({
-        fetchPools: fetchPools,
-        globalCuttingBoard: globalCuttingBoard,
-      }),
-    );
-  } catch (e) {
-    console.log(`Error fetching pools: ${e}`);
-    return;
-  }
+  const response = await fetch(`${getAbsoluteUrl()}/api/getPools/api`);
 
-  const pools = router.getPools() ?? [];
-
-  const totalSupplyStringPools = pools
-    ? pools?.map((pool) => {
-        return {
-          ...pool,
-          totalSupply: pool.totalSupply.toString(),
-        };
-      })
-    : [];
-
-  await getWBeraPriceDictForPoolTokens(
-    (totalSupplyStringPools ?? []) as Pool[],
-    data?.globalCuttingBoard,
-    router,
-  );
-
-  if (!totalSupplyStringPools) {
-    notFound();
-  }
+  const pools = await response.json();
   // pages
   const page = searchParams.get("page");
   const perPage = searchParams.get("perPage");
@@ -92,7 +46,7 @@ export async function GET(request: Request) {
   const newPools = searchParams.get("newPools");
   const searchKeyword = searchParams.get("search") ?? "";
 
-  let taggedPools: any[] = totalSupplyStringPools?.filter((pool: Pool) => {
+  let taggedPools: any[] = pools?.filter((pool: Pool) => {
     return searchKeyword === ""
       ? true
       : pool.poolName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
@@ -123,8 +77,7 @@ export async function GET(request: Request) {
     );
   }
 
-  if (!hasBgtRewards && !hotPools && !newPools)
-    taggedPools = totalSupplyStringPools;
+  if (!hasBgtRewards && !hotPools && !newPools) taggedPools = pools;
 
   // sortables
   const volume = searchParams.get("volume");
