@@ -65,11 +65,11 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
               const token = fullTokenList[index];
               if (item.error) {
                 await mutate([...QUERY_KEY, getAddress(token?.address ?? "")], {
-                  balance: 0,
+                  balance: 0n,
                   formattedBalance: "0",
                   ...token,
                 });
-                return { balance: 0, ...token };
+                return { balance: 0, formattedBalance: "0", ...token };
               }
               const resultBalanceToken: BalanceToken = {
                 balance: item.result,

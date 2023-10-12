@@ -26,14 +26,6 @@ const ConnectBtn = dynamic(
   },
 );
 
-const ThemeToggleMobile = dynamic(
-  () => import("./theme-toggle-mobile").then((mod) => mod.ThemeToggleMobile),
-  {
-    ssr: false,
-    loading: () => <></>,
-  },
-);
-
 export function Header({
   navItems,
   isHoney = false,
@@ -73,8 +65,6 @@ export function Header({
             <span>BGT</span>
           </div>
         )}
-        {!isHoney && <ThemeToggleMobile />}
-        {/* {!isHoney && <ThemeToggle />} */}
         <ConnectBtn isNavItem={true} />
         <MobileDropdown navItems={navItems} />
       </div>

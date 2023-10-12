@@ -104,3 +104,4 @@ export const beraTokenAddress = process.env
   .NEXT_PUBLIC_WBERA_ADDRESS as Address;
 export const stgusdcTokenAddress = process.env
   .NEXT_PUBLIC_STGUSDC_ADDRESS as Address;
+export const bgtTokenAddress = process.env.NEXT_PUBLIC_BGT_ADDRESS as Address;

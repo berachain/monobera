@@ -24,14 +24,14 @@ export function WalletBalanceInUs() {
                 obj.address === nativeTokenAddress
                   ? beraTokenAddress
                   : obj.address
-              ] ?? 0,
+              ] ?? "0",
             ) *
-              Number(obj.formattedBalance),
+              Number(obj.formattedBalance ?? "0"),
           0,
         )
       : 0;
   return (
-    <div className="h-9 w-full flex-col text-center text-3xl font-semibold">
+    <div className="flex h-9 w-full items-center justify-center text-3xl font-semibold">
       {assets && prices ? formatUsd(total) : <Skeleton className="h-9 w-40" />}
     </div>
   );
