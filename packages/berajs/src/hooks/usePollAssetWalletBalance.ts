@@ -34,7 +34,15 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
     async () => {
       if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {
-        const fullTokenList = [...tokenList, ...(externalTokenList ?? [])];
+        const fullTokenList = [
+          ...tokenList,
+          ...(externalTokenList ?? []),
+        ].filter(
+          (t) =>
+            t.address.localeCompare(
+              "0x0000000000000000000000000000000000000001",
+            ) !== 0,
+        );
         const call: Call[] = fullTokenList.map((item: Token) => {
           if (item.address === "0x0000000000000000000000000000000000000000") {
             return {
@@ -52,7 +60,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
             args: [account],
           };
         });
-
+        console.log("calls", call);
         try {
           const result = await publicClient.multicall({
             contracts: call,
@@ -69,7 +77,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
                   formattedBalance: "0",
                   ...token,
                 });
-                return { balance: 0, formattedBalance: "0", ...token };
+                return { balance: 0n, formattedBalance: "0", ...token };
               }
               const resultBalanceToken: BalanceToken = {
                 balance: item.result,

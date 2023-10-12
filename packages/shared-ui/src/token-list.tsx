@@ -8,7 +8,6 @@ import {
 } from "@bera/berajs";
 import {
   beraTokenAddress,
-  bgtTokenAddress,
   blockExplorerUrl,
   nativeTokenAddress,
 } from "@bera/config";
@@ -26,49 +25,47 @@ export function TokenList() {
   return (
     <div className="grid gap-4">
       {assets && assets.length ? (
-        assets
-          .filter((asset: any) => asset.address !== bgtTokenAddress)
-          .map((asset: any) => (
-            <div
-              className="flex items-center justify-between gap-5"
-              key={asset.address}
-            >
-              <div className="flex gap-4">
-                <TokenIcon token={asset} size="2xl" />
-                <div className="font-medium">
-                  <div className="flex-1 truncate text-sm font-medium leading-6">
-                    {formatter.format(Number(asset.formattedBalance))}{" "}
-                    {asset.symbol}
-                    <a
-                      target="_blank"
-                      href={`${blockExplorerUrl}/address/${asset.address}`}
-                    >
-                      <Icons.external className="inline h-3 w-3" />{" "}
-                    </a>
-                  </div>
-                  <div className="text-sm font-medium leading-6 text-muted-foreground">
-                    {asset.name}
-                  </div>
+        assets.map((asset: any) => (
+          <div
+            className="flex items-center justify-between gap-5"
+            key={asset.address}
+          >
+            <div className="flex gap-4">
+              <TokenIcon token={asset} size="2xl" />
+              <div className="font-medium">
+                <div className="flex-1 truncate text-sm font-medium leading-6">
+                  {formatter.format(Number(asset.formattedBalance))}{" "}
+                  {asset.symbol}
+                  <a
+                    target="_blank"
+                    href={`${blockExplorerUrl}/address/${asset.address}`}
+                  >
+                    <Icons.external className="inline h-3 w-3" />{" "}
+                  </a>
+                </div>
+                <div className="text-sm font-medium leading-6 text-muted-foreground">
+                  {asset.name}
                 </div>
               </div>
-              <div className="whitespace-nowrap text-sm font-medium">
-                {isLoading || !prices ? (
-                  <Skeleton className="h-8 w-16" />
-                ) : (
-                  "$" +
-                  formatter.format(
-                    Number(
-                      prices[
-                        asset.address === nativeTokenAddress
-                          ? beraTokenAddress
-                          : asset.address
-                      ] ?? "0",
-                    ) * Number(asset.formattedBalance),
-                  )
-                )}
-              </div>
             </div>
-          ))
+            <div className="whitespace-nowrap text-sm font-medium">
+              {isLoading || !prices ? (
+                <Skeleton className="h-8 w-16" />
+              ) : (
+                "$" +
+                formatter.format(
+                  Number(
+                    prices[
+                      asset.address === nativeTokenAddress
+                        ? beraTokenAddress
+                        : asset.address
+                    ] ?? "0",
+                  ) * Number(asset.formattedBalance),
+                )
+              )}
+            </div>
+          </div>
+        ))
       ) : (
         <div className="flex h-24 justify-center align-middle">
           <div className="flex flex-col items-center justify-center ">
