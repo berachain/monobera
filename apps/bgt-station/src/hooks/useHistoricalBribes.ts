@@ -1,8 +1,6 @@
-import { usePollEpochs } from "@bera/berajs";
+import { usePollEpochs, usePollPrices } from "@bera/berajs";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, getAddress } from "viem";
-
-import { usePollPrices } from "./usePollPrices";
 
 interface EpochBribe {
   bribePerProposal: {
@@ -23,7 +21,7 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
   const { useCurrentEpoch } = usePollEpochs();
   const currentEpoch = useCurrentEpoch();
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const QUERY_KEY = [
     "validator-historical-bribes",
     epochs,

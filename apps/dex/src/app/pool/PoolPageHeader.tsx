@@ -2,12 +2,11 @@
 
 import React, { useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { formatUsd, useLatestBlock } from "@bera/berajs";
+import { formatUsd, useLatestBlock, usePollPrices } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import { sumPrices } from "~/utils/sumPrices";
-import { usePollPrices } from "~/hooks/usePollPrices";
 import { DataCard } from "../components/Data";
 import { PoolSearch } from "./PoolsTable";
 
@@ -21,7 +20,7 @@ export default function PoolPageHeader({
   const router = useRouter();
   const { usePrices, isLoading } = usePollPrices();
 
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const tvlValue = useMemo(() => {
     if (!prices || !tvl || !tvl[0]) return 0;
     return sumPrices(prices, tvl[0].data);

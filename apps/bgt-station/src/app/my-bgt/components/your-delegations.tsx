@@ -2,10 +2,10 @@ import React from "react";
 import {
   usePollDelegatorValidators,
   usePollGlobalValidatorBribes,
+  usePollPrices,
   type PoLValidator,
 } from "@bera/berajs";
 
-import { usePollPrices } from "~/hooks/usePollPrices";
 import Nothing from "../nothing";
 import ValidatorCard from "./validator-card";
 
@@ -16,7 +16,7 @@ export default function YourDelegations() {
   const delegatedValidators = useDelegatorValidators();
 
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const { useDelegatorPolValidators } = usePollGlobalValidatorBribes(prices);
   const delegatorPolValidators = useDelegatorPolValidators(
     delegatedValidators?.map((d: any) => d.operatorAddr),

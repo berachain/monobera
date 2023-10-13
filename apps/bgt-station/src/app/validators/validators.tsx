@@ -7,13 +7,13 @@ import {
   usePollActiveValidators,
   usePollBgtSupply,
   usePollGlobalValidatorBribes,
+  usePollPrices,
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
-import { usePollPrices } from "~/hooks/usePollPrices";
 import ValidatorsTable from "./validators-table";
 
 export default function Validators({
@@ -28,11 +28,10 @@ export default function Validators({
   const { useBgtSupply } = usePollBgtSupply();
   const currentSupply = useBgtSupply();
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const { useGlobalActiveBribeValue, isLoading: isGlobalBribeLoading } =
     usePollGlobalValidatorBribes(prices);
   const totalBribeValue = useGlobalActiveBribeValue();
-  console.log("totalBribeValue", totalBribeValue);
   const { data, isLoading } = useGlobalValidatorGaugeWeight();
 
   const inflation = useMemo(() => {

@@ -646,18 +646,10 @@ export function _derivativeSpotPriceAfterSwapExactTokenInForTokenOut(
     formatUnits(BigInt(formatUnits(poolPairData.swapFee, 18)), 18),
   );
 
-  // console.log(wi);
-  // console.log(wo);
-  // console.log(Bo);
-  // console.log(Bi);
-  // console.log(Ai);
-  // console.log(f);
   const result = (wi + wo) / (Bo * (Bi / (Ai + Bi - Ai * f)) ** (wi / wo) * wi);
-  // console.log('result', result)
   // Convert the decimal value to a BigInt by scaling
   const scalingFactor = 10n ** BigInt(18);
   const bigintValue = BigInt(Math.round(result * Number(scalingFactor)));
-  // console.log('bigintva', bigintValue)
   return bigintValue;
 }
 
