@@ -3,6 +3,7 @@ import Link from "next/link";
 import { type Pool } from "@bera/bera-router";
 import {
   REWARDS_PRECOMPILE_ABI,
+  TransactionActionType,
   formatUsd,
   useBeraJs,
   usePollBgtRewards,
@@ -40,6 +41,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
     onSuccess: () => {
       void mutate(QUERY_KEY);
     },
+    actionType: TransactionActionType.CLAIMING_REWARDS,
   });
 
   const { usePrices } = usePollPrices();

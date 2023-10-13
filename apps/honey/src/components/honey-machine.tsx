@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
+import { TransactionActionType } from "@bera/berajs";
 import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
 import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -138,6 +139,9 @@ export function HoneyMachine() {
 
   const { write } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
+    actionType: isMint
+      ? TransactionActionType.MINT_HONEY
+      : TransactionActionType.REDEEM_HONEY,
     onError: (e: any) => {
       if (e.name === "TransactionExecutionError") {
         // rejection should be triggered when transaction fails(after metamask popup)

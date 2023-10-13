@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useBeraConfig, type Token } from "@bera/berajs";
+import { TransactionActionType, useBeraConfig, type Token } from "@bera/berajs";
 import { ERC20BGT_PRECOMPILE_ABI } from "@bera/berajs/src/config";
 import { useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -42,6 +42,7 @@ export default function CreateBribeCard({
 
   const { write, isLoading } = useTxn({
     message: "Create Bribe",
+    actionType: TransactionActionType.CREATE_BRIBE,
   });
 
   const selectedTokens = tokenBribes.map((tokenBribe: ITokenBribe) => {

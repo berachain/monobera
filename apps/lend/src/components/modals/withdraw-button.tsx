@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
-import { formatter, useBeraJs, type Token } from "@bera/berajs";
+import {
+  TransactionActionType,
+  formatter,
+  useBeraJs,
+  type Token,
+} from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -33,6 +38,7 @@ export default function WithdrawBtn({
       reservesDataRefetch();
       userReservesRefetch();
     },
+    actionType: TransactionActionType.WITHDRAW,
   });
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();

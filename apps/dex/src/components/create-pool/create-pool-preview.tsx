@@ -3,7 +3,11 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { DEX_PRECOMPILE_ABI, useBeraConfig } from "@bera/berajs";
+import {
+  DEX_PRECOMPILE_ABI,
+  TransactionActionType,
+  useBeraConfig,
+} from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { ActionButton, PreviewToken, TokenList, useTxn } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -47,6 +51,7 @@ export function CreatePoolPreview({
       void onCreatePool();
       router.push(`/pool`);
     },
+    actionType: TransactionActionType.CREATE_POOL,
   });
 
   const options = {

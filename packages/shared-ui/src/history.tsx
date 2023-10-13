@@ -61,7 +61,7 @@ export function History() {
               key={txn.hash}
             >
               <div className="flex gap-4">
-                <TokenIcon address={txn.icon ?? ""} fetch size="2xl" />
+                <TokenIcon address={txn.hash ?? ""} fetch size="2xl" />
                 <div className="font-medium">
                   <div className="w-[190px] truncate text-sm font-medium leading-6">
                     {txn.description}{" "}

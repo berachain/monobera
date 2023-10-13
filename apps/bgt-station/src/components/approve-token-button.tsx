@@ -1,4 +1,4 @@
-import { type Token } from "@bera/berajs";
+import { TransactionActionType, type Token } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { erc20ABI } from "wagmi";
@@ -16,6 +16,7 @@ export const ApproveTokenButton = ({
 }: Props) => {
   const { write, isLoading } = useTxn({
     message: `Approve ${token?.name}`,
+    actionType: TransactionActionType.APPROVAL,
   });
 
   return (

@@ -3,6 +3,7 @@
 import React from "react";
 import {
   ERC20BGT_PRECOMPILE_ABI,
+  TransactionActionType,
   useBeraConfig,
   usePollBgtBalance,
   type Token,
@@ -34,6 +35,7 @@ export default function MyBalance() {
     message: `Redeem ${redeemAmount} BGT`,
     onSuccess: () => setOpen(false),
     onError: () => setOpen(false),
+    actionType: TransactionActionType.REDEEM_BGT,
   });
   return (
     <Dialog open={open} onOpenChange={setOpen}>
