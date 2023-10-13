@@ -238,7 +238,7 @@ export default function HoneyTransactionsTable({
       );
     }
   };
-  // console.log("allData", allData);
+
   return (
     <section id="transactions">
       <Tabs
@@ -327,7 +327,6 @@ export const EventTable = ({
   arcade: boolean;
 }) => {
   const { tokenDictionary } = useTokens();
-  // console.log("tokenDictionary", tokenDictionary, events);
   return (
     <Table>
       <TableHeader>

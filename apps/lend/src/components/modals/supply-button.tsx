@@ -5,7 +5,7 @@ import {
   formatter,
   useBeraJs,
   usePollAllowance,
-  useSelectedAssetWalletBalance,
+  usePollAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
@@ -80,7 +80,8 @@ const SupplyModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const { account } = useBeraJs();
-  const balance = useSelectedAssetWalletBalance(token.address);
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: balance } = useSelectedAssetWalletBalance(token.address);
   const { useAllowance } = usePollAllowance({
     contract: lendPoolImplementationAddress,
     token,

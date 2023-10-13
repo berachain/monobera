@@ -87,7 +87,6 @@ export const getBaseTokenPrice = async (pools: Pool[]) => {
       (pool) => Object.keys(pool).length !== 0,
     );
 
-    console.log("AAA", allPoolData);
     mappedTokens = allPoolData?.length
       ? allPoolData?.reduce(
           (acc, cur) => {

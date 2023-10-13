@@ -11,6 +11,7 @@ import {
   usePollBgtBalance,
   usePollDelegatorValidators,
   usePollGlobalValidatorBribes,
+  usePollPrices,
 } from "@bera/berajs";
 import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
@@ -25,7 +26,6 @@ import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import ValidatorInput from "~/components/validator-input";
-import { usePollPrices } from "~/hooks/usePollPrices";
 import { DelegateEnum, ImageMapEnum } from "./types";
 
 export default function Delegate({
@@ -50,7 +50,7 @@ export default function Delegate({
   usePollDelegatorValidators();
 
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const { useDelegatorPolValidators } = usePollGlobalValidatorBribes(prices);
   const { useDelegatorValidators } = usePollDelegatorValidators();
   const delegatedValidators = useDelegatorValidators();
@@ -59,8 +59,6 @@ export default function Delegate({
   );
   const bgtDelegated = useSelectedAccountDelegation();
 
-  console.log("vally", validator);
-  console.log("revally", redelegateValidator);
   const isBadRedelegate =
     validator === redelegateValidator &&
     (validator as string) !== undefined &&

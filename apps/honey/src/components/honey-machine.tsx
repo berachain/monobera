@@ -136,17 +136,6 @@ export function HoneyMachine() {
     collateralList,
   } = usePsm();
 
-  // console.log(
-  //   payload,
-  //   BigInt(payload[2] ?? 0n),
-  // fromAmount,
-  // allowance?.formattedAllowance,
-  // needsApproval,
-  // fromBalance?.balance,
-  //   fromBalance?.formattedBalance,
-  //   toBalance?.formattedBalance,
-  // );
-
   const { write } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
     onError: (e: any) => {
@@ -159,25 +148,17 @@ export function HoneyMachine() {
       }
     },
     onSuccess: () => {
-      // console.log("onSuccess", "approval", "isMint", isMint);
       if (needsApproval) {
         approvalTxnSuccess?.fire();
-        // console.log("fire approval success");
       } else {
         if (isMint) {
           mintTxnSuccess?.fire();
-          // console.log("fire mint success");
         } else {
           redeemTxnSuccess?.fire();
-          // console.log("fire redeem success");
         }
       }
     },
-    // onLoading: () => {
-    //   console.log("onLoading" );
-    // },
     onSubmission: () => {
-      // console.log("onSubmission", "txnSubmitAction");
       if (needsApproval) {
         txnSubmitAction?.fire();
       } else {
@@ -205,7 +186,6 @@ export function HoneyMachine() {
       rive.on(EventType.StateChange, (event: any) => {
         if (event.data[0] === "wallet") {
           if (needsApproval) {
-            // console.log("approval");
             dispatch({ type: "SET_STATE", payload: "approval" });
           } else {
             if (isMint) {
@@ -251,12 +231,7 @@ export function HoneyMachine() {
   const performMinting = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      // console.log(payload[2], Number(fromBalance.formattedBalance));
       if (Number(payload[2]) > 0 && payload[2] <= fromBalance.balance) {
-        // console.log(
-        //   Number(payload[2].toString),
-        //   Number(fromBalance.formattedBalance),
-        // );
         write({
           address: erc20HoneyAddress,
           abi: ERC20_HONEY_ABI,

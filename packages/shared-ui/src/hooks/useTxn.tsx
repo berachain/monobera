@@ -32,6 +32,8 @@ import {
 
 interface IUseTxn {
   message?: string;
+  icon?: string;
+  actionType?: string;
   disableToast?: boolean;
   disableModal?: boolean;
   onSuccess?: (hash: string) => void;
@@ -72,6 +74,8 @@ const DURATION = 3000;
  */
 export const useTxn = ({
   message = "",
+  icon = "",
+  actionType = "",
   disableToast = false,
   disableModal = false,
   onSuccess,
@@ -187,6 +191,8 @@ export const useTxn = ({
         addRecentTransaction({
           hash: result,
           description: message,
+          icon,
+          actionType,
           timestamp: Date.now(),
         });
         onSuccess && onSuccess(result);

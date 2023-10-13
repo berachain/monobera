@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  useBeraJs,
-  usePollAssetWalletBalance,
-  useSelectedAssetWalletBalance,
-} from "@bera/berajs";
+import { useBeraJs, usePollAssetWalletBalance } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -22,11 +18,11 @@ export default function CreatePoolInitialLiquidityInput({
   index,
   onTokenBalanceChange,
 }: Props) {
-  usePollAssetWalletBalance();
-  const tokenBalance = Number(
-    useSelectedAssetWalletBalance(tokenWeight.token?.address ?? "")
-      ?.formattedBalance || 0,
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: token } = useSelectedAssetWalletBalance(
+    tokenWeight.token?.address ?? "",
   );
+  const tokenBalance = Number(token?.formattedBalance || 0);
 
   const { isConnected } = useBeraJs();
 
