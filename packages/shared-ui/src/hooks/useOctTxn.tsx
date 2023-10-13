@@ -9,7 +9,8 @@ import {
 } from "react";
 import {
   useAddRecentTransaction,
-  useBeraContractWrite,
+  useOct,
+  useOctContractWrite,
   type IContractWrite,
 } from "@bera/berajs";
 import toast from "react-hot-toast";
@@ -70,7 +71,7 @@ const DURATION = 3000;
  * @param {IUseTxn} options - Options for the hook.
  * @returns {UseTxnApi} - An object containing transaction-related properties and functions.
  */
-export const useTxn = ({
+export const useOctTxn = ({
   message = "",
   disableToast = false,
   disableModal = false,
@@ -81,6 +82,7 @@ export const useTxn = ({
 }: IUseTxn = {}): UseTxnApi => {
   const [identifier, setIdentifier] = useState("");
   const isMd = useMediaQuery("(min-width: 768px)");
+  const { isOctEnabled } = useOct();
 
   const [modalState, dispatch] = useReducer(modalReducer, initialState);
   const openModal = (modalName: ModalName, modalData: any) => {
@@ -100,7 +102,7 @@ export const useTxn = ({
   const addRecentTransaction = useAddRecentTransaction();
 
   const { write, isLoading, isSubmitting, isSuccess, isError } =
-    useBeraContractWrite({
+    useOctContractWrite({
       /**
        * Error callback function executed when a transaction encounters an error.
        *
@@ -281,7 +283,7 @@ export const useTxn = ({
     );
   };
   const memoizedModalPortal = useMemo(
-    () => <ModalPortal />,
+    () => (!isOctEnabled ? <ModalPortal /> : false),
     [isLoading, isSubmitting, isSuccess, isError, modalState],
   );
 

@@ -16,6 +16,7 @@
   "dependencies": {
     "@rainbow-me/rainbowkit": "^1.0.3",
     "bech32": "^2.0.0",
+    "crypto-js": "^4.1.1",
     "ethers": "^6.8.0",
     "lodash": "^4.17.21",
     "react-device-detect": "^2.2.3",
@@ -35,6 +36,7 @@
     "@cosmjs/stargate": "^0.29.5",
     "@cosmjs/tendermint-rpc": "^0.29.5",
     "@hyrious/esbuild-plugin-commonjs": "0.2.2",
+    "@types/crypto-js": "^4.1.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
     "eslint": "^8.39.0",

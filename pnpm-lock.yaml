@@ -601,6 +601,9 @@ importers:
       bech32:
         specifier: ^2.0.0
         version: 2.0.0
+      crypto-js:
+        specifier: ^4.1.1
+        version: 4.1.1
       ethers:
         specifier: ^6.8.0
         version: 6.8.0
@@ -638,6 +641,9 @@ importers:
       '@hyrious/esbuild-plugin-commonjs':
         specifier: 0.2.2
         version: 0.2.2(esbuild@0.19.4)
+      '@types/crypto-js':
+        specifier: ^4.1.2
+        version: 4.1.2
       '@types/react':
         specifier: ^18.2.0
         version: 18.2.0
@@ -8112,6 +8118,10 @@ packages:
     dependencies:
       '@types/node': 18.16.6
 
+  /@types/crypto-js@4.1.2:
+    resolution: {integrity: sha512-t33RNmTu5ufG/sorROIafiCVJMx3jz95bXUMoPAZcUD14fxMXnuTzqzXZoxpR0tNx2xpw11Dlmem9vGCsrSOfA==}
+    dev: true
+
   /@types/d3-array@3.0.8:
     resolution: {integrity: sha512-2xAVyAUgaXHX9fubjcCbGAUOqYfRJN1em1EKR2HfzWBpObZhwfnZKvofTN4TplMqJdFQao61I+NVSai/vnBvDQ==}
     dev: false
@@ -10562,6 +10572,10 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  /crypto-js@4.1.1:
+    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
+    dev: false
 
   /crypto-random-string@2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}
