@@ -8,6 +8,7 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
+import { bgtTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Badge } from "@bera/ui/badge";
@@ -167,9 +168,6 @@ export function TokenDialog({
               />
             )}
             <div>
-              {/* <div className=" mb-2 text-sm font-medium leading-normal">
-                Favourite Tokens
-              </div> */}
               {!customTokens && (
                 <div className="flex flex-wrap gap-2">
                   {featuredTokenList
@@ -195,20 +193,22 @@ export function TokenDialog({
             <div className="overflow-y-scoll max-h-[600px] ">
               {!error ? (
                 filteredTokens?.length ? (
-                  filteredTokens?.map((token, i) => (
-                    <TokenDialogRow
-                      key={i}
-                      token={token}
-                      isTokenSelected={isTokenSelected(token)}
-                      focusedToken={focusedToken}
-                      addTokenOpen={addTokenOpen}
-                      setAddTokenOpen={onAddTokenCancel}
-                      onAddToken={onAddToken}
-                      onAddTokenCancel={onAddTokenCancel}
-                      onTokenSelect={onTokenSelect}
-                      pendingAddition={pendingAddition}
-                    />
-                  ))
+                  filteredTokens
+                    ?.filter((t) => t.address !== bgtTokenAddress)
+                    .map((token, i) => (
+                      <TokenDialogRow
+                        key={i}
+                        token={token}
+                        isTokenSelected={isTokenSelected(token)}
+                        focusedToken={focusedToken}
+                        addTokenOpen={addTokenOpen}
+                        setAddTokenOpen={onAddTokenCancel}
+                        onAddToken={onAddToken}
+                        onAddTokenCancel={onAddTokenCancel}
+                        onTokenSelect={onTokenSelect}
+                        pendingAddition={pendingAddition}
+                      />
+                    ))
                 ) : (
                   <Alert variant={"info"}>
                     <AlertTitle>Token not found</AlertTitle>

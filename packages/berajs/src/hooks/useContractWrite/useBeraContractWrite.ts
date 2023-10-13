@@ -44,8 +44,6 @@ const useBeraContractWrite = ({
         //   args: params,
         // });
 
-        // console.log("REQUEST", request);
-
         receipt = await walletClient?.writeContract({
           address: address,
           abi: abi,

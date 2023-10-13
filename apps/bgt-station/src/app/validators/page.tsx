@@ -14,7 +14,6 @@ async function getBGTSupply() {
   try {
     const res = await fetch(`${indexerUrl}/bgt/supply?num_of_days=1`);
     const jsonRes = await res.json();
-    // console.log(jsonRes);
     return jsonRes;
   } catch (e) {
     console.log(e);

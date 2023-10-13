@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   formatUsd,
   formatter,
+  usePollPrices,
   usePollValidatorBribes,
   useTokenInformation,
   useTokens,
@@ -12,8 +13,6 @@ import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits, type Address } from "viem";
-
-import { usePollPrices } from "~/hooks/usePollPrices";
 
 const BribeCard = ({
   amountPerProposal,
@@ -50,7 +49,7 @@ const BribeCard = ({
   }, [tokenInformation]);
 
   const { usePrice } = usePollPrices();
-  const price = usePrice(tokenAddress);
+  const { data: price } = usePrice(tokenAddress);
   const formattedAmountPerProposal = Number(
     formatUnits(amountPerProposal, token?.decimals ?? 18),
   );

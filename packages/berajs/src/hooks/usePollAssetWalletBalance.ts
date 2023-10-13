@@ -60,7 +60,6 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
             args: [account],
           };
         });
-        console.log("calls", call);
         try {
           const result = await publicClient.multicall({
             contracts: call,
@@ -107,7 +106,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   };
 
   const useSelectedAssetWalletBalance = (address: string) => {
-    return useSWRImmutable([account, address, "assetWalletBalances"]);
+    return useSWRImmutable([...QUERY_KEY, address]);
   };
 
   return {
