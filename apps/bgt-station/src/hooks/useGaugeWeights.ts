@@ -1,10 +1,9 @@
-import { useBeraJs } from "@bera/berajs";
+import { useBeraJs, usePollPrices } from "@bera/berajs";
 import { indexerUrl } from "@bera/config";
 import useSWR from "swr";
 import { formatUnits, getAddress } from "viem";
 
 import { type MappedTokens } from "~/app/api/getPrices/api/getPrices";
-import { usePollPrices } from "./usePollPrices";
 
 export interface Coin {
   amount: string;
@@ -67,7 +66,7 @@ export interface GaugeWeight {
 export const useUserGaugeWeight = () => {
   const { account } = useBeraJs();
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const QUERY_KEY = ["user-gauge-weight", account, prices];
   return useSWR(
     QUERY_KEY,
@@ -106,7 +105,7 @@ export const useUserGaugeWeight = () => {
 
 export const useValidatorGaugeWeight = (address: string) => {
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const QUERY_KEY = ["user-gauge-weight", address, prices];
   return useSWR(
     QUERY_KEY,
@@ -147,7 +146,7 @@ export const useValidatorGaugeWeight = (address: string) => {
 
 export const useGlobalValidatorGaugeWeight = () => {
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const QUERY_KEY = ["global-gauge-weight", prices];
   return useSWR(
     QUERY_KEY,

@@ -28,7 +28,6 @@ export const usePollReservesDataList = () => {
         result[0],
         result[1],
       );
-      // console.log(reservesData, baseCurrencyData);
       await mutate([...QUERY_KEY, "baseCurrencyData"], baseCurrencyData);
       const formattedReserves = formatReserves({
         reserves: reservesData,
@@ -38,7 +37,6 @@ export const usePollReservesDataList = () => {
         marketReferencePriceInUsd:
           baseCurrencyData.marketReferenceCurrencyPriceInUsd,
       });
-      // console.log("formattedReserves", formattedReserves);
       const reservesDictionary = {};
       await Promise.all(
         formattedReserves.map(async (formattedReserve) => {

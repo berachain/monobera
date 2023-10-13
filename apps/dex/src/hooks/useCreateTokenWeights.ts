@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  useCurrentAssetWalletBalances,
-  usePollAssetWalletBalance,
-  type Token,
-} from "@bera/berajs";
+import { usePollAssetWalletBalance, type Token } from "@bera/berajs";
 import { getAddress } from "viem";
 
 export interface ITokenWeight {
@@ -80,8 +76,8 @@ const useCreateTokenWeights = () => {
 
   const [step, setStep] = useState<Steps>(Steps.SET_TOKEN_WEIGHTS);
 
-  usePollAssetWalletBalance();
-  const tokens = useCurrentAssetWalletBalances();
+  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
+  const { data: tokens } = useCurrentAssetWalletBalances();
 
   // track any errors
   useEffect(() => {
@@ -101,7 +97,7 @@ const useCreateTokenWeights = () => {
       step === 2 &&
       tokenWeights.some((item) => {
         const foundToken = tokens?.find(
-          (t) =>
+          (t: any) =>
             getAddress(t.address) === getAddress(item?.token?.address ?? ""),
         );
 

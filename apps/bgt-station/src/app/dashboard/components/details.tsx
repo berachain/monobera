@@ -4,11 +4,11 @@ import {
   usePollActiveValidators,
   usePollBgtSupply,
   usePollGlobalValidatorBribes,
+  usePollPrices,
 } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { usePollPrices } from "~/hooks/usePollPrices";
 import { EpochTimeline } from "./epoch-timeline";
 import { Stats } from "./stats";
 
@@ -22,7 +22,7 @@ export function Details({
   const { useBgtSupply } = usePollBgtSupply();
   const bgtSupply = useBgtSupply();
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const { useGlobalAvgApy } = usePollGlobalValidatorBribes(prices);
   const avgApy = useGlobalAvgApy();
 

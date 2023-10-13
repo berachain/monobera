@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import {
   useBeraConfig,
-  useCurrentAssetWalletBalances,
   usePollAllowances,
   usePollAssetWalletBalance,
   usePollEpochs,
@@ -69,8 +68,8 @@ const useCreateTokenBribes = (validatorAddress: string) => {
     }
   }, [allowances]);
 
-  usePollAssetWalletBalance();
-  const tokens = useCurrentAssetWalletBalances();
+  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
+  const { data: tokens } = useCurrentAssetWalletBalances();
 
   useEffect(() => {
     const tokenAddress = tokenBribes.map(
@@ -117,7 +116,7 @@ const useCreateTokenBribes = (validatorAddress: string) => {
       tokenBribes && tokenBribes.length > 0
         ? tokenBribes.some((item) => {
             const foundToken = tokens?.find(
-              (t) => t.address === item?.token?.address,
+              (t: any) => t.address === item?.token?.address,
             );
             return Number(foundToken?.formattedBalance ?? 0) < item.total;
           })

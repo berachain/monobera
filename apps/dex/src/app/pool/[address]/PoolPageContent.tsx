@@ -312,6 +312,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     ModalPortal,
   } = useTxn({
     message: "Claiming BGT Rewards",
+    actionType: "Claim Rewards",
     onSuccess: () => {
       void mutate(QUERY_KEY);
     },

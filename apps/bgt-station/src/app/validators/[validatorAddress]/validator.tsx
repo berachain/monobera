@@ -6,6 +6,7 @@ import {
   truncateHash,
   usePollActiveValidators,
   usePollGlobalValidatorBribes,
+  usePollPrices,
 } from "@bera/berajs";
 import { Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
@@ -17,7 +18,6 @@ import {
   useHistoricalBribes,
   type FormattedHistoricalBribes,
 } from "~/hooks/useHistoricalBribes";
-import { usePollPrices } from "~/hooks/usePollPrices";
 import BribeList from "./bribe-list";
 import BribesAndEmissions from "./bribes-and-emissions";
 import Uptime from "./uptime";
@@ -33,7 +33,7 @@ export default function Validator({
   allEpochs: any;
 }) {
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const { usePolValidator } = usePollGlobalValidatorBribes(prices);
   const validator = usePolValidator(validatorAddress);
   const { usePercentageDelegated } = usePollActiveValidators();

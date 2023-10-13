@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import {
   truncateHash,
   usePollGlobalValidatorBribes,
+  usePollPrices,
   usePollValidatorCuttingBoard,
   useTokens,
   type PoLValidator,
@@ -19,7 +20,6 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress, type Address } from "viem";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
-import { usePollPrices } from "~/hooks/usePollPrices";
 
 export const GaugeIcon = ({
   address,
@@ -91,7 +91,7 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
 export default function ValidatorsTable() {
   const router = useRouter();
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
   const [keyword, setKeyword] = React.useState("");
   const validators = usePolValidators();

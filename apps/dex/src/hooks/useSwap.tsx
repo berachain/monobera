@@ -122,8 +122,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [showPriceImpact, setShowPriceImpact] = useState(false);
 
-  const { isLoading: isBalanceLoading } = usePollAssetWalletBalance();
-
+  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
+  const { isLoading: isBalanceLoading } = useCurrentAssetWalletBalances();
   useEffect(() => {
     if (isWrap) {
       if (swapKind === SwapKind.GIVEN_IN) {
@@ -287,7 +287,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       }
 
       const payload = [swapKind, swapInfo?.batchSwapSteps, d];
-      console.log(payload);
       setPayload(payload);
     }
   }, [

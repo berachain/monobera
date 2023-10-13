@@ -134,7 +134,6 @@ export const usePollBribes = () => {
     // const publicClient = usePublicClient();
     // const { networkConfig } = useBeraConfig();
     // return useMemo(async () => {
-    // console.log(tokens);
     //   const call: Call[] = tokens?.map((address: string) => ({
     //     address: address as `0x${string}`,
     //     abi: erc20ABI,
@@ -146,9 +145,6 @@ export const usePollBribes = () => {
     //       multicallAddress: networkConfig.precompileAddresses
     //         .multicallAddress as Address,
     //     });
-
-    //   console.log(result);
-
     // }, [tokens])
   };
   const useValidatorBribeTotal = (validatorAddress: string, prices: any) => {
