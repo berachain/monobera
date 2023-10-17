@@ -21,26 +21,26 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
           ? formatUsd(pool?.fees ?? "0")
           : "$0",
     },
-    {
-      title: "vAPY",
-      amount: (pool?.totalApy ?? 0).toFixed(2) + "%",
-    },
+    // {
+    //   title: "vAPY",
+    //   amount: (pool?.totalApy ?? 0).toFixed(2) + "%",
+    // },
   ];
   return (
     <div
       key={pool?.pool}
-      className="col-span-1 flex w-full max-w-[275px] flex-col justify-end overflow-hidden rounded-xl border border-border bg-background"
+      className="col-span-1 mx-auto flex w-full max-w-[275px] flex-col justify-end overflow-hidden rounded-xl border border-border bg-background"
     >
       <div className="flex flex-col items-center justify-center gap-1 p-6 pb-4">
         <TokenIconList
           tokenList={pool?.tokens?.map((t: any) => t.address) ?? []}
           size="lg"
         />
-        <div className="flex h-12 w-full items-center justify-center text-sm font-medium text-muted-foreground">
+        <div className="flex h-12 w-full items-center justify-center text-sm text-muted-foreground">
           {poolName.length > 60 ? `${poolName.slice(0, 60)}...` : poolName}
         </div>
         <div className="flex h-7 flex-shrink-0 gap-2 whitespace-nowrap text-center text-xl font-semibold">
-          {(pool?.totalApy ?? 0).toFixed(2)}% APY{" "}
+          {(pool?.totalApy ?? 0).toFixed(2)}% PRR{" "}
           <TagList tagList={pool?.tags ?? []} className="inline-flex" />
         </div>
       </div>
