@@ -17,6 +17,7 @@
     "@bera/berajs": "0.1.0",
     "@bera/config": "0.1.0",
     "@bera/shared-ui": "0.1.0",
+    "@bera/proto": "0.1.0",
     "@bera/tailwind-config": "0.1.0",
     "@bera/ui": "0.1.0",
     "@t3-oss/env-nextjs": "^0.2.2",

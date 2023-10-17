@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { Wallet } from "ethers";
+import lodash from "lodash";
 import { Keccak } from "sha3";
 import { useLocalStorage } from "usehooks-ts";
-import { Address } from "viem";
+import { type Address } from "viem";
 import { ethersWalletToAccount } from "viem/ethers";
 import { useSignMessage } from "wagmi";
 
 import { decrypt, encrypt } from "~/utils/encoder";
 import { ActionEnum, initialState, reducer, useBeraJs } from "..";
-import lodash from 'lodash';
 
 export enum LOCAL_STORAGE_KEYS {
   OCT_ENABLED = "oct_enabled",
@@ -29,7 +29,10 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
     LOCAL_STORAGE_KEYS.OCT_ENABLED,
     {},
   );
-  const [octKeyMap, setOctKeyMap] = useLocalStorage<Record<string, string>>(LOCAL_STORAGE_KEYS.OCT_KEY, {});
+  const [octKeyMap, setOctKeyMap] = useLocalStorage<Record<string, string>>(
+    LOCAL_STORAGE_KEYS.OCT_KEY,
+    {},
+  );
 
   const [octAddress, setOctAddress] = useState("");
 
@@ -39,7 +42,7 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const {account} = useBeraJs()
+  const { account } = useBeraJs();
   const { signMessageAsync } = useSignMessage({
     message: `You are enabling One Click Trading. Use at your own risk!`,
   });
@@ -71,9 +74,9 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
 
   useEffect(() => {
     try {
-      const octKey = getOctKey()
-      if(!octKey) {
-        return
+      const octKey = getOctKey();
+      if (!octKey) {
+        return;
       }
       const decodedString = decrypt(octKey, KEY);
       const account = ethersWalletToAccount(new Wallet(decodedString));
@@ -89,33 +92,32 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   }, [account, octKeyMap, octMap]);
 
   const setOctEnabled = (value: boolean) => {
-
-    if(account){
-      const newMap = lodash.set(octMap, account, value)
-      setOctMap(newMap)
+    if (account) {
+      const newMap = lodash.set(octMap, account, value);
+      setOctMap(newMap);
     }
-  }
+  };
 
   const isOctEnabled = () => {
-    if(account) {
-      return octMap[account] ?? false
+    if (account) {
+      return octMap[account] ?? false;
     }
-    return false
-  }
+    return false;
+  };
 
   const setOctKey = (key: string) => {
-    if(account) {
-      const newMap = lodash.set(octKeyMap, account, key)
-      setOctKeyMap(newMap)
+    if (account) {
+      const newMap = lodash.set(octKeyMap, account, key);
+      setOctKeyMap(newMap);
     }
-  }
+  };
 
   const getOctKey = (): string | undefined => {
-    if(account) {
-      return octKeyMap[account] ?? undefined
+    if (account) {
+      return octKeyMap[account] ?? undefined;
     }
-    return undefined
-  }
+    return undefined;
+  };
   return {
     isLoading: state.confirmState === "loading",
     isSubmitting: state.confirmState === "submitting",

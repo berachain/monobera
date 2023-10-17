@@ -1,15 +1,22 @@
+import { formatUsd } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import { type OrderType } from "../type";
 
-export function PlaceOrder({ form }: { form: OrderType }) {
+export function PlaceOrder({
+  form,
+  price,
+}: {
+  form: OrderType;
+  price: number;
+}) {
   return (
     <div className="flex w-full flex-col gap-1 rounded-xl border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
       <div className="flex w-full justify-between">
         <div>EST. EXECUTION PRICE</div>
-        <div className="text-foreground">$0.00</div>
+        <div className="text-foreground">{formatUsd(price)}</div>
       </div>
       <div className="flex w-full justify-between">
         <div>LIQ. PRICE</div>
@@ -19,18 +26,18 @@ export function PlaceOrder({ form }: { form: OrderType }) {
         <div>LEVERAGE</div>
         <div className="text-foreground">{form.leverage}x</div>
       </div>
-      {form.tp && (
-        <div className="flex w-full justify-between">
-          <div>TAKE PROFIT</div>
-          <div className="text-foreground">{form.tp}%</div>
+      <div className="flex w-full justify-between">
+        <div>TAKE PROFIT</div>
+        <div className="text-foreground">
+          {form.tp === 0 ? "None" : `${form.tp}%`}
         </div>
-      )}
-      {form.sl && (
-        <div className="flex w-full justify-between">
-          <div>STOP LOSS</div>
-          <div className="text-foreground">{form.sl}%</div>
+      </div>
+      <div className="flex w-full justify-between">
+        <div>STOP LOSS</div>
+        <div className="text-foreground">
+          {form.sl === 0 ? "None" : `${form.sl}%`}
         </div>
-      )}
+      </div>
       <div className="flex w-full justify-between">
         <div>POSITION SIZE</div>
         <div className="text-foreground">

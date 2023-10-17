@@ -1,4 +1,34 @@
-export function GeneralInfoBanner() {
+"use client";
+
+import { formatUsd } from "@bera/berajs";
+import { formatUnits } from "viem";
+
+import { type IMarket } from "../page";
+
+interface IGeneralInfoBanner {
+  market: IMarket;
+}
+export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
+  console.log(market);
+
+  const formattedLongOi = formatUnits(
+    BigInt(market.openInterest?.oiLong ?? "0"),
+    18,
+  );
+  const formattedShortOi = formatUnits(
+    BigInt(market.openInterest?.oiShort ?? "0"),
+    18,
+  );
+
+  const formattedBorrowingL = formatUnits(
+    BigInt(market.pairBorrowingFee?.bfLong ?? "0"),
+    18,
+  );
+  const formattedBorrowingS = formatUnits(
+    BigInt(market.pairBorrowingFee?.bfShort ?? "0"),
+    18,
+  );
+
   const data = [
     {
       title: "24h Change",
@@ -18,15 +48,19 @@ export function GeneralInfoBanner() {
     },
     {
       title: "Open Interest (L)",
-      amount: "$445.3K / ∞",
+      amount: `${formatUsd(formattedLongOi)} / ∞`,
     },
     {
       title: "Open Interest (S)",
-      amount: "$445.3K / ∞",
+      amount: `${formatUsd(formattedShortOi)} / ∞`,
     },
     {
-      title: "Funding Rate",
-      amount: "0.0060%",
+      title: "Borrowing (L)",
+      amount: `${formattedBorrowingL}%`,
+    },
+    {
+      title: "Borrowing (S)",
+      amount: `${formattedBorrowingS}%`,
     },
   ];
   return (

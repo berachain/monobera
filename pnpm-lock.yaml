@@ -479,6 +479,9 @@ importers:
       '@bera/config':
         specifier: 0.1.0
         version: link:../../packages/config/env
+      '@bera/proto':
+        specifier: 0.1.0
+        version: link:../../packages/proto
       '@bera/shared-ui':
         specifier: 0.1.0
         version: link:../../packages/shared-ui

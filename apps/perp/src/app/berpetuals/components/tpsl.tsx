@@ -7,11 +7,11 @@ const InputSelect = ({
   onValueChange,
   variant = "success",
 }: {
-  bracket: [number, number, number, number];
-  onValueChange: (percenatge: number | undefined) => void;
+  bracket: [number, number, number, number, number];
+  onValueChange: (percenatge: number) => void;
   variant: "success" | "destructive";
 }) => {
-  const [percenatge, setPercenatge] = useState<number | undefined>(undefined);
+  const [percenatge, setPercenatge] = useState<number>(0);
   useEffect(() => {
     onValueChange(percenatge);
   }, [percenatge]);
@@ -20,10 +20,11 @@ const InputSelect = ({
       <Input
         className="h-8 w-full rounded-lg bg-background text-xs lg:w-[102px]"
         placeholder="Amount"
-        value={percenatge}
+        type={percenatge === 0 ? "text" : "number"}
+        value={percenatge === 0 ? "none" : percenatge}
         onChange={(e) =>
           setPercenatge(
-            Number(e.target.value) === 0 ? undefined : Number(e.target.value),
+            Number(e.target.value) === 0 ? 0 : Number(e.target.value),
           )
         }
         endAdornment="%"
@@ -39,7 +40,7 @@ const InputSelect = ({
           )}
           onClick={() => setPercenatge(amount)}
         >
-          {amount}%
+          {amount === 0 ? "None" : `${amount}%`}
         </div>
       ))}
     </div>
@@ -50,19 +51,13 @@ export function TPSL({
   tpslOnChange,
   className,
 }: {
-  tpslOnChange?: ({
-    tp,
-    sl,
-  }: {
-    tp: number | undefined;
-    sl: number | undefined;
-  }) => void;
+  tpslOnChange?: ({ tp, sl }: { tp: number; sl: number }) => void;
   className?: string;
 }) {
   const [tpsl, setTpsl] = useState<{
-    tp: number | undefined;
-    sl: number | undefined;
-  }>({ tp: undefined, sl: undefined });
+    tp: number;
+    sl: number;
+  }>({ tp: 0, sl: 0 });
   useEffect(() => {
     tpslOnChange?.(tpsl);
   }, [tpsl]);
@@ -70,16 +65,16 @@ export function TPSL({
     <div className={className}>
       <div className="mb-2 text-xs font-medium">Take Profit</div>
       <InputSelect
-        bracket={[25, 50, 100, 150]}
-        onValueChange={(percenatge: number | undefined) =>
+        bracket={[0, 25, 50, 100, 150]}
+        onValueChange={(percenatge: number) =>
           setTpsl({ tp: percenatge, sl: tpsl.sl })
         }
         variant="success"
       />
       <div className="mb-2 mt-4 text-xs font-medium">Stop Loss</div>
       <InputSelect
-        bracket={[5, 10, 15, 25]}
-        onValueChange={(percenatge: number | undefined) =>
+        bracket={[0, 5, 10, 15, 25]}
+        onValueChange={(percenatge: number) =>
           setTpsl({ tp: tpsl.tp, sl: percenatge })
         }
         variant="destructive"

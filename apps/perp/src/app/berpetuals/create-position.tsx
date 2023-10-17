@@ -1,18 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { formatUsd } from "@bera/berajs";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import { useMemo, useState } from "react";
+import Image from "next/image";
+import { formatUsd, usePollHoneyBalance } from "@bera/berajs";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
+import { HONEY_IMG } from "~/utils/marketImages";
 import { CustomizeInput } from "./components/customize-input";
 import { LeverageSlider } from "./components/leverage-slider";
 import { LongShortTab } from "./components/long-short-tab";
 import { PlaceOrder } from "./components/place-order";
 import { TPSL } from "./components/tpsl";
+import { type IMarket } from "./page";
 import { type OrderType } from "./type";
 
-export default function CreatePosition() {
+interface ICreatePosition {
+  market: IMarket;
+}
+
+export default function CreatePosition({ market }: ICreatePosition) {
   const [form, setForm] = useState<OrderType>({
     assets: "BTC",
     orderType: "long",
@@ -20,11 +26,22 @@ export default function CreatePosition() {
     amount: undefined,
     quantity: undefined,
     price: undefined,
-    leverage: 0,
-    tp: undefined,
-    sl: undefined,
+    leverage: 1,
+    tp: 0,
+    sl: 0,
   });
 
+  const dummyPrice = 29000;
+  const honeyPrice = 1;
+  const { useHoneyBalance } = usePollHoneyBalance();
+  const honeyBalance = useHoneyBalance();
+
+  useMemo(() => {
+    const honeyAmountPrice = (form.amount ?? 0) * honeyPrice;
+    const leveragedHoneyPrice = honeyAmountPrice * (form.leverage ?? 1);
+    const newQuantity = leveragedHoneyPrice / dummyPrice;
+    setForm({ ...form, quantity: newQuantity });
+  }, [honeyPrice, form.amount, form.leverage]);
   return (
     <div className="w-full flex-shrink-0 pb-10 lg:min-h-screen-250 lg:w-[400px] lg:border-r lg:border-border">
       <LongShortTab
@@ -59,10 +76,18 @@ export default function CreatePosition() {
         <div className="flex flex-col gap-2">
           <CustomizeInput
             title="Amount"
+            value={form.amount}
+            onChange={(e) => {
+              console.log(e);
+              setForm({ ...form, amount: Number(e) });
+            }}
             subTitle={
               <div className="flex items-center gap-1">
-                Balance: 0.00
-                <div className="cursor-pointer rounded bg-secondary px-1 py-[2px] text-[10px] text-secondary-foreground hover:bg-background">
+                Balance: {honeyBalance ?? 0}
+                <div
+                  onClick={() => setForm({ ...form, amount: honeyBalance })}
+                  className="cursor-pointer rounded bg-secondary px-1 py-[2px] text-[10px] text-secondary-foreground hover:bg-background"
+                >
                   MAX
                 </div>
               </div>
@@ -70,15 +95,13 @@ export default function CreatePosition() {
             endAdornment={
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
                 {" "}
-                <Avatar className="h-5 w-5">
-                  <AvatarImage
-                    src={
-                      "https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/honey.png"
-                    }
-                    className="rounded-full"
-                  />
-                  <AvatarFallback>honey</AvatarFallback>
-                </Avatar>{" "}
+                <Image
+                  src={HONEY_IMG}
+                  alt={"selectedMarket"}
+                  width={24}
+                  height={24}
+                  className="rounded-full"
+                />{" "}
                 HONEY
               </div>
             }
@@ -86,18 +109,16 @@ export default function CreatePosition() {
           <CustomizeInput
             title="Quantity"
             subTitle={`Leverage: ${form.leverage}x`}
+            value={form.quantity}
             endAdornment={
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                {" "}
-                <Avatar className="h-5 w-5">
-                  <AvatarImage
-                    src={
-                      "https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/honey.png"
-                    }
-                    className="rounded-full"
-                  />
-                  <AvatarFallback>BTC</AvatarFallback>
-                </Avatar>{" "}
+                <Image
+                  src={market.imageUri ?? ""}
+                  alt={"selectedMarket"}
+                  width={24}
+                  height={24}
+                  className="rounded-full"
+                />
                 HONEY
               </div>
             }
@@ -115,6 +136,7 @@ export default function CreatePosition() {
           )}
         </div>
         <LeverageSlider
+          defaultValue={form.leverage}
           onValueChange={(value: number) =>
             setForm({ ...form, leverage: value })
           }
@@ -125,7 +147,7 @@ export default function CreatePosition() {
             setForm({ ...form, tp: value.tp, sl: value.sl })
           }
         />
-        <PlaceOrder form={form} />
+        <PlaceOrder form={form} price={dummyPrice} />
       </div>
     </div>
   );

@@ -15,8 +15,8 @@ enum BannerEnum {
   ON = "on",
   OFF = "off",
   LOW_BALANCE = "low-balance",
-  NOT_GENERATED = 'not-generated',
-  NOT_DELEGATED = 'not-delegated'
+  NOT_GENERATED = "not-generated",
+  NOT_DELEGATED = "not-delegated",
 }
 
 const getStatusColor = (status: BannerEnum) => {
@@ -30,7 +30,7 @@ const getStatusColor = (status: BannerEnum) => {
     case BannerEnum.NOT_GENERATED:
       return "bg-destructive text-destructive-foreground";
     case BannerEnum.NOT_DELEGATED:
-        return "bg-destructive text-destructive-foreground";
+      return "bg-destructive text-destructive-foreground";
     default:
       return "bg-secondary text-secondary-foreground";
   }
@@ -70,25 +70,31 @@ export function OneClickBanner() {
   const walletBalance = 0.5;
   const [oneClickModalOpen, setOneClickModalOpen] = useState<boolean>(false);
   const [fundModalOpen, setFundModalOpen] = useState<boolean>(false);
-  const { generateKey, setOctEnabled, isOctEnabled: on, isOctGenerated, isOctDelegated } = useOct();
+  const {
+    generateKey,
+    setOctEnabled,
+    isOctEnabled: on,
+    isOctGenerated,
+    isOctDelegated,
+  } = useOct();
   const { write, ModalPortal } = useOctTxn();
 
-    const getStatus= () => {
-      let status;
+  const getStatus = () => {
+    let status;
 
-      if (!on()) {
-        status = BannerEnum.OFF;
-      } else if(on() && !isOctGenerated) {
-        status = BannerEnum.NOT_GENERATED
-      }else if(on() && !isOctDelegated) {
-        status = BannerEnum.NOT_DELEGATED
-      } else if (walletBalance < 1) {
-        status = BannerEnum.LOW_BALANCE;
-      } else {
-        status = BannerEnum.ON;
-      }
-      return status
+    if (!on()) {
+      status = BannerEnum.OFF;
+    } else if (on() && !isOctGenerated) {
+      status = BannerEnum.NOT_GENERATED;
+    } else if (on() && !isOctDelegated) {
+      status = BannerEnum.NOT_DELEGATED;
+    } else if (walletBalance < 1) {
+      status = BannerEnum.LOW_BALANCE;
+    } else {
+      status = BannerEnum.ON;
     }
+    return status;
+  };
   return (
     <div
       className={cn(

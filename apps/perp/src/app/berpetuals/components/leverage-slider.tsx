@@ -1,37 +1,45 @@
-import { useState } from "react";
 import { Input } from "@bera/ui/input";
 import { Slider } from "@bera/ui/slider";
 
 export function LeverageSlider({
-  defaultValue = 0,
+  defaultValue,
   onValueChange,
+  maxLeverage = 150,
 }: {
   defaultValue?: number;
   onValueChange?: (value: number) => void;
+  maxLeverage?: number;
 }) {
-  const [sliderValue, setSliderValue] = useState([defaultValue / 1.5]);
   return (
-    <div className="mt-8">
+    <div className="mt-8 w-full min-w-full">
       <div className="text-xs font-medium">Leverage Slider</div>
       <div className="mt-4 flex gap-4">
         <Slider
-          defaultValue={sliderValue}
-          value={sliderValue}
-          max={150}
-          markers={[25, 50, 75, 100, 125, 150]}
-          onValueChange={(value) => {
-            setSliderValue([Number(value)]);
-            onValueChange?.(Number(value) ?? 0 * 1.5);
+          defaultValue={[defaultValue ?? 1]}
+          value={[Math.floor(((defaultValue ?? 1) * 100) / maxLeverage)]}
+          max={maxLeverage}
+          min={1}
+          markers={[0, 0, 0, 0, 0, 0].map((_, index) => {
+            return Math.floor((maxLeverage * (index + 1)) / 6);
+          })}
+          onValueChange={(value: any) => {
+            onValueChange?.(Math.floor((maxLeverage * (value ?? 1)) / 100));
           }}
           className="w-full"
         />
+
         <Input
           type="number"
-          className="h-8 w-12 bg-background p-2 text-xs"
-          value={sliderValue[0]! * 1.5}
-          onChange={(e) => {
-            setSliderValue([Number(e.target.value) / 1.5]);
-            onValueChange?.(Number(e.target.value) ?? 0);
+          className="h-8 w-14 bg-background p-2 text-xs"
+          outerClassName="w-fit"
+          value={defaultValue === 0 ? undefined : defaultValue}
+          min={1}
+          max={maxLeverage}
+          onKeyDown={(e) => e.key === "-" && e.preventDefault()}
+          maxLength={5}
+          onChange={(e: any) => {
+            const inputValue = Number(e.target.value);
+            onValueChange?.(inputValue);
           }}
         />
       </div>

@@ -1,17 +1,41 @@
+"use client";
+
 import Image from "next/image";
+import {
+  formatUsd,
+  formatter,
+  usePollBHoneySupply,
+  usePollHoneyVaultBalance,
+} from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
+import { Skeleton } from "@bera/ui/skeleton";
 
 export default function HoneyVault() {
+  const {
+    isLoading: isHoneyVaultBalanceLoading,
+    useFormattedHoneyVaultBalance,
+  } = usePollHoneyVaultBalance();
+
+  const { isLoading: isBHoneySupplyLoading, useFormattedBHoneySupply } =
+    usePollBHoneySupply();
+  // const {isLoading: isBHoneyPriceLoading, useHoneyPrice} = usePollBHoneyPrice()
+
+  const isLoading = isBHoneySupplyLoading || isHoneyVaultBalanceLoading;
+
+  const honeyLocked = useFormattedHoneyVaultBalance();
+  const bHoneySupply = useFormattedBHoneySupply();
+
+  console.log(honeyLocked);
   const content = [
     {
       title: "Total value Locked",
-      value: "$69,420,669",
+      value: formatUsd(honeyLocked ?? 0),
       subtitle: "Worth of Honey",
     },
     {
       title: "bHONEY Price",
       value: "$1.69",
-      subtitle: "bHONEY supply 46,860,472",
+      subtitle: `bHONEY supply ${formatter.format(bHoneySupply)}`,
     },
     { title: "Vault APR%", value: "69,420%", subtitle: "In HONEY Yields" },
   ];
@@ -34,7 +58,7 @@ export default function HoneyVault() {
               {item.title}
             </div>
             <div className="mt-2 text-xl font-semibold leading-7">
-              {item.value}
+              {isLoading ? <Skeleton className="h-[32px]" /> : item.value}
             </div>
             <div className="mt-1 text-xs leading-3 text-muted-foreground">
               {item.subtitle}

@@ -7,11 +7,15 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 export interface CustomInputProps extends InputProps {
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
+  outerClassName?: string;
 }
 const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
-  ({ className, startAdornment, endAdornment, type, ...props }, ref) => {
+  (
+    { className, outerClassName, startAdornment, endAdornment, type, ...props },
+    ref,
+  ) => {
     return (
-      <div className="relative w-full">
+      <div className={cn("relative w-full", outerClassName)}>
         {startAdornment && (
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 disabled:text-muted-foreground">
             {startAdornment}

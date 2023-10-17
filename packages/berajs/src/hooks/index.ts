@@ -11,3 +11,4 @@ export * from "./usePollBalance";
 export * from "./usePollAllowance";
 export * from "./useLatestBlock";
 export * from "./useOct";
+export * from "./usePollHoneyBalance";

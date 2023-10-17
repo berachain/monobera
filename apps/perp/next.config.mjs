@@ -24,7 +24,11 @@ const config = {
         pathname: "/static/img/coins/**",
       },
     ],
-    domains: ["res.cloudinary.com", "raw.githubusercontent.com"],
+    domains: [
+      "res.cloudinary.com",
+      "raw.githubusercontent.com",
+      "assets.coingecko.com",
+    ],
   },
 };
 

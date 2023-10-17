@@ -1,10 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { formatUsd } from "@bera/berajs";
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { SearchInput } from "@bera/shared-ui";
-import { cn } from "@bera/ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,21 +12,16 @@ import {
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
 
-import {
-  DEFAULT_INSTRUMENT,
-  generateRandomInstruments,
-  type Instrument,
-} from "./mock-data-generator";
+import { type IMarket } from "../page";
 
+interface InstrumentProps {
+  markets: IMarket[];
+  selectedMarket: IMarket;
+}
 export function InstrumentDropdown({
-  selectedInstrument,
-}: {
-  selectedInstrument?: Instrument;
-}) {
-  const [instrument, setInstrument] = useState(
-    selectedInstrument ?? DEFAULT_INSTRUMENT,
-  );
-  const instrumentsList = useMemo(() => generateRandomInstruments(), []);
+  markets,
+  selectedMarket,
+}: InstrumentProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
@@ -38,14 +32,22 @@ export function InstrumentDropdown({
             <>Choose Market</>
           ) : (
             <>
-              <Avatar className="h-6 w-6">
+              {/* <Avatar className="h-6 w-6">
                 <AvatarImage
-                  src={instrument.logoURI}
+                  src={selectedMarket.imageUri}
                   className="rounded-full"
                 />
-                <AvatarFallback>{instrument.name}</AvatarFallback>
-              </Avatar>
-              {instrument.name}
+                <AvatarFallback>{selectedMarket.name}</AvatarFallback>
+              </Avatar> */}
+
+              <Image
+                src={selectedMarket.imageUri ?? ""}
+                alt={"selectedMarket"}
+                width={24}
+                height={24}
+                className="rounded-full"
+              />
+              {selectedMarket.name}
             </>
           )}
         </div>
@@ -67,24 +69,25 @@ export function InstrumentDropdown({
           placeholder="Search for a market"
         />
         <div className="h-screen-250 flex flex-col gap-1 overflow-y-scroll border-t border-border">
-          {instrumentsList.map((instrument, index) => (
-            <DropdownMenuItem
-              key={index}
-              className=" flex h-[60px] items-center justify-between px-4 hover:bg-muted"
-              onClick={() => setInstrument(instrument)}
-            >
-              <div className="flex items-center gap-2 font-medium">
-                <Avatar className="h-6 w-6">
-                  <AvatarImage
-                    src={instrument.logoURI}
+          {markets.map((market, index) => (
+            <Link href={`/berpetuals/${market.name}`} key={market.name}>
+              <DropdownMenuItem
+                key={index}
+                className=" flex h-[60px] items-center justify-between px-4 hover:bg-muted"
+                // onClick={() => setInstrument(instrument)}
+              >
+                <div className="flex items-center gap-2 font-medium">
+                  <Image
+                    src={market.imageUri ?? ""}
+                    alt={"selectedMarket"}
+                    width={24}
+                    height={24}
                     className="rounded-full"
                   />
-                  <AvatarFallback>{instrument.name}</AvatarFallback>
-                </Avatar>
-                <div>{instrument.name}</div>
-              </div>
-              <div className="font-medium">
-                {formatUsd(instrument.amount)}
+                  <div>{market.name}</div>
+                </div>
+                {/* <div className="font-medium">
+                $69
                 <div
                   className={cn(
                     "text-right text-xs",
@@ -95,8 +98,9 @@ export function InstrumentDropdown({
                 >
                   {instrument.change24H > 0 && "+"} {instrument.change24H}%
                 </div>
-              </div>
-            </DropdownMenuItem>
+              </div> */}
+              </DropdownMenuItem>
+            </Link>
           ))}
         </div>
       </DropdownMenuContent>

@@ -13,3 +13,7 @@ export * from "./redeem";
 export * from "./bribe";
 export * from "./multicall";
 export * from "./wbera";
+export * from "./trading-contract";
+export * from "./pairs-storage";
+export * from "./b-token";
+export * from "./borrowing-fees";
