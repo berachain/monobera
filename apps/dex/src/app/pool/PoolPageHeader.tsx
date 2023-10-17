@@ -44,9 +44,9 @@ export default function PoolPageHeader() {
 
   return (
     <div className="mx-auto mt-4 flex w-full max-w-[1200px] flex-col items-center justify-center gap-8">
-      <div className="flex w-full md:justify-between flex-col-reverse md:flex-row justify-center items-center text-center">
+      <div className="flex w-full flex-col-reverse items-center justify-center text-center md:flex-row md:justify-between">
         <div>
-          <h1 className="leading-12 mb-2 text-center md:text-left text-5xl font-bold">
+          <h1 className="leading-12 mb-2 text-center text-5xl font-bold md:text-left">
             Add{" "}
             <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
               Liquidity
@@ -60,7 +60,7 @@ export default function PoolPageHeader() {
           <div className="mb-4 font-medium leading-6 text-muted-foreground">
             Become an LP to earn trading fees and BGT Incentives
           </div>
-          <div className="mb-2 flex flex-row gap-2 self-center md:justify-start justify-center ">
+          <div className="mb-2 flex flex-row justify-center gap-2 self-center md:justify-start ">
             <Button
               onClick={() => router.push("/pool/create")}
               className="text-md self-center"
@@ -79,7 +79,7 @@ export default function PoolPageHeader() {
           alt="honey jar"
           width={393}
           height={300}
-          className="lg:w-[393px] w-[256px]"
+          className="w-[256px] lg:w-[393px]"
         />
       </div>
       <PoolSearch />
