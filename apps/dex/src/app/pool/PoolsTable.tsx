@@ -64,7 +64,7 @@ const Toggle = ({
 };
 
 const TableViewLoading = () => (
-  <div className="flex flex-col items-center gap-4">
+  <div className="mt-16 flex flex-col items-center gap-4">
     <Skeleton className="h-[150px] w-[238px]" />
     <Skeleton className="h-7 w-[300px]" />
     <Skeleton className="h-7 w-[451px]" />
@@ -167,7 +167,7 @@ export const PoolSearch = () => {
           </div>
         </div>
 
-        <TabsContent value="allPools">
+        <TabsContent value="allPools" className="text-center">
           {isAllDataLoadingMore && data?.length === 0 ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
               {isList ? <TableViewLoading /> : <CardViewLoading />}
