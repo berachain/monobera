@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cloudinaryUrl } from "@bera/config";
@@ -37,17 +37,16 @@ export default function HoneyPage({
   volume90D: HoneyEntry[];
   mode: "arcade" | "pro";
 }) {
-  const arcade = mode === "arcade";
-  const router = useRouter();
-  const formatted24HVolume = formatEther(
-    BigInt(volume7D[volume7D.length - 1]?.amount ?? "0"),
-  );
-  const formattedTotalSupply = formatEther(
-    BigInt(supply24H[supply24H.length - 1]?.amount ?? "0"),
-  );
-  if (arcade && typeof window !== "undefined" && window?.innerWidth < 1000) {
-    router.push("/?mode=pro");
-  }
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (window && window.innerWidth) {
+      setLoading(false);
+      if (window.innerWidth < 1000 && mode === "arcade") {
+        router.push("/?mode=pro");
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,93 +60,118 @@ export default function HoneyPage({
     };
   }, [mode]);
 
-  return (
-    <div className={cn("pt-[72px]", arcade ? "bg-[#468DCB] font-honey" : "")}>
-      <div className="hidden h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline honey:block">
-        {arcade ? (
-          <div onClick={() => router.push("/?mode=pro")} className="font-honey">
-            🍯 Enter Simple Mode
-          </div>
-        ) : (
-          <div
-            onClick={() => router.push("/?mode=arcade")}
-            className="font-honey"
-          >
-            🕹️ Enter Arcade Mode
-          </div>
-        )}
-      </div>
-      <div>
-        <section id="mint">
-          {arcade ? (
-            <div className="m-auto block max-w-[1000px]">
-              <HoneyMachine />
-              <HoneyBanner />
-            </div>
-          ) : (
-            <div className="flex justify-center md:justify-start">
-              <div className="container flex max-w-[1000px] flex-col items-center justify-between md:flex-row">
-                <Hero />
-                <SwapCard />
-              </div>
-            </div>
-          )}
-        </section>
+  const arcade = mode === "arcade";
+  const router = useRouter();
+  const formatted24HVolume = formatEther(
+    BigInt(volume7D[volume7D.length - 1]?.amount ?? "0"),
+  );
+  const formattedTotalSupply = formatEther(
+    BigInt(supply24H[supply24H.length - 1]?.amount ?? "0"),
+  );
+  if (arcade && typeof window !== "undefined" && window?.innerWidth < 1000) {
+    router.push("/?mode=pro");
+  }
 
+  return (
+    <>
+      {!loading ? (
         <div
-          className={cn(
-            arcade ? "bg-gradient-to-b from-[#468DCB] honey:to-background" : "",
-          )}
+          className={cn("pt-[72px]", arcade ? "bg-[#468DCB] font-honey" : "")}
         >
-          <div
-            className={cn(
-              "container max-w-[1050px]",
-              arcade ? "text-blue-900" : "",
+          <div className="hidden h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline honey:block">
+            {arcade ? (
+              <div
+                onClick={() => router.push("/?mode=pro")}
+                className="font-honey"
+              >
+                🍯 Enter Simple Mode
+              </div>
+            ) : (
+              <div
+                onClick={() => router.push("/?mode=arcade")}
+                className="font-honey"
+              >
+                🕹️ Enter Arcade Mode
+              </div>
             )}
-          >
-            <div className="py-4 lg:py-0">
-              <Data
-                dailyVolume={formatted24HVolume}
-                tvl={formattedTotalSupply}
-                arcade={arcade}
-              />
-            </div>
-            <div className="py-4">
-              <h3
+          </div>
+          <div>
+            <section id="mint">
+              {arcade ? (
+                <div className="m-auto block max-w-[1000px]">
+                  <HoneyMachine />
+                  <HoneyBanner />
+                </div>
+              ) : (
+                <div className="flex justify-center md:justify-start">
+                  <div className="container flex max-w-[1000px] flex-col items-center justify-between md:flex-row">
+                    <Hero />
+                    <SwapCard />
+                  </div>
+                </div>
+              )}
+            </section>
+
+            <div
+              className={cn(
+                arcade
+                  ? "bg-gradient-to-b from-[#468DCB] honey:to-background"
+                  : "",
+              )}
+            >
+              <div
                 className={cn(
-                  "mb-4 flex items-center gap-3 text-lg md:text-3xl",
-                  arcade
-                    ? "text-blue-900"
-                    : "bg-gradient-to-r from-[#292524] via-[#875100] via-30% to-[#292524] bg-clip-text font-semibold text-transparent",
+                  "container max-w-[1050px]",
+                  arcade ? "text-blue-900" : "",
                 )}
               >
-                <Image
-                  src={`${cloudinaryUrl}/honey/qqyo5g3phzdwezvazsih`}
-                  className="w-8"
-                  alt="honey"
-                  width={32}
-                  height={32}
-                />
-                Total Honey Supply & Volume
-              </h3>
-              <HoneyChart
-                {...{
-                  supply24H,
-                  volume24H,
-                  supply7D,
-                  volume7D,
-                  supply30D,
-                  volume30D,
-                  supply90D,
-                  volume90D,
-                }}
-                arcade={arcade}
-              />
+                <div className="py-4 lg:py-0">
+                  <Data
+                    dailyVolume={formatted24HVolume}
+                    tvl={formattedTotalSupply}
+                    arcade={arcade}
+                  />
+                </div>
+                <div className="py-4">
+                  <h3
+                    className={cn(
+                      "mb-4 flex items-center gap-3 text-lg md:text-3xl",
+                      arcade
+                        ? "text-blue-900"
+                        : "bg-gradient-to-r from-[#292524] via-[#875100] via-30% to-[#292524] bg-clip-text font-semibold text-transparent",
+                    )}
+                  >
+                    <Image
+                      src={`${cloudinaryUrl}/honey/qqyo5g3phzdwezvazsih`}
+                      className="w-8"
+                      alt="honey"
+                      width={32}
+                      height={32}
+                    />
+                    Total Honey Supply & Volume
+                  </h3>
+                  <HoneyChart
+                    {...{
+                      supply24H,
+                      volume24H,
+                      supply7D,
+                      volume7D,
+                      supply30D,
+                      volume30D,
+                      supply90D,
+                      volume90D,
+                    }}
+                    arcade={arcade}
+                  />
+                </div>
+                <HoneyTransactionsTable arcade={arcade} />
+              </div>
             </div>
-            <HoneyTransactionsTable arcade={arcade} />
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <div>Loading</div>
+      )}
+    </>
   );
 }
