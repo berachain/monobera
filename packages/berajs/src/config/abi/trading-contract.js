@@ -1,4 +1,4 @@
-export const TRADING = [
+export const TRADING_ABI = [
   {
     inputs: [
       {

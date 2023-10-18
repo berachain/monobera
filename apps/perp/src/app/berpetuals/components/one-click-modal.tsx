@@ -38,7 +38,7 @@ export function OneClickModal({
           </div>
           <div className="mt-2 pr-11 text-sm leading-5">
             Sign one approval txn and fund your wallet with at-least{" "}
-            <b>1.0 BERA</b>.
+            <b>0.2 BERA</b>.
           </div>
           <div className="mt-6 flex items-center gap-1 text-sm font-semibold leading-tight">
             <Icons.checkCircle className="h-4 w-4 text-success-foreground" />{" "}

@@ -8,9 +8,11 @@ import {
   type ReactElement,
 } from "react";
 import {
+  type IValueSend,
   useAddRecentTransaction,
   useOct,
   useOctContractWrite,
+  useOctValueSend,
   type IContractWrite,
 } from "@bera/berajs";
 import toast from "react-hot-toast";
@@ -43,6 +45,11 @@ interface IUseTxn {
 
 interface UseTxnApi {
   write: (props: IContractWrite) => void;
+  writeValueSend: (props: IValueSend) => void;
+  isValueSendLoading: boolean;
+  isValueSendSubmitting: boolean;
+  isValueSendSuccess: boolean;
+  isValueSendError: boolean;
   isLoading: boolean;
   isSubmitting: boolean;
   isSuccess: boolean;
@@ -248,6 +255,157 @@ export const useOctTxn = ({
       },
     });
 
+  const {
+    write: writeValueSend,
+    isLoading: isValueSendLoading,
+    isSubmitting: isValueSendSubmitting,
+    isSuccess: isValueSendSuccess,
+    isError: isValueSendError,
+  } = useOctValueSend({
+    /**
+     * Error callback function executed when a transaction encounters an error.
+     *
+     * @param {Error} error - The error object.
+     */
+    onError: (error) => {
+      if (!disableToast) {
+        const toastId = `error-${identifier}`;
+        toast.remove(`loading-${identifier}`);
+        toast.remove(`submission-${identifier}`);
+        if (error?.message.includes("User rejected the request.")) {
+          toast.custom(
+            <ErrorToast
+              title={"User rejected txn"}
+              onClose={() => toast.remove(toastId)}
+            />,
+            {
+              duration: DURATION,
+              id: toastId,
+              position: isMd ? "bottom-right" : "top-center",
+            },
+          );
+        } else {
+          toast.custom(
+            <ErrorToast
+              title={"Transaction failed"}
+              message={error?.message || "unknown error"}
+              onClose={() => toast.remove(toastId)}
+            />,
+            {
+              duration: DURATION,
+              id: toastId,
+              position: isMd ? "bottom-right" : "top-center",
+            },
+          );
+        }
+      }
+      if (!disableModal) {
+        closeModal("loadingModal");
+        closeModal("submissionModal");
+        if (error?.message.includes("User rejected the request.")) {
+          openModal("errorModal", {
+            errorHash: "0x",
+            errorMessage: "User rejected txn",
+          });
+        } else {
+          openModal("errorModal", {
+            errorHash: "0x",
+            errorMessage: error?.message || "unknown error",
+          });
+        }
+      }
+      onError && onError(error);
+    },
+
+    /**
+     * Success callback function executed when a transaction is successful.
+     *
+     * @param {string} result - The transaction hash or result.
+     */
+    onSuccess: (result) => {
+      if (!disableToast) {
+        const toastId = `success-${identifier}`;
+        toast.remove(`submission-${identifier}`);
+        toast.custom(
+          <SuccessToast
+            onClose={() => toast.remove(toastId)}
+            title={"Transaction Success"}
+            message="transaction successfully submitted"
+            hash={result}
+          />,
+          {
+            duration: DURATION,
+            id: toastId,
+            position: isMd ? "bottom-right" : "top-center",
+          },
+        );
+      }
+      if (!disableModal) {
+        closeModal("loadingModal");
+        closeModal("submissionModal");
+        openModal("successModal", { successHash: result });
+      }
+      // addRecentTransaction({
+      //   hash: result,
+      //   description: message,
+      //   timestamp: Date.now(),
+      // });
+      onSuccess && onSuccess(result);
+    },
+
+    /**
+     * Loading callback function executed when a transaction is loading or in progress.
+     */
+    onLoading: () => {
+      if (!disableToast) {
+        const toastId = `loading-${identifier}`;
+        toast.custom(
+          <LoadingToast
+            title={"Waiting for wallet"}
+            message="waiting for wallet action"
+            onClose={() => toast.remove(toastId)}
+          />,
+          {
+            id: toastId,
+            duration: Infinity,
+            position: isMd ? "bottom-right" : "top-center",
+          },
+        );
+      }
+      if (!disableModal) {
+        openModal("loadingModal", undefined);
+      }
+      onLoading && onLoading();
+    },
+
+    /**
+     * Submission callback function executed when a transaction is submitted.
+     */
+    onSubmission: (result: string) => {
+      if (!disableToast) {
+        const toastId = `submission-${identifier}`;
+        toast.remove(`loading-${identifier}`);
+        toast.custom(
+          <SubmissionToast
+            title={"Transaction submitted"}
+            message="waiting for confirmation"
+            onClose={() => toast.remove(toastId)}
+          />,
+          {
+            id: toastId,
+            position: isMd ? "bottom-right" : "top-center",
+          },
+        );
+      }
+      if (!disableModal) {
+        closeModal("loadingModal");
+        openModal("submissionModal", {
+          submissionHash: result,
+        });
+      }
+      onSubmission && onSubmission(result);
+    },
+  });
   const ModalPortal = () => {
     return (
       <>
@@ -289,6 +447,11 @@ export const useOctTxn = ({
 
   return {
     write,
+    writeValueSend,
+    isValueSendLoading,
+    isValueSendSubmitting,
+    isValueSendSuccess,
+    isValueSendError,
     isLoading,
     isSubmitting,
     isSuccess,

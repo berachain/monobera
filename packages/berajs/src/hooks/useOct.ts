@@ -2,13 +2,22 @@ import { useCallback, useEffect, useReducer, useState } from "react";
 import { Wallet } from "ethers";
 import lodash from "lodash";
 import { Keccak } from "sha3";
+import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
 import { type Address } from "viem";
 import { ethersWalletToAccount } from "viem/ethers";
 import { useSignMessage } from "wagmi";
 
 import { decrypt, encrypt } from "~/utils/encoder";
-import { ActionEnum, initialState, reducer, useBeraJs } from "..";
+import {
+  ActionEnum,
+  initialState,
+  reducer,
+  useBeraJs,
+  usePollBeraBalance,
+  usePollTransactionCount,
+} from "..";
+import { useIsDelegated } from "./modules/perps";
 
 export enum LOCAL_STORAGE_KEYS {
   OCT_ENABLED = "oct_enabled",
@@ -118,18 +127,43 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
     }
     return undefined;
   };
+
+  const { isDelegated, QUERY_KEY } = useIsDelegated();
+
+  const refetchDelegated = () => {
+    void mutate(QUERY_KEY);
+  };
+
+  const { useBalance } = usePollBeraBalance({
+    address: octAddress,
+  });
+  const { useTransactionCount } =
+    usePollTransactionCount({ address: octAddress });
+
+  const octBalance = useBalance();
+  const octTxCount = useTransactionCount();
+
+  const isOctUnfunded = octBalance === undefined || octBalance === 0;
+  const isOctBalanceLow = octBalance !== undefined && octBalance < 0.15;
+
   return {
-    isLoading: state.confirmState === "loading",
-    isSubmitting: state.confirmState === "submitting",
-    isSuccess: state.confirmState === "success",
-    isError: state.confirmState === "fail",
+    isGenLoading: state.confirmState === "loading",
+    isGenSubmitting: state.confirmState === "submitting",
+    isGenSuccess: state.confirmState === "success",
+    isGenError: state.confirmState === "fail",
+    refetchDelegated,
     isOctEnabled,
     setOctEnabled,
-    isOctGenerated: getOctKey !== undefined,
-    isOctDelegated: false,
+    isOctUnfunded,
+    isOctBalanceLow,
+    octBalance,
+    isOctGenerated: getOctKey() !== undefined,
+    isOctDelegated: isDelegated,
+    isOctReady: isOctEnabled() && getOctKey() !== undefined && isDelegated,
     getOctKey,
     octAddress,
     octAccount,
+    octTxCount,
     octPrivKey,
     generateKey,
   };
