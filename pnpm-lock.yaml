@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -595,6 +599,9 @@ importers:
 
   packages/berajs:
     dependencies:
+      '@bera/config':
+        specifier: 0.1.0
+        version: link:../config/env
       '@rainbow-me/rainbowkit':
         specifier: ^1.0.3
         version: 1.0.3(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)(viem@0.3.35)(wagmi@1.0.2)
@@ -17004,7 +17011,3 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { type Pool } from "@bera/bera-router";
 import { usePollUserDepositedPools } from "@bera/berajs";
 import useSWRInfinite from "swr/infinite";
@@ -53,7 +53,6 @@ export const usePoolTable = () => {
     `${getAbsoluteUrl()}/api/getPools/api`,
   );
   const userPools = useUserDepositedPools();
-  console.log(use);
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {
       setKeyword(search);
