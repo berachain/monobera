@@ -1,6 +1,8 @@
 import React from "react";
 import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
+import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useLocalStorage } from "usehooks-ts";
@@ -14,7 +16,10 @@ import {
 export enum SELECTION {
   AUTO = "auto",
   CUSTOM = "custom",
+  DEGEN = "degen",
+  INFINITY = "infinity",
 }
+
 export default function SwapSettings() {
   const [slippageToleranceType, setSlippageToleranceType] = useLocalStorage<
     number | string
@@ -51,6 +56,15 @@ export default function SwapSettings() {
           <TabsList>
             <TabsTrigger value={SELECTION.AUTO}>Auto</TabsTrigger>
             <TabsTrigger value={SELECTION.CUSTOM}>Custom</TabsTrigger>
+            <TabsTrigger
+              value={SELECTION.DEGEN}
+              className={cn(
+                slippageToleranceType === SELECTION.DEGEN &&
+                  "data-[state=active]:bg-destructive-foreground",
+              )}
+            >
+              Degen
+            </TabsTrigger>
           </TabsList>
         </Tabs>
         <Input
@@ -59,7 +73,7 @@ export default function SwapSettings() {
           min={0.1}
           max={100}
           className="h-[40px] pr-8 text-right"
-          disabled={slippageToleranceType === SELECTION.AUTO}
+          disabled={slippageToleranceType !== SELECTION.CUSTOM}
           placeholder="1"
           value={
             slippageToleranceType === SELECTION.AUTO
@@ -82,6 +96,18 @@ export default function SwapSettings() {
           }
         />
       </div>
+      {slippageToleranceType === "degen" && (
+        <Alert variant={"destructive"} className="flex gap-2">
+          <Icons.info className="h-4 w-4 flex-shrink-0 text-destructive-foreground" />
+          <div>
+            <AlertTitle>Extremely High slippage</AlertTitle>
+            <AlertDescription className="text-xs">
+              Please be aware this could result in extremely high slippage
+              (50%+)
+            </AlertDescription>
+          </div>
+        </Alert>
+      )}
       <div className="space-y-2">
         <h4 className="flex items-center gap-1 font-medium leading-none">
           Transaction Deadline
@@ -96,6 +122,15 @@ export default function SwapSettings() {
           <TabsList className="flex-shrink-0">
             <TabsTrigger value={SELECTION.AUTO}>Auto</TabsTrigger>
             <TabsTrigger value={SELECTION.CUSTOM}>Custom</TabsTrigger>
+            <TabsTrigger
+              value={SELECTION.INFINITY}
+              className={cn(
+                deadlineType === SELECTION.INFINITY &&
+                  "data-[state=active]:bg-destructive-foreground",
+              )}
+            >
+              Infinity
+            </TabsTrigger>
           </TabsList>
         </Tabs>
         <Input
@@ -104,7 +139,7 @@ export default function SwapSettings() {
           min={0.1}
           max={100}
           className="h-[40px] pl-1 pr-9 text-right"
-          disabled={deadlineType === SELECTION.AUTO}
+          disabled={deadlineType !== SELECTION.CUSTOM}
           placeholder="1"
           value={
             deadlineType === SELECTION.AUTO ? DEFAULT_DEADLINE : deadlineValue
@@ -125,6 +160,17 @@ export default function SwapSettings() {
           }
         />
       </div>
+      {deadlineType === SELECTION.INFINITY && (
+        <Alert variant={"destructive"} className="flex gap-2">
+          <Icons.info className="h-4 w-4 flex-shrink-0 text-destructive-foreground" />
+          <div>
+            <AlertTitle>No Txn Deadline</AlertTitle>
+            <AlertDescription className="text-xs">
+              Please be aware this could result in the txn being active forever.
+            </AlertDescription>
+          </div>
+        </Alert>
+      )}
     </div>
   );
 }
