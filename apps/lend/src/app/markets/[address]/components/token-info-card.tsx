@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatter, type Token } from "@bera/berajs";
+import { addTokenToWallet, formatter, type Token } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
@@ -74,7 +74,10 @@ export default function TokenInfoCard({
           >
             <Icons.external className="relative h-4 w-4 text-muted-foreground" />
           </Link>
-          <div className="h-fit w-fit rounded-full border border-border bg-muted p-2 hover:cursor-pointer md:rounded-xl">
+          <div
+            className="h-fit w-fit rounded-full border border-border bg-muted p-2 hover:cursor-pointer md:rounded-xl"
+            onClick={() => addTokenToWallet(token)}
+          >
             <Icons.wallet className="relative h-4 w-4 text-muted-foreground" />
           </div>
         </div>

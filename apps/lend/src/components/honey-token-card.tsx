@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { formatter, useTokens, type Token } from "@bera/berajs";
+import {
+  addTokenToWallet,
+  formatter,
+  useTokens,
+  type Token,
+} from "@bera/berajs";
 import { blockExplorerUrl, honeyAddress } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
@@ -37,7 +42,13 @@ export default function HoneyTokenCard() {
               >
                 <Icons.external className="relative h-4 w-4 text-muted-foreground" />
               </Link>
-              <div className="h-fit w-fit rounded-full border border-border bg-muted p-1 hover:cursor-pointer ">
+              <div
+                className="h-fit w-fit rounded-full border border-border bg-muted p-1 hover:cursor-pointer "
+                onClick={() =>
+                  tokenDictionary &&
+                  addTokenToWallet(tokenDictionary[honeyAddress])
+                }
+              >
                 <Icons.wallet className="relative h-4 w-4 text-muted-foreground" />
               </div>
             </div>

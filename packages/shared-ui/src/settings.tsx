@@ -151,7 +151,11 @@ export const Setting = ({ goback }: { goback: () => void }) => {
             endAdornment="min"
             type="number"
             disabled={transactionMode !== TRANSACTION_MODE.CUSTOM}
-            value={transactionMode === TRANSACTION_MODE.AUTO ? DEFAULT_DEADLINE : transactionDeadline}
+            value={
+              transactionMode === TRANSACTION_MODE.AUTO
+                ? DEFAULT_DEADLINE
+                : transactionDeadline
+            }
             onChange={(e) => setTransactionDeadline(Number(e.target.value))}
           />
         </div>
