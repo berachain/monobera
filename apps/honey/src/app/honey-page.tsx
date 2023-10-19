@@ -9,10 +9,10 @@ import { formatEther } from "viem";
 
 import Data from "~/components/data";
 import Hero from "~/components/hero";
-import HoneyBanner from "~/components/honey-banner";
 import { HoneyChart } from "~/components/honey-chart";
 import { HoneyMachine } from "~/components/honey-machine";
 import HoneyTransactionsTable from "~/components/honey-transactions-table";
+import { LoadingBee } from "~/components/loadingBee";
 import { SwapCard } from "~/components/swap-card";
 import { type HoneyEntry } from "./type";
 
@@ -76,22 +76,38 @@ export default function HoneyPage({
     <>
       {!loading ? (
         <div
-          className={cn("pt-[72px]", arcade ? "bg-[#468DCB] font-honey" : "")}
+          className={cn(
+            arcade ? "bg-[#468DCB] font-honey" : "pro-mode-background",
+          )}
         >
-          <div className="hidden h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline honey:block">
+          <div className="hidden h-fit w-full cursor-pointer text-center font-medium honey:block">
             {arcade ? (
               <div
                 onClick={() => router.push("/?mode=pro")}
-                className="font-honey"
+                className="flex items-center justify-center gap-1 bg-sky-50 p-2 font-honey"
               >
-                🍯 Enter Simple Mode
+                <Image
+                  src={`${cloudinaryUrl}/honey/k67yfz1uswqqvfh2pmgo`}
+                  className="block w-8"
+                  alt="arcade bear"
+                  width={32}
+                  height={32}
+                />{" "}
+                Switch To Simple Mode
               </div>
             ) : (
               <div
                 onClick={() => router.push("/?mode=arcade")}
-                className="font-honey"
+                className="flex items-center justify-center gap-1 bg-yellow-50 bg-opacity-20 p-2 backdrop-blur-2xl"
               >
-                🕹️ Enter Arcade Mode
+                <Image
+                  src={`${cloudinaryUrl}/honey/k67yfz1uswqqvfh2pmgo`}
+                  className="block w-8"
+                  alt="arcade bear"
+                  width={32}
+                  height={32}
+                />{" "}
+                Switch To Arcade Mode
               </div>
             )}
           </div>
@@ -100,14 +116,12 @@ export default function HoneyPage({
               {arcade ? (
                 <div className="m-auto block max-w-[1000px]">
                   <HoneyMachine />
-                  <HoneyBanner />
+                  {/* <HoneyBanner /> */}
                 </div>
               ) : (
-                <div className="flex justify-center md:justify-start">
-                  <div className="container flex max-w-[1000px] flex-col items-center justify-between md:flex-row">
-                    <Hero />
-                    <SwapCard />
-                  </div>
+                <div className="mx-auto flex w-full max-w-[1000px] flex-col items-center justify-between gap-8 px-4 py-16">
+                  <Hero />
+                  <SwapCard showBear={false} />
                 </div>
               )}
             </section>
@@ -133,23 +147,29 @@ export default function HoneyPage({
                   />
                 </div>
                 <div className="py-4">
-                  <h3
-                    className={cn(
-                      "mb-4 flex items-center gap-3 text-lg md:text-3xl",
-                      arcade
-                        ? "text-blue-900"
-                        : "bg-gradient-to-r from-[#292524] via-[#875100] via-30% to-[#292524] bg-clip-text font-semibold text-transparent",
-                    )}
-                  >
-                    <Image
-                      src={`${cloudinaryUrl}/honey/qqyo5g3phzdwezvazsih`}
-                      className="w-8"
-                      alt="honey"
-                      width={32}
-                      height={32}
-                    />
-                    Total Honey Supply & Volume
-                  </h3>
+                  {arcade ? (
+                    <h3 className="mb-4 flex items-center gap-3 text-lg text-blue-900 md:text-3xl">
+                      <Image
+                        src={`${cloudinaryUrl}/honey/qqyo5g3phzdwezvazsih`}
+                        className="w-8"
+                        alt="honey"
+                        width={32}
+                        height={32}
+                      />
+                      Total Honey Supply & Volume
+                    </h3>
+                  ) : (
+                    <h3 className="mb-12 flex items-center justify-center gap-2 text-3xl font-bold md:text-5xl">
+                      <Image
+                        src={`${cloudinaryUrl}/honey/gugztuverdsqvzw5co8a`}
+                        className="w-12"
+                        alt="honey"
+                        width={48}
+                        height={48}
+                      />
+                      Honey Stats
+                    </h3>
+                  )}
                   <HoneyChart
                     {...{
                       supply24H,
@@ -170,7 +190,7 @@ export default function HoneyPage({
           </div>
         </div>
       ) : (
-        <div>Loading</div>
+        <LoadingBee />
       )}
     </>
   );

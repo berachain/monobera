@@ -6,7 +6,6 @@ import { cloudinaryUrl } from "@bera/config";
 import { ConnectButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
-import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { TokenInput } from "~/components/token-input";
@@ -49,7 +48,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
           height={60}
         />
       )}
-      <Card className="relative z-10 m-auto block max-w-[500px] bg-background">
+      <Card className="relative z-10 m-auto block max-w-[500px] bg-background shadow-2xl">
         {ModalPortal}
         <CardHeader className="pb-3">
           <CardTitle>
@@ -69,7 +68,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                   }
                 }}
               >
-                🍯 Mint
+                Mint
               </TabsTrigger>
               <TabsTrigger
                 value={"burn"}
@@ -81,7 +80,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                   }
                 }}
               >
-                🔥 Burn
+                Redeem
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -105,7 +104,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                   setFromAmount(Number(amount));
                 }}
               />
-              <div className="relative">
+              {/* <div className="relative">
                 <div
                   className="absolute inset-0 flex w-full items-center justify-center"
                   aria-hidden="true"
@@ -126,7 +125,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                     <Icons.swap className="h-3 w-3 sm:h-6 sm:w-6" />
                   </Button>
                 </div>
-              </div>
+              </div> */}
 
               <TokenInput
                 selected={selectedTo}

@@ -48,7 +48,7 @@ export default async function Home({
         supply90D,
         volume90D,
       }}
-      mode={mode === "pro" ? "arcade" : "pro"}
+      mode={mode === "pro" ? "pro" : "arcade"}
     />
   );
 }

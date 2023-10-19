@@ -258,7 +258,7 @@ export default function HoneyTransactionsTable({
               arcade && "data-[state=active]:bg-red-600",
             )}
           >
-            🧾 All {arcade ? "txns" : "transactions"}
+            {arcade && "🧾"} All {arcade ? "txns" : "transactions"}
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Mints}
@@ -267,7 +267,7 @@ export default function HoneyTransactionsTable({
               arcade && "data-[state=active]:bg-red-600",
             )}
           >
-            🪙 Mints
+            {arcade && "🪙"} Mints
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Burns}
@@ -276,7 +276,7 @@ export default function HoneyTransactionsTable({
               arcade && "data-[state=active]:bg-red-600",
             )}
           >
-            🔥 Burns
+            {arcade && "🔥"} Burns
           </TabsTrigger>
         </TabsList>
         <div
