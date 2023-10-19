@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { formatUsd, useLatestBlock } from "@bera/berajs";
+import { formatUsd, useLatestBlock, usePollPrices } from "@bera/berajs";
+import { beraTokenAddress } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { sumPrices } from "~/utils/sumPrices";
-import { usePollPrices } from "~/hooks/usePollPrices";
 
 export function DataCard({
   icon,
@@ -37,22 +37,23 @@ export function DataCard({
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
   const { usePrice, usePrices, isLoading } = usePollPrices();
 
-  const prices = usePrices();
+  const { data: prices } = usePrices();
 
   const tvlValue = useMemo(() => {
-    if (!prices || !tvl || !tvl[0]) return 0;
+    if (isLoading || !prices || !tvl || !tvl[0]) return 0;
     return sumPrices(prices, tvl[0].data);
   }, [tvl, prices]);
 
   const volumeValue = useMemo(() => {
-    if (!prices || !volume || !volume[0]) return 0;
+    if (isLoading || !prices || !volume || !volume[0]) return 0;
     return sumPrices(prices, volume[0].data);
   }, [volume, prices]);
 
   const block = useLatestBlock();
-  const beraPrice = usePrice(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
+  const { data: beraPrice } = usePrice(beraTokenAddress);
+
   const isDataReady = useMemo(() => {
-    return !isLoading && block !== 0n;
+    return !isLoading && beraPrice && block !== 0n;
   }, [isLoading, block]);
 
   return (
@@ -79,7 +80,7 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
         <DataCard
           title="Bera Price"
           isLoading={!isDataReady}
-          value={formatUsd(beraPrice)}
+          value={formatUsd(beraPrice ?? "0")}
           icon={<Icons.bera className="mt-[2px] h-3 w-3 md:h-6 md:w-6" />}
         />
       </div>

@@ -1,63 +1,80 @@
 "use client";
 
 import React from "react";
-import {
-  truncateHash,
-  useRecentTransactions,
-  type NewTransaction,
-} from "@bera/berajs";
+import { useRecentTransactions, type Transaction } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
-import { Balancer } from "react-wrap-balancer";
 
-function formatTimestamp(timestamp: number): JSX.Element {
+import { TokenIcon } from "./token-icon";
+
+// function formatTimestamp(timestamp: number): JSX.Element {
+//   const date = new Date(timestamp);
+
+//   const formattedTimestamp = date.toLocaleString(undefined, {
+//     month: "2-digit",
+//     day: "2-digit",
+//     year: "numeric",
+//     hour: "numeric",
+//     minute: "numeric",
+//     hour12: true,
+//   });
+//   const [datePart, timePart] = formattedTimestamp.split(", ");
+//   return (
+//     <p className="text-right">
+//       <span>{datePart}</span>
+//       <br />
+//       <span>{timePart}</span>
+//     </p>
+//   );
+// }
+
+function getTimeFromNow(timestamp: number) {
+  const now = new Date();
   const date = new Date(timestamp);
+  const years = now.getFullYear() - date.getFullYear();
+  const months = now.getMonth() - date.getMonth();
+  const days = now.getDate() - date.getDate();
+  const hours = now.getHours() - date.getHours();
+  const minutes = now.getMinutes() - date.getMinutes();
 
-  const formattedTimestamp = date.toLocaleString(undefined, {
-    month: "2-digit",
-    day: "2-digit",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-  });
-  const [datePart, timePart] = formattedTimestamp.split(", ");
-  return (
-    <p className="text-right">
-      <span>{datePart}</span>
-      <br />
-      <span>{timePart}</span>
-    </p>
-  );
+  if (years > 0) return `${years}yr`;
+  if (months > 0) return `${months}mo`;
+  if (days > 0) return `${days}d`;
+  if (hours > 0) return `${hours}h`;
+  if (minutes > 0) return `${minutes}m`;
+  return "Just now";
 }
 
 export function History() {
   const transactions = useRecentTransactions();
-
   return (
     <div className="grid gap-4">
-      <h3 className="text-xs font-medium">Recent activity</h3>
       {transactions.length ? (
-        transactions.slice(0, 5).map((txn: NewTransaction) => (
+        transactions.map((txn: Transaction) => (
           <a
             key={txn.hash}
             target="_blank"
-            href={`${process.env.NEXT_PUBLIC_BLOCK_EXPLORER}/tx/${txn.hash}`}
+            href={`${blockExplorerUrl}/tx/${txn.hash}`}
           >
             <div
-              className="flex justify-between border-t border-border pt-3"
+              className="flex items-center justify-between gap-5"
               key={txn.hash}
             >
-              <div className="text-xs">
-                <p className="font-medium">
-                  <Balancer>
+              <div className="flex gap-4">
+                <TokenIcon address={txn.icon ?? ""} fetch size="2xl" />
+                <div className="font-medium">
+                  <div className="w-[190px] truncate text-sm font-medium leading-6">
                     {txn.description}{" "}
                     <Icons.external className="inline h-3 w-3" />
-                  </Balancer>
-                </p>
-
-                <p>{truncateHash(txn.hash as `0x${string}`)}</p>
+                  </div>
+                  <div className="text-sm font-medium leading-6 text-muted-foreground">
+                    {txn.actionType ?? ""} {txn.status}
+                  </div>
+                </div>
               </div>
-              <div className="text-xs">{formatTimestamp(txn.timestamp)}</div>
+              <div className="whitespace-nowrap text-xs font-medium text-muted-foreground">
+                {getTimeFromNow(txn.timestamp)}
+              </div>
             </div>
           </a>
         ))

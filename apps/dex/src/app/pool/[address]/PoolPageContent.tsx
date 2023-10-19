@@ -312,6 +312,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     ModalPortal,
   } = useTxn({
     message: "Claiming BGT Rewards",
+    actionType: "Claim Rewards",
     onSuccess: () => {
       void mutate(QUERY_KEY);
     },
@@ -421,7 +422,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               fee
             </Badge>
             <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
-              {pool?.bgtApy?.toFixed(2)}% BGT APY
+              {pool?.bgtApy?.toFixed(2)}% BGT PRR
             </Badge>
             <div
               className="hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:cursor-pointer hover:underline sm:flex"
@@ -505,7 +506,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             <Card className="p-4">
               <div className="flex flex-row items-center justify-between">
                 <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
-                  APR
+                  PRR
                 </p>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">

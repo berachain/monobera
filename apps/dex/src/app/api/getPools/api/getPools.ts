@@ -111,7 +111,6 @@ export const getParsedPools = async (
   globalCuttingBoard: CuttingBoard[] | undefined,
   mappedTokens: MappedTokens,
 ) => {
-  console.log(globalCuttingBoard);
   if (pools.length) {
     const allPoolVolumePromises: any[] = [];
     pools.forEach((pool) => {

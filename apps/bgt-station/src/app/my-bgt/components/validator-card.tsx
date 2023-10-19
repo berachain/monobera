@@ -4,6 +4,7 @@ import {
   useBeraJs,
   usePollActiveValidators,
   usePollBribes,
+  usePollPrices,
   usePollTotalDelegated,
   type PoLValidator,
 } from "@bera/berajs";
@@ -14,8 +15,6 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { useSWRConfig } from "swr";
 import { formatEther, type Address } from "viem";
-
-import { usePollPrices } from "~/hooks/usePollPrices";
 
 export default function ValidatorCard({
   validator,
@@ -35,7 +34,7 @@ export default function ValidatorCard({
   const userDelegated = useValidatorDelegation(validator.operatorAddr);
 
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const { useValidatorBribeTotal, useValidatorUserBribes, QUERY_KEY } =
     usePollBribes();
 

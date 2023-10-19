@@ -1,98 +1,88 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { formatUsd, useLatestBlock } from "@bera/berajs";
+import { cloudinaryUrl, docsUrl } from "@bera/config";
+// import { formatUsd, useLatestBlock, usePollPrices } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 
-import { sumPrices } from "~/utils/sumPrices";
-import { usePollPrices } from "~/hooks/usePollPrices";
-import { DataCard } from "../components/Data";
+// import { Icons } from "@bera/ui/icons";
+
+// import { sumPrices } from "~/utils/sumPrices";
+// import { DataCard } from "../components/Data";
 import { PoolSearch } from "./PoolsTable";
 
-export default function PoolPageHeader({
-  tvl,
-  volume,
-}: {
-  tvl: any;
-  volume: any;
-}) {
+export default function PoolPageHeader() {
+  //   {
+  //   tvl,
+  //   volume,
+  // }: {
+  //   tvl: any;
+  //   volume: any;
+  // }
   const router = useRouter();
-  const { usePrices, isLoading } = usePollPrices();
+  // const { usePrices, isLoading } = usePollPrices();
 
-  const prices = usePrices();
-  const tvlValue = useMemo(() => {
-    if (!prices || !tvl || !tvl[0]) return 0;
-    return sumPrices(prices, tvl[0].data);
-  }, [tvl, prices]);
+  // const { data: prices } = usePrices();
+  // const tvlValue = useMemo(() => {
+  //   if (!prices || !tvl || !tvl[0]) return 0;
+  //   return sumPrices(prices, tvl[0].data);
+  // }, [tvl, prices]);
 
-  const volumeValue = useMemo(() => {
-    if (!prices || !volume || !volume[0]) return 0;
-    return sumPrices(prices, volume[0].data);
-  }, [volume, prices]);
+  // const volumeValue = useMemo(() => {
+  //   if (!prices || !volume || !volume[0]) return 0;
+  //   return sumPrices(prices, volume[0].data);
+  // }, [volume, prices]);
 
-  const block = useLatestBlock();
+  // const block = useLatestBlock();
 
-  const isDataReady = useMemo(() => {
-    return !isLoading && block !== 0n;
-  }, [isLoading, block]);
+  // const isDataReady = useMemo(() => {
+  //   return !isLoading && block !== 0n;
+  // }, [isLoading, block]);
 
   return (
-    <div className="mt-16 flex w-full flex-col items-center justify-center gap-6">
-      <h1 className="text-center text-5xl font-bold">
-        <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
-          Create
-        </span>{" "}
-        a Pool
-        <br /> Or{" "}
-        <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
-          Add Liquidity
-        </span>
-      </h1>
-      <div className="flex flex-row gap-2 self-center">
-        <Button
-          onClick={() => router.push("/pool/create")}
-          className="text-md mb-10 self-center"
-        >
-          Create a Pool
-        </Button>
-        <Button
-          variant={"outline"}
-          className="text-md mb-10 self-center"
-          onClick={() => {
-            const poolSearchElement = document.getElementById("poolSearch");
-            if (poolSearchElement) {
-              poolSearchElement.scrollIntoView({ behavior: "smooth" });
-            }
-          }}
-        >
-          Learn More
-        </Button>
-      </div>
-      <div className="flex w-full max-w-[980px] flex-col items-center justify-center gap-6 self-center md:flex-row">
-        <DataCard
-          icon={<Icons.lock />}
-          title={"Total Value Locked"}
-          isLoading={!isDataReady}
-          value={formatUsd(tvlValue)}
-        />
-        <DataCard
-          icon={<Icons.candleStick />}
-          title={"24H Volume"}
-          isLoading={!isDataReady}
-          value={formatUsd(volumeValue)}
-        />
-        <DataCard
-          icon={<Icons.medal />}
-          title={"BGT Rewards Distributed"}
-          isLoading={!isDataReady}
-          value={`${(Number(block) * 0.0042).toFixed(2)} BGT`}
+    <div className="mx-auto mt-4 flex w-full max-w-[1200px] flex-col items-center justify-center gap-8">
+      <div className="flex w-full flex-col-reverse items-center justify-center text-center md:flex-row md:justify-between">
+        <div>
+          <h1 className="leading-12 mb-2 text-center text-5xl font-bold md:text-left">
+            Add{" "}
+            <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
+              Liquidity
+            </span>{" "}
+            <br />
+            or Create a{" "}
+            <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
+              Pool
+            </span>
+          </h1>
+          <div className="mb-4 font-medium leading-6 text-muted-foreground">
+            Become an LP to earn trading fees and BGT Incentives
+          </div>
+          <div className="mb-2 flex flex-row justify-center gap-2 self-center md:justify-start ">
+            <Button
+              onClick={() => router.push("/pool/create")}
+              className="text-md self-center"
+            >
+              Create a Pool
+            </Button>
+            <Link href={docsUrl} target="_blank">
+              <Button variant={"outline"} className="text-md self-center">
+                Learn More
+              </Button>
+            </Link>
+          </div>
+        </div>
+        <Image
+          src={`${cloudinaryUrl}/shared/qmtxbqw1lgjsnlszftow`}
+          alt="honey jar"
+          width={393}
+          height={300}
+          className="w-[256px] lg:w-[393px]"
         />
       </div>
-      <div id="poolSearch" className="mt-[72px] w-full max-w-[1100px]">
-        <PoolSearch />
-      </div>
+      <PoolSearch />
     </div>
   );
 }

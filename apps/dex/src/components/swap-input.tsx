@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  useBeraJs,
-  useSelectedAssetWalletBalance,
-  type Token,
-} from "@bera/berajs";
+import { useBeraJs, usePollAssetWalletBalance, type Token } from "@bera/berajs";
 import { SelectToken } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -30,9 +26,9 @@ export default function SwapInput({
   setAmount,
 }: Props) {
   const [focused, setFocused] = React.useState(false);
-  const tokenBalance = Number(
-    useSelectedAssetWalletBalance(selected?.address)?.balance || 0,
-  );
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: token } = useSelectedAssetWalletBalance(selected?.address);
+  const tokenBalance = Number(token?.balance || 0);
 
   const { account } = useBeraJs();
 

@@ -4,10 +4,6 @@ import { indexerUrl } from "@bera/config";
 
 async function getMints(page: number, perPage: number) {
   try {
-    // console.log(
-    //   "getMints",
-    //   `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
-    // );
     const res: any = await fetch(
       `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
       { cache: "no-store" },
@@ -33,11 +29,6 @@ async function getBurns(page: number, perPage: number) {
     if (!jsonRes) {
       throw new Error("Failed to fetch add liquidity data");
     }
-    // console.log(
-    //   "getBurns",
-    //   jsonRes,
-    //   `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
-    // );
     return jsonRes;
   } catch (e) {
     notFound();

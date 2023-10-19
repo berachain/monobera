@@ -13,7 +13,6 @@ async function getAvgValidatorUptime() {
   try {
     const res = await fetch(`${indexerUrl}/validators/uptime`);
     const jsonRes = await res.json();
-    // console.log(jsonRes);
     return jsonRes;
   } catch (e) {
     console.log(e);

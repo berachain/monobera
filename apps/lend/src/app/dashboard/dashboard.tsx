@@ -1,5 +1,5 @@
 import React from "react";
-import { useCurrentAssetWalletBalances } from "@bera/berajs";
+import { usePollAssetWalletBalance } from "@bera/berajs";
 import { Switch } from "@bera/ui/switch";
 
 import { getAssetList } from "~/utils/lendTokenHelper";
@@ -24,7 +24,8 @@ export function Dashboard({
   const { useUserReservesData } = usePollUserReservesData();
   const { data: userReservesData, isLoading: isUserReserveDataLoading } =
     useUserReservesData();
-  const BalanceToken = useCurrentAssetWalletBalances();
+  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
+  const { data: BalanceToken } = useCurrentAssetWalletBalances();
 
   const assetsDictionary = getAssetList(
     reservesDictionary ?? {},

@@ -14,3 +14,4 @@ export * from "./useOct";
 export * from "./usePollHoneyBalance";
 export * from "./usePollBeraBalance";
 export * from "./usePollTransactionCount";
+export * from "./usePollPrices";

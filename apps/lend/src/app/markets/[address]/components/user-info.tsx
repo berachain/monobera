@@ -1,8 +1,4 @@
-import {
-  formatter,
-  useSelectedAssetWalletBalance,
-  type Token,
-} from "@bera/berajs";
+import { formatter, usePollAssetWalletBalance, type Token } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
@@ -16,7 +12,10 @@ import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 
 export default function UserInfo({ token }: { token: Token | undefined }) {
-  const tokenBalance = useSelectedAssetWalletBalance(token?.address ?? "");
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: tokenBalance } = useSelectedAssetWalletBalance(
+    token?.address ?? "",
+  );
   const { useSelectedReserveData, useBaseCurrencyData } =
     usePollReservesDataList();
   const { data: reserveData } = useSelectedReserveData(token?.address ?? "");

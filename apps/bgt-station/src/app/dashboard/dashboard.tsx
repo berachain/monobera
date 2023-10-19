@@ -2,10 +2,13 @@
 
 import { type Metadata } from "next";
 import Image from "next/image";
-import { usePollGlobalValidatorBribes, type PoLValidator } from "@bera/berajs";
+import {
+  usePollGlobalValidatorBribes,
+  usePollPrices,
+  type PoLValidator,
+} from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 
-import { usePollPrices } from "~/hooks/usePollPrices";
 import { Details } from "./components/details";
 import GlobalGaugeWeightInfo from "./components/global-gauge-weight";
 import { ValidatorsList } from "./components/validators-list";
@@ -21,7 +24,7 @@ export default function DashBoard({
   avgValidatorUptime: string;
 }) {
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
   const validators: PoLValidator[] = usePolValidators();
   const validatorSession = [
