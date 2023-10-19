@@ -1,4 +1,4 @@
-import { type Token } from "..";
+import { type Token } from "../api/currency/tokens";
 
 export async function addTokenToWallet(token: Token | undefined) {
   if (token) {
