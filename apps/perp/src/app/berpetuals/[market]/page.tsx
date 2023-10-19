@@ -8,7 +8,7 @@ import { MarketImages } from "~/utils/marketImages";
 import { getMarkets } from "~/endpoints";
 import { GeneralInfoBanner } from "../components/general-info-banner";
 import { InstrumentDropdown } from "../components/instrument-dropdown";
-import { OrderChart } from "../components/order-chart";
+import OrderChart from "../components/order-chart";
 import { OrderHistory } from "../components/order-history";
 import CreatePosition from "../create-position";
 import { type IMarket } from "../page";

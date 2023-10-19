@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { formatUsd, usePollHoneyBalance } from "@bera/berajs";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { formatUnits } from "viem";
 
 import { HONEY_IMG } from "~/utils/marketImages";
 import { CustomizeInput } from "./components/customize-input";
@@ -147,7 +148,19 @@ export default function CreatePosition({ market }: ICreatePosition) {
             setForm({ ...form, tp: value.tp, sl: value.sl })
           }
         />
-        <PlaceOrder form={form} price={dummyPrice} />
+        <PlaceOrder
+          form={form}
+          price={dummyPrice}
+          openingFee={Number(
+            formatUnits(BigInt(market.pairFixedFee?.openFeeP ?? "0"), 18),
+          )}
+          bfLong={Number(
+            formatUnits(BigInt(market.pairBorrowingFee?.bfLong ?? "0"), 18),
+          )}
+          bfShort={Number(
+            formatUnits(BigInt(market.pairBorrowingFee?.bfShort ?? "0"), 18),
+          )}
+        />
       </div>
     </div>
   );

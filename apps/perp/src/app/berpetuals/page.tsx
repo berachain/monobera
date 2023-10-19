@@ -1,19 +1,27 @@
 import React from "react";
 import { notFound } from "next/navigation";
+import { perpsName } from "@bera/config";
 import { type Market } from "@bera/proto/src";
 
 import { MarketImages } from "~/utils/marketImages";
 import { getMarkets } from "~/endpoints";
 import { GeneralInfoBanner } from "./components/general-info-banner";
 import { InstrumentDropdown } from "./components/instrument-dropdown";
-import { OrderChart } from "./components/order-chart";
+import OrderChart from "./components/order-chart";
 import { OrderHistory } from "./components/order-history";
 import CreatePosition from "./create-position";
 
-const DEFAULT_MARKET = "BTC-USD";
+const DEFAULT_MARKET = "ETH-USD";
 
 export interface IMarket extends Market {
   imageUri?: string;
+  tokenName?: string;
+}
+export function generateMetadata({ params }: Props): Metadata {
+  // const { market } = params;
+  return {
+    title: `BTC-USD | ${perpsName}`,
+  };
 }
 
 export default async function Home() {
@@ -26,6 +34,7 @@ export default async function Home() {
     ...m,
     imageUri: MarketImages[m.name],
   }));
+
   const defualtMarket = markets.find((m: Market) => m.name === DEFAULT_MARKET);
 
   if (!data || !defualtMarket) {

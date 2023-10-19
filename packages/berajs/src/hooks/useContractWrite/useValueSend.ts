@@ -7,9 +7,9 @@ import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
 import { TransactionFailedError } from "./error";
 import {
-  type useTxnSendWriteApi,
   type IUseContractWrite,
   type IValueSend,
+  type useTxnSendWriteApi,
 } from "./types";
 
 const useValueSend = ({

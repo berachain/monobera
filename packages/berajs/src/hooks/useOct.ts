@@ -137,8 +137,9 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   const { useBalance } = usePollBeraBalance({
     address: octAddress,
   });
-  const { useTransactionCount } =
-    usePollTransactionCount({ address: octAddress });
+  const { useTransactionCount } = usePollTransactionCount({
+    address: octAddress,
+  });
 
   const octBalance = useBalance();
   const octTxCount = useTransactionCount();

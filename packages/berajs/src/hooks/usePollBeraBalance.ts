@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, formatEther } from "viem";
+import { formatEther, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import POLLING from "~/config/constants/polling";

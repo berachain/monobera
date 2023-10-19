@@ -8,22 +8,23 @@ const InputSelect = ({
   variant = "success",
 }: {
   bracket: [number, number, number, number, number];
-  onValueChange: (percenatge: number) => void;
+  onValueChange: (percentage: number) => void;
   variant: "success" | "destructive";
 }) => {
-  const [percenatge, setPercenatge] = useState<number>(0);
+  const [percentage, setpercentage] = useState<number>(0);
   useEffect(() => {
-    onValueChange(percenatge);
-  }, [percenatge]);
+    onValueChange(percentage);
+  }, [percentage]);
   return (
     <div className="flex w-full gap-1">
       <Input
         className="h-8 w-full rounded-lg bg-background text-xs lg:w-[102px]"
         placeholder="Amount"
-        type={percenatge === 0 ? "text" : "number"}
-        value={percenatge === 0 ? "none" : percenatge}
+        type={percentage === 0 ? "text" : "number"}
+        value={percentage === 0 ? "None" : percentage}
+        disabled={percentage === 0}
         onChange={(e) =>
-          setPercenatge(
+          setpercentage(
             Number(e.target.value) === 0 ? 0 : Number(e.target.value),
           )
         }
@@ -34,11 +35,11 @@ const InputSelect = ({
           key={index}
           className={cn(
             "inline-flex h-8 w-[20%] cursor-pointer items-center justify-center rounded-lg px-2 text-xs font-medium lg:w-full",
-            amount === percenatge
+            amount === percentage
               ? `bg-${variant} text-${variant}-foreground`
               : `bg-muted text-muted-foreground`,
           )}
-          onClick={() => setPercenatge(amount)}
+          onClick={() => setpercentage(amount)}
         >
           {amount === 0 ? "None" : `${amount}%`}
         </div>
@@ -66,16 +67,16 @@ export function TPSL({
       <div className="mb-2 text-xs font-medium">Take Profit</div>
       <InputSelect
         bracket={[0, 25, 50, 100, 150]}
-        onValueChange={(percenatge: number) =>
-          setTpsl({ tp: percenatge, sl: tpsl.sl })
+        onValueChange={(percentage: number) =>
+          setTpsl({ tp: percentage, sl: tpsl.sl })
         }
         variant="success"
       />
       <div className="mb-2 mt-4 text-xs font-medium">Stop Loss</div>
       <InputSelect
         bracket={[0, 5, 10, 15, 25]}
-        onValueChange={(percenatge: number) =>
-          setTpsl({ tp: tpsl.tp, sl: percenatge })
+        onValueChange={(percentage: number) =>
+          setTpsl({ tp: tpsl.tp, sl: percentage })
         }
         variant="destructive"
       />

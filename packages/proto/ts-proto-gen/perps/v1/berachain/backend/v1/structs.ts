@@ -4,8 +4,22 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "berachain.bts.backend.v1";
 
+export interface GlobalParams {
+  groupIndex: string;
+  groupName: string;
+  maxLeverage: string;
+  minLeverage: string;
+  /** 1e18 */
+  maxCollateralP: string;
+  /** 1e18 */
+  maxPosHoney: string;
+  honeyVaultFeeP: string;
+  honeySssFeeP: string;
+  currentEpoch: string;
+}
+
 export interface Market {
-  pairIndex: Long;
+  pairIndex: string;
   name: string;
   /** PRECISION */
   fixedSpreadP: string;
@@ -21,8 +35,7 @@ export interface Market {
 }
 
 export interface OpenInterest {
-  pairIndex: Long;
-  timestamp: Long;
+  pairIndex: string;
   /** 1e18 DAI */
   oiLong: string;
   /** 1e18 DAI */
@@ -32,13 +45,13 @@ export interface OpenInterest {
 }
 
 export interface PairBorrowingFee {
-  pairIndex: Long;
+  pairIndex: string;
   bfLong: string;
   bfShort: string;
 }
 
 export interface PairFundingFee {
-  pairIndex: Long;
+  pairIndex: string;
   /** PRECISION (%) // funding fee per block (received/provided for long/short) */
   ffPerBlockP: string;
   /** 1e18 (DAI) // accrued funding fee per oi long */
@@ -48,7 +61,7 @@ export interface PairFundingFee {
 }
 
 export interface PairRolloverFee {
-  pairIndex: Long;
+  pairIndex: string;
   /** PRECISION (%) // rolling over when position open (flat fee) */
   rolloverPerBlockP: string;
   /** 1e18 (DAI) */
@@ -56,19 +69,31 @@ export interface PairRolloverFee {
 }
 
 export interface PairFixedFee {
-  pairIndex: Long;
+  pairIndex: string;
   /** PRECISION (% of leveraged pos) */
   openFeeP: string;
   /** PRECISION (% of leveraged pos) */
   closeFeeP: string;
   /** PRECISION (% of leveraged pos) */
-  oracleFeeP: string;
-  /** PRECISION (% of leveraged pos) */
   nftLimitOrderFeeP: string;
-  /** PRECISION (% of leveraged pos) */
-  referralFeeP: string;
   /** 1e18 (collateral x leverage, useful for min fee) */
   minLevPosDai: string;
+}
+
+export interface HoneyWithdrawalRequest {
+  createdBy: string;
+  owner: string;
+  shares: string;
+  epochCreated: string;
+  unlockEpoch: string;
+}
+
+export interface HoneyWithdrawalCancel {
+  createdBy: string;
+  owner: string;
+  shares: string;
+  epochCreated: string;
+  unlockEpoch: string;
 }
 
 /** AccountFees is fees paid by the trader. */
@@ -83,9 +108,214 @@ export interface AccountPnL {
   pnl: string;
 }
 
+function createBaseGlobalParams(): GlobalParams {
+  return {
+    groupIndex: "",
+    groupName: "",
+    maxLeverage: "",
+    minLeverage: "",
+    maxCollateralP: "",
+    maxPosHoney: "",
+    honeyVaultFeeP: "",
+    honeySssFeeP: "",
+    currentEpoch: "",
+  };
+}
+
+export const GlobalParams = {
+  encode(
+    message: GlobalParams,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.groupIndex !== "") {
+      writer.uint32(10).string(message.groupIndex);
+    }
+    if (message.groupName !== "") {
+      writer.uint32(18).string(message.groupName);
+    }
+    if (message.maxLeverage !== "") {
+      writer.uint32(26).string(message.maxLeverage);
+    }
+    if (message.minLeverage !== "") {
+      writer.uint32(34).string(message.minLeverage);
+    }
+    if (message.maxCollateralP !== "") {
+      writer.uint32(42).string(message.maxCollateralP);
+    }
+    if (message.maxPosHoney !== "") {
+      writer.uint32(50).string(message.maxPosHoney);
+    }
+    if (message.honeyVaultFeeP !== "") {
+      writer.uint32(58).string(message.honeyVaultFeeP);
+    }
+    if (message.honeySssFeeP !== "") {
+      writer.uint32(66).string(message.honeySssFeeP);
+    }
+    if (message.currentEpoch !== "") {
+      writer.uint32(74).string(message.currentEpoch);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GlobalParams {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGlobalParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.groupIndex = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.groupName = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.maxLeverage = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.minLeverage = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.maxCollateralP = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.maxPosHoney = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.honeyVaultFeeP = reader.string();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.honeySssFeeP = reader.string();
+          continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.currentEpoch = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GlobalParams {
+    return {
+      groupIndex: isSet(object.groupIndex) ? String(object.groupIndex) : "",
+      groupName: isSet(object.groupName) ? String(object.groupName) : "",
+      maxLeverage: isSet(object.maxLeverage) ? String(object.maxLeverage) : "",
+      minLeverage: isSet(object.minLeverage) ? String(object.minLeverage) : "",
+      maxCollateralP: isSet(object.maxCollateralP)
+        ? String(object.maxCollateralP)
+        : "",
+      maxPosHoney: isSet(object.maxPosHoney) ? String(object.maxPosHoney) : "",
+      honeyVaultFeeP: isSet(object.honeyVaultFeeP)
+        ? String(object.honeyVaultFeeP)
+        : "",
+      honeySssFeeP: isSet(object.honeySssFeeP)
+        ? String(object.honeySssFeeP)
+        : "",
+      currentEpoch: isSet(object.currentEpoch)
+        ? String(object.currentEpoch)
+        : "",
+    };
+  },
+
+  toJSON(message: GlobalParams): unknown {
+    const obj: any = {};
+    if (message.groupIndex !== "") {
+      obj.groupIndex = message.groupIndex;
+    }
+    if (message.groupName !== "") {
+      obj.groupName = message.groupName;
+    }
+    if (message.maxLeverage !== "") {
+      obj.maxLeverage = message.maxLeverage;
+    }
+    if (message.minLeverage !== "") {
+      obj.minLeverage = message.minLeverage;
+    }
+    if (message.maxCollateralP !== "") {
+      obj.maxCollateralP = message.maxCollateralP;
+    }
+    if (message.maxPosHoney !== "") {
+      obj.maxPosHoney = message.maxPosHoney;
+    }
+    if (message.honeyVaultFeeP !== "") {
+      obj.honeyVaultFeeP = message.honeyVaultFeeP;
+    }
+    if (message.honeySssFeeP !== "") {
+      obj.honeySssFeeP = message.honeySssFeeP;
+    }
+    if (message.currentEpoch !== "") {
+      obj.currentEpoch = message.currentEpoch;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GlobalParams>, I>>(
+    base?: I,
+  ): GlobalParams {
+    return GlobalParams.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GlobalParams>, I>>(
+    object: I,
+  ): GlobalParams {
+    const message = createBaseGlobalParams();
+    message.groupIndex = object.groupIndex ?? "";
+    message.groupName = object.groupName ?? "";
+    message.maxLeverage = object.maxLeverage ?? "";
+    message.minLeverage = object.minLeverage ?? "";
+    message.maxCollateralP = object.maxCollateralP ?? "";
+    message.maxPosHoney = object.maxPosHoney ?? "";
+    message.honeyVaultFeeP = object.honeyVaultFeeP ?? "";
+    message.honeySssFeeP = object.honeySssFeeP ?? "";
+    message.currentEpoch = object.currentEpoch ?? "";
+    return message;
+  },
+};
+
 function createBaseMarket(): Market {
   return {
-    pairIndex: Long.UZERO,
+    pairIndex: "",
     name: "",
     fixedSpreadP: "",
     onePercentDepthAbove: "",
@@ -103,8 +333,8 @@ export const Market = {
     message: Market,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
-    if (!message.pairIndex.isZero()) {
-      writer.uint32(8).uint64(message.pairIndex);
+    if (message.pairIndex !== "") {
+      writer.uint32(10).string(message.pairIndex);
     }
     if (message.name !== "") {
       writer.uint32(18).string(message.name);
@@ -160,11 +390,11 @@ export const Market = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
+          if (tag !== 10) {
             break;
           }
 
-          message.pairIndex = reader.uint64() as Long;
+          message.pairIndex = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
@@ -249,9 +479,7 @@ export const Market = {
 
   fromJSON(object: any): Market {
     return {
-      pairIndex: isSet(object.pairIndex)
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO,
+      pairIndex: isSet(object.pairIndex) ? String(object.pairIndex) : "",
       name: isSet(object.name) ? String(object.name) : "",
       fixedSpreadP: isSet(object.fixedSpreadP)
         ? String(object.fixedSpreadP)
@@ -282,8 +510,8 @@ export const Market = {
 
   toJSON(message: Market): unknown {
     const obj: any = {};
-    if (!message.pairIndex.isZero()) {
-      obj.pairIndex = (message.pairIndex || Long.UZERO).toString();
+    if (message.pairIndex !== "") {
+      obj.pairIndex = message.pairIndex;
     }
     if (message.name !== "") {
       obj.name = message.name;
@@ -320,10 +548,7 @@ export const Market = {
   },
   fromPartial<I extends Exact<DeepPartial<Market>, I>>(object: I): Market {
     const message = createBaseMarket();
-    message.pairIndex =
-      object.pairIndex !== undefined && object.pairIndex !== null
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO;
+    message.pairIndex = object.pairIndex ?? "";
     message.name = object.name ?? "";
     message.fixedSpreadP = object.fixedSpreadP ?? "";
     message.onePercentDepthAbove = object.onePercentDepthAbove ?? "";
@@ -353,13 +578,7 @@ export const Market = {
 };
 
 function createBaseOpenInterest(): OpenInterest {
-  return {
-    pairIndex: Long.UZERO,
-    timestamp: Long.UZERO,
-    oiLong: "",
-    oiShort: "",
-    oiMax: "",
-  };
+  return { pairIndex: "", oiLong: "", oiShort: "", oiMax: "" };
 }
 
 export const OpenInterest = {
@@ -367,11 +586,8 @@ export const OpenInterest = {
     message: OpenInterest,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
-    if (!message.pairIndex.isZero()) {
-      writer.uint32(8).uint64(message.pairIndex);
-    }
-    if (!message.timestamp.isZero()) {
-      writer.uint32(16).uint64(message.timestamp);
+    if (message.pairIndex !== "") {
+      writer.uint32(10).string(message.pairIndex);
     }
     if (message.oiLong !== "") {
       writer.uint32(26).string(message.oiLong);
@@ -394,18 +610,11 @@ export const OpenInterest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
+          if (tag !== 10) {
             break;
           }
 
-          message.pairIndex = reader.uint64() as Long;
-          continue;
-        case 2:
-          if (tag !== 16) {
-            break;
-          }
-
-          message.timestamp = reader.uint64() as Long;
+          message.pairIndex = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
@@ -439,12 +648,7 @@ export const OpenInterest = {
 
   fromJSON(object: any): OpenInterest {
     return {
-      pairIndex: isSet(object.pairIndex)
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO,
-      timestamp: isSet(object.timestamp)
-        ? Long.fromValue(object.timestamp)
-        : Long.UZERO,
+      pairIndex: isSet(object.pairIndex) ? String(object.pairIndex) : "",
       oiLong: isSet(object.oiLong) ? String(object.oiLong) : "",
       oiShort: isSet(object.oiShort) ? String(object.oiShort) : "",
       oiMax: isSet(object.oiMax) ? String(object.oiMax) : "",
@@ -453,11 +657,8 @@ export const OpenInterest = {
 
   toJSON(message: OpenInterest): unknown {
     const obj: any = {};
-    if (!message.pairIndex.isZero()) {
-      obj.pairIndex = (message.pairIndex || Long.UZERO).toString();
-    }
-    if (!message.timestamp.isZero()) {
-      obj.timestamp = (message.timestamp || Long.UZERO).toString();
+    if (message.pairIndex !== "") {
+      obj.pairIndex = message.pairIndex;
     }
     if (message.oiLong !== "") {
       obj.oiLong = message.oiLong;
@@ -480,14 +681,7 @@ export const OpenInterest = {
     object: I,
   ): OpenInterest {
     const message = createBaseOpenInterest();
-    message.pairIndex =
-      object.pairIndex !== undefined && object.pairIndex !== null
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO;
-    message.timestamp =
-      object.timestamp !== undefined && object.timestamp !== null
-        ? Long.fromValue(object.timestamp)
-        : Long.UZERO;
+    message.pairIndex = object.pairIndex ?? "";
     message.oiLong = object.oiLong ?? "";
     message.oiShort = object.oiShort ?? "";
     message.oiMax = object.oiMax ?? "";
@@ -496,7 +690,7 @@ export const OpenInterest = {
 };
 
 function createBasePairBorrowingFee(): PairBorrowingFee {
-  return { pairIndex: Long.UZERO, bfLong: "", bfShort: "" };
+  return { pairIndex: "", bfLong: "", bfShort: "" };
 }
 
 export const PairBorrowingFee = {
@@ -504,8 +698,8 @@ export const PairBorrowingFee = {
     message: PairBorrowingFee,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
-    if (!message.pairIndex.isZero()) {
-      writer.uint32(8).uint64(message.pairIndex);
+    if (message.pairIndex !== "") {
+      writer.uint32(10).string(message.pairIndex);
     }
     if (message.bfLong !== "") {
       writer.uint32(18).string(message.bfLong);
@@ -525,11 +719,11 @@ export const PairBorrowingFee = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
+          if (tag !== 10) {
             break;
           }
 
-          message.pairIndex = reader.uint64() as Long;
+          message.pairIndex = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
@@ -556,9 +750,7 @@ export const PairBorrowingFee = {
 
   fromJSON(object: any): PairBorrowingFee {
     return {
-      pairIndex: isSet(object.pairIndex)
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO,
+      pairIndex: isSet(object.pairIndex) ? String(object.pairIndex) : "",
       bfLong: isSet(object.bfLong) ? String(object.bfLong) : "",
       bfShort: isSet(object.bfShort) ? String(object.bfShort) : "",
     };
@@ -566,8 +758,8 @@ export const PairBorrowingFee = {
 
   toJSON(message: PairBorrowingFee): unknown {
     const obj: any = {};
-    if (!message.pairIndex.isZero()) {
-      obj.pairIndex = (message.pairIndex || Long.UZERO).toString();
+    if (message.pairIndex !== "") {
+      obj.pairIndex = message.pairIndex;
     }
     if (message.bfLong !== "") {
       obj.bfLong = message.bfLong;
@@ -587,10 +779,7 @@ export const PairBorrowingFee = {
     object: I,
   ): PairBorrowingFee {
     const message = createBasePairBorrowingFee();
-    message.pairIndex =
-      object.pairIndex !== undefined && object.pairIndex !== null
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO;
+    message.pairIndex = object.pairIndex ?? "";
     message.bfLong = object.bfLong ?? "";
     message.bfShort = object.bfShort ?? "";
     return message;
@@ -599,7 +788,7 @@ export const PairBorrowingFee = {
 
 function createBasePairFundingFee(): PairFundingFee {
   return {
-    pairIndex: Long.UZERO,
+    pairIndex: "",
     ffPerBlockP: "",
     accPerOiLong: "",
     accPerOiShort: "",
@@ -611,8 +800,8 @@ export const PairFundingFee = {
     message: PairFundingFee,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
-    if (!message.pairIndex.isZero()) {
-      writer.uint32(8).uint64(message.pairIndex);
+    if (message.pairIndex !== "") {
+      writer.uint32(10).string(message.pairIndex);
     }
     if (message.ffPerBlockP !== "") {
       writer.uint32(18).string(message.ffPerBlockP);
@@ -635,11 +824,11 @@ export const PairFundingFee = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
+          if (tag !== 10) {
             break;
           }
 
-          message.pairIndex = reader.uint64() as Long;
+          message.pairIndex = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
@@ -673,9 +862,7 @@ export const PairFundingFee = {
 
   fromJSON(object: any): PairFundingFee {
     return {
-      pairIndex: isSet(object.pairIndex)
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO,
+      pairIndex: isSet(object.pairIndex) ? String(object.pairIndex) : "",
       ffPerBlockP: isSet(object.ffPerBlockP) ? String(object.ffPerBlockP) : "",
       accPerOiLong: isSet(object.accPerOiLong)
         ? String(object.accPerOiLong)
@@ -688,8 +875,8 @@ export const PairFundingFee = {
 
   toJSON(message: PairFundingFee): unknown {
     const obj: any = {};
-    if (!message.pairIndex.isZero()) {
-      obj.pairIndex = (message.pairIndex || Long.UZERO).toString();
+    if (message.pairIndex !== "") {
+      obj.pairIndex = message.pairIndex;
     }
     if (message.ffPerBlockP !== "") {
       obj.ffPerBlockP = message.ffPerBlockP;
@@ -712,10 +899,7 @@ export const PairFundingFee = {
     object: I,
   ): PairFundingFee {
     const message = createBasePairFundingFee();
-    message.pairIndex =
-      object.pairIndex !== undefined && object.pairIndex !== null
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO;
+    message.pairIndex = object.pairIndex ?? "";
     message.ffPerBlockP = object.ffPerBlockP ?? "";
     message.accPerOiLong = object.accPerOiLong ?? "";
     message.accPerOiShort = object.accPerOiShort ?? "";
@@ -724,7 +908,7 @@ export const PairFundingFee = {
 };
 
 function createBasePairRolloverFee(): PairRolloverFee {
-  return { pairIndex: Long.UZERO, rolloverPerBlockP: "", accPerCollateral: "" };
+  return { pairIndex: "", rolloverPerBlockP: "", accPerCollateral: "" };
 }
 
 export const PairRolloverFee = {
@@ -732,8 +916,8 @@ export const PairRolloverFee = {
     message: PairRolloverFee,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
-    if (!message.pairIndex.isZero()) {
-      writer.uint32(8).uint64(message.pairIndex);
+    if (message.pairIndex !== "") {
+      writer.uint32(10).string(message.pairIndex);
     }
     if (message.rolloverPerBlockP !== "") {
       writer.uint32(18).string(message.rolloverPerBlockP);
@@ -753,11 +937,11 @@ export const PairRolloverFee = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
+          if (tag !== 10) {
             break;
           }
 
-          message.pairIndex = reader.uint64() as Long;
+          message.pairIndex = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
@@ -784,9 +968,7 @@ export const PairRolloverFee = {
 
   fromJSON(object: any): PairRolloverFee {
     return {
-      pairIndex: isSet(object.pairIndex)
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO,
+      pairIndex: isSet(object.pairIndex) ? String(object.pairIndex) : "",
       rolloverPerBlockP: isSet(object.rolloverPerBlockP)
         ? String(object.rolloverPerBlockP)
         : "",
@@ -798,8 +980,8 @@ export const PairRolloverFee = {
 
   toJSON(message: PairRolloverFee): unknown {
     const obj: any = {};
-    if (!message.pairIndex.isZero()) {
-      obj.pairIndex = (message.pairIndex || Long.UZERO).toString();
+    if (message.pairIndex !== "") {
+      obj.pairIndex = message.pairIndex;
     }
     if (message.rolloverPerBlockP !== "") {
       obj.rolloverPerBlockP = message.rolloverPerBlockP;
@@ -819,10 +1001,7 @@ export const PairRolloverFee = {
     object: I,
   ): PairRolloverFee {
     const message = createBasePairRolloverFee();
-    message.pairIndex =
-      object.pairIndex !== undefined && object.pairIndex !== null
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO;
+    message.pairIndex = object.pairIndex ?? "";
     message.rolloverPerBlockP = object.rolloverPerBlockP ?? "";
     message.accPerCollateral = object.accPerCollateral ?? "";
     return message;
@@ -831,12 +1010,10 @@ export const PairRolloverFee = {
 
 function createBasePairFixedFee(): PairFixedFee {
   return {
-    pairIndex: Long.UZERO,
+    pairIndex: "",
     openFeeP: "",
     closeFeeP: "",
-    oracleFeeP: "",
     nftLimitOrderFeeP: "",
-    referralFeeP: "",
     minLevPosDai: "",
   };
 }
@@ -846,8 +1023,8 @@ export const PairFixedFee = {
     message: PairFixedFee,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
-    if (!message.pairIndex.isZero()) {
-      writer.uint32(8).uint64(message.pairIndex);
+    if (message.pairIndex !== "") {
+      writer.uint32(10).string(message.pairIndex);
     }
     if (message.openFeeP !== "") {
       writer.uint32(18).string(message.openFeeP);
@@ -855,17 +1032,11 @@ export const PairFixedFee = {
     if (message.closeFeeP !== "") {
       writer.uint32(26).string(message.closeFeeP);
     }
-    if (message.oracleFeeP !== "") {
-      writer.uint32(34).string(message.oracleFeeP);
-    }
     if (message.nftLimitOrderFeeP !== "") {
-      writer.uint32(42).string(message.nftLimitOrderFeeP);
-    }
-    if (message.referralFeeP !== "") {
-      writer.uint32(50).string(message.referralFeeP);
+      writer.uint32(34).string(message.nftLimitOrderFeeP);
     }
     if (message.minLevPosDai !== "") {
-      writer.uint32(58).string(message.minLevPosDai);
+      writer.uint32(42).string(message.minLevPosDai);
     }
     return writer;
   },
@@ -879,11 +1050,11 @@ export const PairFixedFee = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
+          if (tag !== 10) {
             break;
           }
 
-          message.pairIndex = reader.uint64() as Long;
+          message.pairIndex = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
@@ -904,24 +1075,10 @@ export const PairFixedFee = {
             break;
           }
 
-          message.oracleFeeP = reader.string();
+          message.nftLimitOrderFeeP = reader.string();
           continue;
         case 5:
           if (tag !== 42) {
-            break;
-          }
-
-          message.nftLimitOrderFeeP = reader.string();
-          continue;
-        case 6:
-          if (tag !== 50) {
-            break;
-          }
-
-          message.referralFeeP = reader.string();
-          continue;
-        case 7:
-          if (tag !== 58) {
             break;
           }
 
@@ -938,17 +1095,11 @@ export const PairFixedFee = {
 
   fromJSON(object: any): PairFixedFee {
     return {
-      pairIndex: isSet(object.pairIndex)
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO,
+      pairIndex: isSet(object.pairIndex) ? String(object.pairIndex) : "",
       openFeeP: isSet(object.openFeeP) ? String(object.openFeeP) : "",
       closeFeeP: isSet(object.closeFeeP) ? String(object.closeFeeP) : "",
-      oracleFeeP: isSet(object.oracleFeeP) ? String(object.oracleFeeP) : "",
       nftLimitOrderFeeP: isSet(object.nftLimitOrderFeeP)
         ? String(object.nftLimitOrderFeeP)
-        : "",
-      referralFeeP: isSet(object.referralFeeP)
-        ? String(object.referralFeeP)
         : "",
       minLevPosDai: isSet(object.minLevPosDai)
         ? String(object.minLevPosDai)
@@ -958,8 +1109,8 @@ export const PairFixedFee = {
 
   toJSON(message: PairFixedFee): unknown {
     const obj: any = {};
-    if (!message.pairIndex.isZero()) {
-      obj.pairIndex = (message.pairIndex || Long.UZERO).toString();
+    if (message.pairIndex !== "") {
+      obj.pairIndex = message.pairIndex;
     }
     if (message.openFeeP !== "") {
       obj.openFeeP = message.openFeeP;
@@ -967,14 +1118,8 @@ export const PairFixedFee = {
     if (message.closeFeeP !== "") {
       obj.closeFeeP = message.closeFeeP;
     }
-    if (message.oracleFeeP !== "") {
-      obj.oracleFeeP = message.oracleFeeP;
-    }
     if (message.nftLimitOrderFeeP !== "") {
       obj.nftLimitOrderFeeP = message.nftLimitOrderFeeP;
-    }
-    if (message.referralFeeP !== "") {
-      obj.referralFeeP = message.referralFeeP;
     }
     if (message.minLevPosDai !== "") {
       obj.minLevPosDai = message.minLevPosDai;
@@ -991,16 +1136,287 @@ export const PairFixedFee = {
     object: I,
   ): PairFixedFee {
     const message = createBasePairFixedFee();
-    message.pairIndex =
-      object.pairIndex !== undefined && object.pairIndex !== null
-        ? Long.fromValue(object.pairIndex)
-        : Long.UZERO;
+    message.pairIndex = object.pairIndex ?? "";
     message.openFeeP = object.openFeeP ?? "";
     message.closeFeeP = object.closeFeeP ?? "";
-    message.oracleFeeP = object.oracleFeeP ?? "";
     message.nftLimitOrderFeeP = object.nftLimitOrderFeeP ?? "";
-    message.referralFeeP = object.referralFeeP ?? "";
     message.minLevPosDai = object.minLevPosDai ?? "";
+    return message;
+  },
+};
+
+function createBaseHoneyWithdrawalRequest(): HoneyWithdrawalRequest {
+  return {
+    createdBy: "",
+    owner: "",
+    shares: "",
+    epochCreated: "",
+    unlockEpoch: "",
+  };
+}
+
+export const HoneyWithdrawalRequest = {
+  encode(
+    message: HoneyWithdrawalRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.createdBy !== "") {
+      writer.uint32(10).string(message.createdBy);
+    }
+    if (message.owner !== "") {
+      writer.uint32(18).string(message.owner);
+    }
+    if (message.shares !== "") {
+      writer.uint32(26).string(message.shares);
+    }
+    if (message.epochCreated !== "") {
+      writer.uint32(34).string(message.epochCreated);
+    }
+    if (message.unlockEpoch !== "") {
+      writer.uint32(42).string(message.unlockEpoch);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): HoneyWithdrawalRequest {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseHoneyWithdrawalRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.createdBy = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.owner = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.shares = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.epochCreated = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.unlockEpoch = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): HoneyWithdrawalRequest {
+    return {
+      createdBy: isSet(object.createdBy) ? String(object.createdBy) : "",
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      shares: isSet(object.shares) ? String(object.shares) : "",
+      epochCreated: isSet(object.epochCreated)
+        ? String(object.epochCreated)
+        : "",
+      unlockEpoch: isSet(object.unlockEpoch) ? String(object.unlockEpoch) : "",
+    };
+  },
+
+  toJSON(message: HoneyWithdrawalRequest): unknown {
+    const obj: any = {};
+    if (message.createdBy !== "") {
+      obj.createdBy = message.createdBy;
+    }
+    if (message.owner !== "") {
+      obj.owner = message.owner;
+    }
+    if (message.shares !== "") {
+      obj.shares = message.shares;
+    }
+    if (message.epochCreated !== "") {
+      obj.epochCreated = message.epochCreated;
+    }
+    if (message.unlockEpoch !== "") {
+      obj.unlockEpoch = message.unlockEpoch;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<HoneyWithdrawalRequest>, I>>(
+    base?: I,
+  ): HoneyWithdrawalRequest {
+    return HoneyWithdrawalRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<HoneyWithdrawalRequest>, I>>(
+    object: I,
+  ): HoneyWithdrawalRequest {
+    const message = createBaseHoneyWithdrawalRequest();
+    message.createdBy = object.createdBy ?? "";
+    message.owner = object.owner ?? "";
+    message.shares = object.shares ?? "";
+    message.epochCreated = object.epochCreated ?? "";
+    message.unlockEpoch = object.unlockEpoch ?? "";
+    return message;
+  },
+};
+
+function createBaseHoneyWithdrawalCancel(): HoneyWithdrawalCancel {
+  return {
+    createdBy: "",
+    owner: "",
+    shares: "",
+    epochCreated: "",
+    unlockEpoch: "",
+  };
+}
+
+export const HoneyWithdrawalCancel = {
+  encode(
+    message: HoneyWithdrawalCancel,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.createdBy !== "") {
+      writer.uint32(10).string(message.createdBy);
+    }
+    if (message.owner !== "") {
+      writer.uint32(18).string(message.owner);
+    }
+    if (message.shares !== "") {
+      writer.uint32(26).string(message.shares);
+    }
+    if (message.epochCreated !== "") {
+      writer.uint32(34).string(message.epochCreated);
+    }
+    if (message.unlockEpoch !== "") {
+      writer.uint32(42).string(message.unlockEpoch);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): HoneyWithdrawalCancel {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseHoneyWithdrawalCancel();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.createdBy = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.owner = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.shares = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.epochCreated = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.unlockEpoch = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): HoneyWithdrawalCancel {
+    return {
+      createdBy: isSet(object.createdBy) ? String(object.createdBy) : "",
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      shares: isSet(object.shares) ? String(object.shares) : "",
+      epochCreated: isSet(object.epochCreated)
+        ? String(object.epochCreated)
+        : "",
+      unlockEpoch: isSet(object.unlockEpoch) ? String(object.unlockEpoch) : "",
+    };
+  },
+
+  toJSON(message: HoneyWithdrawalCancel): unknown {
+    const obj: any = {};
+    if (message.createdBy !== "") {
+      obj.createdBy = message.createdBy;
+    }
+    if (message.owner !== "") {
+      obj.owner = message.owner;
+    }
+    if (message.shares !== "") {
+      obj.shares = message.shares;
+    }
+    if (message.epochCreated !== "") {
+      obj.epochCreated = message.epochCreated;
+    }
+    if (message.unlockEpoch !== "") {
+      obj.unlockEpoch = message.unlockEpoch;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<HoneyWithdrawalCancel>, I>>(
+    base?: I,
+  ): HoneyWithdrawalCancel {
+    return HoneyWithdrawalCancel.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<HoneyWithdrawalCancel>, I>>(
+    object: I,
+  ): HoneyWithdrawalCancel {
+    const message = createBaseHoneyWithdrawalCancel();
+    message.createdBy = object.createdBy ?? "";
+    message.owner = object.owner ?? "";
+    message.shares = object.shares ?? "";
+    message.epochCreated = object.epochCreated ?? "";
+    message.unlockEpoch = object.unlockEpoch ?? "";
     return message;
   },
 };

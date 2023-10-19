@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@/*": ["./*"]
     },
     "plugins": [
       {
@@ -12,7 +13,7 @@
     ],
     "strictNullChecks": true
   },
-  "exclude": [],
+  "exclude": ["public/**/*"],
   "include": [
     "next-env.d.ts",
     "async-jsx.d.ts",

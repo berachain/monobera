@@ -1,19 +1,26 @@
-import { formatUsd } from "@bera/berajs";
+import { formatUsd, formatter } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { type ColumnDef } from "@tanstack/react-table";
+import { formatUnits } from "viem";
 
+import { type IMarket } from "~/app/berpetuals/page";
 import { PositionTitle } from "~/app/components/position-title";
-import { type Position } from "~/hooks/usePositions";
+import { usePricesSocket } from "~/hooks/usePricesSocket";
 
-export const market_table_column: ColumnDef<Position>[] = [
+const MarketPrice = ({ pairIndex }: { pairIndex: number }) => {
+  const { useMarketIndexPrice } = usePricesSocket();
+  const price = useMarketIndexPrice(pairIndex);
+  return <div className="w-[88px]">{price && formatUsd(price)}</div>;
+};
+export const market_table_column: ColumnDef<IMarket>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Market" />
     ),
     cell: ({ row }) => (
       <div className="w-[150px]">
-        <PositionTitle position={row.original} />
+        <PositionTitle market={row.original} />
       </div>
     ),
     accessorKey: "market",
@@ -23,9 +30,9 @@ export const market_table_column: ColumnDef<Position>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Index Price" />
     ),
-    cell: ({ row }) => (
-      <div className="w-[88px]">{formatUsd(row.original.current_price)}</div>
-    ),
+    cell: ({ row }) => {
+      <MarketPrice pairIndex={Number(row.original.pairIndex)} />;
+    },
     accessorKey: "current_price",
     enableSorting: true,
   },
@@ -33,8 +40,8 @@ export const market_table_column: ColumnDef<Position>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="24H Change" />
     ),
-    cell: ({ row }) => {
-      const changerate = row.original.open_interest_long;
+    cell: () => {
+      const changerate = 0.69;
       const changeAmoumt = parseFloat((Math.random() * 500).toFixed(2));
       return (
         <div className="flex w-[88px] flex-col gap-1">
@@ -59,56 +66,65 @@ export const market_table_column: ColumnDef<Position>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="1h Funding" />
+      <DataTableColumnHeader column={column} title="Borrow Fee" />
     ),
     cell: ({ row }) => {
-      const changerate = row.original.open_interest_short;
+      const formattedBorrowingL = formatUnits(
+        BigInt(row.original.pairBorrowingFee?.bfLong ?? "0"),
+        18,
+      );
+      const formattedBorrowingS = formatUnits(
+        BigInt(row.original.pairBorrowingFee?.bfShort ?? "0"),
+        18,
+      );
       return (
-        <div
-          className={cn(
-            "text-sm font-semibold leading-tight",
-            changerate >= 0
-              ? "text-success-foreground"
-              : "text-destructive-foreground",
-          )}
-        >
-          {(changerate * 100).toFixed(2)}%
+        <div>
+          <div className="text-xs font-medium text-muted-foreground">
+            {formattedBorrowingL}% (L)
+          </div>
+          <div className="text-xs font-medium text-muted-foreground">
+            {formattedBorrowingS}% (S)
+          </div>
         </div>
       );
     },
-    accessorKey: "open_interest_short",
-    enableSorting: true,
+    accessorKey: "borrow_fee",
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Open Interest" />
     ),
     cell: ({ row }) => {
+      const formattedOIL = formatUnits(
+        BigInt(row.original.openInterest?.oiShort ?? "0"),
+        18,
+      );
+      const formattedOIS = formatUnits(
+        BigInt(row.original.openInterest?.oiShort ?? "0"),
+        18,
+      );
       return (
-        <div className="flex w-[150px] flex-col gap-1">
-          <div className="text-sm font-semibold leading-tight">
-            {row.original.position_size} {row.original.assets}
+        <div>
+          <div className="text-xs font-medium text-muted-foreground">
+            {formatter.format(Number(formattedOIL))} (L)
           </div>
-          <div className="text-xs font-medium leading-tight text-muted-foreground">
-            {formatUsd(row.original.position_size * row.original.current_price)}
+          <div className="text-xs font-medium text-muted-foreground">
+            {formatter.format(Number(formattedOIS))} (L)
           </div>
         </div>
       );
     },
-    accessorKey: "position_size",
-    enableSorting: true,
+    accessorKey: "open_interest",
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="24h Volume" />
     ),
-    cell: ({ row }) => (
-      <div className="w-[150px] text-xs font-medium leading-tight text-muted-foreground">
-        {formatUsd(
-          row.original.position_size *
-            row.original.current_price *
-            row.original.leverage,
-        )}
+    cell: () => (
+      <div className="w-[100px] text-xs font-medium text-muted-foreground">
+        {formatUsd(1000)}
       </div>
     ),
     accessorKey: "leverage",
@@ -118,8 +134,12 @@ export const market_table_column: ColumnDef<Position>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="24h Trades" />
     ),
-    cell: ({ row }) => <div className="w-[100px]">{row.original.leverage}</div>,
-    accessorKey: "leverage",
+    cell: () => (
+      <div className="w-[100px] text-xs font-medium text-muted-foreground">
+        69
+      </div>
+    ),
+    accessorKey: "24h_trades",
     enableSorting: true,
   },
 ];

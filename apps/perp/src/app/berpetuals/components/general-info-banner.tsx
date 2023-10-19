@@ -1,8 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
+import { perpsName } from "@/../../packages/config/env";
 import { formatUsd } from "@bera/berajs";
 import { formatUnits } from "viem";
 
+import { usePricesSocket } from "~/hooks/usePricesSocket";
 import { type IMarket } from "../page";
 
 interface IGeneralInfoBanner {
@@ -10,6 +13,16 @@ interface IGeneralInfoBanner {
 }
 export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
   console.log(market);
+  const { useMarketIndexPrice } = usePricesSocket();
+  const price = useMarketIndexPrice(market.pairIndex ?? 0);
+  console.log(price);
+
+  useEffect(() => {
+    document.title =
+      price === undefined
+        ? `${market.name} | ${perpsName}`
+        : `${formatUsd(price)} | ${market.name} | ${perpsName}`;
+  }, [price]);
 
   const formattedLongOi = formatUnits(
     BigInt(market.openInterest?.oiLong ?? "0"),
@@ -39,14 +52,6 @@ export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
       amount: "$1.64M",
     },
     {
-      title: "Mark Price",
-      amount: "25,312.69",
-    },
-    {
-      title: "Index Price",
-      amount: "25,314.42",
-    },
-    {
       title: "Open Interest (L)",
       amount: `${formatUsd(formattedLongOi)} / ∞`,
     },
@@ -68,7 +73,7 @@ export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
       <div className="flex items-center text-muted-foreground">
         <div className="mr-4">
           <div className="text-xl font-semibold leading-7 text-muted-foreground">
-            25,316.12
+            {price !== undefined && formatUsd(price)}
           </div>
           <div className="text-xs text-success-foreground">+326.69</div>
         </div>

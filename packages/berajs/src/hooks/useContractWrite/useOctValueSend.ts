@@ -8,9 +8,9 @@ import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useOct } from "../useOct";
 import { TransactionFailedError } from "./error";
 import {
-  type useTxnSendWriteApi,
   type IUseContractWrite,
   type IValueSend,
+  type useTxnSendWriteApi,
 } from "./types";
 
 const useOctValueSend = ({
