@@ -178,7 +178,7 @@ const RepayModalContent = ({
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Loan APY</div>
+          <div className="text-muted-foreground ">Loan PRR</div>
           <div className="font-semibold text-warning-foreground">
             {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
           </div>

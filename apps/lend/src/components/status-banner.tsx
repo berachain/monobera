@@ -58,7 +58,7 @@ export default function StatusBanner() {
     },
     {
       icon: <Icons.lineChart className="h-8 w-8" />,
-      title: "Net APY",
+      title: "Net PRR",
       amount: netAPY === 0 ? "~~" : (netAPY * 100).toFixed(2) + "%",
     },
     {

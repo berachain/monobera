@@ -12,8 +12,8 @@ export default function Hero() {
           src="/kingBear.png"
           alt="King Bear"
           width={500}
-          height={500}
-          className="mx-auto"
+          height={311.72}
+          className="mx-auto width-[500px]"
         />
         <h1 className="mt-2 text-3xl font-extrabold leading-8 tracking-tight text-foreground sm:text-4xl">
           Earn Interest And Reward By{" "}

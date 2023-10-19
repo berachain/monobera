@@ -80,7 +80,7 @@ export default function HoneyTokenCard() {
           </div>
           <div>
             <div className="flex items-center text-xs leading-6 md:text-sm">
-              Supply APY
+              Supply PRR
             </div>
             {honey ? (
               <div className="text-2xl font-semibold leading-8">
@@ -122,7 +122,7 @@ export default function HoneyTokenCard() {
 
           <div>
             <div className="flex items-center whitespace-nowrap text-xs leading-6 md:text-sm">
-              Borrow APY (Variable)
+              Borrow PRR (Variable)
             </div>
             {honey ? (
               <div className="text-2xl font-semibold leading-8">

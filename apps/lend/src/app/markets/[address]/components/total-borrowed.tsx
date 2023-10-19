@@ -31,8 +31,17 @@ export default function TotalBorrowed({
       ) : (
         <Skeleton className="h-7 w-20" />
       ),
-      tooltip:
-        "The Maximum LTV ratio represents the maximum borrowing power of a specific collateral. For example, if a collateral has an LTV of 75%, the user can borrow up to 0.75 worth of ETH in the principal currency for every 1 ETH worth of collateral.",
+      tooltip: (
+        <>
+          The Maximum LTV ratio represents the maximum borrowing power of a
+          <br />
+          specific collateral. For example, if a collateral has an LTV of 75%,
+          <br />
+          the user can borrow up to 0.75 worth of ETH in the principal currency
+          <br />
+          for every 1 ETH worth of collateral.
+        </>
+      ),
     },
     {
       title: "Collector contract",
