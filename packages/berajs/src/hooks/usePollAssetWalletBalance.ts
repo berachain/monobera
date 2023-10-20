@@ -28,12 +28,21 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   const { account, isConnected, error } = useBeraJs();
   const { networkConfig } = useBeraConfig();
   const { tokenList } = useTokens();
-  const { isLoading, isValidating } = useSWR(
-    [account, isConnected, tokenList, "assetWalletBalances"],
+  const QUERY_KEY = [account, isConnected, tokenList, "assetWalletBalances"];
+  useSWR(
+    QUERY_KEY,
     async () => {
       if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {
-        const fullTokenList = [...tokenList, ...(externalTokenList ?? [])];
+        const fullTokenList = [
+          ...tokenList,
+          ...(externalTokenList ?? []),
+        ].filter(
+          (t) =>
+            t.address.localeCompare(
+              "0x0000000000000000000000000000000000000001",
+            ) !== 0,
+        );
         const call: Call[] = fullTokenList.map((item: Token) => {
           if (item.address === "0x0000000000000000000000000000000000000000") {
             return {
@@ -51,7 +60,6 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
             args: [account],
           };
         });
-
         try {
           const result = await publicClient.multicall({
             contracts: call,
@@ -63,21 +71,13 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
             result.map(async (item: any, index: number) => {
               const token = fullTokenList[index];
               if (item.error) {
-                await mutate(
-                  [
-                    account,
-                    getAddress(token?.address ?? ""),
-                    "assetWalletBalances",
-                  ],
-                  {
-                    balance: 0,
-                    formattedBalance: "0",
-                    ...token,
-                  },
-                );
-                return { balance: 0, ...token };
+                await mutate([...QUERY_KEY, getAddress(token?.address ?? "")], {
+                  balance: 0n,
+                  formattedBalance: "0",
+                  ...token,
+                });
+                return { balance: 0n, formattedBalance: "0", ...token };
               }
-
               const resultBalanceToken: BalanceToken = {
                 balance: item.result,
                 formattedBalance: formatUnits(
@@ -86,10 +86,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
                 ),
                 ...token,
               } as BalanceToken;
-              await mutate(
-                [account, token?.address, "assetWalletBalances"],
-                resultBalanceToken,
-              );
+              await mutate([...QUERY_KEY, token?.address], resultBalanceToken);
               return resultBalanceToken;
             }),
           );
@@ -103,33 +100,18 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
       refreshInterval: REFRESH_BLOCK_INTERVAL,
     },
   );
-  return {
-    isLoading,
-    isValidating,
+
+  const useCurrentAssetWalletBalances = () => {
+    return useSWRImmutable(QUERY_KEY);
   };
-};
 
-export const useCurrentAssetWalletBalances = (): BalanceToken[] => {
-  const { account, isConnected } = useBeraJs();
-  const { tokenList } = useTokens();
-  const { data: assetWalletBalances = undefined } = useSWRImmutable([
-    account,
-    isConnected,
-    tokenList,
-    "assetWalletBalances",
-  ]);
-  return assetWalletBalances;
-};
+  const useSelectedAssetWalletBalance = (address: string) => {
+    return useSWRImmutable([...QUERY_KEY, address]);
+  };
 
-export const useSelectedAssetWalletBalance = (
-  address: string,
-): BalanceToken => {
-  const { account } = useBeraJs();
-
-  const { data: assetWalletBalances = undefined } = useSWRImmutable([
-    account,
-    address,
-    "assetWalletBalances",
-  ]);
-  return assetWalletBalances;
+  return {
+    refetch: () => void mutate(QUERY_KEY),
+    useCurrentAssetWalletBalances,
+    useSelectedAssetWalletBalance,
+  };
 };

@@ -11,7 +11,7 @@ import {
 } from "@bera/berajs";
 import { beraTokenAddress, erc20ModuleAddress } from "@bera/config";
 import { useReadLocalStorage } from "usehooks-ts";
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
 import { useFeeData, type Address } from "wagmi";
 
 import {
@@ -122,8 +122,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [showPriceImpact, setShowPriceImpact] = useState(false);
 
-  const { isLoading: isBalanceLoading } = usePollAssetWalletBalance();
-
+  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
+  const { isLoading: isBalanceLoading } = useCurrentAssetWalletBalances();
   useEffect(() => {
     if (isWrap) {
       if (swapKind === SwapKind.GIVEN_IN) {
@@ -144,8 +144,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
     amount:
       swapAmount > Number.MAX_SAFE_INTEGER
-        ? parseUnits(`${Number.MAX_SAFE_INTEGER}`, selectedFrom?.decimals ?? 18)
-        : parseUnits(`${swapAmount ?? 0}`, selectedFrom?.decimals ?? 18),
+        ? Number.MAX_SAFE_INTEGER
+        : swapAmount ?? 0,
   });
 
   const { data: priceImpact } = usePollPriceImpact({
@@ -201,33 +201,22 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     tokenIn: selectedFrom?.address as Address,
     tokenOut: QUOTING_TOKEN,
     swapKind: 0,
-    amount: parseUnits(`${1n}`, selectedFrom?.decimals ?? 18),
+    amount: 1,
   });
 
   const { data: tokenOutPriceInfo } = usePollSwaps({
     tokenIn: selectedTo?.address as Address,
     tokenOut: QUOTING_TOKEN,
     swapKind: 0,
-    amount: parseUnits(`${1n}`, selectedTo?.decimals ?? 18),
+    amount: 1,
   });
 
   useEffect(() => {
     if (isWrap) return;
     if (swapKind === SwapKind.GIVEN_IN) {
-      setToAmount(
-        Number(
-          formatUnits(swapInfo?.returnAmount ?? 0n, selectedTo?.decimals ?? 18),
-        ),
-      );
+      setToAmount(Number(swapInfo?.formattedReturnAmount));
     } else {
-      setFromAmount(
-        Number(
-          formatUnits(
-            swapInfo?.returnAmount ?? 0n,
-            selectedFrom?.decimals ?? 18,
-          ),
-        ),
-      );
+      setFromAmount(Number(swapInfo?.formattedReturnAmount));
     }
   }, [swapInfo]);
 
@@ -235,19 +224,26 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     if (
       swapInfo &&
       swapInfo?.formattedSwapAmount &&
-      swapInfo?.formattedReturnAmount
+      swapInfo?.formattedReturnAmount &&
+      selectedFrom &&
+      selectedTo
     ) {
       const ratio = normalizeToRatio(
         Number(swapInfo?.formattedSwapAmount),
         Number(swapInfo?.formattedReturnAmount),
       );
 
-      const exchangeRate = `1 ${swapInfo?.tokenInObj?.symbol} = ${ratio} ${swapInfo?.tokenOutObj?.symbol}`;
+      if (Number.isNaN(Number(ratio))) {
+        setExchangeRate(undefined);
+        return;
+      }
+
+      const exchangeRate = `1 ${selectedFrom?.symbol} = ${ratio} ${selectedTo?.symbol}`;
       setExchangeRate(exchangeRate);
     } else {
       setExchangeRate(undefined);
     }
-  }, [swapInfo]);
+  }, [swapInfo, selectedFrom, selectedTo]);
 
   const { useAllowance } = usePollAllowance({
     contract: erc20ModuleAddress,
@@ -277,10 +273,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       const minAmountOut =
         Number(swapInfo?.formattedReturnAmount ?? 0n) * percentage;
 
-      const parsedMinAmountOut = parseUnits(
-        `${minAmountOut}`,
-        swapInfo?.tokenOutObj?.decimals ?? 18,
-      );
+      const parsedMinAmountOut = parseUnits(`${minAmountOut}`, 18);
 
       swapInfo.batchSwapSteps[
         (swapInfo?.batchSwapSteps?.length ?? 1) - 1
@@ -289,14 +282,21 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       if (swapKind === SwapKind.GIVEN_OUT) {
         swapInfo.batchSwapSteps[0]!.amountIn = parseUnits(
           `${fromAmount ?? 0}`,
-          selectedTo?.decimals ?? 18,
+          18,
         );
       }
 
       const payload = [swapKind, swapInfo?.batchSwapSteps, d];
       setPayload(payload);
     }
-  }, [swapKind, swapInfo, slippageType, deadlineType]);
+  }, [
+    swapKind,
+    swapInfo,
+    slippageType,
+    deadlineType,
+    selectedFrom,
+    selectedTo,
+  ]);
 
   const onSwitch = () => {
     const tempFromAmount = fromAmount;

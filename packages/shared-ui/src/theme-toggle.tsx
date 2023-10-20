@@ -19,7 +19,7 @@ export function ThemeToggle() {
     { theme: "dark", icon: <Icons.moon className="h-4 w-4" /> },
   ];
   return (
-    <Tabs defaultValue={theme} className="hidden lg:block">
+    <Tabs defaultValue={theme} className="block">
       <TabsList className="rounded-full">
         {themeList.map((t, index) => (
           <TabsTrigger

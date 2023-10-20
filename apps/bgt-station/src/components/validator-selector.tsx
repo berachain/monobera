@@ -4,6 +4,7 @@ import {
   usePollActiveValidators,
   usePollDelegatorValidators,
   usePollGlobalValidatorBribes,
+  usePollPrices,
   type PoLValidator,
   type Validator,
 } from "@bera/berajs";
@@ -21,7 +22,6 @@ import { formatUnits, getAddress, type Address } from "viem";
 
 import { ValidatorGauge } from "~/app/validators/validators-table";
 import { validator_table_columns } from "~/columns/validator-table-columns";
-import { usePollPrices } from "~/hooks/usePollPrices";
 
 export default function ValidatorSelector({
   validatorAddress,
@@ -43,7 +43,7 @@ export default function ValidatorSelector({
   const delegatedValidators: Validator[] | undefined = useDelegatorValidators();
 
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const { usePolValidators, useDelegatorPolValidators } =
     usePollGlobalValidatorBribes(prices);
   const validators = usePolValidators();

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { type Pool } from "@bera/bera-router";
 import { usePollUserDepositedPools } from "@bera/berajs";
 import useSWRInfinite from "swr/infinite";
@@ -12,7 +12,7 @@ export const usePoolTable = () => {
   const [hasBgtRewards, setHasBgtRewards] = useState(false);
   const [isNewPool, setIsNewPool] = useState(false);
   const [isHotPool, setIsHotPool] = useState(false);
-  const [isList, setIsList] = useState(false);
+  const [isList, setIsList] = useState(true);
   const [keyword, setKeyword] = useState("");
   const {
     data: allData,
@@ -25,7 +25,7 @@ export const usePoolTable = () => {
       const page = key[1] + 1;
       try {
         const res = await fetch(
-          `${getAbsoluteUrl()}/pool/api?page=${page}&perPage=${DEFAULT_SIZE}&hasBgtRewards=${hasBgtRewards}&hotPools=${isHotPool}&newPools=${isNewPool}&search=${search}&tvl=true&volume=false&bgtRewards=false`,
+          `${getAbsoluteUrl()}/api/getFilteredPools/api?page=${page}&perPage=${DEFAULT_SIZE}&hasBgtRewards=${hasBgtRewards}&hotPools=${isHotPool}&newPools=${isNewPool}&search=${search}&tvl=true&volume=false&bgtRewards=false`,
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -50,10 +50,10 @@ export const usePoolTable = () => {
   const data = allData ? [].concat(...allData) : [];
 
   const { useUserDepositedPools, isLoading } = usePollUserDepositedPools(
-    `${getAbsoluteUrl()}/pool/api`,
+    `${getAbsoluteUrl()}/api/getPools/api`,
   );
   const userPools = useUserDepositedPools();
-
+  console.log(use);
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {
       setKeyword(search);
@@ -61,16 +61,24 @@ export const usePoolTable = () => {
   };
   return {
     data: data,
-    userPools: userPools?.filter((pool: Pool) => {
-      return search === ""
-        ? true
-        : pool.poolName.toLowerCase().includes(search.toLowerCase()) ||
-            (pool.poolShareDenomHex &&
-              pool.poolShareDenomHex
-                .toLowerCase()
-                .includes(search.toLowerCase()));
-    }),
+    userPools: userPools
+      ?.filter((pool: Pool) => {
+        return search === ""
+          ? true
+          : pool.poolName.toLowerCase().includes(search.toLowerCase()) ||
+              (pool.poolShareDenomHex &&
+                pool.poolShareDenomHex
+                  .toLowerCase()
+                  .includes(search.toLowerCase()));
+      })
+      .filter(
+        (pool: Pool) =>
+          (hasBgtRewards ? pool.tags?.includes("bgtRewards") : true) &&
+          (isHotPool ? pool.tags?.includes("hot") : true) &&
+          (isNewPool ? pool.tags?.includes("new") : true),
+      ),
     isUserPoolsLoading: isLoading,
+    isFirstLoad: isLoading && isAllDataEmpty,
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,

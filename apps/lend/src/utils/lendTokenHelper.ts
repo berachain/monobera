@@ -66,12 +66,11 @@ export function getAssetList(
           ...suppliedToken,
           reserveData: reservesDictionary[key],
         });
-      } else {
-        available_supply.push({
-          ...token,
-          reserveData: reservesDictionary[key],
-        });
       }
+      available_supply.push({
+        ...token,
+        reserveData: reservesDictionary[key],
+      });
 
       if (
         userReservesData[key] &&

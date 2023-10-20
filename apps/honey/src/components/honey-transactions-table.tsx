@@ -87,7 +87,7 @@ const getAction = (event: any) => {
   if (isMintData(event)) {
     return <p className="text-success-foreground">Mint</p>;
   } else if (isBurnData(event)) {
-    return <p className="text-destructive-foreground">Burn</p>;
+    return <p className="text-destructive-foreground">Redeem</p>;
   }
   return <p>IDK</p>;
 };
@@ -238,7 +238,7 @@ export default function HoneyTransactionsTable({
       );
     }
   };
-  // console.log("allData", allData);
+
   return (
     <section id="transactions">
       <Tabs
@@ -258,7 +258,7 @@ export default function HoneyTransactionsTable({
               arcade && "data-[state=active]:bg-red-600",
             )}
           >
-            🧾 All {arcade ? "txns" : "transactions"}
+            {arcade && "🧾"} All {arcade ? "txns" : "transactions"}
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Mints}
@@ -267,7 +267,7 @@ export default function HoneyTransactionsTable({
               arcade && "data-[state=active]:bg-red-600",
             )}
           >
-            🪙 Mints
+            {arcade && "🪙"} Mints
           </TabsTrigger>
           <TabsTrigger
             value={Selection.Burns}
@@ -276,7 +276,7 @@ export default function HoneyTransactionsTable({
               arcade && "data-[state=active]:bg-red-600",
             )}
           >
-            🔥 Burns
+            {arcade && "🔥"} Redeems
           </TabsTrigger>
         </TabsList>
         <div
@@ -327,7 +327,6 @@ export const EventTable = ({
   arcade: boolean;
 }) => {
   const { tokenDictionary } = useTokens();
-  // console.log("tokenDictionary", tokenDictionary, events);
   return (
     <Table>
       <TableHeader>

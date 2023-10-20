@@ -15,7 +15,7 @@ interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
   title: any;
-  tooltip?: string;
+  tooltip?: any;
 }
 
 export function DataTableColumnHeader<TData, TValue>({
@@ -26,7 +26,7 @@ export function DataTableColumnHeader<TData, TValue>({
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
     return (
-      <div className={cn(className)}>
+      <div className={cn("font-bold", className)}>
         {title}
         {tooltip && <Tooltip text={tooltip} />}
       </div>
@@ -42,7 +42,7 @@ export function DataTableColumnHeader<TData, TValue>({
             size="sm"
             className="-ml-3 h-8 text-sm hover:bg-hover data-[state=open]:bg-hover"
           >
-            <span>
+            <span className="flex items-center gap-1 font-bold">
               {title}
               {tooltip && <Tooltip text={tooltip} />}
             </span>

@@ -5,7 +5,6 @@ import {
   formatUsd,
   useBeraJs,
   usePollAssetWalletBalance,
-  useSelectedAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
 import { cn } from "@bera/ui";
@@ -52,11 +51,10 @@ export function TokenInput({
   hideMax = false,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
-  const { isLoading: isBalancesLoading } = usePollAssetWalletBalance();
-  let tokenBalance = Number(
-    useSelectedAssetWalletBalance(selected?.address ?? "")?.formattedBalance ??
-      "0",
-  );
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { isLoading: isBalancesLoading, data: token } =
+    useSelectedAssetWalletBalance(selected?.address ?? "");
+  let tokenBalance = Number(token?.formattedBalance ?? "0");
 
   if (balance !== undefined) {
     tokenBalance = balance;

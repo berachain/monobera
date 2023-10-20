@@ -103,6 +103,8 @@ export function SwapCard({
   const [openPreview, setOpenPreview] = useState(false);
 
   const { write, isLoading, ModalPortal } = useTxn({
+    actionType: "Swap",
+    icon: selectedFrom?.address,
     message: `Swap ${Number(swapInfo?.formattedSwapAmount).toFixed(4)} ${
       selectedFrom?.symbol
     } to ${Number(swapInfo?.formattedReturnAmount).toFixed(4)} ${
@@ -127,7 +129,8 @@ export function SwapCard({
         : `Unwrapping ${swapAmount} WBERA to BERA`,
   });
 
-  const { isLoading: isBalancesLoading } = usePollAssetWalletBalance();
+  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
+  const { isLoading: isBalancesLoading } = useCurrentAssetWalletBalances();
 
   const getSwapButton = () => {
     if (
@@ -173,7 +176,9 @@ export function SwapCard({
         return (
           <DynamicPreview
             swapInfo={swapInfo}
-            disabled={!swapInfo?.formattedReturnAmount || exceedingBalance}
+            disabled={
+              swapInfo?.formattedReturnAmount === "0" || exceedingBalance
+            }
             priceImpact={priceImpact}
             exchangeRate={exchangeRate}
             tokenIn={selectedFrom}

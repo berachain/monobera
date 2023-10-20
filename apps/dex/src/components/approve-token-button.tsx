@@ -18,6 +18,8 @@ const ApproveTokenButton = ({
 }: Props) => {
   const { write, isLoading } = useTxn({
     message: `Approve ${token?.name}`,
+    actionType: "Approval",
+    icon: token?.address,
   });
 
   return (

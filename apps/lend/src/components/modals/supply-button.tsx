@@ -5,7 +5,7 @@ import {
   formatter,
   useBeraJs,
   usePollAllowance,
-  useSelectedAssetWalletBalance,
+  usePollAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
@@ -19,6 +19,7 @@ import { formatEther, formatUnits, parseUnits } from "viem";
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
+import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 import ApproveButton from "../approve-button";
 
 export default function SupplyBtn({
@@ -34,8 +35,18 @@ export default function SupplyBtn({
   const [amount, setAmount] = useState<number | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Supplying ${amount} ${token?.symbol}`,
+    onSuccess: () => {
+      userAccountRefetch();
+      reservesDataRefetch();
+      userReservesRefetch();
+    },
   });
   const { isReady } = useBeraJs();
+
+  const { refetch: userAccountRefetch } = usePollUserAccountData();
+  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: userReservesRefetch } = usePollUserReservesData();
+
   useEffect(() => setOpen(false), [isSuccess]);
   return (
     <>
@@ -69,7 +80,8 @@ const SupplyModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const { account } = useBeraJs();
-  const balance = useSelectedAssetWalletBalance(token.address);
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: balance } = useSelectedAssetWalletBalance(token.address);
   const { useAllowance } = usePollAllowance({
     contract: lendPoolImplementationAddress,
     token,

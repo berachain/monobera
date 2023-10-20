@@ -1,10 +1,9 @@
-import { type RouterService } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { type CuttingBoard, type Token } from "@bera/berajs";
-import { formatUnits, getAddress, parseUnits } from "viem";
+import { type CuttingBoard } from "@bera/berajs";
+import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
-import { type MappedTokens } from "../[address]/types";
+import { type MappedTokens } from "../../getPrices/api/getPrices";
 
 async function parseResponse(response: any) {
   const json = await response.json();
@@ -107,79 +106,12 @@ const formatTvl = (
   return tvl;
 };
 
-const BASE_TOKEN = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
-
-const BERA_TOKEN_ADDRESS = process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address;
-
-const beraToken: Token = {
-  address: BERA_TOKEN_ADDRESS,
-  decimals: 18,
-  symbol: "BERA",
-  name: "Berachain",
-};
-export const getWBeraPriceDictForPoolTokens = async (
+export const getParsedPools = async (
   pools: Pool[],
   globalCuttingBoard: CuttingBoard[] | undefined,
-  router: RouterService,
+  mappedTokens: MappedTokens,
 ) => {
-  let mappedTokens: MappedTokens = {};
-
   if (pools.length) {
-    const allPoolPromises: any[] = [];
-
-    if (pools.length > 1) {
-      pools.forEach((pool) => {
-        const tokenPromises = pool.tokens
-          .filter((token: { address: string }) => token.address !== BASE_TOKEN)
-          .map((token: { address: any; decimals: number }) =>
-            router
-              .getSwaps(
-                token.address,
-                BASE_TOKEN,
-                0,
-                parseUnits(`${1}`, token.decimals),
-              )
-              .catch(() => {
-                return undefined;
-              }),
-          );
-
-        allPoolPromises.push(tokenPromises);
-      });
-    }
-    if (pools && pools.length === 1) {
-      const pool = pools[0];
-      const tokenPromises = [...(pool?.tokens as Token[]), beraToken]
-        .filter((token) => token.address !== BASE_TOKEN)
-        .map((token) =>
-          router
-            .getSwaps(
-              token.address as Address,
-              BASE_TOKEN,
-              0,
-              parseUnits(`${1}`, token.decimals),
-            )
-            .catch(() => {
-              return undefined;
-            }),
-        );
-      allPoolPromises.push(tokenPromises);
-    }
-
-    const allPoolData = (await Promise.all(allPoolPromises.flat())).filter(
-      (pool) => pool !== undefined,
-    );
-
-    mappedTokens =
-      allPoolData?.length &&
-      allPoolData?.reduce(
-        (acc, cur) => {
-          acc[getAddress(cur.tokenIn)] = cur.formattedReturnAmount;
-          return acc;
-        },
-        { [getAddress(BASE_TOKEN)]: "1" },
-      );
-
     const allPoolVolumePromises: any[] = [];
     pools.forEach((pool) => {
       const quarterlyVolumeResponse = fetch(
@@ -353,7 +285,7 @@ export const getWBeraPriceDictForPoolTokens = async (
     tagPools(pools);
   }
 
-  return mappedTokens;
+  return pools;
 };
 
 export enum PoolTag {

@@ -1,5 +1,5 @@
 import React from "react";
-import { useCurrentAssetWalletBalances } from "@bera/berajs";
+import { usePollAssetWalletBalance } from "@bera/berajs";
 import { Switch } from "@bera/ui/switch";
 
 import { getAssetList } from "~/utils/lendTokenHelper";
@@ -24,7 +24,8 @@ export function Dashboard({
   const { useUserReservesData } = usePollUserReservesData();
   const { data: userReservesData, isLoading: isUserReserveDataLoading } =
     useUserReservesData();
-  const BalanceToken = useCurrentAssetWalletBalances();
+  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
+  const { data: BalanceToken } = useCurrentAssetWalletBalances();
 
   const assetsDictionary = getAssetList(
     reservesDictionary ?? {},
@@ -42,7 +43,6 @@ export function Dashboard({
           <p className="text-sm text-muted-foreground">Switch to table view</p>
           <Switch
             id="use-tableview"
-            className="hidden lg:block"
             checked={tableView}
             onCheckedChange={(checked: boolean) => setUseTableView(checked)}
           />

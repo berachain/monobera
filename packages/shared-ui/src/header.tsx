@@ -4,6 +4,7 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { formatter, useBeraJs, usePollBgtBalance } from "@bera/berajs";
+import { publicAnalyticsUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -23,14 +24,6 @@ const ConnectBtn = dynamic(
         Loading
       </Button>
     ),
-  },
-);
-
-const ThemeToggleMobile = dynamic(
-  () => import("./theme-toggle-mobile").then((mod) => mod.ThemeToggleMobile),
-  {
-    ssr: false,
-    loading: () => <></>,
   },
 );
 
@@ -73,9 +66,16 @@ export function Header({
             <span>BGT</span>
           </div>
         )}
-        {!isHoney && <ThemeToggleMobile />}
-        {/* {!isHoney && <ThemeToggle />} */}
-        <ConnectBtn isNavItem={true} />
+        {isHoney && (
+          <Link
+            href={publicAnalyticsUrl}
+            target="_blank"
+            className="hidden cursor-pointer items-center gap-1 whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-foreground lg:flex"
+          >
+            Dune Analytics <Icons.externalLink className="h-3 w-3" />
+          </Link>
+        )}
+        <ConnectBtn isNavItem={true} isHoney={isHoney} />
         <MobileDropdown navItems={navItems} />
       </div>
     </nav>

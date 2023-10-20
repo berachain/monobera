@@ -8,11 +8,12 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatEther, formatUnits, parseUnits } from "viem";
+import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
 
 import { lendPoolImplementationABI } from "~/hooks/abi";
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
+import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function BorrowBtn({
   token,
@@ -25,10 +26,20 @@ export default function BorrowBtn({
 }) {
   const { isReady } = useBeraJs();
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const [amount, setAmount] = useState<string | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Borrowing ${amount} ${token.symbol}`,
+    onSuccess: () => {
+      userAccountRefetch();
+      reservesDataRefetch();
+      userReservesRefetch();
+    },
   });
+
+  const { refetch: userAccountRefetch } = usePollUserAccountData();
+  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: userReservesRefetch } = usePollUserReservesData();
+
   useEffect(() => setOpen(false), [isSuccess]);
   return (
     <>
@@ -57,8 +68,8 @@ const BorrowModalContent = ({
   write,
 }: {
   token: Token;
-  amount: number | undefined;
-  setAmount: (amount: number | undefined) => void;
+  amount: string | undefined;
+  setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const { account } = useBeraJs();
@@ -69,26 +80,39 @@ const BorrowModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  const borrowPower =
-    Number(
-      formatUnits(
+  const borrowPower = formatUnits(
+    parseUnits(
+      BigInt(
         userAccountData?.availableBorrowsBase ?? "0",
+      ).toString() as `${number}`,
+      baseCurrencyData?.networkBaseTokenPriceDecimals,
+    ) /
+      parseUnits(
+        reserveData?.formattedPriceInMarketReferenceCurrency,
         baseCurrencyData?.networkBaseTokenPriceDecimals,
       ),
-    ) / Number(reserveData?.formattedPriceInMarketReferenceCurrency);
+    baseCurrencyData?.networkBaseTokenPriceDecimals,
+  );
 
-  const availableLiquidity =
-    Number(reserveData?.totalLiquidity) *
-    Number(reserveData?.formattedPriceInMarketReferenceCurrency) *
-    Number(1 - reserveData?.borrowUsageRatio);
+  const availableLiquidity = formatUnits(
+    BigInt(reserveData?.availableLiquidity ?? "0") *
+      parseUnits(
+        reserveData?.formattedPriceInMarketReferenceCurrency,
+        token.decimals,
+      ),
+    token.decimals * 2,
+  );
 
   const borrowAmout =
-    borrowPower > availableLiquidity ? availableLiquidity : borrowPower;
+    parseEther(borrowPower as `${number}`) >
+    parseEther(availableLiquidity as `${number}`)
+      ? availableLiquidity
+      : borrowPower;
 
   const currentHealthFactor =
-    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
+    BigInt(userAccountData?.healthFactor || "0") > parseEther("1000000000000")
       ? "∞"
-      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+      : formatEther(userAccountData.healthFactor);
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency: formatEther(
@@ -96,7 +120,7 @@ const BorrowModalContent = ({
     ),
     borrowBalanceMarketReferenceCurrency:
       Number(formatEther(userAccountData.totalDebtBase)) +
-      (amount ?? 0) *
+      Number(amount ?? "0") *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
 
     currentLiquidationThreshold: formatUnits(
@@ -132,13 +156,11 @@ const BorrowModalContent = ({
           }
           value={amount}
           onChange={(e) =>
-            setAmount(
-              Number(e.target.value) === 0 ? undefined : Number(e.target.value),
-            )
+            setAmount(Number(e.target.value) === 0 ? undefined : e.target.value)
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          Availabe to borrow: {borrowAmout.toFixed(2)}
+          Availabe to borrow: {Number(borrowAmout).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() => setAmount(borrowAmout)}
@@ -152,7 +174,7 @@ const BorrowModalContent = ({
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">LTV Health Ratio</div>
           <div className="flex items-center gap-1 font-semibold">
-            {currentHealthFactor}{" "}
+            {Number(currentHealthFactor).toFixed(2)}{" "}
             <Icons.moveRight className="inline-block h-6 w-6" />{" "}
             {Number(newHealthFactor.toFixed(2)) < 0
               ? "∞"
@@ -164,7 +186,7 @@ const BorrowModalContent = ({
           <div className="font-semibold">
             $
             {formatter.format(
-              (amount ?? 0) *
+              Number(amount ?? "0") *
                 Number(reserveData?.formattedPriceInMarketReferenceCurrency),
             )}
           </div>
@@ -178,7 +200,11 @@ const BorrowModalContent = ({
       </div>
 
       <Button
-        disabled={!amount || amount === 0 || amount > borrowAmout}
+        disabled={
+          !amount ||
+          Number(amount) === 0 ||
+          Number(amount) > Number(borrowAmout)
+        }
         onClick={() => {
           write({
             address: lendPoolImplementationAddress,
@@ -186,7 +212,7 @@ const BorrowModalContent = ({
             functionName: "borrow",
             params: [
               token.address,
-              parseUnits(`${Number(amount)}`, token.decimals),
+              parseUnits(`${amount}` as `${number}`, token.decimals),
               2,
               0,
               account,
@@ -194,7 +220,7 @@ const BorrowModalContent = ({
           });
         }}
       >
-        {amount === 0 ? "Enter Amount" : "Borrow"}
+        {!amount ? "Enter Amount" : "Borrow"}
       </Button>
     </div>
   );

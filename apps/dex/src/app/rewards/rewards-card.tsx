@@ -7,14 +7,13 @@ import {
   useBeraJs,
   usePollBgtRewards,
   usePollPreviewBurnShares,
+  usePollPrices,
 } from "@bera/berajs";
 import { TokenIconList, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { mutate } from "swr";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
-
-import { usePollPrices } from "~/hooks/usePollPrices";
 
 export default function RewardsCard({ pool }: { pool: Pool }) {
   const { account, isReady } = useBeraJs();
@@ -44,7 +43,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
   });
 
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
 
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
     parseUnits(`${Number(pool?.userDepositedShares)}`, 18) ?? 0n,
@@ -98,7 +97,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
             {pool.bgtApy?.toFixed(2) ?? 0}%
           </div>
           <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
-            Est. APY
+            Est. PRR
           </div>
         </div>
         <div className="flex items-center gap-4">

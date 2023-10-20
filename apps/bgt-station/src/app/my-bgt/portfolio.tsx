@@ -6,6 +6,7 @@ import {
   usePollBribes,
   usePollDelegatorUnbonding,
   usePollDelegatorValidators,
+  usePollPrices,
   usePollTotalDelegated,
 } from "@bera/berajs";
 import { formatUsd } from "@bera/berajs/src/utils";
@@ -16,7 +17,6 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { type Address } from "viem";
 
 import YellowCard from "~/components/yellow-card";
-import { usePollPrices } from "~/hooks/usePollPrices";
 import AverageGaugeWeight from "./components/average-gauge-weight";
 import { ClaimBribesDialog } from "./components/claim-bribes-dialog";
 import UnbondingQueue from "./components/unbonding-queue";
@@ -46,7 +46,7 @@ export default function Portfolio() {
   const unbondingQueue = useDelegatorUnbondingQueue();
   const unbondingValidatorCount = useDelegatorTotalUnbondingValidators();
   const { usePrices } = usePollPrices();
-  const prices = usePrices();
+  const { data: prices } = usePrices();
   const { useTotalBribes, useBribeTokens, useBribes } = usePollBribes();
   const totalBribes = useTotalBribes(prices);
   const bribeTokenList = useBribeTokens();

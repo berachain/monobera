@@ -15,8 +15,8 @@ import { market_table_columns } from "./market-table-column";
 export default function MarketsPageContent() {
   usePollAssetWalletBalance();
   const [tableView, setUseTableView] = React.useState(false);
-  const sortOptions = ["Deposit-APY", "Total-Borrows", "Systems"];
-  const [sortBy, setSortBy] = React.useState<string>(sortOptions[2]!);
+  const sortOptions = ["Pool-Size", "Supply-APY"];
+  const [sortBy, setSortBy] = React.useState<string>(sortOptions[0]!);
   const ref = useRef(null);
   const [keywords, setKeywords] = React.useState<string>("");
   useEffect(() => {
@@ -68,14 +68,12 @@ export default function MarketsPageContent() {
           })
           .sort((a, b) => {
             switch (sortBy) {
-              case "Deposit-APY":
-                return Number(
-                  BigInt(b.currentLiquidityRate - a.currentLiquidityRate),
+              case "Supply-APY":
+                return Number(b.supplyAPY) - Number(a.supplyAPY);
+              case "Pool-Size":
+                return (
+                  Number(b.totalLiquidity ?? 1) - Number(a.totalLiquidity ?? 0)
                 );
-              case "Total-Borrows":
-                return (b.borrowed ?? 1) - (a.borrowed ?? 0);
-              case "Systems":
-                return b.underlyingAsset.localeCompare(a.underlyingAsset);
               default:
                 return 0;
             }
@@ -140,7 +138,7 @@ export default function MarketsPageContent() {
           )}
         </div>
       ) : (
-        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-1">
+        <div className="mt-4 grid grid-cols-1 gap-4">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <TokenLoading key={i} />
           ))}
