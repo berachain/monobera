@@ -5,6 +5,7 @@ import { cn } from "@bera/ui";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -30,6 +31,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   onRowClick?: (row: TData) => void;
   className?: string;
+  title?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -37,6 +39,7 @@ export function DataTable<TData, TValue>({
   data,
   onRowClick,
   className,
+  title,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -73,7 +76,13 @@ export function DataTable<TData, TValue>({
       <div className={cn(className)}>
         {/* <DataTableToolbar table={table} /> */}
         <Table>
-          <TableHeader className="bg-muted">
+          {title && <TableCaption> {title}</TableCaption>}
+          <TableHeader className={"relative bg-muted"}>
+            {/* {title && (
+              <div className="absolute w-full border-b border-border px-8 py-4 text-2xl font-semibold">
+               
+              </div>
+            )} */}
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
