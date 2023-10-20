@@ -15,6 +15,7 @@ import {
 import { motion } from "framer-motion";
 import { erc20ABI } from "wagmi";
 
+import { LoadingBee } from "~/components/loadingBee";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { HoneyTokenInput } from "./honey-token-input";
@@ -315,7 +316,7 @@ export function HoneyMachine() {
                 <h1 className="relative mb-1 text-2xl font-semibold text-foreground">
                   {isMint ? "Mint" : "Redeem"}
                   <div className="absolute right-0 top-1 text-sm text-muted-foreground">
-                    Static fee of {(Number(fee ?? 0) * 100).toPrecision(2)}%
+                    Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
                   </div>
                 </h1>
                 <ul role="list">
@@ -379,9 +380,7 @@ export function HoneyMachine() {
             )}
           </div>
         ) : (
-          <div className=" absolute top-0 flex h-[1048px] w-full items-center justify-center text-3xl text-white">
-            Loading...
-          </div>
+          <LoadingBee />
         )}
 
         <div className="h-[1000px] w-[1000px]">
