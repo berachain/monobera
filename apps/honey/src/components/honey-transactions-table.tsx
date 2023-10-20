@@ -87,7 +87,7 @@ const getAction = (event: any) => {
   if (isMintData(event)) {
     return <p className="text-success-foreground">Mint</p>;
   } else if (isBurnData(event)) {
-    return <p className="text-destructive-foreground">Burn</p>;
+    return <p className="text-destructive-foreground">Redeem</p>;
   }
   return <p>IDK</p>;
 };
@@ -276,7 +276,7 @@ export default function HoneyTransactionsTable({
               arcade && "data-[state=active]:bg-red-600",
             )}
           >
-            {arcade && "🔥"} Burns
+            {arcade && "🔥"} Redeems
           </TabsTrigger>
         </TabsList>
         <div

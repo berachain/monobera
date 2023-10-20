@@ -66,14 +66,16 @@ export function Header({
             <span>BGT</span>
           </div>
         )}
-        <Link
-          href={publicAnalyticsUrl}
-          target="_blank"
-          className="hidden cursor-pointer items-center gap-1 whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-foreground lg:flex"
-        >
-          Dune Analytics <Icons.externalLink className="h-3 w-3" />
-        </Link>
-        <ConnectBtn isNavItem={true} />
+        {isHoney && (
+          <Link
+            href={publicAnalyticsUrl}
+            target="_blank"
+            className="hidden cursor-pointer items-center gap-1 whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-foreground lg:flex"
+          >
+            Dune Analytics <Icons.externalLink className="h-3 w-3" />
+          </Link>
+        )}
+        <ConnectBtn isNavItem={true} isHoney={isHoney} />
         <MobileDropdown navItems={navItems} />
       </div>
     </nav>

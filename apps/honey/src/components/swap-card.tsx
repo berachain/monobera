@@ -16,6 +16,7 @@ import { ApproveTokenButton } from "./approve-token-button";
 export function SwapCard({ showBear = true }: { showBear?: boolean }) {
   const [tabValue, setTabValue] = useState<"mint" | "burn">("mint");
   const {
+    fee,
     payload,
     isConnected,
     setSelectedFrom,
@@ -53,6 +54,9 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
         <CardHeader className="pb-3">
           <CardTitle>
             <span>{isMint ? "Mint" : "Redeem"}</span>
+            <div className="absolute right-6 top-5 text-base font-medium text-muted-foreground">
+              Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
