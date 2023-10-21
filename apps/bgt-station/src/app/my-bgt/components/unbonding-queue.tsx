@@ -11,7 +11,7 @@ import {
   usePollDelegatorUnbonding,
   type EntryData,
 } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, docsUrl } from "@bera/config";
 import { DataTable, ValidatorIcon, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
@@ -123,10 +123,10 @@ export default function UnbondingQueue({
         </>
       ) : (
         <Banner
-          img={`${cloudinaryUrl}/bears/l9oaplrgfkrqw8y6noyp`}
+          img={`${cloudinaryUrl}/bears/zkyxcj5qhdmd75xgozkn`}
           title="How do I unbond BGT?"
           subtitle="Unbond with ease following our walkthrough."
-          href="/delegate"
+          href={`${docsUrl}/proof-of-liquidity/pol-bgt-emissions.html`}
         />
       )}
     </div>

@@ -12,7 +12,7 @@ import {
   type Validator,
 } from "@bera/berajs";
 import { formatUsd } from "@bera/berajs/src/utils";
-import { blockExplorerUrl, cloudinaryUrl } from "@bera/config";
+import { blockExplorerUrl, cloudinaryUrl, docsUrl } from "@bera/config";
 import { TokenIconList, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -73,30 +73,31 @@ export default function Portfolio() {
       (!totalBribes || totalBribes === 0) &&
       (!totalUnbonding || totalUnbonding === 0) ? (
         <div className="flex flex-col gap-8">
-          <div className="leading-12 text-center text-5xl font-bold">
+          <div className="leading-12 text-center text-3xl font-bold md:text-5xl">
             👋 There’s nothing here yet...
           </div>
-          <div className="text-center text-xl font-semibold leading-7 text-muted-foreground">
+          <div className="text-center text-lg font-semibold leading-7 text-muted-foreground md:text-xl">
             This page will be populated with your delegations and
-            <br /> rewards once you have delegated to some validators.{" "}
+            <br className="hidden sm:block" /> rewards once you have delegated
+            to some validators.{" "}
           </div>
           <Banner
-            img={`${cloudinaryUrl}/bears/wy6muyafchlo5wjidall`}
+            img={`${cloudinaryUrl}/bears/kj33rvgbemret3xrknv9`}
             title="How do I delegate BGT?"
             subtitle="Delegate like a pro with these helpful guides."
-            href="/delegate"
+            href={`${docsUrl}/getting-started/bgt-station-bgt.html#delegating-bgt`}
           />
           <Banner
-            img={`${cloudinaryUrl}/bears/pgnhgjsm1si8gb2bdm1m`}
+            img={`${cloudinaryUrl}/bears/j7rciiglmcozlxryug4z`}
             title="What is a gauge weight?"
             subtitle="We’ll teach you what all this de-fi jargon means."
-            href="/delegate"
+            href={`${docsUrl}/getting-started/bgt-station-bgt.html#unbonding-bgt`}
           />
           <Banner
-            img={`${cloudinaryUrl}/bears/l9oaplrgfkrqw8y6noyp`}
+            img={`${cloudinaryUrl}/bears/zkyxcj5qhdmd75xgozkn`}
             title="How do I unbond BGT?"
             subtitle="Unbond with ease following our walkthrough."
-            href="/delegate"
+            href={`${docsUrl}/proof-of-liquidity/pol-bgt-emissions.html`}
           />
         </div>
       ) : (

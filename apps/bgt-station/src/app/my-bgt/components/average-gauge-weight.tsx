@@ -1,5 +1,5 @@
 import { usePollDelegatorValidators } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, docsUrl } from "@bera/config";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import GlobalGaugeWeight from "~/components/global-gauge-weight";
@@ -28,10 +28,10 @@ export default function AverageGaugeWeight() {
         </>
       ) : (
         <Banner
-          img={`${cloudinaryUrl}/bears/pgnhgjsm1si8gb2bdm1m`}
+          img={`${cloudinaryUrl}/bears/j7rciiglmcozlxryug4z`}
           title="What is a gauge weight?"
           subtitle="We’ll teach you what all this de-fi jargon means."
-          href="/delegate"
+          href={`${docsUrl}/getting-started/bgt-station-bgt.html#unbonding-bgt`}
         />
       )}
     </div>

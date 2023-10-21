@@ -5,7 +5,7 @@ import {
   usePollPrices,
   type PoLValidator,
 } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, docsUrl } from "@bera/config";
 
 import { Banner } from "./banner";
 import ValidatorCard from "./validator-card";
@@ -38,10 +38,10 @@ export default function YourDelegations() {
         </div>
       ) : (
         <Banner
-          img={`${cloudinaryUrl}/bears/wy6muyafchlo5wjidall`}
+          img={`${cloudinaryUrl}/bears/kj33rvgbemret3xrknv9`}
           title="How do I delegate BGT?"
           subtitle="Delegate like a pro with these helpful guides."
-          href="/delegate"
+          href={`${docsUrl}/getting-started/bgt-station-bgt.html#delegating-bgt`}
         />
       )}
     </div>
