@@ -2,7 +2,6 @@
 
 import React from "react";
 import {
-  beraToEth,
   truncateHash,
   usePollProposalVotes,
   type Proposal,
@@ -114,6 +113,7 @@ export function ProposalCard({ proposal, onClick }: ProposalCard) {
     Number(proposal.id),
   );
   const normalizedTally = useNormalizedTallyResult();
+
   return (
     <div
       className="hove:cursor-pointer relative rounded-[18px] border border-border bg-background p-8"
@@ -165,8 +165,8 @@ export function ProposalCard({ proposal, onClick }: ProposalCard) {
         <div className="mt-[18px] flex flex-col-reverse gap-2 text-xs font-medium leading-tight text-muted-foreground sm:h-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
             {" "}
-            <Identicon account={getAddress(beraToEth(proposal.proposer))} />
-            Submitted by {truncateHash(beraToEth(proposal.proposer), 6, 4)}
+            <Identicon account={getAddress(proposal.proposer)} />
+            Submitted by {truncateHash(proposal.proposer, 6, 4)}
           </div>
           <div>
             {(normalizedTally?.participationRate ?? 0).toFixed(2)}%
