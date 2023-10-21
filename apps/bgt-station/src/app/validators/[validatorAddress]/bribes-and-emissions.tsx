@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { formatUsd, formatter } from "@bera/berajs";
+import { formatUsd, formatter, usePollValidatorBribes } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card } from "@bera/ui/card";
@@ -10,9 +10,10 @@ import {
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
+import { type Address } from "viem";
 
-import YellowCard from "~/components/yellow-card";
 import { type FormattedHistoricalBribes } from "~/hooks/useHistoricalBribes";
+import BribeList, { BribeCardLoading } from "./bribe-list";
 import { TimeFrameEnum } from "./types";
 
 const Options = {
@@ -115,10 +116,12 @@ const getHistoryInterval = (
 export default function BribesAndEmissions({
   historicalBribes,
   cumulativeBribeValue,
+  validatorAddress,
   isLoading,
 }: {
   historicalBribes: FormattedHistoricalBribes[];
   cumulativeBribeValue: number;
+  validatorAddress: Address;
   isLoading: boolean;
 }) {
   const [timeframe, setTimeframe] = React.useState(TimeFrameEnum.ALL_TIME);
@@ -127,54 +130,99 @@ export default function BribesAndEmissions({
     () => getChartData(getHistoryInterval(historicalBribes, timeframe)),
     [timeframe, historicalBribes],
   );
+  const { useActiveValidatorBribes, isLoading: isBribesLoading } =
+    usePollValidatorBribes(validatorAddress);
+  const bribes = useActiveValidatorBribes();
 
   return (
-    <div className="">
+    <div className="flex flex-col gap-4">
       <div className="flex items-center gap-1 text-lg font-semibold leading-7">
         Bribes
         <Tooltip text="Overview of bribe information on this validator" />
       </div>
-      <div className="mt-4 flex gap-4">
-        <YellowCard className="flex w-full justify-center p-8">
-          <div className="text-3xl font-semibold leading-9 text-foreground">
-            ${formatter.format(cumulativeBribeValue ?? 0)}
+      {isLoading || isBribesLoading ? (
+        <div>
+          Loading
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+            {[0, 0, 0].map((_: any, index: number) => (
+              <BribeCardLoading key={index} />
+            ))}
           </div>
-          <div className="text-sm font-medium leading-[14px] text-muted-foreground">
-            Cumulative bribe value
-          </div>
-        </YellowCard>
-        <Card className="hidden w-3/4 min-w-[666px] p-4 md:block">
-          <div className="relative flex h-10 w-full items-center justify-end gap-2 text-sm font-medium leading-[14px] text-muted-foreground">
-            Time frame
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-xl border border-border p-2 text-sm font-medium capitalize leading-[14px] text-foreground">
-                  {timeframe.replaceAll("-", " ")}
-                  <Icons.chevronDown className="relative h-3 w-3 text-foreground" />
+        </div>
+      ) : (
+        <>
+          {bribes.length !== 0 ? (
+            <div className="flex items-center gap-4 py-4">
+              <hr className="h-[2px] flex-1" />
+              <div className="text-sm text-muted-foreground">
+                This validator has no bribes
+              </div>
+              <hr className="h-[2px] flex-1" />
+            </div>
+          ) : (
+            <>
+              <div className="mt-4 flex gap-4">
+                <div className="flex w-[230px] flex-shrink-0 flex-grow-0 flex-col gap-4">
+                  <Card className="flex w-full flex-1 flex-col items-center justify-center gap-2 shadow">
+                    <div className="text-3xl font-semibold leading-9 text-foreground">
+                      ${formatter.format(cumulativeBribeValue ?? 0)}
+                    </div>
+                    <div className="text-sm font-medium leading-[14px] text-muted-foreground">
+                      Cumulative bribe value
+                    </div>
+                  </Card>
+
+                  <Card className="flex w-full flex-1 flex-col items-center  justify-center gap-2 shadow">
+                    <div className="text-3xl font-semibold leading-9 text-foreground">
+                      ${formatter.format(cumulativeBribeValue ?? 0)}
+                    </div>
+                    <div className="text-sm font-medium leading-[14px] text-muted-foreground">
+                      current per BGT
+                    </div>
+                  </Card>
                 </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                {Object.values(TimeFrameEnum).map((timeframeS) => (
-                  <DropdownMenuCheckboxItem
-                    checked={timeframe === timeframeS}
-                    key={timeframeS}
-                    onClick={() => setTimeframe(timeframeS)}
-                  >
-                    {timeframeS.replaceAll("-", " ")}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="mt-4 h-[142px]">
-            {isLoading ? (
-              <Icons.spinner className="mx-auto h-8 w-8 animate-spin" />
-            ) : (
-              <BeraChart data={chartData} options={Options as any} type="bar" />
-            )}
-          </div>
-        </Card>
-      </div>
+
+                <Card className="hidden w-full flex-1 p-4 shadow md:block">
+                  <div className="relative flex h-10 w-full items-center justify-end gap-2 text-sm font-medium leading-[14px] text-muted-foreground">
+                    Time frame
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-xl border border-border p-2 text-sm font-medium capitalize leading-[14px] text-foreground">
+                          {timeframe.replaceAll("-", " ")}
+                          <Icons.chevronDown className="relative h-3 w-3 text-foreground" />
+                        </div>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-56">
+                        {Object.values(TimeFrameEnum).map((timeframeS) => (
+                          <DropdownMenuCheckboxItem
+                            checked={timeframe === timeframeS}
+                            key={timeframeS}
+                            onClick={() => setTimeframe(timeframeS)}
+                          >
+                            {timeframeS.replaceAll("-", " ")}
+                          </DropdownMenuCheckboxItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  <div className="mt-4 h-[142px]">
+                    {isLoading ? (
+                      <Icons.spinner className="mx-auto h-8 w-8 animate-spin" />
+                    ) : (
+                      <BeraChart
+                        data={chartData}
+                        options={Options as any}
+                        type="bar"
+                      />
+                    )}
+                  </div>
+                </Card>
+              </div>
+              <BribeList bribes={[bribes ?? []]} />
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 }

@@ -38,7 +38,7 @@ export default function DashBoard({
       sortingAttr: "vApy",
       title: "💰 Top Paying Validators",
       message: "Stake your BGT with the most rewarding validators",
-      keyword: "Bribe value",
+      keyword: "PRR",
     },
   ];
   return (

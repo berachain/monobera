@@ -3,16 +3,14 @@ import {
   formatUsd,
   formatter,
   usePollPrices,
-  usePollValidatorBribes,
   useTokenInformation,
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { NotFoundBear, TokenIcon, Tooltip } from "@bera/shared-ui";
-import { Button } from "@bera/ui/button";
+import { TokenIcon } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits, type Address } from "viem";
+import { formatUnits } from "viem";
 
 const BribeCard = ({
   amountPerProposal,
@@ -90,7 +88,7 @@ const BribeCard = ({
   );
 };
 
-const BribeCardLoading = () => {
+export const BribeCardLoading = () => {
   return (
     <Card className="flex flex-1 flex-col gap-3 p-8">
       <div className="flex items-center gap-2">
@@ -105,17 +103,9 @@ const BribeCardLoading = () => {
   );
 };
 
-export default function BribeList({
-  validatorAddress,
-}: {
-  validatorAddress: Address;
-}) {
-  const { useActiveValidatorBribes, isLoading } =
-    usePollValidatorBribes(validatorAddress);
-  const bribes = [useActiveValidatorBribes() ?? []];
-  const [lineCount, setLineCount] = useState(1);
+export default function BribeList({ bribes }: { bribes: any[][] }) {
   const bribesList =
-    !isLoading && bribes && bribes[0] && bribes[0][0]
+    bribes && bribes[0] && bribes[0][0]
       ? bribes
           .map((bribe, index) => {
             const bribeObj = bribe[0];
@@ -137,43 +127,12 @@ export default function BribeList({
           .flat()
       : [];
   return (
-    <div className="">
-      <div className="mb-4 flex items-center gap-1 text-lg font-semibold leading-7">
-        Active Bribes{" "}
-        <Tooltip text="A list of active bribes from this validator." />
+    <div>
+      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+        {bribesList?.map((item: any, index) => (
+          <BribeCard key={index} {...item} />
+        ))}
       </div>
-      <div>
-        {isLoading ? (
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
-            {[0, 0, 0].map((_: any, index: number) => (
-              <BribeCardLoading key={index} />
-            ))}
-          </div>
-        ) : bribesList.length !== 0 ? (
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
-            {bribesList
-              ?.slice(
-                0,
-                lineCount * 3 < bribesList.length
-                  ? lineCount * 3
-                  : bribesList.length,
-              )
-              .map((item: any, index) => (
-                <BribeCard key={index} {...item} />
-              ))}
-          </div>
-        ) : (
-          <NotFoundBear title="The Validator has no bribes" />
-        )}
-      </div>
-      {lineCount * 3 < bribesList.length && (
-        <div className="mt-3 w-full text-center">
-          <Button variant="outline" onClick={() => setLineCount(lineCount + 1)}>
-            {" "}
-            Load More{" "}
-          </Button>
-        </div>
-      )}
     </div>
   );
 }
