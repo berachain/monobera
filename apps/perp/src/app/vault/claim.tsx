@@ -17,7 +17,7 @@ export default function Claim() {
         Claim Rewards
       </Button>
       <Image
-        src={`${cloudinaryUrl}/BERPS/wpvbk14quq4wm0zmcqmj`}
+        src={`${cloudinaryUrl}/BERPS/nsc94gwejblw1oj8yyoo`}
         alt="honey-jar"
         width={1080}
         height={186}

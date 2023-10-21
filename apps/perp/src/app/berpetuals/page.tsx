@@ -1,4 +1,5 @@
 import React from "react";
+import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { perpsName } from "@bera/config";
 import { type Market } from "@bera/proto/src";
@@ -17,8 +18,7 @@ export interface IMarket extends Market {
   imageUri?: string;
   tokenName?: string;
 }
-export function generateMetadata({ params }: Props): Metadata {
-  // const { market } = params;
+export function generateMetadata(): Metadata {
   return {
     title: `BTC-USD | ${perpsName}`,
   };

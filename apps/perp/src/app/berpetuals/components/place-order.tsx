@@ -3,6 +3,7 @@ import { formatUsd } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { formatUnits } from "viem";
 
 import { type OrderType } from "../type";
 
@@ -32,18 +33,17 @@ export function PlaceOrder({
     return sl;
   }, [form.sl, price]);
 
-  const calculateLiqPrice = (
-    rolloverFee: number,
-    fundingFee: number,
-  ): number => {
+  const calculateLiqPrice = (): number => {
+    const formattedBorrowingL = Number(formatUnits(BigInt(bfLong ?? "0"), 18));
+    const formattedBorrowingS = Number(formatUnits(BigInt(bfShort ?? "0"), 18));
     const long = form.orderType === "long";
     const openPrice = price ?? 0;
-    const collateral = form.amount ?? 0;
-    const leverage = form.leverage ?? 1;
+    const leverage = form.leverage ?? 2;
 
     const liqPriceDistance =
-      (openPrice * ((collateral * 90) / 100 - rolloverFee - fundingFee)) /
-      (collateral * leverage);
+      (openPrice *
+        ((90 - (long ? formattedBorrowingL : formattedBorrowingS)) / 100)) /
+      leverage;
 
     const liqPrice = long
       ? openPrice - liqPriceDistance
@@ -67,7 +67,7 @@ export function PlaceOrder({
       )}
       <div className="flex w-full justify-between">
         <div>EST. LIQ. PRICE</div>
-        <div className="text-foreground">$0.00</div>
+        <div className="text-foreground">{formatUsd(calculateLiqPrice())}</div>
       </div>
       <div className="flex w-full justify-between">
         <div>LEVERAGE</div>

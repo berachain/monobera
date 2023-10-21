@@ -1,15 +1,49 @@
-import React from "react";
+"use client";
 
-import AvailableMarket from "../markets/available-markets";
-import Portfolio from "./portfolio";
-import UserAssets from "./userAssets";
+import React from "react";
+import { useBeraJs } from "@/../../packages/berajs/dist";
+import { ConnectWalletBear } from "@bera/shared-ui";
+import LoadingPortfolio from "./[address]/loading";
+import { PortfolioHome } from "./components/portfolio";
 
 export default function Home() {
+  const { account } = useBeraJs();
+
+  const [isMounted, setIsMounted] = React.useState(false);
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
   return (
-    <div className="container mt-8 flex flex-col gap-16">
-      <Portfolio />
-      <UserAssets />
-      <AvailableMarket />
-    </div>
+    <>
+      {!isMounted && <LoadingPortfolio />}
+      {isMounted && !account && (
+        <ConnectWalletBear message="Connect Wallet to view portfolio" />
+      )}
+      {isMounted && account && <PortfolioHome />}
+    </>
   );
 }
+
+// BELOW IS A SSR THINGY
+
+// "use client"
+// import React, { useEffect, useLayoutEffect } from "react";
+
+// import { PortfolioHome } from "./components/portfolio";
+// import { useBeraJs } from "@/../../packages/berajs/dist";
+// import { redirect, useRouter } from 'next/navigation'
+// import { ConnectWalletBear } from "@bera/shared-ui";
+
+// export default function Home() {
+//   const {account} = useBeraJs()
+//     useLayoutEffect(() => {
+//       if(account){
+//         redirect(`/portfolio/${account}`)
+//       }
+//     }, [account])
+//   return (
+//     <>
+//          <ConnectWalletBear message="Connect Wallet to view portfolio" />
+//     </>
+//   );
+// }

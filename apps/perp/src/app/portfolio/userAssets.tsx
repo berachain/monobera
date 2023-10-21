@@ -52,7 +52,7 @@ function AsesetTitle() {
 
 function AsesetCard({ position }: { position: Position }) {
   return (
-    <div className="hidden items-center justify-between rounded-2xl border border-border bg-background px-6 py-4 lg:flex ">
+    <div className="hidden h-[75px] items-center justify-between rounded-2xl border border-border bg-background px-6 py-4 lg:flex ">
       <PositionTitle position={position} />
       <div
         className={cn(

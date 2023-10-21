@@ -20,7 +20,7 @@ export function CustomizeInput({
       </div>
       <Input
         type="number"
-        className="h-7 w-full rounded-none border-none p-0 text-lg font-semibold text-foreground"
+        className="h-7 w-full rounded-none border-none bg-inherit p-0 text-lg font-semibold text-foreground"
         placeholder="0.00"
         endAdornment={endAdornment}
         value={value}

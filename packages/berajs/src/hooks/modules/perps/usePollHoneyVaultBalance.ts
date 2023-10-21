@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "viem";
+import { formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BTOKEN_ABI } from "~/config";
@@ -23,7 +23,7 @@ export const usePollHoneyVaultBalance = () => {
         return result;
       } catch (e) {
         console.error(e);
-        return undefined;
+        return 0;
       }
     },
     {
@@ -38,7 +38,7 @@ export const usePollHoneyVaultBalance = () => {
 
   const useFormattedHoneyVaultBalance = () => {
     const { data = 0 } = useSWRImmutable(QUERY_KEY);
-    return Number(data);
+    return Number(formatUnits(data, 18));
   };
   return {
     useFormattedHoneyVaultBalance,

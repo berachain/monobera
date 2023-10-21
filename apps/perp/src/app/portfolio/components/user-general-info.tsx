@@ -22,7 +22,7 @@ export function UserGeneralInfo() {
     ],
   };
   return (
-    <div className="flex w-full flex-shrink-0 flex-col gap-8 rounded-xl border border-border bg-muted px-4 py-6 lg:w-[270px]">
+    <div className="flex max-h-[300px] w-full flex-shrink-0 flex-col gap-8 rounded-xl border border-border bg-muted px-4 py-6 lg:w-[270px]">
       <div className="flex flex-col gap-2">
         <div className="text-sm font-medium leading-none text-muted-foreground">
           Current Open Positions <Tooltip text="tooltip text" />

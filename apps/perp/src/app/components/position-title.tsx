@@ -13,7 +13,7 @@ export function PositionTitle({
   return (
     <div className={cn("flex w-[112px] items-center gap-2", className)}>
       <Image
-        src={market.imageUri ?? ""}
+        src={market?.imageUri ?? ""}
         alt={"selectedMarket"}
         width={24}
         height={24}
@@ -21,10 +21,10 @@ export function PositionTitle({
       />{" "}
       <div>
         <div className="mt-1 text-sm font-semibold leading-tight text-foreground">
-          {market.tokenName}
+          {market?.tokenName}
         </div>
         <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
-          {market.name}
+          {market?.name}
         </div>
       </div>
     </div>

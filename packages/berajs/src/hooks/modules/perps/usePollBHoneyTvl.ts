@@ -23,7 +23,7 @@ export const usePollBHoneyTvl = () => {
         return result;
       } catch (e) {
         console.error(e);
-        return undefined;
+        return 0;
       }
     },
     {

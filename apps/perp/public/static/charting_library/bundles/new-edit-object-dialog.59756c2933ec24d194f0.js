@@ -1590,27 +1590,25 @@
           const { property: e, hHistInfo: t } = this.props,
             { colors: l, transparencies: n, visible: o } = e.childs(),
             { titles: i } = t;
-          return l
-            .childNames()
-            .map((e) =>
-              r.createElement(
-                B.InputRow,
-                {
-                  key: e,
-                  grouped: !0,
-                  label: r.createElement(
-                    "div",
-                    { className: te.childRowContainer },
-                    i[+e],
-                  ),
-                },
-                r.createElement(ee.ColorWithThicknessSelect, {
-                  disabled: !o.value(),
-                  color: l[+e],
-                  transparency: n[+e],
-                }),
-              ),
-            );
+          return l.childNames().map((e) =>
+            r.createElement(
+              B.InputRow,
+              {
+                key: e,
+                grouped: !0,
+                label: r.createElement(
+                  "div",
+                  { className: te.childRowContainer },
+                  i[+e],
+                ),
+              },
+              r.createElement(ee.ColorWithThicknessSelect, {
+                disabled: !o.value(),
+                color: l[+e],
+                transparency: n[+e],
+              }),
+            ),
+          );
         }
       }
       dt.contextType = L.StylePropertyContext;

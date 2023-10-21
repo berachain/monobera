@@ -13250,13 +13250,11 @@
             }
             v &&
               (l && (l += ", "),
-              (l += o
-                .t(null, void 0, i(26273))
-                .format({
-                  number: (0, a.forceLTRStr)(
-                    this._numericFormatter.format(Math.round(Number(p))),
-                  ),
-                }))),
+              (l += o.t(null, void 0, i(26273)).format({
+                number: (0, a.forceLTRStr)(
+                  this._numericFormatter.format(Math.round(Number(p))),
+                ),
+              }))),
               l && s.push("barsRange");
           }
           if (x) {
