@@ -3,6 +3,7 @@
 import React from "react";
 import { useBeraJs } from "@/../../packages/berajs/dist";
 import { ConnectWalletBear } from "@bera/shared-ui";
+
 import LoadingPortfolio from "./[address]/loading";
 import { PortfolioHome } from "./components/portfolio";
 

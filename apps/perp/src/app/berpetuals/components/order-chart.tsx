@@ -40,7 +40,8 @@ export default function OrderChart() {
   return (
     <div className="h-[500px] w-full">
       {isMounted ? (
-        <TVChartContainer {...defaultWidgetProps} />
+        // <TVChartContainer {...defaultWidgetProps} />
+        <></>
       ) : (
         // <></>
         <div className="flex h-[500px] w-full flex-col items-center justify-center">

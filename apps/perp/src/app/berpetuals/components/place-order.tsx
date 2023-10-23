@@ -1,73 +1,139 @@
 import { useMemo } from "react";
-import { formatUsd } from "@bera/berajs";
+import {
+  TRADING_ABI,
+  formatUsd,
+  useBeraJs,
+  usePollAllowance,
+} from "@bera/berajs";
+import { honeyAddress } from "@bera/config";
+import { ActionButton } from "@bera/shared-ui";
+import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits } from "viem";
+import { Skeleton } from "@bera/ui/skeleton";
+import { parseUnits } from "viem";
+import { type Address } from "wagmi";
 
+import ApproveTokenButton from "~/app/components/approve-token-button";
+import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { type OrderType } from "../type";
 
 export function PlaceOrder({
   form,
-  price,
+  price = 10000,
   openingFee,
   bfLong,
   bfShort,
+  pairIndex,
 }: {
   form: OrderType;
-  price: number;
+  price: number | undefined;
   openingFee: number;
   bfLong: number;
   bfShort: number;
+  pairIndex: number;
 }) {
+  const { isLoading, write } = useOctTxn({
+    message:
+      form.orderType === "long"
+        ? `Longing ${form.assets}`
+        : `Shorting ${form.assets}`,
+  });
+
   const dailyBfLong = bfLong * 24;
   const dailyBfShort = bfShort * 24;
 
   const estTakeProfit = useMemo(() => {
-    const tp = (1 + (form.tp ?? 0) / 100) * price;
+    const tp = (1 + (form.tp ?? 0) / 100) * (price ?? 0);
     return tp;
   }, [form.tp, price]);
 
   const estStopLoss = useMemo(() => {
-    const sl = (1 - (form.sl ?? 0) / 100) * price;
+    const sl = (1 - (form.sl ?? 0) / 100) * (price ?? 0);
     return sl;
   }, [form.sl, price]);
 
-  const calculateLiqPrice = (): number => {
-    const formattedBorrowingL = Number(formatUnits(BigInt(bfLong ?? "0"), 18));
-    const formattedBorrowingS = Number(formatUnits(BigInt(bfShort ?? "0"), 18));
-    const long = form.orderType === "long";
-    const openPrice = price ?? 0;
-    const leverage = form.leverage ?? 2;
+  const liqPrice = useCalculateLiqPrice({
+    bfLong,
+    bfShort,
+    orderType: form.orderType,
+    price,
+    leverage: form.leverage,
+  });
 
-    const liqPriceDistance =
-      (openPrice *
-        ((90 - (long ? formattedBorrowingL : formattedBorrowingS)) / 100)) /
-      leverage;
+  const { account } = useBeraJs();
 
-    const liqPrice = long
-      ? openPrice - liqPriceDistance
-      : openPrice + liqPriceDistance;
+  const tradingContract = process.env
+    .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address;
+  const positionSize = (form.amount ?? 0) * (form.leverage ?? 1);
+  const parsedPositionSize = parseUnits(`${positionSize}`, 18);
+  const payload = [
+    {
+      trader: account,
+      pairIndex: pairIndex,
+      index: 0,
+      initialPosToken: 0,
+      positionSizeDai: parsedPositionSize, // position size
+      openPrice: 0, // for limit orders
+      buy: form.orderType === "long" ? true : false,
+      leverage: form.leverage,
+      tp: form.tp === 0 ? 0 : estTakeProfit,
+      sl: form.sl === 0 ? 0 : estStopLoss,
+    },
+    form.optionType === "market" ? 0 : 2,
+    0,
+    parseUnits(`${25}`, 10),
+  ];
 
-    return liqPrice > 0 ? Math.floor(liqPrice) : 0;
+  const honey = {
+    symbol: "HONEY",
+    address: honeyAddress,
+    decimals: 18,
+    name: "Honey",
   };
+
+  const { useAllowance } = usePollAllowance({
+    contract: tradingContract,
+    token: honey,
+  });
+
+  const allowance = useAllowance();
 
   return (
     <div className="flex w-full flex-col gap-1 rounded-xl border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
       {form.optionType === "market" ? (
         <div className="flex w-full justify-between">
           <div>EST. EXECUTION PRICE</div>
-          <div className="text-foreground">{formatUsd(price)}</div>
+          <div className="text-foreground">
+            {price === undefined ? (
+              <Skeleton className="h-4 w-16" />
+            ) : (
+              formatUsd(price ?? 0)
+            )}
+          </div>
         </div>
       ) : (
         <div className="flex w-full justify-between">
           <div>LIMIT ORDER PRICE</div>
-          <div className="text-foreground">{formatUsd(price)}</div>
+          <div className="text-foreground">
+            {price === undefined ? (
+              <Skeleton className="h-4 w-16" />
+            ) : (
+              formatUsd(price ?? 0)
+            )}
+          </div>
         </div>
       )}
       <div className="flex w-full justify-between">
         <div>EST. LIQ. PRICE</div>
-        <div className="text-foreground">{formatUsd(calculateLiqPrice())}</div>
+        <div className="flex flex-row text-foreground">
+          {liqPrice === undefined ? (
+            <Skeleton className="h-4 w-14" />
+          ) : (
+            formatUsd(liqPrice)
+          )}
+        </div>
       </div>
       <div className="flex w-full justify-between">
         <div>LEVERAGE</div>
@@ -93,9 +159,13 @@ export function PlaceOrder({
       </div>
       <div className="flex w-full justify-between">
         <div>POSITION SIZE</div>
-        <div className="text-foreground">
-          {formatUsd((form.amount ?? 0) * (form.leverage ?? 1))}{" "}
-          <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" />
+        <div className="align-items flex flex-row items-center gap-1 text-foreground">
+          {price === undefined ? (
+            <Skeleton className="h-4 w-14" />
+          ) : (
+            formatUsd((form.amount ?? 0) * (form.leverage ?? 1))
+          )}{" "}
+          <Icons.honey className=" inline h-3 w-3 text-muted-foreground" />
         </div>
       </div>
       <div className="flex w-full justify-between">
@@ -115,16 +185,31 @@ export function PlaceOrder({
           <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" />
         </div>
       </div>
-      <Button
-        className={cn(
-          "mt-4 capitalize hover:opacity-80",
-          form.orderType === "long"
-            ? "bg-success text-success-foreground"
-            : "bg-destructive text-destructive-foreground",
+      <ActionButton>
+        {allowance?.formattedAllowance === "0" ? (
+          <ApproveTokenButton token={honey} spender={tradingContract} />
+        ) : (
+          <Button
+            className={cn(
+              "mt-4 w-full capitalize hover:opacity-80",
+              form.orderType === "long"
+                ? "bg-success text-success-foreground"
+                : "bg-destructive text-destructive-foreground",
+            )}
+            disabled={isLoading}
+            onClick={() =>
+              write({
+                address: tradingContract,
+                abi: TRADING_ABI,
+                functionName: "openTrade",
+                params: payload,
+              })
+            }
+          >
+            Place {form.optionType} {form.orderType} order
+          </Button>
         )}
-      >
-        Place {form.optionType} {form.orderType} order
-      </Button>
+      </ActionButton>
     </div>
   );
 }

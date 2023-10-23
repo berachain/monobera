@@ -7,6 +7,7 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 
 import { HONEY_IMG } from "~/utils/marketImages";
+import { usePricesSocket } from "~/hooks/usePricesSocket";
 import { CustomizeInput } from "./components/customize-input";
 import { LeverageSlider } from "./components/leverage-slider";
 import { LongShortTab } from "./components/long-short-tab";
@@ -27,12 +28,13 @@ export default function CreatePosition({ market }: ICreatePosition) {
     amount: undefined,
     quantity: undefined,
     price: undefined,
-    leverage: 1,
+    leverage: 2,
     tp: 0,
     sl: 0,
   });
 
-  const dummyPrice = 29000;
+  const { useMarketIndexPrice } = usePricesSocket();
+  const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
   const honeyPrice = 1;
   const { useHoneyBalance } = usePollHoneyBalance();
   const honeyBalance = useHoneyBalance();
@@ -40,7 +42,7 @@ export default function CreatePosition({ market }: ICreatePosition) {
   useMemo(() => {
     const honeyAmountPrice = (form.amount ?? 0) * honeyPrice;
     const leveragedHoneyPrice = honeyAmountPrice * (form.leverage ?? 1);
-    const newQuantity = leveragedHoneyPrice / dummyPrice;
+    const newQuantity = leveragedHoneyPrice / price;
     setForm({ ...form, quantity: newQuantity });
   }, [honeyPrice, form.amount, form.leverage]);
   return (
@@ -150,15 +152,16 @@ export default function CreatePosition({ market }: ICreatePosition) {
         />
         <PlaceOrder
           form={form}
-          price={dummyPrice}
+          price={price}
+          pairIndex={Number(market.pair_index) ?? 0}
           openingFee={Number(
-            formatUnits(BigInt(market.pairFixedFee?.openFeeP ?? "0"), 18),
+            formatUnits(BigInt(market.pair_fixed_fee?.open_fee_p ?? "0"), 18),
           )}
           bfLong={Number(
-            formatUnits(BigInt(market.pairBorrowingFee?.bfLong ?? "0"), 18),
+            formatUnits(BigInt(market.pair_borrowing_fee?.bf_long ?? "0"), 18),
           )}
           bfShort={Number(
-            formatUnits(BigInt(market.pairBorrowingFee?.bfShort ?? "0"), 18),
+            formatUnits(BigInt(market.pair_borrowing_fee?.bf_short ?? "0"), 18),
           )}
         />
       </div>

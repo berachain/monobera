@@ -57,9 +57,7 @@ export default async function Home() {
       <div className="flex w-full flex-col lg:flex-row">
         <CreatePosition market={defualtMarket} />
         <div className="h-full w-full pb-[34px] lg:w-screen-w-400">
-          <span className="hidden lg:block">
-            <OrderChart />
-          </span>
+          <span className="hidden lg:block">{/* <OrderChart /> */}</span>
           <OrderHistory />
         </div>
       </div>{" "}

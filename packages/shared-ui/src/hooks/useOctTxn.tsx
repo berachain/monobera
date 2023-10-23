@@ -197,6 +197,8 @@ export const useOctTxn = ({
           hash: result,
           description: message,
           timestamp: Date.now(),
+          icon: "",
+          actionType: "",
         });
         onSuccess && onSuccess(result);
       },

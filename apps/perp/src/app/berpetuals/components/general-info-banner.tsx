@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { perpsName } from "@/../../packages/config/env";
 import { formatUsd } from "@bera/berajs";
+import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
 
 import { usePricesSocket } from "~/hooks/usePricesSocket";
@@ -12,10 +13,9 @@ interface IGeneralInfoBanner {
   market: IMarket;
 }
 export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
-  console.log(market);
   const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(market.pairIndex ?? 0);
-  console.log(price);
+  // const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
+  const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
 
   useEffect(() => {
     document.title =
@@ -25,20 +25,20 @@ export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
   }, [price]);
 
   const formattedLongOi = formatUnits(
-    BigInt(market.openInterest?.oiLong ?? "0"),
+    BigInt(market.open_interest?.oi_long ?? "0"),
     18,
   );
   const formattedShortOi = formatUnits(
-    BigInt(market.openInterest?.oiShort ?? "0"),
+    BigInt(market.open_interest?.oi_short ?? "0"),
     18,
   );
 
   const formattedBorrowingL = formatUnits(
-    BigInt(market.pairBorrowingFee?.bfLong ?? "0"),
+    BigInt(market.pair_borrowing_fee?.bf_long ?? "0"),
     18,
   );
   const formattedBorrowingS = formatUnits(
-    BigInt(market.pairBorrowingFee?.bfShort ?? "0"),
+    BigInt(market.pair_borrowing_fee?.bf_short ?? "0"),
     18,
   );
 
@@ -73,7 +73,11 @@ export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
       <div className="flex items-center text-muted-foreground">
         <div className="mr-4">
           <div className="text-xl font-semibold leading-7 text-muted-foreground">
-            {price !== undefined && formatUsd(price)}
+            {price !== undefined ? (
+              formatUsd(price)
+            ) : (
+              <Skeleton className="h-[28px] w-[80px]" />
+            )}
           </div>
           <div className="text-xs text-success-foreground">+326.69</div>
         </div>

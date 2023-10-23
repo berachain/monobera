@@ -15,8 +15,10 @@ export const usePricesSocket = () => {
 
   const useMarketIndexPrice = (index: number) => {
     if (data) {
+      console.log("index", index);
       const parsed = JSON.parse(data);
-      return parsed[index];
+      console.log("parsed ", parsed[index]);
+      return Number(parsed[index]);
     }
     return data;
   };

@@ -3,11 +3,9 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { formatter, useBeraJs, usePollBgtBalance } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { Skeleton } from "@bera/ui/skeleton";
 
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
@@ -33,10 +31,6 @@ export function Header({
   navItems: any[];
   isHoney?: boolean;
 }) {
-  const { isConnected } = useBeraJs();
-  const { useBgtBalance, isLoading } = usePollBgtBalance();
-  const userBalance = useBgtBalance();
-
   return (
     <nav
       className={cn(
@@ -54,17 +48,6 @@ export function Header({
         </div>
       </div>
       <div className="flex h-full items-center gap-2 xl:gap-4">
-        {isConnected && userBalance && !isHoney && (
-          <div className="flex-no-wrap hidden h-10 w-fit items-center gap-1 rounded-full border border-warning-foreground bg-warning px-4 py-2 text-sm font-medium text-warning-foreground lg:flex">
-            <Icons.wallet className="block h-4 w-4" />
-            {isLoading ? (
-              <Skeleton className="h-10 w-20" />
-            ) : (
-              formatter.format(Number(userBalance))
-            )}{" "}
-            <span>BGT</span>
-          </div>
-        )}
         <ConnectBtn isNavItem={true} />
         <MobileDropdown navItems={navItems} />
       </div>

@@ -28,6 +28,7 @@ export const usePollBHoneyPendingWithdraw = () => {
           return result;
         } catch (e) {
           console.error(e);
+          return 0n;
         }
       }
       return 0;
@@ -51,7 +52,7 @@ export const usePollBHoneyPendingWithdraw = () => {
     const bHoneyBalance = useBHoneyBalance();
     const { data = 0n } = useSWRImmutable(QUERY_KEY);
     return useMemo(() => {
-      return formatUnits(bHoneyBalance - data, 18);
+      return formatUnits(BigInt(bHoneyBalance) - BigInt(data), 18);
     }, [bHoneyBalance, data]);
   };
   return {

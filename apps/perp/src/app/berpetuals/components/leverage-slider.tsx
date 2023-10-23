@@ -23,6 +23,12 @@ export function LeverageSlider({
             return Math.floor((maxLeverage * (index + 1)) / 6);
           })}
           onValueChange={(value: any) => {
+            console.log("vallly", value);
+            if (value[0] === 1) {
+              console.log("v213214allly", value);
+              onValueChange?.(2);
+              return;
+            }
             onValueChange?.(Math.floor((maxLeverage * (value ?? 1)) / 100));
           }}
           className="w-full"

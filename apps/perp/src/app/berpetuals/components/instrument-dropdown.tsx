@@ -22,6 +22,7 @@ export function InstrumentDropdown({
   markets,
   selectedMarket,
 }: InstrumentProps) {
+  console.log(markets);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
