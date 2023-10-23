@@ -28,7 +28,13 @@ export enum TRANSACTION_MODE {
   INFINITY = "infinity",
 }
 
-export const Setting = ({ goback }: { goback: () => void }) => {
+export const Setting = ({
+  goback,
+  isHoney,
+}: {
+  goback: () => void;
+  isHoney: boolean;
+}) => {
   const [slippageMode, setSlippageMode] = useLocalStorage<SLIPPAGE_MODE>(
     SLIPPAGE_TOLERANCE_TYPE,
     SLIPPAGE_MODE.AUTO,
@@ -161,7 +167,11 @@ export const Setting = ({ goback }: { goback: () => void }) => {
             endAdornment="min"
             type="number"
             disabled={transactionMode !== TRANSACTION_MODE.CUSTOM}
-            value={transactionMode === TRANSACTION_MODE.AUTO ? DEFAULT_DEADLINE : transactionDeadline}
+            value={
+              transactionMode === TRANSACTION_MODE.AUTO
+                ? DEFAULT_DEADLINE
+                : transactionDeadline
+            }
             onChange={(e) => setTransactionDeadline(Number(e.target.value))}
           />
         </div>
