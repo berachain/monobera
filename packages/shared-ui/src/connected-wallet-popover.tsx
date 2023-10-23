@@ -18,7 +18,7 @@ import { formatConnectorName } from "./utils";
 import { WalletBalanceInUs } from "./wallet-balance-in-us";
 
 export default function ConnectedWalletPopover({
-  isHoney,
+  isHoney = false,
 }: {
   isHoney?: boolean;
 }) {
