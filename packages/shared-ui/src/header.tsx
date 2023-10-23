@@ -3,6 +3,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { publicAnalyticsUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -47,8 +48,17 @@ export function Header({
           <MainNav navItems={navItems} />
         </div>
       </div>
-      <div className="flex h-full items-center gap-2 xl:gap-4">
-        <ConnectBtn isNavItem={true} />
+      <div className="flex h-full items-center gap-2 xl:gap-4"> 
+        {isHoney && (
+          <Link
+            href={publicAnalyticsUrl}
+            target="_blank"
+            className="hidden cursor-pointer items-center gap-1 whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-foreground lg:flex"
+          >
+            Dune Analytics <Icons.externalLink className="h-3 w-3" />
+          </Link>
+        )}
+        <ConnectBtn isNavItem={true} isHoney={isHoney} />
         <MobileDropdown navItems={navItems} />
       </div>
     </nav>

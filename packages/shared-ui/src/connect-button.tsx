@@ -13,9 +13,11 @@ import ConnectedWalletPopover from "./connected-wallet-popover";
 export const ConnectButton = ({
   className,
   isNavItem = false,
+  isHoney = false,
 }: {
   className?: string;
   isNavItem?: boolean;
+  isHoney?: boolean;
 }) => {
   const { isConnected, isWrongNetwork, isReady } = useBeraJs();
   return (
@@ -57,7 +59,7 @@ export const ConnectButton = ({
                 Wrong network
               </Button>
             )}
-            {isReady && <ConnectedWalletPopover />}
+            {isReady && <ConnectedWalletPopover isHoney={isHoney} />}
           </div>
         );
       }}

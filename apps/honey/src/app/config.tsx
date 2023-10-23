@@ -2,10 +2,14 @@ import { type NetworkConfig } from "@bera/berajs";
 import {
   bankAddress,
   berachefAddress,
+  bgtName,
+  bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
   chainId,
   chainName,
+  dexName,
+  dexUrl,
   epochsAddress,
   erc20BgtAddress,
   erc20DexAddress,
@@ -15,10 +19,17 @@ import {
   gasTokenName,
   gasTokenSymbol,
   governanceAddress,
+  homepageName,
+  homepageUrl,
   honeyAddress,
   jsonRpcUrl,
+  lendName,
+  lendUrl,
   multicallAddress,
   networkName,
+  perpsName,
+  perpsUrl,
+  publicAnalyticsUrl,
   rewardsAddress,
   stakingAddress,
 } from "@bera/config";
@@ -36,6 +47,54 @@ export const navItems = [
   {
     href: "#transactions",
     title: "Transactions",
+  },
+  {
+    href: "#",
+    title: "Explore",
+    children: [
+      {
+        href: publicAnalyticsUrl,
+        title: "Dune Analytics",
+        blurb: "Checkout HONEY’s stats on dune analytics",
+      },
+      {
+        href: homepageUrl,
+        title: homepageName,
+        blurb: "Explore Berachain and learn more about our vision",
+      },
+      {
+        href: dexUrl,
+        title: dexName,
+        blurb: "Swap tokens and provide liquidity to earn BGT rewards",
+      },
+      {
+        href: blockExplorerUrl,
+        type: "external",
+        title: blockExplorerName,
+        blurb:
+          "View all transactions and blockchain information on the Berachain network",
+      },
+      {
+        href: bgtUrl,
+        type: "external",
+        title: bgtName,
+        blurb: "The hub for BGT governance and bribes on Berachain ",
+      },
+      {
+        href: lendUrl,
+        type: "external",
+        title: lendName,
+        blurb:
+          "Earn Interest And Rewards By Supplying Your Assets And Borrowing Honey",
+      },
+      {
+        href: perpsUrl,
+        type: "external",
+        title: perpsName,
+        blurb:
+          "Trade All Your Favourite Pairs With Deep Liquidity and Market Diversity",
+      },
+    ],
   },
 ];
 

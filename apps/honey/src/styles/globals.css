@@ -164,6 +164,12 @@ input[type="number"] {
   background-position-x: center;
 }
 
+.pro-mode-background {
+  background-image: url("./background.svg");
+  background-size: cover;
+  background-position: top center;
+}
+
 @keyframes moveUpDown {
   0%,
   100% {

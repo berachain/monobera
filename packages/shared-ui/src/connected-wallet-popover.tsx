@@ -17,7 +17,11 @@ import { TokenList } from "./token-list";
 import { formatConnectorName } from "./utils";
 import { WalletBalanceInUs } from "./wallet-balance-in-us";
 
-export default function ConnectedWalletPopover() {
+export default function ConnectedWalletPopover({
+  isHoney,
+}: {
+  isHoney?: boolean;
+}) {
   const [openPopover, setOpenPopover] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
@@ -126,7 +130,7 @@ export default function ConnectedWalletPopover() {
           </Tabs>
         </>
       ) : (
-        <Setting goback={() => setSetting(false)} />
+        <Setting goback={() => setSetting(false)} isHoney={isHoney} />
       )}
     </>
   );
