@@ -26,10 +26,6 @@ export default function IndividualMarketAnalytics({
   borrowVariableAPR7D,
   borrowVariableAPR30D,
   borrowVariableAPRALL,
-  utilizationRate1D,
-  utilizationRate7D,
-  utilizationRate30D,
-  utilizationRateALL,
 }: {
   address: Address;
   supplyAPR1D: RateItem[];
@@ -40,10 +36,6 @@ export default function IndividualMarketAnalytics({
   borrowVariableAPR7D: RateItem[];
   borrowVariableAPR30D: RateItem[];
   borrowVariableAPRALL: RateItem[];
-  utilizationRate1D: RateItem[];
-  utilizationRate7D: RateItem[];
-  utilizationRate30D: RateItem[];
-  utilizationRateALL: RateItem[];
 }) {
   usePollAssetWalletBalance();
   const { tokenDictionary } = useTokens();
@@ -122,20 +114,7 @@ export default function IndividualMarketAnalytics({
           {address === honeyAddress && (
             <InterestRateOvertime
               reserveData={reserveData}
-              graphData={{
-                borrow: {
-                  "24H": borrowVariableAPR1D,
-                  "7D": borrowVariableAPR7D,
-                  "30D": borrowVariableAPR30D,
-                  ALL_TIME: borrowVariableAPRALL,
-                },
-                utilization: {
-                  "24H": utilizationRate1D,
-                  "7D": utilizationRate7D,
-                  "30D": utilizationRate30D,
-                  ALL_TIME: utilizationRateALL,
-                },
-              }}
+              currentUtilizationRate={0.5}
             />
           )}
         </div>

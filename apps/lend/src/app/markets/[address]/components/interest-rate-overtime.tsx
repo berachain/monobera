@@ -1,27 +1,119 @@
+import { useMemo } from "react";
 import { Tooltip } from "@bera/shared-ui";
+import { BeraChart } from "@bera/ui/bera-chart";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { type RateItem } from "~/utils/getServerSideData";
+import {
+  OPTIMAL_USAGE_RATE,
+  getRates,
+  type Rate,
+} from "~/utils/utilization-rates";
 import Card from "~/components/card";
-import LineChart from "~/components/line-chart";
-
-type graph = {
-  "24H": RateItem[];
-  "7D": RateItem[];
-  "30D": RateItem[];
-  ALL_TIME: RateItem[];
-};
 
 export default function InterestRateOvertime({
   reserveData,
-  graphData,
+  currentUtilizationRate,
 }: {
   reserveData: any;
-  graphData: {
-    borrow: graph;
-    utilization: graph;
-  };
+  currentUtilizationRate: number;
 }) {
+  const data = useMemo(() => {
+    const rates = getRates();
+    const labelsArray = Array.from({ length: 101 }, (_, i) => `${i}%`);
+    return {
+      labels: labelsArray,
+      datasets: [
+        {
+          label: "Borrow APR, variable",
+          data: rates.map((r: Rate) => r.variableRate * 100),
+          borderColor: "#FBBF24",
+          tension: 0,
+          pointRadius: 0,
+        },
+      ],
+    };
+  }, []);
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        border: {
+          display: false,
+        },
+        grid: {
+          display: false,
+        },
+        ticks: {
+          callback: function (value: string, index: number, _: any) {
+            // Display only specific labels
+            if ([0, 25, 50, 75, 100].includes(index)) return value + "%";
+            else return null;
+          },
+        },
+      },
+      y: {
+        border: {
+          display: false,
+        },
+        grid: {
+          display: false,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        intersect: false,
+        mode: "index",
+        callbacks: {
+          label: function (context: any) {
+            const label = context.dataset.label || "";
+            const value = context.parsed.y;
+            return `${label}: ${value.toFixed(2)}%`;
+          },
+        },
+      },
+      annotation: {
+        annotations: [
+          {
+            type: "line",
+            mode: "vertical",
+            scaleID: "x",
+            value: `${currentUtilizationRate * 100}%`,
+            borderColor: "#059669",
+            borderWidth: 1,
+            borderDash: [5, 5],
+            label: {
+              content: "10% Line",
+              enabled: true,
+              position: "start",
+              yAdjust: -10,
+            },
+          },
+          {
+            type: "line",
+            mode: "vertical",
+            scaleID: "x",
+            value: `${OPTIMAL_USAGE_RATE * 100}%`,
+            borderColor: "#059669",
+            borderWidth: 1,
+            borderDash: [5, 5],
+            label: {
+              content: "Optimal 80%",
+              enabled: true,
+              position: "start",
+              yAdjust: -10,
+            },
+          },
+        ],
+      },
+    },
+  };
+
   return (
     <div className="w-full">
       <div className="text-2xl font-semibold leading-loose">
@@ -44,21 +136,24 @@ export default function InterestRateOvertime({
           </div>
         </div>
 
-        <div>
-          <LineChart
-            data={[
-              {
-                data: graphData.borrow,
-                title: "Borrow APR, Variable",
-                color: "#292524",
-              },
-              {
-                data: graphData.utilization,
-                title: "Utilization Rate",
-                color: "#059669",
-              },
-            ]}
-          />
+        <div className="flex h-full flex-col items-center gap-2 md:flex-row md:gap-8">
+          <div className="flex items-center gap-2 font-medium">
+            <div
+              className={`h-2 w-2 rounded-full border border-accent bg-accent`}
+            />
+            Borrow APR, variable
+          </div>
+
+          <div className="flex items-center gap-2 font-medium">
+            <div
+              className={`h-2 w-2 rounded-full border border-success-foreground bg-success-foreground`}
+            />
+            Utilization Rate
+          </div>
+        </div>
+
+        <div className="h-[180px] w-full">
+          <BeraChart data={data} options={options as any} type="line" />
         </div>
       </Card>
     </div>
