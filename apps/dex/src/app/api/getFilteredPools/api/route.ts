@@ -36,6 +36,7 @@ export async function GET(request: Request) {
   const response = await fetch(`${getAbsoluteUrl()}/api/getPools/api`);
 
   const pools = await response.json();
+
   // pages
   const page = searchParams.get("page");
   const perPage = searchParams.get("perPage");
@@ -46,15 +47,20 @@ export async function GET(request: Request) {
   const newPools = searchParams.get("newPools");
   const searchKeyword = searchParams.get("search") ?? "";
 
-  let taggedPools: any[] = pools?.filter((pool: Pool) => {
-    return searchKeyword === ""
-      ? true
-      : pool.poolName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-          (pool.poolShareDenomHex &&
-            pool.poolShareDenomHex
-              .toLowerCase()
-              .includes(searchKeyword.toLowerCase()));
-  });
+  let taggedPools: any[];
+  if (Array.isArray(pools)) {
+    taggedPools = pools?.filter((pool: Pool) => {
+      return searchKeyword === ""
+        ? true
+        : pool.poolName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+            (pool.poolShareDenomHex &&
+              pool.poolShareDenomHex
+                .toLowerCase()
+                .includes(searchKeyword.toLowerCase()));
+    });
+  } else {
+    taggedPools = [];
+  }
 
   let filteredBgtRewards,
     filteredHotPools,

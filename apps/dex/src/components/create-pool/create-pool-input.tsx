@@ -1,10 +1,10 @@
 import React from "react";
 import { type Token } from "@bera/berajs";
+import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { SelectToken } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { type Address } from "wagmi";
 
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
@@ -41,7 +41,7 @@ export default function CreatePoolInput({
         onTokenSelection={handleTokenSelection}
         selectedTokens={selectedTokens}
         selectable={selectable}
-        filter={[process.env.NEXT_PUBLIC_BERA_ADDRESS as Address]}
+        filter={[nativeTokenAddress, bgtTokenAddress]}
       />
       <Input
         type="number"
