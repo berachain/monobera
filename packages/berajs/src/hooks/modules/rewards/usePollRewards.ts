@@ -23,9 +23,7 @@ export const usePollBgtRewards = (receivers: string[]) => {
         functionName: method,
         args: [account, receiver],
       }));
-
       try {
-        // console.log("calls", calls);
         const result = await publicClient.multicall({
           contracts: calls,
           multicallAddress,
@@ -34,7 +32,7 @@ export const usePollBgtRewards = (receivers: string[]) => {
         const bgtRewards = {};
         await Promise.all(
           result.map(async (item: any, index: number) => {
-            if (item.error) {
+            if (item.error || item.result.length === 0) {
               await mutate([...QUERY_KEY, receivers[index]], "0");
               //@ts-ignore
               bgtRewards[receivers[index]] = "0";

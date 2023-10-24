@@ -239,7 +239,7 @@ export const columns: ColumnDef<Pool>[] = [
   },
 ];
 
-export const my_columns: ColumnDef<Pool>[] = [
+export const my_columns: ColumnDef<any>[] = [
   {
     accessorKey: "poolName",
     header: ({ column }) => (
@@ -261,7 +261,7 @@ export const my_columns: ColumnDef<Pool>[] = [
           {row.original.poolName}
         </span>
         <TokenIconList
-          tokenList={row.original.tokens.map((t) => t.address)}
+          tokenList={row.original.tokens.map((t: any) => t.address)}
           size="lg"
         />
         <Badge
@@ -361,7 +361,7 @@ export const my_columns: ColumnDef<Pool>[] = [
           variant={"warning"}
           className="border-none px-2 py-1 font-normal"
         >
-          {row.original.bgtApy?.toFixed(2)}% BGT
+          {formatter.format(Number(row.original.bgtRewards ?? "0"))} BGT
         </Badge>
       );
     },

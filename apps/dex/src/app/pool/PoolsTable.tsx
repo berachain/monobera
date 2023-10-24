@@ -104,10 +104,8 @@ export const PoolSearch = () => {
   } = usePoolTable();
   const { isReady } = useBeraJs();
   const receivers = userPools?.map((pool: Pool) => pool.pool) || [];
-  console.log("receivers", receivers);
   const { useBgtRewards } = usePollBgtRewards(receivers);
   const { data: bgtRewards } = useBgtRewards();
-  console.log(bgtRewards);
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -231,7 +229,15 @@ export const PoolSearch = () => {
           ) : isList ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <DataTable
-                data={userPools ?? []}
+                data={
+                  userPools.map((pool: any) => ({
+                    ...pool,
+                    bgtRewards:
+                      bgtRewards && bgtRewards[pool.pool]
+                        ? bgtRewards[pool.pool]
+                        : "0",
+                  })) ?? []
+                }
                 columns={my_columns}
                 title={`My Pools (${userPools.length})`}
               />
