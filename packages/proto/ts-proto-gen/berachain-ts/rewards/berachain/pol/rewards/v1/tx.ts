@@ -18,23 +18,16 @@ export interface UpdateParamsRequest {
 /** UpdateParamsResponse defines a message for updating the rewards module parameters. */
 export interface UpdateParamsResponse {}
 
-/** SetWithdrawAddressRequest defines a message for setting the withdraw address. */
-export interface SetWithdrawAddressRequest {
-  /** depositor_address is the address of the account. */
-  depositorAddress: string;
-  /** withdraw_address is the address to which the rewards will be withdrawn. */
-  withdrawAddress: string;
-}
-
-/** SetWithdrawAddressResponse defines a message for setting the withdraw address. */
-export interface SetWithdrawAddressResponse {}
-
 /** WithdrawDepositorRewardRequest defines a message for withdrawing the rewards of a depositor. */
 export interface WithdrawDepositorRewardRequest {
   /** depositor_address is the address of the account. */
   depositorAddress: string;
-  /** receiver_address is the address to which the rewards will be withdrawn. */
+  /** receiver_address is the address for which the rewards were distributed to. */
   receiverAddress: string;
+  /** withdraw_address is the address that the rewards will be sent to on withdraw. */
+  withdrawAddress: string;
+  /** amount is the amount to withdrawl */
+  amount: string;
 }
 
 /** WithdrawDepositorRewardResponse defines a message for withdrawing the rewards of a depositor. */
@@ -182,151 +175,13 @@ export const UpdateParamsResponse = {
   },
 };
 
-function createBaseSetWithdrawAddressRequest(): SetWithdrawAddressRequest {
-  return { depositorAddress: "", withdrawAddress: "" };
-}
-
-export const SetWithdrawAddressRequest = {
-  encode(
-    message: SetWithdrawAddressRequest,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
-    if (message.depositorAddress !== "") {
-      writer.uint32(10).string(message.depositorAddress);
-    }
-    if (message.withdrawAddress !== "") {
-      writer.uint32(18).string(message.withdrawAddress);
-    }
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number,
-  ): SetWithdrawAddressRequest {
-    const reader =
-      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSetWithdrawAddressRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.depositorAddress = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.withdrawAddress = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SetWithdrawAddressRequest {
-    return {
-      depositorAddress: isSet(object.depositorAddress)
-        ? String(object.depositorAddress)
-        : "",
-      withdrawAddress: isSet(object.withdrawAddress)
-        ? String(object.withdrawAddress)
-        : "",
-    };
-  },
-
-  toJSON(message: SetWithdrawAddressRequest): unknown {
-    const obj: any = {};
-    if (message.depositorAddress !== "") {
-      obj.depositorAddress = message.depositorAddress;
-    }
-    if (message.withdrawAddress !== "") {
-      obj.withdrawAddress = message.withdrawAddress;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SetWithdrawAddressRequest>, I>>(
-    base?: I,
-  ): SetWithdrawAddressRequest {
-    return SetWithdrawAddressRequest.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SetWithdrawAddressRequest>, I>>(
-    object: I,
-  ): SetWithdrawAddressRequest {
-    const message = createBaseSetWithdrawAddressRequest();
-    message.depositorAddress = object.depositorAddress ?? "";
-    message.withdrawAddress = object.withdrawAddress ?? "";
-    return message;
-  },
-};
-
-function createBaseSetWithdrawAddressResponse(): SetWithdrawAddressResponse {
-  return {};
-}
-
-export const SetWithdrawAddressResponse = {
-  encode(
-    _: SetWithdrawAddressResponse,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number,
-  ): SetWithdrawAddressResponse {
-    const reader =
-      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSetWithdrawAddressResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(_: any): SetWithdrawAddressResponse {
-    return {};
-  },
-
-  toJSON(_: SetWithdrawAddressResponse): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SetWithdrawAddressResponse>, I>>(
-    base?: I,
-  ): SetWithdrawAddressResponse {
-    return SetWithdrawAddressResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SetWithdrawAddressResponse>, I>>(
-    _: I,
-  ): SetWithdrawAddressResponse {
-    const message = createBaseSetWithdrawAddressResponse();
-    return message;
-  },
-};
-
 function createBaseWithdrawDepositorRewardRequest(): WithdrawDepositorRewardRequest {
-  return { depositorAddress: "", receiverAddress: "" };
+  return {
+    depositorAddress: "",
+    receiverAddress: "",
+    withdrawAddress: "",
+    amount: "",
+  };
 }
 
 export const WithdrawDepositorRewardRequest = {
@@ -339,6 +194,12 @@ export const WithdrawDepositorRewardRequest = {
     }
     if (message.receiverAddress !== "") {
       writer.uint32(18).string(message.receiverAddress);
+    }
+    if (message.withdrawAddress !== "") {
+      writer.uint32(26).string(message.withdrawAddress);
+    }
+    if (message.amount !== "") {
+      writer.uint32(34).string(message.amount);
     }
     return writer;
   },
@@ -368,6 +229,20 @@ export const WithdrawDepositorRewardRequest = {
 
           message.receiverAddress = reader.string();
           continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.withdrawAddress = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.amount = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -385,6 +260,10 @@ export const WithdrawDepositorRewardRequest = {
       receiverAddress: isSet(object.receiverAddress)
         ? String(object.receiverAddress)
         : "",
+      withdrawAddress: isSet(object.withdrawAddress)
+        ? String(object.withdrawAddress)
+        : "",
+      amount: isSet(object.amount) ? String(object.amount) : "",
     };
   },
 
@@ -395,6 +274,12 @@ export const WithdrawDepositorRewardRequest = {
     }
     if (message.receiverAddress !== "") {
       obj.receiverAddress = message.receiverAddress;
+    }
+    if (message.withdrawAddress !== "") {
+      obj.withdrawAddress = message.withdrawAddress;
+    }
+    if (message.amount !== "") {
+      obj.amount = message.amount;
     }
     return obj;
   },
@@ -410,6 +295,8 @@ export const WithdrawDepositorRewardRequest = {
     const message = createBaseWithdrawDepositorRewardRequest();
     message.depositorAddress = object.depositorAddress ?? "";
     message.receiverAddress = object.receiverAddress ?? "";
+    message.withdrawAddress = object.withdrawAddress ?? "";
+    message.amount = object.amount ?? "";
     return message;
   },
 };
@@ -490,10 +377,6 @@ export const WithdrawDepositorRewardResponse = {
 export interface MsgService {
   /** UpdateParams defines a method for updating the rewards module parameters. */
   UpdateParams(request: UpdateParamsRequest): Promise<UpdateParamsResponse>;
-  /** SetWithdrawAddress defines a method for setting the withdraw address. */
-  SetWithdrawAddress(
-    request: SetWithdrawAddressRequest,
-  ): Promise<SetWithdrawAddressResponse>;
   /** WithdrawDepositorReward defines a method for withdrawing the rewards of a depositor. */
   WithdrawDepositorReward(
     request: WithdrawDepositorRewardRequest,
@@ -508,7 +391,6 @@ export class MsgServiceClientImpl implements MsgService {
     this.service = opts?.service || MsgServiceServiceName;
     this.rpc = rpc;
     this.UpdateParams = this.UpdateParams.bind(this);
-    this.SetWithdrawAddress = this.SetWithdrawAddress.bind(this);
     this.WithdrawDepositorReward = this.WithdrawDepositorReward.bind(this);
   }
   UpdateParams(request: UpdateParamsRequest): Promise<UpdateParamsResponse> {
@@ -516,16 +398,6 @@ export class MsgServiceClientImpl implements MsgService {
     const promise = this.rpc.request(this.service, "UpdateParams", data);
     return promise.then((data) =>
       UpdateParamsResponse.decode(_m0.Reader.create(data)),
-    );
-  }
-
-  SetWithdrawAddress(
-    request: SetWithdrawAddressRequest,
-  ): Promise<SetWithdrawAddressResponse> {
-    const data = SetWithdrawAddressRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "SetWithdrawAddress", data);
-    return promise.then((data) =>
-      SetWithdrawAddressResponse.decode(_m0.Reader.create(data)),
     );
   }
 

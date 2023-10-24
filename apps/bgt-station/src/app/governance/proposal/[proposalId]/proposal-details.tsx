@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
@@ -19,11 +19,13 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
+import { decodeGovMsg } from "~/utils/decodeGovMsg";
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
 import { VoteCard } from "../../components/vote-card";
 import { VoteDialog } from "../../components/vote-dialog";
 import { VoterTable } from "../../components/voter-table";
+import { updateFriendsOfTheChefTypeUrl } from "../../create/useCreateProposal";
 import { useProposalDetails } from "./useProposalDetails";
 
 export default function ProposalDetails({
@@ -38,6 +40,10 @@ export default function ProposalDetails({
     usePollTotalDelegated();
   const proposal: Proposal | undefined = useProposal();
 
+  const [proposalType, setProposalType] = useState<
+    "text" | "gauge" | undefined
+  >(undefined);
+  console.log(proposal);
   const globalTotal = useTotalDelegated();
   const userTotal = useTotalDelegatorDelegated();
 
@@ -70,6 +76,31 @@ export default function ProposalDetails({
     }
     return 0;
   }, [userTotal, globalTotal]);
+
+  const jsonMsg = useMemo(() => {
+    if (proposal) {
+      return decodeGovMsg(proposal.messages);
+    }
+    return {};
+  }, [proposal]);
+
+  //handle proposal type
+  useEffect(() => {
+    if (proposal) {
+      if (proposal.messages.length === 0) {
+        setProposalType("text");
+      }
+      if (
+        (proposal.messages[0] as any).typeURL === updateFriendsOfTheChefTypeUrl
+      ) {
+        setProposalType("gauge");
+      }
+    } else {
+      setProposalType(undefined);
+    }
+  }, [proposal]);
+
+  console.log(proposalType);
   return (
     <div className="container pb-16">
       {ModalPortal}
@@ -150,7 +181,7 @@ export default function ProposalDetails({
               Msg
             </div>
             <Card className="mt-1 h-full max-h-[376px] overflow-scroll break-words bg-muted px-3 py-2 text-sm font-normal leading-normal text-muted-foreground">
-              {proposal?.message ?? "{ }"}
+              <pre>{JSON.stringify(jsonMsg, null, 2)}</pre>
             </Card>
           </div>
         </div>

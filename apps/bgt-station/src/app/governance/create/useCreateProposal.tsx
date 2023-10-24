@@ -12,7 +12,9 @@ interface VoteValues {
   enableOrDisableGauge?: boolean;
 }
 
-const updateFriendsOfTheChefTypeUrl = "/berachain.pol.berachef.v1";
+export const updateFriendsOfTheChefTypeUrl =
+  "/berachain.pol.berachef.v1.UpdateFriendsOfTheChefRequest";
+
 export const useCreateProposal = () => {
   const { account } = useBeraJs();
 
@@ -29,10 +31,12 @@ export const useCreateProposal = () => {
 
     if (value.gaugeAddress && value.enableOrDisableGauge) {
       const friendOfTheChef = {
-        authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j33u8zp",
+        authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn",
         receiverAddress: value.gaugeAddress,
         friendOfTheChef: value.enableOrDisableGauge,
       };
+
+      console.log(friendOfTheChef);
       const friendsOfTheChefMsg =
         UpdateFriendsOfTheChefRequest.encode(friendOfTheChef);
 
@@ -60,6 +64,8 @@ export const useCreateProposal = () => {
     // }
 
     // msgPayload.push(testAnyMsg)
+
+    console.log(msgPayload);
     const msg = {
       title: value.title,
       summary: value.description,
