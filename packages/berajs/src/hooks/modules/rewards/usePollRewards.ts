@@ -1,7 +1,7 @@
 import { multicallAddress, rewardsAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatEther, type Address } from "viem";
+import { formatEther } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { REWARDS_PRECOMPILE_ABI } from "~/config";
@@ -25,7 +25,7 @@ export const usePollBgtRewards = (receivers: string[]) => {
       }));
 
       try {
-        console.log("calls", calls);
+        // console.log("calls", calls);
         const result = await publicClient.multicall({
           contracts: calls,
           multicallAddress,

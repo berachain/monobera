@@ -8,7 +8,6 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { bgtTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Badge } from "@bera/ui/badge";
@@ -194,7 +193,7 @@ export function TokenDialog({
               {!error ? (
                 filteredTokens?.length ? (
                   filteredTokens
-                    ?.filter((t) => t.address !== bgtTokenAddress)
+                    ?.filter((token) => !filter.includes(token.address))
                     .map((token, i) => (
                       <TokenDialogRow
                         key={i}

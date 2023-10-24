@@ -1,10 +1,11 @@
 import React from "react";
 import { type Token } from "@bera/berajs";
+import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { SelectToken } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { nativeTokenAddress } from "@bera/config";
+
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 type Props = {
@@ -40,7 +41,7 @@ export default function CreatePoolInput({
         onTokenSelection={handleTokenSelection}
         selectedTokens={selectedTokens}
         selectable={selectable}
-        filter={[nativeTokenAddress]}
+        filter={[nativeTokenAddress, bgtTokenAddress]}
       />
       <Input
         type="number"

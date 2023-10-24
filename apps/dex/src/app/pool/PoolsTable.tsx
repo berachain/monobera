@@ -1,5 +1,6 @@
 "use client";
 
+import { type Pool } from "@bera/bera-router";
 import { useBeraJs, usePollBgtRewards } from "@bera/berajs";
 import {
   ConnectWalletBear,
@@ -17,7 +18,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { columns, my_columns } from "~/components/pools-table-columns";
 import { PoolCard, PoolCardLoading } from "./PoolCard";
 import { usePoolTable } from "./usePoolTable";
-import { type Pool } from "@bera/bera-router";
 
 const FilterBadge = ({
   text,
