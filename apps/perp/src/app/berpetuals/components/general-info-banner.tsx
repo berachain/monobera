@@ -21,7 +21,9 @@ export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
     document.title =
       price === undefined
         ? `${market.name} | ${perpsName}`
-        : `${formatUsd(price)} | ${market.name} | ${perpsName}`;
+        : `${formatUsd(Number(formatUnits(price, 10)))} | ${
+            market.name
+          } | ${perpsName}`;
   }, [price]);
 
   const formattedLongOi = formatUnits(
@@ -74,7 +76,7 @@ export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
         <div className="mr-4">
           <div className="text-xl font-semibold leading-7 text-muted-foreground">
             {price !== undefined ? (
-              formatUsd(price)
+              formatUsd(Number(formatUnits(price, 10)))
             ) : (
               <Skeleton className="h-[28px] w-[80px]" />
             )}

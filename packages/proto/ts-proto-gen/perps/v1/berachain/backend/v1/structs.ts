@@ -105,7 +105,7 @@ export interface OpenTrade {
   position_size: string;
   open_price: string;
   /** true for long, false for short */
-  buy: string;
+  buy: boolean;
   leverage: string;
   tp: string;
   sl: string;
@@ -114,6 +114,45 @@ export interface OpenTrade {
   /** negative => trader earns fee, positive => trader pays fee */
   funding_rate: string;
   closing_fee: string;
+  timestamp_open: string;
+}
+
+export interface OpenLimitOrder {
+  trader: string;
+  pair_index: string;
+  index: string;
+  position_size: string;
+  spread_reduction_p: string;
+  /** true for long, false for short */
+  buy: boolean;
+  leverage: string;
+  tp: string;
+  sl: string;
+  price: string;
+  timestamp_placed: string;
+}
+
+export interface ClosedTrade {
+  timestamp: string;
+  trader: string;
+  pair_index: string;
+  index: string;
+  volume: string;
+  pnl: string;
+  price: string;
+  leverage: string;
+  /** true for long, false for short */
+  buy: boolean;
+  tp: string;
+  sl: string;
+  close_type: string;
+  rollover_fee: string;
+  /** negative => trader earns fee, positive => trader pays fee */
+  funding_rate: string;
+  closing_fee: string;
+  borrowing_fee: string;
+  vault_fee: string;
+  staking_fee: string;
 }
 
 /** AccountFees is fees paid by the trader. */
@@ -152,7 +191,7 @@ export interface SymbolInfo {
  * https://www.tradingview.com/charting-library-docs/latest/api/interfaces/Charting_Library.SearchSymbolResultItem
  */
 export interface SearchSymbolResultItem {
-  Description: string;
+  description: string;
   exchange: string;
   full_name: string;
   symbol: string;
@@ -1496,7 +1535,7 @@ function createBaseOpenTrade(): OpenTrade {
     index: "",
     position_size: "",
     open_price: "",
-    buy: "",
+    buy: false,
     leverage: "",
     tp: "",
     sl: "",
@@ -1504,6 +1543,7 @@ function createBaseOpenTrade(): OpenTrade {
     rollover_fee: "",
     funding_rate: "",
     closing_fee: "",
+    timestamp_open: "",
   };
 }
 
@@ -1527,8 +1567,8 @@ export const OpenTrade = {
     if (message.open_price !== "") {
       writer.uint32(42).string(message.open_price);
     }
-    if (message.buy !== "") {
-      writer.uint32(50).string(message.buy);
+    if (message.buy === true) {
+      writer.uint32(48).bool(message.buy);
     }
     if (message.leverage !== "") {
       writer.uint32(58).string(message.leverage);
@@ -1550,6 +1590,9 @@ export const OpenTrade = {
     }
     if (message.closing_fee !== "") {
       writer.uint32(106).string(message.closing_fee);
+    }
+    if (message.timestamp_open !== "") {
+      writer.uint32(114).string(message.timestamp_open);
     }
     return writer;
   },
@@ -1598,11 +1641,11 @@ export const OpenTrade = {
           message.open_price = reader.string();
           continue;
         case 6:
-          if (tag !== 50) {
+          if (tag !== 48) {
             break;
           }
 
-          message.buy = reader.string();
+          message.buy = reader.bool();
           continue;
         case 7:
           if (tag !== 58) {
@@ -1653,6 +1696,13 @@ export const OpenTrade = {
 
           message.closing_fee = reader.string();
           continue;
+        case 14:
+          if (tag !== 114) {
+            break;
+          }
+
+          message.timestamp_open = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1671,7 +1721,7 @@ export const OpenTrade = {
         ? String(object.position_size)
         : "",
       open_price: isSet(object.open_price) ? String(object.open_price) : "",
-      buy: isSet(object.buy) ? String(object.buy) : "",
+      buy: isSet(object.buy) ? Boolean(object.buy) : false,
       leverage: isSet(object.leverage) ? String(object.leverage) : "",
       tp: isSet(object.tp) ? String(object.tp) : "",
       sl: isSet(object.sl) ? String(object.sl) : "",
@@ -1685,6 +1735,9 @@ export const OpenTrade = {
         ? String(object.funding_rate)
         : "",
       closing_fee: isSet(object.closing_fee) ? String(object.closing_fee) : "",
+      timestamp_open: isSet(object.timestamp_open)
+        ? String(object.timestamp_open)
+        : "",
     };
   },
 
@@ -1705,7 +1758,7 @@ export const OpenTrade = {
     if (message.open_price !== "") {
       obj.open_price = message.open_price;
     }
-    if (message.buy !== "") {
+    if (message.buy === true) {
       obj.buy = message.buy;
     }
     if (message.leverage !== "") {
@@ -1729,6 +1782,9 @@ export const OpenTrade = {
     if (message.closing_fee !== "") {
       obj.closing_fee = message.closing_fee;
     }
+    if (message.timestamp_open !== "") {
+      obj.timestamp_open = message.timestamp_open;
+    }
     return obj;
   },
 
@@ -1744,7 +1800,7 @@ export const OpenTrade = {
     message.index = object.index ?? "";
     message.position_size = object.position_size ?? "";
     message.open_price = object.open_price ?? "";
-    message.buy = object.buy ?? "";
+    message.buy = object.buy ?? false;
     message.leverage = object.leverage ?? "";
     message.tp = object.tp ?? "";
     message.sl = object.sl ?? "";
@@ -1752,6 +1808,587 @@ export const OpenTrade = {
     message.rollover_fee = object.rollover_fee ?? "";
     message.funding_rate = object.funding_rate ?? "";
     message.closing_fee = object.closing_fee ?? "";
+    message.timestamp_open = object.timestamp_open ?? "";
+    return message;
+  },
+};
+
+function createBaseOpenLimitOrder(): OpenLimitOrder {
+  return {
+    trader: "",
+    pair_index: "",
+    index: "",
+    position_size: "",
+    spread_reduction_p: "",
+    buy: false,
+    leverage: "",
+    tp: "",
+    sl: "",
+    price: "",
+    timestamp_placed: "",
+  };
+}
+
+export const OpenLimitOrder = {
+  encode(
+    message: OpenLimitOrder,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.trader !== "") {
+      writer.uint32(10).string(message.trader);
+    }
+    if (message.pair_index !== "") {
+      writer.uint32(18).string(message.pair_index);
+    }
+    if (message.index !== "") {
+      writer.uint32(26).string(message.index);
+    }
+    if (message.position_size !== "") {
+      writer.uint32(34).string(message.position_size);
+    }
+    if (message.spread_reduction_p !== "") {
+      writer.uint32(42).string(message.spread_reduction_p);
+    }
+    if (message.buy === true) {
+      writer.uint32(48).bool(message.buy);
+    }
+    if (message.leverage !== "") {
+      writer.uint32(58).string(message.leverage);
+    }
+    if (message.tp !== "") {
+      writer.uint32(66).string(message.tp);
+    }
+    if (message.sl !== "") {
+      writer.uint32(74).string(message.sl);
+    }
+    if (message.price !== "") {
+      writer.uint32(82).string(message.price);
+    }
+    if (message.timestamp_placed !== "") {
+      writer.uint32(90).string(message.timestamp_placed);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): OpenLimitOrder {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseOpenLimitOrder();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.trader = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pair_index = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.index = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.position_size = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.spread_reduction_p = reader.string();
+          continue;
+        case 6:
+          if (tag !== 48) {
+            break;
+          }
+
+          message.buy = reader.bool();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.leverage = reader.string();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.tp = reader.string();
+          continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.sl = reader.string();
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.price = reader.string();
+          continue;
+        case 11:
+          if (tag !== 90) {
+            break;
+          }
+
+          message.timestamp_placed = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OpenLimitOrder {
+    return {
+      trader: isSet(object.trader) ? String(object.trader) : "",
+      pair_index: isSet(object.pair_index) ? String(object.pair_index) : "",
+      index: isSet(object.index) ? String(object.index) : "",
+      position_size: isSet(object.position_size)
+        ? String(object.position_size)
+        : "",
+      spread_reduction_p: isSet(object.spread_reduction_p)
+        ? String(object.spread_reduction_p)
+        : "",
+      buy: isSet(object.buy) ? Boolean(object.buy) : false,
+      leverage: isSet(object.leverage) ? String(object.leverage) : "",
+      tp: isSet(object.tp) ? String(object.tp) : "",
+      sl: isSet(object.sl) ? String(object.sl) : "",
+      price: isSet(object.price) ? String(object.price) : "",
+      timestamp_placed: isSet(object.timestamp_placed)
+        ? String(object.timestamp_placed)
+        : "",
+    };
+  },
+
+  toJSON(message: OpenLimitOrder): unknown {
+    const obj: any = {};
+    if (message.trader !== "") {
+      obj.trader = message.trader;
+    }
+    if (message.pair_index !== "") {
+      obj.pair_index = message.pair_index;
+    }
+    if (message.index !== "") {
+      obj.index = message.index;
+    }
+    if (message.position_size !== "") {
+      obj.position_size = message.position_size;
+    }
+    if (message.spread_reduction_p !== "") {
+      obj.spread_reduction_p = message.spread_reduction_p;
+    }
+    if (message.buy === true) {
+      obj.buy = message.buy;
+    }
+    if (message.leverage !== "") {
+      obj.leverage = message.leverage;
+    }
+    if (message.tp !== "") {
+      obj.tp = message.tp;
+    }
+    if (message.sl !== "") {
+      obj.sl = message.sl;
+    }
+    if (message.price !== "") {
+      obj.price = message.price;
+    }
+    if (message.timestamp_placed !== "") {
+      obj.timestamp_placed = message.timestamp_placed;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<OpenLimitOrder>, I>>(
+    base?: I,
+  ): OpenLimitOrder {
+    return OpenLimitOrder.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<OpenLimitOrder>, I>>(
+    object: I,
+  ): OpenLimitOrder {
+    const message = createBaseOpenLimitOrder();
+    message.trader = object.trader ?? "";
+    message.pair_index = object.pair_index ?? "";
+    message.index = object.index ?? "";
+    message.position_size = object.position_size ?? "";
+    message.spread_reduction_p = object.spread_reduction_p ?? "";
+    message.buy = object.buy ?? false;
+    message.leverage = object.leverage ?? "";
+    message.tp = object.tp ?? "";
+    message.sl = object.sl ?? "";
+    message.price = object.price ?? "";
+    message.timestamp_placed = object.timestamp_placed ?? "";
+    return message;
+  },
+};
+
+function createBaseClosedTrade(): ClosedTrade {
+  return {
+    timestamp: "",
+    trader: "",
+    pair_index: "",
+    index: "",
+    volume: "",
+    pnl: "",
+    price: "",
+    leverage: "",
+    buy: false,
+    tp: "",
+    sl: "",
+    close_type: "",
+    rollover_fee: "",
+    funding_rate: "",
+    closing_fee: "",
+    borrowing_fee: "",
+    vault_fee: "",
+    staking_fee: "",
+  };
+}
+
+export const ClosedTrade = {
+  encode(
+    message: ClosedTrade,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.timestamp !== "") {
+      writer.uint32(10).string(message.timestamp);
+    }
+    if (message.trader !== "") {
+      writer.uint32(18).string(message.trader);
+    }
+    if (message.pair_index !== "") {
+      writer.uint32(26).string(message.pair_index);
+    }
+    if (message.index !== "") {
+      writer.uint32(34).string(message.index);
+    }
+    if (message.volume !== "") {
+      writer.uint32(42).string(message.volume);
+    }
+    if (message.pnl !== "") {
+      writer.uint32(50).string(message.pnl);
+    }
+    if (message.price !== "") {
+      writer.uint32(58).string(message.price);
+    }
+    if (message.leverage !== "") {
+      writer.uint32(66).string(message.leverage);
+    }
+    if (message.buy === true) {
+      writer.uint32(72).bool(message.buy);
+    }
+    if (message.tp !== "") {
+      writer.uint32(82).string(message.tp);
+    }
+    if (message.sl !== "") {
+      writer.uint32(90).string(message.sl);
+    }
+    if (message.close_type !== "") {
+      writer.uint32(98).string(message.close_type);
+    }
+    if (message.rollover_fee !== "") {
+      writer.uint32(106).string(message.rollover_fee);
+    }
+    if (message.funding_rate !== "") {
+      writer.uint32(114).string(message.funding_rate);
+    }
+    if (message.closing_fee !== "") {
+      writer.uint32(122).string(message.closing_fee);
+    }
+    if (message.borrowing_fee !== "") {
+      writer.uint32(130).string(message.borrowing_fee);
+    }
+    if (message.vault_fee !== "") {
+      writer.uint32(138).string(message.vault_fee);
+    }
+    if (message.staking_fee !== "") {
+      writer.uint32(146).string(message.staking_fee);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ClosedTrade {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseClosedTrade();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.timestamp = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.trader = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.pair_index = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.index = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.volume = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.pnl = reader.string();
+          continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.price = reader.string();
+          continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.leverage = reader.string();
+          continue;
+        case 9:
+          if (tag !== 72) {
+            break;
+          }
+
+          message.buy = reader.bool();
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.tp = reader.string();
+          continue;
+        case 11:
+          if (tag !== 90) {
+            break;
+          }
+
+          message.sl = reader.string();
+          continue;
+        case 12:
+          if (tag !== 98) {
+            break;
+          }
+
+          message.close_type = reader.string();
+          continue;
+        case 13:
+          if (tag !== 106) {
+            break;
+          }
+
+          message.rollover_fee = reader.string();
+          continue;
+        case 14:
+          if (tag !== 114) {
+            break;
+          }
+
+          message.funding_rate = reader.string();
+          continue;
+        case 15:
+          if (tag !== 122) {
+            break;
+          }
+
+          message.closing_fee = reader.string();
+          continue;
+        case 16:
+          if (tag !== 130) {
+            break;
+          }
+
+          message.borrowing_fee = reader.string();
+          continue;
+        case 17:
+          if (tag !== 138) {
+            break;
+          }
+
+          message.vault_fee = reader.string();
+          continue;
+        case 18:
+          if (tag !== 146) {
+            break;
+          }
+
+          message.staking_fee = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ClosedTrade {
+    return {
+      timestamp: isSet(object.timestamp) ? String(object.timestamp) : "",
+      trader: isSet(object.trader) ? String(object.trader) : "",
+      pair_index: isSet(object.pair_index) ? String(object.pair_index) : "",
+      index: isSet(object.index) ? String(object.index) : "",
+      volume: isSet(object.volume) ? String(object.volume) : "",
+      pnl: isSet(object.pnl) ? String(object.pnl) : "",
+      price: isSet(object.price) ? String(object.price) : "",
+      leverage: isSet(object.leverage) ? String(object.leverage) : "",
+      buy: isSet(object.buy) ? Boolean(object.buy) : false,
+      tp: isSet(object.tp) ? String(object.tp) : "",
+      sl: isSet(object.sl) ? String(object.sl) : "",
+      close_type: isSet(object.close_type) ? String(object.close_type) : "",
+      rollover_fee: isSet(object.rollover_fee)
+        ? String(object.rollover_fee)
+        : "",
+      funding_rate: isSet(object.funding_rate)
+        ? String(object.funding_rate)
+        : "",
+      closing_fee: isSet(object.closing_fee) ? String(object.closing_fee) : "",
+      borrowing_fee: isSet(object.borrowing_fee)
+        ? String(object.borrowing_fee)
+        : "",
+      vault_fee: isSet(object.vault_fee) ? String(object.vault_fee) : "",
+      staking_fee: isSet(object.staking_fee) ? String(object.staking_fee) : "",
+    };
+  },
+
+  toJSON(message: ClosedTrade): unknown {
+    const obj: any = {};
+    if (message.timestamp !== "") {
+      obj.timestamp = message.timestamp;
+    }
+    if (message.trader !== "") {
+      obj.trader = message.trader;
+    }
+    if (message.pair_index !== "") {
+      obj.pair_index = message.pair_index;
+    }
+    if (message.index !== "") {
+      obj.index = message.index;
+    }
+    if (message.volume !== "") {
+      obj.volume = message.volume;
+    }
+    if (message.pnl !== "") {
+      obj.pnl = message.pnl;
+    }
+    if (message.price !== "") {
+      obj.price = message.price;
+    }
+    if (message.leverage !== "") {
+      obj.leverage = message.leverage;
+    }
+    if (message.buy === true) {
+      obj.buy = message.buy;
+    }
+    if (message.tp !== "") {
+      obj.tp = message.tp;
+    }
+    if (message.sl !== "") {
+      obj.sl = message.sl;
+    }
+    if (message.close_type !== "") {
+      obj.close_type = message.close_type;
+    }
+    if (message.rollover_fee !== "") {
+      obj.rollover_fee = message.rollover_fee;
+    }
+    if (message.funding_rate !== "") {
+      obj.funding_rate = message.funding_rate;
+    }
+    if (message.closing_fee !== "") {
+      obj.closing_fee = message.closing_fee;
+    }
+    if (message.borrowing_fee !== "") {
+      obj.borrowing_fee = message.borrowing_fee;
+    }
+    if (message.vault_fee !== "") {
+      obj.vault_fee = message.vault_fee;
+    }
+    if (message.staking_fee !== "") {
+      obj.staking_fee = message.staking_fee;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ClosedTrade>, I>>(base?: I): ClosedTrade {
+    return ClosedTrade.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ClosedTrade>, I>>(
+    object: I,
+  ): ClosedTrade {
+    const message = createBaseClosedTrade();
+    message.timestamp = object.timestamp ?? "";
+    message.trader = object.trader ?? "";
+    message.pair_index = object.pair_index ?? "";
+    message.index = object.index ?? "";
+    message.volume = object.volume ?? "";
+    message.pnl = object.pnl ?? "";
+    message.price = object.price ?? "";
+    message.leverage = object.leverage ?? "";
+    message.buy = object.buy ?? false;
+    message.tp = object.tp ?? "";
+    message.sl = object.sl ?? "";
+    message.close_type = object.close_type ?? "";
+    message.rollover_fee = object.rollover_fee ?? "";
+    message.funding_rate = object.funding_rate ?? "";
+    message.closing_fee = object.closing_fee ?? "";
+    message.borrowing_fee = object.borrowing_fee ?? "";
+    message.vault_fee = object.vault_fee ?? "";
+    message.staking_fee = object.staking_fee ?? "";
     return message;
   },
 };
@@ -2158,7 +2795,7 @@ export const SymbolInfo = {
 
 function createBaseSearchSymbolResultItem(): SearchSymbolResultItem {
   return {
-    Description: "",
+    description: "",
     exchange: "",
     full_name: "",
     symbol: "",
@@ -2172,8 +2809,8 @@ export const SearchSymbolResultItem = {
     message: SearchSymbolResultItem,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
-    if (message.Description !== "") {
-      writer.uint32(10).string(message.Description);
+    if (message.description !== "") {
+      writer.uint32(10).string(message.description);
     }
     if (message.exchange !== "") {
       writer.uint32(18).string(message.exchange);
@@ -2209,7 +2846,7 @@ export const SearchSymbolResultItem = {
             break;
           }
 
-          message.Description = reader.string();
+          message.description = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
@@ -2257,7 +2894,7 @@ export const SearchSymbolResultItem = {
 
   fromJSON(object: any): SearchSymbolResultItem {
     return {
-      Description: isSet(object.Description) ? String(object.Description) : "",
+      description: isSet(object.description) ? String(object.description) : "",
       exchange: isSet(object.exchange) ? String(object.exchange) : "",
       full_name: isSet(object.full_name) ? String(object.full_name) : "",
       symbol: isSet(object.symbol) ? String(object.symbol) : "",
@@ -2268,8 +2905,8 @@ export const SearchSymbolResultItem = {
 
   toJSON(message: SearchSymbolResultItem): unknown {
     const obj: any = {};
-    if (message.Description !== "") {
-      obj.Description = message.Description;
+    if (message.description !== "") {
+      obj.description = message.description;
     }
     if (message.exchange !== "") {
       obj.exchange = message.exchange;
@@ -2298,7 +2935,7 @@ export const SearchSymbolResultItem = {
     object: I,
   ): SearchSymbolResultItem {
     const message = createBaseSearchSymbolResultItem();
-    message.Description = object.Description ?? "";
+    message.description = object.description ?? "";
     message.exchange = object.exchange ?? "";
     message.full_name = object.full_name ?? "";
     message.symbol = object.symbol ?? "";

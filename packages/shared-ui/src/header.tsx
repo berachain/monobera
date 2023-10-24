@@ -48,7 +48,7 @@ export function Header({
           <MainNav navItems={navItems} />
         </div>
       </div>
-      <div className="flex h-full items-center gap-2 xl:gap-4"> 
+      <div className="flex h-full items-center gap-2 xl:gap-4">
         {isHoney && (
           <Link
             href={publicAnalyticsUrl}

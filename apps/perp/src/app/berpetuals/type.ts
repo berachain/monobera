@@ -3,6 +3,7 @@ export interface OrderType {
   orderType: "long" | "short";
   optionType: "market" | "limit";
   amount: number | undefined;
+  limitPrice?: number | undefined;
   quantity: number | undefined;
   price?: number | undefined;
   leverage: number | undefined;

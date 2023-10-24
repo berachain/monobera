@@ -27,7 +27,7 @@ export const withdraw_queue_columns: ColumnDef<HoneyWithdrawalRequest>[] = [
       <DataTableColumnHeader column={column} title="Epoch" />
     ),
     cell: ({ row }) => {
-      <div>{row.original.epochCreated}</div>;
+      <div>{row.original.epoch_created}</div>;
     },
     accessorKey: "open_epoch",
     enableSorting: true,
@@ -39,7 +39,7 @@ export const withdraw_queue_columns: ColumnDef<HoneyWithdrawalRequest>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex w-[88px] flex-col gap-1">
-          {row.original.unlockEpoch}
+          {row.original.unlock_epoch}
         </div>
       );
     },

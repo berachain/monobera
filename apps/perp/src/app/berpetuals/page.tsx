@@ -5,6 +5,7 @@ import { perpsName } from "@bera/config";
 import { type Market } from "@bera/proto/src";
 
 import { MarketImages } from "~/utils/marketImages";
+import { MarketTokenNames } from "~/utils/marketTokenNames";
 import { getMarkets } from "~/endpoints";
 import { GeneralInfoBanner } from "./components/general-info-banner";
 import { InstrumentDropdown } from "./components/instrument-dropdown";
@@ -33,6 +34,7 @@ export default async function Home() {
   const markets: IMarket[] = data.markets.map((m: Market) => ({
     ...m,
     imageUri: MarketImages[m.name],
+    tokenName: MarketTokenNames[m.name],
   }));
 
   const defualtMarket = markets.find((m: Market) => m.name === DEFAULT_MARKET);
@@ -57,7 +59,9 @@ export default async function Home() {
       <div className="flex w-full flex-col lg:flex-row">
         <CreatePosition market={defualtMarket} />
         <div className="h-full w-full pb-[34px] lg:w-screen-w-400">
-          <span className="hidden lg:block">{/* <OrderChart /> */}</span>
+          <span className="hidden lg:block">
+            <OrderChart />
+          </span>
           <OrderHistory />
         </div>
       </div>{" "}

@@ -17,10 +17,13 @@ export const Epochs = ({
   const [progressPercentage, setProgressPercentage] = useState(0);
   const [duration, setDuration] = useState("0d");
 
-  const formattedStartDate = format(
-    new Date((epoch?.currentEpochStart ?? 0) * 1000),
-    "MM/dd/yy, h:ma",
-  );
+  const formattedStartDate =
+    epoch === undefined
+      ? 0
+      : format(
+          new Date((epoch?.currentEpochStart ?? 0) * 1000),
+          "MM/dd/yy, h:ma",
+        );
   const formattedEndDate = format(
     new Date((epoch?.currentEpochEnd ?? 0) * 1000),
     "MM/dd/yy, h:ma",

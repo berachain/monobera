@@ -8,11 +8,18 @@ import {
 import { honeyAddress } from "@bera/config";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
+import {
+  DEFAULT_SLIPPAGE,
+  SLIPPAGE_MODE,
+  SLIPPAGE_TOLERANCE_TYPE,
+  SLIPPAGE_TOLERANCE_VALUE,
+} from "@bera/shared-ui/src/settings";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { parseUnits } from "viem";
+import { useLocalStorage } from "usehooks-ts";
+import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import ApproveTokenButton from "~/app/components/approve-token-button";
@@ -21,7 +28,7 @@ import { type OrderType } from "../type";
 
 export function PlaceOrder({
   form,
-  price = 10000,
+  price,
   openingFee,
   bfLong,
   bfShort,
@@ -34,6 +41,7 @@ export function PlaceOrder({
   bfShort: number;
   pairIndex: number;
 }) {
+  const formattedPrice = Number(formatUnits(BigInt(price ?? 0n), 10));
   const { isLoading, write } = useOctTxn({
     message:
       form.orderType === "long"
@@ -45,12 +53,12 @@ export function PlaceOrder({
   const dailyBfShort = bfShort * 24;
 
   const estTakeProfit = useMemo(() => {
-    const tp = (1 + (form.tp ?? 0) / 100) * (price ?? 0);
+    const tp = (1 + (form.tp ?? 0) / 100) * (formattedPrice ?? 0);
     return tp;
   }, [form.tp, price]);
 
   const estStopLoss = useMemo(() => {
-    const sl = (1 - (form.sl ?? 0) / 100) * (price ?? 0);
+    const sl = (1 - (form.sl ?? 0) / 100) * (formattedPrice ?? 0);
     return sl;
   }, [form.sl, price]);
 
@@ -58,7 +66,7 @@ export function PlaceOrder({
     bfLong,
     bfShort,
     orderType: form.orderType,
-    price,
+    price: formattedPrice,
     leverage: form.leverage,
   });
 
@@ -66,8 +74,35 @@ export function PlaceOrder({
 
   const tradingContract = process.env
     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address;
-  const positionSize = (form.amount ?? 0) * (form.leverage ?? 1);
-  const parsedPositionSize = parseUnits(`${positionSize}`, 18);
+  const posSize = useMemo(() => {
+    const positionSize = (form.amount ?? 0) * (form.leverage ?? 1);
+    return Number.isNaN(positionSize) || positionSize === undefined
+      ? 0
+      : positionSize;
+  }, [form.amount, form.leverage]);
+  const parsedPositionSize = parseUnits(`${posSize ?? 0}`, 18);
+
+  const [slippageMode] = useLocalStorage<SLIPPAGE_MODE>(
+    SLIPPAGE_TOLERANCE_TYPE,
+    SLIPPAGE_MODE.AUTO,
+  );
+  const [slippage] = useLocalStorage<number>(
+    SLIPPAGE_TOLERANCE_VALUE,
+    DEFAULT_SLIPPAGE,
+  );
+
+  const slippageTolerance = useMemo(() => {
+    if (slippageMode === SLIPPAGE_MODE.AUTO) {
+      return DEFAULT_SLIPPAGE;
+    }
+    if (slippageMode === SLIPPAGE_MODE.CUSTOM) {
+      return slippage;
+    }
+    if (slippageMode === SLIPPAGE_MODE.DEGEN) {
+      return 80;
+    }
+  }, [slippageMode, slippage]);
+
   const payload = [
     {
       trader: account,
@@ -83,7 +118,7 @@ export function PlaceOrder({
     },
     form.optionType === "market" ? 0 : 2,
     0,
-    parseUnits(`${25}`, 10),
+    parseUnits(`${slippageTolerance ?? 0}`, 10),
   ];
 
   const honey = {
@@ -100,6 +135,8 @@ export function PlaceOrder({
 
   const allowance = useAllowance();
 
+  console.log(payload);
+
   return (
     <div className="flex w-full flex-col gap-1 rounded-xl border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
       {form.optionType === "market" ? (
@@ -109,7 +146,7 @@ export function PlaceOrder({
             {price === undefined ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              formatUsd(price ?? 0)
+              formatUsd(formattedPrice ?? 0)
             )}
           </div>
         </div>
@@ -120,7 +157,7 @@ export function PlaceOrder({
             {price === undefined ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              formatUsd(price ?? 0)
+              formatUsd(formattedPrice ?? 0)
             )}
           </div>
         </div>
@@ -128,7 +165,7 @@ export function PlaceOrder({
       <div className="flex w-full justify-between">
         <div>EST. LIQ. PRICE</div>
         <div className="flex flex-row text-foreground">
-          {liqPrice === undefined ? (
+          {price === undefined || liqPrice === undefined ? (
             <Skeleton className="h-4 w-14" />
           ) : (
             formatUsd(liqPrice)
@@ -141,30 +178,38 @@ export function PlaceOrder({
       </div>
       <div className="flex w-full justify-between">
         <div>EST. TAKE PROFIT</div>
-        <div className="text-foreground">
-          {form.tp === 0 ? "None" : `${formatUsd(estTakeProfit)}`}{" "}
+        <div className="flex flex-row items-center gap-1 text-foreground">
+          {form.tp === 0 ? (
+            "None"
+          ) : price === undefined ? (
+            <Skeleton className="h-4 w-14" />
+          ) : (
+            `${formatUsd(estTakeProfit)}`
+          )}{" "}
           {form.sl !== 0 && (
-            <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" />
+            <Icons.honey className="inline h-3 w-3 text-muted-foreground" />
           )}
         </div>
       </div>
       <div className="flex w-full justify-between">
         <div>EST. STOP LOSS</div>
-        <div className="text-foreground">
-          {form.sl === 0 ? "None" : `${formatUsd(estStopLoss)}`}{" "}
+        <div className="flex flex-row items-center gap-1 text-foreground">
+          {form.sl === 0 ? (
+            "None"
+          ) : price === undefined ? (
+            <Skeleton className="h-4 w-14" />
+          ) : (
+            `${formatUsd(estStopLoss)}`
+          )}{" "}
           {form.sl !== 0 && (
-            <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" />
+            <Icons.honey className="inline h-3 w-3 text-muted-foreground" />
           )}
         </div>
       </div>
       <div className="flex w-full justify-between">
         <div>POSITION SIZE</div>
         <div className="align-items flex flex-row items-center gap-1 text-foreground">
-          {price === undefined ? (
-            <Skeleton className="h-4 w-14" />
-          ) : (
-            formatUsd((form.amount ?? 0) * (form.leverage ?? 1))
-          )}{" "}
+          {formatUsd(posSize)}{" "}
           <Icons.honey className=" inline h-3 w-3 text-muted-foreground" />
         </div>
       </div>
@@ -185,13 +230,13 @@ export function PlaceOrder({
           <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" />
         </div>
       </div>
-      <ActionButton>
+      <ActionButton className="mt-4">
         {allowance?.formattedAllowance === "0" ? (
           <ApproveTokenButton token={honey} spender={tradingContract} />
         ) : (
           <Button
             className={cn(
-              "mt-4 w-full capitalize hover:opacity-80",
+              "w-full capitalize hover:opacity-80",
               form.orderType === "long"
                 ? "bg-success text-success-foreground"
                 : "bg-destructive text-destructive-foreground",

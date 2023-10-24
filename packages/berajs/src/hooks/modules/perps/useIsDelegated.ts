@@ -20,14 +20,11 @@ export const useIsDelegated = () => {
           functionName: method,
           args: [account],
         });
-        console.log("SC RETURN", result);
         return (
           result !== undefined &&
           result !== "0x0000000000000000000000000000000000000000"
         );
       } catch (e) {
-        console.log("SC RETURN FUCK");
-
         console.error(e);
         return false;
       }

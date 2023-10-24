@@ -21,10 +21,12 @@ interface ICreatePosition {
 }
 
 export default function CreatePosition({ market }: ICreatePosition) {
+  const [givenHoney, setGivenHoney] = useState<boolean>(true);
   const [form, setForm] = useState<OrderType>({
     assets: "BTC",
     orderType: "long",
     optionType: "market",
+    limitPrice: undefined,
     amount: undefined,
     quantity: undefined,
     price: undefined,
@@ -34,17 +36,58 @@ export default function CreatePosition({ market }: ICreatePosition) {
   });
 
   const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
+  const rawPrice = useMarketIndexPrice(Number(market.pair_index) ?? 0);
   const honeyPrice = 1;
   const { useHoneyBalance } = usePollHoneyBalance();
   const honeyBalance = useHoneyBalance();
 
+  const formattedPrice = Number(formatUnits(BigInt(rawPrice ?? 0n), 10));
+
   useMemo(() => {
     const honeyAmountPrice = (form.amount ?? 0) * honeyPrice;
     const leveragedHoneyPrice = honeyAmountPrice * (form.leverage ?? 1);
-    const newQuantity = leveragedHoneyPrice / price;
-    setForm({ ...form, quantity: newQuantity });
-  }, [honeyPrice, form.amount, form.leverage]);
+    if (form.optionType === "market") {
+      if (givenHoney) {
+        const newQuantity = leveragedHoneyPrice / formattedPrice;
+        setForm({ ...form, quantity: newQuantity });
+        return;
+      } else if (!givenHoney && form.quantity !== undefined) {
+        const newAmount =
+          (form.quantity / (form.leverage ?? 1)) *
+          (formattedPrice / honeyPrice);
+        setForm({ ...form, amount: newAmount });
+        return;
+      }
+
+      return;
+    }
+    if (form.optionType === "limit") {
+      if (givenHoney) {
+        const newQuantity = leveragedHoneyPrice / (form.limitPrice ?? 0);
+        setForm({ ...form, quantity: newQuantity });
+      } else if (
+        !givenHoney &&
+        form.quantity !== undefined &&
+        form.limitPrice !== undefined
+      ) {
+        const newAmount =
+          (form.quantity / (form.leverage ?? 1)) *
+          (form.limitPrice / honeyPrice);
+        setForm({ ...form, amount: newAmount });
+        return;
+      }
+      return;
+    }
+  }, [
+    honeyPrice,
+    form.amount,
+    form.leverage,
+    form.optionType,
+    form.limitPrice,
+    form.quantity,
+    rawPrice,
+  ]);
+
   return (
     <div className="w-full flex-shrink-0 pb-10 lg:min-h-screen-250 lg:w-[400px] lg:border-r lg:border-border">
       <LongShortTab
@@ -80,8 +123,9 @@ export default function CreatePosition({ market }: ICreatePosition) {
           <CustomizeInput
             title="Amount"
             value={form.amount}
+            isExceeding={honeyBalance && honeyBalance < (form.amount ?? 0)}
             onChange={(e) => {
-              console.log(e);
+              setGivenHoney(true);
               setForm({ ...form, amount: Number(e) });
             }}
             subTitle={
@@ -111,8 +155,13 @@ export default function CreatePosition({ market }: ICreatePosition) {
           />
           <CustomizeInput
             title="Quantity"
+            disabled={rawPrice === undefined}
             subTitle={`Leverage: ${form.leverage}x`}
             value={form.quantity}
+            onChange={(e) => {
+              setGivenHoney(false);
+              setForm({ ...form, quantity: Number(e) });
+            }}
             endAdornment={
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
                 <Image
@@ -122,14 +171,24 @@ export default function CreatePosition({ market }: ICreatePosition) {
                   height={24}
                   className="rounded-full"
                 />
-                HONEY
+                {market.name.split("-")[0]}
               </div>
             }
           />
           {form.optionType === "limit" && (
             <CustomizeInput
               title="Price"
-              subTitle={`Mark: ${formatUsd(25316.12)}`}
+              subTitle={`Mark: ${formatUsd(formattedPrice)}`}
+              value={form.limitPrice}
+              onSubtitleClick={() => {
+                setForm({
+                  ...form,
+                  limitPrice: Number(formattedPrice.toFixed(2)),
+                });
+              }}
+              onChange={(e) => {
+                setForm({ ...form, limitPrice: Number(e) });
+              }}
               endAdornment={
                 <div className="flex items-center text-sm text-muted-foreground">
                   USD
@@ -152,7 +211,7 @@ export default function CreatePosition({ market }: ICreatePosition) {
         />
         <PlaceOrder
           form={form}
-          price={price}
+          price={rawPrice}
           pairIndex={Number(market.pair_index) ?? 0}
           openingFee={Number(
             formatUnits(BigInt(market.pair_fixed_fee?.open_fee_p ?? "0"), 18),

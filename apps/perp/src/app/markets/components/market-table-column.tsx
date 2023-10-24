@@ -31,7 +31,7 @@ export const market_table_column: ColumnDef<IMarket>[] = [
       <DataTableColumnHeader column={column} title="Index Price" />
     ),
     cell: ({ row }) => {
-      <MarketPrice pairIndex={Number(row.original.pairIndex)} />;
+      <MarketPrice pairIndex={Number(row.original.pair_index)} />;
     },
     accessorKey: "current_price",
     enableSorting: true,
@@ -70,11 +70,11 @@ export const market_table_column: ColumnDef<IMarket>[] = [
     ),
     cell: ({ row }) => {
       const formattedBorrowingL = formatUnits(
-        BigInt(row.original.pairBorrowingFee?.bfLong ?? "0"),
+        BigInt(row.original?.pair_borrowing_fee?.bf_long ?? "0"),
         18,
       );
       const formattedBorrowingS = formatUnits(
-        BigInt(row.original.pairBorrowingFee?.bfShort ?? "0"),
+        BigInt(row.original?.pair_borrowing_fee?.bf_short ?? "0"),
         18,
       );
       return (
@@ -97,11 +97,11 @@ export const market_table_column: ColumnDef<IMarket>[] = [
     ),
     cell: ({ row }) => {
       const formattedOIL = formatUnits(
-        BigInt(row.original.openInterest?.oiShort ?? "0"),
+        BigInt(row.original.open_interest?.oi_long ?? "0"),
         18,
       );
       const formattedOIS = formatUnits(
-        BigInt(row.original.openInterest?.oiShort ?? "0"),
+        BigInt(row.original.open_interest?.oi_short ?? "0"),
         18,
       );
       return (
