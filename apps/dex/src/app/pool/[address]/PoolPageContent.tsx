@@ -29,7 +29,6 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { mutate } from "swr";
 import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
@@ -302,8 +301,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const router = useRouter();
   const { useBankBalance } = usePollBankBalance(pool.shareAddress);
 
-  const { useBgtRewards, isLoading, QUERY_KEY } = usePollBgtRewards(pool?.pool);
-  const bgtRewards = useBgtRewards();
+  const { useBgtReward, isLoading, refetch } = usePollBgtRewards([pool?.pool]);
+  const { data: bgtRewards } = useBgtReward(pool?.pool);
   const { account, isReady } = useBeraJs();
 
   const {
@@ -313,9 +312,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   } = useTxn({
     message: "Claiming BGT Rewards",
     actionType: "Claim Rewards",
-    onSuccess: () => {
-      void mutate(QUERY_KEY);
-    },
+    onSuccess: () => refetch(),
   });
 
   const shareBalance = useBankBalance();
@@ -582,14 +579,17 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                     Rewards available
                   </h3>
                   <p className="text-lg font-semibold text-foreground">
-                    {bgtRewards.toFixed(2) ?? 0} BGT
+                    {Number(bgtRewards).toFixed(2) ?? 0} BGT
                   </p>
                 </div>
 
                 <Button
                   variant={"secondary"}
                   disabled={
-                    isLoading || bgtRewards === 0 || isTxnLoading || !isReady
+                    isLoading ||
+                    Number(bgtRewards) === 0 ||
+                    isTxnLoading ||
+                    !isReady
                   }
                   onClick={() => {
                     write({

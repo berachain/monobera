@@ -11,7 +11,6 @@ import {
 } from "@bera/berajs";
 import { TokenIconList, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-import { mutate } from "swr";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -32,14 +31,16 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
     };
   }, []);
 
-  const { useBgtRewards, QUERY_KEY } = usePollBgtRewards(pool.pool);
-  const bgtRewards = useBgtRewards();
+  const { useBgtReward, useBgtRewards, refetch } = usePollBgtRewards([
+    pool.pool,
+  ]);
+  const { data: bgtRewards } = useBgtReward(pool.pool);
+  const { data: bgtRewardsList } = useBgtRewards();
+  console.log(bgtRewardsList, bgtRewards);
 
   const { write, isLoading, ModalPortal } = useTxn({
     message: "Claiming BGT Rewards",
-    onSuccess: () => {
-      void mutate(QUERY_KEY);
-    },
+    onSuccess: () => refetch(),
   });
 
   const { usePrices } = usePollPrices();
@@ -103,7 +104,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
         <div className="flex items-center gap-4">
           <div className="flex min-w-[65px] flex-col gap-1">
             <div className=" text-left text-sm font-semibold leading-tight text-warning-foreground md:text-lg md:leading-7">
-              {bgtRewards.toFixed(2)}
+              {Number(bgtRewards).toFixed(2)}
             </div>
             <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
               BGT earned
@@ -112,7 +113,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
         </div>
         <Button
           variant={"warning"}
-          disabled={isLoading || bgtRewards === 0 || !isReady}
+          disabled={isLoading || Number(bgtRewards) === 0 || !isReady}
           className="px-2 text-sm leading-none md:px-4 md:text-lg md:leading-7"
           onClick={() => {
             write({
