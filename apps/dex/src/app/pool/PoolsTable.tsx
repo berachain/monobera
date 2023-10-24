@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useBeraJs } from "@bera/berajs";
+import { type Pool } from "@bera/bera-router";
+import { useBeraJs, usePollBgtRewards } from "@bera/berajs";
 import {
   ConnectWalletBear,
   DataTable,
@@ -103,7 +103,9 @@ export const PoolSearch = () => {
     setKeyword,
   } = usePoolTable();
   const { isReady } = useBeraJs();
-  const router = useRouter();
+  const receivers = userPools?.map((pool: Pool) => pool.pool) || [];
+  const { useBgtRewards } = usePollBgtRewards(receivers);
+  const { data: bgtRewards } = useBgtRewards();
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -179,9 +181,6 @@ export const PoolSearch = () => {
                   key={data.length}
                   data={data ?? []}
                   columns={columns}
-                  onRowClick={(state: any) =>
-                    router.push(`/pool/${state.original.pool}`)
-                  }
                   title={`All Pools (${data.length})`}
                   className="min-w-[1000px]"
                 />
@@ -230,11 +229,16 @@ export const PoolSearch = () => {
           ) : isList ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <DataTable
-                data={userPools ?? []}
-                columns={my_columns}
-                onRowClick={(state: any) =>
-                  router.push(`/pool/${state.original.pool}`)
+                data={
+                  userPools.map((pool: any) => ({
+                    ...pool,
+                    bgtRewards:
+                      bgtRewards && bgtRewards[pool.pool]
+                        ? bgtRewards[pool.pool]
+                        : "0",
+                  })) ?? []
                 }
+                columns={my_columns}
                 title={`My Pools (${userPools.length})`}
               />
             </div>
