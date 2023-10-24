@@ -63,22 +63,15 @@ function createBaseHealthServiceCheckRequest(): HealthServiceCheckRequest {
 }
 
 export const HealthServiceCheckRequest = {
-  encode(
-    message: HealthServiceCheckRequest,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: HealthServiceCheckRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.service !== "") {
       writer.uint32(10).string(message.service);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number,
-  ): HealthServiceCheckRequest {
-    const reader =
-      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): HealthServiceCheckRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHealthServiceCheckRequest();
     while (reader.pos < end) {
@@ -112,14 +105,10 @@ export const HealthServiceCheckRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<HealthServiceCheckRequest>, I>>(
-    base?: I,
-  ): HealthServiceCheckRequest {
+  create<I extends Exact<DeepPartial<HealthServiceCheckRequest>, I>>(base?: I): HealthServiceCheckRequest {
     return HealthServiceCheckRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<HealthServiceCheckRequest>, I>>(
-    object: I,
-  ): HealthServiceCheckRequest {
+  fromPartial<I extends Exact<DeepPartial<HealthServiceCheckRequest>, I>>(object: I): HealthServiceCheckRequest {
     const message = createBaseHealthServiceCheckRequest();
     message.service = object.service ?? "";
     return message;
@@ -131,22 +120,15 @@ function createBaseHealthServiceCheckResponse(): HealthServiceCheckResponse {
 }
 
 export const HealthServiceCheckResponse = {
-  encode(
-    message: HealthServiceCheckResponse,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
+  encode(message: HealthServiceCheckResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.status !== 0) {
       writer.uint32(8).int32(message.status);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number,
-  ): HealthServiceCheckResponse {
-    const reader =
-      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): HealthServiceCheckResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHealthServiceCheckResponse();
     while (reader.pos < end) {
@@ -169,9 +151,7 @@ export const HealthServiceCheckResponse = {
   },
 
   fromJSON(object: any): HealthServiceCheckResponse {
-    return {
-      status: isSet(object.status) ? servingStatusFromJSON(object.status) : 0,
-    };
+    return { status: isSet(object.status) ? servingStatusFromJSON(object.status) : 0 };
   },
 
   toJSON(message: HealthServiceCheckResponse): unknown {
@@ -182,47 +162,27 @@ export const HealthServiceCheckResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<HealthServiceCheckResponse>, I>>(
-    base?: I,
-  ): HealthServiceCheckResponse {
+  create<I extends Exact<DeepPartial<HealthServiceCheckResponse>, I>>(base?: I): HealthServiceCheckResponse {
     return HealthServiceCheckResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<HealthServiceCheckResponse>, I>>(
-    object: I,
-  ): HealthServiceCheckResponse {
+  fromPartial<I extends Exact<DeepPartial<HealthServiceCheckResponse>, I>>(object: I): HealthServiceCheckResponse {
     const message = createBaseHealthServiceCheckResponse();
     message.status = object.status ?? 0;
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
