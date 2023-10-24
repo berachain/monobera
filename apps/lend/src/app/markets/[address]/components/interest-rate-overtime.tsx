@@ -152,7 +152,19 @@ export default function InterestRateOvertime({
           </div>
         </div>
 
-        <div className="h-[180px] w-full">
+        <div className="relative h-[180px] w-full">
+          <div
+            className="absolute -top-[10px] text-[10px] text-muted-foreground"
+            style={{ left: `calc(${currentUtilizationRate * 100}% - 28px)` }}
+          >
+            Current {currentUtilizationRate * 100}%
+          </div>
+          <div
+            className="absolute -top-[10px] text-[10px] text-muted-foreground"
+            style={{ left: "calc(80% - 30px)" }}
+          >
+            Optimal 80%
+          </div>
           <BeraChart data={data} options={options as any} type="line" />
         </div>
       </Card>
