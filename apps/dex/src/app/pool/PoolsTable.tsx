@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useBeraJs } from "@bera/berajs";
+import { type Pool } from "@bera/bera-router";
+import { useBeraJs, usePollBgtRewards } from "@bera/berajs";
 import {
   ConnectWalletBear,
   DataTable,
@@ -15,7 +15,7 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { columns } from "~/components/pools-table-columns";
+import { columns, my_columns } from "~/components/pools-table-columns";
 import { PoolCard, PoolCardLoading } from "./PoolCard";
 import { usePoolTable } from "./usePoolTable";
 
@@ -53,7 +53,7 @@ const Toggle = ({
   return (
     <div
       className={cn(
-        "cursor-pointer rounded-full p-2 text-foreground hover:bg-hover",
+        "cursor-pointer rounded-full p-2 text-muted-foreground hover:bg-hover",
         className,
       )}
       onClick={onClick}
@@ -64,7 +64,7 @@ const Toggle = ({
 };
 
 const TableViewLoading = () => (
-  <div className="flex flex-col items-center gap-4">
+  <div className="mt-16 flex flex-col items-center gap-4">
     <Skeleton className="h-[150px] w-[238px]" />
     <Skeleton className="h-7 w-[300px]" />
     <Skeleton className="h-7 w-[451px]" />
@@ -103,159 +103,157 @@ export const PoolSearch = () => {
     setKeyword,
   } = usePoolTable();
   const { isReady } = useBeraJs();
-  const router = useRouter();
+  const receivers = userPools?.map((pool: Pool) => pool.pool) || [];
+  const { useBgtRewards } = usePollBgtRewards(receivers);
+  const { data: bgtRewards } = useBgtRewards();
   return (
     <div
       className="w-full flex-col items-center justify-center"
       id="poolstable"
     >
-      <Tabs defaultValue="allPools">
-        <div className="w-full text-center ">
-          <p className="text-5xl font-extrabold">🔍 Search All Pools</p>
-          <p className="text-lg font-semibold text-muted-foreground">
-            Maximize your rewards with our boosted yields
-          </p>
+      <Tabs defaultValue="allPools" className="flex flex-col gap-4">
+        <TabsList className="w-fit" variant="ghost">
+          <TabsTrigger
+            value="allPools"
+            className="w-full sm:w-fit"
+            variant="ghost"
+          >
+            All pools
+          </TabsTrigger>
+          <TabsTrigger
+            value="userPools"
+            className="w-full sm:w-fit"
+            variant="ghost"
+          >
+            My pools
+          </TabsTrigger>
+        </TabsList>
 
-          <div className="mt-12 flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex w-full flex-col items-center justify-center gap-2 sm:flex-row lg:justify-start">
-              <TabsList className="w-[300px] sm:w-fit">
-                <TabsTrigger value="allPools" className="w-full sm:w-fit">
-                  All pools
-                </TabsTrigger>
-                <TabsTrigger value="userPools" className="w-full sm:w-fit">
-                  My pools
-                </TabsTrigger>
-              </TabsList>
-              <div className="flex gap-1">
-                <SearchInput
-                  value={search}
-                  onChange={(e) => {
-                    if (e.target.value === "") {
-                      setKeyword("");
-                      setSearch("");
-                    } else {
-                      setSearch(e.target.value);
-                    }
-                  }}
-                  placeholder="Search by name or address"
-                  onKeyDown={handleEnter}
-                  id="all-pool-search"
-                  className="min-w-[250px]"
-                />
-                <Toggle
-                  icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
-                  onClick={() => setIsList(!isList)}
-                  className="block sm:hidden"
-                />
-              </div>
-            </div>
-            <div className="flex w-full flex-row items-center justify-center gap-2 lg:justify-end">
-              <FilterBadge
-                text={"🚀 New Pools"}
-                active={isNewPool}
-                onClick={() => setIsNewPool(!isNewPool)}
-              />
-              <FilterBadge
-                text={"🔥 Hot Pools"}
-                active={isHotPool}
-                onClick={() => setIsHotPool(!isHotPool)}
-              />
-              <FilterBadge
-                text={"🐝 BGT Rewards"}
-                active={hasBgtRewards}
-                onClick={() => setHasBgtRewards(!hasBgtRewards)}
-              />
-              <Toggle
-                icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
-                onClick={() => setIsList(!isList)}
-                className="hidden sm:block"
-              />
-            </div>
+        <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:items-center lg:justify-between">
+          <SearchInput
+            value={search}
+            onChange={(e) => {
+              if (e.target.value === "") {
+                setKeyword("");
+                setSearch("");
+              } else {
+                setSearch(e.target.value);
+              }
+            }}
+            placeholder="Search..."
+            onKeyDown={handleEnter}
+            id="all-pool-search"
+            className="w-full md:w-[400px]"
+          />
+
+          <div className="flex w-full flex-row items-center justify-center gap-2 lg:justify-end">
+            <FilterBadge
+              text={"🚀 New Pools"}
+              active={isNewPool}
+              onClick={() => setIsNewPool(!isNewPool)}
+            />
+            <FilterBadge
+              text={"🔥 Hot Pools"}
+              active={isHotPool}
+              onClick={() => setIsHotPool(!isHotPool)}
+            />
+            <FilterBadge
+              text={"🐝 BGT Rewards"}
+              active={hasBgtRewards}
+              onClick={() => setHasBgtRewards(!hasBgtRewards)}
+            />
+            <Toggle
+              icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
+              onClick={() => setIsList(!isList)}
+            />
           </div>
+        </div>
 
-          <TabsContent value="allPools">
-            {isAllDataLoadingMore && data?.length === 0 ? (
-              <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-                {isList ? <TableViewLoading /> : <CardViewLoading />}
-              </div>
-            ) : data && data.length ? (
-              isList ? (
-                <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-                  <DataTable
-                    key={data.length}
-                    data={data ?? []}
-                    columns={columns}
-                    onRowClick={(state: any) =>
-                      router.push(`/pool/${state.original.pool}`)
-                    }
-                  />
-                </div>
-              ) : (
-                <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-                  <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-                    {data &&
-                      data[0] &&
-                      data.map((pool: any) => {
-                        return (
-                          <PoolCard pool={pool} key={"search" + pool?.pool} />
-                        );
-                      })}
-                  </div>
-                </div>
-              )
-            ) : (
-              <NotFoundBear title="No Pools found." />
-            )}
-
-            {!isAllDataLoadingMore && data && data?.length > 0 && (
-              <Button
-                className="mt-8"
-                onClick={() => setAllDataSize(allDataSize + 1)}
-                disabled={isAllDataLoadingMore || isAllDataReachingEnd}
-                variant="outline"
-              >
-                {isAllDataReachingEnd ? "No more pools" : "View More"}
-              </Button>
-            )}
-          </TabsContent>
-
-          <TabsContent value="userPools">
-            {!isReady ? (
-              <ConnectWalletBear
-                message="You need to connect your wallet to see deposited pools and
-            rewards"
-              />
-            ) : isUserPoolsLoading ? (
-              <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-                {isList ? <TableViewLoading /> : <CardViewLoading />}
-              </div>
-            ) : userPools === undefined || userPools.length === 0 ? (
-              <NotFoundBear title="No Pools found." />
-            ) : isList ? (
-              <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
+        <TabsContent value="allPools" className="text-center">
+          {isAllDataLoadingMore && data?.length === 0 ? (
+            <div className="flex w-full flex-col items-center justify-center gap-4">
+              {isList ? <TableViewLoading /> : <CardViewLoading />}
+            </div>
+          ) : data && data.length ? (
+            isList ? (
+              <div className="flex w-full flex-col items-center justify-center gap-4 overflow-x-scroll">
                 <DataTable
-                  data={userPools ?? []}
+                  key={data.length}
+                  data={data ?? []}
                   columns={columns}
-                  onRowClick={(state: any) =>
-                    router.push(`/pool/${state.original.pool}`)
-                  }
+                  title={`All Pools (${data.length})`}
+                  className="min-w-[1000px]"
                 />
               </div>
             ) : (
-              <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
-                <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
-                  {userPools &&
-                    userPools[0] &&
-                    userPools.map((pool: any) => {
+              <div className="flex w-full flex-col items-center justify-center gap-4">
+                <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+                  {data &&
+                    data[0] &&
+                    data.map((pool: any) => {
                       return (
                         <PoolCard pool={pool} key={"search" + pool?.pool} />
                       );
                     })}
                 </div>
               </div>
-            )}
-          </TabsContent>
-        </div>
+            )
+          ) : (
+            <NotFoundBear title="No Pools found." />
+          )}
+
+          {!isAllDataLoadingMore && data && data?.length > 0 && (
+            <Button
+              className="mt-8"
+              onClick={() => setAllDataSize(allDataSize + 1)}
+              disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+              variant="outline"
+            >
+              {isAllDataReachingEnd ? "No more pools" : "View More"}
+            </Button>
+          )}
+        </TabsContent>
+
+        <TabsContent value="userPools">
+          {!isReady ? (
+            <ConnectWalletBear
+              message="You need to connect your wallet to see deposited pools and
+            rewards"
+            />
+          ) : isUserPoolsLoading ? (
+            <div className="flex w-full flex-col items-center justify-center gap-4">
+              {isList ? <TableViewLoading /> : <CardViewLoading />}
+            </div>
+          ) : userPools === undefined || userPools.length === 0 ? (
+            <NotFoundBear title="No Pools found." />
+          ) : isList ? (
+            <div className="flex w-full flex-col items-center justify-center gap-4">
+              <DataTable
+                data={
+                  userPools.map((pool: any) => ({
+                    ...pool,
+                    bgtRewards:
+                      bgtRewards && bgtRewards[pool.pool]
+                        ? bgtRewards[pool.pool]
+                        : "0",
+                  })) ?? []
+                }
+                columns={my_columns}
+                title={`My Pools (${userPools.length})`}
+              />
+            </div>
+          ) : (
+            <div className="flex w-full flex-col items-center justify-center gap-4">
+              <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {userPools &&
+                  userPools[0] &&
+                  userPools.map((pool: any) => {
+                    return <PoolCard pool={pool} key={"search" + pool?.pool} />;
+                  })}
+              </div>
+            </div>
+          )}
+        </TabsContent>
       </Tabs>
     </div>
   );

@@ -12,7 +12,7 @@ export const usePoolTable = () => {
   const [hasBgtRewards, setHasBgtRewards] = useState(false);
   const [isNewPool, setIsNewPool] = useState(false);
   const [isHotPool, setIsHotPool] = useState(false);
-  const [isList, setIsList] = useState(false);
+  const [isList, setIsList] = useState(true);
   const [keyword, setKeyword] = useState("");
   const {
     data: allData,
@@ -53,7 +53,6 @@ export const usePoolTable = () => {
     `${getAbsoluteUrl()}/api/getPools/api`,
   );
   const userPools = useUserDepositedPools();
-
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {
       setKeyword(search);
@@ -61,15 +60,22 @@ export const usePoolTable = () => {
   };
   return {
     data: data,
-    userPools: userPools?.filter((pool: Pool) => {
-      return search === ""
-        ? true
-        : pool.poolName.toLowerCase().includes(search.toLowerCase()) ||
-            (pool.poolShareDenomHex &&
-              pool.poolShareDenomHex
-                .toLowerCase()
-                .includes(search.toLowerCase()));
-    }),
+    userPools: userPools
+      ?.filter((pool: Pool) => {
+        return search === ""
+          ? true
+          : pool.poolName.toLowerCase().includes(search.toLowerCase()) ||
+              (pool.poolShareDenomHex &&
+                pool.poolShareDenomHex
+                  .toLowerCase()
+                  .includes(search.toLowerCase()));
+      })
+      .filter(
+        (pool: Pool) =>
+          (hasBgtRewards ? pool.tags?.includes("bgtRewards") : true) &&
+          (isHotPool ? pool.tags?.includes("hot") : true) &&
+          (isNewPool ? pool.tags?.includes("new") : true),
+      ),
     isUserPoolsLoading: isLoading,
     isFirstLoad: isLoading && isAllDataEmpty,
     allDataSize,

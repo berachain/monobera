@@ -30,7 +30,6 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { mutate } from "swr";
 import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
@@ -303,8 +302,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const router = useRouter();
   const { useBankBalance } = usePollBankBalance(pool.shareAddress);
 
-  const { useBgtRewards, isLoading, QUERY_KEY } = usePollBgtRewards(pool?.pool);
-  const bgtRewards = useBgtRewards();
+  const { useBgtReward, isLoading, refetch } = usePollBgtRewards([pool?.pool]);
+  const { data: bgtRewards } = useBgtReward(pool?.pool);
   const { account, isReady } = useBeraJs();
 
   const {
@@ -314,9 +313,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   } = useTxn({
     message: "Claiming BGT Rewards",
     actionType: TransactionActionType.CLAIMING_REWARDS,
-    onSuccess: () => {
-      void mutate(QUERY_KEY);
-    },
+    onSuccess: () => refetch(),
   });
 
   const shareBalance = useBankBalance();
@@ -423,7 +420,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               fee
             </Badge>
             <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
-              {pool?.bgtApy?.toFixed(2)}% BGT APY
+              {pool?.bgtApy?.toFixed(2)}% BGT PRR
             </Badge>
             <div
               className="hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:cursor-pointer hover:underline sm:flex"
@@ -507,7 +504,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             <Card className="p-4">
               <div className="flex flex-row items-center justify-between">
                 <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
-                  APR
+                  PRR
                 </p>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
@@ -583,14 +580,17 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                     Rewards available
                   </h3>
                   <p className="text-lg font-semibold text-foreground">
-                    {bgtRewards.toFixed(2) ?? 0} BGT
+                    {Number(bgtRewards).toFixed(2) ?? 0} BGT
                   </p>
                 </div>
 
                 <Button
                   variant={"secondary"}
                   disabled={
-                    isLoading || bgtRewards === 0 || isTxnLoading || !isReady
+                    isLoading ||
+                    Number(bgtRewards) === 0 ||
+                    isTxnLoading ||
+                    !isReady
                   }
                   onClick={() => {
                     write({

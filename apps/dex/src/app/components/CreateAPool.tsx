@@ -2,8 +2,9 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, docsUrl } from "@bera/config";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 
@@ -46,10 +47,13 @@ export default function CreateAPool() {
           <h3 className="mb-2 text-base font-semibold text-muted-foreground md:text-xl">
             Create your own custom recipe 🍝
           </h3>
-          <div className="mb-12 mt-6 w-full text-center">
+          <div className="mb-12 mt-6 flex w-full justify-center gap-2 text-center">
             <Button onClick={() => router.push(`/pool/create`)}>
               Learn More
             </Button>
+            <Link href={docsUrl} target="_blank">
+              <Button variant={"outline"}>Learn More</Button>
+            </Link>
           </div>
           <div className="relative mx-auto w-full max-w-[1000px]">
             <Avatar
