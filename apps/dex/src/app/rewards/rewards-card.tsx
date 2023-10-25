@@ -3,6 +3,7 @@ import Link from "next/link";
 import { type Pool } from "@bera/bera-router";
 import {
   REWARDS_PRECOMPILE_ABI,
+  TransactionActionType,
   formatUsd,
   useBeraJs,
   usePollBgtRewards,
@@ -40,6 +41,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
 
   const { write, isLoading, ModalPortal } = useTxn({
     message: "Claiming BGT Rewards",
+    actionType: TransactionActionType.CLAIMING_REWARDS,
     onSuccess: () => refetch(),
   });
 

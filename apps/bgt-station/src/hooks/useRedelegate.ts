@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   STAKING_PRECOMPILE_ABI,
+  TransactionActionType,
   truncateHash,
   useBeraConfig,
   usePollAccountDelegations,
@@ -36,6 +37,7 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
       void router.push("/");
     },
     onError: (e) => console.log(e),
+    actionType: TransactionActionType.REDELEGATE,
   });
 
   const redelegate = () => {

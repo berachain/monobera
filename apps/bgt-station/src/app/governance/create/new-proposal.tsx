@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
+  TransactionActionType,
   useBeraJs,
   usePollBgtBalance,
 } from "@bera/berajs";
@@ -65,6 +66,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
 
   const { write, ModalPortal } = useTxn({
     message: "Submit Proposal",
+    actionType: TransactionActionType.SUBMIT_PROPOSAL,
     onSuccess: () => {
       router.push(`/governance`);
     },

@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import {
   BRIBE_PRECOMPILE_ABI,
+  TransactionActionType,
   truncateHash,
   useBeraJs,
   usePollBribes,
@@ -53,6 +54,7 @@ export default function Portfolio() {
   const bribes = useBribes();
   const { write, isLoading, ModalPortal } = useTxn({
     message: `Claiming all bribes`,
+    actionType: TransactionActionType.CLAIMING_BRIBES,
     onSuccess: () => {
       setOpen(false);
     },

@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
+  TransactionActionType,
   useBeraConfig,
   useBeraJs,
   usePollAccountDelegations,
@@ -105,6 +106,7 @@ export default function Delegate({
     ModalPortal,
   } = useTxn({
     message: `Delegating ${amount} BGT to Validator`,
+    actionType: TransactionActionType.DELEGATE,
   });
 
   const {
@@ -113,6 +115,7 @@ export default function Delegate({
     ModalPortal: UnBondModalPortal,
   } = useTxn({
     message: "Unbonding from Validator",
+    actionType: TransactionActionType.UNBONDING,
   });
 
   const {
@@ -121,6 +124,7 @@ export default function Delegate({
     ModalPortal: RedelegateModalPortal,
   } = useTxn({
     message: "Redelegating BGT",
+    actionType: TransactionActionType.REDELEGATE,
   });
 
   const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();

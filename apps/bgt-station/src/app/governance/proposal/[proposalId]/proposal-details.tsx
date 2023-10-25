@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
+  TransactionActionType,
   usePollActiveValidators,
   usePollProposal,
   usePollProposalVotes,
@@ -61,6 +62,7 @@ export default function ProposalDetails({
     isLoading: isTxnLoading,
   } = useTxn({
     message: `Voting for proposal ${proposalId}`,
+    actionType: TransactionActionType.VOTE,
   });
   const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
 

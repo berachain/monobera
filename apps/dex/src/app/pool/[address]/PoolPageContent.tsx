@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   REWARDS_PRECOMPILE_ABI,
+  TransactionActionType,
   formatUsd,
   formatter,
   truncateHash,
@@ -311,7 +312,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     ModalPortal,
   } = useTxn({
     message: "Claiming BGT Rewards",
-    actionType: "Claim Rewards",
+    actionType: TransactionActionType.CLAIMING_REWARDS,
     onSuccess: () => refetch(),
   });
 
