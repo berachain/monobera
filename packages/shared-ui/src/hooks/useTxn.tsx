@@ -11,6 +11,7 @@ import {
   useAddRecentTransaction,
   useBeraContractWrite,
   type IContractWrite,
+  type TransactionActionType,
 } from "@bera/berajs";
 import toast from "react-hot-toast";
 import { useMediaQuery } from "usehooks-ts";
@@ -32,8 +33,7 @@ import {
 
 interface IUseTxn {
   message?: string;
-  icon?: string;
-  actionType?: string;
+  actionType?: TransactionActionType;
   disableToast?: boolean;
   disableModal?: boolean;
   onSuccess?: (hash: string) => void;
@@ -74,8 +74,7 @@ const DURATION = 3000;
  */
 export const useTxn = ({
   message = "",
-  icon = "",
-  actionType = "",
+  actionType,
   disableToast = false,
   disableModal = false,
   onSuccess,
@@ -191,7 +190,6 @@ export const useTxn = ({
         addRecentTransaction({
           hash: result,
           description: message,
-          icon,
           actionType,
           timestamp: Date.now(),
         });

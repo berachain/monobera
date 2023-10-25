@@ -1,11 +1,5 @@
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
 import { type Column } from "@tanstack/react-table";
 
@@ -35,6 +29,35 @@ export function DataTableColumnHeader<TData, TValue>({
 
   return (
     <div className={cn("flex w-full items-center space-x-2", className)}>
+      {/* <DropdownMenu>
+        <DropdownMenuTrigger asChild> */}
+      <Button
+        variant="ghost"
+        size="sm"
+        className="-ml-3 h-8 text-sm hover:bg-hover data-[state=open]:bg-hover"
+        onClick={() => {
+          if (column.getIsSorted() === "desc") {
+            column.toggleSorting(false);
+          } else if (column.getIsSorted() === "asc") {
+            column.toggleSorting(true);
+          } else {
+            column.toggleSorting(true);
+          }
+        }}
+      >
+        <span>
+          {title}
+          {tooltip && <Tooltip text={tooltip} />}
+        </span>
+        {column.getIsSorted() === "desc" ? (
+          <Icons.sortDesc className="ml-2 h-4 w-4 text-accent" />
+        ) : column.getIsSorted() === "asc" ? (
+          <Icons.sortAsc className="ml-2 h-4 w-4 text-accent" />
+        ) : (
+          <Icons.arrowDownUp className="ml-2 h-4 w-4" />
+        )}
+      </Button>
+      {/* </DropdownMenuTrigger>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -65,7 +88,7 @@ export function DataTableColumnHeader<TData, TValue>({
             Desc
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
     </div>
   );
 }
