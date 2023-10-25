@@ -37,7 +37,7 @@ export const columns: ColumnDef<Pool>[] = [
       return (
         <div className="ml-2 flex flex-row justify-start">
           <TokenIconList
-            tokenList={row.original.tokens.map((t) => t.address)}
+            tokenList={row.original.tokens.map((t: any) => t.address)}
             size="lg"
           />
         </div>
