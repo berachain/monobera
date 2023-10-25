@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   REWARDS_PRECOMPILE_ABI,
+  TransactionActionType,
   formatUsd,
   formatter,
   truncateHash,
@@ -29,7 +30,6 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { mutate } from "swr";
 import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
@@ -302,8 +302,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const router = useRouter();
   const { useBankBalance } = usePollBankBalance(pool.shareAddress);
 
-  const { useBgtRewards, isLoading, QUERY_KEY } = usePollBgtRewards(pool?.pool);
-  const bgtRewards = useBgtRewards();
+  const { useBgtReward, isLoading, refetch } = usePollBgtRewards([pool?.pool]);
+  const { data: bgtRewards } = useBgtReward(pool?.pool);
   const { account, isReady } = useBeraJs();
 
   const {
@@ -312,10 +312,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     ModalPortal,
   } = useTxn({
     message: "Claiming BGT Rewards",
-    actionType: "Claim Rewards",
-    onSuccess: () => {
-      void mutate(QUERY_KEY);
-    },
+    actionType: TransactionActionType.CLAIMING_REWARDS,
+    onSuccess: () => refetch(),
   });
 
   const shareBalance = useBankBalance();
@@ -582,14 +580,17 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                     Rewards available
                   </h3>
                   <p className="text-lg font-semibold text-foreground">
-                    {bgtRewards.toFixed(2) ?? 0} BGT
+                    {Number(bgtRewards).toFixed(2) ?? 0} BGT
                   </p>
                 </div>
 
                 <Button
                   variant={"secondary"}
                   disabled={
-                    isLoading || bgtRewards === 0 || isTxnLoading || !isReady
+                    isLoading ||
+                    Number(bgtRewards) === 0 ||
+                    isTxnLoading ||
+                    !isReady
                   }
                   onClick={() => {
                     write({

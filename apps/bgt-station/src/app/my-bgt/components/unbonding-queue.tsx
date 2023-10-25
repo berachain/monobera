@@ -6,6 +6,7 @@ import { unbonding_queue_columns } from "~/columns/global-gauge-weight";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   STAKING_PRECOMPILE_ABI,
+  TransactionActionType,
   truncateHash,
   useBeraConfig,
   usePollDelegatorUnbonding,
@@ -29,6 +30,7 @@ export default function UnbondingQueue({
   const total = useDelegatorTotalUnbonding();
   const { networkConfig } = useBeraConfig();
   const { write, ModalPortal } = useTxn({
+    actionType: TransactionActionType.CANCEL_UNBONDING,
     message: `Cancel Unbonding`,
     onSuccess: () => {
       void mutate(QUERY_KEY);

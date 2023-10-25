@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  TransactionActionType,
   formatter,
   useBeraJs,
   usePollAllowance,
@@ -40,6 +41,7 @@ export default function SupplyBtn({
       reservesDataRefetch();
       userReservesRefetch();
     },
+    actionType: TransactionActionType.SUPPLY,
   });
   const { isReady } = useBeraJs();
 

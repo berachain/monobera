@@ -33,7 +33,7 @@ export function BGTStatus() {
               {formatter.format(Number(userBalance))} BGT
             </div>
             <div className="text-sm font-medium leading-6 text-muted-foreground">
-              Avalible
+              Available
             </div>
           </div>
         </div>
