@@ -12,6 +12,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
+import { ThemeToggle } from "./theme-toggle";
 
 const ConnectBtn = dynamic(
   () => import("./connect-button").then((mod) => mod.ConnectButton),
@@ -29,9 +30,13 @@ const ConnectBtn = dynamic(
 
 export function Header({
   navItems,
+  hideConnectBtn = false,
+  showThemeSwitcher = false,
   isHoney = false,
 }: {
   navItems: any[];
+  hideConnectBtn?: boolean;
+  showThemeSwitcher?: boolean;
   isHoney?: boolean;
 }) {
   const { isConnected } = useBeraJs();
@@ -75,7 +80,8 @@ export function Header({
             Dune Analytics <Icons.externalLink className="h-3 w-3" />
           </Link>
         )}
-        <ConnectBtn isNavItem={true} isHoney={isHoney} />
+        {showThemeSwitcher && <ThemeToggle />}
+        {!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
         <MobileDropdown navItems={navItems} />
       </div>
     </nav>

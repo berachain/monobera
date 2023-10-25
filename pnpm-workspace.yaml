@@ -4,6 +4,7 @@ packages:
   - apps/honey
   - apps/lend
   - apps/perp
+  - apps/faucet
   - packages/config/*
   - packages/ui
   - packages/shared-ui
