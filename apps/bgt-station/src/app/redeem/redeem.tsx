@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import {
   BGT_PRECOMPILE_ABI,
+  TransactionActionType,
   useBeraConfig,
   useBeraJs,
   usePollBgtBalance,
@@ -26,6 +27,7 @@ export default function Redeem() {
   const userBalance = useBgtBalance();
   const { write, isLoading, ModalPortal } = useTxn({
     message: "Redeem BERA",
+    actionType: TransactionActionType.REDEEM_BERA,
   });
   const { networkConfig } = useBeraConfig();
 

@@ -1,5 +1,7 @@
 import type { Address, PublicClient } from "viem";
 
+import { type TransactionActionType } from "~/config";
+
 const storageKey = "rk-transactions";
 
 type TransactionStatus = "pending" | "confirmed" | "failed";
@@ -7,8 +9,7 @@ type TransactionStatus = "pending" | "confirmed" | "failed";
 export interface Transaction {
   hash: string;
   description: string;
-  icon: string;
-  actionType: string;
+  actionType?: TransactionActionType;
   timestamp: number;
   status: TransactionStatus;
   confirmations?: number;
