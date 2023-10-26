@@ -20,7 +20,7 @@ export default function TotalSupplied({
     ALL_TIME: RateItem[];
   };
 }) {
-  const ticker = "ETH";
+  const ticker = reserveData?.symbol;
   const info = [
     {
       title: "Max LTV",

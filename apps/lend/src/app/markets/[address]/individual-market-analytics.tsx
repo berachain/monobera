@@ -37,11 +37,21 @@ export default function IndividualMarketAnalytics({
   borrowVariableAPR30D: RateItem[];
   borrowVariableAPRALL: RateItem[];
 }) {
+  // console.log(
+  //   supplyAPR1D,
+  //   supplyAPR7D,
+  //   supplyAPR30D,
+  //   supplyAPRALL,
+  //   borrowVariableAPR1D,
+  //   borrowVariableAPR7D,
+  //   borrowVariableAPR30D,
+  //   borrowVariableAPRALL
+  // );
   usePollAssetWalletBalance();
   const { tokenDictionary } = useTokens();
   const { useSelectedReserveData } = usePollReservesDataList();
   const { data: reserveData } = useSelectedReserveData(address);
-
+  console.log("reserveData", reserveData);
   const router = useRouter();
   useEffect(() => {
     if (!address || !isAddress(address)) {
@@ -112,10 +122,7 @@ export default function IndividualMarketAnalytics({
             />
           )}
           {address === honeyAddress && (
-            <InterestRateOvertime
-              reserveData={reserveData}
-              currentUtilizationRate={0.5}
-            />
+            <InterestRateOvertime reserveData={reserveData} />
           )}
         </div>
       </div>

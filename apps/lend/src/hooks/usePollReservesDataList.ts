@@ -33,9 +33,9 @@ export const usePollReservesDataList = () => {
         reserves: reservesData,
         currentTimestamp,
         marketReferenceCurrencyDecimals:
-          baseCurrencyData.marketReferenceCurrencyDecimals,
+          baseCurrencyData.networkBaseTokenPriceDecimals,
         marketReferencePriceInUsd:
-          baseCurrencyData.marketReferenceCurrencyPriceInUsd,
+          baseCurrencyData.networkBaseTokenPriceInUsd,
       });
       const reservesDictionary = {};
       await Promise.all(

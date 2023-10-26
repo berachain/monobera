@@ -88,6 +88,7 @@ export default function MarketsPageContent() {
     sortOptions,
   ]);
 
+  console.log("reservesDictionary", reservesDictionary);
   return (
     <>
       <div className="mb-12">

@@ -12,10 +12,8 @@ import Card from "~/components/card";
 
 export default function InterestRateOvertime({
   reserveData,
-  currentUtilizationRate,
 }: {
   reserveData: any;
-  currentUtilizationRate: number;
 }) {
   const data = useMemo(() => {
     const rates = getRates();
@@ -83,7 +81,7 @@ export default function InterestRateOvertime({
             type: "line",
             mode: "vertical",
             scaleID: "x",
-            value: `${currentUtilizationRate * 100}%`,
+            value: `${Number(reserveData?.borrowUsageRatio) * 100}%`,
             borderColor: "#059669",
             borderWidth: 1,
             borderDash: [5, 5],
@@ -155,9 +153,13 @@ export default function InterestRateOvertime({
         <div className="relative h-[180px] w-full">
           <div
             className="absolute -top-[10px] text-[10px] text-muted-foreground"
-            style={{ left: `calc(${currentUtilizationRate * 100}% - 28px)` }}
+            style={{
+              left: `calc(${Number(reserveData?.borrowUsageRatio) * 100}% - ${
+                8 - 20 * Number(reserveData?.borrowUsageRatio)
+              }px)`,
+            }}
           >
-            Current {currentUtilizationRate * 100}%
+            Current {Number(reserveData?.borrowUsageRatio) * 100}%
           </div>
           <div
             className="absolute -top-[10px] text-[10px] text-muted-foreground"

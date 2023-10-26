@@ -22,7 +22,7 @@ export default function TotalBorrowed({
     ALL_TIME: RateItem[];
   };
 }) {
-  const ticker = "ETH";
+  const ticker = reserveData?.symbol;
   const info = [
     {
       title: "Reserve factor",
