@@ -33,7 +33,12 @@ export default function ValidatorDetails({
         <div className="text-sm font-normal leading-normal text-muted-foreground md:flex md:h-[60px] md:items-end md:overflow-y-auto">
           {decription ? decription : <Skeleton className=" h-[14px] w-full" />}
         </div>
-
+        <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
+          <div>
+            PRR <Tooltip text="Projected yearly rewards" />
+          </div>
+          <div className="text-muted-foreground">{vApy}%</div>
+        </div>
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
             Commission{" "}
@@ -57,13 +62,6 @@ export default function ValidatorDetails({
             <Tooltip text="Represents the influence in network governance based on amount delegated to this validator" />
           </div>
           <div className="text-muted-foreground">{votingPower}</div>
-        </div>
-
-        <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
-          <div>
-            vApy <Tooltip text="Projected yearly rewards" />
-          </div>
-          <div className="text-muted-foreground">{vApy}%</div>
         </div>
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">

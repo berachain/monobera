@@ -82,7 +82,7 @@ export default function ValidatorCard({
     {
       title: (
         <div>
-          vAPY <Tooltip text="Projected yearly rewards" />
+          PRR <Tooltip text="Projected yearly rewards" />
         </div>
       ),
       value: `${Number(validator.vApy).toFixed(2)}%`,

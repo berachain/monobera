@@ -18,7 +18,6 @@ import {
   useHistoricalBribes,
   type FormattedHistoricalBribes,
 } from "~/hooks/useHistoricalBribes";
-import BribeList from "./bribe-list";
 import BribesAndEmissions from "./bribes-and-emissions";
 import Uptime from "./uptime";
 import ValidatorActivitiesTable from "./validator-activities-table";
@@ -114,22 +113,24 @@ export default function Validator({
           <Uptime address={validatorAddress} />
         </div>
       </div>
+
       <BribesAndEmissions
         historicalBribes={
           (data as any)?.historicalBribes as FormattedHistoricalBribes[]
         }
         cumulativeBribeValue={(data as any)?.cumulativeBribeTotal}
         isLoading={isLoading}
+        validatorAddress={validatorAddress}
       />
 
       <div className="">
         <div className="mb-4 flex items-center gap-1 text-lg font-semibold leading-7">
-          Cutting Board{" "}
+          Reward Distribution{" "}
           <Tooltip text="Validator block reward allocation towards pools & addresses" />
         </div>
         <ValidatorGaugeWeightInfo validatorAddress={validatorAddress} />
       </div>
-      <BribeList validatorAddress={validatorAddress} />
+
       <ValidatorActivitiesTable validatorAddress={validatorAddress} />
     </div>
   );
