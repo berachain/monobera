@@ -72,19 +72,47 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "uint64",
-        name: "proposalId",
-        type: "uint64",
-      },
-      {
+        components: [
+          {
+            internalType: "uint64",
+            name: "proposalId",
+            type: "uint64",
+          },
+          {
+            internalType: "address",
+            name: "voter",
+            type: "address",
+          },
+          {
+            components: [
+              {
+                internalType: "int32",
+                name: "voteOption",
+                type: "int32",
+              },
+              {
+                internalType: "string",
+                name: "weight",
+                type: "string",
+              },
+            ],
+            internalType: "struct IGovernanceModule.WeightedVoteOption[]",
+            name: "options",
+            type: "tuple[]",
+          },
+          {
+            internalType: "string",
+            name: "metadata",
+            type: "string",
+          },
+        ],
         indexed: false,
-        internalType: "string",
-        name: "option",
-        type: "string",
+        internalType: "struct IGovernanceModule.Vote",
+        name: "proposalVote",
+        type: "tuple",
       },
     ],
-    name: "ProposalVote",
+    name: "ProposalVoted",
     type: "event",
   },
   {
@@ -293,9 +321,21 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
             type: "uint64",
           },
           {
-            internalType: "bytes",
-            name: "message",
-            type: "bytes",
+            components: [
+              {
+                internalType: "string",
+                name: "typeURL",
+                type: "string",
+              },
+              {
+                internalType: "bytes",
+                name: "value",
+                type: "bytes",
+              },
+            ],
+            internalType: "struct Cosmos.CodecAny[]",
+            name: "messages",
+            type: "tuple[]",
           },
           {
             internalType: "int32",
@@ -382,9 +422,9 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
             type: "string",
           },
           {
-            internalType: "string",
+            internalType: "address",
             name: "proposer",
-            type: "string",
+            type: "address",
           },
         ],
         internalType: "struct IGovernanceModule.Proposal",
@@ -713,9 +753,21 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
             type: "uint64",
           },
           {
-            internalType: "bytes",
-            name: "message",
-            type: "bytes",
+            components: [
+              {
+                internalType: "string",
+                name: "typeURL",
+                type: "string",
+              },
+              {
+                internalType: "bytes",
+                name: "value",
+                type: "bytes",
+              },
+            ],
+            internalType: "struct Cosmos.CodecAny[]",
+            name: "messages",
+            type: "tuple[]",
           },
           {
             internalType: "int32",
@@ -802,9 +854,9 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
             type: "string",
           },
           {
-            internalType: "string",
+            internalType: "address",
             name: "proposer",
-            type: "string",
+            type: "address",
           },
         ],
         internalType: "struct IGovernanceModule.Proposal[]",
@@ -885,9 +937,70 @@ export const GOVERNANCE_PRECOMPILE_ABI = [
   {
     inputs: [
       {
-        internalType: "bytes",
-        name: "proposalMsg",
-        type: "bytes",
+        components: [
+          {
+            components: [
+              {
+                internalType: "string",
+                name: "typeURL",
+                type: "string",
+              },
+              {
+                internalType: "bytes",
+                name: "value",
+                type: "bytes",
+              },
+            ],
+            internalType: "struct Cosmos.CodecAny[]",
+            name: "messages",
+            type: "tuple[]",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "amount",
+                type: "uint256",
+              },
+              {
+                internalType: "string",
+                name: "denom",
+                type: "string",
+              },
+            ],
+            internalType: "struct Cosmos.Coin[]",
+            name: "initialDeposit",
+            type: "tuple[]",
+          },
+          {
+            internalType: "address",
+            name: "proposer",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "metadata",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "title",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "summary",
+            type: "string",
+          },
+          {
+            internalType: "bool",
+            name: "expedited",
+            type: "bool",
+          },
+        ],
+        internalType: "struct IGovernanceModule.MsgSubmitProposal",
+        name: "proposal",
+        type: "tuple",
       },
     ],
     name: "submitProposal",

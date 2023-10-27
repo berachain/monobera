@@ -2,6 +2,8 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
+import { Permissions } from "./types";
+
 export const protobufPackage = "cosmos.circuit.v1";
 
 /** MsgAuthorizeCircuitBreaker defines the Msg/AuthorizeCircuitBreaker request type. */
@@ -18,93 +20,12 @@ export interface MsgAuthorizeCircuitBreaker {
    * These will overwrite any existing permissions. LEVEL_NONE_UNSPECIFIED can
    * be specified to revoke all permissions.
    */
-  permissions?: CircuitBreakerPermissions;
+  permissions?: Permissions | undefined;
 }
 
-/** MsgAuthorizeCircuitBreaker defines the Msg/AuthorizeCircuitBreaker response type. */
-export interface MsgAuthorizeCircuitBreakerResponse {}
-
-/**
- * CircuitBreakerPermissions are the permissions that an account has to trip
- * or reset the circuit breaker.
- */
-export interface CircuitBreakerPermissions {
-  /** level is the level of permissions granted to this account. */
-  level: CircuitBreakerPermissions_Level;
-  /**
-   * limit_type_urls is used with LEVEL_SOME_MSGS to limit the lists of Msg type
-   * URLs that the account can pause. It is an error to use limit_type_urls with
-   * a level other than LEVEL_SOME_MSGS.
-   */
-  limitTypeUrls: string[];
-}
-
-/** Level is the permission level. */
-export enum CircuitBreakerPermissions_Level {
-  /**
-   * LEVEL_NONE_UNSPECIFIED - LEVEL_NONE_UNSPECIFIED indicates that the account will have no circuit
-   * breaker permissions.
-   */
-  LEVEL_NONE_UNSPECIFIED = 0,
-  /**
-   * LEVEL_SOME_MSGS - LEVEL_SOME_MSGS indicates that the account will have permission to
-   * trip or reset the circuit breaker for some Msg type URLs. If this level
-   * is chosen, a non-empty list of Msg type URLs must be provided in
-   * limit_type_urls.
-   */
-  LEVEL_SOME_MSGS = 1,
-  /**
-   * LEVEL_ALL_MSGS - LEVEL_ALL_MSGS indicates that the account can trip or reset the circuit
-   * breaker for Msg's of all type URLs.
-   */
-  LEVEL_ALL_MSGS = 2,
-  /**
-   * LEVEL_SUPER_ADMIN - LEVEL_SUPER_ADMIN indicates that the account can take all circuit breaker
-   * actions and can grant permissions to other accounts.
-   */
-  LEVEL_SUPER_ADMIN = 3,
-  UNRECOGNIZED = -1,
-}
-
-export function circuitBreakerPermissions_LevelFromJSON(
-  object: any,
-): CircuitBreakerPermissions_Level {
-  switch (object) {
-    case 0:
-    case "LEVEL_NONE_UNSPECIFIED":
-      return CircuitBreakerPermissions_Level.LEVEL_NONE_UNSPECIFIED;
-    case 1:
-    case "LEVEL_SOME_MSGS":
-      return CircuitBreakerPermissions_Level.LEVEL_SOME_MSGS;
-    case 2:
-    case "LEVEL_ALL_MSGS":
-      return CircuitBreakerPermissions_Level.LEVEL_ALL_MSGS;
-    case 3:
-    case "LEVEL_SUPER_ADMIN":
-      return CircuitBreakerPermissions_Level.LEVEL_SUPER_ADMIN;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return CircuitBreakerPermissions_Level.UNRECOGNIZED;
-  }
-}
-
-export function circuitBreakerPermissions_LevelToJSON(
-  object: CircuitBreakerPermissions_Level,
-): string {
-  switch (object) {
-    case CircuitBreakerPermissions_Level.LEVEL_NONE_UNSPECIFIED:
-      return "LEVEL_NONE_UNSPECIFIED";
-    case CircuitBreakerPermissions_Level.LEVEL_SOME_MSGS:
-      return "LEVEL_SOME_MSGS";
-    case CircuitBreakerPermissions_Level.LEVEL_ALL_MSGS:
-      return "LEVEL_ALL_MSGS";
-    case CircuitBreakerPermissions_Level.LEVEL_SUPER_ADMIN:
-      return "LEVEL_SUPER_ADMIN";
-    case CircuitBreakerPermissions_Level.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
+/** MsgAuthorizeCircuitBreakerResponse defines the Msg/AuthorizeCircuitBreaker response type. */
+export interface MsgAuthorizeCircuitBreakerResponse {
+  success: boolean;
 }
 
 /** MsgTripCircuitBreaker defines the Msg/TripCircuitBreaker request type. */
@@ -121,8 +42,10 @@ export interface MsgTripCircuitBreaker {
   msgTypeUrls: string[];
 }
 
-/** MsgTripCircuitBreaker defines the Msg/TripCircuitBreaker response type. */
-export interface MsgTripCircuitBreakerResponse {}
+/** MsgTripCircuitBreakerResponse defines the Msg/TripCircuitBreaker response type. */
+export interface MsgTripCircuitBreakerResponse {
+  success: boolean;
+}
 
 /** MsgResetCircuitBreaker defines the Msg/ResetCircuitBreaker request type. */
 export interface MsgResetCircuitBreaker {
@@ -137,7 +60,9 @@ export interface MsgResetCircuitBreaker {
 }
 
 /** MsgResetCircuitBreakerResponse defines the Msg/ResetCircuitBreaker response type. */
-export interface MsgResetCircuitBreakerResponse {}
+export interface MsgResetCircuitBreakerResponse {
+  success: boolean;
+}
 
 function createBaseMsgAuthorizeCircuitBreaker(): MsgAuthorizeCircuitBreaker {
   return { granter: "", grantee: "", permissions: undefined };
@@ -155,7 +80,7 @@ export const MsgAuthorizeCircuitBreaker = {
       writer.uint32(18).string(message.grantee);
     }
     if (message.permissions !== undefined) {
-      CircuitBreakerPermissions.encode(
+      Permissions.encode(
         message.permissions,
         writer.uint32(26).fork(),
       ).ldelim();
@@ -167,28 +92,39 @@ export const MsgAuthorizeCircuitBreaker = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): MsgAuthorizeCircuitBreaker {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAuthorizeCircuitBreaker();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.granter = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.grantee = reader.string();
-          break;
+          continue;
         case 3:
-          message.permissions = CircuitBreakerPermissions.decode(
-            reader,
-            reader.uint32(),
-          );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          if (tag !== 26) {
+            break;
+          }
+
+          message.permissions = Permissions.decode(reader, reader.uint32());
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -198,28 +134,30 @@ export const MsgAuthorizeCircuitBreaker = {
       granter: isSet(object.granter) ? String(object.granter) : "",
       grantee: isSet(object.grantee) ? String(object.grantee) : "",
       permissions: isSet(object.permissions)
-        ? CircuitBreakerPermissions.fromJSON(object.permissions)
+        ? Permissions.fromJSON(object.permissions)
         : undefined,
     };
   },
 
   toJSON(message: MsgAuthorizeCircuitBreaker): unknown {
     const obj: any = {};
-    message.granter !== undefined && (obj.granter = message.granter);
-    message.grantee !== undefined && (obj.grantee = message.grantee);
-    message.permissions !== undefined &&
-      (obj.permissions = message.permissions
-        ? CircuitBreakerPermissions.toJSON(message.permissions)
-        : undefined);
+    if (message.granter !== "") {
+      obj.granter = message.granter;
+    }
+    if (message.grantee !== "") {
+      obj.grantee = message.grantee;
+    }
+    if (message.permissions !== undefined) {
+      obj.permissions = Permissions.toJSON(message.permissions);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<MsgAuthorizeCircuitBreaker>, I>>(
     base?: I,
   ): MsgAuthorizeCircuitBreaker {
-    return MsgAuthorizeCircuitBreaker.fromPartial(base ?? {});
+    return MsgAuthorizeCircuitBreaker.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgAuthorizeCircuitBreaker>, I>>(
     object: I,
   ): MsgAuthorizeCircuitBreaker {
@@ -228,21 +166,24 @@ export const MsgAuthorizeCircuitBreaker = {
     message.grantee = object.grantee ?? "";
     message.permissions =
       object.permissions !== undefined && object.permissions !== null
-        ? CircuitBreakerPermissions.fromPartial(object.permissions)
+        ? Permissions.fromPartial(object.permissions)
         : undefined;
     return message;
   },
 };
 
 function createBaseMsgAuthorizeCircuitBreakerResponse(): MsgAuthorizeCircuitBreakerResponse {
-  return {};
+  return { success: false };
 }
 
 export const MsgAuthorizeCircuitBreakerResponse = {
   encode(
-    _: MsgAuthorizeCircuitBreakerResponse,
+    message: MsgAuthorizeCircuitBreakerResponse,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
+    if (message.success === true) {
+      writer.uint32(8).bool(message.success);
+    }
     return writer;
   },
 
@@ -250,120 +191,51 @@ export const MsgAuthorizeCircuitBreakerResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): MsgAuthorizeCircuitBreakerResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgAuthorizeCircuitBreakerResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(_: any): MsgAuthorizeCircuitBreakerResponse {
-    return {};
+  fromJSON(object: any): MsgAuthorizeCircuitBreakerResponse {
+    return { success: isSet(object.success) ? Boolean(object.success) : false };
   },
 
-  toJSON(_: MsgAuthorizeCircuitBreakerResponse): unknown {
+  toJSON(message: MsgAuthorizeCircuitBreakerResponse): unknown {
     const obj: any = {};
+    if (message.success === true) {
+      obj.success = message.success;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<MsgAuthorizeCircuitBreakerResponse>, I>>(
     base?: I,
   ): MsgAuthorizeCircuitBreakerResponse {
-    return MsgAuthorizeCircuitBreakerResponse.fromPartial(base ?? {});
+    return MsgAuthorizeCircuitBreakerResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<MsgAuthorizeCircuitBreakerResponse>, I>,
-  >(_: I): MsgAuthorizeCircuitBreakerResponse {
+  >(object: I): MsgAuthorizeCircuitBreakerResponse {
     const message = createBaseMsgAuthorizeCircuitBreakerResponse();
-    return message;
-  },
-};
-
-function createBaseCircuitBreakerPermissions(): CircuitBreakerPermissions {
-  return { level: 0, limitTypeUrls: [] };
-}
-
-export const CircuitBreakerPermissions = {
-  encode(
-    message: CircuitBreakerPermissions,
-    writer: _m0.Writer = _m0.Writer.create(),
-  ): _m0.Writer {
-    if (message.level !== 0) {
-      writer.uint32(8).int32(message.level);
-    }
-    for (const v of message.limitTypeUrls) {
-      writer.uint32(18).string(v!);
-    }
-    return writer;
-  },
-
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number,
-  ): CircuitBreakerPermissions {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCircuitBreakerPermissions();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.level = reader.int32() as any;
-          break;
-        case 2:
-          message.limitTypeUrls.push(reader.string());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CircuitBreakerPermissions {
-    return {
-      level: isSet(object.level)
-        ? circuitBreakerPermissions_LevelFromJSON(object.level)
-        : 0,
-      limitTypeUrls: Array.isArray(object?.limitTypeUrls)
-        ? object.limitTypeUrls.map((e: any) => String(e))
-        : [],
-    };
-  },
-
-  toJSON(message: CircuitBreakerPermissions): unknown {
-    const obj: any = {};
-    message.level !== undefined &&
-      (obj.level = circuitBreakerPermissions_LevelToJSON(message.level));
-    if (message.limitTypeUrls) {
-      obj.limitTypeUrls = message.limitTypeUrls.map((e) => e);
-    } else {
-      obj.limitTypeUrls = [];
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<CircuitBreakerPermissions>, I>>(
-    base?: I,
-  ): CircuitBreakerPermissions {
-    return CircuitBreakerPermissions.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<CircuitBreakerPermissions>, I>>(
-    object: I,
-  ): CircuitBreakerPermissions {
-    const message = createBaseCircuitBreakerPermissions();
-    message.level = object.level ?? 0;
-    message.limitTypeUrls = object.limitTypeUrls?.map((e) => e) || [];
+    message.success = object.success ?? false;
     return message;
   },
 };
@@ -390,22 +262,32 @@ export const MsgTripCircuitBreaker = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): MsgTripCircuitBreaker {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgTripCircuitBreaker();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.authority = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.msgTypeUrls.push(reader.string());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -421,11 +303,11 @@ export const MsgTripCircuitBreaker = {
 
   toJSON(message: MsgTripCircuitBreaker): unknown {
     const obj: any = {};
-    message.authority !== undefined && (obj.authority = message.authority);
-    if (message.msgTypeUrls) {
-      obj.msgTypeUrls = message.msgTypeUrls.map((e) => e);
-    } else {
-      obj.msgTypeUrls = [];
+    if (message.authority !== "") {
+      obj.authority = message.authority;
+    }
+    if (message.msgTypeUrls?.length) {
+      obj.msgTypeUrls = message.msgTypeUrls;
     }
     return obj;
   },
@@ -433,9 +315,8 @@ export const MsgTripCircuitBreaker = {
   create<I extends Exact<DeepPartial<MsgTripCircuitBreaker>, I>>(
     base?: I,
   ): MsgTripCircuitBreaker {
-    return MsgTripCircuitBreaker.fromPartial(base ?? {});
+    return MsgTripCircuitBreaker.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgTripCircuitBreaker>, I>>(
     object: I,
   ): MsgTripCircuitBreaker {
@@ -447,14 +328,17 @@ export const MsgTripCircuitBreaker = {
 };
 
 function createBaseMsgTripCircuitBreakerResponse(): MsgTripCircuitBreakerResponse {
-  return {};
+  return { success: false };
 }
 
 export const MsgTripCircuitBreakerResponse = {
   encode(
-    _: MsgTripCircuitBreakerResponse,
+    message: MsgTripCircuitBreakerResponse,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
+    if (message.success === true) {
+      writer.uint32(8).bool(message.success);
+    }
     return writer;
   },
 
@@ -462,39 +346,51 @@ export const MsgTripCircuitBreakerResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): MsgTripCircuitBreakerResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgTripCircuitBreakerResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(_: any): MsgTripCircuitBreakerResponse {
-    return {};
+  fromJSON(object: any): MsgTripCircuitBreakerResponse {
+    return { success: isSet(object.success) ? Boolean(object.success) : false };
   },
 
-  toJSON(_: MsgTripCircuitBreakerResponse): unknown {
+  toJSON(message: MsgTripCircuitBreakerResponse): unknown {
     const obj: any = {};
+    if (message.success === true) {
+      obj.success = message.success;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<MsgTripCircuitBreakerResponse>, I>>(
     base?: I,
   ): MsgTripCircuitBreakerResponse {
-    return MsgTripCircuitBreakerResponse.fromPartial(base ?? {});
+    return MsgTripCircuitBreakerResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgTripCircuitBreakerResponse>, I>>(
-    _: I,
+    object: I,
   ): MsgTripCircuitBreakerResponse {
     const message = createBaseMsgTripCircuitBreakerResponse();
+    message.success = object.success ?? false;
     return message;
   },
 };
@@ -521,22 +417,32 @@ export const MsgResetCircuitBreaker = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): MsgResetCircuitBreaker {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgResetCircuitBreaker();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.authority = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.msgTypeUrls.push(reader.string());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -552,11 +458,11 @@ export const MsgResetCircuitBreaker = {
 
   toJSON(message: MsgResetCircuitBreaker): unknown {
     const obj: any = {};
-    message.authority !== undefined && (obj.authority = message.authority);
-    if (message.msgTypeUrls) {
-      obj.msgTypeUrls = message.msgTypeUrls.map((e) => e);
-    } else {
-      obj.msgTypeUrls = [];
+    if (message.authority !== "") {
+      obj.authority = message.authority;
+    }
+    if (message.msgTypeUrls?.length) {
+      obj.msgTypeUrls = message.msgTypeUrls;
     }
     return obj;
   },
@@ -564,9 +470,8 @@ export const MsgResetCircuitBreaker = {
   create<I extends Exact<DeepPartial<MsgResetCircuitBreaker>, I>>(
     base?: I,
   ): MsgResetCircuitBreaker {
-    return MsgResetCircuitBreaker.fromPartial(base ?? {});
+    return MsgResetCircuitBreaker.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgResetCircuitBreaker>, I>>(
     object: I,
   ): MsgResetCircuitBreaker {
@@ -578,14 +483,17 @@ export const MsgResetCircuitBreaker = {
 };
 
 function createBaseMsgResetCircuitBreakerResponse(): MsgResetCircuitBreakerResponse {
-  return {};
+  return { success: false };
 }
 
 export const MsgResetCircuitBreakerResponse = {
   encode(
-    _: MsgResetCircuitBreakerResponse,
+    message: MsgResetCircuitBreakerResponse,
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
+    if (message.success === true) {
+      writer.uint32(8).bool(message.success);
+    }
     return writer;
   },
 
@@ -593,44 +501,56 @@ export const MsgResetCircuitBreakerResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): MsgResetCircuitBreakerResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgResetCircuitBreakerResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.success = reader.bool();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(_: any): MsgResetCircuitBreakerResponse {
-    return {};
+  fromJSON(object: any): MsgResetCircuitBreakerResponse {
+    return { success: isSet(object.success) ? Boolean(object.success) : false };
   },
 
-  toJSON(_: MsgResetCircuitBreakerResponse): unknown {
+  toJSON(message: MsgResetCircuitBreakerResponse): unknown {
     const obj: any = {};
+    if (message.success === true) {
+      obj.success = message.success;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<MsgResetCircuitBreakerResponse>, I>>(
     base?: I,
   ): MsgResetCircuitBreakerResponse {
-    return MsgResetCircuitBreakerResponse.fromPartial(base ?? {});
+    return MsgResetCircuitBreakerResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgResetCircuitBreakerResponse>, I>>(
-    _: I,
+    object: I,
   ): MsgResetCircuitBreakerResponse {
     const message = createBaseMsgResetCircuitBreakerResponse();
+    message.success = object.success ?? false;
     return message;
   },
 };
 
-/** Msg defines the crisis Msg service. */
+/** Msg defines the circuit Msg service. */
 export interface Msg {
   /**
    * AuthorizeCircuitBreaker allows a super-admin to grant (or revoke) another
@@ -652,11 +572,12 @@ export interface Msg {
   ): Promise<MsgResetCircuitBreakerResponse>;
 }
 
+export const MsgServiceName = "cosmos.circuit.v1.Msg";
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || "cosmos.circuit.v1.Msg";
+    this.service = opts?.service || MsgServiceName;
     this.rpc = rpc;
     this.AuthorizeCircuitBreaker = this.AuthorizeCircuitBreaker.bind(this);
     this.TripCircuitBreaker = this.TripCircuitBreaker.bind(this);
@@ -672,7 +593,7 @@ export class MsgClientImpl implements Msg {
       data,
     );
     return promise.then((data) =>
-      MsgAuthorizeCircuitBreakerResponse.decode(new _m0.Reader(data)),
+      MsgAuthorizeCircuitBreakerResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -682,7 +603,7 @@ export class MsgClientImpl implements Msg {
     const data = MsgTripCircuitBreaker.encode(request).finish();
     const promise = this.rpc.request(this.service, "TripCircuitBreaker", data);
     return promise.then((data) =>
-      MsgTripCircuitBreakerResponse.decode(new _m0.Reader(data)),
+      MsgTripCircuitBreakerResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -692,7 +613,7 @@ export class MsgClientImpl implements Msg {
     const data = MsgResetCircuitBreaker.encode(request).finish();
     const promise = this.rpc.request(this.service, "ResetCircuitBreaker", data);
     return promise.then((data) =>
-      MsgResetCircuitBreakerResponse.decode(new _m0.Reader(data)),
+      MsgResetCircuitBreakerResponse.decode(_m0.Reader.create(data)),
     );
   }
 }

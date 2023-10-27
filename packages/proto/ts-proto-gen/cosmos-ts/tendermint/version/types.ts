@@ -40,22 +40,32 @@ export const App = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): App {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseApp();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.protocol = reader.uint64() as Long;
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.software = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -71,16 +81,18 @@ export const App = {
 
   toJSON(message: App): unknown {
     const obj: any = {};
-    message.protocol !== undefined &&
-      (obj.protocol = (message.protocol || Long.UZERO).toString());
-    message.software !== undefined && (obj.software = message.software);
+    if (!message.protocol.isZero()) {
+      obj.protocol = (message.protocol || Long.UZERO).toString();
+    }
+    if (message.software !== "") {
+      obj.software = message.software;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<App>, I>>(base?: I): App {
-    return App.fromPartial(base ?? {});
+    return App.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<App>, I>>(object: I): App {
     const message = createBaseApp();
     message.protocol =
@@ -111,22 +123,32 @@ export const Consensus = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Consensus {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConsensus();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.block = reader.uint64() as Long;
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.app = reader.uint64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -140,17 +162,18 @@ export const Consensus = {
 
   toJSON(message: Consensus): unknown {
     const obj: any = {};
-    message.block !== undefined &&
-      (obj.block = (message.block || Long.UZERO).toString());
-    message.app !== undefined &&
-      (obj.app = (message.app || Long.UZERO).toString());
+    if (!message.block.isZero()) {
+      obj.block = (message.block || Long.UZERO).toString();
+    }
+    if (!message.app.isZero()) {
+      obj.app = (message.app || Long.UZERO).toString();
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<Consensus>, I>>(base?: I): Consensus {
-    return Consensus.fromPartial(base ?? {});
+    return Consensus.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<Consensus>, I>>(
     object: I,
   ): Consensus {
@@ -166,25 +189,6 @@ export const Consensus = {
     return message;
   },
 };
-
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
-  if (typeof globalThis !== "undefined") {
-    return globalThis;
-  }
-  if (typeof self !== "undefined") {
-    return self;
-  }
-  if (typeof window !== "undefined") {
-    return window;
-  }
-  if (typeof global !== "undefined") {
-    return global;
-  }
-  throw "Unable to locate global object";
-})();
 
 type Builtin =
   | Date

@@ -4,7 +4,7 @@ import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "tendermint.crypto";
 
-/** PublicKey defines the keys available for use with Tendermint Validators */
+/** PublicKey defines the keys available for use with Validators */
 export interface PublicKey {
   ed25519?: Uint8Array | undefined;
   secp256k1?: Uint8Array | undefined;
@@ -29,22 +29,32 @@ export const PublicKey = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): PublicKey {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePublicKey();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.ed25519 = reader.bytes();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.secp256k1 = reader.bytes();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -62,23 +72,18 @@ export const PublicKey = {
 
   toJSON(message: PublicKey): unknown {
     const obj: any = {};
-    message.ed25519 !== undefined &&
-      (obj.ed25519 =
-        message.ed25519 !== undefined
-          ? base64FromBytes(message.ed25519)
-          : undefined);
-    message.secp256k1 !== undefined &&
-      (obj.secp256k1 =
-        message.secp256k1 !== undefined
-          ? base64FromBytes(message.secp256k1)
-          : undefined);
+    if (message.ed25519 !== undefined) {
+      obj.ed25519 = base64FromBytes(message.ed25519);
+    }
+    if (message.secp256k1 !== undefined) {
+      obj.secp256k1 = base64FromBytes(message.secp256k1);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<PublicKey>, I>>(base?: I): PublicKey {
-    return PublicKey.fromPartial(base ?? {});
+    return PublicKey.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<PublicKey>, I>>(
     object: I,
   ): PublicKey {
@@ -89,10 +94,10 @@ export const PublicKey = {
   },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
+declare const self: any | undefined;
+declare const window: any | undefined;
+declare const global: any | undefined;
+const tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }

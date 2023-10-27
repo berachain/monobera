@@ -18,7 +18,7 @@ export interface QueryParamsResponse {
    * Please note that `params.version` is not populated in this response, it is
    * tracked separately in the x/upgrade module.
    */
-  params?: ConsensusParams;
+  params?: ConsensusParams | undefined;
 }
 
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -34,16 +34,18 @@ export const QueryParamsRequest = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -60,9 +62,8 @@ export const QueryParamsRequest = {
   create<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(
     base?: I,
   ): QueryParamsRequest {
-    return QueryParamsRequest.fromPartial(base ?? {});
+    return QueryParamsRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(
     _: I,
   ): QueryParamsRequest {
@@ -87,19 +88,25 @@ export const QueryParamsResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.params = ConsensusParams.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -114,19 +121,17 @@ export const QueryParamsResponse = {
 
   toJSON(message: QueryParamsResponse): unknown {
     const obj: any = {};
-    message.params !== undefined &&
-      (obj.params = message.params
-        ? ConsensusParams.toJSON(message.params)
-        : undefined);
+    if (message.params !== undefined) {
+      obj.params = ConsensusParams.toJSON(message.params);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(
     base?: I,
   ): QueryParamsResponse {
-    return QueryParamsResponse.fromPartial(base ?? {});
+    return QueryParamsResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(
     object: I,
   ): QueryParamsResponse {
@@ -141,15 +146,16 @@ export const QueryParamsResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
-  /** Params queries the parameters of x/consensus_param module. */
+  /** Params queries the parameters of x/consensus module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
 }
 
+export const QueryServiceName = "cosmos.consensus.v1.Query";
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || "cosmos.consensus.v1.Query";
+    this.service = opts?.service || QueryServiceName;
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
   }
@@ -157,7 +163,7 @@ export class QueryClientImpl implements Query {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Params", data);
     return promise.then((data) =>
-      QueryParamsResponse.decode(new _m0.Reader(data)),
+      QueryParamsResponse.decode(_m0.Reader.create(data)),
     );
   }
 }

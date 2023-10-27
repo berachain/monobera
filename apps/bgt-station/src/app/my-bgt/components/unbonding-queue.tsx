@@ -4,7 +4,6 @@ import { Card } from "@bera/ui/card";
 
 import { unbonding_queue_columns } from "~/columns/global-gauge-weight";
 import "react-datepicker/dist/react-datepicker.css";
-import Link from "next/link";
 import {
   STAKING_PRECOMPILE_ABI,
   TransactionActionType,
@@ -13,42 +12,14 @@ import {
   usePollDelegatorUnbonding,
   type EntryData,
 } from "@bera/berajs";
-import { docsUrl } from "@bera/config";
+import { cloudinaryUrl, docsUrl } from "@bera/config";
 import { DataTable, ValidatorIcon, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { mutate } from "swr";
 import { type Address } from "wagmi";
 
-function Nothing() {
-  return (
-    <div className="container flex max-w-[764px] flex-col gap-8">
-      <div className="text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
-        Once you unbond BGT,
-        <br /> you’ll be able to view your unbonding queue right here.
-      </div>
-      <div className="flex flex-col justify-center gap-4 sm:flex-row">
-        <Card className="w-full max-w-[500px] flex-1 px-12 py-8">
-          <div className="flex h-12 items-center gap-3 text-lg font-semibold leading-7 text-muted-foreground">
-            {" "}
-            <div className="text-[31.12px]">📜</div>What is Unbonding?
-          </div>
-          <div className="mb-8 text-xl font-semibold leading-7">
-            Confused about unbonding? Check out our documentation for more
-            information.
-          </div>
-          <Link
-            href={`${docsUrl}/getting-started/bgt-station-bgt.html#unbonding-bgt`}
-            target="_blank"
-          >
-            <Button className="w-full">How to unbond</Button>
-          </Link>
-        </Card>
-      </div>
-    </div>
-  );
-}
+import { Banner } from "./banner";
 
 export default function UnbondingQueue({
   unbondingQueue,
@@ -153,7 +124,12 @@ export default function UnbondingQueue({
           </div>
         </>
       ) : (
-        <Nothing />
+        <Banner
+          img={`${cloudinaryUrl}/bears/zkyxcj5qhdmd75xgozkn`}
+          title="How do I unbond BGT?"
+          subtitle="Unbond with ease following our walkthrough."
+          href={`${docsUrl}/proof-of-liquidity/pol-bgt-emissions.html`}
+        />
       )}
     </div>
   );
