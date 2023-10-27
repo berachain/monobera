@@ -55,7 +55,6 @@ export default function ProposalDetails({
     | undefined
   >(undefined);
 
-  console.log(proposal);
   const globalTotal = useTotalDelegated();
   const userTotal = useTotalDelegatorDelegated();
 
