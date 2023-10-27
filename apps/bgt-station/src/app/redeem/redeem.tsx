@@ -45,9 +45,9 @@ export default function Redeem() {
         <div className="text-lg font-semibold leading-7 text-foreground">
           Redeem BGT for BERA
         </div>
-        <div className="text-sm text-muted-foreground">
+        {/* <div className="text-sm text-muted-foreground">
           Exchange your BGT for BERA at a 1:1 ratio.
-        </div>
+        </div> */}
         <div className="relative flex flex-col gap-2">
           <div className="leading-tigh text-sm font-semibold">Amount</div>
           <Input
@@ -85,8 +85,9 @@ export default function Redeem() {
             <div className="text-foreground">0.0 BERA</div>
           </div>
         </div> */}
-        <Alert variant="warning">
-          Redeeming your BGT into BERA is an irreversible action.
+        <Alert variant="info">
+          Exchange your BGT for BERA at a 1:1 ratio. Redeeming your BGT into
+          BERA is an irreversible action.
         </Alert>
         {Number(redeemAmount) > Number(userBalance) &&
           isReady &&

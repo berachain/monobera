@@ -6,10 +6,10 @@ export const protobufPackage = "cosmos.autocli.v1";
 
 /** ModuleOptions describes the CLI options for a Cosmos SDK module. */
 export interface ModuleOptions {
-  /** tx describes the tx command for the module. */
-  tx?: ServiceCommandDescriptor;
-  /** query describes the tx command for the module. */
-  query?: ServiceCommandDescriptor;
+  /** tx describes the tx commands for the module. */
+  tx?: ServiceCommandDescriptor | undefined;
+  /** query describes the queries commands for the module. */
+  query?: ServiceCommandDescriptor | undefined;
 }
 
 /** ServiceCommandDescriptor describes a CLI command based on a protobuf service. */
@@ -32,11 +32,17 @@ export interface ServiceCommandDescriptor {
    * sub-command.
    */
   subCommands: { [key: string]: ServiceCommandDescriptor };
+  /**
+   * enhance_custom_commands specifies whether to skip the service when generating commands, if a custom command already
+   * exists, or enhance the existing command. If set to true, the custom command will be enhanced with the services from
+   * gRPC. otherwise when a custom command exists, no commands will be generated for the service.
+   */
+  enhanceCustomCommand: boolean;
 }
 
 export interface ServiceCommandDescriptor_SubCommandsEntry {
   key: string;
-  value?: ServiceCommandDescriptor;
+  value?: ServiceCommandDescriptor | undefined;
 }
 
 /**
@@ -93,7 +99,7 @@ export interface RpcCommandOptions {
 
 export interface RpcCommandOptions_FlagOptionsEntry {
   key: string;
-  value?: FlagOptions;
+  value?: FlagOptions | undefined;
 }
 
 /**
@@ -111,8 +117,6 @@ export interface FlagOptions {
   usage: string;
   /** default_value is the default value as text. */
   defaultValue: string;
-  /** default value is the default value as text if the flag is used without any value. */
-  noOptDefaultValue: string;
   /** deprecated is the usage text to show if this flag is deprecated. */
   deprecated: string;
   /** shorthand_deprecated is the usage text to show if the shorthand of this flag is deprecated. */
@@ -131,9 +135,14 @@ export interface PositionalArgDescriptor {
   /**
    * varargs makes a positional parameter a varargs parameter. This can only be
    * applied to last positional parameter and the proto_field must a repeated
-   * field.
+   * field. Note: It is mutually exclusive with optional.
    */
   varargs: boolean;
+  /**
+   * optional makes the last positional parameter optional.
+   * Note: It is mutually exclusive with varargs.
+   */
+  optional: boolean;
 }
 
 function createBaseModuleOptions(): ModuleOptions {
@@ -161,25 +170,35 @@ export const ModuleOptions = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ModuleOptions {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseModuleOptions();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.tx = ServiceCommandDescriptor.decode(reader, reader.uint32());
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.query = ServiceCommandDescriptor.decode(
             reader,
             reader.uint32(),
           );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -197,23 +216,20 @@ export const ModuleOptions = {
 
   toJSON(message: ModuleOptions): unknown {
     const obj: any = {};
-    message.tx !== undefined &&
-      (obj.tx = message.tx
-        ? ServiceCommandDescriptor.toJSON(message.tx)
-        : undefined);
-    message.query !== undefined &&
-      (obj.query = message.query
-        ? ServiceCommandDescriptor.toJSON(message.query)
-        : undefined);
+    if (message.tx !== undefined) {
+      obj.tx = ServiceCommandDescriptor.toJSON(message.tx);
+    }
+    if (message.query !== undefined) {
+      obj.query = ServiceCommandDescriptor.toJSON(message.query);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<ModuleOptions>, I>>(
     base?: I,
   ): ModuleOptions {
-    return ModuleOptions.fromPartial(base ?? {});
+    return ModuleOptions.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<ModuleOptions>, I>>(
     object: I,
   ): ModuleOptions {
@@ -231,7 +247,12 @@ export const ModuleOptions = {
 };
 
 function createBaseServiceCommandDescriptor(): ServiceCommandDescriptor {
-  return { service: "", rpcCommandOptions: [], subCommands: {} };
+  return {
+    service: "",
+    rpcCommandOptions: [],
+    subCommands: {},
+    enhanceCustomCommand: false,
+  };
 }
 
 export const ServiceCommandDescriptor = {
@@ -251,6 +272,9 @@ export const ServiceCommandDescriptor = {
         writer.uint32(26).fork(),
       ).ldelim();
     });
+    if (message.enhanceCustomCommand === true) {
+      writer.uint32(32).bool(message.enhanceCustomCommand);
+    }
     return writer;
   },
 
@@ -258,21 +282,34 @@ export const ServiceCommandDescriptor = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): ServiceCommandDescriptor {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseServiceCommandDescriptor();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.service = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.rpcCommandOptions.push(
             RpcCommandOptions.decode(reader, reader.uint32()),
           );
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           const entry3 = ServiceCommandDescriptor_SubCommandsEntry.decode(
             reader,
             reader.uint32(),
@@ -280,11 +317,19 @@ export const ServiceCommandDescriptor = {
           if (entry3.value !== undefined) {
             message.subCommands[entry3.key] = entry3.value;
           }
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.enhanceCustomCommand = reader.bool();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -305,24 +350,33 @@ export const ServiceCommandDescriptor = {
             return acc;
           }, {})
         : {},
+      enhanceCustomCommand: isSet(object.enhanceCustomCommand)
+        ? Boolean(object.enhanceCustomCommand)
+        : false,
     };
   },
 
   toJSON(message: ServiceCommandDescriptor): unknown {
     const obj: any = {};
-    message.service !== undefined && (obj.service = message.service);
-    if (message.rpcCommandOptions) {
-      obj.rpcCommandOptions = message.rpcCommandOptions.map((e) =>
-        e ? RpcCommandOptions.toJSON(e) : undefined,
-      );
-    } else {
-      obj.rpcCommandOptions = [];
+    if (message.service !== "") {
+      obj.service = message.service;
     }
-    obj.subCommands = {};
+    if (message.rpcCommandOptions?.length) {
+      obj.rpcCommandOptions = message.rpcCommandOptions.map((e) =>
+        RpcCommandOptions.toJSON(e),
+      );
+    }
     if (message.subCommands) {
-      Object.entries(message.subCommands).forEach(([k, v]) => {
-        obj.subCommands[k] = ServiceCommandDescriptor.toJSON(v);
-      });
+      const entries = Object.entries(message.subCommands);
+      if (entries.length > 0) {
+        obj.subCommands = {};
+        entries.forEach(([k, v]) => {
+          obj.subCommands[k] = ServiceCommandDescriptor.toJSON(v);
+        });
+      }
+    }
+    if (message.enhanceCustomCommand === true) {
+      obj.enhanceCustomCommand = message.enhanceCustomCommand;
     }
     return obj;
   },
@@ -330,9 +384,8 @@ export const ServiceCommandDescriptor = {
   create<I extends Exact<DeepPartial<ServiceCommandDescriptor>, I>>(
     base?: I,
   ): ServiceCommandDescriptor {
-    return ServiceCommandDescriptor.fromPartial(base ?? {});
+    return ServiceCommandDescriptor.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<ServiceCommandDescriptor>, I>>(
     object: I,
   ): ServiceCommandDescriptor {
@@ -349,6 +402,7 @@ export const ServiceCommandDescriptor = {
       }
       return acc;
     }, {});
+    message.enhanceCustomCommand = object.enhanceCustomCommand ?? false;
     return message;
   },
 };
@@ -378,25 +432,35 @@ export const ServiceCommandDescriptor_SubCommandsEntry = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): ServiceCommandDescriptor_SubCommandsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseServiceCommandDescriptor_SubCommandsEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.key = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.value = ServiceCommandDescriptor.decode(
             reader,
             reader.uint32(),
           );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -412,20 +476,22 @@ export const ServiceCommandDescriptor_SubCommandsEntry = {
 
   toJSON(message: ServiceCommandDescriptor_SubCommandsEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined &&
-      (obj.value = message.value
-        ? ServiceCommandDescriptor.toJSON(message.value)
-        : undefined);
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = ServiceCommandDescriptor.toJSON(message.value);
+    }
     return obj;
   },
 
   create<
     I extends Exact<DeepPartial<ServiceCommandDescriptor_SubCommandsEntry>, I>,
   >(base?: I): ServiceCommandDescriptor_SubCommandsEntry {
-    return ServiceCommandDescriptor_SubCommandsEntry.fromPartial(base ?? {});
+    return ServiceCommandDescriptor_SubCommandsEntry.fromPartial(
+      base ?? ({} as any),
+    );
   },
-
   fromPartial<
     I extends Exact<DeepPartial<ServiceCommandDescriptor_SubCommandsEntry>, I>,
   >(object: I): ServiceCommandDescriptor_SubCommandsEntry {
@@ -504,40 +570,81 @@ export const RpcCommandOptions = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): RpcCommandOptions {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRpcCommandOptions();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.rpcMethod = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.use = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.long = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.short = reader.string();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.example = reader.string();
-          break;
+          continue;
         case 6:
+          if (tag !== 50) {
+            break;
+          }
+
           message.alias.push(reader.string());
-          break;
+          continue;
         case 7:
+          if (tag !== 58) {
+            break;
+          }
+
           message.suggestFor.push(reader.string());
-          break;
+          continue;
         case 8:
+          if (tag !== 66) {
+            break;
+          }
+
           message.deprecated = reader.string();
-          break;
+          continue;
         case 9:
+          if (tag !== 74) {
+            break;
+          }
+
           message.version = reader.string();
-          break;
+          continue;
         case 10:
+          if (tag !== 82) {
+            break;
+          }
+
           const entry10 = RpcCommandOptions_FlagOptionsEntry.decode(
             reader,
             reader.uint32(),
@@ -545,19 +652,28 @@ export const RpcCommandOptions = {
           if (entry10.value !== undefined) {
             message.flagOptions[entry10.key] = entry10.value;
           }
-          break;
+          continue;
         case 11:
+          if (tag !== 90) {
+            break;
+          }
+
           message.positionalArgs.push(
             PositionalArgDescriptor.decode(reader, reader.uint32()),
           );
-          break;
+          continue;
         case 12:
+          if (tag !== 96) {
+            break;
+          }
+
           message.skip = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -596,46 +712,58 @@ export const RpcCommandOptions = {
 
   toJSON(message: RpcCommandOptions): unknown {
     const obj: any = {};
-    message.rpcMethod !== undefined && (obj.rpcMethod = message.rpcMethod);
-    message.use !== undefined && (obj.use = message.use);
-    message.long !== undefined && (obj.long = message.long);
-    message.short !== undefined && (obj.short = message.short);
-    message.example !== undefined && (obj.example = message.example);
-    if (message.alias) {
-      obj.alias = message.alias.map((e) => e);
-    } else {
-      obj.alias = [];
+    if (message.rpcMethod !== "") {
+      obj.rpcMethod = message.rpcMethod;
     }
-    if (message.suggestFor) {
-      obj.suggestFor = message.suggestFor.map((e) => e);
-    } else {
-      obj.suggestFor = [];
+    if (message.use !== "") {
+      obj.use = message.use;
     }
-    message.deprecated !== undefined && (obj.deprecated = message.deprecated);
-    message.version !== undefined && (obj.version = message.version);
-    obj.flagOptions = {};
+    if (message.long !== "") {
+      obj.long = message.long;
+    }
+    if (message.short !== "") {
+      obj.short = message.short;
+    }
+    if (message.example !== "") {
+      obj.example = message.example;
+    }
+    if (message.alias?.length) {
+      obj.alias = message.alias;
+    }
+    if (message.suggestFor?.length) {
+      obj.suggestFor = message.suggestFor;
+    }
+    if (message.deprecated !== "") {
+      obj.deprecated = message.deprecated;
+    }
+    if (message.version !== "") {
+      obj.version = message.version;
+    }
     if (message.flagOptions) {
-      Object.entries(message.flagOptions).forEach(([k, v]) => {
-        obj.flagOptions[k] = FlagOptions.toJSON(v);
-      });
+      const entries = Object.entries(message.flagOptions);
+      if (entries.length > 0) {
+        obj.flagOptions = {};
+        entries.forEach(([k, v]) => {
+          obj.flagOptions[k] = FlagOptions.toJSON(v);
+        });
+      }
     }
-    if (message.positionalArgs) {
+    if (message.positionalArgs?.length) {
       obj.positionalArgs = message.positionalArgs.map((e) =>
-        e ? PositionalArgDescriptor.toJSON(e) : undefined,
+        PositionalArgDescriptor.toJSON(e),
       );
-    } else {
-      obj.positionalArgs = [];
     }
-    message.skip !== undefined && (obj.skip = message.skip);
+    if (message.skip === true) {
+      obj.skip = message.skip;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<RpcCommandOptions>, I>>(
     base?: I,
   ): RpcCommandOptions {
-    return RpcCommandOptions.fromPartial(base ?? {});
+    return RpcCommandOptions.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<RpcCommandOptions>, I>>(
     object: I,
   ): RpcCommandOptions {
@@ -688,22 +816,32 @@ export const RpcCommandOptions_FlagOptionsEntry = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): RpcCommandOptions_FlagOptionsEntry {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRpcCommandOptions_FlagOptionsEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.key = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.value = FlagOptions.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -719,20 +857,20 @@ export const RpcCommandOptions_FlagOptionsEntry = {
 
   toJSON(message: RpcCommandOptions_FlagOptionsEntry): unknown {
     const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined &&
-      (obj.value = message.value
-        ? FlagOptions.toJSON(message.value)
-        : undefined);
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = FlagOptions.toJSON(message.value);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<RpcCommandOptions_FlagOptionsEntry>, I>>(
     base?: I,
   ): RpcCommandOptions_FlagOptionsEntry {
-    return RpcCommandOptions_FlagOptionsEntry.fromPartial(base ?? {});
+    return RpcCommandOptions_FlagOptionsEntry.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<RpcCommandOptions_FlagOptionsEntry>, I>,
   >(object: I): RpcCommandOptions_FlagOptionsEntry {
@@ -752,7 +890,6 @@ function createBaseFlagOptions(): FlagOptions {
     shorthand: "",
     usage: "",
     defaultValue: "",
-    noOptDefaultValue: "",
     deprecated: "",
     shorthandDeprecated: "",
     hidden: false,
@@ -776,9 +913,6 @@ export const FlagOptions = {
     if (message.defaultValue !== "") {
       writer.uint32(34).string(message.defaultValue);
     }
-    if (message.noOptDefaultValue !== "") {
-      writer.uint32(42).string(message.noOptDefaultValue);
-    }
     if (message.deprecated !== "") {
       writer.uint32(50).string(message.deprecated);
     }
@@ -792,40 +926,67 @@ export const FlagOptions = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): FlagOptions {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFlagOptions();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.name = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.shorthand = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.usage = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.defaultValue = reader.string();
-          break;
-        case 5:
-          message.noOptDefaultValue = reader.string();
-          break;
+          continue;
         case 6:
+          if (tag !== 50) {
+            break;
+          }
+
           message.deprecated = reader.string();
-          break;
+          continue;
         case 7:
+          if (tag !== 58) {
+            break;
+          }
+
           message.shorthandDeprecated = reader.string();
-          break;
+          continue;
         case 8:
+          if (tag !== 64) {
+            break;
+          }
+
           message.hidden = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -838,9 +999,6 @@ export const FlagOptions = {
       defaultValue: isSet(object.defaultValue)
         ? String(object.defaultValue)
         : "",
-      noOptDefaultValue: isSet(object.noOptDefaultValue)
-        ? String(object.noOptDefaultValue)
-        : "",
       deprecated: isSet(object.deprecated) ? String(object.deprecated) : "",
       shorthandDeprecated: isSet(object.shorthandDeprecated)
         ? String(object.shorthandDeprecated)
@@ -851,24 +1009,33 @@ export const FlagOptions = {
 
   toJSON(message: FlagOptions): unknown {
     const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
-    message.shorthand !== undefined && (obj.shorthand = message.shorthand);
-    message.usage !== undefined && (obj.usage = message.usage);
-    message.defaultValue !== undefined &&
-      (obj.defaultValue = message.defaultValue);
-    message.noOptDefaultValue !== undefined &&
-      (obj.noOptDefaultValue = message.noOptDefaultValue);
-    message.deprecated !== undefined && (obj.deprecated = message.deprecated);
-    message.shorthandDeprecated !== undefined &&
-      (obj.shorthandDeprecated = message.shorthandDeprecated);
-    message.hidden !== undefined && (obj.hidden = message.hidden);
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
+    if (message.shorthand !== "") {
+      obj.shorthand = message.shorthand;
+    }
+    if (message.usage !== "") {
+      obj.usage = message.usage;
+    }
+    if (message.defaultValue !== "") {
+      obj.defaultValue = message.defaultValue;
+    }
+    if (message.deprecated !== "") {
+      obj.deprecated = message.deprecated;
+    }
+    if (message.shorthandDeprecated !== "") {
+      obj.shorthandDeprecated = message.shorthandDeprecated;
+    }
+    if (message.hidden === true) {
+      obj.hidden = message.hidden;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<FlagOptions>, I>>(base?: I): FlagOptions {
-    return FlagOptions.fromPartial(base ?? {});
+    return FlagOptions.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<FlagOptions>, I>>(
     object: I,
   ): FlagOptions {
@@ -877,7 +1044,6 @@ export const FlagOptions = {
     message.shorthand = object.shorthand ?? "";
     message.usage = object.usage ?? "";
     message.defaultValue = object.defaultValue ?? "";
-    message.noOptDefaultValue = object.noOptDefaultValue ?? "";
     message.deprecated = object.deprecated ?? "";
     message.shorthandDeprecated = object.shorthandDeprecated ?? "";
     message.hidden = object.hidden ?? false;
@@ -886,7 +1052,7 @@ export const FlagOptions = {
 };
 
 function createBasePositionalArgDescriptor(): PositionalArgDescriptor {
-  return { protoField: "", varargs: false };
+  return { protoField: "", varargs: false, optional: false };
 }
 
 export const PositionalArgDescriptor = {
@@ -900,6 +1066,9 @@ export const PositionalArgDescriptor = {
     if (message.varargs === true) {
       writer.uint32(16).bool(message.varargs);
     }
+    if (message.optional === true) {
+      writer.uint32(24).bool(message.optional);
+    }
     return writer;
   },
 
@@ -907,22 +1076,39 @@ export const PositionalArgDescriptor = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): PositionalArgDescriptor {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePositionalArgDescriptor();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.protoField = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.varargs = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.optional = reader.bool();
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -931,28 +1117,36 @@ export const PositionalArgDescriptor = {
     return {
       protoField: isSet(object.protoField) ? String(object.protoField) : "",
       varargs: isSet(object.varargs) ? Boolean(object.varargs) : false,
+      optional: isSet(object.optional) ? Boolean(object.optional) : false,
     };
   },
 
   toJSON(message: PositionalArgDescriptor): unknown {
     const obj: any = {};
-    message.protoField !== undefined && (obj.protoField = message.protoField);
-    message.varargs !== undefined && (obj.varargs = message.varargs);
+    if (message.protoField !== "") {
+      obj.protoField = message.protoField;
+    }
+    if (message.varargs === true) {
+      obj.varargs = message.varargs;
+    }
+    if (message.optional === true) {
+      obj.optional = message.optional;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<PositionalArgDescriptor>, I>>(
     base?: I,
   ): PositionalArgDescriptor {
-    return PositionalArgDescriptor.fromPartial(base ?? {});
+    return PositionalArgDescriptor.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<PositionalArgDescriptor>, I>>(
     object: I,
   ): PositionalArgDescriptor {
     const message = createBasePositionalArgDescriptor();
     message.protoField = object.protoField ?? "";
     message.varargs = object.varargs ?? false;
+    message.optional = object.optional ?? false;
     return message;
   },
 };

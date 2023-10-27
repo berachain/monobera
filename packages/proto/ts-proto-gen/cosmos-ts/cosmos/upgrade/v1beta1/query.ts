@@ -18,7 +18,7 @@ export interface QueryCurrentPlanRequest {}
  */
 export interface QueryCurrentPlanResponse {
   /** plan is the current upgrade plan. */
-  plan?: Plan;
+  plan?: Plan | undefined;
 }
 
 /**
@@ -122,16 +122,18 @@ export const QueryCurrentPlanRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryCurrentPlanRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCurrentPlanRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -148,9 +150,8 @@ export const QueryCurrentPlanRequest = {
   create<I extends Exact<DeepPartial<QueryCurrentPlanRequest>, I>>(
     base?: I,
   ): QueryCurrentPlanRequest {
-    return QueryCurrentPlanRequest.fromPartial(base ?? {});
+    return QueryCurrentPlanRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryCurrentPlanRequest>, I>>(
     _: I,
   ): QueryCurrentPlanRequest {
@@ -178,19 +179,25 @@ export const QueryCurrentPlanResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryCurrentPlanResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryCurrentPlanResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.plan = Plan.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -203,17 +210,17 @@ export const QueryCurrentPlanResponse = {
 
   toJSON(message: QueryCurrentPlanResponse): unknown {
     const obj: any = {};
-    message.plan !== undefined &&
-      (obj.plan = message.plan ? Plan.toJSON(message.plan) : undefined);
+    if (message.plan !== undefined) {
+      obj.plan = Plan.toJSON(message.plan);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryCurrentPlanResponse>, I>>(
     base?: I,
   ): QueryCurrentPlanResponse {
-    return QueryCurrentPlanResponse.fromPartial(base ?? {});
+    return QueryCurrentPlanResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryCurrentPlanResponse>, I>>(
     object: I,
   ): QueryCurrentPlanResponse {
@@ -245,19 +252,25 @@ export const QueryAppliedPlanRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryAppliedPlanRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAppliedPlanRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.name = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -268,16 +281,17 @@ export const QueryAppliedPlanRequest = {
 
   toJSON(message: QueryAppliedPlanRequest): unknown {
     const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
+    if (message.name !== "") {
+      obj.name = message.name;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryAppliedPlanRequest>, I>>(
     base?: I,
   ): QueryAppliedPlanRequest {
-    return QueryAppliedPlanRequest.fromPartial(base ?? {});
+    return QueryAppliedPlanRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryAppliedPlanRequest>, I>>(
     object: I,
   ): QueryAppliedPlanRequest {
@@ -306,19 +320,25 @@ export const QueryAppliedPlanResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryAppliedPlanResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAppliedPlanResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.height = reader.int64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -331,17 +351,17 @@ export const QueryAppliedPlanResponse = {
 
   toJSON(message: QueryAppliedPlanResponse): unknown {
     const obj: any = {};
-    message.height !== undefined &&
-      (obj.height = (message.height || Long.ZERO).toString());
+    if (!message.height.isZero()) {
+      obj.height = (message.height || Long.ZERO).toString();
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryAppliedPlanResponse>, I>>(
     base?: I,
   ): QueryAppliedPlanResponse {
-    return QueryAppliedPlanResponse.fromPartial(base ?? {});
+    return QueryAppliedPlanResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryAppliedPlanResponse>, I>>(
     object: I,
   ): QueryAppliedPlanResponse {
@@ -373,19 +393,25 @@ export const QueryUpgradedConsensusStateRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryUpgradedConsensusStateRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUpgradedConsensusStateRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.lastHeight = reader.int64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -400,17 +426,17 @@ export const QueryUpgradedConsensusStateRequest = {
 
   toJSON(message: QueryUpgradedConsensusStateRequest): unknown {
     const obj: any = {};
-    message.lastHeight !== undefined &&
-      (obj.lastHeight = (message.lastHeight || Long.ZERO).toString());
+    if (!message.lastHeight.isZero()) {
+      obj.lastHeight = (message.lastHeight || Long.ZERO).toString();
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryUpgradedConsensusStateRequest>, I>>(
     base?: I,
   ): QueryUpgradedConsensusStateRequest {
-    return QueryUpgradedConsensusStateRequest.fromPartial(base ?? {});
+    return QueryUpgradedConsensusStateRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<QueryUpgradedConsensusStateRequest>, I>,
   >(object: I): QueryUpgradedConsensusStateRequest {
@@ -424,7 +450,7 @@ export const QueryUpgradedConsensusStateRequest = {
 };
 
 function createBaseQueryUpgradedConsensusStateResponse(): QueryUpgradedConsensusStateResponse {
-  return { upgradedConsensusState: new Uint8Array() };
+  return { upgradedConsensusState: new Uint8Array(0) };
 }
 
 export const QueryUpgradedConsensusStateResponse = {
@@ -442,19 +468,25 @@ export const QueryUpgradedConsensusStateResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryUpgradedConsensusStateResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryUpgradedConsensusStateResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.upgradedConsensusState = reader.bytes();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -463,33 +495,31 @@ export const QueryUpgradedConsensusStateResponse = {
     return {
       upgradedConsensusState: isSet(object.upgradedConsensusState)
         ? bytesFromBase64(object.upgradedConsensusState)
-        : new Uint8Array(),
+        : new Uint8Array(0),
     };
   },
 
   toJSON(message: QueryUpgradedConsensusStateResponse): unknown {
     const obj: any = {};
-    message.upgradedConsensusState !== undefined &&
-      (obj.upgradedConsensusState = base64FromBytes(
-        message.upgradedConsensusState !== undefined
-          ? message.upgradedConsensusState
-          : new Uint8Array(),
-      ));
+    if (message.upgradedConsensusState.length !== 0) {
+      obj.upgradedConsensusState = base64FromBytes(
+        message.upgradedConsensusState,
+      );
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryUpgradedConsensusStateResponse>, I>>(
     base?: I,
   ): QueryUpgradedConsensusStateResponse {
-    return QueryUpgradedConsensusStateResponse.fromPartial(base ?? {});
+    return QueryUpgradedConsensusStateResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<QueryUpgradedConsensusStateResponse>, I>,
   >(object: I): QueryUpgradedConsensusStateResponse {
     const message = createBaseQueryUpgradedConsensusStateResponse();
     message.upgradedConsensusState =
-      object.upgradedConsensusState ?? new Uint8Array();
+      object.upgradedConsensusState ?? new Uint8Array(0);
     return message;
   },
 };
@@ -513,19 +543,25 @@ export const QueryModuleVersionsRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryModuleVersionsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryModuleVersionsRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.moduleName = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -538,16 +574,17 @@ export const QueryModuleVersionsRequest = {
 
   toJSON(message: QueryModuleVersionsRequest): unknown {
     const obj: any = {};
-    message.moduleName !== undefined && (obj.moduleName = message.moduleName);
+    if (message.moduleName !== "") {
+      obj.moduleName = message.moduleName;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryModuleVersionsRequest>, I>>(
     base?: I,
   ): QueryModuleVersionsRequest {
-    return QueryModuleVersionsRequest.fromPartial(base ?? {});
+    return QueryModuleVersionsRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryModuleVersionsRequest>, I>>(
     object: I,
   ): QueryModuleVersionsRequest {
@@ -576,21 +613,27 @@ export const QueryModuleVersionsResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryModuleVersionsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryModuleVersionsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.moduleVersions.push(
             ModuleVersion.decode(reader, reader.uint32()),
           );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -605,12 +648,10 @@ export const QueryModuleVersionsResponse = {
 
   toJSON(message: QueryModuleVersionsResponse): unknown {
     const obj: any = {};
-    if (message.moduleVersions) {
+    if (message.moduleVersions?.length) {
       obj.moduleVersions = message.moduleVersions.map((e) =>
-        e ? ModuleVersion.toJSON(e) : undefined,
+        ModuleVersion.toJSON(e),
       );
-    } else {
-      obj.moduleVersions = [];
     }
     return obj;
   },
@@ -618,9 +659,8 @@ export const QueryModuleVersionsResponse = {
   create<I extends Exact<DeepPartial<QueryModuleVersionsResponse>, I>>(
     base?: I,
   ): QueryModuleVersionsResponse {
-    return QueryModuleVersionsResponse.fromPartial(base ?? {});
+    return QueryModuleVersionsResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryModuleVersionsResponse>, I>>(
     object: I,
   ): QueryModuleVersionsResponse {
@@ -647,16 +687,18 @@ export const QueryAuthorityRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryAuthorityRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAuthorityRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -673,9 +715,8 @@ export const QueryAuthorityRequest = {
   create<I extends Exact<DeepPartial<QueryAuthorityRequest>, I>>(
     base?: I,
   ): QueryAuthorityRequest {
-    return QueryAuthorityRequest.fromPartial(base ?? {});
+    return QueryAuthorityRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryAuthorityRequest>, I>>(
     _: I,
   ): QueryAuthorityRequest {
@@ -703,19 +744,25 @@ export const QueryAuthorityResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryAuthorityResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAuthorityResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.address = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -726,16 +773,17 @@ export const QueryAuthorityResponse = {
 
   toJSON(message: QueryAuthorityResponse): unknown {
     const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
+    if (message.address !== "") {
+      obj.address = message.address;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryAuthorityResponse>, I>>(
     base?: I,
   ): QueryAuthorityResponse {
-    return QueryAuthorityResponse.fromPartial(base ?? {});
+    return QueryAuthorityResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryAuthorityResponse>, I>>(
     object: I,
   ): QueryAuthorityResponse {
@@ -784,11 +832,12 @@ export interface Query {
   Authority(request: QueryAuthorityRequest): Promise<QueryAuthorityResponse>;
 }
 
+export const QueryServiceName = "cosmos.upgrade.v1beta1.Query";
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || "cosmos.upgrade.v1beta1.Query";
+    this.service = opts?.service || QueryServiceName;
     this.rpc = rpc;
     this.CurrentPlan = this.CurrentPlan.bind(this);
     this.AppliedPlan = this.AppliedPlan.bind(this);
@@ -802,7 +851,7 @@ export class QueryClientImpl implements Query {
     const data = QueryCurrentPlanRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "CurrentPlan", data);
     return promise.then((data) =>
-      QueryCurrentPlanResponse.decode(new _m0.Reader(data)),
+      QueryCurrentPlanResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -812,7 +861,7 @@ export class QueryClientImpl implements Query {
     const data = QueryAppliedPlanRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "AppliedPlan", data);
     return promise.then((data) =>
-      QueryAppliedPlanResponse.decode(new _m0.Reader(data)),
+      QueryAppliedPlanResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -826,7 +875,7 @@ export class QueryClientImpl implements Query {
       data,
     );
     return promise.then((data) =>
-      QueryUpgradedConsensusStateResponse.decode(new _m0.Reader(data)),
+      QueryUpgradedConsensusStateResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -836,7 +885,7 @@ export class QueryClientImpl implements Query {
     const data = QueryModuleVersionsRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "ModuleVersions", data);
     return promise.then((data) =>
-      QueryModuleVersionsResponse.decode(new _m0.Reader(data)),
+      QueryModuleVersionsResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -844,7 +893,7 @@ export class QueryClientImpl implements Query {
     const data = QueryAuthorityRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Authority", data);
     return promise.then((data) =>
-      QueryAuthorityResponse.decode(new _m0.Reader(data)),
+      QueryAuthorityResponse.decode(_m0.Reader.create(data)),
     );
   }
 }
@@ -857,10 +906,10 @@ interface Rpc {
   ): Promise<Uint8Array>;
 }
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
+declare const self: any | undefined;
+declare const window: any | undefined;
+declare const global: any | undefined;
+const tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }

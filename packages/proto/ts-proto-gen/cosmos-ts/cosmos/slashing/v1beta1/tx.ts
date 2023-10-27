@@ -2,7 +2,6 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-import { Timestamp } from "../../../google/protobuf/timestamp";
 import { Params } from "./slashing";
 
 export const protobufPackage = "cosmos.slashing.v1beta1";
@@ -28,7 +27,7 @@ export interface MsgUpdateParams {
    *
    * NOTE: All parameters must be supplied.
    */
-  params?: Params;
+  params?: Params | undefined;
 }
 
 /**
@@ -55,19 +54,25 @@ export const MsgUnjail = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnjail {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnjail();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.validatorAddr = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -82,15 +87,15 @@ export const MsgUnjail = {
 
   toJSON(message: MsgUnjail): unknown {
     const obj: any = {};
-    message.validatorAddr !== undefined &&
-      (obj.validatorAddr = message.validatorAddr);
+    if (message.validatorAddr !== "") {
+      obj.validatorAddr = message.validatorAddr;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<MsgUnjail>, I>>(base?: I): MsgUnjail {
-    return MsgUnjail.fromPartial(base ?? {});
+    return MsgUnjail.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgUnjail>, I>>(
     object: I,
   ): MsgUnjail {
@@ -113,16 +118,18 @@ export const MsgUnjailResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUnjailResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUnjailResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -139,9 +146,8 @@ export const MsgUnjailResponse = {
   create<I extends Exact<DeepPartial<MsgUnjailResponse>, I>>(
     base?: I,
   ): MsgUnjailResponse {
-    return MsgUnjailResponse.fromPartial(base ?? {});
+    return MsgUnjailResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgUnjailResponse>, I>>(
     _: I,
   ): MsgUnjailResponse {
@@ -169,22 +175,32 @@ export const MsgUpdateParams = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.authority = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.params = Params.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -198,18 +214,20 @@ export const MsgUpdateParams = {
 
   toJSON(message: MsgUpdateParams): unknown {
     const obj: any = {};
-    message.authority !== undefined && (obj.authority = message.authority);
-    message.params !== undefined &&
-      (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    if (message.authority !== "") {
+      obj.authority = message.authority;
+    }
+    if (message.params !== undefined) {
+      obj.params = Params.toJSON(message.params);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(
     base?: I,
   ): MsgUpdateParams {
-    return MsgUpdateParams.fromPartial(base ?? {});
+    return MsgUpdateParams.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(
     object: I,
   ): MsgUpdateParams {
@@ -239,16 +257,18 @@ export const MsgUpdateParamsResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): MsgUpdateParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -265,9 +285,8 @@ export const MsgUpdateParamsResponse = {
   create<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(
     base?: I,
   ): MsgUpdateParamsResponse {
-    return MsgUpdateParamsResponse.fromPartial(base ?? {});
+    return MsgUpdateParamsResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(
     _: I,
   ): MsgUpdateParamsResponse {
@@ -293,11 +312,12 @@ export interface Msg {
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
 }
 
+export const MsgServiceName = "cosmos.slashing.v1beta1.Msg";
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || "cosmos.slashing.v1beta1.Msg";
+    this.service = opts?.service || MsgServiceName;
     this.rpc = rpc;
     this.Unjail = this.Unjail.bind(this);
     this.UpdateParams = this.UpdateParams.bind(this);
@@ -306,7 +326,7 @@ export class MsgClientImpl implements Msg {
     const data = MsgUnjail.encode(request).finish();
     const promise = this.rpc.request(this.service, "Unjail", data);
     return promise.then((data) =>
-      MsgUnjailResponse.decode(new _m0.Reader(data)),
+      MsgUnjailResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -314,7 +334,7 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateParams.encode(request).finish();
     const promise = this.rpc.request(this.service, "UpdateParams", data);
     return promise.then((data) =>
-      MsgUpdateParamsResponse.decode(new _m0.Reader(data)),
+      MsgUpdateParamsResponse.decode(_m0.Reader.create(data)),
     );
   }
 }

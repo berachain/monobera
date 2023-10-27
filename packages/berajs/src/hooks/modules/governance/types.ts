@@ -26,6 +26,10 @@ export interface Proposal {
   submitTime: bigint;
   depositEndTime: bigint;
   votingStartTime: bigint;
+  messages: {
+    typeURL: string;
+    value: any;
+  }[];
   votingEndTime: bigint;
   finalTallyResult: TallyResult;
   metadata: string;
