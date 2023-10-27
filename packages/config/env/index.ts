@@ -105,3 +105,7 @@ export const beraTokenAddress = process.env
 export const stgusdcTokenAddress = process.env
   .NEXT_PUBLIC_STGUSDC_ADDRESS as Address;
 export const bgtTokenAddress = process.env.NEXT_PUBLIC_BGT_ADDRESS as Address;
+
+// PERPS
+
+export const perpsEndpoints = process.env.NEXT_PUBLIC_PERPS_URL as string;

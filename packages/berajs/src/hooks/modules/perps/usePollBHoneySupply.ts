@@ -23,7 +23,7 @@ export const usePollBHoneySupply = () => {
         return result;
       } catch (e) {
         console.error(e);
-        return 0;
+        return undefined;
       }
     },
     {
@@ -37,7 +37,8 @@ export const usePollBHoneySupply = () => {
   };
 
   const useFormattedBHoneySupply = () => {
-    const { data = 0 } = useSWRImmutable(QUERY_KEY);
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    if (!data) return 0;
     return Number(formatUnits(data, 18));
   };
   return {

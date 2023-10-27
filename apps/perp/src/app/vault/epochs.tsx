@@ -17,17 +17,21 @@ export const Epochs = ({
   const [progressPercentage, setProgressPercentage] = useState(0);
   const [duration, setDuration] = useState("0d");
 
+  console.log("Epochs", epoch);
   const formattedStartDate =
-    epoch === undefined
+    epoch === undefined || Number.isNaN(epoch?.currentEpochStart)
       ? 0
       : format(
           new Date((epoch?.currentEpochStart ?? 0) * 1000),
           "MM/dd/yy, h:ma",
         );
-  const formattedEndDate = format(
-    new Date((epoch?.currentEpochEnd ?? 0) * 1000),
-    "MM/dd/yy, h:ma",
-  );
+  const formattedEndDate =
+    epoch === undefined || Number.isNaN(epoch?.currentEpochEnd)
+      ? 0
+      : format(
+          new Date((epoch?.currentEpochEnd ?? 0) * 1000),
+          "MM/dd/yy, h:ma",
+        );
 
   useSWR(
     [epoch?.currentEpoch],

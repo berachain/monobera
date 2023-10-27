@@ -1,6 +1,6 @@
 import { cn } from "@bera/ui";
 
-export function OrderHistorHeader({
+export function OrderHistoryHeader({
   headers,
   tabType,
   setTabType,

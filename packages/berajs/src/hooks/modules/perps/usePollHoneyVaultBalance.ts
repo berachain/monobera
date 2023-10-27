@@ -23,7 +23,7 @@ export const usePollHoneyVaultBalance = () => {
         return result;
       } catch (e) {
         console.error(e);
-        return 0;
+        return undefined;
       }
     },
     {
@@ -37,7 +37,8 @@ export const usePollHoneyVaultBalance = () => {
   };
 
   const useFormattedHoneyVaultBalance = () => {
-    const { data = 0 } = useSWRImmutable(QUERY_KEY);
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    if (!data) return 0;
     return Number(formatUnits(data, 18));
   };
   return {

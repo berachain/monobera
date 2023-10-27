@@ -354,7 +354,7 @@ export const useTxn = ({
         description: message,
         timestamp: Date.now(),
         icon: "",
-        actionType: ""
+        actionType: "",
       });
       onSuccess && onSuccess(result);
     },

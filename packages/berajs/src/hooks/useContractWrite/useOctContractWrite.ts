@@ -26,7 +26,7 @@ const useOctContractWrite = ({
   const { account } = useBeraJs();
   const { networkConfig } = useBeraConfig();
 
-  const { isOctEnabled, octPrivKey } = useOct();
+  const { isOctReady, octPrivKey } = useOct();
 
   const write = useCallback(
     async ({
@@ -40,7 +40,7 @@ const useOctContractWrite = ({
       onLoading && onLoading();
       let hash: any | undefined;
       try {
-        if (!isOctEnabled()) {
+        if (!isOctReady) {
           hash = await walletClient?.writeContract({
             account: account,
             address: address,
@@ -50,7 +50,7 @@ const useOctContractWrite = ({
             args: [...params],
             chain: undefined,
           });
-        } else if (isOctEnabled()) {
+        } else if (isOctReady) {
           const provider = new JsonRpcProvider(
             process.env.NEXT_PUBLIC_JSON_RPC_URL,
           );
@@ -95,7 +95,7 @@ const useOctContractWrite = ({
       onError,
       onLoading,
       onSubmission,
-      isOctEnabled,
+      isOctReady,
       networkConfig,
     ],
   );

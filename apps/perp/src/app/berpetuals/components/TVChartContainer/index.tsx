@@ -8,6 +8,7 @@ import {
   type LanguageCode,
   type ResolutionString,
 } from "../../../../../public/static/charting_library";
+import Datafeed from "../../../../utils/tv-datafeed";
 import styles from "./index.module.css";
 
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
@@ -38,15 +39,7 @@ export const TVChartContainer = (
     console.log("props.symbol", props.symbol);
     const widgetOptions: ChartingLibraryWidgetOptions = {
       symbol: props.symbol,
-      // BEWARE: no trailing slash is expected in feed URL
-      datafeed: new (window as any).Datafeeds.UDFCompatibleDatafeed(
-        "http://k8s-devnet-btsapinl-bb091436b1-463c707996917350.elb.us-east-2.amazonaws.com",
-        5000,
-        {
-          maxResponseLength: 10,
-          expectedOrder: "latestFirst",
-        },
-      ),
+      datafeed: Datafeed,
       interval: props.interval as ResolutionString,
       container: chartContainerRef.current,
       library_path: props.library_path,

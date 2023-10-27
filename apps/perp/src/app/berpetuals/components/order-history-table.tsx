@@ -1,5 +1,8 @@
+import { useMemo } from "react";
+
 import { AsesetCardMobile } from "~/app/portfolio/userAssets";
-import { usePositions } from "~/hooks/usePositions";
+import { getAssetCardList } from "../getAssetCards";
+import { IMarket } from "../page";
 import {
   history_columns,
   orders_columns,
@@ -7,49 +10,85 @@ import {
   positions_columns,
 } from "./columns";
 import { DataTable } from "./data-table";
+import { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
 
-export function OrderHistorTable({
+export interface IRow {
+  key: string;
+  value: React.ReactNode;
+}
+
+export interface ICards {
+  title: React.ReactNode;
+  rows: IRow[];
+  footer: React.ReactNode | undefined;
+}
+
+export function OrderHistoryTable({
   tab,
+  openPositons,
+  openOrders,
+  history,
 }: {
   tab: "positions" | "orders" | "history" | "pnl";
+  openPositons: IMarketOrder[];
+  openOrders: ILimitOrder[];
+  history: IClosedTrade[];
 }) {
-  const { generatepositionData } = usePositions();
-  const positions = generatepositionData();
+  const assetCardItems = useMemo(() => {
+    return getAssetCardList({
+      marketOrderItems: openPositons,
+      limitOrderItems: openOrders,
+      historyItems: history,
+    });
+  }, [openPositons, openOrders, history]);
 
   return (
     <div className="relative w-full overflow-x-auto">
       {tab === "positions" && (
         <DataTable
           columns={positions_columns}
-          data={positions.slice(0, 5) ?? []}
+          data={openPositons ?? []}
           className="hidden w-full min-w-[1200px] sm:block"
         />
       )}
       {tab === "orders" && (
         <DataTable
           columns={orders_columns}
-          data={positions.slice(0, 2) ?? []}
+          data={[]}
           className="hidden w-full min-w-[1000px] sm:block"
         />
       )}
       {tab === "history" && (
         <DataTable
           columns={history_columns}
-          data={positions.slice(0, 5) ?? []}
+          data={history ?? []}
           className="hidden w-full min-w-[850px] sm:block"
         />
       )}
       {tab === "pnl" && (
         <DataTable
           columns={pnl_columns}
-          data={positions.slice(0, 5) ?? []}
+          data={[]}
           className="hidden w-full min-w-[1200px] sm:block"
         />
       )}
       <div className="flex flex-col gap-8 px-6 py-8 sm:hidden">
-        {positions.map((position, index) => (
-          <AsesetCardMobile position={position} key={index} />
-        ))}
+        {tab === "positions" &&
+          assetCardItems.marketList.map((item, index) => (
+            <AsesetCardMobile card={item} key={index} />
+          ))}
+        {tab === "orders" &&
+          assetCardItems.limitList.map((item, index) => (
+            <AsesetCardMobile card={item} key={index} />
+          ))}
+        {tab === "history" &&
+          assetCardItems.historyList.map((item, index) => (
+            <AsesetCardMobile card={item} key={index} />
+          ))}
+        {tab === "pnl" &&
+          assetCardItems.pnlList.map((item, index) => (
+            <AsesetCardMobile card={item} key={index} />
+          ))}
       </div>
     </div>
   );

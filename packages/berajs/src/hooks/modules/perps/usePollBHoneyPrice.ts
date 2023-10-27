@@ -39,8 +39,9 @@ export const usePollBHoneyPrice = () => {
   };
 
   const useFormattedHoneyPrice = () => {
-    const { data = 0 } = useSWRImmutable(QUERY_KEY);
-    return formatUnits(data, 10);
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    if (!data) return 0;
+    return Number(formatUnits(data, 10));
   };
   return {
     useFormattedHoneyPrice,

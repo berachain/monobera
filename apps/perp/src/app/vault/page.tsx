@@ -14,7 +14,7 @@ export default function Vault() {
       <BhoneyStats />
       <div>
         <p className="mb-4 text-3xl font-semibold leading-9">Your Stats</p>
-        <div className="flex flex-col gap-4 md:flex-row">
+        <div className="flex flex-col gap-4 lg:flex-row ">
           <DepositWithdraw />
           <RewardsWithdraw />
         </div>

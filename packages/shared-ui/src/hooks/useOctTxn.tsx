@@ -89,7 +89,7 @@ export const useOctTxn = ({
 }: IUseTxn = {}): UseTxnApi => {
   const [identifier, setIdentifier] = useState("");
   const isMd = useMediaQuery("(min-width: 768px)");
-  const { isOctEnabled } = useOct();
+  const { isOctReady } = useOct();
 
   const [modalState, dispatch] = useReducer(modalReducer, initialState);
   const openModal = (modalName: ModalName, modalData: any) => {
@@ -443,7 +443,7 @@ export const useOctTxn = ({
     );
   };
   const memoizedModalPortal = useMemo(
-    () => (!isOctEnabled ? <ModalPortal /> : false),
+    () => (!isOctReady ? <ModalPortal /> : false),
     [isLoading, isSubmitting, isSuccess, isError, modalState],
   );
 

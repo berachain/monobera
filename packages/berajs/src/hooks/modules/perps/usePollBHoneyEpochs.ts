@@ -62,7 +62,11 @@ export const usePollBHoneyEpochs = () => {
         return epochs;
       } catch (e) {
         console.error(e);
-        return 0;
+        return {
+          currentEpoch: 0,
+          currentEpochStart: 0,
+          currentEpochEnd: 0,
+        };
       }
     },
     {

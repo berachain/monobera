@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import { formatUnits } from "viem";
 
 export interface ICalculateLiqPrice {
-  bfLong: number | undefined;
-  bfShort: number | undefined;
+  bfLong: string | undefined;
+  bfShort: string | undefined;
   orderType: string | undefined;
   price: number | undefined;
-  leverage: number | undefined;
+  leverage: string | undefined;
 }
 
 export const useCalculateLiqPrice = ({
@@ -32,7 +32,7 @@ export const useCalculateLiqPrice = ({
       const liqPriceDistance =
         (openPrice *
           ((90 - (long ? formattedBorrowingL : formattedBorrowingS)) / 100)) /
-        (leverage ?? 2);
+        (Number(leverage) ?? 2);
 
       const calculatedLiqPrice = long
         ? openPrice - liqPriceDistance

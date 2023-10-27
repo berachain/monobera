@@ -54,15 +54,15 @@ export default async function Home() {
         <GeneralInfoBanner market={defualtMarket} />
       </div>
       <span className="block lg:hidden">
-        <OrderChart />
+        <OrderChart marketName={defualtMarket.name} />
       </span>
       <div className="flex w-full flex-col lg:flex-row">
         <CreatePosition market={defualtMarket} />
         <div className="h-full w-full pb-[34px] lg:w-screen-w-400">
           <span className="hidden lg:block">
-            <OrderChart />
+            <OrderChart marketName={defualtMarket.name} />
           </span>
-          <OrderHistory />
+          <OrderHistory markets={markets} />
         </div>
       </div>{" "}
     </div>

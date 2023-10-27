@@ -1,19 +1,44 @@
 "use client";
 
 import { useState } from "react";
+import { ClosedTrade, OpenLimitOrder, OpenTrade } from "@bera/proto/src";
 
-import { OrderHistorHeader } from "./order-history-header";
-import { OrderHistorTable } from "./order-history-table";
+import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
+import { IMarket } from "../page";
+import { OrderHistoryHeader } from "./order-history-header";
+import { OrderHistoryTable } from "./order-history-table";
 import { TotalAmount } from "./total-amount";
 
-export function OrderHistory() {
+export interface IMarketOrder extends OpenTrade {
+  market: IMarket;
+}
+
+export interface ILimitOrder extends OpenLimitOrder {
+  market: IMarket;
+}
+
+export interface IClosedTrade extends ClosedTrade {
+  market: IMarket;
+}
+
+export function OrderHistory({ markets }: { markets: IMarket[] }) {
   const [tabType, setTabType] = useState<
     "positions" | "orders" | "history" | "pnl"
   >("positions");
+
+  const { useMarketOpenPositions } = usePollOpenPositions();
+
+  const { useMarketClosedPositions } = usePollTradingHistory();
+
+  const openPositions = useMarketOpenPositions(markets);
+
+  const closedPositions = useMarketClosedPositions(markets);
+
   const headers = [
     {
       title: "Positions",
-      counts: 5,
+      counts: openPositions?.length ?? 0,
       type: "positions",
     },
     {
@@ -30,11 +55,17 @@ export function OrderHistory() {
       type: "pnl",
     },
   ];
+
   return (
     <div className="w-full">
-      <OrderHistorHeader {...{ headers, tabType, setTabType }} />
+      <OrderHistoryHeader {...{ headers, tabType, setTabType }} />
       <TotalAmount className="flex sm:hidden" />
-      <OrderHistorTable tab={tabType} />
+      <OrderHistoryTable
+        tab={tabType}
+        openPositons={openPositions}
+        openOrders={[]}
+        history={closedPositions}
+      />
       <TotalAmount className="hidden sm:flex" />
     </div>
   );

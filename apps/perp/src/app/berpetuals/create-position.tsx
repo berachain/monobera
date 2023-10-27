@@ -41,7 +41,7 @@ export default function CreatePosition({ market }: ICreatePosition) {
   const { useHoneyBalance } = usePollHoneyBalance();
   const honeyBalance = useHoneyBalance();
 
-  const formattedPrice = Number(formatUnits(BigInt(rawPrice ?? 0n), 10));
+  const formattedPrice = Number(formatUnits(BigInt(rawPrice ?? 0), 10));
 
   useMemo(() => {
     const honeyAmountPrice = (form.amount ?? 0) * honeyPrice;
@@ -216,11 +216,13 @@ export default function CreatePosition({ market }: ICreatePosition) {
           openingFee={Number(
             formatUnits(BigInt(market.pair_fixed_fee?.open_fee_p ?? "0"), 18),
           )}
-          bfLong={Number(
-            formatUnits(BigInt(market.pair_borrowing_fee?.bf_long ?? "0"), 18),
+          bfLong={formatUnits(
+            BigInt(market.pair_borrowing_fee?.bf_long ?? "0"),
+            18,
           )}
-          bfShort={Number(
-            formatUnits(BigInt(market.pair_borrowing_fee?.bf_short ?? "0"), 18),
+          bfShort={formatUnits(
+            BigInt(market.pair_borrowing_fee?.bf_short ?? "0"),
+            18,
           )}
         />
       </div>

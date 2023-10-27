@@ -26,7 +26,7 @@ export function DataTableColumnHeader<TData, TValue>({
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
     return (
-      <div className={cn("font-bold", className)}>
+      <div className={cn("w-full font-bold", className)}>
         {title}
         {tooltip && <Tooltip text={tooltip} />}
       </div>

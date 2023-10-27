@@ -28,7 +28,7 @@ export const usePollBHoneyPendingWithdraw = () => {
           return result;
         } catch (e) {
           console.error(e);
-          return 0n;
+          return 0;
         }
       }
       return 0;
@@ -38,21 +38,21 @@ export const usePollBHoneyPendingWithdraw = () => {
     },
   );
 
-  const useBHoneyPendingWithdraw = (): bigint => {
-    const { data = 0n } = useSWRImmutable(QUERY_KEY);
+  const useBHoneyPendingWithdraw = () => {
+    const { data = 0 } = useSWRImmutable(QUERY_KEY);
     return data;
   };
 
   const useFormattedBHoneyPendingWithdraw = () => {
-    const { data = 0n } = useSWRImmutable(QUERY_KEY);
-    return formatUnits(data as bigint, 18);
+    const { data = 0 } = useSWRImmutable(QUERY_KEY);
+    return Number(formatUnits(data as bigint, 18));
   };
 
   const useBHoneyEligibleWithdraw = () => {
     const bHoneyBalance = useBHoneyBalance();
-    const { data = 0n } = useSWRImmutable(QUERY_KEY);
+    const { data = 0 } = useSWRImmutable(QUERY_KEY);
     return useMemo(() => {
-      return formatUnits(BigInt(bHoneyBalance) - BigInt(data), 18);
+      return Number(formatUnits(BigInt(bHoneyBalance) - BigInt(data), 18));
     }, [bHoneyBalance, data]);
   };
   return {

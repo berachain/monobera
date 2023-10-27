@@ -37,8 +37,8 @@ export function PlaceOrder({
   form: OrderType;
   price: number | undefined;
   openingFee: number;
-  bfLong: number;
-  bfShort: number;
+  bfLong: string;
+  bfShort: string;
   pairIndex: number;
 }) {
   const formattedPrice = Number(formatUnits(BigInt(price ?? 0n), 10));
@@ -49,8 +49,8 @@ export function PlaceOrder({
         : `Shorting ${form.assets}`,
   });
 
-  const dailyBfLong = bfLong * 24;
-  const dailyBfShort = bfShort * 24;
+  const dailyBfLong = Number(bfLong) * 24;
+  const dailyBfShort = Number(bfShort) * 24;
 
   const estTakeProfit = useMemo(() => {
     const tp = (1 + (form.tp ?? 0) / 100) * (formattedPrice ?? 0);
@@ -67,7 +67,7 @@ export function PlaceOrder({
     bfShort,
     orderType: form.orderType,
     price: formattedPrice,
-    leverage: form.leverage,
+    leverage: form.leverage?.toString(),
   });
 
   const { account } = useBeraJs();
@@ -110,7 +110,7 @@ export function PlaceOrder({
       index: 0,
       initialPosToken: 0,
       positionSizeDai: parsedPositionSize, // position size
-      openPrice: 0, // for limit orders
+      openPrice: price ?? 0, // for limit orders
       buy: form.orderType === "long" ? true : false,
       leverage: form.leverage,
       tp: form.tp === 0 ? 0 : estTakeProfit,
@@ -120,6 +120,8 @@ export function PlaceOrder({
     0,
     parseUnits(`${slippageTolerance ?? 0}`, 10),
   ];
+
+  console.log("payload", payload);
 
   const honey = {
     symbol: "HONEY",

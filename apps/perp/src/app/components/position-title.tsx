@@ -1,19 +1,22 @@
 import Image from "next/image";
+import { OpenLimitOrder, OpenTrade } from "@bera/proto/src";
 import { cn } from "@bera/ui";
 
 import { type IMarket } from "../berpetuals/page";
 
 export function PositionTitle({
   market,
+  type,
   className,
 }: {
   market: IMarket;
+  type: "Long" | "Short";
   className?: string;
 }) {
   return (
     <div className={cn("flex w-[112px] items-center gap-2", className)}>
       <Image
-        src={market?.imageUri ?? ""}
+        src={market.imageUri ?? ""}
         alt={"selectedMarket"}
         width={24}
         height={24}
@@ -21,10 +24,17 @@ export function PositionTitle({
       />{" "}
       <div>
         <div className="mt-1 text-sm font-semibold leading-tight text-foreground">
-          {market?.tokenName}
+          {market.name}
         </div>
-        <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
-          {market?.name}
+        <div
+          className={cn(
+            "mt-1 text-sm font-medium leading-tight",
+            type === "Long"
+              ? "text-success-foreground"
+              : "text-destructive-foreground",
+          )}
+        >
+          {type}
         </div>
       </div>
     </div>

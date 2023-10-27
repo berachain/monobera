@@ -20,13 +20,15 @@ export const usePollBHoneyCollateralization = () => {
     QUERY_KEY,
     async () => {
       try {
+        console.log("honeyLocked", honeyLocked);
+        console.log("bHoneySupply", bHoneySupply);
         if (honeyLocked !== 0 && bHoneySupply !== 0) {
           return Math.floor(honeyLocked / bHoneySupply) * 100 ?? 0;
         }
-        return 0;
+        return undefined;
       } catch (e) {
         console.error(e);
-        return 0;
+        return undefined;
       }
     },
     {
@@ -35,7 +37,8 @@ export const usePollBHoneyCollateralization = () => {
   );
 
   const useBHoneyCollateralization = () => {
-    const { data = 0 } = useSWRImmutable(QUERY_KEY);
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    if (!data) return 0;
     return data;
   };
 

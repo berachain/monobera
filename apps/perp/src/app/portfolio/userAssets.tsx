@@ -6,6 +6,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import { usePositions, type Position } from "~/hooks/usePositions";
+import { ICards } from "../berpetuals/components/order-history-table";
 import { ClosePositionModal } from "../components/close-position-modal";
 import { PositionTitle, PositionTitleSM } from "../components/position-title";
 import { UpdatePositionModal } from "../components/update-position-modal";
@@ -21,7 +22,7 @@ export default function UserAssets() {
           .map((position, index) => (
             <>
               <AsesetCard key={index} position={position} />
-              <AsesetCardMobile key={index} position={position} />
+              {/* <AsesetCardMobile key={index} position={position} /> */}
             </>
           ))}
       </div>
@@ -152,74 +153,10 @@ function AsesetCard({ position }: { position: Position }) {
   );
 }
 
-export function AsesetCardMobile({ position }: { position: Position }) {
+export function AsesetCardMobile({ card }: { card: ICards }) {
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-border bg-background p-4 lg:hidden">
-      <PositionTitleSM position={position} />
-
-      <div className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
-        <div className="flex justify-between leading-5">
-          <div>Entry Price</div>
-          <div>
-            {formatUsd(position.position_size * position.current_price)}
-          </div>
-        </div>
-        <div className="flex justify-between leading-5">
-          <div>Size</div>
-          <div>
-            {position.position_size} {position.assets} (
-            {formatUsd(position.position_size * position.current_price)})
-          </div>
-        </div>
-        <div className="flex justify-between leading-5">
-          <div>Leverage</div>
-          <div>{position.leverage}x</div>
-        </div>
-        <div className="flex justify-between leading-5">
-          <div>Liquidation Price</div>
-          <div>{formatUsd(position.liquidation_price)}</div>
-        </div>
-        <div className="flex justify-between leading-5">
-          <div>Realized PnL</div>
-          <div
-            className={cn(
-              position.unrealized_pnl > 0
-                ? "text-success-foreground"
-                : "text-destructive-foreground",
-            )}
-          >
-            {" "}
-            {position.unrealized_pnl > 0 && "+"}
-            {formatUsd(position.realized_pnl)}
-          </div>
-        </div>
-        <div className="flex justify-between leading-5">
-          <div>Unrealized PnL</div>
-          <div
-            className={cn(
-              position.unrealized_pnl > 0
-                ? "text-success-foreground"
-                : "text-destructive-foreground",
-            )}
-          >
-            {position.unrealized_pnl > 0 && "+"}
-            {formatUsd(position.unrealized_pnl)}
-          </div>
-        </div>
-
-        <div className="flex justify-between leading-5">
-          <div>TP/SL</div>
-          <div>
-            <span className="text-success-foreground">
-              {formatter.format(position.take_profit as number) ?? "-"}
-            </span>
-            /
-            <span className="text-destructive-foreground">
-              {formatter.format(position.stop_loss as number) ?? "-"}
-            </span>
-          </div>
-        </div>
-      </div>
+      {/* <PositionTitleSM position={position} /> */}
 
       <div className="flex gap-4">
         <UpdatePositionModal

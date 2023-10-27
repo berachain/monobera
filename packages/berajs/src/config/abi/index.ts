@@ -18,3 +18,4 @@ export * from "./pairs-storage";
 export * from "./b-token";
 export * from "./borrowing-fees";
 export * from "./price-aggregator";
+export * from "./pnl-feed";

@@ -14,7 +14,7 @@ export default function TradingHistory() {
     "30D" | "60D" | "90D" | "6M" | "ALL TIME"
   >("30D");
   return (
-    <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 p-8">
+    <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 ">
       <div className="flex w-full flex-col items-end justify-between gap-2 md:flex-row">
         <div className="flex-shrink-0 text-2xl font-semibold leading-loose">
           Trading History
