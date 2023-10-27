@@ -15,6 +15,12 @@ interface VoteValues {
 export const updateFriendsOfTheChefTypeUrl =
   "/berachain.pol.berachef.v1.UpdateFriendsOfTheChefRequest";
 
+export const updateHoneyCollateralTypeUrl =
+  "/berachain.honey.v1.UpdateParamsRequest";
+
+export const updateLendMarkeyTypeUrl =
+  "/berachain.honey.v1.UpdateParamsRequest";
+
 export const useCreateProposal = () => {
   const { account } = useBeraJs();
 

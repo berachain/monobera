@@ -20,6 +20,7 @@ import { ProgressBarChart } from "./progress-bar-chart";
 
 type ProposalCard = {
   proposal: Proposal;
+  type?: string;
   onClick?: () => void;
 };
 const getBadge = (proposalStatus: number) => {
@@ -108,7 +109,7 @@ const getDataList = (
   ];
 };
 
-export function ProposalCard({ proposal, onClick }: ProposalCard) {
+export function ProposalCard({ proposal, type, onClick }: ProposalCard) {
   const { useNormalizedTallyResult } = usePollProposalVotes(
     Number(proposal.id),
   );
@@ -127,6 +128,14 @@ export function ProposalCard({ proposal, onClick }: ProposalCard) {
       )} */}
       <div className="flex h-7 items-center gap-1">
         {getBadge(proposal.status)}
+        {type && (
+          <Badge
+            variant="warning"
+            className=" border-none font-medium capitalize"
+          >
+            {type.replaceAll("-", " ")}
+          </Badge>
+        )}
         <div className="text-xs font-medium leading-tight text-muted-foreground">
           {getTimeText(proposal)}
         </div>

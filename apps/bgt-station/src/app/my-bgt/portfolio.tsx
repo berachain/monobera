@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import {
   BRIBE_PRECOMPILE_ABI,
-  formatter,
   TransactionActionType,
+  formatter,
   truncateHash,
   useBeraJs,
   usePollBribes,
