@@ -43,7 +43,7 @@ export interface MsgUpdateParams {
    *
    * NOTE: All parameters must be supplied.
    */
-  params?: Params;
+  params?: Params | undefined;
 }
 
 /**
@@ -64,6 +64,7 @@ export interface MsgUpdateParamsResponse {}
  * Since: cosmos-sdk 0.47
  */
 export interface MsgSetSendEnabled {
+  /** authority is the address that controls the module. */
   authority: string;
   /** send_enabled is the list of entries to add or update. */
   sendEnabled: SendEnabled[];
@@ -82,6 +83,23 @@ export interface MsgSetSendEnabled {
  * Since: cosmos-sdk 0.47
  */
 export interface MsgSetSendEnabledResponse {}
+
+/**
+ * MsgBurn defines a message for burning coins.
+ *
+ * Since: cosmos-sdk 0.51
+ */
+export interface MsgBurn {
+  fromAddress: string;
+  amount: Coin[];
+}
+
+/**
+ * MsgBurnResponse defines the Msg/Burn response type.
+ *
+ * Since: cosmos-sdk 0.51
+ */
+export interface MsgBurnResponse {}
 
 function createBaseMsgSend(): MsgSend {
   return { fromAddress: "", toAddress: "", amount: [] };
@@ -105,25 +123,39 @@ export const MsgSend = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgSend {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSend();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.fromAddress = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.toAddress = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.amount.push(Coin.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -140,21 +172,21 @@ export const MsgSend = {
 
   toJSON(message: MsgSend): unknown {
     const obj: any = {};
-    message.fromAddress !== undefined &&
-      (obj.fromAddress = message.fromAddress);
-    message.toAddress !== undefined && (obj.toAddress = message.toAddress);
-    if (message.amount) {
-      obj.amount = message.amount.map((e) => (e ? Coin.toJSON(e) : undefined));
-    } else {
-      obj.amount = [];
+    if (message.fromAddress !== "") {
+      obj.fromAddress = message.fromAddress;
+    }
+    if (message.toAddress !== "") {
+      obj.toAddress = message.toAddress;
+    }
+    if (message.amount?.length) {
+      obj.amount = message.amount.map((e) => Coin.toJSON(e));
     }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<MsgSend>, I>>(base?: I): MsgSend {
-    return MsgSend.fromPartial(base ?? {});
+    return MsgSend.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgSend>, I>>(object: I): MsgSend {
     const message = createBaseMsgSend();
     message.fromAddress = object.fromAddress ?? "";
@@ -177,16 +209,18 @@ export const MsgSendResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgSendResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSendResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -203,9 +237,8 @@ export const MsgSendResponse = {
   create<I extends Exact<DeepPartial<MsgSendResponse>, I>>(
     base?: I,
   ): MsgSendResponse {
-    return MsgSendResponse.fromPartial(base ?? {});
+    return MsgSendResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgSendResponse>, I>>(
     _: I,
   ): MsgSendResponse {
@@ -233,22 +266,32 @@ export const MsgMultiSend = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgMultiSend {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgMultiSend();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.inputs.push(Input.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.outputs.push(Output.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -266,17 +309,11 @@ export const MsgMultiSend = {
 
   toJSON(message: MsgMultiSend): unknown {
     const obj: any = {};
-    if (message.inputs) {
-      obj.inputs = message.inputs.map((e) => (e ? Input.toJSON(e) : undefined));
-    } else {
-      obj.inputs = [];
+    if (message.inputs?.length) {
+      obj.inputs = message.inputs.map((e) => Input.toJSON(e));
     }
-    if (message.outputs) {
-      obj.outputs = message.outputs.map((e) =>
-        e ? Output.toJSON(e) : undefined,
-      );
-    } else {
-      obj.outputs = [];
+    if (message.outputs?.length) {
+      obj.outputs = message.outputs.map((e) => Output.toJSON(e));
     }
     return obj;
   },
@@ -284,9 +321,8 @@ export const MsgMultiSend = {
   create<I extends Exact<DeepPartial<MsgMultiSend>, I>>(
     base?: I,
   ): MsgMultiSend {
-    return MsgMultiSend.fromPartial(base ?? {});
+    return MsgMultiSend.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgMultiSend>, I>>(
     object: I,
   ): MsgMultiSend {
@@ -313,16 +349,18 @@ export const MsgMultiSendResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): MsgMultiSendResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgMultiSendResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -339,9 +377,8 @@ export const MsgMultiSendResponse = {
   create<I extends Exact<DeepPartial<MsgMultiSendResponse>, I>>(
     base?: I,
   ): MsgMultiSendResponse {
-    return MsgMultiSendResponse.fromPartial(base ?? {});
+    return MsgMultiSendResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgMultiSendResponse>, I>>(
     _: I,
   ): MsgMultiSendResponse {
@@ -369,22 +406,32 @@ export const MsgUpdateParams = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateParams {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.authority = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.params = Params.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -398,18 +445,20 @@ export const MsgUpdateParams = {
 
   toJSON(message: MsgUpdateParams): unknown {
     const obj: any = {};
-    message.authority !== undefined && (obj.authority = message.authority);
-    message.params !== undefined &&
-      (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    if (message.authority !== "") {
+      obj.authority = message.authority;
+    }
+    if (message.params !== undefined) {
+      obj.params = Params.toJSON(message.params);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(
     base?: I,
   ): MsgUpdateParams {
-    return MsgUpdateParams.fromPartial(base ?? {});
+    return MsgUpdateParams.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(
     object: I,
   ): MsgUpdateParams {
@@ -439,16 +488,18 @@ export const MsgUpdateParamsResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): MsgUpdateParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateParamsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -465,9 +516,8 @@ export const MsgUpdateParamsResponse = {
   create<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(
     base?: I,
   ): MsgUpdateParamsResponse {
-    return MsgUpdateParamsResponse.fromPartial(base ?? {});
+    return MsgUpdateParamsResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(
     _: I,
   ): MsgUpdateParamsResponse {
@@ -498,25 +548,39 @@ export const MsgSetSendEnabled = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgSetSendEnabled {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetSendEnabled();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.authority = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.sendEnabled.push(SendEnabled.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.useDefaultFor.push(reader.string());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -535,18 +599,14 @@ export const MsgSetSendEnabled = {
 
   toJSON(message: MsgSetSendEnabled): unknown {
     const obj: any = {};
-    message.authority !== undefined && (obj.authority = message.authority);
-    if (message.sendEnabled) {
-      obj.sendEnabled = message.sendEnabled.map((e) =>
-        e ? SendEnabled.toJSON(e) : undefined,
-      );
-    } else {
-      obj.sendEnabled = [];
+    if (message.authority !== "") {
+      obj.authority = message.authority;
     }
-    if (message.useDefaultFor) {
-      obj.useDefaultFor = message.useDefaultFor.map((e) => e);
-    } else {
-      obj.useDefaultFor = [];
+    if (message.sendEnabled?.length) {
+      obj.sendEnabled = message.sendEnabled.map((e) => SendEnabled.toJSON(e));
+    }
+    if (message.useDefaultFor?.length) {
+      obj.useDefaultFor = message.useDefaultFor;
     }
     return obj;
   },
@@ -554,9 +614,8 @@ export const MsgSetSendEnabled = {
   create<I extends Exact<DeepPartial<MsgSetSendEnabled>, I>>(
     base?: I,
   ): MsgSetSendEnabled {
-    return MsgSetSendEnabled.fromPartial(base ?? {});
+    return MsgSetSendEnabled.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgSetSendEnabled>, I>>(
     object: I,
   ): MsgSetSendEnabled {
@@ -585,16 +644,18 @@ export const MsgSetSendEnabledResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): MsgSetSendEnabledResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSetSendEnabledResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -611,13 +672,143 @@ export const MsgSetSendEnabledResponse = {
   create<I extends Exact<DeepPartial<MsgSetSendEnabledResponse>, I>>(
     base?: I,
   ): MsgSetSendEnabledResponse {
-    return MsgSetSendEnabledResponse.fromPartial(base ?? {});
+    return MsgSetSendEnabledResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<MsgSetSendEnabledResponse>, I>>(
     _: I,
   ): MsgSetSendEnabledResponse {
     const message = createBaseMsgSetSendEnabledResponse();
+    return message;
+  },
+};
+
+function createBaseMsgBurn(): MsgBurn {
+  return { fromAddress: "", amount: [] };
+}
+
+export const MsgBurn = {
+  encode(
+    message: MsgBurn,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.fromAddress !== "") {
+      writer.uint32(10).string(message.fromAddress);
+    }
+    for (const v of message.amount) {
+      Coin.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBurn {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgBurn();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.fromAddress = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.amount.push(Coin.decode(reader, reader.uint32()));
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgBurn {
+    return {
+      fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
+      amount: Array.isArray(object?.amount)
+        ? object.amount.map((e: any) => Coin.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: MsgBurn): unknown {
+    const obj: any = {};
+    if (message.fromAddress !== "") {
+      obj.fromAddress = message.fromAddress;
+    }
+    if (message.amount?.length) {
+      obj.amount = message.amount.map((e) => Coin.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgBurn>, I>>(base?: I): MsgBurn {
+    return MsgBurn.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgBurn>, I>>(object: I): MsgBurn {
+    const message = createBaseMsgBurn();
+    message.fromAddress = object.fromAddress ?? "";
+    message.amount = object.amount?.map((e) => Coin.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseMsgBurnResponse(): MsgBurnResponse {
+  return {};
+}
+
+export const MsgBurnResponse = {
+  encode(
+    _: MsgBurnResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgBurnResponse {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgBurnResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgBurnResponse {
+    return {};
+  },
+
+  toJSON(_: MsgBurnResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgBurnResponse>, I>>(
+    base?: I,
+  ): MsgBurnResponse {
+    return MsgBurnResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgBurnResponse>, I>>(
+    _: I,
+  ): MsgBurnResponse {
+    const message = createBaseMsgBurnResponse();
     return message;
   },
 };
@@ -628,6 +819,12 @@ export interface Msg {
   Send(request: MsgSend): Promise<MsgSendResponse>;
   /** MultiSend defines a method for sending coins from some accounts to other accounts. */
   MultiSend(request: MsgMultiSend): Promise<MsgMultiSendResponse>;
+  /**
+   * Burn defines a method for burning coins by an account.
+   *
+   * Since: cosmos-sdk 0.51
+   */
+  Burn(request: MsgBurn): Promise<MsgBurnResponse>;
   /**
    * UpdateParams defines a governance operation for updating the x/bank module parameters.
    * The authority is defined in the keeper.
@@ -648,28 +845,40 @@ export interface Msg {
   ): Promise<MsgSetSendEnabledResponse>;
 }
 
+export const MsgServiceName = "cosmos.bank.v1beta1.Msg";
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || "cosmos.bank.v1beta1.Msg";
+    this.service = opts?.service || MsgServiceName;
     this.rpc = rpc;
     this.Send = this.Send.bind(this);
     this.MultiSend = this.MultiSend.bind(this);
+    this.Burn = this.Burn.bind(this);
     this.UpdateParams = this.UpdateParams.bind(this);
     this.SetSendEnabled = this.SetSendEnabled.bind(this);
   }
   Send(request: MsgSend): Promise<MsgSendResponse> {
     const data = MsgSend.encode(request).finish();
     const promise = this.rpc.request(this.service, "Send", data);
-    return promise.then((data) => MsgSendResponse.decode(new _m0.Reader(data)));
+    return promise.then((data) =>
+      MsgSendResponse.decode(_m0.Reader.create(data)),
+    );
   }
 
   MultiSend(request: MsgMultiSend): Promise<MsgMultiSendResponse> {
     const data = MsgMultiSend.encode(request).finish();
     const promise = this.rpc.request(this.service, "MultiSend", data);
     return promise.then((data) =>
-      MsgMultiSendResponse.decode(new _m0.Reader(data)),
+      MsgMultiSendResponse.decode(_m0.Reader.create(data)),
+    );
+  }
+
+  Burn(request: MsgBurn): Promise<MsgBurnResponse> {
+    const data = MsgBurn.encode(request).finish();
+    const promise = this.rpc.request(this.service, "Burn", data);
+    return promise.then((data) =>
+      MsgBurnResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -677,7 +886,7 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateParams.encode(request).finish();
     const promise = this.rpc.request(this.service, "UpdateParams", data);
     return promise.then((data) =>
-      MsgUpdateParamsResponse.decode(new _m0.Reader(data)),
+      MsgUpdateParamsResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -687,7 +896,7 @@ export class MsgClientImpl implements Msg {
     const data = MsgSetSendEnabled.encode(request).finish();
     const promise = this.rpc.request(this.service, "SetSendEnabled", data);
     return promise.then((data) =>
-      MsgSetSendEnabledResponse.decode(new _m0.Reader(data)),
+      MsgSetSendEnabledResponse.decode(_m0.Reader.create(data)),
     );
   }
 }

@@ -33,6 +33,10 @@ export default function ValidatorCard({
   const vApy = useValidatorvAPY(validator.operatorAddr);
   const info = [
     {
+      amount: String(vApy?.toFixed(2) ?? 0) + "%",
+      text: "PRR",
+    },
+    {
       amount: `$${formatter.format(Number(bribeValue ?? 0))}`,
       text: "Bribe value",
     },
@@ -45,10 +49,6 @@ export default function ValidatorCard({
     {
       amount: formatCommission(validator.commission.commissionRates.rate) + "%",
       text: "Commission",
-    },
-    {
-      amount: String(vApy?.toFixed(2) ?? 0) + "%",
-      text: "vAPY",
     },
   ];
   return (

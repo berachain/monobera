@@ -43,7 +43,7 @@ export function Details({
         ) : (
           `${avgApy?.toFixed(2)}%`
         ),
-      text: "Average APY",
+      text: "Average PRR",
     },
     {
       amount:

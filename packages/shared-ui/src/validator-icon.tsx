@@ -22,7 +22,7 @@ export const ValidatorIcon = ({
       <AvatarImage src={validatorImg} />
       <AvatarFallback>
         <Image
-          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/bears/vtsmzhf1czvyc9zhmtir`}
+          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/wx4snihxcxxdko2wpsbj`}
           width={100}
           height={100}
           className="h-full w-full rounded-full border border-border p-1"

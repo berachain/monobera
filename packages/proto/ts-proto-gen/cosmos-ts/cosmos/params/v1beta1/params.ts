@@ -46,25 +46,39 @@ export const ParameterChangeProposal = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): ParameterChangeProposal {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParameterChangeProposal();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.title = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.description = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.changes.push(ParamChange.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -81,15 +95,14 @@ export const ParameterChangeProposal = {
 
   toJSON(message: ParameterChangeProposal): unknown {
     const obj: any = {};
-    message.title !== undefined && (obj.title = message.title);
-    message.description !== undefined &&
-      (obj.description = message.description);
-    if (message.changes) {
-      obj.changes = message.changes.map((e) =>
-        e ? ParamChange.toJSON(e) : undefined,
-      );
-    } else {
-      obj.changes = [];
+    if (message.title !== "") {
+      obj.title = message.title;
+    }
+    if (message.description !== "") {
+      obj.description = message.description;
+    }
+    if (message.changes?.length) {
+      obj.changes = message.changes.map((e) => ParamChange.toJSON(e));
     }
     return obj;
   },
@@ -97,9 +110,8 @@ export const ParameterChangeProposal = {
   create<I extends Exact<DeepPartial<ParameterChangeProposal>, I>>(
     base?: I,
   ): ParameterChangeProposal {
-    return ParameterChangeProposal.fromPartial(base ?? {});
+    return ParameterChangeProposal.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<ParameterChangeProposal>, I>>(
     object: I,
   ): ParameterChangeProposal {
@@ -134,25 +146,39 @@ export const ParamChange = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ParamChange {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParamChange();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.subspace = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.key = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.value = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -167,16 +193,21 @@ export const ParamChange = {
 
   toJSON(message: ParamChange): unknown {
     const obj: any = {};
-    message.subspace !== undefined && (obj.subspace = message.subspace);
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value);
+    if (message.subspace !== "") {
+      obj.subspace = message.subspace;
+    }
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== "") {
+      obj.value = message.value;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<ParamChange>, I>>(base?: I): ParamChange {
-    return ParamChange.fromPartial(base ?? {});
+    return ParamChange.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<ParamChange>, I>>(
     object: I,
   ): ParamChange {

@@ -196,15 +196,18 @@ export interface Http {
  * 1. Leaf request fields (recursive expansion nested messages in the request
  *    message) are classified into three categories:
  *    - Fields referred by the path template. They are passed via the URL path.
- *    - Fields referred by the [HttpRule.body][google.api.HttpRule.body]. They are passed via the HTTP
+ *    - Fields referred by the [HttpRule.body][google.api.HttpRule.body]. They
+ *    are passed via the HTTP
  *      request body.
  *    - All other fields are passed via the URL query parameters, and the
  *      parameter name is the field path in the request message. A repeated
  *      field can be represented as multiple query parameters under the same
  *      name.
- *  2. If [HttpRule.body][google.api.HttpRule.body] is "*", there is no URL query parameter, all fields
+ *  2. If [HttpRule.body][google.api.HttpRule.body] is "*", there is no URL
+ *  query parameter, all fields
  *     are passed via URL path and HTTP request body.
- *  3. If [HttpRule.body][google.api.HttpRule.body] is omitted, there is no HTTP request body, all
+ *  3. If [HttpRule.body][google.api.HttpRule.body] is omitted, there is no HTTP
+ *  request body, all
  *     fields are passed via URL path and URL query parameters.
  *
  * ### Path template syntax
@@ -301,7 +304,8 @@ export interface HttpRule {
   /**
    * Selects a method to which this rule applies.
    *
-   * Refer to [selector][google.api.DocumentationRule.selector] for syntax details.
+   * Refer to [selector][google.api.DocumentationRule.selector] for syntax
+   * details.
    */
   selector: string;
   /**
@@ -374,22 +378,32 @@ export const Http = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Http {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHttp();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.rules.push(HttpRule.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.fullyDecodeReservedExpansion = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -407,22 +421,18 @@ export const Http = {
 
   toJSON(message: Http): unknown {
     const obj: any = {};
-    if (message.rules) {
-      obj.rules = message.rules.map((e) =>
-        e ? HttpRule.toJSON(e) : undefined,
-      );
-    } else {
-      obj.rules = [];
+    if (message.rules?.length) {
+      obj.rules = message.rules.map((e) => HttpRule.toJSON(e));
     }
-    message.fullyDecodeReservedExpansion !== undefined &&
-      (obj.fullyDecodeReservedExpansion = message.fullyDecodeReservedExpansion);
+    if (message.fullyDecodeReservedExpansion === true) {
+      obj.fullyDecodeReservedExpansion = message.fullyDecodeReservedExpansion;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<Http>, I>>(base?: I): Http {
-    return Http.fromPartial(base ?? {});
+    return Http.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<Http>, I>>(object: I): Http {
     const message = createBaseHttp();
     message.rules = object.rules?.map((e) => HttpRule.fromPartial(e)) || [];
@@ -489,48 +499,90 @@ export const HttpRule = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): HttpRule {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHttpRule();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.selector = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.get = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.put = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.post = reader.string();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.delete = reader.string();
-          break;
+          continue;
         case 6:
+          if (tag !== 50) {
+            break;
+          }
+
           message.patch = reader.string();
-          break;
+          continue;
         case 8:
+          if (tag !== 66) {
+            break;
+          }
+
           message.custom = CustomHttpPattern.decode(reader, reader.uint32());
-          break;
+          continue;
         case 7:
+          if (tag !== 58) {
+            break;
+          }
+
           message.body = reader.string();
-          break;
+          continue;
         case 12:
+          if (tag !== 98) {
+            break;
+          }
+
           message.responseBody = reader.string();
-          break;
+          continue;
         case 11:
+          if (tag !== 90) {
+            break;
+          }
+
           message.additionalBindings.push(
             HttpRule.decode(reader, reader.uint32()),
           );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -558,33 +610,44 @@ export const HttpRule = {
 
   toJSON(message: HttpRule): unknown {
     const obj: any = {};
-    message.selector !== undefined && (obj.selector = message.selector);
-    message.get !== undefined && (obj.get = message.get);
-    message.put !== undefined && (obj.put = message.put);
-    message.post !== undefined && (obj.post = message.post);
-    message.delete !== undefined && (obj.delete = message.delete);
-    message.patch !== undefined && (obj.patch = message.patch);
-    message.custom !== undefined &&
-      (obj.custom = message.custom
-        ? CustomHttpPattern.toJSON(message.custom)
-        : undefined);
-    message.body !== undefined && (obj.body = message.body);
-    message.responseBody !== undefined &&
-      (obj.responseBody = message.responseBody);
-    if (message.additionalBindings) {
+    if (message.selector !== "") {
+      obj.selector = message.selector;
+    }
+    if (message.get !== undefined) {
+      obj.get = message.get;
+    }
+    if (message.put !== undefined) {
+      obj.put = message.put;
+    }
+    if (message.post !== undefined) {
+      obj.post = message.post;
+    }
+    if (message.delete !== undefined) {
+      obj.delete = message.delete;
+    }
+    if (message.patch !== undefined) {
+      obj.patch = message.patch;
+    }
+    if (message.custom !== undefined) {
+      obj.custom = CustomHttpPattern.toJSON(message.custom);
+    }
+    if (message.body !== "") {
+      obj.body = message.body;
+    }
+    if (message.responseBody !== "") {
+      obj.responseBody = message.responseBody;
+    }
+    if (message.additionalBindings?.length) {
       obj.additionalBindings = message.additionalBindings.map((e) =>
-        e ? HttpRule.toJSON(e) : undefined,
+        HttpRule.toJSON(e),
       );
-    } else {
-      obj.additionalBindings = [];
     }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<HttpRule>, I>>(base?: I): HttpRule {
-    return HttpRule.fromPartial(base ?? {});
+    return HttpRule.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<HttpRule>, I>>(object: I): HttpRule {
     const message = createBaseHttpRule();
     message.selector = object.selector ?? "";
@@ -624,22 +687,32 @@ export const CustomHttpPattern = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): CustomHttpPattern {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCustomHttpPattern();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.kind = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.path = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -653,17 +726,20 @@ export const CustomHttpPattern = {
 
   toJSON(message: CustomHttpPattern): unknown {
     const obj: any = {};
-    message.kind !== undefined && (obj.kind = message.kind);
-    message.path !== undefined && (obj.path = message.path);
+    if (message.kind !== "") {
+      obj.kind = message.kind;
+    }
+    if (message.path !== "") {
+      obj.path = message.path;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<CustomHttpPattern>, I>>(
     base?: I,
   ): CustomHttpPattern {
-    return CustomHttpPattern.fromPartial(base ?? {});
+    return CustomHttpPattern.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<CustomHttpPattern>, I>>(
     object: I,
   ): CustomHttpPattern {

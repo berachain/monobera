@@ -36,7 +36,7 @@ export interface GetResponse {
    * result is the result of the get query. If no value is found, the gRPC
    * status code NOT_FOUND will be returned.
    */
-  result?: Any;
+  result?: Any | undefined;
 }
 
 /** ListRequest is the Query/List request type. */
@@ -53,7 +53,7 @@ export interface ListRequest {
   /** range defines a range query. */
   range?: ListRequest_Range | undefined;
   /** pagination is the pagination request. */
-  pagination?: PageRequest;
+  pagination?: PageRequest | undefined;
 }
 
 /** Prefix specifies the arguments to a prefix query. */
@@ -87,7 +87,7 @@ export interface ListResponse {
   /** results are the results of the query. */
   results: Any[];
   /** pagination is the pagination response. */
-  pagination?: PageResponse;
+  pagination?: PageResponse | undefined;
 }
 
 /** IndexValue represents the value of a field in an ORM index expression. */
@@ -138,25 +138,39 @@ export const GetRequest = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): GetRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.messageName = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.index = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.values.push(IndexValue.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -173,23 +187,21 @@ export const GetRequest = {
 
   toJSON(message: GetRequest): unknown {
     const obj: any = {};
-    message.messageName !== undefined &&
-      (obj.messageName = message.messageName);
-    message.index !== undefined && (obj.index = message.index);
-    if (message.values) {
-      obj.values = message.values.map((e) =>
-        e ? IndexValue.toJSON(e) : undefined,
-      );
-    } else {
-      obj.values = [];
+    if (message.messageName !== "") {
+      obj.messageName = message.messageName;
+    }
+    if (message.index !== "") {
+      obj.index = message.index;
+    }
+    if (message.values?.length) {
+      obj.values = message.values.map((e) => IndexValue.toJSON(e));
     }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<GetRequest>, I>>(base?: I): GetRequest {
-    return GetRequest.fromPartial(base ?? {});
+    return GetRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<GetRequest>, I>>(
     object: I,
   ): GetRequest {
@@ -217,19 +229,25 @@ export const GetResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): GetResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.result = Any.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -242,15 +260,15 @@ export const GetResponse = {
 
   toJSON(message: GetResponse): unknown {
     const obj: any = {};
-    message.result !== undefined &&
-      (obj.result = message.result ? Any.toJSON(message.result) : undefined);
+    if (message.result !== undefined) {
+      obj.result = Any.toJSON(message.result);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<GetResponse>, I>>(base?: I): GetResponse {
-    return GetResponse.fromPartial(base ?? {});
+    return GetResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<GetResponse>, I>>(
     object: I,
   ): GetResponse {
@@ -303,31 +321,53 @@ export const ListRequest = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ListRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.messageName = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.index = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.prefix = ListRequest_Prefix.decode(reader, reader.uint32());
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.range = ListRequest_Range.decode(reader, reader.uint32());
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -350,28 +390,27 @@ export const ListRequest = {
 
   toJSON(message: ListRequest): unknown {
     const obj: any = {};
-    message.messageName !== undefined &&
-      (obj.messageName = message.messageName);
-    message.index !== undefined && (obj.index = message.index);
-    message.prefix !== undefined &&
-      (obj.prefix = message.prefix
-        ? ListRequest_Prefix.toJSON(message.prefix)
-        : undefined);
-    message.range !== undefined &&
-      (obj.range = message.range
-        ? ListRequest_Range.toJSON(message.range)
-        : undefined);
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+    if (message.messageName !== "") {
+      obj.messageName = message.messageName;
+    }
+    if (message.index !== "") {
+      obj.index = message.index;
+    }
+    if (message.prefix !== undefined) {
+      obj.prefix = ListRequest_Prefix.toJSON(message.prefix);
+    }
+    if (message.range !== undefined) {
+      obj.range = ListRequest_Range.toJSON(message.range);
+    }
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<ListRequest>, I>>(base?: I): ListRequest {
-    return ListRequest.fromPartial(base ?? {});
+    return ListRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<ListRequest>, I>>(
     object: I,
   ): ListRequest {
@@ -410,19 +449,25 @@ export const ListRequest_Prefix = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ListRequest_Prefix {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListRequest_Prefix();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.values.push(IndexValue.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -437,12 +482,8 @@ export const ListRequest_Prefix = {
 
   toJSON(message: ListRequest_Prefix): unknown {
     const obj: any = {};
-    if (message.values) {
-      obj.values = message.values.map((e) =>
-        e ? IndexValue.toJSON(e) : undefined,
-      );
-    } else {
-      obj.values = [];
+    if (message.values?.length) {
+      obj.values = message.values.map((e) => IndexValue.toJSON(e));
     }
     return obj;
   },
@@ -450,9 +491,8 @@ export const ListRequest_Prefix = {
   create<I extends Exact<DeepPartial<ListRequest_Prefix>, I>>(
     base?: I,
   ): ListRequest_Prefix {
-    return ListRequest_Prefix.fromPartial(base ?? {});
+    return ListRequest_Prefix.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<ListRequest_Prefix>, I>>(
     object: I,
   ): ListRequest_Prefix {
@@ -481,22 +521,32 @@ export const ListRequest_Range = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ListRequest_Range {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListRequest_Range();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.start.push(IndexValue.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.end.push(IndexValue.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -514,17 +564,11 @@ export const ListRequest_Range = {
 
   toJSON(message: ListRequest_Range): unknown {
     const obj: any = {};
-    if (message.start) {
-      obj.start = message.start.map((e) =>
-        e ? IndexValue.toJSON(e) : undefined,
-      );
-    } else {
-      obj.start = [];
+    if (message.start?.length) {
+      obj.start = message.start.map((e) => IndexValue.toJSON(e));
     }
-    if (message.end) {
-      obj.end = message.end.map((e) => (e ? IndexValue.toJSON(e) : undefined));
-    } else {
-      obj.end = [];
+    if (message.end?.length) {
+      obj.end = message.end.map((e) => IndexValue.toJSON(e));
     }
     return obj;
   },
@@ -532,9 +576,8 @@ export const ListRequest_Range = {
   create<I extends Exact<DeepPartial<ListRequest_Range>, I>>(
     base?: I,
   ): ListRequest_Range {
-    return ListRequest_Range.fromPartial(base ?? {});
+    return ListRequest_Range.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<ListRequest_Range>, I>>(
     object: I,
   ): ListRequest_Range {
@@ -567,22 +610,32 @@ export const ListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ListResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.results.push(Any.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -600,24 +653,20 @@ export const ListResponse = {
 
   toJSON(message: ListResponse): unknown {
     const obj: any = {};
-    if (message.results) {
-      obj.results = message.results.map((e) => (e ? Any.toJSON(e) : undefined));
-    } else {
-      obj.results = [];
+    if (message.results?.length) {
+      obj.results = message.results.map((e) => Any.toJSON(e));
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<ListResponse>, I>>(
     base?: I,
   ): ListResponse {
-    return ListResponse.fromPartial(base ?? {});
+    return ListResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<ListResponse>, I>>(
     object: I,
   ): ListResponse {
@@ -680,42 +729,76 @@ export const IndexValue = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): IndexValue {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseIndexValue();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.uint = reader.uint64() as Long;
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.int = reader.int64() as Long;
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.str = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.bytes = reader.bytes();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.enum = reader.string();
-          break;
+          continue;
         case 6:
+          if (tag !== 48) {
+            break;
+          }
+
           message.bool = reader.bool();
-          break;
+          continue;
         case 7:
+          if (tag !== 58) {
+            break;
+          }
+
           message.timestamp = fromTimestamp(
             Timestamp.decode(reader, reader.uint32()),
           );
-          break;
+          continue;
         case 8:
+          if (tag !== 66) {
+            break;
+          }
+
           message.duration = Duration.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -739,31 +822,36 @@ export const IndexValue = {
 
   toJSON(message: IndexValue): unknown {
     const obj: any = {};
-    message.uint !== undefined &&
-      (obj.uint = (message.uint || undefined).toString());
-    message.int !== undefined &&
-      (obj.int = (message.int || undefined).toString());
-    message.str !== undefined && (obj.str = message.str);
-    message.bytes !== undefined &&
-      (obj.bytes =
-        message.bytes !== undefined
-          ? base64FromBytes(message.bytes)
-          : undefined);
-    message.enum !== undefined && (obj.enum = message.enum);
-    message.bool !== undefined && (obj.bool = message.bool);
-    message.timestamp !== undefined &&
-      (obj.timestamp = message.timestamp.toISOString());
-    message.duration !== undefined &&
-      (obj.duration = message.duration
-        ? Duration.toJSON(message.duration)
-        : undefined);
+    if (message.uint !== undefined) {
+      obj.uint = (message.uint || Long.UZERO).toString();
+    }
+    if (message.int !== undefined) {
+      obj.int = (message.int || Long.ZERO).toString();
+    }
+    if (message.str !== undefined) {
+      obj.str = message.str;
+    }
+    if (message.bytes !== undefined) {
+      obj.bytes = base64FromBytes(message.bytes);
+    }
+    if (message.enum !== undefined) {
+      obj.enum = message.enum;
+    }
+    if (message.bool !== undefined) {
+      obj.bool = message.bool;
+    }
+    if (message.timestamp !== undefined) {
+      obj.timestamp = message.timestamp.toISOString();
+    }
+    if (message.duration !== undefined) {
+      obj.duration = Duration.toJSON(message.duration);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<IndexValue>, I>>(base?: I): IndexValue {
-    return IndexValue.fromPartial(base ?? {});
+    return IndexValue.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<IndexValue>, I>>(
     object: I,
   ): IndexValue {
@@ -797,11 +885,12 @@ export interface Query {
   List(request: ListRequest): Promise<ListResponse>;
 }
 
+export const QueryServiceName = "cosmos.orm.query.v1alpha1.Query";
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || "cosmos.orm.query.v1alpha1.Query";
+    this.service = opts?.service || QueryServiceName;
     this.rpc = rpc;
     this.Get = this.Get.bind(this);
     this.List = this.List.bind(this);
@@ -809,13 +898,13 @@ export class QueryClientImpl implements Query {
   Get(request: GetRequest): Promise<GetResponse> {
     const data = GetRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Get", data);
-    return promise.then((data) => GetResponse.decode(new _m0.Reader(data)));
+    return promise.then((data) => GetResponse.decode(_m0.Reader.create(data)));
   }
 
   List(request: ListRequest): Promise<ListResponse> {
     const data = ListRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "List", data);
-    return promise.then((data) => ListResponse.decode(new _m0.Reader(data)));
+    return promise.then((data) => ListResponse.decode(_m0.Reader.create(data)));
   }
 }
 
@@ -827,10 +916,10 @@ interface Rpc {
   ): Promise<Uint8Array>;
 }
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
+declare const self: any | undefined;
+declare const window: any | undefined;
+declare const global: any | undefined;
+const tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }
@@ -906,8 +995,8 @@ function toTimestamp(date: Date): Timestamp {
 }
 
 function fromTimestamp(t: Timestamp): Date {
-  let millis = t.seconds.toNumber() * 1_000;
-  millis += t.nanos / 1_000_000;
+  let millis = (t.seconds.toNumber() || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
   return new Date(millis);
 }
 
