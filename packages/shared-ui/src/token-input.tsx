@@ -7,6 +7,7 @@ import {
   usePollAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
+import { bgtTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
@@ -89,6 +90,7 @@ export function TokenInput({
           selectable={selectable}
           weight={weight}
           customTokenList={customTokenList}
+          filter={[bgtTokenAddress]}
         />
         <div className="flex w-full flex-col pl-2 sm:pl-0">
           <Input

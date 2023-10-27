@@ -4,18 +4,15 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
-  REWARDS_PRECOMPILE_ABI,
-  TransactionActionType,
   formatUsd,
   formatter,
   truncateHash,
-  useBeraJs,
   usePollBankBalance,
   usePollBgtRewards,
   usePollPreviewBurnShares,
 } from "@bera/berajs";
 import { blockExplorerName, blockExplorerUrl } from "@bera/config";
-import { TokenIcon, useTxn } from "@bera/shared-ui";
+import { RewardBtn, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -301,20 +298,8 @@ export const EventTable = ({
 export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const router = useRouter();
   const { useBankBalance } = usePollBankBalance(pool.shareAddress);
-
-  const { useBgtReward, isLoading, refetch } = usePollBgtRewards([pool?.pool]);
+  const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   const { data: bgtRewards } = useBgtReward(pool?.pool);
-  const { account, isReady } = useBeraJs();
-
-  const {
-    write,
-    isLoading: isTxnLoading,
-    ModalPortal,
-  } = useTxn({
-    message: "Claiming BGT Rewards",
-    actionType: TransactionActionType.CLAIMING_REWARDS,
-    onSuccess: () => refetch(),
-  });
 
   const shareBalance = useBankBalance();
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
@@ -408,7 +393,6 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   };
   return (
     <div className="container p-[52px]">
-      {ModalPortal}
       <div className="mb-4 flex w-full flex-wrap items-center justify-between">
         <div className="w-full items-center sm:items-start">
           <p className="mb-3 w-full text-center text-3xl font-semibold sm:text-left">
@@ -583,27 +567,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                     {Number(bgtRewards).toFixed(2) ?? 0} BGT
                   </p>
                 </div>
-
-                <Button
-                  variant={"secondary"}
-                  disabled={
-                    isLoading ||
-                    Number(bgtRewards) === 0 ||
-                    isTxnLoading ||
-                    !isReady
-                  }
-                  onClick={() => {
-                    write({
-                      address: process.env
-                        .NEXT_PUBLIC_REWARDS_ADDRESS as Address,
-                      abi: REWARDS_PRECOMPILE_ABI,
-                      functionName: "withdrawDepositorRewards",
-                      params: [account, pool.pool],
-                    });
-                  }}
-                >
-                  Claim Rewards
-                </Button>
+                {/* @ts-ignore */}
+                <RewardBtn poolAddress={pool.pool} variant={"secondary"} />
               </CardContent>
             </Card>
           )}
