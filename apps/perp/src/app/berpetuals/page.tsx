@@ -6,7 +6,7 @@ import { type Market } from "@bera/proto/src";
 
 import { MarketImages } from "~/utils/marketImages";
 import { MarketTokenNames } from "~/utils/marketTokenNames";
-import { getMarkets } from "~/endpoints";
+import { getGlobalParams, getMarkets } from "~/endpoints";
 import { GeneralInfoBanner } from "./components/general-info-banner";
 import { InstrumentDropdown } from "./components/instrument-dropdown";
 import OrderChart from "./components/order-chart";
@@ -27,8 +27,10 @@ export function generateMetadata(): Metadata {
 
 export default async function Home() {
   const m = getMarkets();
-  const data: any = await Promise.all([m]).then(([markets]) => ({
+  const p = getGlobalParams();
+  const data: any = await Promise.all([m, p]).then(([markets, params]) => ({
     markets,
+    params,
   }));
 
   const markets: IMarket[] = data.markets.map((m: Market) => ({
@@ -39,7 +41,8 @@ export default async function Home() {
 
   const defualtMarket = markets.find((m: Market) => m.name === DEFAULT_MARKET);
 
-  if (!data || !defualtMarket) {
+  console.log(data);
+  if (!data || !defualtMarket || !data.params) {
     notFound();
   }
   return (
@@ -57,7 +60,7 @@ export default async function Home() {
         <OrderChart marketName={defualtMarket.name} />
       </span>
       <div className="flex w-full flex-col lg:flex-row">
-        <CreatePosition market={defualtMarket} />
+        <CreatePosition market={defualtMarket} params={data.params} />
         <div className="h-full w-full pb-[34px] lg:w-screen-w-400">
           <span className="hidden lg:block">
             <OrderChart marketName={defualtMarket.name} />

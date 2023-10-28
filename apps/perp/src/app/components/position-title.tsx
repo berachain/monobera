@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { OpenLimitOrder, OpenTrade } from "@bera/proto/src";
 import { cn } from "@bera/ui";
 
 import { type IMarket } from "../berpetuals/page";
@@ -41,13 +40,7 @@ export function PositionTitle({
   );
 }
 
-export function PositionTitleSM({
-  position,
-  className,
-}: {
-  position: IMarket;
-  className?: string;
-}) {
+export function PositionTitleSM({ className }: { className?: string }) {
   return (
     <div className={cn("flex w-full justify-between", className)}>
       {/* <div className="flex items-center gap-2">

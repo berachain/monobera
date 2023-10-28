@@ -22,6 +22,11 @@ export const TRADING_ABI = [
         type: "address",
       },
       {
+        internalType: "contract PairsStorageInterfaceV6",
+        name: "_pairsStorage",
+        type: "address",
+      },
+      {
         internalType: "uint256",
         name: "_maxPosDai",
         type: "uint256",
@@ -199,6 +204,25 @@ export const TRADING_ABI = [
     inputs: [
       {
         indexed: false,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "delegate",
+        type: "address",
+      },
+    ],
+    name: "NewDelegation",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "uint256",
         name: "orderId",
         type: "uint256",
@@ -288,12 +312,6 @@ export const TRADING_ABI = [
         indexed: false,
         internalType: "uint256",
         name: "index",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "absOrderId",
         type: "uint256",
       },
     ],
@@ -386,11 +404,6 @@ export const TRADING_ABI = [
           {
             internalType: "uint256",
             name: "tokenId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "absOrderId",
             type: "uint256",
           },
         ],
@@ -507,11 +520,6 @@ export const TRADING_ABI = [
           {
             internalType: "uint256",
             name: "tokenId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "absOrderId",
             type: "uint256",
           },
         ],
@@ -676,6 +684,13 @@ export const TRADING_ABI = [
       },
     ],
     name: "cancelOpenLimitOrder",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "closeAllMarketTrades",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -963,6 +978,19 @@ export const TRADING_ABI = [
     outputs: [
       {
         internalType: "contract GNSPairInfosInterfaceV6",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "pairsStorage",
+    outputs: [
+      {
+        internalType: "contract PairsStorageInterfaceV6",
         name: "",
         type: "address",
       },

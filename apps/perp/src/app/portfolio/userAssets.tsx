@@ -2,14 +2,9 @@
 
 import { formatUsd, formatter } from "@bera/berajs";
 import { cn } from "@bera/ui";
-import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 
 import { usePositions, type Position } from "~/hooks/usePositions";
-import { ICards } from "../berpetuals/components/order-history-table";
-import { ClosePositionModal } from "../components/close-position-modal";
-import { PositionTitle, PositionTitleSM } from "../components/position-title";
-import { UpdatePositionModal } from "../components/update-position-modal";
+import { type ICards } from "../berpetuals/components/order-history-table";
 
 export default function UserAssets() {
   const { generatepositionData } = usePositions();
@@ -54,7 +49,7 @@ function AsesetTitle() {
 function AsesetCard({ position }: { position: Position }) {
   return (
     <div className="hidden h-[75px] items-center justify-between rounded-2xl border border-border bg-background px-6 py-4 lg:flex ">
-      <PositionTitle position={position} />
+      {/* <PositionTitle position={position} /> */}
       <div
         className={cn(
           "w-[55px] text-xs font-medium capitalize leading-tight",
@@ -133,7 +128,7 @@ function AsesetCard({ position }: { position: Position }) {
       </div>
 
       <div className="flex w-[74px] gap-1">
-        <UpdatePositionModal
+        {/* <UpdatePositionModal
           trigger={
             <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-border bg-muted">
               <Icons.penSquare className="h-4 h-4 text-foreground" />
@@ -147,7 +142,7 @@ function AsesetCard({ position }: { position: Position }) {
               <Icons.close className="-ml-[2px] h-4 w-4 text-destructive-foreground" />
             </div>
           }
-        />
+        /> */}
       </div>
     </div>
   );
@@ -159,7 +154,7 @@ export function AsesetCardMobile({ card }: { card: ICards }) {
       {/* <PositionTitleSM position={position} /> */}
 
       <div className="flex gap-4">
-        <UpdatePositionModal
+        {/* <UpdatePositionModal
           trigger={
             <Button className="w-14 flex-shrink-0 bg-primary ">
               <Icons.penSquare className="h-6 h-6 text-primary-foreground" />
@@ -173,7 +168,7 @@ export function AsesetCardMobile({ card }: { card: ICards }) {
               Close Position
             </Button>
           }
-        />
+        /> */}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
 import { useCallback, useReducer } from "react";
 import { Contract, JsonRpcProvider, Wallet } from "ethers";
 import { usePublicClient, useWalletClient } from "wagmi";
+import { prepareWriteContract } from "wagmi/actions";
 
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraConfig, useBeraJs } from "~/contexts";
@@ -41,6 +42,13 @@ const useOctContractWrite = ({
       let hash: any | undefined;
       try {
         if (!isOctReady) {
+          const { request } = await prepareWriteContract({
+            address: address,
+            abi: abi,
+            functionName: functionName,
+            args: params,
+          });
+
           hash = await walletClient?.writeContract({
             account: account,
             address: address,

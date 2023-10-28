@@ -15,60 +15,56 @@ import {
   SLIPPAGE_TOLERANCE_VALUE,
 } from "@bera/shared-ui/src/settings";
 import { cn } from "@bera/ui";
+import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import ApproveTokenButton from "~/app/components/approve-token-button";
-import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
+import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "../type";
 
 export function PlaceOrder({
   form,
   price,
   openingFee,
+  error,
   bfLong,
   bfShort,
+  liqPrice,
   pairIndex,
 }: {
   form: OrderType;
   price: number | undefined;
   openingFee: number;
+  error: string | undefined;
   bfLong: string;
+  liqPrice: number | undefined;
   bfShort: string;
   pairIndex: number;
 }) {
   const formattedPrice = Number(formatUnits(BigInt(price ?? 0n), 10));
-  const { isLoading, write } = useOctTxn({
+  const { QUERY_KEY } = usePollOpenPositions();
+  const { isLoading, write, ModalPortal } = useOctTxn({
     message:
-      form.orderType === "long"
-        ? `Longing ${form.assets}`
-        : `Shorting ${form.assets}`,
+      form.optionType === "market"
+        ? form.orderType === "long"
+          ? `Longing ${form.assets}`
+          : `Shorting ${form.assets}`
+        : form.orderType === "long"
+        ? `Placing Limit Long Order ${form.assets}`
+        : `Placing Limit Short Order ${form.assets}`,
+    onSuccess: () => {
+      void mutate(QUERY_KEY);
+    },
   });
 
   const dailyBfLong = Number(bfLong) * 24;
   const dailyBfShort = Number(bfShort) * 24;
-
-  const estTakeProfit = useMemo(() => {
-    const tp = (1 + (form.tp ?? 0) / 100) * (formattedPrice ?? 0);
-    return tp;
-  }, [form.tp, price]);
-
-  const estStopLoss = useMemo(() => {
-    const sl = (1 - (form.sl ?? 0) / 100) * (formattedPrice ?? 0);
-    return sl;
-  }, [form.sl, price]);
-
-  const liqPrice = useCalculateLiqPrice({
-    bfLong,
-    bfShort,
-    orderType: form.orderType,
-    price: formattedPrice,
-    leverage: form.leverage?.toString(),
-  });
 
   const { account } = useBeraJs();
 
@@ -103,6 +99,8 @@ export function PlaceOrder({
     }
   }, [slippageMode, slippage]);
 
+  console.log(form);
+
   const payload = [
     {
       trader: account,
@@ -110,11 +108,14 @@ export function PlaceOrder({
       index: 0,
       initialPosToken: 0,
       positionSizeDai: parsedPositionSize, // position size
-      openPrice: price ?? 0, // for limit orders
+      openPrice:
+        form.optionType === "market"
+          ? price ?? 0
+          : parseUnits(`${form.limitPrice ?? 0}`, 10), // for limit orders
       buy: form.orderType === "long" ? true : false,
       leverage: form.leverage,
-      tp: form.tp === 0 ? 0 : estTakeProfit,
-      sl: form.sl === 0 ? 0 : estStopLoss,
+      tp: form.tp === 0 ? 0 : parseUnits(`${form.tp ?? 0}`, 10),
+      sl: form.sl === 0 ? 0 : parseUnits(`${form.sl ?? 0}`, 10),
     },
     form.optionType === "market" ? 0 : 2,
     0,
@@ -137,10 +138,9 @@ export function PlaceOrder({
 
   const allowance = useAllowance();
 
-  console.log(payload);
-
   return (
     <div className="flex w-full flex-col gap-1 rounded-xl border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
+      {ModalPortal}
       {form.optionType === "market" ? (
         <div className="flex w-full justify-between">
           <div>EST. EXECUTION PRICE</div>
@@ -159,7 +159,7 @@ export function PlaceOrder({
             {price === undefined ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              formatUsd(formattedPrice ?? 0)
+              formatUsd(form.limitPrice ?? 0)
             )}
           </div>
         </div>
@@ -186,9 +186,9 @@ export function PlaceOrder({
           ) : price === undefined ? (
             <Skeleton className="h-4 w-14" />
           ) : (
-            `${formatUsd(estTakeProfit)}`
+            `${formatUsd(form.tp ?? 0)}`
           )}{" "}
-          {form.sl !== 0 && (
+          {form.tp !== 0 && (
             <Icons.honey className="inline h-3 w-3 text-muted-foreground" />
           )}
         </div>
@@ -201,7 +201,7 @@ export function PlaceOrder({
           ) : price === undefined ? (
             <Skeleton className="h-4 w-14" />
           ) : (
-            `${formatUsd(estStopLoss)}`
+            `${formatUsd(form.sl ?? 0)}`
           )}{" "}
           {form.sl !== 0 && (
             <Icons.honey className="inline h-3 w-3 text-muted-foreground" />
@@ -243,7 +243,7 @@ export function PlaceOrder({
                 ? "bg-success text-success-foreground"
                 : "bg-destructive text-destructive-foreground",
             )}
-            disabled={isLoading}
+            disabled={isLoading || error !== undefined}
             onClick={() =>
               write({
                 address: tradingContract,
@@ -257,6 +257,11 @@ export function PlaceOrder({
           </Button>
         )}
       </ActionButton>
+      {error !== undefined && (
+        <Alert variant="destructive" className="mt-2">
+          {error}
+        </Alert>
+      )}
     </div>
   );
 }

@@ -160,7 +160,11 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
     octBalance,
     isOctGenerated: getOctKey() !== undefined,
     isOctDelegated: isDelegated,
-    isOctReady: isOctEnabled() && getOctKey() !== undefined && isDelegated,
+    isOctReady:
+      isOctEnabled() &&
+      getOctKey() !== undefined &&
+      isDelegated &&
+      !isOctUnfunded,
     getOctKey,
     octAddress,
     octAccount,

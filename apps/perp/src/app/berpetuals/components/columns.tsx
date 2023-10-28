@@ -1,7 +1,6 @@
 import React from "react";
-import { formatUsd, formatter } from "@bera/berajs";
+import { formatUsd } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
-import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -9,12 +8,13 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { formatUnits } from "viem";
 
 import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
+import { CloseOrderModal } from "~/app/components/close-order-modal";
 import { ClosePositionModal } from "~/app/components/close-position-modal";
 import { PositionTitle } from "~/app/components/position-title";
+import { UpdateLimitOrderModal } from "~/app/components/update-limit-order-modal";
 import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { useCalculatePnl } from "~/hooks/useCalculatePnl";
-import { type Position } from "~/hooks/usePositions";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
 import { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
 
@@ -221,6 +221,8 @@ export const positions_columns: ColumnDef<IMarketOrder>[] = [
     cell: ({ row }) => (
       <div className="flex items-center gap-1">
         <UpdatePositionModal
+          type={"market"}
+          openPosition={row.original}
           trigger={
             <Icons.fileEdit className="h-4 w-4 cursor-pointer text-muted-foreground" />
           }
@@ -287,65 +289,101 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Amount" />
+      <DataTableColumnHeader column={column} title="Position Size" />
     ),
-    cell: ({ row }) => (
-      <div className="text-xs font-medium leading-tight text-foreground"></div>
-    ),
+    cell: ({ row }) => {
+      const positionSize = Number(
+        formatUnits(BigInt(row.original.position_size), 18),
+      );
+      const openPrice = Number(formatUnits(BigInt(row.original.price), 10));
+      const size = positionSize / openPrice;
+      return (
+        <div className="w-[88px]">
+          <div className="text-sm font-semibold leading-tight text-foreground ">
+            {size.toFixed(4)}
+          </div>
+          <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
+            {formatUsd(positionSize)}
+          </div>
+        </div>
+      );
+    },
 
     accessorKey: "position_size",
     enableSorting: true,
   },
   {
     header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Leverage" />
+    ),
+    cell: ({ row }) => {
+      return <div className="w-[60px]">{row.original.leverage}x</div>;
+    },
+    accessorKey: "leverage",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Price" />
     ),
-    cell: ({ row }) => <div></div>,
+    cell: ({ row }) => {
+      const openPrice = Number(formatUnits(BigInt(row.original.price), 10));
+      return <div>{formatUsd(openPrice)}</div>;
+    },
     accessorKey: "entry_price",
     enableSorting: false,
   },
-
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total" />
+      <DataTableColumnHeader column={column} title="Take Profit / Stop Loss" />
     ),
     cell: ({ row }) => (
-      <div>
-        <div
-          className={"text-sm font-semibold leading-5 text-foreground"}
-        ></div>
-        <div className="text-[10px] uppercase leading-[10px]">Honey</div>
+      <div className="">
+        <span className="text-success-foreground">
+          {row.original.tp === "0"
+            ? "∞"
+            : formatUsd(Number(formatUnits(BigInt(row.original.tp), 10))) ??
+              "-"}{" "}
+        </span>
+        /
+        <span className="text-destructive-foreground">
+          {" "}
+          {row.original.sl === "0"
+            ? "∞"
+            : formatUsd(Number(formatUnits(BigInt(row.original.sl), 10)))}
+        </span>
       </div>
     ),
-    accessorKey: "total",
-    enableSorting: true,
+    accessorKey: "tp_sl",
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
         title={
-          <div className="flex justify-end">
-            <Button className="bg-destructive px-2 py-1 text-sm font-semibold leading-5 text-destructive-foreground">
-              Cancel All Orders
-            </Button>
-          </div>
+          <Button className="bg-destructive px-2 py-1 text-sm font-semibold leading-5 text-destructive-foreground">
+            Cancel All Orders
+          </Button>
         }
       />
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-end gap-1">
-        <UpdatePositionModal
+        <UpdateLimitOrderModal
+          type={"limit"}
+          openOrder={row.original}
           trigger={
             <Icons.fileEdit className="h-4 w-4 cursor-pointer text-muted-foreground" />
           }
         />
-        <ClosePositionModal
+
+        <CloseOrderModal
           trigger={
             <Icons.close className="h-6 w-6 cursor-pointer text-destructive-foreground" />
           }
           type="limit"
-          openPosition={{} as any}
+          openOrder={row.original}
         />
       </div>
     ),

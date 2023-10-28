@@ -1,4 +1,5 @@
-import {
+import type {
+  Bar,
   DatafeedConfiguration,
   HistoryCallback,
   IDatafeedChartApi,
@@ -7,6 +8,7 @@ import {
   OnReadyCallback,
   PeriodParams,
   ResolutionString,
+  SubscribeBarsCallback,
 } from "public/static/charting_library/charting_library";
 
 export function parseFullSymbol(fullSymbol: string) {
@@ -70,26 +72,18 @@ export const configurationData: DatafeedConfiguration = {
   supported_resolutions: supportedResolutions,
 };
 
-const cachedData: any = [];
+const websocketConnections: Record<string, any> = {};
 
+const websocket = process.env.NEXT_PUBLIC_CANDLEFEED as string;
 const datafeed: IDatafeedChartApi & IExternalDatafeed = {
   onReady: (callback: OnReadyCallback) => {
     console.log("[onReady]: Method call");
     setTimeout(() => callback(configurationData)); // callback must be called asynchronously.
   },
-  searchSymbols: (
-    userInput: any,
-    exchange: any,
-    symbolType: any,
-    onResultReadyCallback: any,
-  ) => {
+  searchSymbols: () => {
     console.log("[searchSymbols]: Method call");
   },
-  resolveSymbol: (
-    symbolName: any,
-    onSymbolResolvedCallback: any,
-    onResolveErrorCallback: any,
-  ) => {
+  resolveSymbol: (symbolName: any, onSymbolResolvedCallback: any) => {
     console.log("[resolveSymbol]: Method call", symbolName);
     const symbolInfo = symbolInfoMap[symbolName];
     onSymbolResolvedCallback(symbolInfo);
@@ -108,7 +102,12 @@ const datafeed: IDatafeedChartApi & IExternalDatafeed = {
           `http://k8s-devnet-btsapinl-bb091436b1-463c707996917350.elb.us-east-2.amazonaws.com/history?symbol=${symbolInfo.name}&resolution=${resolution}`,
         );
         const result = await response.json();
-        const bars = result.prices;
+        const bars = result.prices.map((bar: any) => {
+          return {
+            ...bar,
+            time: Number(bar.time),
+          };
+        });
         console.log(`[getBars]: returned ${bars.length} bar(s)`);
         onResult(bars, { noData: false });
       } else {
@@ -117,24 +116,75 @@ const datafeed: IDatafeedChartApi & IExternalDatafeed = {
     } catch (error) {
       onError("failed to fetch");
     }
+    return Promise.resolve(); // Return a resolved promise to satisfy TypeScript
   },
-  subscribeBars: (
-    symbolInfo: any,
-    resolution: any,
-    onRealtimeCallback: any,
-    subscribeUID: any,
-    onResetCacheNeededCallback: any,
-  ) => {
+  subscribeBars(
+    symbolInfo: LibrarySymbolInfo,
+    resolution: ResolutionString,
+    onTick: SubscribeBarsCallback,
+    listenerGuid: string,
+  ) {
     console.log(
       "[subscribeBars]: Method call with subscribeUID:",
-      subscribeUID,
+      listenerGuid,
     );
+    // Create a WebSocket connection
+
+    // Construct the WebSocket URL
+    const wssurl = websocket + `/${symbolInfo.name}?resolution=${resolution}`;
+
+    // Create a WebSocket connection
+    const socket = new WebSocket(wssurl);
+
+    // Set up an event handler for when the WebSocket connection is opened
+    socket.onopen = () => {
+      console.log("WebSocket connection opened", listenerGuid);
+    };
+
+    // Set up an event handler for when a new message is received
+    socket.onmessage = (event) => {
+      // Parse the received data (assuming it's in JSON format)
+      const data = JSON.parse(event.data);
+
+      console.log("WebSocket message received:", data);
+      const bar: Bar = {
+        time: data.time,
+        open: data.open,
+        high: data.high,
+        low: data.low,
+        close: data.close,
+      };
+      // Call the onTick callback function with the received data
+      onTick(bar);
+    };
+
+    // Set up an event handler for errors
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    // Set up an event handler for when the WebSocket connection is closed
+    socket.onclose = (event) => {
+      console.log("WebSocket connection closed:", event.reason);
+      // Remove the connection from the mapping when it's closed
+      if (websocketConnections[listenerGuid] === socket) {
+        delete websocketConnections[listenerGuid];
+      }
+    };
+
+    // Store the WebSocket connection in the mapping
+    websocketConnections[listenerGuid] = socket;
   },
-  unsubscribeBars: (subscriberUID: any) => {
+  unsubscribeBars(listenerGuid: string) {
     console.log(
       "[unsubscribeBars]: Method call with subscriberUID:",
-      subscriberUID,
+      listenerGuid,
     );
+
+    if (websocketConnections[listenerGuid]) {
+      websocketConnections[listenerGuid].close();
+      delete websocketConnections[listenerGuid];
+    }
   },
 };
 

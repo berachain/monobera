@@ -2,7 +2,6 @@ import { useMemo } from "react";
 
 import { AsesetCardMobile } from "~/app/portfolio/userAssets";
 import { getAssetCardList } from "../getAssetCards";
-import { IMarket } from "../page";
 import {
   history_columns,
   orders_columns,
@@ -10,7 +9,7 @@ import {
   positions_columns,
 } from "./columns";
 import { DataTable } from "./data-table";
-import { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
+import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
 
 export interface IRow {
   key: string;
@@ -42,6 +41,7 @@ export function OrderHistoryTable({
     });
   }, [openPositons, openOrders, history]);
 
+  console.log(openOrders);
   return (
     <div className="relative w-full overflow-x-auto">
       {tab === "positions" && (
@@ -54,7 +54,7 @@ export function OrderHistoryTable({
       {tab === "orders" && (
         <DataTable
           columns={orders_columns}
-          data={[]}
+          data={openOrders ?? []}
           className="hidden w-full min-w-[1000px] sm:block"
         />
       )}

@@ -5,7 +5,7 @@ import { perpsName } from "@bera/config";
 import { type Market } from "@bera/proto/src";
 
 import { MarketImages } from "~/utils/marketImages";
-import { getMarkets } from "~/endpoints";
+import { getGlobalParams, getMarkets } from "~/endpoints";
 import { GeneralInfoBanner } from "../components/general-info-banner";
 import { InstrumentDropdown } from "../components/instrument-dropdown";
 import OrderChart from "../components/order-chart";
@@ -27,8 +27,10 @@ export function generateMetadata({ params }: Props): Metadata {
 export default async function Home({ params }: Props) {
   try {
     const m = getMarkets();
-    const data: any = await Promise.all([m]).then(([markets]) => ({
+    const p = getGlobalParams();
+    const data: any = await Promise.all([m, p]).then(([markets, params]) => ({
       markets,
+      params,
     }));
 
     const markets: IMarket[] = data.markets.map((m: Market) => ({
@@ -54,15 +56,15 @@ export default async function Home({ params }: Props) {
           <GeneralInfoBanner market={defualtMarket} />
         </div>
         <span className="block lg:hidden">
-          <OrderChart />
+          <OrderChart marketName={defualtMarket.name} />
         </span>
         <div className="flex w-full flex-col lg:flex-row">
-          <CreatePosition market={defualtMarket} />
+          <CreatePosition market={defualtMarket} params={data.params} />
           <div className="h-full w-full pb-[34px] lg:w-screen-w-400">
             <span className="hidden lg:block">
-              <OrderChart />
+              <OrderChart marketName={defualtMarket.name} />
             </span>
-            <OrderHistory />
+            <OrderHistory markets={markets} />
           </div>
         </div>{" "}
       </div>

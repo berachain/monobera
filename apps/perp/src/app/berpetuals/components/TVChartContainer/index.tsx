@@ -36,7 +36,6 @@ export const TVChartContainer = (
   }, [appTheme, isDarkOS]);
 
   useEffect(() => {
-    console.log("props.symbol", props.symbol);
     const widgetOptions: ChartingLibraryWidgetOptions = {
       symbol: props.symbol,
       datafeed: Datafeed,

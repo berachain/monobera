@@ -1,17 +1,17 @@
 import { useBeraJs } from "@bera/berajs";
 import { perpsEndpoints } from "@bera/config";
-import { OpenTrade } from "@bera/proto/src";
-import useSWR, { useSWRConfig } from "swr";
+import { type OpenTrade } from "@bera/proto/src";
+import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import { formatUnits } from "viem";
 
 import { POLLING } from "~/utils/constants";
-import { IMarketOrder } from "~/app/berpetuals/components/order-history";
-import { IMarket } from "~/app/berpetuals/page";
+import { type IMarketOrder } from "~/app/berpetuals/components/order-history";
+import { type IMarket } from "~/app/berpetuals/page";
 
 export const usePollOpenPositions = () => {
   const { account } = useBeraJs();
   const QUERY_KEY = ["openPositions", account];
-  const { mutate } = useSWRConfig();
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
@@ -31,6 +31,13 @@ export const usePollOpenPositions = () => {
     return useSWRImmutable(QUERY_KEY);
   };
 
+  const useOpenPositionSize = () => {
+    const { data } = useSWRImmutable<OpenTrade[]>(QUERY_KEY);
+    return data?.reduce((acc: number, position: OpenTrade) => {
+      return acc + Number(formatUnits(BigInt(position.position_size), 18));
+    }, 0);
+  };
+
   const useMarketOpenPositions = (markets: IMarket[]): IMarketOrder[] => {
     const { data } = useSWRImmutable(QUERY_KEY);
     return data?.map((position: OpenTrade) => {
@@ -47,5 +54,6 @@ export const usePollOpenPositions = () => {
     QUERY_KEY,
     useOpenPositions,
     useMarketOpenPositions,
+    useOpenPositionSize,
   };
 };

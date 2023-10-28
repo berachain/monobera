@@ -1,4 +1,13 @@
+"use client";
+
+import { TRADING_ABI } from "@bera/berajs";
+import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
+import { Button } from "@bera/ui/button";
+import { mutate } from "swr";
+import { type Address } from "wagmi";
+
+import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 
 export function OrderHistoryHeader({
   headers,
@@ -13,6 +22,14 @@ export function OrderHistoryHeader({
   tabType: "positions" | "orders" | "history" | "pnl";
   setTabType: (type: "positions" | "orders" | "history" | "pnl") => void;
 }) {
+  const { QUERY_KEY } = usePollOpenPositions();
+
+  const { isLoading, write } = useOctTxn({
+    message: `Closing All Open Positions`,
+    onSuccess: () => {
+      void mutate(QUERY_KEY);
+    },
+  });
   return (
     <div>
       <div className="flex w-full flex-col items-center justify-between border-y border-border bg-muted px-6 py-4 sm:flex-row">
@@ -51,9 +68,21 @@ export function OrderHistoryHeader({
           ))}
         </div>
         <div className="mt-4 block w-full border-t border-border pt-4 sm:hidden" />
-        <div className="w-full cursor-pointer rounded-lg bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit">
+        <Button
+          className="w-full cursor-pointer rounded-lg bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
+          disabled={isLoading}
+          onClick={() => {
+            write({
+              address: process.env
+                .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+              abi: TRADING_ABI,
+              functionName: "closeAllMarketTrades",
+              params: [],
+            });
+          }}
+        >
           🌋 Market Close All
-        </div>
+        </Button>
       </div>
     </div>
   );

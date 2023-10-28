@@ -24,9 +24,10 @@ export default function OrderChart({ marketName }: { marketName: string }) {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
   const defaultWidgetProps: Partial<ChartingLibraryWidgetOptions> = {
     symbol: marketName,
-    interval: "1D" as ResolutionString,
+    interval: "15" as ResolutionString,
     library_path: "/static/charting_library/",
     locale: "en",
     charts_storage_url: "https://saveload.tradingview.com",

@@ -19,8 +19,8 @@ export function LeverageSlider({
           value={[Math.floor(((defaultValue ?? 1) * 100) / maxLeverage)]}
           max={maxLeverage}
           min={1}
-          markers={[0, 0, 0, 0, 0, 0].map((_, index) => {
-            return Math.floor((maxLeverage * (index + 1)) / 6);
+          markers={[0, 0, 0, 0].map((_, index) => {
+            return Math.floor((maxLeverage * (index + 1)) / 4);
           })}
           onValueChange={(value: any) => {
             console.log("vallly", value);

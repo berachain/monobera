@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { formatUnits } from "ethers";
-import { parseUnits } from "viem";
 
 export interface ICalculatePnl {
   currentPrice: bigint | undefined;

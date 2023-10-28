@@ -237,7 +237,7 @@ export function ManageOctDialog({
                       .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
                     abi: TRADING_ABI,
                     functionName: "setDelegate",
-                    params: [account],
+                    params: [octAddress],
                   })
                 }
               >

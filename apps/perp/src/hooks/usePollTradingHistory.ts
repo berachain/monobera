@@ -1,17 +1,16 @@
 import { useBeraJs } from "@bera/berajs";
 import { perpsEndpoints } from "@bera/config";
-import { ClosedTrade } from "@bera/proto/src";
-import useSWR, { useSWRConfig } from "swr";
+import { type ClosedTrade } from "@bera/proto/src";
+import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
 import { POLLING } from "~/utils/constants";
-import { IClosedTrade } from "~/app/berpetuals/components/order-history";
-import { IMarket } from "~/app/berpetuals/page";
+import { type IClosedTrade } from "~/app/berpetuals/components/order-history";
+import { type IMarket } from "~/app/berpetuals/page";
 
 export const usePollTradingHistory = () => {
   const { account } = useBeraJs();
   const QUERY_KEY = ["closedTrades", account];
-  const { mutate } = useSWRConfig();
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
@@ -28,14 +27,6 @@ export const usePollTradingHistory = () => {
   );
 
   const useOpenPositions = () => {
-    return useSWRImmutable(QUERY_KEY);
-  };
-
-  const useTotalPnl = () => {
-    return useSWRImmutable(QUERY_KEY);
-  };
-
-  const useTotalPositionSize = () => {
     return useSWRImmutable(QUERY_KEY);
   };
 

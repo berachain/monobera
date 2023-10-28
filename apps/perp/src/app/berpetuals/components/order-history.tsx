@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ClosedTrade, OpenLimitOrder, OpenTrade } from "@bera/proto/src";
+import type { ClosedTrade, OpenLimitOrder, OpenTrade } from "@bera/proto/src";
 
+import { usePollOpenOrders } from "~/hooks/usePollOpenOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
 import { IMarket } from "../page";
@@ -31,9 +32,13 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
 
   const { useMarketClosedPositions } = usePollTradingHistory();
 
+  const { useMarketOpenOrders } = usePollOpenOrders();
+
   const openPositions = useMarketOpenPositions(markets);
 
   const closedPositions = useMarketClosedPositions(markets);
+
+  const openOrders = useMarketOpenOrders(markets);
 
   const headers = [
     {
@@ -43,7 +48,7 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
     },
     {
       title: "Open Orders",
-      counts: 2,
+      counts: openOrders?.length ?? 0,
       type: "orders",
     },
     {
@@ -63,7 +68,7 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
       <OrderHistoryTable
         tab={tabType}
         openPositons={openPositions}
-        openOrders={[]}
+        openOrders={openOrders}
         history={closedPositions}
       />
       <TotalAmount className="hidden sm:flex" />

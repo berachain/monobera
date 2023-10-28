@@ -1,12 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { formatUsd, usePollHoneyBalance } from "@bera/berajs";
+import { type GlobalParams } from "@bera/proto/src";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 
 import { HONEY_IMG } from "~/utils/marketImages";
+import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
 import { CustomizeInput } from "./components/customize-input";
 import { LeverageSlider } from "./components/leverage-slider";
@@ -18,9 +20,10 @@ import { type OrderType } from "./type";
 
 interface ICreatePosition {
   market: IMarket;
+  params: GlobalParams;
 }
 
-export default function CreatePosition({ market }: ICreatePosition) {
+export default function CreatePosition({ market, params }: ICreatePosition) {
   const [givenHoney, setGivenHoney] = useState<boolean>(true);
   const [form, setForm] = useState<OrderType>({
     assets: "BTC",
@@ -42,6 +45,11 @@ export default function CreatePosition({ market }: ICreatePosition) {
   const honeyBalance = useHoneyBalance();
 
   const formattedPrice = Number(formatUnits(BigInt(rawPrice ?? 0), 10));
+
+  const maxLeverage = Number(params.max_leverage ?? 0);
+  const formattedMaxCollateral = Number(
+    formatUnits(BigInt(params.max_pos_honey ?? 0), 18),
+  );
 
   useMemo(() => {
     const honeyAmountPrice = (form.amount ?? 0) * honeyPrice;
@@ -87,6 +95,45 @@ export default function CreatePosition({ market }: ICreatePosition) {
     form.quantity,
     rawPrice,
   ]);
+
+  const formattedBfLong = formatUnits(
+    BigInt(market.pair_borrowing_fee?.bf_long ?? "0"),
+    18,
+  );
+  const formattedBfShort = formatUnits(
+    BigInt(market.pair_borrowing_fee?.bf_short ?? "0"),
+    18,
+  );
+  const liqPrice = useCalculateLiqPrice({
+    bfLong: formattedBfLong,
+    bfShort: formattedBfShort,
+    orderType: form.orderType,
+    price: form.optionType === "market" ? formattedPrice : form.limitPrice,
+    leverage: form.leverage?.toString(),
+  });
+
+  const [error, setError] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (
+      form.amount &&
+      form.leverage &&
+      form.amount * form.leverage > formattedMaxCollateral
+    ) {
+      setError(`Max position size is ${formattedMaxCollateral} HONEY.`);
+    } else if (form.amount && form.amount < 0) {
+      setError("Collateral must be positive.");
+    } else if (
+      form.leverage &&
+      (form.leverage < 2 || form.leverage > maxLeverage)
+    ) {
+      setError(`Leverage must be between 2x and ${maxLeverage}x.`);
+    } else if (honeyBalance && honeyBalance < (form.amount ?? 0)) {
+      setError("Insufficient balance.");
+    } else {
+      setError(undefined);
+    }
+  }, [form.amount, form.leverage]);
 
   return (
     <div className="w-full flex-shrink-0 pb-10 lg:min-h-screen-250 lg:w-[400px] lg:border-r lg:border-border">
@@ -199,31 +246,40 @@ export default function CreatePosition({ market }: ICreatePosition) {
         </div>
         <LeverageSlider
           defaultValue={form.leverage}
+          maxLeverage={maxLeverage}
           onValueChange={(value: number) =>
             setForm({ ...form, leverage: value })
           }
         />
         <TPSL
           className="my-8"
+          leverage={form.leverage ?? 2}
+          formattedPrice={
+            form.optionType === "market"
+              ? rawPrice === undefined
+                ? undefined
+                : formattedPrice
+              : form.limitPrice
+          }
+          long={form.orderType === "long"}
+          tp={form.tp}
+          liqPrice={liqPrice}
+          sl={form.sl}
           tpslOnChange={(value) =>
             setForm({ ...form, tp: value.tp, sl: value.sl })
           }
         />
         <PlaceOrder
           form={form}
+          error={error}
           price={rawPrice}
           pairIndex={Number(market.pair_index) ?? 0}
           openingFee={Number(
             formatUnits(BigInt(market.pair_fixed_fee?.open_fee_p ?? "0"), 18),
           )}
-          bfLong={formatUnits(
-            BigInt(market.pair_borrowing_fee?.bf_long ?? "0"),
-            18,
-          )}
-          bfShort={formatUnits(
-            BigInt(market.pair_borrowing_fee?.bf_short ?? "0"),
-            18,
-          )}
+          bfLong={formattedBfLong}
+          bfShort={formattedBfShort}
+          liqPrice={liqPrice}
         />
       </div>
     </div>
