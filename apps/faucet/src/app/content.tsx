@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { cloudinaryUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
@@ -12,19 +13,19 @@ export default function Content() {
   const [address, setAddress] = React.useState<string>("");
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
-      <div className="flex items-center justify-center sm:justify-between">
+      <div className="items-center text-center sm:flex sm:text-left">
         <div className="flex flex-col gap-4">
           <div className="leading-12 w-full text-5xl font-bold">
             Bootstrap Your
             <br /> Testnet Wallet
           </div>
-          <div className="flex items-center text-lg font-semibold">
+          <div className="items-center text-lg font-semibold sm:flex">
             {" "}
             Fund your testnet wallet with <TokenBadge />
           </div>
         </div>
         <Image
-          src="/faucet_v2.gif"
+          src={`${cloudinaryUrl}/faucet_v3_uktibg`}
           alt="machine"
           width={200}
           height={198}

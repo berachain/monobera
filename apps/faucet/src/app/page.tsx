@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import Image from "next/image";
-import { lendName } from "@bera/config";
+import { cloudinaryUrl, lendName } from "@bera/config";
 
 import Content from "./content";
 
@@ -15,7 +15,7 @@ export default function Page() {
       <div className="mx-auto flex w-full max-w-[1300px] flex-col-reverse items-center justify-between px-4 py-12 md:px-[108px] xl:flex-row ">
         <Content />
         <Image
-          src="/faucet_v2.gif"
+          src={`${cloudinaryUrl}/faucet_v3_uktibg`}
           alt="machine"
           width={523}
           height={614}
