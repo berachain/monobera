@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { useTokenInformation, useTokens, type Token } from "@bera/berajs";
-import { bgtTokenAddress } from "@bera/config";
+import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -48,7 +48,13 @@ export const TokenIcon = ({
   const { tokenDictionary } = useTokens();
   useMemo(() => {
     const fetchData = async () => {
-      if (fetch && address && !tokenInformation && address !== bgtTokenAddress)
+      if (
+        fetch &&
+        address &&
+        !tokenInformation &&
+        address !== bgtTokenAddress &&
+        address !== nativeTokenAddress
+      )
         await read({ address: address });
     };
     void fetchData();
