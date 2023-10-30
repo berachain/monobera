@@ -11,7 +11,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
       <RouterProvider>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" forcedTheme="light">
           {children}
         </ThemeProvider>
       </RouterProvider>
