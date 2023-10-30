@@ -1,11 +1,11 @@
-import { type Token } from "@bera/berajs";
+import { nativeTokenAddress } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
 
-export function TokenBadge({ token }: { token: Token }) {
+export function TokenBadge() {
   return (
-    <div className="mx-2 inline-flex h-8 w-fit items-center gap-1 rounded bg-muted px-2 py-1 font-medium text-foreground">
-      <TokenIcon token={token} />
-      {token.symbol}
+    <div className="mx-2 inline-flex h-8 w-fit items-center gap-1 rounded bg-neutral-900 bg-opacity-30 px-2 py-1 font-medium">
+      <TokenIcon address={nativeTokenAddress} fetch />
+      BERA
     </div>
   );
 }
