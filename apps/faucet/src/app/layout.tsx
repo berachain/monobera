@@ -28,9 +28,11 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           <div className="z-[100]">
             <Toaster position="bottom-right" />
           </div>
-          <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-            <Header navItems={navItems} hideConnectBtn showThemeSwitcher />
-            <main className="w-full py-[72px]">{props.children}</main>
+          <div className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
+            <Header navItems={navItems} hideConnectBtn />
+            <main className="mt-[72px] min-h-[calc(100vh-72px)] w-full bg-sky-600">
+              {props.children}
+            </main>
             <Footer />
           </div>
           <TailwindIndicator />

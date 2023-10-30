@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import Image from "next/image";
 import { lendName } from "@bera/config";
 
 import Content from "./content";
@@ -11,9 +12,16 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col-reverse items-center justify-between px-4 py-12 md:flex-row lg:px-[108px] ">
+      <div className="mx-auto flex w-full max-w-[1300px] flex-col-reverse items-center justify-between px-4 py-12 md:px-[108px] xl:flex-row ">
         <Content />
-        <div>image</div>
+        <Image
+          src="/faucet_v2.gif"
+          alt="machine"
+          width={523}
+          height={614}
+          loading="eager"
+          className="hidden h-[614px] object-cover xl:block"
+        />
       </div>
     </>
   );
