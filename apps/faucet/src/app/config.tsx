@@ -30,6 +30,8 @@ import {
   perpsUrl,
   rewardsAddress,
   stakingAddress,
+  dexUrl,
+  dexName,
 } from "@bera/config";
 import { type Chain } from "wagmi";
 
@@ -39,29 +41,22 @@ export const navItems = [
     title: "Explore",
     children: [
       {
-        href: homepageUrl,
+        href: bgtUrl,
         type: "external",
-        title: homepageName,
-        blurb: "Explore Berachain and learn more about our vision",
+        title: bgtName,
+        blurb: "The hub for BGT governance and bribes on Berachain",
+      },
+      {
+        href: dexUrl,
+        type: "external",
+        title: dexName,
+        blurb: "Swap tokens and provide liquidity to earn BGT rewards",
       },
       {
         href: honeyUrl,
         type: "external",
         title: honeyName,
         blurb: "Mint or redeem Honey, the stablecoin of Berachain",
-      },
-      {
-        href: bgtUrl,
-        type: "external",
-        title: bgtName,
-        blurb: "The hub for BGT governance and bribes on Berachain ",
-      },
-      {
-        href: blockExplorerUrl,
-        type: "external",
-        title: blockExplorerName,
-        blurb:
-          "View all transactions and blockchain information on the Berachain network",
       },
       {
         href: lendUrl,
@@ -77,6 +72,25 @@ export const navItems = [
         blurb:
           "Trade all your favourite pairs with deep liquidity and market diversity",
       },
+      {
+        href: blockExplorerUrl,
+        type: "external",
+        title: blockExplorerName,
+        blurb:
+          "View all transactions and blockchain information on the Berachain network",
+      },
+      {
+        href: homepageUrl,
+        type: "external",
+        title: homepageName,
+        blurb: "Explore Berachain and learn more about our vision",
+      },
+      // {
+      //   href: faucetUrl,
+      //   type: "external",
+      //   title: faucetName,
+      //   blurb: "Fund your testnet wallet with BERA tokens",
+      // },
     ],
   },
 ];

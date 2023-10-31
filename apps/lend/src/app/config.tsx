@@ -8,10 +8,14 @@ import {
   blockExplorerUrl,
   chainId,
   chainName,
+  dexName,
+  dexUrl,
   epochsAddress,
   erc20BgtAddress,
   erc20DexAddress,
   erc20ModuleAddress,
+  faucetName,
+  faucetUrl,
   gasTokenDecimals,
   gasTokenName,
   gasTokenSymbol,
@@ -22,8 +26,6 @@ import {
   honeyName,
   honeyUrl,
   jsonRpcUrl,
-  lendName,
-  lendUrl,
   multicallAddress,
   networkName,
   perpsName,
@@ -47,10 +49,16 @@ export const navItems = [
     title: "More",
     children: [
       {
-        href: homepageUrl,
+        href: bgtUrl,
         type: "external",
-        title: homepageName,
-        blurb: "Explore Berachain and learn more about our vision",
+        title: bgtName,
+        blurb: "The hub for BGT governance and bribes on Berachain",
+      },
+      {
+        href: dexUrl,
+        type: "external",
+        title: dexName,
+        blurb: "Swap tokens and provide liquidity to earn BGT rewards",
       },
       {
         href: honeyUrl,
@@ -58,11 +66,19 @@ export const navItems = [
         title: honeyName,
         blurb: "Mint or redeem Honey, the stablecoin of Berachain",
       },
+      // {
+      //   href: lendUrl,
+      //   type: "external",
+      //   title: lendName,
+      //   blurb:
+      //     "Earn interest and rewards by supplying your assets and borrowing Honey",
+      // },
       {
-        href: bgtUrl,
+        href: perpsUrl,
         type: "external",
-        title: bgtName,
-        blurb: "The hub for BGT governance and bribes on Berachain ",
+        title: perpsName,
+        blurb:
+          "Trade all your favourite pairs with deep liquidity and market diversity",
       },
       {
         href: blockExplorerUrl,
@@ -72,18 +88,16 @@ export const navItems = [
           "View all transactions and blockchain information on the Berachain network",
       },
       {
-        href: lendUrl,
+        href: homepageUrl,
         type: "external",
-        title: lendName,
-        blurb:
-          "Earn interest and rewards by supplying your assets and borrowing Honey",
+        title: homepageName,
+        blurb: "Explore Berachain and learn more about our vision",
       },
       {
-        href: perpsUrl,
+        href: faucetUrl,
         type: "external",
-        title: perpsName,
-        blurb:
-          "Trade all your favourite pairs with deep liquidity and market diversity",
+        title: faucetName,
+        blurb: "Fund your testnet wallet with BERA tokens",
       },
     ],
   },

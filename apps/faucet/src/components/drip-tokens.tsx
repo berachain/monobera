@@ -1,4 +1,4 @@
-import { faucetUrl } from "@bera/config";
+import { faucetEndpointUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { getAddress, isAddress } from "viem";
 
@@ -11,7 +11,7 @@ export function DripToken({
 }) {
   async function handleRequest() {
     try {
-      const res = await fetch(`${faucetUrl}/api/claim`, {
+      const res = await fetch(`${faucetEndpointUrl}/api/claim`, {
         method: "POST",
         body: JSON.stringify({ address: getAddress(address) }),
       });
