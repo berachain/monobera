@@ -88,6 +88,7 @@ const datafeed: IDatafeedChartApi & IExternalDatafeed = {
     const symbolInfo = symbolInfoMap[symbolName];
     onSymbolResolvedCallback(symbolInfo);
   },
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   getBars: async (
     symbolInfo: LibrarySymbolInfo,
     resolution: ResolutionString,

@@ -38,7 +38,7 @@ const useBeraContractWrite = ({
       let receipt: any | undefined;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
-        const { request } = await prepareWriteContract({
+        const { request: _request } = await prepareWriteContract({
           address: address,
           abi: abi,
           functionName: functionName,

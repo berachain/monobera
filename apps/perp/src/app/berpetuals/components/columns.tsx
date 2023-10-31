@@ -1,7 +1,7 @@
 import React from "react";
 import { formatUsd } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
-import { Button } from "@bera/ui/button";
+import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type ColumnDef } from "@tanstack/react-table";
@@ -16,11 +16,11 @@ import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { useCalculatePnl } from "~/hooks/useCalculatePnl";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
-import { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
+import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
 
 const MarkPrice = ({ position }: { position: IMarketOrder }) => {
   const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(Number(position.market.pair_index) ?? 0);
+  const price = useMarketIndexPrice(Number(position.market?.pair_index) ?? 0);
 
   return (
     <div>
@@ -33,52 +33,81 @@ const MarkPrice = ({ position }: { position: IMarketOrder }) => {
   );
 };
 
-const PositionLiquidationPrice = ({ position }: { position: IMarketOrder }) => {
-  // const { useMarketIndexPrice } = usePricesSocket();
-  // const price = useMarketIndexPrice(Number(position.market.pair_index) ?? 0);
-
+export const PositionLiquidationPrice = ({
+  position,
+  className,
+}: {
+  position: IMarketOrder;
+  className?: string;
+}) => {
   const formattedPrice = Number(
     formatUnits(BigInt(position.open_price ?? 0n), 10),
   );
 
   const liqPrice = useCalculateLiqPrice({
-    bfLong: position.market.pair_borrowing_fee?.bf_long,
-    bfShort: position.market.pair_borrowing_fee?.bf_short,
+    bfLong: position.market?.pair_borrowing_fee?.bf_long,
+    bfShort: position.market?.pair_borrowing_fee?.bf_short,
     orderType: position.buy === true ? "long" : "short",
     price: formattedPrice,
     leverage: position.leverage,
   });
 
   return (
-    <div>
+    <div className={cn("", className)}>
       {liqPrice !== undefined ? (
         formatUsd(liqPrice)
       ) : (
-        <Skeleton className="h-[28px] w-[80px]" />
+        <Skeleton className={cn("h-[28px] w-[80px]", className)} />
       )}
     </div>
   );
 };
 
-const ActivePositionPNL = ({ position }: { position: IMarketOrder }) => {
+export const ActivePositionPNL = ({
+  position,
+  className,
+}: {
+  position: IMarketOrder;
+  className?: string;
+}) => {
   const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(Number(position.market.pair_index) ?? 0);
+  const price = useMarketIndexPrice(Number(position.market?.pair_index) ?? 0);
+  const positionSize =
+    Number(formatUnits(BigInt(position.position_size), 18)) *
+    Number(position.leverage);
+  const openPrice = Number(formatUnits(BigInt(position.open_price), 10));
+
+  const size = positionSize / openPrice;
+
+  const fees =
+    BigInt(position.rollover_fee) +
+    BigInt(position.funding_rate) +
+    BigInt(position.closing_fee) +
+    BigInt(position.borrowing_fee);
 
   const pnl = useCalculatePnl({
     currentPrice: BigInt(price ?? 0),
-    openPrice: BigInt(position.open_price),
-    leverage: Number(position.leverage),
-    levPosSize: BigInt(position.position_size),
-    borrowingFee: BigInt(position.borrowing_fee),
-    rolloverFee: BigInt(position.rollover_fee),
-    fundingFee: BigInt(position.funding_rate),
-    closingFee: BigInt(position.closing_fee),
+    openPrice: BigInt(position.open_price ?? 0),
+    size: size,
+    fees: Number(formatUnits(fees, 18)),
+    leverage: Number(position.leverage ?? 2),
     buy: position.buy,
   });
 
   return (
-    <div>
-      {pnl !== undefined ? pnl : <Skeleton className="h-[28px] w-[80px]" />}
+    <div className={cn("", className)}>
+      {pnl !== undefined ? (
+        <span
+          className={cn(
+            "",
+            pnl > 0 ? "text-success-foreground" : "text-destructive-foreground",
+          )}
+        >
+          {formatUsd(pnl)}
+        </span>
+      ) : (
+        <Skeleton className={cn("h-[28px] w-[80px]", className)} />
+      )}
     </div>
   );
 };
@@ -86,7 +115,11 @@ const ActivePositionPNL = ({ position }: { position: IMarketOrder }) => {
 export const positions_columns: ColumnDef<IMarketOrder>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Market / Slide" />
+      <DataTableColumnHeader
+        column={column}
+        title="Market / Slide"
+        className="min-w-[120px]"
+      />
     ),
     cell: ({ row }) => (
       <PositionTitle
@@ -99,14 +132,18 @@ export const positions_columns: ColumnDef<IMarketOrder>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Position Size" />
+      <DataTableColumnHeader
+        column={column}
+        title="Position Size"
+        className="min-w-[120px]"
+      />
     ),
     cell: ({ row }) => {
-      const positionSize = Number(
-        formatUnits(BigInt(row.original.position_size), 18),
-      );
+      const positionSize =
+        Number(formatUnits(BigInt(row.original.position_size ?? 0), 18)) *
+        Number(row.original.leverage);
       const openPrice = Number(
-        formatUnits(BigInt(row.original.open_price), 10),
+        formatUnits(BigInt(row.original.open_price ?? 0), 10),
       );
       const size = positionSize / openPrice;
       return (
@@ -128,26 +165,36 @@ export const positions_columns: ColumnDef<IMarketOrder>[] = [
       <DataTableColumnHeader column={column} title="Leverage" />
     ),
     cell: ({ row }) => {
-      return <div className="w-[60px]">{row.original.leverage}x</div>;
+      return <div className="w-[60px]">{row.original.leverage ?? 2}x</div>;
     },
     accessorKey: "leverage",
     enableSorting: false,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Entry Price" />
+      <DataTableColumnHeader
+        column={column}
+        title="Entry Price"
+        className="min-w-[120px]"
+      />
     ),
     cell: ({ row }) => (
       <div>
-        {formatUsd(Number(formatUnits(BigInt(row.original.open_price), 10)))}
+        {formatUsd(
+          Number(formatUnits(BigInt(row.original.open_price ?? 0), 10)),
+        )}
       </div>
     ),
-    accessorKey: "entry_price",
-    enableSorting: false,
+    accessorKey: "open_price",
+    enableSorting: true,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Mark Price" />
+      <DataTableColumnHeader
+        column={column}
+        title="Mark Price"
+        className="min-w-[120px]"
+      />
     ),
     cell: ({ row }) => <MarkPrice position={row.original} />,
     accessorKey: "current_price",
@@ -155,7 +202,11 @@ export const positions_columns: ColumnDef<IMarketOrder>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Est. Liq. Price" />
+      <DataTableColumnHeader
+        column={column}
+        title="Est. Liq. Price"
+        className="min-w-[120px]"
+      />
     ),
     cell: ({ row }) => <PositionLiquidationPrice position={row.original} />,
     accessorKey: "est_liq_price",
@@ -180,34 +231,41 @@ export const positions_columns: ColumnDef<IMarketOrder>[] = [
     // ),
     cell: ({ row }) => <ActivePositionPNL position={row.original} />,
     accessorKey: "est_pnl",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Funding" />
     ),
-    cell: ({ row }) => <div></div>,
+    cell: ({ row }) => {
+      return <div>{formatBigIntUsd(row.original.borrowing_fee, 18)}</div>;
+    },
     accessorKey: "funding",
     enableSorting: false,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Take Profit / Stop Loss" />
+      <DataTableColumnHeader
+        column={column}
+        title="TP / SL"
+        className="min-w-[120px]"
+      />
     ),
     cell: ({ row }) => (
       <div className="">
         <span className="text-success-foreground">
           {row.original.tp === "0"
             ? "∞"
-            : formatUsd(Number(formatUnits(BigInt(row.original.tp), 10))) ??
-              "-"}{" "}
+            : formatUsd(
+                Number(formatUnits(BigInt(row.original.tp ?? 0), 10)),
+              ) ?? "-"}{" "}
         </span>
         /
         <span className="text-destructive-foreground">
           {" "}
           {row.original.sl === "0"
             ? "∞"
-            : formatUsd(Number(formatUnits(BigInt(row.original.sl), 10)))}
+            : formatUsd(Number(formatUnits(BigInt(row.original.sl ?? 0), 10)))}
         </span>
       </div>
     ),
@@ -231,7 +289,6 @@ export const positions_columns: ColumnDef<IMarketOrder>[] = [
           trigger={
             <Icons.close className="h-6 w-6 cursor-pointer text-destructive-foreground" />
           }
-          type={"market"}
           openPosition={row.original}
         />
       </div>
@@ -289,7 +346,11 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Position Size" />
+      <DataTableColumnHeader
+        column={column}
+        title="Position Size"
+        className="min-w-[120px]"
+      />
     ),
     cell: ({ row }) => {
       const positionSize = Number(
@@ -324,18 +385,22 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Price" />
+      <DataTableColumnHeader
+        column={column}
+        title="Execution Price"
+        className="min-w-[140px]"
+      />
     ),
     cell: ({ row }) => {
       const openPrice = Number(formatUnits(BigInt(row.original.price), 10));
       return <div>{formatUsd(openPrice)}</div>;
     },
-    accessorKey: "entry_price",
-    enableSorting: false,
+    accessorKey: "price",
+    enableSorting: true,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Take Profit / Stop Loss" />
+      <DataTableColumnHeader column={column} title="TP/ SL" />
     ),
     cell: ({ row }) => (
       <div className="">
@@ -359,14 +424,7 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title={
-          <Button className="bg-destructive px-2 py-1 text-sm font-semibold leading-5 text-destructive-foreground">
-            Cancel All Orders
-          </Button>
-        }
-      />
+      <DataTableColumnHeader column={column} title={"Manage"} />
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-end gap-1">
@@ -382,7 +440,6 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
           trigger={
             <Icons.close className="h-6 w-6 cursor-pointer text-destructive-foreground" />
           }
-          type="limit"
           openOrder={row.original}
         />
       </div>
@@ -393,6 +450,225 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
 ];
 
 export const history_columns: ColumnDef<IClosedTrade>[] = [
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Open time"
+        className="min-w-[120px]"
+      />
+    ),
+    cell: ({ row }) => {
+      const date = new Date(Number(row.original.open_time) * 1000);
+
+      return (
+        <div>
+          <div className="text-sm">{date.toLocaleDateString()}</div>
+          <div className="text-xs text-muted-foreground">
+            {date.toLocaleTimeString()}
+          </div>
+        </div>
+      );
+    },
+    accessorKey: "open_time",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Close time"
+        className="min-w-[120px]"
+      />
+    ),
+    cell: ({ row }) => {
+      const date = new Date(Number(row.original.close_time) * 1000);
+
+      return (
+        <div>
+          <div className="text-sm">{date.toLocaleDateString()}</div>
+          <div className="text-xs text-muted-foreground">
+            {date.toLocaleTimeString()}
+          </div>
+        </div>
+      );
+    },
+    accessorKey: "close_time",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Market / Side"
+        className="min-w-[120px]"
+      />
+    ),
+    cell: ({ row }) => (
+      <PositionTitle
+        market={row.original.market}
+        type={row.original.buy === true ? "Long" : "Short"}
+      />
+    ),
+    accessorKey: "market",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Type" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className=" text-sm font-medium uppercase text-muted-foreground">
+          {row.original.close_type}
+        </div>
+      );
+    },
+    accessorKey: "type",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Open Price"
+        className="min-w-[120px]"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="text-sm font-medium leading-tight text-foreground">
+        {formatBigIntUsd(row.original.open_price, 10)}
+      </div>
+    ),
+
+    accessorKey: "open_price",
+    enableSorting: true,
+  },
+
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Close Price"
+        className="min-w-[120px]"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="text-sm font-medium leading-tight text-foreground">
+        {formatBigIntUsd(row.original.close_price, 10)}
+      </div>
+    ),
+    accessorKey: "close_price",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Amount" />
+    ),
+    cell: ({ row }) => {
+      const volume = Number(row.original?.volume);
+
+      const openPrice = Number(
+        formatUnits(BigInt(row.original.open_price ?? 0), 10),
+      );
+      const size = volume / openPrice;
+      return (
+        <div>
+          {size.toFixed(4)} {row.original.market.name.split("-")[0]}
+        </div>
+      );
+    },
+    accessorKey: "amount",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Position Size"
+        className="min-w-[120px]"
+      />
+    ),
+    cell: ({ row }) => {
+      const volume = Number(row.original?.volume);
+
+      const price = volume;
+      return <div>{formatUsd(price)}</div>;
+    },
+    accessorKey: "position_size",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="TP / SL"
+        className="min-w-[120px]"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="">
+        <span className="text-success-foreground">
+          {row.original.tp === "0"
+            ? "∞"
+            : formatUsd(Number(formatUnits(BigInt(row.original.tp), 10))) ??
+              "-"}{" "}
+        </span>
+        /
+        <span className="text-destructive-foreground">
+          {" "}
+          {row.original.sl === "0"
+            ? "∞"
+            : formatUsd(Number(formatUnits(BigInt(row.original.sl), 10)))}
+        </span>
+      </div>
+    ),
+    accessorKey: "total",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Fees" />
+    ),
+    cell: ({ row }) => {
+      const fees =
+        Number(row.original.rollover_fee) +
+        Number(row.original.funding_rate) +
+        Number(row.original.closing_fee) +
+        Number(row.original.borrowing_fee) +
+        Number(row.original.vault_fee) +
+        Number(row.original.staking_fee);
+      return <div>{formatUsd(fees)}</div>;
+    },
+    accessorKey: "fees",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="PnL" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="text-sm font-medium leading-tight ">
+          <span
+            className={cn(
+              "",
+              Number(row.original.pnl) > 0
+                ? "text-success-foreground"
+                : "text-destructive-foreground",
+            )}
+          >
+            {formatUsd(row.original.pnl)}
+          </span>
+        </div>
+      );
+    },
+    accessorKey: "pnl",
+    enableSorting: true,
+  },
+];
+
+export const pnl_columns: ColumnDef<IClosedTrade>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Open time" />
@@ -433,7 +709,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Market / Side" />
+      <DataTableColumnHeader column={column} title="Position" />
     ),
     cell: ({ row }) => (
       <PositionTitle
@@ -442,20 +718,6 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
       />
     ),
     accessorKey: "assets",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Type" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className=" text-sm font-medium uppercase text-muted-foreground">
-          {"MARKET"}
-        </div>
-      );
-    },
-    accessorKey: "type",
     enableSorting: false,
   },
   {
@@ -486,7 +748,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Amount" />
+      <DataTableColumnHeader column={column} title="Size" />
     ),
     cell: ({ row }) => {
       const volume = Number(row.original?.volume);
@@ -507,145 +769,21 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Position Size" />
-    ),
-    cell: ({ row }) => {
-      const volume = Number(row.original?.volume);
-      const leverage = Number(row.original?.leverage);
-
-      const price = volume * leverage;
-      return <div>{formatUsd(price)}</div>;
-    },
-    accessorKey: "entry_price",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="TP / SL" />
-    ),
-    cell: ({ row }) => (
-      <div className="">
-        <span className="text-success-foreground">
-          {row.original.tp === "0"
-            ? "∞"
-            : formatUsd(Number(formatUnits(BigInt(row.original.tp), 10))) ??
-              "-"}{" "}
-        </span>
-        /
-        <span className="text-destructive-foreground">
-          {" "}
-          {row.original.sl === "0"
-            ? "∞"
-            : formatUsd(Number(formatUnits(BigInt(row.original.sl), 10)))}
-        </span>
-      </div>
-    ),
-    accessorKey: "total",
-    enableSorting: true,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Fees" />
-    ),
-    cell: ({ row }) => {
-      const fees =
-        Number(row.original.rollover_fee) +
-        Number(row.original.funding_rate) +
-        Number(row.original.closing_fee) +
-        Number(row.original.borrowing_fee) +
-        Number(row.original.vault_fee) +
-        Number(row.original.staking_fee);
-      return <div>{formatUsd(fees)}</div>;
-    },
-    accessorKey: "total",
-    enableSorting: true,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="PnL" />
-    ),
-    cell: ({ row }) => (
-      <div>
-        <div className="text-[10px] uppercase leading-[10px]">Honey</div>
-      </div>
-    ),
-    accessorKey: "total",
-    enableSorting: true,
-  },
-];
-
-export const pnl_columns: ColumnDef<IClosedTrade>[] = [
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Time" />
-    ),
-    cell: ({}) => {
-      const date = new Date();
-      return (
-        <div>
-          <div className="text-sm font-semibold leading-tight text-foreground ">
-            {date.toLocaleDateString()}
-          </div>
-          <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
-            {date.toLocaleTimeString()}
-          </div>
-        </div>
-      );
-    },
-    accessorKey: "time",
-    enableSorting: true,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Position" />
-    ),
-    cell: ({ row }) => (
-      <PositionTitle
-        market={row.original.market}
-        type={row.original.buy === true ? "Long" : "Short"}
-      />
-    ),
-    accessorKey: "assets",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Entry Price" />
-    ),
-    cell: ({ row }) => <div></div>,
-    accessorKey: "entry_price",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Exit Price" />
-    ),
-    cell: ({ row }) => <div></div>,
-    accessorKey: "entry_price",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Size" />
-    ),
-    cell: ({ row }) => (
-      <div className="text-xs font-medium leading-tight text-foreground"></div>
-    ),
-
-    accessorKey: "position_size",
-    enableSorting: true,
-  },
-  {
-    header: ({ column }) => (
       <DataTableColumnHeader column={column} title="PnL" />
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-success-foreground">
-          <div className="text-sm font-semibold leading-tight ">+</div>
-          <div className="mt-1 font-medium leading-tight text-[px]">
-            (6.69%)
-          </div>
+        <div className="text-sm font-medium leading-tight ">
+          <span
+            className={cn(
+              "",
+              Number(row.original.pnl) > 0
+                ? "text-success-foreground"
+                : "text-destructive-foreground",
+            )}
+          >
+            {formatUsd(row.original.pnl)}
+          </span>
         </div>
       );
     },

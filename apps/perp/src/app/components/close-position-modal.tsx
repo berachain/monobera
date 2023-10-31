@@ -7,7 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
-import { mutate } from "swr";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -15,6 +14,7 @@ import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { ActivePositionPNL } from "../berpetuals/components/columns";
 import { type IMarketOrder } from "../berpetuals/components/order-history";
 
 export function ClosePositionModal({
@@ -29,7 +29,7 @@ export function ClosePositionModal({
   className?: string;
 }) {
   const [open, setOpen] = useState<boolean>(false);
-  const { QUERY_KEY } = usePollOpenPositions();
+  const { refetch } = usePollOpenPositions();
 
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(
@@ -50,7 +50,7 @@ export function ClosePositionModal({
       openPosition?.buy === true ? "Long" : "Short"
     } position`,
     onSuccess: () => {
-      void mutate(QUERY_KEY);
+      refetch();
       setOpen(false);
     },
   });
@@ -69,7 +69,9 @@ export function ClosePositionModal({
 
   return (
     <div className={className}>
-      <div onClick={() => !disabled && setOpen(true)}>{trigger}</div>
+      <div onClick={() => !disabled && setOpen(true)} className="h-full w-full">
+        {trigger}
+      </div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-[342px]">
           <div className="text-lg font-semibold leading-7">Close Position</div>
@@ -130,9 +132,7 @@ export function ClosePositionModal({
               <div className="text-xs text-muted-foreground">
                 UnRealized PnL
               </div>
-              <div className=" text-sm font-semibold text-destructive-foreground">
-                -$6942.06
-              </div>
+              <ActivePositionPNL position={openPosition} />
             </div>
             <div className="flex h-full flex-col justify-between">
               <div className="text-right text-xs text-muted-foreground ">

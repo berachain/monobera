@@ -160,7 +160,7 @@ export function OneClickBanner() {
         </div>
       )} */}
       <div className="text-sm font-semibold" onClick={handleBannerClick}>
-        <span className="cursor-pointer hover:underline">
+        <span className="cursor-pointer text-[10px] hover:underline sm:text-lg">
           {BannerText[getStatus()]}
         </span>
       </div>

@@ -211,8 +211,8 @@ export const useOctTxn = ({
           const toastId = `loading-${identifier}`;
           toast.custom(
             <LoadingToast
-              title={"Waiting for wallet"}
-              message="waiting for wallet action"
+              title={"Submitting transaction"}
+              message="waiting for submission"
               onClose={() => toast.remove(toastId)}
             />,
             {

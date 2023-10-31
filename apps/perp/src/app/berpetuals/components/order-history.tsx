@@ -6,7 +6,7 @@ import type { ClosedTrade, OpenLimitOrder, OpenTrade } from "@bera/proto/src";
 import { usePollOpenOrders } from "~/hooks/usePollOpenOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
-import { IMarket } from "../page";
+import { type IMarket } from "../page";
 import { OrderHistoryHeader } from "./order-history-header";
 import { OrderHistoryTable } from "./order-history-table";
 import { TotalAmount } from "./total-amount";
@@ -64,14 +64,14 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
   return (
     <div className="w-full">
       <OrderHistoryHeader {...{ headers, tabType, setTabType }} />
-      <TotalAmount className="flex sm:hidden" />
+      <TotalAmount className="flex sm:hidden" markets={markets} />
       <OrderHistoryTable
         tab={tabType}
         openPositons={openPositions}
         openOrders={openOrders}
         history={closedPositions}
       />
-      <TotalAmount className="hidden sm:flex" />
+      <TotalAmount className="hidden sm:flex" markets={markets} />
     </div>
   );
 }

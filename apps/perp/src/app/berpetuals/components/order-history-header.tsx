@@ -32,7 +32,7 @@ export function OrderHistoryHeader({
   });
   return (
     <div>
-      <div className="flex w-full flex-col items-center justify-between border-y border-border bg-muted px-6 py-4 sm:flex-row">
+      <div className="sm: flex h-[70px] h-fit w-full flex-col items-center justify-between border-y border-border bg-muted px-6 py-4 sm:flex-row">
         <div className=" flex gap-10 text-foreground">
           {headers.map((header, index) => (
             <div
@@ -67,22 +67,44 @@ export function OrderHistoryHeader({
             </div>
           ))}
         </div>
-        <div className="mt-4 block w-full border-t border-border pt-4 sm:hidden" />
-        <Button
-          className="w-full cursor-pointer rounded-lg bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
-          disabled={isLoading}
-          onClick={() => {
-            write({
-              address: process.env
-                .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-              abi: TRADING_ABI,
-              functionName: "closeAllMarketTrades",
-              params: [],
-            });
-          }}
-        >
-          🌋 Market Close All
-        </Button>
+        {(tabType === "positions" || tabType === "orders") && (
+          <div className="mt-4 block w-full border-t border-border pt-4 sm:hidden" />
+        )}
+        {tabType === "positions" && (
+          <Button
+            className="h-full w-full cursor-pointer rounded-lg bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
+            disabled={isLoading}
+            onClick={() => {
+              write({
+                address: process.env
+                  .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+                abi: TRADING_ABI,
+                functionName: "closeAllMarketTrades",
+                params: [],
+              });
+            }}
+          >
+            🌋 Close All Positions
+          </Button>
+        )}
+
+        {tabType === "orders" && (
+          <Button
+            className="h-full w-full cursor-pointer rounded-lg bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
+            disabled={isLoading}
+            onClick={() => {
+              write({
+                address: process.env
+                  .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+                abi: TRADING_ABI,
+                functionName: "closeAllMarketTrades",
+                params: [],
+              });
+            }}
+          >
+            🌋 Close All Orders
+          </Button>
+        )}
       </div>
     </div>
   );

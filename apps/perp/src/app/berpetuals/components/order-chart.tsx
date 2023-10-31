@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+
 import {
   type ChartingLibraryWidgetOptions,
   type ResolutionString,
-} from "@/public/static/charting_library/charting_library";
+} from "../../../../public/static/charting_library/charting_library";
 
 const TVChartContainer = dynamic(
   () => import("./TVChartContainer").then((mod) => mod.TVChartContainer),

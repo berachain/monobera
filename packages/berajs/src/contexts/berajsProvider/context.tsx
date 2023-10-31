@@ -17,7 +17,7 @@ export interface IBeraJsAPI {
   isConnected: boolean;
   isWrongNetwork?: boolean;
   isReady?: boolean;
-  login: (connectorID: string) => Promise<void>;
+  login: (connectorID: string) => void;
   logout: (connectorID: string) => void;
   setError: (error: Error | undefined) => void;
 }

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useBeraJs } from "@bera/berajs";
 import { perpsEndpoints } from "@bera/config";
 import { type ClosedTrade } from "@bera/proto/src";
@@ -41,9 +42,23 @@ export const usePollTradingHistory = () => {
       };
     });
   };
+
+  const useRealizedPnl = () => {
+    const { data } = useSWRImmutable(QUERY_KEY);
+    return useMemo(() => {
+      return (
+        data?.reduce(
+          (acc: any, curr: IClosedTrade) => acc + Number(curr.pnl),
+          0,
+        ) ?? 0
+      );
+    }, [data]);
+  };
+
   return {
     isLoading,
     useOpenPositions,
     useMarketClosedPositions,
+    useRealizedPnl,
   };
 };

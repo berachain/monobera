@@ -1,18 +1,18 @@
 "use client";
 
 import React from "react";
-import { DataTable, SearchInput } from "@bera/shared-ui";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { DataTable } from "@bera/shared-ui";
 
-import { usePositions, type Position } from "~/hooks/usePositions";
-import { trading_history_column } from "./components/trading-history-column";
+import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
+import { history_columns } from "../berpetuals/components/columns";
+import type { IMarket } from "../berpetuals/page";
 
-export default function TradingHistory() {
-  const { generatepositionData } = usePositions();
-  const positions: Position[] = generatepositionData();
-  const [voterTypes, setVoterTypes] = React.useState<
-    "30D" | "60D" | "90D" | "6M" | "ALL TIME"
-  >("30D");
+export default function TradingHistory({ markets }: { markets: IMarket[] }) {
+  // const [voterTypes, setVoterTypes] = React.useState<
+  //   "30D" | "60D" | "90D" | "6M" | "ALL TIME"
+  // >("30D");
+  const { useMarketClosedPositions } = usePollTradingHistory();
+  const closedPositions = useMarketClosedPositions(markets);
   return (
     <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 ">
       <div className="flex w-full flex-col items-end justify-between gap-2 md:flex-row">
@@ -23,7 +23,7 @@ export default function TradingHistory() {
             Breakdown of your trading History
           </div>
         </div>
-        <Tabs defaultValue={voterTypes}>
+        {/* <Tabs defaultValue={voterTypes}>
           <TabsList>
             {["30D", "60D", "90D", "6M", "ALL TIME"].map((type) => (
               <TabsTrigger
@@ -39,16 +39,12 @@ export default function TradingHistory() {
               </TabsTrigger>
             ))}
           </TabsList>
-        </Tabs>
+        </Tabs> */}
       </div>
-      <SearchInput
-        placeholder="Filter by Pair, Position, Date or Order Type..."
-        className="w-full"
-      />
       <div className="w-full overflow-x-scroll">
         <DataTable
-          columns={trading_history_column}
-          data={positions ?? []}
+          columns={history_columns}
+          data={closedPositions ?? []}
           className="min-w-[1136px]"
         />
       </div>

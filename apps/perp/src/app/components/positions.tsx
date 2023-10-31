@@ -18,9 +18,9 @@ interface PositionProps extends IMarket {
 
 function Position({
   imageUri,
-  pairIndex = "0",
+  pair_index = "0",
   name,
-  openInterest,
+  open_interest,
   className,
   ...props
 }: PositionProps) {
@@ -39,7 +39,7 @@ function Position({
   }, []);
 
   const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(Number(pairIndex ?? 0));
+  const price = useMarketIndexPrice(Number(pair_index ?? 0));
   return (
     <figure
       className={clsx(
@@ -70,18 +70,18 @@ function Position({
         </div>
 
         <div className="mt-2 text-sm font-semibold leading-7 text-popover-foreground">
-          {openInterest &&
+          {open_interest &&
             formatter.format(
-              Number(formatUnits(BigInt(openInterest?.oiLong), 18)),
+              Number(formatUnits(BigInt(open_interest?.oi_long), 18)),
             )}
         </div>
         <div className="text-xs font-normal leading-3 text-muted-foreground">
           Open Interest (24H)
         </div>
         <div className="mt-2 text-sm font-semibold leading-7 text-popover-foreground">
-          {openInterest &&
+          {open_interest &&
             formatter.format(
-              Number(formatUnits(BigInt(openInterest?.oiShort), 18)),
+              Number(formatUnits(BigInt(open_interest?.oi_short), 18)),
             )}
         </div>
         <div className="text-xs font-normal leading-3 text-muted-foreground">

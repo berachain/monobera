@@ -9,13 +9,17 @@ export interface GlobalParams {
   group_name: string;
   max_leverage: string;
   min_leverage: string;
-  /** 1e18 */
+  /** % of current honey vault that can be used as collateral */
   max_collateral_p: string;
-  /** 1e18 */
-  max_pos_honey: string;
+  /** global maximum collateral possible (1e18) */
+  max_collateral_honey: string;
   honey_vault_fee_p: string;
   honey_sss_fee_p: string;
   current_epoch: string;
+  max_pending_market_orders: string;
+  /** # of blocks */
+  market_orders_timeout: string;
+  max_trades_per_pair: string;
 }
 
 export interface Market {
@@ -117,6 +121,8 @@ export interface OpenTrade {
   funding_rate: string;
   /** (1e18) */
   closing_fee: string;
+  /** (1e18) */
+  open_fee: string;
   timestamp_open: string;
 }
 
@@ -141,8 +147,11 @@ export interface ClosedTrade {
   trader: string;
   pair_index: string;
   index: string;
+  /** leveraged position size (1e18) */
   volume: string;
   pnl: string;
+  /** only nonzero if order was liquidated */
+  liquidation: string;
   close_price: string;
   open_price: string;
   leverage: string;
@@ -158,6 +167,7 @@ export interface ClosedTrade {
   borrowing_fee: string;
   vault_fee: string;
   staking_fee: string;
+  open_fee: string;
 }
 
 /** AccountFees is fees paid by the trader. */
@@ -213,10 +223,13 @@ function createBaseGlobalParams(): GlobalParams {
     max_leverage: "",
     min_leverage: "",
     max_collateral_p: "",
-    max_pos_honey: "",
+    max_collateral_honey: "",
     honey_vault_fee_p: "",
     honey_sss_fee_p: "",
     current_epoch: "",
+    max_pending_market_orders: "",
+    market_orders_timeout: "",
+    max_trades_per_pair: "",
   };
 }
 
@@ -240,8 +253,8 @@ export const GlobalParams = {
     if (message.max_collateral_p !== "") {
       writer.uint32(42).string(message.max_collateral_p);
     }
-    if (message.max_pos_honey !== "") {
-      writer.uint32(50).string(message.max_pos_honey);
+    if (message.max_collateral_honey !== "") {
+      writer.uint32(50).string(message.max_collateral_honey);
     }
     if (message.honey_vault_fee_p !== "") {
       writer.uint32(58).string(message.honey_vault_fee_p);
@@ -251,6 +264,15 @@ export const GlobalParams = {
     }
     if (message.current_epoch !== "") {
       writer.uint32(74).string(message.current_epoch);
+    }
+    if (message.max_pending_market_orders !== "") {
+      writer.uint32(82).string(message.max_pending_market_orders);
+    }
+    if (message.market_orders_timeout !== "") {
+      writer.uint32(90).string(message.market_orders_timeout);
+    }
+    if (message.max_trades_per_pair !== "") {
+      writer.uint32(98).string(message.max_trades_per_pair);
     }
     return writer;
   },
@@ -303,7 +325,7 @@ export const GlobalParams = {
             break;
           }
 
-          message.max_pos_honey = reader.string();
+          message.max_collateral_honey = reader.string();
           continue;
         case 7:
           if (tag !== 58) {
@@ -325,6 +347,27 @@ export const GlobalParams = {
           }
 
           message.current_epoch = reader.string();
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.max_pending_market_orders = reader.string();
+          continue;
+        case 11:
+          if (tag !== 90) {
+            break;
+          }
+
+          message.market_orders_timeout = reader.string();
+          continue;
+        case 12:
+          if (tag !== 98) {
+            break;
+          }
+
+          message.max_trades_per_pair = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -348,8 +391,8 @@ export const GlobalParams = {
       max_collateral_p: isSet(object.max_collateral_p)
         ? String(object.max_collateral_p)
         : "",
-      max_pos_honey: isSet(object.max_pos_honey)
-        ? String(object.max_pos_honey)
+      max_collateral_honey: isSet(object.max_collateral_honey)
+        ? String(object.max_collateral_honey)
         : "",
       honey_vault_fee_p: isSet(object.honey_vault_fee_p)
         ? String(object.honey_vault_fee_p)
@@ -359,6 +402,15 @@ export const GlobalParams = {
         : "",
       current_epoch: isSet(object.current_epoch)
         ? String(object.current_epoch)
+        : "",
+      max_pending_market_orders: isSet(object.max_pending_market_orders)
+        ? String(object.max_pending_market_orders)
+        : "",
+      market_orders_timeout: isSet(object.market_orders_timeout)
+        ? String(object.market_orders_timeout)
+        : "",
+      max_trades_per_pair: isSet(object.max_trades_per_pair)
+        ? String(object.max_trades_per_pair)
         : "",
     };
   },
@@ -380,8 +432,8 @@ export const GlobalParams = {
     if (message.max_collateral_p !== "") {
       obj.max_collateral_p = message.max_collateral_p;
     }
-    if (message.max_pos_honey !== "") {
-      obj.max_pos_honey = message.max_pos_honey;
+    if (message.max_collateral_honey !== "") {
+      obj.max_collateral_honey = message.max_collateral_honey;
     }
     if (message.honey_vault_fee_p !== "") {
       obj.honey_vault_fee_p = message.honey_vault_fee_p;
@@ -391,6 +443,15 @@ export const GlobalParams = {
     }
     if (message.current_epoch !== "") {
       obj.current_epoch = message.current_epoch;
+    }
+    if (message.max_pending_market_orders !== "") {
+      obj.max_pending_market_orders = message.max_pending_market_orders;
+    }
+    if (message.market_orders_timeout !== "") {
+      obj.market_orders_timeout = message.market_orders_timeout;
+    }
+    if (message.max_trades_per_pair !== "") {
+      obj.max_trades_per_pair = message.max_trades_per_pair;
     }
     return obj;
   },
@@ -409,10 +470,13 @@ export const GlobalParams = {
     message.max_leverage = object.max_leverage ?? "";
     message.min_leverage = object.min_leverage ?? "";
     message.max_collateral_p = object.max_collateral_p ?? "";
-    message.max_pos_honey = object.max_pos_honey ?? "";
+    message.max_collateral_honey = object.max_collateral_honey ?? "";
     message.honey_vault_fee_p = object.honey_vault_fee_p ?? "";
     message.honey_sss_fee_p = object.honey_sss_fee_p ?? "";
     message.current_epoch = object.current_epoch ?? "";
+    message.max_pending_market_orders = object.max_pending_market_orders ?? "";
+    message.market_orders_timeout = object.market_orders_timeout ?? "";
+    message.max_trades_per_pair = object.max_trades_per_pair ?? "";
     return message;
   },
 };
@@ -1550,6 +1614,7 @@ function createBaseOpenTrade(): OpenTrade {
     rollover_fee: "",
     funding_rate: "",
     closing_fee: "",
+    open_fee: "",
     timestamp_open: "",
   };
 }
@@ -1598,8 +1663,11 @@ export const OpenTrade = {
     if (message.closing_fee !== "") {
       writer.uint32(106).string(message.closing_fee);
     }
+    if (message.open_fee !== "") {
+      writer.uint32(114).string(message.open_fee);
+    }
     if (message.timestamp_open !== "") {
-      writer.uint32(114).string(message.timestamp_open);
+      writer.uint32(122).string(message.timestamp_open);
     }
     return writer;
   },
@@ -1708,6 +1776,13 @@ export const OpenTrade = {
             break;
           }
 
+          message.open_fee = reader.string();
+          continue;
+        case 15:
+          if (tag !== 122) {
+            break;
+          }
+
           message.timestamp_open = reader.string();
           continue;
       }
@@ -1742,6 +1817,7 @@ export const OpenTrade = {
         ? String(object.funding_rate)
         : "",
       closing_fee: isSet(object.closing_fee) ? String(object.closing_fee) : "",
+      open_fee: isSet(object.open_fee) ? String(object.open_fee) : "",
       timestamp_open: isSet(object.timestamp_open)
         ? String(object.timestamp_open)
         : "",
@@ -1789,6 +1865,9 @@ export const OpenTrade = {
     if (message.closing_fee !== "") {
       obj.closing_fee = message.closing_fee;
     }
+    if (message.open_fee !== "") {
+      obj.open_fee = message.open_fee;
+    }
     if (message.timestamp_open !== "") {
       obj.timestamp_open = message.timestamp_open;
     }
@@ -1815,6 +1894,7 @@ export const OpenTrade = {
     message.rollover_fee = object.rollover_fee ?? "";
     message.funding_rate = object.funding_rate ?? "";
     message.closing_fee = object.closing_fee ?? "";
+    message.open_fee = object.open_fee ?? "";
     message.timestamp_open = object.timestamp_open ?? "";
     return message;
   },
@@ -2064,6 +2144,7 @@ function createBaseClosedTrade(): ClosedTrade {
     index: "",
     volume: "",
     pnl: "",
+    liquidation: "",
     close_price: "",
     open_price: "",
     leverage: "",
@@ -2077,6 +2158,7 @@ function createBaseClosedTrade(): ClosedTrade {
     borrowing_fee: "",
     vault_fee: "",
     staking_fee: "",
+    open_fee: "",
   };
 }
 
@@ -2106,44 +2188,50 @@ export const ClosedTrade = {
     if (message.pnl !== "") {
       writer.uint32(58).string(message.pnl);
     }
+    if (message.liquidation !== "") {
+      writer.uint32(66).string(message.liquidation);
+    }
     if (message.close_price !== "") {
-      writer.uint32(66).string(message.close_price);
+      writer.uint32(74).string(message.close_price);
     }
     if (message.open_price !== "") {
-      writer.uint32(74).string(message.open_price);
+      writer.uint32(82).string(message.open_price);
     }
     if (message.leverage !== "") {
-      writer.uint32(82).string(message.leverage);
+      writer.uint32(90).string(message.leverage);
     }
     if (message.buy === true) {
-      writer.uint32(88).bool(message.buy);
+      writer.uint32(96).bool(message.buy);
     }
     if (message.tp !== "") {
-      writer.uint32(98).string(message.tp);
+      writer.uint32(106).string(message.tp);
     }
     if (message.sl !== "") {
-      writer.uint32(106).string(message.sl);
+      writer.uint32(114).string(message.sl);
     }
     if (message.close_type !== "") {
-      writer.uint32(114).string(message.close_type);
+      writer.uint32(122).string(message.close_type);
     }
     if (message.rollover_fee !== "") {
-      writer.uint32(122).string(message.rollover_fee);
+      writer.uint32(130).string(message.rollover_fee);
     }
     if (message.funding_rate !== "") {
-      writer.uint32(130).string(message.funding_rate);
+      writer.uint32(138).string(message.funding_rate);
     }
     if (message.closing_fee !== "") {
-      writer.uint32(138).string(message.closing_fee);
+      writer.uint32(146).string(message.closing_fee);
     }
     if (message.borrowing_fee !== "") {
-      writer.uint32(146).string(message.borrowing_fee);
+      writer.uint32(154).string(message.borrowing_fee);
     }
     if (message.vault_fee !== "") {
-      writer.uint32(154).string(message.vault_fee);
+      writer.uint32(162).string(message.vault_fee);
     }
     if (message.staking_fee !== "") {
-      writer.uint32(162).string(message.staking_fee);
+      writer.uint32(170).string(message.staking_fee);
+    }
+    if (message.open_fee !== "") {
+      writer.uint32(178).string(message.open_fee);
     }
     return writer;
   },
@@ -2210,91 +2298,105 @@ export const ClosedTrade = {
             break;
           }
 
-          message.close_price = reader.string();
+          message.liquidation = reader.string();
           continue;
         case 9:
           if (tag !== 74) {
             break;
           }
 
-          message.open_price = reader.string();
+          message.close_price = reader.string();
           continue;
         case 10:
           if (tag !== 82) {
             break;
           }
 
-          message.leverage = reader.string();
+          message.open_price = reader.string();
           continue;
         case 11:
-          if (tag !== 88) {
+          if (tag !== 90) {
+            break;
+          }
+
+          message.leverage = reader.string();
+          continue;
+        case 12:
+          if (tag !== 96) {
             break;
           }
 
           message.buy = reader.bool();
-          continue;
-        case 12:
-          if (tag !== 98) {
-            break;
-          }
-
-          message.tp = reader.string();
           continue;
         case 13:
           if (tag !== 106) {
             break;
           }
 
-          message.sl = reader.string();
+          message.tp = reader.string();
           continue;
         case 14:
           if (tag !== 114) {
             break;
           }
 
-          message.close_type = reader.string();
+          message.sl = reader.string();
           continue;
         case 15:
           if (tag !== 122) {
             break;
           }
 
-          message.rollover_fee = reader.string();
+          message.close_type = reader.string();
           continue;
         case 16:
           if (tag !== 130) {
             break;
           }
 
-          message.funding_rate = reader.string();
+          message.rollover_fee = reader.string();
           continue;
         case 17:
           if (tag !== 138) {
             break;
           }
 
-          message.closing_fee = reader.string();
+          message.funding_rate = reader.string();
           continue;
         case 18:
           if (tag !== 146) {
             break;
           }
 
-          message.borrowing_fee = reader.string();
+          message.closing_fee = reader.string();
           continue;
         case 19:
           if (tag !== 154) {
             break;
           }
 
-          message.vault_fee = reader.string();
+          message.borrowing_fee = reader.string();
           continue;
         case 20:
           if (tag !== 162) {
             break;
           }
 
+          message.vault_fee = reader.string();
+          continue;
+        case 21:
+          if (tag !== 170) {
+            break;
+          }
+
           message.staking_fee = reader.string();
+          continue;
+        case 22:
+          if (tag !== 178) {
+            break;
+          }
+
+          message.open_fee = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -2314,6 +2416,7 @@ export const ClosedTrade = {
       index: isSet(object.index) ? String(object.index) : "",
       volume: isSet(object.volume) ? String(object.volume) : "",
       pnl: isSet(object.pnl) ? String(object.pnl) : "",
+      liquidation: isSet(object.liquidation) ? String(object.liquidation) : "",
       close_price: isSet(object.close_price) ? String(object.close_price) : "",
       open_price: isSet(object.open_price) ? String(object.open_price) : "",
       leverage: isSet(object.leverage) ? String(object.leverage) : "",
@@ -2333,6 +2436,7 @@ export const ClosedTrade = {
         : "",
       vault_fee: isSet(object.vault_fee) ? String(object.vault_fee) : "",
       staking_fee: isSet(object.staking_fee) ? String(object.staking_fee) : "",
+      open_fee: isSet(object.open_fee) ? String(object.open_fee) : "",
     };
   },
 
@@ -2358,6 +2462,9 @@ export const ClosedTrade = {
     }
     if (message.pnl !== "") {
       obj.pnl = message.pnl;
+    }
+    if (message.liquidation !== "") {
+      obj.liquidation = message.liquidation;
     }
     if (message.close_price !== "") {
       obj.close_price = message.close_price;
@@ -2398,6 +2505,9 @@ export const ClosedTrade = {
     if (message.staking_fee !== "") {
       obj.staking_fee = message.staking_fee;
     }
+    if (message.open_fee !== "") {
+      obj.open_fee = message.open_fee;
+    }
     return obj;
   },
 
@@ -2415,6 +2525,7 @@ export const ClosedTrade = {
     message.index = object.index ?? "";
     message.volume = object.volume ?? "";
     message.pnl = object.pnl ?? "";
+    message.liquidation = object.liquidation ?? "";
     message.close_price = object.close_price ?? "";
     message.open_price = object.open_price ?? "";
     message.leverage = object.leverage ?? "";
@@ -2428,6 +2539,7 @@ export const ClosedTrade = {
     message.borrowing_fee = object.borrowing_fee ?? "";
     message.vault_fee = object.vault_fee ?? "";
     message.staking_fee = object.staking_fee ?? "";
+    message.open_fee = object.open_fee ?? "";
     return message;
   },
 };

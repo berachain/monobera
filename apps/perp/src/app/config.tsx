@@ -48,8 +48,8 @@ export const navItems = [
     title: "Vault",
   },
   {
-    href: "/history",
-    title: "History",
+    href: "/leaderboard",
+    title: "Leaderboard",
   },
 
   {

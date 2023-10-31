@@ -28,10 +28,13 @@ export function UpdateLimitOrderModal({
   openOrder: ILimitOrder;
   className?: string;
 }) {
-  console.log("openOrder", openOrder);
   const [open, setOpen] = useState<boolean>(false);
-  const [tp, setTp] = useState<number>(Number(openOrder?.tp ?? 0));
-  const [sl, setSl] = useState<number>(Number(openOrder?.sl ?? 0));
+  const [tp, setTp] = useState<number>(
+    Number(formatUnits(BigInt(openOrder?.tp) ?? 0, 10)),
+  );
+  const [sl, setSl] = useState<number>(
+    Number(formatUnits(BigInt(openOrder?.sl) ?? 0, 10)),
+  );
   const { QUERY_KEY } = usePollOpenPositions();
 
   const formattedCurrentPrice = Number(
@@ -53,6 +56,7 @@ export function UpdateLimitOrderModal({
     message: `Updating Open Limit Order`,
     onSuccess: () => {
       void mutate(QUERY_KEY);
+      setOpen(false);
     },
   });
 
@@ -76,10 +80,11 @@ export function UpdateLimitOrderModal({
     parseUnits(`${sl}`, 10),
   ];
 
-  console.log("payload", payload);
   return (
     <div className={className}>
-      <div onClick={() => setOpen(true)}>{trigger}</div>
+      <div onClick={() => setOpen(true)} className="h-full w-full">
+        {trigger}
+      </div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-fit">
           <div className="text-lg font-semibold leading-7">
@@ -160,7 +165,7 @@ export function UpdateLimitOrderModal({
             leverage={Number(openOrder?.leverage) ?? 2}
             tp={tp}
             sl={sl}
-            formattedPrice={formattedCurrentPrice}
+            formattedPrice={executionPrice}
             liqPrice={liqPrice}
             long={openOrder?.buy === true}
             tpslOnChange={(value) => {

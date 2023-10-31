@@ -25,8 +25,10 @@ interface ICreatePosition {
 
 export default function CreatePosition({ market, params }: ICreatePosition) {
   const [givenHoney, setGivenHoney] = useState<boolean>(true);
-  const [form, setForm] = useState<OrderType>({
-    assets: "BTC",
+
+  const asset = market.name.split("-")[0] as string;
+  const initialState: OrderType = {
+    assets: asset,
     orderType: "long",
     optionType: "market",
     limitPrice: undefined,
@@ -36,7 +38,8 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
     leverage: 2,
     tp: 0,
     sl: 0,
-  });
+  };
+  const [form, setForm] = useState<OrderType>(initialState);
 
   const { useMarketIndexPrice } = usePricesSocket();
   const rawPrice = useMarketIndexPrice(Number(market.pair_index) ?? 0);
@@ -48,7 +51,7 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
 
   const maxLeverage = Number(params.max_leverage ?? 0);
   const formattedMaxCollateral = Number(
-    formatUnits(BigInt(params.max_pos_honey ?? 0), 18),
+    formatUnits(BigInt(params.max_collateral_honey ?? 0), 18),
   );
 
   useMemo(() => {

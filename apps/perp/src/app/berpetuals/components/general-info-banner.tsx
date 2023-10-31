@@ -14,7 +14,6 @@ interface IGeneralInfoBanner {
 }
 export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
   const { useMarketIndexPrice } = usePricesSocket();
-  // const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
   const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
 
   useEffect(() => {
@@ -94,12 +93,12 @@ export function GeneralInfoBanner({ market }: IGeneralInfoBanner) {
         ))}
       </div>
       <div className="flex flex-shrink-0 text-[10px] text-muted-foreground">
-        <div className="flex h-8 cursor-pointer items-center border-r border-border p-3 hover:underline">
+        <div className="flex h-8 cursor-pointer items-center p-3 hover:underline">
           Market Details
         </div>
-        <div className="flex h-8 cursor-pointer items-center p-3 hover:underline">
+        {/* <div className="flex h-8 cursor-pointer items-center p-3 hover:underline">
           Berpetuals Tutorial
-        </div>
+        </div> */}
       </div>
     </div>
   );

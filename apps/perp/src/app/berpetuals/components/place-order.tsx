@@ -19,7 +19,6 @@ import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
@@ -48,7 +47,8 @@ export function PlaceOrder({
   pairIndex: number;
 }) {
   const formattedPrice = Number(formatUnits(BigInt(price ?? 0n), 10));
-  const { QUERY_KEY } = usePollOpenPositions();
+  const { refetch } = usePollOpenPositions();
+
   const { isLoading, write, ModalPortal } = useOctTxn({
     message:
       form.optionType === "market"
@@ -59,7 +59,7 @@ export function PlaceOrder({
         ? `Placing Limit Long Order ${form.assets}`
         : `Placing Limit Short Order ${form.assets}`,
     onSuccess: () => {
-      void mutate(QUERY_KEY);
+      refetch();
     },
   });
 
@@ -70,13 +70,16 @@ export function PlaceOrder({
 
   const tradingContract = process.env
     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address;
+
+  const storageContract = process.env
+    .NEXT_PUBLIC_STORAGE_CONTRACT_ADDRESS as Address;
   const posSize = useMemo(() => {
     const positionSize = (form.amount ?? 0) * (form.leverage ?? 1);
     return Number.isNaN(positionSize) || positionSize === undefined
       ? 0
       : positionSize;
   }, [form.amount, form.leverage]);
-  const parsedPositionSize = parseUnits(`${posSize ?? 0}`, 18);
+  const parsedPositionSize = parseUnits(`${form.amount ?? 0}`, 18);
 
   const [slippageMode] = useLocalStorage<SLIPPAGE_MODE>(
     SLIPPAGE_TOLERANCE_TYPE,
@@ -110,15 +113,14 @@ export function PlaceOrder({
       positionSizeDai: parsedPositionSize, // position size
       openPrice:
         form.optionType === "market"
-          ? price ?? 0
+          ? BigInt(price ?? 0)
           : parseUnits(`${form.limitPrice ?? 0}`, 10), // for limit orders
       buy: form.orderType === "long" ? true : false,
       leverage: form.leverage,
-      tp: form.tp === 0 ? 0 : parseUnits(`${form.tp ?? 0}`, 10),
-      sl: form.sl === 0 ? 0 : parseUnits(`${form.sl ?? 0}`, 10),
+      tp: form.tp === 0 ? 0n : parseUnits(`${form.tp ?? 0}`, 10),
+      sl: form.sl === 0 ? 0n : parseUnits(`${form.sl ?? 0}`, 10),
     },
     form.optionType === "market" ? 0 : 2,
-    0,
     parseUnits(`${slippageTolerance ?? 0}`, 10),
   ];
 
@@ -132,7 +134,7 @@ export function PlaceOrder({
   };
 
   const { useAllowance } = usePollAllowance({
-    contract: tradingContract,
+    contract: storageContract,
     token: honey,
   });
 
@@ -243,7 +245,7 @@ export function PlaceOrder({
                 ? "bg-success text-success-foreground"
                 : "bg-destructive text-destructive-foreground",
             )}
-            disabled={isLoading || error !== undefined}
+            disabled={isLoading || error !== undefined || form.amount === 0}
             onClick={() =>
               write({
                 address: tradingContract,

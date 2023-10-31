@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { formatUsd } from "@bera/berajs";
+import { ActionButton } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
@@ -252,14 +253,16 @@ export function TPSL({
         variant="success"
       />
       {isUpdate && (
-        <Button
-          disabled={isTpSubmitLoading}
-          onClick={() => onTpChangeSubmit && onTpChangeSubmit()}
-          className="mt-4 w-full"
-          size="sm"
-        >
-          Update Take Profit
-        </Button>
+        <ActionButton>
+          <Button
+            disabled={isTpSubmitLoading}
+            onClick={() => onTpChangeSubmit && onTpChangeSubmit()}
+            className="mt-4 w-full"
+            size="sm"
+          >
+            Update Take Profit
+          </Button>
+        </ActionButton>
       )}
       <div className="mb-2 mt-4 text-xs font-medium">
         Stop Loss{" "}
@@ -282,14 +285,16 @@ export function TPSL({
         variant="destructive"
       />
       {isUpdate && (
-        <Button
-          disabled={isSlSubmitLoading}
-          onClick={() => onSlChangeSubmit && onSlChangeSubmit()}
-          className="mt-4 w-full"
-          size="sm"
-        >
-          Update Stop Loss
-        </Button>
+        <ActionButton>
+          <Button
+            disabled={isSlSubmitLoading}
+            onClick={() => onSlChangeSubmit && onSlChangeSubmit()}
+            className="mt-4 w-full"
+            size="sm"
+          >
+            Update Stop Loss
+          </Button>
+        </ActionButton>
       )}
     </div>
   );

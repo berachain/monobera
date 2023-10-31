@@ -25,6 +25,7 @@ export const usePollBHoneyPendingWithdraw = () => {
             functionName: "totalSharesBeingWithdrawn",
             args: [account as Address],
           });
+
           return result;
         } catch (e) {
           console.error(e);
@@ -51,6 +52,7 @@ export const usePollBHoneyPendingWithdraw = () => {
   const useBHoneyEligibleWithdraw = () => {
     const bHoneyBalance = useBHoneyBalance();
     const { data = 0 } = useSWRImmutable(QUERY_KEY);
+    console.log("useBHoneyEligibleWithdraw", bHoneyBalance, data);
     return useMemo(() => {
       return Number(formatUnits(BigInt(bHoneyBalance) - BigInt(data), 18));
     }, [bHoneyBalance, data]);

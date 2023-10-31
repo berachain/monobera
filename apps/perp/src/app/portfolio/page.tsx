@@ -1,28 +1,20 @@
-"use client";
-
 import React from "react";
-import { useBeraJs } from "@/../../packages/berajs/dist";
-import { ConnectWalletBear } from "@bera/shared-ui";
+import type { Market } from "@bera/proto/src";
 
-import LoadingPortfolio from "./[address]/loading";
-import { PortfolioHome } from "./components/portfolio";
+import { MarketImages } from "~/utils/marketImages";
+import { MarketTokenNames } from "~/utils/marketTokenNames";
+import { getMarkets } from "~/endpoints";
+import type { IMarket } from "../berpetuals/page";
+import Home from "./portfolio-home";
 
-export default function Home() {
-  const { account } = useBeraJs();
-
-  const [isMounted, setIsMounted] = React.useState(false);
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  return (
-    <>
-      {!isMounted && <LoadingPortfolio />}
-      {isMounted && !account && (
-        <ConnectWalletBear message="Connect Wallet to view portfolio" />
-      )}
-      {isMounted && account && <PortfolioHome />}
-    </>
-  );
+export default async function Page() {
+  const m = await getMarkets();
+  const markets: IMarket[] = m?.map((m: Market) => ({
+    ...m,
+    imageUri: MarketImages[m.name],
+    tokenName: MarketTokenNames[m.name],
+  })) as IMarket[];
+  return <Home markets={markets} />;
 }
 
 // BELOW IS A SSR THINGY

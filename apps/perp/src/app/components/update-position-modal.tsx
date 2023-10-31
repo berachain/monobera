@@ -28,8 +28,12 @@ export function UpdatePositionModal({
   className?: string;
 }) {
   const [open, setOpen] = useState<boolean>(false);
-  const [tp, setTp] = useState<number>(Number(openPosition?.tp ?? 0));
-  const [sl, setSl] = useState<number>(Number(openPosition?.sl ?? 0));
+  const [tp, setTp] = useState<number>(
+    Number(formatUnits(BigInt(openPosition?.tp) ?? 0n, 10)),
+  );
+  const [sl, setSl] = useState<number>(
+    Number(formatUnits(BigInt(openPosition?.sl) ?? 0n, 10)),
+  );
   const { QUERY_KEY } = usePollOpenPositions();
 
   const { useMarketIndexPrice } = usePricesSocket();
@@ -89,7 +93,9 @@ export function UpdatePositionModal({
 
   return (
     <div className={className}>
-      <div onClick={() => setOpen(true)}>{trigger}</div>
+      <div onClick={() => setOpen(true)} className="h-full w-full">
+        {trigger}
+      </div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-fit">
           <div className="text-lg font-semibold leading-7">Update Position</div>
@@ -138,7 +144,7 @@ export function UpdatePositionModal({
                 <div className="text-right  text-[10px] leading-[10px] text-muted-foreground">
                   Liquidation Price
                 </div>
-                <div className=" text-sm font-semibold leading-5 text-destructive-foreground">
+                <div className="text-right text-sm font-semibold leading-5 text-destructive-foreground">
                   {formatUsd(liqPrice ?? 0)}
                 </div>
               </div>
@@ -146,7 +152,7 @@ export function UpdatePositionModal({
                 <div className="text-right text-[10px] leading-[10px] text-muted-foreground">
                   Executed at
                 </div>
-                <div className=" text-sm font-semibold leading-5 text-foreground">
+                <div className=" text-right  text-sm font-semibold leading-5 text-foreground">
                   {formatBigIntUsd(openPosition?.open_price ?? 0, 10)}
                 </div>
               </div>

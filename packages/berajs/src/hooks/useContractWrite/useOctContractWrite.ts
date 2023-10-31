@@ -2,10 +2,12 @@
 
 import { useCallback, useReducer } from "react";
 import { Contract, JsonRpcProvider, Wallet } from "ethers";
+import { encodeFunctionData } from "viem";
 import { usePublicClient, useWalletClient } from "wagmi";
 import { prepareWriteContract } from "wagmi/actions";
 
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
+import { TRADING_ABI } from "~/config";
 import { useBeraConfig, useBeraJs } from "~/contexts";
 import { useOct } from "../useOct";
 import { TransactionFailedError } from "./error";
@@ -42,7 +44,7 @@ const useOctContractWrite = ({
       let hash: any | undefined;
       try {
         if (!isOctReady) {
-          const { request } = await prepareWriteContract({
+          const { request: _request } = await prepareWriteContract({
             address: address,
             abi: abi,
             functionName: functionName,
@@ -65,10 +67,17 @@ const useOctContractWrite = ({
 
           const ethersWallet = new Wallet(octPrivKey, provider);
 
-          const contract = new Contract(address, abi, ethersWallet);
+          const contract = new Contract(address, TRADING_ABI, ethersWallet);
 
+          const data = encodeFunctionData({
+            abi: abi,
+            functionName: functionName,
+            args: params,
+          });
+
+          const payload = [account, data];
           // @ts-ignore
-          const transaction = await contract[functionName](...params);
+          const transaction = await contract["delegatedAction"](...payload);
           const txResponse = await transaction.wait();
           hash = txResponse.hash;
         }

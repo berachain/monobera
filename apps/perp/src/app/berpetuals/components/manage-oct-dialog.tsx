@@ -227,7 +227,7 @@ export function ManageOctDialog({
               Grant your connected wallet permission to interact with trading
               contracts through the One-Click-Trading wallet.
             </p>
-            <ActionButton className="mt-4 w-full">
+            <ActionButton className=" w-full">
               <Button
                 className="w-full"
                 disabled={isLoading}

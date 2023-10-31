@@ -1,9 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "viem";
-import { usePublicClient } from "wagmi";
 
-import { BTOKEN_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { usePollBHoneySupply } from "./usePollBHoneySupply";
 import { usePollHoneyVaultBalance } from "./usePollHoneyVaultBalance";
@@ -18,7 +15,7 @@ export const usePollBHoneyCollateralization = () => {
   const QUERY_KEY = [method, honeyLocked, bHoneySupply];
   const { isLoading } = useSWR(
     QUERY_KEY,
-    async () => {
+    () => {
       try {
         console.log("honeyLocked", honeyLocked);
         console.log("bHoneySupply", bHoneySupply);

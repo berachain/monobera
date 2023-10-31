@@ -41,7 +41,6 @@ export function OrderHistoryTable({
     });
   }, [openPositons, openOrders, history]);
 
-  console.log(openOrders);
   return (
     <div className="relative w-full overflow-x-auto">
       {tab === "positions" && (
@@ -68,7 +67,7 @@ export function OrderHistoryTable({
       {tab === "pnl" && (
         <DataTable
           columns={pnl_columns}
-          data={[]}
+          data={history ?? []}
           className="hidden w-full min-w-[1200px] sm:block"
         />
       )}

@@ -7,11 +7,6 @@ export const TRADING_ABI = [
         type: "address",
       },
       {
-        internalType: "contract NftRewardsInterfaceV6_3_1",
-        name: "_nftRewards",
-        type: "address",
-      },
-      {
         internalType: "contract GNSPairInfosInterfaceV6",
         name: "_pairInfos",
         type: "address",
@@ -19,11 +14,6 @@ export const TRADING_ABI = [
       {
         internalType: "contract GNSBorrowingFeesInterfaceV6_3_2",
         name: "_borrowingFees",
-        type: "address",
-      },
-      {
-        internalType: "contract PairsStorageInterfaceV6",
-        name: "_pairsStorage",
         type: "address",
       },
       {
@@ -82,127 +72,6 @@ export const TRADING_ABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "uint256",
-        name: "orderId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "trader",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "pairIndex",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "open",
-        type: "bool",
-      },
-      {
-        components: [
-          {
-            components: [
-              {
-                internalType: "address",
-                name: "trader",
-                type: "address",
-              },
-              {
-                internalType: "uint256",
-                name: "pairIndex",
-                type: "uint256",
-              },
-              {
-                internalType: "uint256",
-                name: "index",
-                type: "uint256",
-              },
-              {
-                internalType: "uint256",
-                name: "initialPosToken",
-                type: "uint256",
-              },
-              {
-                internalType: "uint256",
-                name: "positionSizeDai",
-                type: "uint256",
-              },
-              {
-                internalType: "uint256",
-                name: "openPrice",
-                type: "uint256",
-              },
-              {
-                internalType: "bool",
-                name: "buy",
-                type: "bool",
-              },
-              {
-                internalType: "uint256",
-                name: "leverage",
-                type: "uint256",
-              },
-              {
-                internalType: "uint256",
-                name: "tp",
-                type: "uint256",
-              },
-              {
-                internalType: "uint256",
-                name: "sl",
-                type: "uint256",
-              },
-            ],
-            internalType: "struct StorageInterfaceV5.Trade",
-            name: "trade",
-            type: "tuple",
-          },
-          {
-            internalType: "uint256",
-            name: "block",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "wantedPrice",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "slippageP",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "spreadReductionP",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-        ],
-        indexed: false,
-        internalType: "struct StorageInterfaceV5.PendingMarketOrder",
-        name: "order",
-        type: "tuple",
-      },
-    ],
-    name: "MarketOrderInitiated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: false,
         internalType: "address",
         name: "sender",
@@ -216,62 +85,6 @@ export const TRADING_ABI = [
       },
     ],
     name: "NewDelegation",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "orderId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "nftHolder",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "trader",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "pairIndex",
-        type: "uint256",
-      },
-    ],
-    name: "NftOrderInitiated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "nftHolder",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "trader",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "pairIndex",
-        type: "uint256",
-      },
-    ],
-    name: "NftOrderSameBlock",
     type: "event",
   },
   {
@@ -401,11 +214,6 @@ export const TRADING_ABI = [
             name: "block",
             type: "uint256",
           },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
         ],
         indexed: false,
         internalType: "struct StorageInterfaceV5.OpenLimitOrder",
@@ -517,11 +325,6 @@ export const TRADING_ABI = [
             name: "block",
             type: "uint256",
           },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
         ],
         indexed: false,
         internalType: "struct StorageInterfaceV5.OpenLimitOrder",
@@ -543,43 +346,6 @@ export const TRADING_ABI = [
       },
     ],
     name: "Paused",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "orderId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "trader",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "pairIndex",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "newSl",
-        type: "uint256",
-      },
-    ],
-    name: "SlUpdateInitiated",
     type: "event",
   },
   {
@@ -689,8 +455,26 @@ export const TRADING_ABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "closeAllMarketTrades",
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "pairIndex",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct GNSTradingV6_3_2.TradeOrOrder[]",
+        name: "orders",
+        type: "tuple[]",
+      },
+    ],
+    name: "cancelOpenLimitOrders",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -716,12 +500,24 @@ export const TRADING_ABI = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "_order",
-        type: "uint256",
+        components: [
+          {
+            internalType: "uint256",
+            name: "pairIndex",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "index",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct GNSTradingV6_3_2.TradeOrOrder[]",
+        name: "trades",
+        type: "tuple[]",
       },
     ],
-    name: "closeTradeMarketTimeout",
+    name: "closeTradesMarket",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -798,16 +594,6 @@ export const TRADING_ABI = [
         name: "index",
         type: "uint256",
       },
-      {
-        internalType: "uint256",
-        name: "nftId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "nftType",
-        type: "uint256",
-      },
     ],
     name: "executeNftOrder",
     outputs: [],
@@ -867,13 +653,29 @@ export const TRADING_ABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "nftRewards",
-    outputs: [
+    inputs: [
       {
-        internalType: "contract NftRewardsInterfaceV6_3_1",
+        internalType: "address",
         name: "",
         type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "openLimitOrderTypes",
+    outputs: [
+      {
+        internalType: "enum GNSTradingV6_3_2.OpenLimitOrderType",
+        name: "",
+        type: "uint8",
       },
     ],
     stateMutability: "view",
@@ -939,14 +741,9 @@ export const TRADING_ABI = [
         type: "tuple",
       },
       {
-        internalType: "enum NftRewardsInterfaceV6_3_1.OpenLimitOrderType",
+        internalType: "enum GNSTradingV6_3_2.OpenLimitOrderType",
         name: "orderType",
         type: "uint8",
-      },
-      {
-        internalType: "uint256",
-        name: "spreadReductionId",
-        type: "uint256",
       },
       {
         internalType: "uint256",
@@ -960,37 +757,11 @@ export const TRADING_ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_order",
-        type: "uint256",
-      },
-    ],
-    name: "openTradeMarketTimeout",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "pairInfos",
     outputs: [
       {
         internalType: "contract GNSPairInfosInterfaceV6",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "pairsStorage",
-    outputs: [
-      {
-        internalType: "contract PairsStorageInterfaceV6",
         name: "",
         type: "address",
       },

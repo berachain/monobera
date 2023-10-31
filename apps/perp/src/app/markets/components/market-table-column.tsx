@@ -20,7 +20,7 @@ export const market_table_column: ColumnDef<IMarket>[] = [
     ),
     cell: ({ row }) => (
       <div className="w-[150px]">
-        <PositionTitle market={row.original} />
+        <PositionTitle market={row.original} type={"Long"} />
       </div>
     ),
     accessorKey: "market",

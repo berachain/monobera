@@ -65,7 +65,9 @@ export function CloseOrderModal({
 
   return (
     <div className={className}>
-      <div onClick={() => !disabled && setOpen(true)}>{trigger}</div>
+      <div onClick={() => !disabled && setOpen(true)} className="h-full w-full">
+        {trigger}
+      </div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-fit">
           <div className="text-lg font-semibold leading-7">
@@ -130,7 +132,7 @@ export function CloseOrderModal({
               <div className="text-sm text-success-foreground">
                 {Number(openOrder?.tp) === 0
                   ? "None"
-                  : formatUsd(openOrder?.tp ?? 0)}
+                  : formatBigIntUsd(openOrder?.tp ?? 0, 10)}
               </div>
             </div>
             <div className="flex w-full flex-row justify-between">
@@ -138,12 +140,13 @@ export function CloseOrderModal({
               <div className="text-sm text-destructive-foreground">
                 {Number(openOrder?.sl) === 0
                   ? "None"
-                  : formatUsd(openOrder?.sl ?? 0)}
+                  : formatBigIntUsd(openOrder?.sl ?? 0, 10)}
               </div>
             </div>
           </div>
           <ActionButton>
             <Button
+              className="w-full"
               disabled={isLoading}
               onClick={() => {
                 write({
