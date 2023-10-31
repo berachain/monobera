@@ -2,7 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import { cloudinaryUrl } from "@bera/config";
+import Link from "next/link";
+import { cloudinaryUrl, dexUrl } from "@bera/config";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
@@ -13,7 +14,7 @@ import { TokenBadge } from "~/components/token-badge";
 export default function Content() {
   const [address, setAddress] = React.useState<string>("");
   const [alert, setAlert] = React.useState<
-    "success" | "destructive" | undefined
+    "success" | "destructive" | "error" | undefined
   >(undefined);
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
@@ -49,6 +50,26 @@ export default function Content() {
           />
         </div>
       </div>
+      {alert === "success" && (
+        <Alert variant={"success"}>
+          <AlertTitle>
+            <Icons.checkCircle className="inline-block h-4 w-4" /> Request
+            Submitted
+          </AlertTitle>
+          <AlertDescription>
+            You’ll receive the testnet tokens in your wallet in about 2 minutes.
+            Use your bera to acquire a basket of other tokens from our{" "}
+            <Link
+              href={dexUrl}
+              target="_blank"
+              className="cursor-pointer underline"
+            >
+              DEX
+            </Link>
+            .
+          </AlertDescription>
+        </Alert>
+      )}
       {alert === "destructive" && (
         <Alert variant={"destructive"}>
           <AlertTitle>
@@ -62,14 +83,14 @@ export default function Content() {
           </AlertDescription>
         </Alert>
       )}
-      {alert === "success" && (
-        <Alert variant={"success"}>
+      {alert === "error" && (
+        <Alert variant={"destructive"}>
           <AlertTitle>
-            <Icons.checkCircle className="inline-block h-4 w-4" /> Request
-            Submitted
+            {" "}
+            <Icons.XOctagon className="inline-block h-4 w-4" /> Oh no!
           </AlertTitle>
           <AlertDescription>
-            You’ll receive the testnet tokens in your wallet in about 2 minutes.
+            Somthings went wrong, please try again later.
           </AlertDescription>
         </Alert>
       )}
