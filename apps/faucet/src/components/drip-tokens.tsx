@@ -2,7 +2,13 @@ import { faucetUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { getAddress, isAddress } from "viem";
 
-export function DripToken({ address }: { address: string }) {
+export function DripToken({
+  address,
+  setAlert,
+}: {
+  address: string;
+  setAlert: (alert: "success" | "destructive" | undefined) => void;
+}) {
   async function handleRequest() {
     // if (address.endsWith(".eth")) {
     //   try {
@@ -26,10 +32,12 @@ export function DripToken({ address }: { address: string }) {
         body: JSON.stringify({ address: getAddress(address) }),
       });
       // const res = await fetch(`${faucetUrl}/api/info`);
-      const result = await res.json();
-      const type = res.ok ? "is-success" : "is-warning";
-      console.log(result, type);
+      // const result = await res.json();
+      // const type = res.ok ? "is-success" : "is-warning";
+      res.ok ? setAlert("success") : setAlert("destructive");
+      // setAlert("success")
     } catch (error: any) {
+      // setAlert("destructive")
       console.log(error, error.message);
     }
   }
