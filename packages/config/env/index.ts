@@ -11,7 +11,8 @@ export const blockExplorerUrl = process.env
 export const blockExplorerName = process.env
   .NEXT_PUBLIC_BLOCK_EXPLORER_NAME as string;
 export const lendEndpointUrl = process.env.NEXT_PUBLIC_LEND_ENDPOINT as string;
-export const faucetEndpointUrl = process.env.NEXT_PUBLIC_FAUCET_ENDPOINT as string;
+export const faucetEndpointUrl = process.env
+  .NEXT_PUBLIC_FAUCET_ENDPOINT as string;
 
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;

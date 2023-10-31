@@ -8,6 +8,8 @@ import {
   blockExplorerUrl,
   chainId,
   chainName,
+  dexName,
+  dexUrl,
   epochsAddress,
   erc20BgtAddress,
   erc20DexAddress,
@@ -30,8 +32,6 @@ import {
   perpsUrl,
   rewardsAddress,
   stakingAddress,
-  dexUrl,
-  dexName,
 } from "@bera/config";
 import { type Chain } from "wagmi";
 
