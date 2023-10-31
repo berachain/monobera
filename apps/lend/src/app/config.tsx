@@ -4,8 +4,8 @@ import { type Chain } from "wagmi";
 import {
   bankAddress,
   berachefAddress,
-  bgtDappName,
-  bgtDappUrl,
+  bgtName,
+  bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
   chainId,
@@ -18,16 +18,21 @@ import {
   gasTokenName,
   gasTokenSymbol,
   governanceAddress,
-  homePageUrl,
+  homepageName,
+  homepageUrl,
   honeyAddress,
-  honeyDappName,
-  honeyDappUrl,
+  honeyName,
+  honeyUrl,
   jsonRpcUrl,
+  lendName,
+  lendUrl,
   multicallAddress,
   networkName,
+  perpsName,
+  perpsUrl,
   rewardsAddress,
   stakingAddress,
-} from "../config";
+} from "@bera/config";
 
 export const navItems = [
   {
@@ -43,24 +48,43 @@ export const navItems = [
     title: "More",
     children: [
       {
-        href: homePageUrl,
-        title: "Berachain Foundation",
-        blurb: "The homepage of the chain",
+        href: homepageUrl,
+        type: "external",
+        title: homepageName,
+        blurb: "Explore Berachain and learn more about our vision",
       },
       {
-        href: honeyDappUrl,
-        title: honeyDappName,
-        blurb: "Mint or redeem the stablecoin of the Berachain",
+        href: honeyUrl,
+        type: "external",
+        title: honeyName,
+        blurb: "Mint or redeem Honey, the stablecoin of Berachain",
       },
       {
-        href: bgtDappUrl,
-        title: bgtDappName,
-        blurb: "The hub for the governance token of Berachain, BGT",
+        href: bgtUrl,
+        type: "external",
+        title: bgtName,
+        blurb: "The hub for BGT governance and bribes on Berachain ",
       },
       {
         href: blockExplorerUrl,
+        type: "external",
         title: blockExplorerName,
-        blurb: "View all transactions in the Berachain network",
+        blurb:
+          "View all transactions and blockchain information on the Berachain network",
+      },
+      {
+        href: lendUrl,
+        type: "external",
+        title: lendName,
+        blurb:
+          "Earn interest and rewards by supplying your assets and borrowing Honey",
+      },
+      {
+        href: perpsUrl,
+        type: "external",
+        title: perpsName,
+        blurb:
+          "Trade all your favourite pairs with deep liquidity and market diversity",
       },
     ],
   },
