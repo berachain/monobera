@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { cloudinaryUrl } from "@bera/config";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
@@ -11,6 +12,9 @@ import { TokenBadge } from "~/components/token-badge";
 
 export default function Content() {
   const [address, setAddress] = React.useState<string>("");
+  const [alert, setAlert] = React.useState<
+    "success" | "destructive" | undefined
+  >(undefined);
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
       <div className="items-center text-center sm:flex sm:text-left">
@@ -45,7 +49,31 @@ export default function Content() {
           />
         </div>
       </div>
-      <DripToken address={address} />
+      {alert === "destructive" && (
+        <Alert variant={"destructive"}>
+          <AlertTitle>
+            {" "}
+            <Icons.info className="inline-block h-4 w-4" /> Wallet Grey-listed
+            for 5 minutes
+          </AlertTitle>
+          <AlertDescription>
+            To ensure a sufficient balance for all users, the Faucet is set to
+            dispense testnet tokens every 5 minutes. Please retry in 5 minutes.
+          </AlertDescription>
+        </Alert>
+      )}
+      {alert === "success" && (
+        <Alert variant={"success"}>
+          <AlertTitle>
+            <Icons.checkCircle className="inline-block h-4 w-4" /> Request
+            Submitted
+          </AlertTitle>
+          <AlertDescription>
+            You’ll receive the testnet tokens in your wallet in about 2 minutes.
+          </AlertDescription>
+        </Alert>
+      )}
+      <DripToken address={address} setAlert={setAlert} />
       <hr />
       <div className="leading-12 text-center text-sm opacity-70 sm:text-start">
         To ensure a sufficient balance for all users, the Faucet is set to
