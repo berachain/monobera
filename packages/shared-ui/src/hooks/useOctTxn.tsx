@@ -14,6 +14,7 @@ import {
   useOctValueSend,
   type IContractWrite,
   type IValueSend,
+  type TransactionActionType,
 } from "@bera/berajs";
 import toast from "react-hot-toast";
 import { useMediaQuery } from "usehooks-ts";
@@ -197,8 +198,7 @@ export const useOctTxn = ({
           hash: result,
           description: message,
           timestamp: Date.now(),
-          icon: "",
-          actionType: "",
+          actionType: "" as TransactionActionType,
         });
         onSuccess && onSuccess(result);
       },

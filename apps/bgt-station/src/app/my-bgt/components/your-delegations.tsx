@@ -5,8 +5,9 @@ import {
   usePollPrices,
   type PoLValidator,
 } from "@bera/berajs";
+import { cloudinaryUrl, docsUrl } from "@bera/config";
 
-import Nothing from "../nothing";
+import { Banner } from "./banner";
 import ValidatorCard from "./validator-card";
 
 export default function YourDelegations() {
@@ -24,7 +25,7 @@ export default function YourDelegations() {
 
   return (
     <div>
-      {total !== 0 && !Number.isNaN(total) ? (
+      {total !== 0 && !Number.isNaN(total) && false ? (
         <div className="flex flex-col gap-3">
           {delegatorPolValidators?.map((validator: PoLValidator) => (
             <ValidatorCard validator={validator} key={validator.operatorAddr} />
@@ -36,10 +37,11 @@ export default function YourDelegations() {
           )}
         </div>
       ) : (
-        <Nothing
-          message={
-            "This section will be populated once you have delegated to some validators. "
-          }
+        <Banner
+          img={`${cloudinaryUrl}/bears/kj33rvgbemret3xrknv9`}
+          title="How do I delegate BGT?"
+          subtitle="Delegate like a pro with these helpful guides."
+          href={`${docsUrl}/getting-started/bgt-station-bgt.html#delegating-bgt`}
         />
       )}
     </div>

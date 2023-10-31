@@ -8,6 +8,7 @@ import {
   type ReactElement,
 } from "react";
 import {
+  TransactionActionType,
   useAddRecentTransaction,
   useBeraContractWrite,
   useValueSend,
@@ -34,8 +35,7 @@ import {
 
 interface IUseTxn {
   message?: string;
-  icon?: string;
-  actionType?: string;
+  actionType?: TransactionActionType;
   disableToast?: boolean;
   disableModal?: boolean;
   onSuccess?: (hash: string) => void;
@@ -81,8 +81,7 @@ const DURATION = 3000;
  */
 export const useTxn = ({
   message = "",
-  icon = "",
-  actionType = "",
+  actionType,
   disableToast = false,
   disableModal = false,
   onSuccess,
@@ -198,7 +197,6 @@ export const useTxn = ({
         addRecentTransaction({
           hash: result,
           description: message,
-          icon,
           actionType,
           timestamp: Date.now(),
         });
@@ -353,8 +351,7 @@ export const useTxn = ({
         hash: result,
         description: message,
         timestamp: Date.now(),
-        icon: "",
-        actionType: "",
+        actionType: TransactionActionType.BORROW,
       });
       onSuccess && onSuccess(result);
     },

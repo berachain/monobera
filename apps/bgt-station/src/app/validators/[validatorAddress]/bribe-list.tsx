@@ -3,16 +3,21 @@ import {
   formatUsd,
   formatter,
   usePollPrices,
-  usePollValidatorBribes,
   useTokenInformation,
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { NotFoundBear, TokenIcon, Tooltip } from "@bera/shared-ui";
-import { Button } from "@bera/ui/button";
+import { TokenIcon } from "@bera/shared-ui";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@bera/ui/accordion";
 import { Card } from "@bera/ui/card";
+import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits, type Address } from "viem";
+import { formatUnits } from "viem";
 
 const BribeCard = ({
   amountPerProposal,
@@ -60,37 +65,58 @@ const BribeCard = ({
   const formattedProposalsLeft = Number(proposalsLeft ?? 0);
   const formattedTotalProposals = Number(numBlockProposals ?? 0);
 
+  const info = [
+    {
+      title: "Total Value",
+      value: formatUsd(formattedTotalInUsd),
+    },
+    {
+      title: "Block Value",
+      value: formatUsd(formattedAmountPerProposalInUsd),
+    },
+    {
+      title: "Return per BGT",
+      value: formatUsd(formattedAmountPerProposalInUsd),
+    },
+    {
+      title: "Proposals left",
+      value: `${formattedProposalsLeft}/${formattedTotalProposals}`,
+    },
+  ];
   return (
-    <Card className="flex w-full flex-1 flex-col gap-3 p-8">
-      <div className="flex items-center gap-2">
+    <Card className="w-full">
+      <div className="flex w-full items-center gap-2 p-6">
         <TokenIcon token={token} className="h-8 w-8" />
-        <div>
-          <div>
-            {" "}
-            {formatter.format(formattedTotalInUsd)} {token?.symbol}{" "}
+        <div className="font-medium">
+          {formatter.format(formattedTotalInUsd)} {token?.symbol}{" "}
+        </div>
+      </div>
+      <div className="flex w-full flex-col gap-4 bg-muted p-6">
+        <div className="flex flex-col gap-2">
+          {info.map((item, index) => (
+            <div
+              key={index}
+              className="flex justify-between text-sm font-medium leading-5 text-muted-foreground"
+            >
+              <div>{item.title}</div>
+              <div className="text-foreground">{item.value}</div>
+            </div>
+          ))}
+        </div>
+        <hr className="h-[1px] bg-border" />
+        <div className="flex justify-between text-sm font-medium leading-tight text-primary-foreground">
+          <div>Start Epoch: {Number(startEpoch ?? 0)}</div>
+          <div className="flex items-center gap-1">
+            End Epoch: {Number(startEpoch + numBlockProposals ?? 0)}
+            <Icons.clock className="block h-4 w-4" />
           </div>
-          <div className="text-xs text-muted-foreground">tokens remaining</div>
         </div>
-      </div>
-      <div className=" flex flex-col gap-2 text-sm font-medium leading-tight text-muted-foreground">
-        <div>
-          {formatUsd(formattedTotalInUsd)} (
-          {formatUsd(formattedAmountPerProposalInUsd)} per block)
-        </div>
-      </div>
-      <div className="flex justify-between text-sm font-medium leading-tight text-muted-foreground">
-        <div>
-          {formattedProposalsLeft} / {formattedTotalProposals} proposals left
-        </div>
-      </div>
-      <div className="flex justify-between text-sm font-medium leading-tight text-muted-foreground">
-        <div>start epoch: {Number(startEpoch ?? 0)}</div>
       </div>
     </Card>
   );
 };
 
-const BribeCardLoading = () => {
+export const BribeCardLoading = () => {
   return (
     <Card className="flex flex-1 flex-col gap-3 p-8">
       <div className="flex items-center gap-2">
@@ -105,17 +131,9 @@ const BribeCardLoading = () => {
   );
 };
 
-export default function BribeList({
-  validatorAddress,
-}: {
-  validatorAddress: Address;
-}) {
-  const { useActiveValidatorBribes, isLoading } =
-    usePollValidatorBribes(validatorAddress);
-  const bribes = [useActiveValidatorBribes() ?? []];
-  const [lineCount, setLineCount] = useState(1);
+export default function BribeList({ bribes }: { bribes: any[][] }) {
   const bribesList =
-    !isLoading && bribes && bribes[0] && bribes[0][0]
+    bribes && bribes[0] && bribes[0][0]
       ? bribes
           .map((bribe, index) => {
             const bribeObj = bribe[0];
@@ -137,43 +155,19 @@ export default function BribeList({
           .flat()
       : [];
   return (
-    <div className="">
-      <div className="mb-4 flex items-center gap-1 text-lg font-semibold leading-7">
-        Active Bribes{" "}
-        <Tooltip text="A list of active bribes from this validator." />
-      </div>
-      <div>
-        {isLoading ? (
+    <Accordion type="single" collapsible defaultValue="item-1">
+      <AccordionItem value="item-1">
+        <AccordionTrigger className="flex gap-4 text-sm font-normal text-muted-foreground">
+          Hide token breakdown
+        </AccordionTrigger>
+        <AccordionContent>
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
-            {[0, 0, 0].map((_: any, index: number) => (
-              <BribeCardLoading key={index} />
+            {bribesList?.map((item: any, index) => (
+              <BribeCard key={index} {...item} />
             ))}
           </div>
-        ) : bribesList.length !== 0 ? (
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
-            {bribesList
-              ?.slice(
-                0,
-                lineCount * 3 < bribesList.length
-                  ? lineCount * 3
-                  : bribesList.length,
-              )
-              .map((item: any, index) => (
-                <BribeCard key={index} {...item} />
-              ))}
-          </div>
-        ) : (
-          <NotFoundBear title="The Validator has no bribes" />
-        )}
-      </div>
-      {lineCount * 3 < bribesList.length && (
-        <div className="mt-3 w-full text-center">
-          <Button variant="outline" onClick={() => setLineCount(lineCount + 1)}>
-            {" "}
-            Load More{" "}
-          </Button>
-        </div>
-      )}
-    </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }

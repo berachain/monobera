@@ -4,6 +4,8 @@ import { useCallback, useReducer } from "react";
 import { usePublicClient, useWalletClient } from "wagmi";
 import { prepareWriteContract } from "wagmi/actions";
 
+// import { prepareWriteContract } from "wagmi/actions";
+
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
 import { TransactionFailedError } from "./error";

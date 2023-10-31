@@ -25,7 +25,7 @@ export interface QueryGroupInfoRequest {
 /** QueryGroupInfoResponse is the Query/GroupInfo response type. */
 export interface QueryGroupInfoResponse {
   /** info is the GroupInfo of the group. */
-  info?: GroupInfo;
+  info?: GroupInfo | undefined;
 }
 
 /** QueryGroupPolicyInfoRequest is the Query/GroupPolicyInfo request type. */
@@ -37,7 +37,7 @@ export interface QueryGroupPolicyInfoRequest {
 /** QueryGroupPolicyInfoResponse is the Query/GroupPolicyInfo response type. */
 export interface QueryGroupPolicyInfoResponse {
   /** info is the GroupPolicyInfo of the group policy. */
-  info?: GroupPolicyInfo;
+  info?: GroupPolicyInfo | undefined;
 }
 
 /** QueryGroupMembersRequest is the Query/GroupMembers request type. */
@@ -45,7 +45,7 @@ export interface QueryGroupMembersRequest {
   /** group_id is the unique ID of the group. */
   groupId: Long;
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination?: PageRequest | undefined;
 }
 
 /** QueryGroupMembersResponse is the Query/GroupMembersResponse response type. */
@@ -53,7 +53,7 @@ export interface QueryGroupMembersResponse {
   /** members are the members of the group with given group_id. */
   members: GroupMember[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination?: PageResponse | undefined;
 }
 
 /** QueryGroupsByAdminRequest is the Query/GroupsByAdmin request type. */
@@ -61,7 +61,7 @@ export interface QueryGroupsByAdminRequest {
   /** admin is the account address of a group's admin. */
   admin: string;
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination?: PageRequest | undefined;
 }
 
 /** QueryGroupsByAdminResponse is the Query/GroupsByAdminResponse response type. */
@@ -69,7 +69,7 @@ export interface QueryGroupsByAdminResponse {
   /** groups are the groups info with the provided admin. */
   groups: GroupInfo[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination?: PageResponse | undefined;
 }
 
 /** QueryGroupPoliciesByGroupRequest is the Query/GroupPoliciesByGroup request type. */
@@ -77,7 +77,7 @@ export interface QueryGroupPoliciesByGroupRequest {
   /** group_id is the unique ID of the group policy's group. */
   groupId: Long;
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination?: PageRequest | undefined;
 }
 
 /** QueryGroupPoliciesByGroupResponse is the Query/GroupPoliciesByGroup response type. */
@@ -85,7 +85,7 @@ export interface QueryGroupPoliciesByGroupResponse {
   /** group_policies are the group policies info associated with the provided group. */
   groupPolicies: GroupPolicyInfo[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination?: PageResponse | undefined;
 }
 
 /** QueryGroupPoliciesByAdminRequest is the Query/GroupPoliciesByAdmin request type. */
@@ -93,7 +93,7 @@ export interface QueryGroupPoliciesByAdminRequest {
   /** admin is the admin address of the group policy. */
   admin: string;
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination?: PageRequest | undefined;
 }
 
 /** QueryGroupPoliciesByAdminResponse is the Query/GroupPoliciesByAdmin response type. */
@@ -101,7 +101,7 @@ export interface QueryGroupPoliciesByAdminResponse {
   /** group_policies are the group policies info with provided admin. */
   groupPolicies: GroupPolicyInfo[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination?: PageResponse | undefined;
 }
 
 /** QueryProposalRequest is the Query/Proposal request type. */
@@ -113,7 +113,7 @@ export interface QueryProposalRequest {
 /** QueryProposalResponse is the Query/Proposal response type. */
 export interface QueryProposalResponse {
   /** proposal is the proposal info. */
-  proposal?: Proposal;
+  proposal?: Proposal | undefined;
 }
 
 /** QueryProposalsByGroupPolicyRequest is the Query/ProposalByGroupPolicy request type. */
@@ -121,7 +121,7 @@ export interface QueryProposalsByGroupPolicyRequest {
   /** address is the account address of the group policy related to proposals. */
   address: string;
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination?: PageRequest | undefined;
 }
 
 /** QueryProposalsByGroupPolicyResponse is the Query/ProposalByGroupPolicy response type. */
@@ -129,7 +129,7 @@ export interface QueryProposalsByGroupPolicyResponse {
   /** proposals are the proposals with given group policy. */
   proposals: Proposal[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination?: PageResponse | undefined;
 }
 
 /** QueryVoteByProposalVoterRequest is the Query/VoteByProposalVoter request type. */
@@ -143,7 +143,7 @@ export interface QueryVoteByProposalVoterRequest {
 /** QueryVoteByProposalVoterResponse is the Query/VoteByProposalVoter response type. */
 export interface QueryVoteByProposalVoterResponse {
   /** vote is the vote with given proposal_id and voter. */
-  vote?: Vote;
+  vote?: Vote | undefined;
 }
 
 /** QueryVotesByProposalRequest is the Query/VotesByProposal request type. */
@@ -151,7 +151,7 @@ export interface QueryVotesByProposalRequest {
   /** proposal_id is the unique ID of a proposal. */
   proposalId: Long;
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination?: PageRequest | undefined;
 }
 
 /** QueryVotesByProposalResponse is the Query/VotesByProposal response type. */
@@ -159,7 +159,7 @@ export interface QueryVotesByProposalResponse {
   /** votes are the list of votes for given proposal_id. */
   votes: Vote[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination?: PageResponse | undefined;
 }
 
 /** QueryVotesByVoterRequest is the Query/VotesByVoter request type. */
@@ -167,7 +167,7 @@ export interface QueryVotesByVoterRequest {
   /** voter is a proposal voter account address. */
   voter: string;
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination?: PageRequest | undefined;
 }
 
 /** QueryVotesByVoterResponse is the Query/VotesByVoter response type. */
@@ -175,7 +175,7 @@ export interface QueryVotesByVoterResponse {
   /** votes are the list of votes by given voter. */
   votes: Vote[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination?: PageResponse | undefined;
 }
 
 /** QueryGroupsByMemberRequest is the Query/GroupsByMember request type. */
@@ -183,7 +183,7 @@ export interface QueryGroupsByMemberRequest {
   /** address is the group member address. */
   address: string;
   /** pagination defines an optional pagination for the request. */
-  pagination?: PageRequest;
+  pagination?: PageRequest | undefined;
 }
 
 /** QueryGroupsByMemberResponse is the Query/GroupsByMember response type. */
@@ -191,7 +191,7 @@ export interface QueryGroupsByMemberResponse {
   /** groups are the groups info with the provided group member. */
   groups: GroupInfo[];
   /** pagination defines the pagination in the response. */
-  pagination?: PageResponse;
+  pagination?: PageResponse | undefined;
 }
 
 /** QueryTallyResultRequest is the Query/TallyResult request type. */
@@ -203,7 +203,29 @@ export interface QueryTallyResultRequest {
 /** QueryTallyResultResponse is the Query/TallyResult response type. */
 export interface QueryTallyResultResponse {
   /** tally defines the requested tally. */
-  tally?: TallyResult;
+  tally?: TallyResult | undefined;
+}
+
+/**
+ * QueryGroupsRequest is the Query/Groups request type.
+ *
+ * Since: cosmos-sdk 0.47.1
+ */
+export interface QueryGroupsRequest {
+  /** pagination defines an optional pagination for the request. */
+  pagination?: PageRequest | undefined;
+}
+
+/**
+ * QueryGroupsResponse is the Query/Groups response type.
+ *
+ * Since: cosmos-sdk 0.47.1
+ */
+export interface QueryGroupsResponse {
+  /** `groups` is all the groups present in state. */
+  groups: GroupInfo[];
+  /** pagination defines the pagination in the response. */
+  pagination?: PageResponse | undefined;
 }
 
 function createBaseQueryGroupInfoRequest(): QueryGroupInfoRequest {
@@ -225,19 +247,25 @@ export const QueryGroupInfoRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupInfoRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupInfoRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.groupId = reader.uint64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -252,17 +280,17 @@ export const QueryGroupInfoRequest = {
 
   toJSON(message: QueryGroupInfoRequest): unknown {
     const obj: any = {};
-    message.groupId !== undefined &&
-      (obj.groupId = (message.groupId || Long.UZERO).toString());
+    if (!message.groupId.isZero()) {
+      obj.groupId = (message.groupId || Long.UZERO).toString();
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupInfoRequest>, I>>(
     base?: I,
   ): QueryGroupInfoRequest {
-    return QueryGroupInfoRequest.fromPartial(base ?? {});
+    return QueryGroupInfoRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryGroupInfoRequest>, I>>(
     object: I,
   ): QueryGroupInfoRequest {
@@ -294,19 +322,25 @@ export const QueryGroupInfoResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupInfoResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupInfoResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.info = GroupInfo.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -319,17 +353,17 @@ export const QueryGroupInfoResponse = {
 
   toJSON(message: QueryGroupInfoResponse): unknown {
     const obj: any = {};
-    message.info !== undefined &&
-      (obj.info = message.info ? GroupInfo.toJSON(message.info) : undefined);
+    if (message.info !== undefined) {
+      obj.info = GroupInfo.toJSON(message.info);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupInfoResponse>, I>>(
     base?: I,
   ): QueryGroupInfoResponse {
-    return QueryGroupInfoResponse.fromPartial(base ?? {});
+    return QueryGroupInfoResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryGroupInfoResponse>, I>>(
     object: I,
   ): QueryGroupInfoResponse {
@@ -361,19 +395,25 @@ export const QueryGroupPolicyInfoRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupPolicyInfoRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupPolicyInfoRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.address = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -384,16 +424,17 @@ export const QueryGroupPolicyInfoRequest = {
 
   toJSON(message: QueryGroupPolicyInfoRequest): unknown {
     const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
+    if (message.address !== "") {
+      obj.address = message.address;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupPolicyInfoRequest>, I>>(
     base?: I,
   ): QueryGroupPolicyInfoRequest {
-    return QueryGroupPolicyInfoRequest.fromPartial(base ?? {});
+    return QueryGroupPolicyInfoRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryGroupPolicyInfoRequest>, I>>(
     object: I,
   ): QueryGroupPolicyInfoRequest {
@@ -422,19 +463,25 @@ export const QueryGroupPolicyInfoResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupPolicyInfoResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupPolicyInfoResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.info = GroupPolicyInfo.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -449,19 +496,17 @@ export const QueryGroupPolicyInfoResponse = {
 
   toJSON(message: QueryGroupPolicyInfoResponse): unknown {
     const obj: any = {};
-    message.info !== undefined &&
-      (obj.info = message.info
-        ? GroupPolicyInfo.toJSON(message.info)
-        : undefined);
+    if (message.info !== undefined) {
+      obj.info = GroupPolicyInfo.toJSON(message.info);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupPolicyInfoResponse>, I>>(
     base?: I,
   ): QueryGroupPolicyInfoResponse {
-    return QueryGroupPolicyInfoResponse.fromPartial(base ?? {});
+    return QueryGroupPolicyInfoResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryGroupPolicyInfoResponse>, I>>(
     object: I,
   ): QueryGroupPolicyInfoResponse {
@@ -496,22 +541,32 @@ export const QueryGroupMembersRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupMembersRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupMembersRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.groupId = reader.uint64() as Long;
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -529,21 +584,20 @@ export const QueryGroupMembersRequest = {
 
   toJSON(message: QueryGroupMembersRequest): unknown {
     const obj: any = {};
-    message.groupId !== undefined &&
-      (obj.groupId = (message.groupId || Long.UZERO).toString());
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+    if (!message.groupId.isZero()) {
+      obj.groupId = (message.groupId || Long.UZERO).toString();
+    }
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupMembersRequest>, I>>(
     base?: I,
   ): QueryGroupMembersRequest {
-    return QueryGroupMembersRequest.fromPartial(base ?? {});
+    return QueryGroupMembersRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryGroupMembersRequest>, I>>(
     object: I,
   ): QueryGroupMembersRequest {
@@ -585,22 +639,32 @@ export const QueryGroupMembersResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupMembersResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupMembersResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.members.push(GroupMember.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -618,26 +682,20 @@ export const QueryGroupMembersResponse = {
 
   toJSON(message: QueryGroupMembersResponse): unknown {
     const obj: any = {};
-    if (message.members) {
-      obj.members = message.members.map((e) =>
-        e ? GroupMember.toJSON(e) : undefined,
-      );
-    } else {
-      obj.members = [];
+    if (message.members?.length) {
+      obj.members = message.members.map((e) => GroupMember.toJSON(e));
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupMembersResponse>, I>>(
     base?: I,
   ): QueryGroupMembersResponse {
-    return QueryGroupMembersResponse.fromPartial(base ?? {});
+    return QueryGroupMembersResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryGroupMembersResponse>, I>>(
     object: I,
   ): QueryGroupMembersResponse {
@@ -674,22 +732,32 @@ export const QueryGroupsByAdminRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupsByAdminRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupsByAdminRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.admin = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -705,20 +773,20 @@ export const QueryGroupsByAdminRequest = {
 
   toJSON(message: QueryGroupsByAdminRequest): unknown {
     const obj: any = {};
-    message.admin !== undefined && (obj.admin = message.admin);
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+    if (message.admin !== "") {
+      obj.admin = message.admin;
+    }
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupsByAdminRequest>, I>>(
     base?: I,
   ): QueryGroupsByAdminRequest {
-    return QueryGroupsByAdminRequest.fromPartial(base ?? {});
+    return QueryGroupsByAdminRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryGroupsByAdminRequest>, I>>(
     object: I,
   ): QueryGroupsByAdminRequest {
@@ -757,22 +825,32 @@ export const QueryGroupsByAdminResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupsByAdminResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupsByAdminResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.groups.push(GroupInfo.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -790,26 +868,20 @@ export const QueryGroupsByAdminResponse = {
 
   toJSON(message: QueryGroupsByAdminResponse): unknown {
     const obj: any = {};
-    if (message.groups) {
-      obj.groups = message.groups.map((e) =>
-        e ? GroupInfo.toJSON(e) : undefined,
-      );
-    } else {
-      obj.groups = [];
+    if (message.groups?.length) {
+      obj.groups = message.groups.map((e) => GroupInfo.toJSON(e));
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupsByAdminResponse>, I>>(
     base?: I,
   ): QueryGroupsByAdminResponse {
-    return QueryGroupsByAdminResponse.fromPartial(base ?? {});
+    return QueryGroupsByAdminResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryGroupsByAdminResponse>, I>>(
     object: I,
   ): QueryGroupsByAdminResponse {
@@ -845,22 +917,32 @@ export const QueryGroupPoliciesByGroupRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupPoliciesByGroupRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupPoliciesByGroupRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.groupId = reader.uint64() as Long;
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -878,21 +960,20 @@ export const QueryGroupPoliciesByGroupRequest = {
 
   toJSON(message: QueryGroupPoliciesByGroupRequest): unknown {
     const obj: any = {};
-    message.groupId !== undefined &&
-      (obj.groupId = (message.groupId || Long.UZERO).toString());
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+    if (!message.groupId.isZero()) {
+      obj.groupId = (message.groupId || Long.UZERO).toString();
+    }
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupPoliciesByGroupRequest>, I>>(
     base?: I,
   ): QueryGroupPoliciesByGroupRequest {
-    return QueryGroupPoliciesByGroupRequest.fromPartial(base ?? {});
+    return QueryGroupPoliciesByGroupRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<QueryGroupPoliciesByGroupRequest>, I>,
   >(object: I): QueryGroupPoliciesByGroupRequest {
@@ -934,24 +1015,34 @@ export const QueryGroupPoliciesByGroupResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupPoliciesByGroupResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupPoliciesByGroupResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.groupPolicies.push(
             GroupPolicyInfo.decode(reader, reader.uint32()),
           );
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -969,26 +1060,22 @@ export const QueryGroupPoliciesByGroupResponse = {
 
   toJSON(message: QueryGroupPoliciesByGroupResponse): unknown {
     const obj: any = {};
-    if (message.groupPolicies) {
+    if (message.groupPolicies?.length) {
       obj.groupPolicies = message.groupPolicies.map((e) =>
-        e ? GroupPolicyInfo.toJSON(e) : undefined,
+        GroupPolicyInfo.toJSON(e),
       );
-    } else {
-      obj.groupPolicies = [];
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupPoliciesByGroupResponse>, I>>(
     base?: I,
   ): QueryGroupPoliciesByGroupResponse {
-    return QueryGroupPoliciesByGroupResponse.fromPartial(base ?? {});
+    return QueryGroupPoliciesByGroupResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<QueryGroupPoliciesByGroupResponse>, I>,
   >(object: I): QueryGroupPoliciesByGroupResponse {
@@ -1025,22 +1112,32 @@ export const QueryGroupPoliciesByAdminRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupPoliciesByAdminRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupPoliciesByAdminRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.admin = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1056,20 +1153,20 @@ export const QueryGroupPoliciesByAdminRequest = {
 
   toJSON(message: QueryGroupPoliciesByAdminRequest): unknown {
     const obj: any = {};
-    message.admin !== undefined && (obj.admin = message.admin);
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+    if (message.admin !== "") {
+      obj.admin = message.admin;
+    }
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupPoliciesByAdminRequest>, I>>(
     base?: I,
   ): QueryGroupPoliciesByAdminRequest {
-    return QueryGroupPoliciesByAdminRequest.fromPartial(base ?? {});
+    return QueryGroupPoliciesByAdminRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<QueryGroupPoliciesByAdminRequest>, I>,
   >(object: I): QueryGroupPoliciesByAdminRequest {
@@ -1108,24 +1205,34 @@ export const QueryGroupPoliciesByAdminResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupPoliciesByAdminResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupPoliciesByAdminResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.groupPolicies.push(
             GroupPolicyInfo.decode(reader, reader.uint32()),
           );
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1143,26 +1250,22 @@ export const QueryGroupPoliciesByAdminResponse = {
 
   toJSON(message: QueryGroupPoliciesByAdminResponse): unknown {
     const obj: any = {};
-    if (message.groupPolicies) {
+    if (message.groupPolicies?.length) {
       obj.groupPolicies = message.groupPolicies.map((e) =>
-        e ? GroupPolicyInfo.toJSON(e) : undefined,
+        GroupPolicyInfo.toJSON(e),
       );
-    } else {
-      obj.groupPolicies = [];
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupPoliciesByAdminResponse>, I>>(
     base?: I,
   ): QueryGroupPoliciesByAdminResponse {
-    return QueryGroupPoliciesByAdminResponse.fromPartial(base ?? {});
+    return QueryGroupPoliciesByAdminResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<QueryGroupPoliciesByAdminResponse>, I>,
   >(object: I): QueryGroupPoliciesByAdminResponse {
@@ -1196,19 +1299,25 @@ export const QueryProposalRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryProposalRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryProposalRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.proposalId = reader.uint64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1223,17 +1332,17 @@ export const QueryProposalRequest = {
 
   toJSON(message: QueryProposalRequest): unknown {
     const obj: any = {};
-    message.proposalId !== undefined &&
-      (obj.proposalId = (message.proposalId || Long.UZERO).toString());
+    if (!message.proposalId.isZero()) {
+      obj.proposalId = (message.proposalId || Long.UZERO).toString();
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryProposalRequest>, I>>(
     base?: I,
   ): QueryProposalRequest {
-    return QueryProposalRequest.fromPartial(base ?? {});
+    return QueryProposalRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryProposalRequest>, I>>(
     object: I,
   ): QueryProposalRequest {
@@ -1265,19 +1374,25 @@ export const QueryProposalResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryProposalResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryProposalResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.proposal = Proposal.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1292,19 +1407,17 @@ export const QueryProposalResponse = {
 
   toJSON(message: QueryProposalResponse): unknown {
     const obj: any = {};
-    message.proposal !== undefined &&
-      (obj.proposal = message.proposal
-        ? Proposal.toJSON(message.proposal)
-        : undefined);
+    if (message.proposal !== undefined) {
+      obj.proposal = Proposal.toJSON(message.proposal);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryProposalResponse>, I>>(
     base?: I,
   ): QueryProposalResponse {
-    return QueryProposalResponse.fromPartial(base ?? {});
+    return QueryProposalResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryProposalResponse>, I>>(
     object: I,
   ): QueryProposalResponse {
@@ -1339,22 +1452,32 @@ export const QueryProposalsByGroupPolicyRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryProposalsByGroupPolicyRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryProposalsByGroupPolicyRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.address = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1370,20 +1493,20 @@ export const QueryProposalsByGroupPolicyRequest = {
 
   toJSON(message: QueryProposalsByGroupPolicyRequest): unknown {
     const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+    if (message.address !== "") {
+      obj.address = message.address;
+    }
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryProposalsByGroupPolicyRequest>, I>>(
     base?: I,
   ): QueryProposalsByGroupPolicyRequest {
-    return QueryProposalsByGroupPolicyRequest.fromPartial(base ?? {});
+    return QueryProposalsByGroupPolicyRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<QueryProposalsByGroupPolicyRequest>, I>,
   >(object: I): QueryProposalsByGroupPolicyRequest {
@@ -1422,22 +1545,32 @@ export const QueryProposalsByGroupPolicyResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryProposalsByGroupPolicyResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryProposalsByGroupPolicyResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.proposals.push(Proposal.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1455,26 +1588,20 @@ export const QueryProposalsByGroupPolicyResponse = {
 
   toJSON(message: QueryProposalsByGroupPolicyResponse): unknown {
     const obj: any = {};
-    if (message.proposals) {
-      obj.proposals = message.proposals.map((e) =>
-        e ? Proposal.toJSON(e) : undefined,
-      );
-    } else {
-      obj.proposals = [];
+    if (message.proposals?.length) {
+      obj.proposals = message.proposals.map((e) => Proposal.toJSON(e));
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryProposalsByGroupPolicyResponse>, I>>(
     base?: I,
   ): QueryProposalsByGroupPolicyResponse {
-    return QueryProposalsByGroupPolicyResponse.fromPartial(base ?? {});
+    return QueryProposalsByGroupPolicyResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<QueryProposalsByGroupPolicyResponse>, I>,
   >(object: I): QueryProposalsByGroupPolicyResponse {
@@ -1511,22 +1638,32 @@ export const QueryVoteByProposalVoterRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryVoteByProposalVoterRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVoteByProposalVoterRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.proposalId = reader.uint64() as Long;
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.voter = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1542,18 +1679,20 @@ export const QueryVoteByProposalVoterRequest = {
 
   toJSON(message: QueryVoteByProposalVoterRequest): unknown {
     const obj: any = {};
-    message.proposalId !== undefined &&
-      (obj.proposalId = (message.proposalId || Long.UZERO).toString());
-    message.voter !== undefined && (obj.voter = message.voter);
+    if (!message.proposalId.isZero()) {
+      obj.proposalId = (message.proposalId || Long.UZERO).toString();
+    }
+    if (message.voter !== "") {
+      obj.voter = message.voter;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryVoteByProposalVoterRequest>, I>>(
     base?: I,
   ): QueryVoteByProposalVoterRequest {
-    return QueryVoteByProposalVoterRequest.fromPartial(base ?? {});
+    return QueryVoteByProposalVoterRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryVoteByProposalVoterRequest>, I>>(
     object: I,
   ): QueryVoteByProposalVoterRequest {
@@ -1586,19 +1725,25 @@ export const QueryVoteByProposalVoterResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryVoteByProposalVoterResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVoteByProposalVoterResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.vote = Vote.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1611,17 +1756,17 @@ export const QueryVoteByProposalVoterResponse = {
 
   toJSON(message: QueryVoteByProposalVoterResponse): unknown {
     const obj: any = {};
-    message.vote !== undefined &&
-      (obj.vote = message.vote ? Vote.toJSON(message.vote) : undefined);
+    if (message.vote !== undefined) {
+      obj.vote = Vote.toJSON(message.vote);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryVoteByProposalVoterResponse>, I>>(
     base?: I,
   ): QueryVoteByProposalVoterResponse {
-    return QueryVoteByProposalVoterResponse.fromPartial(base ?? {});
+    return QueryVoteByProposalVoterResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<
     I extends Exact<DeepPartial<QueryVoteByProposalVoterResponse>, I>,
   >(object: I): QueryVoteByProposalVoterResponse {
@@ -1656,22 +1801,32 @@ export const QueryVotesByProposalRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryVotesByProposalRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVotesByProposalRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.proposalId = reader.uint64() as Long;
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1689,21 +1844,20 @@ export const QueryVotesByProposalRequest = {
 
   toJSON(message: QueryVotesByProposalRequest): unknown {
     const obj: any = {};
-    message.proposalId !== undefined &&
-      (obj.proposalId = (message.proposalId || Long.UZERO).toString());
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+    if (!message.proposalId.isZero()) {
+      obj.proposalId = (message.proposalId || Long.UZERO).toString();
+    }
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryVotesByProposalRequest>, I>>(
     base?: I,
   ): QueryVotesByProposalRequest {
-    return QueryVotesByProposalRequest.fromPartial(base ?? {});
+    return QueryVotesByProposalRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryVotesByProposalRequest>, I>>(
     object: I,
   ): QueryVotesByProposalRequest {
@@ -1745,22 +1899,32 @@ export const QueryVotesByProposalResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryVotesByProposalResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVotesByProposalResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.votes.push(Vote.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1778,24 +1942,20 @@ export const QueryVotesByProposalResponse = {
 
   toJSON(message: QueryVotesByProposalResponse): unknown {
     const obj: any = {};
-    if (message.votes) {
-      obj.votes = message.votes.map((e) => (e ? Vote.toJSON(e) : undefined));
-    } else {
-      obj.votes = [];
+    if (message.votes?.length) {
+      obj.votes = message.votes.map((e) => Vote.toJSON(e));
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryVotesByProposalResponse>, I>>(
     base?: I,
   ): QueryVotesByProposalResponse {
-    return QueryVotesByProposalResponse.fromPartial(base ?? {});
+    return QueryVotesByProposalResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryVotesByProposalResponse>, I>>(
     object: I,
   ): QueryVotesByProposalResponse {
@@ -1831,22 +1991,32 @@ export const QueryVotesByVoterRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryVotesByVoterRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVotesByVoterRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.voter = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1862,20 +2032,20 @@ export const QueryVotesByVoterRequest = {
 
   toJSON(message: QueryVotesByVoterRequest): unknown {
     const obj: any = {};
-    message.voter !== undefined && (obj.voter = message.voter);
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+    if (message.voter !== "") {
+      obj.voter = message.voter;
+    }
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryVotesByVoterRequest>, I>>(
     base?: I,
   ): QueryVotesByVoterRequest {
-    return QueryVotesByVoterRequest.fromPartial(base ?? {});
+    return QueryVotesByVoterRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryVotesByVoterRequest>, I>>(
     object: I,
   ): QueryVotesByVoterRequest {
@@ -1914,22 +2084,32 @@ export const QueryVotesByVoterResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryVotesByVoterResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryVotesByVoterResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.votes.push(Vote.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1947,24 +2127,20 @@ export const QueryVotesByVoterResponse = {
 
   toJSON(message: QueryVotesByVoterResponse): unknown {
     const obj: any = {};
-    if (message.votes) {
-      obj.votes = message.votes.map((e) => (e ? Vote.toJSON(e) : undefined));
-    } else {
-      obj.votes = [];
+    if (message.votes?.length) {
+      obj.votes = message.votes.map((e) => Vote.toJSON(e));
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryVotesByVoterResponse>, I>>(
     base?: I,
   ): QueryVotesByVoterResponse {
-    return QueryVotesByVoterResponse.fromPartial(base ?? {});
+    return QueryVotesByVoterResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryVotesByVoterResponse>, I>>(
     object: I,
   ): QueryVotesByVoterResponse {
@@ -2000,22 +2176,32 @@ export const QueryGroupsByMemberRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupsByMemberRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupsByMemberRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.address = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -2031,20 +2217,20 @@ export const QueryGroupsByMemberRequest = {
 
   toJSON(message: QueryGroupsByMemberRequest): unknown {
     const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+    if (message.address !== "") {
+      obj.address = message.address;
+    }
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupsByMemberRequest>, I>>(
     base?: I,
   ): QueryGroupsByMemberRequest {
-    return QueryGroupsByMemberRequest.fromPartial(base ?? {});
+    return QueryGroupsByMemberRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryGroupsByMemberRequest>, I>>(
     object: I,
   ): QueryGroupsByMemberRequest {
@@ -2083,22 +2269,32 @@ export const QueryGroupsByMemberResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryGroupsByMemberResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryGroupsByMemberResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.groups.push(GroupInfo.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -2116,26 +2312,20 @@ export const QueryGroupsByMemberResponse = {
 
   toJSON(message: QueryGroupsByMemberResponse): unknown {
     const obj: any = {};
-    if (message.groups) {
-      obj.groups = message.groups.map((e) =>
-        e ? GroupInfo.toJSON(e) : undefined,
-      );
-    } else {
-      obj.groups = [];
+    if (message.groups?.length) {
+      obj.groups = message.groups.map((e) => GroupInfo.toJSON(e));
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryGroupsByMemberResponse>, I>>(
     base?: I,
   ): QueryGroupsByMemberResponse {
-    return QueryGroupsByMemberResponse.fromPartial(base ?? {});
+    return QueryGroupsByMemberResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryGroupsByMemberResponse>, I>>(
     object: I,
   ): QueryGroupsByMemberResponse {
@@ -2168,19 +2358,25 @@ export const QueryTallyResultRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryTallyResultRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryTallyResultRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 8) {
+            break;
+          }
+
           message.proposalId = reader.uint64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -2195,17 +2391,17 @@ export const QueryTallyResultRequest = {
 
   toJSON(message: QueryTallyResultRequest): unknown {
     const obj: any = {};
-    message.proposalId !== undefined &&
-      (obj.proposalId = (message.proposalId || Long.UZERO).toString());
+    if (!message.proposalId.isZero()) {
+      obj.proposalId = (message.proposalId || Long.UZERO).toString();
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryTallyResultRequest>, I>>(
     base?: I,
   ): QueryTallyResultRequest {
-    return QueryTallyResultRequest.fromPartial(base ?? {});
+    return QueryTallyResultRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryTallyResultRequest>, I>>(
     object: I,
   ): QueryTallyResultRequest {
@@ -2237,19 +2433,25 @@ export const QueryTallyResultResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QueryTallyResultResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryTallyResultResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.tally = TallyResult.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -2264,19 +2466,17 @@ export const QueryTallyResultResponse = {
 
   toJSON(message: QueryTallyResultResponse): unknown {
     const obj: any = {};
-    message.tally !== undefined &&
-      (obj.tally = message.tally
-        ? TallyResult.toJSON(message.tally)
-        : undefined);
+    if (message.tally !== undefined) {
+      obj.tally = TallyResult.toJSON(message.tally);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryTallyResultResponse>, I>>(
     base?: I,
   ): QueryTallyResultResponse {
-    return QueryTallyResultResponse.fromPartial(base ?? {});
+    return QueryTallyResultResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryTallyResultResponse>, I>>(
     object: I,
   ): QueryTallyResultResponse {
@@ -2284,6 +2484,170 @@ export const QueryTallyResultResponse = {
     message.tally =
       object.tally !== undefined && object.tally !== null
         ? TallyResult.fromPartial(object.tally)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGroupsRequest(): QueryGroupsRequest {
+  return { pagination: undefined };
+}
+
+export const QueryGroupsRequest = {
+  encode(
+    message: QueryGroupsRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGroupsRequest {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGroupsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGroupsRequest {
+    return {
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
+  },
+
+  toJSON(message: QueryGroupsRequest): unknown {
+    const obj: any = {};
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<QueryGroupsRequest>, I>>(
+    base?: I,
+  ): QueryGroupsRequest {
+    return QueryGroupsRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGroupsRequest>, I>>(
+    object: I,
+  ): QueryGroupsRequest {
+    const message = createBaseQueryGroupsRequest();
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGroupsResponse(): QueryGroupsResponse {
+  return { groups: [], pagination: undefined };
+}
+
+export const QueryGroupsResponse = {
+  encode(
+    message: QueryGroupsResponse,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    for (const v of message.groups) {
+      GroupInfo.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork(),
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGroupsResponse {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGroupsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.groups.push(GroupInfo.decode(reader, reader.uint32()));
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGroupsResponse {
+    return {
+      groups: Array.isArray(object?.groups)
+        ? object.groups.map((e: any) => GroupInfo.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
+    };
+  },
+
+  toJSON(message: QueryGroupsResponse): unknown {
+    const obj: any = {};
+    if (message.groups?.length) {
+      obj.groups = message.groups.map((e) => GroupInfo.toJSON(e));
+    }
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<QueryGroupsResponse>, I>>(
+    base?: I,
+  ): QueryGroupsResponse {
+    return QueryGroupsResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGroupsResponse>, I>>(
+    object: I,
+  ): QueryGroupsResponse {
+    const message = createBaseQueryGroupsResponse();
+    message.groups = object.groups?.map((e) => GroupInfo.fromPartial(e)) || [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
         : undefined;
     return message;
   },
@@ -2345,13 +2709,20 @@ export interface Query {
   TallyResult(
     request: QueryTallyResultRequest,
   ): Promise<QueryTallyResultResponse>;
+  /**
+   * Groups queries all groups in state.
+   *
+   * Since: cosmos-sdk 0.47.1
+   */
+  Groups(request: QueryGroupsRequest): Promise<QueryGroupsResponse>;
 }
 
+export const QueryServiceName = "cosmos.group.v1.Query";
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || "cosmos.group.v1.Query";
+    this.service = opts?.service || QueryServiceName;
     this.rpc = rpc;
     this.GroupInfo = this.GroupInfo.bind(this);
     this.GroupPolicyInfo = this.GroupPolicyInfo.bind(this);
@@ -2366,12 +2737,13 @@ export class QueryClientImpl implements Query {
     this.VotesByVoter = this.VotesByVoter.bind(this);
     this.GroupsByMember = this.GroupsByMember.bind(this);
     this.TallyResult = this.TallyResult.bind(this);
+    this.Groups = this.Groups.bind(this);
   }
   GroupInfo(request: QueryGroupInfoRequest): Promise<QueryGroupInfoResponse> {
     const data = QueryGroupInfoRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "GroupInfo", data);
     return promise.then((data) =>
-      QueryGroupInfoResponse.decode(new _m0.Reader(data)),
+      QueryGroupInfoResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2381,7 +2753,7 @@ export class QueryClientImpl implements Query {
     const data = QueryGroupPolicyInfoRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "GroupPolicyInfo", data);
     return promise.then((data) =>
-      QueryGroupPolicyInfoResponse.decode(new _m0.Reader(data)),
+      QueryGroupPolicyInfoResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2391,7 +2763,7 @@ export class QueryClientImpl implements Query {
     const data = QueryGroupMembersRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "GroupMembers", data);
     return promise.then((data) =>
-      QueryGroupMembersResponse.decode(new _m0.Reader(data)),
+      QueryGroupMembersResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2401,7 +2773,7 @@ export class QueryClientImpl implements Query {
     const data = QueryGroupsByAdminRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "GroupsByAdmin", data);
     return promise.then((data) =>
-      QueryGroupsByAdminResponse.decode(new _m0.Reader(data)),
+      QueryGroupsByAdminResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2415,7 +2787,7 @@ export class QueryClientImpl implements Query {
       data,
     );
     return promise.then((data) =>
-      QueryGroupPoliciesByGroupResponse.decode(new _m0.Reader(data)),
+      QueryGroupPoliciesByGroupResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2429,7 +2801,7 @@ export class QueryClientImpl implements Query {
       data,
     );
     return promise.then((data) =>
-      QueryGroupPoliciesByAdminResponse.decode(new _m0.Reader(data)),
+      QueryGroupPoliciesByAdminResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2437,7 +2809,7 @@ export class QueryClientImpl implements Query {
     const data = QueryProposalRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Proposal", data);
     return promise.then((data) =>
-      QueryProposalResponse.decode(new _m0.Reader(data)),
+      QueryProposalResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2451,7 +2823,7 @@ export class QueryClientImpl implements Query {
       data,
     );
     return promise.then((data) =>
-      QueryProposalsByGroupPolicyResponse.decode(new _m0.Reader(data)),
+      QueryProposalsByGroupPolicyResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2461,7 +2833,7 @@ export class QueryClientImpl implements Query {
     const data = QueryVoteByProposalVoterRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "VoteByProposalVoter", data);
     return promise.then((data) =>
-      QueryVoteByProposalVoterResponse.decode(new _m0.Reader(data)),
+      QueryVoteByProposalVoterResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2471,7 +2843,7 @@ export class QueryClientImpl implements Query {
     const data = QueryVotesByProposalRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "VotesByProposal", data);
     return promise.then((data) =>
-      QueryVotesByProposalResponse.decode(new _m0.Reader(data)),
+      QueryVotesByProposalResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2481,7 +2853,7 @@ export class QueryClientImpl implements Query {
     const data = QueryVotesByVoterRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "VotesByVoter", data);
     return promise.then((data) =>
-      QueryVotesByVoterResponse.decode(new _m0.Reader(data)),
+      QueryVotesByVoterResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2491,7 +2863,7 @@ export class QueryClientImpl implements Query {
     const data = QueryGroupsByMemberRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "GroupsByMember", data);
     return promise.then((data) =>
-      QueryGroupsByMemberResponse.decode(new _m0.Reader(data)),
+      QueryGroupsByMemberResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -2501,7 +2873,15 @@ export class QueryClientImpl implements Query {
     const data = QueryTallyResultRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "TallyResult", data);
     return promise.then((data) =>
-      QueryTallyResultResponse.decode(new _m0.Reader(data)),
+      QueryTallyResultResponse.decode(_m0.Reader.create(data)),
+    );
+  }
+
+  Groups(request: QueryGroupsRequest): Promise<QueryGroupsResponse> {
+    const data = QueryGroupsRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "Groups", data);
+    return promise.then((data) =>
+      QueryGroupsResponse.decode(_m0.Reader.create(data)),
     );
   }
 }

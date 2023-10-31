@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  TransactionActionType,
   formatter,
   useBeraJs,
   usePollAssetWalletBalance,
@@ -39,6 +40,7 @@ export default function RepayBtn({
       reservesDataRefetch();
       userReservesRefetch();
     },
+    actionType: TransactionActionType.REPAY,
   });
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();

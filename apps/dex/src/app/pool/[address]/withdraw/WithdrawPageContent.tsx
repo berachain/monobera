@@ -2,7 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { DEX_PRECOMPILE_ABI, formatUsd, useBeraConfig } from "@bera/berajs";
+import {
+  DEX_PRECOMPILE_ABI,
+  TransactionActionType,
+  formatUsd,
+  useBeraConfig,
+} from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import {
   ActionButton,
@@ -53,6 +58,7 @@ export default function WithdrawLiquidityContent({
     onSuccess: () => {
       reset();
     },
+    actionType: TransactionActionType.WITHDRAW_LIQUIDITY,
   });
   const { networkConfig } = useBeraConfig();
   const router = useRouter();

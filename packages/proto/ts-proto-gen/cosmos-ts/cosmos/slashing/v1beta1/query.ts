@@ -12,7 +12,7 @@ export interface QueryParamsRequest {}
 
 /** QueryParamsResponse is the response type for the Query/Params RPC method */
 export interface QueryParamsResponse {
-  params?: Params;
+  params?: Params | undefined;
 }
 
 /**
@@ -30,7 +30,7 @@ export interface QuerySigningInfoRequest {
  */
 export interface QuerySigningInfoResponse {
   /** val_signing_info is the signing info of requested val cons address */
-  valSigningInfo?: ValidatorSigningInfo;
+  valSigningInfo?: ValidatorSigningInfo | undefined;
 }
 
 /**
@@ -38,7 +38,7 @@ export interface QuerySigningInfoResponse {
  * method
  */
 export interface QuerySigningInfosRequest {
-  pagination?: PageRequest;
+  pagination?: PageRequest | undefined;
 }
 
 /**
@@ -48,7 +48,7 @@ export interface QuerySigningInfosRequest {
 export interface QuerySigningInfosResponse {
   /** info is the signing info of all validators */
   info: ValidatorSigningInfo[];
-  pagination?: PageResponse;
+  pagination?: PageResponse | undefined;
 }
 
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -64,16 +64,18 @@ export const QueryParamsRequest = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -90,9 +92,8 @@ export const QueryParamsRequest = {
   create<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(
     base?: I,
   ): QueryParamsRequest {
-    return QueryParamsRequest.fromPartial(base ?? {});
+    return QueryParamsRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(
     _: I,
   ): QueryParamsRequest {
@@ -117,19 +118,25 @@ export const QueryParamsResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryParamsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryParamsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.params = Params.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -142,17 +149,17 @@ export const QueryParamsResponse = {
 
   toJSON(message: QueryParamsResponse): unknown {
     const obj: any = {};
-    message.params !== undefined &&
-      (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    if (message.params !== undefined) {
+      obj.params = Params.toJSON(message.params);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(
     base?: I,
   ): QueryParamsResponse {
-    return QueryParamsResponse.fromPartial(base ?? {});
+    return QueryParamsResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(
     object: I,
   ): QueryParamsResponse {
@@ -184,19 +191,25 @@ export const QuerySigningInfoRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QuerySigningInfoRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySigningInfoRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.consAddress = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -209,17 +222,17 @@ export const QuerySigningInfoRequest = {
 
   toJSON(message: QuerySigningInfoRequest): unknown {
     const obj: any = {};
-    message.consAddress !== undefined &&
-      (obj.consAddress = message.consAddress);
+    if (message.consAddress !== "") {
+      obj.consAddress = message.consAddress;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QuerySigningInfoRequest>, I>>(
     base?: I,
   ): QuerySigningInfoRequest {
-    return QuerySigningInfoRequest.fromPartial(base ?? {});
+    return QuerySigningInfoRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QuerySigningInfoRequest>, I>>(
     object: I,
   ): QuerySigningInfoRequest {
@@ -251,22 +264,28 @@ export const QuerySigningInfoResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QuerySigningInfoResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySigningInfoResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.valSigningInfo = ValidatorSigningInfo.decode(
             reader,
             reader.uint32(),
           );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -281,19 +300,17 @@ export const QuerySigningInfoResponse = {
 
   toJSON(message: QuerySigningInfoResponse): unknown {
     const obj: any = {};
-    message.valSigningInfo !== undefined &&
-      (obj.valSigningInfo = message.valSigningInfo
-        ? ValidatorSigningInfo.toJSON(message.valSigningInfo)
-        : undefined);
+    if (message.valSigningInfo !== undefined) {
+      obj.valSigningInfo = ValidatorSigningInfo.toJSON(message.valSigningInfo);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QuerySigningInfoResponse>, I>>(
     base?: I,
   ): QuerySigningInfoResponse {
-    return QuerySigningInfoResponse.fromPartial(base ?? {});
+    return QuerySigningInfoResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QuerySigningInfoResponse>, I>>(
     object: I,
   ): QuerySigningInfoResponse {
@@ -325,19 +342,25 @@ export const QuerySigningInfosRequest = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QuerySigningInfosRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySigningInfosRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -352,19 +375,17 @@ export const QuerySigningInfosRequest = {
 
   toJSON(message: QuerySigningInfosRequest): unknown {
     const obj: any = {};
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageRequest.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QuerySigningInfosRequest>, I>>(
     base?: I,
   ): QuerySigningInfosRequest {
-    return QuerySigningInfosRequest.fromPartial(base ?? {});
+    return QuerySigningInfosRequest.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QuerySigningInfosRequest>, I>>(
     object: I,
   ): QuerySigningInfosRequest {
@@ -402,24 +423,34 @@ export const QuerySigningInfosResponse = {
     input: _m0.Reader | Uint8Array,
     length?: number,
   ): QuerySigningInfosResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQuerySigningInfosResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.info.push(
             ValidatorSigningInfo.decode(reader, reader.uint32()),
           );
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -437,26 +468,20 @@ export const QuerySigningInfosResponse = {
 
   toJSON(message: QuerySigningInfosResponse): unknown {
     const obj: any = {};
-    if (message.info) {
-      obj.info = message.info.map((e) =>
-        e ? ValidatorSigningInfo.toJSON(e) : undefined,
-      );
-    } else {
-      obj.info = [];
+    if (message.info?.length) {
+      obj.info = message.info.map((e) => ValidatorSigningInfo.toJSON(e));
     }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+    if (message.pagination !== undefined) {
+      obj.pagination = PageResponse.toJSON(message.pagination);
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<QuerySigningInfosResponse>, I>>(
     base?: I,
   ): QuerySigningInfosResponse {
-    return QuerySigningInfosResponse.fromPartial(base ?? {});
+    return QuerySigningInfosResponse.fromPartial(base ?? ({} as any));
   },
-
   fromPartial<I extends Exact<DeepPartial<QuerySigningInfosResponse>, I>>(
     object: I,
   ): QuerySigningInfosResponse {
@@ -485,11 +510,12 @@ export interface Query {
   ): Promise<QuerySigningInfosResponse>;
 }
 
+export const QueryServiceName = "cosmos.slashing.v1beta1.Query";
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || "cosmos.slashing.v1beta1.Query";
+    this.service = opts?.service || QueryServiceName;
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
     this.SigningInfo = this.SigningInfo.bind(this);
@@ -499,7 +525,7 @@ export class QueryClientImpl implements Query {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Params", data);
     return promise.then((data) =>
-      QueryParamsResponse.decode(new _m0.Reader(data)),
+      QueryParamsResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -509,7 +535,7 @@ export class QueryClientImpl implements Query {
     const data = QuerySigningInfoRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "SigningInfo", data);
     return promise.then((data) =>
-      QuerySigningInfoResponse.decode(new _m0.Reader(data)),
+      QuerySigningInfoResponse.decode(_m0.Reader.create(data)),
     );
   }
 
@@ -519,7 +545,7 @@ export class QueryClientImpl implements Query {
     const data = QuerySigningInfosRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "SigningInfos", data);
     return promise.then((data) =>
-      QuerySigningInfosResponse.decode(new _m0.Reader(data)),
+      QuerySigningInfosResponse.decode(_m0.Reader.create(data)),
     );
   }
 }

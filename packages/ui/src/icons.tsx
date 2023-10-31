@@ -21,6 +21,7 @@ import {
   ChevronsRight,
   Circle,
   ClipboardCheck,
+  Clock,
   Coins,
   Command,
   Copy,
@@ -86,6 +87,8 @@ import {
   type LucideProps,
 } from "lucide-react";
 
+import { WalletTxnIcons } from "./wallet-txn-icons";
+
 export type Icon = LucideIcon;
 
 export const Icons = {
@@ -95,6 +98,7 @@ export const Icons = {
   alertCircle: AlertCircle,
   activity: Activity,
   reply: Reply,
+  clock: Clock,
   minusSquare: MinusSquare,
   plusSquare: PlusSquare,
   sortAsc: SortAsc,
@@ -582,4 +586,5 @@ export const Icons = {
       />
     </svg>
   ),
+  ...WalletTxnIcons,
 };

@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
+import { TransactionActionType } from "@bera/berajs";
 import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
 import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -13,6 +14,7 @@ import {
   useStateMachineInput,
 } from "@rive-app/react-canvas";
 import { motion } from "framer-motion";
+import { parseUnits } from "viem";
 import { erc20ABI } from "wagmi";
 
 import { LoadingBee } from "~/components/loadingBee";
@@ -138,7 +140,16 @@ export function HoneyMachine() {
   } = usePsm();
 
   const { write } = useTxn({
-    message: isMint ? "Mint Honey" : "Redeem Honey",
+    message: needsApproval
+      ? `Approve ${fromAmount} ${selectedFrom?.symbol}`
+      : isMint
+      ? `Mint ${toAmount} HONEY`
+      : `Redeem ${fromAmount} HONEY`,
+    actionType: needsApproval
+      ? TransactionActionType.APPROVAL
+      : isMint
+      ? TransactionActionType.MINT_HONEY
+      : TransactionActionType.REDEEM_HONEY,
     onError: (e: any) => {
       if (e.name === "TransactionExecutionError") {
         // rejection should be triggered when transaction fails(after metamask popup)
@@ -217,7 +228,10 @@ export function HoneyMachine() {
           address: selectedFrom?.address as `0x${string}`,
           abi: erc20ABI as unknown as (typeof erc20ABI)[],
           functionName: "approve",
-          params: [erc20HoneyAddress, 1000000000000000000000000000n],
+          params: [
+            erc20HoneyAddress,
+            parseUnits(`${fromAmount}`, selectedFrom?.decimals ?? 18),
+          ],
         });
       } else {
         rejectAction?.fire();

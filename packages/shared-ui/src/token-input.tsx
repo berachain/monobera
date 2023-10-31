@@ -7,6 +7,7 @@ import {
   usePollAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
+import { bgtTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
@@ -89,6 +90,7 @@ export function TokenInput({
           selectable={selectable}
           weight={weight}
           customTokenList={customTokenList}
+          filter={[bgtTokenAddress]}
         />
         <div className="flex w-full flex-col pl-2 sm:pl-0">
           <Input
@@ -102,8 +104,8 @@ export function TokenInput({
               exceeding && showExceeding && "text-destructive-foreground",
             )}
             value={amount > 0 ? amount : ""}
-            onKeyDown={(e) => e.key === "-" && e.preventDefault()}
-            onChange={(e) => {
+            onKeyDown={(e: any) => e.key === "-" && e.preventDefault()}
+            onChange={(e: any) => {
               const inputValue = e.target.value;
 
               // Allow only digits and periods (decimal points)
@@ -141,7 +143,9 @@ export function TokenInput({
               <div className="flex flex-row gap-1">
                 {!hidePrice && (
                   <p className="self-center p-0 text-xs text-muted-foreground">
-                    {amount !== 0 && formatUsd((amount * price).toFixed(2))}
+                    {amount !== 0 &&
+                      !isNaN(amount) &&
+                      formatUsd((amount * price).toFixed(2))}
                   </p>
                 )}
               </div>
