@@ -1,6 +1,6 @@
 "use client";
 
-import { TRADING_ABI } from "@bera/berajs";
+import { TRADING_ABI, TransactionActionType } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -31,6 +31,7 @@ export function OrderHistoryHeader({
   const { isLoading: isClosePositionsLoading, write: writePositionsClose } =
     useOctTxn({
       message: `Closing All Open Positions`,
+      actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
         void mutate(QUERY_KEY);
       },
@@ -38,6 +39,7 @@ export function OrderHistoryHeader({
   const { isLoading: isCloseLimitOrdersLoading, write: writeOrdersClose } =
     useOctTxn({
       message: `Closing All Open Positions`,
+      actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
         void mutate(QUERY_KEY);
       },

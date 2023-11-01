@@ -3,6 +3,7 @@
 import { useState } from "react";
 import {
   TRADING_ABI,
+  TransactionActionType,
   truncateHash,
   useBeraJs,
   useOct,
@@ -45,6 +46,7 @@ export function ManageOctDialog({
   const userBalance = useBalance();
   const { isLoading, write } = useTxn({
     message: "Delegate One Click Trading Wallet",
+    actionType: TransactionActionType.DELEGATE_OCT,
     onSuccess: () => {
       refetchDelegated();
     },
@@ -52,6 +54,7 @@ export function ManageOctDialog({
 
   const { isLoading: isRevokeLoading, write: revokeWrite } = useTxn({
     message: "Revoke One Click Trading Wallet",
+    actionType: TransactionActionType.REVOKE_OCT,
     onSuccess: () => {
       refetchDelegated();
     },

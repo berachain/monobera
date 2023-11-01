@@ -75,7 +75,6 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
     }));
   }, [openPositions]);
 
-  console.log(closePositionsPayload)
   return (
     <div className="w-full">
       <OrderHistoryHeader

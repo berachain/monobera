@@ -9,7 +9,7 @@ import { formatUnits } from "viem";
 import { POLLING } from "~/utils/constants";
 import { type IMarketOrder } from "~/app/berpetuals/components/order-history";
 import { type IMarket } from "~/app/berpetuals/page";
-import { calculateNetPnL } from "./useCalculatePnl";
+import { getPnl } from "./useCalculatePnl";
 import { usePricesSocket } from "./usePricesSocket";
 
 export const usePollOpenPositions = () => {
@@ -58,19 +58,32 @@ export const usePollOpenPositions = () => {
       }
 
       return openPositons?.reduce((acc: number, position: IMarketOrder) => {
-        const price = JSON.parse(prices)[position.market.pair_index];
+        const currentPrice = JSON.parse(prices)[position.market.pair_index];
+        const fees =
+          BigInt(position.borrowing_fee) +
+          BigInt(position.rollover_fee) +
+          BigInt(position.funding_rate) +
+          BigInt(position.closing_fee);
+        const posSize = Number(
+          formatUnits(
+            (BigInt(position?.position_size) ?? 0n) *
+              BigInt(position?.leverage),
+            10,
+          ),
+        );
+        const formattedOpenPrice = Number(
+          formatUnits(BigInt(position?.open_price) ?? 0n, 10),
+        );
 
-        const pnl = calculateNetPnL({
+        const size = posSize / formattedOpenPrice;
+
+        const pnl = getPnl({
+          currentPrice,
+          openPrice: BigInt(position?.open_price),
+          leverage: Number(position.leverage),
+          size,
           buy: position.buy,
-          currentPrice: price,
-          openPrice: BigInt(position.open_price),
-          leverage: BigInt(position.leverage),
-          levPosSize:
-            BigInt(position.position_size) * BigInt(position.leverage),
-          borrowingFee: BigInt(position.borrowing_fee),
-          rolloverFee: BigInt(position.rollover_fee),
-          fundingFee: BigInt(position.funding_rate),
-          closingFee: BigInt(position.closing_fee),
+          fees: Number(formatUnits(fees, 18)),
         });
         return acc + (pnl ?? 0);
       }, 0);

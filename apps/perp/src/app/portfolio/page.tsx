@@ -1,4 +1,6 @@
 import React from "react";
+import type { Metadata } from "next";
+import { perpsName } from "@bera/config";
 import type { Market } from "@bera/proto/src";
 
 import { MarketImages } from "~/utils/marketImages";
@@ -7,6 +9,11 @@ import { getMarkets } from "~/endpoints";
 import type { IMarket } from "../berpetuals/page";
 import Home from "./portfolio-home";
 
+export function generateMetadata(): Metadata {
+  return {
+    title: `Portfolio | ${perpsName}`,
+  };
+}
 export default async function Page() {
   const m = await getMarkets();
   const markets: IMarket[] = m?.map((m: Market) => ({

@@ -1,12 +1,17 @@
-"use client";
-
 import React from "react";
+import type { Metadata } from "next";
+import { perpsName } from "@bera/config";
 
 import { BhoneyStats } from "./bhoney-stats";
 import Claim from "./claim";
 import DepositWithdraw from "./deposit-withdraw";
 import { RewardsWithdraw } from "./rewards-withdraw";
 
+export function generateMetadata(): Metadata {
+  return {
+    title: `Vault | ${perpsName}`,
+  };
+}
 export default function Vault() {
   return (
     <div className="mx-auto mt-8 flex w-full max-w-[1200px] flex-col gap-8 p-8">

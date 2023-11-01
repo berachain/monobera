@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import {
   TRADING_ABI,
+  TransactionActionType,
   formatUsd,
   useBeraJs,
   usePollAllowance,
@@ -48,6 +49,14 @@ export function PlaceOrder({
   const { refetch } = usePollOpenPositions();
 
   const { isLoading, write, ModalPortal } = useOctTxn({
+    actionType:
+      form.optionType === "market"
+        ? form.orderType === "long"
+          ? TransactionActionType.MARKET_LONG
+          : TransactionActionType.MARKET_SHORT
+        : form.orderType === "long"
+        ? TransactionActionType.LIMIT_LONG
+        : TransactionActionType.LIMIT_SHORT,
     message:
       form.optionType === "market"
         ? form.orderType === "long"
@@ -97,8 +106,6 @@ export function PlaceOrder({
     }
   }, [slippageMode, slippage]);
 
-  console.log(form);
-
   const payload = [
     {
       trader: account,
@@ -118,8 +125,6 @@ export function PlaceOrder({
     form.optionType === "market" ? 0 : 2,
     parseUnits(`${slippageTolerance ?? 0}`, 10),
   ];
-
-  console.log("payload", payload);
 
   const honey = {
     symbol: "HONEY",
@@ -231,7 +236,12 @@ export function PlaceOrder({
                 ? "bg-success text-success-foreground"
                 : "bg-destructive text-destructive-foreground",
             )}
-            disabled={isLoading || error !== undefined || form.amount === 0}
+            disabled={
+              isLoading ||
+              error !== undefined ||
+              form.amount === 0 ||
+              form.amount === undefined
+            }
             onClick={() =>
               write({
                 address: tradingContract,

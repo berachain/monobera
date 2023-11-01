@@ -20,6 +20,7 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../../packages/berajs/src/hooks/modules/dex/useBeraPrice.ts"
   ]
 }

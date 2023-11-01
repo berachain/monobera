@@ -1,13 +1,42 @@
+"use client";
+
 import Image from "next/image";
+import {
+  usePollBgtRewardsForAddress,
+  usePollHoneyVaultBalance,
+} from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
+import { Skeleton } from "@bera/ui/skeleton";
+import type { Address } from "wagmi";
 
 export default function Claim() {
+  const {
+    isLoading: isHoneyVaultBalanceLoading,
+    useFormattedHoneyVaultBalance,
+  } = usePollHoneyVaultBalance();
+
+  const honeyLocked = useFormattedHoneyVaultBalance();
+
+  const { isLoading: isBgtRewardsLoading, useBgtApr } =
+    usePollBgtRewardsForAddress({
+      address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+    });
+
+  const bgtApr = useBgtApr(honeyLocked);
+
+  const isLoading = isHoneyVaultBalanceLoading || isBgtRewardsLoading;
   return (
     <div className="relative w-full overflow-hidden rounded-xl border border-border bg-gradient-to-r from-[#180B01] to-[#3B220F] px-10 py-8">
-      <div className=" relative z-10 w-[115px] h-[52px] px-3 py-2 bg-stone-900 rounded-xl border border-yellow-600 justify-center items-center gap-1 inline-flex">
-        <div className="text-yellow-600 text-3xl font-semibold font-['IBM Plex Sans'] leading-9">6.69%</div>
+      <div className=" relative z-10 inline-flex h-[52px] w-[115px] items-center justify-center gap-1 rounded-xl border border-yellow-600 bg-stone-900 px-3 py-2">
+        <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-yellow-600">
+          {isLoading || bgtApr === undefined ? (
+            <Skeleton className="h-[28px] w-[80px]" />
+          ) : (
+            <p>{bgtApr?.toFixed(2)}%</p>
+          )}
+        </div>
       </div>
-      <div className=" relative z-10 mt-4 text-xs text-muted-foreground w-full">
+      <div className=" relative z-10 mt-4 w-full text-xs text-muted-foreground">
         Honey Staking Projected <br /> Reward Rate (PRR)
       </div>
       <Image

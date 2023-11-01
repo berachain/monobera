@@ -1,6 +1,8 @@
 import React from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { type Market } from "@/../../packages/proto/src";
+import { perpsName } from "@bera/config";
 import { formatUnits } from "viem";
 
 import { MarketImages } from "~/utils/marketImages";
@@ -15,6 +17,11 @@ import GeneralInfo from "../components/general-info";
 import Markets from "../components/positions";
 import AvailableMarket from "./available-markets";
 
+export function generateMetadata(): Metadata {
+  return {
+    title: `Markets | ${perpsName}`,
+  };
+}
 export default async function Home() {
   const m = getMarkets();
   const pc = getDailyPriceChange();

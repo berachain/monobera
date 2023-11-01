@@ -1,8 +1,9 @@
 import React from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { type Market } from "@/../../packages/proto/src";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, perpsName } from "@bera/config";
 import { Footer } from "@bera/shared-ui";
 import { formatUnits } from "viem";
 
@@ -19,6 +20,12 @@ import Help from "./components/help";
 import Hero from "./components/hero";
 import Markets from "./components/positions";
 import Tutorial from "./components/tutorial";
+
+export function generateMetadata(): Metadata {
+  return {
+    title: `Home | ${perpsName}`,
+  };
+}
 
 export default async function Home() {
   const m = getMarkets();

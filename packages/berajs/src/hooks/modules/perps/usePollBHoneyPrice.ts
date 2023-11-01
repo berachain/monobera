@@ -3,25 +3,23 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { PRICE_AGGREGATOR_ABI } from "~/config";
+import { BTOKEN_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 
 export const usePollBHoneyPrice = () => {
   const publicClient = usePublicClient();
-  const method = "tokenPriceDai";
+  const method = "shareToAssetsPrice";
   const QUERY_KEY = ["bhoney", method];
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       try {
         const result = await publicClient.readContract({
-          address: process.env
-            .NEXT_PUBLIC_PRICE_AGGREGATOR_CONTRACT_ADDRESS as Address,
-          abi: PRICE_AGGREGATOR_ABI,
+          address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+          abi: BTOKEN_ABI,
           functionName: method,
           args: [],
         });
-        console.log("result", result);
         return result;
       } catch (e) {
         console.error(e);
@@ -41,7 +39,7 @@ export const usePollBHoneyPrice = () => {
   const useFormattedHoneyPrice = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     if (!data) return 0;
-    return Number(formatUnits(data, 10));
+    return 1 / Number(formatUnits(data, 18));
   };
   return {
     useFormattedHoneyPrice,

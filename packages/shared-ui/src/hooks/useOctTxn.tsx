@@ -36,6 +36,7 @@ import {
 
 interface IUseTxn {
   message?: string;
+  actionType?: TransactionActionType;
   disableToast?: boolean;
   disableModal?: boolean;
   onSuccess?: (hash: string) => void;
@@ -81,6 +82,7 @@ const DURATION = 3000;
  */
 export const useOctTxn = ({
   message = "",
+  actionType,
   disableToast = false,
   disableModal = false,
   onSuccess,
@@ -198,7 +200,7 @@ export const useOctTxn = ({
           hash: result,
           description: message,
           timestamp: Date.now(),
-          actionType: "" as TransactionActionType,
+          actionType,
         });
         onSuccess && onSuccess(result);
       },

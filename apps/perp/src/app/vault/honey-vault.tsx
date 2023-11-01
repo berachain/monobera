@@ -25,7 +25,6 @@ export default function HoneyVault() {
   const honeyLocked = useFormattedHoneyVaultBalance();
   const bHoneySupply = useFormattedBHoneySupply();
 
-  console.log(honeyLocked);
   const content = [
     {
       title: "Total value Locked",

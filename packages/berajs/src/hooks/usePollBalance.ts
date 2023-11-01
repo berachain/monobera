@@ -29,7 +29,7 @@ export const usePollBalance = ({
   const { networkConfig } = useBeraConfig();
 
   const QUERY_KEY = [account, address, "balance"];
-  useSWR(
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       if (account && !error && address) {
@@ -91,6 +91,7 @@ export const usePollBalance = ({
     return data;
   };
   return {
+    isLoading,
     useBalance,
   };
 };

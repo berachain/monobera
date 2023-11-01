@@ -17,8 +17,6 @@ export const usePollBHoneyCollateralization = () => {
     QUERY_KEY,
     () => {
       try {
-        console.log("honeyLocked", honeyLocked);
-        console.log("bHoneySupply", bHoneySupply);
         if (honeyLocked !== 0 && bHoneySupply !== 0) {
           return Math.floor(honeyLocked / bHoneySupply) * 100 ?? 0;
         }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TRADING_ABI, formatUsd } from "@bera/berajs";
+import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -49,6 +49,7 @@ export function ClosePositionModal({
     message: `Closing ${openPosition?.market?.name} ${
       openPosition?.buy === true ? "Long" : "Short"
     } position`,
+    actionType: TransactionActionType.CANCEL_ORDER,
     onSuccess: () => {
       refetch();
       setOpen(false);

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import {
   BTOKEN_ABI,
+  TransactionActionType,
   useBeraJs,
   usePollAllowance,
   usePollBHoneyPendingWithdraw,
@@ -35,6 +36,7 @@ export default function DepositWithdraw() {
     ModalPortal: DepositModalPortal,
   } = useTxn({
     message: "Staking HONEY",
+    actionType: TransactionActionType.DEPOSIT_HONEY,
   });
 
   const {
@@ -43,6 +45,7 @@ export default function DepositWithdraw() {
     ModalPortal: WithdrawModalPortal,
   } = useTxn({
     message: "Withdrawing HONEY",
+    actionType: TransactionActionType.START_WITHDRAW_REQUEST,
   });
 
   const { account } = useBeraJs();
@@ -58,10 +61,10 @@ export default function DepositWithdraw() {
 
   const { useBHoneyEligibleWithdraw } = usePollBHoneyPendingWithdraw();
   const eligibleForWithdraw = useBHoneyEligibleWithdraw();
-  
+
   const { useHoneyBalance } = usePollHoneyBalance();
   const honeyBalance = useHoneyBalance();
-  
+
   const { useAllowance } = usePollAllowance({
     contract: gTokenAddress,
     token: honey,

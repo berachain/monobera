@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TRADING_ABI, formatUsd } from "@bera/berajs";
+import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -54,6 +54,7 @@ export function UpdateLimitOrderModal({
   );
   const { isLoading, write } = useOctTxn({
     message: `Updating Open Limit Order`,
+    actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
       void mutate(QUERY_KEY);
       setOpen(false);

@@ -22,7 +22,7 @@ export interface IMarket extends Market {
 }
 export function generateMetadata(): Metadata {
   return {
-    title: `BTC-USD | ${perpsName}`,
+    title: `${DEFAULT_MARKET} | ${perpsName}`,
   };
 }
 

@@ -25,17 +25,20 @@ export const useCalculatePnl = ({
 
   useMemo(() => {
     try {
+      const fees = borrowingFee + rolloverFee + fundingFee + closingFee;
+      const posSize = Number(formatUnits(levPosSize ?? 0n, 18));
+      const formattedOpenPrice = Number(formatUnits(openPrice ?? 0n, 10));
+
+      const size = posSize / formattedOpenPrice;
+
       setPnl(
-        calculateNetPnL({
-          buy,
+        getPnl({
           currentPrice,
           openPrice,
-          leverage,
-          levPosSize,
-          borrowingFee,
-          rolloverFee,
-          fundingFee,
-          closingFee,
+          leverage: Number(leverage),
+          size,
+          buy,
+          fees: Number(formatUnits(fees, 18)),
         }),
       );
     } catch (e) {
@@ -68,7 +71,6 @@ export const getPnl = ({
         formattedOpenPrice;
       return PnL * leverage - fees;
     }
-    return undefined;
   } else {
     return undefined;
   }
@@ -85,48 +87,48 @@ interface IPnl {
   fundingFee: bigint;
   closingFee: bigint;
 }
-export function calculateNetPnL({
-  buy,
-  currentPrice,
-  openPrice,
-  leverage,
-  levPosSize,
-  borrowingFee,
-  rolloverFee,
-  fundingFee,
-  closingFee,
-}: IPnl): number | undefined {
-  const PRECISION: bigint = 10n ** 10n;
-  const maxPnlP: bigint = 900n * PRECISION;
+// function calculateNetPnL({
+//   buy,
+//   currentPrice,
+//   openPrice,
+//   leverage,
+//   levPosSize,
+//   borrowingFee,
+//   rolloverFee,
+//   fundingFee,
+//   closingFee,
+// }: IPnl): number | undefined {
+//   const PRECISION: bigint = 10n ** 18n;
+//   const maxPnlP: bigint = 900n * PRECISION;
 
-  if (!currentPrice) {
-    return undefined;
-  }
-  let percentProfit: bigint =
-    ((buy
-      ? BigInt(currentPrice) - openPrice
-      : openPrice - BigInt(currentPrice)) *
-      100n *
-      PRECISION *
-      leverage) /
-    openPrice;
-  percentProfit = percentProfit > maxPnlP ? maxPnlP : percentProfit;
+//   if (!currentPrice) {
+//     return undefined;
+//   }
+//   let percentProfit: bigint =
+//     ((buy
+//       ? BigInt(currentPrice) - openPrice
+//       : openPrice - BigInt(currentPrice)) *
+//       100n *
+//       PRECISION *
+//       leverage) /
+//     openPrice;
+//   percentProfit = percentProfit > maxPnlP ? maxPnlP : percentProfit;
 
-  const currentDaiPos: bigint = levPosSize / leverage;
+//   const currentDaiPos: bigint = levPosSize / (leverage * PRECISION);
 
-  const netProfitP: bigint =
-    percentProfit - (borrowingFee * 100n * PRECISION) / currentDaiPos;
+//   const netProfitP: bigint =
+//     percentProfit - (borrowingFee * 100n * PRECISION) / currentDaiPos;
 
-  const netPnL: bigint =
-    currentDaiPos +
-    (currentDaiPos * netProfitP) / (100n * PRECISION) -
-    rolloverFee -
-    fundingFee;
+//   const netPnL: bigint =
+//     currentDaiPos +
+//     (currentDaiPos * netProfitP) / (100n * PRECISION) -
+//     rolloverFee -
+//     fundingFee;
 
-  // if (netPnL <= (currentDaiPos * ((100n - 90n) / 100n)) || netPnL <= maxPnlP) {
-  //   return 0;
-  // }
+//   // if (netPnL <= (currentDaiPos * ((100n - 90n) / 100n)) || netPnL <= maxPnlP) {
+//   //   return 0;
+//   // }
 
-  const np = netPnL - closingFee;
-  return Number(formatUnits(np, 18));
-}
+//   const np = netPnL - closingFee;
+//   return Number(formatUnits(np, 18));
+// }

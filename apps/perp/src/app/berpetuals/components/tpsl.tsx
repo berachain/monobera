@@ -14,12 +14,10 @@ const getCappedPercentDifference = (
   long: boolean,
   cap: number,
 ) => {
-  console.log(long);
   const difference =
     long === true
       ? estPrice - formattedPrice
       : Math.abs(estPrice - formattedPrice);
-  console.log(difference);
   const percentDifference = (difference / formattedPrice) * (100 * leverage);
   return Math.min(percentDifference, cap);
 };
@@ -68,8 +66,6 @@ const InputSelect = ({
         type={"number"}
         value={value === 0 ? "Price" : type === "percent" ? "Price" : value}
         onChange={(e) => {
-          console.log(e.target.value === "");
-          console.log(value);
           onValueChange(Number(e.target.value));
           onTypeChange &&
             onTypeChange(e.target.value === "" ? "none" : "number");
@@ -170,7 +166,6 @@ export function TPSL({
         MAX_GAIN,
       );
       if (pnlTarget === MAX_GAIN) {
-        console.log("max gain");
         result =
           calculateMaxPnlPrice(
             pnlTarget,
@@ -178,7 +173,6 @@ export function TPSL({
             formattedPrice ?? 0,
             long ?? true,
           ) ?? 0;
-        console.log(result);
       } else {
         result = (tpsl.tp ?? 0) * 1;
       }

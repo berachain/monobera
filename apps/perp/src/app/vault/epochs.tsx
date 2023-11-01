@@ -17,7 +17,6 @@ export const Epochs = ({
   const [progressPercentage, setProgressPercentage] = useState(0);
   const [duration, setDuration] = useState("0d");
 
-  console.log("Epochs", epoch);
   const formattedStartDate =
     epoch === undefined || Number.isNaN(epoch?.currentEpochStart)
       ? 0
