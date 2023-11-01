@@ -17,26 +17,8 @@ export const BTOKEN_ABI = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-      {
-        indexed: true,
         internalType: "uint256",
         name: "newEpoch",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "prevPositiveOpenPnl",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "newPositiveOpenPnl",
         type: "uint256",
       },
       {
@@ -209,138 +191,6 @@ export const BTOKEN_ABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "depositId",
-        type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "owner",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "shares",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "assetsDeposited",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "assetsDiscount",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "atTimestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "lockDuration",
-            type: "uint256",
-          },
-        ],
-        indexed: false,
-        internalType: "struct IGToken.LockedDeposit",
-        name: "d",
-        type: "tuple",
-      },
-    ],
-    name: "DepositLocked",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "receiver",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "depositId",
-        type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "owner",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "shares",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "assetsDeposited",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "assetsDiscount",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "atTimestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "lockDuration",
-            type: "uint256",
-          },
-        ],
-        indexed: false,
-        internalType: "struct IGToken.LockedDeposit",
-        name: "d",
-        type: "tuple",
-      },
-    ],
-    name: "DepositUnlocked",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: false,
         internalType: "uint8",
         name: "version",
@@ -348,6 +198,38 @@ export const BTOKEN_ABI = [
       },
     ],
     name: "Initialized",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "newEpoch",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newEpochPositiveOpenPnl",
+        type: "uint256",
+      },
+    ],
+    name: "NewEpoch",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "newEpoch",
+        type: "uint256",
+      },
+    ],
+    name: "NewEpochForced",
     type: "event",
   },
   {
@@ -398,15 +280,21 @@ export const BTOKEN_ABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
+        indexed: false,
+        internalType: "uint256",
+        name: "assetsToHoney",
+        type: "uint256",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "assets",
+        name: "assetsToBGT",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "assetsTotal",
         type: "uint256",
       },
     ],
@@ -577,19 +465,6 @@ export const BTOKEN_ABI = [
   },
   {
     inputs: [],
-    name: "MIN_LOCK_DURATION",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "accBlockWeightedMarketCap",
     outputs: [
       {
@@ -729,19 +604,6 @@ export const BTOKEN_ABI = [
   },
   {
     inputs: [],
-    name: "assetsToDeplete",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "availableAssets",
     outputs: [
       {
@@ -762,6 +624,32 @@ export const BTOKEN_ABI = [
       },
     ],
     name: "balanceOf",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "bgtRewards",
+    outputs: [
+      {
+        internalType: "contract IRewardsModule",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "bgtRewardsP",
     outputs: [
       {
         internalType: "uint256",
@@ -862,6 +750,19 @@ export const BTOKEN_ABI = [
   {
     inputs: [],
     name: "currentEpoch",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "currentEpochEnd",
     outputs: [
       {
         internalType: "uint256",
@@ -992,35 +893,6 @@ export const BTOKEN_ABI = [
         name: "assets",
         type: "uint256",
       },
-      {
-        internalType: "uint256",
-        name: "lockDuration",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "receiver",
-        type: "address",
-      },
-    ],
-    name: "depositWithDiscountAndLock",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "assets",
-        type: "uint256",
-      },
     ],
     name: "distributeReward",
     outputs: [],
@@ -1028,54 +900,36 @@ export const BTOKEN_ABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "depositId",
-        type: "uint256",
-      },
-    ],
-    name: "getLockedDeposit",
+    inputs: [],
+    name: "distributionModule",
     outputs: [
       {
-        components: [
-          {
-            internalType: "address",
-            name: "owner",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "shares",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "assetsDeposited",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "assetsDiscount",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "atTimestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "lockDuration",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct IGToken.LockedDeposit",
+        internalType: "address",
         name: "",
-        type: "tuple",
+        type: "address",
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "epochLength",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "forceNewEpoch",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1157,38 +1011,13 @@ export const BTOKEN_ABI = [
           },
           {
             internalType: "address",
-            name: "gnsToken",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "lockedDepositNft",
-            type: "address",
-          },
-          {
-            internalType: "address",
             name: "pnlHandler",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "openTradesPnlFeed",
             type: "address",
           },
         ],
         internalType: "struct GTokenV6_3_2.ContractAddresses",
         name: "_contractAddresses",
         type: "tuple",
-      },
-      {
-        internalType: "uint256",
-        name: "_MIN_LOCK_DURATION",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_maxAccOpenPnlDelta",
-        type: "uint256",
       },
       {
         internalType: "uint256",
@@ -1212,12 +1041,12 @@ export const BTOKEN_ABI = [
       },
       {
         internalType: "uint256",
-        name: "_maxDiscountP",
+        name: "_epochLength",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "_maxDiscountThresholdP",
+        name: "_bgtRewardsP",
         type: "uint256",
       },
     ],
@@ -1249,100 +1078,6 @@ export const BTOKEN_ABI = [
   {
     inputs: [],
     name: "lastMaxSupplyUpdate",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "collatP",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "lockDuration",
-        type: "uint256",
-      },
-    ],
-    name: "lockDiscountP",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "lockedDepositNft",
-    outputs: [
-      {
-        internalType: "contract ERC721MinterBurner",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "lockedDeposits",
-    outputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "shares",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "assetsDeposited",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "assetsDiscount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "atTimestamp",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "lockDuration",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "lockedDepositsCount",
     outputs: [
       {
         internalType: "uint256",
@@ -1412,19 +1147,6 @@ export const BTOKEN_ABI = [
   },
   {
     inputs: [],
-    name: "maxAccOpenPnlDelta",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "maxAccPnlPerToken",
     outputs: [
       {
@@ -1458,32 +1180,6 @@ export const BTOKEN_ABI = [
       },
     ],
     name: "maxDeposit",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "maxDiscountP",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "maxDiscountThresholdP",
     outputs: [
       {
         internalType: "uint256",
@@ -1596,19 +1292,6 @@ export const BTOKEN_ABI = [
         internalType: "string",
         name: "",
         type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "openTradesPnlFeed",
-    outputs: [
-      {
-        internalType: "contract IOpenTradesPnlFeed",
-        name: "",
-        type: "address",
       },
     ],
     stateMutability: "view",
@@ -1862,38 +1545,12 @@ export const BTOKEN_ABI = [
   },
   {
     inputs: [],
-    name: "totalDiscounts",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "totalLiability",
     outputs: [
       {
         internalType: "int256",
         name: "",
         type: "int256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalLockedDiscounts",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -2012,13 +1669,6 @@ export const BTOKEN_ABI = [
   },
   {
     inputs: [],
-    name: "tryNewOpenPnlRequestOrEpoch",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "tryResetDailyAccPnlDelta",
     outputs: [],
     stateMutability: "nonpayable",
@@ -2042,48 +1692,6 @@ export const BTOKEN_ABI = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "depositId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "receiver",
-        type: "address",
-      },
-    ],
-    name: "unlockDeposit",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "prevPositiveOpenPnl",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "newPositiveOpenPnl",
-        type: "uint256",
-      },
-    ],
-    name: "updateAccPnlPerTokenUsed",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -2133,19 +1741,6 @@ export const BTOKEN_ABI = [
         type: "uint256",
       },
     ],
-    name: "updateMaxAccOpenPnlDelta",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "newValue",
-        type: "uint256",
-      },
-    ],
     name: "updateMaxDailyAccPnlDelta",
     outputs: [],
     stateMutability: "nonpayable",
@@ -2159,46 +1754,7 @@ export const BTOKEN_ABI = [
         type: "uint256",
       },
     ],
-    name: "updateMaxDiscountP",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "newValue",
-        type: "uint256",
-      },
-    ],
-    name: "updateMaxDiscountThresholdP",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "newValue",
-        type: "uint256",
-      },
-    ],
     name: "updateMaxSupplyIncreaseDailyP",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newValue",
-        type: "address",
-      },
-    ],
-    name: "updateOpenTradesPnlFeed",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

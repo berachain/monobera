@@ -6,7 +6,7 @@ import {
   useBeraJs,
   usePollAllowance,
   usePollBHoneyPendingWithdraw,
-  usePollWithdrawRequestDisabled,
+  usePollHoneyBalance,
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton, TokenInput, TokenList, useTxn } from "@bera/shared-ui";
@@ -58,10 +58,10 @@ export default function DepositWithdraw() {
 
   const { useBHoneyEligibleWithdraw } = usePollBHoneyPendingWithdraw();
   const eligibleForWithdraw = useBHoneyEligibleWithdraw();
-
-  const { useWithdrawDisabled } = usePollWithdrawRequestDisabled();
-  const withdrawDisabled = useWithdrawDisabled();
-  console.log("withdrawDisabled", withdrawDisabled);
+  
+  const { useHoneyBalance } = usePollHoneyBalance();
+  const honeyBalance = useHoneyBalance();
+  
   const { useAllowance } = usePollAllowance({
     contract: gTokenAddress,
     token: honey,
@@ -99,6 +99,7 @@ export default function DepositWithdraw() {
                 <TokenInput
                   selectable={false}
                   selected={honey}
+                  balance={Number(honeyBalance)}
                   amount={depositAmount}
                   setAmount={setDepositAmount}
                   showExceeding={true}

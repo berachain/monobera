@@ -9,7 +9,7 @@ import { useBeraJs } from "~/contexts";
 export const usePollBHoneyBalance = () => {
   const publicClient = usePublicClient();
   const { isConnected, account } = useBeraJs();
-  const QUERY_KEY = [account, isConnected, "honeyBalance"];
+  const QUERY_KEY = [account, isConnected, "bhoneyBalance"];
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {

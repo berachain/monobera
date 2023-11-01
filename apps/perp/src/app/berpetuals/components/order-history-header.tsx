@@ -13,6 +13,8 @@ export function OrderHistoryHeader({
   headers,
   tabType,
   setTabType,
+  closePositionsPayload,
+  closeOrdersPayload,
 }: {
   headers: {
     title: string;
@@ -21,15 +23,25 @@ export function OrderHistoryHeader({
   }[];
   tabType: "positions" | "orders" | "history" | "pnl";
   setTabType: (type: "positions" | "orders" | "history" | "pnl") => void;
+  closePositionsPayload: any[];
+  closeOrdersPayload: any[];
 }) {
   const { QUERY_KEY } = usePollOpenPositions();
 
-  const { isLoading, write } = useOctTxn({
-    message: `Closing All Open Positions`,
-    onSuccess: () => {
-      void mutate(QUERY_KEY);
-    },
-  });
+  const { isLoading: isClosePositionsLoading, write: writePositionsClose } =
+    useOctTxn({
+      message: `Closing All Open Positions`,
+      onSuccess: () => {
+        void mutate(QUERY_KEY);
+      },
+    });
+  const { isLoading: isCloseLimitOrdersLoading, write: writeOrdersClose } =
+    useOctTxn({
+      message: `Closing All Open Positions`,
+      onSuccess: () => {
+        void mutate(QUERY_KEY);
+      },
+    });
   return (
     <div>
       <div className="sm: flex h-[70px] h-fit w-full flex-col items-center justify-between border-y border-border bg-muted px-6 py-4 sm:flex-row">
@@ -73,14 +85,16 @@ export function OrderHistoryHeader({
         {tabType === "positions" && (
           <Button
             className="h-full w-full cursor-pointer rounded-lg bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
-            disabled={isLoading}
+            disabled={
+              isClosePositionsLoading || closePositionsPayload?.length === 0
+            }
             onClick={() => {
-              write({
+              writePositionsClose({
                 address: process.env
                   .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
                 abi: TRADING_ABI,
-                functionName: "closeAllMarketTrades",
-                params: [],
+                functionName: "closeTradesMarket",
+                params: [closePositionsPayload],
               });
             }}
           >
@@ -91,14 +105,16 @@ export function OrderHistoryHeader({
         {tabType === "orders" && (
           <Button
             className="h-full w-full cursor-pointer rounded-lg bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
-            disabled={isLoading}
+            disabled={
+              isCloseLimitOrdersLoading || closeOrdersPayload?.length === 0
+            }
             onClick={() => {
-              write({
+              writeOrdersClose({
                 address: process.env
                   .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
                 abi: TRADING_ABI,
-                functionName: "closeAllMarketTrades",
-                params: [],
+                functionName: "cancelOpenLimitOrders",
+                params: [closeOrdersPayload],
               });
             }}
           >

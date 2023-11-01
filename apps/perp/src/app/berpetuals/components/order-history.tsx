@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { ClosedTrade, OpenLimitOrder, OpenTrade } from "@bera/proto/src";
 
 import { usePollOpenOrders } from "~/hooks/usePollOpenOrders";
@@ -61,9 +61,28 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
     },
   ];
 
+  const closePositionsPayload = useMemo(() => {
+    return openPositions?.map((position) => ({
+      pairIndex: BigInt(position.market.pair_index),
+      index: BigInt(position.index),
+    }));
+  }, [openPositions]);
+
+  const closeOrdersPayload = useMemo(() => {
+    return openOrders?.map((position) => ({
+      pairIndex: BigInt(position.market.pair_index),
+      index: BigInt(position.index),
+    }));
+  }, [openPositions]);
+
+  console.log(closePositionsPayload)
   return (
     <div className="w-full">
-      <OrderHistoryHeader {...{ headers, tabType, setTabType }} />
+      <OrderHistoryHeader
+        closePositionsPayload={closePositionsPayload}
+        closeOrdersPayload={closeOrdersPayload}
+        {...{ headers, tabType, setTabType }}
+      />
       <TotalAmount className="flex sm:hidden" markets={markets} />
       <OrderHistoryTable
         tab={tabType}

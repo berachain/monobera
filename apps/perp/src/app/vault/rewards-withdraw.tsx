@@ -20,13 +20,26 @@ export const RewardsWithdraw = () => {
           <Skeleton className="h-[28px] w-1/2" />
         ) : (
           <div className="flex flex-row items-center gap-2 text-xl font-semibold leading-7">
-            0{" "}
+            <Image
+              src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/bgt.png"
+              alt="Honey"
+              width={20}
+              height={20}
+            />
+            {" "}0 
+          </div>
+        )}
+              {isLoading ? (
+          <Skeleton className="h-[28px] w-1/2" />
+        ) : (
+          <div className="flex flex-row items-center gap-2 text-xl font-semibold leading-7">
             <Image
               src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/honey.png"
               alt="Honey"
               width={20}
               height={20}
             />
+            {" "}0
           </div>
         )}
       </div>

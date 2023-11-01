@@ -7,4 +7,3 @@ export * from "./usePollBHoneyCollateralization";
 export * from "./usePollBHoneyEpochs";
 export * from "./usePollBHoneyBalance";
 export * from "./usePollBHoneyPendingWithdraw";
-export * from "./usePollWithdrawRequestDisabled";
