@@ -15,7 +15,14 @@ export function DripToken({
         method: "POST",
         body: JSON.stringify({ address: getAddress(address) }),
       });
-      res.ok ? setAlert("success") : setAlert("destructive");
+      console.log(res);
+      if (res.status === 200) {
+        setAlert("success");
+      } else if (res.status === 429) {
+        setAlert("destructive");
+      } else {
+        setAlert("error");
+      }
     } catch (error: any) {
       setAlert("error");
       // console.log(error, error.message);
