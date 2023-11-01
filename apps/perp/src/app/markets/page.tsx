@@ -1,10 +1,15 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import { type Market } from "@/../../packages/proto/src";
+import { formatUnits } from "viem";
 
 import { MarketImages } from "~/utils/marketImages";
 import { MarketTokenNames } from "~/utils/marketTokenNames";
-import { getMarkets } from "~/endpoints";
+import {
+  getDailyPriceChange,
+  getMarkets,
+  getTradingSummary,
+} from "~/endpoints";
 import { type IMarket } from "../berpetuals/page";
 import GeneralInfo from "../components/general-info";
 import Markets from "../components/positions";
@@ -12,23 +17,50 @@ import AvailableMarket from "./available-markets";
 
 export default async function Home() {
   const m = getMarkets();
-  const data: any = await Promise.all([m]).then(([markets]) => ({
-    markets,
-  }));
+  const pc = getDailyPriceChange();
+  const ts = getTradingSummary();
 
-  const markets: IMarket[] = data.markets.map((m: Market) => ({
-    ...m,
-    imageUri: MarketImages[m.name],
-    tokenName: MarketTokenNames[m.name],
-  }));
+  const data: any = await Promise.all([m, pc, ts]).then(
+    ([markets, priceChange, tradingSummary]) => ({
+      markets,
+      priceChange,
+      tradingSummary,
+    }),
+  );
 
   if (!data) {
     notFound();
   }
+  const markets: IMarket[] = data.markets.map((m: Market) => ({
+    ...m,
+    imageUri: MarketImages[m.name],
+    tokenName: MarketTokenNames[m.name],
+    dailyHistoricPrice: Number(data.priceChange[Number(m.pair_index)]),
+  }));
+
+  let oi = 0;
+  const oiLong = markets?.reduce((acc: number, market: IMarket) => {
+    return (
+      acc + Number(formatUnits(BigInt(market.open_interest?.oi_long ?? 0n), 18))
+    );
+  }, 0);
+  const oiShort = markets?.reduce((acc: number, market: IMarket) => {
+    return (
+      acc +
+      Number(formatUnits(BigInt(market.open_interest?.oi_short ?? 0n), 18))
+    );
+  }, 0);
+
+  oi = oiLong + oiShort;
+
+  const tradingSummary = {
+    ...data.tradingSummary,
+    oi,
+  };
   return (
     <div className="container mt-8 flex flex-col gap-16">
       <Markets markets={markets} />
-      <GeneralInfo />
+      <GeneralInfo tradingSummary={tradingSummary} />
       <AvailableMarket markets={markets} />
     </div>
   );

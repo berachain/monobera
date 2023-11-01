@@ -1,23 +1,28 @@
 "use client";
 
 import React from "react";
+import { formatUsd } from "@bera/berajs";
 import { Dropdown, Tooltip } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { useTheme } from "next-themes";
 
+import { useTradingSummaryChart } from "~/hooks/useTradingSummaryChart";
+import type { IMarket } from "../berpetuals/page";
 import { Options, chartColor } from "./components/chat-options";
 import { UserGeneralInfo } from "./components/user-general-info";
 
-const getData = (data: any[], light: boolean) => {
-  const mockData = [
-    6, 5, 4, 2, 1, 0.5, 1, 0.5, 2, 5, 4, 6, 6, 5, 4, 2, 1, 0.5, 1, 0.5, 2, 5, 4,
-    6, 6, 5, 4, 2, 1, 0.5, 1, 0.5, 2, 5, 4, 6,
-  ];
+const getData = (data: any[], type: string, light: boolean) => {
   return {
-    labels: mockData.map((_: any) => ["text"]),
+    labels: data?.map((sumary: any) =>
+      new Date(sumary.time * 1000).toLocaleDateString(),
+    ),
     datasets: [
       {
-        data: mockData,
+        data:
+          type === "Volume"
+            ? data?.map((sumary: any) => sumary.volume)
+            : data?.map((sumary: any) => sumary.pnl),
         labelColor: false,
         backgroundColor: light
           ? chartColor.default.light
@@ -38,26 +43,34 @@ const getData = (data: any[], light: boolean) => {
   };
 };
 
-enum TimeFrame {
+export enum TimeFrame {
   WEEKLY = "7d",
   MONTHLY = "30d",
   QUARTERLY = "90d",
 }
 
-export default function Portfolio() {
-  const data = getData([], true);
+export default function Portfolio({ markets }: { markets: IMarket[] }) {
   const [tabType, setTabType] = React.useState<"Volume" | "PnL">("Volume");
   const [timeFrame, setTimeFrame] = React.useState(TimeFrame.QUARTERLY);
+
+  const { theme } = useTheme();
+  const isLight = theme === "light";
+  const { useChart, useTotalPnl, useTotalVolume } = useTradingSummaryChart({
+    interval: timeFrame,
+  });
+  const chart = useChart();
+  const data = getData(chart, tabType, isLight);
+  const totalVolume = useTotalVolume();
+  const totalPnl = useTotalPnl();
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
-      <UserGeneralInfo />
+      <UserGeneralInfo markets={markets} />
       <div className="flex max-h-[300px] w-full flex-col justify-between rounded-xl border border-border bg-muted px-4 py-6">
         <div className="flex w-full flex-col-reverse justify-between gap-9 sm:flex-row sm:gap-0">
           <div className="text-xl font-semibold leading-7">
-            $6.9M
-            <span className="ml-1 text-sm leading-tight text-success-foreground">
-              4.38%
-            </span>
+            {tabType === "Volume"
+              ? formatUsd(Number(totalVolume))
+              : formatUsd(Number(totalPnl))}
           </div>
           <div className="flex gap-2">
             <Tabs

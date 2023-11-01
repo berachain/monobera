@@ -66,7 +66,6 @@ export function UpdatePositionModal({
     },
   });
 
-  console.log(openPosition);
   const formattedPrice = Number(
     formatUnits(BigInt(openPosition?.open_price ?? 0n), 10),
   );

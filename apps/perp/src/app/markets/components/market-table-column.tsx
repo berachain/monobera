@@ -1,18 +1,82 @@
+import { useMemo } from "react";
+import Image from "next/image";
 import { formatUsd, formatter } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Skeleton } from "@bera/ui/skeleton";
 import { type ColumnDef } from "@tanstack/react-table";
 import { formatUnits } from "viem";
 
+import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
+import { calculatePercentDifference } from "~/utils/percentDifference";
 import { type IMarket } from "~/app/berpetuals/page";
-import { PositionTitle } from "~/app/components/position-title";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
 
 const MarketPrice = ({ pairIndex }: { pairIndex: number }) => {
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(pairIndex);
-  return <div className="w-[88px]">{price && formatUsd(price)}</div>;
+  return (
+    <div className="w-[88px]">
+      {" "}
+      {price !== undefined ? (
+        <span>{formatBigIntUsd(price, 10)}</span>
+      ) : (
+        <Skeleton className="h-[16px] w-[80px]" />
+      )}
+    </div>
+  );
 };
+
+const Change = ({
+  pairIndex,
+  dailyHistoricPrice,
+}: {
+  pairIndex: number;
+  dailyHistoricPrice: number;
+}) => {
+  const { useMarketIndexPrice } = usePricesSocket();
+  const price = useMarketIndexPrice(pairIndex);
+  const formattedPrice = Number(formatUnits(BigInt(price ?? 0), 10));
+
+  const difference = useMemo(() => {
+    return calculatePercentDifference(dailyHistoricPrice ?? 0, formattedPrice);
+  }, [dailyHistoricPrice, formattedPrice]);
+
+  const priceDifference = useMemo(() => {
+    return formattedPrice - (dailyHistoricPrice ?? 0);
+  }, [dailyHistoricPrice, formattedPrice]);
+
+  return (
+    <div className="flex w-[88px] flex-col gap-1">
+      <div
+        className={cn(
+          "text-sm font-semibold leading-tight",
+          difference >= 0
+            ? "text-success-foreground"
+            : "text-destructive-foreground",
+        )}
+      >
+        {price !== undefined ? (
+          <span>
+            {!Number.isNaN(difference) ? Number(difference).toFixed(4) : 0}%
+          </span>
+        ) : (
+          <Skeleton className="h-[16px] w-[50px]" />
+        )}
+      </div>
+      <div className="text-xs font-medium leading-tight text-muted-foreground">
+        {price !== undefined ? (
+          <span>
+            {!Number.isNaN(difference) ? formatUsd(priceDifference) : "$0"}
+          </span>
+        ) : (
+          <Skeleton className="h-[16px] w-[80px]" />
+        )}
+      </div>
+    </div>
+  );
+};
+
 export const market_table_column: ColumnDef<IMarket>[] = [
   {
     header: ({ column }) => (
@@ -20,7 +84,23 @@ export const market_table_column: ColumnDef<IMarket>[] = [
     ),
     cell: ({ row }) => (
       <div className="w-[150px]">
-        <PositionTitle market={row.original} type={"Long"} />
+        <div className={cn("flex w-[112px] items-center gap-2", "")}>
+          <Image
+            src={row.original?.imageUri ?? ""}
+            alt={"selectedMarket"}
+            width={24}
+            height={24}
+            className="rounded-full"
+          />{" "}
+          <div>
+            <div className="mt-1 text-sm font-semibold leading-tight text-foreground">
+              {row.original?.name}
+            </div>
+            <div className="mt-1 text-sm font-medium leading-tight">
+              {row.original?.tokenName}
+            </div>
+          </div>
+        </div>
       </div>
     ),
     accessorKey: "market",
@@ -30,39 +110,26 @@ export const market_table_column: ColumnDef<IMarket>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Index Price" />
     ),
-    cell: ({ row }) => {
-      <MarketPrice pairIndex={Number(row.original.pair_index)} />;
-    },
-    accessorKey: "current_price",
-    enableSorting: true,
+    cell: ({ row }) => (
+      <MarketPrice pairIndex={Number(row.original.pair_index)} />
+    ),
+    accessorKey: "index_price",
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="24H Change" />
     ),
-    cell: () => {
-      const changerate = 0.69;
-      const changeAmoumt = parseFloat((Math.random() * 500).toFixed(2));
+    cell: ({ row }) => {
       return (
-        <div className="flex w-[88px] flex-col gap-1">
-          <div
-            className={cn(
-              "text-sm font-semibold leading-tight",
-              changerate >= 0
-                ? "text-success-foreground"
-                : "text-destructive-foreground",
-            )}
-          >
-            {(changerate * 100).toFixed(2)}%
-          </div>
-          <div className="text-xs font-medium leading-tight text-muted-foreground">
-            {formatUsd(changeAmoumt)}
-          </div>
-        </div>
+        <Change
+          pairIndex={Number(row.original.pair_index)}
+          dailyHistoricPrice={Number(row.original.dailyHistoricPrice)}
+        />
       );
     },
-    accessorKey: "open_interest_long",
-    enableSorting: true,
+    accessorKey: "dailyHistoricPrice",
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
@@ -79,11 +146,11 @@ export const market_table_column: ColumnDef<IMarket>[] = [
       );
       return (
         <div>
-          <div className="text-xs font-medium text-muted-foreground">
-            {formattedBorrowingL}% (L)
+          <div className="text-xs font-medium text-success-foreground">
+            {Number(formattedBorrowingL).toFixed(4)}% (L)
           </div>
-          <div className="text-xs font-medium text-muted-foreground">
-            {formattedBorrowingS}% (S)
+          <div className="text-xs font-medium text-destructive-foreground">
+            {Number(formattedBorrowingS).toFixed(4)}% (S)
           </div>
         </div>
       );
@@ -106,11 +173,11 @@ export const market_table_column: ColumnDef<IMarket>[] = [
       );
       return (
         <div>
-          <div className="text-xs font-medium text-muted-foreground">
+          <div className="text-xs font-medium text-success-foreground">
             {formatter.format(Number(formattedOIL))} (L)
           </div>
-          <div className="text-xs font-medium text-muted-foreground">
-            {formatter.format(Number(formattedOIS))} (L)
+          <div className="text-xs font-medium text-destructive-foreground">
+            {formatter.format(Number(formattedOIS))} (S)
           </div>
         </div>
       );

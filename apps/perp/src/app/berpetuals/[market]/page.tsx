@@ -5,7 +5,7 @@ import { perpsName } from "@bera/config";
 import { type Market } from "@bera/proto/src";
 
 import { MarketImages } from "~/utils/marketImages";
-import { getGlobalParams, getMarkets } from "~/endpoints";
+import { getDailyPriceChange, getGlobalParams, getMarkets } from "~/endpoints";
 import { GeneralInfoBanner } from "../components/general-info-banner";
 import { InstrumentDropdown } from "../components/instrument-dropdown";
 import OrderChart from "../components/order-chart";
@@ -28,10 +28,15 @@ export default async function Home({ params }: Props) {
   try {
     const m = getMarkets();
     const p = getGlobalParams();
-    const data: any = await Promise.all([m, p]).then(([markets, params]) => ({
-      markets,
-      params,
-    }));
+    const pc = getDailyPriceChange();
+
+    const data: any = await Promise.all([m, p, pc]).then(
+      ([markets, params, priceChange]) => ({
+        markets,
+        params,
+        priceChange,
+      }),
+    );
 
     const markets: IMarket[] = data.markets.map((m: Market) => ({
       ...m,
@@ -51,9 +56,13 @@ export default async function Home({ params }: Props) {
             <InstrumentDropdown
               markets={markets}
               selectedMarket={defualtMarket}
+              priceChange={data.priceChange}
             />
           </div>
-          <GeneralInfoBanner market={defualtMarket} />
+          <GeneralInfoBanner
+            market={defualtMarket}
+            priceChange={data.priceChange}
+          />{" "}
         </div>
         <span className="block lg:hidden">
           <OrderChart marketName={defualtMarket.name} />

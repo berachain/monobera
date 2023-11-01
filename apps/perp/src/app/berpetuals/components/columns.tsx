@@ -72,26 +72,17 @@ export const ActivePositionPNL = ({
 }) => {
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(Number(position.market?.pair_index) ?? 0);
-  const positionSize =
-    Number(formatUnits(BigInt(position.position_size), 18)) *
-    Number(position.leverage);
-  const openPrice = Number(formatUnits(BigInt(position.open_price), 10));
-
-  const size = positionSize / openPrice;
-
-  const fees =
-    BigInt(position.rollover_fee) +
-    BigInt(position.funding_rate) +
-    BigInt(position.closing_fee) +
-    BigInt(position.borrowing_fee);
 
   const pnl = useCalculatePnl({
-    currentPrice: BigInt(price ?? 0),
-    openPrice: BigInt(position.open_price ?? 0),
-    size: size,
-    fees: Number(formatUnits(fees, 18)),
-    leverage: Number(position.leverage ?? 2),
     buy: position.buy,
+    currentPrice: price,
+    openPrice: BigInt(position.open_price),
+    leverage: BigInt(position.leverage),
+    levPosSize: BigInt(position.position_size) * BigInt(position.leverage),
+    borrowingFee: BigInt(position.borrowing_fee),
+    rolloverFee: BigInt(position.rollover_fee),
+    fundingFee: BigInt(position.funding_rate),
+    closingFee: BigInt(position.closing_fee),
   });
 
   return (
@@ -238,7 +229,7 @@ export const positions_columns: ColumnDef<IMarketOrder>[] = [
       <DataTableColumnHeader column={column} title="Funding" />
     ),
     cell: ({ row }) => {
-      return <div>{formatBigIntUsd(row.original.borrowing_fee, 18)}</div>;
+      return <div>{formatBigIntUsd(row.original.funding_rate, 18)}</div>;
     },
     accessorKey: "funding",
     enableSorting: false,

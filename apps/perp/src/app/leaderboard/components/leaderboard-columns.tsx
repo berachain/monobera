@@ -1,37 +1,70 @@
+import { formatUsd } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { type Position } from "~/hooks/usePositions";
+const tableTitle: Record<string, string> = {
+  ["pnl"]: "Profit & Loss",
+  ["liquidation"]: "Liquidations",
+  ["volume"]: "Volume",
+};
 
-export const trading_history_column: ColumnDef<Position>[] = [
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Rank" />
-    ),
-    cell: ({}) => (
-      <div className="w-[70px] text-xs">{new Date().toLocaleDateString()}</div>
-    ),
-    accessorKey: "market",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Address" />
-    ),
-    cell: ({}) => (
-      <div className="w-[70px] text-xs">{new Date().toLocaleDateString()}</div>
-    ),
-    accessorKey: "market",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Close Price" />
-    ),
-    cell: ({ row }) => {
-      return <div className="flex w-[80px]">{row.original.current_price}</div>;
+export const getColumns = (type: string) => {
+  const leaderboard_columns: ColumnDef<{
+    trader: string;
+    value: any;
+  }>[] = [
+    // {
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title="Rank" />
+    //   ),
+    //   cell: ({}) => (
+    //     <div className="w-[70px] text-xs">{new Date().toLocaleDateString()}</div>
+    //   ),
+    //   accessorKey: "market",
+    //   enableSorting: false,
+    // },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Trader" />
+      ),
+      cell: ({ row }) => (
+        <div className="w-[70px] text-xs">{row.original.trader}</div>
+      ),
+      accessorKey: "trader",
+      enableSorting: false,
     },
-    accessorKey: "position_size",
-    enableSorting: false,
-  },
-];
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={tableTitle[type ?? ""] as string}
+          className="w-full text-right"
+        />
+      ),
+      cell: ({ row }) => {
+        if (type === "pnl") {
+          return (
+            <p
+              className={cn(
+                "w-full text-right",
+                Number(row.original.value) > 0
+                  ? "text-success-foreground"
+                  : "text-destructive-foreground",
+              )}
+            >
+              {formatUsd(row.original.value)}
+            </p>
+          );
+        }
+        return (
+          <p className="w-full text-right">{formatUsd(row.original.value)}</p>
+        );
+      },
+      accessorKey: "value",
+      enableSorting: false,
+    },
+  ];
+
+  return leaderboard_columns;
+};

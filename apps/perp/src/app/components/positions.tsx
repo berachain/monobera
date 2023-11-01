@@ -3,12 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatUsd, formatter } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
-import { formatUnits } from "viem";
 
+import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
 import { type IMarket } from "../berpetuals/page";
 
@@ -66,26 +65,20 @@ function Position({
           </div>
         </div>
         <div className="text-lg font-semibold leading-normal text-popover-foreground">
-          {price && formatUsd(price)}
+          {price && formatBigIntUsd(price, 10)}
         </div>
 
         <div className="mt-2 text-sm font-semibold leading-7 text-popover-foreground">
-          {open_interest &&
-            formatter.format(
-              Number(formatUnits(BigInt(open_interest?.oi_long), 18)),
-            )}
+          {open_interest && formatBigIntUsd(open_interest?.oi_long, 18)}
         </div>
         <div className="text-xs font-normal leading-3 text-muted-foreground">
-          Open Interest (24H)
+          Open Interest (L) (24H)
         </div>
         <div className="mt-2 text-sm font-semibold leading-7 text-popover-foreground">
-          {open_interest &&
-            formatter.format(
-              Number(formatUnits(BigInt(open_interest?.oi_short), 18)),
-            )}
+          {open_interest && formatBigIntUsd(open_interest?.oi_short, 18)}
         </div>
         <div className="text-xs font-normal leading-3 text-muted-foreground">
-          Open Interest (24H)
+          Open Interest (S) (24H)
         </div>
       </blockquote>
     </figure>

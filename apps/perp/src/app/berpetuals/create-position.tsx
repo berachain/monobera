@@ -278,7 +278,7 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
           price={rawPrice}
           pairIndex={Number(market.pair_index) ?? 0}
           openingFee={Number(
-            formatUnits(BigInt(market.pair_fixed_fee?.open_fee_p ?? "0"), 18),
+            formatUnits(BigInt(market.pair_fixed_fee?.open_fee_p ?? "0"), 10),
           )}
           bfLong={formattedBfLong}
           bfShort={formattedBfShort}

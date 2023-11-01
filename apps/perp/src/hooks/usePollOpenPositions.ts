@@ -9,7 +9,7 @@ import { formatUnits } from "viem";
 import { POLLING } from "~/utils/constants";
 import { type IMarketOrder } from "~/app/berpetuals/components/order-history";
 import { type IMarket } from "~/app/berpetuals/page";
-import { getPnl } from "./useCalculatePnl";
+import { calculateNetPnL } from "./useCalculatePnl";
 import { usePricesSocket } from "./usePricesSocket";
 
 export const usePollOpenPositions = () => {
@@ -58,28 +58,19 @@ export const usePollOpenPositions = () => {
       }
 
       return openPositons?.reduce((acc: number, position: IMarketOrder) => {
-        const fees =
-          BigInt(position.rollover_fee) +
-          BigInt(position.funding_rate) +
-          BigInt(position.closing_fee) +
-          BigInt(position.borrowing_fee);
-
-        const positionSize =
-          Number(formatUnits(BigInt(position.position_size), 18)) *
-          Number(position.leverage);
-        const openPrice = Number(formatUnits(BigInt(position.open_price), 10));
-
-        const size = positionSize / openPrice;
-
         const price = JSON.parse(prices)[position.market.pair_index];
 
-        const pnl = getPnl({
-          currentPrice: BigInt(price),
-          openPrice: BigInt(position.open_price ?? 0),
-          size: size,
-          fees: Number(formatUnits(fees, 18)),
-          leverage: Number(position.leverage ?? 2),
+        const pnl = calculateNetPnL({
           buy: position.buy,
+          currentPrice: price,
+          openPrice: BigInt(position.open_price),
+          leverage: BigInt(position.leverage),
+          levPosSize:
+            BigInt(position.position_size) * BigInt(position.leverage),
+          borrowingFee: BigInt(position.borrowing_fee),
+          rolloverFee: BigInt(position.rollover_fee),
+          fundingFee: BigInt(position.funding_rate),
+          closingFee: BigInt(position.closing_fee),
         });
         return acc + (pnl ?? 0);
       }, 0);

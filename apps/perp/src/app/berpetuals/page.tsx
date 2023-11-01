@@ -6,7 +6,7 @@ import { type Market } from "@bera/proto/src";
 
 import { MarketImages } from "~/utils/marketImages";
 import { MarketTokenNames } from "~/utils/marketTokenNames";
-import { getGlobalParams, getMarkets } from "~/endpoints";
+import { getDailyPriceChange, getGlobalParams, getMarkets } from "~/endpoints";
 import { GeneralInfoBanner } from "./components/general-info-banner";
 import { InstrumentDropdown } from "./components/instrument-dropdown";
 import OrderChart from "./components/order-chart";
@@ -18,6 +18,7 @@ const DEFAULT_MARKET = "ETH-USD";
 export interface IMarket extends Market {
   imageUri?: string;
   tokenName?: string;
+  dailyHistoricPrice?: number;
 }
 export function generateMetadata(): Metadata {
   return {
@@ -28,10 +29,15 @@ export function generateMetadata(): Metadata {
 export default async function Home() {
   const m = getMarkets();
   const p = getGlobalParams();
-  const data: any = await Promise.all([m, p]).then(([markets, params]) => ({
-    markets,
-    params,
-  }));
+  const pc = getDailyPriceChange();
+
+  const data: any = await Promise.all([m, p, pc]).then(
+    ([markets, params, priceChange]) => ({
+      markets,
+      params,
+      priceChange,
+    }),
+  );
 
   const markets: IMarket[] = data.markets.map((m: Market) => ({
     ...m,
@@ -41,10 +47,10 @@ export default async function Home() {
 
   const defualtMarket = markets.find((m: Market) => m.name === DEFAULT_MARKET);
 
-  console.log(data);
   if (!data || !defualtMarket || !data.params) {
     notFound();
   }
+
   return (
     <div>
       <div className="flex h-fit w-full flex-col lg:flex-row">
@@ -52,9 +58,13 @@ export default async function Home() {
           <InstrumentDropdown
             markets={markets}
             selectedMarket={defualtMarket}
+            priceChange={data.priceChange}
           />
         </div>
-        <GeneralInfoBanner market={defualtMarket} />
+        <GeneralInfoBanner
+          market={defualtMarket}
+          priceChange={data.priceChange}
+        />
       </div>
       <span className="block lg:hidden">
         <OrderChart marketName={defualtMarket.name} />

@@ -32,8 +32,6 @@ export function PlaceOrder({
   price,
   openingFee,
   error,
-  bfLong,
-  bfShort,
   liqPrice,
   pairIndex,
 }: {
@@ -62,9 +60,6 @@ export function PlaceOrder({
       refetch();
     },
   });
-
-  const dailyBfLong = Number(bfLong) * 24;
-  const dailyBfShort = Number(bfShort) * 24;
 
   const { account } = useBeraJs();
 
@@ -140,6 +135,7 @@ export function PlaceOrder({
 
   const allowance = useAllowance();
 
+  const levOpeningFee = (form.amount ?? 0) * Number(form.leverage) * openingFee;
   return (
     <div className="flex w-full flex-col gap-1 rounded-xl border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
       {ModalPortal}
@@ -220,17 +216,7 @@ export function PlaceOrder({
       <div className="flex w-full justify-between">
         <div>OPENING FEES</div>
         <div className="text-foreground">
-          {openingFee.toFixed(2)}%{" "}
-          <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" />
-        </div>
-      </div>
-      <div className="flex w-full justify-between">
-        <div>DAILY (24H) BORROW FEE</div>
-        <div className="text-foreground">
-          {form.orderType === "long"
-            ? dailyBfLong.toFixed(2)
-            : dailyBfShort.toFixed(2)}
-          %{" "}
+          {formatUsd(levOpeningFee)}{" "}
           <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" />
         </div>
       </div>

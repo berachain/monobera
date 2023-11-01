@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatUsd } from "@bera/berajs";
@@ -16,17 +16,31 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
 
+import { calculatePercentDifference } from "~/utils/percentDifference";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
 import { type IMarket } from "../page";
 
 interface InstrumentProps {
   markets: IMarket[];
   selectedMarket: IMarket;
+  priceChange: number[];
 }
 
-const MarketPriceOverview = ({ market }: { market: IMarket }) => {
+const MarketPriceOverview = ({
+  market,
+  priceChange,
+}: {
+  market: IMarket;
+  priceChange: number[];
+}) => {
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
+
+  const formattedPrice = Number(formatUnits(BigInt(price ?? 0), 10));
+  const historicPrice = priceChange[Number(market.pair_index)];
+  const difference = useMemo(() => {
+    return calculatePercentDifference(historicPrice ?? 0, formattedPrice);
+  }, [historicPrice, formattedPrice]);
   return (
     <div>
       <div className="text-lg font-semibold leading-7 text-foreground ">
@@ -36,13 +50,28 @@ const MarketPriceOverview = ({ market }: { market: IMarket }) => {
           <Skeleton className="h-[24px] w-[80px]" />
         )}
       </div>
-      <p className="text-right">+0.69%</p>
+      <div className="text-right">
+        {price !== undefined ? (
+          <div
+            className={
+              difference > 0
+                ? "text-success-foreground"
+                : "text-destructive-foreground"
+            }
+          >
+            {Number(difference).toFixed(4)}%
+          </div>
+        ) : (
+          <Skeleton className="h-[16px] w-[40px]" />
+        )}
+      </div>
     </div>
   );
 };
 export function InstrumentDropdown({
   markets,
   selectedMarket,
+  priceChange,
 }: InstrumentProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -59,14 +88,6 @@ export function InstrumentDropdown({
             <>Choose Market</>
           ) : (
             <>
-              {/* <Avatar className="h-6 w-6">
-                <AvatarImage
-                  src={selectedMarket.imageUri}
-                  className="rounded-full"
-                />
-                <AvatarFallback>{selectedMarket.name}</AvatarFallback>
-              </Avatar> */}
-
               <Image
                 src={selectedMarket.imageUri ?? ""}
                 alt={"selectedMarket"}
@@ -115,20 +136,10 @@ export function InstrumentDropdown({
                   />
                   <div>{market.name}</div>
                 </div>
-                <MarketPriceOverview market={market} />
-                {/* <div className="font-medium">
-                $69
-                <div
-                  className={cn(
-                    "text-right text-xs",
-                    instrument.change24H < 0
-                      ? "text-destructive-foreground"
-                      : "text-success-foreground",
-                  )}
-                >
-                  {instrument.change24H > 0 && "+"} {instrument.change24H}%
-                </div>
-              </div> */}
+                <MarketPriceOverview
+                  market={market}
+                  priceChange={priceChange}
+                />
               </DropdownMenuItem>
             </Link>
           ))}
