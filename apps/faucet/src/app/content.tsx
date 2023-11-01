@@ -18,7 +18,7 @@ export default function Content() {
   >(undefined);
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
-      <div className="items-center text-center sm:flex sm:text-left">
+      <div className="items-center justify-between text-center sm:flex sm:text-left">
         <div className="flex flex-col gap-4">
           <div className="leading-12 w-full text-5xl font-bold">
             Bootstrap Your
@@ -30,9 +30,9 @@ export default function Content() {
           </div>
         </div>
         <Image
-          src={`${cloudinaryUrl}/faucet_v3_uktibg`}
+          src={`${cloudinaryUrl}/faucet/faucet_v3_uktibg`}
           alt="machine"
-          width={200}
+          width={162}
           height={198}
           loading="eager"
           className="hidden h-[198px] object-cover sm:block xl:hidden"
