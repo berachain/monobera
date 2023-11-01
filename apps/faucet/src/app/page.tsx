@@ -1,12 +1,12 @@
 import { type Metadata } from "next";
 import Image from "next/image";
-import { cloudinaryUrl, lendName } from "@bera/config";
+import { cloudinaryUrl, faucetName } from "@bera/config";
 
 import Content from "./content";
 
 export const metadata: Metadata = {
-  title: `Faucet | ${lendName}`,
-  description: `Welcome to ${lendName}!`,
+  title: `BERA | ${faucetName} `,
+  description: `Fund your testnet wallet with bera tokens.`,
 };
 
 export default function Page() {
