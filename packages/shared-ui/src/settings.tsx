@@ -8,13 +8,13 @@ import { useLocalStorage } from "usehooks-ts";
 import { ThemeToggle } from "./theme-toggle";
 import { Tooltip } from "./tooltip";
 
-const SLIPPAGE_TOLERANCE_TYPE = "SLIPPAGE_TOLERANCE_TYPE";
-const SLIPPAGE_TOLERANCE_VALUE = "SLIPPAGE_TOLERANCE_VALUE";
-const DEFAULT_SLIPPAGE = 0.3; // 0.3%
+export const SLIPPAGE_TOLERANCE_TYPE = "SLIPPAGE_TOLERANCE_TYPE";
+export const SLIPPAGE_TOLERANCE_VALUE = "SLIPPAGE_TOLERANCE_VALUE";
+export const DEFAULT_SLIPPAGE = 0.3; // 0.3%
 
-const DEADLINE_TYPE = "DEADLINE_TYPE";
-const DEADLINE_VALUE = "DEADLINE_VALUE";
-const DEFAULT_DEADLINE = 30; // minutes
+export const DEADLINE_TYPE = "DEADLINE_TYPE";
+export const DEADLINE_VALUE = "DEADLINE_VALUE";
+export const DEFAULT_DEADLINE = 30; // minutes
 
 export enum SLIPPAGE_MODE {
   AUTO = "auto",
@@ -112,9 +112,13 @@ export const Setting = ({
             type="number"
             disabled={slippageMode !== SLIPPAGE_MODE.CUSTOM}
             value={
-              slippageMode === SLIPPAGE_MODE.AUTO ? DEFAULT_SLIPPAGE : slippage
+              slippageMode === SLIPPAGE_MODE.AUTO
+                ? DEFAULT_SLIPPAGE
+                : slippage === 0
+                ? undefined
+                : slippage
             }
-            onChange={(e) => setSlippage(Number(e.target.value))}
+            onChange={(e: any) => setSlippage(Number(e.target.value))}
           />
         </div>
         {slippageMode === SLIPPAGE_MODE.DEGEN && (

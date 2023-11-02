@@ -1,70 +1,87 @@
+import Image from "next/image";
 import { cn } from "@bera/ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 
-import { type Position } from "~/hooks/usePositions";
+import { type IMarket } from "../berpetuals/page";
 
 export function PositionTitle({
-  position,
+  market,
+  type,
   className,
 }: {
-  position: Position;
+  market: IMarket;
+  type: "Long" | "Short";
   className?: string;
 }) {
   return (
     <div className={cn("flex w-[112px] items-center gap-2", className)}>
-      <Avatar className="h-6 w-6">
-        <AvatarImage src="https://github.com/shadcn.png" />
-        <AvatarFallback>{position.assets}</AvatarFallback>
-      </Avatar>
+      <Image
+        src={market?.imageUri ?? ""}
+        alt={"selectedMarket"}
+        width={24}
+        height={24}
+        className="rounded-full"
+      />{" "}
       <div>
-        <div className="mt-1 text-xs font-medium leading-tight text-foreground">
-          {position.assets}-{position.counter}
+        <div className="mt-1 text-sm font-semibold leading-tight text-foreground">
+          {market?.name}
         </div>
         <div
           className={cn(
-            "text-[10px] uppercase leading-tight text-foreground",
-            position.option_type === "long"
+            "mt-1 text-sm font-medium leading-tight",
+            type === "Long"
               ? "text-success-foreground"
               : "text-destructive-foreground",
           )}
         >
-          {position.option_type}
+          {type}
         </div>
       </div>
     </div>
   );
 }
 
-export function PositionTitleSM({
-  position,
+export function PositionCardTitle({
+  market,
+  type,
   className,
+  size,
 }: {
-  position: Position;
+  market: IMarket;
+  type: "Long" | "Short";
   className?: string;
+  size: number;
 }) {
   return (
-    <div className={cn("flex w-full justify-between", className)}>
-      <div className="flex items-center gap-2">
-        <Avatar className="h-6 w-6">
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>{position.assets}</AvatarFallback>
-        </Avatar>
-        <div className="text-sm font-semibold leading-tight text-muted-foreground">
-          {position.assets}-{position.counter} /{" "}
-          <span
-            className={cn(
-              "capitalize",
-              position.option_type === "long"
-                ? "text-success-foreground"
-                : "text-destructive-foreground",
-            )}
-          >
-            {position.option_type}
-          </span>
+    <div
+      className={cn(
+        "flex flex-row items-center  justify-between gap-1 ",
+        className,
+      )}
+    >
+      <div className="flex flex-row items-center  justify-between gap-1">
+        <Image
+          src={market?.imageUri ?? ""}
+          alt={"selectedMarket"}
+          width={24}
+          height={24}
+          className="rounded-full"
+        />{" "}
+        <div className="text-sm font-semibold leading-tight text-foreground">
+          {market?.name} {" / "}
+        </div>
+        <div
+          className={cn(
+            " text-sm font-medium leading-tight",
+            type === "Long"
+              ? "text-success-foreground"
+              : "text-destructive-foreground",
+          )}
+        >
+          {type}
         </div>
       </div>
-      <div className="text-lg font-semibold leading-7 text-muted-foreground">
-        {position.position_size} {position.assets}
+      <div className="text-sm font-semibold leading-tight text-muted-foreground">
+        {size.toFixed(4) ?? 0} {market?.name.split("-")[0]}
       </div>
     </div>
   );

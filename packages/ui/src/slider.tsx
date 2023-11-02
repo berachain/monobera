@@ -39,16 +39,18 @@ const Slider = React.forwardRef<
               >
                 {point}
               </div>
-              <div
-                key={index + "dot"}
-                style={{ left: `calc(${ratio}% - 5px)` }}
-                className={cn(
-                  "absolute -bottom-[1px] h-[10px] w-[10px] rounded-full border-2",
-                  value[0]! >= ratio
-                    ? "border-accent bg-warning-foreground"
-                    : " border-border bg-muted",
-                )}
-              />
+              {index !== markers.length - 1 && (
+                <div
+                  key={index + "dot"}
+                  style={{ left: `calc(${ratio}% - 8px)` }}
+                  className={cn(
+                    "absolute -bottom-[1px] h-[10px] w-[10px] rounded-full border-2",
+                    value[0]! >= ratio
+                      ? "border-accent bg-warning-foreground"
+                      : " border-border bg-muted",
+                  )}
+                />
+              )}
             </div>
           );
         })}

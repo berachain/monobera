@@ -12,7 +12,7 @@ import {
 import { beraTokenAddress, erc20ModuleAddress } from "@bera/config";
 import { useReadLocalStorage } from "usehooks-ts";
 import { parseUnits } from "viem";
-import { useFeeData, type Address } from "wagmi";
+import { type Address } from "wagmi";
 
 import {
   DEFAULT_DEADLINE,
@@ -51,7 +51,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { tokenDictionary } = useTokens();
 
   // TODO: get honey price
-  const { data: gasData } = useFeeData();
+  // const { data: gasData } = useFeeData();
 
   useEffect(() => {
     if (inputCurrency) {
@@ -349,7 +349,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     priceImpact,
     showPriceImpact,
     exchangeRate,
-    gasPrice: gasData?.formatted.gasPrice,
+    // gasPrice: gasData?.formatted.gasPrice,
+    gasPrice: 69,
     isWrap,
     wrapType,
     isBalanceLoading,

@@ -43,4 +43,20 @@ export enum TransactionActionType {
   WITHDRAW = "Withdraw",
   BORROW = "Borrow",
   REPAY = "Repay",
+
+  // PERPS
+
+  MARKET_LONG = "Market Long",
+  MARKET_SHORT = "Market Short",
+  LIMIT_LONG = "Limit Long",
+  LIMIT_SHORT = "Limit Short",
+  CANCEL_ORDER = "Cancel Order",
+  CANCEL_ALL_ORDERS = "Cancel All Orders",
+  EDIT_PERPS_ORDER = "Edit Perps Order",
+  DEPOSIT_HONEY = "Deposit Honey",
+  START_WITHDRAW_REQUEST = "Start Withdraw Request",
+  CANCEL_WITHDRAW_REQUEST = "Cancel Withdraw Request",
+  WITHDRAW_HONEY = "Withdraw Honey",
+  DELEGATE_OCT = "Delegate",
+  REVOKE_OCT = "Revoke",
 }

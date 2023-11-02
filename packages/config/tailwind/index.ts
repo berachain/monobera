@@ -182,6 +182,10 @@ export default {
             transform: "rotate(-360deg)",
           },
         },
+        "infinite-scroll": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         marquee: "marquee var(--marquee-duration) linear infinite",
@@ -189,6 +193,7 @@ export default {
         "fade-in": "fade-in 0.5s linear forwards",
         "fade-up": "fade-up 0.5s",
         "fade-down": "fade-down 0.5s",
+        "infinite-scroll": "infinite-scroll 25s linear infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "spin-slow": "spin 4s linear infinite",
