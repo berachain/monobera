@@ -9,6 +9,7 @@ import { MarketImages } from "~/utils/marketImages";
 import { MarketTokenNames } from "~/utils/marketTokenNames";
 import {
   getDailyPriceChange,
+  getHistoricalSummary,
   getMarkets,
   getTradingSummary,
 } from "~/endpoints";
@@ -26,24 +27,35 @@ export default async function Home() {
   const m = getMarkets();
   const pc = getDailyPriceChange();
   const ts = getTradingSummary();
+  const hs = getHistoricalSummary();
 
-  const data: any = await Promise.all([m, pc, ts]).then(
-    ([markets, priceChange, tradingSummary]) => ({
+  const data: any = await Promise.all([m, pc, ts, hs]).then(
+    ([markets, priceChange, tradingSummary, historicalSummary]) => ({
       markets,
       priceChange,
       tradingSummary,
+      historicalSummary,
     }),
   );
 
   if (!data) {
     notFound();
   }
-  const markets: IMarket[] = data.markets.map((m: Market) => ({
-    ...m,
-    imageUri: MarketImages[m.name],
-    tokenName: MarketTokenNames[m.name],
-    dailyHistoricPrice: Number(data.priceChange[Number(m.pair_index)]),
-  }));
+  const markets: IMarket[] = data.markets.map((m: Market) => {
+    const historicalInfo = data.historicalSummary.find(
+      (h: any) => h.pair_index === m.pair_index,
+    );
+
+    return {
+      ...m,
+      imageUri: MarketImages[m.name],
+      tokenName: MarketTokenNames[m.name],
+      dailyHistoricPrice: Number(data.priceChange[Number(m.pair_index)]),
+      dailyVolume: historicalInfo === undefined ? 0 : historicalInfo.volume,
+      dailyNumOfTrades:
+        historicalInfo === undefined ? 0 : historicalInfo.num_trades,
+    };
+  });
 
   let oi = 0;
   const oiLong = markets?.reduce((acc: number, market: IMarket) => {

@@ -100,7 +100,9 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
         </div>
         <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs xl:block">
           24h Volume
-          <div className="text-muted-foreground">123123</div>
+          <div className="text-muted-foreground">
+            {formatUsd(market.dailyVolume ?? 0)}
+          </div>
         </div>
         <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs xl:block">
           Open Interest (L)

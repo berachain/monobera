@@ -7,7 +7,6 @@ import {
   useBeraJs,
   usePollAllowance,
   usePollBHoneyPendingWithdraw,
-  usePollHoneyBalance,
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton, TokenInput, TokenList, useTxn } from "@bera/shared-ui";
@@ -17,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 import ApproveTokenButton from "../components/approve-token-button";
 
 export default function DepositWithdraw() {
@@ -39,13 +39,18 @@ export default function DepositWithdraw() {
     actionType: TransactionActionType.DEPOSIT_HONEY,
   });
 
+  const { refetch } = usePollWithdrawQueue();
+
   const {
     write: withdrawWrite,
     isLoading: isWithdrawLoading,
     ModalPortal: WithdrawModalPortal,
   } = useTxn({
-    message: "Withdrawing HONEY",
+    message: "Creating HONEY Withdraw Request",
     actionType: TransactionActionType.START_WITHDRAW_REQUEST,
+    onSuccess: () => {
+      refetch();
+    },
   });
 
   const { account } = useBeraJs();
@@ -61,9 +66,6 @@ export default function DepositWithdraw() {
 
   const { useBHoneyEligibleWithdraw } = usePollBHoneyPendingWithdraw();
   const eligibleForWithdraw = useBHoneyEligibleWithdraw();
-
-  const { useHoneyBalance } = usePollHoneyBalance();
-  const honeyBalance = useHoneyBalance();
 
   const { useAllowance } = usePollAllowance({
     contract: gTokenAddress,
@@ -102,7 +104,6 @@ export default function DepositWithdraw() {
                 <TokenInput
                   selectable={false}
                   selected={honey}
-                  balance={Number(honeyBalance)}
                   amount={depositAmount}
                   setAmount={setDepositAmount}
                   showExceeding={true}

@@ -189,24 +189,24 @@ export const market_table_column: ColumnDef<IMarket>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="24h Volume" />
     ),
-    cell: () => (
+    cell: ({ row }) => (
       <div className="w-[100px] text-xs font-medium text-muted-foreground">
-        {formatUsd(1000)}
+        {formatUsd(row.original.dailyVolume ?? 0)}
       </div>
     ),
-    accessorKey: "leverage",
+    accessorKey: "dailyVolume",
     enableSorting: true,
   },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="24h Trades" />
     ),
-    cell: () => (
+    cell: ({ row }) => (
       <div className="w-[100px] text-xs font-medium text-muted-foreground">
-        69
+        {row.original.dailyNumOfTrades ?? 0}
       </div>
     ),
-    accessorKey: "24h_trades",
+    accessorKey: "dailyNumOfTrades",
     enableSorting: true,
   },
 ];

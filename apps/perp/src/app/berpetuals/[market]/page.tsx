@@ -5,7 +5,13 @@ import { perpsName } from "@bera/config";
 import { type Market } from "@bera/proto/src";
 
 import { MarketImages } from "~/utils/marketImages";
-import { getDailyPriceChange, getGlobalParams, getMarkets } from "~/endpoints";
+import { MarketTokenNames } from "~/utils/marketTokenNames";
+import {
+  getDailyPriceChange,
+  getGlobalParams,
+  getHistoricalSummary,
+  getMarkets,
+} from "~/endpoints";
 import { GeneralInfoBanner } from "../components/general-info-banner";
 import { InstrumentDropdown } from "../components/instrument-dropdown";
 import OrderChart from "../components/order-chart";
@@ -29,20 +35,29 @@ export default async function Home({ params }: Props) {
     const m = getMarkets();
     const p = getGlobalParams();
     const pc = getDailyPriceChange();
-
-    const data: any = await Promise.all([m, p, pc]).then(
-      ([markets, params, priceChange]) => ({
+    const hs = getHistoricalSummary();
+    const data: any = await Promise.all([m, p, pc, hs]).then(
+      ([markets, params, priceChange, historicalSummary]) => ({
         markets,
         params,
         priceChange,
+        historicalSummary,
       }),
     );
 
-    const markets: IMarket[] = data.markets.map((m: Market) => ({
-      ...m,
-      imageUri: MarketImages[m.name],
-    }));
-
+    const markets: IMarket[] = data.markets.map((m: Market) => {
+      const historicalInfo = data.historicalSummary.find(
+        (h: any) => h.pair_index === m.pair_index,
+      );
+      return {
+        ...m,
+        imageUri: MarketImages[m.name],
+        tokenName: MarketTokenNames[m.name],
+        dailyVolume: historicalInfo === undefined ? 0 : historicalInfo.volume,
+        dailyNumOfTrades:
+          historicalInfo === undefined ? 0 : historicalInfo.num_trades,
+      };
+    });
     const defualtMarket = markets.find((m: Market) => m.name === params.market);
 
     if (!data || !defualtMarket) {

@@ -12,6 +12,7 @@ import { DataTable, RewardBtn } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 import type { Address } from "wagmi";
 
+import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 import { withdraw_queue_columns } from "./withdraw-queue-columns";
 
 export const RewardsWithdraw = () => {
@@ -39,6 +40,8 @@ export const RewardsWithdraw = () => {
   const isLoading =
     isGHoneyBalanceLoading || isBHoneyPriceLoading || isBalanceOfAssetsLoading;
 
+  const { useWithdrawQueue } = usePollWithdrawQueue();
+  const withdrawQueue = useWithdrawQueue();
   return (
     <div className="flex w-full flex-col gap-4">
       <div className="flex w-full flex-col justify-between gap-1 rounded-xl border border-border bg-muted px-6 py-4">
@@ -133,7 +136,7 @@ export const RewardsWithdraw = () => {
       </div>
       <DataTable
         columns={withdraw_queue_columns}
-        data={[]}
+        data={withdrawQueue ?? []}
         className="h-full min-w-[490px]"
       />
     </div>

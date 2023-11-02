@@ -20,7 +20,7 @@ export interface IBHoneyEpoch {
   currentEpochEnd: number;
 }
 
-const epochLength = 86400 * 3;
+const epochLength = Number(process.env.NEXT_PUBLIC_EPOCH_LENGTH_SECONDS_PERPS);
 export const usePollBHoneyEpochs = () => {
   const publicClient = usePublicClient();
   const method = "epochs";

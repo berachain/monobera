@@ -192,6 +192,31 @@ export const BTOKEN_ABI = [
     inputs: [
       {
         indexed: false,
+        internalType: "uint256",
+        name: "assetsToHoney",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "assetsToBGT",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "assetsTotal",
+        type: "uint256",
+      },
+    ],
+    name: "FeesDistributed",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "uint8",
         name: "version",
         type: "uint8",
@@ -274,31 +299,6 @@ export const BTOKEN_ABI = [
       },
     ],
     name: "OwnershipTransferred",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "assetsToHoney",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "assetsToBGT",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "assetsTotal",
-        type: "uint256",
-      },
-    ],
-    name: "RewardDistributed",
     type: "event",
   },
   {
@@ -616,6 +616,19 @@ export const BTOKEN_ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "availableBGTRewards",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -635,6 +648,25 @@ export const BTOKEN_ABI = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "balanceOfAssets",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "bgtRewards",
     outputs: [
@@ -642,6 +674,19 @@ export const BTOKEN_ABI = [
         internalType: "contract IRewardsModule",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "bgtRewardsLastUpdated",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -679,6 +724,19 @@ export const BTOKEN_ABI = [
       },
     ],
     name: "cancelWithdrawRequest",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "claimBGT",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -724,19 +782,6 @@ export const BTOKEN_ABI = [
       },
     ],
     name: "convertToShares",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "currentBalanceDai",
     outputs: [
       {
         internalType: "uint256",
@@ -860,6 +905,19 @@ export const BTOKEN_ABI = [
       },
     ],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "deltaBGTRewards",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
