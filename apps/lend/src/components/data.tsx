@@ -41,7 +41,6 @@ export default function Data() {
     displayMarketSize += Number(data[key].totalLiquidity);
     displayBorrowed += Number(data[key].totalDebt);
   });
-
   return (
     <section className="m-auto max-w-[800px] py-24">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

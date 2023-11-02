@@ -25,7 +25,7 @@ export const usePollUserAccountData = () => {
             functionName: "getUserAccountData",
             args: [account],
           });
-          
+
           // Here we assert that result is of type any[] with at least six elements.
           const [
             totalCollateralBase,
@@ -35,7 +35,7 @@ export const usePollUserAccountData = () => {
             ltv,
             healthFactor,
           ] = result as [any, any, any, any, any, any];
-          
+
           return {
             totalCollateralBase,
             totalDebtBase,

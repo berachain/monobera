@@ -30,6 +30,7 @@ export default function UserTokenCard({
   } else {
     balance = asset.formattedBalance;
   }
+
   return (
     <Card key={asset.symbol} className="p-4">
       <div className="flex flex-row items-center justify-between gap-6">

@@ -1,30 +1,32 @@
 import Image from "next/image";
+import { useBeraJs } from "@bera/berajs";
 import { bgtTokenAddress, bgtUrl, cloudinaryUrl } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 export const Banner = () => {
+  const { isReady } = useBeraJs();
   return (
-    <div className="relative flex items-start gap-16 rounded-18 border border-border bg-honey-gradient px-8 py-6  dark:bg-gradient-to-l dark:from-stone-950 dark:to-stone-950">
+    <div className="relative flex flex-col-reverse items-start gap-4 rounded-18 border border-border bg-honey-gradient px-8 py-6 dark:bg-gradient-to-l dark:from-stone-950 dark:to-stone-950 lg:flex-row lg:gap-16">
       <Image
-        src={`${cloudinaryUrl}/bears/v3mi8ggx68n0mapznaju`}
+        src={`${cloudinaryUrl}/bears/l9oaplrgfkrqw8y6noyp`}
         width={420}
         height={100}
-        className="absolute right-0 hidden w-[420px] lg:bottom-0 lg:block"
+        className="absolute -right-0 hidden w-[420px] lg:bottom-0 lg:block"
         alt="happy bear"
       />
-      <div className="flex h-full flex-col gap-4 rounded-xl border border-amber-400 bg-gradient-to-br from-[#FFF6D7] via-[#FFEAA3] to-[#FFD977] p-4">
-        <div className="flex items-center gap-2 text-3xl font-semibold leading-9">
+      <div className="flex h-full w-full flex-shrink-0 flex-col gap-4 rounded-xl border border-amber-400 bg-gradient-to-br from-[#FFF6D7] via-[#FFEAA3] to-[#FFD977] p-4 lg:w-fit">
+        <div className="flex items-center justify-center gap-2 text-3xl font-semibold leading-9 lg:justify-start">
           <TokenIcon address={bgtTokenAddress} fetch />
-          207.10
+          {isReady ? "207.10" : "~~"}
         </div>
-        <Button>Claim Rewards</Button>
+        <Button disable={!isReady}>Claim Rewards</Button>
       </div>
 
-      <div className="flex flex-col gap-4 ">
-        <div className="w-full text-center font-bold md:text-lg md:leading-10 lg:text-left">
-          What can I do with my BGT rewards?
+      <div className="flex w-full flex-col gap-4">
+        <div className="w-full text-center font-bold md:text-lg md:leading-10 lg:w-fit lg:text-left">
+          What can I do with my BGT rewards? (not working)
           <div className="text-xs font-normal leading-normal text-muted-foreground md:text-sm">
             Now that you&apos;ve got some BGT rewards, you can start using them!
           </div>

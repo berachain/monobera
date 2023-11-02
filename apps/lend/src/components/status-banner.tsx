@@ -58,7 +58,7 @@ export default function StatusBanner() {
     ((earnedAPY || 0) * totalLiquidityUSD) /
       (netWorthUSD !== 0 ? netWorthUSD : 1) -
     ((debtAPY || 0) * totalBorrowsUSD) / (netWorthUSD !== 0 ? netWorthUSD : 1);
-  console.log(data);
+
   const status = [
     {
       icon: <Icons.wallet className="h-8 w-8" />,
