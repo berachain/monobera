@@ -31,7 +31,7 @@ const useAuth = ({
 }: IuseAuth = {}) => {
   const [state] = useReducer(reducer, initialState);
   const { networkConfig } = useBeraConfig();
-  const { connectAsync, connectors } = useConnect({
+  const { connect, connectors } = useConnect({
     chainId: networkConfig.chain.id,
   });
   // const { chains, error, isLoading, pendingChainId, switchNetwork } =
@@ -43,12 +43,12 @@ const useAuth = ({
   // });
 
   const login = useCallback(
-    async (connectorID: ConnectorNames | string) => {
+    (connectorID: ConnectorNames | string) => {
       try {
         onLoading && onLoading();
         const connector = connectors.find((c) => c.id === connectorID);
         localStorage?.setItem(connectorLocalStorageKey, connectorID);
-        await connectAsync({ connector, chainId: networkConfig.chain.id });
+        connect({ connector, chainId: networkConfig.chain.id });
         onSuccess && onSuccess();
         return;
       } catch (e: any) {
@@ -56,7 +56,7 @@ const useAuth = ({
         return;
       }
     },
-    [onLoading, connectors, connectAsync, onSuccess, onError],
+    [onLoading, connectors, connect, onSuccess, onError],
   );
 
   const logout = useCallback(() => {

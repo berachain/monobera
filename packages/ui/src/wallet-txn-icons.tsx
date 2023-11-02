@@ -1278,4 +1278,451 @@ export const WalletTxnIcons = {
       </g>
     </svg>
   ),
+  market_long: (props: LucideProps) => (
+    <svg
+      {...props}
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M26 11L17.5 19.5L12.5 14.5L6 21"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M20 11H26V17"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  market_short: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M26 21L17.5 12.5L12.5 17.5L6 11"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M20 21H26V15"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  limit_long: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M16 10L10.9 15.1L7.9 12.1L4 16"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12.4001 10H16.0001V13.6"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <rect x="18.5" y="17.5" width="8" height="4" stroke="currentColor" />
+      <line
+        x1="4"
+        y1="19.5"
+        x2="18"
+        y2="19.5"
+        stroke="currentColor"
+        stroke-dasharray="2 2"
+      />
+    </svg>
+  ),
+  limit_short: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <rect x="18.5" y="10.5" width="8" height="4" stroke="currentColor" />
+      <line
+        x1="4"
+        y1="12.5"
+        x2="18"
+        y2="12.5"
+        stroke="currentColor"
+        stroke-dasharray="2 2"
+      />
+      <path
+        d="M16 22L10.9 16.9L7.9 19.9L4 16"
+        stroke="currentColor"
+        stroke-width="0.916667"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12.3999 22H15.9999V18.4"
+        stroke="currentColor"
+        stroke-width="0.916667"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  deposit_honey: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M23 15H9C7.89543 15 7 15.9768 7 17.1818V24.8182C7 26.0232 7.89543 27 9 27H23C24.1046 27 25 26.0232 25 24.8182V17.1818C25 15.9768 24.1046 15 23 15Z"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M10.9999 14.9995V10.9995C10.9999 9.67343 11.5267 8.40166 12.4643 7.46398C13.402 6.5263 14.6738 5.99951 15.9999 5.99951C17.326 5.99951 18.5977 6.5263 19.5354 7.46398C20.4731 8.40166 20.9999 9.67343 20.9999 10.9995V14.9995"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M14.2876 23.8012H13.3673C13.2067 23.8012 13.0635 23.7652 12.9289 23.6933C12.7944 23.6214 12.6902 23.5215 12.6077 23.3936L12.1172 22.5944C12.0391 22.4745 12 22.3467 12 22.2028C12 22.0589 12.0391 21.9351 12.1172 21.8152L12.6164 21.004L12.1172 20.1968C12.0391 20.0769 12 19.9451 12 19.8052C12 19.6653 12.0391 19.5335 12.1172 19.4136L12.6077 18.6144C12.6858 18.4865 12.7944 18.3866 12.9289 18.3147C13.0635 18.2428 13.2111 18.2028 13.3673 18.2028H14.2876L14.7737 17.4116C14.8519 17.2837 14.9604 17.1838 15.095 17.1119C15.2295 17.04 15.3771 17 15.5334 17H16.4666C16.6272 17 16.7705 17.036 16.905 17.1119C17.0396 17.1838 17.1438 17.2837 17.2263 17.4116L17.7168 18.2028H18.637C18.7976 18.2028 18.9409 18.2388 19.0754 18.3147C19.21 18.3866 19.3142 18.4865 19.3966 18.6144L19.8828 19.4136C19.9609 19.5335 20 19.6613 20 19.8052C20 19.9491 19.9609 20.0769 19.8828 20.1968L19.3836 21.004L19.8828 21.8152C19.9609 21.9351 20 22.0629 20 22.2028C20 22.3427 19.9609 22.4745 19.8828 22.5944L19.3966 23.3936C19.3185 23.5215 19.21 23.6214 19.0754 23.6933C18.9409 23.7652 18.7933 23.8012 18.637 23.8012H17.7168L17.2263 24.5924C17.1481 24.7203 17.0396 24.8202 16.905 24.8921C16.7705 24.964 16.6229 25 16.4666 25H15.5334C15.3728 25 15.2295 24.964 15.095 24.8921C14.9604 24.8202 14.8562 24.7203 14.7737 24.5924L14.2876 23.8012ZM17.7168 20.6044H18.65L19.1275 19.8052L18.65 19.006H17.7168L17.2263 19.8052L17.7168 20.6044ZM15.5464 21.8032H16.4579L16.9441 21.004L16.4579 20.2048H15.5464L15.0602 21.004L15.5464 21.8032ZM15.5464 19.4056H16.4579L16.9571 18.5944L16.471 17.8072H15.5377L15.0515 18.5944L15.5507 19.4056H15.5464ZM14.7781 19.8052L14.2919 19.006H13.3717L12.8855 19.8052L13.3717 20.6044H14.2919L14.7781 19.8052ZM14.7781 22.2028L14.2919 21.4036H13.3587L12.8812 22.2028L13.3673 23.002H14.2876L14.7737 22.2028H14.7781ZM15.5464 22.6024L15.0472 23.4096L15.5334 24.2008H16.4666L16.9528 23.4096L16.4536 22.6024H15.5421H15.5464ZM17.7168 23.002H18.637L19.1232 22.2028L18.637 21.4036H17.7168L17.2263 22.2028L17.7168 23.002Z"
+        fill="currentColor"
+      />
+    </svg>
+  ),
+  withdraw_request: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M23 15H9C7.89543 15 7 15.9768 7 17.1818V24.8182C7 26.0232 7.89543 27 9 27H23C24.1046 27 25 26.0232 25 24.8182V17.1818C25 15.9768 24.1046 15 23 15Z"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <g clip-path="url(#clip0_5102_11863)">
+        <path
+          d="M15.3334 17.6667H16.6667"
+          stroke="currentColor"
+          stroke-width="0.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M16 21.6667L17 20.6667"
+          stroke="currentColor"
+          stroke-width="0.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M16 24.3333C17.4728 24.3333 18.6667 23.1394 18.6667 21.6667C18.6667 20.1939 17.4728 19 16 19C14.5273 19 13.3334 20.1939 13.3334 21.6667C13.3334 23.1394 14.5273 24.3333 16 24.3333Z"
+          stroke="currentColor"
+          stroke-width="0.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <path
+        d="M10.9999 15.0004V11.0004C10.9986 9.76045 11.4582 8.56426 12.2893 7.64406C13.1203 6.72386 14.2637 6.1453 15.4974 6.02069C16.7311 5.89607 17.967 6.2343 18.9654 6.96971C19.9637 7.70512 20.6531 8.78524 20.8999 10.0004"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <defs>
+        <clipPath id="clip0_5102_11863">
+          <rect
+            width="8"
+            height="8"
+            fill="white"
+            transform="translate(12 17)"
+          />
+        </clipPath>
+      </defs>
+    </svg>
+  ),
+  withdraw_request_cancel: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M23 15H9C7.89543 15 7 15.9768 7 17.1818V24.8182C7 26.0232 7.89543 27 9 27H23C24.1046 27 25 26.0232 25 24.8182V17.1818C25 15.9768 24.1046 15 23 15Z"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M18 19L14 23"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M14 19L18 23"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M10.9999 15.0004V11.0004C10.9986 9.76045 11.4582 8.56426 12.2893 7.64406C13.1203 6.72386 14.2637 6.1453 15.4974 6.02069C16.7311 5.89607 17.967 6.2343 18.9654 6.96971C19.9637 7.70512 20.6531 8.78524 20.8999 10.0004"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  withdraw_honey: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M8 17V26C8 27.657 9.343 29 11 29H21C22.657 29 24 27.657 24 26V17H27C28.657 17 30 15.657 30 14C30 12.257 30 9.743 30 8C30 6.343 28.657 5 27 5H5C3.343 5 2 6.343 2 8C2 9.743 2 12.257 2 14C2 15.657 3.343 17 5 17H8ZM22 12V26C22 26.552 21.552 27 21 27H11C10.448 27 10 26.552 10 26V12H22ZM24 15H27C27.552 15 28 14.552 28 14V8C28 7.448 27.552 7 27 7H5C4.448 7 4 7.448 4 8V14C4 14.552 4.448 15 5 15H8V12H7C6.448 12 6 11.552 6 11C6 10.448 6.448 10 7 10H25C25.552 10 26 10.448 26 11C26 11.552 25.552 12 25 12H24V15Z"
+        fill="currentColor"
+      />
+      <path
+        d="M14.0735 22.6513H13.0383C12.8576 22.6513 12.6964 22.6109 12.545 22.53C12.3937 22.449 12.2765 22.3367 12.1837 22.1928L11.6319 21.2937C11.544 21.1588 11.5 21.015 11.5 20.8531C11.5 20.6913 11.544 20.5519 11.6319 20.4171L12.1934 19.5045L11.6319 18.5964C11.544 18.4615 11.5 18.3132 11.5 18.1558C11.5 17.9985 11.544 17.8501 11.6319 17.7153L12.1837 16.8162C12.2716 16.6723 12.3937 16.5599 12.545 16.479C12.6964 16.3981 12.8625 16.3531 13.0383 16.3531H14.0735L14.6205 15.463C14.7084 15.3192 14.8304 15.2068 14.9818 15.1259C15.1332 15.045 15.2992 15 15.475 15H16.525C16.7056 15 16.8668 15.0405 17.0182 15.1259C17.1696 15.2068 17.2868 15.3192 17.3795 15.463L17.9314 16.3531H18.9666C19.1473 16.3531 19.3085 16.3936 19.4598 16.479C19.6112 16.5599 19.7284 16.6723 19.8212 16.8162L20.3681 17.7153C20.456 17.8501 20.5 17.994 20.5 18.1558C20.5 18.3177 20.456 18.4615 20.3681 18.5964L19.8066 19.5045L20.3681 20.4171C20.456 20.5519 20.5 20.6958 20.5 20.8531C20.5 21.0105 20.456 21.1588 20.3681 21.2937L19.8212 22.1928C19.7333 22.3367 19.6112 22.449 19.4598 22.53C19.3085 22.6109 19.1424 22.6513 18.9666 22.6513H17.9314L17.3795 23.5415C17.2916 23.6853 17.1696 23.7977 17.0182 23.8786C16.8668 23.9595 16.7008 24 16.525 24H15.475C15.2944 24 15.1332 23.9595 14.9818 23.8786C14.8304 23.7977 14.7132 23.6853 14.6205 23.5415L14.0735 22.6513ZM17.9314 19.0549H18.9813L19.5184 18.1558L18.9813 17.2567H17.9314L17.3795 18.1558L17.9314 19.0549ZM15.4897 20.4036H16.5152L17.0621 19.5045L16.5152 18.6054H15.4897L14.9428 19.5045L15.4897 20.4036ZM15.4897 17.7063H16.5152L17.0768 16.7937L16.5298 15.9081H15.4799L14.933 16.7937L15.4946 17.7063H15.4897ZM14.6253 18.1558L14.0784 17.2567H13.0431L12.4962 18.1558L13.0431 19.0549H14.0784L14.6253 18.1558ZM14.6253 20.8531L14.0784 19.954H13.0285L12.4913 20.8531L13.0383 21.7522H14.0735L14.6205 20.8531H14.6253ZM15.4897 21.3027L14.9281 22.2108L15.475 23.1009H16.525L17.0719 22.2108L16.5103 21.3027H15.4848H15.4897ZM17.9314 21.7522H18.9666L19.5136 20.8531L18.9666 19.954H17.9314L17.3795 20.8531L17.9314 21.7522Z"
+        fill="currentColor"
+      />
+    </svg>
+  ),
+  edit_order: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M24 23.5V24C24 24.5304 23.7893 25.0391 23.4142 25.4142C23.0391 25.7893 22.5304 26 22 26H10C9.46957 26 8.96086 25.7893 8.58579 25.4142C8.21071 25.0391 8 24.5304 8 24V8C8 7.46957 8.21071 6.96086 8.58579 6.58579C8.96086 6.21071 9.46957 6 10 6H18.5L22 9.5"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12 22H13"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M22.42 13.61C22.615 13.415 22.8465 13.2603 23.1013 13.1547C23.3561 13.0492 23.6292 12.9949 23.905 12.9949C24.1808 12.9949 24.4539 13.0492 24.7087 13.1547C24.9635 13.2603 25.195 13.415 25.39 13.61C25.585 13.805 25.7397 14.0365 25.8452 14.2913C25.9508 14.5461 26.0051 14.8192 26.0051 15.095C26.0051 15.3708 25.9508 15.6439 25.8452 15.8987C25.7397 16.1535 25.585 16.385 25.39 16.58L20.95 21L17 22L17.99 18.05L22.42 13.61Z"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  close_order: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M22 10L10 22"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M10 10L22 22"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  close_all_orders: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M16 16L22 22"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M16 22L22 16"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M24 12H14C12.8954 12 12 12.8954 12 14V24C12 25.1046 12.8954 26 14 26H24C25.1046 26 26 25.1046 26 24V14C26 12.8954 25.1046 12 24 12Z"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M8 20C6.9 20 6 19.1 6 18V8C6 6.9 6.9 6 8 6H18C19.1 6 20 6.9 20 8"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  delegate_oct: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M23 17V13H9C8.46957 13 7.96086 12.7893 7.58579 12.4142C7.21071 12.0391 7 11.5304 7 11C7 9.9 7.9 9 9 9H21V13"
+        stroke="#292524"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M7 11V23C7 24.1 7.9 25 9 25H23V21"
+        stroke="#292524"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M21 17C20.4696 17 19.9609 17.2107 19.5858 17.5858C19.2107 17.9609 19 18.4696 19 19C19 20.1 19.9 21 21 21H25V17H21Z"
+        stroke="#292524"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M24 14C26.7615 14 29 11.7615 29 9C29 6.2385 26.7615 4 24 4C21.2385 4 19 6.2385 19 9C19 11.7615 21.2385 14 24 14Z"
+        fill="#78716C"
+      />
+      <path
+        d="M22.5 9L23.5 10L25.5 8"
+        stroke="#E7E5E4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  revoke_oct: (props: LucideProps) => (
+    <svg
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M24 17V13H10C9.46957 13 8.96086 12.7893 8.58579 12.4142C8.21071 12.0391 8 11.5304 8 11C8 9.9 8.9 9 10 9H22V13"
+        stroke="#292524"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M8 11V23C8 24.1 8.9 25 10 25H24V21"
+        stroke="#292524"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M22 17C21.4696 17 20.9609 17.2107 20.5858 17.5858C20.2107 17.9609 20 18.4696 20 19C20 20.1 20.9 21 22 21H26V17H22Z"
+        stroke="#292524"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M24 14C26.7614 14 29 11.7614 29 9C29 6.23858 26.7614 4 24 4C21.2386 4 19 6.23858 19 9C19 11.7614 21.2386 14 24 14Z"
+        fill="#78716C"
+      />
+      <path
+        d="M25.5 7.5L22.5 10.5"
+        stroke="#E7E5E4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M22.5 7.5L25.5 10.5"
+        stroke="#E7E5E4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
 };

@@ -1,24 +1,54 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import type { ClosedTrade, OpenLimitOrder, OpenTrade } from "@bera/proto/src";
 
-import { OrderHistorHeader } from "./order-history-header";
-import { OrderHistorTable } from "./order-history-table";
+import { usePollOpenOrders } from "~/hooks/usePollOpenOrders";
+import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
+import { type IMarket } from "../page";
+import { OrderHistoryHeader } from "./order-history-header";
+import { OrderHistoryTable } from "./order-history-table";
 import { TotalAmount } from "./total-amount";
 
-export function OrderHistory() {
+export interface IMarketOrder extends OpenTrade {
+  market: IMarket;
+}
+
+export interface ILimitOrder extends OpenLimitOrder {
+  market: IMarket;
+}
+
+export interface IClosedTrade extends ClosedTrade {
+  market: IMarket;
+}
+
+export function OrderHistory({ markets }: { markets: IMarket[] }) {
   const [tabType, setTabType] = useState<
     "positions" | "orders" | "history" | "pnl"
   >("positions");
+
+  const { useMarketOpenPositions } = usePollOpenPositions();
+
+  const { useMarketClosedPositions } = usePollTradingHistory();
+
+  const { useMarketOpenOrders } = usePollOpenOrders();
+
+  const openPositions = useMarketOpenPositions(markets);
+
+  const closedPositions = useMarketClosedPositions(markets);
+
+  const openOrders = useMarketOpenOrders(markets);
+
   const headers = [
     {
       title: "Positions",
-      counts: 5,
+      counts: openPositions?.length ?? 0,
       type: "positions",
     },
     {
       title: "Open Orders",
-      counts: 2,
+      counts: openOrders?.length ?? 0,
       type: "orders",
     },
     {
@@ -30,12 +60,36 @@ export function OrderHistory() {
       type: "pnl",
     },
   ];
+
+  const closePositionsPayload = useMemo(() => {
+    return openPositions?.map((position) => ({
+      pairIndex: BigInt(position.market.pair_index),
+      index: BigInt(position.index),
+    }));
+  }, [openPositions]);
+
+  const closeOrdersPayload = useMemo(() => {
+    return openOrders?.map((position) => ({
+      pairIndex: BigInt(position.market.pair_index),
+      index: BigInt(position.index),
+    }));
+  }, [openPositions]);
+
   return (
     <div className="w-full">
-      <OrderHistorHeader {...{ headers, tabType, setTabType }} />
-      <TotalAmount className="flex sm:hidden" />
-      <OrderHistorTable tab={tabType} />
-      <TotalAmount className="hidden sm:flex" />
+      <OrderHistoryHeader
+        closePositionsPayload={closePositionsPayload}
+        closeOrdersPayload={closeOrdersPayload}
+        {...{ headers, tabType, setTabType }}
+      />
+      <TotalAmount className="flex sm:hidden" markets={markets} />
+      <OrderHistoryTable
+        tab={tabType}
+        openPositons={openPositions}
+        openOrders={openOrders}
+        history={closedPositions}
+      />
+      <TotalAmount className="hidden sm:flex" markets={markets} />
     </div>
   );
 }

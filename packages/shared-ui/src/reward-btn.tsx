@@ -17,7 +17,7 @@ import { type Address } from "wagmi";
 import { useTxn } from "./hooks";
 import { TokenIcon } from "./token-icon";
 
-export function RewardBtn({ poolAddress, ...props }: { poolAddress: Address }) {
+export function RewardBtn({ poolAddress, ...props }: any) {
   const { account, isReady } = useBeraJs();
 
   const [open, setOpen] = useState(false);

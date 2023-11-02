@@ -7,12 +7,26 @@ export interface IContractWrite {
   value?: bigint;
 }
 
+export interface IValueSend {
+  address: `0x${string}`;
+  txnName?: string;
+  value?: any;
+}
+
 export interface useContractWriteApi {
   isLoading: boolean;
   isSubmitting: boolean;
   isSuccess: boolean;
   isError: boolean;
   write: (props: IContractWrite) => void;
+}
+
+export interface useTxnSendWriteApi {
+  isLoading: boolean;
+  isSubmitting: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  write: (props: IValueSend) => void;
 }
 
 export interface IUseContractWrite {
