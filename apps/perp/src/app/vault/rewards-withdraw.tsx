@@ -75,7 +75,7 @@ export const RewardsWithdraw = () => {
           )}
         </div>
       </div>
-      <div className="flex w-full flex-row gap-2">
+      <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-2">
         <div className="flex w-full flex-col justify-between gap-1 rounded-xl border border-border bg-muted px-6 py-4">
           <p className="text-sm font-medium text-muted-foreground">
             bHONEY Balance
