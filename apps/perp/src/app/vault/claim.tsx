@@ -1,23 +1,46 @@
+"use client";
+
 import Image from "next/image";
+import {
+  usePollBgtRewardsForAddress,
+  usePollHoneyVaultBalance,
+} from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
-import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
+import type { Address } from "wagmi";
 
 export default function Claim() {
+  const {
+    isLoading: isHoneyVaultBalanceLoading,
+    useFormattedHoneyVaultBalance,
+  } = usePollHoneyVaultBalance();
+
+  const honeyLocked = useFormattedHoneyVaultBalance();
+
+  const { isLoading: isBgtRewardsLoading, useBgtApr } =
+    usePollBgtRewardsForAddress({
+      address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+    });
+
+  const bgtApr = useBgtApr(honeyLocked);
+
+  const isLoading = isHoneyVaultBalanceLoading || isBgtRewardsLoading;
   return (
     <div className="relative w-full overflow-hidden rounded-xl border border-border bg-gradient-to-r from-[#180B01] to-[#3B220F] px-10 py-8">
-      <div className="relative z-10 font-medium text-muted-foreground">
-        Available to Claim
+      <div className=" relative z-10 inline-flex h-[52px] w-[115px] items-center justify-center gap-1 rounded-xl border border-yellow-600 bg-stone-900 px-3 py-2">
+        <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-yellow-600">
+          {isLoading || bgtApr === undefined ? (
+            <Skeleton className="h-[28px] w-[80px]" />
+          ) : (
+            <p>{bgtApr?.toFixed(2)}%</p>
+          )}
+        </div>
       </div>
-      <div className="relative z-10 flex items-center gap-2 text-3xl font-semibold leading-9">
-        <Icons.nature className="h-7 w-7" />
-        207.10
+      <div className=" relative z-10 mt-4 w-full text-xs text-muted-foreground">
+        Honey Staking Projected <br /> Reward Rate (PRR)
       </div>
-      <Button className="relative z-10 mt-4 bg-primary px-4 py-2 text-primary-foreground">
-        Claim Rewards
-      </Button>
       <Image
-        src={`${cloudinaryUrl}/BERPS/wpvbk14quq4wm0zmcqmj`}
+        src={`${cloudinaryUrl}/BERPS/nsc94gwejblw1oj8yyoo`}
         alt="honey-jar"
         width={1080}
         height={186}

@@ -16,7 +16,7 @@ export const DEFAULT_INSTRUMENT = {
 export function generateRandomInstruments(): Instrument[] {
   const instruments: Instrument[] = [];
 
-  const names = ["BTC-BERP", "ETH-BERP", "LTC-BERP", "XRP-BERP", "ADA-BERP"];
+  const names = ["BTC-USD", "ETH-BERP", "LTC-BERP", "XRP-BERP", "ADA-BERP"];
   const logoURIs = [
     "https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png?1547042389",
     "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880",

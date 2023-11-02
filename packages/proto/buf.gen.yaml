@@ -6,3 +6,4 @@ plugins:
       - esModuleInterop=true
       - forceLong=long
       - useOptionals=true
+      - snakeToCamel=false

@@ -1,20 +1,27 @@
+"use client";
+
+import { formatUsd, formatter } from "@bera/berajs";
 import { cn } from "@bera/ui";
 
-export default function GeneralInfo() {
+export default function GeneralInfo({
+  tradingSummary,
+}: {
+  tradingSummary: any;
+}) {
   const info = [
     {
       title: "Trading Volume",
-      amount: "$842,886,669",
+      amount: formatUsd(tradingSummary?.volume),
       subtitle: "Exchanged in the last 24hours",
     },
     {
       title: "Number of Trades",
-      amount: "182,073",
+      amount: formatter.format(tradingSummary?.num_trades),
       subtitle: "Exchanged in the last 24hours",
     },
     {
       title: "Open Interest",
-      amount: "$267,393,702",
+      amount: formatUsd(tradingSummary?.oi),
       subtitle: "In open positions on BeraPerps",
     },
   ];

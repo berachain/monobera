@@ -17,7 +17,7 @@ export interface IBeraJsAPI {
   isConnected: boolean;
   isWrongNetwork?: boolean;
   isReady?: boolean;
-  login: (connectorID: string) => Promise<void>;
+  login: (connectorID: string) => void;
   logout: (connectorID: string) => void;
   setError: (error: Error | undefined) => void;
 }
@@ -27,7 +27,7 @@ export const BeraJsContext = createContext<IBeraJsAPI | undefined>(undefined);
 const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { login, logout } = useAuth();
   const { error: evmError } = useConnect();
-  const { address: account } = useAccount();
+  const { address: account, status } = useAccount();
   const [error, setError] = useState<Error | undefined>(undefined);
   const [isMounted, setIsMounted] = useState(false);
   const { chain } = useNetwork();
@@ -38,12 +38,15 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
       value={{
         account: account as `0x${string}`,
         error: evmError || error,
-        isConnected: !evmError && account && isMounted ? true : false,
+        isConnected: useMemo(
+          () => (!evmError && account && isMounted ? true : false),
+          [evmError, account, isMounted, status],
+        ),
         isWrongNetwork: !chain?.unsupported ? false : true,
         isReady: useMemo(
           () =>
             !evmError && account && isMounted && chain?.unsupported === false,
-          [evmError, account, isMounted, chain],
+          [evmError, account, isMounted, chain, status],
         ),
         login,
         logout,
