@@ -21,7 +21,7 @@ export const Banner = () => {
           <TokenIcon address={bgtTokenAddress} fetch />
           {isReady ? "207.10" : "~~"}
         </div>
-        <Button disable={!isReady}>Claim Rewards</Button>
+        <Button disabled={!isReady}>Claim Rewards</Button>
       </div>
 
       <div className="flex w-full flex-col gap-4">
