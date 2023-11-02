@@ -67,11 +67,8 @@ export function getReservesHumanized(
   }));
 
   const baseCurrencyData = {
-    // marketReferenceCurrencyDecimals:
-    //   poolBaseCurrencyRaw.marketReferenceCurrencyUnit.toString().length - 1,
-    marketReferenceCurrencyDecimals: Number(
-      poolBaseCurrencyRaw.marketReferenceCurrencyUnit,
-    ),
+    marketReferenceCurrencyDecimals:
+      poolBaseCurrencyRaw.marketReferenceCurrencyUnit.toString().length - 1,
     marketReferenceCurrencyPriceInUsd:
       poolBaseCurrencyRaw.marketReferenceCurrencyPriceInUsd.toString(),
     networkBaseTokenPriceInUsd:

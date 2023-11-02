@@ -1,54 +1,51 @@
 import { useBeraJs } from "@bera/berajs";
-import { lendPoolImplementationAddress, multicallAddress } from "@bera/config";
+import { lendPoolImplementationAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-// import { formatUnits } from "viem";
-import { usePublicClient, type Address } from "wagmi";
+import { usePublicClient } from "wagmi";
 
 import { lendPoolImplementationABI } from "./abi";
 
-interface Call {
-  abi: typeof lendPoolImplementationABI;
-  address: Address;
-  functionName: string;
-  args: any[];
-}
 const REFRESH_BLOCK_INTERVAL = 2000;
 
 export const usePollUserAccountData = () => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account, error } = useBeraJs();
-  // const { networkConfig } = useBeraConfig();
 
   const QUERY_KEY = [account, "getUserAccountData"];
   useSWR(
     QUERY_KEY,
     async () => {
       if (account && !error) {
-        const call: Call[] = [
-          {
+        try {
+          const result = await publicClient.readContract({
             address: lendPoolImplementationAddress,
             abi: lendPoolImplementationABI,
             functionName: "getUserAccountData",
             args: [account],
-          },
-        ];
-        const result = await publicClient.multicall({
-          //@ts-ignore
-          contracts: call,
-          multicallAddress: multicallAddress,
-        });
-        if (result[0]?.status === "success") {
+          });
+          
+          // Here we assert that result is of type any[] with at least six elements.
+          const [
+            totalCollateralBase,
+            totalDebtBase,
+            availableBorrowsBase,
+            currentLiquidationThreshold,
+            ltv,
+            healthFactor,
+          ] = result as [any, any, any, any, any, any];
+          
           return {
-            totalCollateralBase: (result[0].result as any[])[0],
-            totalDebtBase: (result[0].result as any[])[1],
-            availableBorrowsBase: (result[0].result as any[])[2],
-            currentLiquidationThreshold: (result[0].result as any[])[3],
-            ltv: (result[0].result as any[])[4],
-            healthFactor: (result[0].result as any[])[5],
+            totalCollateralBase,
+            totalDebtBase,
+            availableBorrowsBase,
+            currentLiquidationThreshold,
+            ltv,
+            healthFactor,
           };
-        } else {
+        } catch (e) {
+          console.log(e);
           return undefined;
         }
       } else return undefined;

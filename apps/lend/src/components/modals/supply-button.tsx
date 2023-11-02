@@ -92,7 +92,7 @@ const SupplyModalContent = ({
   const { data: reserveData } = useSelectedReserveData(token.address);
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
-
+  // console.log(userAccountData);
   const currentHealthFactor =
     Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
       ? "∞"
@@ -191,7 +191,7 @@ const SupplyModalContent = ({
         </div>
       </div>
 
-      {allowance && Number(allowance.formattedAllowance) > (amount ?? 0) ? (
+      {allowance && Number(allowance.formattedAllowance) >= (amount ?? 0) ? (
         <Button
           disabled={
             !amount || amount === 0 || amount > Number(balance.formattedBalance)

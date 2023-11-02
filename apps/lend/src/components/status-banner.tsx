@@ -2,7 +2,7 @@ import { formatUsd, formatter, useBeraJs } from "@bera/berajs";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatEther, formatUnits } from "viem";
+import { formatUnits } from "viem";
 
 import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
@@ -12,12 +12,13 @@ export default function StatusBanner() {
   const { useUserAccountData } = usePollUserAccountData();
   const { data, isLoading } = useUserAccountData();
   const { isReady } = useBeraJs();
-
   const { useUserReservesData } = usePollUserReservesData();
   const { data: userReservesDictionary } = useUserReservesData();
-  const { useReservesDataList } = usePollReservesDataList();
+  const { useReservesDataList, useBaseCurrencyData } =
+    usePollReservesDataList();
   const { data: reservesDictionary } = useReservesDataList();
-
+  const { data: baseCurrency } = useBaseCurrencyData();
+  // console.log("baseCurrency", baseCurrency)
   let positiveProportion = 0;
   let negativeProportion = 0;
   if (reservesDictionary && userReservesDictionary) {
@@ -39,9 +40,17 @@ export default function StatusBanner() {
     });
   }
   const totalLiquidityUSD = Number(
-    formatEther(data?.totalCollateralBase || "1"),
+    formatUnits(
+      data?.totalCollateralBase || "1",
+      baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+    ),
   );
-  const totalBorrowsUSD = Number(formatEther(data?.totalDebtBase || "1"));
+  const totalBorrowsUSD = Number(
+    formatUnits(
+      data?.totalDebtBase || "1",
+      baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+    ),
+  );
   const netWorthUSD = totalLiquidityUSD - totalBorrowsUSD;
   const earnedAPY = positiveProportion / totalLiquidityUSD;
   const debtAPY = negativeProportion / totalBorrowsUSD;
@@ -49,12 +58,19 @@ export default function StatusBanner() {
     ((earnedAPY || 0) * totalLiquidityUSD) /
       (netWorthUSD !== 0 ? netWorthUSD : 1) -
     ((debtAPY || 0) * totalBorrowsUSD) / (netWorthUSD !== 0 ? netWorthUSD : 1);
-
+  console.log(data);
   const status = [
     {
       icon: <Icons.wallet className="h-8 w-8" />,
       title: "Total Sypplied",
-      amount: formatUsd(Number(formatEther(data?.totalCollateralBase || "0"))),
+      amount: formatUsd(
+        Number(
+          formatUnits(
+            data?.totalCollateralBase || "0",
+            baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+          ),
+        ),
+      ),
     },
     {
       icon: <Icons.lineChart className="h-8 w-8" />,
@@ -66,9 +82,21 @@ export default function StatusBanner() {
       title: "Account Health",
       amount: (
         <div className="flex items-center gap-2">
-          {Number(formatEther(data?.healthFactor || "0")) > 1000000000000
+          {Number(
+            formatUnits(
+              data?.healthFactor || "0",
+              baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+            ),
+          ) > 1000000000000
             ? "∞"
-            : formatter.format(Number(formatEther(data?.healthFactor || "0")))}
+            : formatter.format(
+                Number(
+                  formatUnits(
+                    data?.healthFactor || "0",
+                    baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+                  ),
+                ),
+              )}
           <Badge variant={"info"} className="rounded-md py-0 font-medium">
             Risk Details
           </Badge>
@@ -79,11 +107,21 @@ export default function StatusBanner() {
   const info = [
     {
       title: "You can Borrow Upto",
-      amount: formatUsd(formatEther(data?.availableBorrowsBase || "0")),
+      amount: formatUsd(
+        formatUnits(
+          data?.availableBorrowsBase || "0",
+          baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+        ),
+      ),
     },
     {
       title: "Funds Eligible for deposit",
-      amount: formatUsd(formatEther(data?.totalCollateralBase || "0")),
+      amount: formatUsd(
+        formatUnits(
+          data?.totalCollateralBase || "0",
+          baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+        ),
+      ),
     },
   ];
 

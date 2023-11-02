@@ -26,6 +26,7 @@ import {
   CreditCard,
   Edit,
   Expand,
+  ExternalLink,
   File,
   FileEdit,
   FileText,
@@ -87,6 +88,7 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
+  externalLink: ExternalLink,
   fileEdit: FileEdit,
   lineChart: LineChart,
   pieChart: PieChart,
