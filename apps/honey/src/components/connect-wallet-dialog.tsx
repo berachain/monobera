@@ -76,7 +76,7 @@ export default function ConnectWalletDialog({ className, size }: Props) {
                 className="flex justify-start"
                 onClick={() => {
                   setConnectorId(connectorName);
-                  void login(connectorName);
+                  login(connectorName);
                   setOpen(false);
                 }}
               >

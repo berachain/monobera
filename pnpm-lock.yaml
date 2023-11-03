@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
@@ -740,7 +736,7 @@ importers:
         version: 0.3.35(typescript@5.0.4)(zod@3.21.4)
       wagmi:
         specifier: ^1.0.2
-        version: 1.0.2(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.35)
+        version: 1.0.2(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.50)(zod@3.21.4)
     devDependencies:
       '@aave/math-utils':
         specifier: ^1.20.0
@@ -6593,7 +6589,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
       react-remove-scroll: 2.5.4(@types/react@18.2.0)(react@18.2.0)
       viem: 0.3.35(typescript@5.0.4)(zod@3.21.4)
-      wagmi: 1.0.2(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.35)
+      wagmi: 1.0.2(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.50)(zod@3.21.4)
     transitivePeerDependencies:
       - '@types/react'
     dev: false
@@ -8761,42 +8757,6 @@ packages:
       typescript: 5.0.4
     dev: false
 
-  /@wagmi/connectors@1.0.2(@wagmi/chains@0.2.22)(react@18.2.0)(typescript@5.0.4)(viem@0.3.35):
-    resolution: {integrity: sha512-uoUkWXv3cwwypxDblrNGWo3VGwUbxNAlIzGIDqg4oGO6Kekphj/FjRWMn2Yb9sVmFifh9h/aiJ1cr75Mv+E2fA==}
-    peerDependencies:
-      '@wagmi/chains': '>=0.2.0'
-      typescript: '>=4.9.4'
-      viem: ~0.3.18
-    peerDependenciesMeta:
-      '@wagmi/chains':
-        optional: true
-      typescript:
-        optional: true
-    dependencies:
-      '@coinbase/wallet-sdk': 3.7.2
-      '@ledgerhq/connect-kit-loader': 1.1.2
-      '@safe-global/safe-apps-provider': 0.15.2
-      '@safe-global/safe-apps-sdk': 7.11.0
-      '@wagmi/chains': 0.2.22(typescript@5.0.4)
-      '@walletconnect/ethereum-provider': 2.7.2(@web3modal/standalone@2.4.3)
-      '@walletconnect/legacy-provider': 2.0.0
-      '@web3modal/standalone': 2.4.3(react@18.2.0)
-      abitype: 0.8.1(typescript@5.0.4)(zod@3.21.4)
-      eventemitter3: 4.0.7
-      typescript: 5.0.4
-      viem: 0.3.35(typescript@5.0.4)(zod@3.21.4)
-    transitivePeerDependencies:
-      - '@react-native-async-storage/async-storage'
-      - bufferutil
-      - debug
-      - encoding
-      - lokijs
-      - react
-      - supports-color
-      - utf-8-validate
-      - zod
-    dev: false
-
   /@wagmi/connectors@1.0.2(@wagmi/chains@0.2.22)(react@18.2.0)(typescript@5.0.4)(viem@0.3.35)(zod@3.21.4):
     resolution: {integrity: sha512-uoUkWXv3cwwypxDblrNGWo3VGwUbxNAlIzGIDqg4oGO6Kekphj/FjRWMn2Yb9sVmFifh9h/aiJ1cr75Mv+E2fA==}
     peerDependencies:
@@ -8862,36 +8822,6 @@ packages:
       - bufferutil
       - debug
       - encoding
-      - lokijs
-      - react
-      - supports-color
-      - utf-8-validate
-      - zod
-    dev: false
-
-  /@wagmi/core@1.0.2(@types/react@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.35):
-    resolution: {integrity: sha512-3MCmaah7zdpt/eA6AlxNsL/2BV+6jhi4CMO20vHsSGPyxCPrvDguY9fn6tUMMmhwnFXhSAEHDhXNlZBPVl1tog==}
-    peerDependencies:
-      typescript: '>=4.9.4'
-      viem: ~0.3.18
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@wagmi/chains': 0.2.22(typescript@5.0.4)
-      '@wagmi/connectors': 1.0.2(@wagmi/chains@0.2.22)(react@18.2.0)(typescript@5.0.4)(viem@0.3.35)
-      abitype: 0.8.1(typescript@5.0.4)(zod@3.21.4)
-      eventemitter3: 4.0.7
-      typescript: 5.0.4
-      viem: 0.3.35(typescript@5.0.4)(zod@3.21.4)
-      zustand: 4.4.6(@types/react@18.2.0)(react@18.2.0)
-    transitivePeerDependencies:
-      - '@react-native-async-storage/async-storage'
-      - '@types/react'
-      - bufferutil
-      - debug
-      - encoding
-      - immer
       - lokijs
       - react
       - supports-color
@@ -17044,40 +16974,6 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
-  /wagmi@1.0.2(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.35):
-    resolution: {integrity: sha512-RVmVKK561iRpHAO1pomTKQAbofDZPT8ZBfXo75riJpoTW8ElggfDrcennDqejeMZeVJGZMK/Bt+W4eTxufmS6A==}
-    peerDependencies:
-      react: '>=17.0.0'
-      typescript: '>=4.9.4'
-      viem: ~0.3.18
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@tanstack/query-sync-storage-persister': 4.36.1
-      '@tanstack/react-query': 4.36.1(react-dom@18.2.0)(react@18.2.0)
-      '@tanstack/react-query-persist-client': 4.36.1(@tanstack/react-query@4.36.1)
-      '@wagmi/core': 1.0.2(@types/react@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.35)
-      abitype: 0.8.1(typescript@5.0.4)(zod@3.21.4)
-      react: 18.2.0
-      typescript: 5.0.4
-      use-sync-external-store: 1.2.0(react@18.2.0)
-      viem: 0.3.35(typescript@5.0.4)(zod@3.21.4)
-    transitivePeerDependencies:
-      - '@react-native-async-storage/async-storage'
-      - '@types/react'
-      - bufferutil
-      - debug
-      - encoding
-      - immer
-      - lokijs
-      - react-dom
-      - react-native
-      - supports-color
-      - utf-8-validate
-      - zod
-    dev: false
-
   /wagmi@1.0.2(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.4)(viem@0.3.35)(zod@3.21.4):
     resolution: {integrity: sha512-RVmVKK561iRpHAO1pomTKQAbofDZPT8ZBfXo75riJpoTW8ElggfDrcennDqejeMZeVJGZMK/Bt+W4eTxufmS6A==}
     peerDependencies:
@@ -17551,3 +17447,7 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
