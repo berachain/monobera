@@ -144,6 +144,25 @@ export const REWARDS_PRECOMPILE_ABI = [
     inputs: [
       {
         internalType: "address",
+        name: "depositor",
+        type: "address",
+      },
+    ],
+    name: "getDepositorWithdrawAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "receiver",
         type: "address",
       },
@@ -175,17 +194,26 @@ export const REWARDS_PRECOMPILE_ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "depositor",
+        name: "withdrawAddress",
         type: "address",
       },
+    ],
+    name: "setDepositorWithdrawAddress",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
       {
         internalType: "address",
         name: "receiver",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "withdraw",
         type: "address",
       },
     ],
@@ -216,17 +244,7 @@ export const REWARDS_PRECOMPILE_ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "depositor",
-        type: "address",
-      },
-      {
-        internalType: "address",
         name: "receiver",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "withdraw",
         type: "address",
       },
       {
@@ -236,6 +254,47 @@ export const REWARDS_PRECOMPILE_ABI = [
       },
     ],
     name: "withdrawDepositorRewards",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
+        internalType: "struct Cosmos.Coin[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "receiver",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "recipient",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "withdrawDepositorRewardsTo",
     outputs: [
       {
         components: [

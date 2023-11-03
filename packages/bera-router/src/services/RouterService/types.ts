@@ -78,6 +78,7 @@ export interface BatchSwapStep {
   assetOut: Address;
   amountOut: bigint;
   userData: string;
+  value?: bigint;
 }
 
 export interface ResultPath extends NewPath {
