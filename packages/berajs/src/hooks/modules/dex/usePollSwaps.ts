@@ -55,6 +55,7 @@ interface BatchSwapStep {
   assetOut: Address;
   amountOut: bigint;
   userData: string;
+  value?: bigint;
 }
 export const getSwap = async (
   tokenIn: Address,

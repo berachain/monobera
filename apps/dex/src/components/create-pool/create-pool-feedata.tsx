@@ -22,10 +22,10 @@ enum Types {
 }
 
 enum VALUES {
-  FIVE_BPS = "0.05",
-  TEN_BPS = "0.10",
-  THIRTY_BPS = "0.30",
-  ONE_PERCENT = "1.00",
+  FIVE_BPS = "0.15",
+  TEN_BPS = "0.20",
+  THIRTY_BPS = "0.40",
+  ONE_PERCENT = "1.10",
   CUSTOM = "custom",
 }
 export function CreatePoolFeeData({
@@ -65,19 +65,19 @@ export function CreatePoolFeeData({
         >
           <TabsList className="w-full">
             <TabsTrigger value={VALUES.FIVE_BPS} className="w-full ">
-              0.05%
+              0.15%
             </TabsTrigger>
             <TabsTrigger value={VALUES.TEN_BPS} className="w-full">
-              0.10%
+              0.20%
             </TabsTrigger>
             <TabsTrigger value={VALUES.THIRTY_BPS} className="w-full ">
-              0.30%
+              0.40%
             </TabsTrigger>
             <TabsTrigger
               value={VALUES.ONE_PERCENT}
               className="w-full  min-w-[30px]"
             >
-              1.00%
+              1.10%
             </TabsTrigger>
             {/* <TabsTrigger value={VALUES.CUSTOM} className="w-full">
               Custom

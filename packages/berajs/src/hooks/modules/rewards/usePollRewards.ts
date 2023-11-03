@@ -55,7 +55,7 @@ export const usePollBgtRewards = (receivers: string[]) => {
       }
     },
     {
-      refreshInterval: POLLING.NORMAL,
+      refreshInterval: POLLING.FAST,
     },
   );
 
