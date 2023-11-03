@@ -6,6 +6,12 @@ export interface MappedTokens {
   [key: string]: number;
 }
 
+const handleNativeBera = (token: Address) => {
+  if (token === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)) {
+    return getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
+  }
+  return token;
+};
 export const getSwap = async (
   tokenIn: Address,
   tokenOut: Address,
@@ -17,13 +23,16 @@ export const getSwap = async (
     const response = await fetch(
       `${
         process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
-      }/dex/route?quote_asset=${tokenOut}&base_asset=${tokenIn}&amount=${parseUnits(
+      }/dex/route?quote_asset=${handleNativeBera(
+        tokenOut,
+      )}&base_asset=${handleNativeBera(tokenIn)}&amount=${parseUnits(
         `${amount}`,
         18,
       )}&swap_type=${type}`,
     );
 
     const result = await response.json();
+
     if (!result.steps)
       return {
         batchSwapSteps: [],
@@ -43,6 +52,19 @@ export const getSwap = async (
         userData: "",
       };
     });
+
+    if (
+      tokenIn === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)
+    ) {
+      if (batchSwapSteps[0]) {
+        batchSwapSteps[0].assetIn = process.env
+          .NEXT_PUBLIC_BERA_ADDRESS as Address;
+        batchSwapSteps[0].value = batchSwapSteps[0].amountIn;
+        // batchSwapSteps[0].amountIn = 0n;
+      }
+    }
+
+    console.log("bss", batchSwapSteps);
     const swapInfo = {
       batchSwapSteps: batchSwapSteps,
       formattedSwapAmount: amount.toString(),
@@ -55,6 +77,7 @@ export const getSwap = async (
     };
     return swapInfo;
   } catch (e) {
+    console.log(e);
     return {
       batchSwapSteps: [],
       formattedSwapAmount: amount.toString(),

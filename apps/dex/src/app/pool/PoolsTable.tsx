@@ -106,6 +106,8 @@ export const PoolSearch = () => {
   const receivers = userPools?.map((pool: Pool) => pool.pool) || [];
   const { useBgtRewards } = usePollBgtRewards(receivers);
   const { data: bgtRewards } = useBgtRewards();
+
+  console.log(data);
   return (
     <div
       className="w-full flex-col items-center justify-center"

@@ -85,6 +85,7 @@ export function SwapCard({
     setSwapAmount,
     onSwitch,
     swapInfo,
+    value,
     payload,
     showPriceImpact,
     priceImpact,
@@ -98,6 +99,8 @@ export function SwapCard({
     inputCurrency,
     outputCurrency,
   });
+
+  console.log("swapInfo", swapInfo);
   const { isConnected } = useBeraJs();
   const [exceedingBalance, setExceedingBalance] = useState(false);
 
@@ -197,6 +200,7 @@ export function SwapCard({
                 abi: DEX_PRECOMPILE_ABI,
                 functionName: "batchSwap",
                 params: payload,
+                value: value,
               });
             }}
             isLoading={isLoading}
