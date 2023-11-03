@@ -91,7 +91,7 @@ export const withdraw_queue_columns: ColumnDef<HoneyWithdrawalRequest>[] = [
       <div className="flex flex-row items-center gap-2 text-sm font-semibold leading-7">
         {Number(formatUnits(BigInt(row.original.shares ?? 0n), 18))}{" "}
         <Image
-          src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/honey.png"
+          src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/bhoney.png"
           alt="Honey"
           width={20}
           height={20}

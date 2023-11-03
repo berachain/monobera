@@ -12,7 +12,7 @@ export interface GlobalParams {
   /** % of current honey vault that can be used as collateral */
   max_collateral_p: string;
   /** global maximum collateral possible (1e18) */
-  max_collateral_honey: string;
+  max_pos_honey: string;
   honey_vault_fee_p: string;
   honey_sss_fee_p: string;
   current_epoch: string;
@@ -20,6 +20,8 @@ export interface GlobalParams {
   /** # of blocks */
   market_orders_timeout: string;
   max_trades_per_pair: string;
+  global_oi_long: string;
+  global_oi_short: string;
 }
 
 export interface Market {
@@ -124,6 +126,8 @@ export interface OpenTrade {
   /** (1e18) */
   open_fee: string;
   timestamp_open: string;
+  /** (1e18) */
+  liq_price: string;
 }
 
 export interface OpenLimitOrder {
@@ -216,6 +220,38 @@ export interface SearchSymbolResultItem {
   type: string;
 }
 
+export interface TradingSummary {
+  time: number;
+  volume: number;
+  pnl: number;
+  num_trades: Long;
+  liquidation: number;
+  fees_earned: number;
+  fees_paid: number;
+}
+
+export interface Pagination {
+  page: number;
+  per_page: number;
+  total_pages: number;
+  total_items: number;
+}
+
+export interface TradingLeaderboardItem {
+  trader: string;
+  value: number;
+}
+
+export interface PairHistoricalSummary {
+  pair_index: Long;
+  volume: number;
+  pnl: number;
+  num_trades: Long;
+  liquidation: number;
+  fees_earned: number;
+  fees_paid: number;
+}
+
 function createBaseGlobalParams(): GlobalParams {
   return {
     group_index: "",
@@ -223,13 +259,15 @@ function createBaseGlobalParams(): GlobalParams {
     max_leverage: "",
     min_leverage: "",
     max_collateral_p: "",
-    max_collateral_honey: "",
+    max_pos_honey: "",
     honey_vault_fee_p: "",
     honey_sss_fee_p: "",
     current_epoch: "",
     max_pending_market_orders: "",
     market_orders_timeout: "",
     max_trades_per_pair: "",
+    global_oi_long: "",
+    global_oi_short: "",
   };
 }
 
@@ -253,8 +291,8 @@ export const GlobalParams = {
     if (message.max_collateral_p !== "") {
       writer.uint32(42).string(message.max_collateral_p);
     }
-    if (message.max_collateral_honey !== "") {
-      writer.uint32(50).string(message.max_collateral_honey);
+    if (message.max_pos_honey !== "") {
+      writer.uint32(50).string(message.max_pos_honey);
     }
     if (message.honey_vault_fee_p !== "") {
       writer.uint32(58).string(message.honey_vault_fee_p);
@@ -273,6 +311,12 @@ export const GlobalParams = {
     }
     if (message.max_trades_per_pair !== "") {
       writer.uint32(98).string(message.max_trades_per_pair);
+    }
+    if (message.global_oi_long !== "") {
+      writer.uint32(106).string(message.global_oi_long);
+    }
+    if (message.global_oi_short !== "") {
+      writer.uint32(114).string(message.global_oi_short);
     }
     return writer;
   },
@@ -325,7 +369,7 @@ export const GlobalParams = {
             break;
           }
 
-          message.max_collateral_honey = reader.string();
+          message.max_pos_honey = reader.string();
           continue;
         case 7:
           if (tag !== 58) {
@@ -369,6 +413,20 @@ export const GlobalParams = {
 
           message.max_trades_per_pair = reader.string();
           continue;
+        case 13:
+          if (tag !== 106) {
+            break;
+          }
+
+          message.global_oi_long = reader.string();
+          continue;
+        case 14:
+          if (tag !== 114) {
+            break;
+          }
+
+          message.global_oi_short = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -391,8 +449,8 @@ export const GlobalParams = {
       max_collateral_p: isSet(object.max_collateral_p)
         ? String(object.max_collateral_p)
         : "",
-      max_collateral_honey: isSet(object.max_collateral_honey)
-        ? String(object.max_collateral_honey)
+      max_pos_honey: isSet(object.max_pos_honey)
+        ? String(object.max_pos_honey)
         : "",
       honey_vault_fee_p: isSet(object.honey_vault_fee_p)
         ? String(object.honey_vault_fee_p)
@@ -411,6 +469,12 @@ export const GlobalParams = {
         : "",
       max_trades_per_pair: isSet(object.max_trades_per_pair)
         ? String(object.max_trades_per_pair)
+        : "",
+      global_oi_long: isSet(object.global_oi_long)
+        ? String(object.global_oi_long)
+        : "",
+      global_oi_short: isSet(object.global_oi_short)
+        ? String(object.global_oi_short)
         : "",
     };
   },
@@ -432,8 +496,8 @@ export const GlobalParams = {
     if (message.max_collateral_p !== "") {
       obj.max_collateral_p = message.max_collateral_p;
     }
-    if (message.max_collateral_honey !== "") {
-      obj.max_collateral_honey = message.max_collateral_honey;
+    if (message.max_pos_honey !== "") {
+      obj.max_pos_honey = message.max_pos_honey;
     }
     if (message.honey_vault_fee_p !== "") {
       obj.honey_vault_fee_p = message.honey_vault_fee_p;
@@ -453,6 +517,12 @@ export const GlobalParams = {
     if (message.max_trades_per_pair !== "") {
       obj.max_trades_per_pair = message.max_trades_per_pair;
     }
+    if (message.global_oi_long !== "") {
+      obj.global_oi_long = message.global_oi_long;
+    }
+    if (message.global_oi_short !== "") {
+      obj.global_oi_short = message.global_oi_short;
+    }
     return obj;
   },
 
@@ -470,13 +540,15 @@ export const GlobalParams = {
     message.max_leverage = object.max_leverage ?? "";
     message.min_leverage = object.min_leverage ?? "";
     message.max_collateral_p = object.max_collateral_p ?? "";
-    message.max_collateral_honey = object.max_collateral_honey ?? "";
+    message.max_pos_honey = object.max_pos_honey ?? "";
     message.honey_vault_fee_p = object.honey_vault_fee_p ?? "";
     message.honey_sss_fee_p = object.honey_sss_fee_p ?? "";
     message.current_epoch = object.current_epoch ?? "";
     message.max_pending_market_orders = object.max_pending_market_orders ?? "";
     message.market_orders_timeout = object.market_orders_timeout ?? "";
     message.max_trades_per_pair = object.max_trades_per_pair ?? "";
+    message.global_oi_long = object.global_oi_long ?? "";
+    message.global_oi_short = object.global_oi_short ?? "";
     return message;
   },
 };
@@ -1616,6 +1688,7 @@ function createBaseOpenTrade(): OpenTrade {
     closing_fee: "",
     open_fee: "",
     timestamp_open: "",
+    liq_price: "",
   };
 }
 
@@ -1668,6 +1741,9 @@ export const OpenTrade = {
     }
     if (message.timestamp_open !== "") {
       writer.uint32(122).string(message.timestamp_open);
+    }
+    if (message.liq_price !== "") {
+      writer.uint32(130).string(message.liq_price);
     }
     return writer;
   },
@@ -1785,6 +1861,13 @@ export const OpenTrade = {
 
           message.timestamp_open = reader.string();
           continue;
+        case 16:
+          if (tag !== 130) {
+            break;
+          }
+
+          message.liq_price = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1821,6 +1904,7 @@ export const OpenTrade = {
       timestamp_open: isSet(object.timestamp_open)
         ? String(object.timestamp_open)
         : "",
+      liq_price: isSet(object.liq_price) ? String(object.liq_price) : "",
     };
   },
 
@@ -1871,6 +1955,9 @@ export const OpenTrade = {
     if (message.timestamp_open !== "") {
       obj.timestamp_open = message.timestamp_open;
     }
+    if (message.liq_price !== "") {
+      obj.liq_price = message.liq_price;
+    }
     return obj;
   },
 
@@ -1896,6 +1983,7 @@ export const OpenTrade = {
     message.closing_fee = object.closing_fee ?? "";
     message.open_fee = object.open_fee ?? "";
     message.timestamp_open = object.timestamp_open ?? "";
+    message.liq_price = object.liq_price ?? "";
     return message;
   },
 };
@@ -3129,6 +3217,549 @@ export const SearchSymbolResultItem = {
     message.symbol = object.symbol ?? "";
     message.ticker = object.ticker ?? "";
     message.type = object.type ?? "";
+    return message;
+  },
+};
+
+function createBaseTradingSummary(): TradingSummary {
+  return {
+    time: 0,
+    volume: 0,
+    pnl: 0,
+    num_trades: Long.UZERO,
+    liquidation: 0,
+    fees_earned: 0,
+    fees_paid: 0,
+  };
+}
+
+export const TradingSummary = {
+  encode(
+    message: TradingSummary,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.time !== 0) {
+      writer.uint32(8).uint32(message.time);
+    }
+    if (message.volume !== 0) {
+      writer.uint32(17).double(message.volume);
+    }
+    if (message.pnl !== 0) {
+      writer.uint32(25).double(message.pnl);
+    }
+    if (!message.num_trades.isZero()) {
+      writer.uint32(32).uint64(message.num_trades);
+    }
+    if (message.liquidation !== 0) {
+      writer.uint32(41).double(message.liquidation);
+    }
+    if (message.fees_earned !== 0) {
+      writer.uint32(49).double(message.fees_earned);
+    }
+    if (message.fees_paid !== 0) {
+      writer.uint32(57).double(message.fees_paid);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): TradingSummary {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTradingSummary();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.time = reader.uint32();
+          continue;
+        case 2:
+          if (tag !== 17) {
+            break;
+          }
+
+          message.volume = reader.double();
+          continue;
+        case 3:
+          if (tag !== 25) {
+            break;
+          }
+
+          message.pnl = reader.double();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.num_trades = reader.uint64() as Long;
+          continue;
+        case 5:
+          if (tag !== 41) {
+            break;
+          }
+
+          message.liquidation = reader.double();
+          continue;
+        case 6:
+          if (tag !== 49) {
+            break;
+          }
+
+          message.fees_earned = reader.double();
+          continue;
+        case 7:
+          if (tag !== 57) {
+            break;
+          }
+
+          message.fees_paid = reader.double();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TradingSummary {
+    return {
+      time: isSet(object.time) ? Number(object.time) : 0,
+      volume: isSet(object.volume) ? Number(object.volume) : 0,
+      pnl: isSet(object.pnl) ? Number(object.pnl) : 0,
+      num_trades: isSet(object.num_trades)
+        ? Long.fromValue(object.num_trades)
+        : Long.UZERO,
+      liquidation: isSet(object.liquidation) ? Number(object.liquidation) : 0,
+      fees_earned: isSet(object.fees_earned) ? Number(object.fees_earned) : 0,
+      fees_paid: isSet(object.fees_paid) ? Number(object.fees_paid) : 0,
+    };
+  },
+
+  toJSON(message: TradingSummary): unknown {
+    const obj: any = {};
+    if (message.time !== 0) {
+      obj.time = Math.round(message.time);
+    }
+    if (message.volume !== 0) {
+      obj.volume = message.volume;
+    }
+    if (message.pnl !== 0) {
+      obj.pnl = message.pnl;
+    }
+    if (!message.num_trades.isZero()) {
+      obj.num_trades = (message.num_trades || Long.UZERO).toString();
+    }
+    if (message.liquidation !== 0) {
+      obj.liquidation = message.liquidation;
+    }
+    if (message.fees_earned !== 0) {
+      obj.fees_earned = message.fees_earned;
+    }
+    if (message.fees_paid !== 0) {
+      obj.fees_paid = message.fees_paid;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<TradingSummary>, I>>(
+    base?: I,
+  ): TradingSummary {
+    return TradingSummary.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<TradingSummary>, I>>(
+    object: I,
+  ): TradingSummary {
+    const message = createBaseTradingSummary();
+    message.time = object.time ?? 0;
+    message.volume = object.volume ?? 0;
+    message.pnl = object.pnl ?? 0;
+    message.num_trades =
+      object.num_trades !== undefined && object.num_trades !== null
+        ? Long.fromValue(object.num_trades)
+        : Long.UZERO;
+    message.liquidation = object.liquidation ?? 0;
+    message.fees_earned = object.fees_earned ?? 0;
+    message.fees_paid = object.fees_paid ?? 0;
+    return message;
+  },
+};
+
+function createBasePagination(): Pagination {
+  return { page: 0, per_page: 0, total_pages: 0, total_items: 0 };
+}
+
+export const Pagination = {
+  encode(
+    message: Pagination,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.page !== 0) {
+      writer.uint32(8).uint32(message.page);
+    }
+    if (message.per_page !== 0) {
+      writer.uint32(16).uint32(message.per_page);
+    }
+    if (message.total_pages !== 0) {
+      writer.uint32(24).uint32(message.total_pages);
+    }
+    if (message.total_items !== 0) {
+      writer.uint32(32).uint32(message.total_items);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Pagination {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePagination();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.page = reader.uint32();
+          continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.per_page = reader.uint32();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.total_pages = reader.uint32();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.total_items = reader.uint32();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Pagination {
+    return {
+      page: isSet(object.page) ? Number(object.page) : 0,
+      per_page: isSet(object.per_page) ? Number(object.per_page) : 0,
+      total_pages: isSet(object.total_pages) ? Number(object.total_pages) : 0,
+      total_items: isSet(object.total_items) ? Number(object.total_items) : 0,
+    };
+  },
+
+  toJSON(message: Pagination): unknown {
+    const obj: any = {};
+    if (message.page !== 0) {
+      obj.page = Math.round(message.page);
+    }
+    if (message.per_page !== 0) {
+      obj.per_page = Math.round(message.per_page);
+    }
+    if (message.total_pages !== 0) {
+      obj.total_pages = Math.round(message.total_pages);
+    }
+    if (message.total_items !== 0) {
+      obj.total_items = Math.round(message.total_items);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Pagination>, I>>(base?: I): Pagination {
+    return Pagination.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Pagination>, I>>(
+    object: I,
+  ): Pagination {
+    const message = createBasePagination();
+    message.page = object.page ?? 0;
+    message.per_page = object.per_page ?? 0;
+    message.total_pages = object.total_pages ?? 0;
+    message.total_items = object.total_items ?? 0;
+    return message;
+  },
+};
+
+function createBaseTradingLeaderboardItem(): TradingLeaderboardItem {
+  return { trader: "", value: 0 };
+}
+
+export const TradingLeaderboardItem = {
+  encode(
+    message: TradingLeaderboardItem,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.trader !== "") {
+      writer.uint32(10).string(message.trader);
+    }
+    if (message.value !== 0) {
+      writer.uint32(17).double(message.value);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): TradingLeaderboardItem {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTradingLeaderboardItem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.trader = reader.string();
+          continue;
+        case 2:
+          if (tag !== 17) {
+            break;
+          }
+
+          message.value = reader.double();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TradingLeaderboardItem {
+    return {
+      trader: isSet(object.trader) ? String(object.trader) : "",
+      value: isSet(object.value) ? Number(object.value) : 0,
+    };
+  },
+
+  toJSON(message: TradingLeaderboardItem): unknown {
+    const obj: any = {};
+    if (message.trader !== "") {
+      obj.trader = message.trader;
+    }
+    if (message.value !== 0) {
+      obj.value = message.value;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<TradingLeaderboardItem>, I>>(
+    base?: I,
+  ): TradingLeaderboardItem {
+    return TradingLeaderboardItem.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<TradingLeaderboardItem>, I>>(
+    object: I,
+  ): TradingLeaderboardItem {
+    const message = createBaseTradingLeaderboardItem();
+    message.trader = object.trader ?? "";
+    message.value = object.value ?? 0;
+    return message;
+  },
+};
+
+function createBasePairHistoricalSummary(): PairHistoricalSummary {
+  return {
+    pair_index: Long.UZERO,
+    volume: 0,
+    pnl: 0,
+    num_trades: Long.UZERO,
+    liquidation: 0,
+    fees_earned: 0,
+    fees_paid: 0,
+  };
+}
+
+export const PairHistoricalSummary = {
+  encode(
+    message: PairHistoricalSummary,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (!message.pair_index.isZero()) {
+      writer.uint32(8).uint64(message.pair_index);
+    }
+    if (message.volume !== 0) {
+      writer.uint32(17).double(message.volume);
+    }
+    if (message.pnl !== 0) {
+      writer.uint32(25).double(message.pnl);
+    }
+    if (!message.num_trades.isZero()) {
+      writer.uint32(32).uint64(message.num_trades);
+    }
+    if (message.liquidation !== 0) {
+      writer.uint32(41).double(message.liquidation);
+    }
+    if (message.fees_earned !== 0) {
+      writer.uint32(49).double(message.fees_earned);
+    }
+    if (message.fees_paid !== 0) {
+      writer.uint32(57).double(message.fees_paid);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): PairHistoricalSummary {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePairHistoricalSummary();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.pair_index = reader.uint64() as Long;
+          continue;
+        case 2:
+          if (tag !== 17) {
+            break;
+          }
+
+          message.volume = reader.double();
+          continue;
+        case 3:
+          if (tag !== 25) {
+            break;
+          }
+
+          message.pnl = reader.double();
+          continue;
+        case 4:
+          if (tag !== 32) {
+            break;
+          }
+
+          message.num_trades = reader.uint64() as Long;
+          continue;
+        case 5:
+          if (tag !== 41) {
+            break;
+          }
+
+          message.liquidation = reader.double();
+          continue;
+        case 6:
+          if (tag !== 49) {
+            break;
+          }
+
+          message.fees_earned = reader.double();
+          continue;
+        case 7:
+          if (tag !== 57) {
+            break;
+          }
+
+          message.fees_paid = reader.double();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PairHistoricalSummary {
+    return {
+      pair_index: isSet(object.pair_index)
+        ? Long.fromValue(object.pair_index)
+        : Long.UZERO,
+      volume: isSet(object.volume) ? Number(object.volume) : 0,
+      pnl: isSet(object.pnl) ? Number(object.pnl) : 0,
+      num_trades: isSet(object.num_trades)
+        ? Long.fromValue(object.num_trades)
+        : Long.UZERO,
+      liquidation: isSet(object.liquidation) ? Number(object.liquidation) : 0,
+      fees_earned: isSet(object.fees_earned) ? Number(object.fees_earned) : 0,
+      fees_paid: isSet(object.fees_paid) ? Number(object.fees_paid) : 0,
+    };
+  },
+
+  toJSON(message: PairHistoricalSummary): unknown {
+    const obj: any = {};
+    if (!message.pair_index.isZero()) {
+      obj.pair_index = (message.pair_index || Long.UZERO).toString();
+    }
+    if (message.volume !== 0) {
+      obj.volume = message.volume;
+    }
+    if (message.pnl !== 0) {
+      obj.pnl = message.pnl;
+    }
+    if (!message.num_trades.isZero()) {
+      obj.num_trades = (message.num_trades || Long.UZERO).toString();
+    }
+    if (message.liquidation !== 0) {
+      obj.liquidation = message.liquidation;
+    }
+    if (message.fees_earned !== 0) {
+      obj.fees_earned = message.fees_earned;
+    }
+    if (message.fees_paid !== 0) {
+      obj.fees_paid = message.fees_paid;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<PairHistoricalSummary>, I>>(
+    base?: I,
+  ): PairHistoricalSummary {
+    return PairHistoricalSummary.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<PairHistoricalSummary>, I>>(
+    object: I,
+  ): PairHistoricalSummary {
+    const message = createBasePairHistoricalSummary();
+    message.pair_index =
+      object.pair_index !== undefined && object.pair_index !== null
+        ? Long.fromValue(object.pair_index)
+        : Long.UZERO;
+    message.volume = object.volume ?? 0;
+    message.pnl = object.pnl ?? 0;
+    message.num_trades =
+      object.num_trades !== undefined && object.num_trades !== null
+        ? Long.fromValue(object.num_trades)
+        : Long.UZERO;
+    message.liquidation = object.liquidation ?? 0;
+    message.fees_earned = object.fees_earned ?? 0;
+    message.fees_paid = object.fees_paid ?? 0;
     return message;
   },
 };
