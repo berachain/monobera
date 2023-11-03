@@ -6,3 +6,4 @@ export * from "./formatAmount";
 export * from "./formatAmountBig";
 export * from "./pagination";
 export * from "./addTokenToWallet";
+export * from "./aave-reserve-helper";

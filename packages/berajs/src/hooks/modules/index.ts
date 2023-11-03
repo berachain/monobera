@@ -8,3 +8,5 @@ export * from "./staking";
 export * from "./honey";
 export * from "./bribes";
 export * from "./rewards";
+export * from "./perps";
+export * from "./lend";

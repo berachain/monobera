@@ -1,6 +1,29 @@
+import { useMemo } from "react";
+import { formatUsd } from "@bera/berajs";
 import { cn } from "@bera/ui";
 
-export function TotalAmount({ className }: { className?: string }) {
+import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
+import type { IMarket } from "../page";
+
+export function TotalAmount({
+  className,
+  markets,
+}: {
+  className?: string;
+  markets: IMarket[];
+}) {
+  const { useTotalUnrealizedPnl, useTotalPositionSize } =
+    usePollOpenPositions();
+  const totalUnrealizedPnl = useTotalUnrealizedPnl(markets);
+
+  const { useRealizedPnl } = usePollTradingHistory();
+  const realizedPnl = useRealizedPnl();
+
+  const totalPositionSize = useTotalPositionSize();
+  const totalPnl = useMemo(() => {
+    return totalUnrealizedPnl + realizedPnl;
+  }, [totalUnrealizedPnl, realizedPnl]);
   return (
     <div
       className={cn(
@@ -13,7 +36,16 @@ export function TotalAmount({ className }: { className?: string }) {
           Total Relative Pnl
         </span>
         <span className="font-medium text-success-foreground">
-          $1,246,499.00
+          <span
+            className={cn(
+              "",
+              Number(totalPnl) > 0
+                ? "text-success-foreground"
+                : "text-destructive-foreground",
+            )}
+          >
+            {formatUsd(totalPnl)}
+          </span>
         </span>
       </div>
 
@@ -21,7 +53,9 @@ export function TotalAmount({ className }: { className?: string }) {
         <span className="text-xs font-medium text-muted-foreground">
           Total Position Size
         </span>
-        <span className="font-medium text-foreground">$69,246,499.00</span>
+        <span className="font-medium text-foreground">
+          {formatUsd(totalPositionSize ?? 0)}
+        </span>
       </div>
     </div>
   );

@@ -1,8 +1,9 @@
 version: v1
 plugins:
-  - remote: buf.build/stephenh/plugins/ts-proto
+  - plugin: buf.build/community/stephenh-ts-proto:v1.156.2
     out: .
     opt:
       - esModuleInterop=true
       - forceLong=long
       - useOptionals=true
+      - snakeToCamel=false

@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   addTokenToWallet,
   formatter,
+  usePollReservesDataList,
   useTokens,
   type Token,
 } from "@bera/berajs";
@@ -11,7 +12,6 @@ import { BeraChart } from "@bera/ui/bera-chart";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import Card from "./card";
 import InfoButton from "./info-button";
 import BorrowBtn from "./modals/borrow-button";

@@ -11,6 +11,7 @@ import {
   CalendarClock,
   CandlestickChart,
   Check,
+  CheckCircle,
   CheckCircle2,
   ChevronDown,
   ChevronLeft,
@@ -20,6 +21,7 @@ import {
   ChevronsRight,
   Circle,
   ClipboardCheck,
+  Clock,
   Coins,
   Command,
   Copy,
@@ -85,16 +87,18 @@ import {
   type LucideProps,
 } from "lucide-react";
 
+import { WalletTxnIcons } from "./wallet-txn-icons";
+
 export type Icon = LucideIcon;
 
 export const Icons = {
-  externalLink: ExternalLink,
   fileEdit: FileEdit,
   lineChart: LineChart,
   pieChart: PieChart,
   alertCircle: AlertCircle,
   activity: Activity,
   reply: Reply,
+  clock: Clock,
   minusSquare: MinusSquare,
   plusSquare: PlusSquare,
   sortAsc: SortAsc,
@@ -128,6 +132,7 @@ export const Icons = {
   billing: CreditCard,
   ellipsis: MoreVertical,
   expand: Expand,
+  externalLink: ExternalLink,
   add: Plus,
   minus: Minus,
   warning: AlertTriangle,
@@ -163,6 +168,7 @@ export const Icons = {
   XOctagon: XOctagon,
   helpingHand: HelpingHand,
   checkCircle: CheckCircle2,
+  checkCircle2: CheckCircle,
   plus: Plus,
   candleStick: CandlestickChart,
   medal: Medal,
@@ -580,4 +586,5 @@ export const Icons = {
       />
     </svg>
   ),
+  ...WalletTxnIcons,
 };

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import {
+  TransactionActionType,
   useBeraJs,
   usePollAllowance,
   usePollBalance,
@@ -90,6 +91,9 @@ export const usePsm = () => {
 
   const { write, isLoading, ModalPortal } = useTxn({
     message: isMint ? "Mint Honey" : "Redeem Honey",
+    actionType: isMint
+      ? TransactionActionType.MINT_HONEY
+      : TransactionActionType.REDEEM_HONEY,
   });
 
   const { usePreviewMint } = usePollPreviewMint(collateral, fromAmount);

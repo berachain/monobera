@@ -1,11 +1,8 @@
 import React from "react";
 import { DataTable } from "@bera/shared-ui";
 import { parseUnits } from "viem";
-
+import { usePollReservesDataList, usePollReservesPrices, usePollUserAccountData } from '@bera/berajs'
 import UserTokenCard from "~/components/user-token-card";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
-import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 import { available_borrows_columns } from "./column";
 
 export default function AvailableBorrows({

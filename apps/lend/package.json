@@ -13,7 +13,6 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@aave/math-utils": "^1.20.0",
     "@bera/bera-router": "0.1.0",
     "@bera/berajs": "0.1.0",
     "@bera/config": "0.1.0",
@@ -22,8 +21,9 @@
     "@bera/ui": "0.1.0",
     "@t3-oss/env-nextjs": "^0.2.2",
     "@vercel/analytics": "^1.0.1",
+    "bignumber.js": "^9.1.2",
     "framer-motion": "^10.15.0",
-    "next": "^13.4.1",
+    "next": "^13.5.4",
     "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-day-picker": "^8.7.1",

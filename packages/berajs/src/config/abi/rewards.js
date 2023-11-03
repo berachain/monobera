@@ -144,16 +144,28 @@ export const REWARDS_PRECOMPILE_ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "depositor",
+        name: "receiver",
         type: "address",
       },
     ],
-    name: "getDepositorWithdrawAddress",
+    name: "getOutstandingRewards",
     outputs: [
       {
-        internalType: "address",
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
+        internalType: "struct Cosmos.Coin[]",
         name: "",
-        type: "address",
+        type: "tuple[]",
       },
     ],
     stateMutability: "view",
@@ -163,16 +175,38 @@ export const REWARDS_PRECOMPILE_ABI = [
     inputs: [
       {
         internalType: "address",
-        name: "withdrawAddress",
+        name: "depositor",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "receiver",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "withdraw",
         type: "address",
       },
     ],
-    name: "setDepositorWithdrawAddress",
+    name: "withdrawAllDepositorRewards",
     outputs: [
       {
-        internalType: "bool",
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "denom",
+            type: "string",
+          },
+        ],
+        internalType: "struct Cosmos.Coin[]",
         name: "",
-        type: "bool",
+        type: "tuple[]",
       },
     ],
     stateMutability: "nonpayable",
@@ -189,6 +223,16 @@ export const REWARDS_PRECOMPILE_ABI = [
         internalType: "address",
         name: "receiver",
         type: "address",
+      },
+      {
+        internalType: "address",
+        name: "withdraw",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
       },
     ],
     name: "withdrawDepositorRewards",

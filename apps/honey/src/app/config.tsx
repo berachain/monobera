@@ -2,23 +2,36 @@ import { type NetworkConfig } from "@bera/berajs";
 import {
   bankAddress,
   berachefAddress,
+  bgtName,
+  bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
   chainId,
   chainName,
+  dexName,
+  dexUrl,
   epochsAddress,
   erc20BgtAddress,
   erc20DexAddress,
   erc20HoneyAddress,
   erc20ModuleAddress,
+  faucetName,
+  faucetUrl,
   gasTokenDecimals,
   gasTokenName,
   gasTokenSymbol,
   governanceAddress,
+  homepageName,
+  homepageUrl,
   honeyAddress,
   jsonRpcUrl,
+  lendName,
+  lendUrl,
   multicallAddress,
   networkName,
+  perpsName,
+  perpsUrl,
+  publicAnalyticsUrl,
   rewardsAddress,
   stakingAddress,
 } from "@bera/config";
@@ -36,6 +49,68 @@ export const navItems = [
   {
     href: "#transactions",
     title: "Transactions",
+  },
+  {
+    href: "#",
+    title: "Explore",
+    children: [
+      {
+        href: publicAnalyticsUrl,
+        title: "Dune Analytics",
+        blurb: "Checkout HONEY’s stats on dune analytics",
+      },
+      {
+        href: bgtUrl,
+        type: "external",
+        title: bgtName,
+        blurb: "The hub for BGT governance and bribes on Berachain",
+      },
+      {
+        href: dexUrl,
+        type: "external",
+        title: dexName,
+        blurb: "Swap tokens and provide liquidity to earn BGT rewards",
+      },
+      // {
+      //   href: honeyUrl,
+      //   type: "external",
+      //   title: honeyName,
+      //   blurb: "Mint or redeem Honey, the stablecoin of Berachain",
+      // },
+      {
+        href: lendUrl,
+        type: "external",
+        title: lendName,
+        blurb:
+          "Earn interest and rewards by supplying your assets and borrowing Honey",
+      },
+      {
+        href: perpsUrl,
+        type: "external",
+        title: perpsName,
+        blurb:
+          "Trade all your favourite pairs with deep liquidity and market diversity",
+      },
+      {
+        href: blockExplorerUrl,
+        type: "external",
+        title: blockExplorerName,
+        blurb:
+          "View all transactions and blockchain information on the Berachain network",
+      },
+      {
+        href: homepageUrl,
+        type: "external",
+        title: homepageName,
+        blurb: "Explore Berachain and learn more about our vision",
+      },
+      {
+        href: faucetUrl,
+        type: "external",
+        title: faucetName,
+        blurb: "Fund your testnet wallet with BERA tokens",
+      },
+    ],
   },
 ];
 

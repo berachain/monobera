@@ -11,9 +11,10 @@ export function formatUsd(input: string | number): string {
   if (isString(input)) {
     num = parseFloat(input);
     if (isNaN(num)) {
-      throw new Error(
-        "Invalid input: string input must be convertible to a number.",
-      );
+      num = 0;
+      // throw new Error(
+      //   "Invalid input: string input must be convertible to a number.",
+      // );
     }
   } else {
     num = input;

@@ -8,13 +8,13 @@ import { useLocalStorage } from "usehooks-ts";
 import { ThemeToggle } from "./theme-toggle";
 import { Tooltip } from "./tooltip";
 
-const SLIPPAGE_TOLERANCE_TYPE = "SLIPPAGE_TOLERANCE_TYPE";
-const SLIPPAGE_TOLERANCE_VALUE = "SLIPPAGE_TOLERANCE_VALUE";
-const DEFAULT_SLIPPAGE = 0.3; // 0.3%
+export const SLIPPAGE_TOLERANCE_TYPE = "SLIPPAGE_TOLERANCE_TYPE";
+export const SLIPPAGE_TOLERANCE_VALUE = "SLIPPAGE_TOLERANCE_VALUE";
+export const DEFAULT_SLIPPAGE = 0.3; // 0.3%
 
-const DEADLINE_TYPE = "DEADLINE_TYPE";
-const DEADLINE_VALUE = "DEADLINE_VALUE";
-const DEFAULT_DEADLINE = 30; // minutes
+export const DEADLINE_TYPE = "DEADLINE_TYPE";
+export const DEADLINE_VALUE = "DEADLINE_VALUE";
+export const DEFAULT_DEADLINE = 30; // minutes
 
 export enum SLIPPAGE_MODE {
   AUTO = "auto",
@@ -28,7 +28,13 @@ export enum TRANSACTION_MODE {
   INFINITY = "infinity",
 }
 
-export const Setting = ({ goback }: { goback: () => void }) => {
+export const Setting = ({
+  goback,
+  isHoney,
+}: {
+  goback: () => void;
+  isHoney: boolean;
+}) => {
   const [slippageMode, setSlippageMode] = useLocalStorage<SLIPPAGE_MODE>(
     SLIPPAGE_TOLERANCE_TYPE,
     SLIPPAGE_MODE.AUTO,
@@ -54,12 +60,22 @@ export const Setting = ({ goback }: { goback: () => void }) => {
         Settings
       </div>
 
-      <div className="flex flex-col gap-2 text-sm font-medium">
+      <div
+        className={cn(
+          "flex flex-col gap-2 text-sm font-medium",
+          isHoney && "pointer-events-none opacity-50",
+        )}
+      >
         Theme
         <ThemeToggle />
       </div>
 
-      <div className="flex flex-col gap-2 text-sm font-medium">
+      <div
+        className={cn(
+          "flex flex-col gap-2 text-sm font-medium",
+          isHoney && "pointer-events-none opacity-50",
+        )}
+      >
         <div className="flex items-center gap-1">
           Max slippage <Tooltip text="Max slippage" />
         </div>
@@ -96,9 +112,13 @@ export const Setting = ({ goback }: { goback: () => void }) => {
             type="number"
             disabled={slippageMode !== SLIPPAGE_MODE.CUSTOM}
             value={
-              slippageMode === SLIPPAGE_MODE.AUTO ? DEFAULT_SLIPPAGE : slippage
+              slippageMode === SLIPPAGE_MODE.AUTO
+                ? DEFAULT_SLIPPAGE
+                : slippage === 0
+                ? undefined
+                : slippage
             }
-            onChange={(e) => setSlippage(Number(e.target.value))}
+            onChange={(e: any) => setSlippage(Number(e.target.value))}
           />
         </div>
         {slippageMode === SLIPPAGE_MODE.DEGEN && (

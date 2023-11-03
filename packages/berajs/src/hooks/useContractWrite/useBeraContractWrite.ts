@@ -2,6 +2,9 @@
 
 import { useCallback, useReducer } from "react";
 import { usePublicClient, useWalletClient } from "wagmi";
+import { prepareWriteContract } from "wagmi/actions";
+
+// import { prepareWriteContract } from "wagmi/actions";
 
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
@@ -37,12 +40,12 @@ const useBeraContractWrite = ({
       let receipt: any | undefined;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
-        // const { request } = await prepareWriteContract({
-        //   address: address,
-        //   abi: abi,
-        //   functionName: functionName,
-        //   args: params,
-        // });
+        const { request: _request } = await prepareWriteContract({
+          address: address,
+          abi: abi,
+          functionName: functionName,
+          args: params,
+        });
 
         receipt = await walletClient?.writeContract({
           address: address,

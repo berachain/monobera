@@ -8,9 +8,12 @@ import {
   type ReactElement,
 } from "react";
 import {
+  TransactionActionType,
   useAddRecentTransaction,
   useBeraContractWrite,
+  useValueSend,
   type IContractWrite,
+  type IValueSend,
 } from "@bera/berajs";
 import toast from "react-hot-toast";
 import { useMediaQuery } from "usehooks-ts";
@@ -32,8 +35,7 @@ import {
 
 interface IUseTxn {
   message?: string;
-  icon?: string;
-  actionType?: string;
+  actionType?: TransactionActionType;
   disableToast?: boolean;
   disableModal?: boolean;
   onSuccess?: (hash: string) => void;
@@ -44,10 +46,15 @@ interface IUseTxn {
 
 interface UseTxnApi {
   write: (props: IContractWrite) => void;
+  fundWrite: (props: IValueSend) => void;
   isLoading: boolean;
   isSubmitting: boolean;
   isSuccess: boolean;
   isError: boolean;
+  isFundingLoading: boolean;
+  isFundingSubmitting: boolean;
+  isFundingSuccess: boolean;
+  isFundingError: boolean;
   ModalPortal: ReactElement<any, any>;
 }
 
@@ -74,15 +81,14 @@ const DURATION = 3000;
  */
 export const useTxn = ({
   message = "",
-  icon = "",
-  actionType = "",
+  actionType,
   disableToast = false,
   disableModal = false,
   onSuccess,
   onError,
   onLoading,
   onSubmission,
-}: IUseTxn): UseTxnApi => {
+}: IUseTxn = {}): UseTxnApi => {
   const [identifier, setIdentifier] = useState("");
   const isMd = useMediaQuery("(min-width: 768px)");
 
@@ -191,7 +197,6 @@ export const useTxn = ({
         addRecentTransaction({
           hash: result,
           description: message,
-          icon,
           actionType,
           timestamp: Date.now(),
         });
@@ -252,6 +257,159 @@ export const useTxn = ({
       },
     });
 
+  const {
+    write: fundWrite,
+    isLoading: isFundingLoading,
+    isSubmitting: isFundingSubmitting,
+    isSuccess: isFundingSuccess,
+    isError: isFundingError,
+  } = useValueSend({
+    /**
+     * Error callback function executed when a transaction encounters an error.
+     *
+     * @param {Error} error - The error object.
+     */
+    onError: (error) => {
+      if (!disableToast) {
+        const toastId = `error-${identifier}`;
+        toast.remove(`loading-${identifier}`);
+        toast.remove(`submission-${identifier}`);
+        if (error?.message.includes("User rejected the request.")) {
+          toast.custom(
+            <ErrorToast
+              title={"User rejected txn"}
+              onClose={() => toast.remove(toastId)}
+            />,
+            {
+              duration: DURATION,
+              id: toastId,
+              position: isMd ? "bottom-right" : "top-center",
+            },
+          );
+        } else {
+          toast.custom(
+            <ErrorToast
+              title={"Transaction failed"}
+              message={error?.message || "unknown error"}
+              onClose={() => toast.remove(toastId)}
+            />,
+            {
+              duration: DURATION,
+              id: toastId,
+              position: isMd ? "bottom-right" : "top-center",
+            },
+          );
+        }
+      }
+      if (!disableModal) {
+        closeModal("loadingModal");
+        closeModal("submissionModal");
+        if (error?.message.includes("User rejected the request.")) {
+          openModal("errorModal", {
+            errorHash: "0x",
+            errorMessage: "User rejected txn",
+          });
+        } else {
+          openModal("errorModal", {
+            errorHash: "0x",
+            errorMessage: error?.message || "unknown error",
+          });
+        }
+      }
+      onError && onError(error);
+    },
+
+    /**
+     * Success callback function executed when a transaction is successful.
+     *
+     * @param {string} result - The transaction hash or result.
+     */
+    onSuccess: (result) => {
+      if (!disableToast) {
+        const toastId = `success-${identifier}`;
+        toast.remove(`submission-${identifier}`);
+        toast.custom(
+          <SuccessToast
+            onClose={() => toast.remove(toastId)}
+            title={"Transaction Success"}
+            message="transaction successfully submitted"
+            hash={result}
+          />,
+          {
+            duration: DURATION,
+            id: toastId,
+            position: isMd ? "bottom-right" : "top-center",
+          },
+        );
+      }
+      if (!disableModal) {
+        closeModal("loadingModal");
+        closeModal("submissionModal");
+        openModal("successModal", { successHash: result });
+      }
+      addRecentTransaction({
+        hash: result,
+        description: message,
+        timestamp: Date.now(),
+        actionType: TransactionActionType.BORROW,
+      });
+      onSuccess && onSuccess(result);
+    },
+
+    /**
+     * Loading callback function executed when a transaction is loading or in progress.
+     */
+    onLoading: () => {
+      if (!disableToast) {
+        const toastId = `loading-${identifier}`;
+        toast.custom(
+          <LoadingToast
+            title={"Waiting for wallet"}
+            message="waiting for wallet action"
+            onClose={() => toast.remove(toastId)}
+          />,
+          {
+            id: toastId,
+            duration: Infinity,
+            position: isMd ? "bottom-right" : "top-center",
+          },
+        );
+      }
+      if (!disableModal) {
+        openModal("loadingModal", undefined);
+      }
+      onLoading && onLoading();
+    },
+
+    /**
+     * Submission callback function executed when a transaction is submitted.
+     */
+    onSubmission: (result: string) => {
+      if (!disableToast) {
+        const toastId = `submission-${identifier}`;
+        toast.remove(`loading-${identifier}`);
+        toast.custom(
+          <SubmissionToast
+            title={"Transaction submitted"}
+            message="waiting for confirmation"
+            onClose={() => toast.remove(toastId)}
+          />,
+          {
+            id: toastId,
+            position: isMd ? "bottom-right" : "top-center",
+          },
+        );
+      }
+      if (!disableModal) {
+        closeModal("loadingModal");
+        openModal("submissionModal", {
+          submissionHash: result,
+        });
+      }
+      onSubmission && onSubmission(result);
+    },
+  });
+
   const ModalPortal = () => {
     return (
       <>
@@ -297,6 +455,11 @@ export const useTxn = ({
     isSubmitting,
     isSuccess,
     isError,
+    fundWrite,
+    isFundingLoading,
+    isFundingSubmitting,
+    isFundingSuccess,
+    isFundingError,
     ModalPortal: memoizedModalPortal as ReactElement<any, any>,
   };
 };

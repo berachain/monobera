@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
+  TransactionActionType,
   useBeraJs,
   usePollBgtBalance,
 } from "@bera/berajs";
@@ -65,20 +66,11 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
 
   const { write, ModalPortal } = useTxn({
     message: "Submit Proposal",
+    actionType: TransactionActionType.SUBMIT_PROPOSAL,
     onSuccess: () => {
       router.push(`/governance`);
     },
   });
-
-  function onSubmit(values: z.infer<typeof ProposalFormSchema>) {
-    const payload = createPayload(values);
-    write({
-      address: governanceAddress,
-      abi: GOVERNANCE_PRECOMPILE_ABI as any[],
-      functionName: "submitProposal",
-      params: payload as any,
-    });
-  }
 
   const BaseFormSchema = z.object({
     title: z.string().nonempty("Required"),
@@ -144,8 +136,21 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     resolver: zodResolver(ProposalFormSchema),
     defaultValues: {
       expedite: false,
+      enableOrDisableGauge: true,
     },
   });
+
+  function onSubmit() {
+    const values = form.getValues();
+    const payload = createPayload(values);
+    write({
+      address: governanceAddress,
+      abi: GOVERNANCE_PRECOMPILE_ABI as any[],
+      functionName: "submitProposal",
+      params: payload as any,
+    });
+  }
+
   return (
     <div className="mx-auto  w-full max-w-[564px] pb-16">
       {ModalPortal}

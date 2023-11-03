@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cloudinaryUrl } from "@bera/config";
@@ -9,10 +9,10 @@ import { formatEther } from "viem";
 
 import Data from "~/components/data";
 import Hero from "~/components/hero";
-import HoneyBanner from "~/components/honey-banner";
 import { HoneyChart } from "~/components/honey-chart";
 import { HoneyMachine } from "~/components/honey-machine";
 import HoneyTransactionsTable from "~/components/honey-transactions-table";
+import { LoadingBee } from "~/components/loadingBee";
 import { SwapCard } from "~/components/swap-card";
 import { type HoneyEntry } from "./type";
 
@@ -37,17 +37,16 @@ export default function HoneyPage({
   volume90D: HoneyEntry[];
   mode: "arcade" | "pro";
 }) {
-  const arcade = mode === "arcade";
-  const router = useRouter();
-  const formatted24HVolume = formatEther(
-    BigInt(volume7D[volume7D.length - 1]?.amount ?? "0"),
-  );
-  const formattedTotalSupply = formatEther(
-    BigInt(supply24H[supply24H.length - 1]?.amount ?? "0"),
-  );
-  if (arcade && typeof window !== "undefined" && window?.innerWidth < 1000) {
-    router.push("/?mode=pro");
-  }
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (window && window.innerWidth) {
+      setLoading(false);
+      if (window.innerWidth < 1000 && mode === "arcade") {
+        router.push("/?mode=pro");
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,93 +60,138 @@ export default function HoneyPage({
     };
   }, [mode]);
 
-  return (
-    <div className={cn("pt-[72px]", arcade ? "bg-[#468DCB] font-honey" : "")}>
-      <div className="hidden h-fit w-full bg-slate-200 bg-opacity-50 p-2 text-center hover:cursor-pointer hover:underline honey:block">
-        {arcade ? (
-          <div onClick={() => router.push("/?mode=pro")} className="font-honey">
-            🍯 Enter Simple Mode
-          </div>
-        ) : (
-          <div
-            onClick={() => router.push("/?mode=arcade")}
-            className="font-honey"
-          >
-            🕹️ Enter Arcade Mode
-          </div>
-        )}
-      </div>
-      <div>
-        <section id="mint">
-          {arcade ? (
-            <div className="m-auto block max-w-[1000px]">
-              <HoneyMachine />
-              <HoneyBanner />
-            </div>
-          ) : (
-            <div className="flex justify-center md:justify-start">
-              <div className="container flex max-w-[1000px] flex-col items-center justify-between md:flex-row">
-                <Hero />
-                <SwapCard />
-              </div>
-            </div>
-          )}
-        </section>
+  const arcade = mode === "arcade";
+  const router = useRouter();
+  const formatted24HVolume = formatEther(
+    BigInt(volume7D[volume7D.length - 1]?.amount ?? "0"),
+  );
+  const formattedTotalSupply = formatEther(
+    BigInt(supply24H[supply24H.length - 1]?.amount ?? "0"),
+  );
+  if (arcade && typeof window !== "undefined" && window?.innerWidth < 1000) {
+    router.push("/?mode=pro");
+  }
 
+  return (
+    <>
+      {!loading ? (
         <div
           className={cn(
-            arcade ? "bg-gradient-to-b from-[#468DCB] honey:to-background" : "",
+            arcade ? "bg-[#468DCB] font-honey" : "pro-mode-background",
           )}
         >
-          <div
-            className={cn(
-              "container max-w-[1050px]",
-              arcade ? "text-blue-900" : "",
-            )}
-          >
-            <div className="py-4 lg:py-0">
-              <Data
-                dailyVolume={formatted24HVolume}
-                tvl={formattedTotalSupply}
-                arcade={arcade}
-              />
-            </div>
-            <div className="py-4">
-              <h3
-                className={cn(
-                  "mb-4 flex items-center gap-3 text-lg md:text-3xl",
-                  arcade
-                    ? "text-blue-900"
-                    : "bg-gradient-to-r from-[#292524] via-[#875100] via-30% to-[#292524] bg-clip-text font-semibold text-transparent",
-                )}
+          <div className="hidden h-fit w-full cursor-pointer text-center font-medium honey:block">
+            {arcade ? (
+              <div
+                onClick={() => router.push("/?mode=pro")}
+                className="flex items-center justify-center gap-1 bg-sky-50 p-2 font-honey"
               >
                 <Image
-                  src={`${cloudinaryUrl}/honey/qqyo5g3phzdwezvazsih`}
-                  className="w-8"
-                  alt="honey"
+                  src={`${cloudinaryUrl}/honey/k67yfz1uswqqvfh2pmgo`}
+                  className="block w-8"
+                  alt="arcade bear"
                   width={32}
                   height={32}
-                />
-                Total Honey Supply & Volume
-              </h3>
-              <HoneyChart
-                {...{
-                  supply24H,
-                  volume24H,
-                  supply7D,
-                  volume7D,
-                  supply30D,
-                  volume30D,
-                  supply90D,
-                  volume90D,
-                }}
-                arcade={arcade}
-              />
+                />{" "}
+                Switch To Simple Mode
+              </div>
+            ) : (
+              <div
+                onClick={() => router.push("/?mode=arcade")}
+                className="flex items-center justify-center gap-1 bg-yellow-50 bg-opacity-20 p-2 backdrop-blur-2xl"
+              >
+                <Image
+                  src={`${cloudinaryUrl}/honey/k67yfz1uswqqvfh2pmgo`}
+                  className="block w-8"
+                  alt="arcade bear"
+                  width={32}
+                  height={32}
+                />{" "}
+                Switch To Arcade Mode
+              </div>
+            )}
+          </div>
+          <div>
+            <section id="mint">
+              {arcade ? (
+                <div className="m-auto block max-w-[1000px]">
+                  <HoneyMachine />
+                  {/* <HoneyBanner /> */}
+                </div>
+              ) : (
+                <div className="mx-auto flex w-full max-w-[1000px] flex-col items-center justify-between gap-8 px-4 py-16">
+                  <Hero />
+                  <SwapCard showBear={false} />
+                </div>
+              )}
+            </section>
+
+            <div
+              className={cn(
+                arcade
+                  ? "bg-gradient-to-b from-[#468DCB] honey:to-background"
+                  : "",
+              )}
+            >
+              <div
+                className={cn(
+                  "container max-w-[1050px]",
+                  arcade ? "text-blue-900" : "",
+                )}
+              >
+                <div className="py-4 lg:py-0">
+                  <Data
+                    dailyVolume={formatted24HVolume}
+                    tvl={formattedTotalSupply}
+                    arcade={arcade}
+                  />
+                </div>
+                <div className="py-4">
+                  {arcade ? (
+                    <h3 className="mb-4 flex items-center gap-3 text-lg text-blue-900 md:text-3xl">
+                      <Image
+                        src={`${cloudinaryUrl}/honey/qqyo5g3phzdwezvazsih`}
+                        className="w-8"
+                        alt="honey"
+                        width={32}
+                        height={32}
+                      />
+                      Total Honey Supply & Volume
+                    </h3>
+                  ) : (
+                    <h3 className="mb-12 flex items-center justify-center gap-2 text-3xl font-bold md:text-5xl">
+                      <Image
+                        src={`${cloudinaryUrl}/honey/gugztuverdsqvzw5co8a`}
+                        className="w-12"
+                        alt="honey"
+                        width={48}
+                        height={48}
+                      />
+                      Honey Stats
+                    </h3>
+                  )}
+                  <HoneyChart
+                    {...{
+                      supply24H,
+                      volume24H,
+                      supply7D,
+                      volume7D,
+                      supply30D,
+                      volume30D,
+                      supply90D,
+                      volume90D,
+                    }}
+                    arcade={arcade}
+                  />
+                </div>
+                <HoneyTransactionsTable arcade={arcade} />
+              </div>
             </div>
-            <HoneyTransactionsTable arcade={arcade} />
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <LoadingBee />
+      )}
+    </>
   );
 }

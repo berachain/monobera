@@ -1,49 +1,87 @@
 "use client";
 
-import { useBeraJs, usePollBgtBalance } from "@bera/berajs";
+import { useState } from "react";
+import {
+  BTOKEN_ABI,
+  TransactionActionType,
+  useBeraJs,
+  usePollAllowance,
+  usePollBHoneyPendingWithdraw,
+} from "@bera/berajs";
+import { honeyAddress } from "@bera/config";
+import { ActionButton, TokenInput, TokenList, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { parseUnits } from "viem";
+import { type Address } from "wagmi";
+
+import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
+import ApproveTokenButton from "../components/approve-token-button";
 
 export default function DepositWithdraw() {
-  const { isReady } = useBeraJs();
-  const { useBgtBalance } = usePollBgtBalance();
-  const userBalance = useBgtBalance();
+  const [depositAmount, setDepositAmount] = useState<number | undefined>(
+    undefined,
+  );
+  const [withdrawAmount, setWithdrawAmount] = useState<number | undefined>(
+    undefined,
+  );
 
+  const [isDepositExceeding, setIsDepositExceeding] = useState(false);
+  const [isWithdrawExceeding, setIsWithdrawExceeding] = useState(false);
+
+  const {
+    write: depositWrite,
+    isLoading: isDepositLoading,
+    ModalPortal: DepositModalPortal,
+  } = useTxn({
+    message: "Staking HONEY",
+    actionType: TransactionActionType.DEPOSIT_HONEY,
+  });
+
+  const { refetch } = usePollWithdrawQueue();
+
+  const {
+    write: withdrawWrite,
+    isLoading: isWithdrawLoading,
+    ModalPortal: WithdrawModalPortal,
+  } = useTxn({
+    message: "Creating HONEY Withdraw Request",
+    actionType: TransactionActionType.START_WITHDRAW_REQUEST,
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const { account } = useBeraJs();
+  const honey = {
+    symbol: "HONEY",
+    address: honeyAddress,
+    decimals: 18,
+    name: "Honey",
+  };
+
+  const gTokenAddress = process.env
+    .NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address;
+
+  const { useBHoneyEligibleWithdraw } = usePollBHoneyPendingWithdraw();
+  const eligibleForWithdraw = useBHoneyEligibleWithdraw();
+
+  const { useAllowance } = usePollAllowance({
+    contract: gTokenAddress,
+    token: honey,
+  });
+
+  const allowance = useAllowance();
+
+  const withdrawPayload = [parseUnits(`${withdrawAmount ?? 0}`, 18), account];
   return (
-    <div className="flex w-full flex-col justify-between rounded-xl border border-border p-3 md:flex-row">
-      <div className="flex flex-col gap-8 sm:flex-row md:gap-2 lg:gap-16">
-        <div className="w-full flex-1 flex-shrink-0 p-4 md:w-1/2">
-          <Icons.heartHandShake className="mb-4 h-6 w-6 text-accent" />
-          <div className="text-sm text-muted-foreground">
-            Stakers receive fees from each trade placed on the platform in
-            exchnage for serving as the counterparty to all trades.{" "}
-          </div>
-          <div className="mt-8 text-2xl font-semibold leading-loose sm:mt-16">
-            $2,100,507.10
-          </div>
-          <div className="mt-2 leading-7 text-muted-foreground">
-            Fees Distributed in the last 24 hours
-          </div>
-        </div>
-        <div className="w-full flex-1 flex-shrink-0 p-4 md:w-1/2">
-          <Icons.calendarClock className="mb-4 h-6 w-6 text-accent" />
-          <div className="text-sm text-muted-foreground">
-            bHONEY accumulates fees in real-time. Stakers can claim their
-            portion of the fees earned by clicking claim below.
-          </div>
-          <div className="mt-8 text-2xl font-semibold leading-loose sm:mt-16">
-            $9,678.49
-          </div>
-          <div className="mt-2 leading-7 text-muted-foreground">
-            Total Deposits
-          </div>
-        </div>
-      </div>
-      <div className="w-full flex-shrink-0 p-6 md:w-[400px]">
+    <div className="flex h-fit w-full flex-col justify-between rounded-xl border border-border px-4 py-6 md:flex-row">
+      {DepositModalPortal}
+      {WithdrawModalPortal}
+      <div className="w-full flex-shrink-0">
         <Tabs defaultValue="deposit">
-          <TabsList className="mb-4 w-full">
+          <TabsList className="mb-8 w-full">
             <TabsTrigger value="deposit" className="w-full">
               Deposit
             </TabsTrigger>
@@ -57,26 +95,50 @@ export default function DepositWithdraw() {
               Deposit Honey
             </div>
             <div className="text-sm leading-tight text-muted-foreground">
-              Receive bHONEY, a BRC-20 representing your ownership in the vault.{" "}
+              Deposit HONEY in exchange for bHONEY, stakers receive fees from
+              each trade placed on the platform. bHONEY Accumulates these fees
+              in real-time.
             </div>
             <div>
-              <Input
-                type="number"
-                id="initial-deposit"
-                placeholder="0.00"
-                endAdornment="bHONEY"
-              />
-              {isReady && (
-                <div className="mt-1 flex h-3 w-full items-center justify-end gap-1 text-xs text-muted-foreground">
-                  <Icons.wallet className="relative inline-block h-3 w-3 " />
-                  {userBalance}
-                  <span className="cursor-pointer underline">MAX</span>
-                </div>
-              )}
+              <TokenList>
+                <TokenInput
+                  selectable={false}
+                  selected={honey}
+                  amount={depositAmount}
+                  setAmount={setDepositAmount}
+                  showExceeding={true}
+                  onExceeding={(isExceeding) =>
+                    setIsDepositExceeding(isExceeding)
+                  }
+                />
+              </TokenList>
             </div>
-            <Button variant={"success"} className="w-full">
-              Deposit Honey
-            </Button>
+            <ActionButton>
+              {allowance?.formattedAllowance === "0" ? (
+                <ApproveTokenButton token={honey} spender={gTokenAddress} />
+              ) : (
+                <Button
+                  variant={"success"}
+                  className="w-full"
+                  disabled={
+                    isDepositLoading || !depositAmount || isDepositExceeding
+                  }
+                  onClick={() =>
+                    depositWrite({
+                      address: gTokenAddress,
+                      abi: BTOKEN_ABI,
+                      functionName: "deposit",
+                      params: [
+                        parseUnits(`${depositAmount ?? 0}`, 18),
+                        account,
+                      ],
+                    })
+                  }
+                >
+                  Deposit Honey
+                </Button>
+              )}
+            </ActionButton>
           </TabsContent>
 
           <TabsContent value="withdraw" className="flex flex-col gap-4">
@@ -85,26 +147,56 @@ export default function DepositWithdraw() {
               Withdraw Honey
             </div>
             <div className="text-sm leading-tight text-muted-foreground">
-              Burn your bHONEY to receive HONEY.
+              Withdraws are based on an epoch system of 24 hours. You can make a
+              request to withdraw your assets during the first 18 hours of any
+              epoch, but you must wait until the specified withdraw epoch to
+              actually withdraw them.
+            </div>
+            <div className="text-sm leading-tight text-muted-foreground">
+              Depending on the collateralization ratio of the vault, your
+              withdraw epoch will be delayed by 1 to 3 epochs.{" "}
             </div>
             <div>
-              <Input
-                type="number"
-                id="initial-deposit"
-                placeholder="0.00"
-                endAdornment="bHONEY"
-              />
-              {isReady && (
-                <div className="mt-1 flex h-3 w-full items-center justify-end gap-1 text-xs text-muted-foreground">
-                  <Icons.wallet className="relative inline-block h-3 w-3 " />
-                  {userBalance}
-                  <span className="cursor-pointer underline">MAX</span>
-                </div>
-              )}
+              <TokenList>
+                <TokenInput
+                  selectable={false}
+                  balance={Number(eligibleForWithdraw)}
+                  selected={{
+                    symbol: "BHONEY",
+                    address: gTokenAddress,
+                    decimals: 18,
+                    name: "BHONEY",
+                    logoURI:
+                      "https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/bhoney.png",
+                  }}
+                  amount={withdrawAmount}
+                  setAmount={setWithdrawAmount}
+                  showExceeding={true}
+                  onExceeding={(isExceeding) =>
+                    setIsWithdrawExceeding(isExceeding)
+                  }
+                />
+              </TokenList>
             </div>
-            <Button variant={"destructive"} className="w-full">
-              Withdraw Honey
-            </Button>
+            <ActionButton>
+              <Button
+                disabled={
+                  isWithdrawLoading || !withdrawAmount || isWithdrawExceeding
+                }
+                onClick={() =>
+                  withdrawWrite({
+                    address: gTokenAddress,
+                    abi: BTOKEN_ABI,
+                    functionName: "makeWithdrawRequest",
+                    params: withdrawPayload,
+                  })
+                }
+                variant={"destructive"}
+                className="w-full"
+              >
+                Request Withdraw
+              </Button>
+            </ActionButton>
           </TabsContent>
         </Tabs>
       </div>

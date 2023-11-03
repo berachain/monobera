@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import {
   BRIBE_PRECOMPILE_ABI,
+  TransactionActionType,
   useBeraJs,
   usePollActiveValidators,
   usePollBribes,
@@ -42,6 +43,7 @@ export default function ValidatorCard({
   const userBribeTokenList = useValidatorUserBribes(validator.operatorAddr);
   const { write, ModalPortal } = useTxn({
     message: "Claiming bribes",
+    actionType: TransactionActionType.CLAIMING_BRIBES,
     onSuccess: () => {
       void mutate(QUERY_KEY);
     },
@@ -80,7 +82,7 @@ export default function ValidatorCard({
     {
       title: (
         <div>
-          vAPY <Tooltip text="Projected yearly rewards" />
+          PRR <Tooltip text="Projected yearly rewards" />
         </div>
       ),
       value: `${Number(validator.vApy).toFixed(2)}%`,

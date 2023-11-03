@@ -6,6 +6,7 @@ import Image from "next/image";
 import { RouteNotFound } from "@bera/bera-router";
 import {
   DEX_PRECOMPILE_ABI,
+  TransactionActionType,
   WBERA_ABI,
   useBeraJs,
   usePollAssetWalletBalance,
@@ -103,8 +104,7 @@ export function SwapCard({
   const [openPreview, setOpenPreview] = useState(false);
 
   const { write, isLoading, ModalPortal } = useTxn({
-    actionType: "Swap",
-    icon: selectedFrom?.address,
+    actionType: TransactionActionType.SWAP,
     message: `Swap ${Number(swapInfo?.formattedSwapAmount).toFixed(4)} ${
       selectedFrom?.symbol
     } to ${Number(swapInfo?.formattedReturnAmount).toFixed(4)} ${
@@ -127,6 +127,10 @@ export function SwapCard({
       wrapType === WRAP_TYPE.WRAP
         ? `Wrapping ${swapAmount} BERA to WBERA`
         : `Unwrapping ${swapAmount} WBERA to BERA`,
+    actionType:
+      wrapType === WRAP_TYPE.WRAP
+        ? TransactionActionType.WRAP
+        : TransactionActionType.UNWRAP,
   });
 
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();

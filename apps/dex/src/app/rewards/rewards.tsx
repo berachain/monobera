@@ -15,7 +15,6 @@ export const Rewards = () => {
   );
   const userPools = useUserBgtDepositedPools();
   const { isReady } = useBeraJs();
-
   return (
     <div className="container max-w-[980px]">
       <Banner /> <br />

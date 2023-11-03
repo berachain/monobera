@@ -43,7 +43,12 @@ const config = {
       },
     ],
   },
-  ignorePatterns: ["**/*.config.js", "**/*.config.cjs", "packages/config/**"],
+  ignorePatterns: [
+    "**/*.config.js",
+    "**/*.config.cjs",
+    "packages/config/**",
+    "**/public/**",
+  ],
   reportUnusedDisableDirectives: true,
 };
 

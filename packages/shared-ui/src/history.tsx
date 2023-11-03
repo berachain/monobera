@@ -5,7 +5,7 @@ import { useRecentTransactions, type Transaction } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
-import { TokenIcon } from "./token-icon";
+import { TransactionIcon } from "./transaction-icon";
 
 // function formatTimestamp(timestamp: number): JSX.Element {
 //   const date = new Date(timestamp);
@@ -61,7 +61,7 @@ export function History() {
               key={txn.hash}
             >
               <div className="flex gap-4">
-                <TokenIcon address={txn.icon ?? ""} fetch size="2xl" />
+                <TransactionIcon transaction={txn.actionType} />
                 <div className="font-medium">
                   <div className="w-[190px] truncate text-sm font-medium leading-6">
                     {txn.description}{" "}

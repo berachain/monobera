@@ -1,12 +1,15 @@
-import { formatUsd, formatter, useBeraJs } from "@bera/berajs";
+import {
+  formatUsd,
+  formatter,
+  useBeraJs,
+  usePollReservesDataList,
+  usePollUserAccountData,
+  usePollUserReservesData,
+} from "@bera/berajs";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
-
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
-import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function StatusBanner() {
   const { useUserAccountData } = usePollUserAccountData();

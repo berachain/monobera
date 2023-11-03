@@ -1,11 +1,9 @@
 "use client";
 
 import React from "react";
-import { formatUsd } from "@bera/berajs";
+import { formatUsd, usePollReservesDataList } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 
 function DataCard({
   icon,

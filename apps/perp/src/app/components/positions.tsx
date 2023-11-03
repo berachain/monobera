@@ -1,23 +1,25 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { formatUsd } from "@bera/berajs";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
 
-import { usePositions, type Position } from "~/hooks/usePositions";
+import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
+import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { type IMarket } from "../berpetuals/page";
 
-interface PositionProps extends Position {
+interface PositionProps extends IMarket {
   className?: string;
 }
 
 function Position({
-  assets,
-  current_price,
-  position_size,
+  imageUri,
+  pair_index = "0",
+  name,
+  open_interest,
   className,
   ...props
 }: PositionProps) {
@@ -35,10 +37,12 @@ function Position({
     ];
   }, []);
 
+  const { useMarketIndexPrice } = usePricesSocket();
+  const price = useMarketIndexPrice(Number(pair_index ?? 0));
   return (
     <figure
       className={clsx(
-        "h-[146px] w-[152px] flex-shrink-0 rounded-2xl border border-border bg-background p-4",
+        "flex h-fit w-[162px] flex-shrink-0 items-center rounded-2xl border border-border bg-background p-4",
         className,
       )}
       style={{ animationDelay }}
@@ -46,23 +50,35 @@ function Position({
     >
       <blockquote className="text-foreground">
         <div className="flex items-center gap-1">
-          <Avatar className="h-4 w-4">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>token icon</AvatarFallback>
-          </Avatar>
+          <Image
+            src={imageUri ?? ""}
+            alt={"selectedMarket"}
+            width={24}
+            height={24}
+            className="rounded-full"
+          />{" "}
+          <span className="text-sm font-medium text-muted-foreground">
+            {name}
+          </span>
           <div className="text-sm font-medium leading-normal text-muted-foreground">
-            {assets}
+            {/* {assets} */}
           </div>
         </div>
-        <div className="text-2xl font-semibold leading-normal text-popover-foreground">
-          {formatUsd(current_price)}
+        <div className="text-lg font-semibold leading-normal text-popover-foreground">
+          {price && formatBigIntUsd(price, 10)}
         </div>
 
-        <div className="mt-4 text-lg font-semibold leading-7 text-popover-foreground">
-          {formatUsd(current_price * position_size)}
+        <div className="mt-2 text-sm font-semibold leading-7 text-popover-foreground">
+          {open_interest && formatBigIntUsd(open_interest?.oi_long, 18)}
         </div>
         <div className="text-xs font-normal leading-3 text-muted-foreground">
-          Open Interest (24H)
+          Open Interest (L) (24H)
+        </div>
+        <div className="mt-2 text-sm font-semibold leading-7 text-popover-foreground">
+          {open_interest && formatBigIntUsd(open_interest?.oi_short, 18)}
+        </div>
+        <div className="text-xs font-normal leading-3 text-muted-foreground">
+          Open Interest (S) (24H)
         </div>
       </blockquote>
     </figure>
@@ -83,13 +99,15 @@ function splitArray<T>(array: T[], numParts: number): T[][] {
 
 interface PositionRowProps {
   className?: string;
-  positions: Position[];
+  row: number;
+  positions: IMarket[];
   positionClassName?: (index: number) => string;
   msPerPixel?: number;
 }
 
 function PositionRow({
   className,
+  row,
   positions,
   positionClassName,
   msPerPixel = 0,
@@ -122,7 +140,7 @@ function PositionRow({
     >
       {positions.concat(positions).map((position, positionIndex) => (
         <Position
-          key={positionIndex}
+          key={positionIndex + row}
           aria-hidden={positionIndex >= positions.length}
           className={
             positionClassName &&
@@ -135,12 +153,10 @@ function PositionRow({
   );
 }
 
-function PositionGrid() {
+function PositionGrid({ markets }: { markets: IMarket[] }) {
   const containerRef = useRef(null);
-  const { generatepositionData } = usePositions();
-  const positions = generatepositionData();
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
-  const rows = splitArray(positions, 2);
+  const rows = splitArray(markets, 2);
 
   return (
     <div
@@ -150,6 +166,7 @@ function PositionGrid() {
       {isInView && (
         <>
           <PositionRow
+            row={0}
             // @ts-ignore
             positions={[...rows[0], ...rows[1]]}
             positionClassName={(positionIndex) =>
@@ -165,6 +182,7 @@ function PositionGrid() {
           />
 
           <PositionRow
+            row={1}
             positions={[...rows[1], ...rows[0]]}
             // @ts-ignore
             positionClassName={(positionIndex) =>
@@ -181,7 +199,13 @@ function PositionGrid() {
   );
 }
 
-export default function Positions({ showBtn = false }: { showBtn?: boolean }) {
+export default function Positions({
+  showBtn = false,
+  markets,
+}: {
+  showBtn?: boolean;
+  markets: IMarket[];
+}) {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="md:leading-14 px-8 text-center text-3xl font-extrabold leading-9 tracking-tight text-foreground md:text-5xl">
@@ -196,7 +220,7 @@ export default function Positions({ showBtn = false }: { showBtn?: boolean }) {
         a regular basis.
       </div>
 
-      <PositionGrid />
+      <PositionGrid markets={markets} />
       {showBtn && (
         <Link className="mt-8 flex justify-center" href="/markets">
           <Button variant="secondary">View All Markets</Button>

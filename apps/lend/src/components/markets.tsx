@@ -2,13 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { formatUsd, formatter } from "@bera/berajs";
+import { formatUsd, formatter, usePollReservesDataList } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
-
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 
 interface MarketColumnProps {
   className?: string;

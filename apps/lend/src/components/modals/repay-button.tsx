@@ -2,9 +2,14 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  TransactionActionType,
   formatter,
+  lendPoolImplementationABI,
   useBeraJs,
   usePollAssetWalletBalance,
+  usePollReservesDataList,
+  usePollUserAccountData,
+  usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
@@ -16,10 +21,6 @@ import { Input } from "@bera/ui/input";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { maxUint256 } from "~/utils/constants";
-import { lendPoolImplementationABI } from "~/hooks/abi";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
-import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function RepayBtn({
   token,
@@ -39,6 +40,7 @@ export default function RepayBtn({
       reservesDataRefetch();
       userReservesRefetch();
     },
+    actionType: TransactionActionType.REPAY,
   });
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();

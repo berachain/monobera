@@ -76,11 +76,8 @@ export default function ConnectWalletDialog({ className, size }: Props) {
                 className="flex justify-start"
                 onClick={() => {
                   setConnectorId(connectorName);
-                  login(connectorName)
-                    .then(() => setOpen(false))
-                    .catch((e) => {
-                      console.log(e);
-                    });
+                  void login(connectorName);
+                  setOpen(false);
                 }}
               >
                 <span>{ConnectorAssets[connectorName]?.icon}</span>

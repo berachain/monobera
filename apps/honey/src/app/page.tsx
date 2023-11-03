@@ -7,7 +7,7 @@ import { HoneyTimeFrame } from "./type";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Honey"),
-  description: `Mint & Burn Honey`,
+  description: `Mint & Redeem Honey`,
 };
 export default async function Home({
   searchParams: { mode },
@@ -48,7 +48,7 @@ export default async function Home({
         supply90D,
         volume90D,
       }}
-      mode={mode === "arcade" ? "arcade" : "pro"}
+      mode={mode === "pro" ? "pro" : "arcade"}
     />
   );
 }

@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
-import { formatter, useBeraJs, type Token } from "@bera/berajs";
+import {
+  TransactionActionType,
+  formatter,
+  lendPoolImplementationABI,
+  useBeraJs,
+  usePollReservesDataList,
+  usePollUserAccountData,
+  usePollUserReservesData,
+  type Token,
+} from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -9,11 +18,6 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { formatEther, formatUnits, parseUnits } from "viem";
-
-import { lendPoolImplementationABI } from "~/hooks/abi";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
-import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function WithdrawBtn({
   token,
@@ -33,6 +37,7 @@ export default function WithdrawBtn({
       reservesDataRefetch();
       userReservesRefetch();
     },
+    actionType: TransactionActionType.WITHDRAW,
   });
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();

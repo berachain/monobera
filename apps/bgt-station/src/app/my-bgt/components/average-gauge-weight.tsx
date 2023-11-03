@@ -1,9 +1,10 @@
 import { usePollDelegatorValidators } from "@bera/berajs";
+import { cloudinaryUrl, docsUrl } from "@bera/config";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import GlobalGaugeWeight from "~/components/global-gauge-weight";
 import { useUserGaugeWeight } from "~/hooks/useGaugeWeights";
-import Nothing from "../nothing";
+import { Banner } from "./banner";
 
 export default function AverageGaugeWeight() {
   const { useTotalValidatorsDelegated } = usePollDelegatorValidators();
@@ -26,10 +27,11 @@ export default function AverageGaugeWeight() {
           )}
         </>
       ) : (
-        <Nothing
-          message={
-            "This section will be populated once you have delegated to some validators. "
-          }
+        <Banner
+          img={`${cloudinaryUrl}/bears/j7rciiglmcozlxryug4z`}
+          title="What is a gauge weight?"
+          subtitle="We’ll teach you what all this de-fi jargon means."
+          href={`${docsUrl}/getting-started/bgt-station-bgt.html#unbonding-bgt`}
         />
       )}
     </div>

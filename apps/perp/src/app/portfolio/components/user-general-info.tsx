@@ -1,45 +1,46 @@
+import { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 
-export function UserGeneralInfo() {
-  const portfolio = {
-    total_amount: 4206.9,
-    p_and_l: -26.71,
-    data: [
-      {
-        subtitle: "Total Trades",
-        amount: 420,
-      },
-      {
-        subtitle: "Feeds Paid",
-        amount: formatUsd(690.42),
-      },
-      {
-        subtitle: "PnL Ratio",
-        amount: <>tin</>,
-      },
-    ],
-  };
+import type { IMarket } from "~/app/berpetuals/page";
+import { usePollAccountTradingSummary } from "~/hooks/usePollAccountTradingSummary";
+import { usePollDailyPnl } from "~/hooks/usePollDailyPnl";
+import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+
+export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
+  const { useTotalPositionSize, useTotalUnrealizedPnl } =
+    usePollOpenPositions();
+  const positionSize = useTotalPositionSize();
+
+  const { useAccountTradingSummary } = usePollAccountTradingSummary();
+  const { data } = useAccountTradingSummary();
+
+  const { useDailyPnl } = usePollDailyPnl();
+
+  const unrealizedPnl = useTotalUnrealizedPnl(markets);
+  const dailyPnl = useDailyPnl();
+
+  const pnl = useMemo(() => {
+    return unrealizedPnl + dailyPnl;
+  }, [unrealizedPnl, dailyPnl]);
+
   return (
-    <div className="flex w-full flex-shrink-0 flex-col gap-8 rounded-xl border border-border bg-muted px-4 py-6 lg:w-[270px]">
+    <div className="flex max-h-[300px] w-full flex-shrink-0 flex-col gap-8 rounded-xl border border-border bg-muted px-4 py-6 lg:w-[270px]">
       <div className="flex flex-col gap-2">
         <div className="text-sm font-medium leading-none text-muted-foreground">
-          Current Open Positions <Tooltip text="tooltip text" />
+          Current Open Positions <Tooltip text="Total open position size" />
         </div>
         <div className="text-3xl font-semibold leading-9 text-foreground">
-          {formatUsd(portfolio.total_amount)}
+          {formatUsd(Number(positionSize))}
         </div>
         <div
           className={cn(
             "text-sm font-medium leading-normal",
-            portfolio.p_and_l < 0
-              ? "text-destructive-foreground"
-              : "text-success-foreground",
+            pnl < 0 ? "text-destructive-foreground" : "text-success-foreground",
           )}
         >
-          {formatUsd(portfolio.p_and_l)} (
-          {(portfolio.p_and_l / portfolio.total_amount).toFixed(2)})%
+          {formatUsd(pnl)}
           <span className="ml-2 cursor-pointer text-muted-foreground underline">
             24H PnL
           </span>
@@ -51,15 +52,29 @@ export function UserGeneralInfo() {
           Details
         </div>
         <div className="p flex flex-col gap-2">
-          {portfolio.data.map((item, index) => (
-            <div
-              key={index}
-              className="flex justify-between px-3 text-sm leading-tight"
-            >
-              <div>{item.subtitle}</div>
-              <div>{item.amount}</div>
+          <div className="flex justify-between px-3 text-sm leading-tight">
+            <div>Total Trades</div>
+            <div>{data?.num_trades ?? 0}</div>
+          </div>
+          <div className="flex justify-between px-3 text-sm leading-tight">
+            <div>Fees Paid</div>
+            <div>{formatUsd(data?.fees_paid ?? 0)}</div>
+          </div>
+          <div className="flex justify-between px-3 text-sm leading-tight">
+            <div className="flex flex-row items-center gap-1">
+              Net PnL{" "}
+              <Tooltip text="Cumulative Profit & Loss for this account" />
             </div>
-          ))}
+            <div
+              className={
+                data?.pnl < 0
+                  ? "text-destructive-foreground"
+                  : "text-success-foreground"
+              }
+            >
+              {formatUsd(data?.pnl ?? 0)}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -2,14 +2,17 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { usePollAssetWalletBalance, useTokens } from "@bera/berajs";
+import {
+  usePollAssetWalletBalance,
+  usePollReservesDataList,
+  useTokens,
+} from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { isAddress } from "viem";
 import { type Address } from "wagmi";
 
 import { type RateItem } from "~/utils/getServerSideData";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import InterestRateOvertime from "./components/interest-rate-overtime";
 import TokenInfoCard from "./components/token-info-card";
 import TotalBorrowed from "./components/total-borrowed";

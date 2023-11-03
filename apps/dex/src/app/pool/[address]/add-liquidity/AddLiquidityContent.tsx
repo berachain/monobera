@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   DEX_PRECOMPILE_ABI,
+  TransactionActionType,
   formatUsd,
   useBeraConfig,
   type Token,
@@ -85,6 +86,7 @@ export default function AddLiquidityContent({
     onSuccess: () => {
       reset();
     },
+    actionType: TransactionActionType.ADD_LIQUIDITY,
   });
 
   return (

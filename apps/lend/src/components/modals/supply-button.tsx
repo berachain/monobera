@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  TransactionActionType,
   formatter,
+  lendPoolImplementationABI,
   useBeraJs,
   usePollAllowance,
   usePollAssetWalletBalance,
+  usePollReservesDataList,
+  usePollUserAccountData,
+  usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
@@ -15,11 +20,6 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { formatEther, formatUnits, parseUnits } from "viem";
-
-import { lendPoolImplementationABI } from "~/hooks/abi";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
-import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function SupplyBtn({
   token,
@@ -39,6 +39,7 @@ export default function SupplyBtn({
       reservesDataRefetch();
       userReservesRefetch();
     },
+    actionType: TransactionActionType.SUPPLY,
   });
   const { isReady } = useBeraJs();
 
