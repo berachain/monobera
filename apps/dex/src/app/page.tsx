@@ -53,6 +53,7 @@ export default async function Homepage() {
         volume: volume,
       }),
     );
+
     return (
       <div className="container max-w-[1200px]">
         <Hero />

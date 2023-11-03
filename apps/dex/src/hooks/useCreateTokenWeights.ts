@@ -72,7 +72,7 @@ const useCreateTokenWeights = () => {
 
   const [poolName, setPoolName] = useState<string>("");
 
-  const [swapFee, setSwapFee] = useState<number>(0.3);
+  const [swapFee, setSwapFee] = useState<number>(0.4);
 
   const [step, setStep] = useState<Steps>(Steps.SET_TOKEN_WEIGHTS);
 

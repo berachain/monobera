@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  useGas,
   useLatestBlock,
   usePollAllowance,
   usePollAssetWalletBalance,
@@ -51,7 +52,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { tokenDictionary } = useTokens();
 
   // TODO: get honey price
-  // const { data: gasData } = useFeeData();
+  const gasData = useGas();
 
   useEffect(() => {
     if (inputCurrency) {
@@ -328,6 +329,18 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   };
 
+  const value: bigint | undefined = useMemo(() => {
+    if (!swapInfo) {
+      return undefined;
+    }
+    if (
+      swapInfo.batchSwapSteps[0]?.assetIn ===
+      (process.env.NEXT_PUBLIC_BERA_ADDRESS as Address)
+    ) {
+      return swapInfo.batchSwapSteps[0]?.value;
+    }
+    return undefined;
+  }, [swapInfo]);
   return {
     setSwapKind,
     setSelectedFrom,
@@ -347,10 +360,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     error: getSwapError,
     swapInfo,
     priceImpact,
+    value,
     showPriceImpact,
     exchangeRate,
-    // gasPrice: gasData?.formatted.gasPrice,
-    gasPrice: 69,
+    gasPrice: gasData?.formatted.gasPrice,
     isWrap,
     wrapType,
     isBalanceLoading,
