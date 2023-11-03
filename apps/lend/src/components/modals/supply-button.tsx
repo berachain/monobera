@@ -4,24 +4,22 @@ import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
   formatter,
+  lendPoolImplementationABI,
   useBeraJs,
   usePollAllowance,
   usePollAssetWalletBalance,
+  usePollReservesDataList,
+  usePollUserAccountData,
+  usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
+import { ApproveButton, TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { formatEther, formatUnits, parseUnits } from "viem";
-
-import { lendPoolImplementationABI } from "~/hooks/abi";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
-import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
-import ApproveButton from "../approve-button";
 
 export default function SupplyBtn({
   token,
@@ -94,7 +92,7 @@ const SupplyModalContent = ({
   const { data: reserveData } = useSelectedReserveData(token.address);
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
-
+  // console.log(userAccountData);
   const currentHealthFactor =
     Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
       ? "∞"
@@ -176,7 +174,7 @@ const SupplyModalContent = ({
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Supply APY</div>
+          <div className="text-muted-foreground ">Supply PRR</div>
           <div className="font-semibold text-success-foreground">
             {(Number(reserveData.supplyAPY) * 100).toFixed(2)}%
           </div>
@@ -193,7 +191,7 @@ const SupplyModalContent = ({
         </div>
       </div>
 
-      {allowance && Number(allowance.formattedAllowance) > (amount ?? 0) ? (
+      {allowance && Number(allowance.formattedAllowance) >= (amount ?? 0) ? (
         <Button
           disabled={
             !amount || amount === 0 || amount > Number(balance.formattedBalance)
@@ -215,7 +213,11 @@ const SupplyModalContent = ({
           {amount === 0 ? "Enter Amount" : "Supply"}
         </Button>
       ) : (
-        <ApproveButton token={token} spender={lendPoolImplementationAddress} />
+        <ApproveButton
+          token={token}
+          spender={lendPoolImplementationAddress}
+          amount={parseUnits(`${amount ?? 0}`, token.decimals)}
+        />
       )}
     </div>
   );

@@ -1,9 +1,10 @@
 "use client";
 
 import { TransactionActionType, type Token } from "@bera/berajs";
-import { useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { erc20ABI } from "wagmi";
+
+import { useTxn } from "./hooks/useTxn";
 
 type Props = {
   token: Token | undefined;
@@ -11,10 +12,10 @@ type Props = {
   amount?: bigint;
 };
 
-const ApproveButton = ({
+export const ApproveButton = ({
   token,
   spender,
-  amount = 1000000000000000000000000000n,
+  amount = 1000000000000000000n,
 }: Props) => {
   const { write, isLoading, isSubmitting } = useTxn({
     message: `Approve ${token?.name}`,
@@ -38,5 +39,3 @@ const ApproveButton = ({
     </Button>
   );
 };
-
-export default ApproveButton;

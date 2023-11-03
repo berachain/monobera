@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useBeraJs, usePollAssetWalletBalance } from "@bera/berajs";
 import { ConnectWalletBear } from "@bera/shared-ui";
 
+import { Banner } from "~/components/reward-banner";
 import StatusBanner from "~/components/status-banner";
 import { Dashboard } from "./dashboard";
 
@@ -26,6 +27,7 @@ export default function DashboardPageContent() {
   usePollAssetWalletBalance();
   return (
     <div className="flex flex-col gap-9 md:gap-6">
+      <Banner />
       <StatusBanner />
       {isReady ? (
         <Dashboard tableView={tableView} setUseTableView={setUseTableView} />

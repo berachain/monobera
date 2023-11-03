@@ -18,6 +18,7 @@ import {
   Tooltip,
   type ActiveElement,
 } from "chart.js";
+import annotationPlugin from "chartjs-plugin-annotation";
 import { Chart, type ChartProps } from "react-chartjs-2";
 
 ChartJS.register(
@@ -34,6 +35,7 @@ ChartJS.register(
   PieController,
   LineController,
   BarController,
+  annotationPlugin,
 );
 
 export function BeraChart({
@@ -41,6 +43,7 @@ export function BeraChart({
   type,
   options,
   showDataOnHover,
+  ...props
 }: ChartProps & { showDataOnHover?: boolean }) {
   const [dataPoint, setDataPoint] = useState<number>(0);
   const chartRef = useRef<ChartJS>(null);
@@ -52,6 +55,7 @@ export function BeraChart({
         </div>
       )}
       <Chart
+        {...props}
         ref={chartRef}
         options={{
           ...options,

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  useGas,
+  useGasData,
   useLatestBlock,
   usePollAllowance,
   usePollAssetWalletBalance,
@@ -52,7 +52,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { tokenDictionary } = useTokens();
 
   // TODO: get honey price
-  const gasData = useGas();
+  const gasData = useGasData();
 
   useEffect(() => {
     if (inputCurrency) {

@@ -13,7 +13,6 @@ export function WalletBalanceInUs() {
   const { data: assets } = useCurrentAssetWalletBalances();
   const { usePrices } = usePollPrices();
   const { data: prices } = usePrices();
-
   const total =
     assets && prices
       ? assets.reduce(

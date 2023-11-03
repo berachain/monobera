@@ -1,10 +1,13 @@
 import React from "react";
+import {
+  usePollReservesDataList,
+  usePollReservesPrices,
+  usePollUserAccountData,
+} from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
-import { parseEther } from "viem";
+import { parseUnits } from "viem";
 
 import UserTokenCard from "~/components/user-token-card";
-import { usePollReservesPrices } from "~/hooks/usePollReservesPrices";
-import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
 import { available_borrows_columns } from "./column";
 
 export default function AvailableBorrows({
@@ -14,14 +17,17 @@ export default function AvailableBorrows({
   assets: any[];
   tableView?: boolean;
 }) {
+  const { useBaseCurrencyData } = usePollReservesDataList();
+  const { data: baseCurrencyData } = useBaseCurrencyData();
   const { useReservesPrices } = usePollReservesPrices();
   const { data: reservesPrices } = useReservesPrices();
   const { useUserAccountData } = usePollUserAccountData();
   const { data } = useUserAccountData();
   assets.forEach((asset) => {
     if (reservesPrices && data && reservesPrices[asset.address]) {
-      const tokenPrice = parseEther(
+      const tokenPrice = parseUnits(
         asset.reserveData.formattedPriceInMarketReferenceCurrency,
+        baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8,
       );
       asset.balance = data.availableBorrowsBase / tokenPrice;
       asset.formattedBalance = BigInt(asset.balance).toString();

@@ -32,6 +32,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@aave/math-utils": "^1.20.0",
     "@bera/eslint-config": "0.1.0",
     "@cosmjs/proto-signing": "^0.29.5",
     "@cosmjs/stargate": "^0.29.5",
