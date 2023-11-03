@@ -24,6 +24,7 @@ export function TotalAmount({
   const totalPnl = useMemo(() => {
     return totalUnrealizedPnl + realizedPnl;
   }, [totalUnrealizedPnl, realizedPnl]);
+
   return (
     <div
       className={cn(

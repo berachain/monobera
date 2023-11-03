@@ -30,7 +30,6 @@ export const useCalculatePnl = ({
       const formattedOpenPrice = Number(formatUnits(openPrice ?? 0n, 10));
 
       const size = posSize / formattedOpenPrice;
-
       setPnl(
         getPnl({
           currentPrice,
