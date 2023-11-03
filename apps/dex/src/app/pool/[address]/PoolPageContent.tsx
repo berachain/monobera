@@ -400,8 +400,10 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
           </p>
           <div className="mb-2 flex w-full flex-row items-center justify-center gap-2 sm:items-center sm:justify-start">
             <Badge variant="secondary" className="text-xs font-medium">
-              {Number(formatUnits(BigInt(pool.swapFee) ?? "", 18)) * 100}% swap
-              fee
+              {(
+                Number(formatUnits(BigInt(pool.swapFee) ?? "", 18)) * 100
+              ).toFixed(2)}
+              % swap fee
             </Badge>
             <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
               {pool?.bgtApy?.toFixed(2)}% BGT PRR
