@@ -41,6 +41,7 @@ export function OrderHistoryTable({
     });
   }, [openPositons, openOrders, history]);
 
+  console.log("open pos", openPositons);
   return (
     <div className="relative w-full overflow-x-auto">
       {tab === "positions" && (
