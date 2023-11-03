@@ -66,13 +66,12 @@ export const usePollOpenPositions = () => {
           BigInt(position.closing_fee);
         const posSize = Number(
           formatUnits(
-            (BigInt(position?.position_size) ?? 0n) *
-              BigInt(position?.leverage),
-            10,
+            BigInt(position.position_size) * BigInt(position.leverage) ?? 0n,
+            18,
           ),
         );
         const formattedOpenPrice = Number(
-          formatUnits(BigInt(position?.open_price) ?? 0n, 10),
+          formatUnits(BigInt(position.open_price) ?? 0n, 10),
         );
 
         const size = posSize / formattedOpenPrice;
@@ -85,6 +84,7 @@ export const usePollOpenPositions = () => {
           buy: position.buy,
           fees: Number(formatUnits(fees, 18)),
         });
+
         return acc + (pnl ?? 0);
       }, 0);
     }, [openPositons, prices]);

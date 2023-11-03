@@ -17,11 +17,17 @@ export default function Claim() {
 
   const honeyLocked = useFormattedHoneyVaultBalance();
 
-  const { isLoading: isBgtRewardsLoading, useBgtApr } =
-    usePollBgtRewardsForAddress({
-      address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
-    });
+  const {
+    isLoading: isBgtRewardsLoading,
+    useBgtApr,
+    useBgtRewardsForAddress,
+  } = usePollBgtRewardsForAddress({
+    address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+  });
 
+  const bgtRewards = useBgtRewardsForAddress();
+
+  console.log("bgt rewards", bgtRewards);
   const bgtApr = useBgtApr(honeyLocked);
 
   const isLoading = isHoneyVaultBalanceLoading || isBgtRewardsLoading;

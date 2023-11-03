@@ -5,6 +5,7 @@ import {
   formatUsd,
   formatter,
   usePollBHoneySupply,
+  usePollBgtRewardsForAddress,
   usePollHoneyVaultBalance,
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
@@ -24,6 +25,14 @@ export default function HoneyVault() {
 
   const honeyLocked = useFormattedHoneyVaultBalance();
   const bHoneySupply = useFormattedBHoneySupply();
+
+  const { useBgtRewardsForAddress } = usePollBgtRewardsForAddress({
+    address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS,
+  });
+
+  const bgtRewards = useBgtRewardsForAddress();
+
+  console.log("bgt rewards", bgtRewards);
 
   const content = [
     {

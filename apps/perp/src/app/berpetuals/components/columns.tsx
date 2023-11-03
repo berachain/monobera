@@ -72,7 +72,6 @@ export const ActivePositionPNL = ({
 }) => {
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(Number(position.market?.pair_index) ?? 0);
-
   const pnl = useCalculatePnl({
     buy: position.buy,
     currentPrice: price,

@@ -23,14 +23,13 @@ export const usePollBgtRewardsForAddress = ({
     QUERY_KEY,
     () => {
       if (cuttingBoard && address) {
-        const cb = cuttingBoard?.find(
+        const cb = cuttingBoard.result?.find(
           (b: any) => b.address.toLowerCase() === address.toLowerCase(),
         );
-
         if (cb) {
           return {
-            bgtPerYear: Number(cuttingBoard.amount),
-            UsdBgtPerYear: Number(cuttingBoard.amount) * Number(beraPrice),
+            bgtPerYear: Number(cb.amount),
+            UsdBgtPerYear: Number(cb.amount) * Number(beraPrice),
           };
         } else {
           return undefined;
