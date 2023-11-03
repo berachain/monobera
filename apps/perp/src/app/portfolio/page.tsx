@@ -14,6 +14,10 @@ export function generateMetadata(): Metadata {
     title: `Portfolio | ${perpsName}`,
   };
 }
+
+export const revalidate = 30;
+
+
 export default async function Page() {
   const m = await getMarkets();
   const markets: IMarket[] = m?.map((m: Market) => ({

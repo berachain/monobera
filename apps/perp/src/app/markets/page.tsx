@@ -23,6 +23,9 @@ export function generateMetadata(): Metadata {
     title: `Markets | ${perpsName}`,
   };
 }
+
+export const revalidate = 30;
+
 export default async function Home() {
   const m = getMarkets();
   const pc = getDailyPriceChange();

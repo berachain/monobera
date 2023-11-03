@@ -9,6 +9,9 @@ export function generateMetadata(): Metadata {
     title: `Leaderboard | ${perpsName}`,
   };
 }
+
+export const revalidate = 30;
+
 export default function Home() {
   return <LeaderBoard />;
 }
