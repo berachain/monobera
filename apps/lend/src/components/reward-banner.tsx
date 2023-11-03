@@ -8,15 +8,15 @@ import { Icons } from "@bera/ui/icons";
 export const Banner = () => {
   const { isReady } = useBeraJs();
   return (
-    <div className="relative flex flex-col-reverse items-start gap-4 rounded-18 border border-border bg-honey-gradient px-8 py-6 dark:bg-gradient-to-l dark:from-stone-950 dark:to-stone-950 lg:flex-row lg:gap-16">
+    <div className="relative flex flex-col-reverse items-start gap-4 rounded-18 border border-accent bg-gradient-to-b from-[#FFFCF2] to-[#FFF2D0] px-8 py-6 dark:from-[#27251F] dark:to-[#322400] lg:flex-row lg:gap-16">
       <Image
-        src={`${cloudinaryUrl}/bears/Loading_Icon_jl9z10`}
-        width={420}
-        height={100}
-        className="absolute -right-0 hidden w-[420px] lg:bottom-0 lg:block"
+        src={`${cloudinaryUrl}/bears/lendbear_npxhb3`}
+        width={213}
+        height={197}
+        className="absolute -right-0 hidden w-[213px] lg:bottom-0 lg:block"
         alt="happy bear"
       />
-      <div className="flex h-full w-full flex-shrink-0 flex-col gap-4 rounded-xl border border-amber-400 bg-gradient-to-br from-[#FFF6D7] via-[#FFEAA3] to-[#FFD977] p-4 lg:w-fit">
+      <div className="flex h-full w-full flex-shrink-0 flex-col gap-4 rounded-xl border border-amber-400 bg-gradient-to-br from-[#FFF6D7] via-[#FFEAA3] to-[#FFD977] p-4 dark:from-[#413E33] dark:to-[#453509] lg:w-fit">
         <div className="flex items-center justify-center gap-2 text-3xl font-semibold leading-9 lg:justify-start">
           <TokenIcon address={bgtTokenAddress} fetch />
           {isReady ? "207.10" : "~~"}
