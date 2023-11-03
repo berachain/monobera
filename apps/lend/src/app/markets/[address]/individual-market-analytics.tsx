@@ -2,14 +2,17 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { usePollAssetWalletBalance, useTokens } from "@bera/berajs";
+import {
+  usePollAssetWalletBalance,
+  usePollReservesDataList,
+  useTokens,
+} from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { isAddress } from "viem";
 import { type Address } from "wagmi";
 
 import { type RateItem } from "~/utils/getServerSideData";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import InterestRateOvertime from "./components/interest-rate-overtime";
 import TokenInfoCard from "./components/token-info-card";
 import TotalBorrowed from "./components/total-borrowed";
@@ -26,10 +29,6 @@ export default function IndividualMarketAnalytics({
   borrowVariableAPR7D,
   borrowVariableAPR30D,
   borrowVariableAPRALL,
-  utilizationRate1D,
-  utilizationRate7D,
-  utilizationRate30D,
-  utilizationRateALL,
 }: {
   address: Address;
   supplyAPR1D: RateItem[];
@@ -40,16 +39,22 @@ export default function IndividualMarketAnalytics({
   borrowVariableAPR7D: RateItem[];
   borrowVariableAPR30D: RateItem[];
   borrowVariableAPRALL: RateItem[];
-  utilizationRate1D: RateItem[];
-  utilizationRate7D: RateItem[];
-  utilizationRate30D: RateItem[];
-  utilizationRateALL: RateItem[];
 }) {
+  // console.log(
+  //   supplyAPR1D,
+  //   supplyAPR7D,
+  //   supplyAPR30D,
+  //   supplyAPRALL,
+  //   borrowVariableAPR1D,
+  //   borrowVariableAPR7D,
+  //   borrowVariableAPR30D,
+  //   borrowVariableAPRALL
+  // );
   usePollAssetWalletBalance();
   const { tokenDictionary } = useTokens();
   const { useSelectedReserveData } = usePollReservesDataList();
   const { data: reserveData } = useSelectedReserveData(address);
-
+  console.log("reserveData", reserveData);
   const router = useRouter();
   useEffect(() => {
     if (!address || !isAddress(address)) {
@@ -120,23 +125,7 @@ export default function IndividualMarketAnalytics({
             />
           )}
           {address === honeyAddress && (
-            <InterestRateOvertime
-              reserveData={reserveData}
-              graphData={{
-                borrow: {
-                  "24H": borrowVariableAPR1D,
-                  "7D": borrowVariableAPR7D,
-                  "30D": borrowVariableAPR30D,
-                  ALL_TIME: borrowVariableAPRALL,
-                },
-                utilization: {
-                  "24H": utilizationRate1D,
-                  "7D": utilizationRate7D,
-                  "30D": utilizationRate30D,
-                  ALL_TIME: utilizationRateALL,
-                },
-              }}
-            />
+            <InterestRateOvertime reserveData={reserveData} />
           )}
         </div>
       </div>

@@ -19,3 +19,6 @@ export * from "./b-token";
 export * from "./borrowing-fees";
 export * from "./price-aggregator";
 export * from "./pnl-feed";
+export * from "./lend-oracle";
+export * from "./lend-impl";
+export * from "./lend-ui";

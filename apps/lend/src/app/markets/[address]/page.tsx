@@ -20,23 +20,15 @@ export default async function Page({
     borrowVariableAPR7D,
     borrowVariableAPR30D,
     borrowVariableAPRALL,
-    utilizationRate1D,
-    utilizationRate7D,
-    utilizationRate30D,
-    utilizationRateALL,
   ] = await Promise.all([
-    getGraphData(params.address, "interest", "1D", "supply"),
-    getGraphData(params.address, "interest", "7D", "supply"),
-    getGraphData(params.address, "interest", "30D", "supply"),
-    getGraphData(params.address, "interest", "ALL", "supply"),
-    getGraphData(params.address, "interest", "1D", "variable"),
-    getGraphData(params.address, "interest", "7D", "variable"),
-    getGraphData(params.address, "interest", "30D", "variable"),
-    getGraphData(params.address, "interest", "ALL", "variable"),
-    getGraphData(params.address, "utilization", "1D"),
-    getGraphData(params.address, "utilization", "7D"),
-    getGraphData(params.address, "utilization", "30D"),
-    getGraphData(params.address, "utilization", "ALL"),
+    getGraphData(params.address, "1d", "supply"),
+    getGraphData(params.address, "7d", "supply"),
+    getGraphData(params.address, "30d", "supply"),
+    getGraphData(params.address, "all", "supply"),
+    getGraphData(params.address, "1d", "variable"),
+    getGraphData(params.address, "7d", "variable"),
+    getGraphData(params.address, "30d", "variable"),
+    getGraphData(params.address, "all", "variable"),
   ]);
   return (
     <div className="container my-28">
@@ -51,10 +43,6 @@ export default async function Page({
           borrowVariableAPR7D,
           borrowVariableAPR30D,
           borrowVariableAPRALL,
-          utilizationRate1D,
-          utilizationRate7D,
-          utilizationRate30D,
-          utilizationRateALL,
         }}
       />
     </div>

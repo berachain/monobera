@@ -1,4 +1,3 @@
-import { useBeraJs } from "@bera/berajs";
 import {
   lendPoolAddressProviderAddress,
   lendUIDataProviderAddress,
@@ -7,7 +6,8 @@ import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { lendUIDataProviderABI } from "./abi";
+import { lendUIDataProviderABI } from "~/config";
+import { useBeraJs } from "~/contexts";
 
 export const usePollUserReservesData = () => {
   const publicClient = usePublicClient();

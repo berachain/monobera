@@ -40,5 +40,6 @@ export { ConnectWalletBear } from "./connect-wallet-bear";
 export { UpTimeStatus } from "./up-time-status";
 export { WalletBalanceInUs } from "./wallet-balance-in-us";
 export { RewardBtn } from "./reward-btn";
+export { ApproveButton } from "./approve-button";
 
 export { useTxn } from "./hooks";

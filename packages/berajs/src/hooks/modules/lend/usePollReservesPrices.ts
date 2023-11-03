@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { lendOracleAddress, lendPoolImplementationAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatEther } from "viem";
 import { usePublicClient, type Address } from "wagmi";
 
-import { lendOracleABI, lendPoolImplementationABI } from "./abi";
+import { lendOracleABI, lendPoolImplementationABI } from "../../../config/abi";
 
 export const usePollReservesPrices = () => {
   const publicClient = usePublicClient();
