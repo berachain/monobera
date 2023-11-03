@@ -51,7 +51,7 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
 
   const maxLeverage = Number(params.max_leverage ?? 0);
   const formattedMaxCollateral = Number(
-    formatUnits(BigInt(params.max_collateral_honey ?? 0), 18),
+    formatUnits(BigInt(params.max_pos_honey ?? 0), 18),
   );
 
   useMemo(() => {
