@@ -45,6 +45,7 @@ const useBeraContractWrite = ({
           abi: abi,
           functionName: functionName,
           args: params,
+          value: value,
         });
 
         receipt = await walletClient?.writeContract({
