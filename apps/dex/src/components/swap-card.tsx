@@ -100,7 +100,6 @@ export function SwapCard({
     outputCurrency,
   });
 
-  console.log("swapInfo", swapInfo);
   const { isConnected } = useBeraJs();
   const [exceedingBalance, setExceedingBalance] = useState(false);
 
