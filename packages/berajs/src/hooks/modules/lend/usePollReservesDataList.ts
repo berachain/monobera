@@ -7,8 +7,8 @@ import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { getReservesHumanized } from "~/utils/aave-reserve-helper";
-import { lendUIDataProviderABI } from "./abi";
+import { lendUIDataProviderABI } from "../../../config/abi";
+import { getReservesHumanized } from "../../../utils";
 
 export const usePollReservesDataList = () => {
   const publicClient = usePublicClient();

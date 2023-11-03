@@ -4,7 +4,11 @@ import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
   formatter,
+  lendPoolImplementationABI,
   useBeraJs,
+  usePollReservesDataList,
+  usePollUserAccountData,
+  usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
@@ -14,11 +18,6 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { formatEther, formatUnits, parseUnits } from "viem";
-
-import { lendPoolImplementationABI } from "~/hooks/abi";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
-import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 
 export default function WithdrawBtn({
   token,
@@ -157,7 +156,7 @@ const WithdrawModalContent = ({
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Supply APY</div>
+          <div className="text-muted-foreground ">Supply PRR</div>
           <div className="font-semibold text-success-foreground">
             {(reserveData.supplyAPR * 100).toFixed(2)}%
           </div>

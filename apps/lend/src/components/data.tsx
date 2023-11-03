@@ -1,11 +1,9 @@
 "use client";
 
 import React from "react";
-import { formatUsd } from "@bera/berajs";
+import { formatUsd, usePollReservesDataList } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 
 function DataCard({
   icon,
@@ -41,7 +39,6 @@ export default function Data() {
     displayMarketSize += Number(data[key].totalLiquidity);
     displayBorrowed += Number(data[key].totalDebt);
   });
-
   return (
     <section className="m-auto max-w-[800px] py-24">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

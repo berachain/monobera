@@ -1,10 +1,12 @@
 import React from "react";
-import { usePollAssetWalletBalance } from "@bera/berajs";
+import {
+  usePollAssetWalletBalance,
+  usePollReservesDataList,
+  usePollUserReservesData,
+} from "@bera/berajs";
 import { Switch } from "@bera/ui/switch";
 
 import { getAssetList } from "~/utils/lendTokenHelper";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
 import PageLoading from "./page-loading";

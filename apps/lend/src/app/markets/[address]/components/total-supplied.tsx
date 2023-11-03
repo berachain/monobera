@@ -20,7 +20,7 @@ export default function TotalSupplied({
     ALL_TIME: RateItem[];
   };
 }) {
-  const ticker = "ETH";
+  const ticker = reserveData?.symbol;
   const info = [
     {
       title: "Max LTV",
@@ -31,8 +31,17 @@ export default function TotalSupplied({
       ) : (
         <Skeleton className="h-7 w-20" />
       ),
-      tooltip:
-        "The Maximum LTV ratio represents the maximum borrowing power of a specific collateral. For example, if a collateral has an LTV of 75%, the user can borrow up to 0.75 worth of ETH in the principal currency for every 1 ETH worth of collateral.",
+      tooltip: (
+        <>
+          The Maximum LTV ratio represents the maximum borrowing power of a{" "}
+          <br />
+          specific collateral. For example, if a collateral has an LTV of 75%,{" "}
+          <br />
+          the user can borrow up to 0.75 worth of ETH in the principal currency
+          <br />
+          for every 1 ETH worth of collateral.
+        </>
+      ),
     },
     {
       title: "Liquidation Threshold",
@@ -43,8 +52,19 @@ export default function TotalSupplied({
       ) : (
         <Skeleton className="h-7 w-20" />
       ),
-      tooltip:
-        "This represents the threshold at which a borrow position will be considered undercollateralized and subject to liquidation for each collateral. For example, if a collateral has a liquidation threshold of 80%, it means that the position will be liquidated when the debt value is worth 80% of the collateral value.",
+      tooltip: (
+        <>
+          This represents the threshold at which a borrow position will be
+          <br />
+          considered undercollateralized and subject to liquidation for each
+          <br />
+          collateral. For example, if a collateral has a liquidation threshold
+          <br />
+          of 80%, it means that the position will be liquidated when the debt
+          <br />
+          value is worth 80% of the collateral value.
+        </>
+      ),
     },
     {
       title: "Liquidation Penalty",
@@ -55,8 +75,17 @@ export default function TotalSupplied({
       ) : (
         <Skeleton className="h-7 w-20" />
       ),
-      tooltip:
-        "When a liquidation occurs, liquidators repay up to 50% of the outstanding borrowed amount on behalf of the borrower. In return, they can buy the collateral at a discount and keep the difference as a bonus.",
+      tooltip: (
+        <>
+          When a liquidation occurs, liquidators repay up to 50% of the
+          <br />
+          outstanding borrowed amount on behalf of the borrower. In return, they
+          <br />
+          can buy the collateral at a discount and keep the difference as a
+          <br />
+          bonus.
+        </>
+      ),
     },
   ];
   const color = "#059669";

@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { usePollAssetWalletBalance, useTokens } from "@bera/berajs";
+import {
+  usePollAssetWalletBalance,
+  usePollReservesDataList,
+  useTokens,
+} from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { DataTable, Dropdown, SearchInput } from "@bera/shared-ui";
 import { Switch } from "@bera/ui/switch";
@@ -9,13 +13,12 @@ import { Switch } from "@bera/ui/switch";
 import HoneyTokenCard from "~/components/honey-token-card";
 import StatusBanner from "~/components/status-banner";
 import TokenCard, { TokenLoading } from "~/components/token-card";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import { market_table_columns } from "./market-table-column";
 
 export default function MarketsPageContent() {
   usePollAssetWalletBalance();
   const [tableView, setUseTableView] = React.useState(false);
-  const sortOptions = ["Pool-Size", "Supply-APY"];
+  const sortOptions = ["Pool-Size", "Supply-PRR"];
   const [sortBy, setSortBy] = React.useState<string>(sortOptions[0]!);
   const ref = useRef(null);
   const [keywords, setKeywords] = React.useState<string>("");

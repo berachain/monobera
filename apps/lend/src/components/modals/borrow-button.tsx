@@ -4,7 +4,11 @@ import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
   formatter,
+  lendPoolImplementationABI,
   useBeraJs,
+  usePollReservesDataList,
+  usePollUserAccountData,
+  usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
@@ -13,12 +17,7 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
-
-import { lendPoolImplementationABI } from "~/hooks/abi";
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
-import { usePollUserAccountData } from "~/hooks/usePollUserAccountData";
-import { usePollUserReservesData } from "~/hooks/usePollUserReservesData";
+import { formatUnits, parseEther, parseUnits } from "viem";
 
 export default function BorrowBtn({
   token,
@@ -116,16 +115,29 @@ const BorrowModalContent = ({
       : borrowPower;
 
   const currentHealthFactor =
-    BigInt(userAccountData?.healthFactor || "0") > parseEther("1000000000000")
+    BigInt(userAccountData?.healthFactor || "0") >
+    parseUnits(
+      "1000000000000",
+      baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
+    )
       ? "∞"
-      : formatEther(userAccountData.healthFactor);
+      : formatUnits(
+          userAccountData.healthFactor,
+          baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
+        );
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-    collateralBalanceMarketReferenceCurrency: formatEther(
+    collateralBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalCollateralBase,
+      baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
     ),
     borrowBalanceMarketReferenceCurrency:
-      Number(formatEther(userAccountData.totalDebtBase)) +
+      Number(
+        formatUnits(
+          userAccountData.totalDebtBase,
+          baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
+        ),
+      ) +
       Number(amount ?? "0") *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
 
@@ -134,7 +146,26 @@ const BorrowModalContent = ({
       4,
     ),
   });
+  // console.log({
+  //   collateralBalanceMarketReferenceCurrency: formatUnits(
+  //     userAccountData.totalCollateralBase,
+  //     baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
+  //   ),
+  //   borrowBalanceMarketReferenceCurrency:
+  //     Number(
+  //       formatUnits(
+  //         userAccountData.totalDebtBase,
+  //         baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
+  //       ),
+  //     ) +
+  //     Number(amount ?? "0") *
+  //       Number(reserveData?.formattedPriceInMarketReferenceCurrency),
 
+  //   currentLiquidationThreshold: formatUnits(
+  //     userAccountData.currentLiquidationThreshold,
+  //     4,
+  //   ),
+  // })
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Borrow</div>
@@ -180,7 +211,9 @@ const BorrowModalContent = ({
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground">LTV Health Ratio</div>
           <div className="flex items-center gap-1 font-semibold">
-            {Number(currentHealthFactor).toFixed(2)}{" "}
+            {currentHealthFactor === "∞"
+              ? currentHealthFactor
+              : Number(currentHealthFactor).toFixed(2)}{" "}
             <Icons.moveRight className="inline-block h-6 w-6" />{" "}
             {Number(newHealthFactor.toFixed(2)) < 0
               ? "∞"
@@ -198,7 +231,7 @@ const BorrowModalContent = ({
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground">Variable Borrow APY</div>
+          <div className="text-muted-foreground">Variable Borrow PRR</div>
           <div className="font-semibold text-warning-foreground">
             {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
           </div>

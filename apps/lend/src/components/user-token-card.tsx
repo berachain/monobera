@@ -30,6 +30,7 @@ export default function UserTokenCard({
   } else {
     balance = asset.formattedBalance;
   }
+
   return (
     <Card key={asset.symbol} className="p-4">
       <div className="flex flex-row items-center justify-between gap-6">
@@ -66,7 +67,7 @@ export default function UserTokenCard({
         {(type === "user-supply" || type === "supply") && (
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
-              Supply APY
+              Supply PRR
             </div>
             <div className="text-lg font-bold text-success-foreground">
               {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
@@ -77,7 +78,7 @@ export default function UserTokenCard({
         {type === "borrow" && (
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
-              Variable APY
+              Variable PRR
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
@@ -88,7 +89,7 @@ export default function UserTokenCard({
         {type === "user-borrow" && (
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
-              Loan APY
+              Loan PRR
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%

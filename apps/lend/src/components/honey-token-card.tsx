@@ -1,12 +1,17 @@
 import Link from "next/link";
-import { formatter, useTokens, type Token } from "@bera/berajs";
+import {
+  addTokenToWallet,
+  formatter,
+  usePollReservesDataList,
+  useTokens,
+  type Token,
+} from "@bera/berajs";
 import { blockExplorerUrl, honeyAddress } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { usePollReservesDataList } from "~/hooks/usePollReservesDataList";
 import Card from "./card";
 import InfoButton from "./info-button";
 import BorrowBtn from "./modals/borrow-button";
@@ -37,7 +42,13 @@ export default function HoneyTokenCard() {
               >
                 <Icons.external className="relative h-4 w-4 text-muted-foreground" />
               </Link>
-              <div className="h-fit w-fit rounded-full border border-border bg-muted p-1 hover:cursor-pointer ">
+              <div
+                className="h-fit w-fit rounded-full border border-border bg-muted p-1 hover:cursor-pointer "
+                onClick={() =>
+                  tokenDictionary &&
+                  addTokenToWallet(tokenDictionary[honeyAddress])
+                }
+              >
                 <Icons.wallet className="relative h-4 w-4 text-muted-foreground" />
               </div>
             </div>
@@ -80,7 +91,7 @@ export default function HoneyTokenCard() {
           </div>
           <div>
             <div className="flex items-center text-xs leading-6 md:text-sm">
-              Supply APY
+              Supply PRR
             </div>
             {honey ? (
               <div className="text-2xl font-semibold leading-8">
@@ -122,7 +133,7 @@ export default function HoneyTokenCard() {
 
           <div>
             <div className="flex items-center whitespace-nowrap text-xs leading-6 md:text-sm">
-              Borrow APY (Variable)
+              Borrow PRR (Variable)
             </div>
             {honey ? (
               <div className="text-2xl font-semibold leading-8">

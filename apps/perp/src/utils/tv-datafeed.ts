@@ -100,7 +100,7 @@ const datafeed: IDatafeedChartApi & IExternalDatafeed = {
       const isFirst = periodParams.firstDataRequest;
       if (isFirst) {
         const response = await fetch(
-          `http://k8s-devnet-btsapinl-bb091436b1-463c707996917350.elb.us-east-2.amazonaws.com/history?symbol=${symbolInfo.name}&resolution=${resolution}`,
+          `${process.env.NEXT_PUBLIC_PERPS_URL as string}/history?symbol=${symbolInfo.name}&resolution=${resolution}`,
         );
         const result = await response.json();
         const bars = result.prices.map((bar: any) => {

@@ -36,7 +36,7 @@ export default function TokenCard({ reserveData }: { reserveData: any }) {
 
         <div className="flex justify-between xl:w-[150px] xl:flex-col xl:justify-center">
           <div className="flex items-center text-xs font-medium leading-5 text-muted-foreground">
-            Supply APR
+            Supply PRR
           </div>
           <div className="font-bold text-success-foreground xl:text-lg">
             {(Number(reserveData.supplyAPY) * 100).toFixed(2)}%
@@ -45,7 +45,7 @@ export default function TokenCard({ reserveData }: { reserveData: any }) {
 
         <div className="flex justify-between text-muted-foreground xl:w-[150px] xl:flex-col xl:justify-center">
           <div className="flex items-center text-xs font-medium leading-5">
-            Variable Borrow APR
+            Variable Borrow PRR
           </div>
           <div className="font-bold xl:text-lg">
             ~~
