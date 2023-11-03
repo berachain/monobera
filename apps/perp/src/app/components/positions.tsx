@@ -85,17 +85,17 @@ function Position({
   );
 }
 
-function splitArray<T>(array: T[], numParts: number): T[][] {
-  const result: T[][] = [];
-  for (let i = 0; i < array.length; i++) {
-    const index = i % numParts;
-    if (!result[index]) {
-      result[index] = [];
-    } // @ts-expect-error - No types
-    result[index].push(array[i]);
-  }
-  return result;
-}
+// function splitArray<T>(array: T[], numParts: number): T[][] {
+//   const result: T[][] = [];
+//   for (let i = 0; i < array.length; i++) {
+//     const index = i % numParts;
+//     if (!result[index]) {
+//       result[index] = [];
+//     } // @ts-expect-error - No types
+//     result[index].push(array[i]);
+//   }
+//   return result;
+// }
 
 interface PositionRowProps {
   className?: string;
@@ -156,8 +156,8 @@ function PositionRow({
 function PositionGrid({ markets }: { markets: IMarket[] }) {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
-  const rows = splitArray(markets, 2);
-
+  // const rows = splitArray(markets, 2);
+  const rows = generateArrays(markets, 20) as [any[], any[]];
   return (
     <div
       ref={containerRef}
@@ -168,7 +168,7 @@ function PositionGrid({ markets }: { markets: IMarket[] }) {
           <PositionRow
             row={0}
             // @ts-ignore
-            positions={[...rows[0], ...rows[1]]}
+            positions={rows[0]}
             positionClassName={(positionIndex) =>
               clsx(
                 // @ts-ignore
@@ -183,7 +183,7 @@ function PositionGrid({ markets }: { markets: IMarket[] }) {
 
           <PositionRow
             row={1}
-            positions={[...rows[1], ...rows[0]]}
+            positions={rows[1].reverse()}
             // @ts-ignore
             positionClassName={(positionIndex) =>
               // @ts-ignore
@@ -199,6 +199,19 @@ function PositionGrid({ markets }: { markets: IMarket[] }) {
   );
 }
 
+function generateArrays(originalArray: any[], length: number) {
+  const result = [];
+  for (let i = 0; i < originalArray.length; i++) {
+    const newArray = [];
+    for (let j = 0; j < length; j++) {
+      newArray.push(originalArray[(i + j) % originalArray.length]);
+    }
+    result.push(newArray);
+  }
+
+  return result;
+}
+
 export default function Positions({
   showBtn = false,
   markets,
@@ -206,6 +219,7 @@ export default function Positions({
   showBtn?: boolean;
   markets: IMarket[];
 }) {
+  console.log(markets);
   return (
     <section className="flex flex-col gap-4">
       <h2 className="md:leading-14 px-8 text-center text-3xl font-extrabold leading-9 tracking-tight text-foreground md:text-5xl">
