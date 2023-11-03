@@ -176,7 +176,7 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
         <DataTable
           columns={global_gauge_weight_columns as any}
           data={dataT ?? []}
-          className="min-w-[490px]"
+          className="min-w-[490px] shadow"
         />
       </div>
     </div>
