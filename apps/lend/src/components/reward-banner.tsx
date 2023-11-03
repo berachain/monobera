@@ -10,7 +10,7 @@ export const Banner = () => {
   return (
     <div className="relative flex flex-col-reverse items-start gap-4 rounded-18 border border-border bg-honey-gradient px-8 py-6 dark:bg-gradient-to-l dark:from-stone-950 dark:to-stone-950 lg:flex-row lg:gap-16">
       <Image
-        src={`${cloudinaryUrl}/bears/l9oaplrgfkrqw8y6noyp`}
+        src={`${cloudinaryUrl}/bears/Loading_Icon_jl9z10`}
         width={420}
         height={100}
         className="absolute -right-0 hidden w-[420px] lg:bottom-0 lg:block"
