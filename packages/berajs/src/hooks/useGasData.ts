@@ -1,6 +1,6 @@
 import { useFeeData } from "wagmi";
 
-export const useGas = () => {
+export const useGasData = (): any => {
   const { data: gasData } = useFeeData();
   return gasData;
 };
