@@ -74,7 +74,6 @@ export const getSwap = async (
       )}&swap_type=${type}`,
     );
 
-    
     const result = await response.json();
     if (!result.steps)
       return {
