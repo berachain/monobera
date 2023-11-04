@@ -31,7 +31,7 @@ import {
   networkName,
   perpsName,
   perpsUrl,
-  publicAnalyticsUrl,
+  // publicAnalyticsUrl,
   rewardsAddress,
   stakingAddress,
 } from "@bera/config";
@@ -54,11 +54,11 @@ export const navItems = [
     href: "#",
     title: "Explore",
     children: [
-      {
-        href: publicAnalyticsUrl,
-        title: "Dune Analytics",
-        blurb: "Checkout HONEY’s stats on dune analytics",
-      },
+      // {
+      //   href: publicAnalyticsUrl,
+      //   title: "Dune Analytics",
+      //   blurb: "Checkout HONEY’s stats on dune analytics",
+      // },
       {
         href: bgtUrl,
         type: "external",

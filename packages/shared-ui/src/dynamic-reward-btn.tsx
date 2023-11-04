@@ -117,6 +117,6 @@
 //   );
 // };
 
-export function DynamicRewardBtn(){
-  return <></>
+export function DynamicRewardBtn() {
+  return <></>;
 }

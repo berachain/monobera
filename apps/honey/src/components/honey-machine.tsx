@@ -141,7 +141,7 @@ export function HoneyMachine() {
 
   const { write } = useTxn({
     message: needsApproval
-      ? `Approve ${fromAmount} ${selectedFrom?.symbol}`
+      ? `Approve ${selectedFrom?.symbol}`
       : isMint
       ? `Mint ${toAmount} HONEY`
       : `Redeem ${fromAmount} HONEY`,

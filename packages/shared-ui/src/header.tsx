@@ -3,7 +3,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { publicAnalyticsUrl } from "@bera/config";
+// import { publicAnalyticsUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -54,7 +54,7 @@ export function Header({
         </div>
       </div>
       <div className="flex h-full items-center gap-2 xl:gap-4">
-        {isHoney && (
+        {/* {isHoney && (
           <Link
             href={publicAnalyticsUrl}
             target="_blank"
@@ -62,7 +62,7 @@ export function Header({
           >
             Dune Analytics <Icons.externalLink className="h-3 w-3" />
           </Link>
-        )}
+        )} */}
         {showThemeSwitcher && <ThemeToggle />}
         {!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
         <MobileDropdown navItems={navItems} />
