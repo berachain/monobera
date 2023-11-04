@@ -35,11 +35,11 @@ export function ClosePositionModal({
   const price = useMarketIndexPrice(
     Number(openPosition?.market?.pair_index ?? 0),
   );
-  const positionSize = Number(
-    formatUnits(BigInt(openPosition?.position_size ?? 0), 18),
-  );
+  const positionSize =
+    Number(formatUnits(BigInt(openPosition.position_size ?? 0), 18)) *
+    Number(openPosition.leverage);
   const openPrice = Number(
-    formatUnits(BigInt(openPosition?.open_price ?? 0), 10),
+    formatUnits(BigInt(openPosition.open_price ?? 0), 10),
   );
   const size = positionSize / openPrice;
 
