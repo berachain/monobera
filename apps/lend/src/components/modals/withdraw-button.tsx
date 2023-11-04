@@ -166,9 +166,7 @@ const WithdrawModalContent = ({
           <div className="flex items-center gap-1 font-semibold">
             {currentHealthFactor}{" "}
             <Icons.moveRight className="inline-block h-6 w-6" />{" "}
-            {Number(newHealthFactor.toFixed(2)) < 0
-              ? "∞"
-              : newHealthFactor.toFixed(2)}
+            {newHealthFactor.toFixed(2)}
           </div>
         </div>
       </div>
