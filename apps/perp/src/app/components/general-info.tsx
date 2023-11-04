@@ -12,12 +12,12 @@ export default function GeneralInfo({
     {
       title: "Trading Volume",
       amount: formatUsd(tradingSummary?.volume),
-      subtitle: "Exchanged in the last 24hours",
+      subtitle: "Exchanged in the last 24 hours",
     },
     {
       title: "Number of Trades",
       amount: formatter.format(tradingSummary?.num_trades),
-      subtitle: "Exchanged in the last 24hours",
+      subtitle: "Exchanged in the last 24 hours",
     },
     {
       title: "Open Interest",

@@ -50,7 +50,7 @@ export enum TimeFrame {
 }
 
 export default function Portfolio({ markets }: { markets: IMarket[] }) {
-  const [tabType, setTabType] = React.useState<"Volume" | "PnL">("Volume");
+  const [tabType, setTabType] = React.useState<"Volume" | "PnL">("PnL");
   const [timeFrame, setTimeFrame] = React.useState(TimeFrame.QUARTERLY);
 
   const { theme } = useTheme();

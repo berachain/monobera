@@ -61,7 +61,7 @@ export function ManageOctDialog({
   });
 
   const { isFundingLoading, fundWrite } = useTxn({
-    message: "Revoke One Click Trading Wallet",
+    message: "Funding One Click Trading Wallet",
   });
 
   const { isValueSendLoading, writeValueSend } = useOctTxn({

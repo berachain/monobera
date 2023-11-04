@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   BTOKEN_ABI,
   TransactionActionType,
   useBeraJs,
   usePollAllowance,
   usePollBHoneyPendingWithdraw,
+  usePollMaxDeposit,
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton, TokenInput, TokenList, useTxn } from "@bera/shared-ui";
+import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -75,6 +77,19 @@ export default function DepositWithdraw() {
   const allowance = useAllowance();
 
   const withdrawPayload = [parseUnits(`${withdrawAmount ?? 0}`, 18), account];
+
+  const { isLoading: isMaxDepositLoading, useMaxDeposit } = usePollMaxDeposit();
+
+  const maxDeposit = useMaxDeposit();
+
+  const isMaxDepositExceeding = useMemo(() => {
+    if (maxDeposit && depositAmount) {
+      console.log(maxDeposit, depositAmount);
+      return maxDeposit < depositAmount;
+    }
+    return false;
+  }, [maxDeposit, depositAmount]);
+  console.log(isMaxDepositExceeding);
   return (
     <div className="flex h-fit w-full flex-col justify-between rounded-xl border border-border px-4 py-6 md:flex-row">
       {DepositModalPortal}
@@ -121,7 +136,11 @@ export default function DepositWithdraw() {
                   variant={"success"}
                   className="w-full"
                   disabled={
-                    isDepositLoading || !depositAmount || isDepositExceeding
+                    isDepositLoading ||
+                    !depositAmount ||
+                    isDepositExceeding ||
+                    isMaxDepositExceeding ||
+                    isMaxDepositLoading
                   }
                   onClick={() =>
                     depositWrite({
@@ -139,6 +158,11 @@ export default function DepositWithdraw() {
                 </Button>
               )}
             </ActionButton>
+            {isMaxDepositExceeding && (
+              <Alert variant="destructive" className="mt-2">
+                Deposit amount exceeds the maximum deposit amount.
+              </Alert>
+            )}
           </TabsContent>
 
           <TabsContent value="withdraw" className="flex flex-col gap-4">

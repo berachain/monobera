@@ -17,7 +17,6 @@ export function generateMetadata(): Metadata {
 
 export const revalidate = 30;
 
-
 export default async function Page() {
   const m = await getMarkets();
   const markets: IMarket[] = m?.map((m: Market) => ({
