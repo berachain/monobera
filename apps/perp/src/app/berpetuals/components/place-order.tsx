@@ -140,8 +140,6 @@ export function PlaceOrder({
 
   const allowance = useAllowance();
 
-  console.log("ALLOWANCE", allowance);
-  const levOpeningFee = (form.amount ?? 0) * Number(form.leverage) * openingFee;
   return (
     <div className="flex w-full flex-col gap-1 rounded-xl border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
       {ModalPortal}
@@ -222,8 +220,8 @@ export function PlaceOrder({
       <div className="flex w-full justify-between">
         <div>OPENING FEES</div>
         <div className="text-foreground">
-          {formatUsd(levOpeningFee)}{" "}
-          <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" />
+          {openingFee}%{" "}
+          {/* <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" /> */}
         </div>
       </div>
       <ActionButton className="mt-4">

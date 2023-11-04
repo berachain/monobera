@@ -344,9 +344,9 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
       />
     ),
     cell: ({ row }) => {
-      const positionSize = Number(
-        formatUnits(BigInt(row.original.position_size), 18),
-      );
+      const positionSize =
+        Number(formatUnits(BigInt(row.original.position_size), 18)) *
+        Number(row.original.leverage);
       const openPrice = Number(formatUnits(BigInt(row.original.price), 10));
       const size = positionSize / openPrice;
       return (
