@@ -41,9 +41,9 @@ export function UpdateLimitOrderModal({
     formatUnits(BigInt(openOrder.price ?? 0), 10),
   );
 
-  const positionSize = Number(
-    formatUnits(BigInt(openOrder?.position_size ?? 0), 18),
-  );
+  const positionSize =
+    Number(formatUnits(BigInt(openOrder?.position_size ?? 0), 18)) *
+    Number(openOrder.leverage);
   const openPrice = Number(formatUnits(BigInt(openOrder?.price ?? 0), 10));
   const size = positionSize / openPrice;
 

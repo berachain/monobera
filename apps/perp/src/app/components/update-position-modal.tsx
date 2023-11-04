@@ -42,9 +42,9 @@ export function UpdatePositionModal({
   );
   const formattedCurrentPrice = Number(formatUnits(BigInt(price ?? 0), 10));
 
-  const positionSize = Number(
-    formatUnits(BigInt(openPosition?.position_size ?? 0), 18),
-  );
+  const positionSize =
+    Number(formatUnits(BigInt(openPosition?.position_size ?? 0), 18)) *
+    Number(openPosition.leverage);
   const openPrice = Number(
     formatUnits(BigInt(openPosition?.open_price ?? 0), 10),
   );
@@ -61,7 +61,7 @@ export function UpdatePositionModal({
   });
 
   const { isLoading: isUpdateSLLoading, write: updateSlWrite } = useOctTxn({
-    message: `Updating Take Profit Price`,
+    message: `Updating Stop Loss Price`,
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
       void mutate(QUERY_KEY);

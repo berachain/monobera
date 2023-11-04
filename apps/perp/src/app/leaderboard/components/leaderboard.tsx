@@ -135,25 +135,25 @@ export default function LeaderBoard() {
               value={TimeFrame.HOURLY}
               className={"cursor-pointer  hover:bg-muted"}
             >
-              24H
+              1d
             </SelectItem>
             <SelectItem
               value={TimeFrame.WEEKLY}
               className={"cursor-pointer hover:bg-muted"}
             >
-              7D
+              7d
             </SelectItem>
             <SelectItem
               value={TimeFrame.MONTHLY}
               className={"cursor-pointer hover:bg-muted"}
             >
-              30D
+              30d
             </SelectItem>
             <SelectItem
               value={TimeFrame.QUARTERLY}
               className={"cursor-pointer hover:bg-muted"}
             >
-              90D
+              90d
             </SelectItem>
           </SelectContent>
         </Select>
