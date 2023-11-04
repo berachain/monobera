@@ -90,7 +90,7 @@ export const usePsm = () => {
   const fee = params ? (isMint ? params.mintFee : params.redeemFee) : 0;
 
   const { write, isLoading, ModalPortal } = useTxn({
-    message: isMint ? "Mint Honey" : "Redeem Honey",
+    message: isMint ? `Mint ${toAmount} Honey` : `Redeem ${fromAmount} Honey`,
     actionType: isMint
       ? TransactionActionType.MINT_HONEY
       : TransactionActionType.REDEEM_HONEY,

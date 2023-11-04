@@ -30,6 +30,7 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
+export const revalidate = 5;
 export default async function Home({ params }: Props) {
   try {
     const m = getMarkets();

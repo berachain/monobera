@@ -186,6 +186,7 @@ export function OneClickBanner() {
         onGenerate={() => {
           void generateKey().then(() => {
             setOctGenerateModalOpen(false);
+            setOctManageWalletModalOpen(true);
           });
         }}
       />

@@ -27,6 +27,8 @@ export function generateMetadata(): Metadata {
   };
 }
 
+export const revalidate = 30;
+
 export default async function Home() {
   const m = getMarkets();
   const pc = getDailyPriceChange();

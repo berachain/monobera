@@ -123,9 +123,13 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
       form.leverage &&
       form.amount * form.leverage > formattedMaxCollateral
     ) {
-      setError(`Max position size is ${formattedMaxCollateral} HONEY.`);
+      setError(
+        `Max position size is ${formattedMaxCollateral.toLocaleString()} HONEY.`,
+      );
     } else if (form.amount && form.amount < 0) {
       setError("Collateral must be positive.");
+    } else if (form.amount && form.amount < 10) {
+      setError("Min Collateral is 10 HONEY.");
     } else if (
       form.leverage &&
       (form.leverage < 2 || form.leverage > maxLeverage)

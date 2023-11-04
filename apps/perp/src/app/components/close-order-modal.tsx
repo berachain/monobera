@@ -30,10 +30,10 @@ export function CloseOrderModal({
   const [open, setOpen] = useState<boolean>(false);
   const { QUERY_KEY } = usePollOpenPositions();
 
-  const positionSize = Number(
-    formatUnits(BigInt(openOrder?.position_size ?? 0), 18),
-  );
-  const openPrice = Number(formatUnits(BigInt(openOrder?.price ?? 0), 10));
+  const positionSize =
+    Number(formatUnits(BigInt(openOrder.position_size ?? 0), 18)) *
+    Number(openOrder.leverage);
+  const openPrice = Number(formatUnits(BigInt(openOrder.price ?? 0), 10));
   const size = positionSize / openPrice;
 
   const ticker = openOrder?.market?.name?.split("-")[0];

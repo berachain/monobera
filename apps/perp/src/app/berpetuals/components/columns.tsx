@@ -72,7 +72,6 @@ export const ActivePositionPNL = ({
 }) => {
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(Number(position.market?.pair_index) ?? 0);
-
   const pnl = useCalculatePnl({
     buy: position.buy,
     currentPrice: price,
@@ -345,9 +344,9 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
       />
     ),
     cell: ({ row }) => {
-      const positionSize = Number(
-        formatUnits(BigInt(row.original.position_size), 18),
-      );
+      const positionSize =
+        Number(formatUnits(BigInt(row.original.position_size), 18)) *
+        Number(row.original.leverage);
       const openPrice = Number(formatUnits(BigInt(row.original.price), 10));
       const size = positionSize / openPrice;
       return (
