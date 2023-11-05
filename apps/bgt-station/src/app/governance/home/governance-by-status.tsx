@@ -88,7 +88,7 @@ export default function GovernanceByStatus({
         <Link href="/governance/create">
           <Button>Create proposal</Button>
         </Link>
-        <Button variant="outline">Visit forums</Button>
+        {/* <Button variant="outline">Visit forums</Button> */}
       </div>
       <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 sm:flex-row">
         <Tabs defaultValue={proposalStatus} className="w-full sm:w-fit">

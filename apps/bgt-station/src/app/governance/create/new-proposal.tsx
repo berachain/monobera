@@ -44,7 +44,7 @@ import * as z from "zod";
 import { ProposalTypeEnum } from "../types";
 import NewGaugeForm from "./gauge-proposal-form";
 import NewCollateralForm from "./new-collateral-form";
-import NewMarketCollateralForm from "./new-market-form";
+// import NewMarketCollateralForm from "./new-market-form";
 import { useCreateProposal } from "./useCreateProposal";
 
 export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
@@ -85,7 +85,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       .refine((val) => Number(val) >= minDeposit, {
         message: `Inital deposit must be at least ${minDeposit} BGT.`,
       })
-      .refine((val) => Number(val) < Number(userBalance), {
+      .refine((val) => Number(val) <= Number(userBalance), {
         message: "Insufficient BGT balance.",
       }),
   });
@@ -106,30 +106,44 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       .refine((value) => isAddress(value), {
         message: "Invalid address.",
       }),
-  });
-
-  const NewMarketCollateralProposal = BaseFormSchema.extend({
-    marketCollateralAddress: z
+    mintRate: z
       .string()
+      .min(1, "Required")
       .nonempty("Required")
-      .refine((value) => isAddress(value), {
-        message: "Invalid address.",
+      .refine((val) => Number(val) > 0 && Number(val) <= 100, {
+        message: "Mint rate must be between 100 and 0.",
+      }),
+    redemptionRate: z
+      .string()
+      .min(1, "Required")
+      .nonempty("Required")
+      .refine((val) => Number(val) > 0 && Number(val) <= 100, {
+        message: "Mint rate must be between 100 and 0.",
       }),
   });
+
+  // const NewMarketCollateralProposal = BaseFormSchema.extend({
+  //   marketCollateralAddress: z
+  //     .string()
+  //     .nonempty("Required")
+  //     .refine((value) => isAddress(value), {
+  //       message: "Invalid address.",
+  //     }),
+  // });
 
   const ProposalTypeInformationEnum = {
     [ProposalTypeEnum.GAUGE_PROPOSAL]:
       "New gauge proposal will propose a new gauge be whitelisted to receive BGT rewards.",
     [ProposalTypeEnum.COLLATERAL_PROPOSAL]:
       "New collateral proposal will propose a new stablecoin collateral be added to Honey's PSM.",
-    [ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL]: `New market proposal will propose a new market be added to ${process.env.NEXT_PUBLIC_LEND_NAME} for the proposed collateral.`,
+    // [ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL]: `New market proposal will propose a new market be added to ${process.env.NEXT_PUBLIC_LEND_NAME} for the proposed collateral.`,
   };
 
   const ProposalFormSchema = z.union([
     BaseFormSchema,
     NewGaugeProposal,
     NewCollateralProposal,
-    NewMarketCollateralProposal,
+    // NewMarketCollateralProposal,
   ]) as any;
 
   const form = useForm<z.infer<typeof ProposalFormSchema>>({
@@ -320,9 +334,9 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             {type === ProposalTypeEnum.COLLATERAL_PROPOSAL && (
               <NewCollateralForm form={form} />
             )}
-            {type === ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL && (
+            {/* {type === ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL && (
               <NewMarketCollateralForm form={form} />
-            )}
+            )} */}
             <ActionButton>
               <Button type="submit" className="w-full">
                 Submit

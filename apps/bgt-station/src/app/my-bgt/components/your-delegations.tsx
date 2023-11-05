@@ -25,7 +25,7 @@ export default function YourDelegations() {
 
   return (
     <div>
-      {total !== 0 && !Number.isNaN(total) && false ? (
+      {total !== 0 && !Number.isNaN(total) ? (
         <div className="flex flex-col gap-3">
           {delegatorPolValidators?.map((validator: PoLValidator) => (
             <ValidatorCard validator={validator} key={validator.operatorAddr} />
