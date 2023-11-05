@@ -347,47 +347,67 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {
       return (
-        <Button
-          onClick={() => setAllDataSize(allDataSize + 1)}
-          disabled={isAllDataLoadingMore || isAllDataReachingEnd}
-          variant="outline"
-        >
-          {isAllDataLoadingMore
-            ? "Loading..."
-            : isAllDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
-        </Button>
+        <>
+          {allData.length === 0 ? (
+            false
+          ) : (
+            <Button
+              onClick={() => setAllDataSize(allDataSize + 1)}
+              disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+              variant="outline"
+            >
+              {isAllDataLoadingMore
+                ? "Loading..."
+                : isAllDataReachingEnd
+                ? "No more transactions"
+                : "Load more"}
+            </Button>
+          )}
+        </>
       );
     }
     if (selectedTab === Selection.Swaps) {
       return (
-        <Button
-          onClick={() => setSwapDataSize(swapDataSize + 1)}
-          disabled={isSwapDataLoadingMore || isSwapDataReachingEnd}
-          variant="outline"
-        >
-          {isSwapDataLoadingMore
-            ? "Loading..."
-            : isSwapDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
-        </Button>
+        <>
+          {swapData.length === 0 ? (
+            false
+          ) : (
+            <Button
+              onClick={() => setSwapDataSize(swapDataSize + 1)}
+              disabled={isSwapDataLoadingMore || isSwapDataReachingEnd}
+              variant="outline"
+            >
+              {isSwapDataLoadingMore
+                ? "Loading..."
+                : isSwapDataReachingEnd
+                ? "No more transactions"
+                : "Load more"}
+            </Button>
+          )}
+        </>
       );
     }
     if (selectedTab === Selection.AddsWithdrawals) {
       return (
-        <Button
-          onClick={() => setProvisionDataSize(provisionDataSize + 1)}
-          disabled={isProvisionDataLoadingMore || isProvisionDataReachingEnd}
-          variant="outline"
-        >
-          {isProvisionDataLoadingMore
-            ? "Loading..."
-            : isProvisionDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
-        </Button>
+        <>
+          {provisionData.length === 0 ? (
+            false
+          ) : (
+            <Button
+              onClick={() => setProvisionDataSize(provisionDataSize + 1)}
+              disabled={
+                isProvisionDataLoadingMore || isProvisionDataReachingEnd
+              }
+              variant="outline"
+            >
+              {isProvisionDataLoadingMore
+                ? "Loading..."
+                : isProvisionDataReachingEnd
+                ? "No more transactions"
+                : "Load more"}
+            </Button>
+          )}
+        </>
       );
     }
   };

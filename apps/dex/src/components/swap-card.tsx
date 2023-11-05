@@ -302,7 +302,7 @@ export function SwapCard({
                           Gas fee
                         </p>
                         <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                          {gasPrice} BERA
+                          {Number(gasPrice).toFixed(4)} Bwei
                         </p>
                       </div>
                     </div>
