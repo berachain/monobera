@@ -361,6 +361,9 @@ importers:
 
   apps/honey:
     dependencies:
+      '@bera/bera-router':
+        specifier: 0.1.0
+        version: link:../../packages/bera-router
       '@bera/berajs':
         specifier: 0.1.0
         version: link:../../packages/berajs
