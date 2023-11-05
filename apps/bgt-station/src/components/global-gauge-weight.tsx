@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { truncateHash, useTokens } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
 import { DataTable } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Checkbox } from "@bera/ui/checkbox";
@@ -64,18 +65,16 @@ const Gauge = ({ address }: { address: string | undefined }) => {
     address === undefined || gaugeDictionary === undefined
       ? ""
       : gaugeDictionary[address]?.name ?? truncateHash(address);
-
+  const url =
+    address && gaugeDictionary && gaugeDictionary[address].url
+      ? gaugeDictionary[address]?.url
+      : `${blockExplorerUrl}/address/${address}`;
   return (
     <div className="flex h-full w-[150px] items-center gap-2">
       <GaugeIcon address={address ?? ""} />
       <div
         className="min-w-[150px] cursor-pointer truncate whitespace-nowrap hover:underline"
-        onClick={() =>
-          window.open(
-            `${process.env.NEXT_PUBLIC_DEX_URL}/pool/${address}`,
-            "_blank",
-          )
-        }
+        onClick={() => window.open(url, "_blank")}
       >
         {value}
       </div>

@@ -19,7 +19,8 @@ export function Gradient({
       alt="bera banner"
       width={1078}
       height={820}
-      priority={false}
+      priority
+      loading="eager"
       style={{ height: "auto" }}
     />
   ) : (
@@ -29,7 +30,8 @@ export function Gradient({
       alt="bera banner"
       width={1078}
       height={820}
-      priority={false}
+      priority
+      loading="eager"
       style={{ height: "auto" }}
     />
   );

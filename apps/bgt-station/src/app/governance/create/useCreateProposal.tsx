@@ -1,6 +1,9 @@
 import { useBeraJs } from "@bera/berajs";
 import { stakingToken } from "@bera/config";
-import { UpdateFriendsOfTheChefRequest } from "@bera/proto/src";
+import {
+  UpdateFriendsOfTheChefRequest,
+  UpdateParamsRequest,
+} from "@bera/proto/src";
 import { parseUnits, toHex } from "viem";
 
 interface VoteValues {
@@ -10,6 +13,9 @@ interface VoteValues {
   title: string;
   gaugeAddress?: string;
   enableOrDisableGauge?: boolean;
+  collateralAddress?: string;
+  mintRate?: `${number}`;
+  redemptionRate?: `${number}`;
 }
 
 export const updateFriendsOfTheChefTypeUrl =
@@ -41,16 +47,35 @@ export const useCreateProposal = () => {
         receiverAddress: value.gaugeAddress,
         friendOfTheChef: value.enableOrDisableGauge,
       };
-
-      console.log(friendOfTheChef);
       const friendsOfTheChefMsg =
         UpdateFriendsOfTheChefRequest.encode(friendOfTheChef);
-
       const friendsOfTheChefAnyMsg = {
         typeURL: updateFriendsOfTheChefTypeUrl,
         value: toHex(friendsOfTheChefMsg.finish()),
       };
       msgPayload.push(friendsOfTheChefAnyMsg);
+    } else if (value.collateralAddress) {
+      const honeyCollateral: UpdateParamsRequest = {
+        authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn",
+        params: {
+          psmDenoms: [
+            {
+              //@ts-ignore this will fix once precompile is updated
+              collateral: value.collateralAddress,
+              enabled: true,
+              mintRate: (Number(value.mintRate) / 100).toString(),
+              redemptionRate: (Number(value.redemptionRate) / 100).toString(),
+            },
+          ],
+        },
+      };
+      //missing proto
+      const honeyCollateralMsg = UpdateParamsRequest.encode(honeyCollateral);
+      const honeyCollateralAnyMsg = {
+        typeURL: updateHoneyCollateralTypeUrl,
+        value: toHex(honeyCollateralMsg.finish()),
+      };
+      msgPayload.push(honeyCollateralAnyMsg);
     }
 
     // const test = {
@@ -71,7 +96,7 @@ export const useCreateProposal = () => {
 
     // msgPayload.push(testAnyMsg)
 
-    console.log(msgPayload);
+    // console.log(msgPayload);
     const msg = {
       title: value.title,
       summary: value.description,
@@ -89,7 +114,7 @@ export const useCreateProposal = () => {
 
     const payload = [msg];
 
-    console.log(payload);
+    // console.log(payload);
     return payload as any[];
   };
   return {
