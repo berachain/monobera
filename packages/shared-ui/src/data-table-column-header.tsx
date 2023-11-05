@@ -22,7 +22,7 @@ export function DataTableColumnHeader<TData, TValue>({
     return (
       <div className={cn("w-full font-bold", className)}>
         {title}
-        {tooltip && <Tooltip text={tooltip} />}
+        {tooltip && <Tooltip text={tooltip} className="ml-1" />}
       </div>
     );
   }
@@ -47,7 +47,7 @@ export function DataTableColumnHeader<TData, TValue>({
       >
         <span>
           {title}
-          {tooltip && <Tooltip text={tooltip} />}
+          {tooltip && <Tooltip text={tooltip} className="ml-1" />}
         </span>
         {column.getIsSorted() === "desc" ? (
           <Icons.sortDesc className="ml-2 h-4 w-4 text-accent" />

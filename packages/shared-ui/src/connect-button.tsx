@@ -19,16 +19,32 @@ export const ConnectButton = ({
   isNavItem?: boolean;
   isHoney?: boolean;
 }) => {
-  const { isConnected, isWrongNetwork, isReady } = useBeraJs();
+  const { isWrongNetwork, isReady, account: altAccount } = useBeraJs();
   return (
     <RainbowConnectButton.Custom>
       {({
+        account,
+        chain,
         openChainModal,
         openConnectModal,
         authenticationStatus,
         mounted,
       }) => {
+        console.log({
+          account,
+          altAccount,
+          chain,
+          openChainModal,
+          openConnectModal,
+          authenticationStatus,
+          mounted,
+        });
         const ready = mounted && authenticationStatus !== "loading";
+        const connected =
+          ready &&
+          altAccount &&
+          chain &&
+          (!authenticationStatus || authenticationStatus === "authenticated");
 
         return (
           <div
@@ -42,7 +58,7 @@ export const ConnectButton = ({
             })}
             className={cn("flex w-full", className)}
           >
-            {isConnected === false && (
+            {!connected && (
               <Button
                 onClick={openConnectModal}
                 type="button"

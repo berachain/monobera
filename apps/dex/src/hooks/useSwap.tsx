@@ -11,15 +11,10 @@ import {
   type Token,
 } from "@bera/berajs";
 import { beraTokenAddress, erc20ModuleAddress } from "@bera/config";
-import { useReadLocalStorage } from "usehooks-ts";
+import { useDeadline, useSlippage } from "@bera/shared-ui/src/hooks";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
-import {
-  DEFAULT_DEADLINE,
-  DEFAULT_SLIPPAGE,
-  LOCAL_STORAGE_KEYS,
-} from "~/utils/constants";
 import { usePollPriceImpact } from "./usePollPriceImpact";
 import { usePollSwaps } from "./usePollSwaps";
 
@@ -94,18 +89,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const [isWrap, setIsWrap] = useState(false);
 
   const [wrapType, setWrapType] = useState<WRAP_TYPE | undefined>(undefined);
-
-  const slippageType = useReadLocalStorage(
-    LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE_TYPE,
-  );
-
-  const slippageValue = useReadLocalStorage(
-    LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE_VALUE,
-  );
-
-  const deadlineType = useReadLocalStorage(LOCAL_STORAGE_KEYS.DEADLINE_TYPE);
-
-  const deadlineValue = useReadLocalStorage(LOCAL_STORAGE_KEYS.DEADLINE_VALUE);
 
   const [fromAmount, setFromAmount] = useState<number | undefined>();
 
@@ -255,17 +238,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const block = useLatestBlock();
 
+  const slippage = useSlippage();
+  const deadline = useDeadline();
   useEffect(() => {
     if (swapInfo !== undefined && swapInfo.batchSwapSteps?.length) {
-      const slippage =
-        slippageType === "auto" || slippageType === null
-          ? DEFAULT_SLIPPAGE
-          : slippageValue;
-      const deadline =
-        deadlineType === "auto" || deadlineType === null
-          ? DEFAULT_DEADLINE
-          : deadlineValue;
-
       // parse minutes to blocks
       const d = block + BigInt(Math.floor(((deadline as number) * 60) / 2));
 
@@ -290,14 +266,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       const payload = [swapKind, swapInfo?.batchSwapSteps, d];
       setPayload(payload);
     }
-  }, [
-    swapKind,
-    swapInfo,
-    slippageType,
-    deadlineType,
-    selectedFrom,
-    selectedTo,
-  ]);
+  }, [swapKind, swapInfo, selectedFrom, selectedTo, deadline, slippage]);
 
   const onSwitch = () => {
     const tempFromAmount = fromAmount;
