@@ -47,7 +47,7 @@ export function EpochTimeline() {
   );
 
   return (
-    <Card className=" w-full px-6 py-[39px]">
+    <Card className="w-full px-6 py-[39px]">
       <div className="flex h-8 items-center gap-3">
         {isLoading ? (
           <>

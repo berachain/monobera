@@ -21,5 +21,5 @@ async function getAvgValidatorUptime() {
 
 export default async function Page() {
   const avgValidatorUptime = await getAvgValidatorUptime();
-  return <DashBoard avgValidatorUptime={avgValidatorUptime.uptime ?? 0} />;
+  return <DashBoard avgValidatorUptime={avgValidatorUptime?.uptime ?? 0} />;
 }
