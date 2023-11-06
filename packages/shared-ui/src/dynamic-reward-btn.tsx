@@ -11,8 +11,8 @@ import { TokenIcon } from "./token-icon";
 
 interface DynamicRewardBtnProps {
   claimableBgtRewards: string;
-  amount: string;
-  setAmount: string;
+  amount: number | undefined;
+  setAmount: (amount: number | undefined) => void;
   disabled: boolean;
   onClaim: () => void;
 }
@@ -21,10 +21,11 @@ export function DynamicRewardBtn({
   claimableBgtRewards,
   disabled,
   onClaim,
+  amount,
+  setAmount,
   ...props
 }: DynamicRewardBtnProps) {
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState<number | undefined>(undefined);
 
   return (
     <>

@@ -129,14 +129,14 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
           </div>
         </div>
       </div>
-      <div className="flex flex-shrink-0 text-[10px] text-muted-foreground">
+      {/* <div className="flex flex-shrink-0 text-[10px] text-muted-foreground">
         <div className="flex h-8 cursor-pointer items-center p-3 hover:underline">
           Market Details
         </div>
-        {/* <div className="flex h-8 cursor-pointer items-center p-3 hover:underline">
+        <div className="flex h-8 cursor-pointer items-center p-3 hover:underline">
           Berpetuals Tutorial
-        </div> */}
-      </div>
+        </div>
+      </div> */}
     </div>
   );
 }

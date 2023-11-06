@@ -7,7 +7,7 @@ import React, {
   useState,
   type PropsWithChildren,
 } from "react";
-import { useAccount, useConnect, useDisconnect, useNetwork } from "wagmi";
+import { useAccount, useConnect, useNetwork } from "wagmi";
 
 import { useAuth } from "~/hooks";
 
@@ -34,43 +34,53 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => setIsMounted(true), []);
 
-  const { isConnected } = useAccount();
-  const { connect, connectors } = useConnect();
-  const { disconnect } = useDisconnect();
+  // useEffect(() => {
+  //   if (isMounted) {
+  //     try {
+  //       console.log('status', status)
+  //       console.log('oending conn', pendingConnector)
+  //       console.log('connectors', adcc)
+  //       const connectorId = localStorage.getItem("wagmi.wallet") || "";
+  //       const connector = connectors.find(
+  //         (c: any) => c.id === JSON.parse(connectorId),
+  //       );
+  //       if (connector === undefined) {
+  //         console.log("Bad state, disconnecting");
+  //         // disconnect();
 
-  useEffect(() => {
-    if (isMounted) {
-      try {
-        const connectorId = localStorage.getItem("wagmi.wallet") || "";
-        const connector = connectors.find(
-          (c: any) => c.id === JSON.parse(connectorId),
-        );
-        if (connector === undefined) {
-          console.log("Bad state, disconnecting");
-          disconnect();
-          localStorage.removeItem("wagmi.wallet");
-          localStorage.removeItem("wagmi.metaMask.shimDisconnect");
-          localStorage.removeItem("wagmi.cache");
-          localStorage.removeItem("rk-recent");
-          localStorage.removeItem("walletConnectState");
-        }
-        const state = localStorage.getItem("wagmi.connected") || "";
-        if (!isConnected && state === "true" && connector !== undefined) {
-          connect({
-            connector,
-          });
-        }
-      } catch (e) {
-        console.log("Welcome to Berachain!");
-        disconnect();
-        return;
-      }
-    }
-  }, [isConnected, isMounted, connectors]);
+  //         localStorage.setItem('wagmi.connected', 'true')
+  //         // localStorage.setItem('walletConnectState', 'false')
+  //         // localStorage.setItem('hasVisitedBefore', 'false')
+  //         // localStorage.removeItem('rk-recent')
+  //         // localStorage.removeItem('wagmi.wallet')
+  //         // localStorage.clear();
+  //         // reset();
+  //         return;
+  //       }
+  //       const state = localStorage.getItem("wagmi.connected") || "";
+  //       if (!isConnected && state === "true" && connector !== undefined) {
+  //         connectAsync({
+  //           connector,
+  //         }).then((a)=>{
+  //           console.log('a', a)
+  //         });
+  //       }
+  //     } catch (e) {
+  //       // console.log("Welcome to Berachain!");
+  //       // disconnect();
+  //       // reset();
+  //       // location.reload();
+  //       localStorage.setItem('wagmi.connected', 'true')
 
-  useEffect(() => {
-    localStorage.setItem("walletConnectState", isConnected.toString());
-  }, [isConnected]);
+  //       // localStorage.setItem('wagmi.connected', 'false')
+  //       // localStorage.setItem('walletConnectState', 'false')
+  //       // localStorage.setItem('hasVisitedBefore', 'false')
+  //       // localStorage.clear();
+
+  //       return;
+  //     }
+  //   }
+  // }, [isMounted]);
 
   return (
     <BeraJsContext.Provider
