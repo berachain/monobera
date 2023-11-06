@@ -16,7 +16,7 @@ export function Banner({
   return (
     <div className="flex h-[174px] w-full items-end">
       <Link
-        className="relative mx-auto flex w-full max-w-[569px] flex-col items-center gap-1 rounded-3xl border border-border bg-background bg-white p-4  sm:items-end"
+        className="relative mx-auto flex w-full max-w-[569px] flex-col items-center gap-1 rounded-3xl border border-border bg-white p-4 dark:bg-black  sm:items-end"
         href={href}
         target="_blank"
       >

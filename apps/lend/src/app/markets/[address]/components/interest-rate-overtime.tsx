@@ -139,7 +139,7 @@ export default function InterestRateOvertime({
             <div
               className={`h-2 w-2 rounded-full border border-accent bg-accent`}
             />
-            Borrow APR, variable
+            Borrow PRR, variable
           </div>
 
           <div className="flex items-center gap-2 font-medium">

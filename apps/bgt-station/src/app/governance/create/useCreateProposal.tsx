@@ -1,4 +1,4 @@
-import { useBeraJs } from "@bera/berajs";
+import { useBeraJs, usePollDenom } from "@bera/berajs";
 import { stakingToken } from "@bera/config";
 import {
   UpdateFriendsOfTheChefRequest,
@@ -29,8 +29,9 @@ export const updateLendMarkeyTypeUrl =
 
 export const useCreateProposal = () => {
   const { account } = useBeraJs();
+  const { getDenom } = usePollDenom();
 
-  const createPayload = (value: VoteValues) => {
+  const createPayload = async (value: VoteValues) => {
     const initalDepostAmount = parseUnits(
       `${Number(value.initialDeposit)}`,
       18,
@@ -55,13 +56,13 @@ export const useCreateProposal = () => {
       };
       msgPayload.push(friendsOfTheChefAnyMsg);
     } else if (value.collateralAddress) {
+      const denom = await getDenom(value.collateralAddress as `0x${string}`);
       const honeyCollateral: UpdateParamsRequest = {
         authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn",
         params: {
           psmDenoms: [
             {
-              //@ts-ignore this will fix once precompile is updated
-              collateral: value.collateralAddress,
+              denom: (denom ?? "") as string,
               enabled: true,
               mintRate: (Number(value.mintRate) / 100).toString(),
               redemptionRate: (Number(value.redemptionRate) / 100).toString(),
@@ -77,26 +78,6 @@ export const useCreateProposal = () => {
       };
       msgPayload.push(honeyCollateralAnyMsg);
     }
-
-    // const test = {
-    //   authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn",
-    //   params: {
-    //     sendEnabled: [],
-    //     defaultSendEnabled: true
-    //   }
-    // }
-
-    // console.log(test)
-    // const testMsg = MsgUpdateParams.encode(test).finish()
-
-    // const testAnyMsg = {
-    //   typeURL: '/cosmos.bank.v1beta1.MsgUpdateParams',
-    //   value: toHex(testMsg)
-    // }
-
-    // msgPayload.push(testAnyMsg)
-
-    // console.log(msgPayload);
     const msg = {
       title: value.title,
       summary: value.description,
@@ -113,8 +94,6 @@ export const useCreateProposal = () => {
     };
 
     const payload = [msg];
-
-    // console.log(payload);
     return payload as any[];
   };
   return {

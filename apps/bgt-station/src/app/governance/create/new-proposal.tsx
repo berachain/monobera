@@ -9,6 +9,7 @@ import {
   TransactionActionType,
   useBeraJs,
   usePollBgtBalance,
+  usePollDenom,
 } from "@bera/berajs";
 import {
   cloudinaryUrl,
@@ -48,6 +49,7 @@ import NewCollateralForm from "./new-collateral-form";
 import { useCreateProposal } from "./useCreateProposal";
 
 export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
+  const { getDenom } = usePollDenom();
   const router = useRouter();
   const { isReady } = useBeraJs();
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -102,10 +104,19 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const NewCollateralProposal = BaseFormSchema.extend({
     collateralAddress: z
       .string()
-      .nonempty("Required")
+      .nonempty({ message: "Required" })
       .refine((value) => isAddress(value), {
         message: "Invalid address.",
-      }),
+      })
+      .refine(
+        async (value) => {
+          const denom = await getDenom(value as `0x${string}`);
+          return denom && denom !== "";
+        },
+        {
+          message: "Invalid collateral address.",
+        },
+      ),
     mintRate: z
       .string()
       .min(1, "Required")
@@ -121,6 +132,15 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
         message: "Mint rate must be between 100 and 0.",
       }),
   });
+
+  // const NewMarketCollateralProposal = BaseFormSchema.extend({
+  //   marketCollateralAddress: z
+  //     .string()
+  //     .nonempty("Required")
+  //     .refine((value) => isAddress(value), {
+  //       message: "Invalid address.",
+  //     }),
+  // });
 
   // const NewMarketCollateralProposal = BaseFormSchema.extend({
   //   marketCollateralAddress: z
@@ -154,15 +174,19 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     },
   });
 
-  function onSubmit() {
+  async function onSubmit() {
     const values = form.getValues();
-    const payload = createPayload(values);
-    write({
-      address: governanceAddress,
-      abi: GOVERNANCE_PRECOMPILE_ABI as any[],
-      functionName: "submitProposal",
-      params: payload as any,
-    });
+    try {
+      const payload = await createPayload(values);
+      write({
+        address: governanceAddress,
+        abi: GOVERNANCE_PRECOMPILE_ABI as any[],
+        functionName: "submitProposal",
+        params: payload as any,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (

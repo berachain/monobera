@@ -132,7 +132,7 @@ export default function TotalBorrowed({
 
             <div className="flex flex-col gap-[6px]">
               <div className="text-sm font-normal leading-normal text-muted-foreground">
-                APY, variable
+                PRR, variable
                 <Tooltip text="Variable interest rate will fluctuate based on the market conditions. Recommended for short-term positions." />
               </div>
               {reserveData ? (
