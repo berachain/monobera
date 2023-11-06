@@ -7,7 +7,7 @@ import React, {
   useState,
   type PropsWithChildren,
 } from "react";
-import { useAccount, useConnect, useNetwork } from "wagmi";
+import { useAccount, useConnect, useDisconnect, useNetwork } from "wagmi";
 
 import { useAuth } from "~/hooks";
 
@@ -33,6 +33,45 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { chain } = useNetwork();
 
   useEffect(() => setIsMounted(true), []);
+
+  const { isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { disconnect } = useDisconnect();
+
+  useEffect(() => {
+    if (isMounted) {
+      try {
+        const connectorId = localStorage.getItem("wagmi.wallet") || "";
+        const connector = connectors.find(
+          (c: any) => c.id === JSON.parse(connectorId),
+        );
+        if (connector === undefined) {
+          console.log("Bad state, disconnecting");
+          disconnect();
+          localStorage.removeItem("wagmi.wallet");
+          localStorage.removeItem("wagmi.metaMask.shimDisconnect");
+          localStorage.removeItem("wagmi.cache");
+          localStorage.removeItem("rk-recent");
+          localStorage.removeItem("walletConnectState");
+        }
+        const state = localStorage.getItem("wagmi.connected") || "";
+        if (!isConnected && state === "true" && connector !== undefined) {
+          connect({
+            connector,
+          });
+        }
+      } catch (e) {
+        console.log("Welcome to Berachain!");
+        disconnect();
+        return;
+      }
+    }
+  }, [isConnected, isMounted, connectors]);
+
+  useEffect(() => {
+    localStorage.setItem("walletConnectState", isConnected.toString());
+  }, [isConnected]);
+
   return (
     <BeraJsContext.Provider
       value={{

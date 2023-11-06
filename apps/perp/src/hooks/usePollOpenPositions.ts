@@ -59,30 +59,9 @@ export const usePollOpenPositions = () => {
 
       return openPositons?.reduce((acc: number, position: IMarketOrder) => {
         const currentPrice = JSON.parse(prices)[position.market.pair_index];
-        const fees =
-          BigInt(position.borrowing_fee) +
-          BigInt(position.rollover_fee) +
-          BigInt(position.funding_rate) +
-          BigInt(position.closing_fee);
-        const posSize = Number(
-          formatUnits(
-            BigInt(position.position_size) * BigInt(position.leverage) ?? 0n,
-            18,
-          ),
-        );
-        const formattedOpenPrice = Number(
-          formatUnits(BigInt(position.open_price) ?? 0n, 10),
-        );
-
-        const size = posSize / formattedOpenPrice;
-
         const pnl = getPnl({
           currentPrice,
-          openPrice: BigInt(position?.open_price),
-          leverage: Number(position.leverage),
-          size,
-          buy: position.buy,
-          fees: Number(formatUnits(fees, 18)),
+          openPosition: position,
         });
 
         return acc + (pnl ?? 0);

@@ -64,3 +64,17 @@ export async function getHistoricalSummary(): Promise<any | undefined> {
     return undefined;
   }
 }
+
+export async function getFeesApr(): Promise<any | undefined> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_PERPS_URL}/historical-summary/24h`,
+    );
+    const jsonRes = await res.json();
+    const historicalSummary = jsonRes.result;
+
+    return historicalSummary;
+  } catch (e) {
+    return undefined;
+  }
+}

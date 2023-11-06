@@ -11,7 +11,6 @@ import {
   coinbaseWallet,
   injectedWallet,
   metaMaskWallet,
-  safeWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
@@ -32,11 +31,15 @@ export interface IBeraConfigAPI {
   networkConfig: NetworkConfig;
   autoConnect: boolean;
   darkTheme?: boolean;
+  walletConnectors?: any;
+  chains?: any;
 }
 
 export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
   undefined,
 );
+
+export const projectId = "8b169f8cfd2110ddc5d92a1309534d09";
 
 const BeraConfig: React.FC<IBeraConfig> = ({
   children,
@@ -56,7 +59,6 @@ const BeraConfig: React.FC<IBeraConfig> = ({
   const appInfo = {
     appName: "BeraJS",
   };
-  const projectId = "8b169f8cfd2110ddc5d92a1309534d09";
   const connectors = connectorsForWallets([
     {
       groupName: "Recommended",
@@ -67,20 +69,21 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         walletConnectWallet({ projectId, chains }),
         // phantomWallet({ chains }),
         // rainbowWallet({ projectId, chains }),
-        safeWallet({ chains }),
+        // safeWallet({ chains }),
       ],
     },
   ]);
 
   // TODO make this configurable
   const config = createConfig({
-    autoConnect,
+    autoConnect: false,
     connectors,
+
     publicClient,
   });
 
   return (
-    <BeraConfigContext.Provider value={{ networkConfig, autoConnect }}>
+    <BeraConfigContext.Provider value={{ networkConfig, autoConnect, chains }}>
       <WagmiConfig config={config}>
         <RainbowKitProvider
           appInfo={appInfo}

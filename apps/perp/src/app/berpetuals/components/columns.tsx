@@ -73,15 +73,8 @@ export const ActivePositionPNL = ({
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(Number(position.market?.pair_index) ?? 0);
   const pnl = useCalculatePnl({
-    buy: position.buy,
     currentPrice: price,
-    openPrice: BigInt(position.open_price),
-    leverage: BigInt(position.leverage),
-    levPosSize: BigInt(position.position_size) * BigInt(position.leverage),
-    borrowingFee: BigInt(position.borrowing_fee),
-    rolloverFee: BigInt(position.rollover_fee),
-    fundingFee: BigInt(position.funding_rate),
-    closingFee: BigInt(position.closing_fee),
+    openPosition: position,
   });
 
   return (
