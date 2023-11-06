@@ -41,5 +41,6 @@ export { UpTimeStatus } from "./up-time-status";
 export { WalletBalanceInUs } from "./wallet-balance-in-us";
 export { RewardBtn } from "./reward-btn";
 export { ApproveButton } from "./approve-button";
+export { Documentation } from "./documentation";
 
 export { useTxn } from "./hooks";

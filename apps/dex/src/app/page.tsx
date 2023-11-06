@@ -6,7 +6,6 @@ import { Documentation } from "@bera/shared-ui";
 import { getMetaTitle } from "~/utils/metadata";
 import CreateAPool from "./components/CreateAPool";
 import Data from "./components/Data";
-import Help from "./components/Help";
 import Hero from "./components/Hero";
 
 const getTvl = async () => {
