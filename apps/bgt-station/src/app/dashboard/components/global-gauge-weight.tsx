@@ -11,7 +11,7 @@ export default function GlobalGaugeWeightInfo() {
   return (
     <div>
       <>
-        {isLoading && prices === undefined ? (
+        {(isLoading || !data || !data.length || !prices) ? (
           <div className="flex flex-col gap-16 md:flex-row">
             <Skeleton className="h-[300px] w-[300px] flex-shrink-0 rounded-full" />
             <div className="mt-10 flex w-full flex-col gap-2">
@@ -23,7 +23,7 @@ export default function GlobalGaugeWeightInfo() {
             </div>
           </div>
         ) : (
-          <GlobalGaugeWeight gaugeWeights={data ?? []} />
+          <GlobalGaugeWeight gaugeWeights={data??[]} />
         )}
       </>
     </div>
