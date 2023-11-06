@@ -1,9 +1,9 @@
 import React from "react";
 import { type Metadata } from "next";
 import { lendName } from "@bera/config";
+import { Documentation } from "@bera/shared-ui";
 
 import Data from "~/components/data";
-import Help from "~/components/help";
 import Hero from "~/components/hero";
 import HowItWorks from "~/components/how-it-works";
 import Markets from "~/components/markets";
@@ -25,7 +25,7 @@ export default function Page() {
       <Markets />
       <div className="container">
         <HowItWorks />
-        <Help />
+        <Documentation className="my-24" />
       </div>
     </>
   );

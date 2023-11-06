@@ -67,7 +67,7 @@ export default function PoolPageHeader() {
             >
               Create a Pool
             </Button>
-            <Link href={docsUrl} target="_blank">
+            <Link href={`${docsUrl}/learn/dex/pools`} target="_blank">
               <Button variant={"outline"} className="text-md self-center">
                 Learn More
               </Button>

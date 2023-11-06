@@ -135,6 +135,7 @@ export function Footer() {
                 {footerNavigation.resources.map((item) => (
                   <li key={item.name}>
                     <a
+                      target="_blank"
                       href={item.href}
                       className="text-sm leading-6 text-secondary-foreground hover:text-foreground"
                     >

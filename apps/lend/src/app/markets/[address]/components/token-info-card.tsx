@@ -92,11 +92,11 @@ export default function TokenInfoCard({
             </div>
             <div className="flex h-8 items-center gap-2 text-xl font-semibold leading-loose md:text-2xl">
               {item.amount}
-              {index === 3 && (
+              {/* {index === 3 && (
                 <div className="h-fit w-fit rounded-full border border-border bg-muted p-1 hover:cursor-pointer md:rounded-xl">
                   <Icons.external className="relative h-4 w-4 text-muted-foreground" />
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         ))}

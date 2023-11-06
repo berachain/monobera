@@ -66,7 +66,7 @@ const Gauge = ({ address }: { address: string | undefined }) => {
       ? ""
       : gaugeDictionary[address]?.name ?? truncateHash(address);
   const url =
-    address && gaugeDictionary && gaugeDictionary[address].url
+    address && gaugeDictionary && gaugeDictionary[address]?.url
       ? gaugeDictionary[address]?.url
       : `${blockExplorerUrl}/address/${address}`;
   return (

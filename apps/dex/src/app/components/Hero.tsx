@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { bgtUrl } from "@bera/config";
+import { docsUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
@@ -45,7 +45,9 @@ export default function Hero() {
           </Link>
           <div
             className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-            onClick={() => window.open(bgtUrl, "_blank")}
+            onClick={() =>
+              window.open(`${docsUrl}/learn/protocol/bgt-emissions`, "_blank")
+            }
           >
             🐝 Learn about BGT emissions{" "}
             <Icons.arrowRight className="h-3 w-3" />
