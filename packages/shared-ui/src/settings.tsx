@@ -128,7 +128,7 @@ export const Setting = ({
               <AlertTitle>Extremely High slippage</AlertTitle>
               <AlertDescription className="text-xs">
                 Please be aware this could result in extremely high slippage
-                (50%+)
+                (i.e., A swap could cost you 50% or more)
               </AlertDescription>
             </div>
           </Alert>

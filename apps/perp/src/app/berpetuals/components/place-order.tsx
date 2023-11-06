@@ -8,19 +8,12 @@ import {
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton } from "@bera/shared-ui";
-import { useOctTxn } from "@bera/shared-ui/src/hooks";
-import {
-  DEFAULT_SLIPPAGE,
-  SLIPPAGE_MODE,
-  SLIPPAGE_TOLERANCE_TYPE,
-  SLIPPAGE_TOLERANCE_VALUE,
-} from "@bera/shared-ui/src/settings";
+import { useOctTxn, useSlippage } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { useLocalStorage } from "usehooks-ts";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -85,26 +78,7 @@ export function PlaceOrder({
   }, [form.amount, form.leverage]);
   const parsedPositionSize = parseUnits(`${form.amount ?? 0}`, 18);
 
-  const [slippageMode] = useLocalStorage<SLIPPAGE_MODE>(
-    SLIPPAGE_TOLERANCE_TYPE,
-    SLIPPAGE_MODE.AUTO,
-  );
-  const [slippage] = useLocalStorage<number>(
-    SLIPPAGE_TOLERANCE_VALUE,
-    DEFAULT_SLIPPAGE,
-  );
-
-  const slippageTolerance = useMemo(() => {
-    if (slippageMode === SLIPPAGE_MODE.AUTO) {
-      return DEFAULT_SLIPPAGE;
-    }
-    if (slippageMode === SLIPPAGE_MODE.CUSTOM) {
-      return slippage;
-    }
-    if (slippageMode === SLIPPAGE_MODE.DEGEN) {
-      return 80;
-    }
-  }, [slippageMode, slippage]);
+  const slippageTolerance = useSlippage();
 
   const payload = [
     {

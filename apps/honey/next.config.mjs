@@ -5,7 +5,7 @@ const config = {
   crossOrigin: "anonymous",
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
-  transpilePackages: ["@bera/ui", "@bera/berajs"],
+  transpilePackages: ["@bera/ui", "@bera/berajs", "@bera/bera-router"],
   experimental: {
     esmExternals: "loose",
   },

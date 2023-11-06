@@ -142,6 +142,15 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   //     }),
   // });
 
+  // const NewMarketCollateralProposal = BaseFormSchema.extend({
+  //   marketCollateralAddress: z
+  //     .string()
+  //     .nonempty("Required")
+  //     .refine((value) => isAddress(value), {
+  //       message: "Invalid address.",
+  //     }),
+  // });
+
   const ProposalTypeInformationEnum = {
     [ProposalTypeEnum.GAUGE_PROPOSAL]:
       "New gauge proposal will propose a new gauge be whitelisted to receive BGT rewards.",

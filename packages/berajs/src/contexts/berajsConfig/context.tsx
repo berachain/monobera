@@ -11,9 +11,8 @@ import {
   coinbaseWallet,
   injectedWallet,
   metaMaskWallet,
-  phantomWallet,
-  rainbowWallet,
   safeWallet,
+  walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
@@ -57,7 +56,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
   const appInfo = {
     appName: "BeraJS",
   };
-  const projectId = "a65a5eaa1bd1e749813cb6cafeac059a";
+  const projectId = "8b169f8cfd2110ddc5d92a1309534d09";
   const connectors = connectorsForWallets([
     {
       groupName: "Recommended",
@@ -65,8 +64,9 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         injectedWallet({ chains }),
         metaMaskWallet({ chains, projectId }),
         coinbaseWallet({ chains, appName: appInfo.appName }),
-        phantomWallet({ chains }),
-        rainbowWallet({ projectId, chains }),
+        walletConnectWallet({ projectId, chains }),
+        // phantomWallet({ chains }),
+        // rainbowWallet({ projectId, chains }),
         safeWallet({ chains }),
       ],
     },
