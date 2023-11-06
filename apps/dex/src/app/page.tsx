@@ -1,6 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Documentation } from "@bera/shared-ui";
 
 import { getMetaTitle } from "~/utils/metadata";
 import CreateAPool from "./components/CreateAPool";
@@ -61,7 +62,7 @@ export default async function Homepage() {
         <div className="-mx-full overflow-hidden">
           <CreateAPool />
         </div>
-        <Help />
+        <Documentation className="my-24" />
       </div>
     );
   } catch (e) {

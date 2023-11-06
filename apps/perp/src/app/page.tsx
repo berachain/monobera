@@ -4,7 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { type Market } from "@/../../packages/proto/src";
 import { cloudinaryUrl, perpsName } from "@bera/config";
-import { Footer } from "@bera/shared-ui";
+import { Documentation, Footer } from "@bera/shared-ui";
 import { formatUnits } from "viem";
 
 import { MarketImages } from "~/utils/marketImages";
@@ -16,7 +16,6 @@ import {
 } from "~/endpoints";
 import { type IMarket } from "./berpetuals/page";
 import GeneralInfo from "./components/general-info";
-import Help from "./components/help";
 import Hero from "./components/hero";
 import Markets from "./components/positions";
 import Tutorial from "./components/tutorial";
@@ -85,7 +84,7 @@ export default async function Home() {
         <GeneralInfo tradingSummary={tradingSummary} />
         <Markets showBtn markets={markets} />
         <Tutorial />
-        <Help />
+        <Documentation />
       </div>
       <Footer />
     </div>
