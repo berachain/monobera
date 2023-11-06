@@ -104,7 +104,11 @@ export default function Content() {
           </AlertDescription>
         </Alert>
       )}
-      <DripToken address={address} setAlert={setAlert} setShowAlert={()=>setShowAlert(true)}/>
+      <DripToken
+        address={address}
+        setAlert={setAlert}
+        setShowAlert={() => setShowAlert(true)}
+      />
       <hr />
       <div className="leading-12 text-center text-sm opacity-70 sm:text-start">
         To ensure a sufficient balance for all users, the Faucet is set to
