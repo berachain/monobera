@@ -80,10 +80,10 @@ export default function Data({
               <Icons.externalLink className="relative h-4 w-4" />
             </Link>
             <Image
-              className="absolute -right-10 bottom-0 w-[431px]"
-              src={`${cloudinaryUrl}/shared/qmtxbqw1lgjsnlszftow`}
+              className="absolute bottom-0 right-0 w-[400px]"
+              src={`${cloudinaryUrl}/honey/honeyjar_ewr2fo`}
               alt="honey-jar"
-              width={431}
+              width={420}
               height={360}
             />
           </div>

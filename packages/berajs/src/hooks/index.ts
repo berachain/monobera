@@ -16,3 +16,4 @@ export * from "./usePollBeraBalance";
 export * from "./usePollTransactionCount";
 export * from "./usePollPrices";
 export * from "./useGasData";
+export * from "./usePollDenom";

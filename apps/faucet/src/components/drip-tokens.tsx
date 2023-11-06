@@ -5,9 +5,11 @@ import { getAddress, isAddress } from "viem";
 export function DripToken({
   address,
   setAlert,
+  setShowAlert,
 }: {
   address: string;
   setAlert: (alert: "success" | "destructive" | "error" | undefined) => void;
+  setShowAlert: () => void;
 }) {
   async function handleRequest() {
     try {
@@ -15,7 +17,6 @@ export function DripToken({
         method: "POST",
         body: JSON.stringify({ address: getAddress(address) }),
       });
-      console.log(res);
       if (res.status === 200) {
         setAlert("success");
       } else if (res.status === 429) {
@@ -31,7 +32,10 @@ export function DripToken({
   return (
     <Button
       disabled={!isAddress(address ?? "")}
-      onClick={() => handleRequest()}
+      onClick={() => {
+        setShowAlert();
+        void handleRequest();
+      }}
     >
       Drip Tokens
     </Button>
