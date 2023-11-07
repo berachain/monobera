@@ -16,6 +16,7 @@ export default function Content() {
   const [alert, setAlert] = React.useState<
     "success" | "destructive" | "error" | undefined
   >(undefined);
+  const [showAlet, setShowAlert] = React.useState<boolean>(false);
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
       <div className="items-center justify-between text-center sm:flex sm:text-left">
@@ -43,14 +44,23 @@ export default function Content() {
           Wallet Address <span className="text-destructive-foreground">*</span>
         </div>
         <div className="relative">
-          <Input value={address} onChange={(e) => setAddress(e.target.value)} />
+          <Input
+            value={address}
+            onChange={(e) => {
+              setAddress(e.target.value);
+              if (showAlet) setShowAlert(false);
+            }}
+          />
           <Icons.close
             className="absolute right-3 top-3 h-4 w-4 cursor-pointer text-muted-foreground"
-            onClick={() => setAddress("")}
+            onClick={() => {
+              setAddress("");
+              if (showAlet) setShowAlert(false);
+            }}
           />
         </div>
       </div>
-      {alert === "success" && (
+      {showAlet && alert === "success" && (
         <Alert variant={"success"}>
           <AlertTitle>
             <Icons.checkCircle className="inline-block h-4 w-4" /> Request
@@ -70,7 +80,7 @@ export default function Content() {
           </AlertDescription>
         </Alert>
       )}
-      {alert === "destructive" && (
+      {showAlet && alert === "destructive" && (
         <Alert variant={"destructive"}>
           <AlertTitle>
             {" "}
@@ -83,7 +93,7 @@ export default function Content() {
           </AlertDescription>
         </Alert>
       )}
-      {alert === "error" && (
+      {showAlet && alert === "error" && (
         <Alert variant={"destructive"}>
           <AlertTitle>
             {" "}
@@ -94,7 +104,11 @@ export default function Content() {
           </AlertDescription>
         </Alert>
       )}
-      <DripToken address={address} setAlert={setAlert} />
+      <DripToken
+        address={address}
+        setAlert={setAlert}
+        setShowAlert={() => setShowAlert(true)}
+      />
       <hr />
       <div className="leading-12 text-center text-sm opacity-70 sm:text-start">
         To ensure a sufficient balance for all users, the Faucet is set to

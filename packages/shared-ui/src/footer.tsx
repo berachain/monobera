@@ -16,7 +16,7 @@ import {
   lendUrl,
   perpsName,
   perpsUrl,
-  pressKit,
+  // pressKit,
   twitter,
 } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
@@ -52,7 +52,7 @@ export const footerNavigation = {
     { name: "Foundation", href: homepageUrl },
     { name: "Docs", href: docsUrl },
     { name: "Careers", href: careersUrl },
-    { name: "Press Kit", href: pressKit },
+    // { name: "Press Kit", href: pressKit },
   ],
 
   social: [
@@ -135,6 +135,7 @@ export function Footer() {
                 {footerNavigation.resources.map((item) => (
                   <li key={item.name}>
                     <a
+                      target="_blank"
                       href={item.href}
                       className="text-sm leading-6 text-secondary-foreground hover:text-foreground"
                     >

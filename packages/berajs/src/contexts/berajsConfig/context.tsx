@@ -9,6 +9,8 @@ import {
 } from "@rainbow-me/rainbowkit";
 import {
   injectedWallet,
+  metaMaskWallet,
+  safeWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";

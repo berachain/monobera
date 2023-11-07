@@ -51,7 +51,7 @@ export default function CreateAPool() {
             <Button onClick={() => router.push(`/pool/create`)}>
               Create a Pool
             </Button>
-            <Link href={docsUrl} target="_blank">
+            <Link href={`${docsUrl}/learn/dex/pools`} target="_blank">
               <Button variant={"outline"}>Learn More</Button>
             </Link>
           </div>

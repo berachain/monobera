@@ -22,9 +22,11 @@ export default function AvailableSupply({
             <DataTable columns={available_supply_columns} data={assets} />
           ) : (
             <>
-              {assets.map((asset, index) => (
-                <UserTokenCard asset={asset} key={index} type="supply" />
-              ))}
+              {assets
+                .sort((a, b) => b.address.localeCompare(a.address))
+                .map((asset, index) => (
+                  <UserTokenCard asset={asset} key={index} type="supply" />
+                ))}
             </>
           )}{" "}
         </>

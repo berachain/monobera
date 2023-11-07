@@ -22,3 +22,4 @@ export * from "./pnl-feed";
 export * from "./lend-oracle";
 export * from "./lend-impl";
 export * from "./lend-ui";
+export * from "./erc20-module";
