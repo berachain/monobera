@@ -11,6 +11,7 @@ import {
   usePollProposal,
   usePollProposalVotes,
   usePollTotalDelegated,
+  useTokenInformation,
   type IVote,
   type Proposal,
 } from "@bera/berajs";
@@ -41,6 +42,7 @@ export default function ProposalDetails({
 }: {
   proposalId: number;
 }) {
+  const { read, tokenInformation } = useTokenInformation();
   const { useProposal, isLoading: isProposalLoading } =
     usePollProposal(proposalId);
   const { useTotalDelegated } = usePollActiveValidators();
@@ -103,12 +105,13 @@ export default function ProposalDetails({
     const updateCollateralAddress = async () => {
       const address = await getAddress(jsonMsg[0].params.psmDenoms[0].denom);
       setCollateralAddress(address as string);
+      void read({ address: address as string });
     };
 
     if (proposalType === "enable-collateral-for-honey" && jsonMsg)
       void updateCollateralAddress();
   }, [jsonMsg, proposalType]);
-
+  console.log("tokenInformation", tokenInformation)
   //handle proposal type
   useEffect(() => {
     if (proposal) {
@@ -242,7 +245,7 @@ export default function ProposalDetails({
                 <div>Asset:</div>
                 <div className="flex items-center gap-1 font-medium uppercase text-muted-foreground">
                   <TokenIcon address={collateralAddress} fetch size={"md"} />{" "}
-                  {jsonMsg[0].params.psmDenoms[0].denom}
+                  {tokenInformation?.symbol}
                 </div>
               </div>
               <div className="flex items-center justify-between">
