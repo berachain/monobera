@@ -23,22 +23,22 @@ export const ConnectButton = ({
   return (
     <RainbowConnectButton.Custom>
       {({
-        account,
+        // account,
         chain,
         openChainModal,
         openConnectModal,
         authenticationStatus,
         mounted,
       }) => {
-        console.log({
-          account,
-          altAccount,
-          chain,
-          openChainModal,
-          openConnectModal,
-          authenticationStatus,
-          mounted,
-        });
+        // console.log({
+        //   account,
+        //   altAccount,
+        //   chain,
+        //   openChainModal,
+        //   openConnectModal,
+        //   authenticationStatus,
+        //   mounted,
+        // });
         const ready = mounted && authenticationStatus !== "loading";
         const connected =
           ready &&

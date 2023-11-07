@@ -1,14 +1,38 @@
 import Image from "next/image";
-import { useBeraJs } from "@bera/berajs";
-import { bgtTokenAddress, bgtUrl, cloudinaryUrl } from "@bera/config";
-import { TokenIcon } from "@bera/shared-ui";
+import {
+  LEND_REWARD_HELPER_ABI,
+  TransactionActionType,
+  formatter,
+  useBeraJs,
+  usePollUserBGTRewards,
+} from "@bera/berajs";
+import {
+  bgtTokenAddress,
+  bgtUrl,
+  cloudinaryUrl,
+  lendRewardsAddress,
+} from "@bera/config";
+import { TokenIcon, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { formatEther } from "viem";
 
 export const Banner = () => {
-  const { isReady } = useBeraJs();
+  const { isReady, account } = useBeraJs();
+  const { data: rewards, isLoading, refetch } = usePollUserBGTRewards();
+  const {
+    write,
+    isLoading: isClaimingLoading,
+    ModalPortal,
+  } = useTxn({
+    message: `Claiming ${formatEther((rewards ?? 0n) as bigint)} BGT Rewards`,
+    actionType: TransactionActionType.CLAIMING_REWARDS,
+    onSuccess: () => refetch(),
+  });
+
   return (
     <div className="relative flex flex-col-reverse items-start gap-4 rounded-18 border border-accent bg-gradient-to-b from-[#FFFCF2] to-[#FFF2D0] px-8 py-6 dark:from-[#27251F] dark:to-[#322400] lg:flex-row lg:gap-16">
+      {ModalPortal}
       <Image
         src={`${cloudinaryUrl}/bears/lendbear_npxhb3`}
         width={213}
@@ -19,9 +43,23 @@ export const Banner = () => {
       <div className="flex h-full w-full flex-shrink-0 flex-col gap-4 rounded-xl border border-amber-400 bg-gradient-to-br from-[#FFF6D7] via-[#FFEAA3] to-[#FFD977] p-4 dark:from-[#413E33] dark:to-[#453509] lg:w-fit">
         <div className="flex items-center justify-center gap-2 text-3xl font-semibold leading-9 lg:justify-start">
           <TokenIcon address={bgtTokenAddress} fetch />
-          {isReady ? "207.10" : "~~"}
+          {isReady && !isLoading //@ts-ignore
+            ? formatter.format(formatEther((rewards ?? 0n) as bigint))
+            : "~~"}
         </div>
-        <Button disabled={!isReady}>Claim Rewards</Button>
+        <Button
+          disabled={!isReady || !rewards || rewards === 0n || isClaimingLoading}
+          onClick={() =>
+            write({
+              address: lendRewardsAddress,
+              abi: LEND_REWARD_HELPER_ABI,
+              functionName: "claimAllRewards",
+              params: [account],
+            })
+          }
+        >
+          Claim Rewards
+        </Button>
       </div>
 
       <div className="flex w-full flex-col gap-4">

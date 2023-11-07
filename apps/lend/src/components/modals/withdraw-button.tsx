@@ -90,17 +90,30 @@ const WithdrawModalContent = ({
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency:
-      Number(formatEther(userAccountData.totalCollateralBase)) -
+      Number(formatUnits(userAccountData.totalCollateralBase, 8)) -
       (amount ?? 0) *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
-    borrowBalanceMarketReferenceCurrency: formatEther(
+    borrowBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalDebtBase,
+      8,
     ),
     currentLiquidationThreshold: formatUnits(
       userAccountData.currentLiquidationThreshold,
       4,
     ),
   });
+  const maxWithdrawalAllowance = formatUnits(
+    ((((userAccountData.totalCollateralBase as bigint) / 5n) * 4n -
+      userAccountData.totalDebtBase) *
+      BigInt("100000000")) /
+      parseUnits(reserveData?.formattedPriceInMarketReferenceCurrency, 8),
+    8,
+  );
+
+  const balance =
+    Number(maxWithdrawalAllowance) > Number(userBalance)
+      ? Number(userBalance)
+      : Number(maxWithdrawalAllowance);
 
   return (
     <div className="flex flex-col gap-6">
@@ -135,12 +148,10 @@ const WithdrawModalContent = ({
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          Supply balance: {userBalance.toFixed(2)}
+          Supply balance: {balance.toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() =>
-              setAmount(userBalance === 0 ? undefined : userBalance)
-            }
+            onClick={() => setAmount(balance === 0 ? undefined : balance)}
           >
             MAX
           </span>
