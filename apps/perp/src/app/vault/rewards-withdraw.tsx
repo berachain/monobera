@@ -48,8 +48,11 @@ export const RewardsWithdraw = () => {
   const { useWithdrawQueue } = usePollWithdrawQueue();
   const withdrawQueue = useWithdrawQueue();
 
-  const { isLoading: isRewardsLoading, useBgtRewards } =
-    usePollPerpsBgtRewards();
+  const {
+    isLoading: isRewardsLoading,
+    useBgtRewards,
+    refetch,
+  } = usePollPerpsBgtRewards();
   const claimableBgtRewards = useBgtRewards();
   const [claimAmount, setClaimAmount] = useState<number | undefined>(0);
 
@@ -57,6 +60,9 @@ export const RewardsWithdraw = () => {
   const { write, ModalPortal } = useTxn({
     message: "Claiming BGT",
     actionType: TransactionActionType.CLAIMING_REWARDS,
+    onSuccess: () => {
+      void refetch();
+    },
   });
 
   return (

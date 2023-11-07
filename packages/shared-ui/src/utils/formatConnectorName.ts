@@ -2,12 +2,12 @@ export const formatConnectorName = (connector: string) => {
   switch (connector) {
     case "metaMask":
       return "MetaMask";
-    case "walletconnect":
+    case "walletConnect":
       return "WalletConnect";
-    case "walletlink":
+    case "walletLink":
       return "Coinbase Wallet";
-    case "keplr":
-      return "Keplr";
+    case "frame":
+      return "Frame";
     default:
       return "Unknown";
   }
