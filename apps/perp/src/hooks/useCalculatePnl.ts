@@ -62,7 +62,7 @@ export const getPnl = ({ currentPrice, openPosition }: ICalculatePnl) => {
         openPrice -
       fees;
     console.log({ pnl });
-    const formattedPnl = Number(formatUnits(pnl, 18));
+    const formattedPnl = Number(formatUnits(pnl - collateral, 18));
     console.log({ formattedPnl });
     return formattedPnl;
   } else {

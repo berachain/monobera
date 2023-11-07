@@ -1,16 +1,21 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import {
+  BTOKEN_ABI,
+  TransactionActionType,
   formatter,
+  useBeraJs,
   usePollBHoneyBalance,
   usePollBHoneyPrice,
   usePollBalanceOfAssets,
+  usePollPerpsBgtRewards,
 } from "@bera/berajs";
-import { DataTable, RewardBtn } from "@bera/shared-ui";
+import { DataTable, DynamicRewardBtn, useTxn } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
-import type { Address } from "wagmi";
+import { parseUnits } from "ethers";
+import { type Address } from "wagmi";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 import { withdraw_queue_columns } from "./withdraw-queue-columns";
@@ -42,8 +47,21 @@ export const RewardsWithdraw = () => {
 
   const { useWithdrawQueue } = usePollWithdrawQueue();
   const withdrawQueue = useWithdrawQueue();
+
+  const { isLoading: isRewardsLoading, useBgtRewards } =
+    usePollPerpsBgtRewards();
+  const claimableBgtRewards = useBgtRewards();
+  const [claimAmount, setClaimAmount] = useState<number | undefined>(0);
+
+  const { account } = useBeraJs();
+  const { write, ModalPortal } = useTxn({
+    message: "Claiming BGT",
+    actionType: TransactionActionType.CLAIMING_REWARDS,
+  });
+
   return (
     <div className="flex w-full flex-col gap-4">
+      {ModalPortal}
       <div className="flex w-full flex-col justify-between gap-1 rounded-xl border border-border bg-muted px-6 py-4">
         <p className="text-sm font-medium text-muted-foreground">
           Est. Rewards
@@ -59,18 +77,31 @@ export const RewardsWithdraw = () => {
                 width={20}
                 height={20}
               />{" "}
-              0
+              {claimableBgtRewards?.toFixed(4)}
             </div>
           )}
 
           {isLoading ? (
             <Skeleton className="h-[28px] w-1/4" />
           ) : (
-            <RewardBtn
-              size="sm"
-              poolAddress={
-                process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address
+            <DynamicRewardBtn
+              claimableBgtRewards={claimableBgtRewards}
+              amount={claimAmount}
+              setAmount={setClaimAmount}
+              disabled={isRewardsLoading || claimableBgtRewards === 0}
+              onClaim={() =>
+                write({
+                  address: process.env
+                    .NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+                  abi: BTOKEN_ABI,
+                  functionName: "claimBGT",
+                  params: [
+                    parseUnits(`${Number(claimAmount ?? 0)}`, 18),
+                    account,
+                  ],
+                })
               }
+              size="sm"
             />
           )}
         </div>

@@ -9,14 +9,6 @@ import { Input } from "@bera/ui/input";
 import { ActionButton } from "./action-btn-wrapper";
 import { TokenIcon } from "./token-icon";
 
-interface DynamicRewardBtnProps {
-  claimableBgtRewards: string;
-  amount: number | undefined;
-  setAmount: (amount: number | undefined) => void;
-  disabled: boolean;
-  onClaim: () => void;
-}
-
 export function DynamicRewardBtn({
   claimableBgtRewards,
   disabled,
@@ -24,7 +16,7 @@ export function DynamicRewardBtn({
   amount,
   setAmount,
   ...props
-}: DynamicRewardBtnProps) {
+}: any) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -52,10 +44,10 @@ const RewardModalContent = ({
   amount: number | undefined;
   setAmount: (amount: number | undefined) => void;
   onClaim: () => void;
-  claimableBgtRewards: string | undefined;
+  claimableBgtRewards: number | undefined;
 }) => {
   const exceeding =
-    amount !== undefined && Number(amount) > Number(claimableBgtRewards);
+    amount !== undefined && Number(amount) > Number(claimableBgtRewards ?? 0);
   return (
     <div className="flex w-full flex-col gap-8 sm:w-[440px]">
       <div className="text-lg font-semibold leading-7">Unclaimed Rewards</div>
@@ -75,10 +67,10 @@ const RewardModalContent = ({
         />
         <div className="mt-1 h-[10px] text-right text-[10px] text-muted-foreground">
           {" "}
-          Available to Claim: {Number(claimableBgtRewards).toFixed(2)}{" "}
+          Available to Claim: {Number(claimableBgtRewards ?? 0).toFixed(2)}{" "}
           <span
             className=" cursor-pointer underline"
-            onClick={() => setAmount(Number(claimableBgtRewards))}
+            onClick={() => setAmount(Number(claimableBgtRewards ?? 0))}
           >
             MAX
           </span>

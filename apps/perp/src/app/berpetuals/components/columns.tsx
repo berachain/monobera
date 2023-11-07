@@ -191,10 +191,10 @@ export const positions_columns: ColumnDef<IMarketOrder>[] = [
         className="min-w-[120px]"
       />
     ),
-    // cell: ({ row }) => <PositionLiquidationPrice position={row.original} />,
-    cell: ({ row }) => <div>{formatBigIntUsd(row.original.liq_price, 10)}</div>,
+    cell: ({ row }) => <PositionLiquidationPrice position={row.original} />,
+    // cell: ({ row }) => <div>{formatBigIntUsd(row.original.liq_price, 10)}</div>,
     accessorKey: "liq_price",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
