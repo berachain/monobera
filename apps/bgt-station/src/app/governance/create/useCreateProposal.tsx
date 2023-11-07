@@ -70,7 +70,6 @@ export const useCreateProposal = () => {
           ],
         },
       };
-      //missing proto
       const honeyCollateralMsg = UpdateParamsRequest.encode(honeyCollateral);
       const honeyCollateralAnyMsg = {
         typeURL: updateHoneyCollateralTypeUrl,
