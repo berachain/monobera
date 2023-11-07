@@ -23,13 +23,11 @@ export const ConnectButton = ({
     isConnected,
     isWrongNetwork,
     isReady,
-    account: altAccount,
   } = useBeraJs();
   return (
     <RainbowConnectButton.Custom>
       {({
         // account,
-        chain,
         openChainModal,
         openConnectModal,
         authenticationStatus,
