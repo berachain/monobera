@@ -111,7 +111,7 @@ export default function ProposalDetails({
     if (proposalType === "enable-collateral-for-honey" && jsonMsg)
       void updateCollateralAddress();
   }, [jsonMsg, proposalType]);
-  console.log("tokenInformation", tokenInformation)
+  console.log("tokenInformation", tokenInformation);
   //handle proposal type
   useEffect(() => {
     if (proposal) {
