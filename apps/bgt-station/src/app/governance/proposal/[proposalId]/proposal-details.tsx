@@ -7,6 +7,7 @@ import {
   TransactionActionType,
   truncateHash,
   usePollActiveValidators,
+  usePollDenom,
   usePollProposal,
   usePollProposalVotes,
   usePollTotalDelegated,
@@ -14,7 +15,7 @@ import {
   type Proposal,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils/formatAmount";
-import { governanceAddress, indexerUrl } from "@bera/config";
+import { blockExplorerUrl, governanceAddress, indexerUrl } from "@bera/config";
 import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1beta1/gov";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
@@ -45,6 +46,7 @@ export default function ProposalDetails({
   const { useTotalDelegated } = usePollActiveValidators();
   const { useTotalDelegatorDelegated, isLoading: isUserVotingPowerLoading } =
     usePollTotalDelegated();
+  const { getAddress } = usePollDenom();
   const proposal: Proposal | undefined = useProposal();
 
   const [proposalType, setProposalType] = useState<
@@ -96,6 +98,17 @@ export default function ProposalDetails({
     return {};
   }, [proposal]);
 
+  const [collateralAddress, setCollateralAddress] = useState("");
+  useEffect(() => {
+    const updateCollateralAddress = async () => {
+      const address = await getAddress(jsonMsg[0].params.psmDenoms[0].denom);
+      setCollateralAddress(address as string);
+    };
+
+    if (proposalType === "enable-collateral-for-honey" && jsonMsg)
+      void updateCollateralAddress();
+  }, [jsonMsg, proposalType]);
+
   //handle proposal type
   useEffect(() => {
     if (proposal) {
@@ -121,7 +134,6 @@ export default function ProposalDetails({
     }
   }, [proposal]);
 
-  // console.log(proposalType);
   return (
     <div className="container pb-16">
       {ModalPortal}
@@ -228,25 +240,19 @@ export default function ProposalDetails({
             <Card className="mt-1 flex flex-col gap-1 bg-background p-8 text-sm text-muted-foreground">
               <div className="flex items-center justify-between">
                 <div>Asset:</div>
-                <div className="flex items-center gap-1 font-medium text-muted-foreground">
-                  <TokenIcon
-                    address={(proposal!.messages[0] as any).value}
-                    fetch
-                    size={"md"}
-                  />{" "}
-                  TICKER
+                <div className="flex items-center gap-1 font-medium uppercase text-muted-foreground">
+                  <TokenIcon address={collateralAddress} fetch size={"md"} />{" "}
+                  {jsonMsg[0].params.psmDenoms[0].denom}
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <div>Contract Address:</div>
                 <Link
-                  href={`${indexerUrl}/address/${
-                    (proposal!.messages[0] as any).value
-                  }`}
+                  href={`${blockExplorerUrl}/address/${collateralAddress}`}
                   target="_blank"
                   className="cursor-pointer underline"
                 >
-                  {truncateHash((proposal!.messages[0] as any).value)}
+                  {truncateHash(collateralAddress)}
                   <Icons.externalLink className="ml-1 inline-block h-3 w-3" />
                 </Link>
               </div>
