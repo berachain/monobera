@@ -8,9 +8,9 @@ const config = {
   experimental: {
     esmExternals: "loose",
     serverActions: {
-      bodySizeLimit: '2mb',
+      bodySizeLimit: "2mb",
     },
-    webpackBuildWorker: true
+    webpackBuildWorker: true,
   },
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
