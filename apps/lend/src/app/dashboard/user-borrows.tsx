@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { DataTable } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -27,9 +28,11 @@ export default function UserBorrows({
           {assets.length === 0 ? (
             <Card className="flex h-[72px] items-center justify-between px-6 py-4 text-muted-foreground">
               You have not borrowed any assets
-              <Button variant="outline">
-                <Icons.add className="mr-1 h-6 w-6" /> Borrow
-              </Button>
+              <Link href="/markets">
+                <Button variant="outline">
+                  <Icons.add className="mr-1 h-6 w-6" /> Borrow
+                </Button>
+              </Link>
             </Card>
           ) : (
             <>

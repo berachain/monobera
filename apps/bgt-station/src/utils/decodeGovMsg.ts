@@ -1,7 +1,13 @@
-import { UpdateFriendsOfTheChefRequest } from "@bera/proto/src";
+import {
+  UpdateFriendsOfTheChefRequest,
+  UpdateParamsRequest,
+} from "@bera/proto/src";
 import { hexToBytes } from "viem";
 
-import { updateFriendsOfTheChefTypeUrl } from "~/app/governance/create/useCreateProposal";
+import {
+  updateFriendsOfTheChefTypeUrl,
+  updateHoneyCollateralTypeUrl,
+} from "~/app/governance/create/useCreateProposal";
 
 interface IMsg {
   typeURL: string;
@@ -14,6 +20,9 @@ export const decodeGovMsg = (messages: IMsg[]) => {
       const decoded = UpdateFriendsOfTheChefRequest.decode(
         hexToBytes(msg.value),
       );
+      returnObj.push(decoded);
+    } else if (msg.typeURL === updateHoneyCollateralTypeUrl) {
+      const decoded = UpdateParamsRequest.decode(hexToBytes(msg.value));
       returnObj.push(decoded);
     }
   });

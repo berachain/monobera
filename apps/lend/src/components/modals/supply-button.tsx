@@ -100,11 +100,12 @@ const SupplyModalContent = ({
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency:
-      Number(formatEther(userAccountData.totalCollateralBase)) +
+      Number(formatUnits(userAccountData.totalCollateralBase, 8)) +
       (amount ?? 0) *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
-    borrowBalanceMarketReferenceCurrency: formatEther(
+    borrowBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalDebtBase,
+      8,
     ),
     currentLiquidationThreshold: formatUnits(
       userAccountData.currentLiquidationThreshold,
