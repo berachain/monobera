@@ -24,8 +24,21 @@ export const usePollDenom = () => {
       return null;
     }
   };
-
+  const getAddress = async (denom: string) => {
+    try {
+      return await publicClient.readContract({
+        address: erc20ModuleAddress,
+        abi: ERC20_MODULE_ABI,
+        functionName: "erc20AddressForCoinDenom",
+        args: [denom],
+      });
+    } catch (e) {
+      console.log("error", e);
+      return null;
+    }
+  };
   return {
     getDenom,
+    getAddress,
   };
 };

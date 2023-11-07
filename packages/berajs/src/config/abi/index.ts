@@ -23,3 +23,4 @@ export * from "./lend-oracle";
 export * from "./lend-impl";
 export * from "./lend-ui";
 export * from "./erc20-module";
+export * from "./lend-reward-helper";

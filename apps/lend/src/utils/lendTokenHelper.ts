@@ -100,3 +100,19 @@ export function getAssetList(
   }
   return { supplied, borrowed, available_supply, available_borrow };
 }
+
+export function getEligibleDepositAmount(
+  reservesDictionary: any,
+  balanceToken: any[],
+) {
+  let eligibleDepositAmount = 0;
+  Object.keys(reservesDictionary).forEach((key: Address) => {
+    const token = balanceToken.find((token) => token.address === key);
+    if (token) {
+      eligibleDepositAmount +=
+        Number(token.formattedBalance) *
+        Number(reservesDictionary[key].formattedPriceInMarketReferenceCurrency);
+    }
+  });
+  return eligibleDepositAmount;
+}

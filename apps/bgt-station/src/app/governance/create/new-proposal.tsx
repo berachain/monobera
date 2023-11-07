@@ -129,7 +129,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       .min(1, "Required")
       .nonempty("Required")
       .refine((val) => Number(val) > 0 && Number(val) <= 100, {
-        message: "Mint rate must be between 100 and 0.",
+        message: "Redemption rate must be between 100 and 0.",
       }),
   });
 

@@ -52,7 +52,7 @@ export default function ValidatorCard({
     },
   ];
   return (
-    <div className="col-span-1 flex w-full max-w-[275px] flex-col justify-end overflow-hidden rounded-xl border border-border bg-background shadow">
+    <div className="col-span-1 mx-auto flex w-full max-w-[275px] flex-col justify-end overflow-hidden rounded-xl border border-border bg-background shadow">
       <div className="flex flex-col items-center justify-center gap-1 p-6 pb-4">
         <ValidatorIcon
           address={validator.operatorAddr as Address}
