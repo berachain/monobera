@@ -65,7 +65,6 @@ export default function StatusBanner() {
     ((earnedAPY || 0) * totalLiquidityUSD) /
       (netWorthUSD !== 0 ? netWorthUSD : 1) -
     ((debtAPY || 0) * totalBorrowsUSD) / (netWorthUSD !== 0 ? netWorthUSD : 1);
-
   const status = [
     {
       icon: <Icons.wallet className="h-8 w-8" />,
@@ -89,20 +88,10 @@ export default function StatusBanner() {
       title: "Account Health",
       amount: (
         <div className="flex items-center gap-2">
-          {Number(
-            formatUnits(
-              data?.healthFactor || "0",
-              baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
-            ),
-          ) > 1000000000000
+          {Number(formatUnits(data?.healthFactor || "0", 18)) > 1000000000000
             ? "∞"
             : formatter.format(
-                Number(
-                  formatUnits(
-                    data?.healthFactor || "0",
-                    baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
-                  ),
-                ),
+                Number(formatUnits(data?.healthFactor || "0", 18)),
               )}
           <Badge variant={"info"} className="rounded-md py-0 font-medium">
             Risk Details
