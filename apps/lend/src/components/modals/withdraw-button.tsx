@@ -90,18 +90,18 @@ const WithdrawModalContent = ({
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency:
-      Number(formatEther(userAccountData.totalCollateralBase)) -
+      Number(formatUnits(userAccountData.totalCollateralBase, 8)) -
       (amount ?? 0) *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
-    borrowBalanceMarketReferenceCurrency: formatEther(
+    borrowBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalDebtBase,
+      8,
     ),
     currentLiquidationThreshold: formatUnits(
       userAccountData.currentLiquidationThreshold,
       4,
     ),
   });
-
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Withdraw</div>

@@ -99,11 +99,12 @@ const RepayModalContent = ({
       : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-    collateralBalanceMarketReferenceCurrency: formatEther(
+    collateralBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalCollateralBase,
+      8,
     ),
     borrowBalanceMarketReferenceCurrency:
-      Number(formatEther(userAccountData.totalDebtBase)) -
+      Number(formatUnits(userAccountData.totalDebtBase, 8)) -
       (Number(amount) ?? 0) *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
 
