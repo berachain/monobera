@@ -6,6 +6,7 @@ import {
   formatter,
   lendPoolImplementationABI,
   useBeraJs,
+  usePollAllowance,
   usePollAssetWalletBalance,
   usePollReservesDataList,
   usePollUserAccountData,
@@ -13,7 +14,7 @@ import {
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
+import { ApproveButton, TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -79,6 +80,12 @@ const RepayModalContent = ({
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
+  const { useAllowance } = usePollAllowance({
+    contract: lendPoolImplementationAddress,
+    token,
+  });
+
+  const allowance = useAllowance();
   const debtBalance = token.formattedBalance;
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { data: tokenB } = useSelectedAssetWalletBalance(token.address);
@@ -187,29 +194,37 @@ const RepayModalContent = ({
           </div>
         </div>
       </div>
-
-      <Button
-        disabled={
-          !amount || Number(amount) === 0 || Number(amount) > Number(balance)
-        }
-        onClick={() => {
-          write({
-            address: lendPoolImplementationAddress,
-            abi: lendPoolImplementationABI,
-            functionName: "repay",
-            params: [
-              token.address,
-              Number(amount) === Number(debtBalance)
-                ? maxUint256
-                : parseUnits(amount as `${number}`, token.decimals),
-              2,
-              account,
-            ],
-          });
-        }}
-      >
-        {Number(amount) === 0 ? "Enter Amount" : "Repay"}
-      </Button>
+      {allowance &&
+      Number(allowance.formattedAllowance) > Number(amount ?? "0") ? (
+        <Button
+          disabled={
+            !amount || Number(amount) === 0 || Number(amount) > Number(balance)
+          }
+          onClick={() => {
+            write({
+              address: lendPoolImplementationAddress,
+              abi: lendPoolImplementationABI,
+              functionName: "repay",
+              params: [
+                token.address,
+                Number(amount) === Number(debtBalance)
+                  ? maxUint256
+                  : parseUnits(amount as `${number}`, token.decimals),
+                2,
+                account,
+              ],
+            });
+          }}
+        >
+          {Number(amount) === 0 ? "Enter Amount" : "Repay"}
+        </Button>
+      ) : (
+        <ApproveButton
+          token={token}
+          spender={lendPoolImplementationAddress}
+          amount={maxUint256}
+        />
+      )}
     </div>
   );
 };

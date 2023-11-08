@@ -58,7 +58,7 @@ export default function DashBoard({
   return (
     <div className="container flex w-full max-w-[1200px] flex-col gap-24 pb-24">
       <div className="flex flex-col items-center gap-1">
-        <div className="text-5xl font-bold leading-[48px] text-foreground">
+        <div className="text-center text-5xl font-bold leading-[48px] text-foreground">
           🐝{" "}
           <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
             BGT
