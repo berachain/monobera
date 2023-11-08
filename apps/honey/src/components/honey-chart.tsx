@@ -212,7 +212,7 @@ export const HoneyChart = ({
   }, [timeFrame, chart, arcade]);
 
   return (
-    <section id="supply">
+    <section>
       <Card
         className={cn(
           "border-2 p-0",
