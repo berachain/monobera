@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@bera/config": "0.1.0",
-    "@rainbow-me/rainbowkit": "^1.0.3",
+    "@rainbow-me/rainbowkit": "^1.2.0",
     "bech32": "^2.0.0",
     "crypto-js": "^4.1.1",
     "ethers": "^6.8.0",

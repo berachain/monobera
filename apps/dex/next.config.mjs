@@ -7,7 +7,10 @@ const config = {
   transpilePackages: ["@bera/ui", "@bera/berajs", "@bera/bera-router"],
   experimental: {
     esmExternals: "loose",
-    serverActions: true,
+    serverActions: {
+      bodySizeLimit: "2mb",
+    },
+    webpackBuildWorker: true,
   },
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },

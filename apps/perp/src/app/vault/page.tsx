@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { perpsName } from "@bera/config";
 
+import { getFeesApr } from "~/endpoints";
 import { BhoneyStats } from "./bhoney-stats";
 import Claim from "./claim";
 import DepositWithdraw from "./deposit-withdraw";
@@ -12,10 +13,11 @@ export function generateMetadata(): Metadata {
     title: `Vault | ${perpsName}`,
   };
 }
-export default function Vault() {
+export default async function Vault() {
+  const apr = await getFeesApr();
   return (
     <div className="mx-auto mt-8 flex w-full max-w-[1200px] flex-col gap-8 p-8">
-      <Claim />
+      <Claim feeApr={apr.apr} />
       <BhoneyStats />
       <div>
         <p className="mb-4 text-3xl font-semibold leading-9">Your Stats</p>

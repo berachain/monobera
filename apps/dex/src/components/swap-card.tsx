@@ -339,6 +339,24 @@ export function SwapCard({
                       </AlertDescription>
                     </Alert>
                   )}
+                  {selectedFrom &&
+                    selectedTo &&
+                    swapInfo &&
+                    swapInfo.batchSwapSteps.length === 0 &&
+                    fromAmount &&
+                    fromAmount !== 0 && (
+                      <Alert variant="destructive">
+                        <AlertTitle>
+                          {" "}
+                          <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
+                          Route Not Found
+                        </AlertTitle>
+                        <AlertDescription className="text-xs">
+                          No route found for this swap. Please try a different
+                          pair.
+                        </AlertDescription>
+                      </Alert>
+                    )}
                 </div>
                 <ActionButton>{getSwapButton()}</ActionButton>
               </div>

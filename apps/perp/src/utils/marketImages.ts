@@ -1,12 +1,12 @@
 export const MarketImages: Record<string, string> = {
-  ["BTC-USD"]:
+  ["BTC-USDC"]:
     "https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400",
-  ["ETH-USD"]:
+  ["ETH-USDC"]:
     "https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628",
-  ["OHM-USD"]:
-    "https://assets.coingecko.com/coins/images/14483/standard/token_OHM_%281%29.png?1696514169",
-  ["MATIC-USD"]:
-    "https://assets.coingecko.com/coins/images/4713/standard/matic-token-icon.png?1696505277",
+  ["ATOM-USDC"]:
+    "https://assets.coingecko.com/coins/images/1481/standard/cosmos_hub.png?1696502525",
+  ["TIA-USDC"]:
+    "https://assets.coingecko.com/coins/images/31967/standard/tia.jpg?1696530772",
 };
 
 export const HONEY_IMG =

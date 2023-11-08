@@ -208,6 +208,12 @@ export const BTOKEN_ABI = [
         name: "assetsTotal",
         type: "uint256",
       },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "vaultTVL",
+        type: "uint256",
+      },
     ],
     name: "FeesDistributed",
     type: "event",
@@ -616,19 +622,6 @@ export const BTOKEN_ABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "availableBGTRewards",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "address",
@@ -656,45 +649,6 @@ export const BTOKEN_ABI = [
       },
     ],
     name: "balanceOfAssets",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "bgtRewards",
-    outputs: [
-      {
-        internalType: "contract IRewardsModule",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "bgtRewardsLastUpdated",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "bgtRewardsP",
     outputs: [
       {
         internalType: "uint256",
@@ -734,6 +688,11 @@ export const BTOKEN_ABI = [
         internalType: "uint256",
         name: "amount",
         type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "recipient",
+        type: "address",
       },
     ],
     name: "claimBGT",
@@ -908,19 +867,6 @@ export const BTOKEN_ABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "deltaBGTRewards",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "uint256",
@@ -973,6 +919,19 @@ export const BTOKEN_ABI = [
   {
     inputs: [],
     name: "epochLength",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "feesToPolP",
     outputs: [
       {
         internalType: "uint256",
@@ -1083,9 +1042,14 @@ export const BTOKEN_ABI = [
         type: "uint256",
       },
       {
-        internalType: "uint256[2]",
-        name: "_withdrawLockThresholdsP",
-        type: "uint256[2]",
+        internalType: "uint256",
+        name: "_withdrawLockThresholdsPLow",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_withdrawLockThresholdsPHigh",
+        type: "uint256",
       },
       {
         internalType: "uint256",
@@ -1104,7 +1068,7 @@ export const BTOKEN_ABI = [
       },
       {
         internalType: "uint256",
-        name: "_bgtRewardsP",
+        name: "_feesToPolP",
         type: "uint256",
       },
     ],
@@ -1369,6 +1333,25 @@ export const BTOKEN_ABI = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "pendingBGT",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "pnlHandler",
     outputs: [
@@ -1509,6 +1492,19 @@ export const BTOKEN_ABI = [
     name: "renounceOwnership",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "rewardsModule",
+    outputs: [
+      {
+        internalType: "contract IRewardsModule",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
