@@ -29,7 +29,7 @@ export default function WithdrawBtn({
   variant?: "primary" | "outline";
 }) {
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const [amount, setAmount] = useState<string | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Withdrawing ${amount} ${token.symbol}`,
     onSuccess: () => {
@@ -72,11 +72,11 @@ const WithdrawModalContent = ({
   write,
 }: {
   token: Token;
-  amount: number | undefined;
-  setAmount: (amount: number | undefined) => void;
+  amount: string | undefined;
+  setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const userBalance = Number(token.formattedBalance ?? "0");
+  const userBalance = token.formattedBalance ?? "0";
   const { useSelectedReserveData } = usePollReservesDataList();
   const { data: reserveData } = useSelectedReserveData(token.address);
   const { account } = useBeraJs();
@@ -91,7 +91,7 @@ const WithdrawModalContent = ({
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency:
       Number(formatUnits(userAccountData.totalCollateralBase, 8)) -
-      (amount ?? 0) *
+      Number(amount ?? "0") *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
     borrowBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalDebtBase,
@@ -112,8 +112,8 @@ const WithdrawModalContent = ({
 
   const balance =
     Number(maxWithdrawalAllowance) > Number(userBalance)
-      ? Number(userBalance)
-      : Number(maxWithdrawalAllowance);
+      ? userBalance
+      : maxWithdrawalAllowance;
 
   return (
     <div className="flex flex-col gap-6">
@@ -143,15 +143,15 @@ const WithdrawModalContent = ({
           value={amount}
           onChange={(e) =>
             setAmount(
-              Number(e.target.value) === 0 ? undefined : Number(e.target.value),
+              Number(e.target.value) === 0 ? undefined : e.target.value,
             )
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          Supply balance: {balance.toFixed(2)}
+          Supply balance: {Number(balance).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() => setAmount(balance === 0 ? undefined : balance)}
+            onClick={() => setAmount(Number(balance) === 0 ? undefined : balance)}
           >
             MAX
           </span>
@@ -163,7 +163,7 @@ const WithdrawModalContent = ({
           <div className="text-muted-foreground ">Estimated Value</div>
           <div className="font-semibold">
             {" "}
-            ${formatter.format(amount ?? 0 * 1)}
+            ${formatter.format(Number(amount ?? "0") * Number(reserveData?.formattedPriceInMarketReferenceCurrency))}
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
@@ -183,7 +183,7 @@ const WithdrawModalContent = ({
       </div>
 
       <Button
-        disabled={!amount || amount === 0 || amount > userBalance}
+        disabled={!amount || Number(amount) <= 0 || amount > userBalance}
         onClick={() => {
           write({
             address: lendPoolImplementationAddress,
@@ -197,7 +197,7 @@ const WithdrawModalContent = ({
           });
         }}
       >
-        {amount === 0 ? "Enter Amount" : "Withdraw"}
+        {Number(amount) === 0 ? "Enter Amount" : "Withdraw"}
       </Button>
     </div>
   );

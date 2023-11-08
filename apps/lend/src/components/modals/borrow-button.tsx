@@ -241,7 +241,7 @@ const BorrowModalContent = ({
       <Button
         disabled={
           !amount ||
-          Number(amount) === 0 ||
+          Number(amount) <= 0 ||
           Number(amount) > Number(borrowAmout)
         }
         onClick={() => {

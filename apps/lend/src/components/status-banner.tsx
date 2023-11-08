@@ -93,9 +93,9 @@ export default function StatusBanner() {
             : formatter.format(
                 Number(formatUnits(data?.healthFactor || "0", 18)),
               )}
-          <Badge variant={"info"} className="rounded-md py-0 font-medium">
+          {/* <Badge variant={"info"} className="rounded-md py-0 font-medium">
             Risk Details
-          </Badge>
+          </Badge> */}
         </div>
       ),
     },
