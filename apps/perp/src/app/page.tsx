@@ -84,9 +84,7 @@ export default async function Home() {
         <GeneralInfo tradingSummary={tradingSummary} />
         <Markets showBtn markets={markets} />
         <Tutorial />
-        <div className="max-w-[1200px] self-center">
-          <Documentation />
-        </div>
+        <Documentation className="mx-auto w-full max-w-[1280px] px-8" />
       </div>
       <Footer />
     </div>

@@ -32,13 +32,11 @@ export default function AvailableMarket({ markets }: { markets: IMarket[] }) {
           />
         </div>
       </div>
-      <div className="w-full overflow-x-scroll">
-        <DataTable
-          columns={market_table_column}
-          data={filteredMarkets ?? []}
-          className="min-w-[1200px]"
-        />
-      </div>
+      <DataTable
+        columns={market_table_column}
+        data={filteredMarkets ?? []}
+        className="min-w-[1200px]"
+      />
     </div>
   );
 }
