@@ -41,13 +41,11 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
           </TabsList>
         </Tabs> */}
       </div>
-      <div className="w-full overflow-x-scroll">
-        <DataTable
-          columns={history_columns}
-          data={closedPositions ?? []}
-          className="min-w-[1136px]"
-        />
-      </div>
+      <DataTable
+        columns={history_columns}
+        data={closedPositions ?? []}
+        className="min-w-[1136px]"
+      />
     </div>
   );
 }

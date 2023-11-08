@@ -26,13 +26,11 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
           </div>
         </div>
       </div>
-      <div className="w-full overflow-x-scroll">
-        <DataTable
-          columns={positions_columns}
-          data={openPositions ?? []}
-          className="min-w-[1136px]"
-        />
-      </div>
+      <DataTable
+        columns={positions_columns}
+        data={openPositions ?? []}
+        className="min-w-[1136px]"
+      />
     </div>
   );
 }

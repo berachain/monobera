@@ -41,9 +41,8 @@ export function OrderHistoryTable({
     });
   }, [openPositons, openOrders, history]);
 
-  console.log("open pos", openPositons);
   return (
-    <div className="relative w-full overflow-x-auto">
+    <div className="relative w-full">
       {tab === "positions" && (
         <DataTable
           columns={positions_columns}

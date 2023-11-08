@@ -546,7 +546,10 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 </TabsTrigger>
               </TabsList>
               <Card className="mt-4">
-                <TabsContent value={Selection.AllTransactions} className="mt-0">
+                <TabsContent
+                  value={Selection.AllTransactions}
+                  className="mt-0 overflow-x-auto"
+                >
                   <EventTable
                     pool={pool}
                     prices={prices}
@@ -554,7 +557,10 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                     isLoading={isAllDataLoadingMore}
                   />
                 </TabsContent>
-                <TabsContent value={Selection.Swaps} className="mt-0">
+                <TabsContent
+                  value={Selection.Swaps}
+                  className="mt-0 overflow-x-auto"
+                >
                   <EventTable
                     pool={pool}
                     prices={prices}
@@ -562,7 +568,10 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                     isLoading={isSwapDataLoadingMore}
                   />
                 </TabsContent>
-                <TabsContent value={Selection.AddsWithdrawals} className="mt-0">
+                <TabsContent
+                  value={Selection.AddsWithdrawals}
+                  className="mt-0 overflow-x-auto"
+                >
                   <EventTable
                     pool={pool}
                     prices={prices}

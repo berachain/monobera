@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import Link from "next/link";
+import { bgtUrl, docsUrl, honeyUrl } from "@bera/config";
 import {
   Card,
   CardContent,
@@ -38,29 +40,30 @@ const BerachainInfo = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-1 p-2 text-muted-foreground">
-        <div className="flex flex-row items-center gap-1 hover:cursor-pointer hover:text-foreground">
-          {/* <Icons.userPlus className="h-4 w-4" /> */}
+        <Link
+          className="flex flex-row items-center gap-1 hover:cursor-pointer hover:text-foreground"
+          href={`${docsUrl}/learn/how-to-connect-a-wallet-with-berachain`}
+          target="_blank"
+        >
           <span className="text-lg font-semibold">Create a Wallet</span>
           <Icons.external className="h-4 w-4" />
-        </div>
-        <div
-          onClick={() =>
-            window.open(process.env.NEXT_PUBLIC_HONEY_URL, "_blank")
-          }
+        </Link>
+        <Link
+          href={honeyUrl}
+          target="_blank"
           className="flex flex-row items-center gap-1 hover:cursor-pointer hover:text-foreground"
         >
-          {/* <Icons.hammer className="h-4 w-4" /> */}
           <span className="text-lg font-semibold">Mint Honey</span>
           <Icons.external className="h-4 w-4" />
-        </div>
-        <div
-          onClick={() => window.open(process.env.NEXT_PUBLIC_BGT_URL, "_blank")}
+        </Link>
+        <Link
+          href={bgtUrl}
+          target="_blank"
           className="flex flex-row items-center gap-1 hover:cursor-pointer hover:text-foreground"
         >
-          {/* <Icons.helpingHand className="h-4 w-4" /> */}
           <span className="text-lg font-semibold">Stake on BGT Station</span>
           <Icons.external className="h-4 w-4" />
-        </div>
+        </Link>
       </CardContent>
     </Card>
   );

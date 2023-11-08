@@ -178,8 +178,6 @@ export default function Delegate({
         ) : (
           <Skeleton className="h-[175px] w-full" />
         )}
-        {/* // https://blurred.dev/ */}
-
         <ValidatorInput
           action={action}
           amount={amount}
