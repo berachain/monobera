@@ -25,8 +25,8 @@ export default function ValidatorInput({
 }: // emptyMessage = "No validators available",
 {
   action: DelegateEnum;
-  amount: number | undefined;
-  onAmountChange: (amount: number) => void;
+  amount: string | undefined;
+  onAmountChange: (amount: string | undefined) => void;
   validatorAddress: Address | undefined;
   redelegate?: boolean;
   redelegateValidatorAddress?: string;
@@ -50,7 +50,7 @@ export default function ValidatorInput({
         value={amount}
         placeholder="0"
         disabled={disabled || isBalanceLoading}
-        onChange={(e) => onAmountChange(Number(e.target.value))}
+        onChange={(e) => onAmountChange(e.target.value)}
         startAdornment={
           <ValidatorSelector
             validatorAddress={
@@ -72,11 +72,11 @@ export default function ValidatorInput({
       {action === DelegateEnum.DELEGATE && isReady && (
         <div className=" mt-2 flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {userBalance}
+          {Number(userBalance).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() => {
-              onAmountChange(Number(userBalance));
+              onAmountChange(userBalance);
             }}
           >
             MAX
