@@ -7,7 +7,7 @@ import {
   usePollUserAccountData,
   usePollUserReservesData,
 } from "@bera/berajs";
-import { Badge } from "@bera/ui/badge";
+// import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";

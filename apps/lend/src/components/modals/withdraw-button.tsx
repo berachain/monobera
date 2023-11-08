@@ -102,10 +102,9 @@ const WithdrawModalContent = ({
       4,
     ),
   });
+
   const maxWithdrawalAllowance = formatUnits(
-    ((((userAccountData.totalCollateralBase as bigint) / 5n) * 4n -
-      userAccountData.totalDebtBase) *
-      BigInt("100000000")) /
+    userAccountData.availableBorrowsBase /
       parseUnits(reserveData?.formattedPriceInMarketReferenceCurrency, 8),
     8,
   );
@@ -142,16 +141,16 @@ const WithdrawModalContent = ({
           }
           value={amount}
           onChange={(e) =>
-            setAmount(
-              Number(e.target.value) === 0 ? undefined : e.target.value,
-            )
+            setAmount(Number(e.target.value) === 0 ? undefined : e.target.value)
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           Supply balance: {Number(balance).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
-            onClick={() => setAmount(Number(balance) === 0 ? undefined : balance)}
+            onClick={() =>
+              setAmount(Number(balance) === 0 ? undefined : balance)
+            }
           >
             MAX
           </span>
@@ -163,7 +162,11 @@ const WithdrawModalContent = ({
           <div className="text-muted-foreground ">Estimated Value</div>
           <div className="font-semibold">
             {" "}
-            ${formatter.format(Number(amount ?? "0") * Number(reserveData?.formattedPriceInMarketReferenceCurrency))}
+            $
+            {formatter.format(
+              Number(amount ?? "0") *
+                Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+            )}
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
