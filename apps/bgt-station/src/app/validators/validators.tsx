@@ -69,7 +69,7 @@ export default function Validators({
       amount: isDataLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
-        inflation.toFixed(4) + "%"
+        inflation.toFixed(2) + "%"
       ),
       text: "BGT inflation rate",
     },
