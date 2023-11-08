@@ -311,7 +311,13 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     return undefined;
   }, [swapInfo]);
 
-  console.log("swapInfo", swapInfo);
+  useEffect(() => {
+    if (isWrap) {
+      if (fromAmount !== toAmount) {
+        setToAmount(fromAmount);
+      }
+    }
+  }, [isWrap]);
   return {
     setSwapKind,
     setSelectedFrom,

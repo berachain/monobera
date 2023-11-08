@@ -23,7 +23,7 @@ export default function Page() {
         <Data />
       </div>
       <Markets />
-      <div className="container">
+      <div className="container max-w-[1200px]">
         <HowItWorks />
         <Documentation className="my-24" />
       </div>
