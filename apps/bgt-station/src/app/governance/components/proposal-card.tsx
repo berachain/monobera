@@ -126,7 +126,7 @@ export function ProposalCard({ proposal, type, onClick }: ProposalCard) {
           <span className="hidden sm:inline ">Expedited</span>
         </div>
       )} */}
-      <div className="flex h-7 items-center gap-1">
+      <div className="flex h-fit flex-row flex-wrap items-center gap-1">
         {getBadge(proposal.status)}
         {type && (
           <Badge

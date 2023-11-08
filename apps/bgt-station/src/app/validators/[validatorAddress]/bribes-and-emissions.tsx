@@ -1,5 +1,10 @@
 import React, { useMemo } from "react";
-import { formatUsd, formatter, usePollValidatorBribes } from "@bera/berajs";
+import {
+  formatUsd,
+  formatter,
+  usePollActiveValidators,
+  usePollValidatorBribes,
+} from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card } from "@bera/ui/card";
@@ -116,11 +121,13 @@ const getHistoryInterval = (
 export default function BribesAndEmissions({
   historicalBribes,
   cumulativeBribeValue,
+  currentBribeValue,
   validatorAddress,
   isLoading,
 }: {
   historicalBribes: FormattedHistoricalBribes[];
   cumulativeBribeValue: number;
+  currentBribeValue: number;
   validatorAddress: Address;
   isLoading: boolean;
 }) {
@@ -132,6 +139,18 @@ export default function BribesAndEmissions({
   );
   const { useActiveValidatorBribes, isLoading: isBribesLoading } =
     usePollValidatorBribes(validatorAddress);
+
+  const { useValidatorTokens } = usePollActiveValidators();
+  const totalDelegated = useValidatorTokens(validatorAddress);
+  const amountPerBgt = useMemo(() => {
+    const amnt = Number(currentBribeValue) / totalDelegated;
+    if (Number.isNaN(amnt)) {
+      return 0;
+    }
+    return Number(currentBribeValue) / totalDelegated;
+  }, [totalDelegated, currentBribeValue]);
+
+  console.log(amountPerBgt);
   const bribes = useActiveValidatorBribes();
 
   return (
@@ -162,8 +181,8 @@ export default function BribesAndEmissions({
           ) : (
             <>
               <div className="mt-4 flex gap-4">
-                <div className="flex w-[230px] flex-shrink-0 flex-grow-0 flex-col gap-4">
-                  <Card className="flex w-full flex-1 flex-col items-center justify-center gap-2 shadow">
+                <div className="flex w-full  flex-shrink-0 flex-grow-0 flex-col gap-4 lg:w-[230px]">
+                  <Card className="flex w-full flex-1 flex-col items-center justify-center gap-2 p-4 shadow lg:p-0">
                     <div className="text-3xl font-semibold leading-9 text-foreground">
                       ${formatter.format(cumulativeBribeValue ?? 0)}
                     </div>
@@ -172,9 +191,9 @@ export default function BribesAndEmissions({
                     </div>
                   </Card>
 
-                  <Card className="flex w-full flex-1 flex-col items-center  justify-center gap-2 shadow">
+                  <Card className="flex w-full flex-1 flex-col items-center justify-center gap-2  p-4 shadow lg:p-0">
                     <div className="text-3xl font-semibold leading-9 text-foreground">
-                      ${formatter.format(cumulativeBribeValue ?? 0)}
+                      ${formatter.format(amountPerBgt ?? 0)}
                     </div>
                     <div className="text-sm font-medium leading-[14px] text-muted-foreground">
                       current per BGT
@@ -182,7 +201,7 @@ export default function BribesAndEmissions({
                   </Card>
                 </div>
 
-                <Card className="hidden w-full flex-1 p-4 shadow md:block">
+                <Card className="hidden w-full flex-1 p-4 shadow lg:block">
                   <div className="relative flex h-10 w-full items-center justify-end gap-2 text-sm font-medium leading-[14px] text-muted-foreground">
                     Time frame
                     <DropdownMenu>

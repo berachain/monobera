@@ -1,5 +1,6 @@
 import { formatUsd } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
+import Identicon from "@bera/shared-ui/src/identicon";
 import { cn } from "@bera/ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
@@ -26,10 +27,17 @@ export const getColumns = (type: string) => {
     // },
     {
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Trader" />
+        <DataTableColumnHeader
+          column={column}
+          title="Trader"
+          className="w-full"
+        />
       ),
       cell: ({ row }) => (
-        <div className="w-[70px] text-xs">{row.original.trader}</div>
+        <div className="flex w-full flex-row items-center gap-1 text-xs">
+          <Identicon account={row.original.trader} />
+          {row.original.trader}
+        </div>
       ),
       accessorKey: "trader",
       enableSorting: false,

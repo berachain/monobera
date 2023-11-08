@@ -167,7 +167,7 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
   };
 
   return (
-    <div className="mt-8 flex w-full flex-col items-center gap-16 md:flex-row ">
+    <div className="mt-8 flex w-full flex-col items-center gap-16 lg:flex-row ">
       <div className="flex w-[350px] items-center justify-center">
         <BeraChart data={dataP} options={options as any} type="pie" />
       </div>
