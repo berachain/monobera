@@ -213,14 +213,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       selectedTo
     ) {
       try {
-        console.log(
-          "swapInfo?.formattedSwapAmount",
-          swapInfo?.formattedSwapAmount,
-        );
-        console.log(
-          "swapInfo?.formattedReturnAmount",
-          swapInfo?.formattedReturnAmount,
-        );
         const ratio = normalizeToRatio(
           Number(swapInfo?.formattedSwapAmount),
           Number(swapInfo?.formattedReturnAmount),
