@@ -3,7 +3,7 @@ export const Options = {
   maintainAspectRatio: false,
   scales: {
     x: {
-      // display: false,
+      display: false,
       border: {
         display: false,
       },

@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatUsd } from "@bera/berajs";
+import { formatUsd, formatter } from "@bera/berajs";
 import { cloudinaryUrl, dexUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
@@ -41,7 +41,7 @@ function DataCard({
         className={
           arcade
             ? "mt-2 text-2xl leading-7"
-            : "mt-2 text-3xl font-semibold leading-9"
+            : "mt-2 text-2xl font-semibold leading-9 sm:text-3xl"
         }
       >
         {value}
@@ -112,7 +112,7 @@ export default function Data({
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <DataCard
             title="Total Honey Supply"
-            value={formatUsd(tvl)}
+            value={formatter.format(tvl as any)}
             icon={<Icons.lock />}
             arcade={arcade}
           />

@@ -2,7 +2,9 @@ import { type GlobalParams, type Market } from "@bera/proto/src";
 
 export async function getMarkets(): Promise<Market[] | undefined> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_PERPS_URL}/markets`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/markets`,
+    );
     const jsonRes = await res.json();
     return jsonRes.markets;
   } catch (e) {
@@ -13,7 +15,7 @@ export async function getMarkets(): Promise<Market[] | undefined> {
 export async function getGlobalParams(): Promise<GlobalParams | undefined> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_PERPS_URL}/globalparams`,
+      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/globalparams`,
     );
     const jsonRes = await res.json();
     return jsonRes.global_params;
@@ -25,7 +27,7 @@ export async function getGlobalParams(): Promise<GlobalParams | undefined> {
 export async function getDailyPriceChange(): Promise<any | undefined> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_PERPS_URL}/historical-prices/24h`,
+      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/historical-prices/24h`,
     );
     const jsonRes = await res.json();
     return jsonRes.prices;
@@ -37,7 +39,7 @@ export async function getDailyPriceChange(): Promise<any | undefined> {
 export async function getTradingSummary(): Promise<any | undefined> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_PERPS_URL}/trading-summary?count_back=1&resolution=1d`,
+      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/trading-summary?count_back=1&resolution=1d`,
     );
     const jsonRes = await res.json();
     const tradingSummary = jsonRes.result[0];
@@ -54,7 +56,7 @@ export async function getTradingSummary(): Promise<any | undefined> {
 export async function getHistoricalSummary(): Promise<any | undefined> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_PERPS_URL}/historical-summary/24h`,
+      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/historical-summary/24h`,
     );
     const jsonRes = await res.json();
     const historicalSummary = jsonRes.result;
@@ -68,7 +70,7 @@ export async function getHistoricalSummary(): Promise<any | undefined> {
 export async function getFeesApr(): Promise<any | undefined> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_PERPS_URL}/historical-rewards?count_back=1&resolution=1w`,
+      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/historical-rewards?count_back=1&resolution=1w`,
     );
     const jsonRes = await res.json();
     const historicalSummary = jsonRes.result;

@@ -49,18 +49,18 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
     accessorKey: "incentiveAmount",
     enableSorting: true,
   },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="TVL" />
-    ),
-    cell: ({ row }) => (
-      <div className="flex w-[53px] gap-1">
-        ${formatter.format(row.original.tvl)}
-      </div>
-    ),
-    accessorKey: "tvl",
-    enableSorting: true,
-  },
+  // {
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="TVL" />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div className="flex w-[53px] gap-1">
+  //       ${formatter.format(row.original.tvl)}
+  //     </div>
+  //   ),
+  //   accessorKey: "tvl",
+  //   enableSorting: true,
+  // },
   {
     header: ({ column }) => (
       <DataTableColumnHeader

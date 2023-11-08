@@ -76,7 +76,12 @@ export function DataTable<TData, TValue>({
       <div className={cn(className)}>
         {/* <DataTableToolbar table={table} /> */}
         <Table>
-          {title && <TableCaption> {title}</TableCaption>}
+          {title && (
+            <TableCaption className="text-lg sm:text-2xl">
+              {" "}
+              {title}
+            </TableCaption>
+          )}
           <TableHeader className={"relative bg-muted"}>
             {/* {title && (
               <div className="absolute w-full border-b border-border px-8 py-4 text-2xl font-semibold">
