@@ -268,7 +268,7 @@ export default function ProposalDetails({
             <div className="h-7 text-lg font-semibold leading-7 text-foreground">
               Description
             </div>
-            <Card className="mt-1 h-full max-h-[376px] overflow-y-scroll bg-background p-8 text-sm font-normal leading-normal text-muted-foreground">
+            <Card className="mt-1 h-full max-h-[376px] overflow-y-auto bg-background p-8 text-sm font-normal leading-normal text-muted-foreground">
               {proposal?.summary ?? ""}
             </Card>
           </div>

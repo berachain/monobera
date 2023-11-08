@@ -116,7 +116,7 @@ export function VoterTable({
             Voting power
           </div>
         </div>
-        <div className="max-h-[800px] overflow-y-scroll p-4">
+        <div className="max-h-[800px] overflow-y-auto p-4">
           {isLoading ? (
             <div className="flex flex-col gap-4">
               {" "}

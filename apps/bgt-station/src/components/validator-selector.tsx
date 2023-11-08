@@ -168,7 +168,7 @@ const ValidatorModal = ({
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="w-full justify-center sm:max-w-fit">
-        <div className="flex w-[100vw] flex-col gap-4 p-6 sm:w-fit">
+        <div className="flex w-[100vw] flex-col gap-4 p-6 lg:w-fit">
           <div className="text-lg font-semibold leading-7">
             Validator select
           </div>
