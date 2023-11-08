@@ -10,13 +10,14 @@ interface IUsePollSwaps {
   tokenIn: Address;
   tokenOut: Address;
   swapKind: number;
-  amount: number;
+  amount: string;
 }
 
 export interface SwapInfoV2 {
   batchSwapSteps: BatchSwapStep[];
   formattedSwapAmount: string;
   formattedReturnAmount: string;
+  returnAmount: bigint;
 }
 
 export const usePollSwaps = ({
@@ -40,6 +41,7 @@ export const usePollSwaps = ({
           batchSwapSteps: [],
           formattedSwapAmount: amount.toString(),
           formattedReturnAmount: "0",
+          returnAmount: BigInt(0),
         };
       }
     },

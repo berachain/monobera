@@ -16,7 +16,7 @@ export const getSwap = async (
   tokenIn: Address,
   tokenOut: Address,
   swapType: number,
-  amount: number,
+  amount: string,
 ) => {
   try {
     const type = swapType === 0 ? "given_in" : "given_out";
@@ -26,7 +26,7 @@ export const getSwap = async (
       }/dex/route?quote_asset=${handleNativeBera(
         tokenOut,
       )}&base_asset=${handleNativeBera(tokenIn)}&amount=${parseUnits(
-        `${amount}`,
+        `${Number(amount)}`,
         18,
       )}&swap_type=${type}`,
     );
@@ -38,6 +38,7 @@ export const getSwap = async (
         batchSwapSteps: [],
         formattedSwapAmount: amount.toString(),
         formattedReturnAmount: "0",
+        returnAmount: 0n,
         tokenIn,
         tokenOut,
       };
@@ -71,6 +72,7 @@ export const getSwap = async (
         BigInt(result.steps[result.steps.length - 1].amountOut),
         18,
       ),
+      returnAmount: BigInt(result.steps[result.steps.length - 1].amountOut),
       tokenIn,
       tokenOut,
     };
@@ -81,6 +83,7 @@ export const getSwap = async (
       batchSwapSteps: [],
       formattedSwapAmount: amount.toString(),
       formattedReturnAmount: "0",
+      returnAmount: 0n,
       tokenIn,
       tokenOut,
     };
@@ -97,7 +100,7 @@ export const getBaseTokenPrice = async (pools: Pool[]) => {
       const tokenPromises = pool.tokens
         .filter((token: { address: string }) => token.address !== BASE_TOKEN)
         .map((token: { address: any; decimals: number }) =>
-          getSwap(token.address, BASE_TOKEN, 0, 1).catch(() => {
+          getSwap(token.address, BASE_TOKEN, 0, "1").catch(() => {
             return undefined;
           }),
         );

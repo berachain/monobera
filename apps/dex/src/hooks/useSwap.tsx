@@ -90,9 +90,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [wrapType, setWrapType] = useState<WRAP_TYPE | undefined>(undefined);
 
-  const [fromAmount, setFromAmount] = useState<number | undefined>();
+  const [fromAmount, setFromAmount] = useState<string | undefined>();
 
-  const [toAmount, setToAmount] = useState<number | undefined>();
+  const [toAmount, setToAmount] = useState<string | undefined>();
 
   const [swapAmount, setSwapAmount] = useState(0);
 
@@ -198,9 +198,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   useEffect(() => {
     if (isWrap) return;
     if (swapKind === SwapKind.GIVEN_IN) {
-      setToAmount(Number(swapInfo?.formattedReturnAmount));
+      setToAmount(swapInfo?.formattedReturnAmount.toString());
     } else {
-      setFromAmount(Number(swapInfo?.formattedReturnAmount));
+      setFromAmount(swapInfo?.returnAmount.toString());
     }
   }, [swapInfo]);
 
@@ -212,18 +212,32 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       selectedFrom &&
       selectedTo
     ) {
-      const ratio = normalizeToRatio(
-        Number(swapInfo?.formattedSwapAmount),
-        Number(swapInfo?.formattedReturnAmount),
-      );
+      try {
+        console.log(
+          "swapInfo?.formattedSwapAmount",
+          swapInfo?.formattedSwapAmount,
+        );
+        console.log(
+          "swapInfo?.formattedReturnAmount",
+          swapInfo?.formattedReturnAmount,
+        );
+        const ratio = normalizeToRatio(
+          Number(swapInfo?.formattedSwapAmount),
+          Number(swapInfo?.formattedReturnAmount),
+        );
 
-      if (Number.isNaN(Number(ratio))) {
+        if (Number.isNaN(Number(ratio))) {
+          setExchangeRate(undefined);
+          return;
+        }
+
+        const exchangeRate = `1 ${selectedFrom?.symbol} = ${ratio} ${selectedTo?.symbol}`;
+        setExchangeRate(exchangeRate);
+      } catch (e) {
+        console.log("ERRRROE");
+        console.log(e);
         setExchangeRate(undefined);
-        return;
       }
-
-      const exchangeRate = `1 ${selectedFrom?.symbol} = ${ratio} ${selectedTo?.symbol}`;
-      setExchangeRate(exchangeRate);
     } else {
       setExchangeRate(undefined);
     }
@@ -242,29 +256,32 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const deadline = useDeadline();
   useEffect(() => {
     if (swapInfo !== undefined && swapInfo.batchSwapSteps?.length) {
-      // parse minutes to blocks
-      const d = block + BigInt(Math.floor(((deadline as number) * 60) / 2));
+      try {
+        // parse minutes to blocks
+        const d = block + BigInt(Math.floor(((deadline as number) * 60) / 2));
 
-      // calculate min amount out & set last batch swap step as the min amount out
-      const percentage = (100 - (slippage as number)) / 100;
-      const minAmountOut =
-        Number(swapInfo?.formattedReturnAmount ?? 0n) * percentage;
+        const minAmountOut =
+          (swapInfo?.returnAmount ?? 0n) -
+          ((swapInfo?.returnAmount ?? 0n) * BigInt(slippage as number)) / 100n;
 
-      const parsedMinAmountOut = parseUnits(`${minAmountOut}`, 18);
+        swapInfo.batchSwapSteps[
+          (swapInfo?.batchSwapSteps?.length ?? 1) - 1
+        ]!.amountOut = minAmountOut;
 
-      swapInfo.batchSwapSteps[
-        (swapInfo?.batchSwapSteps?.length ?? 1) - 1
-      ]!.amountOut = parsedMinAmountOut;
+        if (swapKind === SwapKind.GIVEN_OUT) {
+          swapInfo.batchSwapSteps[0]!.amountIn = parseUnits(
+            `${fromAmount ?? 0}`,
+            selectedFrom.decimals ?? 18,
+          );
+        }
 
-      if (swapKind === SwapKind.GIVEN_OUT) {
-        swapInfo.batchSwapSteps[0]!.amountIn = parseUnits(
-          `${fromAmount ?? 0}`,
-          18,
-        );
+        const payload = [swapKind, swapInfo?.batchSwapSteps, d];
+        console.log("PAYLOAD", payload);
+        setPayload(payload);
+      } catch (e) {
+        console.log(e);
+        setPayload([]);
       }
-
-      const payload = [swapKind, swapInfo?.batchSwapSteps, d];
-      setPayload(payload);
     }
   }, [swapKind, swapInfo, selectedFrom, selectedTo, deadline, slippage]);
 

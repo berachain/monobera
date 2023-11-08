@@ -91,27 +91,19 @@ const getTokenDisplay = (event: any, pool: Pool) => {
     const tokenOut = pool.tokens.find(
       (token) => token.address === event.swapOut.denom,
     );
-
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
           <TokenIcon token={tokenIn} />
           <p className="ml-2">
-            {Number(
-              formatUnits(BigInt(event.swapIn.amount), tokenIn?.decimals ?? 18),
-            ).toFixed(4)}
+            {Number(formatUnits(BigInt(event.swapIn.amount), 18)).toFixed(4)}
           </p>
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
           <TokenIcon token={tokenOut} />
           <p className="ml-2">
-            {Number(
-              formatUnits(
-                BigInt(event.swapOut.amount),
-                tokenOut?.decimals ?? 18,
-              ),
-            ).toFixed(4)}
+            {Number(formatUnits(BigInt(event.swapOut.amount), 18)).toFixed(4)}
           </p>
         </div>
       </div>
