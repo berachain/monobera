@@ -104,7 +104,7 @@ export default function Portfolio() {
         </div>
       ) : (
         <>
-          <div className="mb-8 flex h-[100px] items-center justify-center text-3xl font-bold leading-[48px] text-foreground md:text-5xl">
+          <div className="mb-8 flex h-[100px] flex-row flex-wrap items-center justify-center text-2xl font-bold leading-[48px] text-foreground md:text-5xl">
             👋 Hey{" "}
             <span
               onClick={() => {

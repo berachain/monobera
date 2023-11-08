@@ -158,11 +158,11 @@ export default function LeaderBoard() {
           </SelectContent>
         </Select>
       </div>
-      <div className="w-full overflow-x-scroll">
+      <div className="w-full ">
         <DataTable
           columns={getColumns(leaderboardType)}
           data={leaderBoardData ?? []}
-          className="min-w-[1136px]"
+          className="w-full"
         />
       </div>
     </div>

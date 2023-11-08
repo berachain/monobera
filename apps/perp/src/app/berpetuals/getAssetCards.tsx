@@ -45,9 +45,9 @@ export const getAssetCardList = ({
 
 const getMarketListItems = (marketOrderItems: IMarketOrder[]): ICards[] => {
   const cards = marketOrderItems.map((item) => {
-    const positionSize = Number(
-      formatUnits(BigInt(item.position_size ?? 0), 18),
-    );
+    const positionSize =
+      Number(formatUnits(BigInt(item.position_size ?? 0), 18)) *
+      Number(item.leverage);
     const openPrice = Number(formatUnits(BigInt(item.open_price ?? 0), 10));
     const size = positionSize / openPrice;
     return {
@@ -145,9 +145,9 @@ const getMarketListItems = (marketOrderItems: IMarketOrder[]): ICards[] => {
 
 const getLimitListItems = (limitOrderItems: ILimitOrder[]): ICards[] => {
   const cards = limitOrderItems.map((item) => {
-    const positionSize = Number(
-      formatUnits(BigInt(item.position_size ?? 0), 18),
-    );
+    const positionSize =
+      Number(formatUnits(BigInt(item.position_size ?? 0), 18)) *
+      Number(item.leverage);
     const openPrice = Number(formatUnits(BigInt(item.price ?? 0), 10));
     const size = positionSize / openPrice;
     return {
@@ -216,15 +216,14 @@ const getLimitListItems = (limitOrderItems: ILimitOrder[]): ICards[] => {
 const getHisoryListItems = (historyItems: IClosedTrade[]): ICards[] => {
   const cards = historyItems.map((item) => {
     const volume = Number(item?.volume);
-    const leverage = Number(item?.leverage);
 
     const openPrice = Number(formatUnits(BigInt(item.open_price ?? 0), 10));
-    const size = (volume * leverage) / openPrice;
+    const size = volume / openPrice;
 
     const openTime = new Date(Number(item.open_time) * 1000);
     const closeTime = new Date(Number(item.close_time) * 1000);
 
-    const positionSize = volume * leverage;
+    const positionSize = volume;
 
     const fees =
       Number(item.rollover_fee) +
@@ -333,10 +332,8 @@ const getHisoryListItems = (historyItems: IClosedTrade[]): ICards[] => {
 const getPnlListItems = (historyItems: IClosedTrade[]): ICards[] => {
   const cards = historyItems.map((item) => {
     const volume = Number(item?.volume);
-    const leverage = Number(item?.leverage);
-
     const openPrice = Number(formatUnits(BigInt(item.open_price ?? 0), 10));
-    const size = (volume * leverage) / openPrice;
+    const size = volume / openPrice;
 
     const fees =
       Number(item.rollover_fee) +

@@ -198,7 +198,11 @@ export const positions_columns: ColumnDef<IMarketOrder>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Est. PnL" />
+      <DataTableColumnHeader
+        column={column}
+        title="Est. PnL"
+        className="min-w-[120px]"
+      />
     ),
     // cell: ({ row }) => (
     //   <div

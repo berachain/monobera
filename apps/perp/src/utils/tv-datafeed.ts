@@ -130,9 +130,9 @@ const datafeed: IDatafeedChartApi & IExternalDatafeed = {
       const isFirst = periodParams.firstDataRequest;
       if (isFirst) {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_PERPS_URL as string}/history?symbol=${
-            symbolInfo.name
-          }&resolution=${resolution}`,
+          `${
+            process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL as string
+          }/history?symbol=${symbolInfo.name}&resolution=${resolution}`,
         );
         const result = await response.json();
         const bars = result.prices.map((bar: any) => {
