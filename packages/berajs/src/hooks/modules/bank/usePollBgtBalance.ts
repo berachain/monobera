@@ -39,9 +39,8 @@ export const usePollBgtBalance = () => {
   );
 
   const useBgtBalance = () => {
-    const { data = 0 } = useSWRImmutable(QUERY_KEY);
-
-    return Number(data).toFixed(4);
+    const { data = "0" } = useSWRImmutable(QUERY_KEY);
+    return data;
   };
   return {
     isLoading,

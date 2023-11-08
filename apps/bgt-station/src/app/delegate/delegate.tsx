@@ -42,7 +42,7 @@ export default function Delegate({
   const { theme, systemTheme } = useTheme();
   const t = theme === "system" ? systemTheme : theme;
   const router = useRouter();
-  const [amount, setAmount] = React.useState<number | undefined>(undefined);
+  const [amount, setAmount] = React.useState<string | undefined>(undefined);
   const [activeAction, setActiveAction] = React.useState<DelegateEnum>(action);
   const { networkConfig } = useBeraConfig();
 
@@ -78,26 +78,18 @@ export default function Delegate({
 
   const getDisabled = () => {
     if (activeAction === DelegateEnum.DELEGATE) {
-      return (
-        Number(amount) > Number(bgtBalance) ||
-        amount === undefined ||
-        amount === 0
-      );
+      return Number(amount) > Number(bgtBalance) || !amount || amount === "";
     }
     if (activeAction === DelegateEnum.REDELEGATE) {
       return (
         Number(amount) > Number(bgtDelegated) ||
-        !redelegateValidator ||
-        amount === undefined ||
-        amount === 0
+        !amount ||
+        amount === "" ||
+        !redelegateValidator
       );
     }
     if (activeAction === DelegateEnum.UNBOND) {
-      return (
-        Number(amount) > Number(bgtDelegated) ||
-        amount === undefined ||
-        amount === 0
-      );
+      return Number(amount) > Number(bgtDelegated) || !amount || amount === "";
     }
   };
   const {
@@ -105,7 +97,7 @@ export default function Delegate({
     isLoading: isDelegatingLoading,
     ModalPortal,
   } = useTxn({
-    message: `Delegating ${amount} BGT to Validator`,
+    message: `Delegating ${Number(amount).toFixed(2)} BGT to Validator`,
     actionType: TransactionActionType.DELEGATE,
   });
 
