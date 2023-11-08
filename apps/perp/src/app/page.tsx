@@ -23,6 +23,7 @@ import Tutorial from "./components/tutorial";
 export function generateMetadata(): Metadata {
   return {
     title: `Home | ${perpsName}`,
+    description: `Welcome to ${perpsName}!`,
   };
 }
 
