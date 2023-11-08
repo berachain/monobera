@@ -7,7 +7,7 @@ import {
   usePollUserAccountData,
   usePollUserReservesData,
 } from "@bera/berajs";
-import { Badge } from "@bera/ui/badge";
+// import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
@@ -93,9 +93,9 @@ export default function StatusBanner() {
             : formatter.format(
                 Number(formatUnits(data?.healthFactor || "0", 18)),
               )}
-          <Badge variant={"info"} className="rounded-md py-0 font-medium">
+          {/* <Badge variant={"info"} className="rounded-md py-0 font-medium">
             Risk Details
-          </Badge>
+          </Badge> */}
         </div>
       ),
     },

@@ -80,7 +80,10 @@ export default function HoneyPage({
             arcade ? "bg-[#468DCB] font-honey" : "pro-mode-background",
           )}
         >
-          <div className="hidden h-fit w-full cursor-pointer text-center font-medium honey:block">
+          <div
+            className="hidden h-fit w-full cursor-pointer text-center font-medium honey:block"
+            id="mint"
+          >
             {arcade ? (
               <div
                 onClick={() => router.push("/?mode=pro")}
@@ -112,7 +115,7 @@ export default function HoneyPage({
             )}
           </div>
           <div>
-            <section id="mint">
+            <section>
               {arcade ? (
                 <div className="m-auto block max-w-[1000px]">
                   <HoneyMachine />
@@ -139,7 +142,7 @@ export default function HoneyPage({
                   arcade ? "text-blue-900" : "",
                 )}
               >
-                <div className="py-4 lg:py-0">
+                <div className="py-4 lg:py-0" id="supply">
                   <Data
                     dailyVolume={formatted24HVolume}
                     tvl={formattedTotalSupply}
