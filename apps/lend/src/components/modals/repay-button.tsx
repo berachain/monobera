@@ -112,9 +112,8 @@ const RepayModalContent = ({
     ),
     borrowBalanceMarketReferenceCurrency:
       Number(formatUnits(userAccountData.totalDebtBase, 8)) -
-      (Number(amount) ?? 0) *
+      Number(amount ?? "0") *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
-
     currentLiquidationThreshold: formatUnits(
       userAccountData.currentLiquidationThreshold,
       4,
