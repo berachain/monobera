@@ -287,7 +287,7 @@ export function SwapCard({
                   />
                 </ul>
                 <div className="flex flex-col gap-2">
-                  {swapInfo && !isWrap && (
+                  {swapInfo && !isWrap ? (
                     <div className="flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
                       <div className="flex w-full flex-row justify-between">
                         <p className="text-xs font-medium text-muted-foreground sm:text-sm">
@@ -306,8 +306,10 @@ export function SwapCard({
                         </p>
                       </div>
                     </div>
+                  ) : (
+                    false
                   )}
-                  {isConnected && exceedingBalance && !isBalancesLoading && (
+                  {isConnected && exceedingBalance && !isBalancesLoading ? (
                     <Alert
                       variant="destructive"
                       className="items-center justify-center"
@@ -317,16 +319,20 @@ export function SwapCard({
                         This amount exceeds your total balance
                       </AlertDescription>
                     </Alert>
+                  ) : (
+                    false
                   )}
-                  {error instanceof RouteNotFound && (
+                  {error instanceof RouteNotFound ? (
                     <Alert variant="destructive">
                       <AlertTitle>Error</AlertTitle>
                       <AlertDescription className="text-xs">
                         {error.message}
                       </AlertDescription>
                     </Alert>
+                  ) : (
+                    false
                   )}
-                  {showPriceImpact && (
+                  {showPriceImpact ? (
                     <Alert variant="destructive">
                       <AlertTitle>
                         {" "}
@@ -338,25 +344,30 @@ export function SwapCard({
                         {priceImpact?.toFixed(2)}%)
                       </AlertDescription>
                     </Alert>
+                  ) : (
+                    false
                   )}
                   {selectedFrom &&
-                    selectedTo &&
-                    swapInfo &&
-                    swapInfo.batchSwapSteps.length === 0 &&
-                    fromAmount &&
-                    fromAmount !== 0 && (
-                      <Alert variant="destructive">
-                        <AlertTitle>
-                          {" "}
-                          <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
-                          Route Not Found
-                        </AlertTitle>
-                        <AlertDescription className="text-xs">
-                          No route found for this swap. Please try a different
-                          pair.
-                        </AlertDescription>
-                      </Alert>
-                    )}
+                  selectedTo &&
+                  swapInfo &&
+                  swapInfo.batchSwapSteps.length === 0 &&
+                  fromAmount &&
+                  fromAmount !== 0 &&
+                  !isWrap ? (
+                    <Alert variant="destructive">
+                      <AlertTitle>
+                        {" "}
+                        <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
+                        Route Not Found
+                      </AlertTitle>
+                      <AlertDescription className="text-xs">
+                        No route found for this swap. Please try a different
+                        pair.
+                      </AlertDescription>
+                    </Alert>
+                  ) : (
+                    false
+                  )}
                 </div>
                 <ActionButton>{getSwapButton()}</ActionButton>
               </div>
