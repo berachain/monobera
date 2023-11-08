@@ -178,7 +178,7 @@ export const PoolSearch = () => {
             </div>
           ) : data && data.length ? (
             isList ? (
-              <div className="flex w-full flex-col items-center justify-center gap-4 overflow-x-scroll">
+              <div className="flex w-full flex-col items-center justify-center gap-4">
                 <DataTable
                   key={data.length}
                   data={data ?? []}
