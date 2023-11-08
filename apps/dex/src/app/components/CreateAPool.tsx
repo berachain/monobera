@@ -49,7 +49,7 @@ export default function CreateAPool() {
           </h3>
           <div className="mb-12 mt-6 flex w-full justify-center gap-2 text-center">
             <Button onClick={() => router.push(`/pool/create`)}>
-              Learn More
+              Create a Pool
             </Button>
             <Link href={`${docsUrl}/learn/dex/pools`} target="_blank">
               <Button variant={"outline"}>Learn More</Button>

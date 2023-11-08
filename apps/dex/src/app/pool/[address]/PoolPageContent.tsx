@@ -586,7 +586,10 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                     Rewards available
                   </h3>
                   <p className="text-lg font-semibold text-foreground">
-                    {Number(bgtRewards).toFixed(2) ?? 0} BGT
+                    {Number(Number.isNaN(bgtRewards) ? 0 : bgtRewards).toFixed(
+                      2,
+                    ) ?? 0}{" "}
+                    BGT
                   </p>
                 </div>
                 {/* @ts-ignore */}

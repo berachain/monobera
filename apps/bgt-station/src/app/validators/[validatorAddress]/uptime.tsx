@@ -9,7 +9,7 @@ import { useFetchValidatorUptime } from "~/hooks/useFetchValidatorUptime";
 export default function Uptime({ address }: { address: Address }) {
   const { data, isLoading } = useFetchValidatorUptime(address);
   return (
-    <div className="flex w-full flex-col gap-4 text-lg font-semibold leading-7 md:w-2/5 md:min-w-[353px]">
+    <div className="flex w-full flex-col gap-4 text-lg font-semibold leading-7 lg:w-2/5 lg:min-w-[353px]">
       <div className="flex items-center gap-1">
         Uptime <Tooltip text="Validator's uptime over the last 100 blocks." />
       </div>

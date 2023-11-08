@@ -33,10 +33,10 @@ export const supportedResolutions: ResolutionString[] = [
 export const intradayMultipliers = ["1", "5", "15", "60", "240"];
 
 export const symbolInfoMap: Record<string, any> = {
-  ["BTC-USD"]: {
-    ticker: "BTC-USD",
-    name: "BTC-USD",
-    description: "Description for BTC-USD",
+  ["BTC-USDC"]: {
+    ticker: "BTC-USDC",
+    name: "BTC-USDC",
+    description: "Description for BTC-USDC",
     type: "crypto",
     session: "24x7",
     timezone: "Etc/UTC",
@@ -48,10 +48,40 @@ export const symbolInfoMap: Record<string, any> = {
     has_intraday: true,
     intraday_multipliers: intradayMultipliers,
   },
-  ["ETH-USD"]: {
-    ticker: "ETH-USD",
-    name: "ETH-USD",
-    description: "Description for ETH-USD",
+  ["ETH-USDC"]: {
+    ticker: "ETH-USDC",
+    name: "ETH-USDC",
+    description: "Description for ETH-USDC",
+    type: "crypto",
+    session: "24x7",
+    timezone: "Etc/UTC",
+    exchange: "Berpetuals Dex",
+    minmov: "1",
+    pricescale: "100000",
+    visible_plots_set: "ohlc",
+    supported_resolutions: supportedResolutions,
+    has_intraday: true,
+    intraday_multipliers: intradayMultipliers,
+  },
+  ["ATOM-USDC"]: {
+    ticker: "ATOM-USDC",
+    name: "ATOM-USDC",
+    description: "Description for ATOM-USDC",
+    type: "crypto",
+    session: "24x7",
+    timezone: "Etc/UTC",
+    exchange: "Berpetuals Dex",
+    minmov: "1",
+    pricescale: "100000",
+    visible_plots_set: "ohlc",
+    supported_resolutions: supportedResolutions,
+    has_intraday: true,
+    intraday_multipliers: intradayMultipliers,
+  },
+  ["TIA-USDC"]: {
+    ticker: "TIA-USDC",
+    name: "TIA-USDC",
+    description: "Description for TIA-USDC",
     type: "crypto",
     session: "24x7",
     timezone: "Etc/UTC",
@@ -100,9 +130,9 @@ const datafeed: IDatafeedChartApi & IExternalDatafeed = {
       const isFirst = periodParams.firstDataRequest;
       if (isFirst) {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_PERPS_URL as string}/history?symbol=${
-            symbolInfo.name
-          }&resolution=${resolution}`,
+          `${
+            process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL as string
+          }/history?symbol=${symbolInfo.name}&resolution=${resolution}`,
         );
         const result = await response.json();
         const bars = result.prices.map((bar: any) => {

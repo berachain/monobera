@@ -92,7 +92,7 @@ export default function Validator({
             </div>
           </div>
         </div>
-        <div className="mt-8 flex flex-col gap-16 md:flex-row md:gap-4">
+        <div className="mt-8 flex flex-col items-center gap-16 lg:flex-row lg:gap-4">
           <ValidatorDetails
             address={validatorAddress}
             decription={validator?.description.details}
@@ -119,6 +119,7 @@ export default function Validator({
           (data as any)?.historicalBribes as FormattedHistoricalBribes[]
         }
         cumulativeBribeValue={(data as any)?.cumulativeBribeTotal}
+        currentBribeValue={validator?.totalActiveBribeUsdAmount}
         isLoading={isLoading}
         validatorAddress={validatorAddress}
       />

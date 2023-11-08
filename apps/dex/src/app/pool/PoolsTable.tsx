@@ -148,7 +148,7 @@ export const PoolSearch = () => {
             className="w-full md:w-[400px]"
           />
 
-          <div className="flex w-full flex-row items-center justify-center gap-2 lg:justify-end">
+          <div className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:justify-end">
             <FilterBadge
               text={"🚀 New Pools"}
               active={isNewPool}

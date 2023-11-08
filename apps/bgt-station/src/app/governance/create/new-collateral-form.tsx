@@ -40,7 +40,7 @@ export default function NewCollateralForm({
           <FormItem className="inline-flex flex-col justify-start">
             <div className="text-sm font-semibold leading-tight">
               Mint Rate{" "}
-              <Tooltip text="Mint rate defines the amount of honey given for one unit of the asset (assuming 1 asset == 1 USD)." />
+              <Tooltip text="Mint rate defines the amount of honey given for  one unit of the asset (assuming 1 asset == 1 USD)." />
             </div>
             <div>
               <FormControl>

@@ -91,7 +91,7 @@ const BribeCard = ({
           {formatter.format(formattedTotalInUsd)} {token?.symbol}{" "}
         </div>
       </div>
-      <div className="flex w-full flex-col gap-4 bg-muted p-6">
+      <div className="flex w-full flex-col gap-4 rounded-b-[17px] bg-muted p-6">
         <div className="flex flex-col gap-2">
           {info.map((item, index) => (
             <div
@@ -104,7 +104,7 @@ const BribeCard = ({
           ))}
         </div>
         <hr className="h-[1px] bg-border" />
-        <div className="flex justify-between text-sm font-medium leading-tight text-primary-foreground">
+        <div className="flex justify-between text-sm font-medium leading-tight text-foreground">
           <div>Start Epoch: {Number(startEpoch ?? 0)}</div>
           <div className="flex items-center gap-1">
             End Epoch: {Number(startEpoch + numBlockProposals ?? 0)}

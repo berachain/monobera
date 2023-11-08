@@ -310,6 +310,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
     return undefined;
   }, [swapInfo]);
+
+  console.log("swapInfo", swapInfo);
   return {
     setSwapKind,
     setSelectedFrom,
