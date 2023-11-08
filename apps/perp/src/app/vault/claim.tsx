@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import {
+  formatter,
   usePollBgtRewardsForAddress,
   usePollHoneyVaultBalance,
 } from "@bera/berajs";
@@ -9,7 +10,9 @@ import { cloudinaryUrl } from "@bera/config";
 import { Skeleton } from "@bera/ui/skeleton";
 import type { Address } from "wagmi";
 
-export default function Claim() {
+export default function Claim({ feeApr }: { feeApr: string }) {
+  const feeAprTrimmed = feeApr.slice(0, -1);
+  const feeAprNumber = Number(feeAprTrimmed);
   const {
     isLoading: isHoneyVaultBalanceLoading,
     useFormattedHoneyVaultBalance,
@@ -33,12 +36,12 @@ export default function Claim() {
   const isLoading = isHoneyVaultBalanceLoading || isBgtRewardsLoading;
   return (
     <div className="relative w-full overflow-hidden rounded-xl border border-border bg-gradient-to-r from-[#180B01] to-[#3B220F] px-10 py-8">
-      <div className=" relative z-10 inline-flex h-[52px] w-[115px] items-center justify-center gap-1 rounded-xl border border-yellow-600 bg-stone-900 px-3 py-2">
+      <div className=" relative z-10 inline-flex h-[52px] w-fit items-center justify-center gap-1 rounded-xl border border-yellow-600 bg-stone-900 px-3 py-2">
         <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-yellow-600">
           {isLoading || bgtApr === undefined ? (
             <Skeleton className="h-[28px] w-[80px]" />
           ) : (
-            <p>{bgtApr?.toFixed(2)}%</p>
+            <p>{formatter.format(bgtApr ?? 0 + feeAprNumber)}%</p>
           )}
         </div>
       </div>

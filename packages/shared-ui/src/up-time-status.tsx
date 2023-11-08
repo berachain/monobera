@@ -1,15 +1,14 @@
 "use client";
 
 import React from "react";
-import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 
-enum ServerStatusEnuem {
-  OPERATIONAL = "Operational",
-  HALTED = "Service Halted",
-  INTERRUPTION = "Service Interruption",
-}
+// enum ServerStatusEnuem {
+//   OPERATIONAL = "Operational",
+//   HALTED = "Service Halted",
+//   INTERRUPTION = "Service Interruption",
+// }
 
 enum GasSpeedEnum {
   LOW = "🐢-Low",
@@ -18,21 +17,21 @@ enum GasSpeedEnum {
   APE = "🦧-Ape",
 }
 
-const getStatusColor = (status: ServerStatusEnuem) => {
-  switch (status) {
-    case ServerStatusEnuem.OPERATIONAL:
-      return "bg-success-foreground";
-    case ServerStatusEnuem.HALTED:
-      return "bg-destructive-foreground";
-    case ServerStatusEnuem.INTERRUPTION:
-      return "bg-warning-foreground";
-    default:
-      return "bg-success-foreground";
-  }
-};
+// const getStatusColor = (status: ServerStatusEnuem) => {
+//   switch (status) {
+//     case ServerStatusEnuem.OPERATIONAL:
+//       return "bg-success-foreground";
+//     case ServerStatusEnuem.HALTED:
+//       return "bg-destructive-foreground";
+//     case ServerStatusEnuem.INTERRUPTION:
+//       return "bg-warning-foreground";
+//     default:
+//       return "bg-success-foreground";
+//   }
+// };
 
 export function UpTimeStatus() {
-  const status = ServerStatusEnuem.INTERRUPTION;
+  // const status = ServerStatusEnuem.INTERRUPTION;
   const gasAmount = 178;
   const [gasSpeed, setGasSpeed] = React.useState<GasSpeedEnum>(
     GasSpeedEnum.FAST,
@@ -41,10 +40,10 @@ export function UpTimeStatus() {
   return (
     <div className="fixed bottom-0 flex w-full justify-between border-y border-border bg-background px-4 py-2">
       <div className="flex items-center gap-2">
-        <div className={cn("h-3 w-3 rounded-full", getStatusColor(status))} />
+        {/* <div className={cn("h-3 w-3 rounded-full", getStatusColor(status))} />
         <div className="text-xs font-medium leading-3 text-muted-foreground">
           {status}
-        </div>
+        </div> */}
       </div>
       <Popover open={open}>
         <PopoverTrigger onClick={() => setOpen(true)}>

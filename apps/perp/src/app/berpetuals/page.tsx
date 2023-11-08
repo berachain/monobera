@@ -18,7 +18,7 @@ import OrderChart from "./components/order-chart";
 import { OrderHistory } from "./components/order-history";
 import CreatePosition from "./create-position";
 
-const DEFAULT_MARKET = "ETH-USD";
+const DEFAULT_MARKET = "ETH-USDC";
 export const revalidate = 30;
 
 export interface IMarket extends Market {

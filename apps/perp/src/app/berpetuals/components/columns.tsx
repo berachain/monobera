@@ -73,15 +73,8 @@ export const ActivePositionPNL = ({
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(Number(position.market?.pair_index) ?? 0);
   const pnl = useCalculatePnl({
-    buy: position.buy,
     currentPrice: price,
-    openPrice: BigInt(position.open_price),
-    leverage: BigInt(position.leverage),
-    levPosSize: BigInt(position.position_size) * BigInt(position.leverage),
-    borrowingFee: BigInt(position.borrowing_fee),
-    rolloverFee: BigInt(position.rollover_fee),
-    fundingFee: BigInt(position.funding_rate),
-    closingFee: BigInt(position.closing_fee),
+    openPosition: position,
   });
 
   return (
@@ -198,10 +191,10 @@ export const positions_columns: ColumnDef<IMarketOrder>[] = [
         className="min-w-[120px]"
       />
     ),
-    // cell: ({ row }) => <PositionLiquidationPrice position={row.original} />,
-    cell: ({ row }) => <div>{formatBigIntUsd(row.original.liq_price, 10)}</div>,
+    cell: ({ row }) => <PositionLiquidationPrice position={row.original} />,
+    // cell: ({ row }) => <div>{formatBigIntUsd(row.original.liq_price, 10)}</div>,
     accessorKey: "liq_price",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
