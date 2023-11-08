@@ -195,7 +195,7 @@ const SupplyModalContent = ({
       {allowance && Number(allowance.formattedAllowance) >= (amount ?? 0) ? (
         <Button
           disabled={
-            !amount || amount === 0 || amount > Number(balance.formattedBalance)
+            !amount || amount <= 0 || amount > Number(balance.formattedBalance)
           }
           onClick={() => {
             write({

@@ -198,7 +198,7 @@ const RepayModalContent = ({
       Number(allowance.formattedAllowance) > Number(amount ?? "0") ? (
         <Button
           disabled={
-            !amount || Number(amount) === 0 || Number(amount) > Number(balance)
+            !amount || Number(amount) <= 0 || Number(amount) > Number(balance)
           }
           onClick={() => {
             write({
