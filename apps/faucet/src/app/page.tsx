@@ -5,7 +5,7 @@ import { cloudinaryUrl, faucetName } from "@bera/config";
 import Content from "./content";
 
 export const metadata: Metadata = {
-  title: `BERA | ${faucetName} `,
+  title: `Berachain ${faucetName} `,
   description: `Fund your testnet wallet with bera tokens.`,
 };
 
