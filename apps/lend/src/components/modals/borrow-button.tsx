@@ -118,7 +118,7 @@ const BorrowModalContent = ({
     BigInt(userAccountData?.healthFactor || "0") >
     parseUnits(
       "1000000000000",
-      baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
+      18,
     )
       ? "∞"
       : formatUnits(userAccountData.healthFactor, 18);
