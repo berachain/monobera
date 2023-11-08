@@ -121,10 +121,7 @@ const BorrowModalContent = ({
       baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
     )
       ? "∞"
-      : formatUnits(
-          userAccountData.healthFactor,
-          baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
-        );
+      : formatUnits(userAccountData.healthFactor, 18);
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency: formatUnits(
@@ -146,26 +143,6 @@ const BorrowModalContent = ({
       4,
     ),
   });
-  // console.log({
-  //   collateralBalanceMarketReferenceCurrency: formatUnits(
-  //     userAccountData.totalCollateralBase,
-  //     baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
-  //   ),
-  //   borrowBalanceMarketReferenceCurrency:
-  //     Number(
-  //       formatUnits(
-  //         userAccountData.totalDebtBase,
-  //         baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
-  //       ),
-  //     ) +
-  //     Number(amount ?? "0") *
-  //       Number(reserveData?.formattedPriceInMarketReferenceCurrency),
-
-  //   currentLiquidationThreshold: formatUnits(
-  //     userAccountData.currentLiquidationThreshold,
-  //     4,
-  //   ),
-  // })
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Borrow</div>
