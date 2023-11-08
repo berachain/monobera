@@ -9,7 +9,7 @@ import { blockExplorerUrl } from "@bera/config";
 import { DataTable } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { Button } from "@bera/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+// import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -23,8 +23,8 @@ export default function ValidatorActivitiesTable({
 }: {
   validatorAddress: Address;
 }) {
-  const [tab, setTab] = React.useState<"recent-votes" | "delegators">(
-    "recent-votes",
+  const [tab, _setTab] = React.useState<"recent-votes" | "delegators">(
+    "delegators",
   );
   const { useActiveValidator } = usePollActiveValidators();
   const validator = useActiveValidator(validatorAddress);
@@ -61,7 +61,7 @@ export default function ValidatorActivitiesTable({
 
   return (
     <div className="flex flex-col gap-4">
-      <Tabs defaultValue={tab} className="mx-auto w-fit">
+      {/* <Tabs defaultValue={tab} className="mx-auto w-fit">
         <TabsList className="w-full">
           {(["recent-votes", "delegators"] as const).map((value) => (
             <TabsTrigger
@@ -74,7 +74,7 @@ export default function ValidatorActivitiesTable({
             </TabsTrigger>
           ))}
         </TabsList>
-      </Tabs>
+      </Tabs> */}
       {/* <SearchInput placeholder="Search" /> */}
       <div className="w-full">
         {tab === "recent-votes" ? (

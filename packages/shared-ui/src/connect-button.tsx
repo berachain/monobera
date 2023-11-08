@@ -19,11 +19,7 @@ export const ConnectButton = ({
   isNavItem?: boolean;
   isHoney?: boolean;
 }) => {
-  const {
-    isConnected,
-    isWrongNetwork,
-    isReady,
-  } = useBeraJs();
+  const { isConnected, isWrongNetwork, isReady } = useBeraJs();
   return (
     <RainbowConnectButton.Custom>
       {({

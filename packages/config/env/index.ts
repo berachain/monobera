@@ -113,4 +113,5 @@ export const bgtTokenAddress = process.env.NEXT_PUBLIC_BGT_ADDRESS as Address;
 
 // PERPS
 
-export const perpsEndpoints = process.env.NEXT_PUBLIC_PERPS_URL as string;
+export const perpsEndpoints = process.env
+  .NEXT_PUBLIC_PERPS_ENDPOINT_URL as string;
