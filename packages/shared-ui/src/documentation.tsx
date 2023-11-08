@@ -21,11 +21,11 @@ export function Documentation({ className }: { className?: string }) {
         </h3>
       </div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <div className="mx-auto flex flex-col items-center justify-between rounded-2xl border bg-background px-12 py-8 text-center w-full lg:items-start lg:text-left">
+        <div className="mx-auto flex w-full flex-col items-center justify-between rounded-2xl border bg-background px-12 py-8 text-center lg:items-start lg:text-left">
           <p className="mb-2 flex flex-col items-center text-lg font-semibold text-secondary-foreground md:flex-row md:gap-3">
             <span className="text-3xl">🚧</span> Developer Docs
           </p>
-          <p className="mb-8 text-lg md:text-2xl font-semibold">
+          <p className="mb-8 text-lg font-semibold md:text-2xl">
             Are you a fellow builder in the making? Check out our docs and start
             building on BeraChain today.
           </p>
@@ -35,11 +35,11 @@ export function Documentation({ className }: { className?: string }) {
             </Button>
           </Link>
         </div>
-        <div className="mx-auto flex flex-col items-center justify-between rounded-2xl border bg-background px-12 py-8  text-center w-full lg:items-start lg:text-left">
+        <div className="mx-auto flex w-full flex-col items-center justify-between rounded-2xl border bg-background px-12  py-8 text-center lg:items-start lg:text-left">
           <p className="mb-2 flex items-center gap-3 text-lg font-semibold text-secondary-foreground">
             <span className="text-3xl">🤝</span> Join the Community
           </p>
-          <p className="mb-8 text-lg md:text-2xl font-semibold ">
+          <p className="mb-8 text-lg font-semibold md:text-2xl ">
             Eager to connect and learn with fellow crypto enthusiasts? Explore
             and join the vibrant community.
           </p>
