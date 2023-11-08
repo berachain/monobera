@@ -24,7 +24,7 @@
     "@t3-oss/env-nextjs": "^0.2.2",
     "@vercel/analytics": "^1.0.1",
     "date-fns": "^2.29.3",
-    "next": "^13.5.4",
+    "next": "^14.0.1",
     "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-datepicker": "^4.16.0",

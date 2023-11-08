@@ -33,6 +33,55 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { chain } = useNetwork();
 
   useEffect(() => setIsMounted(true), []);
+
+  // useEffect(() => {
+  //   if (isMounted) {
+  //     try {
+  //       console.log('status', status)
+  //       console.log('oending conn', pendingConnector)
+  //       console.log('connectors', adcc)
+  //       const connectorId = localStorage.getItem("wagmi.wallet") || "";
+  //       const connector = connectors.find(
+  //         (c: any) => c.id === JSON.parse(connectorId),
+  //       );
+  //       if (connector === undefined) {
+  //         console.log("Bad state, disconnecting");
+  //         // disconnect();
+
+  //         localStorage.setItem('wagmi.connected', 'true')
+  //         // localStorage.setItem('walletConnectState', 'false')
+  //         // localStorage.setItem('hasVisitedBefore', 'false')
+  //         // localStorage.removeItem('rk-recent')
+  //         // localStorage.removeItem('wagmi.wallet')
+  //         // localStorage.clear();
+  //         // reset();
+  //         return;
+  //       }
+  //       const state = localStorage.getItem("wagmi.connected") || "";
+  //       if (!isConnected && state === "true" && connector !== undefined) {
+  //         connectAsync({
+  //           connector,
+  //         }).then((a)=>{
+  //           console.log('a', a)
+  //         });
+  //       }
+  //     } catch (e) {
+  //       // console.log("Welcome to Berachain!");
+  //       // disconnect();
+  //       // reset();
+  //       // location.reload();
+  //       localStorage.setItem('wagmi.connected', 'true')
+
+  //       // localStorage.setItem('wagmi.connected', 'false')
+  //       // localStorage.setItem('walletConnectState', 'false')
+  //       // localStorage.setItem('hasVisitedBefore', 'false')
+  //       // localStorage.clear();
+
+  //       return;
+  //     }
+  //   }
+  // }, [isMounted]);
+
   return (
     <BeraJsContext.Provider
       value={{

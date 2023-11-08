@@ -284,7 +284,6 @@ export const getParsedPools = async (
       });
     tagPools(pools);
   }
-
   return pools;
 };
 

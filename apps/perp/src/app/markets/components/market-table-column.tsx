@@ -84,7 +84,7 @@ export const market_table_column: ColumnDef<IMarket>[] = [
     ),
     cell: ({ row }) => (
       <div className="w-[150px]">
-        <div className={cn("flex w-[112px] items-center gap-2", "")}>
+        <div className={cn("flex w-[200px] items-center gap-2", "")}>
           <Image
             src={row.original?.imageUri ?? ""}
             alt={"selectedMarket"}
