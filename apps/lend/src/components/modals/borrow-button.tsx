@@ -116,10 +116,7 @@ const BorrowModalContent = ({
 
   const currentHealthFactor =
     BigInt(userAccountData?.healthFactor || "0") >
-    parseUnits(
-      "1000000000000",
-      18,
-    )
+    parseUnits("1000000000000", 18)
       ? "∞"
       : formatUnits(userAccountData.healthFactor, 18);
 

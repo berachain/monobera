@@ -113,7 +113,7 @@ const WithdrawModalContent = ({
     Number(maxWithdrawalAllowance) > Number(userBalance)
       ? userBalance
       : maxWithdrawalAllowance;
-      
+
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Withdraw</div>

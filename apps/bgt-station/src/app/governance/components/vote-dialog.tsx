@@ -60,7 +60,7 @@ export function VoteDialog({
             <Skeleton className="h-20 w-20" />
           ) : (
             <p className="text-3xl font-semibold">
-              {votingPower ? (votingPower*100).toFixed(2) + "%" : "0%"}
+              {votingPower ? (votingPower * 100).toFixed(2) + "%" : "0%"}
             </p>
           )}
           <p className="text-sm font-medium">
