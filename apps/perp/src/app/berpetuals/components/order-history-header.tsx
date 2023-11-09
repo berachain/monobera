@@ -38,12 +38,13 @@ export function OrderHistoryHeader({
     });
   const { isLoading: isCloseLimitOrdersLoading, write: writeOrdersClose } =
     useOctTxn({
-      message: `Closing All Open Positions`,
+      message: `Closing All Open Orders`,
       actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
         void mutate(QUERY_KEY);
       },
     });
+
   return (
     <div>
       <div className="sm: flex h-[70px] h-fit w-full flex-col items-center justify-between border-y border-border bg-muted px-6 py-4 sm:flex-row">

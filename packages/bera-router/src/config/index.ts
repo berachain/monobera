@@ -1,4 +1,15 @@
 import {
+  blockExplorerName,
+  blockExplorerUrl,
+  chainId,
+  chainName,
+  gasTokenDecimals,
+  gasTokenName,
+  gasTokenSymbol,
+  jsonRpcUrl,
+  networkName,
+} from "@bera/config";
+import {
   createPublicClient,
   http,
   type Address,
@@ -6,37 +17,37 @@ import {
   type PublicClient,
 } from "viem";
 
-const PolarisChain: Chain = {
-  id: 2061,
-  name: "Polaris",
-  network: "Polaris",
+const chain: Chain = {
+  id: chainId,
+  name: chainName,
+  network: networkName,
   nativeCurrency: {
-    decimals: 18,
-    name: "Polaris",
-    symbol: "tbera",
+    decimals: gasTokenDecimals,
+    name: gasTokenName,
+    symbol: gasTokenSymbol,
   },
   blockExplorers: {
     etherscan: {
-      name: "PolarScan",
-      url: "k8s-guardedt-explorer-f0d73f8a8b-1f6003a02eec3390.elb.us-west-2.amazonaws.com",
+      name: blockExplorerName,
+      url: blockExplorerUrl,
     },
     default: {
-      name: "PolarScan",
-      url: "k8s-guardedt-explorer-f0d73f8a8b-1f6003a02eec3390.elb.us-west-2.amazonaws.com",
+      name: blockExplorerName,
+      url: blockExplorerUrl,
     },
   },
   rpcUrls: {
     default: {
-      http: ["https://devnet.beraswillmakeit.com"],
+      http: [jsonRpcUrl],
     },
     public: {
-      http: ["https://devnet.beraswillmakeit.com"],
+      http: [jsonRpcUrl],
     },
   },
 };
 
 const client = createPublicClient({
-  chain: PolarisChain,
+  chain: chain,
   transport: http(),
 });
 
