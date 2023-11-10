@@ -5,7 +5,8 @@ import {
   usePollUserAccountData,
 } from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
-import { parseUnits } from "viem";
+import BigNumber from "bignumber.js";
+import { formatUnits, parseUnits } from "viem";
 
 import UserTokenCard from "~/components/user-token-card";
 import { available_borrows_columns } from "./column";
@@ -30,7 +31,14 @@ export default function AvailableBorrows({
         baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8,
       );
       asset.balance = data.availableBorrowsBase / tokenPrice;
-      asset.formattedBalance = BigInt(asset.balance).toString();
+      asset.formattedBalance = BigNumber(
+        formatUnits(
+          data.availableBorrowsBase,
+          baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8,
+        ),
+      )
+        .dividedBy(asset.reserveData.formattedPriceInMarketReferenceCurrency)
+        .toString();
     }
   });
 

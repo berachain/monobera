@@ -81,7 +81,9 @@ export default function InterestRateOvertime({
             type: "line",
             mode: "vertical",
             scaleID: "x",
-            value: `${Number(reserveData?.borrowUsageRatio) * 100}%`,
+            value: `${Math.round(
+              Number(reserveData?.borrowUsageRatio ?? 0) * 100,
+            )}%`,
             borderColor: "#059669",
             borderWidth: 1,
             borderDash: [5, 5],
@@ -159,7 +161,7 @@ export default function InterestRateOvertime({
               }px)`,
             }}
           >
-            Current {Number(reserveData?.borrowUsageRatio) * 100}%
+            Current {(Number(reserveData?.borrowUsageRatio) * 100).toFixed(2)}%
           </div>
           <div
             className="absolute -top-[10px] text-[10px] text-muted-foreground"

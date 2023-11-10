@@ -50,7 +50,7 @@ export default function UserTokenCard({
             </div>
 
             <div className="h-8 text-lg font-bold uppercase">
-              {formatter.format(Number(balance))}
+              {formatter.format(balance)}
             </div>
             <div className="text-xs font-medium leading-tight">
               $
