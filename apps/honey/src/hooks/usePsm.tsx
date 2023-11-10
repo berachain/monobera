@@ -16,6 +16,7 @@ import {
 } from "@bera/berajs";
 import { erc20HoneyAddress, honeyTokenAddress } from "@bera/config";
 import { useTxn } from "@bera/shared-ui";
+import BigNumber from "bignumber.js";
 import { getAddress, parseUnits, type Address } from "viem";
 
 export const usePsm = () => {
@@ -50,9 +51,9 @@ export const usePsm = () => {
     }
   }, [collateralList, honey]);
 
-  const [fromAmount, setFromAmount] = useState(0);
+  const [fromAmount, setFromAmount] = useState<string | undefined>(undefined);
 
-  const [toAmount, setToAmount] = useState(0);
+  const [toAmount, setToAmount] = useState<string | undefined>(undefined);
 
   const isMint = selectedFrom?.address !== honey?.address;
 
@@ -90,70 +91,73 @@ export const usePsm = () => {
   const fee = params ? (isMint ? params.mintFee : params.redeemFee) : 0;
 
   const { write, isLoading, ModalPortal } = useTxn({
-    message: isMint ? `Mint ${toAmount} Honey` : `Redeem ${fromAmount} Honey`,
+    message: isMint
+      ? `Mint ${Number(toAmount).toFixed(2)} Honey`
+      : `Redeem ${Number(fromAmount).toFixed(2)} Honey`,
     actionType: isMint
       ? TransactionActionType.MINT_HONEY
       : TransactionActionType.REDEEM_HONEY,
   });
 
-  const { usePreviewMint } = usePollPreviewMint(collateral, fromAmount);
+  const { usePreviewMint } = usePollPreviewMint(
+    collateral,
+    (fromAmount ?? "0") as `${number}`,
+  );
   const previewMint = usePreviewMint();
   const { usePreviewMintGivenOut } = usePollPreviewMintGivenOut(
     collateral,
-    toAmount,
+    (toAmount ?? "0") as `${number}`,
   );
   const previewMintGivenOut = usePreviewMintGivenOut();
   const { usePreviewRedeemGivenOut } = usePollPreviewRedeemGivenOut(
     collateral,
-    toAmount,
+    (toAmount ?? "0") as `${number}`,
   );
 
   const previewRedeemGivenOut = usePreviewRedeemGivenOut();
-  const { usePreviewRedeem } = usePollPreviewRedeem(collateral, fromAmount);
+  const { usePreviewRedeem } = usePollPreviewRedeem(
+    collateral,
+    (fromAmount ?? "0") as `${number}`,
+  );
   const previewRedeem = usePreviewRedeem();
 
   useEffect(() => {
     if (isMint && givenIn && previewMint !== undefined) {
-      setToAmount(Number(previewMint));
-    } else if (
-      previewMint === undefined &&
-      fromAmount === 0 &&
-      isMint &&
-      givenIn
-    ) {
-      setToAmount(Number(0));
+      setToAmount(previewMint);
+    } else if (!previewMint && Number(fromAmount) === 0 && isMint && givenIn) {
+      setToAmount(undefined);
     }
-    if (!isMint && givenIn && previewRedeem !== undefined) {
-      setToAmount(Number(previewRedeem));
+    if (!isMint && givenIn && previewRedeem) {
+      setToAmount(previewRedeem);
     } else if (
-      previewRedeem === undefined &&
-      fromAmount === 0 &&
+      !previewRedeem &&
+      Number(fromAmount) === 0 &&
       !isMint &&
       givenIn
     ) {
-      setToAmount(Number(0));
+      setToAmount(undefined);
     }
 
-    if (isMint && givenIn === false && previewMintGivenOut !== undefined) {
-      setFromAmount(Number(previewMintGivenOut));
+    if (isMint && !givenIn && previewMintGivenOut) {
+      setFromAmount(previewMintGivenOut);
     } else if (
-      previewMintGivenOut === undefined &&
-      toAmount === 0 &&
+      !previewMintGivenOut &&
+      Number(toAmount) === 0 &&
       isMint &&
       givenIn === false
     ) {
-      setFromAmount(Number(0));
+      setFromAmount(undefined);
     }
 
     if (!isMint && givenIn === false && previewRedeemGivenOut !== undefined) {
-      setFromAmount(Number(previewRedeemGivenOut));
+      setFromAmount(previewRedeemGivenOut);
     } else if (
       previewRedeemGivenOut === undefined &&
-      fromAmount === 0 &&
+      Number(fromAmount) === 0 &&
       !isMint &&
       givenIn
     ) {
-      setFromAmount(Number(0));
+      setFromAmount(undefined);
     }
   }, [previewMint, previewRedeem, previewMintGivenOut, previewRedeemGivenOut]);
 
@@ -176,14 +180,14 @@ export const usePsm = () => {
       const payload = [
         account,
         selectedFrom?.address,
-        parseUnits(`${fromAmount}`, 18),
+        parseUnits((fromAmount ?? "0") as `${number}`, 18),
       ];
       setPayload(payload);
     }
     if (!isMint && account) {
       const payload = [
         account,
-        parseUnits(`${fromAmount}`, 18),
+        parseUnits((fromAmount ?? "0") as `${number}`, 18),
         selectedTo?.address,
       ];
       setPayload(payload);
@@ -199,8 +203,8 @@ export const usePsm = () => {
 
   useEffect(() => {
     if (
-      allowance?.formattedAllowance === "0" ||
-      Number(allowance?.formattedAllowance) < fromAmount
+      BigNumber(allowance?.formattedAllowance).eq("0") ||
+      BigNumber(fromAmount ?? "0").gt(allowance?.formattedAllowance ?? "0")
     ) {
       if (!needsApproval) setNeedsApproval(true);
     } else {

@@ -12,7 +12,7 @@ import { laggy } from "~/hooks/laggy";
 // this is going to be slow for now until we have event indexing
 export const usePollPreviewRedeem = (
   collateral: Token | undefined,
-  amount: number,
+  amount: `${number}`,
 ) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
@@ -23,7 +23,7 @@ export const usePollPreviewRedeem = (
     QUERY_KEY,
     async () => {
       try {
-        if (collateral === undefined || amount === 0) return undefined;
+        if (collateral === undefined || Number(amount) === 0) return undefined;
         const formattedAmount = parseUnits(
           `${amount}`,
           collateral.decimals ?? 18,
@@ -49,9 +49,7 @@ export const usePollPreviewRedeem = (
 
   const usePreviewRedeem = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data
-      ? Number(formatUnits(data, collateral?.decimals ?? 18))
-      : undefined;
+    return data ? formatUnits(data, collateral?.decimals ?? 18) : undefined;
   };
   return {
     usePreviewRedeem,
