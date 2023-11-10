@@ -11,7 +11,7 @@ import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 type Props = {
   tokenWeights: ITokenWeight[];
   error: Error | undefined;
-  onTokenBalanceChange: (index: number, amount: number) => void;
+  onTokenBalanceChange: (index: number, amount: string) => void;
   onContinue: () => void;
   onBack: () => void;
 };

@@ -46,7 +46,7 @@ export const usePollPriceImpact = ({
       const actualResult = Number(swapInfo?.formattedReturnAmount);
       const percentageDifference =
         (Math.abs(bestResult - actualResult) / bestResult) * 100;
-      return percentageDifference;
+      return percentageDifference < -100 ? -100 : percentageDifference;
     },
     {
       refreshInterval: POLLING.FAST,
