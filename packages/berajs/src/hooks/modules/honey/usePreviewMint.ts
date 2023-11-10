@@ -12,7 +12,7 @@ import { laggy } from "~/hooks/laggy";
 // this is going to be slow for now until we have event indexing
 export const usePollPreviewMint = (
   collateral: Token | undefined,
-  amount: number,
+  amount: `${number}`,
 ) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
@@ -23,7 +23,7 @@ export const usePollPreviewMint = (
     QUERY_KEY,
     async () => {
       try {
-        if (collateral === undefined || amount === 0) return undefined;
+        if (collateral === undefined || Number(amount) === 0) return undefined;
         const formattedAmount = parseUnits(
           `${amount}`,
           collateral.decimals ?? 18,
@@ -49,9 +49,7 @@ export const usePollPreviewMint = (
 
   const usePreviewMint = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data
-      ? Number(formatUnits(data, collateral?.decimals ?? 18))
-      : undefined;
+    return data ? formatUnits(data, collateral?.decimals ?? 18) : undefined;
   };
   return {
     usePreviewMint,

@@ -7,6 +7,7 @@ import { ConnectButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import BigNumber from "bignumber.js";
 import { parseUnits } from "viem";
 
 import { TokenInput } from "~/components/token-input";
@@ -99,14 +100,14 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 selected={selectedFrom}
                 selectedTokens={[selectedFrom, selectedTo]}
                 onTokenSelection={setSelectedFrom}
-                amount={fromAmount ?? 0}
+                amount={fromAmount}
                 balance={fromBalance?.formattedBalance}
                 selectable={selectedFrom?.address !== honey?.address}
                 customTokenList={collateralList}
                 hidePrice
                 setAmount={(amount) => {
                   setGivenIn(true);
-                  setFromAmount(Number(amount));
+                  setFromAmount(amount);
                 }}
               />
               {/* <div className="relative">
@@ -138,7 +139,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 amount={toAmount}
                 setAmount={(amount) => {
                   setGivenIn(false);
-                  setToAmount(Number(amount));
+                  setToAmount(amount);
                 }}
                 selectable={selectedTo?.address !== honey?.address}
                 customTokenList={collateralList}
@@ -149,12 +150,12 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
               />
             </ul>
             {/* fix to check if allowance > amount */}
-            {Number(allowance?.formattedAllowance) < fromAmount ? (
+            {BigNumber(allowance?.formattedAllowance).lt(fromAmount ?? "0") ? (
               <ApproveTokenButton
                 token={selectedFrom}
                 spender={erc20HoneyAddress}
                 amount={parseUnits(
-                  `${fromAmount}`,
+                  fromAmount as `${number}`,
                   selectedFrom?.decimals ?? 18,
                 )}
               />
@@ -162,8 +163,8 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
               isMint ? (
                 <Button
                   disabled={
-                    fromAmount === 0 ||
-                    toAmount === 0 ||
+                    Number(fromAmount) === 0 ||
+                    Number(toAmount) === 0 ||
                     isLoading ||
                     !allowance
                   }
@@ -182,8 +183,8 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
               ) : (
                 <Button
                   disabled={
-                    fromAmount === 0 ||
-                    toAmount === 0 ||
+                    Number(fromAmount) === 0 ||
+                    Number(toAmount) === 0 ||
                     isLoading ||
                     !allowance
                   }
