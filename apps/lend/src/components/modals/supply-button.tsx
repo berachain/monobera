@@ -31,7 +31,7 @@ export default function SupplyBtn({
   variant?: "primary" | "outline";
 }) {
   const [open, setOpen] = useState(false);
-  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const [amount, setAmount] = useState<string | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Supplying ${amount} ${token?.symbol}`,
     onSuccess: () => {
@@ -75,8 +75,8 @@ const SupplyModalContent = ({
   write,
 }: {
   token: Token;
-  amount: number | undefined;
-  setAmount: (amount: number | undefined) => void;
+  amount: string | undefined;
+  setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const { account } = useBeraJs();
@@ -101,7 +101,7 @@ const SupplyModalContent = ({
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency:
       Number(formatUnits(userAccountData.totalCollateralBase, 8)) +
-      (amount ?? 0) *
+      Number(amount ?? "0") *
         Number(reserveData?.formattedPriceInMarketReferenceCurrency),
     borrowBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalDebtBase,
@@ -140,9 +140,7 @@ const SupplyModalContent = ({
           }
           value={amount}
           onChange={(e) =>
-            setAmount(
-              Number(e.target.value) === 0 ? undefined : Number(e.target.value),
-            )
+            setAmount(Number(e.target.value) === 0 ? undefined : e.target.value)
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
@@ -154,7 +152,7 @@ const SupplyModalContent = ({
               setAmount(
                 Number(balance?.formattedBalance) === 0
                   ? undefined
-                  : Number(balance?.formattedBalance),
+                  : balance?.formattedBalance,
               )
             }
           >
@@ -169,7 +167,7 @@ const SupplyModalContent = ({
           <div className="font-semibold">
             $
             {formatter.format(
-              (amount ?? 0) *
+              Number(amount ?? "0") *
                 Number(reserveData.formattedPriceInMarketReferenceCurrency),
             )}
           </div>
@@ -192,10 +190,13 @@ const SupplyModalContent = ({
         </div>
       </div>
 
-      {allowance && Number(allowance.formattedAllowance) >= (amount ?? 0) ? (
+      {allowance &&
+      Number(allowance.formattedAllowance) >= Number(amount ?? "0") ? (
         <Button
           disabled={
-            !amount || amount <= 0 || amount > Number(balance.formattedBalance)
+            !amount ||
+            Number(amount) <= 0 ||
+            Number(amount) > Number(balance.formattedBalance)
           }
           onClick={() => {
             write({
@@ -204,20 +205,20 @@ const SupplyModalContent = ({
               functionName: "supply",
               params: [
                 token.address,
-                parseUnits(`${Number(amount)}`, token.decimals),
+                parseUnits(`${amount ?? "0"}` as `${number}`, token.decimals),
                 account,
                 parseUnits("0", token.decimals),
               ],
             });
           }}
         >
-          {amount === 0 ? "Enter Amount" : "Supply"}
+          {!amount ? "Enter Amount" : "Supply"}
         </Button>
       ) : (
         <ApproveButton
           token={token}
           spender={lendPoolImplementationAddress}
-          amount={parseUnits(`${amount ?? 0}`, token.decimals)}
+          amount={parseUnits(`${amount ?? "0"}` as `${number}`, token.decimals)}
         />
       )}
     </div>
