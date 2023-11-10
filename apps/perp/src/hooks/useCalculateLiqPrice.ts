@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { formatUnits } from "viem";
 
 export interface ICalculateLiqPrice {
   bfLong: string | undefined;
@@ -20,12 +19,15 @@ export const useCalculateLiqPrice = ({
 
   useMemo(() => {
     try {
-      const formattedBorrowingL = Number(
-        formatUnits(BigInt(bfLong ?? "0"), 18),
-      );
-      const formattedBorrowingS = Number(
-        formatUnits(BigInt(bfShort ?? "0"), 18),
-      );
+      console.log({
+        bfLong,
+        bfShort,
+        orderType,
+        price,
+        leverage,
+      });
+      const formattedBorrowingL = Number(bfLong);
+      const formattedBorrowingS = Number(bfShort);
       const long = orderType === "long";
       const openPrice = price ?? 0;
 
