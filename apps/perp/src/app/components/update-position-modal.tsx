@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
+import { TRADING_ABI, TransactionActionType } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -10,9 +10,9 @@ import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
-import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { ActivePositionPNL } from "../berpetuals/components/columns";
 import { type IMarketOrder } from "../berpetuals/components/order-history";
 import { TPSL } from "../berpetuals/components/tpsl";
 
@@ -68,17 +68,17 @@ export function UpdatePositionModal({
     },
   });
 
-  const formattedPrice = Number(
-    formatUnits(BigInt(openPosition?.open_price ?? 0n), 10),
-  );
+  // const formattedPrice = Number(
+  //   formatUnits(BigInt(openPosition?.open_price ?? 0n), 10),
+  // );
 
-  const liqPrice = useCalculateLiqPrice({
-    bfLong: openPosition?.market.pair_borrowing_fee?.bf_long,
-    bfShort: openPosition?.market.pair_borrowing_fee?.bf_short,
-    orderType: openPosition?.buy === true ? "long" : "short",
-    price: formattedPrice,
-    leverage: openPosition?.leverage,
-  });
+  // const liqPrice = useCalculateLiqPrice({
+  //   bfLong: openPosition?.market.pair_borrowing_fee?.bf_long,
+  //   bfShort: openPosition?.market.pair_borrowing_fee?.bf_short,
+  //   orderType: openPosition?.buy === true ? "long" : "short",
+  //   price: formattedPrice,
+  //   leverage: openPosition?.leverage,
+  // });
 
   const updateTpParams = [
     openPosition?.market?.pair_index,
@@ -146,7 +146,11 @@ export function UpdatePositionModal({
                   Liquidation Price
                 </div>
                 <div className="text-right text-sm font-semibold leading-5 text-destructive-foreground">
-                  {formatUsd(liqPrice ?? 0)}
+                  {Number(openPosition.liq_price) !== 0 ? (
+                    formatBigIntUsd(openPosition.liq_price, 10)
+                  ) : (
+                    <Skeleton className={"h-[28px] w-[80px]"} />
+                  )}
                 </div>
               </div>
               <div>
@@ -165,9 +169,7 @@ export function UpdatePositionModal({
               <div className="text-[10px] text-muted-foreground">
                 UnRealized PnL
               </div>
-              <div className=" text-sm font-semibold text-destructive-foreground">
-                -$6942.06
-              </div>
+              <ActivePositionPNL position={openPosition} />
             </div>
             <div className="flex h-full flex-col justify-between">
               <div className="text-[10px] text-muted-foreground">Leverage</div>
@@ -182,7 +184,7 @@ export function UpdatePositionModal({
             sl={sl}
             formattedPrice={formattedCurrentPrice}
             isUpdate={true}
-            liqPrice={liqPrice}
+            liqPrice={Number(openPosition.liq_price)}
             long={openPosition?.buy === true}
             isSlSubmitLoading={isUpdateSLLoading}
             isTpSubmitLoading={isUpdateTPLoading}
