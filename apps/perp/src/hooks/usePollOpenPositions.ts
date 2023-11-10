@@ -29,7 +29,7 @@ export const usePollOpenPositions = () => {
   };
 
   const { isLoading } = useSWR(QUERY_KEY, refreshData, {
-    refreshInterval: POLLING.NORMAL,
+    refreshInterval: POLLING.FAST,
   });
 
   const useOpenPositions = () => {
