@@ -5,12 +5,13 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 type Props = {
   tokenWeight: ITokenWeight;
   index: number;
-  onTokenBalanceChange: (index: number, amount: number) => void;
+  onTokenBalanceChange: (index: number, amount: string) => void;
 };
 
 export default function CreatePoolInitialLiquidityInput({
@@ -48,10 +49,12 @@ export default function CreatePoolInitialLiquidityInput({
           placeholder="0"
           className="w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={
-            tokenWeight.initialLiquidity > 0 ? tokenWeight.initialLiquidity : ""
+            getSafeNumber(tokenWeight.initialLiquidity) > 0
+              ? tokenWeight.initialLiquidity
+              : ""
           }
           onChange={(e) => {
-            onTokenBalanceChange(index, Number(e.target.value));
+            onTokenBalanceChange(index, e.target.value);
           }}
         />
       </div>
@@ -66,7 +69,7 @@ export default function CreatePoolInitialLiquidityInput({
               <p
                 className="cursor-pointer self-start text-xs text-muted-foreground hover:underline"
                 onClick={() => {
-                  onTokenBalanceChange(index, tokenBalance);
+                  onTokenBalanceChange(index, tokenBalance.toString());
                 }}
               >
                 MAX

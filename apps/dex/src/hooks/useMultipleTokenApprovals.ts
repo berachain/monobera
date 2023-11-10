@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePollAllowances, type Token } from "@bera/berajs";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { type TokenInput } from "./useMultipleTokenInput";
 
 const useMultipleTokenApprovals = (
@@ -31,7 +32,8 @@ const useMultipleTokenApprovals = (
           );
           if (
             allowance.formattedAllowance === "0" ||
-            Number(allowance.formattedAllowance) < (token?.amount ?? 0)
+            Number(allowance.formattedAllowance) <
+              (getSafeNumber(token?.amount) ?? 0)
           ) {
             return allowance;
           }

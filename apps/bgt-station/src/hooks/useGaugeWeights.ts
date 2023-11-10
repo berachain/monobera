@@ -78,17 +78,15 @@ export const useUserGaugeWeight = () => {
         // const cbTvlData = await Promise.all(promiseArray);
         // const tvl = getTvlPrices(cbTvlData, prices);
 
-        const gaugeWeightArray: GaugeWeight[] = result.map(
-          (w: any) => {
-            return {
-              label: w.address,
-              address: w.address,
-              amount: Number(w.amount),
-              percentage: Number(w.percentage),
-              // tvl: tvl[i],
-            };
-          },
-        );
+        const gaugeWeightArray: GaugeWeight[] = result.map((w: any) => {
+          return {
+            label: w.address,
+            address: w.address,
+            amount: Number(w.amount),
+            percentage: Number(w.percentage),
+            // tvl: tvl[i],
+          };
+        });
         return gaugeWeightArray;
       } catch (e) {
         console.log(e);
@@ -157,17 +155,15 @@ export const useGlobalValidatorGaugeWeight = () => {
         // const promiseArray = result.map((w: any) => getPoolTvl(w.address));
         // const cbTvlData = await Promise.all(promiseArray);
         // const tvl = getTvlPrices(cbTvlData, prices);
-        const gaugeWeightArray: GaugeWeight[] = result.map(
-          (w: any) => {
-            return {
-              label: w.address,
-              address: w.address,
-              amount: Number(w.amount),
-              percentage: Number(w.percentage),
-              // tvl: tvl[i],
-            };
-          },
-        );
+        const gaugeWeightArray: GaugeWeight[] = result.map((w: any) => {
+          return {
+            label: w.address,
+            address: w.address,
+            amount: Number(w.amount),
+            percentage: Number(w.percentage),
+            // tvl: tvl[i],
+          };
+        });
         return gaugeWeightArray;
       } catch (e) {
         console.log(e);

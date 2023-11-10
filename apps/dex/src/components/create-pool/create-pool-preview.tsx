@@ -18,6 +18,7 @@ import { Input } from "@bera/ui/input";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
@@ -67,7 +68,7 @@ export function CreatePoolPreview({
     tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
     tokenWeights.map((tokenWeight) =>
       parseUnits(
-        `${tokenWeight.initialLiquidity}`,
+        `${getSafeNumber(tokenWeight.initialLiquidity)}`,
         tokenWeight.token?.decimals ?? 18,
       ),
     ),
@@ -110,7 +111,7 @@ export function CreatePoolPreview({
                 key={index}
                 token={tokenWeight.token}
                 weight={tokenWeight.weight}
-                value={tokenWeight.initialLiquidity}
+                value={getSafeNumber(tokenWeight.initialLiquidity)}
               />
             );
           })}
