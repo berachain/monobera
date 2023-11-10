@@ -17,7 +17,10 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+// import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
+
+// import { maxUint256 } from "~/utils/constants";
 
 export default function WithdrawBtn({
   token,
@@ -197,7 +200,10 @@ const WithdrawModalContent = ({
             functionName: "withdraw",
             params: [
               token.address,
-              parseUnits(`${Number(amount)}`, token.decimals),
+              // BigNumber(userBalance).eq(BigNumber(amount ?? ""))
+              //   ? maxUint256
+              //   :
+              parseUnits((amount ?? "0") as `${number}`, token.decimals),
               account,
             ],
           });

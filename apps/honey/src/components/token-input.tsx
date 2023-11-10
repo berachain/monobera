@@ -11,11 +11,12 @@ import { SelectToken } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import BigNumber from "bignumber.js";
 
 type Props = {
   selected: Token | undefined;
   selectedTokens?: (Token | undefined)[];
-  amount: number;
+  amount: string | undefined;
   balance?: number;
   price?: number;
   hideBalance?: boolean;
@@ -27,7 +28,7 @@ type Props = {
   showExceeding?: boolean;
   hideMax?: boolean;
   onTokenSelection?: (token: Token) => void;
-  setAmount?: (amount: number) => void;
+  setAmount?: (amount: string | undefined) => void;
   onExceeding?: (isExceeding: boolean) => void;
 };
 
@@ -53,24 +54,23 @@ export function TokenInput({
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { data: token, isLoading: isBalancesLoading } =
     useSelectedAssetWalletBalance(selected?.address ?? "");
-  let tokenBalance = Number(token?.formattedBalance ?? "0");
 
-  if (balance !== undefined) {
-    tokenBalance = balance;
-  }
+  let tokenBalance: string = token?.formattedBalance ?? "0";
+  if (balance !== undefined) tokenBalance = balance.toString();
+
   const { isConnected } = useBeraJs();
 
   useEffect(() => {
-    if (amount > Number.MAX_SAFE_INTEGER) return;
-    if (amount <= tokenBalance) {
-      setExceeding(false);
-      return;
-    }
+    if (BigNumber(tokenBalance).eq(0)) return;
+    if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
     if (
       !isBalancesLoading &&
-      (amount > tokenBalance || Number(tokenBalance) == 0)
+      (BigNumber(amount ?? "0").gt(tokenBalance) || Number(tokenBalance) == 0)
     ) {
       setExceeding(true);
+      return;
+    } else {
+      setExceeding(false);
       return;
     }
   }, [tokenBalance, amount]);
@@ -103,7 +103,7 @@ export function TokenInput({
                 showExceeding &&
                 "text-destructive-foreground",
             )}
-            value={amount > 0 ? amount : ""}
+            value={amount}
             onChange={(e) => {
               const inputValue = e.target.value;
 
@@ -113,13 +113,13 @@ export function TokenInput({
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
               if (periodsCount <= 1) {
-                setAmount && setAmount(Number(filteredValue));
+                setAmount && setAmount(filteredValue);
               }
             }}
           />
         </div>
       </div>
-      {isConnected && selected && tokenBalance !== 0 ? (
+      {isConnected && selected && Number(tokenBalance) !== 0 ? (
         <div className="absolute bottom-2 right-0">
           {hideBalance ? null : (
             <div className="mt-[-10px] flex w-full items-center justify-between gap-1">
@@ -142,7 +142,12 @@ export function TokenInput({
               <div className="flex flex-row gap-1">
                 {!hidePrice && (
                   <p className="self-center p-0 text-xs text-muted-foreground">
-                    {amount !== 0 && formatUsd((amount * price).toFixed(2))}
+                    {Number(amount) !== 0 &&
+                      formatUsd(
+                        BigNumber(amount ?? "0")
+                          .times(price)
+                          .toFixed(2),
+                      )}
                   </p>
                 )}
               </div>
