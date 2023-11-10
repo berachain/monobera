@@ -100,6 +100,16 @@ export function SwapCard({
     outputCurrency,
   });
 
+  const safeFromAmount =
+    Number(fromAmount) > Number.MAX_SAFE_INTEGER
+      ? Number.MAX_SAFE_INTEGER
+      : Number(fromAmount) ?? 0;
+
+  const safeSwapAmount =
+    Number(swapAmount) > Number.MAX_SAFE_INTEGER
+      ? Number.MAX_SAFE_INTEGER
+      : Number(swapAmount) ?? 0;
+
   const { isConnected } = useBeraJs();
   const [exceedingBalance, setExceedingBalance] = useState(false);
 
@@ -140,7 +150,7 @@ export function SwapCard({
 
   const getSwapButton = () => {
     if (
-      (Number(allowance?.formattedAllowance) ?? 0) < (fromAmount ?? 0) &&
+      (Number(allowance?.formattedAllowance) ?? 0) < (safeFromAmount ?? 0) &&
       !exceedingBalance &&
       !isWrap
     ) {
@@ -166,10 +176,10 @@ export function SwapCard({
                 params:
                   wrapType === WRAP_TYPE.WRAP
                     ? []
-                    : [parseUnits(`${swapAmount}`, 18)],
+                    : [parseUnits(`${safeSwapAmount}`, 18)],
                 value:
                   wrapType === WRAP_TYPE.WRAP
-                    ? parseUnits(`${swapAmount}`, 18)
+                    ? parseUnits(`${safeSwapAmount}`, 18)
                     : 0n,
               });
             }}
@@ -244,7 +254,7 @@ export function SwapCard({
                     selected={selectedFrom}
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedFrom}
-                    amount={fromAmount ?? 0}
+                    amount={fromAmount ?? ""}
                     showExceeding={true}
                     onExceeding={(isExceeding: boolean) =>
                       setExceedingBalance(isExceeding)
@@ -352,7 +362,7 @@ export function SwapCard({
                   swapInfo &&
                   swapInfo.batchSwapSteps.length === 0 &&
                   fromAmount &&
-                  fromAmount !== 0 &&
+                  fromAmount !== "" &&
                   !isWrap ? (
                     <Alert variant="destructive">
                       <AlertTitle>

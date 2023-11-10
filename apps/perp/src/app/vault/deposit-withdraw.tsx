@@ -18,16 +18,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 import ApproveTokenButton from "../components/approve-token-button";
 
 export default function DepositWithdraw() {
-  const [depositAmount, setDepositAmount] = useState<number | undefined>(
-    undefined,
-  );
-  const [withdrawAmount, setWithdrawAmount] = useState<number | undefined>(
-    undefined,
-  );
+  const [depositAmount, setDepositAmount] = useState<string>("");
+  const [withdrawAmount, setWithdrawAmount] = useState<string>("");
 
   const [isDepositExceeding, setIsDepositExceeding] = useState(false);
   const [isWithdrawExceeding, setIsWithdrawExceeding] = useState(false);
@@ -76,7 +73,10 @@ export default function DepositWithdraw() {
 
   const allowance = useAllowance();
 
-  const withdrawPayload = [parseUnits(`${withdrawAmount ?? 0}`, 18), account];
+  const withdrawPayload = [
+    parseUnits(`${getSafeNumber(withdrawAmount) ?? 0}`, 18),
+    account,
+  ];
 
   const { isLoading: isMaxDepositLoading, useMaxDeposit } = usePollMaxDeposit();
 
@@ -85,7 +85,7 @@ export default function DepositWithdraw() {
   const isMaxDepositExceeding = useMemo(() => {
     if (maxDeposit && depositAmount) {
       console.log(maxDeposit, depositAmount);
-      return maxDeposit < depositAmount;
+      return maxDeposit < getSafeNumber(depositAmount);
     }
     return false;
   }, [maxDeposit, depositAmount]);
@@ -148,7 +148,7 @@ export default function DepositWithdraw() {
                       abi: BTOKEN_ABI,
                       functionName: "deposit",
                       params: [
-                        parseUnits(`${depositAmount ?? 0}`, 18),
+                        parseUnits(`${getSafeNumber(depositAmount) ?? 0}`, 18),
                         account,
                       ],
                     })

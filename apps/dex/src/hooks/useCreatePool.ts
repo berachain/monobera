@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
 import { type Address } from "wagmi";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 const useCreatePool = (tokenWeights: ITokenWeight[]) => {
@@ -32,7 +33,7 @@ const useCreatePool = (tokenWeights: ITokenWeight[]) => {
           if (
             allowance.formattedAllowance === "0" ||
             Number(allowance.formattedAllowance) <
-              (token?.initialLiquidity ?? 0)
+              (getSafeNumber(token?.initialLiquidity) ?? 0)
           ) {
             return allowance;
           }

@@ -94,7 +94,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [toAmount, setToAmount] = useState<string | undefined>();
 
-  const [swapAmount, setSwapAmount] = useState(0);
+  const [swapAmount, setSwapAmount] = useState("");
 
   const [exchangeRate, setExchangeRate] = useState<undefined | string>(
     undefined,
@@ -127,9 +127,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     tokenOut: selectedTo?.address as Address,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
     amount:
-      swapAmount > Number.MAX_SAFE_INTEGER
+      Number(swapAmount) > Number.MAX_SAFE_INTEGER
         ? Number.MAX_SAFE_INTEGER
-        : swapAmount ?? 0,
+        : Number(swapAmount) ?? 0,
   });
 
   const { data: priceImpact } = usePollPriceImpact({
@@ -139,7 +139,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     tokenOutDecimals: selectedTo?.decimals ?? 18,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
     swapInfo: swapInfo,
-    swapAmount: swapAmount,
+    swapAmount:
+      Number(swapAmount) > Number.MAX_SAFE_INTEGER
+        ? Number.MAX_SAFE_INTEGER
+        : Number(swapAmount) ?? 0,
     isSwapLoading: isLoading,
   });
 
@@ -200,7 +203,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(swapInfo?.formattedReturnAmount.toString());
     } else {
-      setFromAmount(swapInfo?.returnAmount.toString());
+      setFromAmount(swapInfo?.formattedReturnAmount);
     }
   }, [swapInfo]);
 
@@ -247,22 +250,33 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const slippage = useSlippage();
   const deadline = useDeadline();
   useEffect(() => {
-    if (swapInfo !== undefined && swapInfo.batchSwapSteps?.length) {
+    if (
+      swapInfo !== undefined &&
+      swapInfo.batchSwapSteps?.length &&
+      slippage &&
+      selectedFrom &&
+      selectedTo &&
+      deadline
+    ) {
       try {
         // parse minutes to blocks
-        const d = block + BigInt(Math.floor(((deadline as number) * 60) / 2));
+        const d = block + BigInt(Math.floor((deadline * 60) / 2));
 
+        const s = BigInt(slippage * 10 ** 18);
         const minAmountOut =
           (swapInfo?.returnAmount ?? 0n) -
-          ((swapInfo?.returnAmount ?? 0n) * BigInt(slippage as number)) / 100n;
-
+          ((swapInfo?.returnAmount ?? 0n) * s) / BigInt(100 * 10 ** 18);
         swapInfo.batchSwapSteps[
           (swapInfo?.batchSwapSteps?.length ?? 1) - 1
         ]!.amountOut = minAmountOut;
 
         if (swapKind === SwapKind.GIVEN_OUT) {
+          const fromAmnt =
+            Number(fromAmount) > Number.MAX_SAFE_INTEGER
+              ? Number.MAX_SAFE_INTEGER
+              : Number(fromAmount) ?? 0;
           swapInfo.batchSwapSteps[0]!.amountIn = parseUnits(
-            `${fromAmount ?? 0}`,
+            `${fromAmnt ?? 0}`,
             selectedFrom.decimals ?? 18,
           );
         }
@@ -292,12 +306,11 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
     if (swapKind === SwapKind.GIVEN_IN) {
       setSwapKind(SwapKind.GIVEN_OUT);
-      setSwapAmount(fromAmount ?? 0);
+      setSwapAmount(fromAmount ?? "");
     } else {
       setSwapKind(SwapKind.GIVEN_IN);
-      setSwapAmount(toAmount ?? 0);
+      setSwapAmount(toAmount ?? "");
     }
-
     if (isWrap) {
       if (wrapType === WRAP_TYPE.WRAP) {
         setWrapType(WRAP_TYPE.UNWRAP);
@@ -327,6 +340,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       }
     }
   }, [isWrap]);
+
+  console.log(swapInfo);
   return {
     setSwapKind,
     setSelectedFrom,

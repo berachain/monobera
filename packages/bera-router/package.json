@@ -14,6 +14,7 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
+    "@bera/config": "0.1.0",
     "axios": "^1.4.0",
     "lodash": "^4.17.21",
     "viem": "~0.3.35"
