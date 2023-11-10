@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
+import { TRADING_ABI, TransactionActionType } from "@bera/berajs";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -11,7 +11,6 @@ import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
-import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
 import { ActivePositionPNL } from "../berpetuals/components/columns";
@@ -60,13 +59,13 @@ export function ClosePositionModal({
     formatUnits(BigInt(openPosition?.open_price ?? 0n), 10),
   );
 
-  const liqPrice = useCalculateLiqPrice({
-    bfLong: openPosition?.market.pair_borrowing_fee?.bf_long,
-    bfShort: openPosition?.market.pair_borrowing_fee?.bf_short,
-    orderType: openPosition?.buy === true ? "long" : "short",
-    price: formattedPrice,
-    leverage: openPosition?.leverage,
-  });
+  // const liqPrice = useCalculateLiqPrice({
+  //   bfLong: openPosition?.market.pair_borrowing_fee?.bf_long,
+  //   bfShort: openPosition?.market.pair_borrowing_fee?.bf_short,
+  //   orderType: openPosition?.buy === true ? "long" : "short",
+  //   price: formattedPrice,
+  //   leverage: openPosition?.leverage,
+  // });
 
   return (
     <div className={className}>
@@ -115,7 +114,11 @@ export function ClosePositionModal({
                   Liquidation Price
                 </div>
                 <div className=" text-right  text-sm  font-semibold leading-5 text-foreground">
-                  {formatUsd(liqPrice ?? 0)}
+                  {Number(openPosition.liq_price) !== 0 ? (
+                    formatBigIntUsd(openPosition.liq_price, 10)
+                  ) : (
+                    <Skeleton className={"h-[28px] w-[80px]"} />
+                  )}
                 </div>
               </div>
               <div>
