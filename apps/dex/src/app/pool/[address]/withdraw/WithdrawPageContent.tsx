@@ -29,6 +29,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { type MappedTokens } from "../types";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
 
@@ -48,8 +49,8 @@ export default function WithdrawLiquidityContent({
   const reset = () => {
     setPreviewOpen(false);
 
-    setAmount(0);
-    setExactOutAmount(0);
+    setAmount("");
+    setExactOutAmount("");
     setExactOutToken(undefined);
     setWithdrawType(0);
   };
@@ -84,12 +85,12 @@ export default function WithdrawLiquidityContent({
     setExactOutAmount,
   } = useWithdrawLiquidity(pool, prices);
 
-  const handleSingleTokenWithdrawSharesIn = (amount: number): void => {
+  const handleSingleTokenWithdrawSharesIn = (amount: string): void => {
     setAmount(amount);
     setWithdrawType(0);
   };
 
-  const handleSingleTokenWithdrawAssetOut = (amount: number) => {
+  const handleSingleTokenWithdrawAssetOut = (amount: string) => {
     setExactOutAmount(amount);
     setWithdrawType(1);
   };
@@ -170,7 +171,12 @@ export default function WithdrawLiquidityContent({
                       variant={"outline"}
                       className="w-full"
                       onClick={() =>
-                        setAmount(Number(formattedLpBalance) * (percent / 100))
+                        setAmount(
+                          (
+                            Number(formattedLpBalance) *
+                            (percent / 100)
+                          ).toString(),
+                        )
                       }
                       disabled={lpBalance === 0n}
                     >
@@ -270,7 +276,12 @@ export default function WithdrawLiquidityContent({
                       variant={"outline"}
                       className="w-full"
                       onClick={() =>
-                        setAmount(Number(formattedLpBalance) * (percent / 100))
+                        setAmount(
+                          (
+                            Number(formattedLpBalance) *
+                            (percent / 100)
+                          ).toString(),
+                        )
                       }
                       disabled={lpBalance === 0n}
                     >
@@ -327,9 +338,7 @@ export default function WithdrawLiquidityContent({
                 </TokenList>
                 <p className="text-center text-xs font-medium text-muted-foreground">
                   Your Stake of{" "}
-                  <span className="font-bold">
-                    {amount.toFixed(2)} Pool Tokens{" "}
-                  </span>
+                  <span className="font-bold">{amount} Pool Tokens </span>
                   will be converted and withdrawn from the pool, with the
                   following breakdown.
                 </p>
@@ -339,7 +348,7 @@ export default function WithdrawLiquidityContent({
                 <TokenList className="bg-muted">
                   <PreviewToken
                     token={exactOutToken}
-                    value={exactOutAmount}
+                    value={getSafeNumber(exactOutAmount)}
                     price={prices[exactOutToken?.address ?? ""]}
                   />
                 </TokenList>
@@ -349,7 +358,7 @@ export default function WithdrawLiquidityContent({
                     title={"Approximate Total Value"}
                     value={formatUsd(
                       (prices[exactOutToken?.address ?? ""] ?? 0) *
-                        exactOutAmount,
+                        getSafeNumber(exactOutAmount),
                     )}
                   />
                 </InfoBoxList>

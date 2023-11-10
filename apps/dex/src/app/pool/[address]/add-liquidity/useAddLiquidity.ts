@@ -15,6 +15,7 @@ import {
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 
@@ -41,7 +42,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     Token | undefined
   >(undefined);
   const [selectedSingleTokenAmount, setSelectedSingleTokenAmount] =
-    useState<number>(0);
+    useState<string>("");
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
   const [singleTokenPreviewOpen, setSingleTokenSetPreviewOpen] =
     useState<boolean>(false);
@@ -72,13 +73,13 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     setPreviewOpen(false);
     setSingleTokenSetPreviewOpen(false);
     setSelectedSingleToken(undefined);
-    setSelectedSingleTokenAmount(0);
+    setSelectedSingleTokenAmount("");
     setExpectedShares(undefined);
     setTotalValue(0);
     setSingleSidedExpectedShares(undefined);
     setSingleSidedTotalValue(0);
     pool?.tokens.forEach((_, i) => {
-      updateTokenAmount(i, 0);
+      updateTokenAmount(i, "");
     });
   };
 
@@ -87,7 +88,10 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     account,
     tokenInputs.map((tokenInput) => tokenInput?.address),
     tokenInputs.map((tokenInput) =>
-      parseUnits(`${tokenInput.amount}`, tokenInput?.decimals ?? 18),
+      parseUnits(
+        `${getSafeNumber(tokenInput.amount)}`,
+        tokenInput?.decimals ?? 18,
+      ),
     ),
   ];
 
@@ -97,7 +101,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     [selectedSingleToken?.address],
     [
       parseUnits(
-        `${selectedSingleTokenAmount}`,
+        `${getSafeNumber(selectedSingleTokenAmount)}`,
         selectedSingleToken?.decimals ?? 18,
       ),
     ],
@@ -113,7 +117,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   } = usePollPreviewSharesForLiquidity(
     pool?.pool,
     tokenInputs,
-    tokenInputs.map((tokenInput) => tokenInput.amount),
+    tokenInputs.map((tokenInput) => getSafeNumber(tokenInput.amount)),
   );
   const shares = usePreviewSharesForLiquidity();
 
@@ -124,7 +128,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   } = usePollPreviewSharesForSingleSidedLiquidityRequest(
     pool?.pool,
     selectedSingleToken,
-    selectedSingleTokenAmount,
+    getSafeNumber(selectedSingleTokenAmount),
   );
   const singleSidedShares = usePreviewSharesForSingleSidedLiquidityRequest();
 
@@ -163,7 +167,10 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   useEffect(() => {
     if (tokenInputs && tokenInputs.length) {
       const totalValue = tokenInputs.reduce((acc, tokenInput) => {
-        return acc + tokenInput.amount * (prices[tokenInput?.address] ?? 0);
+        return (
+          acc +
+          getSafeNumber(tokenInput.amount) * (prices[tokenInput?.address] ?? 0)
+        );
       }, 0);
       setTotalValue(totalValue);
     }
@@ -175,7 +182,8 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     }
     if (selectedSingleToken && selectedSingleTokenAmount) {
       setTotalValue(
-        selectedSingleTokenAmount * (prices[selectedSingleToken?.address] ?? 0),
+        getSafeNumber(selectedSingleTokenAmount) *
+          (prices[selectedSingleToken?.address] ?? 0),
       );
     }
   }, [selectedSingleToken, selectedSingleTokenAmount]);
@@ -228,7 +236,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     }
     if (
       singleSidedShares === undefined &&
-      selectedSingleTokenAmount !== 0 &&
+      getSafeNumber(selectedSingleTokenAmount) !== 0 &&
       selectedSingleToken !== undefined &&
       !isSingleSidedLoading &&
       !isSingleSidedValidating
@@ -236,7 +244,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
       setSingleSidedError("Unable to perform transaction.");
     } else if (selectedSingleToken === undefined) {
       setSingleSidedError("Please select a token");
-    } else if (selectedSingleTokenAmount === 0) {
+    } else if (getSafeNumber(selectedSingleTokenAmount) === 0) {
       setSingleSidedError("Please input token");
     } else if (singleSharesExceeding) {
       setSingleSidedError("Input exceeds balance");
@@ -245,7 +253,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     if (
       singleSidedShares !== undefined &&
       selectedSingleToken !== undefined &&
-      selectedSingleTokenAmount !== 0 &&
+      getSafeNumber(selectedSingleTokenAmount) !== 0 &&
       !singleSharesExceeding
     ) {
       setSingleSidedError(undefined);

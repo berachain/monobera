@@ -5,7 +5,6 @@ import {
   DEADLINE_TYPE,
   DEADLINE_VALUE,
   DEFAULT_DEADLINE,
-  DEFAULT_SLIPPAGE,
   TRANSACTION_MODE,
 } from "../settings";
 
@@ -18,7 +17,7 @@ export const useDeadline = () => {
 
   return useMemo(() => {
     if (deadlineMode === TRANSACTION_MODE.AUTO) {
-      return DEFAULT_SLIPPAGE;
+      return DEFAULT_DEADLINE;
     }
     if (deadlineMode === TRANSACTION_MODE.CUSTOM) {
       return deadline;

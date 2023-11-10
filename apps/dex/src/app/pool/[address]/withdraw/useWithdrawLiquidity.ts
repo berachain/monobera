@@ -11,19 +11,20 @@ import {
 } from "@bera/berajs";
 import { formatUnits, parseUnits } from "viem";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { toFixedNoRounding } from "~/utils/toFixedNoRounding";
 
 export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
   const { account = undefined } = useBeraJs();
 
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<string>("");
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
   const [exactOutToken, setExactOutToken] = useState<Token | undefined>(
     undefined,
   );
-  const [exactOutAmount, setExactOutAmount] = useState<number>(0);
-  const [withdrawValue, setWithdrawValue] = useState<number>(0);
+  const [exactOutAmount, setExactOutAmount] = useState<string>("");
+  const [withdrawValue, setWithdrawValue] = useState<string>("");
   const [isPoolTokenExceeding, setIsPoolTokenExceeding] =
     useState<boolean>(false);
   const { useBankBalance, useFormattedBankBalance } = usePollBankBalance(
@@ -36,7 +37,7 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
   const [withdrawType, setWithdrawType] = useState(0);
 
   const { usePreviewBurnShares } = usePollPreviewBurnShares(
-    parseUnits(`${amount}`, 18),
+    parseUnits(`${getSafeNumber(amount)}`, 18),
     pool?.pool,
     pool?.poolShareDenomHex,
   );
@@ -51,12 +52,16 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
 
         return acc + formattedAmount * (prices[token.address] ?? 0);
       }, 0);
-      setWithdrawValue(totalValue ?? 0);
+      setWithdrawValue(totalValue?.toString() ?? "");
     }
   }, [burnShares]);
 
   const { usePreviewRemoveLiquidityOneSideOut } =
-    usePollPreviewRemoveLiquidityOneSideOut(pool?.pool, exactOutToken, amount);
+    usePollPreviewRemoveLiquidityOneSideOut(
+      pool?.pool,
+      exactOutToken,
+      getSafeNumber(amount),
+    );
   const previewRemoveLiquidityOneSideOut =
     usePreviewRemoveLiquidityOneSideOut();
 
@@ -64,7 +69,7 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
     usePollPreviewRemoveLiquidityExactAmountOut(
       pool?.pool,
       exactOutToken,
-      exactOutAmount,
+      getSafeNumber(exactOutAmount),
     );
 
   const previewRemoveLiquidityExactAmountOut =
@@ -75,7 +80,7 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
       const formatted = Number(
         formatUnits(previewRemoveLiquidityExactAmountOut[1][0], 18),
       );
-      setAmount(formatted);
+      setAmount(formatted.toString());
     }
   }, [previewRemoveLiquidityExactAmountOut]);
 
@@ -87,7 +92,7 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
           exactOutToken?.decimals ?? 18,
         ),
       );
-      setExactOutAmount(formatted);
+      setExactOutAmount(formatted.toString());
     }
   }, [previewRemoveLiquidityOneSideOut]);
 
@@ -95,22 +100,27 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
     pool?.pool,
     account,
     pool?.poolShareDenomHex,
-    parseUnits(`${amount}`, 18),
+    parseUnits(`${getSafeNumber(amount)}`, 18),
   ];
 
   const singlePayload = [
     pool?.pool,
     account,
     exactOutToken?.address,
-    parseUnits(`${exactOutAmount}`, exactOutToken?.decimals ?? 18),
+    parseUnits(
+      `${getSafeNumber(exactOutAmount)}`,
+      exactOutToken?.decimals ?? 18,
+    ),
     pool?.poolShareDenomHex,
-    parseUnits(`${amount * 1.1}`, 18),
+    parseUnits(`${getSafeNumber(amount) * 1.1}`, 18),
   ];
 
   return {
-    isMultiTokenDisabled: isPoolTokenExceeding || amount === 0,
+    isMultiTokenDisabled: isPoolTokenExceeding || getSafeNumber(amount) === 0,
     isSingleTokenDisabled:
-      isPoolTokenExceeding || amount === 0 || exactOutToken === undefined,
+      isPoolTokenExceeding ||
+      getSafeNumber(amount) === 0 ||
+      exactOutToken === undefined,
     setIsPoolTokenExceeding,
     lpBalance,
     burnShares,

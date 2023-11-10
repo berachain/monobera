@@ -56,7 +56,7 @@ export default function Redeem() {
             disabled={isBalanceLoading}
             endAdornment="BGT"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setRedeemAmount(Number(e.target.value))
+              setRedeemAmount(e.target.value)
             }
             value={redeemAmount}
           />
@@ -67,7 +67,7 @@ export default function Redeem() {
               <span
                 className="underline hover:cursor-pointer"
                 onClick={() => {
-                  setRedeemAmount(Number(userBalance));
+                  setRedeemAmount(userBalance.toString());
                 }}
               >
                 MAX

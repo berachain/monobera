@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { usePollAssetWalletBalance, type Token } from "@bera/berajs";
 import { getAddress } from "viem";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
+
 export interface ITokenWeight {
   weight: number;
   locked: boolean;
   token: Token | undefined;
-  initialLiquidity: number;
+  initialLiquidity: string;
 }
 
 export class InvalidInputError extends Error {
@@ -23,13 +25,13 @@ const defaultTokenWeight: ITokenWeight[] = [
     weight: 50,
     locked: false,
     token: undefined,
-    initialLiquidity: 0,
+    initialLiquidity: "",
   },
   {
     weight: 50,
     locked: false,
     token: undefined,
-    initialLiquidity: 0,
+    initialLiquidity: "",
   },
 ];
 
@@ -91,7 +93,8 @@ const useCreateTokenWeights = () => {
     );
     const isInvalidTokenListLength = tokenWeights.length < 2;
     const isInvalidInitialLiquidity =
-      step === 2 && !tokenWeights.every((item) => item.initialLiquidity !== 0);
+      step === 2 &&
+      !tokenWeights.every((item) => getSafeNumber(item.initialLiquidity) !== 0);
 
     const isInitialLiquidityExceedingBalance =
       step === 2 &&
@@ -102,7 +105,8 @@ const useCreateTokenWeights = () => {
         );
 
         return (
-          Number(foundToken?.formattedBalance ?? 0) < item.initialLiquidity
+          Number(foundToken?.formattedBalance ?? 0) <
+          getSafeNumber(item.initialLiquidity)
         );
       });
     const isInvalidSwapFee = (step === 1 && swapFee > 100) || swapFee < 0;
@@ -191,7 +195,7 @@ const useCreateTokenWeights = () => {
     let updatedTokenWeights: ITokenWeight[] = [...tokenWeights];
     updatedTokenWeights = [
       ...updatedTokenWeights,
-      { token: undefined, locked: false, weight: 0, initialLiquidity: 0 },
+      { token: undefined, locked: false, weight: 0, initialLiquidity: "" },
     ];
     setTokenWeights(updatedTokenWeights);
   };
@@ -217,7 +221,7 @@ const useCreateTokenWeights = () => {
     setTokenWeights(updatedTokenWeights);
   };
 
-  const onTokenBalanceChange = (index: number, amount: number) => {
+  const onTokenBalanceChange = (index: number, amount: string) => {
     const updatedTokenWeights: ITokenWeight[] = [...tokenWeights];
     // @ts-ignore
     updatedTokenWeights[index].initialLiquidity = amount;

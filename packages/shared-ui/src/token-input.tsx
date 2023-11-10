@@ -17,7 +17,7 @@ import { SelectToken } from ".";
 type Props = {
   selected: Token | undefined;
   selectedTokens?: (Token | undefined)[];
-  amount: number | undefined;
+  amount: string | undefined;
   balance?: number;
   price?: number;
   hideBalance?: boolean;
@@ -29,14 +29,14 @@ type Props = {
   showExceeding?: boolean;
   hideMax?: boolean;
   onTokenSelection?: (token: Token) => void;
-  setAmount?: (amount: number) => void;
+  setAmount?: (amount: string) => void;
   onExceeding?: (isExceeding: boolean) => void;
 };
 
 export function TokenInput({
   selected,
   selectedTokens,
-  amount = 0,
+  amount = "",
   price = 1,
   balance = undefined,
   hideBalance = false,
@@ -62,15 +62,21 @@ export function TokenInput({
   }
   const { isConnected } = useBeraJs();
 
+  const safeNumberAmount =
+    Number(amount) > Number.MAX_SAFE_INTEGER
+      ? Number.MAX_SAFE_INTEGER
+      : Number(amount) ?? 0;
+
   useEffect(() => {
-    if (amount > Number.MAX_SAFE_INTEGER) return;
-    if (amount <= tokenBalance) {
+    if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
+    if (safeNumberAmount <= tokenBalance) {
       setExceeding(false);
       return;
     }
     if (
       !isBalancesLoading &&
-      (amount > tokenBalance || Number(tokenBalance) == 0)
+      (safeNumberAmount > tokenBalance || Number(tokenBalance) == 0) &&
+      selected !== undefined
     ) {
       setExceeding(true);
       return;
@@ -103,7 +109,7 @@ export function TokenInput({
               "ring-offset-none w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold shadow-none outline-none ring-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
               exceeding && showExceeding && "text-destructive-foreground",
             )}
-            value={amount > 0 ? amount : ""}
+            value={amount}
             onKeyDown={(e: any) => e.key === "-" && e.preventDefault()}
             onChange={(e: any) => {
               const inputValue = e.target.value;
@@ -114,7 +120,7 @@ export function TokenInput({
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
               if (periodsCount <= 1) {
-                setAmount && setAmount(Number(filteredValue));
+                setAmount && setAmount(filteredValue);
               }
             }}
           />
@@ -133,7 +139,7 @@ export function TokenInput({
                   <p
                     className="cursor-pointer text-xs text-muted-foreground underline hover:text-foreground"
                     onClick={() => {
-                      setAmount && setAmount(tokenBalance);
+                      setAmount && setAmount(tokenBalance.toString());
                     }}
                   >
                     MAX
@@ -143,9 +149,9 @@ export function TokenInput({
               <div className="flex flex-row gap-1">
                 {!hidePrice && (
                   <p className="self-center p-0 text-xs text-muted-foreground">
-                    {amount !== 0 &&
-                      !isNaN(amount) &&
-                      formatUsd((amount * price).toFixed(2))}
+                    {safeNumberAmount !== 0 &&
+                      !isNaN(safeNumberAmount) &&
+                      formatUsd((safeNumberAmount * price).toFixed(2))}
                   </p>
                 )}
               </div>
