@@ -18,7 +18,7 @@ export function VoteCard({
     <Card className="flex w-full p-6">
       <div className="flex flex-1 flex-col items-center gap-2 border-r border-border sm:w-[140px]">
         <div className="text-lg font-semibold leading-9 text-success-foreground sm:text-3xl">
-          {yesPercentage ?? 0}%
+          {Math.round(yesPercentage ?? 0)}%
         </div>
         <div className="flex items-center gap-0.5 text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
           Yes
@@ -26,7 +26,7 @@ export function VoteCard({
       </div>
       <div className="flex flex-1 flex-col items-center gap-2 border-r border-border sm:w-[140px]">
         <div className="text-lg font-semibold leading-9 text-destructive-foreground sm:text-3xl">
-          {noPercentage ?? 0}%
+          {Math.round(noPercentage ?? 0)}%
         </div>
         <div className="flex items-center gap-0.5 text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
           No
@@ -34,7 +34,7 @@ export function VoteCard({
       </div>
       <div className="flex flex-1 flex-col items-center gap-2 border-r border-border sm:w-[140px]">
         <div className="text-lg font-semibold leading-9 text-info-foreground sm:text-3xl">
-          {vetoPercentage ?? 0}%
+          {Math.round(vetoPercentage ?? 0)}%
         </div>
         <div className="flex items-center gap-0.5 text-center text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
           No With Veto
@@ -42,7 +42,7 @@ export function VoteCard({
       </div>
       <div className="flex flex-1 flex-col items-center gap-2 sm:w-[140px]">
         <div className="text-lg font-semibold leading-9 text-muted-foreground sm:text-3xl">
-          {abstainPercentage ?? 0}%
+          {Math.round(abstainPercentage ?? 0)}%
         </div>
         <div className="flex items-center gap-0.5 text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
           Abstain

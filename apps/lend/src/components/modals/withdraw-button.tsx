@@ -110,6 +110,7 @@ const WithdrawModalContent = ({
   );
 
   const balance =
+    userAccountData.totalDebtBase === 0n ||
     Number(maxWithdrawalAllowance) > Number(userBalance)
       ? userBalance
       : maxWithdrawalAllowance;
@@ -180,7 +181,9 @@ const WithdrawModalContent = ({
           <div className="flex items-center gap-1 font-semibold">
             {currentHealthFactor}{" "}
             <Icons.moveRight className="inline-block h-6 w-6" />{" "}
-            {newHealthFactor.toFixed(2)}
+            {userAccountData.totalDebtBase === 0n
+              ? "∞"
+              : newHealthFactor.toFixed(2)}
           </div>
         </div>
       </div>
