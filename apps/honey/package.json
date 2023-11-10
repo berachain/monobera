@@ -22,6 +22,7 @@
     "@rive-app/react-canvas": "^4.1.1",
     "@t3-oss/env-nextjs": "^0.2.2",
     "@vercel/analytics": "^1.0.1",
+    "bignumber.js": "^9.1.2",
     "date-fns": "^2.29.3",
     "framer-motion": "^10.15.0",
     "next": "^14.0.1",

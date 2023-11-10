@@ -5,13 +5,14 @@ import { useBeraJs, usePollAssetWalletBalance, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import BigNumber from "bignumber.js";
 
 import { SelectToken } from "~/components/honey-select-token";
 
 type Props = {
   selected: Token | undefined;
   selectedTokens?: (Token | undefined)[];
-  amount: number;
+  amount: string | undefined;
   balance?: number;
   hideBalance?: boolean;
   hidePrice?: boolean;
@@ -20,7 +21,7 @@ type Props = {
   disabled?: boolean;
   customTokenList?: Token[];
   onTokenSelection?: (token: Token) => void;
-  setAmount?: (amount: number) => void;
+  setAmount?: (amount: string | undefined) => void;
   onExceeding?: (isExceeding: boolean) => void;
 };
 
@@ -43,21 +44,18 @@ export function HoneyTokenInput({
   const { data: token } = useSelectedAssetWalletBalance(
     selected?.address ?? "",
   );
-  let tokenBalance = Number(token?.formattedBalance ?? "0");
+  let tokenBalance: string = token?.formattedBalance ?? "0";
+  if (balance !== undefined) tokenBalance = balance.toString();
 
-  if (balance !== undefined) {
-    tokenBalance = balance;
-  }
   const { isConnected } = useBeraJs();
 
   useEffect(() => {
-    if (tokenBalance === 0) return;
-    if (amount > Number.MAX_SAFE_INTEGER) return;
-    if (amount <= tokenBalance) {
+    if (BigNumber(tokenBalance).eq(0)) return;
+    if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
+    if (BigNumber(amount ?? "0").lte(tokenBalance)) {
       setExceeding(false);
       return;
-    }
-    if (amount > tokenBalance) {
+    } else {
       setExceeding(true);
       return;
     }
@@ -92,14 +90,14 @@ export function HoneyTokenInput({
               "w-full grow border-0 bg-white p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
               exceeding && !hideBalance && "text-destructive-foreground",
             )}
-            value={amount > 0 ? amount : ""}
+            value={amount}
             onChange={(e) => {
-              setAmount && setAmount(Number(e.target.value));
+              setAmount && setAmount(e.target.value);
             }}
           />
         </div>
       </div>
-      {isConnected && selected && tokenBalance !== 0 ? (
+      {isConnected && selected && Number(tokenBalance) !== 0 ? (
         <div className="absolute bottom-[6px] right-2 h-fit cursor-default">
           {/* <div className="flex w-full items-center justify-between gap-1"> */}
           <div className="flex flex-row items-center justify-end gap-1 text-xs text-muted-foreground">

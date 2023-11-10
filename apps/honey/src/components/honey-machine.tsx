@@ -230,7 +230,10 @@ export function HoneyMachine() {
           functionName: "approve",
           params: [
             erc20HoneyAddress,
-            parseUnits(`${fromAmount}`, selectedFrom?.decimals ?? 18),
+            parseUnits(
+              `${fromAmount ?? "0"}` as `${number}`,
+              selectedFrom?.decimals ?? 18,
+            ),
           ],
         });
       } else {
@@ -338,14 +341,14 @@ export function HoneyMachine() {
                     selected={selectedFrom}
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedFrom}
-                    amount={fromAmount ?? 0}
+                    amount={fromAmount}
                     balance={fromBalance?.formattedBalance}
                     selectable={selectedFrom?.address !== honey?.address}
                     customTokenList={collateralList}
                     hidePrice
                     setAmount={(amount) => {
                       setGivenIn(true);
-                      setFromAmount(Number(amount));
+                      setFromAmount(amount);
                     }}
                   />
                   <div className="flex justify-center">
@@ -379,7 +382,7 @@ export function HoneyMachine() {
                     amount={toAmount}
                     setAmount={(amount) => {
                       setGivenIn(false);
-                      setToAmount(Number(amount));
+                      setToAmount(amount);
                     }}
                     selectable={selectedTo?.address !== honey?.address}
                     customTokenList={collateralList}
