@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useBeraJs } from "@bera/berajs";
 import { parseUnits } from "viem";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
+
 export const useRedeem = () => {
-  const [redeemAmount, setRedeemAmount] = useState<number | undefined>(
-    undefined,
-  );
+  const [redeemAmount, setRedeemAmount] = useState<string>("");
   const [payload, setPayload] = useState<any[]>([]);
   const { account } = useBeraJs();
 
@@ -13,7 +13,7 @@ export const useRedeem = () => {
     const newPayload = [
       account,
       account,
-      parseUnits(`${redeemAmount ?? 0}`, 18),
+      parseUnits(`${getSafeNumber(redeemAmount) ?? 0}`, 18),
     ];
     setPayload(newPayload);
   }, [account, redeemAmount]);

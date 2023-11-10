@@ -30,6 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import ApproveTokenButton from "~/components/approve-token-button";
 import { type MappedTokens } from "../types";
 import { useAddLiquidity } from "./useAddLiquidity";
@@ -142,8 +143,8 @@ export default function AddLiquidityContent({
                       key={token.address}
                       selected={token as Token}
                       selectable={false}
-                      amount={tokenInputs[i]?.amount ?? 0}
-                      setAmount={(amount: number) =>
+                      amount={tokenInputs[i]?.amount ?? ""}
+                      setAmount={(amount: string) =>
                         updateTokenAmount(i, amount)
                       }
                       weight={token.normalizedWeight}
@@ -185,8 +186,8 @@ export default function AddLiquidityContent({
                 <TokenList className="bg-muted">
                   {tokenInputs
                     .filter(
-                      (tokenInput: { amount: number }) =>
-                        tokenInput.amount !== 0,
+                      (tokenInput: { amount: string }) =>
+                        tokenInput.amount !== "",
                     )
                     .map((tokenInput: any) => {
                       return (
@@ -254,7 +255,7 @@ export default function AddLiquidityContent({
                   selectable={true}
                   amount={selectedSingleTokenAmount}
                   price={prices[selectedSingleToken?.address ?? ""] ?? 0}
-                  setAmount={(amount: number) =>
+                  setAmount={(amount: string) =>
                     setSelectedSingleTokenAmount(amount)
                   }
                   onExceeding={setSingleSharesExceeding}
@@ -291,7 +292,7 @@ export default function AddLiquidityContent({
                 <TokenList className="bg-muted">
                   <PreviewToken
                     token={selectedSingleToken}
-                    value={selectedSingleTokenAmount}
+                    value={getSafeNumber(selectedSingleTokenAmount)}
                     price={prices[selectedSingleToken?.address ?? ""]}
                   />
                 </TokenList>
@@ -342,7 +343,7 @@ export default function AddLiquidityContent({
                   /> */}
                 </InfoBoxList>
                 {(Number(allowance?.formattedAllowance) ?? 0) <
-                selectedSingleTokenAmount ? (
+                getSafeNumber(selectedSingleTokenAmount) ? (
                   <ApproveTokenButton
                     token={selectedSingleToken}
                     spender={

@@ -2,7 +2,7 @@ import { useReducer, type Reducer } from "react";
 import { type Token } from "@bera/berajs";
 
 export interface TokenInput extends Token {
-  amount: number;
+  amount: string;
   exceeding: boolean;
 }
 
@@ -15,7 +15,7 @@ const useMultipleTokenInput = (tokens: Token[]) => {
   const initialState: IState = {
     tokens: tokens.map((token: Token) => {
       return {
-        amount: 0,
+        amount: "",
         exceeding: false, // Initialize exceeding status to false
         ...token,
       };
@@ -66,7 +66,7 @@ const useMultipleTokenInput = (tokens: Token[]) => {
     initialState,
   );
 
-  const updateTokenAmount = (tokenIndex: number, input: number) => {
+  const updateTokenAmount = (tokenIndex: number, input: string) => {
     dispatch({
       type: actionTypes.UPDATE_INPUT,
       payload: {
@@ -91,13 +91,13 @@ const useMultipleTokenInput = (tokens: Token[]) => {
     updateTokenAmount,
     updateTokenExceeding, // Provide the new function
     areAllInputsEmpty: addLiquidityState.tokens.every(
-      (token: TokenInput) => token.amount === 0,
+      (token: TokenInput) => token.amount === "" || token.amount === "0",
     ),
     areNoInputsExceeding: addLiquidityState.tokens.every(
       (token: TokenInput) => token.exceeding === false,
     ),
     areAllInputsPopulated: addLiquidityState.tokens.every(
-      (token: TokenInput) => token.amount !== 0,
+      (token: TokenInput) => token.amount !== "" && token.amount !== "0",
     ),
   };
 };
