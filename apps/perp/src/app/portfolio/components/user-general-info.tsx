@@ -41,9 +41,7 @@ export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
           )}
         >
           {formatUsd(pnl)}
-          <span className="ml-2 cursor-pointer text-muted-foreground underline">
-            24H PnL
-          </span>
+          <span className="ml-2 text-muted-foreground">24H PnL</span>
         </div>
       </div>
 
