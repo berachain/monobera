@@ -16,7 +16,12 @@ import {
   type Proposal,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils/formatAmount";
-import { blockExplorerUrl, governanceAddress, indexerUrl } from "@bera/config";
+import {
+  beraTokenAddress,
+  blockExplorerUrl,
+  governanceAddress,
+  indexerUrl,
+} from "@bera/config";
 import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1beta1/gov";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
@@ -245,7 +250,9 @@ export default function ProposalDetails({
                 <div>Asset:</div>
                 <div className="flex items-center gap-1 font-medium uppercase text-muted-foreground">
                   <TokenIcon address={collateralAddress} fetch size={"md"} />{" "}
-                  {tokenInformation?.symbol}
+                  {collateralAddress === beraTokenAddress // WBERA have no name, have to hardcode it bro ;<
+                    ? "WBERA"
+                    : tokenInformation?.symbol}
                 </div>
               </div>
               <div className="flex items-center justify-between">
