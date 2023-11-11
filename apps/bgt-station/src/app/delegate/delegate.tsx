@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -117,7 +117,22 @@ export default function Delegate({
   } = useTxn({
     message: "Redelegating BGT",
     actionType: TransactionActionType.REDELEGATE,
+    onError: (e) => {
+      if (
+        e?.message.includes(
+          "redelegation to this validator already in progress",
+        )
+      )
+        setRedelegatePending(true);
+    },
   });
+
+  const [redelegatePending, setRedelegatePending] =
+    React.useState<boolean>(false);
+
+  useEffect(() => {
+    setRedelegatePending(false);
+  }, [redelegateValidator]);
 
   const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const bgtBalance = useBgtBalance();
@@ -201,6 +216,12 @@ export default function Delegate({
         {isBadRedelegate && (
           <Alert variant="destructive">
             Cannot redelegate to the same validator
+          </Alert>
+        )}
+        {redelegatePending && (
+          <Alert variant="destructive">
+            Redelegation to this validator already in progress; first
+            redelegation must complete before next redelegation can be initiated
           </Alert>
         )}
         <ActionButton>

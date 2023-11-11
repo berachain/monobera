@@ -29,7 +29,9 @@ export default function Home({ markets }: { markets: IMarket[] }) {
     <>
       {!isMounted && isLoading && <LoadingPortfolio />}
       {isMounted && !account && (
-        <ConnectWalletBear message="Connect Wallet to view portfolio" />
+        <div className="mt-20">
+          <ConnectWalletBear message="Connect Wallet to view portfolio" />
+        </div>
       )}
       {isMounted && account && <PortfolioHome markets={markets} />}
     </>
