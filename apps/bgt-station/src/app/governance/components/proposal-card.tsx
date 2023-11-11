@@ -141,7 +141,7 @@ export function ProposalCard({ proposal, type, onClick }: ProposalCard) {
         </div>
       </div>
       <div
-        className={`mt-1 font-semibold leading-tight text-foreground min-[600px]:leading-loose ${
+        className={`mt-1 font-semibold leading-tight text-foreground ${
           true ? "text-2xl" : "text-sm"
         }`}
       >

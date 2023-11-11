@@ -39,7 +39,7 @@ export default function ValidatorSelector({
   const validValidator = useActiveValidator(validatorAddress);
   const [open, setOpen] = React.useState(false);
 
-  const { useDelegatorValidators } = usePollDelegatorValidators();
+  const { useDelegatorValidators } = usePollDelegatorValidators(); // => this took to long
   const delegatedValidators: Validator[] | undefined = useDelegatorValidators();
 
   const { usePrices } = usePollPrices();
