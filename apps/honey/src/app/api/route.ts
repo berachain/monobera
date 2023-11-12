@@ -6,7 +6,6 @@ async function getMints(page: number, perPage: number) {
   try {
     const res: any = await fetch(
       `${indexerUrl}/events/pol/honey_minted?num_of_days=1000000&page=${page}&per_page=${perPage}`,
-      { cache: "no-store" },
     );
     const jsonRes = await res.json();
     if (!jsonRes) {
@@ -22,7 +21,6 @@ async function getBurns(page: number, perPage: number) {
   try {
     const res: any = await fetch(
       `${indexerUrl}/events/pol/honey_redeemed?num_of_days=1000000&page=${page}&per_page=${perPage}`,
-      { cache: "no-store" },
     );
     const jsonRes = await res.json();
 
@@ -43,9 +41,7 @@ function sortByBlockTime(data: any[]): any[] {
     .reverse();
 }
 
-// const DEFAULT_SIZE = 5;
-
-export const revalidate = 60;
+export const revalidate = 5;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
