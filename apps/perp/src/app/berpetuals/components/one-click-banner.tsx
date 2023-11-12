@@ -33,15 +33,15 @@ const getStatusColor = (status: BannerEnum) => {
     case BannerEnum.OFF:
       return "bg-secondary text-secondary-foreground";
     case BannerEnum.ON:
-      return "bg-[#ECFDF5] text-[#059669]";
+      return "bg-success text-success-foreground";
     case BannerEnum.LOW_BALANCE:
       return "bg-destructive text-destructive-foreground";
     case BannerEnum.NOT_FUNDED:
       return "bg-destructive text-destructive-foreground";
     case BannerEnum.NOT_GENERATED:
-      return "bg-stone-200 text-stone-600";
+      return "bg-secondary text-secondary-foreground";
     case BannerEnum.NOT_DELEGATED:
-      return "bg-sky-50 text-sky-600";
+      return "bg-info text-info-foreground";
     default:
       return "bg-secondary text-secondary-foreground";
   }

@@ -24,7 +24,7 @@ export const usePollPerpsBgtRewards = () => {
           args: [account],
         });
 
-        console.log("result", result);
+        // console.log("result", result);
 
         return Number(formatUnits(result as bigint, 18));
       } catch (e) {

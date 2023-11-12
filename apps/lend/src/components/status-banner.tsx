@@ -68,7 +68,7 @@ export default function StatusBanner() {
   const status = [
     {
       icon: <Icons.wallet className="h-8 w-8" />,
-      title: "Total Sypplied",
+      title: "Total Supplied",
       amount: formatUsd(
         Number(
           formatUnits(
