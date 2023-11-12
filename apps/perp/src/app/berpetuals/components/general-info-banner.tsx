@@ -1,8 +1,15 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { perpsName } from "@/../../packages/config/env";
 import { formatUsd } from "@bera/berajs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
 
@@ -17,6 +24,7 @@ interface IGeneralInfoBanner {
 export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
+  const [open, setOpen] = useState(false);
 
   const formattedPrice = Number(formatUnits(BigInt(price ?? 0), 10));
   const historicPrice = priceChange[Number(market.pair_index)];
@@ -119,24 +127,92 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
         <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs xl:block">
           Borrow Fee (L)
           <div className="text-success-foreground">
-            {Number(formattedBorrowingL).toFixed(4)}%
+            {Number(formattedBorrowingL).toFixed(6)}%
           </div>
         </div>
         <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs xl:block">
           Borrow Fee (S)
           <div className="text-destructive-foreground">
-            {Number(formattedBorrowingS).toFixed(4)}%
+            {Number(formattedBorrowingS).toFixed(6)}%
           </div>
         </div>
       </div>
-      {/* <div className="flex flex-shrink-0 text-[10px] text-muted-foreground">
-        <div className="flex h-8 cursor-pointer items-center p-3 hover:underline">
-          Market Details
-        </div>
-        <div className="flex h-8 cursor-pointer items-center p-3 hover:underline">
-          Berpetuals Tutorial
-        </div>
-      </div> */}
+      <div className="flex flex-shrink-0 text-[10px] text-muted-foreground">
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <div className="flex h-8 cursor-pointer items-center p-3 hover:underline">
+              Market Details
+            </div>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[420px]">
+            <DialogHeader>
+              <DialogTitle className="mb-3">Market Details</DialogTitle>
+            </DialogHeader>
+            <div className="flex w-full flex-col gap-2">
+              <div className="flex w-full flex-row justify-between text-xs">
+                <div className="text-xs font-medium text-muted-foreground">
+                  24H Change
+                </div>
+                <div>
+                  {price !== undefined ? (
+                    <div
+                      className={
+                        difference > 0
+                          ? "text-success-foreground"
+                          : "text-destructive-foreground"
+                      }
+                    >
+                      {Number(difference).toFixed(4)}%
+                    </div>
+                  ) : (
+                    <Skeleton className="h-[16px] w-[40px]" />
+                  )}
+                </div>
+              </div>
+              <div className="flex w-full flex-row justify-between text-xs">
+                <div className="text-xs font-medium text-muted-foreground">
+                  24H Volume
+                </div>
+                <div className="text-muted-foreground">
+                  {formatUsd(market.dailyVolume ?? 0)}
+                </div>
+              </div>
+              <div className="flex w-full flex-row justify-between text-xs">
+                <div className="text-xs font-medium text-muted-foreground">
+                  Open Interest (L)
+                </div>
+                <div className="text-success-foreground">
+                  {formatUsd(formattedLongOi)}
+                </div>
+              </div>
+              <div className="flex w-full flex-row justify-between text-xs">
+                <div className="text-xs font-medium text-muted-foreground">
+                  Open Interest (S)
+                </div>
+                <div className="text-destructive-foreground">
+                  {formatUsd(formattedShortOi)}
+                </div>
+              </div>
+              <div className="flex w-full flex-row justify-between text-xs">
+                <div className="text-xs font-medium text-muted-foreground">
+                  Borrowing Fee (L)
+                </div>
+                <div className="text-success-foreground">
+                  {Number(formattedBorrowingL).toFixed(6)}%
+                </div>
+              </div>
+              <div className="flex w-full flex-row justify-between text-xs">
+                <div className="text-xs font-medium text-muted-foreground">
+                  Borrowing Fee (S)
+                </div>
+                <div className="text-destructive-foreground">
+                  {Number(formattedBorrowingS).toFixed(6)}%
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 }
