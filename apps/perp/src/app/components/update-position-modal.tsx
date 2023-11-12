@@ -40,7 +40,6 @@ export function UpdatePositionModal({
   const price = useMarketIndexPrice(
     Number(openPosition?.market?.pair_index ?? 0),
   );
-  const formattedCurrentPrice = Number(formatUnits(BigInt(price ?? 0), 10));
 
   const positionSize =
     Number(formatUnits(BigInt(openPosition?.position_size ?? 0), 18)) *
@@ -91,6 +90,8 @@ export function UpdatePositionModal({
     openPosition?.index,
     parseUnits(`${sl ?? 0}`, 10),
   ];
+
+  console.log(openPosition);
 
   return (
     <div className={className}>
@@ -164,7 +165,7 @@ export function UpdatePositionModal({
             </div>
           </div>
 
-          <div className="flex h-[70px] justify-between rounded-lg border border-border bg-muted p-4">
+          <div className="flex h-fit justify-between rounded-lg border border-border bg-muted p-4">
             <div className="flex h-full flex-col justify-between">
               <div className="text-[10px] text-muted-foreground">
                 UnRealized PnL
@@ -182,7 +183,7 @@ export function UpdatePositionModal({
             leverage={Number(openPosition?.leverage) ?? 2}
             tp={tp}
             sl={sl}
-            formattedPrice={formattedCurrentPrice}
+            formattedPrice={openPrice}
             isUpdate={true}
             liqPrice={Number(openPosition.liq_price)}
             long={openPosition?.buy === true}
