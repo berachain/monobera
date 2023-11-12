@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -77,17 +77,27 @@ export const ActivePositionPNL = ({
     openPosition: position,
   });
 
+  const percentage = useMemo(() => {
+    if (!pnl || !position) return 0;
+    const positionSize = Number(
+      formatUnits(BigInt(position.position_size ?? 0), 18),
+    );
+    const currentSize = positionSize + pnl;
+    const percentage = ((currentSize - positionSize) / positionSize) * 100;
+    return percentage;
+  }, [pnl, position]);
   return (
     <div className={cn("", className)}>
       {pnl !== undefined ? (
-        <span
+        <div
           className={cn(
-            "",
+            "flex flex-col items-start",
             pnl > 0 ? "text-success-foreground" : "text-destructive-foreground",
           )}
         >
           {formatUsd(pnl)}
-        </span>
+          <div className="text-xs">({percentage.toFixed(2)}%)</div>
+        </div>
       ) : (
         <Skeleton className={cn("h-[28px] w-[80px]", className)} />
       )}
@@ -95,6 +105,35 @@ export const ActivePositionPNL = ({
   );
 };
 
+export const PnlWithPercentage = ({
+  positionSize,
+  pnl,
+}: {
+  positionSize: number | undefined;
+  pnl: number | undefined;
+}) => {
+  const percentage = useMemo(() => {
+    if (!positionSize || !pnl) return 0;
+    const currentSize = positionSize + Number(pnl);
+    const percentage = ((currentSize - positionSize) / positionSize) * 100;
+    return percentage;
+  }, [positionSize, pnl]);
+  return (
+    <div className="items-start text-sm font-medium leading-tight ">
+      <span
+        className={cn(
+          "flex flex-col items-start",
+          Number(pnl) > 0
+            ? "text-success-foreground"
+            : "text-destructive-foreground",
+        )}
+      >
+        {formatUsd(pnl ?? 0)}
+        <div className="text-xs">({percentage.toFixed(2)}%)</div>
+      </span>
+    </div>
+  );
+};
 export const positions_columns: ColumnDef<IMarketOrder>[] = [
   {
     header: ({ column }) => (
@@ -644,19 +683,18 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
       <DataTableColumnHeader column={column} title="PnL" />
     ),
     cell: ({ row }) => {
+      // const percentage = useMemo(() => {
+      //   if (!row) return 0;
+      //   const positionSize = Number(row.original.volume);
+      //   const currentSize = positionSize + Number(row.original.pnl);
+      //   const percentage = ((currentSize - positionSize) / positionSize) * 100;
+      //   return percentage;
+      // }, [row]);
       return (
-        <div className="text-sm font-medium leading-tight ">
-          <span
-            className={cn(
-              "",
-              Number(row.original.pnl) > 0
-                ? "text-success-foreground"
-                : "text-destructive-foreground",
-            )}
-          >
-            {formatUsd(row.original.pnl)}
-          </span>
-        </div>
+        <PnlWithPercentage
+          positionSize={Number(row.original.volume)}
+          pnl={Number(row.original.pnl)}
+        />
       );
     },
     accessorKey: "pnl",
@@ -769,18 +807,10 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-sm font-medium leading-tight ">
-          <span
-            className={cn(
-              "",
-              Number(row.original.pnl) > 0
-                ? "text-success-foreground"
-                : "text-destructive-foreground",
-            )}
-          >
-            {formatUsd(row.original.pnl)}
-          </span>
-        </div>
+        <PnlWithPercentage
+          positionSize={Number(row.original.volume)}
+          pnl={Number(row.original.pnl)}
+        />
       );
     },
     accessorKey: "pnl",
