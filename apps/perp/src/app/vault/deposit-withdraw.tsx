@@ -11,7 +11,7 @@ import {
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton, TokenInput, TokenList, useTxn } from "@bera/shared-ui";
-import { Alert } from "@bera/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -89,7 +89,7 @@ export default function DepositWithdraw() {
     }
     return false;
   }, [maxDeposit, depositAmount]);
-  console.log(isMaxDepositExceeding);
+  // console.log(isMaxDepositExceeding);
   return (
     <div className="flex h-fit w-full flex-col justify-between rounded-xl border border-border px-4 py-6 md:flex-row">
       {DepositModalPortal}
@@ -109,10 +109,13 @@ export default function DepositWithdraw() {
               <Icons.lock className="h-6 w-6 text-accent" />
               Deposit Honey
             </div>
-            <div className="text-sm leading-tight text-muted-foreground">
+            <div className="text-sm leading-6 text-muted-foreground">
               Deposit HONEY in exchange for bHONEY, stakers receive fees from
               each trade placed on the platform. bHONEY Accumulates these fees
               in real-time.
+            </div>
+            <div className="text-sm font-bold leading-6 text-warning-foreground">
+              Please be aware that a 0.05% fee will be charged on all deposits.
             </div>
             <div>
               <TokenList>
@@ -128,12 +131,23 @@ export default function DepositWithdraw() {
                 />
               </TokenList>
             </div>
+            <Alert variant="warning">
+              <AlertTitle>
+                {" "}
+                <Icons.info className="inline-block h-4 w-4" /> Please read
+                before you deposit
+              </AlertTitle>
+              <AlertDescription>
+                There is a 2 EPOCH Wait period to withdraw your Honey Deposit
+                from the HONEY Vault.
+              </AlertDescription>
+            </Alert>
             <ActionButton>
               {allowance?.formattedAllowance === "0" ? (
                 <ApproveTokenButton token={honey} spender={gTokenAddress} />
               ) : (
                 <Button
-                  variant={"success"}
+                  // variant={"success"}
                   className="w-full"
                   disabled={
                     isDepositLoading ||
@@ -170,13 +184,13 @@ export default function DepositWithdraw() {
               <Icons.lock className="h-6 w-6 text-accent" />
               Withdraw Honey
             </div>
-            <div className="text-sm leading-tight text-muted-foreground">
+            <div className="text-sm leading-6 text-muted-foreground">
               Withdraws are based on an epoch system of 24 hours. You can make a
               request to withdraw your assets during the first 18 hours of any
               epoch, but you must wait until the specified withdraw epoch to
               actually withdraw them.
             </div>
-            <div className="text-sm leading-tight text-muted-foreground">
+            <div className="text-sm leading-6 text-muted-foreground">
               Depending on the collateralization ratio of the vault, your
               withdraw epoch will be delayed by 1 to 3 epochs.{" "}
             </div>
@@ -202,6 +216,17 @@ export default function DepositWithdraw() {
                 />
               </TokenList>
             </div>
+            <Alert variant="warning">
+              <AlertTitle>
+                {" "}
+                <Icons.info className="inline-block h-4 w-4" />
+                Must withdraw in the EPOCH’s first 18 hours
+              </AlertTitle>
+              <AlertDescription>
+                You must withdraw your assets in the first 18 hours of your
+                withdraw epoch, otherwise a new request is required.
+              </AlertDescription>
+            </Alert>
             <ActionButton>
               <Button
                 disabled={
@@ -215,7 +240,7 @@ export default function DepositWithdraw() {
                     params: withdrawPayload,
                   })
                 }
-                variant={"destructive"}
+                // variant={"destructive"}
                 className="w-full"
               >
                 Request Withdraw

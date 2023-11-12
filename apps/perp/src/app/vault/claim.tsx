@@ -28,9 +28,9 @@ export default function Claim({ feeApr }: { feeApr: string }) {
     address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
   });
 
-  const bgtRewards = useBgtRewardsForAddress();
+  const _ = useBgtRewardsForAddress();
 
-  console.log("bgt rewards", bgtRewards);
+  // console.log("bgt rewards", bgtRewards);
   const bgtApr = useBgtApr(honeyLocked);
 
   const isLoading = isHoneyVaultBalanceLoading || isBgtRewardsLoading;

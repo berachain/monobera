@@ -29,9 +29,9 @@ export const Epochs = ({
       ? 0
       : format(
           new Date((epoch?.currentEpochEnd ?? 0) * 1000),
-          "MM/dd/yy, h:ma",
+          "MM/dd/yy, h:mma",
         );
-
+  // console.log(epoch);
   useSWR(
     [epoch?.currentEpoch],
     () => {
@@ -99,7 +99,8 @@ export const Epochs = ({
         ) : (
           <div className="flex w-full flex-row justify-between">
             <p className="text-xs font-normal leading-tight text-muted-foreground">
-              Time Remaining: {duration}
+              Time Remaining: <br />
+              {duration}
             </p>
             <p className="text-xs font-normal leading-tight">
               <span className="text-muted-foreground">End:</span>{" "}

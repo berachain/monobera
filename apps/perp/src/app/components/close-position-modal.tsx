@@ -55,9 +55,9 @@ export function ClosePositionModal({
     },
   });
 
-  const formattedPrice = Number(
-    formatUnits(BigInt(openPosition?.open_price ?? 0n), 10),
-  );
+  // const formattedPrice = Number(
+  //   formatUnits(BigInt(openPosition?.open_price ?? 0n), 10),
+  // );
 
   // const liqPrice = useCalculateLiqPrice({
   //   bfLong: openPosition?.market.pair_borrowing_fee?.bf_long,
