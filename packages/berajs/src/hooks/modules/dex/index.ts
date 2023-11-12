@@ -12,3 +12,4 @@ export * from "./usePollPreviewRemoveLiquidityExactAmountOut";
 export * from "./usePollUserDepositedPools";
 export * from "./usePollSwaps";
 export * from "./useBeraPrice";
+export * from "./usePollUserPendingBgtRewards";

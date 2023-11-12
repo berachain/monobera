@@ -5,7 +5,7 @@ import { getBaseTokenPrice, type MappedTokens } from "./getPrices";
 
 // export const fetchCache = "force-cache";
 
-export const revalidate = 60 * 2;
+export const revalidate = 60;
 
 export async function GET() {
   const router = new RouterService(defaultConfig);

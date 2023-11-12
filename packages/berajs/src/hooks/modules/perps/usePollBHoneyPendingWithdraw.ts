@@ -53,7 +53,7 @@ export const usePollBHoneyPendingWithdraw = () => {
     const bHoneyBalance = useBHoneyBalance();
     const { data = 0 } = useSWRImmutable(QUERY_KEY);
     return useMemo(() => {
-      return Number(formatUnits(BigInt(bHoneyBalance) - BigInt(data), 18));
+      return formatUnits(BigInt(bHoneyBalance) - BigInt(data), 18);
     }, [bHoneyBalance, data]);
   };
   return {

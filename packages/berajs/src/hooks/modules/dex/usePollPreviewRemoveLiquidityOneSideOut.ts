@@ -1,6 +1,7 @@
+import { parseUnits } from "ethers";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { parseUnits, type Address } from "viem";
+import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { type Token } from "~/api";
@@ -12,7 +13,7 @@ const EMPTY_INFO = [[""], [0n]];
 export const usePollPreviewRemoveLiquidityOneSideOut = (
   poolAddress: `0x${string}` | undefined,
   assetOut: Token | undefined,
-  sharesIn: number,
+  sharesIn: string,
 ) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
@@ -28,7 +29,7 @@ export const usePollPreviewRemoveLiquidityOneSideOut = (
           address: networkConfig.precompileAddresses.erc20DexAddress as Address,
           abi: DEX_PRECOMPILE_ABI,
           functionName: method,
-          args: [poolAddress, assetOut.address, parseUnits(`${sharesIn}`, 18)],
+          args: [poolAddress, assetOut.address, parseUnits(sharesIn, 18)],
         })
         .catch((e) => {
           console.log(e);

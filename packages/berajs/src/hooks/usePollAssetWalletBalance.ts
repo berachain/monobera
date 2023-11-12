@@ -78,12 +78,16 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
                 });
                 return { balance: 0n, formattedBalance: "0", ...token };
               }
+              const formattedBalance = formatUnits(
+                item.result,
+                token?.decimals || 18,
+              );
+
               const resultBalanceToken: BalanceToken = {
                 balance: item.result,
-                formattedBalance: formatUnits(
-                  item.result,
-                  token?.decimals || 18,
-                ),
+                formattedBalance: formattedBalance.includes("e")
+                  ? "0"
+                  : formattedBalance,
                 ...token,
               } as BalanceToken;
               await mutate([...QUERY_KEY, token?.address], resultBalanceToken);
