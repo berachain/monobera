@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router";
-import {
-  formatUsd,
-  usePollBgtRewards,
-  usePollPreviewBurnShares,
-  usePollPrices,
-} from "@bera/berajs";
+import { formatUsd, usePollBgtRewards } from "@bera/berajs";
 import { RewardBtn, TokenIconList } from "@bera/shared-ui";
-import { formatUnits, parseUnits } from "viem";
+import { Skeleton } from "@bera/ui/skeleton";
+
+import { usePositionSize } from "~/hooks/usePositionSize";
 
 export default function RewardsCard({ pool }: { pool: Pool }) {
   const [mobile, setMobile] = useState(false);
@@ -28,33 +25,11 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
 
   const { useBgtReward } = usePollBgtRewards([pool.pool]);
   const { data: bgtRewards } = useBgtReward(pool.pool);
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
-
-  const { usePreviewBurnShares } = usePollPreviewBurnShares(
-    parseUnits(`${Number(pool?.userDepositedShares)}`, 18) ?? 0n,
-    pool?.pool,
-    pool?.poolShareDenomHex,
-  );
-
-  const burnShares: Record<string, bigint> = usePreviewBurnShares();
-
-  const [userTotalValue, setUserTotalValue] = useState<number | undefined>(0);
-
-  useEffect(() => {
-    if (burnShares && prices) {
-      const totalValue = pool?.tokens.reduce((acc, token) => {
-        const formattedAmount = burnShares
-          ? Number(formatUnits(burnShares[token.address] ?? 0n, token.decimals))
-          : 0;
-
-        return acc + formattedAmount * (prices[token.address] ?? 0);
-      }, 0);
-      setUserTotalValue(totalValue ?? 0);
-    }
-  }, [burnShares, prices]);
-
   const title = pool.poolName ?? "";
+
+  const { userTotalValue, isPositionSizeLoading } = usePositionSize({
+    pool: pool,
+  });
   return (
     <div className="flex w-full flex-col items-center justify-between gap-4 rounded-2xl border border-border bg-background p-4 md:p-6 lg:flex-row">
       <div className="flex w-full flex-row gap-3">
@@ -70,7 +45,11 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
       <div className="flex w-full flex-col justify-between gap-4 sm:flex-row md:justify-between">
         <div className="flex min-w-[65px] flex-col gap-1">
           <div className=" text-left text-sm font-semibold leading-tight md:text-lg md:leading-7">
-            {formatUsd(userTotalValue ?? 0)}
+            {isPositionSizeLoading ? (
+              <Skeleton className="h-[32px] w-[150px]" />
+            ) : (
+              formatUsd(userTotalValue ?? 0)
+            )}
           </div>
           <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
             My TVL

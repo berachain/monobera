@@ -1,31 +1,26 @@
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router";
-import { formatAmountBig, formatUsd } from "@bera/berajs";
+import { formatAmountBig, formatUsd, formatter } from "@bera/berajs";
 import { TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { TagList } from "~/components/tag-list";
+import { usePositionSize } from "~/hooks/usePositionSize";
 
-export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
+export const PoolCard = ({
+  pool,
+  isUserData,
+}: {
+  pool: Pool | undefined;
+  isUserData?: boolean;
+}) => {
   const router = useRouter();
   const poolName = pool?.poolName ?? "";
-  const dataList = [
-    { title: "TVL", amount: `$${formatAmountBig(pool?.totalValue ?? "0")}` },
-    { title: "Volume (24H)", amount: formatUsd(pool?.dailyVolume ?? "0") },
-    {
-      title: "Fees (24H)",
-      amount:
-        pool?.dailyVolume && Number(pool?.dailyVolume) !== 0
-          ? formatUsd(pool?.fees ?? "0")
-          : "$0",
-    },
-    // {
-    //   title: "vAPY",
-    //   amount: (pool?.totalApy ?? 0).toFixed(2) + "%",
-    // },
-  ];
+  const { userTotalValue, isPositionSizeLoading } = usePositionSize({
+    pool: pool,
+  });
   return (
     <div
       key={pool?.pool}
@@ -40,20 +35,52 @@ export const PoolCard = ({ pool }: { pool: Pool | undefined }) => {
           {poolName.length > 60 ? `${poolName.slice(0, 60)}...` : poolName}
         </div>
         <div className="flex h-7 flex-shrink-0 gap-2 whitespace-nowrap text-center text-xl font-semibold">
-          {(pool?.totalApy ?? 0).toFixed(2)}% PRR{" "}
-          <TagList tagList={pool?.tags ?? []} className="inline-flex" />
+          {(pool?.totalApy ?? 0) > 10000
+            ? formatter.format(pool?.totalApy ?? 0)
+            : (pool?.totalApy ?? 0).toFixed(2)}
+          % PRR <TagList tagList={pool?.tags ?? []} className="inline-flex" />
         </div>
       </div>
 
       <div className="flex flex-col gap-1 bg-muted px-6 py-3">
-        {dataList.map((data, index) => (
-          <div key={index} className=" flex justify-between">
+        {isUserData && (
+          <div className=" flex justify-between">
             <div className="text-sm font-medium text-muted-foreground">
-              {data.title}
+              Position Size
             </div>
-            <div className="text-sm font-medium">{data.amount}</div>
+            <div className="text-sm font-medium">
+              {isPositionSizeLoading ? (
+                <Skeleton className="h-[32px] w-[150px]" />
+              ) : (
+                formatUsd(userTotalValue ?? 0)
+              )}
+            </div>
           </div>
-        ))}
+        )}
+        <div className=" flex justify-between">
+          <div className="text-sm font-medium text-muted-foreground">TVL</div>
+          <div className="text-sm font-medium">
+            {formatAmountBig(pool?.totalValue ?? "0")}
+          </div>
+        </div>
+        <div className=" flex justify-between">
+          <div className="text-sm font-medium text-muted-foreground">
+            Volume (24H)
+          </div>
+          <div className="text-sm font-medium">
+            {formatUsd(pool?.dailyVolume ?? "0")}
+          </div>
+        </div>
+        <div className=" flex justify-between">
+          <div className="text-sm font-medium text-muted-foreground">
+            Fees (24H)
+          </div>
+          <div className="text-sm font-medium">
+            {pool?.dailyVolume && Number(pool?.dailyVolume) !== 0
+              ? formatUsd(pool?.fees ?? "0")
+              : "$0"}
+          </div>
+        </div>
       </div>
 
       <div className="w-full bg-muted p-3">

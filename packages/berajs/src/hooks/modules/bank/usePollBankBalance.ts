@@ -28,9 +28,9 @@ export const usePollBankBalance = (denom: string | undefined) => {
           return result;
         } catch (e) {
           console.error(e);
+          return undefined;
         }
       }
-      return undefined;
     },
     {
       refreshInterval: POLLING.FAST,
@@ -38,7 +38,7 @@ export const usePollBankBalance = (denom: string | undefined) => {
   );
 
   const useBankBalance = () => {
-    const { data = 0n } = useSWRImmutable(QUERY_KEY);
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };
 

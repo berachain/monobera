@@ -154,7 +154,7 @@ export default function WithdrawLiquidityContent({
                     logoURI: "",
                   }}
                   hidePrice={true}
-                  balance={Number(formattedLpBalance)}
+                  balance={formattedLpBalance}
                   selectable={false}
                   amount={amount}
                   setAmount={setAmount}
@@ -259,7 +259,7 @@ export default function WithdrawLiquidityContent({
                     decimals: 18,
                     logoURI: "",
                   }}
-                  balance={Number(formattedLpBalance)}
+                  balance={formattedLpBalance}
                   hidePrice={true}
                   selectable={false}
                   amount={amount}

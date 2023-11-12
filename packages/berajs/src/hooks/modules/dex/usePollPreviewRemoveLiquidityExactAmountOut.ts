@@ -1,6 +1,7 @@
+import { parseUnits } from "ethers";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { parseUnits, type Address } from "viem";
+import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { type Token } from "~/api";
@@ -12,7 +13,7 @@ const EMPTY_INFO = [[""], [0n]];
 export const usePollPreviewRemoveLiquidityExactAmountOut = (
   poolAddress: `0x${string}` | undefined,
   assetIn: Token | undefined,
-  assetAmount: number,
+  assetAmount: string,
 ) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
@@ -31,7 +32,7 @@ export const usePollPreviewRemoveLiquidityExactAmountOut = (
           args: [
             poolAddress,
             assetIn.address,
-            parseUnits(`${assetAmount}`, assetIn?.decimals),
+            parseUnits(assetAmount, assetIn?.decimals),
           ],
         })
         .catch((e) => {

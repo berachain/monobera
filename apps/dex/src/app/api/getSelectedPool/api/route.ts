@@ -5,7 +5,7 @@ import { type Pool } from "@bera/bera-router";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
-export const revalidate = 60;
+export const revalidate = 5;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

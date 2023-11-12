@@ -53,6 +53,8 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     updateTokenExceeding,
     areNoInputsExceeding,
     areAllInputsPopulated,
+    areSomeInputsUnpopulated,
+    areAllInputsEmpty,
   } = useMultipleTokenInput(pool?.tokens ?? []);
 
   const { needsApproval } = useMultipleTokenApprovals(
@@ -214,7 +216,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
       setError("Unable to perform transaction.");
     } else if (!areNoInputsExceeding) {
       setError("Input exceeds balance");
-    } else if (!areAllInputsPopulated) {
+    } else if (areSomeInputsUnpopulated && !areAllInputsEmpty) {
       setError("Missing token input");
     }
 

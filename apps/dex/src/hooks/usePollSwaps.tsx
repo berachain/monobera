@@ -10,7 +10,7 @@ interface IUsePollSwaps {
   tokenIn: Address;
   tokenOut: Address;
   swapKind: number;
-  amount: number;
+  amount: string;
 }
 
 export interface SwapInfoV2 {

@@ -18,7 +18,7 @@ type Props = {
   selected: Token | undefined;
   selectedTokens?: (Token | undefined)[];
   amount: string | undefined;
-  balance?: number;
+  balance?: string;
   price?: number;
   hideBalance?: boolean;
   hidePrice?: boolean;
@@ -55,7 +55,7 @@ export function TokenInput({
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { isLoading: isBalancesLoading, data: token } =
     useSelectedAssetWalletBalance(selected?.address ?? "");
-  let tokenBalance = Number(token?.formattedBalance ?? "0");
+  let tokenBalance = token?.formattedBalance;
 
   if (balance !== undefined) {
     tokenBalance = balance;
@@ -98,7 +98,7 @@ export function TokenInput({
           customTokenList={customTokenList}
           filter={[bgtTokenAddress]}
         />
-        <div className="flex w-full flex-col pl-2 sm:pl-0">
+        <div className="ml-2 flex w-full flex-col pl-2 sm:pl-0">
           <Input
             type="number"
             step="any"
@@ -137,9 +137,12 @@ export function TokenInput({
                 </p>
                 {!hideMax && (
                   <p
-                    className="cursor-pointer text-xs text-muted-foreground underline hover:text-foreground"
+                    className="cursor-pointer select-none	 text-xs text-muted-foreground underline hover:text-foreground"
                     onClick={() => {
-                      setAmount && setAmount(tokenBalance.toString());
+                      setAmount &&
+                        tokenBalance !== "" &&
+                        tokenBalance !== "0" &&
+                        setAmount(tokenBalance?.toString() ?? "");
                     }}
                   >
                     MAX
