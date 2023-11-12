@@ -1,21 +1,23 @@
 "use client";
 
 import React from "react";
+import { useGasData } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
-import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 
+// import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
+// import { formatEther } from 'viem'
 // enum ServerStatusEnuem {
 //   OPERATIONAL = "Operational",
 //   HALTED = "Service Halted",
 //   INTERRUPTION = "Service Interruption",
 // }
 
-enum GasSpeedEnum {
-  LOW = "🐢-Low",
-  MARKET = "🦊-Market",
-  FAST = "🏎️-Fast",
-  APE = "🦧-Ape",
-}
+// enum GasSpeedEnum {
+//   LOW = "🐢-Low",
+//   MARKET = "🦊-Market",
+//   FAST = "🏎️-Fast",
+//   APE = "🦧-Ape",
+// }
 
 // const getStatusColor = (status: ServerStatusEnuem) => {
 //   switch (status) {
@@ -32,11 +34,12 @@ enum GasSpeedEnum {
 
 export function UpTimeStatus() {
   // const status = ServerStatusEnuem.INTERRUPTION;
-  const gasAmount = 178;
-  const [gasSpeed, setGasSpeed] = React.useState<GasSpeedEnum>(
-    GasSpeedEnum.FAST,
-  );
-  const [open, setOpen] = React.useState(false);
+  const gasData = useGasData();
+  // console.log("gasData", formatEther(gasData??0n), gasData)
+  // const [gasSpeed, setGasSpeed] = React.useState<GasSpeedEnum>(
+  //   GasSpeedEnum.FAST,
+  // );
+  // const [open, setOpen] = React.useState(false);
   return (
     <div className="fixed bottom-0 flex w-full justify-between border-y border-border bg-background px-4 py-2">
       <div className="flex items-center gap-2">
@@ -45,10 +48,19 @@ export function UpTimeStatus() {
           {status}
         </div> */}
       </div>
-      <Popover open={open}>
+      <div className="flex cursor-pointer items-center gap-2 text-xs font-medium leading-3 text-muted-foreground">
+        <div className=" text-success-foreground">
+          {gasData?.formatted.gasPrice}
+        </div>
+        <Icons.fuel className="h-4 w-4" />
+        Bwei
+      </div>
+      {/* <Popover open={open}>
         <PopoverTrigger onClick={() => setOpen(true)}>
           <div className="flex cursor-pointer items-center gap-2 text-xs font-medium leading-3 text-muted-foreground">
-            <div className=" text-success-foreground">{gasAmount}</div>
+            <div className=" text-success-foreground">
+              {gasData?.formatted.gasPrice}
+            </div>
             <Icons.fuel className="h-4 w-4" />
             {gasSpeed.split("-")[1]}
           </div>
@@ -67,7 +79,7 @@ export function UpTimeStatus() {
             </div>
           ))}
         </PopoverContent>
-      </Popover>
+      </Popover> */}
     </div>
   );
 }

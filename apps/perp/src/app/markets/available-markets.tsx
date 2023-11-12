@@ -36,6 +36,10 @@ export default function AvailableMarket({ markets }: { markets: IMarket[] }) {
         columns={market_table_column}
         data={filteredMarkets ?? []}
         className="min-w-[1200px]"
+        onRowClick={(row) => {
+          //@ts-ignore
+          window.open(`/berpetuals/${row.original.name}`, "_self");
+        }}
       />
     </div>
   );

@@ -19,13 +19,13 @@ export const useCalculateLiqPrice = ({
 
   useMemo(() => {
     try {
-      console.log({
-        bfLong,
-        bfShort,
-        orderType,
-        price,
-        leverage,
-      });
+      // console.log({
+      //   bfLong,
+      //   bfShort,
+      //   orderType,
+      //   price,
+      //   leverage,
+      // });
       const formattedBorrowingL = Number(bfLong);
       const formattedBorrowingS = Number(bfShort);
       const long = orderType === "long";
@@ -41,7 +41,7 @@ export const useCalculateLiqPrice = ({
         : openPrice + liqPriceDistance;
 
       const finalLiqPrice =
-        calculatedLiqPrice > 0 ? Math.floor(calculatedLiqPrice) : 0;
+        calculatedLiqPrice > 0 ? Math.floor(calculatedLiqPrice * 100) / 100 : 0;
 
       setLiqPrice(finalLiqPrice);
     } catch (e) {
