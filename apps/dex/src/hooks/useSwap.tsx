@@ -126,10 +126,11 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     tokenIn: selectedFrom?.address as Address,
     tokenOut: selectedTo?.address as Address,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
-    amount:
-      Number(swapAmount) > Number.MAX_SAFE_INTEGER
-        ? Number.MAX_SAFE_INTEGER
-        : Number(swapAmount) ?? 0,
+    // amount:
+    //   Number(swapAmount) > Number.MAX_SAFE_INTEGER
+    //     ? Number.MAX_SAFE_INTEGER
+    //     : Number(swapAmount) ?? 0,
+    amount: swapAmount,
   });
 
   const { data: priceImpact } = usePollPriceImpact({
@@ -139,10 +140,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     tokenOutDecimals: selectedTo?.decimals ?? 18,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
     swapInfo: swapInfo,
-    swapAmount:
-      Number(swapAmount) > Number.MAX_SAFE_INTEGER
-        ? Number.MAX_SAFE_INTEGER
-        : Number(swapAmount) ?? 0,
+    swapAmount: swapAmount,
     isSwapLoading: isLoading,
   });
 
@@ -188,14 +186,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     tokenIn: selectedFrom?.address as Address,
     tokenOut: QUOTING_TOKEN,
     swapKind: 0,
-    amount: 1,
+    amount: "1",
   });
 
   const { data: tokenOutPriceInfo } = usePollSwaps({
     tokenIn: selectedTo?.address as Address,
     tokenOut: QUOTING_TOKEN,
     swapKind: 0,
-    amount: 1,
+    amount: "1",
   });
 
   useEffect(() => {
@@ -205,7 +203,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     } else {
       setFromAmount(swapInfo?.formattedReturnAmount);
     }
-  }, [swapInfo]);
+  }, [swapInfo, isWrap]);
 
   useEffect(() => {
     if (
@@ -229,7 +227,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         const exchangeRate = `1 ${selectedFrom?.symbol} = ${ratio} ${selectedTo?.symbol}`;
         setExchangeRate(exchangeRate);
       } catch (e) {
-        console.log("ERRRROE");
         console.log(e);
         setExchangeRate(undefined);
       }
@@ -282,7 +279,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         }
 
         const payload = [swapKind, swapInfo?.batchSwapSteps, d];
-        console.log("PAYLOAD", payload);
         setPayload(payload);
       } catch (e) {
         console.log(e);
@@ -341,7 +337,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [isWrap]);
 
-  console.log(swapInfo);
   return {
     setSwapKind,
     setSelectedFrom,

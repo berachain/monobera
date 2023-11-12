@@ -87,7 +87,7 @@ export function SwapCard({
     swapInfo,
     value,
     payload,
-    showPriceImpact,
+    // showPriceImpact,
     priceImpact,
     exchangeRate,
     gasPrice,
@@ -255,6 +255,7 @@ export function SwapCard({
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedFrom}
                     amount={fromAmount ?? ""}
+                    price={Number(tokenInPrice)}
                     showExceeding={true}
                     onExceeding={(isExceeding: boolean) =>
                       setExceedingBalance(isExceeding)
@@ -287,6 +288,7 @@ export function SwapCard({
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedTo}
                     amount={toAmount}
+                    price={Number(tokenOutPrice)}
                     hideMax={true}
                     setAmount={(amount) => {
                       setSwapKind(SwapKind.GIVEN_OUT);
@@ -342,7 +344,7 @@ export function SwapCard({
                   ) : (
                     false
                   )}
-                  {showPriceImpact ? (
+                  {/* {showPriceImpact ? (
                     <Alert variant="destructive">
                       <AlertTitle>
                         {" "}
@@ -356,7 +358,7 @@ export function SwapCard({
                     </Alert>
                   ) : (
                     false
-                  )}
+                  )} */}
                   {selectedFrom &&
                   selectedTo &&
                   swapInfo &&

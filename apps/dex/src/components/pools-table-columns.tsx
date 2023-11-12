@@ -2,15 +2,17 @@
 
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { formatter } from "@bera/berajs";
+import { formatUsd, formatter } from "@bera/berajs";
 import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
+import { usePositionSize } from "~/hooks/usePositionSize";
 
 export const columns: ColumnDef<Pool>[] = [
   {
@@ -55,6 +57,7 @@ export const columns: ColumnDef<Pool>[] = [
         column={column}
         tooltip="Total amount of assets currently locked, in the Pool"
         title="TVL"
+        className="min-w-[80px]"
       />
     ),
     cell: ({ row }) => {
@@ -239,6 +242,25 @@ export const columns: ColumnDef<Pool>[] = [
   },
 ];
 
+export const PositionSize = (pool: any) => {
+  console.log(pool);
+  const { userTotalValue, isPositionSizeLoading } = usePositionSize({
+    pool: pool.pool,
+  });
+  console.log({
+    userTotalValue,
+    isPositionSizeLoading,
+  });
+  return (
+    <div className="text-sm font-medium">
+      {isPositionSizeLoading ? (
+        <Skeleton className="h-[32px] w-[140px]" />
+      ) : (
+        formatUsd(userTotalValue ?? 0)
+      )}
+    </div>
+  );
+};
 export const my_columns: ColumnDef<any>[] = [
   {
     accessorKey: "poolName",
@@ -280,18 +302,15 @@ export const my_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        tooltip="Total amount of assets currently locked, in the Pool"
+        tooltip="Total amount of user deposited assets"
         title="Position Size"
         className="whitespace-nowrap"
       />
     ),
     cell: ({ row }) => {
-      const totalValue = formatter.format(row.original.totalValue || 0);
-      return <div className="flex items-center">${totalValue}</div>;
+      return <PositionSize pool={row.original as Pool} />;
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
+    enableSorting: false,
   },
   {
     accessorKey: "fees",
@@ -396,7 +415,7 @@ export const my_columns: ColumnDef<any>[] = [
           </Button>
         </Link>
         <Link href={`/pool/${row.original.pool}`}>
-          <Button className="flex gap-1">Claim</Button>
+          <Button className="flex gap-1">Details</Button>
         </Link>
       </div>
     ),

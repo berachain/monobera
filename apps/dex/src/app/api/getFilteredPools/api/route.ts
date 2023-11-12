@@ -28,7 +28,7 @@ function sortByParameter(
 
 const DEFAULT_SIZE = 10;
 
-export const revalidate = 60;
+export const revalidate = 5;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

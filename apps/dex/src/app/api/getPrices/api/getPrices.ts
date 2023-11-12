@@ -1,5 +1,6 @@
 import { type BatchSwapStep, type Pool } from "@bera/bera-router";
-import { formatUnits, getAddress, parseUnits } from "viem";
+import { parseUnits } from "ethers";
+import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
 export interface MappedTokens {
@@ -16,19 +17,19 @@ export const getSwap = async (
   tokenIn: Address,
   tokenOut: Address,
   swapType: number,
-  amount: number,
+  amount: string,
 ) => {
   try {
+    const parsedAmount = parseUnits(amount, 18);
     const type = swapType === 0 ? "given_in" : "given_out";
     const response = await fetch(
       `${
         process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
       }/dex/route?quote_asset=${handleNativeBera(
         tokenOut,
-      )}&base_asset=${handleNativeBera(tokenIn)}&amount=${parseUnits(
-        `${amount}`,
-        18,
-      )}&swap_type=${type}`,
+      )}&base_asset=${handleNativeBera(
+        tokenIn,
+      )}&amount=${parsedAmount}&swap_type=${type}`,
     );
 
     const result = await response.json();
@@ -100,7 +101,7 @@ export const getBaseTokenPrice = async (pools: Pool[]) => {
       const tokenPromises = pool.tokens
         .filter((token: { address: string }) => token.address !== BASE_TOKEN)
         .map((token: { address: any; decimals: number }) =>
-          getSwap(token.address, BASE_TOKEN, 0, 1).catch(() => {
+          getSwap(token.address, BASE_TOKEN, 0, "1").catch(() => {
             return undefined;
           }),
         );

@@ -1,15 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   formatUsd,
   formatter,
   truncateHash,
-  usePollBankBalance,
+  useBeraJs,
   usePollBgtRewards,
-  usePollPreviewBurnShares,
 } from "@bera/berajs";
 import { blockExplorerName, blockExplorerUrl } from "@bera/config";
 import { RewardBtn, TokenIcon } from "@bera/shared-ui";
@@ -18,6 +17,7 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -33,6 +33,7 @@ import { type Address } from "wagmi";
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import { SwapCard } from "~/components/swap-card";
 import { getWBeraPriceForToken } from "~/app/api/getPrices/api/getPrices";
+import { usePositionSize } from "~/hooks/usePositionSize";
 import { PoolChart } from "./PoolChart";
 import {
   type AddLiquidityData,
@@ -289,33 +290,8 @@ export const EventTable = ({
 };
 export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const router = useRouter();
-  const { useBankBalance } = usePollBankBalance(pool.shareAddress);
   const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   const { data: bgtRewards } = useBgtReward(pool?.pool);
-
-  const shareBalance = useBankBalance();
-  const { usePreviewBurnShares } = usePollPreviewBurnShares(
-    shareBalance,
-    pool?.pool,
-    pool?.poolShareDenomHex,
-  );
-
-  const burnShares: Record<string, bigint> = usePreviewBurnShares();
-
-  const [userTotalValue, setUserTotalValue] = useState<number | undefined>(0);
-
-  useEffect(() => {
-    if (burnShares) {
-      const totalValue = pool?.tokens.reduce((acc, token) => {
-        const formattedAmount = burnShares
-          ? Number(formatUnits(burnShares[token.address] ?? 0n, token.decimals))
-          : 0;
-
-        return acc + formattedAmount * (prices[token.address] ?? 0);
-      }, 0);
-      setUserTotalValue(totalValue ?? 0);
-    }
-  }, [burnShares]);
 
   const [selectedTab, setSelectedTab] = useState(Selection.AllTransactions);
   const {
@@ -403,6 +379,16 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
       );
     }
   };
+
+  const { userTotalValue, isPositionSizeLoading } = usePositionSize({
+    pool: pool,
+  });
+
+  console.log("pool", {
+    userTotalValue,
+    isPositionSizeLoading,
+  });
+  const { isConnected } = useBeraJs();
   return (
     <div className="container p-[52px]">
       <div className="mb-4 flex w-full flex-wrap items-center justify-between">
@@ -604,8 +590,16 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 <h3 className="text-xs font-medium text-muted-foreground">
                   My pool balance
                 </h3>
-                <p className="text-lg font-semibold text-foreground">
-                  {formatUsd(userTotalValue ?? 0)}
+                <p className="mt-1 text-lg font-semibold text-foreground">
+                  {isConnected ? (
+                    isPositionSizeLoading ? (
+                      <Skeleton className="h-[32px] w-[150px]" />
+                    ) : (
+                      formatUsd(userTotalValue ?? 0)
+                    )
+                  ) : (
+                    formatUsd(0)
+                  )}
                 </p>
               </div>
 
