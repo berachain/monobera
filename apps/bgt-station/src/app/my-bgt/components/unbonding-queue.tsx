@@ -128,7 +128,7 @@ export default function UnbondingQueue({
           img={`${cloudinaryUrl}/bears/zkyxcj5qhdmd75xgozkn`}
           title="How do I unbond BGT?"
           subtitle="Unbond with ease following our walkthrough."
-          href={`${docsUrl}/proof-of-liquidity/pol-bgt-emissions.html`}
+          href={`${docsUrl}/learn/protocol/bgt-station#unbonding-bgt`}
         />
       )}
     </div>

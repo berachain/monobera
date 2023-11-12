@@ -131,7 +131,7 @@ export function ClosePositionModal({
               </div>
             </div>
           </div>
-          <div className="flex h-[70px] justify-between rounded-lg border border-border bg-muted p-4">
+          <div className="flex h-fit justify-between rounded-lg border border-border bg-muted p-4">
             <div className="flex h-full flex-col justify-between">
               <div className="text-xs text-muted-foreground">
                 UnRealized PnL

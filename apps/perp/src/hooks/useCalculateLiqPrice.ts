@@ -41,7 +41,7 @@ export const useCalculateLiqPrice = ({
         : openPrice + liqPriceDistance;
 
       const finalLiqPrice =
-        calculatedLiqPrice > 0 ? Math.floor(calculatedLiqPrice * 100) / 100 : 0;
+        calculatedLiqPrice > 0 ? (calculatedLiqPrice * 100) / 100 : 0;
 
       setLiqPrice(finalLiqPrice);
     } catch (e) {
