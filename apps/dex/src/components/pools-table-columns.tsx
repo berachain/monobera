@@ -302,7 +302,7 @@ export const my_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        tooltip="Total amount of assets currently locked, in the Pool"
+        tooltip="Total amount of user deposited assets"
         title="Position Size"
         className="whitespace-nowrap"
       />
@@ -310,9 +310,7 @@ export const my_columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       return <PositionSize pool={row.original as Pool} />;
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
+    enableSorting: false,
   },
   {
     accessorKey: "fees",
