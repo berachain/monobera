@@ -55,12 +55,15 @@ export function CreatePoolPreview({
     actionType: TransactionActionType.CREATE_POOL,
   });
 
+  // holy javascript hell
+  const parsedFee = Number(Number(fee / 100).toFixed(4));
+
   const options = {
     weights: tokenWeights.map((tokenWeight) => ({
       asset: tokenWeight.token?.address,
       weight: tokenWeight.weight,
     })),
-    swapFee: parseUnits(`${fee / 100}`, 18),
+    swapFee: parseUnits(`${parsedFee}`, 18),
   };
 
   const payload = [
@@ -75,6 +78,7 @@ export function CreatePoolPreview({
     "balancer",
     options,
   ];
+
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
       {ModalPortal}

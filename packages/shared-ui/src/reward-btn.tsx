@@ -76,7 +76,7 @@ const RewardModalContent = ({
     amount !== undefined &&
     Number(amount) > Number(bgtRewards);
   return (
-    <div className="flex w-full flex-col gap-8 sm:w-[440px]">
+    <div className="flex w-full flex-col gap-8 ">
       <div className="text-lg font-semibold leading-7">Unclaimed Rewards</div>
       <div>
         <Input

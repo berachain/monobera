@@ -157,15 +157,84 @@ const useCreateTokenWeights = () => {
 
     let updated = false; // Track if any changes were made to tokenWeights
 
-    updatedTokenWeights.forEach((item: ITokenWeight, i: number) => {
-      if (!item.locked && item.weight !== outstandingWeightPerItem) {
-        // @ts-ignore
-        updatedTokenWeights[i].weight =
-          outstandingWeightPerItem > 0 ? outstandingWeightPerItem : 0;
-        updated = true;
-      }
-    });
-
+    if (
+      numberOfUnlockedItems === tokenWeights.length &&
+      tokenWeights.length === 3
+    ) {
+      updatedTokenWeights.forEach((item: ITokenWeight, i: number) => {
+        if (!item.locked && item.weight !== outstandingWeightPerItem) {
+          if (i == 0) {
+            // @ts-ignore
+            updatedTokenWeights[i].weight = 34;
+            return;
+          }
+          // @ts-ignore
+          updatedTokenWeights[i].weight =
+            outstandingWeightPerItem > 0 ? outstandingWeightPerItem : 0;
+          updated = true;
+        }
+      });
+    } else if (
+      numberOfUnlockedItems === tokenWeights.length &&
+      tokenWeights.length === 6
+    ) {
+      updatedTokenWeights.forEach((item: ITokenWeight, i: number) => {
+        if (i < 4) {
+          // @ts-ignore
+          updatedTokenWeights[i].weight = 17;
+          return;
+        }
+        if (!item.locked && item.weight !== outstandingWeightPerItem) {
+          // @ts-ignore
+          updatedTokenWeights[i].weight =
+            outstandingWeightPerItem > 0 ? outstandingWeightPerItem : 0;
+          updated = true;
+        }
+      });
+    } else if (
+      numberOfUnlockedItems === tokenWeights.length &&
+      tokenWeights.length === 7
+    ) {
+      updatedTokenWeights.forEach((item: ITokenWeight, i: number) => {
+        if (i < 2) {
+          // @ts-ignore
+          updatedTokenWeights[i].weight = 15;
+          return;
+        }
+        if (!item.locked && item.weight !== outstandingWeightPerItem) {
+          // @ts-ignore
+          updatedTokenWeights[i].weight =
+            outstandingWeightPerItem > 0 ? outstandingWeightPerItem : 0;
+          updated = true;
+        }
+      });
+    } else if (
+      numberOfUnlockedItems === tokenWeights.length &&
+      tokenWeights.length === 8
+    ) {
+      updatedTokenWeights.forEach((item: ITokenWeight, i: number) => {
+        if (i < 4) {
+          // @ts-ignore
+          updatedTokenWeights[i].weight = 13;
+          return;
+        }
+        if (!item.locked && item.weight !== outstandingWeightPerItem) {
+          // @ts-ignore
+          updatedTokenWeights[i].weight =
+            outstandingWeightPerItem > 0 ? outstandingWeightPerItem : 0;
+          updated = true;
+        }
+      });
+    } else {
+      updatedTokenWeights.forEach((item: ITokenWeight, i: number) => {
+        if (!item.locked && item.weight !== outstandingWeightPerItem) {
+          // @ts-ignore
+          updatedTokenWeights[i].weight =
+            outstandingWeightPerItem > 0 ? outstandingWeightPerItem : 0;
+          updated = true;
+        }
+      });
+    }
     if (updated) {
       setTokenWeights(updatedTokenWeights);
     }
@@ -201,6 +270,9 @@ const useCreateTokenWeights = () => {
   };
 
   const onRemove = (index: number) => {
+    if (tokenWeights.length <= 2) {
+      return;
+    }
     const updatedTokenWeights: ITokenWeight[] = [
       ...tokenWeights.slice(0, index),
       ...tokenWeights.slice(index + 1),

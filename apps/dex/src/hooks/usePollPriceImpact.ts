@@ -1,4 +1,5 @@
 import { POLLING } from "@bera/shared-ui/src/utils";
+import { formatUnits, parseUnits } from "ethers";
 import useSWR from "swr";
 import { type Address } from "wagmi";
 
@@ -12,7 +13,7 @@ interface IUsePollSwaps {
   tokenOutDecimals: number;
   swapKind: number;
   swapInfo: SwapInfoV2 | undefined;
-  swapAmount: number;
+  swapAmount: string;
   isSwapLoading: boolean;
 }
 
@@ -27,25 +28,55 @@ export const usePollPriceImpact = ({
     tokenIn: tokenIn,
     tokenOut: tokenOut,
     swapKind,
-    amount: 1,
+    amount: "1",
   });
 
-  const QUERY_KEY = [
-    tokenIn,
-    tokenOut,
-    swapKind,
-    swapInfo?.formattedReturnAmount,
-  ];
+  const QUERY_KEY = [tokenIn, tokenOut, swapKind, swapInfo?.returnAmount];
 
   return useSWR(
     QUERY_KEY,
     () => {
+      console.log("parsed swapAmount", parseUnits(swapAmount, 18));
+      console.log("swap amnt", swapAmount);
       const bestResult =
-        swapAmount * Number(priceImpactSwapInfo?.formattedReturnAmount);
+        (parseUnits(swapAmount, 18) *
+          BigInt(priceImpactSwapInfo?.returnAmount ?? 0n)) /
+        parseUnits("100", 18);
 
-      const actualResult = Number(swapInfo?.formattedReturnAmount);
-      const percentageDifference =
-        (Math.abs(bestResult - actualResult) / bestResult) * 100;
+      const actualResult = BigInt(swapInfo?.returnAmount ?? 0n);
+
+      console.log({
+        bestResult,
+        actualResult,
+      });
+      const formattedBestResult = Number(formatUnits(bestResult, 18));
+      const formattedActualResult = Number(formatUnits(actualResult, 18));
+
+      console.log({
+        formattedBestResult,
+        formattedActualResult,
+        swapInfo,
+        priceImpactSwapInfo,
+      });
+      // const percentageDifference =
+      //   ((formattedBestResult - formattedActualResult)/ formattedBestResult) * 100;
+
+      const percentageDifference = calculatePercentageDifference(
+        formattedBestResult,
+        formattedActualResult,
+      );
+
+      console.log("percentageDifference", percentageDifference);
+      // console.log({
+      //   bestResult,
+      //   actualResult,
+      //   percentageDifference: ((bestResult - actualResult) / bestResult) * parseUnits('100', 18),
+      //   swapInfo,
+      //   priceImpactSwapInfo,
+      // })
+      // const percentageDifference = ((bestResult - actualResult) *  parseUnits('100', 18) / bestResult);
+      // console.log('formatUnits(percentageDifference, 18)', formatUnits(percentageDifference, 18))
+
       return percentageDifference < -100 ? -100 : percentageDifference;
     },
     {
@@ -54,3 +85,8 @@ export const usePollPriceImpact = ({
     },
   );
 };
+
+function calculatePercentageDifference(a: number, b: number): number {
+  const percentageDifference = ((b - a) / ((b + a) / 2)) * 100;
+  return percentageDifference;
+}

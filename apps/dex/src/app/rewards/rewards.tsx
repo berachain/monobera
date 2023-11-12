@@ -1,7 +1,7 @@
 "use client";
 
 import { type Pool } from "@bera/bera-router";
-import { useBeraJs, usePollUserDepositedPools } from "@bera/berajs";
+import { useBeraJs, usePollUserPendingBgtRewards } from "@bera/berajs";
 import { ConnectWalletBear, NotFoundBear } from "@bera/shared-ui";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
@@ -10,10 +10,10 @@ import { Banner } from "./reward-banner";
 import RewardsCard from "./rewards-card";
 
 export const Rewards = () => {
-  const { useUserBgtDepositedPools, isLoading } = usePollUserDepositedPools(
+  const { usePoolsPendingBgtRewards, isLoading } = usePollUserPendingBgtRewards(
     `${getAbsoluteUrl()}/api/getPools/api`,
   );
-  const userPools = useUserBgtDepositedPools();
+  const userPools = usePoolsPendingBgtRewards();
   const { isReady } = useBeraJs();
   return (
     <div className="container max-w-[980px]">

@@ -250,7 +250,13 @@ export const PoolSearch = () => {
                 {userPools &&
                   userPools[0] &&
                   userPools.map((pool: any) => {
-                    return <PoolCard pool={pool} key={"search" + pool?.pool} />;
+                    return (
+                      <PoolCard
+                        pool={pool}
+                        key={"search" + pool?.pool}
+                        isUserData={true}
+                      />
+                    );
                   })}
               </div>
             </div>
