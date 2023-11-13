@@ -12,13 +12,12 @@ export const usePollPrices = () => {
     QUERY_KEY,
     async () => {
       // const absoluteUrl = getAbsoluteUrl();
-      const res = await fetch(`${dexUrl}/api/getPrices/api`,
-        {
-          method: "GET",
-          headers: {
-            "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
-          },
-        });
+      const res = await fetch(`${dexUrl}/api/getPrices/api`, {
+        method: "GET",
+        headers: {
+          "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+        },
+      });
       const data = await res.json();
       Object.keys(data).forEach((key) => {
         mutate([...QUERY_KEY, getAddress(key)], data[key]);
