@@ -196,3 +196,8 @@ input[type="number"] {
 .react-datepicker__navigation {
   top: 0 !important;
 }
+
+img{
+  pointer-events: none;
+  user-select: none;
+}  

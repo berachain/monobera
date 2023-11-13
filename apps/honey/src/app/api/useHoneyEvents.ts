@@ -17,6 +17,12 @@ export const useHoneyEvents = () => {
       try {
         const res = await fetch(
           `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}`,
+          {
+            method: "GET",
+            headers: {
+              "x-vercel-protection-bypass": "4fphLjUJKQcW0kAbaFBGUNcAHb2WwnTX",
+            },
+          },
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -41,6 +47,12 @@ export const useHoneyEvents = () => {
       try {
         const res = await fetch(
           `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&mint`,
+          {
+            method: "GET",
+            headers: {
+              "x-vercel-protection-bypass": "4fphLjUJKQcW0kAbaFBGUNcAHb2WwnTX",
+            },
+          },
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -62,6 +74,12 @@ export const useHoneyEvents = () => {
       try {
         const res = await fetch(
           `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&burn`,
+          {
+            method: "GET",
+            headers: {
+              "x-vercel-protection-bypass": "4fphLjUJKQcW0kAbaFBGUNcAHb2WwnTX",
+            },
+          },
         );
         const jsonRes = await res.json();
         return jsonRes;

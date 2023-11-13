@@ -175,3 +175,8 @@ input[type="number"] {
     transform: translateY(-10px);
   }
 }
+
+img{
+  pointer-events: none;
+  user-select: none;
+}  
