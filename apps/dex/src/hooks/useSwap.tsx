@@ -282,7 +282,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         }
 
         const payload = [swapKind, swapInfo?.batchSwapSteps, d];
-        console.log("PAYLOAD", payload);
+        // console.log("PAYLOAD", payload);
         setPayload(payload);
       } catch (e) {
         console.log(e);
@@ -341,7 +341,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [isWrap]);
 
-  console.log(swapInfo);
+  // console.log(swapInfo);
   return {
     setSwapKind,
     setSelectedFrom,
