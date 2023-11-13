@@ -336,7 +336,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       }
     }
   }, [isWrap]);
-
   return {
     setSwapKind,
     setSelectedFrom,

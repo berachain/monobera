@@ -27,6 +27,7 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import BigNumber from "bignumber.js";
 import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
@@ -583,6 +584,46 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               </CardContent>
             </Card>
           )}
+          <Card className="p-4">
+            <div className="mb-8 flex h-8 w-full items-center justify-between text-lg font-semibold">
+              Pool Liquidity Breakdown
+              <div className="text-2xl">
+                ${formatter.format(pool?.totalValue ?? 0)}
+              </div>
+            </div>
+            <div className="mb-4 text-sm font-medium">Tokens</div>
+            <div>
+              {pool?.tokens.map((token) => (
+                <div
+                  key={token.address}
+                  className="flex h-8 items-center justify-between"
+                >
+                  <div className="flex gap-1">
+                    <TokenIcon token={token} />
+                    <div className="ml-1 font-medium">TICKER</div>
+                    <div className="text-sm font-medium text-muted-foreground">
+                      {token.weight}%
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <div className="font-medium">
+                      {formatter.format(token.balance)}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {" "}
+                      {formatUsd(
+                        // @ts-ignore
+                        BigNumber(token.balance)
+                          .times(prices[token.address] ?? 0)
+                          .toFixed(18),
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
           <Card>
             <CardContent className="flex items-center justify-between gap-4 p-4">
               <div className="w-full">
