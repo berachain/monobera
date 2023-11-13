@@ -12,7 +12,12 @@ export async function GET(request: Request) {
 
   const address = searchParams.get("address");
 
-  const response = await fetch(`${getAbsoluteUrl()}/api/getPools/api`);
+  const response = await fetch(`${getAbsoluteUrl()}/api/getPools/api`, {
+    method: "GET",
+    headers: {
+      "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+    },
+  });
 
   const pools = await response.json();
 

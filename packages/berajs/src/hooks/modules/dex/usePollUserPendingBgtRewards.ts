@@ -24,7 +24,12 @@ export const usePollUserPendingBgtRewards = (endpoint: string) => {
     QUERY_KEY,
     async () => {
       try {
-        const response = await fetch(endpoint);
+        const response = await fetch(endpoint, {
+          method: "GET",
+          headers: {
+            "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+          },
+        });
         const temp = await response.json();
         if (!temp) return false;
         const pool = temp;

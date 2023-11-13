@@ -384,10 +384,6 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     pool: pool,
   });
 
-  console.log("pool", {
-    userTotalValue,
-    isPositionSizeLoading,
-  });
   const { isConnected } = useBeraJs();
   return (
     <div className="container p-[52px]">
@@ -492,7 +488,10 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 </p>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                {(pool?.totalApy ?? 0).toFixed(2)}%
+                {(pool?.totalApy ?? 0) > 100000
+                  ? formatter.format(pool?.totalApy ?? 0)
+                  : (pool?.totalApy ?? 0).toFixed(2)}
+                %
               </div>
             </Card>
           </div>
