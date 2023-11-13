@@ -99,6 +99,9 @@ const useMultipleTokenInput = (tokens: Token[]) => {
     areAllInputsPopulated: addLiquidityState.tokens.every(
       (token: TokenInput) => token.amount !== "" && token.amount !== "0",
     ),
+    areSomeInputsUnpopulated: addLiquidityState.tokens.some(
+      (token: TokenInput) => token.amount === "" || token.amount === "0",
+    ),
   };
 };
 

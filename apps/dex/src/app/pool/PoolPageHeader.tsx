@@ -79,7 +79,7 @@ export default function PoolPageHeader() {
           alt="honey jar"
           width={393}
           height={300}
-          className="w-[256px] lg:w-[393px]"
+          className="pointer-events-none w-[256px] select-none	lg:w-[393px]"
         />
       </div>
       <PoolSearch />

@@ -302,7 +302,7 @@ const TokenDialogRow = ({
   const { isConnected } = useBeraJs();
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { data: t } = useSelectedAssetWalletBalance(token?.address ?? "");
-  const tokenBalance = Number(t?.formattedBalance || 0);
+  const tokenBalance = t?.formattedBalance;
   return (
     <div>
       <Button

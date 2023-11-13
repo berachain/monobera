@@ -67,9 +67,9 @@ export function CreatePoolFeeData({
             <TabsTrigger value={VALUES.FIVE_BPS} className="w-full ">
               0.15%
             </TabsTrigger>
-            <TabsTrigger value={VALUES.TEN_BPS} className="w-full">
+            {/* <TabsTrigger value={VALUES.TEN_BPS} className="w-full">
               0.20%
-            </TabsTrigger>
+            </TabsTrigger> */}
             <TabsTrigger value={VALUES.THIRTY_BPS} className="w-full ">
               0.40%
             </TabsTrigger>
@@ -108,7 +108,7 @@ export function CreatePoolFeeData({
           }}
         /> */}
         <p className="text-sm font-medium text-muted-foreground">
-          0.05% to 0.10% is recommended for stable pairings
+          0.15% to 0.40% is recommended for stable pairings
         </p>
         {error && (
           <Alert variant="destructive" className="my-4">

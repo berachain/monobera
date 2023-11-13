@@ -7,7 +7,6 @@ async function getSwaps(address: string) {
     const res: any = await fetch(
       `${endpoint}/events/dex/swap?pool=${address}`,
       {
-        cache: "force-cache",
         next: {
           revalidate: 5,
         },
@@ -28,7 +27,6 @@ async function getAddLiquidity(address: string) {
     const res: any = await fetch(
       `${endpoint}/events/dex/add_liquidity?pool=${address}`,
       {
-        cache: "force-cache",
         next: {
           revalidate: 5,
         },
@@ -49,7 +47,6 @@ async function getRemoveLiquidity(address: string) {
     const res: any = await fetch(
       `${endpoint}/events/dex/remove_liquidity?pool=${address}`,
       {
-        cache: "force-cache",
         next: {
           revalidate: 5,
         },

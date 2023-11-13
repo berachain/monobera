@@ -1,8 +1,9 @@
+import { dexUrl } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { getAddress } from "viem";
 
-import { getAbsoluteUrl } from "~/utils/vercel-utils";
+// import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 export const usePollPrices = () => {
   const QUERY_KEY = ["prices"];
@@ -10,8 +11,13 @@ export const usePollPrices = () => {
   const swrHook = useSWR(
     QUERY_KEY,
     async () => {
-      const absoluteUrl = getAbsoluteUrl();
-      const res = await fetch(`${absoluteUrl}/api/getPrices/api`);
+      // const absoluteUrl = getAbsoluteUrl();
+      const res = await fetch(`${dexUrl}/api/getPrices/api`, {
+        method: "GET",
+        headers: {
+          "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+        },
+      });
       const data = await res.json();
       Object.keys(data).forEach((key) => {
         mutate([...QUERY_KEY, getAddress(key)], data[key]);

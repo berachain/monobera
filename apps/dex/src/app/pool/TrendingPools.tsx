@@ -19,6 +19,12 @@ export const TrendingPools = () => {
       try {
         const res = await fetch(
           `${getAbsoluteUrl()}/pool/api?page=${page}&perPage=${DEFAULT_SIZE}&newPools=true`,
+          {
+            method: "GET",
+            headers: {
+              "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+            },
+          },
         );
         const jsonRes = await res.json();
         return jsonRes;

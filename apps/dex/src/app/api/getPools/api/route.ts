@@ -10,7 +10,7 @@ import { getParsedPools } from "./getPools";
 
 // export const fetchCache = "force-cache";
 
-export const revalidate = 60 * 2;
+export const revalidate = 10;
 
 async function getGlobalCuttingBoard() {
   try {
@@ -31,7 +31,12 @@ export async function GET() {
 
     const fetchPools = router.fetchPools();
 
-    const pricesResponse = fetch(`${getAbsoluteUrl()}/api/getPrices/api`);
+    const pricesResponse = fetch(`${getAbsoluteUrl()}/api/getPrices/api`, {
+      method: "GET",
+      headers: {
+        "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+      },
+    });
 
     const data = await Promise.all([
       fetchPools,

@@ -1,9 +1,10 @@
+import { rewardsAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { usePublicClient, type Address } from "wagmi";
 
-import { BANK_PRECOMPILE_ABI } from "~/config";
+import { REWARDS_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig, useBeraJs } from "~/contexts";
 
@@ -14,7 +15,7 @@ interface Call {
   args: any[];
 }
 
-export const usePollUserDepositedPools = (endpoint: string) => {
+export const usePollUserPendingBgtRewards = (endpoint: string) => {
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
   const { networkConfig } = useBeraConfig();
@@ -33,18 +34,17 @@ export const usePollUserDepositedPools = (endpoint: string) => {
         if (!temp) return false;
         const pool = temp;
 
-        const shareDenomArray: Address[] = pool.map(
-          (item: any) => item.shareAddress,
-        );
+        const shareDenomArray: Address[] = pool.map((item: any) => item.pool);
 
         const call: Call[] = shareDenomArray.map((item: Address) => {
           return {
-            abi: BANK_PRECOMPILE_ABI,
-            address: networkConfig.precompileAddresses.bankAddress as Address,
-            functionName: "getBalance",
+            abi: REWARDS_PRECOMPILE_ABI,
+            address: rewardsAddress,
+            functionName: "getCurrentRewards",
             args: [account, item],
           };
         });
+
         const result = await publicClient.multicall({
           contracts: call,
           multicallAddress: networkConfig.precompileAddresses
@@ -76,22 +76,17 @@ export const usePollUserDepositedPools = (endpoint: string) => {
       }
     },
     {
-      refreshInterval: POLLING.NORMAL,
+      refreshInterval: POLLING.SLOW,
     },
   );
 
-  const useUserDepositedPools = () => {
+  const usePoolsPendingBgtRewards = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };
 
-  const useUserBgtDepositedPools = () => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data?.filter((pool: any) => pool.bgtApy !== 0);
-  };
   return {
-    useUserDepositedPools,
-    useUserBgtDepositedPools,
+    usePoolsPendingBgtRewards,
     isLoading,
   };
 };

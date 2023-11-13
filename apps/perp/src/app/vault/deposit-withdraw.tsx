@@ -198,7 +198,7 @@ export default function DepositWithdraw() {
               <TokenList>
                 <TokenInput
                   selectable={false}
-                  balance={Number(eligibleForWithdraw)}
+                  balance={eligibleForWithdraw}
                   selected={{
                     symbol: "BHONEY",
                     address: gTokenAddress,

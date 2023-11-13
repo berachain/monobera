@@ -18,7 +18,7 @@ export function generateMetadata({ params }: Props): Metadata {
 
 // export const fetchCache = "force-no-store";
 
-export const revalidate = 60;
+export const revalidate = 5;
 
 export default async function PoolPage({
   params,
@@ -28,8 +28,22 @@ export default async function PoolPage({
   try {
     const poolResponse = await fetch(
       `${getAbsoluteUrl()}/api/getSelectedPool/api?address=${params.address}`,
+      {
+        method: "GET",
+        headers: {
+          "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+        },
+      },
     );
-    const pricesResponse = await fetch(`${getAbsoluteUrl()}/api/getPrices/api`);
+    const pricesResponse = await fetch(
+      `${getAbsoluteUrl()}/api/getPrices/api`,
+      {
+        method: "GET",
+        headers: {
+          "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+        },
+      },
+    );
 
     const pool = await poolResponse.json();
     const prices = await pricesResponse.json();
