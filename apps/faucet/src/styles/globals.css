@@ -162,3 +162,8 @@ input[type="number"] {
   background-position-y: 200px;
   background-position-x: center;
 }
+
+img{
+  pointer-events: none;
+  user-select: none;
+}  
