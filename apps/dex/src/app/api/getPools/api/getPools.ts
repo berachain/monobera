@@ -278,12 +278,14 @@ export const getParsedPools = async (
         const swapApr = (fees / Number(pool?.totalValue)) * 365 * 100;
 
         pool.fees = fees;
-        pool.feeApy = Number.isNaN(swapApr) ? 0 : swapApr;
+        pool.feeApy =
+          Number.isNaN(swapApr) || !Number.isFinite(swapApr) ? 0 : swapApr;
         pool.bgtApy = Number.isNaN(poolApy) ? 0 : poolApy;
         pool.totalApy = pool.bgtApy + pool.feeApy;
       });
     tagPools(pools);
   }
+
   return pools;
 };
 

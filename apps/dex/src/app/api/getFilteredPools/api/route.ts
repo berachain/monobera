@@ -33,7 +33,12 @@ export const revalidate = 5;
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const response = await fetch(`${getAbsoluteUrl()}/api/getPools/api`);
+  const response = await fetch(`${getAbsoluteUrl()}/api/getPools/api`, {
+    method: "GET",
+    headers: {
+      "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+    },
+  });
 
   const pools = await response.json();
 

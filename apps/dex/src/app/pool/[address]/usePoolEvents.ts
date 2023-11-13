@@ -20,6 +20,12 @@ export const usePoolEvents = (address: Address) => {
           `${getAbsoluteUrl()}/pool/${address}/api?page=${
             page ?? 1
           }&perPage=${DEFAULT_SIZE}`,
+          {
+            method: "GET",
+            headers: {
+              "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+            },
+          },
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -43,6 +49,12 @@ export const usePoolEvents = (address: Address) => {
           `${getAbsoluteUrl()}/pool/${address}/api?page=${
             page ?? 1
           }&perPage=${DEFAULT_SIZE}&swap`,
+          {
+            method: "GET",
+            headers: {
+              "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+            },
+          },
         );
         const jsonRes = await res.json();
         return jsonRes;
@@ -67,6 +79,12 @@ export const usePoolEvents = (address: Address) => {
           `${getAbsoluteUrl()}/pool/${address}/api?page=${
             page ?? 1
           }&perPage=${DEFAULT_SIZE}&provisions`,
+          {
+            method: "GET",
+            headers: {
+              "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+            },
+          },
         );
         const jsonRes = await res.json();
         return jsonRes;

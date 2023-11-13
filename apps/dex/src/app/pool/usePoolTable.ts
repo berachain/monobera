@@ -26,6 +26,12 @@ export const usePoolTable = () => {
       try {
         const res = await fetch(
           `${getAbsoluteUrl()}/api/getFilteredPools/api?page=${page}&perPage=${DEFAULT_SIZE}&hasBgtRewards=${hasBgtRewards}&hotPools=${isHotPool}&newPools=${isNewPool}&search=${search}&tvl=true&volume=false&bgtRewards=false`,
+          {
+            method: "GET",
+            headers: {
+              "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+            },
+          },
         );
         const jsonRes = await res.json();
         return jsonRes;

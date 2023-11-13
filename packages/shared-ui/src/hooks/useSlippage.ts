@@ -23,6 +23,9 @@ export const useSlippage = () => {
       return DEFAULT_SLIPPAGE;
     }
     if (slippageMode === SLIPPAGE_MODE.CUSTOM) {
+      if (slippage > 99) {
+        return 99;
+      }
       return slippage;
     }
     if (slippageMode === SLIPPAGE_MODE.DEGEN) {
