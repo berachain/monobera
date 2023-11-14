@@ -114,9 +114,6 @@ export default function DepositWithdraw() {
               each trade placed on the platform. bHONEY Accumulates these fees
               in real-time.
             </div>
-            <div className="text-sm font-bold leading-6 text-warning-foreground">
-              Please be aware that a 0.05% fee will be charged on all deposits.
-            </div>
             <div>
               <TokenList>
                 <TokenInput
