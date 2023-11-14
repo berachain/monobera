@@ -36,8 +36,6 @@ export const usePollPriceImpact = ({
   return useSWR(
     QUERY_KEY,
     () => {
-      console.log("parsed swapAmount", parseUnits(swapAmount, 18));
-      console.log("swap amnt", swapAmount);
       const bestResult =
         (parseUnits(swapAmount, 18) *
           BigInt(priceImpactSwapInfo?.returnAmount ?? 0n)) /
