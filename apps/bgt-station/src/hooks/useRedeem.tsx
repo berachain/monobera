@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useBeraJs } from "@bera/berajs";
-import { parseUnits } from "viem";
-
-import { getSafeNumber } from "~/utils/getSafeNumber";
+import { parseUnits } from "ethers";
 
 export const useRedeem = () => {
   const [redeemAmount, setRedeemAmount] = useState<string>("");
@@ -13,7 +11,7 @@ export const useRedeem = () => {
     const newPayload = [
       account,
       account,
-      parseUnits(`${getSafeNumber(redeemAmount) ?? 0}`, 18),
+      parseUnits(redeemAmount === '' ? '0' : redeemAmount, 18),
     ];
     setPayload(newPayload);
   }, [account, redeemAmount]);

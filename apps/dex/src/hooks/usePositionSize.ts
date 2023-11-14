@@ -16,9 +16,7 @@ export const usePositionSize = ({ pool }: { pool: Pool | undefined }) => {
     useState<boolean>(true);
   const { usePrices } = usePollPrices();
   const { data: prices } = usePrices();
-  const { useBankBalance } = usePollBankBalance(
-    pool?.shareAddress ?? "",
-  );
+  const { useBankBalance } = usePollBankBalance(pool?.shareAddress ?? "");
   const shareBalance = useBankBalance();
   const isBalanceLoading = shareBalance === undefined;
   const { usePreviewBurnShares } = usePollPreviewBurnShares(

@@ -119,6 +119,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     tokenIn: selectedFrom?.address as Address,
     tokenOut: selectedTo?.address as Address,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
+    tokenOutDecimals: selectedTo?.decimals ?? 18,
     // amount:
     //   Number(swapAmount) > Number.MAX_SAFE_INTEGER
     //     ? Number.MAX_SAFE_INTEGER
@@ -159,6 +160,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { data: tokenInPriceInfo } = usePollSwaps({
     tokenIn: selectedFrom?.address as Address,
     tokenOut: QUOTING_TOKEN,
+    tokenOutDecimals: 18,
     swapKind: 0,
     amount: "1",
   });
@@ -166,6 +168,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { data: tokenOutPriceInfo } = usePollSwaps({
     tokenIn: selectedTo?.address as Address,
     tokenOut: QUOTING_TOKEN,
+    tokenOutDecimals: 18,
     swapKind: 0,
     amount: "1",
   });
