@@ -84,7 +84,6 @@ export default function DepositWithdraw() {
 
   const isMaxDepositExceeding = useMemo(() => {
     if (maxDeposit && depositAmount) {
-      console.log(maxDeposit, depositAmount);
       return maxDeposit < getSafeNumber(depositAmount);
     }
     return false;
