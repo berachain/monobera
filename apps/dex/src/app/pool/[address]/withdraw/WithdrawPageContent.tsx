@@ -1,3 +1,5 @@
+/* eslint no-use-before-define: 0 */ // --> OFF
+
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -25,7 +27,7 @@ import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { Tabs, TabsContent } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -128,14 +130,14 @@ export default function WithdrawLiquidityContent({
 
         <Tabs defaultValue={Selection.MULTI_TOKEN} className="w-full">
           <CardContent className="flex flex-col">
-            <TabsList className="mb-3 grid w-full grid-cols-2">
+            {/* <TabsList className="mb-3 grid w-full grid-cols-2">
               <TabsTrigger value={Selection.MULTI_TOKEN}>
                 Multi-token
               </TabsTrigger>
               <TabsTrigger value={Selection.SINGLE_TOKEN}>
                 Single token
               </TabsTrigger>
-            </TabsList>
+            </TabsList> */}
 
             <TabsContent
               value={Selection.MULTI_TOKEN}
@@ -172,9 +174,9 @@ export default function WithdrawLiquidityContent({
                       className="w-full"
                       onClick={() =>
                         setAmount(
-                          (
-                            Number(formattedLpBalance) *
-                            (percent / 100)
+                          (percent === 100
+                            ? formattedLpBalance
+                            : Number(formattedLpBalance) * (percent / 100)
                           ).toString(),
                         )
                       }

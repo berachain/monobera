@@ -2,10 +2,11 @@ import { useMemo } from "react";
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, getAddress } from "viem";
-import { usePublicClient, type Address } from "wagmi";
+import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import { useBeraConfig } from "~/contexts";
+import useTokens from "~/hooks/useTokens";
 import { usePollEpochs } from "../epochs";
 import {
   usePollActiveValidators,
@@ -55,8 +56,9 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
   const globalBGTDelegated = useTotalDelegated();
   const method = "globalValidatorBribes";
   const { useCurrentEpoch } = usePollEpochs();
+  const { tokenDictionary } = useTokens();
   const currentEpoch = useCurrentEpoch();
-  const QUERY_KEY = [method, prices, validators, currentEpoch];
+  const QUERY_KEY = [method, prices, validators, currentEpoch, tokenDictionary];
 
   const ACTIVE_BRIBES_KEY = "activeBribes";
   const ACTIVE_BRIBES_TOTAL_AMOUNT_KEY = "activeBribesTotalAmount";
@@ -68,8 +70,10 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
 
   const GLOBAL_BRIBES_KEY = "globalBribes";
   const GLOBAL_AVG_VAPY = "globalAvgVAPY";
+
   const { isLoading } = useSWRImmutable(QUERY_KEY, async () => {
-    if (!validatorAddresses || !validators || !prices) return undefined;
+    if (!validatorAddresses || !validators || !prices || !tokenDictionary)
+      return undefined;
 
     // build multicall payload for getting brubes
     const bribeCalls: Call[] = validatorAddresses.map((validatorAddress) => ({
@@ -111,13 +115,40 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
       );
       mutate([ACTIVE_BRIBES_KEY, validator.operatorAddr], bribes);
 
+      console.log({ bribes });
+
+      const tokenDecimalMap: Record<Address, number> = {};
+
+      const decimalCalls: Call[] = [];
+
+      bribes?.forEach((bribe: any) => {
+        bribe.bribePerProposal.tokens.forEach((token: Address) => {
+          const tokenObj = tokenDictionary[getAddress(token)];
+          if (tokenObj) {
+            tokenDecimalMap[token] = tokenObj.decimals;
+            return;
+          } else {
+            decimalCalls.push({
+              address: token,
+              abi: erc20ABI as unknown as (typeof erc20ABI)[],
+              functionName: "decimals",
+              args: [],
+            });
+          }
+        });
+      });
+
+      console.log({ tokenDecimalMap, decimalCalls });
       const bribeTokenList: any[] = [];
       const totalPerProposalUsdAmount = bribes?.reduce(
         (total: number, bribe: any) => {
           const perProposalUsdAmount = bribe.bribePerProposal.amounts.reduce(
             (total: number, bribeAmount: any, index: number) => {
-              const formattedBribeAmount = Number(formatUnits(bribeAmount, 18));
               const tokenAddress = bribe.bribePerProposal.tokens[index];
+              const decimals = tokenDecimalMap[tokenAddress];
+              const formattedBribeAmount = Number(
+                formatUnits(bribeAmount, decimals ?? 18),
+              );
               bribeTokenList.push(tokenAddress);
               const price = prices[getAddress(tokenAddress)] ?? 0;
               const bribeValue = Number(formattedBribeAmount) * price;
@@ -137,8 +168,11 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
           const numBlockProposals = Number(bribe.numBlockProposals);
           const perProposalUsdAmount = bribe.bribePerProposal.amounts.reduce(
             (total: number, bribeAmount: any, index: number) => {
-              const formattedBribeAmount = Number(formatUnits(bribeAmount, 18));
               const tokenAddress = bribe.bribePerProposal.tokens[index];
+              const decimals = tokenDecimalMap[tokenAddress];
+              const formattedBribeAmount = Number(
+                formatUnits(bribeAmount, decimals ?? 18),
+              );
               const price = prices[tokenAddress] ?? 0;
               const bribeValue = Number(formattedBribeAmount) * price;
               return total + bribeValue;
@@ -163,6 +197,8 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
 
       const estimatedUsdPerYear =
         totalPerProposalUsdAmount * estimatedValidatorBlocksPerYear;
+
+      console.log({ estimatedUsdPerYear, validatorTVL });
       const vAPY = Number.isNaN(estimatedUsdPerYear / validatorTVL)
         ? 0
         : estimatedUsdPerYear / validatorTVL;

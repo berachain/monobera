@@ -213,7 +213,9 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
       !isSharesLoading &&
       !isSharesValidating
     ) {
-      setError("Unable to perform transaction.");
+      setError(
+        "Unable to perform transaction. This transaction will cause the pool to become unbalanced.",
+      );
     } else if (!areNoInputsExceeding) {
       setError("Input exceeds balance");
     } else if (areSomeInputsUnpopulated && !areAllInputsEmpty) {
@@ -243,7 +245,9 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
       !isSingleSidedLoading &&
       !isSingleSidedValidating
     ) {
-      setSingleSidedError("Unable to perform transaction.");
+      setSingleSidedError(
+        "Unable to perform transaction. This transaction will cause the pool to become unbalanced.",
+      );
     } else if (selectedSingleToken === undefined) {
       setSingleSidedError("Please select a token");
     } else if (getSafeNumber(selectedSingleTokenAmount) === 0) {

@@ -1,126 +1,117 @@
 import React, { useMemo } from "react";
 import {
-  formatUsd,
-  formatter,
+  // formatUsd,
   usePollActiveValidators,
   usePollValidatorBribes,
 } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
-import { BeraChart } from "@bera/ui/bera-chart";
-import { Card } from "@bera/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@bera/ui/dropdown-menu";
-import { Icons } from "@bera/ui/icons";
 import { type Address } from "viem";
 
 import { type FormattedHistoricalBribes } from "~/hooks/useHistoricalBribes";
 import BribeList, { BribeCardLoading } from "./bribe-list";
-import { TimeFrameEnum } from "./types";
 
-const Options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  scales: {
-    x: {
-      display: false,
-    },
-    y: {
-      display: true,
-      grid: {
-        drawBorder: false,
-        display: false,
-      },
-    },
-    xAxes: [
-      {
-        barThickness: 12,
-      },
-    ],
-  },
-  plugins: {
-    legend: {
-      display: false,
-    },
-    title: {
-      display: false,
-      text: "Bera Chart",
-    },
+// import { TimeFrameEnum } from "./types";
 
-    tooltip: {
-      displayColors: false,
-      position: "nearest",
-      interaction: {
-        intersect: false,
-      },
-      backgroundColor: "#FAFAF9",
-      borderColor: "#E7E5E4",
-      borderRadius: 18,
-      borderWidth: 1,
-      padding: {
-        top: 8,
-        right: 8,
-        bottom: 0,
-        left: 8,
-      },
-      caretSize: 0,
-      titleFontSize: 12,
-      titleColor: "#292524",
-      bodyColor: "#292524",
-      callbacks: {
-        label: function (context: {
-          dataset: { label: string };
-          parsed: { y: number | bigint | null };
-        }) {
-          return context.dataset.label || "";
-        },
-      },
-    },
-  },
-};
+// const Options = {
+//   responsive: true,
+//   maintainAspectRatio: false,
+//   scales: {
+//     x: {
+//       display: false,
+//     },
+//     y: {
+//       display: true,
+//       grid: {
+//         drawBorder: false,
+//         display: false,
+//       },
+//     },
+//     xAxes: [
+//       {
+//         barThickness: 12,
+//       },
+//     ],
+//   },
+//   plugins: {
+//     legend: {
+//       display: false,
+//     },
+//     title: {
+//       display: false,
+//       text: "Bera Chart",
+//     },
 
-const getChartData = (data: FormattedHistoricalBribes[]) => {
-  return {
-    labels: data?.map(
-      (da, _) => `Value: ${formatUsd(da.value)}\nEpoch: ${da.epoch}`,
-    ),
-    datasets: [
-      {
-        data: data?.map((d) => d.value),
-        labelColor: false,
-        backgroundColor: "#78716C",
-        borderColor: "#78716C",
-        tension: 0.4,
-        borderRadius: 100,
-        borderSkipped: false,
-      },
-    ],
-  };
-};
+//     tooltip: {
+//       displayColors: false,
+//       position: "nearest",
+//       interaction: {
+//         intersect: false,
+//       },
+//       backgroundColor: "#FAFAF9",
+//       borderColor: "#E7E5E4",
+//       borderRadius: 18,
+//       borderWidth: 1,
+//       padding: {
+//         top: 8,
+//         right: 8,
+//         bottom: 0,
+//         left: 8,
+//       },
+//       caretSize: 0,
+//       titleFontSize: 12,
+//       titleColor: "#292524",
+//       bodyColor: "#292524",
+//       callbacks: {
+//         label: function (context: {
+//           dataset: { label: string };
+//           parsed: { y: number | bigint | null };
+//         }) {
+//           return context.dataset.label || "";
+//         },
+//       },
+//     },
+//   },
+// };
 
-const getHistoryInterval = (
-  historicalBribes: FormattedHistoricalBribes[],
-  timeframe: TimeFrameEnum,
-) => {
-  if (historicalBribes === undefined) return [];
-  let historyInterval = [...historicalBribes];
-  if (timeframe === TimeFrameEnum.ONE_HUNDERED_EPOCHS) {
-    historyInterval = historyInterval.slice(0, 100);
-  }
-  if (timeframe === TimeFrameEnum.FIFTY_EPOCHS) {
-    historyInterval = historyInterval.slice(0, 50);
-  }
-  if (timeframe === TimeFrameEnum.TEN_EPOCHS) {
-    historyInterval = historyInterval.slice(0, 10);
-  }
-  return historyInterval.reverse();
-};
+// const getChartData = (data: FormattedHistoricalBribes[]) => {
+//   return {
+//     labels: data?.map(
+//       (da, _) => `Value: ${formatUsd(da.value)}\nEpoch: ${da.epoch}`,
+//     ),
+//     datasets: [
+//       {
+//         data: data?.map((d) => d.value),
+//         labelColor: false,
+//         backgroundColor: "#78716C",
+//         borderColor: "#78716C",
+//         tension: 0.4,
+//         borderRadius: 100,
+//         borderSkipped: false,
+//       },
+//     ],
+//   };
+// };
+
+// const getHistoryInterval = (
+//   historicalBribes: FormattedHistoricalBribes[],
+//   timeframe: TimeFrameEnum,
+// ) => {
+//   if (historicalBribes === undefined) return [];
+//   let historyInterval = [...historicalBribes];
+//   if (timeframe === TimeFrameEnum.ONE_HUNDERED_EPOCHS) {
+//     historyInterval = historyInterval.slice(0, 100);
+//   }
+//   if (timeframe === TimeFrameEnum.FIFTY_EPOCHS) {
+//     historyInterval = historyInterval.slice(0, 50);
+//   }
+//   if (timeframe === TimeFrameEnum.TEN_EPOCHS) {
+//     historyInterval = historyInterval.slice(0, 10);
+//   }
+//   return historyInterval.reverse();
+// };
 export default function BribesAndEmissions({
-  historicalBribes,
-  cumulativeBribeValue,
+  // historicalBribes,
+  // cumulativeBribeValue,
   currentBribeValue,
   validatorAddress,
   isLoading,
@@ -131,12 +122,12 @@ export default function BribesAndEmissions({
   validatorAddress: Address;
   isLoading: boolean;
 }) {
-  const [timeframe, setTimeframe] = React.useState(TimeFrameEnum.ALL_TIME);
+  // const [timeframe, setTimeframe] = React.useState(TimeFrameEnum.ALL_TIME);
 
-  const chartData = useMemo(
-    () => getChartData(getHistoryInterval(historicalBribes, timeframe)),
-    [timeframe, historicalBribes],
-  );
+  // const chartData = useMemo(
+  //   () => getChartData(getHistoryInterval(historicalBribes, timeframe)),
+  //   [timeframe, historicalBribes],
+  // );
   const { useActiveValidatorBribes, isLoading: isBribesLoading } =
     usePollValidatorBribes(validatorAddress);
 
@@ -180,7 +171,7 @@ export default function BribesAndEmissions({
             </div>
           ) : (
             <>
-              <div className="mt-4 flex gap-4">
+              {/* <div className="mt-4 flex gap-4">
                 <div className="flex w-full  flex-shrink-0 flex-grow-0 flex-col gap-4 lg:w-[230px]">
                   <Card className="flex w-full flex-1 flex-col items-center justify-center gap-2 p-4 shadow lg:p-0">
                     <div className="text-3xl font-semibold leading-9 text-foreground">
@@ -236,7 +227,7 @@ export default function BribesAndEmissions({
                     )}
                   </div>
                 </Card>
-              </div>
+              </div> */}
               <BribeList bribes={[bribes ?? []]} />
             </>
           )}

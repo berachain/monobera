@@ -87,8 +87,6 @@ export function SwapCard({
     swapInfo,
     value,
     payload,
-    // showPriceImpact,
-    priceImpact,
     exchangeRate,
     gasPrice,
     tokenInPrice,
@@ -195,7 +193,7 @@ export function SwapCard({
             disabled={
               swapInfo?.formattedReturnAmount === "0" || exceedingBalance
             }
-            priceImpact={priceImpact}
+            priceImpact={0}
             exchangeRate={exchangeRate}
             tokenIn={selectedFrom}
             tokenOut={selectedTo}
@@ -225,6 +223,8 @@ export function SwapCard({
     }
     return <Connect />;
   };
+
+  console.log(swapInfo);
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}

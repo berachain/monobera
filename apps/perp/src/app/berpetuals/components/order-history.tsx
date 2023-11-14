@@ -75,6 +75,7 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
     }));
   }, [openPositions]);
 
+  console.log("openPositions", closedPositions);
   return (
     <div className="w-full">
       <OrderHistoryHeader
