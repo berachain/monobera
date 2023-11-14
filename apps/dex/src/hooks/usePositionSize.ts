@@ -16,7 +16,7 @@ export const usePositionSize = ({ pool }: { pool: Pool | undefined }) => {
     useState<boolean>(true);
   const { usePrices } = usePollPrices();
   const { data: prices } = usePrices();
-  const { useBankBalance, isLoading } = usePollBankBalance(
+  const { useBankBalance } = usePollBankBalance(
     pool?.shareAddress ?? "",
   );
   const shareBalance = useBankBalance();
@@ -28,15 +28,6 @@ export const usePositionSize = ({ pool }: { pool: Pool | undefined }) => {
   );
 
   const burnShares: Record<string, bigint> = usePreviewBurnShares();
-
-  console.log({
-    burnShares,
-    prices,
-    userTotalValue,
-    shareBalance,
-    isLoading,
-    isBalanceLoading,
-  });
 
   useEffect(() => {
     if (

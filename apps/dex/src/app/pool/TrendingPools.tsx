@@ -22,7 +22,8 @@ export const TrendingPools = () => {
           {
             method: "GET",
             headers: {
-              "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+              "x-vercel-protection-bypass": process.env
+                .VERCEL_AUTOMATION_BYPASS_SECRET as string,
             },
           },
         );
