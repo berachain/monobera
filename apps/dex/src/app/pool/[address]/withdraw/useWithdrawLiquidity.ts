@@ -94,7 +94,6 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
         exactOutToken?.decimals ?? 18,
       );
 
-      console.log("12312312eoa", formatted);
       setExactOutAmount(formatted);
     }
   }, [previewRemoveLiquidityOneSideOut]);
