@@ -15,7 +15,7 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { parseUnits } from "viem";
+import { parseUnits } from "ethers";
 import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
@@ -74,7 +74,7 @@ export default function DepositWithdraw() {
   const allowance = useAllowance();
 
   const withdrawPayload = [
-    parseUnits(`${getSafeNumber(withdrawAmount) ?? 0}`, 18),
+    parseUnits(withdrawAmount === "" ? "0" : withdrawAmount, 18),
     account,
   ];
 
@@ -159,7 +159,10 @@ export default function DepositWithdraw() {
                       abi: BTOKEN_ABI,
                       functionName: "deposit",
                       params: [
-                        parseUnits(`${getSafeNumber(depositAmount) ?? 0}`, 18),
+                        parseUnits(
+                          depositAmount === "" ? "0" : depositAmount,
+                          18,
+                        ),
                         account,
                       ],
                     })
@@ -216,7 +219,7 @@ export default function DepositWithdraw() {
             <Alert variant="warning">
               <AlertTitle>
                 {" "}
-                <Icons.info className="inline-block h-4 w-4" />
+                <Icons.info className="mr-1 inline-block h-4 w-4" />
                 Must withdraw in the EPOCH’s first 18 hours
               </AlertTitle>
               <AlertDescription>

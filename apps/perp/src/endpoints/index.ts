@@ -39,7 +39,7 @@ export async function getDailyPriceChange(): Promise<any | undefined> {
 export async function getTradingSummary(): Promise<any | undefined> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/trading-summary?count_back=1&resolution=1d`,
+      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/trading-summary?count_back=24&resolution=1h&action=sum`,
     );
     const jsonRes = await res.json();
     const tradingSummary = jsonRes.result[0];
