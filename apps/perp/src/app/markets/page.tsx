@@ -24,7 +24,7 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export const revalidate = 30;
+export const revalidate = 5;
 
 export default async function Home() {
   const m = getMarkets();

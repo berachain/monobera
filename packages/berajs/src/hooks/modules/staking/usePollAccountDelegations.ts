@@ -33,7 +33,7 @@ export const usePollAccountDelegations = (
           });
 
         const castedDelegation = result as bigint;
-        const parsedDelegation = formatUnits(castedDelegation, 18).toString();
+        const parsedDelegation = formatUnits(castedDelegation, 18);
 
         return parsedDelegation;
       }
