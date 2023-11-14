@@ -34,6 +34,8 @@ export const getSwap = async (
 
     const result = await response.json();
 
+    console.log({ result });
+
     if (!result.steps)
       return {
         batchSwapSteps: [],

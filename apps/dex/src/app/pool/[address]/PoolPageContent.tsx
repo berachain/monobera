@@ -385,6 +385,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     pool: pool,
   });
 
+  console.log("pool", pool);
   const { isConnected } = useBeraJs();
   return (
     <div className="container p-[52px]">
