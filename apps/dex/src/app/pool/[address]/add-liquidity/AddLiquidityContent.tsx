@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
@@ -27,6 +28,7 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { parseUnits } from "ethers";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -89,6 +91,15 @@ export default function AddLiquidityContent({
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
+
+  const parsedSelectedSingleTokenAmount = useMemo(() => {
+    if (!selectedSingleTokenAmount || !selectedSingleToken)
+      return parseUnits("0", 18);
+    return parseUnits(
+      selectedSingleTokenAmount ?? "0",
+      selectedSingleToken?.decimals ?? 18,
+    );
+  }, [selectedSingleTokenAmount, selectedSingleToken]);
 
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
@@ -221,7 +232,7 @@ export default function AddLiquidityContent({
                     token={needsApproval[0]}
                     spender={
                       networkConfig.precompileAddresses
-                        .erc20DexAddress as Address
+                        .erc20ModuleAddress as Address
                     }
                   />
                 ) : (
@@ -342,13 +353,13 @@ export default function AddLiquidityContent({
                     value={"0.0000069%"}
                   /> */}
                 </InfoBoxList>
-                {(Number(allowance?.formattedAllowance) ?? 0) <
-                getSafeNumber(selectedSingleTokenAmount) ? (
+                {(allowance?.allowance ?? 0n) <
+                parsedSelectedSingleTokenAmount ? (
                   <ApproveTokenButton
                     token={selectedSingleToken}
                     spender={
                       networkConfig.precompileAddresses
-                        .erc20DexAddress as Address
+                        .erc20ModuleAddress as Address
                     }
                   />
                 ) : (
