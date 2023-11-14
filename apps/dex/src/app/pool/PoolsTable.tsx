@@ -107,7 +107,7 @@ export const PoolSearch = () => {
   const { useBgtRewards } = usePollBgtRewards(receivers);
   const { data: bgtRewards } = useBgtRewards();
 
-  console.log(data);
+  // console.log(data);
   return (
     <div
       className="w-full flex-col items-center justify-center"
