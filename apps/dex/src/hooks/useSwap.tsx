@@ -10,12 +10,11 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { beraTokenAddress, erc20ModuleAddress } from "@bera/config";
+import { erc20ModuleAddress, honeyTokenAddress } from "@bera/config";
 import { useDeadline, useSlippage } from "@bera/shared-ui/src/hooks";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
-import { usePollPriceImpact } from "./usePollPriceImpact";
 import { usePollSwaps } from "./usePollSwaps";
 
 export enum SwapKind {
@@ -23,7 +22,7 @@ export enum SwapKind {
   GIVEN_OUT = 1,
 }
 
-const QUOTING_TOKEN = beraTokenAddress;
+const QUOTING_TOKEN = honeyTokenAddress;
 interface ISwap {
   inputCurrency?: Address | undefined;
   outputCurrency?: Address | undefined;
@@ -104,8 +103,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [payload, setPayload] = useState<any[]>([]);
 
-  const [showPriceImpact, setShowPriceImpact] = useState(false);
-
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { isLoading: isBalanceLoading } = useCurrentAssetWalletBalances();
   useEffect(() => {
@@ -118,11 +115,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       }
     }
   }, [swapAmount]);
-  const {
-    data: swapInfo,
-    error: getSwapError,
-    isLoading,
-  } = usePollSwaps({
+  const { data: swapInfo, error: getSwapError } = usePollSwaps({
     tokenIn: selectedFrom?.address as Address,
     tokenOut: selectedTo?.address as Address,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
@@ -131,17 +124,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     //     ? Number.MAX_SAFE_INTEGER
     //     : Number(swapAmount) ?? 0,
     amount: swapAmount,
-  });
-
-  const { data: priceImpact } = usePollPriceImpact({
-    tokenIn: selectedFrom?.address as Address,
-    tokenOut: selectedTo?.address as Address,
-    tokenInDecimals: selectedFrom?.decimals ?? 18,
-    tokenOutDecimals: selectedTo?.decimals ?? 18,
-    swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
-    swapInfo: swapInfo,
-    swapAmount: swapAmount,
-    isSwapLoading: isLoading,
   });
 
   const isBeratoken = (token: Token | undefined) => {
@@ -173,14 +155,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       setWrapType(undefined);
     }
   }, [selectedTo, selectedFrom]);
-
-  useMemo(() => {
-    if (priceImpact && priceImpact > 15) {
-      setShowPriceImpact(true);
-    } else {
-      setShowPriceImpact(false);
-    }
-  }, [priceImpact]);
 
   const { data: tokenInPriceInfo } = usePollSwaps({
     tokenIn: selectedFrom?.address as Address,
@@ -336,6 +310,20 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       }
     }
   }, [isWrap]);
+
+  const tokenInPrice =
+    tokenInPriceInfo === undefined
+      ? "0"
+      : selectedFrom?.address.toLowerCase() === QUOTING_TOKEN.toLowerCase()
+      ? "1"
+      : tokenInPriceInfo?.formattedReturnAmount;
+  const tokenOutPrice =
+    tokenOutPriceInfo === undefined
+      ? "0"
+      : selectedTo?.address.toLowerCase() === QUOTING_TOKEN.toLowerCase()
+      ? "1"
+      : tokenOutPriceInfo?.formattedReturnAmount;
+
   return {
     setSwapKind,
     setSelectedFrom,
@@ -354,25 +342,13 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     swapKind,
     error: getSwapError,
     swapInfo,
-    priceImpact,
     value,
-    showPriceImpact,
     exchangeRate,
     gasPrice: gasData?.formatted.gasPrice,
     isWrap,
     wrapType,
     isBalanceLoading,
-    tokenInPrice:
-      tokenInPriceInfo === undefined
-        ? selectedFrom?.address === QUOTING_TOKEN
-          ? "1"
-          : undefined
-        : tokenInPriceInfo?.formattedReturnAmount,
-    tokenOutPrice:
-      tokenOutPriceInfo === undefined
-        ? selectedTo?.address === QUOTING_TOKEN
-          ? "1"
-          : undefined
-        : tokenOutPriceInfo?.formattedReturnAmount,
+    tokenInPrice,
+    tokenOutPrice,
   };
 };

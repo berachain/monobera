@@ -38,6 +38,7 @@ export default function Validator({
   const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(validatorAddress);
   const { data, isLoading } = useHistoricalBribes(allEpochs);
+  console.log("data", data);
   return (
     <div className="container relative mb-10 flex max-w-[1078px] flex-col gap-16">
       <div>

@@ -27,6 +27,12 @@ export default async function Withdraw({
   try {
     const poolResponse = await fetch(
       `${getAbsoluteUrl()}/api/getSelectedPool/api?address=${params.address}`,
+      {
+        method: "GET",
+        headers: {
+          "x-vercel-protection-bypass": "MYVNWvYrBejFJnJqGyFNSM9OYua9wqE9",
+        },
+      },
     );
     const pricesResponse = await fetch(
       `${getAbsoluteUrl()}/api/getPrices/api`,

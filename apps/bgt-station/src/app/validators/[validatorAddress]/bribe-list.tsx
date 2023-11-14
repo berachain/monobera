@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   formatUsd,
-  formatter,
   usePollPrices,
   useTokenInformation,
   useTokens,
@@ -88,7 +87,7 @@ const BribeCard = ({
       <div className="flex w-full items-center gap-2 p-6">
         <TokenIcon token={token} className="h-8 w-8" />
         <div className="font-medium">
-          {formatter.format(formattedTotalInUsd)} {token?.symbol}{" "}
+          {formattedTotal.toFixed(6)} {token?.symbol}{" "}
         </div>
       </div>
       <div className="flex w-full flex-col gap-4 rounded-b-[17px] bg-muted p-6">
