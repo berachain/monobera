@@ -38,11 +38,6 @@ export const usePositionSize = ({ pool }: { pool: Pool | undefined }) => {
     isBalanceLoading,
   });
 
-  console.log(
-    "rrreee",
-    (burnShares && Object.keys(burnShares).length === 0 && !isBalanceLoading) ||
-      (shareBalance !== undefined && shareBalance === 0n && !isBalanceLoading),
-  );
   useEffect(() => {
     if (
       (burnShares &&

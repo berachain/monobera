@@ -692,7 +692,9 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
       // }, [row]);
       return (
         <PnlWithPercentage
-          positionSize={Number(row.original.volume)}
+          positionSize={
+            Number(row.original.volume) / Number(row.original.leverage)
+          }
           pnl={Number(row.original.pnl)}
         />
       );
@@ -808,7 +810,9 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
     cell: ({ row }) => {
       return (
         <PnlWithPercentage
-          positionSize={Number(row.original.volume)}
+          positionSize={
+            Number(row.original.volume) / Number(row.original.leverage)
+          }
           pnl={Number(row.original.pnl)}
         />
       );
