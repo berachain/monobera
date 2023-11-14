@@ -27,6 +27,7 @@ export const usePollPriceImpact = ({
   const { data: priceImpactSwapInfo } = usePollSwaps({
     tokenIn: tokenIn,
     tokenOut: tokenOut,
+    tokenOutDecimals: 18,
     swapKind,
     amount: "1",
   });

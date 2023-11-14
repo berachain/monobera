@@ -22,8 +22,8 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { parseUnits } from "ethers";
 import { useTheme } from "next-themes";
-import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import ValidatorInput from "~/components/validator-input";
@@ -233,7 +233,8 @@ export default function Delegate({
               isUnbondLoading || // unbond action processing
               isRedelegateLoading || // redelegate action processing
               getDisabled() ||
-              isBadRedelegate
+              isBadRedelegate ||
+              amount === "0"
             }
             onClick={() => {
               switch (action) {
@@ -243,7 +244,7 @@ export default function Delegate({
                       .stakingAddress as Address,
                     abi: STAKING_PRECOMPILE_ABI,
                     functionName: "delegate",
-                    params: [validator, parseUnits(`${Number(amount)}`, 18)],
+                    params: [validator, parseUnits(amount ?? "0", 18)],
                   });
                   break;
                 case DelegateEnum.REDELEGATE:
@@ -255,7 +256,7 @@ export default function Delegate({
                     params: [
                       validator,
                       redelegateValidator,
-                      parseUnits(`${Number(amount)}`, 18),
+                      parseUnits(amount ?? "0", 18),
                     ],
                   });
                   // write(redelegateValidator, amount);
@@ -266,7 +267,7 @@ export default function Delegate({
                       .stakingAddress as Address,
                     abi: STAKING_PRECOMPILE_ABI,
                     functionName: "undelegate",
-                    params: [validator, parseUnits(`${Number(amount)}`, 18)],
+                    params: [validator, parseUnits(amount ?? "0", 18)],
                   });
                   break;
               }

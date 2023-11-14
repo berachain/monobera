@@ -16,6 +16,7 @@ const handleNativeBera = (token: Address) => {
 export const getSwap = async (
   tokenIn: Address,
   tokenOut: Address,
+  tokenOutDecimals: number,
   swapType: number,
   amount: string,
 ) => {
@@ -72,7 +73,7 @@ export const getSwap = async (
       formattedSwapAmount: amount.toString(),
       formattedReturnAmount: formatUnits(
         BigInt(result.steps[result.steps.length - 1].amountOut),
-        18,
+        tokenOutDecimals,
       ),
       returnAmount: BigInt(result.steps[result.steps.length - 1].amountOut),
       tokenIn,
@@ -102,7 +103,7 @@ export const getBaseTokenPrice = async (pools: Pool[]) => {
       const tokenPromises = pool.tokens
         .filter((token: { address: string }) => token.address !== BASE_TOKEN)
         .map((token: { address: any; decimals: number }) =>
-          getSwap(token.address, BASE_TOKEN, 0, "1").catch(() => {
+          getSwap(token.address, BASE_TOKEN, 18, 0, "1").catch(() => {
             return undefined;
           }),
         );

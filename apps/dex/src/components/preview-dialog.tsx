@@ -50,7 +50,7 @@ const PreviewToken = ({
     <div className="flex flex-col">
       <p className="text-sm font-medium text-muted-foreground">{title}</p>
       <div className="flex w-full items-center justify-between">
-        <h4 className="text-xl font-semibold ">{Number(amount).toFixed(2)}</h4>
+        <h4 className="text-xl font-semibold ">{amount}</h4>
         <div
           key={token?.address}
           className={
@@ -174,8 +174,7 @@ export default function PreviewDialog({
               Minimum received
             </p>
             <p className="whitespace-nowrap text-right text-sm font-medium">
-              {Number(swapInfo?.formattedReturnAmount).toFixed(2)}{" "}
-              {tokenOut?.symbol}
+              {swapInfo?.formattedReturnAmount} {tokenOut?.symbol}
             </p>
           </div>
         </div>

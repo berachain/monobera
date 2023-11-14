@@ -15,14 +15,14 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { parseUnits } from "viem";
+import { parseUnits } from "ethers";
 import { type Address } from "wagmi";
 
-import { getSafeNumber } from "~/utils/getSafeNumber";
 import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import ApproveTokenButton from "../approve-token-button";
+import { getSafeNumber } from "~/utils/getSafeNumber";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -71,7 +71,7 @@ export function CreatePoolPreview({
     tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
     tokenWeights.map((tokenWeight) =>
       parseUnits(
-        `${getSafeNumber(tokenWeight.initialLiquidity)}`,
+        tokenWeight.initialLiquidity,
         tokenWeight.token?.decimals ?? 18,
       ),
     ),

@@ -9,6 +9,7 @@ import { laggy } from "./laggy";
 interface IUsePollSwaps {
   tokenIn: Address;
   tokenOut: Address;
+  tokenOutDecimals: number;
   swapKind: number;
   amount: string;
 }
@@ -23,15 +24,22 @@ export interface SwapInfoV2 {
 export const usePollSwaps = ({
   tokenIn,
   tokenOut,
+  tokenOutDecimals,
   swapKind,
   amount,
 }: IUsePollSwaps) => {
-  const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount];
+  const QUERY_KEY = [tokenIn, tokenOut, tokenOutDecimals, swapKind, amount];
   return useSWR<SwapInfoV2 | undefined>(
     QUERY_KEY,
     async () => {
       try {
-        const result = await getSwap(tokenIn, tokenOut, swapKind, amount);
+        const result = await getSwap(
+          tokenIn,
+          tokenOut,
+          tokenOutDecimals,
+          swapKind,
+          amount,
+        );
         return result;
       } catch (e) {
         console.log(e);
