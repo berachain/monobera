@@ -10,7 +10,11 @@ import {
   useBeraJs,
   usePollBgtRewards,
 } from "@bera/berajs";
-import { blockExplorerName, blockExplorerUrl } from "@bera/config";
+import {
+  beraTokenAddress,
+  blockExplorerName,
+  blockExplorerUrl,
+} from "@bera/config";
 import { RewardBtn, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
@@ -601,7 +605,11 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 >
                   <div className="flex gap-1">
                     <TokenIcon token={token} />
-                    <div className="ml-1 font-medium">TICKER</div>
+                    <div className="ml-1 font-medium uppercase">
+                      {token.address === beraTokenAddress
+                        ? "wbera"
+                        : token.symbol}
+                    </div>
                     <div className="text-sm font-medium text-muted-foreground">
                       {token.weight}%
                     </div>
