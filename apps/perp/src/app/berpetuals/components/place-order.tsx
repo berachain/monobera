@@ -204,7 +204,7 @@ export function PlaceOrder({
       </div>
       <ActionButton className="mt-4">
         {allowance?.formattedAllowance === "0" ||
-        allowance.allowance < ethersParseUnits(safeAmount, 18) ? (
+        allowance?.allowance < ethersParseUnits(safeAmount, 18) ? (
           <ApproveTokenButton token={honey} spender={storageContract} />
         ) : (
           <Button
