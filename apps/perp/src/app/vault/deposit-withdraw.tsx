@@ -135,7 +135,7 @@ export default function DepositWithdraw() {
                 before you deposit
               </AlertTitle>
               <AlertDescription>
-                There is a 2 EPOCH Wait period to withdraw your Honey Deposit
+                There is a 1-3 EPOCH Wait period to withdraw your Honey Deposit
                 from the HONEY Vault.
               </AlertDescription>
             </Alert>
@@ -182,14 +182,8 @@ export default function DepositWithdraw() {
               Withdraw Honey
             </div>
             <div className="text-sm leading-6 text-muted-foreground">
-              Withdraws are based on an epoch system of 24 hours. You can make a
-              request to withdraw your assets during the first 18 hours of any
-              epoch, but you must wait until the specified withdraw epoch to
-              actually withdraw them.
-            </div>
-            <div className="text-sm leading-6 text-muted-foreground">
-              Depending on the collateralization ratio of the vault, your
-              withdraw epoch will be delayed by 1 to 3 epochs.{" "}
+              Submit your withdrawal request anytime. It will be processed
+              within 3 epochs.
             </div>
             <div>
               <TokenList>
@@ -213,7 +207,7 @@ export default function DepositWithdraw() {
                 />
               </TokenList>
             </div>
-            <Alert variant="warning">
+            {/* <Alert variant="warning">
               <AlertTitle>
                 {" "}
                 <Icons.info className="inline-block h-4 w-4" />
@@ -223,7 +217,7 @@ export default function DepositWithdraw() {
                 You must withdraw your assets in the first 18 hours of your
                 withdraw epoch, otherwise a new request is required.
               </AlertDescription>
-            </Alert>
+            </Alert> */}
             <ActionButton>
               <Button
                 disabled={
