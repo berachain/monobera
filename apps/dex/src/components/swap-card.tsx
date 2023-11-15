@@ -224,7 +224,6 @@ export function SwapCard({
     return <Connect />;
   };
 
-  console.log(swapInfo);
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}

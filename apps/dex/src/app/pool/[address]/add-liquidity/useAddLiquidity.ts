@@ -12,7 +12,8 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "ethers";
+import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
@@ -59,11 +60,11 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
 
   const { needsApproval } = useMultipleTokenApprovals(
     tokenInputs,
-    networkConfig.precompileAddresses.erc20DexAddress as Address,
+    networkConfig.precompileAddresses.erc20ModuleAddress as Address,
   );
 
   const { useAllowance } = usePollAllowance({
-    contract: networkConfig.precompileAddresses.erc20DexAddress as Address,
+    contract: networkConfig.precompileAddresses.erc20ModuleAddress as Address,
     token: selectedSingleToken,
   });
 
@@ -91,7 +92,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     tokenInputs.map((tokenInput) => tokenInput?.address),
     tokenInputs.map((tokenInput) =>
       parseUnits(
-        `${getSafeNumber(tokenInput.amount)}`,
+        tokenInput.amount === "" ? "0" : tokenInput.amount,
         tokenInput?.decimals ?? 18,
       ),
     ),
@@ -103,7 +104,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     [selectedSingleToken?.address],
     [
       parseUnits(
-        `${getSafeNumber(selectedSingleTokenAmount)}`,
+        selectedSingleTokenAmount === "" ? "0" : selectedSingleTokenAmount,
         selectedSingleToken?.decimals ?? 18,
       ),
     ],
