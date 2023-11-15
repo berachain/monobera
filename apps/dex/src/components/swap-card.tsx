@@ -93,6 +93,7 @@ export function SwapCard({
     tokenOutPrice,
     isWrap,
     wrapType,
+    minAmountOut,
   } = useSwap({
     inputCurrency,
     outputCurrency,
@@ -211,6 +212,7 @@ export function SwapCard({
               });
             }}
             isLoading={isLoading}
+            minAmountOut={minAmountOut}
           />
         );
       } else {
