@@ -9,6 +9,7 @@ import { laggy } from "./laggy";
 interface IUsePollSwaps {
   tokenIn: Address;
   tokenOut: Address;
+  tokenInDecimals: number;
   tokenOutDecimals: number;
   swapKind: number;
   amount: string;
@@ -24,6 +25,7 @@ export interface SwapInfoV2 {
 export const usePollSwaps = ({
   tokenIn,
   tokenOut,
+  tokenInDecimals,
   tokenOutDecimals,
   swapKind,
   amount,
@@ -36,6 +38,7 @@ export const usePollSwaps = ({
         const result = await getSwap(
           tokenIn,
           tokenOut,
+          tokenInDecimals,
           tokenOutDecimals,
           swapKind,
           amount,

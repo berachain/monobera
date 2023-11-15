@@ -89,6 +89,7 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
         openPositons={openPositions}
         openOrders={openOrders}
         history={closedPositions}
+        markets={markets}
       />
       <TotalAmount className="hidden sm:flex" markets={markets} />
     </div>

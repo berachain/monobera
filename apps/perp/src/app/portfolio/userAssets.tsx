@@ -4,7 +4,7 @@ import React from "react";
 import { DataTable } from "@bera/shared-ui";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
-import { positions_columns } from "../berpetuals/components/columns";
+import { getPositionColumns } from "../berpetuals/components/columns";
 import type {
   ICards,
   IRow,
@@ -27,7 +27,7 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
         </div>
       </div>
       <DataTable
-        columns={positions_columns}
+        columns={getPositionColumns(markets)}
         data={openPositions ?? []}
         className="min-w-[1136px]"
       />

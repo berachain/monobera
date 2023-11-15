@@ -22,7 +22,7 @@ export const usePollHoneyBalance = () => {
             functionName: "balanceOf",
             args: [account as Address],
           });
-          return formatUnits(result, 18);
+          return result;
         } catch (e) {
           console.error(e);
         }
@@ -35,10 +35,15 @@ export const usePollHoneyBalance = () => {
   );
   const useHoneyBalance = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    return formatUnits(data ?? 0n, 18);
+  };
+  const useRawHoneyBalance = () => {
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };
   return {
     isLoading,
     useHoneyBalance,
+    useRawHoneyBalance,
   };
 };

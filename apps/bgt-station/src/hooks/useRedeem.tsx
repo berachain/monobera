@@ -11,7 +11,7 @@ export const useRedeem = () => {
     const newPayload = [
       account,
       account,
-      parseUnits(redeemAmount === '' ? '0' : redeemAmount, 18),
+      parseUnits(redeemAmount === "" ? "0" : redeemAmount, 18),
     ];
     setPayload(newPayload);
   }, [account, redeemAmount]);

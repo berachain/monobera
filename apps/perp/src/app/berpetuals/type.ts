@@ -2,7 +2,7 @@ export interface OrderType {
   assets?: any; //Token
   orderType: "long" | "short";
   optionType: "market" | "limit";
-  amount: number | undefined;
+  amount: string;
   limitPrice?: number | undefined;
   quantity: number | undefined;
   price?: number | undefined;

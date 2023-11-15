@@ -105,6 +105,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { isLoading: isBalanceLoading } = useCurrentAssetWalletBalances();
+
+  // for wrapping
   useEffect(() => {
     if (isWrap) {
       if (swapKind === SwapKind.GIVEN_IN) {
@@ -115,10 +117,12 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       }
     }
   }, [swapAmount]);
+
   const { data: swapInfo, error: getSwapError } = usePollSwaps({
     tokenIn: selectedFrom?.address as Address,
     tokenOut: selectedTo?.address as Address,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
+    tokenInDecimals: selectedFrom?.decimals ?? 18,
     tokenOutDecimals: selectedTo?.decimals ?? 18,
     // amount:
     //   Number(swapAmount) > Number.MAX_SAFE_INTEGER
@@ -134,6 +138,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       token.address === process.env.NEXT_PUBLIC_BERA_ADDRESS
     )
       return true;
+
     return false;
   };
 
@@ -160,6 +165,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { data: tokenInPriceInfo } = usePollSwaps({
     tokenIn: selectedFrom?.address as Address,
     tokenOut: QUOTING_TOKEN,
+    tokenInDecimals: selectedFrom?.decimals ?? 18,
     tokenOutDecimals: 18,
     swapKind: 0,
     amount: "1",
@@ -168,6 +174,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { data: tokenOutPriceInfo } = usePollSwaps({
     tokenIn: selectedTo?.address as Address,
     tokenOut: QUOTING_TOKEN,
+    tokenInDecimals: selectedFrom?.decimals ?? 18,
     tokenOutDecimals: 18,
     swapKind: 0,
     amount: "1",
