@@ -139,7 +139,9 @@ export default function DepositWithdraw() {
               </AlertDescription>
             </Alert>
             <ActionButton>
-              {allowance?.formattedAllowance === "0" ? (
+              {allowance?.formattedAllowance === "0" ||
+              allowance?.allowance <
+                parseUnits(depositAmount === "" ? "0" : depositAmount, 18) ? (
                 <ApproveTokenButton token={honey} spender={gTokenAddress} />
               ) : (
                 <Button

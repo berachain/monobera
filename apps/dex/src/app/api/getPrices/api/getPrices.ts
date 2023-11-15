@@ -22,8 +22,12 @@ export const getSwap = async (
   amount: string,
 ) => {
   try {
-    const parsedAmount = parseUnits(amount, tokenInDecimals ?? 18);
     const type = swapType === 0 ? "given_in" : "given_out";
+    const parsedAmount = parseUnits(
+      amount,
+      type === "given_in" ? tokenInDecimals ?? 18 : tokenOutDecimals ?? 18,
+    );
+
     const response = await fetch(
       `${
         process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
@@ -36,7 +40,6 @@ export const getSwap = async (
 
     const result = await response.json();
 
-    console.log({ result });
     if (!result.steps)
       return {
         batchSwapSteps: [],
@@ -70,6 +73,12 @@ export const getSwap = async (
       }
     }
 
+    console.log({
+      tokenInDecimals,
+      tokenOutDecimals,
+      result,
+    });
+    console.log;
     const swapInfo = {
       batchSwapSteps: batchSwapSteps,
       formattedSwapAmount: amount.toString(),
@@ -85,6 +94,8 @@ export const getSwap = async (
       tokenIn,
       tokenOut,
     };
+
+    console.log(swapInfo);
     return swapInfo;
   } catch (e) {
     console.log(e);
