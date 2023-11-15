@@ -2,11 +2,12 @@ import { useMemo } from "react";
 
 import { AsesetCardMobile } from "~/app/portfolio/userAssets";
 import { getAssetCardList } from "../getAssetCards";
+import type { IMarket } from "../page";
 import {
+  getPositionColumns,
   history_columns,
   orders_columns,
   pnl_columns,
-  positions_columns,
 } from "./columns";
 import { DataTable } from "./data-table";
 import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
@@ -27,17 +28,20 @@ export function OrderHistoryTable({
   openPositons,
   openOrders,
   history,
+  markets,
 }: {
   tab: "positions" | "orders" | "history" | "pnl";
   openPositons: IMarketOrder[];
   openOrders: ILimitOrder[];
   history: IClosedTrade[];
+  markets: IMarket[];
 }) {
   const assetCardItems = useMemo(() => {
     return getAssetCardList({
       marketOrderItems: openPositons,
       limitOrderItems: openOrders,
       historyItems: history,
+      markets,
     });
   }, [openPositons, openOrders, history]);
 
@@ -45,7 +49,7 @@ export function OrderHistoryTable({
     <div className="relative w-full">
       {tab === "positions" && (
         <DataTable
-          columns={positions_columns}
+          columns={getPositionColumns(markets)}
           data={openPositons ?? []}
           className="hidden w-full min-w-[1200px] sm:block"
         />
