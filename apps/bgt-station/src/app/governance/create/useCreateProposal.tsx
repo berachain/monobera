@@ -4,7 +4,8 @@ import {
   UpdateFriendsOfTheChefRequest,
   UpdateParamsRequest,
 } from "@bera/proto/src";
-import { parseUnits, toHex } from "viem";
+import { parseUnits } from "ethers";
+import { toHex } from "viem";
 
 interface VoteValues {
   description: string;
@@ -33,9 +34,9 @@ export const useCreateProposal = () => {
 
   const createPayload = async (value: VoteValues) => {
     const initalDepostAmount = parseUnits(
-      `${Number(value.initialDeposit)}`,
+      value.initialDeposit === "" ? "0" : value.initialDeposit,
       18,
-    ).toString();
+    );
 
     const msgPayload: {
       typeURL: string;

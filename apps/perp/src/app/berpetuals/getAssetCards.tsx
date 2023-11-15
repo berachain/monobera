@@ -20,15 +20,18 @@ import type {
   IMarketOrder,
 } from "./components/order-history";
 import { type ICards } from "./components/order-history-table";
+import { type IMarket } from "./page";
 
 export const getAssetCardList = ({
   marketOrderItems,
   limitOrderItems,
   historyItems,
+  markets,
 }: {
   marketOrderItems: IMarketOrder[];
   limitOrderItems: ILimitOrder[];
   historyItems: IClosedTrade[];
+  markets: IMarket[];
 }): {
   marketList: ICards[];
   limitList: ICards[];
@@ -36,14 +39,17 @@ export const getAssetCardList = ({
   pnlList: ICards[];
 } => {
   return {
-    marketList: getMarketListItems(marketOrderItems ?? []),
+    marketList: getMarketListItems(marketOrderItems ?? [], markets),
     limitList: getLimitListItems(limitOrderItems ?? []),
     historyList: getHisoryListItems(historyItems ?? []),
     pnlList: getPnlListItems(historyItems ?? []),
   };
 };
 
-const getMarketListItems = (marketOrderItems: IMarketOrder[]): ICards[] => {
+const getMarketListItems = (
+  marketOrderItems: IMarketOrder[],
+  markets: IMarket[],
+): ICards[] => {
   const cards = marketOrderItems.map((item) => {
     const positionSize =
       Number(formatUnits(BigInt(item.position_size ?? 0), 18)) *
@@ -104,6 +110,7 @@ const getMarketListItems = (marketOrderItems: IMarketOrder[]): ICards[] => {
             <PositionLiquidationPrice
               position={item}
               className="text-xs font-medium leading-tight text-muted-foreground"
+              markets={markets}
             />
           ),
         },

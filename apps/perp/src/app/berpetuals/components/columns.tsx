@@ -16,6 +16,7 @@ import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { useCalculatePnl } from "~/hooks/useCalculatePnl";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
+import type { IMarket } from "../page";
 import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
 
 const MarkPrice = ({ position }: { position: IMarketOrder }) => {
@@ -36,17 +37,31 @@ const MarkPrice = ({ position }: { position: IMarketOrder }) => {
 export const PositionLiquidationPrice = ({
   position,
   className,
+  markets,
 }: {
   position: IMarketOrder;
   className?: string;
+  markets: IMarket[];
 }) => {
   const formattedPrice = Number(
     formatUnits(BigInt(position.open_price ?? 0n), 10),
   );
 
+  const positionMarket = markets?.find(
+    (market) => Number(market.pair_index) === Number(position.pair_index),
+  );
+  const formattedBfLong = formatUnits(
+    BigInt(positionMarket?.pair_borrowing_fee?.bf_long ?? "0"),
+    18,
+  );
+  const formattedBfShort = formatUnits(
+    BigInt(positionMarket?.pair_borrowing_fee?.bf_short ?? "0"),
+    18,
+  );
+
   const liqPrice = useCalculateLiqPrice({
-    bfLong: position.market?.pair_borrowing_fee?.bf_long,
-    bfShort: position.market?.pair_borrowing_fee?.bf_short,
+    bfLong: formattedBfLong,
+    bfShort: formattedBfShort,
     orderType: position.buy === true ? "long" : "short",
     price: formattedPrice,
     leverage: position.leverage,
@@ -54,7 +69,9 @@ export const PositionLiquidationPrice = ({
 
   return (
     <div className={cn("", className)}>
-      {liqPrice !== undefined ? (
+      {Number(position.liq_price) !== 0 ? (
+        formatBigIntUsd(position.liq_price, 10)
+      ) : liqPrice !== undefined ? (
         formatUsd(liqPrice)
       ) : (
         <Skeleton className={cn("h-[28px] w-[80px]", className)} />
@@ -134,205 +151,212 @@ export const PnlWithPercentage = ({
     </div>
   );
 };
-export const positions_columns: ColumnDef<IMarketOrder>[] = [
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Market / Slide"
-        className="min-w-[120px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <PositionTitle
-        market={row.original.market}
-        type={row.original.buy === true ? "Long" : "Short"}
-      />
-    ),
-    accessorKey: "assets",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Position Size"
-        className="min-w-[120px]"
-      />
-    ),
-    cell: ({ row }) => {
-      const positionSize =
-        Number(formatUnits(BigInt(row.original.position_size ?? 0), 18)) *
-        Number(row.original.leverage);
-      const openPrice = Number(
-        formatUnits(BigInt(row.original.open_price ?? 0), 10),
-      );
-      const size = positionSize / openPrice;
-      return (
-        <div className="w-[88px]">
-          <div className="text-sm font-semibold leading-tight text-foreground ">
-            {size.toFixed(4)}
-          </div>
-          <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
-            {formatUsd(positionSize)}
-          </div>
-        </div>
-      );
-    },
-    accessorKey: "position_size",
-    enableSorting: true,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Leverage" />
-    ),
-    cell: ({ row }) => {
-      return <div className="w-[60px]">{row.original.leverage ?? 2}x</div>;
-    },
-    accessorKey: "leverage",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Entry Price"
-        className="min-w-[120px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <div>
-        {formatUsd(
-          Number(formatUnits(BigInt(row.original.open_price ?? 0), 10)),
-        )}
-      </div>
-    ),
-    accessorKey: "open_price",
-    enableSorting: true,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Mark Price"
-        className="min-w-[120px]"
-      />
-    ),
-    cell: ({ row }) => <MarkPrice position={row.original} />,
-    accessorKey: "current_price",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Est. Liq. Price"
-        className="min-w-[120px]"
-      />
-    ),
-    // cell: ({ row }) => <PositionLiquidationPrice position={row.original} />,
-    cell: ({ row }) => (
-      <div>
-        {Number(row.original.liq_price) !== 0 ? (
-          formatBigIntUsd(row.original.liq_price, 10)
-        ) : (
-          <Skeleton className={"h-[28px] w-[80px]"} />
-        )}
-      </div>
-    ),
-    accessorKey: "liq_price",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Est. PnL"
-        className="min-w-[120px]"
-      />
-    ),
-    // cell: ({ row }) => (
-    //   <div
-    //     className={cn(
-    //       "text-sm font-semibold leading-tight text-foreground",
-    //       row.original.realized_pnl >= 0
-    //         ? "text-success-foreground"
-    //         : "text-destructive-foreground",
-    //     )}
-    //   >
-    //     {row.original.realized_pnl > 0 && "+"}
-    //     {formatUsd(row.original.realized_pnl)}
-    //   </div>
-    // ),
-    cell: ({ row }) => <ActivePositionPNL position={row.original} />,
-    accessorKey: "est_pnl",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Funding" />
-    ),
-    cell: ({ row }) => {
-      return <div>{formatBigIntUsd(row.original.funding_rate, 18)}</div>;
-    },
-    accessorKey: "funding",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="TP / SL"
-        className="min-w-[120px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <div className="">
-        <span className="text-success-foreground">
-          {row.original.tp === "0"
-            ? "∞"
-            : formatUsd(
-                Number(formatUnits(BigInt(row.original.tp ?? 0), 10)),
-              ) ?? "-"}{" "}
-        </span>
-        /
-        <span className="text-destructive-foreground">
-          {" "}
-          {row.original.sl === "0"
-            ? "∞"
-            : formatUsd(Number(formatUnits(BigInt(row.original.sl ?? 0), 10)))}
-        </span>
-      </div>
-    ),
-    accessorKey: "tp_sl",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Manage" />
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center gap-1">
-        <UpdatePositionModal
-          type={"market"}
-          openPosition={row.original}
-          trigger={
-            <Icons.fileEdit className="h-4 w-4 cursor-pointer text-muted-foreground" />
-          }
-        />
-        <ClosePositionModal
-          trigger={
-            <Icons.close className="h-6 w-6 cursor-pointer text-destructive-foreground" />
-          }
-          openPosition={row.original}
-        />
-      </div>
-    ),
-    accessorKey: "manage",
-    enableSorting: false,
-  },
-];
 
+export const getPositionColumns = (markets: IMarket[]) => {
+  const positions_columns: ColumnDef<IMarketOrder>[] = [
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Market / Slide"
+          className="min-w-[120px]"
+        />
+      ),
+      cell: ({ row }) => (
+        <PositionTitle
+          market={row.original.market}
+          type={row.original.buy === true ? "Long" : "Short"}
+        />
+      ),
+      accessorKey: "assets",
+      enableSorting: false,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Position Size"
+          className="min-w-[120px]"
+        />
+      ),
+      cell: ({ row }) => {
+        const positionSize =
+          Number(formatUnits(BigInt(row.original.position_size ?? 0), 18)) *
+          Number(row.original.leverage);
+        const openPrice = Number(
+          formatUnits(BigInt(row.original.open_price ?? 0), 10),
+        );
+        const size = positionSize / openPrice;
+        return (
+          <div className="w-[88px]">
+            <div className="text-sm font-semibold leading-tight text-foreground ">
+              {size.toFixed(4)}
+            </div>
+            <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
+              {formatUsd(positionSize)}
+            </div>
+          </div>
+        );
+      },
+      accessorKey: "position_size",
+      enableSorting: true,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Leverage" />
+      ),
+      cell: ({ row }) => {
+        return <div className="w-[60px]">{row.original.leverage ?? 2}x</div>;
+      },
+      accessorKey: "leverage",
+      enableSorting: false,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Entry Price"
+          className="min-w-[120px]"
+        />
+      ),
+      cell: ({ row }) => (
+        <div>
+          {formatUsd(
+            Number(formatUnits(BigInt(row.original.open_price ?? 0), 10)),
+          )}
+        </div>
+      ),
+      accessorKey: "open_price",
+      enableSorting: true,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Mark Price"
+          className="min-w-[120px]"
+        />
+      ),
+      cell: ({ row }) => <MarkPrice position={row.original} />,
+      accessorKey: "current_price",
+      enableSorting: false,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Est. Liq. Price"
+          className="min-w-[120px]"
+        />
+      ),
+      cell: ({ row }) => (
+        <PositionLiquidationPrice position={row.original} markets={markets} />
+      ),
+      // cell: ({ row }) => (
+      //   <div>
+      // {Number(row.original.liq_price) !== 0 ? (
+      //   formatBigIntUsd(row.original.liq_price, 10)
+      // ) : (
+      //   <Skeleton className={"h-[28px] w-[80px]"} />
+      // )}
+      //   </div>
+      // ),
+      accessorKey: "liq_price",
+      enableSorting: false,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Est. PnL"
+          className="min-w-[120px]"
+        />
+      ),
+      // cell: ({ row }) => (
+      // <div
+      //   className={cn(
+      //     "text-sm font-semibold leading-tight text-foreground",
+      //     row.original.realized_pnl >= 0
+      //       ? "text-success-foreground"
+      //       : "text-destructive-foreground",
+      //   )}
+      // >
+      //   {row.original.realized_pnl > 0 && "+"}
+      //   {formatUsd(row.original.realized_pnl)}
+      // </div>
+      // ),
+      cell: ({ row }) => <ActivePositionPNL position={row.original} />,
+      accessorKey: "est_pnl",
+      enableSorting: false,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Funding" />
+      ),
+      cell: ({ row }) => {
+        return <div>{formatBigIntUsd(row.original.funding_rate, 18)}</div>;
+      },
+      accessorKey: "funding",
+      enableSorting: false,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="TP / SL"
+          className="min-w-[120px]"
+        />
+      ),
+      cell: ({ row }) => (
+        <div className="">
+          <span className="text-success-foreground">
+            {row.original.tp === "0"
+              ? "∞"
+              : formatUsd(
+                  Number(formatUnits(BigInt(row.original.tp ?? 0), 10)),
+                ) ?? "-"}{" "}
+          </span>
+          /
+          <span className="text-destructive-foreground">
+            {" "}
+            {row.original.sl === "0"
+              ? "∞"
+              : formatUsd(
+                  Number(formatUnits(BigInt(row.original.sl ?? 0), 10)),
+                )}
+          </span>
+        </div>
+      ),
+      accessorKey: "tp_sl",
+      enableSorting: false,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Manage" />
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center gap-1">
+          <UpdatePositionModal
+            type={"market"}
+            openPosition={row.original}
+            trigger={
+              <Icons.fileEdit className="h-4 w-4 cursor-pointer text-muted-foreground" />
+            }
+          />
+          <ClosePositionModal
+            trigger={
+              <Icons.close className="h-6 w-6 cursor-pointer text-destructive-foreground" />
+            }
+            openPosition={row.original}
+          />
+        </div>
+      ),
+      accessorKey: "manage",
+      enableSorting: false,
+    },
+  ];
+  return positions_columns;
+};
 export const orders_columns: ColumnDef<ILimitOrder>[] = [
   {
     header: ({ column }) => (

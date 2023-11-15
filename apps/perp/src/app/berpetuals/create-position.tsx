@@ -5,6 +5,7 @@ import Image from "next/image";
 import { formatUsd, usePollHoneyBalance } from "@bera/berajs";
 import { type GlobalParams } from "@bera/proto/src";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { parseUnits } from "ethers";
 import { formatUnits } from "viem";
 
 import { HONEY_IMG } from "~/utils/marketImages";
@@ -32,7 +33,7 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
     orderType: "long",
     optionType: "market",
     limitPrice: undefined,
-    amount: undefined,
+    amount: "",
     quantity: undefined,
     price: undefined,
     leverage: 2,
@@ -44,9 +45,9 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
   const { useMarketIndexPrice } = usePricesSocket();
   const rawPrice = useMarketIndexPrice(Number(market.pair_index) ?? 0);
   const honeyPrice = 1;
-  const { useHoneyBalance } = usePollHoneyBalance();
+  const { useHoneyBalance, useRawHoneyBalance } = usePollHoneyBalance();
   const honeyBalance = useHoneyBalance();
-
+  const rawHoneyBalance = useRawHoneyBalance();
   const formattedPrice = Number(formatUnits(BigInt(rawPrice ?? 0), 10));
 
   const maxLeverage = Number(params.max_leverage ?? 0);
@@ -54,8 +55,10 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
     formatUnits(BigInt(params.max_pos_honey ?? 0), 18),
   );
 
+  console.log("honey balance", honeyBalance);
+  const safeAmount = form.amount === "" ? "0" : form.amount;
   useMemo(() => {
-    const honeyAmountPrice = (form.amount ?? 0) * honeyPrice;
+    const honeyAmountPrice = Number(safeAmount) * honeyPrice;
     const leveragedHoneyPrice = honeyAmountPrice * (form.leverage ?? 1);
     if (form.optionType === "market") {
       if (givenHoney) {
@@ -66,7 +69,7 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
         const newAmount =
           (form.quantity / (form.leverage ?? 1)) *
           (formattedPrice / honeyPrice);
-        setForm({ ...form, amount: newAmount });
+        setForm({ ...form, amount: newAmount.toString() });
         return;
       }
 
@@ -84,7 +87,7 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
         const newAmount =
           (form.quantity / (form.leverage ?? 1)) *
           (form.limitPrice / honeyPrice);
-        setForm({ ...form, amount: newAmount });
+        setForm({ ...form, amount: newAmount.toString() });
         return;
       }
       return;
@@ -107,6 +110,11 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
     BigInt(market.pair_borrowing_fee?.bf_short ?? "0"),
     18,
   );
+
+  console.log({
+    bfLong: formattedBfLong,
+    bfShort: formattedBfShort,
+  });
   const liqPrice = useCalculateLiqPrice({
     bfLong: formattedBfLong,
     bfShort: formattedBfShort,
@@ -121,21 +129,24 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
     if (
       form.amount &&
       form.leverage &&
-      form.amount * form.leverage > formattedMaxCollateral
+      Number(safeAmount) * form.leverage > formattedMaxCollateral
     ) {
       setError(
         `Max position size is ${formattedMaxCollateral.toLocaleString()} HONEY.`,
       );
-    } else if (form.amount && form.amount < 0) {
+    } else if (form.amount && Number(safeAmount) < 0) {
       setError("Collateral must be positive.");
-    } else if (form.amount && form.amount < 10) {
+    } else if (form.amount && Number(safeAmount) < 10) {
       setError("Min Collateral is 10 HONEY.");
     } else if (
       form.leverage &&
       (form.leverage < 2 || form.leverage > maxLeverage)
     ) {
       setError(`Leverage must be between 2x and ${maxLeverage}x.`);
-    } else if (honeyBalance && honeyBalance < (form.amount ?? 0)) {
+    } else if (
+      rawHoneyBalance &&
+      rawHoneyBalance < (parseUnits(safeAmount, 18) ?? 0n)
+    ) {
       setError("Insufficient balance.");
     } else {
       setError(undefined);
@@ -177,10 +188,13 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
           <CustomizeInput
             title="Amount"
             value={form.amount}
-            isExceeding={honeyBalance && honeyBalance < (form.amount ?? 0)}
+            isExceeding={
+              rawHoneyBalance &&
+              rawHoneyBalance < (parseUnits(safeAmount, 18) ?? 0n)
+            }
             onChange={(e) => {
               setGivenHoney(true);
-              setForm({ ...form, amount: Number(e) });
+              setForm({ ...form, amount: e });
             }}
             subTitle={
               <div className="flex items-center gap-1">
@@ -211,7 +225,7 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
             title="Quantity"
             disabled={rawPrice === undefined}
             subTitle={`Leverage: ${form.leverage}x`}
-            value={form.quantity}
+            value={form.quantity?.toString()}
             onChange={(e) => {
               setGivenHoney(false);
               setForm({ ...form, quantity: Number(e) });
@@ -233,7 +247,7 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
             <CustomizeInput
               title="Price"
               subTitle={`Mark: ${formatUsd(formattedPrice)}`}
-              value={form.limitPrice}
+              value={form.limitPrice?.toString()}
               onSubtitleClick={() => {
                 setForm({
                   ...form,
