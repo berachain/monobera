@@ -11,7 +11,7 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { getAbsoluteUrl } from "~/utils/vercel-utils";
+// import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { usePositionSize } from "~/hooks/usePositionSize";
 
 export const columns: ColumnDef<Pool>[] = [
@@ -232,9 +232,12 @@ export const columns: ColumnDef<Pool>[] = [
       />
     ),
     cell: ({ row }) => (
-      <Link href={`${getAbsoluteUrl()}/pool/${row.original.pool}`}>
+      <Link
+        href={`/pool/${row.original.pool}/add-liquidity`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <Button variant={"outline"} className="flex gap-1">
-          Details <Icons.arrowRight className="h-6 w-6" />
+          Add Liquidity
         </Button>
       </Link>
     ),
@@ -243,14 +246,14 @@ export const columns: ColumnDef<Pool>[] = [
 ];
 
 export const PositionSize = (pool: any) => {
-  console.log(pool);
+  // console.log(pool);
   const { userTotalValue, isPositionSizeLoading } = usePositionSize({
     pool: pool.pool,
   });
-  console.log({
-    userTotalValue,
-    isPositionSizeLoading,
-  });
+  // console.log({
+  //   userTotalValue,
+  //   isPositionSizeLoading,
+  // });
   return (
     <div className="text-sm font-medium">
       {isPositionSizeLoading ? (
@@ -404,12 +407,18 @@ export const my_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex gap-1 ">
-        <Link href={`/pool/${row.original.pool}/add-liquidity`}>
+        <Link
+          href={`/pool/${row.original.pool}/add-liquidity`}
+          onClick={(e) => e.stopPropagation()}
+        >
           <Button variant={"outline"} className="flex gap-1">
             <Icons.add className="h-6 w-6" />
           </Button>
         </Link>
-        <Link href={`/pool/${row.original.pool}/withdraw`}>
+        <Link
+          href={`/pool/${row.original.pool}/withdraw`}
+          onClick={(e) => e.stopPropagation()}
+        >
           <Button variant={"outline"} className="flex gap-1">
             <Icons.subtract className="h-6 w-6" />
           </Button>
