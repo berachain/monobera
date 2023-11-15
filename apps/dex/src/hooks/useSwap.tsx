@@ -12,6 +12,7 @@ import {
 } from "@bera/berajs";
 import { erc20ModuleAddress, honeyTokenAddress } from "@bera/config";
 import { useDeadline, useSlippage } from "@bera/shared-ui/src/hooks";
+import { formatUnits } from "ethers";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -174,7 +175,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { data: tokenOutPriceInfo } = usePollSwaps({
     tokenIn: selectedTo?.address as Address,
     tokenOut: QUOTING_TOKEN,
-    tokenInDecimals: selectedFrom?.decimals ?? 18,
+    tokenInDecimals: selectedTo?.decimals ?? 18,
     tokenOutDecimals: 18,
     swapKind: 0,
     amount: "1",
@@ -185,7 +186,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(swapInfo?.formattedReturnAmount.toString());
     } else {
-      setFromAmount(swapInfo?.formattedReturnAmount);
+      setFromAmount(swapInfo?.formattedAmountIn);
     }
   }, [swapInfo, isWrap]);
 
@@ -334,6 +335,13 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       ? "1"
       : tokenOutPriceInfo?.formattedReturnAmount;
 
+  const minAmountOut = useMemo(() => {
+    if (!payload[1]) return "0";
+    console.log(payload);
+    const amountOut = payload[1][payload[1].length - 1]?.amountOut;
+    console.log(amountOut);
+    return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
+  }, [payload]);
   return {
     setSwapKind,
     setSelectedFrom,
@@ -360,5 +368,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     isBalanceLoading,
     tokenInPrice,
     tokenOutPrice,
+    minAmountOut,
   };
 };

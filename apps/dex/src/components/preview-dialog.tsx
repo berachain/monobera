@@ -33,6 +33,7 @@ type Props = {
   write: () => void;
   isLoading: boolean;
   disabled: boolean;
+  minAmountOut: string;
 };
 
 const PreviewToken = ({
@@ -80,6 +81,7 @@ export default function PreviewDialog({
   isLoading,
   open,
   disabled,
+  minAmountOut,
   setOpen,
   write,
 }: Props) {
@@ -169,12 +171,15 @@ export default function PreviewDialog({
               {exchangeRate}
             </p>
           </div>
-          <div className="flex w-full flex-row justify-between">
-            <p className="text-sm font-medium text-muted-foreground">
-              Minimum received
+          <div className="flex w-full flex-row justify-between gap-1">
+            <p className="text-sm font-medium text-muted-foreground ">
+              Min. received
             </p>
-            <p className="whitespace-nowrap text-right text-sm font-medium">
-              {swapInfo?.formattedReturnAmount} {tokenOut?.symbol}
+            <p className="overflow-hidden text-ellipsis whitespace-nowrap text-right text-sm font-medium ">
+              {minAmountOut}
+            </p>
+            <p className="whitespace-nowrap text-right text-sm font-medium  ">
+              {tokenOut?.symbol}
             </p>
           </div>
         </div>

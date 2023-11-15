@@ -18,6 +18,7 @@ interface IUsePollSwaps {
 export interface SwapInfoV2 {
   batchSwapSteps: BatchSwapStep[];
   formattedSwapAmount: string;
+  formattedAmountIn: string;
   formattedReturnAmount: string;
   returnAmount: bigint;
 }
@@ -51,6 +52,7 @@ export const usePollSwaps = ({
         return {
           batchSwapSteps: [],
           formattedSwapAmount: amount.toString(),
+          formattedAmountIn: "0",
           formattedReturnAmount: "0",
           returnAmount: BigInt(0),
         };
