@@ -174,7 +174,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { data: tokenOutPriceInfo } = usePollSwaps({
     tokenIn: selectedTo?.address as Address,
     tokenOut: QUOTING_TOKEN,
-    tokenInDecimals: selectedFrom?.decimals ?? 18,
+    tokenInDecimals: selectedTo?.decimals ?? 18,
     tokenOutDecimals: 18,
     swapKind: 0,
     amount: "1",
@@ -185,7 +185,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(swapInfo?.formattedReturnAmount.toString());
     } else {
-      setFromAmount(swapInfo?.formattedReturnAmount);
+      setFromAmount(swapInfo?.formattedAmountIn);
     }
   }, [swapInfo, isWrap]);
 

@@ -41,6 +41,7 @@ export const getSwap = async (
       return {
         batchSwapSteps: [],
         formattedSwapAmount: amount.toString(),
+        formattedAmountIn: "0",
         formattedReturnAmount: "0",
         returnAmount: 0n,
         tokenIn,
@@ -72,9 +73,13 @@ export const getSwap = async (
     const swapInfo = {
       batchSwapSteps: batchSwapSteps,
       formattedSwapAmount: amount.toString(),
+      formattedAmountIn: formatUnits(
+        BigInt(result.steps[0].amountIn),
+        tokenInDecimals ?? 18,
+      ),
       formattedReturnAmount: formatUnits(
         BigInt(result.steps[result.steps.length - 1].amountOut),
-        tokenOutDecimals,
+        tokenOutDecimals ?? 18,
       ),
       returnAmount: BigInt(result.steps[result.steps.length - 1].amountOut),
       tokenIn,
@@ -86,6 +91,7 @@ export const getSwap = async (
     return {
       batchSwapSteps: [],
       formattedSwapAmount: amount.toString(),
+      formattedAmountIn: "0",
       formattedReturnAmount: "0",
       returnAmount: 0n,
       tokenIn,
