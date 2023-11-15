@@ -120,8 +120,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   }, [swapAmount]);
 
   const { data: swapInfo, error: getSwapError } = usePollSwaps({
-    tokenIn: selectedFrom?.address as Address,
-    tokenOut: selectedTo?.address as Address,
+    tokenIn:
+      swapKind === SwapKind.GIVEN_IN
+        ? (selectedFrom?.address as Address)
+        : (selectedTo?.address as Address),
+    tokenOut:
+      swapKind === SwapKind.GIVEN_IN
+        ? (selectedTo?.address as Address)
+        : (selectedFrom?.address as Address),
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
     tokenInDecimals: selectedFrom?.decimals ?? 18,
     tokenOutDecimals: selectedTo?.decimals ?? 18,
