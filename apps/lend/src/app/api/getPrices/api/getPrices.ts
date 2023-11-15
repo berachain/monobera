@@ -1,5 +1,6 @@
 import { type BatchSwapStep, type Pool } from "@bera/bera-router";
-import { formatUnits, getAddress, parseUnits } from "viem";
+import { parseUnits } from "ethers";
+import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
 export interface MappedTokens {
@@ -15,29 +16,34 @@ const handleNativeBera = (token: Address) => {
 export const getSwap = async (
   tokenIn: Address,
   tokenOut: Address,
+  tokenInDecimals: number,
+  tokenOutDecimals: number,
   swapType: number,
-  amount: number,
+  amount: string,
 ) => {
   try {
+    const parsedAmount = parseUnits(amount, tokenInDecimals ?? 18);
     const type = swapType === 0 ? "given_in" : "given_out";
     const response = await fetch(
       `${
         process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
       }/dex/route?quote_asset=${handleNativeBera(
         tokenOut,
-      )}&base_asset=${handleNativeBera(tokenIn)}&amount=${parseUnits(
-        `${amount}`,
-        18,
-      )}&swap_type=${type}`,
+      )}&base_asset=${handleNativeBera(
+        tokenIn,
+      )}&amount=${parsedAmount}&swap_type=${type}`,
     );
 
     const result = await response.json();
 
+    console.log({ result });
     if (!result.steps)
       return {
         batchSwapSteps: [],
         formattedSwapAmount: amount.toString(),
+        formattedAmountIn: "0",
         formattedReturnAmount: "0",
+        returnAmount: 0n,
         tokenIn,
         tokenOut,
       };
@@ -48,7 +54,7 @@ export const getSwap = async (
         assetIn: step.assetIn,
         amountIn: BigInt(step.amountIn),
         assetOut: step.assetOut,
-        amountOut: step.amountOut,
+        amountOut: BigInt(step.amountOut),
         userData: "",
       };
     });
@@ -67,10 +73,15 @@ export const getSwap = async (
     const swapInfo = {
       batchSwapSteps: batchSwapSteps,
       formattedSwapAmount: amount.toString(),
+      formattedAmountIn: formatUnits(
+        BigInt(result.steps[0].amountIn),
+        tokenInDecimals ?? 18,
+      ),
       formattedReturnAmount: formatUnits(
         BigInt(result.steps[result.steps.length - 1].amountOut),
-        18,
+        tokenOutDecimals ?? 18,
       ),
+      returnAmount: BigInt(result.steps[result.steps.length - 1].amountOut),
       tokenIn,
       tokenOut,
     };
@@ -80,7 +91,9 @@ export const getSwap = async (
     return {
       batchSwapSteps: [],
       formattedSwapAmount: amount.toString(),
+      formattedAmountIn: "0",
       formattedReturnAmount: "0",
+      returnAmount: 0n,
       tokenIn,
       tokenOut,
     };
@@ -97,9 +110,11 @@ export const getBaseTokenPrice = async (pools: Pool[]) => {
       const tokenPromises = pool.tokens
         .filter((token: { address: string }) => token.address !== BASE_TOKEN)
         .map((token: { address: any; decimals: number }) =>
-          getSwap(token.address, BASE_TOKEN, 0, 1).catch(() => {
-            return undefined;
-          }),
+          getSwap(token.address, BASE_TOKEN, token.decimals, 18, 0, "1").catch(
+            () => {
+              return undefined;
+            },
+          ),
         );
 
       allPoolPromises.push(tokenPromises);
