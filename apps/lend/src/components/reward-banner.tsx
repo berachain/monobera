@@ -64,7 +64,7 @@ export const Banner = () => {
 
       <div className="flex w-full flex-col gap-4">
         <div className="w-full text-center font-bold md:text-lg md:leading-10 lg:w-fit lg:text-left">
-          What can I do with my BGT rewards? (not working)
+          What can I do with my BGT rewards?
           <div className="text-xs font-normal leading-normal text-muted-foreground md:text-sm">
             Now that you&apos;ve got some BGT rewards, you can start using them!
           </div>

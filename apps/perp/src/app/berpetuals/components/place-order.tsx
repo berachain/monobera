@@ -14,6 +14,7 @@ import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { parseUnits as ethersParseUnits } from "ethers";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -40,6 +41,8 @@ export function PlaceOrder({
 }) {
   const formattedPrice = Number(formatUnits(BigInt(price ?? 0n), 10));
   const { refetch } = usePollOpenPositions();
+
+  const safeAmount = form.amount === "" ? "0" : form.amount;
 
   const { isLoading, write, ModalPortal } = useOctTxn({
     actionType:
@@ -71,12 +74,12 @@ export function PlaceOrder({
   const storageContract = process.env
     .NEXT_PUBLIC_STORAGE_CONTRACT_ADDRESS as Address;
   const posSize = useMemo(() => {
-    const positionSize = (form.amount ?? 0) * (form.leverage ?? 1);
+    const positionSize = Number(safeAmount) * (form.leverage ?? 1);
     return Number.isNaN(positionSize) || positionSize === undefined
       ? 0
       : positionSize;
   }, [form.amount, form.leverage]);
-  const parsedPositionSize = parseUnits(`${form.amount ?? 0}`, 18);
+  const parsedPositionSize = ethersParseUnits(safeAmount, 18);
 
   const slippageTolerance = useSlippage();
 
@@ -100,6 +103,7 @@ export function PlaceOrder({
     parseUnits(`${slippageTolerance ?? 0}`, 10),
   ];
 
+  console.log("payload", payload);
   const honey = {
     symbol: "HONEY",
     address: honeyAddress,
@@ -212,7 +216,8 @@ export function PlaceOrder({
             disabled={
               isLoading ||
               error !== undefined ||
-              form.amount === 0 ||
+              form.amount === "" ||
+              safeAmount === "0" ||
               form.amount === undefined
             }
             onClick={() =>

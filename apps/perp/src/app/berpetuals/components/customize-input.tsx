@@ -11,8 +11,8 @@ export function CustomizeInput({
   isExceeding = false,
   onSubtitleClick,
 }: {
-  value?: number | undefined;
-  onChange?: (value: number | undefined) => void;
+  value?: string;
+  onChange?: (value: string) => void;
   endAdornment?: any;
   disabled?: boolean;
   isExceeding?: boolean;
@@ -42,7 +42,7 @@ export function CustomizeInput({
         min={0}
         endAdornment={endAdornment}
         value={value}
-        onChange={(e) => onChange?.(Number(e.target.value))}
+        onChange={(e) => onChange?.(e.target.value)}
       />
     </div>
   );
