@@ -1,7 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Documentation } from "@bera/shared-ui";
+import { Documentation, Footer } from "@bera/shared-ui";
 
 import { getMetaTitle } from "~/utils/metadata";
 import CreateAPool from "./components/CreateAPool";
@@ -55,14 +55,17 @@ export default async function Homepage() {
     );
 
     return (
-      <div className="container max-w-[1200px]">
-        <Hero />
-        <Data tvl={data?.tvl?.result} volume={data?.volume?.result} />
-        <div className="-mx-full overflow-hidden">
-          <CreateAPool />
+      <>
+        <div className="container max-w-[1200px]">
+          <Hero />
+          <Data tvl={data?.tvl?.result} volume={data?.volume?.result} />
+          <div className="-mx-full overflow-hidden">
+            <CreateAPool />
+          </div>
+          <Documentation className="my-24" />
         </div>
-        <Documentation className="my-24" />
-      </div>
+        <Footer />
+      </>
     );
   } catch (e) {
     console.log(e);
