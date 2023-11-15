@@ -76,7 +76,10 @@ export const footerNavigation = {
 
 export function Footer() {
   return (
-    <footer className="bg-background" aria-labelledby="footer-heading">
+    <footer
+      className="border-t border-border bg-background"
+      aria-labelledby="footer-heading"
+    >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
@@ -147,12 +150,32 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 flex justify-between border-t border-border pt-8 sm:mt-20 lg:mt-24">
+        <div className="mt-16 flex items-center justify-between border-t border-border pt-8 sm:mt-20 lg:mt-24">
           <p className="text-xs leading-5 text-secondary-foreground">
             &copy; {new Date().getFullYear()} Berachain | All rights reserved
           </p>
           <p className="text-xs">Made W/❤️ at the 🐻Beraden</p>
         </div>
+      </div>
+    </footer>
+  );
+}
+
+export function FooterSM() {
+  return (
+    <footer
+      className="border-t border-border bg-background"
+      aria-labelledby="footer-heading"
+    >
+      <h2 id="footer-heading" className="sr-only">
+        Footer
+      </h2>
+
+      <div className="flex items-center justify-between p-4 sm:p-8">
+        <p className="text-xs leading-5 text-secondary-foreground">
+          &copy; {new Date().getFullYear()} Berachain | All rights reserved
+        </p>
+        <p className="text-xs">Made W/❤️ at the 🐻Beraden</p>
       </div>
     </footer>
   );
