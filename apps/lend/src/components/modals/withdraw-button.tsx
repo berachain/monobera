@@ -13,10 +13,12 @@ import {
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { maxUint256 } from "~/utils/constants";
@@ -105,11 +107,16 @@ const WithdrawModalContent = ({
     ),
   });
 
-  const maxWithdrawalAllowance = formatUnits(
-    userAccountData.availableBorrowsBase /
-      parseUnits(reserveData?.formattedPriceInMarketReferenceCurrency, 1),
-    8,
-  );
+  const maxWithdrawalAllowance = BigNumber(
+    formatUnits(
+      (userAccountData.totalCollateralBase as bigint) -
+        (userAccountData.totalDebtBase * 10000n) /
+          userAccountData.currentLiquidationThreshold,
+      8,
+    ),
+  )
+    .div(reserveData?.formattedPriceInMarketReferenceCurrency)
+    .toFixed(token.decimals ?? 18);
 
   const balance =
     userAccountData.totalDebtBase === 0n ||
@@ -117,6 +124,7 @@ const WithdrawModalContent = ({
       ? userBalance
       : maxWithdrawalAllowance;
 
+  console.log(userAccountData);
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Withdraw</div>
@@ -148,7 +156,7 @@ const WithdrawModalContent = ({
           }
         />
         <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          Supply balance: {Number(balance).toFixed(2)}
+          Available to withdraw: {Number(balance).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() =>
@@ -190,8 +198,24 @@ const WithdrawModalContent = ({
         </div>
       </div>
 
+      {userAccountData.totalDebtBase !== 0n &&
+        newHealthFactor.toNumber() < 1.02 && (
+          <Alert variant="destructive">
+            <AlertTitle className="mb-1">
+              {" "}
+              <Icons.info className="inline-block h-4 w-4" /> Liquidation Risk
+            </AlertTitle>
+            <AlertDescription>
+              Withdrawing this amount will reduce your health factor and
+              increase risk of liquidation.
+            </AlertDescription>
+          </Alert>
+        )}
+
       <Button
-        disabled={!amount || Number(amount) <= 0 || amount > userBalance}
+        disabled={
+          !amount || Number(amount) <= 0 || Number(amount) > Number(balance)
+        }
         onClick={() => {
           write({
             address: lendPoolImplementationAddress,
@@ -199,7 +223,7 @@ const WithdrawModalContent = ({
             functionName: "withdraw",
             params: [
               token.address,
-              userBalance === amount ?? ""
+              userAccountData.totalDebtBase === 0n && balance === amount
                 ? maxUint256
                 : parseUnits((amount ?? "0") as `${number}`, token.decimals),
               account,

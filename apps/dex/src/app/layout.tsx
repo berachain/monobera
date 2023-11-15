@@ -2,12 +2,9 @@
 
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
-import dynamic from "next/dynamic";
 import { IBM_Plex_Sans } from "next/font/google";
-import Image from "next/image";
 import Script from "next/script";
-import { cloudinaryUrl } from "@bera/config";
-import { Footer, Header, TailwindIndicator } from "@bera/shared-ui";
+import { Header, TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -20,14 +17,6 @@ const fontSans = IBM_Plex_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
 });
-
-const Gradient = dynamic(
-  () => import("@bera/shared-ui").then((mod) => mod.Gradient),
-  {
-    ssr: false,
-    loading: () => <></>,
-  },
-);
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
@@ -56,23 +45,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             </div>
             <div className="z-10 flex-1">
               <Header navItems={navItems} />
-              <main className="min-h-screen w-full py-20">
-                {props.children}
-              </main>
-              <Footer />
+              <main className="w-full pt-20">{props.children}</main>
             </div>
-
-            <Gradient
-              lightUrl={`${cloudinaryUrl}/shared/xrvkmr8yhvvyckxznty2`}
-              darkUrl={`${cloudinaryUrl}/shared/klszfo1j2sz9yk7lin87`}
-            />
-            <Image
-              className="fixed bottom-0 left-1/2 right-0 h-[300px] -translate-x-1/2 object-cover"
-              src={`${cloudinaryUrl}/shared/qfyewc7lo2ujtktbimd8`}
-              alt="bera banner"
-              width={2000}
-              height={300}
-            />
           </div>
           <TailwindIndicator />
           <Analytics />
