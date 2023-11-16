@@ -185,6 +185,9 @@ export const PoolSearch = () => {
                   columns={columns}
                   title={`All Pools (${data.length})`}
                   className="min-w-[1000px]"
+                  onRowClick={(
+                    row, //@ts-ignore
+                  ) => window.open(`/pool/${row.original.pool}`, "_self")}
                 />
               </div>
             ) : (
@@ -242,6 +245,9 @@ export const PoolSearch = () => {
                 }
                 columns={my_columns}
                 title={`My Pools (${userPools.length})`}
+                onRowClick={(row) =>
+                  window.open(`/pool/${row.original.pool}`, "_self")
+                }
               />
             </div>
           ) : (
