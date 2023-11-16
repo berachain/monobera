@@ -4,7 +4,7 @@ import { Icons } from "@bera/ui/icons";
 
 export const Banner = () => {
   return (
-    <div className="mt-16">
+    <div className="pt-16">
       <Image
         src={`${cloudinaryUrl}/bears/v3mi8ggx68n0mapznaju`}
         width={320}

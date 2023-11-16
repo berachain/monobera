@@ -43,7 +43,7 @@ export default function PoolPageHeader() {
   // }, [isLoading, block]);
 
   return (
-    <div className="mx-auto mt-4 flex w-full max-w-[1200px] flex-col items-center justify-center gap-8">
+    <div className="mx-auto mt-4 flex w-full flex-col items-center justify-center gap-8">
       <div className="flex w-full flex-col-reverse items-center justify-center text-center md:flex-row md:justify-between">
         <div>
           <h1 className="leading-12 mb-2 text-center text-5xl font-bold md:text-left">
