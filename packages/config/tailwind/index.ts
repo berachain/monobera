@@ -67,8 +67,8 @@ export default {
         "dark-shadow": "0px 12px 250px 0px #A571239E",
         "light-shadow": "0px 12px 250px 0px #FFE1C91A",
       },
-      padding:{
-        "start": "106px",
+      padding: {
+        start: "106px",
       },
       colors: {
         hover: "hsl(var(--hover) / <alpha-value>)",
