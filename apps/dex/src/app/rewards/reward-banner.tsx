@@ -12,7 +12,7 @@ export const Banner = () => {
         className=" mx-auto block w-[320px] lg:bottom-0 lg:hidden"
         alt="happy bear"
       />
-      <div className="relative flex flex-col items-start gap-4 rounded-18 border border-border bg-honey-gradient px-6 py-6 dark:bg-gradient-to-l dark:from-stone-950  dark:to-stone-950 lg:px-8 lg:py-12">
+      <div className="rounded-18 relative flex flex-col items-start gap-4 border border-border bg-honey-gradient px-6 py-6 dark:bg-gradient-to-l dark:from-stone-950  dark:to-stone-950 lg:px-8 lg:py-12">
         <Image
           src={`${cloudinaryUrl}/bears/v3mi8ggx68n0mapznaju`}
           width={420}

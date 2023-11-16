@@ -4,7 +4,7 @@ import { Icons } from "@bera/ui/icons";
 
 export const RewardBanner = () => {
   return (
-    <div className="relative flex items-center rounded-18 border border-amber-500 bg-honey-gradient p-4 px-8 py-6 md:h-40 md:p-4">
+    <div className="rounded-18 relative flex items-center border border-amber-500 bg-honey-gradient p-4 px-8 py-6 md:h-40 md:p-4">
       <Image
         src="/beras/redeem-bear.png"
         width={188}
@@ -24,7 +24,7 @@ export const RewardBanner = () => {
 
         <div className="flex h-full items-center gap-12">
           <div className="flex h-full w-full flex-col gap-2 md:flex-row md:gap-6">
-            <div className="bg-whites flex h-full w-full justify-between rounded-18 border border-amber-500 bg-gradient-to-br from-white via-white to-amber-50 px-5 py-4 md:w-[138px] md:flex-col">
+            <div className="bg-whites rounded-18 flex h-full w-full justify-between border border-amber-500 bg-gradient-to-br from-white via-white to-amber-50 px-5 py-4 md:w-[138px] md:flex-col">
               <div>
                 <div className="text-xs leading-3 text-muted-foreground">
                   BGT Rewards
@@ -39,7 +39,7 @@ export const RewardBanner = () => {
               </Button>
             </div>
 
-            <div className="bg-whites flex h-full w-full justify-between rounded-18 border border-amber-500 bg-gradient-to-br from-white via-white to-amber-50 px-5 py-4 md:w-[138px] md:flex-col">
+            <div className="bg-whites rounded-18 flex h-full w-full justify-between border border-amber-500 bg-gradient-to-br from-white via-white to-amber-50 px-5 py-4 md:w-[138px] md:flex-col">
               <div>
                 <div className="text-xs leading-3 text-muted-foreground">
                   BGT Balance
