@@ -84,7 +84,7 @@ export default function Validators({
   ];
 
   return (
-    <div className="container mb-10 max-w-[1078px]">
+    <div>
       <div className="p-8 text-center">
         <Image
           className="mx-auto"
