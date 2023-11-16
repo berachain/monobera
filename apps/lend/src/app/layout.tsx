@@ -4,7 +4,7 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
-import { Footer, Header, TailwindIndicator } from "@bera/shared-ui";
+import { Header, TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -44,8 +44,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           </div>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
             <Header navItems={navItems} />
-            <main className="w-full">{props.children}</main>
-            <Footer />
+            <main className="w-full pt-start">{props.children}</main>
           </div>
           <TailwindIndicator />
           <Analytics />

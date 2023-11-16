@@ -10,9 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function MarketsPage() {
-  return (
-    <div className="container my-28">
-      <MarketsPageContent />
-    </div>
-  );
+  return <MarketsPageContent />;
 }
