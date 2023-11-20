@@ -27,11 +27,11 @@ export const Explore = () => {
       <div className="text-centertext-lg mb-2 font-semibold leading-7 text-background">
         Utilize our Defi primitives
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10 xl:grid-cols-3 xl:gap-20">
+      <div className="mx-auto grid w-fit grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
         {favList.map((fav, index) => (
           <div
             key={index}
-            className="mx-auto flex w-[360px] flex-col items-center gap-4 rounded-xl bg-background p-6"
+            className="mx-auto flex w-[360px] flex-col items-center gap-4 rounded-md bg-background p-6"
           >
             {fav.icon}
             <div>
@@ -96,15 +96,6 @@ const favList = [
     goto: perpsUrl,
   },
   {
-    icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
-    name: blockExplorerName,
-    subtitle: "Supply Assets & Borrow HONEY",
-    description:
-      "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
-    goto: blockExplorerUrl,
-    learnMore: `${docsUrl}/developers/berascan-block-explorer`,
-  },
-  {
     icon: <Icons.bgtFav className="h-[52px] w-[52px]" />,
     name: bgtName,
     subtitle: "The Hub for BGT Governance",
@@ -112,5 +103,14 @@ const favList = [
       "Engage directly in the governance of BGT, leverage BGT Station for innovative bribe mechanisms, enhancing participation.",
     goto: bgtUrl,
     learnMore: `${docsUrl}/learn/protocol/bgt-station`,
+  },
+  {
+    icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
+    name: blockExplorerName,
+    subtitle: "Explore the blockchain",
+    description:
+      "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
+    goto: blockExplorerUrl,
+    learnMore: `${docsUrl}/developers/berascan-block-explorer`,
   },
 ];
