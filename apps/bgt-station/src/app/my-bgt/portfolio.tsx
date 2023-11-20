@@ -69,7 +69,7 @@ export default function Portfolio() {
   });
 
   return (
-    <div className="container mb-[80px] max-w-[1078px]">
+    <div>
       {ModalPortal}
       {(Number.isNaN(totalValidators) || totalValidators === 0) &&
       (!totalBribes || totalBribes === 0) &&

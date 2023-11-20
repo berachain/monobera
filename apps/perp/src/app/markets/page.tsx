@@ -80,7 +80,7 @@ export default async function Home() {
     oi,
   };
   return (
-    <div className="container mt-8 flex flex-col gap-16">
+    <div className="mt-8 flex flex-col gap-16">
       <Markets markets={markets} />
       <GeneralInfo tradingSummary={tradingSummary} />
       <AvailableMarket markets={markets} />
