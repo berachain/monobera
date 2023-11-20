@@ -33,13 +33,14 @@ export function MainNav({
                     {item.title}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                    <ul className="flex w-[404px] flex-col gap-1 p-4">
                       {item.children.map((component: any) => (
                         <ListItem
                           key={component.title}
                           title={component.title}
                           href={component.href}
                           type={component.type}
+                          icon={component.icon}
                         >
                           {component.blurb}
                         </ListItem>
@@ -67,29 +68,34 @@ export function MainNav({
   );
 }
 
-const ListItem = forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, type, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          target={type === "external" ? "_blank" : "_self"}
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-muted hover:text-primary focus:bg-muted focus:text-primary",
-            className,
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
-});
+interface IconProps extends React.ComponentPropsWithoutRef<"a"> {
+  icon?: any;
+}
+const ListItem = forwardRef<React.ElementRef<"a">, IconProps>(
+  ({ className, icon, title, type, children, ...props }, ref) => {
+    return (
+      <li>
+        <NavigationMenuLink asChild>
+          <a
+            target={type === "external" ? "_blank" : "_self"}
+            ref={ref}
+            className={cn(
+              "flex select-none items-center gap-2 rounded-md p-1 leading-none no-underline outline-none transition-colors hover:bg-muted hover:text-primary focus:bg-muted focus:text-primary",
+              className,
+            )}
+            {...props}
+          >
+            {icon}
+            <div>
+              <div className="text-sm font-medium leading-5">{title}</div>
+              <p className="line-clamp-2 text-sm leading-6 text-foreground">
+                {children}
+              </p>
+            </div>
+          </a>
+        </NavigationMenuLink>
+      </li>
+    );
+  },
+);
 ListItem.displayName = "ListItem";
