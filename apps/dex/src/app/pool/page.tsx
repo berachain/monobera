@@ -45,7 +45,7 @@ export default function Pool() {
   // }));
 
   return (
-    <div className="flex w-full flex-col gap-5 p-4 md:p-8 xl:p-16">
+    <div className="flex w-full flex-col gap-5">
       <PoolPageHeader />
     </div>
   );

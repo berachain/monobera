@@ -16,8 +16,9 @@ export const Rewards = () => {
   const userPools = usePoolsPendingBgtRewards();
   const { isReady } = useBeraJs();
   return (
-    <div className="container max-w-[980px]">
-      <Banner /> <br />
+    <div>
+      <Banner />
+      <br />
       <div className="flex flex-col gap-3">
         {/* {!isReady ? (
           <ConnectWalletBear message="You need to connect your wallet to see rewards on deposited pools" />

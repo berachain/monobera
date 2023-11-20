@@ -26,9 +26,9 @@ export default function Hero() {
           </span>{" "}
           Honey
         </h1>
-        <Link href={"/markets"}>
+        <Link href={"/dashboard"}>
           <Button
-            className="mt-8 w-full rounded-18 text-lg font-semibold leading-7 sm:w-auto"
+            className="rounded-18 mt-8 w-full text-lg font-semibold leading-7 sm:w-auto"
             size={"lg"}
           >
             <Icons.helpingHand className="mr-1 h-6 w-6" /> Borrow Funds

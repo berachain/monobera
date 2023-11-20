@@ -139,7 +139,7 @@ export function HoneyMachine() {
     collateralList,
   } = usePsm();
 
-  const { write } = useTxn({
+  const { write, ModalPortal: mp } = useTxn({
     message: needsApproval
       ? `Approve ${selectedFrom?.symbol}`
       : isMint
@@ -320,7 +320,7 @@ export function HoneyMachine() {
     <>
       <div className="relative bg-[#468DCB] pb-12" id="mint-and-burn">
         {ModalPortal}
-
+        {needsApproval && mp}
         {rive ? (
           <div
             className={cn(
