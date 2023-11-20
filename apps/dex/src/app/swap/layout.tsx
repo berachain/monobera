@@ -23,7 +23,9 @@ const BearBG = dynamic(
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <section className="relative">
-      <div className="relative z-10 min-h-[calc(100vh-200px)]">{children}</div>
+      <div className="container relative z-10 min-h-minimun max-w-1280 pb-16">
+        {children}
+      </div>
       <Gradient
         lightUrl={`${cloudinaryUrl}/shared/xrvkmr8yhvvyckxznty2`}
         darkUrl={`${cloudinaryUrl}/shared/klszfo1j2sz9yk7lin87`}

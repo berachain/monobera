@@ -16,7 +16,7 @@ export function generateMetadata(): Metadata {
 export default async function Vault() {
   const apr = await getFeesApr();
   return (
-    <div className="mx-auto mt-8 flex w-full max-w-[1200px] flex-col gap-8 p-8">
+    <div className="mt-8 flex w-full flex-col gap-8">
       <Claim feeApr={apr.apr} />
       <BhoneyStats />
       <div>
