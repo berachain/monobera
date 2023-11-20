@@ -1,7 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { lendName } from "@bera/config";
-import { Documentation } from "@bera/shared-ui";
+import { Documentation, Footer } from "@bera/shared-ui";
 
 import Data from "~/components/data";
 import Hero from "~/components/hero";
@@ -16,17 +16,14 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <div className="container mt-14 bg-lend bg-contain bg-no-repeat">
+      <div className="container mt-14 max-w-1280 bg-lend bg-contain bg-no-repeat pb-16">
         <Hero />
-      </div>
-      <div className="container">
         <Data />
-      </div>
-      <Markets />
-      <div className="container max-w-[1200px]">
+        <Markets />
         <HowItWorks />
         <Documentation className="my-24" />
       </div>
+      <Footer />
     </>
   );
 }

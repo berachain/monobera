@@ -114,12 +114,6 @@
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: "IBM Plex Sans";
   }
-
-  .container {
-    @apply max-sm:px-4;
-    margin-bottom: 40px;
-    margin-top: 40px;
-  }
 }
 
 /* Chrome, Safari, Edge, Opera */

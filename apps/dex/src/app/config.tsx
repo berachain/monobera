@@ -33,6 +33,7 @@ import {
   rewardsAddress,
   stakingAddress,
 } from "@bera/config";
+import { Icons } from "@bera/ui/icons";
 import { type Chain } from "wagmi";
 
 export const navItems = [
@@ -56,52 +57,57 @@ export const navItems = [
         href: bgtUrl,
         type: "external",
         title: bgtName,
-        blurb: "The hub for BGT governance and bribes on Berachain",
+        blurb: "The hub for BGT governance",
+        icon: <Icons.bgtFav className="h-8 w-8" />,
       },
       // {
       //   href: dexUrl,
       //   type: "external",
       //   title: dexName,
-      //   blurb: "Swap tokens and provide liquidity to earn BGT rewards",
+      //   blurb: "Swap tokens and provide liquidity",
+      //   icon: <Icons.bexFav className="h-8 w-8" />,
       // },
       {
         href: honeyUrl,
         type: "external",
         title: honeyName,
-        blurb: "Mint or redeem Honey, the stablecoin of Berachain",
+        blurb: "Mint or redeem Berachain’s native stable coin",
+        icon: <Icons.honeyFav className="h-8 w-8" />,
       },
       {
         href: lendUrl,
         type: "external",
         title: lendName,
-        blurb:
-          "Earn interest and rewards by supplying your assets and borrowing Honey",
+        blurb: "Supply assets and borrow honey",
+        icon: <Icons.bendFav className="h-8 w-8" />,
       },
       {
         href: perpsUrl,
         type: "external",
         title: perpsName,
-        blurb:
-          "Trade all your favourite pairs with deep liquidity and market diversity",
+        blurb: "Trade your favourite pairs",
+        icon: <Icons.berpsFav className="h-8 w-8" />,
       },
       {
         href: blockExplorerUrl,
         type: "external",
         title: blockExplorerName,
-        blurb:
-          "View all transactions and blockchain information on the Berachain network",
+        blurb: "Explore the blockchain",
+        icon: <Icons.berascanFav className="h-8 w-8" />,
       },
       {
         href: homepageUrl,
         type: "external",
         title: homepageName,
         blurb: "Explore Berachain and learn more about our vision",
+        icon: <Icons.foundationFav className="h-8 w-8" />,
       },
       {
         href: faucetUrl,
         type: "external",
         title: faucetName,
         blurb: "Fund your testnet wallet with BERA tokens",
+        icon: <Icons.faucetFav className="h-8 w-8" />,
       },
     ],
   },

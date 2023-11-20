@@ -389,10 +389,10 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     pool: pool,
   });
 
-  console.log("pool", pool);
+  // console.log("pool", pool);
   const { isConnected } = useBeraJs();
   return (
-    <div className="container p-[52px]">
+    <div>
       <div className="mb-4 flex w-full flex-wrap items-center justify-between">
         <div className="w-full items-center sm:items-start">
           <p className="mb-3 w-full text-center text-3xl font-semibold sm:text-left">

@@ -27,9 +27,17 @@ export default {
     },
     container: {
       center: true,
-      padding: "2rem",
+      padding: {
+        DEFAULT: "1rem",
+        md: "2rem",
+        lg: "4rem",
+      },
       screens: {
-        "2xl": "1400px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
       },
     },
     extend: {
@@ -37,11 +45,14 @@ export default {
         honey: "1000px",
       },
       minHeight: {
-        minimun: "calc(100vh - 587px)",
+        minimun: "calc(100vh - 191px)",
         "screen-250": "calc(100vh - 214px)",
       },
       width: {
         "screen-w-400": "calc(100vw - 400px)",
+      },
+      maxWidth: {
+        "1280": "1280px",
       },
       backgroundImage: {
         glow: "url('/glow.png')",
@@ -55,6 +66,9 @@ export default {
       boxShadow: {
         "dark-shadow": "0px 12px 250px 0px #A571239E",
         "light-shadow": "0px 12px 250px 0px #FFE1C91A",
+      },
+      padding: {
+        start: "106px",
       },
       colors: {
         hover: "hsl(var(--hover) / <alpha-value>)",
@@ -110,15 +124,16 @@ export default {
         ring: "hsl(var(--ring) / <alpha-value>)",
         positive: "hsl(var(--positive) / <alpha-value>)",
       },
-
       borderRadius: {
-        sm: "calc(var(--radius) - 4px)",
-        md: `calc(var(--radius) - 2px)`,
-        lg: `var(--radius)`,
-        xl: "12px",
-        "18": "18px",
-        "4xl": "2rem",
-        "5xl": "2.5rem",
+        xs: "0.25rem",
+        sm: "0.5rem",
+        md: `0.75rem`,
+        lg: `1rem`,
+        xl: `1.25rem`,
+        "2xl": `1.5rem`,
+        "3xl": `2rem`,
+        "4xl": `2rem`,
+        "5xl": `2.5rem`,
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],

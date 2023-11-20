@@ -119,7 +119,7 @@ export default function StatusBanner() {
   ];
 
   return (
-    <div className="border-boder flex w-full flex-col justify-between gap-8 rounded-18 border bg-muted p-4 md:flex-row ">
+    <div className="border-boder rounded-18 flex w-full flex-col justify-between gap-8 border bg-muted p-4 md:flex-row ">
       <div className="flex flex-col gap-8 md:flex-row ">
         {status.map((item, index) => (
           <div key={index + item.title} className="flex w-fit gap-4">
