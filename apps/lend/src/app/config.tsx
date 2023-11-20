@@ -46,7 +46,7 @@ export const navItems = [
   },
   {
     href: "#",
-    title: "More",
+    title: "Explore",
     children: [
       {
         href: bgtUrl,
