@@ -79,7 +79,7 @@ export default function GovernanceByStatus({
 
   const router = useRouter();
   return (
-    <div className="container mb-20 w-full max-w-[926px]">
+    <div>
       <div className="text-forergound text-center text-3xl font-bold leading-9 sm:text-5xl sm:leading-[48px]">
         🗳️Vote on proposals or <br />
         create your own

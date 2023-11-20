@@ -142,7 +142,7 @@ export default function ProposalDetails({
   }, [proposal]);
 
   return (
-    <div className="container pb-16">
+    <div className="pb-16">
       {ModalPortal}
       <div className="mx-auto h-fit w-full max-w-[830px]">
         <div className="flex h-11 w-full justify-between hover:cursor-pointer">

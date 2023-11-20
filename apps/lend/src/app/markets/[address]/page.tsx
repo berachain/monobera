@@ -31,20 +31,18 @@ export default async function Page({
     getGraphData(params.address, "all", "variable"),
   ]);
   return (
-    <div className="container my-28">
-      <IndividualMarketAnalytics
-        {...{
-          address: params.address,
-          supplyAPR1D,
-          supplyAPR7D,
-          supplyAPR30D,
-          supplyAPRALL,
-          borrowVariableAPR1D,
-          borrowVariableAPR7D,
-          borrowVariableAPR30D,
-          borrowVariableAPRALL,
-        }}
-      />
-    </div>
+    <IndividualMarketAnalytics
+      {...{
+        address: params.address,
+        supplyAPR1D,
+        supplyAPR7D,
+        supplyAPR30D,
+        supplyAPRALL,
+        borrowVariableAPR1D,
+        borrowVariableAPR7D,
+        borrowVariableAPR30D,
+        borrowVariableAPRALL,
+      }}
+    />
   );
 }

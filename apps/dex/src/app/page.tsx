@@ -56,7 +56,7 @@ export default async function Homepage() {
 
     return (
       <>
-        <div className="container max-w-[1200px]">
+        <div className="container max-w-1280 pb-16">
           <Hero />
           <Data tvl={data?.tvl?.result} volume={data?.volume?.result} />
           <div className="-mx-full overflow-hidden">
