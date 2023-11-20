@@ -88,6 +88,7 @@ import {
 } from "lucide-react";
 
 import { WalletTxnIcons } from "./wallet-txn-icons";
+import { FavIcons } from "./fav-icons";
 
 export type Icon = LucideIcon;
 
@@ -587,4 +588,5 @@ export const Icons = {
     </svg>
   ),
   ...WalletTxnIcons,
+  ...FavIcons,
 };
