@@ -14,8 +14,6 @@ import {
   erc20BgtAddress,
   erc20DexAddress,
   erc20ModuleAddress,
-  faucetName,
-  faucetUrl,
   gasTokenDecimals,
   gasTokenName,
   gasTokenSymbol,

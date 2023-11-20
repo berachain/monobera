@@ -87,8 +87,8 @@ import {
   type LucideProps,
 } from "lucide-react";
 
-import { WalletTxnIcons } from "./wallet-txn-icons";
 import { FavIcons } from "./fav-icons";
+import { WalletTxnIcons } from "./wallet-txn-icons";
 
 export type Icon = LucideIcon;
 
