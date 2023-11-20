@@ -1,12 +1,18 @@
 "use client";
 
 import {
+  bgtName,
   bgtUrl,
+  blockExplorerName,
   blockExplorerUrl,
+  dexName,
   dexUrl,
   docsUrl,
+  honeyName,
   honeyUrl,
+  lendName,
   lendUrl,
+  perpsName,
   perpsUrl,
 } from "@bera/config";
 import { Button } from "@bera/ui/button";
@@ -57,7 +63,7 @@ export const Explore = () => {
 const favList = [
   {
     icon: <Icons.bexFav className="h-[52px] w-[52px]" />,
-    name: "BEX",
+    name: dexName,
     subtitle: "Berachain’s Dex",
     description:
       "Swap a variety of tokens effortlessly on our decentralized platform. Provide liquidity to pools and earn BGT rewards.",
@@ -66,7 +72,7 @@ const favList = [
   },
   {
     icon: <Icons.honeyFav className="h-[52px] w-[52px]" />,
-    name: "HONEY",
+    name: honeyName,
     subtitle: "Berachain’s Native Stable Coin",
     description:
       "A stable coin that's integral to the Berachain ecosystem. Utilize HONEY for seamless trading, ensuring value consistency.",
@@ -75,7 +81,7 @@ const favList = [
   },
   {
     icon: <Icons.bendFav className="h-[52px] w-[52px]" />,
-    name: "BEND",
+    name: lendName,
     subtitle: "Supply Assets & Borrow HONEY",
     description:
       "Supply assets and unlock the potential to borrow HONEY. Earn BGT rewards while you supply and borrow.",
@@ -83,7 +89,7 @@ const favList = [
   },
   {
     icon: <Icons.berpsFav className="h-[52px] w-[52px]" />,
-    name: "BERPS",
+    name: perpsName,
     subtitle: "Trade Your Favourite Pairs",
     description:
       "Experience the thrill of high leverage trading, tailored for both novices and seasoned traders. With an impressive 100x leverage.",
@@ -91,7 +97,7 @@ const favList = [
   },
   {
     icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
-    name: "BEX",
+    name: blockExplorerName,
     subtitle: "Supply Assets & Borrow HONEY",
     description:
       "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
@@ -100,7 +106,7 @@ const favList = [
   },
   {
     icon: <Icons.bgtFav className="h-[52px] w-[52px]" />,
-    name: "BGT Station",
+    name: bgtName,
     subtitle: "The Hub for BGT Governance",
     description:
       "Engage directly in the governance of BGT, leverage BGT Station for innovative bribe mechanisms, enhancing participation.",
