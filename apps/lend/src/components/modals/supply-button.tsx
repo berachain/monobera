@@ -15,11 +15,14 @@ import {
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import { ApproveButton, TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { formatEther, formatUnits, parseUnits } from "viem";
+
+import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function SupplyBtn({
   token,
@@ -92,7 +95,7 @@ const SupplyModalContent = ({
   const { data: reserveData } = useSelectedReserveData(token.address);
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
-  // console.log(userAccountData);
+
   const currentHealthFactor =
     Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
       ? "∞"
@@ -181,11 +184,25 @@ const SupplyModalContent = ({
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
           <div className="flex items-center gap-1 font-semibold">
-            {currentHealthFactor}{" "}
+            <span
+              className={cn(
+                `text-${getLTVColor(
+                  currentHealthFactor === "∞"
+                    ? 10
+                    : Number(currentHealthFactor),
+                )}`,
+              )}
+            >
+              {currentHealthFactor}{" "}
+            </span>
             <Icons.moveRight className="inline-block h-6 w-6" />
-            {Number(newHealthFactor.toFixed(2)) < 0
-              ? "∞"
-              : newHealthFactor.toFixed(2)}
+            <span
+              className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
+            >
+              {Number(newHealthFactor.toFixed(2)) < 0
+                ? "∞"
+                : newHealthFactor.toFixed(2)}
+            </span>
           </div>
         </div>
       </div>

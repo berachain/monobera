@@ -15,6 +15,7 @@ import {
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import { ApproveButton, TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -22,6 +23,7 @@ import { Input } from "@bera/ui/input";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { maxUint256 } from "~/utils/constants";
+import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function RepayBtn({
   token,
@@ -178,12 +180,26 @@ const RepayModalContent = ({
 
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="flex items-center gap-1 gap-2 font-semibold">
-            {currentHealthFactor}{" "}
+          <div className="flex items-center gap-2 font-semibold">
+            <span
+              className={cn(
+                `text-${getLTVColor(
+                  currentHealthFactor === "∞"
+                    ? 10
+                    : Number(currentHealthFactor),
+                )}`,
+              )}
+            >
+              {currentHealthFactor}{" "}
+            </span>
             <Icons.moveRight className="inline-block h-6 w-6" />{" "}
-            {Number(newHealthFactor.toFixed(2)) < 0
-              ? "∞"
-              : newHealthFactor.toFixed(2)}
+            <span
+              className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
+            >
+              {Number(newHealthFactor.toFixed(2)) < 0
+                ? "∞"
+                : newHealthFactor.toFixed(2)}
+            </span>
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">

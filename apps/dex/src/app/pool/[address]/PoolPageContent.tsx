@@ -591,7 +591,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
           )}
           <Card className="p-4">
             <div className="mb-8 flex h-8 w-full items-center justify-between text-lg font-semibold">
-              Pool Liquidity Breakdown
+              Pool Liquidity
               <div className="text-2xl">
                 ${formatter.format(pool?.totalValue ?? 0)}
               </div>
