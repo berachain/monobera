@@ -123,6 +123,8 @@ export function OneClickBanner() {
     const status = getStatus();
     if (status === BannerEnum.NOT_GENERATED) {
       setOctGenerateModalOpen(true);
+    } else if (status === BannerEnum.OFF) {
+      setOneClickModalOpen(true);
     } else if (
       status === BannerEnum.NOT_DELEGATED ||
       status == BannerEnum.LOW_BALANCE ||

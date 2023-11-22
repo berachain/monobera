@@ -33,6 +33,7 @@ import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
+import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import ApproveTokenButton from "~/components/approve-token-button";
 import { type MappedTokens } from "../types";
 import { useAddLiquidity } from "./useAddLiquidity";
@@ -58,6 +59,7 @@ export default function AddLiquidityContent({
     singleSidedError,
     expectedShares,
     singleSidedExpectedShares,
+    beraValue,
     isMultipleInputDisabled,
     isSingleInputDisabled,
     totalValue,
@@ -66,6 +68,7 @@ export default function AddLiquidityContent({
     selectedSingleTokenAmount,
     previewOpen,
     singleTokenPreviewOpen,
+    singleSidedBeraValue,
     setSingleSharesExceeding,
     tokenInputs,
     needsApproval,
@@ -80,6 +83,11 @@ export default function AddLiquidityContent({
     setSelectedSingleTokenAmount,
     setPreviewOpen,
     setSingleTokenSetPreviewOpen,
+    beraToken,
+    wBeraToken,
+    isNativeBera,
+    setIsNativeBera,
+    poolTokens,
   } = useAddLiquidity(pool, prices);
 
   const { networkConfig } = useBeraConfig();
@@ -88,6 +96,7 @@ export default function AddLiquidityContent({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
       reset();
+      router.push(`/pool/${pool?.pool}`);
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
@@ -152,8 +161,30 @@ export default function AddLiquidityContent({
                   return (
                     <TokenInput
                       key={token.address}
-                      selected={token as Token}
-                      selectable={false}
+                      selected={
+                        isBeratoken(token)
+                          ? isNativeBera
+                            ? beraToken
+                            : wBeraToken
+                          : (token as Token)
+                      }
+                      selectable={
+                        isBeratoken(token) && beraToken && wBeraToken
+                          ? true
+                          : false
+                      }
+                      customTokenList={
+                        isBeratoken(token)
+                          ? [beraToken as Token, wBeraToken as Token]
+                          : undefined
+                      }
+                      onTokenSelection={(token: Token | undefined) => {
+                        if (isBera(token)) {
+                          setIsNativeBera(true);
+                        } else {
+                          setIsNativeBera(false);
+                        }
+                      }}
                       amount={tokenInputs[i]?.amount ?? ""}
                       setAmount={(amount: string) =>
                         updateTokenAmount(i, amount)
@@ -246,6 +277,7 @@ export default function AddLiquidityContent({
                           abi: DEX_PRECOMPILE_ABI,
                           functionName: "addLiquidity",
                           params: payload,
+                          value: parseUnits(beraValue ?? "0", 18),
                         });
                       }}
                     >
@@ -270,7 +302,7 @@ export default function AddLiquidityContent({
                     setSelectedSingleTokenAmount(amount)
                   }
                   onExceeding={setSingleSharesExceeding}
-                  customTokenList={pool?.tokens ?? []}
+                  customTokenList={poolTokens}
                 />
               </TokenList>
 
@@ -354,7 +386,8 @@ export default function AddLiquidityContent({
                   /> */}
                 </InfoBoxList>
                 {(allowance?.allowance ?? 0n) <
-                parsedSelectedSingleTokenAmount ? (
+                  parsedSelectedSingleTokenAmount &&
+                !isBera(selectedSingleToken) ? (
                   <ApproveTokenButton
                     token={selectedSingleToken}
                     spender={
@@ -373,6 +406,7 @@ export default function AddLiquidityContent({
                           abi: DEX_PRECOMPILE_ABI,
                           functionName: "addLiquidity",
                           params: singleSidedPayload,
+                          value: parseUnits(singleSidedBeraValue ?? "0", 18),
                         });
                       }}
                     >

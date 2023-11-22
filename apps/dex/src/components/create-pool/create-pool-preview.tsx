@@ -66,6 +66,10 @@ export function CreatePoolPreview({
     swapFee: parseUnits(`${parsedFee}`, 18),
   };
 
+  const rawBeraEntry = tokenWeights.find((tokenWeight) => {
+    return tokenWeight.token?.address === process.env.NEXT_PUBLIC_BERA_ADDRESS;
+  });
+
   const payload = [
     poolName,
     tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
@@ -79,6 +83,7 @@ export function CreatePoolPreview({
     options,
   ];
 
+  console.log(rawBeraEntry);
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
       {ModalPortal}
@@ -154,6 +159,10 @@ export function CreatePoolPreview({
                   abi: DEX_PRECOMPILE_ABI,
                   functionName: "createPool",
                   params: payload,
+                  value:
+                    rawBeraEntry === undefined
+                      ? 0n
+                      : parseUnits(rawBeraEntry.initialLiquidity, 18),
                 });
               }}
             >

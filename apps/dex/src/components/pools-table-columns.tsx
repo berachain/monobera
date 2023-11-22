@@ -237,7 +237,8 @@ export const columns: ColumnDef<Pool>[] = [
         onClick={(e) => e.stopPropagation()}
       >
         <Button variant={"outline"} className="flex gap-1">
-          Add Liquidity
+          <Icons.add />
+          Add
         </Button>
       </Link>
     ),

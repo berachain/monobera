@@ -17,6 +17,10 @@ const config = {
       rootDir: ["apps/dex"],
     },
   },
+  globals: {
+    TradingView: true,
+    Datafeeds: true,
+  },
 };
 
 module.exports = config;

@@ -37,8 +37,8 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
     quantity: undefined,
     price: undefined,
     leverage: 2,
-    tp: 0,
-    sl: 0,
+    tp: "",
+    sl: "",
   };
   const [form, setForm] = useState<OrderType>(initialState);
 
@@ -55,7 +55,6 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
     formatUnits(BigInt(params.max_pos_honey ?? 0), 18),
   );
 
-  console.log("honey balance", honeyBalance);
   const safeAmount = form.amount === "" ? "0" : form.amount;
   useMemo(() => {
     const honeyAmountPrice = Number(safeAmount) * honeyPrice;
@@ -111,10 +110,6 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
     18,
   );
 
-  console.log({
-    bfLong: formattedBfLong,
-    bfShort: formattedBfShort,
-  });
   const liqPrice = useCalculateLiqPrice({
     bfLong: formattedBfLong,
     bfShort: formattedBfShort,
@@ -148,10 +143,37 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
       rawHoneyBalance < (parseUnits(safeAmount, 18) ?? 0n)
     ) {
       setError("Insufficient balance.");
+    } else if (
+      form.orderType === "long"
+        ? form.tp && Number(form.tp) < formattedPrice
+        : form.tp && Number(form.tp) > formattedPrice
+    ) {
+      if (Number(form.tp).toFixed(0) === "0") {
+        setError(undefined);
+        return;
+      }
+      setError("Invalid Take Profit Price.");
+    } else if (
+      form.orderType === "long"
+        ? form.sl && Number(form.sl) > formattedPrice
+        : form.sl && Number(form.sl) < formattedPrice
+    ) {
+      if (Number(form.sl).toFixed(0) === "0") {
+        setError(undefined);
+        return;
+      }
+      setError("Invalid Stop Loss Price.");
     } else {
       setError(undefined);
     }
-  }, [form.amount, form.leverage]);
+  }, [
+    form.amount,
+    form.leverage,
+    form.tp,
+    form.sl,
+    form.orderType,
+    formattedPrice,
+  ]);
 
   return (
     <div className="w-full flex-shrink-0 pb-10 lg:min-h-screen-250 lg:w-[400px] lg:border-r lg:border-border">

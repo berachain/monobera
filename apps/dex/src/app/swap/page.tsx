@@ -17,7 +17,10 @@ export default function Swap({
     outputCurrency: string;
   };
 }) {
-  const { inputCurrency, outputCurrency } = searchParams;
+  const {
+    inputCurrency = process.env.NEXT_PUBLIC_HONEY_ADDRESS as string,
+    outputCurrency,
+  } = searchParams;
   if (!isAddress(inputCurrency) && !isAddress(outputCurrency)) {
     return (
       <div className="container">

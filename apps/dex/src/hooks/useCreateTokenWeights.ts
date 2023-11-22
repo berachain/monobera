@@ -317,10 +317,10 @@ const useCreateTokenWeights = () => {
     setTokenWeights(updatedTokenWeights);
   };
 
-  const onTokenSelection = (token: Token, index: number) => {
+  const onTokenSelection = (token: Token | undefined, index: number) => {
     const updatedTokenWeights: ITokenWeight[] = [...tokenWeights];
     const selectedTokenIndex = updatedTokenWeights.findIndex(
-      (selectedToken) => selectedToken?.token?.address === token.address,
+      (selectedToken) => selectedToken?.token?.address === token?.address,
     );
 
     if (selectedTokenIndex === -1) {

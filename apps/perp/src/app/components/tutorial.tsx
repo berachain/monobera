@@ -1,7 +1,4 @@
 import React from "react";
-import Link from "next/link";
-import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 
 import { LandingCard1 } from "./landing-card-1";
 import { LandingCard2 } from "./landing-card-2";
@@ -35,7 +32,7 @@ export default function Tutorial() {
           <br className="block md:hidden" />
           traders to transact.
         </div>
-        <div className="mb-6 flex items-center justify-center xl:justify-start">
+        {/* <div className="mb-6 flex items-center justify-center xl:justify-start">
           <Link href="/berpetuals">
             <Button className="mr-4">
               <Icons.play className="mr-1 h-6 w-6" />
@@ -45,7 +42,7 @@ export default function Tutorial() {
           <Link href="/markets">
             <Button variant="secondary">Trading Guide</Button>
           </Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );
