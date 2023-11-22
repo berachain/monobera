@@ -58,7 +58,7 @@ export default function RT({
                 key={"tableGroup rows" + row.id}
                 className={`flex w-full justify-between border border-l-0 border-r-0 border-t-0 bg-background px-8 py-4 hover:cursor-pointer hover:bg-muted border-b-border${
                   index === rows.length - 1
-                    ? "rounded-18 rounded border-0 "
+                    ? "rounded rounded-md border-0 "
                     : ""
                 }`}
                 onClick={() => rowOnClick && rowOnClick(row)}

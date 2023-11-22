@@ -7,6 +7,7 @@ import {
   usePollUserAccountData,
   usePollUserReservesData,
 } from "@bera/berajs";
+import { Badge } from "@bera/ui/badge";
 // import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -93,9 +94,9 @@ export default function StatusBanner() {
             : formatter.format(
                 Number(formatUnits(data?.healthFactor || "0", 18)),
               )}
-          {/* <Badge variant={"info"} className="rounded-md py-0 font-medium">
+          <Badge variant={"info"} className="rounded-md py-0 font-medium">
             Risk Details
-          </Badge> */}
+          </Badge>
         </div>
       ),
     },
@@ -119,7 +120,7 @@ export default function StatusBanner() {
   ];
 
   return (
-    <div className="border-boder rounded-18 flex w-full flex-col justify-between gap-8 border bg-muted p-4 md:flex-row ">
+    <div className="border-boder flex w-full flex-col justify-between gap-8 rounded-md border bg-muted p-4 md:flex-row ">
       <div className="flex flex-col gap-8 md:flex-row ">
         {status.map((item, index) => (
           <div key={index + item.title} className="flex w-fit gap-4">
