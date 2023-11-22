@@ -7,13 +7,14 @@ import {
   usePollUserAccountData,
   usePollUserReservesData,
 } from "@bera/berajs";
-import { Badge } from "@bera/ui/badge";
-// import { Badge } from "@bera/ui/badge";
+import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
 
+import { getLTVColor } from "~/utils/get-ltv-color";
 import { getEligibleDepositAmount } from "~/utils/lendTokenHelper";
+import { RiskDetails } from "./risk-details";
 
 export default function StatusBanner() {
   const { useUserAccountData } = usePollUserAccountData();
@@ -88,22 +89,27 @@ export default function StatusBanner() {
       icon: <Icons.warning className="h-8 w-8" />,
       title: "Account Health",
       amount: (
-        <div className="flex items-center gap-2">
+        <div
+          className={cn(
+            "flex items-center gap-2",
+            `text-${getLTVColor(
+              Number(formatUnits(data?.healthFactor || "0", 18)),
+            )}`,
+          )}
+        >
           {Number(formatUnits(data?.healthFactor || "0", 18)) > 1000000000000
             ? "∞"
             : formatter.format(
                 Number(formatUnits(data?.healthFactor || "0", 18)),
               )}
-          <Badge variant={"info"} className="rounded-md py-0 font-medium">
-            Risk Details
-          </Badge>
+          <RiskDetails />
         </div>
       ),
     },
   ];
   const info = [
     {
-      title: "You can Borrow Upto",
+      title: "You can borrow up to",
       amount: formatUsd(
         formatUnits(
           data?.availableBorrowsBase || "0",
@@ -112,7 +118,7 @@ export default function StatusBanner() {
       ),
     },
     {
-      title: "Funds Eligible for deposit",
+      title: "Funds eligible for deposit",
       amount: formatUsd(
         getEligibleDepositAmount(reservesDictionary ?? {}, balanceToken ?? []),
       ),

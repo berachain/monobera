@@ -13,7 +13,7 @@ export default function Card({
   return (
     <div
       className={cn(
-        "block rounded-md border border-border bg-background p-6",
+        "block rounded-lg border border-border bg-background p-6",
         className,
       )}
       {...props}
