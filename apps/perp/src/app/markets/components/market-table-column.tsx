@@ -58,7 +58,7 @@ const Change = ({
       >
         {price !== undefined ? (
           <span>
-            {!Number.isNaN(difference) ? Number(difference).toFixed(4) : 0}%
+            {!Number.isNaN(difference) ? Number(difference).toFixed(2) : 0}%
           </span>
         ) : (
           <Skeleton className="h-[16px] w-[50px]" />

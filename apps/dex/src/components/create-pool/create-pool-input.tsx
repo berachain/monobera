@@ -1,6 +1,6 @@
 import React from "react";
 import { type Token } from "@bera/berajs";
-import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
+import { bgtTokenAddress } from "@bera/config";
 import { SelectToken } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -13,7 +13,7 @@ type Props = {
   index: number;
   selectedTokens: Token[];
   selectable?: boolean;
-  onTokenSelection: (token: Token, index: number) => void;
+  onTokenSelection: (token: Token | undefined, index: number) => void;
   onRemove: (index: number) => void;
   onTokenWeightChange: (index: number, weight: number) => void;
   onLock: (index: number) => void;
@@ -31,7 +31,7 @@ export default function CreatePoolInput({
   onUnlock,
   selectable = true,
 }: Props) {
-  const handleTokenSelection = (token: Token) => {
+  const handleTokenSelection = (token: Token | undefined) => {
     onTokenSelection(token, index);
   };
   return (
@@ -41,7 +41,7 @@ export default function CreatePoolInput({
         onTokenSelection={handleTokenSelection}
         selectedTokens={selectedTokens}
         selectable={selectable}
-        filter={[nativeTokenAddress, bgtTokenAddress]}
+        filter={[bgtTokenAddress]}
       />
       <Input
         type="number"

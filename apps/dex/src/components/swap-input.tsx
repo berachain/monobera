@@ -12,7 +12,7 @@ type Props = {
   amount: number;
   hideBalance?: boolean;
   selectable?: boolean;
-  onTokenSelection: (token: Token) => void;
+  onTokenSelection: (token: Token | undefined) => void;
   setAmount: (amount: number) => void;
 };
 

@@ -176,10 +176,10 @@ const useCreateTokenBribes = (validatorAddress: string) => {
     setTokenBribes(updatedTokenBribes);
   };
 
-  const onTokenSelection = (token: Token, index: number) => {
+  const onTokenSelection = (token: Token | undefined, index: number) => {
     const updatedTokenBribes: ITokenBribe[] = [...tokenBribes];
     const selectedTokenIndex = updatedTokenBribes.findIndex(
-      (selectedToken) => selectedToken?.token?.address === token.address,
+      (selectedToken) => selectedToken?.token?.address === token?.address,
     );
 
     if (selectedTokenIndex === -1) {

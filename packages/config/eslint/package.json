@@ -10,7 +10,8 @@
     "eslint-config-next": "^13.5.4",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-turbo": "^1.9.3",
-    "eslint-plugin-react": "7.32.2"
+    "eslint-plugin-react": "7.32.2",
+    "next-auth": "^4.24.5"
   },
   "devDependencies": {
     "eslint": "^8.39.0",

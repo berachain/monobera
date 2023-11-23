@@ -100,7 +100,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
                   : "text-destructive-foreground"
               }
             >
-              {Number(difference).toFixed(4)}%
+              {Number(difference).toFixed(2)}%
             </div>
           ) : (
             <Skeleton className="h-[16px] w-[40px]" />
@@ -162,7 +162,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
                           : "text-destructive-foreground"
                       }
                     >
-                      {Number(difference).toFixed(4)}%
+                      {Number(difference).toFixed(2)}%
                     </div>
                   ) : (
                     <Skeleton className="h-[16px] w-[40px]" />
