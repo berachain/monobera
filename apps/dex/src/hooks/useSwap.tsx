@@ -343,9 +343,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const minAmountOut = useMemo(() => {
     if (!payload[1]) return "0";
-    console.log(payload);
     const amountOut = payload[1][payload[1].length - 1]?.amountOut;
-    console.log(amountOut);
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
   return {

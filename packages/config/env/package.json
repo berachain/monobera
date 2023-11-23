@@ -6,5 +6,7 @@
   "files": [
     "index.ts"
   ],
-  "devDependencies": {}
+  "dependencies": {
+    "next-auth": "^4.24.5"
+  }
 }
