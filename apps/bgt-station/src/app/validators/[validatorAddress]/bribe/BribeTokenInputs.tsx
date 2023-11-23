@@ -14,7 +14,7 @@ type Props = {
   proposals: number;
   selectedTokens: Token[];
   selectable?: boolean;
-  onTokenSelection: (token: Token, index: number) => void;
+  onTokenSelection: (token: Token | undefined, index: number) => void;
   onRemove: (index: number) => void;
   onAddToken: () => void;
   onTokenBribeChange: (index: number, bribe: number, proposals: number) => void;

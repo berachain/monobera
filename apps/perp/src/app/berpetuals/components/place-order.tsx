@@ -83,6 +83,7 @@ export function PlaceOrder({
 
   const slippageTolerance = useSlippage();
 
+  console.log(form);
   const payload = [
     {
       trader: account,
@@ -96,14 +97,13 @@ export function PlaceOrder({
           : parseUnits(`${form.limitPrice ?? 0}`, 10), // for limit orders
       buy: form.orderType === "long" ? true : false,
       leverage: form.leverage,
-      tp: form.tp === 0 ? 0n : parseUnits(`${form.tp ?? 0}`, 10),
-      sl: form.sl === 0 ? 0n : parseUnits(`${form.sl ?? 0}`, 10),
+      tp: form.tp === "" ? 0n : ethersParseUnits(form?.tp, 10),
+      sl: form.sl === "" ? 0n : ethersParseUnits(form?.sl, 10),
     },
     form.optionType === "market" ? 0 : 2,
     parseUnits(`${slippageTolerance ?? 0}`, 10),
   ];
 
-  console.log("payload", payload);
   const honey = {
     symbol: "HONEY",
     address: honeyAddress,
@@ -161,14 +161,14 @@ export function PlaceOrder({
       <div className="flex w-full justify-between">
         <div>EST. TAKE PROFIT</div>
         <div className="flex flex-row items-center gap-1 text-foreground">
-          {form.tp === 0 ? (
+          {form.tp === "" ? (
             "None"
           ) : price === undefined ? (
             <Skeleton className="h-4 w-14" />
           ) : (
             `${formatUsd(form.tp ?? 0)}`
           )}{" "}
-          {form.tp !== 0 && (
+          {form.tp !== "" && (
             <Icons.honey className="inline h-3 w-3 text-muted-foreground" />
           )}
         </div>
@@ -176,14 +176,14 @@ export function PlaceOrder({
       <div className="flex w-full justify-between">
         <div>EST. STOP LOSS</div>
         <div className="flex flex-row items-center gap-1 text-foreground">
-          {form.sl === 0 ? (
+          {form.sl === "" ? (
             "None"
           ) : price === undefined ? (
             <Skeleton className="h-4 w-14" />
           ) : (
             `${formatUsd(form.sl ?? 0)}`
           )}{" "}
-          {form.sl !== 0 && (
+          {form.sl !== "" && (
             <Icons.honey className="inline h-3 w-3 text-muted-foreground" />
           )}
         </div>

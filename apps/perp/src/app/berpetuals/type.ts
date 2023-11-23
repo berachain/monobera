@@ -7,6 +7,6 @@ export interface OrderType {
   quantity: number | undefined;
   price?: number | undefined;
   leverage: number | undefined;
-  tp: number | undefined;
-  sl: number | undefined;
+  tp: string;
+  sl: string;
 }

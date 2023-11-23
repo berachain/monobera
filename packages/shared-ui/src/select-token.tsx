@@ -9,9 +9,9 @@ import { TokenDialog, TokenIcon } from "./";
 
 type Props = {
   token: Token | undefined;
-  onTokenSelection?: (token: Token) => void;
+  onTokenSelection?: (token: Token | undefined) => void;
   selectedTokens?: (Token | undefined)[];
-  customTokenList?: Token[];
+  customTokenList?: (Token | undefined)[];
   selectable: boolean;
   weight?: number;
   filter?: Address[];
@@ -61,7 +61,7 @@ export function SelectToken({
       {selectable && (
         <TokenDialog
           open={open}
-          onSelectedToken={(token: Token) =>
+          onSelectedToken={(token: Token | undefined) =>
             onTokenSelection && onTokenSelection(token)
           }
           setOpen={setOpen}
