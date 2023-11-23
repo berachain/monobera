@@ -235,7 +235,13 @@ export default function AddLiquidityContent({
                       return (
                         <PreviewToken
                           key={tokenInput.address}
-                          token={tokenInput}
+                          token={
+                            isBeratoken(tokenInput)
+                              ? isNativeBera
+                                ? beraToken
+                                : wBeraToken
+                              : tokenInput
+                          }
                           weight={tokenInput?.normalizedWeight}
                           value={tokenInput?.amount}
                           price={prices[tokenInput?.address ?? ""]}

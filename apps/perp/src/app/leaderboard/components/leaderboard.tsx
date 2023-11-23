@@ -33,7 +33,9 @@ export default function LeaderBoard() {
     MONTHLY = "30D",
     QUARTERLY = "90D",
   }
-  const [timeFrame, setTimeFrame] = React.useState<TimeFrame>(TimeFrame.HOURLY);
+  const [timeFrame, setTimeFrame] = React.useState<TimeFrame>(
+    TimeFrame.QUARTERLY,
+  );
 
   const { useLeaderBoardData } = useLeaderboard({
     sort: leaderboardType,
@@ -126,8 +128,8 @@ export default function LeaderBoard() {
         >
           <SelectTrigger className={"w-[80px] justify-start gap-1 rounded-xl"}>
             <SelectValue
-              placeholder={TimeFrame.HOURLY}
-              defaultValue={TimeFrame.HOURLY}
+              placeholder={TimeFrame.QUARTERLY}
+              defaultValue={TimeFrame.QUARTERLY}
             />
           </SelectTrigger>
           <SelectContent>
