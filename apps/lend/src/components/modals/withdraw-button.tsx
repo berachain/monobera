@@ -13,6 +13,7 @@ import {
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -22,6 +23,7 @@ import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { maxUint256 } from "~/utils/constants";
+import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function WithdrawBtn({
   token,
@@ -189,11 +191,25 @@ const WithdrawModalContent = ({
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
           <div className="flex items-center gap-1 font-semibold">
-            {currentHealthFactor}{" "}
+            <span
+              className={cn(
+                `text-${getLTVColor(
+                  currentHealthFactor === "∞"
+                    ? 10
+                    : Number(currentHealthFactor),
+                )}`,
+              )}
+            >
+              {currentHealthFactor}{" "}
+            </span>
             <Icons.moveRight className="inline-block h-6 w-6" />{" "}
-            {userAccountData.totalDebtBase === 0n
-              ? "∞"
-              : newHealthFactor.toFixed(2)}
+            <span
+              className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
+            >
+              {Number(newHealthFactor.toFixed(2)) < 0
+                ? "∞"
+                : newHealthFactor.toFixed(2)}
+            </span>
           </div>
         </div>
       </div>

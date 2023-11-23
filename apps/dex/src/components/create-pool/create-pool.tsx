@@ -14,7 +14,7 @@ type Props = {
   totalWeight: number;
   error: Error | undefined;
   onContinue: () => void;
-  onTokenSelection: (token: Token, index: number) => void;
+  onTokenSelection: (token: Token | undefined, index: number) => void;
   onAddToken: () => void;
   onRemove: (index: number) => void;
   onTokenWeightChange: (index: number, weight: number) => void;

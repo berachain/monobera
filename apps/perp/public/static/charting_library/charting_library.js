@@ -68,7 +68,7 @@
     );
   let o = !1;
   function s() {
-    return "CL v26.003 (internal id e793d706 @ 2023-10-05T20:27:44.510Z)";
+    return "CL v26.004 (internal id ef42da82 @ 2023-11-17T06:25:31.999Z)";
   }
   const r = class {
     constructor(t) {
@@ -104,7 +104,7 @@
           (o ||
             ((o = !0),
             console.log(
-              "Using CL v26.003 (internal id e793d706 @ 2023-10-05T20:27:44.510Z)",
+              "Using CL v26.004 (internal id ef42da82 @ 2023-11-17T06:25:31.999Z)",
             ))),
         this._create();
     }
@@ -435,25 +435,25 @@
         );
       (r.innerHTML = i), (this._iFrame = r.querySelector(`#${this._id}`));
       const a = this._iFrame;
-      n &&
-        (a.contentWindow
-          ? (a.contentWindow.document.open(),
-            a.contentWindow.document.write(o),
-            a.contentWindow.document.close())
-          : console.warn(
-              "Unable to locate contentWindow for the created iframe. Please try disabling the `iframe_loading_compatibility_mode` featureset.",
-            )),
+      (this._innerWindowLoaded = new Promise((t) => {
+        const e = () => {
+          a.removeEventListener("load", e, !1), t();
+        };
+        a.addEventListener("load", e, !1);
+      })),
+        n &&
+          (a.contentWindow
+            ? (a.contentWindow.document.open(),
+              a.contentWindow.document.write(o),
+              a.contentWindow.document.close())
+            : console.warn(
+                "Unable to locate contentWindow for the created iframe. Please try disabling the `iframe_loading_compatibility_mode` featureset.",
+              )),
         (this._options.autosize || this._options.fullscreen) &&
           ((a.style.width = "100%"),
           this._options.fullscreen || (a.style.height = "100%")),
         window.addEventListener("resize", this._onWindowResize),
         this._onWindowResize(),
-        (this._innerWindowLoaded = new Promise((t) => {
-          const e = () => {
-            a.removeEventListener("load", e, !1), t();
-          };
-          a.addEventListener("load", e, !1);
-        })),
         this._innerWindowLoaded.then(() => {
           try {
             this._innerWindow().widgetReady(() => {
@@ -546,7 +546,7 @@
         var n;
         const o = new URL(`${t || ""}`, location.href).href,
           s = JSON.parse(
-            '["bundles/runtime.0809a655c13b333b6a76.js","bundles/__LANG__.5008.e5d7d914577969582fa4.js","bundles/3515.2f722d33cebe31a154b1.css","bundles/9401.4792ed983286dcafa79b.js","bundles/library.847f247511d3f9997d72.js"]',
+            '["bundles/runtime.22cd9f6fe908159906ae.js","bundles/__LANG__.3732.1bd67796122e14c1a819.js","bundles/3515.2f722d33cebe31a154b1.css","bundles/9401.1a253c12a3b43291d008.js","bundles/library.922da4a8fbaf39eb2333.js"]',
           ),
           r = encodeURIComponent(e),
           a =
