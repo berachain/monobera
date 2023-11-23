@@ -236,9 +236,8 @@ export const columns: ColumnDef<Pool>[] = [
         href={`/pool/${row.original.pool}/add-liquidity`}
         onClick={(e) => e.stopPropagation()}
       >
-        <Button variant={"outline"} className="flex gap-1">
-          <Icons.add />
-          Add
+        <Button variant={"outline"} className="flex items-center gap-1">
+          <Icons.add className="h-5 w-5" /> Add
         </Button>
       </Link>
     ),

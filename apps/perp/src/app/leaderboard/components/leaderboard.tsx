@@ -42,7 +42,7 @@ export default function LeaderBoard() {
 
   const leaderBoardData = useLeaderBoardData();
   return (
-    <div className="mx-auto mt-8 flex w-full max-w-[1200px] flex-col gap-4 px-8 ">
+    <div className="mx-auto mt-8 flex w-full flex-col gap-4">
       <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:justify-start">
         <Image
           src={`${cloudinaryUrl}/BERPS/leaderboardAvatar_iuq8wu`}

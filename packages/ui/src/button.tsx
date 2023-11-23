@@ -12,7 +12,7 @@ const buttonVariants = cva(
         secondary:
           "bg-muted border border-border text-muted-foreground hover:text-foreground",
         outline:
-          "bg-transparent text-muted-foreground border border-border hover:bg-secondary",
+          "bg-transparent text-secondary-foreground border border-secondary-foreground hover:bg-secondary",
         ghost: "text-muted-foreground hover:bg-muted",
         link: "underline-offset-4 hover:underline text-primary",
         destructive:
@@ -24,10 +24,10 @@ const buttonVariants = cva(
         info: "bg-info-foreground text-accent-foreground hover:opacity-90",
       },
       size: {
-        lg: "px-4 py-3 rounded-xl text-lg font-semibold",
-        md: "px-4 py-2 rounded-xl text-lg font-semibold leading-7",
-        sm: "px-2 py-1 rounded-lg text-sm font-semibold leading-tight",
-        xs: "px-1 py-1/2 rounded-lg text-xs font-medium leading-tight",
+        lg: "px-4 py-3 rounded-md text-lg font-semibold",
+        md: "px-4 py-2 rounded-md text-lg font-semibold leading-7",
+        sm: "px-2 py-1 rounded-sm text-sm font-semibold leading-tight",
+        xs: "px-1 py-1/2 rounded-sm text-xs font-medium leading-tight",
       },
     },
     defaultVariants: {

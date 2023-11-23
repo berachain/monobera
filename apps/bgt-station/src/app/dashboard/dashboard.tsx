@@ -56,7 +56,7 @@ export default function DashBoard({
     },
   ];
   return (
-    <div className="container flex w-full max-w-[1200px] flex-col gap-24 pb-24">
+    <div className="flex w-full flex-col gap-24">
       <div className="flex flex-col items-center gap-1">
         <div className="text-center text-5xl font-bold leading-[48px] text-foreground">
           🐝{" "}

@@ -1,5 +1,6 @@
 import { type Metadata } from "next";
 import { indexerUrl } from "@bera/config";
+import { Footer } from "@bera/shared-ui";
 
 import { getMetaTitle } from "~/utils/metadata";
 import DashBoard from "./dashboard/dashboard";
@@ -21,5 +22,12 @@ async function getAvgValidatorUptime() {
 
 export default async function Page() {
   const avgValidatorUptime = await getAvgValidatorUptime();
-  return <DashBoard avgValidatorUptime={avgValidatorUptime?.uptime ?? 0} />;
+  return (
+    <>
+      <div className="container max-w-1280 pb-16">
+        <DashBoard avgValidatorUptime={avgValidatorUptime?.uptime ?? 0} />
+      </div>
+      <Footer />
+    </>
+  );
 }
