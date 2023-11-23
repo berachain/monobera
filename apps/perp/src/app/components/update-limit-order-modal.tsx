@@ -7,6 +7,7 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
+import { parseUnits as ethersParseUnits } from "ethers";
 import { mutate } from "swr";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
@@ -29,11 +30,11 @@ export function UpdateLimitOrderModal({
   className?: string;
 }) {
   const [open, setOpen] = useState<boolean>(false);
-  const [tp, setTp] = useState<number>(
-    Number(formatUnits(BigInt(openOrder?.tp) ?? 0, 10)),
+  const [tp, setTp] = useState<string>(
+    formatUnits(BigInt(openOrder?.tp) ?? 0, 10),
   );
-  const [sl, setSl] = useState<number>(
-    Number(formatUnits(BigInt(openOrder?.sl) ?? 0, 10)),
+  const [sl, setSl] = useState<string>(
+    formatUnits(BigInt(openOrder?.sl) ?? 0, 10),
   );
   const { QUERY_KEY } = usePollOpenPositions();
 
@@ -83,8 +84,8 @@ export function UpdateLimitOrderModal({
     openOrder?.market.pair_index,
     openOrder?.index,
     parseUnits(`${executionPrice}`, 10),
-    parseUnits(`${tp}`, 10),
-    parseUnits(`${sl}`, 10),
+    ethersParseUnits(tp, 10),
+    ethersParseUnits(sl, 10),
   ];
 
   return (

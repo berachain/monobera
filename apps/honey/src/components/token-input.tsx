@@ -27,7 +27,7 @@ type Props = {
   customTokenList?: Token[];
   showExceeding?: boolean;
   hideMax?: boolean;
-  onTokenSelection?: (token: Token) => void;
+  onTokenSelection?: (token: Token | undefined) => void;
   setAmount?: (amount: string | undefined) => void;
   onExceeding?: (isExceeding: boolean) => void;
 };

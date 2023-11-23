@@ -29,10 +29,10 @@ import { TokenIcon } from "./token-icon";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSelectedToken: (token: Token) => void;
+  onSelectedToken: (token: Token | undefined) => void;
   selectedTokens: (Token | undefined)[];
   focusedToken: Token | undefined;
-  customTokens?: Token[];
+  customTokens?: (Token | undefined)[];
   filter?: string[];
 };
 
@@ -58,7 +58,9 @@ export function TokenDialog({
     removeToken,
   } = useTokens();
   const { read, tokenInformation } = useTokenInformation();
-  const [filteredTokens, setFilteredTokens] = useState<Token[] | undefined>(
+  const [filteredTokens, setFilteredTokens] = useState<
+    (Token | undefined)[] | undefined
+  >(
     customTokens
       ? customTokens
       : tokenList?.filter((token) => !filter.includes(token.address)),
@@ -105,8 +107,8 @@ export function TokenDialog({
     }
   }, [tokenInformation]);
 
-  const onTokenSelect = (token: Token) => {
-    if (!token.default && !customTokens) {
+  const onTokenSelect = (token: Token | undefined) => {
+    if (!token?.default && !customTokens) {
       setAddTokenOpen(true);
       return;
     }
@@ -116,7 +118,7 @@ export function TokenDialog({
     setError(undefined);
   };
 
-  const onAddToken = (token: Token) => {
+  const onAddToken = (token: Token | undefined) => {
     addNewToken(token);
     onSelectedToken(token);
     setSearch("");
@@ -132,7 +134,8 @@ export function TokenDialog({
     setOpen(false);
   };
 
-  function isTokenSelected(token: Token): boolean {
+  function isTokenSelected(token: Token | undefined): boolean {
+    if (!token) return false;
     return selectedTokens.some(
       (selectedToken) => selectedToken?.address === token.address,
     );
@@ -193,7 +196,7 @@ export function TokenDialog({
               {!error ? (
                 filteredTokens?.length ? (
                   filteredTokens
-                    ?.filter((token) => !filter.includes(token.address))
+                    ?.filter((token) => !filter.includes(token?.address ?? ""))
                     .map((token, i) => (
                       <TokenDialogRow
                         key={i}
@@ -279,14 +282,14 @@ export function TokenDialog({
 }
 
 type RowProps = {
-  token: Token;
+  token: Token | undefined;
   isTokenSelected: boolean;
   focusedToken: Token | undefined;
   addTokenOpen: boolean;
   setAddTokenOpen: (addTokenOpen: boolean) => void;
-  onAddToken: (token: Token) => void;
+  onAddToken: (token: Token | undefined) => void;
   onAddTokenCancel: () => void;
-  onTokenSelect: (token: Token) => void;
+  onTokenSelect: (token: Token | undefined) => void;
   pendingAddition: boolean;
 };
 const TokenDialogRow = ({
@@ -317,7 +320,7 @@ const TokenDialogRow = ({
       >
         <div className="relative">
           <TokenIcon token={token} />
-          {focusedToken?.address === token.address && (
+          {focusedToken?.address === token?.address && (
             <div className="absolute bottom-0 right-0 mr-[-4px] mt-[10px] flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white">
               <Icons.check className="h-3 w-3 " />
             </div>
@@ -328,7 +331,7 @@ const TokenDialogRow = ({
           <span className="text-sm font-medium">{token?.symbol}</span>
         </div>
 
-        {focusedToken?.address === token.address && (
+        {focusedToken?.address === token?.address && (
           <div className="absolute ml-auto"></div>
         )}
         {!pendingAddition && isConnected && (
@@ -351,7 +354,7 @@ const TokenDialogRow = ({
               <TokenIcon token={token} />
               <h4 className="text-sm font-semibold">{token?.name}</h4>
               <Balancer className="text-xs font-normal text-muted-foreground">
-                {token.address}
+                {token?.address}
               </Balancer>
               <Badge variant="destructive" className="w-fit gap-1">
                 <Icons.tooltip className="h-4 w-4" />

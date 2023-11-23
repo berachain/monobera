@@ -25,6 +25,7 @@
     "@vercel/analytics": "^1.0.1",
     "date-fns": "^2.29.3",
     "next": "^14.0.1",
+    "next-auth": "^4.24.5",
     "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-datepicker": "^4.16.0",

@@ -19,7 +19,6 @@ export const usePollPrices = () => {
         },
       });
       const data = await res.json();
-      console.log({ data });
       Object.keys(data).forEach((key) => {
         mutate([...QUERY_KEY, getAddress(key)], data[key]);
       });

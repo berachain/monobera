@@ -5,8 +5,9 @@ import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
+import { parseUnits } from "ethers";
 import { mutate } from "swr";
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
@@ -28,11 +29,11 @@ export function UpdatePositionModal({
   className?: string;
 }) {
   const [open, setOpen] = useState<boolean>(false);
-  const [tp, setTp] = useState<number>(
-    Number(formatUnits(BigInt(openPosition?.tp) ?? 0n, 10)),
+  const [tp, setTp] = useState<string>(
+    formatUnits(BigInt(openPosition?.tp) ?? 0n, 10),
   );
-  const [sl, setSl] = useState<number>(
-    Number(formatUnits(BigInt(openPosition?.sl) ?? 0n, 10)),
+  const [sl, setSl] = useState<string>(
+    formatUnits(BigInt(openPosition?.sl) ?? 0n, 10),
   );
   const { QUERY_KEY } = usePollOpenPositions();
 
@@ -82,13 +83,13 @@ export function UpdatePositionModal({
   const updateTpParams = [
     openPosition?.market?.pair_index,
     openPosition?.index,
-    parseUnits(`${tp ?? 0}`, 10),
+    parseUnits(tp, 10),
   ];
 
   const updateSlParams = [
     openPosition?.market?.pair_index,
     openPosition?.index,
-    parseUnits(`${sl ?? 0}`, 10),
+    parseUnits(sl, 10),
   ];
 
   console.log(openPosition);

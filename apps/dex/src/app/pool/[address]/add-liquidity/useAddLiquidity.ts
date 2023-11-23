@@ -17,6 +17,7 @@ import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
+import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 
@@ -86,29 +87,6 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     });
   };
 
-  const payload = [
-    pool?.pool,
-    account,
-    tokenInputs.map((tokenInput) => tokenInput?.address),
-    tokenInputs.map((tokenInput) =>
-      parseUnits(
-        tokenInput.amount === "" ? "0" : tokenInput.amount,
-        tokenInput?.decimals ?? 18,
-      ),
-    ),
-  ];
-
-  const singleSidedPayload = [
-    pool?.pool,
-    account,
-    [selectedSingleToken?.address],
-    [
-      parseUnits(
-        selectedSingleTokenAmount === "" ? "0" : selectedSingleTokenAmount,
-        selectedSingleToken?.decimals ?? 18,
-      ),
-    ],
-  ];
   // const {useTotalSupply} = usePollTotalSupply(pool?.shareAddress)
 
   // const totalSupply = useTotalSupply()
@@ -274,7 +252,63 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     shares,
   ]);
 
+  const { beraToken, wBeraToken } = useTokens();
+
+  const [isNativeBera, setIsNativeBera] = useState(true);
+
+  const hasBeraTokens = pool?.tokens.some((token) => isBeratoken(token));
+
+  const poolTokens = hasBeraTokens
+    ? [...(pool?.tokens ?? []), beraToken]
+    : pool?.tokens;
+
+  const payloadTokens = tokenInputs.map((tokenInput) => {
+    if (isNativeBera && isBeratoken(tokenInput)) {
+      return beraToken?.address;
+    } else {
+      return tokenInput?.address;
+    }
+  });
+  const payload = [
+    pool?.pool,
+    account,
+    payloadTokens,
+    tokenInputs.map((tokenInput) =>
+      parseUnits(
+        tokenInput.amount === "" ? "0" : tokenInput.amount,
+        tokenInput?.decimals ?? 18,
+      ),
+    ),
+  ];
+
+  const singleSidedPayload = [
+    pool?.pool,
+    account,
+    [selectedSingleToken?.address],
+    [
+      parseUnits(
+        selectedSingleTokenAmount === "" ? "0" : selectedSingleTokenAmount,
+        selectedSingleToken?.decimals ?? 18,
+      ),
+    ],
+  ];
+
+  const beraValue = isNativeBera
+    ? tokenInputs.find((tokenInput) => isBeratoken(tokenInput))?.amount
+    : "0";
+
+  const singleSidedBeraValue = isBera(selectedSingleToken)
+    ? selectedSingleTokenAmount
+    : "0";
+
   return {
+    beraToken,
+    singleSidedBeraValue,
+    wBeraToken,
+    beraValue,
+    isNativeBera,
+    setIsNativeBera,
+    poolTokens,
     expectedShares,
     error,
     singleSidedError,

@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -12,7 +13,9 @@ interface IUseTokens {
   tokenDictionary: { [key: string]: Token } | undefined;
   featuredTokenList: Token[] | undefined;
   gaugeDictionary: { [key: string]: any } | undefined;
-  addNewToken: (token: Token) => void;
+  beraToken: Token | undefined;
+  wBeraToken: Token | undefined;
+  addNewToken: (token: Token | undefined) => void;
   removeToken: (token: Token) => void;
 }
 
@@ -71,7 +74,7 @@ const useTokens = (): IUseTokens => {
     },
   );
 
-  const addNewToken = (token: Token) => {
+  const addNewToken = (token: Token | undefined) => {
     // Indicate that this token is now accepted into the default list of tokens
     const acceptedToken = {
       ...token,
@@ -81,13 +84,16 @@ const useTokens = (): IUseTokens => {
     // Check if the token already exists in tokenList
     if (
       data?.list.some(
-        (t) => t.address.toLowerCase() === acceptedToken.address.toLowerCase(),
+        (t) =>
+          t.address.toLowerCase() === acceptedToken?.address?.toLowerCase(),
       )
     ) {
       return;
     }
 
-    const updatedData = [...localStorageTokenList, acceptedToken];
+    const updatedData = !token
+      ? [...localStorageTokenList]
+      : [...localStorageTokenList, acceptedToken as Token];
     setLocalStorageTokenList(updatedData);
     // Update config data and store it in localStorage
   };
@@ -101,12 +107,28 @@ const useTokens = (): IUseTokens => {
     setLocalStorageTokenList(updatedData);
   };
 
+  const beraToken: Token | undefined = useMemo(() => {
+    if (!data?.dictionary) return undefined;
+    return (data?.dictionary as { [key: string]: Token })[
+      process.env.NEXT_PUBLIC_BERA_ADDRESS as string
+    ];
+  }, [data?.dictionary]);
+
+  const wBeraToken: Token | undefined = useMemo(() => {
+    if (!data?.dictionary) return undefined;
+    return (data?.dictionary as { [key: string]: Token })[
+      process.env.NEXT_PUBLIC_WBERA_ADDRESS as string
+    ];
+  }, [data?.dictionary]);
+
   return {
     tokenList: data?.list ?? [],
     customTokenList: data?.customList ?? [],
     tokenDictionary: data?.dictionary ?? {},
     featuredTokenList: data?.featured ?? [],
     gaugeDictionary: data?.gaugeDictionary ?? {},
+    beraToken,
+    wBeraToken,
     addNewToken,
     removeToken,
   };

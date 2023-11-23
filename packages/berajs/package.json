@@ -20,6 +20,7 @@
     "crypto-js": "^4.1.1",
     "ethers": "^6.8.0",
     "lodash": "^4.17.21",
+    "next-auth": "^4.24.5",
     "react-device-detect": "^2.2.3",
     "sha3": "^2.1.4",
     "swr": "^2.1.5",

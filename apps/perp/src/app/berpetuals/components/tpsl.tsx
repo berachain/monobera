@@ -51,10 +51,10 @@ const InputSelect = ({
   onTypeChange,
   variant = "success",
 }: {
-  value: number;
+  value: string;
   bracket: [number, number, number, number, number];
   type: "none" | "percent" | "number";
-  onValueChange: (percentage: number) => void;
+  onValueChange: (percentage: string) => void;
   onTypeChange?: (type: "none" | "percent" | "number") => void;
   variant: "success" | "destructive";
 }) => {
@@ -64,9 +64,9 @@ const InputSelect = ({
         className="h-8 w-full rounded-lg bg-background text-xs lg:w-[102px]"
         placeholder="Amount"
         type={"number"}
-        value={value === 0 ? "Price" : type === "percent" ? "Price" : value}
-        onChange={(e) => {
-          onValueChange(Number(e.target.value));
+        value={value === "" ? "Price" : type === "percent" ? "Price" : value}
+        onChange={(e: { target: { value: string } }) => {
+          onValueChange(e.target.value);
           onTypeChange &&
             onTypeChange(e.target.value === "" ? "none" : "number");
         }}
@@ -76,12 +76,12 @@ const InputSelect = ({
           key={index}
           className={cn(
             "inline-flex h-8 w-[20%] cursor-pointer items-center justify-center rounded-lg px-2 text-xs font-medium lg:w-full",
-            amount === value
+            amount === Number(value)
               ? `bg-${variant} text-${variant}-foreground`
               : `bg-muted text-muted-foreground`,
           )}
           onClick={() => {
-            onValueChange(amount);
+            onValueChange(amount.toString());
             onTypeChange && onTypeChange(amount === 0 ? "none" : "percent");
           }}
         >
@@ -107,14 +107,14 @@ export function TPSL({
   onSlChangeSubmit,
   className,
 }: {
-  tpslOnChange?: ({ tp, sl }: { tp: number; sl: number }) => void;
+  tpslOnChange?: ({ tp, sl }: { tp: string; sl: string }) => void;
   isUpdate?: boolean;
   formattedPrice?: number;
   liqPrice?: number;
   leverage: number;
   long?: boolean;
-  tp?: number;
-  sl?: number;
+  tp?: string;
+  sl?: string;
   isTpSubmitLoading?: boolean;
   isSlSubmitLoading?: boolean;
   onTpChangeSubmit?: () => void;
@@ -122,9 +122,9 @@ export function TPSL({
   className?: string;
 }) {
   const [tpsl, setTpsl] = useState<{
-    tp: number;
-    sl: number;
-  }>({ tp: tp ?? 0, sl: sl ?? 0 });
+    tp: string;
+    sl: string;
+  }>({ tp: tp ?? "", sl: sl ?? "" });
   const [tpslType, setTpslType] = useState<"none" | "percent" | "number">(
     "none",
   );
@@ -134,8 +134,10 @@ export function TPSL({
     let result = 0;
     if (tpslType === "percent") {
       const priceFromPercent = long
-        ? (1 + (tpsl.tp ?? 0) / (100 * leverage)) * (formattedPrice ?? 0)
-        : (1 - (tpsl.tp ?? 0) / (100 * leverage)) * (formattedPrice ?? 0);
+        ? (1 + Number(tpsl.tp ?? "0") / (100 * leverage)) *
+          (formattedPrice ?? 0)
+        : (1 - Number(tpsl.tp ?? "0") / (100 * leverage)) *
+          (formattedPrice ?? 0);
       const pnlTarget = getCappedPercentDifference(
         priceFromPercent ?? 0,
         priceFromPercent,
@@ -160,7 +162,7 @@ export function TPSL({
       // if over 900% including leverage then set it to 900% with leverage
       const pnlTarget = getCappedPercentDifference(
         formattedPrice ?? 0,
-        tpsl.tp,
+        Number(tpsl.tp),
         leverage,
         long ?? true,
         MAX_GAIN,
@@ -174,35 +176,37 @@ export function TPSL({
             long ?? true,
           ) ?? 0;
       } else {
-        result = (tpsl.tp ?? 0) * 1;
+        result = (Number(tpsl.tp) ?? 0) * 1;
       }
     }
-    tpslOnChange && tpslOnChange({ tp: result, sl: sl ?? 0 });
-    return result;
+    tpslOnChange && tpslOnChange({ tp: result.toFixed(10), sl: sl ?? "" });
+    return result.toFixed(10);
   }, [sl, tpsl.tp, formattedPrice, tpslType, leverage, long]);
 
   const estStopLoss = useMemo(() => {
     let result = 0;
     if (slType === "percent") {
       const priceFromPercent = long
-        ? (1 - (tpsl.sl ?? 0) / (100 * leverage)) * (formattedPrice ?? 0)
-        : (1 + (tpsl.sl ?? 0) / (100 * leverage)) * (formattedPrice ?? 0);
+        ? (1 - Number(tpsl.sl ?? 0) / (100 * leverage)) * (formattedPrice ?? 0)
+        : (1 + Number(tpsl.sl ?? 0) / (100 * leverage)) * (formattedPrice ?? 0);
       result = priceFromPercent;
     }
     if (slType === "number") {
       if (liqPrice !== undefined) {
-        result = liqPrice < (tpsl.sl ?? 0) ? liqPrice : tpsl.sl ?? 0;
+        result =
+          liqPrice < Number(tpsl.sl ?? 0) ? liqPrice : Number(tpsl.sl ?? 0);
       } else {
-        result = (tpsl.sl ?? 0) * 1;
+        result = Number(tpsl.sl ?? 0) * 1;
       }
     }
-    tpslOnChange && tpslOnChange({ tp: tp ?? 0, sl: result });
-    return result;
+    tpslOnChange &&
+      tpslOnChange({ tp: tp?.toString() ?? "", sl: result.toFixed(10) });
+    return result.toFixed(10);
   }, [tp, tpsl.sl, formattedPrice, slType, leverage, long, liqPrice]);
 
   const tpPercent = getCappedPercentDifference(
     formattedPrice ?? 0,
-    estTakeProfit,
+    Number(estTakeProfit),
     leverage,
     long ?? true,
     MAX_GAIN,
@@ -211,7 +215,7 @@ export function TPSL({
 
   const slPercent = getCappedPercentDifference(
     formattedPrice ?? 0,
-    estStopLoss,
+    Number(estStopLoss),
     leverage,
     long ?? true,
     100,
@@ -220,7 +224,7 @@ export function TPSL({
   const slPercentDisplay =
     slPercent <= -100
       ? -100
-      : estStopLoss > (formattedPrice ?? 0)
+      : Number(estStopLoss) > (formattedPrice ?? 0)
       ? 0 - slPercent
       : slPercent;
 
@@ -237,11 +241,11 @@ export function TPSL({
         </span>
       </div>
       <InputSelect
-        value={tpsl.tp ?? 0}
+        value={tpsl.tp}
         bracket={[0, 25, 50, 100, 150]}
         type={tpslType}
         onTypeChange={setTpslType}
-        onValueChange={(percentage: number) =>
+        onValueChange={(percentage: string) =>
           setTpsl({ tp: percentage, sl: tpsl.sl })
         }
         variant="success"
@@ -269,12 +273,12 @@ export function TPSL({
         </span>
       </div>
       <InputSelect
-        value={tpsl.sl ?? 0}
+        value={tpsl.sl}
         bracket={[0, 5, 10, 15, 25]}
         type={slType}
         onTypeChange={setSlType}
-        onValueChange={(percentage: number) =>
-          setTpsl({ tp: tpsl.tp, sl: percentage })
+        onValueChange={(percentage: string) =>
+          setTpsl({ tp: tpsl.tp, sl: percentage.toString() })
         }
         variant="destructive"
       />

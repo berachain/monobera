@@ -16,6 +16,7 @@ import { formatUnits } from "ethers";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { isBeratoken } from "~/utils/isBeraToken";
 import { usePollSwaps } from "./usePollSwaps";
 
 export enum SwapKind {
@@ -137,17 +138,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     //     : Number(swapAmount) ?? 0,
     amount: swapAmount,
   });
-
-  const isBeratoken = (token: Token | undefined) => {
-    if (token === undefined) return false;
-    if (
-      token.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS ||
-      token.address === process.env.NEXT_PUBLIC_BERA_ADDRESS
-    )
-      return true;
-
-    return false;
-  };
 
   useEffect(() => {
     if (
@@ -343,9 +333,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const minAmountOut = useMemo(() => {
     if (!payload[1]) return "0";
-    console.log(payload);
     const amountOut = payload[1][payload[1].length - 1]?.amountOut;
-    console.log(amountOut);
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
   return {

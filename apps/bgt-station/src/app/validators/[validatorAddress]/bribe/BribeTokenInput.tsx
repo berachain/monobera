@@ -15,7 +15,7 @@ type Props = {
   index: number;
   selectedTokens: Token[];
   selectable?: boolean;
-  onTokenSelection: (token: Token, index: number) => void;
+  onTokenSelection: (token: Token | undefined, index: number) => void;
   onRemove: (index: number) => void;
   onTokenBribeChange: (index: number, bribe: number, proposals: number) => void;
   onTokenTotalChange: (index: number, total: number, proposals: number) => void;
@@ -33,7 +33,7 @@ export default function BribeTokenInput({
   selectable = true,
 }: Props) {
   const [focused, setFocused] = React.useState(false);
-  const handleTokenSelection = (token: Token) => {
+  const handleTokenSelection = (token: Token | undefined) => {
     onTokenSelection(token, index);
   };
   return (

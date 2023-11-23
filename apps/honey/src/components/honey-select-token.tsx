@@ -7,7 +7,7 @@ import { Icons } from "@bera/ui/icons";
 
 type Props = {
   token: Token | undefined;
-  onTokenSelection?: (token: Token) => void;
+  onTokenSelection?: (token: Token | undefined) => void;
   selectedTokens?: (Token | undefined)[];
   customTokenList?: Token[];
   selectable: boolean;
@@ -57,7 +57,7 @@ export function SelectToken({
       {selectable && (
         <TokenDialog
           open={open}
-          onSelectedToken={(token: Token) =>
+          onSelectedToken={(token: Token | undefined) =>
             onTokenSelection && onTokenSelection(token)
           }
           setOpen={setOpen}

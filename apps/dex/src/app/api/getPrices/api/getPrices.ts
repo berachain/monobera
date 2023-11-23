@@ -73,12 +73,6 @@ export const getSwap = async (
       }
     }
 
-    console.log({
-      tokenInDecimals,
-      tokenOutDecimals,
-      result,
-    });
-    console.log;
     const swapInfo = {
       batchSwapSteps: batchSwapSteps,
       formattedSwapAmount: amount.toString(),
@@ -95,7 +89,6 @@ export const getSwap = async (
       tokenOut,
     };
 
-    console.log(swapInfo);
     return swapInfo;
   } catch (e) {
     console.log(e);
@@ -111,6 +104,8 @@ export const getSwap = async (
   }
 };
 const BASE_TOKEN = getAddress(process.env.NEXT_PUBLIC_HONEY_ADDRESS as string);
+const BERA_TOKEN = getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string);
+const WBERA_TOKEN = getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
 
 export const getBaseTokenPrice = async (pools: Pool[]) => {
   let mappedTokens: MappedTokens = {};
@@ -141,9 +136,15 @@ export const getBaseTokenPrice = async (pools: Pool[]) => {
             acc[getAddress(cur.tokenIn)] = cur.formattedReturnAmount;
             return acc;
           },
-          { [BASE_TOKEN]: "1" },
+          { [BASE_TOKEN]: 1 },
         )
       : undefined;
+
+    const beraPrice = mappedTokens[WBERA_TOKEN] ?? 0;
+    mappedTokens = {
+      ...mappedTokens,
+      [BERA_TOKEN]: beraPrice,
+    };
   }
 
   return mappedTokens;

@@ -25,10 +25,10 @@ type Props = {
   selectable?: boolean;
   weight?: number;
   disabled?: boolean;
-  customTokenList?: Token[];
+  customTokenList?: (Token | undefined)[];
   showExceeding?: boolean;
   hideMax?: boolean;
-  onTokenSelection?: (token: Token) => void;
+  onTokenSelection?: (token: Token | undefined) => void;
   setAmount?: (amount: string) => void;
   onExceeding?: (isExceeding: boolean) => void;
 };
@@ -86,6 +86,7 @@ export function TokenInput({
   useEffect(() => {
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
   }, [exceeding]);
+
   return (
     <li className={"flex flex-col flex-wrap px-3"}>
       <div className="flex flex-row items-center">
