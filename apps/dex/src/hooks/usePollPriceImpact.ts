@@ -45,19 +45,9 @@ export const usePollPriceImpact = ({
 
       const actualResult = BigInt(swapInfo?.returnAmount ?? 0n);
 
-      console.log({
-        bestResult,
-        actualResult,
-      });
       const formattedBestResult = Number(formatUnits(bestResult, 18));
       const formattedActualResult = Number(formatUnits(actualResult, 18));
 
-      console.log({
-        formattedBestResult,
-        formattedActualResult,
-        swapInfo,
-        priceImpactSwapInfo,
-      });
       // const percentageDifference =
       //   ((formattedBestResult - formattedActualResult)/ formattedBestResult) * 100;
 
@@ -66,7 +56,6 @@ export const usePollPriceImpact = ({
         formattedActualResult,
       );
 
-      console.log("percentageDifference", percentageDifference);
       // console.log({
       //   bestResult,
       //   actualResult,

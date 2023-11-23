@@ -73,12 +73,6 @@ export const getSwap = async (
       }
     }
 
-    console.log({
-      tokenInDecimals,
-      tokenOutDecimals,
-      result,
-    });
-    console.log;
     const swapInfo = {
       batchSwapSteps: batchSwapSteps,
       formattedSwapAmount: amount.toString(),
@@ -95,7 +89,6 @@ export const getSwap = async (
       tokenOut,
     };
 
-    console.log(swapInfo);
     return swapInfo;
   } catch (e) {
     console.log(e);
