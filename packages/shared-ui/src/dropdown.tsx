@@ -28,7 +28,7 @@ export const Dropdown = ({
         {sortby && <div className="text-sm font-medium">Sort by</div>}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="flex w-fit items-center gap-1 rounded-xl border border-border bg-background px-3 py-2 text-sm">
+            <div className="flex w-fit items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm">
               {selected.replaceAll("-", " ")}
               <Icons.chevronDown className=" h-4 w-4" />
             </div>

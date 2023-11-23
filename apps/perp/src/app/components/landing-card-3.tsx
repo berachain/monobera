@@ -8,9 +8,9 @@ export function LandingCard3() {
   const withdrawTier = [25, 50, 75, 100];
   const [selectedTier, setSelectedTier] = useState<number>(25);
   return (
-    <div className="pointer-events-none flex w-[268px] flex-col gap-4 overflow-hidden rounded-xl bg-background p-4 shadow-light-shadow blur-[1px] dark:shadow-dark-shadow">
+    <div className="pointer-events-none flex w-[268px] flex-col gap-4 overflow-hidden rounded-md bg-background p-4 shadow-light-shadow blur-[1px] dark:shadow-dark-shadow">
       <div className="text-lg font-semibold leading-7">Close Position</div>
-      <div className="flex h-[108px] justify-between rounded-lg border border-border bg-muted p-4">
+      <div className="flex h-[108px] justify-between rounded-sm border border-border bg-muted p-4">
         <div className="flex h-full flex-col justify-between">
           <div className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
             <Avatar className="h-4 w-4">
@@ -48,7 +48,7 @@ export function LandingCard3() {
         </div>
       </div>
 
-      <div className="flex h-[70px] justify-between rounded-lg border border-border bg-muted p-4">
+      <div className="flex h-[70px] justify-between rounded-sm border border-border bg-muted p-4">
         <div className="flex h-full flex-col justify-between">
           <div className="text-[10px] text-muted-foreground">
             UnRealized PnL
@@ -71,7 +71,7 @@ export function LandingCard3() {
             className={cn(
               "flex h-[22px] w-[25%] cursor-pointer items-center justify-center border text-sm font-medium hover:bg-opacity-80",
               selectedTier === tier
-                ? "rounded-lg border-warning-foreground bg-muted"
+                ? "rounded-sm border-warning-foreground bg-muted"
                 : "rounded border-border",
             )}
           >
