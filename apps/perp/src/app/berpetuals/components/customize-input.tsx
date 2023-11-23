@@ -21,7 +21,7 @@ export function CustomizeInput({
   onSubtitleClick?: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-2 rounded-lg bg-muted p-4">
+    <div className="flex flex-col gap-2 rounded-sm bg-muted p-4">
       <div className="flex h-3 items-center justify-between text-xs text-muted-foreground ">
         <div>{title}</div>{" "}
         <div

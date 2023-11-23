@@ -256,7 +256,7 @@ export const HoneyChart = ({
             <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
               <TabsList
                 className={cn(
-                  arcade && "rounded-xl border-2 border-blue-900 bg-blue-100",
+                  arcade && "rounded-md border-2 border-blue-900 bg-blue-100",
                 )}
               >
                 <TabsTrigger
@@ -283,7 +283,7 @@ export const HoneyChart = ({
               >
                 <SelectTrigger
                   className={cn(
-                    "w-fit justify-start gap-1 rounded-xl",
+                    "w-fit justify-start gap-1 rounded-md",
                     arcade
                       ? "border-2 border-blue-900 bg-blue-100 text-blue-900"
                       : "border border-border bg-muted text-foreground",
@@ -297,13 +297,13 @@ export const HoneyChart = ({
                 <SelectContent
                   className={cn(
                     arcade &&
-                      "rounded-xl border-2 border-blue-900 bg-blue-100 text-blue-900",
+                      "rounded-md border-2 border-blue-900 bg-blue-100 text-blue-900",
                   )}
                 >
                   <SelectItem
                     value={HoneyTimeFrame.HOURLY}
                     className={cn(
-                      "cursor-pointer rounded-xl",
+                      "cursor-pointer rounded-md",
                       arcade
                         ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
                         : "hover:bg-muted hover:text-foreground focus:text-foreground",
@@ -314,7 +314,7 @@ export const HoneyChart = ({
                   <SelectItem
                     value={HoneyTimeFrame.WEEKLY}
                     className={cn(
-                      "cursor-pointer rounded-xl",
+                      "cursor-pointer rounded-md",
                       arcade
                         ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
                         : "hover:bg-muted hover:text-foreground focus:text-foreground",
@@ -325,7 +325,7 @@ export const HoneyChart = ({
                   <SelectItem
                     value={HoneyTimeFrame.MONTHLY}
                     className={cn(
-                      "cursor-pointer rounded-xl",
+                      "cursor-pointer rounded-md",
                       arcade
                         ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
                         : "hover:bg-muted hover:text-foreground focus:text-foreground",
@@ -336,7 +336,7 @@ export const HoneyChart = ({
                   <SelectItem
                     value={HoneyTimeFrame.QUARTERLY}
                     className={cn(
-                      "cursor-pointer rounded-xl",
+                      "cursor-pointer rounded-md",
                       arcade
                         ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
                         : "hover:bg-muted hover:text-foreground focus:text-foreground",

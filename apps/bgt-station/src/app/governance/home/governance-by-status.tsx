@@ -113,7 +113,7 @@ export default function GovernanceByStatus({
           Order by
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-xl border border-border bg-background p-2 text-sm font-medium capitalize leading-[14px] text-foreground hover:cursor-pointer">
+              <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-md border border-border bg-background p-2 text-sm font-medium capitalize leading-[14px] text-foreground hover:cursor-pointer">
                 {orderBy.replaceAll("-", " ")}
                 <Icons.chevronDown className="relative h-3 w-3 text-foreground" />
               </div>

@@ -198,18 +198,18 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
           }
           className="mb-4"
         >
-          <TabsList className="w-full rounded-lg">
+          <TabsList className="w-full rounded-sm">
             <TabsTrigger
               value={"market"}
               key={"market"}
-              className="w-full rounded-lg"
+              className="w-full rounded-sm"
             >
               Market
             </TabsTrigger>
             <TabsTrigger
               value={"limit"}
               key={"limit"}
-              className="w-full rounded-lg"
+              className="w-full rounded-sm"
             >
               Limit
             </TabsTrigger>

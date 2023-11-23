@@ -57,7 +57,7 @@ export function MainNav({
             href={item.href}
             key={`${item.href}-${idx}`}
             className={cn(
-              "flex-shrink-0 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium outline-none transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "flex-shrink-0 whitespace-nowrap rounded-xs px-4 py-2 text-sm font-medium outline-none transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             )}
           >
             {item.title}
@@ -80,7 +80,7 @@ const ListItem = forwardRef<React.ElementRef<"a">, IconProps>(
             target={type === "external" ? "_blank" : "_self"}
             ref={ref}
             className={cn(
-              "flex select-none items-center gap-2 rounded-md p-1 leading-none no-underline outline-none transition-colors hover:bg-muted hover:text-primary focus:bg-muted focus:text-primary",
+              "flex select-none items-center gap-2 rounded-xs p-1 leading-none no-underline outline-none transition-colors hover:bg-muted hover:text-primary focus:bg-muted focus:text-primary",
               className,
             )}
             {...props}
