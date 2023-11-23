@@ -61,7 +61,7 @@ const InputSelect = ({
   return (
     <div className="flex w-full gap-1">
       <Input
-        className="h-8 w-full rounded-lg bg-background text-xs lg:w-[102px]"
+        className="h-8 w-full rounded-sm bg-background text-xs lg:w-[102px]"
         placeholder="Amount"
         type={"number"}
         value={value === "" ? "Price" : type === "percent" ? "Price" : value}
@@ -75,7 +75,7 @@ const InputSelect = ({
         <div
           key={index}
           className={cn(
-            "inline-flex h-8 w-[20%] cursor-pointer items-center justify-center rounded-lg px-2 text-xs font-medium lg:w-full",
+            "inline-flex h-8 w-[20%] cursor-pointer items-center justify-center rounded-sm px-2 text-xs font-medium lg:w-full",
             amount === Number(value)
               ? `bg-${variant} text-${variant}-foreground`
               : `bg-muted text-muted-foreground`,

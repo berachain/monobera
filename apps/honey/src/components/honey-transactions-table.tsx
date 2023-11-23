@@ -247,7 +247,7 @@ export default function HoneyTransactionsTable({
       >
         <TabsList
           className={cn(
-            "w-full rounded-xl ",
+            "w-full rounded-md ",
             arcade && "border-2 border-dashed border-blue-900 bg-blue-50",
           )}
         >
@@ -281,7 +281,7 @@ export default function HoneyTransactionsTable({
         </TabsList>
         <div
           className={cn(
-            "mt-4 overflow-hidden rounded-xl border ",
+            "mt-4 overflow-hidden rounded-md border ",
             arcade && "border-blue-300 bg-blue-50",
           )}
         >

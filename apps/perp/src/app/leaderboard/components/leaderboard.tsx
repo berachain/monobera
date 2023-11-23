@@ -66,7 +66,7 @@ export default function LeaderBoard() {
             <TabsTrigger
               value={LeaderboardType.PROFIT}
               key={LeaderboardType.PROFIT}
-              className="w-full rounded-lg"
+              className="w-full rounded-sm"
               onClick={() => setLeaderboardType(LeaderboardType.PROFIT)}
             >
               💰 Most Profitable
@@ -74,7 +74,7 @@ export default function LeaderBoard() {
             <TabsTrigger
               value={"liquidation"}
               key={"liquidation"}
-              className="w-full rounded-lg"
+              className="w-full rounded-sm"
               onClick={() => setLeaderboardType(LeaderboardType.LIQUIDATION)}
             >
               🔥 Top Liquidations
@@ -82,7 +82,7 @@ export default function LeaderBoard() {
             <TabsTrigger
               value={"volume"}
               key={"volume"}
-              className="w-full rounded-lg"
+              className="w-full rounded-sm"
               onClick={() => setLeaderboardType(LeaderboardType.VOLUME)}
             >
               📈 Most Volume
@@ -94,7 +94,7 @@ export default function LeaderBoard() {
         >
           <SelectTrigger
             className={
-              "flex w-[180pxpx] items-center justify-start justify-between rounded-xl sm:hidden"
+              "flex w-[180pxpx] items-center justify-start justify-between rounded-2xs sm:hidden"
             }
           >
             <SelectValue
@@ -126,7 +126,7 @@ export default function LeaderBoard() {
         <Select
           onValueChange={(value: string) => setTimeFrame(value as TimeFrame)}
         >
-          <SelectTrigger className={"w-[80px] justify-start gap-1 rounded-xl"}>
+          <SelectTrigger className={"w-[80px] justify-start gap-1 rounded-md"}>
             <SelectValue
               placeholder={TimeFrame.QUARTERLY}
               defaultValue={TimeFrame.QUARTERLY}
