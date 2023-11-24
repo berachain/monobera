@@ -9,7 +9,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useReadLocalStorage } from "usehooks-ts";
 
-import { BGTStatus } from "./bgt-status";
 import { History } from "./history";
 import Identicon from "./identicon";
 import { Setting } from "./settings";
@@ -105,9 +104,6 @@ export default function ConnectedWalletPopover({
               <TabsTrigger value="history" className="flex-1" variant="ghost">
                 History
               </TabsTrigger>
-              <TabsTrigger value="bgt" className="flex-1" variant="ghost">
-                BGT
-              </TabsTrigger>
             </TabsList>
             <TabsContent
               value="tokens"
@@ -120,12 +116,6 @@ export default function ConnectedWalletPopover({
               className="sm:flex-0 flex-1 overflow-y-auto sm:h-[400px]"
             >
               <History />
-            </TabsContent>
-            <TabsContent
-              value="bgt"
-              className="sm:flex-0 flex-1 overflow-y-auto sm:h-[400px]"
-            >
-              <BGTStatus />
             </TabsContent>
           </Tabs>
         </>

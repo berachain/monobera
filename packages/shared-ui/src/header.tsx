@@ -8,9 +8,10 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
+import { BGTStatusBtn } from "./bgt-status";
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggleMobile } from "./theme-toggle-mobile";
 
 const ConnectBtn = dynamic(
   () => import("./connect-button").then((mod) => mod.ConnectButton),
@@ -29,12 +30,10 @@ const ConnectBtn = dynamic(
 export function Header({
   navItems,
   hideConnectBtn = false,
-  showThemeSwitcher = false,
   isHoney = false,
 }: {
   navItems: any[];
   hideConnectBtn?: boolean;
-  showThemeSwitcher?: boolean;
   isHoney?: boolean;
 }) {
   return (
@@ -63,7 +62,8 @@ export function Header({
             Dune Analytics <Icons.externalLink className="h-3 w-3" />
           </Link>
         )} */}
-        {showThemeSwitcher && <ThemeToggle />}
+        <ThemeToggleMobile />
+        <BGTStatusBtn />
         {!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
         <MobileDropdown navItems={navItems} />
       </div>

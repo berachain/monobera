@@ -180,7 +180,7 @@ export function HoneyMachine() {
   });
 
   const { write: approvalWrite, ModalPortal: ApprovalModalPortal } = useTxn({
-    message:  `Approve ${selectedFrom?.symbol}`,
+    message: `Approve ${selectedFrom?.symbol}`,
     actionType: TransactionActionType.APPROVAL,
     onError: (e: any) => {
       if (e.name === "TransactionExecutionError") {
@@ -189,10 +189,10 @@ export function HoneyMachine() {
       }
     },
     onSuccess: () => {
-        approvalTxnSuccess?.fire();
+      approvalTxnSuccess?.fire();
     },
     onSubmission: () => {
-        txnSubmitAction?.fire();
+      txnSubmitAction?.fire();
     },
   });
   const [rotate, setRotate] = useState(0);
@@ -343,7 +343,7 @@ export function HoneyMachine() {
               "absolute bottom-[50px] left-[45px] z-30 m-6 h-[250px] w-[30%] max-w-[230px] overflow-hidden",
               !isConnected && "bottom-12",
             )}
-          > 
+          >
             {isConnected ? (
               <>
                 <h1 className="relative mb-1 text-2xl font-semibold text-foreground">

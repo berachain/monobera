@@ -56,7 +56,7 @@ export const ConnectButton = ({
                 userSelect: "none",
               },
             })}
-            className={cn("flex w-full", className)}
+            className={cn("flex w-fit", className)}
           >
             {!isConnected && (
               <Button
