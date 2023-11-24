@@ -28,7 +28,7 @@ export const RiskDetails = () => {
     ((data?.totalDebtBase ?? 0n) * 100000000n) / totalCollateralBase,
     8,
   );
-  console.log(data);
+  // console.log(data);
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
