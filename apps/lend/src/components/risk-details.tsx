@@ -20,11 +20,15 @@ export const RiskDetails = () => {
   const { useUserAccountData } = usePollUserAccountData();
   const { data } = useUserAccountData();
   const healthFactor = Number(formatEther(data?.healthFactor ?? 0n));
+  const totalCollateralBase =
+    !data?.totalCollateralBase || data?.totalCollateralBase === 0n
+      ? 1n
+      : data?.totalCollateralBase;
   const ltv = formatUnits(
-    ((data?.totalDebtBase ?? 0n) * 100000000n) /
-      (data?.totalCollateralBase ?? 1n),
+    ((data?.totalDebtBase ?? 0n) * 100000000n) / totalCollateralBase,
     8,
   );
+  // console.log(data);
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -58,7 +62,7 @@ export const RiskDetails = () => {
                   `bg-${getLTVColor(healthFactor)}`,
                 )}
               >
-                {healthFactor.toFixed(2)}
+                {healthFactor <= 1000 ? healthFactor.toFixed(2) : "∞"}
               </div>
             </div>
             <div className="h-24">
@@ -67,7 +71,7 @@ export const RiskDetails = () => {
               >
                 <div className={"flex w-fit flex-col items-center"}>
                   <span className="text-sm font-medium leading-3">
-                    {healthFactor.toFixed(2)}
+                    {healthFactor <= 1000 ? healthFactor.toFixed(2) : "∞"}
                   </span>
                   <Icons.chevronDown className="h-7 w-7" />
                 </div>
@@ -108,7 +112,12 @@ export const RiskDetails = () => {
               <div className="relative h-[68px] w-full">
                 <div
                   className="absolute flex w-fit -translate-x-[50%] flex-col items-center"
-                  style={{ left: `${(Number(ltv) * 100).toFixed(0)}%` }}
+                  style={{
+                    left: `${(Number(ltv) * 100 < 5
+                      ? 5
+                      : Number(ltv) * 100
+                    ).toFixed(0)}%`,
+                  }}
                 >
                   <span className="text-sm font-medium leading-6">
                     {(Number(ltv) * 100).toFixed(2)}%
@@ -129,7 +138,10 @@ export const RiskDetails = () => {
                       {(
                         Number(
                           formatUnits(
-                            data?.currentLiquidationThreshold ?? 0n,
+                            !data?.currentLiquidationThreshold ||
+                              data?.currentLiquidationThreshold === 0n
+                              ? 8000n
+                              : data?.currentLiquidationThreshold,
                             4,
                           ),
                         ) * 100
