@@ -34,7 +34,7 @@ export function MobileDropdown({ navItems }: { navItems: any[] }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen animate-none rounded-none border-none transition-transform">
-        <ScrollArea className="py-8">
+        <ScrollArea className="h-full py-8">
           {navItems.map(({ href, title, children }) => {
             if (href === "#" && children) {
               return (

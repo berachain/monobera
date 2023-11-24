@@ -40,9 +40,11 @@ export const RiskDetails = () => {
             Risk Details
           </Badge>
         </DialogTrigger>
-        <DialogContent className="w-full sm:w-[448px]">
+        <DialogContent className="max-h-[calc(100vh-80px)] w-full overflow-auto sm:w-[448px]">
           <DialogHeader>
-            <DialogTitle>Liquidation risk parameters</DialogTitle>
+            <DialogTitle className="text-left">
+              Liquidation risk parameters
+            </DialogTitle>
           </DialogHeader>
           <div className="text-sm leading-5">
             Your health factor and loan to value determine the assurance of your
