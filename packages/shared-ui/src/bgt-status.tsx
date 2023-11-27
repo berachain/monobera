@@ -9,7 +9,14 @@ import {
   usePollTotalDelegated,
 } from "@bera/berajs";
 import { beraTokenAddress, bgtTokenAddress } from "@bera/config";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@bera/ui/accordion";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
+import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -89,20 +96,20 @@ function Status() {
       amoumt: userBalance,
     },
     {
-      background: "#FBBF24",
-      stroke: "#78350F",
+      background: "#DBDBDB",
+      stroke: "#4B4B4B",
       text: "Staked on BGT Station",
       amoumt: bgtTotalDelegated ?? 0,
     },
     {
-      background: "#FBBF24",
-      stroke: "#78350F",
+      background: "#FFD3B2",
+      stroke: "#94003F",
       text: "In Unbonding Queue",
       amoumt: totalUnbonding ?? 0,
     },
     {
-      background: "#FBBF24",
-      stroke: "#78350F",
+      background: "#EFF199",
+      stroke: "#526E02",
       text: "Claimable Rewards",
       amoumt: userBalance,
     },
@@ -142,7 +149,22 @@ function Status() {
             </div>
           </div>
         ))}
+              <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="item-1">
+          <AccordionTrigger
+            disabled
+            className="flex h-7 w-full cursor-pointer justify-center bg-muted text-foreground focus:outline-none      "
+          >
+            <Icons.chevronsDown className="block h-6 w-6 items-center" />
+          </AccordionTrigger>
+          <AccordionContent>
+            Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
       </div>
+
+
     </>
   );
 }
