@@ -21,64 +21,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { BGTIcon } from "./bgt-icon";
-import { TokenIcon } from "./token-icon";
 
 export function BGTStatusBtn() {
-  const [openPopover, setOpenPopover] = React.useState(true);
+  const [openPopover, setOpenPopover] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
 
-  const { usePrice } = usePollPrices();
-  const { data: price } = usePrice(beraTokenAddress);
-  const { useBgtBalance } = usePollBgtBalance();
-  const userBalance = useBgtBalance();
-  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
-  const total = useTotalDelegatorDelegated();
-  const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
-  const totalUnbonding = useDelegatorTotalUnbonding();
-
-  return (
-    <div>
-      <div className="hidden sm:block">
-        <Popover open={openPopover} onOpenChange={setOpenPopover}>
-          <PopoverTrigger asChild>
-            <div className="flex h-11 w-fit cursor-pointer items-center rounded-full border border-warning-foreground bg-warning px-2 font-medium">
-              <div className="px-2 text-sm text-warning-foreground">
-                12.80K BGT
-              </div>
-              <div className="flex h-7 items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-400 px-3 text-xs">
-                469.69 Claimable
-              </div>
-            </div>
-          </PopoverTrigger>
-          <PopoverContent
-            className="flex h-fit w-[324px] flex-col gap-4 rounded-md p-4"
-            align="end"
-          >
-            <Status />
-          </PopoverContent>
-        </Popover>
-      </div>
-      <div className="block sm:hidden">
-        <div
-          className="flex h-11 w-fit cursor-pointer items-center rounded-full border border-warning-foreground bg-warning px-2 font-medium"
-          onClick={() => setOpenModal(true)}
-        >
-          <div className="px-2 text-sm text-warning-foreground">12.80K BGT</div>
-          <div className="flex h-7 items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-400 px-3 text-xs">
-            469.69 Claimable
-          </div>
-        </div>
-        <Dialog open={openModal} onOpenChange={setOpenModal}>
-          <DialogContent className="flex h-[80vh] max-h-[734px] min-h-[456px] flex-col gap-8 p-8 pt-16 ">
-            <Status />
-          </DialogContent>
-        </Dialog>
-      </div>
-    </div>
-  );
-}
-
-function Status() {
   const { usePrice } = usePollPrices();
   const { data: price } = usePrice(beraTokenAddress);
   const { useBgtBalance } = usePollBgtBalance();
@@ -114,7 +61,8 @@ function Status() {
       amoumt: userBalance,
     },
   ];
-  return (
+  
+  const Status = (
     <>
       <div className="flex flex-col gap-1 py-2 text-center">
         <div className="text-sm font-medium leading-6 text-muted-foreground">
@@ -149,22 +97,114 @@ function Status() {
             </div>
           </div>
         ))}
-              <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
-          <AccordionTrigger
-            disabled
-            className="flex h-7 w-full cursor-pointer justify-center bg-muted text-foreground focus:outline-none      "
-          >
-            <Icons.chevronsDown className="block h-6 w-6 items-center" />
-          </AccordionTrigger>
-          <AccordionContent>
-            Yes. It adheres to the WAI-ARIA design pattern.
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionContent>
+              <div className="flex w-full">
+                <div className="flex w-8 justify-center text-border">
+                  <svg
+                    width="6"
+                    height="80"
+                    viewBox="0 0 6 80"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M0.000162492 2.50012C0.000162553 1.11941 1.19407 0.000121889 2.66683 0.000121954C4.13959 0.000122018 5.3335 1.11941 5.3335 2.50012C5.3335 3.72062 4.40059 4.73684 3.16683 4.95625L3.16683 75.044C4.40059 75.2634 5.33349 76.2796 5.33349 77.5001C5.33349 78.8808 4.13959 80.0001 2.66683 80.0001C1.19407 80.0001 0.000159153 78.8808 0.000159214 77.5001C0.000159267 76.2796 0.933062 75.2634 2.16683 75.044L2.16683 4.95625C0.933065 4.73684 0.000162439 3.72062 0.000162492 2.50012Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+                <div className="flex w-full flex-col gap-1">
+                  <div className="flex w-full justify-between">
+                    <div className="flex items-center gap-2">
+                      <Icons.bexFav className="h-4 w-4" />
+                      BEX
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {" "}
+                      <div className="font-medium"> 69.69 bgt </div>
+                      <div className="text-muted-foreground"> 69.69 bgt </div>
+                    </div>
+                  </div>
+                  <div className="flex w-full justify-between">
+                    <div className="flex items-center gap-2">
+                      <Icons.bendFav className="h-4 w-4" />
+                      BEND
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="font-medium"> 69.69 bgt </div>
+                      <div className="text-muted-foreground"> 69.69 bgt </div>
+                    </div>
+                  </div>
+                  <div className="flex w-full justify-between">
+                    <div className="flex items-center gap-2">
+                      <Icons.berpsFav className="h-4 w-4" />
+                      BERPS
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {" "}
+                      <div className="font-medium"> 69.69 bgt </div>
+                      <div className="text-muted-foreground"> 69.69 bgt </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AccordionContent>
+            <AccordionTrigger
+              disabled
+              className="flex h-7 w-full cursor-pointer justify-center bg-muted text-foreground focus:outline-none      "
+            >
+              <Icons.chevronsDown className="block h-6 w-6 items-center" />
+            </AccordionTrigger>
+          </AccordionItem>
+        </Accordion>
       </div>
-
-
     </>
+  );
+
+
+
+  return (
+    <div>
+      <div className="hidden sm:block">
+        <Popover open={openPopover} onOpenChange={setOpenPopover}>
+          <PopoverTrigger asChild>
+            <div className="flex h-11 w-fit cursor-pointer items-center rounded-full border border-warning-foreground bg-warning px-2 font-medium">
+              <div className="px-2 text-sm text-warning-foreground">
+                12.80K BGT
+              </div>
+              <div className="flex h-7 items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-400 px-3 text-xs text-primary dark:from-[#524608] dark:to-[#887517]">
+                469.69 Claimable
+              </div>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent
+            className="flex h-fit w-[324px] flex-col gap-4 rounded-md p-4"
+            align="end"
+          >
+            {Status}
+          </PopoverContent>
+        </Popover>
+      </div>
+      <div className="block sm:hidden">
+        <div
+          className="flex h-11 w-fit cursor-pointer items-center rounded-full border border-warning-foreground bg-warning px-2 font-medium"
+          onClick={() => setOpenModal(true)}
+        >
+          <div className="px-2 text-sm text-warning-foreground">12.80K BGT</div>
+          <div className="flex h-7 items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-400 px-3 text-xs">
+            469.69 Claimable
+          </div>
+        </div>
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
+          <DialogContent className="flex h-[80vh] max-h-[734px] min-h-[456px] flex-col gap-8 p-8 pt-16 ">
+            {Status}
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
   );
 }
