@@ -69,7 +69,6 @@ export const getSwap = async (
         batchSwapSteps[0].assetIn = process.env
           .NEXT_PUBLIC_BERA_ADDRESS as Address;
         batchSwapSteps[0].value = batchSwapSteps[0].amountIn;
-        // batchSwapSteps[0].amountIn = 0n;
       }
     }
 
