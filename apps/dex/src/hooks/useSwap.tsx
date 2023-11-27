@@ -13,7 +13,6 @@ import {
 import { erc20ModuleAddress, honeyTokenAddress } from "@bera/config";
 import { useDeadline, useSlippage } from "@bera/shared-ui/src/hooks";
 import { formatUnits } from "ethers";
-import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
@@ -121,14 +120,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   }, [swapAmount]);
 
   const { data: swapInfo, error: getSwapError } = usePollSwaps({
-    tokenIn:
-      swapKind === SwapKind.GIVEN_IN
-        ? (selectedFrom?.address as Address)
-        : (selectedTo?.address as Address),
-    tokenOut:
-      swapKind === SwapKind.GIVEN_IN
-        ? (selectedTo?.address as Address)
-        : (selectedFrom?.address as Address),
+    tokenIn: selectedFrom?.address as Address,
+    tokenOut: selectedTo?.address as Address,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
     tokenInDecimals: selectedFrom?.decimals ?? 18,
     tokenOutDecimals: selectedTo?.decimals ?? 18,
@@ -248,18 +241,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
           (swapInfo?.batchSwapSteps?.length ?? 1) - 1
         ]!.amountOut = minAmountOut;
 
-        if (swapKind === SwapKind.GIVEN_OUT) {
-          const fromAmnt =
-            Number(fromAmount) > Number.MAX_SAFE_INTEGER
-              ? Number.MAX_SAFE_INTEGER
-              : Number(fromAmount) ?? 0;
-          swapInfo.batchSwapSteps[0]!.amountIn = parseUnits(
-            `${fromAmnt ?? 0}`,
-            selectedFrom.decimals ?? 18,
-          );
-        }
-
-        const payload = [swapKind, swapInfo?.batchSwapSteps, d];
+        const payload = [0n, swapInfo?.batchSwapSteps, d];
         setPayload(payload);
       } catch (e) {
         console.log(e);
