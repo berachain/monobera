@@ -18,7 +18,9 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatUnits, parseEther, parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
+
+import { getLTVColor } from "~/utils/get-ltv-color";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
 
@@ -112,8 +114,8 @@ const BorrowModalContent = ({
   );
 
   const borrowAmout =
-    parseEther(borrowPower as `${number}`) >
-    parseEther(availableLiquidity as `${number}`)
+    Number(borrowPower as `${number}`) >
+    Number(availableLiquidity as `${number}`)
       ? availableLiquidity
       : borrowPower;
 

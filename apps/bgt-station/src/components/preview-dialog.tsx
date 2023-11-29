@@ -59,7 +59,7 @@ export default function PreviewDialog({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Card className="border border-border">
-            <CardHeader className="rounded-t-lg border-b border-y-border p-3 text-sm text-foreground">
+            <CardHeader className="rounded-t-sm border-b border-y-border p-3 text-sm text-foreground">
               Effective price: 1 {fromToken?.symbol} = 0.5 {toToken?.symbol}
             </CardHeader>
             <CardContent className="border-border p-3">
@@ -108,7 +108,7 @@ export default function PreviewDialog({
         <div>
           <Card className="border border-border">
             <Tabs defaultValue="tokens" className="">
-              <CardHeader className="flex flex-row items-center justify-between rounded-t-lg border-b border-y-border p-3 text-base font-medium text-foreground">
+              <CardHeader className="flex flex-row items-center justify-between rounded-t-sm border-b border-y-border p-3 text-base font-medium text-foreground">
                 Swap from ETH details
                 <TabsList className="p-0">
                   <TabsTrigger value="tokens">Tokens</TabsTrigger>
@@ -159,7 +159,7 @@ export default function PreviewDialog({
         <Accordion
           type="single"
           collapsible
-          className="rounded-lg border border-primary"
+          className="rounded-sm border border-primary"
         >
           <AccordionItem value="item-1">
             <AccordionTrigger className="p-4 text-foreground">

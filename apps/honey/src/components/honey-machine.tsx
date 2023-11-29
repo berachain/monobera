@@ -139,7 +139,7 @@ export function HoneyMachine() {
     collateralList,
   } = usePsm();
 
-  const { write, ModalPortal: mp } = useTxn({
+  const { write } = useTxn({
     message: needsApproval
       ? `Approve ${selectedFrom?.symbol}`
       : isMint
@@ -179,6 +179,22 @@ export function HoneyMachine() {
     },
   });
 
+  const { write: approvalWrite, ModalPortal: ApprovalModalPortal } = useTxn({
+    message: `Approve ${selectedFrom?.symbol}`,
+    actionType: TransactionActionType.APPROVAL,
+    onError: (e: any) => {
+      if (e.name === "TransactionExecutionError") {
+        // rejection should be triggered when transaction fails(after metamask popup)
+        rejectAction?.fire();
+      }
+    },
+    onSuccess: () => {
+      approvalTxnSuccess?.fire();
+    },
+    onSubmission: () => {
+      txnSubmitAction?.fire();
+    },
+  });
   const [rotate, setRotate] = useState(0);
 
   const isConnectedState = useStateMachineInput(
@@ -224,7 +240,7 @@ export function HoneyMachine() {
         // allowance.allowance &&
         needsApproval
       ) {
-        write({
+        approvalWrite({
           address: selectedFrom?.address as `0x${string}`,
           abi: erc20ABI as unknown as (typeof erc20ABI)[],
           functionName: "approve",
@@ -320,7 +336,7 @@ export function HoneyMachine() {
     <>
       <div className="relative bg-[#468DCB] pb-12" id="mint-and-burn">
         {ModalPortal}
-        {needsApproval && mp}
+        {ApprovalModalPortal}
         {rive ? (
           <div
             className={cn(

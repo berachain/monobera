@@ -31,7 +31,7 @@ export const Explore = () => {
         {favList.map((fav, index) => (
           <div
             key={index}
-            className="mx-auto flex w-[360px] flex-col items-center gap-4 rounded-md bg-background p-6"
+            className="mx-auto flex w-full max-w-[360px] flex-col items-center gap-4 rounded-md bg-background p-6"
           >
             {fav.icon}
             <div>
