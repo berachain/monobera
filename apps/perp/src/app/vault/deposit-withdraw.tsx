@@ -90,7 +90,7 @@ export default function DepositWithdraw() {
   }, [maxDeposit, depositAmount]);
   // console.log(isMaxDepositExceeding);
   return (
-    <div className="flex h-fit w-full flex-col justify-between rounded-xl border border-border px-4 py-6 md:flex-row">
+    <div className="flex h-fit w-full flex-col justify-between rounded-lg border border-border px-4 py-6 md:flex-row">
       {DepositModalPortal}
       {WithdrawModalPortal}
       <div className="w-full flex-shrink-0">
@@ -127,7 +127,7 @@ export default function DepositWithdraw() {
                 />
               </TokenList>
             </div>
-            <Alert variant="warning">
+            <Alert variant="warning" className="rounded-md">
               <AlertTitle>
                 {" "}
                 <Icons.info className="inline-block h-4 w-4" /> Please read
