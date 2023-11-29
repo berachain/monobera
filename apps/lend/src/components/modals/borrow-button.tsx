@@ -22,8 +22,6 @@ import { formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
 
-import { getLTVColor } from "~/utils/get-ltv-color";
-
 export default function BorrowBtn({
   token,
   disabled = false,
