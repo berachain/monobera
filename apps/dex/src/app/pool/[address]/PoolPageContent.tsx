@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
   formatUsd,
@@ -10,14 +9,9 @@ import {
   useBeraJs,
   usePollBgtRewards,
 } from "@bera/berajs";
-import {
-  beraTokenAddress,
-  blockExplorerName,
-  blockExplorerUrl,
-} from "@bera/config";
+import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
 import { RewardBtn, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -32,12 +26,12 @@ import {
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import BigNumber from "bignumber.js";
-import { formatUnits, getAddress } from "viem";
+import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
-import { SwapCard } from "~/components/swap-card";
 import { getWBeraPriceForToken } from "~/app/api/getPrices/api/getPrices";
+import PoolHeader from "~/app/components/pool-header";
 import { usePositionSize } from "~/hooks/usePositionSize";
 import { PoolChart } from "./PoolChart";
 import {
@@ -294,7 +288,6 @@ export const EventTable = ({
   );
 };
 export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
-  const router = useRouter();
   const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   const { data: bgtRewards } = useBgtReward(pool?.pool);
 
@@ -389,52 +382,12 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     pool: pool,
   });
 
-  // console.log("pool", pool);
   const { isConnected } = useBeraJs();
   return (
-    <div>
-      <div className="mb-4 flex w-full flex-wrap items-center justify-between">
-        <div className="w-full items-center sm:items-start">
-          <p className="mb-3 w-full text-center text-3xl font-semibold sm:text-left">
-            {pool?.poolName}
-          </p>
-          <div className="mb-2 flex w-full flex-row items-center justify-center gap-2 sm:items-center sm:justify-start">
-            <Badge variant="secondary" className="text-xs font-medium">
-              {(
-                Number(formatUnits(BigInt(pool.swapFee) ?? "", 18)) * 100
-              ).toFixed(2)}
-              % swap fee
-            </Badge>
-            <Badge className="flex flex-row items-center gap-1 bg-amber-100 text-xs font-medium text-amber-800 hover:bg-amber-100">
-              {pool?.bgtApy?.toFixed(2)}% BGT PRR
-            </Badge>
-            <div
-              className="hidden flex-row items-center gap-1 text-xs font-medium text-muted-foreground hover:cursor-pointer hover:underline sm:flex"
-              onClick={() =>
-                window.open(
-                  `${blockExplorerUrl}/address/${pool?.poolShareDenomHex}`,
-                )
-              }
-            >
-              <Icons.newspaper className="h-3 w-3" />
-              View LP Token on {blockExplorerName}
-              <Icons.external className="h-3 w-3" />
-            </div>
-          </div>
-          <p
-            className="flex flex-row items-center justify-center gap-1 text-xs font-medium text-muted-foreground hover:underline sm:hidden"
-            onClick={() =>
-              window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
-            }
-          >
-            <Icons.newspaper className="h-3 w-3" />
-            See Contract on {blockExplorerName}
-            <Icons.external className="h-3 w-3" />
-          </p>
-        </div>
-      </div>
+    <div className="flex flex-col gap-8">
+      <PoolHeader pool={pool} />
 
-      <div className=" mb-6 flex w-full grid-cols-5 flex-col-reverse gap-4 lg:grid">
+      <div className="flex w-full grid-cols-5 flex-col-reverse gap-4 lg:grid">
         <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">
           <PoolChart
             currentTvl={pool.totalValue ?? 0}
@@ -455,9 +408,9 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             quarterlyFeesTotal={pool.quarterlyFeesTotal ?? 0}
           />
           <div className="mb-3 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            <Card className="p-4">
+            <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
-                <div className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+                <div className="overflow-hidden truncate whitespace-nowrap text-sm ">
                   TVL
                 </div>
               </div>
@@ -465,9 +418,9 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 ${formatter.format(pool?.totalValue ?? 0)}
               </div>
             </Card>
-            <Card className="p-4">
+            <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
-                <div className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+                <div className="overflow-hidden truncate whitespace-nowrap text-sm ">
                   Volume (24h)
                 </div>
               </div>
@@ -475,9 +428,9 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                 ${formatter.format(pool?.dailyVolume ?? 0)}
               </div>
             </Card>
-            <Card className="p-4">
+            <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
-                <div className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+                <div className="overflow-hidden truncate whitespace-nowrap text-sm ">
                   Fees (24h)
                 </div>
               </div>
@@ -487,11 +440,11 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                   : "$0"}
               </div>{" "}
             </Card>
-            <Card className="p-4">
+            <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
-                <p className="overflow-hidden truncate whitespace-nowrap text-xs font-medium text-muted-foreground">
+                <div className="overflow-hidden truncate whitespace-nowrap text-sm ">
                   PRR
-                </p>
+                </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
                 {(pool?.totalApy ?? 0) > 100000
@@ -501,75 +454,28 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               </div>
             </Card>
           </div>
-          <section>
-            <Tabs
-              defaultValue={Selection.AllTransactions}
-              onValueChange={(value: string) =>
-                setSelectedTab(value as Selection)
-              }
-            >
-              <TabsList className="w-full">
-                <TabsTrigger
-                  value={Selection.AllTransactions}
-                  className="w-full text-xs sm:text-sm"
-                >
-                  All transactions
-                </TabsTrigger>
-                <TabsTrigger
-                  value={Selection.Swaps}
-                  className="w-full text-xs sm:text-sm"
-                >
-                  Swaps
-                </TabsTrigger>
-                <TabsTrigger
-                  value={Selection.AddsWithdrawals}
-                  className="w-full text-xs sm:text-sm"
-                >
-                  Adds &amp; Withdraws
-                </TabsTrigger>
-              </TabsList>
-              <Card className="mt-4">
-                <TabsContent
-                  value={Selection.AllTransactions}
-                  className="mt-0 overflow-x-auto"
-                >
-                  <EventTable
-                    pool={pool}
-                    prices={prices}
-                    events={allData}
-                    isLoading={isAllDataLoadingMore}
-                  />
-                </TabsContent>
-                <TabsContent
-                  value={Selection.Swaps}
-                  className="mt-0 overflow-x-auto"
-                >
-                  <EventTable
-                    pool={pool}
-                    prices={prices}
-                    events={swapData}
-                    isLoading={isSwapDataLoadingMore}
-                  />
-                </TabsContent>
-                <TabsContent
-                  value={Selection.AddsWithdrawals}
-                  className="mt-0 overflow-x-auto"
-                >
-                  <EventTable
-                    pool={pool}
-                    prices={prices}
-                    events={provisionData}
-                    isLoading={isProvisionDataLoadingMore}
-                  />
-                </TabsContent>
-              </Card>
-              <div className="mt-4 flex justify-center">
-                {getLoadMoreButton()}
-              </div>
-            </Tabs>
-          </section>
         </div>
         <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-2">
+          <Card>
+            <CardContent className="flex items-center justify-between gap-4 p-4">
+              <div className="w-full">
+                <h3 className="text-xs font-medium text-muted-foreground">
+                  My pool balance
+                </h3>
+                <p className="mt-1 text-lg font-semibold text-foreground">
+                  {isConnected ? (
+                    isPositionSizeLoading ? (
+                      <Skeleton className="h-[32px] w-[150px]" />
+                    ) : (
+                      formatUsd(userTotalValue ?? 0)
+                    )
+                  ) : (
+                    formatUsd(0)
+                  )}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
           {pool.bgtApy !== 0 && (
             <Card>
               <CardContent className="flex items-center justify-between gap-4 p-4">
@@ -633,81 +539,72 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
               ))}
             </div>
           </Card>
-          <Card>
-            <CardContent className="flex items-center justify-between gap-4 p-4">
-              <div className="w-full">
-                <h3 className="text-xs font-medium text-muted-foreground">
-                  My pool balance
-                </h3>
-                <p className="mt-1 text-lg font-semibold text-foreground">
-                  {isConnected ? (
-                    isPositionSizeLoading ? (
-                      <Skeleton className="h-[32px] w-[150px]" />
-                    ) : (
-                      formatUsd(userTotalValue ?? 0)
-                    )
-                  ) : (
-                    formatUsd(0)
-                  )}
-                </p>
-              </div>
-
-              <div className="flex w-full flex-row items-center justify-end gap-2">
-                <Button
-                  size={"sm"}
-                  variant={"secondary"}
-                  onClick={() =>
-                    router.push(`/pool/${pool?.pool}/add-liquidity`)
-                  }
-                >
-                  <Icons.add />
-                  <span className="xs:hidden hidden sm:block md:block lg:block">
-                    Add
-                  </span>
-                </Button>
-                <Button
-                  size={"sm"}
-                  variant={"secondary"}
-                  onClick={() => router.push(`/pool/${pool?.pool}/withdraw`)}
-                >
-                  <Icons.subtract />
-                  <span className="xs:hidden hidden sm:block md:block lg:block">
-                    Withdraw
-                  </span>
-                </Button>
-                <Button
-                  size={"sm"}
-                  className="xs:hidden hidden sm:block md:block lg:hidden"
-                  variant={"outline"}
-                  onClick={() =>
-                    router.push(
-                      `?inputCurrency=${getAddress(
-                        pool?.tokens[0]?.address as string,
-                      )}`,
-                    )
-                  }
-                >
-                  Swap
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-          <SwapCard
-            showBear={false}
-            isMainPage={false}
-            inputCurrency={getAddress(pool?.tokens[0]?.address as string)}
-            outputCurrency={getAddress(pool?.tokens[1]?.address as string)}
-            className="hidden lg:contents"
-          />
         </div>
       </div>
-      <SwapCard
-        showBear={true}
-        isMainPage={false}
-        inputCurrency={getAddress(pool?.tokens[0]?.address as string)}
-        outputCurrency={getAddress(pool?.tokens[1]?.address as string)}
-        className="xs:block block sm:hidden md:hidden lg:hidden"
-      />
+
+      <section>
+        <Tabs
+          defaultValue={Selection.AllTransactions}
+          onValueChange={(value: string) => setSelectedTab(value as Selection)}
+        >
+          <TabsList className="w-full">
+            <TabsTrigger
+              value={Selection.AllTransactions}
+              className="w-full text-xs sm:text-sm"
+            >
+              All transactions
+            </TabsTrigger>
+            <TabsTrigger
+              value={Selection.Swaps}
+              className="w-full text-xs sm:text-sm"
+            >
+              Swaps
+            </TabsTrigger>
+            <TabsTrigger
+              value={Selection.AddsWithdrawals}
+              className="w-full text-xs sm:text-sm"
+            >
+              Adds &amp; Withdraws
+            </TabsTrigger>
+          </TabsList>
+          <Card className="mt-4">
+            <TabsContent
+              value={Selection.AllTransactions}
+              className="mt-0 overflow-x-auto"
+            >
+              <EventTable
+                pool={pool}
+                prices={prices}
+                events={allData}
+                isLoading={isAllDataLoadingMore}
+              />
+            </TabsContent>
+            <TabsContent
+              value={Selection.Swaps}
+              className="mt-0 overflow-x-auto"
+            >
+              <EventTable
+                pool={pool}
+                prices={prices}
+                events={swapData}
+                isLoading={isSwapDataLoadingMore}
+              />
+            </TabsContent>
+            <TabsContent
+              value={Selection.AddsWithdrawals}
+              className="mt-0 overflow-x-auto"
+            >
+              <EventTable
+                pool={pool}
+                prices={prices}
+                events={provisionData}
+                isLoading={isProvisionDataLoadingMore}
+              />
+            </TabsContent>
+          </Card>
+          <div className="mt-4 flex justify-center">{getLoadMoreButton()}</div>
+        </Tabs>
+      </section>
     </div>
   );
 }

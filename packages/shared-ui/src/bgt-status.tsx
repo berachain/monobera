@@ -8,7 +8,7 @@ import {
   usePollPrices,
   usePollTotalDelegated,
 } from "@bera/berajs";
-import { beraTokenAddress, bgtTokenAddress } from "@bera/config";
+import { beraTokenAddress } from "@bera/config";
 import {
   Accordion,
   AccordionContent,
@@ -61,7 +61,7 @@ export function BGTStatusBtn() {
       amoumt: userBalance,
     },
   ];
-  
+
   const Status = (
     <>
       <div className="flex flex-col gap-1 py-2 text-center">
@@ -165,8 +165,6 @@ export function BGTStatusBtn() {
     </>
   );
 
-
-
   return (
     <div>
       <div className="hidden sm:block">
@@ -176,7 +174,7 @@ export function BGTStatusBtn() {
               <div className="px-2 text-sm text-warning-foreground">
                 12.80K BGT
               </div>
-              <div className="flex h-7 items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-400 px-3 text-xs text-primary dark:from-[#524608] dark:to-[#887517]">
+              <div className="flex h-7 items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-400 px-3 text-xs text-primary dark:from-[#524608] dark:to-[#887517] lg:hidden xl:flex">
                 469.69 Claimable
               </div>
             </div>

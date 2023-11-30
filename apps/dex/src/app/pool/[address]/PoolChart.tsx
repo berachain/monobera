@@ -244,7 +244,7 @@ export const PoolChart = ({
   }, [timeFrame, chart]);
 
   return (
-    <Card className="p-0">
+    <Card className="bg-muted p-0">
       <Tabs
         defaultValue={Chart.VOLUME}
         onValueChange={(value: string) => setChart(value as Chart)}
@@ -267,7 +267,7 @@ export const PoolChart = ({
           </div>
 
           <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
-            <TabsList>
+            <TabsList className="border border-border">
               <TabsTrigger value={Chart.VOLUME}>Volume</TabsTrigger>
               <TabsTrigger value={Chart.TVL}>TVL</TabsTrigger>
               <TabsTrigger value={Chart.FEES}>Fees</TabsTrigger>
