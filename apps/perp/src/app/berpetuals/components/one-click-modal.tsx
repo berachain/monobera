@@ -22,7 +22,7 @@ export function OneClickModal({
         <div className="text-lg font-semibold leading-7">Trading Mode</div>
         <div
           className={cn(
-            "relative cursor-pointer rounded-xl border border-border p-3 hover:bg-muted",
+            "relative cursor-pointer rounded-md border border-border p-3 hover:bg-muted",
             oneClickMode && "border-amber-800",
           )}
           onClick={() => setOneClickMode(true)}
@@ -51,7 +51,7 @@ export function OneClickModal({
         </div>
         <div
           className={cn(
-            "relative cursor-pointer rounded-xl border border-border p-3 hover:bg-muted",
+            "relative cursor-pointer rounded-md border border-border p-3 hover:bg-muted",
             !oneClickMode && "border-amber-800",
           )}
           onClick={() => setOneClickMode(false)}

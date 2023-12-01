@@ -15,7 +15,7 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
   const closedPositions = useMarketClosedPositions(markets);
   return (
     <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 ">
-      <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row">
+      <div className="flex w-full flex-col items-start justify-between gap-2 pl-2 md:flex-row">
         <div className="flex-shrink-0 text-2xl font-semibold leading-loose">
           Trading History
           <div className="text-xs font-medium leading-tight text-muted-foreground">

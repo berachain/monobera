@@ -26,8 +26,8 @@ export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
   }, [unrealizedPnl, dailyPnl]);
 
   return (
-    <div className="flex max-h-[300px] w-full flex-shrink-0 flex-col gap-8 rounded-xl border border-border bg-muted px-4 py-6 lg:w-[270px]">
-      <div className="flex flex-col gap-2">
+    <div className="flex max-h-[300px] w-full flex-shrink-0 flex-col gap-8 rounded-md border border-border bg-muted px-4 py-6 lg:w-[270px]">
+      <div className="flex flex-col gap-3 px-1">
         <div className="text-sm font-medium leading-none text-muted-foreground">
           Current Open Positions <Tooltip text="Total open position size" />
         </div>
@@ -46,19 +46,19 @@ export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
       </div>
 
       <div>
-        <div className="mb-4 border-b border-border p-[10px] font-medium">
+        <div className="mb-4 border-b border-border px-1 pb-2 font-medium">
           Details
         </div>
         <div className="p flex flex-col gap-2">
-          <div className="flex justify-between px-3 text-sm leading-tight">
+          <div className="flex justify-between px-1 text-sm leading-tight">
             <div>Total Trades</div>
             <div>{data?.num_trades ?? 0}</div>
           </div>
-          <div className="flex justify-between px-3 text-sm leading-tight">
+          <div className="flex justify-between px-1 text-sm leading-tight">
             <div>Fees Paid</div>
             <div>{formatUsd(data?.fees_paid ?? 0)}</div>
           </div>
-          <div className="flex justify-between px-3 text-sm leading-tight">
+          <div className="flex justify-between px-1 text-sm leading-tight">
             <div className="flex flex-row items-center gap-1">
               Net PnL{" "}
               <Tooltip text="Cumulative Profit & Loss for this account" />

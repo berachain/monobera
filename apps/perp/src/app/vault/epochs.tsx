@@ -65,7 +65,7 @@ export const Epochs = ({
   );
 
   return (
-    <div className="flex h-48 w-full flex-col justify-between rounded-xl border border-border px-8 py-6 ">
+    <div className="flex h-48 w-full flex-col justify-between rounded-md border border-border px-8 py-6 ">
       {isLoading ? (
         <Skeleton className="h-[48px] w-[120px]" />
       ) : (

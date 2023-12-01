@@ -91,7 +91,7 @@
     --positive: 111deg 59% 65%; /* deprecated */
 
     --destructive: 0deg 27% 11%;
-    --destructive-foreground: 0deg 91% 71%;
+    --destructive-foreground: 0deg 68% 58%;
 
     --warning: 36deg 28% 11%;
     --warning-foreground: 41deg 96% 40%;
@@ -100,7 +100,7 @@
     --info-foreground: 200deg 98% 39%;
 
     --success: 158deg 28% 10%;
-    --success-foreground: 161deg 94% 30%;
+    --success-foreground: 161deg 75% 48%;
 
     --ring: 27deg 32% 76%; /* deprecated */
 

@@ -119,7 +119,7 @@ export function PlaceOrder({
   const allowance = useAllowance();
 
   return (
-    <div className="flex w-full flex-col gap-1 rounded-xl border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
+    <div className="flex w-full flex-col gap-1 rounded-md border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
       {ModalPortal}
       {form.optionType === "market" ? (
         <div className="flex w-full justify-between">
@@ -211,8 +211,8 @@ export function PlaceOrder({
             className={cn(
               "w-full capitalize hover:opacity-80",
               form.orderType === "long"
-                ? "bg-success text-success-foreground"
-                : "bg-destructive text-destructive-foreground",
+                ? "bg-success-foreground text-white"
+                : "bg-destructive-foreground text-white",
             )}
             disabled={
               isLoading ||
