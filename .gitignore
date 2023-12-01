@@ -42,4 +42,3 @@ yarn-error.log*
 
 # turbo
 .turbo
-apps/perp/src/app/berpetuals/components/manage-oct-dialog-backup.tsx
