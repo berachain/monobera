@@ -1,5 +1,6 @@
 import React from "react";
 import { DataTable } from "@bera/shared-ui";
+
 import Card from "~/components/card";
 import UserTokenCard from "~/components/user-token-card";
 import { user_borrows_columns } from "./column";
