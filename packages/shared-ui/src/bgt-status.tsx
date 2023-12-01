@@ -62,6 +62,10 @@ export function BGTStatusBtn() {
       amoumt: userBalance,
     },
   ];
+  const totalBGT =
+    Number(userBalance) +
+    Number(bgtTotalDelegated ?? "0") +
+    Number(totalUnbonding ?? "0");
 
   const Status = (
     <>
@@ -69,7 +73,9 @@ export function BGTStatusBtn() {
         <div className="text-sm font-medium leading-6 text-muted-foreground">
           Total Balance
         </div>
-        <div className="text-3xl font-semibold leading-9">12800.69 BGT</div>
+        <div className="text-3xl font-semibold leading-9">
+          {totalBGT.toFixed(2)} BGT
+        </div>
       </div>
 
       <div>
@@ -131,7 +137,7 @@ export function BGTStatusBtn() {
                         className="flex items-center gap-1 text-xs text-muted-foreground"
                         variant={"ghost"}
                         size="sm"
-                        onClick={()=>window.open(`${dexUrl}/rewards`)}
+                        onClick={() => window.open(`${dexUrl}/rewards`)}
                       >
                         {" "}
                         Claim <Icons.externalLink className="block h-4 w-4" />{" "}
@@ -149,7 +155,7 @@ export function BGTStatusBtn() {
                         className="flex items-center gap-1 text-xs text-muted-foreground"
                         variant={"ghost"}
                         size="sm"
-                        onClick={()=>window.open(`${lendUrl}/dashboard`)}
+                        onClick={() => window.open(`${lendUrl}/dashboard`)}
                       >
                         {" "}
                         Claim <Icons.externalLink className="block h-4 w-4" />{" "}
@@ -168,7 +174,7 @@ export function BGTStatusBtn() {
                         className="flex items-center gap-1 text-xs text-muted-foreground"
                         variant={"ghost"}
                         size="sm"
-                        onClick={()=>window.open(`${perpsUrl}/vault`)}
+                        onClick={() => window.open(`${perpsUrl}/vault`)}
                       >
                         {" "}
                         Claim <Icons.externalLink className="block h-4 w-4" />{" "}
@@ -195,11 +201,11 @@ export function BGTStatusBtn() {
       <div className="hidden sm:block">
         <Popover open={openPopover} onOpenChange={setOpenPopover}>
           <PopoverTrigger asChild>
-            <div className="flex h-11 w-fit cursor-pointer items-center rounded-full border border-warning-foreground bg-warning px-2 font-medium">
+            <div className="group flex h-11 w-fit cursor-pointer items-center rounded-full border border-accent bg-warning px-2 font-medium">
               <div className="px-2 text-sm text-warning-foreground">
-                12.80K BGT
+                {formatter.format(totalBGT)} BGT
               </div>
-              <div className="flex h-7 items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-400 px-3 text-xs text-primary dark:from-[#524608] dark:to-[#887517] lg:hidden xl:flex">
+              <div className="flex h-7 items-center rounded-full border border-accent bg-gradient-to-br from-stone-50 to-yellow-50 px-3 text-xs text-primary group-hover:from-orange-200 group-hover:to-yellow-400 dark:from-stone-700 dark:to-yellow-950 group-hover:dark:from-lime-900 group-hover:dark:to-yellow-700 lg:hidden xl:flex">
                 469.69 Claimable
               </div>
             </div>
