@@ -65,7 +65,7 @@ export default function Portfolio({ markets }: { markets: IMarket[] }) {
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
       <UserGeneralInfo markets={markets} />
-      <div className="flex max-h-[300px] w-full flex-col justify-between rounded-xl border border-border bg-muted px-4 py-6">
+      <div className="flex max-h-[300px] w-full flex-col justify-between rounded-md border border-border bg-muted px-4 py-6">
         <div className="flex w-full flex-col-reverse justify-between gap-9 sm:flex-row sm:gap-0">
           <div className="text-xl font-semibold leading-7">
             {tabType === "Volume"

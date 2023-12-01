@@ -25,7 +25,7 @@ const StatCard = ({
   isLoading?: boolean;
 }) => {
   return (
-    <div className="flex w-full flex-col justify-between gap-1 rounded-xl border border-border px-6 py-4">
+    <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border px-6 py-4">
       <p className="text-sm font-medium text-muted-foreground">{title}</p>
       {isLoading ? (
         <Skeleton className="h-[28px] w-1/2" />
