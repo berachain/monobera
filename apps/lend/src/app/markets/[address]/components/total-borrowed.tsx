@@ -102,7 +102,7 @@ export default function TotalBorrowed({
           <div className="flex gap-8">
             <div className="flex flex-col gap-[6px]">
               <div className="text-sm font-normal leading-normal text-muted-foreground">
-                Available to Borrow <Tooltip text="?" />
+                Available to Borrow
               </div>
               {reserveData ? (
                 <div className="font-semibold leading-7 md:text-xl">
