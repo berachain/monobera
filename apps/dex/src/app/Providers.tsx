@@ -8,7 +8,7 @@ import { beraJsConfig } from "./config";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
         {children}
       </BeraConfig>

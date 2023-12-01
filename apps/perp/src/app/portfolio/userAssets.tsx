@@ -17,7 +17,7 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
 
   return (
     <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 ">
-      <div className="flex w-full flex-col items-start justify-between gap-2 md:flex-row">
+      <div className="flex w-full flex-col items-start justify-between gap-2 pl-2 md:flex-row">
         <div className="flex-shrink-0 text-2xl font-semibold leading-loose">
           Open Positions
           <div className="text-xs font-medium leading-tight text-muted-foreground">
@@ -37,7 +37,7 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
 
 export function AsesetCardMobile({ card }: { card: ICards }) {
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-border bg-background p-4 lg:hidden">
+    <div className="flex flex-col gap-4 rounded-md border border-border bg-background p-4 lg:hidden">
       <p className="text-xs font-medium leading-tight">{card.title}</p>
       <div className="flex flex-col gap-1">
         {card.rows.map((row: IRow, index) => {

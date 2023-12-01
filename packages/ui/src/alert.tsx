@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils/cn";
 
 const alertVariants = cva(
-  "relative w-full rounded-xl border px-4 py-3 text-sm font-normal leading-tight",
+  "relative w-full rounded-md border px-4 py-3 text-sm font-normal leading-tight",
   {
     variants: {
       variant: {

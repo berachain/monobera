@@ -20,7 +20,7 @@ export default async function Vault() {
       <Claim feeApr={apr.apr} />
       <BhoneyStats />
       <div>
-        <p className="mb-4 text-3xl font-semibold leading-9">Your Stats</p>
+        <p className="mb-4 pl-2 text-3xl font-semibold leading-9">Your Stats</p>
         <div className="flex flex-col gap-4 lg:flex-row ">
           <DepositWithdraw />
           <RewardsWithdraw />

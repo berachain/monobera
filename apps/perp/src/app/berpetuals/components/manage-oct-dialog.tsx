@@ -76,22 +76,10 @@ export function ManageOctDialog({
         <div className="text-xl font-semibold leading-7">
           ⚡ Setup One Click Trading{" "}
         </div>
-        {!isOctBalanceLow && !isOctUnfunded && (
-          <div
-            className={
-              "relative flex flex-row justify-between gap-2 rounded-xl border border-border p-3"
-            }
-          >
-            <div className="flex flex-row gap-2 text-sm font-medium">
-              <Icons.checkCircle2 className="text-[#059669]" />
-              Wallet Funded
-            </div>
-          </div>
-        )}
         {isOctDelegated && (
           <div
             className={
-              "relative flex flex-row justify-between gap-2 rounded-xl border border-border p-3"
+              "relative flex flex-row justify-between gap-2 rounded-md border border-border p-3"
             }
           >
             <div className="flex flex-row gap-2 text-sm font-medium">
@@ -116,7 +104,19 @@ export function ManageOctDialog({
             </Button>
           </div>
         )}
-        <div className={"relative rounded-xl border border-border p-3"}>
+        {!isOctBalanceLow && !isOctUnfunded && (
+          <div
+            className={
+              "relative flex flex-row justify-between gap-2 rounded-md border border-border p-3"
+            }
+          >
+            <div className="flex flex-row gap-2 text-sm font-medium">
+              <Icons.checkCircle2 className="text-[#059669]" />
+              Wallet Funded
+            </div>
+          </div>
+        )}
+        <div className={"relative rounded-md border border-border p-3"}>
           <p className="text-sm font-medium leading-normal">
             Your 1-Click Trade Wallet
           </p>
@@ -178,7 +178,32 @@ export function ManageOctDialog({
             </Button>
           </div>
         </div>
-        <div className={"relative rounded-xl border border-border p-3"}>
+        {!isOctDelegated && (
+          <div className={"relative rounded-md border border-border p-3"}>
+            <p className="pb-4 text-sm font-normal">
+              Grant your connected wallet permission to interact with trading
+              contracts through the One-Click-Trading wallet.
+            </p>
+            <ActionButton className=" w-full">
+              <Button
+                className="w-full"
+                disabled={isLoading}
+                onClick={() =>
+                  write({
+                    address: process.env
+                      .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+                    abi: TRADING_ABI,
+                    functionName: "setDelegate",
+                    params: [octAddress],
+                  })
+                }
+              >
+                Approve
+              </Button>
+            </ActionButton>
+          </div>
+        )}
+        <div className={"relative rounded-md border border-border p-3"}>
           <p className="text-sm font-medium leading-normal">
             Fund Your One-Click Account
           </p>
@@ -224,31 +249,6 @@ export function ManageOctDialog({
             </Button>
           </ActionButton>
         </div>
-        {!isOctDelegated && (
-          <div className={"relative rounded-xl border border-border p-3"}>
-            <p className="text-sm font-normal">
-              Grant your connected wallet permission to interact with trading
-              contracts through the One-Click-Trading wallet.
-            </p>
-            <ActionButton className=" w-full">
-              <Button
-                className="w-full"
-                disabled={isLoading}
-                onClick={() =>
-                  write({
-                    address: process.env
-                      .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                    abi: TRADING_ABI,
-                    functionName: "setDelegate",
-                    params: [octAddress],
-                  })
-                }
-              >
-                Approve
-              </Button>
-            </ActionButton>
-          </div>
-        )}
       </DialogContent>
     </Dialog>
   );

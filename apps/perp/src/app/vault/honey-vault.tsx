@@ -48,9 +48,9 @@ export default function HoneyVault() {
     { title: "Vault APR%", value: "69,420%", subtitle: "In HONEY Yields" },
   ];
   return (
-    <div className="relative w-full overflow-hidden rounded-xl border border-border bg-gradient-to-r from-[#180B01] to-[#3B220F] p-8">
+    <div className="relative w-full overflow-hidden rounded-lg border border-border bg-gradient-to-r from-[#180B01] to-[#3B220F] p-8">
       <Image
-        src={`${cloudinaryUrl}/BERPS/ly3o2bc8rdjscoeqbe3w`}
+        src={`${cloudinaryUrl}/BERPS/PRRBanner_hhx0kq`}
         alt="vault-bear"
         width={300}
         height={400}

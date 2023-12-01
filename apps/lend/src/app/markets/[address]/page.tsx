@@ -34,14 +34,14 @@ export default async function Page({
     <IndividualMarketAnalytics
       {...{
         address: params.address,
-        supplyAPR1D,
-        supplyAPR7D,
-        supplyAPR30D,
-        supplyAPRALL,
-        borrowVariableAPR1D,
-        borrowVariableAPR7D,
-        borrowVariableAPR30D,
-        borrowVariableAPRALL,
+        supplyAPR1D: [...supplyAPR1D.reverse()],
+        supplyAPR7D: [...supplyAPR7D.reverse()],
+        supplyAPR30D: [...supplyAPR30D.reverse()],
+        supplyAPRALL: [...supplyAPRALL.reverse()],
+        borrowVariableAPR1D: [...borrowVariableAPR1D.reverse()],
+        borrowVariableAPR7D: [...borrowVariableAPR7D.reverse()],
+        borrowVariableAPR30D: [...borrowVariableAPR30D.reverse()],
+        borrowVariableAPRALL: [...borrowVariableAPRALL.reverse()],
       }}
     />
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import { honeyTokenAddress } from "@bera/config";
 import { DataTable, NotFoundBear } from "@bera/shared-ui";
 
 import UserTokenCard from "~/components/user-token-card";
@@ -23,7 +24,12 @@ export default function AvailableSupply({
           ) : (
             <>
               {assets
-                .sort((a, b) => b.address.localeCompare(a.address))
+                .sort((a, b) => {
+                  if (a.address === honeyTokenAddress) return -1;
+                  if (b.address === honeyTokenAddress) return 1;
+                  return b.address.localeCompare(a.address);
+                })
+
                 .map((asset, index) => (
                   <UserTokenCard asset={asset} key={index} type="supply" />
                 ))}

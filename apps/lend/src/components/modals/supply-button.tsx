@@ -28,15 +28,19 @@ export default function SupplyBtn({
   token,
   disabled = false,
   variant = "primary",
+  supply = false,
 }: {
   token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
+  supply?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `Supplying ${amount} ${token?.symbol}`,
+    message: `${supply ? "Supplying" : "Depositing"} ${amount} ${
+      token?.symbol
+    }`,
     onSuccess: () => {
       userAccountRefetch();
       reservesDataRefetch();
@@ -60,7 +64,7 @@ export default function SupplyBtn({
         disabled={disabled || isLoading || !isReady}
         variant={variant}
       >
-        {isLoading ? "Loading" : "Supply"}
+        {isLoading ? "Loading" : supply ? "Supply" : "Deposit"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-fit p-8">

@@ -152,7 +152,7 @@ export default function PreviewDialog({
         <PreviewToken
           token={tokenIn}
           title={"You pay"}
-          amount={swapInfo?.formattedSwapAmount ?? "0"}
+          amount={swapInfo?.formattedAmountIn ?? "0"}
           price={tokenInPrice ?? "0"}
         />
         {/* TODO: add slippage calculation */}
