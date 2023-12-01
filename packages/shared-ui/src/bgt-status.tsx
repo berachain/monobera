@@ -8,13 +8,14 @@ import {
   usePollPrices,
   usePollTotalDelegated,
 } from "@bera/berajs";
-import { beraTokenAddress } from "@bera/config";
+import { beraTokenAddress, dexUrl, lendUrl, perpsUrl } from "@bera/config";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@bera/ui/accordion";
+import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
@@ -126,7 +127,15 @@ export function BGTStatusBtn() {
                     <div className="flex items-center gap-1">
                       {" "}
                       <div className="font-medium"> 69.69 bgt </div>
-                      <div className="text-muted-foreground"> 69.69 bgt </div>
+                      <Button
+                        className="flex items-center gap-1 text-xs text-muted-foreground"
+                        variant={"ghost"}
+                        size="sm"
+                        onClick={()=>window.open(`${dexUrl}/rewards`)}
+                      >
+                        {" "}
+                        Claim <Icons.externalLink className="block h-4 w-4" />{" "}
+                      </Button>
                     </div>
                   </div>
                   <div className="flex w-full justify-between">
@@ -136,7 +145,15 @@ export function BGTStatusBtn() {
                     </div>
                     <div className="flex items-center gap-1">
                       <div className="font-medium"> 69.69 bgt </div>
-                      <div className="text-muted-foreground"> 69.69 bgt </div>
+                      <Button
+                        className="flex items-center gap-1 text-xs text-muted-foreground"
+                        variant={"ghost"}
+                        size="sm"
+                        onClick={()=>window.open(`${lendUrl}/dashboard`)}
+                      >
+                        {" "}
+                        Claim <Icons.externalLink className="block h-4 w-4" />{" "}
+                      </Button>
                     </div>
                   </div>
                   <div className="flex w-full justify-between">
@@ -147,7 +164,15 @@ export function BGTStatusBtn() {
                     <div className="flex items-center gap-1">
                       {" "}
                       <div className="font-medium"> 69.69 bgt </div>
-                      <div className="text-muted-foreground"> 69.69 bgt </div>
+                      <Button
+                        className="flex items-center gap-1 text-xs text-muted-foreground"
+                        variant={"ghost"}
+                        size="sm"
+                        onClick={()=>window.open(`${perpsUrl}/vault`)}
+                      >
+                        {" "}
+                        Claim <Icons.externalLink className="block h-4 w-4" />{" "}
+                      </Button>
                     </div>
                   </div>
                 </div>
