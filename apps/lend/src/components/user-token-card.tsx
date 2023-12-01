@@ -144,18 +144,17 @@ export default function UserTokenCard({
           have supplied. It only updates when you supply assets.
         </Alert>
       )}
-      {(type === "user-supply" || type === "supply") &&
-        asset.address === honeyAddress && (
-          <Alert variant="warning" className="mt-4">
-            <AlertTitle>
-              {" "}
-              <Icons.info className="mr-1 inline-block h-4 w-4" />
-              Cannot Borrow Against This Conllateral
-            </AlertTitle>
-            HONEY deposits earn interest but don&apos;t qualify as collateral or
-            boost borrowing capacity.
-          </Alert>
-        )}
+      {type === "supply" && asset.address === honeyAddress && (
+        <Alert variant="warning" className="mt-4">
+          <AlertTitle>
+            {" "}
+            <Icons.info className="mr-1 inline-block h-4 w-4" />
+            Cannot Borrow Against This Conllateral
+          </AlertTitle>
+          HONEY deposits earn interest but don&apos;t qualify as collateral or
+          boost borrowing capacity.
+        </Alert>
+      )}
       {type === "borrow" &&
         Number(
           formatUnits(asset.reserveData.availableLiquidity, asset.decimals),

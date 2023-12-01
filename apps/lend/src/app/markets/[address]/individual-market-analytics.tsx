@@ -78,7 +78,7 @@ export default function IndividualMarketAnalytics({
         <Icons.arrowLeft className="relative h-4 w-4" />
         <div
           className="text-sm font-medium leading-normal"
-          onClick={() => router.push("/markets")}
+          onClick={() => router.push("/dashboard")}
         >
           Go Back
         </div>
