@@ -41,10 +41,10 @@ export const navItems = [
     href: "/dashboard",
     title: "Dashboard",
   },
-  {
-    href: "/markets",
-    title: "Markets",
-  },
+  // {
+  //   href: "/markets",
+  //   title: "Markets",
+  // },
   {
     href: "#",
     title: "Explore",

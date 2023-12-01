@@ -1,6 +1,8 @@
 import { formatter } from "@bera/berajs";
+import { honeyAddress } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
+import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
@@ -43,14 +45,20 @@ export default function UserTokenCard({
               {type === "supply" && (
                 <>
                   <Icons.wallet className="relative h-3 w-3 rounded-lg" />
-                  Wallet Balance{" "}
+                  {asset.symbol}{" "}
                 </>
               )}
               {type === "borrow" && <>{asset.symbol} Avaliable</>}
             </div>
 
             <div className="h-8 text-lg font-bold uppercase">
-              {formatter.format(balance)}
+              {formatter.format(balance)}{" "}
+              {(type === "user-supply" || type === "supply") &&
+                asset.address === honeyAddress && (
+                  <Badge variant={"warning"} className="rounded-xs px-2 py-0">
+                    SUPPLY ONLY
+                  </Badge>
+                )}
             </div>
             <div className="text-xs font-medium leading-tight">
               $
@@ -64,16 +72,17 @@ export default function UserTokenCard({
           </div>
         </div>
 
-        {(type === "user-supply" || type === "supply") && (
-          <div className="flex flex-shrink-0 flex-col">
-            <div className="text-xs font-medium leading-5 text-muted-foreground">
-              Supply PRR
+        {(type === "user-supply" || type === "supply") &&
+          asset.address === honeyAddress && (
+            <div className="flex flex-shrink-0 flex-col">
+              <div className="text-xs font-medium leading-5 text-muted-foreground">
+                Supply PRR
+              </div>
+              <div className="text-lg font-bold text-success-foreground">
+                {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
+              </div>
             </div>
-            <div className="text-lg font-bold text-success-foreground">
-              {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
-            </div>
-          </div>
-        )}
+          )}
 
         {type === "borrow" && (
           <div className="flex flex-shrink-0 flex-col">
@@ -99,7 +108,7 @@ export default function UserTokenCard({
 
         <div className="grow-1 hidden w-full items-center gap-2 md:flex md:w-fit">
           {(type === "user-supply" || type === "supply") && (
-            <SupplyBtn token={asset} />
+            <SupplyBtn token={asset} supply={asset.address === honeyAddress} />
           )}
           {type === "user-supply" && <WithdrawBtn token={asset} />}
           {(type === "user-borrow" || type === "borrow") && (
@@ -113,7 +122,7 @@ export default function UserTokenCard({
       </div>
       <div className="grow-1 mt-8 flex w-full items-center gap-2 md:hidden md:w-fit">
         {(type === "user-supply" || type === "supply") && (
-          <SupplyBtn token={asset} />
+          <SupplyBtn token={asset} supply={asset.address === honeyAddress} />
         )}
         {type === "user-supply" && <WithdrawBtn token={asset} />}
         {(type === "user-borrow" || type === "borrow") && (
@@ -133,6 +142,17 @@ export default function UserTokenCard({
           </AlertTitle>
           Your available-to-borrow balance is based on the amounts of assets you
           have supplied. It only updates when you supply assets.
+        </Alert>
+      )}
+      {type === "supply" && asset.address === honeyAddress && (
+        <Alert variant="warning" className="mt-4">
+          <AlertTitle>
+            {" "}
+            <Icons.info className="mr-1 inline-block h-4 w-4" />
+            Cannot Borrow Against This Conllateral
+          </AlertTitle>
+          HONEY deposits earn interest but don&apos;t qualify as collateral or
+          boost borrowing capacity.
         </Alert>
       )}
       {type === "borrow" &&

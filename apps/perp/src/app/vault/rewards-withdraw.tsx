@@ -66,9 +66,9 @@ export const RewardsWithdraw = () => {
   });
 
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className="flex w-full flex-col gap-2">
       {ModalPortal}
-      <div className="flex w-full flex-col justify-between gap-1 rounded-xl border border-border bg-muted px-6 py-4">
+      <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
         <p className="text-sm font-medium text-muted-foreground">
           Est. Rewards
         </p>
@@ -113,7 +113,7 @@ export const RewardsWithdraw = () => {
         </div>
       </div>
       <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-2">
-        <div className="flex w-full flex-col justify-between gap-1 rounded-xl border border-border bg-muted px-6 py-4">
+        <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
           <p className="text-sm font-medium text-muted-foreground">
             bHONEY Balance
           </p>
@@ -131,7 +131,7 @@ export const RewardsWithdraw = () => {
             </div>
           )}
         </div>
-        <div className="flex w-full flex-col justify-between gap-1 rounded-xl border border-border bg-muted px-6 py-4">
+        <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
           <p className="text-sm font-medium text-muted-foreground">
             Total HONEY Value
           </p>
@@ -149,7 +149,7 @@ export const RewardsWithdraw = () => {
             </div>
           )}
         </div>
-        <div className="flex w-full flex-col justify-between gap-1 rounded-xl border border-border bg-muted px-6 py-4">
+        <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
           <p className="w-full text-sm font-medium text-muted-foreground">
             Est. Earnings
           </p>
@@ -168,8 +168,8 @@ export const RewardsWithdraw = () => {
           )}
         </div>
       </div>
-      <div>
-        <p className="text-lg font-semibold">Withdrawal Queue</p>
+      <div className="pt-4">
+        <p className="pl-2 text-lg font-semibold">Withdrawal Queue</p>
       </div>
       <DataTable
         columns={withdraw_queue_columns}
