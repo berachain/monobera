@@ -72,12 +72,14 @@ export const getSwap = async (
       }
     }
 
-
     if (
       tokenOut === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)
     ) {
       const lastStep = batchSwapSteps.length - 1;
-      if (batchSwapSteps !== undefined && batchSwapSteps[lastStep] !== undefined) {
+      if (
+        batchSwapSteps !== undefined &&
+        batchSwapSteps[lastStep] !== undefined
+      ) {
         // @ts-ignore
         batchSwapSteps[lastStep].assetOut = process.env
           .NEXT_PUBLIC_BERA_ADDRESS as Address;
