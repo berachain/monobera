@@ -7,6 +7,7 @@ import {
   usePollDelegatorUnbonding,
   usePollPrices,
   usePollTotalDelegated,
+  usePollUserAllBGTRewards,
 } from "@bera/berajs";
 import { beraTokenAddress, dexUrl, lendUrl, perpsUrl } from "@bera/config";
 import {
@@ -20,6 +21,7 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Skeleton } from "@bera/ui/skeleton";
+import { formatEther } from "viem";
 
 import { BGTIcon } from "./bgt-icon";
 
@@ -35,6 +37,17 @@ export function BGTStatusBtn() {
   const bgtTotalDelegated = useTotalDelegatorDelegated();
   const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
   const totalUnbonding = useDelegatorTotalUnbonding();
+  const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
+
+  const totalBGT =
+    Number(userBalance) +
+    Number(bgtTotalDelegated ?? "0") +
+    Number(totalUnbonding ?? "0");
+
+  const totalClaimableBGT: bigint = //@ts-ignore
+    isLoading || !bgtRewards || bgtRewards.length !== 3
+      ? 0n //@ts-ignore
+      : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
 
   const data = [
     {
@@ -58,14 +71,10 @@ export function BGTStatusBtn() {
     {
       background: "#EFF199",
       stroke: "#526E02",
-      text: "Claimable Rewards",
-      amoumt: userBalance,
+      text: "Claimable Rewards", //@ts-ignore
+      amoumt: Number(formatEther(totalClaimableBGT)),
     },
   ];
-  const totalBGT =
-    Number(userBalance) +
-    Number(bgtTotalDelegated ?? "0") +
-    Number(totalUnbonding ?? "0");
 
   const Status = (
     <>
@@ -132,7 +141,19 @@ export function BGTStatusBtn() {
                     </div>
                     <div className="flex items-center gap-1">
                       {" "}
-                      <div className="font-medium"> 69.69 bgt </div>
+                      {isLoading ? (
+                        <Skeleton className="w-20" />
+                      ) : (
+                        <div className="font-medium">
+                          {" "}
+                          {!isLoading &&
+                            formatter.format(
+                              //@ts-ignore
+                              formatEther((bgtRewards as bigint[])[0] ?? 0n),
+                            )}{" "}
+                          BGT{" "}
+                        </div>
+                      )}
                       <Button
                         className="flex items-center gap-1 text-xs text-muted-foreground"
                         variant={"ghost"}
@@ -150,7 +171,19 @@ export function BGTStatusBtn() {
                       BEND
                     </div>
                     <div className="flex items-center gap-1">
-                      <div className="font-medium"> 69.69 bgt </div>
+                      {isLoading ? (
+                        <Skeleton className="w-20" />
+                      ) : (
+                        <div className="font-medium">
+                          {" "}
+                          {!isLoading &&
+                            formatter.format(
+                              //@ts-ignore
+                              formatEther((bgtRewards as bigint[])[1] ?? 0n),
+                            )}{" "}
+                          BGT{" "}
+                        </div>
+                      )}
                       <Button
                         className="flex items-center gap-1 text-xs text-muted-foreground"
                         variant={"ghost"}
@@ -169,7 +202,19 @@ export function BGTStatusBtn() {
                     </div>
                     <div className="flex items-center gap-1">
                       {" "}
-                      <div className="font-medium"> 69.69 bgt </div>
+                      {isLoading ? (
+                        <Skeleton className="w-20" />
+                      ) : (
+                        <div className="font-medium">
+                          {" "}
+                          {!isLoading &&
+                            formatter.format(
+                              //@ts-ignore
+                              formatEther((bgtRewards as bigint[])[2] ?? 0n),
+                            )}{" "}
+                          BGT{" "}
+                        </div>
+                      )}
                       <Button
                         className="flex items-center gap-1 text-xs text-muted-foreground"
                         variant={"ghost"}
@@ -206,7 +251,8 @@ export function BGTStatusBtn() {
                 {formatter.format(totalBGT)} BGT
               </div>
               <div className="flex h-7 items-center rounded-full border border-accent bg-gradient-to-br from-stone-50 to-yellow-50 px-3 text-xs text-primary group-hover:from-orange-200 group-hover:to-yellow-400 dark:from-stone-700 dark:to-yellow-950 group-hover:dark:from-lime-900 group-hover:dark:to-yellow-700 lg:hidden xl:flex">
-                469.69 Claimable
+                {/* @ts-ignore */}
+                {formatter.format(formatEther(totalClaimableBGT))} Claimable
               </div>
             </div>
           </PopoverTrigger>
