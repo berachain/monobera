@@ -16,7 +16,7 @@ export function OctGenerateDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-[382px]">
-        <div className="text-xl font-semibold leading-7">
+        <div className="pb-4 text-xl font-semibold leading-7">
           ⚡ Setup One Click Trading{" "}
         </div>
         <div className="text-sm font-normal leading-5 text-muted-foreground">
@@ -43,7 +43,7 @@ export function OctGenerateDialog({
             </div>
             <div>
               <li className="text-sm font-bold">Delegate:</li>
-              <div className="text-sm font-normal leading-5 text-muted-foreground">
+              <div className="pb-6 text-sm font-normal leading-5 text-muted-foreground">
                 Grant your connected wallet permission to interact with trading
                 contracts through the 1-CT wallet.
               </div>

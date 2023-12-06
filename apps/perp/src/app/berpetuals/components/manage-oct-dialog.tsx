@@ -22,22 +22,271 @@ import { useCopyToClipboard } from "usehooks-ts";
 import { parseEther } from "viem";
 import { type Address } from "wagmi";
 
-export function ManageOctDialog({
-  open,
-  onOpenChange,
+const TradeWalletSection = () => {
+  const { octPrivKey, octAddress, octBalance, octTxCount } = useOct();
+
+  const { account } = useBeraJs();
+
+  const [_, copy] = useCopyToClipboard();
+  const { isValueSendLoading, writeValueSend } = useOctTxn({
+    message: "Withdrawing All From One Click Trading Wallet",
+  });
+
+  return (
+    <div className={"relative rounded-md border border-border p-3"}>
+      <p className="text-md pb-4 font-bold leading-normal">
+        Your 1-Click Trade Wallet
+      </p>
+      <div className="mt-2 flex flex-row gap-2">
+        <Identicon account={octAddress} size={24} />
+        <div
+          className="text-sm font-semibold hover:underline"
+          onClick={() =>
+            window.open(blockExplorerUrl + "/address/" + octAddress, "_blank")
+          }
+        >
+          {truncateHash(octAddress)}
+        </div>
+        <Icons.external className="h-4 w-4" />
+      </div>
+      <div className="mt-2 flex flex-row gap-2">
+        <TokenIcon
+          token={{
+            address: "0x0000000000000000000000000000000000000000",
+            symbol: "BERA",
+            decimals: 18,
+            name: "BERA",
+          }}
+        />
+        <div className="text-sm font-semibold">
+          {Number(octBalance ?? 0).toFixed(2)} BERA{" "}
+          <span className="text-xs font-medium text-success-foreground">
+            ~ {octTxCount.toString()} txns
+          </span>
+        </div>
+      </div>
+      <div className="mt-3 flex flex-row gap-2">
+        <Button
+          size={"sm"}
+          className="w-full"
+          variant={"secondary"}
+          disabled={isValueSendLoading || false}
+          onClick={() => {
+            writeValueSend({
+              address: account as Address,
+              value:
+                parseUnits(octBalance.toString(), 18) -
+                parseEther(`${Number(0.15)}`),
+            });
+          }}
+        >
+          Withdraw All
+        </Button>
+        <Button
+          size={"sm"}
+          className="w-full"
+          variant={"secondary"}
+          onClick={() => copy("0x" + octPrivKey)}
+        >
+          Copy Private Key
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+// FundAccountSection Component
+const FundAccountSection = ({
+  fundAmount,
+  setFundAmount,
+  isReady,
+  userBalance,
+  isFundingLoading,
+  fundWrite,
+  octAddress,
+  setShowFundSection,
 }: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
+  fundAmount: string | undefined;
+  setFundAmount: (value: string | undefined) => void;
+  isReady: boolean;
+  userBalance: string;
+  isFundingLoading: boolean;
+  fundWrite: (args: { address: Address; value: string }) => void;
+  octAddress: string;
+  setShowFundSection: (value: boolean) => void;
+}) => {
+  return (
+    <div className={"relative rounded-md border border-border p-3"}>
+      <div className={"items-centre flex justify-between pb-4"}>
+        <p className="text-md font-bold leading-normal">
+          Fund Your One-Click Account
+        </p>
+        <Button
+          variant={"secondary"}
+          size="sm"
+          className="border-secondary text-secondary-foreground hover:bg-secondary hover:text-foreground"
+          onClick={() => setShowFundSection(false)}
+        >
+          Hide
+        </Button>
+      </div>
+      <p className="text-sm font-normal">
+        Fund your 1-click trading account with at least 1.0 BERA token to ensure
+        you have enough reserves for gas fees.{" "}
+      </p>
+      <div>
+        <Input
+          type="number"
+          value={fundAmount}
+          onChange={(e) => setFundAmount(e.target.value)}
+          id="initial-deposit"
+          className="mt-4"
+          placeholder="0.00"
+          endAdornment="BERA"
+        />
+        {isReady && (
+          <div className="mt-1 flex h-3 w-full items-center justify-end gap-1 text-xs text-muted-foreground">
+            <Icons.wallet className="relative inline-block h-3 w-3 " />
+            {userBalance}
+            <span
+              className="cursor-pointer underline"
+              onClick={() => setFundAmount(userBalance)}
+            >
+              MAX
+            </span>
+          </div>
+        )}
+      </div>
+      <ActionButton className="mt-4 w-full">
+        <Button
+          className="w-full"
+          disabled={isFundingLoading}
+          onClick={() =>
+            fundWrite({
+              address: octAddress as Address,
+              value: parseEther(`${fundAmount || '0'}`),
+              // value: parseEther(fundAmount ? `${fundAmount.toString()}` : '0'),
+            })
+          }
+        >
+          Fund One-Click Wallet
+        </Button>
+      </ActionButton>
+    </div>
+  );
+};
+
+// DelegatedSection Component
+const DelegatedSection = ({
+  isRevokeLoading,
+  revokeDelegation,
+}: {
+  isRevokeLoading: boolean;
+  revokeDelegation: () => void;
+}) => {
+  return (
+    <div className="relative flex flex-row justify-between gap-2 rounded-md border border-border p-3">
+      <div className="flex flex-row gap-2 text-sm font-medium">
+        <Icons.checkCircle2 className="text-success-foreground" />
+        Granted Permission
+      </div>
+      <Button
+        variant={"destructive"}
+        size="sm"
+        className="bg-destructive text-destructive-foreground hover:bg-destructive-foreground hover:text-destructive"
+        disabled={isRevokeLoading}
+        onClick={() => revokeDelegation()}
+      >
+        Revoke
+      </Button>
+    </div>
+  );
+};
+
+// ApprovalSection Component
+const ApprovalSection = ({
+  isLoading,
+  delegateWallet,
+}: {
+  isLoading: boolean;
+  delegateWallet: () => void;
+}) => {
+  return (
+    <div className={"relative rounded-md border border-border p-3"}>
+      <p className="pb-4 text-sm font-normal">
+        Grant your connected wallet permission to interact with trading
+        contracts through the One-Click-Trading wallet.
+      </p>
+      <ActionButton className="w-full">
+        <Button
+          className="w-full"
+          disabled={isLoading}
+          onClick={() => delegateWallet()}
+        >
+          Approve
+        </Button>
+      </ActionButton>
+    </div>
+  );
+};
+
+// WalletFundedSection Component
+const WalletFundedSection = ({
+  isBalanceLessThanThreshold,
+  setShowFundSection,
+}: {
+  isBalanceLessThanThreshold: boolean;
+  setShowFundSection: (value: boolean) => void;
+}) => {
+  return (
+    <div className="relative flex flex-row justify-between gap-2 rounded-md border border-border p-3">
+      <div className="flex flex-row gap-2 text-sm font-medium">
+        {isBalanceLessThanThreshold ? (
+          <Icons.warning className="text-warning-foreground" />
+        ) : (
+          <Icons.checkCircle2 className="text-success-foreground" />
+        )}
+        <span
+          className={
+            isBalanceLessThanThreshold ? "text-warning-foreground" : ""
+          }
+        >
+          {isBalanceLessThanThreshold ? "Low Balance" : "Wallet Funded"}
+        </span>
+      </div>
+      <Button
+        variant={"secondary"}
+        size="sm"
+        className="border-success bg-success text-success-foreground hover:bg-success-foreground hover:text-success"
+        onClick={() => setShowFundSection((prev: boolean | undefined) => prev !== undefined ? !prev : false)}
+      >
+        Fund
+      </Button>
+    </div>
+  );
+};
+
+// OneClickWalletEnabledSection Component
+const OneClickWalletEnabledSection = () => {
+  return (
+    <div className="relative flex flex-row items-center justify-between gap-2 rounded-md border border-border p-3">
+      <div className="flex flex-row items-center gap-2 text-sm font-medium">
+        <Icons.checkCircle2 className="text-success-foreground" />
+        One-Click Wallet Enabled
+      </div>
+    </div>
+  );
+};
+
+// Main component: ManageOctDialog
+export function ManageOctDialog({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const {
-    octPrivKey,
     isOctDelegated,
     refetchDelegated,
     isOctUnfunded,
     isOctBalanceLow,
     octAddress,
     octBalance,
-    octTxCount,
   } = useOct();
 
   const [fundAmount, setFundAmount] = useState<string | undefined>(undefined);
@@ -64,191 +313,66 @@ export function ManageOctDialog({
     message: "Funding One Click Trading Wallet",
   });
 
-  const { isValueSendLoading, writeValueSend } = useOctTxn({
-    message: "Withdrawing All From One Click Trading Wallet",
-  });
+  const [showFundSection, setShowFundSection] = useState(false);
+  const isBalanceLessThanThreshold = Number(octBalance ?? 0) < 0.15;
 
-  const [_, copy] = useCopyToClipboard();
+  function revokeDelegation() {
+    revokeWrite({
+      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      abi: TRADING_ABI,
+      functionName: "removeDelegate",
+      params: [],
+    });
+  }
+
+  function delegateWallet() {
+    write({
+      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      abi: TRADING_ABI,
+      functionName: "setDelegate",
+      params: [octAddress],
+    });
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-[382px]">
         <div className="text-xl font-semibold leading-7">
-          ⚡ Setup One Click Trading{" "}
+          ⚡ One-Click Trading{" "}
         </div>
-        {isOctDelegated && (
-          <div
-            className={
-              "relative flex flex-row justify-between gap-2 rounded-md border border-border p-3"
-            }
-          >
-            <div className="flex flex-row gap-2 text-sm font-medium">
-              <Icons.checkCircle2 className="text-[#059669]" />
-              Granted Permission
-            </div>
-            <Button
-              variant={"destructive"}
-              size="sm"
-              disabled={isRevokeLoading}
-              onClick={() =>
-                revokeWrite({
-                  address: process.env
-                    .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                  abi: TRADING_ABI,
-                  functionName: "removeDelegate",
-                  params: [],
-                })
-              }
-            >
-              Revoke
-            </Button>
-          </div>
+        <TradeWalletSection />
+        {isOctDelegated && !isOctBalanceLow && !isOctUnfunded && (
+          <OneClickWalletEnabledSection />
         )}
-        {!isOctBalanceLow && !isOctUnfunded && (
-          <div
-            className={
-              "relative flex flex-row justify-between gap-2 rounded-md border border-border p-3"
-            }
-          >
-            <div className="flex flex-row gap-2 text-sm font-medium">
-              <Icons.checkCircle2 className="text-[#059669]" />
-              Wallet Funded
-            </div>
-          </div>
+        {isOctDelegated ? (
+          <DelegatedSection
+            isRevokeLoading={isRevokeLoading}
+            revokeDelegation={revokeDelegation}
+          />
+        ) : (
+          <ApprovalSection
+            isLoading={isLoading}
+            delegateWallet={delegateWallet}
+          />
         )}
-        <div className={"relative rounded-md border border-border p-3"}>
-          <p className="text-sm font-medium leading-normal">
-            Your 1-Click Trade Wallet
-          </p>
-          <div className="mt-2 flex flex-row gap-2">
-            <Identicon account={octAddress} size={24} />
-            <div
-              className="text-sm font-semibold hover:underline"
-              onClick={() =>
-                window.open(
-                  blockExplorerUrl + "/address/" + octAddress,
-                  "_blank",
-                )
-              }
-            >
-              {truncateHash(octAddress)}
-            </div>
-            <Icons.external className="h-4 w-4" />
-          </div>
-          <div className="mt-2 flex flex-row gap-2">
-            <TokenIcon
-              token={{
-                address: "0x0000000000000000000000000000000000000000",
-                symbol: "BERA",
-                decimals: 18,
-                name: "BERA",
-              }}
-            />
-            <div className="text-sm font-semibold">
-              {Number(octBalance ?? 0).toFixed(2)} BERA{" "}
-              <span className="text-xs font-medium text-emerald-600">
-                ~ {octTxCount} txns
-              </span>
-            </div>
-          </div>
-          <div className="mt-3 flex flex-row gap-2">
-            <Button
-              size={"sm"}
-              className="w-full"
-              variant={"secondary"}
-              disabled={isValueSendLoading}
-              onClick={() => {
-                writeValueSend({
-                  address: account as Address,
-                  value:
-                    parseUnits(octBalance.toString(), 18) -
-                    parseEther(`${Number(0.15)}`),
-                });
-              }}
-            >
-              Withdraw All
-            </Button>
-            <Button
-              size={"sm"}
-              className="w-full"
-              variant={"secondary"}
-              onClick={() => copy("0x" + octPrivKey)}
-            >
-              Copy Private Key
-            </Button>
-          </div>
-        </div>
-        {!isOctDelegated && (
-          <div className={"relative rounded-md border border-border p-3"}>
-            <p className="pb-4 text-sm font-normal">
-              Grant your connected wallet permission to interact with trading
-              contracts through the One-Click-Trading wallet.
-            </p>
-            <ActionButton className=" w-full">
-              <Button
-                className="w-full"
-                disabled={isLoading}
-                onClick={() =>
-                  write({
-                    address: process.env
-                      .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                    abi: TRADING_ABI,
-                    functionName: "setDelegate",
-                    params: [octAddress],
-                  })
-                }
-              >
-                Approve
-              </Button>
-            </ActionButton>
-          </div>
+        {(!isOctBalanceLow && !isOctUnfunded) || isBalanceLessThanThreshold ? (
+          <WalletFundedSection
+            isBalanceLessThanThreshold={isBalanceLessThanThreshold}
+            setShowFundSection={setShowFundSection}
+          />
+        ) : null}
+        {showFundSection && (
+          <FundAccountSection
+            fundAmount={fundAmount}
+            setFundAmount={setFundAmount}
+            isReady={isReady}
+            userBalance={userBalance}
+            isFundingLoading={isFundingLoading}
+            fundWrite={fundWrite}
+            octAddress={octAddress}
+            setShowFundSection={setShowFundSection}
+          />
         )}
-        <div className={"relative rounded-md border border-border p-3"}>
-          <p className="text-sm font-medium leading-normal">
-            Fund Your One-Click Account
-          </p>
-          <p className="text-sm font-normal">
-            Fund your 1-click trading account with at least 1.0 BERA token to
-            ensure you have enough reserves for gas fees.{" "}
-          </p>
-          <div>
-            <Input
-              type="number"
-              value={fundAmount}
-              onChange={(e) => setFundAmount(e.target.value)}
-              id="initial-deposit"
-              className="mt-4"
-              placeholder="0.00"
-              endAdornment="BERA"
-            />
-            {isReady && (
-              <div className="mt-1 flex h-3 w-full items-center justify-end gap-1 text-xs text-muted-foreground">
-                <Icons.wallet className="relative inline-block h-3 w-3 " />
-                {userBalance}
-                <span
-                  className="cursor-pointer underline"
-                  onClick={() => setFundAmount(userBalance)}
-                >
-                  MAX
-                </span>
-              </div>
-            )}
-          </div>
-          <ActionButton className="mt-4 w-full">
-            <Button
-              className="w-full"
-              disabled={isFundingLoading}
-              onClick={() =>
-                fundWrite({
-                  address: octAddress as Address,
-                  value: parseEther(`${Number(fundAmount)}` ?? 0),
-                })
-              }
-            >
-              Fund One-Click Wallet
-            </Button>
-          </ActionButton>
-        </div>
       </DialogContent>
     </Dialog>
   );

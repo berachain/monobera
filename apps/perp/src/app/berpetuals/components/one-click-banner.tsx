@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useOct } from "@bera/berajs";
 import { cn } from "@bera/ui";
+import { useLocalStorage } from "usehooks-ts";
 
 import { FundModal } from "./fund-modal";
 import { ManageOctDialog } from "./manage-oct-dialog";
@@ -19,13 +20,13 @@ enum BannerEnum {
 }
 
 const BannerText = {
-  [BannerEnum.ON]: "Manage One-Click Trade Wallet",
-  [BannerEnum.OFF]: "One Click Trade is disabled",
-  [BannerEnum.LOW_BALANCE]: "Fund One-Click Trade Wallet",
-  [BannerEnum.NOT_FUNDED]: "Fund One-Click Trade Wallet",
-  [BannerEnum.NOT_GENERATED]: "Setup One-Click Trade Wallet",
+  [BannerEnum.ON]: "⚡️ Manage One-Click Trade Wallet",
+  [BannerEnum.OFF]: "⚡️ One Click Trade is disabled",
+  [BannerEnum.LOW_BALANCE]: "⚡️ Fund One-Click Trade Wallet",
+  [BannerEnum.NOT_FUNDED]: "⚡️ Fund One-Click Trade Wallet",
+  [BannerEnum.NOT_GENERATED]: "⚡️ Setup One-Click Trade Wallet",
   [BannerEnum.NOT_DELEGATED]:
-    "Approve your One-Click Trade Wallet to submit transactions",
+    "⚡️ Approve your One-Click Trade Wallet to submit transactions",
 };
 
 const getStatusColor = (status: BannerEnum) => {
@@ -47,58 +48,72 @@ const getStatusColor = (status: BannerEnum) => {
   }
 };
 
-const OneClickSwitch = ({
-  isOctEnabled,
-  onClick,
-}: {
-  isOctEnabled: boolean;
-  onClick: (mode: boolean) => void;
-}) => {
-  return (
-    <div
-      className="flex cursor-pointer gap-2 text-sm  font-semibold"
-      onClick={() => onClick(true)}
-    >
-      <div className="flex items-center text-center text-[11px]">
-        <div
-          className={cn(
-            "h-4 w-5 rounded-l-full bg-stone-800 ",
-            isOctEnabled === true && "opacity-20",
-          )}
-        >
-          <span className="-mt-1 block select-none">🐢</span>
-        </div>
-        <div
-          className={cn(
-            "h-4 w-5 rounded-r-full bg-stone-800 ",
-            isOctEnabled === false && "opacity-20",
-          )}
-        >
-          <span className="-mt-[2px] block select-none">⚡️</span>
-        </div>
-      </div>
-    </div>
-  );
-};
+// const OneClickSwitch = ({
+//   isOctEnabled,
+//   onClick,
+// }: {
+//   isOctEnabled: boolean;
+//   onClick: (mode: boolean) => void;
+// }) => {
+//   // return (
+//   //   <div
+//   //     className="flex cursor-pointer gap-2 text-sm  font-semibold"
+//   //     onClick={() => onClick(true)}
+//   //   >
+//   //     <div className="flex items-center text-center text-[11px]">
+//   //       <div
+//   //         className={cn(
+//   //           "h-4 w-5 rounded-l-full bg-stone-800 ",
+//   //           isOctEnabled === true && "opacity-20",
+//   //         )}
+//   //       >
+//   //         <span className="-mt-1 block select-none">🐢</span>
+//   //       </div>
+//   //       <div
+//   //         className={cn(
+//   //           "h-4 w-5 rounded-r-full bg-stone-800 ",
+//   //           isOctEnabled === false && "opacity-20",
+//   //         )}
+//   //       >
+//   //         <span className="-mt-[2px] block select-none">⚡️</span>
+//   //       </div>
+//   //     </div>
+//   //   </div>
+//   // );
+// };
 
 export function OneClickBanner() {
   // const [on, setOn] = useState<boolean>(false);
   const [oneClickModalOpen, setOneClickModalOpen] = useState<boolean>(false);
   const [fundModalOpen, setFundModalOpen] = useState<boolean>(false);
+  const [isFirstTimeOct, setIsFirstTimeOct] = useLocalStorage(
+    "isFirstTimeOct",
+    true,
+  );
+
   const [octGenerateModalOpen, setOctGenerateModalOpen] =
     useState<boolean>(false);
   const [octManageWalletModalOpen, setOctManageWalletModalOpen] =
     useState<boolean>(false);
+
   const {
     generateKey,
     isGenLoading,
     setOctEnabled,
     isOctEnabled: on,
+    isOctReady,
     isOctGenerated,
     isOctUnfunded,
     isOctBalanceLow,
     isOctDelegated,
   } = useOct();
+
+  const handleOctManageWalletModalOpen = (open: boolean) => {
+    setOctManageWalletModalOpen(open);
+    if (isOctReady) {
+      setIsFirstTimeOct(false);
+    }
+  };
 
   const getStatus = () => {
     let status;
@@ -167,10 +182,10 @@ export function OneClickBanner() {
         </span>
       </div>
       {/* @ts-ignore */}
-      <OneClickSwitch
+      {/* <OneClickSwitch
         isOctEnabled={on()}
         onClick={(mode: boolean) => setOneClickModalOpen(mode)}
-      />
+      /> */}
       <OneClickModal
         open={oneClickModalOpen}
         onOpenChange={setOneClickModalOpen}
@@ -179,7 +194,8 @@ export function OneClickBanner() {
       />
       <ManageOctDialog
         open={octManageWalletModalOpen}
-        onOpenChange={(open) => setOctManageWalletModalOpen(open)}
+        isFirstTimeOct={isFirstTimeOct}
+        onOpenChange={(open) => handleOctManageWalletModalOpen(open)}
       />
       <OctGenerateDialog
         open={octGenerateModalOpen}
