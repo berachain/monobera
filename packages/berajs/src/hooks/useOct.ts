@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
-import { Wallet } from "ethers";
 import lodash from "lodash";
 import { Keccak } from "sha3";
 import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
-import { http, type Address, createWalletClient } from "viem";
-import { privateKeyToAccount } from 'viem/accounts'
+import { createWalletClient, http, type Address } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 import { useSignMessage } from "wagmi";
 
 import { decrypt, encrypt } from "~/utils/encoder";
@@ -53,7 +52,7 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { account } = useBeraJs();
-  const { networkConfig} = useBeraConfig();
+  const { networkConfig } = useBeraConfig();
   const { signMessageAsync } = useSignMessage({
     message: `You are enabling One Click Trading. Use at your own risk!`,
   });
@@ -92,11 +91,11 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
       const decodedString = decrypt(octKey, KEY);
 
       const account = privateKeyToAccount(decodedString as `0x${string}`);
-      const client = createWalletClient({ 
-        account, 
+      const client = createWalletClient({
+        account,
         chain: networkConfig.chain,
-        transport: http()
-      })
+        transport: http(),
+      });
       // const account = ethersWalletToAccount(new Wallet(decodedString));
 
       setOctAccount(client);
