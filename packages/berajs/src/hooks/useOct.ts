@@ -4,8 +4,8 @@ import lodash from "lodash";
 import { Keccak } from "sha3";
 import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
-import { type Address } from "viem";
-import { ethersWalletToAccount } from "viem/ethers";
+import { http, type Address, createWalletClient } from "viem";
+import { privateKeyToAccount } from 'viem/accounts'
 import { useSignMessage } from "wagmi";
 
 import { decrypt, encrypt } from "~/utils/encoder";
@@ -13,6 +13,7 @@ import {
   ActionEnum,
   initialState,
   reducer,
+  useBeraConfig,
   useBeraJs,
   usePollBeraBalance,
   usePollTransactionCount,
@@ -52,6 +53,7 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { account } = useBeraJs();
+  const { networkConfig} = useBeraConfig();
   const { signMessageAsync } = useSignMessage({
     message: `You are enabling One Click Trading. Use at your own risk!`,
   });
@@ -88,9 +90,16 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
         return;
       }
       const decodedString = decrypt(octKey, KEY);
-      const account = ethersWalletToAccount(new Wallet(decodedString));
 
-      setOctAccount(account);
+      const account = privateKeyToAccount(decodedString as `0x${string}`);
+      const client = createWalletClient({ 
+        account, 
+        chain: networkConfig.chain,
+        transport: http()
+      })
+      // const account = ethersWalletToAccount(new Wallet(decodedString));
+
+      setOctAccount(client);
       setOctAddress(account.address);
       setOctPrivKey(decodedString);
     } catch (e) {

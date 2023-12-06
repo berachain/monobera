@@ -39,7 +39,7 @@
     "tailwindcss-animate": "^1.0.5",
     "uniqolor": "^1.1.0",
     "usehooks-ts": "^2.9.1",
-    "viem": "~0.3.35",
+    "viem": "~1.19.11",
     "wagmi": "^1.0.2",
     "zod": "^3.21.4"
   },

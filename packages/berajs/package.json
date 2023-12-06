@@ -24,7 +24,7 @@
     "react-device-detect": "^2.2.3",
     "sha3": "^2.1.4",
     "swr": "^2.1.5",
-    "viem": "~0.3.35",
+    "viem": "~1.19.11",
     "wagmi": "^1.0.2"
   },
   "peerDependencies": {
