@@ -61,7 +61,7 @@ const TradeWalletSection = () => {
         <div className="text-sm font-semibold">
           {Number(octBalance ?? 0).toFixed(2)} BERA{" "}
           <span className="text-xs font-medium text-success-foreground">
-            ~ {octTxCount.toString()} txns
+            ~ {octTxCount} txns
           </span>
         </div>
       </div>
@@ -95,7 +95,6 @@ const TradeWalletSection = () => {
   );
 };
 
-// FundAccountSection Component
 const FundAccountSection = ({
   fundAmount,
   setFundAmount,
@@ -164,8 +163,7 @@ const FundAccountSection = ({
           onClick={() =>
             fundWrite({
               address: octAddress as Address,
-              value: parseEther(`${fundAmount || '0'}`),
-              // value: parseEther(fundAmount ? `${fundAmount.toString()}` : '0'),
+              value: parseEther(`${fundAmount || "0"}`),
             })
           }
         >
@@ -176,7 +174,6 @@ const FundAccountSection = ({
   );
 };
 
-// DelegatedSection Component
 const DelegatedSection = ({
   isRevokeLoading,
   revokeDelegation,
@@ -230,7 +227,6 @@ const ApprovalSection = ({
   );
 };
 
-// WalletFundedSection Component
 const WalletFundedSection = ({
   isBalanceLessThanThreshold,
   setShowFundSection,
@@ -258,7 +254,11 @@ const WalletFundedSection = ({
         variant={"secondary"}
         size="sm"
         className="border-success bg-success text-success-foreground hover:bg-success-foreground hover:text-success"
-        onClick={() => setShowFundSection((prev: boolean | undefined) => prev !== undefined ? !prev : false)}
+        onClick={() =>
+          setShowFundSection((prev: boolean | undefined) =>
+            prev !== undefined ? !prev : false,
+          )
+        }
       >
         Fund
       </Button>
@@ -266,7 +266,6 @@ const WalletFundedSection = ({
   );
 };
 
-// OneClickWalletEnabledSection Component
 const OneClickWalletEnabledSection = () => {
   return (
     <div className="relative flex flex-row items-center justify-between gap-2 rounded-md border border-border p-3">
@@ -278,8 +277,13 @@ const OneClickWalletEnabledSection = () => {
   );
 };
 
-// Main component: ManageOctDialog
-export function ManageOctDialog({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
+export function ManageOctDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const {
     isOctDelegated,
     refetchDelegated,
@@ -355,12 +359,12 @@ export function ManageOctDialog({ open, onOpenChange }: { open: boolean, onOpenC
             delegateWallet={delegateWallet}
           />
         )}
-        {(!isOctBalanceLow && !isOctUnfunded) || isBalanceLessThanThreshold ? (
+        {((!isOctBalanceLow && !isOctUnfunded) || isBalanceLessThanThreshold) && (
           <WalletFundedSection
             isBalanceLessThanThreshold={isBalanceLessThanThreshold}
             setShowFundSection={setShowFundSection}
           />
-        ) : null}
+        )}
         {showFundSection && (
           <FundAccountSection
             fundAmount={fundAmount}

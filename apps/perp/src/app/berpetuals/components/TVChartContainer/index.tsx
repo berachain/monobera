@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { useMediaQuery } from "usehooks-ts";
 
-// import { string } from "zod";
-
 import {
   widget,
   type ChartingLibraryWidgetOptions,

@@ -48,40 +48,6 @@ const getStatusColor = (status: BannerEnum) => {
   }
 };
 
-// const OneClickSwitch = ({
-//   isOctEnabled,
-//   onClick,
-// }: {
-//   isOctEnabled: boolean;
-//   onClick: (mode: boolean) => void;
-// }) => {
-//   // return (
-//   //   <div
-//   //     className="flex cursor-pointer gap-2 text-sm  font-semibold"
-//   //     onClick={() => onClick(true)}
-//   //   >
-//   //     <div className="flex items-center text-center text-[11px]">
-//   //       <div
-//   //         className={cn(
-//   //           "h-4 w-5 rounded-l-full bg-stone-800 ",
-//   //           isOctEnabled === true && "opacity-20",
-//   //         )}
-//   //       >
-//   //         <span className="-mt-1 block select-none">🐢</span>
-//   //       </div>
-//   //       <div
-//   //         className={cn(
-//   //           "h-4 w-5 rounded-r-full bg-stone-800 ",
-//   //           isOctEnabled === false && "opacity-20",
-//   //         )}
-//   //       >
-//   //         <span className="-mt-[2px] block select-none">⚡️</span>
-//   //       </div>
-//   //     </div>
-//   //   </div>
-//   // );
-// };
-
 export function OneClickBanner() {
   // const [on, setOn] = useState<boolean>(false);
   const [oneClickModalOpen, setOneClickModalOpen] = useState<boolean>(false);
@@ -182,10 +148,6 @@ export function OneClickBanner() {
         </span>
       </div>
       {/* @ts-ignore */}
-      {/* <OneClickSwitch
-        isOctEnabled={on()}
-        onClick={(mode: boolean) => setOneClickModalOpen(mode)}
-      /> */}
       <OneClickModal
         open={oneClickModalOpen}
         onOpenChange={setOneClickModalOpen}
