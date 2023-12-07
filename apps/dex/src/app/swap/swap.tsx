@@ -19,7 +19,7 @@ const DynamicBerachainInfo = dynamic(
 
 export const SwapContent = ({ inputCurrency, outputCurrency }: ISwap) => {
   return (
-    <div className="mx-auto flex min-w-[350px] flex-col items-center justify-center gap-4 md:w-[500px]">
+    <div className="mx-auto flex min-w-[320px] flex-col items-center justify-center gap-4 md:w-[500px]">
       <DynamicBerachainInfo />
       <div className="w-full ">
         <SwapCard
