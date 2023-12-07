@@ -359,7 +359,8 @@ export function ManageOctDialog({
             delegateWallet={delegateWallet}
           />
         )}
-        {((!isOctBalanceLow && !isOctUnfunded) || isBalanceLessThanThreshold) && (
+        {((!isOctBalanceLow && !isOctUnfunded) ||
+          isBalanceLessThanThreshold) && (
           <WalletFundedSection
             isBalanceLessThanThreshold={isBalanceLessThanThreshold}
             setShowFundSection={setShowFundSection}
