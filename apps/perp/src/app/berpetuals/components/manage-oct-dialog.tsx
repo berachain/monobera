@@ -21,6 +21,7 @@ import { parseUnits } from "ethers";
 import { useCopyToClipboard } from "usehooks-ts";
 import { parseEther } from "viem";
 import { type Address } from "wagmi";
+import cn from "classnames";
 
 const TradeWalletSection = () => {
   const { octPrivKey, octAddress, octBalance, octTxCount } = useOct();
@@ -244,7 +245,7 @@ const WalletFundedSection = ({
         )}
         <span
           className={
-            isBalanceLessThanThreshold ? "text-warning-foreground" : ""
+            cn(isBalanceLessThanThreshold ? "text-warning-foreground" : "")
           }
         >
           {isBalanceLessThanThreshold ? "Low Balance" : "Wallet Funded"}
