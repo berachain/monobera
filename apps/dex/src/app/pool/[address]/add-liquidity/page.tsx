@@ -50,7 +50,6 @@ export default async function AddLiquidity({
     const pool = await poolResponse.json();
     const prices = await pricesResponse.json();
 
-    console.log("pool", pool);
     return (
       <AddLiquidityContent
         pool={pool}

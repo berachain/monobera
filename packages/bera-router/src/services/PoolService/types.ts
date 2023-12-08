@@ -66,6 +66,7 @@ export interface Pool {
   dailyFees?: number;
   tags?: string[];
   poolShareDenomHex?: string;
+  liquidity?: [Address[], string[]];
   bgtApy?: number;
   totalApy?: number;
   feeApy?: number;

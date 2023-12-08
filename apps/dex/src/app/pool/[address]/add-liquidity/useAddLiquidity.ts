@@ -12,14 +12,18 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
+import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
+import lodash from "lodash";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
-import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
+import useMultipleTokenInput, {
+  type TokenInput,
+} from "~/hooks/useMultipleTokenInput";
 
 export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   const { account = undefined } = useBeraJs();
@@ -48,6 +52,11 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
   const [singleTokenPreviewOpen, setSingleTokenSetPreviewOpen] =
     useState<boolean>(false);
+
+  const [activeInput, setActiveInput] = useState<number | undefined>(undefined);
+  const [activeAmount, setActiveAmount] = useState<string | undefined>(
+    undefined,
+  );
 
   const {
     tokenInputs,
@@ -301,6 +310,58 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     ? selectedSingleTokenAmount
     : "0";
 
+  const totalTokens = useMemo(() => {
+    if (pool && pool.tokens && pool.liquidity) {
+      const totalTokens = pool?.tokens.reduce((prev: bigint, curr: any) => {
+        return prev + parseUnits(curr.balance, 18);
+      }, 0n);
+      return new BigNumber(totalTokens.toString());
+    } else{
+      return undefined
+    }  }, [pool]);
+
+  const liquidityMap: Record<string, BigNumber> | undefined = useMemo(() => {
+    const map: Record<string, BigNumber> = {};
+    if (pool && pool.tokens && pool.liquidity && totalTokens) {
+      pool?.tokens.forEach((token: any) => {
+        const bnTotal = new BigNumber(totalTokens.toString());
+        const bnBalance = new BigNumber(
+          parseUnits(token.balance, 18).toString(),
+        );
+        const ratio = bnBalance.div(bnTotal).times(new BigNumber(100));
+        lodash.set(map, token.address, ratio);
+      });
+      return map;
+    } else {
+      return undefined;
+    }
+  }, [totalTokens]);
+
+  useMemo(() => {
+    if (
+      activeInput !== undefined &&
+      liquidityMap !== undefined &&
+      totalTokens !== undefined
+    ) {
+      console.log(liquidityMap)
+      const amount = activeAmount === '' ? '0' : activeAmount;
+      const bnAmount = new BigNumber(parseUnits(amount ?? "0", 18).toString());
+      const selectedToken = tokenInputs[activeInput]
+      const totalSelectedTokenType =  (liquidityMap[selectedToken?.address ?? ''] ?? new BigNumber(0)).times(totalTokens)
+      const amountRatio = bnAmount.div(totalSelectedTokenType)
+      tokenInputs.forEach((tokenInput: TokenInput, i: number) => {
+        if (i === activeInput) return;
+
+        const totalTokenType = (liquidityMap[tokenInput.address] ?? new BigNumber(0)).times(totalTokens).div(new BigNumber(10).pow(18))
+        const newAmount = amountRatio.times(totalTokenType)
+
+        updateTokenAmount(i, newAmount.toFormat(18));
+      });
+    } else {
+      return
+    }
+  }, [activeAmount, activeInput, liquidityMap, totalTokens]);
+
   return {
     beraToken,
     singleSidedBeraValue,
@@ -336,5 +397,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     setSelectedSingleTokenAmount,
     setPreviewOpen,
     setSingleTokenSetPreviewOpen,
+    setActiveInput,
+    setActiveAmount,
   };
 };

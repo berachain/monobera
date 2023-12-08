@@ -108,6 +108,8 @@ export const PoolSearch = () => {
   const { data: bgtRewards } = useBgtRewards();
 
   // console.log(data);
+
+  console.log(data.map((d: any) => d.pool));
   return (
     <div
       className="w-full flex-col items-center justify-center"
