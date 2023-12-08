@@ -17,11 +17,11 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { cn } from "@bera/ui";
 import { parseUnits } from "ethers";
 import { useCopyToClipboard } from "usehooks-ts";
 import { parseEther } from "viem";
 import { type Address } from "wagmi";
-import cn from "classnames";
 
 const TradeWalletSection = () => {
   const { octPrivKey, octAddress, octBalance, octTxCount } = useOct();
@@ -36,7 +36,7 @@ const TradeWalletSection = () => {
   return (
     <div className={"relative rounded-md border border-border p-3"}>
       <p className="text-md pb-4 font-bold leading-normal">
-        Your 1-Click Trade Wallet
+        Your 1-Click Trade Wallet {octAddress}
       </p>
       <div className="mt-2 flex flex-row gap-2">
         <Identicon account={octAddress} size={24} />
@@ -108,10 +108,10 @@ const FundAccountSection = ({
 }: {
   fundAmount: string | undefined;
   setFundAmount: (value: string | undefined) => void;
-  isReady: boolean;
+  isReady: boolean | undefined;
   userBalance: string;
   isFundingLoading: boolean;
-  fundWrite: (args: { address: Address; value: string }) => void;
+  fundWrite: (args: { address: Address; value: bigint }) => void;
   octAddress: string;
   setShowFundSection: (value: boolean) => void;
 }) => {
@@ -164,7 +164,7 @@ const FundAccountSection = ({
           onClick={() =>
             fundWrite({
               address: octAddress as Address,
-              value: parseEther(`${fundAmount || "0"}`),
+              value: parseEther(`${fundAmount || "0"}` as `${number}`),
             })
           }
         >
@@ -231,9 +231,11 @@ const ApprovalSection = ({
 const WalletFundedSection = ({
   isBalanceLessThanThreshold,
   setShowFundSection,
+  showFundSection,
 }: {
   isBalanceLessThanThreshold: boolean;
   setShowFundSection: (value: boolean) => void;
+  showFundSection: boolean;
 }) => {
   return (
     <div className="relative flex flex-row justify-between gap-2 rounded-md border border-border p-3">
@@ -244,9 +246,9 @@ const WalletFundedSection = ({
           <Icons.checkCircle2 className="text-success-foreground" />
         )}
         <span
-          className={
-            cn(isBalanceLessThanThreshold ? "text-warning-foreground" : "")
-          }
+          className={cn(
+            isBalanceLessThanThreshold ? "text-warning-foreground" : "",
+          )}
         >
           {isBalanceLessThanThreshold ? "Low Balance" : "Wallet Funded"}
         </span>
@@ -255,11 +257,7 @@ const WalletFundedSection = ({
         variant={"secondary"}
         size="sm"
         className="border-success bg-success text-success-foreground hover:bg-success-foreground hover:text-success"
-        onClick={() =>
-          setShowFundSection((prev: boolean | undefined) =>
-            prev !== undefined ? !prev : false,
-          )
-        }
+        onClick={() => setShowFundSection(!showFundSection)}
       >
         Fund
       </Button>
@@ -365,6 +363,7 @@ export function ManageOctDialog({
           <WalletFundedSection
             isBalanceLessThanThreshold={isBalanceLessThanThreshold}
             setShowFundSection={setShowFundSection}
+            showFundSection={showFundSection}
           />
         )}
         {showFundSection && (

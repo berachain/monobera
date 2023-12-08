@@ -156,6 +156,7 @@ export function OneClickBanner() {
       />
       <ManageOctDialog
         open={octManageWalletModalOpen}
+        // @ts-ignore
         isFirstTimeOct={isFirstTimeOct}
         onOpenChange={(open) => handleOctManageWalletModalOpen(open)}
       />

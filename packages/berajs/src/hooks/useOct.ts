@@ -85,6 +85,7 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   useEffect(() => {
     try {
       const octKey = getOctKey();
+      console.log("octKey", octKey)
       if (!octKey) {
         return;
       }
