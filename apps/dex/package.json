@@ -10,7 +10,8 @@
     "lint:fix": "pnpm lint --fix",
     "start": "pnpm with-env next start -p 3000",
     "check-types": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e ../../.env --",
+    "install": "pnpm clean && pnpm install --frozen-lockfile"
   },
   "dependencies": {
     "@bera/bera-router": "0.1.0",
