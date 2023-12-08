@@ -48,7 +48,7 @@ export default function HoneyVault() {
   return (
     <div className="relative w-full overflow-hidden rounded-lg border border-border bg-gradient-to-r from-[#180B01] to-[#3B220F] p-8">
       <Image
-        src={`${cloudinaryUrl}/BERPS/PRRBanner_hhx0kq`}
+        src={`${cloudinaryUrl}/BERPS/wlpafhymyjy8taz2x9qa`}
         alt="vault-bear"
         width={300}
         height={400}

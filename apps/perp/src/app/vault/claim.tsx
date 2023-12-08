@@ -48,7 +48,7 @@ export default function Claim({ feeApr }: { feeApr: string }) {
         Honey Staking Projected <br /> Reward Rate (PRR)
       </div>
       <Image
-        src={`${cloudinaryUrl}/BERPS/nsc94gwejblw1oj8yyoo`}
+        src={`${cloudinaryUrl}/BERPS/wlpafhymyjy8taz2x9qa`}
         alt="honey-jar"
         width={1080}
         height={186}
@@ -56,7 +56,7 @@ export default function Claim({ feeApr }: { feeApr: string }) {
         style={{ objectPosition: "right" }}
       />
       <Image
-        src={`${cloudinaryUrl}/BERPS/ehohrtn3bi6inl4uv2ks`}
+        src={`${cloudinaryUrl}/BERPS/z2esmjuetjcppo8e6qsh`}
         alt="honey-jar"
         width={1080}
         height={186}
