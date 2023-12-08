@@ -2,10 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import { docsUrl } from "@bera/config";
+import { docsUrl, honeyAddress, nativeTokenAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { type Address } from "wagmi";
 
 import { SwapCard } from "~/components/swap-card";
 
@@ -56,9 +55,11 @@ export default function Hero() {
         </div>
       </div>
       <div className="flex-1">
-        <div className="mx-auto w-full min-w-[320px] md:w-[400px]">
+        <div className="mx-auto w-full min-w-[320px] md:w-[450px]">
           <SwapCard
-            inputCurrency={process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address}
+            inputCurrency={nativeTokenAddress}
+            outputCurrency={honeyAddress}
+            isMainPage
           />
         </div>
       </div>

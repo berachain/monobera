@@ -423,9 +423,9 @@ export const my_columns: ColumnDef<any>[] = [
             <Icons.subtract className="h-6 w-6" />
           </Button>
         </Link>
-        <Link href={`/pool/${row.original.pool}`}>
+        {/* <Link href={`/pool/${row.original.pool}`}>
           <Button className="flex gap-1">Details</Button>
-        </Link>
+        </Link> */}
       </div>
     ),
     enableSorting: false,

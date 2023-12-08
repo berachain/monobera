@@ -19,16 +19,16 @@ const DynamicBerachainInfo = dynamic(
 
 export const SwapContent = ({ inputCurrency, outputCurrency }: ISwap) => {
   return (
-    <div className="flex items-center justify-center gap-4">
-      <div className="w-full min-w-[350px] md:w-[450px]">
+    <div className="mx-auto flex min-w-[350px] flex-col items-center justify-center gap-4 md:w-[500px]">
+      <DynamicBerachainInfo />
+      <div className="w-full ">
         <SwapCard
           inputCurrency={inputCurrency}
           outputCurrency={outputCurrency}
+          showBear={false}
+          className="drop-shadow-[0px_4px_32px_#23232314] dark:drop-shadow-[0px_4px_32px_#CFB69714]"
         />
       </div>
-      <span className="hidden pt-[64px] md:block">
-        <DynamicBerachainInfo />
-      </span>
     </div>
   );
 };

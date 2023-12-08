@@ -124,7 +124,18 @@ export default function InterestRateOvertime({
           <div className="flex flex-col gap-[6px]">
             <div className="font-medium">Interest Rate Modal</div>
             <div className="text-sm font-normal leading-normal text-muted-foreground">
-              Utilization Rate <Tooltip text="" />
+              Utilization Rate{" "}
+              <Tooltip
+                text={
+                  <>
+                    The utilization rate represents the ratio of total borrowed
+                    funds to total available funds in a lending pool.
+                    <br /> It&apos;s crucial as it directly influences interest
+                    rates: higher utilization means higher interest rates, and
+                    vice versa.
+                  </>
+                }
+              />
             </div>
             {reserveData ? (
               <div className=" text-xl font-semibold leading-7">

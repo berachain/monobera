@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
 import { RouteNotFound } from "@bera/bera-router";
 import {
   DEX_PRECOMPILE_ABI,
@@ -67,6 +68,7 @@ export function SwapCard({
   inputCurrency,
   outputCurrency,
   showBear = true,
+  isMainPage = false,
   className,
 }: ISwapCard) {
   const {
@@ -277,7 +279,7 @@ export function SwapCard({
                         onClick={() => {
                           onSwitch();
                         }}
-                        className="z-10 inline-flex h-6 w-6 items-center rounded-full bg-background p-0.5 text-sm font-semibold text-muted-foreground md:h-8 md:w-8 md:p-1"
+                        className="z-10 inline-flex h-6 w-6 items-center rounded-sm border-border bg-background p-0.5 text-sm font-semibold text-muted-foreground md:h-8 md:w-8 md:p-1"
                       >
                         <Icons.swap className="h-3 w-3 md:h-6 md:w-6" />
                       </Button>
@@ -381,7 +383,15 @@ export function SwapCard({
                     false
                   )}
                 </div>
-                <ActionButton>{getSwapButton()}</ActionButton>
+                {isMainPage ? (
+                  <Link href="/swap" className="w-full">
+                    <Button className="flex w-full gap-1">
+                      Swap <Icons.moveRight className="block h-4 w-4" />
+                    </Button>
+                  </Link>
+                ) : (
+                  <ActionButton>{getSwapButton()}</ActionButton>
+                )}
               </div>
             </div>
           </Card>

@@ -45,7 +45,7 @@ export default function UserTokenCard({
               {type === "supply" && (
                 <>
                   <Icons.wallet className="relative h-3 w-3 rounded-lg" />
-                  Wallet Balance{" "}
+                  {asset.symbol}{" "}
                 </>
               )}
               {type === "borrow" && <>{asset.symbol} Avaliable</>}
