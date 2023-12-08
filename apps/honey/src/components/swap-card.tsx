@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
-import { ConnectButton } from "@bera/shared-ui";
+import { ApproveButton, ConnectButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -13,7 +13,6 @@ import { parseUnits } from "viem";
 import { TokenInput } from "~/components/token-input";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
-import { ApproveTokenButton } from "./approve-token-button";
 
 export function SwapCard({ showBear = true }: { showBear?: boolean }) {
   const [tabValue, setTabValue] = useState<"mint" | "burn">("mint");
@@ -151,7 +150,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
             </ul>
             {/* fix to check if allowance > amount */}
             {BigNumber(allowance?.formattedAllowance).lt(fromAmount ?? "0") ? (
-              <ApproveTokenButton
+              <ApproveButton
                 token={selectedFrom}
                 spender={erc20HoneyAddress}
                 amount={parseUnits(

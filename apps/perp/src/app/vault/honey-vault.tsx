@@ -32,8 +32,6 @@ export default function HoneyVault() {
 
   const _ = useBgtRewardsForAddress();
 
-  // console.log("bgt rewards", bgtRewards);
-
   const content = [
     {
       title: "Total value Locked",

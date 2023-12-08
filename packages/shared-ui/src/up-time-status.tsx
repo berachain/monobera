@@ -35,7 +35,6 @@ import { Icons } from "@bera/ui/icons";
 export function UpTimeStatus() {
   // const status = ServerStatusEnuem.INTERRUPTION;
   const gasData = useGasData();
-  // console.log("gasData", formatEther(gasData??0n), gasData)
   // const [gasSpeed, setGasSpeed] = React.useState<GasSpeedEnum>(
   //   GasSpeedEnum.FAST,
   // );

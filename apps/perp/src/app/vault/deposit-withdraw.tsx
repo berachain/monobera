@@ -10,7 +10,13 @@ import {
   usePollMaxDeposit,
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
-import { ActionButton, TokenInput, TokenList, useTxn } from "@bera/shared-ui";
+import {
+  ActionButton,
+  ApproveButton,
+  TokenInput,
+  TokenList,
+  useTxn,
+} from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -20,7 +26,6 @@ import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
-import ApproveTokenButton from "../components/approve-token-button";
 
 export default function DepositWithdraw() {
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -142,7 +147,14 @@ export default function DepositWithdraw() {
               {allowance?.formattedAllowance === "0" ||
               allowance?.allowance <
                 parseUnits(depositAmount === "" ? "0" : depositAmount, 18) ? (
-                <ApproveTokenButton token={honey} spender={gTokenAddress} />
+                <ApproveButton
+                  token={honey}
+                  spender={gTokenAddress}
+                  amount={parseUnits(
+                    depositAmount === "" ? "0" : depositAmount,
+                    18,
+                  )}
+                />
               ) : (
                 <Button
                   // variant={"success"}

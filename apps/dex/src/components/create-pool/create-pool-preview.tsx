@@ -87,7 +87,6 @@ export function CreatePoolPreview({
     options,
   ];
 
-  console.log(rawBeraEntry);
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
       {ModalPortal}

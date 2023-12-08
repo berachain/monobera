@@ -156,7 +156,10 @@ export function SwapCard({
     ) {
       return (
         <ApproveButton
-          amount={parseUnits(fromAmount ?? "0", selectedFrom?.decimals ?? 18)}
+          amount={parseUnits(
+            (fromAmount ?? "0") as `${number}`,
+            selectedFrom?.decimals ?? 18,
+          )}
           token={selectedFrom}
           spender={erc20ModuleAddress}
         />

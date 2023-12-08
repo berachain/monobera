@@ -23,9 +23,6 @@ export const usePollPerpsBgtRewards = () => {
           functionName: method,
           args: [account],
         });
-
-        // console.log("result", result);
-
         return Number(formatUnits(result as bigint, 18));
       } catch (e) {
         console.error(e);

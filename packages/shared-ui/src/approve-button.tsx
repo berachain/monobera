@@ -1,6 +1,7 @@
 "use client";
 
 import { TransactionActionType, type Token } from "@bera/berajs";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { maxInt256 } from "viem";
 import { erc20ABI } from "wagmi";
@@ -11,16 +12,17 @@ type Props = {
   token: Token | undefined;
   spender: string;
   amount?: bigint;
+  className?: string;
 };
 
-export const ApproveButton = ({ token, spender, amount }: Props) => {
+export const ApproveButton = ({ token, spender, amount, className }: Props) => {
   const { write, isLoading, isSubmitting } = useTxn({
     message: `Approve ${token?.name}`,
     actionType: TransactionActionType.APPROVAL,
   });
 
   return (
-    <div className="flex gap-4">
+    <div className={cn("flex gap-4", className)}>
       {amount !== undefined && (
         <Button
           className="w-full"
