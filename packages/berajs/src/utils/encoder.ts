@@ -6,15 +6,15 @@ export const encrypt = (message: string, key: string) => {
   return cipherText.toString();
 };
 
-export const decrypt = (cipher: string, key: string) => {
+export const decrypt = (cipher: string, key: string): `0x${string}` => {
   let bytes;
 
   try {
     bytes = AES.decrypt(cipher, key);
     const decrypted = bytes.toString(enc.Utf8);
-    return decrypted;
+    return ("0x" + decrypted) as `0x${string}`;
   } catch (err) {
     console.log("UNABLE TO DECIPHER", err);
-    return "";
+    return "0x";
   }
 };

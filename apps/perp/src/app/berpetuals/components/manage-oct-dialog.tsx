@@ -36,7 +36,7 @@ const TradeWalletSection = () => {
   return (
     <div className={"relative rounded-md border border-border p-3"}>
       <p className="text-md pb-4 font-bold leading-normal">
-        Your 1-Click Trade Wallet {octAddress}
+        Your 1-Click Trade Wallet
       </p>
       <div className="mt-2 flex flex-row gap-2">
         <Identicon account={octAddress} size={24} />
@@ -87,7 +87,7 @@ const TradeWalletSection = () => {
           size={"sm"}
           className="w-full"
           variant={"secondary"}
-          onClick={() => copy("0x" + octPrivKey)}
+          onClick={() => copy(octPrivKey)}
         >
           Copy Private Key
         </Button>
