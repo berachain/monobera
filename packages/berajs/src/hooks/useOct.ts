@@ -3,7 +3,11 @@ import lodash from "lodash";
 import { Keccak } from "sha3";
 import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
-import { createWalletClient, http, type Address } from "viem";
+import {
+  createWalletClient,
+  http,
+  type Address,
+} from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { useSignMessage } from "wagmi";
 
@@ -89,19 +93,17 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
         return;
       }
       const decodedString = decrypt(octKey, KEY);
-
-      const account = privateKeyToAccount(decodedString as `0x${string}`);
+      const account = privateKeyToAccount(decodedString);
       const client = createWalletClient({
         account,
         chain: networkConfig.chain,
         transport: http(),
       });
-      // const account = ethersWalletToAccount(new Wallet(decodedString));
-
       setOctAccount(client);
       setOctAddress(account.address);
       setOctPrivKey(decodedString);
     } catch (e) {
+      console.log(e);
       setOctAddress("");
       setOctPrivKey("");
       setOctAccount(undefined);
