@@ -9,6 +9,7 @@
     "storybook": "turbo storybook",
     "storybook:build": "turbo storybook:build",
     "build": "turbo build",
+    "build:force": "turbo build --force",
     "clean": "turbo clean",
     "clean:git": "git clean -xdf node_modules",
     "dev": "turbo dev --concurrency=12",
