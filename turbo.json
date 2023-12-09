@@ -1,4 +1,39 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "globalDependencies": ["**/.env"]
+  "globalDependencies": ["**/.env"],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+
+    },
+    "start": {
+      "persistent": true,
+      "cache": false
+    },
+    "lint": {},
+    "lint:fix": {},
+    "storybook": {},
+    "storybook:build": {},
+    "clean": {
+      "cache": false
+    },
+    "dev": {
+      "persistent": false,
+      "cache": false
+    },
+    "check-types": {
+      "dependsOn": ["^build"],
+      "cache": false
+    }
+  },
+  "globalEnv": [
+    "CI",
+    "NODE_ENV",
+    "SKIP_ENV_VALIDATION",
+    "VERCEL",
+    "VERCEL_URL",
+    "VERCEL_ENV"
+  ]
 }
