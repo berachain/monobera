@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
+import { Wallet } from "ethers";
 import lodash from "lodash";
 import { Keccak } from "sha3";
 import { mutate } from "swr";
@@ -16,7 +17,6 @@ import {
   usePollTransactionCount,
 } from "..";
 import { useIsDelegated } from "./modules/perps";
-import { Wallet } from "ethers";
 
 export enum LOCAL_STORAGE_KEYS {
   OCT_ENABLED = "oct_enabled",

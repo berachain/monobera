@@ -1,3 +1,4 @@
+import { bankAddress } from "@bera/config";
 import { cloneDeep, set, unset } from "lodash";
 import { formatUnits, type Address, type PublicClient } from "viem";
 
@@ -14,7 +15,6 @@ import {
   type RawPool,
   type WeightEntry,
 } from "./types";
-import { bankAddress } from "@bera/config";
 
 function mapPoolsToRecord(pools: RawPool[]): Record<string, PoolData> {
   return pools?.reduce((record, pool) => {

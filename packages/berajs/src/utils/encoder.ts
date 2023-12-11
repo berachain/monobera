@@ -6,7 +6,6 @@ export const encrypt = (message: string, key: string) => {
   return cipherText.toString();
 };
 
-
 export const decrypt = (cipher: string, key: string) => {
   let bytes;
 

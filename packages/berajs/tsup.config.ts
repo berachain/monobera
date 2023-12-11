@@ -1,9 +1,9 @@
 const config = {
   entryPoints: ["src/index.ts"], // The entry point(s) of your library
   format: ["esm"], // The desired output format(s)
-  clean: true, 
+  clean: true,
   splitting: true,
-  outDir: 'dist',
+  outDir: "dist",
   skipNodeModulesBundle: true,
   minify: true, // Whether to minify the output
   sourcemap: true, // Whether to generate sourcemaps
