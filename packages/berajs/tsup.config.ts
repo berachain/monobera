@@ -1,6 +1,10 @@
 const config = {
   entryPoints: ["src/index.ts"], // The entry point(s) of your library
-  // format: ["cjs", "esm"], // The desired output format(s)
+  format: ["cjs", "esm"], // The desired output format(s)
+  clean: true, 
+  splitting: true,
+  outDir: 'dist',
+  skipNodeModulesBundle: true,
   minify: true, // Whether to minify the output
   sourcemap: true, // Whether to generate sourcemaps
   // splitting: true, // Whether to split the bundle into chunks

@@ -14,6 +14,7 @@ import {
   type RawPool,
   type WeightEntry,
 } from "./types";
+import { bankAddress } from "@bera/config";
 
 function mapPoolsToRecord(pools: RawPool[]): Record<string, PoolData> {
   return pools?.reduce((record, pool) => {
@@ -64,7 +65,7 @@ export class MultiCallPools {
       this.call(
         `${pool.pool}.totalSupply`,
         BANK_PRECOMPILE_ABI,
-        process.env.NEXT_PUBLIC_BANK_ADDRESS as Address,
+        bankAddress,
         "getSupply",
         [pool.poolShareDenom],
       );

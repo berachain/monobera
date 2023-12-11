@@ -5,9 +5,8 @@
     "paths": {
       "~/*": ["./src/*"]
     },
-    "types": ["node"],
-    "typeRoots": ["./src/window.d.ts"]
+    "typeRoots": ["./src/window.d.ts"],
   },
   "exclude": ["node_modules", "dist", "build", "coverage", "lib", "esm", "cjs"],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs",    "src/**/*.ts",]
 }
