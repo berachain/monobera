@@ -3,10 +3,13 @@ import {
   blockExplorerUrl,
   chainId,
   chainName,
+  erc20DexAddress,
   gasTokenDecimals,
   gasTokenName,
   gasTokenSymbol,
+  indexerUrl,
   jsonRpcUrl,
+  multicallAddress,
   networkName,
 } from "@bera/config";
 import {
@@ -68,11 +71,11 @@ export interface RouterConfig {
 }
 
 export const defaultConfig: RouterConfig = {
-  subgraphUrl: process.env.NEXT_PUBLIC_INDEXER_ENDPOINT as string,
+  subgraphUrl: indexerUrl,
   publicClient: client as PublicClient,
   contracts: {
-    poolAddress: process.env.NEXT_PUBLIC_ERC20_DEX_ADDRESS as Address,
-    multicallAddress: process.env.NEXT_PUBLIC_MULTICALL_ADDRESS as Address,
+    poolAddress: erc20DexAddress,
+    multicallAddress: multicallAddress,
     connectingTokens: [
       {
         symbol: "wbera",

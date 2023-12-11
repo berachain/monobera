@@ -1,3 +1,4 @@
+import { bankAddress } from "@bera/config";
 import { cloneDeep, set, unset } from "lodash";
 import { formatUnits, type Address, type PublicClient } from "viem";
 
@@ -64,7 +65,7 @@ export class MultiCallPools {
       this.call(
         `${pool.pool}.totalSupply`,
         BANK_PRECOMPILE_ABI,
-        process.env.NEXT_PUBLIC_BANK_ADDRESS as Address,
+        bankAddress,
         "getSupply",
         [pool.poolShareDenom],
       );

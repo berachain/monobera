@@ -3,11 +3,7 @@ import lodash from "lodash";
 import { Keccak } from "sha3";
 import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
-import {
-  createWalletClient,
-  http,
-  type Address,
-} from "viem";
+import { createWalletClient, http, type Address } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { useSignMessage } from "wagmi";
 
@@ -56,11 +52,10 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { account } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
   const { signMessageAsync } = useSignMessage({
     message: `You are enabling One Click Trading. Use at your own risk!`,
   });
-
+  const { networkConfig } = useBeraConfig();
   const generateKey = useCallback(async () => {
     dispatch({ type: ActionEnum.LOADING });
     onLoading && onLoading();
