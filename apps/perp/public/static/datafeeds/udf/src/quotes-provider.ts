@@ -4,16 +4,16 @@ import { IQuotesProvider, UdfQuotesResponse } from "./iquotes-provider";
 import { IRequester } from "./irequester";
 
 export class QuotesProvider implements IQuotesProvider {
-  private readonly _datafeedUrl: string;
-  private readonly _requester: IRequester;
+	private readonly _datafeedUrl: string;
+	private readonly _requester: IRequester;
 
-  public constructor(datafeedUrl: string, requester: IRequester) {
-    this._datafeedUrl = datafeedUrl;
-    this._requester = requester;
-  }
+	public constructor(datafeedUrl: string, requester: IRequester) {
+		this._datafeedUrl = datafeedUrl;
+		this._requester = requester;
+	}
 
-  public getQuotes(symbols: string[]): Promise<QuoteData[]> {
-    return new Promise(
+	public getQuotes(symbols: string[]): Promise<QuoteData[]> {
+		return new Promise(
       (
         resolve: (data: QuoteData[]) => void,
         reject: (reason: string) => void,
@@ -38,5 +38,5 @@ export class QuotesProvider implements IQuotesProvider {
           });
       },
     );
-  }
+	}
 }

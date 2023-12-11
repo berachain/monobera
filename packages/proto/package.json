@@ -11,5 +11,8 @@
     "next-auth": "^4.24.5",
     "sha3": "^2.1.4",
     "ts-proto": "^1.136.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.4.1"
   }
 }

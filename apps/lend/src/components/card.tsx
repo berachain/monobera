@@ -2,23 +2,23 @@ import React, { type PropsWithChildren } from "react";
 import { cn } from "@bera/ui";
 
 type Props = {
-  className?: string;
+	className?: string;
 };
 
 export default function Card({
-  className,
-  children,
-  ...props
+	className,
+	children,
+	...props
 }: PropsWithChildren<Props>) {
-  return (
-    <div
-      className={cn(
-        "block rounded-lg border border-border bg-background p-6",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  );
+	return (
+		<div
+			className={cn(
+				"block rounded-lg border border-border bg-background p-6",
+				className,
+			)}
+			{...props}
+		>
+			{children}
+		</div>
+	);
 }

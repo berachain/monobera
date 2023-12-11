@@ -5,27 +5,27 @@ import { type UseFormReturn } from "react-hook-form";
 import { CustomParameterGroup } from "../components/custom-parameter-group";
 
 export default function ParameterForm({ form }: { form: UseFormReturn<any> }) {
-  return (
-    <>
-      <FormField
-        control={form.control}
-        name="parameters2Change"
-        render={({}) => (
-          <FormItem className="inline-flex flex-col justify-start">
-            <div className="text-sm font-semibold leading-tight">
-              Parameters to change <Tooltip text="test" />
-            </div>
-            <div>
-              <CustomParameterGroup
-                onSubmit={(parameterForm) =>
-                  form.setValue("parameters2Change", parameterForm)
-                }
-              />
-              <FormMessage className="mt-[-24px]" />
-            </div>
-          </FormItem>
-        )}
-      />
-    </>
-  );
+	return (
+		<>
+			<FormField
+				control={form.control}
+				name="parameters2Change"
+				render={() => (
+					<FormItem className="inline-flex flex-col justify-start">
+						<div className="text-sm font-semibold leading-tight">
+							Parameters to change <Tooltip text="test" />
+						</div>
+						<div>
+							<CustomParameterGroup
+								onSubmit={(parameterForm) =>
+									form.setValue("parameters2Change", parameterForm)
+								}
+							/>
+							<FormMessage className="mt-[-24px]" />
+						</div>
+					</FormItem>
+				)}
+			/>
+		</>
+	);
 }

@@ -3,14 +3,14 @@ import { indexerUrl } from "@bera/config";
 import useSWR from "swr";
 
 export interface Coin {
-  amount: string;
-  denom: string;
+	amount: string;
+	denom: string;
 }
 
 export interface TvlData {
-  data: any;
-  UTCTime: string;
-  coins: Coin[];
+	data: any;
+	UTCTime: string;
+	coins: Coin[];
 }
 
 // export const getTvlPrices = (
@@ -54,124 +54,124 @@ export interface TvlData {
 // };
 
 export interface GaugeWeight {
-  label: string;
-  address: string;
-  amount: number;
-  percentage: number;
-  tvl: number;
+	label: string;
+	address: string;
+	amount: number;
+	percentage: number;
+	tvl: number;
 }
 export const useUserGaugeWeight = () => {
-  const { account } = useBeraJs();
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
-  const QUERY_KEY = ["user-gauge-weight", account, prices];
-  return useSWR(
-    QUERY_KEY,
-    async () => {
-      try {
-        if (!prices) return undefined;
-        const response = await fetch(
-          `${indexerUrl}/bgt/rewards/delegator/${account}`,
-        );
-        const result = await response.json().then((res) => res.result);
-        // const promiseArray = result.map((w: any) => getPoolTvl(w.address));
-        // const cbTvlData = await Promise.all(promiseArray);
-        // const tvl = getTvlPrices(cbTvlData, prices);
+	const { account } = useBeraJs();
+	const { usePrices } = usePollPrices();
+	const { data: prices } = usePrices();
+	const QUERY_KEY = ["user-gauge-weight", account, prices];
+	return useSWR(
+		QUERY_KEY,
+		async () => {
+			try {
+				if (!prices) return undefined;
+				const response = await fetch(
+					`${indexerUrl}/bgt/rewards/delegator/${account}`,
+				);
+				const result = await response.json().then((res) => res.result);
+				// const promiseArray = result.map((w: any) => getPoolTvl(w.address));
+				// const cbTvlData = await Promise.all(promiseArray);
+				// const tvl = getTvlPrices(cbTvlData, prices);
 
-        const gaugeWeightArray: GaugeWeight[] = result.map((w: any) => {
-          return {
-            label: w.address,
-            address: w.address,
-            amount: Number(w.amount),
-            percentage: Number(w.percentage),
-            // tvl: tvl[i],
-          };
-        });
-        return gaugeWeightArray;
-      } catch (e) {
-        console.log(e);
-        return undefined;
-      }
-    },
-    {
-      refreshInterval: 5 * 60 * 1000, // 5 mins
-    },
-  );
+				const gaugeWeightArray: GaugeWeight[] = result.map((w: any) => {
+					return {
+						label: w.address,
+						address: w.address,
+						amount: Number(w.amount),
+						percentage: Number(w.percentage),
+						// tvl: tvl[i],
+					};
+				});
+				return gaugeWeightArray;
+			} catch (e) {
+				console.log(e);
+				return undefined;
+			}
+		},
+		{
+			refreshInterval: 5 * 60 * 1000, // 5 mins
+		},
+	);
 };
 
 export const useValidatorGaugeWeight = (address: string) => {
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
-  const QUERY_KEY = ["user-gauge-weight", address, prices];
-  return useSWR(
-    QUERY_KEY,
-    async () => {
-      try {
-        if (!prices) return undefined;
-        const response = await fetch(
-          `${indexerUrl}/cuttingboards/active?validators=${address}`,
-        );
-        const result = await response.json().then((res) => res.result);
-        // const promiseArray = result[0].weights.map((w: any) =>
-        //   getPoolTvl(w.address),
-        // );
-        // const cbTvlData = await Promise.all(promiseArray);
-        // const tvl = getTvlPrices(cbTvlData, prices);
-        const gaugeWeightArray: GaugeWeight[] = result[0].weights.map(
-          (w: any) => {
-            return {
-              label: w.address,
-              address: w.address,
-              amount: Number(w.amount),
-              percentage: Number(w.percentage),
-              // tvl: tvl[i],
-            };
-          },
-        );
-        return gaugeWeightArray;
-      } catch (e) {
-        console.log(e);
-        return undefined;
-      }
-    },
-    {
-      refreshInterval: 5 * 60 * 1000, // 5 mins
-    },
-  );
+	const { usePrices } = usePollPrices();
+	const { data: prices } = usePrices();
+	const QUERY_KEY = ["user-gauge-weight", address, prices];
+	return useSWR(
+		QUERY_KEY,
+		async () => {
+			try {
+				if (!prices) return undefined;
+				const response = await fetch(
+					`${indexerUrl}/cuttingboards/active?validators=${address}`,
+				);
+				const result = await response.json().then((res) => res.result);
+				// const promiseArray = result[0].weights.map((w: any) =>
+				//   getPoolTvl(w.address),
+				// );
+				// const cbTvlData = await Promise.all(promiseArray);
+				// const tvl = getTvlPrices(cbTvlData, prices);
+				const gaugeWeightArray: GaugeWeight[] = result[0].weights.map(
+					(w: any) => {
+						return {
+							label: w.address,
+							address: w.address,
+							amount: Number(w.amount),
+							percentage: Number(w.percentage),
+							// tvl: tvl[i],
+						};
+					},
+				);
+				return gaugeWeightArray;
+			} catch (e) {
+				console.log(e);
+				return undefined;
+			}
+		},
+		{
+			refreshInterval: 5 * 60 * 1000, // 5 mins
+		},
+	);
 };
 
 export const useGlobalValidatorGaugeWeight = () => {
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
-  const QUERY_KEY = ["global-gauge-weight", prices];
-  return useSWR(
-    QUERY_KEY,
-    async () => {
-      try {
-        if (!prices) return undefined;
-        const response = await fetch(`${indexerUrl}/bgt/rewards`);
-        const result = await response.json().then((res) => res.result);
+	const { usePrices } = usePollPrices();
+	const { data: prices } = usePrices();
+	const QUERY_KEY = ["global-gauge-weight", prices];
+	return useSWR(
+		QUERY_KEY,
+		async () => {
+			try {
+				if (!prices) return undefined;
+				const response = await fetch(`${indexerUrl}/bgt/rewards`);
+				const result = await response.json().then((res) => res.result);
 
-        // const promiseArray = result.map((w: any) => getPoolTvl(w.address));
-        // const cbTvlData = await Promise.all(promiseArray);
-        // const tvl = getTvlPrices(cbTvlData, prices);
-        const gaugeWeightArray: GaugeWeight[] = result.map((w: any) => {
-          return {
-            label: w.address,
-            address: w.address,
-            amount: Number(w.amount),
-            percentage: Number(w.percentage),
-            // tvl: tvl[i],
-          };
-        });
-        return gaugeWeightArray;
-      } catch (e) {
-        console.log(e);
-        return undefined;
-      }
-    },
-    {
-      refreshInterval: 5 * 60 * 1000, // 5 mins
-    },
-  );
+				// const promiseArray = result.map((w: any) => getPoolTvl(w.address));
+				// const cbTvlData = await Promise.all(promiseArray);
+				// const tvl = getTvlPrices(cbTvlData, prices);
+				const gaugeWeightArray: GaugeWeight[] = result.map((w: any) => {
+					return {
+						label: w.address,
+						address: w.address,
+						amount: Number(w.amount),
+						percentage: Number(w.percentage),
+						// tvl: tvl[i],
+					};
+				});
+				return gaugeWeightArray;
+			} catch (e) {
+				console.log(e);
+				return undefined;
+			}
+		},
+		{
+			refreshInterval: 5 * 60 * 1000, // 5 mins
+		},
+	);
 };

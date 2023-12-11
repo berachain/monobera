@@ -14,9 +14,7 @@
     "build": "tsup src",
     "clean": "git clean -xdf dist .turbo node_modules",
     "check-types": "tsc --noEmit",
-    "dev": "tsup src --watch",
-    "lint": "eslint src",
-    "lint:fix": "pnpm lint --fix"
+    "dev": "tsup src --watch"
   },
   "dependencies": {
     "@bera/config": "0.1.0",
@@ -27,6 +25,7 @@
   },
   "devDependencies": {
     "@bera/eslint-config": "0.1.0",
+    "@biomejs/biome": "1.4.1",
     "@hyrious/esbuild-plugin-commonjs": "0.2.2",
     "@types/node": "^18.16.6",
     "eslint": "^8.39.0",

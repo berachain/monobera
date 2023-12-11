@@ -5,9 +5,9 @@ import { cn } from "./utils/cn";
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 export interface CustomInputProps extends InputProps {
-  startAdornment?: React.ReactNode;
-  endAdornment?: React.ReactNode;
-  outerClassName?: string;
+	startAdornment?: React.ReactNode;
+	endAdornment?: React.ReactNode;
+	outerClassName?: string;
 }
 const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
   (

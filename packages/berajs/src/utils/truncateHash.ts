@@ -2,13 +2,13 @@
  * Truncate a transaction or address hash
  */
 export const truncateHash = (
-  address: `0x${string}` | string,
-  startLength = 4,
-  endLength = 4,
+	address: `0x${string}` | string,
+	startLength = 4,
+	endLength = 4,
 ) => {
-  if (!address) return "";
+	if (!address) return "";
 
-  return `${address.substring(0, startLength)}...${address.substring(
-    address.length - endLength,
-  )}`;
+	return `${address.substring(0, startLength)}...${address.substring(
+		address.length - endLength,
+	)}`;
 };

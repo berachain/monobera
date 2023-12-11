@@ -7,11 +7,11 @@ import { ThemeProvider } from "next-themes";
 import { beraJsConfig } from "./config";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-      <ThemeProvider attribute="class" forcedTheme="light">
-        {children}
-      </ThemeProvider>
-    </BeraConfig>
-  );
+	return (
+		<BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
+			<ThemeProvider attribute="class" forcedTheme="light">
+				{children}
+			</ThemeProvider>
+		</BeraConfig>
+	);
 }

@@ -15,47 +15,47 @@ import { MobileDropdown } from "./mobile-nav";
 import { ThemeToggleMobile } from "./theme-toggle-mobile";
 
 const ConnectBtn = dynamic(
-  () => import("./connect-button").then((mod) => mod.ConnectButton),
-  {
-    ssr: false,
-    loading: () => (
-      <Button>
-        {" "}
-        <Icons.spinner className="relative mr-1 h-6 w-6 animate-spin" />
-        Loading
-      </Button>
-    ),
-  },
+	() => import("./connect-button").then((mod) => mod.ConnectButton),
+	{
+		ssr: false,
+		loading: () => (
+			<Button>
+				{" "}
+				<Icons.spinner className="relative mr-1 h-6 w-6 animate-spin" />
+				Loading
+			</Button>
+		),
+	},
 );
 
 export function Header({
-  navItems,
-  hideConnectBtn = false,
-  isHoney = false,
+	navItems,
+	hideConnectBtn = false,
+	isHoney = false,
 }: {
-  navItems: any[];
-  hideConnectBtn?: boolean;
-  isHoney?: boolean;
+	navItems: any[];
+	hideConnectBtn?: boolean;
+	isHoney?: boolean;
 }) {
-  const { isReady } = useBeraJs();
-  return (
-    <nav
-      className={cn(
-        "h-18 fixed left-0 right-0 top-0 z-50 flex w-full items-end justify-between border-b border-border bg-background bg-opacity-20 px-6 py-3 backdrop-blur-2xl",
-      )}
-    >
-      <div>
-        <div className="flex items-center">
-          <span className="text-lg font-bold tracking-tight lg:mr-5">
-            <Link href={"/"}>
-              <Icons.logo className="h-12 w-12 text-foreground" />
-            </Link>
-          </span>
-          <MainNav navItems={navItems} />
-        </div>
-      </div>
-      <div className="flex h-full items-center gap-2 xl:gap-4">
-        {/* {isHoney && (
+	const { isReady } = useBeraJs();
+	return (
+		<nav
+			className={cn(
+				"h-18 fixed left-0 right-0 top-0 z-50 flex w-full items-end justify-between border-b border-border bg-background bg-opacity-20 px-6 py-3 backdrop-blur-2xl",
+			)}
+		>
+			<div>
+				<div className="flex items-center">
+					<span className="text-lg font-bold tracking-tight lg:mr-5">
+						<Link href={"/"}>
+							<Icons.logo className="h-12 w-12 text-foreground" />
+						</Link>
+					</span>
+					<MainNav navItems={navItems} />
+				</div>
+			</div>
+			<div className="flex h-full items-center gap-2 xl:gap-4">
+				{/* {isHoney && (
           <Link
             href={publicAnalyticsUrl}
             target="_blank"
@@ -64,11 +64,11 @@ export function Header({
             Dune Analytics <Icons.externalLink className="h-3 w-3" />
           </Link>
         )} */}
-        <ThemeToggleMobile />
-        {isReady && <BGTStatusBtn />}
-        {!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
-        <MobileDropdown navItems={navItems} />
-      </div>
-    </nav>
-  );
+				<ThemeToggleMobile />
+				{isReady && <BGTStatusBtn />}
+				{!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
+				<MobileDropdown navItems={navItems} />
+			</div>
+		</nav>
+	);
 }

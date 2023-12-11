@@ -9,21 +9,21 @@ import HowItWorks from "~/components/how-it-works";
 import Markets from "~/components/markets";
 
 export const metadata: Metadata = {
-  title: `Home | ${lendName}`,
-  description: `Welcome to ${lendName}!`,
+	title: `Home | ${lendName}`,
+	description: `Welcome to ${lendName}!`,
 };
 
 export default function Page() {
-  return (
-    <>
-      <div className="container mt-14 max-w-1280 bg-lend bg-contain bg-no-repeat pb-16">
-        <Hero />
-        <Data />
-        <Markets />
-        <HowItWorks />
-        <Documentation className="my-24" />
-      </div>
-      <Footer />
-    </>
-  );
+	return (
+		<>
+			<div className="container mt-14 max-w-1280 bg-lend bg-contain bg-no-repeat pb-16">
+				<Hero />
+				<Data />
+				<Markets />
+				<HowItWorks />
+				<Documentation className="my-24" />
+			</div>
+			<Footer />
+		</>
+	);
 }

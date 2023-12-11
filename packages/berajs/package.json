@@ -15,8 +15,7 @@
     "clean": "git clean -xdf dist .turbo node_modules",
     "check-types": "tsc --noEmit",
     "dev": "tsup src --watch",
-    "lint": "eslint src",
-    "lint:fix": "pnpm lint --fix"
+    "lint": " biome check ./src"
   },
   "dependencies": {
     "@bera/config": "0.1.0",
@@ -40,6 +39,7 @@
   "devDependencies": {
     "@aave/math-utils": "^1.20.0",
     "@bera/eslint-config": "0.1.0",
+    "@biomejs/biome": "1.4.1",
     "@cosmjs/proto-signing": "^0.29.5",
     "@cosmjs/stargate": "^0.29.5",
     "@cosmjs/tendermint-rpc": "^0.29.5",

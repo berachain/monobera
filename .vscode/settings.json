@@ -1,18 +1,18 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
-  "eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }],
-  "eslint.workingDirectories": [
-    { "pattern": "apps/*/" },
-    { "pattern": "packages/*/" }
-  ],
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "tailwindCSS.experimental.configFile": "./packages/config/tailwind/index.ts",
-  "workbench.colorCustomizations": {
-    "activityBar.background": "#0E3511",
-    "titleBar.activeBackground": "#134A18",
-    "titleBar.activeForeground": "#F3FCF4"
-  }
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }],
+	"eslint.workingDirectories": [
+		{ "pattern": "apps/*/" },
+		{ "pattern": "packages/*/" }
+	],
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"tailwindCSS.experimental.configFile": "./packages/config/tailwind/index.ts",
+	"workbench.colorCustomizations": {
+		"activityBar.background": "#0E3511",
+		"titleBar.activeBackground": "#134A18",
+		"titleBar.activeForeground": "#F3FCF4"
+	}
 }

@@ -7,8 +7,7 @@
     "build": "tsup",
     "clean": "git clean -xdf dist .turbo node_modules",
     "dev": "tsup --watch",
-    "lint": "eslint src",
-    "lint:fix": "pnpm lint --fix",
+    "lint": "biome check ./src",
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -- -p 6006",
     "build-storybook": "storybook build"
@@ -58,6 +57,7 @@
   "devDependencies": {
     "@bera/eslint-config": "0.1.0",
     "@bera/tailwind-config": "0.1.0",
+    "@biomejs/biome": "1.4.1",
     "@storybook/addon-essentials": "^7.0.22",
     "@storybook/addon-interactions": "^7.0.22",
     "@storybook/addon-links": "^7.0.22",

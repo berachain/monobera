@@ -7,14 +7,14 @@ import { ConnectWalletBear } from "@bera/shared-ui";
 import Portfolio from "./portfolio";
 
 export default function MyBGT() {
-  const { isReady } = useBeraJs();
-  return (
-    <>
-      {isReady ? (
-        <Portfolio />
-      ) : (
-        <ConnectWalletBear message="You need to connect your wallet to see delegations and rewards" />
-      )}
-    </>
-  );
+	const { isReady } = useBeraJs();
+	return (
+		<>
+			{isReady ? (
+				<Portfolio />
+			) : (
+				<ConnectWalletBear message="You need to connect your wallet to see delegations and rewards" />
+			)}
+		</>
+	);
 }

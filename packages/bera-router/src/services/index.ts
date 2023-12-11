@@ -2,11 +2,11 @@ export * from "./RouterService/routerService";
 export * from "./RouterService/types";
 export * from "./RouterService/errors";
 export type {
-  TokenData,
-  PoolRecord,
-  Pool,
-  PoolRecords,
-  PoolData,
-  WeightEntry,
-  RawPool,
+	TokenData,
+	PoolRecord,
+	Pool,
+	PoolRecords,
+	PoolData,
+	WeightEntry,
+	RawPool,
 } from "./PoolService/types";

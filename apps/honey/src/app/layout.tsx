@@ -13,25 +13,25 @@ import { Toaster } from "react-hot-toast";
 import { beraJsConfig, navItems } from "./config";
 
 const fontSans = IBM_Plex_Sans({
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-sans",
-  subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	variable: "--font-sans",
+	subsets: ["latin"],
 });
 
 const fontHoney = Jua({
-  weight: ["400"],
-  variable: "--font-honey",
-  subsets: ["latin"],
+	weight: ["400"],
+	variable: "--font-honey",
+	subsets: ["latin"],
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <Script
-        id="HotJarAnalytics"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `(function(h,o,t,j,a,r){
+	return (
+		<html lang="en" suppressHydrationWarning>
+			<Script
+				id="HotJarAnalytics"
+				strategy="afterInteractive"
+				dangerouslySetInnerHTML={{
+					__html: `(function(h,o,t,j,a,r){
             h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
             h._hjSettings={hjid:3728320,hjsv:6};
             a=o.getElementsByTagName('head')[0];
@@ -39,24 +39,24 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
             a.appendChild(r);
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
-        }}
-      />
-      <body
-        className={cn(
-          "font-sans antialiased",
-          fontSans.variable,
-          fontHoney.variable,
-        )}
-      >
-        <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-          <Header navItems={navItems} isHoney />
-          <main className="w-full py-[72px]">{props.children}</main>
-          <Toaster position="bottom-right" />
-          <Footer />
-          <TailwindIndicator />
-          <Analytics />
-        </BeraConfig>
-      </body>
-    </html>
-  );
+				}}
+			/>
+			<body
+				className={cn(
+					"font-sans antialiased",
+					fontSans.variable,
+					fontHoney.variable,
+				)}
+			>
+				<BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
+					<Header navItems={navItems} isHoney />
+					<main className="w-full py-[72px]">{props.children}</main>
+					<Toaster position="bottom-right" />
+					<Footer />
+					<TailwindIndicator />
+					<Analytics />
+				</BeraConfig>
+			</body>
+		</html>
+	);
 }

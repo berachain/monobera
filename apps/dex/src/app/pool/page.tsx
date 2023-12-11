@@ -7,8 +7,8 @@ import { getMetaTitle } from "~/utils/metadata";
 import PoolPageHeader from "./PoolPageHeader";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Pools"),
-  description: "View pools",
+	title: getMetaTitle("Pools"),
+	description: "View pools",
 };
 
 // const getTvl = async () => {
@@ -37,16 +37,16 @@ export const metadata: Metadata = {
 // export const fetchCache = "force-no-store";
 
 export default function Pool() {
-  // const tvl = getTvl();
-  // const volume = getVolume();
-  // const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
-  //   tvl: tvl,
-  //   volume: volume,
-  // }));
+	// const tvl = getTvl();
+	// const volume = getVolume();
+	// const data: any = await Promise.all([tvl, volume]).then(([tvl, volume]) => ({
+	//   tvl: tvl,
+	//   volume: volume,
+	// }));
 
-  return (
-    <div className="flex w-full flex-col gap-5">
-      <PoolPageHeader />
-    </div>
-  );
+	return (
+		<div className="flex w-full flex-col gap-5">
+			<PoolPageHeader />
+		</div>
+	);
 }

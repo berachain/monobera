@@ -10,21 +10,21 @@ import type { IMarket } from "../berpetuals/page";
 import Home from "./portfolio-home";
 
 export function generateMetadata(): Metadata {
-  return {
-    title: `Portfolio | ${perpsName}`,
-  };
+	return {
+		title: `Portfolio | ${perpsName}`,
+	};
 }
 
 export const revalidate = 30;
 
 export default async function Page() {
-  const m = await getMarkets();
-  const markets: IMarket[] = m?.map((m: Market) => ({
-    ...m,
-    imageUri: MarketImages[m.name],
-    tokenName: MarketTokenNames[m.name],
-  })) as IMarket[];
-  return <Home markets={markets} />;
+	const m = await getMarkets();
+	const markets: IMarket[] = m?.map((m: Market) => ({
+		...m,
+		imageUri: MarketImages[m.name],
+		tokenName: MarketTokenNames[m.name],
+	})) as IMarket[];
+	return <Home markets={markets} />;
 }
 
 // BELOW IS A SSR THINGY

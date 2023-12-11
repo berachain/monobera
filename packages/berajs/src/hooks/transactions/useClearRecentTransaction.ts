@@ -5,15 +5,15 @@ import { useChainId } from "~/hooks/useChainId";
 import { useTransactionStore } from "./TransactionStoreContext";
 
 export function useClearRecentTransactions(): () => void {
-  const store = useTransactionStore();
-  const chainId = useChainId();
-  const { account } = useBeraJs();
+	const store = useTransactionStore();
+	const chainId = useChainId();
+	const { account } = useBeraJs();
 
-  return useCallback(() => {
-    if (!account || !chainId) {
-      throw new Error("No address or chain ID found");
-    }
+	return useCallback(() => {
+		if (!account || !chainId) {
+			throw new Error("No address or chain ID found");
+		}
 
-    store.clearTransactions(account, chainId);
-  }, [store, account, chainId]);
+		store.clearTransactions(account, chainId);
+	}, [store, account, chainId]);
 }

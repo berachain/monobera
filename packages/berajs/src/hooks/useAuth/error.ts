@@ -1,8 +1,8 @@
 export class UserRejectedError extends Error {
-  constructor() {
-    super();
+	constructor() {
+		super();
 
-    // Set the prototype explicitly.
-    Object.setPrototypeOf(this, UserRejectedError.prototype);
-  }
+		// Set the prototype explicitly.
+		Object.setPrototypeOf(this, UserRejectedError.prototype);
+	}
 }

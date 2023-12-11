@@ -1,3 +1,3 @@
 export const Rewards = () => {
-  return <></>;
+	return <></>;
 };

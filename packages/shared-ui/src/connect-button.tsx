@@ -11,74 +11,74 @@ import { Icons } from "@bera/ui/icons";
 import ConnectedWalletPopover from "./connected-wallet-popover";
 
 export const ConnectButton = ({
-  className,
-  isNavItem = false,
-  isHoney = false,
+	className,
+	isNavItem = false,
+	isHoney = false,
 }: {
-  className?: string;
-  isNavItem?: boolean;
-  isHoney?: boolean;
+	className?: string;
+	isNavItem?: boolean;
+	isHoney?: boolean;
 }) => {
-  const { isConnected, isWrongNetwork, isReady } = useBeraJs();
-  return (
-    <RainbowConnectButton.Custom>
-      {({
-        // account,
-        // chain,
-        openChainModal,
-        openConnectModal,
-        authenticationStatus,
-        mounted,
-      }) => {
-        // console.log({
-        //   account,
-        //   altAccount,
-        //   chain,
-        //   openChainModal,
-        //   openConnectModal,
-        //   authenticationStatus,
-        //   mounted,
-        // });
-        const ready = mounted && authenticationStatus !== "loading";
-        // const connected =
-        //   ready &&
-        //   account &&
-        //   chain &&
-        //   (!authenticationStatus || authenticationStatus === "authenticated");
+	const { isConnected, isWrongNetwork, isReady } = useBeraJs();
+	return (
+		<RainbowConnectButton.Custom>
+			{({
+				// account,
+				// chain,
+				openChainModal,
+				openConnectModal,
+				authenticationStatus,
+				mounted,
+			}) => {
+				// console.log({
+				//   account,
+				//   altAccount,
+				//   chain,
+				//   openChainModal,
+				//   openConnectModal,
+				//   authenticationStatus,
+				//   mounted,
+				// });
+				const ready = mounted && authenticationStatus !== "loading";
+				// const connected =
+				//   ready &&
+				//   account &&
+				//   chain &&
+				//   (!authenticationStatus || authenticationStatus === "authenticated");
 
-        return (
-          <div
-            {...(!ready && {
-              "aria-hidden": true,
-              style: {
-                opacity: 0,
-                pointerEvents: "none",
-                userSelect: "none",
-              },
-            })}
-            className={cn("flex w-fit", className)}
-          >
-            {!isConnected && (
-              <Button
-                onClick={openConnectModal}
-                type="button"
-                className={cn("w-full gap-2", !isNavItem && "font-semibold")}
-              >
-                <Icons.wallet
-                  className={cn("h-4 w-4", !isNavItem && "h-6 w-6")}
-                />
-                Connect
-              </Button>
-            )}
-            {isWrongNetwork && (
-              <Button onClick={openChainModal} type="button" className="w-full">
-                Wrong network
-              </Button>
-            )}
-            {isReady && <ConnectedWalletPopover isHoney={isHoney} />}
-          </div>
-        );
-      }}
-    </RainbowConnectButton.Custom>
-  );
+				return (
+					<div
+						{...(!ready && {
+							"aria-hidden": true,
+							style: {
+								opacity: 0,
+								pointerEvents: "none",
+								userSelect: "none",
+							},
+						})}
+						className={cn("flex w-fit", className)}
+					>
+						{!isConnected && (
+							<Button
+								onClick={openConnectModal}
+								type="button"
+								className={cn("w-full gap-2", !isNavItem && "font-semibold")}
+							>
+								<Icons.wallet
+									className={cn("h-4 w-4", !isNavItem && "h-6 w-6")}
+								/>
+								Connect
+							</Button>
+						)}
+						{isWrongNetwork && (
+							<Button onClick={openChainModal} type="button" className="w-full">
+								Wrong network
+							</Button>
+						)}
+						{isReady && <ConnectedWalletPopover isHoney={isHoney} />}
+					</div>
+				);
+			}}
+		</RainbowConnectButton.Custom>
+	);
 };

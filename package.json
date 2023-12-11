@@ -20,9 +20,8 @@
     "dev:perp": "turbo dev --filter=perp --filter='./packages/*'",
     "dev:faucet": "turbo dev --filter=faucet --filter='./packages/*'",
     "check-types": "turbo check-types",
-    "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,md,json}\" --ignore-path .gitignore",
-    "lint": "turbo lint && manypkg check",
-    "lint:fix": "turbo lint:fix && manypkg fix",
+    "lint": "turbo lint",
+    "format": "biome format --write .",
     "prepare": "husky install"
   },
   "dependencies": {

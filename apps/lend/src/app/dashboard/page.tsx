@@ -5,10 +5,10 @@ import { lendName } from "@bera/config";
 import DashboardPageContent from "./dashboard-page-content";
 
 export const metadata: Metadata = {
-  title: `Dashboard | ${lendName}`,
-  description: `Welcome to ${lendName}!`,
+	title: `Dashboard | ${lendName}`,
+	description: `Welcome to ${lendName}!`,
 };
 
 export default function DashboardPage() {
-  return <DashboardPageContent />;
+	return <DashboardPageContent />;
 }

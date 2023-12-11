@@ -6,14 +6,14 @@ import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import PoolPageContent from "./PoolPageContent";
 
 type Props = {
-  params: { address: string };
+	params: { address: string };
 };
 
 export function generateMetadata({ params }: Props): Metadata {
-  const { address } = params;
-  return {
-    title: `${address} Pool | DEX | Berachain`,
-  };
+	const { address } = params;
+	return {
+		title: `${address} Pool | DEX | Berachain`,
+	};
 }
 
 // export const fetchCache = "force-no-store";
@@ -21,38 +21,38 @@ export function generateMetadata({ params }: Props): Metadata {
 export const revalidate = 5;
 
 export default async function PoolPage({
-  params,
+	params,
 }: {
-  params: { address: string };
+	params: { address: string };
 }) {
-  try {
-    const poolResponse = await fetch(
-      `${getAbsoluteUrl()}/api/getSelectedPool/api?address=${params.address}`,
-      {
-        method: "GET",
-        headers: {
-          "x-vercel-protection-bypass": process.env
-            .VERCEL_AUTOMATION_BYPASS_SECRET as string,
-        },
-      },
-    );
-    const pricesResponse = await fetch(
-      `${getAbsoluteUrl()}/api/getPrices/api`,
-      {
-        method: "GET",
-        headers: {
-          "x-vercel-protection-bypass": process.env
-            .VERCEL_AUTOMATION_BYPASS_SECRET as string,
-        },
-      },
-    );
+	try {
+		const poolResponse = await fetch(
+			`${getAbsoluteUrl()}/api/getSelectedPool/api?address=${params.address}`,
+			{
+				method: "GET",
+				headers: {
+					"x-vercel-protection-bypass": process.env
+						.VERCEL_AUTOMATION_BYPASS_SECRET as string,
+				},
+			},
+		);
+		const pricesResponse = await fetch(
+			`${getAbsoluteUrl()}/api/getPrices/api`,
+			{
+				method: "GET",
+				headers: {
+					"x-vercel-protection-bypass": process.env
+						.VERCEL_AUTOMATION_BYPASS_SECRET as string,
+				},
+			},
+		);
 
-    const pool = await poolResponse.json();
-    const prices = await pricesResponse.json();
+		const pool = await poolResponse.json();
+		const prices = await pricesResponse.json();
 
-    return <PoolPageContent prices={prices} pool={pool} />;
-  } catch (e) {
-    console.log(`Error fetching pools: ${e}`);
-    notFound();
-  }
+		return <PoolPageContent prices={prices} pool={pool} />;
+	} catch (e) {
+		console.log(`Error fetching pools: ${e}`);
+		notFound();
+	}
 }

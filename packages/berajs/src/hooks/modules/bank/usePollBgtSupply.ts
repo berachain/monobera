@@ -9,33 +9,33 @@ import { useBeraConfig } from "~/contexts";
 
 // this is going to be slow for now until we have event indexing
 export const usePollBgtSupply = () => {
-  const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
+	const publicClient = usePublicClient();
+	const { networkConfig } = useBeraConfig();
 
-  const method = "getSupply";
-  const QUERY_KEY = [method];
-  useSWR(
-    QUERY_KEY,
-    async () => {
-      const result = await publicClient.readContract({
-        address: networkConfig.precompileAddresses.bankAddress as Address,
-        abi: BANK_PRECOMPILE_ABI,
-        functionName: method,
-        args: [process.env.NEXT_PUBLIC_STAKING_TOKEN],
-      });
+	const method = "getSupply";
+	const QUERY_KEY = [method];
+	useSWR(
+		QUERY_KEY,
+		async () => {
+			const result = await publicClient.readContract({
+				address: networkConfig.precompileAddresses.bankAddress as Address,
+				abi: BANK_PRECOMPILE_ABI,
+				functionName: method,
+				args: [process.env.NEXT_PUBLIC_STAKING_TOKEN],
+			});
 
-      return formatUnits(result as bigint, 18);
-    },
-    {
-      refreshInterval: POLLING.FAST,
-    },
-  );
+			return formatUnits(result as bigint, 18);
+		},
+		{
+			refreshInterval: POLLING.FAST,
+		},
+	);
 
-  const useBgtSupply = () => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
-  };
-  return {
-    useBgtSupply,
-  };
+	const useBgtSupply = () => {
+		const { data = undefined } = useSWRImmutable(QUERY_KEY);
+		return data;
+	};
+	return {
+		useBgtSupply,
+	};
 };

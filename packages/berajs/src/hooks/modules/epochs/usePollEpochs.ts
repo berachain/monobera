@@ -8,45 +8,45 @@ import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 
 export interface IEpoch {
-  current: number;
-  startTime: number;
-  endTime: number;
+	current: number;
+	startTime: number;
+	endTime: number;
 }
 // this is going to be slow for now until we have event indexing
 export const usePollEpochs = () => {
-  const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
+	const publicClient = usePublicClient();
+	const { networkConfig } = useBeraConfig();
 
-  const identifierKey = "berachain_epoch_identifier";
-  const method = "getCurrentEpoch";
-  const QUERY_KEY = [identifierKey, method];
-  const { isLoading } = useSWR(
-    QUERY_KEY,
-    async () => {
-      const result = (await publicClient.readContract({
-        address: networkConfig.precompileAddresses.epochsAddress as Address,
-        abi: EPOCHS_PRECOMPILE_ABI,
-        functionName: method,
-        args: [identifierKey],
-      })) as any[];
+	const identifierKey = "berachain_epoch_identifier";
+	const method = "getCurrentEpoch";
+	const QUERY_KEY = [identifierKey, method];
+	const { isLoading } = useSWR(
+		QUERY_KEY,
+		async () => {
+			const result = (await publicClient.readContract({
+				address: networkConfig.precompileAddresses.epochsAddress as Address,
+				abi: EPOCHS_PRECOMPILE_ABI,
+				functionName: method,
+				args: [identifierKey],
+			})) as any[];
 
-      return {
-        current: Number(result[0]),
-        startTime: Number(result[1]),
-        endTime: Number(result[2]),
-      };
-    },
-    {
-      refreshInterval: POLLING.FAST, // make it rlly slow TODO CHANGE
-    },
-  );
+			return {
+				current: Number(result[0]),
+				startTime: Number(result[1]),
+				endTime: Number(result[2]),
+			};
+		},
+		{
+			refreshInterval: POLLING.FAST, // make it rlly slow TODO CHANGE
+		},
+	);
 
-  const useCurrentEpoch = () => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
-  };
-  return {
-    useCurrentEpoch,
-    isLoading,
-  };
+	const useCurrentEpoch = () => {
+		const { data = undefined } = useSWRImmutable(QUERY_KEY);
+		return data;
+	};
+	return {
+		useCurrentEpoch,
+		isLoading,
+	};
 };

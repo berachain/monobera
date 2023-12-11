@@ -6,23 +6,23 @@ import { useTransactionStore } from "./TransactionStoreContext";
 import type { Transaction } from "./transactionStore";
 
 export function useRecentTransactions(): Transaction[] {
-  const store = useTransactionStore();
-  const { account } = useBeraJs();
-  const chainId = useChainId();
+	const store = useTransactionStore();
+	const { account } = useBeraJs();
+	const chainId = useChainId();
 
-  const [transactions, setTransactions] = useState(() =>
-    store && account && chainId ? store.getTransactions(account, chainId) : [],
-  );
+	const [transactions, setTransactions] = useState(() =>
+		store && account && chainId ? store.getTransactions(account, chainId) : [],
+	);
 
-  useEffect(() => {
-    if (store && account && chainId) {
-      setTransactions(store.getTransactions(account, chainId));
+	useEffect(() => {
+		if (store && account && chainId) {
+			setTransactions(store.getTransactions(account, chainId));
 
-      return store.onChange(() => {
-        setTransactions(store.getTransactions(account, chainId));
-      });
-    }
-  }, [store, account, chainId]);
+			return store.onChange(() => {
+				setTransactions(store.getTransactions(account, chainId));
+			});
+		}
+	}, [store, account, chainId]);
 
-  return transactions;
+	return transactions;
 }

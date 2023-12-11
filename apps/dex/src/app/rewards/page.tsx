@@ -4,10 +4,10 @@ import { getMetaTitle } from "~/utils/metadata";
 import { Rewards } from "./rewards";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Rewards"),
-  description: "View & claim your BGT rewards",
+	title: getMetaTitle("Rewards"),
+	description: "View & claim your BGT rewards",
 };
 
 export default function Page() {
-  return <Rewards />;
+	return <Rewards />;
 }

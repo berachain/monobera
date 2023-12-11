@@ -6,29 +6,29 @@ import { type Address } from "wagmi";
 import { SwapCard } from "~/components/swap-card";
 
 interface ISwap {
-  inputCurrency?: Address | undefined;
-  outputCurrency?: Address | undefined;
+	inputCurrency?: Address | undefined;
+	outputCurrency?: Address | undefined;
 }
 
 const DynamicBerachainInfo = dynamic(
-  () => import("~/components/berachain-info"),
-  {
-    ssr: false,
-  },
+	() => import("~/components/berachain-info"),
+	{
+		ssr: false,
+	},
 );
 
 export const SwapContent = ({ inputCurrency, outputCurrency }: ISwap) => {
-  return (
-    <div className="mx-auto flex min-w-[350px] flex-col items-center justify-center gap-4 md:w-[500px]">
-      <DynamicBerachainInfo />
-      <div className="w-full ">
-        <SwapCard
-          inputCurrency={inputCurrency}
-          outputCurrency={outputCurrency}
-          showBear={false}
-          className="drop-shadow-[0px_4px_32px_#23232314] dark:drop-shadow-[0px_4px_32px_#CFB69714]"
-        />
-      </div>
-    </div>
-  );
+	return (
+		<div className="mx-auto flex min-w-[350px] flex-col items-center justify-center gap-4 md:w-[500px]">
+			<DynamicBerachainInfo />
+			<div className="w-full ">
+				<SwapCard
+					inputCurrency={inputCurrency}
+					outputCurrency={outputCurrency}
+					showBear={false}
+					className="drop-shadow-[0px_4px_32px_#23232314] dark:drop-shadow-[0px_4px_32px_#CFB69714]"
+				/>
+			</div>
+		</div>
+	);
 };

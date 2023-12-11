@@ -12,10 +12,10 @@ export { SearchInput } from "./search-input";
 export { Spinner } from "./spinner";
 export { TailwindIndicator } from "./tailwind-indicator";
 export {
-  SuccessToast,
-  ErrorToast,
-  SubmissionToast,
-  LoadingToast,
+	SuccessToast,
+	ErrorToast,
+	SubmissionToast,
+	LoadingToast,
 } from "./custom-toasts";
 export { TxnPreview } from "./txn-preview";
 export { Timeblock } from "./time-block";

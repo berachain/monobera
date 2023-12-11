@@ -6,28 +6,28 @@ import { getMetaTitle } from "~/utils/metadata";
 import DashBoard from "./dashboard/dashboard";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Home"),
-  description: `Welcome to ${process.env.NEXT_PUBLIC_BGT_NAME}!`,
+	title: getMetaTitle("Home"),
+	description: `Welcome to ${process.env.NEXT_PUBLIC_BGT_NAME}!`,
 };
 
 async function getAvgValidatorUptime() {
-  try {
-    const res = await fetch(`${indexerUrl}/validators/uptime`);
-    const jsonRes = await res.json();
-    return jsonRes;
-  } catch (e) {
-    console.log(e);
-  }
+	try {
+		const res = await fetch(`${indexerUrl}/validators/uptime`);
+		const jsonRes = await res.json();
+		return jsonRes;
+	} catch (e) {
+		console.log(e);
+	}
 }
 
 export default async function Page() {
-  const avgValidatorUptime = await getAvgValidatorUptime();
-  return (
-    <>
-      <div className="container max-w-1280 pb-16">
-        <DashBoard avgValidatorUptime={avgValidatorUptime?.uptime ?? 0} />
-      </div>
-      <Footer />
-    </>
-  );
+	const avgValidatorUptime = await getAvgValidatorUptime();
+	return (
+		<>
+			<div className="container max-w-1280 pb-16">
+				<DashBoard avgValidatorUptime={avgValidatorUptime?.uptime ?? 0} />
+			</div>
+			<Footer />
+		</>
+	);
 }

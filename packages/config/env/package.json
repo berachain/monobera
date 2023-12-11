@@ -13,13 +13,15 @@
     "build": "tsup",
     "clean": "git clean -xdf dist .turbo node_modules",
     "check-types": "tsc --noEmit",
-    "dev": "tsup index.ts --watch"
+    "dev": "tsup index.ts --watch",
+    "lint": " biome check ."
   },
   "dependencies": {
     "next-auth": "^4.24.5",
     "typescript": "^5.0.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.4.1",
     "@types/node": "^18.16.6"
   }
 }

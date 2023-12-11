@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import {
-  // formatUsd,
-  usePollActiveValidators,
-  usePollValidatorBribes,
+	// formatUsd,
+	usePollActiveValidators,
+	usePollValidatorBribes,
 } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { type Address } from "viem";
@@ -110,68 +110,68 @@ import BribeList, { BribeCardLoading } from "./bribe-list";
 //   return historyInterval.reverse();
 // };
 export default function BribesAndEmissions({
-  // historicalBribes,
-  // cumulativeBribeValue,
-  currentBribeValue,
-  validatorAddress,
-  isLoading,
+	// historicalBribes,
+	// cumulativeBribeValue,
+	currentBribeValue,
+	validatorAddress,
+	isLoading,
 }: {
-  historicalBribes: FormattedHistoricalBribes[];
-  cumulativeBribeValue: number;
-  currentBribeValue: number;
-  validatorAddress: Address;
-  isLoading: boolean;
+	historicalBribes: FormattedHistoricalBribes[];
+	cumulativeBribeValue: number;
+	currentBribeValue: number;
+	validatorAddress: Address;
+	isLoading: boolean;
 }) {
-  // const [timeframe, setTimeframe] = React.useState(TimeFrameEnum.ALL_TIME);
+	// const [timeframe, setTimeframe] = React.useState(TimeFrameEnum.ALL_TIME);
 
-  // const chartData = useMemo(
-  //   () => getChartData(getHistoryInterval(historicalBribes, timeframe)),
-  //   [timeframe, historicalBribes],
-  // );
-  const { useActiveValidatorBribes, isLoading: isBribesLoading } =
-    usePollValidatorBribes(validatorAddress);
+	// const chartData = useMemo(
+	//   () => getChartData(getHistoryInterval(historicalBribes, timeframe)),
+	//   [timeframe, historicalBribes],
+	// );
+	const { useActiveValidatorBribes, isLoading: isBribesLoading } =
+		usePollValidatorBribes(validatorAddress);
 
-  const { useValidatorTokens } = usePollActiveValidators();
-  const totalDelegated = useValidatorTokens(validatorAddress);
-  const amountPerBgt = useMemo(() => {
-    const amnt = Number(currentBribeValue) / totalDelegated;
-    if (Number.isNaN(amnt)) {
-      return 0;
-    }
-    return Number(currentBribeValue) / totalDelegated;
-  }, [totalDelegated, currentBribeValue]);
+	const { useValidatorTokens } = usePollActiveValidators();
+	const totalDelegated = useValidatorTokens(validatorAddress);
+	const amountPerBgt = useMemo(() => {
+		const amnt = Number(currentBribeValue) / totalDelegated;
+		if (Number.isNaN(amnt)) {
+			return 0;
+		}
+		return Number(currentBribeValue) / totalDelegated;
+	}, [totalDelegated, currentBribeValue]);
 
-  console.log(amountPerBgt);
-  const bribes = useActiveValidatorBribes();
+	console.log(amountPerBgt);
+	const bribes = useActiveValidatorBribes();
 
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-1 text-lg font-semibold leading-7">
-        Bribes
-        <Tooltip text="Overview of bribe information on this validator" />
-      </div>
-      {isLoading || isBribesLoading ? (
-        <div>
-          Loading
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
-            {[0, 0, 0].map((_: any, index: number) => (
-              <BribeCardLoading key={index} />
-            ))}
-          </div>
-        </div>
-      ) : (
-        <>
-          {bribes.length === 0 ? (
-            <div className="flex items-center gap-4 py-4">
-              <hr className="h-[2px] flex-1" />
-              <div className="text-sm text-muted-foreground">
-                This validator has no bribes
-              </div>
-              <hr className="h-[2px] flex-1" />
-            </div>
-          ) : (
-            <>
-              {/* <div className="mt-4 flex gap-4">
+	return (
+		<div className="flex flex-col gap-4">
+			<div className="flex items-center gap-1 text-lg font-semibold leading-7">
+				Bribes
+				<Tooltip text="Overview of bribe information on this validator" />
+			</div>
+			{isLoading || isBribesLoading ? (
+				<div>
+					Loading
+					<div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+						{[0, 0, 0].map((_: any, index: number) => (
+							<BribeCardLoading key={index} />
+						))}
+					</div>
+				</div>
+			) : (
+				<>
+					{bribes.length === 0 ? (
+						<div className="flex items-center gap-4 py-4">
+							<hr className="h-[2px] flex-1" />
+							<div className="text-sm text-muted-foreground">
+								This validator has no bribes
+							</div>
+							<hr className="h-[2px] flex-1" />
+						</div>
+					) : (
+						<>
+							{/* <div className="mt-4 flex gap-4">
                 <div className="flex w-full  flex-shrink-0 flex-grow-0 flex-col gap-4 lg:w-[230px]">
                   <Card className="flex w-full flex-1 flex-col items-center justify-center gap-2 p-4 shadow lg:p-0">
                     <div className="text-3xl font-semibold leading-9 text-foreground">
@@ -228,11 +228,11 @@ export default function BribesAndEmissions({
                   </div>
                 </Card>
               </div> */}
-              <BribeList bribes={[bribes ?? []]} />
-            </>
-          )}
-        </>
-      )}
-    </div>
-  );
+							<BribeList bribes={[bribes ?? []]} />
+						</>
+					)}
+				</>
+			)}
+		</div>
+	);
 }

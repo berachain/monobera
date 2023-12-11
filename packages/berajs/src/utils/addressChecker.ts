@@ -27,42 +27,40 @@ HE SOFTWARE.
 */
 
 export const stripHexPrefix = (str: string): string => {
-  return str.slice(0, 2) === "0x" ? str.slice(2) : str;
+	return str.slice(0, 2) === "0x" ? str.slice(2) : str;
 };
 export const toChecksumAddress = (
-  address: string,
-  chainId: number | null,
+	address: string,
+	chainId: number | null,
 ): string => {
-  if (typeof address !== "string") {
-    throw new Error(
-      "stripHexPrefix param must be type 'string', is currently type " +
-        typeof address +
-        ".",
-    );
-  }
-  const strip_address = stripHexPrefix(address).toLowerCase();
-  const prefix = chainId != null ? chainId.toString() + "0x" : "";
-  const keccak_hash = keccak(prefix + strip_address).toString("hex");
-  let output = "0x";
+	if (typeof address !== "string") {
+		throw new Error(
+			`stripHexPrefix param must be type 'string', is currently type ${typeof address}.`,
+		);
+	}
+	const strip_address = stripHexPrefix(address).toLowerCase();
+	const prefix = chainId != null ? `${chainId.toString()}0x` : "";
+	const keccak_hash = keccak(prefix + strip_address).toString("hex");
+	let output = "0x";
 
-  for (let i = 0; i < strip_address.length; i++)
-    output +=
-      parseInt(String(keccak_hash[i]), 16) >= 8
-        ? String(strip_address[i]).toUpperCase()
-        : strip_address[i];
-  return output;
+	for (let i = 0; i < strip_address.length; i++)
+		output +=
+			parseInt(String(keccak_hash[i]), 16) >= 8
+				? String(strip_address[i]).toUpperCase()
+				: strip_address[i];
+	return output;
 };
 export function isValidChecksumAddress(
-  address: string,
-  chainId: number | null,
+	address: string,
+	chainId: number | null,
 ): boolean {
-  return (
-    isValidAddress(address) && toChecksumAddress(address, chainId) === address
-  );
+	return (
+		isValidAddress(address) && toChecksumAddress(address, chainId) === address
+	);
 }
 function isValidAddress(address: string) {
-  return /^0x[0-9a-fA-F]{40}$/.test(address);
+	return /^0x[0-9a-fA-F]{40}$/.test(address);
 }
 function keccak(a: any) {
-  return new Keccak(256).update(a).digest();
+	return new Keccak(256).update(a).digest();
 }

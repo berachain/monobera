@@ -13,19 +13,19 @@ import Providers from "./Providers";
 import { navItems } from "./config";
 
 const fontSans = IBM_Plex_Sans({
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-sans",
-  subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	variable: "--font-sans",
+	subsets: ["latin"],
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <Script
-        id="HotJarAnalytics"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `(function(h,o,t,j,a,r){
+	return (
+		<html lang="en">
+			<Script
+				id="HotJarAnalytics"
+				strategy="afterInteractive"
+				dangerouslySetInnerHTML={{
+					__html: `(function(h,o,t,j,a,r){
             h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
             h._hjSettings={hjid:3728407,hjsv:6};
             a=o.getElementsByTagName('head')[0];
@@ -33,23 +33,23 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
             a.appendChild(r);
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
-        }}
-      />
-      <body
-        className={cn("bg-background font-sans antialiased", fontSans.variable)}
-      >
-        <Providers>
-          <div className="z-[100]">
-            <Toaster position="bottom-right" />
-          </div>
-          <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-            <Header navItems={navItems} />
-            <main className="w-full pt-start">{props.children}</main>
-          </div>
-          <TailwindIndicator />
-          <Analytics />
-        </Providers>
-      </body>
-    </html>
-  );
+				}}
+			/>
+			<body
+				className={cn("bg-background font-sans antialiased", fontSans.variable)}
+			>
+				<Providers>
+					<div className="z-[100]">
+						<Toaster position="bottom-right" />
+					</div>
+					<div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+						<Header navItems={navItems} />
+						<main className="w-full pt-start">{props.children}</main>
+					</div>
+					<TailwindIndicator />
+					<Analytics />
+				</Providers>
+			</body>
+		</html>
+	);
 }

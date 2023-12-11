@@ -1,3 +1,3 @@
 export function OrderHistorCard() {
-  return <div>card</div>;
+	return <div>card</div>;
 }

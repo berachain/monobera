@@ -3,13 +3,13 @@ import { useContext } from "react";
 import { BeraJsContext } from "./context";
 
 const useBeraJs = () => {
-  const beraJsContext = useContext(BeraJsContext);
+	const beraJsContext = useContext(BeraJsContext);
 
-  if (beraJsContext === undefined) {
-    throw new Error("bera js context undefined");
-  }
+	if (beraJsContext === undefined) {
+		throw new Error("bera js context undefined");
+	}
 
-  return beraJsContext;
+	return beraJsContext;
 };
 
 export default useBeraJs;
