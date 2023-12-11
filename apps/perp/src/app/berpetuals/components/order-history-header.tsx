@@ -87,7 +87,7 @@ export function OrderHistoryHeader({
         )}
         {tabType === "positions" && (
           <Button
-            className="h-full w-full cursor-pointer rounded-lg bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
+            className="h-full w-full cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
             disabled={
               isClosePositionsLoading || closePositionsPayload?.length === 0
             }
@@ -107,7 +107,7 @@ export function OrderHistoryHeader({
 
         {tabType === "orders" && (
           <Button
-            className="h-full w-full cursor-pointer rounded-lg bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
+            className="h-full w-full cursor-pointer rounded-md bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
             disabled={
               isCloseLimitOrdersLoading || closeOrdersPayload?.length === 0
             }

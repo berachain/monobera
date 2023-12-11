@@ -1,12 +1,25 @@
 {
   "name": "@bera/config",
   "version": "0.1.0",
-  "main": "index.ts",
-  "license": "MIT",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "type": "module",
   "files": [
-    "index.ts"
+    "dist"
   ],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup",
+    "clean": "git clean -xdf dist .turbo node_modules",
+    "check-types": "tsc --noEmit",
+    "dev": "tsup index.ts --watch"
+  },
   "dependencies": {
-    "next-auth": "^4.24.5"
+    "next-auth": "^4.24.5",
+    "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.6"
   }
 }

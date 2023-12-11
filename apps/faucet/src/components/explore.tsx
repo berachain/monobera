@@ -10,8 +10,10 @@ import {
   docsUrl,
   honeyName,
   honeyUrl,
+  lendDocsUrl,
   lendName,
   lendUrl,
+  perpsDocsUrl,
   perpsName,
   perpsUrl,
 } from "@bera/config";
@@ -86,6 +88,7 @@ const favList = [
     description:
       "Supply assets and unlock the potential to borrow HONEY. Earn BGT rewards while you supply and borrow.",
     goto: lendUrl,
+    learnMore: lendDocsUrl,
   },
   {
     icon: <Icons.berpsFav className="h-[52px] w-[52px]" />,
@@ -94,6 +97,7 @@ const favList = [
     description:
       "Experience the thrill of high leverage trading, tailored for both novices and seasoned traders. With an impressive 100x leverage.",
     goto: perpsUrl,
+    learnMore: perpsDocsUrl,
   },
   {
     icon: <Icons.bgtFav className="h-[52px] w-[52px]" />,

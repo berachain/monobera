@@ -52,11 +52,10 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { account } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
   const { signMessageAsync } = useSignMessage({
     message: `You are enabling One Click Trading. Use at your own risk!`,
   });
-
+  const { networkConfig } = useBeraConfig();
   const generateKey = useCallback(async () => {
     dispatch({ type: ActionEnum.LOADING });
     onLoading && onLoading();
@@ -89,19 +88,17 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
         return;
       }
       const decodedString = decrypt(octKey, KEY);
-
-      const account = privateKeyToAccount(decodedString as `0x${string}`);
+      const account = privateKeyToAccount(decodedString);
       const client = createWalletClient({
         account,
         chain: networkConfig.chain,
         transport: http(),
       });
-      // const account = ethersWalletToAccount(new Wallet(decodedString));
-
       setOctAccount(client);
       setOctAddress(account.address);
       setOctPrivKey(decodedString);
     } catch (e) {
+      console.log(e);
       setOctAddress("");
       setOctPrivKey("");
       setOctAccount(undefined);
