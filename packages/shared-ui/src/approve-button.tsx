@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { TransactionActionType, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -20,9 +21,33 @@ export const ApproveButton = ({ token, spender, amount, className }: Props) => {
     message: `Approve ${token?.name}`,
     actionType: TransactionActionType.APPROVAL,
   });
+  const ref = useRef<HTMLDivElement>(null);
+  const [smallScreen, setSmallScreen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (ref.current && ref.current.clientWidth) {
+        if (ref.current.clientWidth < 360 && !smallScreen) {
+          setSmallScreen(true);
+        } else if (ref.current.clientWidth >= 360 && smallScreen) {
+          setSmallScreen(false);
+        }
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <div className={cn("flex gap-4", className)}>
+    <div
+      className={cn(
+        "flex gap-4",
+        smallScreen ? "flex-col" : "flex-row",
+        className,
+      )}
+      ref={ref}
+    >
       {amount !== undefined && (
         <Button
           className="w-full"

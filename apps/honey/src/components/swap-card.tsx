@@ -40,7 +40,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     collateralList,
   } = usePsm();
   return (
-    <div>
+    <div className="w-full">
       {showBear && (
         <Image
           src={`${cloudinaryUrl}/bears/l9oaplrgfkrqw8y6noyp`}
@@ -50,7 +50,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
           height={60}
         />
       )}
-      <Card className="relative z-10 m-auto block max-w-[500px] bg-background shadow-2xl">
+      <Card className="relative z-10 m-auto block w-full max-w-[500px] bg-background shadow-2xl">
         {ModalPortal}
         <CardHeader className="pb-3">
           <CardTitle>
