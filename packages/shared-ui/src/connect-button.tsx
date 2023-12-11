@@ -23,15 +23,12 @@ export const ConnectButton = ({
   return (
     <RainbowConnectButton.Custom>
       {({
-        // account,
-        // chain,
         openChainModal,
         openConnectModal,
         authenticationStatus,
         mounted,
       }) => {
         const ready = mounted && authenticationStatus !== "loading";
-
         return (
           <div
             {...(!ready && {

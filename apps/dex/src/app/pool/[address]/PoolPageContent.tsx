@@ -287,6 +287,7 @@ export const EventTable = ({
     </Table>
   );
 };
+
 export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   const { data: bgtRewards } = useBgtReward(pool?.pool);

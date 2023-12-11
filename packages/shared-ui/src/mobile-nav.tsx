@@ -5,8 +5,11 @@ import Link from "next/link";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { NavigationMenu } from "@bera/ui/navigation-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { ScrollArea } from "@bera/ui/scroll-area";
+
+import { NavListItem } from "./main-nav";
 
 export function MobileDropdown({ navItems }: { navItems: any[] }) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -38,20 +41,21 @@ export function MobileDropdown({ navItems }: { navItems: any[] }) {
           {navItems.map(({ href, title, children }) => {
             if (href === "#" && children) {
               return (
-                <ul
-                  className="grid w-full gap-3 p-1 md:w-[500px] md:grid-cols-2 lg:w-[600px]"
-                  key={href}
-                >
-                  {children.map((component: any) => (
-                    <ListItem
-                      key={component.title}
-                      title={component.title}
-                      href={component.href}
-                    >
-                      {component.blurb}
-                    </ListItem>
-                  ))}
-                </ul>
+                <NavigationMenu key={href}>
+                  <ul className="flex w-full flex-col gap-1 p-4" key={href}>
+                    {children.map((component: any) => (
+                      <NavListItem
+                        key={component.title}
+                        title={component.title}
+                        href={component.href}
+                        type={component.type}
+                        icon={component.icon}
+                      >
+                        {component.blurb}
+                      </NavListItem>
+                    ))}
+                  </ul>
+                </NavigationMenu>
               );
             }
             return (

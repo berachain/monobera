@@ -2,7 +2,12 @@
   "name": "@bera/bera-router",
   "version": "0.1.0",
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
   "author": "deez",
   "license": "MIT",
   "scripts": {
@@ -18,11 +23,12 @@
     "axios": "^1.4.0",
     "lodash": "^4.17.21",
     "next-auth": "^4.24.5",
-    "viem": "~1.19.11"
+    "viem": "~1.19.13"
   },
   "devDependencies": {
     "@bera/eslint-config": "0.1.0",
     "@hyrious/esbuild-plugin-commonjs": "0.2.2",
+    "@types/node": "^18.16.6",
     "eslint": "^8.39.0",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4"
