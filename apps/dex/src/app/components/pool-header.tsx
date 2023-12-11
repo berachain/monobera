@@ -8,8 +8,8 @@ import { formatUnits } from "viem";
 
 export default function PoolHeader({ pool }: { pool: Pool }) {
   return (
-    <div className="flex w-full items-end justify-between">
-      <div className="flex w-full flex-col items-center gap-4 sm:items-start">
+    <div className="flex w-full flex-col items-center justify-between md:flex-row md:items-end md:justify-center">
+      <div className="flex w-full flex-col items-center gap-4 md:items-start">
         <Button
           variant={"ghost"}
           size="sm"
@@ -19,14 +19,14 @@ export default function PoolHeader({ pool }: { pool: Pool }) {
           <Icons.arrowLeft className="h-4 w-4" />
           <div className="text-sm font-medium"> All Pools</div>
         </Button>
-        <p className="flex w-full gap-4 text-center text-2xl font-semibold sm:text-left">
+        <p className="flex w-full justify-center gap-4 text-center text-2xl font-semibold md:justify-start md:text-left">
           <TokenIconList
             tokenList={pool.tokens.map((t) => t.address)}
             size="xl"
           />
           {pool?.poolName}
         </p>
-        <div className="flex w-full flex-row items-center gap-4 leading-7 text-muted-foreground">
+        <div className="flex w-full flex-row items-center justify-center gap-4 leading-7 text-muted-foreground md:justify-start">
           <div className="flex w-fit items-center gap-1">
             PRR:
             <span className="text-sm text-success-foreground">
@@ -42,7 +42,7 @@ export default function PoolHeader({ pool }: { pool: Pool }) {
               %
             </span>
           </div>
-          <div className="flex w-fit items-center gap-1">
+          <div className="hidden w-fit items-center gap-1 sm:flex">
             {" "}
             Pool Contract:
             <span
@@ -59,7 +59,22 @@ export default function PoolHeader({ pool }: { pool: Pool }) {
           </div>
         </div>
       </div>
-      <div className="flex gap-2">
+      <div className="flex w-fit items-center gap-1 sm:hidden ">
+        {" "}
+        Pool Contract:
+        <span
+          className="cursor-pointer px-1 text-sm text-foreground hover:underline"
+          onClick={() =>
+            window.open(
+              `${blockExplorerUrl}/address/${pool?.poolShareDenomHex}`,
+            )
+          }
+        >
+          {truncateHash(pool.pool)}
+          <Icons.externalLink className="-mt-1 ml-1 inline-block h-4 w-4 text-muted-foreground" />
+        </span>
+      </div>
+      <div className="mt-4 flex gap-2 md:mt-0">
         <Button
           variant={"outline"}
           onClick={() =>

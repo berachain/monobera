@@ -10,6 +10,7 @@ import {
   usePollUserAllBGTRewards,
 } from "@bera/berajs";
 import { beraTokenAddress, dexUrl, lendUrl, perpsUrl } from "@bera/config";
+import { cn } from "@bera/ui";
 import {
   Accordion,
   AccordionContent,
@@ -17,7 +18,6 @@ import {
   AccordionTrigger,
 } from "@bera/ui/accordion";
 import { Button } from "@bera/ui/button";
-import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -27,10 +27,6 @@ import { BGTIcon } from "./bgt-icon";
 
 export function BGTStatusBtn() {
   const [openPopover, setOpenPopover] = React.useState(false);
-  const [openModal, setOpenModal] = React.useState(false);
-
-  const { usePrice } = usePollPrices();
-  const { data: price } = usePrice(beraTokenAddress);
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   const { useTotalDelegatorDelegated } = usePollTotalDelegated();
@@ -43,6 +39,73 @@ export function BGTStatusBtn() {
     Number(userBalance) +
     Number(bgtTotalDelegated ?? "0") +
     Number(totalUnbonding ?? "0");
+
+  const totalClaimableBGT: bigint = //@ts-ignore
+    isLoading || !bgtRewards || bgtRewards.length !== 3
+      ? 0n //@ts-ignore
+      : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
+
+  return (
+    <div className="hidden sm:block">
+      <Popover open={openPopover} onOpenChange={setOpenPopover}>
+        <PopoverTrigger asChild>
+          <div className="group flex h-11 w-fit cursor-pointer items-center rounded-full border border-accent bg-warning px-2 font-medium">
+            <div className="px-2 text-sm text-warning-foreground">
+              {formatter.format(totalBGT)} BGT
+            </div>
+            <div className="flex h-7 items-center rounded-full border border-accent bg-gradient-to-br from-stone-50 to-yellow-50 px-3 text-xs text-primary group-hover:from-orange-200 group-hover:to-yellow-400 dark:from-stone-700 dark:to-yellow-950 group-hover:dark:from-lime-900 group-hover:dark:to-yellow-700 lg:hidden xl:flex">
+              {/* @ts-ignore */}
+              {formatter.format(formatEther(totalClaimableBGT))} Claimable
+            </div>
+          </div>
+        </PopoverTrigger>
+        <PopoverContent
+          className="flex h-fit w-[324px] flex-col gap-4 rounded-md p-4"
+          align="end"
+        >
+          <div className={"flex flex-col gap-1 py-2 text-center"}>
+            <div className="text-sm font-medium leading-6 text-muted-foreground">
+              Total Balance
+            </div>
+            <TotalBGT />
+          </div>
+          <BGTStatusDetails />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
+export function TotalBGT({ className }: { className?: string }) {
+  const { useBgtBalance } = usePollBgtBalance();
+  const userBalance = useBgtBalance();
+  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
+  const bgtTotalDelegated = useTotalDelegatorDelegated();
+  const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
+  const totalUnbonding = useDelegatorTotalUnbonding();
+
+  const totalBGT =
+    Number(userBalance) +
+    Number(bgtTotalDelegated ?? "0") +
+    Number(totalUnbonding ?? "0");
+
+  return (
+    <div className={cn("text-3xl font-semibold leading-9", className)}>
+      {totalBGT.toFixed(2)} BGT
+    </div>
+  );
+}
+
+export function BGTStatusDetails() {
+  const { usePrice } = usePollPrices();
+  const { data: price } = usePrice(beraTokenAddress);
+  const { useBgtBalance } = usePollBgtBalance();
+  const userBalance = useBgtBalance();
+  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
+  const bgtTotalDelegated = useTotalDelegatorDelegated();
+  const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
+  const totalUnbonding = useDelegatorTotalUnbonding();
+  const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
 
   const totalClaimableBGT: bigint = //@ts-ignore
     isLoading || !bgtRewards || bgtRewards.length !== 3
@@ -75,18 +138,8 @@ export function BGTStatusBtn() {
       amoumt: Number(formatEther(totalClaimableBGT)),
     },
   ];
-
-  const Status = (
+  return (
     <>
-      <div className="flex flex-col gap-1 py-2 text-center">
-        <div className="text-sm font-medium leading-6 text-muted-foreground">
-          Total Balance
-        </div>
-        <div className="text-3xl font-semibold leading-9">
-          {totalBGT.toFixed(2)} BGT
-        </div>
-      </div>
-
       <div>
         {data.map((item, index) => (
           <div
@@ -239,47 +292,5 @@ export function BGTStatusBtn() {
         </Accordion>
       </div>
     </>
-  );
-
-  return (
-    <div>
-      <div className="hidden sm:block">
-        <Popover open={openPopover} onOpenChange={setOpenPopover}>
-          <PopoverTrigger asChild>
-            <div className="group flex h-11 w-fit cursor-pointer items-center rounded-full border border-accent bg-warning px-2 font-medium">
-              <div className="px-2 text-sm text-warning-foreground">
-                {formatter.format(totalBGT)} BGT
-              </div>
-              <div className="flex h-7 items-center rounded-full border border-accent bg-gradient-to-br from-stone-50 to-yellow-50 px-3 text-xs text-primary group-hover:from-orange-200 group-hover:to-yellow-400 dark:from-stone-700 dark:to-yellow-950 group-hover:dark:from-lime-900 group-hover:dark:to-yellow-700 lg:hidden xl:flex">
-                {/* @ts-ignore */}
-                {formatter.format(formatEther(totalClaimableBGT))} Claimable
-              </div>
-            </div>
-          </PopoverTrigger>
-          <PopoverContent
-            className="flex h-fit w-[324px] flex-col gap-4 rounded-md p-4"
-            align="end"
-          >
-            {Status}
-          </PopoverContent>
-        </Popover>
-      </div>
-      <div className="block sm:hidden">
-        <div
-          className="flex h-11 w-fit cursor-pointer items-center rounded-full border border-warning-foreground bg-warning px-2 font-medium"
-          onClick={() => setOpenModal(true)}
-        >
-          <div className="px-2 text-sm text-warning-foreground">12.80K BGT</div>
-          <div className="flex h-7 items-center rounded-full bg-gradient-to-br from-amber-300 to-amber-400 px-3 text-xs">
-            469.69 Claimable
-          </div>
-        </div>
-        <Dialog open={openModal} onOpenChange={setOpenModal}>
-          <DialogContent className="flex h-[80vh] max-h-[734px] min-h-[456px] flex-col gap-8 p-8 pt-16 ">
-            {Status}
-          </DialogContent>
-        </Dialog>
-      </div>
-    </div>
   );
 }

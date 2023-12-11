@@ -35,7 +35,7 @@ export function MainNav({
                   <NavigationMenuContent>
                     <ul className="flex w-[404px] flex-col gap-1 p-4">
                       {item.children.map((component: any) => (
-                        <ListItem
+                        <NavListItem
                           key={component.title}
                           title={component.title}
                           href={component.href}
@@ -43,7 +43,7 @@ export function MainNav({
                           icon={component.icon}
                         >
                           {component.blurb}
-                        </ListItem>
+                        </NavListItem>
                       ))}
                     </ul>
                   </NavigationMenuContent>
@@ -71,7 +71,7 @@ export function MainNav({
 interface IconProps extends React.ComponentPropsWithoutRef<"a"> {
   icon?: any;
 }
-const ListItem = forwardRef<React.ElementRef<"a">, IconProps>(
+export const NavListItem = forwardRef<React.ElementRef<"a">, IconProps>(
   ({ className, icon, title, type, children, ...props }, ref) => {
     return (
       <li>
@@ -98,4 +98,4 @@ const ListItem = forwardRef<React.ElementRef<"a">, IconProps>(
     );
   },
 );
-ListItem.displayName = "ListItem";
+NavListItem.displayName = "ListItem";

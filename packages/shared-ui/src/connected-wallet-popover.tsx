@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useReadLocalStorage } from "usehooks-ts";
 
+import { BGTStatusDetails, TotalBGT } from "./bgt-status";
 import { History } from "./history";
 import Identicon from "./identicon";
 import { Setting } from "./settings";
@@ -27,7 +28,7 @@ export default function ConnectedWalletPopover({
   const { account, logout } = useBeraJs();
   const connectorName = useReadLocalStorage<string>("wagmi.wallet");
   const [setting, setSetting] = React.useState(false);
-
+  const [tab, setTab] = React.useState("tokens");
   const Content = (
     <>
       {!setting ? (
@@ -92,16 +93,39 @@ export default function ConnectedWalletPopover({
               </Button>
             </div>
           </div>
-          <WalletBalanceInUs />
+
+          {tab === "bgt" ? (
+            <TotalBGT className="text-center" />
+          ) : (
+            <WalletBalanceInUs />
+          )}
           <Tabs
             defaultValue="tokens"
             className="flex flex-1 flex-col gap-4 overflow-y-hidden"
           >
             <TabsList className="w-full" variant="ghost">
-              <TabsTrigger value="tokens" className="flex-1" variant="ghost">
+              <TabsTrigger
+                value="tokens"
+                className="flex-1"
+                variant="ghost"
+                onClick={() => setTab("tokens")}
+              >
                 Tokens
               </TabsTrigger>
-              <TabsTrigger value="history" className="flex-1" variant="ghost">
+              <TabsTrigger
+                value="bgt"
+                className="flex-1 sm:hidden"
+                variant="ghost"
+                onClick={() => setTab("bgt")}
+              >
+                BGT
+              </TabsTrigger>
+              <TabsTrigger
+                value="history"
+                className="flex-1"
+                variant="ghost"
+                onClick={() => setTab("history")}
+              >
                 History
               </TabsTrigger>
             </TabsList>
@@ -110,6 +134,12 @@ export default function ConnectedWalletPopover({
               className="sm:flex-0 flex-1 overflow-y-auto sm:h-[400px]"
             >
               <TokenList />
+            </TabsContent>
+            <TabsContent
+              value="bgt"
+              className="flex-1 overflow-y-auto sm:hidden"
+            >
+              <BGTStatusDetails />
             </TabsContent>
             <TabsContent
               value="history"
