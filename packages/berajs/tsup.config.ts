@@ -1,6 +1,6 @@
 const config = {
   entryPoints: ["src/index.ts"], // The entry point(s) of your library
-  format: ["cjs", "esm"], // The desired output format(s)
+  format: ["esm"], // The desired output format(s)
   clean: true, 
   splitting: true,
   outDir: 'dist',

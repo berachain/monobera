@@ -4,7 +4,6 @@ import { Keccak } from "sha3";
 import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
 import { type Address } from "viem";
-import { ethersWalletToAccount } from "viem/ethers";
 import { useSignMessage } from "wagmi";
 
 import { decrypt, encrypt } from "~/utils/encoder";
@@ -83,15 +82,15 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
 
   useEffect(() => {
     try {
-      const octKey = getOctKey();
-      if (!octKey) {
-        return;
-      }
-      const decodedString = decrypt(octKey, KEY);
-      const account = ethersWalletToAccount(new Wallet(decodedString));
-      setOctAccount(account);
-      setOctAddress(account.address);
-      setOctPrivKey(decodedString);
+      // const octKey = getOctKey();
+      // if (!octKey) {
+      //   return;
+      // }
+      // const decodedString = decrypt(octKey, KEY);
+      // const account = ethersWalletToAccount(new Wallet(decodedString));
+      // setOctAccount(account);
+      // setOctAddress(account.address);
+      // setOctPrivKey(decodedString);
     } catch (e) {
       console.log(e);
       setOctAddress("");
