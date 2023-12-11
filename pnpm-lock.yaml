@@ -841,6 +841,13 @@ importers:
       next-auth:
         specifier: ^4.24.5
         version: 4.24.5(next@14.0.4)(react-dom@18.2.0)(react@18.2.0)
+      typescript:
+        specifier: ^5.0.4
+        version: 5.3.3
+    devDependencies:
+      '@types/node':
+        specifier: ^18.16.6
+        version: 18.19.3
 
   packages/config/eslint:
     dependencies:
