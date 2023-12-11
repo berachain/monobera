@@ -92,8 +92,6 @@ export function UpdatePositionModal({
     parseUnits(sl, 10),
   ];
 
-  console.log(openPosition);
-
   return (
     <div className={className}>
       <div onClick={() => setOpen(true)} className="h-full w-full">

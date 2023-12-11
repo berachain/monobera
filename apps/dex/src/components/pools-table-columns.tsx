@@ -246,14 +246,9 @@ export const columns: ColumnDef<Pool>[] = [
 ];
 
 export const PositionSize = (pool: any) => {
-  // console.log(pool);
   const { userTotalValue, isPositionSizeLoading } = usePositionSize({
     pool: pool.pool,
   });
-  // console.log({
-  //   userTotalValue,
-  //   isPositionSizeLoading,
-  // });
   return (
     <div className="text-sm font-medium">
       {isPositionSizeLoading ? (

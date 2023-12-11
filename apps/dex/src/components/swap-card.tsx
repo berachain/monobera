@@ -17,7 +17,12 @@ import {
   erc20DexAddress,
   erc20ModuleAddress,
 } from "@bera/config";
-import { ActionButton, TokenInput, useTxn } from "@bera/shared-ui";
+import {
+  ActionButton,
+  ApproveButton,
+  TokenInput,
+  useTxn,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -35,11 +40,6 @@ const DynamicPreview = dynamic(() => import("./preview-dialog"), {
       Preview <Icons.arrowRight className="h-3 w-3" />
     </Button>
   ),
-  ssr: false,
-});
-
-const DynamicApproveButton = dynamic(() => import("./approve-token-button"), {
-  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 
@@ -155,7 +155,11 @@ export function SwapCard({
       !isWrap
     ) {
       return (
-        <DynamicApproveButton
+        <ApproveButton
+          amount={parseUnits(
+            (fromAmount ?? "0") as `${number}`,
+            selectedFrom?.decimals ?? 18,
+          )}
           token={selectedFrom}
           spender={erc20ModuleAddress}
         />

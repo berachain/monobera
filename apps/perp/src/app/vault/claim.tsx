@@ -30,7 +30,6 @@ export default function Claim({ feeApr }: { feeApr: string }) {
 
   const _ = useBgtRewardsForAddress();
 
-  // console.log("bgt rewards", bgtRewards);
   const bgtApr = useBgtApr(honeyLocked);
 
   const isLoading = isHoneyVaultBalanceLoading || isBgtRewardsLoading;

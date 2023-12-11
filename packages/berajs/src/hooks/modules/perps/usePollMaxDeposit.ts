@@ -18,8 +18,6 @@ export const usePollMaxDeposit = () => {
         functionName: method,
         args: [account],
       });
-
-      console.log("CHANG", result);
       return Number(formatUnits(result as bigint, 18));
     } catch (e) {
       console.error(e);
