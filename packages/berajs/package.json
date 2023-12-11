@@ -15,7 +15,7 @@
     "clean": "git clean -xdf dist .turbo node_modules",
     "check-types": "tsc --noEmit",
     "dev": "tsup src --watch",
-    "lint": " biome check ./src"
+    "lint": " biome lint ."
   },
   "dependencies": {
     "@bera/config": "0.1.0",

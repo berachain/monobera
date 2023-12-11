@@ -137,7 +137,7 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
 	let firstNumberIndex = 0;
 	while (
 		entries[firstNumberIndex] &&
-		Number(formatEther(BigInt(entries[firstNumberIndex]?.amount))) === 0
+		Number(formatEther(BigInt(entries[firstNumberIndex]?.amount as any))) === 0
 	) {
 		firstNumberIndex++;
 	}
@@ -147,10 +147,10 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
 	}
 
 	const firstNumber = Number(
-		formatEther(BigInt(entries[firstNumberIndex]?.amount)),
+		formatEther(BigInt(entries[firstNumberIndex]?.amount as any)),
 	);
 	const lastNumber = Number(
-		formatEther(BigInt(entries[entries.length - 1]?.amount)),
+		formatEther(BigInt(entries[entries.length - 1]?.amount as any)),
 	);
 
 	const difference = lastNumber - firstNumber;

@@ -14,7 +14,7 @@
     "clean": "git clean -xdf dist .turbo node_modules",
     "check-types": "tsc --noEmit",
     "dev": "tsup index.ts --watch",
-    "lint": " biome check ."
+    "lint": " biome lint ."
   },
   "dependencies": {
     "next-auth": "^4.24.5",

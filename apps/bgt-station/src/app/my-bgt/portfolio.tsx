@@ -143,6 +143,7 @@ export default function Portfolio() {
 								variant="outline"
 								onClick={() => {
 									setTab(BGTSelectionEnum.YOUR_DELEGATIONS);
+									// @ts-ignore
 									tabRef.current?.scrollIntoView({ behavior: "smooth" });
 								}}
 							>
@@ -193,6 +194,7 @@ export default function Portfolio() {
 								variant="outline"
 								onClick={() => {
 									setTab(BGTSelectionEnum.UNBONDING_QUEUE);
+									// @ts-ignore
 									tabRef.current?.scrollIntoView({ behavior: "smooth" });
 								}}
 							>

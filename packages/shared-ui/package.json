@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "git clean -xdf dist .turbo node_modules",
-    "lint": "biome check ./src"
+    "lint": "biome lint ."
   },
   "dependencies": {
     "next-auth": "^4.24.5",

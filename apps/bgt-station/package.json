@@ -6,7 +6,7 @@
     "build": "pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "pnpm with-env next dev -p 3001",
-    "lint": "biome check ./src",
+    "lint": "biome lint .",
     "start": "pnpm with-env next start -p 3001",
     "check-types": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"

@@ -7,7 +7,7 @@
     "build": "tsup",
     "clean": "git clean -xdf dist .turbo node_modules",
     "dev": "tsup --watch",
-    "lint": "biome check ./src",
+    "lint": "biome lint .",
     "check-types": "tsc --noEmit",
     "storybook": "storybook dev -- -p 6006",
     "build-storybook": "storybook build"

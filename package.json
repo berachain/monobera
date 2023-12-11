@@ -20,7 +20,7 @@
     "dev:perp": "turbo dev --filter=perp --filter='./packages/*'",
     "dev:faucet": "turbo dev --filter=faucet --filter='./packages/*'",
     "check-types": "turbo check-types",
-    "lint": "turbo lint",
+    "lint": "biome lint .",
     "format": "biome format --write .",
     "prepare": "husky install"
   },
