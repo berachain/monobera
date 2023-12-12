@@ -2,7 +2,12 @@
   "name": "@bera/berajs",
   "version": "0.1.0",
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
   "author": "deez",
   "license": "MIT",
   "scripts": {
@@ -24,8 +29,8 @@
     "react-device-detect": "^2.2.3",
     "sha3": "^2.1.4",
     "swr": "^2.1.5",
-    "viem": "~0.3.35",
-    "wagmi": "^1.0.2"
+    "viem": "~1.19.13",
+    "wagmi": "^1.4.10"
   },
   "peerDependencies": {
     "react": "^18.2.0",

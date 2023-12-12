@@ -23,29 +23,12 @@ export const ConnectButton = ({
   return (
     <RainbowConnectButton.Custom>
       {({
-        // account,
-        // chain,
         openChainModal,
         openConnectModal,
         authenticationStatus,
         mounted,
       }) => {
-        // console.log({
-        //   account,
-        //   altAccount,
-        //   chain,
-        //   openChainModal,
-        //   openConnectModal,
-        //   authenticationStatus,
-        //   mounted,
-        // });
         const ready = mounted && authenticationStatus !== "loading";
-        // const connected =
-        //   ready &&
-        //   account &&
-        //   chain &&
-        //   (!authenticationStatus || authenticationStatus === "authenticated");
-
         return (
           <div
             {...(!ready && {
@@ -56,7 +39,7 @@ export const ConnectButton = ({
                 userSelect: "none",
               },
             })}
-            className={cn("flex w-full", className)}
+            className={cn("flex w-fit", className)}
           >
             {!isConnected && (
               <Button

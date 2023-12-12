@@ -31,7 +31,7 @@ export const Epochs = ({
           new Date((epoch?.currentEpochEnd ?? 0) * 1000),
           "MM/dd/yy, h:mma",
         );
-  // console.log(epoch);
+
   useSWR(
     [epoch?.currentEpoch],
     () => {

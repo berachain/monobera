@@ -39,8 +39,6 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
     prices,
   ];
   return useSWR(QUERY_KEY, () => {
-    console.log("rwearweereqwsafzgfdsaw");
-
     if (
       epochs.length === 0 ||
       currentEpoch === undefined ||
@@ -57,8 +55,6 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
       history = [...epochs];
     }
     let cumulativeBribeTotal = 0;
-
-    console.log("rwearweeraw");
 
     const tokenDecimalMap: Record<Address, number> = {};
 
@@ -84,9 +80,6 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
       });
     });
 
-    console.log("??????????");
-
-    console.log("reee", { tokenDecimalMap, decimalCalls });
     const historicalBribes: FormattedHistoricalBribes[] = history.map(
       (historicalBribe: any, index) => {
         let value = 0;
@@ -95,12 +88,10 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
             (total: number, bribe: any) => {
               const tokenAddress = bribe.bribePerProposal.tokens[index];
               const decimals = tokenDecimalMap[getAddress(tokenAddress)];
-              console.log({ tokenAddress, decimals });
               const formattedBribeAmount = Number(
                 formatUnits(bribe.amount, decimals ?? 18),
               );
               const price = prices[getAddress(tokenAddress)] ?? 0;
-              console.log({ price, formattedBribeAmount, bribe, tokenAddress });
               const bribeValue =
                 Number(formattedBribeAmount) *
                 price *
@@ -118,7 +109,6 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
       },
     );
 
-    console.log({ historicalBribes, cumulativeBribeTotal });
     return {
       historicalBribes,
       cumulativeBribeTotal,

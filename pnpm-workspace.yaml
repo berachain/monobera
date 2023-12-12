@@ -6,6 +6,7 @@ packages:
   - apps/perp
   - apps/faucet
   - packages/config/*
+  - packages/config/env
   - packages/ui
   - packages/shared-ui
   - packages/berajs

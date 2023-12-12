@@ -19,13 +19,6 @@ export const useCalculateLiqPrice = ({
 
   useMemo(() => {
     try {
-      // console.log({
-      //   bfLong,
-      //   bfShort,
-      //   orderType,
-      //   price,
-      //   leverage,
-      // });
       const formattedBorrowingL = Number(bfLong);
       const formattedBorrowingS = Number(bfShort);
       const long = orderType === "long";

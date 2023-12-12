@@ -7,18 +7,16 @@ import {
   usePollAllowance,
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
-import { ActionButton } from "@bera/shared-ui";
+import { ActionButton, ApproveButton } from "@bera/shared-ui";
 import { useOctTxn, useSlippage } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { parseUnits as ethersParseUnits } from "ethers";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
 
-import ApproveTokenButton from "~/app/components/approve-token-button";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "../type";
 
@@ -79,11 +77,10 @@ export function PlaceOrder({
       ? 0
       : positionSize;
   }, [form.amount, form.leverage]);
-  const parsedPositionSize = ethersParseUnits(safeAmount, 18);
+  const parsedPositionSize = parseUnits(safeAmount, 18);
 
   const slippageTolerance = useSlippage();
 
-  console.log(form);
   const payload = [
     {
       trader: account,
@@ -97,8 +94,8 @@ export function PlaceOrder({
           : parseUnits(`${form.limitPrice ?? 0}`, 10), // for limit orders
       buy: form.orderType === "long" ? true : false,
       leverage: form.leverage,
-      tp: form.tp === "" ? 0n : ethersParseUnits(form?.tp, 10),
-      sl: form.sl === "" ? 0n : ethersParseUnits(form?.sl, 10),
+      tp: form.tp === "" ? 0n : parseUnits(form?.tp, 10),
+      sl: form.sl === "" ? 0n : parseUnits(form?.sl, 10),
     },
     form.optionType === "market" ? 0 : 2,
     parseUnits(`${slippageTolerance ?? 0}`, 10),
@@ -204,8 +201,12 @@ export function PlaceOrder({
       </div>
       <ActionButton className="mt-4">
         {allowance?.formattedAllowance === "0" ||
-        allowance?.allowance < ethersParseUnits(safeAmount, 18) ? (
-          <ApproveTokenButton token={honey} spender={storageContract} />
+        allowance?.allowance < parseUnits(safeAmount, 18) ? (
+          <ApproveButton
+            token={honey}
+            spender={storageContract}
+            amount={parseUnits(safeAmount, 18)}
+          />
         ) : (
           <Button
             className={cn(

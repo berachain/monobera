@@ -174,3 +174,9 @@ img{
   pointer-events: none;
   user-select: none;
 }  
+
+.dex-background {
+  background-image: url("./background.svg");
+  background-size: cover;
+  background-position: top center;
+}
