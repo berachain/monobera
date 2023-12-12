@@ -115,8 +115,6 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
       );
       mutate([ACTIVE_BRIBES_KEY, validator.operatorAddr], bribes);
 
-      console.log({ bribes });
-
       const tokenDecimalMap: Record<Address, number> = {};
 
       const decimalCalls: Call[] = [];
@@ -138,7 +136,6 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
         });
       });
 
-      console.log({ tokenDecimalMap, decimalCalls });
       const bribeTokenList: any[] = [];
       const totalPerProposalUsdAmount = bribes?.reduce(
         (total: number, bribe: any) => {
@@ -198,7 +195,6 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
       const estimatedUsdPerYear =
         totalPerProposalUsdAmount * estimatedValidatorBlocksPerYear;
 
-      console.log({ estimatedUsdPerYear, validatorTVL });
       const vAPY = Number.isNaN(estimatedUsdPerYear / validatorTVL)
         ? 0
         : estimatedUsdPerYear / validatorTVL;

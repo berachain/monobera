@@ -12,6 +12,7 @@
     "clean": "turbo clean",
     "clean:git": "git clean -xdf node_modules",
     "dev": "turbo dev --concurrency=12",
+    "build:dex": "turbo build --filter=dex --filter='./packages/*'",
     "dev:dex": "turbo dev --filter=dex",
     "dev:honey": "turbo dev --filter=honey --filter='./packages/*'",
     "dev:bgt": "turbo dev --filter=bgt-station --filter='./packages/*'",

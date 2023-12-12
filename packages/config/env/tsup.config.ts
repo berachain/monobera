@@ -1,5 +1,5 @@
 const config = {
-  entryPoints: ["src/index.ts"], // The entry point(s) of your library
+  entryPoints: ["index.ts"], // The entry point(s) of your library
   format: ["esm"], // The desired output format(s)
   clean: true,
   splitting: true,

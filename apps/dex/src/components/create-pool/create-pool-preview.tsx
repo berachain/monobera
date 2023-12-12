@@ -9,7 +9,13 @@ import {
   useBeraConfig,
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
-import { ActionButton, PreviewToken, TokenList, useTxn } from "@bera/shared-ui";
+import {
+  ActionButton,
+  ApproveButton,
+  PreviewToken,
+  TokenList,
+  useTxn,
+} from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -22,7 +28,6 @@ import { getSafeNumber } from "~/utils/getSafeNumber";
 import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
-import ApproveTokenButton from "../approve-token-button";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -43,7 +48,6 @@ export function CreatePoolPreview({
 }: Props) {
   const { needsApproval } = useCreatePool(tokenWeights);
   const { networkConfig } = useBeraConfig();
-
   const router = useRouter();
 
   const { write, ModalPortal } = useTxn({
@@ -83,7 +87,6 @@ export function CreatePoolPreview({
     options,
   ];
 
-  console.log(rawBeraEntry);
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
       {ModalPortal}
@@ -142,7 +145,13 @@ export function CreatePoolPreview({
           </Alert>
         )}
         {needsApproval.length > 0 ? (
-          <ApproveTokenButton
+          <ApproveButton
+            amount={parseUnits(
+              tokenWeights.find(
+                (w) => w.token?.address === needsApproval[0]?.address,
+              )?.initialLiquidity || "0",
+              needsApproval[0]?.decimals ?? 18,
+            )}
             token={needsApproval[0]}
             spender={
               networkConfig.precompileAddresses.erc20ModuleAddress as Address
