@@ -1,8 +1,6 @@
 import { type Metadata } from "next";
-import Image from "next/image";
-import { cloudinaryUrl, faucetName } from "@bera/config";
+import { faucetName } from "@bera/config";
 
-import { Explore } from "~/components/explore";
 import Content from "./content";
 
 export const metadata: Metadata = {
@@ -13,18 +11,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="container mx-auto">
-      <div className="flex w-full flex-col-reverse items-center justify-between py-12 xl:flex-row ">
-        <Content />
-        <Image
-          src={`${cloudinaryUrl}/faucet/faucet_v3_uktibg`}
-          alt="machine"
-          width={523}
-          height={614}
-          loading="eager"
-          className="hidden h-[614px] object-cover xl:block"
-        />
-      </div>
-      <Explore />
+      <Content />
     </div>
   );
 }

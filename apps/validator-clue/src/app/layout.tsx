@@ -44,10 +44,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           </div>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
             <Header navItems={[]} hideTheme />
-            <main className="mt-[72px] min-h-[calc(100vh-72px)] w-full bg-sky-600 pb-[70px]">
+            <main className="mt-[72px] min-h-[calc(100vh-72px)] w-full py-[70px]">
               {props.children}
             </main>
-            <Footer />
           </div>
           <TailwindIndicator />
           <Analytics />

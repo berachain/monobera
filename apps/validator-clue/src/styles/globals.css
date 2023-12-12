@@ -107,15 +107,12 @@
     --radius: 0.5rem;
   }
 }
+
 @layer base {
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: "IBM Plex Sans";
-  }
-
-  .container {
-    @apply max-sm:px-4;
   }
 }
 
