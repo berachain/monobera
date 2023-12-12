@@ -19,6 +19,7 @@ import {
   ChevronUp,
   ChevronsDown,
   ChevronsRight,
+  ChevronsUp,
   Circle,
   ClipboardCheck,
   Clock,
@@ -109,6 +110,7 @@ export const Icons = {
   sortDesc: SortDesc,
   command: Command,
   chevronsRight: ChevronsRight,
+
   list: List,
   layoutDashboard: LayoutDashboard,
   close: X,
@@ -123,6 +125,7 @@ export const Icons = {
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   chevronUp: ChevronUp,
+  chevronsUp: ChevronsUp,
   chevronDown: ChevronDown,
   edit: Edit,
   trash: Trash,

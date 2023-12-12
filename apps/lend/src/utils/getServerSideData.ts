@@ -16,14 +16,7 @@ export async function getGraphData(
     `${lendEndpointUrl}/interest/${address}/${interval}?rate_type=${rate_type}`,
   );
   if (!res.ok) {
-    // console.log(
-    //   "api",
-    //   `${lendEndpointUrl}/${requestType}/${address}/${interval}${
-    //     requestType === "interest" ? `?rate_type=${rate_type}` : ""
-    //   }`,
-    // );
     // throw new Error("Failed to fetch data");
-    // console.log("Failed to fetch data");
     return [];
   }
   return res.json();

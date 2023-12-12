@@ -26,7 +26,6 @@ export function DripToken({
       }
     } catch (error: any) {
       setAlert("error");
-      // console.log(error, error.message);
     }
   }
   return (

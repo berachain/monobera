@@ -4,7 +4,7 @@ import "./src/env.mjs";
 const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
-  transpilePackages: ["@bera/ui", "@bera/berajs", "@bera/bera-router"],
+  transpilePackages: ["@bera/ui", "@bera/berajs"],
   experimental: {
     esmExternals: "loose",
     serverActions: {

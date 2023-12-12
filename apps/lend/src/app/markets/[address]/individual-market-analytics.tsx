@@ -44,7 +44,7 @@ export default function IndividualMarketAnalytics({
   const { tokenDictionary } = useTokens();
   const { useSelectedReserveData } = usePollReservesDataList();
   const { data: reserveData } = useSelectedReserveData(address);
-  // console.log("reserveData", reserveData);
+
   const router = useRouter();
   useEffect(() => {
     if (!address || !isAddress(address)) {

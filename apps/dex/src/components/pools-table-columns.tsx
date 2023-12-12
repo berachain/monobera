@@ -246,14 +246,9 @@ export const columns: ColumnDef<Pool>[] = [
 ];
 
 export const PositionSize = (pool: any) => {
-  // console.log(pool);
   const { userTotalValue, isPositionSizeLoading } = usePositionSize({
     pool: pool.pool,
   });
-  // console.log({
-  //   userTotalValue,
-  //   isPositionSizeLoading,
-  // });
   return (
     <div className="text-sm font-medium">
       {isPositionSizeLoading ? (
@@ -423,9 +418,9 @@ export const my_columns: ColumnDef<any>[] = [
             <Icons.subtract className="h-6 w-6" />
           </Button>
         </Link>
-        <Link href={`/pool/${row.original.pool}`}>
+        {/* <Link href={`/pool/${row.original.pool}`}>
           <Button className="flex gap-1">Details</Button>
-        </Link>
+        </Link> */}
       </div>
     ),
     enableSorting: false,

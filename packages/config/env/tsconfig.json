@@ -1,12 +1,9 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "incremental": false,
     "declaration": true,
-    "paths": {
-      "~/*": ["./src/*"]
-    },
-    "typeRoots": ["./src/window.d.ts"]
+    "typeRoots": ["./src/window.d.ts", "../../../node_modules/@types"]
   },
   "exclude": ["node_modules", "dist", "build", "coverage", "lib", "esm", "cjs"],
   "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
