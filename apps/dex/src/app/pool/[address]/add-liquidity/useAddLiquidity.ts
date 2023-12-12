@@ -316,9 +316,10 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
         return prev + parseUnits(curr.balance, 18);
       }, 0n);
       return new BigNumber(totalTokens.toString());
-    } else{
-      return undefined
-    }  }, [pool]);
+    } else {
+      return undefined;
+    }
+  }, [pool]);
 
   const liquidityMap: Record<string, BigNumber> | undefined = useMemo(() => {
     const map: Record<string, BigNumber> = {};
@@ -343,22 +344,28 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
       liquidityMap !== undefined &&
       totalTokens !== undefined
     ) {
-      console.log(liquidityMap)
-      const amount = activeAmount === '' ? '0' : activeAmount;
+      console.log(liquidityMap);
+      const amount = activeAmount === "" ? "0" : activeAmount;
       const bnAmount = new BigNumber(parseUnits(amount ?? "0", 18).toString());
-      const selectedToken = tokenInputs[activeInput]
-      const totalSelectedTokenType =  (liquidityMap[selectedToken?.address ?? ''] ?? new BigNumber(0)).times(totalTokens)
-      const amountRatio = bnAmount.div(totalSelectedTokenType)
+      const selectedToken = tokenInputs[activeInput];
+      const totalSelectedTokenType = (
+        liquidityMap[selectedToken?.address ?? ""] ?? new BigNumber(0)
+      ).times(totalTokens);
+      const amountRatio = bnAmount.div(totalSelectedTokenType);
       tokenInputs.forEach((tokenInput: TokenInput, i: number) => {
         if (i === activeInput) return;
 
-        const totalTokenType = (liquidityMap[tokenInput.address] ?? new BigNumber(0)).times(totalTokens).div(new BigNumber(10).pow(18))
-        const newAmount = amountRatio.times(totalTokenType)
+        const totalTokenType = (
+          liquidityMap[tokenInput.address] ?? new BigNumber(0)
+        )
+          .times(totalTokens)
+          .div(new BigNumber(10).pow(18));
+        const newAmount = amountRatio.times(totalTokenType);
 
         updateTokenAmount(i, newAmount.toFormat(18));
       });
     } else {
-      return
+      return;
     }
   }, [activeAmount, activeInput, liquidityMap, totalTokens]);
 
