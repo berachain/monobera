@@ -219,7 +219,6 @@ export default function Positions({
   showBtn?: boolean;
   markets: IMarket[];
 }) {
-  console.log(markets);
   return (
     <section className="flex flex-col gap-4">
       <h2 className="md:leading-14 px-8 text-center text-3xl font-extrabold leading-9 tracking-tight text-foreground md:text-5xl">

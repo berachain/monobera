@@ -34,7 +34,7 @@ export function Disclaimer() {
           <DialogTitle className="p-4 pb-1 leading-7">Terms of Use</DialogTitle>
           <hr />
           <div className="p-4">
-            <div className="rounded-lg border border-border bg-background px-4 py-3">
+            <div className="rounded-md border border-border bg-background px-4 py-3">
               <div className="h-6 font-medium">Trading View</div>
               <hr className="my-2" />
               <div className="text-sm leading-5 text-muted-foreground">
@@ -46,7 +46,7 @@ export function Disclaimer() {
                 terms and conditions.
               </div>
             </div>
-            <div className="mt-2 rounded-lg border border-border bg-background px-4 py-3">
+            <div className="mt-2 rounded-md border border-border bg-background px-4 py-3">
               <div className="h-6 font-medium">Use of service</div>
               <hr className="my-2" />
               <div className="text-sm leading-5 text-muted-foreground">

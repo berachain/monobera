@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
 import { RouteNotFound } from "@bera/bera-router";
 import {
   DEX_PRECOMPILE_ABI,
@@ -16,7 +17,12 @@ import {
   erc20DexAddress,
   erc20ModuleAddress,
 } from "@bera/config";
-import { ActionButton, TokenInput, useTxn } from "@bera/shared-ui";
+import {
+  ActionButton,
+  ApproveButton,
+  TokenInput,
+  useTxn,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -34,11 +40,6 @@ const DynamicPreview = dynamic(() => import("./preview-dialog"), {
       Preview <Icons.arrowRight className="h-3 w-3" />
     </Button>
   ),
-  ssr: false,
-});
-
-const DynamicApproveButton = dynamic(() => import("./approve-token-button"), {
-  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 
@@ -67,6 +68,7 @@ export function SwapCard({
   inputCurrency,
   outputCurrency,
   showBear = true,
+  isMainPage = false,
   className,
 }: ISwapCard) {
   const {
@@ -153,7 +155,11 @@ export function SwapCard({
       !isWrap
     ) {
       return (
-        <DynamicApproveButton
+        <ApproveButton
+          amount={parseUnits(
+            (fromAmount ?? "0") as `${number}`,
+            selectedFrom?.decimals ?? 18,
+          )}
           token={selectedFrom}
           spender={erc20ModuleAddress}
         />
@@ -241,14 +247,22 @@ export function SwapCard({
         )}
         <div className="flex w-full flex-col gap-4 md:flex-row">
           <Card className="w-full rounded-2xl px-6 py-8">
-            <CardTitle className="center flex items-center justify-between px-2">
+            <CardTitle
+              className={cn(
+                "center flex items-center justify-between px-2",
+                isMainPage ? "pointer-events-none" : "",
+              )}
+            >
               Swap <SettingsPopover />
             </CardTitle>
             <div className="mt-3">
               <div className="border-1 flex flex-col gap-6 border-border">
                 <ul
+                  className={cn(
+                    "divide-y divide-border rounded-2xl border",
+                    isMainPage ? "pointer-events-none" : "",
+                  )}
                   role="list"
-                  className="divide-y divide-border rounded-2xl border"
                 >
                   <TokenInput
                     selected={selectedFrom}
@@ -277,7 +291,7 @@ export function SwapCard({
                         onClick={() => {
                           onSwitch();
                         }}
-                        className="z-10 inline-flex h-6 w-6 items-center rounded-full bg-background p-0.5 text-sm font-semibold text-muted-foreground md:h-8 md:w-8 md:p-1"
+                        className="z-10 inline-flex h-6 w-6 items-center rounded-sm border-border bg-background p-0.5 text-sm font-semibold text-muted-foreground md:h-8 md:w-8 md:p-1"
                       >
                         <Icons.swap className="h-3 w-3 md:h-6 md:w-6" />
                       </Button>
@@ -381,7 +395,15 @@ export function SwapCard({
                     false
                   )}
                 </div>
-                <ActionButton>{getSwapButton()}</ActionButton>
+                {isMainPage ? (
+                  <Link href="/swap" className="w-full">
+                    <Button className="flex w-full gap-1">
+                      Swap <Icons.arrowRight className="block h-5 w-5" />
+                    </Button>
+                  </Link>
+                ) : (
+                  <ActionButton>{getSwapButton()}</ActionButton>
+                )}
               </div>
             </div>
           </Card>

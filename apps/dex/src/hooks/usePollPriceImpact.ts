@@ -56,16 +56,6 @@ export const usePollPriceImpact = ({
         formattedActualResult,
       );
 
-      // console.log({
-      //   bestResult,
-      //   actualResult,
-      //   percentageDifference: ((bestResult - actualResult) / bestResult) * parseUnits('100', 18),
-      //   swapInfo,
-      //   priceImpactSwapInfo,
-      // })
-      // const percentageDifference = ((bestResult - actualResult) *  parseUnits('100', 18) / bestResult);
-      // console.log('formatUnits(percentageDifference, 18)', formatUnits(percentageDifference, 18))
-
       return percentageDifference < -100 ? -100 : percentageDifference;
     },
     {

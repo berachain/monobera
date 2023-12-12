@@ -13,6 +13,7 @@ import {
 import { cloudinaryUrl } from "@bera/config";
 import {
   ActionButton,
+  ApproveButton,
   InfoBoxList,
   InfoBoxListItem,
   PreviewToken,
@@ -34,7 +35,6 @@ import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
-import ApproveTokenButton from "~/components/approve-token-button";
 import { type MappedTokens } from "../types";
 import { useAddLiquidity } from "./useAddLiquidity";
 
@@ -258,14 +258,15 @@ export default function AddLiquidityContent({
                     title={"Approximate Total Value"}
                     value={formatUsd(totalValue ?? 0) ?? "-"}
                   />
-                  {/* TODO: impl */}
-                  {/* <InfoBoxListItem
-                    title={"Percentage of Pool"}
-                    value={"0.0000069%"}
-                  /> */}
                 </InfoBoxList>
                 {needsApproval.length > 0 ? (
-                  <ApproveTokenButton
+                  <ApproveButton
+                    amount={parseUnits(
+                      tokenInputs.find(
+                        (t) => t.address === needsApproval[0]?.address,
+                      )?.amount || "0",
+                      needsApproval[0]?.decimals ?? 18,
+                    )}
                     token={needsApproval[0]}
                     spender={
                       networkConfig.precompileAddresses
@@ -385,21 +386,20 @@ export default function AddLiquidityContent({
                     title={"Approximate Total Value"}
                     value={formatUsd(singleSidedTotalValue ?? 0) ?? "-"}
                   />
-                  {/* TODO: impl
-                  <InfoBoxListItem
-                    title={"Percentage of Pool"}
-                    value={"0.0000069%"}
-                  /> */}
                 </InfoBoxList>
                 {(allowance?.allowance ?? 0n) <
                   parsedSelectedSingleTokenAmount &&
                 !isBera(selectedSingleToken) ? (
-                  <ApproveTokenButton
+                  <ApproveButton
                     token={selectedSingleToken}
                     spender={
                       networkConfig.precompileAddresses
                         .erc20ModuleAddress as Address
                     }
+                    amount={parseUnits(
+                      selectedSingleTokenAmount,
+                      selectedSingleToken?.decimals ?? 18,
+                    )}
                   />
                 ) : (
                   <ActionButton>
