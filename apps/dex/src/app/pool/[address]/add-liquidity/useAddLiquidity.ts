@@ -346,27 +346,34 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     ) {
       try {
         const amount = activeAmount === "" ? "0" : activeAmount;
-        const bnAmount = new BigNumber(parseUnits(amount ?? "0", 18).toString());
+        const bnAmount = new BigNumber(
+          parseUnits(amount ?? "0", 18).toString(),
+        );
         const selectedToken = tokenInputs[activeInput];
         const totalSelectedTokenType = (
           liquidityMap[selectedToken?.address ?? ""] ?? new BigNumber(0)
         ).times(totalTokens);
         const amountRatio = bnAmount.div(totalSelectedTokenType);
-        console.log(amountRatio)
+        console.log(amountRatio);
         tokenInputs.forEach((tokenInput: TokenInput, i: number) => {
           if (i === activeInput) return;
-  
+
           const totalTokenType = (
             liquidityMap[tokenInput.address] ?? new BigNumber(0)
-          ).times(totalTokens).div(new BigNumber(10).pow(18));
+          )
+            .times(totalTokens)
+            .div(new BigNumber(10).pow(18));
           const newAmount = amountRatio.times(totalTokenType);
-          console.log(newAmount.toString(10).slice(0,tokenInput.decimals))
-          const parsedNewAmount = Number(newAmount) === 0 ? '' : newAmount.toString(10).slice(0,tokenInput.decimals)
-          console.log(parsedNewAmount)
-          updateTokenAmount(i,parsedNewAmount);
+          console.log(newAmount.toString(10).slice(0, tokenInput.decimals));
+          const parsedNewAmount =
+            Number(newAmount) === 0
+              ? ""
+              : newAmount.toString(10).slice(0, tokenInput.decimals);
+          console.log(parsedNewAmount);
+          updateTokenAmount(i, parsedNewAmount);
         });
-      } catch(e) {
-        console.log(e)
+      } catch (e) {
+        console.log(e);
       }
     } else {
       return;
