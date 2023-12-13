@@ -2,25 +2,48 @@
 
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
-import { IBM_Plex_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import Script from "next/script";
 import { Header, TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
-import { Footer } from "~/components/footer";
 import Providers from "./Providers";
 
-const fontSans = IBM_Plex_Sans({
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-sans",
-  subsets: ["latin"],
+const retroGaming = localFont({
+  src: "../../public/fonts/retro-gaming/Retro-Gaming.ttf",
+  weight: "400",
+  style: "normal",
+  variable: "--font-retro-gaming",
 });
 
+const jetBrainsMono = localFont({
+  src: [
+    {
+      path: "../../public/fonts/jet-brains-mono/JetBrainsMono-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/jet-brains-mono/JetBrainsMono-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/jet-brains-mono/JetBrainsMono-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-jet-brains-mono",
+});
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={cn(retroGaming.className, jetBrainsMono.className)}
+    >
       <Script
         id="HotJarAnalytics"
         strategy="afterInteractive"
@@ -35,16 +58,14 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
         }}
       />
-      <body
-        className={cn("bg-background font-sans antialiased", fontSans.variable)}
-      >
+      <body className="antialiased">
         <Providers>
           <div className="z-[100]">
             <Toaster position="bottom-right" />
           </div>
-          <div className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
-            <Header navItems={[]} hideTheme />
-            <main className="mt-[72px] min-h-[calc(100vh-72px)] w-full py-[70px]">
+          <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+            {/* <Header navItems={[]} hideTheme /> */}
+            <main>
               {props.children}
             </main>
           </div>
