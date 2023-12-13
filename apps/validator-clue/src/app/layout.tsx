@@ -4,12 +4,13 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import localFont from "next/font/local";
 import Script from "next/script";
-import { Header, TailwindIndicator } from "@bera/shared-ui";
+import { TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
 import Providers from "./Providers";
+import Header from "./components/header";
 
 const retroGaming = localFont({
   src: "../../public/fonts/retro-gaming/Retro-Gaming.ttf",
@@ -64,7 +65,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <Toaster position="bottom-right" />
           </div>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-            {/* <Header navItems={[]} hideTheme /> */}
+            <Header />
             <main>
               {props.children}
             </main>

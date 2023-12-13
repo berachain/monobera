@@ -3,43 +3,40 @@ import { useBeraJs, useChainId } from "@bera/berajs";
 import { validatorClueEndpoint } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { SiweMessage } from "siwe";
+import { useLocalStorage } from "usehooks-ts";
 import { useSignMessage } from "wagmi";
 
-export function SignInButton({
-  onSuccess,
-  onError,
-}: {
-  onSuccess: (args: { address: string }) => void;
-  onError: (args: { error: Error }) => void;
-}) {
-  const [state, setState] = React.useState<{
-    loading?: boolean;
-    nonce?: string;
-  }>({});
+export function SignInButton() {
   const { account } = useBeraJs();
   const chainId = useChainId();
   const { signMessageAsync } = useSignMessage();
 
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [allowed, setAllowed] = React.useState<boolean>(true);
+  const [_, setAuthToken] = useLocalStorage<{ token: string; address: string }>(
+    "VALCLUE_AUTH_TOKEN",
+    { token: "", address: "" },
+  );
+
   const fetchNonce = async () => {
     try {
       const nonceRes = await fetch(`/api/nonce`);
-      const nonce = await nonceRes.json();
-      setState((x) => ({ ...x, nonce }));
+      return await nonceRes.json();
     } catch (error) {
-      setState((x) => ({ ...x, error: error as Error }));
+      console.error("Somethings wrong with fecthing nonce:", error);
+      return undefined;
     }
   };
 
   React.useEffect(() => {
-    void fetchNonce();
-  }, []);
-
+    setAllowed(true);
+    setAuthToken({ token: "", address: "" });
+  }, [account]);
+  
   const signIn = async () => {
+    setLoading(true);
     try {
-      if (!account || !chainId) return;
-
-      setState((x) => ({ ...x, loading: true }));
-
+      const nonce = await fetchNonce();
       const message = new SiweMessage({
         domain: window.location.host,
         address: account,
@@ -47,13 +44,12 @@ export function SignInButton({
         uri: window.location.origin,
         version: "1",
         chainId,
-        nonce: state.nonce,
+        nonce: nonce,
       });
       const preparedMessage = message.prepareMessage();
       const signature = await signMessageAsync({
         message: preparedMessage,
       });
-
       const verifyRes = await fetch(
         `${validatorClueEndpoint}/api/v1/auth/verify`,
         {
@@ -64,26 +60,24 @@ export function SignInButton({
           body: JSON.stringify({ message: preparedMessage, signature }),
         },
       );
-      console.log(account);
       const verify = await verifyRes.json();
       if (verifyRes.status === 200 && verify.token) {
-        console.log("verify:3", verify.token);
+        setAuthToken({ token: verify.token, address: account });
       } else {
-        console.log("verify error:", verify.error);
+        setAllowed(false);
+        setAuthToken({ token: "", address: "" });
       }
-      setState((x) => ({ ...x, loading: false }));
-      onSuccess({ address: account });
+      setLoading(false);
     } catch (error) {
-      console.log("error:3", error);
-      // setState((x) => ({ ...x, loading: false, nonce: undefined }));
-      // onError({ error: error as Error });
-      // void fetchNonce();
+      console.log("something went wrong", error);
+      setLoading(false);
+      setAuthToken({ token: "", address: "" });
     }
   };
 
   return (
-    <Button disabled={!state.nonce || state.loading} onClick={signIn}>
-      Sign-In with SIWE
+    <Button disabled={loading || !allowed} onClick={signIn}>
+      {allowed ? "Sign-In" : "Not Eligible"}
     </Button>
   );
 }
