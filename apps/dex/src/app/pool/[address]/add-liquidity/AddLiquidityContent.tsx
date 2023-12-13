@@ -54,8 +54,6 @@ export default function AddLiquidityContent({
 }: IAddLiquidityContent) {
   const router = useRouter();
 
-  console.log("pool", pool);
-
   const {
     error,
     singleSidedError,

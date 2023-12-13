@@ -107,7 +107,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   } = usePollPreviewSharesForLiquidity(
     pool?.pool,
     tokenInputs,
-    tokenInputs.map((tokenInput) => getSafeNumber(tokenInput.amount)),
+    tokenInputs.map((tokenInput) => tokenInput.amount),
   );
   const shares = usePreviewSharesForLiquidity();
 
@@ -118,7 +118,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   } = usePollPreviewSharesForSingleSidedLiquidityRequest(
     pool?.pool,
     selectedSingleToken,
-    getSafeNumber(selectedSingleTokenAmount),
+    selectedSingleTokenAmount,
   );
   const singleSidedShares = usePreviewSharesForSingleSidedLiquidityRequest();
 
@@ -148,7 +148,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
         const formattedAmount = burnShares
           ? Number(formatUnits(burnShares[token.address] ?? 0n, token.decimals))
           : 0;
-
+        // @ts-ignore
         return acc + formattedAmount * (prices[token.address] ?? 0);
       }, 0);
       setSingleSidedTotalValue(totalValue ?? 0);
@@ -344,26 +344,30 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
       liquidityMap !== undefined &&
       totalTokens !== undefined
     ) {
-      console.log(liquidityMap);
-      const amount = activeAmount === "" ? "0" : activeAmount;
-      const bnAmount = new BigNumber(parseUnits(amount ?? "0", 18).toString());
-      const selectedToken = tokenInputs[activeInput];
-      const totalSelectedTokenType = (
-        liquidityMap[selectedToken?.address ?? ""] ?? new BigNumber(0)
-      ).times(totalTokens);
-      const amountRatio = bnAmount.div(totalSelectedTokenType);
-      tokenInputs.forEach((tokenInput: TokenInput, i: number) => {
-        if (i === activeInput) return;
-
-        const totalTokenType = (
-          liquidityMap[tokenInput.address] ?? new BigNumber(0)
-        )
-          .times(totalTokens)
-          .div(new BigNumber(10).pow(18));
-        const newAmount = amountRatio.times(totalTokenType);
-
-        updateTokenAmount(i, newAmount.toFormat(18));
-      });
+      try {
+        const amount = activeAmount === "" ? "0" : activeAmount;
+        const bnAmount = new BigNumber(parseUnits(amount ?? "0", 18).toString());
+        const selectedToken = tokenInputs[activeInput];
+        const totalSelectedTokenType = (
+          liquidityMap[selectedToken?.address ?? ""] ?? new BigNumber(0)
+        ).times(totalTokens);
+        const amountRatio = bnAmount.div(totalSelectedTokenType);
+        console.log(amountRatio)
+        tokenInputs.forEach((tokenInput: TokenInput, i: number) => {
+          if (i === activeInput) return;
+  
+          const totalTokenType = (
+            liquidityMap[tokenInput.address] ?? new BigNumber(0)
+          ).times(totalTokens).div(new BigNumber(10).pow(18));
+          const newAmount = amountRatio.times(totalTokenType);
+          console.log(newAmount.toString(10).slice(0,tokenInput.decimals))
+          const parsedNewAmount = Number(newAmount) === 0 ? '' : newAmount.toString(10).slice(0,tokenInput.decimals)
+          console.log(parsedNewAmount)
+          updateTokenAmount(i,parsedNewAmount);
+        });
+      } catch(e) {
+        console.log(e)
+      }
     } else {
       return;
     }
