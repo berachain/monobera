@@ -64,9 +64,12 @@ export function SignInButton({
           body: JSON.stringify({ message: preparedMessage, signature }),
         },
       );
-      if (verifyRes.status === 200) {
-        const verify = await verifyRes.json();
+      console.log(account);
+      const verify = await verifyRes.json();
+      if (verifyRes.status === 200 && verify.token) {
         console.log("verify:3", verify.token);
+      } else {
+        console.log("verify error:", verify.error);
       }
       setState((x) => ({ ...x, loading: false }));
       onSuccess({ address: account });
