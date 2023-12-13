@@ -4,7 +4,7 @@ export const IMGMap = {
   "leaderboard-icon": "r6by1rudonzfifmd7ex7",
   "connect-wallet-bear": "z33lisipn7jridhtj6dh",
   "sign-in-bear": "im7wb3nsx1g621of9fzn",
-  "vote-card-default": "vl4bhueivgek0vfdypnp",
+  "vote-card-default": "xtj8nytqmpkytmzpjfjt",
   "voted-wrong-mobile": "q36eg8tvjodjp10rimgq",
   "voted-wrong-desktop": "i1o12houpo3zxtyszgw6",
   "voted-correct-mobile": "cgv5g4qbb6h5j3elrugs",
