@@ -1,6 +1,11 @@
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useBeraJs } from "@bera/berajs";
-import { bgtTokenAddress } from "@bera/config";
+import { formatter, useBeraJs } from "@bera/berajs";
+import {
+  bgtTokenAddress,
+  blockExplorerUrl,
+  validatorClueEndpoint,
+} from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -10,19 +15,38 @@ export default function PersonalInfo() {
     "VALCLUE_AUTH_TOKEN",
     { token: "", address: "" },
   );
+  const [me, setMe] = useState<any>({});
+  const fetchMe = async () => {
+    try {
+      const meRes = await fetch(`${validatorClueEndpoint}/api/v1/me`, {
+        headers: { Authorization: `Bearer ${authToken.token}` },
+      });
+      if (!meRes.ok) {
+        throw new Error(`API responded with status ${meRes.status}`);
+      } else {
+        const me = await meRes.json();
+        setMe(me);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    void fetchMe();
+  }, [authToken, authToken.token]);
+
   if (isConnected && authToken.address === account && authToken.token) {
     return (
       <div className="flex w-full justify-between rounded-sm border border-border px-3 py-4">
         <div>
-          <div className="font-retro-gaming text-lg leading-7">
-            Select Validator
-          </div>
+          <div className="font-retro-gaming text-lg leading-7">{me.name}</div>
           <Link
             className="mt-1 text-xs leading-4 text-muted-foreground underline"
-            href={"/"}
+            href={`${blockExplorerUrl}/address/${me.pool}`}
             target="_blank"
           >
-            My Pool: Berautist Honey
+            {me.pool}
           </Link>
         </div>
         <div className="flex flex-col items-end gap-6 border-l border-border pl-4 sm:flex-row sm:border-none">
@@ -69,7 +93,9 @@ export default function PersonalInfo() {
           <div className="flex items-center gap-[6px]">
             <TokenIcon address={bgtTokenAddress} fetch />
             <div>
-              <div className="font-retro-gaming text-sm leading-5">420.69</div>
+              <div className="font-retro-gaming text-sm leading-5">
+                {formatter.format(me.bgt)}
+              </div>
               <div className="text-xs leading-3 text-muted-foreground">
                 BGT Score
               </div>

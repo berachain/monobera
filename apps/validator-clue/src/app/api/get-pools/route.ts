@@ -3,6 +3,8 @@ import { validatorClueEndpoint } from "@bera/config";
 
 import { Header } from "~/utils/ironOption";
 
+export const revalidate = 10;
+
 export async function GET() {
   try {
     // Fetch the nonce

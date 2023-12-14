@@ -12,7 +12,7 @@ export default function GAME() {
   const [pools, setPools] = useState<any[]>([]);
   const [validators, setValidators] = useState<any[]>([]);
   const [obituaries, setObituaries] = useState<any[]>([]);
-
+    
   const fetchPools = async () => {
     try {
       const poolsRes = await fetch(`/api/get-pools`);
