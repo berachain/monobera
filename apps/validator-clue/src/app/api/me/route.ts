@@ -5,12 +5,11 @@ import { Header } from "~/utils/ironOption";
 
 export async function GET() {
   try {
-    const nonceResponse = await fetch(
-      `${validatorClueEndpoint}/api/v1/auth/nonce`,
-    );
-    if (!nonceResponse.ok)
-      throw new Error(`API responded with status ${nonceResponse.status}`);
-    const res = await nonceResponse.json();
+    // Fetch the nonce
+    const valsRes = await fetch(`${validatorClueEndpoint}/api/v1/me`);
+    if (!valsRes.ok)
+      throw new Error(`API responded with status ${valsRes.status}`);
+    const res = await valsRes.json();
 
     // Return the response
     return new NextResponse(JSON.stringify(res), {

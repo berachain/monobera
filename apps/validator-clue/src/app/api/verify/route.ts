@@ -5,7 +5,6 @@ import { Header } from "~/utils/ironOption";
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("req.body", req.body);
     const verifyRes = await fetch(
       `${validatorClueEndpoint}/api/v1/auth/verify`,
       {
