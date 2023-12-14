@@ -65,8 +65,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <Toaster position="bottom-right" />
           </div>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-            <Header />
-            <main>
+            <Header/>
+            <main className="pb-12">
               {props.children}
             </main>
           </div>

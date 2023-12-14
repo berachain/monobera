@@ -64,7 +64,7 @@ export default function GameConsole({ tab }: { tab: tabEnumT }) {
           <Item3 />
         </Link>
       </div>
-      <div className="h-[380px] w-full flex-1">{getContent()}</div>
+      <div className="min-h-[380px] h-[380px] w-full flex-1 flex-shrink-0 ">{getContent()}</div>
     </div>
   );
 }
