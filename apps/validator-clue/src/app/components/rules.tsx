@@ -38,7 +38,7 @@ export default function Rules() {
             stroke-linejoin="round"
           />
         </svg>
-        <div>Official Rules for: The Validator's Clue</div>
+        <div className="font-retro-gaming">Official Rules for: The Validator's Clue</div>
       </div>
 
       <div>

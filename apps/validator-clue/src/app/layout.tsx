@@ -13,7 +13,7 @@ import Providers from "./Providers";
 import Header from "./components/header";
 
 const retroGaming = localFont({
-  src: "../../public/fonts/retro-gaming/Retro-Gaming.ttf",
+  src: "../../public/fonts/retro-gaming/Retro-Gaming.woff2",
   weight: "400",
   style: "normal",
   variable: "--font-retro-gaming",

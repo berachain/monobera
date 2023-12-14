@@ -14,7 +14,7 @@ export default function PersonalInfo() {
     return (
       <div className="flex w-full justify-between rounded-sm border border-border px-3 py-4">
         <div>
-          <div className="text-lg leading-7">Select Validator</div>
+          <div className="text-lg leading-7 font-retro-gaming">Select Validator</div>
           <Link
             className="mt-1 text-xs leading-4 text-muted-foreground underline"
             href={"/"}
@@ -55,7 +55,7 @@ export default function PersonalInfo() {
               />
             </svg>
             <div>
-              <div className="text-sm leading-5 whitespace-nowrap">42Hrs 2Mins</div>
+              <div className="text-sm leading-5 whitespace-nowrap font-retro-gaming">42Hrs 2Mins</div>
               <div className="text-xs leading-3 text-muted-foreground whitespace-nowrap">
                 Epoch Countdown
               </div>
@@ -65,7 +65,7 @@ export default function PersonalInfo() {
           <div className="flex items-center gap-[6px]">
             <TokenIcon address={bgtTokenAddress} fetch />
             <div>
-              <div className="text-sm leading-5">420.69</div>
+              <div className="text-sm leading-5 font-retro-gaming">420.69</div>
               <div className="text-xs leading-3 text-muted-foreground">
                 BGT Score
               </div>

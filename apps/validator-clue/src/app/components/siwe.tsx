@@ -14,10 +14,10 @@ export default function SIWE() {
           width={181}
           height={170}
         />
-        <div className="text-3xl leading-9 text-foreground">
+        <div className="text-3xl leading-9 text-foreground font-retro-gaming">
           Sign-in with Ethereum
         </div>
-        <div className="text-center leading-6 text-muted-foreground">
+        <div className="text-center leading-6 text-muted-foreground font-retro-gaming">
           Please sign-in with your ethereum wallet to access the game.
         </div>
         <SignInButton />

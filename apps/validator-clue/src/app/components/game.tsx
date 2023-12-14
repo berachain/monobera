@@ -12,7 +12,7 @@ export default function GAME() {
       <div className="flex gap-3">
         <div
           className={cn(
-            "cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground",
+            "cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground font-retro-gaming",
             tab === "pools" && "bg-foreground",
           )}
           onClick={() => setTab("pools")}
@@ -21,7 +21,7 @@ export default function GAME() {
         </div>
         <div
           className={cn(
-            "cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground",
+            "cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground font-retro-gaming",
             tab === "validators" && "bg-foreground",
           )}
           onClick={() => setTab("validators")}
@@ -30,7 +30,7 @@ export default function GAME() {
         </div>
         <div
           className={cn(
-            "cursor-pointer rounded-t-sm bg-destructive px-3 py-1 leading-6 text-destructive-foreground",
+            "cursor-pointer rounded-t-sm bg-destructive px-3 py-1 leading-6 text-destructive-foreground font-retro-gaming",
             tab === "eliminated" &&
               "bg-destructive-foreground text-destructive",
           )}
@@ -54,9 +54,9 @@ export default function GAME() {
                   key={index}
                   className="flex h-[52px] w-full items-center gap-3 rounded-xs bg-muted p-2"
                 >
-                  <div className="text-2xl">{value}</div>
+                  <div className="text-2xl font-retro-gaming">{value}</div>
                   <div className="flex h-full flex-1 flex-col justify-between">
-                    <div className="text-sm leading-5">Deez/Bera</div>
+                    <div className="text-sm leading-5 font-retro-gaming">Deez/Bera</div>
                     <div className="text-xs text-muted-foreground">
                       BGT Score
                     </div>
@@ -82,7 +82,7 @@ export default function GAME() {
                   className="flex h-[52px] w-full items-center gap-3 rounded-xs bg-muted p-2"
                 >
                   <div className="flex h-full flex-1 flex-col justify-between">
-                    <div className="text-sm leading-5">Deez/Bera</div>
+                    <div className="text-sm leading-5 font-retro-gaming">Deez/Bera</div>
                     <div className="text-xs text-muted-foreground">
                       0x446...7869
                     </div>
@@ -103,7 +103,7 @@ export default function GAME() {
                     className="flex h-[52px] flex-1 items-center gap-3 rounded-xs bg-destructive p-2 text-destructive-foreground"
                   >
                     <div className="flex h-full flex-1 flex-col justify-between">
-                      <div className="text-sm leading-5 line-through">Deez/Bera</div>
+                      <div className="text-sm leading-5 line-through font-retro-gaming">Deez/Bera</div>
                       <div className="text-xs line-through">0x446...7869</div>
                     </div>
                     <div className="flex h-full items-end">
@@ -169,7 +169,7 @@ export default function GAME() {
                   </svg>
                   <div className="flex h-[52px] flex-1 items-center gap-3 rounded-xs bg-destructive p-2 text-destructive-foreground">
                     <div className="flex h-full flex-1 flex-col justify-between">
-                      <div className="text-sm leading-5 line-through">Deez/Bera</div>
+                      <div className="text-sm leading-5 line-through font-retro-gaming">Deez/Bera</div>
                       <div className="text-xs">BGT Score</div>
                     </div>
                     <div className="flex h-full items-end gap-1">

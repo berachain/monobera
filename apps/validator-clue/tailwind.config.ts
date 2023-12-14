@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        retroGaming: ['var(--font-retro-gaming)', 'sans-serif'],
-        jetBrainsMono: ['var(--font-jet-brains-mono)', 'monospace'],
+        "retro-gaming": ["var(--font-retro-gaming)", "sans-serif"],
+        "jet-brains-mono": ["var(--font-jet-brains-mono)", "monospace"],
       },
     },
   },

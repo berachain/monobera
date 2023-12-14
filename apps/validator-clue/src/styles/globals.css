@@ -63,6 +63,23 @@
   }
 }
 
+:root {
+  --font-retro-gaming: 'Retro-Gaming', sans-serif;
+}
+
+
+@font-face {
+  font-family: 'Retro-Gaming';
+  src: url('../../public/fonts/retro-gaming/Retro-Gaming.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 .font-retro-gaming {
+  font-family: var(--font-retro-gaming);
+}
+
+button{
   font-family: var(--font-retro-gaming);
 }

@@ -23,17 +23,17 @@ const ConnectBtn = dynamic(
 export default function ConnetWallet() {
   return (
     <div className="h-full rounded-sm border border-border bg-background">
-      <div className="mx-auto py-6 flex w-full max-w-[480px] flex-col items-center gap-3">
+      <div className="mx-auto flex w-full max-w-[480px] flex-col items-center gap-3 py-6">
         <Image
           src={`${cloudinaryUrl}/clue/${IMGMap["connect-wallet-bear"]}`}
           alt="connect-wallet-bear"
           width={318}
           height={169}
         />
-        <div className="text-3xl leading-9 text-foreground">
+        <div className="font-retro-gaming text-3xl leading-9 text-foreground">
           Connect your wallet
         </div>
-        <div className="text-center leading-6 text-muted-foreground">
+        <div className="font-retro-gaming text-center leading-6 text-muted-foreground">
           Validators must be invited to the game and should connect their
           wallets to play the game.
         </div>
