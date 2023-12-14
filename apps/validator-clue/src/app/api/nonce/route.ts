@@ -16,7 +16,6 @@
 
 import { NextResponse } from "next/server";
 import { validatorClueEndpoint } from "@bera/config";
-import { getSession } from "next-auth/react";
 
 import { Header } from "~/utils/ironOption";
 
@@ -49,6 +48,7 @@ export async function GET() {
     });
   } catch (e) {
     console.error(`Error fetching nonce: ${e}`);
+    //@ts-ignore
     return new NextResponse(JSON.stringify({ error: e.message }), {
       status: 500,
       headers: Header,

@@ -8,7 +8,7 @@ import { useSignMessage } from "wagmi";
 
 export function SignInButton() {
   const { account } = useBeraJs();
-  const chainId = useChainId();
+  const chainId:number = useChainId()??0;
   const { signMessageAsync } = useSignMessage();
 
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -62,7 +62,7 @@ export function SignInButton() {
       );
       const verify = await verifyRes.json();
       if (verifyRes.status === 200 && verify.token) {
-        setAuthToken({ token: verify.token, address: account });
+        setAuthToken({ token: verify.token, address: account??"" });
       } else {
         setAllowed(false);
         setAuthToken({ token: "", address: "" });

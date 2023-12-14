@@ -11,7 +11,7 @@ export default function Content({ tab }: { tab: tabEnumT }) {
   return (
     <div className="flex w-full flex-1 flex-col gap-4">
       <GameConsole tab={tab} />
-      <PersonalInfo/>
+      <PersonalInfo />
       <hr className="border-border" />
       <Boxes />
     </div>

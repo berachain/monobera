@@ -12,7 +12,7 @@ export default function GAME() {
       <div className="flex gap-3">
         <div
           className={cn(
-            "cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground font-retro-gaming",
+            "font-retro-gaming cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground",
             tab === "pools" && "bg-foreground",
           )}
           onClick={() => setTab("pools")}
@@ -21,7 +21,7 @@ export default function GAME() {
         </div>
         <div
           className={cn(
-            "cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground font-retro-gaming",
+            "font-retro-gaming cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground",
             tab === "validators" && "bg-foreground",
           )}
           onClick={() => setTab("validators")}
@@ -30,7 +30,7 @@ export default function GAME() {
         </div>
         <div
           className={cn(
-            "cursor-pointer rounded-t-sm bg-destructive px-3 py-1 leading-6 text-destructive-foreground font-retro-gaming",
+            "font-retro-gaming cursor-pointer rounded-t-sm bg-destructive px-3 py-1 leading-6 text-destructive-foreground",
             tab === "eliminated" &&
               "bg-destructive-foreground text-destructive",
           )}
@@ -47,16 +47,18 @@ export default function GAME() {
         )}
       >
         {tab === "pools" && (
-          <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map(
               (value, index) => (
                 <div
                   key={index}
                   className="flex h-[52px] w-full items-center gap-3 rounded-xs bg-muted p-2"
                 >
-                  <div className="text-2xl font-retro-gaming">{value}</div>
+                  <div className="font-retro-gaming text-2xl">{value}</div>
                   <div className="flex h-full flex-1 flex-col justify-between">
-                    <div className="text-sm leading-5 font-retro-gaming">Deez/Bera</div>
+                    <div className="font-retro-gaming text-sm leading-5">
+                      Deez/Bera
+                    </div>
                     <div className="text-xs text-muted-foreground">
                       BGT Score
                     </div>
@@ -74,7 +76,7 @@ export default function GAME() {
         )}
 
         {tab === "validators" && (
-          <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map(
               (value, index) => (
                 <div
@@ -82,7 +84,9 @@ export default function GAME() {
                   className="flex h-[52px] w-full items-center gap-3 rounded-xs bg-muted p-2"
                 >
                   <div className="flex h-full flex-1 flex-col justify-between">
-                    <div className="text-sm leading-5 font-retro-gaming">Deez/Bera</div>
+                    <div className="font-retro-gaming text-sm leading-5">
+                      Deez/Bera
+                    </div>
                     <div className="text-xs text-muted-foreground">
                       0x446...7869
                     </div>
@@ -103,48 +107,50 @@ export default function GAME() {
                     className="flex h-[52px] flex-1 items-center gap-3 rounded-xs bg-destructive p-2 text-destructive-foreground"
                   >
                     <div className="flex h-full flex-1 flex-col justify-between">
-                      <div className="text-sm leading-5 line-through font-retro-gaming">Deez/Bera</div>
+                      <div className="font-retro-gaming text-sm leading-5 line-through">
+                        Deez/Bera
+                      </div>
                       <div className="text-xs line-through">0x446...7869</div>
                     </div>
                     <div className="flex h-full items-end">
-                    <svg
-                      width="13"
-                      height="12"
-                      viewBox="0 0 13 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5 6.5C5.27614 6.5 5.5 6.27614 5.5 6C5.5 5.72386 5.27614 5.5 5 5.5C4.72386 5.5 4.5 5.72386 4.5 6C4.5 6.27614 4.72386 6.5 5 6.5Z"
-                        stroke="#DC2626"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M8 6.5C8.27614 6.5 8.5 6.27614 8.5 6C8.5 5.72386 8.27614 5.5 8 5.5C7.72386 5.5 7.5 5.72386 7.5 6C7.5 6.27614 7.72386 6.5 8 6.5Z"
-                        stroke="#DC2626"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M4.5 10V11H8.5V10"
-                        stroke="#DC2626"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M6.75 8.5L6.5 8L6.25 8.5H6.75Z"
-                        stroke="#DC2626"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M8.5 10.001C8.68835 10.0009 8.87283 9.94761 9.03221 9.84726C9.1916 9.7469 9.3194 9.60357 9.4009 9.43377C9.4824 9.26397 9.5143 9.07461 9.49291 8.88748C9.47152 8.70035 9.39772 8.52307 9.28 8.37604C9.85299 7.82219 10.2475 7.10981 10.4129 6.33025C10.5783 5.5507 10.5071 4.7395 10.2084 4.00069C9.90968 3.26188 9.3971 2.62913 8.73638 2.18358C8.07566 1.73804 7.29691 1.5 6.5 1.5C5.70309 1.5 4.92435 1.73804 4.26362 2.18358C3.6029 2.62913 3.09033 3.26188 2.79162 4.00069C2.49292 4.7395 2.42171 5.5507 2.58712 6.33025C2.75252 7.10981 3.14702 7.82219 3.72 8.37604C3.60228 8.52307 3.52848 8.70035 3.50709 8.88748C3.48571 9.07461 3.5176 9.26397 3.5991 9.43377C3.68061 9.60357 3.80841 9.7469 3.96779 9.84726C4.12717 9.94761 4.31165 10.0009 4.5 10.001"
-                        stroke="#DC2626"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                      <svg
+                        width="13"
+                        height="12"
+                        viewBox="0 0 13 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5 6.5C5.27614 6.5 5.5 6.27614 5.5 6C5.5 5.72386 5.27614 5.5 5 5.5C4.72386 5.5 4.5 5.72386 4.5 6C4.5 6.27614 4.72386 6.5 5 6.5Z"
+                          stroke="#DC2626"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M8 6.5C8.27614 6.5 8.5 6.27614 8.5 6C8.5 5.72386 8.27614 5.5 8 5.5C7.72386 5.5 7.5 5.72386 7.5 6C7.5 6.27614 7.72386 6.5 8 6.5Z"
+                          stroke="#DC2626"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M4.5 10V11H8.5V10"
+                          stroke="#DC2626"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M6.75 8.5L6.5 8L6.25 8.5H6.75Z"
+                          stroke="#DC2626"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M8.5 10.001C8.68835 10.0009 8.87283 9.94761 9.03221 9.84726C9.1916 9.7469 9.3194 9.60357 9.4009 9.43377C9.4824 9.26397 9.5143 9.07461 9.49291 8.88748C9.47152 8.70035 9.39772 8.52307 9.28 8.37604C9.85299 7.82219 10.2475 7.10981 10.4129 6.33025C10.5783 5.5507 10.5071 4.7395 10.2084 4.00069C9.90968 3.26188 9.3971 2.62913 8.73638 2.18358C8.07566 1.73804 7.29691 1.5 6.5 1.5C5.70309 1.5 4.92435 1.73804 4.26362 2.18358C3.6029 2.62913 3.09033 3.26188 2.79162 4.00069C2.49292 4.7395 2.42171 5.5507 2.58712 6.33025C2.75252 7.10981 3.14702 7.82219 3.72 8.37604C3.60228 8.52307 3.52848 8.70035 3.50709 8.88748C3.48571 9.07461 3.5176 9.26397 3.5991 9.43377C3.68061 9.60357 3.80841 9.7469 3.96779 9.84726C4.12717 9.94761 4.31165 10.0009 4.5 10.001"
+                          stroke="#DC2626"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
                     </div>
                   </div>
                   <svg
@@ -169,7 +175,9 @@ export default function GAME() {
                   </svg>
                   <div className="flex h-[52px] flex-1 items-center gap-3 rounded-xs bg-destructive p-2 text-destructive-foreground">
                     <div className="flex h-full flex-1 flex-col justify-between">
-                      <div className="text-sm leading-5 line-through font-retro-gaming">Deez/Bera</div>
+                      <div className="font-retro-gaming text-sm leading-5 line-through">
+                        Deez/Bera
+                      </div>
                       <div className="text-xs">BGT Score</div>
                     </div>
                     <div className="flex h-full items-end gap-1">

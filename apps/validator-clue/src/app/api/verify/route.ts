@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (e) {
     console.error(`Error in /api/verify: ${e}`);
+    //@ts-ignore
     return new NextResponse(JSON.stringify({ error: e.message }), {
       status: 500,
       headers: Header,

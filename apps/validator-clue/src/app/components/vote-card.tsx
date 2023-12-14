@@ -11,7 +11,7 @@ export default function VoteCard() {
   const [validator, setValidator] = useState(undefined);
   const [pool, setPool] = useState(undefined);
   return (
-    <div className="flex h-full w-[320px] items-center justify-center border border-border bg-[#FFFDD3] p-5 rounded-sm">
+    <div className="flex h-full w-[320px] items-center justify-center rounded-sm border border-border bg-[#FFFDD3] p-5">
       {step === 0 && (
         <div>
           <Image

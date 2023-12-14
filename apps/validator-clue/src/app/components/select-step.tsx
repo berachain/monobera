@@ -2,10 +2,10 @@ import { Button } from "@bera/ui/button";
 
 export default function SelectStep({
   validator,
-  setValidator,
+  // setValidator,
   pool,
-  setPool,
-}: {
+}: // setPool,
+{
   validator: any;
   setValidator: (validator: any) => void;
   pool: any;

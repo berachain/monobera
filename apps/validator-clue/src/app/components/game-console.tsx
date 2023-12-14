@@ -64,7 +64,9 @@ export default function GameConsole({ tab }: { tab: tabEnumT }) {
           <Item3 />
         </Link>
       </div>
-      <div className="h-[380px] w-full flex-auto" style={{height:'380px!'}}>{getContent()}</div>
+      <div className="h-[380px] w-full flex-auto" style={{ height: "380px!" }}>
+        {getContent()}
+      </div>
     </div>
   );
 }

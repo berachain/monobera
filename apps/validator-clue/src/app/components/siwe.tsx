@@ -7,17 +7,17 @@ import { SignInButton } from "~/components/sign-in-btn";
 export default function SIWE() {
   return (
     <div className="h-full rounded-sm border border-border bg-background">
-      <div className="mx-auto py-6 flex w-full max-w-[480px] flex-col items-center gap-3">
+      <div className="mx-auto flex w-full max-w-[480px] flex-col items-center gap-3 py-6">
         <Image
           src={`${cloudinaryUrl}/clue/${IMGMap["sign-in-bear"]}`}
           alt="sign-in-bear"
           width={181}
           height={170}
         />
-        <div className="text-3xl leading-9 text-foreground font-retro-gaming">
+        <div className="font-retro-gaming text-3xl leading-9 text-foreground">
           Sign-in with Ethereum
         </div>
-        <div className="text-center leading-6 text-muted-foreground font-retro-gaming">
+        <div className="font-retro-gaming text-center leading-6 text-muted-foreground">
           Please sign-in with your ethereum wallet to access the game.
         </div>
         <SignInButton />

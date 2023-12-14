@@ -1,6 +1,6 @@
 export default function Rules() {
   return (
-    <div className="flex h-full flex-col gap-2 rounded-sm bg-muted p-4 overflow-y-auto">
+    <div className="flex h-full flex-col gap-2 overflow-y-auto rounded-sm bg-muted p-4">
       <div className="text-forground flex items-center gap-1 text-lg leading-7">
         <svg
           width="24"
@@ -38,7 +38,9 @@ export default function Rules() {
             stroke-linejoin="round"
           />
         </svg>
-        <div className="font-retro-gaming">Official Rules for: The Validator's Clue</div>
+        <div className="font-retro-gaming">
+          Official Rules for: The Validator&apos;s Clue
+        </div>
       </div>
 
       <div>
