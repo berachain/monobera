@@ -1,6 +1,6 @@
+import Link from "next/link";
 import { useBeraJs } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
-import { beraTokenAddress } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -15,11 +15,15 @@ export default function PersonalInfo() {
       <div className="flex w-full justify-between rounded-sm border border-border px-3 py-4">
         <div>
           <div className="text-lg leading-7">Select Validator</div>
-          <div className="mt-1 text-xs leading-4 text-muted-foreground underline">
+          <Link
+            className="mt-1 text-xs leading-4 text-muted-foreground underline"
+            href={"/"}
+            target="_blank"
+          >
             My Pool: Berautist Honey
-          </div>
+          </Link>
         </div>
-        <div className="flex items-end gap-6">
+        <div className="flex items-end gap-6 sm:flex-row flex-col border-l border-border sm:border-none pl-4">
           <div className="flex items-center gap-[6px]">
             <svg
               width="24"
@@ -51,15 +55,15 @@ export default function PersonalInfo() {
               />
             </svg>
             <div>
-              <div className="text-sm leading-5">42Hrs 2Mins</div>
-              <div className="text-xs leading-3 text-muted-foreground">
+              <div className="text-sm leading-5 whitespace-nowrap">42Hrs 2Mins</div>
+              <div className="text-xs leading-3 text-muted-foreground whitespace-nowrap">
                 Epoch Countdown
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-[6px]">
-            <TokenIcon address={bgtTokenAddress} fetch/>
+            <TokenIcon address={bgtTokenAddress} fetch />
             <div>
               <div className="text-sm leading-5">420.69</div>
               <div className="text-xs leading-3 text-muted-foreground">

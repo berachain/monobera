@@ -47,12 +47,12 @@ export default function GAME() {
         )}
       >
         {tab === "pools" && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
             {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map(
               (value, index) => (
                 <div
                   key={index}
-                  className="flex h-[52px] w-full items-center gap-3 rounded-sm bg-muted p-2"
+                  className="flex h-[52px] w-full items-center gap-3 rounded-xs bg-muted p-2"
                 >
                   <div className="text-2xl">{value}</div>
                   <div className="flex h-full flex-1 flex-col justify-between">
@@ -74,12 +74,12 @@ export default function GAME() {
         )}
 
         {tab === "validators" && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
             {[1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map(
               (value, index) => (
                 <div
                   key={index}
-                  className="flex h-[52px] w-full items-center gap-3 rounded-sm bg-muted p-2"
+                  className="flex h-[52px] w-full items-center gap-3 rounded-xs bg-muted p-2"
                 >
                   <div className="flex h-full flex-1 flex-col justify-between">
                     <div className="text-sm leading-5">Deez/Bera</div>
@@ -100,7 +100,7 @@ export default function GAME() {
                 <div key={index} className="flex items-center">
                   <div
                     key={index}
-                    className="flex h-[52px] flex-1 items-center gap-3 rounded-sm bg-destructive p-2 text-destructive-foreground"
+                    className="flex h-[52px] flex-1 items-center gap-3 rounded-xs bg-destructive p-2 text-destructive-foreground"
                   >
                     <div className="flex h-full flex-1 flex-col justify-between">
                       <div className="text-sm leading-5 line-through">Deez/Bera</div>
@@ -167,8 +167,7 @@ export default function GAME() {
                       stroke-width="2"
                     />
                   </svg>
-                  <div className="flex h-[52px] flex-1 items-center gap-3 rounded-sm bg-destructive p-2 text-destructive-foreground">
-                    <div className="text-2xl">{value}</div>
+                  <div className="flex h-[52px] flex-1 items-center gap-3 rounded-xs bg-destructive p-2 text-destructive-foreground">
                     <div className="flex h-full flex-1 flex-col justify-between">
                       <div className="text-sm leading-5 line-through">Deez/Bera</div>
                       <div className="text-xs">BGT Score</div>

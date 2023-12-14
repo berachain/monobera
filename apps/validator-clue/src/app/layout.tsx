@@ -36,6 +36,11 @@ const jetBrainsMono = localFont({
       weight: "700",
       style: "normal",
     },
+    {
+      path: "../../public/fonts/jet-brains-mono/JetBrainsMono-ExtraBold.woff2",
+      weight: "800",
+      style: "normal",
+    },
   ],
   variable: "--font-jet-brains-mono",
 });
