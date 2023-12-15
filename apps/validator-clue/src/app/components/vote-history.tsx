@@ -1,46 +1,15 @@
-import { useEffect, useState } from "react";
 import Image from "next/image";
-import { cloudinaryUrl, validatorClueEndpoint } from "@bera/config";
+import { cloudinaryUrl } from "@bera/config";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@bera/ui/accordion";
-import { useLocalStorage } from "usehooks-ts";
 
 import { IMGMap } from "~/utils/image-map";
 
-export default function VoteHistory() {
-  const [votes, setVotes] = useState<any[]>([]);
-  const [authToken, _] = useLocalStorage<{ token: string; address: string }>(
-    "VALCLUE_AUTH_TOKEN",
-    { token: "", address: "" },
-  );
-
-  const fetchMe = async () => {
-    try {
-      const meRes = await fetch(`${validatorClueEndpoint}/api/v1/me`, {
-        headers: { Authorization: `Bearer ${authToken.token}` },
-        next: { revalidate: 100 },
-      });
-      if (!meRes.ok) {
-        throw new Error(`API responded with status ${meRes.status}`);
-      } else {
-        const me = await meRes.json();
-        console.log(me);
-        setVotes(me.votes);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  useEffect(() => {
-    void fetchMe();
-  }, [authToken, authToken.token]);
-
-  console.log(votes)
+export default function VoteHistory({votes}:{votes:any[]}) {
   return (
     <div className="h-full flex-auto overflow-y-auto">
       <div className="font-retro-gaming text-lg leading-7">Vote History</div>

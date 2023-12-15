@@ -6,7 +6,7 @@ import { Button } from "@bera/ui/button";
 import { IMGMap } from "~/utils/image-map";
 import SelectStep from "./select-step";
 
-export default function VoteCard() {
+export default function VoteCard({voted, alive}:{voted?:boolean, alive?:boolean}) {
   const [step, setStep] = useState(0);
   const [validator, setValidator] = useState(undefined);
   const [pool, setPool] = useState(undefined);

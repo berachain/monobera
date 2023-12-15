@@ -5,61 +5,18 @@ import { bgtTokenAddress, blockExplorerUrl } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 
-export default function GAME() {
+export default function GAME({
+  validators,
+  pools,
+  obituaries,
+}: {
+  validators: any[];
+  pools: any[];
+  obituaries: any[];
+}) {
   const [tab, setTab] = useState<"pools" | "validators" | "eliminated">(
     "pools",
   );
-  const [pools, setPools] = useState<any[]>([]);
-  const [validators, setValidators] = useState<any[]>([]);
-  const [obituaries, setObituaries] = useState<any[]>([]);
-    
-  const fetchPools = async () => {
-    try {
-      const poolsRes = await fetch(`/api/get-pools`);
-      const pools = (await poolsRes.json()).sort(
-        (a: any, b: any) => a.bgt < b.bgt,
-      );
-      setPools(pools);
-      return;
-    } catch (error) {
-      console.error("Somethings wrong with fecthing pools:", error);
-      return undefined;
-    }
-  };
-
-  const fetchValidators = async () => {
-    try {
-      const valisRes = await fetch(`/api/get-validators`);
-      const validators = (await valisRes.json()).sort(
-        (a: any, b: any) => a.bgt < b.bgt,
-      );
-      setValidators(validators);
-      return;
-    } catch (error) {
-      console.error("Somethings wrong with fecthing validators:", error);
-      return undefined;
-    }
-  };
-
-  const fetchObituaries = async () => {
-    try {
-      const obiRes = await fetch(`/api/get-obituaries `);
-      const obituaries = (await obiRes.json()).sort(
-        (a: any, b: any) => a.bgt < b.bgt,
-      );
-      setObituaries(obituaries);
-      return;
-    } catch (error) {
-      console.error("Somethings wrong with fecthing validators:", error);
-      return undefined;
-    }
-  };
-
-  useEffect(() => {
-    void fetchPools();
-    void fetchValidators();
-    void fetchObituaries();
-  }, []);
 
   return (
     <div className="flex h-full flex-col">

@@ -12,7 +12,15 @@ import Rules from "./rules";
 import SIWE from "./siwe";
 import Vote from "./vote";
 
-export default function GameConsole({ tab }: { tab: tabEnumT }) {
+export default function GameConsole({
+  tab,
+  ...props
+}: {
+  tab: tabEnumT;
+  validators: any[];
+  pools: any[];
+  obituaries: any[];
+}) {
   const { isConnected, account } = useBeraJs();
   const [authToken, _] = useLocalStorage<{ token: string; address: string }>(
     "VALCLUE_AUTH_TOKEN",
@@ -20,7 +28,7 @@ export default function GameConsole({ tab }: { tab: tabEnumT }) {
   );
 
   const getContent = () => {
-    if (tab === tabEnum.GAME) return <Game />;
+    if (tab === tabEnum.GAME) return <Game {...props} />;
     else if (tab === tabEnum.RULES) return <Rules />;
     else {
       if (!isConnected) return <ConnectWallet />;
