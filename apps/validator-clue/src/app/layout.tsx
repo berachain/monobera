@@ -10,7 +10,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
 import Providers from "./Providers";
-import Header from "./components/header";
+import Header from "../components/header";
 
 const retroGaming = localFont({
   src: "../../public/fonts/retro-gaming/Retro-Gaming.woff2",

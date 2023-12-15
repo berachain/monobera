@@ -1,44 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { formatter, useBeraJs } from "@bera/berajs";
-import {
-  bgtTokenAddress,
-  blockExplorerUrl,
-  validatorClueEndpoint,
-} from "@bera/config";
+import { formatter } from "@bera/berajs";
+import { bgtTokenAddress, blockExplorerUrl } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
-import { useLocalStorage } from "usehooks-ts";
+import { usePollMe } from "~/hooks/usePollMe";
 
 export default function PersonalInfo() {
-  const { isConnected, account } = useBeraJs();
-  const [authToken, _] = useLocalStorage<{ token: string; address: string }>(
-    "VALCLUE_AUTH_TOKEN",
-    { token: "", address: "" },
-  );
-  const [me, setMe] = useState<any>({});
-  const fetchMe = async () => {
-    try {
-      const meRes = await fetch(`${validatorClueEndpoint}/api/v1/me`, {
-        headers: { Authorization: `Bearer ${authToken.token}` },
-      });
-      if (!meRes.ok) {
-        throw new Error(`API responded with status ${meRes.status}`);
-      } else {
-        const me = await meRes.json();
-        setMe(me);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const { data: me, isLoading } = usePollMe();
 
-  useEffect(() => {
-    void fetchMe();
-  }, [authToken, authToken.token]);
-
-  if (isConnected && authToken.address === account && authToken.token) {
+  if (!isLoading && me) {
     return (
       <div className="flex w-full justify-between rounded-sm border border-border px-3 py-4">
         <div>

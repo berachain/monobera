@@ -1,6 +1,6 @@
 import React from "react";
 
-import { type tabEnum as tabEnumT } from "../types";
+import { type tabEnum as tabEnumT } from "../app/types";
 import Boxes from "./boxes";
 import GameConsole from "./game-console";
 import PersonalInfo from "./personal-info";

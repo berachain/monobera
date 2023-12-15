@@ -5,7 +5,7 @@ import { useBeraJs } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { useLocalStorage } from "usehooks-ts";
 
-import { tabEnum, type tabEnum as tabEnumT } from "../types";
+import { tabEnum, type tabEnum as tabEnumT } from "../app/types";
 import ConnectWallet from "./connect-wallet";
 import Game from "./game";
 import Rules from "./rules";
