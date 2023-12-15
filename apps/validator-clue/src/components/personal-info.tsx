@@ -4,11 +4,11 @@ import Link from "next/link";
 import { formatter } from "@bera/berajs";
 import { bgtTokenAddress, blockExplorerUrl } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
+
 import { usePollMe } from "~/hooks/usePollMe";
 
 export default function PersonalInfo() {
   const { data: me, isLoading } = usePollMe();
-
   if (!isLoading && me) {
     return (
       <div className="flex w-full justify-between rounded-sm border border-border px-3 py-4">
@@ -36,21 +36,21 @@ export default function PersonalInfo() {
                 stroke="#713F12"
                 stroke-width="2"
                 stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M12 14L15 11"
                 stroke="#713F12"
                 stroke-width="2"
                 stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M12 22C16.4183 22 20 18.4183 20 14C20 9.58172 16.4183 6 12 6C7.58172 6 4 9.58172 4 14C4 18.4183 7.58172 22 12 22Z"
                 stroke="#713F12"
                 stroke-width="2"
                 stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinejoin="round"
               />
             </svg>
             <div>

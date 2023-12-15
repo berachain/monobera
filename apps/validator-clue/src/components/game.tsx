@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { formatter, truncateHash } from "@bera/berajs";
 import { bgtTokenAddress, blockExplorerUrl } from "@bera/config";

@@ -38,11 +38,12 @@ export default function GameConsole({
         authToken.address !== account
       )
         return <SIWE />;
-      else return <Vote />;
+      else return <Vote {...props} />;
     }
   };
   return (
     <div className="flex w-full flex-col gap-4 xl:flex-row">
+      {isConnected}
       <div className="flex w-full flex-row justify-between gap-8 rounded-sm border border-border p-4 xl:w-fit xl:flex-col xl:justify-normal">
         <Link
           href="/?tab=game"
