@@ -23,7 +23,7 @@ export default function VoteCard({
   const [pool, setPool] = useState(undefined);
   const { data: me } = usePollMe();
 
-  const currentEpoch = 11;
+  const currentEpoch = 1;
   const dead = !me
     ? false
     : obituaries.find((o) => o.validator.address === account);

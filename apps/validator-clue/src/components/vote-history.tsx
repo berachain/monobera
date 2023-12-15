@@ -57,7 +57,7 @@ export default function VoteHistory({
                     {vote.status && vote.status === "succesed" && (
                       <>
                         <Image
-                          src={`${cloudinaryUrl}/clue/${IMGMap["made-elimination"]}`}
+                          src={`${cloudinaryUrl}/clue/${IMGMap["banner-img-vote"]}`}
                           alt="made-elimination"
                           width={272}
                           height={172}
