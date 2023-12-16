@@ -36,28 +36,29 @@ export default function VoteCard({
           {dead ? (
             <div>
               <Image
-                src={`${cloudinaryUrl}/clue/${IMGMap["got-eliminated"]}`}
-                alt="got-eliminated"
+                src={`${cloudinaryUrl}/clue/${IMGMap["voted-wrong-desktop"]}`}
+                alt="voted-wrong-desktop"
                 width={222}
-                height={273}
+                height={274}
                 className="mx-auto"
               />
-              <Button className="mt-1 w-full" onClick={() => setStep(1)}>
-                Dead
-              </Button>
+              <div className="mt-6 flex h-full w-full items-center justify-center">
+                {/* <p className="mt-1 w-full" onClick={() => setStep(1)}> */}
+                <p className="text-sm">You are Dead</p>
+              </div>
             </div>
           ) : voted ? (
-            <div>
+            <div className="justify-middle">
               <Image
                 src={`${cloudinaryUrl}/clue/${IMGMap["voted-correct-desktop"]}`}
                 alt="voted-desktop"
                 width={222}
-                height={273}
-                className="mx-auto"
+                height={274}
+                className="mx-auto "
               />
-              <Button className="mt-2 w-full" disabled>
-                You Already Voted
-              </Button>
+              <div className="mt-6 flex h-full w-full items-center justify-center">
+                <p className="text-sm">You&apos;ve already voted this epoch</p>
+              </div>
             </div>
           ) : (
             <div>
@@ -65,7 +66,7 @@ export default function VoteCard({
                 src={`${cloudinaryUrl}/clue/${IMGMap["vote-card-default"]}`}
                 alt="vote-card-default"
                 width={222}
-                height={273}
+                height={274}
                 className="mx-auto"
               />
               <Button

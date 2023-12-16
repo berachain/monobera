@@ -43,7 +43,6 @@ export default function GameConsole({
   };
   return (
     <div className="flex w-full flex-col gap-4 xl:flex-row">
-      {isConnected}
       <div className="flex w-full flex-row justify-between gap-8 rounded-sm border border-border p-4 xl:w-fit xl:flex-col xl:justify-normal">
         <Link
           href="/?tab=game"
