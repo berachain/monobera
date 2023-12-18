@@ -21,7 +21,9 @@ export default function VoteHistory({
   const votes = me?.votes || [];
   return (
     <div className="h-full flex-auto overflow-y-auto">
-      <div className="font-retro-gaming text-lg leading-7">Vote History</div>
+      <div className="font-retro-gaming px-2 text-lg leading-7">
+        Vote History
+      </div>
       <Accordion
         type="single"
         className="w-full"
@@ -36,9 +38,9 @@ export default function VoteHistory({
               key={index}
               className="w-full"
             >
-              <AccordionTrigger className="text-left text-xs">
+              <AccordionTrigger className="rounded-md px-3 text-left text-xs hover:bg-yellow-100">
                 <div>
-                  Epoch {vote.epochNumber} {`item-${index}`}: <br /> Voted{" "}
+                  Epoch {vote.epochNumber} : <br /> Voted{" "}
                   <span className="text-info-foreground">
                     {
                       validators.find((vali) => vali.address === vote.accused)
