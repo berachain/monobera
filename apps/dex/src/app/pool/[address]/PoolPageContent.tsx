@@ -41,6 +41,7 @@ import {
   type WithdrawLiquidityData,
 } from "./types";
 import { usePoolEvents } from "./usePoolEvents";
+import { type LiquidityChanged } from "@bera/graphql";
 
 interface IPoolPageContent {
   prices: MappedTokens;
@@ -221,7 +222,7 @@ export const EventTable = ({
 }: {
   pool: Pool;
   prices: MappedTokens;
-  events: SwapData[] | AddLiquidityData[] | WithdrawLiquidityData[];
+  events: LiquidityChanged[];
   isLoading: boolean | undefined;
 }) => {
   return (
@@ -241,7 +242,7 @@ export const EventTable = ({
       </TableHeader>
       <TableBody>
         {events?.length ? (
-          events?.map((event: SwapData | any | undefined) => {
+          events?.map((event: LiquidityChanged) => {
             if (!event) return null;
             return (
               <TableRow
@@ -310,6 +311,10 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     isProvisionDataLoadingMore,
     isProvisionDataReachingEnd,
   } = usePoolEvents(pool?.pool);
+
+  console.log("all", allData);
+  console.log("swaps", swapData);
+  console.log("adds", provisionData);
 
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {

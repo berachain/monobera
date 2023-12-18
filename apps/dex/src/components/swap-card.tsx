@@ -100,6 +100,8 @@ export function SwapCard({
     inputCurrency,
     outputCurrency,
   });
+
+  console.log(payload)
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER

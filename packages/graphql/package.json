@@ -1,5 +1,5 @@
 {
-  "name": "@bera/bera-router",
+  "name": "@bera/graphql",
   "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -21,19 +21,6 @@
   "dependencies": {
     "@apollo/client": "^3.8.8",
     "@bera/config": "0.1.0",
-    "@bera/graphql": "0.1.0",
-    "axios": "^1.4.0",
-    "graphql": "^16.8.1",
-    "lodash": "^4.17.21",
-    "next-auth": "^4.24.5",
-    "viem": "~1.19.13"
-  },
-  "devDependencies": {
-    "@bera/eslint-config": "0.1.0",
-    "@hyrious/esbuild-plugin-commonjs": "0.2.2",
-    "@types/node": "^18.16.6",
-    "eslint": "^8.39.0",
-    "tsup": "^6.7.0",
-    "typescript": "^5.0.4"
+    "graphql": "^16.8.1"
   }
 }

@@ -182,7 +182,10 @@ export const getParsedPools = async (
         } = getVolume(mappedTokens, volumeData, pool, 90);
 
         pool.totalValue = pool.tokens.reduce(
-          (acc: number, cur: { address: string | number; balance: any }) => {
+          (
+            acc: number,
+            cur: { address: string | number; balance: any; decimals: any },
+          ) => {
             const tokenValue = mappedTokens[cur.address];
             const tokenBalance = cur.balance;
             if (!tokenValue) {
