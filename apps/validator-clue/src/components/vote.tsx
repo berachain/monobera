@@ -20,27 +20,27 @@ export default function Vote({
           <div
             className={cn(
               "font-retro-gaming cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground",
-              tab === "vote" && "bg-foreground",
+              tab === "vote" && "bg-foreground text-muted",
             )}
             onClick={() => setTab("vote")}
           >
-            Pools
+            Vote
           </div>
           <div
             className={cn(
               "font-retro-gaming cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground",
-              tab === "history" && "bg-foreground",
+              tab === "history" && "bg-foreground text-muted",
             )}
             onClick={() => setTab("history")}
           >
-            Validators
+            History
           </div>
         </div>
 
         {tab === "vote" && <VoteCard {...{ obituaries, ...props }} />}
         {tab === "history" && <VoteHistory {...props} />}
       </div>
-      <div className="hidden h-full w-full gap-4 rounded-sm bg-background p-4 md:flex ">
+      <div className="hidden h-full w-full gap-4 rounded-sm bg-background p-4 sm:rounded-tl-none md:flex md:rounded-tl-sm">
         <VoteCard {...{ obituaries, ...props }} />
         <VoteHistory {...props} />
       </div>
