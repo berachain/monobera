@@ -1,5 +1,10 @@
-export default function GlobalConsole() {
+export default function GlobalConsole({
+  notifications,
+}: {
+  notifications: any[];
+}) {
   const valName = "THJValidator";
+  console.log(notifications);
   return (
     <div className="flex h-[284px] w-full flex-col rounded-sm bg-foreground text-white xl:h-[687px] xl:max-w-[278px]">
       <div className="flex flex-col-reverse gap-2 overflow-hidden overflow-y-auto p-2 text-xs">

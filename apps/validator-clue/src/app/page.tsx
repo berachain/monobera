@@ -52,6 +52,19 @@ async function getObituaries() {
   }
 }
 
+async function getNotifications() {
+  try {
+    const poolsRes = await fetch(
+      `${validatorClueEndpoint}/api/v1/notifications`,
+      { next: { revalidate: 3600 } },
+    );
+    const res = await poolsRes.json();
+    return res ? res : [];
+  } catch (e) {
+    console.error(`Error fetching notifications: ${e}`);
+    return [];
+  }
+}
 async function getEpoch() {
   try {
     const poolsRes = await fetch(`${validatorClueEndpoint}/api/v1/epoch`, {
@@ -71,12 +84,14 @@ export default async function Page({
     tab: tabEnumT;
   };
 }) {
-  const [validators, pools, obituaries, epoch] = await Promise.all([
-    getValidators(),
-    getPools(),
-    getObituaries(),
-    getEpoch(),
-  ]);
+  const [validators, pools, obituaries, notifications, epoch] =
+    await Promise.all([
+      getValidators(),
+      getPools(),
+      getObituaries(),
+      getNotifications(),
+      getEpoch(),
+    ]);
 
   return (
     <div className="container mx-auto mt-8 flex w-full flex-col gap-4 xl:flex-row xl:gap-8">
@@ -84,7 +99,7 @@ export default async function Page({
         tab={searchParams.tab ?? tabEnum.GAME}
         {...{ validators, pools, obituaries, epoch }}
       />
-      <GlobalConsole />
+      <GlobalConsole notifications={notifications} />
     </div>
   );
 }
