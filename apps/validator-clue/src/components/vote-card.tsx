@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useBeraJs } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
