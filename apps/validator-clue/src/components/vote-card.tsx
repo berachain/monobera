@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import { useBeraJs } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
@@ -7,6 +7,8 @@ import { Button } from "@bera/ui/button";
 import { IMGMap } from "~/utils/image-map";
 import { usePollMe } from "~/hooks/usePollMe";
 import SelectStep from "./select-step";
+import VoteFailed from "./vote-failed";
+import VoteSuccess from "./vote-success";
 
 export default function VoteCard({
   validators,
@@ -21,13 +23,24 @@ export default function VoteCard({
   const [step, setStep] = useState(0);
   const [validator, setValidator] = useState(undefined);
   const [pool, setPool] = useState(undefined);
-  const { data: me } = usePollMe();
+  const [voteSuccess, setVoteSuccess] = useState<undefined | boolean>(
+    undefined,
+  );
+  const { data: me, refetch } = usePollMe();
 
-  const currentEpoch = 1;
-  const dead = !me
-    ? false
-    : obituaries.find((o) => o.validator.address === account);
+  const currentEpoch = 20;
+  const dead =
+    !me || !obituaries
+      ? false
+      : obituaries.find((o) => o.validator.address === account);
   const voted = !me ? false : me?.votes[0].epochNumber === currentEpoch;
+
+  useEffect(() => {
+    if (step === 1 && voteSuccess !== undefined) {
+      setStep(2);
+    }
+    if (voteSuccess) refetch();
+  }, [voteSuccess]);
 
   return (
     <div className="flex h-full w-[320px] items-center justify-center rounded-sm border border-border bg-[#FFFDD3] p-5">
@@ -48,7 +61,7 @@ export default function VoteCard({
               </div>
             </div>
           ) : voted ? (
-            <div className="justify-middle">
+            <div>
               <Image
                 src={`${cloudinaryUrl}/clue/${IMGMap["voted-correct-desktop"]}`}
                 alt="voted-desktop"
@@ -89,10 +102,24 @@ export default function VoteCard({
           validators={validators.filter(
             (vali: any) => vali.address !== account,
           )}
+          setVoteSuccess={setVoteSuccess}
           pools={pools}
         />
       )}
-      {step === 2 && <div>Vote seccuess</div>}
+      {step === 2 && (
+        <>
+          {voteSuccess ? (
+            <VoteSuccess />
+          ) : (
+            <VoteFailed
+              reset={() => {
+                setStep(0);
+                setVoteSuccess(undefined);
+              }}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 }

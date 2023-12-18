@@ -11,12 +11,8 @@ export default function Vote({
 }) {
   return (
     <div className="flex h-full w-full flex-wrap gap-4 rounded-sm bg-background p-4 ">
-      <div className="flex h-full w-full flex-shrink flex-grow-0 sm:w-auto">
-        <VoteCard {...{ obituaries, ...props }} />
-      </div>
-      <div className="flex h-full w-full flex-shrink flex-grow sm:w-auto">
-        <VoteHistory {...props} />
-      </div>
+      <VoteCard {...{ obituaries, ...props }} />
+      <VoteHistory {...props} />
     </div>
   );
 }

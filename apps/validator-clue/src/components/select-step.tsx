@@ -1,7 +1,9 @@
+import { useState } from "react";
 import Link from "next/link";
 import { truncateHash } from "@bera/berajs";
-import { blockExplorerUrl } from "@bera/config";
+import { blockExplorerUrl, validatorClueEndpoint } from "@bera/config";
 import { Button } from "@bera/ui/button";
+import { useLocalStorage } from "usehooks-ts";
 
 import { Selector } from "./selector";
 
@@ -12,6 +14,7 @@ export default function SelectStep({
   pool,
   pools,
   setPool,
+  setVoteSuccess,
 }: {
   validator: any;
   validators: any[];
@@ -19,18 +22,32 @@ export default function SelectStep({
   pool: any;
   pools: any[];
   setPool: (validator: any) => void;
+  setVoteSuccess: (success: boolean) => void;
 }) {
+  const [loading, setLoading] = useState(false);
+  const [authToken, _] = useLocalStorage<{ token: string; address: string }>(
+    "VALCLUE_AUTH_TOKEN",
+    { token: "", address: "" },
+  );
   const vote = async () => {
+    setLoading(true);
     try {
-      const res = await fetch(
-        `${blockExplorerUrl}/api/v1/leaderboard/vote?validator=${validator?.address}&pool=${pool?.address}`,
-        { method: "POST" },
-      );
+      const res = await fetch(`${validatorClueEndpoint}/vote`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${authToken.token}` },
+        body: JSON.stringify({
+          accused: validator.address,
+          pool: pool.address,
+        }),
+      });
       const json = await res.json();
       console.log(json);
+      setVoteSuccess(true)
     } catch (e) {
       console.error(`Error voting: ${e}`);
+      setVoteSuccess(false)
     }
+    setLoading(false);
   };
 
   return (
@@ -71,7 +88,7 @@ export default function SelectStep({
       </div>
       <Button
         className="w-full"
-        disabled={!validator || !pool}
+        disabled={!validator || !pool || loading}
         onClick={() => vote()}
       >
         Vote

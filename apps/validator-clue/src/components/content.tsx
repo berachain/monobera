@@ -14,7 +14,7 @@ export default function Content({
   obituaries: any[];
 }) {
   return (
-    <div className="flex w-full flex-1 flex-col flex-wrap gap-4">
+    <div className="flex w-full flex-1 flex-col gap-4">
       <GameConsole {...props} />
       <PersonalInfo />
       <hr className="border-border" />
