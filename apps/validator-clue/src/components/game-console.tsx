@@ -20,6 +20,7 @@ export default function GameConsole({
   validators: any[];
   pools: any[];
   obituaries: any[];
+  epoch: any;
 }) {
   const { isConnected, account } = useBeraJs();
   const [authToken, _] = useLocalStorage<{ token: string; address: string }>(

@@ -43,9 +43,13 @@ export default function SelectStep({
           pool: pool.address,
         }),
       });
-      const json = await res.text();
-      console.log(json);
-      setVoteSuccess(true);
+      if (!res.ok) {
+        const text = await res.text();
+        console.error(`Error voting: ${text}`);
+        setVoteSuccess(false);
+      } else {
+        setVoteSuccess(true);
+      }
     } catch (e) {
       console.error(`Error voting: ${e}`);
       setVoteSuccess(false);

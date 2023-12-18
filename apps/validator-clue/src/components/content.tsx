@@ -17,7 +17,7 @@ export default function Content({
 }) {
   return (
     <div className="flex w-full flex-1 flex-col gap-4">
-      <GameConsole {...props} />
+      <GameConsole epoch={epoch} {...props} />
       <PersonalInfo epoch={epoch} />
       <hr className="border-border" />
       <Boxes />
