@@ -13,6 +13,7 @@ export default function Content({
   pools: any[];
   obituaries: any[];
 }) {
+  
   return (
     <div className="flex w-full flex-1 flex-col gap-4">
       <GameConsole {...props} />

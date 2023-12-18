@@ -17,7 +17,6 @@ export default function GAME({
   const [tab, setTab] = useState<"pools" | "validators" | "eliminated">(
     "pools",
   );
-
   return (
     <div className="flex h-full flex-col">
       <div className="flex gap-3">
