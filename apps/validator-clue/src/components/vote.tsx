@@ -15,7 +15,7 @@ export default function Vote({
   const [tab, setTab] = useState<"vote" | "history">("vote");
   return (
     <>
-      <div className="flex flex-col md:hidden h-full">
+      <div className="flex h-full flex-col md:hidden">
         <div className="flex gap-3">
           <div
             className={cn(
@@ -36,7 +36,7 @@ export default function Vote({
             Validators
           </div>
         </div>
-        
+
         {tab === "vote" && <VoteCard {...{ obituaries, ...props }} />}
         {tab === "history" && <VoteHistory {...props} />}
       </div>

@@ -42,10 +42,10 @@ export default function SelectStep({
       });
       const json = await res.json();
       console.log(json);
-      setVoteSuccess(true)
+      setVoteSuccess(true);
     } catch (e) {
       console.error(`Error voting: ${e}`);
-      setVoteSuccess(false)
+      setVoteSuccess(false);
     }
     setLoading(false);
   };

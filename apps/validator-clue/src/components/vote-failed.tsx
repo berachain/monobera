@@ -39,7 +39,9 @@ export default function VoteFailed({ reset }: { reset: () => void }) {
       <div className="font-retro-gaming text-center text-xs leading-6">
         Looks like something went wrong. Please try again.
       </div>
-      <Button className="w-full" onClick={reset}>Retry</Button>
+      <Button className="w-full" onClick={reset}>
+        Retry
+      </Button>
     </div>
   );
 }
