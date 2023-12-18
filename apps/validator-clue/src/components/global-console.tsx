@@ -12,7 +12,7 @@ export default function GlobalConsole() {
           </div>
         ))}
       </div>
-      <div className="w-full rounded-b-sm bg-secondary-foreground px-3 py-2 text-sm font-bold leading-7 text-secondary">
+      <div className="w-full rounded-b-sm bg-primary px-3 py-2 text-sm font-bold leading-7 text-secondary">
         ~/ValClue/{valName}
       </div>
     </div>

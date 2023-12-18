@@ -24,7 +24,7 @@ export default function GAME({
         <div
           className={cn(
             "font-retro-gaming cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground",
-            tab === "pools" && "bg-foreground",
+            tab === "pools" && "bg-foreground text-muted",
           )}
           onClick={() => setTab("pools")}
         >
@@ -33,7 +33,7 @@ export default function GAME({
         <div
           className={cn(
             "font-retro-gaming cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground",
-            tab === "validators" && "bg-foreground",
+            tab === "validators" && "bg-foreground text-muted",
           )}
           onClick={() => setTab("validators")}
         >
@@ -67,7 +67,7 @@ export default function GAME({
                 <div className="font-retro-gaming text-2xl">{index + 1}</div>
                 <div className="flex h-full flex-1 flex-col justify-between">
                   <Link
-                    className="font-retro-gaming text-sm leading-5 hover:text-muted-foreground"
+                    className="font-retro-gaming text-sm leading-5 hover:text-hover"
                     href={`${blockExplorerUrl}/address/${value.address}`}
                     target="_blank"
                   >
@@ -98,7 +98,7 @@ export default function GAME({
                     {value.name}
                   </div>
                   <Link
-                    className="text-xs text-muted-foreground hover:text-foreground"
+                    className="text-xs text-muted-foreground hover:text-hover"
                     href={`${blockExplorerUrl}/address/${value.address}`}
                     target="_blank"
                   >

@@ -32,7 +32,7 @@ export default function Boxes() {
           </Link>
         </div>
       </div>
-      <div className="flex flex-1 gap-4 rounded-sm bg-sky-200 p-4">
+      <div className="flex flex-1 gap-4 rounded-sm bg-muted p-4">
         <Image
           src={`${cloudinaryUrl}/clue/${IMGMap["banner-img-mint-honey"]}`}
           alt="banner-img-mint-honey"
@@ -42,15 +42,15 @@ export default function Boxes() {
         />
         <div className="flex flex-col justify-between">
           <div>
-            <div className="font-retro-gaming text-xl font-bold leading-7 text-sky-800">
+            <div className="font-retro-gaming text-xl font-bold leading-7">
               Mint HONEY
             </div>
-            <div className="font-retro-gaming mt-1 text-xs leading-5 text-sky-600">
+            <div className="font-retro-gaming mt-1 text-xs leading-5 text-yellow-500">
               Swap your fav stables into honey.
             </div>
           </div>
           <Link href={honeyUrl} target="_blank">
-            <Button size={"sm"} className="w-fit" variant={"info"}>
+            <Button size={"sm"} className="w-fit">
               Mint Honey
             </Button>
           </Link>
