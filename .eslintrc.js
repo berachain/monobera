@@ -3,6 +3,7 @@ const config = {
   root: true,
   extends: ["@bera/eslint-config"], // uses the config in `packages/config/eslint`
   parser: "@typescript-eslint/parser",
+  ignorePatterns: ["**/auth/*"],
   parserOptions: {
     ecmaVersion: "latest",
     tsconfigRootDir: __dirname,
@@ -22,5 +23,6 @@ const config = {
     Datafeeds: true,
   },
 };
+
 
 module.exports = config;
