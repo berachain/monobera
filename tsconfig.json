@@ -17,6 +17,7 @@
     "incremental": true,
     "noUncheckedIndexedAccess": true
   },
+  "exclude": [ "**/auth/*"],
   "include": [
     "src",
     "index.ts",
