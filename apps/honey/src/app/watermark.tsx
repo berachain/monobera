@@ -6,8 +6,8 @@ const ContentWithWatermark = ({ children }: any) => {
 
   // @ts-ignore
   const user = session?.token["cognito:username"]
-    // @ts-ignore
-    ? session?.token["cognito:username"]
+    ? // @ts-ignore
+      session?.token["cognito:username"]
     : "";
   return (
     <Watermark text={user}>

@@ -12,8 +12,7 @@
     ],
     "strictNullChecks": true
   },
-  "exclude": [    "**/auth/*"
-],
+  "exclude": ["**/auth/*"],
   "include": [
     "next-env.d.ts",
     "async-jsx.d.ts",
