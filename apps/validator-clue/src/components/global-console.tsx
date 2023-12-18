@@ -5,11 +5,11 @@ export default function GlobalConsole({
 }) {
   const valName = "THJValidator";
   return (
-    <div className="flex h-[284px] w-full flex-col rounded-sm bg-foreground text-white xl:h-[687px] xl:max-w-[278px]">
+    <div className="flex h-[284px] w-full flex-col rounded-sm bg-foreground text-white xl:h-[710px] xl:max-w-[278px]">
       <div className="flex h-full flex-col-reverse gap-2 overflow-hidden overflow-y-auto p-2 text-xs">
         {notifications.map((value, index) => (
           <div key={index}>
-            <span className="text-sky-300 uppercase">
+            <span className="uppercase text-sky-300">
               {value.timestamp}
               <br /> [{value.type}]:
             </span>{" "}
