@@ -373,10 +373,10 @@ const Item3 = () => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g clip-path="url(#clip0_6115_22219)">
+    <g clipPath="url(#clip0_6115_22219)">
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M6 3H20V5H22V11H20V19H18V5H6V3ZM14 17V15H6V5H4V15H2V17V19H4V21H18V19H16V17H14ZM14 17V19H4V17H14ZM8 7H16V9H8V7ZM16 11H8V13H16V11Z"
         fill="#713F12"
       />

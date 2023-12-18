@@ -7,8 +7,18 @@ import { TokenIcon } from "@bera/shared-ui";
 
 import { usePollMe } from "~/hooks/usePollMe";
 
-export default function PersonalInfo() {
+export default function PersonalInfo({ epoch }: { epoch: any }) {
   const { data: me, isLoading } = usePollMe();
+
+  function countdown(targetDateTime: string) {
+    const targetDate = new Date(targetDateTime);
+    const currentDate = new Date();
+    const diff = targetDate.getTime() - currentDate.getTime();
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    return `${hours}Hs ${minutes}mins`;
+  }
+
   if (!isLoading && me) {
     return (
       <div className="flex w-full justify-between rounded-sm border border-border px-3 py-4">
@@ -34,28 +44,28 @@ export default function PersonalInfo() {
               <path
                 d="M10 2H14"
                 stroke="#713F12"
-                stroke-width="2"
-                stroke-linecap="round"
+                strokeWidth="2"
+                strokeLinecap="round"
                 strokeLinejoin="round"
               />
               <path
                 d="M12 14L15 11"
                 stroke="#713F12"
-                stroke-width="2"
-                stroke-linecap="round"
+                strokeWidth="2"
+                strokeLinecap="round"
                 strokeLinejoin="round"
               />
               <path
                 d="M12 22C16.4183 22 20 18.4183 20 14C20 9.58172 16.4183 6 12 6C7.58172 6 4 9.58172 4 14C4 18.4183 7.58172 22 12 22Z"
                 stroke="#713F12"
-                stroke-width="2"
-                stroke-linecap="round"
+                strokeWidth="2"
+                strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
             <div>
               <div className="font-retro-gaming whitespace-nowrap text-sm leading-5">
-                42Hrs 2Mins
+                {countdown(epoch?.nextEpoch)}
               </div>
               <div className="whitespace-nowrap text-xs leading-3 text-muted-foreground">
                 Epoch Countdown

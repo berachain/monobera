@@ -32,15 +32,18 @@ export default function SelectStep({
   const vote = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${validatorClueEndpoint}/vote`, {
+      const res = await fetch(`${validatorClueEndpoint}/api/v1/vote`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${authToken.token}` },
+        headers: {
+          Authorization: `Bearer ${authToken.token}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           accused: validator.address,
           pool: pool.address,
         }),
       });
-      const json = await res.json();
+      const json = await res.text();
       console.log(json);
       setVoteSuccess(true);
     } catch (e) {
