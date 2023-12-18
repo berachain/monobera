@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { cn } from "@bera/ui";
+
 import VoteCard from "./vote-card";
 import VoteHistory from "./vote-history";
 
@@ -9,14 +12,38 @@ export default function Vote({
   pools: any[];
   obituaries: any[];
 }) {
+  const [tab, setTab] = useState<"vote" | "history">("vote");
   return (
-    <div className="flex h-full w-full flex-wrap gap-4 rounded-sm bg-background p-4 ">
-      <div className="flex h-full w-full flex-shrink flex-grow-0 sm:w-auto">
-        <VoteCard {...{ obituaries, ...props }} />
+    <>
+      <div className="flex h-full flex-col md:hidden">
+        <div className="flex gap-3">
+          <div
+            className={cn(
+              "font-retro-gaming cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground",
+              tab === "vote" && "bg-foreground",
+            )}
+            onClick={() => setTab("vote")}
+          >
+            Pools
+          </div>
+          <div
+            className={cn(
+              "font-retro-gaming cursor-pointer rounded-t-sm bg-background px-3 py-1 leading-6 text-muted-foreground",
+              tab === "history" && "bg-foreground",
+            )}
+            onClick={() => setTab("history")}
+          >
+            Validators
+          </div>
+        </div>
+
+        {tab === "vote" && <VoteCard {...{ obituaries, ...props }} />}
+        {tab === "history" && <VoteHistory {...props} />}
       </div>
-      <div className="flex h-full w-full flex-shrink flex-grow sm:w-auto">
+      <div className="hidden h-full w-full gap-4 rounded-sm bg-background p-4 md:flex ">
+        <VoteCard {...{ obituaries, ...props }} />
         <VoteHistory {...props} />
       </div>
-    </div>
+    </>
   );
 }

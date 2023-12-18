@@ -17,7 +17,7 @@ async function getValidators() {
       { next: { revalidate: 100 } },
     );
     const res = await poolsRes.json();
-    return res;
+    return res ? res : [];
   } catch (e) {
     console.error(`Error fetching validators: ${e}`);
     return [];
@@ -31,7 +31,7 @@ async function getPools() {
       { next: { revalidate: 100 } },
     );
     const res = await poolsRes.json();
-    return res;
+    return res ? res : [];
   } catch (e) {
     console.error(`Error fetching pools: ${e}`);
     return [];
@@ -45,7 +45,7 @@ async function getObituaries() {
       { next: { revalidate: 100 } },
     );
     const res = await poolsRes.json();
-    return res;
+    return res ? res : [];
   } catch (e) {
     console.error(`Error fetching obituaries: ${e}`);
     return [];

@@ -72,9 +72,7 @@ export default function GameConsole({
           <Item3 />
         </Link>
       </div>
-      <div className="h-[380px] w-full flex-auto" style={{ height: "380px!" }}>
-        {getContent()}
-      </div>
+      <div className="h-[400px] w-full flex-auto">{getContent()}</div>
     </div>
   );
 }
