@@ -11,6 +11,7 @@ export default function Vote({
   validators: any[];
   pools: any[];
   obituaries: any[];
+  epoch: any;
 }) {
   const [tab, setTab] = useState<"vote" | "history">("vote");
   return (

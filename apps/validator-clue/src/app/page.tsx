@@ -14,7 +14,7 @@ async function getValidators() {
   try {
     const poolsRes = await fetch(
       `${validatorClueEndpoint}/api/v1/leaderboard/validators`,
-      { next: { revalidate: 100 } },
+      { next: { revalidate: 3600 } },
     );
     const res = await poolsRes.json();
     return res ? res : [];
@@ -28,7 +28,7 @@ async function getPools() {
   try {
     const poolsRes = await fetch(
       `${validatorClueEndpoint}/api/v1/leaderboard/pools`,
-      { next: { revalidate: 100 } },
+      { next: { revalidate: 3600 } },
     );
     const res = await poolsRes.json();
     return res ? res : [];
@@ -42,7 +42,7 @@ async function getObituaries() {
   try {
     const poolsRes = await fetch(
       `${validatorClueEndpoint}/api/v1/leaderboard/obituaries`,
-      { next: { revalidate: 100 } },
+      { next: { revalidate: 3600 } },
     );
     const res = await poolsRes.json();
     return res ? res : [];
@@ -52,6 +52,31 @@ async function getObituaries() {
   }
 }
 
+async function getNotifications() {
+  try {
+    const poolsRes = await fetch(
+      `${validatorClueEndpoint}/api/v1/notifications`,
+      { next: { revalidate: 3600 } },
+    );
+    const res = await poolsRes.json();
+    return res ? res : [];
+  } catch (e) {
+    console.error(`Error fetching notifications: ${e}`);
+    return [];
+  }
+}
+async function getEpoch() {
+  try {
+    const poolsRes = await fetch(`${validatorClueEndpoint}/api/v1/epoch`, {
+      next: { revalidate: 60 },
+    });
+    const res = await poolsRes.json();
+    return res;
+  } catch (e) {
+    console.error(`Error fetching epoch: ${e}`);
+    return {};
+  }
+}
 export default async function Page({
   searchParams,
 }: {
@@ -59,20 +84,22 @@ export default async function Page({
     tab: tabEnumT;
   };
 }) {
-  const [validators, pools, obituaries] = await Promise.all([
-    getValidators(),
-    getPools(),
-    getObituaries(),
-  ]);
+  const [validators, pools, obituaries, notifications, epoch] =
+    await Promise.all([
+      getValidators(),
+      getPools(),
+      getObituaries(),
+      getNotifications(),
+      getEpoch(),
+    ]);
+
   return (
     <div className="container mx-auto mt-8 flex w-full flex-col gap-4 xl:flex-row xl:gap-8">
       <Content
         tab={searchParams.tab ?? tabEnum.GAME}
-        validators={validators}
-        pools={pools}
-        obituaries={obituaries}
+        {...{ validators, pools, obituaries, epoch }}
       />
-      <GlobalConsole />
+      <GlobalConsole notifications={notifications} />
     </div>
   );
 }

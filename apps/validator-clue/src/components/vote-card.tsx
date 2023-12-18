@@ -14,10 +14,12 @@ export default function VoteCard({
   validators,
   pools,
   obituaries,
+  epoch,
 }: {
   validators: any[];
   pools: any[];
   obituaries: any[];
+  epoch: any;
 }) {
   const { account } = useBeraJs();
   const [step, setStep] = useState(0);
@@ -27,13 +29,11 @@ export default function VoteCard({
     undefined,
   );
   const { data: me, refetch } = usePollMe();
-
-  const currentEpoch = 20;
   const dead =
     !me || !obituaries
       ? false
       : obituaries.find((o) => o.validator.address === account);
-  const voted = !me ? false : me?.votes[0].epochNumber === currentEpoch;
+  const voted = !me ? false : me?.votes[0].epochNumber === epoch.current;
 
   useEffect(() => {
     if (step === 1 && voteSuccess !== undefined) {
