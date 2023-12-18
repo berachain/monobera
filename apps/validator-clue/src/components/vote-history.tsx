@@ -58,13 +58,6 @@ export default function VoteHistory({
                   <div className="mx-auto flex max-w-[300px] flex-col gap-4 text-center">
                     {vote.status && vote.status === "succesed" && (
                       <>
-                        {/* <Image
-                          src={`${cloudinaryUrl}/clue/${IMGMap["banner-img-vote"]}`}
-                          alt="made-elimination"
-                          width={272}
-                          height={172}
-                          className="mx-auto rounded-sm"
-                        /> */}
                         <div className="font-retro-gaming text-lg leading-7">
                           You&apos;ve made an <br />
                           <span className="text-success-foreground">
@@ -74,15 +67,7 @@ export default function VoteHistory({
                       </>
                     )}
 
-<<<<<<< HEAD
                     {/* {vote.status && vote.status === "failed" && <> */}
-                    {/* <Image
-                      src={`${cloudinaryUrl}/clue/${IMGMap["guessed-wrong"]}`}
-                      alt="guessed-wrong"
-                      width={272}
-                      height={172}
-                      className="mx-auto rounded-sm"
-                    /> */}
                     <div className="font-retro-gaming text-lg leading-7">
                       You guessed
                       <span className="px-2 text-destructive-foreground">
@@ -90,39 +75,6 @@ export default function VoteHistory({
                       </span>
                     </div>
                     {/* </>} */}
-=======
-                    {vote.status && vote.status === "failed" && (
-                      <>
-                        <Image
-                          src={`${cloudinaryUrl}/clue/${IMGMap["guessed-wrong"]}`}
-                          alt="guessed-wrong"
-                          width={272}
-                          height={172}
-                          className="mx-auto rounded-sm"
-                        />
-                        <div className="font-retro-gaming text-lg leading-7">
-                          You&apos;ve made an <br />
-                          <span className="text-destructive-foreground">
-                            mistake
-                          </span>
-                        </div>
-                      </>
-                    )}
-                    {vote.status && vote.status === "pending" && (
-                      <>
-                        <Image
-                          src={`${cloudinaryUrl}/clue/${IMGMap["guessed-wrong"]}`}
-                          alt="guessed-wrong"
-                          width={272}
-                          height={172}
-                          className="mx-auto rounded-sm"
-                        />
-                        <div className="font-retro-gaming text-lg leading-7">
-                          waiting for results
-                        </div>
-                      </>
-                    )}
->>>>>>> 76c196d566cf474a9f4b706fe07e2d24008c18e8
                   </div>
                 </div>
               </AccordionContent>
