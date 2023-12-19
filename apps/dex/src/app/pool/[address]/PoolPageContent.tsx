@@ -10,7 +10,7 @@ import {
   usePollBgtRewards,
 } from "@bera/berajs";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
-import { RewardBtn, TokenIcon } from "@bera/shared-ui";
+import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
@@ -32,6 +32,7 @@ import { type Address } from "wagmi";
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import { getWBeraPriceForToken } from "~/app/api/getPrices/api/getPrices";
 import PoolHeader from "~/app/components/pool-header";
+import { RewardBtn } from "~/app/components/reward-btn";
 import { usePositionSize } from "~/hooks/usePositionSize";
 import { PoolChart } from "./PoolChart";
 import {

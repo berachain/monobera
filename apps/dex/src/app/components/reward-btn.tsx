@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   REWARDS_PRECOMPILE_ABI,
   TransactionActionType,
@@ -9,14 +9,11 @@ import {
   useTokens,
 } from "@bera/berajs";
 import { bgtTokenAddress, rewardsAddress } from "@bera/config";
+import { ActionButton, TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { parseEther } from "viem";
 import { type Address } from "wagmi";
-
-import { ActionButton } from "./action-btn-wrapper";
-import { useTxn } from "./hooks";
-import { TokenInput } from "./token-input";
 
 export function RewardBtn({ poolAddress, ...props }: any) {
   const { isReady } = useBeraJs();
