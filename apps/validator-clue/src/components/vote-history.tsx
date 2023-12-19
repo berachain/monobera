@@ -1,5 +1,6 @@
 // import Image from "next/image";
 // import { cloudinaryUrl } from "@bera/config";
+
 import {
   Accordion,
   AccordionContent,
@@ -13,12 +14,24 @@ import { usePollMe } from "~/hooks/usePollMe";
 export default function VoteHistory({
   pools,
   validators,
+  epoch,
 }: {
   pools: any[];
   validators: any[];
+  epoch: any;
 }) {
   const { data: me } = usePollMe();
   const votes = me?.votes || [];
+
+  function countdown(targetDateTime: string) {
+    const targetDate = new Date(targetDateTime);
+    const currentDate = new Date();
+    const diff = targetDate.getTime() - currentDate.getTime();
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    return `${hours}Hs ${minutes}mins`;
+  }
+
   return (
     <div className="h-full flex-auto overflow-y-auto rounded-b-sm rounded-tl-none rounded-tr-sm border bg-muted py-4 md:rounded-sm">
       <div className="font-retro-gaming hidden px-2 text-lg leading-7 md:block">
@@ -67,14 +80,27 @@ export default function VoteHistory({
                       </>
                     )}
 
-                    {/* {vote.status && vote.status === "failed" && <> */}
-                    <div className="font-retro-gaming text-lg leading-7">
-                      You guessed
-                      <span className="px-2 text-destructive-foreground">
-                        wrong
-                      </span>
-                    </div>
-                    {/* </>} */}
+                    {vote.status && vote.status === "failed" && (
+                      <>
+                        <div className="font-retro-gaming text-lg leading-7">
+                          You guessed
+                          <span className="px-2 text-destructive-foreground">
+                            wrong
+                          </span>
+                        </div>
+                      </>
+                    )}
+
+                    {vote.status && vote.status === "pending" && (
+                      <>
+                        <div className="font-retro-gaming text-lg leading-7">
+                          You&apos;ll get results in <br />
+                          <span className="text-destructive-foreground">
+                            {countdown(epoch?.nextEpoch)}
+                          </span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </AccordionContent>

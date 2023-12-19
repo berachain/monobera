@@ -2,7 +2,7 @@ export const IMGMap = {
   "vote-icon": "lzvauo1tnkidiakygjer",
   "rules-icon": "hknj5nus1vpvpruhhoq2",
   "leaderboard-icon": "r6by1rudonzfifmd7ex7",
-  "connect-wallet-bear": "xryzpoi4dbagvnntaw2k",
+  "connect-wallet-bear": "eozdspa7tlbyppytuktu",
   "sign-in-bear": "pxampibskuxmdrqczjms",
   "vote-card-default": "uvspc36yino8udauhkxk",
   "voted-wrong-mobile": "qkgc3nlszhaspebxsbnj",
