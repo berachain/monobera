@@ -16,12 +16,12 @@ export default function Boxes() {
           height={144}
           className="rounded-sm"
         />
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col justify-center">
           <div>
             <div className="font-retro-gaming text-xl font-bold leading-7">
               Voting Has Begun
             </div>
-            <div className="font-retro-gaming mt-1 text-xs leading-5 text-yellow-500">
+            <div className="font-retro-gaming mt-1 pb-6 text-xs leading-5 text-yellow-500">
               Cast your vote before the epoch ends
             </div>
           </div>
@@ -40,12 +40,12 @@ export default function Boxes() {
           height={144}
           className="rounded-sm"
         />
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col justify-center">
           <div>
             <div className="font-retro-gaming text-xl font-bold leading-7">
               Mint HONEY
             </div>
-            <div className="font-retro-gaming mt-1 text-xs leading-5 text-yellow-500">
+            <div className="font-retro-gaming mt-1 pb-6 text-xs leading-5 text-yellow-500">
               Swap your fav stables into honey.
             </div>
           </div>

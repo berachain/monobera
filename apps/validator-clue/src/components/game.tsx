@@ -66,16 +66,18 @@ export default function GAME({
                 <div className="font-retro-gaming text-2xl">{index + 1}</div>
                 <div className="flex h-full flex-1 flex-col justify-between">
                   <Link
-                    className="font-retro-gaming text-sm leading-5 hover:text-hover"
+                    className="font-retro-gaming text-md leading-5 hover:text-hover"
                     href={`${blockExplorerUrl}/address/${value.address}`}
                     target="_blank"
                   >
                     {value.name}
                   </Link>
-                  <div className="text-xs text-muted-foreground">BGT Score</div>
+                  <div className="text-xs text-muted-foreground">
+                    {truncateHash(value.address)}
+                  </div>
                 </div>
-                <div className="flex h-full items-end gap-1">
-                  <div className="scroll-mb-0.5 text-xs text-muted-foreground">
+                <div className="flex h-full items-center gap-1">
+                  <div className="scroll-mb-0.5 text-sm text-muted-foreground">
                     {formatter.format(value.bgt)}
                   </div>
                   <TokenIcon address={bgtTokenAddress} fetch size="sm" />
@@ -118,7 +120,7 @@ export default function GAME({
                   className="flex h-[52px] flex-1 items-center gap-3 rounded-xs bg-destructive p-2 text-destructive-foreground"
                 >
                   <div className="flex h-full flex-1 flex-col justify-between">
-                    <div className="font-retro-gaming text-sm leading-5 line-through">
+                    <div className="font-retro-gaming text-md leading-5 line-through">
                       {value.validator.name}
                     </div>
                     <div className="text-xs line-through">

@@ -32,7 +32,18 @@ export default function PersonalInfo({ epoch }: { epoch: any }) {
             {me.pool}
           </Link>
         </div>
-        <div className="flex flex-col items-end gap-6 border-l border-border pl-4 sm:flex-row sm:border-none">
+        <div className="xs:items-start flex flex-col gap-6 border-l border-border pl-4 sm:flex-row sm:items-end sm:border-none md:items-end lg:items-end">
+          <div className="flex items-center gap-[6px]">
+            <TokenIcon address={bgtTokenAddress} fetch />
+            <div>
+              <div className="font-retro-gaming text-sm leading-5">
+                {formatter.format(me.bgt)}
+              </div>
+              <div className="text-xs leading-3 text-muted-foreground">
+                BGT Score
+              </div>
+            </div>
+          </div>
           <div className="flex items-center gap-[6px]">
             <svg
               width="24"
@@ -69,18 +80,6 @@ export default function PersonalInfo({ epoch }: { epoch: any }) {
               </div>
               <div className="whitespace-nowrap text-xs leading-3 text-muted-foreground">
                 Epoch Countdown
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-[6px]">
-            <TokenIcon address={bgtTokenAddress} fetch />
-            <div>
-              <div className="font-retro-gaming text-sm leading-5">
-                {formatter.format(me.bgt)}
-              </div>
-              <div className="text-xs leading-3 text-muted-foreground">
-                BGT Score
               </div>
             </div>
           </div>
