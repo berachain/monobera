@@ -32,8 +32,12 @@ export default function VoteCard({
   const dead =
     !me || !obituaries
       ? false
-      : obituaries.find((o) => o.validator.address === account);
-  const voted = !me ? false : me?.votes[0].epochNumber === epoch.current;
+      : obituaries.find((o) => o.validator === account);
+
+  const voted =
+    !me || me.votes.length === 0
+      ? false
+      : me?.votes[0].epochNumber === epoch.current;
 
   useEffect(() => {
     if (step === 1 && voteSuccess !== undefined) {
@@ -57,7 +61,7 @@ export default function VoteCard({
               />
               <div className="mt-6 flex h-full w-full items-center justify-center">
                 {/* <p className="mt-1 w-full" onClick={() => setStep(1)}> */}
-                <p className="text-sm">You are Dead</p>
+                <p className="font-retro-gaming text-destructive-foreground">You are Dead</p>
               </div>
             </div>
           ) : voted ? (
@@ -70,7 +74,7 @@ export default function VoteCard({
                 className="mx-auto "
               />
               <div className="mt-6 flex h-full w-full items-center justify-center">
-                <p className="text-sm">You&apos;ve already voted this epoch</p>
+                <p className="font-retro-gaming text-success-foreground text-center">You&apos;ve already voted this epoch</p>
               </div>
             </div>
           ) : (

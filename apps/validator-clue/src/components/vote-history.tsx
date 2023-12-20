@@ -22,7 +22,6 @@ export default function VoteHistory({
 }) {
   const { data: me } = usePollMe();
   const votes = me?.votes || [];
-
   function countdown(targetDateTime: string) {
     const targetDate = new Date(targetDateTime);
     const currentDate = new Date();
@@ -69,7 +68,7 @@ export default function VoteHistory({
               <AccordionContent>
                 <div className="border-b bg-background p-4">
                   <div className="mx-auto flex max-w-[300px] flex-col gap-4 text-center">
-                    {vote.status && vote.status === "succesed" && (
+                    {vote.status && vote.status === "success" && (
                       <>
                         <div className="font-retro-gaming text-lg leading-7">
                           You&apos;ve made an <br />
@@ -79,7 +78,17 @@ export default function VoteHistory({
                         </div>
                       </>
                     )}
-
+                    {vote.status && vote.status === "overtaken" && (
+                      <>
+                        <div className="font-retro-gaming text-lg leading-7">
+                          You&apos;ve voted{" "}
+                          <span className="text-success-foreground">
+                            right{" "}
+                          </span>{" "}
+                          but someone voted before you <br />
+                        </div>
+                      </>
+                    )}
                     {vote.status && vote.status === "failed" && (
                       <>
                         <div className="font-retro-gaming text-lg leading-7">

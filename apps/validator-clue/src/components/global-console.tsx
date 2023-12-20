@@ -3,7 +3,7 @@ export default function GlobalConsole({
 }: {
   notifications: any[];
 }) {
-  const valName = "THJValidator";
+  const valName = "Me";
   return (
     <div className="flex h-[284px] w-full flex-col rounded-sm bg-foreground text-white xl:h-[710px] xl:max-w-[278px]">
       <div className="flex h-full flex-col-reverse gap-2 overflow-hidden overflow-y-auto p-2 text-xs">
