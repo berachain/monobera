@@ -121,10 +121,10 @@ export default function GAME({
                 >
                   <div className="flex h-full flex-1 flex-col justify-between">
                     <div className="font-retro-gaming text-md leading-5 line-through">
-                      {value.validator.name}
+                      {value.validatorName}
                     </div>
                     <div className="text-xs line-through">
-                      {truncateHash(value.validator.address)}
+                      {truncateHash(value.validator)}
                     </div>
                   </div>
                   <div className="flex h-full items-end">

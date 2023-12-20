@@ -14,7 +14,8 @@ async function getValidators() {
   try {
     const poolsRes = await fetch(
       `${validatorClueEndpoint}/api/v1/leaderboard/validators`,
-      { next: { revalidate: 3600 } },
+      // { next: { revalidate: 3600 } },
+      { next: { revalidate: 10 } },
     );
     const res = await poolsRes.json();
     return res ? res : [];
@@ -28,7 +29,8 @@ async function getPools() {
   try {
     const poolsRes = await fetch(
       `${validatorClueEndpoint}/api/v1/leaderboard/pools`,
-      { next: { revalidate: 3600 } },
+      // { next: { revalidate: 3600 } },
+      { next: { revalidate: 10 } },
     );
     const res = await poolsRes.json();
     return res ? res : [];
@@ -42,7 +44,8 @@ async function getObituaries() {
   try {
     const poolsRes = await fetch(
       `${validatorClueEndpoint}/api/v1/leaderboard/obituaries`,
-      { next: { revalidate: 3600 } },
+      // { next: { revalidate: 3600 } },
+      { next: { revalidate: 10 } },
     );
     const res = await poolsRes.json();
     return res ? res : [];
@@ -56,7 +59,8 @@ async function getNotifications() {
   try {
     const poolsRes = await fetch(
       `${validatorClueEndpoint}/api/v1/notifications`,
-      { next: { revalidate: 3600 } },
+      // { next: { revalidate: 3600 } },
+      { next: { revalidate: 1 } },
     );
     const res = await poolsRes.json();
     return res ? res : [];
@@ -68,7 +72,8 @@ async function getNotifications() {
 async function getEpoch() {
   try {
     const poolsRes = await fetch(`${validatorClueEndpoint}/api/v1/epoch`, {
-      next: { revalidate: 60 },
+      // next: { revalidate: 60 },
+      next: { revalidate: 1 },
     });
     const res = await poolsRes.json();
     return res;
@@ -92,7 +97,8 @@ export default async function Page({
       getNotifications(),
       getEpoch(),
     ]);
-
+  
+    
   return (
     <div className="container mx-auto mt-8 flex w-full flex-col gap-4 xl:flex-row xl:gap-8">
       <Content
