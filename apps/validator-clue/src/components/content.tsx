@@ -6,6 +6,7 @@ import GameConsole from "./game-console";
 import PersonalInfo from "./personal-info";
 
 export default function Content({
+  pools,
   epoch,
   ...props
 }: {
@@ -17,8 +18,8 @@ export default function Content({
 }) {
   return (
     <div className="flex w-full flex-1 flex-col gap-4">
-      <GameConsole epoch={epoch} {...props} />
-      <PersonalInfo epoch={epoch} />
+      <GameConsole {...{epoch, pools,...props}} />
+      <PersonalInfo epoch={epoch} pools={pools} />
       <hr className="border-border" />
       <Boxes />
     </div>
