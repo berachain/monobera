@@ -191,7 +191,7 @@ export default function GAME({
                 <div className="flex h-[52px] flex-1 items-center gap-3 rounded-xs bg-destructive p-2 text-destructive-foreground">
                   <div className="flex h-full flex-1 flex-col justify-between">
                     <div className="font-retro-gaming text-sm leading-5 line-through">
-                      {value.pool}
+                      {truncateHash(value.pool)}
                     </div>
                     <div className="text-xs">BGT Score</div>
                   </div>

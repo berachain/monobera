@@ -15,7 +15,7 @@ async function getValidators() {
     const poolsRes = await fetch(
       `${validatorClueEndpoint}/api/v1/leaderboard/validators`,
       // { next: { revalidate: 3600 } },
-      { next: { revalidate: 10 } },
+      { next: { revalidate: 1 } },
     );
     const res = await poolsRes.json();
     return res ? res : [];
@@ -30,7 +30,7 @@ async function getPools() {
     const poolsRes = await fetch(
       `${validatorClueEndpoint}/api/v1/leaderboard/pools`,
       // { next: { revalidate: 3600 } },
-      { next: { revalidate: 10 } },
+      { next: { revalidate: 1 } },
     );
     const res = await poolsRes.json();
     return res ? res : [];
@@ -45,7 +45,7 @@ async function getObituaries() {
     const poolsRes = await fetch(
       `${validatorClueEndpoint}/api/v1/leaderboard/obituaries`,
       // { next: { revalidate: 3600 } },
-      { next: { revalidate: 10 } },
+      { next: { revalidate: 1 } },
     );
     const res = await poolsRes.json();
     return res ? res : [];
@@ -105,7 +105,7 @@ export default async function Page({
         tab={searchParams.tab ?? tabEnum.GAME}
         {...{ validators, pools, obituaries, epoch }}
       />
-      <GlobalConsole notifications={notifications} />
+      <GlobalConsole notifications={notifications}/>
     </div>
   );
 }
