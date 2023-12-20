@@ -43,7 +43,7 @@ export default function VoteCard({
   }, [voteSuccess]);
 
   return (
-    <div className="flex h-full w-full items-center justify-center rounded-sm border border-border bg-[#FFFDD3] p-5 md:w-[320px]">
+    <div className="flex h-full w-full items-center justify-center rounded-b-sm rounded-tl-none rounded-tr-sm border border-border bg-[#FFFDD3] p-5 md:w-[320px] md:rounded-sm">
       {step === 0 && (
         <>
           {dead ? (

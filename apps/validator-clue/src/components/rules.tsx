@@ -39,7 +39,7 @@ export default function Rules() {
           />
         </svg>
         <div className="font-retro-gaming">
-          Official Rules for: The Validator&apos;s Clue
+          Rules for: The Validator&apos;s Clue
         </div>
       </div>
 

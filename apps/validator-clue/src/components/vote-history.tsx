@@ -1,5 +1,6 @@
-import Image from "next/image";
-import { cloudinaryUrl } from "@bera/config";
+// import Image from "next/image";
+// import { cloudinaryUrl } from "@bera/config";
+
 import {
   Accordion,
   AccordionContent,
@@ -7,21 +8,33 @@ import {
   AccordionTrigger,
 } from "@bera/ui/accordion";
 
-import { IMGMap } from "~/utils/image-map";
+// import { IMGMap } from "~/utils/image-map";
 import { usePollMe } from "~/hooks/usePollMe";
 
 export default function VoteHistory({
   pools,
   validators,
+  epoch,
 }: {
   pools: any[];
   validators: any[];
+  epoch: any;
 }) {
   const { data: me } = usePollMe();
   const votes = me?.votes || [];
+
+  function countdown(targetDateTime: string) {
+    const targetDate = new Date(targetDateTime);
+    const currentDate = new Date();
+    const diff = targetDate.getTime() - currentDate.getTime();
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    return `${hours}Hs ${minutes}mins`;
+  }
+
   return (
-    <div className="h-full flex-auto overflow-y-auto">
-      <div className="font-retro-gaming px-2 text-lg leading-7">
+    <div className="h-full flex-auto overflow-y-auto rounded-b-sm rounded-tl-none rounded-tr-sm border bg-muted py-4 md:rounded-sm">
+      <div className="font-retro-gaming hidden px-2 text-lg leading-7 md:block">
         Vote History
       </div>
       <Accordion
@@ -38,33 +51,26 @@ export default function VoteHistory({
               key={index}
               className="w-full"
             >
-              <AccordionTrigger className="rounded-md px-3 text-left text-xs hover:bg-yellow-100">
+              <AccordionTrigger className=" px-3 text-left text-xs hover:bg-yellow-200">
                 <div>
                   Epoch {vote.epochNumber} : <br /> Voted{" "}
-                  <span className="text-info-foreground">
+                  <span className="text-foreground">
                     {
                       validators.find((vali) => vali.address === vote.accused)
                         .name
                     }
                   </span>{" "}
                   owns{" "}
-                  <span className="text-info-foreground">
+                  <span className="text-foreground">
                     {pools.find((pool) => pool.address === vote.pool).name}
                   </span>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="rounded-md bg-muted p-4 ">
+                <div className="border-b bg-background p-4">
                   <div className="mx-auto flex max-w-[300px] flex-col gap-4 text-center">
                     {vote.status && vote.status === "succesed" && (
                       <>
-                        <Image
-                          src={`${cloudinaryUrl}/clue/${IMGMap["banner-img-vote"]}`}
-                          alt="made-elimination"
-                          width={272}
-                          height={172}
-                          className="mx-auto rounded-sm"
-                        />
                         <div className="font-retro-gaming text-lg leading-7">
                           You&apos;ve made an <br />
                           <span className="text-success-foreground">
@@ -76,32 +82,22 @@ export default function VoteHistory({
 
                     {vote.status && vote.status === "failed" && (
                       <>
-                        <Image
-                          src={`${cloudinaryUrl}/clue/${IMGMap["guessed-wrong"]}`}
-                          alt="guessed-wrong"
-                          width={272}
-                          height={172}
-                          className="mx-auto rounded-sm"
-                        />
                         <div className="font-retro-gaming text-lg leading-7">
-                          You&apos;ve made an <br />
-                          <span className="text-destructive-foreground">
-                            mistake
+                          You guessed
+                          <span className="px-2 text-destructive-foreground">
+                            wrong
                           </span>
                         </div>
                       </>
                     )}
+
                     {vote.status && vote.status === "pending" && (
                       <>
-                        <Image
-                          src={`${cloudinaryUrl}/clue/${IMGMap["guessed-wrong"]}`}
-                          alt="guessed-wrong"
-                          width={272}
-                          height={172}
-                          className="mx-auto rounded-sm"
-                        />
                         <div className="font-retro-gaming text-lg leading-7">
-                          waiting for results
+                          You&apos;ll get results in <br />
+                          <span className="text-destructive-foreground">
+                            {countdown(epoch?.nextEpoch)}
+                          </span>
                         </div>
                       </>
                     )}

@@ -27,8 +27,8 @@ export default function ConnetWallet() {
         <Image
           src={`${cloudinaryUrl}/clue/${IMGMap["connect-wallet-bear"]}`}
           alt="connect-wallet-bear"
-          width={318}
-          height={169}
+          width={218}
+          height={164}
         />
         <div className="font-retro-gaming text-3xl leading-9 text-foreground">
           Connect your wallet
