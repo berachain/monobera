@@ -97,15 +97,14 @@ export default async function Page({
       getNotifications(),
       getEpoch(),
     ]);
-  
-    
+
   return (
     <div className="container mx-auto mt-8 flex w-full flex-col gap-4 xl:flex-row xl:gap-8">
       <Content
         tab={searchParams.tab ?? tabEnum.GAME}
         {...{ validators, pools, obituaries, epoch }}
       />
-      <GlobalConsole notifications={notifications}/>
+      <GlobalConsole notifications={notifications} />
     </div>
   );
 }
