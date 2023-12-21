@@ -15,8 +15,7 @@ export default function GlobalConsole({
                   {value.timestamp}
                   <br /> [{value.type}]:
                 </span>{" "}
-                {value.payload.accused}{" "}
-                is out
+                {value.payload.accused} is out
               </div>
             ) : (
               <div key={index}>

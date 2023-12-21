@@ -54,13 +54,13 @@ export default function VoteHistory({
                 <div>
                   Epoch {vote.epochNumber} : <br /> Voted{" "}
                   <span className="text-foreground">
-                    {
-                      validators.find((vali) => vali.address === vote.accused)?.name || vote.accused
-                    }
+                    {validators.find((vali) => vali.address === vote.accused)
+                      ?.name || vote.accused}
                   </span>{" "}
                   owns{" "}
                   <span className="text-foreground">
-                    {pools.find((pool) => pool.address === vote.pool)?.name || vote.pool}
+                    {pools.find((pool) => pool.address === vote.pool)?.name ||
+                      vote.pool}
                   </span>
                 </div>
               </AccordionTrigger>

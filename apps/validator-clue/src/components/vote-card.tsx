@@ -61,7 +61,9 @@ export default function VoteCard({
               />
               <div className="mt-6 flex h-full w-full items-center justify-center">
                 {/* <p className="mt-1 w-full" onClick={() => setStep(1)}> */}
-                <p className="font-retro-gaming text-destructive-foreground">You are Dead</p>
+                <p className="font-retro-gaming text-destructive-foreground">
+                  You are Dead
+                </p>
               </div>
             </div>
           ) : voted ? (
@@ -74,7 +76,9 @@ export default function VoteCard({
                 className="mx-auto "
               />
               <div className="mt-6 flex h-full w-full items-center justify-center">
-                <p className="font-retro-gaming text-success-foreground text-center">You&apos;ve already voted this epoch</p>
+                <p className="font-retro-gaming text-center text-success-foreground">
+                  You&apos;ve already voted this epoch
+                </p>
               </div>
             </div>
           ) : (

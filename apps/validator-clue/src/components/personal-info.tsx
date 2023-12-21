@@ -7,13 +7,7 @@ import { TokenIcon } from "@bera/shared-ui";
 
 import { usePollMe } from "~/hooks/usePollMe";
 
-export default function PersonalInfo({
-  epoch,
-  pools,
-}: {
-  epoch: any;
-  pools: any[];
-}) {
+export default function PersonalInfo({ epoch }: { epoch: any }) {
   const { data: me, isLoading } = usePollMe();
 
   function countdown(targetDateTime: string) {
@@ -24,7 +18,6 @@ export default function PersonalInfo({
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     return `${hours}Hs ${minutes}mins`;
   }
-  
   if (!isLoading && me) {
     return (
       <div className="flex w-full justify-between rounded-sm border border-border px-3 py-4">
@@ -32,10 +25,10 @@ export default function PersonalInfo({
           <div className="font-retro-gaming text-lg leading-7">{me.name}</div>
           <Link
             className="mt-1 text-xs leading-4 text-muted-foreground underline"
-            href={`${blockExplorerUrl}/address/${me.pool}`}
+            href={`${blockExplorerUrl}/address/${me.pool.address}`}
             target="_blank"
           >
-            {pools.find((pool) => pool.address === me.pool).name}
+            {me.pool.name}
           </Link>
         </div>
         <div className="xs:items-start flex flex-col gap-6 border-l border-border pl-4 sm:flex-row sm:items-end sm:border-none md:items-end lg:items-end">
