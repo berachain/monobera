@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --hover: 41deg 96% 40%;
+
+    --background: 48deg 100% 96%;
+    --background-secondary: 27deg 33% 62%; /* deprecated */
+
+    --foreground: 32deg 71% 16%;
+    --foreground-secondary: 33deg 5% 32%; /* deprecated */
+    --foreground-tetriary: 0deg 0% 60%; /* deprecated */
+
+    --popover: 55deg 92% 95%;
+    --popover-foreground: 32deg 81% 29%;
+
+    --card: 55deg 92% 95%;
+    --card-foreground: 32deg 81% 29%;
+
+    --muted: 54deg 100% 89%;
+    --muted-foreground: 45deg 56% 36%;
+
+    --primary: 32deg 81% 29%;
+    --primary-foreground: 55deg 92% 95%;
+
+    --secondary: 53deg 98% 77%;
+    --secondary-foreground: 41deg 96% 40%;
+    /* 33deg 3% 38% */
+    --accent: 43deg 96% 53%;
+    --accent-foreground: 55deg 92% 95%;
+
+    --border: 50deg 98% 64%;
+    --border-secondary: 27deg 32% 76%; /* deprecated */
+
+    --input: 55deg 92% 95%;
+
+    --positive: 111deg 59% 65%; /* deprecated */
+
+    --destructive: 0deg 86% 97%;
+    --destructive-foreground: 0deg 72% 51%;
+
+    --warning: 55deg 92% 95%;
+    --warning-foreground: 41deg 96% 40%;
+
+    --info: 204deg 100% 97%;
+    --info-foreground: 200deg 98% 39%;
+
+    --success: 152deg 81% 96%;
+    --success-foreground: 161deg 94% 30%;
+
+    --ring: 27deg 32% 76%; /* deprecated */
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  body {
+    @apply text-foreground;
+    font-family: var(--font-jet-brains-mono);
+  }
+}
+
+:root {
+  --font-retro-gaming: 'Retro-Gaming', sans-serif;
+}
+
+
+@font-face {
+  font-family: 'Retro-Gaming';
+  src: url('../../public/fonts/retro-gaming/Retro-Gaming.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+.font-retro-gaming {
+  font-family: var(--font-retro-gaming);
+}
+
+button{
+  font-family: var(--font-retro-gaming);
+}
