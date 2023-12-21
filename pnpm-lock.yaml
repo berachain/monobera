@@ -3695,43 +3695,6 @@ packages:
     resolution: {integrity: sha512-xdtDTt5Ifdjdx//R8aAskULQuNR34D81pYTaZtk3q3fE7Fh2UDGHKCvlAoChG9NajThoLN+8PCrT0/cy/Dt5jg==}
     dev: false
 
-  /@hapi/b64@5.0.0:
-    resolution: {integrity: sha512-ngu0tSEmrezoiIaNGG6rRvKOUkUuDdf4XTPnONHGYfSGRmDqPZX5oJL6HAdKTo1UQHECbdB4OzhWrfgVppjHUw==}
-    dependencies:
-      '@hapi/hoek': 9.3.0
-    dev: false
-
-  /@hapi/boom@9.1.4:
-    resolution: {integrity: sha512-Ls1oH8jaN1vNsqcaHVYJrKmgMcKsC1wcp8bujvXrHaAqD2iDYq3HoOwsxwo09Cuda5R5nC0o0IxlrlTuvPuzSw==}
-    dependencies:
-      '@hapi/hoek': 9.3.0
-    dev: false
-
-  /@hapi/bourne@2.1.0:
-    resolution: {integrity: sha512-i1BpaNDVLJdRBEKeJWkVO6tYX6DMFBuwMhSuWqLsY4ufeTKGVuV5rBsUhxPayXqnnWHgXUAmWK16H/ykO5Wj4Q==}
-    dev: false
-
-  /@hapi/cryptiles@5.1.0:
-    resolution: {integrity: sha512-fo9+d1Ba5/FIoMySfMqPBR/7Pa29J2RsiPrl7bkwo5W5o+AN1dAYQRi4SPrPwwVxVGKjgLOEWrsvt1BonJSfLA==}
-    engines: {node: '>=12.0.0'}
-    dependencies:
-      '@hapi/boom': 9.1.4
-    dev: false
-
-  /@hapi/hoek@9.3.0:
-    resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
-    dev: false
-
-  /@hapi/iron@6.0.0:
-    resolution: {integrity: sha512-zvGvWDufiTGpTJPG1Y/McN8UqWBu0k/xs/7l++HVU535NLHXsHhy54cfEMdW7EjwKfbBfM9Xy25FmTiobb7Hvw==}
-    dependencies:
-      '@hapi/b64': 5.0.0
-      '@hapi/boom': 9.1.4
-      '@hapi/bourne': 2.1.0
-      '@hapi/cryptiles': 5.1.0
-      '@hapi/hoek': 9.3.0
-    dev: false
-
   /@hirohe/react-watermark@0.5.0(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-VB43IxKVTveUk7bjBZuG+0AYyyPx+GuMQ/0jMJZ8YIMgar5sZW3lPoegA3lCLOjIKj/TQs25fxU9aZpj2t70Dg==}
     peerDependencies:
