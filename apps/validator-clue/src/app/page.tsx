@@ -1,12 +1,12 @@
 import { type Metadata } from "next";
-import { faucetName, validatorClueEndpoint } from "@bera/config";
+import { validatorClueEndpoint } from "@bera/config";
 
 import Content from "../components/content";
 import GlobalConsole from "../components/global-console";
 import { tabEnum, type tabEnum as tabEnumT } from "./types";
 
 export const metadata: Metadata = {
-  title: `Berachain ${faucetName} `,
+  title: `Berachain Validator Clue`,
   description: `Fund your testnet wallet with bera tokens.`,
 };
 

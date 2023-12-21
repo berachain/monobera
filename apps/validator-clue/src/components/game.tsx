@@ -61,7 +61,7 @@ export default function GAME({
             {pools.map((value: any, index) => (
               <div
                 key={index}
-                className="flex h-[52px] w-full items-center gap-3 rounded-xs bg-muted p-2"
+                className="flex w-full items-center gap-3 rounded-xs bg-muted p-2"
               >
                 <div className="font-retro-gaming text-2xl">{index + 1}</div>
                 <div className="flex h-full flex-1 flex-col justify-between">
@@ -92,7 +92,7 @@ export default function GAME({
             {validators.map((value: any, index) => (
               <div
                 key={index}
-                className="flex h-[52px] w-full items-center gap-3 rounded-xs bg-muted p-2"
+                className="flex w-full items-center gap-3 rounded-xs bg-muted p-2"
               >
                 <div className="flex h-full flex-1 flex-col justify-between">
                   <div className="font-retro-gaming text-sm leading-5">
@@ -117,7 +117,7 @@ export default function GAME({
               <div key={index} className="flex items-center">
                 <div
                   key={index}
-                  className="flex h-[52px] flex-1 items-center gap-3 rounded-xs bg-destructive p-2 text-destructive-foreground"
+                  className="flex flex-1 items-center gap-3 rounded-xs bg-destructive p-2 text-destructive-foreground"
                 >
                   <div className="flex h-full flex-1 flex-col justify-between">
                     <div className="font-retro-gaming text-md leading-5 line-through">

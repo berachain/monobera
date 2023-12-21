@@ -18,7 +18,8 @@ export default function PersonalInfo({ epoch }: { epoch: any }) {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     return `${hours}Hs ${minutes}mins`;
   }
-  if (!isLoading && me) {
+  
+  if (!isLoading && me && !me.error) {
     return (
       <div className="flex w-full justify-between rounded-sm border border-border px-3 py-4">
         <div>
