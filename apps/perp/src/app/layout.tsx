@@ -11,6 +11,7 @@ import { Toaster } from "react-hot-toast";
 
 import Providers from "./Providers";
 import { navItems } from "./config";
+import ContentWithWatermark from "./watermark";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -39,16 +40,18 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
         <Providers>
-          <div className="z-[100]">
-            <Toaster position="bottom-right" />
-          </div>
-          <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-            <Header navItems={navItems} />
-            <main className="w-full pt-[72px]">{props.children}</main>
-            <Toaster position="bottom-right" />
-          </div>
-          <TailwindIndicator />
-          <Analytics />
+          <ContentWithWatermark>
+            <div className="z-[100]">
+              <Toaster position="bottom-right" />
+            </div>
+            <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+              <Header navItems={navItems} />
+              <main className="w-full pt-[72px]">{props.children}</main>
+              <Toaster position="bottom-right" />
+            </div>
+            <TailwindIndicator />
+            <Analytics />
+          </ContentWithWatermark>
         </Providers>
       </body>
     </html>
