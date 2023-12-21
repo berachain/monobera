@@ -32,10 +32,12 @@ export function Header({
   navItems,
   hideConnectBtn = false,
   isHoney = false,
+  hideTheme = false,
 }: {
   navItems: any[];
   hideConnectBtn?: boolean;
   isHoney?: boolean;
+  hideTheme?: boolean;
 }) {
   const { isReady } = useBeraJs();
   return (
@@ -64,7 +66,7 @@ export function Header({
             Dune Analytics <Icons.externalLink className="h-3 w-3" />
           </Link>
         )} */}
-        <ThemeToggleMobile />
+        {hideTheme && <ThemeToggleMobile />}
         {isReady && <BGTStatusBtn />}
         {!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
         <MobileDropdown navItems={navItems} />

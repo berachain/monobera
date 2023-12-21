@@ -5,6 +5,7 @@ packages:
   - apps/lend
   - apps/perp
   - apps/faucet
+  - apps/validator-clue
   - packages/config/*
   - packages/config/env
   - packages/ui

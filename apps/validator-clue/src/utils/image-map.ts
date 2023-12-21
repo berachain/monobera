@@ -1,0 +1,17 @@
+export const IMGMap = {
+  "vote-icon": "lzvauo1tnkidiakygjer",
+  "rules-icon": "hknj5nus1vpvpruhhoq2",
+  "leaderboard-icon": "r6by1rudonzfifmd7ex7",
+  "connect-wallet-bear": "eozdspa7tlbyppytuktu",
+  "sign-in-bear": "pxampibskuxmdrqczjms",
+  "vote-card-default": "uvspc36yino8udauhkxk",
+  "voted-wrong-mobile": "qkgc3nlszhaspebxsbnj",
+  "voted-wrong-desktop": "qkgc3nlszhaspebxsbnj",
+  "voted-correct-mobile": "l7tt4ezot8b7r8vxdx02",
+  "voted-correct-desktop": "l7tt4ezot8b7r8vxdx02",
+  "got-eliminated": "dzvotowlkx3gzfr7vuav",
+  "guessed-wrong": "qkgc3nlszhaspebxsbnj",
+  "made-elimination": "l7tt4ezot8b7r8vxdx02",
+  "banner-img-vote": "c2r0nbyn6apyth9stp3p",
+  "banner-img-mint-honey": "npkvvybf15ewkhpx8fwt",
+};

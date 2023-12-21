@@ -19,6 +19,7 @@
     "dev:lend": "turbo dev --filter=lend --filter='./packages/*'",
     "dev:perp": "turbo dev --filter=perp --filter='./packages/*'",
     "dev:faucet": "turbo dev --filter=faucet --filter='./packages/*'",
+    "dev:clue": "turbo dev --filter=validator-clue --filter='./packages/*'",
     "check-types": "turbo check-types",
     "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,md,json}\" --ignore-path .gitignore",
     "lint": "turbo lint && manypkg check",
