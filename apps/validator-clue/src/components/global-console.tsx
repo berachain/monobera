@@ -1,13 +1,19 @@
+"use client";
+
+import { usePollMe } from "~/hooks/usePollMe";
+import { usePollNotification } from "~/hooks/usePollNotification";
+
 export default function GlobalConsole({
   notifications,
 }: {
   notifications: any[];
 }) {
-  const valName = "Me";
+  const { data: notis } = usePollNotification(notifications);
+  const { data: me } = usePollMe();
   return (
     <div className="flex h-[284px] w-full flex-col rounded-sm bg-foreground text-white xl:h-[710px] xl:max-w-[278px]">
       <div className="flex h-full flex-col-reverse gap-2 overflow-hidden overflow-y-auto p-2 text-xs">
-        {notifications.map((value, index) => (
+        {notis.map((value:any, index:any) => (
           <>
             {value.type === "obituary" ? (
               <div key={index} className="whitespace-normal">
@@ -30,7 +36,7 @@ export default function GlobalConsole({
         ))}
       </div>
       <div className="w-full rounded-b-sm bg-primary px-3 py-2 text-sm font-bold leading-7 text-secondary">
-        ~/ValClue/{valName}
+        ~/ValClue/{me?.name??""}
       </div>
     </div>
   );

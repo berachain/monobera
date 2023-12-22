@@ -65,8 +65,7 @@ async function getNotifications() {
 }
 async function getEpoch() {
   try {
-    const poolsRes = await fetch(`${validatorClueEndpoint}/api/v1/epoch`, {
-    });
+    const poolsRes = await fetch(`${validatorClueEndpoint}/api/v1/epoch`);
     const res = await poolsRes.json();
     return res;
   } catch (e) {
