@@ -7,7 +7,7 @@ import { TokenIcon } from "@bera/shared-ui";
 
 import { usePollEpoch } from "~/hooks/usePollEpoch";
 import { usePollMe } from "~/hooks/usePollMe";
-
+import {getAddress} from "viem"
 export default function PersonalInfo({ epoch }: { epoch: any }) {
   const { data: me, isLoading } = usePollMe();
   const { data: epo } = usePollEpoch(epoch);
@@ -36,7 +36,7 @@ export default function PersonalInfo({ epoch }: { epoch: any }) {
         </div>
         <div className="xs:items-start flex flex-col gap-6 border-l border-border pl-4 sm:flex-row sm:items-end sm:border-none md:items-end lg:items-end">
           <div className="flex items-center gap-[6px]">
-            <TokenIcon address={bgtTokenAddress} fetch />
+            <TokenIcon address={getAddress(bgtTokenAddress)} fetch />
             <div>
               <div className="font-retro-gaming text-sm leading-5">
                 {formatter.format(me.bgt)}
