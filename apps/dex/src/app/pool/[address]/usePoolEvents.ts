@@ -8,8 +8,6 @@ import {
 import useSWRInfinite from "swr/infinite";
 import { type Address } from "wagmi";
 
-import { getAbsoluteUrl } from "~/utils/vercel-utils";
-
 const DEFAULT_SIZE = 10;
 
 export const usePoolEvents = (address: Address) => {
@@ -140,17 +138,17 @@ export const usePoolEvents = (address: Address) => {
       (provisionData[provisionData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
 
   return {
-    allData: allData ? ([] as LiquidityChanged[]).concat(...allData) : [],
+    allData: allData ? ([] as LiquidityChanged[]).concat(...allData as any) : [],
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,
     isAllDataReachingEnd,
-    swapData: swapData ? ([] as LiquidityChanged[]).concat(...swapData) : [],
+    swapData: swapData ? ([] as LiquidityChanged[]).concat(...swapData as any) : [],
     swapDataSize,
     setSwapDataSize,
     isSwapDataLoadingMore,
     isSwapDataReachingEnd,
-    provisionData: provisionData ? ([] as LiquidityChanged[]).concat(...provisionData) : [],
+    provisionData: provisionData ? ([] as LiquidityChanged[]).concat(...provisionData as any) : [],
     provisionDataSize,
     setProvisionDataSize,
     isProvisionDataLoadingMore,

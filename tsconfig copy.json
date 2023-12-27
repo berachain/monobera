@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "lib": ["DOM","ES2017"],
+    "types": ["@graphprotocol/graph-ts", "node"],
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true, 
+    "strictNullChecks": true
+  }
+}

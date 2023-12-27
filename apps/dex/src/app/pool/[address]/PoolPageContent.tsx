@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
+  type Token,
   formatUsd,
   formatter,
   truncateHash,
@@ -26,8 +27,7 @@ import {
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import BigNumber from "bignumber.js";
-import { formatUnits } from "viem";
-import { type Address } from "wagmi";
+import { formatUnits, getAddress } from "viem";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import { getWBeraPriceForToken } from "~/app/api/getPrices/api/getPrices";
@@ -35,96 +35,39 @@ import PoolHeader from "~/app/components/pool-header";
 import { usePositionSize } from "~/hooks/usePositionSize";
 import { PoolChart } from "./PoolChart";
 import {
-  type AddLiquidityData,
   type MappedTokens,
-  type SwapData,
-  type WithdrawLiquidityData,
 } from "./types";
 import { usePoolEvents } from "./usePoolEvents";
-import { type LiquidityChanged } from "@bera/graphql";
+import { type Liquidity, type LiquidityChanged, SWAP_DIRECTION, LIQUIDITY_CHANGED_TYPE } from "@bera/graphql";
 
 interface IPoolPageContent {
   prices: MappedTokens;
   pool: Pool;
 }
 
-function isSwapData(obj: any): obj is SwapData {
-  return (
-    typeof obj === "object" &&
-    obj !== null &&
-    "metadata" in obj &&
-    "pool" in obj &&
-    "swapIn" in obj &&
-    "swapOut" in obj &&
-    "sender" in obj
-  );
-}
+const getTokenDisplay = (event: LiquidityChanged, pool: Pool) => {
+  if (event.type === LIQUIDITY_CHANGED_TYPE.SWAP) {
+    const tokenIn = event.liquidity.find((liq: Liquidity) => liq.swapDirection=== SWAP_DIRECTION.IN) ?? {} as any
+    const tokenOut = event.liquidity.find((liq: Liquidity) => liq.swapDirection=== SWAP_DIRECTION.OUT) ?? {} as any
 
-function isAddLiquidity(obj: any): obj is SwapData {
-  return (
-    typeof obj === "object" &&
-    obj !== null &&
-    "metadata" in obj &&
-    "pool" in obj &&
-    "liquidityIn" in obj &&
-    "sharesOut" in obj &&
-    "sender" in obj
-  );
-}
-
-function isRemoveLiquidity(obj: any): obj is SwapData {
-  return (
-    typeof obj === "object" &&
-    obj !== null &&
-    "metadata" in obj &&
-    "pool" in obj &&
-    "liquidityOut" in obj &&
-    "sharesIn" in obj &&
-    "sender" in obj
-  );
-}
-
-const getTokenDisplay = (event: any, pool: Pool) => {
-  if (isSwapData(event)) {
-    const tokenIn = pool.tokens.find(
-      (token) => token.address === event.swapIn.denom,
-    );
-    const tokenOut = pool.tokens.find(
-      (token) => token.address === event.swapOut.denom,
-    );
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
-          <TokenIcon token={tokenIn} />
+          <TokenIcon token={tokenIn.coin as Token} />
           <p className="ml-2">
-            {Number(formatUnits(BigInt(event.swapIn.amount), 18)).toFixed(4)}
+            {Number(formatUnits(BigInt(tokenIn.amount), 18)).toFixed(4)}
           </p>
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
-          <TokenIcon token={tokenOut} />
+          <TokenIcon token={tokenOut.coin as Token} />
           <p className="ml-2">
-            {Number(formatUnits(BigInt(event.swapOut.amount), 18)).toFixed(4)}
+            {Number(formatUnits(BigInt(tokenOut.amount), 18)).toFixed(4)}
           </p>
         </div>
       </div>
     );
-  } else if (isAddLiquidity(event)) {
-    return (
-      <div className="space-evenly flex flex-row items-center">
-        {pool.tokens.map((token, i) => {
-          return (
-            <div
-              className={cn("flex flex-row", i !== 0 && "ml-[-10px]")}
-              key={i}
-            >
-              <TokenIcon token={token} />
-            </div>
-          );
-        })}
-      </div>
-    );
-  } else if (isRemoveLiquidity(event)) {
+  } else if (event.type === LIQUIDITY_CHANGED_TYPE.ADD || event.type === LIQUIDITY_CHANGED_TYPE.REMOVE) {
     return (
       <div className="space-evenly flex flex-row items-center">
         {pool.tokens.map((token, i) => {
@@ -142,10 +85,10 @@ const getTokenDisplay = (event: any, pool: Pool) => {
   }
 };
 
-const getAction = (event: any) => {
-  if (isSwapData(event)) {
+const getAction = (event: "SWAP" | "ADD" | "REMOVE") => {
+  if (event === "SWAP") {
     return <p>Swap</p>;
-  } else if (isAddLiquidity(event)) {
+  } else if (event === "ADD") {
     return <p className="text-positive">Add</p>;
   }
   return <p className="text-destructive-foreground">Withdraw</p>;
@@ -153,29 +96,27 @@ const getAction = (event: any) => {
 
 const getValue = (
   pool: Pool | undefined,
-  event: SwapData | AddLiquidityData | WithdrawLiquidityData,
+  event: LiquidityChanged,
   prices: MappedTokens,
 ) => {
-  if (isSwapData(event)) {
-    const decimals = pool?.tokens.find(
-      (token) => token.address === event.swapIn.denom,
-    )?.decimals;
+  if (event.type === LIQUIDITY_CHANGED_TYPE.SWAP) {
+    const tokenIn = event.liquidity.find((liq: Liquidity) => liq.swapDirection === SWAP_DIRECTION.IN)
     const formattedAmount = formatUnits(
-      BigInt(event.swapIn.amount),
-      decimals ?? 18,
+      BigInt(tokenIn?.amount ?? 0),
+      tokenIn?.coin.decimals ?? 18,
     );
     return getWBeraPriceForToken(
       prices,
-      event.swapIn.denom as Address,
+      getAddress(tokenIn?.coin.address ?? '') ,
       Number(formattedAmount),
     );
   }
-  if (isAddLiquidity(event)) {
-    const value = (event as AddLiquidityData).liquidityIn.reduce((acc, cur) => {
-      const token = pool?.tokens.find((token) => token.address === cur.denom);
+  if (event.type === LIQUIDITY_CHANGED_TYPE.ADD || event.type === LIQUIDITY_CHANGED_TYPE.REMOVE) {
+    const value = event.liquidity.reduce((acc, cur) => {
+      const token = pool?.tokens.find((token) => token.address === cur.coin.address);
       const tokenValue = getWBeraPriceForToken(
         prices,
-        cur.denom as Address,
+        getAddress(cur.coin.address),
         Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)),
       );
       if (!tokenValue) {
@@ -184,25 +125,6 @@ const getValue = (
       const totalTokenValue = tokenValue;
       return acc + totalTokenValue;
     }, 0);
-    return value;
-  }
-  if (isRemoveLiquidity(event)) {
-    const value = (event as WithdrawLiquidityData).liquidityOut.reduce(
-      (acc, cur) => {
-        const token = pool?.tokens.find((token) => token.address === cur.denom);
-        const tokenValue = getWBeraPriceForToken(
-          prices,
-          cur.denom as Address,
-          Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)),
-        );
-        if (!tokenValue) {
-          return acc;
-        }
-        const totalTokenValue = tokenValue;
-        return acc + totalTokenValue;
-      },
-      0,
-    );
     return value;
   }
   return 0;
@@ -244,17 +166,18 @@ export const EventTable = ({
         {events?.length ? (
           events?.map((event: LiquidityChanged) => {
             if (!event) return null;
+            const txHash = event.id.split(":")[2]
             return (
               <TableRow
-                key={event?.metadata?.txHash}
+                key={txHash}
                 onClick={() =>
                   window.open(
-                    `${blockExplorerUrl}/tx/${event?.metadata?.txHash ?? ""}`,
+                    `${blockExplorerUrl}/tx/${txHash ?? ""}`,
                     "_blank",
                   )
                 }
               >
-                <TableCell>{getAction(event)}</TableCell>
+                <TableCell>{getAction(event.type)}</TableCell>
                 <TableCell>
                   {formatUsd(getValue(pool, event, prices) ?? "")}
                 </TableCell>
@@ -268,7 +191,7 @@ export const EventTable = ({
                   className="overflow-hidden truncate whitespace-nowrap text-right "
                   suppressHydrationWarning
                 >
-                  {formatTimeAgo(event.metadata?.blockTime ?? 0)}
+                  {formatTimeAgo(event.timestamp ?? 0)}
                 </TableCell>
               </TableRow>
             );
@@ -311,10 +234,6 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
     isProvisionDataLoadingMore,
     isProvisionDataReachingEnd,
   } = usePoolEvents(pool?.pool);
-
-  console.log("all", allData);
-  console.log("swaps", swapData);
-  console.log("adds", provisionData);
 
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {
