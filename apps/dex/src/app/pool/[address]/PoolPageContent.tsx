@@ -3,14 +3,20 @@
 import React, { useState } from "react";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
-  type Token,
   formatUsd,
   formatter,
   truncateHash,
   useBeraJs,
   usePollBgtRewards,
+  type Token,
 } from "@bera/berajs";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
+import {
+  LIQUIDITY_CHANGED_TYPE,
+  SWAP_DIRECTION,
+  type Liquidity,
+  type LiquidityChanged,
+} from "@bera/graphql";
 import { RewardBtn, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -34,11 +40,8 @@ import { getWBeraPriceForToken } from "~/app/api/getPrices/api/getPrices";
 import PoolHeader from "~/app/components/pool-header";
 import { usePositionSize } from "~/hooks/usePositionSize";
 import { PoolChart } from "./PoolChart";
-import {
-  type MappedTokens,
-} from "./types";
+import { type MappedTokens } from "./types";
 import { usePoolEvents } from "./usePoolEvents";
-import { type Liquidity, type LiquidityChanged, SWAP_DIRECTION, LIQUIDITY_CHANGED_TYPE } from "@bera/graphql";
 
 interface IPoolPageContent {
   prices: MappedTokens;
@@ -47,8 +50,14 @@ interface IPoolPageContent {
 
 const getTokenDisplay = (event: LiquidityChanged, pool: Pool) => {
   if (event.type === LIQUIDITY_CHANGED_TYPE.SWAP) {
-    const tokenIn = event.liquidity.find((liq: Liquidity) => liq.swapDirection=== SWAP_DIRECTION.IN) ?? {} as any
-    const tokenOut = event.liquidity.find((liq: Liquidity) => liq.swapDirection=== SWAP_DIRECTION.OUT) ?? {} as any
+    const tokenIn =
+      event.liquidity.find(
+        (liq: Liquidity) => liq.swapDirection === SWAP_DIRECTION.IN,
+      ) ?? ({} as any);
+    const tokenOut =
+      event.liquidity.find(
+        (liq: Liquidity) => liq.swapDirection === SWAP_DIRECTION.OUT,
+      ) ?? ({} as any);
 
     return (
       <div className="space-evenly flex flex-row items-center">
@@ -67,7 +76,10 @@ const getTokenDisplay = (event: LiquidityChanged, pool: Pool) => {
         </div>
       </div>
     );
-  } else if (event.type === LIQUIDITY_CHANGED_TYPE.ADD || event.type === LIQUIDITY_CHANGED_TYPE.REMOVE) {
+  } else if (
+    event.type === LIQUIDITY_CHANGED_TYPE.ADD ||
+    event.type === LIQUIDITY_CHANGED_TYPE.REMOVE
+  ) {
     return (
       <div className="space-evenly flex flex-row items-center">
         {pool.tokens.map((token, i) => {
@@ -100,20 +112,27 @@ const getValue = (
   prices: MappedTokens,
 ) => {
   if (event.type === LIQUIDITY_CHANGED_TYPE.SWAP) {
-    const tokenIn = event.liquidity.find((liq: Liquidity) => liq.swapDirection === SWAP_DIRECTION.IN)
+    const tokenIn = event.liquidity.find(
+      (liq: Liquidity) => liq.swapDirection === SWAP_DIRECTION.IN,
+    );
     const formattedAmount = formatUnits(
       BigInt(tokenIn?.amount ?? 0),
       tokenIn?.coin.decimals ?? 18,
     );
     return getWBeraPriceForToken(
       prices,
-      getAddress(tokenIn?.coin.address ?? '') ,
+      getAddress(tokenIn?.coin.address ?? ""),
       Number(formattedAmount),
     );
   }
-  if (event.type === LIQUIDITY_CHANGED_TYPE.ADD || event.type === LIQUIDITY_CHANGED_TYPE.REMOVE) {
+  if (
+    event.type === LIQUIDITY_CHANGED_TYPE.ADD ||
+    event.type === LIQUIDITY_CHANGED_TYPE.REMOVE
+  ) {
     const value = event.liquidity.reduce((acc, cur) => {
-      const token = pool?.tokens.find((token) => token.address === cur.coin.address);
+      const token = pool?.tokens.find(
+        (token) => token.address === cur.coin.address,
+      );
       const tokenValue = getWBeraPriceForToken(
         prices,
         getAddress(cur.coin.address),
@@ -166,7 +185,7 @@ export const EventTable = ({
         {events?.length ? (
           events?.map((event: LiquidityChanged) => {
             if (!event) return null;
-            const txHash = event.id.split(":")[2]
+            const txHash = event.id.split(":")[2];
             return (
               <TableRow
                 key={txHash}

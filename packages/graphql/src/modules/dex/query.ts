@@ -34,9 +34,9 @@ export const getTypedLiquidityChanged = gql`
     liquidityChangeds(
       skip: $page
       first: $limit
-      where: { pool: $poolDenom type_in: $type }
-      orderBy: timestamp 
-      orderDirection:desc
+      where: { pool: $poolDenom, type_in: $type }
+      orderBy: timestamp
+      orderDirection: desc
     ) {
       id
       type
@@ -59,7 +59,13 @@ export const getTypedLiquidityChanged = gql`
 
 export const getAllLiquidityChanged = gql`
   query GetAllLiquidityChanged($page: Int!, $limit: Int!, $poolDenom: String) {
-    liquidityChangeds(skip: $page first: $limit where: { pool: $poolDenom } orderBy: timestamp orderDirection:desc) {
+    liquidityChangeds(
+      skip: $page
+      first: $limit
+      where: { pool: $poolDenom }
+      orderBy: timestamp
+      orderDirection: desc
+    ) {
       id
       type
       timestamp
