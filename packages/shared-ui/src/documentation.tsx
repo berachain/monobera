@@ -27,7 +27,7 @@ export function Documentation({ className }: { className?: string }) {
           </p>
           <p className="mb-8 text-lg font-semibold md:text-2xl">
             Are you a fellow builder in the making? Check out our docs and start
-            building on BeraChain today.
+            building on Berachain today.
           </p>
           <Link href={`${docsUrl}/developers`} target="_blank">
             <Button className="w-fit" variant="secondary">
