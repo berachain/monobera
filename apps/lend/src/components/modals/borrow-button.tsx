@@ -59,7 +59,7 @@ export default function BorrowBtn({
         {isLoading ? "Loading" : "Borrow"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="p-8 w-full md:w-[480px]">
+        <DialogContent className="w-full p-8 md:w-[480px]">
           <BorrowModalContent {...{ token, amount, setAmount, write }} />
         </DialogContent>
       </Dialog>

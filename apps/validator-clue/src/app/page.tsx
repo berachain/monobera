@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: `Fund your testnet wallet with bera tokens.`,
 };
 
-export const revalidate = 6
+export const revalidate = 6;
 
 async function getValidators() {
   try {

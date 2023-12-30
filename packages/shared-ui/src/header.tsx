@@ -44,11 +44,13 @@ const BGTStatusBtn = dynamic(
 
 export function Header({
   navItems,
+  mobileNavItems = [],
   hideConnectBtn = false,
   isHoney = false,
   hideTheme = false,
 }: {
   navItems: any[];
+  mobileNavItems?: any[];
   hideConnectBtn?: boolean;
   isHoney?: boolean;
   hideTheme?: boolean;
@@ -71,19 +73,10 @@ export function Header({
         </div>
       </div>
       <div className="flex h-full items-center gap-2 xl:gap-4">
-        {/* {isHoney && (
-          <Link
-            href={publicAnalyticsUrl}
-            target="_blank"
-            className="hidden cursor-pointer items-center gap-1 whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-foreground lg:flex"
-          >
-            Dune Analytics <Icons.externalLink className="h-3 w-3" />
-          </Link>
-        )} */}
         {hideTheme && <ThemeToggleMobile />}
         {isReady && <BGTStatusBtn />}
         {!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
-        <MobileDropdown navItems={navItems} />
+        <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />
       </div>
     </nav>
   );
