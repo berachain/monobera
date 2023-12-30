@@ -47,6 +47,7 @@ export async function getHoneyData(
       query = dataType === "volume" ? GetVolumeHour : GetSupplyHour;
       break;
   }
+
   const data = await client
     .query({
       query,
@@ -54,5 +55,6 @@ export async function getHoneyData(
     })
     .then((res: any) => res.data)
     .catch((e: any) => console.error(e));
+
   return data;
 }

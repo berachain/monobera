@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cloudinaryUrl } from "@bera/config";
 import { cn } from "@bera/ui";
-import { formatEther } from "viem";
 
 import Data from "~/components/data";
 import Hero from "~/components/hero";
@@ -62,12 +61,10 @@ export default function HoneyPage({
 
   const arcade = mode === "arcade";
   const router = useRouter();
-  const formatted24HVolume = formatEther(
-    BigInt(volume7D[volume7D.length - 1]?.amount ?? "0"),
+  const formatted24HVolume = String(
+    volume24H.reduce((acc, cur) => acc + Number(cur.amount), 0),
   );
-  const formattedTotalSupply = formatEther(
-    BigInt(supply24H[supply24H.length - 1]?.amount ?? "0"),
-  );
+  const formattedTotalSupply = supply24H[supply24H.length - 1]?.amount ?? "0";
   if (arcade && typeof window !== "undefined" && window?.innerWidth < 1000) {
     router.push("/?mode=pro");
   }

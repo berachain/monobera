@@ -19,7 +19,7 @@ export const useHoneyEvents = () => {
   } = useSWRInfinite(
     (index) => ["allData", index],
     (key: any[]) => {
-      const page = key[1] + 1;
+      const page = key[1];
       return client
         .query({
           query: getMintsAndRedemptions,
@@ -41,7 +41,7 @@ export const useHoneyEvents = () => {
   } = useSWRInfinite(
     (index) => ["mintData", index],
     (key: any[]) => {
-      const page = key[1] + 1;
+      const page = key[1];
       return client
         .query({
           query: getMints,
@@ -60,7 +60,7 @@ export const useHoneyEvents = () => {
   } = useSWRInfinite(
     (index) => ["redeemData", index],
     async (key: any[]) => {
-      const page = key[1] + 1;
+      const page = key[1];
       return client
         .query({
           query: getRedemptions,
