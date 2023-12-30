@@ -39,14 +39,14 @@ export default async function Home({
   return (
     <HoneyPage
       {...{
-        supply24H,
-        volume24H,
-        supply7D,
-        volume7D,
-        supply30D,
-        volume30D,
-        supply90D,
-        volume90D,
+        supply24H: supply24H?.honeySupplyHourDatas ?? [],
+        volume24H: volume24H?.honeyVolumeHourDatas ?? [],
+        supply7D: supply7D?.honeySupplyHourDatas ?? [],
+        volume7D: volume7D?.honeyVolumeHourDatas ?? [],
+        supply30D: supply30D?.honeySupplyDayDatas ?? [],
+        volume30D: volume30D?.honeyVolumeDayDatas ?? [],
+        supply90D: supply90D?.honeySupplyDayDatas ?? [],
+        volume90D: volume90D?.honeyVolumeDayDatas ?? [],
       }}
       mode={mode === "pro" ? "pro" : "arcade"}
     />

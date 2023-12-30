@@ -106,3 +106,59 @@ export const getMintsAndRedemptions = gql`
     }
   }
 `;
+
+export const GetSupplyDay = gql`
+  query GetSupplyDay($timestamp_gt: Int!) {
+    honeySupplyDayDatas(
+      where: { timestamp_gt: $timestamp_gt }
+      orderBy: timestamp
+      orderDirection: asc
+    ) {
+      id
+      timestamp
+      amount
+    }
+  }
+`;
+
+export const GetSupplyHour = gql`
+  query GetSupplyHour($timestamp_gt: Int!) {
+    honeySupplyHourDatas(
+      where: { timestamp_gt: $timestamp_gt }
+      orderBy: timestamp
+      orderDirection: asc
+    ) {
+      id
+      timestamp
+      amount
+    }
+  }
+`;
+
+export const GetVolumeDay = gql`
+  query GetVolumeDay($timestamp_gt: Int!) {
+    honeyVolumeDayDatas(
+      where: { timestamp_gt: $timestamp_gt }
+      orderBy: timestamp
+      orderDirection: asc
+    ) {
+      id
+      timestamp
+      amount
+    }
+  }
+`;
+
+export const GetVolumeHour = gql`
+  query GetVolumeHour($timestamp_gt: Int!) {
+    honeyVolumeHourDatas(
+      where: { timestamp_gt: $timestamp_gt }
+      orderBy: timestamp
+      orderDirection: asc
+    ) {
+      id
+      timestamp
+      amount
+    }
+  }
+`;

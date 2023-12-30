@@ -321,7 +321,7 @@ export const EventTable = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {events.length && events[0] ? (
+        {events && events.length && events[0] ? (
           events.map((event: HoneyMint | HoneyRedemption) => {
             if (!event) return null;
             return (
