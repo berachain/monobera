@@ -1,8 +1,9 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { subgraphUrl } from "@bera/config";
-import { getAllPools } from "@bera/graphql";
+import { getAllPools, getPoolDayData } from "@bera/graphql";
 
 import { type RouterConfig } from "~/config";
+import { getDayStartTimestampDaysAgo } from "./helper";
 import { MultiCallPools } from "./onChainData";
 import {
   type Pool,
@@ -43,9 +44,39 @@ export class PoolService {
           query: getAllPools,
         })
         .then((res: any) => res.data.pools)
-        .catch(() => undefined);
+        .catch((e) => {
+          console.log(e);
+          return undefined;
+        });
 
-      this.finalPools = this.poolMulticall.formatSubGraphPools(subgraphPools);
+      const historicalDataPromises: Promise<any>[] = [];
+
+      subgraphPools.forEach((subgraphPool: SubGraphPool) => {
+        console.log(subgraphPool.pool);
+        const subgraphDayData = client
+          .query({
+            query: getPoolDayData,
+            variables: {
+              limit: 90,
+              poolDenom: subgraphPool.pool,
+              timestamp: getDayStartTimestampDaysAgo(90),
+            },
+          })
+          .then((res: any) => res.data.poolDayDatas)
+          .catch((e) => {
+            console.log(e);
+            return undefined;
+          });
+        historicalDataPromises.push(subgraphDayData);
+      });
+
+      const responses: any = await Promise.all(historicalDataPromises).catch(
+        (e: any) => console.log(e),
+      );
+      this.finalPools = this.poolMulticall.formatSubGraphPools(
+        subgraphPools,
+        responses,
+      );
       // const responsePromise = fetch(
       //   `${this.config.subgraphUrl}/events/dex/pool_created`,
       // );

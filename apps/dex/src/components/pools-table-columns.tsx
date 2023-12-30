@@ -4,7 +4,6 @@ import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatUsd, formatter } from "@bera/berajs";
 import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
-import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -62,12 +61,12 @@ export const columns: ColumnDef<Pool>[] = [
     ),
     cell: ({ row }) => {
       const totalValue = formatter.format(row.original.totalValue || 0);
-      const tvl = row.original.weeklyTvl?.[6] || 0;
-      const tvl24h = row.original.weeklyTvl?.[5] || 1;
+      // const tvl = row.original.weeklyTvl?.[6] || 0;
+      // const tvl24h = row.original.weeklyTvl?.[5] || 1;
       return (
         <div className="flex flex-col gap-1">
           <div className="text-sm leading-5">${totalValue}</div>
-          <div
+          {/* <div
             className={cn(
               "text-[10px] leading-[10px]",
               tvl > tvl24h
@@ -79,7 +78,7 @@ export const columns: ColumnDef<Pool>[] = [
           >
             {tvl > tvl24h && "+"}
             {(((tvl - tvl24h) / (tvl24h ?? 1)) * 100).toFixed(2)}%
-          </div>
+          </div> */}
         </div>
       );
     },
@@ -99,12 +98,12 @@ export const columns: ColumnDef<Pool>[] = [
     ),
     cell: ({ row }) => {
       const dailyFees = formatter.format(row.original.dailyFees || 0);
-      const fee = row.original.weeklyFees?.[6] || 0;
-      const fee24h = row.original.weeklyFees?.[5] || 1;
+      // const fee = row.original.weeklyFees?.[6] || 0;
+      // const fee24h = row.original.weeklyFees?.[5] || 1;
       return (
         <div className="flex flex-col gap-1">
           <div className="text-sm leading-5">${dailyFees}</div>
-          <div
+          {/* <div
             className={cn(
               "text-[10px] leading-[10px]",
               fee > fee24h
@@ -116,7 +115,7 @@ export const columns: ColumnDef<Pool>[] = [
           >
             {fee > fee24h && "+"}
             {(((fee - fee24h) / fee24h) * 100).toFixed(2)}%
-          </div>
+          </div> */}
         </div>
       );
     },
@@ -136,12 +135,12 @@ export const columns: ColumnDef<Pool>[] = [
     ),
     cell: ({ row }) => {
       const dailyVolume = formatter.format(row.original.dailyVolume || 0);
-      const volume = row.original.weeklyVolume?.[6] || 0;
-      const volume24h = row.original.weeklyVolume?.[5] || 1;
+      // const volume = row.original.weeklyVolume?.[6] || 0;
+      // const volume24h = row.original.weeklyVolume?.[5] || 1;
       return (
         <div className="flex flex-col gap-1">
           <div className="text-sm leading-5">${dailyVolume}</div>
-          <div
+          {/* <div
             className={cn(
               "text-[10px] leading-[10px]",
               volume > volume24h
@@ -153,7 +152,7 @@ export const columns: ColumnDef<Pool>[] = [
           >
             {volume > volume24h && "+"}
             {(((volume - volume24h) / volume24h) * 100).toFixed(2)}%
-          </div>
+          </div> */}
         </div>
       );
     },

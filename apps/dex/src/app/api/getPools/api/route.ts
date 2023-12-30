@@ -52,7 +52,7 @@ export async function GET() {
 
     const mappedTokens = await data.pricesResponse.json();
 
-    const parsedPools = await getParsedPools(
+    const parsedPools = getParsedPools(
       pools,
       data.globalCuttingBoard,
       mappedTokens,

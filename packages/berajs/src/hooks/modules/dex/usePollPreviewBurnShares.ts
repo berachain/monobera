@@ -35,23 +35,27 @@ export const usePollPreviewBurnShares = (
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!poolAddress || !shareAddress || !isAddress(shareAddress))
-        return undefined;
-      const result = await publicClient.readContract({
-        address: networkConfig.precompileAddresses.erc20DexAddress as Address,
-        abi: DEX_PRECOMPILE_ABI,
-        functionName: method,
-        args: [poolAddress, shareAddress, amount],
-      });
+      try {
+        if (!poolAddress || !shareAddress || !isAddress(shareAddress))
+          return undefined;
+        const result = await publicClient.readContract({
+          address: networkConfig.precompileAddresses.erc20DexAddress as Address,
+          abi: DEX_PRECOMPILE_ABI,
+          functionName: method,
+          args: [poolAddress, shareAddress, amount],
+        });
 
-      const preview = (result as any[][])[0]?.map((r, i) => {
-        return {
-          address: r,
-          output: (result as any[][])[1]?.[i],
-        };
-      });
+        const preview = (result as any[][])[0]?.map((r, i) => {
+          return {
+            address: r,
+            output: (result as any[][])[1]?.[i],
+          };
+        });
 
-      return convertToRecord(preview);
+        return convertToRecord(preview);
+      } catch (e) {
+        console.log(e);
+      }
     },
     {
       refreshInterval: POLLING.SLOW,

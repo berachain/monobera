@@ -3,7 +3,7 @@ import {
   client,
   getAllLiquidityChanged,
   getTypedLiquidityChanged,
-  type LiquidityChanged
+  type LiquidityChanged,
 } from "@bera/graphql";
 import useSWRInfinite from "swr/infinite";
 import { type Address } from "wagmi";
@@ -25,10 +25,10 @@ export const usePoolEvents = (address: Address) => {
           .query({
             query: getAllLiquidityChanged,
             variables: {
-              "page": page,
-              "limit": DEFAULT_SIZE,
-              "poolDenom": ethToBera(address)
-            }
+              page: page,
+              limit: DEFAULT_SIZE,
+              poolDenom: ethToBera(address),
+            },
           })
           .then((res: any) => {
             return res.data.liquidityChangeds;
@@ -56,11 +56,11 @@ export const usePoolEvents = (address: Address) => {
           .query({
             query: getTypedLiquidityChanged,
             variables: {
-              "page": page,
-              "limit": DEFAULT_SIZE,
-              "poolDenom": ethToBera(address),
-              "type": ["SWAP"]
-            }
+              page: page,
+              limit: DEFAULT_SIZE,
+              poolDenom: ethToBera(address),
+              type: ["SWAP"],
+            },
           })
           .then((res: any) => {
             return res.data.liquidityChangeds;
@@ -88,11 +88,11 @@ export const usePoolEvents = (address: Address) => {
           .query({
             query: getTypedLiquidityChanged,
             variables: {
-              "page": page,
-              "limit": DEFAULT_SIZE,
-              "poolDenom": ethToBera(address),
-              "type": ["ADD", "REMOVE"]
-            }
+              page: page,
+              limit: DEFAULT_SIZE,
+              poolDenom: ethToBera(address),
+              type: ["ADD", "REMOVE"],
+            },
           })
           .then((res: any) => {
             return res.data.liquidityChangeds;
@@ -131,24 +131,30 @@ export const usePoolEvents = (address: Address) => {
     (allData && (allData[allData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
   const isSwapDataReachingEnd =
     isSwapDataEmpty ||
-    (swapData && (swapData[swapData.length - 1]?.length  ?? 0)< DEFAULT_SIZE);
+    (swapData && (swapData[swapData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
   const isProvisionDataReachingEnd =
     isProvisionDataEmpty ||
     (provisionData &&
       (provisionData[provisionData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
 
   return {
-    allData: allData ? ([] as LiquidityChanged[]).concat(...allData as any) : [],
+    allData: allData
+      ? ([] as LiquidityChanged[]).concat(...(allData as any))
+      : [],
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,
     isAllDataReachingEnd,
-    swapData: swapData ? ([] as LiquidityChanged[]).concat(...swapData as any) : [],
+    swapData: swapData
+      ? ([] as LiquidityChanged[]).concat(...(swapData as any))
+      : [],
     swapDataSize,
     setSwapDataSize,
     isSwapDataLoadingMore,
     isSwapDataReachingEnd,
-    provisionData: provisionData ? ([] as LiquidityChanged[]).concat(...provisionData as any) : [],
+    provisionData: provisionData
+      ? ([] as LiquidityChanged[]).concat(...(provisionData as any))
+      : [],
     provisionDataSize,
     setProvisionDataSize,
     isProvisionDataLoadingMore,
