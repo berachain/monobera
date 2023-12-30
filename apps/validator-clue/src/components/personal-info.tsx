@@ -4,10 +4,11 @@ import Link from "next/link";
 import { formatter } from "@bera/berajs";
 import { bgtTokenAddress, blockExplorerUrl } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
+import { getAddress } from "viem";
 
 import { usePollEpoch } from "~/hooks/usePollEpoch";
 import { usePollMe } from "~/hooks/usePollMe";
-import {getAddress} from "viem"
+
 export default function PersonalInfo({ epoch }: { epoch: any }) {
   const { data: me, isLoading } = usePollMe();
   const { data: epo } = usePollEpoch(epoch);
