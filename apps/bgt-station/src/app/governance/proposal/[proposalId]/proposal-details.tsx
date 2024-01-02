@@ -205,6 +205,7 @@ export default function ProposalDetails({
           />
         </div>
 
+
         {proposalType === "new-gauge-proposal" && (
           <div className="mt-16">
             <div className="h-7 text-lg font-semibold leading-7 text-foreground">
