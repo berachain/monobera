@@ -9,17 +9,20 @@ export const getAllPools = gql`
       tokens: poolTokens {
         denomWeight
         amount
-        coin {
-          denom
-          address
-          symbol
-          decimals
+        denom
+        address
+        symbol
+        decimals
+        latestPriceUsd {
+          id
+          price
         }
       }
       swapFee
       sharesDenom
       sharesAddress
       totalShares
+      tvlUsd
     }
   }
 `;
@@ -45,6 +48,10 @@ export const getTypedLiquidityChanged = gql`
       liquidity {
         amount
         swapDirection
+        latestPriceUsd {
+          id
+          price
+        }
         coin {
           denom
           address
@@ -53,6 +60,23 @@ export const getTypedLiquidityChanged = gql`
           decimals
         }
       }
+    }
+  }
+`;
+
+export const getPoolDayData = gql`
+  query GetPoolDayData($limit: Int!, $poolDenom: String, $timestamp: Int!) {
+    poolDayDatas(
+      first: $limit
+      where: { pool: $poolDenom, date_gte: $timestamp }
+      orderBy: date
+      orderDirection: desc
+    ) {
+      id
+      tvlUsd
+      date
+      volumeUsd
+      feesUsd
     }
   }
 `;
@@ -73,6 +97,10 @@ export const getAllLiquidityChanged = gql`
       liquidity {
         amount
         swapDirection
+        latestPriceUsd {
+          id
+          price
+        }
         coin {
           denom
           address
@@ -81,6 +109,16 @@ export const getAllLiquidityChanged = gql`
           decimals
         }
       }
+    }
+  }
+`;
+
+export const getGlobalDexData = gql`
+  query GetGlobalData($limit: Int!) {
+    bexGlobalDayDatas(first: $limit, orderBy: date, orderDirection: desc) {
+      id
+      volumeUsd
+      date
     }
   }
 `;

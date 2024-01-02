@@ -7,7 +7,6 @@ export interface LiquidityChanged {
   sender: string;
   timestamp: number;
 }
-
 export interface Liquidity {
   coin: SubgraphCoin;
   swapDirection: SWAP_DIRECTION;
@@ -20,4 +19,11 @@ export interface SubgraphCoin {
   symbol: string;
   name: string;
   decimals: number;
+}
+export interface PoolDayData {
+  id: string;
+  tvlUsd: string;
+  date: number;
+  volumeUsd: string;
+  feesUsd: string;
 }

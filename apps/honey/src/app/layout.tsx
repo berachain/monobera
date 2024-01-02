@@ -11,7 +11,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 
-import { beraJsConfig, navItems } from "./config";
+import { beraJsConfig, mobileNavItems, navItems } from "./config";
 import ContentWithWatermark from "./watermark";
 
 const fontSans = IBM_Plex_Sans({
@@ -53,7 +53,11 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         <SessionProvider>
           <ContentWithWatermark>
             <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-              <Header navItems={navItems} isHoney />
+              <Header
+                isHoney
+                navItems={navItems}
+                mobileNavItems={mobileNavItems}
+              />
               <main className="w-full py-[72px]">{props.children}</main>
               <Toaster position="bottom-right" />
               <Footer />

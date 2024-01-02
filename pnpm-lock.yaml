@@ -861,6 +861,9 @@ importers:
       axios:
         specifier: ^1.4.0
         version: 1.6.2
+      bech32:
+        specifier: ^2.0.0
+        version: 2.0.0
       graphql:
         specifier: ^16.8.1
         version: 16.8.1
@@ -870,6 +873,9 @@ importers:
       next-auth:
         specifier: ^4.24.5
         version: 4.24.5(next@14.0.4)(react-dom@18.2.0)(react@18.2.0)
+      sha3:
+        specifier: ^2.1.4
+        version: 2.1.4
       viem:
         specifier: ~1.19.13
         version: 1.19.13(typescript@5.3.3)(zod@3.22.4)
