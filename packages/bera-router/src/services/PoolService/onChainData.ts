@@ -3,6 +3,7 @@ import { type PoolDayData } from "@bera/graphql";
 import { cloneDeep, set, unset } from "lodash";
 import { formatUnits, getAddress, type Address, type PublicClient } from "viem";
 
+import { beraToEth } from "~/utils/evmToBera";
 import {
   BANK_PRECOMPILE_ABI,
   DEX_PRECOMPILE_ABI,
@@ -18,7 +19,6 @@ import {
   type SubGraphPool,
   type WeightEntry,
 } from "./types";
-import { beraToEth } from "~/utils/evmToBera";
 
 function mapPoolsToRecord(pools: RawPool[]): Record<string, PoolData> {
   return pools?.reduce((record, pool) => {
