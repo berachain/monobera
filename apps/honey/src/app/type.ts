@@ -1,5 +1,5 @@
 export type HoneyEntry = {
-  UTCTime: string;
+  timestamp: number;
   amount: string;
 };
 

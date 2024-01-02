@@ -392,6 +392,9 @@ importers:
 
   apps/honey:
     dependencies:
+      '@apollo/client':
+        specifier: ^3.8.8
+        version: 3.8.8(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@bera/bera-router':
         specifier: 0.1.0
         version: link:../../packages/bera-router
@@ -401,6 +404,9 @@ importers:
       '@bera/config':
         specifier: 0.1.0
         version: link:../../packages/config/env
+      '@bera/graphql':
+        specifier: 0.1.0
+        version: link:../../packages/graphql
       '@bera/shared-ui':
         specifier: 0.1.0
         version: link:../../packages/shared-ui

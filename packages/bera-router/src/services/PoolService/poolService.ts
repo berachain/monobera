@@ -87,7 +87,6 @@ export class PoolService {
       // this.pools = poolResponse.result;
       // this.poolMulticall.getPoolData(this.pools);
       // await this.poolMulticall.execute(this.pools);
-
       // console.log(this.poolMulticall.getPools())
       this.finishedFetching = true;
       return true;

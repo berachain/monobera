@@ -64,7 +64,6 @@ export const getParsedPools = (
         });
       tagPools(pools);
     }
-
     return pools;
   } catch (e) {
     console.log(e);
