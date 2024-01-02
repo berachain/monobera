@@ -1,4 +1,3 @@
-import { beraToEth } from "@bera/berajs";
 import { bankAddress } from "@bera/config";
 import { type PoolDayData } from "@bera/graphql";
 import { cloneDeep, set, unset } from "lodash";
@@ -19,6 +18,7 @@ import {
   type SubGraphPool,
   type WeightEntry,
 } from "./types";
+import { beraToEth } from "~/utils/evmToBera";
 
 function mapPoolsToRecord(pools: RawPool[]): Record<string, PoolData> {
   return pools?.reduce((record, pool) => {
