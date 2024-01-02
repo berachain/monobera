@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router";
 import { formatUsd, formatter, usePollBgtRewards } from "@bera/berajs";
-import { RewardBtn, TokenIconList } from "@bera/shared-ui";
+import { TokenIconList } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
+import { RewardBtn } from "~/app/components/reward-btn";
 import { usePositionSize } from "~/hooks/usePositionSize";
 
 export default function RewardsCard({ pool }: { pool: Pool }) {

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Link from "next/link";
 import { truncateHash, useTokens } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable } from "@bera/shared-ui";
@@ -70,15 +71,16 @@ const Gauge = ({ address }: { address: string | undefined }) => {
       ? gaugeDictionary[address]?.url
       : `${blockExplorerUrl}/address/${address}`;
   return (
-    <div className="flex h-full w-[150px] items-center gap-2">
+    <Link
+      href={url}
+      target="_blank"
+      className="flex h-full w-[150px] items-center gap-2"
+    >
       <GaugeIcon address={address ?? ""} />
-      <div
-        className="min-w-[150px] cursor-pointer truncate whitespace-nowrap hover:underline"
-        onClick={() => window.open(url, "_blank")}
-      >
+      <div className="min-w-[150px] cursor-pointer truncate whitespace-nowrap hover:underline">
         {value}
       </div>
-    </div>
+    </Link>
   );
 };
 export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
@@ -175,7 +177,7 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
         <DataTable
           columns={global_gauge_weight_columns as any}
           data={dataT ?? []}
-          className="min-w-[490px] shadow"
+          className="max-h-[300px] min-w-[490px] shadow"
         />
       </div>
     </div>

@@ -8,9 +8,11 @@ import { BeraConfig } from "@bera/berajs";
 import { Footer, Header, TailwindIndicator } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
+import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 
-import { beraJsConfig, navItems } from "./config";
+import { beraJsConfig, mobileNavItems, navItems } from "./config";
+import ContentWithWatermark from "./watermark";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -48,14 +50,22 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           fontHoney.variable,
         )}
       >
-        <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-          <Header navItems={navItems} isHoney />
-          <main className="w-full py-[72px]">{props.children}</main>
-          <Toaster position="bottom-right" />
-          <Footer />
-          <TailwindIndicator />
-          <Analytics />
-        </BeraConfig>
+        <SessionProvider>
+          <ContentWithWatermark>
+            <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
+              <Header
+                isHoney
+                navItems={navItems}
+                mobileNavItems={mobileNavItems}
+              />
+              <main className="w-full py-[72px]">{props.children}</main>
+              <Toaster position="bottom-right" />
+              <Footer />
+              <TailwindIndicator />
+              <Analytics />
+            </BeraConfig>
+          </ContentWithWatermark>
+        </SessionProvider>
       </body>
     </html>
   );

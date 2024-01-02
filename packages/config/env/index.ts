@@ -115,6 +115,9 @@ export const stgusdcTokenAddress = process.env
 export const bgtTokenAddress = process.env.NEXT_PUBLIC_BGT_ADDRESS as Address;
 
 // PERPS
-
 export const perpsEndpoints = process.env
   .NEXT_PUBLIC_PERPS_ENDPOINT_URL as string;
+
+// Validator clue
+export const validatorClueEndpoint = process.env
+  .NEXT_PUBLIC_VILIDATOR_CLUE_ENDPOINT as string;
