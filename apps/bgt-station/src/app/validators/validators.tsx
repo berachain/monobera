@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import Image from "next/image";
 import {
   formatter,
   usePollActiveValidators,
-  usePollBgtSupply,
   usePollGlobalValidatorBribes,
   usePollPrices,
 } from "@bera/berajs";
@@ -13,38 +12,25 @@ import { cloudinaryUrl } from "@bera/config";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
 import ValidatorsTable from "./validators-table";
 
 export default function Validators({
   activeGauges,
+  bgtSupply,
 }: {
   activeGauges: number;
-  oldBgtSupply: number | undefined;
+  bgtSupply: number;
 }) {
   const { useTotalValidators, isLoading: isActiveValidatorsLoading } =
     usePollActiveValidators();
   const totalValidators: number = useTotalValidators();
-  const { useBgtSupply } = usePollBgtSupply();
-  const currentSupply = useBgtSupply();
   const { usePrices } = usePollPrices();
   const { data: prices } = usePrices();
   const { useGlobalActiveBribeValue, isLoading: isGlobalBribeLoading } =
     usePollGlobalValidatorBribes(prices);
   const totalBribeValue = useGlobalActiveBribeValue();
-  const { data, isLoading } = useGlobalValidatorGaugeWeight();
 
-  const inflation = useMemo(() => {
-    if (data === undefined || currentSupply === undefined) return 0;
-    const projectedBGTPerYear = data?.reduce((acc, cur) => {
-      return acc + cur.amount;
-    }, 0);
-    const inflation = ((projectedBGTPerYear ?? 0) / currentSupply) * 100;
-    return inflation;
-  }, [data, currentSupply]);
-
-  const isDataLoading =
-    isActiveValidatorsLoading || isLoading || isGlobalBribeLoading;
+  const isDataLoading = isActiveValidatorsLoading || isGlobalBribeLoading;
   const generalInfo = [
     {
       amount: isDataLoading ? (
@@ -69,7 +55,7 @@ export default function Validators({
       amount: isDataLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
-        inflation.toFixed(2) + "%"
+        bgtSupply.toFixed(2) + "%"
       ),
       text: "BGT inflation rate",
     },

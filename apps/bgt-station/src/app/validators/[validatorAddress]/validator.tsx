@@ -14,22 +14,16 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits, type Address } from "viem";
 
-import {
-  useHistoricalBribes,
-  type FormattedHistoricalBribes,
-} from "~/hooks/useHistoricalBribes";
 import BribesAndEmissions from "./bribes-and-emissions";
-import Uptime from "./uptime";
+// import Uptime from "./uptime";
 import ValidatorActivitiesTable from "./validator-activities-table";
 import ValidatorDetails from "./validator-details";
 import ValidatorGaugeWeightInfo from "./validator-gauge-weight";
 
 export default function Validator({
   validatorAddress,
-  allEpochs,
 }: {
   validatorAddress: Address;
-  allEpochs: any;
 }) {
   const { usePrices } = usePollPrices();
   const { data: prices } = usePrices();
@@ -37,7 +31,7 @@ export default function Validator({
   const validator = usePolValidator(validatorAddress);
   const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(validatorAddress);
-  const { data, isLoading } = useHistoricalBribes(allEpochs);
+  // const { data, isLoading } = useHistoricalBribes(allEpochs);
 
   return (
     <div className="relative flex flex-col gap-16">
@@ -111,17 +105,16 @@ export default function Validator({
             website={validator?.description.website ?? ""}
             vApy={validator?.vApy ? validator.vApy.toFixed(2) : "0"}
           />
-          <Uptime address={validatorAddress} />
+          {/* <Uptime address={validatorAddress} /> */}
         </div>
       </div>
 
       <BribesAndEmissions
-        historicalBribes={
-          (data as any)?.historicalBribes as FormattedHistoricalBribes[]
-        }
-        cumulativeBribeValue={(data as any)?.cumulativeBribeTotal}
+        // historicalBribes={
+        //   (data as any)?.historicalBribes as FormattedHistoricalBribes[]
+        // }
+        // cumulativeBribeValue={(data as any)?.cumulativeBribeTotal}
         currentBribeValue={validator?.totalActiveBribeUsdAmount}
-        isLoading={isLoading}
         validatorAddress={validatorAddress}
       />
 

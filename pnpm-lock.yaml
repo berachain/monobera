@@ -50,6 +50,9 @@ importers:
       '@bera/config':
         specifier: 0.1.0
         version: link:../../packages/config/env
+      '@bera/graphql':
+        specifier: 0.1.0
+        version: link:../../packages/graphql
       '@bera/proto':
         specifier: 0.1.0
         version: link:../../packages/proto
