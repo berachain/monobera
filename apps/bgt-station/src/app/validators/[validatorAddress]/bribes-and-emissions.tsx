@@ -1,12 +1,18 @@
-import React, { useMemo } from "react";
-import { usePollActiveValidators, usePollValidatorBribes } from "@bera/berajs";
+import React from "react";
+import {
+  // formatUsd,
+  // usePollActiveValidators,
+  usePollValidatorBribes,
+} from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { type Address } from "viem";
 
 import BribeList, { BribeCardLoading } from "./bribe-list";
 
 export default function BribesAndEmissions({
-  currentBribeValue,
+  // historicalBribes,
+  // cumulativeBribeValue,
+  // currentBribeValue,
   validatorAddress,
 }: {
   currentBribeValue: number;
@@ -15,17 +21,16 @@ export default function BribesAndEmissions({
   const { useActiveValidatorBribes, isLoading: isBribesLoading } =
     usePollValidatorBribes(validatorAddress);
 
-  const { useValidatorTokens } = usePollActiveValidators();
-  const totalDelegated = useValidatorTokens(validatorAddress);
-  const amountPerBgt = useMemo(() => {
-    const amnt = Number(currentBribeValue) / totalDelegated;
-    if (Number.isNaN(amnt)) {
-      return 0;
-    }
-    return Number(currentBribeValue) / totalDelegated;
-  }, [totalDelegated, currentBribeValue]);
+  // const { useValidatorTokens } = usePollActiveValidators();
+  // const totalDelegated = useValidatorTokens(validatorAddress);
+  // const amountPerBgt = useMemo(() => {
+  //   const amnt = Number(currentBribeValue) / totalDelegated;
+  //   if (Number.isNaN(amnt)) {
+  //     return 0;
+  //   }
+  //   return Number(currentBribeValue) / totalDelegated;
+  // }, [totalDelegated, currentBribeValue]);
 
-  console.log(amountPerBgt);
   const bribes = useActiveValidatorBribes();
 
   return (
