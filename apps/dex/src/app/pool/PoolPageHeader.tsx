@@ -5,42 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { cloudinaryUrl, docsUrl } from "@bera/config";
-// import { formatUsd, useLatestBlock, usePollPrices } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 
-// import { Icons } from "@bera/ui/icons";
-
-// import { sumPrices } from "~/utils/sumPrices";
-// import { DataCard } from "../components/Data";
 import { PoolSearch } from "./PoolsTable";
 
-export default function PoolPageHeader() {
-  //   {
-  //   tvl,
-  //   volume,
-  // }: {
-  //   tvl: any;
-  //   volume: any;
-  // }
+export default function PoolPageHeader({
+  poolType,
+}: {
+  poolType: "allPools" | "userPools";
+}) {
   const router = useRouter();
-  // const { usePrices, isLoading } = usePollPrices();
-
-  // const { data: prices } = usePrices();
-  // const tvlValue = useMemo(() => {
-  //   if (!prices || !tvl || !tvl[0]) return 0;
-  //   return sumPrices(prices, tvl[0].data);
-  // }, [tvl, prices]);
-
-  // const volumeValue = useMemo(() => {
-  //   if (!prices || !volume || !volume[0]) return 0;
-  //   return sumPrices(prices, volume[0].data);
-  // }, [volume, prices]);
-
-  // const block = useLatestBlock();
-
-  // const isDataReady = useMemo(() => {
-  //   return !isLoading && block !== 0n;
-  // }, [isLoading, block]);
 
   return (
     <div className="mx-auto mt-4 flex w-full flex-col items-center justify-center gap-8">
@@ -82,7 +56,7 @@ export default function PoolPageHeader() {
           className="pointer-events-none w-[256px] select-none	lg:w-[393px]"
         />
       </div>
-      <PoolSearch />
+      <PoolSearch poolType={poolType} />
     </div>
   );
 }

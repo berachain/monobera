@@ -10,13 +10,8 @@ import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { EpochTimeline } from "./epoch-timeline";
-import { Stats } from "./stats";
 
-export function Details({
-  avgValidatorUptime,
-}: {
-  avgValidatorUptime: string;
-}) {
+export function Details() {
   const { useTotalValidators } = usePollActiveValidators();
   const total = useTotalValidators();
   const { useBgtSupply } = usePollBgtSupply();
@@ -43,7 +38,7 @@ export function Details({
         ) : (
           `${avgApy?.toFixed(2)}%`
         ),
-      text: "Average PRR",
+      text: "Average Bribe PRR",
     },
     {
       amount:
@@ -74,7 +69,7 @@ export function Details({
           ))}
         </div>
       </div>
-      <Stats avgValidatorUptime={avgValidatorUptime} />
+      {/* <Stats avgValidatorUptime={avgValidatorUptime} /> */}
     </div>
   );
 }

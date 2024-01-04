@@ -11,15 +11,15 @@ import { useBeraConfig } from "~/contexts";
 export const usePollPreviewSharesForLiquidity = (
   poolAddress: `0x${string}` | undefined,
   assets: Token[],
-  amounts: number[],
+  amounts: string[],
 ) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
   const method = "getPreviewSharesForLiquidity";
   const addresses = assets.map((asset: Token) => asset.address);
-  const formattedAmounts = amounts.map((amount: number, i) =>
-    parseUnits(`${amount}`, assets[i]?.decimals ?? 18),
+  const formattedAmounts = amounts.map((amount: string, i) =>
+    parseUnits(amount, assets[i]?.decimals ?? 18),
   );
   const QUERY_KEY = [poolAddress, ...addresses, ...formattedAmounts, method];
   const { isLoading, isValidating } = useSWR(

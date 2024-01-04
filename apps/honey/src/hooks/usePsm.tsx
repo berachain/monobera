@@ -173,6 +173,7 @@ export const usePsm = () => {
 
     setFromAmount(tempToAmount);
     setToAmount(tempFromAmount);
+    setGivenIn(!givenIn);
   };
 
   useEffect(() => {

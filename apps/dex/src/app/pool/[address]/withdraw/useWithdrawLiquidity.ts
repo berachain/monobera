@@ -119,7 +119,6 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
     maxAmountIn,
   ];
 
-  console.log(singlePayload);
   return {
     isMultiTokenDisabled: isPoolTokenExceeding || getSafeNumber(amount) === 0,
     isSingleTokenDisabled:

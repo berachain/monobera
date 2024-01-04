@@ -22,6 +22,7 @@ export default function ValidatorInput({
   redelegateValidatorAddress,
   disabled = false,
   showDelegated, //when this is true, the validator list will only show the validators user delegated
+  filter,
 }: // emptyMessage = "No validators available",
 {
   action: DelegateEnum;
@@ -32,6 +33,7 @@ export default function ValidatorInput({
   redelegateValidatorAddress?: string;
   disabled?: boolean;
   showDelegated?: boolean;
+  filter?: Address[];
   // emptyMessage?: string;
 }) {
   const router = useRouter();
@@ -64,6 +66,7 @@ export default function ValidatorInput({
               )
             }
             showDelegated={showDelegated}
+            filter={filter}
             // emptyMessage={emptyMessage}
           />
         }

@@ -4,7 +4,6 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useBeraJs } from "@bera/berajs";
-// import { publicAnalyticsUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -73,7 +72,7 @@ export function Header({
         </div>
       </div>
       <div className="flex h-full items-center gap-2 xl:gap-4">
-        {hideTheme && <ThemeToggleMobile />}
+        {!hideTheme && <ThemeToggleMobile />}
         {isReady && <BGTStatusBtn />}
         {!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
         <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />

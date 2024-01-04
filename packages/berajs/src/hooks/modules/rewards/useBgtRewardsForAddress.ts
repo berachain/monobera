@@ -1,8 +1,10 @@
+import { type Weight } from "@bera/graphql";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
 import POLLING from "~/config/constants/polling";
 import { useBeraPrice, usePollGlobalCuttingBoard } from "..";
+import { usePollBgtInflation } from "../staking/usePollBgtInflation";
 
 interface IBgtRewardsForAddress {
   bgtPerYear: number;
@@ -15,21 +17,36 @@ export const usePollBgtRewardsForAddress = ({
 }) => {
   const { useGlobalCuttingBoard } = usePollGlobalCuttingBoard();
 
+  const { useInflationData } = usePollBgtInflation();
+
   const cuttingBoard = useGlobalCuttingBoard();
+  const inflationData = useInflationData();
 
   const beraPrice = useBeraPrice();
-  const QUERY_KEY = ["bgtRewardsForAddress", address, cuttingBoard, beraPrice];
+  const QUERY_KEY = [
+    "bgtRewardsForAddress",
+    address,
+    cuttingBoard,
+    beraPrice,
+    inflationData,
+  ];
   const { isLoading } = useSWR(
     QUERY_KEY,
     () => {
-      if (cuttingBoard && address) {
-        const cb = cuttingBoard.result?.find(
-          (b: any) => b.address.toLowerCase() === address.toLowerCase(),
+      if (cuttingBoard && address && inflationData) {
+        const totalAmount = cuttingBoard.reduce((acc: number, curr: any) => {
+          return acc + Number(curr.amount);
+        }, 0);
+        const cb: Weight = cuttingBoard.find(
+          (b: Weight) => b.receiver.toLowerCase() === address.toLowerCase(),
         );
         if (cb) {
+          const weight = cb.amount / totalAmount;
+          const amountPerYear = weight * inflationData.bgtPerYear;
+
           return {
-            bgtPerYear: Number(cb.amount),
-            UsdBgtPerYear: Number(cb.amount) * Number(beraPrice),
+            bgtPerYear: amountPerYear,
+            UsdBgtPerYear: amountPerYear * Number(beraPrice),
           };
         } else {
           return undefined;
