@@ -57,7 +57,7 @@ export const usePollProposalVotes = (proposalId: number) => {
         lodash.set(
           resultObj,
           `${item.voter}.option`,
-          item.weightedVoteOption[0]?.option??0,
+          item.weightedVoteOption[0]?.option ?? 0,
         );
         lodash.set(resultObj, `${item.voter}.voter`, item.voter);
       });

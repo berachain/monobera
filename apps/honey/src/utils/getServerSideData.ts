@@ -29,7 +29,7 @@ export async function getHoneyData(
     case HoneyTimeFrame.WEEKLY:
       fromTimeInSeconds =
         currentTimeInseconds - timeFrameToNumber[HoneyTimeFrame.WEEKLY];
-      query = dataType === "volume" ? GetVolumeHour : GetSupplyHour;
+      query = dataType === "volume" ? GetVolumeDay : GetSupplyDay;
       break;
     case HoneyTimeFrame.MONTHLY:
       fromTimeInSeconds =
@@ -43,8 +43,8 @@ export async function getHoneyData(
       break;
     default:
       fromTimeInSeconds =
-        currentTimeInseconds - timeFrameToNumber[HoneyTimeFrame.HOURLY];
-      query = dataType === "volume" ? GetVolumeHour : GetSupplyHour;
+        currentTimeInseconds - timeFrameToNumber[HoneyTimeFrame.WEEKLY];
+      query = dataType === "volume" ? GetVolumeDay : GetSupplyDay;
       break;
   }
 

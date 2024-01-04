@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { formatUsd } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { BeraChart } from "@bera/ui/bera-chart";
@@ -153,9 +153,6 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
   }
 }
 
-const getTotalAmount = (data: HoneyEntry[]): number =>
-  data.reduce((acc, entry) => acc + Number(entry.amount), 0);
-
 export const HoneyChart = ({
   supply24H,
   volume24H,
@@ -177,24 +174,13 @@ export const HoneyChart = ({
     supply90D,
     volume90D,
   };
-  const [difference, setDifference] = useState(0);
-  const [total, setTotal] = useState<any>(getTotalAmount(DATA.volume24H));
-  const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.HOURLY);
+  const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.WEEKLY);
   const [chart, setChart] = useState(Chart.VOLUME);
-  const [data, setData] = useState(getData(DATA.volume24H, arcade));
 
-  useEffect(() => {
-    setData(getData(DATA[`${chart}${timeFrame}`], arcade));
-    setDifference(calculatePercentageDifference(DATA[`${chart}${timeFrame}`]));
-    if (chart === Chart.FEES) {
-      setTotal(
-        DATA[`${chart}${timeFrame}`][DATA[`${chart}${timeFrame}`].length - 1]
-          ?.amount ?? 0,
-      );
-    } else {
-      setTotal(getTotalAmount(DATA[`${chart}${timeFrame}`]));
-    }
-  }, [timeFrame, chart, arcade]);
+  const data = DATA[`${chart}${timeFrame}`];
+  const charData = getData(data, arcade);
+  const total = data[data.length - 1]?.amount ?? 0;
+  const difference = calculatePercentageDifference(data);
 
   return (
     <section>
@@ -275,8 +261,8 @@ export const HoneyChart = ({
                   )}
                 >
                   <SelectValue
-                    placeholder={HoneyTimeFrame.HOURLY}
-                    defaultValue={HoneyTimeFrame.HOURLY}
+                    placeholder={HoneyTimeFrame.WEEKLY}
+                    defaultValue={HoneyTimeFrame.WEEKLY}
                   />
                 </SelectTrigger>
                 <SelectContent
@@ -285,7 +271,7 @@ export const HoneyChart = ({
                       "rounded-md border-2 border-blue-900 bg-blue-100 text-blue-900",
                   )}
                 >
-                  <SelectItem
+                  {/* <SelectItem
                     value={HoneyTimeFrame.HOURLY}
                     className={cn(
                       "cursor-pointer rounded-md",
@@ -295,7 +281,7 @@ export const HoneyChart = ({
                     )}
                   >
                     24H
-                  </SelectItem>
+                  </SelectItem> */}
                   <SelectItem
                     value={HoneyTimeFrame.WEEKLY}
                     className={cn(
@@ -336,10 +322,9 @@ export const HoneyChart = ({
 
           <CardContent className="relative min-h-[250px] w-full">
             <BeraChart
-              data={data}
+              data={charData}
               options={Options as any}
-              // type={chart === Chart.VOLUME ? "bar" : "line"}
-              type="line"
+              type={chart === Chart.VOLUME ? "bar" : "line"}
             />
           </CardContent>
         </Tabs>

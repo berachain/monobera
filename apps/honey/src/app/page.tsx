@@ -55,13 +55,13 @@ export default async function Home({
           Math.floor(Date.now() / 1000) -
             timeFrameToNumber[HoneyTimeFrame.HOURLY],
         ),
-        supply7D: fillSupplyDataByHour(
-          supply7D?.honeySupplyHourDatas ?? [],
+        supply7D: fillSupplyDataByDay(
+          supply7D?.honeySupplyDayDatas ?? [],
           Math.floor(Date.now() / 1000) -
             timeFrameToNumber[HoneyTimeFrame.WEEKLY],
         ),
-        volume7D: fillVolumeDataByHour(
-          volume7D?.honeyVolumeHourDatas ?? [],
+        volume7D: fillVolumeDataByDay(
+          volume7D?.honeyVolumeDayDatas ?? [],
           Math.floor(Date.now() / 1000) -
             timeFrameToNumber[HoneyTimeFrame.WEEKLY],
         ),
@@ -75,7 +75,7 @@ export default async function Home({
           Math.floor(Date.now() / 1000) -
             timeFrameToNumber[HoneyTimeFrame.MONTHLY],
         ),
-        supply90D: fillVolumeDataByDay(
+        supply90D: fillSupplyDataByDay(
           supply90D?.honeySupplyDayDatas ?? [],
           Math.floor(Date.now() / 1000) -
             timeFrameToNumber[HoneyTimeFrame.QUARTERLY],
