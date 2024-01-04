@@ -338,8 +338,7 @@ export const HoneyChart = ({
             <BeraChart
               data={data}
               options={Options as any}
-              // type={chart === Chart.VOLUME ? "bar" : "line"}
-              type="line"
+              type={chart === Chart.VOLUME ? "bar" : "line"}
             />
           </CardContent>
         </Tabs>

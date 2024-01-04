@@ -7,7 +7,6 @@ import {
   gasTokenDecimals,
   gasTokenName,
   gasTokenSymbol,
-  indexerUrl,
   jsonRpcUrl,
   multicallAddress,
   networkName,
@@ -55,7 +54,6 @@ const client = createPublicClient({
 });
 
 export interface RouterConfig {
-  subgraphUrl: string;
   publicClient: PublicClient;
   contracts: {
     poolAddress: Address;
@@ -71,7 +69,6 @@ export interface RouterConfig {
 }
 
 export const defaultConfig: RouterConfig = {
-  subgraphUrl: indexerUrl,
   publicClient: client as PublicClient,
   contracts: {
     poolAddress: erc20DexAddress,

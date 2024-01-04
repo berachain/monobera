@@ -20,7 +20,7 @@ export const usePoolEvents = (address: Address) => {
     (index) => ["allData", index, client],
     async (key: any[]) => {
       try {
-        const page = key[1] + 1;
+        const page = key[1];
         const allLiquidityChanged: LiquidityChanged[] = await client
           .query({
             query: getAllLiquidityChanged,
@@ -51,7 +51,7 @@ export const usePoolEvents = (address: Address) => {
     (index) => ["swapData", index],
     async (key: any[]) => {
       try {
-        const page = key[1] + 1;
+        const page = key[1];
         const swapData: LiquidityChanged[] = await client
           .query({
             query: getTypedLiquidityChanged,
@@ -83,7 +83,7 @@ export const usePoolEvents = (address: Address) => {
     (index) => ["provisionData", index],
     async (key: any[]) => {
       try {
-        const page = key[1] + 1;
+        const page = key[1];
         const swapData: LiquidityChanged[] = await client
           .query({
             query: getTypedLiquidityChanged,

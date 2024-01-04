@@ -149,6 +149,7 @@ export default function GovernanceByStatus({
             <ProposalCard
               proposal={proposal}
               key={"proposal" + index}
+              className="hover:cursor-pointer"
               onClick={() =>
                 router.push(
                   // replace this with real data
