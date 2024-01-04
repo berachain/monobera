@@ -86,7 +86,7 @@ export default async function Home({
             timeFrameToNumber[HoneyTimeFrame.QUARTERLY],
         ),
       }}
-      mode={mode === "pro" ? "pro" : "arcade"}
+      mode={mode === "arcade" ? "pro" : "arcade"}
     />
   );
 }
