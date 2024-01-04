@@ -1,3 +1,4 @@
+import { client, getValidatorCuttingBoard, type Weight } from "@bera/graphql";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Address } from "wagmi";
@@ -12,16 +13,32 @@ export const usePollValidatorCuttingBoard = (
   useSWR(
     QUERY_KEY,
     async () => {
-      if (!validatorAddress) return undefined;
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/cuttingboards/active?validators=${validatorAddress}`,
-      );
-      const temp = await response.json();
-      const cuttingBoard = temp;
-      return cuttingBoard.result[0].weights.sort(
-        (a: { percentage: string }, b: { percentage: string }) =>
-          parseFloat(b.percentage) - parseFloat(a.percentage),
-      );
+      try {
+        if (!validatorAddress) return undefined;
+        const validatorCuttingBoard: Weight[] = await client
+          .query({
+            query: getValidatorCuttingBoard,
+            variables: {
+              page: 0,
+              limit: 1,
+              validatorAddress: validatorAddress,
+            },
+          })
+          .then((res: any) => {
+            return res.data.cuttingBoards[0].weights;
+          })
+          .catch((e) => {
+            console.log(e);
+            return undefined;
+          });
+        const sortedValidatorCuttingBoard = [...validatorCuttingBoard].sort(
+          (a: Weight, b: Weight) => Number(b.weight) - Number(a.weight),
+        );
+
+        return sortedValidatorCuttingBoard;
+      } catch (e) {
+        console.log(e);
+      }
     },
     {
       refreshInterval: POLLING.SLOW,

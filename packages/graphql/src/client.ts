@@ -11,4 +11,3 @@ export const ssrClient = new ApolloClient({
   uri: subgraphUrl,
   cache: new InMemoryCache(),
 });
-

@@ -1,7 +1,10 @@
 import { getDayStartTimestampDaysAgo, getLatestDay } from "@bera/bera-router";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { type CuttingBoard } from "@bera/berajs";
-import { type PoolDayData } from "@bera/graphql";
+import {
+  type InflationRate,
+  type PoolDayData,
+  type Weight,
+} from "@bera/graphql";
 import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
@@ -9,18 +12,24 @@ import { type MappedTokens } from "../../getPrices/api/getPrices";
 
 export const getParsedPools = (
   pools: Pool[],
-  globalCuttingBoard: CuttingBoard[] | undefined,
+  globalCuttingBoard: Weight[] | undefined,
   mappedTokens: MappedTokens,
+  inflationData: InflationRate | undefined,
 ) => {
   try {
+    const totalAmount = globalCuttingBoard?.reduce((arr, curr) => {
+      return arr + Number(curr.amount);
+    }, 0);
+
     if (pools.length) {
       if (pools)
         pools.map((pool) => {
           const swapFee = Number(formatUnits(BigInt(pool.swapFee) ?? "", 18));
           pool.formattedSwapFee = (swapFee * 100).toString();
 
-          const cuttingBoard = globalCuttingBoard?.find(
-            (board) => board.address.toLowerCase() === pool.pool.toLowerCase(),
+          const cuttingBoard: Weight | undefined = globalCuttingBoard?.find(
+            (board: Weight) =>
+              board.receiver.toLowerCase() === pool.pool.toLowerCase(),
           );
 
           const bgtPrice =
@@ -29,11 +38,14 @@ export const getParsedPools = (
             ];
 
           let poolApy = 0;
-          if (cuttingBoard && bgtPrice) {
+          if (cuttingBoard && bgtPrice && totalAmount && inflationData) {
+            const recieverWeight = Number(cuttingBoard.amount) / totalAmount;
+            const bgtPerYear =
+              recieverWeight * Number(inflationData.bgtPerYear);
             const totalCuttingBoardValue =
-              Number(cuttingBoard.amount) * Number(bgtPrice);
+              Number(bgtPerYear) * Number(bgtPrice);
             poolApy = (totalCuttingBoardValue / Number(pool.tvlUsd)) * 100;
-            pool.bgtPerYear = Number(cuttingBoard.amount);
+            pool.bgtPerYear = bgtPerYear;
           }
 
           // extract daily volume from array

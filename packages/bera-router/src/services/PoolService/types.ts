@@ -107,26 +107,6 @@ export interface SubGraphPool {
   historicalData: PoolDayData[];
 }
 
-export interface SubGraphPool {
-  id: string;
-  pool: string;
-  poolName: string;
-  tokens: {
-    denomWeight: number;
-    amount: number;
-    coin: {
-      denom: string;
-      address: string;
-      symbol: string;
-      decimals: number;
-    };
-  }[];
-  swapFee: number;
-  sharesDenom: string;
-  sharesAddress: string;
-  totalShares: number;
-}
-
 export type PoolRecords = Record<string, PoolRecord>;
 
 export interface PoolData extends RawPool {

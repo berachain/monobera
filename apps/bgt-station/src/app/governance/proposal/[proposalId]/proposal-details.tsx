@@ -20,7 +20,6 @@ import {
   beraTokenAddress,
   blockExplorerUrl,
   governanceAddress,
-  indexerUrl,
 } from "@bera/config";
 import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1beta1/gov";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
@@ -205,7 +204,6 @@ export default function ProposalDetails({
           />
         </div>
 
-
         {proposalType === "new-gauge-proposal" && (
           <div className="mt-16">
             <div className="h-7 text-lg font-semibold leading-7 text-foreground">
@@ -221,7 +219,7 @@ export default function ProposalDetails({
               <div className="flex items-center justify-between">
                 <div>Address To Add:</div>
                 <Link
-                  href={`${indexerUrl}/address/${proposal?.messages[0]?.value}`}
+                  href={`${blockExplorerUrl}/address/${proposal?.messages[0]?.value}`}
                   target="_blank"
                   className="cursor-pointer underline"
                 >

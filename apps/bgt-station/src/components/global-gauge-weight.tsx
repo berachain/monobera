@@ -113,7 +113,6 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
         label: data.address,
         percentage: data.percentage,
         amount: data.amount,
-        tvl: data.tvl,
       };
     });
     setCuttingBoardData(temp);
