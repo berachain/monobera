@@ -354,7 +354,6 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
           liquidityMap[selectedToken?.address ?? ""] ?? new BigNumber(0)
         ).times(totalTokens);
         const amountRatio = bnAmount.div(totalSelectedTokenType);
-        console.log(amountRatio);
         tokenInputs.forEach((tokenInput: TokenInput, i: number) => {
           if (i === activeInput) return;
 
@@ -364,12 +363,10 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
             .times(totalTokens)
             .div(new BigNumber(10).pow(18));
           const newAmount = amountRatio.times(totalTokenType);
-          console.log(newAmount.toString(10).slice(0, tokenInput.decimals));
           const parsedNewAmount =
             Number(newAmount) === 0
               ? ""
               : newAmount.toString(10).slice(0, tokenInput.decimals);
-          console.log(parsedNewAmount);
           updateTokenAmount(i, parsedNewAmount);
         });
       } catch (e) {

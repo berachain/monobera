@@ -41,7 +41,6 @@ export const usePollBgtRewardsForAddress = ({
           (b: Weight) => b.receiver.toLowerCase() === address.toLowerCase(),
         );
         if (cb) {
-          console.log({ cb, totalAmount, inflationData });
           const weight = cb.amount / totalAmount;
           const amountPerYear = weight * inflationData.bgtPerYear;
 

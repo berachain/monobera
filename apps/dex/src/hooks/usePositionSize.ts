@@ -4,6 +4,7 @@ import {
   usePollBankBalance,
   usePollPreviewBurnShares,
   usePollPrices,
+  type Token,
 } from "@bera/berajs";
 import { formatUnits } from "ethers";
 
@@ -49,12 +50,17 @@ export const usePositionSize = ({ pool }: { pool: Pool | undefined }) => {
           ? Number(formatUnits(burnShares[token.address] ?? 0n, token.decimals))
           : 0;
 
-        return acc + formattedAmount * (prices[token.address] ?? 0);
+        const poolToken = pool.tokens.find(
+          (val: Token) =>
+            val.address.toLowerCase() === token.address.toLowerCase(),
+        );
+        const poolTokenPrice = Number(poolToken?.latestPriceUsd ?? 0);
+        return acc + formattedAmount * poolTokenPrice;
       }, 0);
       setIsPositionSizeLoading(false);
       setUserTotalValue(totalValue ?? 0);
     }
-  }, [burnShares, prices, pool, shareBalance]);
+  }, [burnShares, pool, shareBalance]);
 
   return { userTotalValue, isPositionSizeLoading };
 };

@@ -52,7 +52,6 @@ export class PoolService {
       const historicalDataPromises: Promise<any>[] = [];
 
       subgraphPools.forEach((subgraphPool: SubGraphPool) => {
-        console.log(subgraphPool.pool);
         const subgraphDayData = client
           .query({
             query: getPoolDayData,
@@ -99,26 +98,26 @@ export class PoolService {
     }
   }
 
-  public async fetchPaginatedPools(page: number, perPage: number) {
-    try {
-      const response = await fetch(
-        `${this.config.subgraphUrl}/events/dex/pool_created?page=${page}&per_page=${perPage}`,
-      );
-      const temp = await response.json();
+  // public async fetchPaginatedPools(page: number, perPage: number) {
+  //   try {
+  //     const response = await fetch(
+  //       `${this.config.subgraphUrl}/events/dex/pool_created?page=${page}&per_page=${perPage}`,
+  //     );
+  //     const temp = await response.json();
 
-      this.pools = temp.result;
-      this.poolMulticall.getPoolData(this.pools);
-      await this.poolMulticall.execute(this.pools);
+  //     this.pools = temp.result;
+  //     this.poolMulticall.getPoolData(this.pools);
+  //     await this.poolMulticall.execute(this.pools);
 
-      this.finishedFetching = true;
+  //     this.finishedFetching = true;
 
-      return this.poolMulticall.getPools();
-    } catch (err) {
-      // On error clear all caches and return false so user knows to try again.
-      this.finishedFetching = false;
-      this.pools = [];
-      console.error(`Error: fetchPools(): ${err}`);
-      return undefined;
-    }
-  }
+  //     return this.poolMulticall.getPools();
+  //   } catch (err) {
+  //     // On error clear all caches and return false so user knows to try again.
+  //     this.finishedFetching = false;
+  //     this.pools = [];
+  //     console.error(`Error: fetchPools(): ${err}`);
+  //     return undefined;
+  //   }
+  // }
 }

@@ -11,6 +11,7 @@ import {
   formatUnixTimestamp,
   timeDifferenceFromNow,
 } from "@bera/shared-ui/src/utils/times";
+import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress } from "viem";
@@ -22,6 +23,7 @@ type ProposalCard = {
   proposal: Proposal;
   type?: string;
   onClick?: () => void;
+  className?: string;
 };
 const getBadge = (proposalStatus: number) => {
   switch (proposalStatus) {
@@ -109,7 +111,12 @@ const getDataList = (
   ];
 };
 
-export function ProposalCard({ proposal, type, onClick }: ProposalCard) {
+export function ProposalCard({
+  proposal,
+  type,
+  onClick,
+  className,
+}: ProposalCard) {
   const { useNormalizedTallyResult } = usePollProposalVotes(
     Number(proposal.id),
   );
@@ -117,7 +124,10 @@ export function ProposalCard({ proposal, type, onClick }: ProposalCard) {
 
   return (
     <div
-      className="hove:cursor-pointer relative rounded-[18px] border border-border bg-background p-8"
+      className={cn(
+        "relative rounded-[18px] border border-border bg-background p-8",
+        className,
+      )}
       onClick={onClick}
     >
       {/* {expedited && (

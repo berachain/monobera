@@ -171,17 +171,29 @@ export const usePollProposalVotes = (proposalId: number) => {
 
       const totalVotes = abstainCount + noCount + yesCount + vetoCount;
 
-      const abstainPercentage = (abstainCount / totalVotes) * 100;
-      const noPercentage = (noCount / totalVotes) * 100;
-      const yesPercentage = (yesCount / totalVotes) * 100;
-      const vetoPercentage = (vetoCount / totalVotes) * 100;
+      let abstainPercentage = 0;
+      let noPercentage = 0;
+      let yesPercentage = 0;
+      let vetoPercentage = 0;
+      let globalAbstainPercentage = 0;
+      let globalNoPercentage = 0;
+      let globalYesPercentage = 0;
+      let globalVetoPercentage = 0;
+      let participationRate = 0;
 
-      const globalAbstainPercentage = (abstainCount / totalBGTDelegated) * 100;
-      const globalNoPercentage = (noCount / totalBGTDelegated) * 100;
-      const globalYesPercentage = (yesCount / totalBGTDelegated) * 100;
-      const globalVetoPercentage = (vetoCount / totalBGTDelegated) * 100;
+      if (totalVotes !== 0) {
+        abstainPercentage = (abstainCount / totalVotes) * 100;
+        noPercentage = (noCount / totalVotes) * 100;
+        yesPercentage = (yesCount / totalVotes) * 100;
+        vetoPercentage = (vetoCount / totalVotes) * 100;
 
-      const participationRate = (totalVotes / totalBGTDelegated) * 100;
+        globalAbstainPercentage = (abstainCount / totalBGTDelegated) * 100;
+        globalNoPercentage = (noCount / totalBGTDelegated) * 100;
+        globalYesPercentage = (yesCount / totalBGTDelegated) * 100;
+        globalVetoPercentage = (vetoCount / totalBGTDelegated) * 100;
+
+        participationRate = (totalVotes / totalBGTDelegated) * 100;
+      }
 
       return {
         abstainPercentage,

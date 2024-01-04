@@ -336,7 +336,7 @@ const TokenDialogRow = ({
         )}
         {!pendingAddition && isConnected && (
           <div className="ml-auto text-muted-foreground ">
-            <p>{tokenBalance}</p>
+            <p>{tokenBalance ?? 0}</p>
           </div>
         )}
         <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
