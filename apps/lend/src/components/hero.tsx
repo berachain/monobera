@@ -31,7 +31,7 @@ export default function Hero() {
             className="rounded-18 mt-8 w-full text-lg font-semibold leading-7 sm:w-auto"
             size={"lg"}
           >
-            <Icons.helpingHand className="mr-1 h-6 w-6" /> Borrow Honey
+            Enter App <Icons.arrowRight className="block h-5 w-5" />
           </Button>
         </Link>
       </div>

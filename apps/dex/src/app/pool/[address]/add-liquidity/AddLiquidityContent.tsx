@@ -98,7 +98,7 @@ export default function AddLiquidityContent({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
       reset();
-      // router.push(`/pool?pool=userPools`);
+      router.push(`/pool?pool=userPools`);
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
