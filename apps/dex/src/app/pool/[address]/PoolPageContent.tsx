@@ -421,7 +421,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                   </p>
                 </div>
                 {/* @ts-ignore */}
-                <RewardBtn poolAddress={pool.pool} variant={"secondary"} />
+                <RewardBtn poolAddress={pool.pool} variant={"warning"} />
               </CardContent>
             </Card>
           )}
