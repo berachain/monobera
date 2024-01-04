@@ -9363,7 +9363,7 @@ packages:
       on-headers: 1.0.2
       safe-buffer: 5.1.2
       vary: 1.1.2
-    transitivePeerDependencies:
+    transitivePeerDependencies: 
       - supports-color
     dev: true
 
