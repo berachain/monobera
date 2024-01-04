@@ -24,7 +24,7 @@ export function fullDayTimestamps(endUnix: number): number[] {
 
 export function fillVolumeDataByHour(list: HoneyEntry[], endUnix: number) {
   const data = [...list];
-  const timeList = fullHourTimestamps(endUnix);
+  const timeList = fullHourTimestamps(endUnix + 3600);
   timeList.forEach((time: number) => {
     const entry = data.find((entry: HoneyEntry) => entry.timestamp === time);
     if (!entry) {
@@ -42,7 +42,7 @@ export function fillVolumeDataByHour(list: HoneyEntry[], endUnix: number) {
 
 export function fillVolumeDataByDay(list: HoneyEntry[], endUnix: number) {
   const data = [...list];
-  const timeList = fullDayTimestamps(endUnix);
+  const timeList = fullDayTimestamps(endUnix + 24 * 3600);
   timeList.forEach((time: number) => {
     const entry = data.find((entry: HoneyEntry) => entry.timestamp === time);
     if (!entry) {
@@ -61,7 +61,7 @@ export function fillVolumeDataByDay(list: HoneyEntry[], endUnix: number) {
 export function fillSupplyDataByHour(list: HoneyEntry[], endUnix: number) {
   if (list && list.length > 0) {
     const data = [...list];
-    const timeList = fullHourTimestamps(endUnix);
+    const timeList = fullHourTimestamps(endUnix + 3600);
     let supply = data[0]!.amount;
     timeList.forEach((time: number) => {
       const entry = data.find((entry: HoneyEntry) => entry.timestamp === time);
@@ -88,7 +88,7 @@ export function fillSupplyDataByHour(list: HoneyEntry[], endUnix: number) {
 export function fillSupplyDataByDay(list: HoneyEntry[], endUnix: number) {
   if (list && list.length > 0) {
     const data = [...list];
-    const timeList = fullDayTimestamps(endUnix);
+    const timeList = fullDayTimestamps(endUnix + 24 * 3600);
     let supply = data[0]!.amount;
     timeList.forEach((time: number) => {
       const entry = data.find((entry: HoneyEntry) => entry.timestamp === time);
