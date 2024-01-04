@@ -28,6 +28,7 @@ export const usePositionSize = ({ pool }: { pool: Pool | undefined }) => {
   const burnShares: Record<string, bigint> = usePreviewBurnShares();
 
   useEffect(() => {
+    console.log(burnShares, prices, pool, shareBalance);
     if (
       (burnShares &&
         Object.keys(burnShares).length === 0 &&

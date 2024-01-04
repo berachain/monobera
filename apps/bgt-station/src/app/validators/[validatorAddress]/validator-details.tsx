@@ -5,9 +5,10 @@ import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { type Address } from "viem";
 
-import { useFetchValidatorUptime } from "~/hooks/useFetchValidatorUptime";
+// import { type Address } from "viem";
+
+// import { useFetchValidatorUptime } from "~/hooks/useFetchValidatorUptime";
 
 export default function ValidatorDetails({
   address,
@@ -24,7 +25,7 @@ export default function ValidatorDetails({
   website: string;
   vApy: string;
 }) {
-  const { data } = useFetchValidatorUptime(address as Address);
+  // const { data } = useFetchValidatorUptime(address as Address);
 
   return (
     <div className="flex w-full flex-col gap-4 text-lg font-semibold leading-7">
@@ -47,14 +48,14 @@ export default function ValidatorDetails({
           <div className="text-muted-foreground">{commissions}</div>
         </div>
 
-        <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
+        {/* <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
             Uptime <Tooltip text="Percentage uptime over the last 100 blocks" />
           </div>
           <div className="text-muted-foreground">
             {data?.uptime ? data?.uptime : 0}%
           </div>
-        </div>
+        </div> */}
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>

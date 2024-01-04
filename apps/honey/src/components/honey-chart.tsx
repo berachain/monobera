@@ -12,7 +12,6 @@ import {
 } from "@bera/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { format } from "date-fns";
-import { formatEther } from "viem";
 
 import { HoneyTimeFrame, barColors, type HoneyEntry } from "~/app/type";
 
@@ -99,7 +98,7 @@ enum Chart {
 const getData = (data: HoneyEntry[], arcade: boolean) => {
   return {
     labels: data.map((entry: any) => {
-      const utcDate = new Date(entry.UTCTime * 1000);
+      const utcDate = new Date(entry.timestamp * 1000);
       return [
         format(utcDate, "eeee HH:mm"),
         utcDate.toLocaleDateString("en-US", {
@@ -111,9 +110,7 @@ const getData = (data: HoneyEntry[], arcade: boolean) => {
     }),
     datasets: [
       {
-        data: data.map((entry: any) =>
-          Number(formatEther(BigInt(entry.amount))),
-        ),
+        data: data.map((entry: any) => Number(entry.amount)),
         labelColor: false,
         backgroundColor: arcade ? barColors.arcade : barColors.pro,
         borderColor: arcade ? barColors.arcade : barColors.pro,
@@ -137,7 +134,7 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
     let firstNumberIndex = 0;
     while (
       entries[firstNumberIndex] &&
-      Number(formatEther(BigInt(entries[firstNumberIndex]!.amount))) === 0
+      Number(entries[firstNumberIndex]!.amount) === 0
     ) {
       firstNumberIndex++;
     }
@@ -146,12 +143,8 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
       return 0; // All numbers are zero, cannot calculate percentage difference
     }
 
-    const firstNumber = Number(
-      formatEther(BigInt(entries[firstNumberIndex]!.amount)),
-    );
-    const lastNumber = Number(
-      formatEther(BigInt(entries[entries.length - 1]!.amount)),
-    );
+    const firstNumber = Number(entries[firstNumberIndex]!.amount);
+    const lastNumber = Number(entries[entries.length - 1]!.amount);
 
     const difference = lastNumber - firstNumber;
     const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
@@ -161,10 +154,7 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
 }
 
 const getTotalAmount = (data: HoneyEntry[]): number =>
-  data.reduce(
-    (acc, entry) => acc + Number(formatEther(BigInt(entry.amount))),
-    0,
-  );
+  data.reduce((acc, entry) => acc + Number(entry.amount), 0);
 
 export const HoneyChart = ({
   supply24H,
@@ -198,13 +188,8 @@ export const HoneyChart = ({
     setDifference(calculatePercentageDifference(DATA[`${chart}${timeFrame}`]));
     if (chart === Chart.FEES) {
       setTotal(
-        formatEther(
-          BigInt(
-            DATA[`${chart}${timeFrame}`][
-              DATA[`${chart}${timeFrame}`].length - 1
-            ]?.amount ?? 0,
-          ),
-        ),
+        DATA[`${chart}${timeFrame}`][DATA[`${chart}${timeFrame}`].length - 1]
+          ?.amount ?? 0,
       );
     } else {
       setTotal(getTotalAmount(DATA[`${chart}${timeFrame}`]));
@@ -353,7 +338,8 @@ export const HoneyChart = ({
             <BeraChart
               data={data}
               options={Options as any}
-              type={chart === Chart.VOLUME ? "bar" : "line"}
+              // type={chart === Chart.VOLUME ? "bar" : "line"}
+              type="line"
             />
           </CardContent>
         </Tabs>

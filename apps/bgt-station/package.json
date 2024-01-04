@@ -16,6 +16,7 @@
     "@bera/bera-router": "0.1.0",
     "@bera/berajs": "0.1.0",
     "@bera/config": "0.1.0",
+    "@bera/graphql": "0.1.0",
     "@bera/proto": "0.1.0",
     "@bera/shared-ui": "0.1.0",
     "@bera/tailwind-config": "0.1.0",

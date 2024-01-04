@@ -63,7 +63,7 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
   );
   const cuttingBoard = useValidatorCuttingBoard();
   const highestVotedGauge = React.useMemo(() => {
-    return cuttingBoard ? cuttingBoard[0].address : undefined;
+    return cuttingBoard ? cuttingBoard[0].receiver : undefined;
   }, [cuttingBoard]);
   const { gaugeDictionary } = useTokens();
 

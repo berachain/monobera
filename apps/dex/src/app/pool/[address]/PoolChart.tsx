@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { getDayStartTimestampDaysAgo } from "@bera/bera-router";
 import { formatUsd } from "@bera/berajs";
+import { type PoolDayData } from "@bera/graphql";
 import { Dropdown } from "@bera/shared-ui";
-import { cn } from "@bera/ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -66,25 +67,6 @@ const Options = {
   },
 };
 
-interface IPoolChart {
-  currentTvl: number;
-  weeklyTvl: number[];
-  weeklyVolume: number[];
-  weeklyFees: number[];
-  weeklyVolumeTotal: number;
-  weeklyFeesTotal: number;
-  monthlyTvl: number[];
-  monthlyVolume: number[];
-  monthlyFees: number[];
-  monthlyVolumeTotal: number;
-  monthlyFeesTotal: number;
-  quarterlyTvl: number[];
-  quarterlyVolume: number[];
-  quarterlyFees: number[];
-  quarterlyVolumeTotal: number;
-  quarterlyFeesTotal: number;
-}
-
 enum TimeFrame {
   WEEKLY = "7d",
   MONTHLY = "30d",
@@ -137,107 +119,163 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
         tension: 0.4,
         borderRadius: 100,
         borderSkipped: false,
+        spanGaps: false,
       },
     ],
   };
   return barLineData;
 };
 
-function calculatePercentageDifference(numbers: number[]): number {
-  if (numbers.length < 2) {
-    return 0; // Not enough numbers to calculate the difference
-  }
+// function calculatePercentageDifference(numbers: number[]): number {
+//   if (numbers.length < 2) {
+//     return 0; // Not enough numbers to calculate the difference
+//   }
 
-  let firstNumberIndex = 0;
-  while (firstNumberIndex < numbers.length && numbers[firstNumberIndex] === 0) {
-    firstNumberIndex++;
-  }
+//   let firstNumberIndex = 0;
+//   while (firstNumberIndex < numbers.length && numbers[firstNumberIndex] === 0) {
+//     firstNumberIndex++;
+//   }
 
-  if (firstNumberIndex >= numbers.length) {
-    return 0; // All numbers are zero, cannot calculate percentage difference
-  }
+//   if (firstNumberIndex >= numbers.length) {
+//     return 0; // All numbers are zero, cannot calculate percentage difference
+//   }
 
-  const firstNumber = numbers[firstNumberIndex] as number;
-  const lastNumber = numbers[numbers.length - 1] as number;
+//   const firstNumber = numbers[firstNumberIndex] as number;
+//   const lastNumber = numbers[numbers.length - 1] as number;
 
-  const difference = lastNumber - firstNumber;
-  const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
+//   const difference = lastNumber - firstNumber;
+//   const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
 
-  return percentageDifference;
-}
+//   return percentageDifference;
+// }
 
 export const PoolChart = ({
   currentTvl,
-  weeklyTvl,
-  weeklyVolume,
-  weeklyFees,
-  weeklyVolumeTotal,
-  weeklyFeesTotal,
-  monthlyTvl,
-  monthlyVolume,
-  monthlyFees,
-  monthlyVolumeTotal,
-  monthlyFeesTotal,
-  quarterlyTvl,
-  quarterlyVolume,
-  quarterlyFees,
-  quarterlyVolumeTotal,
-  quarterlyFeesTotal,
-}: IPoolChart) => {
+  historicalData,
+}: {
+  currentTvl: number;
+  historicalData: PoolDayData[];
+}) => {
+  const quarterlyDayStartTimes: number[] = [];
+  for (let i = 0; i < 90; i++) {
+    quarterlyDayStartTimes.push(getDayStartTimestampDaysAgo(i));
+  }
+
+  let weeklyVolumeTotal = 0;
+  let monthlyVolumeTotal = 0;
+  let quarterlyVolumeTotal = 0;
+
+  let weeklyFeesTotal = 0;
+  let monthlyFeesTotal = 0;
+  let quarterlyFeesTotal = 0;
+
+  // TODO: fill in gaps back to front instead of front to back
+  let latestTvlSeen = 0;
+  const completeDailyData: any[] = quarterlyDayStartTimes.map(
+    (dayStartTimestamp: number, i) => {
+      const poolData = historicalData.find(
+        (data) => data.date === dayStartTimestamp,
+      );
+      if (!poolData) {
+        if (i === 0) {
+          latestTvlSeen = currentTvl;
+          return {
+            id: "",
+            tvlUsd: currentTvl,
+            volumeUsd: "0",
+            feesUsd: "0",
+            date: dayStartTimestamp,
+          };
+        }
+        return {
+          id: "",
+          tvlUsd: latestTvlSeen,
+          volumeUsd: "0",
+          feesUsd: "0",
+          date: dayStartTimestamp,
+        };
+      } else {
+        latestTvlSeen = Number(poolData.tvlUsd);
+        if (i < 7) {
+          weeklyVolumeTotal += Number(poolData.volumeUsd);
+          weeklyFeesTotal += Number(poolData.feesUsd);
+        }
+        if (i < 30) {
+          monthlyVolumeTotal += Number(poolData.volumeUsd);
+          monthlyFeesTotal += Number(poolData.feesUsd);
+        }
+        if (i < 90) {
+          quarterlyVolumeTotal += Number(poolData.volumeUsd);
+          quarterlyFeesTotal += Number(poolData.feesUsd);
+        }
+        return poolData;
+      }
+    },
+  );
+
+  const extractData = (field: string, numOfDays: number) => {
+    return completeDailyData
+      .slice(0, numOfDays)
+      .map((dayData: any) => Number(dayData[field]))
+      .reverse();
+  };
+
   const [total, setTotal] = useState(weeklyVolumeTotal);
-  const [difference, setDifference] = useState(0);
+  // const [difference, setDifference] = useState(0);
   const [timeFrame, setTimeFrame] = useState(TimeFrame.WEEKLY);
   const [chart, setChart] = useState(Chart.VOLUME);
-  const [data, setData] = useState(getData(weeklyVolume, timeFrame, chart));
+  const [data, setData] = useState(
+    getData(extractData("volumeUsd", 7), timeFrame, chart),
+  );
   useEffect(() => {
     if (timeFrame === TimeFrame.WEEKLY) {
       if (chart === Chart.VOLUME) {
-        setData(getData(weeklyVolume, timeFrame, chart));
-        setDifference(calculatePercentageDifference(weeklyVolume));
+        setData(getData(extractData("volumeUsd", 7), timeFrame, chart));
+        // setDifference(calculatePercentageDifference(weeklyVolume));
         setTotal(weeklyVolumeTotal);
       }
       if (chart === Chart.TVL) {
-        setData(getData(weeklyTvl, timeFrame, chart));
-        setDifference(calculatePercentageDifference(weeklyTvl));
-        setTotal(currentTvl);
+        setData(getData(extractData("tvlUsd", 7), timeFrame, chart));
+        // setDifference(calculatePercentageDifference(weeklyTvl));
+        setTotal(Number(currentTvl));
       }
       if (chart === Chart.FEES) {
-        setData(getData(weeklyFees, timeFrame, chart));
-        setDifference(calculatePercentageDifference(weeklyFees));
+        setData(getData(extractData("feesUsd", 7), timeFrame, chart));
+        // setDifference(calculatePercentageDifference(weeklyFees));
         setTotal(weeklyFeesTotal);
       }
     }
     if (timeFrame === TimeFrame.MONTHLY) {
       if (chart === Chart.VOLUME) {
-        setData(getData(monthlyVolume, timeFrame, chart));
-        setDifference(calculatePercentageDifference(monthlyVolume));
+        setData(getData(extractData("volumeUsd", 30), timeFrame, chart));
+        // setDifference(calculatePercentageDifference(monthlyVolume));
         setTotal(monthlyVolumeTotal);
       }
       if (chart === Chart.TVL) {
-        setData(getData(monthlyTvl, timeFrame, chart));
-        setDifference(calculatePercentageDifference(monthlyTvl));
-        setTotal(currentTvl);
+        setData(getData(extractData("tvlUsd", 30), timeFrame, chart));
+        // setDifference(calculatePercentageDifference(monthlyTvl));
+        setTotal(Number(currentTvl));
       }
       if (chart === Chart.FEES) {
-        setData(getData(monthlyFees, timeFrame, chart));
-        setDifference(calculatePercentageDifference(monthlyFees));
+        setData(getData(extractData("feesUsd", 30), timeFrame, chart));
+        // setDifference(calculatePercentageDifference(monthlyFees));
         setTotal(monthlyFeesTotal);
       }
     }
     if (timeFrame === TimeFrame.QUARTERLY) {
       if (chart === Chart.VOLUME) {
-        setData(getData(quarterlyVolume, timeFrame, chart));
-        setDifference(calculatePercentageDifference(quarterlyVolume));
+        setData(getData(extractData("volumeUsd", 90), timeFrame, chart));
+        // setDifference(calculatePercentageDifference(quarterlyVolume));
         setTotal(quarterlyVolumeTotal);
       }
       if (chart === Chart.TVL) {
-        setData(getData(quarterlyTvl, timeFrame, chart));
-        setDifference(calculatePercentageDifference(quarterlyTvl));
-        setTotal(currentTvl);
+        setData(getData(extractData("tvlUsd", 90), timeFrame, chart));
+        // setDifference(calculatePercentageDifference(quarterlyTvl));
+        setTotal(Number(currentTvl));
       }
       if (chart === Chart.FEES) {
-        setData(getData(quarterlyFees, timeFrame, chart));
-        setDifference(calculatePercentageDifference(quarterlyFees));
+        setData(getData(extractData("feesUsd", 90), timeFrame, chart));
+        // setDifference(calculatePercentageDifference(quarterlyFees));
         setTotal(quarterlyFeesTotal);
       }
     }
@@ -254,7 +292,7 @@ export const PoolChart = ({
             <div className="w-fit text-xl font-semibold">
               {formatUsd(total)}
             </div>
-            <div
+            {/* <div
               className={cn(
                 "w-full text-sm font-normal",
                 difference >= 0
@@ -263,7 +301,7 @@ export const PoolChart = ({
               )}
             >
               {difference.toFixed(2)}%
-            </div>
+            </div> */}
           </div>
 
           <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">

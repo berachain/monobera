@@ -4,6 +4,13 @@ import {
   defaultConfig,
   parseBigIntToString,
 } from "@bera/bera-router";
+import {
+  client,
+  getGlobalCuttingBoard as getCuttingBoard,
+  getInflationData,
+  type InflationRate,
+  type Weight,
+} from "@bera/graphql";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { getParsedPools } from "./getPools";
@@ -13,12 +20,48 @@ import { getParsedPools } from "./getPools";
 export const revalidate = 10;
 
 async function getGlobalCuttingBoard() {
+  const globalCuttingBoard: Weight[] = await client
+    .query({
+      query: getCuttingBoard,
+      variables: {
+        page: 0,
+        limit: 1,
+      },
+    })
+    .then((res: any) => {
+      return res.data.globalCuttingBoardDatas[0].weights;
+    })
+    .catch((e) => {
+      console.log(e);
+      return undefined;
+    });
+
+  return globalCuttingBoard;
+}
+
+async function getInflation() {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
-    );
-    const jsonRes = await res.json();
-    return jsonRes.result;
+    const inflationData: InflationRate | undefined = await client
+      .query({
+        query: getInflationData,
+        variables: {
+          page: 0,
+          limit: 20,
+        },
+      })
+      .then((res: any) => {
+        const positiveInflationData = res.data.inflationRates.find(
+          (inflationData: InflationRate) =>
+            Number(inflationData.difference) > 0,
+        );
+        return positiveInflationData;
+      })
+      .catch((e) => {
+        console.log(e);
+        return undefined;
+      });
+
+    return inflationData;
   } catch (e) {
     console.log(e);
   }
@@ -28,7 +71,7 @@ export async function GET() {
   try {
     const router = new RouterService(defaultConfig);
     const globalCuttingBoard = getGlobalCuttingBoard();
-
+    const inflationRate = getInflation();
     const fetchPools = router.fetchPools();
 
     const pricesResponse = fetch(`${getAbsoluteUrl()}/api/getPrices/api`, {
@@ -43,19 +86,24 @@ export async function GET() {
       fetchPools,
       globalCuttingBoard,
       pricesResponse,
-    ]).then(([fetchPools, globalCuttingBoard, pricesResponse]) => ({
-      fetchPools: fetchPools,
-      globalCuttingBoard: globalCuttingBoard,
-      pricesResponse: pricesResponse,
-    }));
+      inflationRate,
+    ]).then(
+      ([fetchPools, globalCuttingBoard, pricesResponse, inflationRate]) => ({
+        fetchPools: fetchPools,
+        globalCuttingBoard: globalCuttingBoard,
+        pricesResponse: pricesResponse,
+        inflationRate: inflationRate,
+      }),
+    );
     const pools = router.getPools() ?? [];
 
     const mappedTokens = await data.pricesResponse.json();
 
-    const parsedPools = await getParsedPools(
+    const parsedPools = getParsedPools(
       pools,
       data.globalCuttingBoard,
       mappedTokens,
+      data.inflationRate,
     );
 
     if (!parsedPools) {

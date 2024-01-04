@@ -1,7 +1,12 @@
+import { ethToBera } from "@bera/berajs";
+import {
+  client,
+  getAllLiquidityChanged,
+  getTypedLiquidityChanged,
+  type LiquidityChanged,
+} from "@bera/graphql";
 import useSWRInfinite from "swr/infinite";
 import { type Address } from "wagmi";
-
-import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 const DEFAULT_SIZE = 10;
 
@@ -12,26 +17,27 @@ export const usePoolEvents = (address: Address) => {
     setSize: setAllDataSize,
     isLoading: isAllDataLoading,
   } = useSWRInfinite(
-    (index) => ["allData", index],
+    (index) => ["allData", index, client],
     async (key: any[]) => {
-      const page = key[1] + 1;
       try {
-        const res = await fetch(
-          `${getAbsoluteUrl()}/pool/${address}/api?page=${
-            page ?? 1
-          }&perPage=${DEFAULT_SIZE}`,
-          {
-            method: "GET",
-            headers: {
-              "x-vercel-protection-bypass": process.env
-                .VERCEL_AUTOMATION_BYPASS_SECRET as string,
+        const page = key[1] + 1;
+        const allLiquidityChanged: LiquidityChanged[] = await client
+          .query({
+            query: getAllLiquidityChanged,
+            variables: {
+              page: page,
+              limit: DEFAULT_SIZE,
+              poolDenom: ethToBera(address),
             },
-          },
-        );
-        const jsonRes = await res.json();
-        return jsonRes;
+          })
+          .then((res: any) => {
+            return res.data.liquidityChangeds;
+          });
+
+        return allLiquidityChanged;
       } catch (e) {
-        console.error(e);
+        console.log(e);
+        return undefined;
       }
     },
   );
@@ -44,24 +50,26 @@ export const usePoolEvents = (address: Address) => {
   } = useSWRInfinite(
     (index) => ["swapData", index],
     async (key: any[]) => {
-      const page = key[1] + 1;
       try {
-        const res = await fetch(
-          `${getAbsoluteUrl()}/pool/${address}/api?page=${
-            page ?? 1
-          }&perPage=${DEFAULT_SIZE}&swap`,
-          {
-            method: "GET",
-            headers: {
-              "x-vercel-protection-bypass": process.env
-                .VERCEL_AUTOMATION_BYPASS_SECRET as string,
+        const page = key[1] + 1;
+        const swapData: LiquidityChanged[] = await client
+          .query({
+            query: getTypedLiquidityChanged,
+            variables: {
+              page: page,
+              limit: DEFAULT_SIZE,
+              poolDenom: ethToBera(address),
+              type: ["SWAP"],
             },
-          },
-        );
-        const jsonRes = await res.json();
-        return jsonRes;
+          })
+          .then((res: any) => {
+            return res.data.liquidityChangeds;
+          });
+
+        return swapData;
       } catch (e) {
-        console.error(e);
+        console.log(e);
+        return undefined;
       }
     },
   );
@@ -74,25 +82,26 @@ export const usePoolEvents = (address: Address) => {
   } = useSWRInfinite(
     (index) => ["provisionData", index],
     async (key: any[]) => {
-      const page = key[1] + 1;
-
       try {
-        const res = await fetch(
-          `${getAbsoluteUrl()}/pool/${address}/api?page=${
-            page ?? 1
-          }&perPage=${DEFAULT_SIZE}&provisions`,
-          {
-            method: "GET",
-            headers: {
-              "x-vercel-protection-bypass": process.env
-                .VERCEL_AUTOMATION_BYPASS_SECRET as string,
+        const page = key[1] + 1;
+        const swapData: LiquidityChanged[] = await client
+          .query({
+            query: getTypedLiquidityChanged,
+            variables: {
+              page: page,
+              limit: DEFAULT_SIZE,
+              poolDenom: ethToBera(address),
+              type: ["ADD", "REMOVE"],
             },
-          },
-        );
-        const jsonRes = await res.json();
-        return jsonRes;
+          })
+          .then((res: any) => {
+            return res.data.liquidityChangeds;
+          });
+
+        return swapData;
       } catch (e) {
-        console.error(e);
+        console.log(e);
+        return undefined;
       }
     },
   );
@@ -119,27 +128,33 @@ export const usePoolEvents = (address: Address) => {
 
   const isAllDataReachingEnd =
     isAllDataEmpty ||
-    (allData && allData[allData.length - 1]?.length < DEFAULT_SIZE);
+    (allData && (allData[allData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
   const isSwapDataReachingEnd =
     isSwapDataEmpty ||
-    (swapData && swapData[swapData.length - 1]?.length < DEFAULT_SIZE);
+    (swapData && (swapData[swapData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
   const isProvisionDataReachingEnd =
     isProvisionDataEmpty ||
     (provisionData &&
-      provisionData[provisionData.length - 1]?.length < DEFAULT_SIZE);
+      (provisionData[provisionData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
 
   return {
-    allData: allData ? [].concat(...allData) : [],
+    allData: allData
+      ? ([] as LiquidityChanged[]).concat(...(allData as any))
+      : [],
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,
     isAllDataReachingEnd,
-    swapData: swapData ? [].concat(...swapData) : [],
+    swapData: swapData
+      ? ([] as LiquidityChanged[]).concat(...(swapData as any))
+      : [],
     swapDataSize,
     setSwapDataSize,
     isSwapDataLoadingMore,
     isSwapDataReachingEnd,
-    provisionData: provisionData ? [].concat(...provisionData) : [],
+    provisionData: provisionData
+      ? ([] as LiquidityChanged[]).concat(...(provisionData as any))
+      : [],
     provisionDataSize,
     setProvisionDataSize,
     isProvisionDataLoadingMore,
