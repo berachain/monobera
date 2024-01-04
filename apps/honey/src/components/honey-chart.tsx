@@ -178,7 +178,7 @@ export const HoneyChart = ({
   const [chart, setChart] = useState(Chart.VOLUME);
 
   const data = DATA[`${chart}${timeFrame}`];
-  const charData = getData(data, arcade);
+  const chartData = getData(data, arcade);
   const total = data[data.length - 1]?.amount ?? 0;
   const difference = calculatePercentageDifference(data);
 
@@ -322,7 +322,7 @@ export const HoneyChart = ({
 
           <CardContent className="relative min-h-[250px] w-full">
             <BeraChart
-              data={charData}
+              data={chartData}
               options={Options as any}
               type={chart === Chart.VOLUME ? "bar" : "line"}
             />
