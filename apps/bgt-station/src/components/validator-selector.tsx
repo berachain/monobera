@@ -84,7 +84,7 @@ export default function ValidatorSelector({
       <ValidatorModal
         open={open}
         validators={
-          filteredValidators.filter(
+          filteredValidators?.filter(
             (vali: Validator) => !filter?.find((f) => f === vali.operatorAddr),
           ) ?? []
         }
