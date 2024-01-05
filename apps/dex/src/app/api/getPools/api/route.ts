@@ -4,13 +4,8 @@ import {
   defaultConfig,
   parseBigIntToString,
 } from "@bera/bera-router";
-import {
-  client,
-  getGlobalCuttingBoard as getCuttingBoard,
-  getInflationData,
-  type InflationRate,
-  type Weight,
-} from "@bera/graphql";
+import { subgraphUrl } from "@bera/config";
+import { type InflationRate } from "@bera/graphql";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { getParsedPools } from "./getPools";
@@ -20,48 +15,115 @@ import { getParsedPools } from "./getPools";
 export const revalidate = 10;
 
 async function getGlobalCuttingBoard() {
-  const globalCuttingBoard: Weight[] = await client
-    .query({
-      query: getCuttingBoard,
-      variables: {
-        page: 0,
-        limit: 1,
-      },
-    })
-    .then((res: any) => {
-      return res.data.globalCuttingBoardDatas[0].weights;
-    })
-    .catch((e) => {
-      console.log(e);
-      return undefined;
-    });
+  // const globalCuttingBoard: Weight[] = await client
+  //   .query({
+  //     query: getCuttingBoard,
+  //     variables: {
+  //       page: 0,
+  //       limit: 1,
+  //     },
+  //   })
+  //   .then((res: any) => {
+  //     return res.data.globalCuttingBoardDatas[0].weights;
+  //   })
+  //   .catch((e) => {
+  //     console.log(e);
+  //     return undefined;
+  //   });
 
-  return globalCuttingBoard;
+  const data = await fetch(subgraphUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: `{
+            globalCuttingBoardDatas(
+              skip: 0
+              first: 1
+              orderBy: epoch
+              orderDirection: desc
+            ) {
+              id
+              epoch
+              weights {
+                id
+                receiver
+                amount
+                epoch
+              }
+            }}
+          `,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: 10 },
+  })
+    .then((res) => res.json())
+    .catch((e: any) => console.log("fetching error", e));
+
+  if (data.error !== undefined) {
+    console.error("error fetching cutting board");
+  }
+  return data.data.globalCuttingBoardDatas[0].weights;
 }
 
 async function getInflation() {
   try {
-    const inflationData: InflationRate | undefined = await client
-      .query({
-        query: getInflationData,
-        variables: {
-          page: 0,
-          limit: 20,
-        },
-      })
-      .then((res: any) => {
-        const positiveInflationData = res.data.inflationRates.find(
-          (inflationData: InflationRate) =>
-            Number(inflationData.difference) > 0,
-        );
-        return positiveInflationData;
-      })
-      .catch((e) => {
-        console.log(e);
-        return undefined;
-      });
+    // const inflationData: InflationRate | undefined = await client
+    //   .query({
+    //     query: getInflationData,
+    //     variables: {
+    //       page: 0,
+    //       limit: 20,
+    //     },
+    //   })
+    //   .then((res: any) => {
+    //     const positiveInflationData = res.data.inflationRates.find(
+    //       (inflationData: InflationRate) =>
+    //         Number(inflationData.difference) > 0,
+    //     );
+    //     return positiveInflationData;
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //     return undefined;
+    //   });
 
-    return inflationData;
+    const data = await fetch(subgraphUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        query: `{
+            inflationRates(
+              skip: 0
+              first: 20
+              orderBy: currentBlock
+              orderDirection: desc
+            ) {
+              id
+              currentBlockSupply
+              lastBlockSupply
+              lastBlock
+              currentBlock
+              difference
+              inflationRate
+              bgtPerYear
+            }}
+          `,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 10 },
+    })
+      .then((res) => res.json())
+      .catch((e: any) => console.log("fetching error", e));
+
+    if (data.error !== undefined) {
+      console.error("error fetching cutting board");
+    }
+    const positiveInflationData = data.data.inflationRates.find(
+      (inflationData: InflationRate) => Number(inflationData.difference) > 0,
+    );
+    return positiveInflationData;
   } catch (e) {
     console.log(e);
   }

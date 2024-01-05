@@ -29,6 +29,14 @@ const Options = {
       },
     },
   },
+  elements: {
+    point: {
+      radius: 0,
+    },
+    line: {
+      tension: 0.4, // smooth lines
+    },
+  },
   plugins: {
     legend: {
       display: false,

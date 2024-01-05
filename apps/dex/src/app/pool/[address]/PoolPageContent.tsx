@@ -327,6 +327,7 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
   });
 
   const { isConnected } = useBeraJs();
+
   return (
     <div className="flex flex-col gap-8">
       <PoolHeader pool={pool} />
@@ -414,9 +415,9 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
                     Rewards available
                   </h3>
                   <p className="text-lg font-semibold text-foreground">
-                    {Number(Number.isNaN(bgtRewards) ? 0 : bgtRewards).toFixed(
-                      2,
-                    ) ?? 0}{" "}
+                    {Number(
+                      Number.isNaN(Number(bgtRewards)) ? 0 : bgtRewards,
+                    ).toFixed(2) ?? 0}{" "}
                     BGT
                   </p>
                 </div>
