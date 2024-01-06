@@ -42,9 +42,9 @@ export function BGTStatusBtn() {
 
   // @ts-ignore
   // const totalClaimableBGT: bigint =
-    isLoading || !bgtRewards || bgtRewards.length !== 3
-      ? 0n //@ts-ignore
-      : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
+  isLoading || !bgtRewards || bgtRewards.length !== 3
+    ? 0n //@ts-ignore
+    : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
 
   return (
     <div className="hidden sm:block">

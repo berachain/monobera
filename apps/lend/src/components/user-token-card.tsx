@@ -76,7 +76,7 @@ export default function UserTokenCard({
           asset.address === honeyAddress && (
             <div className="flex flex-shrink-0 flex-col">
               <div className="text-xs font-medium leading-5 text-muted-foreground">
-                Supply PRR
+                Supply APY
               </div>
               <div className="text-lg font-bold text-success-foreground">
                 {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
@@ -87,7 +87,7 @@ export default function UserTokenCard({
         {type === "borrow" && (
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
-              Variable PRR
+              Variable APY
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
@@ -98,7 +98,7 @@ export default function UserTokenCard({
         {type === "user-borrow" && (
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
-              Loan PRR
+              Loan APY
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
