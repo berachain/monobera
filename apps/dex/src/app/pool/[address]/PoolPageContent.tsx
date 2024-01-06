@@ -17,7 +17,7 @@ import {
   type Liquidity,
   type LiquidityChanged,
 } from "@bera/graphql";
-import { TokenIcon } from "@bera/shared-ui";
+import { ApyTooltip, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
@@ -373,8 +373,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             </Card>
             <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
-                <div className="overflow-hidden truncate whitespace-nowrap text-sm ">
-                  PRR
+                <div className="flex flex-row items-center gap-1 overflow-hidden truncate whitespace-nowrap text-sm ">
+                  APY <ApyTooltip />
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">

@@ -4,6 +4,7 @@ import {
   DataTableColumnHeader,
   TokenIconList,
   ValidatorIcon,
+  bribeApyTooltipText,
 } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 import { type Address } from "wagmi";
@@ -77,7 +78,11 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="vApy" />
+      <DataTableColumnHeader
+        column={column}
+        title="vApy"
+        tooltip={bribeApyTooltipText()}
+      />
     ),
     cell: ({ row }) => (
       <div className="flex h-full w-[91px] items-center">

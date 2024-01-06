@@ -18,7 +18,7 @@ import { market_table_columns } from "./market-table-column";
 export default function MarketsPageContent() {
   usePollAssetWalletBalance();
   const [tableView, setUseTableView] = React.useState(false);
-  const sortOptions = ["Pool-Size", "Supply-PRR"];
+  const sortOptions = ["Pool-Size", "Supply-APY"];
   const [sortBy, setSortBy] = React.useState<string>(sortOptions[0]!);
   const ref = useRef(null);
   const [keywords, setKeywords] = React.useState<string>("");

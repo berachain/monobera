@@ -90,7 +90,7 @@ export function CreatePool({
         </div>
         <ActionButton>
           <Button
-            disabled={error?.message === "Tokens must be selected"}
+            disabled={error !== undefined}
             className="mt-4 w-full"
             onClick={onContinue}
           >

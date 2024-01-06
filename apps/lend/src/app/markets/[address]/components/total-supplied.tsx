@@ -131,7 +131,7 @@ export default function TotalSupplied({
 
           <div className="flex flex-col gap-[6px]">
             <div className="text-xs font-normal leading-normal text-muted-foreground md:text-sm">
-              PRR
+              APY
             </div>
             {reserveData ? (
               <div className="font-semibold leading-7 md:text-xl">

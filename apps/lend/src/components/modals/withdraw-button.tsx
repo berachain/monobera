@@ -150,7 +150,7 @@ const WithdrawModalContent = ({
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Supply PRR</div>
+          <div className="text-muted-foreground ">Supply APY</div>
           <div className="font-semibold text-success-foreground">
             {(reserveData.supplyAPR * 100).toFixed(2)}%
           </div>

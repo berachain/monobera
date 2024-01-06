@@ -48,7 +48,7 @@ export default function DashBoard() {
         </>
       ),
       message: "Stake your BGT with the most rewarding validators",
-      keyword: "PRR",
+      keyword: "APY",
     },
   ];
   return (

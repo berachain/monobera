@@ -1,10 +1,7 @@
 import { type Metadata } from "next";
 
 import { getHoneyData } from "~/utils/getServerSideData";
-import {
-  fillSupplyDataByDay,
-  fillVolumeDataByDay,
-} from "~/utils/graph-utils";
+import { fillSupplyDataByDay, fillVolumeDataByDay } from "~/utils/graph-utils";
 import { getMetaTitle } from "~/utils/metadata";
 import HoneyPage from "./honey-page";
 import { HoneyTimeFrame, timeFrameToNumber } from "./type";
@@ -14,7 +11,7 @@ export const metadata: Metadata = {
   description: `Mint & Redeem Honey`,
 };
 
-export const revalidate = 10
+export const revalidate = 10;
 
 export default async function Home({
   searchParams: { mode },
@@ -23,21 +20,15 @@ export default async function Home({
     mode: "arcade" | "pro";
   };
 }) {
-  const [
-    supply7D,
-    volume7D,
-    supply30D,
-    volume30D,
-    supply90D,
-    volume90D,
-  ] = await Promise.all([
-    getHoneyData("supply", HoneyTimeFrame.WEEKLY),
-    getHoneyData("volume", HoneyTimeFrame.WEEKLY),
-    getHoneyData("supply", HoneyTimeFrame.MONTHLY),
-    getHoneyData("volume", HoneyTimeFrame.MONTHLY),
-    getHoneyData("supply", HoneyTimeFrame.QUARTERLY),
-    getHoneyData("volume", HoneyTimeFrame.QUARTERLY),
-  ]);
+  const [supply7D, volume7D, supply30D, volume30D, supply90D, volume90D] =
+    await Promise.all([
+      getHoneyData("supply", HoneyTimeFrame.WEEKLY),
+      getHoneyData("volume", HoneyTimeFrame.WEEKLY),
+      getHoneyData("supply", HoneyTimeFrame.MONTHLY),
+      getHoneyData("volume", HoneyTimeFrame.MONTHLY),
+      getHoneyData("supply", HoneyTimeFrame.QUARTERLY),
+      getHoneyData("volume", HoneyTimeFrame.QUARTERLY),
+    ]);
 
   return (
     <HoneyPage

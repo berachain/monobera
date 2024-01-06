@@ -7,6 +7,7 @@ import {
   usePollHoneyVaultBalance,
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
+import { ApyTooltip } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 import type { Address } from "wagmi";
 
@@ -45,7 +46,7 @@ export default function Claim({ feeApr }: { feeApr: string }) {
         </div>
       </div>
       <div className=" relative z-10 mt-4 w-full text-xs text-muted-foreground">
-        Honey Staking Projected <br /> Reward Rate (PRR)
+        APY <ApyTooltip />
       </div>
       <Image
         src={`${cloudinaryUrl}/BERPS/wlpafhymyjy8taz2x9qa`}
