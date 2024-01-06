@@ -89,7 +89,7 @@ export const Banner = () => {
             <TokenIcon address={bgtTokenAddress} fetch />
           </div>
           <div className="text-wrapper flex w-auto items-center align-middle text-lg font-bold">
-            {isLoadingApr ? 'Loading...' : `${bgtApr}% APY`}
+            {isLoadingApr ? 'Loading...' : `${parseFloat(String(bgtApr ?? "0")).toFixed(2)}% APY`}
             <Tooltip
               text={
                 <>
