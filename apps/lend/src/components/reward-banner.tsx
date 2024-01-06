@@ -62,7 +62,15 @@ export const Banner = () => {
         </Button>
       </div>
 
-      <div className="flex w-full flex-col gap-4">
+      <div className="flex w-full flex-col gap-2 md:items-center md:justify-center lg:items-start">
+        <div className="mx-auto flex inline-flex w-fit items-center rounded-full bg-background pr-4 lg:mx-0">
+          <div className="relative flex h-[32px] w-[32px] items-center">
+            <TokenIcon address={bgtTokenAddress} fetch />
+          </div>
+          <div className="text-wrapper w-auto text-lg font-bold">
+            69.69% PRR
+          </div>
+        </div>
         <div className="w-full text-center font-bold md:text-lg md:leading-10 lg:w-fit lg:text-left">
           What can I do with my BGT rewards?
           <div className="text-xs font-normal leading-normal text-muted-foreground md:text-sm">
