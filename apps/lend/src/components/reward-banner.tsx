@@ -5,6 +5,8 @@ import {
   formatter,
   useBeraJs,
   usePollUserBGTRewards,
+  usePollHoneyVaultBalance,
+  usePollBgtRewardsForAddress,
 } from "@bera/berajs";
 import {
   bgtTokenAddress,
@@ -16,10 +18,29 @@ import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { formatEther } from "viem";
+import type { Address } from "wagmi";
 
 export const Banner = () => {
   const { isReady, account } = useBeraJs();
   const { data: rewards, isLoading, refetch } = usePollUserBGTRewards();
+
+  const {
+    isLoading: isHoneyVaultBalanceLoading,
+    useFormattedHoneyVaultBalance,
+  } = usePollHoneyVaultBalance();
+
+  const honeyLocked = useFormattedHoneyVaultBalance();
+
+  const {
+    isLoading: isBgtRewardsLoading,
+    useBgtApr,
+  } = usePollBgtRewardsForAddress({
+    address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+  });
+
+  const bgtApr = useBgtApr(honeyLocked);
+  const isLoadingApr = isHoneyVaultBalanceLoading || isBgtRewardsLoading;
+
   const {
     write,
     isLoading: isClaimingLoading,
@@ -68,7 +89,7 @@ export const Banner = () => {
             <TokenIcon address={bgtTokenAddress} fetch />
           </div>
           <div className="text-wrapper flex w-auto items-center align-middle text-lg font-bold">
-            69.69% APY
+            {isLoadingApr ? 'Loading...' : `${bgtApr}% APY`}
             <Tooltip
               text={
                 <>

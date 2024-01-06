@@ -76,7 +76,7 @@ export function Header({
         {isReady && <BGTStatusBtn />}
         <Link
           className="flex h-10 w-12 flex-shrink-0 items-center justify-center rounded-md bg-blue-500"
-          href={process.env.NEXT_PUBLIC_FAUCET ?? ""}
+          href={process.env.NEXT_PUBLIC_FAUCET_URL ?? ""}
         >
           <svg
             width="24"
