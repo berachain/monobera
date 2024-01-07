@@ -6,8 +6,10 @@ export const useBeraPrice = () => {
   const { data } = usePollSwaps({
     tokenIn: process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address,
     tokenOut: process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address,
+    tokenInDecimals: 18,
+    tokenOutDecimals: 18,
     swapKind: 0,
-    amount: 1,
+    amount: "1",
   });
   return Number(data?.formattedReturnAmount);
 };

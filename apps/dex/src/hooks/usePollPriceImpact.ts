@@ -4,7 +4,7 @@ import useSWR from "swr";
 import { type Address } from "wagmi";
 
 import { laggy } from "./laggy";
-import { usePollSwaps, type SwapInfoV2 } from "./usePollSwaps";
+import { SwapInfoV2, usePollSwaps } from "@bera/berajs";
 
 interface IUsePollSwaps {
   tokenIn: Address;
