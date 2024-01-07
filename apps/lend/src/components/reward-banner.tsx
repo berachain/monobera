@@ -4,9 +4,9 @@ import {
   TransactionActionType,
   formatter,
   useBeraJs,
-  usePollUserBGTRewards,
-  usePollHoneyVaultBalance,
   usePollBgtRewardsForAddress,
+  usePollHoneyVaultBalance,
+  usePollUserBGTRewards,
 } from "@bera/berajs";
 import {
   bgtTokenAddress,
@@ -31,12 +31,10 @@ export const Banner = () => {
 
   const honeyLocked = useFormattedHoneyVaultBalance();
 
-  const {
-    isLoading: isBgtRewardsLoading,
-    useBgtApr,
-  } = usePollBgtRewardsForAddress({
-    address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
-  });
+  const { isLoading: isBgtRewardsLoading, useBgtApr } =
+    usePollBgtRewardsForAddress({
+      address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+    });
 
   const bgtApr = useBgtApr(honeyLocked);
   const isLoadingApr = isHoneyVaultBalanceLoading || isBgtRewardsLoading;
@@ -89,7 +87,9 @@ export const Banner = () => {
             <TokenIcon address={bgtTokenAddress} fetch />
           </div>
           <div className="text-wrapper flex w-auto items-center align-middle text-lg font-bold">
-            {isLoadingApr ? 'Loading...' : `${parseFloat(String(bgtApr ?? "0")).toFixed(2)}% APY`}
+            {isLoadingApr
+              ? "Loading..."
+              : `${parseFloat(String(bgtApr ?? "0")).toFixed(2)}% APY`}
             <Tooltip
               text={
                 <>

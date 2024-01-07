@@ -33,7 +33,7 @@ export function BGTStatusBtn() {
   const bgtTotalDelegated = useTotalDelegatorDelegated();
   const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
   const totalUnbonding = useDelegatorTotalUnbonding();
-  const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
+  // const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
 
   const totalBGT =
     Number(userBalance) +
@@ -42,15 +42,15 @@ export function BGTStatusBtn() {
 
   // @ts-ignore
   // const totalClaimableBGT: bigint =
-  isLoading || !bgtRewards || bgtRewards.length !== 3
-    ? 0n //@ts-ignore
-    : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
+  // isLoading || !bgtRewards || bgtRewards.length !== 3
+  //   ? 0n //@ts-ignore
+  //   : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
 
   return (
     <div className="hidden sm:block">
       <Popover open={openPopover} onOpenChange={setOpenPopover}>
         <PopoverTrigger asChild>
-          <div className="group flex h-11 w-fit cursor-pointer items-center rounded-md border border-accent bg-warning px-1 font-medium hover:bg-hover">
+          <div className="group flex h-10 w-fit cursor-pointer items-center rounded-md border border-accent bg-warning px-1 font-medium hover:bg-hover">
             {/* <BGTIcon bg="#FBBF24" stroke="#78350F" size="24" /> */}
             <div className="px-2 text-sm text-warning-foreground">
               {formatter.format(totalBGT)} BGT
