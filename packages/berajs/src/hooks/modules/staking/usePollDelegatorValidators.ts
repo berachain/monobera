@@ -167,9 +167,15 @@ export const usePollTotalDelegated = () => {
       ? undefined
       : data.delegationMap[validatorAddress];
   };
+
+  const useValidatorDelegationMap = () => {
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    return data === undefined ? undefined : data.delegationMap;
+  };
   return {
     isLoading,
     useTotalDelegatorDelegated,
+    useValidatorDelegationMap,
     useValidatorDelegation,
   };
 };

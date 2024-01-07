@@ -65,19 +65,19 @@ export function CreatePoolFeeData({
         >
           <TabsList className="w-full">
             <TabsTrigger value={VALUES.FIVE_BPS} className="w-full ">
-              0.15%
+              0.05%
             </TabsTrigger>
             {/* <TabsTrigger value={VALUES.TEN_BPS} className="w-full">
               0.20%
             </TabsTrigger> */}
             <TabsTrigger value={VALUES.THIRTY_BPS} className="w-full ">
-              0.40%
+              0.30%
             </TabsTrigger>
             <TabsTrigger
               value={VALUES.ONE_PERCENT}
               className="w-full  min-w-[30px]"
             >
-              1.10%
+              1%
             </TabsTrigger>
             {/* <TabsTrigger value={VALUES.CUSTOM} className="w-full">
               Custom
@@ -108,8 +108,14 @@ export function CreatePoolFeeData({
           }}
         /> */}
         <p className="text-sm font-medium text-muted-foreground">
-          0.15% to 0.40% is recommended for stable pairings
+          0.05% and 0.30% are recommended for stable pairings
         </p>
+        <Alert variant="info">
+          <AlertDescription>
+            Additional fee of 0.10% will be added to each pool to be redirected
+            to BGT stakers
+          </AlertDescription>
+        </Alert>
         {error && (
           <Alert variant="destructive" className="my-4">
             <AlertTitle>Error</AlertTitle>

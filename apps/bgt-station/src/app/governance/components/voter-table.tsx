@@ -12,13 +12,11 @@ import {
 import { Badge } from "@bera/ui/badge";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { getAddress } from "viem";
 
 import { MultiSelectBadge } from "../components/multi-select-badge";
-import { type ALL, type VOTER_TYPE } from "../types";
 
-const userTypes: Array<ALL | VOTER_TYPE> = ["all", "validators", "users"];
+// const userTypes: Array<ALL | VOTER_TYPE> = ["all","validators" ,"users"];
 
 const getBadge = (vt: number) => {
   switch (vt) {
@@ -70,7 +68,7 @@ export function VoterTable({
   votes: IVote[];
   isLoading: boolean;
 }) {
-  const [voterTypes, setVoterTypes] = React.useState<ALL | VOTER_TYPE>("all");
+  // const [voterTypes, setVoterTypes] = React.useState<ALL | VOTER_TYPE>("all");
   const [voteType, setVoteType] = React.useState<number[]>([]);
 
   const voterData = useMemo(
@@ -83,13 +81,14 @@ export function VoterTable({
           (data) => voteType.length === 0 || voteType.includes(data.option),
         ),
 
-    [voteType, voterTypes, votes],
+    // [voteType, voterTypes, votes],
+    [voteType, votes],
   );
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col items-center justify-between sm:flex-row">
-        <Tabs defaultValue={voterTypes} className="my-4">
+        {/* <Tabs defaultValue={voterTypes} className="my-4">
           <TabsList>
             {userTypes.map((type: ALL | VOTER_TYPE) => (
               <TabsTrigger
@@ -102,7 +101,7 @@ export function VoterTable({
               </TabsTrigger>
             ))}
           </TabsList>
-        </Tabs>
+        </Tabs> */}
         <MultiSelectBadge onSelect={(value) => setVoteType(value)} />
       </div>
       <Card className="relative ">

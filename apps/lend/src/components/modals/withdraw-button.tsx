@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
@@ -12,13 +11,12 @@ import {
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
+import { TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
 import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
@@ -63,7 +61,7 @@ export default function WithdrawBtn({
         {isLoading ? "Loading" : "Withdraw"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="w-fit p-8">
+        <DialogContent className="w-full p-8 md:w-[480px]">
           <WithdrawModalContent {...{ token, amount, setAmount, write }} />
         </DialogContent>
       </Dialog>
@@ -129,46 +127,16 @@ const WithdrawModalContent = ({
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Withdraw</div>
-      <Image
-        src={"/supply.png"}
-        alt="supply-img"
-        className="h-36 w-96"
-        width={100}
-        height={100}
-      />
-
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-1 text-sm font-semibold leading-tight">
-          Amount <Tooltip text="amount" />{" "}
-        </div>
-        <Input
-          type="number"
-          id="forum-discussion-link"
-          placeholder="0.0"
-          endAdornment={
-            <div className="flex items-center gap-1">
-              <TokenIcon token={token} size={"md"} />
-              {token.symbol}
-            </div>
-          }
-          value={amount}
-          onChange={(e) =>
-            setAmount(Number(e.target.value) === 0 ? undefined : e.target.value)
-          }
+      <div className="rounded-md border border-border bg-input">
+        <TokenInput
+          selected={token}
+          amount={amount}
+          balance={balance}
+          showExceeding={true}
+          selectable={false}
+          setAmount={(amount) => setAmount(amount as `${number}`)}
         />
-        <div className="flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
-          Available to withdraw: {Number(balance).toFixed(2)}
-          <span
-            className="underline hover:cursor-pointer"
-            onClick={() =>
-              setAmount(Number(balance) === 0 ? undefined : balance)
-            }
-          >
-            MAX
-          </span>
-        </div>
       </div>
-
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
@@ -182,7 +150,7 @@ const WithdrawModalContent = ({
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Supply PRR</div>
+          <div className="text-muted-foreground ">Supply APY</div>
           <div className="font-semibold text-success-foreground">
             {(reserveData.supplyAPR * 100).toFixed(2)}%
           </div>

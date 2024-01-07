@@ -59,6 +59,10 @@ export const navItems = [
     title: "Redeem",
   },
   {
+    href: faucetUrl,
+    title: "Faucet",
+  },
+  {
     href: "#",
     title: "Explore",
     children: [

@@ -20,7 +20,6 @@ import {
   beraTokenAddress,
   blockExplorerUrl,
   governanceAddress,
-  indexerUrl,
 } from "@bera/config";
 import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1beta1/gov";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
@@ -122,16 +121,14 @@ export default function ProposalDetails({
       if (proposal.messages.length === 0) {
         setProposalType("text-proposal");
       } else if (
-        (proposal.messages[0] as any).typeURL === updateFriendsOfTheChefTypeUrl
+        proposal.messages[0]?.typeURL === updateFriendsOfTheChefTypeUrl
       ) {
         setProposalType("new-gauge-proposal");
       } else if (
-        (proposal.messages[0] as any).typeURL === updateHoneyCollateralTypeUrl
+        proposal.messages[0]?.typeURL === updateHoneyCollateralTypeUrl
       ) {
         setProposalType("enable-collateral-for-honey");
-      } else if (
-        (proposal.messages[0] as any).typeURL === updateLendMarkeyTypeUrl
-      ) {
+      } else if (proposal.messages[0]?.typeURL === updateLendMarkeyTypeUrl) {
         setProposalType("new-lend-market");
       } else {
         setProposalType(undefined);
@@ -222,13 +219,11 @@ export default function ProposalDetails({
               <div className="flex items-center justify-between">
                 <div>Address To Add:</div>
                 <Link
-                  href={`${indexerUrl}/address/${
-                    (proposal!.messages[0] as any).value
-                  }`}
+                  href={`${blockExplorerUrl}/address/${proposal?.messages[0]?.value}`}
                   target="_blank"
                   className="cursor-pointer underline"
                 >
-                  {truncateHash((proposal!.messages[0] as any).value)}
+                  {truncateHash(proposal?.messages[0]?.value)}
                   <Icons.externalLink className="ml-1 inline-block h-3 w-3" />
                 </Link>
               </div>

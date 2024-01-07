@@ -109,29 +109,6 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                   setFromAmount(amount);
                 }}
               />
-              {/* <div className="relative">
-                <div
-                  className="absolute inset-0 flex w-full items-center justify-center"
-                  aria-hidden="true"
-                >
-                  <Button
-                    type="button"
-                    variant={"outline"}
-                    onClick={() => {
-                      if (isMint) {
-                        setTabValue("burn");
-                      } else {
-                        setTabValue("mint");
-                      }
-                      onSwitch();
-                    }}
-                    className="z-10 inline-flex h-fit w-fit items-center rounded-full bg-background p-1 text-sm font-semibold sm:p-2"
-                  >
-                    <Icons.swap className="h-3 w-3 sm:h-6 sm:w-6" />
-                  </Button>
-                </div>
-              </div> */}
-
               <TokenInput
                 selected={selectedTo}
                 selectedTokens={[selectedFrom, selectedTo]}

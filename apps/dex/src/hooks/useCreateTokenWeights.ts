@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePollAssetWalletBalance, type Token } from "@bera/berajs";
+import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import { getAddress } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
@@ -111,6 +112,9 @@ const useCreateTokenWeights = () => {
       });
     const isInvalidSwapFee = (step === 1 && swapFee > 100) || swapFee < 0;
 
+    const isBothBeras =
+      tokenWeights.some((item) => item.token?.address === nativeTokenAddress) &&
+      tokenWeights.some((item) => item.token?.address === beraTokenAddress);
     if (hasZeroWeight) {
       setError(new InvalidInputError("Weight cannot be 0"));
     } else if (isInvalidTotalWeight) {
@@ -127,6 +131,10 @@ const useCreateTokenWeights = () => {
       );
     } else if (isInvalidSwapFee) {
       setError(new InvalidInputError("Invalid swap fee."));
+    } else if (isBothBeras) {
+      setError(
+        new InvalidInputError("Cannot create a pool with both BERA tokens."),
+      );
     } else {
       setError(undefined);
     }

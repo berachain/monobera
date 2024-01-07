@@ -14,7 +14,7 @@ export const usePollAccountTradingSummary = () => {
     async () => {
       if (account) {
         const res = await fetch(
-          `${perpsEndpoints}/trading-summary/traders/${account}?count_back=1&resolution=1w`,
+          `${perpsEndpoints}/trading-summary/traders/${account}`,
         );
         const data = await res.json();
         const tradingSummary = data.result[0];

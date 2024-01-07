@@ -80,7 +80,11 @@ const CardViewLoading = () => (
   </div>
 );
 
-export const PoolSearch = () => {
+export const PoolSearch = ({
+  poolType,
+}: {
+  poolType: "allPools" | "userPools";
+}) => {
   const {
     data,
     userPools,
@@ -106,17 +110,19 @@ export const PoolSearch = () => {
   const receivers = userPools?.map((pool: Pool) => pool.pool) || [];
   const { useBgtRewards } = usePollBgtRewards(receivers);
   const { data: bgtRewards } = useBgtRewards();
+
   return (
     <div
       className="w-full flex-col items-center justify-center"
       id="poolstable"
     >
-      <Tabs defaultValue="allPools" className="flex flex-col gap-4">
+      <Tabs className="flex flex-col gap-4" value={poolType}>
         <TabsList className="w-fit" variant="ghost">
           <TabsTrigger
             value="allPools"
             className="w-full sm:w-fit"
             variant="ghost"
+            onClick={() => window.open("/pool?pool=allPools", "_self")}
           >
             All pools
           </TabsTrigger>
@@ -124,6 +130,7 @@ export const PoolSearch = () => {
             value="userPools"
             className="w-full sm:w-fit"
             variant="ghost"
+            onClick={() => window.open("/pool?pool=userPools", "_self")}
           >
             My pools
           </TabsTrigger>

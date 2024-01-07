@@ -22,8 +22,12 @@ export const getSwap = async (
   amount: string,
 ) => {
   try {
-    const parsedAmount = parseUnits(amount, tokenInDecimals ?? 18);
     const type = swapType === 0 ? "given_in" : "given_out";
+    const parsedAmount = parseUnits(
+      amount,
+      type === "given_in" ? tokenInDecimals ?? 18 : tokenOutDecimals ?? 18,
+    );
+
     const response = await fetch(
       `${
         process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
@@ -65,10 +69,23 @@ export const getSwap = async (
         batchSwapSteps[0].assetIn = process.env
           .NEXT_PUBLIC_BERA_ADDRESS as Address;
         batchSwapSteps[0].value = batchSwapSteps[0].amountIn;
-        // batchSwapSteps[0].amountIn = 0n;
       }
     }
 
+    if (
+      tokenOut === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)
+    ) {
+      const lastStep = batchSwapSteps.length - 1;
+      if (
+        batchSwapSteps !== undefined &&
+        batchSwapSteps[lastStep] !== undefined
+      ) {
+        // @ts-ignore
+        batchSwapSteps[lastStep].assetOut = process.env
+          .NEXT_PUBLIC_BERA_ADDRESS as Address;
+        // batchSwapSteps[0].value = batchSwapSteps[0].amountIn;
+      }
+    }
     const swapInfo = {
       batchSwapSteps: batchSwapSteps,
       formattedSwapAmount: amount.toString(),
@@ -84,9 +101,10 @@ export const getSwap = async (
       tokenIn,
       tokenOut,
     };
+
     return swapInfo;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return {
       batchSwapSteps: [],
       formattedSwapAmount: amount.toString(),
@@ -99,6 +117,8 @@ export const getSwap = async (
   }
 };
 const BASE_TOKEN = getAddress(process.env.NEXT_PUBLIC_HONEY_ADDRESS as string);
+const BERA_TOKEN = getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string);
+const WBERA_TOKEN = getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
 
 export const getBaseTokenPrice = async (pools: Pool[]) => {
   let mappedTokens: MappedTokens = {};
@@ -129,9 +149,15 @@ export const getBaseTokenPrice = async (pools: Pool[]) => {
             acc[getAddress(cur.tokenIn)] = cur.formattedReturnAmount;
             return acc;
           },
-          { [BASE_TOKEN]: "1" },
+          { [BASE_TOKEN]: 1 },
         )
       : undefined;
+
+    const beraPrice = mappedTokens[WBERA_TOKEN] ?? 0;
+    mappedTokens = {
+      ...mappedTokens,
+      [BERA_TOKEN]: beraPrice,
+    };
   }
 
   return mappedTokens;

@@ -1,6 +1,17 @@
-import { useBeraJs, usePollPrices } from "@bera/berajs";
-import { indexerUrl } from "@bera/config";
+import {
+  useBeraJs,
+  usePollDelegatorValidators,
+  usePollTotalDelegated,
+  type Validator,
+} from "@bera/berajs";
+import {
+  client,
+  getGlobalCuttingBoard,
+  getValidatorCuttingBoard,
+  type Weight,
+} from "@bera/graphql";
 import useSWR from "swr";
+import { getAddress, type Address } from "viem";
 
 export interface Coin {
   amount: string;
@@ -58,36 +69,76 @@ export interface GaugeWeight {
   address: string;
   amount: number;
   percentage: number;
-  tvl: number;
 }
+
+const getValidator = async (address: string): Promise<Weight[]> => {
+  return await client
+    .query({
+      query: getValidatorCuttingBoard,
+      variables: {
+        page: 0,
+        limit: 1,
+        validatorAddress: address,
+      },
+    })
+    .then((res: any) => {
+      return res.data.cuttingBoards[0].weights;
+    })
+    .catch((e) => {
+      console.log(e);
+      return undefined;
+    });
+};
 export const useUserGaugeWeight = () => {
   const { account } = useBeraJs();
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
-  const QUERY_KEY = ["user-gauge-weight", account, prices];
+  const { useDelegatorValidators } = usePollDelegatorValidators();
+  const delegatedValidators = useDelegatorValidators();
+  const { useValidatorDelegationMap, useTotalDelegatorDelegated } =
+    usePollTotalDelegated();
+  const delegationMap = useValidatorDelegationMap();
+  const total = useTotalDelegatorDelegated();
+  const QUERY_KEY = [
+    "user-gauge-weight",
+    account,
+    delegatedValidators,
+    delegationMap,
+    total,
+  ];
   return useSWR(
     QUERY_KEY,
     async () => {
       try {
-        if (!prices) return undefined;
-        const response = await fetch(
-          `${indexerUrl}/bgt/rewards/delegator/${account}`,
-        );
-        const result = await response.json().then((res) => res.result);
-        // const promiseArray = result.map((w: any) => getPoolTvl(w.address));
-        // const cbTvlData = await Promise.all(promiseArray);
-        // const tvl = getTvlPrices(cbTvlData, prices);
-
-        const gaugeWeightArray: GaugeWeight[] = result.map((w: any) => {
-          return {
-            label: w.address,
-            address: w.address,
-            amount: Number(w.amount),
-            percentage: Number(w.percentage),
-            // tvl: tvl[i],
-          };
+        if (!delegatedValidators || !delegationMap || !account || !total) {
+          return;
+        }
+        const promises = delegatedValidators?.map((validator: Validator) => {
+          return getValidator(validator.consAddr);
         });
-        return gaugeWeightArray;
+
+        console.log(promises);
+        const data = await Promise.all(promises as Promise<any>[]);
+        console.log(data);
+
+        const userWeights: Record<Address, GaugeWeight> = {};
+        delegatedValidators.forEach((validator: Validator, i: number) => {
+          const validatorCuttingBoard: Weight[] = data[i];
+          const userDelegatedAmount =
+            delegationMap[getAddress(validator.operatorAddr)];
+          validatorCuttingBoard.forEach((cb: Weight) => {
+            const weight = cb.weight;
+            const userStakedBgt = weight * userDelegatedAmount;
+            const receiver = getAddress(cb.receiver);
+            const userWeight = userWeights[receiver];
+            const newAmount = userStakedBgt + (userWeight?.amount ?? 0);
+            userWeights[receiver] = {
+              label: receiver,
+              address: receiver,
+              amount: newAmount,
+              percentage: newAmount / total,
+            };
+          });
+        });
+        return Object.values(userWeights);
       } catch (e) {
         console.log(e);
         return undefined;
@@ -100,35 +151,27 @@ export const useUserGaugeWeight = () => {
 };
 
 export const useValidatorGaugeWeight = (address: string) => {
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
-  const QUERY_KEY = ["user-gauge-weight", address, prices];
+  const QUERY_KEY = ["validator-gauge-weight", address];
   return useSWR(
     QUERY_KEY,
     async () => {
       try {
-        if (!prices) return undefined;
-        const response = await fetch(
-          `${indexerUrl}/cuttingboards/active?validators=${address}`,
-        );
-        const result = await response.json().then((res) => res.result);
-        // const promiseArray = result[0].weights.map((w: any) =>
-        //   getPoolTvl(w.address),
-        // );
-        // const cbTvlData = await Promise.all(promiseArray);
-        // const tvl = getTvlPrices(cbTvlData, prices);
-        const gaugeWeightArray: GaugeWeight[] = result[0].weights.map(
-          (w: any) => {
-            return {
-              label: w.address,
-              address: w.address,
-              amount: Number(w.amount),
-              percentage: Number(w.percentage),
-              // tvl: tvl[i],
-            };
-          },
-        );
-        return gaugeWeightArray;
+        const validatorCuttingBoard: Weight[] = await getValidator(address);
+
+        const totalAmount = validatorCuttingBoard.reduce((arr, curr) => {
+          return arr + Number(curr.amount);
+        }, 0);
+
+        const cbArray: GaugeWeight[] = validatorCuttingBoard.map((w: any) => {
+          return {
+            label: w.receiver,
+            address: w.receiver,
+            amount: Number(w.amount),
+            percentage: Number(w.amount) / totalAmount,
+          };
+        });
+
+        return cbArray;
       } catch (e) {
         console.log(e);
         return undefined;
@@ -141,29 +184,41 @@ export const useValidatorGaugeWeight = (address: string) => {
 };
 
 export const useGlobalValidatorGaugeWeight = () => {
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
-  const QUERY_KEY = ["global-gauge-weight", prices];
+  const QUERY_KEY = ["global-gauge-weight"];
   return useSWR(
     QUERY_KEY,
     async () => {
       try {
-        if (!prices) return undefined;
-        const response = await fetch(`${indexerUrl}/bgt/rewards`);
-        const result = await response.json().then((res) => res.result);
+        const globalCuttingBoard: Weight[] = await client
+          .query({
+            query: getGlobalCuttingBoard,
+            variables: {
+              page: 0,
+              limit: 1,
+            },
+          })
+          .then((res: any) => {
+            return res.data.globalCuttingBoardDatas[0].weights;
+          })
+          .catch((e) => {
+            console.log(e);
+            return undefined;
+          });
 
-        // const promiseArray = result.map((w: any) => getPoolTvl(w.address));
-        // const cbTvlData = await Promise.all(promiseArray);
-        // const tvl = getTvlPrices(cbTvlData, prices);
-        const gaugeWeightArray: GaugeWeight[] = result.map((w: any) => {
-          return {
-            label: w.address,
-            address: w.address,
-            amount: Number(w.amount),
-            percentage: Number(w.percentage),
-            // tvl: tvl[i],
-          };
-        });
+        const totalAmount = globalCuttingBoard.reduce((arr, curr) => {
+          return arr + Number(curr.amount);
+        }, 0);
+
+        const gaugeWeightArray: GaugeWeight[] = globalCuttingBoard.map(
+          (w: Weight) => {
+            return {
+              label: w.receiver,
+              address: w.receiver,
+              amount: Number(w.amount),
+              percentage: Number(w.amount) / totalAmount,
+            };
+          },
+        );
         return gaugeWeightArray;
       } catch (e) {
         console.log(e);

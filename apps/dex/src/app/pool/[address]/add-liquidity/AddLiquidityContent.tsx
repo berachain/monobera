@@ -87,6 +87,8 @@ export default function AddLiquidityContent({
     wBeraToken,
     isNativeBera,
     setIsNativeBera,
+    setActiveInput,
+    setActiveAmount,
     poolTokens,
   } = useAddLiquidity(pool, prices);
 
@@ -96,7 +98,7 @@ export default function AddLiquidityContent({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
       reset();
-      router.push(`/pool/${pool?.pool}`);
+      router.push(`/pool?pool=userPools`);
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
@@ -186,9 +188,11 @@ export default function AddLiquidityContent({
                         }
                       }}
                       amount={tokenInputs[i]?.amount ?? ""}
-                      setAmount={(amount: string) =>
-                        updateTokenAmount(i, amount)
-                      }
+                      setAmount={(amount: string) => {
+                        updateTokenAmount(i, amount);
+                        setActiveInput(i);
+                        setActiveAmount(amount);
+                      }}
                       weight={token.normalizedWeight}
                       price={prices[token.address]}
                       onExceeding={(exceeding: boolean) =>

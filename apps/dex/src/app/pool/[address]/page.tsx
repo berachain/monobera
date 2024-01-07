@@ -36,21 +36,10 @@ export default async function PoolPage({
         },
       },
     );
-    const pricesResponse = await fetch(
-      `${getAbsoluteUrl()}/api/getPrices/api`,
-      {
-        method: "GET",
-        headers: {
-          "x-vercel-protection-bypass": process.env
-            .VERCEL_AUTOMATION_BYPASS_SECRET as string,
-        },
-      },
-    );
 
     const pool = await poolResponse.json();
-    const prices = await pricesResponse.json();
 
-    return <PoolPageContent prices={prices} pool={pool} />;
+    return <PoolPageContent pool={pool} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
     notFound();

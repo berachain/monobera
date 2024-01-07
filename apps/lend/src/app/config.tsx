@@ -46,6 +46,10 @@ export const navItems = [
   //   title: "Markets",
   // },
   {
+    href: faucetUrl,
+    title: "Faucet",
+  },
+  {
     href: "#",
     title: "Explore",
     children: [
