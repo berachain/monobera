@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cloudinaryUrl } from "@bera/config";
 import { cn } from "@bera/ui";
-import { formatEther } from "viem";
 
 import Data from "~/components/data";
 import Hero from "~/components/hero";
@@ -17,8 +16,6 @@ import { SwapCard } from "~/components/swap-card";
 import { type HoneyEntry } from "./type";
 
 export default function HoneyPage({
-  supply24H,
-  volume24H,
   supply7D,
   volume7D,
   supply30D,
@@ -27,8 +24,6 @@ export default function HoneyPage({
   volume90D,
   mode,
 }: {
-  supply24H: HoneyEntry[];
-  volume24H: HoneyEntry[];
   supply7D: HoneyEntry[];
   volume7D: HoneyEntry[];
   supply30D: HoneyEntry[];
@@ -62,12 +57,8 @@ export default function HoneyPage({
 
   const arcade = mode === "arcade";
   const router = useRouter();
-  const formatted24HVolume = formatEther(
-    BigInt(volume7D[volume7D.length - 1]?.amount ?? "0"),
-  );
-  const formattedTotalSupply = formatEther(
-    BigInt(supply24H[supply24H.length - 1]?.amount ?? "0"),
-  );
+  const formatted24HVolume = volume7D[volume7D.length - 1]?.amount ?? "0";
+  const formattedTotalSupply = supply7D[supply7D.length - 1]?.amount ?? "0";
   if (arcade && typeof window !== "undefined" && window?.innerWidth < 1000) {
     router.push("/?mode=pro");
   }
@@ -175,8 +166,6 @@ export default function HoneyPage({
                   )}
                   <HoneyChart
                     {...{
-                      supply24H,
-                      volume24H,
                       supply7D,
                       volume7D,
                       supply30D,

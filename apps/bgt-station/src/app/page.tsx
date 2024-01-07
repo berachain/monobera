@@ -1,5 +1,4 @@
 import { type Metadata } from "next";
-import { indexerUrl } from "@bera/config";
 import { Footer } from "@bera/shared-ui";
 
 import { getMetaTitle } from "~/utils/metadata";
@@ -10,22 +9,11 @@ export const metadata: Metadata = {
   description: `Welcome to ${process.env.NEXT_PUBLIC_BGT_NAME}!`,
 };
 
-async function getAvgValidatorUptime() {
-  try {
-    const res = await fetch(`${indexerUrl}/validators/uptime`);
-    const jsonRes = await res.json();
-    return jsonRes;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-export default async function Page() {
-  const avgValidatorUptime = await getAvgValidatorUptime();
+export default function Page() {
   return (
     <>
       <div className="container max-w-1280 pb-16">
-        <DashBoard avgValidatorUptime={avgValidatorUptime?.uptime ?? 0} />
+        <DashBoard />
       </div>
       <Footer />
     </>

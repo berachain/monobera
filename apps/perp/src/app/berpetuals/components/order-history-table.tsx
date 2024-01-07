@@ -51,7 +51,7 @@ export function OrderHistoryTable({
         <DataTable
           columns={getPositionColumns(markets)}
           data={openPositons ?? []}
-          className="hidden w-full min-w-[1200px] sm:block"
+          className="hidden w-full w-full sm:block"
         />
       )}
       {tab === "orders" && (

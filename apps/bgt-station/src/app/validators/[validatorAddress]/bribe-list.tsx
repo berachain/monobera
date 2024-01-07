@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   formatUsd,
+  usePollEpochs,
   usePollPrices,
   useTokenInformation,
   useTokens,
@@ -131,6 +132,10 @@ export const BribeCardLoading = () => {
 };
 
 export default function BribeList({ bribes }: { bribes: any[][] }) {
+  const { useCurrentEpoch } = usePollEpochs();
+  const epochs = useCurrentEpoch();
+  const secondsPerEpoch = (epochs?.endTime ?? 0) - (epochs?.startTime ?? 0);
+
   const bribesList =
     bribes && bribes[0] && bribes[0][0]
       ? bribes
@@ -146,7 +151,8 @@ export default function BribeList({ bribes }: { bribes: any[][] }) {
                   proposalsLeft:
                     bribeObj.numBlockProposals -
                     bribeObj.numBlockProposalsBribed,
-                  numBlockProposals: bribeObj.numBlockProposals,
+                  numBlockProposals:
+                    (bribeObj.numBlockProposals * 5n) / BigInt(secondsPerEpoch),
                 };
               },
             );

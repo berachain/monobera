@@ -100,6 +100,8 @@ export function SwapCard({
     inputCurrency,
     outputCurrency,
   });
+
+  console.log(payload);
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
@@ -123,9 +125,13 @@ export function SwapCard({
       selectedTo?.symbol
     }`,
     onSuccess: () => {
+      setFromAmount(undefined);
+      setToAmount(undefined);
       setOpenPreview(false);
     },
     onError: () => {
+      setFromAmount(undefined);
+      setToAmount(undefined);
       setOpenPreview(false);
     },
   });
@@ -304,6 +310,7 @@ export function SwapCard({
                     amount={toAmount}
                     price={Number(tokenOutPrice)}
                     hideMax={true}
+                    disabled={true}
                     setAmount={(amount) => {
                       setSwapKind(SwapKind.GIVEN_OUT);
                       setSwapAmount(amount);
@@ -398,7 +405,7 @@ export function SwapCard({
                 {isMainPage ? (
                   <Link href="/swap" className="w-full">
                     <Button className="flex w-full gap-1">
-                      Swap <Icons.arrowRight className="block h-5 w-5" />
+                      Enter App <Icons.arrowRight className="block h-5 w-5" />
                     </Button>
                   </Link>
                 ) : (

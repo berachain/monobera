@@ -1,3 +1,4 @@
+import { type PoolDayData } from "@bera/graphql";
 import { type Address } from "viem";
 
 export type TokenData = {
@@ -29,6 +30,7 @@ export interface Token {
   weight: string;
   normalizedWeight: number;
   balance: bigint;
+  latestPriceUsd: string;
 }
 export interface Pool {
   metadata: {
@@ -66,12 +68,44 @@ export interface Pool {
   dailyFees?: number;
   tags?: string[];
   poolShareDenomHex?: string;
+  liquidity?: [Address[], string[]];
   bgtApy?: number;
   totalApy?: number;
   feeApy?: number;
   fees?: number;
   bgtPerYear?: number;
   userDepositedShares?: number;
+  tvlUsd?: number;
+  volumeUsd?: number;
+  historicalData?: PoolDayData[];
+  createdTimeStamp?: number;
+}
+
+export interface LatestPriceUsd {
+  id: string;
+  price: string;
+}
+export interface SubGraphPool {
+  createdTimeStamp: any;
+  feesUsd: string;
+  id: string;
+  pool: string;
+  poolName: string;
+  tokens: {
+    denomWeight: number;
+    amount: number;
+    denom: string;
+    address: string;
+    symbol: string;
+    decimals: number;
+    latestPriceUsd: LatestPriceUsd;
+  }[];
+  swapFee: number;
+  sharesDenom: string;
+  sharesAddress: string;
+  totalShares: number;
+  tvlUsd: string;
+  historicalData: PoolDayData[];
 }
 
 export type PoolRecords = Record<string, PoolRecord>;

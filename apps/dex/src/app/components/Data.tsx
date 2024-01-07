@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { formatUsd, useLatestBlock, usePollPrices } from "@bera/berajs";
+import {
+  formatUsd,
+  formatter,
+  useLatestBlock,
+  usePollPrices,
+} from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-
-import { sumPrices } from "~/utils/sumPrices";
 
 export function DataCard({
   icon,
@@ -35,19 +38,7 @@ export function DataCard({
 }
 
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
-  const { usePrice, usePrices, isLoading } = usePollPrices();
-
-  const { data: prices } = usePrices();
-
-  const tvlValue = useMemo(() => {
-    if (isLoading || !prices || !tvl || !tvl[0]) return 0;
-    return sumPrices(prices, tvl[0].data);
-  }, [tvl, prices]);
-
-  const volumeValue = useMemo(() => {
-    if (isLoading || !prices || !volume || !volume[0]) return 0;
-    return sumPrices(prices, volume[0].data);
-  }, [volume, prices]);
+  const { usePrice, isLoading } = usePollPrices();
 
   const block = useLatestBlock();
   const { data: beraPrice } = usePrice(beraTokenAddress);
@@ -62,19 +53,19 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
         <DataCard
           title="Total Value Locked"
           isLoading={!isDataReady}
-          value={formatUsd(tvlValue)}
+          value={formatUsd(tvl)}
           icon={<Icons.lock className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard
           title="24H Volume"
           isLoading={!isDataReady}
-          value={formatUsd(volumeValue)}
+          value={formatUsd(volume)}
           icon={<Icons.candleStick className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard
           title="BGT Rewards"
           isLoading={!isDataReady}
-          value={`${(Number(block) * 2.86).toFixed(2)} BGT`}
+          value={`${formatter.format(Number(block) * 2.86)} BGT`}
           icon={<Icons.medal className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard

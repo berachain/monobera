@@ -131,7 +131,7 @@ export function TokenInput({
         <div className="mb-4 h-fit w-full cursor-default">
           {hideBalance ? null : (
             <div className="mt-[-10px] flex w-full items-center justify-between gap-1">
-              <div className="flex flex-row items-center justify-start gap-1 px-3">
+              <div className="flex flex-row items-center justify-start gap-1 px-1">
                 <Icons.wallet className="h-3 w-3 text-muted-foreground" />
                 <p className="w-fit max-w-[60px] overflow-hidden truncate p-0 text-xs text-muted-foreground">
                   {tokenBalance ? tokenBalance : "0"}

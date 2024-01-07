@@ -203,6 +203,7 @@ export default function Delegate({
               validatorAddress={validator}
               redelegate
               redelegateValidatorAddress={redelegateValidator}
+              filter={[validator]}
             />
           </>
         )}

@@ -41,7 +41,7 @@ export default function Vote({
         {tab === "vote" && <VoteCard {...{ obituaries, ...props }} />}
         {tab === "history" && <VoteHistory {...props} />}
       </div>
-      <div className="hidden h-full w-full gap-4 rounded-sm bg-background p-4 sm:rounded-tl-none md:flex md:rounded-tl-sm">
+      <div className="hidden h-full w-full gap-4 rounded-sm sm:rounded-tl-none md:flex md:rounded-tl-sm">
         <VoteCard {...{ obituaries, ...props }} />
         <VoteHistory {...props} />
       </div>

@@ -1,6 +1,3 @@
-// import Image from "next/image";
-// import { cloudinaryUrl } from "@bera/config";
-
 import {
   Accordion,
   AccordionContent,
@@ -8,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@bera/ui/accordion";
 
-// import { IMGMap } from "~/utils/image-map";
+import { usePollEpoch } from "~/hooks/usePollEpoch";
 import { usePollMe } from "~/hooks/usePollMe";
 
 export default function VoteHistory({
@@ -21,6 +18,7 @@ export default function VoteHistory({
   epoch: any;
 }) {
   const { data: me } = usePollMe();
+  const { data: epo } = usePollEpoch(epoch);
   const votes = me?.votes || [];
   function countdown(targetDateTime: string) {
     const targetDate = new Date(targetDateTime);
@@ -28,11 +26,11 @@ export default function VoteHistory({
     const diff = targetDate.getTime() - currentDate.getTime();
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    return `${hours}Hs ${minutes}mins`;
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    return `${hours}Hs ${minutes}mins ${seconds}secs`;
   }
-
   return (
-    <div className="h-full flex-auto overflow-y-auto rounded-b-sm rounded-tl-none rounded-tr-sm border bg-muted py-4 md:rounded-sm">
+    <div className="h-full flex-1 overflow-y-auto rounded-b-sm rounded-tl-none rounded-tr-sm border bg-muted py-4 md:rounded-sm">
       <div className="font-retro-gaming hidden px-2 text-lg leading-7 md:block">
         Vote History
       </div>
@@ -104,7 +102,7 @@ export default function VoteHistory({
                         <div className="font-retro-gaming text-lg leading-7">
                           You&apos;ll get results in <br />
                           <span className="text-destructive-foreground">
-                            {countdown(epoch?.nextEpoch)}
+                            {countdown(epo?.nextEpoch)}
                           </span>
                         </div>
                       </>

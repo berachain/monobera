@@ -6,17 +6,13 @@ import {
   usePollGlobalValidatorBribes,
   usePollPrices,
 } from "@bera/berajs";
+import { BribeApyTooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { EpochTimeline } from "./epoch-timeline";
-import { Stats } from "./stats";
 
-export function Details({
-  avgValidatorUptime,
-}: {
-  avgValidatorUptime: string;
-}) {
+export function Details() {
   const { useTotalValidators } = usePollActiveValidators();
   const total = useTotalValidators();
   const { useBgtSupply } = usePollBgtSupply();
@@ -43,7 +39,7 @@ export function Details({
         ) : (
           `${avgApy?.toFixed(2)}%`
         ),
-      text: "Average PRR",
+      text: "Average Bribe APY",
     },
     {
       amount:
@@ -67,14 +63,15 @@ export function Details({
               <div className="flex h-8 items-center justify-center text-2xl font-semibold leading-loose text-foreground">
                 {info.amount}
               </div>
-              <div className="text-sm font-medium leading-[14px] text-muted-foreground">
-                {info.text}
+              <div className="flex flex-row items-center justify-center gap-1 self-center text-center text-sm font-medium leading-[14px] text-muted-foreground">
+                {info.text}{" "}
+                {info.text === "Average Bribe APY" && <BribeApyTooltip />}
               </div>
             </Card>
           ))}
         </div>
       </div>
-      <Stats avgValidatorUptime={avgValidatorUptime} />
+      {/* <Stats avgValidatorUptime={avgValidatorUptime} /> */}
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { client, getGlobalCuttingBoard, type Weight } from "@bera/graphql";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
@@ -9,11 +10,22 @@ export const usePollGlobalCuttingBoard = () => {
   useSWR(
     QUERY_KEY,
     async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_INDEXER_ENDPOINT}/bgt/rewards`,
-      );
-      const temp = await response.json();
-      return temp;
+      const globalCuttingBoard: Weight[] = await client
+        .query({
+          query: getGlobalCuttingBoard,
+          variables: {
+            page: 0,
+            limit: 1,
+          },
+        })
+        .then((res: any) => {
+          return res.data.globalCuttingBoardDatas[0].weights;
+        })
+        .catch((e) => {
+          console.log(e);
+          return undefined;
+        });
+      return globalCuttingBoard;
     },
     {
       refreshInterval: POLLING.SLOW,

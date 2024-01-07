@@ -33,7 +33,7 @@ export const usePollSwaps = ({
       } catch (e) {
         // console.log(e);
         // TODO: throws so many errors but this is good 4 debug
-        // console.error(e);
+        console.error(e);
         return {
           batchSwapSteps: [],
           formattedSwapAmount: amount.toString(),
