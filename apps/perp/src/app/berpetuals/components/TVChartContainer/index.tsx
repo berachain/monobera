@@ -44,10 +44,14 @@ export const TVChartContainer = (
       container: chartContainerRef.current,
       library_path: props.library_path,
       locale: props.locale as LanguageCode,
-      disabled_features: ["use_localstorage_for_settings"],
       enabled_features: [
         "study_templates",
         "iframe_loading_compatibility_mode",
+      ],
+      disabled_features: [
+        "header_symbol_search",
+        "use_localstorage_for_settings",
+        "header_compare",
       ],
       charts_storage_url: props.charts_storage_url,
       charts_storage_api_version: props.charts_storage_api_version,
