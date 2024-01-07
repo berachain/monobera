@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router";
 import { formatUsd, formatter, usePollBgtRewards } from "@bera/berajs";
-import { TokenIconList } from "@bera/shared-ui";
+import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { RewardBtn } from "~/app/components/reward-btn";
@@ -65,8 +65,8 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
               : (pool.bgtApy ?? 0).toFixed(2)}
             %
           </div>
-          <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
-            Est. PRR
+          <div className="flex flex-row items-center gap-1 text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
+            Est. APY <ApyTooltip />
           </div>
         </div>
         <div className="flex items-center gap-4">

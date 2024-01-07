@@ -1,4 +1,4 @@
-import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
+import { nativeTokenAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, getAddress } from "viem";
@@ -35,10 +35,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
     async () => {
       if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {
-        const fullTokenList = [
-          ...tokenList,
-          ...(externalTokenList ?? []),
-        ].filter((t) => t.address.localeCompare(beraTokenAddress) !== 0);
+        const fullTokenList = [...tokenList, ...(externalTokenList ?? [])];
         const call: Call[] = fullTokenList.map((item: Token) => {
           if (item.address === nativeTokenAddress) {
             return {

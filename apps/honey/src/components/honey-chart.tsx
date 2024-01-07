@@ -37,6 +37,14 @@ const Options = {
       },
     },
   },
+  elements: {
+    point: {
+      radius: 0,
+    },
+    line: {
+      tension: 0.4, // smooth lines
+    },
+  },
   plugins: {
     legend: {
       display: false,
@@ -79,8 +87,6 @@ const Options = {
 };
 
 interface IHoneyChart {
-  supply24H: HoneyEntry[];
-  volume24H: HoneyEntry[];
   supply7D: HoneyEntry[];
   volume7D: HoneyEntry[];
   supply30D: HoneyEntry[];
@@ -154,8 +160,6 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
 }
 
 export const HoneyChart = ({
-  supply24H,
-  volume24H,
   supply7D,
   volume7D,
   supply30D,
@@ -165,8 +169,6 @@ export const HoneyChart = ({
   arcade,
 }: IHoneyChart) => {
   const DATA = {
-    supply24H,
-    volume24H,
     supply7D,
     volume7D,
     supply30D,

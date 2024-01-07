@@ -20,6 +20,8 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { type Address } from "viem";
 
 import YellowCard from "~/components/yellow-card";
+import { useUserGaugeWeight } from "~/hooks/useGaugeWeights";
+import AverageGaugeWeight from "./components/average-gauge-weight";
 import { Banner } from "./components/banner";
 import { ClaimBribesDialog } from "./components/claim-bribes-dialog";
 import UnbondingQueue from "./components/unbonding-queue";
@@ -39,7 +41,6 @@ export default function Portfolio() {
 
   const { useTotalDelegatorDelegated } = usePollTotalDelegated();
   const total = useTotalDelegatorDelegated();
-
   const totalValidators = useTotalValidatorsDelegated();
   const {
     useDelegatorUnbondingQueue,
@@ -66,7 +67,7 @@ export default function Portfolio() {
       console.log(e);
     },
   });
-
+  useUserGaugeWeight();
   return (
     <div>
       {ModalPortal}
@@ -221,7 +222,7 @@ export default function Portfolio() {
                       {BGTSelectionEnum.YOUR_DELEGATIONS.split("-")[1]}
                     </p>
                   </TabsTrigger>
-                  {/* <TabsTrigger
+                  <TabsTrigger
                     value={BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT}
                     className="capitalize"
                     onClick={() =>
@@ -239,7 +240,7 @@ export default function Portfolio() {
                       {" "}
                       {BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT.split("-")[1]}
                     </p>
-                  </TabsTrigger> */}
+                  </TabsTrigger>
                   <TabsTrigger
                     value={BGTSelectionEnum.UNBONDING_QUEUE}
                     className="capitalize"
@@ -259,9 +260,9 @@ export default function Portfolio() {
             </div>
             <div className="mt-8">
               {tab === BGTSelectionEnum.YOUR_DELEGATIONS && <YourDelegations />}
-              {/* {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
+              {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
                 <AverageGaugeWeight />
-              )} */}
+              )}
               {tab === BGTSelectionEnum.UNBONDING_QUEUE && (
                 <UnbondingQueue unbondingQueue={unbondingQueue} />
               )}

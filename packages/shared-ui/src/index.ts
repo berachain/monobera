@@ -44,3 +44,4 @@ export { DynamicRewardBtn } from "./dynamic-reward-btn";
 export { Documentation } from "./documentation";
 
 export { useTxn } from "./hooks";
+export * from "./apyTooltip";
