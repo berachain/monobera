@@ -12,6 +12,10 @@ export interface Liquidity {
   swapDirection: SWAP_DIRECTION;
   amount: number;
   timestamp: number;
+  latestPriceUsd: {
+    id: string;
+    price: string;
+  };
 }
 export interface SubgraphCoin {
   denom: string;

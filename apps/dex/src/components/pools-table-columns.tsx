@@ -319,24 +319,24 @@ export const my_columns: ColumnDef<any>[] = [
     },
     enableSorting: false,
   },
-  {
-    accessorKey: "fees",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Fees Collected"
-        tooltip="Your share of transaction fees the position has collected."
-        className="whitespace-nowrap"
-      />
-    ),
-    cell: ({ row }) => {
-      const fees = formatter.format(row.original.fees || 0);
-      return <div className="flex items-center">${fees}</div>;
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-  },
+  // {
+  //   accessorKey: "fees",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="Fees Collected"
+  //       tooltip="Your share of transaction fees the position has collected."
+  //       className="whitespace-nowrap"
+  //     />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const fees = formatter.format(row.original.fees || 0);
+  //     return <div className="flex items-center">${fees}</div>;
+  //   },
+  //   filterFn: (row, id, value) => {
+  //     return value.includes(row.getValue(id));
+  //   },
+  // },
   {
     accessorKey: "totalApy",
     header: ({ column }) => (
