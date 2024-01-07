@@ -1,10 +1,10 @@
+import { usePollSwaps, type SwapInfoV2 } from "@bera/berajs";
 import { POLLING } from "@bera/shared-ui/src/utils";
 import { formatUnits, parseUnits } from "ethers";
 import useSWR from "swr";
 import { type Address } from "wagmi";
 
 import { laggy } from "./laggy";
-import { SwapInfoV2, usePollSwaps } from "@bera/berajs";
 
 interface IUsePollSwaps {
   tokenIn: Address;
