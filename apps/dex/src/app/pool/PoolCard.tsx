@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { type Pool } from "@bera/bera-router";
 import { formatAmountBig, formatUsd, formatter } from "@bera/berajs";
-import { TokenIconList } from "@bera/shared-ui";
+import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -34,11 +34,12 @@ export const PoolCard = ({
         <div className="flex h-12 w-full items-center justify-center text-sm text-muted-foreground">
           {poolName.length > 60 ? `${poolName.slice(0, 60)}...` : poolName}
         </div>
-        <div className="flex h-7 flex-shrink-0 gap-2 whitespace-nowrap text-center text-xl font-semibold">
+        <div className="flex h-7 flex-shrink-0 items-center whitespace-nowrap text-center text-xl font-semibold">
           {(pool?.totalApy ?? 0) > 10000
             ? formatter.format(pool?.totalApy ?? 0)
             : (pool?.totalApy ?? 0).toFixed(2)}
-          % PRR <TagList tagList={pool?.tags ?? []} className="inline-flex" />
+          % APY <ApyTooltip />{" "}
+          <TagList tagList={pool?.tags ?? []} className="inline-flex" />
         </div>
       </div>
 

@@ -310,6 +310,7 @@ export function SwapCard({
                     amount={toAmount}
                     price={Number(tokenOutPrice)}
                     hideMax={true}
+                    disabled={true}
                     setAmount={(amount) => {
                       setSwapKind(SwapKind.GIVEN_OUT);
                       setSwapAmount(amount);

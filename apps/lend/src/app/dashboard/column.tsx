@@ -55,7 +55,7 @@ export const user_supply_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Supply PRR"
+        title="Supply APY"
         className="whitespace-nowrap"
       />
     ),
@@ -126,7 +126,7 @@ export const user_borrows_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Loan PRR"
+        title="Loan APY"
         className="whitespace-nowrap"
       />
     ),
@@ -197,7 +197,7 @@ export const available_supply_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Supply PRR"
+        title="Supply APY"
         className="whitespace-nowrap"
       />
     ),
@@ -268,7 +268,7 @@ export const available_borrows_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Variable PRR"
+        title="Variable APY"
         className="whitespace-nowrap"
       />
     ),

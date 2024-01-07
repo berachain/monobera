@@ -10,7 +10,13 @@ import {
   type PoLValidator,
 } from "@bera/berajs";
 import { formatUsd } from "@bera/berajs/src/utils";
-import { TokenIconList, Tooltip, ValidatorIcon, useTxn } from "@bera/shared-ui";
+import {
+  BribeApyTooltip,
+  TokenIconList,
+  Tooltip,
+  ValidatorIcon,
+  useTxn,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -52,7 +58,7 @@ export default function ValidatorCard({
   const valiInfo = [
     {
       title: (
-        <div>
+        <div className="flex flex-row items-center gap-1">
           BGT Delegated{" "}
           <Tooltip text="Amount of BGT that you delegated to this validator." />
         </div>
@@ -61,7 +67,7 @@ export default function ValidatorCard({
     },
     {
       title: (
-        <div>
+        <div className="flex flex-row items-center gap-1">
           Voting power{" "}
           <Tooltip text="Represents the influence in network governance based on amount delegated to this validator" />
         </div>
@@ -70,7 +76,7 @@ export default function ValidatorCard({
     },
     {
       title: (
-        <div>
+        <div className="flex flex-row items-center gap-1">
           Commision{" "}
           <Tooltip text="Amount of validator rewards retained by this validator" />
         </div>
@@ -81,15 +87,15 @@ export default function ValidatorCard({
     },
     {
       title: (
-        <div>
-          PRR <Tooltip text="Projected yearly rewards" />
+        <div className="flex flex-row items-center gap-1">
+          APY <BribeApyTooltip />
         </div>
       ),
       value: `${Number(validator.vApy).toFixed(2)}%`,
     },
     {
       title: (
-        <div>
+        <div className="flex flex-row items-center gap-1">
           Bribes Earned{" "}
           <Tooltip text="Total amount of bribes accrued from this validator" />
         </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Tooltip } from "@bera/shared-ui";
+import { BribeApyTooltip, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -36,7 +36,7 @@ export default function ValidatorDetails({
         </div>
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
-            PRR <Tooltip text="Projected yearly rewards" />
+            APY <BribeApyTooltip />
           </div>
           <div className="text-muted-foreground">{vApy}%</div>
         </div>
