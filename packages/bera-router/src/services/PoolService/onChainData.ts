@@ -1,7 +1,9 @@
 import { bankAddress } from "@bera/config";
+import { type PoolDayData } from "@bera/graphql";
 import { cloneDeep, set, unset } from "lodash";
-import { formatUnits, type Address, type PublicClient } from "viem";
+import { formatUnits, getAddress, type Address, type PublicClient } from "viem";
 
+import { beraToEth } from "~/utils/evmToBera";
 import {
   BANK_PRECOMPILE_ABI,
   DEX_PRECOMPILE_ABI,
@@ -9,10 +11,12 @@ import {
 } from "../constants";
 import { ERC20ABI } from "./erc20abi";
 import {
+  type LatestPriceUsd,
   type Pool,
   type PoolData,
   type PoolRecords,
   type RawPool,
+  type SubGraphPool,
   type WeightEntry,
 } from "./types";
 
@@ -132,6 +136,73 @@ export class MultiCallPools {
     this.formatRecords();
     return true;
   }
+
+  public formatSubGraphPools = (
+    pools: SubGraphPool[],
+    responses: any[],
+  ): Pool[] => {
+    const parsedPools = pools.map((subGraphPool, index) => {
+      const historicalPoolData: PoolDayData[] = responses[index];
+      const poolHexAddress = beraToEth(subGraphPool.pool);
+      const totalWeight = subGraphPool.tokens.reduce((acc, curr) => {
+        return acc + Number(curr.denomWeight);
+      }, 0);
+      const liquidityStruct = [
+        subGraphPool.tokens.map((token: any) => token.address),
+        subGraphPool.tokens.map((token: any) =>
+          formatUnits(token.amount, token.decimals),
+        ),
+      ];
+
+      return {
+        metadata: {
+          blockNum: "", // You can set appropriate values here
+          txHash: "",
+          blockHash: "",
+          blockTime: "",
+          txIndex: "",
+        },
+        pool: poolHexAddress,
+        poolName: subGraphPool.poolName,
+        totalSupply: subGraphPool.totalShares,
+        shareAddress: subGraphPool.sharesDenom,
+        poolShareDenomHex: subGraphPool.sharesAddress,
+        liquidity: liquidityStruct,
+        historicalData: historicalPoolData,
+        createdTimeStamp: subGraphPool.createdTimeStamp,
+        tokens: subGraphPool.tokens.map(
+          (token: {
+            denomWeight: number;
+            amount: number;
+            denom: string;
+            address: string;
+            symbol: string;
+            decimals: number;
+            latestPriceUsd: LatestPriceUsd;
+          }) => {
+            const normalizedWeight = token.denomWeight
+              ? (Number(token.denomWeight) * 100) / totalWeight
+              : 0;
+            return {
+              address: getAddress(token.address),
+              decimals: token.decimals,
+              name: token.symbol,
+              symbol: token.symbol,
+              weight: token.denomWeight,
+              balance: formatUnits(BigInt(token.amount), token.decimals),
+              normalizedWeight: normalizedWeight,
+              latestPriceUsd: token.latestPriceUsd.price,
+            };
+          },
+        ),
+        swapFee: subGraphPool.swapFee,
+        totalWeight: totalWeight,
+        tvlUsd: subGraphPool.tvlUsd,
+      } as unknown as Pool;
+    });
+
+    return parsedPools;
+  };
 
   public formatRecords = () => {
     for (const key in this.rawPools) {

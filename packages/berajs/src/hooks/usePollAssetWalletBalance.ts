@@ -1,3 +1,4 @@
+import { nativeTokenAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, getAddress } from "viem";
@@ -34,17 +35,9 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
     async () => {
       if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {
-        const fullTokenList = [
-          ...tokenList,
-          ...(externalTokenList ?? []),
-        ].filter(
-          (t) =>
-            t.address.localeCompare(
-              "0x0000000000000000000000000000000000000001",
-            ) !== 0,
-        );
+        const fullTokenList = [...tokenList, ...(externalTokenList ?? [])];
         const call: Call[] = fullTokenList.map((item: Token) => {
-          if (item.address === "0x0000000000000000000000000000000000000000") {
+          if (item.address === nativeTokenAddress) {
             return {
               address: networkConfig.precompileAddresses
                 .multicallAddress as Address,

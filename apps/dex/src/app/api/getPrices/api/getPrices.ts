@@ -104,7 +104,7 @@ export const getSwap = async (
 
     return swapInfo;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return {
       batchSwapSteps: [],
       formattedSwapAmount: amount.toString(),

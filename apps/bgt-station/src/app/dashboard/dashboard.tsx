@@ -16,11 +16,7 @@ export const metadata: Metadata = {
   description: "BGT Station",
 };
 
-export default function DashBoard({
-  avgValidatorUptime,
-}: {
-  avgValidatorUptime: string;
-}) {
+export default function DashBoard() {
   const { usePrices } = usePollPrices();
   const { data: prices } = usePrices();
   const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
@@ -52,7 +48,7 @@ export default function DashBoard({
         </>
       ),
       message: "Stake your BGT with the most rewarding validators",
-      keyword: "PRR",
+      keyword: "APY",
     },
   ];
   return (
@@ -68,7 +64,7 @@ export default function DashBoard({
         <div className="text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
           A place for all your BGT
         </div>
-        <Details avgValidatorUptime={avgValidatorUptime} />
+        <Details />
       </div>
       <div>
         <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">

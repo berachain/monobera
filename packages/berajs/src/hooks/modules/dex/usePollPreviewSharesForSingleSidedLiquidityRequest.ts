@@ -11,7 +11,7 @@ import { useBeraConfig } from "~/contexts";
 export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
   poolAddress: `0x${string}` | undefined,
   asset: Token | undefined,
-  amount: number,
+  amount: string,
 ) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
@@ -29,7 +29,7 @@ export const usePollPreviewSharesForSingleSidedLiquidityRequest = (
           args: [
             poolAddress,
             asset?.address,
-            parseUnits(`${amount}`, asset?.decimals ?? 18),
+            parseUnits(amount, asset?.decimals ?? 18),
           ],
         })
         .catch(() => {

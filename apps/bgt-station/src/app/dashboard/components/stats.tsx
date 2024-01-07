@@ -16,7 +16,7 @@ const SemiCircleProgress = dynamic(
   },
 );
 
-export function Stats({ avgValidatorUptime }: { avgValidatorUptime: string }) {
+export function Stats() {
   const { usePercentOfStakedBGT } = usePollActiveValidators();
   const percentOfStakedBGT = usePercentOfStakedBGT();
 
@@ -27,8 +27,8 @@ export function Stats({ avgValidatorUptime }: { avgValidatorUptime: string }) {
   const beraToBgtRatio = (beraSupply / bgtSupply) * 100;
   return (
     <Card className="px-4 py-8 sm:px-16">
-      <div className="flex flex-col items-center justify-between sm:flex-row">
-        <SemiCircleProgress
+      <div className="flex flex-col items-center justify-around sm:flex-row">
+        {/* <SemiCircleProgress
           percentage={Number(avgValidatorUptime)}
           size={{
             width: 200,
@@ -38,7 +38,7 @@ export function Stats({ avgValidatorUptime }: { avgValidatorUptime: string }) {
           hasBackground={true}
           strokeColor="#FBBF24"
           label="Avg Validator Uptime"
-        />
+        /> */}
 
         <SemiCircleProgress
           percentage={percentOfStakedBGT}

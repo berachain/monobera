@@ -1,7 +1,7 @@
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { truncateHash } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
-import { TokenIconList } from "@bera/shared-ui";
+import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
@@ -28,7 +28,8 @@ export default function PoolHeader({ pool }: { pool: Pool }) {
         </p>
         <div className="flex w-full flex-row items-center justify-center gap-4 leading-7 text-muted-foreground md:justify-start">
           <div className="flex w-fit items-center gap-1">
-            PRR:
+            <ApyTooltip />
+            APY:
             <span className="text-sm text-success-foreground">
               {pool?.bgtApy?.toFixed(2)}%
             </span>

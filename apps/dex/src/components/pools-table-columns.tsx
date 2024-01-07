@@ -3,17 +3,50 @@
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatUsd, formatter } from "@bera/berajs";
-import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
-import { cn } from "@bera/ui";
+import {
+  DataTableColumnHeader,
+  TokenIconList,
+  apyTooltipText,
+} from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type ColumnDef } from "@tanstack/react-table";
 
+import { usePoolTable } from "~/app/pool/usePoolTable";
 // import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { usePositionSize } from "~/hooks/usePositionSize";
 
+export const PoolSummary = ({ pool }: { pool: Pool }) => {
+  const { userPools } = usePoolTable();
+
+  const isDeposited = userPools?.some(
+    (userPool: Pool) => userPool.pool === pool.pool,
+  );
+  return (
+    <div className="flex flex-col items-start gap-2">
+      <span className="w-[180px] truncate text-left">{pool.poolName}</span>
+      <TokenIconList tokenList={pool.tokens.map((t) => t.address)} size="lg" />
+      <div className="flex flex-row items-center gap-1">
+        <Badge
+          variant={"secondary"}
+          className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
+        >
+          {Number(pool.formattedSwapFee).toFixed(2)}%
+        </Badge>
+        {isDeposited && (
+          <Badge
+            variant="success"
+            className="border-none bg-success px-2 py-1 text-xs"
+          >
+            Provided Liquidity
+          </Badge>
+        )}
+      </div>
+    </div>
+  );
+};
 export const columns: ColumnDef<Pool>[] = [
   {
     accessorKey: "poolName",
@@ -30,23 +63,7 @@ export const columns: ColumnDef<Pool>[] = [
         title={"Pool Composition"}
       />
     ),
-    cell: ({ row }) => (
-      <div className="flex flex-col items-start gap-2">
-        <span className="w-[180px] truncate text-left">
-          {row.original.poolName}
-        </span>
-        <TokenIconList
-          tokenList={row.original.tokens.map((t) => t.address)}
-          size="lg"
-        />
-        <Badge
-          variant={"secondary"}
-          className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
-        >
-          {Number(row.original.formattedSwapFee).toFixed(2)}%
-        </Badge>
-      </div>
-    ),
+    cell: ({ row }) => <PoolSummary pool={row.original} />,
     enableSorting: false,
     enableHiding: false,
   },
@@ -62,12 +79,12 @@ export const columns: ColumnDef<Pool>[] = [
     ),
     cell: ({ row }) => {
       const totalValue = formatter.format(row.original.totalValue || 0);
-      const tvl = row.original.weeklyTvl?.[6] || 0;
-      const tvl24h = row.original.weeklyTvl?.[5] || 1;
+      // const tvl = row.original.weeklyTvl?.[6] || 0;
+      // const tvl24h = row.original.weeklyTvl?.[5] || 1;
       return (
         <div className="flex flex-col gap-1">
           <div className="text-sm leading-5">${totalValue}</div>
-          <div
+          {/* <div
             className={cn(
               "text-[10px] leading-[10px]",
               tvl > tvl24h
@@ -79,7 +96,7 @@ export const columns: ColumnDef<Pool>[] = [
           >
             {tvl > tvl24h && "+"}
             {(((tvl - tvl24h) / (tvl24h ?? 1)) * 100).toFixed(2)}%
-          </div>
+          </div> */}
         </div>
       );
     },
@@ -99,12 +116,12 @@ export const columns: ColumnDef<Pool>[] = [
     ),
     cell: ({ row }) => {
       const dailyFees = formatter.format(row.original.dailyFees || 0);
-      const fee = row.original.weeklyFees?.[6] || 0;
-      const fee24h = row.original.weeklyFees?.[5] || 1;
+      // const fee = row.original.weeklyFees?.[6] || 0;
+      // const fee24h = row.original.weeklyFees?.[5] || 1;
       return (
         <div className="flex flex-col gap-1">
           <div className="text-sm leading-5">${dailyFees}</div>
-          <div
+          {/* <div
             className={cn(
               "text-[10px] leading-[10px]",
               fee > fee24h
@@ -116,7 +133,7 @@ export const columns: ColumnDef<Pool>[] = [
           >
             {fee > fee24h && "+"}
             {(((fee - fee24h) / fee24h) * 100).toFixed(2)}%
-          </div>
+          </div> */}
         </div>
       );
     },
@@ -136,12 +153,12 @@ export const columns: ColumnDef<Pool>[] = [
     ),
     cell: ({ row }) => {
       const dailyVolume = formatter.format(row.original.dailyVolume || 0);
-      const volume = row.original.weeklyVolume?.[6] || 0;
-      const volume24h = row.original.weeklyVolume?.[5] || 1;
+      // const volume = row.original.weeklyVolume?.[6] || 0;
+      // const volume24h = row.original.weeklyVolume?.[5] || 1;
       return (
         <div className="flex flex-col gap-1">
           <div className="text-sm leading-5">${dailyVolume}</div>
-          <div
+          {/* <div
             className={cn(
               "text-[10px] leading-[10px]",
               volume > volume24h
@@ -153,7 +170,7 @@ export const columns: ColumnDef<Pool>[] = [
           >
             {volume > volume24h && "+"}
             {(((volume - volume24h) / volume24h) * 100).toFixed(2)}%
-          </div>
+          </div> */}
         </div>
       );
     },
@@ -193,16 +210,8 @@ export const columns: ColumnDef<Pool>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="PRR"
-        tooltip={
-          <>
-            PRR (Projected Reward Rate) is calculated based on the fees and
-            rewards <br />
-            generated by the pool over the last 24 hours. The PRR displayed is{" "}
-            <br />
-            algorithmic and subject to change
-          </>
-        }
+        title="APY"
+        tooltip={apyTooltipText()}
         className="whitespace-nowrap"
       />
     ),
@@ -310,39 +319,31 @@ export const my_columns: ColumnDef<any>[] = [
     },
     enableSorting: false,
   },
-  {
-    accessorKey: "fees",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Fees Collected"
-        tooltip="Your share of transaction fees the position has collected."
-        className="whitespace-nowrap"
-      />
-    ),
-    cell: ({ row }) => {
-      const fees = formatter.format(row.original.fees || 0);
-      return <div className="flex items-center">${fees}</div>;
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-  },
+  // {
+  //   accessorKey: "fees",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="Fees Collected"
+  //       tooltip="Your share of transaction fees the position has collected."
+  //       className="whitespace-nowrap"
+  //     />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const fees = formatter.format(row.original.fees || 0);
+  //     return <div className="flex items-center">${fees}</div>;
+  //   },
+  //   filterFn: (row, id, value) => {
+  //     return value.includes(row.getValue(id));
+  //   },
+  // },
   {
     accessorKey: "totalApy",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="PRR"
-        tooltip={
-          <>
-            PRR (Projected Reward Rate) is calculated based on the fees and
-            rewards <br />
-            generated by the pool over the last 24 hours. The PRR displayed is{" "}
-            <br />
-            algorithmic and subject to change
-          </>
-        }
+        title="APY"
+        tooltip={apyTooltipText()}
         className="whitespace-nowrap"
       />
     ),

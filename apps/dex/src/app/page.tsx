@@ -1,6 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
+import { subgraphUrl } from "@bera/config";
 import { Documentation, Footer } from "@bera/shared-ui";
 
 import { getMetaTitle } from "~/utils/metadata";
@@ -9,31 +10,109 @@ import Data from "./components/Data";
 import Hero from "./components/Hero";
 
 const getTvl = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/tvldaily/global`,
-  );
+  // const allPools = await ssrClient
+  //   .query({
+  //     query: getAllPools,
+  //     variables: {
+  //       limit: 1,
+  //     },
+  //   })
+  //   .then((res: any) => res.data.pools)
+  //   .catch((e) => {
+  //     console.log(e);
+  //     return undefined;
+  //   });
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch pools");
+  const data = await fetch(subgraphUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: `{
+            pools {
+              id
+              pool: address
+              poolName: name
+              tokens: poolTokens {
+                denomWeight
+                amount
+                denom
+                address
+                symbol
+                decimals
+                latestPriceUsd {
+                  id
+                  price
+                }
+              }
+              swapFee
+              sharesDenom
+              sharesAddress
+              totalShares
+              tvlUsd
+            }}`,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: 10 },
+  })
+    .then((res) => res.json())
+    .catch((e: any) => console.log("fetching error", e));
+
+  if (data.error !== undefined) {
+    console.error("error fetching cutting board");
   }
 
-  const result = await res.json();
-  return result;
+  const total = data.data.pools.reduce(
+    (
+      acc: number,
+      curr: {
+        tvlUsd: string;
+      },
+    ) => {
+      return acc + Number(curr.tvlUsd);
+    },
+    0,
+  );
+  return total;
 };
 
 const getVolume = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ANALYTICS}/analytics/volumedaily/global`,
-  );
+  // const globalDexData = await ssrClient
+  //   .query({
+  //     query: getGlobalDexData,
+  //     variables: {
+  //       limit: 1,
+  //     },
+  //   })
+  //   .then((res: any) => res.data.bexGlobalDayDatas)
+  //   .catch((e) => {
+  //     console.log(e);
+  //     return undefined;
+  //   });
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch pools");
+  const data = await fetch(subgraphUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: `{
+          bexGlobalDayDatas(first: 1, orderBy: date, orderDirection: desc) {
+            id
+            volumeUsd
+            date
+          }}`,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: 10 },
+  })
+    .then((res) => res.json())
+    .catch((e: any) => console.log("fetching error", e));
+
+  if (data.error !== undefined) {
+    console.error("error fetching cutting board");
   }
 
-  const result = await res.json();
-  return result;
+  return Number(data.data.bexGlobalDayDatas[0].volumeUsd);
 };
 
 export const metadata: Metadata = {
@@ -58,7 +137,7 @@ export default async function Homepage() {
       <>
         <div className="container max-w-1280 pb-16">
           <Hero />
-          <Data tvl={data?.tvl?.result} volume={data?.volume?.result} />
+          <Data tvl={data?.tvl} volume={data?.volume} />
           <div className="-mx-full overflow-hidden">
             <CreateAPool />
           </div>

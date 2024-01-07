@@ -4,12 +4,9 @@ import "./src/env.mjs";
 const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
-  transpilePackages: ["@bera/ui", "@bera/berajs"],
+  transpilePackages: ["@bera/ui", "@bera/shared-ui", "@bera/berajs"],
   experimental: {
     esmExternals: "loose",
-    serverActions: {
-      bodySizeLimit: "2mb",
-    },
     webpackBuildWorker: true,
   },
   /** We already do linting and typechecking as separate tasks in CI */

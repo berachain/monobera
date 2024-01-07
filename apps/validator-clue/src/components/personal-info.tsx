@@ -4,21 +4,25 @@ import Link from "next/link";
 import { formatter } from "@bera/berajs";
 import { bgtTokenAddress, blockExplorerUrl } from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
+import { getAddress } from "viem";
 
+import { usePollEpoch } from "~/hooks/usePollEpoch";
 import { usePollMe } from "~/hooks/usePollMe";
 
 export default function PersonalInfo({ epoch }: { epoch: any }) {
   const { data: me, isLoading } = usePollMe();
-
+  const { data: epo } = usePollEpoch(epoch);
   function countdown(targetDateTime: string) {
     const targetDate = new Date(targetDateTime);
     const currentDate = new Date();
     const diff = targetDate.getTime() - currentDate.getTime();
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    return `${hours}Hs ${minutes}mins`;
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    return `${hours}Hs ${minutes}mins ${seconds}secs`;
   }
-  if (!isLoading && me) {
+
+  if (!isLoading && me && !me.error) {
     return (
       <div className="flex w-full justify-between rounded-sm border border-border px-3 py-4">
         <div>
@@ -33,7 +37,7 @@ export default function PersonalInfo({ epoch }: { epoch: any }) {
         </div>
         <div className="xs:items-start flex flex-col gap-6 border-l border-border pl-4 sm:flex-row sm:items-end sm:border-none md:items-end lg:items-end">
           <div className="flex items-center gap-[6px]">
-            <TokenIcon address={bgtTokenAddress} fetch />
+            <TokenIcon address={getAddress(bgtTokenAddress)} fetch />
             <div>
               <div className="font-retro-gaming text-sm leading-5">
                 {formatter.format(me.bgt)}
@@ -75,7 +79,7 @@ export default function PersonalInfo({ epoch }: { epoch: any }) {
             </svg>
             <div>
               <div className="font-retro-gaming whitespace-nowrap text-sm leading-5">
-                {countdown(epoch?.nextEpoch)}
+                {countdown(epo?.nextEpoch)}
               </div>
               <div className="whitespace-nowrap text-xs leading-3 text-muted-foreground">
                 Epoch Countdown

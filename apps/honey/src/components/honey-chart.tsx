@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { formatUsd } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { BeraChart } from "@bera/ui/bera-chart";
@@ -12,7 +12,6 @@ import {
 } from "@bera/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { format } from "date-fns";
-import { formatEther } from "viem";
 
 import { HoneyTimeFrame, barColors, type HoneyEntry } from "~/app/type";
 
@@ -36,6 +35,14 @@ const Options = {
       grid: {
         display: false,
       },
+    },
+  },
+  elements: {
+    point: {
+      radius: 0,
+    },
+    line: {
+      tension: 0.4, // smooth lines
     },
   },
   plugins: {
@@ -80,8 +87,6 @@ const Options = {
 };
 
 interface IHoneyChart {
-  supply24H: HoneyEntry[];
-  volume24H: HoneyEntry[];
   supply7D: HoneyEntry[];
   volume7D: HoneyEntry[];
   supply30D: HoneyEntry[];
@@ -99,7 +104,7 @@ enum Chart {
 const getData = (data: HoneyEntry[], arcade: boolean) => {
   return {
     labels: data.map((entry: any) => {
-      const utcDate = new Date(entry.UTCTime * 1000);
+      const utcDate = new Date(entry.timestamp * 1000);
       return [
         format(utcDate, "eeee HH:mm"),
         utcDate.toLocaleDateString("en-US", {
@@ -111,9 +116,7 @@ const getData = (data: HoneyEntry[], arcade: boolean) => {
     }),
     datasets: [
       {
-        data: data.map((entry: any) =>
-          Number(formatEther(BigInt(entry.amount))),
-        ),
+        data: data.map((entry: any) => Number(entry.amount)),
         labelColor: false,
         backgroundColor: arcade ? barColors.arcade : barColors.pro,
         borderColor: arcade ? barColors.arcade : barColors.pro,
@@ -137,7 +140,7 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
     let firstNumberIndex = 0;
     while (
       entries[firstNumberIndex] &&
-      Number(formatEther(BigInt(entries[firstNumberIndex]!.amount))) === 0
+      Number(entries[firstNumberIndex]!.amount) === 0
     ) {
       firstNumberIndex++;
     }
@@ -146,12 +149,8 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
       return 0; // All numbers are zero, cannot calculate percentage difference
     }
 
-    const firstNumber = Number(
-      formatEther(BigInt(entries[firstNumberIndex]!.amount)),
-    );
-    const lastNumber = Number(
-      formatEther(BigInt(entries[entries.length - 1]!.amount)),
-    );
+    const firstNumber = Number(entries[firstNumberIndex]!.amount);
+    const lastNumber = Number(entries[entries.length - 1]!.amount);
 
     const difference = lastNumber - firstNumber;
     const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
@@ -160,15 +159,7 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
   }
 }
 
-const getTotalAmount = (data: HoneyEntry[]): number =>
-  data.reduce(
-    (acc, entry) => acc + Number(formatEther(BigInt(entry.amount))),
-    0,
-  );
-
 export const HoneyChart = ({
-  supply24H,
-  volume24H,
   supply7D,
   volume7D,
   supply30D,
@@ -178,8 +169,6 @@ export const HoneyChart = ({
   arcade,
 }: IHoneyChart) => {
   const DATA = {
-    supply24H,
-    volume24H,
     supply7D,
     volume7D,
     supply30D,
@@ -187,29 +176,13 @@ export const HoneyChart = ({
     supply90D,
     volume90D,
   };
-  const [difference, setDifference] = useState(0);
-  const [total, setTotal] = useState<any>(getTotalAmount(DATA.volume24H));
-  const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.HOURLY);
+  const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.WEEKLY);
   const [chart, setChart] = useState(Chart.VOLUME);
-  const [data, setData] = useState(getData(DATA.volume24H, arcade));
 
-  useEffect(() => {
-    setData(getData(DATA[`${chart}${timeFrame}`], arcade));
-    setDifference(calculatePercentageDifference(DATA[`${chart}${timeFrame}`]));
-    if (chart === Chart.FEES) {
-      setTotal(
-        formatEther(
-          BigInt(
-            DATA[`${chart}${timeFrame}`][
-              DATA[`${chart}${timeFrame}`].length - 1
-            ]?.amount ?? 0,
-          ),
-        ),
-      );
-    } else {
-      setTotal(getTotalAmount(DATA[`${chart}${timeFrame}`]));
-    }
-  }, [timeFrame, chart, arcade]);
+  const data = DATA[`${chart}${timeFrame}`];
+  const chartData = getData(data, arcade);
+  const total = data[data.length - 1]?.amount ?? 0;
+  const difference = calculatePercentageDifference(data);
 
   return (
     <section>
@@ -290,8 +263,8 @@ export const HoneyChart = ({
                   )}
                 >
                   <SelectValue
-                    placeholder={HoneyTimeFrame.HOURLY}
-                    defaultValue={HoneyTimeFrame.HOURLY}
+                    placeholder={HoneyTimeFrame.WEEKLY}
+                    defaultValue={HoneyTimeFrame.WEEKLY}
                   />
                 </SelectTrigger>
                 <SelectContent
@@ -300,7 +273,7 @@ export const HoneyChart = ({
                       "rounded-md border-2 border-blue-900 bg-blue-100 text-blue-900",
                   )}
                 >
-                  <SelectItem
+                  {/* <SelectItem
                     value={HoneyTimeFrame.HOURLY}
                     className={cn(
                       "cursor-pointer rounded-md",
@@ -310,7 +283,7 @@ export const HoneyChart = ({
                     )}
                   >
                     24H
-                  </SelectItem>
+                  </SelectItem> */}
                   <SelectItem
                     value={HoneyTimeFrame.WEEKLY}
                     className={cn(
@@ -351,7 +324,7 @@ export const HoneyChart = ({
 
           <CardContent className="relative min-h-[250px] w-full">
             <BeraChart
-              data={data}
+              data={chartData}
               options={Options as any}
               type={chart === Chart.VOLUME ? "bar" : "line"}
             />

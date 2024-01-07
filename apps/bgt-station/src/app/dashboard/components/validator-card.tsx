@@ -8,7 +8,7 @@ import {
   type PoLValidator,
 } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
-import { TokenIconList, ValidatorIcon } from "@bera/shared-ui";
+import { BribeApyTooltip, TokenIconList, ValidatorIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -34,7 +34,7 @@ export default function ValidatorCard({
   const info = [
     {
       amount: String(vApy?.toFixed(2) ?? 0) + "%",
-      text: "PRR",
+      text: "APY",
     },
     {
       amount: `$${formatter.format(Number(bribeValue ?? 0))}`,
@@ -78,8 +78,8 @@ export default function ValidatorCard({
 
       <div className="flex flex-col gap-1 bg-muted px-6 py-3">
         <div className=" flex justify-between">
-          <div className="text-sm font-medium text-muted-foreground">
-            {info[0]!.text}
+          <div className="flex flex-row items-center gap-1 text-sm font-medium text-muted-foreground">
+            {info[0]!.text} <BribeApyTooltip />
           </div>
           <div
             className={cn(

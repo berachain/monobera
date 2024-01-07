@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { formatUsd, truncateHash, useTokens } from "@bera/berajs";
 import { blockExplorerUrl, honeyTokenAddress } from "@bera/config";
+import { type HoneyMint, type HoneyRedemption } from "@bera/graphql";
 import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -19,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatDistance } from "date-fns";
 import { formatUnits, getAddress } from "viem";
 
-import { useHoneyEvents } from "~/app/api/useHoneyEvents";
+import { useHoneyEvents } from "~/hooks/useHoneyEvents";
 
 enum Selection {
   AllTransactions = "allTransactions",
@@ -36,51 +37,12 @@ const prices = {
   stgusdc: 1,
 };
 
-interface Metadata {
-  blockNum: string;
-  txHash: string;
-  blockHash: string;
-  blockTime: string;
+function isMintData(obj: any): obj is HoneyMint {
+  return obj.__typename === "HoneyMint";
 }
 
-interface Collateral {
-  denom: string;
-  amount: string;
-}
-
-interface MintData {
-  metadata: Metadata;
-  from: string;
-  to: string;
-  collateral: Collateral;
-  mintAmount: string;
-  honeyTotalSupply: string;
-}
-
-interface BurnData {
-  metadata: Metadata;
-  from: string;
-  redeemAmountOut: Collateral;
-  redeemAmount: string;
-  honeyTotalSupply: string;
-}
-
-function isMintData(obj: any): obj is MintData {
-  return (
-    typeof obj === "object" &&
-    obj !== null &&
-    "metadata" in obj &&
-    "mintAmount" in obj
-  );
-}
-
-function isBurnData(obj: any): obj is BurnData {
-  return (
-    typeof obj === "object" &&
-    obj !== null &&
-    "metadata" in obj &&
-    "redeemAmount" in obj
-  );
+function isBurnData(obj: any): obj is HoneyRedemption {
+  return obj.__typename === "HoneyRedemption";
 }
 
 const getAction = (event: any) => {
@@ -108,7 +70,7 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
           <p className="ml-2">
             {Number(
               formatUnits(
-                BigInt(event.collateral.amount),
+                BigInt(event.collateralAmount),
                 tokenIn?.decimals ?? 18,
               ),
             ).toFixed(4)}
@@ -136,7 +98,10 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
           <TokenIcon token={honey} />
           <p className="ml-2">
             {Number(
-              formatUnits(BigInt(event.redeemAmount), honey?.decimals ?? 18),
+              formatUnits(
+                BigInt(event.collateralAmount),
+                honey?.decimals ?? 18,
+              ),
             ).toFixed(4)}
           </p>
         </div>
@@ -146,7 +111,7 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
           <p className="ml-2">
             {Number(
               formatUnits(
-                BigInt(event.redeemAmountOut.amount),
+                BigInt(event.collateralAmount),
                 tokenOut?.decimals ?? 18,
               ),
             ).toFixed(4)}
@@ -157,12 +122,12 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
   }
 };
 
-const getValue = (event: MintData | BurnData) => {
+const getValue = (event: HoneyMint | HoneyRedemption) => {
   if (isMintData(event)) {
     return formatUnits(BigInt(event.mintAmount), 18);
   }
   if (isBurnData(event)) {
-    return formatUnits(BigInt(event.redeemAmount), 18);
+    return formatUnits(BigInt(event.collateralAmount), 18);
   }
   return 0;
 };
@@ -184,11 +149,11 @@ export default function HoneyTransactionsTable({
     isMintDataLoadingMore,
     isMintDataReachingEnd,
     setMintDataSize,
-    burnData,
-    burnDataSize,
-    isBurnDataLoadingMore,
-    isBurnDataReachingEnd,
-    setBurnDataSize,
+    redemptionData,
+    redemptionDataSize,
+    isRedemptionDataLoadingMore,
+    isRedemptionDataReachingEnd,
+    setRedemptionDataSize,
   } = useHoneyEvents();
 
   const getLoadMoreButton = () => {
@@ -225,13 +190,13 @@ export default function HoneyTransactionsTable({
     if (selectedTab === Selection.Burns) {
       return (
         <Button
-          onClick={() => setBurnDataSize(burnDataSize + 1)}
-          disabled={isBurnDataLoadingMore || isBurnDataReachingEnd}
+          onClick={() => setRedemptionDataSize(redemptionDataSize + 1)}
+          disabled={isRedemptionDataLoadingMore || isRedemptionDataReachingEnd}
           variant="outline"
         >
-          {isBurnDataLoadingMore
+          {isRedemptionDataLoadingMore
             ? "Loading..."
-            : isBurnDataReachingEnd
+            : isRedemptionDataReachingEnd
             ? "No more transactions"
             : "Load more"}
         </Button>
@@ -304,8 +269,8 @@ export default function HoneyTransactionsTable({
           <TabsContent value={Selection.Burns} className="mt-0">
             <EventTable
               prices={prices}
-              events={burnData}
-              isLoading={isBurnDataLoadingMore}
+              events={redemptionData}
+              isLoading={isRedemptionDataLoadingMore}
               arcade={arcade}
             />
           </TabsContent>
@@ -322,7 +287,7 @@ export const EventTable = ({
   arcade,
 }: {
   prices: MappedTokens;
-  events: MintData[] | BurnData[];
+  events: HoneyMint[] | HoneyRedemption[];
   isLoading: boolean | undefined;
   arcade: boolean;
 }) => {
@@ -356,8 +321,8 @@ export const EventTable = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {events?.length && events[0] && Object.keys(events[0]).length !== 0 ? (
-          events?.map((event: MintData | any | undefined) => {
+        {events && events.length && events[0] ? (
+          events.map((event: HoneyMint | HoneyRedemption) => {
             if (!event) return null;
             return (
               <TableRow
@@ -365,10 +330,10 @@ export const EventTable = ({
                   "hover:cursor-pointer",
                   arcade ? "hover:bg-blue-200" : "hover:bg-muted",
                 )}
-                key={event?.metadata?.txHash}
+                key={event.id}
                 onClick={() =>
                   window.open(
-                    `${blockExplorerUrl}/tx/${event?.metadata?.txHash ?? ""}`,
+                    `${blockExplorerUrl}/tx/${event.id.split(":")[2]}`,
                     "_blank",
                   )
                 }
@@ -379,14 +344,14 @@ export const EventTable = ({
                   {getTokenDisplay(event, tokenDictionary)}
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
-                  {truncateHash(event?.metadata?.txHash ?? "")}
+                  {truncateHash(event.id.split(":")[2] ?? "")}
                 </TableCell>
                 <TableCell
                   className="overflow-hidden truncate whitespace-nowrap text-right "
                   suppressHydrationWarning
                 >
                   {formatDistance(
-                    new Date(event.metadata?.blockTime * 1000 ?? 0),
+                    new Date(Number(event.timestamp) * 1000 ?? 0),
                     new Date(),
                   )}{" "}
                   ago

@@ -3,16 +3,13 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useBeraJs } from "@bera/berajs";
-// import { publicAnalyticsUrl } from "@bera/config";
+// import { useBeraJs } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-import { BGTStatusBtn } from "./bgt-status";
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
-import { ThemeToggleMobile } from "./theme-toggle-mobile";
 
 const ConnectBtn = dynamic(
   () => import("./connect-button").then((mod) => mod.ConnectButton),
@@ -28,18 +25,36 @@ const ConnectBtn = dynamic(
   },
 );
 
+const ThemeToggleMobile = dynamic(
+  () => import("./theme-toggle-mobile").then((mod) => mod.ThemeToggleMobile),
+  {
+    ssr: false,
+    loading: () => <> </>,
+  },
+);
+
+// const BGTStatusBtn = dynamic(
+//   () => import("./bgt-status").then((mod) => mod.BGTStatusBtn),
+//   {
+//     ssr: false,
+//     loading: () => <> </>,
+//   },
+// );
+
 export function Header({
   navItems,
+  mobileNavItems = [],
   hideConnectBtn = false,
   isHoney = false,
   hideTheme = false,
 }: {
   navItems: any[];
+  mobileNavItems?: any[];
   hideConnectBtn?: boolean;
   isHoney?: boolean;
   hideTheme?: boolean;
 }) {
-  const { isReady } = useBeraJs();
+  // const { isReady } = useBeraJs();
   return (
     <nav
       className={cn(
@@ -57,19 +72,10 @@ export function Header({
         </div>
       </div>
       <div className="flex h-full items-center gap-2 xl:gap-4">
-        {/* {isHoney && (
-          <Link
-            href={publicAnalyticsUrl}
-            target="_blank"
-            className="hidden cursor-pointer items-center gap-1 whitespace-nowrap text-sm font-medium text-muted-foreground hover:text-foreground lg:flex"
-          >
-            Dune Analytics <Icons.externalLink className="h-3 w-3" />
-          </Link>
-        )} */}
-        {hideTheme && <ThemeToggleMobile />}
-        {isReady && <BGTStatusBtn />}
+        {!hideTheme && <ThemeToggleMobile />}
+        {/* {isReady && <BGTStatusBtn />} */}
         {!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
-        <MobileDropdown navItems={navItems} />
+        <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />
       </div>
     </nav>
   );
