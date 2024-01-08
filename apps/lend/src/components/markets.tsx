@@ -180,7 +180,7 @@ export default function Markets() {
         </h2>
 
         <MarketGrid />
-        <Link className="mt-16 flex justify-center" href={"/markets"}>
+        <Link className="mt-16 flex justify-center" href={"/dashboard"}>
           <Button variant={"outline"}>View all markets</Button>
         </Link>
       </div>

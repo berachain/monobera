@@ -22,7 +22,7 @@ import { Icons } from "@bera/ui/icons";
 
 export const Explore = () => {
   return (
-    <div className="mt-20 flex flex-col gap-6 text-center">
+    <div id="dapps" className="mt-20 flex flex-col gap-6 text-center">
       <div className="leading-12 text-5xl font-bold text-background">
         Explore Berachain
       </div>

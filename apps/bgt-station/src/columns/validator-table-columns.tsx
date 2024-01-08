@@ -1,5 +1,5 @@
 import React from "react";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { DataTableColumnHeader, bribeApyTooltipText } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { formatCommission } from "~/utils/formatCommission";
@@ -59,7 +59,11 @@ export const validator_table_columns: ColumnDef<any>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="vAPY" />
+      <DataTableColumnHeader
+        column={column}
+        title="vAPY"
+        tooltip={bribeApyTooltipText()}
+      />
     ),
     cell: ({ row }) => {
       return (

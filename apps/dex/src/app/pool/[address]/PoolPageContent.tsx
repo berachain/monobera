@@ -17,7 +17,7 @@ import {
   type Liquidity,
   type LiquidityChanged,
 } from "@bera/graphql";
-import { TokenIcon } from "@bera/shared-ui";
+import { ApyTooltip, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
@@ -32,19 +32,16 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { formatUnits, getAddress } from "viem";
+import { formatUnits } from "viem";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
-import { getWBeraPriceForToken } from "~/app/api/getPrices/api/getPrices";
 import PoolHeader from "~/app/components/pool-header";
 import { RewardBtn } from "~/app/components/reward-btn";
 import { usePositionSize } from "~/hooks/usePositionSize";
 import { PoolChart } from "./PoolChart";
-import { type MappedTokens } from "./types";
 import { usePoolEvents } from "./usePoolEvents";
 
 interface IPoolPageContent {
-  prices: MappedTokens;
   pool: Pool;
 }
 
@@ -106,11 +103,7 @@ const getAction = (event: "SWAP" | "ADD" | "REMOVE") => {
   return <p className="text-destructive-foreground">Withdraw</p>;
 };
 
-const getValue = (
-  pool: Pool | undefined,
-  event: LiquidityChanged,
-  prices: MappedTokens,
-) => {
+const getValue = (pool: Pool | undefined, event: LiquidityChanged) => {
   if (event.type === LIQUIDITY_CHANGED_TYPE.SWAP) {
     const tokenIn = event.liquidity.find(
       (liq: Liquidity) => liq.swapDirection === SWAP_DIRECTION.IN,
@@ -119,11 +112,9 @@ const getValue = (
       BigInt(tokenIn?.amount ?? 0),
       tokenIn?.coin.decimals ?? 18,
     );
-    return getWBeraPriceForToken(
-      prices,
-      getAddress(tokenIn?.coin.address ?? ""),
-      Number(formattedAmount),
-    );
+
+    const price = Number(tokenIn?.latestPriceUsd.price);
+    return price * Number(formattedAmount);
   }
   if (
     event.type === LIQUIDITY_CHANGED_TYPE.ADD ||
@@ -131,13 +122,14 @@ const getValue = (
   ) {
     const value = event.liquidity.reduce((acc, cur) => {
       const token = pool?.tokens.find(
-        (token) => token.address === cur.coin.address,
+        (token) =>
+          token.address.toLowerCase() === cur.coin.address.toLowerCase(),
       );
-      const tokenValue = getWBeraPriceForToken(
-        prices,
-        getAddress(cur.coin.address),
-        Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)),
-      );
+
+      const price = Number(token?.latestPriceUsd);
+
+      const tokenValue =
+        Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)) * price;
       if (!tokenValue) {
         return acc;
       }
@@ -157,12 +149,10 @@ enum Selection {
 
 export const EventTable = ({
   pool,
-  prices,
   events,
   isLoading,
 }: {
   pool: Pool;
-  prices: MappedTokens;
   events: LiquidityChanged[];
   isLoading: boolean | undefined;
 }) => {
@@ -197,9 +187,7 @@ export const EventTable = ({
                 }
               >
                 <TableCell>{getAction(event.type)}</TableCell>
-                <TableCell>
-                  {formatUsd(getValue(pool, event, prices) ?? "")}
-                </TableCell>
+                <TableCell>{formatUsd(getValue(pool, event) ?? "")}</TableCell>
                 <TableCell className="xs:hidden	 hidden	 font-medium	 sm:table-cell	 md:table-cell lg:table-cell">
                   {getTokenDisplay(event, pool)}
                 </TableCell>
@@ -231,7 +219,7 @@ export const EventTable = ({
   );
 };
 
-export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
+export default function PoolPageContent({ pool }: IPoolPageContent) {
   const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   const { data: bgtRewards } = useBgtReward(pool?.pool);
 
@@ -373,8 +361,8 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             </Card>
             <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
-                <div className="overflow-hidden truncate whitespace-nowrap text-sm ">
-                  PRR
+                <div className="flex flex-row items-center gap-1 overflow-hidden truncate whitespace-nowrap text-sm ">
+                  APY <ApyTooltip />
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
@@ -502,7 +490,6 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             >
               <EventTable
                 pool={pool}
-                prices={prices}
                 events={allData}
                 isLoading={isAllDataLoadingMore}
               />
@@ -513,7 +500,6 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             >
               <EventTable
                 pool={pool}
-                prices={prices}
                 events={swapData}
                 isLoading={isSwapDataLoadingMore}
               />
@@ -524,7 +510,6 @@ export default function PoolPageContent({ prices, pool }: IPoolPageContent) {
             >
               <EventTable
                 pool={pool}
-                prices={prices}
                 events={provisionData}
                 isLoading={isProvisionDataLoadingMore}
               />

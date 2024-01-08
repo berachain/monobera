@@ -1,4 +1,9 @@
-import { useBeraJs, usePollPrices } from "@bera/berajs";
+import {
+  useBeraJs,
+  usePollDelegatorValidators,
+  usePollTotalDelegated,
+  type Validator,
+} from "@bera/berajs";
 import {
   client,
   getGlobalCuttingBoard,
@@ -6,6 +11,7 @@ import {
   type Weight,
 } from "@bera/graphql";
 import useSWR from "swr";
+import { getAddress, type Address } from "viem";
 
 export interface Coin {
   amount: string;
@@ -64,34 +70,75 @@ export interface GaugeWeight {
   amount: number;
   percentage: number;
 }
+
+const getValidator = async (address: string): Promise<Weight[]> => {
+  return await client
+    .query({
+      query: getValidatorCuttingBoard,
+      variables: {
+        page: 0,
+        limit: 1,
+        validatorAddress: address,
+      },
+    })
+    .then((res: any) => {
+      return res.data.cuttingBoards[0].weights;
+    })
+    .catch((e) => {
+      console.log(e);
+      return undefined;
+    });
+};
 export const useUserGaugeWeight = () => {
   const { account } = useBeraJs();
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
-  const QUERY_KEY = ["user-gauge-weight", account, prices];
+  const { useDelegatorValidators } = usePollDelegatorValidators();
+  const delegatedValidators = useDelegatorValidators();
+  const { useValidatorDelegationMap, useTotalDelegatorDelegated } =
+    usePollTotalDelegated();
+  const delegationMap = useValidatorDelegationMap();
+  const total = useTotalDelegatorDelegated();
+  const QUERY_KEY = [
+    "user-gauge-weight",
+    account,
+    delegatedValidators,
+    delegationMap,
+    total,
+  ];
   return useSWR(
     QUERY_KEY,
     () => {
       try {
-        // if (!prices) return undefined;
-        // const response = await fetch(
-        //   `${indexerUrl}/bgt/rewards/delegator/${account}`,
-        // );
-        // const result = await response.json().then((res) => res.result);
-        // // const promiseArray = result.map((w: any) => getPoolTvl(w.address));
-        // // const cbTvlData = await Promise.all(promiseArray);
-        // // const tvl = getTvlPrices(cbTvlData, prices);
+        if (!delegatedValidators || !delegationMap || !account || !total) {
+          return;
+        }
+        const promises = delegatedValidators?.map((validator: Validator) => {
+          return getValidator(validator.consAddr);
+        });
 
-        // const gaugeWeightArray: GaugeWeight[] = result.map((w: any) => {
-        //   return {
-        //     label: w.address,
-        //     address: w.address,
-        //     amount: Number(w.amount),
-        //     percentage: Number(w.percentage),
-        //     // tvl: tvl[i],
-        //   };
-        // });
-        return [];
+        console.log(promises);
+        const data = await Promise.all(promises as Promise<any>[]);
+        console.log(data);
+
+        const userWeights: Record<Address, GaugeWeight> = {};
+        delegatedValidators.forEach((validator: Validator, i: number) => {
+          const validatorCuttingBoard: Weight[] = data[i];
+          const userDelegatedAmount =
+            delegationMap[getAddress(validator.operatorAddr)];
+          validatorCuttingBoard.forEach((cb: Weight) => {
+            const weight = cb.weight;
+            const userStakedBgt = weight * userDelegatedAmount;
+            const receiver = getAddress(cb.receiver);
+            const userWeight = userWeights[receiver];
+            const newAmount = userStakedBgt + (userWeight?.amount ?? 0);
+            userWeights[receiver] = {
+              label: receiver,
+              address: receiver,
+              amount: newAmount,
+              percentage: newAmount / total,
+            };
+          });
+        });
+        return Object.values(userWeights);
       } catch (e) {
         console.log(e);
         return undefined;
@@ -109,22 +156,7 @@ export const useValidatorGaugeWeight = (address: string) => {
     QUERY_KEY,
     async () => {
       try {
-        const validatorCuttingBoard: Weight[] = await client
-          .query({
-            query: getValidatorCuttingBoard,
-            variables: {
-              page: 0,
-              limit: 1,
-              validatorAddress: address,
-            },
-          })
-          .then((res: any) => {
-            return res.data.cuttingBoards[0].weights;
-          })
-          .catch((e) => {
-            console.log(e);
-            return undefined;
-          });
+        const validatorCuttingBoard: Weight[] = await getValidator(address);
 
         const totalAmount = validatorCuttingBoard.reduce((arr, curr) => {
           return arr + Number(curr.amount);

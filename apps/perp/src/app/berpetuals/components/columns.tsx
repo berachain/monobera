@@ -159,7 +159,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
         <DataTableColumnHeader
           column={column}
           title="Market / Slide"
-          className="min-w-[120px]"
+          className="w-fit"
         />
       ),
       cell: ({ row }) => (
@@ -176,7 +176,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
         <DataTableColumnHeader
           column={column}
           title="Position Size"
-          className="min-w-[120px]"
+          className="w-fit"
         />
       ),
       cell: ({ row }) => {
@@ -201,22 +201,22 @@ export const getPositionColumns = (markets: IMarket[]) => {
       accessorKey: "position_size",
       enableSorting: true,
     },
-    {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Leverage" />
-      ),
-      cell: ({ row }) => {
-        return <div className="w-[60px]">{row.original.leverage ?? 2}x</div>;
-      },
-      accessorKey: "leverage",
-      enableSorting: false,
-    },
+    // {
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title="Leverage" />
+    //   ),
+    //   cell: ({ row }) => {
+    //     return <div className="w-[60px]">{row.original.leverage ?? 2}x</div>;
+    //   },
+    //   accessorKey: "leverage",
+    //   enableSorting: false,
+    // },
     {
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
           title="Entry Price"
-          className="min-w-[120px]"
+          className="w-fit"
         />
       ),
       cell: ({ row }) => (
@@ -234,7 +234,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
         <DataTableColumnHeader
           column={column}
           title="Mark Price"
-          className="min-w-[120px]"
+          className="w-fit"
         />
       ),
       cell: ({ row }) => <MarkPrice position={row.original} />,
@@ -246,7 +246,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
         <DataTableColumnHeader
           column={column}
           title="Est. Liq. Price"
-          className="min-w-[120px]"
+          className="w-fit"
         />
       ),
       cell: ({ row }) => (
@@ -268,8 +268,39 @@ export const getPositionColumns = (markets: IMarket[]) => {
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
+          title="TP / SL"
+          className="w-fit"
+        />
+      ),
+      cell: ({ row }) => (
+        <div className="">
+          <span className="text-success-foreground">
+            {row.original.tp === "0"
+              ? "∞"
+              : formatUsd(
+                  Number(formatUnits(BigInt(row.original.tp ?? 0), 10)),
+                ) ?? "-"}{" "}
+          </span>
+          /
+          <span className="text-destructive-foreground">
+            {" "}
+            {row.original.sl === "0"
+              ? "∞"
+              : formatUsd(
+                  Number(formatUnits(BigInt(row.original.sl ?? 0), 10)),
+                )}
+          </span>
+        </div>
+      ),
+      accessorKey: "tp_sl",
+      enableSorting: false,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
           title="Est. PnL"
-          className="min-w-[120px]"
+          className="w-fit"
         />
       ),
       // cell: ({ row }) => (
@@ -297,37 +328,6 @@ export const getPositionColumns = (markets: IMarket[]) => {
         return <div>{formatBigIntUsd(row.original.funding_rate, 18)}</div>;
       },
       accessorKey: "funding",
-      enableSorting: false,
-    },
-    {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="TP / SL"
-          className="min-w-[120px]"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="">
-          <span className="text-success-foreground">
-            {row.original.tp === "0"
-              ? "∞"
-              : formatUsd(
-                  Number(formatUnits(BigInt(row.original.tp ?? 0), 10)),
-                ) ?? "-"}{" "}
-          </span>
-          /
-          <span className="text-destructive-foreground">
-            {" "}
-            {row.original.sl === "0"
-              ? "∞"
-              : formatUsd(
-                  Number(formatUnits(BigInt(row.original.sl ?? 0), 10)),
-                )}
-          </span>
-        </div>
-      ),
-      accessorKey: "tp_sl",
       enableSorting: false,
     },
     {
@@ -695,8 +695,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
         Number(row.original.funding_rate) +
         Number(row.original.closing_fee) +
         Number(row.original.borrowing_fee) +
-        Number(row.original.vault_fee) +
-        Number(row.original.staking_fee);
+        Number(row.original.vault_fee);
       return <div>{formatUsd(fees)}</div>;
     },
     accessorKey: "fees",

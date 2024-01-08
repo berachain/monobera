@@ -182,14 +182,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   useEffect(() => {
     if (
       swapInfo &&
-      swapInfo?.formattedSwapAmount &&
+      swapInfo?.formattedAmountIn &&
       swapInfo?.formattedReturnAmount &&
       selectedFrom &&
       selectedTo
     ) {
       try {
         const ratio = normalizeToRatio(
-          Number(swapInfo?.formattedSwapAmount),
+          Number(swapInfo?.formattedAmountIn),
           Number(swapInfo?.formattedReturnAmount),
         );
         if (Number.isNaN(Number(ratio))) {

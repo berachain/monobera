@@ -7,6 +7,7 @@ import {
   usePollUserAccountData,
   usePollUserReservesData,
 } from "@bera/berajs";
+import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -82,7 +83,23 @@ export default function StatusBanner() {
     },
     {
       icon: <Icons.lineChart className="h-8 w-8" />,
-      title: "Net PRR",
+      title: (
+        <div className="flex items-center justify-center">
+          Net APY{" "}
+          <Tooltip
+            text={
+              <>
+                Net APY (Annual Percentage Yield) is the combined effect of all
+                supply and borrow positions
+                <br />
+                on net worth, including rewards and fees. It is possible to have
+                a negative net APY <br />
+                if debt APY is higher than supply APY + Rewards.
+              </>
+            }
+          />
+        </div>
+      ),
       amount: netAPY === 0 ? "~~" : (netAPY * 100).toFixed(2) + "%",
     },
     {
@@ -129,7 +146,7 @@ export default function StatusBanner() {
     <div className="border-boder flex w-full flex-col justify-between gap-8 rounded-md border bg-muted p-4 md:flex-row ">
       <div className="flex flex-col gap-8 md:flex-row ">
         {status.map((item, index) => (
-          <div key={index + item.title} className="flex w-fit gap-4">
+          <div key={index.toString() + item.title} className="flex w-fit gap-4">
             <div className="w-fit rounded-lg border p-2 text-muted-foreground">
               {item.icon}
             </div>

@@ -101,7 +101,7 @@ export function SwapCard({
     outputCurrency,
   });
 
-  console.log(payload);
+  // console.log(payload);
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
@@ -310,6 +310,7 @@ export function SwapCard({
                     amount={toAmount}
                     price={Number(tokenOutPrice)}
                     hideMax={true}
+                    disabled={true}
                     setAmount={(amount) => {
                       setSwapKind(SwapKind.GIVEN_OUT);
                       setSwapAmount(amount);

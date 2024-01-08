@@ -55,7 +55,13 @@ export const user_supply_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Supply PRR"
+        title="Supply APY"
+        tooltip={
+          <>
+            Supply APY (Annual Percentage Yield) represents the annualized
+            return on supplied assets.
+          </>
+        }
         className="whitespace-nowrap"
       />
     ),
@@ -126,7 +132,13 @@ export const user_borrows_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Loan PRR"
+        title="Loan APY"
+        tooltip={
+          <>
+            Variable interest rate will fluctuate based on the market
+            conditions.
+          </>
+        }
         className="whitespace-nowrap"
       />
     ),
@@ -197,7 +209,13 @@ export const available_supply_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Supply PRR"
+        title="Supply APY"
+        tooltip={
+          <>
+            Supply APY (Annual Percentage Yield) represents the annualized
+            return on supplied assets.
+          </>
+        }
         className="whitespace-nowrap"
       />
     ),
@@ -268,7 +286,13 @@ export const available_borrows_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Variable PRR"
+        title="Variable APY"
+        tooltip={
+          <>
+            Variable interest rate will fluctuate based on the market
+            conditions.
+          </>
+        }
         className="whitespace-nowrap"
       />
     ),

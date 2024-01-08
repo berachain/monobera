@@ -1,6 +1,6 @@
 import { formatter } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
-import { TokenIcon } from "@bera/shared-ui";
+import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
@@ -76,7 +76,8 @@ export default function UserTokenCard({
           asset.address === honeyAddress && (
             <div className="flex flex-shrink-0 flex-col">
               <div className="text-xs font-medium leading-5 text-muted-foreground">
-                Supply PRR
+                Supply APY{" "}
+                <Tooltip text="Supply APY (Annual Percentage Yield) represents the annualized return on supplied assets." />
               </div>
               <div className="text-lg font-bold text-success-foreground">
                 {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
@@ -87,7 +88,8 @@ export default function UserTokenCard({
         {type === "borrow" && (
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
-              Variable PRR
+              Variable APY{" "}
+              <Tooltip text="Variable interest rate will fluctuate based on the market conditions." />
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
@@ -98,7 +100,8 @@ export default function UserTokenCard({
         {type === "user-borrow" && (
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
-              Loan PRR
+              Loan APY{" "}
+              <Tooltip text="Variable interest rate will fluctuate based on the market conditions." />
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
