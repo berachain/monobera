@@ -55,7 +55,7 @@ export function Header({
   isHoney?: boolean;
   hideTheme?: boolean;
 }) {
-  // const { isReady } = useBeraJs();
+  const { isReady } = useBeraJs();
   return (
     <nav
       className={cn(

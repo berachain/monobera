@@ -171,6 +171,12 @@
         "Nothing herein shall constitute an employment, consultancy, joint venture, or partnership relationship between you and the Company. These Terms reflect the entire agreement between the parties relating to the subject matter hereof and supersede all prior agreements, representations, statements and understandings of the parties relating to the subject matter hereof. The section titles in these Terms are for convenience only and have no legal or contractual effect. Use of the word “including” will be interpreted to mean “including without limitation.",
         "If you have any questions about these Terms, the Services or the Testnet, please contact us at: founders@berachain.com"
       ]
+    },
+    {
+      "title": "Trading View",
+      "content": [
+        "TradingView charts and analysis tools are integrated into our DeFi perpetual trading platform under the terms of TradingView's API usage agreement and terms of service. TradingView is a registered trademark of TradingView, Inc., and their services are used in compliance with their respective terms and conditions."
+      ]
     }
   ]
 }
