@@ -30,6 +30,7 @@ import {
   lendUrl,
   multicallAddress,
   networkName,
+  publicJsonRpcUrl,
   rewardsAddress,
   stakingAddress,
 } from "@bera/config";
@@ -57,10 +58,10 @@ export const navItems = [
     href: "/leaderboard",
     title: "Leaderboard",
   },
-  {
-    href: faucetUrl,
-    title: "Faucet",
-  },
+  // {
+  //   href: faucetUrl,
+  //   title: "Faucet",
+  // },
   {
     href: "#",
     title: "Explore",
@@ -149,7 +150,7 @@ const chain: Chain = {
       http: [jsonRpcUrl],
     },
     public: {
-      http: [jsonRpcUrl],
+      http: [publicJsonRpcUrl],
     },
   },
 };

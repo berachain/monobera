@@ -5,11 +5,17 @@ import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
 import Script from "next/script";
 import { BeraConfig } from "@bera/berajs";
-import { Footer, Header, TailwindIndicator } from "@bera/shared-ui";
+import {
+  Footer,
+  Header,
+  TailwindIndicator,
+  TermOfUseModal,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
+import { useLocalStorage } from "usehooks-ts";
 
 import { beraJsConfig, mobileNavItems, navItems } from "./config";
 
@@ -26,6 +32,10 @@ const fontHoney = Jua({
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
+  const [firstTimeUser, setFirstTimeUser] = useLocalStorage(
+    "FIRST_TIME_USER",
+    true,
+  );
   return (
     <html lang="en" suppressHydrationWarning>
       <Script
@@ -49,6 +59,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           fontHoney.variable,
         )}
       >
+        {" "}
+        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <SessionProvider>
           <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
             <Header

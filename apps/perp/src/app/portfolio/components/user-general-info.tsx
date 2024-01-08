@@ -29,7 +29,7 @@ export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
     <div className="flex max-h-[300px] w-full flex-shrink-0 flex-col gap-8 rounded-md border border-border bg-muted px-4 py-6 lg:w-[270px]">
       <div className="flex flex-col gap-3 px-1">
         <div className="text-sm font-medium leading-none text-muted-foreground">
-          Current Open Positions <Tooltip text="Total open position size" />
+          Current Open Positions
         </div>
         <div className="text-3xl font-semibold leading-9 text-foreground">
           {formatUsd(Number(positionSize))}

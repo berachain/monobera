@@ -49,6 +49,8 @@ export const chainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID);
 export const chainName = process.env.NEXT_PUBLIC_CHAIN_NAME as string;
 export const networkName = process.env.NEXT_PUBLIC_NETWORK_NAME as string;
 export const jsonRpcUrl = process.env.NEXT_PUBLIC_JSON_RPC_URL as string;
+export const publicJsonRpcUrl = process.env
+  .NEXT_PUBLIC_PUBLIC_JSON_RPC_URL as string;
 
 // Bera token information
 export const gasTokenSymbol = process.env
