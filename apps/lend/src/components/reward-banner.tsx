@@ -6,12 +6,14 @@ import {
   useBeraJs,
   usePollBgtRewardsForAddress,
   usePollHoneyVaultBalance,
+  usePollReservesDataList,
   usePollUserBGTRewards,
 } from "@bera/berajs";
 import {
   bgtTokenAddress,
   bgtUrl,
   cloudinaryUrl,
+  honeyAddress,
   lendRewardsAddress,
 } from "@bera/config";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
@@ -29,11 +31,20 @@ export const Banner = () => {
     useFormattedHoneyVaultBalance,
   } = usePollHoneyVaultBalance();
 
+  const { useReservesDataList } = usePollReservesDataList();
+
+  const { data: reservesDictionary } = useReservesDataList();
+
+  const debtBearingHoney =
+    reservesDictionary === undefined
+      ? undefined
+      : reservesDictionary[honeyAddress].variableDebtTokenAddress;
+
   const honeyLocked = useFormattedHoneyVaultBalance();
 
   const { isLoading: isBgtRewardsLoading, useBgtApr } =
     usePollBgtRewardsForAddress({
-      address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+      address: debtBearingHoney as Address,
     });
 
   const bgtApr = useBgtApr(honeyLocked);
