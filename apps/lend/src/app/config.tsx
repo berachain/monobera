@@ -30,6 +30,7 @@ import {
   networkName,
   perpsName,
   perpsUrl,
+  publicJsonRpcUrl,
   rewardsAddress,
   stakingAddress,
 } from "@bera/config";
@@ -137,7 +138,7 @@ const chain: Chain = {
       http: [jsonRpcUrl],
     },
     public: {
-      http: [jsonRpcUrl],
+      http: [publicJsonRpcUrl],
     },
   },
 };
