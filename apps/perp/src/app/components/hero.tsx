@@ -5,14 +5,16 @@ import { Button } from "@bera/ui/button";
 export default function Hero() {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
-      <h1 className="md:leading-14 text-center text-3xl font-extrabold leading-9 md:text-5xl">
-        The{" "}
+      <h1 className="md:leading-14 leading-24 text-center text-3xl font-extrabold md:text-5xl">
         <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
-          Tools
-          <br /> You Need
+          Perps
         </span>{" "}
-        for
-        <br /> Your Next Trade{" "}
+        Powered by
+        <br />
+        Proof of{" "}
+        <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
+          Liquidity
+        </span>
       </h1>
       <div className="text-center font-medium leading-normal text-muted-foreground">
         Trade All Your Favourite Pairs

@@ -151,7 +151,7 @@ export default function TotalBorrowed({
             data={[
               {
                 data: graphData,
-                title: "Borrow APR, Variable",
+                title: "Borrow APY, Variable",
                 color: color,
               },
             ]}

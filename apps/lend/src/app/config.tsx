@@ -45,10 +45,10 @@ export const navItems = [
   //   href: "/markets",
   //   title: "Markets",
   // },
-  {
-    href: faucetUrl,
-    title: "Faucet",
-  },
+  // {
+  //   href: faucetUrl,
+  //   title: "Faucet",
+  // },
   {
     href: "#",
     title: "Explore",

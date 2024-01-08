@@ -57,10 +57,10 @@ export const navItems = [
     href: "/leaderboard",
     title: "Leaderboard",
   },
-  {
-    href: faucetUrl,
-    title: "Faucet",
-  },
+  // {
+  //   href: faucetUrl,
+  //   title: "Faucet",
+  // },
   {
     href: "#",
     title: "Explore",

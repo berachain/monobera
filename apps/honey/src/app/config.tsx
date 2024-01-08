@@ -51,10 +51,10 @@ export const navItems = [
     href: "#transactions",
     title: "Transactions",
   },
-  {
-    href: faucetUrl,
-    title: "Faucet",
-  },
+  // {
+  //   href: faucetUrl,
+  //   title: "Faucet",
+  // },
   {
     href: "#",
     title: "Explore",
