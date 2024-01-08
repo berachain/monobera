@@ -156,13 +156,18 @@ const BorrowModalContent = ({
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground items-center">LTV Health Ratio {" "}
-            <Tooltip text={
-                  <>
-                  Your health factor and loan to value determine the assurance of your collateral. <br />
-                  To avoid liquidations you can supply more collateral or repay borrow positions.
+          <div className="items-center text-muted-foreground">
+            LTV Health Ratio{" "}
+            <Tooltip
+              text={
+                <>
+                  Your health factor and loan to value determine the assurance
+                  of your collateral. <br />
+                  To avoid liquidations you can supply more collateral or repay
+                  borrow positions.
                 </>
-            } />
+              }
+            />
           </div>
           <div className="flex items-center gap-1 font-semibold">
             <span
@@ -188,7 +193,7 @@ const BorrowModalContent = ({
             </span>
           </div>
         </div>
-        <div className="flex justify-between items-center text-sm leading-tight">
+        <div className="flex items-center justify-between text-sm leading-tight">
           <div className="text-muted-foreground">Estimated Value</div>
           <div className="font-semibold">
             $
@@ -198,15 +203,17 @@ const BorrowModalContent = ({
             )}
           </div>
         </div>
-        <div className="flex justify-between text-sm leading-tight items-center">
-          <div className="text-muted-foreground">Variable Borrow APY {""}
-              <Tooltip
-                text={
-                  <>
-                    variable interest rate will fluctuate based on the market conditions.
-                  </>
-                }
-              />
+        <div className="flex items-center justify-between text-sm leading-tight">
+          <div className="text-muted-foreground">
+            Variable Borrow APY {""}
+            <Tooltip
+              text={
+                <>
+                  variable interest rate will fluctuate based on the market
+                  conditions.
+                </>
+              }
+            />
           </div>
           <div className="font-semibold text-warning-foreground">
             {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%

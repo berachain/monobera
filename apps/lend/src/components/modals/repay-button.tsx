@@ -206,7 +206,7 @@ const RepayModalContent = ({
           amount={
             amount === debtBalance
               ? maxUint256
-              : parseUnits(amount as `${number}`, token.decimals)
+              : parseUnits((amount ?? "0") as `${number}`, token.decimals)
           }
         />
       )}
