@@ -27,7 +27,7 @@ export default function HowItWorks() {
             2
           </div>
           <h3 className="mb-2 text-lg font-semibold">
-            Receive Interest Bearing Tokns
+            Receive Interest Bearing Tokens
           </h3>
           <p>
             Once you&apos;ve supplied assets, you will receive interest bearing
@@ -39,11 +39,11 @@ export default function HowItWorks() {
             3
           </div>
           <h3 className="mb-2 text-lg font-semibold">
-            Use Interest Bearing Tkns in Defi
+            Use Interest Bearing Tokens in Defi
           </h3>
           <p>
             Now that you&apos;ve got some interest bearing tokens you can use
-            these across the Berachain&apos;s Defi ecosystem.
+            these across the Berachain Defi ecosystem.
           </p>
         </div>
       </div>

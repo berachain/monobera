@@ -54,10 +54,6 @@ export default function LeaderBoard() {
         />
         <div className="flex-shrink-0 text-center text-2xl font-semibold leading-loose lg:text-left">
           Leaderboard
-          <div className="text-sm font-medium leading-tight text-muted-foreground">
-            {" "}
-            Trade competitively, winner gets HONEY or a bear every week.
-          </div>
         </div>
       </div>
       <div className="flex w-full flex-row justify-between gap-2">

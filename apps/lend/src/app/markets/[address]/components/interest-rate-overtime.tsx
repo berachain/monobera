@@ -22,7 +22,7 @@ export default function InterestRateOvertime({
       labels: labelsArray,
       datasets: [
         {
-          label: "Borrow APR, variable",
+          label: "Borrow APY, variable",
           data: rates.map((r: Rate) => r.variableRate * 100),
           borderColor: "#FBBF24",
           tension: 0,
