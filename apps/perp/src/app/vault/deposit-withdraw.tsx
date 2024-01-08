@@ -80,7 +80,6 @@ export default function DepositWithdraw() {
 
   const withdrawPayload = [
     parseUnits(withdrawAmount === "" ? "0" : withdrawAmount, 18),
-    account,
   ];
 
   const { isLoading: isMaxDepositLoading, useMaxDeposit } = usePollMaxDeposit();

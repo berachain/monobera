@@ -2,7 +2,7 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "berachain.bts.backend.v1";
+export const protobufPackage = "berachain.backend.v1";
 
 export interface GlobalParams {
   group_index: string;
@@ -13,8 +13,6 @@ export interface GlobalParams {
   max_collateral_p: string;
   /** global maximum collateral possible (1e18) */
   max_pos_honey: string;
-  honey_vault_fee_p: string;
-  honey_sss_fee_p: string;
   current_epoch: string;
   max_pending_market_orders: string;
   /** # of blocks */
@@ -29,9 +27,9 @@ export interface Market {
   name: string;
   /** PRECISION */
   fixed_spread_p: string;
-  /** 1e18 DAI */
+  /** 1e18 HONEY */
   one_percent_depth_above: string;
-  /** 1e18 DAI */
+  /** 1e18 HONEY */
   one_percent_depth_below: string;
   open_interest?: OpenInterest | undefined;
   pair_borrowing_fee?: PairBorrowingFee | undefined;
@@ -42,11 +40,11 @@ export interface Market {
 
 export interface OpenInterest {
   pair_index: string;
-  /** 1e18 DAI */
+  /** 1e18 HONEY */
   oi_long: string;
-  /** 1e18 DAI */
+  /** 1e18 HONEY */
   oi_short: string;
-  /** 1e18 DAI */
+  /** 1e18 HONEY */
   oi_max: string;
 }
 
@@ -62,9 +60,9 @@ export interface PairFundingFee {
   pair_index: string;
   /** PRECISION (%) // funding fee per block (received/provided for long/short) */
   ff_per_block_p: string;
-  /** 1e18 (DAI) // accrued funding fee per oi long */
+  /** 1e18 (HONEY) // accrued funding fee per oi long */
   acc_per_oi_long: string;
-  /** 1e18 (DAI) // accrued funding fee per oi short */
+  /** 1e18 (HONEY) // accrued funding fee per oi short */
   acc_per_oi_short: string;
 }
 
@@ -72,7 +70,7 @@ export interface PairRolloverFee {
   pair_index: string;
   /** PRECISION (%) // rolling over when position open (flat fee) */
   rollover_per_block_p: string;
-  /** 1e18 (DAI) */
+  /** 1e18 (HONEY) */
   acc_per_collateral: string;
 }
 
@@ -85,7 +83,7 @@ export interface PairFixedFee {
   /** PRECISION (% of leveraged pos) */
   nft_limit_order_fee_p: string;
   /** 1e18 (collateral x leverage, useful for min fee) */
-  min_lev_pos_dai: string;
+  min_lev_pos_honey: string;
 }
 
 export interface HoneyWithdrawalRequest {
@@ -151,7 +149,7 @@ export interface ClosedTrade {
   trader: string;
   pair_index: string;
   index: string;
-  /** leveraged position size (1e18) */
+  /** leveraged position size */
   volume: string;
   pnl: string;
   /** only nonzero if order was liquidated */
@@ -170,7 +168,6 @@ export interface ClosedTrade {
   closing_fee: string;
   borrowing_fee: string;
   vault_fee: string;
-  staking_fee: string;
   open_fee: string;
 }
 
@@ -252,6 +249,22 @@ export interface PairHistoricalSummary {
   fees_paid: number;
 }
 
+export interface HoneyReward {
+  fees_to_honey: string;
+  fees_to_bgt: string;
+  combined_fees: string;
+  apr: string;
+}
+
+export interface ReferrerTraderDetails {
+  referrer: string;
+  trader: string;
+  /** HONEY */
+  volume_trader: string;
+  /** HONEY */
+  rewards: string;
+}
+
 function createBaseGlobalParams(): GlobalParams {
   return {
     group_index: "",
@@ -260,8 +273,6 @@ function createBaseGlobalParams(): GlobalParams {
     min_leverage: "",
     max_collateral_p: "",
     max_pos_honey: "",
-    honey_vault_fee_p: "",
-    honey_sss_fee_p: "",
     current_epoch: "",
     max_pending_market_orders: "",
     market_orders_timeout: "",
@@ -293,12 +304,6 @@ export const GlobalParams = {
     }
     if (message.max_pos_honey !== "") {
       writer.uint32(50).string(message.max_pos_honey);
-    }
-    if (message.honey_vault_fee_p !== "") {
-      writer.uint32(58).string(message.honey_vault_fee_p);
-    }
-    if (message.honey_sss_fee_p !== "") {
-      writer.uint32(66).string(message.honey_sss_fee_p);
     }
     if (message.current_epoch !== "") {
       writer.uint32(74).string(message.current_epoch);
@@ -371,20 +376,6 @@ export const GlobalParams = {
 
           message.max_pos_honey = reader.string();
           continue;
-        case 7:
-          if (tag !== 58) {
-            break;
-          }
-
-          message.honey_vault_fee_p = reader.string();
-          continue;
-        case 8:
-          if (tag !== 66) {
-            break;
-          }
-
-          message.honey_sss_fee_p = reader.string();
-          continue;
         case 9:
           if (tag !== 74) {
             break;
@@ -452,12 +443,6 @@ export const GlobalParams = {
       max_pos_honey: isSet(object.max_pos_honey)
         ? String(object.max_pos_honey)
         : "",
-      honey_vault_fee_p: isSet(object.honey_vault_fee_p)
-        ? String(object.honey_vault_fee_p)
-        : "",
-      honey_sss_fee_p: isSet(object.honey_sss_fee_p)
-        ? String(object.honey_sss_fee_p)
-        : "",
       current_epoch: isSet(object.current_epoch)
         ? String(object.current_epoch)
         : "",
@@ -499,12 +484,6 @@ export const GlobalParams = {
     if (message.max_pos_honey !== "") {
       obj.max_pos_honey = message.max_pos_honey;
     }
-    if (message.honey_vault_fee_p !== "") {
-      obj.honey_vault_fee_p = message.honey_vault_fee_p;
-    }
-    if (message.honey_sss_fee_p !== "") {
-      obj.honey_sss_fee_p = message.honey_sss_fee_p;
-    }
     if (message.current_epoch !== "") {
       obj.current_epoch = message.current_epoch;
     }
@@ -541,8 +520,6 @@ export const GlobalParams = {
     message.min_leverage = object.min_leverage ?? "";
     message.max_collateral_p = object.max_collateral_p ?? "";
     message.max_pos_honey = object.max_pos_honey ?? "";
-    message.honey_vault_fee_p = object.honey_vault_fee_p ?? "";
-    message.honey_sss_fee_p = object.honey_sss_fee_p ?? "";
     message.current_epoch = object.current_epoch ?? "";
     message.max_pending_market_orders = object.max_pending_market_orders ?? "";
     message.market_orders_timeout = object.market_orders_timeout ?? "";
@@ -1260,7 +1237,7 @@ function createBasePairFixedFee(): PairFixedFee {
     open_fee_p: "",
     close_fee_p: "",
     nft_limit_order_fee_p: "",
-    min_lev_pos_dai: "",
+    min_lev_pos_honey: "",
   };
 }
 
@@ -1281,8 +1258,8 @@ export const PairFixedFee = {
     if (message.nft_limit_order_fee_p !== "") {
       writer.uint32(34).string(message.nft_limit_order_fee_p);
     }
-    if (message.min_lev_pos_dai !== "") {
-      writer.uint32(42).string(message.min_lev_pos_dai);
+    if (message.min_lev_pos_honey !== "") {
+      writer.uint32(42).string(message.min_lev_pos_honey);
     }
     return writer;
   },
@@ -1328,7 +1305,7 @@ export const PairFixedFee = {
             break;
           }
 
-          message.min_lev_pos_dai = reader.string();
+          message.min_lev_pos_honey = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1347,8 +1324,8 @@ export const PairFixedFee = {
       nft_limit_order_fee_p: isSet(object.nft_limit_order_fee_p)
         ? String(object.nft_limit_order_fee_p)
         : "",
-      min_lev_pos_dai: isSet(object.min_lev_pos_dai)
-        ? String(object.min_lev_pos_dai)
+      min_lev_pos_honey: isSet(object.min_lev_pos_honey)
+        ? String(object.min_lev_pos_honey)
         : "",
     };
   },
@@ -1367,8 +1344,8 @@ export const PairFixedFee = {
     if (message.nft_limit_order_fee_p !== "") {
       obj.nft_limit_order_fee_p = message.nft_limit_order_fee_p;
     }
-    if (message.min_lev_pos_dai !== "") {
-      obj.min_lev_pos_dai = message.min_lev_pos_dai;
+    if (message.min_lev_pos_honey !== "") {
+      obj.min_lev_pos_honey = message.min_lev_pos_honey;
     }
     return obj;
   },
@@ -1386,7 +1363,7 @@ export const PairFixedFee = {
     message.open_fee_p = object.open_fee_p ?? "";
     message.close_fee_p = object.close_fee_p ?? "";
     message.nft_limit_order_fee_p = object.nft_limit_order_fee_p ?? "";
-    message.min_lev_pos_dai = object.min_lev_pos_dai ?? "";
+    message.min_lev_pos_honey = object.min_lev_pos_honey ?? "";
     return message;
   },
 };
@@ -2245,7 +2222,6 @@ function createBaseClosedTrade(): ClosedTrade {
     closing_fee: "",
     borrowing_fee: "",
     vault_fee: "",
-    staking_fee: "",
     open_fee: "",
   };
 }
@@ -2314,9 +2290,6 @@ export const ClosedTrade = {
     }
     if (message.vault_fee !== "") {
       writer.uint32(162).string(message.vault_fee);
-    }
-    if (message.staking_fee !== "") {
-      writer.uint32(170).string(message.staking_fee);
     }
     if (message.open_fee !== "") {
       writer.uint32(178).string(message.open_fee);
@@ -2472,13 +2445,6 @@ export const ClosedTrade = {
 
           message.vault_fee = reader.string();
           continue;
-        case 21:
-          if (tag !== 170) {
-            break;
-          }
-
-          message.staking_fee = reader.string();
-          continue;
         case 22:
           if (tag !== 178) {
             break;
@@ -2523,7 +2489,6 @@ export const ClosedTrade = {
         ? String(object.borrowing_fee)
         : "",
       vault_fee: isSet(object.vault_fee) ? String(object.vault_fee) : "",
-      staking_fee: isSet(object.staking_fee) ? String(object.staking_fee) : "",
       open_fee: isSet(object.open_fee) ? String(object.open_fee) : "",
     };
   },
@@ -2590,9 +2555,6 @@ export const ClosedTrade = {
     if (message.vault_fee !== "") {
       obj.vault_fee = message.vault_fee;
     }
-    if (message.staking_fee !== "") {
-      obj.staking_fee = message.staking_fee;
-    }
     if (message.open_fee !== "") {
       obj.open_fee = message.open_fee;
     }
@@ -2626,7 +2588,6 @@ export const ClosedTrade = {
     message.closing_fee = object.closing_fee ?? "";
     message.borrowing_fee = object.borrowing_fee ?? "";
     message.vault_fee = object.vault_fee ?? "";
-    message.staking_fee = object.staking_fee ?? "";
     message.open_fee = object.open_fee ?? "";
     return message;
   },
@@ -3760,6 +3721,237 @@ export const PairHistoricalSummary = {
     message.liquidation = object.liquidation ?? 0;
     message.fees_earned = object.fees_earned ?? 0;
     message.fees_paid = object.fees_paid ?? 0;
+    return message;
+  },
+};
+
+function createBaseHoneyReward(): HoneyReward {
+  return { fees_to_honey: "", fees_to_bgt: "", combined_fees: "", apr: "" };
+}
+
+export const HoneyReward = {
+  encode(
+    message: HoneyReward,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.fees_to_honey !== "") {
+      writer.uint32(10).string(message.fees_to_honey);
+    }
+    if (message.fees_to_bgt !== "") {
+      writer.uint32(18).string(message.fees_to_bgt);
+    }
+    if (message.combined_fees !== "") {
+      writer.uint32(26).string(message.combined_fees);
+    }
+    if (message.apr !== "") {
+      writer.uint32(34).string(message.apr);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): HoneyReward {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseHoneyReward();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.fees_to_honey = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.fees_to_bgt = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.combined_fees = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.apr = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): HoneyReward {
+    return {
+      fees_to_honey: isSet(object.fees_to_honey)
+        ? String(object.fees_to_honey)
+        : "",
+      fees_to_bgt: isSet(object.fees_to_bgt) ? String(object.fees_to_bgt) : "",
+      combined_fees: isSet(object.combined_fees)
+        ? String(object.combined_fees)
+        : "",
+      apr: isSet(object.apr) ? String(object.apr) : "",
+    };
+  },
+
+  toJSON(message: HoneyReward): unknown {
+    const obj: any = {};
+    if (message.fees_to_honey !== "") {
+      obj.fees_to_honey = message.fees_to_honey;
+    }
+    if (message.fees_to_bgt !== "") {
+      obj.fees_to_bgt = message.fees_to_bgt;
+    }
+    if (message.combined_fees !== "") {
+      obj.combined_fees = message.combined_fees;
+    }
+    if (message.apr !== "") {
+      obj.apr = message.apr;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<HoneyReward>, I>>(base?: I): HoneyReward {
+    return HoneyReward.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<HoneyReward>, I>>(
+    object: I,
+  ): HoneyReward {
+    const message = createBaseHoneyReward();
+    message.fees_to_honey = object.fees_to_honey ?? "";
+    message.fees_to_bgt = object.fees_to_bgt ?? "";
+    message.combined_fees = object.combined_fees ?? "";
+    message.apr = object.apr ?? "";
+    return message;
+  },
+};
+
+function createBaseReferrerTraderDetails(): ReferrerTraderDetails {
+  return { referrer: "", trader: "", volume_trader: "", rewards: "" };
+}
+
+export const ReferrerTraderDetails = {
+  encode(
+    message: ReferrerTraderDetails,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
+    if (message.referrer !== "") {
+      writer.uint32(10).string(message.referrer);
+    }
+    if (message.trader !== "") {
+      writer.uint32(18).string(message.trader);
+    }
+    if (message.volume_trader !== "") {
+      writer.uint32(26).string(message.volume_trader);
+    }
+    if (message.rewards !== "") {
+      writer.uint32(34).string(message.rewards);
+    }
+    return writer;
+  },
+
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): ReferrerTraderDetails {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseReferrerTraderDetails();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.referrer = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.trader = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.volume_trader = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.rewards = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ReferrerTraderDetails {
+    return {
+      referrer: isSet(object.referrer) ? String(object.referrer) : "",
+      trader: isSet(object.trader) ? String(object.trader) : "",
+      volume_trader: isSet(object.volume_trader)
+        ? String(object.volume_trader)
+        : "",
+      rewards: isSet(object.rewards) ? String(object.rewards) : "",
+    };
+  },
+
+  toJSON(message: ReferrerTraderDetails): unknown {
+    const obj: any = {};
+    if (message.referrer !== "") {
+      obj.referrer = message.referrer;
+    }
+    if (message.trader !== "") {
+      obj.trader = message.trader;
+    }
+    if (message.volume_trader !== "") {
+      obj.volume_trader = message.volume_trader;
+    }
+    if (message.rewards !== "") {
+      obj.rewards = message.rewards;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ReferrerTraderDetails>, I>>(
+    base?: I,
+  ): ReferrerTraderDetails {
+    return ReferrerTraderDetails.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ReferrerTraderDetails>, I>>(
+    object: I,
+  ): ReferrerTraderDetails {
+    const message = createBaseReferrerTraderDetails();
+    message.referrer = object.referrer ?? "";
+    message.trader = object.trader ?? "";
+    message.volume_trader = object.volume_trader ?? "";
+    message.rewards = object.rewards ?? "";
     return message;
   },
 };
