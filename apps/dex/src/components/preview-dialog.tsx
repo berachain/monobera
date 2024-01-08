@@ -175,12 +175,14 @@ export default function PreviewDialog({
             <p className="text-sm font-medium text-muted-foreground ">
               Min. received
             </p>
-            <p className="overflow-hidden text-ellipsis whitespace-nowrap text-right text-sm font-medium ">
-              {minAmountOut}
-            </p>
-            <p className="whitespace-nowrap text-right text-sm font-medium  ">
-              {tokenOut?.symbol}
-            </p>
+            <div className="flex justify-center space-x-1">
+              <p className="overflow-hidden text-ellipsis whitespace-nowrap text-right text-sm font-medium ">
+                {minAmountOut}
+              </p>
+              <p className="whitespace-nowrap text-right text-sm font-medium  ">
+                {tokenOut?.symbol}
+              </p>
+            </div>
           </div>
         </div>
         {priceChangeWarning && (
