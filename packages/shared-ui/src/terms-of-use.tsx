@@ -123,9 +123,9 @@ export const TermOfUseModal = ({
                 to User Our Services
               </AlertTitle>
               <AlertDescription className="text-xs">
-                Looks like you selected <b>“I Disagree”</b>, you will able to
-                use our services, only when you agree to our terms of use
-                agreement.
+                Looks like you selected “I Disagree”, unfortunately you
+                won&apos;t be able to use our services unless you agree to our
+                terms of use agreement.
               </AlertDescription>
             </Alert>
           )}
