@@ -695,8 +695,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
         Number(row.original.funding_rate) +
         Number(row.original.closing_fee) +
         Number(row.original.borrowing_fee) +
-        Number(row.original.vault_fee) +
-        Number(row.original.staking_fee);
+        Number(row.original.vault_fee);
       return <div>{formatUsd(fees)}</div>;
     },
     accessorKey: "fees",

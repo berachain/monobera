@@ -3,7 +3,8 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-// import { useBeraJs } from "@bera/berajs";
+import { useBeraJs } from "@bera/berajs";
+import { faucetUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -33,13 +34,13 @@ const ThemeToggleMobile = dynamic(
   },
 );
 
-// const BGTStatusBtn = dynamic(
-//   () => import("./bgt-status").then((mod) => mod.BGTStatusBtn),
-//   {
-//     ssr: false,
-//     loading: () => <> </>,
-//   },
-// );
+const BGTStatusBtn = dynamic(
+  () => import("./bgt-status").then((mod) => mod.BGTStatusBtn),
+  {
+    ssr: false,
+    loading: () => <> </>,
+  },
+);
 
 export function Header({
   navItems,
@@ -71,9 +72,15 @@ export function Header({
           <MainNav navItems={navItems} />
         </div>
       </div>
-      <div className="flex h-full items-center gap-2 xl:gap-4">
+      <div className="flex h-full items-center gap-2 xl:gap-2">
         {!hideTheme && <ThemeToggleMobile />}
-        {/* {isReady && <BGTStatusBtn />} */}
+        {isReady && <BGTStatusBtn />}
+        <Link
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md"
+          href={faucetUrl ?? ""}
+        >
+          <Icons.faucetFav className="h-10 w-10 hover:opacity-80" />
+        </Link>
         {!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
         <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />
       </div>

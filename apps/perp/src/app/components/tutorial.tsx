@@ -21,14 +21,14 @@ export default function Tutorial() {
       <div className="flex flex-shrink-0 flex-col gap-4">
         <h1 className="md:leading-14 text-center text-3xl font-extrabold leading-9 md:text-5xl xl:text-left">
           <span className="whitespace-nowrap bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
-            Familiar Experience
+            Level Up
           </span>{" "}
           <br />
-          and Tooling
+          Your Trading
         </h1>
         <div className=" text-center font-medium leading-normal text-muted-foreground xl:text-left ">
           Enabling a full suite of features <br className="block md:hidden" />{" "}
-          for both <br className="hidden md:block" /> veteran and novice
+          for both <br className="hidden md:block" /> veteran and novice{" "}
           <br className="block md:hidden" />
           traders to transact.
         </div>

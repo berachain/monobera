@@ -160,8 +160,8 @@ export default function Portfolio() {
                 <TokenIconList size="xl" tokenList={bribeTokenList} />
                 <p className="mt-1">
                   {bribeTokenList.length > 0
-                    ? "in claimable rewards"
-                    : "you have no rewards"}
+                    ? "in claimable bribes"
+                    : "you have no bribes to claim"}
                 </p>
               </div>
               <ClaimBribesDialog
