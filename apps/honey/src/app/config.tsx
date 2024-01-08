@@ -31,6 +31,7 @@ import {
   networkName,
   perpsName,
   perpsUrl,
+  publicJsonRpcUrl,
   // publicAnalyticsUrl,
   rewardsAddress,
   stakingAddress,
@@ -51,10 +52,10 @@ export const navItems = [
     href: "#transactions",
     title: "Transactions",
   },
-  {
-    href: faucetUrl,
-    title: "Faucet",
-  },
+  // {
+  //   href: faucetUrl,
+  //   title: "Faucet",
+  // },
   {
     href: "#",
     title: "Explore",
@@ -120,6 +121,10 @@ export const navItems = [
 ];
 
 export const mobileNavItems = [
+  {
+    href: faucetUrl,
+    title: "Faucet",
+  },
   {
     href: "#",
     title: "Explore",
@@ -208,7 +213,7 @@ const chain: Chain = {
       http: [jsonRpcUrl],
     },
     public: {
-      http: [jsonRpcUrl],
+      http: [publicJsonRpcUrl],
     },
   },
 };

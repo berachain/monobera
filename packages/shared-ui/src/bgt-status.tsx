@@ -33,30 +33,32 @@ export function BGTStatusBtn() {
   const bgtTotalDelegated = useTotalDelegatorDelegated();
   const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
   const totalUnbonding = useDelegatorTotalUnbonding();
-  const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
+  // const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
 
   const totalBGT =
     Number(userBalance) +
     Number(bgtTotalDelegated ?? "0") +
     Number(totalUnbonding ?? "0");
 
-  const totalClaimableBGT: bigint = //@ts-ignore
-    isLoading || !bgtRewards || bgtRewards.length !== 3
-      ? 0n //@ts-ignore
-      : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
+  // @ts-ignore
+  // const totalClaimableBGT: bigint =
+  // isLoading || !bgtRewards || bgtRewards.length !== 3
+  //   ? 0n //@ts-ignore
+  //   : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
 
   return (
     <div className="hidden sm:block">
       <Popover open={openPopover} onOpenChange={setOpenPopover}>
         <PopoverTrigger asChild>
-          <div className="group flex h-11 w-fit cursor-pointer items-center rounded-full border border-accent bg-warning px-2 font-medium">
+          <div className="group flex h-10 w-fit cursor-pointer items-center rounded-md border border-accent bg-warning px-1 font-medium hover:bg-hover">
+            {/* <BGTIcon bg="#FBBF24" stroke="#78350F" size="24" /> */}
             <div className="px-2 text-sm text-warning-foreground">
               {formatter.format(totalBGT)} BGT
             </div>
-            <div className="flex h-7 items-center rounded-full border border-accent bg-gradient-to-br from-stone-50 to-yellow-50 px-3 text-xs text-primary group-hover:from-orange-200 group-hover:to-yellow-400 dark:from-stone-700 dark:to-yellow-950 group-hover:dark:from-lime-900 group-hover:dark:to-yellow-700 lg:hidden xl:flex">
+            {/* <div className="flex h-7 items-center rounded-full border border-accent bg-gradient-to-br from-stone-50 to-yellow-50 px-3 text-xs text-primary group-hover:from-orange-200 group-hover:to-yellow-400 dark:from-stone-700 dark:to-yellow-950 group-hover:dark:from-lime-900 group-hover:dark:to-yellow-700 lg:hidden xl:flex">
               {/* @ts-ignore */}
-              {formatter.format(formatEther(totalClaimableBGT))} Claimable
-            </div>
+            {/* {formatter.format(formatEther(totalClaimableBGT))} Claimable */}
+            {/* </div> */}
           </div>
         </PopoverTrigger>
         <PopoverContent

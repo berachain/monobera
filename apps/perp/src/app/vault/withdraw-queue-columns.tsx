@@ -55,7 +55,6 @@ export const CancelWithdraw = ({
             functionName: "cancelWithdrawRequest",
             params: [
               BigInt(withdrawRequest.shares),
-              account,
               BigInt(withdrawRequest.unlock_epoch),
             ],
           })
