@@ -12,7 +12,6 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 
 import { beraJsConfig, mobileNavItems, navItems } from "./config";
-import ContentWithWatermark from "./watermark";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -51,20 +50,18 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         )}
       >
         <SessionProvider>
-          <ContentWithWatermark>
-            <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-              <Header
-                isHoney
-                navItems={navItems}
-                mobileNavItems={mobileNavItems}
-              />
-              <main className="w-full py-[72px]">{props.children}</main>
-              <Toaster position="bottom-right" />
-              <Footer />
-              <TailwindIndicator />
-              <Analytics />
-            </BeraConfig>
-          </ContentWithWatermark>
+          <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
+            <Header
+              isHoney
+              navItems={navItems}
+              mobileNavItems={mobileNavItems}
+            />
+            <main className="w-full py-[72px]">{props.children}</main>
+            <Toaster position="bottom-right" />
+            <Footer />
+            <TailwindIndicator />
+            <Analytics />
+          </BeraConfig>
         </SessionProvider>
       </body>
     </html>
