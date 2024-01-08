@@ -4,10 +4,11 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
-import { Header, TailwindIndicator } from "@bera/shared-ui";
+import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
+import { useLocalStorage } from "usehooks-ts";
 
 import { navItems } from "~/app/config";
 import Providers from "./Providers";
@@ -19,6 +20,11 @@ const fontSans = IBM_Plex_Sans({
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
+  const [firstTimeUser, setFirstTimeUser] = useLocalStorage(
+    "FIRST_TIME_USER",
+    true,
+  );
+
   return (
     <html lang="en" className="bg-background">
       <Script
@@ -38,6 +44,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
+        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
             <div className="z-[100]">

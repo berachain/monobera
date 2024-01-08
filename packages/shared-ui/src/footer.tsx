@@ -152,7 +152,10 @@ export function Footer() {
         </div>
         <div className="mt-16 flex items-center justify-between border-t border-border pt-8 sm:mt-20 lg:mt-24">
           <p className="text-xs leading-5 text-secondary-foreground">
-            &copy; {new Date().getFullYear()} Berachain | All rights reserved
+            &copy; {new Date().getFullYear()} Berachain | All rights reserved |{" "}
+            <a className="font-bold underline" href="/terms-of-use">
+              Terms of Service
+            </a>
           </p>
           <p className="text-xs">Made W/❤️ at the 🐻Beraden</p>
         </div>
@@ -174,10 +177,7 @@ export function FooterSM() {
       <div className="flex items-center justify-between p-4 sm:p-8">
         <p className="text-xs leading-5 text-secondary-foreground">
           &copy; {new Date().getFullYear()} Berachain | All rights reserved |{" "}
-          <a
-            className="cursor-pointer font-bold leading-7 underline"
-            href="/terms-of-use"
-          >
+          <a className="font-bold underline" href="/terms-of-use">
             Terms of Service
           </a>
         </p>
