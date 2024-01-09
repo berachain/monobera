@@ -13,7 +13,6 @@ import {
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
-import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -61,20 +60,14 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       >
         {" "}
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
-        <SessionProvider>
-          <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-            <Header
-              isHoney
-              navItems={navItems}
-              mobileNavItems={mobileNavItems}
-            />
-            <main className="w-full py-[72px]">{props.children}</main>
-            <Toaster position="bottom-right" />
-            <Footer />
-            <TailwindIndicator />
-            <Analytics />
-          </BeraConfig>
-        </SessionProvider>
+        <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
+          <Header isHoney navItems={navItems} mobileNavItems={mobileNavItems} />
+          <main className="w-full py-[72px]">{props.children}</main>
+          <Toaster position="bottom-right" />
+          <Footer />
+          <TailwindIndicator />
+          <Analytics />
+        </BeraConfig>
       </body>
     </html>
   );
