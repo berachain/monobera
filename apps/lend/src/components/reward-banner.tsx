@@ -38,7 +38,7 @@ export const Banner = () => {
   const debtBearingHoney =
     reservesDictionary === undefined
       ? undefined
-      : reservesDictionary[honeyAddress].variableDebtTokenAddress;
+      : reservesDictionary[honeyAddress]?.variableDebtTokenAddress;
 
   const honeyLocked = useFormattedHoneyVaultBalance();
 

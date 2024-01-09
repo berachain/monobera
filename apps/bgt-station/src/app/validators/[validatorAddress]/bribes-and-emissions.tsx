@@ -49,7 +49,7 @@ export default function BribesAndEmissions({
         </div>
       ) : (
         <>
-          {bribes.length === 0 ? (
+          {bribes?.length === 0 ? (
             <div className="flex items-center gap-4 py-4">
               <hr className="h-[2px] flex-1" />
               <div className="text-sm text-muted-foreground">

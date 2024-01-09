@@ -5,9 +5,9 @@ const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
   transpilePackages: ["@bera/ui", "@bera/berajs"],
-  compiler: {
-    removeConsole: true,
-  },
+  // compiler: {
+  //   removeConsole: true,
+  // },
   experimental: {
     esmExternals: "loose",
     webpackBuildWorker: true,
