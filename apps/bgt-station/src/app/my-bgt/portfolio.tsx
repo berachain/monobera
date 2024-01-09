@@ -260,9 +260,9 @@ export default function Portfolio() {
             </div>
             <div className="mt-8">
               {tab === BGTSelectionEnum.YOUR_DELEGATIONS && <YourDelegations />}
-              {/* {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
+              {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
                 <AverageGaugeWeight />
-              )} */}
+              )}
               {tab === BGTSelectionEnum.UNBONDING_QUEUE && (
                 <UnbondingQueue unbondingQueue={unbondingQueue} />
               )}

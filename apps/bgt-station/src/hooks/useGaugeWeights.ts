@@ -106,7 +106,7 @@ export const useUserGaugeWeight = () => {
   ];
   return useSWR(
     QUERY_KEY,
-    () => {
+    async () => {
       try {
         if (!delegatedValidators || !delegationMap || !account || !total) {
           return;

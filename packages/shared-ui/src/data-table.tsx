@@ -17,7 +17,6 @@ import {
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
@@ -65,7 +64,7 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
@@ -136,7 +135,6 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        {/* <DataTablePagination table={table} /> */}
       </div>
     </div>
   );
