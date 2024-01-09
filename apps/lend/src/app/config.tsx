@@ -42,18 +42,6 @@ export const navItems = [
     href: "/dashboard",
     title: "Dashboard",
   },
-  // {
-  //   href: "/markets",
-  //   title: "Markets",
-  // },
-  // {
-  //   href: faucetUrl,
-  //   title: "Faucet",
-  // },
-  {
-    href: faucetUrl,
-    title: "Faucet",
-  },
   {
     href: "#",
     title: "Explore",
@@ -79,13 +67,6 @@ export const navItems = [
         blurb: "Mint or redeem Berachain’s native stable coin",
         icon: <Icons.honeyFav className="h-8 w-8" />,
       },
-      // {
-      //   href: lendUrl,
-      //   type: "external",
-      //   title: lendName,
-      //   blurb: "Supply assets and borrow honey",
-      //   icon: <Icons.bendFav className="h-8 w-8" />,
-      // },
       {
         href: perpsUrl,
         type: "external",

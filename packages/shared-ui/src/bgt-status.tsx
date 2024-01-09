@@ -204,7 +204,9 @@ export function BGTStatusDetails() {
                           {!isLoading &&
                             formatter.format(
                               //@ts-ignore
-                              formatEther((bgtRewards as bigint[])[0] ?? 0n),
+                              bgtRewards !== undefined
+                                ? formatEther((bgtRewards as bigint[])[0] ?? 0n)
+                                : 0,
                             )}{" "}
                           BGT{" "}
                         </div>
@@ -234,7 +236,9 @@ export function BGTStatusDetails() {
                           {!isLoading &&
                             formatter.format(
                               //@ts-ignore
-                              formatEther((bgtRewards as bigint[])[1] ?? 0n),
+                              bgtRewards !== undefined
+                                ? formatEther((bgtRewards as bigint[])[1] ?? 0n)
+                                : 0,
                             )}{" "}
                           BGT{" "}
                         </div>
@@ -265,7 +269,9 @@ export function BGTStatusDetails() {
                           {!isLoading &&
                             formatter.format(
                               //@ts-ignore
-                              formatEther((bgtRewards as bigint[])[2] ?? 0n),
+                              bgtRewards !== undefined
+                                ? formatEther((bgtRewards as bigint[])[2] ?? 0n)
+                                : 0,
                             )}{" "}
                           BGT{" "}
                         </div>
