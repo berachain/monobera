@@ -252,3 +252,4 @@ export const beraJsConfig: NetworkConfig = {
   },
   chain: chain,
 };
+
