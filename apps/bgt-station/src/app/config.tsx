@@ -59,14 +59,6 @@ export const navItems = [
     href: "/redeem",
     title: "Redeem",
   },
-  // {
-  //   href: faucetUrl,
-  //   title: "Faucet",
-  // },
-  {
-    href: faucetUrl,
-    title: "Faucet",
-  },
   {
     href: "#",
     title: "Explore",

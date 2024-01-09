@@ -6,6 +6,7 @@ import {
   useLatestBlock,
   usePollAllowance,
   usePollAssetWalletBalance,
+  usePollSwaps,
   useTokenInformation,
   useTokens,
   type Token,
@@ -16,7 +17,6 @@ import { formatUnits } from "ethers";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
-import { usePollSwaps } from "./usePollSwaps";
 
 export enum SwapKind {
   GIVEN_IN = 0,
@@ -175,7 +175,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(swapInfo?.formattedReturnAmount.toString());
     } else {
-      setFromAmount(swapInfo?.formattedAmountIn);
+      setFromAmount(swapInfo?.formattedSwapAmount);
     }
   }, [swapInfo, isWrap]);
 
