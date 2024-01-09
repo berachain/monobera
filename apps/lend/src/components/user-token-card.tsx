@@ -25,10 +25,16 @@ export default function UserTokenCard({
   if (type === "borrow") {
     balance =
       Number(
-        formatUnits(asset.reserveData.availableLiquidity, asset.decimals),
+        formatUnits(
+          asset.reserveData?.availableLiquidity ?? "0",
+          asset.decimals,
+        ),
       ) > Number(asset.formattedBalance)
         ? asset.formattedBalance
-        : formatUnits(asset.reserveData.availableLiquidity, asset.decimals);
+        : formatUnits(
+            asset.reserveData?.availableLiquidity ?? "0",
+            asset.decimals,
+          );
   } else {
     balance = asset.formattedBalance;
   }
@@ -65,7 +71,8 @@ export default function UserTokenCard({
               {formatter.format(
                 Number(balance) *
                   Number(
-                    asset.reserveData.formattedPriceInMarketReferenceCurrency,
+                    asset.reserveData
+                      ?.formattedPriceInMarketReferenceCurrency ?? "0",
                   ),
               )}
             </div>
@@ -92,7 +99,10 @@ export default function UserTokenCard({
               <Tooltip text="Variable interest rate will fluctuate based on the market conditions." />
             </div>
             <div className="text-lg font-bold text-warning-foreground">
-              {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
+              {(
+                Number(asset.reserveData?.variableBorrowAPY ?? 0) * 100
+              ).toFixed(2)}
+              %
             </div>
           </div>
         )}
@@ -160,7 +170,10 @@ export default function UserTokenCard({
       )}
       {type === "borrow" &&
         Number(
-          formatUnits(asset.reserveData.availableLiquidity, asset.decimals),
+          formatUnits(
+            asset.reserveData?.availableLiquidity ?? "0",
+            asset.decimals,
+          ),
         ) === 0 && (
           <Alert variant="destructive" className="mt-4">
             <AlertTitle>

@@ -52,10 +52,6 @@ export const navItems = [
     href: "#transactions",
     title: "Transactions",
   },
-  // {
-  //   href: faucetUrl,
-  //   title: "Faucet",
-  // },
   {
     href: "#",
     title: "Explore",
@@ -121,10 +117,6 @@ export const navItems = [
 ];
 
 export const mobileNavItems = [
-  {
-    href: faucetUrl,
-    title: "Faucet",
-  },
   {
     href: "#",
     title: "Explore",
