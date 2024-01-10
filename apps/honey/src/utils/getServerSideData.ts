@@ -137,23 +137,28 @@ export async function getHoneyData(
   //   .then((res: any) => res.data)
   //   .catch((e: any) => console.error(e));
 
-  const data = await fetch(subgraphUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      query: query,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    next: { revalidate: 10 },
-  })
-    .then((res) => res.json())
-    .catch((e: any) => console.log("fetching error", e));
+  try {
+    const data = await fetch(subgraphUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        query: query,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 10 },
+    })
+      .then((res) => res.json())
+      .catch((e: any) => console.log("fetching error", e));
 
-  if (data.error !== undefined) {
-    console.error("error fetching cutting board");
-    return false;
+    if (data?.error !== undefined) {
+      console.error("error fetching cutting board");
+      return false;
+    }
+    const response = dataType === "volume" ? data.data : data.data;
+    return response;
+  } catch (e) {
+    console.log(e);
+    return [];
   }
-  const response = dataType === "volume" ? data.data : data.data;
-  return response;
 }

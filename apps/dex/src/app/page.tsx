@@ -10,23 +10,11 @@ import Data from "./components/Data";
 import Hero from "./components/Hero";
 
 const getTvl = async () => {
-  // const allPools = await ssrClient
-  //   .query({
-  //     query: getAllPools,
-  //     variables: {
-  //       limit: 1,
-  //     },
-  //   })
-  //   .then((res: any) => res.data.pools)
-  //   .catch((e) => {
-  //     console.log(e);
-  //     return undefined;
-  //   });
-
-  const data = await fetch(subgraphUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      query: `{
+  try {
+    const data = await fetch(subgraphUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        query: `{
             pools {
               id
               pool: address
@@ -49,70 +37,72 @@ const getTvl = async () => {
               totalShares
               tvlUsd
             }}`,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    next: { revalidate: 10 },
-  })
-    .then((res) => res.json())
-    .catch((e: any) => console.log("fetching error", e));
-
-  if (data.error !== undefined) {
-    console.error("error fetching cutting board");
-  }
-
-  const total = data.data.pools.reduce(
-    (
-      acc: number,
-      curr: {
-        tvlUsd: string;
+      }),
+      headers: {
+        "Content-Type": "application/json",
       },
-    ) => {
-      return acc + Number(curr.tvlUsd);
-    },
-    0,
-  );
-  return total;
+      next: { revalidate: 10 },
+    })
+      .then((res) => res.json())
+      .catch((e: any) => {
+        console.log("fetching error", e);
+        return undefined;
+      });
+
+    if (data.error !== undefined) {
+      console.error("error fetching cutting board");
+    }
+
+    const total = data?.data?.pools?.reduce(
+      (
+        acc: number,
+        curr: {
+          tvlUsd: string;
+        },
+      ) => {
+        return acc + Number(curr.tvlUsd);
+      },
+      0,
+    );
+    return total ?? 0;
+  } catch (e) {
+    console.log(e);
+    return 0;
+  }
 };
 
 const getVolume = async () => {
-  // const globalDexData = await ssrClient
-  //   .query({
-  //     query: getGlobalDexData,
-  //     variables: {
-  //       limit: 1,
-  //     },
-  //   })
-  //   .then((res: any) => res.data.bexGlobalDayDatas)
-  //   .catch((e) => {
-  //     console.log(e);
-  //     return undefined;
-  //   });
+  try {
+    const data = await fetch(subgraphUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        query: `{
+            bexGlobalDayDatas(first: 1, orderBy: date, orderDirection: desc) {
+              id
+              volumeUsd
+              date
+            }}`,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 10 },
+    })
+      .then((res) => res.json())
+      .catch((e: any) => {
+        console.log("fetching error", e);
+        return undefined;
+      });
 
-  const data = await fetch(subgraphUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      query: `{
-          bexGlobalDayDatas(first: 1, orderBy: date, orderDirection: desc) {
-            id
-            volumeUsd
-            date
-          }}`,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    next: { revalidate: 10 },
-  })
-    .then((res) => res.json())
-    .catch((e: any) => console.log("fetching error", e));
+    if (data.error !== undefined) {
+      console.error("error fetching cutting board");
+    }
 
-  if (data.error !== undefined) {
-    console.error("error fetching cutting board");
+    return Number(data.data.bexGlobalDayDatas[0].volumeUsd ?? 0);
+  } catch (e) {
+    console.log(e);
+    return 0;
   }
-
-  return Number(data.data.bexGlobalDayDatas[0].volumeUsd);
 };
 
 export const metadata: Metadata = {

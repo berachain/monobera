@@ -1,366 +1,216 @@
 export const BRIBE_PRECOMPILE_ABI = [
   {
-    inputs: [],
+    type: "function",
     name: "bribeModule",
+    inputs: [],
     outputs: [
-      {
-        internalType: "contract IBribeModule",
-        name: "",
-        type: "address",
-      },
+      { name: "", type: "address", internalType: "contract IBribeModule" },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "delegator",
-        type: "address",
-      },
-    ],
+    type: "function",
     name: "claimAllBribes",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    inputs: [{ name: "delegator", type: "address", internalType: "address" }],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "delegator",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "validator",
-        type: "address",
-      },
-    ],
+    type: "function",
     name: "claimValidatorBribes",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
+    inputs: [
+      { name: "delegator", type: "address", internalType: "address" },
+      { name: "validator", type: "address", internalType: "address" },
     ],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        internalType: "uint64",
-        name: "startEpoch",
-        type: "uint64",
-      },
-      {
-        internalType: "uint64",
-        name: "numBlockProposals",
-        type: "uint64",
-      },
-      {
-        internalType: "address[]",
-        name: "tokens",
-        type: "address[]",
-      },
-      {
-        internalType: "uint256[]",
-        name: "amounts",
-        type: "uint256[]",
-      },
-    ],
+    type: "function",
     name: "createBribe",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "distributionModule",
-    outputs: [
-      {
-        internalType: "contract IDistributionModule",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "erc20Module",
-    outputs: [
-      {
-        internalType: "contract IERC20BankModule",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
+      { name: "operator", type: "address", internalType: "address" },
+      { name: "startEpoch", type: "uint64", internalType: "uint64" },
+      { name: "numBlockProposals", type: "uint64", internalType: "uint64" },
+      { name: "tokens", type: "address[]", internalType: "address[]" },
+      { name: "amounts", type: "uint256[]", internalType: "uint256[]" },
     ],
-    name: "getActiveValidatorBribes",
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "payable",
+  },
+  {
+    type: "function",
+    name: "distributionModule",
+    inputs: [],
     outputs: [
       {
-        components: [
-          {
-            internalType: "address",
-            name: "consensusAddress",
-            type: "address",
-          },
-          {
-            internalType: "uint64",
-            name: "startEpoch",
-            type: "uint64",
-          },
-          {
-            internalType: "uint64",
-            name: "numBlockProposals",
-            type: "uint64",
-          },
-          {
-            components: [
-              {
-                internalType: "address[]",
-                name: "tokens",
-                type: "address[]",
-              },
-              {
-                internalType: "uint256[]",
-                name: "amounts",
-                type: "uint256[]",
-              },
-            ],
-            internalType: "struct ERC20BribeModule.BribePerProposal",
-            name: "bribePerProposal",
-            type: "tuple",
-          },
-        ],
-        internalType: "struct ERC20BribeModule.Bribe[]",
+        name: "",
+        type: "address",
+        internalType: "contract IDistributionModule",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "erc20Module",
+    inputs: [],
+    outputs: [
+      { name: "", type: "address", internalType: "contract IERC20BankModule" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getActiveValidatorBribes",
+    inputs: [{ name: "operator", type: "address", internalType: "address" }],
+    outputs: [
+      {
         name: "bribe",
         type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        internalType: "uint64",
-        name: "startEpoch",
-        type: "uint64",
-      },
-    ],
-    name: "getBribeForValidator",
-    outputs: [
-      {
+        internalType: "struct ERC20BribeModule.Bribe[]",
         components: [
           {
-            internalType: "address",
             name: "consensusAddress",
             type: "address",
-          },
-          {
-            internalType: "uint64",
-            name: "startEpoch",
-            type: "uint64",
-          },
-          {
-            internalType: "uint64",
-            name: "numBlockProposals",
-            type: "uint64",
-          },
-          {
-            components: [
-              {
-                internalType: "address[]",
-                name: "tokens",
-                type: "address[]",
-              },
-              {
-                internalType: "uint256[]",
-                name: "amounts",
-                type: "uint256[]",
-              },
-            ],
-            internalType: "struct ERC20BribeModule.BribePerProposal",
-            name: "bribePerProposal",
-            type: "tuple",
-          },
-        ],
-        internalType: "struct ERC20BribeModule.Bribe",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "getValidatorBribes",
-    outputs: [
-      {
-        components: [
-          {
             internalType: "address",
-            name: "consensusAddress",
-            type: "address",
           },
+          { name: "startEpoch", type: "uint64", internalType: "uint64" },
+          { name: "numBlockProposals", type: "uint64", internalType: "uint64" },
           {
-            internalType: "uint64",
-            name: "startEpoch",
-            type: "uint64",
-          },
-          {
-            internalType: "uint64",
-            name: "numBlockProposals",
-            type: "uint64",
-          },
-          {
-            internalType: "uint64",
             name: "numBlockProposalsBribed",
             type: "uint64",
+            internalType: "uint64",
           },
           {
-            components: [
-              {
-                internalType: "address[]",
-                name: "tokens",
-                type: "address[]",
-              },
-              {
-                internalType: "uint256[]",
-                name: "amounts",
-                type: "uint256[]",
-              },
-            ],
-            internalType: "struct ERC20BribeModule.BribePerProposal",
             name: "bribePerProposal",
             type: "tuple",
+            internalType: "struct ERC20BribeModule.BribePerProposal",
+            components: [
+              { name: "tokens", type: "address[]", internalType: "address[]" },
+              { name: "amounts", type: "uint256[]", internalType: "uint256[]" },
+            ],
           },
         ],
-        internalType: "struct ERC20BribeModule.Bribe[]",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getAllValidatorBribes",
+    inputs: [{ name: "operator", type: "address", internalType: "address" }],
+    outputs: [
+      {
         name: "bribe",
         type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "delegator",
-        type: "address",
-      },
-    ],
-    name: "previewClaimAllBribes",
-    outputs: [
-      {
+        internalType: "struct ERC20BribeModule.Bribe[]",
         components: [
           {
-            internalType: "address",
-            name: "token",
+            name: "consensusAddress",
             type: "address",
+            internalType: "address",
+          },
+          { name: "startEpoch", type: "uint64", internalType: "uint64" },
+          { name: "numBlockProposals", type: "uint64", internalType: "uint64" },
+          {
+            name: "numBlockProposalsBribed",
+            type: "uint64",
+            internalType: "uint64",
           },
           {
-            internalType: "uint256",
-            name: "amount",
-            type: "uint256",
+            name: "bribePerProposal",
+            type: "tuple",
+            internalType: "struct ERC20BribeModule.BribePerProposal",
+            components: [
+              { name: "tokens", type: "address[]", internalType: "address[]" },
+              { name: "amounts", type: "uint256[]", internalType: "uint256[]" },
+            ],
           },
         ],
-        internalType: "struct ERC20BribeModule.Reward[]",
-        name: "rewards",
-        type: "tuple[]",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "getBribesForValidator",
     inputs: [
-      {
-        internalType: "address",
-        name: "delegator",
-        type: "address",
-      },
+      { name: "operator", type: "address", internalType: "address" },
+      { name: "startEpoch", type: "uint64", internalType: "uint64" },
     ],
-    name: "previewClaimValidatorBribes",
     outputs: [
       {
+        name: "",
+        type: "tuple[]",
+        internalType: "struct ERC20BribeModule.Bribe[]",
         components: [
           {
-            internalType: "address",
-            name: "validator",
+            name: "consensusAddress",
             type: "address",
+            internalType: "address",
+          },
+          { name: "startEpoch", type: "uint64", internalType: "uint64" },
+          { name: "numBlockProposals", type: "uint64", internalType: "uint64" },
+          {
+            name: "numBlockProposalsBribed",
+            type: "uint64",
+            internalType: "uint64",
           },
           {
+            name: "bribePerProposal",
+            type: "tuple",
+            internalType: "struct ERC20BribeModule.BribePerProposal",
             components: [
-              {
-                internalType: "address",
-                name: "token",
-                type: "address",
-              },
-              {
-                internalType: "uint256",
-                name: "amount",
-                type: "uint256",
-              },
+              { name: "tokens", type: "address[]", internalType: "address[]" },
+              { name: "amounts", type: "uint256[]", internalType: "uint256[]" },
             ],
-            internalType: "struct ERC20BribeModule.Reward[]",
+          },
+        ],
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "previewClaimAllBribes",
+    inputs: [{ name: "delegator", type: "address", internalType: "address" }],
+    outputs: [
+      {
+        name: "rewards",
+        type: "tuple[]",
+        internalType: "struct ERC20BribeModule.Reward[]",
+        components: [
+          { name: "token", type: "address", internalType: "address" },
+          { name: "amount", type: "uint256", internalType: "uint256" },
+        ],
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "previewClaimValidatorBribes",
+    inputs: [{ name: "delegator", type: "address", internalType: "address" }],
+    outputs: [
+      {
+        name: "rewards",
+        type: "tuple[]",
+        internalType: "struct ERC20BribeModule.ValidatorReward[]",
+        components: [
+          { name: "validator", type: "address", internalType: "address" },
+          {
             name: "reward",
             type: "tuple[]",
+            internalType: "struct ERC20BribeModule.Reward[]",
+            components: [
+              { name: "token", type: "address", internalType: "address" },
+              { name: "amount", type: "uint256", internalType: "uint256" },
+            ],
           },
         ],
-        internalType: "struct ERC20BribeModule.ValidatorReward[]",
-        name: "rewards",
-        type: "tuple[]",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
 ];

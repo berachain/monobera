@@ -65,7 +65,7 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
         <DataCard
           title="BGT Rewards"
           isLoading={!isDataReady}
-          value={`${formatter.format(Number(block) * 2.86)} BGT`}
+          value={`${formatter.format(Number(block) * 0.1)} BGT`}
           icon={<Icons.medal className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard

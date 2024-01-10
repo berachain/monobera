@@ -222,7 +222,7 @@ export default function Portfolio() {
                       {BGTSelectionEnum.YOUR_DELEGATIONS.split("-")[1]}
                     </p>
                   </TabsTrigger>
-                  <TabsTrigger
+                  {/* <TabsTrigger
                     value={BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT}
                     className="capitalize"
                     onClick={() =>
@@ -240,7 +240,7 @@ export default function Portfolio() {
                       {" "}
                       {BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT.split("-")[1]}
                     </p>
-                  </TabsTrigger>
+                  </TabsTrigger> */}
                   <TabsTrigger
                     value={BGTSelectionEnum.UNBONDING_QUEUE}
                     className="capitalize"

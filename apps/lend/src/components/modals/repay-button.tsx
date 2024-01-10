@@ -120,7 +120,7 @@ const RepayModalContent = ({
   });
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">Repay</div>
       <div className="rounded-md border border-border bg-input">
         <TokenInput
@@ -206,7 +206,7 @@ const RepayModalContent = ({
           amount={
             amount === debtBalance
               ? maxUint256
-              : parseUnits(amount as `${number}`, token.decimals)
+              : parseUnits((amount ?? "0") as `${number}`, token.decimals)
           }
         />
       )}

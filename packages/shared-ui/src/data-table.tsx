@@ -17,7 +17,6 @@ import {
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
@@ -65,14 +64,14 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
   return (
-    <div className="w-full space-y-4 overflow-x-auto rounded-md border border-border bg-background">
+    <div className="w-full space-y-4 overflow-x-auto overflow-y-auto  rounded-md border border-border bg-background">
       <div className={cn(className)}>
         {/* <DataTableToolbar table={table} /> */}
         <Table>
@@ -136,7 +135,6 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        {/* <DataTablePagination table={table} /> */}
       </div>
     </div>
   );

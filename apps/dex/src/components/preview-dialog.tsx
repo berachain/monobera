@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { formatUsd, type Token } from "@bera/berajs";
+import { formatUsd, type SwapInfoV2, type Token } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { Spinner, TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -18,7 +18,6 @@ import { Icons } from "@bera/ui/icons";
 import { useReadLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
-import { type SwapInfoV2 } from "~/hooks/usePollSwaps";
 
 type Props = {
   swapInfo: SwapInfoV2 | undefined;
@@ -175,12 +174,14 @@ export default function PreviewDialog({
             <p className="text-sm font-medium text-muted-foreground ">
               Min. received
             </p>
-            <p className="overflow-hidden text-ellipsis whitespace-nowrap text-right text-sm font-medium ">
-              {minAmountOut}
-            </p>
-            <p className="whitespace-nowrap text-right text-sm font-medium  ">
-              {tokenOut?.symbol}
-            </p>
+            <div className="flex justify-center space-x-1">
+              <p className="overflow-hidden text-ellipsis whitespace-nowrap text-right text-sm font-medium ">
+                {minAmountOut}
+              </p>
+              <p className="whitespace-nowrap text-right text-sm font-medium  ">
+                {tokenOut?.symbol}
+              </p>
+            </div>
           </div>
         </div>
         {priceChangeWarning && (

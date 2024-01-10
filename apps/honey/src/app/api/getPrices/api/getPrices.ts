@@ -1,6 +1,7 @@
 import { type BatchSwapStep, type Pool } from "@bera/bera-router";
+import { jsonRpcUrl } from "@bera/config";
 import { parseUnits } from "ethers";
-import { formatUnits, getAddress } from "viem";
+import { formatUnits, getAddress, toHex } from "viem";
 import { type Address } from "wagmi";
 
 export interface MappedTokens {
@@ -22,20 +23,46 @@ export const getSwap = async (
   amount: string,
 ) => {
   try {
-    const parsedAmount = parseUnits(amount, tokenInDecimals ?? 18);
-    const type = swapType === 0 ? "given_in" : "given_out";
-    const response = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
-      }/dex/route?quote_asset=${handleNativeBera(
-        tokenOut,
-      )}&base_asset=${handleNativeBera(
-        tokenIn,
-      )}&amount=${parsedAmount}&swap_type=${type}`,
-    );
+    const type = "given_in";
+    // const parsedAmount = parseUnits(
+    //   amount,
+    //   type === "given_in" ? tokenInDecimals ?? 18 : tokenOutDecimals ?? 18,
+    // );
 
-    const result = await response.json();
+    const rpcRequest = {
+      jsonrpc: "2.0",
+      method: "eth_routeDexSwap",
+      params: [
+        handleNativeBera(tokenIn),
+        handleNativeBera(tokenOut),
+        toHex(parseUnits(`${amount}`, tokenInDecimals)),
+        type,
+        "latest",
+      ],
+      id: 1, // You can set this to any unique value to correlate with the response.
+    };
 
+    // Fetch options for the POST request
+    const fetchOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(rpcRequest),
+    };
+    // const response = await fetch(
+    //   `${
+    //     process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
+    //   }/dex/route?quote_asset=${tokenOut}&base_asset=${tokenIn}&amount=${parseUnits(
+    //     `${amount}`,
+    //     18,
+    //   )}&swap_type=${type}`,
+    // );
+
+    const response = await fetch(jsonRpcUrl, fetchOptions);
+
+    let result = await response.json();
+    result = result.result;
     if (!result.steps)
       return {
         batchSwapSteps: [],
@@ -50,10 +77,10 @@ export const getSwap = async (
     const batchSwapSteps: BatchSwapStep[] = result.steps.map((step: any) => {
       return {
         poolId: step.pool,
-        assetIn: step.assetIn,
-        amountIn: BigInt(step.amountIn),
-        assetOut: step.assetOut,
-        amountOut: BigInt(step.amountOut),
+        assetIn: step.asset_in,
+        amountIn: BigInt(step.amount_in),
+        assetOut: step.asset_out,
+        amountOut: BigInt(step.amount_out),
         userData: "",
       };
     });
@@ -65,28 +92,42 @@ export const getSwap = async (
         batchSwapSteps[0].assetIn = process.env
           .NEXT_PUBLIC_BERA_ADDRESS as Address;
         batchSwapSteps[0].value = batchSwapSteps[0].amountIn;
-        // batchSwapSteps[0].amountIn = 0n;
       }
     }
 
+    if (
+      tokenOut === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)
+    ) {
+      const lastStep = batchSwapSteps.length - 1;
+      if (
+        batchSwapSteps !== undefined &&
+        batchSwapSteps[lastStep] !== undefined
+      ) {
+        // @ts-ignore
+        batchSwapSteps[lastStep].assetOut = process.env
+          .NEXT_PUBLIC_BERA_ADDRESS as Address;
+        // batchSwapSteps[0].value = batchSwapSteps[0].amountIn;
+      }
+    }
     const swapInfo = {
       batchSwapSteps: batchSwapSteps,
       formattedSwapAmount: amount.toString(),
       formattedAmountIn: formatUnits(
-        BigInt(result.steps[0].amountIn),
+        BigInt(result.steps[0].amount_in),
         tokenInDecimals ?? 18,
       ),
       formattedReturnAmount: formatUnits(
-        BigInt(result.steps[result.steps.length - 1].amountOut),
+        BigInt(result.steps[result.steps.length - 1].amount_out),
         tokenOutDecimals ?? 18,
       ),
-      returnAmount: BigInt(result.steps[result.steps.length - 1].amountOut),
+      returnAmount: BigInt(result.steps[result.steps.length - 1].amount_out),
       tokenIn,
       tokenOut,
     };
+
     return swapInfo;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return {
       batchSwapSteps: [],
       formattedSwapAmount: amount.toString(),
@@ -98,7 +139,10 @@ export const getSwap = async (
     };
   }
 };
+
 const BASE_TOKEN = getAddress(process.env.NEXT_PUBLIC_HONEY_ADDRESS as string);
+const BERA_TOKEN = getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string);
+const WBERA_TOKEN = getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
 
 export const getBaseTokenPrice = async (pools: Pool[]) => {
   let mappedTokens: MappedTokens = {};
@@ -129,9 +173,15 @@ export const getBaseTokenPrice = async (pools: Pool[]) => {
             acc[getAddress(cur.tokenIn)] = cur.formattedReturnAmount;
             return acc;
           },
-          { [BASE_TOKEN]: "1" },
+          { [BASE_TOKEN]: 1 },
         )
       : undefined;
+
+    const beraPrice = mappedTokens[WBERA_TOKEN] ?? 0;
+    mappedTokens = {
+      ...mappedTokens,
+      [BERA_TOKEN]: beraPrice,
+    };
   }
 
   return mappedTokens;

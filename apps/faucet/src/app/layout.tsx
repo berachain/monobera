@@ -5,12 +5,12 @@ import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
 import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
+import { FooterSM } from "@bera/shared-ui/src/footer";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { useLocalStorage } from "usehooks-ts";
 
-import { Footer } from "~/components/footer";
 import Providers from "./Providers";
 import { navItems } from "./config";
 
@@ -54,7 +54,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <main className="mt-[72px] min-h-[calc(100vh-72px)] w-full bg-sky-600 pb-[70px]">
               {props.children}
             </main>
-            <Footer />
+            <FooterSM />
           </div>
           <TailwindIndicator />
           <Analytics />

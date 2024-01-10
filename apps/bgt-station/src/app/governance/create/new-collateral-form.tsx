@@ -63,7 +63,7 @@ export default function NewCollateralForm({
         render={({ field }) => (
           <FormItem className="inline-flex flex-col justify-start">
             <div className="text-sm font-semibold leading-tight">
-              Collateral Address{" "}
+              Redemption Rate{" "}
               <Tooltip text="Redemption rate defines the amount of asset given for one honey (assuming 1 asset == 1 USD)." />
             </div>
             <div>

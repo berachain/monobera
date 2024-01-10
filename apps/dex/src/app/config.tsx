@@ -55,10 +55,6 @@ export const navItems = [
   //   title: "Faucet",
   // },
   {
-    href: faucetUrl,
-    title: "Faucet",
-  },
-  {
     href: "#",
     title: "Explore",
     children: [
@@ -101,7 +97,7 @@ export const navItems = [
         href: blockExplorerUrl,
         type: "external",
         title: blockExplorerName,
-        blurb: "Explore the blockchain",
+        blurb: "Berachain's block explorer",
         icon: <Icons.berascanFav className="h-8 w-8" />,
       },
       {

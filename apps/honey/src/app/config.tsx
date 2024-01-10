@@ -52,10 +52,6 @@ export const navItems = [
     href: "#transactions",
     title: "Transactions",
   },
-  // {
-  //   href: faucetUrl,
-  //   title: "Faucet",
-  // },
   {
     href: "#",
     title: "Explore",
@@ -99,7 +95,7 @@ export const navItems = [
         href: blockExplorerUrl,
         type: "external",
         title: blockExplorerName,
-        blurb: "Explore the blockchain",
+        blurb: "Berachain's block explorer",
         icon: <Icons.berascanFav className="h-8 w-8" />,
       },
       {
@@ -122,10 +118,6 @@ export const navItems = [
 
 export const mobileNavItems = [
   {
-    href: faucetUrl,
-    title: "Faucet",
-  },
-  {
     href: "#",
     title: "Explore",
     children: [
@@ -143,13 +135,6 @@ export const mobileNavItems = [
         blurb: "Swap tokens and provide liquidity",
         icon: <Icons.bexFav className="h-8 w-8" />,
       },
-      // {
-      //   href: honeyUrl,
-      //   type: "external",
-      //   title: honeyName,
-      //   blurb: "Mint or redeem Berachain’s native stable coin",
-      //   icon: <Icons.honeyFav className="h-8 w-8" />,
-      // },
       {
         href: lendUrl,
         type: "external",
@@ -168,7 +153,7 @@ export const mobileNavItems = [
         href: blockExplorerUrl,
         type: "external",
         title: blockExplorerName,
-        blurb: "Explore the blockchain",
+        blurb: "Berachain's block explorer",
         icon: <Icons.berascanFav className="h-8 w-8" />,
       },
       {

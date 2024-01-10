@@ -70,7 +70,7 @@ const favList = [
     description:
       "Swap a variety of tokens effortlessly on our decentralized platform. Provide liquidity to pools and earn BGT rewards.",
     goto: dexUrl,
-    learnMore: `${docsUrl}/learn/dex`,
+    learnMore: `${docsUrl}/learn/bex`,
   },
   {
     icon: <Icons.honeyFav className="h-[52px] w-[52px]" />,
@@ -111,7 +111,7 @@ const favList = [
   {
     icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
     name: blockExplorerName,
-    subtitle: "Explore the blockchain",
+    subtitle: "Berachain's block explorer",
     description:
       "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
     goto: blockExplorerUrl,

@@ -11,7 +11,7 @@ import {
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { TokenInput, useTxn } from "@bera/shared-ui";
+import { TokenInput, Tooltip, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -142,7 +142,7 @@ const BorrowModalContent = ({
     ),
   });
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">Borrow</div>
       <div className="rounded-md border border-border bg-input">
         <TokenInput
@@ -156,7 +156,19 @@ const BorrowModalContent = ({
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground">LTV Health Ratio</div>
+          <div className="items-center text-muted-foreground">
+            LTV Health Ratio{" "}
+            <Tooltip
+              text={
+                <>
+                  Your health factor and loan to value determine the assurance
+                  of your collateral. <br />
+                  To avoid liquidations you can supply more collateral or repay
+                  borrow positions.
+                </>
+              }
+            />
+          </div>
           <div className="flex items-center gap-1 font-semibold">
             <span
               className={cn(
@@ -181,7 +193,7 @@ const BorrowModalContent = ({
             </span>
           </div>
         </div>
-        <div className="flex justify-between text-sm leading-tight">
+        <div className="flex items-center justify-between text-sm leading-tight">
           <div className="text-muted-foreground">Estimated Value</div>
           <div className="font-semibold">
             $
@@ -191,8 +203,18 @@ const BorrowModalContent = ({
             )}
           </div>
         </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground">Variable Borrow APY</div>
+        <div className="flex items-center justify-between text-sm leading-tight">
+          <div className="text-muted-foreground">
+            Variable Borrow APY {""}
+            <Tooltip
+              text={
+                <>
+                  variable interest rate will fluctuate based on the market
+                  conditions.
+                </>
+              }
+            />
+          </div>
           <div className="font-semibold text-warning-foreground">
             {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
           </div>

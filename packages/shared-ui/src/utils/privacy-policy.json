@@ -1,0 +1,200 @@
+{
+  "title": "Privacy Policy",
+  "last_updated": "December 18, 2023",
+  "content": [
+    {
+      "content": [
+        "This Privacy Notice does not address our privacy practices relating to job applicants, employees and other personnel. This Privacy Notice is also not a contract and does not create any legal rights or obligations. "
+      ]
+    },
+    {
+      "title": "OUR COLLECTION OF PERSONAL INFORMATION",
+      "content": [
+        "The Company is the controller of the personal information we collect or otherwise maintain in connection with our services. This means that we determine and are responsible for how personal information is used. ",
+        "The categories of personal information we collect depend on how you interact with us and our services. The Company collects information that individuals provide directly to us, information we collect automatically when individuals interact with us, and information we collect from third-party sources and other organizations."
+      ]
+    },
+    {
+      "title": "Personal Information Individuals Provide Directly to Us",
+      "content": [
+        "We may collect the following personal information individuals provide directly to us in connection with our services:",
+        [
+          "Contact Information, including name, email address, social media handles, and communication preferences;",
+          "Account Information, including username, profile pictures, profile description, general location, trust level, join date, and the products and services developed, used, or interacted with and any requests for feedback you provide in connection with your account, including requests for feedback on code you have developed;",
+          "Community information, including number of days visited, topics and posts created, topics viewed, posts read, time spent reading, likes given and received, badges, certifications, and community preferences;",
+          "Event, contest, promotion, and survey information, including contact information, preferences, feedback, and other relevant content provided when signing up for an event, entering a contest or promotion, or completing a survey; and",
+          "Inquiry information, including information provided in custom messages sent through our services or provided directly to a member of our team."
+        ],
+        "When an individual chooses to contact us, we may need additional information to fulfill the request or respond to inquiries. We may provide additional privacy-related information where the scope of the inquiry/request and/or personal information we require fall outside the scope of this Privacy Notice. In that case, the additional privacy notice will govern how we may process the information provided at that time."
+      ]
+    },
+    {
+      "title": "Personal Information Automatically Collected",
+      "content": [
+        "As is true of many digital platforms, we and our third-party providers may also collect certain personal information from an individual’s device, browsing actions, and site usage patterns automatically when visiting or interacting with our services, which may include:",
+        [
+          "Log data, such as cookie identifiers, internet protocol (IP) address, mobile carrier, MAC address, user settings, mobile ad identifiers, Internet service provider, browser or device information, the URL entered and the referring page/campaign, date/time of visit, the time spent on our services, and any errors that may occur during the visit to our services;",
+          "Analytics data, such as the electronic path taken to our services, through our services, and when exiting our services, as well as information pertaining to usage and activity on our services (including pages visited, links clicked, content interacted with, and duration and frequency of the activities); and",
+          "Location data, such as general geographic location based on the log data we or our third-party providers collect."
+        ],
+        "For information about our and our third-party providers’ use of cookies and related technologies to collect information automatically, and any choices individuals may have in relation to its collection, please review the Cookies and Related Technologies section below."
+      ]
+    },
+    {
+      "title": "Personal Information from Third Parties and Other Sources",
+      "content": [
+        "We also obtain personal information from third-party sources, which we often combine with personal information we collect either automatically or directly from an individual.",
+        "We may receive the same categories of personal information as described above from the following third parties:",
+        [
+          "Affiliates: We may receive personal information from other companies owned or controlled by the Company, and other companies owning or under common ownership with the Company, particularly when we collaborate in providing services.",
+          "Single Sign-On: Some parts of our services may allow community members to login through a third-party social network or authentication service such as Discord, Google, or Github. These services will authenticate the community member’s identity and provide them the option to share certain personal information with us, which could include name, email address, address book and contacts, or other information. The data we receive is dependent on that third party’s policies and the community member’s privacy settings on that third-party site. However, we do not receive the community member’s login credentials for the relevant third-party service. Instead, we receive tokens from the single sign-on service to help identify the community member in our system (such as by their username) and confirm the community member successfully authenticated with the single sign-on services. This information allows us to more easily provide community members access to our platform.",
+          "Social Media: If an individual chooses to interact with us on social media, we may collect personal information about them from their social media account that they make public. We use personal information collected in connection with their social media account to communicate with them, better understand their interests and preferences, and better understand our user base in the aggregate.",
+          "Identity Verification Providers: In rare circumstances, we may engage third-party identity verification providers to help us verify the identity of a specific individual with whom we are interacting. This information is used primarily for purposes of preventing fraud.",
+          "Event, Promotion and Other Business Partners: We may from time to time offer opportunities for individuals to take part in events or promotions, or obtain services provided in connection with a third-party business partner. Our event, promotion, and other business partners may collect or share personal information with us in connection with the relevant event, promotion or service. For example, we may receive personal information from third-party business partners that help foster the community in order to identify community members eligible for benefits in relation to a promotion.",
+          "Data Analytics Providers: We rely on third-party providers to help us collect analytics relating to our services and user base. These data analytics providers often collect personal information directly from individuals and share some or all of this information with us in connection with their analytics services.",
+          "Other Service Providers: Other service providers that perform services solely on our behalf, such as website hosting and marketing providers, collect personal information and often share some or all of this information with us in connection with their services.",
+          "Information Providers: We may from time to time obtain information from third-party information providers to correct or supplement personal information we collect. For example, we may obtain updated contact information from third-party information providers to connect with an individual who may be interested in our services.",
+          "Publicly Available Sources: We may collect personal information about individuals that we do not otherwise have, such as contact information or an individual’s interest in our services, from publicly available sources. We may combine this information with the information we collect from an individual directly.",
+          "Inferences: We may generate inferences or predictions about individuals and their interests and preferences based on the other personal information we collect and the interactions we have with the individuals."
+        ]
+      ]
+    },
+    {
+      "title": "Our Collection of Blockchain Information",
+      "content": [
+        "Blockchain is a shared, immutable ledger used to record transactions of assets. In connection with our services, we may collect the following blockchain information directly from individuals, from the third parties identified above, or from the public blockchain itself (including the Berachain blockchain):",
+        [
+          "Account Address: The unique blockchain address or domain from or to which assets are transferred;",
+          "Wallet Information: The wallet connected to a specific account address;",
+          "Account Balance and Assets: The balance associated with the blockchain address, as well as the assets stored in connection with that account;",
+          "Transaction Details: The transaction identifier, blockchain position for the transaction, date and time of the transaction, type of transaction, amount sent or received, fee amount, account address of the sender and recipient, and storage size of the transaction;",
+          "Connected Apps: The name of the apps to which an individual connects using our blockchain services."
+        ],
+        "We may in certain circumstances combine the blockchain information we obtain with the personal information described above."
+      ]
+    },
+    {
+      "title": "OUR USE OF PERSONAL INFORMATION AND BLOCKCHAIN INFORMATION",
+      "content": [
+        "We use the information we collect to:",
+        [
+          "Manage our organization and its day-to-day operations;",
+          "Administer, provide, maintain, improve, and personalize our products and services;",
+          "Improve and support the community;",
+          "Facilitate identity and transaction management services at your request;",
+          "Process or otherwise facilitate transactions and send you related information, including confirmations, receipts, invoices, customer experience surveys, and recall notices;",
+          "Personalize and improve your experience on our services;",
+          "Send you technical notices, security alerts, and support and administrative messages;",
+          "Respond to your comments and questions and provide customer service;",
+          "Communicate with you about products, services, and events offered by the Company and others and provide news and information that we think will interest you;",
+          "Tailor and provide you with content and advertisements, including through in-person events, social media, email, and other online venues, based on individual interests and interactions with us;",
+          "Monitor and analyze trends, usage, and activities in connection with our services;",
+          "Facilitate contests, sweepstakes, and promotions and process and deliver entries and rewards;",
+          "Test, enhance, update, and monitor the services, or diagnose or fix technology problems;",
+          "Help maintain the safety, security, and integrity of our property and services, technology assets, and business;",
+          "Detect, prevent, investigate, or provide notice of security incidents or other malicious, deceptive, fraudulent, or illegal activity and protect the rights and property of The Company and others;",
+          "Debug to identify and repair errors in our services;",
+          "Facilitate business transactions and reorganizations impacting the structure of our business;",
+          "Defend, protect, or enforce our rights or applicable contracts and agreements;",
+          "Comply with our legal and financial obligations;",
+          "Carry out any other purpose described to you at the time the information was collected."
+        ]
+      ]
+    },
+    {
+      "title": "OUR DISCLOSURE OF PERSONAL INFORMATION AND BLOCKCHAIN INFORMATION",
+      "content": [
+        "We disclose the information we collect to:",
+        [
+          "Affiliates: We share information with other companies owned or controlled by the Company, and other companies owning or under common ownership with the Company, particularly when we collaborate in providing services.",
+          "Identity Verification Providers: Where we engage a third-party identity verification provider to help us verify the identity of a specific individual with whom we are interacting, we will typically provide the third-party identity verification provider sufficient information to facilitate the identity verification service.",
+          "Event, Promotion and Other Business Partners: Just as we may receive information from our event, promotion and other business partners, we may share information with them in connection with the relevant event, promotion or service we are offering.",
+          "Data Analytics Providers: We may share information with our data analytics providers to facilitate the analytics services they are providing us.",
+          "Other Service Providers: In addition to the third parties identified above, we engage other third-party service providers that perform business or operational services for us or on our behalf, such as web hosting, shipping and delivery, payment processing, fraud prevention, customer service, contests, sweepstakes, promotions, and marketing and advertising service. Depending on the function the provider serves, the service provider may process information on our behalf or have access to information while performing functions on our behalf.",
+          "Business Transaction or Reorganization: We may share or otherwise disclose personal information or blockchain information to a third-party during negotiations concerning, in connection with, or as an asset in a merger, sale or other transfer of company assets, joint venture, financing, or acquisition of all or a portion of our business by another company. Personal information or blockchain information may also be disclosed in the event of insolvency, bankruptcy, or receivership.",
+          "Legal Obligations and Rights: We share or otherwise disclose information to third parties, such as our lawyers, other professional advisors and law enforcement:",
+          [
+            "Where necessary to obtain advice or otherwise protect and manage our business interests;",
+            "In connection with the establishment, exercise, or defense of legal claims;",
+            "To comply with laws or to respond to lawful requests or legal process, including lawful requests by public authorities to meet national security or law enforcement requirements;",
+            "To protect our rights and property and the rights and property of others, including to enforce our agreements and policies;",
+            "To detect, suppress, or prevent fraud;",
+            "To protect the health and safety of us and others;",
+            "As otherwise required by applicable law."
+          ],
+          "Otherwise with Consent or Direction: We may share or otherwise disclose information with your consent or at your direction. We may also share community content with your intended recipients or make information available to the public blockchain to facilitate proper recording of activities relating to your blockchain wallet. We also share aggregated or de-identified information that cannot reasonably be used to identify you."
+        ]
+      ]
+    },
+    {
+      "title": "Cookies and Related Technologies",
+      "content": [
+        "We engage third parties to provide us with analytics and other services across the web and in mobile apps. We and our third-party providers may use (i) cookies or small data files that are stored on an individual’s computer and (ii) other, similar technologies, such as web beacons, pixels, embedded scripts, location-identifying technologies and logging technologies (collectively, “cookies”) to automatically collect personal information and use or disclose the personal information for the purposes described in the sections above, including to analyze and track data, determine the popularity of certain content, and better understand each user’s online activity.",
+        "If an individual would prefer not to accept cookies, most browsers will allow the individual to: (i) change the individual’s browser settings to notify the individual when the individual receives a cookie, which lets the individual choose whether to accept it; (ii) disable existing cookies; or (iii) set the individual’s browser to automatically reject cookies. Please note that doing so may negatively impact the individual’s experience using our website, as some features and offerings may not work properly or at all. Depending on the individual’s device and operating system, the individual may not be able to delete or block all cookies. In addition, if the individual wants to reject cookies across all browsers and devices, the individual will need to do so on each browser on each device the individual actively uses.",
+        "The individual may also set their email options to prevent the automatic downloading of images that may contain technologies that would allow us to know whether they have accessed our email and performed certain functions with it."
+      ]
+    },
+    {
+      "title": "CHILDREN’S PERSONAL INFORMATION",
+      "content": [
+        "Our services are not directed to, and we do not intend to, or knowingly, collect or solicit personal information from children under the age of 13. If an individual is under the age of 13, they should not use our services or otherwise provide us with any personal information either directly or by other means. If a child under the age of 13 has provided personal information to us, we encourage the child’s parent or guardian to contact us to request that we remove the personal information from our systems. If we learn that any personal information we collect has been provided by a child under the age of 13, we will promptly delete that personal information."
+      ]
+    },
+    {
+      "title": "LINKS TO THIRD-PARTY WEBSITE OR SERVICE",
+      "content": [
+        "Our services may include links to third-party websites, plug-ins, and applications. Except where we post, link to, or expressly adopt or refer to this Privacy Notice, this Privacy Notice does not apply to, and we are not responsible for, any personal information practices of third-party websites and online services or the practices of other third parties. To learn about the personal information practices of third parties, please visit their respective privacy notices."
+      ]
+    },
+    {
+      "title": "UPDATES TO THIS PRIVACY NOTICE",
+      "content": [
+        "We may change this Privacy Notice from time to time. If we make changes, we will notify you by revising the date at the top of this notice and, if we make material changes, we may provide you with additional notice (such as adding a statement to our services or sending you a notification). We encourage you to review this Privacy Notice regularly to stay informed about our information practices and the choices available to you."
+      ]
+    },
+    {
+      "title": "Contact Us",
+      "content": [
+        "If you have any questions or requests in connection with this Privacy Notice or other privacy-related matters, please send an email to: founders@berachain.com."
+      ]
+    },
+    {
+      "title": "ADDITIONAL PRIVACY DISCLOSURES"
+    },
+    {
+      "title": "Residents of the European Economic Area",
+      "content": [
+        "If you are a resident of the European Economic Area (“EEA”), you have certain rights and protections under the law regarding the processing of your personal data. Any reference to Personal Information in this Privacy Policy should be understood as referring to “personal data”,  defined under the General Data Protection Regulation (“GDPR”) as “any information relating to an identified or identifiable natural person (“data subject”); an identifiable natural person is one who can be identified, directly or indirectly, in particular by reference to an identifier such as a name, an identification number, location data, an online identifier or to one or more factors specific to the physical, physiological, genetic, mental, economic, cultural or social identity of that natural person”."
+      ]
+    },
+    {
+      "title": "Legal Basis for Processing",
+      "Content": [
+        "If you are a resident of the EEA, when we process your personal data we will only do so in the following situations:",
+        [
+          "with your consent;",
+          "to perform the Services you have requested from us or, upon your request, to take the steps necessary to provide you with such Services; or",
+          "in the furtherance of our legitimate interests in maintaining business relationships and communicating with you as a business contact, about our activities and Services and providing, securing and improving our Services."
+        ]
+      ]
+    },
+    {
+      "title": "Data Subject Requests",
+      "content": [
+        "If you are a resident of the EEA, you have the right to access personal data we hold about you and to ask that your personal data be corrected, erased, or transferred. You may also have the right to object to, or request that we restrict, certain processing. If you would like to exercise any of these rights, you can contact us as indicated below. Please note that the limitation or deletion of your personal data may mean we will be unable to provide our Services. You also have the right to receive your personal data in a machine-readable format and have the data transferred to another party responsible for data processing."
+      ]
+    },
+    {
+      "title": "Questions or Complaints",
+      "content": [
+        "If you are a resident of the EEA and have a concern about our processing of personal data that we are not able to resolve, you have the right to lodge a complaint with the data privacy authority where you reside. For contact details of your local Data Protection Authority, please see: http://ec.europa.eu/justice/data-protection/article-29/structure/data-protection-authorities/index_en.htm."
+      ]
+    },
+    {
+      "title": "Residents of California",
+      "content": [
+        "California Civil Code Section § 1798.83 permits users who are California residents to request certain information, including the categories of personal information disclosed to third parties for their marketing purposes and the names and addresses of those third parties, regarding our disclosure of personal information to third parties for their direct marketing purposes, if any. If you are a California resident and you have questions about our practices with respect to sharing information with third parties and affiliates for their direct marketing purposes, please contact us at founders@berachain.com. "
+      ]
+    }
+  ]
+}

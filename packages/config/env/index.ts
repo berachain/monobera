@@ -123,3 +123,7 @@ export const perpsEndpoints = process.env
 // Validator clue
 export const validatorClueEndpoint = process.env
   .NEXT_PUBLIC_VILIDATOR_CLUE_ENDPOINT as string;
+
+
+// gov authority
+export const governanceAuthority = process.env.NEXT_PUBLIC_GOVERNANCE_AUTHORITY as string
