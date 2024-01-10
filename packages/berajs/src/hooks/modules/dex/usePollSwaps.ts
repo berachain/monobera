@@ -25,7 +25,7 @@ export const getSwap = async (
   amount: string,
 ) => {
   try {
-    const type = swapType === 0 ? "given_in" : "given_out";
+    const type = "given_in";
     // const parsedAmount = parseUnits(
     //   amount,
     //   type === "given_in" ? tokenInDecimals ?? 18 : tokenOutDecimals ?? 18,
@@ -35,8 +35,8 @@ export const getSwap = async (
       jsonrpc: "2.0",
       method: "eth_routeDexSwap",
       params: [
-        handleNativeBera(tokenOut),
         handleNativeBera(tokenIn),
+        handleNativeBera(tokenOut),
         toHex(parseUnits(`${amount}`, 18)),
         type,
         "latest",
@@ -64,9 +64,7 @@ export const getSwap = async (
     const response = await fetch(jsonRpcUrl, fetchOptions);
 
     let result = await response.json();
-    console.log(result);
     result = result.result;
-    console.log(result);
     if (!result.steps)
       return {
         batchSwapSteps: [],
@@ -78,6 +76,7 @@ export const getSwap = async (
         tokenOut,
       };
 
+    console.log(result.steps)
     const batchSwapSteps: BatchSwapStep[] = result.steps.map((step: any) => {
       return {
         poolId: step.pool,
@@ -89,6 +88,7 @@ export const getSwap = async (
       };
     });
 
+    console.log(batchSwapSteps)
     if (
       tokenIn === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)
     ) {

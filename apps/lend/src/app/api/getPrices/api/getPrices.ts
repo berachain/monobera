@@ -33,8 +33,8 @@ export const getSwap = async (
       jsonrpc: "2.0",
       method: "eth_routeDexSwap",
       params: [
-        handleNativeBera(tokenOut),
         handleNativeBera(tokenIn),
+        handleNativeBera(tokenOut),
         toHex(parseUnits(`${amount}`, 18)),
         type,
         "latest",
