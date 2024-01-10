@@ -78,6 +78,7 @@ export function Header({
         <Link
           className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md"
           href={faucetUrl ?? ""}
+          target="_blank"
         >
           <Icons.faucetFav className="h-10 w-10 hover:opacity-80" />
         </Link>
