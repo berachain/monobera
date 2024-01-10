@@ -21,6 +21,7 @@ import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { ProposalCard } from "../components/proposal-card";
+import { getProposalType } from "../helper";
 import {
   OrderByEnum,
   StatusEnum,
@@ -150,6 +151,7 @@ export default function GovernanceByStatus({
               proposal={proposal}
               key={"proposal" + index}
               className="hover:cursor-pointer"
+              type={getProposalType(proposal)}
               onClick={() =>
                 router.push(
                   // replace this with real data
