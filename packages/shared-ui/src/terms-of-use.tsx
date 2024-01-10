@@ -22,7 +22,7 @@ export const TermsOfUse = () => {
         Public Testnet Terms of Use
       </div>
       <div className="text-md text-center font-semibold leading-4 sm:text-lg sm:leading-7">
-        Last updated: January 1, 2024
+        Last updated: January 9, 2024
       </div>
       <div className="sm:text-md text-sm leading-4 sm:leading-6">
         These Public Testnet Terms of Use (these “<b>Terms</b>”) apply to your
