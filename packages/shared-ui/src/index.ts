@@ -43,7 +43,8 @@ export { WalletBalanceInUs } from "./wallet-balance-in-us";
 export { ApproveButton } from "./approve-button";
 export { DynamicRewardBtn } from "./dynamic-reward-btn";
 export { Documentation } from "./documentation";
-export { TermsOfUse, TermOfUseModal, PrivacyPolicy } from "./terms-of-use";
+export { TermsOfUse, TermOfUseModal } from "./terms-of-use";
+export { AccessDeny, AccessDenyModal } from "./access-deny";
 
 export { useTxn } from "./hooks";
 export * from "./apyTooltip";
