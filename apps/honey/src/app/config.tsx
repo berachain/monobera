@@ -95,7 +95,7 @@ export const navItems = [
         href: blockExplorerUrl,
         type: "external",
         title: blockExplorerName,
-        blurb: "Explore the blockchain",
+        blurb: "Berachain's block explorer",
         icon: <Icons.berascanFav className="h-8 w-8" />,
       },
       {
@@ -160,7 +160,7 @@ export const mobileNavItems = [
         href: blockExplorerUrl,
         type: "external",
         title: blockExplorerName,
-        blurb: "Explore the blockchain",
+        blurb: "Berachain's block explorer",
         icon: <Icons.berascanFav className="h-8 w-8" />,
       },
       {

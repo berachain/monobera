@@ -1,56 +1,37 @@
 export const BGT_PRECOMPILE_ABI = [
   {
-    anonymous: false,
+    type: "function",
+    name: "redeem",
     inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "bgtburner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "berareceiver",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint64",
-        name: "redeemed",
-        type: "uint64",
-      },
+      { name: "receiver", type: "address", internalType: "address" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
     ],
-    name: "Redeem",
-    type: "event",
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "nonpayable",
   },
   {
+    type: "event",
+    name: "Redeem",
     inputs: [
       {
-        internalType: "address",
-        name: "from",
+        name: "bgtburner",
         type: "address",
+        indexed: true,
+        internalType: "address",
       },
       {
-        internalType: "address",
-        name: "receiver",
+        name: "berareceiver",
         type: "address",
+        indexed: true,
+        internalType: "address",
       },
       {
-        internalType: "uint256",
-        name: "amount",
+        name: "redeemed",
         type: "uint256",
+        indexed: false,
+        internalType: "uint256",
       },
     ],
-    name: "redeem",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
+    anonymous: false,
   },
 ];

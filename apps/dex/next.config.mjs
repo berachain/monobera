@@ -6,7 +6,7 @@ const config = {
   pageExtensions: ["ts", "tsx"],
   transpilePackages: ["@bera/ui", "@bera/shared-ui", "@bera/berajs"],
   compiler: {
-    removeConsole: true,
+    removeConsole: process.env.NODE_ENV === "production",
   },
   experimental: {
     esmExternals: "loose",
