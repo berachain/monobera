@@ -1,6 +1,4 @@
-import Link from "next/link";
-
-export default function Banner() {
+export const LaunchBanner = () => {
   return (
     <header className="xl fixed top-[72px] z-50 flex h-12 w-[100vw] items-center justify-center gap-2 bg-yellow-600 px-1 py-3 text-white">
       <div className="flex items-center gap-2">
@@ -29,18 +27,10 @@ export default function Banner() {
           </g>
         </svg>
         <div className="font-semibold leading-tight text-foreground">
-          Validators can now point liquidity to berps and help launch the
-          platform |{" "}
-          <Link
-            //    TODO: update link once ready
-            href={`${process.env.NEXT_PUBLIC_FAUCET_URL}/#dapps`}
-            className="underline"
-            target="_blank"
-          >
-            Learn more
-          </Link>
+          Validators can now point liquidity to BERPS. Users may interact after
+          Artio Epoch 1
         </div>
       </div>
     </header>
   );
-}
+};

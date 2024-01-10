@@ -1,13 +1,33 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const BLOCKED_COUNTRY = ["CU", "IR", "KP", "SY", "SD"];
+const BLOCKED_COUNTRY = [
+  "BY",
+  "CD",
+  "CU",
+  "ET",
+  "IR",
+  "IQ",
+  "KR",
+  "LY",
+  "SD",
+  "SY",
+  "RU",
+  "XC",
+  "HK",
+  "MM",
+  "VE",
+  "YE",
+  "UK",
+  "ZW",
+];
+
 export { default } from "next-auth/middleware";
 export const config = {
   matcher: ["/"],
 };
 export function middleware(req: NextRequest) {
   // Extract country
-  const country = req.geo?.country || "CU";
+  const country = req.geo?.country || "CA";
 
   // Specify the correct pathname
   if (BLOCKED_COUNTRY.includes(country)) {
