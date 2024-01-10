@@ -4,7 +4,12 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
-import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
+import {
+  AccessDenyModal,
+  Header,
+  TailwindIndicator,
+  TermOfUseModal,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -45,6 +50,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
+        <AccessDenyModal open />
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <Providers>
           <div className="z-[100]">

@@ -43,6 +43,7 @@ export { ApproveButton } from "./approve-button";
 export { DynamicRewardBtn } from "./dynamic-reward-btn";
 export { Documentation } from "./documentation";
 export { TermsOfUse, TermOfUseModal } from "./terms-of-use";
+export { AccessDeny, AccessDenyModal } from "./access-deny";
 
 export { useTxn } from "./hooks";
 export * from "./apyTooltip";
