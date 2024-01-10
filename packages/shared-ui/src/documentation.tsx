@@ -29,7 +29,7 @@ export function Documentation({ className }: { className?: string }) {
             Are you a fellow builder in the making? Check out our docs and start
             building on Berachain today.
           </p>
-          <Link href={`${docsUrl}/developers`} target="_blank">
+          <Link href={`${docsUrl}/developers/`} target="_blank">
             <Button className="w-fit" variant="secondary">
               Checkout Docs
             </Button>
@@ -43,7 +43,7 @@ export function Documentation({ className }: { className?: string }) {
             Eager to connect and learn with fellow crypto enthusiasts? Explore
             and join the vibrant community.
           </p>
-          <Link href={`${docsUrl}/community`} target="_blank">
+          <Link href={`${docsUrl}/community/`} target="_blank">
             <Button className="w-fit" variant="secondary">
               Learn More
             </Button>
