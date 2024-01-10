@@ -1,4 +1,4 @@
-export const LaunchBanner = () => {
+export const LaunchBanner = ({ appName }: { appName: string }) => {
   return (
     <header className="xl fixed top-[72px] z-50 flex h-12 w-[100vw] items-center justify-center gap-2 bg-yellow-600 px-1 py-3 text-white">
       <div className="flex items-center gap-2">
@@ -26,9 +26,9 @@ export const LaunchBanner = () => {
             />
           </g>
         </svg>
-        <div className="font-semibold leading-tight text-foreground">
-          Validators can now point liquidity to BERPS. Users may interact after
-          Artio Epoch 1
+        <div className="text-foreground-white font-semibold leading-tight">
+          {`Validators can now point liquidity to ${appName}. Users may interact after
+          Artio Epoch 1`}
         </div>
       </div>
     </header>
