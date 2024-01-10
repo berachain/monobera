@@ -50,7 +50,7 @@ export function CreatePoolStepper({ step = 0, steps, setStep }: Props) {
               </div>
               <div
                 onClick={() => stepIdx < step && setStep(stepIdx)}
-                className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-primary bg-white text-primary transition-colors duration-200"
+                className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-primary bg-foreground text-background transition-colors duration-200"
                 aria-current="step"
               >
                 <span className="items-center rounded-full" aria-hidden="true">

@@ -44,7 +44,7 @@ import * as z from "zod";
 
 import { ProposalTypeEnum } from "../types";
 import NewGaugeForm from "./gauge-proposal-form";
-import NewCollateralForm from "./new-collateral-form";
+// import NewCollateralForm from "./new-collateral-form";
 // import NewMarketCollateralForm from "./new-market-form";
 import { useCreateProposal } from "./useCreateProposal";
 
@@ -154,8 +154,8 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const ProposalTypeInformationEnum = {
     [ProposalTypeEnum.GAUGE_PROPOSAL]:
       "New gauge proposal will propose a new gauge be whitelisted to receive BGT rewards.",
-    [ProposalTypeEnum.COLLATERAL_PROPOSAL]:
-      "New collateral proposal will propose a new stablecoin collateral be added to Honey's PSM.",
+    // [ProposalTypeEnum.COLLATERAL_PROPOSAL]:
+    //   "New collateral proposal will propose a new stablecoin collateral be added to Honey's PSM.",
     // [ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL]: `New market proposal will propose a new market be added to ${process.env.NEXT_PUBLIC_LEND_NAME} for the proposed collateral.`,
   };
 
@@ -190,7 +190,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   }
 
   return (
-    <div className="mx-auto  w-full max-w-[564px] pb-16">
+    <div className="mx-auto w-full max-w-[564px] pb-16">
       {ModalPortal}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} id="proposal">
@@ -216,7 +216,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                     className="inline-flex h-[42px] w-full flex-col items-start justify-start hover:cursor-pointer"
                     ref={triggerRef}
                   >
-                    <div className=" inline-flex w-full items-center justify-start gap-2.5 rounded-xl border border-border px-3 py-2">
+                    <div className=" inline-flex w-full items-center justify-start gap-2.5 rounded-md border border-border px-3 py-2">
                       <div className="relative shrink grow basis-0 caption-top text-sm font-normal capitalize leading-normal text-muted-foreground">
                         {type.replaceAll("-", " ")}
                         <Icons.chevronDown className="absolute right-0 top-1 h-4 w-4" />
@@ -355,9 +355,9 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
             {type === ProposalTypeEnum.GAUGE_PROPOSAL && (
               <NewGaugeForm form={form} />
             )}
-            {type === ProposalTypeEnum.COLLATERAL_PROPOSAL && (
+            {/* {type === ProposalTypeEnum.COLLATERAL_PROPOSAL && (
               <NewCollateralForm form={form} />
-            )}
+            )} */}
             {/* {type === ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL && (
               <NewMarketCollateralForm form={form} />
             )} */}
