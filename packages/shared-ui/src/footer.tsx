@@ -179,6 +179,10 @@ export function FooterSM() {
           &copy; {new Date().getFullYear()} Berachain | All rights reserved |{" "}
           <a className="font-bold underline" href="/terms-of-use">
             Terms of Service
+          </a>{" "}
+          |{" "}
+          <a className="font-bold underline" href="/privacy-policy">
+            Privacy Policy
           </a>
         </p>
         <p className="text-xs">Made W/❤️ at the 🐻Beraden</p>

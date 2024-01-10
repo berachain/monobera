@@ -76,7 +76,7 @@ export function Header({
         {!hideTheme && <ThemeToggleMobile />}
         {isReady && <BGTStatusBtn />}
         <Link
-          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md"
+          className="hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-md sm:flex"
           href={faucetUrl ?? ""}
         >
           <Icons.faucetFav className="h-10 w-10 hover:opacity-80" />

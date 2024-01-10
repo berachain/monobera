@@ -137,7 +137,7 @@ export default function ProposalDetails({
       setProposalType(undefined);
     }
   }, [proposal]);
-
+  console.log(proposal, jsonMsg);
   return (
     <div className="pb-16">
       {ModalPortal}
@@ -219,11 +219,11 @@ export default function ProposalDetails({
               <div className="flex items-center justify-between">
                 <div>Address To Add:</div>
                 <Link
-                  href={`${blockExplorerUrl}/address/${proposal?.messages[0]?.value}`}
+                  href={`${blockExplorerUrl}/address/${jsonMsg[0].receiverAddress}`}
                   target="_blank"
                   className="cursor-pointer underline"
                 >
-                  {truncateHash(proposal?.messages[0]?.value)}
+                  {truncateHash(jsonMsg[0].receiverAddress)}
                   <Icons.externalLink className="ml-1 inline-block h-3 w-3" />
                 </Link>
               </div>

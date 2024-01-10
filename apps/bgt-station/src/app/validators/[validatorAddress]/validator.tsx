@@ -90,7 +90,9 @@ export default function Validator({
         <div className="mt-8 flex flex-col items-center gap-16 lg:flex-row lg:gap-4">
           <ValidatorDetails
             address={validatorAddress}
-            decription={validator?.description.details}
+            decription={
+              validator ? validator?.description.details ?? "" : undefined
+            }
             commissions={
               (
                 Number(

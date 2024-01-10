@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { type Pool } from "@bera/bera-router";
 import { useBeraJs, usePollBgtRewards } from "@bera/berajs";
 import {
@@ -110,7 +111,7 @@ export const PoolSearch = ({
   const receivers = userPools?.map((pool: Pool) => pool.pool) || [];
   const { useBgtRewards } = usePollBgtRewards(receivers);
   const { data: bgtRewards } = useBgtRewards();
-
+  console.log(data);
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -122,17 +123,15 @@ export const PoolSearch = ({
             value="allPools"
             className="w-full sm:w-fit"
             variant="ghost"
-            onClick={() => window.open("/pool?pool=allPools", "_self")}
           >
-            All pools
+            <Link href="/pool?pool=allPools">All pools</Link>
           </TabsTrigger>
           <TabsTrigger
             value="userPools"
             className="w-full sm:w-fit"
             variant="ghost"
-            onClick={() => window.open("/pool?pool=userPools", "_self")}
           >
-            My pools
+            <Link href="/pool?pool=userPools">My pools</Link>
           </TabsTrigger>
         </TabsList>
 
