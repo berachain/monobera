@@ -79,7 +79,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
     const bribeCalls: Call[] = validatorAddresses.map((validatorAddress) => ({
       address: networkConfig.precompileAddresses.erc20BribeModule as Address,
       abi: BRIBE_PRECOMPILE_ABI,
-      functionName: "getValidatorBribes",
+      functionName: "getAllValidatorBribes",
       args: [validatorAddress],
     }));
 
