@@ -1,8 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const BLOCKED_COUNTRY = [
+  "BU",
   "BY",
   "CD",
+  "CF",
   "CU",
   "ET",
   "IR",
@@ -20,7 +22,6 @@ const BLOCKED_COUNTRY = [
   "UK",
   "ZW",
 ];
-
 export { default } from "next-auth/middleware";
 export const config = {
   matcher: ["/"],
