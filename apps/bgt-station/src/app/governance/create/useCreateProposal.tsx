@@ -1,5 +1,5 @@
 import { useBeraJs, usePollDenom } from "@bera/berajs";
-import { stakingToken } from "@bera/config";
+import { governanceAuthority, stakingToken } from "@bera/config";
 import {
   UpdateFriendsOfTheChefRequest,
   UpdateParamsRequest,
@@ -43,9 +43,10 @@ export const useCreateProposal = () => {
       value: any;
     }[] = [];
 
+    
     if (value.gaugeAddress && value.enableOrDisableGauge) {
       const friendOfTheChef = {
-        authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn",
+        authority: governanceAuthority,
         receiverAddress: value.gaugeAddress,
         friendOfTheChef: value.enableOrDisableGauge,
       };
@@ -59,7 +60,7 @@ export const useCreateProposal = () => {
     } else if (value.collateralAddress) {
       const denom = await getDenom(value.collateralAddress as `0x${string}`);
       const honeyCollateral: UpdateParamsRequest = {
-        authority: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn",
+        authority: governanceAuthority,
         params: {
           psmDenoms: [
             {
