@@ -63,7 +63,7 @@ const useBeraContractWrite = ({
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
             hash: receipt,
-            pollingInterval: 200,
+            pollingInterval: 2500,
           });
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
