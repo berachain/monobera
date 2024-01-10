@@ -45,8 +45,8 @@ export const navItems = [
     title: "Mint",
   },
   {
-    href: "#supply",
-    title: "Supply",
+    href: "#stats",
+    title: "Stats",
   },
   {
     href: "#transactions",
