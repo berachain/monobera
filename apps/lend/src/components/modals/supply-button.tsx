@@ -119,7 +119,7 @@ const SupplyModalContent = ({
   });
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">Supply</div>
       <div className="rounded-md border border-border bg-input">
         <TokenInput

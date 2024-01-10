@@ -135,13 +135,6 @@ export const mobileNavItems = [
         blurb: "Swap tokens and provide liquidity",
         icon: <Icons.bexFav className="h-8 w-8" />,
       },
-      // {
-      //   href: honeyUrl,
-      //   type: "external",
-      //   title: honeyName,
-      //   blurb: "Mint or redeem Berachain’s native stable coin",
-      //   icon: <Icons.honeyFav className="h-8 w-8" />,
-      // },
       {
         href: lendUrl,
         type: "external",
