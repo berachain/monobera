@@ -16,7 +16,7 @@ export const usePollValidatorBribes = (
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
-  const method = "getValidatorBribes";
+  const method = "getAllValidatorBribes";
   const QUERY_KEY = [validatorAddress, method];
   const { isLoading } = useSWR(
     QUERY_KEY,
