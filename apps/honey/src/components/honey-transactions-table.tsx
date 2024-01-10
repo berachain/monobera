@@ -62,7 +62,7 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
     // this should be fixed once backend updated
     const tokenIn =
       tokenDictionary &&
-      tokenDictionary["0x1d0f659fF50d1830e449dD88E533cb11FB7a25E4"];
+      tokenDictionary["0x6581e59A1C8dA66eD0D313a0d4029DcE2F746Cc5"];
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -91,7 +91,7 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
     // this should be fixed once backend updated
     const tokenOut =
       tokenDictionary &&
-      tokenDictionary["0x1d0f659fF50d1830e449dD88E533cb11FB7a25E4"];
+      tokenDictionary["0x6581e59A1C8dA66eD0D313a0d4029DcE2F746Cc5"];
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
