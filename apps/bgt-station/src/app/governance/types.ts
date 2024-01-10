@@ -23,7 +23,7 @@ export enum OrderByEnum {
 export enum ProposalTypeEnum {
   TEXT_PROPOSAL = "text-proposal",
   GAUGE_PROPOSAL = "new-gauge-proposal",
-  COLLATERAL_PROPOSAL = "new-collateral-proposal",
+  // COLLATERAL_PROPOSAL = "new-collateral-proposal",
   // MARKET_COLLATERAL_PROPOSAL = "new-market-proposal",
 }
 

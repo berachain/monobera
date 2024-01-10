@@ -34,11 +34,7 @@ import { ProposalCard } from "../../components/proposal-card";
 import { VoteCard } from "../../components/vote-card";
 import { VoteDialog } from "../../components/vote-dialog";
 import { VoterTable } from "../../components/voter-table";
-import {
-  updateFriendsOfTheChefTypeUrl,
-  updateHoneyCollateralTypeUrl,
-  updateLendMarkeyTypeUrl,
-} from "../../create/useCreateProposal";
+import { getProposalType } from "../../helper";
 import { useProposalDetails } from "./useProposalDetails";
 
 export default function ProposalDetails({
@@ -117,25 +113,7 @@ export default function ProposalDetails({
   }, [jsonMsg, proposalType]);
   //handle proposal type
   useEffect(() => {
-    if (proposal) {
-      if (proposal.messages.length === 0) {
-        setProposalType("text-proposal");
-      } else if (
-        proposal.messages[0]?.typeURL === updateFriendsOfTheChefTypeUrl
-      ) {
-        setProposalType("new-gauge-proposal");
-      } else if (
-        proposal.messages[0]?.typeURL === updateHoneyCollateralTypeUrl
-      ) {
-        setProposalType("enable-collateral-for-honey");
-      } else if (proposal.messages[0]?.typeURL === updateLendMarkeyTypeUrl) {
-        setProposalType("new-lend-market");
-      } else {
-        setProposalType(undefined);
-      }
-    } else {
-      setProposalType(undefined);
-    }
+    setProposalType(getProposalType(proposal));
   }, [proposal]);
 
   return (
@@ -219,11 +197,11 @@ export default function ProposalDetails({
               <div className="flex items-center justify-between">
                 <div>Address To Add:</div>
                 <Link
-                  href={`${blockExplorerUrl}/address/${proposal?.messages[0]?.value}`}
+                  href={`${blockExplorerUrl}/address/${jsonMsg[0].receiverAddress}`}
                   target="_blank"
                   className="cursor-pointer underline"
                 >
-                  {truncateHash(proposal?.messages[0]?.value)}
+                  {truncateHash(jsonMsg[0].receiverAddress)}
                   <Icons.externalLink className="ml-1 inline-block h-3 w-3" />
                 </Link>
               </div>
