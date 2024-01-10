@@ -37,7 +37,7 @@ export const getSwap = async (
       params: [
         handleNativeBera(tokenIn),
         handleNativeBera(tokenOut),
-        toHex(parseUnits(`${amount}`, 18)),
+        toHex(parseUnits(`${amount}`, tokenInDecimals)),
         type,
         "latest",
       ],
@@ -76,7 +76,6 @@ export const getSwap = async (
         tokenOut,
       };
 
-    console.log(result.steps)
     const batchSwapSteps: BatchSwapStep[] = result.steps.map((step: any) => {
       return {
         poolId: step.pool,
