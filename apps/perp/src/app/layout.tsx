@@ -15,6 +15,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { useLocalStorage } from "usehooks-ts";
 
+import Banner from "~/components/Banner";
 import Providers from "./Providers";
 import { navItems } from "./config";
 
