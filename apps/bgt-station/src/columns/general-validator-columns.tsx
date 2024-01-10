@@ -14,19 +14,19 @@ import { VP } from "~/components/validator-selector";
 import { ValidatorGauge } from "~/app/validators/validators-table";
 
 export const general_validator_columns: ColumnDef<PoLValidator>[] = [
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Rank" />
-    ),
-    cell: ({ row }) => {
-      const rank = row.original.rank;
-      return (
-        <div className="flex h-full items-center justify-center">{rank}</div>
-      );
-    },
-    accessorKey: "delegate",
-    enableSorting: false,
-  },
+  // {
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Rank" />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const rank = row.original.rank;
+  //     return (
+  //       <div className="flex h-full items-center justify-center">{rank}</div>
+  //     );
+  //   },
+  //   accessorKey: "delegate",
+  //   enableSorting: false,
+  // },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Validator" />
