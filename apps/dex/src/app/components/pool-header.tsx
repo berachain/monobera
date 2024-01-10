@@ -8,7 +8,7 @@ import { formatUnits } from "viem";
 
 export default function PoolHeader({ pool }: { pool: Pool }) {
   return (
-    <div className="flex w-full flex-col items-center justify-between md:flex-row md:items-end md:justify-center">
+    <div className="flex w-full flex-col items-center justify-between md:items-end md:justify-center lg:flex-row">
       <div className="flex w-full flex-col items-center gap-4 md:items-start">
         <Button
           variant={"ghost"}
@@ -28,9 +28,15 @@ export default function PoolHeader({ pool }: { pool: Pool }) {
         </p>
         <div className="flex w-full flex-row items-center justify-center gap-4 leading-7 text-muted-foreground md:justify-start">
           <div className="flex w-fit items-center gap-1">
-            <ApyTooltip />
-            APY:
+            APY
+            <ApyTooltip className="w-3" />:
             <span className="text-sm text-success-foreground">
+              {pool?.totalApy?.toFixed(2)}%
+            </span>
+          </div>
+          <div className="flex w-fit items-center gap-1">
+            BGT Rewards:
+            <span className="text-sm text-warning-foreground">
               {pool?.bgtApy?.toFixed(2)}%
             </span>
           </div>
@@ -43,6 +49,7 @@ export default function PoolHeader({ pool }: { pool: Pool }) {
               %
             </span>
           </div>
+
           <div className="hidden w-fit items-center gap-1 sm:flex">
             {" "}
             Pool Contract:

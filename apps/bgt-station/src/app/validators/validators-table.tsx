@@ -97,14 +97,19 @@ export default function ValidatorsTable() {
   const validators = usePolValidators();
 
   const filteredValidators = React.useMemo(() => {
-    return validators?.filter((validator: PoLValidator) => {
-      return (
-        validator.description.moniker
-          .toLowerCase()
-          .includes(keyword.toLowerCase()) ||
-        validator.operatorAddr.toLowerCase().includes(keyword.toLowerCase())
-      );
-    });
+    return validators
+      ?.sort(
+        (a: PoLValidator, b: PoLValidator) =>
+          Number(b.tokens) - Number(a.tokens),
+      )
+      .filter((validator: PoLValidator) => {
+        return (
+          validator.description.moniker
+            .toLowerCase()
+            .includes(keyword.toLowerCase()) ||
+          validator.operatorAddr.toLowerCase().includes(keyword.toLowerCase())
+        );
+      });
   }, [validators, keyword]);
 
   return (

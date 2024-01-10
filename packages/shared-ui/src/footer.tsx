@@ -150,14 +150,29 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 flex items-center justify-between border-t border-border pt-8 sm:mt-20 lg:mt-24">
+        <div className="mt-16 flex flex-col items-center justify-between border-t border-border pt-8 sm:mt-20 sm:flex-row lg:mt-24">
           <p className="text-xs leading-5 text-secondary-foreground">
             &copy; {new Date().getFullYear()} Berachain | All rights reserved |{" "}
             <a className="font-bold underline" href="/terms-of-use">
               Terms of Service
+            </a>{" "}
+            |{" "}
+            <a className="font-bold underline" href="/privacy-policy">
+              Privacy Policy
             </a>
           </p>
           <p className="text-xs">Made W/❤️ at the 🐻Beraden</p>
+        </div>
+        <div className="text-center text-[8px] sm:text-left">
+          *Annual Percentage Yield (APY) data is provided from third party and
+          publicly available information, is subject to change, may not be
+          accurate or complete and may not reflect your actual earnings but
+          rather the general network yields estimated to be applicable to all
+          relevant network participants based on current conditions of the
+          network, which may change. Presented rates are retrospective in nature
+          and there is no guarantee that historic rates will represent current
+          or future rates. APY data is provided for informational purposes only
+          and should not be relied on.
         </div>
       </div>
     </footer>
@@ -167,21 +182,37 @@ export function Footer() {
 export function FooterSM() {
   return (
     <footer
-      className="border-t border-border bg-background"
+      className="border-t border-border bg-background p-4 sm:p-8"
       aria-labelledby="footer-heading"
     >
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
 
-      <div className="flex items-center justify-between p-4 sm:p-8">
+      <div className="flex flex-col items-center justify-between sm:flex-row">
         <p className="text-xs leading-5 text-secondary-foreground">
           &copy; {new Date().getFullYear()} Berachain | All rights reserved |{" "}
           <a className="font-bold underline" href="/terms-of-use">
             Terms of Service
+          </a>{" "}
+          |{" "}
+          <a className="font-bold underline" href="/privacy-policy">
+            Privacy Policy
           </a>
         </p>
-        <p className="text-xs">Made W/❤️ at the 🐻Beraden</p>
+        <p className="whitespace-nowrap text-xs">Made W/❤️ at the 🐻Beraden</p>
+      </div>
+
+      <div className="text-[8px]  sm:text-left">
+        *Annual Percentage Yield (APY) data is provided from third party and
+        publicly available information, is subject to change, may not be
+        accurate or complete and may not reflect your actual earnings but rather
+        the general network yields estimated to be applicable to all relevant
+        network participants based on current conditions of the network, which
+        may change. Presented rates are retrospective in nature and there is no
+        guarantee that historic rates will represent current or future rates.
+        APY data is provided for informational purposes only and should not be
+        relied on.
       </div>
     </footer>
   );

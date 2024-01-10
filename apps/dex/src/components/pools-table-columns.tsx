@@ -146,7 +146,7 @@ export const columns: ColumnDef<Pool>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Volume (24h)"
+        title="Volume (24H)"
         tooltip="Total trading or transaction volume in the last 24 hours"
         className="whitespace-nowrap"
       />
@@ -190,9 +190,10 @@ export const columns: ColumnDef<Pool>[] = [
       />
     ),
     cell: ({ row }) => {
+      const bgtApy = row.original.bgtApy ?? 0;
       return (
         <div className="flex items-center text-sm text-success-foreground">
-          {row.original.bgtApy?.toFixed(2)}%
+          {bgtApy === 0 ? bgtApy : bgtApy < 0.01 ? "<0.01" : bgtApy.toFixed(2)}%
         </div>
       );
     },
