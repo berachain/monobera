@@ -10,6 +10,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { useLocalStorage } from "usehooks-ts";
 
+import Banner from "~/components/Banner";
 import Providers from "./Providers";
 import { navItems } from "./config";
 
@@ -49,6 +50,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           <div className="z-[100]">
             <Toaster position="bottom-right" />
           </div>
+          <Banner />
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
             <Header navItems={navItems} />
             <main className="w-full pt-[72px]">{props.children}</main>
