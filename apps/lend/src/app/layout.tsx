@@ -9,6 +9,7 @@ import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { useLocalStorage } from "usehooks-ts";
+
 import Providers from "./Providers";
 import { navItems } from "./config";
 

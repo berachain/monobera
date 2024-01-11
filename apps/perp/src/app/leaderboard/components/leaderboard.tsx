@@ -38,7 +38,7 @@ export default function LeaderBoard() {
   );
 
   const { useLeaderBoardData } = useLeaderboard({
-    sort: leaderboardType,
+    sort: leaderboardType as any,
     interval: timeFrame as any,
   });
 
@@ -57,7 +57,10 @@ export default function LeaderBoard() {
         </div>
       </div>
       <div className="flex w-full flex-row justify-between gap-2">
-        <Tabs defaultValue={leaderboardType as any} className="hidden w-full sm:block">
+        <Tabs
+          defaultValue={leaderboardType as any}
+          className="hidden w-full sm:block"
+        >
           <TabsList className="w-full">
             <TabsTrigger
               value={LeaderboardType.PROFIT as any}
