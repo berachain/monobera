@@ -318,6 +318,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
 
+  console.log(payload)
+
   return {
     setSwapKind,
     setSelectedFrom,
