@@ -178,7 +178,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 </Button>
               )
             ) : (
-              <ConnectButton />
+              <ConnectButton className="w-full"/>
             )}
           </div>
         </CardContent>
