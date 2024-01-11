@@ -252,7 +252,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
           const newStep = {
             ...value,
-            amountOut: minAmountOut,
+            amountOut: minAmountOut - 1n, // to guard against router errors, we reduce the minAmountOut
           }
           newBatchSwapStep.push(newStep)
 

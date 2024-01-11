@@ -14,7 +14,7 @@ export enum TRANSACTION_TYPES {
 }
 
 export const DEFAULT_DEADLINE = 30; // minutes
-export const DEFAULT_SLIPPAGE = 0.3; // 0.3%
+export const DEFAULT_SLIPPAGE = 1; // 0.3%
 
 export enum POLLING {
   FAST = 5000,

@@ -10,7 +10,7 @@ import { Tooltip } from "./tooltip";
 
 export const SLIPPAGE_TOLERANCE_TYPE = "SLIPPAGE_TOLERANCE_TYPE";
 export const SLIPPAGE_TOLERANCE_VALUE = "SLIPPAGE_TOLERANCE_VALUE";
-export const DEFAULT_SLIPPAGE = 0.3; // 0.3%
+export const DEFAULT_SLIPPAGE = 1; // 0.3%
 
 export const DEADLINE_TYPE = "DEADLINE_TYPE";
 export const DEADLINE_VALUE = "DEADLINE_VALUE";

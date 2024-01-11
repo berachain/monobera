@@ -51,7 +51,7 @@ export const getSwap = async (
         handleNativeBera(tokenOut), //usdc
         toHex(parseUnits(`${amount}`, tokenInDecimals)),
         type,
-        "finalized",
+        "latest",
       ],
       id: 1, // You can set this to any unique value to correlate with the response.
     };
