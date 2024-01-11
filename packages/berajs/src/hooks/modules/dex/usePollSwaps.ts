@@ -211,7 +211,7 @@ export const usePollSwaps = ({
       }
     },
     {
-      refreshInterval: POLLING.FAST,
+      refreshInterval: POLLING.NORMAL,
       use: [laggy],
     },
   );
