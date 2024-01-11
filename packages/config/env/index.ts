@@ -37,6 +37,8 @@ export const perpsDocsUrl = process.env.NEXT_PUBLIC_PERPS_DOCS_URL as string;
 export const lendDocsUrl = process.env.NEXT_PUBLIC_LEND_DOCS_URL as string;
 export const careersUrl = process.env.NEXT_PUBLIC_CAREERS_URL as string;
 export const pressKit = process.env.NEXT_PUBLIC_PRESS_KIT as string;
+export const blogUrl = process.env.NEXT_PUBLIC_BERAERA_BLOG_URL as string;
+export const mediaKitUrl = process.env.NEXT_PUBLIC_MEDIA_KIT_URL as string;
 
 //Socials
 export const twitter = process.env.NEXT_PUBLIC_TWITTER as string;
