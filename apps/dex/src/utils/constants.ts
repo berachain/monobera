@@ -17,7 +17,8 @@ export const DEFAULT_DEADLINE = 30; // minutes
 export const DEFAULT_SLIPPAGE = 1; // 0.3%
 
 export enum POLLING {
-  FAST = 5000,
-  NORMAL = 10000,
-  SLOW = 100000,
+  FAST = 10000,
+  NORMAL = 20000,
+  SLOW = 200000,
 }
+
