@@ -9,7 +9,6 @@ import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { useLocalStorage } from "usehooks-ts";
-import { lendName } from "@bera/config";
 import Providers from "./Providers";
 import { navItems } from "./config";
 
@@ -49,8 +48,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <Toaster position="bottom-right" />
           </div>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-            <Header navItems={navItems} appName={lendName} />
-            <main className="w-full pt-start-lg">{props.children}</main>
+            <Header navItems={navItems} />
+            <main className="w-full pt-start">{props.children}</main>
           </div>
           <TailwindIndicator />
           <Analytics />

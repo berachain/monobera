@@ -4,7 +4,6 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
-import { dexName } from "@bera/config";
 import {
   Header,
   TailwindIndicator,
@@ -56,8 +55,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Toaster position="bottom-right" />
             </div>
             <div className="z-10 flex-1">
-              <Header navItems={navItems} appName={dexName} />
-              <main className="w-full pt-start-lg">{props.children}</main>
+              <Header navItems={navItems}/>
+              <main className="w-full pt-start">{props.children}</main>
             </div>
           </div>
           <TailwindIndicator />
