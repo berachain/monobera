@@ -38,7 +38,7 @@ export default function LeaderBoard() {
   );
 
   const { useLeaderBoardData } = useLeaderboard({
-    sort: leaderboardType,
+    sort: leaderboardType as any,
     interval: timeFrame as any,
   });
 
@@ -57,10 +57,13 @@ export default function LeaderBoard() {
         </div>
       </div>
       <div className="flex w-full flex-row justify-between gap-2">
-        <Tabs defaultValue={leaderboardType} className="hidden w-full sm:block">
+        <Tabs
+          defaultValue={leaderboardType as any}
+          className="hidden w-full sm:block"
+        >
           <TabsList className="w-full">
             <TabsTrigger
-              value={LeaderboardType.PROFIT}
+              value={LeaderboardType.PROFIT as any}
               key={LeaderboardType.PROFIT}
               className="w-full rounded-sm"
               onClick={() => setLeaderboardType(LeaderboardType.PROFIT)}
@@ -100,19 +103,19 @@ export default function LeaderBoard() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem
-              value={LeaderboardType.PROFIT}
+              value={LeaderboardType.PROFIT as any}
               className={"cursor-pointer  hover:bg-muted"}
             >
               💰 Most Profitable
             </SelectItem>
             <SelectItem
-              value={LeaderboardType.LIQUIDATION}
+              value={LeaderboardType.LIQUIDATION as any}
               className={"cursor-pointer hover:bg-muted"}
             >
               🔥 Top Liquidations
             </SelectItem>
             <SelectItem
-              value={LeaderboardType.VOLUME}
+              value={LeaderboardType.VOLUME as any}
               className={"cursor-pointer hover:bg-muted"}
             >
               📈 Most Volume
@@ -158,7 +161,7 @@ export default function LeaderBoard() {
       </div>
       <div className="w-full ">
         <DataTable
-          columns={getColumns(leaderboardType)}
+          columns={getColumns(leaderboardType as any)}
           data={leaderBoardData ?? []}
           className="w-full"
         />
