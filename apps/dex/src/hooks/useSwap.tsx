@@ -132,13 +132,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     amount: swapAmount,
   });
 
-  console.log({
-    swapInfo,
-    selectedFrom,
-    selectedTo,
-    swapAmount
-  })
-
   useEffect(() => {
     if (
       selectedTo !== undefined &&

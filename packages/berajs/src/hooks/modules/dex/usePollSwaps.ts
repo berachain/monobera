@@ -24,6 +24,18 @@ export const getSwap = async (
   swapType: number,
   amount: string,
 ) => {
+
+  if(amount === '0') {
+    return {
+      batchSwapSteps: [],
+      formattedSwapAmount: amount.toString(),
+      formattedAmountIn: "0",
+      formattedReturnAmount: "0",
+      returnAmount: 0n,
+      tokenIn,
+      tokenOut,
+    };
+  }
   try {
     const type = "given_in";
     // const parsedAmount = parseUnits(
@@ -44,7 +56,6 @@ export const getSwap = async (
       id: 1, // You can set this to any unique value to correlate with the response.
     };
 
-    console.log('req',rpcRequest)
     // Fetch options for the POST request
     const fetchOptions = {
       method: "POST",
@@ -66,7 +77,6 @@ export const getSwap = async (
 
     let result = await response.json();
     result = result.result;
-    console.log(result)
     if (!result.steps)
       return {
         batchSwapSteps: [],
