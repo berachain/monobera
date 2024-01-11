@@ -283,7 +283,10 @@ function createBaseGlobalParams(): GlobalParams {
 }
 
 export const GlobalParams = {
-  encode(message: GlobalParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: GlobalParams,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.group_index !== "") {
       writer.uint32(10).string(message.group_index);
     }
@@ -324,7 +327,8 @@ export const GlobalParams = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): GlobalParams {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGlobalParams();
     while (reader.pos < end) {
@@ -427,18 +431,36 @@ export const GlobalParams = {
     return {
       group_index: isSet(object.group_index) ? String(object.group_index) : "",
       group_name: isSet(object.group_name) ? String(object.group_name) : "",
-      max_leverage: isSet(object.max_leverage) ? String(object.max_leverage) : "",
-      min_leverage: isSet(object.min_leverage) ? String(object.min_leverage) : "",
-      max_collateral_p: isSet(object.max_collateral_p) ? String(object.max_collateral_p) : "",
-      max_pos_honey: isSet(object.max_pos_honey) ? String(object.max_pos_honey) : "",
-      current_epoch: isSet(object.current_epoch) ? String(object.current_epoch) : "",
+      max_leverage: isSet(object.max_leverage)
+        ? String(object.max_leverage)
+        : "",
+      min_leverage: isSet(object.min_leverage)
+        ? String(object.min_leverage)
+        : "",
+      max_collateral_p: isSet(object.max_collateral_p)
+        ? String(object.max_collateral_p)
+        : "",
+      max_pos_honey: isSet(object.max_pos_honey)
+        ? String(object.max_pos_honey)
+        : "",
+      current_epoch: isSet(object.current_epoch)
+        ? String(object.current_epoch)
+        : "",
       max_pending_market_orders: isSet(object.max_pending_market_orders)
         ? String(object.max_pending_market_orders)
         : "",
-      market_orders_timeout: isSet(object.market_orders_timeout) ? String(object.market_orders_timeout) : "",
-      max_trades_per_pair: isSet(object.max_trades_per_pair) ? String(object.max_trades_per_pair) : "",
-      global_oi_long: isSet(object.global_oi_long) ? String(object.global_oi_long) : "",
-      global_oi_short: isSet(object.global_oi_short) ? String(object.global_oi_short) : "",
+      market_orders_timeout: isSet(object.market_orders_timeout)
+        ? String(object.market_orders_timeout)
+        : "",
+      max_trades_per_pair: isSet(object.max_trades_per_pair)
+        ? String(object.max_trades_per_pair)
+        : "",
+      global_oi_long: isSet(object.global_oi_long)
+        ? String(object.global_oi_long)
+        : "",
+      global_oi_short: isSet(object.global_oi_short)
+        ? String(object.global_oi_short)
+        : "",
     };
   },
 
@@ -483,10 +505,14 @@ export const GlobalParams = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GlobalParams>, I>>(base?: I): GlobalParams {
+  create<I extends Exact<DeepPartial<GlobalParams>, I>>(
+    base?: I,
+  ): GlobalParams {
     return GlobalParams.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GlobalParams>, I>>(object: I): GlobalParams {
+  fromPartial<I extends Exact<DeepPartial<GlobalParams>, I>>(
+    object: I,
+  ): GlobalParams {
     const message = createBaseGlobalParams();
     message.group_index = object.group_index ?? "";
     message.group_name = object.group_name ?? "";
@@ -520,7 +546,10 @@ function createBaseMarket(): Market {
 }
 
 export const Market = {
-  encode(message: Market, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Market,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.pair_index !== "") {
       writer.uint32(10).string(message.pair_index);
     }
@@ -537,25 +566,41 @@ export const Market = {
       writer.uint32(42).string(message.one_percent_depth_below);
     }
     if (message.open_interest !== undefined) {
-      OpenInterest.encode(message.open_interest, writer.uint32(50).fork()).ldelim();
+      OpenInterest.encode(
+        message.open_interest,
+        writer.uint32(50).fork(),
+      ).ldelim();
     }
     if (message.pair_borrowing_fee !== undefined) {
-      PairBorrowingFee.encode(message.pair_borrowing_fee, writer.uint32(58).fork()).ldelim();
+      PairBorrowingFee.encode(
+        message.pair_borrowing_fee,
+        writer.uint32(58).fork(),
+      ).ldelim();
     }
     if (message.pair_funding_fee !== undefined) {
-      PairFundingFee.encode(message.pair_funding_fee, writer.uint32(66).fork()).ldelim();
+      PairFundingFee.encode(
+        message.pair_funding_fee,
+        writer.uint32(66).fork(),
+      ).ldelim();
     }
     if (message.pair_rollover_fee !== undefined) {
-      PairRolloverFee.encode(message.pair_rollover_fee, writer.uint32(74).fork()).ldelim();
+      PairRolloverFee.encode(
+        message.pair_rollover_fee,
+        writer.uint32(74).fork(),
+      ).ldelim();
     }
     if (message.pair_fixed_fee !== undefined) {
-      PairFixedFee.encode(message.pair_fixed_fee, writer.uint32(82).fork()).ldelim();
+      PairFixedFee.encode(
+        message.pair_fixed_fee,
+        writer.uint32(82).fork(),
+      ).ldelim();
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Market {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMarket();
     while (reader.pos < end) {
@@ -608,21 +653,30 @@ export const Market = {
             break;
           }
 
-          message.pair_borrowing_fee = PairBorrowingFee.decode(reader, reader.uint32());
+          message.pair_borrowing_fee = PairBorrowingFee.decode(
+            reader,
+            reader.uint32(),
+          );
           continue;
         case 8:
           if (tag !== 66) {
             break;
           }
 
-          message.pair_funding_fee = PairFundingFee.decode(reader, reader.uint32());
+          message.pair_funding_fee = PairFundingFee.decode(
+            reader,
+            reader.uint32(),
+          );
           continue;
         case 9:
           if (tag !== 74) {
             break;
           }
 
-          message.pair_rollover_fee = PairRolloverFee.decode(reader, reader.uint32());
+          message.pair_rollover_fee = PairRolloverFee.decode(
+            reader,
+            reader.uint32(),
+          );
           continue;
         case 10:
           if (tag !== 82) {
@@ -644,18 +698,30 @@ export const Market = {
     return {
       pair_index: isSet(object.pair_index) ? String(object.pair_index) : "",
       name: isSet(object.name) ? String(object.name) : "",
-      fixed_spread_p: isSet(object.fixed_spread_p) ? String(object.fixed_spread_p) : "",
-      one_percent_depth_above: isSet(object.one_percent_depth_above) ? String(object.one_percent_depth_above) : "",
-      one_percent_depth_below: isSet(object.one_percent_depth_below) ? String(object.one_percent_depth_below) : "",
-      open_interest: isSet(object.open_interest) ? OpenInterest.fromJSON(object.open_interest) : undefined,
+      fixed_spread_p: isSet(object.fixed_spread_p)
+        ? String(object.fixed_spread_p)
+        : "",
+      one_percent_depth_above: isSet(object.one_percent_depth_above)
+        ? String(object.one_percent_depth_above)
+        : "",
+      one_percent_depth_below: isSet(object.one_percent_depth_below)
+        ? String(object.one_percent_depth_below)
+        : "",
+      open_interest: isSet(object.open_interest)
+        ? OpenInterest.fromJSON(object.open_interest)
+        : undefined,
       pair_borrowing_fee: isSet(object.pair_borrowing_fee)
         ? PairBorrowingFee.fromJSON(object.pair_borrowing_fee)
         : undefined,
-      pair_funding_fee: isSet(object.pair_funding_fee) ? PairFundingFee.fromJSON(object.pair_funding_fee) : undefined,
+      pair_funding_fee: isSet(object.pair_funding_fee)
+        ? PairFundingFee.fromJSON(object.pair_funding_fee)
+        : undefined,
       pair_rollover_fee: isSet(object.pair_rollover_fee)
         ? PairRolloverFee.fromJSON(object.pair_rollover_fee)
         : undefined,
-      pair_fixed_fee: isSet(object.pair_fixed_fee) ? PairFixedFee.fromJSON(object.pair_fixed_fee) : undefined,
+      pair_fixed_fee: isSet(object.pair_fixed_fee)
+        ? PairFixedFee.fromJSON(object.pair_fixed_fee)
+        : undefined,
     };
   },
 
@@ -680,7 +746,9 @@ export const Market = {
       obj.open_interest = OpenInterest.toJSON(message.open_interest);
     }
     if (message.pair_borrowing_fee !== undefined) {
-      obj.pair_borrowing_fee = PairBorrowingFee.toJSON(message.pair_borrowing_fee);
+      obj.pair_borrowing_fee = PairBorrowingFee.toJSON(
+        message.pair_borrowing_fee,
+      );
     }
     if (message.pair_funding_fee !== undefined) {
       obj.pair_funding_fee = PairFundingFee.toJSON(message.pair_funding_fee);
@@ -704,21 +772,28 @@ export const Market = {
     message.fixed_spread_p = object.fixed_spread_p ?? "";
     message.one_percent_depth_above = object.one_percent_depth_above ?? "";
     message.one_percent_depth_below = object.one_percent_depth_below ?? "";
-    message.open_interest = (object.open_interest !== undefined && object.open_interest !== null)
-      ? OpenInterest.fromPartial(object.open_interest)
-      : undefined;
-    message.pair_borrowing_fee = (object.pair_borrowing_fee !== undefined && object.pair_borrowing_fee !== null)
-      ? PairBorrowingFee.fromPartial(object.pair_borrowing_fee)
-      : undefined;
-    message.pair_funding_fee = (object.pair_funding_fee !== undefined && object.pair_funding_fee !== null)
-      ? PairFundingFee.fromPartial(object.pair_funding_fee)
-      : undefined;
-    message.pair_rollover_fee = (object.pair_rollover_fee !== undefined && object.pair_rollover_fee !== null)
-      ? PairRolloverFee.fromPartial(object.pair_rollover_fee)
-      : undefined;
-    message.pair_fixed_fee = (object.pair_fixed_fee !== undefined && object.pair_fixed_fee !== null)
-      ? PairFixedFee.fromPartial(object.pair_fixed_fee)
-      : undefined;
+    message.open_interest =
+      object.open_interest !== undefined && object.open_interest !== null
+        ? OpenInterest.fromPartial(object.open_interest)
+        : undefined;
+    message.pair_borrowing_fee =
+      object.pair_borrowing_fee !== undefined &&
+      object.pair_borrowing_fee !== null
+        ? PairBorrowingFee.fromPartial(object.pair_borrowing_fee)
+        : undefined;
+    message.pair_funding_fee =
+      object.pair_funding_fee !== undefined && object.pair_funding_fee !== null
+        ? PairFundingFee.fromPartial(object.pair_funding_fee)
+        : undefined;
+    message.pair_rollover_fee =
+      object.pair_rollover_fee !== undefined &&
+      object.pair_rollover_fee !== null
+        ? PairRolloverFee.fromPartial(object.pair_rollover_fee)
+        : undefined;
+    message.pair_fixed_fee =
+      object.pair_fixed_fee !== undefined && object.pair_fixed_fee !== null
+        ? PairFixedFee.fromPartial(object.pair_fixed_fee)
+        : undefined;
     return message;
   },
 };
@@ -728,7 +803,10 @@ function createBaseOpenInterest(): OpenInterest {
 }
 
 export const OpenInterest = {
-  encode(message: OpenInterest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: OpenInterest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.pair_index !== "") {
       writer.uint32(10).string(message.pair_index);
     }
@@ -745,7 +823,8 @@ export const OpenInterest = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OpenInterest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOpenInterest();
     while (reader.pos < end) {
@@ -814,10 +893,14 @@ export const OpenInterest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<OpenInterest>, I>>(base?: I): OpenInterest {
+  create<I extends Exact<DeepPartial<OpenInterest>, I>>(
+    base?: I,
+  ): OpenInterest {
     return OpenInterest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<OpenInterest>, I>>(object: I): OpenInterest {
+  fromPartial<I extends Exact<DeepPartial<OpenInterest>, I>>(
+    object: I,
+  ): OpenInterest {
     const message = createBaseOpenInterest();
     message.pair_index = object.pair_index ?? "";
     message.oi_long = object.oi_long ?? "";
@@ -832,7 +915,10 @@ function createBasePairBorrowingFee(): PairBorrowingFee {
 }
 
 export const PairBorrowingFee = {
-  encode(message: PairBorrowingFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PairBorrowingFee,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.pair_index !== "") {
       writer.uint32(10).string(message.pair_index);
     }
@@ -846,7 +932,8 @@ export const PairBorrowingFee = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): PairBorrowingFee {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePairBorrowingFee();
     while (reader.pos < end) {
@@ -904,10 +991,14 @@ export const PairBorrowingFee = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PairBorrowingFee>, I>>(base?: I): PairBorrowingFee {
+  create<I extends Exact<DeepPartial<PairBorrowingFee>, I>>(
+    base?: I,
+  ): PairBorrowingFee {
     return PairBorrowingFee.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PairBorrowingFee>, I>>(object: I): PairBorrowingFee {
+  fromPartial<I extends Exact<DeepPartial<PairBorrowingFee>, I>>(
+    object: I,
+  ): PairBorrowingFee {
     const message = createBasePairBorrowingFee();
     message.pair_index = object.pair_index ?? "";
     message.bf_long = object.bf_long ?? "";
@@ -917,11 +1008,19 @@ export const PairBorrowingFee = {
 };
 
 function createBasePairFundingFee(): PairFundingFee {
-  return { pair_index: "", ff_per_block_p: "", acc_per_oi_long: "", acc_per_oi_short: "" };
+  return {
+    pair_index: "",
+    ff_per_block_p: "",
+    acc_per_oi_long: "",
+    acc_per_oi_short: "",
+  };
 }
 
 export const PairFundingFee = {
-  encode(message: PairFundingFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PairFundingFee,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.pair_index !== "") {
       writer.uint32(10).string(message.pair_index);
     }
@@ -938,7 +1037,8 @@ export const PairFundingFee = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): PairFundingFee {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePairFundingFee();
     while (reader.pos < end) {
@@ -984,9 +1084,15 @@ export const PairFundingFee = {
   fromJSON(object: any): PairFundingFee {
     return {
       pair_index: isSet(object.pair_index) ? String(object.pair_index) : "",
-      ff_per_block_p: isSet(object.ff_per_block_p) ? String(object.ff_per_block_p) : "",
-      acc_per_oi_long: isSet(object.acc_per_oi_long) ? String(object.acc_per_oi_long) : "",
-      acc_per_oi_short: isSet(object.acc_per_oi_short) ? String(object.acc_per_oi_short) : "",
+      ff_per_block_p: isSet(object.ff_per_block_p)
+        ? String(object.ff_per_block_p)
+        : "",
+      acc_per_oi_long: isSet(object.acc_per_oi_long)
+        ? String(object.acc_per_oi_long)
+        : "",
+      acc_per_oi_short: isSet(object.acc_per_oi_short)
+        ? String(object.acc_per_oi_short)
+        : "",
     };
   },
 
@@ -1007,10 +1113,14 @@ export const PairFundingFee = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PairFundingFee>, I>>(base?: I): PairFundingFee {
+  create<I extends Exact<DeepPartial<PairFundingFee>, I>>(
+    base?: I,
+  ): PairFundingFee {
     return PairFundingFee.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PairFundingFee>, I>>(object: I): PairFundingFee {
+  fromPartial<I extends Exact<DeepPartial<PairFundingFee>, I>>(
+    object: I,
+  ): PairFundingFee {
     const message = createBasePairFundingFee();
     message.pair_index = object.pair_index ?? "";
     message.ff_per_block_p = object.ff_per_block_p ?? "";
@@ -1025,7 +1135,10 @@ function createBasePairRolloverFee(): PairRolloverFee {
 }
 
 export const PairRolloverFee = {
-  encode(message: PairRolloverFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PairRolloverFee,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.pair_index !== "") {
       writer.uint32(10).string(message.pair_index);
     }
@@ -1039,7 +1152,8 @@ export const PairRolloverFee = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): PairRolloverFee {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePairRolloverFee();
     while (reader.pos < end) {
@@ -1078,8 +1192,12 @@ export const PairRolloverFee = {
   fromJSON(object: any): PairRolloverFee {
     return {
       pair_index: isSet(object.pair_index) ? String(object.pair_index) : "",
-      rollover_per_block_p: isSet(object.rollover_per_block_p) ? String(object.rollover_per_block_p) : "",
-      acc_per_collateral: isSet(object.acc_per_collateral) ? String(object.acc_per_collateral) : "",
+      rollover_per_block_p: isSet(object.rollover_per_block_p)
+        ? String(object.rollover_per_block_p)
+        : "",
+      acc_per_collateral: isSet(object.acc_per_collateral)
+        ? String(object.acc_per_collateral)
+        : "",
     };
   },
 
@@ -1097,10 +1215,14 @@ export const PairRolloverFee = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PairRolloverFee>, I>>(base?: I): PairRolloverFee {
+  create<I extends Exact<DeepPartial<PairRolloverFee>, I>>(
+    base?: I,
+  ): PairRolloverFee {
     return PairRolloverFee.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PairRolloverFee>, I>>(object: I): PairRolloverFee {
+  fromPartial<I extends Exact<DeepPartial<PairRolloverFee>, I>>(
+    object: I,
+  ): PairRolloverFee {
     const message = createBasePairRolloverFee();
     message.pair_index = object.pair_index ?? "";
     message.rollover_per_block_p = object.rollover_per_block_p ?? "";
@@ -1110,11 +1232,20 @@ export const PairRolloverFee = {
 };
 
 function createBasePairFixedFee(): PairFixedFee {
-  return { pair_index: "", open_fee_p: "", close_fee_p: "", nft_limit_order_fee_p: "", min_lev_pos_honey: "" };
+  return {
+    pair_index: "",
+    open_fee_p: "",
+    close_fee_p: "",
+    nft_limit_order_fee_p: "",
+    min_lev_pos_honey: "",
+  };
 }
 
 export const PairFixedFee = {
-  encode(message: PairFixedFee, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PairFixedFee,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.pair_index !== "") {
       writer.uint32(10).string(message.pair_index);
     }
@@ -1134,7 +1265,8 @@ export const PairFixedFee = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): PairFixedFee {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePairFixedFee();
     while (reader.pos < end) {
@@ -1189,8 +1321,12 @@ export const PairFixedFee = {
       pair_index: isSet(object.pair_index) ? String(object.pair_index) : "",
       open_fee_p: isSet(object.open_fee_p) ? String(object.open_fee_p) : "",
       close_fee_p: isSet(object.close_fee_p) ? String(object.close_fee_p) : "",
-      nft_limit_order_fee_p: isSet(object.nft_limit_order_fee_p) ? String(object.nft_limit_order_fee_p) : "",
-      min_lev_pos_honey: isSet(object.min_lev_pos_honey) ? String(object.min_lev_pos_honey) : "",
+      nft_limit_order_fee_p: isSet(object.nft_limit_order_fee_p)
+        ? String(object.nft_limit_order_fee_p)
+        : "",
+      min_lev_pos_honey: isSet(object.min_lev_pos_honey)
+        ? String(object.min_lev_pos_honey)
+        : "",
     };
   },
 
@@ -1214,10 +1350,14 @@ export const PairFixedFee = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PairFixedFee>, I>>(base?: I): PairFixedFee {
+  create<I extends Exact<DeepPartial<PairFixedFee>, I>>(
+    base?: I,
+  ): PairFixedFee {
     return PairFixedFee.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PairFixedFee>, I>>(object: I): PairFixedFee {
+  fromPartial<I extends Exact<DeepPartial<PairFixedFee>, I>>(
+    object: I,
+  ): PairFixedFee {
     const message = createBasePairFixedFee();
     message.pair_index = object.pair_index ?? "";
     message.open_fee_p = object.open_fee_p ?? "";
@@ -1229,11 +1369,20 @@ export const PairFixedFee = {
 };
 
 function createBaseHoneyWithdrawalRequest(): HoneyWithdrawalRequest {
-  return { created_by: "", owner: "", shares: "", epoch_created: "", unlock_epoch: "" };
+  return {
+    created_by: "",
+    owner: "",
+    shares: "",
+    epoch_created: "",
+    unlock_epoch: "",
+  };
 }
 
 export const HoneyWithdrawalRequest = {
-  encode(message: HoneyWithdrawalRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: HoneyWithdrawalRequest,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.created_by !== "") {
       writer.uint32(10).string(message.created_by);
     }
@@ -1252,8 +1401,12 @@ export const HoneyWithdrawalRequest = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): HoneyWithdrawalRequest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): HoneyWithdrawalRequest {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHoneyWithdrawalRequest();
     while (reader.pos < end) {
@@ -1308,8 +1461,12 @@ export const HoneyWithdrawalRequest = {
       created_by: isSet(object.created_by) ? String(object.created_by) : "",
       owner: isSet(object.owner) ? String(object.owner) : "",
       shares: isSet(object.shares) ? String(object.shares) : "",
-      epoch_created: isSet(object.epoch_created) ? String(object.epoch_created) : "",
-      unlock_epoch: isSet(object.unlock_epoch) ? String(object.unlock_epoch) : "",
+      epoch_created: isSet(object.epoch_created)
+        ? String(object.epoch_created)
+        : "",
+      unlock_epoch: isSet(object.unlock_epoch)
+        ? String(object.unlock_epoch)
+        : "",
     };
   },
 
@@ -1333,10 +1490,14 @@ export const HoneyWithdrawalRequest = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<HoneyWithdrawalRequest>, I>>(base?: I): HoneyWithdrawalRequest {
+  create<I extends Exact<DeepPartial<HoneyWithdrawalRequest>, I>>(
+    base?: I,
+  ): HoneyWithdrawalRequest {
     return HoneyWithdrawalRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<HoneyWithdrawalRequest>, I>>(object: I): HoneyWithdrawalRequest {
+  fromPartial<I extends Exact<DeepPartial<HoneyWithdrawalRequest>, I>>(
+    object: I,
+  ): HoneyWithdrawalRequest {
     const message = createBaseHoneyWithdrawalRequest();
     message.created_by = object.created_by ?? "";
     message.owner = object.owner ?? "";
@@ -1348,11 +1509,20 @@ export const HoneyWithdrawalRequest = {
 };
 
 function createBaseHoneyWithdrawalCancel(): HoneyWithdrawalCancel {
-  return { created_by: "", owner: "", shares: "", epoch_created: "", unlock_epoch: "" };
+  return {
+    created_by: "",
+    owner: "",
+    shares: "",
+    epoch_created: "",
+    unlock_epoch: "",
+  };
 }
 
 export const HoneyWithdrawalCancel = {
-  encode(message: HoneyWithdrawalCancel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: HoneyWithdrawalCancel,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.created_by !== "") {
       writer.uint32(10).string(message.created_by);
     }
@@ -1371,8 +1541,12 @@ export const HoneyWithdrawalCancel = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): HoneyWithdrawalCancel {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): HoneyWithdrawalCancel {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHoneyWithdrawalCancel();
     while (reader.pos < end) {
@@ -1427,8 +1601,12 @@ export const HoneyWithdrawalCancel = {
       created_by: isSet(object.created_by) ? String(object.created_by) : "",
       owner: isSet(object.owner) ? String(object.owner) : "",
       shares: isSet(object.shares) ? String(object.shares) : "",
-      epoch_created: isSet(object.epoch_created) ? String(object.epoch_created) : "",
-      unlock_epoch: isSet(object.unlock_epoch) ? String(object.unlock_epoch) : "",
+      epoch_created: isSet(object.epoch_created)
+        ? String(object.epoch_created)
+        : "",
+      unlock_epoch: isSet(object.unlock_epoch)
+        ? String(object.unlock_epoch)
+        : "",
     };
   },
 
@@ -1452,10 +1630,14 @@ export const HoneyWithdrawalCancel = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<HoneyWithdrawalCancel>, I>>(base?: I): HoneyWithdrawalCancel {
+  create<I extends Exact<DeepPartial<HoneyWithdrawalCancel>, I>>(
+    base?: I,
+  ): HoneyWithdrawalCancel {
     return HoneyWithdrawalCancel.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<HoneyWithdrawalCancel>, I>>(object: I): HoneyWithdrawalCancel {
+  fromPartial<I extends Exact<DeepPartial<HoneyWithdrawalCancel>, I>>(
+    object: I,
+  ): HoneyWithdrawalCancel {
     const message = createBaseHoneyWithdrawalCancel();
     message.created_by = object.created_by ?? "";
     message.owner = object.owner ?? "";
@@ -1488,7 +1670,10 @@ function createBaseOpenTrade(): OpenTrade {
 }
 
 export const OpenTrade = {
-  encode(message: OpenTrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: OpenTrade,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.trader !== "") {
       writer.uint32(10).string(message.trader);
     }
@@ -1541,7 +1726,8 @@ export const OpenTrade = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OpenTrade {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOpenTrade();
     while (reader.pos < end) {
@@ -1673,18 +1859,28 @@ export const OpenTrade = {
       trader: isSet(object.trader) ? String(object.trader) : "",
       pair_index: isSet(object.pair_index) ? String(object.pair_index) : "",
       index: isSet(object.index) ? String(object.index) : "",
-      position_size: isSet(object.position_size) ? String(object.position_size) : "",
+      position_size: isSet(object.position_size)
+        ? String(object.position_size)
+        : "",
       open_price: isSet(object.open_price) ? String(object.open_price) : "",
       buy: isSet(object.buy) ? Boolean(object.buy) : false,
       leverage: isSet(object.leverage) ? String(object.leverage) : "",
       tp: isSet(object.tp) ? String(object.tp) : "",
       sl: isSet(object.sl) ? String(object.sl) : "",
-      borrowing_fee: isSet(object.borrowing_fee) ? String(object.borrowing_fee) : "",
-      rollover_fee: isSet(object.rollover_fee) ? String(object.rollover_fee) : "",
-      funding_rate: isSet(object.funding_rate) ? String(object.funding_rate) : "",
+      borrowing_fee: isSet(object.borrowing_fee)
+        ? String(object.borrowing_fee)
+        : "",
+      rollover_fee: isSet(object.rollover_fee)
+        ? String(object.rollover_fee)
+        : "",
+      funding_rate: isSet(object.funding_rate)
+        ? String(object.funding_rate)
+        : "",
       closing_fee: isSet(object.closing_fee) ? String(object.closing_fee) : "",
       open_fee: isSet(object.open_fee) ? String(object.open_fee) : "",
-      timestamp_open: isSet(object.timestamp_open) ? String(object.timestamp_open) : "",
+      timestamp_open: isSet(object.timestamp_open)
+        ? String(object.timestamp_open)
+        : "",
       liq_price: isSet(object.liq_price) ? String(object.liq_price) : "",
     };
   },
@@ -1745,7 +1941,9 @@ export const OpenTrade = {
   create<I extends Exact<DeepPartial<OpenTrade>, I>>(base?: I): OpenTrade {
     return OpenTrade.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<OpenTrade>, I>>(object: I): OpenTrade {
+  fromPartial<I extends Exact<DeepPartial<OpenTrade>, I>>(
+    object: I,
+  ): OpenTrade {
     const message = createBaseOpenTrade();
     message.trader = object.trader ?? "";
     message.pair_index = object.pair_index ?? "";
@@ -1784,7 +1982,10 @@ function createBaseOpenLimitOrder(): OpenLimitOrder {
 }
 
 export const OpenLimitOrder = {
-  encode(message: OpenLimitOrder, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: OpenLimitOrder,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.trader !== "") {
       writer.uint32(10).string(message.trader);
     }
@@ -1822,7 +2023,8 @@ export const OpenLimitOrder = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OpenLimitOrder {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOpenLimitOrder();
     while (reader.pos < end) {
@@ -1919,14 +2121,20 @@ export const OpenLimitOrder = {
       trader: isSet(object.trader) ? String(object.trader) : "",
       pair_index: isSet(object.pair_index) ? String(object.pair_index) : "",
       index: isSet(object.index) ? String(object.index) : "",
-      position_size: isSet(object.position_size) ? String(object.position_size) : "",
-      spread_reduction_p: isSet(object.spread_reduction_p) ? String(object.spread_reduction_p) : "",
+      position_size: isSet(object.position_size)
+        ? String(object.position_size)
+        : "",
+      spread_reduction_p: isSet(object.spread_reduction_p)
+        ? String(object.spread_reduction_p)
+        : "",
       buy: isSet(object.buy) ? Boolean(object.buy) : false,
       leverage: isSet(object.leverage) ? String(object.leverage) : "",
       tp: isSet(object.tp) ? String(object.tp) : "",
       sl: isSet(object.sl) ? String(object.sl) : "",
       price: isSet(object.price) ? String(object.price) : "",
-      timestamp_placed: isSet(object.timestamp_placed) ? String(object.timestamp_placed) : "",
+      timestamp_placed: isSet(object.timestamp_placed)
+        ? String(object.timestamp_placed)
+        : "",
     };
   },
 
@@ -1968,10 +2176,14 @@ export const OpenLimitOrder = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<OpenLimitOrder>, I>>(base?: I): OpenLimitOrder {
+  create<I extends Exact<DeepPartial<OpenLimitOrder>, I>>(
+    base?: I,
+  ): OpenLimitOrder {
     return OpenLimitOrder.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<OpenLimitOrder>, I>>(object: I): OpenLimitOrder {
+  fromPartial<I extends Exact<DeepPartial<OpenLimitOrder>, I>>(
+    object: I,
+  ): OpenLimitOrder {
     const message = createBaseOpenLimitOrder();
     message.trader = object.trader ?? "";
     message.pair_index = object.pair_index ?? "";
@@ -2015,7 +2227,10 @@ function createBaseClosedTrade(): ClosedTrade {
 }
 
 export const ClosedTrade = {
-  encode(message: ClosedTrade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ClosedTrade,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.close_time !== "") {
       writer.uint32(10).string(message.close_time);
     }
@@ -2083,7 +2298,8 @@ export const ClosedTrade = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ClosedTrade {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseClosedTrade();
     while (reader.pos < end) {
@@ -2262,10 +2478,16 @@ export const ClosedTrade = {
       tp: isSet(object.tp) ? String(object.tp) : "",
       sl: isSet(object.sl) ? String(object.sl) : "",
       close_type: isSet(object.close_type) ? String(object.close_type) : "",
-      rollover_fee: isSet(object.rollover_fee) ? String(object.rollover_fee) : "",
-      funding_rate: isSet(object.funding_rate) ? String(object.funding_rate) : "",
+      rollover_fee: isSet(object.rollover_fee)
+        ? String(object.rollover_fee)
+        : "",
+      funding_rate: isSet(object.funding_rate)
+        ? String(object.funding_rate)
+        : "",
       closing_fee: isSet(object.closing_fee) ? String(object.closing_fee) : "",
-      borrowing_fee: isSet(object.borrowing_fee) ? String(object.borrowing_fee) : "",
+      borrowing_fee: isSet(object.borrowing_fee)
+        ? String(object.borrowing_fee)
+        : "",
       vault_fee: isSet(object.vault_fee) ? String(object.vault_fee) : "",
       open_fee: isSet(object.open_fee) ? String(object.open_fee) : "",
     };
@@ -2342,7 +2564,9 @@ export const ClosedTrade = {
   create<I extends Exact<DeepPartial<ClosedTrade>, I>>(base?: I): ClosedTrade {
     return ClosedTrade.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ClosedTrade>, I>>(object: I): ClosedTrade {
+  fromPartial<I extends Exact<DeepPartial<ClosedTrade>, I>>(
+    object: I,
+  ): ClosedTrade {
     const message = createBaseClosedTrade();
     message.close_time = object.close_time ?? "";
     message.open_time = object.open_time ?? "";
@@ -2374,7 +2598,10 @@ function createBaseAccountFees(): AccountFees {
 }
 
 export const AccountFees = {
-  encode(message: AccountFees, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: AccountFees,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.trader !== "") {
       writer.uint32(10).string(message.trader);
     }
@@ -2385,7 +2612,8 @@ export const AccountFees = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): AccountFees {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAccountFees();
     while (reader.pos < end) {
@@ -2435,7 +2663,9 @@ export const AccountFees = {
   create<I extends Exact<DeepPartial<AccountFees>, I>>(base?: I): AccountFees {
     return AccountFees.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AccountFees>, I>>(object: I): AccountFees {
+  fromPartial<I extends Exact<DeepPartial<AccountFees>, I>>(
+    object: I,
+  ): AccountFees {
     const message = createBaseAccountFees();
     message.trader = object.trader ?? "";
     message.fees = object.fees ?? "";
@@ -2448,7 +2678,10 @@ function createBaseAccountPnL(): AccountPnL {
 }
 
 export const AccountPnL = {
-  encode(message: AccountPnL, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: AccountPnL,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.trader !== "") {
       writer.uint32(10).string(message.trader);
     }
@@ -2459,7 +2692,8 @@ export const AccountPnL = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): AccountPnL {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAccountPnL();
     while (reader.pos < end) {
@@ -2509,7 +2743,9 @@ export const AccountPnL = {
   create<I extends Exact<DeepPartial<AccountPnL>, I>>(base?: I): AccountPnL {
     return AccountPnL.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<AccountPnL>, I>>(object: I): AccountPnL {
+  fromPartial<I extends Exact<DeepPartial<AccountPnL>, I>>(
+    object: I,
+  ): AccountPnL {
     const message = createBaseAccountPnL();
     message.trader = object.trader ?? "";
     message.pnl = object.pnl ?? "";
@@ -2536,7 +2772,10 @@ function createBaseSymbolInfo(): SymbolInfo {
 }
 
 export const SymbolInfo = {
-  encode(message: SymbolInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: SymbolInfo,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.ticker !== "") {
       writer.uint32(10).string(message.ticker);
     }
@@ -2580,7 +2819,8 @@ export const SymbolInfo = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): SymbolInfo {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSymbolInfo();
     while (reader.pos < end) {
@@ -2696,12 +2936,18 @@ export const SymbolInfo = {
       timezone: isSet(object.timezone) ? String(object.timezone) : "",
       exchange: isSet(object.exchange) ? String(object.exchange) : "",
       minmov: isSet(object.minmov) ? Long.fromValue(object.minmov) : Long.ZERO,
-      pricescale: isSet(object.pricescale) ? Long.fromValue(object.pricescale) : Long.ZERO,
-      visible_plots_set: isSet(object.visible_plots_set) ? String(object.visible_plots_set) : "",
+      pricescale: isSet(object.pricescale)
+        ? Long.fromValue(object.pricescale)
+        : Long.ZERO,
+      visible_plots_set: isSet(object.visible_plots_set)
+        ? String(object.visible_plots_set)
+        : "",
       supported_resolutions: Array.isArray(object?.supported_resolutions)
         ? object.supported_resolutions.map((e: any) => String(e))
         : [],
-      has_intraday: isSet(object.has_intraday) ? Boolean(object.has_intraday) : false,
+      has_intraday: isSet(object.has_intraday)
+        ? Boolean(object.has_intraday)
+        : false,
       intraday_multipliers: Array.isArray(object?.intraday_multipliers)
         ? object.intraday_multipliers.map((e: any) => String(e))
         : [],
@@ -2755,7 +3001,9 @@ export const SymbolInfo = {
   create<I extends Exact<DeepPartial<SymbolInfo>, I>>(base?: I): SymbolInfo {
     return SymbolInfo.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<SymbolInfo>, I>>(object: I): SymbolInfo {
+  fromPartial<I extends Exact<DeepPartial<SymbolInfo>, I>>(
+    object: I,
+  ): SymbolInfo {
     const message = createBaseSymbolInfo();
     message.ticker = object.ticker ?? "";
     message.name = object.name ?? "";
@@ -2764,26 +3012,40 @@ export const SymbolInfo = {
     message.session = object.session ?? "";
     message.timezone = object.timezone ?? "";
     message.exchange = object.exchange ?? "";
-    message.minmov = (object.minmov !== undefined && object.minmov !== null)
-      ? Long.fromValue(object.minmov)
-      : Long.ZERO;
-    message.pricescale = (object.pricescale !== undefined && object.pricescale !== null)
-      ? Long.fromValue(object.pricescale)
-      : Long.ZERO;
+    message.minmov =
+      object.minmov !== undefined && object.minmov !== null
+        ? Long.fromValue(object.minmov)
+        : Long.ZERO;
+    message.pricescale =
+      object.pricescale !== undefined && object.pricescale !== null
+        ? Long.fromValue(object.pricescale)
+        : Long.ZERO;
     message.visible_plots_set = object.visible_plots_set ?? "";
-    message.supported_resolutions = object.supported_resolutions?.map((e) => e) || [];
+    message.supported_resolutions =
+      object.supported_resolutions?.map((e) => e) || [];
     message.has_intraday = object.has_intraday ?? false;
-    message.intraday_multipliers = object.intraday_multipliers?.map((e) => e) || [];
+    message.intraday_multipliers =
+      object.intraday_multipliers?.map((e) => e) || [];
     return message;
   },
 };
 
 function createBaseSearchSymbolResultItem(): SearchSymbolResultItem {
-  return { description: "", exchange: "", full_name: "", symbol: "", ticker: "", type: "" };
+  return {
+    description: "",
+    exchange: "",
+    full_name: "",
+    symbol: "",
+    ticker: "",
+    type: "",
+  };
 }
 
 export const SearchSymbolResultItem = {
-  encode(message: SearchSymbolResultItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: SearchSymbolResultItem,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.description !== "") {
       writer.uint32(10).string(message.description);
     }
@@ -2805,8 +3067,12 @@ export const SearchSymbolResultItem = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): SearchSymbolResultItem {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): SearchSymbolResultItem {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSearchSymbolResultItem();
     while (reader.pos < end) {
@@ -2897,10 +3163,14 @@ export const SearchSymbolResultItem = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SearchSymbolResultItem>, I>>(base?: I): SearchSymbolResultItem {
+  create<I extends Exact<DeepPartial<SearchSymbolResultItem>, I>>(
+    base?: I,
+  ): SearchSymbolResultItem {
     return SearchSymbolResultItem.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<SearchSymbolResultItem>, I>>(object: I): SearchSymbolResultItem {
+  fromPartial<I extends Exact<DeepPartial<SearchSymbolResultItem>, I>>(
+    object: I,
+  ): SearchSymbolResultItem {
     const message = createBaseSearchSymbolResultItem();
     message.description = object.description ?? "";
     message.exchange = object.exchange ?? "";
@@ -2913,11 +3183,22 @@ export const SearchSymbolResultItem = {
 };
 
 function createBaseTradingSummary(): TradingSummary {
-  return { time: 0, volume: 0, pnl: 0, num_trades: Long.UZERO, liquidation: 0, fees_earned: 0, fees_paid: 0 };
+  return {
+    time: 0,
+    volume: 0,
+    pnl: 0,
+    num_trades: Long.UZERO,
+    liquidation: 0,
+    fees_earned: 0,
+    fees_paid: 0,
+  };
 }
 
 export const TradingSummary = {
-  encode(message: TradingSummary, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TradingSummary,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.time !== 0) {
       writer.uint32(8).uint32(message.time);
     }
@@ -2943,7 +3224,8 @@ export const TradingSummary = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): TradingSummary {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTradingSummary();
     while (reader.pos < end) {
@@ -3012,7 +3294,9 @@ export const TradingSummary = {
       time: isSet(object.time) ? Number(object.time) : 0,
       volume: isSet(object.volume) ? Number(object.volume) : 0,
       pnl: isSet(object.pnl) ? Number(object.pnl) : 0,
-      num_trades: isSet(object.num_trades) ? Long.fromValue(object.num_trades) : Long.UZERO,
+      num_trades: isSet(object.num_trades)
+        ? Long.fromValue(object.num_trades)
+        : Long.UZERO,
       liquidation: isSet(object.liquidation) ? Number(object.liquidation) : 0,
       fees_earned: isSet(object.fees_earned) ? Number(object.fees_earned) : 0,
       fees_paid: isSet(object.fees_paid) ? Number(object.fees_paid) : 0,
@@ -3045,17 +3329,22 @@ export const TradingSummary = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<TradingSummary>, I>>(base?: I): TradingSummary {
+  create<I extends Exact<DeepPartial<TradingSummary>, I>>(
+    base?: I,
+  ): TradingSummary {
     return TradingSummary.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<TradingSummary>, I>>(object: I): TradingSummary {
+  fromPartial<I extends Exact<DeepPartial<TradingSummary>, I>>(
+    object: I,
+  ): TradingSummary {
     const message = createBaseTradingSummary();
     message.time = object.time ?? 0;
     message.volume = object.volume ?? 0;
     message.pnl = object.pnl ?? 0;
-    message.num_trades = (object.num_trades !== undefined && object.num_trades !== null)
-      ? Long.fromValue(object.num_trades)
-      : Long.UZERO;
+    message.num_trades =
+      object.num_trades !== undefined && object.num_trades !== null
+        ? Long.fromValue(object.num_trades)
+        : Long.UZERO;
     message.liquidation = object.liquidation ?? 0;
     message.fees_earned = object.fees_earned ?? 0;
     message.fees_paid = object.fees_paid ?? 0;
@@ -3068,7 +3357,10 @@ function createBasePagination(): Pagination {
 }
 
 export const Pagination = {
-  encode(message: Pagination, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Pagination,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.page !== 0) {
       writer.uint32(8).uint32(message.page);
     }
@@ -3085,7 +3377,8 @@ export const Pagination = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Pagination {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePagination();
     while (reader.pos < end) {
@@ -3157,7 +3450,9 @@ export const Pagination = {
   create<I extends Exact<DeepPartial<Pagination>, I>>(base?: I): Pagination {
     return Pagination.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Pagination>, I>>(object: I): Pagination {
+  fromPartial<I extends Exact<DeepPartial<Pagination>, I>>(
+    object: I,
+  ): Pagination {
     const message = createBasePagination();
     message.page = object.page ?? 0;
     message.per_page = object.per_page ?? 0;
@@ -3172,7 +3467,10 @@ function createBaseTradingLeaderboardItem(): TradingLeaderboardItem {
 }
 
 export const TradingLeaderboardItem = {
-  encode(message: TradingLeaderboardItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TradingLeaderboardItem,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.trader !== "") {
       writer.uint32(10).string(message.trader);
     }
@@ -3182,8 +3480,12 @@ export const TradingLeaderboardItem = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): TradingLeaderboardItem {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): TradingLeaderboardItem {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTradingLeaderboardItem();
     while (reader.pos < end) {
@@ -3230,10 +3532,14 @@ export const TradingLeaderboardItem = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<TradingLeaderboardItem>, I>>(base?: I): TradingLeaderboardItem {
+  create<I extends Exact<DeepPartial<TradingLeaderboardItem>, I>>(
+    base?: I,
+  ): TradingLeaderboardItem {
     return TradingLeaderboardItem.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<TradingLeaderboardItem>, I>>(object: I): TradingLeaderboardItem {
+  fromPartial<I extends Exact<DeepPartial<TradingLeaderboardItem>, I>>(
+    object: I,
+  ): TradingLeaderboardItem {
     const message = createBaseTradingLeaderboardItem();
     message.trader = object.trader ?? "";
     message.value = object.value ?? 0;
@@ -3254,7 +3560,10 @@ function createBasePairHistoricalSummary(): PairHistoricalSummary {
 }
 
 export const PairHistoricalSummary = {
-  encode(message: PairHistoricalSummary, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PairHistoricalSummary,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (!message.pair_index.isZero()) {
       writer.uint32(8).uint64(message.pair_index);
     }
@@ -3279,8 +3588,12 @@ export const PairHistoricalSummary = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PairHistoricalSummary {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): PairHistoricalSummary {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePairHistoricalSummary();
     while (reader.pos < end) {
@@ -3346,10 +3659,14 @@ export const PairHistoricalSummary = {
 
   fromJSON(object: any): PairHistoricalSummary {
     return {
-      pair_index: isSet(object.pair_index) ? Long.fromValue(object.pair_index) : Long.UZERO,
+      pair_index: isSet(object.pair_index)
+        ? Long.fromValue(object.pair_index)
+        : Long.UZERO,
       volume: isSet(object.volume) ? Number(object.volume) : 0,
       pnl: isSet(object.pnl) ? Number(object.pnl) : 0,
-      num_trades: isSet(object.num_trades) ? Long.fromValue(object.num_trades) : Long.UZERO,
+      num_trades: isSet(object.num_trades)
+        ? Long.fromValue(object.num_trades)
+        : Long.UZERO,
       liquidation: isSet(object.liquidation) ? Number(object.liquidation) : 0,
       fees_earned: isSet(object.fees_earned) ? Number(object.fees_earned) : 0,
       fees_paid: isSet(object.fees_paid) ? Number(object.fees_paid) : 0,
@@ -3382,19 +3699,25 @@ export const PairHistoricalSummary = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PairHistoricalSummary>, I>>(base?: I): PairHistoricalSummary {
+  create<I extends Exact<DeepPartial<PairHistoricalSummary>, I>>(
+    base?: I,
+  ): PairHistoricalSummary {
     return PairHistoricalSummary.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PairHistoricalSummary>, I>>(object: I): PairHistoricalSummary {
+  fromPartial<I extends Exact<DeepPartial<PairHistoricalSummary>, I>>(
+    object: I,
+  ): PairHistoricalSummary {
     const message = createBasePairHistoricalSummary();
-    message.pair_index = (object.pair_index !== undefined && object.pair_index !== null)
-      ? Long.fromValue(object.pair_index)
-      : Long.UZERO;
+    message.pair_index =
+      object.pair_index !== undefined && object.pair_index !== null
+        ? Long.fromValue(object.pair_index)
+        : Long.UZERO;
     message.volume = object.volume ?? 0;
     message.pnl = object.pnl ?? 0;
-    message.num_trades = (object.num_trades !== undefined && object.num_trades !== null)
-      ? Long.fromValue(object.num_trades)
-      : Long.UZERO;
+    message.num_trades =
+      object.num_trades !== undefined && object.num_trades !== null
+        ? Long.fromValue(object.num_trades)
+        : Long.UZERO;
     message.liquidation = object.liquidation ?? 0;
     message.fees_earned = object.fees_earned ?? 0;
     message.fees_paid = object.fees_paid ?? 0;
@@ -3407,7 +3730,10 @@ function createBaseHoneyReward(): HoneyReward {
 }
 
 export const HoneyReward = {
-  encode(message: HoneyReward, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: HoneyReward,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.fees_to_honey !== "") {
       writer.uint32(10).string(message.fees_to_honey);
     }
@@ -3424,7 +3750,8 @@ export const HoneyReward = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): HoneyReward {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseHoneyReward();
     while (reader.pos < end) {
@@ -3469,9 +3796,13 @@ export const HoneyReward = {
 
   fromJSON(object: any): HoneyReward {
     return {
-      fees_to_honey: isSet(object.fees_to_honey) ? String(object.fees_to_honey) : "",
+      fees_to_honey: isSet(object.fees_to_honey)
+        ? String(object.fees_to_honey)
+        : "",
       fees_to_bgt: isSet(object.fees_to_bgt) ? String(object.fees_to_bgt) : "",
-      combined_fees: isSet(object.combined_fees) ? String(object.combined_fees) : "",
+      combined_fees: isSet(object.combined_fees)
+        ? String(object.combined_fees)
+        : "",
       apr: isSet(object.apr) ? String(object.apr) : "",
     };
   },
@@ -3496,7 +3827,9 @@ export const HoneyReward = {
   create<I extends Exact<DeepPartial<HoneyReward>, I>>(base?: I): HoneyReward {
     return HoneyReward.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<HoneyReward>, I>>(object: I): HoneyReward {
+  fromPartial<I extends Exact<DeepPartial<HoneyReward>, I>>(
+    object: I,
+  ): HoneyReward {
     const message = createBaseHoneyReward();
     message.fees_to_honey = object.fees_to_honey ?? "";
     message.fees_to_bgt = object.fees_to_bgt ?? "";
@@ -3511,7 +3844,10 @@ function createBaseReferrerTraderDetails(): ReferrerTraderDetails {
 }
 
 export const ReferrerTraderDetails = {
-  encode(message: ReferrerTraderDetails, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ReferrerTraderDetails,
+    writer: _m0.Writer = _m0.Writer.create(),
+  ): _m0.Writer {
     if (message.referrer !== "") {
       writer.uint32(10).string(message.referrer);
     }
@@ -3527,8 +3863,12 @@ export const ReferrerTraderDetails = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ReferrerTraderDetails {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number,
+  ): ReferrerTraderDetails {
+    const reader =
+      input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseReferrerTraderDetails();
     while (reader.pos < end) {
@@ -3575,7 +3915,9 @@ export const ReferrerTraderDetails = {
     return {
       referrer: isSet(object.referrer) ? String(object.referrer) : "",
       trader: isSet(object.trader) ? String(object.trader) : "",
-      volume_trader: isSet(object.volume_trader) ? String(object.volume_trader) : "",
+      volume_trader: isSet(object.volume_trader)
+        ? String(object.volume_trader)
+        : "",
       rewards: isSet(object.rewards) ? String(object.rewards) : "",
     };
   },
@@ -3597,10 +3939,14 @@ export const ReferrerTraderDetails = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ReferrerTraderDetails>, I>>(base?: I): ReferrerTraderDetails {
+  create<I extends Exact<DeepPartial<ReferrerTraderDetails>, I>>(
+    base?: I,
+  ): ReferrerTraderDetails {
     return ReferrerTraderDetails.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ReferrerTraderDetails>, I>>(object: I): ReferrerTraderDetails {
+  fromPartial<I extends Exact<DeepPartial<ReferrerTraderDetails>, I>>(
+    object: I,
+  ): ReferrerTraderDetails {
     const message = createBaseReferrerTraderDetails();
     message.referrer = object.referrer ?? "";
     message.trader = object.trader ?? "";
@@ -3610,17 +3956,33 @@ export const ReferrerTraderDetails = {
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

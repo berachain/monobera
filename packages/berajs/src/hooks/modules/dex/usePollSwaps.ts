@@ -24,8 +24,7 @@ export const getSwap = async (
   swapType: number,
   amount: string,
 ) => {
-
-  if(amount === '0') {
+  if (amount === "0") {
     return {
       batchSwapSteps: [],
       formattedSwapAmount: amount.toString(),
@@ -48,7 +47,7 @@ export const getSwap = async (
       method: "eth_routeDexSwap",
       params: [
         handleNativeBera(tokenIn), //wbera
-        handleNativeBera(tokenOut), //usdc 
+        handleNativeBera(tokenOut), //usdc
         toHex(parseUnits(`${amount}`, tokenInDecimals)),
         type,
         "finalized",
