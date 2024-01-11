@@ -22,7 +22,7 @@ export const Epochs = ({
       ? 0
       : format(
           new Date((epoch?.currentEpochStart ?? 0) * 1000),
-          "MM/dd/yy, h:ma",
+          "MM/dd/yy, h:mma",
         );
   const formattedEndDate =
     epoch === undefined || Number.isNaN(epoch?.currentEpochEnd)

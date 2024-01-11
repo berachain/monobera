@@ -107,14 +107,12 @@ const websocketConnections: Record<string, any> = {};
 const websocket = process.env.NEXT_PUBLIC_CANDLEFEED as string;
 const datafeed: IDatafeedChartApi & IExternalDatafeed = {
   onReady: (callback: OnReadyCallback) => {
-    console.log("[onReady]: Method call");
     setTimeout(() => callback(configurationData)); // callback must be called asynchronously.
   },
   searchSymbols: () => {
     console.log("[searchSymbols]: Method call");
   },
   resolveSymbol: (symbolName: any, onSymbolResolvedCallback: any) => {
-    console.log("[resolveSymbol]: Method call", symbolName);
     const symbolInfo = symbolInfoMap[symbolName];
     onSymbolResolvedCallback(symbolInfo);
   },
@@ -179,7 +177,6 @@ const datafeed: IDatafeedChartApi & IExternalDatafeed = {
       // Parse the received data (assuming it's in JSON format)
       const data = JSON.parse(event.data);
 
-      console.log("WebSocket message received:", data);
       const bar: Bar = {
         time: data.time,
         open: data.open,

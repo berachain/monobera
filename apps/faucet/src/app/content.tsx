@@ -112,7 +112,7 @@ export default function Content() {
       <hr />
       <div className="leading-12 text-center text-sm opacity-70 sm:text-start">
         To ensure a sufficient balance for all users, the Faucet is set to
-        dispense 100 testnet BERA tokens every 5 minutes.
+        dispense 0.1 testnet BERA tokens every 8 hours.
       </div>
       {/* <div className="leading-12 text-center text-sm text-muted-foreground sm:text-start">
         Faucet drips: 10 Bera, 10K HONEY, 10K STGUSDC, .01 BTC, and 0.25 ETH{" "}
