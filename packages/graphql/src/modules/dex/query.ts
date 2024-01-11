@@ -122,3 +122,14 @@ export const getGlobalDexData = gql`
     }
   }
 `;
+
+export const getTokenHoneyPrice = gql`
+query GetTokenHoneyPrice( $id: String) {
+  tokenHoneyPrices(
+    where: {id: $id}
+  ) {
+    id
+    price
+  }
+}
+`
