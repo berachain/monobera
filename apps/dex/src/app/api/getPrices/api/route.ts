@@ -50,7 +50,7 @@ export async function GET() {
     },
     next: { revalidate: 10 },
   })
-    .then((res) => res.json())
+    .then(async(res) => await res.json())
     .catch((e: any) => {
       console.log("fetching error", e);
       return undefined;

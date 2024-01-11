@@ -146,14 +146,13 @@ const WBERA_TOKEN = getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
 
 export const getBaseTokenPrice = async (pools: Pool[]) => {
   
-  console.log(pools)
   let mappedTokens: MappedTokens = {};
 
   if (pools.length) {
     const allPoolPromises: any[] = [];
     pools.forEach((pool) => {
       const tokenPromises = pool.tokens
-        .filter((token: { address: string }) => token.address !== BASE_TOKEN)
+        .filter((token: { address: string }) => getAddress(token.address) !== BASE_TOKEN)
         .map((token: { address: any; decimals: number }) =>
           getSwap(token.address, BASE_TOKEN, token.decimals, 18, 0, "1").catch(
             () => {
@@ -175,7 +174,7 @@ export const getBaseTokenPrice = async (pools: Pool[]) => {
             acc[getAddress(cur.tokenIn)] = cur.formattedReturnAmount;
             return acc;
           },
-          { [BASE_TOKEN]: 1 },
+          { [BASE_TOKEN]: "1" },
         )
       : undefined;
 
