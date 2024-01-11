@@ -3,6 +3,7 @@ import {
   bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
+  blogUrl,
   careersUrl,
   dexName,
   dexUrl,
@@ -14,10 +15,10 @@ import {
   honeyUrl,
   lendName,
   lendUrl,
+  mediaKitUrl,
   perpsName,
   perpsUrl,
   telegram,
-  // pressKit,
   twitter,
 } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
@@ -53,7 +54,8 @@ export const footerNavigation = {
     { name: "Foundation", href: homepageUrl },
     { name: "Docs", href: docsUrl },
     { name: "Careers", href: careersUrl },
-    // { name: "Press Kit", href: pressKit },
+    { name: "Blog", href: blogUrl },
+    { name: "Media kit", href: mediaKitUrl },
   ],
 
   social: [
