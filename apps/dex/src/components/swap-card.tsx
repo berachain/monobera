@@ -279,6 +279,7 @@ export function SwapCard({
                     onTokenSelection={setSelectedFrom}
                     amount={fromAmount ?? ""}
                     price={Number(tokenInPrice)}
+                    hidePrice={true}
                     showExceeding={true}
                     onExceeding={(isExceeding: boolean) =>
                       setExceedingBalance(isExceeding)
@@ -313,6 +314,7 @@ export function SwapCard({
                     amount={toAmount}
                     price={Number(tokenOutPrice)}
                     hideMax={true}
+                    hidePrice={true}
                     disabled={true}
                     setAmount={(amount) => {
                       setSwapKind(SwapKind.GIVEN_OUT);
