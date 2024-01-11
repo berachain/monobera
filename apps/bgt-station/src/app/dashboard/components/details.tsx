@@ -60,7 +60,7 @@ export function Details() {
         <div className="flex w-full flex-col gap-2 sm:flex-row">
           {generalInfo.map((info, index) => (
             <Card key={index} className="h-full flex-1 p-8 text-center">
-              <div className="flex h-8 items-center justify-center text-2xl font-semibold leading-loose text-foreground whitespace-nowrap">
+              <div className="flex h-8 items-center justify-center whitespace-nowrap text-2xl font-semibold leading-loose text-foreground">
                 {info.amount}
               </div>
               <div className="flex flex-row items-center justify-center gap-1 self-center text-center text-sm font-medium leading-[14px] text-muted-foreground">
