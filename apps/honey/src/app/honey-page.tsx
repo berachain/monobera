@@ -133,7 +133,7 @@ export default function HoneyPage({
                   arcade ? "text-blue-900" : "",
                 )}
               >
-                <div className="py-4 lg:py-0" id="supply">
+                <div className="py-4 lg:py-0" id="stats">
                   <Data
                     dailyVolume={formatted24HVolume}
                     tvl={formattedTotalSupply}
