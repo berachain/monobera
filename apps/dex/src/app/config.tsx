@@ -76,7 +76,7 @@ export const navItems = [
         href: honeyUrl,
         type: "external",
         title: honeyName,
-        blurb: "Mint or redeem Berachain’s native stable coin",
+        blurb: "Mint or redeem Berachain’s native stablecoin",
         icon: <Icons.honeyFav className="h-8 w-8" />,
       },
       {
