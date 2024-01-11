@@ -165,7 +165,7 @@ export default function WithdrawLiquidityContent({
                 />
               </TokenList>
 
-              <div className="flex flex-row gap-2">
+              {/* <div className="flex flex-row gap-2">
                 {[25, 50, 75, 100].map((percent) => {
                   return (
                     <Button
@@ -186,7 +186,7 @@ export default function WithdrawLiquidityContent({
                     </Button>
                   );
                 })}
-              </div>
+              </div> */}
               <Alert variant="warning">
                 All outstanding BGT Rewards will be claimed upon withdrawing all
                 liquidity.

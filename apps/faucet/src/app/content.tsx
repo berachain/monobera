@@ -85,11 +85,11 @@ export default function Content() {
           <AlertTitle>
             {" "}
             <Icons.info className="inline-block h-4 w-4" /> Wallet Grey-listed
-            for 5 minutes
+            for 8 hours
           </AlertTitle>
           <AlertDescription>
             To ensure a sufficient balance for all users, the Faucet is set to
-            dispense testnet tokens every 5 minutes. Please retry in 5 minutes.
+            dispense testnet tokens every 8 hours. Please retry in 8 hours.
           </AlertDescription>
         </Alert>
       )}

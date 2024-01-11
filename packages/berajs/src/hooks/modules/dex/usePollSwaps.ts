@@ -47,11 +47,11 @@ export const getSwap = async (
       jsonrpc: "2.0",
       method: "eth_routeDexSwap",
       params: [
-        handleNativeBera(tokenIn), //wbera
-        handleNativeBera(tokenOut), //usdc
+        handleNativeBera(tokenIn), //usdc
+        handleNativeBera(tokenOut), //wbtc
         toHex(parseUnits(`${amount}`, tokenInDecimals)),
         type,
-        "finalized",
+        "latest",
       ],
       id: 1, // You can set this to any unique value to correlate with the response.
     };
@@ -74,14 +74,10 @@ export const getSwap = async (
     //   )}&swap_type=${type}`,
     // );
 
-    console.log(";FUZKNGWBJEWFKJHJKLDSBRHEISUOFP");
 
     const response = await fetch(jsonRpcUrl, fetchOptions);
 
-    console.log(";FUZKNGWBJRHEISUOFP");
-
     let result = await response.json();
-    console.log("REEEEEE", result);
     result = result.result;
     if (!result.steps)
       return {
