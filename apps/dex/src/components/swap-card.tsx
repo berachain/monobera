@@ -117,6 +117,7 @@ export function SwapCard({
 
   const [openPreview, setOpenPreview] = useState(false);
 
+
   const { write, isLoading, ModalPortal } = useTxn({
     actionType: TransactionActionType.SWAP,
     message: `Swap ${Number(swapInfo?.formattedSwapAmount).toFixed(4)} ${
@@ -126,11 +127,13 @@ export function SwapCard({
     }`,
     onSuccess: () => {
       setFromAmount(undefined);
+      setSwapAmount('')
       setToAmount(undefined);
       setOpenPreview(false);
     },
     onError: () => {
       setFromAmount(undefined);
+      setSwapAmount('')
       setToAmount(undefined);
       setOpenPreview(false);
     },
