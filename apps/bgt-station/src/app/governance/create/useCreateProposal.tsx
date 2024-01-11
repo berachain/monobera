@@ -43,7 +43,6 @@ export const useCreateProposal = () => {
       value: any;
     }[] = [];
 
-    
     if (value.gaugeAddress && value.enableOrDisableGauge) {
       const friendOfTheChef = {
         authority: governanceAuthority,

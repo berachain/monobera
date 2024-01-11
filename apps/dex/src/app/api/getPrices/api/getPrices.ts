@@ -145,8 +145,7 @@ const BERA_TOKEN = getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string);
 const WBERA_TOKEN = getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
 
 export const getBaseTokenPrice = async (pools: Pool[]) => {
-  
-  console.log(pools)
+  console.log(pools);
   let mappedTokens: MappedTokens = {};
 
   if (pools.length) {

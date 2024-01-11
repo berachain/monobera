@@ -201,7 +201,7 @@ const ValidatorModal = ({
               onSelect(value.original.address);
               onClose();
             }}
-            className="min-w-[1000px] max-h-[500px] overflow-y-scroll"
+            className="max-h-[500px] min-w-[1000px] overflow-y-scroll"
             // emptyMessage={emptyMessage}
           />
         </div>
