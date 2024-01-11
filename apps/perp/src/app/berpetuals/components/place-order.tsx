@@ -97,7 +97,7 @@ export function PlaceOrder({
       tp: form.tp === "" ? 0n : parseUnits(form?.tp, 10),
       sl: form.sl === "" ? 0n : parseUnits(form?.sl, 10),
     },
-    form.optionType === "market" ? 0 : 2,
+    form.optionType === "market" ? 0 : 1,
     parseUnits(`${slippageTolerance ?? 0}`, 10),
   ];
 

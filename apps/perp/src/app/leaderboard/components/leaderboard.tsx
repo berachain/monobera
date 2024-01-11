@@ -18,9 +18,9 @@ import { getColumns } from "./leaderboard-columns";
 
 export default function LeaderBoard() {
   enum LeaderboardType {
-    PROFIT = "pnl",
-    LIQUIDATION = "liquidation",
-    VOLUME = "volume",
+    PROFIT = 1,
+    LIQUIDATION = 2,
+    VOLUME = 3,
   }
 
   const [leaderboardType, setLeaderboardType] = React.useState<LeaderboardType>(

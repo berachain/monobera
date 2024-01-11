@@ -24,6 +24,18 @@ export const getSwap = async (
   swapType: number,
   amount: string,
 ) => {
+
+  if(amount === '0') {
+    return {
+      batchSwapSteps: [],
+      formattedSwapAmount: amount.toString(),
+      formattedAmountIn: "0",
+      formattedReturnAmount: "0",
+      returnAmount: 0n,
+      tokenIn,
+      tokenOut,
+    };
+  }
   try {
     const type = "given_in";
     // const parsedAmount = parseUnits(
@@ -35,11 +47,11 @@ export const getSwap = async (
       jsonrpc: "2.0",
       method: "eth_routeDexSwap",
       params: [
-        handleNativeBera(tokenIn),
-        handleNativeBera(tokenOut),
+        handleNativeBera(tokenIn), //wbera
+        handleNativeBera(tokenOut), //usdc 
         toHex(parseUnits(`${amount}`, tokenInDecimals)),
         type,
-        "latest",
+        "finalized",
       ],
       id: 1, // You can set this to any unique value to correlate with the response.
     };
@@ -89,7 +101,7 @@ export const getSwap = async (
 
     // console.log(batchSwapSteps);
     if (
-      tokenIn === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)
+      tokenIn === getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
     ) {
       if (batchSwapSteps[0]) {
         batchSwapSteps[0].assetIn = process.env
@@ -99,7 +111,7 @@ export const getSwap = async (
     }
 
     if (
-      tokenOut === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)
+      tokenOut === getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
     ) {
       const lastStep = batchSwapSteps.length - 1;
       if (
