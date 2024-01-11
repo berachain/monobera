@@ -74,14 +74,10 @@ export const getSwap = async (
     //   )}&swap_type=${type}`,
     // );
 
-    console.log(";FUZKNGWBJEWFKJHJKLDSBRHEISUOFP");
 
     const response = await fetch(jsonRpcUrl, fetchOptions);
 
-    console.log(";FUZKNGWBJRHEISUOFP");
-
     let result = await response.json();
-    console.log("REEEEEE", result);
     result = result.result;
     if (!result.steps)
       return {
