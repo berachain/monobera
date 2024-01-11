@@ -99,7 +99,7 @@ export const getSwap = async (
       };
     });
 
-    console.log(batchSwapSteps)
+    // console.log(batchSwapSteps);
     if (
       tokenIn === getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
     ) {

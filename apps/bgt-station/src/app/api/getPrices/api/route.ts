@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
+import { subgraphUrl } from "@bera/config";
 
 import { getBaseTokenPrice, type MappedTokens } from "./getPrices";
-import { subgraphUrl } from "@bera/config";
 
 // export const fetchCache = "force-cache";
 
@@ -16,7 +16,6 @@ export async function GET() {
   //   return;
   // }
   // const pools = router.getPools() ?? [];
-
 
   const data = await fetch(subgraphUrl, {
     method: "POST",

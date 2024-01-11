@@ -69,6 +69,7 @@ export default {
       },
       padding: {
         start: "106px",
+        "start-lg": "154px",
       },
       colors: {
         hover: "hsl(var(--hover) / <alpha-value>)",
