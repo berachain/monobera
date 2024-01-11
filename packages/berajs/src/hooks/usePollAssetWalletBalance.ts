@@ -8,8 +8,9 @@ import { MULTICALL3_ABI } from "..";
 import { type Token } from "../api/currency/tokens";
 import { useBeraConfig, useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
+import POLLING from "~/config/constants/polling";
 
-const REFRESH_BLOCK_INTERVAL = 2000;
+const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
 
 interface BalanceToken extends Token {
   balance: bigint;

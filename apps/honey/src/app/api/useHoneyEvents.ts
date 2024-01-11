@@ -1,3 +1,4 @@
+import POLLING from "@bera/berajs/src/config/constants/polling";
 import useSWRInfinite from "swr/infinite";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
@@ -31,7 +32,7 @@ export const useHoneyEvents = () => {
       }
     },
     {
-      refreshInterval: 10000,
+      refreshInterval: POLLING.SLOW,
     },
   );
 
