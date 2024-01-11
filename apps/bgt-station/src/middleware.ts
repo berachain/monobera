@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const BLOCKED_COUNTRY = [
+  "BA",
   "BU",
   "BY",
   "CD",
