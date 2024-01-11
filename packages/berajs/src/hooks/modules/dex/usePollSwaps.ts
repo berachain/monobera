@@ -25,7 +25,7 @@ export const getSwap = async (
   swapType: number,
   amount: string,
 ) => {
-  if (amount === "0") {
+  if (amount === "0" || !tokenIn || !tokenOut || !amount) {
     return {
       batchSwapSteps: [],
       formattedSwapAmount: amount.toString(),
