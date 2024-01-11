@@ -115,9 +115,9 @@ export const useUserGaugeWeight = () => {
           return getValidator(validator.consAddr);
         });
 
-        console.log(promises);
+        // console.log(promises);
         const data = await Promise.all(promises as Promise<any>[]);
-        console.log(data);
+        // console.log(data);
 
         const userWeights: Record<Address, GaugeWeight> = {};
         delegatedValidators.forEach((validator: Validator, i: number) => {
