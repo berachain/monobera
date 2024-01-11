@@ -4,9 +4,10 @@ import { formatUnits } from "viem";
 import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
 import { type Token } from "~/api/currency/tokens";
+import POLLING from "~/config/constants/polling";
 import { useBeraConfig, useBeraJs } from "~/contexts";
 
-const REFRESH_BLOCK_INTERVAL = 2000;
+const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
 
 interface AllowanceToken extends Token {
   allowance: bigint;

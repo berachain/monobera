@@ -6,6 +6,7 @@ import { Progress } from "@bera/ui/progress";
 import { Skeleton } from "@bera/ui/skeleton";
 import { format, formatDistanceToNow } from "date-fns";
 import useSWR from "swr";
+import { POLLING } from "~/utils/constants";
 
 export const Epochs = ({
   epoch,
@@ -60,7 +61,7 @@ export const Epochs = ({
       }
     },
     {
-      refreshInterval: 5000,
+      refreshInterval: POLLING.SLOW,
     },
   );
 

@@ -4,9 +4,10 @@ import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
 import { lendPoolImplementationABI } from "~/config";
+import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
 
-const REFRESH_BLOCK_INTERVAL = 2000;
+const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
 
 export const usePollUserAccountData = () => {
   const publicClient = usePublicClient();
