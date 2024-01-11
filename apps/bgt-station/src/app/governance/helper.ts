@@ -19,9 +19,9 @@ export function getProposalType(proposal: Proposal | undefined) {
     } else if (proposal.messages[0]?.typeURL === updateLendMarkeyTypeUrl) {
       return "new-lend-market";
     } else {
-      return undefined;
+      return "text-proposal";
     }
   } else {
-    return undefined;
+    return "text-proposal";
   }
 }
