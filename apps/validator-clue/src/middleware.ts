@@ -10,7 +10,7 @@ const BLOCKED_COUNTRY = [
   "ET",
   "IR",
   "IQ",
-  "KR",
+  "KP",
   "LY",
   "SD",
   "SY",
