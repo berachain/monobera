@@ -6,15 +6,18 @@ export function DripToken({
   address,
   setAlert,
   setShowAlert,
+  token,
 }: {
   address: string;
   setAlert: (alert: "success" | "destructive" | "error" | undefined) => void;
   setShowAlert: () => void;
+  token?: string;
 }) {
   async function handleRequest() {
     try {
       const res = await fetch(`${faucetEndpointUrl}/api/claim`, {
         method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify({ address: getAddress(address) }),
       });
       if (res.status === 200) {
@@ -35,6 +38,7 @@ export function DripToken({
         setShowAlert();
         void handleRequest();
       }}
+      className="w-full"
     >
       Drip Tokens
     </Button>
