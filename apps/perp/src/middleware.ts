@@ -1,12 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const BLOCKED_COUNTRY = [
+  "BA",
+  "BU",
+  "BY",
   "CD",
+  "CF",
   "CU",
   "ET",
   "IR",
   "IQ",
-  "KP",
+  "KR",
   "LY",
   "SD",
   "SY",
@@ -16,6 +20,7 @@ const BLOCKED_COUNTRY = [
   "MM",
   "VE",
   "YE",
+  "UK",
   "ZW",
 ];
 export { default } from "next-auth/middleware";

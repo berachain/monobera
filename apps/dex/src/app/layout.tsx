@@ -55,7 +55,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <div className="z-[100]">
               <Toaster position="bottom-right" />
             </div>
-            <LaunchBanner />
+            <LaunchBanner appName="DEX" />
             <div className="z-10 flex-1">
               <Header navItems={navItems} />
               <main className="w-full pt-start">{props.children}</main>
