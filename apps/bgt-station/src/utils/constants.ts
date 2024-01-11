@@ -207,7 +207,7 @@ export const poolDetails = {
 };
 
 export enum POLLING {
-  FAST = 5000,
-  NORMAL = 10000,
-  SLOW = 100000,
+  FAST = 10000,
+  NORMAL = 20000,
+  SLOW = 200000,
 }
