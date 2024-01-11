@@ -165,28 +165,27 @@ export default function WithdrawLiquidityContent({
                 />
               </TokenList>
 
-              {/* <div className="flex flex-row gap-2">
-                {[25, 50, 75, 100].map((percent) => {
+              <div className="flex flex-row gap-2">
+                {[25n, 50n, 75n, 100n].map((percent) => {
                   return (
                     <Button
-                      key={percent}
+                      key={percent.toString()}
                       variant={"outline"}
                       className="w-full"
                       onClick={() =>
                         setAmount(
-                          (percent === 100
+                          percent === 100n
                             ? formattedLpBalance
-                            : Number(formattedLpBalance) * (percent / 100)
-                          ).toString(),
+                            : formatUnits(((lpBalance ?? 0n) * percent) / 100n, 18),
                         )
                       }
                       disabled={lpBalance === 0n}
                     >
-                      {percent}%
+                      {percent.toString()}%
                     </Button>
                   );
                 })}
-              </div> */}
+              </div>
               <Alert variant="warning">
                 All outstanding BGT Rewards will be claimed upon withdrawing all
                 liquidity.
@@ -271,23 +270,22 @@ export default function WithdrawLiquidityContent({
                 />
               </TokenList>
               <div className="flex flex-row gap-2">
-                {[25, 50, 75, 100].map((percent) => {
+                {[25n, 50n, 75n, 100n].map((percent) => {
                   return (
                     <Button
-                      key={percent}
+                      key={percent.toString()}
                       variant={"outline"}
                       className="w-full"
                       onClick={() =>
                         setAmount(
-                          (
-                            Number(formattedLpBalance) *
-                            (percent / 100)
-                          ).toString(),
+                          percent === 100n
+                            ? formattedLpBalance
+                            : formatUnits(((lpBalance ?? 0n) * percent) / 100n, 18)
                         )
                       }
                       disabled={lpBalance === 0n}
                     >
-                      {percent}%
+                      {percent.toString()}%
                     </Button>
                   );
                 })}
