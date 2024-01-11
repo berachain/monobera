@@ -16,6 +16,7 @@ import {
   lendUrl,
   perpsName,
   perpsUrl,
+  telegram,
   // pressKit,
   twitter,
 } from "@bera/config";
@@ -71,6 +72,11 @@ export const footerNavigation = {
       href: discord,
       icon: Icons.discord,
     },
+    {
+      name: "Telegram",
+      href: telegram,
+      icon: Icons.telegram,
+    }
   ],
 };
 
