@@ -84,7 +84,7 @@ export default function UserTokenCard({
             <div className="flex flex-shrink-0 flex-col">
               <div className="text-xs font-medium leading-5 text-muted-foreground">
                 Supply APY{" "}
-                <Tooltip text="Supply APY (Annual Percentage Yield) represents the annualized return on supplied assets." />
+                <Tooltip text="Supply APY (Annual Percentage Yield) represents the annualized return on supplied assets. See additional disclaimers in notes below." />
               </div>
               <div className="text-lg font-bold text-success-foreground">
                 {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
@@ -96,7 +96,7 @@ export default function UserTokenCard({
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
               Variable APY{" "}
-              <Tooltip text="Variable interest rate will fluctuate based on the market conditions." />
+              <Tooltip text="Variable interest rate will fluctuate based on the market conditions. See additional disclaimers in notes below." />
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               {(
@@ -111,7 +111,7 @@ export default function UserTokenCard({
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
               Loan APY{" "}
-              <Tooltip text="Variable interest rate will fluctuate based on the market conditions." />
+              <Tooltip text="Variable interest rate will fluctuate based on the market conditions. See additional disclaimers in notes below." />
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
@@ -151,7 +151,7 @@ export default function UserTokenCard({
           <AlertTitle>
             {" "}
             <Icons.info className="mr-1 inline-block h-4 w-4" />
-            You Must supply To Borrow
+            You Must Supply To Borrow
           </AlertTitle>
           Your available-to-borrow balance is based on the amounts of assets you
           have supplied. It only updates when you supply assets.
@@ -162,7 +162,7 @@ export default function UserTokenCard({
           <AlertTitle>
             {" "}
             <Icons.info className="mr-1 inline-block h-4 w-4" />
-            Cannot Borrow Against This Conllateral
+            Cannot Borrow Against This Collateral
           </AlertTitle>
           HONEY deposits earn interest but don&apos;t qualify as collateral or
           boost borrowing capacity.

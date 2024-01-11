@@ -210,7 +210,7 @@ const BorrowModalContent = ({
               text={
                 <>
                   variable interest rate will fluctuate based on the market
-                  conditions.
+                  conditions. See additional disclaimers in notes below.
                 </>
               }
             />

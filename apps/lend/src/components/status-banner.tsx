@@ -94,7 +94,7 @@ export default function StatusBanner() {
                 <br />
                 on net worth, including rewards and fees. It is possible to have
                 a negative net APY <br />
-                if debt APY is higher than supply APY + Rewards.
+                if debt APY is higher than supply APY + Rewards. See additional disclaimers in notes below.
               </>
             }
           />

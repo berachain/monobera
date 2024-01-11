@@ -2,7 +2,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 
 export default function Loading() {
   return (
-    <div className="flex w-full max-w-[1000px] flex-col gap-4 ">
+    <div className="flex w-full flex-col gap-4 ">
       <div className="flex justify-between">
         <Skeleton className="h-8 w-1/2" />
         <Skeleton className="h-8 w-1/4" />
