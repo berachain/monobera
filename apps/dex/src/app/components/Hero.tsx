@@ -55,7 +55,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="flex-1">
-        <div className="mx-auto w-full min-w-[320px] md:w-[450px]">
+        <div className="mx-auto w-full min-w-[320px] md:w-[450px] block" onClick={()=>window.open("/swap", "_self")}>
           <SwapCard
             inputCurrency={nativeTokenAddress}
             outputCurrency={honeyAddress}
