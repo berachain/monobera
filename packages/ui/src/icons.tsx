@@ -83,6 +83,7 @@ import {
   UserX,
   Wallet,
   X,
+  Clock8,
   XOctagon,
   type LucideIcon,
   type LucideProps,
@@ -110,7 +111,7 @@ export const Icons = {
   sortDesc: SortDesc,
   command: Command,
   chevronsRight: ChevronsRight,
-
+  clock8: Clock8,
   list: List,
   layoutDashboard: LayoutDashboard,
   close: X,

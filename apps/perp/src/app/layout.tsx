@@ -6,7 +6,6 @@ import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
 import {
   Header,
-  LaunchBanner,
   TailwindIndicator,
   TermOfUseModal,
 } from "@bera/shared-ui";
@@ -17,6 +16,7 @@ import { useLocalStorage } from "usehooks-ts";
 
 import Providers from "./Providers";
 import { navItems } from "./config";
+import { perpsName } from "@bera/config";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -54,10 +54,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           <div className="z-[100]">
             <Toaster position="bottom-right" />
           </div>
-          <LaunchBanner appName="BERP" />
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-            <Header navItems={navItems} />
-            <main className="w-full pt-[72px]">{props.children}</main>
+            <Header navItems={navItems} appName={perpsName}/>
+            <main className="w-full pt-[120px]">{props.children}</main>
             <Toaster position="bottom-right" />
           </div>
           <TailwindIndicator />
