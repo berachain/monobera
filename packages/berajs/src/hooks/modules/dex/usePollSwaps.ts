@@ -47,8 +47,8 @@ export const getSwap = async (
       jsonrpc: "2.0",
       method: "eth_routeDexSwap",
       params: [
-        handleNativeBera(tokenIn), //wbera
-        handleNativeBera(tokenOut), //usdc
+        handleNativeBera(tokenIn), //usdc
+        handleNativeBera(tokenOut), //wbtc
         toHex(parseUnits(`${amount}`, tokenInDecimals)),
         type,
         "latest",
