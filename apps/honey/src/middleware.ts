@@ -16,7 +16,6 @@ const BLOCKED_COUNTRY = [
   "SY",
   "RU",
   "XC",
-  "HK",
   "MM",
   "VE",
   "YE",
