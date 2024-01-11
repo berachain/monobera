@@ -61,9 +61,9 @@ const PreviewToken = ({
           {token?.symbol}
         </div>
       </div>
-      <p className="text-xs font-medium text-muted-foreground">
+      {/* <p className="text-xs font-medium text-muted-foreground">
         {formatUsd(Number(price) * Number(amount))}
-      </p>
+      </p> */}
     </div>
   );
 };
