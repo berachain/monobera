@@ -250,9 +250,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         //   (swapInfo?.batchSwapSteps?.length ?? 1) - 1
         // ]!.amountOut = formatUnits(minAmountOut, tokenOut.decimals);
 
+          // const newStep = {
+          //   ...value,
+          //   amountOut: minAmountOut - 1n, // to guard against router errors, we reduce the minAmountOut
+          // }
+
           const newStep = {
             ...value,
-            amountOut: minAmountOut - 1n, // to guard against router errors, we reduce the minAmountOut
+            amountOut: 0n, // to guard against router errors, we reduce the minAmountOut
           }
           newBatchSwapStep.push(newStep)
 
@@ -319,12 +324,21 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [isWrap]);
 
+  // const tokenInPrice = useTokenHoneyPrice(selectedFrom?.address)
+  // const tokenOutPrice = useTokenHoneyPrice(selectedTo?.address)
+
+  // console.log({
+  //   tokenInPrice,
+  //   tokenOutPrice
+  // })
   const tokenInPrice =
     tokenInPriceInfo === undefined
       ? "0"
       : selectedFrom?.address.toLowerCase() === QUOTING_TOKEN.toLowerCase()
       ? "1"
       : tokenInPriceInfo?.formattedReturnAmount;
+
+
   const tokenOutPrice =
     tokenOutPriceInfo === undefined
       ? "0"
