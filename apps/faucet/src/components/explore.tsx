@@ -75,9 +75,9 @@ const favList = [
   {
     icon: <Icons.honeyFav className="h-[52px] w-[52px]" />,
     name: honeyName,
-    subtitle: "Berachain’s Native Stable Coin",
+    subtitle: "Berachain’s Native Stablecoin",
     description:
-      "A stable coin that's integral to the Berachain ecosystem. Utilize HONEY for seamless trading, ensuring value consistency.",
+      "A stablecoin that's integral to the Berachain ecosystem. Utilize HONEY for seamless trading, ensuring value consistency.",
     goto: honeyUrl,
     learnMore: `${docsUrl}/learn/protocol/honey-stablecoin`,
   },
