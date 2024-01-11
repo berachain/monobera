@@ -6,8 +6,7 @@ export const LaunchBanner = ({ appName }: { appName: string }) => {
       <div className="flex items-center gap-2">
         <Icons.clock8 className="h-4 w-4" />
         <div className="font-semibold leading-tight text-sm md:text-md">
-          {`Validators can now point liquidity to ${appName}. Users may interact after
-          Artio Epoch 1`}
+          {`Validators can now point liquidity to ${appName}. Users may earn BGT after Artio Epoch 2.`}
         </div>
       </div>
     </header>

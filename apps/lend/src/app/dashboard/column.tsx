@@ -51,28 +51,28 @@ export const user_supply_columns: ColumnDef<any>[] = [
     accessorKey: "balance",
     enableSorting: true,
   },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Supply APY"
-        tooltip={
-          <>
-            Supply APY (Annual Percentage Yield) represents the annualized
-            return on supplied assets.
-          </>
-        }
-        className="whitespace-nowrap"
-      />
-    ),
-    cell: ({ row }) => (
-      <div className="text-success-foreground">
-        {(Number(row.original.reserveData.supplyAPY) * 100).toFixed(2)}%
-      </div>
-    ),
-    accessorKey: "supplyAPR",
-    enableSorting: true,
-  },
+  // {
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="Supply APY"
+  //       tooltip={
+  //         <>
+  //           Supply APY (Annual Percentage Yield) represents the annualized
+  //           return on supplied assets.
+  //         </>
+  //       }
+  //       className="whitespace-nowrap"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div className="text-success-foreground">
+  //       {(Number(row.original.reserveData.supplyAPY) * 100).toFixed(2)}%
+  //     </div>
+  //   ),
+  //   accessorKey: "supplyAPR",
+  //   enableSorting: true,
+  // },
   {
     header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
     cell: ({ row }) => (
