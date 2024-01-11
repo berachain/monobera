@@ -4,6 +4,7 @@ import { formatUnits, getAddress, parseUnits, toHex, type Address } from "viem";
 
 import POLLING from "~/config/constants/polling";
 import { laggy } from "~/hooks/laggy";
+import { nativeTokenAddress } from '../../../../../config/env/index';
 
 export interface MappedTokens {
   [key: string]: number;
@@ -55,6 +56,8 @@ export const getSwap = async (
       id: 1, // You can set this to any unique value to correlate with the response.
     };
 
+
+    console.log(rpcRequest)
     // Fetch options for the POST request
     const fetchOptions = {
       method: "POST",
@@ -72,9 +75,14 @@ export const getSwap = async (
     //   )}&swap_type=${type}`,
     // );
 
+    console.log(';FUZKNGWBJEWFKJHJKLDSBRHEISUOFP')
+
     const response = await fetch(jsonRpcUrl, fetchOptions);
 
+    console.log(';FUZKNGWBJRHEISUOFP')
+
     let result = await response.json();
+    console.log('REEEEEE',result)
     result = result.result;
     if (!result.steps)
       return {
@@ -100,29 +108,28 @@ export const getSwap = async (
 
     // console.log(batchSwapSteps);
     if (
-      tokenIn === getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
+      getAddress(tokenIn) === getAddress(nativeTokenAddress)
     ) {
       if (batchSwapSteps[0]) {
-        batchSwapSteps[0].assetIn = process.env
-          .NEXT_PUBLIC_BERA_ADDRESS as Address;
+        batchSwapSteps[0].assetIn = nativeTokenAddress as Address;
         batchSwapSteps[0].value = batchSwapSteps[0].amountIn;
       }
     }
 
-    if (
-      tokenOut === getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
-    ) {
-      const lastStep = batchSwapSteps.length - 1;
-      if (
-        batchSwapSteps !== undefined &&
-        batchSwapSteps[lastStep] !== undefined
-      ) {
-        // @ts-ignore
-        batchSwapSteps[lastStep].assetOut = process.env
-          .NEXT_PUBLIC_BERA_ADDRESS as Address;
-        // batchSwapSteps[0].value = batchSwapSteps[0].amountIn;
-      }
-    }
+    // if (
+    //   tokenOut === getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
+    // ) {
+    //   const lastStep = batchSwapSteps.length - 1;
+    //   if (
+    //     batchSwapSteps !== undefined &&
+    //     batchSwapSteps[lastStep] !== undefined
+    //   ) {
+    //     // @ts-ignore
+    //     batchSwapSteps[lastStep].assetOut = process.env
+    //       .NEXT_PUBLIC_BERA_ADDRESS as Address;
+    //     // batchSwapSteps[0].value = batchSwapSteps[0].amountIn;
+    //   }
+    // }
     const swapInfo = {
       batchSwapSteps: batchSwapSteps,
       formattedSwapAmount: amount.toString(),

@@ -338,44 +338,44 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     }
   }, [totalTokens]);
 
-  useMemo(() => {
-    if (
-      activeInput !== undefined &&
-      liquidityMap !== undefined &&
-      totalTokens !== undefined
-    ) {
-      try {
-        const amount = activeAmount === "" ? "0" : activeAmount;
-        const bnAmount = new BigNumber(
-          parseUnits(amount ?? "0", 18).toString(),
-        );
-        const selectedToken = tokenInputs[activeInput];
-        const totalSelectedTokenType = (
-          liquidityMap[selectedToken?.address ?? ""] ?? new BigNumber(0)
-        ).times(totalTokens);
-        const amountRatio = bnAmount.div(totalSelectedTokenType);
-        tokenInputs.forEach((tokenInput: TokenInput, i: number) => {
-          if (i === activeInput) return;
+  // useMemo(() => {
+  //   if (
+  //     activeInput !== undefined &&
+  //     liquidityMap !== undefined &&
+  //     totalTokens !== undefined
+  //   ) {
+  //     try {
+  //       const amount = activeAmount === "" ? "0" : activeAmount;
+  //       const bnAmount = new BigNumber(
+  //         parseUnits(amount ?? "0", 18).toString(),
+  //       );
+  //       const selectedToken = tokenInputs[activeInput];
+  //       const totalSelectedTokenType = (
+  //         liquidityMap[selectedToken?.address ?? ""] ?? new BigNumber(0)
+  //       ).times(totalTokens);
+  //       const amountRatio = bnAmount.div(totalSelectedTokenType);
+  //       tokenInputs.forEach((tokenInput: TokenInput, i: number) => {
+  //         if (i === activeInput) return;
 
-          const totalTokenType = (
-            liquidityMap[tokenInput.address] ?? new BigNumber(0)
-          )
-            .times(totalTokens)
-            .div(new BigNumber(10).pow(18));
-          const newAmount = amountRatio.times(totalTokenType);
-          const parsedNewAmount =
-            Number(newAmount) === 0
-              ? ""
-              : newAmount.toString(10).slice(0, tokenInput.decimals);
-          updateTokenAmount(i, parsedNewAmount);
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      return;
-    }
-  }, [activeAmount, activeInput, liquidityMap, totalTokens]);
+  //         const totalTokenType = (
+  //           liquidityMap[tokenInput.address] ?? new BigNumber(0)
+  //         )
+  //           .times(totalTokens)
+  //           .div(new BigNumber(10).pow(18));
+  //         const newAmount = amountRatio.times(totalTokenType);
+  //         const parsedNewAmount =
+  //           Number(newAmount) === 0
+  //             ? ""
+  //             : newAmount.toString(10).slice(0, tokenInput.decimals);
+  //         updateTokenAmount(i, parsedNewAmount);
+  //       });
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   } else {
+  //     return;
+  //   }
+  // }, [activeAmount, activeInput, liquidityMap, totalTokens]);
 
   return {
     beraToken,
