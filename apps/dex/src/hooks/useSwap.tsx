@@ -233,12 +233,15 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         const d = block + BigInt(Math.floor((deadline * 60) / 2));
 
         const s = BigInt(slippage * 10 ** 18);
-        const minAmountOut =
-          (swapInfo?.returnAmount ?? 0n) -
-          ((swapInfo?.returnAmount ?? 0n) * s) / BigInt(100 * 10 ** 18);
-        swapInfo.batchSwapSteps[
-          (swapInfo?.batchSwapSteps?.length ?? 1) - 1
-        ]!.amountOut = minAmountOut;
+
+        swapInfo.batchSwapSteps.forEach((value: any) => {
+          const sI = value.amountOut;
+          const minAmountOut =
+            (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
+          swapInfo.batchSwapSteps[
+            (swapInfo?.batchSwapSteps?.length ?? 1) - 1
+          ]!.amountOut = minAmountOut;
+        });
 
         const payload = [0n, swapInfo?.batchSwapSteps, d];
         setPayload(payload);
@@ -318,7 +321,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
 
-  console.log(payload)
+  console.log(payload);
 
   return {
     setSwapKind,
