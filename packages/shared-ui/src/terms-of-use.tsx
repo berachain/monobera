@@ -162,7 +162,7 @@ export const TermOfUseModal = ({
           <div className="flex space-x-2">
             <Checkbox
               id="terms"
-              className="mt-1.5 ml-1"
+              className="ml-1 mt-1.5"
               checked={checked}
               onCheckedChange={(checked: boolean) => {
                 setChecked(checked);

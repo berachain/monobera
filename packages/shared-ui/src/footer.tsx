@@ -76,7 +76,7 @@ export const footerNavigation = {
       name: "Telegram",
       href: telegram,
       icon: Icons.telegram,
-    }
+    },
   ],
 };
 

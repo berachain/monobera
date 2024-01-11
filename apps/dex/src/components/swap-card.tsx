@@ -117,7 +117,6 @@ export function SwapCard({
 
   const [openPreview, setOpenPreview] = useState(false);
 
-
   const { write, isLoading, ModalPortal } = useTxn({
     actionType: TransactionActionType.SWAP,
     message: `Swap ${Number(swapInfo?.formattedSwapAmount).toFixed(4)} ${
@@ -127,13 +126,13 @@ export function SwapCard({
     }`,
     onSuccess: () => {
       setFromAmount(undefined);
-      setSwapAmount('')
+      setSwapAmount("");
       setToAmount(undefined);
       setOpenPreview(false);
     },
     onError: () => {
       setFromAmount(undefined);
-      setSwapAmount('')
+      setSwapAmount("");
       setToAmount(undefined);
       setOpenPreview(false);
     },
@@ -279,7 +278,6 @@ export function SwapCard({
                     onTokenSelection={setSelectedFrom}
                     amount={fromAmount ?? ""}
                     price={Number(tokenInPrice)}
-                    hidePrice={true}
                     showExceeding={true}
                     onExceeding={(isExceeding: boolean) =>
                       setExceedingBalance(isExceeding)
@@ -314,7 +312,6 @@ export function SwapCard({
                     amount={toAmount}
                     price={Number(tokenOutPrice)}
                     hideMax={true}
-                    hidePrice={true}
                     disabled={true}
                     setAmount={(amount) => {
                       setSwapKind(SwapKind.GIVEN_OUT);
