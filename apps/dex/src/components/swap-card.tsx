@@ -64,6 +64,8 @@ interface ISwapCard {
   showBear?: boolean;
   className?: string;
 }
+
+
 export function SwapCard({
   inputCurrency,
   outputCurrency,
@@ -86,8 +88,10 @@ export function SwapCard({
     setSelectedTo,
     setSwapAmount,
     onSwitch,
+    setIsTyping,
     swapInfo,
     value,
+    isRouteLoading,
     payload,
     exchangeRate,
     gasPrice,
@@ -280,6 +284,7 @@ export function SwapCard({
                     amount={fromAmount ?? ""}
                     price={Number(tokenInPrice)}
                     showExceeding={true}
+                    setIsTyping={(isTyping: boolean) => setIsTyping(isTyping)}
                     onExceeding={(isExceeding: boolean) =>
                       setExceedingBalance(isExceeding)
                     }
@@ -320,6 +325,7 @@ export function SwapCard({
                       setToAmount(amount);
                     }}
                     showExceeding={false}
+                    isActionLoading={isRouteLoading}
                   />
                 </ul>
                 <div className="flex flex-col gap-2">
@@ -358,7 +364,7 @@ export function SwapCard({
                   ) : (
                     false
                   )}
-                  {error instanceof RouteNotFound ? (
+                  {error !== undefined ? (
                     <Alert variant="destructive">
                       <AlertTitle>Error</AlertTitle>
                       <AlertDescription className="text-xs">
@@ -368,6 +374,16 @@ export function SwapCard({
                   ) : (
                     false
                   )}
+                                  {/* {isRouteLoading === true && swapAmount !=='0' && selectedTo !==undefined ? (
+                    <Alert variant="info">
+                      <AlertTitle>Searching for best routes</AlertTitle>
+                      <AlertDescription className="text-xs">
+                        route loading
+                      </AlertDescription>
+                    </Alert>
+                  ) : (
+                    false
+                  )} */}
                   {/* {showPriceImpact ? (
                     <Alert variant="destructive">
                       <AlertTitle>
@@ -389,6 +405,7 @@ export function SwapCard({
                   swapInfo.batchSwapSteps.length === 0 &&
                   fromAmount &&
                   fromAmount !== "" &&
+                  !isRouteLoading &&
                   !isWrap ? (
                     <Alert variant="destructive">
                       <AlertTitle>
