@@ -55,6 +55,10 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         rpc: (chain: any) => ({ http: chain.rpcUrls.default.http[0] || "" }),
       }),
     ],
+    {
+      retryCount: 0,
+      retryDelay: 20000,
+    }
   );
 
   const appInfo = {

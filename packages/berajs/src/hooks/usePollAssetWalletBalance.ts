@@ -10,7 +10,7 @@ import { type Token } from "../api/currency/tokens";
 import { useBeraConfig, useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
 
-const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
+const REFRESH_BLOCK_INTERVAL = 20000;
 
 interface BalanceToken extends Token {
   balance: bigint;
