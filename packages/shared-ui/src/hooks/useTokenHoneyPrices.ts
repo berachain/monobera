@@ -1,36 +1,47 @@
 import {
-  //   beraTokenAddress,
+  beraTokenAddress,
   honeyTokenAddress,
-  //   nativeTokenAddress,
+  nativeTokenAddress,
 } from "@bera/config";
-import {
-  client,
-  getAllPools,
-  getTokenHoneyPrice,
-  //   getTokenHoneyPrices,
-} from "@bera/graphql";
-import { getAddress } from "ethers";
+import { client, getTokenHoneyPrice, getTokenHoneyPrices } from "@bera/graphql";
 import useSWR from "swr";
-import { type Address } from "wagmi";
+import { getAddress, type Address } from "viem";
 
-export const usePools = () => {
+export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
   const { data } = useSWR(
-    ["getAllPools"],
+    ["tokenHoneyPrices", tokenAddresses],
     async () => {
+      if (!tokenAddresses) {
+        return [];
+      }
+
+      const swappedAddresses = tokenAddresses.map((token: string) => {
+        if (token.toLowerCase() === nativeTokenAddress.toLowerCase()) {
+          return beraTokenAddress.toLowerCase();
+        }
+        return token.toLowerCase();
+      });
+
       return await client
         .query({
-          query: getAllPools,
+          query: getTokenHoneyPrices,
+          variables: {
+            id: swappedAddresses,
+          },
         })
-        .then((res) => res.data.pools)
-        .catch((e) => {
+        .then((res: any) => {
+          return res.data.tokenHoneyPrices;
+        })
+        .catch((e: any) => {
           console.log(e);
           return undefined;
         });
     },
     {
-      refreshInterval: 5000,
+      refreshInterval: 50000,
     },
   );
+
   return data;
 };
 

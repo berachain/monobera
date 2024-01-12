@@ -21,4 +21,3 @@ export enum POLLING {
   NORMAL = 20000,
   SLOW = 200000,
 }
-

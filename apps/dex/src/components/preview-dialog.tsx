@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { type SwapInfoV2, type Token } from "@bera/berajs";
+import { formatUsd } from "@bera/berajs/src/utils";
 import { cloudinaryUrl } from "@bera/config";
 import { Spinner, TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -38,7 +39,8 @@ type Props = {
 const PreviewToken = ({
   token,
   title,
-  amount
+  amount,
+  price,
 }: {
   token: Token | undefined;
   title: string;
@@ -60,9 +62,9 @@ const PreviewToken = ({
           {token?.symbol}
         </div>
       </div>
-      {/* <p className="text-xs font-medium text-muted-foreground">
+      <p className="text-xs font-medium text-muted-foreground">
         {formatUsd(Number(price) * Number(amount))}
-      </p> */}
+      </p>
     </div>
   );
 };
