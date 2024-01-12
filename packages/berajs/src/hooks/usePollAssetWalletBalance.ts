@@ -4,11 +4,11 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits, getAddress } from "viem";
 import { erc20ABI, usePublicClient, type Address } from "wagmi";
 
+import POLLING from "~/config/constants/polling";
 import { MULTICALL3_ABI } from "..";
 import { type Token } from "../api/currency/tokens";
 import { useBeraConfig, useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
-import POLLING from "~/config/constants/polling";
 
 const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
 

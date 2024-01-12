@@ -124,9 +124,18 @@ export const getGlobalDexData = gql`
 `;
 
 export const getTokenHoneyPrice = gql`
-query GetTokenHoneyPrice( $id: String) {
+  query GetTokenHoneyPrice($id: String) {
+    tokenHoneyPrices(where: { id: $id }) {
+      id
+      price
+    }
+  }
+`;
+
+export const getTokenHoneyPrices = gql`
+query GetTokenHoneyPrice( $id: [String!]) {
   tokenHoneyPrices(
-    where: {id: $id}
+    where: {id_in: $id}
   ) {
     id
     price
