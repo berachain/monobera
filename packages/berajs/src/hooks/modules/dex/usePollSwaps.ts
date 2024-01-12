@@ -1,10 +1,7 @@
 import { nativeTokenAddress } from "@bera/config";
 import useSWR from "swr";
 import { formatUnits, getAddress, parseUnits, type Address } from "viem";
-import { usePublicClient } from "wagmi";
 
-import { DEX_PRECOMPILE_ABI } from "~/config";
-import { useBeraConfig } from "~/contexts";
 import { laggy } from "~/hooks/laggy";
 import POLLING from "../../../config/constants/polling";
 
@@ -15,6 +12,7 @@ interface IUsePollSwaps {
   tokenOutDecimals: number;
   swapKind: number;
   amount: string;
+  isTyping?: boolean | undefined;
 }
 
 export interface SwapInfoV2 {
@@ -34,12 +32,25 @@ export const usePollSwaps = ({
   tokenOutDecimals,
   swapKind,
   amount,
+  isTyping,
 }: IUsePollSwaps) => {
-  const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount];
+  const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount, isTyping];
   return useSWR<SwapInfoV2 | undefined>(
     QUERY_KEY,
     async () => {
       try {
+        if (isTyping !== undefined && isTyping === true) {
+          return {
+            batchSwapSteps: [],
+            formattedSwapAmount: amount.toString(),
+            formattedAmountIn: "0",
+            formattedReturnAmount: "0",
+            returnAmount: 0n,
+            tokenIn,
+            tokenOut,
+          };
+        }
+
         const swapInfo = await getSwap(
           tokenIn,
           tokenOut,

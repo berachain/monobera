@@ -79,7 +79,7 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
         });
     },
     {
-      refreshInterval: 5000,
+      refreshInterval: 10000,
     },
   );
   return data;

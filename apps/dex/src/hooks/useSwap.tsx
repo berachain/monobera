@@ -105,12 +105,12 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [payload, setPayload] = useState<any[]>([]);
 
+  const [isTyping, setIsTyping] = useState(false)
+
+
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { isLoading: isBalanceLoading } = useCurrentAssetWalletBalances();
 
-  // const allPools = usePools()
-  // console.log('dwterf',allPools)
-  // for wrapping
   useEffect(() => {
     if (isWrap) {
       if (swapKind === SwapKind.GIVEN_IN) {
@@ -122,7 +122,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapAmount]);
 
-  const { data: swapInfo, error: getSwapError } = usePollSwaps({
+  const { data: swapInfo, error: getSwapError, isLoading: isSwapLoading, isValidating: isSwapReloading } = usePollSwaps({
     tokenIn: selectedFrom?.address as Address,
     tokenOut: selectedTo?.address as Address,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
@@ -133,6 +133,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     //     ? Number.MAX_SAFE_INTEGER
     //     : Number(swapAmount) ?? 0,
     amount: swapAmount,
+    isTyping: isTyping
   });
 
   useEffect(() => {
@@ -218,7 +219,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const allowance = useAllowance();
 
-  const block = useLatestBlock();
+  const {data: block} = useLatestBlock();
 
   const slippage = useSlippage();
   const deadline = useDeadline();
@@ -283,7 +284,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapInfo, deadline, slippage]);
 
-  console.log(swapInfo);
   const onSwitch = () => {
     const tempFromAmount = fromAmount;
     const tempToAmount = toAmount;
@@ -343,7 +343,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
 
-  console.log(payload);
 
   return {
     setSwapKind,
@@ -353,6 +352,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setSelectedTo,
     setSwapAmount,
     onSwitch,
+    setIsTyping,
     swapAmount,
     payload,
     selectedFrom,
@@ -366,6 +366,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     value,
     exchangeRate,
     gasPrice: gasData?.formatted.gasPrice,
+    isRouteLoading: isSwapLoading || isTyping ||isSwapReloading,
     isWrap,
     wrapType,
     isBalanceLoading,
