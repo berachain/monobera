@@ -25,16 +25,15 @@ export function DripToken({
       });
       if (res.status === 200) {
         setAlert("success");
-        setToken(undefined);
       } else if (res.status === 429) {
         setAlert("destructive");
-        setToken(undefined);
       } else {
         setAlert("error");
       }
     } catch (error: any) {
       setAlert("error");
     }
+    setToken(undefined);
   }
   return (
     <Button

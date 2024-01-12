@@ -3,7 +3,6 @@ import { Button } from "@bera/ui/button";
 
 const ReCAPTCHAButton = ({
   setToken,
-  bot,
   setBot,
 }: {
   setToken: (token: string) => void;
@@ -34,13 +33,8 @@ const ReCAPTCHAButton = ({
   };
 
   return (
-    <Button
-      onClick={onClick}
-      variant={bot ? "destructive" : "primary"}
-      disabled={bot}
-      className="w-full"
-    >
-      {bot ? "Your sus" : "Click here to prove you are not a bot"}
+    <Button onClick={onClick} className="w-full">
+      Click here to prove you are not a bot
     </Button>
   );
 };
