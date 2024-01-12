@@ -242,8 +242,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
           const minAmountOut =
           (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
 
-          newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = minAmountOut
-          // newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = 0n
+          // newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = minAmountOut
+          newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = 0n
 
         // swapInfo.batchSwapSteps.forEach((value: any) => {
         //   // console.log('v',value)
