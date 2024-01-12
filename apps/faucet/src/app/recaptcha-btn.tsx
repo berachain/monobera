@@ -6,13 +6,13 @@ const ReCAPTCHAButton = ({
   bot,
   setBot,
 }: {
-  setToken: (token:string) => void;
+  setToken: (token: string) => void;
   bot: boolean | undefined;
   setBot: (bot: boolean) => void;
 }) => {
-  const onClick = (e:any) => {
+  const onClick = (e: any) => {
     e.preventDefault();
-     //@ts-ignore
+    //@ts-ignore
     if (typeof window.grecaptcha !== "undefined") {
       //@ts-ignore
       window.grecaptcha.ready(() => {
@@ -21,7 +21,7 @@ const ReCAPTCHAButton = ({
           .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
             action: "submit",
           })
-          .then((token:any) => {
+          .then((token: any) => {
             if (token) {
               setToken(token);
               setBot(false);
