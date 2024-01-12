@@ -15,6 +15,7 @@ import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { useLocalStorage } from "usehooks-ts";
+import { SWRDevTools } from "swr-devtools";
 
 import { beraJsConfig, mobileNavItems, navItems } from "./config";
 
@@ -59,6 +60,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         )}
       >
         {" "}
+        <SWRDevTools />
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
           <Header isHoney navItems={navItems} mobileNavItems={mobileNavItems} />
