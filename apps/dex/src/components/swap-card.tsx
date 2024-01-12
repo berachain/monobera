@@ -124,11 +124,7 @@ export function SwapCard({
     // } to ${Number(swapInfo?.formattedReturnAmount).toFixed(4)} ${
     //   selectedTo?.symbol
     // }`,
-    message: `Swap ${
-      selectedFrom?.symbol
-    } to ${
-      selectedTo?.symbol
-    }`,
+    message: `Swap ${selectedFrom?.symbol} to ${selectedTo?.symbol}`,
     onSuccess: () => {
       setFromAmount(undefined);
       setSwapAmount("");

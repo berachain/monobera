@@ -133,12 +133,10 @@ export const getTokenHoneyPrice = gql`
 `;
 
 export const getTokenHoneyPrices = gql`
-query GetTokenHoneyPrice( $id: [String!]) {
-  tokenHoneyPrices(
-    where: {id_in: $id}
-  ) {
-    id
-    price
+  query GetTokenHoneyPrice($id: [String!]) {
+    tokenHoneyPrices(where: { id_in: $id }) {
+      id
+      price
+    }
   }
-}
-`
+`;

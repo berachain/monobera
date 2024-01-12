@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { formatUsd, type SwapInfoV2, type Token } from "@bera/berajs";
+import { type SwapInfoV2, type Token } from "@bera/berajs";
+import { formatUsd } from "@bera/berajs/src/utils";
 import { cloudinaryUrl } from "@bera/config";
 import { Spinner, TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";

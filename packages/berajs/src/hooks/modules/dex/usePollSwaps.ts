@@ -1,12 +1,12 @@
 import { nativeTokenAddress } from "@bera/config";
 import useSWR from "swr";
 import { formatUnits, getAddress, parseUnits, type Address } from "viem";
-
-import { laggy } from "~/hooks/laggy";
-import POLLING from "../../../config/constants/polling";
 import { usePublicClient } from "wagmi";
+
 import { DEX_PRECOMPILE_ABI } from "~/config";
 import { useBeraConfig } from "~/contexts";
+import { laggy } from "~/hooks/laggy";
+import POLLING from "../../../config/constants/polling";
 
 interface IUsePollSwaps {
   tokenIn: Address;
@@ -74,7 +74,7 @@ export const usePollSwaps = ({
         //     formattedReturnAmount: formattedAmountOut
         //   }
         // }
-        
+
         return swapInfo;
       } catch (e) {
         // console.log(e);
@@ -160,7 +160,6 @@ export const getSwap = async (
       };
 
     const batchSwapSteps: BatchSwapStep[] = result.steps.map((step: any) => {
-
       return {
         poolId: step.pool,
         assetIn: step.assetIn,
@@ -170,11 +169,8 @@ export const getSwap = async (
         userData: "",
       };
     });
-    
 
     // call rpc set last amount out as result
-
-
 
     if (getAddress(tokenIn) === getAddress(nativeTokenAddress)) {
       if (batchSwapSteps[0]) {
@@ -201,7 +197,7 @@ export const getSwap = async (
 
     return swapInfo;
   } catch (e) {
-    console.log(e)
+    console.log(e);
     return {
       batchSwapSteps: [],
       formattedSwapAmount: amount.toString(),

@@ -11,7 +11,7 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { erc20ModuleAddress, honeyTokenAddress } from "@bera/config";
+import { erc20ModuleAddress } from "@bera/config";
 import { useDeadline, useSlippage } from "@bera/shared-ui/src/hooks";
 import { formatUnits } from "ethers";
 import { type Address } from "wagmi";
@@ -24,7 +24,7 @@ export enum SwapKind {
   GIVEN_OUT = 1,
 }
 
-const QUOTING_TOKEN = honeyTokenAddress;
+// const QUOTING_TOKEN = honeyTokenAddress;
 interface ISwap {
   inputCurrency?: Address | undefined;
   outputCurrency?: Address | undefined;
@@ -237,13 +237,13 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
         const newBatchSwapStep: any[] = [...swapInfo.batchSwapSteps];
 
-          const sI = BigInt(swapInfo.returnAmount);
-          const s = BigInt(slippage * 10 ** 18);
-          const minAmountOut =
-          (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
+        // const sI = BigInt(swapInfo.returnAmount);
+        // const s = BigInt(slippage * 10 ** 18);
+        // const minAmountOut =
+        // (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
 
-          // newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = minAmountOut
-          newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = 0n
+        // newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = minAmountOut
+        newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = 0n;
 
         // swapInfo.batchSwapSteps.forEach((value: any) => {
         //   // console.log('v',value)
@@ -272,9 +272,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         //   newBatchSwapStep.push(newStep);
         // });
 
-        console.log(newBatchSwapStep);
+        // console.log(newBatchSwapStep);
         const payload = [0n, newBatchSwapStep, d];
-        console.log(payload)
+        // console.log(payload)
         setPayload(payload);
       } catch (e) {
         console.log(e);
@@ -334,8 +334,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [isWrap]);
 
-  const tokenInPrice = useTokenHoneyPrice(selectedFrom?.address)
-  const tokenOutPrice = useTokenHoneyPrice(selectedTo?.address)
+  const tokenInPrice = useTokenHoneyPrice(selectedFrom?.address);
+  const tokenOutPrice = useTokenHoneyPrice(selectedTo?.address);
 
   const minAmountOut = useMemo(() => {
     if (!payload[1]) return "0";
