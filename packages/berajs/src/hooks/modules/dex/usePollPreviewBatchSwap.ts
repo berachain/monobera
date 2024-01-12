@@ -6,17 +6,13 @@ import { DEX_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 
-export const usePollPreviewBatchSwap = (
-  batchSwapSteps: any[]
-) => {
+export const usePollPreviewBatchSwap = (batchSwapSteps: any[]) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
   const method = "getPreviewBatchSwap";
 
-  const QUERY_KEY = [
-    batchSwapSteps
-  ];
+  const QUERY_KEY = [batchSwapSteps];
   useSWR(
     QUERY_KEY,
     async () => {
@@ -25,14 +21,11 @@ export const usePollPreviewBatchSwap = (
           address: networkConfig.precompileAddresses.erc20DexAddress as Address,
           abi: DEX_PRECOMPILE_ABI,
           functionName: method,
-          args: [
-            0,
-            batchSwapSteps
-          ],
+          args: [0, batchSwapSteps],
         });
 
-        console.log(result)
-        return 0
+        console.log(result);
+        return 0;
       }
       return undefined;
     },

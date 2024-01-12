@@ -1,3 +1,4 @@
+import React from "react";
 import { faucetEndpointUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { getAddress, isAddress } from "viem";
@@ -7,11 +8,13 @@ export function DripToken({
   setAlert,
   setShowAlert,
   token,
+  setToken,
 }: {
   address: string;
   setAlert: (alert: "success" | "destructive" | "error" | undefined) => void;
   setShowAlert: () => void;
   token?: string;
+  setToken: (token: undefined | string) => void;
 }) {
   async function handleRequest() {
     try {
@@ -22,8 +25,10 @@ export function DripToken({
       });
       if (res.status === 200) {
         setAlert("success");
+        setToken(undefined);
       } else if (res.status === 429) {
         setAlert("destructive");
+        setToken(undefined);
       } else {
         setAlert("error");
       }
@@ -33,7 +38,7 @@ export function DripToken({
   }
   return (
     <Button
-      disabled={!isAddress(address ?? "")}
+      disabled={!isAddress(address ?? "") || !token}
       onClick={() => {
         setShowAlert();
         void handleRequest();
