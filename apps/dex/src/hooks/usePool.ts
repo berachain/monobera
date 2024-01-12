@@ -1,5 +1,5 @@
-import { honeyTokenAddress } from "@bera/config";
-import { client, getAllPools, getTokenHoneyPrice } from "@bera/graphql";
+import { beraTokenAddress, honeyTokenAddress, nativeTokenAddress } from "@bera/config";
+import { client, getAllPools, getTokenHoneyPrice, getTokenHoneyPrices } from "@bera/graphql";
 import { getAddress } from "ethers";
 import useSWR from "swr";
 import { Address } from "wagmi";
@@ -36,16 +36,12 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
   const { data } = useSWR(
     ["tokenHoneyPrice", tokenAddress],
     async () => {
-      console.log("!213safSDadfd");
-
       if (!tokenAddress) {
         return "0";
       }
       if (tokenAddress.toLowerCase() === honeyTokenAddress.toLowerCase()) {
         return "1";
       }
-
-      console.log("!213sad");
       return await client
         .query({
           query: getTokenHoneyPrice,
@@ -53,11 +49,11 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
             id: handleNativeBera(tokenAddress as Address).toLowerCase(),
           },
         })
-        .then((res) => {
+        .then((res: any) => {
           console.log(res);
           return res.data.tokenHoneyPrices[0].price;
         })
-        .catch((e) => {
+        .catch((e: any) => {
           console.log(e);
           return undefined;
         });

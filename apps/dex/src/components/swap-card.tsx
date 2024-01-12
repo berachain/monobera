@@ -119,9 +119,14 @@ export function SwapCard({
 
   const { write, isLoading, ModalPortal } = useTxn({
     actionType: TransactionActionType.SWAP,
-    message: `Swap ${Number(swapInfo?.formattedSwapAmount).toFixed(4)} ${
+    // message: `Swap ${Number(swapInfo?.formattedSwapAmount).toFixed(4)} ${
+    //   selectedFrom?.symbol
+    // } to ${Number(swapInfo?.formattedReturnAmount).toFixed(4)} ${
+    //   selectedTo?.symbol
+    // }`,
+    message: `Swap ${
       selectedFrom?.symbol
-    } to ${Number(swapInfo?.formattedReturnAmount).toFixed(4)} ${
+    } to ${
       selectedTo?.symbol
     }`,
     onSuccess: () => {

@@ -4,25 +4,68 @@ import React from "react";
 import {
   formatter,
   usePollAssetWalletBalance,
-  usePollPrices,
   type Token,
+  useTokens,
 } from "@bera/berajs";
 import {
-  beraTokenAddress,
   bgtTokenAddress,
   blockExplorerUrl,
-  nativeTokenAddress,
 } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { TokenIcon } from "./token-icon";
+import { useTokenHoneyPrice } from "./hooks/useTokenHoneyPrices";
 
+export function TokenRow({
+  asset,
+  isLoading
+} : {
+  asset: Token
+  isLoading: boolean
+}) {
+  const tokenPrice = useTokenHoneyPrice(asset.address)
+  return (
+    <div
+    className="flex items-center justify-between gap-5"
+    key={asset.address}
+  >
+    <div className="flex gap-4">
+      <TokenIcon token={asset} size="2xl" />
+      <div className="font-medium">
+        <div className="flex-1 truncate text-sm font-medium leading-6">
+          {formatter.format(Number(asset.formattedBalance))}{" "}
+          {asset.symbol}
+          <a
+            target="_blank"
+            href={`${blockExplorerUrl}/address/${asset.address}`}
+          >
+            <Icons.external className="inline h-3 w-3" />{" "}
+          </a>
+        </div>
+        <div className="text-sm font-medium leading-6 text-muted-foreground">
+          {asset.name}
+        </div>
+      </div>
+    </div>
+    <div className="whitespace-nowrap text-sm font-medium">
+      {isLoading || !tokenPrice ? (
+        <Skeleton className="h-8 w-16" />
+      ) : (
+        "$" +
+        formatter.format(
+          Number(
+            tokenPrice
+          ) * Number(asset.formattedBalance),
+        )
+      )}
+    </div>
+  </div>
+  )
+}
 export function TokenList() {
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
-  const { data: assets } = useCurrentAssetWalletBalances();
-  const { usePrices, isLoading } = usePollPrices();
-  const { data: prices } = usePrices();
+  const { data: assets, isLoading } = useCurrentAssetWalletBalances();
 
   return (
     <div className="grid gap-4">
@@ -30,45 +73,7 @@ export function TokenList() {
         assets
           .filter((token: Token) => token.address !== bgtTokenAddress)
           .map((asset: Token) => (
-            <div
-              className="flex items-center justify-between gap-5"
-              key={asset.address}
-            >
-              <div className="flex gap-4">
-                <TokenIcon token={asset} size="2xl" />
-                <div className="font-medium">
-                  <div className="flex-1 truncate text-sm font-medium leading-6">
-                    {formatter.format(Number(asset.formattedBalance))}{" "}
-                    {asset.symbol}
-                    <a
-                      target="_blank"
-                      href={`${blockExplorerUrl}/address/${asset.address}`}
-                    >
-                      <Icons.external className="inline h-3 w-3" />{" "}
-                    </a>
-                  </div>
-                  <div className="text-sm font-medium leading-6 text-muted-foreground">
-                    {asset.name}
-                  </div>
-                </div>
-              </div>
-              <div className="whitespace-nowrap text-sm font-medium">
-                {isLoading || !prices ? (
-                  <Skeleton className="h-8 w-16" />
-                ) : (
-                  "$" +
-                  formatter.format(
-                    Number(
-                      prices[
-                        asset.address === nativeTokenAddress
-                          ? beraTokenAddress
-                          : asset.address
-                      ] ?? "0",
-                    ) * Number(asset.formattedBalance),
-                  )
-                )}
-              </div>
-            </div>
+            <TokenRow asset={asset} isLoading={isLoading} key={asset.address} />
           ))
       ) : (
         <div className="flex h-24 justify-center align-middle">

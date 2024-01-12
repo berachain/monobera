@@ -17,6 +17,7 @@ import { formatUnits } from "ethers";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
+import { useTokenHoneyPrice } from "./usePool";
 
 export enum SwapKind {
   GIVEN_IN = 0,
@@ -242,6 +243,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
           (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
 
           newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = minAmountOut
+          // newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = 0n
+
         // swapInfo.batchSwapSteps.forEach((value: any) => {
         //   // console.log('v',value)
         //   // console.log('ap',allPools)
@@ -331,29 +334,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [isWrap]);
 
-  // const tokenInPrice = useTokenHoneyPrice(selectedFrom?.address)
-  // const tokenOutPrice = useTokenHoneyPrice(selectedTo?.address)
+  const tokenInPrice = useTokenHoneyPrice(selectedFrom?.address)
+  const tokenOutPrice = useTokenHoneyPrice(selectedTo?.address)
 
-  // console.log({
-  //   tokenInPrice,
-  //   tokenOutPrice
-  // })
-  // const tokenInPrice =
-  //   tokenInPriceInfo === undefined
-  //     ? "0"
-  //     : selectedFrom?.address.toLowerCase() === QUOTING_TOKEN.toLowerCase()
-  //     ? "1"
-  //     : tokenInPriceInfo?.formattedReturnAmount;
-
-  // const tokenOutPrice =
-  //   tokenOutPriceInfo === undefined
-  //     ? "0"
-  //     : selectedTo?.address.toLowerCase() === QUOTING_TOKEN.toLowerCase()
-  //     ? "1"
-  //     : tokenOutPriceInfo?.formattedReturnAmount;
-
-  const tokenInPrice = '0'
-  const tokenOutPrice = '0'
   const minAmountOut = useMemo(() => {
     if (!payload[1]) return "0";
     const amountOut = payload[1][payload[1].length - 1]?.amountOut;

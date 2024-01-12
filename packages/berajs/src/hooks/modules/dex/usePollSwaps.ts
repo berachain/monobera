@@ -35,8 +35,6 @@ export const usePollSwaps = ({
   swapKind,
   amount,
 }: IUsePollSwaps) => {
-  const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
   const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount];
   return useSWR<SwapInfoV2 | undefined>(
     QUERY_KEY,
@@ -51,31 +49,31 @@ export const usePollSwaps = ({
           amount,
         );
 
-        const batchSwapSteps = swapInfo.batchSwapSteps
+        // const batchSwapSteps = swapInfo.batchSwapSteps
 
-        if(batchSwapSteps && batchSwapSteps.length) {
-          const result= await publicClient.readContract({
-            address: networkConfig.precompileAddresses.erc20DexAddress as Address,
-            abi: DEX_PRECOMPILE_ABI,
-            functionName: "getPreviewBatchSwap",
-            args: [
-              0,
-              batchSwapSteps
-            ],
-          });
+        // if(batchSwapSteps && batchSwapSteps.length) {
+        //   const result= await publicClient.readContract({
+        //     address: networkConfig.precompileAddresses.erc20DexAddress as Address,
+        //     abi: DEX_PRECOMPILE_ABI,
+        //     functionName: "getPreviewBatchSwap",
+        //     args: [
+        //       0,
+        //       batchSwapSteps
+        //     ],
+        //   });
 
-          console.log('previewbatchswapreturn', result)
-          const amountOut = (result as [string, bigint] )[1]
-          const formattedAmountOut = formatUnits(amountOut, tokenOutDecimals)
-          // @ts-ignore
-          batchSwapSteps[batchSwapSteps.length - 1].amountOut = amountOut
-          return {
-            ...swapInfo,
-            batchSwapSteps: batchSwapSteps,
-            returnAmount: amountOut,
-            formattedReturnAmount: formattedAmountOut
-          }
-        }
+        //   console.log('previewbatchswapreturn', result)
+        //   const amountOut = (result as [string, bigint] )[1]
+        //   const formattedAmountOut = formatUnits(amountOut, tokenOutDecimals)
+        //   // @ts-ignore
+        //   batchSwapSteps[batchSwapSteps.length - 1].amountOut = 0n
+        //   return {
+        //     ...swapInfo,
+        //     batchSwapSteps: batchSwapSteps,
+        //     returnAmount: amountOut,
+        //     formattedReturnAmount: formattedAmountOut
+        //   }
+        // }
         
         return swapInfo;
       } catch (e) {
@@ -144,7 +142,7 @@ export const getSwap = async (
         tokenOut,
       )}&base_asset=${handleNativeBera(tokenIn)}&amount=${parseUnits(
         `${amount}`,
-        18,
+        tokenInDecimals,
       )}&swap_type=${type}`,
     );
 
