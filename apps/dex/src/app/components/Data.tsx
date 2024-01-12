@@ -35,7 +35,7 @@ export function DataCard({
 }
 
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
-  const block = useLatestBlock();
+  const { data: block } = useLatestBlock();
   const beraPrice = useTokenHoneyPrice(beraTokenAddress);
 
   const isDataReady = useMemo(() => {
