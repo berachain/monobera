@@ -17,6 +17,7 @@ import { formatUnits } from "ethers";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
+import { useTokenHoneyPrice } from "./usePool";
 
 export enum SwapKind {
   GIVEN_IN = 0,
@@ -154,23 +155,23 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [selectedTo, selectedFrom]);
 
-  const { data: tokenInPriceInfo } = usePollSwaps({
-    tokenIn: selectedFrom?.address as Address,
-    tokenOut: QUOTING_TOKEN,
-    tokenInDecimals: selectedFrom?.decimals ?? 18,
-    tokenOutDecimals: 18,
-    swapKind: 0,
-    amount: "1",
-  });
+  // const { data: tokenInPriceInfo } = usePollSwaps({
+  //   tokenIn: selectedFrom?.address as Address,
+  //   tokenOut: QUOTING_TOKEN,
+  //   tokenInDecimals: selectedFrom?.decimals ?? 18,
+  //   tokenOutDecimals: 18,
+  //   swapKind: 0,
+  //   amount: "1",
+  // });
 
-  const { data: tokenOutPriceInfo } = usePollSwaps({
-    tokenIn: selectedTo?.address as Address,
-    tokenOut: QUOTING_TOKEN,
-    tokenInDecimals: selectedTo?.decimals ?? 18,
-    tokenOutDecimals: 18,
-    swapKind: 0,
-    amount: "1",
-  });
+  // const { data: tokenOutPriceInfo } = usePollSwaps({
+  //   tokenIn: selectedTo?.address as Address,
+  //   tokenOut: QUOTING_TOKEN,
+  //   tokenInDecimals: selectedTo?.decimals ?? 18,
+  //   tokenOutDecimals: 18,
+  //   swapKind: 0,
+  //   amount: "1",
+  // });
 
   useEffect(() => {
     if (isWrap) return;
@@ -234,37 +235,46 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         // parse minutes to blocks
         const d = block + BigInt(Math.floor((deadline * 60) / 2));
 
-        const newBatchSwapStep: any[] = []
-        swapInfo.batchSwapSteps.forEach((value: any) => {
-          // console.log('v',value)
-          // console.log('ap',allPools)
-          // const pool = allPools.find((pool: Pool) => beraToEth(pool.pool).toLowerCase() === value.poolId.toLowerCase())
-          // console.log('POOL', pool)
-          // const tokenOut = pool.tokens.find((token: Token) => token.address.toLowerCase() === value.assetOut.toLowerCase())
-          const sI = value.amountOut;
-          const s = BigInt(slippage * 10 ** 18);
+        const newBatchSwapStep: any[] = [...swapInfo.batchSwapSteps];
 
+          const sI = BigInt(swapInfo.returnAmount);
+          const s = BigInt(slippage * 10 ** 18);
           const minAmountOut =
           (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
-        // swapInfo.batchSwapSteps[
-        //   (swapInfo?.batchSwapSteps?.length ?? 1) - 1
-        // ]!.amountOut = formatUnits(minAmountOut, tokenOut.decimals);
 
-          // const newStep = {
-          //   ...value,
-          //   amountOut: minAmountOut - 1n, // to guard against router errors, we reduce the minAmountOut
-          // }
+          newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = minAmountOut
+          // newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = 0n
 
-          const newStep = {
-            ...value,
-            amountOut: 0n, // to guard against router errors, we reduce the minAmountOut
-          }
-          newBatchSwapStep.push(newStep)
+        // swapInfo.batchSwapSteps.forEach((value: any) => {
+        //   // console.log('v',value)
+        //   // console.log('ap',allPools)
+        //   // const pool = allPools.find((pool: Pool) => beraToEth(pool.pool).toLowerCase() === value.poolId.toLowerCase())
+        //   // console.log('POOL', pool)
+        //   // const tokenOut = pool.tokens.find((token: Token) => token.address.toLowerCase() === value.assetOut.toLowerCase())
+        //   const sI = BigInt(value.amountOut);
+        //   const s = BigInt(slippage * 10 ** 18);
 
-        });
+        //   const minAmountOut =
+        //     (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
+        //   // swapInfo.batchSwapSteps[
+        //   //   (swapInfo?.batchSwapSteps?.length ?? 1) - 1
+        //   // ]!.amountOut = formatUnits(minAmountOut, tokenOut.decimals);
+        //   if()
+        //   const newStep = {
+        //     ...value,
+        //     amountOut: minAmountOut - 1n, // to guard against router errors, we reduce the minAmountOut
+        //   }
 
-        console.log(newBatchSwapStep)
+        //   // const newStep = {
+        //   //   ...value,
+        //   //   amountOut: 0n, // to guard against router errors, we reduce the minAmountOut
+        //   // };
+        //   newBatchSwapStep.push(newStep);
+        // });
+
+        console.log(newBatchSwapStep);
         const payload = [0n, newBatchSwapStep, d];
+        console.log(payload)
         setPayload(payload);
       } catch (e) {
         console.log(e);
@@ -273,7 +283,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapInfo, deadline, slippage]);
 
-  console.log(swapInfo)
+  console.log(swapInfo);
   const onSwitch = () => {
     const tempFromAmount = fromAmount;
     const tempToAmount = toAmount;
@@ -324,27 +334,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [isWrap]);
 
-  // const tokenInPrice = useTokenHoneyPrice(selectedFrom?.address)
-  // const tokenOutPrice = useTokenHoneyPrice(selectedTo?.address)
-
-  // console.log({
-  //   tokenInPrice,
-  //   tokenOutPrice
-  // })
-  const tokenInPrice =
-    tokenInPriceInfo === undefined
-      ? "0"
-      : selectedFrom?.address.toLowerCase() === QUOTING_TOKEN.toLowerCase()
-      ? "1"
-      : tokenInPriceInfo?.formattedReturnAmount;
-
-
-  const tokenOutPrice =
-    tokenOutPriceInfo === undefined
-      ? "0"
-      : selectedTo?.address.toLowerCase() === QUOTING_TOKEN.toLowerCase()
-      ? "1"
-      : tokenOutPriceInfo?.formattedReturnAmount;
+  const tokenInPrice = useTokenHoneyPrice(selectedFrom?.address)
+  const tokenOutPrice = useTokenHoneyPrice(selectedTo?.address)
 
   const minAmountOut = useMemo(() => {
     if (!payload[1]) return "0";

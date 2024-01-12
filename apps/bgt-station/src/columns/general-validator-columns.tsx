@@ -13,7 +13,6 @@ import { formatCommission } from "~/utils/formatCommission";
 import { VP } from "~/components/validator-selector";
 import { ValidatorGauge } from "~/app/validators/validators-table";
 
-
 export const general_validator_columns: ColumnDef<PoLValidator>[] = [
   // {
   //   header: ({ column }) => (

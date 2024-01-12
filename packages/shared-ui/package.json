@@ -20,7 +20,10 @@
   "devDependencies": {
     "@bera/bera-router": "0.1.0",
     "@bera/berajs": "0.1.0",
+    "@bera/graphql": "0.1.0",
     "@bera/config": "0.1.0",
+    "swr": "^2.1.5",
+    "viem": "~1.19.13",
     "@bera/eslint-config": "0.1.0",
     "@bera/tailwind-config": "0.1.0",
     "@bera/ui": "0.1.0",

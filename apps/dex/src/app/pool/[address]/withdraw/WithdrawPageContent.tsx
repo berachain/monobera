@@ -176,7 +176,10 @@ export default function WithdrawLiquidityContent({
                         setAmount(
                           percent === 100n
                             ? formattedLpBalance
-                            : formatUnits(((lpBalance ?? 0n) * percent) / 100n, 18),
+                            : formatUnits(
+                                ((lpBalance ?? 0n) * percent) / 100n,
+                                18,
+                              ),
                         )
                       }
                       disabled={lpBalance === 0n}
@@ -280,7 +283,10 @@ export default function WithdrawLiquidityContent({
                         setAmount(
                           percent === 100n
                             ? formattedLpBalance
-                            : formatUnits(((lpBalance ?? 0n) * percent) / 100n, 18)
+                            : formatUnits(
+                                ((lpBalance ?? 0n) * percent) / 100n,
+                                18,
+                              ),
                         )
                       }
                       disabled={lpBalance === 0n}
