@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { formatUsd, type SwapInfoV2, type Token } from "@bera/berajs";
+import { type SwapInfoV2, type Token } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { Spinner, TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -38,8 +38,7 @@ type Props = {
 const PreviewToken = ({
   token,
   title,
-  amount,
-  price,
+  amount
 }: {
   token: Token | undefined;
   title: string;

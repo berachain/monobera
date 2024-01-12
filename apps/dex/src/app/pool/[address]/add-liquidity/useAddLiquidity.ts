@@ -12,18 +12,16 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-import BigNumber from "bignumber.js";
+// import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
-import lodash from "lodash";
+// import lodash from "lodash";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
-import useMultipleTokenInput, {
-  type TokenInput,
-} from "~/hooks/useMultipleTokenInput";
+import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 
 export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   const { account = undefined } = useBeraJs();
@@ -310,33 +308,33 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     ? selectedSingleTokenAmount
     : "0";
 
-  const totalTokens = useMemo(() => {
-    if (pool && pool.tokens && pool.liquidity) {
-      const totalTokens = pool?.tokens.reduce((prev: bigint, curr: any) => {
-        return prev + parseUnits(curr.balance, 18);
-      }, 0n);
-      return new BigNumber(totalTokens.toString());
-    } else {
-      return undefined;
-    }
-  }, [pool]);
+  // const totalTokens = useMemo(() => {
+  //   if (pool && pool.tokens && pool.liquidity) {
+  //     const totalTokens = pool?.tokens.reduce((prev: bigint, curr: any) => {
+  //       return prev + parseUnits(curr.balance, 18);
+  //     }, 0n);
+  //     return new BigNumber(totalTokens.toString());
+  //   } else {
+  //     return undefined;
+  //   }
+  // }, [pool]);
 
-  const liquidityMap: Record<string, BigNumber> | undefined = useMemo(() => {
-    const map: Record<string, BigNumber> = {};
-    if (pool && pool.tokens && pool.liquidity && totalTokens) {
-      pool?.tokens.forEach((token: any) => {
-        const bnTotal = new BigNumber(totalTokens.toString());
-        const bnBalance = new BigNumber(
-          parseUnits(token.balance, 18).toString(),
-        );
-        const ratio = bnBalance.div(bnTotal).times(new BigNumber(100));
-        lodash.set(map, token.address, ratio);
-      });
-      return map;
-    } else {
-      return undefined;
-    }
-  }, [totalTokens]);
+  // const liquidityMap: Record<string, BigNumber> | undefined = useMemo(() => {
+  //   const map: Record<string, BigNumber> = {};
+  //   if (pool && pool.tokens && pool.liquidity && totalTokens) {
+  //     pool?.tokens.forEach((token: any) => {
+  //       const bnTotal = new BigNumber(totalTokens.toString());
+  //       const bnBalance = new BigNumber(
+  //         parseUnits(token.balance, 18).toString(),
+  //       );
+  //       const ratio = bnBalance.div(bnTotal).times(new BigNumber(100));
+  //       lodash.set(map, token.address, ratio);
+  //     });
+  //     return map;
+  //   } else {
+  //     return undefined;
+  //   }
+  // }, [totalTokens]);
 
   // useMemo(() => {
   //   if (
@@ -412,7 +410,9 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     setSelectedSingleTokenAmount,
     setPreviewOpen,
     setSingleTokenSetPreviewOpen,
+    activeInput,
     setActiveInput,
+    activeAmount,
     setActiveAmount,
   };
 };

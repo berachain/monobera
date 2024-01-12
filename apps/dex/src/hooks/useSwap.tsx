@@ -241,11 +241,11 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
           // const pool = allPools.find((pool: Pool) => beraToEth(pool.pool).toLowerCase() === value.poolId.toLowerCase())
           // console.log('POOL', pool)
           // const tokenOut = pool.tokens.find((token: Token) => token.address.toLowerCase() === value.assetOut.toLowerCase())
-          const sI = value.amountOut;
-          const s = BigInt(slippage * 10 ** 18);
+          // const sI = value.amountOut;
+          // const s = BigInt(slippage * 10 ** 18);
 
-          const minAmountOut =
-          (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
+          // const minAmountOut =
+          // (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
         // swapInfo.batchSwapSteps[
         //   (swapInfo?.batchSwapSteps?.length ?? 1) - 1
         // ]!.amountOut = formatUnits(minAmountOut, tokenOut.decimals);

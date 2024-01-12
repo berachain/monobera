@@ -2,7 +2,7 @@ import { honeyTokenAddress } from "@bera/config";
 import { client, getAllPools, getTokenHoneyPrice } from "@bera/graphql"
 import { getAddress } from "ethers";
 import useSWR from "swr";
-import { Address } from "wagmi";
+import { type Address } from "wagmi";
 
 
 export const usePools =() => {
