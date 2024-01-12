@@ -106,7 +106,9 @@ export default function Content() {
             <Icons.XOctagon className="inline-block h-4 w-4" /> Oh no!
           </AlertTitle>
           <AlertDescription>
-            Somthings went wrong, please try again later.
+            We are currently experiencing high traffic, causing temporary
+            unavailability of our service. Please try again in a few minutes. We
+            apologize for any inconvenience and appreciate your patience.
           </AlertDescription>
         </Alert>
       )}
@@ -125,7 +127,8 @@ export default function Content() {
       <hr />
       <div className="leading-12 text-center text-sm opacity-70 sm:text-start">
         To ensure a sufficient balance for all users, the Faucet is set to
-        dispense 0.25 testnet BERA tokens every 8 hours.
+        dispense {process.env.NEXT_PUBLIC_FAUCET_DRIP_AMOUNT} testnet BERA
+        tokens every {process.env.NEXT_PUBLIC_FAUCET_DRIP_TIME_GAP} hours.
       </div>
 
       {/* <div className="leading-12 text-center text-sm text-muted-foreground sm:text-start">
