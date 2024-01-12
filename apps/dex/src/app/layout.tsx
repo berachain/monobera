@@ -12,6 +12,7 @@ import { useLocalStorage } from "usehooks-ts";
 
 import { navItems } from "~/app/config";
 import Providers from "./Providers";
+import { SWRDevTools } from "swr-devtools";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -41,6 +42,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
         }}
       />
+      <SWRDevTools />
       <body
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
