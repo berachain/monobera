@@ -25,7 +25,7 @@ export const usePollPrices = () => {
       return data;
     },
     {
-      refreshInterval: 5, // 2 mins
+      refreshInterval: 10000, // 2 mins
     },
   );
 
