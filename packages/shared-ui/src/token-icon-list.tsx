@@ -24,7 +24,6 @@ export function TokenIconList({
         <TokenIcon
           key={icon}
           address={icon}
-          fetch
           className="ml-[-5px]"
           size={size}
         />

@@ -325,7 +325,7 @@ export function SwapCard({
                       setToAmount(amount);
                     }}
                     showExceeding={false}
-                    isActionLoading={isRouteLoading}
+                    isActionLoading={isRouteLoading && !isWrap}
                   />
                 </ul>
                 <div className="flex flex-col gap-2">
