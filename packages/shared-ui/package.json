@@ -20,11 +20,9 @@
   "devDependencies": {
     "@bera/bera-router": "0.1.0",
     "@bera/berajs": "0.1.0",
-    "@bera/graphql": "0.1.0",
     "@bera/config": "0.1.0",
-    "swr": "^2.1.5",
-    "viem": "~1.19.13",
     "@bera/eslint-config": "0.1.0",
+    "@bera/graphql": "0.1.0",
     "@bera/tailwind-config": "0.1.0",
     "@bera/ui": "0.1.0",
     "@metamask/jazzicon": "^2.0.0",
@@ -36,8 +34,10 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
+    "swr": "^2.1.5",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4",
-    "usehooks-ts": "^2.9.1"
+    "usehooks-ts": "^2.9.1",
+    "viem": "~1.19.13"
   }
 }
