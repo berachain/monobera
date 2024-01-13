@@ -1,8 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { useTokenInformation, useTokens, type Token } from "@bera/berajs";
-import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
+import { useTokens, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -44,51 +43,30 @@ export const TokenIcon = ({
   size,
   ...props
 }: IconProps) => {
-  const { read, tokenInformation } = useTokenInformation();
   const { tokenDictionary } = useTokens();
-  useMemo(() => {
-    const fetchData = async () => {
-      if (
-        fetch &&
-        address &&
-        !tokenInformation &&
-        address !== bgtTokenAddress &&
-        address !== nativeTokenAddress
-      )
-        await read({ address: address });
-    };
-    void fetchData();
-  }, [token]);
-  const getTokenImgUri = () => {
-    if (token && token.logoURI) {
-      return token.logoURI;
-    }
-    if (token && token.logoURI === undefined && tokenDictionary) {
-      return tokenDictionary[getAddress(token.address)]?.logoURI;
-    }
-    if (fetch && address) {
-      if (tokenDictionary && tokenDictionary[address]) {
+
+  const img = useMemo(() => {
+    if(tokenDictionary && (address || token)) {
+      if(address) {
         return tokenDictionary[address]?.logoURI;
-      } else {
-        return "";
+      } else if(token) {
+        return tokenDictionary[getAddress(token.address)]?.logoURI;
       }
     }
-    return "";
-  };
+    return ''
 
+  }, [token, address, tokenDictionary])
+  
   return (
-    // <Avatar className={cn(IconVariants({ size }), className)} {...props}>
-    //   <AvatarImage
-    //     src={getTokenImgUri()}
-    //     className="rounded-full"
-    //     alt={token?.symbol ?? "unknow"}
-    //   />
-    //   <AvatarFallback className="h-full w-full border border-foreground bg-background text-inherit">
-    //     {fetch
-    //       ? tokenInformation?.symbol?.slice(0, 3).toUpperCase()
-    //       : token?.symbol?.slice(0, 3).toUpperCase()}
-    //   </AvatarFallback>
-    // </Avatar>
-    <></>
+    <Avatar className={cn(IconVariants({ size }), className)} {...props}>
+      <AvatarImage
+        src={img}
+        className="rounded-full"
+        alt={token?.symbol ?? "unknow"}
+      />
+      <AvatarFallback className="h-full w-full border border-foreground bg-background text-inherit">
+          TKN
+      </AvatarFallback>
+    </Avatar>
   );
 };
