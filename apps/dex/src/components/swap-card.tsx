@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { RouteNotFound } from "@bera/bera-router";
+// import { RouteNotFound } from "@bera/bera-router";
 import {
   DEX_PRECOMPILE_ABI,
   TransactionActionType,
