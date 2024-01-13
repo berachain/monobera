@@ -2,68 +2,64 @@
 
 import React from "react";
 import Link from "next/link";
-import { docsUrl, honeyAddress, nativeTokenAddress } from "@bera/config";
+import { docsUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-import { SwapCard } from "~/components/swap-card";
-
 export default function Hero() {
   return (
-    <div className="my-24 flex w-full flex-col items-center justify-between gap-4 md:flex-row">
-      <div className="flex-1">
-        <h1 className="md:leading-14 mb-6 text-center text-3xl font-extrabold leading-9 md:text-left md:text-5xl">
+    <div className="my-24 flex w-full flex-col items-center justify-between gap-4">
+      <div className="mb-2 text-center text-3xl font-extrabold md:text-left md:text-5xl">
+        <div className="text-center">
           <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
             Swap Tokens
           </span>{" "}
-          on <br className="hidden md:block" /> Your Favorite{" "}
-          <br className="block md:hidden" /> New Dex
-        </h1>
-
-        <div className="mb-6 text-center md:text-left">
-          <Link href={"/swap"}>
-            <Button className="mr-3">Enter App</Button>
-          </Link>
-          <Link href={"/pool"}>
-            <Button variant="outline">View Pools</Button>
-          </Link>
+          on
         </div>
-        <div className="flex flex-col items-center gap-3 md:items-start">
-          <Link
-            className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-            href={"/pool"}
-          >
-            💧 Add Liquidity to Earn BGT Rewards{" "}
-            <Icons.arrowRight className="h-3 w-3" />
-          </Link>
-          <Link
-            className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-            href={"/pool/create"}
-          >
-            🏖️ Create your own Liquidity Pools{" "}
-            <Icons.arrowRight className="h-3 w-3" />
-          </Link>
-          <div
-            className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-            onClick={() =>
-              window.open(`${docsUrl}/learn/protocol/bgt-emissions`, "_blank")
-            }
-          >
-            🐝 Learn about BGT emissions{" "}
-            <Icons.arrowRight className="h-3 w-3" />
-          </div>
+        <div>
+          Your Favorite <br className="block md:hidden" /> New Dex
         </div>
       </div>
-      <div className="flex-1">
-        <div
-          className="mx-auto block w-full min-w-[320px] md:w-[450px]"
-          onClick={() => window.open("/swap", "_self")}
+
+      <div className="mb-6 text-center md:text-left">
+        <Link
+          href={"/swap"}
+          className="shadow-dark-shadow"
         >
-          {/* <SwapCard
-            inputCurrency={nativeTokenAddress}
-            outputCurrency={honeyAddress}
-            isMainPage
-          /> */}
+          <Button className="mr-3" variant={"primary"}>
+            Swap Tokens
+          </Button>
+        </Link>
+        <Link
+          href={"/pool"}
+          className="shadow-dark-shadow"
+        >
+          <Button variant="outline">View Pools</Button>
+        </Link>
+      </div>
+
+      <div className="flex flex-col items-center gap-3 lg:flex-row">
+        <Link
+          className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
+          href={"/pool"}
+        >
+          💧 Add Liquidity to Earn BGT Rewards{" "}
+          <Icons.arrowRight className="h-3 w-3" />
+        </Link>
+        <Link
+          className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
+          href={"/pool/create"}
+        >
+          🏖️ Create your own Liquidity Pools{" "}
+          <Icons.arrowRight className="h-3 w-3" />
+        </Link>
+        <div
+          className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
+          onClick={() =>
+            window.open(`${docsUrl}/learn/protocol/bgt-emissions`, "_blank")
+          }
+        >
+          🐝 Learn about BGT emissions <Icons.arrowRight className="h-3 w-3" />
         </div>
       </div>
     </div>
