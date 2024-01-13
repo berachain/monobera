@@ -11,6 +11,7 @@ import { Input } from "@bera/ui/input";
 import { DripToken } from "~/components/drip-tokens";
 import { TokenBadge } from "~/components/token-badge";
 import ReCAPTCHAButton from "./recaptcha-btn";
+import TwitterJump from "./twitter-jump";
 
 export default function Content() {
   const [address, setAddress] = React.useState<string>("");
@@ -27,7 +28,7 @@ export default function Content() {
         <div className="flex flex-col gap-4">
           <div className="leading-12 w-full text-5xl font-bold">
             Bootstrap Your
-            <br /> Testnet Wallet
+            <br /> Testnet Wallet <TwitterJump/>
           </div>
           <div className="items-center text-lg font-semibold sm:flex">
             {" "}
