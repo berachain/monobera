@@ -20,7 +20,7 @@ export const usePoolTable = () => {
     setSize: setAllDataSize,
     isLoading: isAllDataLoading,
   } = useSWRInfinite(
-    (index) => ["search", hasBgtRewards, isHotPool, isNewPool, keyword],
+    (index) => ["search",index, hasBgtRewards, isHotPool, isNewPool, keyword],
     async (key: any[]) => {
       const page = key[1] + 1;
       try {

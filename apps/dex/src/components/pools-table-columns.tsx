@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { formatUsd, formatter } from "@bera/berajs";
+import { formatter } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   TokenIconList,
@@ -11,29 +11,26 @@ import {
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { Skeleton } from "@bera/ui/skeleton";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { usePoolTable } from "~/app/pool/usePoolTable";
-// import { getAbsoluteUrl } from "~/utils/vercel-utils";
-import { usePositionSize } from "~/hooks/usePositionSize";
 
 export const PoolSummary = ({ pool }: { pool: Pool }) => {
   const { userPools } = usePoolTable();
 
   const isDeposited = userPools?.some(
-    (userPool: Pool) => userPool.pool === pool.pool,
+    (userPool: Pool) => userPool.pool === pool?.pool,
   );
   return (
     <div className="flex flex-col items-start gap-2">
-      <span className="w-[180px] truncate text-left">{pool.poolName}</span>
-      <TokenIconList tokenList={pool.tokens.map((t) => t.address)} size="lg" />
+      <span className="w-[180px] truncate text-left">{pool?.poolName}</span>
+      <TokenIconList tokenList={pool?.tokens.map((t) => t?.address)} size="lg" />
       <div className="flex flex-row items-center gap-1">
         <Badge
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
         >
-          {Number(pool.formattedSwapFee).toFixed(2)}%
+          {Number(pool?.formattedSwapFee).toFixed(2)}%
         </Badge>
         {isDeposited && (
           <Badge
@@ -48,25 +45,25 @@ export const PoolSummary = ({ pool }: { pool: Pool }) => {
   );
 };
 export const columns: ColumnDef<Pool>[] = [
-  // {
-  //   accessorKey: "poolName",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       className="flex items-center gap-1"
-  //       tooltip={
-  //         <>
-  //           Specific combination and ratio of assets in a liquidity pool, <br />
-  //           influencing how users trade and liquidity providers earn fees
-  //         </>
-  //       }
-  //       title={"Pool Composition"}
-  //     />
-  //   ),
-  //   cell: ({ row }) => <PoolSummary pool={row.original} />,
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
+  {
+    accessorKey: "poolName",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        className="flex items-center gap-1"
+        tooltip={
+          <>
+            Specific combination and ratio of assets in a liquidity pool, <br />
+            influencing how users trade and liquidity providers earn fees
+          </>
+        }
+        title={"Pool Composition"}
+      />
+    ),
+    cell: ({ row }) => <PoolSummary pool={row.original} />,
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "totalValue",
     header: ({ column }) => (
@@ -78,7 +75,7 @@ export const columns: ColumnDef<Pool>[] = [
       />
     ),
     cell: ({ row }) => {
-      const totalValue = formatter.format(row.original.totalValue || 0);
+      const totalValue = formatter.format(row.original?.totalValue || 0);
       // const tvl = row.original.weeklyTvl?.[6] || 0;
       // const tvl24h = row.original.weeklyTvl?.[5] || 1;
       return (
@@ -270,41 +267,41 @@ export const columns: ColumnDef<Pool>[] = [
 //   );
 // };
 export const my_columns: ColumnDef<any>[] = [
-  // {
-  //   accessorKey: "poolName",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       className="flex items-center gap-1"
-  //       tooltip={
-  //         <>
-  //           Specific combination and ratio of assets in a liquidity pool, <br />
-  //           influencing how users trade and liquidity providers earn fees
-  //         </>
-  //       }
-  //       title={"Pool Composition"}
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className="flex flex-col items-start gap-2">
-  //       <span className="w-[180px] truncate text-left">
-  //         {row.original.poolName}
-  //       </span>
-  //       <TokenIconList
-  //         tokenList={row.original.tokens.map((t: any) => t.address)}
-  //         size="lg"
-  //       />
-  //       <Badge
-  //         variant={"secondary"}
-  //         className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
-  //       >
-  //         {Number(row.original.formattedSwapFee).toFixed(2)}%
-  //       </Badge>
-  //     </div>
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
+  {
+    accessorKey: "poolName",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        className="flex items-center gap-1"
+        tooltip={
+          <>
+            Specific combination and ratio of assets in a liquidity pool, <br />
+            influencing how users trade and liquidity providers earn fees
+          </>
+        }
+        title={"Pool Composition"}
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="flex flex-col items-start gap-2">
+        <span className="w-[180px] truncate text-left">
+          {row.original?.poolName}
+        </span>
+        <TokenIconList
+          tokenList={row.original?.tokens.map((t: any) => t.address)}
+          size="lg"
+        />
+        <Badge
+          variant={"secondary"}
+          className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
+        >
+          {Number(row.original?.formattedSwapFee).toFixed(2)}%
+        </Badge>
+      </div>
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   // {
   //   accessorKey: "totalValue",
   //   header: ({ column }) => (
@@ -403,7 +400,7 @@ export const my_columns: ColumnDef<any>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="flex gap-1 ">
+      <div className="flex gap-1 flex-row items-center justify-center w-100">
         <Link
           href={`/pool/${row.original.pool}/add-liquidity`}
           onClick={(e) => e.stopPropagation()}

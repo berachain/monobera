@@ -366,7 +366,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     value,
     exchangeRate,
     gasPrice: gasData?.formatted.gasPrice,
-    isRouteLoading: isSwapLoading || isTyping ||isSwapReloading,
+    isRouteLoading: isSwapLoading || isTyping,
     isWrap,
     wrapType,
     isBalanceLoading,
