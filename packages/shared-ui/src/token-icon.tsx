@@ -47,9 +47,9 @@ export const TokenIcon = ({
 
   const img = useMemo(() => {
     if(tokenDictionary && (address || token)) {
-      if(address) {
+      if(address && address !== '') {
         return tokenDictionary[address]?.logoURI;
-      } else if(token) {
+      } else if(token && token?.address !=='') {
         return tokenDictionary[getAddress(token.address)]?.logoURI;
       }
     }
