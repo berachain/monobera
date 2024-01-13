@@ -77,17 +77,18 @@ export const TokenIcon = ({
   };
 
   return (
-    <Avatar className={cn(IconVariants({ size }), className)} {...props}>
-      <AvatarImage
-        src={getTokenImgUri()}
-        className="rounded-full"
-        alt={token?.symbol ?? "unknow"}
-      />
-      <AvatarFallback className="h-full w-full border border-foreground bg-background text-inherit">
-        {fetch
-          ? tokenInformation?.symbol?.slice(0, 3).toUpperCase()
-          : token?.symbol?.slice(0, 3).toUpperCase()}
-      </AvatarFallback>
-    </Avatar>
+    // <Avatar className={cn(IconVariants({ size }), className)} {...props}>
+    //   <AvatarImage
+    //     src={getTokenImgUri()}
+    //     className="rounded-full"
+    //     alt={token?.symbol ?? "unknow"}
+    //   />
+    //   <AvatarFallback className="h-full w-full border border-foreground bg-background text-inherit">
+    //     {fetch
+    //       ? tokenInformation?.symbol?.slice(0, 3).toUpperCase()
+    //       : token?.symbol?.slice(0, 3).toUpperCase()}
+    //   </AvatarFallback>
+    // </Avatar>
+    <></>
   );
 };
