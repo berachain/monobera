@@ -60,7 +60,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         )}
       >
         {" "}
-        <SWRDevTools />
+        <SWRDevTools> </SWRDevTools>
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
           <Header isHoney navItems={navItems} mobileNavItems={mobileNavItems} />
