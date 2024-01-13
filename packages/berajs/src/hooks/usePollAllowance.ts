@@ -6,7 +6,7 @@ import { erc20ABI, usePublicClient } from "wagmi";
 import { type Token } from "~/api/currency/tokens";
 import { useBeraJs } from "~/contexts";
 
-const REFRESH_BLOCK_INTERVAL = 2000;
+const REFRESH_BLOCK_INTERVAL = 20000;
 
 interface AllowanceToken extends Token {
   allowance: bigint;
