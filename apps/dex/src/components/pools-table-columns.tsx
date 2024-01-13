@@ -48,25 +48,25 @@ export const PoolSummary = ({ pool }: { pool: Pool }) => {
   );
 };
 export const columns: ColumnDef<Pool>[] = [
-  {
-    accessorKey: "poolName",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        className="flex items-center gap-1"
-        tooltip={
-          <>
-            Specific combination and ratio of assets in a liquidity pool, <br />
-            influencing how users trade and liquidity providers earn fees
-          </>
-        }
-        title={"Pool Composition"}
-      />
-    ),
-    cell: ({ row }) => <PoolSummary pool={row.original} />,
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   accessorKey: "poolName",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       className="flex items-center gap-1"
+  //       tooltip={
+  //         <>
+  //           Specific combination and ratio of assets in a liquidity pool, <br />
+  //           influencing how users trade and liquidity providers earn fees
+  //         </>
+  //       }
+  //       title={"Pool Composition"}
+  //     />
+  //   ),
+  //   cell: ({ row }) => <PoolSummary pool={row.original} />,
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "totalValue",
     header: ({ column }) => (
@@ -255,71 +255,71 @@ export const columns: ColumnDef<Pool>[] = [
   },
 ];
 
-export const PositionSize = (pool: any) => {
-  const { userTotalValue, isPositionSizeLoading } = usePositionSize({
-    pool: pool.pool,
-  });
-  return (
-    <div className="text-sm font-medium">
-      {isPositionSizeLoading ? (
-        <Skeleton className="h-[32px] w-[140px]" />
-      ) : (
-        formatUsd(userTotalValue ?? 0)
-      )}
-    </div>
-  );
-};
+// export const PositionSize = (pool: any) => {
+//   const { userTotalValue, isPositionSizeLoading } = usePositionSize({
+//     pool: pool.pool,
+//   });
+//   return (
+//     <div className="text-sm font-medium">
+//       {isPositionSizeLoading ? (
+//         <Skeleton className="h-[32px] w-[140px]" />
+//       ) : (
+//         formatUsd(userTotalValue ?? 0)
+//       )}
+//     </div>
+//   );
+// };
 export const my_columns: ColumnDef<any>[] = [
-  {
-    accessorKey: "poolName",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        className="flex items-center gap-1"
-        tooltip={
-          <>
-            Specific combination and ratio of assets in a liquidity pool, <br />
-            influencing how users trade and liquidity providers earn fees
-          </>
-        }
-        title={"Pool Composition"}
-      />
-    ),
-    cell: ({ row }) => (
-      <div className="flex flex-col items-start gap-2">
-        <span className="w-[180px] truncate text-left">
-          {row.original.poolName}
-        </span>
-        <TokenIconList
-          tokenList={row.original.tokens.map((t: any) => t.address)}
-          size="lg"
-        />
-        <Badge
-          variant={"secondary"}
-          className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
-        >
-          {Number(row.original.formattedSwapFee).toFixed(2)}%
-        </Badge>
-      </div>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "totalValue",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        tooltip="Total amount of user deposited assets"
-        title="Position Size"
-        className="whitespace-nowrap"
-      />
-    ),
-    cell: ({ row }) => {
-      return <PositionSize pool={row.original as Pool} />;
-    },
-    enableSorting: false,
-  },
+  // {
+  //   accessorKey: "poolName",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       className="flex items-center gap-1"
+  //       tooltip={
+  //         <>
+  //           Specific combination and ratio of assets in a liquidity pool, <br />
+  //           influencing how users trade and liquidity providers earn fees
+  //         </>
+  //       }
+  //       title={"Pool Composition"}
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div className="flex flex-col items-start gap-2">
+  //       <span className="w-[180px] truncate text-left">
+  //         {row.original.poolName}
+  //       </span>
+  //       <TokenIconList
+  //         tokenList={row.original.tokens.map((t: any) => t.address)}
+  //         size="lg"
+  //       />
+  //       <Badge
+  //         variant={"secondary"}
+  //         className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
+  //       >
+  //         {Number(row.original.formattedSwapFee).toFixed(2)}%
+  //       </Badge>
+  //     </div>
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
+  // {
+  //   accessorKey: "totalValue",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       tooltip="Total amount of user deposited assets"
+  //       title="Position Size"
+  //       className="whitespace-nowrap"
+  //     />
+  //   ),
+  //   cell: ({ row }) => {
+  //     return <PositionSize pool={row.original as Pool} />;
+  //   },
+  //   enableSorting: false,
+  // },
   // {
   //   accessorKey: "fees",
   //   header: ({ column }) => (
