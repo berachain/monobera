@@ -20,7 +20,7 @@ export default function Content() {
   const [showAlet, setShowAlert] = React.useState<boolean>(false);
   const [token, setToken] = React.useState<string | undefined>(undefined);
   const [bot, setBot] = React.useState<boolean | undefined>(undefined);
-
+  
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
       <div className="items-center justify-between text-center sm:flex sm:text-left">
@@ -55,6 +55,7 @@ export default function Content() {
               if (showAlet) setShowAlert(false);
               setBot(undefined);
               setToken(undefined);
+              setAlert(undefined);
             }}
           />
           <Icons.close
