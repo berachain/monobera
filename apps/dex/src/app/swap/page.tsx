@@ -48,8 +48,8 @@ export default function Swap({
   if (isAddress(inputCurrency) && isAddress(outputCurrency)) {
     return (
       <SwapContent
-        inputCurrency={inputCurrency}
-        outputCurrency={outputCurrency}
+        inputCurrency={'' as any}
+        outputCurrency={'' as any}
       />
     );
   }

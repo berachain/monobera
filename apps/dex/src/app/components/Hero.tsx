@@ -59,11 +59,11 @@ export default function Hero() {
           className="mx-auto block w-full min-w-[320px] md:w-[450px]"
           onClick={() => window.open("/swap", "_self")}
         >
-          <SwapCard
+          {/* <SwapCard
             inputCurrency={nativeTokenAddress}
             outputCurrency={honeyAddress}
             isMainPage
-          />
+          /> */}
         </div>
       </div>
     </div>
