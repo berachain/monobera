@@ -19,6 +19,9 @@ export default function Content() {
   >(undefined);
   const [showAlet, setShowAlert] = React.useState<boolean>(false);
   const [token, setToken] = React.useState<string | undefined>(undefined);
+  const [twitterAccessToken, setTwitterAccessToken] = React.useState<
+    string | undefined
+  >(undefined);
   const [bot, setBot] = React.useState<boolean | undefined>(undefined);
 
   return (
