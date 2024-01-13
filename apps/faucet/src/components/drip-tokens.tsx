@@ -18,7 +18,7 @@ export function DripToken({
 }) {
   async function handleRequest() {
     try {
-      const res = await fetch(`${faucetEndpointUrl}/api/claim`, {
+      const res = await fetch(`${faucetEndpointUrl}/api/claim?address=${getAddress(address)}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify({ address: getAddress(address) }),
