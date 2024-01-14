@@ -3,25 +3,30 @@ import { faucetEndpointUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { getAddress, isAddress } from "viem";
 
+import ReCAPTCHAButton from "./recaptcha-btn";
+
 export function DripToken({
   address,
   setAlert,
   setShowAlert,
-  token,
-  setToken,
+  twitterId,
 }: {
   address: string;
-  setAlert: (alert: "success" | "destructive" | "error" | undefined) => void;
+  setAlert: (alert: number | undefined) => void;
   setShowAlert: () => void;
-  token?: string;
-  setToken: (token: undefined | string) => void;
+  twitterId: string;
 }) {
+  const [token, setToken] = React.useState<string | undefined>(undefined);
+
   async function handleRequest() {
     try {
       const res = await fetch(`${faucetEndpointUrl}/api/claim`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ address: getAddress(address) }),
+        body: JSON.stringify({
+          address: getAddress(address),
+          tweetId: twitterId,
+        }),
       });
       if (res.status === 200) {
         setAlert("success");
@@ -32,19 +37,26 @@ export function DripToken({
       }
     } catch (error: any) {
       setAlert("error");
+      setToken("");
     }
-    setToken(undefined);
+    setShowAlert();
   }
+
   return (
-    <Button
-      disabled={!isAddress(address ?? "") || !token}
-      onClick={() => {
-        setShowAlert();
-        void handleRequest();
-      }}
-      className="w-full"
-    >
-      Drip Tokens
-    </Button>
+    <>
+      {!token ? (
+        <ReCAPTCHAButton setToken={setToken} />
+      ) : (
+        <Button
+          disabled={!isAddress(address ?? "")}
+          onClick={() => {
+            void handleRequest();
+          }}
+          className="w-full"
+        >
+          Drip Tokens
+        </Button>
+      )}
+    </>
   );
 }

@@ -21,5 +21,5 @@
     "**/*.cjs",
     "**/*.mjs",
     ".next/types/**/*.ts"
-  ]
+, "src/utils/tweet-look-up.js"  ]
 }
