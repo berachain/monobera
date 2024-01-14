@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { subgraphUrl } from "@bera/config";
 import { getAddress } from "ethers";
 import lodash from "lodash";
-import { Address } from "wagmi";
+import { type Address } from "wagmi";
 
 export const revalidate = 10;
 
@@ -31,9 +31,9 @@ export async function GET() {
 
     const tokenHoneyPrices = td.data.tokenHoneyPrices;
 
-    let tokenHoneyPricesObj: Record<Address, string> = {};
+    const tokenHoneyPricesObj: Record<Address, string> = {};
     tokenHoneyPrices.forEach((thp: { id: string; price: string }) => {
-      lodash.set(tokenHoneyPricesObj, getAddress(thp.id), thp.price);
+      lodash.set(tokenHoneyPricesObj, thp.id, thp.price);
     });
     return NextResponse.json(tokenHoneyPricesObj);
   } catch (e) {

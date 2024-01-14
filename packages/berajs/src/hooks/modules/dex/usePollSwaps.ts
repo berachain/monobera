@@ -185,7 +185,7 @@ export const getSwap = async (
 
     if (getAddress(tokenIn) === getAddress(nativeTokenAddress)) {
       if (batchSwapSteps[0]) {
-        batchSwapSteps[0].assetIn = nativeTokenAddress as Address;
+        batchSwapSteps[0].assetIn = nativeTokenAddress;
         batchSwapSteps[0].value = batchSwapSteps[0].amountIn;
       }
     }

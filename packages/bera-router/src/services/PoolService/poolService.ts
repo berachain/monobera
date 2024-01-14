@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { subgraphUrl } from "@bera/config";
 import { getAllPools, getPoolDayData, getSelectedPool } from "@bera/graphql";
-import { Address } from "viem";
+import { type Address } from "viem";
 
 import { ethToBera } from "~/utils/evmToBera";
 import { type RouterConfig } from "~/config";

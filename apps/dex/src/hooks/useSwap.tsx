@@ -215,7 +215,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     ) {
       try {
         // parse minutes to blocks
-        const d = block??BigInt(0) + BigInt(Math.floor((deadline * 60) / 2));
+        const d = block ?? BigInt(0) + BigInt(Math.floor((deadline * 60) / 2));
 
         const newBatchSwapStep: any[] = [...swapInfo.batchSwapSteps];
 
