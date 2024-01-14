@@ -18,12 +18,12 @@ interface IUseTokens {
 
 const useValidators = (): IUseTokens => {
   const { data } = useSWRImmutable(
-    ["defaultTokenList"],
+    ["defaultValidatorList"],
     async () => {
       const res = await fetch(process.env.NEXT_PUBLIC_VALIDATOR_LIST as string);
 
       const validatorInformation = await res.json();
-      if (!validatorInformation.validators) return { list: [], dictionary: {} };
+      if (!validatorInformation) return { list: [], dictionary: {} };
 
       return {
         list: validatorInformation.validators,

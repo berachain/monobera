@@ -6,6 +6,7 @@ import {
 } from "@bera/bera-router";
 import { subgraphUrl } from "@bera/config";
 import { type InflationRate } from "@bera/graphql";
+import { type Address } from "wagmi";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import { getParsedPools } from "../../getPools/api/getPools";
@@ -133,11 +134,15 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   const address = searchParams.get("address");
+
+  if (address === null) {
+    return NextResponse.json({ error: "Unable to fetch pools" });
+  }
   try {
     const router = new RouterService(defaultConfig);
     const globalCuttingBoard = getGlobalCuttingBoard();
     const inflationRate = getInflation();
-    const fetchPools = router.fetchSelectedPool(address);
+    const fetchPools = router.fetchSelectedPool(address as Address);
 
     const pricesResponse = fetch(`${getAbsoluteUrl()}/api/getPrices/api`, {
       method: "GET",
@@ -165,7 +170,7 @@ export async function GET(request: Request) {
     const mappedTokens = await data.pricesResponse.json();
 
     const parsedPools = getParsedPools(
-      pools,
+      pools as any,
       data.globalCuttingBoard,
       mappedTokens,
       data.inflationRate,
