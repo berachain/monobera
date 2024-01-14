@@ -115,6 +115,6 @@ const favList = [
     description:
       "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
     goto: blockExplorerUrl,
-    learnMore: `${docsUrl}/developers/berascan-block-explorer`,
+    learnMore: `${docsUrl}/developers/beratrail-block-explorer`,
   },
 ];
