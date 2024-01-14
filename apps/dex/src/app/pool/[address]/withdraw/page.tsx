@@ -47,6 +47,10 @@ export default async function Withdraw({
     );
 
     const pool = await poolResponse.json();
+
+    if (pool.error !== undefined) {
+      notFound();
+    }
     const prices = await pricesResponse.json();
 
     return <WithdrawPageContent pool={pool} prices={prices} />;

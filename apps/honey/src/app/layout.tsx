@@ -14,8 +14,8 @@ import {
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { useLocalStorage } from "usehooks-ts";
 import { SWRDevTools } from "swr-devtools";
+import { useLocalStorage } from "usehooks-ts";
 
 import { beraJsConfig, mobileNavItems, navItems } from "./config";
 

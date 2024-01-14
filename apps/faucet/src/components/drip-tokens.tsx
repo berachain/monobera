@@ -18,11 +18,14 @@ export function DripToken({
 }) {
   async function handleRequest() {
     try {
-      const res = await fetch(`${faucetEndpointUrl}/api/claim?address=${getAddress(address)}`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ address: getAddress(address) }),
-      });
+      const res = await fetch(
+        `${faucetEndpointUrl}/api/claim?address=${getAddress(address)}`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ address: getAddress(address) }),
+        },
+      );
       if (res.status === 200) {
         setAlert("success");
       } else if (res.status === 429) {
