@@ -22,18 +22,12 @@ export default function Hero() {
       </div>
 
       <div className="mb-6 text-center md:text-left">
-        <Link
-          href={"/swap"}
-          className="shadow-dark-shadow"
-        >
+        <Link href={"/swap"} className="shadow-dark-shadow">
           <Button className="mr-3" variant={"primary"}>
             Swap Tokens
           </Button>
         </Link>
-        <Link
-          href={"/pool"}
-          className="shadow-dark-shadow"
-        >
+        <Link href={"/pool"} className="shadow-dark-shadow">
           <Button variant="outline">View Pools</Button>
         </Link>
       </div>

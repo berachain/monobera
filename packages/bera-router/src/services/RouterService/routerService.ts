@@ -61,6 +61,10 @@ export class RouterService {
     await this.poolService.fetchPools();
   }
 
+  public async fetchSelectedPool(address: Address) {
+    return await this.poolService.fetchSelectedPool(address);
+  }
+
   // public async fetchPaginatedPools(page: number, perPage: number) {
   //   const result = await this.poolService.fetchPaginatedPools(page, perPage);
   //   return result;
