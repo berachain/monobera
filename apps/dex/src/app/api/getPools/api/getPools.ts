@@ -8,12 +8,10 @@ import {
 import { formatUnits, getAddress } from "viem";
 import { type Address } from "wagmi";
 
-import { type MappedTokens } from "../../getPrices/api/getPrices";
-
 export const getParsedPools = (
   pools: Pool[],
   globalCuttingBoard: Weight[] | undefined,
-  mappedTokens: MappedTokens,
+  mappedTokens: any,
   inflationData: InflationRate | undefined,
 ) => {
   try {
@@ -171,7 +169,7 @@ export const tagPools = (pools: Pool[]) => {
 };
 
 export const getWBeraPriceForToken = (
-  prices: MappedTokens,
+  prices: any,
   token: Address,
   amount: number,
 ) => {

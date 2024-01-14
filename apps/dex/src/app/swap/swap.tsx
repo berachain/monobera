@@ -17,7 +17,10 @@ const DynamicBerachainInfo = dynamic(
   },
 );
 
-export const SwapContent = ({}: // inputCurrency, outputCurrency
+export const SwapContent = ({
+  inputCurrency,
+  outputCurrency
+}: // inputCurrency, outputCurrency
 ISwap) => {
   return (
     <div className="mx-auto flex min-w-[320px] flex-col items-center justify-center gap-4 md:w-[500px]">
