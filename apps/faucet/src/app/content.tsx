@@ -18,6 +18,10 @@ export default function Content() {
   const [twitterId, settwitterId] = React.useState<string | undefined>(
     undefined,
   );
+  const [twitterSignedIn, setTwitterSignedIn] = React.useState<boolean>(false);
+  const [twitterAccessToken, setTwitterAccessToken] = React.useState<
+    string | undefined
+  >(undefined);
 
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
@@ -44,7 +48,12 @@ export default function Content() {
 
       {!twitterId ? (
         <div className="flex flex-col gap-4">
-          <TwitterDialog settwitterId={settwitterId} />
+          <TwitterDialog
+            settwitterId={settwitterId}
+            twitterSignedIn={twitterSignedIn}
+            setTwitterSignedIn={setTwitterSignedIn}
+            setTwitterAccessToken={setTwitterAccessToken}
+          />
         </div>
       ) : (
         <div className="flex flex-col gap-1">

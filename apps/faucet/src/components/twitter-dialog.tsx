@@ -11,11 +11,17 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
 import TwitterJump from "./twitter-jump";
+import TwitterSignInButton from "./twitter-sign-in-btn";
 
 export default function TwitterDialog({
   settwitterId,
+  twitterSignedIn,
+  ...props
 }: {
   settwitterId: (twitterId: string | undefined) => void;
+  twitterSignedIn: boolean;
+  setTwitterSignedIn: (twitterSignedIn: boolean) => void;
+  setTwitterAccessToken: (token: string) => void;
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const [link, setLink] = useState<string | undefined>(undefined);
@@ -24,7 +30,7 @@ export default function TwitterDialog({
   useEffect(() => {
     const fetchGid = async () => {
       if (!bid) {
-        const response = await fetch("/api/get-gid/api");
+        const response = await fetch("/api/get-bid/api");
         const data = await response.json();
         setBid(data.bid);
       }
@@ -46,17 +52,27 @@ export default function TwitterDialog({
           <DialogTitle className="mb-3 flex flex-col gap-2">
             Verify Twitter
           </DialogTitle>
+
           <div>
             <div className="text-lg uppercase">Step 1</div>
             <div className="mb-1">
               Please click this button below and tweet a verification message on
               Twitter
             </div>
-            <TwitterJump bid={bid} />
+            <TwitterSignInButton twitterSignedIn={twitterSignedIn} {...props} />
           </div>
           <br />
           <div>
             <div className="text-lg uppercase">Step 2</div>
+            <div className="mb-1">
+              Please click this button below and tweet a verification message on
+              Twitter
+            </div>
+            <TwitterJump bid={bid} disabled={!twitterSignedIn} />
+          </div>
+          <br />
+          <div>
+            <div className="text-lg uppercase">Step 3</div>
             <div className="mb-1">
               On your tweet, find the share button. Copy link and paste it here.
               Click the button to verify your account

@@ -41,7 +41,12 @@ const TwitterSignInButton = ({
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    if (session) {
+    if (
+      session &&
+      session.expires_at &&
+      session.expires_at > new Date().getTime() / 1000
+    ) {
+      console.log("session", session);
       setTwitterAccessToken(session.access_token);
       setTwitterSignedIn(true);
     }
@@ -51,21 +56,17 @@ const TwitterSignInButton = ({
   }, []);
 
   return (
-    <div className="flex flex-row gap-4">
+    <>
       {twitterSignedIn ? (
-        <div>
-          <Button onClick={signOut} className="w-full">
-            Sign out from Twitter
-          </Button>
-        </div>
+        <Button onClick={signOut} className="w-full">
+          Sign out from Twitter
+        </Button>
       ) : (
-        <div>
-          <Button onClick={signInWithTwitter} className="w-full">
-            Sign in with Twitter
-          </Button>
-        </div>
+        <Button onClick={signInWithTwitter} className="w-full">
+          Sign in with Twitter
+        </Button>
       )}
-    </div>
+    </>
   );
 };
 
