@@ -87,7 +87,6 @@ export function CreatePoolPreview({
         if (data.error !== undefined) {
           console.error("error fetching cutting board");
         }
-        console.log("data", data?.data?.pools);
 
         return data?.data?.pools ?? [];
       } catch (e) {
@@ -116,7 +115,6 @@ export function CreatePoolPreview({
           // a pool match is any pool that has:
           // matching name OR
           // matching token list and associated token weights and pool swap fee
-
           const isMatchingPool =
             isSameName || (isSameSwapFee && isSameTokenWeights);
           if (isMatchingPool) setIsDuplicatePool(isMatchingPool);
