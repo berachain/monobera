@@ -10,15 +10,7 @@ export const poolSwapFeeExisted = (
 };
 
 export const poolTokenWeightsExisted = (tokensInput: any, poolsTokens: any) => {
-  // rearrange tokenInput
-  const formattedTokenInput = tokensInput.map((token: any) => {
-    return {
-      weight: token?.weight.toString(),
-      symbol: token?.token?.symbol,
-    };
-  });
-
-  for (const token1 of formattedTokenInput) {
+  for (const token1 of tokensInput) {
     const equivalentExists = poolsTokens.some((token2: any) => {
       return token1.symbol === token2.symbol && token1.weight === token2.weight;
     });

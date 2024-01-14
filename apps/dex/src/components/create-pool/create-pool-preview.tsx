@@ -99,11 +99,17 @@ export function CreatePoolPreview({
     const fetchData = async () => {
       try {
         const pools = await getAllPoolsInfo();
+        const formattedTokenInput = tokenWeights.map((token: any) => {
+          return {
+            weight: token?.weight.toString(),
+            symbol: token?.token?.symbol,
+          };
+        });
         return pools.find((pool: any) => {
           const isSameName = poolNameExisted(poolName, pool.poolName);
           const isSameSwapFee = poolSwapFeeExisted(fee, pool.swapFee);
           const isSameTokenWeights = poolTokenWeightsExisted(
-            tokenWeights,
+            formattedTokenInput,
             pool.tokens,
           );
 
