@@ -225,7 +225,7 @@ export default function Delegate({
             redelegation must complete before next redelegation can be initiated
           </Alert>
         )}
-        {/* <ActionButton>
+        <ActionButton>
           <Button
             className="w-full"
             disabled={
@@ -276,7 +276,7 @@ export default function Delegate({
           >
             Confirm
           </Button>
-        </ActionButton> */}
+        </ActionButton>
       </Card>
     </div>
   );

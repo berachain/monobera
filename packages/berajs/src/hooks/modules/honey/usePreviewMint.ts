@@ -49,7 +49,7 @@ export const usePollPreviewMint = (
 
   const usePreviewMint = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data ? formatUnits(data, collateral?.decimals ?? 18) : undefined;
+    return data ? formatUnits(data, collateral?.decimals ?? 18) : '';
   };
   return {
     usePreviewMint,

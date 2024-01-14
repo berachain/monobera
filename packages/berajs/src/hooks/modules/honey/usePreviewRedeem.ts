@@ -49,7 +49,7 @@ export const usePollPreviewRedeem = (
 
   const usePreviewRedeem = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data ? formatUnits(data, collateral?.decimals ?? 18) : undefined;
+    return data ? formatUnits(data, collateral?.decimals ?? 18) : '';
   };
   return {
     usePreviewRedeem,

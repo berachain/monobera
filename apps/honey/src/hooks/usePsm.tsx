@@ -125,7 +125,7 @@ export const usePsm = () => {
     if (isMint && givenIn && previewMint !== undefined) {
       setToAmount(previewMint);
     } else if (!previewMint && Number(fromAmount) === 0 && isMint && givenIn) {
-      setToAmount(undefined);
+      setToAmount('');
     }
     if (!isMint && givenIn && previewRedeem) {
       setToAmount(previewRedeem);
@@ -135,7 +135,7 @@ export const usePsm = () => {
       !isMint &&
       givenIn
     ) {
-      setToAmount(undefined);
+      setToAmount('');
     }
 
     if (isMint && !givenIn && previewMintGivenOut) {
@@ -146,7 +146,7 @@ export const usePsm = () => {
       isMint &&
       givenIn === false
     ) {
-      setFromAmount(undefined);
+      setFromAmount('');
     }
 
     if (!isMint && givenIn === false && previewRedeemGivenOut !== undefined) {
@@ -157,7 +157,7 @@ export const usePsm = () => {
       !isMint &&
       givenIn
     ) {
-      setFromAmount(undefined);
+      setFromAmount('');
     }
   }, [previewMint, previewRedeem, previewMintGivenOut, previewRedeemGivenOut]);
 

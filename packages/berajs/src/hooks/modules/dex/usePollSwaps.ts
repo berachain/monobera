@@ -1,7 +1,10 @@
 import { nativeTokenAddress } from "@bera/config";
 import useSWR from "swr";
 import { formatUnits, getAddress, parseUnits, type Address } from "viem";
+import { usePublicClient } from "wagmi";
 
+import { DEX_PRECOMPILE_ABI } from "~/config";
+import { useBeraConfig } from "~/contexts";
 import { laggy } from "~/hooks/laggy";
 import POLLING from "../../../config/constants/polling";
 
@@ -34,6 +37,8 @@ export const usePollSwaps = ({
   amount,
   isTyping,
 }: IUsePollSwaps) => {
+  const { networkConfig } = useBeraConfig();
+  const publicClient = usePublicClient();
   const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount, isTyping];
   return useSWR<SwapInfoV2 | undefined>(
     QUERY_KEY,
@@ -60,31 +65,28 @@ export const usePollSwaps = ({
           amount,
         );
 
-        // const batchSwapSteps = swapInfo.batchSwapSteps
+        const batchSwapSteps = swapInfo.batchSwapSteps;
 
-        // if(batchSwapSteps && batchSwapSteps.length) {
-        //   const result= await publicClient.readContract({
-        //     address: networkConfig.precompileAddresses.erc20DexAddress as Address,
-        //     abi: DEX_PRECOMPILE_ABI,
-        //     functionName: "getPreviewBatchSwap",
-        //     args: [
-        //       0,
-        //       batchSwapSteps
-        //     ],
-        //   });
+        if (batchSwapSteps && batchSwapSteps.length) {
+          const result = await publicClient.readContract({
+            address: networkConfig.precompileAddresses
+              .erc20DexAddress as Address,
+            abi: DEX_PRECOMPILE_ABI,
+            functionName: "getPreviewBatchSwap",
+            args: [0, batchSwapSteps],
+          });
 
-        //   console.log('previewbatchswapreturn', result)
-        //   const amountOut = (result as [string, bigint] )[1]
-        //   const formattedAmountOut = formatUnits(amountOut, tokenOutDecimals)
-        //   // @ts-ignore
-        //   batchSwapSteps[batchSwapSteps.length - 1].amountOut = 0n
-        //   return {
-        //     ...swapInfo,
-        //     batchSwapSteps: batchSwapSteps,
-        //     returnAmount: amountOut,
-        //     formattedReturnAmount: formattedAmountOut
-        //   }
-        // }
+          const amountOut = (result as [string, bigint])[1];
+          const formattedAmountOut = formatUnits(amountOut, tokenOutDecimals);
+          // @ts-ignore
+          batchSwapSteps[batchSwapSteps.length - 1].amountOut = 0n;
+          return {
+            ...swapInfo,
+            batchSwapSteps: batchSwapSteps,
+            returnAmount: amountOut,
+            formattedReturnAmount: formattedAmountOut,
+          };
+        }
 
         return swapInfo;
       } catch (e) {
