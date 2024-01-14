@@ -52,25 +52,30 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
         }}
       />
-      <body
-        className={cn(
-          "font-sans antialiased",
-          fontSans.variable,
-          fontHoney.variable,
-        )}
-      >
-        {" "}
-        <SWRDevTools> </SWRDevTools>
-        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
-        <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-          <Header isHoney navItems={navItems} mobileNavItems={mobileNavItems} />
-          <main className="w-full py-[72px]">{props.children}</main>
-          <Toaster position="bottom-right" />
-          <Footer />
-          <TailwindIndicator />
-          <Analytics />
-        </BeraConfig>
-      </body>
+      <SWRDevTools>
+        <body
+          className={cn(
+            "font-sans antialiased",
+            fontSans.variable,
+            fontHoney.variable,
+          )}
+        >
+          {" "}
+          <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
+          <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
+            <Header
+              isHoney
+              navItems={navItems}
+              mobileNavItems={mobileNavItems}
+            />
+            <main className="w-full py-[72px]">{props.children}</main>
+            <Toaster position="bottom-right" />
+            <Footer />
+            <TailwindIndicator />
+            <Analytics />
+          </BeraConfig>
+        </body>
+      </SWRDevTools>
     </html>
   );
 }

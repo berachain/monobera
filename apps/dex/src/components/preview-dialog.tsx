@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { type SwapInfoV2, type Token } from "@bera/berajs";
-import { formatUsd } from "@bera/berajs/src/utils";
+import { formatUsd, type SwapInfoV2, type Token } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { Spinner, TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -138,7 +137,7 @@ export default function PreviewDialog({
           Preview <Icons.arrowRight className="h-3 w-3" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[420px]">
+      <DialogContent className="sm:w-fit">
         <DialogHeader>
           <DialogTitle className="mb-3">Preview swap</DialogTitle>
           <Image
