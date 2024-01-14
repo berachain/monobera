@@ -105,8 +105,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [payload, setPayload] = useState<any[]>([]);
 
-  const [isTyping, setIsTyping] = useState(false)
-
+  const [isTyping, setIsTyping] = useState(false);
 
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { isLoading: isBalanceLoading } = useCurrentAssetWalletBalances();
@@ -122,7 +121,12 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapAmount]);
 
-  const { data: swapInfo, error: getSwapError, isLoading: isSwapLoading, isValidating: isSwapReloading } = usePollSwaps({
+  const {
+    data: swapInfo,
+    error: getSwapError,
+    isLoading: isSwapLoading,
+    isValidating: isSwapReloading,
+  } = usePollSwaps({
     tokenIn: selectedFrom?.address as Address,
     tokenOut: selectedTo?.address as Address,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
@@ -133,7 +137,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     //     ? Number.MAX_SAFE_INTEGER
     //     : Number(swapAmount) ?? 0,
     amount: swapAmount,
-    isTyping: isTyping
+    isTyping: isTyping,
   });
 
   useEffect(() => {
@@ -219,7 +223,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const allowance = useAllowance();
 
-  const {data: block} = useLatestBlock();
+  const { data: block } = useLatestBlock();
 
   const slippage = useSlippage();
   const deadline = useDeadline();
@@ -342,7 +346,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     const amountOut = payload[1][payload[1].length - 1]?.amountOut;
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
-
 
   return {
     setSwapKind,

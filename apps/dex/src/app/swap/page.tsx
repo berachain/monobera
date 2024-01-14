@@ -46,11 +46,6 @@ export default function Swap({
   }
 
   if (isAddress(inputCurrency) && isAddress(outputCurrency)) {
-    return (
-      <SwapContent
-        inputCurrency={'' as any}
-        outputCurrency={'' as any}
-      />
-    );
+    return <SwapContent inputCurrency={"" as any} outputCurrency={"" as any} />;
   }
 }

@@ -2,7 +2,34 @@ import { gql } from "@apollo/client";
 
 export const getAllPools = gql`
   {
-    pools {
+    pools(where: { tvlUsd_gt: 10000, tvlUsd_lt: 500000000 }) {
+      id
+      pool: address
+      poolName: name
+      tokens: poolTokens {
+        denomWeight
+        amount
+        denom
+        address
+        symbol
+        decimals
+        latestPriceUsd {
+          id
+          price
+        }
+      }
+      swapFee
+      sharesDenom
+      sharesAddress
+      totalShares
+      tvlUsd
+    }
+  }
+`;
+
+export const getSelectedPool = gql`
+  query GetSelectedPool($id: String) {
+    pool(id: $id) {
       id
       pool: address
       poolName: name

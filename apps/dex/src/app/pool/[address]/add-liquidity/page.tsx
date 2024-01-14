@@ -48,6 +48,10 @@ export default async function AddLiquidity({
     );
 
     const pool = await poolResponse.json();
+
+    if (pool.error !== undefined) {
+      notFound();
+    }
     const prices = await pricesResponse.json();
 
     return (

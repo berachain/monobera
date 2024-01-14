@@ -24,7 +24,10 @@ export const PoolSummary = ({ pool }: { pool: Pool }) => {
   return (
     <div className="flex flex-col items-start gap-2">
       <span className="w-[180px] truncate text-left">{pool?.poolName}</span>
-      <TokenIconList tokenList={pool?.tokens.map((t) => t?.address)} size="lg" />
+      <TokenIconList
+        tokenList={pool?.tokens.map((t) => t?.address)}
+        size="lg"
+      />
       <div className="flex flex-row items-center gap-1">
         <Badge
           variant={"secondary"}
@@ -400,7 +403,7 @@ export const my_columns: ColumnDef<any>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="flex gap-1 flex-row items-center justify-center w-100">
+      <div className="w-100 flex flex-row items-center justify-center gap-1">
         <Link
           href={`/pool/${row.original.pool}/add-liquidity`}
           onClick={(e) => e.stopPropagation()}

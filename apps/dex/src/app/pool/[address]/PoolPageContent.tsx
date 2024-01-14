@@ -410,7 +410,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                   </p>
                 </div>
                 {/* @ts-ignore */}
-                <RewardBtn poolAddress={pool.pool} variant={"warning"} />
+                <RewardBtn poolAddress={pool?.pool} variant={"warning"} />
               </CardContent>
             </Card>
           )}
@@ -423,7 +423,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             </div>
             <div className="mb-4 text-sm font-medium">Tokens</div>
             <div>
-              {pool?.tokens.map((token) => (
+              {pool?.tokens?.map((token) => (
                 <div
                   key={token.address}
                   className="flex h-8 items-center justify-between"
