@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   useGasData,
-  useLatestBlock,
+  // useLatestBlock,
   usePollAllowance,
   usePollAssetWalletBalance,
   usePollSwaps,
@@ -200,7 +200,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const allowance = useAllowance();
 
-  const { data: block } = useLatestBlock();
+  // const { data: block } = useLatestBlock();
 
   const slippage = useSlippage();
   const deadline = useDeadline();
@@ -215,17 +215,17 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     ) {
       try {
         // parse minutes to blocks
-        const d = block ?? BigInt(0) + BigInt(Math.floor((deadline * 60) / 2));
+        // const d = block ?? BigInt(0) + BigInt(Math.floor((deadline * 60) / 2));
 
         const newBatchSwapStep: any[] = [...swapInfo.batchSwapSteps];
 
-        // const sI = BigInt(swapInfo.returnAmount);
-        // const s = BigInt(slippage * 10 ** 18);
-        // const minAmountOut =
-        // (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
+        const sI = BigInt(swapInfo.returnAmount);
+        const s = BigInt(slippage * 10 ** 18);
+        const minAmountOut =
+          (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
 
-        // newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = minAmountOut
-        newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = 0n;
+        newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = minAmountOut;
+        // newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = 0n;
 
         // swapInfo.batchSwapSteps.forEach((value: any) => {
         //   // console.log('v',value)

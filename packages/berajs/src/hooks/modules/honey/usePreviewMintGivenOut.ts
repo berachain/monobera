@@ -49,7 +49,7 @@ export const usePollPreviewMintGivenOut = (
 
   const usePreviewMintGivenOut = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data === undefined ? '' : data;
+    return data === undefined ? "" : data;
   };
   return {
     usePreviewMintGivenOut,
