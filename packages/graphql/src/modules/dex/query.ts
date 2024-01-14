@@ -167,3 +167,15 @@ export const getTokenHoneyPrices = gql`
     }
   }
 `;
+
+export const getPoolNameTokensInfo = `{
+    pools(first: 200){
+      id
+      poolName: name
+      tokens: poolTokens {
+        weight: denomWeight
+        symbol
+      }
+      swapFee
+    }
+  }`;

@@ -8,7 +8,7 @@ import {
   TransactionActionType,
   useBeraConfig,
 } from "@bera/berajs";
-import { cloudinaryUrl, subgraphUrl } from "@bera/config";
+import { cloudinaryUrl } from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
@@ -33,6 +33,7 @@ import { getSafeNumber } from "~/utils/getSafeNumber";
 import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
+import { usePoolComparison } from "~/hooks/usePoolComparison";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -56,76 +57,29 @@ export function CreatePoolPreview({
   const router = useRouter();
   const [isDuplicatePool, setIsDuplicatePool] = useState(false);
 
+  // Process the data to find duplicate pools
+  const { pools } = usePoolComparison();
   useEffect(() => {
-    const getAllPoolsInfo = async () => {
-      try {
-        const data = await fetch(subgraphUrl, {
-          method: "POST",
-          body: JSON.stringify({
-            query: `{
-                  pools(first: 200){
-                    id
-                    poolName: name
-                    tokens: poolTokens {
-                      weight: denomWeight
-                      symbol
-                    }
-                    swapFee
-                  }}`,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          next: { revalidate: 10 },
-        })
-          .then((res) => res.json())
-          .catch((e: any) => {
-            console.log("fetching error", e);
-            return undefined;
-          });
+    if (pools) {
+      const formattedTokenInput = tokenWeights.map((token) => ({
+        weight: token?.weight.toString(),
+        symbol: token?.token?.symbol,
+      }));
 
-        if (data.error !== undefined) {
-          console.error("error fetching cutting board");
-        }
+      const duplicatePool = pools.find((pool: any) => {
+        const isSameName = poolNameExisted(poolName, pool.poolName);
+        const isSameSwapFee = poolSwapFeeExisted(fee, pool.swapFee);
+        const isSameTokenWeights = poolTokenWeightsExisted(
+          formattedTokenInput,
+          pool.tokens,
+        );
 
-        return data?.data?.pools ?? [];
-      } catch (e) {
-        console.log(e);
-        return 0;
-      }
-    };
+        return isSameName || (isSameSwapFee && isSameTokenWeights);
+      });
 
-    const fetchData = async () => {
-      try {
-        const pools = await getAllPoolsInfo();
-        const formattedTokenInput = tokenWeights.map((token: any) => {
-          return {
-            weight: token?.weight.toString(),
-            symbol: token?.token?.symbol,
-          };
-        });
-        return pools.find((pool: any) => {
-          const isSameName = poolNameExisted(poolName, pool.poolName);
-          const isSameSwapFee = poolSwapFeeExisted(fee, pool.swapFee);
-          const isSameTokenWeights = poolTokenWeightsExisted(
-            formattedTokenInput,
-            pool.tokens,
-          );
-
-          // a pool match is any pool that has:
-          // matching name OR
-          // matching token list and associated token weights and pool swap fee
-          const isMatchingPool =
-            isSameName || (isSameSwapFee && isSameTokenWeights);
-          if (isMatchingPool) setIsDuplicatePool(isMatchingPool);
-          return;
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, [fee, poolName, tokenWeights]);
+      if (duplicatePool) setIsDuplicatePool(true);
+    }
+  }, [pools, poolName, fee, tokenWeights]);
 
   const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
