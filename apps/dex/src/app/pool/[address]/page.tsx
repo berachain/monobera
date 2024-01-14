@@ -39,6 +39,9 @@ export default async function PoolPage({
 
     const pool = await poolResponse.json();
 
+    if (pool.error !== undefined) {
+      notFound();
+    }
     return <PoolPageContent pool={pool} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);

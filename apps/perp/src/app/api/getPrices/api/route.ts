@@ -1,70 +1,42 @@
 import { NextResponse } from "next/server";
 import { subgraphUrl } from "@bera/config";
-
-import { getBaseTokenPrice, type MappedTokens } from "./getPrices";
-
-// export const fetchCache = "force-cache";
+import { getAddress } from "ethers";
+import lodash from "lodash";
+import { type Address } from "wagmi";
 
 export const revalidate = 10;
 
 export async function GET() {
-  // const router = new RouterService(defaultConfig);
-  // try {
-  //   await router.fetchPools();
-  // } catch (e) {
-  //   console.log(`Error fetching pools: ${e}`);
-  //   return;
-  // }
-  // const pools = router.getPools() ?? [];
-
-  const data = await fetch(subgraphUrl, {
-    method: "POST",
-    body: JSON.stringify({
-      query: `{
-          pools {
-            id
-            pool: address
-            poolName: name
-            tokens: poolTokens {
-              denomWeight
-              amount
-              denom
-              address
-              symbol
-              decimals
-              latestPriceUsd {
-                id
-                price
-              }
-            }
-            swapFee
-            sharesDenom
-            sharesAddress
-            totalShares
-            tvlUsd
-          }}`,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    next: { revalidate: 10 },
-  })
-    .then((res) => res.json())
-    .catch((e: any) => {
-      console.log("fetching error", e);
-      return undefined;
-    });
-
   try {
-    const mappedTokens: MappedTokens | undefined = await getBaseTokenPrice(
-      data?.data?.pools,
-    );
-    if (!mappedTokens) {
-      return NextResponse.json({ error: "No mapped tokens found" });
-    }
+    const td = await fetch(subgraphUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        query: `{
+            tokenHoneyPrices{
+              id
+              price
+            }
+          }`,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 10 },
+    })
+      .then(async (res) => await res.json())
+      .catch((e: any) => {
+        console.log("fetching error", e);
+        return undefined;
+      });
 
-    return NextResponse.json(mappedTokens);
+    const tokenHoneyPrices = td.data.tokenHoneyPrices;
+
+    const tokenHoneyPricesObj: Record<Address, string> = {};
+    tokenHoneyPrices.forEach((thp: { id: string; price: string }) => {
+      lodash.set(tokenHoneyPricesObj, getAddress(thp.id), thp.price);
+    });
+    return NextResponse.json(tokenHoneyPricesObj);
   } catch (e) {
-    console.log(e);
+    return NextResponse.json({});
   }
 }

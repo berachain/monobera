@@ -58,7 +58,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
     {
       retryCount: 0,
       retryDelay: 20000,
-    }
+    },
   );
 
   const appInfo = {
