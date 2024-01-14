@@ -24,6 +24,11 @@ import { Input } from "@bera/ui/input";
 import { parseUnits } from "ethers";
 import { type Address } from "wagmi";
 
+import {
+  poolNameExisted,
+  poolSwapFeeExisted,
+  poolTokenWeightsExisted,
+} from "~/utils/checkIsDuplicatedPool";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
@@ -36,43 +41,6 @@ type Props = {
   fee: number;
   setPoolName: (poolName: string) => void;
   onBack: () => void;
-  isDuplicatePool?: boolean;
-};
-
-const poolNameExisted = (nameInput: string, poolName: string) => {
-  return nameInput === poolName;
-};
-
-const poolSwapFeeExisted = (swapFeeInput: number, poolSwapFee: number) => {
-  return swapFeeInput * 1e16 == poolSwapFee;
-};
-
-const poolTokenWeightsExisted = (tokensInput: any, poolsTokens: any) => {
-  // rearrange tokenInput
-  const formattedTokenInput = tokensInput.map((token: any) => {
-    return {
-      weight: token?.weight,
-      symbol: token?.token?.symbol,
-    };
-  });
-  //rearrange poolTokens
-  const formattedPoolTokens = poolsTokens.map((token: any) => {
-    return {
-      weight: token.denomWeight,
-      name: token.symbol,
-    };
-  });
-
-  for (const token1 of formattedTokenInput) {
-    const equivalentExists = formattedPoolTokens.some((token2: any) => {
-      return token1.name === token2.name && token1.weight === token2.weight;
-    });
-
-    if (!equivalentExists) {
-      return true;
-    }
-  }
-  return false;
 };
 
 export function CreatePoolPreview({
@@ -97,11 +65,9 @@ export function CreatePoolPreview({
             query: `{
                   pools(first: 200){
                     id
-                    pool: address
                     poolName: name
                     tokens: poolTokens {
-                      denomWeight
-                      denom
+                      weight: denomWeight
                       symbol
                     }
                     swapFee
@@ -121,6 +87,7 @@ export function CreatePoolPreview({
         if (data.error !== undefined) {
           console.error("error fetching cutting board");
         }
+        console.log("data", data?.data?.pools);
 
         return data?.data?.pools ?? [];
       } catch (e) {
@@ -139,10 +106,14 @@ export function CreatePoolPreview({
             tokenWeights,
             pool.tokens,
           );
-          if (isSameName && isSameSwapFee && isSameTokenWeights)
-            setIsDuplicatePool(
-              isSameName && isSameSwapFee && isSameTokenWeights,
-            );
+
+          // a pool match is any pool that has:
+          // matching name OR
+          // matching token list and associated token weights and pool swap fee
+
+          const isMatchingPool =
+            isSameName || (isSameSwapFee && isSameTokenWeights);
+          if (isMatchingPool) setIsDuplicatePool(isMatchingPool);
           return;
         });
       } catch (error) {
@@ -251,7 +222,7 @@ export function CreatePoolPreview({
           <Alert variant="destructive" className="my-4">
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-              Duplicate pool created, please try another one
+              Potential duplicated pool is being created, please try another one
             </AlertDescription>
           </Alert>
         )}
