@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { RouteNotFound } from "@bera/bera-router";
+// import { RouteNotFound } from "@bera/bera-router";
 import {
   DEX_PRECOMPILE_ABI,
   TransactionActionType,
@@ -64,7 +64,6 @@ interface ISwapCard {
   showBear?: boolean;
   className?: string;
 }
-
 
 export function SwapCard({
   inputCurrency,
@@ -374,7 +373,7 @@ export function SwapCard({
                   ) : (
                     false
                   )}
-                                  {/* {isRouteLoading === true && swapAmount !=='0' && selectedTo !==undefined ? (
+                  {/* {isRouteLoading === true && swapAmount !=='0' && selectedTo !==undefined ? (
                     <Alert variant="info">
                       <AlertTitle>Searching for best routes</AlertTitle>
                       <AlertDescription className="text-xs">

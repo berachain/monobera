@@ -6,7 +6,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits } from "viem";
 
-export default function PoolHeader({ pool }: { pool: Pool }) {
+export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
   return (
     <div className="flex w-full flex-col items-center justify-between md:items-end md:justify-center lg:flex-row">
       <div className="flex w-full flex-col items-center gap-4 md:items-start">
@@ -21,7 +21,7 @@ export default function PoolHeader({ pool }: { pool: Pool }) {
         </Button>
         <p className="flex w-full justify-center gap-4 text-center text-2xl font-semibold md:justify-start md:text-left">
           <TokenIconList
-            tokenList={pool.tokens.map((t) => t.address)}
+            tokenList={pool?.tokens?.map((t) => t.address)}
             size="xl"
           />
           {pool?.poolName}
@@ -44,7 +44,7 @@ export default function PoolHeader({ pool }: { pool: Pool }) {
             Fee:
             <span className="text-sm text-success-foreground">
               {(
-                Number(formatUnits(BigInt(pool.swapFee) ?? "", 18)) * 100
+                Number(formatUnits(BigInt(pool?.swapFee ?? 0) ?? "", 18)) * 100
               ).toFixed(2)}
               %
             </span>
@@ -61,7 +61,7 @@ export default function PoolHeader({ pool }: { pool: Pool }) {
                 )
               }
             >
-              {truncateHash(pool.pool)}
+              {truncateHash(pool?.pool ?? "")}
               <Icons.externalLink className="-mt-1 ml-1 inline-block h-4 w-4 text-muted-foreground" />
             </span>
           </div>
@@ -78,7 +78,7 @@ export default function PoolHeader({ pool }: { pool: Pool }) {
             )
           }
         >
-          {truncateHash(pool.pool)}
+          {truncateHash(pool?.pool ?? "")}
           <Icons.externalLink className="-mt-1 ml-1 inline-block h-4 w-4 text-muted-foreground" />
         </span>
       </div>

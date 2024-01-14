@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button } from "@bera/ui/button";
 import { createClient } from "@supabase/supabase-js";
 
@@ -11,12 +11,13 @@ const TwitterSignInButton = ({
   setTwitterSignedIn: (twitterSignedIn: boolean) => void;
   setTwitterAccessToken: (token: string) => void;
 }) => {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY ?? "";
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   async function signInWithTwitter() {
-    const { data, error } = await supabase.auth
+    // const { data, error } =
+    await supabase.auth
       .signInWithOAuth({
         provider: "twitter",
       })
@@ -32,7 +33,8 @@ const TwitterSignInButton = ({
   }
 
   async function signOut() {
-    const { error } = await supabase.auth.signOut();
+    // const { error } =
+    await supabase.auth.signOut();
     setTwitterSignedIn(false);
   }
   async function getSession() {
@@ -45,7 +47,7 @@ const TwitterSignInButton = ({
     }
   }
   useEffect(() => {
-    getSession();
+    void getSession();
   }, []);
 
   return (

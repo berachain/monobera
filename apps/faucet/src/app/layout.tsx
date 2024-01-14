@@ -9,8 +9,8 @@ import { FooterSM } from "@bera/shared-ui/src/footer";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { useLocalStorage } from "usehooks-ts";
 import { SWRDevTools } from "swr-devtools";
+import { useLocalStorage } from "usehooks-ts";
 
 import Providers from "./Providers";
 import { navItems } from "./config";
@@ -48,8 +48,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
-                      <SWRDevTools />
-
+        <SWRDevTools />
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <Providers>
           <div className="z-[100]">

@@ -37,7 +37,7 @@ export interface IconProps
 
 export const TokenIcon = ({
   token,
-  fetch = false,
+  // fetch = false,
   address,
   className,
   size,
@@ -46,17 +46,16 @@ export const TokenIcon = ({
   const { tokenDictionary } = useTokens();
 
   const img = useMemo(() => {
-    if(tokenDictionary && (address || token)) {
-      if(address && address !== '') {
+    if (tokenDictionary && (address || token)) {
+      if (address && address !== "") {
         return tokenDictionary[address]?.logoURI;
-      } else if(token && token?.address !=='') {
+      } else if (token && token?.address !== "") {
         return tokenDictionary[getAddress(token.address)]?.logoURI;
       }
     }
-    return ''
+    return "";
+  }, [token, address, tokenDictionary]);
 
-  }, [token, address, tokenDictionary])
-  
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage
@@ -65,7 +64,7 @@ export const TokenIcon = ({
         alt={token?.symbol ?? "unknow"}
       />
       <AvatarFallback className="h-full w-full border border-foreground bg-background text-inherit">
-          TKN
+        TKN
       </AvatarFallback>
     </Avatar>
   );

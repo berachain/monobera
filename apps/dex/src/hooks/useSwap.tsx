@@ -105,8 +105,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [payload, setPayload] = useState<any[]>([]);
 
-  const [isTyping, setIsTyping] = useState(false)
-
+  const [isTyping, setIsTyping] = useState(false);
 
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { isLoading: isBalanceLoading } = useCurrentAssetWalletBalances();
@@ -122,18 +121,18 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapAmount]);
 
-  const { data: swapInfo, error: getSwapError, isLoading: isSwapLoading, isValidating: isSwapReloading } = usePollSwaps({
+  const {
+    data: swapInfo,
+    error: getSwapError,
+    isLoading: isSwapLoading,
+  } = usePollSwaps({
     tokenIn: selectedFrom?.address as Address,
     tokenOut: selectedTo?.address as Address,
     swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
     tokenInDecimals: selectedFrom?.decimals ?? 18,
     tokenOutDecimals: selectedTo?.decimals ?? 18,
-    // amount:
-    //   Number(swapAmount) > Number.MAX_SAFE_INTEGER
-    //     ? Number.MAX_SAFE_INTEGER
-    //     : Number(swapAmount) ?? 0,
     amount: swapAmount,
-    isTyping: isTyping
+    isTyping: isTyping,
   });
 
   useEffect(() => {
@@ -155,24 +154,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       setWrapType(undefined);
     }
   }, [selectedTo, selectedFrom]);
-
-  // const { data: tokenInPriceInfo } = usePollSwaps({
-  //   tokenIn: selectedFrom?.address as Address,
-  //   tokenOut: QUOTING_TOKEN,
-  //   tokenInDecimals: selectedFrom?.decimals ?? 18,
-  //   tokenOutDecimals: 18,
-  //   swapKind: 0,
-  //   amount: "1",
-  // });
-
-  // const { data: tokenOutPriceInfo } = usePollSwaps({
-  //   tokenIn: selectedTo?.address as Address,
-  //   tokenOut: QUOTING_TOKEN,
-  //   tokenInDecimals: selectedTo?.decimals ?? 18,
-  //   tokenOutDecimals: 18,
-  //   swapKind: 0,
-  //   amount: "1",
-  // });
 
   useEffect(() => {
     if (isWrap) return;
@@ -219,7 +200,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const allowance = useAllowance();
 
-  const {data: block} = useLatestBlock();
+  const { data: block } = useLatestBlock();
 
   const slippage = useSlippage();
   const deadline = useDeadline();
@@ -234,7 +215,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     ) {
       try {
         // parse minutes to blocks
-        const d = block + BigInt(Math.floor((deadline * 60) / 2));
+        const d = block ?? BigInt(0) + BigInt(Math.floor((deadline * 60) / 2));
 
         const newBatchSwapStep: any[] = [...swapInfo.batchSwapSteps];
 
@@ -342,7 +323,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     const amountOut = payload[1][payload[1].length - 1]?.amountOut;
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
-
 
   return {
     setSwapKind,

@@ -1,11 +1,17 @@
-import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import Link from "next/link";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 
-export default function AlertGroups({showAlet, alert}:{showAlet:boolean, alert:"success" | "destructive" | "error" | undefined}) {
-
-    return <>
-         {showAlet && alert === "success" && (
+export default function AlertGroups({
+  showAlet,
+  alert,
+}: {
+  showAlet: boolean;
+  alert: "success" | "destructive" | "error" | undefined;
+}) {
+  return (
+    <>
+      {showAlet && alert === "success" && (
         <Alert variant={"success"}>
           <AlertTitle>
             <Icons.checkCircle className="inline-block h-4 w-4" /> Request
@@ -52,4 +58,5 @@ export default function AlertGroups({showAlet, alert}:{showAlet:boolean, alert:"
         </Alert>
       )}
     </>
+  );
 }

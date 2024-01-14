@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export function GET() {
   try {
     // const { body } = await request.json();
     // const res = await fetch(
@@ -13,10 +13,10 @@ export async function GET() {
     //     body: JSON.stringify({ tweetId: body.tweetId }),
     //   },
     // );
-    
-    return NextResponse.json({gid: Math.random()});
+
+    return NextResponse.json({ gid: Math.random() });
   } catch (e) {
     console.log(e);
-    return NextResponse.json({ error: e.message});
+    return NextResponse.json({ error: e.message });
   }
 }
