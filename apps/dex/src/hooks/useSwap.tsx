@@ -279,14 +279,16 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
     setFromAmount(tempToAmount);
     setToAmount(tempFromAmount);
+    setSwapKind(SwapKind.GIVEN_IN);
+    setSwapAmount(fromAmount ?? "");
 
-    if (swapKind === SwapKind.GIVEN_IN) {
-      setSwapKind(SwapKind.GIVEN_OUT);
-      setSwapAmount(fromAmount ?? "");
-    } else {
-      setSwapKind(SwapKind.GIVEN_IN);
-      setSwapAmount(toAmount ?? "");
-    }
+    // if (swapKind === SwapKind.GIVEN_IN) {
+    //   setSwapKind(SwapKind.GIVEN_OUT);
+    //   setSwapAmount(fromAmount ?? "");
+    // } else {
+    //   setSwapKind(SwapKind.GIVEN_IN);
+    //   setSwapAmount(toAmount ?? "");
+    // }
     if (isWrap) {
       if (wrapType === WRAP_TYPE.WRAP) {
         setWrapType(WRAP_TYPE.UNWRAP);
