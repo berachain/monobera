@@ -151,9 +151,9 @@ export const getSwap = async (
     const response = await fetch(
       `${
         process.env.NEXT_PUBLIC_INDEXER_ENDPOINT
-      }/dex/route?quote_asset=${handleNativeBera(
+      }/dex/route?quoteAsset=${handleNativeBera(
         tokenOut,
-      )}&base_asset=${handleNativeBera(tokenIn)}&amount=${parseUnits(
+      )}&baseAsset=${handleNativeBera(tokenIn)}&amount=${parseUnits(
         `${amount}`,
         tokenInDecimals,
       )}&swap_type=${type}`,

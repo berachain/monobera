@@ -255,7 +255,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         // });
 
         // console.log(newBatchSwapStep);
-        const payload = [0n, newBatchSwapStep, d];
+        // const payload = [0n, newBatchSwapStep, d];
+        const payload = [0n, newBatchSwapStep, 99999999n];
+
         // console.log(payload)
         setPayload(payload);
       } catch (e) {
