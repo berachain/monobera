@@ -6,11 +6,13 @@ import { getAddress, isAddress } from "viem";
 import ReCAPTCHAButton from "./recaptcha-btn";
 
 export function DripToken({
+  alert,
   address,
   setAlert,
   setShowAlert,
   twitterId,
 }: {
+  alert: number | undefined;
   address: string;
   setAlert: (alert: number | undefined) => void;
   setShowAlert: () => void;
@@ -28,15 +30,10 @@ export function DripToken({
           tweetId: twitterId,
         }),
       });
-      if (res.status === 200) {
-        setAlert("success");
-      } else if (res.status === 429) {
-        setAlert("destructive");
-      } else {
-        setAlert("error");
-      }
+
+      setAlert(res.status);
     } catch (error: any) {
-      setAlert("error");
+      setAlert(429);
       setToken("");
     }
     setShowAlert();
@@ -48,7 +45,7 @@ export function DripToken({
         <ReCAPTCHAButton setToken={setToken} />
       ) : (
         <Button
-          disabled={!isAddress(address ?? "")}
+          disabled={!isAddress(address ?? "") || alert !== undefined}
           onClick={() => {
             void handleRequest();
           }}

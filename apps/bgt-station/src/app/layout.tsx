@@ -45,7 +45,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
-        <SWRDevTools />
+        <SWRDevTools> </SWRDevTools>
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">

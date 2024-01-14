@@ -13,11 +13,11 @@ import TwitterDialog from "../components/twitter-dialog";
 
 export default function Content() {
   const [address, setAddress] = React.useState<string>("");
-  const [alert, setAlert] = React.useState<
-    "success" | "destructive" | "error" | undefined
-  >(undefined);
+  const [alert, setAlert] = React.useState<number | undefined>(undefined);
   const [showAlet, setShowAlert] = React.useState<boolean>(false);
-  const [twitterId, settwitterId] = React.useState<string | undefined>(false);
+  const [twitterId, settwitterId] = React.useState<string | undefined>(
+    undefined,
+  );
 
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
@@ -59,6 +59,7 @@ export default function Content() {
               onChange={(e) => {
                 setAddress(e.target.value);
                 if (showAlet) setShowAlert(false);
+                setAlert(undefined);
               }}
             />
             <Icons.close
@@ -66,10 +67,12 @@ export default function Content() {
               onClick={() => {
                 setAddress("");
                 if (showAlet) setShowAlert(false);
+                setAlert(undefined);
               }}
             />
           </div>
           <DripToken
+            alert={alert}
             address={address}
             setAlert={setAlert}
             setShowAlert={() => setShowAlert(true)}
