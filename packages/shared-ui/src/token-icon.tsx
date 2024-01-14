@@ -37,7 +37,7 @@ export interface IconProps
 
 export const TokenIcon = ({
   token,
-  fetch = false,
+  // fetch = false,
   address,
   className,
   size,

@@ -42,7 +42,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
         }}
       />
-      <SWRDevTools />
+
+      <SWRDevTools> </SWRDevTools>
       <body
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >

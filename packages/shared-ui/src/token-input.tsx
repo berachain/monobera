@@ -12,7 +12,7 @@ import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
-import { SelectToken, Spinner } from ".";
+import { SelectToken } from ".";
 
 type Props = {
   selected: Token | undefined;
