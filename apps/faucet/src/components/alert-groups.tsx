@@ -32,7 +32,7 @@ export default function AlertGroups({
           </AlertDescription>
         </Alert>
       )}
-      {showAlet && alert === 401 && (
+      {showAlet && alert === 400 && (
         <Alert variant={"destructive"}>
           <AlertTitle>
             {" "}
@@ -45,7 +45,7 @@ export default function AlertGroups({
           </AlertDescription>
         </Alert>
       )}
-      {showAlet && alert === 428 && (
+      {showAlet && alert === 429 && (
         <Alert variant={"destructive"}>
           <AlertTitle>
             {" "}
@@ -58,7 +58,7 @@ export default function AlertGroups({
           </AlertDescription>
         </Alert>
       )}
-      {showAlet && alert === 429 && (
+      {showAlet && (alert === 401 || alert === 500) && (
         <Alert variant={"destructive"}>
           <AlertTitle>
             {" "}

@@ -33,7 +33,7 @@ export function DripToken({
 
       setAlert(res.status);
     } catch (error: any) {
-      setAlert(429);
+      setAlert(500);
       setToken("");
     }
     setShowAlert();
