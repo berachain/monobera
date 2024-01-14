@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { subgraphUrl } from "@bera/config";
 import { getAddress } from "ethers";
 import lodash from "lodash";
 import { type Address } from "wagmi";
-import { beraTokenAddress, nativeTokenAddress } from '../../../../../../../packages/config/env/index';
+import { beraTokenAddress, nativeTokenAddress, subgraphUrl } from "@bera/config";
 
 export const revalidate = 10;
 
