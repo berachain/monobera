@@ -73,6 +73,8 @@ export const usePollBgtRewardsForAddress = ({
     beraPrice,
     inflationData,
   ];
+
+  console.log(QUERY_KEY)
   const { isLoading } = useSWR(
     QUERY_KEY,
     () => {
