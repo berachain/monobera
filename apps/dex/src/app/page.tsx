@@ -1,7 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { subgraphUrl } from "@bera/config";
+import { docsUrl, subgraphUrl } from "@bera/config";
 import { Documentation, Footer } from "@bera/shared-ui";
 
 import { getMetaTitle } from "~/utils/metadata";
@@ -131,7 +131,7 @@ export default async function Homepage() {
           <div className="-mx-full overflow-hidden">
             <CreateAPool />
           </div>
-          <Documentation className="my-24" />
+          <Documentation docLink={docsUrl} className="my-24" />
         </div>
         <Footer />
       </>
