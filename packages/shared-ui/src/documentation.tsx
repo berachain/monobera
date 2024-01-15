@@ -49,7 +49,7 @@ export function Documentation({
             Eager to connect and learn with fellow crypto enthusiasts? Explore
             and join the vibrant community.
           </p>
-          <Link href={docLink} target="_blank">
+          <Link href={docLink ?? `${docsUrl}/community/`} target="_blank">
             <Button className="w-fit" variant="secondary">
               Learn More
             </Button>
