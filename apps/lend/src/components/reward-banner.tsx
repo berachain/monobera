@@ -50,6 +50,12 @@ export const Banner = () => {
   const bgtApr = useBgtApr(honeyLocked);
   const isLoadingApr = isHoneyVaultBalanceLoading || isBgtRewardsLoading;
 
+  console.log({
+    bgtApr,
+    isLoadingApr,
+    debtBearingHoney,
+    reservesDictionary
+  })
   const {
     write,
     isLoading: isClaimingLoading,
