@@ -72,6 +72,7 @@ export default function CreatePageContent() {
             setSwapFee={setSwapFee}
             onContinue={() => !error && setStep(Steps.SET_INITIAL_LIQUIDITY)}
             onBack={() => setStep(Steps.SET_TOKEN_WEIGHTS)}
+            isDuplicatePool={true}
           />
         )}
         {step === Steps.SET_INITIAL_LIQUIDITY && (

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -24,16 +24,10 @@ import { Input } from "@bera/ui/input";
 import { parseUnits } from "ethers";
 import { type Address } from "wagmi";
 
-import {
-  poolNameExisted,
-  poolSwapFeeExisted,
-  poolTokenWeightsExisted,
-} from "~/utils/checkIsDuplicatedPool";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
-import { usePoolComparison } from "~/hooks/usePoolComparison";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -55,31 +49,6 @@ export function CreatePoolPreview({
   const { needsApproval } = useCreatePool(tokenWeights);
   const { networkConfig } = useBeraConfig();
   const router = useRouter();
-  const [isDuplicatePool, setIsDuplicatePool] = useState(false);
-
-  // Process the data to find duplicate pools
-  const { pools } = usePoolComparison();
-  useEffect(() => {
-    if (pools) {
-      const formattedTokenInput = tokenWeights.map((token) => ({
-        weight: token?.weight.toString(),
-        symbol: token?.token?.symbol,
-      }));
-
-      const duplicatePool = pools.find((pool: any) => {
-        const isSameName = poolNameExisted(poolName, pool.poolName);
-        const isSameSwapFee = poolSwapFeeExisted(fee, pool.swapFee);
-        const isSameTokenWeights = poolTokenWeightsExisted(
-          formattedTokenInput,
-          pool.tokens,
-        );
-
-        return isSameName || (isSameSwapFee && isSameTokenWeights);
-      });
-
-      if (duplicatePool) setIsDuplicatePool(true);
-    }
-  }, [pools, poolName, fee, tokenWeights]);
 
   const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
@@ -176,15 +145,6 @@ export function CreatePoolPreview({
           </Alert>
         )}
 
-        {isDuplicatePool && (
-          <Alert variant="destructive" className="my-4">
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>
-              Potential duplicated pool is being created, please try another one
-            </AlertDescription>
-          </Alert>
-        )}
-
         {needsApproval.length > 0 ? (
           <ApproveButton
             amount={parseUnits(
@@ -202,7 +162,6 @@ export function CreatePoolPreview({
           <ActionButton>
             <Button
               className="w-full"
-              disabled={isDuplicatePool}
               onClick={() => {
                 write({
                   address: networkConfig.precompileAddresses

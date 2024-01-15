@@ -168,14 +168,11 @@ export const getTokenHoneyPrices = gql`
   }
 `;
 
-export const getPoolNameTokensInfo = `{
-    pools(first: 200){
+export const getUniquePoolById = gql`
+  query GetUniquePoolID($id: String!) {
+    uniquePoolIDs(where: { id: $id }) {
       id
-      poolName: name
-      tokens: poolTokens {
-        weight: denomWeight
-        symbol
-      }
-      swapFee
+      count
     }
-  }`;
+  }
+`;
