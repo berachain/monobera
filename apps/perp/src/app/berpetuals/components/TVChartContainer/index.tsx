@@ -54,7 +54,7 @@ export const TVChartContainer = (
         "header_compare",
         "save_chart_properties_to_local_storage",
         "header_saveload",
-        "items_favoriting"
+        "items_favoriting",
       ],
       charts_storage_url: props.charts_storage_url,
       charts_storage_api_version: props.charts_storage_api_version,
@@ -68,9 +68,9 @@ export const TVChartContainer = (
         backgroundColor: backgroundColor,
       },
       overrides: {
+        "paneProperties.backgroundType": "solid",
         "paneProperties.background": backgroundColor,
         "chartProperties.background": backgroundColor,
-        "paneProperties.backgroundType": "solid",
         "symbolWatermarkProperties.transparency": 90,
         "scalesProperties.textColor": "#AAA",
         "mainSeriesProperties.candleStyle.wickUpColor": "#336854",
