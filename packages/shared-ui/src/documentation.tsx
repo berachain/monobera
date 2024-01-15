@@ -8,7 +8,7 @@ export function Documentation({
   docLink,
   className,
 }: {
-  docLink: string;
+  docLink?: string;
   className?: string;
 }) {
   return (
