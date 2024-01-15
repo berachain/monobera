@@ -6,7 +6,7 @@ export default function TwitterSelfSignInButton() {
   const token = data?.access_token;
   const expires = data?.expires_at;
   const signedIn = token && expires && expires > Date.now() / 1000;
-  const name = data.name;
+  const name = data?.name;
 
   return (
     <Button onClick={() => signIn()} className="w-full" disabled={signedIn}>

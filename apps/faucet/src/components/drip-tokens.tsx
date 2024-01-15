@@ -33,7 +33,7 @@ export function DripToken({
         body: JSON.stringify({
           address: getAddress(address),
           tweetId: twitterId,
-          access_token: data!.access_token,
+          accessToken: data!.access_token,
         }),
       });
 
@@ -47,8 +47,8 @@ export function DripToken({
 
   return (
     <>
-      {!token ? (
-        <ReCAPTCHAButton setToken={CAPTCHAtoken} />
+      {!CAPTCHAtoken ? (
+        <ReCAPTCHAButton setToken={setCAPTCHAtoken} />
       ) : (
         <Button
           disabled={!isAddress(address ?? "") || alert !== undefined}
