@@ -129,3 +129,7 @@ export const validatorClueEndpoint = process.env
 // gov authority
 export const governanceAuthority = process.env
   .NEXT_PUBLIC_GOVERNANCE_AUTHORITY as string;
+
+export const bannerEnabled = Boolean(
+  process.env.NEXT_PUBLIC_BANNER_ENABLED,
+) as boolean;
