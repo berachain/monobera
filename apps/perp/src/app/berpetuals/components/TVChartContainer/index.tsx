@@ -61,14 +61,19 @@ export const TVChartContainer = (
       theme,
       autosize: props.autosize,
       height: 500,
+      loading_screen: {
+        backgroundColor: backgroundColor,
+      },
       overrides: {
-        "paneProperties.backgroundType": "solid",
         "paneProperties.background": backgroundColor,
+        "chartProperties.background": backgroundColor,
+        "paneProperties.backgroundType": "solid",
         "symbolWatermarkProperties.transparency": 90,
         "scalesProperties.textColor": "#AAA",
         "mainSeriesProperties.candleStyle.wickUpColor": "#336854",
         "mainSeriesProperties.candleStyle.wickDownColor": "#7f323f",
       },
+      toolbar_bg: backgroundColor,
     };
 
     const tvWidget = new widget({ ...widgetOptions });
