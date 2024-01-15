@@ -36,7 +36,7 @@ export const TVChartContainer = (
   }, [appTheme, isDarkOS]);
 
   useEffect(() => {
-    const backgroundColor = theme === "dark" ? "#0E0803" : "#FAFAF9";
+    const backgroundColor = theme === "dark" ? "#000000" : "#FAFAF9";
     const widgetOptions: ChartingLibraryWidgetOptions = {
       symbol: props.symbol,
       datafeed: Datafeed,
@@ -62,9 +62,8 @@ export const TVChartContainer = (
       autosize: props.autosize,
       height: 500,
       overrides: {
+        "paneProperties.backgroundType": "solid",
         "paneProperties.background": backgroundColor,
-        "paneProperties.vertGridProperties.color": "#373332",
-        "paneProperties.horzGridProperties.color": "#373332",
         "symbolWatermarkProperties.transparency": 90,
         "scalesProperties.textColor": "#AAA",
         "mainSeriesProperties.candleStyle.wickUpColor": "#336854",
