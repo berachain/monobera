@@ -1,7 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { docsUrl, subgraphUrl } from "@bera/config";
+import { subgraphUrl } from "@bera/config";
 import { Documentation, Footer } from "@bera/shared-ui";
 
 import { getMetaTitle } from "~/utils/metadata";
