@@ -116,6 +116,9 @@ export const usePollBgtRewardsForAddress = ({
     const { data = undefined } = useSWRImmutable<
       IBgtRewardsForAddress | undefined
     >(QUERY_KEY);
+    console.log({
+      data, tvl
+    })
     if (data && tvl) {
       const apr = (data.UsdBgtPerYear / tvl) * 100;
       return apr;
