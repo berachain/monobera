@@ -131,7 +131,7 @@ export default async function Homepage() {
           <div className="-mx-full overflow-hidden">
             <CreateAPool />
           </div>
-          <Documentation docLink={docsUrl} className="my-24" />
+          <Documentation className="my-24" />
         </div>
         <Footer />
       </>
