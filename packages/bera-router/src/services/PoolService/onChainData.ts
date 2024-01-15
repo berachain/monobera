@@ -2,8 +2,6 @@ import { bankAddress } from "@bera/config";
 import { type PoolDayData } from "@bera/graphql";
 import { cloneDeep, set, unset } from "lodash";
 import { formatUnits, getAddress, type Address, type PublicClient } from "viem";
-
-import { beraToEth } from "~/utils/evmToBera";
 import {
   BANK_PRECOMPILE_ABI,
   DEX_PRECOMPILE_ABI,
@@ -143,7 +141,7 @@ export class MultiCallPools {
   ): Pool[] => {
     const parsedPools = pools.map((subGraphPool, index) => {
       const historicalPoolData: PoolDayData[] = responses[index];
-      const poolHexAddress = beraToEth(subGraphPool.pool);
+      const poolHexAddress = subGraphPool.pool;
       const totalWeight = subGraphPool.tokens.reduce((acc, curr) => {
         return acc + Number(curr.denomWeight);
       }, 0);
