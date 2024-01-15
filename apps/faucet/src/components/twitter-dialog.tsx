@@ -11,7 +11,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
 import TwitterJump from "./twitter-jump";
-import TwitterSignInButton from "./twitter-sign-in-btn";
+import TwitterSelfSignInButton from "./twitter-self-sign-in-btn";
 
 export default function TwitterDialog({
   settwitterId,
@@ -59,7 +59,7 @@ export default function TwitterDialog({
               Please click this button below and tweet a verification message on
               Twitter
             </div>
-            <TwitterSignInButton twitterSignedIn={twitterSignedIn} {...props} />
+            <TwitterSelfSignInButton twitterSignedIn={twitterSignedIn} {...props} />
           </div>
           <br />
           <div>
