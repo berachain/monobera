@@ -34,7 +34,6 @@ export const getParsedPools = (
             mappedTokens[
               getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
             ];
-
           let poolApy = 0;
           if (cuttingBoard && bgtPrice && totalAmount && inflationData) {
             const recieverWeight = Number(cuttingBoard.amount) / totalAmount;
