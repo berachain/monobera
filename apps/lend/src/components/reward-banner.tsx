@@ -42,7 +42,6 @@ export const Banner = () => {
 
   const honeyLocked = useFormattedHoneyVaultBalance();
 
-  console.log(honeyLocked)
   const { isLoading: isBgtRewardsLoading, useBgtApr } =
     usePollBgtRewardsForAddress({
       address: debtBearingHoney as Address,
@@ -52,12 +51,6 @@ export const Banner = () => {
   console.log(bgtApr)
   const isLoadingApr = isHoneyVaultBalanceLoading || isBgtRewardsLoading;
 
-  console.log({
-    bgtApr,
-    isLoadingApr,
-    debtBearingHoney,
-    reservesDictionary
-  })
   const {
     write,
     isLoading: isClaimingLoading,
