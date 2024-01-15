@@ -9,7 +9,7 @@ export default function TwitterJump({
   disabled: boolean;
 }) {
   const url = "https://artio.faucet.berachain.com/";
-  const text = `Ooga+Booga!%0AI'm+claiming+my+testnet+tokens+for+Bearchain+Artio%0AThe+first+L1+not+backed+by+Paradigm+@berachain%20%0A%23berachain+%23artio+%23drop%20%23bid=${bid}%0A%0A`;
+  const text = `Ooga+Booga!%0AI'm+claiming+my+testnet+tokens+for+Bearchain+Artio%0AThe+first+L1+not+backed+by+Paradigm+@berachain%20%0A%23berachain+%23artio+%23drip%20%23bid=${bid}%0A%0A`;
   const link = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
   return (
     <Button
