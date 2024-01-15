@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { type Market } from "@/../../packages/proto/src";
-import { cloudinaryUrl, perpsName } from "@bera/config";
+import { cloudinaryUrl, perpsDocsUrl, perpsName } from "@bera/config";
 import { Documentation, Footer } from "@bera/shared-ui";
 import { formatUnits } from "viem";
 
@@ -85,7 +85,10 @@ export default async function Home() {
         <GeneralInfo tradingSummary={tradingSummary} />
         <Markets showBtn markets={markets} />
         <Tutorial />
-        <Documentation className="mx-auto w-full max-w-[1280px] px-8" />
+        <Documentation
+          docLink={perpsDocsUrl}
+          className="mx-auto w-full max-w-[1280px] px-8"
+        />
       </div>
       <Footer />
     </div>
