@@ -68,9 +68,9 @@ export const TVChartContainer = (
         backgroundColor: backgroundColor,
       },
       overrides: {
-        "paneProperties.backgroundType": "solid",
         "paneProperties.background": backgroundColor,
         "chartProperties.background": backgroundColor,
+        "paneProperties.backgroundType": "solid",
         "symbolWatermarkProperties.transparency": 90,
         "scalesProperties.textColor": "#AAA",
         "mainSeriesProperties.candleStyle.wickUpColor": "#336854",
