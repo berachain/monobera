@@ -144,6 +144,7 @@ export function CreatePoolPreview({
             <AlertDescription>{error && error.message}</AlertDescription>
           </Alert>
         )}
+
         {needsApproval.length > 0 ? (
           <ApproveButton
             amount={parseUnits(
