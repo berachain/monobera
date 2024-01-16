@@ -40,7 +40,7 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
 
   const isDataReady = useMemo(() => {
     return beraPrice && block !== 0n;
-  }, [block]);
+  }, [block, beraPrice]);
 
   return (
     <section className="my-24 flex w-full flex-col items-center">
