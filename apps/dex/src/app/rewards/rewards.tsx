@@ -32,7 +32,7 @@ export const Rewards = () => {
             />
           ) : (
             <>
-              {userPools?.map((pool: Pool) => (
+              {userPools?.filter((userPool: Pool) => userPool.bgtApy !== undefined)?.map((pool: Pool) => (
                 <RewardsCard pool={pool} key={pool.pool} />
               ))}
             </>
