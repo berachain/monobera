@@ -211,7 +211,7 @@ export function FooterSM() {
         <p className="whitespace-nowrap text-xs">Made W/❤️ at the 🐻Beraden</p>
       </div>
 
-      <div className="text-[8px]  sm:text-left">
+      <div className="mt-2 flex w-full text-left text-[8px] sm:w-9/12">
         *Annual Percentage Yield (APY) data is provided from third party and
         publicly available information, is subject to change, may not be
         accurate or complete and may not reflect your actual earnings but rather
