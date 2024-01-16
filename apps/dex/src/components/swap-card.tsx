@@ -104,7 +104,6 @@ export function SwapCard({
     outputCurrency,
   });
 
-  // console.log(payload);
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
@@ -424,6 +423,8 @@ export function SwapCard({
                   swapInfo.batchSwapSteps.length === 0 &&
                   fromAmount &&
                   fromAmount !== "" &&
+                  swapAmount !== "0" &&
+                  swapAmount !== "" &&
                   !isRouteLoading &&
                   !isWrap ? (
                     <Alert variant="destructive">
