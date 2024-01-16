@@ -9,6 +9,7 @@ import {
   type IStep,
 } from "~/components/create-pool/create-pool-stepper";
 import useCreateTokenWeights, { Steps } from "~/hooks/useCreateTokenWeights";
+import { useFindPool } from "~/hooks/useFindPool";
 
 const steps: IStep[] = [
   {
@@ -47,13 +48,21 @@ export default function CreatePageContent() {
     setPoolName,
     setStep,
   } = useCreateTokenWeights();
+  const { data: findDuplicatedPool, isLoading } = useFindPool(
+    String(swapFee / 100),
+    tokenWeights,
+  );
 
   return (
     <div className="flex max-w-[500px] flex-col items-center justify-center gap-8">
       <div className="mt-8 w-full">
         {step === Steps.SET_TOKEN_WEIGHTS && (
           <CreatePool
-            tokenWeights={tokenWeights}
+            tokenWeights={tokenWeights.sort((a, b) => {
+              if (a.token === undefined) return 1;
+              if (b.token === undefined) return -1;
+              return 0;
+            })}
             totalWeight={totalWeight}
             error={error}
             onTokenSelection={onTokenSelection}
@@ -72,7 +81,8 @@ export default function CreatePageContent() {
             setSwapFee={setSwapFee}
             onContinue={() => !error && setStep(Steps.SET_INITIAL_LIQUIDITY)}
             onBack={() => setStep(Steps.SET_TOKEN_WEIGHTS)}
-            isDuplicatePool={true}
+            isDuplicatePool={findDuplicatedPool}
+            isLoading={isLoading}
           />
         )}
         {step === Steps.SET_INITIAL_LIQUIDITY && (

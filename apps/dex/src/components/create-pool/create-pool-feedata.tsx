@@ -15,6 +15,7 @@ type Props = {
   onContinue: () => void;
   onBack: () => void;
   isDuplicatePool?: boolean;
+  isLoading?: boolean;
 };
 
 enum Types {
@@ -35,7 +36,8 @@ export function CreatePoolFeeData({
   setSwapFee,
   onContinue,
   onBack,
-  isDuplicatePool
+  isDuplicatePool,
+  isLoading,
 }: Props) {
   const [_type, setType] = useState(Types.VALUE);
   const [customValue, _setCustomValue] = useState(swapFee);
@@ -136,9 +138,9 @@ export function CreatePoolFeeData({
           <Button
             className="w-full"
             onClick={onContinue}
-            disabled={isDuplicatePool || error !== undefined}
+            disabled={isDuplicatePool || isLoading || error !== undefined}
           >
-            Next
+            {isLoading ? "Fetching Pools" : "Next"}
           </Button>
         </ActionButton>
       </div>

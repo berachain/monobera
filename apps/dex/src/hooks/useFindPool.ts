@@ -1,33 +1,22 @@
-import { subgraphUrl } from "@bera/config";
-import { getUniquePoolById } from "@bera/graphql";
-import useSWR from "swr";
+import { client, getUniquePoolById } from "@bera/graphql";
+import useSWRImmutable from "swr/immutable";
 
-export const useFindPool = ({
-  swapFee,
-  tokenWeights,
-}: {
-  swapFee: string;
-  tokenWeights: any[];
-}) => {
+export const useFindPool = (swapFee: string, tokenWeights: any[]) => {
   const id = getPoolId(swapFee, tokenWeights);
   const QUERY_KEY = ["useFindPool", id];
-
-  const { isLoading } = useSWR(
-    QUERY_KEY,
+  return useSWRImmutable(
+    id ? QUERY_KEY : null,
     async () => {
       try {
-        const response = await fetch(subgraphUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ getUniquePoolById }),
+        const res = await client.query({
+          query: getUniquePoolById,
+          variables: { id },
         });
-        const data = await response.json();
-        if (response.ok && !data.errors) {
-          return data.data.pools;
+        const poolCount = res.data.uniquePoolIDs;
+        if (poolCount.length === 0 || Number(poolCount[0].count) === 0) {
+          return false;
         } else {
-          throw new Error(
-            data.errors ? data.errors[0].message : "Error fetching data",
-          );
+          return true;
         }
       } catch (error) {
         console.error("fetching error", error);
@@ -41,8 +30,18 @@ export const useFindPool = ({
 };
 
 const getPoolId = (swapFee: string, tokenWeights: any[]) => {
-  const id = swapFee;
+  let poolId = swapFee;
   tokenWeights
-    .sort((a, b) => a.token.address.localeCompare(b.token.address))
-    .map((token: any) => id.concat("-").concat(token.token.address));
+    .sort((a, b) =>
+      (a.token?.address ?? "").localeCompare(b.token?.address ?? ""),
+    )
+    .forEach((token: any) => {
+      if (!token.token || !token.token.address) return undefined;
+      poolId = poolId
+        .concat("-")
+        .concat(token.token.address.toLowerCase())
+        .concat("-")
+        .concat(token.weight);
+    });
+  return poolId;
 };
