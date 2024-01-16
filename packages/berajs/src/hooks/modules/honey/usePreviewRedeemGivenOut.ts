@@ -49,7 +49,7 @@ export const usePollPreviewRedeemGivenOut = (
 
   const usePreviewRedeemGivenOut = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
+    return data === undefined ? "" : data;
   };
   return {
     usePreviewRedeemGivenOut,

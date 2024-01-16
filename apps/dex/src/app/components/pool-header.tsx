@@ -21,7 +21,7 @@ export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
         </Button>
         <p className="flex w-full justify-center gap-4 text-center text-2xl font-semibold md:justify-start md:text-left">
           <TokenIconList
-            tokenList={pool?.tokens?.map((t) => t.address)}
+            tokenList={pool?.tokens?.map((t) => t.address) ?? []}
             size="xl"
           />
           {pool?.poolName}

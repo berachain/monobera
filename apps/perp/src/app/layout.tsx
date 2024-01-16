@@ -42,24 +42,28 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
         }}
       />
-      <body
-        className={cn("bg-background font-sans antialiased", fontSans.variable)}
-      >
-        <SWRDevTools> </SWRDevTools>
-        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
-        <Providers>
-          <div className="z-[100]">
-            <Toaster position="bottom-right" />
-          </div>
-          <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-            <Header navItems={navItems} />
-            <main className="w-full pt-[72px]">{props.children}</main>
-            <Toaster position="bottom-right" />
-          </div>
-          <TailwindIndicator />
-          <Analytics />
-        </Providers>
-      </body>
+      <SWRDevTools>
+        <body
+          className={cn(
+            "bg-background font-sans antialiased",
+            fontSans.variable,
+          )}
+        >
+          <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
+          <Providers>
+            <div className="z-[100]">
+              <Toaster position="bottom-right" />
+            </div>
+            <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+              <Header navItems={navItems} />
+              <main className="w-full pt-[72px]">{props.children}</main>
+              <Toaster position="bottom-right" />
+            </div>
+            <TailwindIndicator />
+            <Analytics />
+          </Providers>
+        </body>
+      </SWRDevTools>
     </html>
   );
 }

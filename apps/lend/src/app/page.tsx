@@ -1,6 +1,6 @@
 import React from "react";
 import { type Metadata } from "next";
-import { lendName } from "@bera/config";
+import { lendDocsUrl, lendName } from "@bera/config";
 import { Documentation, Footer } from "@bera/shared-ui";
 
 import Data from "~/components/data";
@@ -21,7 +21,7 @@ export default function Page() {
         <Data />
         <Markets />
         <HowItWorks />
-        <Documentation className="my-24" />
+        <Documentation docLink={lendDocsUrl} className="my-24" />
       </div>
       <Footer />
     </>

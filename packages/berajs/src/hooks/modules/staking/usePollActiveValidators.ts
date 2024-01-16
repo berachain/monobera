@@ -1,11 +1,9 @@
 import { useMemo } from "react";
-import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { usePublicClient, type Address } from "wagmi";
 
 import { STAKING_PRECOMPILE_ABI } from "~/config";
-import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 import { defaultPagination } from "~/utils";
 import { usePollBgtSupply } from "../bank";
@@ -75,30 +73,24 @@ export const usePollActiveValidators = () => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
 
-  const { isLoading } = useSWR(
-    "getValidators",
-    async () => {
-      const result = (await publicClient
-        .readContract({
-          address: networkConfig.precompileAddresses.stakingAddress as Address,
-          abi: STAKING_PRECOMPILE_ABI,
-          functionName: "getValidators",
-          args: [defaultPagination],
-        })
-        .catch((e) => {
-          console.log(e);
-          return undefined;
-        })) as any[];
-      return {
-        validators: result ? result[0] : undefined,
-        nextKey: result ? result[1].nextKey : undefined,
-        total: result ? result[1].total : undefined,
-      };
-    },
-    {
-      refreshInterval: POLLING.NORMAL,
-    },
-  );
+  const { isLoading } = useSWRImmutable("getValidators", async () => {
+    const result = (await publicClient
+      .readContract({
+        address: networkConfig.precompileAddresses.stakingAddress as Address,
+        abi: STAKING_PRECOMPILE_ABI,
+        functionName: "getValidators",
+        args: [defaultPagination],
+      })
+      .catch((e) => {
+        console.log(e);
+        return undefined;
+      })) as any[];
+    return {
+      validators: result ? result[0] : undefined,
+      nextKey: result ? result[1].nextKey : undefined,
+      total: result ? result[1].total : undefined,
+    };
+  });
   const useActiveValidators = (): Validator[] | undefined => {
     const { data } = useSWRImmutable<ValidatorListResponse>("getValidators");
     const validators = data?.validators ?? undefined;

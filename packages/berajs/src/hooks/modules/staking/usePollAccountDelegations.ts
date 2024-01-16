@@ -40,7 +40,7 @@ export const usePollAccountDelegations = (
       return undefined;
     },
     {
-      refreshInterval: POLLING.FAST,
+      refreshInterval: POLLING.SLOW,
     },
   );
 

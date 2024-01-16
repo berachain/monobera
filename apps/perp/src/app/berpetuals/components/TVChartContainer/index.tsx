@@ -36,7 +36,7 @@ export const TVChartContainer = (
   }, [appTheme, isDarkOS]);
 
   useEffect(() => {
-    const backgroundColor = theme === "dark" ? "#0E0803" : "#FAFAF9";
+    const backgroundColor = theme === "dark" ? "#000000" : "#FAFAF9";
     const widgetOptions: ChartingLibraryWidgetOptions = {
       symbol: props.symbol,
       datafeed: Datafeed,
@@ -52,6 +52,9 @@ export const TVChartContainer = (
         "header_symbol_search",
         "use_localstorage_for_settings",
         "header_compare",
+        "save_chart_properties_to_local_storage",
+        "header_saveload",
+        "items_favoriting"
       ],
       charts_storage_url: props.charts_storage_url,
       charts_storage_api_version: props.charts_storage_api_version,
@@ -61,15 +64,19 @@ export const TVChartContainer = (
       theme,
       autosize: props.autosize,
       height: 500,
+      loading_screen: {
+        backgroundColor: backgroundColor,
+      },
       overrides: {
         "paneProperties.background": backgroundColor,
-        "paneProperties.vertGridProperties.color": "#373332",
-        "paneProperties.horzGridProperties.color": "#373332",
+        "chartProperties.background": backgroundColor,
+        "paneProperties.backgroundType": "solid",
         "symbolWatermarkProperties.transparency": 90,
         "scalesProperties.textColor": "#AAA",
         "mainSeriesProperties.candleStyle.wickUpColor": "#336854",
         "mainSeriesProperties.candleStyle.wickDownColor": "#7f323f",
       },
+      toolbar_bg: backgroundColor,
     };
 
     const tvWidget = new widget({ ...widgetOptions });

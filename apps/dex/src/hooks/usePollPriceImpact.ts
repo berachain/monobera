@@ -4,8 +4,6 @@ import { formatUnits, parseUnits } from "ethers";
 import useSWR from "swr";
 import { type Address } from "wagmi";
 
-import { laggy } from "./laggy";
-
 interface IUsePollSwaps {
   tokenIn: Address;
   tokenOut: Address;
@@ -33,7 +31,13 @@ export const usePollPriceImpact = ({
     amount: "1",
   });
 
-  const QUERY_KEY = [tokenIn, tokenOut, swapKind, swapInfo?.returnAmount];
+  const QUERY_KEY = [
+    "priceimpact",
+    tokenIn,
+    tokenOut,
+    swapKind,
+    swapInfo?.returnAmount,
+  ];
 
   return useSWR(
     QUERY_KEY,
@@ -60,7 +64,7 @@ export const usePollPriceImpact = ({
     },
     {
       refreshInterval: POLLING.FAST,
-      use: [laggy],
+      // use: [laggy],
     },
   );
 };
