@@ -17,17 +17,16 @@ export function PositionTitle({
   const leverageLabelColor = {
     Long: {
       textColor: "text-success-foreground",
-      borderColor: "#059669",
-      bgColor: "#13221D",
+      borderColor: "border-success-foreground",
+      bgColor: "bg-success",
     },
     Short: {
       textColor: "text-destructive-foreground",
-      borderColor: "#F87171",
-      bgColor: "#2D1717",
+      borderColor: "border-destructive-foreground",
+      bgColor: "bg-destructive",
     },
   };
 
-  const labelClass = `rounded border border-[${leverageLabelColor[type].borderColor}] bg-[${leverageLabelColor[type].bgColor}] ${leverageLabelColor[type].textColor} px-1`;
   return (
     <div className={cn("flex w-[112px] items-center gap-2", className)}>
       <Image
@@ -49,7 +48,14 @@ export function PositionTitle({
               : "text-destructive-foreground",
           )}
         >
-          {type.toUpperCase()} <label className={labelClass}>{leverage}x</label>
+          {type.toUpperCase()}{" "}
+          <label
+            className={cn(
+              `rounded border ${leverageLabelColor[type].bgColor} ${leverageLabelColor[type].borderColor} ${leverageLabelColor[type].textColor} px-1`,
+            )}
+          >
+            {leverage}x
+          </label>
         </div>
       </div>
     </div>
