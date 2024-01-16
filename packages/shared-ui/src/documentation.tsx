@@ -4,7 +4,13 @@ import { docsUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 
-export function Documentation({ className }: { className?: string }) {
+export function Documentation({
+  docLink,
+  className,
+}: {
+  docLink?: string;
+  className?: string;
+}) {
   return (
     <section className={cn(className)}>
       <div className="mb-12 p-6 text-center">
@@ -29,7 +35,7 @@ export function Documentation({ className }: { className?: string }) {
             Are you a fellow builder in the making? Check out our docs and start
             building on Berachain today.
           </p>
-          <Link href={`${docsUrl}/developers/`} target="_blank">
+          <Link href={docLink ?? `${docsUrl}/developers/`} target="_blank">
             <Button className="w-fit" variant="secondary">
               Checkout Docs
             </Button>

@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { perpsName } from "@bera/config";
+import { bannerEnabled, perpsName } from "@bera/config";
 import { LaunchBanner, UpTimeStatus } from "@bera/shared-ui";
 
 // import { useReadLocalStorage } from "usehooks-ts";
@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   // );
   return (
     <section className="relative">
-      <LaunchBanner appName={perpsName} />
+      {bannerEnabled && <LaunchBanner appName={perpsName} />}
       {/* {!disclaimerAccepted && <Disclaimer />} */}
       <OneClickBanner />
       <Script

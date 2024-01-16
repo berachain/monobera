@@ -4,7 +4,7 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useBeraJs } from "@bera/berajs";
-import { faucetUrl } from "@bera/config";
+import { bannerEnabled, faucetUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -89,7 +89,7 @@ export function Header({
           <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />
         </div>
       </div>
-      {appName && <LaunchBanner appName={appName} />}
+      {appName && bannerEnabled && <LaunchBanner appName={appName} />}
     </nav>
   );
 }
