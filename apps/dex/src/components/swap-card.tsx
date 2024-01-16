@@ -234,9 +234,29 @@ export function SwapCard({
         );
       } else {
         return (
-          <Button disabled={true} variant={"outline"} className="mt-4 w-full">
-            Select Token & Enter Amount
-          </Button>
+          <DynamicPreview
+            swapInfo={swapInfo}
+            disabled={true}
+            priceImpact={0}
+            exchangeRate={exchangeRate}
+            tokenIn={selectedFrom}
+            tokenOut={selectedTo}
+            tokenInPrice={tokenInPrice}
+            tokenOutPrice={tokenOutPrice}
+            open={openPreview}
+            setOpen={setOpenPreview}
+            write={() => {
+              write({
+                address: erc20DexAddress,
+                abi: DEX_PRECOMPILE_ABI,
+                functionName: "batchSwap",
+                params: payload,
+                value: value,
+              });
+            }}
+            isLoading={isLoading}
+            minAmountOut={minAmountOut}
+          />
         );
       }
     }
@@ -328,7 +348,7 @@ export function SwapCard({
                   />
                 </ul>
                 <div className="flex flex-col gap-2">
-                  {swapInfo && !isWrap ? (
+                  {!isWrap ? (
                     <div className="flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
                       <div className="flex w-full flex-row justify-between">
                         <p className="text-xs font-medium text-muted-foreground sm:text-sm">

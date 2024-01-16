@@ -150,7 +150,7 @@ export function TokenInput({
               setIsTyping && setIsTyping(true);
               typingTimer = setTimeout(() => {
                 setIsTyping && setIsTyping(false);
-              }, 100);
+              }, 1000);
             }}
             onChange={(e: any) => {
               const inputValue = e.target.value;
