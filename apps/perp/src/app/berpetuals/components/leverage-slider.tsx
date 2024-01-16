@@ -12,7 +12,7 @@ export function LeverageSlider({
 }) {
   return (
     <div className="mt-6 w-full min-w-full">
-      <div className="flex justify-between pl-2 align-middle text-xs font-medium">
+      <div className="flex items-center justify-between pl-2 align-middle text-xs font-medium">
         Leverage Slider
         <Input
           type="number"
@@ -29,7 +29,7 @@ export function LeverageSlider({
           }}
         />
       </div>
-      <div className="mt-4 flex w-full gap-4 pl-2 pr-2">
+      <div className="mt-4 flex w-full gap-4 pl-2 pr-6">
         <Slider
           defaultValue={[defaultValue ?? 1]}
           value={[Math.floor(((defaultValue ?? 1) * 100) / maxLeverage)]}

@@ -34,7 +34,7 @@ const Slider = React.forwardRef<
             <div key={index}>
               <div
                 key={index + "label"}
-                style={{ left: `calc(${ratio}% - 8px)` }}
+                style={{ left: `calc(${ratio}% - 16px)` }}
                 className="absolute bottom-3 text-xs text-foreground"
               >
                 {point}
@@ -42,7 +42,7 @@ const Slider = React.forwardRef<
               {index !== markers.length - 1 && (
                 <div
                   key={index + "dot"}
-                  style={{ left: `calc(${ratio}% - 8px)` }}
+                  style={{ left: `calc(${ratio}% - 16px)` }}
                   className={cn(
                     "absolute -bottom-[1px] h-[10px] w-[10px] rounded-full border-2",
                     value[0]! >= ratio
