@@ -31,8 +31,9 @@ export function WalletBalanceInUs() {
           const price = pricesArray?.find(
             (price: any) => price.id.toLowerCase() === address,
           );
+          // Ran into a runtime error here:
           const total =
-            Number(curr.formattedBalance ?? 0) * Number(price.price ?? 0);
+            Number(curr.formattedBalance ?? 0) * Number(price?.price ?? 0);
           return acc + total;
         }, 0)
       : 0;

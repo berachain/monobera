@@ -167,3 +167,12 @@ export const getTokenHoneyPrices = gql`
     }
   }
 `;
+
+export const getUniquePoolById = gql`
+  query GetUniquePoolID($id: String!) {
+    uniquePoolIDs(where: { id: $id }) {
+      id
+      count
+    }
+  }
+`;
