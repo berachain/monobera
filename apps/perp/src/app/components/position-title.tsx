@@ -42,7 +42,7 @@ export function PositionTitle({
         </div>
         <div
           className={cn(
-            "mt-1 text-sm font-medium leading-tight",
+            "mt-1 text-sm font-medium leading-tight flex flex-row items-center gap-1",
             type === "Long"
               ? "text-success-foreground"
               : "text-destructive-foreground",
