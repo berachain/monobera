@@ -34,7 +34,7 @@ const Slider = React.forwardRef<
             <div key={index}>
               <div
                 key={index + "label"}
-                style={{ left: `calc(${ratio}% - 8px)` }}
+                style={{ left: `calc(${ratio}% - 16px)` }}
                 className="absolute bottom-3 text-xs text-foreground"
               >
                 {point}
