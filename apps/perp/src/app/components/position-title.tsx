@@ -6,12 +6,27 @@ import { type IMarket } from "../berpetuals/page";
 export function PositionTitle({
   market,
   type,
+  leverage,
   className,
 }: {
   market: IMarket;
   type: "Long" | "Short";
+  leverage: number;
   className?: string;
 }) {
+  const leverageLabelColor = {
+    Long: {
+      textColor: "text-success-foreground",
+      borderColor: "border-success-foreground",
+      bgColor: "bg-success",
+    },
+    Short: {
+      textColor: "text-destructive-foreground",
+      borderColor: "border-destructive-foreground",
+      bgColor: "bg-destructive",
+    },
+  };
+
   return (
     <div className={cn("flex w-[112px] items-center gap-2", className)}>
       <Image
@@ -27,13 +42,20 @@ export function PositionTitle({
         </div>
         <div
           className={cn(
-            "mt-1 text-sm font-medium leading-tight",
+            "mt-1 text-sm font-medium leading-tight flex flex-row items-center gap-1",
             type === "Long"
               ? "text-success-foreground"
               : "text-destructive-foreground",
           )}
         >
-          {type}
+          {type.toUpperCase()}{" "}
+          <label
+            className={cn(
+              `rounded border ${leverageLabelColor[type].bgColor} ${leverageLabelColor[type].borderColor} ${leverageLabelColor[type].textColor} px-1`,
+            )}
+          >
+            {leverage}x
+          </label>
         </div>
       </div>
     </div>
