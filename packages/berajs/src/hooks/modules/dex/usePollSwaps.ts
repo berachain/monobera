@@ -5,7 +5,6 @@ import { usePublicClient } from "wagmi";
 
 import { DEX_PRECOMPILE_ABI } from "~/config";
 import { useBeraConfig } from "~/contexts";
-import { laggy } from "~/hooks/laggy";
 import POLLING from "../../../config/constants/polling";
 
 interface IUsePollSwaps {
@@ -40,6 +39,7 @@ export const usePollSwaps = ({
   const { networkConfig } = useBeraConfig();
   const publicClient = usePublicClient();
   const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount, isTyping];
+  console.log(QUERY_KEY);
   return useSWR<SwapInfoV2 | undefined>(
     QUERY_KEY,
     async () => {
@@ -105,8 +105,8 @@ export const usePollSwaps = ({
       }
     },
     {
-      refreshInterval: POLLING.NORMAL,
-      use: [laggy],
+      refreshInterval: POLLING.SLOW,
+      // use: [laggy],
     },
   );
 };
