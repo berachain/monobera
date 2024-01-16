@@ -31,6 +31,7 @@ export const useHoneyEvents = () => {
         ])
         .catch((e: any) => console.error(e));
     },
+    { refreshInterval: 1800000 },
   );
 
   const {
@@ -50,6 +51,7 @@ export const useHoneyEvents = () => {
         .then((res: any) => res.data.honeyMints)
         .catch((e: any) => console.error(e));
     },
+    { refreshInterval: 1800000 },
   );
 
   const {
@@ -69,6 +71,7 @@ export const useHoneyEvents = () => {
         .then((res: any) => res.data.honeyRedemptions)
         .catch((e: any) => console.error(e));
     },
+    { refreshInterval: 1800000 },
   );
 
   const isMintDataLoadingMore =
