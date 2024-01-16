@@ -319,6 +319,9 @@ importers:
       '@vercel/analytics':
         specifier: ^1.0.1
         version: 1.1.1
+      cryptojs:
+        specifier: ^2.5.3
+        version: 2.5.3
       framer-motion:
         specifier: ^10.15.0
         version: 10.18.0(react-dom@18.2.0)(react@18.2.0)
@@ -9267,6 +9270,10 @@ packages:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}
     engines: {node: '>=8'}
     dev: true
+
+  /cryptojs@2.5.3:
+    resolution: {integrity: sha512-+rdPl1UCxE8s3R94NNn+zMKOiI4MJ7dyh3X0c5uBL3btDr4zQ6acd7f9mY7Wb5MrccZEi2Rrha3OEtLcc5XXog==}
+    dev: false
 
   /css-loader@6.9.0(webpack@5.89.0):
     resolution: {integrity: sha512-3I5Nu4ytWlHvOP6zItjiHlefBNtrH+oehq8tnQa2kO305qpVyx9XNIT1CXIj5bgCJs7qICBCkgCYxQLKPANoLA==}
