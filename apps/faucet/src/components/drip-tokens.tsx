@@ -1,9 +1,10 @@
 import React from "react";
 import { faucetEndpointUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
+import CryptoJS from "crypto-js";
 import { useSession } from "next-auth/react";
 import { getAddress, isAddress } from "viem";
-import CryptoJS from "crypto-js";
+
 import ReCAPTCHAButton from "./recaptcha-btn";
 
 export function DripToken({
@@ -27,12 +28,18 @@ export function DripToken({
 
   async function handleRequest() {
     try {
-      const iv = CryptoJS.enc.Utf8.parse(process.env.NEXT_PUBLIC_IV).toString();
-      var key = CryptoJS.enc.Utf8.parse(process.env.NEXT_PUBLIC_ENCRYPTION_KEY??"");
-      const encryptedAccessToken = CryptoJS.AES.encrypt(data!.access_token, key, {
-        iv: iv,
-        padding: CryptoJS.pad.Pkcs7
-    }).toString();
+      const iv = CryptoJS.enc.Utf8.parse(process.env.NEXT_PUBLIC_IV);
+      var key = CryptoJS.enc.Utf8.parse(
+        process.env.NEXT_PUBLIC_ENCRYPTION_KEY ?? "",
+      );
+      const encryptedAccessToken = CryptoJS.AES.encrypt(
+        data!.access_token,
+        key,
+        {
+          iv: iv,
+          padding: CryptoJS.pad.Pkcs7,
+        },
+      ).toString();
       const res = await fetch(`${faucetEndpointUrl}/api/claim`, {
         method: "POST",
         headers: { Authorization: `Bearer ${CAPTCHAtoken}` },
@@ -42,7 +49,6 @@ export function DripToken({
           accessToken: encryptedAccessToken,
         }),
       });
-
       setAlert(res.status);
     } catch (error: any) {
       setAlert(500);
