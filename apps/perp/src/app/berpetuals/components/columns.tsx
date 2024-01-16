@@ -166,6 +166,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
         <PositionTitle
           market={row.original.market}
           type={row.original.buy === true ? "Long" : "Short"}
+          leverage={Number(row.original.leverage) ?? 2}
         />
       ),
       accessorKey: "assets",
@@ -398,6 +399,7 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
       <PositionTitle
         market={row.original.market}
         type={row.original.buy === true ? "Long" : "Short"}
+        leverage={Number(row.original.leverage) ?? 2}
       />
     ),
     accessorKey: "assets",
@@ -567,6 +569,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
       <PositionTitle
         market={row.original.market}
         type={row.original.buy === true ? "Long" : "Short"}
+        leverage={Number(row.original.leverage) ?? 2}
       />
     ),
     accessorKey: "market",
@@ -774,6 +777,7 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
       <PositionTitle
         market={row.original.market}
         type={row.original.buy === true ? "Long" : "Short"}
+        leverage={Number(row.original.leverage) ?? 2}
       />
     ),
     accessorKey: "assets",
