@@ -128,9 +128,10 @@ export function CreatePoolFeeData({
         )}
         {isDuplicatePool && (
           <Alert variant="destructive" className="my-4">
-            <AlertTitle>Error</AlertTitle>
+            <AlertTitle>Similar Pools Already Exist</AlertTitle>
             <AlertDescription>
-              Potential duplicated pool is being created, please try another one
+              Please note that creating this pool will not be possible; consider
+              adding liquidity to an existing pool instead.
             </AlertDescription>
           </Alert>
         )}
