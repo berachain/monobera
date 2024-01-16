@@ -18,8 +18,8 @@ const DynamicBerachainInfo = dynamic(
 );
 
 export const SwapContent = ({
-  inputCurrency,
-  outputCurrency
+  // inputCurrency,
+  // outputCurrency
 }: // inputCurrency, outputCurrency
 ISwap) => {
   return (
