@@ -17,15 +17,15 @@ export const usePollPreviewBatchSwap = (batchSwapSteps: any[]) => {
     QUERY_KEY,
     async () => {
       if (batchSwapSteps.length) {
-        const result = await publicClient.readContract({
+        return await publicClient.readContract({
           address: networkConfig.precompileAddresses.erc20DexAddress as Address,
           abi: DEX_PRECOMPILE_ABI,
           functionName: method,
           args: [0, batchSwapSteps],
         });
 
-        console.log(result);
-        return 0;
+        // console.log(result);
+        // return 0;
       }
       return undefined;
     },
