@@ -10,6 +10,7 @@ import {
   usePollBgtRewards,
   type Token,
 } from "@bera/berajs";
+import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
 import {
   LIQUIDITY_CHANGED_TYPE,
@@ -17,7 +18,7 @@ import {
   type Liquidity,
   type LiquidityChanged,
 } from "@bera/graphql";
-import { ApyTooltip, TokenIcon } from "@bera/shared-ui";
+import { ApyTooltip, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
@@ -402,12 +403,12 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                   <h3 className="text-xs font-medium text-muted-foreground">
                     Rewards available
                   </h3>
-                  <p className="text-lg font-semibold text-foreground">
-                    {Number(
-                      Number.isNaN(Number(bgtRewards)) ? 0 : bgtRewards,
-                    ).toFixed(2) ?? 0}{" "}
-                    BGT
-                  </p>
+                  <div className="flex items-center gap-1">
+                    <p className="text-lg font-semibold text-foreground">
+                      {formatAmountSmall(bgtRewards, 2)} BGT
+                    </p>
+                    <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
+                  </div>
                 </div>
                 {/* @ts-ignore */}
                 <RewardBtn poolAddress={pool?.pool} variant={"warning"} />

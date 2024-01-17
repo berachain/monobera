@@ -74,8 +74,11 @@ export const Banner = () => {
         <div className="flex items-center justify-center gap-2 text-3xl font-semibold leading-9 lg:justify-start">
           <TokenIcon address={bgtTokenAddress} fetch />
           {isReady && !isLoading //@ts-ignore
-            ? formatter.format(formatEther((rewards ?? 0n) as bigint))
+            ? rewards < 0.01
+              ? "< 0.01"
+              : formatter.format(formatEther((rewards ?? 0n) as bigint))
             : "~~"}
+          <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
         </div>
         <Button
           disabled={!isReady || !rewards || rewards === 0n || isClaimingLoading}

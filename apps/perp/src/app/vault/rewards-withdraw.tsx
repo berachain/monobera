@@ -12,8 +12,9 @@ import {
   usePollBalanceOfAssets,
   usePollPerpsBgtRewards,
 } from "@bera/berajs";
+import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import { DataTable, DynamicRewardBtn, useTxn } from "@bera/shared-ui";
-import { Skeleton } from "@bera/ui/skeleton";
+import { Skeleton, Tooltip } from "@bera/ui";
 import { parseUnits } from "ethers";
 import { type Address } from "wagmi";
 
@@ -83,7 +84,8 @@ export const RewardsWithdraw = () => {
                 width={20}
                 height={20}
               />{" "}
-              {claimableBgtRewards?.toFixed(4)}
+              {formatAmountSmall(claimableBgtRewards, 4)}
+              <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
             </div>
           )}
 

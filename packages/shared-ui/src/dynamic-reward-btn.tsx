@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import { bgtTokenAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -67,7 +68,10 @@ const RewardModalContent = ({
         />
         <div className="mt-1 h-[10px] text-right text-[10px] text-muted-foreground">
           {" "}
-          Available to Claim: {Number(claimableBgtRewards ?? 0).toFixed(2)}{" "}
+          Available to Claim: {formatAmountSmall(
+            claimableBgtRewards ?? 0,
+            2,
+          )}{" "}
           <span
             className=" cursor-pointer underline"
             onClick={() => setAmount(Number(claimableBgtRewards ?? 0))}
