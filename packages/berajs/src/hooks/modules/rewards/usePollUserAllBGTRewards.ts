@@ -21,7 +21,7 @@ export const usePollUserAllBGTRewards = () => {
       try {
         const result = await publicClient.readContract({
           abi: BGT_AGGREGATOR,
-          address: "0x328f967af323E1654a7b64E279516819C5FF8471",
+          address: "0xbfa9a15457b974d59735261C6c1BeFd253F4F3a6",
           functionName: "getAllRewards",
           args: [account, addresses],
         });
