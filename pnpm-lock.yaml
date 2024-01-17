@@ -11,6 +11,9 @@ importers:
       '@bera/eslint-config':
         specifier: 0.1.0
         version: link:packages/config/eslint
+      '@datadog/browser-rum':
+        specifier: ^5.8.0
+        version: 5.8.0
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^3.7.2
         version: 3.7.2(prettier@2.8.8)
@@ -2838,6 +2841,28 @@ packages:
 
   /@cosmjs/utils@0.29.5:
     resolution: {integrity: sha512-m7h+RXDUxOzEOGt4P+3OVPX7PuakZT3GBmaM/Y2u+abN3xZkziykD/NvedYFvvCCdQo714XcGl33bwifS9FZPQ==}
+
+  /@datadog/browser-core@5.8.0:
+    resolution: {integrity: sha512-aNMSB+tLu5aKm/uzswy5d6KDgGtMs2uMxsGWdZ3lmqorEHLXk5kPNTEVRJfeE49EJaWaxiTYQuuuLo0c5S0rUA==}
+    dev: false
+
+  /@datadog/browser-rum-core@5.8.0:
+    resolution: {integrity: sha512-UtWVR7z8qXvt0Ik10KjjG6Ueck1JLOXcfY00Vv2TttQ73hepL1NUlSDjdMyobySc/990ROvWkCYTIvhtqWFDFw==}
+    dependencies:
+      '@datadog/browser-core': 5.8.0
+    dev: false
+
+  /@datadog/browser-rum@5.8.0:
+    resolution: {integrity: sha512-WtWRQa41d/G4TRs4PwbMM82i56Fsjov9b/B1go0ocqIqUkaJYdTBqQCIcJo3xmCZrgmxSlPiPgEgB5shhVDXxA==}
+    peerDependencies:
+      '@datadog/browser-logs': 5.8.0
+    peerDependenciesMeta:
+      '@datadog/browser-logs':
+        optional: true
+    dependencies:
+      '@datadog/browser-core': 5.8.0
+      '@datadog/browser-rum-core': 5.8.0
+    dev: false
 
   /@discoveryjs/json-ext@0.5.7:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}

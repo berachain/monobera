@@ -11,6 +11,7 @@ import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
 import { useLocalStorage } from "usehooks-ts";
 
+import { DatadogInit } from "~/components/datadog-init";
 import { navItems } from "~/app/config";
 import Providers from "./Providers";
 
@@ -58,6 +59,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               </div>
               <div className="z-10 flex-1">
                 <Header navItems={navItems} />
+                <DatadogInit />
                 <main className="w-full pt-start">{props.children}</main>
               </div>
             </div>
