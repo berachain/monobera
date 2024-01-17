@@ -168,6 +168,17 @@ export default function UserTokenCard({
           boost borrowing capacity.
         </Alert>
       )}
+      {type === "user-borrow" && asset.address === honeyAddress && (
+        <Alert variant="destructive" className="mt-4">
+          <AlertTitle>
+            {" "}
+            <Icons.info className="mr-1 inline-block h-4 w-4" />
+            Must Repay Entire Loan to Withdraw Collaterall
+          </AlertTitle>
+          Please be sure to pay your entire honey debt, you will not be able to
+          withdraw your collateral until you repay your honey loan.
+        </Alert>
+      )}
       {type === "borrow" &&
         Number(
           formatUnits(

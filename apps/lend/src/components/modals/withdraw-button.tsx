@@ -10,7 +10,7 @@ import {
   usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
-import { lendPoolImplementationAddress } from "@bera/config";
+import { honeyAddress, lendPoolImplementationAddress } from "@bera/config";
 import { TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -195,9 +195,24 @@ const WithdrawModalContent = ({
           </Alert>
         )}
 
+      {token.address !== honeyAddress && userAccountData.totalDebtBase > 0n && (
+        <Alert variant="destructive" className="mt-4">
+          <AlertTitle>
+            {" "}
+            <Icons.info className="mr-1 inline-block h-4 w-4" />
+            Must Repay Entire Loan to Withdraw Collaterall
+          </AlertTitle>
+          Please be sure to pay your entire honey debt, you will not be able to
+          withdraw your collateral until you repay your honey loan.
+        </Alert>
+      )}
+
       <Button
         disabled={
-          !amount || Number(amount) <= 0 || Number(amount) > Number(balance)
+          !amount ||
+          Number(amount) <= 0 ||
+          Number(amount) > Number(balance) ||
+          (userAccountData.totalDebtBase > 0n && token.address !== honeyAddress)
         }
         onClick={() => {
           write({

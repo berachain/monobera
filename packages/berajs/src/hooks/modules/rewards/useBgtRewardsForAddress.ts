@@ -1,12 +1,12 @@
+import { beraTokenAddress, honeyTokenAddress } from "@bera/config";
 import { client, getTokenHoneyPrice, type Weight } from "@bera/graphql";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import { getAddress, type Address } from "viem";
 
 import POLLING from "~/config/constants/polling";
 import { usePollGlobalCuttingBoard } from "..";
 import { usePollBgtInflation } from "../staking/usePollBgtInflation";
-import { beraTokenAddress, honeyTokenAddress } from "@bera/config";
-import { type Address, getAddress } from "viem";
 
 const handleNativeBera = (token: Address) => {
   if (token === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)) {
@@ -47,7 +47,6 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
   return data;
 };
 
-
 interface IBgtRewardsForAddress {
   bgtPerYear: number;
   UsdBgtPerYear: number;
@@ -64,7 +63,7 @@ export const usePollBgtRewardsForAddress = ({
   const cuttingBoard = useGlobalCuttingBoard();
   const inflationData = useInflationData();
 
-  const beraPrice = useTokenHoneyPrice(beraTokenAddress)
+  const beraPrice = useTokenHoneyPrice(beraTokenAddress);
   // const beraPrice = useBeraPrice();
   const QUERY_KEY = [
     "bgtRewardsForAddress",
@@ -74,7 +73,7 @@ export const usePollBgtRewardsForAddress = ({
     inflationData,
   ];
 
-  console.log(QUERY_KEY)
+  // console.log(QUERY_KEY)
   const { isLoading } = useSWR(
     QUERY_KEY,
     () => {
@@ -117,8 +116,9 @@ export const usePollBgtRewardsForAddress = ({
       IBgtRewardsForAddress | undefined
     >(QUERY_KEY);
     console.log({
-      data, tvl
-    })
+      data,
+      tvl,
+    });
     if (data && tvl) {
       const apr = (data.UsdBgtPerYear / tvl) * 100;
       return apr;
