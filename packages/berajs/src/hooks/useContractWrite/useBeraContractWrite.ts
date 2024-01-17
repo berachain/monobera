@@ -55,7 +55,7 @@ const useBeraContractWrite = ({
           value: value,
           args: [...params],
           account: account,
-          chain: undefined,
+          // chain: undefined,
         });
         dispatch({ type: ActionEnum.SUBMITTING });
 
