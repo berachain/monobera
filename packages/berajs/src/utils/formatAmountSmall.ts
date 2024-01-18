@@ -4,6 +4,10 @@ export function formatAmountSmall(
 ): string {
   const numericValue = Number(value);
 
+  if (isNaN(numericValue)) {
+    return "0.00";
+  }
+
   // Check if the value is not a number or is less than 0.01
   if (isNaN(numericValue) || numericValue < 0.01) {
     return numericValue < 0.01 ? "< 0.01" : "0";
