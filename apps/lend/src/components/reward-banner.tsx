@@ -78,7 +78,7 @@ export const Banner = () => {
           <TokenIcon address={bgtTokenAddress} fetch />
           {isReady && !isLoading ? (
             <span>
-              {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(2)}}`}
+              {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(2)}`}
             </span>
           ) : (
             "~~"
