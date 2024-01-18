@@ -205,7 +205,10 @@ export function SwapCard({
           <DynamicPreview
             swapInfo={swapInfo}
             disabled={
-              swapInfo?.formattedReturnAmount === "0" || exceedingBalance
+              swapInfo?.formattedReturnAmount === "0" ||
+              exceedingBalance ||
+              Number(fromAmount) <= 0 ||
+              Number(toAmount) <= 0
             }
             priceImpact={0}
             exchangeRate={exchangeRate}
