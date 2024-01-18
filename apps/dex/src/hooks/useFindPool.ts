@@ -3,7 +3,6 @@ import useSWRImmutable from "swr/immutable";
 
 export const useFindPool = (swapFee: number, tokenWeights: any[]) => {
   const id = getPoolId(swapFee, tokenWeights);
-  console.log("id", id, swapFee)
   const QUERY_KEY = ["useFindPool", id];
   return useSWRImmutable(
     id ? QUERY_KEY : null,
@@ -38,14 +37,14 @@ export const useFindPool = (swapFee: number, tokenWeights: any[]) => {
   swapFeeStr = 0.011000000000000001 r u kidding me??
 */
 const getSwapFeeInStr = (swapFee: number) => {
-  if(swapFee === 1.1) return "0.011";
-  else if(swapFee === 0.4) return "0.004";
-  else if(swapFee === 0.15) return "0.0015";
-  else return (swapFee/100).toString();
-}
+  if (swapFee === 1.1) return "0.011";
+  else if (swapFee === 0.4) return "0.004";
+  else if (swapFee === 0.15) return "0.0015";
+  else return (swapFee / 100).toString();
+};
 
 const getPoolId = (swapFee: number, tokenWeights: any[]) => {
-  let poolId = getSwapFeeInStr(swapFee)
+  let poolId = getSwapFeeInStr(swapFee);
   tokenWeights
     .sort((a, b) =>
       (a.token?.address ?? "").localeCompare(b.token?.address ?? ""),
