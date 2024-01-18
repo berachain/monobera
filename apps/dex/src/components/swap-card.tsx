@@ -134,9 +134,6 @@ export function SwapCard({
       setOpenPreview(false);
     },
     onError: () => {
-      setFromAmount(undefined);
-      setSwapAmount("");
-      setToAmount(undefined);
       setOpenPreview(false);
     },
   });
