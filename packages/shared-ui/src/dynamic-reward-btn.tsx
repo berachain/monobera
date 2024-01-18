@@ -49,7 +49,11 @@ const RewardModalContent = ({
 }) => {
   const exceeding =
     amount !== undefined && Number(amount) > Number(claimableBgtRewards ?? 0);
-  const { isSmall, formattedBgt } = formatAmountSmall(claimableBgtRewards ?? 0);
+  const { isSmall, numericValue: formattedBgt } = formatAmountSmall(
+    claimableBgtRewards ?? 0,
+  );
+  console.log("formattedBgt", isSmall, formattedBgt);
+
   return (
     <div className="flex w-full flex-col gap-8 sm:w-[440px]">
       <div className="text-lg font-semibold leading-7">Unclaimed Rewards</div>

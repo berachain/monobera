@@ -66,7 +66,8 @@ export const RewardsWithdraw = () => {
     },
   });
 
-  const { isSmall, formattedBgt } = formatAmountSmall(claimableBgtRewards);
+  const { isSmall, numericalValue: formattedBgt } =
+    formatAmountSmall(claimableBgtRewards);
 
   return (
     <div className="flex w-full flex-col gap-2">

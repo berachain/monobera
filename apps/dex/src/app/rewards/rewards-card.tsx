@@ -33,7 +33,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
     pool: pool,
   });
 
-  const { isSmall, formattedBgt } = formatAmountSmall(bgtRewards);
+  const { isSmall, numericValue: formattedBgt } = formatAmountSmall(bgtRewards);
 
   return (
     <div className="flex w-full flex-col items-center justify-between gap-4 rounded-2xl border border-border bg-background p-4 md:p-6 lg:flex-row">
@@ -76,7 +76,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
           <div className="flex min-w-[65px] flex-col gap-1">
             <div className=" text-left text-sm font-semibold leading-tight text-warning-foreground md:text-lg md:leading-7">
               <p className="text-lg font-semibold text-foreground">
-                {isSmall && "< "} {formattedBgt.toFixed(2)}
+                {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(2)}`}
               </p>
             </div>
             <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">

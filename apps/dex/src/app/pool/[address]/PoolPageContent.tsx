@@ -316,7 +316,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   });
 
   const { isConnected } = useBeraJs();
-  const { isSmall, formattedBGTRewards } = formatAmountSmall();
+  const { isSmall, numericValue: formattedBGTRewards } =
+    formatAmountSmall(bgtRewards);
 
   return (
     <div className="flex flex-col gap-8">
