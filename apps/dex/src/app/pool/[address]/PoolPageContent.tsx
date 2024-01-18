@@ -316,6 +316,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   });
 
   const { isConnected } = useBeraJs();
+  const { isSmall, formattedBGTRewards } = formatAmountSmall();
 
   return (
     <div className="flex flex-col gap-8">
@@ -405,7 +406,9 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                   </h3>
                   <div className="flex items-center gap-1">
                     <p className="text-lg font-semibold text-foreground">
-                      {formatAmountSmall(bgtRewards, 2)} BGT
+                      {isSmall
+                        ? `< ${formattedBGTRewards} BGT`
+                        : `${formattedBGTRewards} BGT`}
                     </p>
                     <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
                   </div>

@@ -60,6 +60,7 @@ export const Banner = () => {
     onSuccess: () => refetch(),
   });
   const formattedRewards = formatEther(rewards ?? 0n);
+  const { isSmall, formattedBgt } = formatAmountSmall(formattedRewards);
 
   return (
     <div className="relative flex flex-col-reverse items-start justify-center gap-4 rounded-lg border border-accent bg-gradient-to-b from-[#FFFCF2] to-[#FFF2D0] px-8 py-6 dark:from-[#27251F] dark:to-[#322400] lg:flex-row lg:gap-16">
@@ -74,9 +75,14 @@ export const Banner = () => {
       <div className="flex h-full w-full flex-shrink-0 flex-col gap-4 rounded-xl border border-amber-400 bg-gradient-to-br from-[#FFF6D7] via-[#FFEAA3] to-[#FFD977] p-4 dark:from-[#413E33] dark:to-[#453509] lg:w-fit">
         <div className="flex items-center justify-center gap-2 text-3xl font-semibold leading-9 lg:justify-start">
           <TokenIcon address={bgtTokenAddress} fetch />
-          {isReady && !isLoading //@ts-ignore
-            ? formatAmountSmall(formattedRewards, 2)
-            : "~~"}
+          {isReady && !isLoading ? (
+            <span>
+              {isSmall ? "< " : ""}
+              {formattedBgt.toFixed(2)}
+            </span>
+          ) : (
+            "~~"
+          )}
           <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
         </div>
         <Button

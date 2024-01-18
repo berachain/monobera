@@ -66,6 +66,8 @@ export const RewardsWithdraw = () => {
     },
   });
 
+  const { isSmall, formattedBgt } = formatAmountSmall(claimableBgtRewards);
+
   return (
     <div className="flex w-full flex-col gap-2">
       {ModalPortal}
@@ -84,7 +86,7 @@ export const RewardsWithdraw = () => {
                 width={20}
                 height={20}
               />{" "}
-              {formatAmountSmall(claimableBgtRewards, 4)}
+              {isSmall && "< "} {formattedBgt.toFixed(4)}
               <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
             </div>
           )}

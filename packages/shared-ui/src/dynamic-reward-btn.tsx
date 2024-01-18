@@ -49,6 +49,7 @@ const RewardModalContent = ({
 }) => {
   const exceeding =
     amount !== undefined && Number(amount) > Number(claimableBgtRewards ?? 0);
+  const { isSmall, formattedBgt } = formatAmountSmall(claimableBgtRewards ?? 0);
   return (
     <div className="flex w-full flex-col gap-8 sm:w-[440px]">
       <div className="text-lg font-semibold leading-7">Unclaimed Rewards</div>
@@ -68,10 +69,7 @@ const RewardModalContent = ({
         />
         <div className="mt-1 h-[10px] text-right text-[10px] text-muted-foreground">
           {" "}
-          Available to Claim: {formatAmountSmall(
-            claimableBgtRewards ?? 0,
-            2,
-          )}{" "}
+          Available to Claim: {isSmall && "< "} {formattedBgt.toFixed(2)}{" "}
           <span
             className=" cursor-pointer underline"
             onClick={() => setAmount(Number(claimableBgtRewards ?? 0))}
