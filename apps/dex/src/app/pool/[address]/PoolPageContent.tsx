@@ -409,7 +409,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                     <p className="text-lg font-semibold text-foreground">
                       {isSmall
                         ? `< ${formattedBGTRewards} BGT`
-                        : `${formattedBGTRewards} BGT`}
+                        : `${formattedBGTRewards.toFixed(2)} BGT`}
                     </p>
                     <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
                   </div>
