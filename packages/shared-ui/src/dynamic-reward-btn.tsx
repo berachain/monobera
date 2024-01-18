@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import { bgtTokenAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -48,6 +49,10 @@ const RewardModalContent = ({
 }) => {
   const exceeding =
     amount !== undefined && Number(amount) > Number(claimableBgtRewards ?? 0);
+  const { isSmall, numericValue: formattedBgt } = formatAmountSmall(
+    claimableBgtRewards ?? 0,
+  );
+
   return (
     <div className="flex w-full flex-col gap-8 sm:w-[440px]">
       <div className="text-lg font-semibold leading-7">Unclaimed Rewards</div>
@@ -67,7 +72,8 @@ const RewardModalContent = ({
         />
         <div className="mt-1 h-[10px] text-right text-[10px] text-muted-foreground">
           {" "}
-          Available to Claim: {Number(claimableBgtRewards ?? 0).toFixed(2)}{" "}
+          Available to Claim:{" "}
+          {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(2)}}`}{" "}
           <span
             className=" cursor-pointer underline"
             onClick={() => setAmount(Number(claimableBgtRewards ?? 0))}

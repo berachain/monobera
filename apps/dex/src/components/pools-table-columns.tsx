@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatter } from "@bera/berajs";
+import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import {
   DataTableColumnHeader,
   TokenIconList,
@@ -375,12 +376,17 @@ export const my_columns: ColumnDef<any>[] = [
       />
     ),
     cell: ({ row }) => {
+      const { isSmall, numericValue: formattedBGTRewards } = formatAmountSmall(
+        row.original.bgtRewards ?? "0",
+      );
       return (
         <Badge
           variant={"warning"}
           className="border-none px-2 py-1 font-normal"
         >
-          {formatter.format(Number(row.original.bgtRewards ?? "0"))} BGT
+          {isSmall
+            ? `< ${formattedBGTRewards} BGT`
+            : `${formattedBGTRewards.toFixed(2)} BGT`}
         </Badge>
       );
     },
