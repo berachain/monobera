@@ -74,7 +74,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
           <div className="flex min-w-[65px] flex-col gap-1">
             <div className=" text-left text-sm font-semibold leading-tight text-warning-foreground md:text-lg md:leading-7">
               <p className="text-lg font-semibold text-foreground">
-                {formatAmountSmall(bgtRewards, 2)} BGT
+                {formatAmountSmall(bgtRewards, 2)}
               </p>
             </div>
             <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
