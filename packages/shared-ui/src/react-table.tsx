@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@bera/ui";
 import { Card } from "@bera/ui/card";
-import { useTable } from "react-table";
+import { useSortBy, useTable } from "react-table";
 
 type Column = {
   header: React.ReactNode;
@@ -17,8 +17,9 @@ interface RTProps {
   rowOnClick?: (row: any) => void;
 }
 export function RT({ columns, data, rowOnClick, className }: RTProps) {
+  // allows for multi-column sorting
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+    useTable({ columns, data }, useSortBy);
 
   return (
     <Card className="overflow-x-scroll">
