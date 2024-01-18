@@ -3,7 +3,6 @@ export function formatAmountSmall(value: number | string): {
   numericValue: number;
 } {
   const numericValue = Number(value);
-  console.log("numericValue!!!!!!", numericValue);
 
   if (isNaN(numericValue) || numericValue === 0) {
     return { isSmall: false, numericValue: 0 };
