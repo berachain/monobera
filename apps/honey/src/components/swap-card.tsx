@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
+import { cloudinaryUrl, erc20HoneyAddress, honeyAddress } from "@bera/config";
 import { ApproveButton, ConnectButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -104,6 +104,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 selectable={selectedFrom?.address !== honey?.address}
                 customTokenList={collateralList}
                 hidePrice
+                showExceeding
                 setAmount={(amount) => {
                   setGivenIn(true);
                   setFromAmount(amount);
@@ -121,6 +122,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 customTokenList={collateralList}
                 showExceeding={false}
                 hidePrice
+                hideBalance
                 hideMax={true}
                 balance={toBalance?.formattedBalance}
               />
@@ -139,15 +141,16 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
               isMint ? (
                 <Button
                   disabled={
-                    Number(fromAmount) === 0 ||
-                    Number(toAmount) === 0 ||
+                    Number(fromAmount) <= 0 ||
+                    Number(toAmount) <= 0 ||
                     isLoading ||
+                    !fromAmount ||
+                    !toAmount ||
                     !allowance
                   }
                   onClick={() => {
                     write({
-                      address: process.env
-                        .NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
+                      address: honeyAddress,
                       abi: ERC20_HONEY_ABI,
                       functionName: "mint",
                       params: payload,
@@ -159,15 +162,16 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
               ) : (
                 <Button
                   disabled={
-                    Number(fromAmount) === 0 ||
-                    Number(toAmount) === 0 ||
+                    Number(fromAmount) <= 0 ||
+                    Number(toAmount) <= 0 ||
+                    !fromAmount ||
+                    !toAmount ||
                     isLoading ||
                     !allowance
                   }
                   onClick={() => {
                     write({
-                      address: process.env
-                        .NEXT_PUBLIC_ERC20_HONEY_ADDRESS as `0x{string}`,
+                      address: honeyAddress,
                       abi: ERC20_HONEY_ABI,
                       functionName: "redeem",
                       params: payload,

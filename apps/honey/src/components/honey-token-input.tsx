@@ -22,6 +22,7 @@ type Props = {
   customTokenList?: Token[];
   onTokenSelection?: (token: Token | undefined) => void;
   setAmount?: (amount: string | undefined) => void;
+  showExceeding?: boolean;
   onExceeding?: (isExceeding: boolean) => void;
 };
 
@@ -37,6 +38,7 @@ export function HoneyTokenInput({
   customTokenList = undefined,
   onTokenSelection = undefined,
   setAmount = undefined,
+  showExceeding = false,
   onExceeding = undefined,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
@@ -50,13 +52,13 @@ export function HoneyTokenInput({
   const { isConnected } = useBeraJs();
 
   useEffect(() => {
-    if (BigNumber(tokenBalance).eq(0)) return;
+    // if (BigNumber(tokenBalance).eq(0)) return;
     if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
-    if (BigNumber(amount ?? "0").lte(tokenBalance)) {
-      setExceeding(false);
+    if (BigNumber(amount ?? "0").gt(tokenBalance)) {
+      setExceeding(true);
       return;
     } else {
-      setExceeding(true);
+      setExceeding(false);
       return;
     }
   }, [tokenBalance, amount]);
@@ -64,6 +66,7 @@ export function HoneyTokenInput({
   useEffect(() => {
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
   }, [exceeding]);
+
   return (
     <li
       className={
@@ -88,7 +91,10 @@ export function HoneyTokenInput({
             disabled={disabled}
             className={cn(
               "w-full grow border-0 bg-white p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
-              exceeding && !hideBalance && "text-destructive-foreground",
+              exceeding &&
+                !hideBalance &&
+                showExceeding &&
+                "text-destructive-foreground",
             )}
             value={amount}
             onChange={(e) => {
@@ -97,15 +103,16 @@ export function HoneyTokenInput({
           />
         </div>
       </div>
-      {isConnected && selected && Number(tokenBalance) !== 0 ? (
+      {isConnected && selected ? (
         <div className="absolute bottom-[6px] right-2 h-fit cursor-default">
           {/* <div className="flex w-full items-center justify-between gap-1"> */}
-          <div className="flex flex-row items-center justify-end gap-1 text-xs text-muted-foreground">
-            <div className="w-16 overflow-hidden truncate p-0 text-right text-xs">
-              <Icons.wallet className="mr-[2px] mt-[-3px] inline h-3 w-3" />
-              {tokenBalance ? tokenBalance : "0"}
-            </div>
-            {!hideBalance && (
+          {!hideBalance && (
+            <div className="flex flex-row items-center justify-end gap-1 text-xs text-muted-foreground">
+              <div className="w-16 overflow-hidden truncate p-0 text-right text-xs">
+                <Icons.wallet className="mr-[2px] mt-[-3px] inline h-3 w-3" />
+                {tokenBalance ? tokenBalance : "0"}
+              </div>
+
               <p
                 className="cursor-pointer hover:underline"
                 onClick={() => {
@@ -114,8 +121,8 @@ export function HoneyTokenInput({
               >
                 MAX
               </p>
-            )}
-          </div>
+            </div>
+          )}
           {/* <div className="flex flex-row gap-1">
               {!hidePrice && (
                 <p className="self-center p-0 text-xs text-muted-foreground">
