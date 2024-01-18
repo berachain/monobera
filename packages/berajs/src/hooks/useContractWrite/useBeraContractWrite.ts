@@ -2,9 +2,8 @@
 
 import { useCallback, useReducer } from "react";
 import { usePublicClient, useWalletClient } from "wagmi";
-import { prepareWriteContract } from "wagmi/actions";
 
-// import { prepareWriteContract } from "wagmi/actions";
+import { prepareWriteContract } from "wagmi/actions";
 
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
@@ -52,10 +51,10 @@ const useBeraContractWrite = ({
           address: address,
           abi: abi,
           functionName: functionName,
-          value: value,
+          value: value === 0n ? undefined : value,
           args: [...params],
           account: account,
-          chain: undefined,
+          // chain: undefined,
         });
         dispatch({ type: ActionEnum.SUBMITTING });
 
@@ -64,6 +63,7 @@ const useBeraContractWrite = ({
           await publicClient.waitForTransactionReceipt({
             hash: receipt,
             pollingInterval: 2500,
+            timeout: 120000
           });
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });

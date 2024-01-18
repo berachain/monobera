@@ -39,6 +39,8 @@ export const usePsm = () => {
 
   const [givenIn, setGivenIn] = useState<boolean>(true);
 
+  const [isTyping, setIsTyping] = useState(false);
+
   useEffect(() => {
     if (
       defaultCollateral &&
@@ -217,6 +219,8 @@ export const usePsm = () => {
     payload,
     isConnected,
     setSelectedFrom,
+    isTyping,
+    setIsTyping,
     allowance,
     isLoading,
     write,
