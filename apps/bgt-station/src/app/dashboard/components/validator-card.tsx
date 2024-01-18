@@ -31,6 +31,10 @@ export default function ValidatorCard({
     usePollGlobalValidatorBribes(prices);
   const bribeValue = useValidatorTotalActiveBribeValue(validator.operatorAddr);
   const vApy = useValidatorvAPY(validator.operatorAddr);
+  const formattedBGTRewards =
+    validator.tokens < 0.01
+      ? "< 0.01"
+      : formatter.format(parseFloat(formatUnits(BigInt(validator.tokens), 18)));
   const info = [
     {
       amount: String(vApy?.toFixed(2) ?? 0) + "%",
@@ -41,9 +45,7 @@ export default function ValidatorCard({
       text: "Bribe value",
     },
     {
-      amount:
-        formatter.format(Number(formatUnits(BigInt(validator.tokens), 18))) +
-        " BGT",
+      amount: formattedBGTRewards.toString() + " BGT",
       text: "Voting power",
     },
     {
