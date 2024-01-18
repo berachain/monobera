@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router";
 import { formatUsd, formatter, usePollBgtRewards } from "@bera/berajs";
+import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -72,7 +73,9 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
         <div className="flex items-center gap-4">
           <div className="flex min-w-[65px] flex-col gap-1">
             <div className=" text-left text-sm font-semibold leading-tight text-warning-foreground md:text-lg md:leading-7">
-              {Number(bgtRewards).toFixed(2)}
+              <p className="text-lg font-semibold text-foreground">
+                {formatAmountSmall(bgtRewards, 2)} BGT
+              </p>
             </div>
             <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
               BGT earned
