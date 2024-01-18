@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@bera/ui";
 import { Card } from "@bera/ui/card";
-import { useTable } from "react-table";
+import { useSortBy, useTable } from "react-table";
 
 type Column = {
   header: React.ReactNode;
@@ -24,8 +24,9 @@ export default function RT({
   emptyMessage = "No data found.",
   className,
 }: RTProps) {
+  // allows for multi-column sorting
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns: columns ?? [], data: data ?? [] });
+    useTable({ columns: columns ?? [], data: data ?? [] }, useSortBy);
 
   return (
     <Card className="w-full overflow-x-scroll">
