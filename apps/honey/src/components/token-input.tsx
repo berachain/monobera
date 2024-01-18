@@ -61,7 +61,7 @@ export function TokenInput({
   const { isConnected } = useBeraJs();
 
   useEffect(() => {
-    if (BigNumber(tokenBalance).eq(0)) return;
+    // if (BigNumber(tokenBalance).eq(0)) return;
     if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
     if (
       !isBalancesLoading &&
@@ -119,7 +119,7 @@ export function TokenInput({
           />
         </div>
       </div>
-      {isConnected && selected && Number(tokenBalance) !== 0 ? (
+      {isConnected && selected ? (
         <div className="absolute bottom-2 right-0">
           {hideBalance ? null : (
             <div className="mt-[-10px] flex w-full items-center justify-between gap-1">
@@ -130,7 +130,7 @@ export function TokenInput({
                 </p>
                 {!hideMax && (
                   <p
-                    className="cursor-pointer text-xs text-muted-foreground underline hover:text-foreground"
+                    className="cursor-pointer text-xs text-muted-foreground underline hover:text-foreground pl-1"
                     onClick={() => {
                       setAmount && setAmount(tokenBalance);
                     }}
