@@ -8,9 +8,9 @@ export function formatAmountSmall(
     return "0.00";
   }
 
-  // Check if the value is not a number or is less than 0.01
-  if (isNaN(numericValue) || numericValue < 0.01) {
-    return numericValue < 0.01 ? "< 0.01" : "0";
+  // Check if the value is less than 0.01
+  if (numericValue < 0.01) {
+    return "< 0.01";
   }
 
   // Format the number and return it as a string
