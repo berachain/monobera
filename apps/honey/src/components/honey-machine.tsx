@@ -362,6 +362,7 @@ export function HoneyMachine() {
                     selectable={selectedFrom?.address !== honey?.address}
                     customTokenList={collateralList}
                     hidePrice
+                    showExceeding
                     setAmount={(amount) => {
                       setGivenIn(true);
                       setFromAmount(amount);
