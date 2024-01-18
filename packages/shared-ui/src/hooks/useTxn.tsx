@@ -237,12 +237,13 @@ export const useTxn = ({
           toast.remove(`loading-${identifier}`);
           toast.custom(
             <SubmissionToast
-              title={"Transaction submitted"}
+              title={"Transaction pending"}
               message="waiting for confirmation"
               onClose={() => toast.remove(toastId)}
             />,
             {
               id: toastId,
+              duration: Infinity,
               position: isMd ? "bottom-right" : "top-center",
             },
           );
@@ -428,7 +429,7 @@ export const useTxn = ({
           hash={undefined}
         />
         <SubmissionModal
-          title="Transaction submitted"
+          title="Transaction pending"
           onClose={() => closeModal("submissionModal")}
           open={modalState.submissionModal?.isOpen ?? false}
           message={message}

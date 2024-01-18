@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { erc20ABI, usePublicClient } from "wagmi";
@@ -6,7 +6,7 @@ import { erc20ABI, usePublicClient } from "wagmi";
 import { type Token } from "~/api/currency/tokens";
 import { useBeraJs } from "~/contexts";
 
-const REFRESH_BLOCK_INTERVAL = 20000;
+const REFRESH_BLOCK_INTERVAL = 10000;
 
 interface AllowanceToken extends Token {
   allowance: bigint;
@@ -68,5 +68,6 @@ export const usePollAllowance = ({ contract, token }: IUsePollAllowances) => {
 
   return {
     useAllowance,
+    refresh: () => mutate(QUERY_KEY)
   };
 };
