@@ -87,7 +87,7 @@ export const RewardsWithdraw = () => {
                 width={20}
                 height={20}
               />{" "}
-              {isSmall && "< "} {formattedBgt.toFixed(4)}
+              {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(4)}}`}
               <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
             </div>
           )}

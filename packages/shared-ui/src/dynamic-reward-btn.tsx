@@ -52,7 +52,6 @@ const RewardModalContent = ({
   const { isSmall, numericValue: formattedBgt } = formatAmountSmall(
     claimableBgtRewards ?? 0,
   );
-  console.log("formattedBgt", isSmall, formattedBgt);
 
   return (
     <div className="flex w-full flex-col gap-8 sm:w-[440px]">
@@ -73,7 +72,8 @@ const RewardModalContent = ({
         />
         <div className="mt-1 h-[10px] text-right text-[10px] text-muted-foreground">
           {" "}
-          Available to Claim: {isSmall && "< "} {formattedBgt.toFixed(2)}{" "}
+          Available to Claim:{" "}
+          {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(2)}}`}{" "}
           <span
             className=" cursor-pointer underline"
             onClick={() => setAmount(Number(claimableBgtRewards ?? 0))}

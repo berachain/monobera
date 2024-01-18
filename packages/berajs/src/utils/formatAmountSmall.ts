@@ -15,6 +15,6 @@ export function formatAmountSmall(value: number | string): {
     return { isSmall, numericValue: 0.01 };
   }
 
-  // return the number
+  // return the if number if small and the numericValue
   return { isSmall, numericValue };
 }
