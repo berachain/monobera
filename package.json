@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@bera/eslint-config": "0.1.0",
-    "@datadog/browser-rum": "^5.8.0",
     "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
     "@manypkg/cli": "^0.20.0",
     "@types/prettier": "^2.7.2",
