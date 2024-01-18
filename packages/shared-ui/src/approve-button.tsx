@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { TransactionActionType, type Token } from "@bera/berajs";
+import { TransactionActionType, type Token, usePollAllowance } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { maxInt256 } from "viem";
@@ -17,9 +17,19 @@ type Props = {
 };
 
 export const ApproveButton = ({ token, spender, amount, className }: Props) => {
+  const { refresh } = usePollAllowance({
+    contract: spender,
+    token: token,
+  });
+
+
+
   const { write, isLoading, isSubmitting } = useTxn({
-    message: `Approve ${token?.name}`,
+    message: `Approving ${token?.name}`,
     actionType: TransactionActionType.APPROVAL,
+    onSuccess: () => {
+      refresh()
+    }
   });
   const ref = useRef<HTMLDivElement>(null);
   const [smallScreen, setSmallScreen] = useState(false);
