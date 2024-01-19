@@ -13,13 +13,13 @@ import {
   usePollPerpsBgtRewards,
 } from "@bera/berajs";
 import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
-import { DataTable, DynamicRewardBtn, useTxn } from "@bera/shared-ui";
-import { Skeleton, Tooltip } from "@bera/ui";
+import { DataTable, DynamicRewardBtn, Tooltip, useTxn } from "@bera/shared-ui";
 import { parseUnits } from "ethers";
 import { type Address } from "wagmi";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 import { withdraw_queue_columns } from "./withdraw-queue-columns";
+import { Skeleton } from "@bera/ui/skeleton";
 
 export const RewardsWithdraw = () => {
   const { isLoading: isGHoneyBalanceLoading, useFormattedBHoneyBalance } =
@@ -66,8 +66,8 @@ export const RewardsWithdraw = () => {
     },
   });
 
-  const { isSmall, numericalValue: formattedBgt } =
-    formatAmountSmall(claimableBgtRewards);
+  const { isSmall, numericValue: formattedBgt } =
+    formatAmountSmall(claimableBgtRewards === undefined ? '' : claimableBgtRewards);
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -87,7 +87,7 @@ export const RewardsWithdraw = () => {
                 width={20}
                 height={20}
               />{" "}
-              {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(4)}}`}
+              {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(4)}`}
               <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
             </div>
           )}

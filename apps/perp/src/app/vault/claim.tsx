@@ -33,6 +33,9 @@ export default function Claim({ feeApr }: { feeApr: string }) {
 
   const bgtApr = useBgtApr(honeyLocked);
 
+  console.log('reee', {
+    bgtApr, feeApr
+  })
   const isLoading = false;
   return (
     <div className="relative w-full overflow-hidden rounded-md border border-border bg-gradient-to-r from-[#180B01] to-[#3B220F] px-10 py-8">
@@ -41,7 +44,7 @@ export default function Claim({ feeApr }: { feeApr: string }) {
           {isLoading ? (
             <Skeleton className="h-[28px] w-[80px]" />
           ) : (
-            <p>{formatter.format(bgtApr ?? 0 + feeAprNumber)}%</p>
+            <p>{formatter.format((bgtApr ?? 0) + feeAprNumber)}%</p>
             // <p>{feeApr}</p>
           )}
         </div>
