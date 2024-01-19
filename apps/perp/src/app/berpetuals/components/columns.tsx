@@ -749,6 +749,13 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
     },
     accessorKey: "time",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = new Date(Number(rowA.original.open_time));
+      const b = new Date(Number(rowB.original.open_time));
+      if (a < b) return -1;
+      else if (a > b) return 1;
+      else return 0;
+    },
   },
   {
     header: ({ column }) => (
@@ -768,6 +775,13 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
     },
     accessorKey: "time",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = new Date(Number(rowA.original.close_time));
+      const b = new Date(Number(rowB.original.close_time));
+      if (a < b) return -1;
+      else if (a > b) return 1;
+      else return 0;
+    },
   },
   {
     header: ({ column }) => (
@@ -807,7 +821,7 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
       </div>
     ),
     accessorKey: "total",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
