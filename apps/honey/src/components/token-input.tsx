@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import {
+  formatInputTokenValue,
   formatUsd,
   useBeraJs,
   usePollAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
-import { formatInputTokenValue } from "@bera/berajs/src/utils/formatInputTokenValue";
 import { SelectToken } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";

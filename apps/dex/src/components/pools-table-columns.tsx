@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { formatter } from "@bera/berajs";
-import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
+import { formatAmountSmall, formatter } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   TokenIconList,
