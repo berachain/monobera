@@ -72,7 +72,6 @@ export function TokenInput({
     Number(amount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
       : Number(amount) ?? 0;
-
   useEffect(() => {
     if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
     if (safeNumberAmount <= tokenBalance) {
@@ -154,8 +153,20 @@ export function TokenInput({
             }}
             onChange={(e: any) => {
               const inputValue = e.target.value;
-              // Allow only digits and periods (decimal points)
-              const filteredValue = inputValue.replace(/[^0-9.]/g, "");
+              // Remove all non-numeric characters except for the decimal point, and remove leading zeros
+              let filteredValue = inputValue
+                .replace(/[^0-9.]/g, "")
+                .replace(/^0+/, "");
+
+              // Keep the 0
+              if (filteredValue.startsWith(".")) {
+                filteredValue = "0" + filteredValue;
+              }
+
+              // If the input becomes empty, reset it to '0'
+              if (filteredValue === "") {
+                filteredValue = "0";
+              }
 
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
@@ -177,7 +188,7 @@ export function TokenInput({
                 </p>
                 {!hideMax && (
                   <p
-                    className="cursor-pointer select-none	 text-xs text-muted-foreground underline hover:text-foreground"
+                    className="cursor-pointer select-none  text-xs text-muted-foreground underline hover:text-foreground"
                     onClick={() => {
                       setAmount &&
                         tokenBalance !== "" &&
