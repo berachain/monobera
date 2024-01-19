@@ -176,3 +176,16 @@ export const getUniquePoolById = gql`
     }
   }
 `;
+
+export const getUserPools = gql`
+  query GetUserPools($userAddress: String!) {
+    userPools(where: { userAddress: $userAddress }) {
+      pools {
+        id
+        poolAddress
+        shares
+        userAddress
+      }
+    }
+  }
+`;
