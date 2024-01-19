@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
@@ -35,5 +35,6 @@ export const usePollTransactionCount = ({
   return {
     isLoading,
     useTransactionCount,
+    refresh: () => mutate(QUERY_KEY)
   };
 };
