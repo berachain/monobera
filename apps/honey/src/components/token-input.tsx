@@ -27,10 +27,13 @@ type Props = {
   customTokenList?: Token[];
   showExceeding?: boolean;
   hideMax?: boolean;
+  setIsTyping?: (isTyping: boolean) => void;
   onTokenSelection?: (token: Token | undefined) => void;
   setAmount?: (amount: string | undefined) => void;
   onExceeding?: (isExceeding: boolean) => void;
 };
+
+let typingTimer: NodeJS.Timeout;
 
 export function TokenInput({
   selected,
@@ -46,6 +49,7 @@ export function TokenInput({
   customTokenList = undefined,
   onTokenSelection = undefined,
   setAmount = undefined,
+  setIsTyping = undefined,
   showExceeding = true,
   onExceeding = undefined,
   hideMax = false,
@@ -104,6 +108,16 @@ export function TokenInput({
                 "text-destructive-foreground",
             )}
             value={amount}
+            onKeyDown={(e: any) => {
+              if (e.key === "-") {
+                e.preventDefault();
+              }
+              clearTimeout(typingTimer);
+              setIsTyping && setIsTyping(true);
+              typingTimer = setTimeout(() => {
+                setIsTyping && setIsTyping(false);
+              }, 1000);
+            }}
             onChange={(e) => {
               const inputValue = e.target.value;
 

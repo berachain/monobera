@@ -21,6 +21,8 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     payload,
     isConnected,
     setSelectedFrom,
+    isTyping,
+    setIsTyping,
     allowance,
     isLoading,
     write,

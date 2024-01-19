@@ -13,6 +13,7 @@ import {
   type IUseContractWrite,
   type useContractWriteApi,
 } from "./types";
+import { usePollTransactionCount } from "../usePollTransactionCount";
 
 const useBeraContractWrite = ({
   onSuccess,
@@ -25,6 +26,13 @@ const useBeraContractWrite = ({
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
+
+  const { useTransactionCount, refresh } = usePollTransactionCount({
+    address: account,
+  });
+
+
+  const userNonce = useTransactionCount();
 
   const write = useCallback(
     async ({
@@ -39,13 +47,13 @@ const useBeraContractWrite = ({
       let receipt: any | undefined;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
-        const { request: _request } = await prepareWriteContract({
-          address: address,
-          abi: abi,
-          functionName: functionName,
-          args: params,
-          value: value,
-        });
+        // const { request: _request } = await prepareWriteContract({
+        //   address: address,
+        //   abi: abi,
+        //   functionName: functionName,
+        //   args: params,
+        //   value: value,
+        // });
 
         receipt = await walletClient?.writeContract({
           address: address,
@@ -54,6 +62,7 @@ const useBeraContractWrite = ({
           value: value === 0n ? undefined : value,
           args: [...params],
           account: account,
+          nonce: userNonce
           // chain: undefined,
         });
         dispatch({ type: ActionEnum.SUBMITTING });
@@ -62,8 +71,9 @@ const useBeraContractWrite = ({
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
             hash: receipt,
-            pollingInterval: 2500,
-            timeout: 120000
+            pollingInterval: 5000,
+            timeout: 120000,
+            confirmations: 2
           });
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
@@ -77,16 +87,20 @@ const useBeraContractWrite = ({
         console.log(e);
         dispatch({ type: ActionEnum.ERROR });
         onError && onError(e);
+      } finally {
+        await refresh()
       }
     },
     [
       walletClient,
       account,
       publicClient,
+      userNonce,
       onSuccess,
       onError,
       onLoading,
       onSubmission,
+      refresh
     ],
   );
 
