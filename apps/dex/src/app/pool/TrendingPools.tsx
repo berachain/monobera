@@ -2,7 +2,7 @@ import { Button } from "@bera/ui/button";
 import useSWRInfinite from "swr/infinite";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
-import { PoolCard } from "./PoolCard";
+import { PoolCard } from "./components/pools/PoolCard";
 
 const DEFAULT_SIZE = 3;
 

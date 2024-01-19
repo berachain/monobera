@@ -28,7 +28,7 @@ export const ApproveButton = ({ token, spender, amount, className }: Props) => {
     message: `Approving ${token?.name}`,
     actionType: TransactionActionType.APPROVAL,
     onSuccess: () => {
-      refresh()
+      void refresh()
     }
   });
   const ref = useRef<HTMLDivElement>(null);
