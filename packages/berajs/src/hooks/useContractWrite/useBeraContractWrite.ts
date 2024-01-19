@@ -2,18 +2,17 @@
 
 import { useCallback, useReducer } from "react";
 import { usePublicClient, useWalletClient } from "wagmi";
-
 import { prepareWriteContract } from "wagmi/actions";
 
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
+import { usePollTransactionCount } from "../usePollTransactionCount";
 import { TransactionFailedError } from "./error";
 import {
   type IContractWrite,
   type IUseContractWrite,
   type useContractWriteApi,
 } from "./types";
-import { usePollTransactionCount } from "../usePollTransactionCount";
 
 const useBeraContractWrite = ({
   onSuccess,
@@ -30,7 +29,6 @@ const useBeraContractWrite = ({
   const { useTransactionCount, refresh } = usePollTransactionCount({
     address: account,
   });
-
 
   const userNonce = useTransactionCount();
 
@@ -53,7 +51,7 @@ const useBeraContractWrite = ({
           functionName: functionName,
           args: params,
           value: value,
-          nonce: userNonce
+          nonce: userNonce,
         });
 
         receipt = await walletClient?.writeContract({
@@ -63,7 +61,7 @@ const useBeraContractWrite = ({
           value: value === 0n ? undefined : value,
           args: [...params],
           account: account,
-          nonce: userNonce
+          nonce: userNonce,
           // chain: undefined,
         });
         dispatch({ type: ActionEnum.SUBMITTING });
@@ -74,7 +72,7 @@ const useBeraContractWrite = ({
             hash: receipt,
             pollingInterval: 5000,
             timeout: 120000,
-            confirmations: 2
+            confirmations: 2,
           });
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
@@ -89,7 +87,7 @@ const useBeraContractWrite = ({
         dispatch({ type: ActionEnum.ERROR });
         onError && onError(e);
       } finally {
-        await refresh()
+        await refresh();
       }
     },
     [
@@ -101,7 +99,7 @@ const useBeraContractWrite = ({
       onError,
       onLoading,
       onSubmission,
-      refresh
+      refresh,
     ],
   );
 

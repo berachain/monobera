@@ -115,14 +115,16 @@ export function HoneyTokenInput({
                 {tokenBalance ? tokenBalance : "0"}
               </div>
 
-              {!hideMax && <p
-                className="cursor-pointer hover:underline"
-                onClick={() => {
-                  setAmount && setAmount(tokenBalance);
-                }}
-              >
-                MAX
-              </p>}
+              {!hideMax && (
+                <p
+                  className="cursor-pointer hover:underline"
+                  onClick={() => {
+                    setAmount && setAmount(tokenBalance);
+                  }}
+                >
+                  MAX
+                </p>
+              )}
             </div>
           )}
           {/* <div className="flex flex-row gap-1">
