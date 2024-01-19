@@ -82,6 +82,8 @@ export default async function Home() {
           market={defualtMarket}
           priceChange={data.priceChange}
         />
+
+        
       </div>
       <span className="block lg:hidden">
         <OrderChart marketName={defualtMarket.name} />
