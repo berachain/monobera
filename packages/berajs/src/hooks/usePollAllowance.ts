@@ -68,6 +68,6 @@ export const usePollAllowance = ({ contract, token }: IUsePollAllowances) => {
 
   return {
     useAllowance,
-    refresh: () => mutate(QUERY_KEY)
+    refresh: () => mutate(QUERY_KEY),
   };
 };
