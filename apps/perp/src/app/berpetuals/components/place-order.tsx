@@ -8,7 +8,7 @@ import {
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
-import { useOctTxn, useSlippage } from "@bera/shared-ui/src/hooks";
+import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -79,7 +79,7 @@ export function PlaceOrder({
   }, [form.amount, form.leverage]);
   const parsedPositionSize = parseUnits(safeAmount, 18);
 
-  const slippageTolerance = useSlippage();
+  // const slippageTolerance = useSlippage();
 
   const payload = [
     {
@@ -98,7 +98,8 @@ export function PlaceOrder({
       sl: form.sl === "" ? 0n : parseUnits(form?.sl, 10),
     },
     form.optionType === "market" ? 0 : 1,
-    parseUnits(`${slippageTolerance ?? 0}`, 10),
+    // parseUnits(`${slippageTolerance ?? 0}`, 10),
+    parseUnits("0", 10),
   ];
 
   const honey = {
