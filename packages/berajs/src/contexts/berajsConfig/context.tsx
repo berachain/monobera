@@ -13,6 +13,7 @@ import {
   ledgerWallet,
   metaMaskWallet,
   walletConnectWallet,
+  rabbyWallet
 } from "@rainbow-me/rainbowkit/wallets";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
@@ -73,6 +74,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         walletConnectWallet({ projectId, chains }),
         ledgerWallet({ chains, projectId }),
         frameWallet({ chains }),
+        rabbyWallet({chains})
         // phantomWallet({ chains }),
         // rainbowWallet({ projectId, chains }),
         // safeWallet({ chains }),
