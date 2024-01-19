@@ -200,7 +200,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
         );
       },
       accessorKey: "position_size",
-      enableSorting: true,
+      enableSorting: false,
     },
     // {
     //   header: ({ column }) => (
@@ -432,7 +432,7 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
     },
 
     accessorKey: "position_size",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
@@ -686,7 +686,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
       </div>
     ),
     accessorKey: "total",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
