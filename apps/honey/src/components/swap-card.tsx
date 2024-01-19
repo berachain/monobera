@@ -124,7 +124,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 customTokenList={collateralList}
                 showExceeding={false}
                 hidePrice
-                hideBalance
+                // hideBalance
                 hideMax={true}
                 balance={toBalance?.formattedBalance}
               />
@@ -173,7 +173,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                   }
                   onClick={() => {
                     write({
-                      address: honeyAddress,
+                      address: erc20HoneyAddress,
                       abi: ERC20_HONEY_ABI,
                       functionName: "redeem",
                       params: payload,
