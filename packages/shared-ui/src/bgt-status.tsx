@@ -120,6 +120,7 @@ export function BGTStatusDetails() {
   const totalUnbonding = useDelegatorTotalUnbonding();
   const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
 
+  // Format bgt rewards from different dapps
   const bexBGTRewards =
     isLoading || !bgtRewards || bgtRewards.length !== 3
       ? 0n
@@ -137,6 +138,7 @@ export function BGTStatusDetails() {
   const bendFormatBGTRewards = formatEther((bendBGTRewards as bigint) ?? 0n);
   const berpsFormatBGTRewards = formatEther((berpsBGTRewards as bigint) ?? 0n);
 
+  // Total claimable bgt rewards
   const totalClaimableBGT: bigint =
     bexBGTRewards + bendBGTRewards + berpsBGTRewards;
 
