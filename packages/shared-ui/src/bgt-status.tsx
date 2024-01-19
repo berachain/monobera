@@ -9,6 +9,7 @@ import {
   usePollTotalDelegated,
   usePollUserAllBGTRewards,
 } from "@bera/berajs";
+import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import { beraTokenAddress, dexUrl, lendUrl, perpsUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import {
@@ -40,6 +41,9 @@ export function BGTStatusBtn() {
     Number(bgtTotalDelegated ?? "0") +
     Number(totalUnbonding ?? "0");
 
+  const { isSmall, numericValue: formattedBGTRewards } =
+    formatAmountSmall(totalBGT);
+
   // @ts-ignore
   // const totalClaimableBGT: bigint =
   // isLoading || !bgtRewards || bgtRewards.length !== 3
@@ -53,7 +57,9 @@ export function BGTStatusBtn() {
           <div className="group flex h-10 w-fit cursor-pointer items-center rounded-md border border-accent bg-warning px-1 font-medium hover:bg-hover">
             {/* <BGTIcon bg="#FBBF24" stroke="#78350F" size="24" /> */}
             <div className="px-2 text-sm text-warning-foreground">
-              {formatter.format(totalBGT)} BGT
+              {isSmall
+                ? `< ${formattedBGTRewards} BGT`
+                : `${formattedBGTRewards.toFixed(2)} BGT`}
             </div>
             {/* <div className="flex h-7 items-center rounded-full border border-accent bg-gradient-to-br from-stone-50 to-yellow-50 px-3 text-xs text-primary group-hover:from-orange-200 group-hover:to-yellow-400 dark:from-stone-700 dark:to-yellow-950 group-hover:dark:from-lime-900 group-hover:dark:to-yellow-700 lg:hidden xl:flex">
               {/* @ts-ignore */}
@@ -91,9 +97,14 @@ export function TotalBGT({ className }: { className?: string }) {
     Number(bgtTotalDelegated ?? "0") +
     Number(totalUnbonding ?? "0");
 
+  const { isSmall, numericValue: formattedBGTRewards } =
+    formatAmountSmall(totalBGT);
+
   return (
     <div className={cn("text-3xl font-semibold leading-9", className)}>
-      {totalBGT.toFixed(2)} BGT
+      {isSmall
+        ? `< ${formattedBGTRewards} BGT`
+        : `${formattedBGTRewards.toFixed(2)} BGT`}
     </div>
   );
 }
@@ -109,10 +120,36 @@ export function BGTStatusDetails() {
   const totalUnbonding = useDelegatorTotalUnbonding();
   const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
 
-  const totalClaimableBGT: bigint = //@ts-ignore
+  const bexBGTRewards =
     isLoading || !bgtRewards || bgtRewards.length !== 3
-      ? 0n //@ts-ignore
-      : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
+      ? 0n
+      : bgtRewards[0] ?? 0n;
+  const bendBGTRewards =
+    isLoading || !bgtRewards || bgtRewards.length !== 3
+      ? 0n
+      : bgtRewards[1] ?? 0n;
+  const berpsBGTRewards =
+    isLoading || !bgtRewards || bgtRewards.length !== 3
+      ? 0n
+      : bgtRewards[2] ?? 0n;
+
+  const bexFormatBGTRewards = formatEther((bexBGTRewards as bigint) ?? 0n);
+  const bendFormatBGTRewards = formatEther((bendBGTRewards as bigint) ?? 0n);
+  const berpsFormatBGTRewards = formatEther((berpsBGTRewards as bigint) ?? 0n);
+
+  const totalClaimableBGT: bigint =
+    bexBGTRewards + bendBGTRewards + berpsBGTRewards;
+
+  const totalClaimableBgtNumber = Number(formatEther(totalClaimableBGT));
+
+  const { isSmall: isBexRewardsSmall, numericValue: formattedBexBGTRewards } =
+    formatAmountSmall(bexFormatBGTRewards);
+  const { isSmall: isBendRewardsSmall, numericValue: formattedBendBGTRewards } =
+    formatAmountSmall(bendFormatBGTRewards);
+  const {
+    isSmall: isBerpsRewardsSmall,
+    numericValue: formattedBerpsBGTRewards,
+  } = formatAmountSmall(berpsFormatBGTRewards);
 
   const data = [
     {
@@ -137,7 +174,7 @@ export function BGTStatusDetails() {
       background: "#EFF199",
       stroke: "#526E02",
       text: "Claimable Rewards", //@ts-ignore
-      amoumt: Number(formatEther(totalClaimableBGT)),
+      amoumt: totalClaimableBgtNumber,
     },
   ];
   return (
@@ -201,14 +238,9 @@ export function BGTStatusDetails() {
                       ) : (
                         <div className="font-medium">
                           {" "}
-                          {!isLoading &&
-                            formatter.format(
-                              //@ts-ignore
-                              bgtRewards !== undefined
-                                ? formatEther((bgtRewards as bigint[])[0] ?? 0n)
-                                : 0,
-                            )}{" "}
-                          BGT{" "}
+                          {isBexRewardsSmall
+                            ? `< ${formattedBexBGTRewards} BGT`
+                            : `${formattedBexBGTRewards.toFixed(2)} BGT`}{" "}
                         </div>
                       )}
                       <Button
@@ -233,14 +265,9 @@ export function BGTStatusDetails() {
                       ) : (
                         <div className="font-medium">
                           {" "}
-                          {!isLoading &&
-                            formatter.format(
-                              //@ts-ignore
-                              bgtRewards !== undefined
-                                ? formatEther((bgtRewards as bigint[])[1] ?? 0n)
-                                : 0,
-                            )}{" "}
-                          BGT{" "}
+                          {isBendRewardsSmall
+                            ? `< ${formattedBendBGTRewards} BGT`
+                            : `${formattedBendBGTRewards.toFixed(2)} BGT`}{" "}
                         </div>
                       )}
                       <Button
@@ -266,14 +293,9 @@ export function BGTStatusDetails() {
                       ) : (
                         <div className="font-medium">
                           {" "}
-                          {!isLoading &&
-                            formatter.format(
-                              //@ts-ignore
-                              bgtRewards !== undefined
-                                ? formatEther((bgtRewards as bigint[])[2] ?? 0n)
-                                : 0,
-                            )}{" "}
-                          BGT{" "}
+                          {isBerpsRewardsSmall
+                            ? `< ${formattedBerpsBGTRewards} BGT`
+                            : `${formattedBerpsBGTRewards.toFixed(2)} BGT`}{" "}
                         </div>
                       )}
                       <Button
