@@ -49,7 +49,7 @@ export default function CreatePageContent() {
     setStep,
   } = useCreateTokenWeights();
   const { data: findDuplicatedPool, isLoading } = useFindPool(
-    String(swapFee / 100),
+    swapFee,
     tokenWeights,
   );
 

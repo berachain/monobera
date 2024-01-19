@@ -73,7 +73,7 @@ const RewardModalContent = ({
         <div className="mt-1 h-[10px] text-right text-[10px] text-muted-foreground">
           {" "}
           Available to Claim:{" "}
-          {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(2)}}`}{" "}
+          {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(2)}`}{" "}
           <span
             className=" cursor-pointer underline"
             onClick={() => setAmount(Number(claimableBgtRewards ?? 0))}

@@ -1,7 +1,7 @@
 import { client, getUniquePoolById } from "@bera/graphql";
 import useSWRImmutable from "swr/immutable";
 
-export const useFindPool = (swapFee: string, tokenWeights: any[]) => {
+export const useFindPool = (swapFee: number, tokenWeights: any[]) => {
   const id = getPoolId(swapFee, tokenWeights);
   const QUERY_KEY = ["useFindPool", id];
   return useSWRImmutable(
@@ -29,8 +29,22 @@ export const useFindPool = (swapFee: string, tokenWeights: any[]) => {
   );
 };
 
-const getPoolId = (swapFee: string, tokenWeights: any[]) => {
-  let poolId = swapFee;
+/*
+  the reason i am writing this stupid function is because javascript sucks
+  const swapFee = 1.1
+  const swapFeeStr = (swapFee/100).toString();
+  result:
+  swapFeeStr = 0.011000000000000001 r u kidding me??
+*/
+const getSwapFeeInStr = (swapFee: number) => {
+  if (swapFee === 1.1) return "0.011";
+  else if (swapFee === 0.4) return "0.004";
+  else if (swapFee === 0.15) return "0.0015";
+  else return (swapFee / 100).toString();
+};
+
+const getPoolId = (swapFee: number, tokenWeights: any[]) => {
+  let poolId = getSwapFeeInStr(swapFee);
   tokenWeights
     .sort((a, b) =>
       (a.token?.address ?? "").localeCompare(b.token?.address ?? ""),
