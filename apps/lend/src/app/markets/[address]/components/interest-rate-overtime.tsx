@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Tooltip } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -103,7 +104,7 @@ export default function InterestRateOvertime({
             borderWidth: 1,
             borderDash: [5, 5],
             label: {
-              content: "Optimal 80%",
+              content: "Optimal 90%",
               enabled: true,
               position: "start",
               yAdjust: -10,
@@ -165,20 +166,19 @@ export default function InterestRateOvertime({
 
         <div className="relative h-[180px] w-full">
           <div
-            className="absolute -top-[10px] text-[10px] text-muted-foreground"
+            className="absolute -top-[10px] -translate-x-1/2 transform text-[10px] text-muted-foreground"
             style={{
-              left: `calc(${Number(reserveData?.borrowUsageRatio) * 100}% - ${
-                8 - 20 * Number(reserveData?.borrowUsageRatio)
-              }px)`,
+              left: `${Number(reserveData?.borrowUsageRatio) * 100}%`,
             }}
           >
             Current {(Number(reserveData?.borrowUsageRatio) * 100).toFixed(2)}%
           </div>
           <div
-            className="absolute -top-[10px] text-[10px] text-muted-foreground"
-            style={{ left: "calc(80% - 30px)" }}
+            className={cn(
+              "absolute -top-6 left-[90%] -translate-x-1/2 transform text-[10px] text-muted-foreground",
+            )}
           >
-            Optimal 80%
+            Optimal {OPTIMAL_USAGE_RATE * 100}%
           </div>
           <BeraChart data={data} options={options as any} type="line" />
         </div>
