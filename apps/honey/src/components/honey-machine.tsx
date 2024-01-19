@@ -404,7 +404,7 @@ export function HoneyMachine() {
                     selectable={selectedTo?.address !== honey?.address}
                     customTokenList={collateralList}
                     hidePrice
-                    hideBalance
+                    // hideBalance
                     balance={toBalance?.formattedBalance}
                   />
                 </ul>
