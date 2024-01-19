@@ -144,7 +144,7 @@ export function TokenInput({
                 </p>
                 {!hideMax && (
                   <p
-                    className="cursor-pointer text-xs text-muted-foreground underline hover:text-foreground pl-1"
+                    className="cursor-pointer pl-1 text-xs text-muted-foreground underline hover:text-foreground"
                     onClick={() => {
                       setAmount && setAmount(tokenBalance);
                     }}

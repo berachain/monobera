@@ -77,7 +77,9 @@ const useOctContractWrite = ({
 
           const payload = [account, data];
           // @ts-ignore
-          const transaction = await contract["delegatedAction"](...payload);
+          const transaction = await contract["delegatedAction"](...payload, {
+            gasLimit: 10000000n,
+          });
           const txResponse = await transaction.wait();
           hash = txResponse.hash;
         }
