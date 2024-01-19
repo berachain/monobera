@@ -49,7 +49,10 @@ export async function getTradingSummary(): Promise<any | undefined> {
       num_trades: tradingSummary.num_trades,
     };
   } catch (e) {
-    return undefined;
+    return {
+      volume: 0,
+      num_trades: 0,
+    };
   }
 }
 
