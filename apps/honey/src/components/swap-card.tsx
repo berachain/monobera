@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { cloudinaryUrl, erc20HoneyAddress, honeyAddress } from "@bera/config";
+import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
 import { ApproveButton, ConnectButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -152,7 +152,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                   }
                   onClick={() => {
                     write({
-                      address: honeyAddress,
+                      address: erc20HoneyAddress,
                       abi: ERC20_HONEY_ABI,
                       functionName: "mint",
                       params: payload,
