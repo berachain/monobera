@@ -24,6 +24,7 @@ type Props = {
   setAmount?: (amount: string | undefined) => void;
   showExceeding?: boolean;
   onExceeding?: (isExceeding: boolean) => void;
+  hideMax?: boolean;
 };
 
 export function HoneyTokenInput({
@@ -40,6 +41,7 @@ export function HoneyTokenInput({
   setAmount = undefined,
   showExceeding = false,
   onExceeding = undefined,
+  hideMax = false,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
@@ -113,14 +115,14 @@ export function HoneyTokenInput({
                 {tokenBalance ? tokenBalance : "0"}
               </div>
 
-              <p
+              {!hideMax && <p
                 className="cursor-pointer hover:underline"
                 onClick={() => {
                   setAmount && setAmount(tokenBalance);
                 }}
               >
                 MAX
-              </p>
+              </p>}
             </div>
           )}
           {/* <div className="flex flex-row gap-1">
