@@ -7,6 +7,7 @@ import {
   usePollAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
+import { formatInputTokenValue } from "@bera/berajs/src/utils/formatInputTokenValue";
 import { SelectToken } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
@@ -120,9 +121,7 @@ export function TokenInput({
             }}
             onChange={(e) => {
               const inputValue = e.target.value;
-
-              // Allow only digits and periods (decimal points)
-              const filteredValue = inputValue.replace(/[^0-9.]/g, "");
+              const filteredValue = formatInputTokenValue(inputValue);
 
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
@@ -144,7 +143,7 @@ export function TokenInput({
                 </p>
                 {!hideMax && (
                   <p
-                    className="cursor-pointer text-xs text-muted-foreground underline hover:text-foreground pl-1"
+                    className="cursor-pointer pl-1 text-xs text-muted-foreground underline hover:text-foreground"
                     onClick={() => {
                       setAmount && setAmount(tokenBalance);
                     }}

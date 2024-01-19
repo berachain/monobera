@@ -7,6 +7,7 @@ import {
   usePollAssetWalletBalance,
   type Token,
 } from "@bera/berajs";
+import { formatInputTokenValue } from "@bera/berajs/src/utils/formatInputTokenValue";
 import { bgtTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
@@ -153,21 +154,7 @@ export function TokenInput({
             }}
             onChange={(e: any) => {
               const inputValue = e.target.value;
-              // Remove all non-numeric characters except for the decimal point, and remove leading zeros
-              let filteredValue = inputValue
-                .replace(/[^0-9.]/g, "")
-                .replace(/^0+/, "");
-
-              // Keep the 0
-              if (filteredValue.startsWith(".")) {
-                filteredValue = "0" + filteredValue;
-              }
-
-              // If the input becomes empty, reset it to '0'
-              if (filteredValue === "") {
-                filteredValue = "0";
-              }
-
+              const filteredValue = formatInputTokenValue(inputValue);
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
               if (periodsCount <= 1) {
