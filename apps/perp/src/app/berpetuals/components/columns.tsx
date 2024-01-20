@@ -16,7 +16,7 @@ import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { useCalculatePnl } from "~/hooks/useCalculatePnl";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
-import { EST_PNL_TOOLTIP_TEXT, TPSL_TOOLTIP_TEXT } from "../const";
+import { EST_PNL_TOOLTIP_TEXT, TPSL_TOOLTIP_TEXT } from "../../../utils/tooltip-text";
 import type { IMarket } from "../page";
 import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
 
