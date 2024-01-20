@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
+import { formatAmountSmall } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
