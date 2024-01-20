@@ -99,7 +99,7 @@ export function PlaceOrder({
     },
     form.optionType === "market" ? 0 : 1,
     // parseUnits(`${slippageTolerance ?? 0}`, 10),
-    parseUnits("0", 10),
+    parseUnits("100", 10),
   ];
 
   const honey = {

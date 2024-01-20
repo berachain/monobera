@@ -3,7 +3,7 @@
 export const OPTIMAL_USAGE_RATE = 0.9;
 export const BASE_VARIABLE_BORROW_RATE = 0;
 export const VARIABLE_RATE_SLOPE_1 = 0.04;
-export const VARIABLE_RATE_SLOPE_2 = 0.60;
+export const VARIABLE_RATE_SLOPE_2 = 0.6;
 export const BASE_STABLE_BORROW_RATE = 0.02;
 export const STABLE_RATE_SLOPE_1 = 0.005;
 export const STABLE_RATE_SLOPE_2 = 0.6;
