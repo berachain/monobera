@@ -1,5 +1,12 @@
 import { useBeraJs } from "@bera/berajs";
 import { client, getUserPools, getUserPoolsDetails } from "@bera/graphql";
+import {
+  formatEther,
+  formatUnits,
+  getAddress,
+  parseEther,
+  parseUnits,
+} from "ethers";
 import useSWRImmutable from "swr/immutable";
 
 export const usePollUsersPools = () => {
@@ -22,11 +29,28 @@ export const usePollUsersPools = () => {
           query: getUserPoolsDetails,
           variables: { list: poolAddresslist },
         });
-        return userPools.data.pools;
+        return userPools.data.pools.map((pool: any) => {
+          const userShares = pools.find(
+            (p: any) => getAddress(p.poolAddress) === getAddress(pool.pool),
+          ).shares;
+          const balance =
+            Number(
+              formatEther(
+                parseUnits(userShares, 36) / parseEther(pool.totalShares),
+              ),
+            ) * Number(pool.tvlUsd);
+
+          return {
+            ...pool,
+            userBalance: balance,
+            totalValue: pool.tvlUsd,
+            userShares: userShares,
+            formattedSwapFee: formatUnits(pool.swapFee, 16),
+          };
+        });
       } catch (error) {
         console.error("fetching error", error);
         throw error;
-        return [];
       }
     },
     {

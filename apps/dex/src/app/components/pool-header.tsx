@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { truncateHash } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
@@ -10,15 +11,16 @@ export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
   return (
     <div className="flex w-full flex-col items-center justify-between md:items-end md:justify-center lg:flex-row">
       <div className="flex w-full flex-col items-center gap-4 md:items-start">
-        <Button
-          variant={"ghost"}
-          size="sm"
-          className="flex items-center gap-1"
-          onClick={() => window.open("/pool", "_self")}
-        >
-          <Icons.arrowLeft className="h-4 w-4" />
-          <div className="text-sm font-medium"> All Pools</div>
-        </Button>
+        <Link href={"/pool"} target="_self">
+          <Button
+            variant={"ghost"}
+            size="sm"
+            className="flex items-center gap-1"
+          >
+            <Icons.arrowLeft className="h-4 w-4" />
+            <div className="text-sm font-medium"> All Pools</div>
+          </Button>
+        </Link>
         <p className="flex w-full justify-center gap-4 text-center text-2xl font-semibold md:justify-start md:text-left">
           <TokenIconList
             tokenList={pool?.tokens?.map((t) => t.address) ?? []}

@@ -196,7 +196,7 @@ export const PoolSearch = ({
         </TabsContent>
 
         <TabsContent value="userPools">
-          <MyPool />
+          <MyPool isList={false} />
         </TabsContent>
       </Tabs>
     </div>

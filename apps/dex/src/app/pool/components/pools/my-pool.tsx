@@ -4,13 +4,11 @@ import { ConnectWalletBear, DataTable, NotFoundBear } from "@bera/shared-ui";
 
 import { my_columns } from "~/components/pools-table-columns";
 import { usePollUsersPools } from "~/hooks/usePollUsersPools";
-import { usePoolTable } from "../../usePoolTable";
 import { PoolCard } from "./PoolCard";
 import CardViewLoading from "./card-view-loading";
 import TableViewLoading from "./table-view-loading";
 
-export default function MyPool() {
-  const { isList } = usePoolTable();
+export default function MyPool({ isList }: { isList: boolean }) {
   const { isReady } = useBeraJs();
 
   const { data: myPools = [], isLoading: isMyPoolsLoading } =
@@ -18,7 +16,6 @@ export default function MyPool() {
   const receivers = myPools?.map((pool: Pool) => pool.pool) || [];
   const { useBgtRewards } = usePollBgtRewards(receivers);
   const { data: bgtRewards } = useBgtRewards();
-  console.log("myPools", myPools, isMyPoolsLoading);
 
   return (
     <>
