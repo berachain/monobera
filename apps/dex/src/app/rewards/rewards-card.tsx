@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router";
-import {
-  formatAmountSmall,
-  formatUsd,
-  formatter,
-  usePollBgtRewards,
-} from "@bera/berajs";
+import { formatUsd, formatter, usePollBgtRewards } from "@bera/berajs";
+import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
