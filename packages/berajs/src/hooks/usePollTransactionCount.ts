@@ -35,6 +35,6 @@ export const usePollTransactionCount = ({
   return {
     isLoading,
     useTransactionCount,
-    refresh: () => mutate(QUERY_KEY)
+    refresh: () => mutate(QUERY_KEY),
   };
 };
