@@ -33,9 +33,6 @@ export default function Claim({ feeApr }: { feeApr: string }) {
 
   const bgtApr = useBgtApr(honeyLocked);
 
-  console.log('reee', {
-    bgtApr, feeApr
-  })
   const isLoading = false;
   return (
     <div className="relative w-full overflow-hidden rounded-md border border-border bg-gradient-to-r from-[#180B01] to-[#3B220F] px-10 py-8">

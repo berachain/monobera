@@ -14,12 +14,12 @@ import {
 } from "@bera/berajs";
 import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import { DataTable, DynamicRewardBtn, Tooltip, useTxn } from "@bera/shared-ui";
+import { Skeleton } from "@bera/ui/skeleton";
 import { parseUnits } from "ethers";
 import { type Address } from "wagmi";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 import { withdraw_queue_columns } from "./withdraw-queue-columns";
-import { Skeleton } from "@bera/ui/skeleton";
 
 export const RewardsWithdraw = () => {
   const { isLoading: isGHoneyBalanceLoading, useFormattedBHoneyBalance } =
@@ -66,8 +66,9 @@ export const RewardsWithdraw = () => {
     },
   });
 
-  const { isSmall, numericValue: formattedBgt } =
-    formatAmountSmall(claimableBgtRewards === undefined ? '' : claimableBgtRewards);
+  const { isSmall, numericValue: formattedBgt } = formatAmountSmall(
+    claimableBgtRewards === undefined ? "" : claimableBgtRewards,
+  );
 
   return (
     <div className="flex w-full flex-col gap-2">
