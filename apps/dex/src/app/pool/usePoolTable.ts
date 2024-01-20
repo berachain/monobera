@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { type Pool } from "@bera/bera-router";
-import { usePollUserDepositedPools } from "@bera/berajs";
 import useSWRInfinite from "swr/infinite";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
@@ -56,10 +54,6 @@ export const usePoolTable = () => {
 
   const data = allData ? [].concat(...allData) : [];
 
-  const { useUserDepositedPools, isLoading } = usePollUserDepositedPools(
-    `${getAbsoluteUrl()}/api/getPools/api`,
-  );
-  const userPools = useUserDepositedPools();
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {
       setKeyword(search);
@@ -67,24 +61,7 @@ export const usePoolTable = () => {
   };
   return {
     data: data,
-    userPools: userPools
-      ?.filter((pool: Pool) => {
-        return search === ""
-          ? true
-          : pool.poolName.toLowerCase().includes(search.toLowerCase()) ||
-              (pool.poolShareDenomHex &&
-                pool.poolShareDenomHex
-                  .toLowerCase()
-                  .includes(search.toLowerCase()));
-      })
-      .filter(
-        (pool: Pool) =>
-          (hasBgtRewards ? pool.tags?.includes("bgtRewards") : true) &&
-          (isHotPool ? pool.tags?.includes("hot") : true) &&
-          (isNewPool ? pool.tags?.includes("new") : true),
-      ),
-    isUserPoolsLoading: isLoading,
-    isFirstLoad: isLoading && isAllDataEmpty,
+    isFirstLoad: isAllDataEmpty,
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,
