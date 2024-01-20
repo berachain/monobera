@@ -59,7 +59,9 @@ export const Banner = () => {
     actionType: TransactionActionType.CLAIMING_REWARDS,
     onSuccess: () => refetch(),
   });
-  const formattedRewards = formatEther((rewards as bigint) ?? 0n);
+
+  const formattedRewards = formatEther((rewards ?? 0n) as bigint);
+  
   const { isSmall, numericValue: formattedBgt } =
     formatAmountSmall(formattedRewards);
 
