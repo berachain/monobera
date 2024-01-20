@@ -16,6 +16,7 @@ import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { useCalculatePnl } from "~/hooks/useCalculatePnl";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { EST_PNL_TOOLTIP_TEXT, TPSL_TOOLTIP_TEXT } from "../../../utils/tooltip-text";
 import type { IMarket } from "../page";
 import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
 
@@ -271,6 +272,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
           column={column}
           title="TP / SL"
           className="w-fit"
+          tooltip={TPSL_TOOLTIP_TEXT}
         />
       ),
       cell: ({ row }) => (
@@ -302,6 +304,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
           column={column}
           title="Est. PnL"
           className="w-fit"
+          tooltip={EST_PNL_TOOLTIP_TEXT}
         />
       ),
       // cell: ({ row }) => (
@@ -461,7 +464,11 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="TP/ SL" />
+      <DataTableColumnHeader
+        column={column}
+        title="TP / SL"
+        tooltip={TPSL_TOOLTIP_TEXT}
+      />
     ),
     cell: ({ row }) => (
       <div className="">
@@ -666,6 +673,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
         column={column}
         title="TP / SL"
         className="min-w-[120px]"
+        tooltip={TPSL_TOOLTIP_TEXT}
       />
     ),
     cell: ({ row }) => (
