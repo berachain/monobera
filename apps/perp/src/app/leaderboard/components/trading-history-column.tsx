@@ -3,7 +3,7 @@ import { DataTableColumnHeader } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { EST_PNL_TOOLTIP_TEXT } from "~/app/berpetuals/const";
+import { EST_PNL_TOOLTIP_TEXT } from "~/utils/tooltip-text";
 import { type Position } from "~/hooks/usePositions";
 
 export const trading_history_column: ColumnDef<Position>[] = [
