@@ -5,6 +5,7 @@ import Image from "next/image";
 import {
   BTOKEN_ABI,
   TransactionActionType,
+  formatAmountSmall,
   formatter,
   useBeraJs,
   usePollBHoneyBalance,
@@ -12,7 +13,6 @@ import {
   usePollBalanceOfAssets,
   usePollPerpsBgtRewards,
 } from "@bera/berajs";
-import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import { DataTable, DynamicRewardBtn, Tooltip, useTxn } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 import { parseUnits } from "ethers";
