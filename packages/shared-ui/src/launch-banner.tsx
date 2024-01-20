@@ -18,7 +18,7 @@ export const LaunchBanner = ({
       <div className="flex items-center gap-2">
         <Icons.clock8 className="h-4 w-4" />
         <div className="md:text-md text-sm font-semibold leading-tight">
-          {`Validators can now point liquidity to ${appName}. Users may earn BGT after Artio Epoch 2.`}
+          {`Validators can now point liquidity to ${appName}. Users may earn BGT after Artio Epoch 7.`}
         </div>
       </div>
     </header>

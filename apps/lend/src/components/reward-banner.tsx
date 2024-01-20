@@ -61,11 +61,12 @@ export const Banner = () => {
   });
 
   const formattedRewards = formatEther((rewards ?? 0n) as bigint);
+  
   const { isSmall, numericValue: formattedBgt } =
     formatAmountSmall(formattedRewards);
 
   return (
-    <div className="relative flex flex-colp>r-reverse items-start justify-center gap-4 rounded-lg border border-accent bg-gradient-to-b from-[#FFFCF2] to-[#FFF2D0] px-8 py-6 dark:from-[#27251F] dark:to-[#322400] lg:flex-row lg:gap-16">
+    <div className="flex-colp>r-reverse relative flex items-start justify-center gap-4 rounded-lg border border-accent bg-gradient-to-b from-[#FFFCF2] to-[#FFF2D0] px-8 py-6 dark:from-[#27251F] dark:to-[#322400] lg:flex-row lg:gap-16">
       {ModalPortal}
       <Image
         src={`${cloudinaryUrl}/bears/lendbear_npxhb3`}
@@ -107,9 +108,12 @@ export const Banner = () => {
             <TokenIcon address={bgtTokenAddress} fetch />
           </div>
           <div className="text-wrapper flex w-auto items-center align-middle text-lg font-bold">
-            {isLoadingApr
+            {/* {isLoadingApr
               ? "Loading..."
-              : `${parseFloat(String(bgtApr ?? "0")).toFixed(2)}% APY`}
+              : `${parseFloat(String(bgtApr ?? "0")).toFixed(2)}% APY`} */}
+                        {isLoadingApr
+              ? "Loading..."
+              : `${parseFloat('0').toFixed(2)}% APY`}
             <Tooltip
               text={
                 <>
