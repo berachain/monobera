@@ -3,6 +3,7 @@ import { DataTableColumnHeader } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
+import { EST_PNL_TOOLTIP_TEXT } from "~/app/berpetuals/const";
 import { type Position } from "~/hooks/usePositions";
 
 export const trading_history_column: ColumnDef<Position>[] = [
@@ -112,7 +113,11 @@ export const trading_history_column: ColumnDef<Position>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="PnL" />
+      <DataTableColumnHeader
+        column={column}
+        title="PnL"
+        tooltip={EST_PNL_TOOLTIP_TEXT}
+      />
     ),
     cell: ({ row }) => (
       <div className="w-[80px]">
