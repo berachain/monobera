@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { TransactionActionType, type Token, usePollAllowance } from "@bera/berajs";
+import {
+  TransactionActionType,
+  usePollAllowance,
+  type Token,
+} from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { maxInt256 } from "viem";
@@ -21,8 +25,6 @@ export const ApproveButton = ({ token, spender, amount, className }: Props) => {
     contract: spender,
     token: token,
   });
-
-
 
   const { write, isLoading, isSubmitting } = useTxn({
     message: `Approving ${token?.name}`,
