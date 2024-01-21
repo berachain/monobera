@@ -3,9 +3,6 @@ import {
   LEND_REWARD_HELPER_ABI,
   TransactionActionType,
   useBeraJs,
-  usePollBgtRewardsForAddress,
-  usePollHoneyVaultBalance,
-  usePollReservesDataList,
   usePollUserBGTRewards,
 } from "@bera/berajs";
 import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
@@ -13,42 +10,16 @@ import {
   bgtTokenAddress,
   bgtUrl,
   cloudinaryUrl,
-  honeyAddress,
   lendRewardsAddress,
 } from "@bera/config";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { formatEther } from "viem";
-import type { Address } from "wagmi";
 
 export const Banner = () => {
   const { isReady, account } = useBeraJs();
   const { data: rewards, isLoading, refetch } = usePollUserBGTRewards();
-
-  const {
-    isLoading: isHoneyVaultBalanceLoading,
-    useFormattedHoneyVaultBalance,
-  } = usePollHoneyVaultBalance();
-
-  const { useReservesDataList } = usePollReservesDataList();
-
-  const { data: reservesDictionary } = useReservesDataList();
-
-  const debtBearingHoney =
-    reservesDictionary === undefined
-      ? undefined
-      : reservesDictionary[honeyAddress]?.variableDebtTokenAddress;
-
-  const honeyLocked = useFormattedHoneyVaultBalance();
-
-  const { isLoading: isBgtRewardsLoading, useBgtApr } =
-    usePollBgtRewardsForAddress({
-      address: debtBearingHoney as Address,
-    });
-
-  const bgtApr = useBgtApr(honeyLocked);
-  const isLoadingApr = isHoneyVaultBalanceLoading || isBgtRewardsLoading;
 
   const {
     write,
@@ -108,12 +79,7 @@ export const Banner = () => {
             <TokenIcon address={bgtTokenAddress} fetch />
           </div>
           <div className="text-wrapper flex w-auto items-center align-middle text-lg font-bold">
-            {/* {isLoadingApr
-              ? "Loading..."
-              : `${parseFloat(String(bgtApr ?? "0")).toFixed(2)}% APY`} */}
-                        {isLoadingApr
-              ? "Loading..."
-              : `${parseFloat('0').toFixed(2)}% APY`}
+              {parseFloat('0').toFixed(2)}% APY
             <Tooltip
               text={
                 <>
