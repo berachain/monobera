@@ -48,7 +48,8 @@ const useOctValueSend = ({
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
             hash: hash,
-            pollingInterval: 200,
+            pollingInterval: 5000,
+            timeout: 120000,
           });
 
         if (confirmationReceipt?.status === "success") {
@@ -57,7 +58,7 @@ const useOctValueSend = ({
           return;
         } else {
           const e = new TransactionFailedError();
-          onError && onError(e);
+          onError && onError("Transaction failed");
         }
       } catch (e: any) {
         console.log(e);

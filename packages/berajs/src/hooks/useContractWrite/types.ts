@@ -31,7 +31,7 @@ export interface useTxnSendWriteApi {
 
 export interface IUseContractWrite {
   onSuccess?: (hash: string) => void;
-  onError?: (e?: Error) => void;
+  onError?: (e?: any) => void;
   onLoading?: () => void;
   onSubmission?: (hash: string) => void;
 }

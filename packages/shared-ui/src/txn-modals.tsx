@@ -123,7 +123,7 @@ export const ErrorModal = ({
           alt={"user-x"}
         />
       }
-      message={"Something went wrong. Please try again."}
+      message={message}
       href={undefined}
     />
   );
