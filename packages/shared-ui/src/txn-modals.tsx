@@ -123,6 +123,7 @@ export const ErrorModal = ({
         />
       }
       message={
+        // TODO: categotize error messages
         message.toString().includes("eth_gasPrice")
           ? RPC_ERROR_MESSAGHES.eth_gasPrice
           : GENERAL_ERROR_MESSAGE
