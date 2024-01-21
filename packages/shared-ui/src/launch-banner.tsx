@@ -33,12 +33,9 @@ export const RPCBanner = ({ className }: { className?: string }) => {
         className,
       )}
     >
-      <div className="flex items-center gap-2">
-        <Icons.clock8 className="h-4 w-4" />
-        <div className="md:text-md text-sm font-semibold leading-tight">
-          We are currently upgrading our infrastructure to meet the increased
-          demand. Please bear with us; we will be back shortly.
-        </div>
+      <div className="md:text-md text-center text-xs font-semibold leading-tight md:text-sm">
+        We are currently upgrading our infrastructure to meet the increased
+        demand. Please bear with us; we will be back shortly.
       </div>
     </header>
   );
