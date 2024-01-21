@@ -133,3 +133,7 @@ export const governanceAuthority = process.env
 export const bannerEnabled = Boolean(
   process.env.NEXT_PUBLIC_BANNER_ENABLED,
 ) as boolean;
+
+export const rpcBannerEnabled = Boolean(
+  process.env.NEXT_PUBLIC_RPC_BANNER_ENABLED,
+);
