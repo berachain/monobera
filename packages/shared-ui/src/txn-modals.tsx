@@ -37,7 +37,9 @@ const BaseModal = ({
       <DialogContent className="flex flex-col items-center justify-center gap-3 py-12 sm:max-w-[420px]">
         <div className="flex h-fit w-full flex-row justify-center">{icon}</div>
         <p className="text-lg font-semibold">{title}</p>
-        <Balancer className="text-xs font-medium text-center">{message}</Balancer>
+        <Balancer className="text-center text-xs font-medium">
+          {message}
+        </Balancer>
         {href && (
           <Button
             onClick={() => window.open(href, "_blank")}

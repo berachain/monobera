@@ -110,16 +110,17 @@ const useOctContractWrite = ({
       } catch (e: any) {
         console.log(e);
         dispatch({ type: ActionEnum.ERROR });
-        let finalMsg = 'Something went wrong. Please Try again'
-        const errormsg = e?.details
-        if(errormsg?.includes('gasLimit')) {
-          finalMsg = 'It seems an RPC error has occurred while estimating gas. Please try your request later.'
-        } else if (
-          errormsg?.includes('JSON-RPC')
-        ) {
-          finalMsg = 'It seems an RPC error has occurred. Please try your request one more later.'
-        } else if(e.details === undefined && e?.toString().includes('hash')) {
-          finalMsg = 'It seems an RPC error has occurred. Please check if your transaction was finalized. If not, please try again.'
+        let finalMsg = "Something went wrong. Please Try again";
+        const errormsg = e?.details;
+        if (errormsg?.includes("gasLimit")) {
+          finalMsg =
+            "It seems an RPC error has occurred while estimating gas. Please try your request later.";
+        } else if (errormsg?.includes("JSON-RPC")) {
+          finalMsg =
+            "It seems an RPC error has occurred. Please try your request one more later.";
+        } else if (e.details === undefined && e?.toString().includes("hash")) {
+          finalMsg =
+            "It seems an RPC error has occurred. Please check if your transaction was finalized. If not, please try again.";
         }
         onError && onError(finalMsg);
       }
