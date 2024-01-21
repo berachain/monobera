@@ -27,7 +27,6 @@ export const usePollUsersPools = () => {
         });
         const pools = res.data.userPools ?? [];
         const poolAddresslist = pools
-          .filter((pool: any) => Number(pool.shares) !== 0)
           .map((pool: any) => ({
             address: pool.poolAddress,
           }));

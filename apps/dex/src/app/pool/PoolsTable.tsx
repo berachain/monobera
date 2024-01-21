@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { DataTable, NotFoundBear } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -84,6 +85,8 @@ export const PoolSearch = ({
     // setKeyword,
   } = usePoolTable();
 
+  const [allPoolShowed, setAllPoolShowed] = useState(false);
+
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -107,8 +110,8 @@ export const PoolSearch = ({
           </TabsTrigger>
         </TabsList>
 
-        {poolType === "allPools" && (
-          <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:items-center lg:justify-between">
+        {poolType === "allPools" ? (
+          <div className="flex w-full flex-col items-center justsify-center gap-2 lg:flex-row lg:items-center lg:justify-between">
             {/* <SearchInput
             value={search}
             onChange={(e) => {
@@ -146,6 +149,15 @@ export const PoolSearch = ({
                 onClick={() => setIsList(!isList)}
               />
             </div>
+          </div>
+        ) : (
+          <div
+            className="cursor-pointer text-info-foreground text-right underline"
+            onClick={() => setAllPoolShowed(!allPoolShowed)}
+          >
+            {allPoolShowed
+              ? "Show deposited pools"
+              : "Show all pools"}
           </div>
         )}
 
@@ -198,7 +210,7 @@ export const PoolSearch = ({
         </TabsContent>
 
         <TabsContent value="userPools">
-          <MyPool isList />
+          <MyPool isList allPoolShowed={allPoolShowed}/>
         </TabsContent>
       </Tabs>
     </div>
