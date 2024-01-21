@@ -38,6 +38,7 @@ import { formatUnits } from "viem";
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
 import { RewardBtn } from "~/app/components/reward-btn";
+import { usePollUsersPools } from "~/hooks/usePollUsersPools";
 import { usePositionSize } from "~/hooks/usePositionSize";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
@@ -311,13 +312,14 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
     }
   };
 
-  const { userTotalValue, isPositionSizeLoading } = usePositionSize({
-    pool: pool,
-  });
-
+  usePositionSize({ pool });
   const { isConnected } = useBeraJs();
   const { isSmall, numericValue: formattedBGTRewards } =
     formatAmountSmall(bgtRewards);
+  const { isReady } = useBeraJs();
+
+  const { isLoading, useUserPool } = usePollUsersPools();
+  const userPool = useUserPool(pool.pool);
 
   return (
     <div className="flex flex-col gap-8">
@@ -378,26 +380,28 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
           </div>
         </div>
         <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-2">
-          <Card>
-            <CardContent className="flex items-center justify-between gap-4 p-4">
-              <div className="w-full">
-                <h3 className="text-xs font-medium text-muted-foreground">
-                  My pool balance
-                </h3>
-                <p className="mt-1 text-lg font-semibold text-foreground">
-                  {isConnected ? (
-                    isPositionSizeLoading ? (
-                      <Skeleton className="h-[32px] w-[150px]" />
+          {isReady && (
+            <Card>
+              <CardContent className="flex items-center justify-between gap-4 p-4">
+                <div className="w-full">
+                  <h3 className="text-xs font-medium text-muted-foreground">
+                    My pool balance
+                  </h3>
+                  <p className="mt-1 text-lg font-semibold text-foreground">
+                    {isConnected ? (
+                      isLoading ? (
+                        <Skeleton className="h-[32px] w-[150px]" />
+                      ) : (
+                        formatUsd(userPool.userBalance ?? 0)
+                      )
                     ) : (
-                      formatUsd(userTotalValue ?? 0)
-                    )
-                  ) : (
-                    formatUsd(0)
-                  )}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+                      formatUsd(0)
+                    )}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
           {(pool.bgtApy !== 0 || formattedBGTRewards !== 0) && (
             <Card>
               <CardContent className="flex items-center justify-between gap-4 p-4">
@@ -423,7 +427,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             <div className="mb-8 flex h-8 w-full items-center justify-between text-lg font-semibold">
               Pool Liquidity
               <div className="text-2xl">
-                ${formatter.format(pool?.totalValue ?? 0)}
+                ${formatter.format(pool?.tvlUsd ?? 0)}
               </div>
             </div>
             <div className="mb-4 text-sm font-medium">Tokens</div>
