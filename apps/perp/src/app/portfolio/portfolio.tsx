@@ -6,8 +6,12 @@ import { Dropdown, Tooltip } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useTheme } from "next-themes";
-import { PNL_TOOLTIP_TEXT, VOLUME_TOOLTIP_TEXT } from "../../utils/tooltip-text";
+
 import { useTradingSummaryChart } from "~/hooks/useTradingSummaryChart";
+import {
+  PNL_TOOLTIP_TEXT,
+  VOLUME_TOOLTIP_TEXT,
+} from "../../utils/tooltip-text";
 import type { IMarket } from "../berpetuals/page";
 import { Options, chartColor } from "./components/chat-options";
 import { UserGeneralInfo } from "./components/user-general-info";
