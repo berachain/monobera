@@ -2,10 +2,10 @@ import Image from "next/image";
 import {
   LEND_REWARD_HELPER_ABI,
   TransactionActionType,
+  formatAmountSmall,
   useBeraJs,
   usePollUserBGTRewards,
 } from "@bera/berajs";
-import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import {
   bgtTokenAddress,
   bgtUrl,
