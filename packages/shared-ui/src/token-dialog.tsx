@@ -68,11 +68,17 @@ export function TokenDialog({
 
   useEffect(() => {
     if (!customTokens) {
-      setFilteredTokens(
-        tokenList?.filter((token) => !filter.includes(token.address)),
+      // Only update the state if the filtered list is different from the current state
+      const newFilteredTokens = tokenList?.filter(
+        (token) => !filter.includes(token.address),
       );
+      if (
+        JSON.stringify(newFilteredTokens) !== JSON.stringify(filteredTokens)
+      ) {
+        setFilteredTokens(newFilteredTokens);
+      }
     }
-  }, [tokenList]);
+  }, [tokenList, customTokens, filter, filteredTokens]);
 
   useEffect(() => {
     setManagingTokens(false);
