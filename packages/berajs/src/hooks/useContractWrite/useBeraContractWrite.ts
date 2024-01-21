@@ -84,15 +84,16 @@ const useBeraContractWrite = ({
           onError && onError(e);
         }
       } catch (e: any) {
-        console.log('reee',e.details);
         let finalMsg = 'Something went wrong. Please Try again'
         const errormsg = e?.details
-        if(errormsg?.contains('gasLimit')) {
-          finalMsg = 'It seems an RPC error has occurred. Please try your request once more later.'
+        if(errormsg?.includes('gasLimit')) {
+          finalMsg = 'It seems an RPC error has occurred while estimating gas. Please try your request later.'
         } else if (
-          errormsg?.contains('internal')
+          errormsg?.includes('JSON-RPC')
         ) {
-
+          finalMsg = 'It seems an RPC error has occurred. Please try your request one more later.'
+        } else if(e.details === undefined && e?.toString().includes('hash')) {
+          finalMsg = 'It seems an RPC error has occurred. Please check if your transaction was finalized. If not, please try again.'
         }
         dispatch({ type: ActionEnum.ERROR });
         onError && onError({
