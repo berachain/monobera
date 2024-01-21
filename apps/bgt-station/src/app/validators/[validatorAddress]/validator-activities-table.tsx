@@ -8,7 +8,7 @@ import {
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
-import { Button } from "@bera/ui/button";
+// import { Button } from "@bera/ui/button";
 // import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
@@ -29,8 +29,10 @@ export default function ValidatorActivitiesTable({
   const { useActiveValidator } = usePollActiveValidators();
   const validator = useActiveValidator(validatorAddress);
 
-  const { data, size, isLoading, isReachingEnd, setSize } =
-    useInfiniteValidatorDelegations(validatorAddress);
+  const {
+    data,
+    // size, isLoading, isReachingEnd, setSize
+  } = useInfiniteValidatorDelegations(validatorAddress);
 
   const getDelegatorPercentage = (shares: bigint) => {
     const s = Number(formatUnits(shares, 18));
@@ -98,8 +100,7 @@ export default function ValidatorActivitiesTable({
                 )
               }
             />
-
-            <Button
+            {/* <Button
               onClick={() => setSize(size + 1)}
               disabled={isLoading || isReachingEnd}
               variant="outline"
@@ -109,7 +110,7 @@ export default function ValidatorActivitiesTable({
                 : isReachingEnd
                 ? "No More Delegators"
                 : "View More"}
-            </Button>
+            </Button> */}
           </div>
         )}
       </div>

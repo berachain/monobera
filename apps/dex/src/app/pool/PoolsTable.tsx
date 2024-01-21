@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { DataTable, NotFoundBear, SearchInput } from "@bera/shared-ui";
+import { DataTable, NotFoundBear } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
@@ -70,8 +70,8 @@ export const PoolSearch = ({
     setAllDataSize,
     isAllDataLoadingMore,
     isAllDataReachingEnd,
-    search,
-    setSearch,
+    // search,
+    // setSearch,
     hasBgtRewards,
     setHasBgtRewards,
     isNewPool,
@@ -80,8 +80,8 @@ export const PoolSearch = ({
     setIsHotPool,
     isList,
     setIsList,
-    handleEnter,
-    setKeyword,
+    // handleEnter,
+    // setKeyword,
   } = usePoolTable();
 
   return (
@@ -107,8 +107,9 @@ export const PoolSearch = ({
           </TabsTrigger>
         </TabsList>
 
-        <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:items-center lg:justify-between">
-          <SearchInput
+        {poolType === "allPools" && (
+          <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:items-center lg:justify-between">
+            {/* <SearchInput
             value={search}
             onChange={(e) => {
               if (e.target.value === "") {
@@ -122,30 +123,31 @@ export const PoolSearch = ({
             onKeyDown={handleEnter}
             id="all-pool-search"
             className="w-full md:w-[400px]"
-          />
+          /> */}
 
-          <div className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:justify-end">
-            <FilterBadge
-              text={"🚀 New Pools"}
-              active={isNewPool}
-              onClick={() => setIsNewPool(!isNewPool)}
-            />
-            <FilterBadge
-              text={"🔥 Hot Pools"}
-              active={isHotPool}
-              onClick={() => setIsHotPool(!isHotPool)}
-            />
-            <FilterBadge
-              text={"🐝 BGT Rewards"}
-              active={hasBgtRewards}
-              onClick={() => setHasBgtRewards(!hasBgtRewards)}
-            />
-            <Toggle
-              icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
-              onClick={() => setIsList(!isList)}
-            />
+            <div className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:justify-end">
+              <FilterBadge
+                text={"🚀 New Pools"}
+                active={isNewPool}
+                onClick={() => setIsNewPool(!isNewPool)}
+              />
+              <FilterBadge
+                text={"🔥 Hot Pools"}
+                active={isHotPool}
+                onClick={() => setIsHotPool(!isHotPool)}
+              />
+              <FilterBadge
+                text={"🐝 BGT Rewards"}
+                active={hasBgtRewards}
+                onClick={() => setHasBgtRewards(!hasBgtRewards)}
+              />
+              <Toggle
+                icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
+                onClick={() => setIsList(!isList)}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         <TabsContent value="allPools" className="text-center">
           {isAllDataLoadingMore && data?.length === 0 ? (
