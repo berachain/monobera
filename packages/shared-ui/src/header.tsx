@@ -49,14 +49,12 @@ export function Header({
   hideConnectBtn = false,
   isHoney = false,
   hideTheme = false,
-  appName,
 }: {
   navItems: any[];
   mobileNavItems?: any[];
   hideConnectBtn?: boolean;
   isHoney?: boolean;
   hideTheme?: boolean;
-  appName?: string;
 }) {
   const { isReady } = useBeraJs();
   return (
@@ -89,7 +87,7 @@ export function Header({
           <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />
         </div>
       </div>
-      {appName && bannerEnabled && <LaunchBanner appName={appName} />}
+      {bannerEnabled && <LaunchBanner />}
     </nav>
   );
 }
