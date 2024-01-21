@@ -19,6 +19,7 @@ import toast from "react-hot-toast";
 import { useMediaQuery } from "usehooks-ts";
 
 import { ErrorToast, LoadingToast, SubmissionToast, SuccessToast } from "../";
+import { BEAR_WITH_US_MESSAGE } from "../errorMessages";
 import {
   ErrorModal,
   LoadingModal,
@@ -159,7 +160,7 @@ export const useTxn = ({
           } else {
             openModal("errorModal", {
               errorHash: "0x",
-              errorMessage: error?.message || "unknown error",
+              errorMessage: error?.message || BEAR_WITH_US_MESSAGE,
             });
           }
         }
@@ -291,7 +292,7 @@ export const useTxn = ({
           toast.custom(
             <ErrorToast
               title={"Transaction failed"}
-              message={error?.message || "unknown error"}
+              message={error?.message || BEAR_WITH_US_MESSAGE}
               onClose={() => toast.remove(toastId)}
             />,
             {
@@ -313,7 +314,7 @@ export const useTxn = ({
         } else {
           openModal("errorModal", {
             errorHash: "0x",
-            errorMessage: error?.message || "unknown error",
+            errorMessage: error?.message || BEAR_WITH_US_MESSAGE,
           });
         }
       }

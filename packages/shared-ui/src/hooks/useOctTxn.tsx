@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import { useMediaQuery } from "usehooks-ts";
 
 import { ErrorToast, LoadingToast, SubmissionToast, SuccessToast } from "../";
+import { GENERAL_ERROR_MESSAGE } from "../errorMessages";
 import {
   ErrorModal,
   LoadingModal,
@@ -417,7 +418,7 @@ export const useOctTxn = ({
           title="Error"
           onClose={() => closeModal("errorModal")}
           open={modalState.errorModal?.isOpen ?? false}
-          message={modalState.errorModal?.errorMessage}
+          message={modalState.errorModal?.errorMessage ?? GENERAL_ERROR_MESSAGE}
           hash={modalState.errorModal?.errorHash}
         />
         <LoadingModal

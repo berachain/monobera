@@ -4,6 +4,7 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import Balancer from "react-wrap-balancer";
 
+import { GENERAL_ERROR_MESSAGE, RPC_ERROR_MESSAGHES } from "./errorMessages";
 import { Spinner } from "./spinner";
 
 interface IModal {
@@ -89,8 +90,6 @@ export const ErrorModal = ({
   onClose,
   open,
 }: IModal) => {
-  // const { networkConfig } = useBeraConfig();
-
   if (message === "User rejected txn") {
     return (
       <BaseModal
@@ -123,7 +122,11 @@ export const ErrorModal = ({
           alt={"user-x"}
         />
       }
-      message={message}
+      message={
+        message.toString().includes("eth_gasPrice")
+          ? RPC_ERROR_MESSAGHES.eth_gasPrice
+          : GENERAL_ERROR_MESSAGE
+      }
       href={undefined}
     />
   );
