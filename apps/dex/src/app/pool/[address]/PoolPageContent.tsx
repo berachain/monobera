@@ -388,7 +388,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                     My pool balance
                   </h3>
                   <p className="mt-1 text-lg font-semibold text-foreground">
-                    {isConnected ? (
+                    {isConnected && userPool ? (
                       isLoading ? (
                         <Skeleton className="h-[32px] w-[150px]" />
                       ) : (
