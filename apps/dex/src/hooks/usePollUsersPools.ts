@@ -26,10 +26,9 @@ export const usePollUsersPools = () => {
           variables: { userAddress: account },
         });
         const pools = res.data.userPools ?? [];
-        const poolAddresslist = pools
-          .map((pool: any) => ({
-            address: pool.poolAddress,
-          }));
+        const poolAddresslist = pools.map((pool: any) => ({
+          address: pool.poolAddress,
+        }));
         const userPools = await client.query({
           query: getUserPoolsDetails,
           variables: { list: poolAddresslist },

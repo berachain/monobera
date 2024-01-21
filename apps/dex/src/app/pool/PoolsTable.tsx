@@ -111,7 +111,7 @@ export const PoolSearch = ({
         </TabsList>
 
         {poolType === "allPools" ? (
-          <div className="flex w-full flex-col items-center justsify-center gap-2 lg:flex-row lg:items-center lg:justify-between">
+          <div className="justsify-center flex w-full flex-col items-center gap-2 lg:flex-row lg:items-center lg:justify-between">
             {/* <SearchInput
             value={search}
             onChange={(e) => {
@@ -152,12 +152,10 @@ export const PoolSearch = ({
           </div>
         ) : (
           <div
-            className="cursor-pointer text-info-foreground text-right underline"
+            className="cursor-pointer text-right text-info-foreground underline"
             onClick={() => setAllPoolShowed(!allPoolShowed)}
           >
-            {allPoolShowed
-              ? "Show deposited pools"
-              : "Show all pools"}
+            {allPoolShowed ? "Show deposited pools" : "Show all pools"}
           </div>
         )}
 
@@ -210,7 +208,7 @@ export const PoolSearch = ({
         </TabsContent>
 
         <TabsContent value="userPools">
-          <MyPool isList allPoolShowed={allPoolShowed}/>
+          <MyPool isList allPoolShowed={allPoolShowed} />
         </TabsContent>
       </Tabs>
     </div>
