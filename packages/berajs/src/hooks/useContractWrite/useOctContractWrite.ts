@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useReducer } from "react";
+import { perpsEndpoints } from "@bera/config";
 import { Contract, JsonRpcProvider, Wallet } from "ethers";
 import { encodeFunctionData } from "viem";
 import { usePublicClient, useWalletClient } from "wagmi";
@@ -10,7 +11,6 @@ import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { TRADING_ABI } from "~/config";
 import { useBeraConfig, useBeraJs } from "~/contexts";
 import { useOct } from "../useOct";
-import { TransactionFailedError } from "./error";
 import {
   type IContractWrite,
   type IUseContractWrite,
@@ -89,21 +89,40 @@ const useOctContractWrite = ({
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
             hash: hash,
-            pollingInterval: 200,
+            pollingInterval: 5000,
+            timeout: 120000,
+            confirmations: 2,
           });
 
-        if (confirmationReceipt?.status === "success") {
+        const botConfirmation = await fetch(
+          `${perpsEndpoints}/canceled/${hash}`,
+        );
+        const botConfirmationResult = await botConfirmation.json();
+        const cancelReason = botConfirmationResult.result.cancel_reason;
+        if (confirmationReceipt?.status === "success" && cancelReason === "") {
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess && onSuccess(hash);
+        } else if (cancelReason !== "") {
+          onError && onError(cancelReason);
         } else {
-          // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
-          const e = new TransactionFailedError();
-          onError && onError(e);
+          onError && onError("Transaction has failed");
         }
       } catch (e: any) {
         console.log(e);
         dispatch({ type: ActionEnum.ERROR });
-        onError && onError(e);
+        let finalMsg = "Something went wrong. Please Try again";
+        const errormsg = e?.details;
+        if (errormsg?.includes("gasLimit")) {
+          finalMsg =
+            "It seems an RPC error has occurred while estimating gas. Please try your request later.";
+        } else if (errormsg?.includes("JSON-RPC")) {
+          finalMsg =
+            "It seems an RPC error has occurred. Please try your request one more later.";
+        } else if (e.details === undefined && e?.toString().includes("hash")) {
+          finalMsg =
+            "It seems an RPC error has occurred. Please check if your transaction was finalized. If not, please try again.";
+        }
+        onError && onError(finalMsg);
       }
     },
     [

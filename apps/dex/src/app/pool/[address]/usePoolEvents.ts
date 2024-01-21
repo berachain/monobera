@@ -25,7 +25,7 @@ export const usePoolEvents = (address: Address) => {
           .query({
             query: getAllLiquidityChanged,
             variables: {
-              page: page,
+              page: page * DEFAULT_SIZE,
               limit: DEFAULT_SIZE,
               poolDenom: ethToBera(address),
             },
@@ -56,7 +56,7 @@ export const usePoolEvents = (address: Address) => {
           .query({
             query: getTypedLiquidityChanged,
             variables: {
-              page: page,
+              page: page * DEFAULT_SIZE,
               limit: DEFAULT_SIZE,
               poolDenom: ethToBera(address),
               type: ["SWAP"],
@@ -88,7 +88,7 @@ export const usePoolEvents = (address: Address) => {
           .query({
             query: getTypedLiquidityChanged,
             variables: {
-              page: page,
+              page: page * DEFAULT_SIZE,
               limit: DEFAULT_SIZE,
               poolDenom: ethToBera(address),
               type: ["ADD", "REMOVE"],
