@@ -8,7 +8,6 @@ import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
 import { usePollTransactionCount } from "../usePollTransactionCount";
 import { TransactionFailedError } from "./error";
-import Details from '../../../../../apps/bgt-station/src/app/dashboard/components/details';
 import {
   type IContractWrite,
   type IUseContractWrite,
