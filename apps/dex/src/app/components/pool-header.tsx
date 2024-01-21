@@ -58,9 +58,7 @@ export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
             <span
               className="cursor-pointer px-1 text-sm text-foreground hover:underline"
               onClick={() =>
-                window.open(
-                  `${blockExplorerUrl}/address/${pool?.poolShareDenomHex}`,
-                )
+                window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
               }
             >
               {truncateHash(pool?.pool ?? "")}
@@ -75,9 +73,7 @@ export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
         <span
           className="cursor-pointer px-1 text-sm text-foreground hover:underline"
           onClick={() =>
-            window.open(
-              `${blockExplorerUrl}/address/${pool?.poolShareDenomHex}`,
-            )
+            window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
           }
         >
           {truncateHash(pool?.pool ?? "")}
@@ -85,22 +81,23 @@ export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
         </span>
       </div>
       <div className="mt-4 flex gap-2 md:mt-0">
-        <Button
-          variant={"outline"}
-          onClick={() =>
-            window.open(`/pool/${pool?.pool}/add-liquidity`, "_self")
-          }
-        >
-          <Icons.add />
-          <span className="ml-1">Add</span>
-        </Button>
-        <Button
-          variant={"outline"}
-          onClick={() => window.open(`/pool/${pool?.pool}/withdraw`, "_self")}
-        >
-          <Icons.subtract />
-          <span className="ml-1">Withdraw</span>
-        </Button>
+        <Link href={`/pool/${pool?.pool}/add-liquidity`} target="_self">
+          <Button
+            variant={"outline"}
+            onClick={() =>
+              window.open(`/pool/${pool?.pool}/add-liquidity`, "_self")
+            }
+          >
+            <Icons.add />
+            <span className="ml-1">Add</span>
+          </Button>
+        </Link>
+        <Link href={`/pool/${pool?.pool}/withdraw`} target="_self">
+          <Button variant={"outline"}>
+            <Icons.subtract />
+            <span className="ml-1">Withdraw</span>
+          </Button>
+        </Link>
       </div>
     </div>
   );
