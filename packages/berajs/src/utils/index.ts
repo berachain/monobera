@@ -4,6 +4,7 @@ export * from "./truncateHash";
 export * from "./formatUsd";
 export * from "./formatAmount";
 export * from "./formatAmountBig";
+export * from "./formatAmountSmall";
 export * from "./pagination";
 export * from "./addTokenToWallet";
 export * from "./aave-reserve-helper";

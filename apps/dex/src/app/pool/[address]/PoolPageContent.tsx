@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
+  formatAmountSmall,
   formatUsd,
   formatter,
   truncateHash,
@@ -10,7 +11,6 @@ import {
   usePollBgtRewards,
   type Token,
 } from "@bera/berajs";
-import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
 import {
   LIQUIDITY_CHANGED_TYPE,
