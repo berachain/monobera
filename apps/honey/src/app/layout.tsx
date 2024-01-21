@@ -5,6 +5,7 @@ import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
 import Script from "next/script";
 import { BeraConfig } from "@bera/berajs";
+import { rpcBannerEnabled } from "@bera/config";
 import {
   Footer,
   Header,
@@ -68,7 +69,14 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               navItems={navItems}
               mobileNavItems={mobileNavItems}
             />
-            <main className="w-full py-[72px]">{props.children}</main>
+            <main
+              className={cn(
+                "w-full pb-[72px]",
+                rpcBannerEnabled ? "pt-[120px]" : "pt-[72px]",
+              )}
+            >
+              {props.children}
+            </main>
             <Toaster position="bottom-right" />
             <Footer />
             <TailwindIndicator />

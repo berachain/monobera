@@ -93,7 +93,7 @@ export function SwapCard({
     isRouteLoading,
     payload,
     exchangeRate,
-    gasPrice,
+    // gasPrice,
     tokenInPrice,
     tokenOutPrice,
     isWrap,
@@ -362,7 +362,7 @@ export function SwapCard({
                           Gas fee
                         </p>
                         <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                          {Number(gasPrice).toFixed(4)} Bwei
+                          {`<0.0001 Bwei`}
                         </p>
                       </div>
                     </div>
