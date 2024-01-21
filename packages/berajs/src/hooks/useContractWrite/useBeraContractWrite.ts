@@ -8,6 +8,7 @@ import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
 import { usePollTransactionCount } from "../usePollTransactionCount";
 import { TransactionFailedError } from "./error";
+import Details from '../../../../../apps/bgt-station/src/app/dashboard/components/details';
 import {
   type IContractWrite,
   type IUseContractWrite,
@@ -83,9 +84,20 @@ const useBeraContractWrite = ({
           onError && onError(e);
         }
       } catch (e: any) {
-        console.log(e);
+        console.log('reee',e.details);
+        let finalMsg = 'Something went wrong. Please Try again'
+        const errormsg = e?.details
+        if(errormsg?.contains('gasLimit')) {
+          finalMsg = 'It seems an RPC error has occurred. Please try your request once more later.'
+        } else if (
+          errormsg?.contains('internal')
+        ) {
+
+        }
         dispatch({ type: ActionEnum.ERROR });
-        onError && onError(e);
+        onError && onError({
+          message: finalMsg
+        });
       } finally {
         await refresh();
       }
