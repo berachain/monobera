@@ -40,9 +40,7 @@ export function TotalAmount({
           <span className="font-medium text-success-foreground">
             <span
               className={cn(
-                "cursor-help",
-                "underline",
-                "decoration-dashed",
+                "cursor-help underline decoration-dashed",
                 Number(totalPnl) > 0
                   ? "text-success-foreground"
                   : "text-destructive-foreground",

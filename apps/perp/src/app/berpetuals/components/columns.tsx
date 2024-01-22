@@ -123,21 +123,23 @@ export const ActivePositionPNL = ({
       {pnl !== undefined ? (
         <div
           className={cn(
-            "group relative flex flex-col items-start",
+            "flex flex-col items-start",
             pnl > 0 ? "text-success-foreground" : "text-destructive-foreground",
           )}
         >
-          {formatUsd(pnl)}
+          <div className="group relative cursor-help underline decoration-dashed">
+            {formatUsd(pnl)}
+            <HoverState>
+              <PnLRowHoverState
+                initialCollateral={initialCollateral}
+                pnl={pnl}
+                borrowFee={borrowFee}
+                closeFee={closeFee}
+              />
+            </HoverState>
+          </div>
 
           <div className="text-xs">({percentage.toFixed(2)}%)</div>
-          <HoverState>
-            <PnLRowHoverState
-              initialCollateral={initialCollateral}
-              pnl={pnl}
-              borrowFee={borrowFee}
-              closeFee={closeFee}
-            />
-          </HoverState>
         </div>
       ) : (
         <Skeleton className={cn("h-[28px] w-[80px]", className)} />
