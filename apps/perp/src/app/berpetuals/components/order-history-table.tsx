@@ -11,7 +11,6 @@ import {
 } from "./columns";
 import { DataTable } from "./data-table";
 import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
-import { type BerpTabTypes } from "./order-history-header";
 
 export interface IRow {
   key: string;
@@ -31,7 +30,7 @@ export function OrderHistoryTable({
   history,
   markets,
 }: {
-  tab: BerpTabTypes;
+  tab: "positions" | "orders" | "history" | "pnl";
   openPositons: IMarketOrder[];
   openOrders: ILimitOrder[];
   history: IClosedTrade[];
