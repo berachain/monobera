@@ -78,7 +78,7 @@ export function TokenDialog({
         setFilteredTokens(newFilteredTokens);
       }
     }
-  }, [tokenList, customTokens, filter, filteredTokens]);
+  }, [tokenList]);
 
   useEffect(() => {
     setManagingTokens(false);
