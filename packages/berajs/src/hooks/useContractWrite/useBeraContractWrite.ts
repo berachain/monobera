@@ -6,7 +6,7 @@ import { prepareWriteContract } from "wagmi/actions";
 
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
-import { useBeraJs } from "~/contexts";
+import { useBeraConfig, useBeraJs } from "~/contexts";
 import { usePollTransactionCount } from "../usePollTransactionCount";
 import { TransactionFailedError } from "./error";
 import {
@@ -26,6 +26,7 @@ const useBeraContractWrite = ({
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
+  const { networkConfig } = useBeraConfig();
 
   const { useTransactionCount, refresh } = usePollTransactionCount({
     address: account,
@@ -58,6 +59,7 @@ const useBeraContractWrite = ({
         receipt = await walletClient?.writeContract({
           address: address,
           abi: abi,
+          chain: networkConfig.chain,
           functionName: functionName,
           value: value === 0n ? undefined : value,
           args: [...params],
@@ -81,7 +83,10 @@ const useBeraContractWrite = ({
         } else {
           // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
           const e = new TransactionFailedError();
-          onError && onError(e);
+          onError &&
+            onError({
+              message: "Something went wrong. Please Try again",
+            });
         }
       } catch (e: any) {
         // if (process.env.VERCEL_ENV !== "production") {
@@ -102,6 +107,7 @@ const useBeraContractWrite = ({
       account,
       publicClient,
       userNonce,
+      networkConfig,
       onSuccess,
       onError,
       onLoading,
