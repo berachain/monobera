@@ -58,7 +58,8 @@ const useOctContractWrite = ({
             functionName: functionName,
             value: value,
             args: [...params],
-            chain: undefined,
+            chain: networkConfig.chain,
+            gas: 10000000n,
           });
         } else if (isOctReady) {
           const provider = new JsonRpcProvider(
@@ -91,7 +92,7 @@ const useOctContractWrite = ({
             hash: hash,
             pollingInterval: 5000,
             timeout: 120000,
-            confirmations: 2,
+            confirmations: 4,
           });
 
         const botConfirmation = await fetch(
@@ -99,17 +100,20 @@ const useOctContractWrite = ({
         );
         const botConfirmationResult = await botConfirmation.json();
         const cancelReason = botConfirmationResult.result.cancel_reason;
+        console.log("cancelReson", cancelReason);
         if (confirmationReceipt?.status === "success" && cancelReason === "") {
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess && onSuccess(hash);
         } else if (cancelReason !== "") {
+          console.log("ERROR", cancelReason);
           onError && onError(cancelReason);
         } else {
+          console.log("error", "txn failed");
+          console.log(confirmationReceipt);
           onError && onError("Transaction has failed");
         }
       } catch (e: any) {
         console.log(e);
-        dispatch({ type: ActionEnum.ERROR });
         let finalMsg = "Something went wrong. Please Try again";
         const errormsg = e?.details;
         if (errormsg?.includes("gasLimit")) {
@@ -122,6 +126,7 @@ const useOctContractWrite = ({
           finalMsg =
             "It seems an RPC error has occurred. Please check if your transaction was finalized. If not, please try again.";
         }
+        dispatch({ type: ActionEnum.ERROR });
         onError && onError(finalMsg);
       }
     },
