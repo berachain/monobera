@@ -88,7 +88,7 @@ const useBeraContractWrite = ({
           console.log(e);
         }
         dispatch({ type: ActionEnum.ERROR });
-        const finalMsg = getErrorMessage(e?.details);
+        const finalMsg = getErrorMessage(e);
         onError &&
           onError({
             message: finalMsg,

@@ -41,14 +41,21 @@ const errorMsgMap: ErrorMessages = {
   },
   LEND: {
     PRICE_FLUCTUATION: {
-      keywords: [`function "borrow" reverted`, `function "repay" reverted`],
+      keywords: [`function "borrow"`, `function "repay"`, "repay", "borrow"],
       errorMSG:
         "The price of the asset you are trying to borrow has fluctuated too much. Please try again.",
     },
   },
 };
 
-export const getErrorMessage = (errorMsgDetails: string | undefined) => {
+export const getErrorMessage = (e: any) => {
+  let errorMsgDetails = "";
+
+  for (const key in e) {
+    if (e[key]) {
+      errorMsgDetails += `${key}: ${String(e[key])}, `;
+    }
+  }
   if (!errorMsgDetails) {
     return errorMsgMap.GENERAL_ERROR;
   } else {
