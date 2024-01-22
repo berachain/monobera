@@ -34,7 +34,7 @@ export function DripToken({
         try {
           const res = await fetch("/api/get-queue/api");
           const data = await res.json();
-          if (data.amount > 600) {
+          if (Number(data.amount) > 600) {
             setQueue(data.amount);
             setAlert("busy");
           } else {
