@@ -28,7 +28,8 @@ export const usePollOpenOrders = () => {
   );
 
   const useOpenPositions = () => {
-    return useSWRImmutable(QUERY_KEY);
+    const { data } = useSWRImmutable(QUERY_KEY);
+    return data;
   };
 
   const useMarketOpenOrders = (markets: IMarket[]): ILimitOrder[] => {
