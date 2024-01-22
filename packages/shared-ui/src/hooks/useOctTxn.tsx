@@ -123,7 +123,7 @@ export const useOctTxn = ({
           const toastId = `error-${identifier}`;
           toast.remove(`loading-${identifier}`);
           toast.remove(`submission-${identifier}`);
-          if (error?.includes("User rejected the request.")) {
+          if (error?.message?.includes("User rejected the request.")) {
             toast.custom(
               <ErrorToast
                 title={"User rejected txn"}
@@ -139,7 +139,7 @@ export const useOctTxn = ({
             toast.custom(
               <ErrorToast
                 title={"Transaction failed"}
-                message={error || "unknown error"}
+                message={error?.message || "unknown error"}
                 onClose={() => toast.remove(toastId)}
               />,
               {
@@ -153,7 +153,7 @@ export const useOctTxn = ({
         if (!disableModal) {
           closeModal("loadingModal");
           closeModal("submissionModal");
-          if (error?.includes("User rejected the request.")) {
+          if (error?.message?.includes("User rejected the request.")) {
             openModal("errorModal", {
               errorHash: "0x",
               errorMessage: "User rejected txn",
@@ -161,7 +161,8 @@ export const useOctTxn = ({
           } else {
             openModal("errorModal", {
               errorHash: "0x",
-              errorMessage: error || "Something went wrong. Please Try Again.",
+              errorMessage:
+                error?.message || "Something went wrong. Please Try Again.",
             });
           }
         }
@@ -245,6 +246,7 @@ export const useOctTxn = ({
             />,
             {
               id: toastId,
+              duration: Infinity,
               position: isMd ? "bottom-right" : "top-center",
             },
           );

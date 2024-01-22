@@ -7,6 +7,7 @@ import { encodeFunctionData } from "viem";
 import { usePublicClient, useWalletClient } from "wagmi";
 import { prepareWriteContract } from "wagmi/actions";
 
+import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { TRADING_ABI } from "~/config";
 import { useBeraConfig, useBeraJs } from "~/contexts";
@@ -58,7 +59,8 @@ const useOctContractWrite = ({
             functionName: functionName,
             value: value,
             args: [...params],
-            chain: undefined,
+            chain: networkConfig.chain,
+            gas: 10000000n,
           });
         } else if (isOctReady) {
           const provider = new JsonRpcProvider(
@@ -91,7 +93,7 @@ const useOctContractWrite = ({
             hash: hash,
             pollingInterval: 5000,
             timeout: 120000,
-            confirmations: 2,
+            confirmations: 4,
           });
 
         const botConfirmation = await fetch(
@@ -99,30 +101,22 @@ const useOctContractWrite = ({
         );
         const botConfirmationResult = await botConfirmation.json();
         const cancelReason = botConfirmationResult.result.cancel_reason;
+        console.log("cancelReson", cancelReason);
         if (confirmationReceipt?.status === "success" && cancelReason === "") {
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess && onSuccess(hash);
         } else if (cancelReason !== "") {
-          onError && onError(cancelReason);
+          onError && onError({ message: cancelReason });
         } else {
-          onError && onError("Transaction has failed");
+          onError && onError({ message: "Transaction has failed" });
         }
       } catch (e: any) {
+        // if (process.env.VERCEL_ENV !== "production") {
         console.log(e);
+        // }
         dispatch({ type: ActionEnum.ERROR });
-        let finalMsg = "Something went wrong. Please Try again";
-        const errormsg = e?.details;
-        if (errormsg?.includes("gasLimit")) {
-          finalMsg =
-            "It seems an RPC error has occurred while estimating gas. Please try your request later.";
-        } else if (errormsg?.includes("JSON-RPC")) {
-          finalMsg =
-            "It seems an RPC error has occurred. Please try your request one more later.";
-        } else if (e.details === undefined && e?.toString().includes("hash")) {
-          finalMsg =
-            "It seems an RPC error has occurred. Please check if your transaction was finalized. If not, please try again.";
-        }
-        onError && onError(finalMsg);
+        const finalMsg = getErrorMessage(e);
+        onError && onError({ message: finalMsg });
       }
     },
     [

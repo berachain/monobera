@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import {
+  formatInputTokenValue,
   formatUsd,
   useBeraJs,
   usePollAssetWalletBalance,
@@ -72,7 +73,6 @@ export function TokenInput({
     Number(amount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
       : Number(amount) ?? 0;
-
   useEffect(() => {
     if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
     if (safeNumberAmount <= tokenBalance) {
@@ -132,7 +132,7 @@ export function TokenInput({
         </div>
         <div className="ml-2 flex w-full flex-col pl-2 sm:pl-0">
           <Input
-            type="number"
+            type="text"
             step="any"
             min="0"
             placeholder="0"
@@ -154,9 +154,7 @@ export function TokenInput({
             }}
             onChange={(e: any) => {
               const inputValue = e.target.value;
-              // Allow only digits and periods (decimal points)
-              const filteredValue = inputValue.replace(/[^0-9.]/g, "");
-
+              const filteredValue = formatInputTokenValue(inputValue);
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
               if (periodsCount <= 1) {
@@ -177,7 +175,7 @@ export function TokenInput({
                 </p>
                 {!hideMax && (
                   <p
-                    className="cursor-pointer select-none	 text-xs text-muted-foreground underline hover:text-foreground"
+                    className="cursor-pointer select-none text-xs text-muted-foreground underline hover:text-foreground"
                     onClick={() => {
                       setAmount &&
                         tokenBalance !== "" &&
