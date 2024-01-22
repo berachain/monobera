@@ -7,6 +7,7 @@ import { encodeFunctionData } from "viem";
 import { usePublicClient, useWalletClient } from "wagmi";
 import { prepareWriteContract } from "wagmi/actions";
 
+import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { TRADING_ABI } from "~/config";
 import { useBeraConfig, useBeraJs } from "~/contexts";
@@ -108,20 +109,11 @@ const useOctContractWrite = ({
           onError && onError("Transaction has failed");
         }
       } catch (e: any) {
-        console.log(e);
-        dispatch({ type: ActionEnum.ERROR });
-        let finalMsg = "Something went wrong. Please Try again";
-        const errormsg = e?.details;
-        if (errormsg?.includes("gasLimit")) {
-          finalMsg =
-            "It seems an RPC error has occurred while estimating gas. Please try your request later.";
-        } else if (errormsg?.includes("JSON-RPC")) {
-          finalMsg =
-            "It seems an RPC error has occurred. Please try your request one more later.";
-        } else if (e.details === undefined && e?.toString().includes("hash")) {
-          finalMsg =
-            "It seems an RPC error has occurred. Please check if your transaction was finalized. If not, please try again.";
+        if (process.env.VERCEL_ENV !== "production") {
+          console.log(e);
         }
+        dispatch({ type: ActionEnum.ERROR });
+        const finalMsg = getErrorMessage(e?.details);
         onError && onError(finalMsg);
       }
     },
