@@ -34,6 +34,10 @@ const errorMsgMap: ErrorMessages = {
       errorMSG:
         "It seems an RPC error has occurred. Please check if your transaction was finalized. If not, please try again.",
     },
+    USER_REJECTION: {
+      keywords: ["User denied transaction signature"],
+      errorMSG: "You Rejected the transaction.",
+    },
   },
   LEND: {
     PRICE_FLUCTUATION: {
