@@ -59,7 +59,8 @@ const useOctContractWrite = ({
             functionName: functionName,
             value: value,
             args: [...params],
-            chain: undefined,
+            chain: networkConfig.chain,
+            gas: 10000000n,
           });
         } else if (isOctReady) {
           const provider = new JsonRpcProvider(
@@ -92,7 +93,7 @@ const useOctContractWrite = ({
             hash: hash,
             pollingInterval: 5000,
             timeout: 120000,
-            confirmations: 2,
+            confirmations: 4,
           });
 
         const botConfirmation = await fetch(
@@ -100,6 +101,7 @@ const useOctContractWrite = ({
         );
         const botConfirmationResult = await botConfirmation.json();
         const cancelReason = botConfirmationResult.result.cancel_reason;
+        console.log("cancelReson", cancelReason);
         if (confirmationReceipt?.status === "success" && cancelReason === "") {
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess && onSuccess(hash);

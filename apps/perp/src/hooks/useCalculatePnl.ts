@@ -38,6 +38,10 @@ export const useCalculatePnl = ({
 export const getPnl = ({ currentPrice, openPosition }: ICalculatePnl) => {
   if (currentPrice && openPosition) {
     const collateral = BigInt(openPosition.position_size);
+    const formattedCollateral = Number(
+      formatUnits(BigInt(openPosition.position_size), 18),
+    );
+
     const openPrice = BigInt(openPosition.open_price);
     const fees =
       BigInt(openPosition.borrowing_fee) +
@@ -46,15 +50,20 @@ export const getPnl = ({ currentPrice, openPosition }: ICalculatePnl) => {
       BigInt(openPosition.closing_fee);
     const leverage = BigInt(openPosition.leverage);
 
-    const pnl =
-      collateral +
+    let pnl =
       ((openPrice - BigInt(currentPrice)) *
         (leverage * collateral) *
         (openPosition.buy === true ? -1n : 1n)) /
         openPrice -
       fees;
 
-    const formattedPnl = Number(formatUnits(pnl - collateral, 18));
+    const formattedPnl = Number(formatUnits(pnl, 18));
+
+    const minPos = formattedCollateral;
+
+    if (formattedPnl <= -minPos) {
+      return -minPos;
+    }
 
     return formattedPnl;
   } else {
