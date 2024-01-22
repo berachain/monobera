@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
+import { HoverState } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
@@ -50,13 +51,14 @@ export function TotalAmount({
               {formatUsd(totalPnl)}
             </span>
           </span>
-          <div className="absolute bottom-full hidden w-max rounded-sm text-sm text-white opacity-0 shadow-lg group-hover:block group-hover:opacity-100">
+
+          <HoverState>
             <TotalRelativePnLHoverState
               totalUnrealizedPnl={totalUnrealizedPnl}
               realizedPnl={realizedPnl}
               totalPnl={totalPnl}
             />
-          </div>
+          </HoverState>
         </div>
       </div>
     );
