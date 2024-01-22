@@ -29,6 +29,7 @@ export { RT, type Columns } from "./react-table";
 export { IconList } from "./icon-list";
 export { TokenChip } from "./token-chip";
 export { Header } from "./header";
+export { HoverState } from "./hover-state";
 export { Footer } from "./footer";
 export { ErrorPage } from "./error";
 export { Gradient } from "./gradient";
