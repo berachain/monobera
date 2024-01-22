@@ -9,6 +9,8 @@ import { type Address } from "wagmi";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 
+export type BerpTabTypes = "positions" | "orders" | "history" | "pnl";
+
 export function OrderHistoryHeader({
   headers,
   tabType,
@@ -21,8 +23,8 @@ export function OrderHistoryHeader({
     counts?: number;
     type: string;
   }[];
-  tabType: "positions" | "orders" | "history" | "pnl";
-  setTabType: (type: "positions" | "orders" | "history" | "pnl") => void;
+  tabType: BerpTabTypes;
+  setTabType: (type: BerpTabTypes) => void;
   closePositionsPayload: any[];
   closeOrdersPayload: any[];
 }) {
@@ -51,11 +53,7 @@ export function OrderHistoryHeader({
         <div className=" flex gap-10 text-foreground">
           {headers.map((header, index) => (
             <div
-              onClick={() =>
-                setTabType(
-                  header.type as "positions" | "orders" | "history" | "pnl",
-                )
-              }
+              onClick={() => setTabType(header.type as BerpTabTypes)}
               key={index}
               className={cn(
                 "flex cursor-pointer items-center gap-2",

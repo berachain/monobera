@@ -310,19 +310,6 @@ export const getPositionColumns = (markets: IMarket[]) => {
           tooltip={EST_PNL_TOOLTIP_TEXT}
         />
       ),
-      // cell: ({ row }) => (
-      // <div
-      //   className={cn(
-      //     "text-sm font-semibold leading-tight text-foreground",
-      //     row.original.realized_pnl >= 0
-      //       ? "text-success-foreground"
-      //       : "text-destructive-foreground",
-      //   )}
-      // >
-      //   {row.original.realized_pnl > 0 && "+"}
-      //   {formatUsd(row.original.realized_pnl)}
-      // </div>
-      // ),
       cell: ({ row }) => <ActivePositionPNL position={row.original} />,
       accessorKey: "est_pnl",
       enableSorting: false,
