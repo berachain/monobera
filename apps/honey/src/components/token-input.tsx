@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import {
+  formatInputTokenValue,
   formatUsd,
   useBeraJs,
   usePollAssetWalletBalance,
@@ -95,7 +96,7 @@ export function TokenInput({
         />
         <div className="flex w-full flex-col pl-2 sm:pl-0">
           <Input
-            type="number"
+            type="text"
             step="any"
             min="0"
             placeholder="0.00"
@@ -120,9 +121,7 @@ export function TokenInput({
             }}
             onChange={(e) => {
               const inputValue = e.target.value;
-
-              // Allow only digits and periods (decimal points)
-              const filteredValue = inputValue.replace(/[^0-9.]/g, "");
+              const filteredValue = formatInputTokenValue(inputValue);
 
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
