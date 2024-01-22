@@ -13,30 +13,44 @@ import styles from "./index.module.css";
 
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
 
+export const TV_BACKGROUND_COLOR = {
+  DARK: { theme: "dark", color: "#0E0803" },
+  LIGHT: { theme: "light", color: "#FAFAF9" },
+};
+
+export type TV_BACKGROUND_TYPE =
+  | TV_BACKGROUND_COLOR.LIGHT.theme
+  | TV_BACKGROUND_COLOR.DARK.theme;
+
 export const TVChartContainer = (
   props: Partial<ChartingLibraryWidgetOptions>,
 ) => {
   const chartContainerRef =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<TV_BACKGROUND_TYPE>(
+    TV_BACKGROUND_COLOR.LIGHT.theme,
+  );
   const { theme: appTheme } = useTheme();
   const isDarkOS = useMediaQuery(COLOR_SCHEME_QUERY);
 
   useEffect(() => {
     if (appTheme === "system") {
       if (isDarkOS) {
-        setTheme("dark");
+        setTheme(TV_BACKGROUND_COLOR.DARK.theme);
       } else {
-        setTheme("light");
+        setTheme(TV_BACKGROUND_COLOR.LIGHT.theme);
       }
     } else if (appTheme !== undefined) {
-      setTheme(appTheme as "light" | "dark");
+      setTheme(appTheme as TV_BACKGROUND_TYPE);
     }
   }, [appTheme, isDarkOS]);
 
   useEffect(() => {
-    const backgroundColor = theme === "dark" ? "#000000" : "#FAFAF9";
+    const backgroundColor =
+      theme === TV_BACKGROUND_COLOR.DARK.theme
+        ? TV_BACKGROUND_COLOR.DARK.color
+        : TV_BACKGROUND_COLOR.LIGHT.color;
     const widgetOptions: ChartingLibraryWidgetOptions = {
       symbol: props.symbol,
       datafeed: Datafeed,
