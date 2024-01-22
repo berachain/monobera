@@ -176,3 +176,41 @@ export const getUniquePoolById = gql`
     }
   }
 `;
+
+export const getUserPools = gql`
+  query GetUserPools($userAddress: String!) {
+    userPools(where: { userAddress: $userAddress }) {
+      id
+      poolAddress
+      shares
+      userAddress
+    }
+  }
+`;
+
+export const getUserPoolsDetails = gql`
+  query GetUserPoolsDetails($list: [Pool_filter]) {
+    pools(where: { or: $list }) {
+      id
+      pool: address
+      poolName: name
+      tokens: poolTokens {
+        denomWeight
+        amount
+        denom
+        address
+        symbol
+        decimals
+        latestPriceUsd {
+          id
+          price
+        }
+      }
+      swapFee
+      sharesDenom
+      sharesAddress
+      totalShares
+      tvlUsd
+    }
+  }
+`;

@@ -1,0 +1,23 @@
+{
+  "GENERAL_ERROR_MESSAGE": "Something went wrong. Please try again later.",
+  "BEAR_WITH_US_MESSAGE": "We're currently expanding our capacity to better serve you. Please bear with us; we'll be back shortly with improved performance!",
+
+  "RPC_MESSAGES": {
+    "ETH_GASPRICE": {
+      "method": "eth_gasPrice",
+      "err": "Try setting up your gas price to 100 bwei, if that doesn't resolve your issue, please report in discord with details."
+    },
+    "ETH_CALL": {
+      "method": "eth_call",
+      "err": "It seems an RPC error has occurred. Please try your request once more later."
+    },
+    "ETH_GETLOGS": {
+      "method": "eth_getLogs",
+      "err": "An RPC error seems to have occurred. We advise trying your request again later."
+    },
+    "ETH_GETBALANCE": {
+      "method": "eth_getBalance",
+      "err": "An RPC error has been detected. Please attempt your request after a short while."
+    }
+  }
+}

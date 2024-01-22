@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { truncateHash } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
@@ -10,15 +11,16 @@ export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
   return (
     <div className="flex w-full flex-col items-center justify-between md:items-end md:justify-center lg:flex-row">
       <div className="flex w-full flex-col items-center gap-4 md:items-start">
-        <Button
-          variant={"ghost"}
-          size="sm"
-          className="flex items-center gap-1"
-          onClick={() => window.open("/pool", "_self")}
-        >
-          <Icons.arrowLeft className="h-4 w-4" />
-          <div className="text-sm font-medium"> All Pools</div>
-        </Button>
+        <Link href={"/pool"} target="_self">
+          <Button
+            variant={"ghost"}
+            size="sm"
+            className="flex items-center gap-1"
+          >
+            <Icons.arrowLeft className="h-4 w-4" />
+            <div className="text-sm font-medium"> All Pools</div>
+          </Button>
+        </Link>
         <p className="flex w-full justify-center gap-4 text-center text-2xl font-semibold md:justify-start md:text-left">
           <TokenIconList
             tokenList={pool?.tokens?.map((t) => t.address) ?? []}
@@ -56,9 +58,7 @@ export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
             <span
               className="cursor-pointer px-1 text-sm text-foreground hover:underline"
               onClick={() =>
-                window.open(
-                  `${blockExplorerUrl}/address/${pool?.poolShareDenomHex}`,
-                )
+                window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
               }
             >
               {truncateHash(pool?.pool ?? "")}
@@ -73,9 +73,7 @@ export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
         <span
           className="cursor-pointer px-1 text-sm text-foreground hover:underline"
           onClick={() =>
-            window.open(
-              `${blockExplorerUrl}/address/${pool?.poolShareDenomHex}`,
-            )
+            window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
           }
         >
           {truncateHash(pool?.pool ?? "")}
@@ -83,22 +81,23 @@ export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
         </span>
       </div>
       <div className="mt-4 flex gap-2 md:mt-0">
-        <Button
-          variant={"outline"}
-          onClick={() =>
-            window.open(`/pool/${pool?.pool}/add-liquidity`, "_self")
-          }
-        >
-          <Icons.add />
-          <span className="ml-1">Add</span>
-        </Button>
-        <Button
-          variant={"outline"}
-          onClick={() => window.open(`/pool/${pool?.pool}/withdraw`, "_self")}
-        >
-          <Icons.subtract />
-          <span className="ml-1">Withdraw</span>
-        </Button>
+        <Link href={`/pool/${pool?.pool}/add-liquidity`} target="_self">
+          <Button
+            variant={"outline"}
+            onClick={() =>
+              window.open(`/pool/${pool?.pool}/add-liquidity`, "_self")
+            }
+          >
+            <Icons.add />
+            <span className="ml-1">Add</span>
+          </Button>
+        </Link>
+        <Link href={`/pool/${pool?.pool}/withdraw`} target="_self">
+          <Button variant={"outline"}>
+            <Icons.subtract />
+            <span className="ml-1">Withdraw</span>
+          </Button>
+        </Link>
       </div>
     </div>
   );

@@ -204,6 +204,13 @@ export const available_supply_columns: ColumnDef<any>[] = [
     ),
     accessorKey: "walletBalanceUS",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = Number(rowA.original.formattedBalance);
+      const b = Number(rowB.original.formattedBalance);
+      if (a < b) return -1;
+      else if (a > b) return 1;
+      else return 0;
+    },
   },
   {
     header: ({ column }) => (
@@ -226,6 +233,13 @@ export const available_supply_columns: ColumnDef<any>[] = [
     ),
     accessorKey: "supplyAPR",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = Number(rowA.original.reserveData.supplyAPY);
+      const b = Number(rowB.original.reserveData.supplyAPY);
+      if (a < b) return -1;
+      else if (a > b) return 1;
+      else return 0;
+    },
   },
   {
     header: ({ column }) => <DataTableColumnHeader column={column} title="" />,

@@ -23,7 +23,7 @@ export { PreviewToken, TokenList } from "./preview-token-list";
 export { InfoBoxList, InfoBoxListItem } from "./info-box";
 export { Dropdown } from "./dropdown";
 export { HoneyBanner } from "./honey-banner";
-export { LaunchBanner } from "./launch-banner";
+export { LaunchBanner, RPCBanner } from "./launch-banner";
 export { RewardBanner } from "./reward-banner";
 export { RT, type Columns } from "./react-table";
 export { IconList } from "./icon-list";
@@ -48,4 +48,4 @@ export * from "./access-deny";
 
 export { useTxn } from "./hooks";
 export * from "./apyTooltip";
-export * from './hooks'
+export * from "./hooks";

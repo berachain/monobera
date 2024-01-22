@@ -2,18 +2,17 @@
 
 import { useCallback, useReducer } from "react";
 import { usePublicClient, useWalletClient } from "wagmi";
-
 import { prepareWriteContract } from "wagmi/actions";
 
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
+import { usePollTransactionCount } from "../usePollTransactionCount";
 import { TransactionFailedError } from "./error";
 import {
   type IContractWrite,
   type IUseContractWrite,
   type useContractWriteApi,
 } from "./types";
-import { usePollTransactionCount } from "../usePollTransactionCount";
 
 const useBeraContractWrite = ({
   onSuccess,
@@ -30,7 +29,6 @@ const useBeraContractWrite = ({
   const { useTransactionCount, refresh } = usePollTransactionCount({
     address: account,
   });
-
 
   const userNonce = useTransactionCount();
 
@@ -53,7 +51,7 @@ const useBeraContractWrite = ({
           functionName: functionName,
           args: params,
           value: value,
-          nonce: userNonce
+          nonce: userNonce,
         });
 
         receipt = await walletClient?.writeContract({
@@ -63,7 +61,7 @@ const useBeraContractWrite = ({
           value: value === 0n ? undefined : value,
           args: [...params],
           account: account,
-          nonce: userNonce
+          nonce: userNonce,
           // chain: undefined,
         });
         dispatch({ type: ActionEnum.SUBMITTING });
@@ -74,7 +72,7 @@ const useBeraContractWrite = ({
             hash: receipt,
             pollingInterval: 5000,
             timeout: 120000,
-            confirmations: 2
+            confirmations: 2,
           });
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
@@ -85,11 +83,25 @@ const useBeraContractWrite = ({
           onError && onError(e);
         }
       } catch (e: any) {
-        console.log(e);
+        let finalMsg = "Something went wrong. Please Try again";
+        const errormsg = e?.details;
+        if (errormsg?.includes("gasLimit")) {
+          finalMsg =
+            "It seems an RPC error has occurred while estimating gas. Please try your request later.";
+        } else if (errormsg?.includes("JSON-RPC")) {
+          finalMsg =
+            "It seems an RPC error has occurred. Please try your request one more later.";
+        } else if (e.details === undefined && e?.toString().includes("hash")) {
+          finalMsg =
+            "It seems an RPC error has occurred. Please check if your transaction was finalized. If not, please try again.";
+        }
         dispatch({ type: ActionEnum.ERROR });
-        onError && onError(e);
+        onError &&
+          onError({
+            message: finalMsg,
+          });
       } finally {
-        await refresh()
+        await refresh();
       }
     },
     [
@@ -101,7 +113,7 @@ const useBeraContractWrite = ({
       onError,
       onLoading,
       onSubmission,
-      refresh
+      refresh,
     ],
   );
 

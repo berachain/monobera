@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
-import { formatter } from "@bera/berajs";
-import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
+import { formatAmountSmall, formatter } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   TokenIconList,
@@ -13,14 +12,14 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
+import { getAddress } from "ethers";
 
-import { usePoolTable } from "~/app/pool/usePoolTable";
+import { usePollUsersPools } from "~/hooks/usePollUsersPools";
 
 export const PoolSummary = ({ pool }: { pool: Pool }) => {
-  const { userPools } = usePoolTable();
-
-  const isDeposited = userPools?.some(
-    (userPool: Pool) => userPool.pool === pool?.pool,
+  const { data: myPools = [] } = usePollUsersPools();
+  const isDeposited = myPools?.find(
+    (myPool: any) => getAddress(myPool.pool) === getAddress(pool?.pool),
   );
   return (
     <div className="flex flex-col items-start gap-2">
@@ -340,30 +339,19 @@ export const my_columns: ColumnDef<any>[] = [
   //   },
   // },
   {
-    accessorKey: "totalApy",
+    accessorKey: "userBalance",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="APY"
-        tooltip={apyTooltipText()}
+        title="My Balance"
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center text-sm">
-          {row.original.totalApy?.toFixed(2)}%
-        </div>
-      );
-    },
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.totalApy ?? 0;
-      const b = rowB.original.totalApy ?? 0;
-      if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
-    },
-    filterFn: (row, id, value) => value.includes(row.getValue(id)),
+    cell: ({ row }) => (
+      <div className="flex items-center text-sm">
+        {formatter.format(row.original.userBalance)} USD
+      </div>
+    ),
   },
   {
     accessorKey: "bgtApy",
@@ -391,8 +379,8 @@ export const my_columns: ColumnDef<any>[] = [
       );
     },
     sortingFn: (rowA, rowB) => {
-      const a = rowA.original.bgtApy ?? 0;
-      const b = rowB.original.bgtApy ?? 0;
+      const a = rowA.original.bgtRewards ?? 0;
+      const b = rowB.original.bgtRewards ?? 0;
       if (a < b) return -1;
       else if (a > b) return 1;
       else return 0;

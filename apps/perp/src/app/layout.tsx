@@ -4,6 +4,7 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
+import { rpcBannerEnabled } from "@bera/config";
 import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
@@ -56,7 +57,14 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             </div>
             <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
               <Header navItems={navItems} />
-              <main className="w-full pt-[72px]">{props.children}</main>
+              <main
+                className={cn(
+                  "w-full",
+                  rpcBannerEnabled ? "pt-[120px]" : "pt-[72px]",
+                )}
+              >
+                {props.children}
+              </main>
               <Toaster position="bottom-right" />
             </div>
             <TailwindIndicator />

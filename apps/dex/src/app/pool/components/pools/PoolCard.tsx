@@ -7,7 +7,6 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { TagList } from "~/components/tag-list";
-import { usePositionSize } from "~/hooks/usePositionSize";
 
 export const PoolCard = ({
   pool,
@@ -18,9 +17,6 @@ export const PoolCard = ({
 }) => {
   const router = useRouter();
   const poolName = pool?.poolName ?? "";
-  const { userTotalValue, isPositionSizeLoading } = usePositionSize({
-    pool: pool,
-  });
   return (
     <div
       key={pool?.pool}
@@ -50,11 +46,8 @@ export const PoolCard = ({
               Position Size
             </div>
             <div className="text-sm font-medium">
-              {isPositionSizeLoading ? (
-                <Skeleton className="h-[32px] w-[150px]" />
-              ) : (
-                formatUsd(userTotalValue ?? 0)
-              )}
+              {/* @ts-ignore */}
+              {formatUsd(pool?.userBalance ?? 0)}
             </div>
           </div>
         )}

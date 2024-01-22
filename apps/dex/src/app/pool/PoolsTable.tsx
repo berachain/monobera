@@ -1,23 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { type Pool } from "@bera/bera-router";
-import { useBeraJs, usePollBgtRewards } from "@bera/berajs";
-import {
-  ConnectWalletBear,
-  DataTable,
-  NotFoundBear,
-  SearchInput,
-} from "@bera/shared-ui";
+import { DataTable, NotFoundBear } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { columns, my_columns } from "~/components/pools-table-columns";
-import { PoolCard, PoolCardLoading } from "./PoolCard";
+import { columns } from "~/components/pools-table-columns";
+import { PoolCard } from "./components/pools/PoolCard";
+import CardViewLoading from "./components/pools/card-view-loading";
+import MyPool from "./components/pools/my-pool";
+import TableViewLoading from "./components/pools/table-view-loading";
 import { usePoolTable } from "./usePoolTable";
 
 const FilterBadge = ({
@@ -64,23 +60,6 @@ const Toggle = ({
   );
 };
 
-const TableViewLoading = () => (
-  <div className="mt-16 flex flex-col items-center gap-4">
-    <Skeleton className="h-[150px] w-[238px]" />
-    <Skeleton className="h-7 w-[300px]" />
-    <Skeleton className="h-7 w-[451px]" />
-    <Skeleton className="h-7 w-[130px]" />
-  </div>
-);
-
-const CardViewLoading = () => (
-  <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-    {[0, 0, 0, 0].map((_, index) => (
-      <PoolCardLoading key={index} />
-    ))}
-  </div>
-);
-
 export const PoolSearch = ({
   poolType,
 }: {
@@ -88,13 +67,12 @@ export const PoolSearch = ({
 }) => {
   const {
     data,
-    userPools,
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,
     isAllDataReachingEnd,
-    search,
-    setSearch,
+    // search,
+    // setSearch,
     hasBgtRewards,
     setHasBgtRewards,
     isNewPool,
@@ -103,14 +81,11 @@ export const PoolSearch = ({
     setIsHotPool,
     isList,
     setIsList,
-    isUserPoolsLoading,
-    handleEnter,
-    setKeyword,
+    // handleEnter,
+    // setKeyword,
   } = usePoolTable();
-  const { isReady } = useBeraJs();
-  const receivers = userPools?.map((pool: Pool) => pool.pool) || [];
-  const { useBgtRewards } = usePollBgtRewards(receivers);
-  const { data: bgtRewards } = useBgtRewards();
+
+  const [allPoolShowed, setAllPoolShowed] = useState(false);
 
   return (
     <div
@@ -135,8 +110,9 @@ export const PoolSearch = ({
           </TabsTrigger>
         </TabsList>
 
-        <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:items-center lg:justify-between">
-          <SearchInput
+        {poolType === "allPools" ? (
+          <div className="justsify-center flex w-full flex-col items-center gap-2 lg:flex-row lg:items-center lg:justify-between">
+            {/* <SearchInput
             value={search}
             onChange={(e) => {
               if (e.target.value === "") {
@@ -150,30 +126,38 @@ export const PoolSearch = ({
             onKeyDown={handleEnter}
             id="all-pool-search"
             className="w-full md:w-[400px]"
-          />
+          /> */}
 
-          <div className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:justify-end">
-            <FilterBadge
-              text={"🚀 New Pools"}
-              active={isNewPool}
-              onClick={() => setIsNewPool(!isNewPool)}
-            />
-            <FilterBadge
-              text={"🔥 Hot Pools"}
-              active={isHotPool}
-              onClick={() => setIsHotPool(!isHotPool)}
-            />
-            <FilterBadge
-              text={"🐝 BGT Rewards"}
-              active={hasBgtRewards}
-              onClick={() => setHasBgtRewards(!hasBgtRewards)}
-            />
-            <Toggle
-              icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
-              onClick={() => setIsList(!isList)}
-            />
+            <div className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:justify-end">
+              <FilterBadge
+                text={"🚀 New Pools"}
+                active={isNewPool}
+                onClick={() => setIsNewPool(!isNewPool)}
+              />
+              <FilterBadge
+                text={"🔥 Hot Pools"}
+                active={isHotPool}
+                onClick={() => setIsHotPool(!isHotPool)}
+              />
+              <FilterBadge
+                text={"🐝 BGT Rewards"}
+                active={hasBgtRewards}
+                onClick={() => setHasBgtRewards(!hasBgtRewards)}
+              />
+              <Toggle
+                icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
+                onClick={() => setIsList(!isList)}
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div
+            className="cursor-pointer text-right text-info-foreground underline"
+            onClick={() => setAllPoolShowed(!allPoolShowed)}
+          >
+            {allPoolShowed ? "Show deposited pools" : "Show all pools"}
+          </div>
+        )}
 
         <TabsContent value="allPools" className="text-center">
           {isAllDataLoadingMore && data?.length === 0 ? (
@@ -224,53 +208,7 @@ export const PoolSearch = ({
         </TabsContent>
 
         <TabsContent value="userPools">
-          {!isReady ? (
-            <ConnectWalletBear
-              message="You need to connect your wallet to see deposited pools and
-            rewards"
-            />
-          ) : isUserPoolsLoading ? (
-            <div className="flex w-full flex-col items-center justify-center gap-4">
-              {isList ? <TableViewLoading /> : <CardViewLoading />}
-            </div>
-          ) : userPools === undefined || userPools.length === 0 ? (
-            <NotFoundBear title="No Pools found." />
-          ) : isList ? (
-            <div className="flex w-full flex-col items-center justify-center gap-4">
-              <DataTable
-                data={
-                  userPools.map((pool: any) => ({
-                    ...pool,
-                    bgtRewards:
-                      bgtRewards && bgtRewards[pool.pool]
-                        ? bgtRewards[pool.pool]
-                        : "0",
-                  })) ?? []
-                }
-                columns={my_columns}
-                title={`My Pools (${userPools.length})`}
-                onRowClick={(row) =>
-                  window.open(`/pool/${row.original.pool}`, "_self")
-                }
-              />
-            </div>
-          ) : (
-            <div className="flex w-full flex-col items-center justify-center gap-4">
-              <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-                {userPools &&
-                  userPools[0] &&
-                  userPools.map((pool: any) => {
-                    return (
-                      <PoolCard
-                        pool={pool}
-                        key={"search" + pool?.pool}
-                        isUserData={true}
-                      />
-                    );
-                  })}
-              </div>
-            </div>
-          )}
+          <MyPool isList allPoolShowed={allPoolShowed} />
         </TabsContent>
       </Tabs>
     </div>

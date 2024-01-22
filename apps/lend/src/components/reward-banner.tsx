@@ -2,53 +2,24 @@ import Image from "next/image";
 import {
   LEND_REWARD_HELPER_ABI,
   TransactionActionType,
+  formatAmountSmall,
   useBeraJs,
-  usePollBgtRewardsForAddress,
-  usePollHoneyVaultBalance,
-  usePollReservesDataList,
   usePollUserBGTRewards,
 } from "@bera/berajs";
-import { formatAmountSmall } from "@bera/berajs/src/utils/formatAmountSmall";
 import {
   bgtTokenAddress,
   bgtUrl,
   cloudinaryUrl,
-  honeyAddress,
   lendRewardsAddress,
 } from "@bera/config";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { formatEther } from "viem";
-import type { Address } from "wagmi";
 
 export const Banner = () => {
   const { isReady, account } = useBeraJs();
   const { data: rewards, isLoading, refetch } = usePollUserBGTRewards();
-
-  const {
-    isLoading: isHoneyVaultBalanceLoading,
-    useFormattedHoneyVaultBalance,
-  } = usePollHoneyVaultBalance();
-
-  const { useReservesDataList } = usePollReservesDataList();
-
-  const { data: reservesDictionary } = useReservesDataList();
-
-  const debtBearingHoney =
-    reservesDictionary === undefined
-      ? undefined
-      : reservesDictionary[honeyAddress]?.variableDebtTokenAddress;
-
-  const honeyLocked = useFormattedHoneyVaultBalance();
-
-  const { isLoading: isBgtRewardsLoading, useBgtApr } =
-    usePollBgtRewardsForAddress({
-      address: debtBearingHoney as Address,
-    });
-
-  const bgtApr = useBgtApr(honeyLocked);
-  const isLoadingApr = isHoneyVaultBalanceLoading || isBgtRewardsLoading;
 
   const {
     write,
@@ -59,12 +30,14 @@ export const Banner = () => {
     actionType: TransactionActionType.CLAIMING_REWARDS,
     onSuccess: () => refetch(),
   });
-  const formattedRewards = formatEther(rewards ?? 0n);
+
+  const formattedRewards = formatEther((rewards ?? 0n) as bigint);
+
   const { isSmall, numericValue: formattedBgt } =
     formatAmountSmall(formattedRewards);
 
   return (
-    <div className="relative flex flex-col-reverse items-start justify-center gap-4 rounded-lg border border-accent bg-gradient-to-b from-[#FFFCF2] to-[#FFF2D0] px-8 py-6 dark:from-[#27251F] dark:to-[#322400] lg:flex-row lg:gap-16">
+    <div className="row-reverse relative flex flex-col items-start justify-center gap-4 rounded-lg border border-accent bg-gradient-to-b from-[#FFFCF2] to-[#FFF2D0] px-8 py-6 dark:from-[#27251F] dark:to-[#322400] lg:flex-row lg:gap-16">
       {ModalPortal}
       <Image
         src={`${cloudinaryUrl}/bears/lendbear_npxhb3`}
@@ -106,9 +79,7 @@ export const Banner = () => {
             <TokenIcon address={bgtTokenAddress} fetch />
           </div>
           <div className="text-wrapper flex w-auto items-center align-middle text-lg font-bold">
-            {isLoadingApr
-              ? "Loading..."
-              : `${parseFloat(String(bgtApr ?? "0")).toFixed(2)}% APY`}
+            {parseFloat("0").toFixed(2)}% APY
             <Tooltip
               text={
                 <>
