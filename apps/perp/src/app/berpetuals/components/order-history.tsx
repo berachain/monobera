@@ -7,7 +7,7 @@ import { usePollOpenOrders } from "~/hooks/usePollOpenOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
 import { type IMarket } from "../page";
-import { OrderHistoryHeader, type BerpTabTypes } from "./order-history-header";
+import { OrderHistoryHeader } from "./order-history-header";
 import { OrderHistoryTable } from "./order-history-table";
 import { TotalAmount } from "./total-amount";
 
@@ -24,7 +24,9 @@ export interface IClosedTrade extends ClosedTrade {
 }
 
 export function OrderHistory({ markets }: { markets: IMarket[] }) {
-  const [tabType, setTabType] = useState<BerpTabTypes>("positions");
+  const [tabType, setTabType] = useState<
+    "positions" | "orders" | "history" | "pnl"
+  >("positions");
 
   const { useMarketOpenPositions } = usePollOpenPositions();
 
@@ -80,11 +82,7 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
         closeOrdersPayload={closeOrdersPayload}
         {...{ headers, tabType, setTabType }}
       />
-      <TotalAmount
-        className="flex sm:hidden"
-        markets={markets}
-        tabType={tabType}
-      />
+      <TotalAmount className="flex sm:hidden" markets={markets} />
       <OrderHistoryTable
         tab={tabType}
         openPositons={openPositions}
@@ -92,11 +90,7 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
         history={closedPositions}
         markets={markets}
       />
-      <TotalAmount
-        className="hidden sm:flex"
-        markets={markets}
-        tabType={tabType}
-      />
+      <TotalAmount className="hidden sm:flex" markets={markets} />
     </div>
   );
 }
