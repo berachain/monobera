@@ -109,9 +109,9 @@ const useOctContractWrite = ({
           onError && onError({ message: "Transaction has failed" });
         }
       } catch (e: any) {
-        if (process.env.VERCEL_ENV !== "production") {
-          console.log(e);
-        }
+        // if (process.env.VERCEL_ENV !== "production") {
+        console.log(e);
+        // }
         dispatch({ type: ActionEnum.ERROR });
         const finalMsg = getErrorMessage(e);
         onError && onError({ message: finalMsg });
