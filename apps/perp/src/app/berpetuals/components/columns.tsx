@@ -206,16 +206,6 @@ export const getPositionColumns = (markets: IMarket[]) => {
       accessorKey: "position_size",
       enableSorting: false,
     },
-    // {
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title="Leverage" />
-    //   ),
-    //   cell: ({ row }) => {
-    //     return <div className="w-[60px]">{row.original.leverage ?? 2}x</div>;
-    //   },
-    //   accessorKey: "leverage",
-    //   enableSorting: false,
-    // },
     {
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -310,19 +300,6 @@ export const getPositionColumns = (markets: IMarket[]) => {
           tooltip={EST_PNL_TOOLTIP_TEXT}
         />
       ),
-      // cell: ({ row }) => (
-      // <div
-      //   className={cn(
-      //     "text-sm font-semibold leading-tight text-foreground",
-      //     row.original.realized_pnl >= 0
-      //       ? "text-success-foreground"
-      //       : "text-destructive-foreground",
-      //   )}
-      // >
-      //   {row.original.realized_pnl > 0 && "+"}
-      //   {formatUsd(row.original.realized_pnl)}
-      // </div>
-      // ),
       cell: ({ row }) => <ActivePositionPNL position={row.original} />,
       accessorKey: "est_pnl",
       enableSorting: false,
@@ -554,7 +531,6 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
     ),
     cell: ({ row }) => {
       const date = new Date(Number(row.original.close_time) * 1000);
-
       return (
         <div>
           <div className="text-sm">{date.toLocaleDateString()}</div>
@@ -720,13 +696,6 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
       <DataTableColumnHeader column={column} title="PnL" />
     ),
     cell: ({ row }) => {
-      // const percentage = useMemo(() => {
-      //   if (!row) return 0;
-      //   const positionSize = Number(row.original.volume);
-      //   const currentSize = positionSize + Number(row.original.pnl);
-      //   const percentage = ((currentSize - positionSize) / positionSize) * 100;
-      //   return percentage;
-      // }, [row]);
       return (
         <PnlWithPercentage
           positionSize={
@@ -738,6 +707,17 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
     },
     accessorKey: "pnl",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = Number(rowA.original.pnl);
+      const b = Number(rowB.original.pnl);
+      if (a < 0 && b < 0) {
+        if (Math.abs(a) < Math.abs(b)) return 1;
+        else if (Math.abs(a) > Math.abs(b)) return -1;
+      }
+      if (a < b) return -1;
+      else if (a > b) return 1;
+      else return 0;
+    },
   },
 ];
 
@@ -761,8 +741,8 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
     accessorKey: "time",
     enableSorting: true,
     sortingFn: (rowA, rowB) => {
-      const a = new Date(Number(rowA.original.open_time));
-      const b = new Date(Number(rowB.original.open_time));
+      const a = new Date(Number(rowA.original.open_time) * 1000);
+      const b = new Date(Number(rowB.original.open_time) * 1000);
       if (a < b) return -1;
       else if (a > b) return 1;
       else return 0;
@@ -787,8 +767,8 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
     accessorKey: "time",
     enableSorting: true,
     sortingFn: (rowA, rowB) => {
-      const a = new Date(Number(rowA.original.close_time));
-      const b = new Date(Number(rowB.original.close_time));
+      const a = new Date(Number(rowA.original.open_time) * 1000);
+      const b = new Date(Number(rowB.original.open_time) * 1000);
       if (a < b) return -1;
       else if (a > b) return 1;
       else return 0;
@@ -821,7 +801,6 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
     accessorKey: "amount",
     enableSorting: false,
   },
-
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Close Price" />
