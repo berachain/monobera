@@ -94,6 +94,12 @@ const useBeraContractWrite = ({
         } else if (e.details === undefined && e?.toString().includes("hash")) {
           finalMsg =
             "It seems an RPC error has occurred. Please check if your transaction was finalized. If not, please try again.";
+        } else if (
+          errormsg.includes(`function "borrow" reverted`) ||
+          errormsg.includes(`function "repay" reverted`)
+        ) {
+          finalMsg =
+            "We are experiencing a price fluctuation right now, please try again.";
         }
         dispatch({ type: ActionEnum.ERROR });
         onError &&

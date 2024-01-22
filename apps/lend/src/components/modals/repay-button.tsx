@@ -188,7 +188,7 @@ const RepayModalContent = ({
               functionName: "repay",
               params: [
                 token.address,
-                Number(amount) === Number(debtBalance)
+                amount?.localeCompare(debtBalance ?? "") === 0
                   ? maxUint256
                   : parseUnits(amount as `${number}`, token.decimals),
                 2,
