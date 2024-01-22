@@ -36,10 +36,12 @@ export function TotalAmount({
           Total Relative Pnl
         </span>
         <div className="group relative">
-          <span className="dotted-underline font-medium text-success-foreground">
+          <span className="font-medium text-success-foreground">
             <span
               className={cn(
                 "cursor-help",
+                "underline",
+                "decoration-dashed",
                 Number(totalPnl) > 0
                   ? "text-success-foreground"
                   : "text-destructive-foreground",
@@ -48,7 +50,7 @@ export function TotalAmount({
               {formatUsd(totalPnl)}
             </span>
           </span>
-          <div className="absolute bottom-full mb-2 hidden w-max rounded bg-black px-2 py-1 text-sm text-white opacity-0 group-hover:block group-hover:opacity-100">
+          <div className="absolute bottom-full hidden w-max rounded-sm text-sm text-white opacity-0 shadow-lg group-hover:block group-hover:opacity-100">
             <TotalRelativePnLHoverState
               totalUnrealizedPnl={totalUnrealizedPnl}
               realizedPnl={realizedPnl}

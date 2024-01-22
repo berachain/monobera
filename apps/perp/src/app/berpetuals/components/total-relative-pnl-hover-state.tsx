@@ -11,7 +11,7 @@ export function TotalRelativePnLHoverState({
   totalPnl: number;
 }) {
   return (
-    <div className="flex flex-col items-start gap-2 rounded-sm border p-4 shadow-sm">
+    <div className="flex flex-col items-start gap-2 rounded-sm border bg-background p-4">
       <div className="flex">
         <span className="text-xs font-medium text-muted-foreground">
           Total Relative PnL: PnL for open trades + Historical PnL
