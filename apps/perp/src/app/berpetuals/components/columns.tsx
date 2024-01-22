@@ -123,7 +123,7 @@ export const ActivePositionPNL = ({
       {pnl !== undefined ? (
         <div
           className={cn(
-            "z-1000 group relative flex flex-col items-start",
+            "group relative flex flex-col items-start",
             pnl > 0 ? "text-success-foreground" : "text-destructive-foreground",
           )}
         >
