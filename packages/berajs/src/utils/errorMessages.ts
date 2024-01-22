@@ -56,28 +56,24 @@ export const getErrorMessage = (e: any) => {
       errorMsgDetails += `${key}: ${String(e[key])}, `;
     }
   }
-  if (!errorMsgDetails) {
-    return errorMsgMap.GENERAL_ERROR;
-  } else {
-    for (const category in errorMsgMap) {
-      if (
-        category !== "GENERAL_ERROR" &&
-        typeof errorMsgMap[category] !== "string"
-      ) {
-        const errors = errorMsgMap[category] as ErrorCategory;
-        for (const type in errors) {
-          const errorType = errors[type];
-          if (
-            errorType &&
-            errorType.keywords.some((keyword) =>
-              errorMsgDetails.includes(keyword),
-            )
-          ) {
-            return errorType.errorMSG;
-          }
+  for (const category in errorMsgMap) {
+    if (
+      category !== "GENERAL_ERROR" &&
+      typeof errorMsgMap[category] !== "string"
+    ) {
+      const errors = errorMsgMap[category] as ErrorCategory;
+      for (const type in errors) {
+        const errorType = errors[type];
+        if (
+          errorType &&
+          errorType.keywords.some((keyword) =>
+            errorMsgDetails.includes(keyword),
+          )
+        ) {
+          return errorType.errorMSG;
         }
       }
     }
-    return errorMsgMap.GENERAL_ERROR;
   }
+  return errorMsgMap.GENERAL_ERROR;
 };
