@@ -15,11 +15,12 @@ import ReCAPTCHAButton from "./recaptcha-btn";
 export default function Content() {
   const [address, setAddress] = React.useState<string>("");
   const [alert, setAlert] = React.useState<
-    "success" | "destructive" | "error" | undefined
+    "success" | "destructive" | "error" | "busy" | undefined
   >(undefined);
   const [showAlet, setShowAlert] = React.useState<boolean>(false);
   const [token, setToken] = React.useState<string | undefined>(undefined);
   const [bot, setBot] = React.useState<boolean | undefined>(undefined);
+  const [queue, setQueue] = React.useState<number | undefined>(undefined);
 
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
@@ -87,6 +88,19 @@ export default function Content() {
           </AlertDescription>
         </Alert>
       )}
+      {showAlet && alert === "busy" && (
+        <Alert variant={"warning"}>
+          <AlertTitle>
+            <Icons.checkCircle className="inline-block h-4 w-4" /> Faucet is
+            Busy! But, We’ve Received Your Request.
+          </AlertTitle>
+          <AlertDescription>
+            You are queued behind {queue} requests. Due to higher than usual
+            volume, the estimated wait time for you to receive your BERA is
+            approximately {Math.round((queue ?? 0) / 300)} minutes.
+          </AlertDescription>
+        </Alert>
+      )}
       {showAlet && alert === "destructive" && (
         <Alert variant={"destructive"}>
           <AlertTitle>
@@ -120,6 +134,7 @@ export default function Content() {
           setShowAlert={() => setShowAlert(true)}
           token={token}
           setToken={setToken}
+          setQueue={setQueue}
         />
       ) : (
         <ReCAPTCHAButton setToken={setToken} setBot={setBot} bot={bot} />

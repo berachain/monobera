@@ -9,12 +9,16 @@ export function DripToken({
   setShowAlert,
   token,
   setToken,
+  setQueue,
 }: {
   address: string;
-  setAlert: (alert: "success" | "destructive" | "error" | undefined) => void;
+  setAlert: (
+    alert: "success" | "destructive" | "error" | "busy" | undefined,
+  ) => void;
   setShowAlert: () => void;
   token?: string;
   setToken: (token: undefined | string) => void;
+  setQueue: (queue: undefined | number) => void;
 }) {
   async function handleRequest() {
     try {
@@ -27,7 +31,22 @@ export function DripToken({
         },
       );
       if (res.status === 200) {
-        setAlert("success");
+        try {
+          const res = await fetch("/api/get-queue/api");
+          const data = await res.json();
+          if (data.amount > 600) {
+            setQueue(data.amount);
+            setAlert("busy");
+          } else {
+            setQueue(undefined);
+            setAlert("success");
+          }
+        } catch (e) {
+          console.log(e);
+          setAlert("success");
+          setQueue(undefined);
+        }
+        // setAlert("success");
       } else if (res.status === 429) {
         setAlert("destructive");
       } else {
