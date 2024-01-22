@@ -132,7 +132,7 @@ export function TokenInput({
         </div>
         <div className="ml-2 flex w-full flex-col pl-2 sm:pl-0">
           <Input
-            type="number"
+            type="text"
             step="any"
             min="0"
             placeholder="0"
