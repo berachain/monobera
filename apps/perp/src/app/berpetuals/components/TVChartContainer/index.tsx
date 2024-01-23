@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
-import { useMediaQuery } from "usehooks-ts";
 
 import {
   widget,
@@ -11,16 +10,10 @@ import {
 import Datafeed from "../../../../utils/tv-datafeed";
 import styles from "./index.module.css";
 
-const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
-
 export const TV_BACKGROUND_COLOR = {
-  DARK: { theme: "dark", color: "#0E0803" },
-  LIGHT: { theme: "light", color: "#FAFAF9" },
+  dark: "#0E0803",
+  light: "#FAFAF9",
 };
-
-export type TV_BACKGROUND_TYPE =
-  | TV_BACKGROUND_COLOR.LIGHT.theme
-  | TV_BACKGROUND_COLOR.DARK.theme;
 
 export const TVChartContainer = (
   props: Partial<ChartingLibraryWidgetOptions>,
@@ -28,29 +21,12 @@ export const TVChartContainer = (
   const chartContainerRef =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
 
-  const [theme, setTheme] = useState<TV_BACKGROUND_TYPE>(
-    TV_BACKGROUND_COLOR.LIGHT.theme,
-  );
-  const { theme: appTheme } = useTheme();
-  const isDarkOS = useMediaQuery(COLOR_SCHEME_QUERY);
-
-  useEffect(() => {
-    if (appTheme === "system") {
-      if (isDarkOS) {
-        setTheme(TV_BACKGROUND_COLOR.DARK.theme);
-      } else {
-        setTheme(TV_BACKGROUND_COLOR.LIGHT.theme);
-      }
-    } else if (appTheme !== undefined) {
-      setTheme(appTheme as TV_BACKGROUND_TYPE);
-    }
-  }, [appTheme, isDarkOS]);
+  const { theme: appTheme, systemTheme } = useTheme();
+  const theme = (appTheme === "system" ? systemTheme : appTheme) || "dark";
 
   useEffect(() => {
     const backgroundColor =
-      theme === TV_BACKGROUND_COLOR.DARK.theme
-        ? TV_BACKGROUND_COLOR.DARK.color
-        : TV_BACKGROUND_COLOR.LIGHT.color;
+      TV_BACKGROUND_COLOR[theme as keyof typeof TV_BACKGROUND_COLOR];
     const widgetOptions: ChartingLibraryWidgetOptions = {
       symbol: props.symbol,
       datafeed: Datafeed,
@@ -75,7 +51,7 @@ export const TVChartContainer = (
       client_id: props.client_id,
       user_id: props.user_id,
       fullscreen: props.fullscreen,
-      theme,
+      theme: theme as "light" | "dark",
       autosize: props.autosize,
       height: 500,
       loading_screen: {
