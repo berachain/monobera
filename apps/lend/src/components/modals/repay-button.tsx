@@ -85,8 +85,11 @@ const RepayModalContent = ({
   });
 
   const allowance = useAllowance();
-  const debtBalance = token.formattedBalance;
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: debtTokenBalance } = useSelectedAssetWalletBalance(
+    token.reserveData.variableDebtTokenAddress,
+  );
+  const debtBalance = debtTokenBalance.formattedBalance ?? token.formattedBalance;
   const { data: tokenB } = useSelectedAssetWalletBalance(token.address);
   const tokenBalance = tokenB?.formattedBalance;
 
