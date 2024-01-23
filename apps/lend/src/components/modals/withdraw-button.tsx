@@ -106,16 +106,17 @@ const WithdrawModalContent = ({
       4,
     ),
   });
-
   const maxWithdrawalAllowance = BigNumber(
     formatUnits(
       (userAccountData.totalCollateralBase as bigint) -
         (userAccountData.totalDebtBase * 10000n) /
-          userAccountData.currentLiquidationThreshold,
+          (userAccountData.currentLiquidationThreshold === 0n
+            ? 8000n
+            : userAccountData.currentLiquidationThreshold),
       8,
     ),
   )
-    .div(reserveData?.formattedPriceInMarketReferenceCurrency)
+    .div(reserveData?.formattedPriceInMarketReferenceCurrency ?? 1n)
     .toFixed(token.decimals ?? 18);
 
   const balance =
