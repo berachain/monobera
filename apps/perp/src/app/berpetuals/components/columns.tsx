@@ -1,6 +1,6 @@
 import React, { use, useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
-import { DataTableColumnHeader, HoverState } from "@bera/shared-ui";
+import { DataTableColumnHeader, HoverCard } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -121,22 +121,30 @@ export const ActivePositionPNL = ({
   return (
     <div className={cn("", className)}>
       {pnl !== undefined ? (
-        <div
-          className={cn(
-            "flex flex-col items-start",
-            pnl > 0 ? "text-success-foreground" : "text-destructive-foreground",
-          )}
-        >
-          <div className="group relative cursor-help underline decoration-dashed">
-            {formatUsd(pnl)}
-            <HoverState>
-              <PnLRowHoverState
-                initialCollateral={initialCollateral}
-                pnl={pnl}
-                borrowFee={borrowFee}
-                closeFee={closeFee}
-              />
-            </HoverState>
+        <div>
+          <div
+            className={cn(
+              " flex flex-col items-start ",
+              pnl > 0
+                ? "text-success-foreground"
+                : "text-destructive-foreground",
+            )}
+          >
+            <HoverCard
+              triggerElement={
+                <div className="cursor-help underline decoration-dashed">
+                  {formatUsd(pnl)}
+                </div>
+              }
+              content={
+                <PnLRowHoverState
+                  initialCollateral={initialCollateral}
+                  pnl={pnl}
+                  borrowFee={borrowFee}
+                  closeFee={closeFee}
+                />
+              }
+            />
           </div>
 
           <div className="text-xs">({percentage.toFixed(2)}%)</div>
