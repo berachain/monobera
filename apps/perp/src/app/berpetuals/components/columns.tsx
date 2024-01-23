@@ -118,6 +118,7 @@ export const ActivePositionPNL = ({
     formatUnits(BigInt(position.borrowing_fee ?? 0), 18),
   );
   const closeFee = Number(formatUnits(BigInt(position.closing_fee ?? 0), 18));
+  const openFee = Number(formatUnits(BigInt(position.open_fee ?? 0), 18));
   return (
     <div className={cn("", className)}>
       {pnl !== undefined ? (
@@ -139,15 +140,15 @@ export const ActivePositionPNL = ({
               content={
                 <PnLRowHoverState
                   initialCollateral={initialCollateral}
-                  pnl={pnl}
+                  pnlAfterFees={pnl}
                   borrowFee={borrowFee}
                   closeFee={closeFee}
+                  openFee={openFee}
                 />
               }
             />
+            <div className="text-xs">({percentage.toFixed(2)}%)</div>
           </div>
-
-          <div className="text-xs">({percentage.toFixed(2)}%)</div>
         </div>
       ) : (
         <Skeleton className={cn("h-[28px] w-[80px]", className)} />

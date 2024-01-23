@@ -3,16 +3,18 @@ import { cn } from "@bera/ui";
 
 export function PnLRowHoverState({
   initialCollateral,
-  pnl,
+  pnlAfterFees,
   borrowFee,
   closeFee,
+  openFee,
 }: {
   initialCollateral: number;
-  pnl: number;
+  pnlAfterFees: number;
   borrowFee: number;
   closeFee: number;
+  openFee: number;
 }) {
-  const pnlAfterFees = pnl - borrowFee - closeFee;
+  const pnl = pnlAfterFees + borrowFee + closeFee + openFee;
   return (
     <div>
       <div className="flex">
@@ -62,6 +64,21 @@ export function PnLRowHoverState({
             )}
           >
             {formatUsd(borrowFee * -1)}
+          </span>
+        </span>
+      </div>
+      <div className="flex flex-row items-start justify-between gap-2 self-stretch">
+        <span className="font-medium text-foreground">Open Fee</span>
+        <span className="font-medium text-foreground">
+          <span
+            className={cn(
+              "",
+              Number(openFee * -1) > 0
+                ? "text-success-foreground"
+                : "text-destructive-foreground",
+            )}
+          >
+            {formatUsd(openFee * -1)}
           </span>
         </span>
       </div>
