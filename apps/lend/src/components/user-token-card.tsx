@@ -1,4 +1,4 @@
-import { formatter } from "@bera/berajs";
+import { formatter, usePollAssetWalletBalance } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
@@ -21,6 +21,10 @@ export default function UserTokenCard({
   asset: any;
   type: "user-supply" | "user-borrow" | "supply" | "borrow";
 }) {
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: debtTokenBalance } = useSelectedAssetWalletBalance(
+    asset.reserveData.variableDebtTokenAddress,
+  );
   let balance;
   if (type === "borrow") {
     balance =
@@ -35,6 +39,10 @@ export default function UserTokenCard({
             asset.reserveData?.availableLiquidity ?? "0",
             asset.decimals,
           );
+  } else if (type === "user-borrow") {
+    balance = debtTokenBalance
+      ? debtTokenBalance.formattedBalance
+      : asset.formattedBalance;
   } else {
     balance = asset.formattedBalance;
   }
