@@ -134,6 +134,10 @@
       "import": "./dist/form.mjs",
       "types": "./dist/form.d.ts"
     },
+    "./hover-card": {
+      "import": "./dist/hover-card.mjs",
+      "types": "./dist/hover-card.d.ts"
+    },
     "./input": {
       "import": "./dist/input.mjs",
       "types": "./dist/input.d.ts"
@@ -337,6 +341,9 @@
       ],
       "slider": [
         "dist/slider.d.ts"
+      ],
+      "hover-card": [
+        "dist/hover-card.d.ts"
       ]
     }
   },
