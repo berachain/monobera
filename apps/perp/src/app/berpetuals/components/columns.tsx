@@ -1,4 +1,4 @@
-import React, { use, useMemo } from "react";
+import React, { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
 import { DataTableColumnHeader, HoverCard } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
