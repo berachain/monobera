@@ -41,6 +41,7 @@ export default function Content() {
           height={198}
           loading="eager"
           className="hidden h-[198px] object-cover sm:block xl:hidden"
+          unoptimized
         />
       </div>
       <div className="flex flex-col gap-1">

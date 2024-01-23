@@ -22,6 +22,7 @@ export default function Page() {
           height={614}
           loading="eager"
           className="hidden h-[614px] object-cover xl:block"
+          unoptimized
         />
       </div>
       <Explore />
