@@ -767,8 +767,8 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
     accessorKey: "time",
     enableSorting: true,
     sortingFn: (rowA, rowB) => {
-      const a = new Date(Number(rowA.original.open_time) * 1000);
-      const b = new Date(Number(rowB.original.open_time) * 1000);
+      const a = new Date(Number(rowA.original.close_time) * 1000);
+      const b = new Date(Number(rowB.original.close_time) * 1000);
       if (a < b) return -1;
       else if (a > b) return 1;
       else return 0;
