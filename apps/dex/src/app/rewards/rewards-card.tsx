@@ -9,8 +9,10 @@ import {
 } from "@bera/berajs";
 import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
+import { getAddress } from "viem";
 
 import { RewardBtn } from "~/app/components/reward-btn";
+import { usePollUsersPools } from "~/hooks/usePollUsersPools";
 import { usePositionSize } from "~/hooks/usePositionSize";
 
 export default function RewardsCard({ pool }: { pool: Pool }) {
@@ -36,8 +38,15 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
   const { userTotalValue, isPositionSizeLoading } = usePositionSize({
     pool: pool,
   });
+  const { data: myPools = [], isLoading: isMyPoolsLoading } =
+    usePollUsersPools();
 
   const { isSmall, numericValue: formattedBgt } = formatAmountSmall(bgtRewards);
+  const userBalance =
+    myPools.find((p: any) => getAddress(p.pool) === getAddress(pool.pool))
+      ?.userBalance ??
+    userTotalValue ??
+    0;
 
   return (
     <div className="flex w-full flex-col items-center justify-between gap-4 rounded-2xl border border-border bg-background p-4 md:p-6 lg:flex-row">
@@ -54,10 +63,10 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
       <div className="flex w-full flex-col justify-between gap-4 sm:flex-row md:justify-between">
         <div className="flex min-w-[65px] flex-col gap-1">
           <div className=" text-left text-sm font-semibold leading-tight md:text-lg md:leading-7">
-            {isPositionSizeLoading ? (
+            {isPositionSizeLoading || isMyPoolsLoading ? (
               <Skeleton className="h-[32px] w-[150px]" />
             ) : (
-              formatUsd(userTotalValue ?? 0)
+              formatUsd(userBalance)
             )}
           </div>
           <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
