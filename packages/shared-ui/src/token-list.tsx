@@ -63,7 +63,7 @@ export function TokenList() {
     <div className="grid gap-4">
       {assets && assets.length ? (
         assets
-          .filter((token: Token) => token.address !== bgtTokenAddress)
+          .filter((token: Token) => token.address !== bgtTokenAddress && token.tags?.includes("featured"))
           .map((asset: Token) => (
             <TokenRow asset={asset} isLoading={isLoading} key={asset.address} />
           ))
