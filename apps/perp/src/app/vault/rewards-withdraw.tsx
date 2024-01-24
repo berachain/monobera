@@ -100,7 +100,7 @@ export const RewardsWithdraw = () => {
               claimableBgtRewards={claimableBgtRewards}
               amount={claimAmount}
               setAmount={setClaimAmount}
-              disabled={isRewardsLoading || claimableBgtRewards === 0}
+              disabled={isRewardsLoading || claimableBgtRewards === 0 || true}
               onClaim={() =>
                 write({
                   address: process.env

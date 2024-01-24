@@ -93,7 +93,7 @@ const useOctContractWrite = ({
             hash: hash,
             pollingInterval: 5000,
             timeout: 120000,
-            confirmations: 4,
+            confirmations: 1,
           });
 
         const botConfirmation = await fetch(
