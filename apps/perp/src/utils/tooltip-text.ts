@@ -1,6 +1,6 @@
 // TODO: consolidate the text
 export const EST_PNL_TOOLTIP_TEXT =
-  "Your Net PnL value is Initial Collateral - Borrow Fee + Gross PnL";
+  "Your Net PnL value is Initial Collateral - Fees + Gross PnL";
 export const TPSL_TOOLTIP_TEXT =
   "Positions are set to a default Take Profit (TP) of 900% if no specific TP value is specified.";
 export const VOLUME_TOOLTIP_TEXT =
