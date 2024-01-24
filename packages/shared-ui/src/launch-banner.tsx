@@ -37,7 +37,7 @@ export const RPCBanner = ({ className }: { className?: string }) => {
         {/* We are currently upgrading our infrastructure to meet the increased
         demand. Please bear with us; we will be back shortly. */}
         We are currently performing system-wide updates. Our services will be
-        temporarily unavailable, but we'll be back up shortly.
+        temporarily unavailable, but we&apos;ll be back up shortly.
       </div>
     </header>
   );

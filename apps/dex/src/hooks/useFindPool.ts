@@ -1,4 +1,6 @@
+import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import { client, getUniquePoolById } from "@bera/graphql";
+import { getAddress, isAddress } from "ethers";
 import useSWRImmutable from "swr/immutable";
 
 export const useFindPool = (swapFee: number, tokenWeights: any[]) => {
@@ -47,15 +49,28 @@ const getPoolId = (swapFee: number, tokenWeights: any[]) => {
   let poolId = getSwapFeeInStr(swapFee);
   tokenWeights
     .sort((a, b) =>
-      (a.token?.address ?? "").localeCompare(b.token?.address ?? ""),
+      updateAddress(a.token?.address ?? "").localeCompare(
+        updateAddress(b.token?.address ?? ""),
+      ),
     )
     .forEach((token: any) => {
       if (!token.token || !token.token.address) return undefined;
       poolId = poolId
         .concat("-")
-        .concat(token.token.address.toLowerCase())
+        .concat(updateAddress(token.token.address).toLowerCase())
         .concat("-")
         .concat(token.weight);
     });
+
   return poolId;
+};
+
+const updateAddress = (address: string) => {
+  if (!isAddress(address)) {
+    return address;
+  } else if (getAddress(address) === getAddress(nativeTokenAddress)) {
+    return getAddress(beraTokenAddress);
+  } else {
+    return getAddress(address);
+  }
 };
