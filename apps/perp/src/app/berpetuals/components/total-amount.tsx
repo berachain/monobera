@@ -54,9 +54,9 @@ export function TotalAmount({
             }
             content={
               <TotalRelativePnLHoverState
-                totalUnrealizedPnl={totalUnrealizedPnl}
-                realizedPnl={realizedPnl}
-                totalPnl={totalPnl}
+                totalUnrealizedPnl={totalUnrealizedPnl ?? 0}
+                realizedPnl={realizedPnl ?? 0}
+                totalPnl={totalPnl ?? 0}
               />
             }
           />
@@ -80,7 +80,7 @@ export function TotalAmount({
                 : "text-destructive-foreground",
             )}
           >
-            {formatUsd(totalUnrealizedPnl)}
+            {formatUsd(totalUnrealizedPnl ?? 0)}
           </span>
         </span>
       </div>
