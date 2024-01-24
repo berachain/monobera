@@ -1,13 +1,14 @@
 "use client";
 
 import Script from "next/script";
-import { bannerEnabled, perpsName } from "@bera/config";
-import { LaunchBanner, UpTimeStatus } from "@bera/shared-ui";
+import { bannerEnabled} from "@bera/config";
+import { UpTimeStatus } from "@bera/shared-ui";
 
 // import { useReadLocalStorage } from "usehooks-ts";
 
 // import { Disclaimer } from "../components/disclaimer";
 import { OneClickBanner } from "./components/one-click-banner";
+import { BerpsBanner } from "@bera/shared-ui/src/launch-banner";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   // const disclaimerAccepted = useReadLocalStorage<boolean | null>(
@@ -15,7 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   // );
   return (
     <section className="relative">
-      {bannerEnabled && <LaunchBanner appName={perpsName} />}
+      {bannerEnabled && <BerpsBanner appName={""} />}
       {/* {!disclaimerAccepted && <Disclaimer />} */}
       <OneClickBanner />
       <Script
