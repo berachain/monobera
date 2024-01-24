@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
-import { HoverState } from "@bera/shared-ui";
+import { HoverCard } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
@@ -37,28 +37,29 @@ export function TotalAmount({
           Total Relative Pnl
         </span>
         <div className="group relative">
-          <span className="font-medium text-success-foreground">
-            <span
-              className={cn(
-                "cursor-help",
-                "underline",
-                "decoration-dashed",
-                Number(totalPnl) > 0
-                  ? "text-success-foreground"
-                  : "text-destructive-foreground",
-              )}
-            >
-              {formatUsd(totalPnl)}
-            </span>
-          </span>
-
-          <HoverState>
-            <TotalRelativePnLHoverState
-              totalUnrealizedPnl={totalUnrealizedPnl}
-              realizedPnl={realizedPnl}
-              totalPnl={totalPnl}
-            />
-          </HoverState>
+          <HoverCard
+            triggerElement={
+              <span className="font-medium text-success-foreground">
+                <span
+                  className={cn(
+                    "cursor-help underline decoration-dashed",
+                    Number(totalPnl) > 0
+                      ? "text-success-foreground"
+                      : "text-destructive-foreground",
+                  )}
+                >
+                  {formatUsd(totalPnl)}
+                </span>
+              </span>
+            }
+            content={
+              <TotalRelativePnLHoverState
+                totalUnrealizedPnl={totalUnrealizedPnl ?? 0}
+                realizedPnl={realizedPnl ?? 0}
+                totalPnl={totalPnl ?? 0}
+              />
+            }
+          />
         </div>
       </div>
     );
@@ -79,7 +80,7 @@ export function TotalAmount({
                 : "text-destructive-foreground",
             )}
           >
-            {formatUsd(totalUnrealizedPnl)}
+            {formatUsd(totalUnrealizedPnl ?? 0)}
           </span>
         </span>
       </div>

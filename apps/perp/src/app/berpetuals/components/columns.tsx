@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { DataTableColumnHeader, HoverCard } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -22,6 +22,7 @@ import {
 } from "../../../utils/tooltip-text";
 import type { IMarket } from "../page";
 import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
+import { PnLRowHoverState } from "./pnl-row-hover-state";
 
 const MarkPrice = ({ position }: { position: IMarketOrder }) => {
   const { useMarketIndexPrice } = usePricesSocket();
@@ -92,6 +93,7 @@ export const ActivePositionPNL = ({
   className?: string;
 }) => {
   const { useMarketIndexPrice } = usePricesSocket();
+
   const price = useMarketIndexPrice(Number(position.market?.pair_index) ?? 0);
   const pnl = useCalculatePnl({
     currentPrice: price,
@@ -107,17 +109,46 @@ export const ActivePositionPNL = ({
     const percentage = ((currentSize - positionSize) / positionSize) * 100;
     return percentage;
   }, [pnl, position]);
+
+  const initialCollateral = Number(
+    formatUnits(BigInt(position.position_size ?? 0), 18),
+  );
+
+  const borrowFee = Number(
+    formatUnits(BigInt(position.borrowing_fee ?? 0), 18),
+  );
+  const closeFee = Number(formatUnits(BigInt(position.closing_fee ?? 0), 18));
+  const openFee = Number(formatUnits(BigInt(position.open_fee ?? 0), 18));
   return (
     <div className={cn("", className)}>
       {pnl !== undefined ? (
-        <div
-          className={cn(
-            "flex flex-col items-start",
-            pnl > 0 ? "text-success-foreground" : "text-destructive-foreground",
-          )}
-        >
-          {formatUsd(pnl)}
-          <div className="text-xs">({percentage.toFixed(2)}%)</div>
+        <div>
+          <div
+            className={cn(
+              " flex flex-col items-start ",
+              pnl > 0
+                ? "text-success-foreground"
+                : "text-destructive-foreground",
+            )}
+          >
+            <HoverCard
+              triggerElement={
+                <div className="cursor-help underline decoration-dashed">
+                  {formatUsd(pnl)}
+                </div>
+              }
+              content={
+                <PnLRowHoverState
+                  initialCollateral={initialCollateral}
+                  pnlAfterFees={pnl}
+                  borrowFee={borrowFee}
+                  closeFee={closeFee}
+                  openFee={openFee}
+                />
+              }
+            />
+            <div className="text-xs">({percentage.toFixed(2)}%)</div>
+          </div>
         </div>
       ) : (
         <Skeleton className={cn("h-[28px] w-[80px]", className)} />
@@ -206,16 +237,6 @@ export const getPositionColumns = (markets: IMarket[]) => {
       accessorKey: "position_size",
       enableSorting: false,
     },
-    // {
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title="Leverage" />
-    //   ),
-    //   cell: ({ row }) => {
-    //     return <div className="w-[60px]">{row.original.leverage ?? 2}x</div>;
-    //   },
-    //   accessorKey: "leverage",
-    //   enableSorting: false,
-    // },
     {
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -257,15 +278,6 @@ export const getPositionColumns = (markets: IMarket[]) => {
       cell: ({ row }) => (
         <PositionLiquidationPrice position={row.original} markets={markets} />
       ),
-      // cell: ({ row }) => (
-      //   <div>
-      // {Number(row.original.liq_price) !== 0 ? (
-      //   formatBigIntUsd(row.original.liq_price, 10)
-      // ) : (
-      //   <Skeleton className={"h-[28px] w-[80px]"} />
-      // )}
-      //   </div>
-      // ),
       accessorKey: "liq_price",
       enableSorting: false,
     },
@@ -310,19 +322,6 @@ export const getPositionColumns = (markets: IMarket[]) => {
           tooltip={EST_PNL_TOOLTIP_TEXT}
         />
       ),
-      // cell: ({ row }) => (
-      // <div
-      //   className={cn(
-      //     "text-sm font-semibold leading-tight text-foreground",
-      //     row.original.realized_pnl >= 0
-      //       ? "text-success-foreground"
-      //       : "text-destructive-foreground",
-      //   )}
-      // >
-      //   {row.original.realized_pnl > 0 && "+"}
-      //   {formatUsd(row.original.realized_pnl)}
-      // </div>
-      // ),
       cell: ({ row }) => <ActivePositionPNL position={row.original} />,
       accessorKey: "est_pnl",
       enableSorting: false,
