@@ -50,7 +50,7 @@ export const getPnl = ({ currentPrice, openPosition }: ICalculatePnl) => {
       BigInt(openPosition.closing_fee);
     const leverage = BigInt(openPosition.leverage);
 
-    let pnl =
+    const pnl =
       ((openPrice - BigInt(currentPrice)) *
         (leverage * collateral) *
         (openPosition.buy === true ? -1n : 1n)) /
