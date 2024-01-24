@@ -738,7 +738,7 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
         </div>
       );
     },
-    accessorKey: "time",
+    accessorKey: "open_time",
     enableSorting: true,
     sortingFn: (rowA, rowB) => {
       const a = new Date(Number(rowA.original.open_time) * 1000);
@@ -764,7 +764,7 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
         </div>
       );
     },
-    accessorKey: "time",
+    accessorKey: "close_time",
     enableSorting: true,
     sortingFn: (rowA, rowB) => {
       const a = new Date(Number(rowA.original.close_time) * 1000);
