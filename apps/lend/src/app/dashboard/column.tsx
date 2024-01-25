@@ -205,8 +205,16 @@ export const available_supply_columns: ColumnDef<any>[] = [
     accessorKey: "walletBalanceUS",
     enableSorting: true,
     sortingFn: (rowA, rowB) => {
-      const a = Number(rowA.original.formattedBalance);
-      const b = Number(rowB.original.formattedBalance);
+      const a =
+        Number(rowA.original.formattedBalance) *
+        Number(
+          rowA.original.reserveData.formattedPriceInMarketReferenceCurrency,
+        );
+      const b =
+        Number(rowB.original.formattedBalance) *
+        Number(
+          rowB.original.reserveData.formattedPriceInMarketReferenceCurrency,
+        );
       if (a < b) return -1;
       else if (a > b) return 1;
       else return 0;

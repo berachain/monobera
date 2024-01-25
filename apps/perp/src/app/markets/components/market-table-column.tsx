@@ -208,5 +208,8 @@ export const market_table_column: ColumnDef<IMarket>[] = [
     ),
     accessorKey: "dailyNumOfTrades",
     enableSorting: true,
+    sortingFn: (a, b) =>
+      Number(a.original.dailyNumOfTrades ?? "0") -
+      Number(b.original.dailyNumOfTrades ?? "0"),
   },
 ];
