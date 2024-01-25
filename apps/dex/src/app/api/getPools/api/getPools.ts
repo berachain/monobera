@@ -5,7 +5,7 @@ import {
   type PoolDayData,
   type Weight,
 } from "@bera/graphql";
-import { formatUnits, getAddress } from "viem";
+import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 export const getParsedPools = (
