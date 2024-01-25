@@ -161,7 +161,8 @@ export default function UserTokenCard({
             <Icons.info className="mr-1 inline-block h-4 w-4" />
             To borrow, you need to provide assets that are not HONEY
           </AlertTitle>
-          The amount you can borrow is based on the assets you have provided, excluding HONEY.
+          The amount you can borrow is based on the assets you have provided,
+          excluding HONEY.
         </Alert>
       )}
       {type === "supply" && asset.address === honeyAddress && (
@@ -171,7 +172,8 @@ export default function UserTokenCard({
             <Icons.info className="mr-1 inline-block h-4 w-4" />
             Cannot Borrow Against HONEY
           </AlertTitle>
-          You can only earn interest on HONEY deposits. You cannot borrow against them.
+          You can only earn interest on HONEY deposits. You cannot borrow
+          against them.
         </Alert>
       )}
       {type === "user-borrow" && asset.address === honeyAddress && (

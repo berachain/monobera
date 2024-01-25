@@ -14,9 +14,9 @@ import {
   usePollPerpsBgtRewards,
 } from "@bera/berajs";
 import { DataTable, DynamicRewardBtn, Tooltip, useTxn } from "@bera/shared-ui";
-import { Skeleton } from "@bera/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 import { parseUnits } from "ethers";
 import { type Address } from "wagmi";
 
@@ -120,13 +120,15 @@ export const RewardsWithdraw = () => {
           )}
         </div>
         <Alert variant="warning" className="rounded-md">
-              <AlertTitle>
-                {" "}
-                <Icons.info className="inline-block h-4 w-4" /> BGT Rewards are currently paused.
-              </AlertTitle>
-              <AlertDescription>
-                They will start again after the Berps Upgrade on Jan 28th, at 02:15 UTC.
-              </AlertDescription>
+          <AlertTitle>
+            {" "}
+            <Icons.info className="inline-block h-4 w-4" /> BGT Rewards are
+            currently paused.
+          </AlertTitle>
+          <AlertDescription>
+            They will start again after the Berps Upgrade on Jan 28th, at 02:15
+            UTC.
+          </AlertDescription>
         </Alert>
       </div>
       <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-2">
