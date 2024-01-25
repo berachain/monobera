@@ -6,8 +6,8 @@ import {
   useTokenHoneyPrices,
   useTokens,
   type Token,
+  handleNativeBera,
 } from "@bera/berajs";
-import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import { Skeleton } from "@bera/ui/skeleton";
 
 export function WalletBalanceInUs() {
@@ -21,11 +21,7 @@ export function WalletBalanceInUs() {
   const total =
     assets && pricesArray
       ? assets?.reduce((acc: number, curr: Token) => {
-          const address =
-            curr.address === nativeTokenAddress
-              ? beraTokenAddress.toLowerCase()
-              : curr.address.toLowerCase();
-
+          const address = handleNativeBera(curr.address).toLowerCase();
           const price = pricesArray?.find(
             (price: any) => price.id.toLowerCase() === address,
           );

@@ -6,6 +6,7 @@ import { usePublicClient } from "wagmi";
 import { DEX_PRECOMPILE_ABI } from "~/config";
 import { useBeraConfig } from "~/contexts";
 import POLLING from "../../../config/constants/polling";
+import { handleNativeBera } from "~/utils";
 
 interface IUsePollSwaps {
   tokenIn: Address;
@@ -120,12 +121,6 @@ interface BatchSwapStep {
   value?: bigint;
 }
 
-const handleNativeBera = (token: Address) => {
-  if (token === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)) {
-    return getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
-  }
-  return token;
-};
 export const getSwap = async (
   tokenIn: Address,
   tokenOut: Address,

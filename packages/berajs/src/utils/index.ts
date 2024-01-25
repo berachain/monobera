@@ -9,3 +9,4 @@ export * from "./formatAmountSmall";
 export * from "./pagination";
 export * from "./addTokenToWallet";
 export * from "./aave-reserve-helper";
+export * from "./handle-native-bera";

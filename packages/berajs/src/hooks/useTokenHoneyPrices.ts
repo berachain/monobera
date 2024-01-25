@@ -1,11 +1,9 @@
-import {
-  beraTokenAddress,
-  honeyTokenAddress,
-  nativeTokenAddress,
-} from "@bera/config";
+import { honeyTokenAddress } from "@bera/config";
 import { client, getTokenHoneyPrice, getTokenHoneyPrices } from "@bera/graphql";
 import useSWR from "swr";
-import { getAddress, type Address } from "viem";
+import { type Address } from "viem";
+
+import { handleNativeBera } from "~/utils";
 
 export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
   return useSWR(
@@ -15,12 +13,9 @@ export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
         return [];
       }
 
-      const swappedAddresses = tokenAddresses.map((token: string) => {
-        if (token.toLowerCase() === nativeTokenAddress.toLowerCase()) {
-          return beraTokenAddress.toLowerCase();
-        }
-        return token.toLowerCase();
-      });
+      const swappedAddresses = tokenAddresses.map((token: string) =>
+        handleNativeBera(token).toLowerCase(),
+      );
 
       return await client
         .query({
@@ -41,13 +36,6 @@ export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
       refreshInterval: 50000,
     },
   );
-};
-
-const handleNativeBera = (token: Address) => {
-  if (getAddress(token) === getAddress(nativeTokenAddress)) {
-    return getAddress(beraTokenAddress);
-  }
-  return token;
 };
 
 export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
