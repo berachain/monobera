@@ -50,7 +50,9 @@ enum Selection {
 export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   const router = useRouter();
 
-  const tokenAddresses = pool?.tokens.map((token) => token.address);
+  const tokenAddresses = pool?.tokens.map((token) =>
+    token.address.toLowerCase(),
+  );
   const prices = useTokenHoneyPrices(tokenAddresses);
 
   const {
@@ -193,7 +195,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         setActiveAmount(amount);
                       }}
                       weight={token.normalizedWeight}
-                      price={prices?.[token?.address.toLowerCase()] ?? 0}
+                      price={prices?.[tokenAddresses[i]] ?? 0}
                       onExceeding={(exceeding: boolean) =>
                         updateTokenExceeding(i, exceeding)
                       }
@@ -374,7 +376,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                   <Icons.chevronsDown className="h-6 w-6 self-center text-muted-foreground" />
                 </div>
                 <TokenList className="bg-muted">
-                  {pool?.tokens.map((token) => {
+                  {pool?.tokens.map((token, i) => {
                     const formattedAmount = burnShares
                       ? Number(
                           formatUnits(
@@ -389,7 +391,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         token={token}
                         value={formattedAmount}
                         // weight={token.normalizedWeight}
-                        price={prices?.[token.address.toLowerCase()] ?? 0}
+                        price={prices?.[tokenAddresses[i]] ?? 0}
                       />
                     );
                   })}
