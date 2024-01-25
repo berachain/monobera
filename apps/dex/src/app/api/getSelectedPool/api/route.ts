@@ -15,6 +15,31 @@ import { getParsedPools } from "../../getPools/api/getPools";
 
 export const revalidate = 10;
 
+async function getBeraPrice() {
+  const data = await fetch(subgraphUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: `{
+        tokenHoneyPrice(id: "0x5806e416da447b267cea759358cf22cc41fae80f") {
+          id
+          price
+        }
+      }`,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: 10 },
+  })
+    .then((res) => res.json())
+    .catch((e: any) => console.log("fetching error", e));
+
+  if (data.error !== undefined) {
+    console.error("error fetching cutting board");
+  }
+  return data.data.tokenHoneyPrice.price;
+}
+
 async function getGlobalCuttingBoard() {
   // const globalCuttingBoard: Weight[] = await client
   //   .query({
@@ -144,35 +169,28 @@ export async function GET(request: Request) {
     const inflationRate = getInflation();
     const fetchPools = router.fetchSelectedPool(address as Address);
 
-    const pricesResponse = fetch(`${getAbsoluteUrl()}/api/getPrices/api`, {
-      method: "GET",
-      headers: {
-        "x-vercel-protection-bypass": process.env
-          .VERCEL_AUTOMATION_BYPASS_SECRET as string,
-      },
-    });
+    const beraPrice = getBeraPrice()
 
     const data = await Promise.all([
       fetchPools,
       globalCuttingBoard,
-      pricesResponse,
+      beraPrice,
       inflationRate,
     ]).then(
-      ([fetchPools, globalCuttingBoard, pricesResponse, inflationRate]) => ({
+      ([fetchPools, globalCuttingBoard, beraPrice, inflationRate]) => ({
         fetchPools: fetchPools,
         globalCuttingBoard: globalCuttingBoard,
-        pricesResponse: pricesResponse,
+        beraPrice: beraPrice,
         inflationRate: inflationRate,
       }),
     );
     const pools = data.fetchPools;
 
-    const mappedTokens = await data.pricesResponse.json();
 
     const parsedPools = getParsedPools(
       pools as any,
       data.globalCuttingBoard,
-      mappedTokens,
+      data.beraPrice,
       data.inflationRate,
     );
 

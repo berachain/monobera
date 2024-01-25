@@ -11,7 +11,7 @@ import { type Address } from "wagmi";
 export const getParsedPools = (
   pools: Pool[],
   globalCuttingBoard: Weight[] | undefined,
-  mappedTokens: any,
+  beraPrice: any,
   inflationData: InflationRate | undefined,
 ) => {
   try {
@@ -30,10 +30,7 @@ export const getParsedPools = (
               board.receiver.toLowerCase() === pool.pool.toLowerCase(),
           );
 
-          const bgtPrice =
-            mappedTokens[
-              getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string)
-            ];
+          const bgtPrice = Number(beraPrice);
           let poolApy = 0;
           if (cuttingBoard && bgtPrice && totalAmount && inflationData) {
             const recieverWeight = Number(cuttingBoard.amount) / totalAmount;
