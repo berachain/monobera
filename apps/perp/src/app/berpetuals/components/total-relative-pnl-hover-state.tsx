@@ -23,7 +23,7 @@ export function TotalRelativePnLHoverState({
           <span
             className={cn(
               "",
-              Number(totalPnl) > 0
+              Number(totalUnrealizedPnl) > 0
                 ? "text-success-foreground"
                 : "text-destructive-foreground",
             )}
@@ -38,7 +38,7 @@ export function TotalRelativePnLHoverState({
           <span
             className={cn(
               "",
-              Number(totalPnl) > 0
+              Number(realizedPnl) > 0
                 ? "text-success-foreground"
                 : "text-destructive-foreground",
             )}
