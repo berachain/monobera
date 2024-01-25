@@ -35,12 +35,11 @@ import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
-import { type MappedTokens } from "../types";
+import { useTokenHoneyPrices } from "~/hooks/usePool";
 import { useAddLiquidity } from "./useAddLiquidity";
 
 interface IAddLiquidityContent {
   pool: Pool | undefined;
-  prices: MappedTokens;
 }
 
 enum Selection {
@@ -48,11 +47,11 @@ enum Selection {
   SINGLE_TOKEN = "single-token",
 }
 
-export default function AddLiquidityContent({
-  pool,
-  prices,
-}: IAddLiquidityContent) {
+export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   const router = useRouter();
+
+  const tokenAddresses = pool?.tokens.map((token) => token.address);
+  const prices = useTokenHoneyPrices(tokenAddresses);
 
   const {
     error,
@@ -194,7 +193,7 @@ export default function AddLiquidityContent({
                         setActiveAmount(amount);
                       }}
                       weight={token.normalizedWeight}
-                      price={prices[token.address]}
+                      price={prices?.[token?.address.toLowerCase()] ?? 0}
                       onExceeding={(exceeding: boolean) =>
                         updateTokenExceeding(i, exceeding)
                       }
@@ -248,7 +247,9 @@ export default function AddLiquidityContent({
                           }
                           weight={tokenInput?.normalizedWeight}
                           value={tokenInput?.amount}
-                          price={prices[tokenInput?.address ?? ""]}
+                          price={
+                            prices?.[tokenInput?.address.toLowerCase()] ?? 0
+                          }
                         />
                       );
                     })}
@@ -308,7 +309,13 @@ export default function AddLiquidityContent({
                   onTokenSelection={setSelectedSingleToken}
                   selectable={true}
                   amount={selectedSingleTokenAmount}
-                  price={prices[selectedSingleToken?.address ?? ""] ?? 0}
+                  price={
+                    prices?.[
+                      isBeratoken(selectedSingleToken)
+                        ? wBeraToken?.address.toLowerCase()
+                        : selectedSingleToken?.address.toLowerCase()
+                    ] ?? 0
+                  }
                   setAmount={(amount: string) =>
                     setSelectedSingleTokenAmount(amount)
                   }
@@ -324,7 +331,7 @@ export default function AddLiquidityContent({
                 />
                 <InfoBoxListItem
                   title={"Approximate Total Value"}
-                  value={formatUsd(totalValue ?? 0) ?? "-"}
+                  value={formatUsd(singleSidedTotalValue ?? 0) ?? "-"}
                 />
               </InfoBoxList>
               {singleSidedError && (
@@ -347,7 +354,13 @@ export default function AddLiquidityContent({
                   <PreviewToken
                     token={selectedSingleToken}
                     value={getSafeNumber(selectedSingleTokenAmount)}
-                    price={prices[selectedSingleToken?.address ?? ""]}
+                    price={
+                      prices?.[
+                        isBeratoken(selectedSingleToken)
+                          ? wBeraToken?.address.toLowerCase()
+                          : selectedSingleToken?.address.toLowerCase()
+                      ] ?? 0
+                    }
                   />
                 </TokenList>
                 <p className="w-full max-w-full justify-center self-center text-center text-xs text-muted-foreground">
@@ -376,7 +389,7 @@ export default function AddLiquidityContent({
                         token={token}
                         value={formattedAmount}
                         // weight={token.normalizedWeight}
-                        price={prices[token.address]}
+                        price={prices?.[token.address.toLowerCase()] ?? 0}
                       />
                     );
                   })}

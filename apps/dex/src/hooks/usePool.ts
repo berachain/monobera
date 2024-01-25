@@ -7,7 +7,7 @@ import {
   client,
   getAllPools,
   getTokenHoneyPrice,
-  //   getTokenHoneyPrices,
+  getTokenHoneyPrices,
 } from "@bera/graphql";
 import { getAddress } from "ethers";
 import useSWR from "swr";
@@ -60,6 +60,42 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
         })
         .then((res: any) => {
           return res.data.tokenHoneyPrices[0].price;
+        })
+        .catch((e: any) => {
+          console.log(e);
+          return undefined;
+        });
+    },
+    {
+      refreshInterval: 5000,
+    },
+  );
+  return data;
+};
+
+export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
+  const { data } = useSWR(
+    ["tokenHoneyPrice", tokenAddresses],
+    async () => {
+      if (!tokenAddresses) {
+        return [];
+      }
+      return await client
+        .query({
+          query: getTokenHoneyPrices,
+          variables: {
+            id: tokenAddresses.map((t) =>
+              handleNativeBera(t as Address).toLowerCase(),
+            ),
+          },
+        })
+        .then((res: any) => {
+          return res.data?.tokenHoneyPrices.reduce((allPrices, price) => {
+            return {
+              ...allPrices,
+              [price.id]: price.price,
+            };
+          }, {});
         })
         .catch((e: any) => {
           console.log(e);

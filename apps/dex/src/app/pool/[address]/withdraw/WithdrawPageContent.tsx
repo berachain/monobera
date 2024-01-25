@@ -32,12 +32,11 @@ import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
-import { type MappedTokens } from "../types";
+import { useTokenHoneyPrices } from "~/hooks/usePool";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
 
 interface IWithdrawLiquidityContent {
   pool: Pool | undefined;
-  prices: MappedTokens;
 }
 
 enum Selection {
@@ -46,7 +45,6 @@ enum Selection {
 }
 export default function WithdrawLiquidityContent({
   pool,
-  prices,
 }: IWithdrawLiquidityContent) {
   const reset = () => {
     setPreviewOpen(false);
@@ -65,6 +63,9 @@ export default function WithdrawLiquidityContent({
   });
   const { networkConfig } = useBeraConfig();
   const router = useRouter();
+
+  const tokenAddresses = pool?.tokens.map((token) => token.address);
+  const prices = useTokenHoneyPrices(tokenAddresses);
 
   const {
     lpBalance,
@@ -217,7 +218,7 @@ export default function WithdrawLiquidityContent({
                         token={token}
                         value={formattedAmount}
                         weight={token.normalizedWeight}
-                        price={prices[token.address]}
+                        price={prices?.[token?.address.toLowerCase()] ?? 0}
                       />
                     );
                   })}
@@ -306,7 +307,7 @@ export default function WithdrawLiquidityContent({
                   setAmount={handleSingleTokenWithdrawAssetOut}
                   customTokenList={pool?.tokens}
                   showExceeding={false}
-                  price={prices[exactOutToken?.address ?? ""] ?? 0}
+                  price={prices?.[exactOutToken?.address ?? ""] ?? 0}
                 />
               </TokenList>
               <Alert variant="warning">
@@ -337,7 +338,7 @@ export default function WithdrawLiquidityContent({
                         token={token}
                         value={formattedAmount}
                         weight={token.normalizedWeight}
-                        price={prices[token.address]}
+                        price={prices?.[token?.address.toLowerCase()] ?? 0}
                       />
                     );
                   })}
@@ -355,7 +356,7 @@ export default function WithdrawLiquidityContent({
                   <PreviewToken
                     token={exactOutToken}
                     value={getSafeNumber(exactOutAmount)}
-                    price={prices[exactOutToken?.address ?? ""]}
+                    price={prices?.[exactOutToken?.address.toLowerCase]}
                   />
                 </TokenList>
                 <InfoBoxList>
@@ -363,7 +364,7 @@ export default function WithdrawLiquidityContent({
                   <InfoBoxListItem
                     title={"Approximate Total Value"}
                     value={formatUsd(
-                      (prices[exactOutToken?.address ?? ""] ?? 0) *
+                      (prices?.[exactOutToken?.address.toLowerCase] ?? 0) *
                         getSafeNumber(exactOutAmount),
                     )}
                   />
