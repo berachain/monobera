@@ -75,7 +75,7 @@ export function TotalAmount({
           <span
             className={cn(
               "",
-              Number(totalPnl) > 0
+              Number(totalUnrealizedPnl) > 0
                 ? "text-success-foreground"
                 : "text-destructive-foreground",
             )}
