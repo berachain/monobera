@@ -1,13 +1,18 @@
 import { useMemo } from "react";
-import { FallbackProvider, JsonRpcProvider } from "ethers";
-import { createClient, http, type Chain, type Client, type Transport } from "viem";
+import { FallbackProvider, JsonRpcProvider, type Provider } from "ethers";
+import {
+  createClient,
+  http,
+  type Chain,
+  type Client,
+  type Transport,
+} from "viem";
 
+import { type NetworkConfig } from "~/config";
 
-
-import { defaultBeraConfig } from "~/config";
-
-
-export function clientToProvider(client: Client<Transport, Chain>) {
+export function clientToProvider(
+  client: Client<Transport, Chain>,
+): Provider | undefined {
   const { chain, transport } = client;
   const network = {
     chainId: chain.id,
@@ -25,9 +30,11 @@ export function clientToProvider(client: Client<Transport, Chain>) {
 }
 
 /** Action to convert a viem Client to an ethers.js Provider. */
-export function useEthersProvider() {
+export function useEthersProvider(
+  networkConfig: NetworkConfig,
+): Provider | undefined {
   const client = createClient({
-    chain: defaultBeraConfig.chain,
+    chain: networkConfig.chain,
     transport: http(),
   });
   // const client = useClient<Config>({ chainId });

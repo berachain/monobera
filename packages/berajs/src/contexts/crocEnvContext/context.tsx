@@ -1,10 +1,11 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import { CrocEnv } from "@crocswap-libs/sdk";
-import { useWalletClient } from "wagmi";
+import { type ConnectArg } from "@crocswap-libs/sdk/dist/context";
 
 import { type NetworkConfig } from "~/config/types";
 import { useChainId } from "~/hooks";
 import { useEthersProvider } from "~/hooks/useEthersProvider";
+import { useEthersSigner } from "~/hooks/useEthersSigner";
 
 export type AppEnvironment = "local" | "testnet" | "production";
 export const APP_ENVIRONMENT: AppEnvironment = "local";
@@ -30,19 +31,13 @@ const CrocEnvContextProvider = ({
   networkConfig,
 }: CrocEnvContextProviderProps) => {
   const chainId = useChainId();
-  const { data: signer, isError, error, isLoading: status } = useWalletClient();
-  const provider = useEthersProvider();
+  // const { data: signer, isError, error, isLoading: status } = useWalletClient();
+  const provider = useEthersProvider(networkConfig);
+  const signer = useEthersSigner(networkConfig);
 
   //new JsonRpcProvider(process.env.NEXT_PUBLIC_JSON_RPC_URL);
   const [crocEnv, setCrocEnv] = useState<CrocEnv | undefined>();
-  console.log(
-    "si!!!!!!gner",
-    networkConfig,
-    signer,
-    provider,
-    chainId,
-    typeof chainId,
-  );
+  console.log("si!!!!!!gner", networkConfig, signer, provider, chainId);
 
   const setNewCrocEnv = async () => {
     if (APP_ENVIRONMENT === "local") {
@@ -50,10 +45,6 @@ const CrocEnvContextProvider = ({
       console.debug({ signer });
       console.debug({ crocEnv });
       console.debug({ status });
-    }
-    if (isError) {
-      console.error({ error });
-      setCrocEnv(undefined);
     } else if (!chainId && !signer) {
       APP_ENVIRONMENT === "local" &&
         console.debug("setting crocEnv to undefined");
@@ -63,14 +54,20 @@ const CrocEnvContextProvider = ({
       APP_ENVIRONMENT === "local" && console.debug("keeping provider");
       return;
     } else if (chainId && !crocEnv) {
-      const newCrocEnv = new CrocEnv(provider, signer ? signer : undefined);
+      const newCrocEnv = new CrocEnv(
+        provider as unknown as ConnectArg,
+        signer ? signer : undefined,
+      );
       setCrocEnv(newCrocEnv);
     } else {
       // If signer and provider are set to different chains (as can happen)
       // after a network switch, it causes a lot of performance killing timeouts
       // and errors
       if (signer?.chain.id == chainId) {
-        const newCrocEnv = new CrocEnv(provider, signer ? signer : undefined);
+        const newCrocEnv = new CrocEnv(
+          provider as unknown as ConnectArg,
+          signer ? signer : undefined,
+        );
         APP_ENVIRONMENT === "local" && console.debug({ newCrocEnv });
         setCrocEnv(newCrocEnv);
       }
