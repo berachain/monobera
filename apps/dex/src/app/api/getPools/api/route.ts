@@ -15,22 +15,6 @@ import { getParsedPools } from "./getPools";
 export const revalidate = 10;
 
 async function getGlobalCuttingBoard() {
-  // const globalCuttingBoard: Weight[] = await client
-  //   .query({
-  //     query: getCuttingBoard,
-  //     variables: {
-  //       page: 0,
-  //       limit: 1,
-  //     },
-  //   })
-  //   .then((res: any) => {
-  //     return res.data.globalCuttingBoardDatas[0].weights;
-  //   })
-  //   .catch((e) => {
-  //     console.log(e);
-  //     return undefined;
-  //   });
-
   const data = await fetch(subgraphUrl, {
     method: "POST",
     body: JSON.stringify({
@@ -66,28 +50,33 @@ async function getGlobalCuttingBoard() {
   return data.data.globalCuttingBoardDatas[0].weights;
 }
 
+async function getBeraPrice() {
+  const data = await fetch(subgraphUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: `{
+        tokenHoneyPrice(id: "0x5806e416da447b267cea759358cf22cc41fae80f") {
+          id
+          price
+        }
+      }`,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: 10 },
+  })
+    .then((res) => res.json())
+    .catch((e: any) => console.log("fetching error", e));
+
+  if (data.error !== undefined) {
+    console.error("error fetching cutting board");
+  }
+  return data.data.tokenHoneyPrice.price;
+}
+
 async function getInflation() {
   try {
-    // const inflationData: InflationRate | undefined = await client
-    //   .query({
-    //     query: getInflationData,
-    //     variables: {
-    //       page: 0,
-    //       limit: 20,
-    //     },
-    //   })
-    //   .then((res: any) => {
-    //     const positiveInflationData = res.data.inflationRates.find(
-    //       (inflationData: InflationRate) =>
-    //         Number(inflationData.difference) > 0,
-    //     );
-    //     return positiveInflationData;
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //     return undefined;
-    //   });
-
     const data = await fetch(subgraphUrl, {
       method: "POST",
       body: JSON.stringify({
@@ -135,36 +124,27 @@ export async function GET() {
     const globalCuttingBoard = getGlobalCuttingBoard();
     const inflationRate = getInflation();
     const fetchPools = router.fetchPools();
-
-    const pricesResponse = fetch(`${getAbsoluteUrl()}/api/getPrices/api`, {
-      method: "GET",
-      headers: {
-        "x-vercel-protection-bypass": process.env
-          .VERCEL_AUTOMATION_BYPASS_SECRET as string,
-      },
-    });
+    const beraPrice = getBeraPrice()
 
     const data = await Promise.all([
       fetchPools,
       globalCuttingBoard,
-      pricesResponse,
+      beraPrice,
       inflationRate,
     ]).then(
-      ([fetchPools, globalCuttingBoard, pricesResponse, inflationRate]) => ({
+      ([fetchPools, globalCuttingBoard, beraPrice, inflationRate]) => ({
         fetchPools: fetchPools,
         globalCuttingBoard: globalCuttingBoard,
-        pricesResponse: pricesResponse,
+        beraPrice: beraPrice,
         inflationRate: inflationRate,
       }),
     );
     const pools = router.getPools() ?? [];
 
-    const mappedTokens = await data.pricesResponse.json();
-
     const parsedPools = getParsedPools(
       pools,
       data.globalCuttingBoard,
-      mappedTokens,
+      data.beraPrice,
       data.inflationRate,
     );
 
