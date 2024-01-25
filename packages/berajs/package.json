@@ -28,6 +28,7 @@
     "lodash": "^4.17.21",
     "next-auth": "^4.24.5",
     "react-device-detect": "^2.2.3",
+    "@crocswap-libs/sdk": "^0.2.79",
     "sha3": "^2.1.4",
     "swr": "^2.1.5",
     "viem": "~1.19.13",
