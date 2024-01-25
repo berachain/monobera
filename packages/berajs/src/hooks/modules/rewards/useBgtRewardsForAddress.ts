@@ -73,8 +73,7 @@ export const usePollBgtRewardsForAddress = ({
     inflationData,
   ];
 
-  // console.log(QUERY_KEY)
-  const { isLoading } = useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     () => {
       if (cuttingBoard && address && inflationData) {
@@ -122,7 +121,7 @@ export const usePollBgtRewardsForAddress = ({
     return undefined;
   };
   return {
-    isLoading,
+    ...swrResponse,
     useBgtRewardsForAddress,
     useBgtApr,
   };
