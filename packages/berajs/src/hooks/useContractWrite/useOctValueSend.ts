@@ -57,6 +57,7 @@ const useOctValueSend = ({
           onSuccess && onSuccess(confirmationReceipt);
           return;
         } else {
+          // @ts-ignore
           const e = new TransactionFailedError();
           onError && onError("Transaction failed");
         }
