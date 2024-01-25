@@ -8,7 +8,7 @@ import useSWR from "swr";
 import { getAddress, type Address } from "viem";
 
 export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
-  const { data } = useSWR(
+  return useSWR(
     ["tokenHoneyPrices", tokenAddresses],
     async () => {
       if (!tokenAddresses) {
@@ -41,19 +41,17 @@ export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
       refreshInterval: 50000,
     },
   );
-
-  return data;
 };
 
 const handleNativeBera = (token: Address) => {
-  if (token === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)) {
-    return getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
+  if (getAddress(token) === getAddress(nativeTokenAddress)) {
+    return getAddress(beraTokenAddress);
   }
   return token;
 };
 
 export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
-  const { data } = useSWR(
+  return useSWR(
     ["tokenHoneyPrice", tokenAddress],
     async () => {
       if (!tokenAddress) {
@@ -81,5 +79,4 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
       refreshInterval: 10000,
     },
   );
-  return data;
 };

@@ -3,20 +3,18 @@
 import {
   formatUsd,
   usePollAssetWalletBalance,
-  // usePollPrices,
+  useTokenHoneyPrices,
   useTokens,
   type Token,
 } from "@bera/berajs";
 import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { useTokenHoneyPrices } from "./hooks/useTokenHoneyPrices";
-
 export function WalletBalanceInUs() {
   const { featuredTokenList } = useTokens();
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { data: assets } = useCurrentAssetWalletBalances();
-  const pricesArray = useTokenHoneyPrices(
+  const { data: pricesArray } = useTokenHoneyPrices(
     featuredTokenList?.map((featuredToken: Token) => featuredToken.address),
   );
 

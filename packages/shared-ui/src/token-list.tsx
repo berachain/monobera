@@ -4,14 +4,13 @@ import React from "react";
 import {
   formatter,
   usePollAssetWalletBalance,
-  // useTokens,
+  useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
 import { bgtTokenAddress, blockExplorerUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { useTokenHoneyPrice } from "./hooks/useTokenHoneyPrices";
 import { TokenIcon } from "./token-icon";
 
 export function TokenRow({
@@ -21,7 +20,7 @@ export function TokenRow({
   asset: Token;
   isLoading: boolean;
 }) {
-  const tokenPrice = useTokenHoneyPrice(asset.address);
+  const { data: tokenPrice } = useTokenHoneyPrice(asset.address);
   return (
     <div
       className="flex items-center justify-between gap-5"
@@ -63,7 +62,11 @@ export function TokenList() {
     <div className="grid gap-4">
       {assets && assets.length ? (
         assets
-          .filter((token: Token) => token.address !== bgtTokenAddress && token.tags?.includes("featured"))
+          .filter(
+            (token: Token) =>
+              token.address !== bgtTokenAddress &&
+              token.tags?.includes("featured"),
+          )
           .map((asset: Token) => (
             <TokenRow asset={asset} isLoading={isLoading} key={asset.address} />
           ))
