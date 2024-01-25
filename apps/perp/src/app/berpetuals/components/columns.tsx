@@ -591,6 +591,13 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
 
     accessorKey: "open_price",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = Number(rowA.original.open_price);
+      const b = Number(rowB.original.open_price);
+      if (a < b) return -1;
+      else if (a > b) return 1;
+      else return 0;
+    },
   },
 
   {
@@ -608,6 +615,13 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
     ),
     accessorKey: "close_price",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = Number(rowA.original.close_price);
+      const b = Number(rowB.original.close_price);
+      if (a < b) return -1;
+      else if (a > b) return 1;
+      else return 0;
+    },
   },
   {
     header: ({ column }) => (
