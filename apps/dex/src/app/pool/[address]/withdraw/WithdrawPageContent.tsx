@@ -9,6 +9,7 @@ import {
   TransactionActionType,
   formatUsd,
   useBeraConfig,
+  useTokenHoneyPrices
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import {
@@ -32,7 +33,6 @@ import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
-import { useTokenHoneyPrices } from "~/hooks/usePool";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
 
 interface IWithdrawLiquidityContent {
