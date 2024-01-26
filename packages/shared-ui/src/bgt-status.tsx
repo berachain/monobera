@@ -6,22 +6,23 @@ import {
   usePollBgtBalance,
   usePollDelegatorUnbonding,
   usePollTotalDelegated,
-  usePollUserAllBGTRewards,
-  useTokenHoneyPrice
+  // usePollUserAllBGTRewards,
+  useTokenHoneyPrice,
 } from "@bera/berajs";
-import { beraTokenAddress, dexUrl, lendUrl, perpsUrl } from "@bera/config";
+import { beraTokenAddress } from "@bera/config";
+// import { beraTokenAddress, dexUrl, lendUrl, perpsUrl } from "@bera/config";
 import { cn } from "@bera/ui";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@bera/ui/accordion";
-import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
+// import {
+//   Accordion,
+//   AccordionContent,
+//   AccordionItem,
+//   AccordionTrigger,
+// } from "@bera/ui/accordion";
+// import { Button } from "@bera/ui/button";
+// import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatEther } from "viem";
+// import { formatEther } from "viem";
 
 import { BGTIcon } from "./bgt-icon";
 
@@ -106,12 +107,12 @@ export function BGTStatusDetails() {
   const bgtTotalDelegated = useTotalDelegatorDelegated();
   const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
   const totalUnbonding = useDelegatorTotalUnbonding();
-  const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
+  // const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
 
-  const totalClaimableBGT: bigint = //@ts-ignore
-    isLoading || !bgtRewards || bgtRewards.length !== 3
-      ? 0n //@ts-ignore
-      : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
+  // const totalClaimableBGT: bigint = //@ts-ignore
+  //   isLoading || !bgtRewards || bgtRewards.length !== 3
+  //     ? 0n //@ts-ignore
+  //     : (bgtRewards[0] ?? 0n) + (bgtRewards[1] ?? 0n) + (bgtRewards[2] ?? 0n);
 
   const data = [
     {
@@ -132,14 +133,13 @@ export function BGTStatusDetails() {
       text: "In Unbonding Queue",
       amoumt: totalUnbonding ?? 0,
     },
-    {
-      background: "#EFF199",
-      stroke: "#526E02",
-      text: "Claimable Rewards", //@ts-ignore
-      amoumt: Number(formatEther(totalClaimableBGT)),
-    },
+    // {
+    //   background: "#EFF199",
+    //   stroke: "#526E02",
+    //   text: "Claimable Rewards", //@ts-ignore
+    //   amoumt: Number(formatEther(totalClaimableBGT)),
+    // },
   ];
-  console.log("data", userBalance, price);
   return (
     <>
       <div>
@@ -168,7 +168,7 @@ export function BGTStatusDetails() {
             </div>
           </div>
         ))}
-        <Accordion type="single" collapsible className="w-full">
+        {/* <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
             <AccordionContent>
               <div className="flex w-full">
@@ -297,7 +297,7 @@ export function BGTStatusDetails() {
               <Icons.chevronsDown className="block h-6 w-6 items-center" />
             </AccordionTrigger>
           </AccordionItem>
-        </Accordion>
+        </Accordion> */}
       </div>
     </>
   );
