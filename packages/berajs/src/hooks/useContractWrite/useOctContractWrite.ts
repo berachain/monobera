@@ -2,7 +2,7 @@
 
 import { useCallback, useReducer } from "react";
 import { perpsEndpoints } from "@bera/config";
-import { Contract, JsonRpcProvider, Wallet } from "ethers";
+import { Contract, Wallet, providers } from "ethers";
 import { encodeFunctionData } from "viem";
 import { usePublicClient, useWalletClient } from "wagmi";
 import { prepareWriteContract } from "wagmi/actions";
@@ -63,7 +63,7 @@ const useOctContractWrite = ({
             gas: 10000000n,
           });
         } else if (isOctReady) {
-          const provider = new JsonRpcProvider(
+          const provider = new providers.JsonRpcProvider(
             process.env.NEXT_PUBLIC_JSON_RPC_URL,
           );
 
@@ -83,7 +83,7 @@ const useOctContractWrite = ({
             gasLimit: 10000000n,
           });
           const txResponse = await transaction.wait();
-          hash = txResponse.hash;
+          hash = txResponse?.transactionHash;
         }
         dispatch({ type: ActionEnum.SUBMITTING });
 
