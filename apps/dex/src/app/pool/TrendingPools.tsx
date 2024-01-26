@@ -72,8 +72,8 @@ export const TrendingPools = () => {
             {isAllDataLoadingMore
               ? "Loading..."
               : isAllDataReachingEnd
-              ? "No more new pools"
-              : "View More"}
+                ? "No more new pools"
+                : "View More"}
           </Button>
         </div>
       </div>

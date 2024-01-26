@@ -136,9 +136,7 @@ export default function Portfolio() {
               <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
                 BGT delegated
                 <br />
-                across {Number.isNaN(totalValidators)
-                  ? 0
-                  : totalValidators}{" "}
+                across {Number.isNaN(totalValidators) ? 0 : totalValidators}{" "}
                 validators
               </div>
               <Button

@@ -80,8 +80,8 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                ? "No more hot pools"
-                : "View More"}
+                  ? "No more hot pools"
+                  : "View More"}
             </Button>
           )}
           {isMainPage && (

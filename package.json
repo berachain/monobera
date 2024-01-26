@@ -21,9 +21,8 @@
     "dev:faucet": "turbo dev --filter=faucet --filter='./packages/*' --concurrency=18",
     "dev:clue": "turbo dev --filter=validator-clue --filter='./packages/*' --concurrency=18",
     "check-types": "turbo check-types",
-    "format": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx,md,json}\" --ignore-path .gitignore",
-    "lint": "turbo lint && manypkg check",
-    "lint:fix": "turbo lint:fix && manypkg fix",
+    "lint": "biome lint . ",
+    "format": "biome format --write .",
     "prepare": "husky install"
   },
   "dependencies": {

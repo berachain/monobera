@@ -225,8 +225,8 @@ export function TPSL({
     slPercent <= -100
       ? -100
       : Number(estStopLoss) > (formattedPrice ?? 0)
-      ? 0 - slPercent
-      : slPercent;
+        ? 0 - slPercent
+        : slPercent;
 
   return (
     <div className={className}>
@@ -236,8 +236,8 @@ export function TPSL({
           {tpslType === "none"
             ? ""
             : tpslType === "percent"
-            ? `(${formatUsd(estTakeProfit)})`
-            : `(${tpPercentDisplay.toFixed(2)}%)`}
+              ? `(${formatUsd(estTakeProfit)})`
+              : `(${tpPercentDisplay.toFixed(2)}%)`}
         </span>
       </div>
       <InputSelect
@@ -268,8 +268,8 @@ export function TPSL({
           {slType === "none"
             ? ""
             : slType === "percent"
-            ? `(${formatUsd(estStopLoss)})`
-            : `(${slPercentDisplay.toFixed(2)}%)`}
+              ? `(${formatUsd(estStopLoss)})`
+              : `(${slPercentDisplay.toFixed(2)}%)`}
         </span>
       </div>
       <InputSelect
