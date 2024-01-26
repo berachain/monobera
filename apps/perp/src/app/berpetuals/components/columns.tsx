@@ -333,7 +333,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
       cell: ({ row }) => {
         return <div>{formatBigIntUsd(row.original.borrowing_fee, 18)}</div>;
       },
-      accessorKey: "borrow fee",
+      accessorKey: "borrow_fee",
       enableSorting: false,
     },
     {
