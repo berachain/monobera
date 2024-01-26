@@ -82,7 +82,7 @@ const useBeraContractWrite = ({
           onSuccess && onSuccess(receipt);
         } else {
           // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
-          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const e = new TransactionFailedError();
           onError &&
             onError({
