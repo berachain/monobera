@@ -59,6 +59,7 @@
   "devDependencies": {
     "@bera/eslint-config": "0.1.0",
     "@bera/tailwind-config": "0.1.0",
+    "@biomejs/biome": "1.5.3",
     "@storybook/addon-essentials": "^7.0.22",
     "@storybook/addon-interactions": "^7.0.22",
     "@storybook/addon-links": "^7.0.22",
