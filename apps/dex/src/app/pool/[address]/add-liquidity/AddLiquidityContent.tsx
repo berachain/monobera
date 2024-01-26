@@ -9,6 +9,7 @@ import {
   formatUsd,
   useBeraConfig,
   type Token,
+  useTokenHoneyPrices
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import {
@@ -35,7 +36,6 @@ import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
-import { useTokenHoneyPrices } from "~/hooks/usePool";
 import { useAddLiquidity } from "./useAddLiquidity";
 
 interface IAddLiquidityContent {
