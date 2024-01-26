@@ -49,16 +49,36 @@ export const usePollOpenPositions = () => {
   };
 
   const useTotalUnrealizedPnl = (markets: IMarket[]) => {
-    const openPositons = useMarketOpenPositions(markets);
+    const openPositions = useMarketOpenPositions(markets);
     const { usePriceFeed } = usePricesSocket();
     const prices = usePriceFeed();
+
     return useMemo(() => {
-      if (!prices) {
+      if (!Array.isArray(openPositions) || openPositions.length === 0) {
         return 0;
       }
 
-      return openPositons?.reduce((acc: number, position: IMarketOrder) => {
-        const currentPrice = JSON.parse(prices)[position.market.pair_index];
+      let parsedPrices: any;
+      try {
+        parsedPrices = JSON.parse(prices);
+      } catch (error) {
+        console.error("Failed to parse prices:", error);
+        return 0; // Return 0 if the prices are not available
+      }
+
+      if (!parsedPrices) {
+        return 0;
+      }
+
+      return openPositions?.reduce((acc: number, position: IMarketOrder) => {
+        const currentPrice = parsedPrices[position.market.pair_index];
+        if (currentPrice == null) {
+          console.warn(
+            `No price available for pair_index ${position.market.pair_index}`,
+          );
+          return acc; // Skip this position if the current price is not available
+        }
+
         const pnl = getPnl({
           currentPrice,
           openPosition: position,
@@ -66,7 +86,7 @@ export const usePollOpenPositions = () => {
 
         return acc + (pnl ?? 0);
       }, 0);
-    }, [openPositons, prices]);
+    }, [openPositions, prices]);
   };
 
   const useTotalPositionSize = () => {
