@@ -167,8 +167,8 @@ export default function HoneyTransactionsTable({
           {isAllDataLoadingMore
             ? "Loading..."
             : isAllDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+              ? "No more transactions"
+              : "Load more"}
         </Button>
       );
     }
@@ -182,8 +182,8 @@ export default function HoneyTransactionsTable({
           {isMintDataLoadingMore
             ? "Loading..."
             : isMintDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+              ? "No more transactions"
+              : "Load more"}
         </Button>
       );
     }
@@ -197,8 +197,8 @@ export default function HoneyTransactionsTable({
           {isRedemptionDataLoadingMore
             ? "Loading..."
             : isRedemptionDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+              ? "No more transactions"
+              : "Load more"}
         </Button>
       );
     }

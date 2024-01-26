@@ -149,8 +149,8 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
           ? form.tp && Number(form.tp) < formattedPrice
           : form.tp && Number(form.tp) > formattedPrice
         : form.orderType === "long"
-        ? form.tp && Number(form.tp) < (form.limitPrice ?? 0)
-        : form.tp && Number(form.tp) > (form.limitPrice ?? 0)
+          ? form.tp && Number(form.tp) < (form.limitPrice ?? 0)
+          : form.tp && Number(form.tp) > (form.limitPrice ?? 0)
     ) {
       if (Number(form.tp).toFixed(0) === "0") {
         setError(undefined);
@@ -163,8 +163,8 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
           ? form.sl && Number(form.sl) > formattedPrice
           : form.sl && Number(form.sl) < formattedPrice
         : form.orderType === "long"
-        ? form.sl && Number(form.sl) > (form.limitPrice ?? 0)
-        : form.sl && Number(form.sl) < (form.limitPrice ?? 0)
+          ? form.sl && Number(form.sl) > (form.limitPrice ?? 0)
+          : form.sl && Number(form.sl) < (form.limitPrice ?? 0)
     ) {
       if (Number(form.sl).toFixed(0) === "0") {
         setError(undefined);
