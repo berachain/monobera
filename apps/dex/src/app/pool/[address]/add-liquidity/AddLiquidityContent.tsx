@@ -8,8 +8,8 @@ import {
   TransactionActionType,
   formatUsd,
   useBeraConfig,
+  useTokenHoneyPrices,
   type Token,
-  useTokenHoneyPrices
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import {

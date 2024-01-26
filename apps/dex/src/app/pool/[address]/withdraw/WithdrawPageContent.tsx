@@ -9,7 +9,7 @@ import {
   TransactionActionType,
   formatUsd,
   useBeraConfig,
-  useTokenHoneyPrices
+  useTokenHoneyPrices,
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import {
