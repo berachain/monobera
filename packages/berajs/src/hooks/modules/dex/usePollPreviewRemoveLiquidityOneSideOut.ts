@@ -1,7 +1,6 @@
-import { parseUnits } from "ethers";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "viem";
+import { parseUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { type Token } from "~/api";

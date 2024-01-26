@@ -18,9 +18,9 @@ export const usePricesSocket = () => {
         return Number(parsed[index]);
       }
       return data;
-    } catch(e) {
-      console.log(e)
-      return 0
+    } catch (e) {
+      console.log(e);
+      return 0;
     }
   };
 
