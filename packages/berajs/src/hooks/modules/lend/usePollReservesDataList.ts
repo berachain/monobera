@@ -15,7 +15,7 @@ export const usePollReservesDataList = () => {
   const { mutate } = useSWRConfig();
 
   const QUERY_KEY = ["getReservesDataList"];
-  useSWR(QUERY_KEY, async () => {
+  const swrResponse = useSWR(QUERY_KEY, async () => {
     try {
       const result = (await publicClient.readContract({
         address: lendUIDataProviderAddress,
@@ -71,6 +71,7 @@ export const usePollReservesDataList = () => {
   };
 
   return {
+    ...swrResponse,
     refetch: () => void mutate(QUERY_KEY),
     useReservesDataList,
     useSelectedReserveData,

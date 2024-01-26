@@ -107,6 +107,9 @@ export const lendPoolAddressProviderAddress = process.env
   .NEXT_PUBLIC_LEND_POOL_ADDRESS_PROVIDER as Address;
 export const lendRewardsAddress = process.env
   .NEXT_PUBLIC_LEND_REWARDS_ADDRESS as Address;
+export const lendHoneyDebtTokenAddress = process.env
+  .NEXT_PUBLIC_LEND_HONEY_DEBT_TOKEN_ADDRESS as Address;
+
 // TOKENS
 export const honeyTokenAddress = process.env
   .NEXT_PUBLIC_HONEY_ADDRESS as Address;

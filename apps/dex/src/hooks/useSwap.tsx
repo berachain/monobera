@@ -7,6 +7,7 @@ import {
   usePollAllowance,
   usePollAssetWalletBalance,
   usePollSwaps,
+  useTokenHoneyPrice,
   useTokenInformation,
   useTokens,
   type Token,
@@ -17,7 +18,6 @@ import { formatUnits } from "ethers";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
-import { useTokenHoneyPrice } from "./usePool";
 
 export enum SwapKind {
   GIVEN_IN = 0,
@@ -319,8 +319,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [isWrap]);
 
-  const tokenInPrice = useTokenHoneyPrice(selectedFrom?.address);
-  const tokenOutPrice = useTokenHoneyPrice(selectedTo?.address);
+  const { data: tokenInPrice } = useTokenHoneyPrice(selectedFrom?.address);
+  const { data: tokenOutPrice } = useTokenHoneyPrice(selectedTo?.address);
 
   const minAmountOut = useMemo(() => {
     if (!payload[1]) return "0";

@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { formatUsd, formatter, useLatestBlock } from "@bera/berajs";
+import {
+  formatUsd,
+  formatter,
+  useLatestBlock,
+  useTokenHoneyPrice,
+} from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-
-import { useTokenHoneyPrice } from "~/hooks/usePool";
 
 export function DataCard({
   icon,
@@ -36,7 +39,7 @@ export function DataCard({
 
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
   const { data: block } = useLatestBlock();
-  const beraPrice = useTokenHoneyPrice(beraTokenAddress);
+  const { data: beraPrice } = useTokenHoneyPrice(beraTokenAddress);
 
   const isDataReady = useMemo(() => {
     return beraPrice && block !== 0n;
