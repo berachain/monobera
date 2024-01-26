@@ -1,26 +1,21 @@
-import {
-  beraTokenAddress,
-  honeyTokenAddress,
-  nativeTokenAddress,
-} from "@bera/config";
+import { honeyTokenAddress } from "@bera/config";
 import { client, getTokenHoneyPrice, getTokenHoneyPrices } from "@bera/graphql";
 import useSWR from "swr";
-import { getAddress, type Address } from "viem";
+import { type Address } from "viem";
+
+import { handleNativeBera } from "~/utils";
 
 export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
-  const { data } = useSWR(
+  return useSWR(
     ["tokenHoneyPrices", tokenAddresses],
     async () => {
       if (!tokenAddresses) {
         return [];
       }
 
-      const swappedAddresses = tokenAddresses.map((token: string) => {
-        if (token.toLowerCase() === nativeTokenAddress.toLowerCase()) {
-          return beraTokenAddress.toLowerCase();
-        }
-        return token.toLowerCase();
-      });
+      const swappedAddresses = tokenAddresses.map((token: string) =>
+        handleNativeBera(token).toLowerCase(),
+      );
 
       return await client
         .query({
@@ -41,19 +36,10 @@ export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
       refreshInterval: 50000,
     },
   );
-
-  return data;
-};
-
-const handleNativeBera = (token: Address) => {
-  if (token === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)) {
-    return getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
-  }
-  return token;
 };
 
 export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
-  const { data } = useSWR(
+  return useSWR(
     ["tokenHoneyPrice", tokenAddress],
     async () => {
       if (!tokenAddress) {
@@ -81,5 +67,4 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
       refreshInterval: 10000,
     },
   );
-  return data;
 };
