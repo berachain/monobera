@@ -147,7 +147,9 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
           ? Number(formatUnits(burnShares[token.address] ?? 0n, token.decimals))
           : 0;
         // @ts-ignore
-        return acc + formattedAmount * (prices[token.address] ?? 0);
+        return (
+          acc + formattedAmount * (prices?.[token.address.toLowerCase()] ?? 0)
+        );
       }, 0);
       setSingleSidedTotalValue(totalValue ?? 0);
     }
@@ -157,7 +159,8 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
       const totalValue = tokenInputs.reduce((acc, tokenInput) => {
         return (
           acc +
-          getSafeNumber(tokenInput.amount) * (prices[tokenInput?.address] ?? 0)
+          getSafeNumber(tokenInput.amount) *
+            (prices?.[tokenInput?.address.toLowerCase()] ?? 0)
         );
       }, 0);
       setTotalValue(totalValue);
@@ -171,7 +174,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     if (selectedSingleToken && selectedSingleTokenAmount) {
       setTotalValue(
         getSafeNumber(selectedSingleTokenAmount) *
-          (prices[selectedSingleToken?.address] ?? 0),
+          (prices?.[selectedSingleToken?.address.toLowerCase()] ?? 0),
       );
     }
   }, [selectedSingleToken, selectedSingleTokenAmount]);
