@@ -115,8 +115,8 @@ export const Setting = ({
               slippageMode === SLIPPAGE_MODE.AUTO
                 ? DEFAULT_SLIPPAGE
                 : slippage === 0
-                ? undefined
-                : slippage
+                  ? undefined
+                  : slippage
             }
             onChange={(e: any) => setSlippage(Number(e.target.value))}
           />

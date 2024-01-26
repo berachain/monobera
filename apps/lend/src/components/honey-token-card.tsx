@@ -32,7 +32,9 @@ export default function HoneyTokenCard() {
             <Skeleton className="h-12 w-12 rounded-full" />
           )}
           <div>
-            <div className="text-xs	font-medium leading-5">Honey StableCoin</div>
+            <div className="text-xs	font-medium leading-5">
+              Honey StableCoin
+            </div>
             <div className="flex items-center gap-1 text-2xl font-bold leading-8">
               HONEY{" "}
               <Link
