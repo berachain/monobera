@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useReducer } from "react";
-import { JsonRpcProvider, Wallet } from "ethers";
+import { Wallet, providers } from "ethers";
 import { usePublicClient } from "wagmi";
 
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
@@ -29,7 +29,7 @@ const useOctValueSend = ({
       onLoading && onLoading();
       let hash: any | undefined;
       try {
-        const provider = new JsonRpcProvider(
+        const provider = new providers.JsonRpcProvider(
           process.env.NEXT_PUBLIC_JSON_RPC_URL,
         );
 
@@ -40,7 +40,7 @@ const useOctValueSend = ({
           value: value,
         });
         const txResponse = await transaction.wait();
-        hash = txResponse?.hash;
+        hash = txResponse?.transactionHash;
 
         dispatch({ type: ActionEnum.SUBMITTING });
 

@@ -4,9 +4,9 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
 import POLLING from "~/config/constants/polling";
+import { useTokenHoneyPrice } from "~/hooks/useTokenHoneyPrices";
 import { usePollGlobalCuttingBoard } from "..";
 import { usePollBgtInflation } from "../staking/usePollBgtInflation";
-import { useTokenHoneyPrice } from "~/hooks/useTokenHoneyPrices";
 
 interface IBgtRewardsForAddress {
   bgtPerYear: number;

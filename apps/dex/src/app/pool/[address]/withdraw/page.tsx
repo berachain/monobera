@@ -35,25 +35,14 @@ export default async function Withdraw({
         },
       },
     );
-    const pricesResponse = await fetch(
-      `${getAbsoluteUrl()}/api/getPrices/api`,
-      {
-        method: "GET",
-        headers: {
-          "x-vercel-protection-bypass": process.env
-            .VERCEL_AUTOMATION_BYPASS_SECRET as string,
-        },
-      },
-    );
 
     const pool = await poolResponse.json();
 
     if (pool.error !== undefined) {
       notFound();
     }
-    const prices = await pricesResponse.json();
 
-    return <WithdrawPageContent pool={pool} prices={prices} />;
+    return <WithdrawPageContent pool={pool} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
     notFound();

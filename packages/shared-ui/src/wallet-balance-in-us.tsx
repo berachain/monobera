@@ -2,11 +2,11 @@
 
 import {
   formatUsd,
+  handleNativeBera,
   usePollAssetWalletBalance,
   useTokenHoneyPrices,
   useTokens,
   type Token,
-  handleNativeBera,
 } from "@bera/berajs";
 import { Skeleton } from "@bera/ui/skeleton";
 

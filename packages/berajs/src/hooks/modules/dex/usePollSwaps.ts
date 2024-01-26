@@ -5,8 +5,8 @@ import { usePublicClient } from "wagmi";
 
 import { DEX_PRECOMPILE_ABI } from "~/config";
 import { useBeraConfig } from "~/contexts";
-import POLLING from "../../../config/constants/polling";
 import { handleNativeBera } from "~/utils";
+import POLLING from "../../../config/constants/polling";
 
 interface IUsePollSwaps {
   tokenIn: Address;

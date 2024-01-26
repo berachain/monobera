@@ -124,21 +124,19 @@ export async function GET() {
     const globalCuttingBoard = getGlobalCuttingBoard();
     const inflationRate = getInflation();
     const fetchPools = router.fetchPools();
-    const beraPrice = getBeraPrice()
+    const beraPrice = getBeraPrice();
 
     const data = await Promise.all([
       fetchPools,
       globalCuttingBoard,
       beraPrice,
       inflationRate,
-    ]).then(
-      ([fetchPools, globalCuttingBoard, beraPrice, inflationRate]) => ({
-        fetchPools: fetchPools,
-        globalCuttingBoard: globalCuttingBoard,
-        beraPrice: beraPrice,
-        inflationRate: inflationRate,
-      }),
-    );
+    ]).then(([fetchPools, globalCuttingBoard, beraPrice, inflationRate]) => ({
+      fetchPools: fetchPools,
+      globalCuttingBoard: globalCuttingBoard,
+      beraPrice: beraPrice,
+      inflationRate: inflationRate,
+    }));
     const pools = router.getPools() ?? [];
 
     const parsedPools = getParsedPools(
