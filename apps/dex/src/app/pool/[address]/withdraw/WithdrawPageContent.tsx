@@ -9,7 +9,8 @@ import {
   TransactionActionType,
   formatUsd,
   useBeraConfig,
-  useTokenHoneyPrices
+  useTokenHoneyPrices,
+  handleNativeBera,
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import {
@@ -64,10 +65,8 @@ export default function WithdrawLiquidityContent({
   const { networkConfig } = useBeraConfig();
   const router = useRouter();
 
-  const tokenAddresses = pool?.tokens.map((token) =>
-    token.address.toLowerCase(),
-  );
-  const prices = useTokenHoneyPrices(tokenAddresses);
+  const tokenAddresses = pool?.tokens.map((token: any) => token.address);
+  const { data: prices = {} } = useTokenHoneyPrices(tokenAddresses);
 
   const {
     lpBalance,
@@ -220,7 +219,7 @@ export default function WithdrawLiquidityContent({
                         token={token}
                         value={formattedAmount}
                         weight={token.normalizedWeight}
-                        price={prices?.[tokenAddresses[i]] ?? 0}
+                        price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
                       />
                     );
                   })}
@@ -309,7 +308,7 @@ export default function WithdrawLiquidityContent({
                   setAmount={handleSingleTokenWithdrawAssetOut}
                   customTokenList={pool?.tokens}
                   showExceeding={false}
-                  price={prices?.[exactOutToken?.address.toLowerCase()] ?? 0}
+                  price={prices[handleNativeBera(exactOutToken?.address)] ?? 0}
                 />
               </TokenList>
               <Alert variant="warning">
@@ -340,7 +339,7 @@ export default function WithdrawLiquidityContent({
                         token={token}
                         value={formattedAmount}
                         weight={token.normalizedWeight}
-                        price={prices?.[tokenAddresses[i]] ?? 0}
+                        price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
                       />
                     );
                   })}
@@ -358,7 +357,7 @@ export default function WithdrawLiquidityContent({
                   <PreviewToken
                     token={exactOutToken}
                     value={getSafeNumber(exactOutAmount)}
-                    price={prices?.[exactOutToken?.address.toLowerCase()]}
+                    price={prices[handleNativeBera(exactOutToken?.address)]}
                   />
                 </TokenList>
                 <InfoBoxList>
@@ -366,7 +365,7 @@ export default function WithdrawLiquidityContent({
                   <InfoBoxListItem
                     title={"Approximate Total Value"}
                     value={formatUsd(
-                      (prices?.[exactOutToken?.address.toLowerCase()] ?? 0) *
+                      (prices[handleNativeBera(exactOutToken?.address)] ?? 0) *
                         getSafeNumber(exactOutAmount),
                     )}
                   />

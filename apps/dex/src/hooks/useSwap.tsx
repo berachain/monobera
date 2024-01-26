@@ -31,7 +31,6 @@ interface ISwap {
 }
 function normalizeToRatio(num1: number, num2: number): string {
   const ratio = num2 / num1;
-
   return ratio.toFixed(6);
 }
 
@@ -267,6 +266,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapInfo, deadline, slippage]);
 
+  console.log(fromAmount, toAmount)
+
   const onSwitch = () => {
     const tempFromAmount = fromAmount;
     const tempToAmount = toAmount;
@@ -277,18 +278,18 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setSelectedFrom(tempTo);
     setSelectedTo(tempFrom);
 
-    setFromAmount(tempToAmount);
-    setToAmount(tempFromAmount);
-    setSwapKind(SwapKind.GIVEN_IN);
-    setSwapAmount(fromAmount ?? "");
+    if (swapKind === SwapKind.GIVEN_IN) {
+      setSwapKind(SwapKind.GIVEN_OUT);
+      setToAmount(tempFromAmount);
+      setFromAmount("");
+      setSwapAmount(tempFromAmount ?? "");
+    } else {
+      setSwapKind(SwapKind.GIVEN_IN);
+      setFromAmount(tempToAmount);
+      setToAmount("");
+      setSwapAmount(tempToAmount ?? "");
+    }
 
-    // if (swapKind === SwapKind.GIVEN_IN) {
-    //   setSwapKind(SwapKind.GIVEN_OUT);
-    //   setSwapAmount(fromAmount ?? "");
-    // } else {
-    //   setSwapKind(SwapKind.GIVEN_IN);
-    //   setSwapAmount(toAmount ?? "");
-    // }
     if (isWrap) {
       if (wrapType === WRAP_TYPE.WRAP) {
         setWrapType(WRAP_TYPE.UNWRAP);

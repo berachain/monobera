@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { type Pool } from "@bera/bera-router";
 import {
+  handleNativeBera,
   useBeraConfig,
   useBeraJs,
   usePollAllowance,
@@ -12,9 +13,7 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-// import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
-// import lodash from "lodash";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
@@ -23,7 +22,7 @@ import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 
-export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
+export const useAddLiquidity = (pool: Pool | undefined, prices: any[]) => {
   const { account = undefined } = useBeraJs();
   const { networkConfig } = useBeraConfig();
   const [error, setError] = useState<string | undefined>("");
@@ -142,25 +141,23 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
 
   useEffect(() => {
     if (burnShares) {
-      const totalValue = pool?.tokens.reduce((acc, token) => {
+      const totalValue = pool?.tokens.reduce((acc: number, token: any) => {
         const formattedAmount = burnShares
           ? Number(formatUnits(burnShares[token.address] ?? 0n, token.decimals))
           : 0;
-        // @ts-ignore
-        return (
-          acc + formattedAmount * (prices?.[token.address.toLowerCase()] ?? 0)
-        );
+        const address = handleNativeBera(token.address);
+        return acc + formattedAmount * Number(prices[address] ?? "0");
       }, 0);
       setSingleSidedTotalValue(totalValue ?? 0);
     }
   }, [burnShares]);
   useEffect(() => {
     if (tokenInputs && tokenInputs.length) {
-      const totalValue = tokenInputs.reduce((acc, tokenInput) => {
+      const totalValue = tokenInputs.reduce((acc: number, tokenInput: any) => {
+        const address = handleNativeBera(tokenInput.address);
         return (
           acc +
-          getSafeNumber(tokenInput.amount) *
-            (prices?.[tokenInput?.address.toLowerCase()] ?? 0)
+          getSafeNumber(tokenInput.amount) * Number(prices[address] ?? "0")
         );
       }, 0);
       setTotalValue(totalValue);
@@ -172,9 +169,10 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
       return;
     }
     if (selectedSingleToken && selectedSingleTokenAmount) {
+      const address = handleNativeBera(selectedSingleToken.address);
       setTotalValue(
         getSafeNumber(selectedSingleTokenAmount) *
-          (prices?.[selectedSingleToken?.address.toLowerCase()] ?? 0),
+          Number(prices[address] ?? "0"),
       );
     }
   }, [selectedSingleToken, selectedSingleTokenAmount]);
