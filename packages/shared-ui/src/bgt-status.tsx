@@ -5,9 +5,9 @@ import {
   formatter,
   usePollBgtBalance,
   usePollDelegatorUnbonding,
-  usePollPrices,
   usePollTotalDelegated,
   usePollUserAllBGTRewards,
+  useTokenHoneyPrice
 } from "@bera/berajs";
 import { beraTokenAddress, dexUrl, lendUrl, perpsUrl } from "@bera/config";
 import { cn } from "@bera/ui";
@@ -99,8 +99,7 @@ export function TotalBGT({ className }: { className?: string }) {
 }
 
 export function BGTStatusDetails() {
-  const { usePrice } = usePollPrices();
-  const { data: price } = usePrice(beraTokenAddress);
+  const { data: price } = useTokenHoneyPrice(beraTokenAddress);
   const { useBgtBalance } = usePollBgtBalance();
   const userBalance = useBgtBalance();
   const { useTotalDelegatorDelegated } = usePollTotalDelegated();
@@ -140,6 +139,7 @@ export function BGTStatusDetails() {
       amoumt: Number(formatEther(totalClaimableBGT)),
     },
   ];
+  console.log("data", userBalance, price);
   return (
     <>
       <div>
