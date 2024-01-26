@@ -82,6 +82,7 @@ const useBeraContractWrite = ({
           onSuccess && onSuccess(receipt);
         } else {
           // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
+          // @ts-ignore
           const e = new TransactionFailedError();
           onError &&
             onError({
