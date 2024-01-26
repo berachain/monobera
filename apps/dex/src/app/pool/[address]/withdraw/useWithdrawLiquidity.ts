@@ -52,7 +52,9 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
           ? Number(formatUnits(burnShares[token.address] ?? 0n, token.decimals))
           : 0;
 
-        return acc + formattedAmount * (prices[token.address] ?? 0);
+        return (
+          acc + formattedAmount * (prices?.[token.address.toLowerCase()] ?? 0)
+        );
       }, 0);
       setWithdrawValue(totalValue?.toString() ?? "");
     }

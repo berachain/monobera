@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 
 import { getMetaTitle } from "~/utils/metadata";
 import { getAbsoluteUrl } from "~/utils/vercel-utils";
-import { type MappedTokens } from "../types";
 import AddLiquidityContent from "./AddLiquidityContent";
 
 type Props = {
@@ -36,30 +35,14 @@ export default async function AddLiquidity({
         },
       },
     );
-    const pricesResponse = await fetch(
-      `${getAbsoluteUrl()}/api/getPrices/api`,
-      {
-        method: "GET",
-        headers: {
-          "x-vercel-protection-bypass": process.env
-            .VERCEL_AUTOMATION_BYPASS_SECRET as string,
-        },
-      },
-    );
 
     const pool = await poolResponse.json();
 
     if (pool.error !== undefined) {
       notFound();
     }
-    const prices = await pricesResponse.json();
 
-    return (
-      <AddLiquidityContent
-        pool={pool}
-        prices={prices as unknown as MappedTokens}
-      />
-    );
+    return <AddLiquidityContent pool={pool} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
     notFound();
