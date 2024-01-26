@@ -328,12 +328,12 @@ export const getPositionColumns = (markets: IMarket[]) => {
     },
     {
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Funding" />
+        <DataTableColumnHeader column={column} title="Borrow Fee" />
       ),
       cell: ({ row }) => {
-        return <div>{formatBigIntUsd(row.original.funding_rate, 18)}</div>;
+        return <div>{formatBigIntUsd(row.original.borrowing_fee, 18)}</div>;
       },
-      accessorKey: "funding",
+      accessorKey: "borrow_fee",
       enableSorting: false,
     },
     {
