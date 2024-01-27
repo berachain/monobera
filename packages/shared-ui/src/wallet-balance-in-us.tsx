@@ -21,13 +21,10 @@ export function WalletBalanceInUs() {
   const total =
     assets && pricesArray
       ? assets?.reduce((acc: number, curr: Token) => {
-          const address = handleNativeBera(curr.address).toLowerCase();
-          const price = pricesArray?.find(
-            (price: any) => price.id.toLowerCase() === address,
-          );
-          // Ran into a runtime error here:
+          const address = handleNativeBera(curr.address);
+          const price = pricesArray[address];
           const total =
-            Number(curr.formattedBalance ?? 0) * Number(price?.price ?? 0);
+            Number(curr.formattedBalance ?? 0) * Number(price ?? 0);
           return acc + total;
         }, 0)
       : 0;
