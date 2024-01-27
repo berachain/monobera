@@ -99,6 +99,7 @@ export function SwapCard({
     isWrap,
     wrapType,
     minAmountOut,
+    swapKind,
   } = useSwap({
     inputCurrency,
     outputCurrency,
@@ -287,6 +288,15 @@ export function SwapCard({
               Swap <SettingsPopover />
             </CardTitle>
             <div className="mt-3">
+              <div>
+                fromAmount: {fromAmount}
+                <br />
+                swapAmount: {swapAmount}
+                <br />
+                toAmount: {toAmount}
+                <br />
+                swapKind: {swapKind}
+              </div>
               <div className="border-1 flex flex-col gap-6 border-border">
                 <ul
                   className={cn(
@@ -336,7 +346,6 @@ export function SwapCard({
                     amount={toAmount}
                     price={Number(tokenOutPrice)}
                     hideMax={true}
-                    disabled={true}
                     setAmount={(amount) => {
                       setSwapKind(SwapKind.GIVEN_OUT);
                       setSwapAmount(amount);
