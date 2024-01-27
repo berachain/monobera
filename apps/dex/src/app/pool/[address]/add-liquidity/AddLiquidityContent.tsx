@@ -7,6 +7,7 @@ import {
   DEX_PRECOMPILE_ABI,
   TransactionActionType,
   formatUsd,
+  handleNativeBera,
   useBeraConfig,
   useTokenHoneyPrices,
   type Token,
@@ -50,10 +51,8 @@ enum Selection {
 export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   const router = useRouter();
 
-  const tokenAddresses = pool?.tokens.map((token) =>
-    token.address.toLowerCase(),
-  );
-  const prices = useTokenHoneyPrices(tokenAddresses);
+  const tokenAddresses = pool?.tokens.map((token: Token) => token.address);
+  const { data: prices = {} } = useTokenHoneyPrices(tokenAddresses);
 
   const {
     error,
@@ -195,7 +194,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         setActiveAmount(amount);
                       }}
                       weight={token.normalizedWeight}
-                      price={prices?.[tokenAddresses[i]] ?? 0}
+                      price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
                       onExceeding={(exceeding: boolean) =>
                         updateTokenExceeding(i, exceeding)
                       }
@@ -250,7 +249,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                           weight={tokenInput?.normalizedWeight}
                           value={tokenInput?.amount}
                           price={
-                            prices?.[tokenInput?.address.toLowerCase()] ?? 0
+                            prices[handleNativeBera(tokenInput.address)] ?? 0
                           }
                         />
                       );
@@ -312,11 +311,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                   selectable={true}
                   amount={selectedSingleTokenAmount}
                   price={
-                    prices?.[
-                      isBeratoken(selectedSingleToken)
-                        ? wBeraToken?.address.toLowerCase()
-                        : selectedSingleToken?.address.toLowerCase()
-                    ] ?? 0
+                    prices[handleNativeBera(selectedSingleToken?.address)] ?? 0
                   }
                   setAmount={(amount: string) =>
                     setSelectedSingleTokenAmount(amount)
@@ -357,11 +352,8 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                     token={selectedSingleToken}
                     value={getSafeNumber(selectedSingleTokenAmount)}
                     price={
-                      prices?.[
-                        isBeratoken(selectedSingleToken)
-                          ? wBeraToken?.address.toLowerCase()
-                          : selectedSingleToken?.address.toLowerCase()
-                      ] ?? 0
+                      prices[handleNativeBera(selectedSingleToken?.address)] ??
+                      0
                     }
                   />
                 </TokenList>
@@ -391,7 +383,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         token={token}
                         value={formattedAmount}
                         // weight={token.normalizedWeight}
-                        price={prices?.[tokenAddresses[i]] ?? 0}
+                        price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
                       />
                     );
                   })}

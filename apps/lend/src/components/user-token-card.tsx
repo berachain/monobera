@@ -25,6 +25,9 @@ export default function UserTokenCard({
   const { data: debtTokenBalance } = useSelectedAssetWalletBalance(
     asset.reserveData.variableDebtTokenAddress,
   );
+  const { data: aTokenBalance } = useSelectedAssetWalletBalance(
+    asset.reserveData.aTokenAddress,
+  );
   let balance;
   if (type === "borrow") {
     balance =
@@ -40,8 +43,20 @@ export default function UserTokenCard({
             asset.decimals,
           );
   } else if (type === "user-borrow") {
+    if (debtTokenBalance) {
+      asset.formattedBalance = debtTokenBalance.formattedBalance;
+      asset.balance = debtTokenBalance.balance;
+    }
     balance = debtTokenBalance
       ? debtTokenBalance.formattedBalance
+      : asset.formattedBalance;
+  } else if (type === "user-supply") {
+    if (aTokenBalance) {
+      asset.formattedBalance = aTokenBalance.formattedBalance;
+      asset.balance = aTokenBalance.balance;
+    }
+    balance = aTokenBalance
+      ? aTokenBalance.formattedBalance
       : asset.formattedBalance;
   } else {
     balance = asset.formattedBalance;
