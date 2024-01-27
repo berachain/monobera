@@ -81,6 +81,8 @@ const useBeraContractWrite = ({
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess && onSuccess(receipt);
         } else {
+          if (process.env.VERCEL_ENV !== "production")
+            console.log(confirmationReceipt);
           // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
           // @ts-ignore
           const e = new TransactionFailedError();

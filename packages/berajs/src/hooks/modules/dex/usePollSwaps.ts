@@ -40,7 +40,6 @@ export const usePollSwaps = ({
   const { networkConfig } = useBeraConfig();
   const publicClient = usePublicClient();
   const QUERY_KEY = [tokenIn, tokenOut, swapKind, amount, isTyping];
-  // console.log(QUERY_KEY);
   return useSWR<SwapInfoV2 | undefined>(
     QUERY_KEY,
     async () => {
