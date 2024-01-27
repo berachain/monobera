@@ -126,7 +126,7 @@ export const RewardsWithdraw = () => {
             currently paused.
           </AlertTitle>
           <AlertDescription>
-            They will start again after the Berps Upgrade on Jan 28th, at 02:15
+            They will start again after the Berps Upgrade on Jan 29th, at 02:15
             UTC.
           </AlertDescription>
         </Alert>
