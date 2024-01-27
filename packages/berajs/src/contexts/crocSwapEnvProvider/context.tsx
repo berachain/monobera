@@ -5,7 +5,6 @@ import React, {
   type ReactNode,
 } from "react";
 import { CrocEnv } from "@bera/beracrocswap-sdk";
-import { type Provider } from "@ethersproject/providers";
 import {
   createClient,
   http,
@@ -46,7 +45,6 @@ const CrocEnvContextProvider = ({
 
   //new JsonRpcProvider(process.env.NEXT_PUBLIC_JSON_RPC_URL);
   const [crocEnv, setCrocEnv] = useState<CrocEnv | undefined>();
-  console.log(">>>>>>>>", crocEnv);
   const client = createClient<Transport, Chain, Account>({
     chain: networkConfig.chain,
     transport: http(),

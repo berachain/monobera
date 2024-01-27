@@ -10,10 +10,6 @@ export function clientToProvider(client: Client<Transport, Chain>) {
     name: chain.name,
   };
 
-  console.log({
-    network,
-    transport,
-  });
   if (transport.type === "fallback")
     return new providers.FallbackProvider(
       (transport.transports as ReturnType<Transport>[]).map(

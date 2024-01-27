@@ -1,3 +1,0 @@
-[submodule "packages/graphql/submodules/berachain-subgraph"]
-	path = packages/graphql/submodules/berachain-subgraph
-	url = https://github.com/berachain/berachain-subgraph.git

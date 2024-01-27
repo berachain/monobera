@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { use, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   DEX_PRECOMPILE_ABI,
   TransactionActionType,
   useBeraConfig,
+  useCrocEnv,
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import {
@@ -49,6 +50,27 @@ export function CreatePoolPreview({
   const { needsApproval } = useCreatePool(tokenWeights);
   const { networkConfig } = useBeraConfig();
   const router = useRouter();
+  const crocContext = useCrocEnv();
+
+  useEffect(() => {
+    const createPool = async () => {
+      if (crocContext) {
+        const tokenWeightA = tokenWeights[0];
+        const tokenWeightB = tokenWeights[1];
+        // const tx = await crocContext?.crocEnv
+        //   ?.pool(tokenWeightA?.token.address, tokenWeightB?.token.address)
+        //   .initPool(111);
+        console.log(
+          "txxxxxxxxxxxx",
+          crocContext.crocEnv,
+          tokenWeightA,
+          tokenWeightB,
+          // tx,
+        );
+      }
+    };
+    void createPool();
+  }, [crocContext]);
 
   const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
