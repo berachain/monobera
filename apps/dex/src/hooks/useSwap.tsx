@@ -266,7 +266,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapInfo, deadline, slippage]);
 
-  console.log(fromAmount, toAmount)
+  // console.log(fromAmount, toAmount)
 
   const onSwitch = () => {
     const tempFromAmount = fromAmount;
@@ -278,17 +278,30 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setSelectedFrom(tempTo);
     setSelectedTo(tempFrom);
 
+    setFromAmount(tempToAmount);
+    setToAmount(tempFromAmount);
+    setSwapKind(SwapKind.GIVEN_IN);
+    setSwapAmount(fromAmount ?? "");
+
     if (swapKind === SwapKind.GIVEN_IN) {
-      setSwapKind(SwapKind.GIVEN_OUT);
-      setToAmount(tempFromAmount);
-      setFromAmount("");
-      setSwapAmount(tempFromAmount ?? "");
+      // setSwapKind(SwapKind.GIVEN_OUT);
+      setSwapAmount(fromAmount ?? "");
     } else {
-      setSwapKind(SwapKind.GIVEN_IN);
-      setFromAmount(tempToAmount);
-      setToAmount("");
-      setSwapAmount(tempToAmount ?? "");
+      // setSwapKind(SwapKind.GIVEN_IN);
+      setSwapAmount(toAmount ?? "");
     }
+
+    // if (swapKind === SwapKind.GIVEN_IN) {
+    //   setSwapKind(SwapKind.GIVEN_OUT);
+    //   setToAmount(tempFromAmount);
+    //   setFromAmount("");
+    //   setSwapAmount(tempFromAmount ?? "");
+    // } else {
+    //   setSwapKind(SwapKind.GIVEN_IN);
+    //   setFromAmount(tempToAmount);
+    //   setToAmount("");
+    //   setSwapAmount(tempToAmount ?? "");
+    // }
 
     if (isWrap) {
       if (wrapType === WRAP_TYPE.WRAP) {
