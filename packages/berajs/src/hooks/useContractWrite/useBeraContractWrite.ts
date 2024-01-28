@@ -84,7 +84,7 @@ const useBeraContractWrite = ({
           if (process.env.VERCEL_ENV !== "production")
             console.log(confirmationReceipt);
           // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
-          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const e = new TransactionFailedError();
           onError &&
             onError({

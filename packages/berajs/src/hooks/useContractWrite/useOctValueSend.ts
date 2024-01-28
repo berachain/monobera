@@ -57,7 +57,7 @@ const useOctValueSend = ({
           onSuccess && onSuccess(confirmationReceipt);
           return;
         } else {
-          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const e = new TransactionFailedError();
           onError && onError("Transaction failed");
         }
