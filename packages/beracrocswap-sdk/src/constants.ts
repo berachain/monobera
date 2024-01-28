@@ -147,7 +147,7 @@ const SCROLL_CHAIN: ChainSpec = {
 };
 
 const BERA_CHAIN: ChainSpec = {
-  nodeUrl: "https://rpc.berachain-internal.com",
+  nodeUrl: "https://rpc.berachain-internal.com/",
   addrs: {
     dex: "0xD297bd3685b2ebb5A81C51C9932689d7a827316f",
     query: "0x8d394eeAF686749bF075EB281A69a83bf468Ef0f",
@@ -195,6 +195,7 @@ export const CHAIN_SPECS: { [chainId: string]: ChainSpec } = {
   mainnet: MAINNET_CHAIN,
   scrolltest: SCROLL_SEPOLIA_CHAIN,
   scroll: SCROLL_CHAIN,
+  berachain: BERA_CHAIN,
 };
 
 export const MIN_TICK = -665454;

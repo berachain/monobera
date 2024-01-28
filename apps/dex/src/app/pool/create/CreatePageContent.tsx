@@ -79,13 +79,13 @@ export default function CreatePageContent() {
             swapFee={swapFee}
             error={error}
             setSwapFee={setSwapFee}
-            onContinue={() => !error && setStep(Steps.SET_INITIAL_LIQUIDITY)}
+            onContinue={() => !error && setStep(Steps.CREATE_POOL_PREVIEW)}
             onBack={() => setStep(Steps.SET_TOKEN_WEIGHTS)}
             isDuplicatePool={findDuplicatedPool}
             isLoading={isLoading}
           />
         )}
-        {step === Steps.SET_INITIAL_LIQUIDITY && (
+        {/* {step === Steps.SET_INITIAL_LIQUIDITY && (
           <CreatePoolInitialLiquidity
             tokenWeights={tokenWeights}
             error={error}
@@ -93,7 +93,7 @@ export default function CreatePageContent() {
             onContinue={() => !error && setStep(Steps.CREATE_POOL_PREVIEW)}
             onBack={() => setStep(Steps.SET_SWAP_FEES)}
           />
-        )}
+        )} */}
         {step === Steps.CREATE_POOL_PREVIEW && (
           <CreatePoolPreview
             tokenWeights={tokenWeights}
@@ -101,7 +101,7 @@ export default function CreatePageContent() {
             fee={swapFee}
             setPoolName={setPoolName}
             error={undefined}
-            onBack={() => setStep(Steps.SET_INITIAL_LIQUIDITY)}
+            onBack={() => setStep(Steps.SET_SWAP_FEES)}
           />
         )}
       </div>

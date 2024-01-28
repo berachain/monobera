@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { providers, type Signer } from "ethers";
-import { type Account, type Chain, type Client, type Transport } from "viem";
-import { useAccount } from "wagmi";
+// import { type Account, type Chain, type Client, type Transport } from "viem";
+import { useAccount, type PublicClient } from "wagmi";
 
 export function clientToSigner(
-  client: Client<Transport, Chain, Account>,
+  client: PublicClient,
   address: `0x${string}` | undefined,
 ) {
   const { chain, transport } = client;
@@ -18,10 +18,7 @@ export function clientToSigner(
   return signer;
 }
 
-/** Hook to convert a Viem Client to an ethers.js Signer. */
-export function useEthersSigner(
-  client: Client<Transport, Chain, Account>,
-): Signer | undefined {
+export function useEthersSigner(client: PublicClient): Signer | undefined {
   const { address } = useAccount();
   return useMemo(
     () => (client ? clientToSigner(client, address) : undefined),

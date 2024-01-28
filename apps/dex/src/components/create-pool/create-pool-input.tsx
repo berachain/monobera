@@ -1,5 +1,5 @@
 import React from "react";
-import { type Token } from "@bera/berajs";
+import { useApprove, type Token } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { SelectToken } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -34,6 +34,7 @@ export default function CreatePoolInput({
   const handleTokenSelection = (token: Token | undefined) => {
     onTokenSelection(token, index);
   };
+  const { approve, isApprovalPending } = useApprove();
   return (
     <li className={"flex flex-row items-center justify-between gap-1 px-4"}>
       <SelectToken
@@ -71,6 +72,15 @@ export default function CreatePoolInput({
         onClick={() => onRemove(index)}
       >
         <Icons.close className="h-4 w-4 " />
+      </Button>
+      <Button
+        className="ghost"
+        disabled={isApprovalPending || !tokenWeight}
+        onClick={async () => {
+          await approve(tokenWeight?.token?.address);
+        }}
+      >
+        Approve {tokenWeight?.token?.symbol}
       </Button>
     </li>
   );

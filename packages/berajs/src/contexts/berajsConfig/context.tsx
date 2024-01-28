@@ -23,6 +23,7 @@ import { type NetworkConfig } from "~/config/types";
 import { BeraJsProvider } from "~/contexts/berajsProvider";
 import { TransactionStoreProvider } from "~/hooks/transactions/TransactionStoreContext";
 import { CrocEnvContextProvider } from "../crocSwapEnvProvider";
+import ReceiptContextProvider from "../receiptProvider/context";
 
 interface IBeraConfig extends PropsWithChildren {
   networkConfig?: NetworkConfig;
@@ -101,7 +102,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
           <BeraJsProvider>
             <TransactionStoreProvider>
               <CrocEnvContextProvider networkConfig={networkConfig}>
-                {children}
+                <ReceiptContextProvider>{children}</ReceiptContextProvider>
               </CrocEnvContextProvider>
             </TransactionStoreProvider>
           </BeraJsProvider>

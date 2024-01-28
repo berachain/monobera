@@ -22,5 +22,5 @@
     "**/*.mjs",
     ".next/types/**/*.ts",
     "../../packages/shared-ui/src/terms-of-use/terms-of-use.tsx"
-  ]
+, "../../packages/berajs/src/hooks/useApprove.ts"  ]
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -51,26 +51,18 @@ export function CreatePoolPreview({
   const { networkConfig } = useBeraConfig();
   const router = useRouter();
   const crocContext = useCrocEnv();
+  const tokenWeightA = tokenWeights[0];
+  const tokenWeightB = tokenWeights[1];
 
-  useEffect(() => {
-    const createPool = async () => {
-      if (crocContext) {
-        const tokenWeightA = tokenWeights[0];
-        const tokenWeightB = tokenWeights[1];
-        // const tx = await crocContext?.crocEnv
-        //   ?.pool(tokenWeightA?.token.address, tokenWeightB?.token.address)
-        //   .initPool(111);
-        console.log(
-          "txxxxxxxxxxxx",
-          crocContext.crocEnv,
-          tokenWeightA,
-          tokenWeightB,
-          // tx,
-        );
-      }
-    };
-    void createPool();
-  }, [crocContext]);
+  const createPool = async () => {
+    if (crocContext) {
+      console.log("tokens", crocContext.crocEnv, tokenWeightA, tokenWeightB);
+      const tx = await crocContext?.crocEnv
+        ?.pool(tokenWeightA?.token.address, tokenWeightB?.token.address)
+        .initPool(2000);
+      console.log(tx);
+    }
+  };
 
   const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
@@ -96,18 +88,18 @@ export function CreatePoolPreview({
     return tokenWeight.token?.address === process.env.NEXT_PUBLIC_BERA_ADDRESS;
   });
 
-  const payload = [
-    poolName,
-    tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
-    tokenWeights.map((tokenWeight) =>
-      parseUnits(
-        tokenWeight.initialLiquidity,
-        tokenWeight.token?.decimals ?? 18,
-      ),
-    ),
-    "balancer",
-    options,
-  ];
+  // const payload = [
+  //   poolName,
+  //   tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
+  //   tokenWeights.map((tokenWeight) =>
+  //     parseUnits(
+  //       tokenWeight.initialLiquidity,
+  //       tokenWeight.token?.decimals ?? 18,
+  //     ),
+  //   ),
+  //   "balancer",
+  //   options,
+  // ];
 
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
@@ -184,19 +176,20 @@ export function CreatePoolPreview({
           <ActionButton>
             <Button
               className="w-full"
-              onClick={() => {
-                write({
-                  address: networkConfig.precompileAddresses
-                    .erc20DexAddress as Address,
-                  abi: DEX_PRECOMPILE_ABI,
-                  functionName: "createPool",
-                  params: payload,
-                  value:
-                    rawBeraEntry === undefined
-                      ? 0n
-                      : parseUnits(rawBeraEntry.initialLiquidity, 18),
-                });
-              }}
+              onClick={() => createPool()}
+              // {
+              // write({
+              //   address: networkConfig.precompileAddresses
+              //     .erc20DexAddress as Address,
+              //   abi: DEX_PRECOMPILE_ABI,
+              //   functionName: "createPool",
+              //   params: payload,
+              //   value:
+              //     rawBeraEntry === undefined
+              //       ? 0n
+              //       : parseUnits(rawBeraEntry.initialLiquidity, 18),
+              // });
+              // }
             >
               Create Pool
             </Button>
