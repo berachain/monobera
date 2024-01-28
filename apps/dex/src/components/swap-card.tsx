@@ -288,15 +288,6 @@ export function SwapCard({
               Swap <SettingsPopover />
             </CardTitle>
             <div className="mt-3">
-              {/* <div>
-                fromAmount: {fromAmount}
-                <br />
-                swapAmount: {swapAmount}
-                <br />
-                toAmount: {toAmount}
-                <br />
-                swapKind: {swapKind}
-              </div> */}
               <div className="border-1 flex flex-col gap-6 border-border">
                 <ul
                   className={cn(
@@ -317,7 +308,7 @@ export function SwapCard({
                       setExceedingBalance(isExceeding)
                     }
                     setAmount={(amount) => {
-                      setSwapKind(SwapKind.GIVEN_IN);
+                      // setSwapKind(SwapKind.GIVEN_IN);
                       setSwapAmount(amount);
                       setFromAmount(amount);
                     }}
@@ -348,7 +339,7 @@ export function SwapCard({
                     hideMax={true}
                     disabled={true}
                     setAmount={(amount) => {
-                      setSwapKind(SwapKind.GIVEN_OUT);
+                      // setSwapKind(SwapKind.GIVEN_OUT);
                       setSwapAmount(amount);
                       setToAmount(amount);
                     }}
