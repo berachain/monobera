@@ -157,7 +157,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   useEffect(() => {
     if (isWrap) return;
     if (swapKind === SwapKind.GIVEN_IN) {
-      setToAmount(swapInfo?.formattedReturnAmount.toString());
+      setToAmount(swapInfo?.formattedReturnAmount);
     } else {
       setFromAmount(swapInfo?.formattedSwapAmount);
     }
@@ -266,11 +266,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapInfo, deadline, slippage]);
 
-  // console.log(fromAmount, toAmount)
-
   const onSwitch = () => {
-    const tempFromAmount = fromAmount;
-    const tempToAmount = toAmount;
+    // const tempFromAmount = fromAmount;
+    // const tempToAmount = toAmount;
 
     const tempFrom = selectedFrom;
     const tempTo = selectedTo;
@@ -278,26 +276,17 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setSelectedFrom(tempTo);
     setSelectedTo(tempFrom);
 
-    setFromAmount(tempToAmount);
-    setToAmount(tempFromAmount);
-    setSwapKind(SwapKind.GIVEN_IN);
-    setSwapAmount(fromAmount ?? "");
-
-    if (swapKind === SwapKind.GIVEN_IN) {
-      // setSwapKind(SwapKind.GIVEN_OUT);
-      setSwapAmount(fromAmount ?? "");
-    } else {
-      // setSwapKind(SwapKind.GIVEN_IN);
-      setSwapAmount(toAmount ?? "");
-    }
+    setFromAmount(toAmount);
+    setToAmount("");
+    setSwapAmount(toAmount ?? "");
 
     // if (swapKind === SwapKind.GIVEN_IN) {
-    //   setSwapKind(SwapKind.GIVEN_OUT);
-    //   setToAmount(tempFromAmount);
-    //   setFromAmount("");
-    //   setSwapAmount(tempFromAmount ?? "");
+    // setSwapKind(SwapKind.GIVEN_OUT);
+    // setToAmount(tempFromAmount);
+    // setFromAmount("");
+    // setSwapAmount(tempFromAmount ?? "");
     // } else {
-    //   setSwapKind(SwapKind.GIVEN_IN);
+    // setSwapKind(SwapKind.GIVEN_IN);
     //   setFromAmount(tempToAmount);
     //   setToAmount("");
     //   setSwapAmount(tempToAmount ?? "");
