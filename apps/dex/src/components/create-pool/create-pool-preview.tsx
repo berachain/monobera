@@ -54,7 +54,7 @@ export function CreatePoolPreview({
     message: `Create ${poolName} pool`,
     onSuccess: () => {
       void onCreatePool();
-      router.push(`/pool`);
+      router.push("/pool");
     },
     actionType: TransactionActionType.CREATE_POOL,
   });
@@ -141,7 +141,7 @@ export function CreatePoolPreview({
         {error && (
           <Alert variant="destructive" className="my-4">
             <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error && error.message}</AlertDescription>
+            <AlertDescription>{error?.message}</AlertDescription>
           </Alert>
         )}
 

@@ -47,7 +47,7 @@ export default function HoneyBanner() {
           </h3>
           <div
             onClick={() =>
-              window.open(process.env.NEXT_PUBLIC_DEX_URL + "/pool", "_blank")
+              window.open(`${process.env.NEXT_PUBLIC_DEX_URL}/pool`, "_blank")
             }
             className="inline-flex gap-2 rounded-full bg-green-600 px-4 py-2 text-sm text-white"
           >

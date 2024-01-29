@@ -43,9 +43,8 @@ const useContractRead = (): useContractReadApi => {
         });
         if (Array.isArray(data)) {
           return data;
-        } else {
-          return [data];
         }
+        return [data];
       } catch (e: any) {
         dispatch({
           type: ActionEnum.ERROR,

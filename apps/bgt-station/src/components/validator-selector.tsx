@@ -88,7 +88,7 @@ export default function ValidatorSelector({
             (vali: Validator) => !filter?.find((f) => f === vali.operatorAddr),
           ) ?? []
         }
-        onSelect={(address) => onSelectValidator && onSelectValidator(address)}
+        onSelect={(address) => onSelectValidator?.(address)}
         onClose={() => setOpen(false)}
         // emptyMessage={emptyMessage}
       />

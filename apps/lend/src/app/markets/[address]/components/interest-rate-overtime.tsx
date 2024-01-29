@@ -45,10 +45,10 @@ export default function InterestRateOvertime({
           display: false,
         },
         ticks: {
-          callback: function (value: string, index: number, _: any) {
+          callback: (value: string, index: number, _: any) => {
             // Display only specific labels
-            if ([0, 25, 50, 75, 100].includes(index)) return value + "%";
-            else return null;
+            if ([0, 25, 50, 75, 100].includes(index)) return `${value}%`;
+            return null;
           },
         },
       },
@@ -69,7 +69,7 @@ export default function InterestRateOvertime({
         intersect: false,
         mode: "index",
         callbacks: {
-          label: function (context: any) {
+          label: (context: any) => {
             const label = context.dataset.label || "";
             const value = context.parsed.y;
             return `${label}: ${value.toFixed(2)}%`;
@@ -151,14 +151,16 @@ export default function InterestRateOvertime({
         <div className="flex h-full flex-col items-center gap-2 md:flex-row md:gap-8">
           <div className="flex items-center gap-2 font-medium">
             <div
-              className={`h-2 w-2 rounded-full border border-accent bg-accent`}
+              className={"h-2 w-2 rounded-full border border-accent bg-accent"}
             />
             Borrow APY, variable
           </div>
 
           <div className="flex items-center gap-2 font-medium">
             <div
-              className={`h-2 w-2 rounded-full border border-success-foreground bg-success-foreground`}
+              className={
+                "h-2 w-2 rounded-full border border-success-foreground bg-success-foreground"
+              }
             />
             Utilization Rate
           </div>

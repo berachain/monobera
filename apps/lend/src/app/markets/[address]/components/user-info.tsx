@@ -86,7 +86,7 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                 </div>
                 <div className="mt-[-2px] leading-7 text-muted-foreground">
                   <b>
-                    {!isNaN(supplyAmount) ? (
+                    {!Number.isNaN(supplyAmount) ? (
                       formatter.format(supplyAmount)
                     ) : (
                       <Skeleton className="inline-block h-7 w-20" />
@@ -125,7 +125,7 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                   </div>
                   <div className="mt-[-2px] leading-7 text-muted-foreground">
                     <b>
-                      {!isNaN(borrowAmout) ? (
+                      {!Number.isNaN(borrowAmout) ? (
                         formatter.format(borrowAmout)
                       ) : (
                         <Skeleton className="inline-block h-7 w-20" />

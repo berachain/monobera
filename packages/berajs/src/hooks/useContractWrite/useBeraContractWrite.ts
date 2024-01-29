@@ -43,7 +43,7 @@ const useBeraContractWrite = ({
       value = 0n,
     }: IContractWrite): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
-      onLoading && onLoading();
+      onLoading?.();
       let receipt: any | undefined;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
@@ -69,7 +69,7 @@ const useBeraContractWrite = ({
         });
         dispatch({ type: ActionEnum.SUBMITTING });
 
-        onSubmission && onSubmission(receipt);
+        onSubmission?.(receipt);
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
             hash: receipt,
@@ -79,14 +79,13 @@ const useBeraContractWrite = ({
           });
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
-          onSuccess && onSuccess(receipt);
+          onSuccess?.(receipt);
         } else {
           // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
           const e = new TransactionFailedError();
-          onError &&
-            onError({
-              message: "Something went wrong. Please Try again",
-            });
+          onError?.({
+            message: "Something went wrong. Please Try again",
+          });
         }
       } catch (e: any) {
         // if (process.env.VERCEL_ENV !== "production") {
@@ -94,10 +93,9 @@ const useBeraContractWrite = ({
         // }
         dispatch({ type: ActionEnum.ERROR });
         const finalMsg = getErrorMessage(e);
-        onError &&
-          onError({
-            message: finalMsg,
-          });
+        onError?.({
+          message: finalMsg,
+        });
       } finally {
         await refresh();
       }

@@ -70,7 +70,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
     message: "Submit Proposal",
     actionType: TransactionActionType.SUBMIT_PROPOSAL,
     onSuccess: () => {
-      router.push(`/governance`);
+      router.push("/governance");
     },
   });
 

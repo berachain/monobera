@@ -58,7 +58,7 @@ export function SelectToken({
         <TokenDialog
           open={open}
           onSelectedToken={(token: Token | undefined) =>
-            onTokenSelection && onTokenSelection(token)
+            onTokenSelection?.(token)
           }
           setOpen={setOpen}
           selectedTokens={selectedTokens ?? []}

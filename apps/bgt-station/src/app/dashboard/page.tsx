@@ -5,7 +5,7 @@ import DashBoard from "./dashboard";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Dashboard"),
-  description: `View global BGT statistics`,
+  description: "View global BGT statistics",
 };
 
 export default function Page() {

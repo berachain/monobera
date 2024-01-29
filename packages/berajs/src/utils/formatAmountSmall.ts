@@ -4,7 +4,7 @@ export function formatAmountSmall(value: number | string): {
 } {
   const numericValue = Number(value);
 
-  if (isNaN(numericValue) || numericValue === 0) {
+  if (Number.isNaN(numericValue) || numericValue === 0) {
     return { isSmall: false, numericValue: 0 };
   }
 

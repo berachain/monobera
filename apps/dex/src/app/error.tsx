@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ErrorPage } from "@bera/shared-ui";
 
-export default function Error({
+export default function NotFound({
   error,
 }: // reset,
 {

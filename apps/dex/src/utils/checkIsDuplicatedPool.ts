@@ -6,7 +6,7 @@ export const poolSwapFeeExisted = (
   swapFeeInput: number,
   poolSwapFee: number,
 ) => {
-  return swapFeeInput * 1e16 == poolSwapFee;
+  return swapFeeInput * 1e16 === poolSwapFee;
 };
 
 export const poolTokenWeightsExisted = (tokensInput: any, poolsTokens: any) => {

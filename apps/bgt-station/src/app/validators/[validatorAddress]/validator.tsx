@@ -93,16 +93,14 @@ export default function Validator({
             decription={
               validator ? validator?.description.details ?? "" : undefined
             }
-            commissions={
-              (
-                Number(
-                  formatUnits(
-                    validator?.commission.commissionRates.rate ?? 0n,
-                    18,
-                  ),
-                ) * 100
-              ).toString() + "%"
-            }
+            commissions={`${(
+              Number(
+                formatUnits(
+                  validator?.commission.commissionRates.rate ?? 0n,
+                  18,
+                ),
+              ) * 100
+            ).toString()}%`}
             votingPower={`${percentageDelegated?.toFixed(2) ?? 0}%`}
             website={validator?.description.website ?? ""}
             vApy={validator?.vApy ? validator.vApy.toFixed(2) : "0"}

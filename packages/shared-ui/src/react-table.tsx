@@ -28,13 +28,13 @@ export function RT({ columns, data, rowOnClick, className }: RTProps) {
           {headerGroups.map((headerGroup: any) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}
-              key={"headerGroup" + headerGroup.id}
+              key={`headerGroup${headerGroup.id}`}
               className="flex justify-between rounded-tl-[18px] rounded-tr-[18px] border border-l-0 border-r-0 border-t-0 border-b-border bg-muted px-8 py-3"
             >
               {headerGroup.headers.map((column: any) => (
                 <th
                   {...column.getHeaderProps()}
-                  key={"headerGroup column" + column.id}
+                  key={`headerGroup column${column.id}`}
                   className="text-xs font-medium leading-tight text-muted-foreground"
                 >
                   {column.header}
@@ -49,18 +49,18 @@ export function RT({ columns, data, rowOnClick, className }: RTProps) {
             return (
               <tr
                 {...row.getRowProps()}
-                key={"tableGroup rows" + row.id}
+                key={`tableGroup rows${row.id}`}
                 className={`flex justify-between border border-l-0 border-r-0 border-t-0 bg-background px-8 py-4 hover:cursor-pointer hover:bg-muted border-b-border${
                   index === rows.length - 1
                     ? "rounded-18 rounded border-0 "
                     : ""
                 }`}
-                onClick={() => rowOnClick && rowOnClick(row)}
+                onClick={() => rowOnClick?.(row)}
               >
                 {row.cells.map((cell: any, index: number) => (
                   <td
                     {...cell.getCellProps()}
-                    key={"tableGroup" + index}
+                    key={`tableGroup${index}`}
                     className="flex items-center text-xs font-medium leading-tight text-foreground"
                   >
                     {cell.render("Cell")}

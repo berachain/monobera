@@ -75,6 +75,7 @@ export default function ValidatorDetails({
             className="text-info-foreground hover:underline"
             href={website}
             target="_blank"
+            rel="noreferrer"
           >
             {website}
           </a>

@@ -35,6 +35,7 @@ export function TokenRow({
             <a
               target="_blank"
               href={`${blockExplorerUrl}/address/${asset.address}`}
+              rel="noreferrer"
             >
               <Icons.external className="inline h-3 w-3" />{" "}
             </a>
@@ -48,8 +49,9 @@ export function TokenRow({
         {isLoading || !tokenPrice ? (
           <Skeleton className="h-8 w-16" />
         ) : (
-          "$" +
-          formatter.format(Number(tokenPrice) * Number(asset.formattedBalance))
+          `$${formatter.format(
+            Number(tokenPrice) * Number(asset.formattedBalance),
+          )}`
         )}
       </div>
     </div>
@@ -61,7 +63,7 @@ export function TokenList() {
 
   return (
     <div className="grid gap-4">
-      {assets && assets.length ? (
+      {assets?.length ? (
         assets
           .filter(
             (token: Token) =>

@@ -25,9 +25,8 @@ export const usePollBalanceOfAssets = () => {
           });
 
           return result;
-        } else {
-          return undefined;
         }
+        return undefined;
       } catch (e) {
         console.error(e);
         return undefined;

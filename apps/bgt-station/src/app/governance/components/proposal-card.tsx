@@ -151,9 +151,7 @@ export function ProposalCard({
         </div>
       </div>
       <div
-        className={`mt-1 font-semibold leading-tight text-foreground ${
-          true ? "text-2xl" : "text-sm"
-        }`}
+        className={"mt-1 font-semibold leading-tight text-foregroundtext-2xl"}
       >
         {proposal.title}
       </div>
