@@ -12,9 +12,11 @@ import {
 export function Tooltip({
   text,
   className,
+  size = 4,
 }: {
   text: any;
   className?: string;
+  size?: number;
 }) {
   const [tooltipOpen, setTooltipOpen] = React.useState(false);
   return (
@@ -30,7 +32,7 @@ export function Tooltip({
             onMouseEnter={() => setTooltipOpen(true)}
             onMouseLeave={() => setTooltipOpen(false)}
           >
-            <Icons.tooltip className="h-4 w-4" />
+            <Icons.tooltip className={cn(`h-${size} w-${size}`)} />
             <span className="sr-only">Tooltip</span>
           </Button>
         </TooltipTrigger>
