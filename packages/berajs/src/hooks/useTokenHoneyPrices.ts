@@ -23,7 +23,7 @@ export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
           },
         });
         return res.data?.tokenHoneyPrices.reduce(
-          (allPrices:any, price:any) => ({
+          (allPrices: any, price: any) => ({
             ...allPrices,
             [getAddress(price.id)]: price.price,
           }),
