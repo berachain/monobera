@@ -4,7 +4,7 @@ import { getAddress, isAddress } from "viem";
 export const handleNativeBera = (tokenAddress: any) => {
   if (!isAddress(tokenAddress)) {
     return tokenAddress;
-  } else if (getAddress(tokenAddress) === getAddress(nativeTokenAddress)) {
+  }if (getAddress(tokenAddress) === getAddress(nativeTokenAddress)) {
     return getAddress(beraTokenAddress);
   }
   return getAddress(tokenAddress);

@@ -22,6 +22,8 @@
     "dev:clue": "turbo dev --filter=validator-clue --filter='./packages/*' --concurrency=18",
     "check-types": "turbo check-types",
     "lint": "biome lint . ",
+    "lint:apply": "biome lint . --apply",
+    "lint:apply-unsafe": "biome lint . --apply-unsafe",
     "format:check": "biome format .",
     "format": "biome format --write .",
     "check": "biome check .",
