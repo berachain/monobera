@@ -194,7 +194,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         setActiveAmount(amount);
                       }}
                       weight={token.normalizedWeight}
-                      price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
+                      price={
+                        prices && tokenAddresses
+                          ? prices[handleNativeBera(tokenAddresses[i])]
+                          : 0
+                      }
                       onExceeding={(exceeding: boolean) =>
                         updateTokenExceeding(i, exceeding)
                       }
@@ -383,7 +387,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         token={token}
                         value={formattedAmount}
                         // weight={token.normalizedWeight}
-                        price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
+                        price={
+                          prices && tokenAddresses
+                            ? prices[handleNativeBera(tokenAddresses[i])]
+                            : 0
+                        }
                       />
                     );
                   })}
