@@ -7,6 +7,7 @@ import {
   usePollAllowance,
   usePollAssetWalletBalance,
   usePollSwaps,
+  useTokenHoneyPrice,
   useTokenInformation,
   useTokens,
   type Token,
@@ -17,7 +18,6 @@ import { formatUnits } from "ethers";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
-import { useTokenHoneyPrice } from "./usePool";
 
 export enum SwapKind {
   GIVEN_IN = 0,
@@ -31,7 +31,6 @@ interface ISwap {
 }
 function normalizeToRatio(num1: number, num2: number): string {
   const ratio = num2 / num1;
-
   return ratio.toFixed(6);
 }
 
@@ -158,7 +157,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   useEffect(() => {
     if (isWrap) return;
     if (swapKind === SwapKind.GIVEN_IN) {
-      setToAmount(swapInfo?.formattedReturnAmount.toString());
+      setToAmount(swapInfo?.formattedReturnAmount);
     } else {
       setFromAmount(swapInfo?.formattedSwapAmount);
     }
@@ -266,8 +265,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   }, [swapInfo, deadline, slippage]);
 
   const onSwitch = () => {
-    const tempFromAmount = fromAmount;
-    const tempToAmount = toAmount;
+    // const tempFromAmount = fromAmount;
+    // const tempToAmount = toAmount;
 
     const tempFrom = selectedFrom;
     const tempTo = selectedTo;
@@ -275,18 +274,22 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setSelectedFrom(tempTo);
     setSelectedTo(tempFrom);
 
-    setFromAmount(tempToAmount);
-    setToAmount(tempFromAmount);
-    setSwapKind(SwapKind.GIVEN_IN);
-    setSwapAmount(fromAmount ?? "");
+    setFromAmount(toAmount);
+    setToAmount("");
+    setSwapAmount(toAmount ?? "");
 
     // if (swapKind === SwapKind.GIVEN_IN) {
-    //   setSwapKind(SwapKind.GIVEN_OUT);
-    //   setSwapAmount(fromAmount ?? "");
+    // setSwapKind(SwapKind.GIVEN_OUT);
+    // setToAmount(tempFromAmount);
+    // setFromAmount("");
+    // setSwapAmount(tempFromAmount ?? "");
     // } else {
-    //   setSwapKind(SwapKind.GIVEN_IN);
-    //   setSwapAmount(toAmount ?? "");
+    // setSwapKind(SwapKind.GIVEN_IN);
+    //   setFromAmount(tempToAmount);
+    //   setToAmount("");
+    //   setSwapAmount(tempToAmount ?? "");
     // }
+
     if (isWrap) {
       if (wrapType === WRAP_TYPE.WRAP) {
         setWrapType(WRAP_TYPE.UNWRAP);
@@ -317,8 +320,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [isWrap]);
 
-  const tokenInPrice = useTokenHoneyPrice(selectedFrom?.address);
-  const tokenOutPrice = useTokenHoneyPrice(selectedTo?.address);
+  const { data: tokenInPrice } = useTokenHoneyPrice(selectedFrom?.address);
+  const { data: tokenOutPrice } = useTokenHoneyPrice(selectedTo?.address);
 
   const minAmountOut = useMemo(() => {
     if (!payload[1]) return "0";

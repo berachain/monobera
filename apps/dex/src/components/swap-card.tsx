@@ -99,6 +99,7 @@ export function SwapCard({
     isWrap,
     wrapType,
     minAmountOut,
+    swapKind,
   } = useSwap({
     inputCurrency,
     outputCurrency,
@@ -306,7 +307,7 @@ export function SwapCard({
                       setExceedingBalance(isExceeding)
                     }
                     setAmount={(amount) => {
-                      setSwapKind(SwapKind.GIVEN_IN);
+                      // setSwapKind(SwapKind.GIVEN_IN);
                       setSwapAmount(amount);
                       setFromAmount(amount);
                     }}
@@ -337,7 +338,7 @@ export function SwapCard({
                     hideMax={true}
                     disabled={true}
                     setAmount={(amount) => {
-                      setSwapKind(SwapKind.GIVEN_OUT);
+                      // setSwapKind(SwapKind.GIVEN_OUT);
                       setSwapAmount(amount);
                       setToAmount(amount);
                     }}

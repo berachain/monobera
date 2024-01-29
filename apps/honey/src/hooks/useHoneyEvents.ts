@@ -61,7 +61,7 @@ export const useHoneyEvents = () => {
     isLoading: isRedemptionDataLoading,
   } = useSWRInfinite(
     (index) => ["redeemData", index],
-    async (key: any[]) => {
+    (key: any[]) => {
       const page = key[1];
       return client
         .query({
