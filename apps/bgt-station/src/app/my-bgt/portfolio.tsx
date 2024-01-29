@@ -143,7 +143,9 @@ export default function Portfolio() {
                 variant="outline"
                 onClick={() => {
                   setTab(BGTSelectionEnum.YOUR_DELEGATIONS);
-                  tabRef.current?.scrollIntoView({ behavior: "smooth" });
+                  (tabRef.current as any)?.scrollIntoView({
+                    behavior: "smooth",
+                  });
                 }}
               >
                 Manage delegations
@@ -193,7 +195,9 @@ export default function Portfolio() {
                 variant="outline"
                 onClick={() => {
                   setTab(BGTSelectionEnum.UNBONDING_QUEUE);
-                  tabRef.current?.scrollIntoView({ behavior: "smooth" });
+                  (tabRef.current as any)?.scrollIntoView({
+                    behavior: "smooth",
+                  });
                 }}
               >
                 See my queue

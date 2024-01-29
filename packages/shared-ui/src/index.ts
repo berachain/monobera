@@ -23,7 +23,7 @@ export { PreviewToken, TokenList } from "./preview-token-list";
 export { InfoBoxList, InfoBoxListItem } from "./info-box";
 export { Dropdown } from "./dropdown";
 export { HoneyBanner } from "./honey-banner";
-export { LaunchBanner, RPCBanner } from "./launch-banner";
+export { LaunchBanner, RPCBanner, BerpsBanner } from "./launch-banner";
 export { RewardBanner } from "./reward-banner";
 export { RT, type Columns } from "./react-table";
 export { IconList } from "./icon-list";

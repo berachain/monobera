@@ -23,8 +23,7 @@ export function WalletBalanceInUs() {
       ? assets?.reduce((acc: number, curr: Token) => {
           const address = handleNativeBera(curr.address);
           const price = pricesArray[address];
-          const total =
-            Number(curr.formattedBalance ?? 0) * Number(price ?? 0);
+          const total = Number(curr.formattedBalance ?? 0) * Number(price ?? 0);
           return acc + total;
         }, 0)
       : 0;
