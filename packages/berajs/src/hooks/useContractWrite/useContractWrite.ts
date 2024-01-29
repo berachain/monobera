@@ -33,7 +33,7 @@ const useContractWrite = ({
     }: // txnName = "",
     IContractWrite): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
-      onLoading && onLoading();
+      onLoading?.();
       let receipt: any | undefined;
       try {
         receipt = await walletClient?.writeContract({
@@ -44,7 +44,7 @@ const useContractWrite = ({
           account: account,
           chain: undefined,
         });
-        onSubmission && onSubmission(receipt);
+        onSubmission?.(receipt);
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
             hash: receipt,
@@ -53,16 +53,16 @@ const useContractWrite = ({
 
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
-          onSuccess && onSuccess(receipt);
+          onSuccess?.(receipt);
         } else {
           dispatch({ type: ActionEnum.ERROR });
           const e = new TransactionFailedError();
-          onError && onError(e);
+          onError?.(e);
           throw e;
         }
       } catch (e: any) {
         dispatch({ type: ActionEnum.SUCCESS });
-        onError && onError(e);
+        onError?.(e);
         return;
       }
     },

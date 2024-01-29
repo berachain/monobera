@@ -338,7 +338,7 @@ const TokenDialogRow = ({
         </div>
 
         {focusedToken?.address === token?.address && (
-          <div className="absolute ml-auto"></div>
+          <div className="absolute ml-auto" />
         )}
         {!pendingAddition && isConnected && (
           <div className="ml-auto text-muted-foreground ">

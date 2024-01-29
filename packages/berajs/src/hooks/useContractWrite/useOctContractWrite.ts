@@ -41,7 +41,7 @@ const useOctContractWrite = ({
       value = 0n,
     }: IContractWrite): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
-      onLoading && onLoading();
+      onLoading?.();
       let hash: any | undefined;
       try {
         if (!isOctReady) {
@@ -79,7 +79,7 @@ const useOctContractWrite = ({
 
           const payload = [account, data];
           // @ts-ignore
-          const transaction = await contract["delegatedAction"](...payload, {
+          const transaction = await contract.delegatedAction(...payload, {
             gasLimit: 10000000n,
           });
           const txResponse = await transaction.wait();
@@ -87,7 +87,7 @@ const useOctContractWrite = ({
         }
         dispatch({ type: ActionEnum.SUBMITTING });
 
-        onSubmission && onSubmission(hash);
+        onSubmission?.(hash);
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
             hash: hash,
@@ -104,11 +104,11 @@ const useOctContractWrite = ({
         console.log("cancelReson", cancelReason);
         if (confirmationReceipt?.status === "success" && cancelReason === "") {
           dispatch({ type: ActionEnum.SUCCESS });
-          onSuccess && onSuccess(hash);
+          onSuccess?.(hash);
         } else if (cancelReason !== "") {
-          onError && onError({ message: cancelReason });
+          onError?.({ message: cancelReason });
         } else {
-          onError && onError({ message: "Transaction has failed" });
+          onError?.({ message: "Transaction has failed" });
         }
       } catch (e: any) {
         // if (process.env.VERCEL_ENV !== "production") {
@@ -116,7 +116,7 @@ const useOctContractWrite = ({
         // }
         dispatch({ type: ActionEnum.ERROR });
         const finalMsg = getErrorMessage(e);
-        onError && onError({ message: finalMsg });
+        onError?.({ message: finalMsg });
       }
     },
     [

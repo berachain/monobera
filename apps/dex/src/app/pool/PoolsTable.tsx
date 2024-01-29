@@ -164,7 +164,7 @@ export const PoolSearch = ({
             <div className="flex w-full flex-col items-center justify-center gap-4">
               {isList ? <TableViewLoading /> : <CardViewLoading />}
             </div>
-          ) : data && data.length ? (
+          ) : data?.length ? (
             isList ? (
               <div className="flex w-full flex-col items-center justify-center gap-4">
                 <DataTable
@@ -181,11 +181,10 @@ export const PoolSearch = ({
             ) : (
               <div className="flex w-full flex-col items-center justify-center gap-4">
                 <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-                  {data &&
-                    data[0] &&
+                  {data?.[0] &&
                     data.map((pool: any) => {
                       return (
-                        <PoolCard pool={pool} key={"search" + pool?.pool} />
+                        <PoolCard pool={pool} key={`search${pool?.pool}`} />
                       );
                     })}
                 </div>

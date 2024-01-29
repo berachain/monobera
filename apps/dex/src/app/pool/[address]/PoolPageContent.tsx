@@ -75,7 +75,8 @@ const getTokenDisplay = (event: LiquidityChanged, pool: Pool) => {
         </div>
       </div>
     );
-  } else if (
+  }
+  if (
     event.type === LIQUIDITY_CHANGED_TYPE.ADD ||
     event.type === LIQUIDITY_CHANGED_TYPE.REMOVE
   ) {
@@ -99,7 +100,8 @@ const getTokenDisplay = (event: LiquidityChanged, pool: Pool) => {
 const getAction = (event: "SWAP" | "ADD" | "REMOVE") => {
   if (event === "SWAP") {
     return <p>Swap</p>;
-  } else if (event === "ADD") {
+  }
+  if (event === "ADD") {
     return <p className="text-positive">Add</p>;
   }
   return <p className="text-destructive-foreground">Withdraw</p>;
@@ -259,8 +261,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                ? "No more transactions"
-                : "Load more"}
+                  ? "No more transactions"
+                  : "Load more"}
             </Button>
           )}
         </>
@@ -280,8 +282,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                ? "No more transactions"
-                : "Load more"}
+                  ? "No more transactions"
+                  : "Load more"}
             </Button>
           )}
         </>
@@ -303,8 +305,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                ? "No more transactions"
-                : "Load more"}
+                  ? "No more transactions"
+                  : "Load more"}
             </Button>
           )}
         </>

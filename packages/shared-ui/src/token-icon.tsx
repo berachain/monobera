@@ -49,7 +49,8 @@ export const TokenIcon = ({
     if (tokenDictionary && (address || token)) {
       if (address && address !== "") {
         return tokenDictionary[getAddress(address)]?.logoURI;
-      } else if (token && token?.address !== "") {
+      }
+      if (token && token?.address !== "") {
         return tokenDictionary[getAddress(token.address)]?.logoURI;
       }
     }

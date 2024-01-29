@@ -58,10 +58,9 @@ export const TrendingPools = () => {
         </p>
         <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-            {data &&
-              data[0] &&
+            {data?.[0] &&
               data.map((pool: any) => {
-                return <PoolCard pool={pool} key={pool?.pool + "trend"} />;
+                return <PoolCard pool={pool} key={`${pool?.pool}trend`} />;
               })}
           </div>
           <Button
@@ -72,8 +71,8 @@ export const TrendingPools = () => {
             {isAllDataLoadingMore
               ? "Loading..."
               : isAllDataReachingEnd
-              ? "No more new pools"
-              : "View More"}
+                ? "No more new pools"
+                : "View More"}
           </Button>
         </div>
       </div>

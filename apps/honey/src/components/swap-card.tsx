@@ -93,10 +93,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
           </Tabs>
 
           <div className="border-1 flex flex-col gap-6 border-border">
-            <ul
-              role="list"
-              className="divide-y divide-border rounded-2xl border"
-            >
+            <ul className="divide-y divide-border rounded-2xl border">
               <TokenInput
                 selected={selectedFrom}
                 selectedTokens={[selectedFrom, selectedTo]}

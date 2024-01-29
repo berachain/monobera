@@ -5,9 +5,9 @@ import { cn } from "@bera/ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
 const tableTitle: Record<string, string> = {
-  ["pnl"]: "Profit & Loss",
-  ["liquidation"]: "Liquidations",
-  ["volume"]: "Volume",
+  pnl: "Profit & Loss",
+  liquidation: "Liquidations",
+  volume: "Volume",
 };
 
 export const getColumns = (type: string) => {

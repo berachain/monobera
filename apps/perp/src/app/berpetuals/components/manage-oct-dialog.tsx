@@ -43,7 +43,7 @@ const TradeWalletSection = () => {
         <div
           className="text-sm font-semibold hover:underline"
           onClick={() =>
-            window.open(blockExplorerUrl + "/address/" + octAddress, "_blank")
+            window.open(`${blockExplorerUrl}/address/${octAddress}`, "_blank")
           }
         >
           {truncateHash(octAddress)}

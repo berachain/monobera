@@ -36,9 +36,6 @@ export const TransactionIcon = ({
         return <Icons.swap />;
       case TransactionActionType.CLAIMING_REWARDS:
         return <Icons.claim />;
-      case TransactionActionType.CLAIMING_BRIBES:
-        return <Icons.claim />;
-
       case TransactionActionType.REPAY:
         return <Icons.repay />;
       case TransactionActionType.SUPPLY:
@@ -65,9 +62,6 @@ export const TransactionIcon = ({
       // return <Icons.send />;
       // case TransactionActionType.RECEIVE:
       //   return <Icons.receive />;
-      case TransactionActionType.CLAIMING_REWARDS:
-        return <Icons.claim />;
-
       case TransactionActionType.MARKET_LONG:
         return <Icons.market_long />;
 

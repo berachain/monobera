@@ -151,8 +151,8 @@ export default function ProposalDetails({
                 isVotingPowerLoading={isUserVotingPowerLoading}
               />
             )}
-            {proposal?.status ===
-              ProposalStatus.PROPOSAL_STATUS_DEPOSIT_PERIOD && <></>}
+            {/* {proposal?.status ===
+              ProposalStatus.PROPOSAL_STATUS_DEPOSIT_PERIOD && <></>} */}
           </div>
         </div>
 

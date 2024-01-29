@@ -45,14 +45,14 @@ const useAuth = ({
   const login = useCallback(
     (connectorID: ConnectorNames | string) => {
       try {
-        onLoading && onLoading();
+        onLoading?.();
         const connector = connectors.find((c) => c.id === connectorID);
         localStorage?.setItem(connectorLocalStorageKey, connectorID);
         connect({ connector, chainId: networkConfig.chain.id });
-        onSuccess && onSuccess();
+        onSuccess?.();
         return;
       } catch (e: any) {
-        onError && onError(e);
+        onError?.(e);
         return;
       }
     },
@@ -64,9 +64,9 @@ const useAuth = ({
       disconnect();
       localStorage?.removeItem(connectorLocalStorageKey);
     } catch (e: any) {
-      onLogoutError && onLogoutError(e);
+      onLogoutError?.(e);
     } finally {
-      onLogoutSuccess && onLogoutSuccess();
+      onLogoutSuccess?.();
     }
   }, [disconnect, onLogoutError, onLogoutSuccess]);
 

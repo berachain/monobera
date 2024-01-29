@@ -54,7 +54,7 @@ export function UpdateLimitOrderModal({
     formattedCurrentPrice,
   );
   const { isLoading, write } = useOctTxn({
-    message: `Updating Open Limit Order`,
+    message: "Updating Open Limit Order",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
       void mutate(QUERY_KEY);
@@ -133,7 +133,7 @@ export function UpdateLimitOrderModal({
                 </div>
                 <div className="text-xs font-medium leading-5 text-muted-foreground">
                   {formattedCurrentPrice !== undefined ? (
-                    formatUsd(formattedCurrentPrice) + " / " + ticker
+                    `${formatUsd(formattedCurrentPrice)} / ${ticker}`
                   ) : (
                     <Skeleton className="h-[28px] w-[80px]" />
                   )}

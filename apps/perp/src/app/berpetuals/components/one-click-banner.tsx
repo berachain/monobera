@@ -108,9 +108,9 @@ export function OneClickBanner() {
       setOneClickModalOpen(true);
     } else if (
       status === BannerEnum.NOT_DELEGATED ||
-      status == BannerEnum.LOW_BALANCE ||
-      status == BannerEnum.NOT_FUNDED ||
-      status == BannerEnum.ON
+      status === BannerEnum.LOW_BALANCE ||
+      status === BannerEnum.NOT_FUNDED ||
+      status === BannerEnum.ON
     ) {
       setOctManageWalletModalOpen(true);
     }

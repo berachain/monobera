@@ -31,7 +31,7 @@ export default function UnbondingQueue({
   const { networkConfig } = useBeraConfig();
   const { write, ModalPortal } = useTxn({
     actionType: TransactionActionType.CANCEL_UNBONDING,
-    message: `Cancel Unbonding`,
+    message: "Cancel Unbonding",
     onSuccess: () => {
       void mutate(QUERY_KEY);
     },
