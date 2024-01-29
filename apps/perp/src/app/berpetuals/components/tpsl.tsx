@@ -67,8 +67,7 @@ const InputSelect = ({
         value={value === "" ? "Price" : type === "percent" ? "Price" : value}
         onChange={(e: { target: { value: string } }) => {
           onValueChange(e.target.value);
-          onTypeChange &&
-            onTypeChange(e.target.value === "" ? "none" : "number");
+          onTypeChange?.(e.target.value === "" ? "none" : "number");
         }}
       />
       {bracket.map((amount: number, index: number) => (
@@ -78,11 +77,11 @@ const InputSelect = ({
             "inline-flex h-8 w-[20%] cursor-pointer items-center justify-center rounded-sm px-2 text-xs font-medium lg:w-full",
             amount === Number(value)
               ? `bg-${variant} text-${variant}-foreground`
-              : `bg-muted text-muted-foreground`,
+              : "bg-muted text-muted-foreground",
           )}
           onClick={() => {
             onValueChange(amount.toString());
-            onTypeChange && onTypeChange(amount === 0 ? "none" : "percent");
+            onTypeChange?.(amount === 0 ? "none" : "percent");
           }}
         >
           {amount === 0 ? "None" : `${amount}%`}
@@ -179,7 +178,7 @@ export function TPSL({
         result = (Number(tpsl.tp) ?? 0) * 1;
       }
     }
-    tpslOnChange && tpslOnChange({ tp: result.toFixed(10), sl: sl ?? "" });
+    tpslOnChange?.({ tp: result.toFixed(10), sl: sl ?? "" });
     return result.toFixed(10);
   }, [sl, tpsl.tp, formattedPrice, tpslType, leverage, long]);
 
@@ -199,8 +198,7 @@ export function TPSL({
         result = Number(tpsl.sl ?? 0) * 1;
       }
     }
-    tpslOnChange &&
-      tpslOnChange({ tp: tp?.toString() ?? "", sl: result.toFixed(10) });
+    tpslOnChange?.({ tp: tp?.toString() ?? "", sl: result.toFixed(10) });
     return result.toFixed(10);
   }, [tp, tpsl.sl, formattedPrice, slType, leverage, long, liqPrice]);
 
@@ -225,8 +223,8 @@ export function TPSL({
     slPercent <= -100
       ? -100
       : Number(estStopLoss) > (formattedPrice ?? 0)
-      ? 0 - slPercent
-      : slPercent;
+        ? 0 - slPercent
+        : slPercent;
 
   return (
     <div className={className}>
@@ -236,8 +234,8 @@ export function TPSL({
           {tpslType === "none"
             ? ""
             : tpslType === "percent"
-            ? `(${formatUsd(estTakeProfit)})`
-            : `(${tpPercentDisplay.toFixed(2)}%)`}
+              ? `(${formatUsd(estTakeProfit)})`
+              : `(${tpPercentDisplay.toFixed(2)}%)`}
         </span>
       </div>
       <InputSelect
@@ -254,7 +252,7 @@ export function TPSL({
         <ActionButton>
           <Button
             disabled={isTpSubmitLoading}
-            onClick={() => onTpChangeSubmit && onTpChangeSubmit()}
+            onClick={() => onTpChangeSubmit?.()}
             className="mt-4 w-full"
             size="sm"
           >
@@ -268,8 +266,8 @@ export function TPSL({
           {slType === "none"
             ? ""
             : slType === "percent"
-            ? `(${formatUsd(estStopLoss)})`
-            : `(${slPercentDisplay.toFixed(2)}%)`}
+              ? `(${formatUsd(estStopLoss)})`
+              : `(${slPercentDisplay.toFixed(2)}%)`}
         </span>
       </div>
       <InputSelect
@@ -286,7 +284,7 @@ export function TPSL({
         <ActionButton>
           <Button
             disabled={isSlSubmitLoading}
-            onClick={() => onSlChangeSubmit && onSlChangeSubmit()}
+            onClick={() => onSlChangeSubmit?.()}
             className="mt-4 w-full"
             size="sm"
           >

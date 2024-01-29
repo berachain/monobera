@@ -56,5 +56,5 @@ export function get7daysLater() {
   const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // January is 0!
   const year = currentDate.getFullYear();
 
-  return day + "/" + month + "/" + year;
+  return `${day}/${month}/${year}`;
 }

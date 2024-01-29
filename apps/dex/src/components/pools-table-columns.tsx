@@ -201,8 +201,8 @@ export const columns: ColumnDef<Pool>[] = [
       const a = rowA.original.bgtApy ?? 0;
       const b = rowB.original.bgtApy ?? 0;
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
     filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
@@ -227,8 +227,8 @@ export const columns: ColumnDef<Pool>[] = [
       const a = rowA.original.totalApy ?? 0;
       const b = rowB.original.totalApy ?? 0;
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
     filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
@@ -382,8 +382,8 @@ export const my_columns: ColumnDef<any>[] = [
       const a = rowA.original.bgtRewards ?? 0;
       const b = rowB.original.bgtRewards ?? 0;
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
     filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },

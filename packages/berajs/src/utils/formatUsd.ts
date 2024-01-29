@@ -10,7 +10,7 @@ export function formatUsd(input: string | number): string {
 
   if (isString(input)) {
     num = parseFloat(input);
-    if (isNaN(num)) {
+    if (Number.isNaN(num)) {
       num = 0;
       // throw new Error(
       //   "Invalid input: string input must be convertible to a number.",

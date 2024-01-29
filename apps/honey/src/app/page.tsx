@@ -8,7 +8,7 @@ import { HoneyTimeFrame, timeFrameToNumber } from "./type";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Honey"),
-  description: `Mint & Redeem Honey`,
+  description: "Mint & Redeem Honey",
 };
 
 export const revalidate = 10;

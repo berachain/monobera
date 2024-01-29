@@ -109,6 +109,7 @@ export function Footer() {
                   key={item.name}
                   href={item.href}
                   className="text-muted-foreground hover:text-secondary-foreground"
+                  rel="noreferrer"
                 >
                   <span className="sr-only">{item.name}</span>
                   <item.icon
@@ -124,13 +125,14 @@ export function Footer() {
               <h3 className="text-sm font-semibold leading-6 text-foreground">
                 Ecosystem
               </h3>
-              <ul role="list" className="mt-6 space-y-4">
+              <ul className="mt-6 space-y-4">
                 {footerNavigation.ecosystem.map((item) => (
                   <li key={item.name}>
                     <a
                       target="_blank"
                       href={item.href}
                       className="text-sm leading-6 text-secondary-foreground hover:text-foreground"
+                      rel="noreferrer"
                     >
                       {item.name}
                     </a>
@@ -142,13 +144,14 @@ export function Footer() {
               <h3 className="text-sm font-semibold leading-6 text-foreground">
                 Resources
               </h3>
-              <ul role="list" className="mt-6 space-y-4">
+              <ul className="mt-6 space-y-4">
                 {footerNavigation.resources.map((item) => (
                   <li key={item.name}>
                     <a
                       target="_blank"
                       href={item.href}
                       className="text-sm leading-6 text-secondary-foreground hover:text-foreground"
+                      rel="noreferrer"
                     >
                       {item.name}
                     </a>

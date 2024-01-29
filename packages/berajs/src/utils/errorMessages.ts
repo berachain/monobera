@@ -65,8 +65,7 @@ export const getErrorMessage = (e: any) => {
       for (const type in errors) {
         const errorType = errors[type];
         if (
-          errorType &&
-          errorType.keywords.some((keyword) =>
+          errorType?.keywords.some((keyword) =>
             errorMsgDetails.includes(keyword),
           )
         ) {

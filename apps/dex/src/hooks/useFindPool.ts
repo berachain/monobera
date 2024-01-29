@@ -16,9 +16,8 @@ export const useFindPool = (swapFee: number, tokenWeights: any[]) => {
         const poolCount = res.data.uniquePoolIDs;
         if (poolCount.length === 0 || Number(poolCount[0].count) === 0) {
           return false;
-        } else {
-          return true;
         }
+        return true;
       } catch (error) {
         console.error("fetching error", error);
         throw error;
@@ -39,9 +38,9 @@ export const useFindPool = (swapFee: number, tokenWeights: any[]) => {
 */
 const getSwapFeeInStr = (swapFee: number) => {
   if (swapFee === 1.1) return "0.011";
-  else if (swapFee === 0.4) return "0.004";
-  else if (swapFee === 0.15) return "0.0015";
-  else return (swapFee / 100).toString();
+  if (swapFee === 0.4) return "0.004";
+  if (swapFee === 0.15) return "0.0015";
+  return (swapFee / 100).toString();
 };
 
 const getPoolId = (swapFee: number, tokenWeights: any[]) => {

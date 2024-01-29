@@ -8,10 +8,10 @@ packages:
   - apps/validator-clue
   - packages/config/*
   - packages/config/env
-  - packages/ui
-  - packages/shared-ui
+  - packages/graphql
+  - packages/proto
   - packages/berajs
   - packages/bera-router
+  - packages/ui
+  - packages/shared-ui
   - packages/api
-  - packages/proto
-  - packages/graphql

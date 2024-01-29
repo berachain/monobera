@@ -80,9 +80,8 @@ export function fillSupplyDataByHour(list: HoneyEntry[], endUnix: number) {
     return data.sort(
       (a: HoneyEntry, b: HoneyEntry) => a.timestamp - b.timestamp,
     );
-  } else {
-    return [];
   }
+  return [];
 }
 
 export function fillSupplyDataByDay(list: HoneyEntry[], endUnix: number) {
@@ -107,7 +106,6 @@ export function fillSupplyDataByDay(list: HoneyEntry[], endUnix: number) {
     return data.sort(
       (a: HoneyEntry, b: HoneyEntry) => a.timestamp - b.timestamp,
     );
-  } else {
-    return [];
   }
+  return [];
 }

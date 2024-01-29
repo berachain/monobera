@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@bera/eslint-config": "0.1.0",
+    "@biomejs/biome": "1.5.3",
     "@hyrious/esbuild-plugin-commonjs": "0.2.2",
     "@types/node": "^18.16.6",
     "eslint": "^8.39.0",

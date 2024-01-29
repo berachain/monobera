@@ -24,10 +24,7 @@ export function CustomizeInput({
     <div className="flex flex-col gap-2 rounded-sm bg-muted p-4">
       <div className="flex h-3 items-center justify-between text-xs text-muted-foreground ">
         <div>{title}</div>{" "}
-        <div
-          className="hover:underline"
-          onClick={() => onSubtitleClick && onSubtitleClick()}
-        >
+        <div className="hover:underline" onClick={() => onSubtitleClick?.()}>
           {subTitle}
         </div>
       </div>

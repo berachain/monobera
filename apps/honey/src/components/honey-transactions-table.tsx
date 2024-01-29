@@ -48,21 +48,20 @@ function isBurnData(obj: any): obj is HoneyRedemption {
 const getAction = (event: any) => {
   if (isMintData(event)) {
     return <p className="text-success-foreground">Mint</p>;
-  } else if (isBurnData(event)) {
+  }
+  if (isBurnData(event)) {
     return <p className="text-destructive-foreground">Redeem</p>;
   }
   return <p>IDK</p>;
 };
 
 const getTokenDisplay = (event: any, tokenDictionary: any) => {
-  const honey =
-    tokenDictionary && tokenDictionary[getAddress(honeyTokenAddress)];
+  const honey = tokenDictionary?.[getAddress(honeyTokenAddress)];
 
   if (isMintData(event)) {
     // this should be fixed once backend updated
     const tokenIn =
-      tokenDictionary &&
-      tokenDictionary["0x6581e59A1C8dA66eD0D313a0d4029DcE2F746Cc5"];
+      tokenDictionary?.["0x6581e59A1C8dA66eD0D313a0d4029DcE2F746Cc5"];
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -87,11 +86,11 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
         </div>
       </div>
     );
-  } else if (isBurnData(event)) {
+  }
+  if (isBurnData(event)) {
     // this should be fixed once backend updated
     const tokenOut =
-      tokenDictionary &&
-      tokenDictionary["0x6581e59A1C8dA66eD0D313a0d4029DcE2F746Cc5"];
+      tokenDictionary?.["0x6581e59A1C8dA66eD0D313a0d4029DcE2F746Cc5"];
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -167,8 +166,8 @@ export default function HoneyTransactionsTable({
           {isAllDataLoadingMore
             ? "Loading..."
             : isAllDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+              ? "No more transactions"
+              : "Load more"}
         </Button>
       );
     }
@@ -182,8 +181,8 @@ export default function HoneyTransactionsTable({
           {isMintDataLoadingMore
             ? "Loading..."
             : isMintDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+              ? "No more transactions"
+              : "Load more"}
         </Button>
       );
     }
@@ -197,8 +196,8 @@ export default function HoneyTransactionsTable({
           {isRedemptionDataLoadingMore
             ? "Loading..."
             : isRedemptionDataReachingEnd
-            ? "No more transactions"
-            : "Load more"}
+              ? "No more transactions"
+              : "Load more"}
         </Button>
       );
     }
@@ -321,7 +320,7 @@ export const EventTable = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {events && events.length && events[0] ? (
+        {events?.length && events[0] ? (
           events.map((event: HoneyMint | HoneyRedemption) => {
             if (!event) return null;
             return (

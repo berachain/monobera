@@ -88,7 +88,7 @@ export default function ValidatorSelector({
             (vali: Validator) => !filter?.find((f) => f === vali.operatorAddr),
           ) ?? []
         }
-        onSelect={(address) => onSelectValidator && onSelectValidator(address)}
+        onSelect={(address) => onSelectValidator?.(address)}
         onClose={() => setOpen(false)}
         // emptyMessage={emptyMessage}
       />
@@ -220,8 +220,8 @@ const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
       {isLoading
         ? "Loading"
         : bgtDelegated && Number(bgtDelegated) === 0
-        ? "0 BGT"
-        : Number(bgtDelegated ?? 0).toFixed(2)}
+          ? "0 BGT"
+          : Number(bgtDelegated ?? 0).toFixed(2)}
     </div>
   );
 };

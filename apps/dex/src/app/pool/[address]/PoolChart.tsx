@@ -53,10 +53,10 @@ const Options = {
         intersect: false,
       },
       callbacks: {
-        label: function (context: {
+        label: (context: {
           dataset: { label: string };
           parsed: { y: number | bigint | null };
-        }) {
+        }) => {
           let label = context.dataset.label || "";
 
           if (label) {
@@ -202,22 +202,21 @@ export const PoolChart = ({
           feesUsd: "0",
           date: dayStartTimestamp,
         };
-      } else {
-        latestTvlSeen = Number(poolData.tvlUsd);
-        if (i < 7) {
-          weeklyVolumeTotal += Number(poolData.volumeUsd);
-          weeklyFeesTotal += Number(poolData.feesUsd);
-        }
-        if (i < 30) {
-          monthlyVolumeTotal += Number(poolData.volumeUsd);
-          monthlyFeesTotal += Number(poolData.feesUsd);
-        }
-        if (i < 90) {
-          quarterlyVolumeTotal += Number(poolData.volumeUsd);
-          quarterlyFeesTotal += Number(poolData.feesUsd);
-        }
-        return poolData;
       }
+      latestTvlSeen = Number(poolData.tvlUsd);
+      if (i < 7) {
+        weeklyVolumeTotal += Number(poolData.volumeUsd);
+        weeklyFeesTotal += Number(poolData.feesUsd);
+      }
+      if (i < 30) {
+        monthlyVolumeTotal += Number(poolData.volumeUsd);
+        monthlyFeesTotal += Number(poolData.feesUsd);
+      }
+      if (i < 90) {
+        quarterlyVolumeTotal += Number(poolData.volumeUsd);
+        quarterlyFeesTotal += Number(poolData.feesUsd);
+      }
+      return poolData;
     },
   );
 

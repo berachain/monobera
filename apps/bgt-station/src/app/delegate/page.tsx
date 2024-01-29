@@ -8,7 +8,7 @@ import { DelegateEnum } from "./types";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Delegate"),
-  description: `Delegate, Redelegate, or Undelegate your BGT`,
+  description: "Delegate, Redelegate, or Undelegate your BGT",
 };
 export default function Page({
   searchParams,

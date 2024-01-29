@@ -59,10 +59,9 @@ export function HoneyTokenInput({
     if (BigNumber(amount ?? "0").gt(tokenBalance)) {
       setExceeding(true);
       return;
-    } else {
-      setExceeding(false);
-      return;
     }
+    setExceeding(false);
+    return;
   }, [tokenBalance, amount]);
 
   useEffect(() => {
@@ -100,7 +99,7 @@ export function HoneyTokenInput({
             )}
             value={amount}
             onChange={(e) => {
-              setAmount && setAmount(e.target.value);
+              setAmount?.(e.target.value);
             }}
           />
         </div>
@@ -119,7 +118,7 @@ export function HoneyTokenInput({
                 <p
                   className="cursor-pointer hover:underline"
                   onClick={() => {
-                    setAmount && setAmount(tokenBalance);
+                    setAmount?.(tokenBalance);
                   }}
                 >
                   MAX

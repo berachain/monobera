@@ -12,7 +12,6 @@
   "scripts": {
     "build": "tsup",
     "clean": "git clean -xdf dist .turbo node_modules",
-    "check-types": "tsc --noEmit",
     "dev": "tsup index.ts --watch"
   },
   "dependencies": {
@@ -20,6 +19,7 @@
     "typescript": "^5.0.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.5.3",
     "@types/node": "^18.16.6"
   }
 }

@@ -232,33 +232,32 @@ export function SwapCard({
             minAmountOut={minAmountOut}
           />
         );
-      } else {
-        return (
-          <DynamicPreview
-            swapInfo={swapInfo}
-            disabled={true}
-            priceImpact={0}
-            exchangeRate={exchangeRate}
-            tokenIn={selectedFrom}
-            tokenOut={selectedTo}
-            tokenInPrice={tokenInPrice}
-            tokenOutPrice={tokenOutPrice}
-            open={openPreview}
-            setOpen={setOpenPreview}
-            write={() => {
-              write({
-                address: erc20DexAddress,
-                abi: DEX_PRECOMPILE_ABI,
-                functionName: "batchSwap",
-                params: payload,
-                value: value,
-              });
-            }}
-            isLoading={isLoading}
-            minAmountOut={minAmountOut}
-          />
-        );
       }
+      return (
+        <DynamicPreview
+          swapInfo={swapInfo}
+          disabled={true}
+          priceImpact={0}
+          exchangeRate={exchangeRate}
+          tokenIn={selectedFrom}
+          tokenOut={selectedTo}
+          tokenInPrice={tokenInPrice}
+          tokenOutPrice={tokenOutPrice}
+          open={openPreview}
+          setOpen={setOpenPreview}
+          write={() => {
+            write({
+              address: erc20DexAddress,
+              abi: DEX_PRECOMPILE_ABI,
+              functionName: "batchSwap",
+              params: payload,
+              value: value,
+            });
+          }}
+          isLoading={isLoading}
+          minAmountOut={minAmountOut}
+        />
+      );
     }
     return <Connect />;
   };
@@ -363,7 +362,7 @@ export function SwapCard({
                           Gas fee
                         </p>
                         <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                          {`<0.0001 Bwei`}
+                          {"<0.0001 Bwei"}
                         </p>
                       </div>
                     </div>
