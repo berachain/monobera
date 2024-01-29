@@ -25,6 +25,9 @@ export default function UserTokenCard({
   const { data: debtTokenBalance } = useSelectedAssetWalletBalance(
     asset.reserveData.variableDebtTokenAddress,
   );
+  const { data: aTokenBalance } = useSelectedAssetWalletBalance(
+    asset.reserveData.aTokenAddress,
+  );
   let balance;
   if (type === "borrow") {
     balance =
@@ -40,8 +43,20 @@ export default function UserTokenCard({
             asset.decimals,
           );
   } else if (type === "user-borrow") {
+    if (debtTokenBalance) {
+      asset.formattedBalance = debtTokenBalance.formattedBalance;
+      asset.balance = debtTokenBalance.balance;
+    }
     balance = debtTokenBalance
       ? debtTokenBalance.formattedBalance
+      : asset.formattedBalance;
+  } else if (type === "user-supply") {
+    if (aTokenBalance) {
+      asset.formattedBalance = aTokenBalance.formattedBalance;
+      asset.balance = aTokenBalance.balance;
+    }
+    balance = aTokenBalance
+      ? aTokenBalance.formattedBalance
       : asset.formattedBalance;
   } else {
     balance = asset.formattedBalance;
@@ -159,10 +174,10 @@ export default function UserTokenCard({
           <AlertTitle>
             {" "}
             <Icons.info className="mr-1 inline-block h-4 w-4" />
-            You Must Supply To Borrow
+            To borrow, you need to provide assets that are not HONEY
           </AlertTitle>
-          Your available-to-borrow balance is based on the amounts of assets you
-          have supplied. It only updates when you supply assets.
+          The amount you can borrow is based on the assets you have provided,
+          excluding HONEY.
         </Alert>
       )}
       {type === "supply" && asset.address === honeyAddress && (
@@ -170,10 +185,10 @@ export default function UserTokenCard({
           <AlertTitle>
             {" "}
             <Icons.info className="mr-1 inline-block h-4 w-4" />
-            Cannot Borrow Against This Collateral
+            Cannot Borrow Against HONEY
           </AlertTitle>
-          HONEY deposits earn interest but don&apos;t qualify as collateral or
-          boost borrowing capacity.
+          You can only earn interest on HONEY deposits. You cannot borrow
+          against them.
         </Alert>
       )}
       {type === "user-borrow" && asset.address === honeyAddress && (

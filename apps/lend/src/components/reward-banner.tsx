@@ -4,12 +4,15 @@ import {
   TransactionActionType,
   formatAmountSmall,
   useBeraJs,
+  usePollBgtRewardsForAddress,
+  usePollReservesDataList,
   usePollUserBGTRewards,
 } from "@bera/berajs";
 import {
   bgtTokenAddress,
   bgtUrl,
   cloudinaryUrl,
+  lendHoneyDebtTokenAddress,
   lendRewardsAddress,
 } from "@bera/config";
 import { TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
@@ -35,6 +38,17 @@ export const Banner = () => {
 
   const { isSmall, numericValue: formattedBgt } =
     formatAmountSmall(formattedRewards);
+
+  //@ts-ignore
+  const { useBgtApr } = usePollBgtRewardsForAddress(lendHoneyDebtTokenAddress);
+  const { useReservesDataList } = usePollReservesDataList();
+  const { data } = useReservesDataList();
+
+  let displayBorrowed = 0;
+  Object.keys(data ?? {}).forEach(
+    (key) => (displayBorrowed += Number(data[key].totalDebt)),
+  );
+  const bgtApr = useBgtApr(displayBorrowed);
 
   return (
     <div className="row-reverse relative flex flex-col items-start justify-center gap-4 rounded-lg border border-accent bg-gradient-to-b from-[#FFFCF2] to-[#FFF2D0] px-8 py-6 dark:from-[#27251F] dark:to-[#322400] lg:flex-row lg:gap-16">
@@ -74,12 +88,12 @@ export const Banner = () => {
       </div>
 
       <div className="flex w-full flex-col gap-2 md:items-center md:justify-center lg:items-start">
-        <div className="mx-auto flex inline-flex w-fit items-center rounded-full bg-background pr-4 lg:mx-0">
+        <div className="mx-auto flex w-fit items-center rounded-full bg-background pr-4 lg:mx-0">
           <div className="relative flex h-[32px] w-[32px] items-center">
             <TokenIcon address={bgtTokenAddress} fetch />
           </div>
           <div className="text-wrapper flex w-auto items-center align-middle text-lg font-bold">
-            {parseFloat("0").toFixed(2)}% APY
+            {(bgtApr ?? 0).toFixed(2)}% APY
             <Tooltip
               text={
                 <>

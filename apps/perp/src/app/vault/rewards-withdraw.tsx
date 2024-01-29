@@ -14,6 +14,8 @@ import {
   usePollPerpsBgtRewards,
 } from "@bera/berajs";
 import { DataTable, DynamicRewardBtn, Tooltip, useTxn } from "@bera/shared-ui";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
+import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { parseUnits } from "ethers";
 import { type Address } from "wagmi";
@@ -77,7 +79,7 @@ export const RewardsWithdraw = () => {
         <p className="text-sm font-medium text-muted-foreground">
           Est. Rewards
         </p>
-        <div className="flex w-full flex-row justify-between">
+        <div className="flex w-full flex-row justify-between pb-4">
           {isLoading ? (
             <Skeleton className="h-[28px] w-1/4" />
           ) : (
@@ -100,7 +102,7 @@ export const RewardsWithdraw = () => {
               claimableBgtRewards={claimableBgtRewards}
               amount={claimAmount}
               setAmount={setClaimAmount}
-              disabled={isRewardsLoading || claimableBgtRewards === 0 || true}
+              disabled={isRewardsLoading || claimableBgtRewards === 0}
               onClaim={() =>
                 write({
                   address: process.env
@@ -117,6 +119,17 @@ export const RewardsWithdraw = () => {
             />
           )}
         </div>
+        {/* <Alert variant="warning" className="rounded-md">
+          <AlertTitle>
+            {" "}
+            <Icons.info className="inline-block h-4 w-4" /> BGT Rewards are
+            currently paused.
+          </AlertTitle>
+          <AlertDescription>
+            They will start again after the Berps Upgrade on Jan 29th, at 02:15
+            UTC.
+          </AlertDescription>
+        </Alert> */}
       </div>
       <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-2">
         <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">

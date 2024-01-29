@@ -10,7 +10,7 @@ import {
   type Token,
 } from "@bera/berajs";
 import { parseUnits } from "ethers";
-import { formatUnits } from "viem";
+import { formatUnits, getAddress } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 
@@ -47,13 +47,13 @@ export const useWithdrawLiquidity = (pool: Pool | undefined, prices: any) => {
 
   useEffect(() => {
     if (burnShares) {
-      const totalValue = pool?.tokens.reduce((acc, token) => {
+      const totalValue = pool?.tokens.reduce((acc: number, token: any) => {
         const formattedAmount = burnShares
           ? Number(formatUnits(burnShares[token.address] ?? 0n, token.decimals))
           : 0;
-
         return (
-          acc + formattedAmount * (prices?.[token.address.toLowerCase()] ?? 0)
+          acc +
+          formattedAmount * Number(prices[getAddress(token.address)] ?? "0")
         );
       }, 0);
       setWithdrawValue(totalValue?.toString() ?? "");

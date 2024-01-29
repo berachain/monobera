@@ -18,7 +18,7 @@ export const LaunchBanner = ({
       <div className="flex items-center gap-2">
         <Icons.clock8 className="h-4 w-4" />
         <div className="md:text-md text-sm font-semibold leading-tight">
-          {`Validators can now point liquidity to ${appName}. Users may earn BGT after Artio Epoch 7.`}
+          {`Validators can now point liquidity to ${appName}. Users may earn BGT after Artio Epoch 9.`}
         </div>
       </div>
     </header>
@@ -59,9 +59,7 @@ export const BerpsBanner = ({
       <div className="flex items-center gap-2">
         <Icons.clock8 className="h-4 w-4" />
         <div className="md:text-md text-sm font-semibold leading-tight">
-          {
-            "Berps will undergo an upgrade on Sunday, January 28th, 2024, at 02:15 AM UTC. Please close your positions and withdraw HONEY"
-          }
+          BEND is currently undergoing maintenance, and will be back shortly.
         </div>
       </div>
     </header>

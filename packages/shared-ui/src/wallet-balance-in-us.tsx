@@ -2,38 +2,29 @@
 
 import {
   formatUsd,
+  handleNativeBera,
   usePollAssetWalletBalance,
-  // usePollPrices,
+  useTokenHoneyPrices,
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import { Skeleton } from "@bera/ui/skeleton";
-
-import { useTokenHoneyPrices } from "./hooks/useTokenHoneyPrices";
 
 export function WalletBalanceInUs() {
   const { featuredTokenList } = useTokens();
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { data: assets } = useCurrentAssetWalletBalances();
-  const pricesArray = useTokenHoneyPrices(
+  const { data: pricesArray } = useTokenHoneyPrices(
     featuredTokenList?.map((featuredToken: Token) => featuredToken.address),
   );
 
   const total =
     assets && pricesArray
       ? assets?.reduce((acc: number, curr: Token) => {
-          const address =
-            curr.address === nativeTokenAddress
-              ? beraTokenAddress.toLowerCase()
-              : curr.address.toLowerCase();
-
-          const price = pricesArray?.find(
-            (price: any) => price.id.toLowerCase() === address,
-          );
-          // Ran into a runtime error here:
+          const address = handleNativeBera(curr.address);
+          const price = pricesArray[address];
           const total =
-            Number(curr.formattedBalance ?? 0) * Number(price?.price ?? 0);
+            Number(curr.formattedBalance ?? 0) * Number(price ?? 0);
           return acc + total;
         }, 0)
       : 0;
