@@ -39,6 +39,3 @@ jobs:
         run: pnpm lint
       - name: Check format
         run: pnpm format:check
-      - name: TypeScript Error Reporter
-        uses: andoshin11/typescript-error-reporter-action@v1.0.2
-            
