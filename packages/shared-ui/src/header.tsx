@@ -9,7 +9,7 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-import { LaunchBanner, RPCBanner } from "./launch-banner";
+import { BerpsBanner, RPCBanner } from "./launch-banner";
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
 
@@ -89,7 +89,7 @@ export function Header({
           <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />
         </div>
       </div>
-      {appName && bannerEnabled && <LaunchBanner appName={appName} />}
+      {appName && bannerEnabled && <BerpsBanner appName={""} />}
       {rpcBannerEnabled && <RPCBanner />}
     </nav>
   );

@@ -1,51 +1,12 @@
-import { beraTokenAddress, honeyTokenAddress } from "@bera/config";
-import { client, getTokenHoneyPrice, type Weight } from "@bera/graphql";
+import { beraTokenAddress } from "@bera/config";
+import { type Weight } from "@bera/graphql";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { getAddress, type Address } from "viem";
 
 import POLLING from "~/config/constants/polling";
+import { useTokenHoneyPrice } from "~/hooks/useTokenHoneyPrices";
 import { usePollGlobalCuttingBoard } from "..";
 import { usePollBgtInflation } from "../staking/usePollBgtInflation";
-
-const handleNativeBera = (token: Address) => {
-  if (token === getAddress(process.env.NEXT_PUBLIC_BERA_ADDRESS as string)) {
-    return getAddress(process.env.NEXT_PUBLIC_WBERA_ADDRESS as string);
-  }
-  return token;
-};
-
-export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
-  const { data } = useSWR(
-    ["tokenHoneyPrice", tokenAddress],
-    async () => {
-      if (!tokenAddress) {
-        return "0";
-      }
-      if (tokenAddress.toLowerCase() === honeyTokenAddress.toLowerCase()) {
-        return "1";
-      }
-      return await client
-        .query({
-          query: getTokenHoneyPrice,
-          variables: {
-            id: handleNativeBera(tokenAddress as Address).toLowerCase(),
-          },
-        })
-        .then((res: any) => {
-          return res.data.tokenHoneyPrices[0].price;
-        })
-        .catch((e: any) => {
-          console.log(e);
-          return undefined;
-        });
-    },
-    {
-      refreshInterval: 10000,
-    },
-  );
-  return data;
-};
 
 interface IBgtRewardsForAddress {
   bgtPerYear: number;
@@ -63,7 +24,7 @@ export const usePollBgtRewardsForAddress = ({
   const cuttingBoard = useGlobalCuttingBoard();
   const inflationData = useInflationData();
 
-  const beraPrice = useTokenHoneyPrice(beraTokenAddress);
+  const { data: beraPrice } = useTokenHoneyPrice(beraTokenAddress);
   // const beraPrice = useBeraPrice();
   const QUERY_KEY = [
     "bgtRewardsForAddress",
@@ -73,8 +34,7 @@ export const usePollBgtRewardsForAddress = ({
     inflationData,
   ];
 
-  // console.log(QUERY_KEY)
-  const { isLoading } = useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     () => {
       if (cuttingBoard && address && inflationData) {
@@ -120,7 +80,7 @@ export const usePollBgtRewardsForAddress = ({
     return undefined;
   };
   return {
-    isLoading,
+    ...swrResponse,
     useBgtRewardsForAddress,
     useBgtApr,
   };

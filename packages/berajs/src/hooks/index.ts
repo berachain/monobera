@@ -18,3 +18,4 @@ export * from "./usePollTransactionCount";
 export * from "./usePollPrices";
 export * from "./useGasData";
 export * from "./usePollDenom";
+export { useTokenHoneyPrices, useTokenHoneyPrice } from "./useTokenHoneyPrices";
