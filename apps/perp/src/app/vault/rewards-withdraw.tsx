@@ -119,7 +119,7 @@ export const RewardsWithdraw = () => {
             />
           )}
         </div>
-        <Alert variant="warning" className="rounded-md">
+        {/* <Alert variant="warning" className="rounded-md">
           <AlertTitle>
             {" "}
             <Icons.info className="inline-block h-4 w-4" /> BGT Rewards are
@@ -129,7 +129,7 @@ export const RewardsWithdraw = () => {
             They will start again after the Berps Upgrade on Jan 29th, at 02:15
             UTC.
           </AlertDescription>
-        </Alert>
+        </Alert> */}
       </div>
       <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-2">
         <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
