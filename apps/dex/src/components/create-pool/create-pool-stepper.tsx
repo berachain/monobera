@@ -12,10 +12,7 @@ type Props = {
 };
 export function CreatePoolStepper({ step = 0, steps, setStep }: Props) {
   return (
-    <ol
-      role="list"
-      className="flex w-48 items-center justify-center	self-center"
-    >
+    <ol className="flex w-48 items-center justify-center	self-center">
       {steps.map((s, stepIdx) => (
         <li
           key={stepIdx}

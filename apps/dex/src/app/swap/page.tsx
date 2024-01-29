@@ -32,7 +32,7 @@ export default function Swap({
   if (isAddress(inputCurrency) && !isAddress(outputCurrency)) {
     return (
       <div className="container">
-        <SwapContent inputCurrency={inputCurrency} />
+        <SwapContent />
       </div>
     );
   }
@@ -40,12 +40,12 @@ export default function Swap({
   if (!isAddress(inputCurrency) && isAddress(outputCurrency)) {
     return (
       <div className="container">
-        <SwapContent outputCurrency={outputCurrency} />
+        <SwapContent />
       </div>
     );
   }
 
   if (isAddress(inputCurrency) && isAddress(outputCurrency)) {
-    return <SwapContent inputCurrency={"" as any} outputCurrency={"" as any} />;
+    return <SwapContent />;
   }
 }

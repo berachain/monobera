@@ -32,6 +32,7 @@ export function History() {
           key={txn.hash}
           target="_blank"
           href={`http://${networkConfig.chain.blockExplorers?.default.url}/tx/${txn.hash}`}
+          rel="noreferrer"
         >
           <div
             className="flex justify-between border-t border-backgroundSecondary pt-2"

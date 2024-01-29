@@ -6,7 +6,8 @@ import MyBGT from "./my-bgt";
 
 export const metadata: Metadata = {
   title: getMetaTitle("My BGT"),
-  description: `View your validators, active bribes, and delegator related information`,
+  description:
+    "View your validators, active bribes, and delegator related information",
 };
 
 export default function Page() {

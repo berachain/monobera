@@ -30,17 +30,16 @@ export default function GameConsole({
 
   const getContent = () => {
     if (tab === tabEnum.GAME) return <Game {...props} />;
-    else if (tab === tabEnum.RULES) return <Rules />;
-    else {
-      if (!isConnected) return <ConnectWallet />;
-      else if (
-        authToken.token === "" ||
-        authToken.address === "" ||
-        authToken.address !== account
-      )
-        return <SIWE />;
-      else return <Vote {...props} />;
-    }
+    if (tab === tabEnum.RULES) return <Rules />;
+
+    if (!isConnected) return <ConnectWallet />;
+    if (
+      authToken.token === "" ||
+      authToken.address === "" ||
+      authToken.address !== account
+    )
+      return <SIWE />;
+    return <Vote {...props} />;
   };
   return (
     <div className="flex w-full flex-col gap-4 xl:flex-row">

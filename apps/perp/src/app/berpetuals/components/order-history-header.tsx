@@ -32,7 +32,7 @@ export function OrderHistoryHeader({
 
   const { isLoading: isClosePositionsLoading, write: writePositionsClose } =
     useOctTxn({
-      message: `Closing All Open Positions`,
+      message: "Closing All Open Positions",
       actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
         void mutate(QUERY_KEY);
@@ -40,7 +40,7 @@ export function OrderHistoryHeader({
     });
   const { isLoading: isCloseLimitOrdersLoading, write: writeOrdersClose } =
     useOctTxn({
-      message: `Closing All Open Orders`,
+      message: "Closing All Open Orders",
       actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
         void mutate(QUERY_KEY);

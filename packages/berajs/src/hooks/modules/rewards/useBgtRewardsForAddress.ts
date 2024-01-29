@@ -52,12 +52,10 @@ export const usePollBgtRewardsForAddress = ({
             bgtPerYear: amountPerYear,
             UsdBgtPerYear: amountPerYear * Number(beraPrice),
           };
-        } else {
-          return undefined;
         }
-      } else {
         return undefined;
       }
+      return undefined;
     },
     {
       refreshInterval: POLLING.SLOW,

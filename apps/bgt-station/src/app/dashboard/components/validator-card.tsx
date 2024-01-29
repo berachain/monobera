@@ -37,7 +37,7 @@ export default function ValidatorCard({
       : formatter.format(parseFloat(formatUnits(BigInt(validator.tokens), 18)));
   const info = [
     {
-      amount: String(vApy?.toFixed(2) ?? 0) + "%",
+      amount: `${String(vApy?.toFixed(2) ?? 0)}%`,
       text: "APY",
     },
     {
@@ -45,11 +45,11 @@ export default function ValidatorCard({
       text: "Bribe value",
     },
     {
-      amount: formattedBGTRewards.toString() + " BGT",
+      amount: `${formattedBGTRewards.toString()} BGT`,
       text: "Voting power",
     },
     {
-      amount: formatCommission(validator.commission.commissionRates.rate) + "%",
+      amount: `${formatCommission(validator.commission.commissionRates.rate)}%`,
       text: "Commission",
     },
   ];

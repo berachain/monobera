@@ -53,7 +53,7 @@ export function UpdatePositionModal({
   const ticker = openPosition?.market?.name?.split("-")[0];
 
   const { isLoading: isUpdateTPLoading, write: updateTpWrite } = useOctTxn({
-    message: `Updating Take Profit Price`,
+    message: "Updating Take Profit Price",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
       void mutate(QUERY_KEY);
@@ -61,7 +61,7 @@ export function UpdatePositionModal({
   });
 
   const { isLoading: isUpdateSLLoading, write: updateSlWrite } = useOctTxn({
-    message: `Updating Stop Loss Price`,
+    message: "Updating Stop Loss Price",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
       void mutate(QUERY_KEY);
@@ -133,7 +133,7 @@ export function UpdatePositionModal({
                 </div>
                 <div className="text-xs font-medium leading-5 text-muted-foreground">
                   {price !== undefined ? (
-                    formatBigIntUsd(price, 10) + " / " + ticker
+                    `${formatBigIntUsd(price, 10)} / ${ticker}`
                   ) : (
                     <Skeleton className="h-[28px] w-[80px]" />
                   )}

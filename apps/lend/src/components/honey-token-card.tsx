@@ -26,13 +26,15 @@ export default function HoneyTokenCard() {
     <Card className="mt-6 flex flex-col justify-between gap-6 p-4 md:p-6 lg:flex-row lg:items-center">
       <div className="flex  flex-row justify-between md:flex-col md:gap-8">
         <div className="mb-0 flex items-center gap-2">
-          {tokenDictionary && tokenDictionary[honeyAddress] ? (
+          {tokenDictionary?.[honeyAddress] ? (
             <TokenIcon token={tokenDictionary[honeyAddress]} size="2xl" />
           ) : (
             <Skeleton className="h-12 w-12 rounded-full" />
           )}
           <div>
-            <div className="text-xs	font-medium leading-5">Honey StableCoin</div>
+            <div className="text-xs	font-medium leading-5">
+              Honey StableCoin
+            </div>
             <div className="flex items-center gap-1 text-2xl font-bold leading-8">
               HONEY{" "}
               <Link
@@ -54,7 +56,7 @@ export default function HoneyTokenCard() {
             </div>
           </div>
         </div>
-        {tokenDictionary && tokenDictionary[honeyAddress] ? (
+        {tokenDictionary?.[honeyAddress] ? (
           <div className="hidden h-fit w-fit items-center gap-2 lg:flex">
             <SupplyBtn token={tokenDictionary[honeyAddress] as Token} />
             <BorrowBtn
@@ -150,7 +152,7 @@ export default function HoneyTokenCard() {
         </div>
       </div>
 
-      {tokenDictionary && tokenDictionary[honeyAddress] && (
+      {tokenDictionary?.[honeyAddress] && (
         <div className="flex h-fit w-full items-center gap-2 lg:hidden ">
           <SupplyBtn token={tokenDictionary[honeyAddress] as Token} />
           <BorrowBtn

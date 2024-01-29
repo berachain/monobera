@@ -219,7 +219,11 @@ export default function WithdrawLiquidityContent({
                         token={token}
                         value={formattedAmount}
                         weight={token.normalizedWeight}
-                        price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
+                        price={
+                          prices && tokenAddresses
+                            ? prices[handleNativeBera(tokenAddresses[i])]
+                            : 0
+                        }
                       />
                     );
                   })}
@@ -339,7 +343,11 @@ export default function WithdrawLiquidityContent({
                         token={token}
                         value={formattedAmount}
                         weight={token.normalizedWeight}
-                        price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
+                        price={
+                          prices && tokenAddresses
+                            ? prices[handleNativeBera(tokenAddresses[i])]
+                            : 0
+                        }
                       />
                     );
                   })}

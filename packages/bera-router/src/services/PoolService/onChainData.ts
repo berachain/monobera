@@ -20,10 +20,13 @@ import {
 } from "./types";
 
 function mapPoolsToRecord(pools: RawPool[]): Record<string, PoolData> {
-  return pools?.reduce((record, pool) => {
-    record[pool.pool] = pool;
-    return record;
-  }, {} as Record<string, PoolData>);
+  return pools?.reduce(
+    (record, pool) => {
+      record[pool.pool] = pool;
+      return record;
+    },
+    {} as Record<string, PoolData>,
+  );
 }
 
 export class MultiCallPools {

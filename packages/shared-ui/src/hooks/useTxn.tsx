@@ -163,7 +163,7 @@ export const useTxn = ({
             });
           }
         }
-        onError && onError(error);
+        onError?.(error);
       },
 
       /**
@@ -200,7 +200,7 @@ export const useTxn = ({
           actionType,
           timestamp: Date.now(),
         });
-        onSuccess && onSuccess(result);
+        onSuccess?.(result);
       },
 
       /**
@@ -225,7 +225,7 @@ export const useTxn = ({
         if (!disableModal) {
           openModal("loadingModal", undefined);
         }
-        onLoading && onLoading();
+        onLoading?.();
       },
 
       /**
@@ -254,7 +254,7 @@ export const useTxn = ({
             submissionHash: result,
           });
         }
-        onSubmission && onSubmission(result);
+        onSubmission?.(result);
       },
     });
 
@@ -317,7 +317,7 @@ export const useTxn = ({
           });
         }
       }
-      onError && onError(error);
+      onError?.(error);
     },
 
     /**
@@ -354,7 +354,7 @@ export const useTxn = ({
         timestamp: Date.now(),
         actionType: TransactionActionType.BORROW,
       });
-      onSuccess && onSuccess(result);
+      onSuccess?.(result);
     },
 
     /**
@@ -379,7 +379,7 @@ export const useTxn = ({
       if (!disableModal) {
         openModal("loadingModal", undefined);
       }
-      onLoading && onLoading();
+      onLoading?.();
     },
 
     /**
@@ -407,7 +407,7 @@ export const useTxn = ({
           submissionHash: result,
         });
       }
-      onSubmission && onSubmission(result);
+      onSubmission?.(result);
     },
   });
 

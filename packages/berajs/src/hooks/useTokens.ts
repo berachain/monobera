@@ -22,7 +22,7 @@ interface IUseTokens {
 function tokenListToDict(list: Token[]): { [key: string]: Token } {
   return list.reduce((acc, item) => {
     // @ts-ignore
-    acc[item["address"]] = item;
+    acc[item.address] = item;
     return acc;
   }, {});
 }

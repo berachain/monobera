@@ -136,29 +136,25 @@ export default function BribeList({ bribes }: { bribes: any[][] }) {
   const epochs = useCurrentEpoch();
   const secondsPerEpoch = (epochs?.endTime ?? 0) - (epochs?.startTime ?? 0);
 
-  const bribesList =
-    bribes && bribes[0] && bribes[0][0]
-      ? bribes
-          .map((bribe, index) => {
-            const bribeObj = bribe[0];
-            return bribeObj.bribePerProposal?.amounts.map(
-              (amount: any, i: number) => {
-                return {
-                  key: `${index}bribe${i}`,
-                  amountPerProposal: amount,
-                  tokenAddress: bribeObj.bribePerProposal.tokens[i],
-                  startEpoch: bribeObj.startEpoch,
-                  proposalsLeft:
-                    bribeObj.numBlockProposals -
-                    bribeObj.numBlockProposalsBribed,
-                  numBlockProposals:
-                    (bribeObj.numBlockProposals * 5n) / BigInt(secondsPerEpoch),
-                };
-              },
-            );
-          })
-          .flat()
-      : [];
+  const bribesList = bribes?.[0]?.[0]
+    ? bribes.flatMap((bribe, index) => {
+        const bribeObj = bribe[0];
+        return bribeObj.bribePerProposal?.amounts.map(
+          (amount: any, i: number) => {
+            return {
+              key: `${index}bribe${i}`,
+              amountPerProposal: amount,
+              tokenAddress: bribeObj.bribePerProposal.tokens[i],
+              startEpoch: bribeObj.startEpoch,
+              proposalsLeft:
+                bribeObj.numBlockProposals - bribeObj.numBlockProposalsBribed,
+              numBlockProposals:
+                (bribeObj.numBlockProposals * 5n) / BigInt(secondsPerEpoch),
+            };
+          },
+        );
+      })
+    : [];
   return (
     <Accordion type="single" collapsible defaultValue="item-1">
       <AccordionItem value="item-1">

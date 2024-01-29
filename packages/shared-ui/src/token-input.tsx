@@ -81,7 +81,7 @@ export function TokenInput({
     }
     if (
       !isBalancesLoading &&
-      (safeNumberAmount > tokenBalance || Number(tokenBalance) == 0) &&
+      (safeNumberAmount > tokenBalance || Number(tokenBalance) === 0) &&
       selected !== undefined
     ) {
       setExceeding(true);
@@ -147,9 +147,9 @@ export function TokenInput({
                 e.preventDefault();
               }
               clearTimeout(typingTimer);
-              setIsTyping && setIsTyping(true);
+              setIsTyping?.(true);
               typingTimer = setTimeout(() => {
-                setIsTyping && setIsTyping(false);
+                setIsTyping?.(false);
               }, 1000);
             }}
             onChange={(e: any) => {
@@ -158,7 +158,7 @@ export function TokenInput({
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
               if (periodsCount <= 1) {
-                setAmount && setAmount(filteredValue);
+                setAmount?.(filteredValue);
               }
             }}
           />
@@ -191,7 +191,7 @@ export function TokenInput({
                 {!hidePrice && (
                   <p className="self-center p-0 text-xs text-muted-foreground">
                     {safeNumberAmount !== 0 &&
-                      !isNaN(safeNumberAmount) &&
+                      !Number.isNaN(safeNumberAmount) &&
                       formatUsd((safeNumberAmount * price).toFixed(2))}
                   </p>
                 )}
