@@ -195,7 +195,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         setActiveAmount(amount);
                       }}
                       weight={token.normalizedWeight}
-                      price={prices?.[tokenAddresses[i]] ?? 0}
+                      price={ (prices && tokenAddresses) ? prices?.[tokenAddresses[i] ?? ''] : 0}
                       onExceeding={(exceeding: boolean) =>
                         updateTokenExceeding(i, exceeding)
                       }
