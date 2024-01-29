@@ -152,7 +152,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any[]) => {
     }
   }, [burnShares]);
   useEffect(() => {
-    if (tokenInputs && tokenInputs.length) {
+    if (tokenInputs?.length) {
       const totalValue = tokenInputs.reduce((acc: number, tokenInput: any) => {
         const address = handleNativeBera(tokenInput.address);
         return (
