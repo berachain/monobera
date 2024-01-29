@@ -10,7 +10,7 @@ import NewProposal from "./new-proposal";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Create Proposal"),
-  description: `Create a new proposal on Berachain`,
+  description: "Create a new proposal on Berachain",
 };
 export default function Create({
   searchParams,

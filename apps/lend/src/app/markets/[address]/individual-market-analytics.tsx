@@ -76,7 +76,7 @@ export default function IndividualMarketAnalytics({
 
       <TokenInfoCard
         {...{
-          token: tokenDictionary && tokenDictionary[address],
+          token: tokenDictionary?.[address],
           reserve:
             Number(reserveData?.totalLiquidity) *
             Number(reserveData?.formattedPriceInMarketReferenceCurrency),
@@ -92,7 +92,7 @@ export default function IndividualMarketAnalytics({
       />
 
       <div className="mt-9 flex flex-col gap-8 lg:flex-row">
-        <UserInfo token={tokenDictionary && tokenDictionary[address]} />
+        <UserInfo token={tokenDictionary?.[address]} />
         <div className="flex w-full flex-col gap-8">
           <TotalSupplied
             reserveData={reserveData}

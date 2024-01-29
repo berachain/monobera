@@ -52,7 +52,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   useEffect(() => {
     if (inputCurrency) {
-      const token = tokenDictionary && tokenDictionary[inputCurrency];
+      const token = tokenDictionary?.[inputCurrency];
 
       if (!token) {
         void readInput({ address: inputCurrency });
@@ -61,7 +61,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       }
     }
     if (outputCurrency) {
-      const token = tokenDictionary && tokenDictionary[outputCurrency];
+      const token = tokenDictionary?.[outputCurrency];
       if (!token) {
         void readOutput({ address: outputCurrency });
       } else {
@@ -166,7 +166,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   useEffect(() => {
     if (
-      swapInfo &&
       swapInfo?.formattedAmountIn &&
       swapInfo?.formattedReturnAmount &&
       selectedFrom &&
@@ -206,8 +205,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const deadline = useDeadline();
   useEffect(() => {
     if (
-      swapInfo !== undefined &&
-      swapInfo.batchSwapSteps?.length &&
+      swapInfo?.batchSwapSteps?.length &&
       slippage &&
       selectedFrom &&
       selectedTo &&

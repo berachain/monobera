@@ -44,10 +44,11 @@ export default function Validators({
       amount: isDataLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
-        "$" +
-        (totalBribeValue === undefined || Number.isNaN(totalBribeValue)
-          ? "0.00"
-          : formatter.format(totalBribeValue))
+        `$${
+          totalBribeValue === undefined || Number.isNaN(totalBribeValue)
+            ? "0.00"
+            : formatter.format(totalBribeValue)
+        }`
       ),
       text: "In bribe rewards",
     },
@@ -55,7 +56,7 @@ export default function Validators({
       amount: isDataLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
-        bgtSupply.toFixed(2) + "%"
+        `${bgtSupply.toFixed(2)}%`
       ),
       text: "BGT inflation rate",
     },

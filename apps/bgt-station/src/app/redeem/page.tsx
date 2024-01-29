@@ -6,7 +6,7 @@ import Redeem from "./redeem";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Redeem"),
-  description: `Redeem your BGT for BERA`,
+  description: "Redeem your BGT for BERA",
 };
 
 export default function Page() {

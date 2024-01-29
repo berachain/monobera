@@ -33,7 +33,7 @@ export const supportedResolutions: ResolutionString[] = [
 export const intradayMultipliers = ["1", "5", "15", "60", "240"];
 
 export const symbolInfoMap: Record<string, any> = {
-  ["BTC-USDC"]: {
+  "BTC-USDC": {
     ticker: "BTC-USDC",
     name: "BTC-USDC",
     description: "Description for BTC-USDC",
@@ -48,7 +48,7 @@ export const symbolInfoMap: Record<string, any> = {
     has_intraday: true,
     intraday_multipliers: intradayMultipliers,
   },
-  ["ETH-USDC"]: {
+  "ETH-USDC": {
     ticker: "ETH-USDC",
     name: "ETH-USDC",
     description: "Description for ETH-USDC",
@@ -63,7 +63,7 @@ export const symbolInfoMap: Record<string, any> = {
     has_intraday: true,
     intraday_multipliers: intradayMultipliers,
   },
-  ["ATOM-USDC"]: {
+  "ATOM-USDC": {
     ticker: "ATOM-USDC",
     name: "ATOM-USDC",
     description: "Description for ATOM-USDC",
@@ -78,7 +78,7 @@ export const symbolInfoMap: Record<string, any> = {
     has_intraday: true,
     intraday_multipliers: intradayMultipliers,
   },
-  ["TIA-USDC"]: {
+  "TIA-USDC": {
     ticker: "TIA-USDC",
     name: "TIA-USDC",
     description: "Description for TIA-USDC",
@@ -162,7 +162,7 @@ const datafeed: IDatafeedChartApi & IExternalDatafeed = {
     // Create a WebSocket connection
 
     // Construct the WebSocket URL
-    const wssurl = websocket + `/${symbolInfo.name}?resolution=${resolution}`;
+    const wssurl = `${websocket}/${symbolInfo.name}?resolution=${resolution}`;
 
     // Create a WebSocket connection
     const socket = new WebSocket(wssurl);

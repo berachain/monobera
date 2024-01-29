@@ -130,7 +130,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     if (isSingleSidedLoading || isSingleSidedValidating) {
       return;
     }
-    if (singleSidedShares && singleSidedShares[1][0]) {
+    if (singleSidedShares?.[1][0]) {
       setSingleSidedExpectedShares(formatUnits(singleSidedShares[1][0], 18));
     }
     if (singleSidedShares === undefined) {
@@ -155,7 +155,7 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
     }
   }, [burnShares]);
   useEffect(() => {
-    if (tokenInputs && tokenInputs.length) {
+    if (tokenInputs?.length) {
       const totalValue = tokenInputs.reduce((acc, tokenInput) => {
         return (
           acc +
@@ -275,9 +275,8 @@ export const useAddLiquidity = (pool: Pool | undefined, prices: any) => {
   const payloadTokens = tokenInputs.map((tokenInput) => {
     if (isNativeBera && isBeratoken(tokenInput)) {
       return beraToken?.address;
-    } else {
-      return tokenInput?.address;
     }
+    return tokenInput?.address;
   });
   const payload = [
     pool?.pool,

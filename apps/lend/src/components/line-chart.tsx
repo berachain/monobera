@@ -89,7 +89,7 @@ export default function LineChart({ data }: LineChartProps) {
           {data.map((d) => (
             <div className="flex items-center gap-2 font-medium" key={d.title}>
               <div
-                className={`h-2 w-2 rounded-full border`}
+                className={"h-2 w-2 rounded-full border"}
                 style={{ backgroundColor: d.color, borderColor: d.color }}
               />
               {d.title}

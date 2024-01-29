@@ -11,7 +11,7 @@ export const trading_history_column: ColumnDef<Position>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
     ),
-    cell: ({}) => (
+    cell: () => (
       <div className="w-[70px] text-xs">{new Date().toLocaleDateString()}</div>
     ),
     accessorKey: "market",
@@ -44,7 +44,7 @@ export const trading_history_column: ColumnDef<Position>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Type" />
     ),
-    cell: ({}) => <div className="flex w-[40px] flex-col gap-1">LIQ.</div>,
+    cell: () => <div className="flex w-[40px] flex-col gap-1">LIQ.</div>,
     accessorKey: "open_interest_long",
     enableSorting: false,
   },

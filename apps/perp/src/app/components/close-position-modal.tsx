@@ -101,7 +101,7 @@ export function ClosePositionModal({
                 </div>
                 <div className="text-xs font-medium leading-5 text-muted-foreground">
                   {price !== undefined ? (
-                    formatBigIntUsd(price, 10) + " / " + ticker
+                    `${formatBigIntUsd(price, 10)} / ${ticker}`
                   ) : (
                     <Skeleton className="h-[28px] w-[80px]" />
                   )}

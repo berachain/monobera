@@ -12,11 +12,13 @@
       "**/next/**",
       "./packages/bera-router/**",
       "./apps/perp/public/static/**",
-      "**/public/**"
+      "**/public/**",
+      "ui/",
+      ".vscode"
     ]
   },
   "organizeImports": {
-    "enabled": true
+    "enabled": false
   },
   "formatter": {
     "enabled": true,
@@ -36,7 +38,8 @@
         "noExplicitAny": "off",
         "noArrayIndexKey": "off",
         "noRedeclare": "off",
-        "noAssignInExpressions": "off"
+        "noAssignInExpressions": "off",
+        "noImplicitAnyLet": "off"
       },
       "correctness": {
         "useExhaustiveDependencies": "off"
@@ -54,6 +57,9 @@
       },
       "security": {
         "noDangerouslySetInnerHtml": "off"
+      },
+      "performance": {
+        "noAccumulatingSpread": "off"
       },
       "recommended": true
     }

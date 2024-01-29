@@ -93,7 +93,7 @@ export default function Portfolio({ markets }: { markets: IMarket[] }) {
                     {status}{" "}
                     <Tooltip
                       text={
-                        status == "Volume"
+                        status === "Volume"
                           ? VOLUME_TOOLTIP_TEXT
                           : PNL_TOOLTIP_TEXT
                       }

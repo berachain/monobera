@@ -81,25 +81,24 @@ export const usePollBalance = ({
             default: false,
           };
           return balance;
-        } else {
-          const call = {
-            address: networkConfig.precompileAddresses
-              .multicallAddress as Address,
-            abi: MULTICALL3_ABI,
-            functionName: "getEthBalance",
-            args: [account],
-          };
-          const result = await publicClient.readContract(call);
-          return {
-            balance: result,
-            formattedBalance: formatEther((result as bigint) ?? 0n),
-            address,
-            decimals: 18,
-            symbol: "BERA",
-            name: "Berachain",
-            default: true,
-          };
         }
+        const call = {
+          address: networkConfig.precompileAddresses
+            .multicallAddress as Address,
+          abi: MULTICALL3_ABI,
+          functionName: "getEthBalance",
+          args: [account],
+        };
+        const result = await publicClient.readContract(call);
+        return {
+          balance: result,
+          formattedBalance: formatEther((result as bigint) ?? 0n),
+          address,
+          decimals: 18,
+          symbol: "BERA",
+          name: "Berachain",
+          default: true,
+        };
       }
       return undefined;
     },

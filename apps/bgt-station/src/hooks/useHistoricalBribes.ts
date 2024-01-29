@@ -69,14 +69,13 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
         if (tokenObj) {
           tokenDecimalMap[getAddress(token)] = tokenObj.decimals;
           return;
-        } else {
-          decimalCalls.push({
-            address: token,
-            abi: erc20ABI as unknown as (typeof erc20ABI)[],
-            functionName: "decimals",
-            args: [],
-          });
         }
+        decimalCalls.push({
+          address: token,
+          abi: erc20ABI as unknown as (typeof erc20ABI)[],
+          functionName: "decimals",
+          args: [],
+        });
       });
     });
 

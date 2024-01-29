@@ -171,7 +171,7 @@ const useCreateTokenWeights = () => {
     ) {
       updatedTokenWeights.forEach((item: ITokenWeight, i: number) => {
         if (!item.locked && item.weight !== outstandingWeightPerItem) {
-          if (i == 0) {
+          if (i === 0) {
             // @ts-ignore
             updatedTokenWeights[i].weight = 34;
             return;

@@ -18,11 +18,11 @@ function sortByParameter(
 
     if (valueA < valueB) {
       return -1 * sortOrder;
-    } else if (valueA > valueB) {
-      return 1 * sortOrder;
-    } else {
-      return 0;
     }
+    if (valueA > valueB) {
+      return 1 * sortOrder;
+    }
+    return 0;
   });
 }
 
@@ -59,31 +59,30 @@ export async function GET(request: Request) {
       return searchKeyword === ""
         ? true
         : pool.poolName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-            (pool.poolShareDenomHex &&
-              pool.poolShareDenomHex
-                .toLowerCase()
-                .includes(searchKeyword.toLowerCase()));
+            pool.poolShareDenomHex
+              ?.toLowerCase()
+              .includes(searchKeyword.toLowerCase());
     });
   } else {
     taggedPools = [];
   }
 
-  let filteredBgtRewards,
-    filteredHotPools,
-    filteredNewPools = [];
-  if (hasBgtRewards == "true") {
+  let filteredBgtRewards;
+  let filteredHotPools;
+  let filteredNewPools = [];
+  if (hasBgtRewards === "true") {
     filteredBgtRewards = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.BGT_REWARDS),
     );
   }
 
-  if (hotPools == "true") {
+  if (hotPools === "true") {
     filteredHotPools = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.HOT),
     );
   }
 
-  if (newPools == "true") {
+  if (newPools === "true") {
     filteredNewPools = taggedPools.filter((pool) =>
       pool.tags?.includes(PoolTag.NEW),
     );
@@ -97,7 +96,7 @@ export async function GET(request: Request) {
   const tvl = searchParams.get("tvl");
 
   const isFilterApplied =
-    hasBgtRewards == "true" || hotPools == "true" || newPools == "true";
+    hasBgtRewards === "true" || hotPools === "true" || newPools === "true";
   let sortedPools = isFilterApplied
     ? [
         ...new Set([
@@ -107,24 +106,24 @@ export async function GET(request: Request) {
         ]),
       ]
     : taggedPools;
-  if (volume == "false" && bgtRewards == "false" && tvl == "false") {
+  if (volume === "false" && bgtRewards === "false" && tvl === "false") {
     sortedPools = sortByParameter(sortedPools, "dailyVolume", "desc");
   }
-  if (volume == "true") {
+  if (volume === "true") {
     sortedPools = sortByParameter(
       sortedPools,
       "dailyVolume",
       volume as "asc" | "desc",
     );
   }
-  if (bgtRewards == "true") {
+  if (bgtRewards === "true") {
     sortedPools = sortByParameter(
       sortedPools,
       "dailyVolume",
       bgtRewards as "asc" | "desc",
     );
   }
-  if (tvl == "true") {
+  if (tvl === "true") {
     sortedPools = sortByParameter(
       sortedPools,
       "totalValue",

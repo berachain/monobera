@@ -7,7 +7,7 @@ import Content from "./content";
 
 export const metadata: Metadata = {
   title: `Berachain ${faucetName} `,
-  description: `Fund your testnet wallet with bera tokens.`,
+  description: "Fund your testnet wallet with bera tokens.",
 };
 
 export default function Page() {

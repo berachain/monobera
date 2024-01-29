@@ -352,7 +352,7 @@ export function HoneyMachine() {
                     Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
                   </div>
                 </h1>
-                <ul role="list">
+                <ul>
                   <HoneyTokenInput
                     selected={selectedFrom}
                     selectedTokens={[selectedFrom, selectedTo]}
@@ -378,6 +378,7 @@ export function HoneyMachine() {
                       }}
                     >
                       <button
+                        type="button"
                         onClick={() => {
                           onSwitch();
                           setRotate(rotate + 180);
