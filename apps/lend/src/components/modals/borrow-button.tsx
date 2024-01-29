@@ -207,12 +207,8 @@ const BorrowModalContent = ({
           <div className="text-muted-foreground">
             Variable Borrow APY {""}
             <Tooltip
-              text={
-                <>
-                  variable interest rate will fluctuate based on the market
-                  conditions. See additional disclaimers in notes below.
-                </>
-              }
+              text="variable interest rate will fluctuate based on the market
+                  conditions. See additional disclaimers in notes below."
             />
           </div>
           <div className="font-semibold text-warning-foreground">

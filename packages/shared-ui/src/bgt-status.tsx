@@ -161,7 +161,7 @@ export function BGTStatusDetails() {
             </div>
             <div className="whitespace-nowrap text-sm font-medium">
               {userBalance && price ? (
-                "$" + formatter.format(Number(item.amoumt) * Number(price))
+                `$${formatter.format(Number(item.amoumt) * Number(price))}`
               ) : (
                 <Skeleton className="h-8 w-16" />
               )}

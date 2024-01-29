@@ -20,7 +20,7 @@ export function SignInButton() {
 
   const fetchNonce = async () => {
     try {
-      const nonceRes = await fetch(`/api/nonce`);
+      const nonceRes = await fetch("/api/nonce");
       return await nonceRes.json();
     } catch (error) {
       console.error("Somethings wrong with fecthing nonce:", error);

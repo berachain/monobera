@@ -31,8 +31,7 @@ export default function MyPool({
         .filter((pool: any) => allPoolShowed || pool.userBalance > 0)
         .map((pool: any) => ({
           ...pool,
-          bgtRewards:
-            bgtRewards && bgtRewards[pool.pool] ? bgtRewards[pool.pool] : "0",
+          bgtRewards: bgtRewards?.[pool.pool] ? bgtRewards[pool.pool] : "0",
         })) ?? []
     );
   }, [myPools, bgtRewards, allPoolShowed]);
@@ -69,7 +68,7 @@ export default function MyPool({
               return (
                 <PoolCard
                   pool={pool}
-                  key={"search" + pool?.pool}
+                  key={`search${pool?.pool}`}
                   isUserData={true}
                 />
               );

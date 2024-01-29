@@ -12,7 +12,7 @@ import {
 
 export const metadata: Metadata = {
   title: getMetaTitle("Governance"),
-  description: `View Governance proposals on Berachain`,
+  description: "View Governance proposals on Berachain",
 };
 
 export default function Governance({

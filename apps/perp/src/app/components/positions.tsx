@@ -142,10 +142,7 @@ function PositionRow({
         <Position
           key={positionIndex + row}
           aria-hidden={positionIndex >= positions.length}
-          className={
-            positionClassName &&
-            positionClassName(positionIndex % positions.length)
-          }
+          className={positionClassName?.(positionIndex % positions.length)}
           {...position}
         />
       ))}

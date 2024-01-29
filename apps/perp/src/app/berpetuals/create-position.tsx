@@ -64,7 +64,8 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
         const newQuantity = leveragedHoneyPrice / formattedPrice;
         setForm({ ...form, quantity: newQuantity });
         return;
-      } else if (!givenHoney && form.quantity !== undefined) {
+      }
+      if (!givenHoney && form.quantity !== undefined) {
         const newAmount =
           (form.quantity / (form.leverage ?? 1)) *
           (formattedPrice / honeyPrice);

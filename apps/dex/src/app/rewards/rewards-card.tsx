@@ -56,7 +56,7 @@ export default function RewardsCard({ pool }: { pool: Pool }) {
           href={`/pool/${pool?.pool}`}
           className="whitespace-nowrap text-xs font-medium leading-tight hover:underline md:text-sm"
         >
-          {mobile && title.length > 19 ? title.slice(0, 19) + "..." : title}
+          {mobile && title.length > 19 ? `${title.slice(0, 19)}...` : title}
         </Link>
       </div>
 

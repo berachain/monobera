@@ -19,7 +19,9 @@ export function NotFoundBear({
   return (
     <div className="mx-auto mt-8 flex w-fit flex-col justify-center gap-4">
       <Image
-        src={`https://res.cloudinary.com/duv0g402y/image/upload/f_auto,q_auto/v1/bears/e6monhixzv21jy0fqes1`}
+        src={
+          "https://res.cloudinary.com/duv0g402y/image/upload/f_auto,q_auto/v1/bears/e6monhixzv21jy0fqes1"
+        }
         alt="not found bear"
         width={345.35}
         height={200}

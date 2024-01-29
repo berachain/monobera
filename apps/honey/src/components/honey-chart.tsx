@@ -64,10 +64,10 @@ const Options = {
         intersect: false,
       },
       callbacks: {
-        label: function (context: {
+        label: (context: {
           dataset: { label: string };
           parsed: { y: number | bigint | null };
-        }) {
+        }) => {
           let label = context.dataset.label || "";
 
           if (label) {
@@ -136,27 +136,26 @@ const getData = (data: HoneyEntry[], arcade: boolean) => {
 function calculatePercentageDifference(entries: HoneyEntry[]): number {
   if (entries.length < 2) {
     return 0; // Not enough numbers to calculate the difference
-  } else {
-    let firstNumberIndex = 0;
-    while (
-      entries[firstNumberIndex] &&
-      Number(entries[firstNumberIndex]!.amount) === 0
-    ) {
-      firstNumberIndex++;
-    }
-
-    if (firstNumberIndex >= entries.length) {
-      return 0; // All numbers are zero, cannot calculate percentage difference
-    }
-
-    const firstNumber = Number(entries[firstNumberIndex]!.amount);
-    const lastNumber = Number(entries[entries.length - 1]!.amount);
-
-    const difference = lastNumber - firstNumber;
-    const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
-
-    return percentageDifference;
   }
+  let firstNumberIndex = 0;
+  while (
+    entries[firstNumberIndex] &&
+    Number(entries[firstNumberIndex]!.amount) === 0
+  ) {
+    firstNumberIndex++;
+  }
+
+  if (firstNumberIndex >= entries.length) {
+    return 0; // All numbers are zero, cannot calculate percentage difference
+  }
+
+  const firstNumber = Number(entries[firstNumberIndex]!.amount);
+  const lastNumber = Number(entries[entries.length - 1]!.amount);
+
+  const difference = lastNumber - firstNumber;
+  const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
+
+  return percentageDifference;
 }
 
 export const HoneyChart = ({

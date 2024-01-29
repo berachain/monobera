@@ -26,7 +26,7 @@ const useOctValueSend = ({
   const write = useCallback(
     async ({ address, value }: IValueSend): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
-      onLoading && onLoading();
+      onLoading?.();
       let hash: any | undefined;
       try {
         const provider = new providers.JsonRpcProvider(
@@ -44,7 +44,7 @@ const useOctValueSend = ({
 
         dispatch({ type: ActionEnum.SUBMITTING });
 
-        onSubmission && onSubmission(hash);
+        onSubmission?.(hash);
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
             hash: hash,
@@ -54,16 +54,15 @@ const useOctValueSend = ({
 
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
-          onSuccess && onSuccess(confirmationReceipt);
+          onSuccess?.(confirmationReceipt);
           return;
-        } else {
-          const e = new TransactionFailedError();
-          onError && onError("Transaction failed");
         }
+        const e = new TransactionFailedError();
+        onError?.("Transaction failed");
       } catch (e: any) {
         console.log(e);
         dispatch({ type: ActionEnum.ERROR });
-        onError && onError(e);
+        onError?.(e);
       }
     },
     [

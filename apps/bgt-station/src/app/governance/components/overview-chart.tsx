@@ -53,12 +53,10 @@ const Options = {
       titleColor: "#292524",
       bodyColor: "#292524",
       callbacks: {
-        label: function (context: {
+        label: (context: {
           dataset: { label: string };
           parsed: { y: number | bigint | null };
-        }) {
-          return context.dataset.label || "";
-        },
+        }) => context.dataset.label || "",
       },
     },
   },

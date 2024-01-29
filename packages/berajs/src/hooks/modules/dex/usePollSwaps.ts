@@ -67,7 +67,7 @@ export const usePollSwaps = ({
 
         const batchSwapSteps = swapInfo.batchSwapSteps;
 
-        if (batchSwapSteps && batchSwapSteps.length) {
+        if (batchSwapSteps?.length) {
           const result = await publicClient.readContract({
             address: networkConfig.precompileAddresses
               .erc20DexAddress as Address,

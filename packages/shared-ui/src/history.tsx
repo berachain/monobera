@@ -55,6 +55,7 @@ export function History() {
             key={txn.hash}
             target="_blank"
             href={`${blockExplorerUrl}/tx/${txn.hash}`}
+            rel="noreferrer"
           >
             <div
               className="flex items-center justify-between gap-5"

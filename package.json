@@ -23,6 +23,7 @@
     "check-types": "turbo check-types",
     "lint": "biome lint . ",
     "format": "biome format --write .",
+    "check": "biome check .",
     "prepare": "husky install"
   },
   "dependencies": {

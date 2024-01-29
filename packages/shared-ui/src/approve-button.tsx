@@ -38,7 +38,7 @@ export const ApproveButton = ({ token, spender, amount, className }: Props) => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (ref.current && ref.current.clientWidth) {
+      if (ref.current?.clientWidth) {
         if (ref.current.clientWidth < 360 && !smallScreen) {
           setSmallScreen(true);
         } else if (ref.current.clientWidth >= 360 && smallScreen) {
@@ -88,7 +88,7 @@ export const ApproveButton = ({ token, spender, amount, className }: Props) => {
           });
         }}
       >
-        {isLoading ? "Loading..." : `Approve Infinite`}
+        {isLoading ? "Loading..." : "Approve Infinite"}
       </Button>
     </div>
   );

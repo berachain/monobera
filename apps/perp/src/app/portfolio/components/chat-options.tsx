@@ -37,10 +37,10 @@ export const Options = {
         intersect: false,
       },
       callbacks: {
-        label: function (context: {
+        label: (context: {
           dataset: { label: string };
           parsed: { y: number | bigint | null };
-        }) {
+        }) => {
           let label = context.dataset.label || "";
 
           if (label) {

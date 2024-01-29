@@ -62,12 +62,12 @@ export default function MarketsPageContent() {
             )
               return false;
             if (!keywords || keywords === "") return true;
-            else
-              return Object.values(reserve).some((value) =>
-                typeof value !== "string"
-                  ? String(value).toLowerCase().includes(keywords.toLowerCase())
-                  : value.toLowerCase().includes(keywords.toLowerCase()),
-              );
+
+            return Object.values(reserve).some((value) =>
+              typeof value !== "string"
+                ? String(value).toLowerCase().includes(keywords.toLowerCase())
+                : value.toLowerCase().includes(keywords.toLowerCase()),
+            );
           })
           .sort((a, b) => {
             switch (sortBy) {

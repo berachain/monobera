@@ -33,10 +33,7 @@ export function CreatePoolInitialLiquidity({
         Set initial liquidity
       </CardTitle>
       <div className="flex flex-col gap-4">
-        <ul
-          role="list"
-          className="divide divide-y divide-border rounded-lg border"
-        >
+        <ul className="divide divide-y divide-border rounded-lg border">
           {tokenWeights.map((tokenWeight, index) => {
             return (
               <CreatePoolInitialLiquidityInput
@@ -53,7 +50,7 @@ export function CreatePoolInitialLiquidity({
           <Alert className="my-4" variant="destructive">
             <AlertDescription>
               <Icons.info className="mr-1 mt-[-4px] inline h-4 w-4" />
-              {error && error.message}
+              {error?.message}
             </AlertDescription>
           </Alert>
         )}
