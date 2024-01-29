@@ -1,7 +1,6 @@
 name: Code Quality
 on:
   - push
-  - pull_request
 
 jobs:
   cache-and-install:
@@ -38,7 +37,7 @@ jobs:
         run: pnpm install
       - name: Run lint
         run: pnpm lint
-      - name: Run type check
-        run: pnpm check-types
       - name: Check format
         run: pnpm format:check
+      - name: Run type check
+        run: pnpm check-types
