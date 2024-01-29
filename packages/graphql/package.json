@@ -13,7 +13,6 @@
   "scripts": {
     "build": "tsup src",
     "clean": "git clean -xdf dist .turbo node_modules",
-    "check-types": "tsc --noEmit",
     "dev": "tsup src --watch",
     "lint": "eslint src",
     "lint:fix": "pnpm lint --fix"
