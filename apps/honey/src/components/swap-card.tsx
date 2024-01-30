@@ -11,6 +11,7 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import BigNumber from "bignumber.js";
 import { parseUnits } from "viem";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { TokenInput } from "~/components/token-input";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
@@ -43,10 +44,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     collateralList,
   } = usePsm();
 
-  const safeFromAmount =
-    Number(fromAmount) > Number.MAX_SAFE_INTEGER
-      ? Number.MAX_SAFE_INTEGER
-      : Number(fromAmount) ?? 0;
+  const safeFromAmount = getSafeNumber(fromAmount).toString();
 
   const [exceedingBalance, setExceedingBalance] = useState(false);
 
@@ -154,7 +152,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
 
             {BigNumber(allowance?.formattedAllowance).lt(fromAmount ?? "0") &&
             (Number(allowance?.formattedAllowance) ?? 0) <
-              (safeFromAmount ?? 0) &&
+              (Number(safeFromAmount) ?? 0) &&
             !exceedingBalance ? (
               <ApproveButton
                 token={selectedFrom}
