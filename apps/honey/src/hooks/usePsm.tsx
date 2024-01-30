@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { from } from "@apollo/client";
 import {
   TransactionActionType,
   useBeraJs,
