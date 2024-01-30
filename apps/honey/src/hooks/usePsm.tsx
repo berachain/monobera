@@ -19,6 +19,8 @@ import { useTxn } from "@bera/shared-ui";
 import BigNumber from "bignumber.js";
 import { getAddress, parseUnits, type Address } from "viem";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
+
 export const usePsm = () => {
   const { tokenDictionary, tokenList } = useTokens();
   const collateralList = tokenList?.filter((token: any) =>
@@ -55,6 +57,10 @@ export const usePsm = () => {
 
   const [fromAmount, setFromAmount] = useState<string | undefined>(undefined);
   const [toAmount, setToAmount] = useState<string | undefined>(undefined);
+
+  const safeFromAmount = fromAmount
+    ? getSafeNumber(fromAmount).toString()
+    : "0";
 
   const isMint = selectedFrom?.address !== honey?.address;
 
@@ -178,22 +184,6 @@ export const usePsm = () => {
   };
 
   useEffect(() => {
-    function getSafeFromAmount() {
-      if (!fromAmount || Number.isNaN(fromAmount)) {
-        return "0";
-      }
-      try {
-        const bnFromAmount = BigNumber(fromAmount);
-        if (bnFromAmount.gt(BigNumber(Number.MAX_SAFE_INTEGER.toString()))) {
-          return Number.MAX_SAFE_INTEGER.toString();
-        }
-        return bnFromAmount.toString();
-      } catch (e) {
-        return "0";
-      }
-    }
-    const safeFromAmount = getSafeFromAmount();
-
     if (isMint && account) {
       const payload = [
         account,
