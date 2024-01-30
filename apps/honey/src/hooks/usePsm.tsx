@@ -179,7 +179,7 @@ export const usePsm = () => {
 
   useEffect(() => {
     function getSafeFromAmount() {
-      if (!fromAmount || isNaN(Number(fromAmount))) {
+      if (!fromAmount || Number.isNaN(fromAmount)) {
         return "0";
       }
       try {
