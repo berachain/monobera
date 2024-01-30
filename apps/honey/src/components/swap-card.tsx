@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
-import { ApproveButton, ConnectButton } from "@bera/shared-ui";
+import { ApproveButton, ConnectButton, TokenInput } from "@bera/shared-ui";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import BigNumber from "bignumber.js";
 import { parseUnits } from "viem";
 
-import { TokenInput } from "~/components/token-input";
+// import { TokenInput } from "~/components/token-input";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 
@@ -41,6 +42,14 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     honey,
     collateralList,
   } = usePsm();
+
+  const safeFromAmount =
+    Number(fromAmount) > Number.MAX_SAFE_INTEGER
+      ? Number.MAX_SAFE_INTEGER
+      : Number(fromAmount) ?? 0;
+
+  const [exceedingBalance, setExceedingBalance] = useState(false);
+
   return (
     <div className="w-full">
       {showBear && (
@@ -104,6 +113,9 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 customTokenList={collateralList}
                 hidePrice
                 showExceeding
+                onExceeding={(isExceeding: boolean) =>
+                  setExceedingBalance(isExceeding)
+                }
                 setAmount={(amount) => {
                   setGivenIn(true);
                   setFromAmount(amount);
@@ -126,8 +138,24 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 balance={toBalance?.formattedBalance}
               />
             </ul>
-            {/* fix to check if allowance > amount */}
-            {BigNumber(allowance?.formattedAllowance).lt(fromAmount ?? "0") ? (
+            {isConnected && exceedingBalance ? (
+              <Alert
+                variant="destructive"
+                className="items-center justify-center"
+              >
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  This amount exceeds your total balance
+                </AlertDescription>
+              </Alert>
+            ) : (
+              false
+            )}
+
+            {BigNumber(allowance?.formattedAllowance).lt(fromAmount ?? "0") &&
+            (Number(allowance?.formattedAllowance) ?? 0) <
+              (safeFromAmount ?? 0) &&
+            !exceedingBalance ? (
               <ApproveButton
                 token={selectedFrom}
                 spender={erc20HoneyAddress}

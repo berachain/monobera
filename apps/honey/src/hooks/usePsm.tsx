@@ -54,8 +54,16 @@ export const usePsm = () => {
   }, [collateralList, honey]);
 
   const [fromAmount, setFromAmount] = useState<string | undefined>(undefined);
-
   const [toAmount, setToAmount] = useState<string | undefined>(undefined);
+  const safeFromAmount =
+    Number(fromAmount) > Number.MAX_SAFE_INTEGER
+      ? Number.MAX_SAFE_INTEGER
+      : Number(fromAmount) ?? 0;
+
+  const safeToAmount =
+    Number(toAmount) > Number.MAX_SAFE_INTEGER
+      ? Number.MAX_SAFE_INTEGER
+      : Number(toAmount) ?? 0;
 
   const isMint = selectedFrom?.address !== honey?.address;
 
@@ -94,8 +102,8 @@ export const usePsm = () => {
 
   const { write, isLoading, ModalPortal } = useTxn({
     message: isMint
-      ? `Mint ${Number(toAmount).toFixed(2)} Honey`
-      : `Redeem ${Number(fromAmount).toFixed(2)} Honey`,
+      ? `Mint ${Number(safeToAmount).toFixed(2)} Honey`
+      : `Redeem ${Number(safeFromAmount).toFixed(2)} Honey`,
     actionType: isMint
       ? TransactionActionType.MINT_HONEY
       : TransactionActionType.REDEEM_HONEY,
@@ -180,19 +188,11 @@ export const usePsm = () => {
 
   useEffect(() => {
     if (isMint && account) {
-      const payload = [
-        account,
-        selectedFrom?.address,
-        parseUnits((fromAmount ?? "0") as `${number}`, 18),
-      ];
+      const payload = [account, selectedFrom?.address, safeFromAmount];
       setPayload(payload);
     }
     if (!isMint && account) {
-      const payload = [
-        account,
-        parseUnits((fromAmount ?? "0") as `${number}`, 18),
-        selectedTo?.address,
-      ];
+      const payload = [account, safeFromAmount, selectedTo?.address];
       setPayload(payload);
     }
   }, [isMint, account, fromAmount, toAmount]);
