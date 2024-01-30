@@ -46,7 +46,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
-      : Number(fromAmount) ?? 0;
+      : fromAmount ?? 0;
 
   const [exceedingBalance, setExceedingBalance] = useState(false);
 
@@ -160,7 +160,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 token={selectedFrom}
                 spender={erc20HoneyAddress}
                 amount={parseUnits(
-                  safeFromAmount.toString(),
+                  (fromAmount ?? "0") as `${number}`,
                   selectedFrom?.decimals ?? 18,
                 )}
               />
