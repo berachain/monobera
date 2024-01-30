@@ -30,17 +30,17 @@ export default function Home({
       className={cn(arcade ? "bg-[#468DCB] font-honey" : "pro-mode-background")}
     >
       <ModeSwitch arcade={arcade} />
-      <div className="container max-w-[1050px]">
-        <HoneyPage arcade={arcade} />
-        <div
-          className={cn(
-            arcade
-              ? "bg-gradient-to-b from-[#468DCB] text-blue-900 honey:to-background"
-              : "",
-          )}
-        >
-          <Data arcade={arcade} />
 
+      <HoneyPage arcade={arcade} />
+      <div
+        className={cn(
+          arcade
+            ? "bg-gradient-to-b from-[#468DCB] text-blue-900 honey:to-background"
+            : "",
+        )}
+      >
+        <div className="container max-w-[1050px]">
+          <Data arcade={arcade} />
           <div className="py-4">
             {arcade ? (
               <h3 className="mb-4 flex items-center gap-3 text-lg text-blue-900 md:text-3xl">
