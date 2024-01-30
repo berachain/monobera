@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { formatUsd } from "@bera/berajs";
 import { GetSupplyDay, GetVolumeDay } from "@bera/graphql";
+import { Spinner } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
@@ -269,17 +270,6 @@ export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
                       "rounded-md border-2 border-blue-900 bg-blue-100 text-blue-900",
                   )}
                 >
-                  {/* <SelectItem
-                    value={HoneyTimeFrame.HOURLY}
-                    className={cn(
-                      "cursor-pointer rounded-md",
-                      arcade
-                        ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
-                        : "hover:bg-muted hover:text-foreground focus:text-foreground",
-                    )}
-                  >
-                    24H
-                  </SelectItem> */}
                   <SelectItem
                     value={HoneyTimeFrame.WEEKLY}
                     className={cn(
@@ -318,9 +308,9 @@ export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
             </div>
           </CardHeader>
 
-          <CardContent className="relative min-h-[250px] w-full">
+          <CardContent className="relative flex h-full min-h-[250px] w-full items-center justify-center">
             {loading || error ? (
-              <div>isLoading</div>
+              <Spinner />
             ) : (
               <BeraChart
                 data={chartData}

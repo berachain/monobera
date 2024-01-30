@@ -30,7 +30,7 @@ export default function Home({
       className={cn(arcade ? "bg-[#468DCB] font-honey" : "pro-mode-background")}
     >
       <ModeSwitch arcade={arcade} />
-      <div className="container">
+      <div className="container max-w-[1050px]">
         <HoneyPage arcade={arcade} />
         <div
           className={cn(
