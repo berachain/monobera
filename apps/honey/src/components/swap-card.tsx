@@ -46,7 +46,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
-      : fromAmount ?? 0;
+      : Number(fromAmount) ?? 0;
 
   const [exceedingBalance, setExceedingBalance] = useState(false);
 

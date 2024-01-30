@@ -57,17 +57,6 @@ export const usePsm = () => {
   const [fromAmount, setFromAmount] = useState<string | undefined>(undefined);
   const [toAmount, setToAmount] = useState<string | undefined>(undefined);
 
-  console.log(
-    fromAmount,
-    Number(fromAmount) > Number.MAX_SAFE_INTEGER,
-    "safeFromAmount",
-  );
-
-  const safeToAmount =
-    Number(toAmount) > Number.MAX_SAFE_INTEGER
-      ? Number.MAX_SAFE_INTEGER.toString()
-      : fromAmount ?? "0";
-
   const isMint = selectedFrom?.address !== honey?.address;
 
   const collateral = isMint ? selectedFrom : selectedTo;
