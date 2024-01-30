@@ -55,7 +55,7 @@ const Slider = React.forwardRef<
           );
         })}
     </SliderPrimitive.Track>
-      <span style={{ right: `calc(${Math.min(Math.max((100 - (Number(value) / max) * max), 0), 98)}% - 5px)`, position: "absolute" }} >
+      <span style={{ right: `calc(${Math.min(Math.max((100 - (Number(value) / max) * max), 0), 100)}% - 5px)`, position: "absolute" }} >
         <span className="block h-[14px] w-[14px] rounded-full border-2 border-warning-foreground bg-accent transition-colors focus:outline-none disabled:opacity-50">
         </span>
       </span>
