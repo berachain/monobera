@@ -160,7 +160,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 token={selectedFrom}
                 spender={erc20HoneyAddress}
                 amount={parseUnits(
-                  (fromAmount ?? "0") as `${number}`,
+                  fromAmount as `${number}`,
                   selectedFrom?.decimals ?? 18,
                 )}
               />

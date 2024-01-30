@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { from } from "@apollo/client";
 import {
   TransactionActionType,
   useBeraJs,
@@ -55,15 +56,17 @@ export const usePsm = () => {
 
   const [fromAmount, setFromAmount] = useState<string | undefined>(undefined);
   const [toAmount, setToAmount] = useState<string | undefined>(undefined);
-  const safeFromAmount =
-    Number(fromAmount) > Number.MAX_SAFE_INTEGER
-      ? Number.MAX_SAFE_INTEGER
-      : Number(fromAmount) ?? 0;
+
+  console.log(
+    fromAmount,
+    Number(fromAmount) > Number.MAX_SAFE_INTEGER,
+    "safeFromAmount",
+  );
 
   const safeToAmount =
     Number(toAmount) > Number.MAX_SAFE_INTEGER
-      ? Number.MAX_SAFE_INTEGER
-      : Number(toAmount) ?? 0;
+      ? Number.MAX_SAFE_INTEGER.toString()
+      : fromAmount ?? "0";
 
   const isMint = selectedFrom?.address !== honey?.address;
 
@@ -102,8 +105,8 @@ export const usePsm = () => {
 
   const { write, isLoading, ModalPortal } = useTxn({
     message: isMint
-      ? `Mint ${Number(safeToAmount).toFixed(2)} Honey`
-      : `Redeem ${Number(safeFromAmount).toFixed(2)} Honey`,
+      ? `Mint ${Number(toAmount).toFixed(2)} Honey`
+      : `Redeem ${Number(fromAmount).toFixed(2)} Honey`,
     actionType: isMint
       ? TransactionActionType.MINT_HONEY
       : TransactionActionType.REDEEM_HONEY,
@@ -187,15 +190,40 @@ export const usePsm = () => {
   };
 
   useEffect(() => {
+    function getSafeFromAmount() {
+      if (!fromAmount || isNaN(Number(fromAmount))) {
+        return "0";
+      }
+      try {
+        const bnFromAmount = BigNumber(fromAmount);
+        if (bnFromAmount.gt(BigNumber(Number.MAX_SAFE_INTEGER.toString()))) {
+          return Number.MAX_SAFE_INTEGER.toString();
+        }
+        return bnFromAmount.toString();
+      } catch (e) {
+        return "0";
+      }
+    }
+    const safeFromAmount = getSafeFromAmount();
+
     if (isMint && account) {
-      const payload = [account, selectedFrom?.address, safeFromAmount];
+      const payload = [
+        account,
+        selectedFrom?.address,
+        parseUnits(safeFromAmount, 18),
+      ];
       setPayload(payload);
     }
+
     if (!isMint && account) {
-      const payload = [account, safeFromAmount, selectedTo?.address];
+      const payload = [
+        account,
+        selectedTo?.address,
+        parseUnits(safeFromAmount, 18),
+      ];
       setPayload(payload);
     }
-  }, [isMint, account, fromAmount, toAmount]);
+  }, [isMint, account, fromAmount, selectedFrom, selectedTo]);
 
   const [needsApproval, setNeedsApproval] = useState(false);
 
