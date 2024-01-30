@@ -1,5 +1,9 @@
+"use client";
+
 import { useState } from "react";
+import { useQuery } from "@apollo/client";
 import { formatUsd } from "@bera/berajs";
+import { GetSupplyDay, GetVolumeDay } from "@bera/graphql";
 import { cn } from "@bera/ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
@@ -13,6 +17,8 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { format } from "date-fns";
 
+import { getTime } from "~/utils/getTime";
+import { fillSupplyDataByDay, fillVolumeDataByDay } from "~/utils/graph-utils";
 import { HoneyTimeFrame, barColors, type HoneyEntry } from "~/app/type";
 
 const Options = {
@@ -86,16 +92,6 @@ const Options = {
   },
 };
 
-interface IHoneyChart {
-  supply7D: HoneyEntry[];
-  volume7D: HoneyEntry[];
-  supply30D: HoneyEntry[];
-  volume30D: HoneyEntry[];
-  supply90D: HoneyEntry[];
-  volume90D: HoneyEntry[];
-  arcade: boolean;
-}
-
 enum Chart {
   VOLUME = "volume",
   FEES = "supply",
@@ -158,27 +154,28 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
   return percentageDifference;
 }
 
-export const HoneyChart = ({
-  supply7D,
-  volume7D,
-  supply30D,
-  volume30D,
-  supply90D,
-  volume90D,
-  arcade,
-}: IHoneyChart) => {
-  const DATA = {
-    supply7D,
-    volume7D,
-    supply30D,
-    volume30D,
-    supply90D,
-    volume90D,
-  };
+export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
   const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.WEEKLY);
-  const [chart, setChart] = useState(Chart.VOLUME);
+  const [chart, setChart] = useState<Chart.VOLUME | Chart.FEES>(Chart.VOLUME);
+  const {
+    data: graphdata,
+    loading,
+    error,
+  } = useQuery(chart === Chart.VOLUME ? GetVolumeDay : GetSupplyDay, {
+    variables: { timestamp_gt: getTime(timeFrame) },
+  });
 
-  const data = DATA[`${chart}${timeFrame}`];
+  const data =
+    chart === Chart.VOLUME
+      ? fillVolumeDataByDay(
+          graphdata?.honeyVolumeDayDatas ?? [],
+          getTime(timeFrame),
+        )
+      : fillSupplyDataByDay(
+          graphdata?.honeySupplyDayDatas ?? [],
+          getTime(timeFrame),
+        );
+
   const chartData = getData(data, arcade);
   const total = data[data.length - 1]?.amount ?? 0;
   const difference = calculatePercentageDifference(data);
@@ -322,11 +319,15 @@ export const HoneyChart = ({
           </CardHeader>
 
           <CardContent className="relative min-h-[250px] w-full">
-            <BeraChart
-              data={chartData}
-              options={Options as any}
-              type={chart === Chart.VOLUME ? "bar" : "line"}
-            />
+            {loading || error ? (
+              <div>isLoading</div>
+            ) : (
+              <BeraChart
+                data={chartData}
+                options={Options as any}
+                type={chart === Chart.VOLUME ? "bar" : "line"}
+              />
+            )}
           </CardContent>
         </Tabs>
       </Card>

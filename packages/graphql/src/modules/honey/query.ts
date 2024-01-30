@@ -162,3 +162,18 @@ export const GetVolumeHour = gql`
     }
   }
 `;
+
+export const GetGlobalData = gql`
+  query GetGlobalData {
+    honeyVolumeDayDatas(first: 1, orderBy: timestamp, orderDirection: desc) {
+      id
+      timestamp
+      amount
+    }
+    honeySupplyHourDatas(first: 1, orderBy: timestamp, orderDirection: desc) {
+      id
+      timestamp
+      amount
+    }
+  }
+`;
