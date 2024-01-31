@@ -26,7 +26,7 @@ export const usePollHoneyParams = () => {
       return result;
     },
     {
-      refreshInterval: POLLING.SLOW, // make it rlly slow TODO CHANGE
+      refreshInterval: POLLING.SLOW, // 3 minutes
     },
   );
 
