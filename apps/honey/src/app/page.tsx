@@ -27,15 +27,16 @@ export default function Home({
   const arcade = mode === "arcade";
   return (
     <div
-      className={cn(arcade ? "bg-[#468DCB] font-honey" : "pro-mode-background")}
+      className={cn(
+        arcade ? "bg-backgroundSecondary font-honey" : "pro-mode-background",
+      )}
     >
       <ModeSwitch arcade={arcade} />
-
       <HoneyPage arcade={arcade} />
       <div
         className={cn(
           arcade
-            ? "bg-gradient-to-b from-[#468DCB] text-blue-900 honey:to-background"
+            ? "bg-gradient-to-b from-backgroundSecondary text-foregroundSecondary honey:to-background"
             : "",
         )}
       >
@@ -43,7 +44,7 @@ export default function Home({
           <Data arcade={arcade} />
           <div className="py-4">
             {arcade ? (
-              <h3 className="mb-4 flex items-center gap-3 text-lg text-blue-900 md:text-3xl">
+              <h3 className="mb-4 flex items-center gap-3 text-lg text-foregroundSecondary md:text-3xl">
                 <Image
                   src={`${cloudinaryUrl}/honey/qqyo5g3phzdwezvazsih`}
                   className="w-8"

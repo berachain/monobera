@@ -187,7 +187,7 @@ export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
         className={cn(
           "border-2 p-0",
           arcade
-            ? "border-dashed border-blue-900"
+            ? "border-dashed border-foregroundSecondary"
             : "border-border bg-background",
         )}
       >
@@ -205,7 +205,7 @@ export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
               <div
                 className={cn(
                   arcade
-                    ? "text-2xl font-normal leading-9 text-blue-900"
+                    ? "text-2xl font-normal leading-9 text-foregroundSecondary"
                     : "text-xl font-semibold leading-7",
                 )}
               >
@@ -226,13 +226,15 @@ export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
             <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
               <TabsList
                 className={cn(
-                  arcade && "rounded-md border-2 border-blue-900 bg-blue-100",
+                  arcade &&
+                    "rounded-md border-2 border-foregroundSecondary bg-blue-100",
                 )}
               >
                 <TabsTrigger
                   value={Chart.VOLUME}
                   className={cn(
-                    arcade && "text-blue-900 data-[state=active]:bg-blue-900",
+                    arcade &&
+                      "text-foregroundSecondary data-[state=active]:bg-foregroundSecondary",
                   )}
                 >
                   Volume
@@ -240,7 +242,8 @@ export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
                 <TabsTrigger
                   value={Chart.FEES}
                   className={cn(
-                    arcade && "text-blue-900 data-[state=active]:bg-blue-900",
+                    arcade &&
+                      "text-foregroundSecondary data-[state=active]:bg-foregroundSecondary",
                   )}
                 >
                   Supply
@@ -255,7 +258,7 @@ export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
                   className={cn(
                     "w-fit justify-start gap-1 rounded-md",
                     arcade
-                      ? "border-2 border-blue-900 bg-blue-100 text-blue-900"
+                      ? "border-2 border-foregroundSecondary bg-blue-100 text-foregroundSecondary"
                       : "border border-border bg-muted text-foreground",
                   )}
                 >

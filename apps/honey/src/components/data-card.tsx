@@ -19,7 +19,7 @@ export default function DataCard({
       className={cn(
         "flex flex-col rounded-2xl bg-card",
         arcade
-          ? "border-[3px] border-dashed border-blue-900 px-6 py-4 text-blue-900"
+          ? "border-[3px] border-dashed border-foregroundSecondary px-6 py-4 text-foregroundSecondary"
           : "border-2 border-white bg-opacity-20 p-6 backdrop-blur-xl",
       )}
     >

@@ -39,7 +39,6 @@ export default function HoneyPage({ arcade = false }: { arcade: boolean }) {
       {arcade ? (
         <div className="m-auto block max-w-[1000px]">
           <HoneyMachine />
-          {/* <HoneyBanner /> */}
         </div>
       ) : (
         <div className="mx-auto flex w-full max-w-[1000px] flex-col items-center justify-between gap-8 px-4 py-16">
