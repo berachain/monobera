@@ -20,10 +20,10 @@ export function TokenIconList({
 
   return (
     <div className="ml-[5px] flex items-center">
-      {tokenList?.map((icon) => (
+      {tokenList?.map((tokenAddress: string) => (
         <TokenIcon
-          key={icon}
-          address={icon}
+          key={tokenAddress}
+          address={tokenAddress}
           className="ml-[-5px]"
           size={size}
         />

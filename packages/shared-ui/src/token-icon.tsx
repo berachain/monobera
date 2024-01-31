@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
-import { useTokens, type Token } from "@bera/berajs";
+import { handleNativeBera, useTokens } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { cva, type VariantProps } from "class-variance-authority";
-import { getAddress } from "viem";
+import { getAddress, isAddress } from "viem";
 
 const IconVariants = cva(
   "aspect-square flex items-center justify-center rounded-full text-foreground",
@@ -30,40 +30,30 @@ const IconVariants = cva(
 export interface IconProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof IconVariants> {
-  token?: Token | undefined;
+  // token?: Token | undefined;
   fetch?: boolean;
-  address?: string;
+  address: string;
 }
 
 export const TokenIcon = ({
-  token,
-  // fetch = false,
-  address,
+  address: adr,
   className,
   size,
   ...props
 }: IconProps) => {
   const { tokenDictionary } = useTokens();
-
+  const address = isAddress(adr) ? getAddress(adr) : adr;
   const img = useMemo(() => {
-    if (tokenDictionary && (address || token)) {
-      if (address && address !== "") {
-        return tokenDictionary[getAddress(address)]?.logoURI;
-      }
-      if (token && token?.address !== "") {
-        return tokenDictionary[getAddress(token.address)]?.logoURI;
-      }
+    if (tokenDictionary && address && isAddress(address)) {
+      return tokenDictionary[address]?.logoURI;
+    } else {
+      return "";
     }
-    return "";
-  }, [token, address, tokenDictionary]);
+  }, [tokenDictionary, tokenDictionary?.[address]]);
 
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
-      <AvatarImage
-        src={img}
-        className="rounded-full"
-        alt={token?.symbol ?? "unknow"}
-      />
+      <AvatarImage src={img} className="rounded-full" alt={address} />
       <AvatarFallback className="h-full w-full border border-foreground bg-background text-inherit">
         TKN
       </AvatarFallback>

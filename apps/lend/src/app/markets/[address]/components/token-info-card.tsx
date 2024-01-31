@@ -59,7 +59,7 @@ export default function TokenInfoCard({
     <Card className="flex flex-col gap-6 lg:flex-row lg:justify-between">
       <div className="flex items-center gap-4">
         {token ? (
-          <TokenIcon token={token} size="2xl" />
+          <TokenIcon address={token.address} size="2xl" />
         ) : (
           <Skeleton className="h-12 w-12 rounded-full" />
         )}
