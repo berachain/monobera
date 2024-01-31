@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+// import { DataTable } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
+// import { transaction_history_columns } from "~/utils/columns";
 import { EventTable } from "~/components/event-table";
 import { useHoneyEvents } from "~/hooks/useHoneyEvents";
 
@@ -137,6 +139,10 @@ export default function HoneyTransactionsTable({
           )}
         >
           <TabsContent value={Selection.AllTransactions} className="mt-0">
+            {/* <DataTable
+              columns={transaction_history_columns}
+              data={allData ?? []}
+            /> */}
             <EventTable
               events={allData}
               isLoading={isAllDataLoadingMore}
@@ -144,6 +150,10 @@ export default function HoneyTransactionsTable({
             />
           </TabsContent>
           <TabsContent value={Selection.Mints} className="mt-0">
+            {/* <DataTable
+              columns={transaction_history_columns}
+              data={mintData ?? []}
+            /> */}
             <EventTable
               events={mintData}
               isLoading={isMintDataLoadingMore}
@@ -151,6 +161,10 @@ export default function HoneyTransactionsTable({
             />
           </TabsContent>
           <TabsContent value={Selection.Burns} className="mt-0">
+            {/* <DataTable
+              columns={transaction_history_columns}
+              data={redemptionData ?? []}
+            /> */}
             <EventTable
               events={redemptionData}
               isLoading={isRedemptionDataLoadingMore}

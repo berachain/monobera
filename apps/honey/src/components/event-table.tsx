@@ -45,7 +45,7 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
-          <TokenIcon token={tokenIn} />
+          <TokenIcon address={tokenIn.address} />
           <p className="ml-2">
             {Number(
               formatUnits(
@@ -57,7 +57,7 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
-          <TokenIcon token={honey} />
+          <TokenIcon address={honeyTokenAddress} />
           <p className="ml-2">
             {Number(
               formatUnits(BigInt(event.mintAmount), honey?.decimals ?? 18),
@@ -74,7 +74,7 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
-          <TokenIcon token={honey} />
+          <TokenIcon address={honeyTokenAddress} />
           <p className="ml-2">
             {Number(
               formatUnits(
@@ -86,7 +86,7 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
-          <TokenIcon token={tokenOut} />
+          <TokenIcon address={tokenOut.address} />
           <p className="ml-2">
             {Number(
               formatUnits(
