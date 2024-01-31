@@ -855,12 +855,11 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
     ),
     cell: ({ row }) => {
       const volume = Number(row.original?.volume);
-      const leverage = Number(row.original?.leverage);
 
       const openPrice = Number(
         formatUnits(BigInt(row.original.open_price ?? 0), 10),
       );
-      const size = (volume * leverage) / openPrice;
+      const size = volume / openPrice;
       return (
         <div>
           {size.toFixed(4)} {row.original.market.name.split("-")[0]}
