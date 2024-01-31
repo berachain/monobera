@@ -67,7 +67,8 @@ const useBeraContractWrite = ({
               hash: receipt,
               pollingInterval: 5000,
               timeout: 120000,
-              confirmations: 2,
+              //Waits until confirmations number of blocks are mined on top of the block containing the transaction
+              confirmations: 1,
             });
           if (confirmationReceipt?.status === "success") {
             dispatch({ type: ActionEnum.SUCCESS });
@@ -84,7 +85,9 @@ const useBeraContractWrite = ({
           }
         }
       } catch (e: any) {
-        console.log(e);
+        if (process.env.VERCEL_ENV !== "production") {
+          console.log(e);
+        }
         dispatch({ type: ActionEnum.ERROR });
         const finalMsg = getErrorMessage(e);
         onError?.({
