@@ -42,7 +42,7 @@ export const usePollPreviewRedeemGivenOut = (
       }
     },
     {
-      refreshInterval: POLLING.FAST, // make it rlly slow TODO CHANGE
+      refreshInterval: POLLING.SLOW, // 3 minutes
       use: [laggy],
     },
   );
