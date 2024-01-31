@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
 import { ApproveButton, ConnectButton } from "@bera/shared-ui";
@@ -23,8 +23,6 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     payload,
     isConnected,
     setSelectedFrom,
-    // isTyping,
-    // setIsTyping,
     allowance,
     isLoading,
     write,
@@ -171,7 +169,8 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                     isLoading ||
                     !fromAmount ||
                     !toAmount ||
-                    !allowance
+                    !allowance ||
+                    exceedingBalance
                   }
                   onClick={() => {
                     write({

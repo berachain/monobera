@@ -19,7 +19,7 @@ import { useTxn } from "@bera/shared-ui";
 import BigNumber from "bignumber.js";
 import { getAddress, parseUnits, type Address } from "viem";
 
-import { getSafeNumber } from "~/utils/getSafeNumber";
+import { getScientificNotationToBigInt } from "~/utils/getScientificNotationToBigInt";
 
 export const usePsm = () => {
   const { tokenDictionary, tokenList } = useTokens();
@@ -57,10 +57,6 @@ export const usePsm = () => {
 
   const [fromAmount, setFromAmount] = useState<string | undefined>(undefined);
   const [toAmount, setToAmount] = useState<string | undefined>(undefined);
-
-  const safeFromAmount = fromAmount
-    ? getSafeNumber(fromAmount).toString()
-    : "0";
 
   const isMint = selectedFrom?.address !== honey?.address;
 
@@ -184,11 +180,12 @@ export const usePsm = () => {
   };
 
   useEffect(() => {
+    const fromAmountBN = getScientificNotationToBigInt(fromAmount ?? "0");
     if (isMint && account) {
       const payload = [
         account,
         selectedFrom?.address,
-        parseUnits(safeFromAmount, 18),
+        parseUnits(fromAmountBN, 18),
       ];
       setPayload(payload);
     }
@@ -196,8 +193,8 @@ export const usePsm = () => {
     if (!isMint && account) {
       const payload = [
         account,
+        parseUnits(fromAmountBN, 18),
         selectedTo?.address,
-        parseUnits(safeFromAmount, 18),
       ];
       setPayload(payload);
     }
