@@ -67,8 +67,7 @@ const useBeraContractWrite = ({
               hash: receipt,
               pollingInterval: 5000,
               timeout: 120000,
-              //Waits until confirmations number of blocks are mined on top of the block containing the transaction
-              confirmations: 1,
+              confirmations: 2,
             });
           if (confirmationReceipt?.status === "success") {
             dispatch({ type: ActionEnum.SUCCESS });
