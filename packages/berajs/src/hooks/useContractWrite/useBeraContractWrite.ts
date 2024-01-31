@@ -80,7 +80,8 @@ const useBeraContractWrite = ({
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const e = new TransactionFailedError();
             onError?.({
-              message: e.message ?? "Something went wrong. Please Try again",
+              message:
+                getErrorMessage(e) ?? "Something went wrong. Please Try again",
             });
           }
         }
