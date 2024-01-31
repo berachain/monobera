@@ -42,7 +42,7 @@ export const usePollPreviewMintGivenOut = (
       }
     },
     {
-      refreshInterval: POLLING.FAST, // make it rlly slow TODO CHANGE
+      refreshInterval: POLLING.SLOW, // 3 minutes
       use: [laggy],
     },
   );
