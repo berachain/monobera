@@ -84,7 +84,9 @@ export const usePsm = () => {
 
   const allowance = useAllowance();
 
-  const { useHoneyParams } = usePollHoneyParams();
+  const { useHoneyParams, isLoading: isFeeLoading } = usePollHoneyParams(
+    collateralList?.map((token: any) => token.address) ?? [],
+  );
 
   const params = useHoneyParams(
     collateral ? (collateral.address as Address) : undefined,
@@ -227,6 +229,7 @@ export const usePsm = () => {
     selectedFrom,
     selectedTo,
     fee,
+    isFeeLoading,
     setSelectedTo,
     fromAmount,
     setFromAmount,

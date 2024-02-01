@@ -2,22 +2,27 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
+import {
+  cloudinaryUrl,
+  erc20HoneyAddress,
+} from "@bera/config";
+import { ERC20_HONEY_ABI } from "@bera/berajs";
 import { ApproveButton, ConnectButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import BigNumber from "bignumber.js";
 import { parseUnits } from "viem";
 
 import { TokenInput } from "~/components/token-input";
-import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 
 export function SwapCard({ showBear = true }: { showBear?: boolean }) {
   const [tabValue, setTabValue] = useState<"mint" | "burn">("mint");
   const {
     fee,
+    isFeeLoading,
     payload,
     isConnected,
     setSelectedFrom,
@@ -41,6 +46,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     honey,
     collateralList,
   } = usePsm();
+
   return (
     <div className="w-full">
       {showBear && (
@@ -57,9 +63,13 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
         <CardHeader className="pb-3">
           <CardTitle>
             <span>{isMint ? "Mint" : "Redeem"}</span>
-            <div className="absolute right-6 top-5 text-base font-medium text-muted-foreground">
-              Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
-            </div>
+            {isFeeLoading ? (
+              <Skeleton className="w-40 h-6 absolute right-6 top-5" />
+            ) : (
+              <div className="absolute right-6 top-5 text-base font-medium text-muted-foreground">
+                Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
+              </div>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>

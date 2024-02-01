@@ -39,13 +39,11 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
   const honey = tokenDictionary?.[getAddress(honeyTokenAddress)];
 
   if (isMintData(event)) {
-    // this should be fixed once backend updated
-    const tokenIn =
-      tokenDictionary?.["0x6581e59A1C8dA66eD0D313a0d4029DcE2F746Cc5"];
+    const tokenIn = event.collateralCoin;
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
-          <TokenIcon address={tokenIn.address} />
+          <TokenIcon address={tokenIn?.address} />
           <p className="ml-2">
             {Number(
               formatUnits(
@@ -68,9 +66,7 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
     );
   }
   if (isBurnData(event)) {
-    // this should be fixed once backend updated
-    const tokenOut =
-      tokenDictionary?.["0x6581e59A1C8dA66eD0D313a0d4029DcE2F746Cc5"];
+    const tokenOut = event.collateralCoin;
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -86,7 +82,7 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
-          <TokenIcon address={tokenOut.address} />
+          <TokenIcon address={tokenOut?.address} />
           <p className="ml-2">
             {Number(
               formatUnits(

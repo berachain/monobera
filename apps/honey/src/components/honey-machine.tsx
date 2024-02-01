@@ -2,7 +2,7 @@
 
 import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
-import { TransactionActionType } from "@bera/berajs";
+import { ERC20_HONEY_ABI, TransactionActionType } from "@bera/berajs";
 import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
 import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -18,7 +18,6 @@ import { parseUnits } from "viem";
 import { erc20ABI } from "wagmi";
 
 import { LoadingBee } from "~/components/loadingBee";
-import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { HoneyTokenInput } from "./honey-token-input";
 
