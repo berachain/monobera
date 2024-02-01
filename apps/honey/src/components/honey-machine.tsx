@@ -285,7 +285,7 @@ export function HoneyMachine() {
   const performRedeeming = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-       //@ts-ignore
+      //@ts-ignore
       if (Number(payload[1]) > 0 && payload[1] <= fromBalance.balance) {
         write({
           address: erc20HoneyAddress,
