@@ -26,6 +26,14 @@ export const validator_table_columns: ColumnDef<any>[] = [
     },
     accessorKey: "bgt_delegated",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      console.log(rowA, rowB);
+      const a = rowA.original.my_delegation ?? 0;
+      const b = rowB.original.my_delegation ?? 0;
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    },
   },
   {
     header: ({ column }) => (
@@ -42,6 +50,13 @@ export const validator_table_columns: ColumnDef<any>[] = [
     ),
     accessorKey: "vp",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.voting_power ?? 0;
+      const b = rowB.original.voting_power ?? 0;
+      if (a > b) return -1;
+      if (a < b) return 1;
+      return 0;
+    },
   },
   {
     header: ({ column }) => (

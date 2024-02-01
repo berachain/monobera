@@ -96,24 +96,6 @@ export default function ValidatorSelector({
   );
 }
 
-export const VP = ({
-  operatorAddr,
-  tokens,
-}: {
-  operatorAddr: string;
-  tokens: bigint;
-}) => {
-  const { usePercentageDelegated } = usePollActiveValidators();
-  const percentageDelegated = usePercentageDelegated(operatorAddr);
-
-  return (
-    <div className="flex h-full w-full flex-shrink-0 items-center">
-      {formatter.format(Number(formatUnits(tokens, 18)))} (
-      {percentageDelegated?.toFixed(2)}%)
-    </div>
-  );
-};
-
 const ValidatorModal = ({
   onClose,
   open,
@@ -148,7 +130,9 @@ const ValidatorModal = ({
               {validator.description.moniker}
             </div>
           ),
+          my_delegation: validator.commission.commissionRates.rate,
           bgt_delegated: <BGTDelegated operatorAddr={validator.operatorAddr} />,
+          voting_power: validator.tokens,
           vp: (
             <VP
               operatorAddr={validator.operatorAddr}
@@ -210,18 +194,45 @@ const ValidatorModal = ({
   );
 };
 
-const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
+export const useCustomPercentageDelegated = (operatorAddr: string) => {
+  const { usePercentageDelegated } = usePollActiveValidators();
+  return usePercentageDelegated(operatorAddr);
+};
+
+export const useCustomBGTDelegated = (operatorAddr: string) => {
   const { useSelectedAccountDelegation, isLoading } = usePollAccountDelegations(
     getAddress(operatorAddr),
   );
   const bgtDelegated = useSelectedAccountDelegation();
+  return { isLoading, bgtDelegated };
+};
+
+const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
+  const { bgtDelegated, isLoading } = useCustomBGTDelegated(operatorAddr);
   return (
     <div className="flex h-full w-24 items-center justify-center">
       {isLoading
         ? "Loading"
         : bgtDelegated && Number(bgtDelegated) === 0
-          ? "0 BGT"
-          : Number(bgtDelegated ?? 0).toFixed(2)}
+        ? "0 BGT"
+        : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
+    </div>
+  );
+};
+
+export const VP = ({
+  operatorAddr,
+  tokens,
+}: {
+  operatorAddr: string;
+  tokens: bigint;
+}) => {
+  const percentageDelegated = useCustomPercentageDelegated(operatorAddr);
+
+  return (
+    <div className="flex h-full w-full flex-shrink-0 items-center">
+      {formatter.format(Number(formatUnits(tokens, 18)))} (
+      {percentageDelegated?.toFixed(2)}%)
     </div>
   );
 };
