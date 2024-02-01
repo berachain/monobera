@@ -118,37 +118,38 @@ export function HoneyMachine() {
   const {
     payload,
     isReady,
-    setSelectedFrom,
-    allowance,
     selectedFrom,
     selectedTo,
     fromAmount,
-    setFromAmount,
-    setToAmount,
     toAmount,
     isMint,
     fromBalance,
     toBalance,
-    setGivenIn,
     fee,
-    onSwitch,
     needsApproval,
     ModalPortal,
     honey,
     collateralList,
+    exceedBalance,
+    onSwitch,
+    setGivenIn,
+    setSelectedFrom,
+    setSelectedTo,
+    setFromAmount,
+    setToAmount,
   } = usePsm();
 
   const { write } = useTxn({
     message: needsApproval
       ? `Approve ${selectedFrom?.symbol}`
       : isMint
-        ? `Mint ${toAmount} HONEY`
-        : `Redeem ${fromAmount} HONEY`,
+      ? `Mint ${toAmount} HONEY`
+      : `Redeem ${fromAmount} HONEY`,
     actionType: needsApproval
       ? TransactionActionType.APPROVAL
       : isMint
-        ? TransactionActionType.MINT_HONEY
-        : TransactionActionType.REDEEM_HONEY,
+      ? TransactionActionType.MINT_HONEY
+      : TransactionActionType.REDEEM_HONEY,
     onError: (e: any) => {
       if (e.name === "TransactionExecutionError") {
         // rejection should be triggered when transaction fails(after metamask popup)
@@ -194,6 +195,7 @@ export function HoneyMachine() {
       txnSubmitAction?.fire();
     },
   });
+
   const [rotate, setRotate] = useState(0);
 
   const isReadyState = useStateMachineInput(
@@ -203,9 +205,7 @@ export function HoneyMachine() {
   );
 
   useEffect(() => {
-    if (rive) {
-      rive.play();
-    }
+    if (rive) rive.play();
   }, [rive]);
 
   useEffect(() => {
@@ -234,11 +234,7 @@ export function HoneyMachine() {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
       // const enterAmount = isMint ? payload[2] : payload[1];
-      if (
-        allowance &&
-        // allowance.allowance &&
-        needsApproval
-      ) {
+      if (needsApproval) {
         approvalWrite({
           address: selectedFrom?.address as `0x${string}`,
           abi: erc20ABI as unknown as (typeof erc20ABI)[],
@@ -264,8 +260,7 @@ export function HoneyMachine() {
   const performMinting = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      //@ts-ignore
-      if (Number(payload[2]) > 0 && payload[2] <= fromBalance.balance) {
+      if (!exceedBalance) {
         write({
           address: erc20HoneyAddress,
           abi: HONEY_PRECOMPILE_ABI,
@@ -285,8 +280,7 @@ export function HoneyMachine() {
   const performRedeeming = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      //@ts-ignore
-      if (Number(payload[1]) > 0 && payload[1] <= fromBalance.balance) {
+      if (!exceedBalance) {
         write({
           address: erc20HoneyAddress,
           abi: HONEY_PRECOMPILE_ABI,
@@ -332,6 +326,8 @@ export function HoneyMachine() {
         break;
     }
   }, [state.currentState]);
+
+  console.log("state", state.currentState);
 
   return (
     <>
@@ -398,6 +394,7 @@ export function HoneyMachine() {
                   <HoneyTokenInput
                     selected={selectedTo}
                     selectedTokens={[selectedFrom, selectedTo]}
+                    onTokenSelection={setSelectedTo}
                     amount={toAmount}
                     setAmount={(amount) => {
                       setGivenIn(false);
@@ -407,7 +404,6 @@ export function HoneyMachine() {
                     customTokenList={collateralList}
                     hidePrice
                     hideMax
-                    // hideBalance
                     balance={toBalance?.formattedBalance}
                   />
                 </ul>
