@@ -3,7 +3,7 @@ import { Footer } from "@bera/shared-ui";
 
 export const metadata: Metadata = {
   title: "Ambassador",
-  description: `Welcome!`,
+  description: "Welcome!",
 };
 
 export default function Page() {
