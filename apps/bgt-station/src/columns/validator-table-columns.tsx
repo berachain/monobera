@@ -24,8 +24,9 @@ export const validator_table_columns: ColumnDef<any>[] = [
         </div>
       );
     },
+    // TODO: find a way to sort for my delegation
     accessorKey: "bgt_delegated",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
@@ -42,6 +43,13 @@ export const validator_table_columns: ColumnDef<any>[] = [
     ),
     accessorKey: "vp",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.voting_power ?? 0;
+      const b = rowB.original.voting_power ?? 0;
+      if (a > b) return -1;
+      if (a < b) return 1;
+      return 0;
+    },
   },
   {
     header: ({ column }) => (
