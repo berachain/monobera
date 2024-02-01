@@ -143,13 +143,13 @@ export function HoneyMachine() {
     message: needsApproval
       ? `Approve ${selectedFrom?.symbol}`
       : isMint
-      ? `Mint ${toAmount} HONEY`
-      : `Redeem ${fromAmount} HONEY`,
+        ? `Mint ${toAmount} HONEY`
+        : `Redeem ${fromAmount} HONEY`,
     actionType: needsApproval
       ? TransactionActionType.APPROVAL
       : isMint
-      ? TransactionActionType.MINT_HONEY
-      : TransactionActionType.REDEEM_HONEY,
+        ? TransactionActionType.MINT_HONEY
+        : TransactionActionType.REDEEM_HONEY,
     onError: (e: any) => {
       if (e.name === "TransactionExecutionError") {
         // rejection should be triggered when transaction fails(after metamask popup)
@@ -326,8 +326,6 @@ export function HoneyMachine() {
         break;
     }
   }, [state.currentState]);
-
-  console.log("state", state.currentState);
 
   return (
     <>
