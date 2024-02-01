@@ -8,6 +8,7 @@ packages:
   - apps/validator-clue
   - packages/config/*
   - packages/config/env
+  - packages/beracrocswap
   - packages/graphql
   - packages/proto
   - packages/berajs

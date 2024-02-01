@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@bera/bera-router": "0.1.0",
+    "@bera/beracrocswap": "0.1.0",
     "@bera/berajs": "0.1.0",
     "@bera/config": "0.1.0",
     "@bera/graphql": "0.1.0",
