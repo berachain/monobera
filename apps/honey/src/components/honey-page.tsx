@@ -43,7 +43,7 @@ export default function HoneyPage({ arcade = false }: { arcade: boolean }) {
       ) : (
         <div className="mx-auto flex w-full max-w-[1000px] flex-col items-center justify-between gap-8 px-4 py-16">
           <Hero />
-          <SwapCard showBear={false} />
+          <SwapCard />
         </div>
       )}
     </section>

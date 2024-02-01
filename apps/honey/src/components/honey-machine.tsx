@@ -2,7 +2,7 @@
 
 import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
-import { ERC20_HONEY_ABI, TransactionActionType } from "@bera/berajs";
+import { HONEY_PRECOMPILE_ABI, TransactionActionType } from "@bera/berajs";
 import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
 import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -117,7 +117,7 @@ export function HoneyMachine() {
 
   const {
     payload,
-    isConnected,
+    isReady,
     setSelectedFrom,
     allowance,
     selectedFrom,
@@ -196,7 +196,7 @@ export function HoneyMachine() {
   });
   const [rotate, setRotate] = useState(0);
 
-  const isConnectedState = useStateMachineInput(
+  const isReadyState = useStateMachineInput(
     rive,
     STATE_MACHINE_NAME,
     "connectWallet",
@@ -264,10 +264,11 @@ export function HoneyMachine() {
   const performMinting = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
+      //@ts-ignore
       if (Number(payload[2]) > 0 && payload[2] <= fromBalance.balance) {
         write({
           address: erc20HoneyAddress,
-          abi: ERC20_HONEY_ABI,
+          abi: HONEY_PRECOMPILE_ABI,
           functionName: "mint",
           params: payload,
         });
@@ -284,10 +285,11 @@ export function HoneyMachine() {
   const performRedeeming = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
+       //@ts-ignore
       if (Number(payload[1]) > 0 && payload[1] <= fromBalance.balance) {
         write({
           address: erc20HoneyAddress,
-          abi: ERC20_HONEY_ABI,
+          abi: HONEY_PRECOMPILE_ABI,
           functionName: "redeem",
           params: payload,
         });
@@ -302,16 +304,16 @@ export function HoneyMachine() {
   };
 
   useEffect(() => {
-    if (isConnected) {
-      if (isConnectedState) {
-        isConnectedState.value = true;
+    if (isReady) {
+      if (isReadyState) {
+        isReadyState.value = true;
       }
     } else {
-      if (isConnectedState) {
-        isConnectedState.value = false;
+      if (isReadyState) {
+        isReadyState.value = false;
       }
     }
-  }, [isConnected, isConnectedState]);
+  }, [isReady, isReadyState]);
 
   // Perform the contract calls based on the current state
   useEffect(() => {
@@ -340,10 +342,10 @@ export function HoneyMachine() {
           <div
             className={cn(
               "absolute bottom-[50px] left-[45px] z-30 m-6 h-[250px] w-[30%] max-w-[230px] overflow-hidden",
-              !isConnected && "bottom-12",
+              !isReady && "bottom-12",
             )}
           >
-            {isConnected ? (
+            {isReady ? (
               <>
                 <h1 className="relative mb-1 text-2xl font-semibold text-foreground">
                   {isMint ? "Mint" : "Redeem"}

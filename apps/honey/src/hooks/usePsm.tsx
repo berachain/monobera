@@ -7,10 +7,7 @@ import {
   usePollAllowance,
   usePollBalance,
   usePollHoneyParams,
-  usePollPreviewMint,
-  usePollPreviewMintGivenOut,
-  usePollPreviewRedeem,
-  usePollPreviewRedeemGivenOut,
+  usePollHoneyPreview,
   useTokens,
   type Token,
 } from "@bera/berajs";
@@ -39,15 +36,8 @@ export const usePsm = () => {
 
   const [givenIn, setGivenIn] = useState<boolean>(true);
 
-  const [isTyping, setIsTyping] = useState(false);
-
   useEffect(() => {
-    if (
-      defaultCollateral &&
-      honey &&
-      selectedFrom === undefined &&
-      selectedTo === undefined
-    ) {
+    if (defaultCollateral && honey && !selectedFrom && !selectedTo) {
       setSelectedFrom(defaultCollateral);
       setSelectedTo(honey);
     }
@@ -73,9 +63,7 @@ export const usePsm = () => {
 
   const toBalance = useToBalance();
 
-  const [payload, setPayload] = useState<any[]>([]);
-
-  const { isConnected, account } = useBeraJs();
+  const { isReady, account } = useBeraJs();
 
   const { useAllowance } = usePollAllowance({
     contract: erc20HoneyAddress,
@@ -94,7 +82,11 @@ export const usePsm = () => {
 
   const fee = params ? (isMint ? params.mintFee : params.redeemFee) : 0;
 
-  const { write, isLoading, ModalPortal } = useTxn({
+  const {
+    write,
+    isLoading: isUseTxnLoading,
+    ModalPortal,
+  } = useTxn({
     message: isMint
       ? `Mint ${Number(toAmount).toFixed(2)} Honey`
       : `Redeem ${Number(fromAmount).toFixed(2)} Honey`,
@@ -103,67 +95,19 @@ export const usePsm = () => {
       : TransactionActionType.REDEEM_HONEY,
   });
 
-  const { usePreviewMint } = usePollPreviewMint(
-    collateral,
-    (fromAmount ?? "0") as `${number}`,
-  );
-  const previewMint = usePreviewMint();
-  const { usePreviewMintGivenOut } = usePollPreviewMintGivenOut(
-    collateral,
-    (toAmount ?? "0") as `${number}`,
-  );
-  const previewMintGivenOut = usePreviewMintGivenOut();
-  const { usePreviewRedeemGivenOut } = usePollPreviewRedeemGivenOut(
-    collateral,
-    (toAmount ?? "0") as `${number}`,
-  );
-
-  const previewRedeemGivenOut = usePreviewRedeemGivenOut();
-  const { usePreviewRedeem } = usePollPreviewRedeem(
-    collateral,
-    (fromAmount ?? "0") as `${number}`,
-  );
-  const previewRedeem = usePreviewRedeem();
+  const { useHoneyPreview, isLoading: isHoneyPreviewLoading } =
+    usePollHoneyPreview(
+      collateral,
+      (givenIn ? fromAmount : toAmount) ?? "0",
+      isMint,
+      givenIn,
+    );
+  const honeyPreview = useHoneyPreview();
 
   useEffect(() => {
-    if (isMint && givenIn && previewMint !== undefined) {
-      setToAmount(previewMint);
-    } else if (!previewMint && Number(fromAmount) === 0 && isMint && givenIn) {
-      setToAmount("");
-    }
-    if (!isMint && givenIn && previewRedeem) {
-      setToAmount(previewRedeem);
-    } else if (
-      !previewRedeem &&
-      Number(fromAmount) === 0 &&
-      !isMint &&
-      givenIn
-    ) {
-      setToAmount("");
-    }
-
-    if (isMint && !givenIn && previewMintGivenOut) {
-      setFromAmount(previewMintGivenOut);
-    } else if (
-      !previewMintGivenOut &&
-      Number(toAmount) === 0 &&
-      isMint &&
-      givenIn === false
-    ) {
-      setFromAmount("");
-    }
-
-    if (!isMint && givenIn === false && previewRedeemGivenOut !== undefined) {
-      setFromAmount(previewRedeemGivenOut);
-    } else if (
-      previewRedeemGivenOut === undefined &&
-      Number(fromAmount) === 0 &&
-      !isMint &&
-      givenIn
-    ) {
-      setFromAmount("");
-    }
-  }, [previewMint, previewRedeem, previewMintGivenOut, previewRedeemGivenOut]);
+    if (givenIn) setToAmount(honeyPreview);
+    else setFromAmount(honeyPreview);
+  }, [honeyPreview]);
 
   const onSwitch = () => {
     const tempFromAmount = fromAmount;
@@ -180,55 +124,33 @@ export const usePsm = () => {
     setGivenIn(!givenIn);
   };
 
-  useEffect(() => {
-    if (isMint && account) {
-      const payload = [
-        account,
-        selectedFrom?.address,
-        parseUnits((fromAmount ?? "0") as `${number}`, 18),
-      ];
-      setPayload(payload);
-    }
-    if (!isMint && account) {
-      const payload = [
-        account,
-        parseUnits((fromAmount ?? "0") as `${number}`, 18),
-        selectedTo?.address,
-      ];
-      setPayload(payload);
-    }
-  }, [isMint, account, fromAmount, toAmount]);
+  const payload = [
+    collateral?.address,
+    parseUnits(
+      fromAmount ?? "0",
+      (isMint ? collateral?.decimals : honey?.decimals) ?? 18,
+    ),
+    account ?? "",
+  ];
 
-  const [needsApproval, setNeedsApproval] = useState(false);
-
-  const validInput = Boolean(
-    Number(payload[2] > 0) &&
-      Number(payload[2]) <= Number(fromBalance?.formattedBalance),
+  const needsApproval = BigNumber(fromAmount ?? "0").gt(
+    allowance?.formattedAllowance ?? "0",
+  );
+  const exceedBalance = BigNumber(fromAmount ?? "0").gt(
+    fromBalance?.formattedBalance ?? "0",
   );
 
-  useEffect(() => {
-    if (
-      BigNumber(allowance?.formattedAllowance).eq("0") ||
-      BigNumber(fromAmount ?? "0").gt(allowance?.formattedAllowance ?? "0")
-    ) {
-      if (!needsApproval) setNeedsApproval(true);
-    } else {
-      if (needsApproval) setNeedsApproval(false);
-    }
-  }, [fromAmount, allowance]);
-
+  const isLoading = isUseTxnLoading || isHoneyPreviewLoading;
   return {
     payload,
-    isConnected,
-    setSelectedFrom,
-    isTyping,
-    setIsTyping,
     allowance,
+    setSelectedFrom,
     isLoading,
     write,
     selectedFrom,
     selectedTo,
     fee,
+    isReady,
     isFeeLoading,
     setSelectedTo,
     fromAmount,
@@ -242,7 +164,7 @@ export const usePsm = () => {
     ModalPortal,
     setGivenIn,
     needsApproval,
-    validInput,
+    exceedBalance,
     honey,
     collateralList,
   };
