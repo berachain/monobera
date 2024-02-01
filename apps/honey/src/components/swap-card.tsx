@@ -2,10 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import {
-  cloudinaryUrl,
-  erc20HoneyAddress,
-} from "@bera/config";
+import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
 import { ERC20_HONEY_ABI } from "@bera/berajs";
 import { ApproveButton, ConnectButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
