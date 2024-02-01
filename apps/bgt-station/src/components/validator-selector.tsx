@@ -214,8 +214,8 @@ const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
       {isLoading
         ? "Loading"
         : bgtDelegated && Number(bgtDelegated) === 0
-        ? "0 BGT"
-        : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
+          ? "0 BGT"
+          : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
     </div>
   );
 };
