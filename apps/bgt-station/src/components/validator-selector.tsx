@@ -19,7 +19,7 @@ import {
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits, type Address } from "viem";
+import { formatUnits, getAddress, type Address } from "viem";
 
 import { ValidatorGauge } from "~/app/validators/validators-table";
 import { validator_table_columns } from "~/columns/validator-table-columns";
@@ -195,8 +195,10 @@ const ValidatorModal = ({
 };
 
 const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
-  const { usePercentageDelegated, isLoading } = usePollActiveValidators();
-  const bgtDelegated = usePercentageDelegated(operatorAddr);
+  const { useSelectedAccountDelegation, isLoading } = usePollAccountDelegations(
+    getAddress(operatorAddr),
+  );
+  const bgtDelegated = useSelectedAccountDelegation();
   return (
     <div className="flex h-full w-24 items-center justify-center">
       {isLoading
