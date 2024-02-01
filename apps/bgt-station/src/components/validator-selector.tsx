@@ -1,3 +1,4 @@
+import { get } from "http";
 import React, { useMemo } from "react";
 import {
   usePollAccountDelegations,
@@ -18,7 +19,7 @@ import {
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits, getAddress, type Address } from "viem";
+import { formatUnits, type Address } from "viem";
 
 import { ValidatorGauge } from "~/app/validators/validators-table";
 import { validator_table_columns } from "~/columns/validator-table-columns";
@@ -130,7 +131,6 @@ const ValidatorModal = ({
               {validator.description.moniker}
             </div>
           ),
-          my_delegation: validator.commission.commissionRates.rate,
           bgt_delegated: <BGTDelegated operatorAddr={validator.operatorAddr} />,
           voting_power: validator.tokens,
           vp: (
@@ -194,28 +194,16 @@ const ValidatorModal = ({
   );
 };
 
-export const useCustomPercentageDelegated = (operatorAddr: string) => {
-  const { usePercentageDelegated } = usePollActiveValidators();
-  return usePercentageDelegated(operatorAddr);
-};
-
-export const useCustomBGTDelegated = (operatorAddr: string) => {
-  const { useSelectedAccountDelegation, isLoading } = usePollAccountDelegations(
-    getAddress(operatorAddr),
-  );
-  const bgtDelegated = useSelectedAccountDelegation();
-  return { isLoading, bgtDelegated };
-};
-
 const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
-  const { bgtDelegated, isLoading } = useCustomBGTDelegated(operatorAddr);
+  const { usePercentageDelegated, isLoading } = usePollActiveValidators();
+  const bgtDelegated = usePercentageDelegated(operatorAddr);
   return (
     <div className="flex h-full w-24 items-center justify-center">
       {isLoading
         ? "Loading"
         : bgtDelegated && Number(bgtDelegated) === 0
-          ? "0 BGT"
-          : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
+        ? "0 BGT"
+        : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
     </div>
   );
 };
@@ -227,7 +215,8 @@ export const VP = ({
   operatorAddr: string;
   tokens: bigint;
 }) => {
-  const percentageDelegated = useCustomPercentageDelegated(operatorAddr);
+  const { usePercentageDelegated } = usePollActiveValidators();
+  const percentageDelegated = usePercentageDelegated(operatorAddr);
 
   return (
     <div className="flex h-full w-full flex-shrink-0 items-center">
