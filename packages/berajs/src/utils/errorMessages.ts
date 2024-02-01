@@ -46,6 +46,32 @@ const errorMsgMap: ErrorMessages = {
         "The price of the asset you are trying to borrow has fluctuated too much. Please try again.",
     },
   },
+  PERPS: {
+    WRONG_LIMIT_PRICE: {
+      keywords: ["WRONG_LIMIT_PRICE"],
+      errorMSG: "Invalid limit conditions.",
+    },
+    PRICE_IMPACT_TOO_HIGH: {
+      keywords: ["PRICE_IMPACT_TOO_HIGH"],
+      errorMSG: "This trade has too much price impact!",
+    },
+    MAX_TRADES_PER_PAIR: {
+      keywords: ["MAX_TRADES_PER_PAIR"],
+      errorMSG: "You've exceeded your maximum amount of trades for this pair!",
+    },
+    ABOVE_MAX_POS: {
+      keywords: ["ABOVE_MAX_POS"],
+      errorMSG: "The trade's position size is too high.",
+    },
+    ABOVE_MAX_GROUP_COLLATERAL: {
+      keywords: ["ABOVE_MAX_GROUP_COLLATERAL"],
+      errorMSG: "The trade's collateral is more than the vault can support.",
+    },
+    BELOW_MIN_POS: {
+      keywords: ["BELOW_MIN_POS"],
+      errorMSG: "The trade's position size is too low.",
+    },
+  },
 };
 
 export const getErrorMessage = (e: any) => {
