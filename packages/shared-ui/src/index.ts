@@ -44,6 +44,7 @@ export { WalletBalanceInUs } from "./wallet-balance-in-us";
 export { ApproveButton } from "./approve-button";
 export { DynamicRewardBtn } from "./dynamic-reward-btn";
 export { Documentation } from "./documentation";
+export { MainNav } from "./main-nav";
 export * from "./terms-of-use";
 export * from "./access-deny";
 
