@@ -52,10 +52,19 @@ export class CrocSwapPlan {
       await this.calcLimitPrice(), await this.calcSlipQty(), surplusFlags,
       await this.buildTxArgs(surplusFlags))
 
+
     return (await this.context).dex.swap
-      (this.baseToken.tokenAddr, this.quoteToken.tokenAddr, (await this.context).chain.poolIndex,
-      this.sellBase, this.qtyInBase, await this.qty, TIP, 
-      await this.calcLimitPrice(), await this.calcSlipQty(), surplusFlags,
+      (
+      this.baseToken.tokenAddr, 
+      this.quoteToken.tokenAddr, 
+      (await this.context).chain.poolIndex,
+      this.sellBase, 
+      this.qtyInBase, 
+      await this.qty, 
+      TIP, 
+      await this.calcLimitPrice(), 
+      await this.calcSlipQty(), 
+      surplusFlags,
       await this.buildTxArgs(surplusFlags, await gasEst))
   }
 
@@ -90,7 +99,7 @@ export class CrocSwapPlan {
   }
 
   private async buildTxArgs (surplusArg: number, gasEst?: BigNumber) {
-    let txArgs = await this.attachEthMsg(surplusArg)
+    const txArgs = await this.attachEthMsg(surplusArg)
 
     if (gasEst) {
       const GAS_PADDING = 15000

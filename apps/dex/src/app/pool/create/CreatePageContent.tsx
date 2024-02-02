@@ -38,7 +38,6 @@ export default function CreatePageContent() {
     poolName,
     step,
     onTokenSelection,
-    onAddToken,
     onRemove,
     onTokenWeightChange,
     onTokenBalanceChange,
@@ -70,7 +69,6 @@ export default function CreatePageContent() {
             onTokenWeightChange={onTokenWeightChange}
             onLock={onLock}
             onUnlock={onUnlock}
-            onAddToken={onAddToken}
             onContinue={() => !error && setStep(Steps.SET_SWAP_FEES)}
           />
         )}

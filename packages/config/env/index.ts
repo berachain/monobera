@@ -140,3 +140,10 @@ export const bannerEnabled = Boolean(
 export const rpcBannerEnabled = Boolean(
   process.env.NEXT_PUBLIC_RPC_BANNER_ENABLED,
 );
+
+// Crocswap
+export const crocDexAddress = process.env.NEXT_PUBLIC_RPC_CROC_DEX as Address;
+export const crocQueryAddress = process.env
+  .NEXT_PUBLIC_RPC_CROC_QUERY as Address;
+export const crocImpactAddress = process.env
+  .NEXT_PUBLIC_RPC_CROC_IMPACT as Address;

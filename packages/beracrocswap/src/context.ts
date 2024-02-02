@@ -1,6 +1,6 @@
 import { Provider, JsonRpcProvider } from "@ethersproject/providers";
 import { Contract, ethers, Signer } from "ethers";
-import { ChainSpec, CHAIN_SPECS } from "./constants";
+import { ChainSpec, BERA_CHAIN } from "./constants";
 import { CROC_ABI, QUERY_ABI, ERC20_ABI } from "./abis";
 import { AddressZero } from "@ethersproject/constants";
 import { IMPACT_ABI } from "./abis/impact";
@@ -33,7 +33,7 @@ async function buildProvider(
   signer?: Signer
 ): Promise<[Provider, Signer | undefined]> {
   if (typeof arg === "number" || typeof arg == "string") {
-    const context = lookupChain(arg);
+    const context = BERA_CHAIN;
     return buildProvider(new JsonRpcProvider(context.nodeUrl), signer);
   } else if ("getNetwork" in arg) {
     return [arg, signer];
@@ -48,8 +48,7 @@ async function setupProvider(
   signer?: Signer
 ): Promise<CrocContext> {
   const actor = determineActor(provider, signer);
-  const chainId = await getChain(provider);
-  let cntx = inflateContracts(chainId, provider, actor);
+  const cntx = inflateContracts(provider, actor);
   return await attachSenderAddr(cntx, actor)
 }
 
@@ -58,7 +57,9 @@ async function attachSenderAddr (cntx: CrocContext,
   if ('getAddress' in actor) {
     try {
       cntx.senderAddr = await actor.getAddress()
-    } catch (e) { }
+    } catch (e) { 
+      console.log(e)
+    }
   }
   return cntx
 }
@@ -75,7 +76,7 @@ function determineActor(
     }
   } else if ("getSigner" in provider) {
     try {
-      let signer = (provider as ethers.providers.Web3Provider).getSigner();
+      const signer = (provider as ethers.providers.Web3Provider).getSigner();
       return signer
     } catch { 
       return provider 
@@ -85,23 +86,12 @@ function determineActor(
   }
 }
 
-async function getChain(provider: Provider): Promise<number> {
-  if ("chainId" in provider) {
-    return (provider as any).chainId as number;
-  } else if ("getNetwork" in provider) {
-    return provider.getNetwork().then((n) => n.chainId);
-  } else {
-    throw new Error("Invalid provider");
-  }
-}
-
 function inflateContracts(
-  chainId: number,
   provider: Provider,
   actor: Provider | Signer,
   addr?: string
 ): CrocContext {
-  const context = lookupChain(chainId);
+  const context = BERA_CHAIN;
   return {
     provider: provider,
     dex: new Contract(context.addrs.dex, CROC_ABI, actor),
@@ -112,16 +102,4 @@ function inflateContracts(
     chain: context,
     senderAddr: addr
   };
-}
-
-export function lookupChain(chainId: number | string): ChainSpec {
-  if (typeof chainId === "number") {
-    return lookupChain("0x" + chainId.toString(16));
-  } else {
-    const context = CHAIN_SPECS[chainId.toLowerCase()];
-    if (!context) {
-      throw new Error("Unsupported chain ID: " + chainId);
-    }
-    return context;
-  }
 }

@@ -85,7 +85,7 @@ export class CrocTokenView {
 
   private truncFraction (qty: string | number, decimals: number): number {
     if (typeof(qty) === "number") {
-      let exp = Math.pow(10, decimals)
+      const exp = Math.pow(10, decimals)
       return Math.floor(qty * exp) / exp
     } else {
       return this.truncFraction(parseFloat(qty), decimals)
@@ -136,7 +136,7 @@ export class CrocTokenView {
         [subCode, recv, await weiQty, this.tokenAddr])
   
       const txArgs = useMsgVal ? { value: await weiQty } : { }
-      let cntx = await this.context
+      const cntx = await this.context
       return cntx.dex.userCmd(cntx.chain.proxyPaths.cold, cmd, txArgs)
   
   }

@@ -8,6 +8,7 @@ import { BigNumber, BigNumberish } from 'ethers';
 import { AddressZero } from '@ethersproject/constants';
 import { PoolInitEncoder } from "./encoding/init";
 import { CrocSurplusFlags, decodeSurplusFlag, encodeSurplusArg } from "./encoding/flags";
+import { BeraSdkResponse } from "./types";
 
 type PriceRange = [number, number]
 type TickRange = [number, number]
@@ -108,27 +109,27 @@ export class CrocPoolView {
             isPriceBelow: (await pinPrice) < dispPrice })
     }
 
-    async initPool (initPrice: number): Promise<TransactionResponse> {
+    async initPool (initPrice: number, baseToken: string, quoteToken: string, poolIndex: number): Promise<BeraSdkResponse> {
         // Very small amount of ETH in economic terms but more than sufficient for min init burn
         const ETH_INIT_BURN = BigNumber.from(10).pow(12)
-        let txArgs = this.baseToken.tokenAddr === AddressZero ? { value: ETH_INIT_BURN } : { }
         
-        let encoder = new PoolInitEncoder(this.baseToken.tokenAddr, this.quoteToken.tokenAddr, 
-            (await this.context).chain.poolIndex)
+        let encoder = new PoolInitEncoder(baseToken, quoteToken, poolIndex)
         let spotPrice = this.fromDisplayPrice(initPrice)
         let calldata = encoder.encodeInitialize(await spotPrice)        
 
-        let cntx = await this.context
-        return cntx.dex.userCmd(cntx.chain.proxyPaths.cold, calldata, txArgs)
+        return {
+            calldata, 
+            value: this.baseToken.tokenAddr === AddressZero ? ETH_INIT_BURN.toString() : undefined
+        }
     }
 
     async mintAmbientBase (qty: TokenQty, limits: PriceRange, opts?: CrocLpOpts): 
-        Promise<TransactionResponse> {
+        Promise<BeraSdkResponse> {
         return this.mintAmbient(qty, this.useTrueBase, limits, opts)
     }
 
     async mintAmbientQuote (qty: TokenQty, limits: PriceRange, opts?: CrocLpOpts): 
-        Promise<TransactionResponse> {
+        Promise<BeraSdkResponse> {
         return this.mintAmbient(qty, !this.useTrueBase, limits, opts)
     }
 
@@ -143,18 +144,22 @@ export class CrocPoolView {
     }
 
     async burnAmbientLiq (liq: BigNumber, limits: PriceRange, opts?: CrocLpOpts): 
-        Promise<TransactionResponse> {
+        Promise<BeraSdkResponse> {
         let [lowerBound, upperBound] = await this.transformLimits(limits)
         const calldata = (await this.makeEncoder()).encodeBurnAmbient
             (liq, lowerBound, upperBound, this.maskSurplusFlag(opts))
-        return this.sendCmd(calldata)
+        return {
+            calldata
+        }
     }
 
-    async burnAmbientAll (limits: PriceRange, opts?: CrocLpOpts): Promise<TransactionResponse> {
+    async burnAmbientAll (limits: PriceRange, opts?: CrocLpOpts): Promise<BeraSdkResponse> {
         let [lowerBound, upperBound] = await this.transformLimits(limits)
         const calldata = (await this.makeEncoder()).encodeBurnAmbientAll
             (lowerBound, upperBound, this.maskSurplusFlag(opts))
-        return this.sendCmd(calldata)
+        return {
+            calldata
+        }
     }
 
     async burnRangeLiq (liq: BigNumber, range: TickRange, limits: PriceRange, opts?: CrocLpOpts): 
@@ -183,14 +188,17 @@ export class CrocPoolView {
     }
 
     private async mintAmbient (qty: TokenQty, isQtyBase: boolean, 
-        limits: PriceRange, opts?: CrocLpOpts): Promise<TransactionResponse> {
+        limits: PriceRange, opts?: CrocLpOpts): Promise<BeraSdkResponse> {
         let msgVal = this.msgValAmbient(qty, isQtyBase, limits, opts)
         let weiQty = this.normQty(qty, isQtyBase)
         let [lowerBound, upperBound] = await this.transformLimits(limits)
 
         const calldata = (await this.makeEncoder()).encodeMintAmbient(
             await weiQty, isQtyBase, lowerBound, upperBound, this.maskSurplusFlag(opts))
-        return this.sendCmd(calldata, {value: await msgVal})
+        return {
+            calldata, 
+            value: (await msgVal).toString()
+        }
     }
 
     private async boundLimits (range: TickRange, limits: PriceRange): Promise<PriceRange> {

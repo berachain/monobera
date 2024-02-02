@@ -953,6 +953,9 @@ importers:
         specifier: ^5.5.3
         version: 5.7.2
     devDependencies:
+      '@bera/config':
+        specifier: 0.1.0
+        version: link:../config/env
       '@types/jest':
         specifier: ^27.4.0
         version: 27.5.2

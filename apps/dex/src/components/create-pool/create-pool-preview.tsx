@@ -4,11 +4,11 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  DEX_PRECOMPILE_ABI,
+  CROCSWAP_DEX,
   TransactionActionType,
   useBeraConfig,
 } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
@@ -28,6 +28,8 @@ import { getSafeNumber } from "~/utils/getSafeNumber";
 import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
+import { parseAbiParameters, encodeAbiParameters } from "viem";
+import { encodeCrocPrice } from "@bera/beracrocswap";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -59,34 +61,24 @@ export function CreatePoolPreview({
     actionType: TransactionActionType.CREATE_POOL,
   });
 
-  // holy javascript hell
-  const parsedFee = Number(Number(fee / 100).toFixed(4));
-
-  const options = {
-    weights: tokenWeights.map((tokenWeight) => ({
-      asset: tokenWeight.token?.address,
-      weight: tokenWeight.weight,
-    })),
-    swapFee: parseUnits(`${parsedFee}`, 18),
-  };
-
   const rawBeraEntry = tokenWeights.find((tokenWeight) => {
     return tokenWeight.token?.address === process.env.NEXT_PUBLIC_BERA_ADDRESS;
   });
 
-  const payload = [
-    poolName,
-    tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
-    tokenWeights.map((tokenWeight) =>
-      parseUnits(
-        tokenWeight.initialLiquidity,
-        tokenWeight.token?.decimals ?? 18,
-      ),
-    ),
-    "balancer",
-    options,
+  const initPoolArgs = [
+    71n,
+    tokenWeights[0]?.token?.address,
+    tokenWeights[1]?.token?.address,
+    36000n,
+    encodeCrocPrice(1 / 3000),
   ];
 
+  const initPoolArgsEncoded = encodeAbiParameters(
+    parseAbiParameters("uint8, address, address, uint256, uint128"),
+    initPoolArgs as any[5],
+  );
+
+  const newPayload = [3n, initPoolArgsEncoded];
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
       {ModalPortal}
@@ -164,15 +156,11 @@ export function CreatePoolPreview({
               className="w-full"
               onClick={() => {
                 write({
-                  address: networkConfig.precompileAddresses
-                    .erc20DexAddress as Address,
-                  abi: DEX_PRECOMPILE_ABI,
-                  functionName: "createPool",
-                  params: payload,
-                  value:
-                    rawBeraEntry === undefined
-                      ? 0n
-                      : parseUnits(rawBeraEntry.initialLiquidity, 18),
+                  address: crocDexAddress,
+                  abi: CROCSWAP_DEX,
+                  functionName: "userCmd",
+                  params: newPayload,
+                  value: rawBeraEntry === undefined ? 0n : 10n ** 16n,
                 });
               }}
             >

@@ -15,7 +15,6 @@ type Props = {
   error: Error | undefined;
   onContinue: () => void;
   onTokenSelection: (token: Token | undefined, index: number) => void;
-  onAddToken: () => void;
   onRemove: (index: number) => void;
   onTokenWeightChange: (index: number, weight: number) => void;
   onLock: (index: number) => void;
@@ -28,7 +27,6 @@ export function CreatePool({
   error,
   onContinue,
   onTokenSelection,
-  onAddToken,
   onRemove,
   onTokenWeightChange,
   onLock,
@@ -62,10 +60,6 @@ export function CreatePool({
             );
           })}
         </ul>
-        <Icons.plusCircle
-          className="mt-4 h-6 w-6 self-center text-muted-foreground"
-          onClick={onAddToken}
-        />
         {error && (
           <Alert variant="destructive">
             <AlertDescription>
