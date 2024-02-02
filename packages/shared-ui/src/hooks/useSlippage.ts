@@ -6,6 +6,7 @@ import {
   SLIPPAGE_MODE,
   SLIPPAGE_TOLERANCE_TYPE,
   SLIPPAGE_TOLERANCE_VALUE,
+  SLIPPAGE_DEGEN_VALUE,
 } from "../settings";
 
 export const useSlippage = () => {
@@ -29,7 +30,7 @@ export const useSlippage = () => {
       return slippage;
     }
     if (slippageMode === SLIPPAGE_MODE.DEGEN) {
-      return 80;
+      return SLIPPAGE_DEGEN_VALUE;
     }
   }, [slippageMode, slippage]);
 };
