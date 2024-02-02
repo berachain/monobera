@@ -2,7 +2,11 @@
 
 import { formatUsd, truncateHash, useTokens } from "@bera/berajs";
 import { blockExplorerUrl, honeyTokenAddress } from "@bera/config";
-import { type HoneyMint, type HoneyRedemption } from "@bera/graphql";
+import {
+  type HoneyMint,
+  type HoneyRedemption,
+  type HoneyTxn,
+} from "@bera/graphql";
 import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
@@ -17,38 +21,20 @@ import {
 import { formatDistance } from "date-fns";
 import { formatUnits, getAddress } from "viem";
 
-function isMintData(obj: any): obj is HoneyMint {
-  return obj.__typename === "HoneyMint";
-}
-
-function isBurnData(obj: any): obj is HoneyRedemption {
-  return obj.__typename === "HoneyRedemption";
-}
-
-const getAction = (event: any) => {
-  if (isMintData(event)) {
-    return <p className="text-success-foreground">Mint</p>;
-  }
-  if (isBurnData(event)) {
-    return <p className="text-destructive-foreground">Redeem</p>;
-  }
-  return <p>IDK</p>;
-};
-
 const getTokenDisplay = (event: any, tokenDictionary: any) => {
   const honey = tokenDictionary?.[getAddress(honeyTokenAddress)];
+  const collateral = tokenDictionary?.[getAddress(event.collateral)];
 
-  if (isMintData(event)) {
-    const tokenIn = event.collateralCoin;
+  if (event.txnType === "Mint") {
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
-          <TokenIcon address={tokenIn?.address} />
+          <TokenIcon address={collateral?.address} />
           <p className="ml-2">
             {Number(
               formatUnits(
                 BigInt(event.collateralAmount),
-                tokenIn?.decimals ?? 18,
+                collateral?.decimals ?? 18,
               ),
             ).toFixed(4)}
           </p>
@@ -58,53 +44,37 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
           <TokenIcon address={honeyTokenAddress} />
           <p className="ml-2">
             {Number(
-              formatUnits(BigInt(event.mintAmount), honey?.decimals ?? 18),
+              formatUnits(BigInt(event.honeyAmount), honey?.decimals ?? 18),
             ).toFixed(4)}
           </p>
         </div>
       </div>
     );
   }
-  if (isBurnData(event)) {
-    const tokenOut = event.collateralCoin;
-    return (
-      <div className="space-evenly flex flex-row items-center">
-        <div className="flex items-center">
-          <TokenIcon address={honeyTokenAddress} />
-          <p className="ml-2">
-            {Number(
-              formatUnits(
-                BigInt(event.collateralAmount),
-                honey?.decimals ?? 18,
-              ),
-            ).toFixed(4)}
-          </p>
-        </div>
-        <Icons.chevronRight className="mx-2" />
-        <div className="flex items-center">
-          <TokenIcon address={tokenOut?.address} />
-          <p className="ml-2">
-            {Number(
-              formatUnits(
-                BigInt(event.collateralAmount),
-                tokenOut?.decimals ?? 18,
-              ),
-            ).toFixed(4)}
-          </p>
-        </div>
+  return (
+    <div className="space-evenly flex flex-row items-center">
+      <div className="flex items-center">
+        <TokenIcon address={honeyTokenAddress} />
+        <p className="ml-2">
+          {Number(
+            formatUnits(BigInt(event.honeyAmount), honey?.decimals ?? 18),
+          ).toFixed(4)}
+        </p>
       </div>
-    );
-  }
-};
-
-const getValue = (event: HoneyMint | HoneyRedemption) => {
-  if (isMintData(event)) {
-    return formatUnits(BigInt(event.mintAmount), 18);
-  }
-  if (isBurnData(event)) {
-    return formatUnits(BigInt(event.collateralAmount), 18);
-  }
-  return 0;
+      <Icons.chevronRight className="mx-2" />
+      <div className="flex items-center">
+        <TokenIcon address={collateral?.address} />
+        <p className="ml-2">
+          {Number(
+            formatUnits(
+              BigInt(event.collateralAmount),
+              collateral?.decimals ?? 18,
+            ),
+          ).toFixed(4)}
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export const EventTable = ({
@@ -112,7 +82,8 @@ export const EventTable = ({
   isLoading,
   arcade,
 }: {
-  events: HoneyMint[] | HoneyRedemption[];
+  // events: HoneyMint[] | HoneyRedemption[] ;
+  events: HoneyTxn[];
   isLoading: boolean | undefined;
   arcade: boolean;
 }) => {
@@ -147,7 +118,7 @@ export const EventTable = ({
       </TableHeader>
       <TableBody>
         {events?.length && events[0] ? (
-          events.map((event: HoneyMint | HoneyRedemption) => {
+          events.map((event: HoneyTxn) => {
             if (!event) return null;
             return (
               <TableRow
@@ -163,8 +134,27 @@ export const EventTable = ({
                   )
                 }
               >
-                <TableCell>{getAction(event)}</TableCell>
-                <TableCell>{formatUsd(getValue(event) ?? "")}</TableCell>
+                <TableCell
+                  className={cn(
+                    event.txnType === "Mint"
+                      ? "text-success-foreground"
+                      : " text-destructive-foreground",
+                  )}
+                >
+                  {event.txnType}
+                </TableCell>
+                <TableCell>
+                  {formatUsd(
+                    formatUnits(
+                      BigInt(
+                        event.txnType === "Mint"
+                          ? event.honeyAmount
+                          : event.collateralAmount,
+                      ),
+                      18,
+                    ),
+                  )}
+                </TableCell>
                 <TableCell className="hidden font-medium sm:table-cell">
                   {getTokenDisplay(event, tokenDictionary)}
                 </TableCell>
