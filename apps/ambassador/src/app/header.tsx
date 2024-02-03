@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { MainNav } from "@bera/shared-ui";
+import { ThemeToggleMobile } from "@bera/shared-ui/src/theme-toggle-mobile";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 
@@ -24,6 +25,7 @@ export function Header({ navItems }: { navItems: any[] }) {
         </div>
 
         <div className="flex h-full items-center gap-2 xl:gap-2">
+          <ThemeToggleMobile />
           <Link
             className="hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-md sm:flex"
             href={""}
