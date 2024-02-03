@@ -1,9 +1,24 @@
 "use client";
 
 import React, { type ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
-import { Skeleton } from "@bera/ui/skeleton";
+
+const announcements = [
+  {
+    image: "/announcement_1.png",
+  },
+  {
+    image: "/announcement_2.png",
+  },
+  {
+    image: "/announcement_3.png",
+  },
+  {
+    image: "/announcement_4.png",
+  },
+];
 
 export default function Announcements() {
   const [allDataSize, setAllDataSize] = React.useState(4);
@@ -18,10 +33,17 @@ export default function Announcements() {
         Upcoming Events, Hackathons, Team GetToGethers, etc..
       </div>
       <div className="mt-8 grid h-fit grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
-        {[1, 2, 3, 4].map((index) => (
+        {announcements.map((announcement) => (
           <div className="relative col-span-1 flex h-[340px] w-[420px] flex-col rounded-xl border border-solid bg-background">
             <div className="flex flex-col items-center gap-1 px-6 pb-4 pt-6">
-              <Skeleton className="rounded-2 h-[149px] w-[372px]" />
+              <Image
+                src={announcement.image}
+                alt="bera banner"
+                width={452}
+                height={175}
+                priority
+                loading="eager"
+              />
               <div className="text-xl font-semibold text-foreground">
                 Project name
               </div>

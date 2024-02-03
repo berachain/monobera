@@ -13,11 +13,11 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <div className="relative mx-auto flex max-w-1280 flex-col gap-[128px] bg-lend bg-contain bg-no-repeat pb-[72px] pt-20 md:pt-[116px] lg:pt-[140px]">
+      <div className="relative mx-auto flex max-w-1280 flex-col gap-[128px] bg-contain bg-no-repeat pb-[72px] pt-20 md:pt-[116px] lg:pt-[140px]">
         <Hero />
         <div className="-mx-full">
           <div className="relative m-auto mt-8 bg-glow bg-cover bg-center bg-no-repeat">
-            <div className="relative mx-auto flex h-[2000px] items-center justify-center">
+            <div className="relative mx-auto flex h-[3200px] items-center justify-center">
               <Image
                 src="/bright_bg.png"
                 alt="Ellipase"
