@@ -61,14 +61,14 @@ const getTokenDisplay = (event: LiquidityChanged, pool: Pool) => {
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
-          <TokenIcon token={tokenIn.coin as Token} />
+          <TokenIcon address={tokenIn.coin.address} />
           <p className="ml-2">
             {Number(formatUnits(BigInt(tokenIn.amount), 18)).toFixed(4)}
           </p>
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
-          <TokenIcon token={tokenOut.coin as Token} />
+          <TokenIcon address={tokenOut.coin.address} />
           <p className="ml-2">
             {Number(formatUnits(BigInt(tokenOut.amount), 18)).toFixed(4)}
           </p>
@@ -88,7 +88,7 @@ const getTokenDisplay = (event: LiquidityChanged, pool: Pool) => {
               className={cn("flex flex-row", i !== 0 && "ml-[-10px]")}
               key={i}
             >
-              <TokenIcon token={token} />
+              <TokenIcon address={token.address} />
             </div>
           );
         })}
@@ -440,7 +440,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                   className="flex h-8 items-center justify-between"
                 >
                   <div className="flex gap-1">
-                    <TokenIcon token={token} />
+                    <TokenIcon address={token.address} />
                     <div className="ml-1 font-medium uppercase">
                       {token.address === beraTokenAddress
                         ? "wbera"

@@ -5,6 +5,7 @@ import { formatUsd, truncateHash, useTokens } from "@bera/berajs";
 import { blockExplorerUrl, honeyTokenAddress } from "@bera/config";
 import { type HoneyMint, type HoneyRedemption } from "@bera/graphql";
 import { TokenIcon } from "@bera/shared-ui";
+// import { DataTable } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -20,7 +21,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatDistance } from "date-fns";
 import { formatUnits, getAddress } from "viem";
 
-import { useHoneyEvents } from "~/hooks/useHoneyEvents";
+// import { transaction_history_columns } from "~/utils/columns";
+// import { EventTable } from "~/components/event-table";
+import { useHoneyEvents } from "~/hooks/useHoneyEventsOld";
 
 enum Selection {
   AllTransactions = "allTransactions",
@@ -31,105 +34,6 @@ enum Selection {
 export interface MappedTokens {
   [key: string]: number;
 }
-
-const prices = {
-  ahoney: 1,
-  stgusdc: 1,
-};
-
-function isMintData(obj: any): obj is HoneyMint {
-  return obj.__typename === "HoneyMint";
-}
-
-function isBurnData(obj: any): obj is HoneyRedemption {
-  return obj.__typename === "HoneyRedemption";
-}
-
-const getAction = (event: any) => {
-  if (isMintData(event)) {
-    return <p className="text-success-foreground">Mint</p>;
-  }
-  if (isBurnData(event)) {
-    return <p className="text-destructive-foreground">Redeem</p>;
-  }
-  return <p>IDK</p>;
-};
-
-const getTokenDisplay = (event: any, tokenDictionary: any) => {
-  const honey = tokenDictionary?.[getAddress(honeyTokenAddress)];
-
-  if (isMintData(event)) {
-    // this should be fixed once backend updated
-    const tokenIn =
-      tokenDictionary?.["0x6581e59A1C8dA66eD0D313a0d4029DcE2F746Cc5"];
-    return (
-      <div className="space-evenly flex flex-row items-center">
-        <div className="flex items-center">
-          <TokenIcon token={tokenIn} />
-          <p className="ml-2">
-            {Number(
-              formatUnits(
-                BigInt(event.collateralAmount),
-                tokenIn?.decimals ?? 18,
-              ),
-            ).toFixed(4)}
-          </p>
-        </div>
-        <Icons.chevronRight className="mx-2" />
-        <div className="flex items-center">
-          <TokenIcon token={honey} />
-          <p className="ml-2">
-            {Number(
-              formatUnits(BigInt(event.mintAmount), honey?.decimals ?? 18),
-            ).toFixed(4)}
-          </p>
-        </div>
-      </div>
-    );
-  }
-  if (isBurnData(event)) {
-    // this should be fixed once backend updated
-    const tokenOut =
-      tokenDictionary?.["0x6581e59A1C8dA66eD0D313a0d4029DcE2F746Cc5"];
-    return (
-      <div className="space-evenly flex flex-row items-center">
-        <div className="flex items-center">
-          <TokenIcon token={honey} />
-          <p className="ml-2">
-            {Number(
-              formatUnits(
-                BigInt(event.collateralAmount),
-                honey?.decimals ?? 18,
-              ),
-            ).toFixed(4)}
-          </p>
-        </div>
-        <Icons.chevronRight className="mx-2" />
-        <div className="flex items-center">
-          <TokenIcon token={tokenOut} />
-          <p className="ml-2">
-            {Number(
-              formatUnits(
-                BigInt(event.collateralAmount),
-                tokenOut?.decimals ?? 18,
-              ),
-            ).toFixed(4)}
-          </p>
-        </div>
-      </div>
-    );
-  }
-};
-
-const getValue = (event: HoneyMint | HoneyRedemption) => {
-  if (isMintData(event)) {
-    return formatUnits(BigInt(event.mintAmount), 18);
-  }
-  if (isBurnData(event)) {
-    return formatUnits(BigInt(event.collateralAmount), 18);
-  }
-  return 0;
-};
 
 export default function HoneyTransactionsTable({
   arcade,
@@ -250,24 +154,33 @@ export default function HoneyTransactionsTable({
           )}
         >
           <TabsContent value={Selection.AllTransactions} className="mt-0">
+            {/* <DataTable
+              columns={transaction_history_columns}
+              data={allData ?? []}
+            /> */}
             <EventTable
-              prices={prices}
               events={allData}
               isLoading={isAllDataLoadingMore}
               arcade={arcade}
             />
           </TabsContent>
           <TabsContent value={Selection.Mints} className="mt-0">
+            {/* <DataTable
+              columns={transaction_history_columns}
+              data={mintData ?? []}
+            /> */}
             <EventTable
-              prices={prices}
               events={mintData}
               isLoading={isMintDataLoadingMore}
               arcade={arcade}
             />
           </TabsContent>
           <TabsContent value={Selection.Burns} className="mt-0">
+            {/* <DataTable
+              columns={transaction_history_columns}
+              data={redemptionData ?? []}
+            /> */}
             <EventTable
-              prices={prices}
               events={redemptionData}
               isLoading={isRedemptionDataLoadingMore}
               arcade={arcade}
@@ -280,12 +193,104 @@ export default function HoneyTransactionsTable({
   );
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// below should be moved wen new honey comes up
+
+function isMintData(obj: any): obj is HoneyMint {
+  return obj.__typename === "HoneyMint";
+}
+
+function isBurnData(obj: any): obj is HoneyRedemption {
+  return obj.__typename === "HoneyRedemption";
+}
+
+const getAction = (event: any) => {
+  if (isMintData(event)) {
+    return <p className="text-success-foreground">Mint</p>;
+  }
+  if (isBurnData(event)) {
+    return <p className="text-destructive-foreground">Redeem</p>;
+  }
+  return <p>IDK</p>;
+};
+
+const getTokenDisplay = (event: any, tokenDictionary: any) => {
+  const honey = tokenDictionary?.[getAddress(honeyTokenAddress)];
+  const collateral =
+    tokenDictionary?.[getAddress(event.collateralCoin.address)];
+  if (isMintData(event)) {
+    // this should be fixed once backend updated
+    return (
+      <div className="space-evenly flex flex-row items-center">
+        <div className="flex items-center">
+          <TokenIcon address={collateral.address} />
+          <p className="ml-2">
+            {Number(
+              formatUnits(
+                BigInt(event.collateralAmount),
+                collateral?.decimals ?? 18,
+              ),
+            ).toFixed(4)}
+          </p>
+        </div>
+        <Icons.chevronRight className="mx-2" />
+        <div className="flex items-center">
+          <TokenIcon address={honeyTokenAddress} />
+          <p className="ml-2">
+            {Number(
+              formatUnits(BigInt(event.mintAmount), honey?.decimals ?? 18),
+            ).toFixed(4)}
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (isBurnData(event)) {
+    return (
+      <div className="space-evenly flex flex-row items-center">
+        <div className="flex items-center">
+          <TokenIcon address={honeyTokenAddress} />
+          <p className="ml-2">
+            {Number(
+              formatUnits(
+                BigInt(event.collateralAmount),
+                honey?.decimals ?? 18,
+              ),
+            ).toFixed(4)}
+          </p>
+        </div>
+        <Icons.chevronRight className="mx-2" />
+        <div className="flex items-center">
+          <TokenIcon address={collateral.address} />
+          <p className="ml-2">
+            {Number(
+              formatUnits(
+                BigInt(event.collateralAmount),
+                collateral?.decimals ?? 18,
+              ),
+            ).toFixed(4)}
+          </p>
+        </div>
+      </div>
+    );
+  }
+};
+
+const getValue = (event: HoneyMint | HoneyRedemption) => {
+  if (isMintData(event)) {
+    return formatUnits(BigInt(event.mintAmount), 18);
+  }
+  if (isBurnData(event)) {
+    return formatUnits(BigInt(event.collateralAmount), 18);
+  }
+  return 0;
+};
+
 export const EventTable = ({
   events,
   isLoading,
   arcade,
 }: {
-  prices: MappedTokens;
   events: HoneyMint[] | HoneyRedemption[];
   isLoading: boolean | undefined;
   arcade: boolean;

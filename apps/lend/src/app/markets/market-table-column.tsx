@@ -15,7 +15,7 @@ export const market_table_columns: ColumnDef<any>[] = [
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
         {row.original.token ? (
           <TokenIcon
-            token={row.original.token}
+            address={row.original.address}
             size="lg"
             key={row.original.address}
           />
