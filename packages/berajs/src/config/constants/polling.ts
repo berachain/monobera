@@ -1,7 +1,7 @@
 enum POLLING {
-  FAST = 10000, // 2sec
-  NORMAL = 10000, // 10 sec
-  SLOW = 1800000, // 1 minute 30 secs
+  FAST = 10000, // 10 sec
+  NORMAL = 100000, // 100 sec
+  SLOW = 180000, // 3 min
 }
 
 export default POLLING;

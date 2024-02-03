@@ -105,8 +105,7 @@ export const usePollSwaps = ({
       }
     },
     {
-      refreshInterval: POLLING.SLOW,
-      // use: [laggy],
+      refreshInterval: POLLING.FAST, // 10 seconds to ensure the accurate data
     },
   );
 };
