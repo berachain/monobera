@@ -6,6 +6,7 @@ import { IBM_Plex_Sans, Jua } from "next/font/google";
 import Script from "next/script";
 import { BeraConfig } from "@bera/berajs";
 import { rpcBannerEnabled } from "@bera/config";
+import { BeraGraphProvider } from "@bera/graphql";
 import {
   Footer,
   Header,
@@ -63,25 +64,27 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         >
           {" "}
           <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
-          <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
-            <Header
-              isHoney
-              navItems={navItems}
-              mobileNavItems={mobileNavItems}
-            />
-            <main
-              className={cn(
-                "w-full pb-[72px]",
-                rpcBannerEnabled ? "pt-[120px]" : "pt-[72px]",
-              )}
-            >
-              {props.children}
-            </main>
-            <Toaster position="bottom-right" />
-            <Footer />
-            <TailwindIndicator />
-            <Analytics />
-          </BeraConfig>
+          <BeraGraphProvider>
+            <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
+              <Header
+                isHoney
+                navItems={navItems}
+                mobileNavItems={mobileNavItems}
+              />
+              <main
+                className={cn(
+                  "w-full pb-[72px]",
+                  rpcBannerEnabled ? "pt-[120px]" : "pt-[72px]",
+                )}
+              >
+                {props.children}
+              </main>
+              <Toaster position="bottom-right" />
+              <Footer />
+              <TailwindIndicator />
+              <Analytics />
+            </BeraConfig>
+          </BeraGraphProvider>
         </body>
       </SWRDevTools>
     </html>

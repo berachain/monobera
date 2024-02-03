@@ -121,8 +121,8 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
           {pool?.tokens?.map((token, i) => {
             return (
               <TokenIcon
-                token={token}
                 className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
+                address={token.address}
                 key={token.address}
               />
             );

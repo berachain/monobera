@@ -35,7 +35,7 @@ export default function CreatePoolInitialLiquidityInput({
           variant="secondary"
         >
           <>
-            <TokenIcon token={tokenWeight.token} />
+            <TokenIcon address={tokenWeight.token?.address ?? ""} />
             {tokenWeight.token?.symbol}
             <div className=" h-fit text-base text-foreground">
               {tokenWeight.weight}%

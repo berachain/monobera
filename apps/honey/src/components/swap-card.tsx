@@ -1,29 +1,27 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
-import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
+import { erc20HoneyAddress } from "@bera/config";
 import { ApproveButton, ConnectButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import BigNumber from "bignumber.js";
 import { parseUnits } from "viem";
 
 import { TokenInput } from "~/components/token-input";
+// import { HONEY_PRECOMPILE_ABI } from "@bera/berajs";
 import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 
-export function SwapCard({ showBear = true }: { showBear?: boolean }) {
+export function SwapCard() {
   const [tabValue, setTabValue] = useState<"mint" | "burn">("mint");
   const {
-    fee,
+    // fee,
+    isFeeLoading,
     payload,
-    isConnected,
+    isReady,
     setSelectedFrom,
-    // isTyping,
-    // setIsTyping,
-    allowance,
     isLoading,
     write,
     selectedFrom,
@@ -40,26 +38,25 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
     ModalPortal,
     honey,
     collateralList,
+    needsApproval,
+    exceedBalance,
   } = usePsm();
+
   return (
     <div className="w-full">
-      {showBear && (
-        <Image
-          src={`${cloudinaryUrl}/bears/l9oaplrgfkrqw8y6noyp`}
-          className="relative z-0 m-auto self-center"
-          alt="king"
-          width={300}
-          height={60}
-        />
-      )}
       <Card className="relative z-10 m-auto block w-full max-w-[500px] bg-background shadow-2xl">
         {ModalPortal}
         <CardHeader className="pb-3">
           <CardTitle>
             <span>{isMint ? "Mint" : "Redeem"}</span>
-            <div className="absolute right-6 top-5 text-base font-medium text-muted-foreground">
-              Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
-            </div>
+            {isFeeLoading ? (
+              <Skeleton className="absolute right-6 top-5 h-6 w-40" />
+            ) : (
+              <div className="absolute right-6 top-5 text-base font-medium text-muted-foreground">
+                {/* Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}% */}
+                Static fee of 0.5%
+              </div>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -70,9 +67,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 className="flex-1 capitalize"
                 onClick={() => {
                   setTabValue("mint");
-                  if (!isMint) {
-                    onSwitch();
-                  }
+                  if (!isMint) onSwitch();
                 }}
               >
                 Mint
@@ -82,9 +77,7 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 className="flex-1 capitalize"
                 onClick={() => {
                   setTabValue("burn");
-                  if (isMint) {
-                    onSwitch();
-                  }
+                  if (isMint) onSwitch();
                 }}
               >
                 Redeem
@@ -121,67 +114,40 @@ export function SwapCard({ showBear = true }: { showBear?: boolean }) {
                 customTokenList={collateralList}
                 showExceeding={false}
                 hidePrice
+                disabled
                 // hideBalance
                 hideMax={true}
                 balance={toBalance?.formattedBalance}
               />
             </ul>
-            {/* fix to check if allowance > amount */}
-            {BigNumber(allowance?.formattedAllowance).lt(fromAmount ?? "0") ? (
+            {!isReady ? (
+              <ConnectButton className="w-full" />
+            ) : needsApproval ? (
               <ApproveButton
                 token={selectedFrom}
                 spender={erc20HoneyAddress}
                 amount={parseUnits(
-                  fromAmount as `${number}`,
+                  fromAmount ?? "0",
                   selectedFrom?.decimals ?? 18,
                 )}
               />
-            ) : isConnected ? (
-              isMint ? (
-                <Button
-                  disabled={
-                    Number(fromAmount) <= 0 ||
-                    Number(toAmount) <= 0 ||
-                    isLoading ||
-                    !fromAmount ||
-                    !toAmount ||
-                    !allowance
-                  }
-                  onClick={() => {
-                    write({
-                      address: erc20HoneyAddress,
-                      abi: ERC20_HONEY_ABI,
-                      functionName: "mint",
-                      params: payload,
-                    });
-                  }}
-                >
-                  Mint
-                </Button>
-              ) : (
-                <Button
-                  disabled={
-                    Number(fromAmount) <= 0 ||
-                    Number(toAmount) <= 0 ||
-                    !fromAmount ||
-                    !toAmount ||
-                    isLoading ||
-                    !allowance
-                  }
-                  onClick={() => {
-                    write({
-                      address: erc20HoneyAddress,
-                      abi: ERC20_HONEY_ABI,
-                      functionName: "redeem",
-                      params: payload,
-                    });
-                  }}
-                >
-                  Redeem
-                </Button>
-              )
             ) : (
-              <ConnectButton className="w-full" />
+              <Button
+                disabled={
+                  isLoading || !fromAmount || !toAmount || exceedBalance
+                }
+                onClick={() => {
+                  write({
+                    address: erc20HoneyAddress,
+                    // abi: HONEY_PRECOMPILE_ABI,
+                    abi: ERC20_HONEY_ABI,
+                    functionName: isMint ? "mint" : "redeem",
+                    params: payload,
+                  });
+                }}
+              >
+                Mint
+              </Button>
             )}
           </div>
         </CardContent>

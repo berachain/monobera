@@ -86,7 +86,7 @@ const BribeCard = ({
   return (
     <Card className="w-full">
       <div className="flex w-full items-center gap-2 p-6">
-        <TokenIcon token={token} className="h-8 w-8" />
+        <TokenIcon address={token?.address ?? ""} className="h-8 w-8" />
         <div className="font-medium">
           {formattedTotal.toFixed(6)} {token?.symbol}{" "}
         </div>

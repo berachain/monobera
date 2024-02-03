@@ -27,7 +27,7 @@ export function TokenRow({
       key={asset.address}
     >
       <div className="flex gap-4">
-        <TokenIcon token={asset} size="2xl" />
+        <TokenIcon address={asset.address} size="2xl" />
         <div className="font-medium">
           <div className="flex-1 truncate text-sm font-medium leading-6">
             {formatter.format(Number(asset.formattedBalance))} {asset.symbol}
