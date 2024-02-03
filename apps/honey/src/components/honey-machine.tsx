@@ -344,7 +344,8 @@ export function HoneyMachine() {
                 <h1 className="relative mb-1 text-2xl font-semibold text-foreground">
                   {isMint ? "Mint" : "Redeem"}
                   <div className="absolute right-0 top-1 text-sm text-muted-foreground">
-                    Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
+                    {/* Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}% */}
+                    Static fee of 0.5%
                   </div>
                 </h1>
                 <ul>
@@ -402,6 +403,7 @@ export function HoneyMachine() {
                     customTokenList={collateralList}
                     hidePrice
                     hideMax
+                    disabled
                     balance={toBalance?.formattedBalance}
                   />
                 </ul>

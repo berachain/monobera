@@ -2,11 +2,7 @@
 
 import { formatUsd, truncateHash, useTokens } from "@bera/berajs";
 import { blockExplorerUrl, honeyTokenAddress } from "@bera/config";
-import {
-  type HoneyMint,
-  type HoneyRedemption,
-  type HoneyTxn,
-} from "@bera/graphql";
+import { type HoneyTxn } from "@bera/graphql";
 import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";

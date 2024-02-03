@@ -121,17 +121,29 @@ export const usePsm = () => {
 
     setFromAmount(tempToAmount);
     setToAmount(tempFromAmount);
-    setGivenIn(!givenIn);
+    // setGivenIn(!givenIn);
   };
 
-  const payload = [
-    collateral?.address,
-    parseUnits(
-      fromAmount ?? "0",
-      (isMint ? collateral?.decimals : honey?.decimals) ?? 18,
-    ),
-    account ?? "",
-  ];
+  // const payload = [
+  //   collateral?.address,
+  //   parseUnits(
+  //     fromAmount ?? "0",
+  //     (isMint ? collateral?.decimals : honey?.decimals) ?? 18,
+  //   ),
+  //   account ?? "",
+  // ];
+
+  const payload = isMint
+    ? [
+        account,
+        selectedFrom?.address,
+        parseUnits((fromAmount ?? "0") as `${number}`, 18),
+      ]
+    : [
+        account,
+        parseUnits((fromAmount ?? "0") as `${number}`, 18),
+        selectedTo?.address,
+      ];
 
   const needsApproval = BigNumber(fromAmount ?? "0").gt(
     allowance?.formattedAllowance ?? "0",
