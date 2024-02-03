@@ -1,3 +1,4 @@
+// this should be deleted with new honey
 export const ERC20_HONEY_ABI = [
   {
     inputs: [
