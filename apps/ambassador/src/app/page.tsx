@@ -1,8 +1,7 @@
 import { type Metadata } from "next";
-import Image from "next/image";
+// import Image from "next/image";
 import { Footer } from "@bera/shared-ui";
-
-import AmbassadorPageContent from "./components/ambassador-page-content";
+import { Button } from "@bera/ui/button";
 import {
   AmbassadorCard,
   brigadeGeneral,
@@ -12,6 +11,7 @@ import {
 import { Projects } from "./components/upcoming-events/events";
 import Hero from "./components/hero";
 import Announcements from "./components/announcements/announcements";
+import { SignUp } from './components/signUp-section/signup';
 import FAQ from "./components/faq";
 
 export const metadata: Metadata = {
@@ -42,12 +42,16 @@ export default function Page() {
                   Ambassador
                 </span>
               </h1>
-              <div className="flex flex-wrap justify-between gap-1 p-4 pb-4">
+              <div className="flex flex-wrap justify-between gap-4 p-4 pb-4">
                 <AmbassadorCard ambassador={brigadeGeneral} />
                 <AmbassadorCard ambassador={kingsOath} />
                 <AmbassadorCard ambassador={footSoldier} />
               </div>
+              <Button variant="outline" className="mt-12 mb-8">
+                Learn more about Tiers
+              </Button>
             </div>
+            <SignUp cloudinaryUrl={""} />
             <Announcements />
             <FAQ />
             <Footer />

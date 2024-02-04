@@ -1,7 +1,8 @@
 import React from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "@bera/ui/avatar";
+import { Button } from "@bera/ui/button";
 
 // Define the ambassadors
 export const brigadeGeneral = {
@@ -25,7 +26,7 @@ export const footSoldier = {
   intro: "Amet avec adios abibas abelao donde",
 };
 
-export function AmbassadorCard({ ambassador }) {
+export function AmbassadorCard({ ambassador }: { ambassador: any }) {
   function getAmbassadorStyle(tier: string) {
     switch (tier) {
       case "Tier 1":
@@ -65,7 +66,7 @@ export function AmbassadorCard({ ambassador }) {
   );
 }
 
-export function Tiers() {
+export function Tiers(): React.JSX.Element {
   return (
     <>
       <div className="flex flex-col items-center justify-center pt-12 pb-12">
@@ -75,11 +76,14 @@ export function Tiers() {
             Ambassador
           </span>
         </h1>
-        <div className="flex flex-wrap justify-between gap-1 p-4 pb-4">
+        <div className="flex flex-wrap justify-between gap-4 p-4 pb-4">
           <AmbassadorCard ambassador={brigadeGeneral} />
           <AmbassadorCard ambassador={kingsOath} />
           <AmbassadorCard ambassador={footSoldier} />
         </div>
+        <Button variant="outline" className="mt-12 mb-8">
+          View more events
+        </Button>
       </div>
     </>
   );

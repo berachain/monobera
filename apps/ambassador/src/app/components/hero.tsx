@@ -5,9 +5,9 @@ import { Button } from "@bera/ui/button";
 
 export default function Hero() {
   return (
-    <div className="flex flex-col items-center justify-between sm:flex-row">
-      <div className="flex flex-col items-start gap-4 ">
-        <h1 className="leading-24 leading-14 text-5xl font-extrabold md:text-5xl ">
+    <div className="flex flex-wrap justify-between items-center px-24">
+      <div className="items-left flex flex-col gap-4">
+        <h1 className="leading-24 leading-14 text-xl font-extrabold md:text-5xl ">
           <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
             Become a
           </span>{" "}
@@ -32,7 +32,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="relative flex flex-col items-center justify-center gap-4 ">
-        <div className="transition-opacity hover:animate-spin-slower">
+        <div className="transition-opacity hover:animate-spin-slower md:block sm:hidden">
           <Image
             src="/circle.png"
             alt="bera circle"

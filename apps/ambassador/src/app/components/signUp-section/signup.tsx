@@ -1,30 +1,17 @@
-"use client";
+"use client"
 
-import React from "react";
-import Image from "next/image";
-import { cloudinaryUrl } from "@bera/config";
+import React from 'react';
+import Image from 'next/image';
 import { Button } from "@bera/ui/button";
+import { cloudinaryUrl } from "@bera/config";
 
-import Announcements from "./announcements/announcements";
-import FAQ from "./faq";
 
-export default function AmbassadorPageContent() {
-  return (
-    <div className="absolute z-20 justify-center pt-8 text-center">
-      <div className="mt-8 flex flex-col items-center justify-center pt-8">
-        <h1 className="md:leading-14 leading-24 text-3xl font-extrabold md:text-5xl">
-          Who are the{" "}
-          <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
-            Ambassadors?
-          </span>
-        </h1>
+type SignUpProps = {
+    cloudinaryUrl: string;
+  };
 
-        <div className="mt-8">
-          <Button onClick={() => {}} variant="outline">
-            Register
-          </Button>
-        </div>
-      </div>
+  export const SignUp: React.FC<SignUpProps> = ({ cloudinaryUrl }) => (
+    <>
       <div className="flex items-start gap-4 pt-8 ">
         <Image
           className="max-[600px]:mx-auto"
@@ -60,7 +47,6 @@ export default function AmbassadorPageContent() {
             alt="bg"
             layout="fill"
           />
-
           <div className="absolute z-20 max-w-[653px] pt-8">
             <h1 className="md:leading-14 leading-24 w-[653px] text-2xl font-extrabold text-white md:text-xl">
               Experience the collaboration of numerous creators. Register now
@@ -69,7 +55,6 @@ export default function AmbassadorPageContent() {
             </h1>
             <div className="mt-8">
               <Button
-                onClick={() => {}}
                 variant="outline"
                 className=" text-white"
               >
@@ -79,8 +64,5 @@ export default function AmbassadorPageContent() {
           </div>
         </div>
       </div>
-      <Announcements />
-      <FAQ />
-    </div>
+    </>
   );
-}

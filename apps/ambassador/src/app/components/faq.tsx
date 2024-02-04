@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link";
+// import Link from "next/link";
 import {
   Accordion,
   AccordionContent,
@@ -9,7 +9,7 @@ import {
 
 export default function FAQ() {
   return (
-    <div className="mt-8 flex w-full flex-col items-center justify-center pt-32 pb-64 gap-4">
+    <div className="mt-8 flex w-full flex-col items-center justify-center pt-32 pb-32 gap-4 bg-muted">
       <h1 className="md:leading-14 leading-24 text-xl font-extrabold md:text-3xl">
         Frequently Asked Questions (FAQ)
       </h1>
@@ -47,7 +47,7 @@ export default function FAQ() {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-4">
-          <AccordionTrigger>What's in it for me?</AccordionTrigger>
+          <AccordionTrigger>What&apos;s in it for me?</AccordionTrigger>
           <AccordionContent className="max-w-[585px] pl-10 text-xs font-medium leading-tight text-muted-foreground">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
             dignissim turpis ac risus convallis commodo. Aenean vitae varius
