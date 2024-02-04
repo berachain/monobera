@@ -29,13 +29,13 @@ export function AmbassadorCard({ ambassador }) {
   function getAmbassadorStyle(tier: string) {
     switch (tier) {
       case "Tier 1":
-        return 'dark:bg-gradient-to-b dark:from-amber-800 dark:to-amber-900 dark:border-amber-600 bg-gradient-to-b from-amber-200 to-amber-50 border-amber-200 opacity-75 backdrop-blur';
+        return "dark:bg-gradient-to-b dark:from-amber-800 dark:to-amber-900 dark:border-amber-600 bg-gradient-to-b from-amber-200 to-amber-50 border-amber-200 opacity-75 backdrop-blur";
       case "Tier 2":
-        return 'dark:bg-gradient-to-b dark:from-slate-900 dark:to-slate-700 dark:border-slate-600 bg-gradient-to-b from-slate-300 to-slate-100 border-slate-200 opacity-75 backdrop-blur';
+        return "dark:bg-gradient-to-b dark:from-slate-900 dark:to-slate-700 dark:border-slate-600 bg-gradient-to-b from-slate-300 to-slate-100 border-slate-200 opacity-75 backdrop-blur";
       case "Tier 3":
-        return 'dark:bg-gradient-to-b dark:from-orange-900 dark:to-orange-700 dark:border-orange-600 bg-gradient-to-b from-orange-100 to-orange-50 border-orange-200 opacity-75 backdrop-blur';
+        return "dark:bg-gradient-to-b dark:from-orange-900 dark:to-orange-700 dark:border-orange-600 bg-gradient-to-b from-orange-100 to-orange-50 border-orange-200 opacity-75 backdrop-blur";
       default:
-        return '';
+        return "";
     }
   }
 

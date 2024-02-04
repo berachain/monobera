@@ -35,7 +35,9 @@ export default function FAQ() {
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-3">
-          <AccordionTrigger>If i sign up, what would be expected of me?</AccordionTrigger>
+          <AccordionTrigger>
+            If i sign up, what would be expected of me?
+          </AccordionTrigger>
           <AccordionContent className="max-w-[585px] pl-1 text-xs font-medium leading-tight text-muted-foreground">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
             dignissim turpis ac risus convallis commodo. Aenean vitae varius
