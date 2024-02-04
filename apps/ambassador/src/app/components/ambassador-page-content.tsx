@@ -2,11 +2,9 @@
 
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { cloudinaryUrl } from "@bera/config";
-// import { cn } from "@bera/ui";
-import { Avatar, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
+
 import Announcements from "./announcements/announcements";
 import FAQ from "./faq";
 

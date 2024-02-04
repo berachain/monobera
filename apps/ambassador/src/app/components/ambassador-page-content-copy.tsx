@@ -53,16 +53,16 @@ const ambassadors = [
   },
 ];
 
-function getAmbassadorStyle(tier) {
+function getAmbassadorStyle(tier: string) {
   switch (tier) {
-    case 'Tier 1':
-      return 'bg-gradient-to-b from-amber-200 to-amber-50 border-amber-200 opacity-75 backdrop-blur';
-    case 'Tier 2':
-      return 'bg-gradient-to-b from-slate-300 to-slate-100 border-slate-200 opacity-75 backdrop-blur';
-    case 'Tier 3':
-      return 'bg-gradient-to-b from-orange-100 to-orange-50 border-orange-200 opacity-75 backdrop-blur';
+    case "Tier 1":
+      return "bg-gradient-to-b from-amber-200 to-amber-50 border-amber-200 opacity-75 backdrop-blur";
+    case "Tier 2":
+      return "bg-gradient-to-b from-slate-300 to-slate-100 border-slate-200 opacity-75 backdrop-blur";
+    case "Tier 3":
+      return "bg-gradient-to-b from-orange-100 to-orange-50 border-orange-200 opacity-75 backdrop-blur";
     default:
-      return '';
+      return "";
   }
 }
 
@@ -107,13 +107,13 @@ export default function AmbassadorPageContent() {
             </div>
           ))}
         </div>
-        <div className="mt-2 mb-8">
+        <div className="mb-8 mt-2">
           <Button onClick={() => {}} variant="outline">
             View more events
           </Button>
         </div>
       </div>
-      <div className="mt-8 flex flex-col items-center justify-center pt-8">
+      <div className=" mt-8 flex flex-col items-center justify-center pt-8">
         <h1 className="md:leading-14 leading-24 text-3xl font-extrabold md:text-5xl">
           Who are the{" "}
           <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
@@ -123,7 +123,11 @@ export default function AmbassadorPageContent() {
         <div className="mt-8 grid h-fit grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {ambassadors.map((ambassador) => (
             <Link href="" target="_blank">
-              <div className={`relative col-span-1 flex h-[440px] w-[300px] flex-col rounded-lg border border-solid ${getAmbassadorStyle(ambassador.tier)}`}>
+              <div
+                className={`relative col-span-1 flex h-[440px] w-[300px] flex-col rounded-lg border border-solid ${getAmbassadorStyle(
+                  ambassador.tier,
+                )}`}
+              >
                 <div className="flex flex-col items-center gap-4 px-6 pb-4 pt-6">
                   <Avatar className="h-20 w-20">
                     <AvatarImage
@@ -131,7 +135,7 @@ export default function AmbassadorPageContent() {
                       className="rounded-full"
                     />
                   </Avatar>
-                  <div className="h-[40px] w-[86px] bg-gradient-to-b from-amber-100 to-white rounded-sm border border-solid p-2">
+                  <div className="h-[40px] w-[86px] rounded-sm border border-solid bg-gradient-to-b from-amber-100 to-white p-2">
                     {ambassador.tier}
                   </div>
                   <div className="text-lg font-semibold text-foreground">
