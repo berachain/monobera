@@ -1,14 +1,19 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
+import { useTheme } from "next-themes";
 
 export default function Hero() {
+  const { theme: appTheme, systemTheme } = useTheme();
+  const theme = (appTheme === "system" ? systemTheme : appTheme) || "dark";
   return (
     <div className="flex items-center justify-center">
       <div className="relative mx-auto flex h-[483px] w-[1280px]">
         <Image
-          src="/eco_bear_bg.png"
+          src={theme == "dark" ? "/dark_bear_bg.png" : "/light_bear_bg.png"}
           alt="Eco Bear"
           width={1280}
           height={483}

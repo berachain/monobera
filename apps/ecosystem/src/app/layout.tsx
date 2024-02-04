@@ -12,6 +12,7 @@ import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
 import { useLocalStorage } from "usehooks-ts";
 
+import { ThemeProvider } from "./components/theme-provider";
 import { navItems } from "./config";
 import { Header } from "./header";
 
@@ -51,23 +52,24 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           )}
         >
           <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
-
-          <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-            <div className="z-[100]">
-              <Toaster position="bottom-right" />
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+            <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+              <div className="z-[100]">
+                <Toaster position="bottom-right" />
+              </div>
+              <div className="z-10 flex-1">
+                <Header navItems={navItems} />
+                <main
+                  className={cn(
+                    "w-full",
+                    rpcBannerEnabled ? "pt-start-lg" : "pt-start",
+                  )}
+                >
+                  {props.children}
+                </main>
+              </div>
             </div>
-            <div className="z-10 flex-1">
-              <Header navItems={navItems} />
-              <main
-                className={cn(
-                  "w-full",
-                  rpcBannerEnabled ? "pt-start-lg" : "pt-start",
-                )}
-              >
-                {props.children}
-              </main>
-            </div>
-          </div>
+          </ThemeProvider>
           <TailwindIndicator />
           <Analytics />
         </body>

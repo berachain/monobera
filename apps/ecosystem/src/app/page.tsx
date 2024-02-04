@@ -8,7 +8,7 @@ import TopProjects from "./components/top-projects";
 export default function Home() {
   return (
     <main>
-      <div className="flex w-full flex-col items-center justify-between xl:flex-row">
+      <div className="flex w-full flex-col items-center justify-between">
         <Hero />
         <TopProjects />
         <EcosystemProjects />
