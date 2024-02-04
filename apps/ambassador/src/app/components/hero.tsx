@@ -5,9 +5,9 @@ import { Button } from "@bera/ui/button";
 
 export default function Hero() {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between items-center">
       <div className="items-left flex flex-col gap-4">
-        <h1 className="leading-24 leading-14 text-5xl font-extrabold md:text-5xl ">
+        <h1 className="leading-24 leading-14 text-xl font-extrabold md:text-5xl ">
           <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
             Become a
           </span>{" "}
@@ -19,9 +19,9 @@ export default function Hero() {
           </span>
         </h1>
         <div className="font-medium leading-normal text-muted-foreground">
-          Join the Bera Brigade and help foster the vibrant community of bears.
+          Join the Bera Brigade and <br />help foster the vibrant community of bears.
         </div>
-        <div className="mb-6 text-center md:text-left">
+        <div className="mt-6 mb-6 text-center md:text-left">
           <Link href="/">
             <Button className="mr-4">Sign up</Button>
           </Link>
