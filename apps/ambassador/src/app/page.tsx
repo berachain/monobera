@@ -6,7 +6,7 @@ import { Button } from "@bera/ui/button";
 import {
   AmbassadorCard,
   brigadeGeneral,
-  footSoldier,
+  colonel,
   kingsOath,
 } from "./components/ambassador-tiers/tiers";
 import FAQ from "./components/faq";
@@ -43,10 +43,10 @@ export default function Page() {
                   Ambassador
                 </span>
               </h1>
-              <div className="flex flex-wrap justify-center gap-4 p-4 pb-4">
+              <div className="flex flex-wrap justify-center gap-8 p-4 pb-4">
                 <AmbassadorCard ambassador={brigadeGeneral} />
                 <AmbassadorCard ambassador={kingsOath} />
-                <AmbassadorCard ambassador={footSoldier} />
+                <AmbassadorCard ambassador={colonel} />
               </div>
               <Button variant="outline" className="mb-8 mt-12">
                 Learn more about Tiers

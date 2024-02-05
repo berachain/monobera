@@ -5,13 +5,6 @@ import { Avatar, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 
 // Define the ambassadors
-export const brigadeGeneral = {
-  name: "Brigade General",
-  image: "/bear_center.png",
-  tier: "Tier 3",
-  intro: "Amet avec adios abibas abelao donde",
-};
-
 export const kingsOath = {
   name: "The King’s Oath",
   image: "/bear_center.png",
@@ -19,10 +12,17 @@ export const kingsOath = {
   intro: "Amet avec adios abibas abelao donde",
 };
 
-export const footSoldier = {
-  name: "Foot Solider",
+export const brigadeGeneral = {
+  name: "Brigade General",
   image: "/bear_center.png",
   tier: "Tier 2",
+  intro: "Amet avec adios abibas abelao donde",
+};
+
+export const colonel = {
+  name: "Colonel",
+  image: "/bear_center.png",
+  tier: "Tier 3",
   intro: "Amet avec adios abibas abelao donde",
 };
 
@@ -30,11 +30,11 @@ export function AmbassadorCard({ ambassador }: { ambassador: any }) {
   function getAmbassadorStyle(tier: string) {
     switch (tier) {
       case "Tier 1":
-        return "dark:bg-gradient-to-b dark:from-amber-800 dark:to-amber-900 dark:border-amber-600 bg-gradient-to-b from-amber-200 to-amber-50 border-amber-200 opacity-75 backdrop-blur";
+        return "dark:bg-gradient-to-b dark:from-amber-800 dark:to-amber-900 dark:border-amber-600 bg-gradient-to-b from-amber-200 to-amber-50 border-amber-200 opacity-75 backdrop-blur shadow-lg transform scale-110";
       case "Tier 2":
-        return "dark:bg-gradient-to-b dark:from-slate-900 dark:to-slate-700 dark:border-slate-600 bg-gradient-to-b from-slate-300 to-slate-100 border-slate-200 opacity-75 backdrop-blur";
+        return "dark:bg-gradient-to-b dark:from-slate-900 dark:to-slate-700 dark:border-slate-600 bg-gradient-to-b from-slate-300 to-slate-100 border-slate-200 opacity-75 backdrop-blur shadow-lg";
       case "Tier 3":
-        return "dark:bg-gradient-to-b dark:from-orange-900 dark:to-orange-700 dark:border-orange-600 bg-gradient-to-b from-orange-100 to-orange-50 border-orange-200 opacity-75 backdrop-blur";
+        return "dark:bg-gradient-to-b dark:from-orange-900 dark:to-orange-700 dark:border-orange-600 bg-gradient-to-b from-orange-100 to-orange-50 border-orange-200 opacity-75 backdrop-blur shadow-lg";
       default:
         return "";
     }
@@ -79,7 +79,7 @@ export function Tiers(): React.JSX.Element {
         <div className="flex flex-wrap justify-between gap-4 p-4 pb-4">
           <AmbassadorCard ambassador={brigadeGeneral} />
           <AmbassadorCard ambassador={kingsOath} />
-          <AmbassadorCard ambassador={footSoldier} />
+          <AmbassadorCard ambassador={colonel} />
         </div>
         <Button variant="outline" className="mt-12 mb-8">
           View more events
