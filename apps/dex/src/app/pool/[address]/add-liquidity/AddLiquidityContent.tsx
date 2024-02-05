@@ -98,7 +98,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
       reset();
-      router.push(`/pool?pool=userPools`);
+      router.push("/pool?pool=userPools");
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
@@ -121,8 +121,8 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
           {pool?.tokens?.map((token, i) => {
             return (
               <TokenIcon
-                token={token}
                 className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
+                address={token.address}
                 key={token.address}
               />
             );
@@ -194,7 +194,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         setActiveAmount(amount);
                       }}
                       weight={token.normalizedWeight}
-                      price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
+                      price={
+                        prices && tokenAddresses
+                          ? prices[handleNativeBera(tokenAddresses[i])]
+                          : 0
+                      }
                       onExceeding={(exceeding: boolean) =>
                         updateTokenExceeding(i, exceeding)
                       }
@@ -383,7 +387,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         token={token}
                         value={formattedAmount}
                         // weight={token.normalizedWeight}
-                        price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
+                        price={
+                          prices && tokenAddresses
+                            ? prices[handleNativeBera(tokenAddresses[i])]
+                            : 0
+                        }
                       />
                     );
                   })}

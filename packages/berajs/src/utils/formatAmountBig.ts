@@ -10,7 +10,7 @@ export function formatAmountBig(input: string | number): string {
 
   if (isString(input)) {
     num = parseFloat(input);
-    if (isNaN(num)) {
+    if (Number.isNaN(num)) {
       throw new Error(
         "Invalid input: string input must be convertible to a number.",
       );
@@ -21,18 +21,20 @@ export function formatAmountBig(input: string | number): string {
 
   const config = { maximumFractionDigits: 2 };
   if (num >= 1000000000000) {
-    return (
-      new Intl.NumberFormat("en-US", config).format(num / 1000000000000) + "T"
-    );
-  } else if (num >= 1000000000) {
-    return (
-      new Intl.NumberFormat("en-US", config).format(num / 1000000000) + "B"
-    );
-  } else if (num >= 1000000) {
-    return new Intl.NumberFormat("en-US", config).format(num / 1000000) + "M";
-  } else if (num >= 1000) {
-    return new Intl.NumberFormat("en-US", config).format(num / 1000) + "K";
-  } else {
-    return new Intl.NumberFormat("en-US", config).format(num);
+    return `${new Intl.NumberFormat("en-US", config).format(
+      num / 1000000000000,
+    )}T`;
   }
+  if (num >= 1000000000) {
+    return `${new Intl.NumberFormat("en-US", config).format(
+      num / 1000000000,
+    )}B`;
+  }
+  if (num >= 1000000) {
+    return `${new Intl.NumberFormat("en-US", config).format(num / 1000000)}M`;
+  }
+  if (num >= 1000) {
+    return `${new Intl.NumberFormat("en-US", config).format(num / 1000)}K`;
+  }
+  return new Intl.NumberFormat("en-US", config).format(num);
 }

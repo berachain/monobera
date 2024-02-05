@@ -306,7 +306,7 @@ export function generateRandomData() {
     data.push({
       amount: randomAmount,
       voteType: randomVoteType,
-      voter: "Vote Bear" + i,
+      voter: `Vote Bear${i}`,
       voterTypes: randomVoterType,
     });
   }

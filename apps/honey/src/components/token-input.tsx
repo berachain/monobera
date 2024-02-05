@@ -32,6 +32,7 @@ type Props = {
   onTokenSelection?: (token: Token | undefined) => void;
   setAmount?: (amount: string | undefined) => void;
   onExceeding?: (isExceeding: boolean) => void;
+  className?: string;
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -54,6 +55,7 @@ export function TokenInput({
   showExceeding = true,
   onExceeding = undefined,
   hideMax = false,
+  className,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
@@ -70,21 +72,20 @@ export function TokenInput({
     if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
     if (
       !isBalancesLoading &&
-      (BigNumber(amount ?? "0").gt(tokenBalance) || Number(tokenBalance) == 0)
+      (BigNumber(amount ?? "0").gt(tokenBalance) || Number(tokenBalance) === 0)
     ) {
       setExceeding(true);
       return;
-    } else {
-      setExceeding(false);
-      return;
     }
+    setExceeding(false);
+    return;
   }, [tokenBalance, amount]);
 
   useEffect(() => {
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
   }, [exceeding]);
   return (
-    <li className={"relative flex flex-col flex-wrap px-3"}>
+    <li className={cn("relative flex flex-col flex-wrap px-3", className)}>
       <div className="flex flex-row items-center">
         <SelectToken
           token={selected}
@@ -114,9 +115,9 @@ export function TokenInput({
                 e.preventDefault();
               }
               clearTimeout(typingTimer);
-              setIsTyping && setIsTyping(true);
+              setIsTyping?.(true);
               typingTimer = setTimeout(() => {
-                setIsTyping && setIsTyping(false);
+                setIsTyping?.(false);
               }, 1000);
             }}
             onChange={(e) => {
@@ -126,7 +127,7 @@ export function TokenInput({
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
               if (periodsCount <= 1) {
-                setAmount && setAmount(filteredValue);
+                setAmount?.(filteredValue);
               }
             }}
           />
@@ -145,7 +146,7 @@ export function TokenInput({
                   <p
                     className="cursor-pointer pl-1 text-xs text-muted-foreground underline hover:text-foreground"
                     onClick={() => {
-                      setAmount && setAmount(tokenBalance);
+                      setAmount?.(tokenBalance);
                     }}
                   >
                     MAX

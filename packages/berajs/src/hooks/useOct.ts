@@ -53,12 +53,12 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
 
   const { account } = useBeraJs();
   const { signMessageAsync } = useSignMessage({
-    message: `You are enabling One Click Trading. Use at your own risk!`,
+    message: "You are enabling One Click Trading. Use at your own risk!",
   });
   const { networkConfig } = useBeraConfig();
   const generateKey = useCallback(async () => {
     dispatch({ type: ActionEnum.LOADING });
-    onLoading && onLoading();
+    onLoading?.();
     try {
       const signedData = await signMessageAsync();
 
@@ -77,7 +77,7 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
       setOctPrivKey("");
       setOctAccount(undefined);
       dispatch({ type: ActionEnum.ERROR });
-      onError && onError();
+      onError?.();
     }
   }, [onSuccess, onError, onLoading, account]);
 

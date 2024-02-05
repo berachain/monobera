@@ -59,11 +59,11 @@ const prefix = process.env.NEXT_PUBLIC_BECH32_PREFIX as string;
 
 export const BERA = bech32Chain("BERA", prefix);
 
-export const BERAVALOPER = bech32Chain("BERA", prefix + "valoper");
+export const BERAVALOPER = bech32Chain("BERA", `${prefix}valoper`);
 
 export const COSMOS = bech32Chain("COSMOS", prefix);
 
-export const COSMOSVALOPER = bech32Chain("COSMOS", prefix + "valoper");
+export const COSMOSVALOPER = bech32Chain("COSMOS", `${prefix}valoper`);
 
 export const ethToBera = (ethAddress: string | undefined): Address => {
   if (!ethAddress) {

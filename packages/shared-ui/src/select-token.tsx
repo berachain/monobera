@@ -39,7 +39,7 @@ export function SelectToken({
       >
         {token ? (
           <>
-            <TokenIcon token={token} />
+            <TokenIcon address={token.address} />
             <span className="w-fit max-w-[140px] overflow-hidden truncate">
               {token?.symbol}{" "}
             </span>
@@ -62,7 +62,7 @@ export function SelectToken({
         <TokenDialog
           open={open}
           onSelectedToken={(token: Token | undefined) =>
-            onTokenSelection && onTokenSelection(token)
+            onTokenSelection?.(token)
           }
           setOpen={setOpen}
           selectedTokens={selectedTokens ?? []}

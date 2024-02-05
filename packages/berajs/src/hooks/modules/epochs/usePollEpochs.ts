@@ -37,7 +37,7 @@ export const usePollEpochs = () => {
       };
     },
     {
-      refreshInterval: POLLING.FAST, // make it rlly slow TODO CHANGE
+      refreshInterval: POLLING.SLOW, // 3 minutes
     },
   );
 

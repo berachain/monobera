@@ -126,7 +126,7 @@ export const useOctTxn = ({
           if (error?.message?.includes("User rejected the request.")) {
             toast.custom(
               <ErrorToast
-                title={"User rejected txn"}
+                title={"User rejected transaction"}
                 onClose={() => toast.remove(toastId)}
               />,
               {
@@ -156,7 +156,7 @@ export const useOctTxn = ({
           if (error?.message?.includes("User rejected the request.")) {
             openModal("errorModal", {
               errorHash: "0x",
-              errorMessage: "User rejected txn",
+              errorMessage: "User rejected transaction",
             });
           } else {
             openModal("errorModal", {
@@ -166,7 +166,7 @@ export const useOctTxn = ({
             });
           }
         }
-        onError && onError(error);
+        onError?.(error);
       },
 
       /**
@@ -203,7 +203,7 @@ export const useOctTxn = ({
           timestamp: Date.now(),
           actionType,
         });
-        onSuccess && onSuccess(result);
+        onSuccess?.(result);
       },
 
       /**
@@ -228,7 +228,7 @@ export const useOctTxn = ({
         if (!disableModal) {
           openModal("loadingModal", undefined);
         }
-        onLoading && onLoading();
+        onLoading?.();
       },
 
       /**
@@ -257,7 +257,7 @@ export const useOctTxn = ({
             submissionHash: result,
           });
         }
-        onSubmission && onSubmission(result);
+        onSubmission?.(result);
       },
     });
 
@@ -281,7 +281,7 @@ export const useOctTxn = ({
         if (error?.message.includes("User rejected the request.")) {
           toast.custom(
             <ErrorToast
-              title={"User rejected txn"}
+              title={"User rejected transaction"}
               onClose={() => toast.remove(toastId)}
             />,
             {
@@ -311,7 +311,7 @@ export const useOctTxn = ({
         if (error?.message.includes("User rejected the request.")) {
           openModal("errorModal", {
             errorHash: "0x",
-            errorMessage: "User rejected txn",
+            errorMessage: "User rejected transaction",
           });
         } else {
           openModal("errorModal", {
@@ -320,7 +320,7 @@ export const useOctTxn = ({
           });
         }
       }
-      onError && onError(error);
+      onError?.(error);
     },
 
     /**
@@ -356,7 +356,7 @@ export const useOctTxn = ({
       //   description: message,
       //   timestamp: Date.now(),
       // });
-      onSuccess && onSuccess(result);
+      onSuccess?.(result);
     },
 
     /**
@@ -381,7 +381,7 @@ export const useOctTxn = ({
       if (!disableModal) {
         openModal("loadingModal", undefined);
       }
-      onLoading && onLoading();
+      onLoading?.();
     },
 
     /**
@@ -409,7 +409,7 @@ export const useOctTxn = ({
           submissionHash: result,
         });
       }
-      onSubmission && onSubmission(result);
+      onSubmission?.(result);
     },
   });
   const ModalPortal = () => {

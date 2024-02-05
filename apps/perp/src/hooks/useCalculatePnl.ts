@@ -66,7 +66,6 @@ export const getPnl = ({ currentPrice, openPosition }: ICalculatePnl) => {
     }
 
     return formattedPnl;
-  } else {
-    return undefined;
   }
+  return undefined;
 };

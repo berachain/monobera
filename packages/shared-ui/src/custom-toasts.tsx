@@ -10,6 +10,7 @@ interface IToast {
   title: string;
   message?: string;
   hash?: string;
+  description?: string;
   onClose: () => void;
 }
 
@@ -20,6 +21,7 @@ interface IBaseToast {
   duration?: number;
   className?: string;
   startAdornment?: React.ReactNode;
+  description?: string;
 }
 
 const BaseToast = ({
@@ -27,24 +29,45 @@ const BaseToast = ({
   href,
   className = "",
   startAdornment,
+  description,
 }: IBaseToast) => {
   return (
     <div
       className={cn(
-        "z-50 flex h-14 flex-row items-center justify-between rounded-md  p-4 text-white shadow",
+        "z-50 w-[350px] flex flex-col rounded-md  p-4 text-white shadow",
         className,
       )}
-      style={{ width: "350px", background: "#292524", zIndex: 500 }} // i dont know why this is needed, but we ball 🤮
+      style={{ background: "#292524", zIndex: 500 }} // i dont know why this is needed, but we ball 🤮
     >
-      <div className="flex flex-row items-center gap-2 text-sm font-semibold text-white">
-        {startAdornment && startAdornment}
-        {title}
+      <div className="flex flex-row gap-2 text-sm font-semibold text-white">
+        <div className="flex flex-0 items-center">
+          {startAdornment && startAdornment}
+        </div>
+        <span className="flex-1 line-clamp-2" title={title}>
+          {title}
+        </span>
+        {href && (
+          <a
+            href={href}
+            className="flex flex-row gap-2 flex-0 items-center"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <p className="text-sm font-normal">View Txn</p>
+            <Icons.external className="h-4 w-4" />
+          </a>
+        )}
       </div>
-      {href && (
-        <a href={href} className="flex flex-row gap-2" target="_blank">
-          <p className="text-sm font-normal">View Txn</p>
-          <Icons.external className="h-4 w-4" />
-        </a>
+      {description && (
+        <>
+          <div className="my-2 w-[311px] h-[0px] border" />
+          <span
+            title={description}
+            className="w-[311px] text-stone-500 text-xs font-medium font-['IBM Plex Sans'] leading-tight line-clamp-2"
+          >
+            {description}
+          </span>
+        </>
       )}
     </div>
   );
@@ -52,6 +75,7 @@ const BaseToast = ({
 export const SuccessToast = ({
   title = "Success",
   hash = undefined,
+  description,
   onClose,
 }: IToast) => {
   const { networkConfig } = useBeraConfig();
@@ -60,6 +84,7 @@ export const SuccessToast = ({
     <BaseToast
       title={title}
       onClose={onClose}
+      description={description}
       startAdornment={<Icons.checkCircle className="h-6 w-6 text-positive" />}
       href={
         hash
@@ -70,7 +95,11 @@ export const SuccessToast = ({
   );
 };
 
-export const ErrorToast = ({ title = "Error", onClose }: IToast) => {
+export const ErrorToast = ({
+  title = "Error",
+  onClose,
+  description,
+}: IToast) => {
   // HANDLE ERROR MESSAGES
   if (title === "User rejected txn") {
     return (
@@ -88,6 +117,7 @@ export const ErrorToast = ({ title = "Error", onClose }: IToast) => {
     <BaseToast
       title={title}
       onClose={onClose}
+      description={description}
       startAdornment={
         <Icons.XOctagon className="h-6 w-6 text-destructive-foreground" />
       }
@@ -103,6 +133,7 @@ export const ErrorToast = ({ title = "Error", onClose }: IToast) => {
 export const SubmissionToast = ({
   title = "Submitting",
   hash = undefined,
+  description,
   onClose,
 }: IToast) => {
   const { networkConfig } = useBeraConfig();
@@ -111,6 +142,7 @@ export const SubmissionToast = ({
     <BaseToast
       title={title}
       onClose={onClose}
+      description={description}
       startAdornment={<Spinner size={18} color="#f8b613" />}
       href={
         hash
@@ -121,11 +153,16 @@ export const SubmissionToast = ({
   );
 };
 
-export const LoadingToast = ({ title = "Loading", onClose }: IToast) => {
+export const LoadingToast = ({
+  title = "Loading",
+  description,
+  onClose,
+}: IToast) => {
   return (
     <BaseToast
       title={title}
       onClose={onClose}
+      description={description}
       startAdornment={<Spinner size={18} color="#f8b613" />}
     />
   );

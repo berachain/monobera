@@ -43,7 +43,7 @@ const useBeraContractWrite = ({
       value = 0n,
     }: IContractWrite): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
-      onLoading && onLoading();
+      onLoading?.();
       let receipt: any | undefined;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
@@ -55,52 +55,44 @@ const useBeraContractWrite = ({
           value: value,
           nonce: userNonce,
         });
+        // Directly pass request to writeContract
 
-        receipt = await walletClient?.writeContract({
-          address: address,
-          abi: abi,
-          chain: networkConfig.chain,
-          functionName: functionName,
-          value: value === 0n ? undefined : value,
-          args: [...params],
-          account: account,
-          nonce: userNonce,
-          // chain: undefined,
-        });
+        receipt = await walletClient?.writeContract(_request);
         dispatch({ type: ActionEnum.SUBMITTING });
 
-        onSubmission && onSubmission(receipt);
-        const confirmationReceipt: any =
-          await publicClient.waitForTransactionReceipt({
-            hash: receipt,
-            pollingInterval: 5000,
-            timeout: 120000,
-            confirmations: 2,
-          });
-        if (confirmationReceipt?.status === "success") {
-          dispatch({ type: ActionEnum.SUCCESS });
-          onSuccess && onSuccess(receipt);
-        } else {
-          if (process.env.VERCEL_ENV !== "production")
-            console.log(confirmationReceipt);
-          // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const e = new TransactionFailedError();
-          onError &&
-            onError({
-              message: "Something went wrong. Please Try again",
+        if (receipt) {
+          onSubmission?.(receipt);
+          const confirmationReceipt: any =
+            await publicClient.waitForTransactionReceipt({
+              hash: receipt,
+              pollingInterval: 5000,
+              timeout: 120000,
+              confirmations: 2,
             });
+          if (confirmationReceipt?.status === "success") {
+            dispatch({ type: ActionEnum.SUCCESS });
+            onSuccess?.(receipt);
+          } else {
+            if (process.env.VERCEL_ENV !== "production")
+              console.log(confirmationReceipt);
+            // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const e = new TransactionFailedError();
+            onError?.({
+              message:
+                getErrorMessage(e) ?? "Something went wrong. Please Try again",
+            });
+          }
         }
       } catch (e: any) {
-        // if (process.env.VERCEL_ENV !== "production") {
-        console.log(e);
-        // }
+        if (process.env.VERCEL_ENV !== "production") {
+          console.log(e);
+        }
         dispatch({ type: ActionEnum.ERROR });
         const finalMsg = getErrorMessage(e);
-        onError &&
-          onError({
-            message: finalMsg,
-          });
+        onError?.({
+          message: finalMsg,
+        });
       } finally {
         await refresh();
       }

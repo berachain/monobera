@@ -35,13 +35,11 @@ export const toChecksumAddress = (
 ): string => {
   if (typeof address !== "string") {
     throw new Error(
-      "stripHexPrefix param must be type 'string', is currently type " +
-        typeof address +
-        ".",
+      `stripHexPrefix param must be type 'string', is currently type ${typeof address}.`,
     );
   }
   const strip_address = stripHexPrefix(address).toLowerCase();
-  const prefix = chainId != null ? chainId.toString() + "0x" : "";
+  const prefix = chainId != null ? `${chainId.toString()}0x` : "";
   const keccak_hash = keccak(prefix + strip_address).toString("hex");
   let output = "0x";
 

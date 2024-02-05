@@ -50,9 +50,8 @@ export const usePollDelegatorValidators = () => {
           nextKey: result ? result[1].nextKey : undefined,
           total: result ? result[1].total : undefined,
         };
-      } else {
-        return undefined;
       }
+      return undefined;
     },
     {
       refreshInterval: POLLING.NORMAL,
@@ -78,9 +77,8 @@ export const usePollDelegatorValidators = () => {
     const percentage = useMemo(() => {
       if (totalDelegated && data) {
         return (data / totalDelegated) * 100;
-      } else {
-        return undefined;
       }
+      return undefined;
     }, [totalDelegated, data]);
     return percentage;
   };
@@ -147,9 +145,8 @@ export const usePollTotalDelegated = () => {
           totalDelegated,
           delegationMap,
         };
-      } else {
-        return undefined;
       }
+      return undefined;
     },
     {
       refreshInterval: POLLING.NORMAL,
@@ -229,9 +226,8 @@ export const usePollDelegatorUnbonding = () => {
           nextKey: result ? result[1].nextKey : undefined,
           total: result ? result[1].total : undefined,
         };
-      } else {
-        return undefined;
       }
+      return undefined;
     },
     {
       refreshInterval: POLLING.NORMAL,

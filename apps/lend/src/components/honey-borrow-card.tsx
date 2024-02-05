@@ -53,7 +53,8 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
             <span className="opacity-80">
               {formatter.format(debtTokenBalance?.formattedBalance ?? "0")}
             </span>
-            /<span>{formatter.format(userTotalBorrowAllowance)}</span>
+            {/* @ts-ignore */}/
+            <span>{formatter.format(userTotalBorrowAllowance)}</span>
           </div>
         </div>
 
@@ -94,7 +95,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
               <Skeleton className="h-4 w-20" />
             ) : (
               <span className="text-sm font-semibold text-yellow-900 dark:text-yellow-200">
-                {formatEther(rewards)} BGT
+                {formatEther(rewards as bigint)} BGT
               </span>
             )}
           </div>

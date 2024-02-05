@@ -388,7 +388,7 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Type" />
     ),
-    cell: ({}) => (
+    cell: () => (
       <div className=" text-xs font-medium uppercase text-muted-foreground">
         LIMIT
       </div>
@@ -617,8 +617,8 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
       const a = Number(rowA.original.open_price);
       const b = Number(rowB.original.open_price);
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
   },
 
@@ -641,8 +641,8 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
       const a = Number(rowA.original.close_price);
       const b = Number(rowB.original.close_price);
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
   },
   {
@@ -748,11 +748,11 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
       const b = Number(rowB.original.pnl);
       if (a < 0 && b < 0) {
         if (Math.abs(a) < Math.abs(b)) return 1;
-        else if (Math.abs(a) > Math.abs(b)) return -1;
+        if (Math.abs(a) > Math.abs(b)) return -1;
       }
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
   },
 ];
@@ -780,8 +780,8 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
       const a = new Date(Number(rowA.original.open_time) * 1000);
       const b = new Date(Number(rowB.original.open_time) * 1000);
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
   },
   {
@@ -806,8 +806,8 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
       const a = new Date(Number(rowA.original.close_time) * 1000);
       const b = new Date(Number(rowB.original.close_time) * 1000);
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
   },
   {
@@ -855,12 +855,11 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
     ),
     cell: ({ row }) => {
       const volume = Number(row.original?.volume);
-      const leverage = Number(row.original?.leverage);
 
       const openPrice = Number(
         formatUnits(BigInt(row.original.open_price ?? 0), 10),
       );
-      const size = (volume * leverage) / openPrice;
+      const size = volume / openPrice;
       return (
         <div>
           {size.toFixed(4)} {row.original.market.name.split("-")[0]}
@@ -891,11 +890,11 @@ export const pnl_columns: ColumnDef<IClosedTrade>[] = [
       const b = Number(rowB.original.pnl);
       if (a < 0 && b < 0) {
         if (Math.abs(a) < Math.abs(b)) return 1;
-        else if (Math.abs(a) > Math.abs(b)) return -1;
+        if (Math.abs(a) > Math.abs(b)) return -1;
       }
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
   },
 ];

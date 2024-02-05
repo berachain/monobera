@@ -12,7 +12,7 @@ export const decrypt = (cipher: string, key: string): `0x${string}` => {
   try {
     bytes = AES.decrypt(cipher, key);
     const decrypted = bytes.toString(enc.Utf8);
-    return ("0x" + decrypted) as `0x${string}`;
+    return `0x${decrypted}` as `0x${string}`;
   } catch (err) {
     console.log("UNABLE TO DECIPHER", err);
     return "0x";

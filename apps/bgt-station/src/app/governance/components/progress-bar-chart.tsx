@@ -20,10 +20,12 @@ export function ProgressBarChart({ dataList, labelList }: IProgressBarProps) {
           <>
             <div
               key={(data.width, data.label)}
-              className={`absolute top-0 text-xs font-medium capitalize leading-tight text-muted-foreground`}
+              className={
+                "absolute top-0 text-xs font-medium capitalize leading-tight text-muted-foreground"
+              }
               style={{
                 left: `${data.width}%`,
-                transform: `translateX(-50%)`,
+                transform: "translateX(-50%)",
               }}
             >
               {data.label}
@@ -41,7 +43,7 @@ export function ProgressBarChart({ dataList, labelList }: IProgressBarProps) {
         {dataList.map((data, i) => (
           <div
             key={(data.width, data.color)}
-            className={`absolute left-0 top-0 h-2 rounded-full`}
+            className={"absolute left-0 top-0 h-2 rounded-full"}
             style={{
               width: `${data.width}%`,
               backgroundColor: data.color,

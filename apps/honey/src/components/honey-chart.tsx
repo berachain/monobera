@@ -1,5 +1,10 @@
+"use client";
+
 import { useState } from "react";
+import { useQuery } from "@apollo/client";
 import { formatUsd } from "@bera/berajs";
+import { GetSupplyDay, GetVolumeDay } from "@bera/graphql";
+import { Spinner } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
@@ -13,6 +18,8 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { format } from "date-fns";
 
+import { getTime } from "~/utils/getTime";
+import { fillSupplyDataByDay, fillVolumeDataByDay } from "~/utils/graph-utils";
 import { HoneyTimeFrame, barColors, type HoneyEntry } from "~/app/type";
 
 const Options = {
@@ -64,10 +71,10 @@ const Options = {
         intersect: false,
       },
       callbacks: {
-        label: function (context: {
+        label: (context: {
           dataset: { label: string };
           parsed: { y: number | bigint | null };
-        }) {
+        }) => {
           let label = context.dataset.label || "";
 
           if (label) {
@@ -85,16 +92,6 @@ const Options = {
     },
   },
 };
-
-interface IHoneyChart {
-  supply7D: HoneyEntry[];
-  volume7D: HoneyEntry[];
-  supply30D: HoneyEntry[];
-  volume30D: HoneyEntry[];
-  supply90D: HoneyEntry[];
-  volume90D: HoneyEntry[];
-  arcade: boolean;
-}
 
 enum Chart {
   VOLUME = "volume",
@@ -136,50 +133,50 @@ const getData = (data: HoneyEntry[], arcade: boolean) => {
 function calculatePercentageDifference(entries: HoneyEntry[]): number {
   if (entries.length < 2) {
     return 0; // Not enough numbers to calculate the difference
-  } else {
-    let firstNumberIndex = 0;
-    while (
-      entries[firstNumberIndex] &&
-      Number(entries[firstNumberIndex]!.amount) === 0
-    ) {
-      firstNumberIndex++;
-    }
-
-    if (firstNumberIndex >= entries.length) {
-      return 0; // All numbers are zero, cannot calculate percentage difference
-    }
-
-    const firstNumber = Number(entries[firstNumberIndex]!.amount);
-    const lastNumber = Number(entries[entries.length - 1]!.amount);
-
-    const difference = lastNumber - firstNumber;
-    const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
-
-    return percentageDifference;
   }
+  let firstNumberIndex = 0;
+  while (
+    entries[firstNumberIndex] &&
+    Number(entries[firstNumberIndex]!.amount) === 0
+  ) {
+    firstNumberIndex++;
+  }
+
+  if (firstNumberIndex >= entries.length) {
+    return 0; // All numbers are zero, cannot calculate percentage difference
+  }
+
+  const firstNumber = Number(entries[firstNumberIndex]!.amount);
+  const lastNumber = Number(entries[entries.length - 1]!.amount);
+
+  const difference = lastNumber - firstNumber;
+  const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
+
+  return percentageDifference;
 }
 
-export const HoneyChart = ({
-  supply7D,
-  volume7D,
-  supply30D,
-  volume30D,
-  supply90D,
-  volume90D,
-  arcade,
-}: IHoneyChart) => {
-  const DATA = {
-    supply7D,
-    volume7D,
-    supply30D,
-    volume30D,
-    supply90D,
-    volume90D,
-  };
+export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
   const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.WEEKLY);
-  const [chart, setChart] = useState(Chart.VOLUME);
+  const [chart, setChart] = useState<Chart.VOLUME | Chart.FEES>(Chart.VOLUME);
+  const {
+    data: graphdata,
+    loading,
+    error,
+  } = useQuery(chart === Chart.VOLUME ? GetVolumeDay : GetSupplyDay, {
+    variables: { timestamp_gt: getTime(timeFrame) },
+  });
 
-  const data = DATA[`${chart}${timeFrame}`];
+  const data =
+    chart === Chart.VOLUME
+      ? fillVolumeDataByDay(
+          graphdata?.honeyVolumeDayDatas ?? [],
+          getTime(timeFrame),
+        )
+      : fillSupplyDataByDay(
+          graphdata?.honeySupplyDayDatas ?? [],
+          getTime(timeFrame),
+        );
+
   const chartData = getData(data, arcade);
   const total = data[data.length - 1]?.amount ?? 0;
   const difference = calculatePercentageDifference(data);
@@ -190,7 +187,7 @@ export const HoneyChart = ({
         className={cn(
           "border-2 p-0",
           arcade
-            ? "border-dashed border-blue-900"
+            ? "border-dashed border-foregroundSecondary"
             : "border-border bg-background",
         )}
       >
@@ -208,7 +205,7 @@ export const HoneyChart = ({
               <div
                 className={cn(
                   arcade
-                    ? "text-2xl font-normal leading-9 text-blue-900"
+                    ? "text-2xl font-normal leading-9 text-foregroundSecondary"
                     : "text-xl font-semibold leading-7",
                 )}
               >
@@ -229,13 +226,15 @@ export const HoneyChart = ({
             <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">
               <TabsList
                 className={cn(
-                  arcade && "rounded-md border-2 border-blue-900 bg-blue-100",
+                  arcade &&
+                    "rounded-md border-2 border-foregroundSecondary bg-blue-100",
                 )}
               >
                 <TabsTrigger
                   value={Chart.VOLUME}
                   className={cn(
-                    arcade && "text-blue-900 data-[state=active]:bg-blue-900",
+                    arcade &&
+                      "text-foregroundSecondary data-[state=active]:bg-foregroundSecondary",
                   )}
                 >
                   Volume
@@ -243,7 +242,8 @@ export const HoneyChart = ({
                 <TabsTrigger
                   value={Chart.FEES}
                   className={cn(
-                    arcade && "text-blue-900 data-[state=active]:bg-blue-900",
+                    arcade &&
+                      "text-foregroundSecondary data-[state=active]:bg-foregroundSecondary",
                   )}
                 >
                   Supply
@@ -258,7 +258,7 @@ export const HoneyChart = ({
                   className={cn(
                     "w-fit justify-start gap-1 rounded-md",
                     arcade
-                      ? "border-2 border-blue-900 bg-blue-100 text-blue-900"
+                      ? "border-2 border-foregroundSecondary bg-blue-100 text-foregroundSecondary"
                       : "border border-border bg-muted text-foreground",
                   )}
                 >
@@ -273,17 +273,6 @@ export const HoneyChart = ({
                       "rounded-md border-2 border-blue-900 bg-blue-100 text-blue-900",
                   )}
                 >
-                  {/* <SelectItem
-                    value={HoneyTimeFrame.HOURLY}
-                    className={cn(
-                      "cursor-pointer rounded-md",
-                      arcade
-                        ? "hover:text-boue-100 text-blue-900 hover:bg-blue-900 hover:text-blue-100"
-                        : "hover:bg-muted hover:text-foreground focus:text-foreground",
-                    )}
-                  >
-                    24H
-                  </SelectItem> */}
                   <SelectItem
                     value={HoneyTimeFrame.WEEKLY}
                     className={cn(
@@ -322,12 +311,16 @@ export const HoneyChart = ({
             </div>
           </CardHeader>
 
-          <CardContent className="relative min-h-[250px] w-full">
-            <BeraChart
-              data={chartData}
-              options={Options as any}
-              type={chart === Chart.VOLUME ? "bar" : "line"}
-            />
+          <CardContent className="relative flex h-full min-h-[250px] w-full items-center justify-center">
+            {loading || error ? (
+              <Spinner />
+            ) : (
+              <BeraChart
+                data={chartData}
+                options={Options as any}
+                type={chart === Chart.VOLUME ? "bar" : "line"}
+              />
+            )}
           </CardContent>
         </Tabs>
       </Card>

@@ -19,8 +19,8 @@ export function Timeblock({
       <BeraUiTooltip open={tooltipOpen} defaultOpen={false}>
         <TooltipTrigger asChild>
           <div
-            className={`h-3 w-3 rounded-2xs hover:cursor-pointer`}
-            style={{ background: blockDown ? `#DC2626` : `#059669` }}
+            className={"h-3 w-3 rounded-2xs hover:cursor-pointer"}
+            style={{ background: blockDown ? "#DC2626" : "#059669" }}
             onMouseEnter={() => setTooltipOpen(true)}
             onMouseLeave={() => setTooltipOpen(false)}
           />

@@ -189,7 +189,7 @@ export function TokenDialog({
                             !isTokenSelected(token) && onTokenSelect(token)
                           }
                         >
-                          <TokenIcon token={token} size="md" />
+                          <TokenIcon address={token.address} size="md" />
                           {token.symbol}
                         </TokenChip>
                       );
@@ -267,7 +267,7 @@ export function TokenDialog({
                     key={token.address}
                   >
                     <div className="flex flex-row items-center gap-2">
-                      <TokenIcon token={token} />
+                      <TokenIcon address={token.address} />
                       <p className="text-sm font-medium text-muted-foreground">
                         {token.symbol}
                       </p>
@@ -325,7 +325,7 @@ const TokenDialogRow = ({
         }}
       >
         <div className="relative">
-          <TokenIcon token={token} />
+          <TokenIcon address={token?.address ?? ""} />
           {focusedToken?.address === token?.address && (
             <div className="absolute bottom-0 right-0 mr-[-4px] mt-[10px] flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white">
               <Icons.check className="h-3 w-3 " />
@@ -338,7 +338,7 @@ const TokenDialogRow = ({
         </div>
 
         {focusedToken?.address === token?.address && (
-          <div className="absolute ml-auto"></div>
+          <div className="absolute ml-auto" />
         )}
         {!pendingAddition && isConnected && (
           <div className="ml-auto text-muted-foreground ">
@@ -348,7 +348,7 @@ const TokenDialogRow = ({
         <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
           <DialogContent className="flex flex-col items-center justify-center gap-3 px-4 md:w-[350px]">
             <Icons.tooltip
-              style={{ height: "64px", width: "64px", color: "#DC2626 " }}
+              style={{ height: "64px", width: "64px", color: "#DC2626" }}
             />
             <p className="text-lg font-semibold">Import token</p>
             <Balancer className="text-center text-xs font-medium text-muted-foreground">
@@ -357,7 +357,7 @@ const TokenDialogRow = ({
             that claim to represent projects`}
             </Balancer>
             <div className="flex w-full flex-col items-center gap-2 rounded-lg bg-muted p-2">
-              <TokenIcon token={token} />
+              <TokenIcon address={token?.address ?? ""} />
               <h4 className="text-sm font-semibold">{token?.name}</h4>
               <Balancer className="text-xs font-normal text-muted-foreground">
                 {token?.address}

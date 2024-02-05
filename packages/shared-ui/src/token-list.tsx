@@ -27,13 +27,14 @@ export function TokenRow({
       key={asset.address}
     >
       <div className="flex gap-4">
-        <TokenIcon token={asset} size="2xl" />
+        <TokenIcon address={asset.address} size="2xl" />
         <div className="font-medium">
           <div className="flex-1 truncate text-sm font-medium leading-6">
             {formatter.format(Number(asset.formattedBalance))} {asset.symbol}
             <a
               target="_blank"
               href={`${blockExplorerUrl}/address/${asset.address}`}
+              rel="noreferrer"
             >
               <Icons.external className="inline h-3 w-3" />{" "}
             </a>
@@ -47,8 +48,9 @@ export function TokenRow({
         {isLoading || !tokenPrice ? (
           <Skeleton className="h-8 w-16" />
         ) : (
-          "$" +
-          formatter.format(Number(tokenPrice) * Number(asset.formattedBalance))
+          `$${formatter.format(
+            Number(tokenPrice) * Number(asset.formattedBalance),
+          )}`
         )}
       </div>
     </div>
@@ -60,7 +62,7 @@ export function TokenList() {
 
   return (
     <div className="grid gap-4">
-      {assets && assets.length ? (
+      {assets?.length ? (
         assets
           .filter(
             (token: Token) =>

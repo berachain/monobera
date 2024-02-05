@@ -41,6 +41,7 @@
   "devDependencies": {
     "@aave/math-utils": "^1.20.0",
     "@bera/eslint-config": "0.1.0",
+    "@biomejs/biome": "1.5.3",
     "@cosmjs/proto-signing": "^0.29.5",
     "@cosmjs/stargate": "^0.29.5",
     "@cosmjs/tendermint-rpc": "^0.29.5",

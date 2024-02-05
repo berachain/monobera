@@ -37,14 +37,14 @@ const SemiCircleProgress = ({
     throw new Error("Percentage must be between 0 and 100");
   }
 
-  if (isNaN(strokeWidth) || strokeWidth <= 0) {
+  if (Number.isNaN(strokeWidth) || strokeWidth <= 0) {
     throw new Error("Stroke width must be a positive number");
   }
 
   if (
-    isNaN(size.width) ||
+    Number.isNaN(size.width) ||
     size.width <= 0 ||
-    isNaN(size.height) ||
+    Number.isNaN(size.height) ||
     size.height <= 0
   ) {
     throw new Error("Size must be a positive number");

@@ -32,9 +32,9 @@ export function middleware(req: NextRequest) {
 
   // Specify the correct pathname
   if (BLOCKED_COUNTRY.includes(country)) {
-    req.nextUrl.pathname = `/access-deny`;
+    req.nextUrl.pathname = "/access-deny";
   } else {
-    req.nextUrl.pathname = `/`;
+    req.nextUrl.pathname = "/";
   }
 
   // Rewrite to URL

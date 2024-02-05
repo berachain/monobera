@@ -101,7 +101,7 @@ export default function StatusBanner() {
           />
         </div>
       ),
-      amount: netAPY === 0 ? "~~" : (netAPY * 100).toFixed(2) + "%",
+      amount: netAPY === 0 ? "~~" : `${(netAPY * 100).toFixed(2)}%`,
     },
     {
       icon: <Icons.warning className="h-8 w-8" />,

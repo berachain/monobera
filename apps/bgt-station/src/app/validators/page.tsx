@@ -13,7 +13,7 @@ import Validators from "./validators";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Validators"),
-  description: `View active validators on Berachain`,
+  description: "View active validators on Berachain",
 };
 
 async function getBGTSupply() {

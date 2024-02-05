@@ -13,7 +13,6 @@
   "scripts": {
     "build": "tsup src",
     "clean": "git clean -xdf dist .turbo node_modules",
-    "check-types": "tsc --noEmit",
     "dev": "tsup src --watch",
     "lint": "eslint src",
     "lint:fix": "pnpm lint --fix"
@@ -22,5 +21,8 @@
     "@apollo/client": "^3.8.8",
     "@bera/config": "0.1.0",
     "graphql": "^16.8.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.5.3"
   }
 }

@@ -108,7 +108,7 @@ export default function WithdrawLiquidityContent({
           {pool?.tokens?.map((token, i) => {
             return (
               <TokenIcon
-                token={token}
+                address={token.address}
                 className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
                 key={token.address}
               />
@@ -219,7 +219,11 @@ export default function WithdrawLiquidityContent({
                         token={token}
                         value={formattedAmount}
                         weight={token.normalizedWeight}
-                        price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
+                        price={
+                          prices && tokenAddresses
+                            ? prices[handleNativeBera(tokenAddresses[i])]
+                            : 0
+                        }
                       />
                     );
                   })}
@@ -339,7 +343,11 @@ export default function WithdrawLiquidityContent({
                         token={token}
                         value={formattedAmount}
                         weight={token.normalizedWeight}
-                        price={prices[handleNativeBera(tokenAddresses[i])] ?? 0}
+                        price={
+                          prices && tokenAddresses
+                            ? prices[handleNativeBera(tokenAddresses[i])]
+                            : 0
+                        }
                       />
                     );
                   })}

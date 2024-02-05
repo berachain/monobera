@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { tokenListUrl } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -22,7 +23,7 @@ interface IUseTokens {
 function tokenListToDict(list: Token[]): { [key: string]: Token } {
   return list.reduce((acc, item) => {
     // @ts-ignore
-    acc[item["address"]] = item;
+    acc[item.address] = item;
     return acc;
   }, {});
 }
@@ -37,9 +38,7 @@ const useTokens = (): IUseTokens => {
   const { data } = useSWRImmutable(
     ["defaultTokenList", localStorageTokenList],
     async () => {
-      const tokenList = await fetch(
-        process.env.NEXT_PUBLIC_TOKEN_LIST as string,
-      );
+      const tokenList = await fetch(tokenListUrl);
       const temp = await tokenList.json();
       if (!temp.tokens)
         return { list: localStorageTokenList, featured: [], dictionary: {} };
@@ -65,7 +64,7 @@ const useTokens = (): IUseTokens => {
       return {
         list: uniqueList,
         customList: [...localStorageTokenList],
-        dictionary: tokenListToDict(list),
+        dictionary: tokenListToDict(list), // i dont know if we still need this since we already have a map
         gaugeDictionary: temp.gaugeMap ?? undefined,
         featured: defaultFeaturedList ?? [],
       };

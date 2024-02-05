@@ -11,7 +11,11 @@ import { formatEther } from "viem";
 
 export default function BGTRewardsClaimBtn() {
   const { account } = useBeraJs();
-  const { data: rewards, refetch } = usePollLendUserBGTRewards();
+  const {
+    data: rewards = 0n,
+    isLoading,
+    refetch,
+  } = usePollLendUserBGTRewards();
   const {
     write,
     isLoading: isClaimingLoading,
@@ -26,7 +30,7 @@ export default function BGTRewardsClaimBtn() {
       {ModalPortal}
       <Button
         variant="outline"
-        disabled={!rewards || rewards === 0n || isClaimingLoading || isLoading}
+        disabled={rewards === 0n || isClaimingLoading || isLoading}
         className="flex items-center gap-1 border border-yellow-400 bg-gradient-to-br  from-orange-100 to-yellow-300 text-black"
         onClick={() =>
           write({
@@ -37,7 +41,7 @@ export default function BGTRewardsClaimBtn() {
           })
         }
       >
-        {!rewards || rewards === 0n ? (
+        {rewards === 0n ? (
           <>
             <TokenIcon address={bgtTokenAddress} className="h-6 w-6" />
             No Claimable BGT Rewards
@@ -50,7 +54,7 @@ export default function BGTRewardsClaimBtn() {
         ) : (
           <>
             <TokenIcon address={bgtTokenAddress} className="h-6 w-6" />
-            Claim {formatEther(rewards)} BGT Rewards
+            Claim {formatEther(rewards as bigint)} BGT Rewards
           </>
         )}
       </Button>

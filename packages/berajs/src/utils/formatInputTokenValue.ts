@@ -4,7 +4,7 @@ export const formatInputTokenValue = (inputValue: string) => {
 
   // Keep the 0
   if (filteredValue.startsWith(".")) {
-    filteredValue = "0" + filteredValue;
+    filteredValue = `0${filteredValue}`;
   }
 
   return filteredValue;

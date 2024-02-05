@@ -2,7 +2,7 @@
 
 import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
-import { TransactionActionType } from "@bera/berajs";
+import { HONEY_PRECOMPILE_ABI, TransactionActionType } from "@bera/berajs";
 import { cloudinaryUrl, erc20HoneyAddress } from "@bera/config";
 import { ConnectButton, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -18,7 +18,6 @@ import { parseUnits } from "viem";
 import { erc20ABI } from "wagmi";
 
 import { LoadingBee } from "~/components/loadingBee";
-import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 import { HoneyTokenInput } from "./honey-token-input";
 
@@ -118,38 +117,39 @@ export function HoneyMachine() {
 
   const {
     payload,
-    isConnected,
-    setSelectedFrom,
-    allowance,
+    isReady,
     selectedFrom,
     selectedTo,
     fromAmount,
-    setFromAmount,
-    setToAmount,
     toAmount,
     isMint,
     fromBalance,
     toBalance,
-    setGivenIn,
     fee,
-    onSwitch,
     needsApproval,
     ModalPortal,
     honey,
     collateralList,
+    exceedBalance,
+    onSwitch,
+    setGivenIn,
+    setSelectedFrom,
+    setSelectedTo,
+    setFromAmount,
+    setToAmount,
   } = usePsm();
 
   const { write } = useTxn({
     message: needsApproval
       ? `Approve ${selectedFrom?.symbol}`
       : isMint
-      ? `Mint ${toAmount} HONEY`
-      : `Redeem ${fromAmount} HONEY`,
+        ? `Mint ${toAmount} HONEY`
+        : `Redeem ${fromAmount} HONEY`,
     actionType: needsApproval
       ? TransactionActionType.APPROVAL
       : isMint
-      ? TransactionActionType.MINT_HONEY
-      : TransactionActionType.REDEEM_HONEY,
+        ? TransactionActionType.MINT_HONEY
+        : TransactionActionType.REDEEM_HONEY,
     onError: (e: any) => {
       if (e.name === "TransactionExecutionError") {
         // rejection should be triggered when transaction fails(after metamask popup)
@@ -195,18 +195,17 @@ export function HoneyMachine() {
       txnSubmitAction?.fire();
     },
   });
+
   const [rotate, setRotate] = useState(0);
 
-  const isConnectedState = useStateMachineInput(
+  const isReadyState = useStateMachineInput(
     rive,
     STATE_MACHINE_NAME,
     "connectWallet",
   );
 
   useEffect(() => {
-    if (rive) {
-      rive.play();
-    }
+    if (rive) rive.play();
   }, [rive]);
 
   useEffect(() => {
@@ -235,11 +234,7 @@ export function HoneyMachine() {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
       // const enterAmount = isMint ? payload[2] : payload[1];
-      if (
-        allowance &&
-        // allowance.allowance &&
-        needsApproval
-      ) {
+      if (needsApproval) {
         approvalWrite({
           address: selectedFrom?.address as `0x${string}`,
           abi: erc20ABI as unknown as (typeof erc20ABI)[],
@@ -265,10 +260,10 @@ export function HoneyMachine() {
   const performMinting = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      if (Number(payload[2]) > 0 && payload[2] <= fromBalance.balance) {
+      if (!exceedBalance) {
         write({
           address: erc20HoneyAddress,
-          abi: ERC20_HONEY_ABI,
+          abi: HONEY_PRECOMPILE_ABI,
           functionName: "mint",
           params: payload,
         });
@@ -285,10 +280,10 @@ export function HoneyMachine() {
   const performRedeeming = () => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      if (Number(payload[1]) > 0 && payload[1] <= fromBalance.balance) {
+      if (!exceedBalance) {
         write({
           address: erc20HoneyAddress,
-          abi: ERC20_HONEY_ABI,
+          abi: HONEY_PRECOMPILE_ABI,
           functionName: "redeem",
           params: payload,
         });
@@ -303,16 +298,16 @@ export function HoneyMachine() {
   };
 
   useEffect(() => {
-    if (isConnected) {
-      if (isConnectedState) {
-        isConnectedState.value = true;
+    if (isReady) {
+      if (isReadyState) {
+        isReadyState.value = true;
       }
     } else {
-      if (isConnectedState) {
-        isConnectedState.value = false;
+      if (isReadyState) {
+        isReadyState.value = false;
       }
     }
-  }, [isConnected, isConnectedState]);
+  }, [isReady, isReadyState]);
 
   // Perform the contract calls based on the current state
   useEffect(() => {
@@ -341,18 +336,19 @@ export function HoneyMachine() {
           <div
             className={cn(
               "absolute bottom-[50px] left-[45px] z-30 m-6 h-[250px] w-[30%] max-w-[230px] overflow-hidden",
-              !isConnected && "bottom-12",
+              !isReady && "bottom-12",
             )}
           >
-            {isConnected ? (
+            {isReady ? (
               <>
                 <h1 className="relative mb-1 text-2xl font-semibold text-foreground">
                   {isMint ? "Mint" : "Redeem"}
                   <div className="absolute right-0 top-1 text-sm text-muted-foreground">
-                    Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
+                    {/* Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}% */}
+                    Static fee of 0.5%
                   </div>
                 </h1>
-                <ul role="list">
+                <ul>
                   <HoneyTokenInput
                     selected={selectedFrom}
                     selectedTokens={[selectedFrom, selectedTo]}
@@ -378,6 +374,7 @@ export function HoneyMachine() {
                       }}
                     >
                       <button
+                        type="button"
                         onClick={() => {
                           onSwitch();
                           setRotate(rotate + 180);
@@ -396,6 +393,7 @@ export function HoneyMachine() {
                   <HoneyTokenInput
                     selected={selectedTo}
                     selectedTokens={[selectedFrom, selectedTo]}
+                    onTokenSelection={setSelectedTo}
                     amount={toAmount}
                     setAmount={(amount) => {
                       setGivenIn(false);
@@ -405,7 +403,7 @@ export function HoneyMachine() {
                     customTokenList={collateralList}
                     hidePrice
                     hideMax
-                    // hideBalance
+                    disabled
                     balance={toBalance?.formattedBalance}
                   />
                 </ul>

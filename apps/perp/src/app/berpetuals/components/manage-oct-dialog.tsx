@@ -9,7 +9,7 @@ import {
   useOct,
   usePollBeraBalance,
 } from "@bera/berajs";
-import { blockExplorerUrl } from "@bera/config";
+import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
 import { ActionButton, TokenIcon, useTxn } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import Identicon from "@bera/shared-ui/src/identicon";
@@ -43,7 +43,7 @@ const TradeWalletSection = () => {
         <div
           className="text-sm font-semibold hover:underline"
           onClick={() =>
-            window.open(blockExplorerUrl + "/address/" + octAddress, "_blank")
+            window.open(`${blockExplorerUrl}/address/${octAddress}`, "_blank")
           }
         >
           {truncateHash(octAddress)}
@@ -51,14 +51,7 @@ const TradeWalletSection = () => {
         <Icons.external className="h-4 w-4" />
       </div>
       <div className="mt-2 flex flex-row gap-2">
-        <TokenIcon
-          token={{
-            address: "0x0000000000000000000000000000000000000000",
-            symbol: "BERA",
-            decimals: 18,
-            name: "BERA",
-          }}
-        />
+        <TokenIcon address={beraTokenAddress} />
         <div className="text-sm font-semibold">
           {Number(octBalance ?? 0).toFixed(2)} BERA{" "}
           <span className="text-xs font-medium text-success-foreground">

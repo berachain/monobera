@@ -58,7 +58,7 @@ export default function Portfolio() {
   const bribeTokenList = useBribeTokens();
   const bribes = useBribes();
   const { write, isLoading, ModalPortal } = useTxn({
-    message: `Claiming all bribes`,
+    message: "Claiming all bribes",
     actionType: TransactionActionType.CLAIMING_BRIBES,
     onSuccess: () => {
       setOpen(false);
@@ -108,7 +108,7 @@ export default function Portfolio() {
             👋 Hey{" "}
             <span
               onClick={() => {
-                window.open(blockExplorerUrl + "/address/" + account, "_blank");
+                window.open(`${blockExplorerUrl}/address/${account}`, "_blank");
               }}
               className="mx-2 cursor-pointer hover:underline"
             >
@@ -136,17 +136,16 @@ export default function Portfolio() {
               <div className="py-[14px] text-center text-sm font-semibold leading-tight text-muted-foreground">
                 BGT delegated
                 <br />
-                across {Number.isNaN(totalValidators)
-                  ? 0
-                  : totalValidators}{" "}
+                across {Number.isNaN(totalValidators) ? 0 : totalValidators}{" "}
                 validators
               </div>
               <Button
                 variant="outline"
                 onClick={() => {
                   setTab(BGTSelectionEnum.YOUR_DELEGATIONS);
-                  tabRef.current && //@ts-ignore
-                    tabRef.current.scrollIntoView({ behavior: "smooth" });
+                  (tabRef.current as any)?.scrollIntoView({
+                    behavior: "smooth",
+                  });
                 }}
               >
                 Manage delegations
@@ -196,8 +195,9 @@ export default function Portfolio() {
                 variant="outline"
                 onClick={() => {
                   setTab(BGTSelectionEnum.UNBONDING_QUEUE);
-                  tabRef.current && //@ts-ignore
-                    tabRef.current.scrollIntoView({ behavior: "smooth" });
+                  (tabRef.current as any)?.scrollIntoView({
+                    behavior: "smooth",
+                  });
                 }}
               >
                 See my queue

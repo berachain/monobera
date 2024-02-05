@@ -27,7 +27,7 @@ const useValueSend = ({
   const write = useCallback(
     async ({ address, value = 0n }: IValueSend): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
-      onLoading && onLoading();
+      onLoading?.();
       let receipt: any | undefined;
       try {
         receipt = await walletClient?.sendTransaction({
@@ -37,7 +37,7 @@ const useValueSend = ({
         });
         dispatch({ type: ActionEnum.SUBMITTING });
 
-        onSubmission && onSubmission(receipt);
+        onSubmission?.(receipt);
         const confirmationReceipt: any =
           await publicClient.waitForTransactionReceipt({
             hash: receipt,
@@ -45,15 +45,15 @@ const useValueSend = ({
           });
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
-          onSuccess && onSuccess(receipt);
+          onSuccess?.(receipt);
         } else {
           const e = new TransactionFailedError();
-          onError && onError(e);
+          onError?.(e);
         }
       } catch (e: any) {
         console.log(e);
         dispatch({ type: ActionEnum.ERROR });
-        onError && onError(e);
+        onError?.(e);
       }
     },
     [

@@ -54,10 +54,8 @@ export default function GovernanceByStatus({
       data
         ?.filter((proposal: Proposal) => {
           if (!keywords) return true;
-          else
-            return proposal.title
-              .toLowerCase()
-              .includes(keywords.toLowerCase());
+
+          return proposal.title.toLowerCase().includes(keywords.toLowerCase());
         })
         .sort((a: Proposal, b: Proposal) => {
           switch (orderBy) {
@@ -149,7 +147,7 @@ export default function GovernanceByStatus({
           sortedProposalList?.map((proposal: Proposal, index: number) => (
             <ProposalCard
               proposal={proposal}
-              key={"proposal" + index}
+              key={`proposal${index}`}
               className="hover:cursor-pointer"
               type={getProposalType(proposal)}
               onClick={() =>

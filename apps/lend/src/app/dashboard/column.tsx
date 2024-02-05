@@ -16,7 +16,7 @@ export const user_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
-        <TokenIcon token={row.original} size="lg" />
+        <TokenIcon address={row.original.address} size="lg" />
         {row.original.symbol}
       </div>
     ),
@@ -93,7 +93,7 @@ export const user_borrows_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
-        <TokenIcon token={row.original} size="lg" />
+        <TokenIcon address={row.original.address} size="lg" />
         {row.original.symbol}
       </div>
     ),
@@ -133,12 +133,8 @@ export const user_borrows_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader
         column={column}
         title="Loan APY"
-        tooltip={
-          <>
-            Variable interest rate will fluctuate based on the market
-            conditions.
-          </>
-        }
+        tooltip="Variable interest rate will fluctuate based on the market
+            conditions."
         className="whitespace-nowrap"
       />
     ),
@@ -170,7 +166,7 @@ export const available_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
-        <TokenIcon token={row.original} size="lg" />
+        <TokenIcon address={row.original.address} size="lg" />
         {row.original.symbol}
       </div>
     ),
@@ -216,8 +212,8 @@ export const available_supply_columns: ColumnDef<any>[] = [
           rowB.original.reserveData.formattedPriceInMarketReferenceCurrency,
         );
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
   },
   {
@@ -225,12 +221,8 @@ export const available_supply_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader
         column={column}
         title="Supply APY"
-        tooltip={
-          <>
-            Supply APY (Annual Percentage Yield) represents the annualized
-            return on supplied assets.
-          </>
-        }
+        tooltip="Supply APY (Annual Percentage Yield) represents the annualized
+            return on supplied assets."
         className="whitespace-nowrap"
       />
     ),
@@ -245,8 +237,8 @@ export const available_supply_columns: ColumnDef<any>[] = [
       const a = Number(rowA.original.reserveData.supplyAPY);
       const b = Number(rowB.original.reserveData.supplyAPY);
       if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a > b) return 1;
+      return 0;
     },
   },
   {
@@ -269,7 +261,7 @@ export const available_borrows_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
-        <TokenIcon token={row.original} size="lg" />
+        <TokenIcon address={row.original.address} size="lg" />
         {row.original.symbol}
       </div>
     ),
@@ -309,12 +301,8 @@ export const available_borrows_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader
         column={column}
         title="Variable APY"
-        tooltip={
-          <>
-            Variable interest rate will fluctuate based on the market
-            conditions.
-          </>
-        }
+        tooltip="Variable interest rate will fluctuate based on the market
+            conditions."
         className="whitespace-nowrap"
       />
     ),

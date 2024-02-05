@@ -15,7 +15,7 @@ export const market_table_columns: ColumnDef<any>[] = [
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
         {row.original.token ? (
           <TokenIcon
-            token={row.original.token}
+            address={row.original.address}
             size="lg"
             key={row.original.address}
           />
@@ -64,7 +64,7 @@ export const market_table_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Total Borrowed" />
     ),
-    cell: ({}) => (
+    cell: () => (
       <div className="flex flex-col pl-1 text-base">
         {/* {formatter.format(Number(row.original.totalDebt))} */} ~~
         <div className="text-xs font-medium leading-tight text-muted-foreground">
@@ -83,7 +83,7 @@ export const market_table_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Borrow APY Variable" />
     ),
-    cell: ({}) => (
+    cell: () => (
       <div className="pl-4 text-base text-success-foreground">
         {/* {(Number(formatEther(row.original.variableBorrowAPY)) * 100).toFixed(2)}
         % */}

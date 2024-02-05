@@ -23,7 +23,7 @@ export default function TokenInfoCard({
   const info = [
     {
       title: "Reserve Size",
-      amount: !isNaN(reserve) ? (
+      amount: !Number.isNaN(reserve) ? (
         `$${formatter.format(reserve)}`
       ) : (
         <Skeleton className="h-8 w-16 " />
@@ -31,7 +31,7 @@ export default function TokenInfoCard({
     },
     {
       title: "Available Liquidity",
-      amount: !isNaN(liquidity) ? (
+      amount: !Number.isNaN(liquidity) ? (
         `$${formatter.format(liquidity)}`
       ) : (
         <Skeleton className="h-8 w-16 " />
@@ -39,7 +39,7 @@ export default function TokenInfoCard({
     },
     {
       title: "Utilization Ratio",
-      amount: !isNaN(utilization) ? (
+      amount: !Number.isNaN(utilization) ? (
         `${(utilization * 100).toFixed(2)}%`
       ) : (
         <Skeleton className="h-8 w-16 " />
@@ -59,7 +59,7 @@ export default function TokenInfoCard({
     <Card className="flex flex-col gap-6 lg:flex-row lg:justify-between">
       <div className="flex items-center gap-4">
         {token ? (
-          <TokenIcon token={token} size="2xl" />
+          <TokenIcon address={token.address} size="2xl" />
         ) : (
           <Skeleton className="h-12 w-12 rounded-full" />
         )}

@@ -123,7 +123,7 @@ export function CreatePoolFeeData({
         {error && (
           <Alert variant="destructive" className="my-4">
             <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error && error.message}</AlertDescription>
+            <AlertDescription>{error?.message}</AlertDescription>
           </Alert>
         )}
         {isDuplicatePool && (

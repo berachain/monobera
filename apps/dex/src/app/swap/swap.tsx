@@ -5,10 +5,10 @@ import { type Address } from "wagmi";
 
 import { SwapCard } from "~/components/swap-card";
 
-interface ISwap {
-  inputCurrency?: Address | undefined;
-  outputCurrency?: Address | undefined;
-}
+// interface ISwap {
+//   inputCurrency?: Address | undefined;
+//   outputCurrency?: Address | undefined;
+// }
 
 const DynamicBerachainInfo = dynamic(
   () => import("~/components/berachain-info"),
@@ -17,10 +17,7 @@ const DynamicBerachainInfo = dynamic(
   },
 );
 
-export const SwapContent = ({}: // inputCurrency,
-// outputCurrency,
-// inputCurrency, outputCurrency
-ISwap) => {
+export const SwapContent = () => {
   return (
     <div className="mx-auto flex min-w-[320px] flex-col items-center justify-center gap-4 md:w-[500px]">
       <DynamicBerachainInfo />

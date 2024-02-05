@@ -6,8 +6,8 @@ import GlobalConsole from "../components/global-console";
 import { tabEnum, type tabEnum as tabEnumT } from "./types";
 
 export const metadata: Metadata = {
-  title: `Berachain Validator Clue`,
-  description: `Fund your testnet wallet with bera tokens.`,
+  title: "Berachain Validator Clue",
+  description: "Fund your testnet wallet with bera tokens.",
 };
 
 export const revalidate = 6;
