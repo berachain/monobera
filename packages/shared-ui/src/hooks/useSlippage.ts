@@ -24,8 +24,8 @@ export const useSlippage = () => {
       return DEFAULT_SLIPPAGE;
     }
     if (slippageMode === SLIPPAGE_MODE.CUSTOM) {
-      if (slippage > 99) {
-        return 99;
+      if (slippage > 100) {
+        return 100;
       }
       return slippage;
     }

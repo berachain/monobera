@@ -8,7 +8,11 @@ import {
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
-import { useOctTxn } from "@bera/shared-ui/src/hooks";
+import {
+  useOctTxn,
+  useSlippage,
+  useSetSlippage,
+} from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Input } from "@bera/ui/input";
 import { Alert } from "@bera/ui/alert";
@@ -17,18 +21,10 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
-import { useLocalStorage } from "usehooks-ts";
-
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "../type";
 
-import {
-  SLIPPAGE_TOLERANCE_TYPE,
-  SLIPPAGE_TOLERANCE_VALUE,
-  DEFAULT_SLIPPAGE,
-  SLIPPAGE_MODE,
-  SLIPPAGE_DEGEN_VALUE,
-} from "@bera/shared-ui/src/settings";
+import { DEFAULT_SLIPPAGE, SLIPPAGE_MODE } from "@bera/shared-ui/src/settings";
 
 export function PlaceOrder({
   form,
@@ -50,14 +46,8 @@ export function PlaceOrder({
   const formattedPrice = Number(formatUnits(BigInt(price ?? 0n), 10));
   const { refetch } = usePollOpenPositions();
 
-  const [slippageMode, setSlippageMode] = useLocalStorage<SLIPPAGE_MODE>(
-    SLIPPAGE_TOLERANCE_TYPE,
-    SLIPPAGE_MODE.CUSTOM,
-  );
-  const [slippage, setSlippage] = useLocalStorage<number>(
-    SLIPPAGE_TOLERANCE_VALUE,
-    DEFAULT_SLIPPAGE,
-  );
+  const slippage = useSlippage();
+  const { setSlippageMode, setSlippage } = useSetSlippage();
 
   const handleSlippageChange = (e: any) => {
     let newSlippage = Number(e.target.value);
@@ -191,15 +181,7 @@ export function PlaceOrder({
           outerClassName="w-auto"
           className="flex pr-6 h-6 rounded-sm bg-background text-xs w-[64px]"
           required={false}
-          value={
-            slippageMode === SLIPPAGE_MODE.AUTO
-              ? DEFAULT_SLIPPAGE
-              : slippageMode === SLIPPAGE_MODE.DEGEN
-                ? SLIPPAGE_DEGEN_VALUE
-                : slippage === 0
-                  ? undefined
-                  : slippage
-          }
+          value={slippage === 0 ? undefined : slippage}
           onChange={handleSlippageChange}
         />
       </div>
