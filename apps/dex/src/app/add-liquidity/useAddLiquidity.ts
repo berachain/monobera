@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useBeraConfig, useBeraJs, useTokens } from "@bera/berajs";
+import { useState, useMemo } from "react";
+import { useBeraJs, useTokens } from "@bera/berajs";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
@@ -9,11 +9,11 @@ import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 import { type PoolV2 } from "../pools/fetchPools";
 import { useCrocPoolPrice } from "~/hooks/useCrocPoolPrice";
+import { crocDexAddress } from "@bera/config";
 
 export const useAddLiquidity = (pool: PoolV2 | undefined) => {
   const { account: _account } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
-  const [error, _setError] = useState<string | undefined>("");
+  const [error, setError] = useState<string | undefined>("");
 
   const [totalValue, setTotalValue] = useState<number>(0);
 
@@ -28,15 +28,15 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     tokenInputs,
     updateTokenAmount,
     updateTokenExceeding,
-    // areNoInputsExceeding,
-    // areAllInputsPopulated,
-    // areSomeInputsUnpopulated,
-    // areAllInputsEmpty,
+    areNoInputsExceeding,
+    areAllInputsPopulated,
+    areSomeInputsUnpopulated,
+    areAllInputsEmpty,
   } = useMultipleTokenInput(pool?.tokens ?? []);
 
   const { needsApproval } = useMultipleTokenApprovals(
     tokenInputs,
-    networkConfig.precompileAddresses.erc20ModuleAddress as Address,
+    crocDexAddress as Address,
   );
 
   const { tokenDictionary } = useTokens();
@@ -59,14 +59,28 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     ? [...(pool?.tokens ?? []), beraToken]
     : pool?.tokens;
 
-  const payload: never[] = [];
-
   const beraValue = isNativeBera
     ? tokenInputs.find((tokenInput) => isBeratoken(tokenInput))?.amount
     : "0";
 
   const { usePoolPrice } = useCrocPoolPrice(pool);
   const poolPrice = usePoolPrice();
+
+  useMemo(() => {
+    if (!areNoInputsExceeding) {
+      setError("Input exceeds balance");
+    } else if (areSomeInputsUnpopulated && !areAllInputsEmpty) {
+      setError("Missing token input");
+    } else if (areAllInputsPopulated && areNoInputsExceeding) {
+      setError(undefined);
+    }
+  }, [
+    areNoInputsExceeding,
+    areAllInputsPopulated,
+    areSomeInputsUnpopulated,
+    areAllInputsEmpty,
+  ]);
+
   return {
     poolPrice,
     beraToken,
@@ -81,9 +95,9 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     tokenDictionary,
     previewOpen,
     tokenInputs,
+    areAllInputsEmpty,
     needsApproval,
     reset,
-    payload,
     updateTokenAmount,
     updateTokenExceeding,
     setPreviewOpen,

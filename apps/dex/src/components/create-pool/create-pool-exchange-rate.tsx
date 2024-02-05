@@ -6,6 +6,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { formatNumber } from "@bera/berajs";
+import { getBaseCost, getQuoteCost } from "~/app/pools/fetchPools";
 
 type Props = {
   baseToken: ITokenWeight | undefined;
@@ -18,9 +19,9 @@ export default function CreatePoolExchangeRate({
   quoteToken,
   initialPrice,
 }: Props) {
-  const [isPricingBase, setIsPricingBase] = useState(true);
-  const baseCost = 1 * getSafeNumber(initialPrice);
-  const quoteCost = 1 / getSafeNumber(initialPrice);
+  const [isPricingBase, setIsPricingBase] = useState(false);
+  const baseCost = getBaseCost(getSafeNumber(initialPrice));
+  const quoteCost = getQuoteCost(getSafeNumber(initialPrice));
   return (
     <li className={"flex w-full flex-col  items-center p-2 overflow-x-scroll"}>
       <div className="flex w-fit flex-row justify-between gap-2">

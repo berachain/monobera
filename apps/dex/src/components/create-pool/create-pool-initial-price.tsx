@@ -4,13 +4,13 @@ import { Input } from "@bera/ui/input";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 type Props = {
-  quoteToken: ITokenWeight | undefined;
+  baseToken: ITokenWeight | undefined;
   initialPrice: string;
   onInitialPriceChange: (initialPrice: string) => void;
 };
 
 export default function CreatePoolInitialPriceInput({
-  quoteToken,
+  baseToken,
   initialPrice,
   onInitialPriceChange,
 }: Props) {
@@ -18,8 +18,8 @@ export default function CreatePoolInitialPriceInput({
     <li className={"flex w-full flex-col items-center p-2"}>
       <div className="flex w-full flex-row justify-between ">
         <div className="w-fit flex flex-row gap-1 self-center font-semibold">
-          <TokenIcon token={quoteToken?.token} />
-          {quoteToken?.token?.symbol}
+          <TokenIcon token={baseToken?.token} />
+          {baseToken?.token?.symbol}
         </div>
         <Input
           type="number"

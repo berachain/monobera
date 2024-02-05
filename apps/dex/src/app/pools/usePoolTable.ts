@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useSWRInfinite from "swr/infinite";
 
-import { fetchPools } from "./fetchPools";
+import { type PoolV2, fetchPools } from "./fetchPools";
 
 const DEFAULT_SIZE = 8;
 
@@ -53,9 +53,9 @@ export const usePoolTable = () => {
 
   const isAllDataReachingEnd =
     isAllDataEmpty ||
-    (allData && allData[allData.length - 1]?.length < DEFAULT_SIZE);
+    (allData && (allData[allData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
 
-  const data = allData ? [].concat(...allData) : [];
+  const data = allData ? ([] as PoolV2[]).concat(...allData) : [];
 
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {

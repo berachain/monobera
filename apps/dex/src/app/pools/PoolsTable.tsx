@@ -172,9 +172,9 @@ export const PoolSearch = ({
                     row, //@ts-ignore
                   ) =>
                     window.open(
-                      `/pool?base=${getAddress(
-                        row.base,
-                      )}&quote=${getAddress(row.quote)}`,
+                      `/pool?base=${getAddress(row.base)}&quote=${getAddress(
+                        row.quote,
+                      )}`,
                       "_self",
                     )
                   }

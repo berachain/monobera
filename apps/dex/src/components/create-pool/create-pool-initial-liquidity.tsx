@@ -72,7 +72,7 @@ export function CreatePoolInitialLiquidity({
       <div className="flex flex-col w-full gap-4">
         <ul className="divide divide-y divide-border rounded-lg border">
           <CreatePoolInitialPriceInput
-            quoteToken={tokenWeights[1]}
+            baseToken={tokenWeights[0]}
             initialPrice={initialPrice}
             onInitialPriceChange={onInitialPriceChange}
           />

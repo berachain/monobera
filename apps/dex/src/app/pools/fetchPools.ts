@@ -35,11 +35,11 @@ export const getPoolWithdrawUrl = (pool: PoolV2) => {
 };
 
 export const getBaseCost = (initialPrice: number) => {
-  return 1 * initialPrice;
+  return 1 / initialPrice;
 };
 
 export const getQuoteCost = (initialPrice: number) => {
-  return 1 / initialPrice;
+  return 1 * initialPrice;
 };
 
 export const fetchPools = async (

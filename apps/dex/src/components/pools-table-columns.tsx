@@ -11,7 +11,7 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
-import { PoolV2 } from "~/app/pools/fetchPools";
+import { PoolV2, getPoolAddLiquidityUrl } from "~/app/pools/fetchPools";
 
 export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   // const { data: myPools = [] } = usePollUsersPools();
@@ -242,7 +242,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     ),
     cell: ({ row }) => (
       <Link
-        href={`/pool/${row.original.pool}/add-liquidity`}
+        href={getPoolAddLiquidityUrl(row.original)}
         onClick={(e) => e.stopPropagation()}
       >
         <Button variant={"outline"} className="flex items-center gap-1">

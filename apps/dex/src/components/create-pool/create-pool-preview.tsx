@@ -178,8 +178,8 @@ export function CreatePoolPreview({
           <div className="flex h-fit w-full items-center justify-between text-sm">
             <p className="text-primary">Initial Price</p>
             <p>
-              1 {tokenWeights[0]?.token?.symbol} ={" "}
               {formatNumber(getSafeNumber(initialPrice))}{" "}
+              {tokenWeights[0]?.token?.symbol} = 1{" "}
               {tokenWeights[1]?.token?.symbol}
             </p>
           </div>

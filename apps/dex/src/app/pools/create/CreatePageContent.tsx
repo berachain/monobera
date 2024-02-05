@@ -35,16 +35,13 @@ export default function CreatePageContent() {
     totalWeight,
     error,
     swapFee,
-    poolName,
     step,
+    initialPrice,
+    setInitialPrice,
     onTokenSelection,
-    onRemove,
     onTokenWeightChange,
     onTokenBalanceChange,
-    onLock,
-    onUnlock,
     setSwapFee,
-    setPoolName,
     setStep,
   } = useCreateTokenWeights();
   const { data: findDuplicatedPool, isLoading } = useFindPool(
@@ -65,11 +62,8 @@ export default function CreatePageContent() {
             totalWeight={totalWeight}
             error={error}
             onTokenSelection={onTokenSelection}
-            onRemove={onRemove}
             onTokenWeightChange={onTokenWeightChange}
-            onLock={onLock}
-            onUnlock={onUnlock}
-            onContinue={() => !error && setStep(Steps.SET_SWAP_FEES)}
+            onContinue={() => !error && setStep(Steps.SET_INITIAL_LIQUIDITY)}
           />
         )}
         {step === Steps.SET_SWAP_FEES && (
@@ -87,17 +81,17 @@ export default function CreatePageContent() {
           <CreatePoolInitialLiquidity
             tokenWeights={tokenWeights}
             error={error}
+            initialPrice={initialPrice}
+            onInitialPriceChange={setInitialPrice}
             onTokenBalanceChange={onTokenBalanceChange}
             onContinue={() => !error && setStep(Steps.CREATE_POOL_PREVIEW)}
-            onBack={() => setStep(Steps.SET_SWAP_FEES)}
+            onBack={() => setStep(Steps.SET_TOKEN_WEIGHTS)}
           />
         )}
         {step === Steps.CREATE_POOL_PREVIEW && (
           <CreatePoolPreview
             tokenWeights={tokenWeights}
-            poolName={poolName}
-            fee={swapFee}
-            setPoolName={setPoolName}
+            initialPrice={initialPrice}
             error={undefined}
             onBack={() => setStep(Steps.SET_INITIAL_LIQUIDITY)}
           />

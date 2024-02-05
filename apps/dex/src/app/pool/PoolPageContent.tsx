@@ -373,8 +373,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
           </div>
         </div>
         <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-2">
-          {isReady && (
-            false
+          {
+            isReady && false
             // <Card>
             //   <CardContent className="flex items-center justify-between gap-4 p-4">
             //     <div className="w-full">
@@ -395,9 +395,9 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             //     </div>
             //   </CardContent>
             // </Card>
-          )}
-          {false && (
-            false
+          }
+          {
+            false && false
             // <Card>
             //   <CardContent className="flex items-center justify-between gap-4 p-4">
             //     <div>
@@ -417,7 +417,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             //     <RewardBtn poolAddress={pool?.pool} variant={"warning"} />
             //   </CardContent>
             // </Card>
-          )}
+          }
           <Card className="p-4">
             <div className="mb-8 flex h-8 w-full items-center justify-between text-lg font-semibold">
               Pool Liquidity

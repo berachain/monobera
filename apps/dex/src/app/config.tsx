@@ -43,7 +43,7 @@ export const navItems = [
     title: "Swap",
   },
   {
-    href: "/pool",
+    href: "/pools",
     title: "Pool",
   },
   {

@@ -2,15 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import {
-  DEX_PRECOMPILE_ABI,
   TransactionActionType,
-  formatUsd,
-  handleNativeBera,
-  useBeraConfig,
-  useTokenHoneyPrices,
   type Token,
+  CROCSWAP_DEX,
+  formatNumber,
 } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
@@ -21,6 +18,7 @@ import {
   TokenInput,
   TokenList,
   TxnPreview,
+  useSlippage,
   useTxn,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -29,7 +27,6 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { parseUnits } from "ethers";
-import { type Address } from "wagmi";
 
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import { useAddLiquidity } from "./useAddLiquidity";
@@ -39,8 +36,10 @@ import {
   getQuoteCost,
   type PoolV2,
 } from "../pools/fetchPools";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { getSafeNumber } from "~/utils/getSafeNumber";
+import { useCrocPool } from "~/hooks/useCrocPool";
+import { type PriceRange, type BeraSdkResponse } from "@bera/beracrocswap";
 
 interface IAddLiquidityContent {
   pool: PoolV2;
@@ -48,21 +47,14 @@ interface IAddLiquidityContent {
 
 export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   const router = useRouter();
-
-  const tokenAddresses = pool?.tokens.map((token: Token) => token.address);
-  const { data: prices = {} } = useTokenHoneyPrices(tokenAddresses);
-
   const {
     poolPrice,
     error,
-    beraValue,
-    isMultipleInputDisabled,
-    totalValue,
     previewOpen,
     tokenInputs,
     needsApproval,
+    areAllInputsEmpty,
     reset,
-    payload,
     updateTokenAmount,
     updateTokenExceeding,
     setPreviewOpen,
@@ -70,20 +62,12 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     wBeraToken,
     isNativeBera,
     setIsNativeBera,
-    // setActiveInput,
-    // setActiveAmount,
   } = useAddLiquidity(pool);
-
-  console.log({
-    poolPrice,
-  });
-  const { networkConfig } = useBeraConfig();
 
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
       reset();
-      router.push("/pool?pool=userPools");
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
@@ -107,14 +91,56 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   const handleBaseAssetAmountChange = (value: string): void => {
     updateTokenAmount(0, value);
     const quoteAmount = baseCost * getSafeNumber(value);
-    updateTokenAmount(1, quoteAmount.toString());
+    updateTokenAmount(1, quoteAmount === 0 ? "" : quoteAmount.toString());
   };
 
   const handleQuoteAssetAmountChange = (value: string): void => {
     updateTokenAmount(1, value);
     const baseAmount = quoteCost * getSafeNumber(value);
-    updateTokenAmount(0, baseAmount.toString());
+    updateTokenAmount(0, baseAmount === 0 ? "" : baseAmount.toString());
   };
+
+  const crocPool = useCrocPool(pool);
+  const slippage = useSlippage();
+  const baseTokenInitialLiquidity = tokenInputs[0]?.amount;
+  const handleCreatePool = useCallback(async () => {
+    try {
+      if (!crocPool) {
+        return;
+      }
+      const priceLimits = {
+        min: getSafeNumber(poolPrice) * (1 - (slippage ?? 1) / 100),
+        max: getSafeNumber(poolPrice) * (1 + (slippage ?? 1) / 100),
+      };
+      const limits: PriceRange = [priceLimits.min, priceLimits.max];
+
+      const mintInfo: BeraSdkResponse = await crocPool.mintAmbientBase(
+        baseTokenInitialLiquidity ?? 0,
+        limits,
+      );
+
+      const totalValue = BigInt(mintInfo.value ?? 0);
+      const payload = [2, mintInfo.calldata];
+
+      write({
+        address: crocDexAddress,
+        abi: CROCSWAP_DEX,
+        functionName: "userCmd",
+        params: payload,
+        value: totalValue === 0n ? undefined : totalValue,
+      });
+    } catch (error) {
+      console.error("Error creating pool:", error);
+    }
+  }, [
+    crocPool,
+    baseToken,
+    quoteToken,
+    poolPrice,
+    baseTokenInitialLiquidity,
+    slippage,
+    write,
+  ]);
 
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
@@ -146,8 +172,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
             Add Liquidity
           </CardTitle>
         </CardHeader>
-
-        <CardContent className="flex flex-col">
+        <CardContent className="flex flex-col gap-4">
           <TokenList>
             <TokenInput
               key={baseToken.address}
@@ -225,11 +250,20 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
             />
           </TokenList>
           <InfoBoxList>
-            <InfoBoxListItem title={"Expected Shares"} value={0 ?? "-"} />
             <InfoBoxListItem
+              title={"Pool Price"}
+              value={
+                poolPrice
+                  ? `${formatNumber(poolPrice)} ${baseToken.symbol} = 1 ${
+                      quoteToken.symbol
+                    }`
+                  : "-"
+              }
+            />
+            {/* <InfoBoxListItem
               title={"Approximate Total Value"}
               value={formatUsd(totalValue ?? 0) ?? "-"}
-            />
+            /> */}
           </InfoBoxList>
           {error && (
             <Alert variant="destructive">
@@ -239,7 +273,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
           )}
           <TxnPreview
             open={previewOpen}
-            disabled={isMultipleInputDisabled}
+            disabled={areAllInputsEmpty || error !== undefined}
             title={"Confirm LP Addition Details"}
             imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
             triggerText={"Preview"}
@@ -263,17 +297,26 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       }
                       weight={tokenInput?.normalizedWeight}
                       value={tokenInput?.amount}
-                      price={prices[handleNativeBera(tokenInput.address)] ?? 0}
+                      price={0}
                     />
                   );
                 })}
             </TokenList>
             <InfoBoxList>
-              <InfoBoxListItem title={"Expected Shares"} value={0 ?? "-"} />
               <InfoBoxListItem
+                title={"Pool Price"}
+                value={
+                  poolPrice
+                    ? `${formatNumber(poolPrice)} ${baseToken.symbol} = 1 ${
+                        quoteToken.symbol
+                      }`
+                    : "-"
+                }
+              />
+              {/* <InfoBoxListItem
                 title={"Approximate Total Value"}
                 value={formatUsd(totalValue ?? 0) ?? "-"}
-              />
+              /> */}
             </InfoBoxList>
             {needsApproval.length > 0 ? (
               <ApproveButton
@@ -284,26 +327,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                   needsApproval[0]?.decimals ?? 18,
                 )}
                 token={needsApproval[0]}
-                spender={
-                  networkConfig.precompileAddresses
-                    .erc20ModuleAddress as Address
-                }
+                spender={crocDexAddress}
               />
             ) : (
               <ActionButton>
-                <Button
-                  className="w-full"
-                  onClick={() => {
-                    write({
-                      address: networkConfig.precompileAddresses
-                        .erc20DexAddress as Address,
-                      abi: DEX_PRECOMPILE_ABI,
-                      functionName: "addLiquidity",
-                      params: payload,
-                      value: parseUnits(beraValue ?? "0", 18),
-                    });
-                  }}
-                >
+                <Button className="w-full" onClick={() => handleCreatePool()}>
                   Add Liquidity
                 </Button>
               </ActionButton>

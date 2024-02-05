@@ -10,9 +10,6 @@ export const useCrocPool = (
 ): CrocPoolView | undefined => {
   const crocenv = useCrocEnv();
 
-  console.log({
-    crocenv,
-  });
   return useMemo(() => {
     if (!pool || !crocenv.crocEnv) {
       return undefined;

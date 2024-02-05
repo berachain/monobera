@@ -158,6 +158,13 @@ export function TokenInput({
               const filteredValue = formatInputTokenValue(inputValue);
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
+
+              const [_, decimalPart = ""] = filteredValue.split(".");
+              if (decimalPart.length > 18) {
+                // ignore
+                return;
+              }
+
               if (periodsCount <= 1) {
                 setAmount?.(filteredValue);
               }
