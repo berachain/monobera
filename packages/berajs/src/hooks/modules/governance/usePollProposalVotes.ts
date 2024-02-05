@@ -132,7 +132,7 @@ export const usePollProposalVotes = (proposalId: number) => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return useMemo(() => {
       return Object.values(data ?? {}).reduce((sum: number, voter: any) => {
-        return sum + voter.delegation;
+        return sum + (voter.delegation ? parseFloat(voter.delegation) : 0);
       }, 0);
     }, [data]);
   };
@@ -147,25 +147,26 @@ export const usePollProposalVotes = (proposalId: number) => {
       const dataArray = Object.values(data);
       const abstainCount = dataArray.reduce((sum: number, voter: any) => {
         if (voter.option === VoteOption.VOTE_OPTION_ABSTAIN)
-          return sum + voter.delegation;
+          return sum + (voter.delegation ? parseFloat(voter.delegation) : 0);
         return sum;
       }, 0);
 
       const noCount = dataArray.reduce((sum: number, voter: any) => {
         if (voter.option === VoteOption.VOTE_OPTION_NO)
-          return sum + voter.delegation;
+          return sum + (voter.delegation ? parseFloat(voter.delegation) : 0);
         return sum;
       }, 0);
 
       const yesCount = dataArray.reduce((sum: number, voter: any) => {
-        if (voter.option === VoteOption.VOTE_OPTION_YES)
-          return sum + voter.delegation;
+        if (voter.option === VoteOption.VOTE_OPTION_YES) {
+          return sum + (voter.delegation ? parseFloat(voter.delegation) : 0);
+        }
         return sum;
       }, 0);
 
       const vetoCount = dataArray.reduce((sum: number, voter: any) => {
         if (voter.option === VoteOption.VOTE_OPTION_NO_WITH_VETO)
-          return sum + voter.delegation;
+          return sum + (voter.delegation ? parseFloat(voter.delegation) : 0);
         return sum;
       }, 0);
 
