@@ -56,12 +56,15 @@ export const SignUp: React.FC<SignUpProps> = ({ cloudinaryUrl }) => (
               and become a part of a community comprising over 10,000 local and
               international creators.
             </h1>
-            <Button 
-              variant="outline" 
-              className="text-white" 
-              style={{ backgroundColor: '', borderColor: '#fff' }} 
-              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#F5F5F5'} 
-              onMouseOut={(e) => e.currentTarget.style.backgroundColor = ''}>
+            <Button
+              variant="outline"
+              className="text-white"
+              style={{ backgroundColor: "", borderColor: "#fff" }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#F5F5F5")
+              }
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "")}
+            >
               Sign up as an Ambassador
             </Button>
           </div>
