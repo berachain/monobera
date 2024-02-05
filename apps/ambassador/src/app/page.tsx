@@ -37,7 +37,7 @@ export default function Page() {
             <Projects />
             <div className="flex flex-col items-center justify-center pt-12 pb-12">
               <h1 className="md:leading-14 leading-24 pb-8 text-3xl font-extrabold md:text-5xl">
-                Stages of an{" "}
+                Tiers of an{" "}
                 <span className="bg-gradient-to-r from-[rgba(255,181,113,0.9)] to-[rgba(255,122,0,0.9)] bg-clip-text text-transparent backdrop-blur-md">
                   Ambassador
                 </span>
