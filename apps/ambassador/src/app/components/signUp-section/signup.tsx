@@ -15,7 +15,9 @@ export const SignUp: React.FC<SignUpProps> = ({ cloudinaryUrl }) => (
       <div className="flex items-center justify-between pt-8 mb-[-160px]">
         <Image
           className="max-[600px]:mx-auto"
-          src={"https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/r035ky4zgyilzdbxzr08.png"}
+          src={
+            "https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/r035ky4zgyilzdbxzr08.png"
+          }
           alt="proposal-bear"
           width={500}
           height={500}
@@ -32,7 +34,9 @@ export const SignUp: React.FC<SignUpProps> = ({ cloudinaryUrl }) => (
         </h1>
         <Image
           className="max-[600px]:mx-auto"
-          src={"https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/xsbwqslzlgw5q1des79i.png"}
+          src={
+            "https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/xsbwqslzlgw5q1des79i.png"
+          }
           alt="proposal-bear"
           width={500}
           height={500}
