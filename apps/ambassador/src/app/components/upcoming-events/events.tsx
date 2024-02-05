@@ -58,19 +58,19 @@ export function ProjectCard({ project }) {
 // Define the Projects component
 export function Projects() {
   return (
-    <div className="flex flex-col items-center justify-center align-middle pt-12 pb-12">
+    <div className="flex flex-col items-center justify-center pb-12 pt-12">
       <h1 className="md:leading-14 leading-24 pb-12 text-3xl font-extrabold md:text-5xl">
         Connect with the{" "}
         <span className="bg-gradient-to-r from-[rgba(255,181,113,0.9)] to-[rgba(255,122,0,0.9)] bg-clip-text text-transparent backdrop-blur-md">
           Community
         </span>
       </h1>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap justify-center gap-4">
         {projects.map((project, index) => (
           <ProjectCard key={index} project={project} />
         ))}
       </div>
-      <Button variant="outline" className="mt-12 mb-8">
+      <Button variant="outline" className="mb-8 mt-12">
         View more events
       </Button>
     </div>
