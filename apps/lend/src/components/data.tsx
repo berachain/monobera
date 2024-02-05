@@ -36,7 +36,7 @@ export default function Data() {
         <DataCard title="Total Market Size" value={displayMarketSize} />
         <DataCard title="Total borrows" value={displayBorrowed} />
       </div>
-      <div className="bg-bg mt-4 flex w-full flex-col items-center gap-4 rounded-sm border border-accent py-4 border-opacity-20">
+      <div className="bg-bg mt-4 flex w-full flex-col items-center gap-4 rounded-sm border border-accent border-opacity-20 py-4">
         <BGTApy />
         <div className="flex flex-col items-center gap-1">
           <div className="text font-semibold leading-7 text-foreground sm:text-xl">

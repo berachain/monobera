@@ -14,9 +14,10 @@ export default function UserBorrows({
 }) {
   return (
     <>
-      <div className="text-2xl font-semibold leading-loose">Your Borrows</div>
+      <div className="text-2xl font-semibold leading-loose">Supply Honey</div>
       <div className="text-muted-foreground">
-        These assets are borrowed against your supplied collateral.
+        Honey only earns Interest.{" "}
+        <b>It cannot be used as collateral to borrow more HONEY</b>
       </div>
       {tableView ? (
         <DataTable columns={user_borrows_columns} data={assets} />

@@ -22,6 +22,7 @@ import { cn } from "@bera/ui";
 // import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Skeleton } from "@bera/ui/skeleton";
+
 // import { formatEther } from "viem";
 
 import { BGTIcon } from "./bgt-icon";

@@ -24,10 +24,12 @@ export default function BorrowBtn({
   token,
   disabled = false,
   variant = "primary",
+  className,
 }: {
   token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
+  className?: string;
 }) {
   const { isReady } = useBeraJs();
   const [open, setOpen] = useState(false);
@@ -52,7 +54,7 @@ export default function BorrowBtn({
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-full text-sm leading-5 xl:w-fit"
+        className={cn("w-full text-sm leading-5 xl:w-fit", className)}
         disabled={disabled || isLoading || !isReady}
         variant={variant}
       >

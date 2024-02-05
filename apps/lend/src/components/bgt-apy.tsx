@@ -21,7 +21,7 @@ export default function BGTApy() {
     address: lendHoneyDebtTokenAddress,
   });
   const bgtApr = useBgtApr(displayBorrowed);
-  
+
   return (
     <div className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-accent bg-opacity-10 pr-4 text-xl font-semibold sm:text-3xl">
       <Icons.honey className="h-10 w-10" />

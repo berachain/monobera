@@ -15,11 +15,14 @@ export default function UserSupply({
 }) {
   return (
     <>
-      <div className="text-2xl font-semibold leading-loose">Your Deposits</div>
-      <div className=" text-muted-foreground">
-        You must deposit in order to borrow funds.
+      <div>
+        <div className="text-2xl font-semibold leading-loose">
+          Your Deposits
+        </div>
+        <div className=" text-muted-foreground">
+          You must deposit collateral in order to borrow HONEY
+        </div>
       </div>
-
       {tableView ? (
         <DataTable columns={user_supply_columns} data={assets} />
       ) : (

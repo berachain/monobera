@@ -4,20 +4,12 @@ import {
   usePollReservesPrices,
   usePollUserAccountData,
 } from "@bera/berajs";
-import { DataTable } from "@bera/shared-ui";
 import BigNumber from "bignumber.js";
 import { formatUnits, parseUnits } from "viem";
 
-import UserTokenCard from "~/components/user-token-card";
-import { available_borrows_columns } from "./column";
+import HoneyBorrowCard from "~/components/honey-borrow-card";
 
-export default function AvailableBorrows({
-  assets,
-  tableView = false,
-}: {
-  assets: any[];
-  tableView?: boolean;
-}) {
+export default function AvailableBorrows({ assets }: { assets: any[] }) {
   const { useBaseCurrencyData } = usePollReservesDataList();
   const { data: baseCurrencyData } = useBaseCurrencyData();
   const { useReservesPrices } = usePollReservesPrices();
@@ -41,25 +33,15 @@ export default function AvailableBorrows({
         .toString();
     }
   });
-
   return (
     <>
-      <div className="text-2xl font-semibold leading-loose">
-        Available Borrows
+      <div>
+        <div className="text-2xl font-semibold leading-loose">Borrow Honey</div>
+        <div className="text-sm leading-5 text-muted-foreground">
+          HONEY that can be borrowed against your deposited collateral
+        </div>
       </div>
-      {
-        <>
-          {tableView ? (
-            <DataTable columns={available_borrows_columns} data={assets} />
-          ) : (
-            <>
-              {assets.map((asset, index) => (
-                <UserTokenCard asset={asset} key={index} type="borrow" />
-              ))}
-            </>
-          )}
-        </>
-      }
+      <HoneyBorrowCard honeyAsset={assets[0]} />
     </>
   );
 }
