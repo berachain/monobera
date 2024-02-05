@@ -27,7 +27,7 @@ const NotFoundPage = () => {
           Please check the address and try again.
         </div>
       </div>
-      <Link href={"/pool"} className="mx-auto">
+      <Link href={"/pools"} className="mx-auto">
         {" "}
         <Button>See Pools</Button>
       </Link>

@@ -79,6 +79,7 @@ const useCreateTokenWeights = () => {
 
   const [step, setStep] = useState<Steps>(Steps.SET_TOKEN_WEIGHTS);
 
+  const [initialPrice, setInitialPrice] = useState<string>("");
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { data: tokens } = useCurrentAssetWalletBalances();
 
@@ -351,6 +352,8 @@ const useCreateTokenWeights = () => {
     swapFee,
     poolName,
     step,
+    initialPrice,
+    setInitialPrice,
     onTokenSelection,
     onAddToken,
     onRemove,

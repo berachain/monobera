@@ -10,7 +10,7 @@ import { PoolInitEncoder } from "./encoding/init";
 import { CrocSurplusFlags, decodeSurplusFlag, encodeSurplusArg } from "./encoding/flags";
 import { BeraSdkResponse } from "./types";
 
-type PriceRange = [number, number]
+export type PriceRange = [number, number]
 type TickRange = [number, number]
 type BlockTag = number | string
 

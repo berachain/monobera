@@ -11,11 +11,13 @@ import { toDisplayQty, fromDisplayQty } from "./utils/token";
 export type TokenQty = BigNumber | string | number;
 
 export class CrocTokenView {
-  constructor(context: Promise<CrocContext>, tokenAddr: string) {
+  constructor(context: Promise<CrocContext>, tokenAddr: string, tokenDecimals?: number) {
     this.context = context;
     this.tokenAddr = tokenAddr;
     this.isNativeEth = tokenAddr == AddressZero;
-    if (this.isNativeEth) {
+    if(tokenDecimals) {
+      this.decimals = Promise.resolve(tokenDecimals);
+    } else if (this.isNativeEth) {
       this.decimals = Promise.resolve(18);
     } else {
       this.decimals = this.resolve().then((c) => c.decimals());

@@ -214,3 +214,34 @@ export const getUserPoolsDetails = gql`
     }
   }
 `;
+
+export const getPoolList = gql`
+  query GetPoolList($page: Int!, $limit: Int!) {
+    pools(
+      skip: $page
+      first: $limit
+      orderBy: timeCreate
+      orderDirection: desc
+    ) {
+      id
+      poolIdx
+      base
+      quote
+      timeCreate
+      baseInfo {
+        id
+        address
+        symbol
+        name
+        decimals
+      }
+      quoteInfo{
+        id
+        address
+        symbol
+        name
+        decimals
+      }
+    }
+  }
+`;

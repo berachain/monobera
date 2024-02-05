@@ -1,22 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
+import { usePollAllowances, type Token } from "@bera/berajs";
 import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
+import { crocDexAddress } from "@bera/config";
 
 const useCreatePool = (tokenWeights: ITokenWeight[]) => {
   const [needsApproval, setNeedsApproval] = useState<Token[]>([]);
-  const { networkConfig } = useBeraConfig();
 
   const tokens: Token[] = tokenWeights
     .filter((tokenWeight: ITokenWeight) => tokenWeight.token !== undefined)
     .map((tokenWeight) => tokenWeight.token) as Token[];
 
   const { useCurrentAllowancesForContract } = usePollAllowances({
-    contract: networkConfig.precompileAddresses.erc20ModuleAddress as Address,
+    contract: crocDexAddress as Address,
     tokens,
   });
 

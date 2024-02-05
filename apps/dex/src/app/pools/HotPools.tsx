@@ -87,7 +87,7 @@ export const HotPools = ({ isMainPage = false }: { isMainPage: boolean }) => {
             <Button
               variant="outline"
               className="mt-8"
-              onClick={() => router.push("/pool")}
+              onClick={() => router.push("/pools")}
             >
               View Pools
             </Button>

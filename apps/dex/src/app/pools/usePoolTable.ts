@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useSWRInfinite from "swr/infinite";
 
-import { getAbsoluteUrl } from "~/utils/vercel-utils";
+import { fetchPools } from "./fetchPools";
 
 const DEFAULT_SIZE = 8;
 
@@ -20,22 +20,25 @@ export const usePoolTable = () => {
   } = useSWRInfinite(
     (index) => ["search", index, hasBgtRewards, isHotPool, isNewPool, keyword],
     async (key: any[]) => {
-      const page = key[1] + 1;
+      const page = key[1];
       try {
-        const res = await fetch(
-          `${getAbsoluteUrl()}/api/getFilteredPools/api?page=${page}&perPage=${DEFAULT_SIZE}&hasBgtRewards=${hasBgtRewards}&hotPools=${isHotPool}&newPools=${isNewPool}&search=${search}&tvl=true&volume=false&bgtRewards=false`,
-          {
-            method: "GET",
-            headers: {
-              "x-vercel-protection-bypass": process.env
-                .VERCEL_AUTOMATION_BYPASS_SECRET as string,
-            },
-          },
-        );
-        const jsonRes = await res.json();
-        return jsonRes;
+        // const res = await fetch(
+        //   `${getAbsoluteUrl()}/api/getFilteredPools/api?page=${page}&perPage=${DEFAULT_SIZE}&hasBgtRewards=${hasBgtRewards}&hotPools=${isHotPool}&newPools=${isNewPool}&search=${search}&tvl=true&volume=false&bgtRewards=false`,
+        //   {
+        //     method: "GET",
+        //     headers: {
+        //       "x-vercel-protection-bypass": process.env
+        //         .VERCEL_AUTOMATION_BYPASS_SECRET as string,
+        //     },
+        //   },
+        // );
+        const newPools = await fetchPools(page, DEFAULT_SIZE);
+
+        // const jsonRes = await res.json();
+        return newPools ?? [];
       } catch (e) {
         console.error(e);
+        return [];
       }
     },
   );

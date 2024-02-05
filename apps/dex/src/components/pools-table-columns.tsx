@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatAmountSmall, formatter } from "@bera/berajs";
 import {
   DataTableColumnHeader,
@@ -12,15 +11,14 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
-import { getAddress } from "ethers";
+import { PoolV2 } from "~/app/pools/fetchPools";
 
-import { usePollUsersPools } from "~/hooks/usePollUsersPools";
+export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
+  // const { data: myPools = [] } = usePollUsersPools();
+  // const isDeposited = myPools?.find(
+  //   (myPool: any) => getAddress(myPool.pool) === getAddress(pool?.pool),
+  // );
 
-export const PoolSummary = ({ pool }: { pool: Pool }) => {
-  const { data: myPools = [] } = usePollUsersPools();
-  const isDeposited = myPools?.find(
-    (myPool: any) => getAddress(myPool.pool) === getAddress(pool?.pool),
-  );
   return (
     <div className="flex flex-col items-start gap-2">
       <span className="w-[180px] truncate text-left">{pool?.poolName}</span>
@@ -33,21 +31,22 @@ export const PoolSummary = ({ pool }: { pool: Pool }) => {
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
         >
-          {Number(pool?.formattedSwapFee).toFixed(2)}%
+          {/* {Number(pool?.formattedSwapFee).toFixed(2)}% */}
+          dynamic
         </Badge>
-        {isDeposited && (
+        {/* {isDeposited && (
           <Badge
             variant="success"
             className="border-none bg-success px-2 py-1 text-xs"
           >
             Provided Liquidity
           </Badge>
-        )}
+        )} */}
       </div>
     </div>
   );
 };
-export const columns: ColumnDef<Pool>[] = [
+export const columns: ColumnDef<PoolV2>[] = [
   {
     accessorKey: "poolName",
     header: ({ column }) => (

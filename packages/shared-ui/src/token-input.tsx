@@ -14,6 +14,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
 import { SelectToken } from ".";
+import { getAddress } from "viem";
 
 type Props = {
   selected: Token | undefined;
@@ -61,7 +62,7 @@ export function TokenInput({
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { isLoading: isBalancesLoading, data: token } =
-    useSelectedAssetWalletBalance(selected?.address ?? "");
+    useSelectedAssetWalletBalance(getAddress(selected?.address ?? ""));
   let tokenBalance = token?.formattedBalance;
 
   if (balance !== undefined) {

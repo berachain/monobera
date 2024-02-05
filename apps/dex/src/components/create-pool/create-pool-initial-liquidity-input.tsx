@@ -5,18 +5,17 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
-import { getSafeNumber } from "~/utils/getSafeNumber";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 type Props = {
   tokenWeight: ITokenWeight;
-  index: number;
-  onTokenBalanceChange: (index: number, amount: string) => void;
+  disabled: boolean;
+  onTokenBalanceChange: (amount: string) => void;
 };
 
 export default function CreatePoolInitialLiquidityInput({
   tokenWeight,
-  index,
+  disabled,
   onTokenBalanceChange,
 }: Props) {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
@@ -37,24 +36,18 @@ export default function CreatePoolInitialLiquidityInput({
           <>
             <TokenIcon token={tokenWeight.token} />
             {tokenWeight.token?.symbol}
-            <div className=" h-fit text-base text-foreground">
-              {tokenWeight.weight}%
-            </div>
           </>
         </Button>
         <Input
+          disabled={disabled}
           type="number"
           step="any"
           min="0"
           placeholder="0"
           className="w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-          value={
-            getSafeNumber(tokenWeight.initialLiquidity) > 0
-              ? tokenWeight.initialLiquidity
-              : ""
-          }
+          value={tokenWeight.initialLiquidity}
           onChange={(e) => {
-            onTokenBalanceChange(index, e.target.value);
+            onTokenBalanceChange(e.target.value);
           }}
         />
       </div>
@@ -69,7 +62,7 @@ export default function CreatePoolInitialLiquidityInput({
               <p
                 className="cursor-pointer self-start text-xs text-muted-foreground hover:underline"
                 onClick={() => {
-                  onTokenBalanceChange(index, tokenBalance.toString());
+                  onTokenBalanceChange(tokenBalance.toString());
                 }}
               >
                 MAX

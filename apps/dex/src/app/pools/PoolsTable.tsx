@@ -3,10 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { DataTable, NotFoundBear } from "@bera/shared-ui";
-import { cn } from "@bera/ui";
-import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { columns } from "~/components/pools-table-columns";
@@ -15,50 +12,51 @@ import CardViewLoading from "./components/pools/card-view-loading";
 import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { usePoolTable } from "./usePoolTable";
+import { getAddress } from "ethers";
 
-const FilterBadge = ({
-  text,
-  active,
-  onClick,
-}: {
-  text: string;
-  active: boolean;
-  onClick: any;
-}) => {
-  return (
-    <Badge
-      className={cn(
-        "border-border bg-muted font-medium text-muted-foreground hover:cursor-pointer hover:bg-info",
-        active ? "border-info-foreground bg-info text-info-foreground" : "",
-      )}
-      onClick={onClick}
-    >
-      {text}
-    </Badge>
-  );
-};
+// const FilterBadge = ({
+//   text,
+//   active,
+//   onClick,
+// }: {
+//   text: string;
+//   active: boolean;
+//   onClick: any;
+// }) => {
+//   return (
+//     <Badge
+//       className={cn(
+//         "border-border bg-muted font-medium text-muted-foreground hover:cursor-pointer hover:bg-info",
+//         active ? "border-info-foreground bg-info text-info-foreground" : "",
+//       )}
+//       onClick={onClick}
+//     >
+//       {text}
+//     </Badge>
+//   );
+// };
 
-const Toggle = ({
-  icon,
-  onClick,
-  className,
-}: {
-  icon: any;
-  className?: string;
-  onClick: any;
-}) => {
-  return (
-    <div
-      className={cn(
-        "cursor-pointer rounded-full p-2 text-muted-foreground hover:bg-hover",
-        className,
-      )}
-      onClick={onClick}
-    >
-      {icon}
-    </div>
-  );
-};
+// const Toggle = ({
+//   icon,
+//   onClick,
+//   className,
+// }: {
+//   icon: any;
+//   className?: string;
+//   onClick: any;
+// }) => {
+//   return (
+//     <div
+//       className={cn(
+//         "cursor-pointer rounded-full p-2 text-muted-foreground hover:bg-hover",
+//         className,
+//       )}
+//       onClick={onClick}
+//     >
+//       {icon}
+//     </div>
+//   );
+// };
 
 export const PoolSearch = ({
   poolType,
@@ -71,20 +69,17 @@ export const PoolSearch = ({
     setAllDataSize,
     isAllDataLoadingMore,
     isAllDataReachingEnd,
-    // search,
-    // setSearch,
-    hasBgtRewards,
-    setHasBgtRewards,
-    isNewPool,
-    setIsNewPool,
-    isHotPool,
-    setIsHotPool,
+    // hasBgtRewards,
+    // setHasBgtRewards,
+    // isNewPool,
+    // setIsNewPool,
+    // isHotPool,
+    // setIsHotPool,
     isList,
-    setIsList,
-    // handleEnter,
-    // setKeyword,
+    // setIsList,
   } = usePoolTable();
 
+  console.log("i am new pools henlo", data);
   const [allPoolShowed, setAllPoolShowed] = useState(false);
 
   return (
@@ -128,7 +123,7 @@ export const PoolSearch = ({
             className="w-full md:w-[400px]"
           /> */}
 
-            <div className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:justify-end">
+            {/* <div className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:justify-end">
               <FilterBadge
                 text={"🚀 New Pools"}
                 active={isNewPool}
@@ -148,7 +143,7 @@ export const PoolSearch = ({
                 icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
                 onClick={() => setIsList(!isList)}
               />
-            </div>
+            </div> */}
           </div>
         ) : (
           <div
@@ -175,7 +170,14 @@ export const PoolSearch = ({
                   className="min-w-[1000px]"
                   onRowClick={(
                     row, //@ts-ignore
-                  ) => window.open(`/pool/${row.original.pool}`, "_self")}
+                  ) =>
+                    window.open(
+                      `/pool?base=${getAddress(
+                        row.base,
+                      )}&quote=${getAddress(row.quote)}`,
+                      "_self",
+                    )
+                  }
                 />
               </div>
             ) : (

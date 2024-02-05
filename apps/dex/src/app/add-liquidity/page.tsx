@@ -1,20 +1,20 @@
-import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import PoolPageContent from "./PoolPageContent";
+import { getMetaTitle } from "~/utils/metadata";
+import AddLiquidityContent from "./AddLiquidityContent";
+import { dexName } from "@bera/config";
 import { isAddress } from "ethers";
 import { fetchSelectedPool } from "../pools/fetchPools";
 
 export function generateMetadata(): Metadata {
   return {
-    title: "Pool | DEX | Berachain",
+    title: getMetaTitle("Add Liquidity"),
+    description: `Add liquidity to ${dexName}`,
   };
 }
 
-// export const fetchCache = "force-no-store";
-
-export const revalidate = 5;
+export const fetchCache = "force-no-store";
 
 export default async function PoolPage({
   searchParams,
@@ -30,7 +30,7 @@ export default async function PoolPage({
     if (!pool) {
       notFound();
     }
-    return <PoolPageContent pool={pool} />;
+    return <AddLiquidityContent pool={pool} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
     notFound();
