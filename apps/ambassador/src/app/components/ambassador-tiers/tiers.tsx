@@ -30,11 +30,11 @@ export function AmbassadorCard({ ambassador }: { ambassador: any }) {
   function getAmbassadorStyle(tier: string) {
     switch (tier) {
       case "Tier 1":
-        return "dark:bg-gradient-to-b dark:from-amber-800 dark:to-amber-900 dark:border-amber-600 bg-gradient-to-b from-amber-200 to-amber-50 border-amber-200 opacity-75 backdrop-blur shadow-lg transform scale-110";
+        return "dark:bg-gradient-to-b dark:from-[rgba(255,193,7,0.15)] dark:to-[rgba(255,235,59,0.15)] dark:border-amber-600 bg-gradient-to-b from-[rgba(255,210,93,0.50)] to-[rgba(255,231,169,0.05)] border-amber-200 backdrop-blur dark:box-shadow-[rgba(255, 214, 129, 0.56)] shadow-lg transform scale-110";
       case "Tier 2":
-        return "dark:bg-gradient-to-b dark:from-slate-900 dark:to-slate-700 dark:border-slate-600 bg-gradient-to-b from-slate-300 to-slate-100 border-slate-200 opacity-75 backdrop-blur shadow-lg";
+        return "dark:bg-gradient-to-b dark:from-[rgba(112,128,144,0.15)] dark:to-[rgba(192,192,192,0.15)] dark:border-slate-600 bg-gradient-to-b from-[rgba(235,235,235,0.99)] to-[rgba(235,235,235,0.05)] border-slate-200 backdrop-blur shadow-lg";
       case "Tier 3":
-        return "dark:bg-gradient-to-b dark:from-orange-900 dark:to-orange-700 dark:border-orange-600 bg-gradient-to-b from-orange-100 to-orange-50 border-orange-200 opacity-75 backdrop-blur shadow-lg";
+        return "dark:bg-gradient-to-b dark:from-[rgba(255,165,0,0.15)] dark:to-[rgba(255,140,0,0.15)] dark:border-orange-600 bg-gradient-to-b from-[rgba(255,231,203,0.99)] to-[rgba(255,205,169,0.05)] border-orange-200 backdrop-blur shadow-lg";
       default:
         return "";
     }
