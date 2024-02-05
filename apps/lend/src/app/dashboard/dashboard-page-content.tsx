@@ -12,8 +12,9 @@ export default function DashboardPageContent() {
 
   usePollAssetWalletBalance();
   return (
-    <div className="flex flex-col gap-9 md:gap-6">
+    <div className="flex flex-col gap-8 md:gap-6">
       <StatusBanner />
+      <hr />
       {isReady ? (
         <Dashboard />
       ) : (

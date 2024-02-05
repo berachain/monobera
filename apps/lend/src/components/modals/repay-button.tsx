@@ -55,7 +55,7 @@ export default function RepayBtn({
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className={cn("w-full text-sm leading-5 xl:w-fit", className)}
+        className={cn("w-full xl:w-fit", className)}
         disabled={disabled || isLoading}
         variant={variant}
       >

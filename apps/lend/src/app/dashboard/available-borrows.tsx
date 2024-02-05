@@ -35,12 +35,13 @@ export default function AvailableBorrows({ assets }: { assets: any[] }) {
   });
   return (
     <>
-      <div>
-        <div className="text-2xl font-semibold leading-loose">Borrow Honey</div>
-        <div className="text-sm leading-5 text-muted-foreground">
+      <div className="mt-4">
+        <div className="text-2xl font-semibold leading-8">Borrow Honey</div>
+        <div className="text-sm text-muted-foreground">
           HONEY that can be borrowed against your deposited collateral
         </div>
       </div>
+
       <HoneyBorrowCard honeyAsset={assets[0]} />
     </>
   );

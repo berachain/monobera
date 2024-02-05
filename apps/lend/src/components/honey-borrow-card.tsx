@@ -42,7 +42,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
     .toString();
 
   return (
-    <div className="relative rounded-md border border-accent bg-background px-4 py-3">
+    <div className="relative rounded-md border border-accent bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3">
       <div className="flex flex-col gap-4 px-3 py-4">
         <div>
           <div className="flex items-center gap-1 text-xs font-medium leading-5 text-yellow-900 opacity-60 dark:text-yellow-200">
@@ -105,7 +105,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
           <BorrowBtn
             token={honeyAsset}
             variant="outline"
-            className="w-full flex-1 border border-yellow-900 bg-background py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:opacity-90 dark:border-yellow-200 dark:text-yellow-200"
+            className="w-full flex-1 border border-yellow-900 bg-background py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white bg-opacity-20"
           />
           <RepayBtn
             token={{
@@ -114,13 +114,10 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
               balance: debtTokenBalance.balance,
             }}
             variant="outline"
-            className="w-full flex-1 border border-yellow-900 bg-background py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:opacity-90 dark:border-yellow-200 dark:text-yellow-200"
+            className="w-full flex-1 border border-yellow-900 bg-background py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white bg-opacity-20"
           />
           <Link href={`/markets/${honeyTokenAddress}`}>
-            <Button
-              variant={"outline"}
-              className="w-fit border border-yellow-900 bg-background py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:opacity-90 dark:border-yellow-200 dark:text-yellow-200"
-            >
+            <Button className="w-fit border border-yellow-900 bg-background py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white bg-opacity-20">
               Details
             </Button>
           </Link>

@@ -7,23 +7,18 @@ import UserTokenCard from "~/components/user-token-card";
 export default function AvailableSupply({ assets }: { assets: any[] }) {
   return (
     <>
-      <div>
-        <div className="text-2xl font-semibold leading-loose">
+      <div className="mt-4">
+        <div className="text-2xl font-semibold leading-8">
           Available to Deposit
         </div>
-        <div className="text-sm leading-5 text-muted-foreground">
+        <div className="text-sm text-muted-foreground">
           You can deposit the following assets to borrow HONEY
         </div>
       </div>
       {assets && assets.length > 0 ? (
         <>
           {assets
-            .sort((a, b) => {
-              if (a.address === honeyTokenAddress) return -1;
-              if (b.address === honeyTokenAddress) return 1;
-              return b.address.localeCompare(a.address);
-            })
-
+            .filter((assets) => assets.address !== honeyTokenAddress)
             .map((asset, index) => (
               <UserTokenCard asset={asset} key={index} type="supply" />
             ))}

@@ -20,6 +20,8 @@ export default function UserTokenCard({
 }: {
   asset: any;
   type: "user-supply" | "user-borrow" | "supply" | "borrow";
+  // no more "user-borrow" and "borrow", i just dont wanna delete them all, they are all my babies ;-;
+  // feel free to delete them you baby killer
 }) {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { data: debtTokenBalance } = useSelectedAssetWalletBalance(
@@ -63,25 +65,25 @@ export default function UserTokenCard({
   }
 
   return (
-    <Card key={asset.symbol} className="p-4">
+    <Card key={asset.symbol} className="bg-muted p-4">
       <div className="flex flex-row items-center justify-between gap-6">
         <div className="flex flex-shrink-0 items-center gap-4 ">
           <TokenIcon address={asset.address} fetch size="2xl" />
           <div>
             <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
-              {type === "user-supply" && <>{asset.symbol} Supplied</>}
+              {type === "user-supply" && "Deposited"}
               {type === "user-borrow" && <>{asset.symbol} Debt</>}
               {type === "supply" && (
                 <>
                   <Icons.wallet className="relative h-3 w-3 rounded-lg" />
-                  {asset.symbol}{" "}
+                  Wallet Balance
                 </>
               )}
               {type === "borrow" && <>{asset.symbol} Avaliable</>}
             </div>
 
             <div className="h-8 text-lg font-bold uppercase">
-              {formatter.format(balance)}{" "}
+              {formatter.format(balance)} {asset.symbol}
               {(type === "user-supply" || type === "supply") &&
                 asset.address === honeyAddress && (
                   <Badge variant={"warning"} className="rounded-xs px-2 py-0">

@@ -33,6 +33,7 @@ export default function StatusBanner() {
   let negativeProportion = 0;
   if (reservesDictionary && userReservesDictionary) {
     Object.keys(reservesDictionary).forEach((address) => {
+      // need to work on
       if (reservesDictionary[address] && userReservesDictionary[address]) {
         const useReserve = userReservesDictionary[address];
         const reserve = reservesDictionary[address];
@@ -144,45 +145,51 @@ export default function StatusBanner() {
   ];
 
   return (
-    <div className="border-boder flex w-full flex-col justify-between gap-8 rounded-md border bg-muted p-4 md:flex-row ">
-      <div className="flex flex-col gap-8 md:flex-row ">
-        {status.map((item, index) => (
-          <div key={index.toString() + item.title} className="flex w-fit gap-4">
-            <div className="w-fit rounded-lg border p-2 text-muted-foreground">
-              {item.icon}
+    <div>
+      <h2 className="mb-4 text-3xl font-semibold leading-9">Account Status</h2>
+      <div className="border-boder flex w-full flex-col justify-between gap-8 rounded-md border bg-muted p-4 md:flex-row ">
+        <div className="flex flex-col gap-8 md:flex-row ">
+          {status.map((item, index) => (
+            <div
+              key={index.toString() + item.title}
+              className="flex w-fit gap-4"
+            >
+              <div className="w-fit rounded-lg border p-2 text-muted-foreground">
+                {item.icon}
+              </div>
+              <div className="flex flex-col">
+                <div className="text-sm font-normal leading-normal text-muted-foreground">
+                  {item.title}
+                </div>
+                {isLoading ? (
+                  <Skeleton className="h-6 w-full" />
+                ) : (
+                  <div className="h-6 text-xl font-semibold md:text-2xl">
+                    {isReady ? item.amount : "~~"}
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="flex flex-col">
+          ))}
+        </div>
+
+        <div className="hidden gap-4 xl:flex">
+          {info.map((item, index) => (
+            <div key={index + item.title} className="flex flex-col">
               <div className="text-sm font-normal leading-normal text-muted-foreground">
                 {item.title}
               </div>
+
               {isLoading ? (
                 <Skeleton className="h-6 w-full" />
               ) : (
-                <div className="h-6 text-xl font-semibold md:text-2xl">
+                <div className="h-6 w-full text-left text-lg font-semibold xl:text-right">
                   {isReady ? item.amount : "~~"}
                 </div>
               )}
             </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="hidden gap-4 xl:flex">
-        {info.map((item, index) => (
-          <div key={index + item.title} className="flex flex-col">
-            <div className="text-sm font-normal leading-normal text-muted-foreground">
-              {item.title}
-            </div>
-
-            {isLoading ? (
-              <Skeleton className="h-6 w-full" />
-            ) : (
-              <div className="h-6 w-full text-left text-lg font-semibold xl:text-right">
-                {isReady ? item.amount : "~~"}
-              </div>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

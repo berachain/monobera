@@ -4,12 +4,12 @@ import {
   usePollReservesDataList,
   usePollUserReservesData,
 } from "@bera/berajs";
-
+import { honeyTokenAddress } from "@bera/config";
 import { getAssetList } from "~/utils/lendTokenHelper";
 import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
+import HoneySupply from "./honey-supply";
 import PageLoading from "./page-loading";
-import UserBorrows from "./user-borrows";
 import UserSupply from "./user-supply";
 
 export function Dashboard() {
@@ -30,12 +30,6 @@ export function Dashboard() {
 
   return (
     <div className="flex flex-col gap-9 md:gap-6">
-      <div className="flex flex-row justify-between">
-        <div>
-          <h2 className="mb-2 text-3xl font-bold">Account Status</h2>
-        </div>
-      </div>
-
       {BalanceToken &&
       BalanceToken.length > 0 &&
       !isReservesDataLoading &&
@@ -49,8 +43,11 @@ export function Dashboard() {
               />
             </div>
             <div className="flex flex-1 flex-col gap-4">
-              {/* this is not user borrow anymore, its supply honey :) */}
-              <UserBorrows {...{ assets: assetsDictionary.borrowed }} />
+              <HoneySupply
+                honey={assetsDictionary.supplied.find(
+                  (assert) => assert.address === honeyTokenAddress,
+                )}
+              />
               {/* this is not avaliable borrow anymore, its borrow honey :p */}
               {/* feel free to rename/refactor, i am lazy zzz */}
               <AvailableBorrows

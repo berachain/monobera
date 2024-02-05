@@ -14,11 +14,14 @@ export default function UserBorrows({
 }) {
   return (
     <>
-      <div className="text-2xl font-semibold leading-loose">Supply Honey</div>
-      <div className="text-muted-foreground">
-        Honey only earns Interest.{" "}
-        <b>It cannot be used as collateral to borrow more HONEY</b>
+      <div>
+        <div className="text-2xl font-semibold leading-8">Supply Honey</div>
+        <div className="text-sm text-muted-foreground">
+          Honey only earns Interest.{" "}
+          <b>It cannot be used as collateral to borrow more HONEY</b>
+        </div>
       </div>
+
       {tableView ? (
         <DataTable columns={user_borrows_columns} data={assets} />
       ) : (

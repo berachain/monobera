@@ -27,10 +27,12 @@ export default function WithdrawBtn({
   token,
   disabled = false,
   variant = "outline",
+  className,
 }: {
   token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
@@ -54,7 +56,7 @@ export default function WithdrawBtn({
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-full text-sm leading-5 xl:w-fit"
+        className={cn("w-full xl:w-fit", className)}
         disabled={disabled || isLoading}
         variant={variant}
       >

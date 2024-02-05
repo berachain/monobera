@@ -27,11 +27,13 @@ export default function SupplyBtn({
   disabled = false,
   variant = "primary",
   supply = false,
+  className,
 }: {
   token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
   supply?: boolean;
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
@@ -58,7 +60,7 @@ export default function SupplyBtn({
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-full text-sm leading-5 xl:w-fit"
+        className={cn("w-full xl:w-fit", className)}
         disabled={disabled || isLoading || !isReady}
         variant={variant}
       >
