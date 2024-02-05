@@ -14,7 +14,7 @@ import {
 } from "@bera/berajs";
 import { erc20ModuleAddress } from "@bera/config";
 import { useDeadline, useSlippage } from "@bera/shared-ui/src/hooks";
-import { formatUnits } from "ethers";
+import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";

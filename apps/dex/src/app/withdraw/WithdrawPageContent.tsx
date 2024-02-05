@@ -3,101 +3,178 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import {
-  DEX_PRECOMPILE_ABI,
-  TransactionActionType,
+  formatNumber,
   formatUsd,
-  useBeraConfig,
-  useTokenHoneyPrices,
-  handleNativeBera,
+  type Token,
+  TransactionActionType,
+  CROCSWAP_DEX,
 } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
   ActionButton,
   InfoBoxList,
   InfoBoxListItem,
   PreviewToken,
   TokenIcon,
-  TokenInput,
   TokenList,
   TxnPreview,
+  useSlippage,
   useTxn,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { Tabs, TabsContent } from "@bera/ui/tabs";
-import { formatUnits } from "viem";
-import { type Address } from "wagmi";
 
-import { getSafeNumber } from "~/utils/getSafeNumber";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
-
+import { getPoolUrl, type PoolV2 } from "../pools/fetchPools";
+import { SettingsPopover } from "~/components/settings-popover";
+import { Slider } from "@bera/ui/slider";
+import { usePollUserPosition } from "~/hooks/usePollUserPosition";
+import { formatUnits } from "viem";
+import { useCallback, useMemo } from "react";
+import { useCrocPositionSeeds } from "~/hooks/useCrocPositionSeeds";
+import { type PriceRange } from "@bera/beracrocswap";
+import { getSafeNumber } from "~/utils/getSafeNumber";
+import { useCrocPool } from "~/hooks/useCrocPool";
 interface IWithdrawLiquidityContent {
-  pool: Pool | undefined;
+  pool: PoolV2;
 }
 
-enum Selection {
-  MULTI_TOKEN = "multi-token",
-  SINGLE_TOKEN = "single-token",
+interface ITokenSummary {
+  title: string;
+  baseToken: Token;
+  quoteToken: Token;
+  baseAmount: string;
+  quoteAmount: string;
+  isLoading: boolean;
 }
+export const TokenSummary = ({
+  title,
+  baseToken,
+  quoteToken,
+  baseAmount,
+  quoteAmount,
+  isLoading,
+}: ITokenSummary) => {
+  return (
+    <div className="flex w-full flex-col items-center justify-center rounded-lg p-3 bg-muted gap-3">
+      <p className="text-lg font-semibold text-left w-full">{title}</p>
+      <div className="w-full justify-between items-center flex flex-row">
+        <p className="text-sm text-muted-foreground">
+          Pooled {baseToken.symbol}
+        </p>
+        <div className="flex flex-row items-center gap-1 font-medium">
+          {isLoading ? "..." : baseAmount} <TokenIcon token={baseToken} />
+        </div>
+      </div>
+      <div className="w-full justify-between items-center flex flex-row">
+        <p className="text-sm text-muted-foreground">
+          Pooled {quoteToken.symbol}
+        </p>
+        <div className="flex flex-row items-center gap-1 font-medium">
+          {isLoading ? "..." : quoteAmount} <TokenIcon token={quoteToken} />
+        </div>{" "}
+      </div>
+    </div>
+  );
+};
+
 export default function WithdrawLiquidityContent({
   pool,
 }: IWithdrawLiquidityContent) {
   const reset = () => {
     setPreviewOpen(false);
 
-    setAmount("");
-    setExactOutAmount("");
-    setExactOutToken(undefined);
-    setWithdrawType(0);
+    setAmount(0);
   };
+
+  const router = useRouter();
+
+  const { amount, setAmount, previewOpen, setPreviewOpen, poolPrice } =
+    useWithdrawLiquidity(pool);
+
+  const slippage = useSlippage();
+
+  const baseToken = pool.baseInfo;
+  const quoteToken = pool.quoteInfo;
+
+  const { usePositionBreakdown, refresh } = usePollUserPosition(pool);
+  const { data: userPositionBreakdown, isLoading: isPositionBreakdownLoading } =
+    usePositionBreakdown();
+
+  const baseAmountWithdrawn = useMemo(() => {
+    if (!userPositionBreakdown || amount === 0) {
+      return 0;
+    }
+    return formatUnits(
+      (userPositionBreakdown.baseAmount * BigInt(amount)) / 100n,
+      baseToken.decimals,
+    );
+  }, [userPositionBreakdown?.baseAmount, amount]);
+
+  const quoteAmountWithdrawn = useMemo(() => {
+    if (!userPositionBreakdown || amount === 0) {
+      return 0;
+    }
+    return formatUnits(
+      (userPositionBreakdown.quoteAmount * BigInt(amount)) / 100n,
+      quoteToken.decimals,
+    );
+  }, [userPositionBreakdown?.quoteAmount, amount]);
+
+  const { usePositionSeeds } = useCrocPositionSeeds(pool);
+  const seeds = usePositionSeeds();
+
+  const liquidityToBurn = useMemo(
+    () => seeds?.mul(amount).div(100),
+    [seeds, amount],
+  );
+  const crocPool = useCrocPool(pool);
   const { write, ModalPortal } = useTxn({
     message: `Withdraw liquidity from ${pool?.poolName}`,
     onSuccess: () => {
       reset();
+      refresh();
     },
     actionType: TransactionActionType.WITHDRAW_LIQUIDITY,
   });
-  const { networkConfig } = useBeraConfig();
-  const router = useRouter();
+  const handleWithdrawLiquidity = useCallback(async () => {
+    try {
+      if (!liquidityToBurn) {
+        return;
+      }
+      const priceLimits = {
+        min: getSafeNumber(poolPrice) * (1 - (slippage ?? 1) / 100),
+        max: getSafeNumber(poolPrice) * (1 + (slippage ?? 1) / 100),
+      };
+      const limits: PriceRange = [priceLimits.min, priceLimits.max];
 
-  const tokenAddresses = pool?.tokens.map((token: any) => token.address);
-  const { data: prices = {} } = useTokenHoneyPrices(tokenAddresses);
+      let calldata = "";
+      if (amount === 100) {
+        const response = await crocPool?.burnAmbientAll(limits);
+        calldata = response?.calldata ?? "";
+      } else {
+        const response = await crocPool?.burnAmbientLiq(
+          liquidityToBurn,
+          limits,
+        );
+        calldata = response?.calldata ?? "";
+      }
 
-  const {
-    lpBalance,
-    burnShares,
-    withdrawValue,
-    isMultiTokenDisabled,
-    isSingleTokenDisabled,
-    formattedLpBalance,
-    singlePayload,
-    setWithdrawType,
-    amount,
-    setIsPoolTokenExceeding,
-    setAmount,
-    previewOpen,
-    setPreviewOpen,
-    payload,
-    exactOutToken,
-    setExactOutToken,
-    exactOutAmount,
-    setExactOutAmount,
-  } = useWithdrawLiquidity(pool, prices);
+      const payload = [2, calldata];
 
-  const handleSingleTokenWithdrawSharesIn = (amount: string): void => {
-    setAmount(amount);
-    setWithdrawType(0);
-  };
-
-  const handleSingleTokenWithdrawAssetOut = (amount: string) => {
-    setExactOutAmount(amount);
-    setWithdrawType(1);
-  };
+      write({
+        address: crocDexAddress,
+        abi: CROCSWAP_DEX,
+        functionName: "userCmd",
+        params: payload,
+      });
+    } catch (error) {
+      console.error("Error creating pool:", error);
+    }
+  }, [liquidityToBurn, amount, crocPool, write]);
 
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
@@ -116,7 +193,7 @@ export default function WithdrawLiquidityContent({
           })}
         </div>
         <div
-          onClick={() => router.push(`/pool/${pool?.pool}`)}
+          onClick={() => router.push(getPoolUrl(pool))}
           className="flex items-center justify-center text-sm font-normal leading-tight text-muted-foreground hover:cursor-pointer hover:underline"
         >
           View Pool Details
@@ -127,277 +204,132 @@ export default function WithdrawLiquidityContent({
         <CardHeader>
           <CardTitle className="center flex justify-between font-bold">
             Withdraw Liquidity
+            <SettingsPopover />
           </CardTitle>
         </CardHeader>
-
-        <Tabs defaultValue={Selection.MULTI_TOKEN} className="w-full">
-          <CardContent className="flex flex-col">
-            {/* <TabsList className="mb-3 grid w-full grid-cols-2">
-              <TabsTrigger value={Selection.MULTI_TOKEN}>
-                Multi-token
-              </TabsTrigger>
-              <TabsTrigger value={Selection.SINGLE_TOKEN}>
-                Single token
-              </TabsTrigger>
-            </TabsList> */}
-
-            <TabsContent
-              value={Selection.MULTI_TOKEN}
-              className="mt-0 flex w-full flex-col gap-3"
-            >
-              <TokenList className="bg-muted">
-                <p className="text-md w-full py-2 text-center font-medium">
-                  Your Pool Tokens
-                </p>
-                <TokenInput
-                  selected={{
-                    address: "",
-                    symbol: pool?.poolName ?? "",
-                    name: pool?.poolName ?? "",
-                    decimals: 18,
-                    logoURI: "",
-                  }}
-                  hidePrice={true}
-                  balance={formattedLpBalance}
-                  selectable={false}
-                  amount={amount}
-                  setAmount={setAmount}
-                  showExceeding={true}
-                  onExceeding={setIsPoolTokenExceeding}
-                />
-              </TokenList>
-
+        <CardContent className="flex flex-col gap-4">
+          <TokenSummary
+            title="Your Tokens In the Pool"
+            baseToken={baseToken}
+            quoteToken={quoteToken}
+            baseAmount={userPositionBreakdown?.formattedBaseAmount ?? "0"}
+            quoteAmount={userPositionBreakdown?.formattedQuoteAmount ?? "0"}
+            isLoading={isPositionBreakdownLoading}
+          />
+          <div className="w-full p-4 border rounded-lg">
+            <div className="w-full flex flex-row justify-between items-center">
+              <p className="text-lg font-semibold">{amount.toFixed(2)}%</p>
               <div className="flex flex-row gap-2">
-                {[25n, 50n, 75n, 100n].map((percent) => {
+                {[25, 50, 75, 100].map((percent) => {
                   return (
                     <Button
                       key={percent.toString()}
-                      variant={"outline"}
-                      className="w-full"
-                      onClick={() =>
-                        setAmount(
-                          percent === 100n
-                            ? formattedLpBalance
-                            : formatUnits(
-                                ((lpBalance ?? 0n) * percent) / 100n,
-                                18,
-                              ),
-                        )
-                      }
-                      disabled={lpBalance === 0n}
+                      variant={"secondary"}
+                      size={"sm"}
+                      className="w-full text-foreground"
+                      onClick={() => setAmount(percent)}
                     >
                       {percent.toString()}%
                     </Button>
                   );
                 })}
               </div>
-              <Alert variant="warning">
-                All outstanding BGT Rewards will be claimed upon withdrawing all
-                liquidity.
-              </Alert>
-              <TxnPreview
-                open={previewOpen}
-                disabled={isMultiTokenDisabled}
-                title={"Confirm LP Withdrawal Details"}
-                imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
-                triggerText={"Preview"}
-                setOpen={setPreviewOpen}
-              >
-                <TokenList className="divide-muted bg-muted">
-                  {pool?.tokens.map((token, i) => {
-                    const formattedAmount = burnShares
-                      ? Number(
-                          formatUnits(
-                            burnShares[token.address] ?? 0n,
-                            token.decimals,
-                          ),
-                        )
-                      : 0;
-                    return (
-                      <PreviewToken
-                        key={token.address}
-                        token={token}
-                        value={formattedAmount}
-                        weight={token.normalizedWeight}
-                        price={
-                          prices && tokenAddresses
-                            ? prices[handleNativeBera(tokenAddresses[i])]
-                            : 0
-                        }
-                      />
-                    );
-                  })}
-                </TokenList>
-                <InfoBoxList>
-                  <InfoBoxListItem title={"Total Shares"} value={amount} />
-                  <InfoBoxListItem
-                    title={"Approximate Total Value"}
-                    value={formatUsd(withdrawValue)}
-                  />
-                </InfoBoxList>
-                <ActionButton>
-                  <Button
-                    className="w-full"
-                    onClick={() => {
-                      write({
-                        address: networkConfig.precompileAddresses
-                          .erc20DexAddress as Address,
-                        abi: DEX_PRECOMPILE_ABI,
-                        functionName: "removeLiquidityBurningShares",
-                        params: payload,
-                      });
-                    }}
-                  >
-                    Withdraw Liquidity
-                  </Button>
-                </ActionButton>
-              </TxnPreview>
-            </TabsContent>
-            <TabsContent
-              value={Selection.SINGLE_TOKEN}
-              className="mt-0 flex w-full flex-col gap-3"
-            >
-              <TokenList>
-                <p className="text-md w-full py-2 text-center font-medium">
-                  Your Pool Tokens
-                </p>
-                <TokenInput
-                  selected={{
-                    address: pool?.poolShareDenomHex ?? "",
-                    symbol: pool?.poolName ?? "",
-                    name: pool?.poolName ?? "",
-                    decimals: 18,
-                    logoURI: "",
-                  }}
-                  balance={formattedLpBalance}
-                  hidePrice={true}
-                  selectable={false}
-                  amount={amount}
-                  showExceeding={true}
-                  setAmount={handleSingleTokenWithdrawSharesIn}
-                  onExceeding={setIsPoolTokenExceeding}
-                />
-              </TokenList>
-              <div className="flex flex-row gap-2">
-                {[25n, 50n, 75n, 100n].map((percent) => {
-                  return (
-                    <Button
-                      key={percent.toString()}
-                      variant={"outline"}
-                      className="w-full"
-                      onClick={() =>
-                        setAmount(
-                          percent === 100n
-                            ? formattedLpBalance
-                            : formatUnits(
-                                ((lpBalance ?? 0n) * percent) / 100n,
-                                18,
-                              ),
-                        )
-                      }
-                      disabled={lpBalance === 0n}
-                    >
-                      {percent.toString()}%
-                    </Button>
-                  );
-                })}
-              </div>
-              <Icons.chevronsDown className="self-center text-secondary-foreground" />
-              <TokenList>
-                <TokenInput
-                  selected={exactOutToken}
-                  onTokenSelection={setExactOutToken}
-                  selectable={true}
-                  amount={exactOutAmount}
-                  setAmount={handleSingleTokenWithdrawAssetOut}
-                  customTokenList={pool?.tokens}
-                  showExceeding={false}
-                  price={prices[handleNativeBera(exactOutToken?.address)] ?? 0}
-                />
-              </TokenList>
-              <Alert variant="warning">
-                All outstanding BGT Rewards will be claimed upon withdrawing all
-                liquidity.
-              </Alert>
-              <TxnPreview
-                open={previewOpen}
-                disabled={isSingleTokenDisabled}
-                title={"Confirm LP Withdrawal Details"}
-                imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
-                triggerText={"Preview"}
-                setOpen={setPreviewOpen}
-              >
-                <TokenList className="divide-muted bg-muted">
-                  {pool?.tokens.map((token, i) => {
-                    const formattedAmount = burnShares
-                      ? Number(
-                          formatUnits(
-                            burnShares[token.address] ?? 0n,
-                            token.decimals,
-                          ),
-                        )
-                      : 0;
-                    return (
-                      <PreviewToken
-                        key={token.address}
-                        token={token}
-                        value={formattedAmount}
-                        weight={token.normalizedWeight}
-                        price={
-                          prices && tokenAddresses
-                            ? prices[handleNativeBera(tokenAddresses[i])]
-                            : 0
-                        }
-                      />
-                    );
-                  })}
-                </TokenList>
-                <p className="text-center text-xs font-medium text-muted-foreground">
-                  Your Stake of{" "}
-                  <span className="font-bold">{amount} Pool Tokens </span>
-                  will be converted and withdrawn from the pool, with the
-                  following breakdown.
-                </p>
-                <div className="flex w-full items-center justify-center">
-                  <Icons.chevronsDown className="self-center text-secondary-foreground" />
+            </div>
+            <Slider
+              defaultValue={[0]}
+              value={[amount]}
+              max={100}
+              min={0}
+              onValueChange={(value: number[]) => {
+                setAmount(value[0] ?? 0);
+              }}
+            />
+          </div>
+          <InfoBoxList>
+            <InfoBoxListItem
+              title={`Removing ${baseToken.symbol}`}
+              value={
+                <div className="flex flex-row gap-1 items-center justify-end">
+                  <p>{baseAmountWithdrawn}</p>
+                  <TokenIcon token={baseToken} size={"md"} />
                 </div>
-                <TokenList className="bg-muted">
-                  <PreviewToken
-                    token={exactOutToken}
-                    value={getSafeNumber(exactOutAmount)}
-                    price={prices[handleNativeBera(exactOutToken?.address)]}
-                  />
-                </TokenList>
-                <InfoBoxList>
-                  <InfoBoxListItem title={"Total Shares"} value={amount} />
-                  <InfoBoxListItem
-                    title={"Approximate Total Value"}
-                    value={formatUsd(
-                      (prices[handleNativeBera(exactOutToken?.address)] ?? 0) *
-                        getSafeNumber(exactOutAmount),
-                    )}
-                  />
-                </InfoBoxList>
-                <ActionButton>
-                  <Button
-                    className="w-full"
-                    onClick={() => {
-                      write({
-                        address: networkConfig.precompileAddresses
-                          .erc20DexAddress as Address,
-                        abi: DEX_PRECOMPILE_ABI,
-                        functionName: "removeLiquidityExactAmount",
-                        params: singlePayload,
-                      });
-                    }}
-                  >
-                    Withdraw Liquidity
-                  </Button>
-                </ActionButton>
-              </TxnPreview>
-            </TabsContent>
-          </CardContent>
-        </Tabs>
+              }
+            />
+            <InfoBoxListItem
+              title={`Removing ${quoteToken.symbol}`}
+              value={
+                <div className="flex flex-row gap-1 items-center justify-end">
+                  <p>{quoteAmountWithdrawn}</p>
+                  <TokenIcon token={quoteToken} size={"md"} />
+                </div>
+              }
+            />
+
+            <InfoBoxListItem title={"Estimated Value"} value={formatUsd(0)} />
+            <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
+            <InfoBoxListItem
+              title={"Pool Price"}
+              value={
+                poolPrice
+                  ? `${formatNumber(poolPrice)} ${baseToken.symbol} = 1 ${
+                      quoteToken.symbol
+                    }`
+                  : "-"
+              }
+            />
+          </InfoBoxList>
+          <TxnPreview
+            open={previewOpen}
+            title={"Confirm LP Withdrawal Details"}
+            imgURI={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
+            triggerText={"Preview"}
+            setOpen={setPreviewOpen}
+            disabled={
+              amount === 0 ||
+              isPositionBreakdownLoading ||
+              userPositionBreakdown === undefined ||
+              userPositionBreakdown.baseAmount === 0n ||
+              userPositionBreakdown.quoteAmount === 0n
+            }
+          >
+            <TokenList className="divide-muted bg-muted">
+              <PreviewToken
+                key={baseToken.address}
+                token={baseToken}
+                value={Number(baseAmountWithdrawn)}
+                price={0}
+              />
+              <PreviewToken
+                key={quoteToken.address}
+                token={quoteToken}
+                value={Number(quoteAmountWithdrawn)}
+                price={0}
+              />
+            </TokenList>
+            <InfoBoxList>
+              <InfoBoxListItem title={"Estimated Value"} value={formatUsd(0)} />
+              <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
+              <InfoBoxListItem
+                title={"Pool Price"}
+                value={
+                  poolPrice
+                    ? `${formatNumber(poolPrice)} ${baseToken.symbol} = 1 ${
+                        quoteToken.symbol
+                      }`
+                    : "-"
+                }
+              />
+            </InfoBoxList>
+            <ActionButton>
+              <Button
+                className="w-full"
+                onClick={() => handleWithdrawLiquidity()}
+              >
+                Withdraw Liquidity
+              </Button>
+            </ActionButton>
+          </TxnPreview>
+        </CardContent>
       </Card>
     </div>
   );

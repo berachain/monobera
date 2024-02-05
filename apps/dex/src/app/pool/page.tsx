@@ -3,7 +3,7 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import PoolPageContent from "./PoolPageContent";
-import { isAddress } from "ethers";
+import { isAddress } from "viem";
 import { fetchSelectedPool } from "../pools/fetchPools";
 
 export function generateMetadata(): Metadata {

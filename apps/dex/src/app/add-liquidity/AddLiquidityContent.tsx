@@ -26,7 +26,7 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { parseUnits } from "ethers";
+import { parseUnits } from "viem";
 
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import { useAddLiquidity } from "./useAddLiquidity";
@@ -40,6 +40,7 @@ import { useCallback, useMemo } from "react";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { useCrocPool } from "~/hooks/useCrocPool";
 import { type PriceRange, type BeraSdkResponse } from "@bera/beracrocswap";
+import { SettingsPopover } from "~/components/settings-popover";
 
 interface IAddLiquidityContent {
   pool: PoolV2;
@@ -103,7 +104,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   const crocPool = useCrocPool(pool);
   const slippage = useSlippage();
   const baseTokenInitialLiquidity = tokenInputs[0]?.amount;
-  const handleCreatePool = useCallback(async () => {
+  const handleAddLiquidity = useCallback(async () => {
     try {
       if (!crocPool) {
         return;
@@ -170,6 +171,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
         <CardHeader>
           <CardTitle className="center flex justify-between font-bold">
             Add Liquidity
+            <SettingsPopover />
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
@@ -260,10 +262,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                   : "-"
               }
             />
-            {/* <InfoBoxListItem
-              title={"Approximate Total Value"}
-              value={formatUsd(totalValue ?? 0) ?? "-"}
-            /> */}
+            <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
           </InfoBoxList>
           {error && (
             <Alert variant="destructive">
@@ -313,10 +312,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                     : "-"
                 }
               />
-              {/* <InfoBoxListItem
-                title={"Approximate Total Value"}
-                value={formatUsd(totalValue ?? 0) ?? "-"}
-              /> */}
+              <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
             </InfoBoxList>
             {needsApproval.length > 0 ? (
               <ApproveButton
@@ -331,7 +327,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               />
             ) : (
               <ActionButton>
-                <Button className="w-full" onClick={() => handleCreatePool()}>
+                <Button className="w-full" onClick={() => handleAddLiquidity()}>
                   Add Liquidity
                 </Button>
               </ActionButton>

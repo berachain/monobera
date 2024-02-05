@@ -4,7 +4,7 @@ import {
   nativeTokenAddress,
   subgraphUrl,
 } from "@bera/config";
-import { getAddress } from "ethers";
+import { getAddress } from "viem";
 import lodash from "lodash";
 import { type Address } from "wagmi";
 

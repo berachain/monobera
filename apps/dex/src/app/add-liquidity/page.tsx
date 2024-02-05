@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getMetaTitle } from "~/utils/metadata";
 import AddLiquidityContent from "./AddLiquidityContent";
 import { dexName } from "@bera/config";
-import { isAddress } from "ethers";
+import { isAddress } from "viem";
 import { fetchSelectedPool } from "../pools/fetchPools";
 
 export function generateMetadata(): Metadata {

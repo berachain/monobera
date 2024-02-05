@@ -12,7 +12,7 @@ import CardViewLoading from "./components/pools/card-view-loading";
 import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { usePoolTable } from "./usePoolTable";
-import { getAddress } from "ethers";
+import { getAddress } from "viem";
 
 // const FilterBadge = ({
 //   text,
