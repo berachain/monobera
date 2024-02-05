@@ -105,7 +105,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
           <BorrowBtn
             token={honeyAsset}
             variant="outline"
-            className="w-full flex-1 border border-yellow-900 bg-background py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white bg-opacity-20"
+            className="w-full flex-1 border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-2xl hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
           />
           <RepayBtn
             token={{
@@ -114,10 +114,10 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
               balance: debtTokenBalance.balance,
             }}
             variant="outline"
-            className="w-full flex-1 border border-yellow-900 bg-background py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white bg-opacity-20"
+            className="w-full flex-1 border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-2xl hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
           />
           <Link href={`/markets/${honeyTokenAddress}`}>
-            <Button className="w-fit border border-yellow-900 bg-background py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white bg-opacity-20">
+            <Button className="w-fit border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-2xl hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white">
               Details
             </Button>
           </Link>
@@ -126,7 +126,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
         <BGTRewardsClaimBtn />
       </div>
       <Image
-        src={`${cloudinaryUrl}/bears/qvtld0jktnbcwopn05vs`}
+        src={`${cloudinaryUrl}/bears/wmbe33wwgz8vevwybb0u`}
         alt="home bear"
         width={320}
         height={320}
