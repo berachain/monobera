@@ -27,6 +27,7 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
         </div>
       </div>
       <DataTable
+        pagination
         columns={getPositionColumns(markets)}
         data={openPositions ?? []}
         className="min-w-[1136px]"

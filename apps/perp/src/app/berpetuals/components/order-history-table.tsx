@@ -9,7 +9,7 @@ import {
   orders_columns,
   pnl_columns,
 } from "./columns";
-import { DataTable } from "./data-table";
+import { DataTable } from "@bera/shared-ui";
 import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
 import { type BerpTabTypes } from "./order-history-header";
 
@@ -53,6 +53,8 @@ export function OrderHistoryTable({
           columns={getPositionColumns(markets)}
           data={openPositons ?? []}
           className="hidden w-full sm:block"
+          embedded
+          pagination
         />
       )}
       {tab === "orders" && (
@@ -60,6 +62,8 @@ export function OrderHistoryTable({
           columns={orders_columns}
           data={openOrders ?? []}
           className="hidden w-full min-w-[1000px] sm:block"
+          embedded
+          pagination
         />
       )}
       {tab === "history" && (
@@ -67,6 +71,8 @@ export function OrderHistoryTable({
           columns={history_columns}
           data={history ?? []}
           className="hidden w-full min-w-[850px] sm:block"
+          embedded
+          pagination
         />
       )}
       {tab === "pnl" && (
@@ -74,6 +80,8 @@ export function OrderHistoryTable({
           columns={pnl_columns}
           data={history ?? []}
           className="hidden w-full min-w-[1200px] sm:block"
+          embedded
+          pagination
         />
       )}
       <div className="flex flex-col gap-8 px-6 py-8 sm:hidden">
