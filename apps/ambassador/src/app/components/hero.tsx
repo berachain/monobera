@@ -5,24 +5,24 @@ import { Button } from "@bera/ui/button";
 
 export default function Hero() {
   return (
-    <div className="flex flex-wrap justify-between items-center px-32">
-      <div className="items-left flex flex-col gap-4">
-        <h1 className="leading-24 leading-14 text-xl font-extrabold md:text-5xl ">
+    <div className="flex flex-col sm:flex-row flex-wrap justify-between items-center p-4 sm:px-8 lg:px-32 xl:px-48 mt-[-60px] mb-[-120px]">
+      <div className="items-left flex flex-col gap-4 mb-6 sm:mb-0">
+        <h1 className="lg:text-[64px] lg:leading-[72px] md:text-[42px] md:leading-[48px] sm:text-[28px] sm:leading-[32px] font-extrabold">
           <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
             Become a
           </span>{" "}
-          <br />
+          <br className="" />
           Berachain
-          <br />
+          <br className="" />
           <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
             Ambassador
           </span>
         </h1>
-        <div className="font-medium leading-normal text-muted-foreground">
-          Join the Bera Brigade and <br />
+        <div className="font-medium leading-normal text-muted-foreground text-sm sm:text-base lg:text-lg">
+          Join the Bera Brigade and <br className="sm:hidden lg:block" />
           help foster the vibrant community of bears.
         </div>
-        <div className="mb-6 mt-6 text-center md:text-left">
+        <div className="mt-6 mb-6 sm:mb-0 text-center sm:text-left">
           <Link href="/">
             <Button className="mr-4">Sign up</Button>
           </Link>
@@ -32,7 +32,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="relative flex flex-col items-center justify-center gap-4 ">
-        <div className="transition-opacity hover:animate-spin-slower md:block sm:hidden">
+        <div className="transition-opacity hover:animate-spin-slowly hidden sm:block">
           <Image
             src="/circle.png"
             alt="bera circle"

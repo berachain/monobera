@@ -25,7 +25,7 @@ export default function Announcements() {
   const isAllDataLoadingMore = false;
   const isAllDataReachingEnd = false;
   return (
-    <div className="relative flex h-fit flex-col items-center justify-center px-0 pb-0 pt-[64px]">
+    <div className="relative flex h-fit flex-col items-center justify-center px-32 md:px-16 sm:px-8 pb-0 pt-[64px]">
       <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
         Announcements
       </div>
@@ -33,8 +33,11 @@ export default function Announcements() {
         Upcoming Events, Hackathons, Team GetToGethers, etc..
       </div>
       <div className="mt-8 grid h-fit grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
-        {announcements.map((announcement) => (
-          <div className="relative col-span-1 flex h-[340px] w-[420px] flex-col rounded-xl border border-solid bg-background">
+        {announcements.map((announcement, index) => (
+          <div
+            key={index}
+            className="relative col-span-1 flex h-[340px] w-[420px] flex-col rounded-xl border border-solid bg-background"
+          >
             <div className="flex flex-col items-center gap-1 px-6 pb-4 pt-6">
               <Image
                 src={announcement.image}
