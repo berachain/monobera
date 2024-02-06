@@ -11,7 +11,11 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
-import { PoolV2, getPoolAddLiquidityUrl } from "~/app/pools/fetchPools";
+import {
+  type PoolV2,
+  getPoolAddLiquidityUrl,
+  getPoolWithdrawUrl,
+} from "~/app/pools/fetchPools";
 
 export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   // const { data: myPools = [] } = usePollUsersPools();
@@ -268,7 +272,7 @@ export const columns: ColumnDef<PoolV2>[] = [
 //     </div>
 //   );
 // };
-export const my_columns: ColumnDef<any>[] = [
+export const my_columns: ColumnDef<PoolV2>[] = [
   {
     accessorKey: "poolName",
     header: ({ column }) => (
@@ -297,7 +301,7 @@ export const my_columns: ColumnDef<any>[] = [
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
         >
-          {Number(row.original?.formattedSwapFee).toFixed(2)}%
+          {Number(0).toFixed(2)}%
         </Badge>
       </div>
     ),
@@ -347,9 +351,7 @@ export const my_columns: ColumnDef<any>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="flex items-center text-sm">
-        {formatter.format(row.original.userBalance)} USD
-      </div>
+      <div className="flex items-center text-sm">{formatter.format(0)} USD</div>
     ),
   },
   {
@@ -363,9 +365,8 @@ export const my_columns: ColumnDef<any>[] = [
       />
     ),
     cell: ({ row }) => {
-      const { isSmall, numericValue: formattedBGTRewards } = formatAmountSmall(
-        row.original.bgtRewards ?? "0",
-      );
+      const { isSmall, numericValue: formattedBGTRewards } =
+        formatAmountSmall("0");
       return (
         <Badge
           variant={"warning"}
@@ -398,7 +399,7 @@ export const my_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="w-100 flex flex-row items-center justify-center gap-1">
         <Link
-          href={`/pool/${row.original.pool}/add-liquidity`}
+          href={getPoolAddLiquidityUrl(row.original)}
           onClick={(e) => e.stopPropagation()}
         >
           <Button variant={"outline"} className="flex gap-1">
@@ -406,7 +407,7 @@ export const my_columns: ColumnDef<any>[] = [
           </Button>
         </Link>
         <Link
-          href={`/pool/${row.original.pool}/withdraw`}
+          href={getPoolWithdrawUrl(row.original)}
           onClick={(e) => e.stopPropagation()}
         >
           <Button variant={"outline"} className="flex gap-1">

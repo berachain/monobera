@@ -18,6 +18,7 @@ import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
+import { usePollCrocSwapRoute } from "./usePollCrocSwapRoute";
 
 export enum SwapKind {
   GIVEN_IN = 0,
@@ -329,6 +330,11 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
 
+  usePollCrocSwapRoute({
+    sellToken: selectedFrom,
+    buyToken: selectedTo,
+    qty: swapAmount,
+  });
   return {
     setSwapKind,
     setSelectedFrom,

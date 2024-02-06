@@ -23,6 +23,7 @@ export const useCrocPoolSpotPrice = (pool: PoolV2 | undefined) => {
 
   const usePoolSpotPrice = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    console.log("DATA", data);
     return data;
   };
   return {

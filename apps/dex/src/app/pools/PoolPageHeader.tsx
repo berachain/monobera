@@ -36,7 +36,7 @@ export default function PoolPageHeader({
           </div>
           <div className="mb-2 flex flex-row justify-center gap-2 self-center md:justify-start ">
             <Button
-              onClick={() => router.push("/pool/create")}
+              onClick={() => router.push("/pools/create")}
               className="text-md self-center"
             >
               Create a Pool

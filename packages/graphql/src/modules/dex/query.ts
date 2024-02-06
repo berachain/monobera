@@ -245,3 +245,34 @@ export const getPoolList = gql`
     }
   }
 `;
+
+export const getFilteredPoolList = gql`
+  query GetPoolList($baseAssets: [Bytes!], $quoteAssets: [Bytes!]) {
+    pools(
+      where: {
+        base_in: $baseAssets
+        quote_in: $quoteAssets
+      }
+    ) {
+      id
+      poolIdx
+      base
+      quote
+      timeCreate
+      baseInfo {
+        id
+        address
+        symbol
+        name
+        decimals
+      }
+      quoteInfo{
+        id
+        address
+        symbol
+        name
+        decimals
+      }
+    }
+  }
+`;

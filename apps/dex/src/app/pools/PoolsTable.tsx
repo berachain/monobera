@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { DataTable, NotFoundBear } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -80,8 +79,6 @@ export const PoolSearch = ({
   } = usePoolTable();
 
   console.log("i am new pools henlo", data);
-  const [allPoolShowed, setAllPoolShowed] = useState(false);
-
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -94,20 +91,19 @@ export const PoolSearch = ({
             className="w-full sm:w-fit"
             variant="ghost"
           >
-            <Link href="/pool?pool=allPools">All pools</Link>
+            <Link href="/pools?pool=allPools">All pools</Link>
           </TabsTrigger>
           <TabsTrigger
             value="userPools"
             className="w-full sm:w-fit"
             variant="ghost"
           >
-            <Link href="/pool?pool=userPools">My pools</Link>
+            <Link href="/pools?pool=userPools">My pools</Link>
           </TabsTrigger>
         </TabsList>
 
-        {poolType === "allPools" ? (
-          <div className="justsify-center flex w-full flex-col items-center gap-2 lg:flex-row lg:items-center lg:justify-between">
-            {/* <SearchInput
+        <div className="justsify-center flex w-full flex-col items-center gap-2 lg:flex-row lg:items-center lg:justify-between">
+          {/* <SearchInput
             value={search}
             onChange={(e) => {
               if (e.target.value === "") {
@@ -123,7 +119,7 @@ export const PoolSearch = ({
             className="w-full md:w-[400px]"
           /> */}
 
-            {/* <div className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:justify-end">
+          {/* <div className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:justify-end">
               <FilterBadge
                 text={"🚀 New Pools"}
                 active={isNewPool}
@@ -144,15 +140,7 @@ export const PoolSearch = ({
                 onClick={() => setIsList(!isList)}
               />
             </div> */}
-          </div>
-        ) : (
-          <div
-            className="cursor-pointer text-right text-info-foreground underline"
-            onClick={() => setAllPoolShowed(!allPoolShowed)}
-          >
-            {allPoolShowed ? "Show deposited pools" : "Show all pools"}
-          </div>
-        )}
+        </div>
 
         <TabsContent value="allPools" className="text-center">
           {isAllDataLoadingMore && data?.length === 0 ? (
@@ -209,7 +197,7 @@ export const PoolSearch = ({
         </TabsContent>
 
         <TabsContent value="userPools">
-          <MyPool isList allPoolShowed={allPoolShowed} />
+          <MyPool isList />
         </TabsContent>
       </Tabs>
     </div>

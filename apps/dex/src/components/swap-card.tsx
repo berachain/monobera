@@ -73,7 +73,6 @@ export function SwapCard({
   className,
 }: ISwapCard) {
   const {
-    setSwapKind,
     setSelectedFrom,
     selectedFrom,
     allowance,
@@ -99,7 +98,6 @@ export function SwapCard({
     isWrap,
     wrapType,
     minAmountOut,
-    swapKind,
   } = useSwap({
     inputCurrency,
     outputCurrency,

@@ -1,6 +1,5 @@
 import { BigNumber } from "ethers";
 
-import { TransactionResponse } from '@ethersproject/providers';
 import { CrocContext } from './context';
 import { CrocPoolView } from './pool';
 import { decodeCrocPrice } from './utils';
@@ -42,7 +41,10 @@ export class CrocSwapPlan {
   }
 
 
-  async swap (args: CrocSwapOpts = { }): Promise<TransactionResponse> {
+  async swap (args: CrocSwapOpts = { }): Promise<{
+    payload: any[],
+    txArgs: any
+  }> {
     const TIP = 0
     const surplusFlags = this.maskSurplusArgs(args.surplus)
 
@@ -53,20 +55,22 @@ export class CrocSwapPlan {
       await this.buildTxArgs(surplusFlags))
 
 
-    return (await this.context).dex.swap
-      (
-      this.baseToken.tokenAddr, 
-      this.quoteToken.tokenAddr, 
-      (await this.context).chain.poolIndex,
-      this.sellBase, 
-      this.qtyInBase, 
-      await this.qty, 
-      TIP, 
-      await this.calcLimitPrice(), 
-      await this.calcSlipQty(), 
-      surplusFlags,
-      await this.buildTxArgs(surplusFlags, await gasEst))
-  }
+    return {
+      payload:[
+        this.baseToken.tokenAddr, 
+        this.quoteToken.tokenAddr, 
+        (await this.context).chain.poolIndex,
+        this.sellBase, 
+        this.qtyInBase, 
+        await this.qty, 
+        TIP, 
+        await this.calcLimitPrice(), 
+        await this.calcSlipQty(), 
+        surplusFlags,
+      ],
+      txArgs: await this.buildTxArgs(surplusFlags, await gasEst)
+    }
+    }
 
 
   async calcImpact(): Promise<CrocImpact> {

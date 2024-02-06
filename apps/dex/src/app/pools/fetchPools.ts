@@ -42,6 +42,26 @@ export const getQuoteCost = (initialPrice: number) => {
   return 1 * initialPrice;
 };
 
+export const formatPoolData = (result: any): PoolV2 => {
+  return {
+    id: getPoolId(result.base, result.quote),
+    base: result.base,
+    quote: result.quote,
+    baseInfo: result.baseInfo,
+    quoteInfo: result.quoteInfo,
+    timeCreate: result.timeCreate,
+    poolIdx: result.poolIdx,
+    poolName: result.baseInfo.symbol
+      .concat("-")
+      .concat(result.quoteInfo.symbol),
+    tokens: [result.baseInfo, result.quoteInfo],
+    feeRate: 0,
+    tvlUsd: 0,
+    volumeUsd: 0,
+    fees: 0,
+  };
+};
+
 export const fetchPools = async (
   page: number,
   limit: number,
@@ -73,23 +93,7 @@ export const fetchPools = async (
     }
 
     const formattedPools: PoolV2[] = result.pools.map((result: any) => {
-      return {
-        id: getPoolId(result.base, result.quote),
-        base: result.base,
-        quote: result.quote,
-        baseInfo: result.baseInfo,
-        quoteInfo: result.quoteInfo,
-        timeCreate: result.timeCreate,
-        poolIdx: result.poolIdx,
-        poolName: result.baseInfo.symbol
-          .concat("-")
-          .concat(result.quoteInfo.symbol),
-        tokens: [result.baseInfo, result.quoteInfo],
-        feeRate: 0,
-        tvlUsd: 0,
-        volumeUsd: 0,
-        fees: 0,
-      };
+      return formatPoolData(result);
     });
 
     return formattedPools;

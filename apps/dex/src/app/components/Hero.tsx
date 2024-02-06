@@ -42,7 +42,7 @@ export default function Hero() {
         </Link>
         <Link
           className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
-          href={"/pool/create"}
+          href={"/pools/create"}
         >
           🏖️ Create your own Liquidity Pools{" "}
           <Icons.arrowRight className="h-3 w-3" />
