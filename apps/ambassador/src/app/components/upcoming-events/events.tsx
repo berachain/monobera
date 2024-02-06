@@ -2,8 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
 
+interface Project {
+  name: string;
+  image: string;
+  date: string;
+  numParticipants: string;
+}
+
 // Define the projects
-export const projects = [
+export const projects: Project[] = [
   {
     name: "Beras in NYC",
     image: "/bear_1.png",
@@ -25,7 +32,7 @@ export const projects = [
 ];
 
 // Define the ProjectCard component
-export function ProjectCard({ project }) {
+export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link href="/some-path">
       <div className="relative col-span-1 flex h-[auto] w-[280px] flex-col rounded-xl border border-solid bg-background">
