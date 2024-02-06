@@ -16,7 +16,7 @@ import FAQ from "./components/faq";
 import Hero from "./components/hero";
 import { Orbit } from "./components/orbit";
 // import Announcements from "./components/announcements/announcements";
-import SignUp from "./components/signUp-section/signup";
+import { SignUp } from "./components/signUp-section/signup";
 import { Projects } from "./components/upcoming-events/events";
 
 export const metadata: Metadata = {

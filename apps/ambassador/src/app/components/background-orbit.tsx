@@ -16,7 +16,7 @@ export default function BackGroundOrbit() {
   return (
     <>
       <div className="mx-auto flex flex-col items-center justify-center">
-        <div className="absolute top-[-18%] h-full w-full">
+        <div className="absolute top-[-16%] h-full w-full">
           <Image
             src="/globe.png"
             alt="Globe"
@@ -25,15 +25,18 @@ export default function BackGroundOrbit() {
           />
         </div>
         <div
-          className={cn("absolute top-[5%] z-[-2] h-[50%] w-full", bgGradient)}
+          className={cn(
+            "absolute top-[-5%] z-[-2] h-[100%] w-full",
+            bgGradient,
+          )}
         ></div>
-        <div className="absolute top-[-19%] z-[-3] h-[100%] w-[100%] opacity-40">
+        <div className="absolute top-[-18%] z-[-3] h-[100%] w-[100%] opacity-40">
           <Orbit radius={2} className="animate-spin-slowly" />
         </div>
-        <div className="absolute top-[-18%] z-[-3] h-[100%] w-[100%] opacity-60">
+        <div className="absolute top-[-15%] z-[-3] h-[100%] w-[100%] opacity-60">
           <Orbit radius={3} className="animate-spin-reverse-slowly" />
         </div>
-        <div className="absolute top-[-17%] z-[-3] h-[100%] w-[100%] opacity-80">
+        <div className="absolute top-[-12%] z-[-3] h-[100%] w-[100%] opacity-80">
           <Orbit radius={4} className="animate-spin-slowly" />
         </div>
       </div>
