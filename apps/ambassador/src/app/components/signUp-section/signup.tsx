@@ -2,7 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import { cloudinaryUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { useTheme } from "next-themes";
@@ -11,7 +10,7 @@ type SignUpProps = {
   cloudinaryUrl: string;
 };
 
-export default function SignUp({ cloudinaryUrl }) {
+export default function SignUp() {
   const { theme, systemTheme } = useTheme();
   const t = theme === "system" ? systemTheme : theme;
   const bgGradient =
