@@ -216,6 +216,7 @@ export default {
         "spin-slow": "spin 4s linear infinite",
         "spin-slower": "spin 6s linear infinite",
         "spin-slowly": "spin 20s linear infinite",
+        "spin-reverse-slowly": "spin-reverse 20s linear infinite",
         "spin-reverse": "spin-reverse 1s linear infinite",
         "spin-reverse-slow": "spin-reverse 4s linear infinite",
         "spin-reverse-slower": "spin-reverse 6s linear infinite",
