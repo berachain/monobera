@@ -16,7 +16,7 @@ import { Projects } from "./components/upcoming-events/events";
 
 export const metadata: Metadata = {
   title: "Ambassador",
-  description: "Welcome to the ambassador page!",
+  description: "Welcome to the ambassador page",
 };
 
 export default function Page() {
@@ -47,7 +47,7 @@ export default function Page() {
               </Button>
             </div>
           </div>
-          <SignUp cloudinaryUrl={""} />
+          <SignUp />
           <FAQ />
           <Footer />
         </div>
