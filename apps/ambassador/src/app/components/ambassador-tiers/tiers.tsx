@@ -30,11 +30,11 @@ export function AmbassadorCard({ ambassador }: { ambassador: any }) {
   function getAmbassadorStyle(tier: string) {
     switch (tier) {
       case "Tier 1":
-        return "dark:bg-gradient-to-b dark:from-[rgba(255,193,7,0.15)] dark:to-[rgba(255,235,59,0.15)] dark:border-amber-600 bg-gradient-to-b from-[rgba(255,210,93,0.50)] to-[rgba(255,231,169,0.05)] border-amber-200 backdrop-blur dark:box-shadow-[rgba(255, 214, 129, 0.56)] shadow-lg transform scale-110";
+        return "dark:bg-gradient-to-b dark:from-[rgba(255,193,7,0.30)] dark:to-[rgba(255,235,59,0.05)] dark:border-amber-600 bg-gradient-to-b from-[rgba(255,210,93,0.50)] to-[rgba(255,231,169,0.05)] border-amber-200 backdrop-blur dark:box-shadow-[rgba(255, 214, 129, 0.56)] shadow-lg transform scale-110";
       case "Tier 2":
-        return "dark:bg-gradient-to-b dark:from-[rgba(112,128,144,0.15)] dark:to-[rgba(192,192,192,0.15)] dark:border-slate-600 bg-gradient-to-b from-[rgba(235,235,235,0.99)] to-[rgba(235,235,235,0.05)] border-slate-200 backdrop-blur shadow-lg";
+        return "dark:bg-gradient-to-b dark:from-[rgba(112,128,144,0.30)] dark:to-[rgba(192,192,192,0.05)] dark:border-slate-600 bg-gradient-to-b from-[rgba(235,235,235,0.99)] to-[rgba(235,235,235,0.05)] border-slate-200 backdrop-blur shadow-lg";
       case "Tier 3":
-        return "dark:bg-gradient-to-b dark:from-[rgba(255,165,0,0.15)] dark:to-[rgba(255,140,0,0.15)] dark:border-orange-600 bg-gradient-to-b from-[rgba(255,231,203,0.99)] to-[rgba(255,205,169,0.05)] border-orange-200 backdrop-blur shadow-lg";
+        return "dark:bg-gradient-to-b dark:from-[rgba(255,165,0,0.30)] dark:to-[rgba(255,140,0,0.05)] dark:border-orange-600 bg-gradient-to-b from-[rgba(255,231,203,0.99)] to-[rgba(255,205,169,0.05)] border-orange-200 backdrop-blur shadow-lg";
       default:
         return "";
     }
@@ -48,12 +48,12 @@ export function AmbassadorCard({ ambassador }: { ambassador: any }) {
         )}`}
       >
         <div className="flex flex-col items-center gap-4 px-6 pb-4 pt-6">
-          <div className="text-xl font-semibold text-foreground">
-            {ambassador.tier}
-          </div>
           <Avatar className="h-20 w-20">
             <AvatarImage src={ambassador.image} className="rounded-full" />
           </Avatar>
+          <div className="text-xl font-semibold text-foreground">
+            {ambassador.tier}
+          </div>
           <div className="text-xl font-semibold text-foreground">
             {ambassador.name}
           </div>

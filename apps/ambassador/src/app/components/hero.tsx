@@ -32,7 +32,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="relative flex flex-col items-center justify-center gap-4 ">
-        <div className="hidden transition-opacity hover:animate-spin-slowly sm:block">
+        <div className="hidden transition-opacity animate-spin-slowly sm:block">
           <Image
             src="/circle.png"
             alt="bera circle"
