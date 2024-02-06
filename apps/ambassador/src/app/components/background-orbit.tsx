@@ -12,13 +12,13 @@ export default function BackGroundOrbit() {
   const bgGradient =
     theme === "dark"
       ? "bg-gradient-to-t from-black via-black to-transparent"
-      : "bg-white";
+      : "bg-gradient-to-t from-white via-white to-transparent";
   return (
     <>
       <div className="mx-auto flex flex-col items-center justify-center">
         <div className="absolute top-[-16%] h-full w-full">
           <Image
-            src="/globe.png"
+            src={theme === "dark" ? "/globe.png" : "/globe_bright.png"}
             alt="Globe"
             layout="fill"
             objectFit="contain"
@@ -29,7 +29,7 @@ export default function BackGroundOrbit() {
             "absolute top-[-5%] z-[-2] h-[100%] w-full",
             bgGradient,
           )}
-        ></div>
+        />
         <div className="absolute top-[-18%] z-[-3] h-[100%] w-[100%] opacity-40">
           <Orbit radius={2} className="animate-spin-slowly" />
         </div>
