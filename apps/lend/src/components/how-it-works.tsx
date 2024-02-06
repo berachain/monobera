@@ -1,6 +1,12 @@
 import React from "react";
 import Link from "next/link";
-import { bgtTokenAddress, bgtUrl, honeyTokenAddress, wbtcTokenAddress, wethTokenAddress } from "@bera/config";
+import {
+  bgtTokenAddress,
+  bgtUrl,
+  honeyTokenAddress,
+  wbtcTokenAddress,
+  wethTokenAddress,
+} from "@bera/config";
 import { TokenIcon, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 
@@ -15,8 +21,13 @@ export default function HowItWorks() {
 
       <div className="grid grid-cols-1 gap-8 rounded-2xl border-2 bg-muted  p-6 lg:grid-cols-3">
         <div className="flex flex-col">
-          <TokenIconList tokenList={[wbtcTokenAddress, wethTokenAddress]} size="2xl" />
-          <h3 className="mb-2 text-lg font-semibold mt-4">Deposit Collateral</h3>
+          <TokenIconList
+            tokenList={[wbtcTokenAddress, wethTokenAddress]}
+            size="2xl"
+          />
+          <h3 className="mb-2 text-lg font-semibold mt-4">
+            Deposit Collateral
+          </h3>
           <p>
             Deposit assets such as ETH, BTC, USDC, etc., to enhance the
             platform&apos;s liquidity and increase your borrowing capacity.
