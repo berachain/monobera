@@ -26,8 +26,10 @@ export default function Page() {
       <div className="relative mx-auto flex flex-col gap-64 bg-contain bg-no-repeat pt-20 md:pt-[116px] lg:pt-[140px]">
         <Hero />
         <div className="-mx-full">
-          <div className="relative m-auto mt-8 bg-glow bg-cover bg-center bg-no-repeat">
-            <BackGroundOrbit />
+          <div className="relative m-auto mt-8 bg-cover bg-center bg-no-repeat">
+            <div className="hidden sm:block">
+              <BackGroundOrbit />
+            </div>
             <Projects />
             <div className="flex flex-col items-center justify-center pb-12 pt-12">
               <h1 className="md:leading-14 leading-24 pb-12 text-3xl font-extrabold md:text-5xl">
