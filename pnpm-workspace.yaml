@@ -6,6 +6,7 @@ packages:
   - apps/perp
   - apps/faucet
   - apps/validator-clue
+  - apps/ambassador
   - packages/config/*
   - packages/config/env
   - packages/graphql
