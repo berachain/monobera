@@ -6,7 +6,7 @@ import { Button } from "@bera/ui/button";
 export default function Hero() {
   return (
     <div className="mb-[-120px] mt-[-60px] flex flex-col flex-wrap items-center justify-between p-4 sm:flex-row sm:px-8 lg:px-32 xl:px-48">
-      <div className="items-left mb-6 flex flex-col gap-4 sm:mb-4">
+      <div className="mb-6 flex flex-col items-center justify-center gap-4 lg:items-start">
         <h1 className="font-extrabold sm:text-[28px] sm:leading-[32px] md:text-[42px] md:leading-[48px] lg:text-[64px] lg:leading-[72px]">
           <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
             Become a
@@ -32,7 +32,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="relative flex flex-col items-center justify-center gap-4 ">
-        <div className="hidden transition-opacity animate-spin-slowly sm:block">
+        <div className="hidden animate-spin-slowly transition-opacity sm:block">
           <Image
             src="/circle.png"
             alt="bera circle"
