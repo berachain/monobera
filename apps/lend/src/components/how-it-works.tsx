@@ -1,5 +1,7 @@
 import React from "react";
 import Link from "next/link";
+import { bgtTokenAddress, bgtUrl, honeyTokenAddress, wbtcTokenAddress, wethTokenAddress } from "@bera/config";
+import { TokenIcon, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 
 export default function HowItWorks() {
@@ -7,43 +9,36 @@ export default function HowItWorks() {
     <section className="my-24">
       <div className="p-6 text-center">
         <h2 className="mb-4 text-3xl font-bold">
-          How <span className="text-amber-400">Lending</span> Works
+          What can I do on <span className="text-amber-400">BEND</span>
         </h2>
       </div>
 
       <div className="grid grid-cols-1 gap-8 rounded-2xl border-2 bg-muted  p-6 lg:grid-cols-3">
         <div className="flex flex-col">
-          <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full border bg-background p-2 text-xl font-semibold">
-            1
-          </div>
-          <h3 className="mb-2 text-lg font-semibold">Supply Assets</h3>
+          <TokenIconList tokenList={[wbtcTokenAddress, wethTokenAddress]} size="2xl" />
+          <h3 className="mb-2 text-lg font-semibold mt-4">Deposit Collateral</h3>
           <p>
-            Supply your assets like BERA, HONEY, ETH & BTC on BEND and start
-            generating some Yield
+            Deposit assets such as ETH, BTC, USDC, etc., to enhance the
+            platform&apos;s liquidity and increase your borrowing capacity.
           </p>
         </div>
         <div className="flex flex-col">
-          <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full border bg-background p-2 text-xl font-semibold">
-            2
-          </div>
-          <h3 className="mb-2 text-lg font-semibold">
-            Receive Interest Bearing Tokens
-          </h3>
+          <TokenIcon address={honeyTokenAddress} size="2xl" className="mb-4" />
+          <h3 className="mb-2 text-lg font-semibold">Borrow HONEY</h3>
           <p>
-            Once you&apos;ve supplied assets, you will receive interest bearing
-            tokens denoting your stake of assets in the lending pool.
+            Use your deposited collateral to borrow HONEY. Earn enhanced BGT
+            rewards by utilizing HONEY within the berachain ecosystem.
           </p>
         </div>
         <div className="flex flex-col">
-          <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full border bg-background p-2 text-xl font-semibold">
-            3
-          </div>
-          <h3 className="mb-2 text-lg font-semibold">
-            Use Interest Bearing Tokens in Defi
-          </h3>
+          <TokenIcon address={bgtTokenAddress} size="2xl" className="mb-4" />
+          <h3 className="mb-2 text-lg font-semibold">Earn BGT Rewards</h3>
           <p>
-            Now that you&apos;ve got some interest bearing tokens you can use
-            these across the Berachain Defi ecosystem.
+            Borrowing HONEY qualifies you for increased BGT rewards on BEND.{" "}
+            <Link href={bgtUrl} target="_blank" className="underline">
+              Stake your BGT at BGT Station
+            </Link>{" "}
+            to earn additional bribes.
           </p>
         </div>
       </div>

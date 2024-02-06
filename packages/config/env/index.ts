@@ -111,15 +111,13 @@ export const lendHoneyDebtTokenAddress = process.env
   .NEXT_PUBLIC_LEND_HONEY_DEBT_TOKEN_ADDRESS as Address;
 
 // TOKENS
-export const honeyTokenAddress = process.env
-  .NEXT_PUBLIC_HONEY_ADDRESS as Address;
-export const nativeTokenAddress = process.env
-  .NEXT_PUBLIC_BERA_ADDRESS as Address;
-export const beraTokenAddress = process.env
-  .NEXT_PUBLIC_WBERA_ADDRESS as Address;
-export const stgusdcTokenAddress = process.env
-  .NEXT_PUBLIC_STGUSDC_ADDRESS as Address;
+export const honeyTokenAddress = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
+export const nativeTokenAddress = process.env.NEXT_PUBLIC_BERA_ADDRESS as Address;
+export const beraTokenAddress = process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address;
+export const stgusdcTokenAddress = process.env.NEXT_PUBLIC_STGUSDC_ADDRESS as Address;
 export const bgtTokenAddress = process.env.NEXT_PUBLIC_BGT_ADDRESS as Address;
+export const wbtcTokenAddress = process.env.NEXT_PUBLIC_WBTC_ADDRESS as Address;
+export const wethTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS as Address;
 
 // PERPS
 export const perpsEndpoints = process.env
