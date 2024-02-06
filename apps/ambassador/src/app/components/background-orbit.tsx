@@ -26,18 +26,18 @@ export default function BackGroundOrbit() {
         </div>
         <div
           className={cn(
-            "absolute top-[-5%] z-[-2] h-[100%] w-full",
+            "absolute top-[-20%] z-[-2] h-[120%] w-full",
             bgGradient,
           )}
         />
         <div className="absolute top-[-18%] z-[-3] h-[100%] w-[100%] opacity-40">
-          <Orbit radius={2} className="animate-spin-slowly" />
+          <Orbit radius={2} className="animate-orbit-spin" />
         </div>
         <div className="absolute top-[-15%] z-[-3] h-[100%] w-[100%] opacity-60">
-          <Orbit radius={3} className="animate-spin-reverse-slowly" />
+          <Orbit radius={3} className="animate-orbit-spin-reverse" />
         </div>
         <div className="absolute top-[-12%] z-[-3] h-[100%] w-[100%] opacity-80">
-          <Orbit radius={4} className="animate-spin-slowly" />
+          <Orbit radius={4} className="animate-orbit-spin" />
         </div>
       </div>
     </>

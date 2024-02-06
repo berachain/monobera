@@ -220,6 +220,8 @@ export default {
         "spin-reverse": "spin-reverse 1s linear infinite",
         "spin-reverse-slow": "spin-reverse 4s linear infinite",
         "spin-reverse-slower": "spin-reverse 6s linear infinite",
+        "orbit-spin": "spin 30s linear infinite",
+        "orbit-spin-reverse": "spin-reverse 30s linear infinite",
       },
     },
   },
