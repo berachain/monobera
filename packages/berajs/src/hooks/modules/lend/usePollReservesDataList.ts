@@ -24,10 +24,13 @@ export const usePollReservesDataList = () => {
         args: [lendPoolAddressProviderAddress],
       })) as [any[], any];
       const currentTimestamp = Math.floor(Date.now() / 1000);
+      console.log(result);
       const { reservesData, baseCurrencyData } = getReservesHumanized(
         result[0],
         result[1],
       );
+      console.log("result", result);
+      console.log("reservesData", reservesData);
       await mutate([...QUERY_KEY, "baseCurrencyData"], baseCurrencyData);
       const formattedReserves = formatReserves({
         reserves: reservesData,

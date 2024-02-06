@@ -7,6 +7,7 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
 
+import AssetInfo from "./asset-info";
 import Card from "./card";
 import InfoButton from "./info-button";
 import BorrowBtn from "./modals/borrow-button";
@@ -82,14 +83,9 @@ export default function UserTokenCard({
               {type === "borrow" && <>{asset.symbol} Avaliable</>}
             </div>
 
-            <div className="h-8 text-lg font-bold uppercase">
+            <div className="flex h-8 items-center gap-1 text-lg font-bold uppercase">
               {formatter.format(balance)} {asset.symbol}
-              {(type === "user-supply" || type === "supply") &&
-                asset.address === honeyAddress && (
-                  <Badge variant={"warning"} className="rounded-xs px-2 py-0">
-                    SUPPLY ONLY
-                  </Badge>
-                )}
+              <Tooltip text={<AssetInfo asset={asset} />} />
             </div>
             <div className="text-xs font-medium leading-tight">
               $
@@ -153,9 +149,9 @@ export default function UserTokenCard({
             <BorrowBtn token={asset} />
           )}
           {type === "user-borrow" && <RepayBtn token={asset} />}
-          {(type === "borrow" || type === "supply") && (
+          {/* {(type === "borrow" || type === "supply") && (
             <InfoButton address={asset.address} />
-          )}
+          )} */}
         </div>
       </div>
       <div className="grow-1 mt-8 flex w-full items-center gap-2 md:hidden md:w-fit">
@@ -167,9 +163,9 @@ export default function UserTokenCard({
           <BorrowBtn token={asset} />
         )}
         {type === "user-borrow" && <RepayBtn token={asset} />}
-        {(type === "borrow" || type === "supply") && (
+        {/* {(type === "borrow" || type === "supply") && (
           <InfoButton address={asset.address} />
-        )}
+        )} */}
       </div>
       {type === "borrow" && Number(asset.formattedBalance) === 0 && (
         <Alert variant="warning" className="mt-4">
