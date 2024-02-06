@@ -25,7 +25,7 @@ export default function HoneySupply({ honey }: { honey: any }) {
         </div>
       </div>
 
-      <div className="relative rounded-md border border-accent bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3">
+      <div className="relative rounded-md border border-accent bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3 dark:from-lime-950 dark:to-yellow-950 bg-opacity-50">
         <div className="flex flex-row items-center justify-between gap-6">
           <div className="flex flex-shrink-0 items-center gap-4 ">
             <TokenIcon address={honey.address} fetch size="2xl" />
@@ -70,6 +70,18 @@ export default function HoneySupply({ honey }: { honey: any }) {
               className="w-fit border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
             />
           </div>
+        </div>
+
+        <div className="grow-1 mt-4 flex w-full items-center gap-2 md:hidden">
+          <SupplyBtn
+            token={honey}
+            supply
+            className="w-full border border-yellow-400 bg-gradient-to-br from-orange-200 to-yellow-400 text-black"
+          />
+          <WithdrawBtn
+            token={honey}
+            className="w-full border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
+          />
         </div>
       </div>
     </>

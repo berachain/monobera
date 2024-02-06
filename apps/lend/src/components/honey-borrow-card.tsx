@@ -42,7 +42,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
     .toString();
 
   return (
-    <div className="relative rounded-md border border-accent bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3">
+    <div className="relative rounded-md border border-accent bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3 dark:from-lime-950 dark:to-yellow-950">
       <div className="flex flex-col gap-4 px-3 py-4">
         <div>
           <div className="flex items-center gap-1 text-xs font-medium leading-5 text-yellow-900 opacity-60 dark:text-yellow-200">
@@ -130,7 +130,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
         alt="home bear"
         width={320}
         height={320}
-        className="absolute right-0 top-3"
+        className="absolute right-0 top-3 hidden sm:block"
       />
     </div>
   );
