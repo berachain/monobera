@@ -11,7 +11,6 @@ import {
 import BackGroundOrbit from "./components/background-orbit";
 import FAQ from "./components/faq";
 import Hero from "./components/hero";
-// import Announcements from "./components/announcements/announcements";
 import SignUp from "./components/signUp-section/signup";
 import { Projects } from "./components/upcoming-events/events";
 
@@ -49,12 +48,10 @@ export default function Page() {
             </div>
           </div>
           <SignUp cloudinaryUrl={""} />
-          {/* <Announcements /> */}
           <FAQ />
           <Footer />
         </div>
       </div>
-      {/* </div> */}
     </>
   );
 }
