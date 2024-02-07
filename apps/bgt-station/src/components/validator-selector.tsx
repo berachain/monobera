@@ -116,9 +116,11 @@ const ValidatorModal = ({
     () =>
       validators
         .filter(
-          (v) =>
-            v.operatorAddr.includes(search) ||
-            v.description.moniker.includes(search),
+          (validator) =>
+            validator.description.moniker
+              .toLowerCase()
+              .includes(search.toLowerCase()) ||
+            validator.operatorAddr.toLowerCase().includes(search.toLowerCase()),
         )
         .map((validator: PoLValidator) => ({
           address: validator.operatorAddr,
