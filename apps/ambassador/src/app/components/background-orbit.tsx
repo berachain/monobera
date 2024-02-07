@@ -12,7 +12,7 @@ export default function BackGroundOrbit() {
   const bgGradient =
     t === "dark"
       ? "bg-gradient-to-t from-black via-[#1E0900] to-transparent"
-      : "bg-gradient-to-t from-[bg-muted] via-[bg-muted] to-transparent";
+      : "bg-gradient-to-t from-[bg-muted] via-white to-transparent";
   return (
     <>
       <div className="mx-auto flex flex-col items-center justify-center">
@@ -26,7 +26,7 @@ export default function BackGroundOrbit() {
         </div>
         <div
           className={cn(
-            "absolute top-[-50%] z-[-2] h-[150%] w-full",
+            "absolute top-[-50%] z-[-2] h-[150%] w-full bg-gradient-to-t from-[var(--gradient-start)] to-[var(--gradient-end)]",
             bgGradient,
           )}
         />
