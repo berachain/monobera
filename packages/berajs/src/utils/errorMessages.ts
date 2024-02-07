@@ -49,7 +49,8 @@ const errorMsgMap: ErrorMessages = {
   PERPS: {
     WRONG_LIMIT_PRICE: {
       keywords: ["WRONG_LIMIT_PRICE"],
-      errorMSG: "Invalid limit conditions.",
+      errorMSG:
+        "Currently, Limit Prices must be set above the current price for long positions and below for short positions.",
     },
     PRICE_IMPACT_TOO_HIGH: {
       keywords: ["PRICE_IMPACT_TOO_HIGH"],
