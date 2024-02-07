@@ -37,7 +37,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
   const { data: debtTokenBalance } = useSelectedAssetWalletBalance(
     lendHoneyDebtTokenAddress,
   );
-  const userTotalBorrowAllowance = BigNumber(honeyAsset.formattedBalance)
+  const userTotalBorrowAllowance = BigNumber(honeyAsset?.formattedBalance)
     .plus(BigNumber(debtTokenBalance?.formattedBalance ?? 0))
     .toString();
 
@@ -75,9 +75,9 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
             </div>
             <div className="text-xl font-semibold leading-7 text-warning-foreground">
               -
-              {(Number(honeyAsset.reserveData.variableBorrowAPY) * 100).toFixed(
-                2,
-              )}
+              {(
+                Number(honeyAsset?.reserveData?.variableBorrowAPY) * 100
+              ).toFixed(2)}
               %
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
               <Skeleton className="h-4 w-20" />
             ) : (
               <span className="text-sm font-semibold text-yellow-900 dark:text-yellow-200">
-                {formatEther(rewards as bigint)} BGT
+                {formatEther((rewards ?? 0n) as bigint)} BGT
               </span>
             )}
           </div>

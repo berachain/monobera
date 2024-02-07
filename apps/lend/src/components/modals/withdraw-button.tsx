@@ -37,7 +37,7 @@ export default function WithdrawBtn({
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `Withdrawing ${amount} ${token.symbol}`,
+    message: `Withdrawing ${amount} ${token?.symbol}`,
     onSuccess: () => {
       userAccountRefetch();
       reservesDataRefetch();

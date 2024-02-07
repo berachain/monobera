@@ -67,7 +67,7 @@ export default function AssetInfo({ asset }: { asset: any }) {
             <div className="text-xs font-normal text-muted-foreground">
               {item.title}
             </div>
-            <div className=" text-sm font-medium">{item.value}</div>
+            <div className="text-sm font-medium">{item.value}</div>
           </div>
         ))}
       </div>

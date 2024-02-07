@@ -88,19 +88,7 @@ const BorrowModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  const borrowPower = formatUnits(
-    parseUnits(
-      BigInt(
-        userAccountData?.availableBorrowsBase ?? "0",
-      ).toString() as `${number}`,
-      baseCurrencyData?.networkBaseTokenPriceDecimals,
-    ) /
-      parseUnits(
-        reserveData?.formattedPriceInMarketReferenceCurrency,
-        baseCurrencyData?.networkBaseTokenPriceDecimals,
-      ),
-    baseCurrencyData?.networkBaseTokenPriceDecimals,
-  );
+  const borrowPower = token.formattedBalance
 
   const availableLiquidity = formatUnits(
     BigInt(reserveData?.availableLiquidity ?? "0") *

@@ -18,19 +18,17 @@ export default function AvailableBorrows({ assets }: { assets: any[] }) {
   const { data } = useUserAccountData();
   assets.forEach((asset) => {
     if (reservesPrices && data && reservesPrices[asset.address]) {
-      const tokenPrice = parseUnits(
-        asset.reserveData.formattedPriceInMarketReferenceCurrency,
+      const tokenPrice = reservesPrices[asset.address].formattedPrice;
+      const borrowBase = formatUnits(
+        data.availableBorrowsBase,
         baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8,
       );
-      asset.balance = data.availableBorrowsBase / tokenPrice;
-      asset.formattedBalance = BigNumber(
-        formatUnits(
-          data.availableBorrowsBase,
-          baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8,
-        ),
-      )
-        .dividedBy(asset.reserveData.formattedPriceInMarketReferenceCurrency)
-        .toString();
+      const formattedBalance = BigNumber(borrowBase)
+        .div(tokenPrice)
+        .times(0.99)
+        .toFixed(asset.decimals);
+      asset.formattedBalance = formattedBalance;
+      asset.balance = parseUnits(formattedBalance, asset.decimals);
     }
   });
   return (

@@ -8,7 +8,7 @@ import WithdrawBtn from "~/components/modals/withdraw-button";
 export default function HoneySupply({ honey }: { honey: any }) {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { data: aTokenBalance } = useSelectedAssetWalletBalance(
-    honey.reserveData.aTokenAddress,
+    honey?.reserveData.aTokenAddress,
   );
   if (aTokenBalance) {
     honey.formattedBalance = aTokenBalance.formattedBalance;
@@ -28,20 +28,20 @@ export default function HoneySupply({ honey }: { honey: any }) {
       <div className="relative rounded-md border border-accent bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3 dark:from-lime-950 dark:to-yellow-950 bg-opacity-50">
         <div className="flex flex-row items-center justify-between gap-6">
           <div className="flex flex-shrink-0 items-center gap-4 ">
-            <TokenIcon address={honey.address} fetch size="2xl" />
+            <TokenIcon address={honey?.address} fetch size="2xl" />
             <div>
               <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
                 Supplied
               </div>
               <div className="h-8 text-lg font-bold uppercase">
-                {formatter.format(honey.formattedBalance)} {honey.symbol}
+                {formatter.format(honey?.formattedBalance)} {honey?.symbol}
               </div>
               <div className="text-xs font-medium leading-tight">
                 $
                 {formatter.format(
-                  Number(honey.formattedBalance) *
+                  Number(honey?.formattedBalance) *
                     Number(
-                      honey.reserveData
+                      honey?.reserveData
                         ?.formattedPriceInMarketReferenceCurrency ?? "0",
                     ),
                 )}
@@ -55,7 +55,7 @@ export default function HoneySupply({ honey }: { honey: any }) {
               <Tooltip text="Earn APY (Annual Percentage Yield) represents the annualized return on supplied assets. See additional disclaimers in notes below." />
             </div>
             <div className="text-lg font-bold text-success-foreground">
-              {(Number(honey.reserveData.supplyAPY) * 100).toFixed(2)}%
+              {(Number(honey?.reserveData.supplyAPY) * 100).toFixed(2)}%
             </div>
           </div>
 
