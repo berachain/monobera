@@ -12,9 +12,7 @@ type SignUpProps = {
 
 export default function SignUp() {
   const { theme, systemTheme } = useTheme();
-  // This assumes 'light' is the default theme.
   const t = !theme || theme === "system" ? systemTheme || "dark" : theme;
-  console.log("ttttt", t, systemTheme);
   const bgGradient =
     t === "dark"
       ? "bg-gradient-to-t from-[#371605] to-[#4E2C1A]"
@@ -61,8 +59,10 @@ export default function SignUp() {
         </div>
         <div className="relative mb-[-32px] flex flex-col items-center justify-center gap-4">
           <div
-            className="
-              z-[-10] mx-auto flex h-[240px] w-full flex-col items-center justify-center bg-gradient-to-t from-[#371605] to-[#4E2C1A]"
+            className={cn(
+              "z-[-10] mx-auto flex h-[240px] w-full flex-col items-center justify-center",
+              bgGradient,
+            )}
           >
             <Image
               className="absolute h-full w-full object-cover"

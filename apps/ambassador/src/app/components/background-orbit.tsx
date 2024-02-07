@@ -8,7 +8,7 @@ import { Orbit } from "./orbit";
 
 export default function BackGroundOrbit() {
   const { theme, systemTheme } = useTheme();
-  const t = theme === "system" ? systemTheme : theme;
+  const t = !theme || theme === "system" ? systemTheme || "dark" : theme;
   const bgGradient =
     t === "dark"
       ? "bg-gradient-to-t from-black via-[#1E0900] to-transparent"
@@ -26,7 +26,7 @@ export default function BackGroundOrbit() {
         </div>
         <div
           className={cn(
-            "absolute top-[-50%] z-[-2] h-[150%] w-full bg-gradient-to-t from-[var(--gradient-start)] to-[var(--gradient-end)]",
+            "absolute top-[-50%] z-[-2] h-[150%] w-full",
             bgGradient,
           )}
         />
