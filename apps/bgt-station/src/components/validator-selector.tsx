@@ -116,9 +116,11 @@ const ValidatorModal = ({
     () =>
       validators
         .filter(
-          (v) =>
-            v.operatorAddr.includes(search) ||
-            v.description.moniker.includes(search),
+          (validator) =>
+            validator.description.moniker
+              .toLowerCase()
+              .includes(search.toLowerCase()) ||
+            validator.operatorAddr.toLowerCase().includes(search.toLowerCase()),
         )
         .map((validator: PoLValidator) => ({
           address: validator.operatorAddr,
@@ -204,8 +206,8 @@ const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
       {isLoading
         ? "Loading"
         : bgtDelegated && Number(bgtDelegated) === 0
-          ? "0 BGT"
-          : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
+        ? "0 BGT"
+        : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
     </div>
   );
 };
