@@ -8,7 +8,6 @@ import { Orbit } from "./orbit";
 
 export default function BackGroundOrbit() {
   const { theme, systemTheme } = useTheme();
-  console.log("theme", theme, systemTheme);
   const t = theme === "system" ? systemTheme : theme;
   const bgGradient =
     t === "dark"
