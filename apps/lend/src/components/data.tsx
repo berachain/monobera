@@ -38,7 +38,7 @@ export default function Data() {
       </div>
       <div className="bg-bg mt-4 flex w-full flex-col items-center gap-4 rounded-sm border border-accent border-opacity-20 py-4">
         <BGTApy />
-        
+
         <div className="flex flex-col items-center gap-1">
           <div className="text font-semibold leading-7 text-foreground sm:text-xl">
             Honey boosted borrow rates
