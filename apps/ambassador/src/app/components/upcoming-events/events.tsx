@@ -1,3 +1,6 @@
+// @client
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
@@ -29,6 +32,12 @@ export const projects: Project[] = [
     date: "04/04/2024",
     numParticipants: "4.20k",
   },
+  {
+    name: "Beras at your Mom's House",
+    image: "/bear_2.png",
+    date: "06/09/2420",
+    numParticipants: "4.20k",
+  }
 ];
 
 // Define the ProjectCard component
@@ -64,6 +73,13 @@ export function ProjectCard({ project }: { project: Project }) {
 
 // Define the Projects component
 export function Projects() {
+
+  const [visibleProjects, setVisibleProjects] = React.useState(3);
+
+  const handleViewMore = () => {
+    setVisibleProjects(visibleProjects + 3);
+  }
+
   return (
     <div className="flex flex-col flex-wrap items-center justify-center pb-12 pt-12">
       <h1 className="md:leading-14 leading-24 pb-12 text-3xl font-extrabold md:text-5xl">
@@ -72,14 +88,16 @@ export function Projects() {
           Community
         </span>
       </h1>
-      <div className="flex flex-wrap justify-center gap-4">
-        {projects.map((project, index) => (
+      <div className="flex flex-wrap justify-center gap-4 z-1">
+        {projects.slice(0, visibleProjects).map((project, index) => (
           <ProjectCard key={index} project={project} />
         ))}
       </div>
-      <Button variant="outline" className="mb-8 mt-12">
-        View more events
-      </Button>
+      {visibleProjects < projects.length && (
+        <Button variant="outline" className="mb-8 mt-12" onClick={handleViewMore}>
+          View more events
+        </Button>
+      )}
     </div>
   );
 }

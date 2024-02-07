@@ -23,7 +23,7 @@ export default function SignUp() {
       <div className="items-center justify-center">
         <div className="mb-[-160px] flex items-center justify-between pt-8">
           <Image
-            className="max-[600px]:mx-auto"
+            className="max-[600px]:mx-auto z-10"
             src={
               "https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/r035ky4zgyilzdbxzr08.png"
             }
@@ -42,7 +42,7 @@ export default function SignUp() {
             </span>
           </h1>
           <Image
-            className="max-[600px]:mx-auto"
+            className="max-[600px]:mx-auto z-10"
             src={
               "https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/xsbwqslzlgw5q1des79i.png"
             }
