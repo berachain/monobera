@@ -45,6 +45,7 @@ export { ApproveButton } from "./approve-button";
 export { DynamicRewardBtn } from "./dynamic-reward-btn";
 export { Documentation } from "./documentation";
 export { MainNav } from "./main-nav";
+export { MobileDropdown } from "./mobile-nav";
 export * from "./terms-of-use";
 export * from "./access-deny";
 

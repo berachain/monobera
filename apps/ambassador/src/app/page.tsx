@@ -11,13 +11,12 @@ import {
 import BackGroundOrbit from "./components/background-orbit";
 import FAQ from "./components/faq";
 import Hero from "./components/hero";
-// import Announcements from "./components/announcements/announcements";
 import SignUp from "./components/signUp-section/signup";
 import { Projects } from "./components/upcoming-events/events";
 
 export const metadata: Metadata = {
   title: "Ambassador",
-  description: "Welcome to the ambassador page!",
+  description: "Welcome to the ambassador page",
 };
 
 export default function Page() {
@@ -48,13 +47,11 @@ export default function Page() {
               </Button>
             </div>
           </div>
-          <SignUp cloudinaryUrl={""} />
-          {/* <Announcements /> */}
+          <SignUp />
           <FAQ />
           <Footer />
         </div>
       </div>
-      {/* </div> */}
     </>
   );
 }
