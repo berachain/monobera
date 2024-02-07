@@ -1,0 +1,96 @@
+{
+  "name": "@bera/ecosystem",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "pnpm with-env next build",
+    "clean": "git clean -xdf .next .turbo node_modules",
+    "dev": "pnpm with-env next dev -p 3001",
+    "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
+    "lint:fix": "pnpm lint --fix",
+    "start": "pnpm with-env next start -p 3001",
+    "check-types": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
+  },
+  "dependencies": {
+    "@bera/bera-router": "0.1.0",
+    "@bera/berajs": "0.1.0",
+    "@bera/config": "0.1.0",
+    "@bera/graphql": "0.1.0",
+    "@bera/proto": "0.1.0",
+    "@bera/shared-ui": "0.1.0",
+    "@bera/tailwind-config": "0.1.0",
+    "@bera/ui": "0.1.0",
+    "@hirohe/react-watermark": "^0.5.0",
+    "@hookform/resolvers": "^3.2.0",
+    "@t3-oss/env-nextjs": "^0.2.2",
+    "@vercel/analytics": "^1.0.1",
+    "date-fns": "^2.29.3",
+    "next": "^14.0.4",
+    "next-auth": "^4.24.5",
+    "next-themes": "^0.2.1",
+    "react": "18.2.0",
+    "react-datepicker": "^4.16.0",
+    "react-day-picker": "^8.7.1",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.4",
+    "react-table": "^7.8.0",
+    "react-wrap-balancer": "^0.5.0",
+    "recharts": "^2.5.0",
+    "superjson": "1.9.1",
+    "swr-devtools": "^1.3.2",
+    "tailwindcss-animate": "^1.0.5",
+    "uniqolor": "^1.1.0",
+    "usehooks-ts": "^2.9.1",
+    "viem": "~1.19.13",
+    "wagmi": "^1.4.10",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@bera/eslint-config": "0.1.0",
+    "@biomejs/biome": "1.5.3",
+    "@types/node": "^18.16.6",
+    "@types/react": "^18.2.0",
+    "@types/react-datepicker": "^4.15.0",
+    "@types/react-dom": "^18.2.1",
+    "@types/react-table": "^7.7.14",
+    "autoprefixer": "^10.4.14",
+    "dotenv-cli": "^7.2.1",
+    "eslint": "^8.39.0",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
+    "typescript": "^5.0.4"
+  },
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
