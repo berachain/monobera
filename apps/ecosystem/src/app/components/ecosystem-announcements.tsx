@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type ReactNode } from "react";
+import React from "react";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -10,7 +10,7 @@ export default function EcosystemAnnouncements() {
   const isAllDataLoadingMore = false;
   const isAllDataReachingEnd = false;
   return (
-    <div className="relative flex h-fit flex-col items-center justify-center px-0 pb-0 pt-[64px]">
+    <div className="relative flex h-fit flex-col items-center justify-center px-0 pb-16 pt-[64px]">
       <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
         Ecosystem Announcements
       </div>

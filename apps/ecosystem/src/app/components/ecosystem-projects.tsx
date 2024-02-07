@@ -131,7 +131,7 @@ export default function EcosystemProjects() {
     [projectList, keywords],
   );
   return (
-    <div id="dapps" className="mt-20 flex flex-col gap-6 text-center">
+    <div id="dapps" className="mt-4 flex flex-col gap-6 text-center">
       <SearchInput
         placeholder="Search..."
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -158,7 +158,7 @@ export default function EcosystemProjects() {
         {filteredProjectList.map((fav: any, index: number) => (
           <div
             key={index}
-            className="mx-auto flex w-full max-w-[260px] flex-col items-center gap-4 rounded-md border border-solid bg-background p-6"
+            className="mx-auto flex w-full max-w-[260px] flex-col items-center justify-center gap-4 rounded-md border border-solid bg-background p-6"
           >
             {fav.icon}
             <div>
@@ -168,8 +168,8 @@ export default function EcosystemProjects() {
             <div className="text-center text-sm leading-5 text-muted-foreground">
               {fav.description}
             </div>
-            <div className="flex w-full justify-between gap-2">
-              <Button onClick={() => window.open(fav.goto)}>
+            <div className="flex justify-between gap-2 ">
+              <Button onClick={() => window.open(fav.goto)} variant="outline">
                 View Project <Icons.arrowRight />
               </Button>
             </div>

@@ -1,13 +1,23 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { MainNav } from "@bera/shared-ui";
-import { ThemeToggleMobile } from "@bera/shared-ui/src/theme-toggle-mobile";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 
 export function Header({ navItems }: { navItems: any[] }) {
+  const ThemeToggleMobile = dynamic(
+    () =>
+      import("../../../../packages/shared-ui/src/theme-toggle-mobile").then(
+        (mod) => mod.ThemeToggleMobile,
+      ),
+    {
+      ssr: false,
+      loading: () => <> </>, // Your loading component or JSX here
+    },
+  );
   return (
     <nav
       className={cn(
