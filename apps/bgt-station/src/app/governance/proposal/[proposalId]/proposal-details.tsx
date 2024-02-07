@@ -164,7 +164,8 @@ export default function ProposalDetails({
             <div className="text-2xl font-semibold leading-loose text-foreground">
               {normalizedTally !== undefined
                 ? formatter.format(normalizedTally.totalVotes)
-                : 0}
+                : 0}{" "}
+              BGT
             </div>
             <div className="mt-[-4px] flex items-center gap-0.5 text-sm font-medium leading-[14px] text-muted-foreground">
               Total votes
