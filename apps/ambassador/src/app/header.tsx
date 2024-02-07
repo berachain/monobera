@@ -3,7 +3,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { MainNav } from "@bera/shared-ui";
+import { MainNav, MobileDropdown } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 
@@ -44,6 +44,7 @@ export function Header({ navItems }: { navItems: any[] }) {
           >
             <Icons.faucetFav className="h-10 w-10 hover:opacity-80" />
           </Link>
+          <MobileDropdown navItems={navItems} />
         </div>
       </div>
     </nav>
