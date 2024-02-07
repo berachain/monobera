@@ -1,3 +1,4 @@
+import React from "react";
 import { type Metadata } from "next";
 import { Footer } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -26,7 +27,7 @@ export default function Page() {
         <Hero />
         <div className="-mx-full">
           <div className="relative m-auto mt-8 bg-cover bg-center bg-no-repeat">
-            <div className="hidden sm:block">
+            <div className="hidden sm:block z-20">
               <BackGroundOrbit />
             </div>
             <Projects />
