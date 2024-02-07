@@ -1,6 +1,5 @@
 // @client
 "use client";
-
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -88,7 +87,7 @@ export function Projects() {
           Community
         </span>
       </h1>
-      <div className="z-1 flex flex-wrap justify-center gap-4">
+      <div className="flex flex-wrap justify-center gap-4 z-1">
         {projects.slice(0, visibleProjects).map((project, index) => (
           <ProjectCard key={index} project={project} />
         ))}
@@ -96,7 +95,7 @@ export function Projects() {
       {visibleProjects < projects.length && (
         <Button
           variant="outline"
-          className="z-10 mb-8 mt-12"
+          className="mb-8 mt-12"
           onClick={handleViewMore}
         >
           View more events

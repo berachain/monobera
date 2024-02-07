@@ -21,41 +21,35 @@ export default function SignUp() {
   return (
     <>
       <div className="items-center justify-center">
-        <div className="flex items-center justify-between pt-8">
-          <div className="hidden sm:block">
-            <Image
-              className="z-10 max-[600px]:mx-auto"
-              src={
-                "https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/r035ky4zgyilzdbxzr08.png"
-              }
-              alt="proposal-bear"
-              width={500}
-              height={500}
-            />
-          </div>
-          <div>
-            <h1 className="mb-[24px] text-center text-[42px] text-lg font-extrabold leading-10">
-              <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
-                Unlock
-                <br />
-              </span>{" "}
-              {""} Your Potential as an {""}
-              <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
-                Ambassador
-              </span>
-            </h1>
-          </div>
-          <div className="hidden sm:block">
-            <Image
-              className="z-10 max-[600px]:mx-auto"
-              src={
-                "https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/xsbwqslzlgw5q1des79i.png"
-              }
-              alt="proposal-bear"
-              width={500}
-              height={500}
-            />
-          </div>
+        <div className="mb-[-160px] flex items-center justify-between pt-8">
+          <Image
+            className="max-[600px]:mx-auto z-10"
+            src={
+              "https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/r035ky4zgyilzdbxzr08.png"
+            }
+            alt="proposal-bear"
+            width={500}
+            height={500}
+          />
+          <h1 className="mb-[24px] text-center text-lg font-extrabold leading-10 md:text-[42px]">
+            <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
+              Unlock
+              <br />
+            </span>{" "}
+            {""} Your Potential as an {""}
+            <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
+              Ambassador
+            </span>
+          </h1>
+          <Image
+            className="max-[600px]:mx-auto z-10"
+            src={
+              "https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/xsbwqslzlgw5q1des79i.png"
+            }
+            alt="proposal-bear"
+            width={500}
+            height={500}
+          />
         </div>
         <div className="relative mb-[-32px] flex flex-col items-center justify-center gap-4">
           <div
@@ -70,8 +64,8 @@ export default function SignUp() {
               alt="bg"
               layout="fill"
             />
-            <div className="absolute z-20 flex max-w-[653px] flex-col flex-wrap items-center justify-center px-4 md:px-0">
-              <h1 className="w-full pb-8 text-center text-2xl font-extrabold leading-tight text-white md:leading-normal">
+            <div className="absolute z-20 flex max-w-[653px] flex-col items-center justify-center">
+              <h1 className="md:leading-14 leading-24 w-[653px] pb-8 text-center text-2xl font-extrabold text-white md:text-xl">
                 Experience the collaboration of numerous creators. Register now
                 and become a part of a community comprising over 10,000 local
                 and international creators.
