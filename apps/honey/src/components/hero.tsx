@@ -7,7 +7,7 @@ export default function Hero() {
     <div className="flex flex-col items-center gap-4" id="mint-and-burn">
       <div
         className="flex h-8 w-fit items-center gap-1 rounded-2xl bg-muted bg-opacity-20 px-2 text-base font-normal leading-normal text-secondary-foreground shadow-lg backdrop-blur-xl hover:cursor-pointer hover:text-foreground"
-        onClick={() => window.open(`${dexUrl}/pool`, "_blank")}
+        onClick={() => window.open(`${dexUrl}/pools`, "_blank")}
       >
         💧 Add Liquidity to Earn BGT Rewards{" "}
         <Icons.arrowRight className="h-3 w-3" />

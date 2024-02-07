@@ -276,3 +276,34 @@ export const getFilteredPoolList = gql`
     }
   }
 `;
+
+export const getCrocSelectedPool = gql`
+  query GetPoolList($baseAsset: Bytes!, $quoteAsset: Bytes!) {
+    pools(
+      where: {
+        base: $baseAsset
+        quote: $quoteAsset
+      }
+    ) {
+      id
+      poolIdx
+      base
+      quote
+      timeCreate
+      baseInfo {
+        id
+        address
+        symbol
+        name
+        decimals
+      }
+      quoteInfo{
+        id
+        address
+        symbol
+        name
+        decimals
+      }
+    }
+  }
+`;

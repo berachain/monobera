@@ -1,11 +1,17 @@
 import React from "react";
-import { useBeraJs, usePollAssetWalletBalance } from "@bera/berajs";
+import {
+  useBeraJs,
+  usePollAssetWalletBalance,
+  useTokenHoneyPrice,
+} from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
+import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
+import { getSafeNumber } from "~/utils/getSafeNumber";
 
 type Props = {
   tokenWeight: ITokenWeight;
@@ -25,6 +31,10 @@ export default function CreatePoolInitialLiquidityInput({
   const tokenBalance = Number(token?.formattedBalance || 0);
 
   const { isConnected } = useBeraJs();
+
+  const { data: tokenHoneyPrice } = useTokenHoneyPrice(
+    tokenWeight?.token?.address,
+  );
 
   return (
     <li className={"flex w-full flex-col  items-center p-3"}>
@@ -70,8 +80,12 @@ export default function CreatePoolInitialLiquidityInput({
             </div>
             <div className="flex flex-row gap-1">
               <p className="self-center p-0 text-xs text-muted-foreground">
-                {/* TODO: change to actual values */}
-                {/* {amount !== 0 && formatUsd((amount * 1).toFixed(2))} */}
+                {tokenWeight.initialLiquidity !== "0" &&
+                  tokenWeight.initialLiquidity !== "" &&
+                  formatUsd(
+                    getSafeNumber(tokenWeight.initialLiquidity) *
+                      (tokenHoneyPrice ?? 0),
+                  )}
               </p>
             </div>
           </div>

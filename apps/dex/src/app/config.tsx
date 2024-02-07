@@ -132,7 +132,7 @@ export const ctaFeatures = [
   {
     logoURI: "/graphics/pool.png",
     title: "Pool",
-    href: "/pool",
+    href: "/pools",
   },
 ];
 

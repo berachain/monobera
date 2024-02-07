@@ -306,7 +306,6 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
           >
             <TokenList className="bg-muted">
               <PreviewToken
-                key={tokenInputs[0].address}
                 token={
                   isBeratoken(tokenInputs[0])
                     ? isNativeBera
@@ -318,7 +317,6 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 price={baseTokenHoneyPrice}
               />
               <PreviewToken
-                key={tokenInputs[1].address}
                 token={
                   isBeratoken(tokenInputs[1])
                     ? isNativeBera

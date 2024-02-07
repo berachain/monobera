@@ -33,10 +33,8 @@ export function CreatePoolInitialLiquidity({
   onBack,
 }: Props) {
   useEffect(() => {
-    if (initialPrice === "" || initialPrice === "0") {
-      onTokenBalanceChange(0, "");
-      onTokenBalanceChange(1, "");
-    }
+    onTokenBalanceChange(0, "");
+    onTokenBalanceChange(1, "");
   }, [initialPrice]);
 
   const baseCost = getBaseCost(getSafeNumber(initialPrice));
@@ -99,7 +97,7 @@ export function CreatePoolInitialLiquidity({
           </ul>
 
           {error && (
-            <Alert className="my-4" variant="destructive">
+            <Alert variant="destructive">
               <AlertDescription>
                 <Icons.info className="mr-1 mt-[-4px] inline h-4 w-4" />
                 {error?.message}
@@ -108,7 +106,7 @@ export function CreatePoolInitialLiquidity({
           )}
           <ActionButton>
             <Button
-              className="mt-4 w-full"
+              className="w-full"
               onClick={onContinue}
               disabled={error !== undefined}
             >

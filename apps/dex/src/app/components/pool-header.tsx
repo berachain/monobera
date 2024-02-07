@@ -12,7 +12,7 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
   return (
     <div className="flex w-full flex-col items-center justify-between md:items-end md:justify-center lg:flex-row">
       <div className="flex w-full flex-col items-center gap-4 md:items-start">
-        <Link href={"/pool"} target="_self">
+        <Link href={"/pools"} target="_self">
           <Button
             variant={"ghost"}
             size="sm"
@@ -86,12 +86,7 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
       </div> */}
       <div className="mt-4 flex gap-2 md:mt-0">
         <Link href={getPoolAddLiquidityUrl(pool)} target="_self">
-          <Button
-            variant={"outline"}
-            // onClick={() =>
-            //   window.open(`/pool/${pool?.pool}/add-liquidity`, "_self")
-            // }
-          >
+          <Button variant={"outline"}>
             <Icons.add />
             <span className="ml-1">Add</span>
           </Button>

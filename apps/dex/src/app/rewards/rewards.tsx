@@ -29,7 +29,7 @@ export const Rewards = () => {
               title="You have no rewards"
               subtitle="Only BGT boosted pools are eligible for rewards"
               actionTitle="View Pools with BGT Rewards"
-              actionLink="/pool"
+              actionLink="/pools"
             />
           ) : (
             <>

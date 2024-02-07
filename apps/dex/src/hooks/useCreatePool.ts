@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { usePollAllowances, type Token } from "@bera/berajs";
-import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
@@ -16,7 +15,7 @@ const useCreatePool = (tokenWeights: ITokenWeight[]) => {
     .map((tokenWeight) => tokenWeight.token) as Token[];
 
   const { useCurrentAllowancesForContract } = usePollAllowances({
-    contract: crocDexAddress as Address,
+    contract: crocDexAddress,
     tokens,
   });
 

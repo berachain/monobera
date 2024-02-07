@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   CROCSWAP_DEX,
   TransactionActionType,
   formatNumber,
   useCrocEnv,
+  useTokenHoneyPrice,
 } from "@bera/berajs";
 import { crocDexAddress } from "@bera/config";
 import {
@@ -22,10 +23,8 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { parseUnits } from "viem";
-import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
-import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import {
@@ -37,6 +36,7 @@ import {
 import { CrocTokenView } from "@bera/beracrocswap/dist/tokens";
 import { type CrocContext } from "@bera/beracrocswap/dist/context";
 import { encodeAbiParameters, parseAbiParameters } from "viem";
+import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -57,8 +57,7 @@ export function CreatePoolPreview({
   const { write, ModalPortal } = useTxn({
     message: "Create new pool",
     onSuccess: () => {
-      void onCreatePool();
-      router.push("/pool");
+      router.push("/pools");
     },
     actionType: TransactionActionType.CREATE_POOL,
   });
@@ -145,6 +144,28 @@ export function CreatePoolPreview({
     rawBeraEntry,
   ]);
 
+  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(
+    tokenWeights[0]?.token?.address,
+  );
+  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
+    tokenWeights[1]?.token?.address,
+  );
+
+  const total = useMemo(() => {
+    return (
+      getSafeNumber(tokenWeights[0]?.initialLiquidity) *
+        Number(baseTokenHoneyPrice ?? 0) +
+      getSafeNumber(tokenWeights[1]?.initialLiquidity) *
+        Number(quoteTokenHoneyPrice ?? 0)
+    );
+  }, [tokenWeights, baseTokenHoneyPrice, quoteTokenHoneyPrice]);
+
+  console.log({
+    tokenWeights,
+    baseTokenHoneyPrice,
+    quoteTokenHoneyPrice,
+    total,
+  });
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
       {ModalPortal}
@@ -163,16 +184,16 @@ export function CreatePoolPreview({
           transaction to create the pool
         </p>
         <TokenList className="bg-muted ">
-          {tokenWeights.map((tokenWeight, index) => {
-            return (
-              <PreviewToken
-                key={index}
-                token={tokenWeight.token}
-                weight={undefined}
-                value={getSafeNumber(tokenWeight.initialLiquidity)}
-              />
-            );
-          })}
+          <PreviewToken
+            token={tokenWeights[0]?.token}
+            price={baseTokenHoneyPrice}
+            value={getSafeNumber(tokenWeights[0]?.initialLiquidity)}
+          />
+          <PreviewToken
+            token={tokenWeights[1]?.token}
+            price={quoteTokenHoneyPrice}
+            value={getSafeNumber(tokenWeights[1]?.initialLiquidity)}
+          />
         </TokenList>
         <div className="w-full rounded-lg bg-muted p-3">
           <div className="flex h-fit w-full items-center justify-between text-sm">
@@ -182,6 +203,10 @@ export function CreatePoolPreview({
               {tokenWeights[0]?.token?.symbol} = 1{" "}
               {tokenWeights[1]?.token?.symbol}
             </p>
+          </div>
+          <div className="flex h-fit w-full items-center justify-between text-sm">
+            <p className="text-primary">Estimated Value</p>
+            <p>{formatUsd(total)}</p>
           </div>
           <div className="flex h-fit w-full items-center justify-between text-sm">
             <p className="text-primary">Swap Fee</p>
@@ -206,7 +231,7 @@ export function CreatePoolPreview({
               ) + parseUnits("10", 16)
             }
             token={needsApproval[0]}
-            spender={crocDexAddress as Address}
+            spender={crocDexAddress}
           />
         ) : (
           <ActionButton>
