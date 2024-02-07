@@ -48,11 +48,11 @@ export class CrocSwapPlan {
     const TIP = 0
     const surplusFlags = this.maskSurplusArgs(args.surplus)
 
-    const gasEst = (await this.context).dex.estimateGas.swap
-      (this.baseToken.tokenAddr, this.quoteToken.tokenAddr, (await this.context).chain.poolIndex,
-      this.sellBase, this.qtyInBase, await this.qty, TIP, 
-      await this.calcLimitPrice(), await this.calcSlipQty(), surplusFlags,
-      await this.buildTxArgs(surplusFlags))
+    // const gasEst = (await this.context).dex.estimateGas.swap
+    //   (this.baseToken.tokenAddr, this.quoteToken.tokenAddr, (await this.context).chain.poolIndex,
+    //   this.sellBase, this.qtyInBase, await this.qty, TIP, 
+    //   await this.calcLimitPrice(), await this.calcSlipQty(), surplusFlags,
+    //   await this.buildTxArgs(surplusFlags))
 
 
     return {
@@ -68,7 +68,7 @@ export class CrocSwapPlan {
         await this.calcSlipQty(), 
         surplusFlags,
       ],
-      txArgs: await this.buildTxArgs(surplusFlags, await gasEst)
+      txArgs: await this.buildTxArgs(surplusFlags)
     }
     }
 

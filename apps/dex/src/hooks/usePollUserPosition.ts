@@ -3,10 +3,13 @@ import useSWR, { mutate } from "swr";
 import { type PoolV2 } from "~/app/pools/fetchPools";
 import useSWRImmutable from "swr/immutable";
 import { useBeraJs } from "@bera/berajs";
+import { client, getTokenHoneyPrices } from "@bera/graphql";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { toHex } from "viem";
 import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
 import { formatUnits } from "viem";
+import { getAddress } from "viem";
+import { type IUserPosition } from "./usePollUserDeposited";
 
 interface AmbientPosition {
   ambientLiq: string;
@@ -33,27 +36,52 @@ interface AmbientPosition {
   user: string;
 }
 
-export interface IUserPosition {
-  baseAmount: bigint;
-  quoteAmount: bigint;
-  formattedBaseAmount: string;
-  formattedQuoteAmount: string;
+export interface IUserAmbientPositon extends AmbientPosition {
+  userPosition: IUserPosition | undefined;
 }
+
 export const usePollUserPosition = (pool: PoolV2 | undefined) => {
   const { account } = useBeraJs();
   const hexChainId = toHex(chainId);
-  const QUERY_KEY = [account, pool, hexChainId];
-  useSWR(
+  const { usePoolSpotPrice } = useCrocPoolSpotPrice(pool);
+  const spotPrice = usePoolSpotPrice();
+  const QUERY_KEY = [account, pool, hexChainId, spotPrice];
+  const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!account || !pool) {
+      if (!account || !pool || !spotPrice) {
         return undefined;
       }
       try {
-        const response = await fetch(
+        const tokenHoneyPricesResult = client
+          .query({
+            query: getTokenHoneyPrices,
+            variables: {
+              id: [pool.base, pool.quote],
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            return res.data?.tokenHoneyPrices.reduce(
+              (allPrices: any, price: any) => ({
+                ...allPrices,
+                [getAddress(price.id)]: price.price,
+              }),
+              {},
+            );
+          });
+
+        const positionsResponse = fetch(
           `${crocIndexerEndpoint}/user_positions?chainId=${hexChainId}&user=${account}`,
         );
-        const positions = await response.json();
+
+        const [tokenHoneyPrices, positionsResult] = await Promise.all([
+          tokenHoneyPricesResult,
+          positionsResponse,
+        ]);
+
+        const positions = await positionsResult.json();
+
         console.log({ positions, pool });
 
         const userPoolPosition: AmbientPosition | undefined =
@@ -64,7 +92,47 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
               pos.chainId === hexChainId,
           );
 
-        return userPoolPosition;
+        if (!userPoolPosition) {
+          return undefined;
+        }
+
+        const sqrtPrice = Math.sqrt(spotPrice);
+
+        // get pool price non display
+        const liq = Number(userPoolPosition.ambientLiq);
+
+        const baseAmount = BigInt(liq * sqrtPrice);
+        const quoteAmount = BigInt(liq / sqrtPrice);
+
+        const baseInfo = pool?.baseInfo;
+        const quoteInfo = pool?.quoteInfo;
+
+        const formattedBaseAmount = formatUnits(
+          baseAmount,
+          baseInfo?.decimals ?? 18,
+        );
+
+        const formattedQuoteAmount = formatUnits(
+          quoteAmount,
+          quoteInfo?.decimals ?? 18,
+        );
+
+        const estimatedHoneyValue =
+          Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
+            Number(formattedBaseAmount) +
+          Number(tokenHoneyPrices[getAddress(pool.quote)] ?? 0) *
+            Number(formattedQuoteAmount);
+        const userPosition: IUserPosition = {
+          baseAmount,
+          quoteAmount,
+          formattedBaseAmount,
+          formattedQuoteAmount,
+          estimatedHoneyValue,
+        };
+        return {
+          ...userPoolPosition,
+          userPosition,
+        };
       } catch (e) {
         console.log(e);
         return undefined;
@@ -76,52 +144,15 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
   );
 
   const usePosition = () => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    const { data = undefined } = useSWRImmutable<
+      IUserAmbientPositon | undefined
+    >(QUERY_KEY);
     return data;
   };
 
-  const usePositionBreakdown = () => {
-    const { usePoolSpotPrice } = useCrocPoolSpotPrice(pool);
-    const spotPrice = usePoolSpotPrice();
-    const { data: position = undefined } = useSWRImmutable<
-      AmbientPosition | undefined
-    >(QUERY_KEY);
-    const POSITION_QUERY_KEY = [position, spotPrice, ...QUERY_KEY];
-    return useSWRImmutable<IUserPosition | undefined>(
-      POSITION_QUERY_KEY,
-      () => {
-        if (!position || !spotPrice) {
-          return undefined;
-        }
-
-        const sqrtPrice = Math.sqrt(spotPrice);
-
-        // get pool price non display
-        const liq = Number(position.ambientLiq);
-
-        const baseAmount = BigInt(liq * sqrtPrice);
-        const quoteAmount = BigInt(liq / sqrtPrice);
-
-        const baseInfo = pool?.baseInfo;
-        const quoteInfo = pool?.quoteInfo;
-        return {
-          baseAmount,
-          quoteAmount,
-          formattedBaseAmount: formatUnits(
-            baseAmount,
-            baseInfo?.decimals ?? 18,
-          ),
-          formattedQuoteAmount: formatUnits(
-            quoteAmount,
-            quoteInfo?.decimals ?? 18,
-          ),
-        };
-      },
-    );
-  };
   return {
+    isLoading,
     usePosition,
-    usePositionBreakdown,
     refresh: () => void mutate(QUERY_KEY),
   };
 };

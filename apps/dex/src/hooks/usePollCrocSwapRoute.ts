@@ -55,7 +55,9 @@ export const usePollCrocSwapRoute = ({
           slippage,
           crocenv.crocEnv.context,
         );
+        console.log(crocSwapPlan);
         const swapRoute = await crocSwapPlan.swap();
+        console.log(swapRoute);
         return swapRoute;
       } catch (e) {
         console.log(e);

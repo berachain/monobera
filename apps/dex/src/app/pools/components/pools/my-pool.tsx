@@ -17,10 +17,6 @@ export default function MyPool({
   const { usePositions, isLoading } = usePollUserDeposited();
   const userPools = usePositions();
 
-  console.log({
-    userPools,
-    isLoading,
-  });
   return (
     <>
       {" "}
@@ -41,7 +37,9 @@ export default function MyPool({
             data={userPools}
             columns={my_columns}
             title={`My Pools (${userPools.length})`}
-            onRowClick={(row) => window.open(getPoolUrl(row), "_self")}
+            onRowClick={(row: any) => {
+              window.open(getPoolUrl(row.original), "_self");
+            }}
           />
         </div>
       ) : (

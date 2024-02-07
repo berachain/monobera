@@ -6,8 +6,10 @@ import { ConnectWalletBear, NotFoundBear } from "@bera/shared-ui";
 import Loading from "./loading-component";
 import { Banner } from "./reward-banner";
 import RewardsCard from "./rewards-card";
-import { usePollUserDeposited } from "~/hooks/usePollUserDeposited";
-import { type PoolV2 } from "../pools/fetchPools";
+import {
+  type IUserPool,
+  usePollUserDeposited,
+} from "~/hooks/usePollUserDeposited";
 
 export const Rewards = () => {
   const { isReady } = useBeraJs();
@@ -33,7 +35,7 @@ export const Rewards = () => {
             <>
               {userPools
                 // ?.filter((userPool: PoolV2) => userPool.bgtApy !== undefined)
-                ?.map((pool: PoolV2) => (
+                ?.map((pool: IUserPool) => (
                   <RewardsCard pool={pool} key={pool.poolName} />
                 ))}
             </>

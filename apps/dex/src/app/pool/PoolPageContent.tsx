@@ -17,7 +17,7 @@ import {
 } from "@bera/graphql";
 import { ApyTooltip, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { Card } from "@bera/ui/card";
+import { Card, CardContent } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import {
   Table,
@@ -34,6 +34,8 @@ import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
 import { PoolChart } from "./PoolChart";
 import { type PoolV2 } from "../pools/fetchPools";
+import { Skeleton } from "@bera/ui/skeleton";
+import { usePollUserPosition } from "~/hooks/usePollUserPosition";
 interface IPoolPageContent {
   pool: PoolV2;
 }
@@ -310,7 +312,11 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   // const { isSmall, numericValue: formattedBGTRewards } =
   //   formatAmountSmall(bgtRewards);
   const { isReady } = useBeraJs();
+  const { usePosition, isLoading: isPositionBreakdownLoading } =
+    usePollUserPosition(pool);
 
+  const userAmbientPosition = usePosition();
+  const userPositionBreakdown = userAmbientPosition?.userPosition;
   // const { isLoading, useUserPool } = usePollUsersPools();
   // const userPool = useUserPool(pool.pool);
 
@@ -373,29 +379,26 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
           </div>
         </div>
         <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-2">
-          {
-            isReady && false
-            // <Card>
-            //   <CardContent className="flex items-center justify-between gap-4 p-4">
-            //     <div className="w-full">
-            //       <h3 className="text-xs font-medium text-muted-foreground">
-            //         My pool balance
-            //       </h3>
-            //       <p className="mt-1 text-lg font-semibold text-foreground">
-            //         {isConnected && userPool ? (
-            //           isLoading ? (
-            //             <Skeleton className="h-[32px] w-[150px]" />
-            //           ) : (
-            //             formatUsd(userPool.userBalance ?? 0)
-            //           )
-            //         ) : (
-            //           formatUsd(0)
-            //         )}
-            //       </p>
-            //     </div>
-            //   </CardContent>
-            // </Card>
-          }
+          <Card>
+            <CardContent className="flex items-center justify-between gap-4 p-4">
+              <div className="w-full">
+                <h3 className="text-xs font-medium text-muted-foreground">
+                  My pool balance
+                </h3>
+                <p className="mt-1 text-lg font-semibold text-foreground">
+                  {isReady ? (
+                    isPositionBreakdownLoading ? (
+                      <Skeleton className="h-[32px] w-[150px]" />
+                    ) : (
+                      formatUsd(userPositionBreakdown?.estimatedHoneyValue ?? 0)
+                    )
+                  ) : (
+                    <Skeleton className="h-[32px] w-[150px]" />
+                  )}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
           {
             false && false
             // <Card>

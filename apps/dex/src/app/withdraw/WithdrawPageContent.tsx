@@ -9,6 +9,7 @@ import {
   type Token,
   TransactionActionType,
   CROCSWAP_DEX,
+  useTokenHoneyPrice,
 } from "@bera/berajs";
 import { cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
@@ -100,9 +101,14 @@ export default function WithdrawLiquidityContent({
   const baseToken = pool.baseInfo;
   const quoteToken = pool.quoteInfo;
 
-  const { usePositionBreakdown, refresh } = usePollUserPosition(pool);
-  const { data: userPositionBreakdown, isLoading: isPositionBreakdownLoading } =
-    usePositionBreakdown();
+  const {
+    usePosition,
+    isLoading: isPositionBreakdownLoading,
+    refresh,
+  } = usePollUserPosition(pool);
+
+  const userAmbientPosition = usePosition();
+  const userPositionBreakdown = userAmbientPosition?.userPosition;
 
   const baseAmountWithdrawn = useMemo(() => {
     if (!userPositionBreakdown || amount === 0) {
@@ -127,6 +133,23 @@ export default function WithdrawLiquidityContent({
   const { usePositionSeeds } = useCrocPositionSeeds(pool);
   const seeds = usePositionSeeds();
 
+  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
+  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
+    quoteToken?.address,
+  );
+
+  const totalHoneyPrice = useMemo(() => {
+    if (!baseTokenHoneyPrice || !quoteTokenHoneyPrice) return 0;
+    return (
+      Number(baseTokenHoneyPrice) * Number(baseAmountWithdrawn) +
+      Number(quoteTokenHoneyPrice) * Number(quoteAmountWithdrawn)
+    );
+  }, [
+    baseTokenHoneyPrice,
+    quoteTokenHoneyPrice,
+    baseAmountWithdrawn,
+    quoteAmountWithdrawn,
+  ]);
   const liquidityToBurn = useMemo(
     () => seeds?.mul(amount).div(100),
     [seeds, amount],
@@ -264,9 +287,6 @@ export default function WithdrawLiquidityContent({
                 </div>
               }
             />
-
-            <InfoBoxListItem title={"Estimated Value"} value={formatUsd(0)} />
-            <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
             <InfoBoxListItem
               title={"Pool Price"}
               value={
@@ -277,6 +297,11 @@ export default function WithdrawLiquidityContent({
                   : "-"
               }
             />
+            <InfoBoxListItem
+              title={"Estimated Value"}
+              value={formatUsd(totalHoneyPrice)}
+            />
+            <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
           </InfoBoxList>
           <TxnPreview
             open={previewOpen}
@@ -297,18 +322,16 @@ export default function WithdrawLiquidityContent({
                 key={baseToken.address}
                 token={baseToken}
                 value={Number(baseAmountWithdrawn)}
-                price={0}
+                price={baseTokenHoneyPrice}
               />
               <PreviewToken
                 key={quoteToken.address}
                 token={quoteToken}
                 value={Number(quoteAmountWithdrawn)}
-                price={0}
+                price={quoteTokenHoneyPrice}
               />
             </TokenList>
             <InfoBoxList>
-              <InfoBoxListItem title={"Estimated Value"} value={formatUsd(0)} />
-              <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
               <InfoBoxListItem
                 title={"Pool Price"}
                 value={
@@ -319,6 +342,11 @@ export default function WithdrawLiquidityContent({
                     : "-"
                 }
               />
+              <InfoBoxListItem
+                title={"Estimated Value"}
+                value={formatUsd(totalHoneyPrice)}
+              />
+              <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
             </InfoBoxList>
             <ActionButton>
               <Button

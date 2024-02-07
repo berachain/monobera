@@ -16,6 +16,7 @@ import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
 } from "~/app/pools/fetchPools";
+import { IUserPool } from "~/hooks/usePollUserDeposited";
 
 export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   // const { data: myPools = [] } = usePollUsersPools();
@@ -272,7 +273,7 @@ export const columns: ColumnDef<PoolV2>[] = [
 //     </div>
 //   );
 // };
-export const my_columns: ColumnDef<PoolV2>[] = [
+export const my_columns: ColumnDef<IUserPool>[] = [
   {
     accessorKey: "poolName",
     header: ({ column }) => (
@@ -342,7 +343,7 @@ export const my_columns: ColumnDef<PoolV2>[] = [
   //   },
   // },
   {
-    accessorKey: "userBalance",
+    accessorKey: "userPosition.estimatedHoneyValue",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -351,7 +352,10 @@ export const my_columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="flex items-center text-sm">{formatter.format(0)} USD</div>
+      <div className="flex items-center text-sm">
+        {formatter.format(row.original.userPosition?.estimatedHoneyValue ?? 0)}{" "}
+        USD
+      </div>
     ),
   },
   {

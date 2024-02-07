@@ -5,10 +5,15 @@ import { chainId, crocIndexerEndpoint, crocQueryAddress } from "@bera/config";
 import { toHex } from "viem";
 import { formatPoolData, type PoolV2 } from "~/app/pools/fetchPools";
 import { usePublicClient, type Address } from "wagmi";
-import { client, getFilteredPoolList } from "@bera/graphql";
+import {
+  client,
+  getFilteredPoolList,
+  getTokenHoneyPrices,
+} from "@bera/graphql";
 import { formatUnits } from "viem";
 import { decodeCrocPrice } from "@bera/beracrocswap";
 import { BigNumber } from "ethers";
+import { getAddress } from "viem";
 
 interface AmbientPosition {
   ambientLiq: string;
@@ -40,6 +45,7 @@ export interface IUserPosition {
   quoteAmount: bigint;
   formattedBaseAmount: string;
   formattedQuoteAmount: string;
+  estimatedHoneyValue: number;
 }
 
 export interface IUserPool extends PoolV2 {
@@ -74,6 +80,29 @@ export const usePollUserDeposited = () => {
         baseTokenAddresses.push(pool.base);
         quoteTokenAddresses.push(pool.quote);
       }
+
+      const uniqueTokenAddresses = Array.from(
+        new Set([...baseTokenAddresses, ...quoteTokenAddresses]),
+      );
+
+      const tokenHoneyPricesResult = client
+        .query({
+          query: getTokenHoneyPrices,
+          variables: {
+            id: uniqueTokenAddresses,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          return res.data?.tokenHoneyPrices.reduce(
+            (allPrices: any, price: any) => ({
+              ...allPrices,
+              [getAddress(price.id)]: price.price,
+            }),
+            {},
+          );
+        });
+
       const calls: Call[] = positions.data.map((pool: AmbientPosition) => {
         return {
           abi: CROC_QUERY_ABI,
@@ -107,7 +136,11 @@ export const usePollUserDeposited = () => {
           return res.data.pools;
         });
 
-      const [poolPrices, pools] = await Promise.all([result, poolsResult]);
+      const [poolPrices, pools, tokenHoneyPrices] = await Promise.all([
+        result,
+        poolsResult,
+        tokenHoneyPricesResult,
+      ]);
 
       const userPositions: IUserPool[] = positions.data.map(
         (position: AmbientPosition, i: number) => {
@@ -131,17 +164,28 @@ export const usePollUserDeposited = () => {
 
           const baseInfo = pool?.baseInfo;
           const quoteInfo = pool?.quoteInfo;
+
+          const formattedBaseAmount = formatUnits(
+            baseAmount,
+            baseInfo?.decimals ?? 18,
+          );
+
+          const formattedQuoteAmount = formatUnits(
+            quoteAmount,
+            quoteInfo?.decimals ?? 18,
+          );
+
+          const estimatedHoneyValue =
+            Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
+              Number(formattedBaseAmount) +
+            Number(tokenHoneyPrices[getAddress(pool.quote)] ?? 0) *
+              Number(formattedQuoteAmount);
           const userPosition: IUserPosition = {
             baseAmount,
             quoteAmount,
-            formattedBaseAmount: formatUnits(
-              baseAmount,
-              baseInfo?.decimals ?? 18,
-            ),
-            formattedQuoteAmount: formatUnits(
-              quoteAmount,
-              quoteInfo?.decimals ?? 18,
-            ),
+            formattedBaseAmount,
+            formattedQuoteAmount,
+            estimatedHoneyValue,
           };
           return {
             ...formattedPool,
@@ -157,7 +201,9 @@ export const usePollUserDeposited = () => {
   });
 
   const usePositions = () => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    const { data = undefined } = useSWRImmutable<IUserPool[] | undefined>(
+      QUERY_KEY,
+    );
     return data;
   };
 

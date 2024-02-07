@@ -4,9 +4,10 @@ import { formatUsd } from "@bera/berajs";
 import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 
 import { RewardBtn } from "~/app/components/reward-btn";
-import { getPoolUrl, type PoolV2 } from "../pools/fetchPools";
+import { getPoolUrl } from "../pools/fetchPools";
+import { type IUserPool } from "~/hooks/usePollUserDeposited";
 
-export default function RewardsCard({ pool }: { pool: PoolV2 }) {
+export default function RewardsCard({ pool }: { pool: IUserPool }) {
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -44,7 +45,7 @@ export default function RewardsCard({ pool }: { pool: PoolV2 }) {
             ) : (
               formatUsd(0)
             )} */}
-            {formatUsd(0)}
+            {formatUsd(pool.userPosition?.estimatedHoneyValue ?? 0)}
           </div>
           <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
             My TVL

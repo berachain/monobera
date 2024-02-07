@@ -11,7 +11,7 @@ import CardViewLoading from "./components/pools/card-view-loading";
 import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { usePoolTable } from "./usePoolTable";
-import { getAddress } from "viem";
+import { getPoolUrl } from "./fetchPools";
 
 // const FilterBadge = ({
 //   text,
@@ -156,15 +156,8 @@ export const PoolSearch = ({
                   columns={columns}
                   title={`All Pools (${data.length})`}
                   className="min-w-[1000px]"
-                  onRowClick={(
-                    row, //@ts-ignore
-                  ) =>
-                    window.open(
-                      `/pool?base=${getAddress(row.base)}&quote=${getAddress(
-                        row.quote,
-                      )}`,
-                      "_self",
-                    )
+                  onRowClick={(row: any) =>
+                    window.open(getPoolUrl(row.original), "_self")
                   }
                 />
               </div>

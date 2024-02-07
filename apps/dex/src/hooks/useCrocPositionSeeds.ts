@@ -15,7 +15,6 @@ export const useCrocPositionSeeds = (pool: PoolV2 | undefined) => {
       }
       try {
         const ambientPos = await crocPool.queryAmbient();
-        console.log({ ambientPos });
         return ambientPos.seeds as BigNumber;
       } catch (e) {
         return undefined;

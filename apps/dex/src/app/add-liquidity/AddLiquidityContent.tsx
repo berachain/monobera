@@ -6,6 +6,7 @@ import {
   type Token,
   CROCSWAP_DEX,
   formatNumber,
+  useTokenHoneyPrice,
 } from "@bera/berajs";
 import { cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
@@ -41,6 +42,7 @@ import { getSafeNumber } from "~/utils/getSafeNumber";
 import { useCrocPool } from "~/hooks/useCrocPool";
 import { type PriceRange, type BeraSdkResponse } from "@bera/beracrocswap";
 import { SettingsPopover } from "~/components/settings-popover";
+import { formatUsd } from "../../../../../packages/berajs/src/utils/formatUsd";
 
 interface IAddLiquidityContent {
   pool: PoolV2;
@@ -75,6 +77,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const baseToken = pool.baseInfo;
   const quoteToken = pool.quoteInfo;
+
+  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
+  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
+    quoteToken?.address,
+  );
 
   const baseCost = useMemo(() => {
     if (!poolPrice) {
@@ -143,6 +150,20 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     write,
   ]);
 
+  const totalHoneyPrice = useMemo(() => {
+    if (!baseTokenHoneyPrice || !quoteTokenHoneyPrice) {
+      return 0;
+    }
+    return (
+      Number(baseTokenHoneyPrice) * Number(tokenInputs[0]?.amount || 0) +
+      Number(quoteTokenHoneyPrice) * Number(tokenInputs[1]?.amount || 0)
+    );
+  }, [
+    baseTokenHoneyPrice,
+    quoteTokenHoneyPrice,
+    tokenInputs[0]?.amount,
+    tokenInputs[1]?.amount,
+  ]);
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
@@ -183,7 +204,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                   ? isNativeBera
                     ? beraToken
                     : wBeraToken
-                  : (baseToken as Token)
+                  : baseToken
               }
               selectable={
                 isBeratoken(baseToken) && beraToken && wBeraToken ? true : false
@@ -204,7 +225,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               setAmount={(amount: string) => {
                 handleBaseAssetAmountChange(amount);
               }}
-              price={0}
+              price={baseTokenHoneyPrice}
               onExceeding={(exceeding: boolean) =>
                 updateTokenExceeding(0, exceeding)
               }
@@ -219,7 +240,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                   ? isNativeBera
                     ? beraToken
                     : wBeraToken
-                  : (quoteToken as Token)
+                  : quoteToken
               }
               selectable={
                 isBeratoken(quoteToken) && beraToken && wBeraToken
@@ -243,7 +264,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 handleQuoteAssetAmountChange(amount);
               }}
               weight={quoteToken.normalizedWeight}
-              price={0}
+              price={quoteTokenHoneyPrice}
               onExceeding={(exceeding: boolean) =>
                 updateTokenExceeding(1, exceeding)
               }
@@ -262,6 +283,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                   : "-"
               }
             />
+            <InfoBoxListItem
+              title={"Total Value"}
+              value={formatUsd(totalHoneyPrice)}
+            />
+
             <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
           </InfoBoxList>
           {error && (
@@ -279,27 +305,30 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
             setOpen={setPreviewOpen}
           >
             <TokenList className="bg-muted">
-              {tokenInputs
-                .filter(
-                  (tokenInput: { amount: string }) => tokenInput.amount !== "",
-                )
-                .map((tokenInput: any) => {
-                  return (
-                    <PreviewToken
-                      key={tokenInput.address}
-                      token={
-                        isBeratoken(tokenInput)
-                          ? isNativeBera
-                            ? beraToken
-                            : wBeraToken
-                          : tokenInput
-                      }
-                      weight={tokenInput?.normalizedWeight}
-                      value={tokenInput?.amount}
-                      price={0}
-                    />
-                  );
-                })}
+              <PreviewToken
+                key={tokenInputs[0].address}
+                token={
+                  isBeratoken(tokenInputs[0])
+                    ? isNativeBera
+                      ? beraToken
+                      : wBeraToken
+                    : tokenInputs[0]
+                }
+                value={getSafeNumber(tokenInputs[0]?.amount)}
+                price={baseTokenHoneyPrice}
+              />
+              <PreviewToken
+                key={tokenInputs[1].address}
+                token={
+                  isBeratoken(tokenInputs[1])
+                    ? isNativeBera
+                      ? beraToken
+                      : wBeraToken
+                    : tokenInputs[1]
+                }
+                value={getSafeNumber(tokenInputs[1]?.amount)}
+                price={quoteTokenHoneyPrice}
+              />
             </TokenList>
             <InfoBoxList>
               <InfoBoxListItem
@@ -311,6 +340,10 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       }`
                     : "-"
                 }
+              />
+              <InfoBoxListItem
+                title={"Total Value"}
+                value={formatUsd(totalHoneyPrice)}
               />
               <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
             </InfoBoxList>
