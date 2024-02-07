@@ -12,8 +12,6 @@ export function generateMetadata(): Metadata {
   };
 }
 
-// export const fetchCache = "force-no-store";
-
 export const revalidate = 5;
 
 export default async function PoolPage({

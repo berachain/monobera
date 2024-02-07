@@ -1,40 +1,35 @@
-import { ethToBera } from "@bera/berajs";
-import {
-  client,
-  getAllLiquidityChanged,
-  getTypedLiquidityChanged,
-  type LiquidityChanged,
-} from "@bera/graphql";
 import useSWRInfinite from "swr/infinite";
-import { type Address } from "wagmi";
+import { type PoolV2 } from "../pools/fetchPools";
+import { type ISwaps } from "~/hooks/usePoolRecentSwaps";
+import { type IProvisions } from "~/hooks/usePoolRecentProvisions";
 
 const DEFAULT_SIZE = 10;
 
-export const usePoolEvents = (address: Address) => {
+export const usePoolEvents = ({
+  pool,
+  swaps,
+  provisions,
+  combinedEvents,
+}: {
+  pool: PoolV2 | undefined;
+  swaps: ISwaps[] | undefined;
+  provisions: IProvisions[] | undefined;
+  combinedEvents: (ISwaps | IProvisions)[] | undefined;
+}) => {
   const {
     data: allData,
     size: allDataSize,
     setSize: setAllDataSize,
     isLoading: isAllDataLoading,
   } = useSWRInfinite(
-    (index) => ["allData", index, client],
-    async (key: any[]) => {
+    (index) => ["allData", index, pool, combinedEvents],
+    (key: any[]) => {
       try {
         const page = key[1];
-        const allLiquidityChanged: LiquidityChanged[] = await client
-          .query({
-            query: getAllLiquidityChanged,
-            variables: {
-              page: page * DEFAULT_SIZE,
-              limit: DEFAULT_SIZE,
-              poolDenom: ethToBera(address),
-            },
-          })
-          .then((res: any) => {
-            return res.data.liquidityChangeds;
-          });
-
-        return allLiquidityChanged;
+        return combinedEvents?.slice(
+          page * DEFAULT_SIZE,
+          (page + 1) * DEFAULT_SIZE,
+        );
       } catch (e) {
         console.log(e);
         return undefined;
@@ -48,25 +43,11 @@ export const usePoolEvents = (address: Address) => {
     setSize: setSwapDataSize,
     isLoading: isSwapDataLoading,
   } = useSWRInfinite(
-    (index) => ["swapData", index],
-    async (key: any[]) => {
+    (index) => ["swapData", index, swaps],
+    (key: any[]) => {
       try {
         const page = key[1];
-        const swapData: LiquidityChanged[] = await client
-          .query({
-            query: getTypedLiquidityChanged,
-            variables: {
-              page: page * DEFAULT_SIZE,
-              limit: DEFAULT_SIZE,
-              poolDenom: ethToBera(address),
-              type: ["SWAP"],
-            },
-          })
-          .then((res: any) => {
-            return res.data.liquidityChangeds;
-          });
-
-        return swapData;
+        return swaps?.slice(page * DEFAULT_SIZE, (page + 1) * DEFAULT_SIZE);
       } catch (e) {
         console.log(e);
         return undefined;
@@ -80,25 +61,14 @@ export const usePoolEvents = (address: Address) => {
     setSize: setProvisionDataSize,
     isLoading: isProvisionDataLoading,
   } = useSWRInfinite(
-    (index) => ["provisionData", index],
-    async (key: any[]) => {
+    (index) => ["provisionData", index, provisions],
+    (key: any[]) => {
       try {
         const page = key[1];
-        const swapData: LiquidityChanged[] = await client
-          .query({
-            query: getTypedLiquidityChanged,
-            variables: {
-              page: page * DEFAULT_SIZE,
-              limit: DEFAULT_SIZE,
-              poolDenom: ethToBera(address),
-              type: ["ADD", "REMOVE"],
-            },
-          })
-          .then((res: any) => {
-            return res.data.liquidityChangeds;
-          });
-
-        return swapData;
+        return provisions?.slice(
+          page * DEFAULT_SIZE,
+          (page + 1) * DEFAULT_SIZE,
+        );
       } catch (e) {
         console.log(e);
         return undefined;
@@ -139,21 +109,19 @@ export const usePoolEvents = (address: Address) => {
 
   return {
     allData: allData
-      ? ([] as LiquidityChanged[]).concat(...(allData as any))
+      ? ([] as (ISwaps | IProvisions)[]).concat(...(allData as any))
       : [],
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,
     isAllDataReachingEnd,
-    swapData: swapData
-      ? ([] as LiquidityChanged[]).concat(...(swapData as any))
-      : [],
+    swapData: swapData ? ([] as ISwaps[]).concat(...(swapData as any)) : [],
     swapDataSize,
     setSwapDataSize,
     isSwapDataLoadingMore,
     isSwapDataReachingEnd,
     provisionData: provisionData
-      ? ([] as LiquidityChanged[]).concat(...(provisionData as any))
+      ? ([] as IProvisions[]).concat(...(provisionData as any))
       : [],
     provisionDataSize,
     setProvisionDataSize,

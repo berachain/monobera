@@ -307,3 +307,40 @@ export const getCrocSelectedPool = gql`
     }
   }
 `;
+
+export const getRecentSwaps = gql`
+  query GetRecentSwaps($poolHash: Bytes!) {
+    swaps(
+    first: 50,
+    orderBy:time,
+    orderDirection: desc,
+    where:{
+    pool: $poolHash
+  }) {
+    user
+    baseFlow
+    quoteFlow
+    transactionHash
+    time
+  }
+  }
+`;
+
+export const getRecentProvisions = gql`
+  query GetRecentProvisions($poolHash: Bytes!) {
+    liquidityChanges(
+    first: 50,
+    orderBy:time,
+    orderDirection: desc,
+    where:{
+    pool: $poolHash
+  }) {
+    user
+    baseFlow
+    quoteFlow
+    changeType
+    transactionHash
+    time
+  }
+  }
+`;

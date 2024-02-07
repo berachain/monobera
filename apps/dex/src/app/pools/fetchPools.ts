@@ -44,7 +44,7 @@ export const getQuoteCost = (initialPrice: number) => {
 
 export const formatPoolData = (result: any): PoolV2 => {
   return {
-    id: getPoolId(result.base, result.quote),
+    id: result.id,
     base: result.base,
     quote: result.quote,
     baseInfo: result.baseInfo,
@@ -150,23 +150,7 @@ export const fetchSelectedPool = async (base: string, quote: string) => {
   }
 
   const formattedPools: PoolV2[] = data.data.pools.map((result: any) => {
-    return {
-      id: getPoolId(result.base, result.quote),
-      base: result.base,
-      quote: result.quote,
-      baseInfo: result.baseInfo,
-      quoteInfo: result.quoteInfo,
-      timeCreate: result.timeCreate,
-      poolIdx: result.poolIdx,
-      poolName: result.baseInfo.symbol
-        .concat("-")
-        .concat(result.quoteInfo.symbol),
-      tokens: [result.baseInfo, result.quoteInfo],
-      feeRate: 0,
-      tvlUsd: 0,
-      volumeUsd: 0,
-      fees: 0,
-    };
+    return formatPoolData(result);
   });
 
   return formattedPools[0];

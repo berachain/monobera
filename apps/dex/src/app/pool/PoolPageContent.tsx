@@ -1,20 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  formatUsd,
-  formatter,
-  truncateHash,
-  useBeraJs,
-  type Token,
-} from "@bera/berajs";
+import React, { useMemo, useState } from "react";
+import { formatUsd, formatter, truncateHash, useBeraJs } from "@bera/berajs";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
-import {
-  LIQUIDITY_CHANGED_TYPE,
-  SWAP_DIRECTION,
-  type Liquidity,
-  type LiquidityChanged,
-} from "@bera/graphql";
 import { ApyTooltip, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Card, CardContent } from "@bera/ui/card";
@@ -28,7 +16,6 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { formatUnits } from "viem";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
@@ -36,106 +23,61 @@ import { PoolChart } from "./PoolChart";
 import { type PoolV2 } from "../pools/fetchPools";
 import { Skeleton } from "@bera/ui/skeleton";
 import { usePollUserPosition } from "~/hooks/usePollUserPosition";
+import { type ISwaps, usePoolRecentSwaps } from "~/hooks/usePoolRecentSwaps";
+import {
+  type IProvisions,
+  usePoolRecentProvisions,
+} from "~/hooks/usePoolRecentProvisions";
+
+import { usePoolEvents } from "./usePoolEvents";
+import { formatNumber } from "../../../../../packages/berajs/src/utils/formatNumber";
+import { Button } from "@bera/ui/button";
 interface IPoolPageContent {
   pool: PoolV2;
 }
 
-const getTokenDisplay = (event: LiquidityChanged, pool: PoolV2) => {
-  if (event.type === LIQUIDITY_CHANGED_TYPE.SWAP) {
-    const tokenIn =
-      event.liquidity.find(
-        (liq: Liquidity) => liq.swapDirection === SWAP_DIRECTION.IN,
-      ) ?? ({} as any);
-    const tokenOut =
-      event.liquidity.find(
-        (liq: Liquidity) => liq.swapDirection === SWAP_DIRECTION.OUT,
-      ) ?? ({} as any);
-
+const getTokenDisplay = (
+  event: ISwapOrProvision | ISwaps | IProvisions,
+  pool: PoolV2,
+) => {
+  if ((event as IProvisions).changeType === undefined) {
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
-          <TokenIcon token={tokenIn.coin as Token} />
-          <p className="ml-2">
-            {Number(formatUnits(BigInt(tokenIn.amount), 18)).toFixed(4)}
-          </p>
+          <TokenIcon token={(event as ISwaps).swapIn} />
+          <p className="ml-2">{formatNumber((event as ISwaps).swapInAmount)}</p>
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
-          <TokenIcon token={tokenOut.coin as Token} />
+          <TokenIcon token={(event as ISwaps).swapOut} />
           <p className="ml-2">
-            {Number(formatUnits(BigInt(tokenOut.amount), 18)).toFixed(4)}
+            {formatNumber((event as ISwaps).swapOutAmount)}
           </p>
         </div>
       </div>
     );
   }
-  if (
-    event.type === LIQUIDITY_CHANGED_TYPE.ADD ||
-    event.type === LIQUIDITY_CHANGED_TYPE.REMOVE
-  ) {
-    return (
-      <div className="space-evenly flex flex-row items-center">
-        {pool.tokens.map((token, i) => {
-          return (
-            <div
-              className={cn("flex flex-row", i !== 0 && "ml-[-10px]")}
-              key={i}
-            >
-              <TokenIcon token={token} />
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
+  return (
+    <div className="space-evenly flex flex-row items-center">
+      {pool.tokens.map((token, i) => {
+        return (
+          <div className={cn("flex flex-row", i !== 0 && "ml-[-10px]")} key={i}>
+            <TokenIcon token={token} />
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
-const getAction = (event: "SWAP" | "ADD" | "REMOVE") => {
-  if (event === "SWAP") {
+const getAction = (event: ISwapOrProvision | ISwaps | IProvisions) => {
+  if ((event as IProvisions).changeType === undefined) {
     return <p>Swap</p>;
   }
-  if (event === "ADD") {
+  if ((event as IProvisions).changeType === "mint") {
     return <p className="text-positive">Add</p>;
   }
   return <p className="text-destructive-foreground">Withdraw</p>;
-};
-
-const getValue = (pool: PoolV2 | undefined, event: LiquidityChanged) => {
-  if (event.type === LIQUIDITY_CHANGED_TYPE.SWAP) {
-    const tokenIn = event.liquidity.find(
-      (liq: Liquidity) => liq.swapDirection === SWAP_DIRECTION.IN,
-    );
-    const formattedAmount = formatUnits(
-      BigInt(tokenIn?.amount ?? 0),
-      tokenIn?.coin.decimals ?? 18,
-    );
-
-    const price = Number(tokenIn?.latestPriceUsd.price);
-    return price * Number(formattedAmount);
-  }
-  if (
-    event.type === LIQUIDITY_CHANGED_TYPE.ADD ||
-    event.type === LIQUIDITY_CHANGED_TYPE.REMOVE
-  ) {
-    const value = event.liquidity.reduce((acc, cur) => {
-      const token = pool?.tokens.find(
-        (token) =>
-          token.address.toLowerCase() === cur.coin.address.toLowerCase(),
-      );
-
-      const price = Number(0);
-
-      const tokenValue =
-        Number(formatUnits(BigInt(cur.amount), token?.decimals ?? 18)) * price;
-      if (!tokenValue) {
-        return acc;
-      }
-      const totalTokenValue = tokenValue;
-      return acc + totalTokenValue;
-    }, 0);
-    return value;
-  }
-  return 0;
 };
 
 enum Selection {
@@ -150,7 +92,7 @@ export const EventTable = ({
   isLoading,
 }: {
   pool: PoolV2;
-  events: LiquidityChanged[];
+  events: (ISwapOrProvision[] | ISwaps[] | IProvisions[]) | undefined;
   isLoading: boolean | undefined;
 }) => {
   return (
@@ -170,9 +112,9 @@ export const EventTable = ({
       </TableHeader>
       <TableBody>
         {events?.length ? (
-          events?.map((event: LiquidityChanged) => {
+          events?.map((event: ISwapOrProvision | ISwaps | IProvisions) => {
             if (!event) return null;
-            const txHash = event.id.split(":")[2];
+            const txHash = event.transactionHash;
             return (
               <TableRow
                 key={txHash}
@@ -183,19 +125,21 @@ export const EventTable = ({
                   )
                 }
               >
-                <TableCell>{getAction(event.type)}</TableCell>
-                <TableCell>{formatUsd(getValue(pool, event) ?? "")}</TableCell>
+                <TableCell>{getAction(event)}</TableCell>
+                <TableCell>
+                  {formatUsd(event.estimatedHoneyValue ?? "0")}
+                </TableCell>
                 <TableCell className="xs:hidden	 hidden	 font-medium	 sm:table-cell	 md:table-cell lg:table-cell">
                   {getTokenDisplay(event, pool)}
                 </TableCell>
                 <TableCell className="xs:hidden	 hidden	 sm:table-cell	 md:table-cell	 lg:table-cell">
-                  {truncateHash(event?.sender ?? "")}
+                  {truncateHash(event?.user ?? "")}
                 </TableCell>
                 <TableCell
                   className="overflow-hidden truncate whitespace-nowrap text-right "
                   suppressHydrationWarning
                 >
-                  {formatTimeAgo(event.timestamp ?? 0)}
+                  {formatTimeAgo(event.time ?? 0)}
                 </TableCell>
               </TableRow>
             );
@@ -216,99 +160,135 @@ export const EventTable = ({
   );
 };
 
+type ISwapOrProvision = ISwaps | IProvisions;
 export default function PoolPageContent({ pool }: IPoolPageContent) {
   // const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   // const { data: bgtRewards } = useBgtReward(pool?.pool);
 
-  const [_selectedTab, setSelectedTab] = useState(Selection.AllTransactions);
-  // const {
-  //   allData,
-  //   allDataSize,
-  //   setAllDataSize,
-  //   isAllDataLoadingMore,
-  //   isAllDataReachingEnd,
-  //   swapData,
-  //   swapDataSize,
-  //   setSwapDataSize,
-  //   isSwapDataLoadingMore,
-  //   isSwapDataReachingEnd,
-  //   provisionData,
-  //   provisionDataSize,
-  //   setProvisionDataSize,
-  //   isProvisionDataLoadingMore,
-  //   isProvisionDataReachingEnd,
-  // } = usePoolEvents(pool?.pool);
+  const { useRecentSwaps, isLoading: isRecentSwapsLoading } =
+    usePoolRecentSwaps(pool);
 
-  // const getLoadMoreButton = () => {
-  //   if (selectedTab === Selection.AllTransactions) {
-  //     return (
-  //       <>
-  //         {allData.length === 0 ? (
-  //           false
-  //         ) : (
-  //           <Button
-  //             onClick={() => setAllDataSize(allDataSize + 1)}
-  //             disabled={isAllDataLoadingMore || isAllDataReachingEnd}
-  //             variant="outline"
-  //           >
-  //             {isAllDataLoadingMore
-  //               ? "Loading..."
-  //               : isAllDataReachingEnd
-  //                 ? "No more transactions"
-  //                 : "Load more"}
-  //           </Button>
-  //         )}
-  //       </>
-  //     );
-  //   }
-  //   if (selectedTab === Selection.Swaps) {
-  //     return (
-  //       <>
-  //         {swapData.length === 0 ? (
-  //           false
-  //         ) : (
-  //           <Button
-  //             onClick={() => setSwapDataSize(swapDataSize + 1)}
-  //             disabled={isSwapDataLoadingMore || isSwapDataReachingEnd}
-  //             variant="outline"
-  //           >
-  //             {isSwapDataLoadingMore
-  //               ? "Loading..."
-  //               : isSwapDataReachingEnd
-  //                 ? "No more transactions"
-  //                 : "Load more"}
-  //           </Button>
-  //         )}
-  //       </>
-  //     );
-  //   }
-  //   if (selectedTab === Selection.AddsWithdrawals) {
-  //     return (
-  //       <>
-  //         {provisionData.length === 0 ? (
-  //           false
-  //         ) : (
-  //           <Button
-  //             onClick={() => setProvisionDataSize(provisionDataSize + 1)}
-  //             disabled={
-  //               isProvisionDataLoadingMore || isProvisionDataReachingEnd
-  //             }
-  //             variant="outline"
-  //           >
-  //             {isProvisionDataLoadingMore
-  //               ? "Loading..."
-  //               : isProvisionDataReachingEnd
-  //                 ? "No more transactions"
-  //                 : "Load more"}
-  //           </Button>
-  //         )}
-  //       </>
-  //     );
-  //   }
-  // };
+  const { useRecentProvisions, isLoading: isRecentProvisionsLoading } =
+    usePoolRecentProvisions(pool);
 
-  // usePositionSize({ pool });
-  // const { isConnected } = useBeraJs();
+  const isLoading = isRecentSwapsLoading || isRecentProvisionsLoading;
+
+  const swaps = useRecentSwaps();
+  const provisions = useRecentProvisions();
+
+  const combinedEvents: ISwapOrProvision[] | undefined = useMemo(() => {
+    if (!swaps || !provisions) return undefined;
+    return [...swaps, ...provisions].sort((a, b) => b.time - a.time);
+  }, [swaps, provisions]);
+  const [selectedTab, setSelectedTab] = useState(Selection.AllTransactions);
+  const {
+    allData,
+    allDataSize,
+    setAllDataSize,
+    isAllDataLoadingMore,
+    isAllDataReachingEnd,
+    swapData,
+    swapDataSize,
+    setSwapDataSize,
+    isSwapDataLoadingMore,
+    isSwapDataReachingEnd,
+    provisionData,
+    provisionDataSize,
+    setProvisionDataSize,
+    isProvisionDataLoadingMore,
+    isProvisionDataReachingEnd,
+  } = usePoolEvents({
+    pool,
+    swaps,
+    provisions,
+    combinedEvents,
+  });
+
+  console.log({
+    allData,
+    allDataSize,
+    setAllDataSize,
+    isAllDataLoadingMore,
+    isAllDataReachingEnd,
+    swapData,
+    swapDataSize,
+    setSwapDataSize,
+    isSwapDataLoadingMore,
+    isSwapDataReachingEnd,
+    provisionData,
+    provisionDataSize,
+    setProvisionDataSize,
+    isProvisionDataLoadingMore,
+    isProvisionDataReachingEnd,
+  });
+  const getLoadMoreButton = () => {
+    if (selectedTab === Selection.AllTransactions) {
+      return (
+        <>
+          {allData.length === 0 ? (
+            false
+          ) : (
+            <Button
+              onClick={() => setAllDataSize(allDataSize + 1)}
+              disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+              variant="outline"
+            >
+              {isAllDataLoadingMore
+                ? "Loading..."
+                : isAllDataReachingEnd
+                  ? "No more transactions"
+                  : "Load more"}
+            </Button>
+          )}
+        </>
+      );
+    }
+    if (selectedTab === Selection.Swaps) {
+      return (
+        <>
+          {swapData.length === 0 ? (
+            false
+          ) : (
+            <Button
+              onClick={() => setSwapDataSize(swapDataSize + 1)}
+              disabled={isSwapDataLoadingMore || isSwapDataReachingEnd}
+              variant="outline"
+            >
+              {isSwapDataLoadingMore
+                ? "Loading..."
+                : isSwapDataReachingEnd
+                  ? "No more transactions"
+                  : "Load more"}
+            </Button>
+          )}
+        </>
+      );
+    }
+    if (selectedTab === Selection.AddsWithdrawals) {
+      return (
+        <>
+          {provisionData.length === 0 ? (
+            false
+          ) : (
+            <Button
+              onClick={() => setProvisionDataSize(provisionDataSize + 1)}
+              disabled={
+                isProvisionDataLoadingMore || isProvisionDataReachingEnd
+              }
+              variant="outline"
+            >
+              {isProvisionDataLoadingMore
+                ? "Loading..."
+                : isProvisionDataReachingEnd
+                  ? "No more transactions"
+                  : "Load more"}
+            </Button>
+          )}
+        </>
+      );
+    }
+  };
+
   // const { isSmall, numericValue: formattedBGTRewards } =
   //   formatAmountSmall(bgtRewards);
   const { isReady } = useBeraJs();
@@ -317,8 +297,6 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
   const userAmbientPosition = usePosition();
   const userPositionBreakdown = userAmbientPosition?.userPosition;
-  // const { isLoading, useUserPool } = usePollUsersPools();
-  // const userPool = useUserPool(pool.pool);
 
   return (
     <div className="flex flex-col gap-8">
@@ -491,22 +469,26 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               value={Selection.AllTransactions}
               className="mt-0 overflow-x-auto"
             >
-              <EventTable pool={pool} events={[]} isLoading={false} />
+              <EventTable pool={pool} events={allData} isLoading={isLoading} />
             </TabsContent>
             <TabsContent
               value={Selection.Swaps}
               className="mt-0 overflow-x-auto"
             >
-              <EventTable pool={pool} events={[]} isLoading={false} />
+              <EventTable pool={pool} events={swaps} isLoading={isLoading} />
             </TabsContent>
             <TabsContent
               value={Selection.AddsWithdrawals}
               className="mt-0 overflow-x-auto"
             >
-              <EventTable pool={pool} events={[]} isLoading={false} />
+              <EventTable
+                pool={pool}
+                events={provisions}
+                isLoading={isLoading}
+              />
             </TabsContent>
           </Card>
-          {/* <div className="mt-4 flex justify-center">{getLoadMoreButton()}</div> */}
+          <div className="mt-4 flex justify-center">{getLoadMoreButton()}</div>
         </Tabs>
       </section>
     </div>
