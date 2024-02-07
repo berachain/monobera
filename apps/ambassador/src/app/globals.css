@@ -6,6 +6,13 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --gradient-start: #371605; /* Default/start value */
+  --gradient-end: #4e2c1a; /* Default/end value */
+}
+
+[data-theme="light"] {
+  --gradient-start: #ffb571; /* Light theme start value */
+  --gradient-end: #ff7a00; /* Light theme end value */
 }
 
 @media (prefers-color-scheme: dark) {

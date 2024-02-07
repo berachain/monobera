@@ -12,7 +12,9 @@ type SignUpProps = {
 
 export default function SignUp() {
   const { theme, systemTheme } = useTheme();
-  const t = theme === "system" ? systemTheme : theme;
+  // This assumes 'light' is the default theme.
+  const t = !theme || theme === "system" ? systemTheme || "dark" : theme;
+  console.log("ttttt", t, systemTheme);
   const bgGradient =
     t === "dark"
       ? "bg-gradient-to-t from-[#371605] to-[#4E2C1A]"
@@ -21,7 +23,7 @@ export default function SignUp() {
   return (
     <>
       <div className="items-center justify-center">
-        <div className="flex items-center justify-between pt-8">
+        <div className="flex items-center justify-between pt-8 lg:mb-[-160px]">
           <div className="hidden sm:block">
             <Image
               className="z-10 max-[600px]:mx-auto"
@@ -34,7 +36,7 @@ export default function SignUp() {
             />
           </div>
           <div>
-            <h1 className="mb-[24px] text-center text-[42px] text-lg font-extrabold leading-10">
+            <h1 className="mb-[24px] text-center text-5xl font-extrabold leading-10">
               <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
                 Unlock
                 <br />
@@ -59,10 +61,8 @@ export default function SignUp() {
         </div>
         <div className="relative mb-[-32px] flex flex-col items-center justify-center gap-4">
           <div
-            className={cn(
-              "mx-auto flex h-[240px] w-full flex-col items-center justify-center",
-              bgGradient,
-            )}
+            className="
+              z-[-10] mx-auto flex h-[240px] w-full flex-col items-center justify-center bg-gradient-to-t from-[#371605] to-[#4E2C1A]"
           >
             <Image
               className="absolute h-full w-full object-cover"
