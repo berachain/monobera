@@ -37,7 +37,7 @@ export const projects: Project[] = [
     image: "/bear_2.png",
     date: "06/09/2420",
     numParticipants: "4.20k",
-  }
+  },
 ];
 
 // Define the ProjectCard component
@@ -73,12 +73,11 @@ export function ProjectCard({ project }: { project: Project }) {
 
 // Define the Projects component
 export function Projects() {
-
   const [visibleProjects, setVisibleProjects] = React.useState(3);
 
   const handleViewMore = () => {
     setVisibleProjects(visibleProjects + 3);
-  }
+  };
 
   return (
     <div className="flex flex-col flex-wrap items-center justify-center pb-12 pt-12">
@@ -94,7 +93,11 @@ export function Projects() {
         ))}
       </div>
       {visibleProjects < projects.length && (
-        <Button variant="outline" className="mb-8 mt-12" onClick={handleViewMore}>
+        <Button
+          variant="outline"
+          className="mb-8 mt-12"
+          onClick={handleViewMore}
+        >
           View more events
         </Button>
       )}
