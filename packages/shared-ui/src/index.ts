@@ -23,7 +23,7 @@ export { PreviewToken, TokenList } from "./preview-token-list";
 export { InfoBoxList, InfoBoxListItem } from "./info-box";
 export { Dropdown } from "./dropdown";
 export { HoneyBanner } from "./honey-banner";
-export { LaunchBanner, RPCBanner, BerpsBanner } from "./launch-banner";
+export { LaunchBanner, RPCBanner, CustomizedBanner } from "./launch-banner";
 export { RewardBanner } from "./reward-banner";
 export { RT, type Columns } from "./react-table";
 export { IconList } from "./icon-list";
@@ -45,6 +45,7 @@ export { ApproveButton } from "./approve-button";
 export { DynamicRewardBtn } from "./dynamic-reward-btn";
 export { Documentation } from "./documentation";
 export { MainNav } from "./main-nav";
+export { MobileDropdown } from "./mobile-nav";
 export * from "./terms-of-use";
 export * from "./access-deny";
 
