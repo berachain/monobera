@@ -168,7 +168,7 @@ export default function EcosystemProjects() {
             <div className="text-center text-sm leading-5 text-muted-foreground">
               {fav.description}
             </div>
-            <div className="flex justify-between gap-2 ">
+            <div className="flex justify-between gap-2">
               <Button onClick={() => window.open(fav.goto)} variant="outline">
                 View Project <Icons.arrowRight />
               </Button>
