@@ -15,36 +15,36 @@ interface Project {
 
 // Define the projects
 export const projects: Project[] = [
+  // {
+  //   name: "Beras in NYC",
+  //   image: "/bear_1.png",
+  //   date: "04/04/2024",
+  //   numParticipants: "4.20k",
+  // },
   {
-    name: "Beras in NYC",
+    name: "beras in denver",
     image: "/bear_1.png",
-    date: "04/04/2024",
-    numParticipants: "4.20k",
+    date: "02/29/2024",
+    numParticipants: "1.00k+",
   },
   {
-    name: "Bears in Denver",
+    name: "Beras in Dubai",
     image: "/bear_2.png",
-    date: "04/04/2024",
-    numParticipants: "4.20k",
+    date: "TBD",
+    numParticipants: "N/A",
   },
-  {
-    name: "Beras in LA",
-    image: "/bear_3.png",
-    date: "04/04/2024",
-    numParticipants: "4.20k",
-  },
-  {
-    name: "Beras at your Mom's House",
-    image: "/bear_2.png",
-    date: "06/09/2420",
-    numParticipants: "4.20k",
-  },
+  // {
+  //   name: "Beras at your Mom's House",
+  //   image: "/bear_11.png",
+  //   date: "06/09/2420",
+  //   numParticipants: "4.20k",
+  // },
 ];
 
 // Define the ProjectCard component
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <Link href="/some-path">
+    <Link href="https://lu.ma/Berapalooza">
       <div className="relative col-span-1 flex h-[auto] w-[280px] flex-col rounded-xl border border-solid bg-background">
         {project.image && (
           <Image
@@ -52,6 +52,7 @@ export function ProjectCard({ project }: { project: Project }) {
             alt={project.name}
             width={452}
             height={175}
+            style={{ borderRadius: "0.75rem 0.75rem 0 0" }}
             priority
             loading="eager"
           />
@@ -105,7 +106,9 @@ export function Projects() {
         className="z-10 mb-8 mt-12"
         onClick={toggleDisplay}
       >
-        {viewMore ? "View More Events" : "View Less Events"}
+        {viewMore
+          ? "View More Events (coming soon)"
+          : "View Less Events (coming soon)"}
       </Button>
     </div>
   );
