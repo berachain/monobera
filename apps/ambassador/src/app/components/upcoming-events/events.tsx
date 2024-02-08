@@ -74,10 +74,16 @@ export function ProjectCard({ project }: { project: Project }) {
 
 // Define the Projects component
 export function Projects() {
-  const [visibleProjects, setVisibleProjects] = React.useState(3);
+  const [visibleProjects, setVisibleProjects] = useState(3);
+  const [viewMore, setViewMore] = useState(true); // true = "View More", false = "View Less"
 
-  const handleViewMore = () => {
-    setVisibleProjects(visibleProjects + 3);
+  const toggleDisplay = () => {
+    if (viewMore) {
+      setVisibleProjects((current) => current + 1);
+    } else {
+      setVisibleProjects(3);
+    }
+    setViewMore(!viewMore);
   };
 
   return (
@@ -93,15 +99,14 @@ export function Projects() {
           <ProjectCard key={index} project={project} />
         ))}
       </div>
-      {visibleProjects < projects.length && (
-        <Button
-          variant="outline"
-          className="z-10 mb-8 mt-12"
-          onClick={handleViewMore}
-        >
-          View more events
-        </Button>
-      )}
+
+      <Button
+        variant="outline"
+        className="z-10 mb-8 mt-12"
+        onClick={toggleDisplay}
+      >
+        {viewMore ? "View More Events" : "View Less Events"}
+      </Button>
     </div>
   );
 }
