@@ -1,4 +1,7 @@
 export const getLTVColor = (ltv: number) => {
+  if(ltv <0){
+    return "success-foreground";
+  }
   if (ltv < 1.1) {
     return "destructive-foreground";
   }

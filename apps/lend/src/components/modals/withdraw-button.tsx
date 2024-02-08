@@ -10,7 +10,11 @@ import {
   usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
-import { honeyAddress, lendPoolImplementationAddress } from "@bera/config";
+import {
+  honeyAddress,
+  honeyTokenAddress,
+  lendPoolImplementationAddress,
+} from "@bera/config";
 import { TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -158,33 +162,36 @@ const WithdrawModalContent = ({
             {(reserveData.supplyAPR * 100).toFixed(2)}%
           </div>
         </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="flex items-center gap-1 font-semibold">
-            <span
-              className={cn(
-                `text-${getLTVColor(
-                  currentHealthFactor === "∞"
-                    ? 10
-                    : Number(currentHealthFactor),
-                )}`,
-              )}
-            >
-              {currentHealthFactor}{" "}
-            </span>
-            <Icons.moveRight className="inline-block h-6 w-6" />{" "}
-            <span
-              className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
-            >
-              {Number(newHealthFactor.toFixed(2)) < 0
-                ? "∞"
-                : newHealthFactor.toFixed(2)}
-            </span>
+        {token.address !== honeyTokenAddress && (
+          <div className="flex justify-between text-sm leading-tight">
+            <div className="text-muted-foreground ">LTV Health Ratio</div>
+            <div className="flex items-center gap-1 font-semibold">
+              <span
+                className={cn(
+                  `text-${getLTVColor(
+                    currentHealthFactor === "∞"
+                      ? 10
+                      : Number(currentHealthFactor),
+                  )}`,
+                )}
+              >
+                {currentHealthFactor}{" "}
+              </span>
+              <Icons.moveRight className="inline-block h-6 w-6" />{" "}
+              <span
+                className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
+              >
+                {Number(newHealthFactor.toFixed(2)) < 0
+                  ? "∞"
+                  : newHealthFactor.toFixed(2)}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {userAccountData.totalDebtBase !== 0n &&
+      {token.address !== honeyTokenAddress &&
+        userAccountData.totalDebtBase !== 0n &&
         newHealthFactor.toNumber() < 1.02 && (
           <Alert variant="destructive">
             <AlertTitle className="mb-1">

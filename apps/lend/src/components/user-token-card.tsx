@@ -2,14 +2,12 @@ import { formatter, usePollAssetWalletBalance } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
-import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
 
 import AssetInfo from "./asset-info";
 import Card from "./card";
-import InfoButton from "./info-button";
 import BorrowBtn from "./modals/borrow-button";
 import RepayBtn from "./modals/repay-button";
 import SupplyBtn from "./modals/supply-button";
@@ -105,7 +103,16 @@ export default function UserTokenCard({
             <div className="flex flex-shrink-0 flex-col">
               <div className="text-xs font-medium leading-5 text-muted-foreground">
                 Supply APY{" "}
-                <Tooltip text="Supply APY (Annual Percentage Yield) represents the annualized return on supplied assets. See additional disclaimers in notes below." />
+                <Tooltip
+                  text={
+                    <>
+                      Supply APY (Annual Percentage Yield) represents the <br />
+                      annualized return on supplied assets. See additional{" "}
+                      <br />
+                      disclaimers in notes below.
+                    </>
+                  }
+                />
               </div>
               <div className="text-lg font-bold text-success-foreground">
                 {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
@@ -117,7 +124,14 @@ export default function UserTokenCard({
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
               Variable APY{" "}
-              <Tooltip text="Variable interest rate will fluctuate based on the market conditions. See additional disclaimers in notes below." />
+              <Tooltip
+                text={
+                  <>
+                    Variable interest rate will fluctuate based on the market <br/>
+                    conditions. See additional disclaimers in notes below.
+                  </>
+                }
+              />
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               {(

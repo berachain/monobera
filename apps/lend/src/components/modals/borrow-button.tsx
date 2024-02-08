@@ -55,7 +55,7 @@ export default function BorrowBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || !isReady}
+        disabled={disabled || isLoading || !isReady || token.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Borrow"}

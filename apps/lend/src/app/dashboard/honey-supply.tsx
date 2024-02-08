@@ -49,7 +49,17 @@ export default function HoneySupply({ honey }: { honey: any }) {
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
               Earn APY{" "}
-              <Tooltip text="Earn APY (Annual Percentage Yield) represents the annualized return on supplied assets. See additional disclaimers in notes below." />
+              <Tooltip
+                text={
+                  <>
+                    Earn APY (Annual Percentage Yield) represents the annualized{" "}
+                    <br />
+                    return on supplied assets. See additional disclaimers in{" "}
+                    <br />
+                    notes below.
+                  </>
+                }
+              />
             </div>
             <div className="text-lg font-bold text-success-foreground">
               {(Number(honey.reserveData.supplyAPY) * 100).toFixed(2)}%

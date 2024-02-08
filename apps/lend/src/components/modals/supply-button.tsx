@@ -12,7 +12,7 @@ import {
   usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
-import { lendPoolImplementationAddress } from "@bera/config";
+import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import { ApproveButton, TokenInput, Tooltip, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -61,7 +61,7 @@ export default function SupplyBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || !isReady}
+        disabled={disabled || isLoading || !isReady || token.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : supply ? "Supply" : "Deposit"}
@@ -165,30 +165,32 @@ const SupplyModalContent = ({
             {(Number(reserveData.supplyAPY) * 100).toFixed(2)}%
           </div>
         </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="flex items-center gap-1 font-semibold">
-            <span
-              className={cn(
-                `text-${getLTVColor(
-                  currentHealthFactor === "∞"
-                    ? 10
-                    : Number(currentHealthFactor),
-                )}`,
-              )}
-            >
-              {currentHealthFactor}{" "}
-            </span>
-            <Icons.moveRight className="inline-block h-6 w-6" />
-            <span
-              className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
-            >
-              {Number(newHealthFactor.toFixed(2)) < 0
-                ? "∞"
-                : newHealthFactor.toFixed(2)}
-            </span>
+        {token.address !== honeyTokenAddress && (
+          <div className="flex justify-between text-sm leading-tight">
+            <div className="text-muted-foreground ">LTV Health Ratio</div>
+            <div className="flex items-center gap-1 font-semibold">
+              <span
+                className={cn(
+                  `text-${getLTVColor(
+                    currentHealthFactor === "∞"
+                      ? 10
+                      : Number(currentHealthFactor),
+                  )}`,
+                )}
+              >
+                {currentHealthFactor}{" "}
+              </span>
+              <Icons.moveRight className="inline-block h-6 w-6" />
+              <span
+                className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
+              >
+                {Number(newHealthFactor.toFixed(2)) < 0
+                  ? "∞"
+                  : newHealthFactor.toFixed(2)}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {allowance &&

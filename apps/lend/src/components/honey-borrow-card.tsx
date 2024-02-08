@@ -13,7 +13,7 @@ import {
   honeyTokenAddress,
   lendHoneyDebtTokenAddress,
 } from "@bera/config";
-import { TokenIcon } from "@bera/shared-ui";
+import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
@@ -45,8 +45,18 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
     <div className="relative rounded-md border border-accent bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3 dark:from-lime-950 dark:to-yellow-950">
       <div className="flex flex-col gap-4 px-3 py-4">
         <div>
-          <div className="flex items-center gap-1 text-xs font-medium leading-5 text-yellow-900 opacity-60 dark:text-yellow-200">
-            Your Borrow Capacity Used {bgtApr}
+          <div className="flex items-center gap-1 text-xs font-medium leading-5 text-yellow-900 text-opacity-60 dark:text-yellow-200">
+            Your Borrow Capacity Used {bgtApr}{" "}
+            <Tooltip
+              text={
+                <div className="bg-background">
+                  The first value is the amount of HONEY you have borrowed, the{" "}
+                  <br />
+                  second value is the Amount of HONEY you are potentially <br />
+                  eligible to borrow based on deposited collateral.
+                </div>
+              }
+            />
           </div>
           <div className="flex items-center gap-1 text-3xl font-semibold text-yellow-900 dark:text-yellow-200">
             <TokenIcon address={honeyTokenAddress} className="h-8 w-8" />
