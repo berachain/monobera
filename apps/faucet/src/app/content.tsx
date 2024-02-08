@@ -10,7 +10,6 @@ import { Input } from "@bera/ui/input";
 
 import { DripToken } from "~/components/drip-tokens";
 import { TokenBadge } from "~/components/token-badge";
-import ReCAPTCHAButton from "./recaptcha-btn";
 
 export default function Content() {
   const [address, setAddress] = React.useState<string>("");
@@ -18,8 +17,6 @@ export default function Content() {
     "success" | "destructive" | "error" | undefined
   >(undefined);
   const [showAlet, setShowAlert] = React.useState<boolean>(false);
-  const [token, setToken] = React.useState<string | undefined>(undefined);
-  const [bot, setBot] = React.useState<boolean | undefined>(undefined);
 
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
@@ -54,8 +51,6 @@ export default function Content() {
             onChange={(e) => {
               setAddress(e.target.value);
               if (showAlet) setShowAlert(false);
-              setBot(undefined);
-              setToken(undefined);
               setAlert(undefined);
             }}
           />
@@ -114,18 +109,11 @@ export default function Content() {
           </AlertDescription>
         </Alert>
       )}
-      {bot === false ? (
-        <DripToken
-          address={address}
-          setAlert={setAlert}
-          setShowAlert={() => setShowAlert(true)}
-          token={token}
-          setToken={setToken}
-        />
-      ) : (
-        <ReCAPTCHAButton setToken={setToken} setBot={setBot} bot={bot} />
-      )}
-
+      <DripToken
+        address={address}
+        setAlert={setAlert}
+        setShowAlert={() => setShowAlert(true)}
+      />
       <hr />
       <div className="leading-12 text-center text-sm opacity-70 sm:text-start">
         To ensure a sufficient balance for all users, the Faucet is set to

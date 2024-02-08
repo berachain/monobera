@@ -1,3 +1,4 @@
+import { on } from "events";
 import React from "react";
 import { faucetEndpointUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
@@ -7,16 +8,12 @@ export function DripToken({
   address,
   setAlert,
   setShowAlert,
-  token,
-  setToken,
 }: {
   address: string;
   setAlert: (alert: "success" | "destructive" | "error" | undefined) => void;
   setShowAlert: () => void;
-  token?: string;
-  setToken: (token: undefined | string) => void;
 }) {
-  async function handleRequest() {
+  async function handleRequest(token: string) {
     try {
       const res = await fetch(
         `${faucetEndpointUrl}/api/claim?address=${getAddress(address)}`,
@@ -36,18 +33,31 @@ export function DripToken({
     } catch (error: any) {
       setAlert("error");
     }
-    setToken(undefined);
   }
+
+  function onsubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setShowAlert();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const token = formData.get("cf-turnstile-response") as string;
+    if (token) void handleRequest(token);
+    else setAlert("error");
+  }
+
   return (
-    <Button
-      disabled={!isAddress(address ?? "") || !token}
-      onClick={() => {
-        setShowAlert();
-        void handleRequest();
-      }}
-      className="w-full"
-    >
-      Drip Tokens
-    </Button>
+    <form onSubmit={onsubmit}>
+      <Button
+        disabled={!isAddress(address ?? "")}
+        className="mb-4 w-full"
+        type="submit"
+      >
+        Drip Tokens
+      </Button>
+      <div
+        className="cf-turnstile"
+        data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_KEY!}
+        data-theme="light"
+      />
+    </form>
   );
 }
