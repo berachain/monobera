@@ -296,7 +296,7 @@ export const useOctTxn = ({
         } else {
           toast.custom(
             <ErrorToast
-              title={error || "Transaction Failed"}
+              title={error?.message || "Transaction Failed"}
               message={error?.message || "unknown error"}
               onClose={() => toast.remove(toastId)}
               hash={error?.hash}
