@@ -9,21 +9,24 @@ export const kingsOath = {
   name: "The King’s Oath",
   image: "/bear_center.png",
   tier: "Tier 1",
-  intro: "Amet avec adios abibas abelao donde",
+  intro:
+    "Highest status amongst the ambassadors. KOs are the leading thought group and have the highest understanding of Berachain's tech stack and deep rooted community",
 };
 
 export const brigadeGeneral = {
   name: "Brigade General",
   image: "/bear_center.png",
   tier: "Tier 2",
-  intro: "Amet avec adios abibas abelao donde",
+  intro:
+    "A driving force of the Ecosystem, Brigade Generals are extremely enthusiastic memebrs of the ecosystem, leading new narratives & information on berachain .",
 };
 
 export const colonel = {
   name: "Colonel",
   image: "/bear_center.png",
   tier: "Tier 3",
-  intro: "Amet avec adios abibas abelao donde",
+  intro:
+    "The core faction of the Brigade, Colonels are the back bone of the ambassador program, easily identifiable and great sources of information.",
 };
 
 export function AmbassadorCard({ ambassador }: { ambassador: any }) {
@@ -47,7 +50,7 @@ export function AmbassadorCard({ ambassador }: { ambassador: any }) {
           ambassador.tier,
         )}`}
       >
-        <div className="flex flex-col items-center gap-4 px-6 pb-4 pt-6">
+        <div className="flex flex-col items-center gap-4 px-6 pb-4 pt-6 justify-middle items-center">
           <Avatar className="h-20 w-20">
             <AvatarImage src={ambassador.image} className="rounded-full" />
           </Avatar>
@@ -57,7 +60,7 @@ export function AmbassadorCard({ ambassador }: { ambassador: any }) {
           <div className="text-xl font-semibold text-foreground">
             {ambassador.name}
           </div>
-          <div className="text-base font-normal text-foreground">
+          <div className="text-base font-normal text-foreground text-center">
             {ambassador.intro}
           </div>
         </div>

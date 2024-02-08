@@ -5,6 +5,8 @@ import Image from "next/image";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { useTheme } from "next-themes";
+import { cloudinaryUrl } from "@bera/config";
+import { transform } from "next/dist/build/swc";
 
 type SignUpProps = {
   cloudinaryUrl: string;
@@ -25,9 +27,7 @@ export default function SignUp() {
           <div className="hidden sm:block">
             <Image
               className="z-10 max-[600px]:mx-auto"
-              src={
-                "https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/r035ky4zgyilzdbxzr08.png"
-              }
+              src={`${cloudinaryUrl}/bears/SmokeyBongless_ebu7vl`}
               alt="proposal-bear"
               width={500}
               height={500}
@@ -48,10 +48,9 @@ export default function SignUp() {
           <div className="hidden sm:block">
             <Image
               className="z-10 max-[600px]:mx-auto"
-              src={
-                "https://res.cloudinary.com/duv0g402y/image/upload/v1707152345/bears/xsbwqslzlgw5q1des79i.png"
-              }
+              src={`${cloudinaryUrl}/bears/RoyalBongless_fgwkmm`}
               alt="proposal-bear"
+              style={{ transform: "scaleX(-1)" }}
               width={500}
               height={500}
             />
