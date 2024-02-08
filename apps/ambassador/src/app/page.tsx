@@ -27,7 +27,7 @@ export default function Page() {
         <Hero />
         <div className="-mx-full">
           <div className="relative m-auto mt-8 bg-cover bg-center bg-no-repeat">
-            <div className="hidden sm:block z-20">
+            <div className="z-20 hidden sm:block">
               <BackGroundOrbit />
             </div>
             <Projects />
@@ -39,9 +39,15 @@ export default function Page() {
                 </span>
               </h1>
               <div className="flex flex-wrap justify-center gap-8 p-4 pb-4">
-                <AmbassadorCard ambassador={brigadeGeneral} />
-                <AmbassadorCard ambassador={kingsOath} />
-                <AmbassadorCard ambassador={colonel} />
+                <div className="order-2 sm:order-1">
+                  <AmbassadorCard ambassador={brigadeGeneral} />
+                </div>
+                <div className="order-1">
+                  <AmbassadorCard ambassador={kingsOath} />
+                </div>
+                <div className="order-3">
+                  <AmbassadorCard ambassador={colonel} />
+                </div>
               </div>
               <Button variant="outline" className="mb-8 mt-12">
                 Learn more about Tiers
