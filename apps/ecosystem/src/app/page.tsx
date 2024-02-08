@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import EcosystemAnnouncements from "./components/ecosystem-announcements";
 import EcosystemProjects from "./components/ecosystem-projects";
 import Hero from "./components/hero";
