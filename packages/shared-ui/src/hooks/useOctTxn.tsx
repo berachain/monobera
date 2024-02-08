@@ -118,7 +118,7 @@ export const useOctTxn = ({
        *
        * @param {Error} error - The error object.
        */
-      onError: (error) => {
+      onError: (error: any) => {
         if (!disableToast) {
           const toastId = `error-${identifier}`;
           toast.remove(`loading-${identifier}`);
@@ -128,6 +128,7 @@ export const useOctTxn = ({
               <ErrorToast
                 title={"User rejected transaction"}
                 onClose={() => toast.remove(toastId)}
+                hash={error?.hash}
               />,
               {
                 duration: DURATION,
@@ -141,6 +142,7 @@ export const useOctTxn = ({
                 title={"Transaction failed"}
                 message={error?.message || "unknown error"}
                 onClose={() => toast.remove(toastId)}
+                hash={error?.hash}
               />,
               {
                 duration: DURATION,
@@ -155,12 +157,12 @@ export const useOctTxn = ({
           closeModal("submissionModal");
           if (error?.message?.includes("User rejected the request.")) {
             openModal("errorModal", {
-              errorHash: "0x",
+              errorHash: error?.hash ?? "0x",
               errorMessage: "User rejected transaction",
             });
           } else {
             openModal("errorModal", {
-              errorHash: "0x",
+              errorHash: error?.hash ?? "0x",
               errorMessage:
                 error?.message || "Something went wrong. Please Try Again.",
             });
@@ -174,7 +176,7 @@ export const useOctTxn = ({
        *
        * @param {string} result - The transaction hash or result.
        */
-      onSuccess: (result) => {
+      onSuccess: (result: string) => {
         if (!disableToast) {
           const toastId = `success-${identifier}`;
           toast.remove(`submission-${identifier}`);
@@ -243,6 +245,7 @@ export const useOctTxn = ({
               title={"Transaction submitted"}
               message="waiting for confirmation"
               onClose={() => toast.remove(toastId)}
+              hash={result}
             />,
             {
               id: toastId,
@@ -273,7 +276,7 @@ export const useOctTxn = ({
      *
      * @param {Error} error - The error object.
      */
-    onError: (error) => {
+    onError: (error: any) => {
       if (!disableToast) {
         const toastId = `error-${identifier}`;
         toast.remove(`loading-${identifier}`);
@@ -296,6 +299,7 @@ export const useOctTxn = ({
               title={error || "Transaction Failed"}
               message={error?.message || "unknown error"}
               onClose={() => toast.remove(toastId)}
+              hash={error?.hash}
             />,
             {
               duration: DURATION,
@@ -328,7 +332,7 @@ export const useOctTxn = ({
      *
      * @param {string} result - The transaction hash or result.
      */
-    onSuccess: (result) => {
+    onSuccess: (result: string) => {
       if (!disableToast) {
         const toastId = `success-${identifier}`;
         toast.remove(`submission-${identifier}`);
@@ -396,6 +400,7 @@ export const useOctTxn = ({
             title={"Transaction submitted"}
             message="waiting for confirmation"
             onClose={() => toast.remove(toastId)}
+            hash={result}
           />,
           {
             id: toastId,
