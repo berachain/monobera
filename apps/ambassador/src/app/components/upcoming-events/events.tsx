@@ -74,10 +74,16 @@ export function ProjectCard({ project }: { project: Project }) {
 
 // Define the Projects component
 export function Projects() {
-  const [visibleProjects, setVisibleProjects] = React.useState(3);
+  const [displayCount, setDisplayCount] = useState(3);
+  const [viewMore, setViewMore] = useState(true); // true = "View More", false = "View Less"
 
-  const handleViewMore = () => {
-    setVisibleProjects(visibleProjects + 3);
+  const toggleDisplay = () => {
+    if (viewMore) {
+      setDisplayCount((current) => current + 1);
+    } else {
+      setDisplayCount(3);
+    }
+    setViewMore(!viewMore);
   };
 
   return (
@@ -89,19 +95,18 @@ export function Projects() {
         </span>
       </h1>
       <div className="z-1 flex flex-wrap justify-center gap-4">
-        {projects.slice(0, visibleProjects).map((project, index) => (
+        {projects.slice(0, displayCount).map((project, index) => (
           <ProjectCard key={index} project={project} />
         ))}
       </div>
-      {visibleProjects < projects.length && (
-        <Button
-          variant="outline"
-          className="z-10 mb-8 mt-12"
-          onClick={handleViewMore}
-        >
-          View more events
-        </Button>
-      )}
+
+      <Button
+        variant="outline"
+        className="z-10 mb-8 mt-12"
+        onClick={toggleDisplay}
+      >
+        {viewMore ? "View More Events" : "View Less Events"}
+      </Button>
     </div>
   );
 }
