@@ -57,7 +57,7 @@ export default function WithdrawBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading}
+        disabled={disabled || isLoading || token.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Withdraw"}
@@ -199,7 +199,7 @@ const WithdrawModalContent = ({
         )}
 
       {token.address !== honeyAddress && userAccountData.totalDebtBase > 0n && (
-        <Alert variant="destructive" className="mt-4">
+        <Alert variant="destructive">
           <AlertTitle>
             {" "}
             <Icons.info className="mr-1 inline-block h-4 w-4" />
@@ -213,8 +213,8 @@ const WithdrawModalContent = ({
       <Button
         disabled={
           !amount ||
-          Number(amount) <= 0 ||
-          Number(amount) > Number(balance) ||
+          BigNumber(amount).lte(BigNumber(0)) ||
+          BigNumber(amount).gt(BigNumber(balance)) ||
           (userAccountData.totalDebtBase > 0n && token.address !== honeyAddress)
         }
         onClick={() => {
@@ -224,7 +224,7 @@ const WithdrawModalContent = ({
             functionName: "withdraw",
             params: [
               token.address,
-              userAccountData.totalDebtBase === 0n && balance === amount
+              BigNumber(balance ?? "0").eq(BigNumber(amount ?? "0"))
                 ? maxUint256
                 : parseUnits((amount ?? "0") as `${number}`, token.decimals),
               account,
