@@ -44,7 +44,7 @@ const BaseToast = ({
           {startAdornment && startAdornment}
         </div>
         <span className="flex-1 line-clamp-2" title={title}>
-          {title}
+          {typeof title === "string" ? title : ""}
         </span>
         {href && (
           <a
