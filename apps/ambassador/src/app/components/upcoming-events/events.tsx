@@ -74,14 +74,14 @@ export function ProjectCard({ project }: { project: Project }) {
 
 // Define the Projects component
 export function Projects() {
-  const [displayCount, setDisplayCount] = useState(3);
+  const [visibleProjects, setVisibleProjects] = useState(3);
   const [viewMore, setViewMore] = useState(true); // true = "View More", false = "View Less"
 
   const toggleDisplay = () => {
     if (viewMore) {
-      setDisplayCount((current) => current + 1);
+      setVisibleProjects((current) => current + 1);
     } else {
-      setDisplayCount(3);
+      setVisibleProjects(3);
     }
     setViewMore(!viewMore);
   };
@@ -95,7 +95,7 @@ export function Projects() {
         </span>
       </h1>
       <div className="z-1 flex flex-wrap justify-center gap-4">
-        {projects.slice(0, displayCount).map((project, index) => (
+        {projects.slice(0, visibleProjects).map((project, index) => (
           <ProjectCard key={index} project={project} />
         ))}
       </div>
