@@ -27,7 +27,6 @@ export function Dashboard() {
     userReservesData ?? {},
     BalanceToken ?? [],
   );
-
   return (
     <div className="flex flex-col gap-9 md:gap-6">
       {BalanceToken &&
@@ -44,7 +43,7 @@ export function Dashboard() {
             </div>
             <div className="flex flex-1 flex-col gap-4">
               <HoneySupply
-                honey={assetsDictionary.supplied.find(
+                honey={assetsDictionary.available_supply.find(
                   (assert) => assert.address === honeyTokenAddress,
                 )}
               />
