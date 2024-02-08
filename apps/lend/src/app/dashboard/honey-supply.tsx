@@ -63,7 +63,11 @@ export default function HoneySupply({ honey }: { honey: any }) {
               className="border border-yellow-400 bg-gradient-to-br from-orange-200 to-yellow-400 text-black"
             />
             <WithdrawBtn
-              token={{...honey, formattedBalance: aTokenBalance?.formattedBalance, balance: aTokenBalance?.balance}}
+              token={{
+                ...honey,
+                formattedBalance: aTokenBalance?.formattedBalance,
+                balance: aTokenBalance?.balance,
+              }}
               className="w-fit border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
             />
           </div>
@@ -76,7 +80,11 @@ export default function HoneySupply({ honey }: { honey: any }) {
             className="w-full border border-yellow-400 bg-gradient-to-br from-orange-200 to-yellow-400 text-black"
           />
           <WithdrawBtn
-            token={{...honey, formattedBalance: aTokenBalance?.formattedBalance, balance: aTokenBalance?.balance}}
+            token={{
+              ...honey,
+              formattedBalance: aTokenBalance?.formattedBalance,
+              balance: aTokenBalance?.balance,
+            }}
             className="w-full border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
           />
         </div>
