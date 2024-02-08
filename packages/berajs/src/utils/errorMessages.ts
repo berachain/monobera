@@ -132,6 +132,10 @@ const errorMsgMap: ErrorMessages = {
       keywords: ["Arithmetic operation resulted in underflow or overflow."],
       errorMSG: "This operation reverted on chain. Please try again later.",
     },
+    BGT_CLAIMING_ERROR: {
+      keywords: ["unexpected withdraw amount from Rewards Module"],
+      errorMSG: "BGT claiming is currently disabled for maintenance.",
+    },
   },
 };
 
