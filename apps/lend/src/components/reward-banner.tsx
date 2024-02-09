@@ -5,8 +5,8 @@ import {
   formatAmountSmall,
   useBeraJs,
   usePollBgtRewardsForAddress,
+  usePollLendUserBGTRewards,
   usePollReservesDataList,
-  usePollUserBGTRewards,
 } from "@bera/berajs";
 import {
   bgtTokenAddress,
@@ -22,7 +22,7 @@ import { formatEther } from "viem";
 
 export const Banner = () => {
   const { isReady, account } = useBeraJs();
-  const { data: rewards, isLoading, refetch } = usePollUserBGTRewards();
+  const { data: rewards, isLoading, refetch } = usePollLendUserBGTRewards();
 
   const {
     write,
@@ -40,7 +40,9 @@ export const Banner = () => {
     formatAmountSmall(formattedRewards);
 
   //@ts-ignore
-  const { useBgtApr } = usePollBgtRewardsForAddress(lendHoneyDebtTokenAddress);
+  const { useBgtApr } = usePollBgtRewardsForAddress({
+    address: lendHoneyDebtTokenAddress,
+  });
   const { useReservesDataList } = usePollReservesDataList();
   const { data } = useReservesDataList();
 

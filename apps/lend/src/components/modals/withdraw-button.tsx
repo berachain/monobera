@@ -10,7 +10,11 @@ import {
   usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
-import { honeyAddress, lendPoolImplementationAddress } from "@bera/config";
+import {
+  honeyAddress,
+  honeyTokenAddress,
+  lendPoolImplementationAddress,
+} from "@bera/config";
 import { TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -27,15 +31,17 @@ export default function WithdrawBtn({
   token,
   disabled = false,
   variant = "outline",
+  className,
 }: {
   token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `Withdrawing ${amount} ${token.symbol}`,
+    message: `Withdrawing ${amount} ${token?.symbol}`,
     onSuccess: () => {
       userAccountRefetch();
       reservesDataRefetch();
@@ -54,8 +60,8 @@ export default function WithdrawBtn({
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-full text-sm leading-5 xl:w-fit"
-        disabled={disabled || isLoading}
+        className={cn("w-full xl:w-fit", className)}
+        disabled={disabled || isLoading || token.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Withdraw"}
@@ -156,33 +162,36 @@ const WithdrawModalContent = ({
             {(reserveData.supplyAPR * 100).toFixed(2)}%
           </div>
         </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">LTV Health Ratio</div>
-          <div className="flex items-center gap-1 font-semibold">
-            <span
-              className={cn(
-                `text-${getLTVColor(
-                  currentHealthFactor === "∞"
-                    ? 10
-                    : Number(currentHealthFactor),
-                )}`,
-              )}
-            >
-              {currentHealthFactor}{" "}
-            </span>
-            <Icons.moveRight className="inline-block h-6 w-6" />{" "}
-            <span
-              className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
-            >
-              {Number(newHealthFactor.toFixed(2)) < 0
-                ? "∞"
-                : newHealthFactor.toFixed(2)}
-            </span>
+        {token.address !== honeyTokenAddress && (
+          <div className="flex justify-between text-sm leading-tight">
+            <div className="text-muted-foreground ">LTV Health Ratio</div>
+            <div className="flex items-center gap-1 font-semibold">
+              <span
+                className={cn(
+                  `text-${getLTVColor(
+                    currentHealthFactor === "∞"
+                      ? 10
+                      : Number(currentHealthFactor),
+                  )}`,
+                )}
+              >
+                {currentHealthFactor}{" "}
+              </span>
+              <Icons.moveRight className="inline-block h-6 w-6" />{" "}
+              <span
+                className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
+              >
+                {Number(newHealthFactor.toFixed(2)) < 0
+                  ? "∞"
+                  : newHealthFactor.toFixed(2)}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {userAccountData.totalDebtBase !== 0n &&
+      {token.address !== honeyTokenAddress &&
+        userAccountData.totalDebtBase !== 0n &&
         newHealthFactor.toNumber() < 1.02 && (
           <Alert variant="destructive">
             <AlertTitle className="mb-1">
@@ -197,7 +206,7 @@ const WithdrawModalContent = ({
         )}
 
       {token.address !== honeyAddress && userAccountData.totalDebtBase > 0n && (
-        <Alert variant="destructive" className="mt-4">
+        <Alert variant="destructive">
           <AlertTitle>
             {" "}
             <Icons.info className="mr-1 inline-block h-4 w-4" />
@@ -211,8 +220,8 @@ const WithdrawModalContent = ({
       <Button
         disabled={
           !amount ||
-          Number(amount) <= 0 ||
-          Number(amount) > Number(balance) ||
+          BigNumber(amount).lte(BigNumber(0)) ||
+          BigNumber(amount).gt(BigNumber(balance)) ||
           (userAccountData.totalDebtBase > 0n && token.address !== honeyAddress)
         }
         onClick={() => {
@@ -222,7 +231,7 @@ const WithdrawModalContent = ({
             functionName: "withdraw",
             params: [
               token.address,
-              userAccountData.totalDebtBase === 0n && balance === amount
+              BigNumber(balance ?? "0").eq(BigNumber(amount ?? "0"))
                 ? maxUint256
                 : parseUnits((amount ?? "0") as `${number}`, token.decimals),
               account,
