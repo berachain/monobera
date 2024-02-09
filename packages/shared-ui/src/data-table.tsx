@@ -29,6 +29,8 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: TData) => void;
+  customSorting?: SortingState;
+  onCustomSortingChange?: (sorting: any) => void;
   className?: string;
   title?: string;
 }
@@ -37,6 +39,8 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   onRowClick,
+  customSorting,
+  onCustomSortingChange = undefined,
   className,
   title,
 }: DataTableProps<TData, TValue>) {
@@ -52,19 +56,19 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     state: {
-      sorting,
+      sorting: customSorting === undefined ? sorting : customSorting,
       columnVisibility,
       rowSelection,
       columnFilters,
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
+    onSortingChange:
+      onCustomSortingChange === undefined ? setSorting : onCustomSortingChange,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    // getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),

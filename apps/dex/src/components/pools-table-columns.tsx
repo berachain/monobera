@@ -16,7 +16,7 @@ import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
 } from "~/app/pools/fetchPools";
-import { IUserPool } from "~/hooks/usePollUserDeposited";
+import { type IUserPool } from "~/hooks/usePollUserDeposited";
 
 export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   // const { data: myPools = [] } = usePollUsersPools();
@@ -72,7 +72,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "totalValue",
+    accessorKey: "tvl",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -82,7 +82,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => {
-      const totalValue = formatter.format(row.original?.totalValue || 0);
+      const totalValue = formatter.format(row.original?.tvlUsd || 0);
       // const tvl = row.original.weeklyTvl?.[6] || 0;
       // const tvl24h = row.original.weeklyTvl?.[5] || 1;
       return (
@@ -109,7 +109,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     },
   },
   {
-    accessorKey: "dailyFees",
+    accessorKey: "fees",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -146,7 +146,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     },
   },
   {
-    accessorKey: "dailyVolume",
+    accessorKey: "volume",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -185,6 +185,7 @@ export const columns: ColumnDef<PoolV2>[] = [
   },
   {
     accessorKey: "bgtApy",
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -212,6 +213,7 @@ export const columns: ColumnDef<PoolV2>[] = [
   },
   {
     accessorKey: "totalApy",
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}

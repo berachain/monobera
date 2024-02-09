@@ -3,7 +3,11 @@ import useSWRImmutable from "swr/immutable";
 import { CROC_QUERY_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint, crocQueryAddress } from "@bera/config";
 import { toHex } from "viem";
-import { formatPoolData, type PoolV2 } from "~/app/pools/fetchPools";
+import {
+  formatPoolData,
+  formatSubgraphPoolData,
+  type PoolV2,
+} from "~/app/pools/fetchPools";
 import { usePublicClient, type Address } from "wagmi";
 import {
   client,
@@ -152,7 +156,7 @@ export const usePollUserDeposited = () => {
             return;
           }
 
-          const formattedPool = formatPoolData(pool);
+          const formattedPool = formatSubgraphPoolData(pool);
           const decodedSpotPrice = decodeCrocPrice(
             BigNumber.from(poolPrice.toString()),
           );

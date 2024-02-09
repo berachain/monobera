@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { formatUsd, type SwapInfoV2, type Token } from "@bera/berajs";
+import { formatUsd, type SwapInfoV3, type Token } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { Spinner, TokenIcon } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -20,7 +20,7 @@ import { useReadLocalStorage } from "usehooks-ts";
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
 
 type Props = {
-  swapInfo: SwapInfoV2 | undefined;
+  swapInfo: SwapInfoV3 | undefined;
   priceImpact: number | undefined;
   exchangeRate: string | undefined;
   tokenIn: Token | undefined;
@@ -85,7 +85,7 @@ export default function PreviewDialog({
   write,
 }: Props) {
   const [initialSwapInfo, setInitialSwapInfo] = useState<
-    SwapInfoV2 | undefined
+    SwapInfoV3 | undefined
   >(undefined);
 
   const [priceChangeWarning, setPriceChangeWarning] = useState<

@@ -1,84 +1,59 @@
 "use client";
 
+import { useState } from "react";
+import { useEffectOnce } from "usehooks-ts";
+
 import Link from "next/link";
 import { DataTable, NotFoundBear } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { columns } from "~/components/pools-table-columns";
-import { PoolCard } from "./components/pools/PoolCard";
-import CardViewLoading from "./components/pools/card-view-loading";
 import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { usePoolTable } from "./usePoolTable";
 import { getPoolUrl } from "./fetchPools";
-
-// const FilterBadge = ({
-//   text,
-//   active,
-//   onClick,
-// }: {
-//   text: string;
-//   active: boolean;
-//   onClick: any;
-// }) => {
-//   return (
-//     <Badge
-//       className={cn(
-//         "border-border bg-muted font-medium text-muted-foreground hover:cursor-pointer hover:bg-info",
-//         active ? "border-info-foreground bg-info text-info-foreground" : "",
-//       )}
-//       onClick={onClick}
-//     >
-//       {text}
-//     </Badge>
-//   );
-// };
-
-// const Toggle = ({
-//   icon,
-//   onClick,
-//   className,
-// }: {
-//   icon: any;
-//   className?: string;
-//   onClick: any;
-// }) => {
-//   return (
-//     <div
-//       className={cn(
-//         "cursor-pointer rounded-full p-2 text-muted-foreground hover:bg-hover",
-//         className,
-//       )}
-//       onClick={onClick}
-//     >
-//       {icon}
-//     </div>
-//   );
-// };
 
 export const PoolSearch = ({
   poolType,
 }: {
   poolType: "allPools" | "userPools";
 }) => {
+  const [sorting, onCustomSorting] = useState<any>([
+    {
+      id: "tvl",
+      desc: true,
+    },
+  ]);
+
+  const [isFirstLoading, setIsLoading] = useState(true);
+
+  useEffectOnce(() => {
+    // Simulate a loading operation, like fetching data
+    // For now, we'll just use a timeout to mimic a network request
+    const timer = setTimeout(() => {
+      // Once the loading operation is complete, set isLoading to false
+      setIsLoading(false);
+    }, 500); // Assume it takes 2 seconds to load whatever you need
+
+    // Cleanup function to clear the timeout if the component unmounts before the timeout completes
+    return () => clearTimeout(timer);
+  }); // Empty dependency array means this effect runs once on mount
+
   const {
     data,
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,
     isAllDataReachingEnd,
-    // hasBgtRewards,
-    // setHasBgtRewards,
-    // isNewPool,
-    // setIsNewPool,
-    // isHotPool,
-    // setIsHotPool,
-    isList,
-    // setIsList,
-  } = usePoolTable();
+  } = usePoolTable(sorting);
 
-  console.log("i am new pools henlo", data);
+  const handleNewSort = (newSort: any) => {
+    void setAllDataSize(1);
+    onCustomSorting(newSort);
+  };
+
+  console.log({ data });
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -118,61 +93,28 @@ export const PoolSearch = ({
             id="all-pool-search"
             className="w-full md:w-[400px]"
           /> */}
-
-          {/* <div className="flex w-full flex-row flex-wrap items-center justify-center gap-2 lg:justify-end">
-              <FilterBadge
-                text={"🚀 New Pools"}
-                active={isNewPool}
-                onClick={() => setIsNewPool(!isNewPool)}
-              />
-              <FilterBadge
-                text={"🔥 Hot Pools"}
-                active={isHotPool}
-                onClick={() => setIsHotPool(!isHotPool)}
-              />
-              <FilterBadge
-                text={"🐝 BGT Rewards"}
-                active={hasBgtRewards}
-                onClick={() => setHasBgtRewards(!hasBgtRewards)}
-              />
-              <Toggle
-                icon={!isList ? <Icons.list /> : <Icons.layoutDashboard />}
-                onClick={() => setIsList(!isList)}
-              />
-            </div> */}
         </div>
 
         <TabsContent value="allPools" className="text-center">
-          {isAllDataLoadingMore && data?.length === 0 ? (
+          {isFirstLoading ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
-              {isList ? <TableViewLoading /> : <CardViewLoading />}
+              <TableViewLoading />
             </div>
-          ) : data?.length ? (
-            isList ? (
-              <div className="flex w-full flex-col items-center justify-center gap-4">
-                <DataTable
-                  key={data.length}
-                  data={data ?? []}
-                  columns={columns}
-                  title={`All Pools (${data.length})`}
-                  className="min-w-[1000px]"
-                  onRowClick={(row: any) =>
-                    window.open(getPoolUrl(row.original), "_self")
-                  }
-                />
-              </div>
-            ) : (
-              <div className="flex w-full flex-col items-center justify-center gap-4">
-                <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-                  {data?.[0] &&
-                    data.map((pool: any) => {
-                      return (
-                        <PoolCard pool={pool} key={`search${pool?.pool}`} />
-                      );
-                    })}
-                </div>
-              </div>
-            )
+          ) : data?.length || (data.length === 0 && isAllDataLoadingMore) ? (
+            <div className="flex w-full flex-col items-center justify-center gap-4">
+              <DataTable
+                key={data.length}
+                data={data ?? []}
+                columns={columns}
+                title={`All Pools (${data.length})`}
+                className="min-w-[1000px]"
+                onRowClick={(row: any) =>
+                  window.open(getPoolUrl(row.original), "_self")
+                }
+                customSorting={sorting}
+                onCustomSortingChange={(a: any) => handleNewSort(a)}
+              />
+            </div>
           ) : (
             <NotFoundBear title="No Pools found." />
           )}

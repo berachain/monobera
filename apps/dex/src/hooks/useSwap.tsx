@@ -3,22 +3,20 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   useGasData,
-  // useLatestBlock,
   usePollAllowance,
   usePollAssetWalletBalance,
-  usePollSwaps,
+  usePollCrocSwap,
   useTokenHoneyPrice,
   useTokenInformation,
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { erc20ModuleAddress } from "@bera/config";
-import { useDeadline, useSlippage } from "@bera/shared-ui/src/hooks";
+import { crocMultiSwapAddress } from "@bera/config";
+import { useSlippage } from "@bera/shared-ui/src/hooks";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
-import { usePollCrocSwapRoute } from "./usePollCrocSwapRoute";
 
 export enum SwapKind {
   GIVEN_IN = 0,
@@ -125,10 +123,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     data: swapInfo,
     error: getSwapError,
     isLoading: isSwapLoading,
-  } = usePollSwaps({
+  } = usePollCrocSwap({
     tokenIn: selectedFrom?.address as Address,
     tokenOut: selectedTo?.address as Address,
-    swapKind: swapKind === SwapKind.GIVEN_IN ? 0 : 1,
     tokenInDecimals: selectedFrom?.decimals ?? 18,
     tokenOutDecimals: selectedTo?.decimals ?? 18,
     amount: swapAmount,
@@ -192,83 +189,44 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapInfo, selectedFrom, selectedTo, fromAmount, toAmount]);
 
-  const { useAllowance } = usePollAllowance({
-    contract: erc20ModuleAddress,
+  const { useAllowance, refresh: refreshAllowance } = usePollAllowance({
+    contract: crocMultiSwapAddress,
     token: selectedFrom,
   });
 
   const allowance = useAllowance();
 
-  // const { data: block } = useLatestBlock();
-
   const slippage = useSlippage();
-  const deadline = useDeadline();
   useEffect(() => {
     if (
       swapInfo?.batchSwapSteps?.length &&
       slippage &&
       selectedFrom &&
-      selectedTo &&
-      deadline
+      selectedTo
     ) {
       try {
         // parse minutes to blocks
-        // const d = block ?? BigInt(0) + BigInt(Math.floor((deadline * 60) / 2));
-
-        const newBatchSwapStep: any[] = [...swapInfo.batchSwapSteps];
-
+        console.log({ swapInfo });
         const sI = BigInt(swapInfo.returnAmount);
         const s = BigInt(slippage * 10 ** 18);
         const minAmountOut =
           (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
 
-        newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = minAmountOut;
-        // newBatchSwapStep[newBatchSwapStep.length - 1].amountOut = 0n;
+        const payload = [
+          swapInfo.batchSwapSteps,
+          swapInfo.amountIn,
+          minAmountOut,
+        ];
 
-        // swapInfo.batchSwapSteps.forEach((value: any) => {
-        //   // console.log('v',value)
-        //   // console.log('ap',allPools)
-        //   // const pool = allPools.find((pool: Pool) => beraToEth(pool.pool).toLowerCase() === value.poolId.toLowerCase())
-        //   // console.log('POOL', pool)
-        //   // const tokenOut = pool.tokens.find((token: Token) => token.address.toLowerCase() === value.assetOut.toLowerCase())
-        //   const sI = BigInt(value.amountOut);
-        //   const s = BigInt(slippage * 10 ** 18);
-
-        //   const minAmountOut =
-        //     (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
-        //   // swapInfo.batchSwapSteps[
-        //   //   (swapInfo?.batchSwapSteps?.length ?? 1) - 1
-        //   // ]!.amountOut = formatUnits(minAmountOut, tokenOut.decimals);
-        //   if()
-        //   const newStep = {
-        //     ...value,
-        //     amountOut: minAmountOut - 1n, // to guard against router errors, we reduce the minAmountOut
-        //   }
-
-        //   // const newStep = {
-        //   //   ...value,
-        //   //   amountOut: 0n, // to guard against router errors, we reduce the minAmountOut
-        //   // };
-        //   newBatchSwapStep.push(newStep);
-        // });
-
-        // console.log(newBatchSwapStep);
-        // const payload = [0n, newBatchSwapStep, d];
-        const payload = [0n, newBatchSwapStep, 99999999n];
-
-        // console.log(payload)
         setPayload(payload);
       } catch (e) {
         console.log(e);
         setPayload([]);
       }
     }
-  }, [swapInfo, deadline, slippage]);
+  }, [swapInfo, slippage]);
 
   const onSwitch = () => {
-    // const tempFromAmount = fromAmount;
-    // const tempToAmount = toAmount;
-
     const tempFrom = selectedFrom;
     const tempTo = selectedTo;
 
@@ -279,18 +237,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setToAmount("");
     setSwapAmount(toAmount ?? "");
 
-    // if (swapKind === SwapKind.GIVEN_IN) {
-    // setSwapKind(SwapKind.GIVEN_OUT);
-    // setToAmount(tempFromAmount);
-    // setFromAmount("");
-    // setSwapAmount(tempFromAmount ?? "");
-    // } else {
-    // setSwapKind(SwapKind.GIVEN_IN);
-    //   setFromAmount(tempToAmount);
-    //   setToAmount("");
-    //   setSwapAmount(tempToAmount ?? "");
-    // }
-
     if (isWrap) {
       if (wrapType === WRAP_TYPE.WRAP) {
         setWrapType(WRAP_TYPE.UNWRAP);
@@ -299,19 +245,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       }
     }
   };
-
-  const value: bigint | undefined = useMemo(() => {
-    if (!swapInfo) {
-      return undefined;
-    }
-    if (
-      swapInfo.batchSwapSteps[0]?.assetIn ===
-      (process.env.NEXT_PUBLIC_BERA_ADDRESS as Address)
-    ) {
-      return swapInfo.batchSwapSteps[0]?.value;
-    }
-    return undefined;
-  }, [swapInfo]);
 
   useEffect(() => {
     if (isWrap) {
@@ -330,11 +263,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
 
-  usePollCrocSwapRoute({
-    sellToken: selectedFrom,
-    buyToken: selectedTo,
-    qty: swapAmount,
-  });
   return {
     setSwapKind,
     setSelectedFrom,
@@ -344,6 +272,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setSwapAmount,
     onSwitch,
     setIsTyping,
+    refreshAllowance,
     swapAmount,
     payload,
     selectedFrom,
@@ -354,7 +283,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     swapKind,
     error: getSwapError,
     swapInfo,
-    value,
     exchangeRate,
     gasPrice: gasData?.formatted.gasPrice,
     isRouteLoading: isSwapLoading || isTyping,

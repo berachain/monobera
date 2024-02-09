@@ -6,17 +6,13 @@ import Image from "next/image";
 import Link from "next/link";
 // import { RouteNotFound } from "@bera/bera-router";
 import {
-  DEX_PRECOMPILE_ABI,
+  MULTISWAP_ABI,
   TransactionActionType,
   WBERA_ABI,
   useBeraJs,
   usePollAssetWalletBalance,
 } from "@bera/berajs";
-import {
-  cloudinaryUrl,
-  erc20DexAddress,
-  erc20ModuleAddress,
-} from "@bera/config";
+import { cloudinaryUrl, crocMultiSwapAddress } from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
@@ -88,8 +84,8 @@ export function SwapCard({
     onSwitch,
     setIsTyping,
     swapInfo,
-    value,
     isRouteLoading,
+    refreshAllowance,
     payload,
     exchangeRate,
     // gasPrice,
@@ -103,6 +99,8 @@ export function SwapCard({
     outputCurrency,
   });
 
+  console.log(swapInfo)
+  console.log(payload);
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
@@ -131,6 +129,7 @@ export function SwapCard({
       setSwapAmount("");
       setToAmount(undefined);
       setOpenPreview(false);
+      void refreshAllowance();
     },
     onError: () => {
       setOpenPreview(false);
@@ -168,7 +167,7 @@ export function SwapCard({
             selectedFrom?.decimals ?? 18,
           )}
           token={selectedFrom}
-          spender={erc20ModuleAddress}
+          spender={crocMultiSwapAddress}
         />
       );
     }
@@ -219,11 +218,11 @@ export function SwapCard({
             setOpen={setOpenPreview}
             write={() => {
               write({
-                address: erc20DexAddress,
-                abi: DEX_PRECOMPILE_ABI,
-                functionName: "batchSwap",
+                address: crocMultiSwapAddress,
+                abi: MULTISWAP_ABI,
+                functionName: "multiSwap",
                 params: payload,
-                value: value,
+                value: swapInfo.value,
               });
             }}
             isLoading={isLoading}
@@ -245,11 +244,11 @@ export function SwapCard({
           setOpen={setOpenPreview}
           write={() => {
             write({
-              address: erc20DexAddress,
-              abi: DEX_PRECOMPILE_ABI,
-              functionName: "batchSwap",
+              address: crocMultiSwapAddress,
+              abi: MULTISWAP_ABI,
+              functionName: "multiSwap",
               params: payload,
-              value: value,
+              value: swapInfo.value,
             });
           }}
           isLoading={isLoading}

@@ -149,7 +149,11 @@ export const crocImpactAddress = process.env
   .NEXT_PUBLIC_RPC_CROC_IMPACT as Address;
 export const crocMultiPathAddress = process.env
   .NEXT_PUBLIC_RPC_CROC_MULTIPATH as Address;
+export const crocMultiSwapAddress = process.env
+  .NEXT_PUBLIC_RPC_CROC_MULTISWAP as Address;
 export const crocIndexerEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_INDEXER_ENDPOINT as Address;
 export const crocSubgraphEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_SUBGRAPH as Address;
+export const crocRouterEndpoint = process.env
+  .NEXT_PUBLIC_RPC_CROC_ROUTER_ENDPOINT as Address;

@@ -75,7 +75,7 @@ const useBeraContractWrite = ({
             hash: receipt,
             pollingInterval: 5000,
             timeout: 120000,
-            confirmations: 2,
+            confirmations: 1,
           });
         if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
