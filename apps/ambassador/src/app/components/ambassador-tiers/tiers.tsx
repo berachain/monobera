@@ -7,7 +7,7 @@ import { Button } from "@bera/ui/button";
 // Define the ambassadors
 export const kingsOath = {
   name: "Pack Lead",
-  image: "/bear_center.png",
+  image: "/smokey.png",
   tier: "Tier 1",
   intro:
     "Highest status amongst the ambassadors. KOs are the leading thought group and have the highest understanding of Berachain's tech stack and deep rooted community",
@@ -15,7 +15,7 @@ export const kingsOath = {
 
 export const brigadeGeneral = {
   name: "Berabassador",
-  image: "/bear_center.png",
+  image: "/zeus.png",
   tier: "Tier 2",
   intro:
     "A driving force of the Ecosystem, Brigade Generals are extremely enthusiastic memebrs of the ecosystem, leading new narratives & information on berachain .",
@@ -23,7 +23,7 @@ export const brigadeGeneral = {
 
 export const colonel = {
   name: "Cubassador",
-  image: "/bear_center.png",
+  image: "/kng.png",
   tier: "Tier 3",
   intro:
     "The core faction of the Brigade, Colonels are the back bone of the ambassador program, easily identifiable and great sources of information.",
@@ -50,7 +50,7 @@ export function AmbassadorCard({ ambassador }: { ambassador: any }) {
           ambassador.tier,
         )}`}
       >
-        <div className="flex flex-col items-center gap-4 px-6 pb-4 pt-6 justify-middle items-center">
+        <div className="flex flex-col items-center gap-4 px-6 pb-4 pt-6">
           <Avatar className="h-20 w-20">
             <AvatarImage src={ambassador.image} className="rounded-full" />
           </Avatar>
