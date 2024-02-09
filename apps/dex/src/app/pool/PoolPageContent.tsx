@@ -204,23 +204,6 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
     combinedEvents,
   });
 
-  console.log({
-    allData,
-    allDataSize,
-    setAllDataSize,
-    isAllDataLoadingMore,
-    isAllDataReachingEnd,
-    swapData,
-    swapDataSize,
-    setSwapDataSize,
-    isSwapDataLoadingMore,
-    isSwapDataReachingEnd,
-    provisionData,
-    provisionDataSize,
-    setProvisionDataSize,
-    isProvisionDataLoadingMore,
-    isProvisionDataReachingEnd,
-  });
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {
       return (
@@ -316,7 +299,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                ${formatter.format(0)}
+                ${formatter.format(pool.tvlUsd)}
               </div>
             </Card>
             <Card className="px-4 py-2">
@@ -408,32 +391,46 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             </div>
             <div className="mb-4 text-sm font-medium">Tokens</div>
             <div>
-              {pool?.tokens?.map((token) => (
-                <div
-                  key={token.address}
-                  className="flex h-8 items-center justify-between"
-                >
-                  <div className="flex gap-1">
-                    <TokenIcon token={token} />
-                    <div className="ml-1 font-medium uppercase">
-                      {token.address === beraTokenAddress
-                        ? "wbera"
-                        : token.symbol}
-                    </div>
-                    <div className="text-sm font-medium text-muted-foreground">
-                      {token.weight}%
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <div className="font-medium">{formatter.format(0)}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {" "}
-                      {formatUsd(Number(0) * Number(0))}
-                    </div>
+              <div className="flex h-8 items-center justify-between">
+                <div className="flex gap-1">
+                  <TokenIcon token={pool.baseInfo} />
+                  <div className="ml-1 font-medium uppercase">
+                    {pool.base.address === beraTokenAddress
+                      ? "wbera"
+                      : pool.baseInfo.symbol}
                   </div>
                 </div>
-              ))}
+
+                <div className="flex gap-2">
+                  <div className="font-medium">
+                    {formatter.format(pool.baseTokens)}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {" "}
+                    {formatUsd(pool.baseTokenHoneyTvl)}
+                  </div>
+                </div>
+              </div>
+              <div className="flex h-8 items-center justify-between">
+                <div className="flex gap-1">
+                  <TokenIcon token={pool.quoteInfo} />
+                  <div className="ml-1 font-medium uppercase">
+                    {pool.quote.address === beraTokenAddress
+                      ? "wbera"
+                      : pool.quoteInfo.symbol}
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <div className="font-medium">
+                    {formatter.format(pool.quoteTokens)}
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    {" "}
+                    {formatUsd(pool.quoteTokenHoneyTvl)}
+                  </div>
+                </div>
+              </div>
             </div>
           </Card>
         </div>

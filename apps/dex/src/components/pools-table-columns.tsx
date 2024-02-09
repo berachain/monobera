@@ -16,13 +16,19 @@ import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
 } from "~/app/pools/fetchPools";
-import { type IUserPool } from "~/hooks/usePollUserDeposited";
+import {
+  usePollUserDeposited,
+  type IUserPool,
+} from "~/hooks/usePollUserDeposited";
 
 export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   // const { data: myPools = [] } = usePollUsersPools();
   // const isDeposited = myPools?.find(
   //   (myPool: any) => getAddress(myPool.pool) === getAddress(pool?.pool),
   // );
+
+  const { useIsPoolDeposited } = usePollUserDeposited();
+  const isDeposited = useIsPoolDeposited(pool);
 
   return (
     <div className="flex flex-col items-start gap-2">
@@ -36,17 +42,16 @@ export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
         >
-          {/* {Number(pool?.formattedSwapFee).toFixed(2)}% */}
-          dynamic
+          {Number(pool?.feeRate).toFixed(2)}%
         </Badge>
-        {/* {isDeposited && (
+        {isDeposited && (
           <Badge
             variant="success"
-            className="border-none bg-success px-2 py-1 text-xs"
+            className="border-none bg-success px-2 py-1 text-[10px] leading-[10px] "
           >
             Provided Liquidity
           </Badge>
-        )} */}
+        )}
       </div>
     </div>
   );
@@ -304,7 +309,7 @@ export const my_columns: ColumnDef<IUserPool>[] = [
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
         >
-          {Number(0).toFixed(2)}%
+          dynamic
         </Badge>
       </div>
     ),

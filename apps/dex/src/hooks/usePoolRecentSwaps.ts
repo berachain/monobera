@@ -21,8 +21,8 @@ export interface ISwaps {
 
 export const usePoolRecentSwaps = (pool: PoolV2 | undefined) => {
   const { data: prices } = useTokenHoneyPrices([pool?.base, pool?.quote]);
-  const basePrice = prices && prices[getAddress(pool?.base ?? "")];
-  const quotePrice = prices && prices[getAddress(pool?.quote ?? "")];
+  const basePrice = prices?.[getAddress(pool?.base ?? "")];
+  const quotePrice = prices?.[getAddress(pool?.quote ?? "")];
 
   const QUERY_KEY = ["recentSwaps", pool, basePrice, quotePrice];
   const { isLoading } = useSWRImmutable(QUERY_KEY, async () => {

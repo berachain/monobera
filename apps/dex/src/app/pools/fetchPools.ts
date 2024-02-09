@@ -1,6 +1,6 @@
 import { type Token } from "@bera/berajs";
 import { type Address } from "wagmi";
-import { crocIndexerEndpoint, crocSubgraphEndpoint } from "@bera/config";
+import { crocIndexerEndpoint } from "@bera/config";
 import { formatUnits } from "ethers/lib/utils";
 export interface PoolV2 {
   id: string; // concat base-quote-poolidx
@@ -12,9 +12,9 @@ export interface PoolV2 {
   poolIdx: number;
   poolName: string; // concat {BASE}-{QUOTE}
   tokens: Token[];
-  feeRate: number;
   tvlUsd: number;
   volumeUsd: number;
+  feeRate: number;
   fees: number;
   baseTokens: string;
   quoteTokens: string;
@@ -96,7 +96,7 @@ export const formatPoolData = (result: any): PoolV2 => {
   );
 
   const totalTvl =
-    parseFloat(baseTvlFormattedAmount) + parseFloat(quoteTvlFormattedAmount);
+    parseFloat(baseTvlHoneyAmount) + parseFloat(quotTvlHoneyAmount);
 
   return {
     id: result.info.id,
@@ -112,7 +112,7 @@ export const formatPoolData = (result: any): PoolV2 => {
     tokens: [result.info.baseInfo, result.info.quoteInfo],
     baseTokens: baseTvlFormattedAmount,
     quoteTokens: quoteTvlFormattedAmount,
-    feeRate: 0,
+    feeRate: result.stats.feeRate,
     tvlUsd: totalTvl,
     volumeUsd: 0,
     fees: 0,
@@ -145,54 +145,9 @@ export const fetchPools = async (
 };
 
 export const fetchSelectedPool = async (base: string, quote: string) => {
-  const data = await fetch(crocSubgraphEndpoint, {
-    method: "POST",
-    body: JSON.stringify({
-      query: `{
-            pools(
-              where:{
-              base: "${base.toLowerCase()}"
-              quote: "${quote.toLowerCase()}"
-              }
-            ) {
-              id
-              poolIdx
-              base
-              quote
-              timeCreate
-              baseInfo {
-                id
-                address
-                symbol
-                name
-                decimals
-              }
-              quoteInfo{
-                id
-                address
-                symbol
-                name
-                decimals
-              }
-            }
-          }`,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    next: { revalidate: 10 },
-  })
-    .then((res) => res.json())
-    .catch((e: any) => console.log("fetching error", e));
+  const response = await fetchPools(0, 100, "tvl", "desc");
 
-  if (data?.error !== undefined) {
-    console.error("error fetching selected pool");
-    return undefined;
-  }
-
-  const formattedPools: PoolV2[] = data.data.pools.map((result: any) => {
-    return formatSubgraphPoolData(result);
+  return response.find((pool) => {
+    return pool.base === base && pool.quote === quote;
   });
-
-  return formattedPools[0];
 };

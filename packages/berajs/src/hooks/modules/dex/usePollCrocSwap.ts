@@ -1,5 +1,5 @@
 import {
-    beraTokenAddress,
+  beraTokenAddress,
   crocMultiSwapAddress,
   crocRouterEndpoint,
   nativeTokenAddress,
@@ -11,7 +11,6 @@ import { usePublicClient } from "wagmi";
 import { MULTISWAP_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { handleNativeBera } from "~/utils";
-import lodash from 'lodash';
 
 interface IUsePollSwaps {
   tokenIn: Address;
@@ -77,21 +76,14 @@ export const usePollCrocSwap = ({
         const batchSwapSteps = swapInfo.batchSwapSteps;
 
         if (batchSwapSteps?.length) {
-
           const previewBatchSwapSteps = [...batchSwapSteps];
-          console.log({
-            tokenIn,
-            nativeTokenAddress,
-          })
-          console.log('b4', swapInfo)
+
           if (getAddress(tokenIn) === getAddress(nativeTokenAddress)) {
             if (previewBatchSwapSteps[0]) {
-                previewBatchSwapSteps[0].base = beraTokenAddress;
+              previewBatchSwapSteps[0].base = beraTokenAddress;
             }
           }
-          console.log('after', swapInfo)
 
-          console.log("previewBatchSwapSteps", previewBatchSwapSteps);
           const result = await publicClient.readContract({
             address: crocMultiSwapAddress,
             abi: MULTISWAP_ABI,
@@ -99,7 +91,6 @@ export const usePollCrocSwap = ({
             args: [previewBatchSwapSteps, swapInfo.amountIn],
           });
 
-          console.log("result", result);
           const amountOut = result as bigint;
           const formattedAmountOut = formatUnits(amountOut, tokenOutDecimals);
           // @ts-ignore
@@ -158,9 +149,9 @@ export const getCrocSwap = async (
       `${crocRouterEndpoint}/dex/route?fromAsset=${handleNativeBera(
         tokenIn,
       )}&toAsset=${handleNativeBera(tokenOut)}&amount=${amountIn.toString()}`,
-    ).then((res) => res.json());
+    );
 
-    const result = response
+    const result = await response.json();
 
     if (!result.steps)
       return {
@@ -174,20 +165,12 @@ export const getCrocSwap = async (
         tokenOut,
       };
 
-    let batchSwapSteps: ICrocSwapStep[] = [...result.steps];
+    const batchSwapSteps: ICrocSwapStep[] = [...result.steps];
 
     let value = undefined;
     if (getAddress(tokenIn) === getAddress(nativeTokenAddress)) {
       value = amountIn;
-      console.log('before', batchSwapSteps)
-      if (batchSwapSteps[0]) {
-        const step = await {...batchSwapSteps[0], base: '0x0000000000000000000000000000000000000000' as Address};
-        console.log('step', step)
-        batchSwapSteps[0] = step;
-        console.log('after', batchSwapSteps)
-      }
     }
-    console.log("batchSwapSteps", batchSwapSteps);
 
     const swapInfo = {
       batchSwapSteps: batchSwapSteps,

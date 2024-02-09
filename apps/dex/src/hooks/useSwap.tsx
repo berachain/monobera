@@ -11,7 +11,11 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { crocMultiSwapAddress } from "@bera/config";
+import {
+  beraTokenAddress,
+  crocMultiSwapAddress,
+  nativeTokenAddress,
+} from "@bera/config";
 import { useSlippage } from "@bera/shared-ui/src/hooks";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
@@ -212,12 +216,54 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         const minAmountOut =
           (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
 
+        if (selectedFrom && selectedFrom.address === nativeTokenAddress) {
+          const swapSteps = [...swapInfo.batchSwapSteps];
+          if (swapSteps.length > 0 && swapSteps[0].base && swapSteps[0].quote) {
+            if (
+              swapSteps[0].base.toLowerCase() === beraTokenAddress.toLowerCase()
+            ) {
+              swapSteps[0].base = nativeTokenAddress;
+            } else if (
+              swapSteps[0].quote.toLowerCase() ===
+              beraTokenAddress.toLowerCase()
+            ) {
+              swapSteps[0].quote = nativeTokenAddress;
+            }
+            swapInfo.batchSwapSteps = swapSteps;
+          }
+        }
+
+        if (selectedTo && selectedTo.address === nativeTokenAddress) {
+          const swapSteps = [...swapInfo.batchSwapSteps];
+          if (swapSteps.length > 0) {
+            const lastIndex = swapSteps.length - 1;
+            if (
+              swapSteps[lastIndex]?.base &&
+              swapSteps[lastIndex].quote
+            ) {
+              if (
+                swapSteps[lastIndex].base.toLowerCase() ===
+                beraTokenAddress.toLowerCase()
+              ) {
+                swapSteps[lastIndex].base = nativeTokenAddress;
+              } else if (
+                swapSteps[lastIndex].quote.toLowerCase() ===
+                beraTokenAddress.toLowerCase()
+              ) {
+                swapSteps[lastIndex].quote = nativeTokenAddress;
+              }
+              swapInfo.batchSwapSteps = swapSteps;
+            }
+          }
+        }
+
         const payload = [
           swapInfo.batchSwapSteps,
           swapInfo.amountIn,
           minAmountOut,
         ];
 
+        console.log({ payload });
         setPayload(payload);
       } catch (e) {
         console.log(e);
@@ -258,8 +304,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { data: tokenOutPrice } = useTokenHoneyPrice(selectedTo?.address);
 
   const minAmountOut = useMemo(() => {
-    if (!payload[1]) return "0";
-    const amountOut = payload[1][payload[1].length - 1]?.amountOut;
+    if (!payload[2]) return "0";
+    const amountOut = payload[2];
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
 

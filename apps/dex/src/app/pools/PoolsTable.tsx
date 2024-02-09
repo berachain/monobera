@@ -13,6 +13,7 @@ import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { usePoolTable } from "./usePoolTable";
 import { getPoolUrl } from "./fetchPools";
+import { usePollUserDeposited } from "~/hooks/usePollUserDeposited";
 
 export const PoolSearch = ({
   poolType,
@@ -29,16 +30,12 @@ export const PoolSearch = ({
   const [isFirstLoading, setIsLoading] = useState(true);
 
   useEffectOnce(() => {
-    // Simulate a loading operation, like fetching data
-    // For now, we'll just use a timeout to mimic a network request
     const timer = setTimeout(() => {
-      // Once the loading operation is complete, set isLoading to false
       setIsLoading(false);
-    }, 500); // Assume it takes 2 seconds to load whatever you need
+    }, 500);
 
-    // Cleanup function to clear the timeout if the component unmounts before the timeout completes
     return () => clearTimeout(timer);
-  }); // Empty dependency array means this effect runs once on mount
+  });
 
   const {
     data,
@@ -54,6 +51,7 @@ export const PoolSearch = ({
   };
 
   console.log({ data });
+  usePollUserDeposited();
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -107,7 +105,7 @@ export const PoolSearch = ({
                 data={data ?? []}
                 columns={columns}
                 title={`All Pools (${data.length})`}
-                className="min-w-[1000px]"
+                className="min-w-[1000px] min-h-[300px]"
                 onRowClick={(row: any) =>
                   window.open(getPoolUrl(row.original), "_self")
                 }
@@ -119,7 +117,7 @@ export const PoolSearch = ({
             <NotFoundBear title="No Pools found." />
           )}
 
-          {!isAllDataLoadingMore && data && data?.length > 0 && (
+          {!isFirstLoading && (
             <Button
               className="mt-8"
               onClick={() => setAllDataSize(allDataSize + 1)}

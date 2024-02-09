@@ -3,11 +3,7 @@ import useSWRImmutable from "swr/immutable";
 import { CROC_QUERY_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint, crocQueryAddress } from "@bera/config";
 import { toHex } from "viem";
-import {
-  formatPoolData,
-  formatSubgraphPoolData,
-  type PoolV2,
-} from "~/app/pools/fetchPools";
+import { formatSubgraphPoolData, type PoolV2 } from "~/app/pools/fetchPools";
 import { usePublicClient, type Address } from "wagmi";
 import {
   client,
@@ -211,8 +207,20 @@ export const usePollUserDeposited = () => {
     return data;
   };
 
+  const useIsPoolDeposited = (pool: PoolV2) => {
+    const { data = undefined } = useSWRImmutable<IUserPool[] | undefined>(
+      QUERY_KEY,
+    );
+    if (!data) {
+      return false;
+    }
+    return data.some(
+      (p: IUserPool) => p.base === pool.base && p.quote === pool.quote,
+    );
+  };
   return {
     usePositions,
+    useIsPoolDeposited,
     isLoading: isLoading || isValidating,
     refresh: () => void mutate(QUERY_KEY),
   };
