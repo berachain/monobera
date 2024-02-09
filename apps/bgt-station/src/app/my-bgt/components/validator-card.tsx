@@ -54,6 +54,7 @@ export default function ValidatorCard({
       void mutate(QUERY_KEY);
     },
   });
+  console.log("validatorrrrr", validator, validator?.description?.identity);
 
   const valiInfo = [
     {
@@ -116,7 +117,9 @@ export default function ValidatorCard({
       {ModalPortal}
       <div className="flex items-center justify-center md:justify-between">
         <div className="flex items-center gap-3">
-          <ValidatorIcon address={validator.operatorAddr as Address} />
+          <ValidatorIcon
+            address={validator?.description?.identity ?? undefined}
+          />
           <div className="text-lg font-semibold leading-loose text-foreground md:text-2xl">
             {validator.description.moniker}
           </div>

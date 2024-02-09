@@ -53,11 +53,12 @@ export default function ValidatorCard({
       text: "Commission",
     },
   ];
+  console.log("validatorrrrr", validator, validator?.description?.identity);
   return (
     <div className="col-span-1 mx-auto flex w-full max-w-[275px] flex-col justify-end overflow-hidden rounded-xl border border-border bg-background shadow">
       <div className="flex flex-col items-center justify-center gap-1 p-6 pb-4">
         <ValidatorIcon
-          address={validator.operatorAddr as Address}
+          address={validator?.description?.identity ?? undefined}
           className="h-12 w-12"
         />
         <div className="flex h-12 w-full items-center justify-center font-medium text-muted-foreground">

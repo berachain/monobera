@@ -37,7 +37,7 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
       return (
         <div className="flex items-center gap-2">
           <ValidatorIcon
-            address={row.original.operatorAddr as Address}
+            address={row.original.description?.identity ?? undefined}
             className="h-8 w-8"
           />
           {moniker}{" "}

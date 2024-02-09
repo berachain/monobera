@@ -69,7 +69,7 @@ export default function ValidatorSelector({
         {validValidator ? (
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
             <ValidatorIcon
-              address={validValidator.operatorAddr as Address}
+              address={validValidator?.description?.identity ?? undefined}
               className="h-8 w-8"
             />
             {validValidator.description.moniker}
@@ -206,8 +206,8 @@ const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
       {isLoading
         ? "Loading"
         : bgtDelegated && Number(bgtDelegated) === 0
-          ? "0 BGT"
-          : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
+        ? "0 BGT"
+        : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
     </div>
   );
 };
