@@ -106,9 +106,7 @@ export function Projects() {
         className="z-10 mb-8 mt-12"
         onClick={toggleDisplay}
       >
-        {viewMore
-          ? "View More Events (coming soon)"
-          : "View Less Events (coming soon)"}
+        {viewMore ? "View More Events (coming soon)" : "View Less Events (coming soon)"}
       </Button>
     </div>
   );
