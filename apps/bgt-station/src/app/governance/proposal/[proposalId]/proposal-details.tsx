@@ -62,12 +62,11 @@ export default function ProposalDetails({
   const globalTotal = useTotalDelegated();
   const userTotal = useTotalDelegatorDelegated();
 
-  const { useProposalVotes, isLoading, useNormalizedTallyResult } =
+  const { useProposalVotes, isLoading, useProposalTallyResult } =
     usePollProposalVotes(proposalId);
 
   const votes = useProposalVotes();
-  const normalizedTally = useNormalizedTallyResult();
-
+  const normalizedTally = useProposalTallyResult(proposalId);
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 

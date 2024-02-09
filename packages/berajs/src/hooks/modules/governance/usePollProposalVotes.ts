@@ -6,7 +6,7 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { STAKING_PRECOMPILE_ABI } from "~/config";
+import { GOVERNANCE_PRECOMPILE_ABI, STAKING_PRECOMPILE_ABI } from "~/config";
 import { useBeraConfig } from "~/contexts";
 import { defaultPagination } from "~/utils";
 import { VoteOption } from "../../../../../proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
@@ -137,6 +137,76 @@ export const usePollProposalVotes = (proposalId: number) => {
     }, [data]);
   };
 
+  const useProposalTallyResult = (proposalId: number) => {
+    const { useTotalDelegated } = usePollActiveValidators();
+    const totalBGTDelegated = useTotalDelegated();
+    const TALLY_QUERY_KEY = [proposalId];
+    const { isLoading } = useSWRImmutable(TALLY_QUERY_KEY, async () => {
+      const result = (await publicClient
+        .readContract({
+          address: networkConfig.precompileAddresses
+            .governanceAddress as Address,
+          abi: GOVERNANCE_PRECOMPILE_ABI,
+          functionName: "getProposalTallyResult",
+          args: [proposalId],
+        })
+        .catch((e) => {
+          console.log(e);
+          return null;
+        })) as any[];
+      if (!result) return false;
+      return result;
+    });
+
+    const { data } = useSWRImmutable(TALLY_QUERY_KEY);
+
+    const normalizedTallyResult = useMemo(() => {
+      if (!data) return undefined;
+      const abstainCount = Number(formatUnits(data.abstainCount ?? "0", 18));
+      const noCount = Number(formatUnits(data.noCount ?? "0", 18));
+      const yesCount = Number(formatUnits(data.yesCount ?? "0", 18));
+      const vetoCount = Number(formatUnits(data.vetoCount ?? "0", 18));
+      const totalVotes = abstainCount + noCount + yesCount + vetoCount;
+
+      let abstainPercentage = 0;
+      let noPercentage = 0;
+      let yesPercentage = 0;
+      let vetoPercentage = 0;
+      let globalAbstainPercentage = 0;
+      let globalNoPercentage = 0;
+      let globalYesPercentage = 0;
+      let globalVetoPercentage = 0;
+      let participationRate = 0;
+
+      if (totalVotes !== 0) {
+        abstainPercentage = (abstainCount / totalVotes) * 100;
+        noPercentage = (noCount / totalVotes) * 100;
+        yesPercentage = (yesCount / totalVotes) * 100;
+        vetoPercentage = (vetoCount / totalVotes) * 100;
+
+        globalAbstainPercentage = (abstainCount / totalBGTDelegated) * 100;
+        globalNoPercentage = (noCount / totalBGTDelegated) * 100;
+        globalYesPercentage = (yesCount / totalBGTDelegated) * 100;
+        globalVetoPercentage = (vetoCount / totalBGTDelegated) * 100;
+
+        participationRate = (totalVotes / totalBGTDelegated) * 100;
+      }
+      return {
+        abstainPercentage,
+        noPercentage,
+        yesPercentage,
+        vetoPercentage,
+        globalAbstainPercentage,
+        globalNoPercentage,
+        globalYesPercentage,
+        globalVetoPercentage,
+        totalVotes,
+        participationRate,
+      };
+    }, [data, totalBGTDelegated]);
+    return normalizedTallyResult;
+  };
+
   const useNormalizedTallyResult = () => {
     const { useTotalDelegated } = usePollActiveValidators();
     const totalBGTDelegated = useTotalDelegated();
@@ -217,6 +287,7 @@ export const usePollProposalVotes = (proposalId: number) => {
     useProposalVotes,
     useTotalProposalVotes,
     useNormalizedTallyResult,
+    useProposalTallyResult,
     isLoading,
   };
 };
