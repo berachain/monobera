@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import BigNumber from "bignumber.js";
 
 import POLLING from "~/config/constants/polling";
 import { usePollBHoneySupply } from "./usePollBHoneySupply";
@@ -18,7 +19,10 @@ export const usePollBHoneyCollateralization = () => {
     () => {
       try {
         if (honeyLocked !== 0 && bHoneySupply !== 0) {
-          return Math.floor(honeyLocked / bHoneySupply) * 100 ?? 0;
+          return BigNumber(honeyLocked)
+            .div(BigNumber(bHoneySupply))
+            .times(100)
+            .dp(2);
         }
         return undefined;
       } catch (e) {
