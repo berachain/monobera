@@ -6,7 +6,7 @@ import { Button } from "@bera/ui/button";
 
 // Define the ambassadors
 export const kingsOath = {
-  name: "The King’s Oath",
+  name: "Pack Lead",
   image: "/bear_center.png",
   tier: "Tier 1",
   intro:
@@ -14,7 +14,7 @@ export const kingsOath = {
 };
 
 export const brigadeGeneral = {
-  name: "Brigade General",
+  name: "Berabassador",
   image: "/bear_center.png",
   tier: "Tier 2",
   intro:
@@ -22,7 +22,7 @@ export const brigadeGeneral = {
 };
 
 export const colonel = {
-  name: "Colonel",
+  name: "Cubassador",
   image: "/bear_center.png",
   tier: "Tier 3",
   intro:
