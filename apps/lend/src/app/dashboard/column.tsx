@@ -16,7 +16,7 @@ export const user_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
-        <TokenIcon token={row.original} size="lg" />
+        <TokenIcon address={row.original.address} size="lg" />
         {row.original.symbol}
       </div>
     ),
@@ -93,7 +93,7 @@ export const user_borrows_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
-        <TokenIcon token={row.original} size="lg" />
+        <TokenIcon address={row.original.address} size="lg" />
         {row.original.symbol}
       </div>
     ),
@@ -166,7 +166,7 @@ export const available_supply_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
-        <TokenIcon token={row.original} size="lg" />
+        <TokenIcon address={row.original.address} size="lg" />
         {row.original.symbol}
       </div>
     ),
@@ -261,7 +261,7 @@ export const available_borrows_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-sm font-medium leading-none">
-        <TokenIcon token={row.original} size="lg" />
+        <TokenIcon address={row.original.address} size="lg" />
         {row.original.symbol}
       </div>
     ),

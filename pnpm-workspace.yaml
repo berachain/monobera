@@ -6,6 +6,8 @@ packages:
   - apps/perp
   - apps/faucet
   - apps/validator-clue
+  - apps/ambassador
+  - apps/ecosystem
   - packages/config/*
   - packages/config/env
   - packages/beracrocswap

@@ -6,7 +6,11 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
-import { blockExplorerUrl, honeyAddress } from "@bera/config";
+import {
+  blockExplorerUrl,
+  honeyAddress,
+  honeyTokenAddress,
+} from "@bera/config";
 import { TokenIcon } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Icons } from "@bera/ui/icons";
@@ -26,11 +30,7 @@ export default function HoneyTokenCard() {
     <Card className="mt-6 flex flex-col justify-between gap-6 p-4 md:p-6 lg:flex-row lg:items-center">
       <div className="flex  flex-row justify-between md:flex-col md:gap-8">
         <div className="mb-0 flex items-center gap-2">
-          {tokenDictionary?.[honeyAddress] ? (
-            <TokenIcon token={tokenDictionary[honeyAddress]} size="2xl" />
-          ) : (
-            <Skeleton className="h-12 w-12 rounded-full" />
-          )}
+          <TokenIcon address={honeyTokenAddress} size="2xl" />
           <div>
             <div className="text-xs	font-medium leading-5">
               Honey StableCoin

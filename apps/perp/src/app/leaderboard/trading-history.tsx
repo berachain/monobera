@@ -42,6 +42,7 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
         </Tabs> */}
       </div>
       <DataTable
+        pagination
         columns={history_columns}
         data={closedPositions ?? []}
         className="min-w-[1136px]"

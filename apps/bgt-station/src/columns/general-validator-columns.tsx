@@ -59,6 +59,13 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     ),
     accessorKey: "tokens",
     enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.tokens ?? 0;
+      const b = rowB.original.tokens ?? 0;
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    },
   },
   {
     header: ({ column }) => (

@@ -33,3 +33,14 @@ export interface HoneyRedemption {
   collateralAmount: bigint;
   totalHoneySupply: bigint;
 }
+
+export interface HoneyTxn {
+  id: string;
+  timestamp: number;
+  from: string;
+  to: string;
+  collateral: string;
+  collateralAmount: string;
+  honeyAmount: string;
+  txnType: string;
+}

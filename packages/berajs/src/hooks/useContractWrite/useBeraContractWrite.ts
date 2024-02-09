@@ -2,7 +2,7 @@
 
 import { useCallback, useReducer } from "react";
 import { usePublicClient, useWalletClient } from "wagmi";
-import { prepareWriteContract } from "wagmi/actions";
+// import { prepareWriteContract } from "wagmi/actions";
 
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
@@ -47,25 +47,27 @@ const useBeraContractWrite = ({
       let receipt: any | undefined;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
-        const { request: _request } = await prepareWriteContract({
-          address: address,
-          abi: abi,
-          functionName: functionName,
-          args: params,
-          value: value,
-          nonce: userNonce,
-        });
+        // prepareWriteContract causes issues with the gas estimation and fails before writing contract
+        // const { request: _request } = await prepareWriteContract({
+        //   address: address,
+        //   abi: abi,
+        //   functionName: functionName,
+        //   args: params,
+        //   value: value,
+        //   nonce: userNonce,
+        // });
+        // Directly pass request to writeContract
 
         receipt = await walletClient?.writeContract({
+          account: account,
           address: address,
           abi: abi,
-          chain: networkConfig.chain,
           functionName: functionName,
-          value: value === 0n ? undefined : value,
+          value: value,
           args: [...params],
-          account: account,
+          chain: networkConfig.chain,
           nonce: userNonce,
-          // chain: undefined,
+          gas: 10000000n,
         });
         dispatch({ type: ActionEnum.SUBMITTING });
 
@@ -91,9 +93,9 @@ const useBeraContractWrite = ({
           });
         }
       } catch (e: any) {
-        // if (process.env.VERCEL_ENV !== "production") {
-        console.log(e);
-        // }
+        if (process.env.VERCEL_ENV !== "production") {
+          console.log(e);
+        }
         dispatch({ type: ActionEnum.ERROR });
         const finalMsg = getErrorMessage(e);
         onError?.({

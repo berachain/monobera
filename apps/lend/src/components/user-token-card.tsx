@@ -2,13 +2,12 @@ import { formatter, usePollAssetWalletBalance } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
-import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits } from "viem";
 
+import AssetInfo from "./asset-info";
 import Card from "./card";
-import InfoButton from "./info-button";
 import BorrowBtn from "./modals/borrow-button";
 import RepayBtn from "./modals/repay-button";
 import SupplyBtn from "./modals/supply-button";
@@ -20,6 +19,8 @@ export default function UserTokenCard({
 }: {
   asset: any;
   type: "user-supply" | "user-borrow" | "supply" | "borrow";
+  // no more "user-borrow" and "borrow", i just dont wanna delete them all, they are all my babies ;-;
+  // feel free to delete them you baby killer
 }) {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { data: debtTokenBalance } = useSelectedAssetWalletBalance(
@@ -63,31 +64,26 @@ export default function UserTokenCard({
   }
 
   return (
-    <Card key={asset.symbol} className="p-4">
+    <Card key={asset.symbol} className="bg-muted p-4">
       <div className="flex flex-row items-center justify-between gap-6">
         <div className="flex flex-shrink-0 items-center gap-4 ">
-          <TokenIcon token={asset} fetch size="2xl" />
+          <TokenIcon address={asset.address} fetch size="2xl" />
           <div>
             <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
-              {type === "user-supply" && <>{asset.symbol} Supplied</>}
+              {type === "user-supply" && "Deposited"}
               {type === "user-borrow" && <>{asset.symbol} Debt</>}
               {type === "supply" && (
                 <>
                   <Icons.wallet className="relative h-3 w-3 rounded-lg" />
-                  {asset.symbol}{" "}
+                  Wallet Balance
                 </>
               )}
               {type === "borrow" && <>{asset.symbol} Avaliable</>}
             </div>
 
-            <div className="h-8 text-lg font-bold uppercase">
-              {formatter.format(balance)}{" "}
-              {(type === "user-supply" || type === "supply") &&
-                asset.address === honeyAddress && (
-                  <Badge variant={"warning"} className="rounded-xs px-2 py-0">
-                    SUPPLY ONLY
-                  </Badge>
-                )}
+            <div className="flex h-8 items-center gap-1 text-lg font-bold uppercase">
+              {formatter.format(balance)} {asset.symbol}
+              <Tooltip text={<AssetInfo asset={asset} />} />
             </div>
             <div className="text-xs font-medium leading-tight">
               $
@@ -107,7 +103,16 @@ export default function UserTokenCard({
             <div className="flex flex-shrink-0 flex-col">
               <div className="text-xs font-medium leading-5 text-muted-foreground">
                 Supply APY{" "}
-                <Tooltip text="Supply APY (Annual Percentage Yield) represents the annualized return on supplied assets. See additional disclaimers in notes below." />
+                <Tooltip
+                  text={
+                    <>
+                      Supply APY (Annual Percentage Yield) represents the <br />
+                      annualized return on supplied assets. See additional{" "}
+                      <br />
+                      disclaimers in notes below.
+                    </>
+                  }
+                />
               </div>
               <div className="text-lg font-bold text-success-foreground">
                 {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
@@ -119,7 +124,15 @@ export default function UserTokenCard({
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
               Variable APY{" "}
-              <Tooltip text="Variable interest rate will fluctuate based on the market conditions. See additional disclaimers in notes below." />
+              <Tooltip
+                text={
+                  <>
+                    Variable interest rate will fluctuate based on the market{" "}
+                    <br />
+                    conditions. See additional disclaimers in notes below.
+                  </>
+                }
+              />
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               {(
@@ -151,9 +164,9 @@ export default function UserTokenCard({
             <BorrowBtn token={asset} />
           )}
           {type === "user-borrow" && <RepayBtn token={asset} />}
-          {(type === "borrow" || type === "supply") && (
+          {/* {(type === "borrow" || type === "supply") && (
             <InfoButton address={asset.address} />
-          )}
+          )} */}
         </div>
       </div>
       <div className="grow-1 mt-8 flex w-full items-center gap-2 md:hidden md:w-fit">
@@ -165,9 +178,9 @@ export default function UserTokenCard({
           <BorrowBtn token={asset} />
         )}
         {type === "user-borrow" && <RepayBtn token={asset} />}
-        {(type === "borrow" || type === "supply") && (
+        {/* {(type === "borrow" || type === "supply") && (
           <InfoButton address={asset.address} />
-        )}
+        )} */}
       </div>
       {type === "borrow" && Number(asset.formattedBalance) === 0 && (
         <Alert variant="warning" className="mt-4">

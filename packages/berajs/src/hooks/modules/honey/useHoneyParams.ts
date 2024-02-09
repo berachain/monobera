@@ -1,55 +1,73 @@
+import { erc20HoneyAddress, multicallAddress } from "@bera/config";
+import BigNumber from "bignumber.js";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatEther, type Address } from "viem";
+import { formatUnits, getAddress, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { HONEY_PRECOMPILE_ABI } from "~/config";
-import POLLING from "~/config/constants/polling";
-import { useBeraConfig } from "~/contexts";
 
-// this is going to be slow for now until we have event indexing
-export const usePollHoneyParams = () => {
+interface CollateralRates {
+  mintFee: number;
+  redeemFee: number;
+}
+
+export const usePollHoneyParams = (collateralList: Address[]) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
+  const method = "usePollHoneyParams";
+  const QUERY_KEY = [method, ...collateralList];
 
-  const method = "getExchangable";
-  const QUERY_KEY = [method];
-  useSWR(
-    QUERY_KEY,
-    async () => {
-      const result = (await publicClient.readContract({
-        address: networkConfig.precompileAddresses.erc20HoneyAddress as Address,
+  const swrResponse = useSWR(QUERY_KEY, async () => {
+    const calls: any[] = [];
+    collateralList.forEach((collateral: Address) => {
+      calls.push({
+        address: erc20HoneyAddress,
         abi: HONEY_PRECOMPILE_ABI,
-        functionName: method,
-        args: [],
-      })) as any[];
-      return result;
-    },
-    {
-      refreshInterval: POLLING.SLOW, // 3 minutes
-    },
-  );
+        functionName: "getMintRate",
+        args: [collateral],
+      });
+      calls.push({
+        address: erc20HoneyAddress,
+        abi: HONEY_PRECOMPILE_ABI,
+        functionName: "getRedeemRate",
+        args: [collateral],
+      });
+    });
+
+    const results = await publicClient.multicall({
+      contracts: calls,
+      multicallAddress: multicallAddress,
+    });
+
+    const obj: Record<Address, CollateralRates> = {};
+    results.map((result: any, index: number) => {
+      const collateral = collateralList[Math.floor(index / 2)] as Address;
+      if (!obj[collateral]) obj[collateral] = { mintFee: 0, redeemFee: 0 };
+      if (index % 2 === 0) {
+        if (result.status === "success") {
+          obj[collateral]!.mintFee = BigNumber(1)
+            .minus(BigNumber(formatUnits(result.result, 18)))
+            .toNumber();
+        }
+      } else {
+        if (result.status === "success") {
+          obj[collateral]!.redeemFee = BigNumber(1)
+            .minus(BigNumber(formatUnits(result.result, 18)))
+            .toNumber();
+        }
+      }
+    });
+    return obj;
+  });
 
   const useHoneyParams = (collateral: Address | undefined) => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     if (!data || !collateral) return undefined;
-    const honeyParams = data.find((p: any) => {
-      return p.collateral === collateral;
-    });
-    if (!honeyParams) return undefined;
-    const mintRate = formatEther(honeyParams.mintRate);
-    const redeemRate = formatEther(honeyParams.redemptionRate);
-    const mintFee = 1 - Number(mintRate);
-    const redeemFee = 1 - Number(redeemRate);
-    return {
-      mintRate,
-      redeemRate,
-      mintFee,
-      redeemFee,
-      enabled: honeyParams.enabled,
-    };
+    return data[getAddress(collateral)];
   };
+
   return {
+    ...swrResponse,
     useHoneyParams,
   };
 };

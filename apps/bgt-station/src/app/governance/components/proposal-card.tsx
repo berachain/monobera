@@ -151,7 +151,7 @@ export function ProposalCard({
         </div>
       </div>
       <div
-        className={"mt-1 font-semibold leading-tight text-foregroundtext-2xl"}
+        className={"text-foregroundtext-2xl mt-1 font-semibold leading-tight"}
       >
         {proposal.title}
       </div>
@@ -185,8 +185,9 @@ export function ProposalCard({
             <Identicon account={getAddress(proposal.proposer)} />
             Submitted by {truncateHash(proposal.proposer, 6, 4)}
           </div>
+          {/* show more accurate participation rate */}
           <div>
-            {(normalizedTally?.participationRate ?? 0).toFixed(2)}%
+            {(normalizedTally?.participationRate ?? 0).toFixed(8)}%
             participation rate
           </div>
         </div>

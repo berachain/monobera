@@ -20,6 +20,8 @@
     "dev:perp": "turbo dev --filter=perp --filter='./packages/*' --concurrency=18",
     "dev:faucet": "turbo dev --filter=faucet --filter='./packages/*' --concurrency=18",
     "dev:clue": "turbo dev --filter=validator-clue --filter='./packages/*' --concurrency=18",
+    "dev:ambassador": "turbo dev --filter=ambassador --filter='./packages/*' --concurrency=18",
+    "dev:ecosystem": "turbo dev --filter=ecosystem --filter='./packages/*' --concurrency=18",
     "check-types": "turbo check-types",
     "lint": "biome lint . ",
     "lint:apply": "biome lint . --apply",

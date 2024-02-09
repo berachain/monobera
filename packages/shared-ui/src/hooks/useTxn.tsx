@@ -154,7 +154,7 @@ export const useTxn = ({
           if (error?.message.includes("User rejected the request.")) {
             openModal("errorModal", {
               errorHash: "0x",
-              errorMessage: "User rejected txn",
+              errorMessage: "User rejected transaction",
             });
           } else {
             openModal("errorModal", {
@@ -278,7 +278,7 @@ export const useTxn = ({
         if (error?.message.includes("User rejected the request.")) {
           toast.custom(
             <ErrorToast
-              title={"User rejected txn"}
+              title={"User rejected transaction"}
               onClose={() => toast.remove(toastId)}
             />,
             {
@@ -308,7 +308,7 @@ export const useTxn = ({
         if (error?.message.includes("User rejected the request.")) {
           openModal("errorModal", {
             errorHash: "0x",
-            errorMessage: "User rejected txn",
+            errorMessage: "User rejected transaction",
           });
         } else {
           openModal("errorModal", {

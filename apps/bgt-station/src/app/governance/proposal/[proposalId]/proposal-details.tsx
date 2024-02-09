@@ -62,15 +62,10 @@ export default function ProposalDetails({
   const globalTotal = useTotalDelegated();
   const userTotal = useTotalDelegatorDelegated();
 
-  const {
-    useProposalVotes,
-    useTotalProposalVotes,
-    isLoading,
-    useNormalizedTallyResult,
-  } = usePollProposalVotes(proposalId);
+  const { useProposalVotes, isLoading, useNormalizedTallyResult } =
+    usePollProposalVotes(proposalId);
 
   const votes = useProposalVotes();
-  const totalVotes = useTotalProposalVotes();
   const normalizedTally = useNormalizedTallyResult();
 
   const { open, setOpen, comment, setComment, selected, setSelected } =
@@ -167,7 +162,10 @@ export default function ProposalDetails({
         <div className="mt-4 flex gap-4">
           <Card className="hidden w-full flex-col items-center justify-center p-6 sm:flex">
             <div className="text-2xl font-semibold leading-loose text-foreground">
-              {normalizedTally !== undefined ? formatter.format(totalVotes) : 0}
+              {normalizedTally !== undefined
+                ? formatter.format(normalizedTally.totalVotes)
+                : 0}{" "}
+              BGT
             </div>
             <div className="mt-[-4px] flex items-center gap-0.5 text-sm font-medium leading-[14px] text-muted-foreground">
               Total votes

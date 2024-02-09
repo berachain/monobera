@@ -10,18 +10,9 @@ type Props = {
 export default function BribesList({ bribes }: Props) {
   return (
     <div className="flex flex-row">
-      {bribes?.proposers.map((token: string, index) => (
+      {bribes?.proposers.map((token: string, index: number) => (
         <div key={index} className="ml-[-15px]">
-          <TokenIcon
-            fetch
-            token={{
-              address: token,
-              decimals: 18,
-              symbol: "",
-              name: "",
-              default: true,
-            }}
-          />
+          <TokenIcon address={token} />
         </div>
       ))}
     </div>

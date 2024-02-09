@@ -1,10 +1,8 @@
 import {
+  GetHoneyTxn,
+  GetHoneyTxnByType,
   client,
-  getMints,
-  getMintsAndRedemptions,
-  getRedemptions,
-  type HoneyMint,
-  type HoneyRedemption,
+  type HoneyTxn,
 } from "@bera/graphql";
 import useSWRInfinite from "swr/infinite";
 
@@ -22,13 +20,10 @@ export const useHoneyEvents = () => {
       const page = key[1];
       return client
         .query({
-          query: getMintsAndRedemptions,
+          query: GetHoneyTxn,
           variables: { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE },
         })
-        .then((res: any) => [
-          ...res.data.honeyMints,
-          ...res.data.honeyRedemptions,
-        ])
+        .then((res: any) => res.data.honeyTxns)
         .catch((e: any) => console.error(e));
     },
     { refreshInterval: 1800000 },
@@ -45,10 +40,14 @@ export const useHoneyEvents = () => {
       const page = key[1];
       return client
         .query({
-          query: getMints,
-          variables: { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE },
+          query: GetHoneyTxnByType,
+          variables: {
+            page: page * DEFAULT_SIZE,
+            limit: DEFAULT_SIZE,
+            txnType: "Mint",
+          },
         })
-        .then((res: any) => res.data.honeyMints)
+        .then((res: any) => res.data.honeyTxns)
         .catch((e: any) => console.error(e));
     },
     { refreshInterval: 1800000 },
@@ -65,10 +64,14 @@ export const useHoneyEvents = () => {
       const page = key[1];
       return client
         .query({
-          query: getRedemptions,
-          variables: { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE },
+          query: GetHoneyTxnByType,
+          variables: {
+            page: page * DEFAULT_SIZE,
+            limit: DEFAULT_SIZE,
+            txnType: "Redeem",
+          },
         })
-        .then((res: any) => res.data.honeyRedemptions)
+        .then((res: any) => res.data.honeyTxns)
         .catch((e: any) => console.error(e));
     },
     { refreshInterval: 1800000 },
@@ -105,19 +108,19 @@ export const useHoneyEvents = () => {
     allData: allData
       ?.flat()
       .sort((a: any, b: any) => Number(b.timestamp) - Number(a.timestamp))
-      .slice(0, allDataSize * DEFAULT_SIZE) as HoneyMint[] | HoneyRedemption[],
+      .slice(0, allDataSize * DEFAULT_SIZE) as HoneyTxn[],
     allDataSize,
     setAllDataSize,
     isAllDataLoadingMore,
     isAllDataReachingEnd,
 
-    mintData: mintData?.flat() as HoneyMint[],
+    mintData: mintData?.flat() as HoneyTxn[],
     mintDataSize,
     setMintDataSize,
     isMintDataLoadingMore,
     isMintDataReachingEnd,
 
-    redemptionData: redemptionData?.flat() as HoneyRedemption[],
+    redemptionData: redemptionData?.flat() as HoneyTxn[],
     redemptionDataSize,
     setRedemptionDataSize,
     isRedemptionDataLoadingMore,

@@ -18,7 +18,7 @@ export function PreviewToken({ token, value, price }: PreviewToken) {
     <li className={"flex w-full flex-row items-center  justify-between p-2"}>
       <div className="flex cursor-not-allowed items-center justify-center gap-2">
         <>
-          <TokenIcon token={token} />
+          <TokenIcon address={token?.address ?? ""} />
           <span className="text-sm font-medium">{token?.symbol}</span>
         </>
       </div>

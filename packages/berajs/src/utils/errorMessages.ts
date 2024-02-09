@@ -46,6 +46,93 @@ const errorMsgMap: ErrorMessages = {
         "The price of the asset you are trying to borrow has fluctuated too much. Please try again.",
     },
   },
+  PERPS: {
+    WRONG_LIMIT_PRICE: {
+      keywords: ["WRONG_LIMIT_PRICE"],
+      errorMSG:
+        "Currently, Limit Prices must be set above the current price for long positions and below for short positions.",
+    },
+    PRICE_IMPACT_TOO_HIGH: {
+      keywords: ["PRICE_IMPACT_TOO_HIGH"],
+      errorMSG: "This trade has too much price impact.",
+    },
+    MAX_TRADES_PER_PAIR: {
+      keywords: ["MAX_TRADES_PER_PAIR"],
+      errorMSG: "You've exceeded your maximum amount of trades for this pair!",
+    },
+    ABOVE_MAX_POS: {
+      keywords: ["ABOVE_MAX_POS"],
+      errorMSG: "The trade's position size is too high.",
+    },
+    ABOVE_MAX_GROUP_COLLATERAL: {
+      keywords: ["ABOVE_MAX_GROUP_COLLATERAL"],
+      errorMSG: "The trade's collateral is more than the vault can support.",
+    },
+    BELOW_MIN_POS: {
+      keywords: ["BELOW_MIN_POS"],
+      errorMSG: "The trade's position size is too low.",
+    },
+    LEVERAGE_INCORRECT: {
+      keywords: ["LEVERAGE_INCORRECT"],
+      errorMSG: "The leverage for this trade is either too low or too high.",
+    },
+    WRONG_TP: {
+      keywords: ["WRONG_TP", "TP_REACHED"],
+      errorMSG: "The Take Profit is invalid for this trade.",
+    },
+    WRONG_SL: {
+      keywords: ["WRONG_SL", "SL_TOO_BIG", "SL_REACHED"],
+      errorMSG: "The Stop Loss is invalid for this trade.",
+    },
+    TOO_MANY_PAIRS: {
+      keywords: ["TOO_MANY_PAIRS"],
+      errorMSG: "We only support batch closing at most 10 trades at this time.",
+    },
+    ALREADY_BEING_CLOSED: {
+      keywords: ["ALREADY_BEING_CLOSED"],
+      errorMSG: "This trade is currently being closed or has been closed.",
+    },
+    NO_TRADE: {
+      keywords: ["NO_TRADE"],
+      errorMSG: "This position is no longer open.",
+    },
+    NO_LIMIT: {
+      keywords: ["NO_LIMIT"],
+      errorMSG: "This order is no longer open.",
+    },
+    SLIPPAGE_EXCEEDED: {
+      keywords: ["SLIPPAGE_EXCEEDED"],
+      errorMSG:
+        "The price just moved significantly! Please set a higher slippage.",
+    },
+    PAST_EXPOSURE_LIMITS: {
+      keywords: ["PAST_EXPOSURE_LIMITS"],
+      errorMSG:
+        "This position's size is beyond the safe exposure limits of the system. Please try again later or with a smaller size.",
+    },
+    PENDING_WITHDRAWAL: {
+      keywords: ["PENDING_WITHDRAWAL"],
+      errorMSG:
+        "You have a pending withdrawal. Please wait for it to be processed.",
+    },
+    MORE_THAN_WITHDRAW_AMOUNT: {
+      keywords: ["MORE_THAN_WITHDRAW_AMOUNT"],
+      errorMSG: "You can't cancel more than you've requested to withdraw.",
+    },
+    NOT_ENOUGH_ASSETS: {
+      keywords: ["NOT_ENOUGH_ASSETS"],
+      errorMSG: "The vault cannot settle your position at this time.",
+    },
+    MAX_DAILY_PNL: {
+      keywords: ["MAX_DAILY_PNL"],
+      errorMSG:
+        "This trade exceeds the daily maximum allowed PnL on the vault.",
+    },
+    ARITHMETIC_ERROR: {
+      keywords: ["Arithmetic operation resulted in underflow or overflow."],
+      errorMSG: "This operation reverted on chain. Please try again later.",
+    },
+  },
 };
 
 export const getErrorMessage = (e: any) => {
