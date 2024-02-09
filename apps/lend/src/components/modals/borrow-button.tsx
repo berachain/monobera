@@ -24,10 +24,12 @@ export default function BorrowBtn({
   token,
   disabled = false,
   variant = "primary",
+  className,
 }: {
   token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
+  className?: string;
 }) {
   const { isReady } = useBeraJs();
   const [open, setOpen] = useState(false);
@@ -52,8 +54,8 @@ export default function BorrowBtn({
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-full text-sm leading-5 xl:w-fit"
-        disabled={disabled || isLoading || !isReady}
+        className={cn("w-full xl:w-fit", className)}
+        disabled={disabled || isLoading || !isReady || token.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Borrow"}
@@ -86,19 +88,7 @@ const BorrowModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  const borrowPower = formatUnits(
-    parseUnits(
-      BigInt(
-        userAccountData?.availableBorrowsBase ?? "0",
-      ).toString() as `${number}`,
-      baseCurrencyData?.networkBaseTokenPriceDecimals,
-    ) /
-      parseUnits(
-        reserveData?.formattedPriceInMarketReferenceCurrency,
-        baseCurrencyData?.networkBaseTokenPriceDecimals,
-      ),
-    baseCurrencyData?.networkBaseTokenPriceDecimals,
-  );
+  const borrowPower = token.formattedBalance;
 
   const availableLiquidity = formatUnits(
     BigInt(reserveData?.availableLiquidity ?? "0") *

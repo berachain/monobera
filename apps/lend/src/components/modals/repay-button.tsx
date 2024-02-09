@@ -18,6 +18,7 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
@@ -26,10 +27,12 @@ export default function RepayBtn({
   token,
   disabled = false,
   variant = "outline",
+  className = "",
 }: {
   token: Token;
   disabled?: boolean;
   variant?: "primary" | "outline";
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
@@ -53,8 +56,8 @@ export default function RepayBtn({
       {ModalPortal}
       <Button
         onClick={() => setOpen(true)}
-        className="w-full text-sm leading-5 xl:w-fit"
-        disabled={disabled || isLoading}
+        className={cn("w-full xl:w-fit", className)}
+        disabled={disabled || isLoading || token.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Repay"}
@@ -188,7 +191,7 @@ const RepayModalContent = ({
               functionName: "repay",
               params: [
                 token.address,
-                amount?.localeCompare(debtBalance ?? "") === 0
+                BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0"))
                   ? maxUint256
                   : parseUnits(amount as `${number}`, token.decimals),
                 2,
@@ -203,11 +206,7 @@ const RepayModalContent = ({
         <ApproveButton
           token={token}
           spender={lendPoolImplementationAddress}
-          amount={
-            amount === debtBalance
-              ? maxUint256
-              : parseUnits((amount ?? "0") as `${number}`, token.decimals)
-          }
+          amount={parseUnits((amount ?? "0") as `${number}`, token.decimals)}
         />
       )}
     </div>
