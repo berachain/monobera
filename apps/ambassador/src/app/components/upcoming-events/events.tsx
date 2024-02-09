@@ -22,7 +22,7 @@ export const projects: Project[] = [
   //   numParticipants: "4.20k",
   // },
   {
-    name: "beras in denver",
+    name: "Beras in denver",
     image: "/bear_1.png",
     date: "02/29/2024",
     numParticipants: "1.00k+",
@@ -106,7 +106,9 @@ export function Projects() {
         className="z-10 mb-8 mt-12"
         onClick={toggleDisplay}
       >
-        {viewMore ? "View More Events (coming soon)" : "View Less Events (coming soon)"}
+        {viewMore
+          ? "View More Events (coming soon)"
+          : "View Less Events (coming soon)"}
       </Button>
     </div>
   );
