@@ -3,10 +3,12 @@ import {
   formatter,
   useBeraJs,
   usePollAssetWalletBalance,
+  usePollBgtRewardsForAddress,
   usePollReservesDataList,
   usePollUserAccountData,
   usePollUserReservesData,
 } from "@bera/berajs";
+import { lendHoneyDebtTokenAddress } from "@bera/config";
 import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
@@ -29,6 +31,18 @@ export default function StatusBanner() {
   const { data: baseCurrency } = useBaseCurrencyData();
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { data: balanceToken } = useCurrentAssetWalletBalances();
+  const { useBgtApr } = usePollBgtRewardsForAddress({
+    address: lendHoneyDebtTokenAddress,
+  });
+  const bgtApr = useBgtApr(
+    Number(
+      formatUnits(
+        data?.totalDebtBase ?? 0n,
+        baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+      ),
+    ),
+  );
+
   let positiveProportion = 0;
   let negativeProportion = 0;
   if (reservesDictionary && userReservesDictionary) {
@@ -50,6 +64,14 @@ export default function StatusBanner() {
       }
     });
   }
+  negativeProportion -=
+    Number(
+      formatUnits(
+        data?.totalDebtBase ?? 0n,
+        baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+      ),
+    ) * Number(bgtApr ?? "0");
+
   const totalLiquidityUSD = Number(
     formatUnits(
       data?.totalCollateralBase || "1",

@@ -127,7 +127,8 @@ export default function UserTokenCard({
               <Tooltip
                 text={
                   <>
-                    Variable interest rate will fluctuate based on the market <br/>
+                    Variable interest rate will fluctuate based on the market{" "}
+                    <br />
                     conditions. See additional disclaimers in notes below.
                   </>
                 }
