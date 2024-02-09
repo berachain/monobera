@@ -122,6 +122,17 @@ const projectList = [
 export default function EcosystemProjects() {
   const [keywords, setKeywords] = useState<string | null>(null);
   const [ecosystemType, setEcosystemType] = React.useState<string>("All");
+  const [visibleProjects, setVisibleProjects] = React.useState(4);
+  const [viewMore, setViewMore] = React.useState(false);
+
+  const toggleDisplay = () => {
+    if (viewMore) {
+      setVisibleProjects(projectList.length);
+    } else {
+      setVisibleProjects(3);
+    }
+    setViewMore(!viewMore);
+  };
   const filteredProjectList: any = useMemo(
     () =>
       projectList?.filter((project: any) => {
@@ -131,7 +142,10 @@ export default function EcosystemProjects() {
     [projectList, keywords],
   );
   return (
-    <div id="dapps" className="mt-4 flex flex-col gap-6 text-center">
+    <div
+      id="dapps"
+      className="mt-4 flex flex-col items-center gap-6 text-center"
+    >
       <SearchInput
         placeholder="Search..."
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -155,27 +169,38 @@ export default function EcosystemProjects() {
       </Tabs>
       <div className="my-4 border-b border-gray-200" />
       <div className="mx-auto grid w-fit grid-cols-1 gap-6 lg:grid-cols-4 xl:grid-cols-4">
-        {filteredProjectList.map((fav: any, index: number) => (
-          <div
-            key={index}
-            className="mx-auto flex w-full max-w-[260px] flex-col items-center justify-center gap-4 rounded-md border border-solid bg-background p-6"
-          >
-            {fav.icon}
-            <div>
-              <div className="text-3xl font-semibold leading-9">{fav.name}</div>
-              <div className="font-medium ">{fav.subtitle}</div>
+        {filteredProjectList
+          .slice(0, visibleProjects)
+          .map((fav: any, index: number) => (
+            <div
+              key={index}
+              className="mx-auto flex w-full max-w-[260px] flex-col items-center justify-center gap-4 rounded-md border border-solid bg-background p-6"
+            >
+              {fav.icon}
+              <div>
+                <div className="text-3xl font-semibold leading-9">
+                  {fav.name}
+                </div>
+                <div className="font-medium ">{fav.subtitle}</div>
+              </div>
+              <div className="text-center text-sm leading-5 text-muted-foreground">
+                {fav.description}
+              </div>
+              <div className="flex justify-between gap-2">
+                <Button onClick={() => window.open(fav.goto)} variant="outline">
+                  View Project <Icons.arrowRight />
+                </Button>
+              </div>
             </div>
-            <div className="text-center text-sm leading-5 text-muted-foreground">
-              {fav.description}
-            </div>
-            <div className="flex justify-between gap-2 ">
-              <Button onClick={() => window.open(fav.goto)} variant="outline">
-                View Project <Icons.arrowRight />
-              </Button>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
+      <Button
+        variant="outline"
+        className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
+        onClick={toggleDisplay}
+      >
+        {viewMore ? "View More" : "View Less"}
+      </Button>
     </div>
   );
 }
