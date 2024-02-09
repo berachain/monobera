@@ -40,25 +40,25 @@ import { type Chain } from "viem";
 
 export const navItems = [
   {
-    href: "/my-bgt",
-    title: "My BGT",
+    href: "#",
+    title: "Home",
   },
-  {
-    href: "/amm",
-    title: "AMM",
-  },
-  {
-    href: "/honey",
-    title: "Honey",
-  },
-  {
-    href: "/governance",
-    title: "Governance",
-  },
-  {
-    href: "/redeem",
-    title: "Redeem",
-  },
+  // {
+  //   href: "/amm",
+  //   title: "AMM",
+  // },
+  // {
+  //   href: "/honey",
+  //   title: "Honey",
+  // },
+  // {
+  //   href: "/governance",
+  //   title: "Governance",
+  // },
+  // {
+  //   href: "/redeem",
+  //   title: "Redeem",
+  // },
   {
     href: "#",
     title: "Explore",
