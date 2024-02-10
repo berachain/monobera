@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  const isFaucetPArtnersEnabled =
+  const isFaucetPartnersEnabled =
     process.env.NEXT_PUBLIC_FAUCET_PARTNERS_ENABLED === "true";
   return (
     <div className="container mx-auto">
@@ -28,7 +28,7 @@ export default function Page() {
           unoptimized
         />
       </div>
-      {isFaucetPArtnersEnabled && <FaucetPartners />}
+      {isFaucetPartnersEnabled && <FaucetPartners />}
 
       <Explore />
     </div>
