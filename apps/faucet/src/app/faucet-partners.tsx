@@ -26,7 +26,7 @@ export default function FaucetPartners() {
                 unoptimized
               />
               <div className="flex flex-col items-start">
-                <div className="font-bold text-black">Quicknode Faucet</div>
+                <div className="font-bold text-black">The Honey Jar Faucet</div>
               </div>
             </div>
             <Icons.arrowRight className="h-[24px] w-[24px] text-black" />
@@ -34,12 +34,12 @@ export default function FaucetPartners() {
         </Link>
         <Link href="https://faucet.quicknode.com/berachain/artio">
           <div className="flex h-[60px] w-[352px] flex-row items-center justify-between rounded-lg bg-[#2e1359] p-2 hover:bg-[#441a86] hover:shadow-xl">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 pb-2">
               <Image
                 src="./quicknode-logo.png"
                 alt="machine"
-                width={48}
-                height={48}
+                width={46}
+                height={46}
                 loading="eager"
                 className="relative object-cover"
                 unoptimized
