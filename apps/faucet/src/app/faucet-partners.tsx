@@ -8,7 +8,7 @@ export default function FaucetPartners() {
       <div className="flex text-3xl font-bold text-stone-50">
         Our Faucet Partners
       </div>
-      <div className="text-md font-semibold text-primary-foreground opacity-70">
+      <div className="text-md text-center font-semibold text-primary-foreground opacity-70">
         Help us assure a consistent drip across the ecosystem.
       </div>
       <div className="flex flex-row flex-wrap items-center justify-center gap-4 pt-6">
@@ -34,12 +34,12 @@ export default function FaucetPartners() {
         </Link>
         <Link href="https://faucet.quicknode.com/berachain/artio">
           <div className="flex h-[60px] w-[352px] flex-row items-center justify-between rounded-lg bg-[#2e1359] p-2 hover:bg-[#441a86] hover:shadow-xl">
-            <div className="flex items-center gap-2 pb-2">
+            <div className="flex items-center gap-2">
               <Image
                 src="./quicknode-logo.png"
                 alt="machine"
-                width={46}
-                height={46}
+                width={48}
+                height={48}
                 loading="eager"
                 className="relative object-cover"
                 unoptimized
