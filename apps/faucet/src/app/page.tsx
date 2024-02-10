@@ -4,6 +4,7 @@ import { cloudinaryUrl, faucetName } from "@bera/config";
 
 import { Explore } from "~/components/explore";
 import Content from "./content";
+import FaucetPartners from "./faucet-partners";
 
 export const metadata: Metadata = {
   title: `Berachain ${faucetName} `,
@@ -25,6 +26,8 @@ export default function Page() {
           unoptimized
         />
       </div>
+      <FaucetPartners />
+
       <Explore />
     </div>
   );
