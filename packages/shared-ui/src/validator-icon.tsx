@@ -6,14 +6,9 @@ import { get } from "@/libs/http";
 import { useValidators } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
-import { add } from "husky";
+import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 import { type Address } from "viem";
-
-
-
-import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
-
 
 export const ValidatorIcon = ({
   address,
@@ -46,6 +41,23 @@ export const ValidatorIcon = ({
     );
   };
 
+  const { data } = useSWRImmutable([address], () => {
+    keybase(address)
+      .then((d) => {
+        if (Array.isArray(d.them)) {
+          const uri = String(d.them[0]?.pictures?.primary?.url).replace(
+            "https://s3.amazonaws.com/keybase_processed_uploads/",
+            "",
+          );
+          console.log("uriiiii", uri);
+          return uri;
+        } else throw new Error(`failed to fetch avatar for ${address}.`);
+      })
+      .catch((error) => {
+        console.error(error); // uncomment this if you want the user to see if the avatar failed to load.
+      });
+  });
+
   const fetchAvatar = (identity: string) => {
     // fetch avatar from keybase
     return new Promise<void>((resolve) => {
@@ -66,12 +78,14 @@ export const ValidatorIcon = ({
         });
     });
   };
-  if (address && !validatorIcon) {
-    console.log("fetching avatar for", validatorIcon);
-    fetchAvatar(address).then(() => {
-      setValidatorIcon(validatorImg);
-    });
-  }
+  useEffect(() => {
+    if (address) {
+      console.log("fetching avatar for", validatorIcon, validatorImg);
+      fetchAvatar(address).then(() => {
+        setValidatorIcon(validatorImg);
+      });
+    }
+  }, [address]);
 
   return (
     <Avatar className={cn("", className)}>
