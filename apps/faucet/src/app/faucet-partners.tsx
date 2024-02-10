@@ -13,7 +13,7 @@ export default function FaucetPartners() {
       </div>
       <div className="flex flex-row flex-wrap items-center justify-center gap-4 pt-6">
         <Link href="https://faucet.0xhoneyjar.xyz/">
-          <div className="flex h-[60px] w-[352px] flex-row items-center justify-between rounded-lg bg-[#ffc100] p-2">
+          <div className="flex h-[60px] w-[352px] flex-row items-center justify-between rounded-lg bg-[#ffc100] p-2 hover:bg-[#ffd246] hover:shadow-xl">
             {/* TODO: upload logos to cloudinaryUrl */}
             <div className="flex items-center gap-2">
               <Image
@@ -33,7 +33,7 @@ export default function FaucetPartners() {
           </div>
         </Link>
         <Link href="https://faucet.quicknode.com/berachain/artio">
-          <div className="flex h-[60px] w-[352px] flex-row items-center justify-between rounded-lg bg-[#2e1359] p-2">
+          <div className="flex h-[60px] w-[352px] flex-row items-center justify-between rounded-lg bg-[#2e1359] p-2 hover:bg-[#441a86] hover:shadow-xl">
             <div className="flex items-center gap-2">
               <Image
                 src="./quicknode-logo.png"
