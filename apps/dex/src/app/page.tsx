@@ -128,9 +128,6 @@ export default async function Homepage() {
         <div className="container max-w-1280 pb-16">
           <Hero />
           <Data tvl={data?.tvl} volume={data?.volume} />
-          <div className="-mx-full overflow-hidden">
-            <CreateAPool />
-          </div>
           <Documentation className="my-24" />
         </div>
         <Footer />

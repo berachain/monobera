@@ -237,10 +237,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
           const swapSteps = [...swapInfo.batchSwapSteps];
           if (swapSteps.length > 0) {
             const lastIndex = swapSteps.length - 1;
-            if (
-              swapSteps[lastIndex]?.base &&
-              swapSteps[lastIndex].quote
-            ) {
+            if (swapSteps[lastIndex]?.base && swapSteps[lastIndex].quote) {
               if (
                 swapSteps[lastIndex].base.toLowerCase() ===
                 beraTokenAddress.toLowerCase()
