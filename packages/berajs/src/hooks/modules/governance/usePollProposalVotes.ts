@@ -28,6 +28,13 @@ export interface IVote {
   voter: string;
 }
 
+export interface TallyVote {
+  abstainCount: bigint;
+  noCount: bigint;
+  yesCount: bigint;
+  vetoCount: bigint;
+}
+
 export const usePollProposalVotes = (proposalId: number) => {
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
@@ -141,8 +148,7 @@ export const usePollProposalVotes = (proposalId: number) => {
   const useProposalTallyResult = (proposalId: number) => {
     const { useTotalDelegated } = usePollActiveValidators();
     const totalBGTDelegated = useTotalDelegated();
-    const TALLY_QUERY_KEY = [proposalId];
-    const { isLoading } = useSWRImmutable(TALLY_QUERY_KEY, async () => {
+    const { data = undefined } = useSWRImmutable([proposalId], async () => {
       const result = (await publicClient
         .readContract({
           address: networkConfig.precompileAddresses
@@ -154,12 +160,10 @@ export const usePollProposalVotes = (proposalId: number) => {
         .catch((e) => {
           console.log(e);
           return null;
-        })) as any[];
+        })) as TallyVote;
       if (!result) return false;
       return result;
     });
-
-    const { data } = useSWRImmutable(TALLY_QUERY_KEY);
 
     const normalizedTallyResult = useMemo(() => {
       if (!data) return undefined;
