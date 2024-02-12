@@ -1,5 +1,4 @@
-import { on } from "events";
-import React from "react";
+import React, { useEffect } from "react";
 import { faucetEndpointUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { getAddress, isAddress } from "viem";
@@ -13,6 +12,12 @@ export function DripToken({
   setAlert: (alert: "success" | "destructive" | "error" | undefined) => void;
   setShowAlert: () => void;
 }) {
+  const [height, setHeight] = React.useState<number | undefined>(undefined);
+  useEffect(() => {
+    const item = document.getElementById("cf-turnstile")?.offsetHeight;
+    setHeight(item);
+  }, []);
+
   async function handleRequest(token: string) {
     try {
       const res = await fetch(
@@ -46,18 +51,20 @@ export function DripToken({
 
   return (
     <form onSubmit={onsubmit}>
+      <div
+        className="cf-turnstile"
+        data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_KEY!}
+        data-theme="light"
+        id="cf-turnstile"
+        data-appearance="interaction-only"
+      />
       <Button
-        disabled={!isAddress(address ?? "")}
+        disabled={!isAddress(address ?? "") || height !== 0}
         className="mb-4 w-full"
         type="submit"
       >
         Drip Tokens
       </Button>
-      <div
-        className="cf-turnstile"
-        data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_KEY!}
-        data-theme="light"
-      />
     </form>
   );
 }
