@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useValidatorIcon, useValidators } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
-import { useLocalStorage } from "usehooks-ts";
 import { type Address } from "viem";
 
 export const ValidatorIcon = ({
@@ -22,18 +21,10 @@ export const ValidatorIcon = ({
     ? validatorInfo?.validatorDictionary[address]?.logoURI
     : "";
   const [validatorImg, setValidatorImg] = useState<string>("");
-  // const [validatorIcon, setValidatorIcon] = useLocalStorage(
-  //   `VALIDATOR_ICON-${address}`,
-  //   "",
-  // );
-
-  const { data, isLoading } = useValidatorIcon(description);
-
-  console.log("validatorImg", data, isLoading, validatorImg);
+  const { data, isLoading } = useValidatorIcon(description, address);
 
   useEffect(() => {
     if (address && !isLoading && data) {
-      console.log("fetching avatar for", validatorImg);
       setValidatorImg(data);
     }
   }, [address, isLoading, data]);

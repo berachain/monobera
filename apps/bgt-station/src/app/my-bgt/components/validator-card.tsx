@@ -54,7 +54,6 @@ export default function ValidatorCard({
       void mutate(QUERY_KEY);
     },
   });
-  console.log("validatorrrrr", validator, validator?.description?.identity);
 
   const valiInfo = [
     {

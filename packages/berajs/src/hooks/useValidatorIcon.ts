@@ -1,6 +1,16 @@
 import useSWRImmutable from "swr/immutable";
+import { useLocalStorage } from "usehooks-ts";
+import { type Address } from "viem";
 
-export const useValidatorIcon = (description: string) => {
+export const useValidatorIcon = (
+  identity: string | undefined,
+  address: Address,
+) => {
+  const [validatorIcon, setValidatorIcon] = useLocalStorage<string>(
+    `validatorIcon-${address}`,
+    "",
+  );
+
   const keybase = async (identity: string) => {
     return (
       await fetch(
@@ -10,25 +20,28 @@ export const useValidatorIcon = (description: string) => {
     ).json();
   };
 
-  const fetchValidatorIcon = async (description: string) => {
+  const fetchValidatorIcon = async (identity: string) => {
     try {
-      const d = await keybase(description);
+      if (validatorIcon) {
+        return validatorIcon;
+      }
+      const d = await keybase(identity);
       if (Array.isArray(d.them)) {
         const uri = String(d.them[0]?.pictures?.primary?.url).replace(
           "https://s3.amazonaws.com/keybase_processed_uploads/",
           "",
         );
-        console.log("uriiiii", uri);
+        setValidatorIcon(uri);
         return uri;
       }
     } catch (error) {
       console.error(error);
-      throw new Error(`failed to fetch avatar for ${description}.`);
+      throw new Error(`failed to fetch avatar for ${identity}.`);
     }
   };
 
   const { isLoading, data = undefined } = useSWRImmutable(
-    description,
+    identity,
     fetchValidatorIcon,
   );
 
