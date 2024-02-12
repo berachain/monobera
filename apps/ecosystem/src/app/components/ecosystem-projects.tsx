@@ -43,23 +43,26 @@ const ecosystemTypeTabs = [
     value: "Defi",
   },
   {
-    value: "Stablecoins",
+    value: "Bridges",
   },
   {
-    value: "Validators",
+    value: "Wallets and Onramps",
+  },
+  {
+    value: "CEXs",
+  },
+  {
+    value: "NFTs",
   },
   {
     value: "Gaming",
   },
   {
-    value: "Metaverse",
+    value: "SocialFi",
   },
   {
-    value: "Data",
-  },
-  {
-    value: "Infrastructure",
-  },
+    value: "Infrastructure & Tooling",
+  }
 ];
 // TODO: add in other projects
 const projectList = [
