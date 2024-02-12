@@ -1,18 +1,13 @@
-"use client";
-
 import useSWRImmutable from "swr/immutable";
 
 export const useValidatorIcon = (description: string) => {
-  const get = async (url: string) => {
-    return (
-      await fetch(url, { referrerPolicy: "origin-when-cross-origin" })
-    ).json();
-  };
-
   const keybase = async (identity: string) => {
-    return get(
-      `https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`,
-    );
+    return (
+      await fetch(
+        `https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`,
+        { referrerPolicy: "origin-when-cross-origin" },
+      )
+    ).json();
   };
 
   const fetchValidatorIcon = async (description: string) => {
@@ -25,10 +20,10 @@ export const useValidatorIcon = (description: string) => {
         );
         console.log("uriiiii", uri);
         return uri;
-      } else throw new Error(`failed to fetch avatar for ${description}.`);
+      }
     } catch (error) {
       console.error(error);
-      return null;
+      throw new Error(`failed to fetch avatar for ${description}.`);
     }
   };
 
