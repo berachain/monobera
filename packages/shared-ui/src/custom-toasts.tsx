@@ -44,7 +44,7 @@ const BaseToast = ({
           {startAdornment && startAdornment}
         </div>
         <span className="flex-1 line-clamp-2" title={title}>
-          {title}
+          {typeof title === "string" ? title : ""}
         </span>
         {href && (
           <a
@@ -99,8 +99,10 @@ export const ErrorToast = ({
   title = "Error",
   onClose,
   description,
+  hash = undefined,
 }: IToast) => {
   // HANDLE ERROR MESSAGES
+  const { networkConfig } = useBeraConfig();
   if (title === "User rejected txn") {
     return (
       <BaseToast
@@ -113,7 +115,6 @@ export const ErrorToast = ({
     );
   }
   return (
-    // TODO: txn handle txn hash
     <BaseToast
       title={title}
       onClose={onClose}
@@ -121,11 +122,11 @@ export const ErrorToast = ({
       startAdornment={
         <Icons.XOctagon className="h-6 w-6 text-destructive-foreground" />
       }
-      // href={
-      //   hash
-      //     ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
-      //     : undefined
-      // }
+      href={
+        hash
+          ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
+          : undefined
+      }
     />
   );
 };
@@ -157,13 +158,21 @@ export const LoadingToast = ({
   title = "Loading",
   description,
   onClose,
+  hash = undefined,
 }: IToast) => {
+  const { networkConfig } = useBeraConfig();
+
   return (
     <BaseToast
       title={title}
       onClose={onClose}
       description={description}
       startAdornment={<Spinner size={18} color="#f8b613" />}
+      href={
+        hash
+          ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
+          : undefined
+      }
     />
   );
 };

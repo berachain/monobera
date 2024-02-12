@@ -81,6 +81,7 @@ const useBeraContractWrite = ({
             onError?.({
               message:
                 getErrorMessage(e) ?? "Something went wrong. Please Try again",
+              hash: receipt,
             });
           }
         }
@@ -92,6 +93,7 @@ const useBeraContractWrite = ({
         const finalMsg = getErrorMessage(e);
         onError?.({
           message: finalMsg,
+          hash: e?.transactionHash,
         });
       } finally {
         await refresh();
