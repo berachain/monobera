@@ -7,7 +7,7 @@ export const useValidatorIcon = (
   address: Address,
 ) => {
   const [validatorIcon, setValidatorIcon] = useLocalStorage<string>(
-    `validatorIcon-${address}`,
+    `VALIDATOR_ICON_${address}`,
     "",
   );
 
