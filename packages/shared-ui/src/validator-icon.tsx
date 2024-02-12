@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { get } from "@/libs/http";
-import { useValidators, useValidatorIcon } from "@bera/berajs";
-import { useValidatorIcon } from "@bera/berajs/src/hooks/useValidatorIcon";
+import { useValidatorIcon, useValidators } from "@bera/berajs";
+// import { useValidatorIcon } from "@bera/berajs/src/hooks/useValidatorIcon";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import useSWRImmutable from "swr/immutable";
@@ -37,8 +37,10 @@ export const ValidatorIcon = ({
 
   // const validatorInfo = useValidators();
   // const validatorImg = validatorInfo?.validatorDictionary
-  //   ? validatorInfo?.validatorDictionary[address]?.logoURI
+  //   ? validatorInfo?.validatorDictionary[address]?.icon
   //   : "";
+
+  console.log("validatorImg", data, isLoading, validatorImg);
 
   // const keybase = async (identity: string) => {
   //   return get(
@@ -91,19 +93,29 @@ export const ValidatorIcon = ({
       //   setValidatorIcon(validatorImg);
       // });
     }
-  }, [address]);
+  }, [address, isLoading, data]);
 
   return (
     <Avatar className={cn("", className)}>
       <AvatarImage src={`${process.env.NEXT_PUBLIC_AWS_URL}/${validatorImg}`} />
       <AvatarFallback>
-        <Image
-          src={`${process.env.NEXT_PUBLIC_AWS_URL}/${validatorImg}`}
-          width={100}
-          height={100}
-          className="h-full w-full rounded-full border border-border p-1"
-          alt={"validator-icon"}
-        />
+        {validatorImg ? (
+          <Image
+            src={`${process.env.NEXT_PUBLIC_AWS_URL}/${validatorImg}`}
+            width={100}
+            height={100}
+            className="h-full w-full rounded-full border border-border p-1"
+            alt={"validator-icon"}
+          />
+        ) : (
+          <Image
+            src=""
+            width={100}
+            height={100}
+            className="h-full w-full rounded-full border border-border p-1"
+            alt={"validator-icon"}
+          />
+        )}
       </AvatarFallback>
     </Avatar>
   );

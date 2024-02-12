@@ -1,3 +1,5 @@
+"use client";
+
 import useSWRImmutable from "swr/immutable";
 
 export const useValidatorIcon = (description: string) => {
@@ -13,22 +15,27 @@ export const useValidatorIcon = (description: string) => {
     );
   };
 
-  const { isLoading, data } = useSWRImmutable(description, () => {
-    keybase(description)
-      .then((d) => {
-        if (Array.isArray(d.them)) {
-          const uri = String(d.them[0]?.pictures?.primary?.url).replace(
-            "https://s3.amazonaws.com/keybase_processed_uploads/",
-            "",
-          );
-          console.log("uriiiii", uri);
-          return uri;
-        } else throw new Error(`failed to fetch avatar for ${description}.`);
-      })
-      .catch((error) => {
-        console.error(error); // uncomment this if you want the user to see if the avatar failed to load.
-      });
-  });
+  const fetchValidatorIcon = async (description: string) => {
+    try {
+      const d = await keybase(description);
+      if (Array.isArray(d.them)) {
+        const uri = String(d.them[0]?.pictures?.primary?.url).replace(
+          "https://s3.amazonaws.com/keybase_processed_uploads/",
+          "",
+        );
+        console.log("uriiiii", uri);
+        return uri;
+      } else throw new Error(`failed to fetch avatar for ${description}.`);
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+  const { isLoading, data = undefined } = useSWRImmutable(
+    description,
+    fetchValidatorIcon,
+  );
 
   return {
     isLoading,
