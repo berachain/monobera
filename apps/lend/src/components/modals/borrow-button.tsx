@@ -142,6 +142,7 @@ const BorrowModalContent = ({
           showExceeding={true}
           selectable={false}
           setAmount={(amount) => setAmount(amount as `${number}`)}
+          price={Number(reserveData?.formattedPriceInMarketReferenceCurrency)}
         />
       </div>
       <div className="flex flex-col gap-2">
