@@ -70,11 +70,31 @@ export const usePollReservesDataList = () => {
     return useSWRImmutable([...QUERY_KEY, "baseCurrencyData"]);
   };
 
+  const useTotalBorrowed = () => {
+    const { data } = useReservesDataList();
+    let totalBorrowed = 0;
+    Object.keys(data ?? {}).forEach(
+      (key) => (totalBorrowed += Number(data[key].totalDebt)),
+    );
+    return totalBorrowed;
+  };
+
+  const useTotalMarketSize = () => {
+    const { data } = useReservesDataList();
+    let marketSize = 0;
+    Object.keys(data ?? {}).forEach(
+      (key) => (marketSize += Number(data[key].totalLiquidity)),
+    );
+    return marketSize;
+  };
+
   return {
     ...swrResponse,
     refetch: () => void mutate(QUERY_KEY),
     useReservesDataList,
     useSelectedReserveData,
     useBaseCurrencyData,
+    useTotalBorrowed,
+    useTotalMarketSize,
   };
 };
