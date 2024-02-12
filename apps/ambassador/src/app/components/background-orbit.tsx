@@ -8,11 +8,11 @@ import { Orbit } from "./orbit";
 
 export default function BackGroundOrbit() {
   const { theme, systemTheme } = useTheme();
-  const t = theme === "system" ? systemTheme : theme;
+  const t = !theme || theme === "system" ? systemTheme || "dark" : theme;
   const bgGradient =
     t === "dark"
       ? "bg-gradient-to-t from-black via-[#1E0900] to-transparent"
-      : "bg-gradient-to-t from-[bg-muted] via-[bg-muted] to-transparent";
+      : "bg-gradient-to-t from-[bg-muted] via-white to-transparent";
   return (
     <>
       <div className="mx-auto flex flex-col items-center justify-center">

@@ -47,28 +47,17 @@ const useBeraContractWrite = ({
       let receipt: any | undefined;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
-        // prepareWriteContract causes issues with the gas estimation and fails before writing contract
-        // const { request: _request } = await prepareWriteContract({
-        //   address: address,
-        //   abi: abi,
-        //   functionName: functionName,
-        //   args: params,
-        //   value: value,
-        //   nonce: userNonce,
-        // });
-        // Directly pass request to writeContract
-
-        receipt = await walletClient?.writeContract({
-          account: account,
+        const { request: _request } = await prepareWriteContract({
           address: address,
           abi: abi,
           functionName: functionName,
+          args: params,
           value: value,
-          args: [...params],
-          chain: networkConfig.chain,
           nonce: userNonce,
-          gas: 10000000n,
         });
+        // Directly pass request to writeContract
+
+        receipt = await walletClient?.writeContract(_request);
         dispatch({ type: ActionEnum.SUBMITTING });
 
         if (receipt) {
@@ -92,6 +81,7 @@ const useBeraContractWrite = ({
             onError?.({
               message:
                 getErrorMessage(e) ?? "Something went wrong. Please Try again",
+              hash: receipt,
             });
           }
         }
@@ -103,6 +93,7 @@ const useBeraContractWrite = ({
         const finalMsg = getErrorMessage(e);
         onError?.({
           message: finalMsg,
+          hash: e?.transactionHash,
         });
       } finally {
         await refresh();
