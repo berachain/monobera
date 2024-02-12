@@ -106,9 +106,9 @@ const useOctContractWrite = ({
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess?.(hash);
         } else if (cancelReason !== "") {
-          onError?.({ message: cancelReason });
+          onError?.({ message: cancelReason, hash: hash });
         } else {
-          onError?.({ message: "Transaction has failed" });
+          onError?.({ message: "Transaction has failed", hash: hash });
         }
       } catch (e: any) {
         // if (process.env.VERCEL_ENV !== "production") {
@@ -116,7 +116,7 @@ const useOctContractWrite = ({
         // }
         dispatch({ type: ActionEnum.ERROR });
         const finalMsg = getErrorMessage(e);
-        onError?.({ message: finalMsg });
+        onError?.({ message: finalMsg, hash: e?.transactionHash });
       }
     },
     [

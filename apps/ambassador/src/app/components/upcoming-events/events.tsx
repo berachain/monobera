@@ -15,36 +15,36 @@ interface Project {
 
 // Define the projects
 export const projects: Project[] = [
+  // {
+  //   name: "Beras in NYC",
+  //   image: "/bear_1.png",
+  //   date: "04/04/2024",
+  //   numParticipants: "4.20k",
+  // },
   {
-    name: "Beras in NYC",
+    name: "Beras in denver",
     image: "/bear_1.png",
-    date: "04/04/2024",
-    numParticipants: "4.20k",
+    date: "02/29/2024",
+    numParticipants: "1.00k+",
   },
   {
-    name: "Bears in Denver",
+    name: "Beras in Dubai",
     image: "/bear_2.png",
-    date: "04/04/2024",
-    numParticipants: "4.20k",
+    date: "TBD",
+    numParticipants: "N/A",
   },
-  {
-    name: "Beras in LA",
-    image: "/bear_3.png",
-    date: "04/04/2024",
-    numParticipants: "4.20k",
-  },
-  {
-    name: "Beras at your Mom's House",
-    image: "/bear_2.png",
-    date: "06/09/2420",
-    numParticipants: "4.20k",
-  },
+  // {
+  //   name: "Beras at your Mom's House",
+  //   image: "/bear_11.png",
+  //   date: "06/09/2420",
+  //   numParticipants: "4.20k",
+  // },
 ];
 
 // Define the ProjectCard component
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <Link href="/some-path">
+    <Link href="https://lu.ma/Berapalooza">
       <div className="relative col-span-1 flex h-[auto] w-[280px] flex-col rounded-xl border border-solid bg-background">
         {project.image && (
           <Image
@@ -52,6 +52,7 @@ export function ProjectCard({ project }: { project: Project }) {
             alt={project.name}
             width={452}
             height={175}
+            style={{ borderRadius: "0.75rem 0.75rem 0 0" }}
             priority
             loading="eager"
           />
@@ -74,10 +75,16 @@ export function ProjectCard({ project }: { project: Project }) {
 
 // Define the Projects component
 export function Projects() {
-  const [visibleProjects, setVisibleProjects] = React.useState(3);
+  const [visibleProjects, setVisibleProjects] = useState(3);
+  const [viewMore, setViewMore] = useState(true); // true = "View More", false = "View Less"
 
-  const handleViewMore = () => {
-    setVisibleProjects(visibleProjects + 3);
+  const toggleDisplay = () => {
+    if (viewMore) {
+      setVisibleProjects((current) => current + 1);
+    } else {
+      setVisibleProjects(3);
+    }
+    setViewMore(!viewMore);
   };
 
   return (
@@ -93,15 +100,16 @@ export function Projects() {
           <ProjectCard key={index} project={project} />
         ))}
       </div>
-      {visibleProjects < projects.length && (
-        <Button
-          variant="outline"
-          className="z-10 mb-8 mt-12"
-          onClick={handleViewMore}
-        >
-          View more events
-        </Button>
-      )}
+
+      <Button
+        variant="outline"
+        className="z-10 mb-8 mt-12"
+        onClick={toggleDisplay}
+      >
+        {viewMore
+          ? "View More Events (coming soon)"
+          : "View Less Events (coming soon)"}
+      </Button>
     </div>
   );
 }

@@ -57,12 +57,14 @@ const useOctValueSend = ({
           onSuccess?.(confirmationReceipt);
           return;
         }
-        onError?.("Transaction failed");
-        onError?.("Transaction failed");
+        onError?.({ message: "Transaction failed", hash: hash });
       } catch (e: any) {
         console.log(e);
         dispatch({ type: ActionEnum.ERROR });
-        onError?.(e);
+        onError?.({
+          message: e?.message ?? "Transaction failed",
+          hash: e?.transactionHash,
+        });
       }
     },
     [

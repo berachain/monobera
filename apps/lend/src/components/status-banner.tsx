@@ -3,10 +3,12 @@ import {
   formatter,
   useBeraJs,
   usePollAssetWalletBalance,
+  usePollBgtRewardsForAddress,
   usePollReservesDataList,
   usePollUserAccountData,
   usePollUserReservesData,
 } from "@bera/berajs";
+import { lendHoneyDebtTokenAddress } from "@bera/config";
 import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
@@ -29,10 +31,23 @@ export default function StatusBanner() {
   const { data: baseCurrency } = useBaseCurrencyData();
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { data: balanceToken } = useCurrentAssetWalletBalances();
+  const { useBgtApr } = usePollBgtRewardsForAddress({
+    address: lendHoneyDebtTokenAddress,
+  });
+  const bgtApr = useBgtApr(
+    Number(
+      formatUnits(
+        data?.totalDebtBase ?? 0n,
+        baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+      ),
+    ),
+  );
+
   let positiveProportion = 0;
   let negativeProportion = 0;
   if (reservesDictionary && userReservesDictionary) {
     Object.keys(reservesDictionary).forEach((address) => {
+      // need to work on
       if (reservesDictionary[address] && userReservesDictionary[address]) {
         const useReserve = userReservesDictionary[address];
         const reserve = reservesDictionary[address];
@@ -49,6 +64,14 @@ export default function StatusBanner() {
       }
     });
   }
+  negativeProportion -=
+    Number(
+      formatUnits(
+        data?.totalDebtBase ?? 0n,
+        baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+      ),
+    ) * Number(bgtApr ?? "0");
+
   const totalLiquidityUSD = Number(
     formatUnits(
       data?.totalCollateralBase || "1",
@@ -144,45 +167,51 @@ export default function StatusBanner() {
   ];
 
   return (
-    <div className="border-boder flex w-full flex-col justify-between gap-8 rounded-md border bg-muted p-4 md:flex-row ">
-      <div className="flex flex-col gap-8 md:flex-row ">
-        {status.map((item, index) => (
-          <div key={index.toString() + item.title} className="flex w-fit gap-4">
-            <div className="w-fit rounded-lg border p-2 text-muted-foreground">
-              {item.icon}
+    <div>
+      <h2 className="mb-4 text-3xl font-semibold leading-9">Account Status</h2>
+      <div className="border-boder flex w-full flex-col justify-between gap-8 rounded-md border bg-muted p-4 md:flex-row ">
+        <div className="flex flex-col gap-8 md:flex-row ">
+          {status.map((item, index) => (
+            <div
+              key={index.toString() + item.title}
+              className="flex w-fit gap-4"
+            >
+              <div className="w-fit rounded-lg border p-2 text-muted-foreground">
+                {item.icon}
+              </div>
+              <div className="flex flex-col">
+                <div className="text-sm font-normal leading-normal text-muted-foreground">
+                  {item.title}
+                </div>
+                {isLoading ? (
+                  <Skeleton className="h-6 w-full" />
+                ) : (
+                  <div className="h-6 text-xl font-semibold md:text-2xl">
+                    {isReady ? item.amount : "~~"}
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="flex flex-col">
+          ))}
+        </div>
+
+        <div className="hidden gap-4 xl:flex">
+          {info.map((item, index) => (
+            <div key={index + item.title} className="flex flex-col">
               <div className="text-sm font-normal leading-normal text-muted-foreground">
                 {item.title}
               </div>
+
               {isLoading ? (
                 <Skeleton className="h-6 w-full" />
               ) : (
-                <div className="h-6 text-xl font-semibold md:text-2xl">
+                <div className="h-6 w-full text-left text-lg font-semibold xl:text-right">
                   {isReady ? item.amount : "~~"}
                 </div>
               )}
             </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="hidden gap-4 xl:flex">
-        {info.map((item, index) => (
-          <div key={index + item.title} className="flex flex-col">
-            <div className="text-sm font-normal leading-normal text-muted-foreground">
-              {item.title}
-            </div>
-
-            {isLoading ? (
-              <Skeleton className="h-6 w-full" />
-            ) : (
-              <div className="h-6 w-full text-left text-lg font-semibold xl:text-right">
-                {isReady ? item.amount : "~~"}
-              </div>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
