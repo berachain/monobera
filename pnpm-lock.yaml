@@ -1236,6 +1236,9 @@ importers:
       bech32:
         specifier: ^2.0.0
         version: 2.0.0
+      bignumber.js:
+        specifier: ^9.1.2
+        version: 9.1.2
       crypto-js:
         specifier: ^4.1.1
         version: 4.2.0

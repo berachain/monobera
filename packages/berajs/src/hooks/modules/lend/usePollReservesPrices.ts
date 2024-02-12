@@ -1,9 +1,10 @@
 import { lendOracleAddress, lendPoolImplementationAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatEther } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient, type Address } from "wagmi";
 
+import POLLING from "~/config/constants/polling";
 import { lendOracleABI, lendPoolImplementationABI } from "../../../config/abi";
 
 export const usePollReservesPrices = () => {
@@ -11,43 +12,49 @@ export const usePollReservesPrices = () => {
   const { mutate } = useSWRConfig();
 
   const QUERY_KEY = ["getAssetsPrices"];
-  useSWR(QUERY_KEY, async () => {
-    const result = await publicClient.readContract({
-      address: lendPoolImplementationAddress,
-      abi: lendPoolImplementationABI,
-      functionName: "getReservesList",
-      args: [],
-    });
-    if (result && (result as Address[]).length > 0) {
-      try {
-        const assetsPrices = await publicClient.readContract({
-          address: lendOracleAddress,
-          abi: lendOracleABI,
-          functionName: "getAssetsPrices",
-          args: [result as Address[]],
-        });
-        const assetsPricesDictionary = {};
-        (assetsPrices as bigint[]).forEach((price, index) => {
-          //@ts-ignore
-          assetsPricesDictionary[result[index]] = {
-            price,
-            formattedPrice: formatEther(price),
-          };
-          //@ts-ignore
-          mutate([...QUERY_KEY, result[index]], {
-            price,
-            formattedPrice: formatEther(price),
+  useSWR(
+    QUERY_KEY,
+    async () => {
+      const result = await publicClient.readContract({
+        address: lendPoolImplementationAddress,
+        abi: lendPoolImplementationABI,
+        functionName: "getReservesList",
+        args: [],
+      });
+      if (result && (result as Address[]).length > 0) {
+        try {
+          const assetsPrices = await publicClient.readContract({
+            address: lendOracleAddress,
+            abi: lendOracleABI,
+            functionName: "getAssetsPrices",
+            args: [result as Address[]],
           });
-        });
-        return assetsPricesDictionary;
-      } catch (e) {
-        console.log(e);
-        return undefined;
+          const assetsPricesDictionary = {};
+          (assetsPrices as bigint[]).forEach((price, index) => {
+            //@ts-ignore
+            assetsPricesDictionary[result[index]] = {
+              price,
+              formattedPrice: formatUnits(price, 8),
+            };
+            //@ts-ignore
+            mutate([...QUERY_KEY, result[index]], {
+              price,
+              formattedPrice: formatUnits(price, 8),
+            });
+          });
+          return assetsPricesDictionary;
+        } catch (e) {
+          console.log(e);
+          return undefined;
+        }
+      } else {
+        return {};
       }
-    } else {
-      return {};
-    }
-  });
+    },
+    {
+      refreshInterval: POLLING.FAST,
+    },
+  );
 
   const useReservesPrices = () => {
     return useSWRImmutable(QUERY_KEY);

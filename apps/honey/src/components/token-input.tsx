@@ -97,7 +97,7 @@ export function TokenInput({
         />
         <div className="flex w-full flex-col pl-2 sm:pl-0">
           <Input
-            type="text"
+            type="number"
             step="any"
             min="0"
             placeholder="0.00"
@@ -111,7 +111,7 @@ export function TokenInput({
             )}
             value={amount}
             onKeyDown={(e: any) => {
-              if (e.key === "-") {
+              if (e.key === "-" || e.key === "e") {
                 e.preventDefault();
               }
               clearTimeout(typingTimer);
