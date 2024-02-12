@@ -62,7 +62,7 @@ const ecosystemTypeTabs = [
   },
   {
     value: "Infrastructure & Tooling",
-  }
+  },
 ];
 // TODO: add in other projects
 const projectList = [
