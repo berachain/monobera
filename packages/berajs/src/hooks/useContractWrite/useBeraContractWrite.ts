@@ -2,7 +2,7 @@
 
 import { useCallback, useReducer } from "react";
 import { usePublicClient, useWalletClient } from "wagmi";
-// import { prepareWriteContract } from "wagmi/actions";
+import { prepareWriteContract } from "wagmi/actions";
 
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
@@ -48,14 +48,14 @@ const useBeraContractWrite = ({
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
         // prepareWriteContract causes issues with the gas estimation and fails before writing contract
-        // const { request: _request } = await prepareWriteContract({
-        //   address: address,
-        //   abi: abi,
-        //   functionName: functionName,
-        //   args: params,
-        //   value: value,
-        //   nonce: userNonce,
-        // });
+        const { request: _request } = await prepareWriteContract({
+          address: address,
+          abi: abi,
+          functionName: functionName,
+          args: params,
+          value: value,
+          nonce: userNonce,
+        });
         // Directly pass request to writeContract
 
         receipt = await walletClient?.writeContract({
@@ -96,6 +96,7 @@ const useBeraContractWrite = ({
         if (process.env.VERCEL_ENV !== "production") {
           console.log(e);
         }
+        console.log(e);
         dispatch({ type: ActionEnum.ERROR });
         const finalMsg = getErrorMessage(e);
         onError?.({

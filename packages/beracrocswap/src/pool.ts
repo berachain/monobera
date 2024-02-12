@@ -123,14 +123,14 @@ export class CrocPoolView {
         }
     }
 
-    async mintAmbientBase (qty: TokenQty, limits: PriceRange, opts?: CrocLpOpts): 
+    async mintAmbientBase (qty: TokenQty, limits: PriceRange, conduitLpAddress: string, opts?: CrocLpOpts): 
         Promise<BeraSdkResponse> {
-        return this.mintAmbient(qty, this.useTrueBase, limits, opts)
+        return this.mintAmbient(qty, this.useTrueBase, limits,conduitLpAddress, opts)
     }
 
-    async mintAmbientQuote (qty: TokenQty, limits: PriceRange, opts?: CrocLpOpts): 
+    async mintAmbientQuote (qty: TokenQty, limits: PriceRange, conduitLpAddress: string,opts?: CrocLpOpts): 
         Promise<BeraSdkResponse> {
-        return this.mintAmbient(qty, !this.useTrueBase, limits, opts)
+        return this.mintAmbient(qty, !this.useTrueBase, limits,conduitLpAddress, opts)
     }
 
     async mintRangeBase (qty: TokenQty, range: TickRange, limits: PriceRange, opts?: CrocLpOpts): 
@@ -188,13 +188,13 @@ export class CrocPoolView {
     }
 
     private async mintAmbient (qty: TokenQty, isQtyBase: boolean, 
-        limits: PriceRange, opts?: CrocLpOpts): Promise<BeraSdkResponse> {
+        limits: PriceRange, conduitLpAddress: string, opts?: CrocLpOpts): Promise<BeraSdkResponse> {
         let msgVal = this.msgValAmbient(qty, isQtyBase, limits, opts)
         let weiQty = this.normQty(qty, isQtyBase)
         let [lowerBound, upperBound] = await this.transformLimits(limits)
 
         const calldata = (await this.makeEncoder()).encodeMintAmbient(
-            await weiQty, isQtyBase, lowerBound, upperBound, this.maskSurplusFlag(opts))
+            await weiQty, isQtyBase, lowerBound, upperBound, this.maskSurplusFlag(opts), conduitLpAddress)
         return {
             calldata, 
             value: (await msgVal).toString()

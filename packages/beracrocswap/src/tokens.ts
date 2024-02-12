@@ -4,6 +4,7 @@ import { TransactionResponse } from "@ethersproject/providers";
 import { AddressZero, MaxUint256 } from "@ethersproject/constants";
 import { MAX_LIQ } from "./constants";
 import { toDisplayQty, fromDisplayQty } from "./utils/token";
+// import { beraTokenAddress } from "@bera/config";
 
 // Convention where token quantities can be repesented either as BigNumbers, indicating that it's
 // the full wei value. *OR* can be represented as strings/numbers, indicating that the quantity
@@ -174,8 +175,14 @@ export class CrocEthView extends CrocTokenView {
   }
 } 
 
-export function sortBaseQuoteViews (tokenA: CrocTokenView, tokenB: CrocTokenView): 
+export function sortBaseQuoteViews (base: CrocTokenView, quote: CrocTokenView): 
   [CrocTokenView, CrocTokenView] {
-  return tokenA.tokenAddr.toLowerCase() < tokenB.tokenAddr.toLowerCase() ?
-    [tokenA, tokenB] : [tokenB, tokenA]
+    // if(base.tokenAddr.toLowerCase() === AddressZero.toLowerCase() && beraTokenAddress.toLowerCase() > quote.tokenAddr.toLowerCase()) {
+    //   return [quote, base]
+    // }
+    // if(quote.tokenAddr.toLowerCase() === AddressZero.toLowerCase() && beraTokenAddress.toLowerCase() < base.tokenAddr.toLowerCase()) { 
+    //   return [quote, base]
+    // }
+  return base.tokenAddr.toLowerCase() < quote.tokenAddr.toLowerCase() ?
+    [base, quote] : [quote, base]
 }

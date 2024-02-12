@@ -81,7 +81,8 @@ export class WarmPathEncoder {
     qtyIsBase: boolean,
     limitLow: number,
     limitHigh: number,
-    useSurplus: number
+    useSurplus: number,
+    conduitLpAddress: string
   ) {
     return this.encodeWarmPath(
       qtyIsBase ? MINT_AMBIENT_BASE : MINT_AMBIENT_QUOTE,
@@ -90,7 +91,8 @@ export class WarmPathEncoder {
       qty,
       limitLow,
       limitHigh,
-      useSurplus
+      useSurplus,
+      conduitLpAddress
     );
   }
 
@@ -134,8 +136,10 @@ export class WarmPathEncoder {
     qty: BigNumber,
     limitLow: number,
     limitHigh: number,
-    useSurplus: number
+    useSurplus: number,
+    conduitLpAddress?: string
   ): string {
+    console.log('am conduit ', conduitLpAddress)
     return this.abiCoder.encode(WARM_ARG_TYPES, [
       callCode,
       this.base,
@@ -147,7 +151,7 @@ export class WarmPathEncoder {
       encodeCrocPrice(limitLow),
       encodeCrocPrice(limitHigh),
       useSurplus,
-      AddressZero,
+      conduitLpAddress || AddressZero,
     ]);
   }
 }

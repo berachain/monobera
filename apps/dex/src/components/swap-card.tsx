@@ -248,7 +248,7 @@ export function SwapCard({
               abi: MULTISWAP_ABI,
               functionName: "multiSwap",
               params: payload,
-              value: swapInfo.value,
+              value: (swapInfo as any)?.value,
             });
           }}
           isLoading={isLoading}

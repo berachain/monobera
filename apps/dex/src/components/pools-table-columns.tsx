@@ -124,7 +124,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => {
-      const dailyFees = formatter.format(row.original.dailyFees || 0);
+      const dailyFees = formatter.format(row.original.fees || 0);
       // const fee = row.original.weeklyFees?.[6] || 0;
       // const fee24h = row.original.weeklyFees?.[5] || 1;
       return (
@@ -161,7 +161,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => {
-      const dailyVolume = formatter.format(row.original.dailyVolume || 0);
+      const dailyVolume = formatter.format(row.original.volumeUsd || 0);
       // const volume = row.original.weeklyVolume?.[6] || 0;
       // const volume24h = row.original.weeklyVolume?.[5] || 1;
       return (
@@ -389,13 +389,13 @@ export const my_columns: ColumnDef<IUserPool>[] = [
         </Badge>
       );
     },
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.bgtRewards ?? 0;
-      const b = rowB.original.bgtRewards ?? 0;
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
+    // sortingFn: (rowA, rowB) => {
+    //   const a = rowA.original.bgtRewards ?? 0;
+    //   const b = rowB.original.bgtRewards ?? 0;
+    //   if (a < b) return -1;
+    //   if (a > b) return 1;
+    //   return 0;
+    // },
     filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
   {

@@ -8,6 +8,7 @@ import {
   formatNumber,
   useCrocEnv,
   useTokenHoneyPrice,
+  getCrocErc20LpAddress
 } from "@bera/berajs";
 import { crocDexAddress } from "@bera/config";
 import {
@@ -113,6 +114,7 @@ export function CreatePoolPreview({
       const mintInfo: BeraSdkResponse = await crocPoolView.mintAmbientBase(
         baseTokenInitialLiquidity ?? 0,
         limits,
+        getCrocErc20LpAddress(crocDexAddress, baseToken?.address as string, quoteToken?.address as string),
       );
 
       const totalValue =
@@ -128,7 +130,7 @@ export function CreatePoolPreview({
         abi: CROCSWAP_DEX,
         functionName: "userCmd",
         params: [6, multiCmd],
-        value: rawBeraEntry === undefined ? 0n : totalValue,
+        value: rawBeraEntry === undefined ? undefined : totalValue,
       });
     } catch (error) {
       console.error("Error creating pool:", error);

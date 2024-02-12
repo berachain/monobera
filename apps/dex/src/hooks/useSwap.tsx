@@ -10,6 +10,7 @@ import {
   useTokenInformation,
   useTokens,
   type Token,
+  ICrocSwapStep,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
@@ -216,18 +217,19 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         const minAmountOut =
           (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
 
+        // @ts-nocheck
         if (selectedFrom && selectedFrom.address === nativeTokenAddress) {
           const swapSteps = [...swapInfo.batchSwapSteps];
-          if (swapSteps.length > 0 && swapSteps[0].base && swapSteps[0].quote) {
+          const firstStep = swapSteps[0] as ICrocSwapStep;
+          if (swapSteps.length > 0 && firstStep.base && firstStep.quote) {
             if (
-              swapSteps[0].base.toLowerCase() === beraTokenAddress.toLowerCase()
+              firstStep.base.toLowerCase() === beraTokenAddress.toLowerCase()
             ) {
-              swapSteps[0].base = nativeTokenAddress;
+              firstStep.base = nativeTokenAddress;
             } else if (
-              swapSteps[0].quote.toLowerCase() ===
-              beraTokenAddress.toLowerCase()
+              firstStep.quote.toLowerCase() === beraTokenAddress.toLowerCase()
             ) {
-              swapSteps[0].quote = nativeTokenAddress;
+              firstStep.quote = nativeTokenAddress;
             }
             swapInfo.batchSwapSteps = swapSteps;
           }
@@ -237,17 +239,16 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
           const swapSteps = [...swapInfo.batchSwapSteps];
           if (swapSteps.length > 0) {
             const lastIndex = swapSteps.length - 1;
-            if (swapSteps[lastIndex]?.base && swapSteps[lastIndex].quote) {
+            const lastStep = swapSteps[lastIndex] as ICrocSwapStep;
+            if (lastStep.base && lastStep.quote) {
               if (
-                swapSteps[lastIndex].base.toLowerCase() ===
-                beraTokenAddress.toLowerCase()
+                lastStep.base.toLowerCase() === beraTokenAddress.toLowerCase()
               ) {
-                swapSteps[lastIndex].base = nativeTokenAddress;
+                lastStep.base = nativeTokenAddress;
               } else if (
-                swapSteps[lastIndex].quote.toLowerCase() ===
-                beraTokenAddress.toLowerCase()
+                lastStep.quote.toLowerCase() === beraTokenAddress.toLowerCase()
               ) {
-                swapSteps[lastIndex].quote = nativeTokenAddress;
+                lastStep.quote = nativeTokenAddress;
               }
               swapInfo.batchSwapSteps = swapSteps;
             }

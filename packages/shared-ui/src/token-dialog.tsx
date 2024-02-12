@@ -57,6 +57,7 @@ export function TokenDialog({
     addNewToken,
     removeToken,
   } = useTokens();
+  console.log("tokenList", tokenList);
   const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined

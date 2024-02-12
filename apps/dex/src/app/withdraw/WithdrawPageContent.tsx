@@ -67,7 +67,8 @@ export const TokenSummary = ({
           Pooled {baseToken.symbol}
         </p>
         <div className="flex flex-row items-center gap-1 font-medium">
-          {isLoading ? "..." : baseAmount} <TokenIcon token={baseToken} />
+          {isLoading ? "..." : baseAmount}{" "}
+          <TokenIcon address={baseToken.address} />
         </div>
       </div>
       <div className="w-full justify-between items-center flex flex-row">
@@ -75,7 +76,8 @@ export const TokenSummary = ({
           Pooled {quoteToken.symbol}
         </p>
         <div className="flex flex-row items-center gap-1 font-medium">
-          {isLoading ? "..." : quoteAmount} <TokenIcon token={quoteToken} />
+          {isLoading ? "..." : quoteAmount}{" "}
+          <TokenIcon address={quoteToken.address} />
         </div>{" "}
       </div>
     </div>
@@ -208,7 +210,7 @@ export default function WithdrawLiquidityContent({
           {pool?.tokens?.map((token, i) => {
             return (
               <TokenIcon
-                token={token}
+                address={token.address}
                 className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
                 key={token.address}
               />
@@ -274,7 +276,7 @@ export default function WithdrawLiquidityContent({
               value={
                 <div className="flex flex-row gap-1 items-center justify-end">
                   <p>{baseAmountWithdrawn}</p>
-                  <TokenIcon token={baseToken} size={"md"} />
+                  <TokenIcon address={baseToken.address} size={"md"} />
                 </div>
               }
             />
@@ -283,7 +285,7 @@ export default function WithdrawLiquidityContent({
               value={
                 <div className="flex flex-row gap-1 items-center justify-end">
                   <p>{quoteAmountWithdrawn}</p>
-                  <TokenIcon token={quoteToken} size={"md"} />
+                  <TokenIcon address={quoteToken.address} size={"md"} />
                 </div>
               }
             />

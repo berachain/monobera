@@ -26,7 +26,7 @@ export default function CreatePoolExchangeRate({
     <li className={"flex w-full flex-col  items-center p-2 overflow-x-scroll"}>
       <div className="flex w-fit flex-row justify-between gap-2">
         <div className="w-fit flex flex-row gap-1 self-center font-semibold">
-          <TokenIcon token={baseToken?.token} />
+          <TokenIcon address={baseToken?.token?.address} />
           {initialPrice === "" || initialPrice === "0"
             ? 0
             : isPricingBase
@@ -42,7 +42,7 @@ export default function CreatePoolExchangeRate({
           <Icons.repeat className="h-4 w-4" />
         </Button>
         <div className="w-fit flex flex-row gap-1 self-center font-semibold">
-          <TokenIcon token={quoteToken?.token} />
+          <TokenIcon address={quoteToken?.token?.address} />
           {initialPrice === "" || initialPrice === "0"
             ? 0
             : isPricingBase

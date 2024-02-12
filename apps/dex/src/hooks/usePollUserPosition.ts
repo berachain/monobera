@@ -82,8 +82,6 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
 
         const positions = await positionsResult.json();
 
-        console.log({ positions, pool });
-
         const userPoolPosition: AmbientPosition | undefined =
           positions.data.find(
             (pos: any) =>

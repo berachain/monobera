@@ -65,6 +65,6 @@ export const useUserPositionBreakdown = (pool: PoolV2 | undefined) => {
     return data;
   };
   return {
-    usePosition,
+    usePositionBreakdown,
   };
 };

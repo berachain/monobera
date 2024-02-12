@@ -20,6 +20,8 @@ export interface PoolV2 {
   quoteTokens: string;
   baseTokenHoneyTvl: number;
   quoteTokenHoneyTvl: number;
+  totalApy: number;
+  bgtApy: number;
 }
 
 export const getPoolId = (base: Address, quote: Address) => {
@@ -67,6 +69,8 @@ export const formatSubgraphPoolData = (result: any): PoolV2 => {
     fees: 0,
     baseTokenHoneyTvl: 0,
     quoteTokenHoneyTvl: 0,
+    totalApy: 0,
+    bgtApy: 0,
   };
 };
 
@@ -118,6 +122,8 @@ export const formatPoolData = (result: any): PoolV2 => {
     fees: 0,
     baseTokenHoneyTvl: parseFloat(baseTvlHoneyAmount),
     quoteTokenHoneyTvl: parseFloat(quotTvlHoneyAmount),
+    totalApy: 0,
+    bgtApy: 0,
   };
 };
 

@@ -44,12 +44,12 @@ const getTokenDisplay = (
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
-          <TokenIcon token={(event as ISwaps).swapIn} />
+          <TokenIcon address={(event as ISwaps).swapIn.address} />
           <p className="ml-2">{formatNumber((event as ISwaps).swapInAmount)}</p>
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
-          <TokenIcon token={(event as ISwaps).swapOut} />
+          <TokenIcon address={(event as ISwaps).swapOut.address} />
           <p className="ml-2">
             {formatNumber((event as ISwaps).swapOutAmount)}
           </p>
@@ -62,7 +62,7 @@ const getTokenDisplay = (
       {pool.tokens.map((token, i) => {
         return (
           <div className={cn("flex flex-row", i !== 0 && "ml-[-10px]")} key={i}>
-            <TokenIcon token={token} />
+            <TokenIcon address={token.address} />
           </div>
         );
       })}
@@ -393,9 +393,9 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             <div>
               <div className="flex h-8 items-center justify-between">
                 <div className="flex gap-1">
-                  <TokenIcon token={pool.baseInfo} />
+                  <TokenIcon address={pool.baseInfo.address} />
                   <div className="ml-1 font-medium uppercase">
-                    {pool.base.address === beraTokenAddress
+                    {pool.base === beraTokenAddress
                       ? "wbera"
                       : pool.baseInfo.symbol}
                   </div>
@@ -403,7 +403,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
                 <div className="flex gap-2">
                   <div className="font-medium">
-                    {formatter.format(pool.baseTokens)}
+                    {formatter.format(Number(pool.baseTokens))}
                   </div>
                   <div className="text-sm text-muted-foreground">
                     {" "}
@@ -413,9 +413,9 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               </div>
               <div className="flex h-8 items-center justify-between">
                 <div className="flex gap-1">
-                  <TokenIcon token={pool.quoteInfo} />
+                  <TokenIcon address={pool.quoteInfo.address} />
                   <div className="ml-1 font-medium uppercase">
-                    {pool.quote.address === beraTokenAddress
+                    {pool.quote === beraTokenAddress
                       ? "wbera"
                       : pool.quoteInfo.symbol}
                   </div>
@@ -423,7 +423,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
                 <div className="flex gap-2">
                   <div className="font-medium">
-                    {formatter.format(pool.quoteTokens)}
+                    {formatter.format(Number(pool.quoteTokens))}
                   </div>
                   <div className="text-sm text-muted-foreground">
                     {" "}

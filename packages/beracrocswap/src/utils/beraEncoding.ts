@@ -3,7 +3,7 @@ import { PoolInitEncoder } from "../encoding/init"
 import { BeraSdkResponse } from "../types"
 import { fromDisplayPrice } from "./price"
 import { AddressZero } from '@ethersproject/constants';
-import { beraTokenAddress } from "@bera/config";
+// import { beraTokenAddress } from "@bera/config";
 
 interface IToken {
     decimals: number
@@ -13,12 +13,12 @@ interface IToken {
 
 function sortBaseQuoteViews (base: IToken, quote: IToken): 
   [IToken, IToken] {
-  if(base.address === AddressZero && beraTokenAddress > quote.address) {
-    return [quote, base]
-  }
-  if(quote.address === AddressZero && beraTokenAddress < base.address) { 
-    return [quote, base]
-  }
+  // if(base.address.toLowerCase() === AddressZero.toLowerCase() && beraTokenAddress.toLowerCase() > quote.address.toLowerCase()) {
+  //   return [quote, base]
+  // }
+  // if(quote.address.toLowerCase() === AddressZero.toLowerCase() && beraTokenAddress.toLowerCase() < base.address.toLowerCase()) { 
+  //   return [quote, base]
+  // }
   return base.address.toLowerCase() < quote.address.toLowerCase() ?
     [base, quote] : [quote, base]
 }
