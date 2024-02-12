@@ -40,9 +40,8 @@ export function DripToken({
     setShowAlert();
     const formData = new FormData(e.target as HTMLFormElement);
     const token = formData.get("cf-turnstile-response") as string;
-    // if (token) void handleRequest(token);
-    // else setAlert("error");
-    console.log(token);
+    if (token) void handleRequest(token);
+    else setAlert("error");
   }
 
   return (
