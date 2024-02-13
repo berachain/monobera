@@ -34,10 +34,10 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     areAllInputsEmpty,
   } = useMultipleTokenInput(pool?.tokens ?? []);
 
-  const { needsApproval } = useMultipleTokenApprovals(
-    tokenInputs,
-    crocDexAddress as Address,
-  );
+  console.log("tokenInputs", tokenInputs);
+  const { needsApproval, refresh: refreshAllowances } =
+    useMultipleTokenApprovals(tokenInputs, crocDexAddress as Address);
+  console.log("needsApproval", needsApproval);
 
   const { tokenDictionary } = useTokens();
 
@@ -98,6 +98,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     areAllInputsEmpty,
     needsApproval,
     reset,
+    refreshAllowances,
     updateTokenAmount,
     updateTokenExceeding,
     setPreviewOpen,

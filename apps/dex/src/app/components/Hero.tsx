@@ -9,9 +9,9 @@ import { Icons } from "@bera/ui/icons";
 
 export default function Hero() {
   return (
-    <div className="flex flex-col justify-between lg:flex-row">
+    <div className="flex flex-col justify-around lg:flex-row">
       <div className="lg:items-start items-center my-24 flex w-full lg:w-[450px] flex-col gap-8 ">
-        <div className="text-center text-6xl font-extrabold lg:text-left lg:text-5xl">
+        <div className="text-center font-extrabold lg:text-left text-6xl lg:text-4xl xl:text-6xl">
           Swap Tokens <br />
           on{" "}
           <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
@@ -26,17 +26,22 @@ export default function Hero() {
           </span>
         </div>
 
-        <div className="text-2xl font-semibold leading-8 text-muted-foreground">
+        <div className="text-2xl lg:text-lg xl:text-2xl font-semibold leading-8 text-muted-foreground">
           Swap tokens, add liquidity, create <br />
           pools, and earn BGT rewards.
         </div>
 
         <div className="text-center lg:text-left flex gap-3">
           <Link href={"/swap"} className="shadow-dark-shadow">
-            <Button variant={"primary"}>Swap Tokens</Button>
+            <Button
+              variant={"primary"}
+              className="text-lg lg:text-sm xl:text-lg"
+            >
+              Swap Tokens
+            </Button>
           </Link>
           <Link href={"/pools"} className="shadow-dark-shadow">
-            <Button variant="outline">
+            <Button variant="outline" className="text-lg lg:text-sm xl:text-lg">
               {" "}
               <Icons.search className="w-6 h-6 mr-1 inline-block" /> View Pools
             </Button>
@@ -69,8 +74,16 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
       <Image
-        // className=""
+        className="self-center dark:hidden block "
+        src={`${cloudinaryUrl}/DEX/fmo87psttmceptuw6ae0`}
+        alt="Create a pool screenshot"
+        width={610}
+        height={700}
+      />
+      <Image
+        className="self-center dark:block hidden"
         src={`${cloudinaryUrl}/DEX/g0ntgyc2atxltdycxymz`}
         alt="Create a pool screenshot"
         width={610}

@@ -2,7 +2,7 @@ import { POLLING } from "@bera/shared-ui/src/utils";
 import useSWR, { mutate } from "swr";
 import { type PoolV2 } from "~/app/pools/fetchPools";
 import useSWRImmutable from "swr/immutable";
-import { useBeraJs } from "@bera/berajs";
+import { getCrocErc20LpAddress, useBeraConfig, useBeraJs } from "@bera/berajs";
 import { client, getTokenHoneyPrices } from "@bera/graphql";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { toHex } from "viem";
@@ -10,6 +10,8 @@ import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
 import { formatUnits } from "viem";
 import { getAddress } from "viem";
 import { type IUserPosition } from "./usePollUserDeposited";
+import { erc20ABI, usePublicClient } from "wagmi";
+import BigNumber from "bignumber.js";
 
 interface AmbientPosition {
   ambientLiq: string;
@@ -42,6 +44,9 @@ export interface IUserAmbientPositon extends AmbientPosition {
 
 export const usePollUserPosition = (pool: PoolV2 | undefined) => {
   const { account } = useBeraJs();
+  const publicClient = usePublicClient();
+  const { networkConfig } = useBeraConfig();
+
   const hexChainId = toHex(chainId);
   const { usePoolSpotPrice } = useCrocPoolSpotPrice(pool);
   const spotPrice = usePoolSpotPrice();
@@ -75,10 +80,21 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           `${crocIndexerEndpoint}/user_positions?chainId=${hexChainId}&user=${account}`,
         );
 
-        const [tokenHoneyPrices, positionsResult] = await Promise.all([
-          tokenHoneyPricesResult,
-          positionsResponse,
-        ]);
+        const lpBalanceCall = publicClient.readContract({
+          address: getCrocErc20LpAddress(pool.base, pool.quote) as any,
+          abi: erc20ABI,
+          functionName: "balanceOf",
+          args: [account],
+        });
+
+        const [tokenHoneyPrices, positionsResult, lpBalance] =
+          await Promise.all([
+            tokenHoneyPricesResult,
+            positionsResponse,
+            lpBalanceCall,
+          ]);
+
+        console.log({ tokenHoneyPrices, positionsResult, lpBalance });
 
         const positions = await positionsResult.json();
 
@@ -94,25 +110,28 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           return undefined;
         }
 
-        const sqrtPrice = Math.sqrt(spotPrice);
+        const sqrtPrice = new BigNumber(Math.sqrt(spotPrice).toString());
 
         // get pool price non display
-        const liq = Number(userPoolPosition.ambientLiq);
+        const liq = new BigNumber(lpBalance.toString());
 
-        const baseAmount = BigInt(liq * sqrtPrice);
-        const quoteAmount = BigInt(liq / sqrtPrice);
+        const baseAmount = liq.times(sqrtPrice);
 
-        const baseInfo = pool?.baseInfo;
-        const quoteInfo = pool?.quoteInfo;
+        // const quoteAmount = BigInt(liq / sqrtPrice);
+        const quoteAmount = liq.div(sqrtPrice);
 
-        const formattedBaseAmount = formatUnits(
+        console.log({
           baseAmount,
-          baseInfo?.decimals ?? 18,
+          quoteAmount,
+        });
+        const formattedBaseAmount = formatUnits(
+          BigInt(baseAmount.toString()),
+          18,
         );
 
         const formattedQuoteAmount = formatUnits(
-          quoteAmount,
-          quoteInfo?.decimals ?? 18,
+          BigInt(quoteAmount.toString()),
+          18,
         );
 
         const estimatedHoneyValue =
@@ -120,12 +139,14 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
             Number(formattedBaseAmount) +
           Number(tokenHoneyPrices[getAddress(pool.quote)] ?? 0) *
             Number(formattedQuoteAmount);
+
         const userPosition: IUserPosition = {
-          baseAmount,
-          quoteAmount,
+          baseAmount: BigInt(baseAmount.toString()),
+          quoteAmount: BigInt(quoteAmount.toString()),
           formattedBaseAmount,
           formattedQuoteAmount,
           estimatedHoneyValue,
+          seeds: lpBalance,
         };
         return {
           ...userPoolPosition,

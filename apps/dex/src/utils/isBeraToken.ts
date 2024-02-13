@@ -2,8 +2,6 @@ import { type Token } from "@bera/berajs";
 import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 
 export const isBeratoken = (token: Token | undefined) => {
-  console.log("isBeratoken");
-
   if (token === undefined) return false;
 
   if (

@@ -39,6 +39,7 @@ import { useCrocPositionSeeds } from "~/hooks/useCrocPositionSeeds";
 import { type PriceRange } from "@bera/beracrocswap";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { useCrocPool } from "~/hooks/useCrocPool";
+import { BigNumber } from "ethers";
 interface IWithdrawLiquidityContent {
   pool: PoolV2;
 }
@@ -89,7 +90,6 @@ export default function WithdrawLiquidityContent({
 }: IWithdrawLiquidityContent) {
   const reset = () => {
     setPreviewOpen(false);
-
     setAmount(0);
   };
 
@@ -132,9 +132,6 @@ export default function WithdrawLiquidityContent({
     );
   }, [userPositionBreakdown?.quoteAmount, amount]);
 
-  const { usePositionSeeds } = useCrocPositionSeeds(pool);
-  const seeds = usePositionSeeds();
-
   const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
   const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
     quoteToken?.address,
@@ -153,9 +150,13 @@ export default function WithdrawLiquidityContent({
     quoteAmountWithdrawn,
   ]);
   const liquidityToBurn = useMemo(
-    () => seeds?.mul(amount).div(100),
-    [seeds, amount],
+    () =>
+      BigNumber.from(userPositionBreakdown?.seeds.toString() ?? "0")
+        ?.mul(amount)
+        .div(100),
+    [userPositionBreakdown, amount],
   );
+
   const crocPool = useCrocPool(pool);
   const { write, ModalPortal } = useTxn({
     message: `Withdraw liquidity from ${pool?.poolName}`,
@@ -177,6 +178,7 @@ export default function WithdrawLiquidityContent({
       const limits: PriceRange = [priceLimits.min, priceLimits.max];
 
       let calldata = "";
+
       if (amount === 100) {
         const response = await crocPool?.burnAmbientAll(limits);
         calldata = response?.calldata ?? "";
@@ -242,8 +244,10 @@ export default function WithdrawLiquidityContent({
             isLoading={isPositionBreakdownLoading}
           />
           <div className="w-full p-4 border rounded-lg">
-            <div className="w-full flex flex-row justify-between items-center">
-              <p className="text-lg font-semibold">{amount.toFixed(2)}%</p>
+            <div className="w-full flex flex-row gap-1 justify-between items-center">
+              <p className="text-sm sm:text-lg font-semibold">
+                {amount.toFixed(2)}%
+              </p>
               <div className="flex flex-row gap-2">
                 {[25, 50, 75, 100].map((percent) => {
                   return (

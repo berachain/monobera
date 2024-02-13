@@ -9,11 +9,24 @@ import { AddressZero } from '@ethersproject/constants';
 import { PoolInitEncoder } from "./encoding/init";
 import { CrocSurplusFlags, decodeSurplusFlag, encodeSurplusArg } from "./encoding/flags";
 import { BeraSdkResponse } from "./types";
+import { getCrocErc20LpAddress } from "./utils/getCrocErc20LpAddress";
+import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 
 export type PriceRange = [number, number]
 type TickRange = [number, number]
 type BlockTag = number | string
 
+export const isBeratoken = (tokenAddress: string) => {
+    if (
+      tokenAddress.toLowerCase() === beraTokenAddress.toLowerCase() ||
+      tokenAddress.toLowerCase() === nativeTokenAddress.toLowerCase()
+    ) {
+      return beraTokenAddress;
+    }
+  
+    return tokenAddress;
+  };
+  
 export class CrocPoolView {
 
     constructor (quoteToken: CrocTokenView, baseToken: CrocTokenView, context: Promise<CrocContext>) {
@@ -123,14 +136,14 @@ export class CrocPoolView {
         }
     }
 
-    async mintAmbientBase (qty: TokenQty, limits: PriceRange, conduitLpAddress: string, opts?: CrocLpOpts): 
+    async mintAmbientBase (qty: TokenQty, limits: PriceRange, opts?: CrocLpOpts): 
         Promise<BeraSdkResponse> {
-        return this.mintAmbient(qty, this.useTrueBase, limits,conduitLpAddress, opts)
+        return this.mintAmbient(qty, this.useTrueBase, limits, getCrocErc20LpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)), opts)
     }
 
-    async mintAmbientQuote (qty: TokenQty, limits: PriceRange, conduitLpAddress: string,opts?: CrocLpOpts): 
+    async mintAmbientQuote (qty: TokenQty, limits: PriceRange,opts?: CrocLpOpts): 
         Promise<BeraSdkResponse> {
-        return this.mintAmbient(qty, !this.useTrueBase, limits,conduitLpAddress, opts)
+        return this.mintAmbient(qty, !this.useTrueBase, limits,getCrocErc20LpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)), opts)
     }
 
     async mintRangeBase (qty: TokenQty, range: TickRange, limits: PriceRange, opts?: CrocLpOpts): 
@@ -147,7 +160,7 @@ export class CrocPoolView {
         Promise<BeraSdkResponse> {
         let [lowerBound, upperBound] = await this.transformLimits(limits)
         const calldata = (await this.makeEncoder()).encodeBurnAmbient
-            (liq, lowerBound, upperBound, this.maskSurplusFlag(opts))
+            (liq, lowerBound, upperBound, this.maskSurplusFlag(opts), getCrocErc20LpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)))
         return {
             calldata
         }
@@ -156,7 +169,7 @@ export class CrocPoolView {
     async burnAmbientAll (limits: PriceRange, opts?: CrocLpOpts): Promise<BeraSdkResponse> {
         let [lowerBound, upperBound] = await this.transformLimits(limits)
         const calldata = (await this.makeEncoder()).encodeBurnAmbientAll
-            (lowerBound, upperBound, this.maskSurplusFlag(opts))
+            (lowerBound, upperBound, this.maskSurplusFlag(opts), getCrocErc20LpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)))
         return {
             calldata
         }

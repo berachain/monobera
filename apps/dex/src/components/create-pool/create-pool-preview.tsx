@@ -8,7 +8,7 @@ import {
   formatNumber,
   useCrocEnv,
   useTokenHoneyPrice,
-  getCrocErc20LpAddress
+  getCrocErc20LpAddress,
 } from "@bera/berajs";
 import { crocDexAddress } from "@bera/config";
 import {
@@ -52,7 +52,7 @@ export function CreatePoolPreview({
   initialPrice,
   onBack,
 }: Props) {
-  const { needsApproval } = useCreatePool(tokenWeights);
+  const { needsApproval, refreshAllowances } = useCreatePool(tokenWeights);
   const router = useRouter();
 
   const { write, ModalPortal } = useTxn({
@@ -114,7 +114,6 @@ export function CreatePoolPreview({
       const mintInfo: BeraSdkResponse = await crocPoolView.mintAmbientBase(
         baseTokenInitialLiquidity ?? 0,
         limits,
-        getCrocErc20LpAddress(crocDexAddress, baseToken?.address as string, quoteToken?.address as string),
       );
 
       const totalValue =
@@ -234,6 +233,7 @@ export function CreatePoolPreview({
             }
             token={needsApproval[0]}
             spender={crocDexAddress}
+            onApproval={() => refreshAllowances()}
           />
         ) : (
           <ActionButton>

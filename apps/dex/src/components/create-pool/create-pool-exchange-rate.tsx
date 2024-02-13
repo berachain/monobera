@@ -27,7 +27,9 @@ export default function CreatePoolExchangeRate({
       <div className="flex w-fit flex-row justify-between gap-2">
         <div className="w-fit flex flex-row gap-1 self-center font-semibold">
           <TokenIcon address={baseToken?.token?.address} />
-          {initialPrice === "" || initialPrice === "0"
+          {initialPrice === "" ||
+          initialPrice === "0" ||
+          getSafeNumber(initialPrice) === 0
             ? 0
             : isPricingBase
               ? 1

@@ -1,6 +1,6 @@
-import { type Token } from "@bera/berajs";
+import { getCrocErc20LpAddress, type Token } from "@bera/berajs";
 import { type Address } from "wagmi";
-import { crocIndexerEndpoint } from "@bera/config";
+import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { formatUnits } from "ethers/lib/utils";
 export interface PoolV2 {
   id: string; // concat base-quote-poolidx
@@ -22,6 +22,7 @@ export interface PoolV2 {
   quoteTokenHoneyTvl: number;
   totalApy: number;
   bgtApy: number;
+  shareAddress: string;
 }
 
 export const getPoolId = (base: Address, quote: Address) => {
@@ -41,10 +42,12 @@ export const getPoolWithdrawUrl = (pool: PoolV2) => {
 };
 
 export const getBaseCost = (initialPrice: number) => {
+  if (initialPrice === 0) return 0;
   return 1 / initialPrice;
 };
 
 export const getQuoteCost = (initialPrice: number) => {
+  if (initialPrice === 0) return 0;
   return 1 * initialPrice;
 };
 
@@ -71,6 +74,7 @@ export const formatSubgraphPoolData = (result: any): PoolV2 => {
     quoteTokenHoneyTvl: 0,
     totalApy: 0,
     bgtApy: 0,
+    shareAddress: "",
   };
 };
 
@@ -124,6 +128,7 @@ export const formatPoolData = (result: any): PoolV2 => {
     quoteTokenHoneyTvl: parseFloat(quotTvlHoneyAmount),
     totalApy: 0,
     bgtApy: 0,
+    shareAddress: "",
   };
 };
 
@@ -135,7 +140,9 @@ export const fetchPools = async (
 ): Promise<PoolV2[]> => {
   try {
     const result = await fetch(
-      `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x138d5&sortBy=${sort}.${order}&page=${page}&pageLimit=${limit}`,
+      `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
+        16,
+      )}&sortBy=${sort}.${order}&page=${page}&pageLimit=${limit}`,
     );
 
     const response = await result.json();

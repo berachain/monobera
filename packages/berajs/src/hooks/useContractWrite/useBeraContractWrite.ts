@@ -49,11 +49,12 @@ const useBeraContractWrite = ({
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
         // prepareWriteContract causes issues with the gas estimation and fails before writing contract
         const { request: _request } = await prepareWriteContract({
+          account: account,
           address: address,
           abi: abi,
           functionName: functionName,
-          args: params,
           value: value,
+          args: [...params],
           nonce: userNonce,
         });
         // Directly pass request to writeContract
@@ -67,7 +68,7 @@ const useBeraContractWrite = ({
           args: [...params],
           chain: networkConfig.chain,
           nonce: userNonce,
-          gas: 10000000n,
+          // gas: 10000000n,
         });
         dispatch({ type: ActionEnum.SUBMITTING });
 

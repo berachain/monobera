@@ -4,7 +4,7 @@ import { CROC_QUERY_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint, crocQueryAddress } from "@bera/config";
 import { toHex } from "viem";
 import { formatSubgraphPoolData, type PoolV2 } from "~/app/pools/fetchPools";
-import { usePublicClient, type Address } from "wagmi";
+import { usePublicClient, type Address, erc20ABI } from "wagmi";
 import {
   client,
   getFilteredPoolList,
@@ -14,6 +14,8 @@ import { formatUnits } from "viem";
 import { decodeCrocPrice } from "@bera/beracrocswap";
 import { BigNumber } from "ethers";
 import { getAddress } from "viem";
+import { getCrocErc20LpAddress } from "@bera/berajs";
+import { getSafeNumber } from "~/utils/getSafeNumber";
 
 interface AmbientPosition {
   ambientLiq: string;
@@ -46,6 +48,7 @@ export interface IUserPosition {
   formattedBaseAmount: string;
   formattedQuoteAmount: string;
   estimatedHoneyValue: number;
+  seeds: bigint;
 }
 
 export interface IUserPool extends PoolV2 {
@@ -92,8 +95,7 @@ export const usePollUserDeposited = () => {
             id: uniqueTokenAddresses,
           },
         })
-        .then((res) => {
-          console.log(res);
+        .then((res: any) => {
           return res.data?.tokenHoneyPrices.reduce(
             (allPrices: any, price: any) => ({
               ...allPrices,
@@ -119,7 +121,24 @@ export const usePollUserDeposited = () => {
           .multicallAddress as Address,
       });
 
-      // get pool objects for pools user deposited for
+      const balanceCalls: Call[] = positions.data.map(
+        (pool: AmbientPosition) => {
+          return {
+            abi: erc20ABI,
+            address: getCrocErc20LpAddress(pool.base, pool.quote),
+            functionName: "balanceOf",
+            args: [account],
+          };
+        },
+      );
+
+      const balanceResult = publicClient.multicall({
+        contracts: balanceCalls,
+        multicallAddress: networkConfig.precompileAddresses
+          .multicallAddress as Address,
+      });
+
+      // // get pool objects for pools user deposited for
       const poolsResult = client
         .query({
           query: getFilteredPoolList,
@@ -128,7 +147,7 @@ export const usePollUserDeposited = () => {
             quoteAssets: quoteTokenAddresses,
           },
         })
-        .then((res) => {
+        .then((res: any) => {
           if (res.error) {
             console.log(res.error);
             return undefined;
@@ -136,29 +155,32 @@ export const usePollUserDeposited = () => {
           return res.data.pools;
         });
 
-      const [poolPrices, pools, tokenHoneyPrices] = await Promise.all([
-        result,
-        poolsResult,
-        tokenHoneyPricesResult,
-      ]);
+      const [poolPrices, pools, tokenHoneyPrices, lpBalances] =
+        await Promise.all([
+          result,
+          poolsResult,
+          tokenHoneyPricesResult,
+          balanceResult,
+        ]);
 
       const userPositions: IUserPool[] = positions.data.map(
         (position: AmbientPosition, i: number) => {
           const poolPrice = poolPrices[i]?.result;
           const pool: PoolV2 | undefined = pools.find((p: PoolV2) => {
-            return p.base === position.base && p.quote === position.quote;
+            return (
+              p.base.toLowerCase() === position.base.toLowerCase() &&
+              p.quote.toLowerCase() === position.quote.toLowerCase()
+            );
           });
           if (!pool || !poolPrice) {
             return;
           }
-
           const formattedPool = formatSubgraphPoolData(pool);
           const decodedSpotPrice = decodeCrocPrice(
             BigNumber.from(poolPrice.toString()),
           );
           const sqrtPrice = Math.sqrt(decodedSpotPrice);
-          const liq = Number(position.ambientLiq);
-
+          const liq = getSafeNumber((lpBalances[i] as any).result);
           const baseAmount = BigInt(liq * sqrtPrice);
           const quoteAmount = BigInt(liq / sqrtPrice);
 
@@ -186,6 +208,7 @@ export const usePollUserDeposited = () => {
             formattedBaseAmount,
             formattedQuoteAmount,
             estimatedHoneyValue,
+            seeds: BigInt(0),
           };
           return {
             ...formattedPool,
@@ -207,15 +230,18 @@ export const usePollUserDeposited = () => {
     return data;
   };
 
-  const useIsPoolDeposited = (pool: PoolV2) => {
+  const useIsPoolDeposited = (pool: PoolV2 | undefined) => {
     const { data = undefined } = useSWRImmutable<IUserPool[] | undefined>(
       QUERY_KEY,
     );
-    if (!data) {
+    if (!data || data.some((p) => !p) || !pool) {
       return false;
     }
+
     return data.some(
-      (p: IUserPool) => p.base === pool.base && p.quote === pool.quote,
+      (p: IUserPool) =>
+        p.base.toLowerCase() === pool.base.toLowerCase() &&
+        p.quote.toLowerCase() === pool.quote.toLowerCase(),
     );
   };
   return {

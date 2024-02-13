@@ -100,7 +100,8 @@ export class WarmPathEncoder {
     liq: BigNumber,
     limitLow: number,
     limitHigh: number,
-    useSurplus: number
+    useSurplus: number,
+    conduitLpAddress: string
   ) {
     return this.encodeWarmPath(
       BURN_AMBIENT,
@@ -109,14 +110,16 @@ export class WarmPathEncoder {
       liq,
       limitLow,
       limitHigh,
-      useSurplus
+      useSurplus,
+      conduitLpAddress
     );
   }
 
   encodeBurnAmbientAll(
     limitLow: number,
     limitHigh: number,
-    useSurplus: number
+    useSurplus: number,
+    conduitLpAddress: string
   ) {
     return this.encodeWarmPath(
       BURN_AMBIENT,
@@ -125,7 +128,8 @@ export class WarmPathEncoder {
       MAX_LIQ,
       limitLow,
       limitHigh,
-      useSurplus
+      useSurplus,
+      conduitLpAddress
     );
   }
 
@@ -139,7 +143,19 @@ export class WarmPathEncoder {
     useSurplus: number,
     conduitLpAddress?: string
   ): string {
-    console.log('am conduit ', conduitLpAddress)
+    console.log([
+      callCode,
+      this.base,
+      this.quote,
+      this.poolIdx,
+      lowerTick.toString(),
+      upperTick.toString(),
+      qty.toString(),
+      encodeCrocPrice(limitLow).toString(),
+      encodeCrocPrice(limitHigh).toString(),
+      useSurplus,
+      conduitLpAddress || AddressZero,
+    ])
     return this.abiCoder.encode(WARM_ARG_TYPES, [
       callCode,
       this.base,

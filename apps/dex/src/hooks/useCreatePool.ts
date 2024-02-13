@@ -14,10 +14,11 @@ const useCreatePool = (tokenWeights: ITokenWeight[]) => {
     .filter((tokenWeight: ITokenWeight) => tokenWeight.token !== undefined)
     .map((tokenWeight) => tokenWeight.token) as Token[];
 
-  const { useCurrentAllowancesForContract } = usePollAllowances({
-    contract: crocDexAddress,
-    tokens,
-  });
+  const { useCurrentAllowancesForContract, refresh: refreshAllowances } =
+    usePollAllowances({
+      contract: crocDexAddress,
+      tokens,
+    });
 
   const allowances = useCurrentAllowancesForContract();
 
@@ -44,6 +45,7 @@ const useCreatePool = (tokenWeights: ITokenWeight[]) => {
 
   return {
     needsApproval,
+    refreshAllowances,
   };
 };
 

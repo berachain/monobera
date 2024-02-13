@@ -83,13 +83,21 @@ export function CreatePoolInitialLiquidity({
         <div className="flex flex-col gap-4">
           <ul className="divide divide-y divide-border rounded-lg border">
             <CreatePoolInitialLiquidityInput
-              disabled={!initialPrice || initialPrice === "0"}
+              disabled={
+                !initialPrice ||
+                initialPrice === "0" ||
+                getSafeNumber(initialPrice) === 0
+              }
               key={0}
               tokenWeight={tokenWeights[0] as ITokenWeight}
               onTokenBalanceChange={handleBaseAssetAmountChange}
             />
             <CreatePoolInitialLiquidityInput
-              disabled={!initialPrice || initialPrice === "0"}
+              disabled={
+                !initialPrice ||
+                initialPrice === "0" ||
+                getSafeNumber(initialPrice) === 0
+              }
               key={1}
               tokenWeight={tokenWeights[1] as ITokenWeight}
               onTokenBalanceChange={handleQuoteAssetAmountChange}
