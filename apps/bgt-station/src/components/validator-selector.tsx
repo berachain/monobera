@@ -70,6 +70,7 @@ export default function ValidatorSelector({
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
             <ValidatorIcon
               address={validValidator.operatorAddr as Address}
+              description={validValidator?.description?.identity ?? undefined}
               className="h-8 w-8"
             />
             {validValidator.description.moniker}
@@ -128,6 +129,7 @@ const ValidatorModal = ({
             <div className="flex w-[100px] items-center gap-1">
               <ValidatorIcon
                 address={validator.operatorAddr as Address}
+                description={validator?.description?.identity ?? undefined}
                 className="h-8 w-8"
               />
               {validator.description.moniker}
