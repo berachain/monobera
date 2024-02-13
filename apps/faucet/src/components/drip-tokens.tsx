@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { faucetEndpointUrl } from "@bera/config";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { getAddress, isAddress } from "viem";
 
@@ -14,7 +15,7 @@ export function DripToken({
 }) {
   const [token, setToken] = React.useState<string | null>(null);
   const turnstile = useRef<HTMLDivElement>(null);
-
+  const [buttonDisabled, setButtonDisabled] = React.useState(false);
   useEffect(() => {
     let inputElement: HTMLInputElement | null = null;
     let observer: MutationObserver | null = null;
@@ -57,7 +58,12 @@ export function DripToken({
     };
   }, []);
 
-  async function handleRequest(token: string) {
+  async function handleRequest(token: string | null) {
+    setShowAlert();
+    if (!token) {
+      setAlert("error");
+      return;
+    }
     try {
       const res = await fetch(
         `${faucetEndpointUrl}/api/claim?address=${getAddress(address)}`,
@@ -79,34 +85,26 @@ export function DripToken({
     }
   }
 
-  function onsubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setShowAlert();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const token = formData.get("cf-turnstile-response") as string;
-    if (token) void handleRequest(token);
-    else setAlert("error");
-  }
-
   return (
-    <form onSubmit={onsubmit}>
-      {!token ? (
-        <div
-          className="cf-turnstile"
-          data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_KEY!}
-          data-theme="light"
-          ref={turnstile}
-          data-appearance="execute"
-        />
-      ) : (
-        <Button
-          disabled={!isAddress(address ?? "")}
-          className="mb-4 w-full"
-          type="submit"
-        >
-          Drip Tokens
-        </Button>
-      )}
-    </form>
+    <div>
+      <div
+        className={cn("cf-turnstile", token ? "hidden" : "block")}
+        data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_KEY!}
+        data-theme="light"
+        ref={turnstile}
+        data-appearance="execute"
+      />
+      <Button
+        disabled={!isAddress(address ?? "") || buttonDisabled}
+        className={cn("mb-4 w-full", token ? "block" : "hidden")}
+        type="submit"
+        onClick={() => {
+          setButtonDisabled(true);
+          void handleRequest(token);
+        }}
+      >
+        Drip Tokens
+      </Button>
+    </div>
   );
 }

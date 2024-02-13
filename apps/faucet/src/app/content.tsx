@@ -59,6 +59,7 @@ export default function Content() {
             onClick={() => {
               setAddress("");
               if (showAlet) setShowAlert(false);
+              setAlert(undefined);
             }}
           />
         </div>
