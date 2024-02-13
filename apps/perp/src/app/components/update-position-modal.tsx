@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { TRADING_ABI, TransactionActionType } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -80,22 +80,16 @@ export function UpdatePositionModal({
   //   leverage: openPosition?.leverage,
   // });
 
-  const handleTPSLChange = useCallback(
-    (value: string, key: string) =>
-      key === "tp" ? setTp(value) : setSl(value),
-    [setTp, setSl],
-  );
-
   const updateTpParams = [
     openPosition?.market?.pair_index,
     openPosition?.index,
-    parseUnits(tp === "" ? "0" : tp, 10),
+    parseUnits(tp, 10),
   ];
 
   const updateSlParams = [
     openPosition?.market?.pair_index,
     openPosition?.index,
-    parseUnits(sl === "" ? "0" : sl, 10),
+    parseUnits(sl, 10),
   ];
 
   return (
@@ -190,11 +184,7 @@ export function UpdatePositionModal({
             sl={sl}
             formattedPrice={openPrice}
             isUpdate={true}
-            liqPrice={
-              Number(openPosition.liq_price) !== 0
-                ? Number(formatUnits(BigInt(openPosition?.liq_price ?? 0), 10))
-                : undefined
-            }
+            liqPrice={Number(openPosition.liq_price)}
             long={openPosition?.buy === true}
             isSlSubmitLoading={isUpdateSLLoading}
             isTpSubmitLoading={isUpdateTPLoading}
@@ -216,7 +206,10 @@ export function UpdatePositionModal({
                 params: updateSlParams,
               });
             }}
-            tpslOnChange={handleTPSLChange}
+            tpslOnChange={(value) => {
+              setTp(value.tp);
+              setSl(value.sl);
+            }}
           />
           {/* <Button>Update Order</Button> */}
         </DialogContent>
