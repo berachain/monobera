@@ -50,7 +50,7 @@ const errorMsgMap: ErrorMessages = {
     WRONG_LIMIT_PRICE: {
       keywords: ["WRONG_LIMIT_PRICE"],
       errorMSG:
-        "Currently, Limit Prices must be set above the current price for long positions and below for short positions.",
+        "Currently, Limit Prices must be set below the current price for long positions and above for short positions.",
     },
     PRICE_IMPACT_TOO_HIGH: {
       keywords: ["PRICE_IMPACT_TOO_HIGH"],
