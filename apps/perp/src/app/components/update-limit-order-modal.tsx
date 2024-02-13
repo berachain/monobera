@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -62,6 +62,12 @@ export function UpdateLimitOrderModal({
     },
   });
 
+  const handleTPSLChange = useCallback(
+    (value: string, key: string) =>
+      key === "tp" ? setTp(value) : setSl(value),
+    [setTp, setSl],
+  );
+
   const formattedPrice = Number(
     formatUnits(BigInt(openOrder?.price ?? 0n), 10),
   );
@@ -84,8 +90,8 @@ export function UpdateLimitOrderModal({
     openOrder?.market.pair_index,
     openOrder?.index,
     parseUnits(`${executionPrice}`, 10),
-    ethersParseUnits(tp, 10),
-    ethersParseUnits(sl, 10),
+    ethersParseUnits(tp === "" ? "0" : tp, 10),
+    ethersParseUnits(sl === "" ? "0" : sl, 10),
   ];
 
   return (
@@ -176,10 +182,7 @@ export function UpdateLimitOrderModal({
             formattedPrice={executionPrice}
             liqPrice={liqPrice}
             long={openOrder?.buy === true}
-            tpslOnChange={(value) => {
-              setTp(value.tp);
-              setSl(value.sl);
-            }}
+            tpslOnChange={handleTPSLChange}
           />
           <Button
             disabled={isLoading}
