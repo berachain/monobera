@@ -1,62 +1,45 @@
-import { useMemo, useState } from "react";
-import { formatUsd } from "@bera/berajs";
-import { ActionButton } from "@bera/shared-ui";
+import { useState, useCallback, useEffect, useMemo } from "react";
+
+import { ActionButton, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
 
-const MAX_GAIN = 900;
+import {
+  TPSL_PROFIT_TOOLTIP_TEXT,
+  TPSL_LOSS_TOOLTIP_TEXT,
+} from "../../../utils/tooltip-text";
 
-const getCappedPercentDifference = (
+const MAX_GAIN = 900;
+const MAX_STOP_LOSS = -75;
+
+const getPercentDifference = (
   formattedPrice: number,
   estPrice: number,
   leverage: number,
   long: boolean,
-  cap: number,
 ) => {
-  const difference =
-    long === true
-      ? estPrice - formattedPrice
-      : Math.abs(estPrice - formattedPrice);
+  const difference = long
+    ? estPrice - formattedPrice
+    : Math.abs(estPrice - formattedPrice);
   const percentDifference = (difference / formattedPrice) * (100 * leverage);
-  return Math.min(percentDifference, cap);
+  return percentDifference;
 };
-
-function calculateMaxPnlPrice(
-  maxPnl: number,
-  leverage: number,
-  currentPrice: number,
-  long: boolean,
-): number {
-  // Ensure maxPnl is greater than 0 and leverage is not 0
-  if (maxPnl <= 0 || leverage === 0) {
-    throw new Error(
-      "Invalid input. Please ensure maxPnl is greater than 0 and leverage is not 0.",
-    );
-  }
-
-  // Calculate the price required for the maximum pnl
-  const tpPrice: number = long
-    ? currentPrice * (1 + maxPnl / (100 * leverage))
-    : currentPrice * (1 - maxPnl / (100 * leverage));
-
-  return tpPrice;
-}
 
 const InputSelect = ({
   bracket,
   value,
-  type,
+  percent,
   onValueChange,
-  onTypeChange,
-  variant = "success",
+  onPercentChange,
+  variant = "tp",
 }: {
   value: string;
   bracket: [number, number, number, number, number];
-  type: "none" | "percent" | "number";
+  percent: string;
   onValueChange: (percentage: string) => void;
-  onTypeChange?: (type: "none" | "percent" | "number") => void;
-  variant: "success" | "destructive";
+  onPercentChange: (percentage: string) => void;
+  variant: "tp" | "sl";
 }) => {
   return (
     <div className="flex w-full gap-1">
@@ -64,24 +47,24 @@ const InputSelect = ({
         className="h-8 w-full rounded-sm bg-background text-xs lg:w-[102px]"
         placeholder="Amount"
         type={"number"}
-        value={value === "" ? "Price" : type === "percent" ? "Price" : value}
-        onChange={(e: { target: { value: string } }) => {
-          onValueChange(e.target.value);
-          onTypeChange?.(e.target.value === "" ? "none" : "number");
-        }}
+        value={value === "" ? undefined : value}
+        onChange={(e: { target: { value: string } }) =>
+          onValueChange(e.target.value)
+        }
       />
       {bracket.map((amount: number, index: number) => (
         <div
           key={index}
           className={cn(
             "inline-flex h-8 w-[20%] cursor-pointer items-center justify-center rounded-sm px-2 text-xs font-medium lg:w-full",
-            amount === Number(value)
-              ? `bg-${variant} text-${variant}-foreground`
+            amount === Number(percent) && value !== ""
+              ? `bg-${variant === "tp" ? "success" : "destructive"} text-${
+                  variant === "tp" ? "success" : "destructive"
+                }-foreground`
               : "bg-muted text-muted-foreground",
           )}
           onClick={() => {
-            onValueChange(amount.toString());
-            onTypeChange?.(amount === 0 ? "none" : "percent");
+            onPercentChange(amount.toString());
           }}
         >
           {amount === 0 ? "None" : `${amount}%`}
@@ -94,8 +77,8 @@ const InputSelect = ({
 export function TPSL({
   tpslOnChange,
   isUpdate,
-  tp,
-  sl,
+  tp = "",
+  sl = "",
   leverage,
   liqPrice,
   long,
@@ -106,7 +89,7 @@ export function TPSL({
   onSlChangeSubmit,
   className,
 }: {
-  tpslOnChange?: ({ tp, sl }: { tp: string; sl: string }) => void;
+  tpslOnChange: (value: string, key: string) => void;
   isUpdate?: boolean;
   formattedPrice?: number;
   liqPrice?: number;
@@ -120,133 +103,171 @@ export function TPSL({
   onSlChangeSubmit?: () => void;
   className?: string;
 }) {
-  const [tpsl, setTpsl] = useState<{
-    tp: string;
-    sl: string;
-  }>({ tp: tp ?? "", sl: sl ?? "" });
-  const [tpslType, setTpslType] = useState<"none" | "percent" | "number">(
-    "none",
+  const [tpslPercent, setTpslPercent] = useState<{
+    tpPercent: string;
+    slPercent: string;
+  }>({ tpPercent: "", slPercent: "" });
+  const [initTpState, setInitTpState] = useState(tp === "");
+  const safeLeverage = useMemo(
+    () => (leverage || leverage > 0 ? leverage : 1),
+    [leverage],
   );
-  const [slType, setSlType] = useState<"none" | "percent" | "number">("none");
 
-  const estTakeProfit = useMemo(() => {
-    let result = 0;
-    if (tpslType === "percent") {
+  const handleTpChange = useCallback(
+    (value: string) => {
+      const isNegativeString = /-\d+(\.\d+)?/.test(value);
+      // edge case for short positions where minimum take profit should be 0
+      if (isNegativeString && !long) {
+        tpslOnChange("0", "tp");
+      } else {
+        tpslOnChange(value, "tp");
+      }
+    },
+    [tpslOnChange, long],
+  );
+
+  const handleSlChange = useCallback(
+    (value: string) => {
+      tpslOnChange(value, "sl");
+    },
+    [tpslOnChange],
+  );
+
+  // tp percentage has changed
+  const handleTpPercentChange = useCallback(
+    (percentage: string) => {
       const priceFromPercent = long
-        ? (1 + Number(tpsl.tp ?? "0") / (100 * leverage)) *
+        ? (1 + Number(percentage ?? "0") / (100 * safeLeverage)) *
           (formattedPrice ?? 0)
-        : (1 - Number(tpsl.tp ?? "0") / (100 * leverage)) *
+        : (1 - Number(percentage ?? "0") / (100 * safeLeverage)) *
           (formattedPrice ?? 0);
-      const pnlTarget = getCappedPercentDifference(
-        priceFromPercent ?? 0,
-        priceFromPercent,
-        leverage,
-        long ?? true,
-        MAX_GAIN,
-      );
-
-      if (pnlTarget === MAX_GAIN) {
-        result =
-          calculateMaxPnlPrice(
-            pnlTarget,
-            leverage,
-            formattedPrice ?? 0,
-            long ?? true,
-          ) ?? 0;
+      if (priceFromPercent <= 0) {
+        tpslOnChange("0", "tp");
       } else {
-        result = priceFromPercent;
+        tpslOnChange(priceFromPercent.toFixed(10), "tp");
+        setTpslPercent((prev) => ({ ...prev, tpPercent: percentage }));
       }
-    }
-    if (tpslType === "number") {
-      // if over 900% including leverage then set it to 900% with leverage
-      const pnlTarget = getCappedPercentDifference(
-        formattedPrice ?? 0,
-        Number(tpsl.tp),
-        leverage,
-        long ?? true,
-        MAX_GAIN,
-      );
-      if (pnlTarget === MAX_GAIN) {
-        result =
-          calculateMaxPnlPrice(
-            pnlTarget,
-            leverage,
-            formattedPrice ?? 0,
-            long ?? true,
-          ) ?? 0;
-      } else {
-        result = (Number(tpsl.tp) ?? 0) * 1;
-      }
-    }
-    tpslOnChange?.({ tp: result.toFixed(10), sl: sl ?? "" });
-    return result.toFixed(10);
-  }, [sl, tpsl.tp, formattedPrice, tpslType, leverage, long]);
+    },
+    [formattedPrice, safeLeverage, long, tpslOnChange],
+  );
 
-  const estStopLoss = useMemo(() => {
-    let result = 0;
-    if (slType === "percent") {
+  const handleSlPercentChange = useCallback(
+    (percentage: string) => {
       const priceFromPercent = long
-        ? (1 - Number(tpsl.sl ?? 0) / (100 * leverage)) * (formattedPrice ?? 0)
-        : (1 + Number(tpsl.sl ?? 0) / (100 * leverage)) * (formattedPrice ?? 0);
-      result = priceFromPercent;
-    }
-    if (slType === "number") {
-      if (liqPrice !== undefined) {
-        result =
-          liqPrice < Number(tpsl.sl ?? 0) ? liqPrice : Number(tpsl.sl ?? 0);
+        ? (1 + Number(percentage ?? "0") / (100 * safeLeverage)) *
+          (formattedPrice ?? 0)
+        : (1 - Number(percentage ?? "0") / (100 * safeLeverage)) *
+          (formattedPrice ?? 0);
+      tpslOnChange(priceFromPercent.toFixed(10), "sl");
+      setTpslPercent((prev) => ({ ...prev, slPercent: percentage }));
+    },
+    [formattedPrice, safeLeverage, long, tpslOnChange],
+  );
+
+  useEffect(() => {
+    if (safeLeverage && formattedPrice) {
+      if (tp === "") {
+        if (initTpState && long) {
+          const priceFromPercent =
+            (1 + MAX_GAIN / (100 * safeLeverage)) * (formattedPrice ?? 0);
+          tpslOnChange(priceFromPercent.toFixed(10), "tp");
+          setTpslPercent((prev) => ({
+            ...prev,
+            tpPercent: MAX_GAIN.toString(),
+          }));
+          setInitTpState(false);
+        } else {
+          return;
+        }
       } else {
-        result = Number(tpsl.sl ?? 0) * 1;
+        let result = 0;
+        result = (Number(tp) ?? 0) * 1;
+        let tpPercent = getPercentDifference(
+          formattedPrice ?? 0,
+          Number(result.toFixed(10)),
+          safeLeverage,
+          long ?? true,
+        );
+        // edge case for short positions where take profit percent should be negative
+        if (formattedPrice && result > formattedPrice && !long) {
+          tpPercent = -tpPercent;
+        }
+        // Add this check to prevent NaN from being displayed with undefined props
+        if (!Number.isNaN(tpPercent)) {
+          setTpslPercent((prev) => ({
+            ...prev,
+            tpPercent: tpPercent.toFixed(2),
+          }));
+        }
       }
     }
-    tpslOnChange?.({ tp: tp?.toString() ?? "", sl: result.toFixed(10) });
-    return result.toFixed(10);
-  }, [tp, tpsl.sl, formattedPrice, slType, leverage, long, liqPrice]);
+  }, [formattedPrice, safeLeverage, long, tp, initTpState, tpslOnChange]);
 
-  const tpPercent = getCappedPercentDifference(
-    formattedPrice ?? 0,
-    Number(estTakeProfit),
-    leverage,
-    long ?? true,
-    MAX_GAIN,
-  );
-  const tpPercentDisplay = tpPercent <= 0 ? 0 : tpPercent;
+  useEffect(() => {
+    if (sl === "") {
+      return;
+    }
+    let result = 0;
+    result = Number(sl ?? 0) * 1;
+    let slPercent = getPercentDifference(
+      formattedPrice ?? 0,
+      Number(result.toFixed(10)),
+      safeLeverage,
+      long ?? true,
+    );
+    // edge case for short positions where stop loss percent should be negative
+    if (formattedPrice && result > formattedPrice && !long) {
+      slPercent = -slPercent;
+    }
+    // Add this check to prevent NaN from being displayed with undefined props
+    if (!Number.isNaN(slPercent)) {
+      setTpslPercent((prev) => ({
+        ...prev,
+        slPercent: slPercent.toFixed(2),
+      }));
+    }
+  }, [sl, formattedPrice, safeLeverage, long, liqPrice, tpslOnChange]);
 
-  const slPercent = getCappedPercentDifference(
-    formattedPrice ?? 0,
-    Number(estStopLoss),
-    leverage,
-    long ?? true,
+  const isTpUnset = (long && Number(tp) === 0) || tp === "";
+  const sanitizedTpPercent =
+    !isTpUnset &&
+    `(${Math.min(
+      Math.max(Number(tpslPercent.tpPercent), -100),
+      MAX_GAIN,
+    ).toFixed(2)}%)`;
+  const sanitizedSlPercent = `(${Math.min(
+    Math.max(Number(tpslPercent.slPercent), -100),
     100,
-  );
-
-  const slPercentDisplay =
-    slPercent <= -100
-      ? -100
-      : Number(estStopLoss) > (formattedPrice ?? 0)
-        ? 0 - slPercent
-        : slPercent;
+  ).toFixed(2)}%)`;
 
   return (
     <div className={className}>
-      <div className="mb-2 text-xs font-medium">
-        Take Profit{" "}
-        <span className="text-success-foreground">
-          {tpslType === "none"
-            ? ""
-            : tpslType === "percent"
-              ? `(${formatUsd(estTakeProfit)})`
-              : `(${tpPercentDisplay.toFixed(2)}%)`}
+      <div className="mb-2 text-xs font-medium flex">
+        Take Profit{"  "}
+        <span
+          className={cn(
+            "text-success-foreground ml-1 flex-1",
+            !isTpUnset &&
+              (Number(tpslPercent.tpPercent) < 0 ||
+                Number(tpslPercent.tpPercent) > MAX_GAIN) &&
+              "line-through",
+          )}
+        >
+          {tpslPercent.tpPercent
+            ? isTpUnset
+              ? "(Unset)"
+              : `${sanitizedTpPercent}`
+            : ""}
         </span>
+        <Tooltip text={TPSL_PROFIT_TOOLTIP_TEXT} />
       </div>
       <InputSelect
-        value={tpsl.tp}
-        bracket={[0, 25, 50, 100, 150]}
-        type={tpslType}
-        onTypeChange={setTpslType}
-        onValueChange={(percentage: string) =>
-          setTpsl({ tp: percentage, sl: tpsl.sl })
-        }
-        variant="success"
+        value={tp}
+        bracket={[25, 50, 100, 300, MAX_GAIN]}
+        percent={tpslPercent.tpPercent ?? ""}
+        onPercentChange={handleTpPercentChange}
+        onValueChange={handleTpChange}
+        variant="tp"
       />
       {isUpdate && (
         <ActionButton>
@@ -260,25 +281,27 @@ export function TPSL({
           </Button>
         </ActionButton>
       )}
-      <div className="mb-2 mt-4 text-xs font-medium">
+      <div className="mb-2 mt-4 text-xs font-medium flex">
         Stop Loss{" "}
-        <span className="text-destructive-foreground">
-          {slType === "none"
-            ? ""
-            : slType === "percent"
-              ? `(${formatUsd(estStopLoss)})`
-              : `(${slPercentDisplay.toFixed(2)}%)`}
+        <span
+          className={cn(
+            "text-destructive-foreground flex-1 ml-1",
+            (Number(tpslPercent.slPercent) < MAX_STOP_LOSS ||
+              Number(tpslPercent.slPercent) > 0) &&
+              "line-through",
+          )}
+        >
+          {sanitizedSlPercent && sl !== "" ? `${sanitizedSlPercent}` : ""}
         </span>
+        <Tooltip text={TPSL_LOSS_TOOLTIP_TEXT} />
       </div>
       <InputSelect
-        value={tpsl.sl}
-        bracket={[0, 5, 10, 15, 25]}
-        type={slType}
-        onTypeChange={setSlType}
-        onValueChange={(percentage: string) =>
-          setTpsl({ tp: tpsl.tp, sl: percentage.toString() })
-        }
-        variant="destructive"
+        value={sl}
+        bracket={[0, -10, -25, -50, MAX_STOP_LOSS]}
+        percent={Number(tpslPercent.slPercent).toString() ?? ""}
+        onPercentChange={handleSlPercentChange}
+        onValueChange={handleSlChange}
+        variant="sl"
       />
       {isUpdate && (
         <ActionButton>
