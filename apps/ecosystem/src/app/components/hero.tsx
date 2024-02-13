@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 import { useTheme } from "next-themes";
 
 export default function Hero() {
@@ -40,7 +41,8 @@ export default function Hero() {
                 className="rounded-18 mt-8 w-full text-lg font-semibold leading-7 sm:w-auto"
                 size={"lg"}
               >
-                Build on Berachain
+                <Icons.hammer />
+                <div className="px-2"> Build on Berachain</div>
               </Button>
             </Link>
             <Link href={"/dashboard"}>
