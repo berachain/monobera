@@ -117,10 +117,8 @@ export function ProposalCard({
   onClick,
   className,
 }: ProposalCard) {
-  const { useNormalizedTallyResult } = usePollProposalVotes(
-    Number(proposal.id),
-  );
-  const normalizedTally = useNormalizedTallyResult();
+  const { useProposalTallyResult } = usePollProposalVotes(Number(proposal.id));
+  const normalizedTally = useProposalTallyResult(Number(proposal.id));
 
   return (
     <div
