@@ -9,6 +9,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
 import { DripToken } from "~/components/drip-tokens";
+import NonSSRWrapper from "~/components/no-ssr-wrapper";
 import { TokenBadge } from "~/components/token-badge";
 
 export default function Content() {
@@ -45,26 +46,26 @@ export default function Content() {
         <div className="h-7 text-sm font-medium">
           Wallet Address <span className="text-destructive-foreground">*</span>
         </div>
-        <div className="relative">
-          <Input
-            value={address}
-            onChange={(e) => {
-              setAddress(e.target.value);
-              if (showAlet) setShowAlert(false);
-              setAlert(undefined);
-            }}
-            //@ts-ignore
-            strategy="afterInteractive"
-          />
-          <Icons.close
-            className="absolute right-3 top-3 h-4 w-4 cursor-pointer text-muted-foreground"
-            onClick={() => {
-              setAddress("");
-              if (showAlet) setShowAlert(false);
-              setAlert(undefined);
-            }}
-          />
-        </div>
+        <NonSSRWrapper>
+          <div className="relative">
+            <Input
+              value={address}
+              onChange={(e) => {
+                setAddress(e.target.value);
+                if (showAlet) setShowAlert(false);
+                setAlert(undefined);
+              }}
+            />
+            <Icons.close
+              className="absolute right-3 top-3 h-4 w-4 cursor-pointer text-muted-foreground"
+              onClick={() => {
+                setAddress("");
+                if (showAlet) setShowAlert(false);
+                setAlert(undefined);
+              }}
+            />
+          </div>
+        </NonSSRWrapper>
       </div>
       {showAlet && alert === "success" && (
         <Alert variant={"success"}>
