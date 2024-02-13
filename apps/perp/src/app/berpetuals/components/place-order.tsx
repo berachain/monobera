@@ -112,8 +112,8 @@ export function PlaceOrder({
           : parseUnits(`${form.limitPrice ?? 0}`, 10), // for limit orders
       buy: form.orderType === "long" ? true : false,
       leverage: form.leverage,
-      tp: form.tp === "" ? 0n : parseUnits(form?.tp, 10),
-      sl: form.sl === "" ? 0n : parseUnits(form?.sl, 10),
+      tp: form.tp === "" ? 0n : parseUnits(form?.tp ?? "0", 10),
+      sl: form.sl === "" ? 0n : parseUnits(form?.sl ?? "0", 10),
     },
     form.optionType === "market" ? 0 : 1,
     parseUnits(`${slippage ?? 0}`, 10),
@@ -187,39 +187,43 @@ export function PlaceOrder({
       </div>
       <div className="flex w-full justify-between">
         <div>EST. TAKE PROFIT</div>
-        <div className="flex flex-row items-center gap-1 text-foreground">
-          {form.tp === "" ? (
-            "None"
-          ) : price === undefined ? (
-            <Skeleton className="h-4 w-14" />
-          ) : (
-            `${formatUsd(form.tp ?? 0)}`
-          )}{" "}
+        <div className="flex flex-row items-center gap-1 text-foreground truncate">
+          <span className="truncate">
+            {form.tp === "" ? (
+              "None"
+            ) : price === undefined ? (
+              <Skeleton className="h-4 w-14" />
+            ) : (
+              `${formatUsd(form.tp ?? 0)}`
+            )}{" "}
+          </span>
           {form.tp !== "" && (
-            <Icons.honey className="inline h-3 w-3 text-muted-foreground" />
+            <Icons.honey className="inline h-3 w-3 text-muted-foreground flex-1" />
           )}
         </div>
       </div>
       <div className="flex w-full justify-between">
         <div>EST. STOP LOSS</div>
-        <div className="flex flex-row items-center gap-1 text-foreground">
-          {form.sl === "" ? (
-            "None"
-          ) : price === undefined ? (
-            <Skeleton className="h-4 w-14" />
-          ) : (
-            `${formatUsd(form.sl ?? 0)}`
-          )}{" "}
+        <div className="flex flex-row items-center gap-1 text-foreground truncate">
+          <span className="truncate">
+            {form.sl === "" ? (
+              "None"
+            ) : price === undefined ? (
+              <Skeleton className="h-4 w-14" />
+            ) : (
+              `${formatUsd(form.sl ?? 0)}`
+            )}{" "}
+          </span>
           {form.sl !== "" && (
-            <Icons.honey className="inline h-3 w-3 text-muted-foreground" />
+            <Icons.honey className="inline h-3 w-3 text-muted-foreground flex-1" />
           )}
         </div>
       </div>
       <div className="flex w-full justify-between">
         <div>POSITION SIZE</div>
-        <div className="align-items flex flex-row items-center gap-1 text-foreground">
-          {formatUsd(posSize)}{" "}
-          <Icons.honey className=" inline h-3 w-3 text-muted-foreground" />
+        <div className="align-items flex flex-row items-center gap-1 text-foreground truncate">
+          <span className="truncate">{formatUsd(posSize)} </span>
+          <Icons.honey className="inline h-3 w-3 text-muted-foreground flex-1" />
         </div>
       </div>
       <div className="flex w-full justify-between">
