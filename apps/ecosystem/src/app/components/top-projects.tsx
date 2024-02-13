@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 const topSections = [
