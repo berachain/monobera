@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { formatUsd, usePollHoneyBalance } from "@bera/berajs";
 import { type GlobalParams } from "@bera/proto/src";
@@ -121,14 +121,6 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
 
   const [error, setError] = useState<string | undefined>(undefined);
 
-  // wrapped in useCallback to avoid unnecessary re-renders in TPSL component
-  const handleTPSLChange = useCallback(
-    (value: string, key: string) => {
-      setForm((prev) => ({ ...prev, [key]: value }));
-    },
-    [setForm],
-  );
-
   useEffect(() => {
     if (
       form.amount &&
@@ -143,7 +135,7 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
     } else if (form.amount && Number(safeAmount) < 10) {
       setError("Min Collateral is 10 HONEY.");
     } else if (
-      form.leverage !== undefined &&
+      form.leverage &&
       (form.leverage < 2 || form.leverage > maxLeverage)
     ) {
       setError(`Leverage must be between 2x and ${maxLeverage}x.`);
@@ -326,7 +318,9 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
           tp={form.tp}
           liqPrice={liqPrice}
           sl={form.sl}
-          tpslOnChange={handleTPSLChange}
+          tpslOnChange={(value) =>
+            setForm({ ...form, tp: value.tp, sl: value.sl })
+          }
         />
         <PlaceOrder
           form={form}
