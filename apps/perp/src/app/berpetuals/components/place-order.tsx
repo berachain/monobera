@@ -8,17 +8,23 @@ import {
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
-import { useOctTxn } from "@bera/shared-ui/src/hooks";
+import {
+  useOctTxn,
+  useSlippage,
+  useSetSlippage,
+} from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
+import { Input } from "@bera/ui/input";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits, parseUnits } from "viem";
 import { type Address } from "wagmi";
-
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "../type";
+
+import { DEFAULT_SLIPPAGE, SLIPPAGE_MODE } from "@bera/shared-ui/src/settings";
 
 export function PlaceOrder({
   form,
@@ -39,6 +45,20 @@ export function PlaceOrder({
 }) {
   const formattedPrice = Number(formatUnits(BigInt(price ?? 0n), 10));
   const { refetch } = usePollOpenPositions();
+
+  const slippage = useSlippage();
+  const { setSlippageMode, setSlippage } = useSetSlippage();
+
+  const handleSlippageChange = (e: any) => {
+    let newSlippage = Number(e.target.value);
+    if (newSlippage < 0) {
+      newSlippage = DEFAULT_SLIPPAGE;
+    } else if (newSlippage > 100) {
+      newSlippage = 100;
+    }
+    setSlippageMode(SLIPPAGE_MODE.CUSTOM);
+    setSlippage(newSlippage);
+  };
 
   const safeAmount = form.amount === "" ? "0" : form.amount;
 
@@ -79,8 +99,6 @@ export function PlaceOrder({
   }, [form.amount, form.leverage]);
   const parsedPositionSize = parseUnits(safeAmount, 18);
 
-  // const slippageTolerance = useSlippage();
-
   const payload = [
     {
       trader: account,
@@ -98,8 +116,7 @@ export function PlaceOrder({
       sl: form.sl === "" ? 0n : parseUnits(form?.sl, 10),
     },
     form.optionType === "market" ? 0 : 1,
-    // parseUnits(`${slippageTolerance ?? 0}`, 10),
-    parseUnits("100", 10),
+    parseUnits(`${slippage ?? 0}`, 10),
   ];
 
   const honey = {
@@ -155,6 +172,18 @@ export function PlaceOrder({
       <div className="flex w-full justify-between">
         <div>LEVERAGE</div>
         <div className="text-foreground">{form.leverage}x</div>
+      </div>
+      <div className="flex w-full justify-between">
+        <div className="flex flex-1 self-center">SLIPPAGE</div>
+        <Input
+          endAdornment={<div className="absolute left-1.5">%</div>}
+          type="number"
+          outerClassName="w-auto"
+          className="flex pr-6 h-6 rounded-sm bg-background text-xs w-[64px]"
+          required={false}
+          value={slippage === 0 ? undefined : slippage}
+          onChange={handleSlippageChange}
+        />
       </div>
       <div className="flex w-full justify-between">
         <div>EST. TAKE PROFIT</div>
