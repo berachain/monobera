@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-// import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
+import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
   formatter,
@@ -17,16 +17,15 @@ import {
 } from "@bera/config";
 import { TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { getLTVColor } from "~/utils/get-ltv-color";
 import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import BigNumber from "bignumber.js";
-import { formatUnits, parseUnits } from "viem";
+import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { maxUint256 } from "~/utils/constants";
-
-// import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function WithdrawBtn({
   token,
@@ -94,25 +93,25 @@ const WithdrawModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  // const currentHealthFactor =
-  //   Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
-  //     ? "∞"
-  //     : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+  const currentHealthFactor =
+    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
+      ? "∞"
+      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
 
-  // const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-  //   collateralBalanceMarketReferenceCurrency:
-  //     Number(formatUnits(userAccountData.totalCollateralBase, 8)) -
-  //     Number(amount ?? "0") *
-  //       Number(reserveData?.formattedPriceInMarketReferenceCurrency),
-  //   borrowBalanceMarketReferenceCurrency: formatUnits(
-  //     userAccountData.totalDebtBase,
-  //     8,
-  //   ),
-  //   currentLiquidationThreshold: formatUnits(
-  //     userAccountData.currentLiquidationThreshold,
-  //     4,
-  //   ),
-  // });
+  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
+    collateralBalanceMarketReferenceCurrency:
+      Number(formatUnits(userAccountData.totalCollateralBase, 8)) -
+      Number(amount ?? "0") *
+        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+    borrowBalanceMarketReferenceCurrency: formatUnits(
+      userAccountData.totalDebtBase,
+      8,
+    ),
+    currentLiquidationThreshold: formatUnits(
+      userAccountData.currentLiquidationThreshold,
+      4,
+    ),
+  });
   const maxWithdrawalAllowance = BigNumber(
     formatUnits(
       (userAccountData.totalCollateralBase as bigint) -
@@ -164,7 +163,7 @@ const WithdrawModalContent = ({
             {(reserveData.supplyAPR * 100).toFixed(2)}%
           </div>
         </div>
-        {/* {token.address !== honeyTokenAddress && (
+        {token.address !== honeyTokenAddress && (
           <div className="flex justify-between text-sm leading-tight">
             <div className="text-muted-foreground ">LTV Health Ratio</div>
             <div className="flex items-center gap-1 font-semibold">
@@ -189,7 +188,7 @@ const WithdrawModalContent = ({
               </span>
             </div>
           </div>
-        )} */}
+        )}
       </div>
 
       {/* {token.address !== honeyTokenAddress &&
