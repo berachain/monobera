@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useValidatorIcon, useValidators } from "@bera/berajs";
 import { cn } from "@bera/ui";
@@ -20,14 +20,8 @@ export const ValidatorIcon = ({
   const localValidatorImg = validatorInfo?.validatorDictionary
     ? validatorInfo?.validatorDictionary[address]?.logoURI
     : "";
-  const [validatorImg, setValidatorImg] = useState<string>("");
-  const { data, isLoading } = useValidatorIcon(description, address);
 
-  useEffect(() => {
-    if (address && !isLoading && data) {
-      setValidatorImg(data);
-    }
-  }, [address, isLoading, data]);
+  const { data: validatorImg } = useValidatorIcon(description, address);
 
   return (
     <Avatar className={cn("", className)}>
