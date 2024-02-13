@@ -6,11 +6,13 @@ import TopProjects from "./components/top-projects";
 export default function Home() {
   return (
     <main>
-      <div className="relative mx-auto flex flex-col items-center justify-between bg-contain bg-no-repeat px-2 md:px-12 lg:px-32">
+      <div className="relative mx-auto flex flex-col items-center justify-between bg-contain bg-no-repeat">
         <Hero />
-        <TopProjects />
-        <EcosystemProjects />
-        <EcosystemAnnouncements />
+        <div className="lg:w-[1280px]">
+          <TopProjects />
+          <EcosystemProjects />
+          <EcosystemAnnouncements />
+        </div>
       </div>
     </main>
   );

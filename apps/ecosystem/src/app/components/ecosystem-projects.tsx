@@ -147,7 +147,7 @@ export default function EcosystemProjects() {
   return (
     <div
       id="dapps"
-      className="mt-4 flex flex-col items-center gap-6 text-center"
+      className="mt-4 flex flex-col items-center justify-center gap-6 px-4 text-center"
     >
       <SearchInput
         placeholder="Search..."
