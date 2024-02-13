@@ -53,6 +53,8 @@ export default function Content() {
               if (showAlet) setShowAlert(false);
               setAlert(undefined);
             }}
+            //@ts-ignore
+            strategy="afterInteractive"
           />
           <Icons.close
             className="absolute right-3 top-3 h-4 w-4 cursor-pointer text-muted-foreground"

@@ -105,9 +105,6 @@ export function DripToken({
       >
         Drip Tokens
       </Button>
-      is Address: {String(isAddress(address ?? ""))} {address}
-      <br />
-      token: {token}
     </div>
   );
 }
