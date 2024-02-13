@@ -20,7 +20,11 @@ export const ValidatorIcon = ({
 
   return (
     <Avatar className={cn("", className)}>
-      <AvatarImage src={`${process.env.NEXT_PUBLIC_AWS_URL}/${validatorImg}`} />
+      {validatorImg && (
+        <AvatarImage
+          src={`${process.env.NEXT_PUBLIC_AWS_URL}/${validatorImg}`}
+        />
+      )}
       <AvatarFallback>
         <Image
           src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/wx4snihxcxxdko2wpsbj`}

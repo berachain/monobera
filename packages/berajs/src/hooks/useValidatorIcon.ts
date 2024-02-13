@@ -36,7 +36,6 @@ export const useValidatorIcon = (
       }
     } catch (error) {
       console.error(error);
-      throw new Error(`failed to fetch avatar for ${identity}.`);
     }
   };
 
