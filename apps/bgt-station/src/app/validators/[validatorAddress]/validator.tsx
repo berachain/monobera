@@ -62,7 +62,11 @@ export default function Validator({
             )}
           </div>
           <div className="flex w-full items-center justify-center gap-2 text-3xl font-bold leading-[48px] md:text-5xl ">
-            <ValidatorIcon address={validatorAddress} className="h-12 w-12" />
+            <ValidatorIcon
+              address={validatorAddress}
+              description={validator?.description?.identity ?? undefined}
+              className="h-12 w-12"
+            />
             {validator?.description.moniker ?? (
               <Skeleton className="inline-block h-12 w-[100px]" />
             )}

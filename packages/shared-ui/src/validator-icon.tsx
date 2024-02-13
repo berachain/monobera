@@ -1,25 +1,30 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
-import { useValidators } from "@bera/berajs";
+import { useValidatorIcon } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { type Address } from "viem";
 
 export const ValidatorIcon = ({
   address,
+  description,
   className,
 }: {
   address: Address;
+  description?: string;
   className?: string;
 }) => {
-  const validatorInfo = useValidators();
-  const validatorImg = validatorInfo?.validatorDictionary
-    ? validatorInfo?.validatorDictionary[address]?.logoURI
-    : "";
+  const { data: validatorImg } = useValidatorIcon(description, address);
+
   return (
     <Avatar className={cn("", className)}>
-      <AvatarImage src={validatorImg} />
+      {validatorImg && (
+        <AvatarImage
+          src={`${process.env.NEXT_PUBLIC_AWS_URL}/${validatorImg}`}
+        />
+      )}
       <AvatarFallback>
         <Image
           src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/wx4snihxcxxdko2wpsbj`}
