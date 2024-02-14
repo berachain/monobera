@@ -82,9 +82,14 @@ export default function ProposalDetails({
 
   const votingPower = useMemo(() => {
     if (userTotal && globalTotal) {
-      return userTotal / globalTotal;
+      const ratio = userTotal / globalTotal;
+      // Convert to scientific notation if very small
+      if (ratio > 0 && ratio < 0.01) {
+        return parseFloat(ratio.toPrecision(2));
+      }
+      return ratio;
     }
-    return 0;
+    return 0.0;
   }, [userTotal, globalTotal]);
 
   const jsonMsg = useMemo(() => {
