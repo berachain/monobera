@@ -89,7 +89,7 @@ export default function ProposalDetails({
       }
       return ratio;
     }
-    return 0.0;
+    return 0;
   }, [userTotal, globalTotal]);
 
   const jsonMsg = useMemo(() => {
