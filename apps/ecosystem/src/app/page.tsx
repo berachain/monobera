@@ -1,6 +1,9 @@
+"use client";
+
 import EcosystemAnnouncements from "./components/ecosystem-announcements";
 import EcosystemProjects from "./components/ecosystem-projects";
 import Hero from "./components/hero";
+import ProjectHighlights from "./components/project-highlights";
 import TopProjects from "./components/top-projects";
 
 export default function Home() {
@@ -8,11 +11,11 @@ export default function Home() {
     <main>
       <div className="relative mx-auto flex flex-col items-center justify-between bg-contain bg-no-repeat">
         <Hero />
-        <div className="lg:w-[1280px]">
-          <TopProjects />
-          <EcosystemProjects />
-          <EcosystemAnnouncements />
-        </div>
+
+        <TopProjects />
+        <EcosystemProjects />
+        <ProjectHighlights />
+        <EcosystemAnnouncements />
       </div>
     </main>
   );
