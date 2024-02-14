@@ -126,13 +126,13 @@ export default function EcosystemProjects() {
   const [keywords, setKeywords] = useState<string | null>(null);
   const [ecosystemType, setEcosystemType] = React.useState<string>("All");
   const [visibleProjects, setVisibleProjects] = React.useState(4);
-  const [viewMore, setViewMore] = React.useState(false);
+  const [viewMore, setViewMore] = React.useState(true);
 
   const toggleDisplay = () => {
     if (viewMore) {
       setVisibleProjects(projectList.length);
     } else {
-      setVisibleProjects(3);
+      setVisibleProjects(4);
     }
     setViewMore(!viewMore);
   };
@@ -147,7 +147,7 @@ export default function EcosystemProjects() {
   return (
     <div
       id="dapps"
-      className="mt-4 flex flex-col items-center gap-6 text-center"
+      className="mt-4 flex flex-col items-center justify-center gap-6 px-4 text-center"
     >
       <SearchInput
         placeholder="Search..."
