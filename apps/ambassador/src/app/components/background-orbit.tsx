@@ -9,6 +9,7 @@ import { Orbit } from "./orbit";
 export default function BackGroundOrbit() {
   const { theme, systemTheme } = useTheme();
   const t = !theme || theme === "system" ? systemTheme || "dark" : theme;
+  const bg = t === "dark" ? "/globe.png" : "/globe_bright.png";
   const bgGradient =
     t === "dark"
       ? "bg-gradient-to-t from-black via-[#1E0900] to-transparent"
@@ -17,12 +18,7 @@ export default function BackGroundOrbit() {
     <>
       <div className="mx-auto flex flex-col items-center justify-center">
         <div className="absolute top-[-16%] h-full w-full">
-          <Image
-            src={t === "dark" ? "/globe.png" : "/globe_bright.png"}
-            alt="Globe"
-            layout="fill"
-            objectFit="contain"
-          />
+          <Image src={bg} alt="Globe" layout="fill" objectFit="contain" />
         </div>
         <div
           className={cn(
