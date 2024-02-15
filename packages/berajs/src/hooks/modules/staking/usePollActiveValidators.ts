@@ -85,6 +85,7 @@ export const usePollActiveValidators = () => {
         console.log(e);
         return undefined;
       })) as any[];
+    console.log("result", result);
     return {
       validators: result ? result[0] : undefined,
       nextKey: result ? result[1].nextKey : undefined,
