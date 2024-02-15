@@ -42,7 +42,7 @@ export default function MyProject() {
           alt="Project"
           width={650}
           height={600}
-          className="rounded-2 absolute bottom-[-20%] right-[-10%]" // Adjust these values as needed
+          className="rounded-2 absolute bottom-[-20%] right-[-10%]"
         />
       </div>
     </div>
