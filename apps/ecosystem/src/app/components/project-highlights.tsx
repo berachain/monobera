@@ -42,19 +42,19 @@ const highlights = [
     tags: ["Validator", "Staking", "Bera"],
   },
   {
-    title: "Title 4",
+    title: "Title 7",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Validator", "Staking", "Bera"],
   },
   {
-    title: "Title 5",
+    title: "Title 8",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Validator", "Staking", "Bera"],
   },
   {
-    title: "Title 6",
+    title: "Title 9",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Validator", "Staking", "Bera"],
@@ -63,9 +63,18 @@ const highlights = [
 
 export default function ProjectHighlights() {
   const [currentIndex, setCurrentIndex] = useState(1); // Start from 1 because of the duplicated first item at the beginning
+  const [itemWidth, setItemWidth] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (sliderRef.current) {
+      const firstChild = sliderRef.current.children[0] as HTMLElement;
+      setItemWidth(firstChild.offsetWidth);
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("currentIndex", currentIndex);
     // Adjust the scroll position for the looping effect
     if (sliderRef.current) {
       const firstChildWidth =
@@ -120,21 +129,19 @@ export default function ProjectHighlights() {
         </div>
       </div>
 
-      {/* <div className="flex max-w-lg overflow-hidden"> */}
       <div
         ref={sliderRef}
-        className="mt-4 flex max-w-lg snap-x scroll-smooth"
+        className="mt-4 flex max-w-lg snap-x gap-4 scroll-smooth whitespace-nowrap transition-transform duration-300 ease-linear lg:flex"
         onTouchStart={(e) => e.stopPropagation()}
-        //   className="mt-4 gap-4 whitespace-nowrap transition-transform duration-300 ease-linear lg:flex"
-        style={{ transform: `translateX(-${currentIndex * 20}%)` }}
+        style={{ transform: `translateX(-${currentIndex * 50}%)` }}
       >
         {itemsForLooping.map((section, index) => (
           <Link href={section.link} target="_blank">
             <div
               key={index}
-              className="relative flex h-[266px] w-[266px] snap-center flex-col rounded-xl border border-solid bg-background "
+              className="relative flex h-[266px] w-[266px] snap-center flex-col items-center justify-center rounded-xl border border-solid bg-background"
             >
-              <Skeleton className="rounded-2 h-[148px] w-[266px]" />
+              <Skeleton className="rounded-2 h-[148px] w-[240px]" />
               <div className="flex flex-col items-center gap-1 px-6 pb-4 pt-6">
                 <div className="text-xl font-semibold text-foreground">
                   {section.title}
@@ -145,7 +152,6 @@ export default function ProjectHighlights() {
           </Link>
         ))}
       </div>
-      {/* </div> */}
     </div>
   );
 }
