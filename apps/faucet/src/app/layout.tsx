@@ -29,7 +29,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   );
   return (
     <html lang="en">
-      <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" />
+      <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" strategy="lazyOnload"/>
       <Script
         id="HotJarAnalytics"
         strategy="afterInteractive"
