@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Link from "next/link";
 import {
   bgtName,
   bgtUrl,
@@ -147,9 +148,10 @@ export default function EcosystemProjects() {
   return (
     <div
       id="dapps"
-      className="mt-4 flex flex-col items-center justify-center gap-6 px-4 text-center"
+      className="mt-16 flex flex-col items-center justify-center gap-6 text-center"
     >
       <SearchInput
+        className="h-[40px] w-full rounded-md border border-solid bg-background"
         placeholder="Search..."
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setKeywords(e.target.value)
@@ -170,7 +172,9 @@ export default function EcosystemProjects() {
           ))}
         </TabsList>
       </Tabs>
-      <div className="my-4 border-b border-gray-200" />
+
+      <div className="my-4 w-full border border-solid" />
+
       <div className="mx-auto grid w-fit grid-cols-1 gap-6 lg:grid-cols-4 xl:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
@@ -189,11 +193,11 @@ export default function EcosystemProjects() {
               <div className="text-center text-sm leading-5 text-muted-foreground">
                 {fav.description}
               </div>
-              <div className="flex justify-between gap-2">
-                <Button onClick={() => window.open(fav.goto)} variant="outline">
-                  View Project <Icons.arrowRight />
-                </Button>
-              </div>
+              <Link href={fav.goto}>
+                <div className="flex justify-between gap-2 text-sm text-muted-foreground">
+                  Visit Project <Icons.arrowRight />
+                </div>
+              </Link>
             </div>
           ))}
       </div>
