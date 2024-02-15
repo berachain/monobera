@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Link from "next/link";
 import {
   bgtName,
   bgtUrl,
@@ -73,7 +74,6 @@ const projectList = [
     description:
       "Swap a variety of tokens effortlessly on our decentralized platform. Provide liquidity to pools and earn BGT rewards.",
     goto: dexUrl,
-    learnMore: `${docsUrl}/learn/bex`,
   },
   {
     icon: <Icons.honeyFav className="h-[52px] w-[52px]" />,
@@ -82,7 +82,6 @@ const projectList = [
     description:
       "A stablecoin that's integral to the Berachain ecosystem. Utilize HONEY for seamless trading, ensuring value consistency.",
     goto: honeyUrl,
-    learnMore: `${docsUrl}/learn/protocol/honey-stablecoin`,
   },
   {
     icon: <Icons.bendFav className="h-[52px] w-[52px]" />,
@@ -91,7 +90,6 @@ const projectList = [
     description:
       "Supply assets and unlock the potential to borrow HONEY. Earn BGT rewards while you supply and borrow.",
     goto: lendUrl,
-    learnMore: lendDocsUrl,
   },
   {
     icon: <Icons.berpsFav className="h-[52px] w-[52px]" />,
@@ -100,7 +98,6 @@ const projectList = [
     description:
       "Experience the thrill of high leverage trading, tailored for both novices and seasoned traders. With an impressive 100x leverage.",
     goto: perpsUrl,
-    learnMore: perpsDocsUrl,
   },
   {
     icon: <Icons.bgtFav className="h-[52px] w-[52px]" />,
@@ -109,7 +106,6 @@ const projectList = [
     description:
       "Engage directly in the governance of BGT, leverage BGT Station for innovative bribe mechanisms, enhancing participation.",
     goto: bgtUrl,
-    learnMore: `${docsUrl}/learn/protocol/bgt-station`,
   },
   {
     icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
@@ -118,7 +114,6 @@ const projectList = [
     description:
       "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
     goto: blockExplorerUrl,
-    learnMore: `${docsUrl}/developers/beratrail-block-explorer`,
   },
 ];
 
@@ -147,9 +142,10 @@ export default function EcosystemProjects() {
   return (
     <div
       id="dapps"
-      className="mt-4 flex flex-col items-center justify-center gap-6 px-4 text-center"
+      className="mt-16 flex flex-col items-center justify-center gap-6 text-center"
     >
       <SearchInput
+        className="h-[40px] w-full rounded-md border border-solid bg-background"
         placeholder="Search..."
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setKeywords(e.target.value)
@@ -170,7 +166,9 @@ export default function EcosystemProjects() {
           ))}
         </TabsList>
       </Tabs>
-      <div className="my-4 border-b border-gray-200" />
+
+      <div className="my-4 w-full border border-solid" />
+
       <div className="mx-auto grid w-fit grid-cols-1 gap-6 lg:grid-cols-4 xl:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
@@ -189,11 +187,11 @@ export default function EcosystemProjects() {
               <div className="text-center text-sm leading-5 text-muted-foreground">
                 {fav.description}
               </div>
-              <div className="flex justify-between gap-2">
-                <Button onClick={() => window.open(fav.goto)} variant="outline">
-                  View Project <Icons.arrowRight />
-                </Button>
-              </div>
+              <Link href={fav.goto}>
+                <div className="flex justify-between gap-2 text-sm text-muted-foreground">
+                  Visit Project <Icons.arrowRight />
+                </div>
+              </Link>
             </div>
           ))}
       </div>
