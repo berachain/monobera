@@ -7,8 +7,9 @@ import { Button } from "@bera/ui/button";
 
 export default function MyProject() {
   return (
-    <div>
-      <div className="flex items-center justify-center gap-8 rounded-xl border border-solid bg-muted p-8 py-4">
+    <div className="px-0 pb-16 pt-[64px]">
+      <div className="relative flex items-center justify-center gap-8 rounded-xl border border-solid bg-muted p-8 py-4">
+        {" "}
         <div className="relative mx-auto flex h-[220px] w-[1088px]">
           <div className="absolute flex flex-col flex-wrap items-start py-8">
             <div className="left-0 top-0 flex flex-col leading-10">
@@ -36,14 +37,14 @@ export default function MyProject() {
             </div>
           </div>
         </div>
+        <Image
+          src="/ecobear.png"
+          alt="Project"
+          width={650}
+          height={600}
+          className="rounded-2 absolute bottom-[-20%] right-[-10%]" // Adjust these values as needed
+        />
       </div>
-      <Image
-        src="/ecobear.png"
-        alt="Project"
-        width={480}
-        height={480}
-        className="rounded-2 absolute pr-2"
-      />
     </div>
   );
 }

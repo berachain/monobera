@@ -23,7 +23,7 @@ export default function Hero() {
         />
         <div className="absolute flex flex-col flex-wrap items-start py-28">
           <div className="left-0 top-0 flex flex-col leading-10">
-            <h1 className="text-4xl font-extrabold leading-[72px] tracking-tight text-foreground sm:text-4xl">
+            <h1 className="text-5xl font-extrabold leading-[72px] tracking-tight text-foreground">
               Berachain
               <br />
               Ecosystem

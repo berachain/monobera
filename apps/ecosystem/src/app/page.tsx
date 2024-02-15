@@ -1,6 +1,6 @@
 "use client";
 
-import EcosystemAnnouncements from "./components/ecosystem-announcements";
+// import EcosystemAnnouncements from "./components/ecosystem-announcements";
 import EcosystemProjects from "./components/ecosystem-projects";
 import Hero from "./components/hero";
 import MyProject from "./components/my-project";
@@ -15,7 +15,7 @@ export default function Home() {
         <TopProjects />
         <EcosystemProjects />
         <ProjectHighlights />
-        <EcosystemAnnouncements />
+        {/* <EcosystemAnnouncements /> */}
         <MyProject />
       </div>
     </main>
