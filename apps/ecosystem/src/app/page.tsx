@@ -1,11 +1,13 @@
 "use client";
 
 // import EcosystemAnnouncements from "./components/ecosystem-announcements";
+// import TopProjects from "./components/top-projects";
+import { Footer } from "@bera/shared-ui";
+
 import EcosystemProjects from "./components/ecosystem-projects";
 import Hero from "./components/hero";
 import MyProject from "./components/my-project";
 import ProjectHighlights from "./components/project-highlights";
-import TopProjects from "./components/top-projects";
 
 export default function Home() {
   return (
@@ -17,6 +19,7 @@ export default function Home() {
         <ProjectHighlights />
         {/* <EcosystemAnnouncements /> */}
         <MyProject />
+        <Footer />
       </div>
     </main>
   );
