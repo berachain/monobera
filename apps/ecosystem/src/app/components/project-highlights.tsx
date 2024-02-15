@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { Skeleton } from "@bera/ui/skeleton";
 
 const highlights = [
   {
@@ -148,8 +148,14 @@ export default function ProjectHighlights() {
       >
         {itemsForLooping.map((section, index) => (
           <Link href={section.link} key={index} target="_blank">
-            <div className="m-2 mx-auto flex h-[266px] w-[266px] snap-center flex-col items-center justify-center rounded-md border border-solid bg-background hover:opacity-80 hover:shadow-xl">
-              <Skeleton className="rounded-2 h-[148px] w-[240px]" />
+            <div className="mx-auto flex h-[308px] w-[298px] snap-center flex-col items-center justify-start rounded-md border border-solid bg-background pt-4 hover:opacity-80 hover:shadow-xl">
+              <Image
+                src="/partnerships_placeholder.png"
+                alt="Project"
+                width={266}
+                height={148}
+                className="rounded-2"
+              />
               <div className="flex w-[266px] items-center justify-between px-4 py-2">
                 <div className="text-xl font-semibold text-foreground">
                   {section.title}
