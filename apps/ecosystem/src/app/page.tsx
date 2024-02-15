@@ -12,7 +12,7 @@ export default function Home() {
     <main>
       <div className="relative mx-auto flex flex-col items-center justify-between bg-contain bg-no-repeat">
         <Hero />
-        <TopProjects />
+        {/* <TopProjects /> */}
         <EcosystemProjects />
         <ProjectHighlights />
         {/* <EcosystemAnnouncements /> */}
