@@ -44,35 +44,33 @@ export function AmbassadorCard({ ambassador }: { ambassador: any }) {
   }
 
   return (
-    <Link href="" target="_blank">
-      <div
-        className={`relative col-span-1 flex h-[440px] w-[300px] flex-col rounded-lg border border-solid ${getAmbassadorStyle(
-          ambassador.tier,
-        )}`}
-      >
-        <div className="flex flex-col items-center gap-4 px-6 pb-4 pt-6">
-          <Avatar className="h-20 w-20">
-            <AvatarImage src={ambassador.image} className="rounded-full" />
-          </Avatar>
-          <div className="text-xl font-semibold text-foreground">
-            {ambassador.tier}
-          </div>
-          <div className="text-xl font-semibold text-foreground">
-            {ambassador.name}
-          </div>
-          <div className="text-base font-normal text-foreground text-center">
-            {ambassador.intro}
-          </div>
+    <div
+      className={`relative col-span-1 flex h-[440px] w-[300px] flex-col rounded-lg border border-solid ${getAmbassadorStyle(
+        ambassador.tier,
+      )}`}
+    >
+      <div className="flex flex-col items-center gap-4 px-6 pb-4 pt-6">
+        <Avatar className="h-20 w-20">
+          <AvatarImage src={ambassador.image} className="rounded-full" />
+        </Avatar>
+        <div className="text-xl font-semibold text-foreground">
+          {ambassador.tier}
+        </div>
+        <div className="text-xl font-semibold text-foreground">
+          {ambassador.name}
+        </div>
+        <div className="text-center text-base font-normal text-foreground">
+          {ambassador.intro}
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
 export function Tiers(): React.JSX.Element {
   return (
     <>
-      <div className="flex flex-col items-center justify-center pt-12 pb-12 px-32">
+      <div className="flex flex-col items-center justify-center px-32 pb-12 pt-12">
         <h1 className="md:leading-14 leading-24 pb-8 text-3xl font-extrabold md:text-5xl">
           Stages of an{" "}
           <span className="bg-gradient-to-r from-[rgba(255,181,113,0.9)] to-[rgba(255,122,0,0.9)] bg-clip-text text-transparent backdrop-blur-md">
@@ -84,7 +82,7 @@ export function Tiers(): React.JSX.Element {
           <AmbassadorCard ambassador={kingsOath} />
           <AmbassadorCard ambassador={colonel} />
         </div>
-        <Button variant="outline" className="mt-12 mb-8">
+        <Button variant="outline" className="mb-8 mt-12">
           View more events
         </Button>
       </div>
