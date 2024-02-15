@@ -12,8 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  const isFaucetPartnersEnabled =
-    process.env.NEXT_PUBLIC_FAUCET_PARTNERS_ENABLED === "true";
   return (
     <div className="container mx-auto">
       <div className="flex w-full flex-col-reverse items-center justify-between py-12 xl:flex-row ">
@@ -28,7 +26,7 @@ export default function Page() {
           unoptimized
         />
       </div>
-      {isFaucetPartnersEnabled && <FaucetPartners />}
+      <FaucetPartners />
 
       <Explore />
     </div>
