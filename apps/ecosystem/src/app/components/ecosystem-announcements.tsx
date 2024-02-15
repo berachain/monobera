@@ -12,7 +12,7 @@ export default function EcosystemAnnouncements() {
   return (
     <div className="relative flex h-fit flex-col items-center justify-center px-0 pb-16 pt-[64px]">
       <div className="text-center text-3xl font-bold leading-[48px] text-foreground sm:text-5xl">
-        Ecosystem Announcements
+        Announcements
       </div>
       <div className="mt-4 text-center text-lg font-semibold leading-7 text-muted-foreground sm:text-xl">
         Upcoming Events, Hackathons, Team GetToGethers, etc..
