@@ -74,7 +74,6 @@ const projectList = [
     description:
       "Swap a variety of tokens effortlessly on our decentralized platform. Provide liquidity to pools and earn BGT rewards.",
     goto: dexUrl,
-    learnMore: `${docsUrl}/learn/bex`,
   },
   {
     icon: <Icons.honeyFav className="h-[52px] w-[52px]" />,
@@ -83,7 +82,6 @@ const projectList = [
     description:
       "A stablecoin that's integral to the Berachain ecosystem. Utilize HONEY for seamless trading, ensuring value consistency.",
     goto: honeyUrl,
-    learnMore: `${docsUrl}/learn/protocol/honey-stablecoin`,
   },
   {
     icon: <Icons.bendFav className="h-[52px] w-[52px]" />,
@@ -92,7 +90,6 @@ const projectList = [
     description:
       "Supply assets and unlock the potential to borrow HONEY. Earn BGT rewards while you supply and borrow.",
     goto: lendUrl,
-    learnMore: lendDocsUrl,
   },
   {
     icon: <Icons.berpsFav className="h-[52px] w-[52px]" />,
@@ -101,7 +98,6 @@ const projectList = [
     description:
       "Experience the thrill of high leverage trading, tailored for both novices and seasoned traders. With an impressive 100x leverage.",
     goto: perpsUrl,
-    learnMore: perpsDocsUrl,
   },
   {
     icon: <Icons.bgtFav className="h-[52px] w-[52px]" />,
@@ -110,7 +106,6 @@ const projectList = [
     description:
       "Engage directly in the governance of BGT, leverage BGT Station for innovative bribe mechanisms, enhancing participation.",
     goto: bgtUrl,
-    learnMore: `${docsUrl}/learn/protocol/bgt-station`,
   },
   {
     icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
@@ -119,7 +114,6 @@ const projectList = [
     description:
       "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
     goto: blockExplorerUrl,
-    learnMore: `${docsUrl}/developers/beratrail-block-explorer`,
   },
 ];
 
