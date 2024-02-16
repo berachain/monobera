@@ -198,8 +198,3 @@ export default function ProjectHighlights() {
     </div>
   );
 }
-
-/* <div
-                className="w-full overflow-hidden px-4 text-center text-sm text-muted-foreground"
-                style={{ wordBreak: "break-word" }}
-              > */
