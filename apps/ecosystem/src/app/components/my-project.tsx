@@ -10,8 +10,8 @@ export default function MyProject() {
     <div className="px-0 pb-16 pt-[64px]">
       <div className="relative">
         <div className="relative mx-auto flex min-h-[300px] min-w-[400px] gap-4 rounded-xl border border-solid bg-muted px-8 py-4 md:h-[220px] md:min-w-[800px] lg:w-[1080px]">
-          <div className="absolute flex flex-col flex-wrap items-center justify-center pr-8 sm:items-start">
-            <div className="top-0 flex flex-col flex-wrap leading-10 lg:left-0">
+          <div className="absolute flex flex-col flex-wrap items-center justify-center pl-4 sm:items-start">
+            <div className="top-0 flex flex-col flex-wrap items-center leading-10 lg:left-0 lg:items-start">
               <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-2xl sm:leading-[72px]">
                 Get My Project Listed
               </h1>
@@ -37,7 +37,7 @@ export default function MyProject() {
             </div>
           </div>
         </div>
-        <div className="relative justify-end sm:flex">
+        <div className="relative hidden justify-end sm:flex">
           <div className="absolute bottom-0 right-0 xl:bottom-[-5%] xl:right-[-10%]">
             <Image
               src="/ecobear.png"
