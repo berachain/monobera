@@ -160,16 +160,13 @@ export default function ProjectHighlights() {
       >
         {itemsForLooping.map((section, index) => (
           <Link href={section.link} key={index} target="_blank">
-            <div
-              key={index}
-              className="mx-auto flex h-[308px] w-[298px] flex-col items-center justify-start rounded-md border border-solid bg-background p-4 hover:opacity-80 hover:shadow-xl"
-            >
+            <div className="card-hover mx-auto flex h-[308px] w-[298px] flex-col items-center justify-start rounded-md border border-solid bg-background p-4 hover:opacity-80 hover:shadow-xl">
               <Image
                 src="/partnerships_placeholder.png"
                 alt="Project"
                 width={266}
                 height={148}
-                className="rounded-2"
+                className="rounded-2 image-zoom"
               />
               <div className="flex w-[266px] items-center justify-between py-4">
                 <div className="text-xl font-semibold text-foreground">
