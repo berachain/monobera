@@ -8,10 +8,10 @@ import { Button } from "@bera/ui/button";
 export default function MyProject() {
   return (
     <div className="px-0 pb-16 pt-[64px]">
-      <div className="relative flex items-center justify-center gap-8 rounded-xl border border-solid bg-muted p-8 py-4">
+      <div className="relative flex items-center justify-center gap-4 rounded-xl border border-solid bg-muted px-8 py-4">
         {" "}
         <div className="relative mx-auto flex h-[500px] w-[480px] flex-wrap md:h-[220px] lg:w-[1088px]">
-          <div className="absolute flex flex-col flex-wrap items-start py-8">
+          <div className="absolute flex flex-col flex-wrap items-start py-2">
             <div className="top-0 flex flex-col flex-wrap leading-10 lg:left-0">
               <h1 className="text-2xl font-extrabold leading-[72px] tracking-tight text-foreground sm:text-2xl">
                 Get My Project Listed
@@ -37,12 +37,13 @@ export default function MyProject() {
             </div>
           </div>
         </div>
-        <div className="hidden sm:block">
+        <div className="flex justify-center sm:w-1/2 sm:justify-end">
           <Image
             src="/ecobear.png"
             alt="Project"
             width={650}
             height={600}
+            layout="intrinsic"
             className="rounded-2 absolute bottom-[-20%] right-[-10%]"
           />
         </div>
