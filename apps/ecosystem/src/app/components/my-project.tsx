@@ -16,7 +16,7 @@ export default function MyProject() {
               <h1 className="text-2xl font-extrabold leading-[72px] tracking-tight text-foreground sm:text-2xl">
                 Get My Project Listed
               </h1>
-              <h2 className="text-md mt-2 whitespace-nowrap leading-8 tracking-tight text-muted-foreground">
+              <h2 className="text-md mt-2 flex-wrap whitespace-nowrap leading-8 tracking-tight text-muted-foreground">
                 Fellow builder in the making? Submit project details via this
                 form <br />
                 and please be sure to provide us as much information as
@@ -37,14 +37,14 @@ export default function MyProject() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center sm:w-1/2 sm:justify-end">
+        <div className="flex justify-center sm:justify-end">
           <Image
             src="/ecobear.png"
             alt="Project"
             width={650}
             height={600}
             layout="intrinsic"
-            className="rounded-2 absolute bottom-[-20%] right-[-10%]"
+            className="lg:absolute lg:bottom-[-20%] lg:right-[-10%]"
           />
         </div>
       </div>
