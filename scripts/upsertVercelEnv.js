@@ -2,6 +2,14 @@
 // Nice to have: add option to clean up / remove existing env variables of a project, ensure you write a history file with those vars in case of rollback
 // Nice to have: for every project in a list, upsert - currently only one project at a time
 
+/**
+ * Notes for usage
+ * Make sure to get your token by following the instructions here: https://vercel.com/docs/rest-api#creating-an-access-token
+ * Make sure to select your env file name
+ * This script overrides existing keys if a new value exists
+ * This script does NOT erase existing keys if they do not exist in the `envFileName` file.
+ */
+
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const argv = yargs(hideBin(process.argv)).argv;
