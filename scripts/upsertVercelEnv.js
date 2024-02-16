@@ -1,4 +1,7 @@
 // pookie bear is watching
+// Nice to have: add option to clean up / remove existing env variables of a project, ensure you write a history file with those vars in case of rollback
+// Nice to have: for every project in a list, upsert - currently only one project at a time
+
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const argv = yargs(hideBin(process.argv)).argv;
@@ -94,13 +97,6 @@ const main = async () => {
   // pares file into envVariables
   const envVariables = readEnvFile(envFilePath);
 
-  // TODO: Clean up / remove env variables of a project, ensure you write a history file with those vars in case of rollback
-
-  console.log(`Upserting environment variables from: ${envFilePath}`);
-  //   console.log(envVariables);
-  console.log(`Bearer ${bearerToken}`);
-
-  // TODO: for each project, upsert - currently only one project at a time
   const requestBody = Object.entries(envVariables).map(([key, value]) => ({
     key,
     value,
@@ -109,7 +105,7 @@ const main = async () => {
       ? ["production", "development", "preview"]
       : ["development", "preview"],
   }));
-  console.log(requestBody);
+
   await fetch(
     `https://api.vercel.com/v10/projects/${projectName}/env?teamId=team_1OTkqDgy6VcVy0OhB8Ksxf8O&upsert=true`,
     {
