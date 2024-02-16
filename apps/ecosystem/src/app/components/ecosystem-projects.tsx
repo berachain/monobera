@@ -169,7 +169,7 @@ export default function EcosystemProjects() {
 
       <div className="my-4 w-full border border-solid" />
 
-      <div className="mx-auto grid w-fit grid-cols-1 gap-6 lg:grid-cols-4 xl:grid-cols-4">
+      <div className="mx-auto grid w-fit grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
           .map((fav: any, index: number) => (
