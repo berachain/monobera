@@ -13,7 +13,6 @@
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const argv = yargs(hideBin(process.argv)).argv;
-const { exec } = require("child_process");
 
 const fs = require("fs");
 const path = require("path");
