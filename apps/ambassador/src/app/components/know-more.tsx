@@ -38,12 +38,12 @@ export default function KnowMore() {
         </div>
         <div className="hidden justify-center sm:flex sm:justify-end">
           <Image
-            src="/Bera_WYLTKM_alt.png"
+            src="/knowmoarbear.png"
             alt="Project"
-            width={500}
-            height={500}
+            width={400}
+            height={400}
             layout="intrinsic"
-            className="xl:absolute xl:bottom-[-5%] xl:right-[10%]"
+            className="xl:absolute xl:bottom-0 xl:right-[15%]"
           />
         </div>
       </div>
