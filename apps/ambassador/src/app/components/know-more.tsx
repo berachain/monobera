@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
 
-export default function MyProject() {
+export default function KnowMore() {
   return (
     <div className="px-16 pb-16 pt-[64px]">
       <div className="relative">
