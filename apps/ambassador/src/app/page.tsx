@@ -6,7 +6,7 @@ import AmbassadorCards from "./components/ambassador-tiers/ambassadorCards";
 import BackGroundOrbit from "./components/background-orbit";
 import FAQ from "./components/faq";
 import Hero from "./components/hero";
-import MyProject from "./components/my-project";
+import KnowMore from "./components/know-more";
 import SignUp from "./components/signUp-section/signup";
 import { Projects } from "./components/upcoming-events/events";
 
@@ -30,7 +30,7 @@ export default function Page() {
           </div>
           <SignUp />
           <FAQ />
-          <MyProject />
+          <KnowMore />
           <Footer />
         </div>
       </div>
