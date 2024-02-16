@@ -15,7 +15,7 @@ export default function MyProject() {
               <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-2xl sm:leading-[72px]">
                 Get My Project Listed
               </h1>
-              <div className="max-w-[480px] flex-wrap lg:w-full">
+              <div className="max-w-[300px] flex-wrap md:max-w-[480px] lg:w-full">
                 <h2 className="flex-wrap text-sm tracking-tight text-muted-foreground sm:text-lg sm:leading-8">
                   Fellow builder in the making? Submit project details via this
                   form and please be sure to provide us as much information as
@@ -37,7 +37,7 @@ export default function MyProject() {
             </div>
           </div>
         </div>
-        <div className="relative hidden justify-end sm:flex">
+        <div className="relative justify-end sm:flex">
           <div className="absolute bottom-0 right-0 xl:bottom-[-5%] xl:right-[-10%]">
             <Image
               src="/ecobear.png"
