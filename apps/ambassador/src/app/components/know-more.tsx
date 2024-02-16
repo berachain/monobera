@@ -10,12 +10,12 @@ export default function KnowMore() {
     <div className="px-16 pb-16 pt-[64px]">
       <div className="relative">
         <div className="relative mx-auto flex min-h-[300px] w-full flex-wrap overflow-hidden rounded-xl border border-solid bg-muted px-8 py-4 md:h-[220px] md:max-w-[1080px]">
-          <div className="absolute flex flex-col flex-wrap items-center justify-center pr-8 sm:items-start">
-            <div className="top-0 flex flex-col flex-wrap leading-10 lg:left-0">
+          <div className="absolute flex flex-col flex-wrap items-center justify-center pl-4 sm:items-start">
+            <div className="top-0 flex flex-col flex-wrap items-center leading-10 lg:left-0 lg:items-start">
               <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-2xl sm:leading-[72px]">
                 Want to know more?
               </h1>
-              <div className="max-w-[300px] flex-wrap md:max-w-[440px] lg:w-full">
+              <div className="max-w-[300px] flex-wrap items-center md:max-w-[440px] lg:w-full">
                 <h2 className="flex-wrap text-sm tracking-tight text-muted-foreground sm:text-lg sm:leading-8">
                   Fellow builder in the making? Submit project details via this
                   form and please be sure to provide us as much information as
@@ -37,7 +37,7 @@ export default function KnowMore() {
             </div>
           </div>
         </div>
-        <div className="relative justify-end sm:flex">
+        <div className="relative hidden justify-end sm:flex">
           <div className="absolute bottom-0 right-0 xl:right-[15%]">
             <Image
               src="/knowmoarbear.png"
