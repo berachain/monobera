@@ -44,6 +44,7 @@ export default function Content() {
           </div>
           <div className="items-center text-lg font-semibold sm:flex">
             {" "}
+            {process.env.NEXT_PUBLIC_HELLO ?? "YO"}
             Fund your testnet wallet with <TokenBadge />
           </div>
         </div>
