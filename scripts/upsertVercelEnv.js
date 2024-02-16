@@ -73,7 +73,7 @@ const main = async () => {
   // check bearerToken, if not tell user
   if (!bearerToken) {
     console.log(
-      "You must pass in a vercel auth token, create one by following these instructions.",
+      "You must pass in a vercel auth token, create one by following these instructions. https://vercel.com/docs/rest-api#creating-an-access-token",
     );
     printExampleUsage();
     process.exit();
