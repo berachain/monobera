@@ -38,10 +38,10 @@ export default function MyProject() {
         </div>
         <div className="hidden justify-center sm:flex sm:justify-end">
           <Image
-            src="/ecobear.png"
+            src="/Bera_WYLTKM_alt.png"
             alt="Project"
-            width={650}
-            height={600}
+            width={500}
+            height={500}
             layout="intrinsic"
             className="xl:absolute xl:bottom-[-5%] xl:right-[10%]"
           />

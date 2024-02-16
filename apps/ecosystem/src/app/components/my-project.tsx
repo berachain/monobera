@@ -35,16 +35,16 @@ export default function MyProject() {
               </Link>
             </div>
           </div>
-          <div className="hidden justify-center sm:flex sm:justify-end">
-            <Image
-              src="/ecobear.png"
-              alt="Project"
-              width={650}
-              height={600}
-              layout="intrinsic"
-              className="xl:absolute xl:bottom-[-5%] xl:right-[-10%]"
-            />
-          </div>
+        </div>
+        <div className="hidden justify-center sm:flex sm:justify-end">
+          <Image
+            src="/ecobear.png"
+            alt="Project"
+            width={650}
+            height={600}
+            layout="intrinsic"
+            className="xl:absolute xl:bottom-[-5%] xl:right-[-10%]"
+          />
         </div>
       </div>
     </div>
