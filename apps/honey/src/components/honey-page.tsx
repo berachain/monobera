@@ -18,7 +18,7 @@ export default function HoneyPage({ arcade = false }: { arcade: boolean }) {
 
   useEffect(() => {
     const handleResize = () => {
-      if (arcade && window?.innerWidth < 1000) {
+      if (arcade && window?.innerWidth < 1250) {
         router.push("/?mode=pro");
       }
     };
@@ -30,14 +30,14 @@ export default function HoneyPage({ arcade = false }: { arcade: boolean }) {
 
   const router = useRouter();
 
-  if (arcade && typeof window !== "undefined" && window?.innerWidth < 1000) {
+  if (arcade && typeof window !== "undefined" && window?.innerWidth < 1250) {
     router.push("/?mode=pro");
   }
 
   return (
     <section>
       {arcade ? (
-        <div className="m-auto block max-w-[1000px]">
+        <div className="m-auto block max-w-[1200px]">
           <HoneyMachine />
         </div>
       ) : (

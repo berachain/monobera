@@ -146,7 +146,7 @@ export function SwapCard() {
                   });
                 }}
               >
-                Mint
+                {isMint ? "Mint" : "Redeem"}
               </Button>
             )}
           </div>
