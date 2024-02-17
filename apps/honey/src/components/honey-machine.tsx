@@ -95,13 +95,13 @@ export function HoneyMachine() {
     message: needsApproval
       ? `Approve ${selectedFrom?.symbol}`
       : isMint
-        ? `Mint ${toAmount} HONEY`
-        : `Redeem ${fromAmount} HONEY`,
+      ? `Mint ${toAmount} HONEY`
+      : `Redeem ${fromAmount} HONEY`,
     actionType: needsApproval
       ? TransactionActionType.APPROVAL
       : isMint
-        ? TransactionActionType.MINT_HONEY
-        : TransactionActionType.REDEEM_HONEY,
+      ? TransactionActionType.MINT_HONEY
+      : TransactionActionType.REDEEM_HONEY,
     onError: () => {
       if (txnState) {
         txnState.value = 3;
@@ -127,7 +127,7 @@ export function HoneyMachine() {
   }, [exceedBalance, fromAmount, toAmount]);
 
   useEffect(() => {
-    if (buttonState) {
+    if (buttonState && txnState && txnState.value === 0) {
       if (needsApproval) {
         buttonState.value = 1;
       } else {
@@ -138,7 +138,7 @@ export function HoneyMachine() {
         }
       }
     }
-  }, [needsApproval, isMint]);
+  }, [needsApproval, isMint, txnState?.value]);
 
   useEffect(() => {
     if (userReady) {
