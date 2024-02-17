@@ -40,7 +40,7 @@ export default function Home({
             : "",
         )}
       >
-        <div className="container max-w-[1050px]">
+        <div className="container max-w-[1200px]">
           <Data arcade={arcade} />
           <div className="py-4">
             {arcade ? (

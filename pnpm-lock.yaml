@@ -719,8 +719,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0(react-dom@18.2.0)(react@18.2.0)
       '@rive-app/react-canvas':
-        specifier: ^4.1.1
-        version: 4.7.1(react@18.2.0)
+        specifier: ^4.8.1
+        version: 4.8.1(react@18.2.0)
       '@t3-oss/env-nextjs':
         specifier: ^0.2.2
         version: 0.2.2(zod@3.22.4)
@@ -6461,16 +6461,16 @@ packages:
       - '@types/react'
     dev: false
 
-  /@rive-app/canvas@2.9.2:
-    resolution: {integrity: sha512-XkrAjhiPl+qf+Tqnl31zICnTmrjpgAz91QEYNk/f52M5quEzU59MR9H2xZRd7+Hm8eJSYezInYYcqxFoTsGVaQ==}
+  /@rive-app/canvas@2.10.1:
+    resolution: {integrity: sha512-zVEDQr+JjYYLR+G4iuJJecP5mG+RCix92I9+YcxE+YeDPUIMXJdiH7OAHj3rlRl634d9wi8SEeB0fay6/RUHpg==}
     dev: false
 
-  /@rive-app/react-canvas@4.7.1(react@18.2.0):
-    resolution: {integrity: sha512-96Bbn0sgcPUYcjGJfw11tImefk52FJTPK4X78WHF4wLMI+xVHhbSv5aDO58eFkcZLF/60eqL08EnyszOOfa6JA==}
+  /@rive-app/react-canvas@4.8.1(react@18.2.0):
+    resolution: {integrity: sha512-IuWXpnp8QEOXoEdDHLolIklRXrAGtzj3XODVD3sfNvH9ewvBCKGqPbiFbJkmm8AwWtZToCX/oOyfPnis6QtDpg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      '@rive-app/canvas': 2.9.2
+      '@rive-app/canvas': 2.10.1
       react: 18.2.0
     dev: false
 
