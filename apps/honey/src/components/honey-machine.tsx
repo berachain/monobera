@@ -95,13 +95,13 @@ export function HoneyMachine() {
     message: needsApproval
       ? `Approve ${selectedFrom?.symbol}`
       : isMint
-      ? `Mint ${toAmount} HONEY`
-      : `Redeem ${fromAmount} HONEY`,
+        ? `Mint ${toAmount} HONEY`
+        : `Redeem ${fromAmount} HONEY`,
     actionType: needsApproval
       ? TransactionActionType.APPROVAL
       : isMint
-      ? TransactionActionType.MINT_HONEY
-      : TransactionActionType.REDEEM_HONEY,
+        ? TransactionActionType.MINT_HONEY
+        : TransactionActionType.REDEEM_HONEY,
     onError: () => {
       if (txnState) {
         txnState.value = 3;
