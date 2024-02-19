@@ -11,6 +11,7 @@
     "build": "turbo build",
     "clean": "turbo clean && git clean -xdf node_modules",
     "clean:git": "git clean -xdf node_modules",
+    "pullenv": "vercel env pull --environment=production",
     "dev": "turbo dev --concurrency=19",
     "build:dex": "turbo build --filter=dex --filter='./packages/*' --concurrency=19",
     "dev:dex": "turbo dev --filter=dex",
@@ -29,7 +30,8 @@
     "format:check": "biome format .",
     "format": "biome format --write .",
     "check": "biome check .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "upsertenv": "node ./scripts/upsertVercelEnv.js"
   },
   "dependencies": {
     "@bera/eslint-config": "0.1.0",
@@ -42,5 +44,8 @@
     "prettier-plugin-tailwindcss": "^0.2.8",
     "turbo": "^1.10.15",
     "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "yargs": "^17.7.2"
   }
 }

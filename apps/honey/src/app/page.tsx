@@ -36,11 +36,11 @@ export default function Home({
       <div
         className={cn(
           arcade
-            ? "bg-gradient-to-b from-backgroundSecondary text-foregroundSecondary honey:to-background"
+            ? "bg-gradient-to-b from-backgroundSecondary text-foregroundSecondary xl:to-background"
             : "",
         )}
       >
-        <div className="container max-w-[1050px]">
+        <div className="container max-w-[1200px]">
           <Data arcade={arcade} />
           <div className="py-4">
             {arcade ? (

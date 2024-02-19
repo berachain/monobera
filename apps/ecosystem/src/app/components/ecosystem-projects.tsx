@@ -142,7 +142,7 @@ export default function EcosystemProjects() {
   return (
     <div
       id="dapps"
-      className="mt-16 flex flex-col items-center justify-center gap-6 text-center"
+      className="mt-16 flex flex-col items-center justify-center gap-6 text-center lg:w-[1280px]"
     >
       <SearchInput
         className="h-[40px] w-full rounded-md border border-solid bg-background"
@@ -169,7 +169,7 @@ export default function EcosystemProjects() {
 
       <div className="my-4 w-full border border-solid" />
 
-      <div className="mx-auto grid w-fit grid-cols-1 gap-6 lg:grid-cols-4 xl:grid-cols-4">
+      <div className="mx-auto grid w-fit grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
           .map((fav: any, index: number) => (
