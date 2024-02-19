@@ -11,60 +11,72 @@ const highlights = [
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Validator"],
+    description:
+      "Lorem Ipsum Saint Dolar set amet avec, adios bibbas Lorem Ipsum Saint Dolar set amet avec, adios bibbas ",
   },
   {
     title: "Hello Bera world",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Bera"],
+    description: "Lorem Ipsum Saint",
   },
   {
     title: "Ooga booga",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Bera"],
+    description: "Lorem Ipsum Saint",
   },
   {
     title: "The Future of DAOs",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Bera"],
+    description: "Lorem Ipsum Saint",
   },
   {
     title: "The Future of Bera",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Bera"],
+    description: "Lorem Ipsum Saint",
   },
   {
     title: "The Future of Honey",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Bera"],
+    description: "Lorem Ipsum Saint",
   },
   {
     title: "The Future of BGT",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Bera"],
+    description:
+      "Lorem Ipsum Saint Dolar set amet avec, adios bibbas Lorem Ipsum Saint Dolar set amet avec, adios bibbas ",
   },
   {
     title: "Yayyyy",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Validator", "Staking", "Bera"],
+    description: "this is a test",
   },
   {
     title: "Celestia",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Validator", "Bera"],
+    description: "Lorem Ipsum Saint",
   },
   {
     title: "Henlo",
     link: "",
     image: "https://via.placeholder.com/150",
     tags: ["Validator", "Staking"],
+    description: "Lorem Ipsum Saint",
   },
 ];
 
@@ -142,21 +154,21 @@ export default function ProjectHighlights() {
 
       <div
         ref={sliderRef}
-        className="mt-4 flex w-[200%] max-w-lg snap-x gap-4 scroll-smooth whitespace-nowrap transition-transform duration-300 ease-linear lg:flex"
+        className="mt-4 flex w-full max-w-lg snap-x gap-4 scroll-smooth transition-transform duration-300 ease-linear lg:flex"
         onTouchStart={(e) => e.stopPropagation()}
         style={{ transform: `translateX(-${currentIndex * itemWidth - 16}px)` }}
       >
         {itemsForLooping.map((section, index) => (
           <Link href={section.link} key={index} target="_blank">
-            <div className="mx-auto flex h-[308px] w-[298px] snap-center flex-col items-center justify-start rounded-md border border-solid bg-background pt-4 hover:opacity-80 hover:shadow-xl">
+            <div className="card-hover mx-auto flex h-[308px] w-[298px] flex-col items-center justify-start rounded-md border border-solid bg-background p-4 hover:opacity-80 hover:shadow-xl">
               <Image
                 src="/partnerships_placeholder.png"
                 alt="Project"
                 width={266}
                 height={148}
-                className="rounded-2"
+                className="rounded-2 image-zoom"
               />
-              <div className="flex w-[266px] items-center justify-between px-4 py-2">
+              <div className="flex w-[266px] items-center justify-between py-4">
                 <div className="text-xl font-semibold text-foreground">
                   {section.title}
                 </div>
@@ -172,8 +184,9 @@ export default function ProjectHighlights() {
                   ))}
                 </div>
               </div>
-              <div className="mx-4 text-center text-sm leading-5 text-muted-foreground">
-                Lorem Ipsum Saint
+
+              <div className="self-stretch text-center text-sm leading-5 text-muted-foreground">
+                {section.description}
               </div>
             </div>
           </Link>
