@@ -7,10 +7,11 @@ import { cloudinaryUrl, dexUrl } from "@bera/config";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { isAddress } from "viem";
 
 import { DripToken } from "~/components/drip-tokens";
+import NonSSRWrapper from "~/components/no-ssr-wrapper";
 import { TokenBadge } from "~/components/token-badge";
-import ReCAPTCHAButton from "./recaptcha-btn";
 
 export default function Content() {
   const [address, setAddress] = React.useState<string>("");
@@ -18,8 +19,20 @@ export default function Content() {
     "success" | "destructive" | "error" | undefined
   >(undefined);
   const [showAlet, setShowAlert] = React.useState<boolean>(false);
-  const [token, setToken] = React.useState<string | undefined>(undefined);
-  const [bot, setBot] = React.useState<boolean | undefined>(undefined);
+  const [inputError, setInputError] = React.useState<string | null>(null);
+
+  const handleFaucetAddressChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setAddress(e.target.value);
+    if (!e.target.value || isAddress(e.target.value)) {
+      setInputError(null);
+    } else {
+      setInputError("Please enter a valid address. ex: 0x...");
+    }
+    if (showAlet) setShowAlert(false);
+    setAlert(undefined);
+  };
 
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
@@ -48,25 +61,28 @@ export default function Content() {
         <div className="h-7 text-sm font-medium">
           Wallet Address <span className="text-destructive-foreground">*</span>
         </div>
-        <div className="relative">
-          <Input
-            value={address}
-            onChange={(e) => {
-              setAddress(e.target.value);
-              if (showAlet) setShowAlert(false);
-              setBot(undefined);
-              setToken(undefined);
-              setAlert(undefined);
-            }}
-          />
-          <Icons.close
-            className="absolute right-3 top-3 h-4 w-4 cursor-pointer text-muted-foreground"
-            onClick={() => {
-              setAddress("");
-              if (showAlet) setShowAlert(false);
-            }}
-          />
-        </div>
+        <NonSSRWrapper>
+          <div className="relative">
+            <Input value={address} onChange={handleFaucetAddressChange} />
+            <Icons.close
+              className="absolute right-3 top-3 h-4 w-4 cursor-pointer text-muted-foreground"
+              onClick={() => {
+                setAddress("");
+                setInputError(null);
+                if (showAlet) setShowAlert(false);
+                setAlert(undefined);
+              }}
+            />
+          </div>
+          {inputError && (
+            <Alert variant={"destructive"}>
+              <AlertTitle className="align-center flex gap-1">
+                <Icons.alertCircle className="inline-block h-4 w-4" />
+                {inputError}
+              </AlertTitle>
+            </Alert>
+          )}
+        </NonSSRWrapper>
       </div>
       {showAlet && alert === "success" && (
         <Alert variant={"success"}>
@@ -114,18 +130,11 @@ export default function Content() {
           </AlertDescription>
         </Alert>
       )}
-      {bot === false ? (
-        <DripToken
-          address={address}
-          setAlert={setAlert}
-          setShowAlert={() => setShowAlert(true)}
-          token={token}
-          setToken={setToken}
-        />
-      ) : (
-        <ReCAPTCHAButton setToken={setToken} setBot={setBot} bot={bot} />
-      )}
-
+      <DripToken
+        address={address}
+        setAlert={setAlert}
+        setShowAlert={() => setShowAlert(true)}
+      />
       <hr />
       <div className="leading-12 text-center text-sm opacity-70 sm:text-start">
         To ensure a sufficient balance for all users, the Faucet is set to

@@ -21,7 +21,7 @@
     "dev": {
       "persistent": true,
       "cache": false,
-      "dependsOn": ["^build"]
+      "env": [".env.devnet"]
     },
     "check-types": {
       "dependsOn": ["^build"],
