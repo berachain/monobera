@@ -200,4 +200,8 @@ input[type="number"] {
 img{
   pointer-events: none;
   user-select: none;
+}
+.card-hover:hover .image-zoom {
+  transform: scale(1.05); 
+  transition: transform 0.05s ease-in-out;
 }  
