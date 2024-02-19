@@ -5,7 +5,7 @@ import { cloudinaryUrl } from "@bera/config";
 export default function ModeSwitch({ arcade = false }: { arcade: boolean }) {
   return (
     <section
-      className="hidden h-fit w-full cursor-pointer text-center font-medium honey:block"
+      className="hidden h-fit w-full cursor-pointer text-center font-medium xl:block"
       id="mint"
     >
       {arcade ? (
