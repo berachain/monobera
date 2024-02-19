@@ -36,7 +36,7 @@ export default function Home({
       <div
         className={cn(
           arcade
-            ? "bg-gradient-to-b from-backgroundSecondary text-foregroundSecondary honey:to-background"
+            ? "bg-gradient-to-b from-backgroundSecondary text-foregroundSecondary xl:to-background"
             : "",
         )}
       >
