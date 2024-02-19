@@ -10,7 +10,7 @@ import { SwapCard } from "~/components/swap-card";
 export default function HoneyPage({ arcade = false }: { arcade: boolean }) {
   useEffect(() => {
     if (window?.innerWidth) {
-      if (window.innerWidth < 1000 && arcade) {
+      if (window.innerWidth < 1280 && arcade) {
         router.push("/?mode=pro");
       }
     }
@@ -18,7 +18,7 @@ export default function HoneyPage({ arcade = false }: { arcade: boolean }) {
 
   useEffect(() => {
     const handleResize = () => {
-      if (arcade && window?.innerWidth < 1250) {
+      if (arcade && window?.innerWidth < 1280) {
         router.push("/?mode=pro");
       }
     };
@@ -30,7 +30,7 @@ export default function HoneyPage({ arcade = false }: { arcade: boolean }) {
 
   const router = useRouter();
 
-  if (arcade && typeof window !== "undefined" && window?.innerWidth < 1250) {
+  if (arcade && typeof window !== "undefined" && window?.innerWidth < 1280) {
     router.push("/?mode=pro");
   }
 

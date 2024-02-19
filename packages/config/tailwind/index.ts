@@ -41,9 +41,6 @@ export default {
       },
     },
     extend: {
-      screens: {
-        honey: "1000px",
-      },
       minHeight: {
         minimun: "calc(100vh - 191px)",
         "screen-250": "calc(100vh - 214px)",
