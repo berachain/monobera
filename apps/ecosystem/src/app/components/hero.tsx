@@ -11,20 +11,20 @@ export default function Hero() {
   const { theme, systemTheme } = useTheme();
   const t = !theme || theme === "system" ? systemTheme || "dark" : theme;
   const bg = t === "dark" ? "/dark_bear_bg.png" : "/light_bear_bg.png";
+  console.log("theme", t, bg);
   return (
     <div className="flex items-center justify-center">
-      <div className=" relative mx-auto flex h-[483px] w-[1280px]">
-        <div className="hidden md:block">
-          <Image
-            src={bg}
-            alt="Eco Bear"
-            width={1280}
-            height={483}
-            className="absolute left-0 top-0 h-full w-full"
-          />
-        </div>
-        <div className="flex flex-col flex-wrap items-center justify-center py-28 md:absolute md:items-start">
-          <div className="flex flex-row leading-10 md:flex-col lg:left-0 lg:top-0">
+      <div className="relative mx-auto flex h-[483px] w-[1280px]">
+        <Image
+          src={bg}
+          alt="Eco Bear"
+          layout="fill"
+          objectFit="cover"
+          className="absolute left-0 top-0 z-0"
+        />
+
+        <div className="z-10 flex w-full flex-col items-center justify-center p-4 md:p-0 lg:absolute lg:items-start">
+          <div className="mt-4 flex flex-col flex-wrap justify-center gap-4 md:justify-start">
             <h1 className="text-5xl font-extrabold leading-[72px] tracking-tight text-foreground">
               Berachain
               <br />
@@ -37,7 +37,7 @@ export default function Hero() {
             </h2>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-4">
+          <div className="mt-4 flex flex-col flex-wrap justify-center gap-4 md:flex-row md:justify-start">
             <Link href={"/dashboard"}>
               <Button
                 className="rounded-18 mt-8 w-full text-lg font-semibold leading-7 sm:w-auto"
