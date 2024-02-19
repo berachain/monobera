@@ -17,7 +17,8 @@ import {
 } from "@bera/config";
 import { TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
+import { getLTVColor } from "~/utils/get-ltv-color";
+import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -25,7 +26,6 @@ import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { maxUint256 } from "~/utils/constants";
-import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function WithdrawBtn({
   token,
@@ -126,10 +126,11 @@ const WithdrawModalContent = ({
     .toFixed(token.decimals ?? 18);
 
   const balance =
-    userAccountData.totalDebtBase === 0n ||
-    Number(maxWithdrawalAllowance) > Number(userBalance)
-      ? userBalance
-      : maxWithdrawalAllowance;
+    token.address === honeyTokenAddress
+      ? Number(maxWithdrawalAllowance) > Number(userBalance)
+        ? userBalance
+        : maxWithdrawalAllowance
+      : userBalance;
 
   return (
     <div className="flex flex-col gap-6">
@@ -191,7 +192,7 @@ const WithdrawModalContent = ({
         )}
       </div>
 
-      {token.address !== honeyTokenAddress &&
+      {/* {token.address !== honeyTokenAddress &&
         userAccountData.totalDebtBase !== 0n &&
         newHealthFactor.toNumber() < 1.02 && (
           <Alert variant="destructive">
@@ -204,7 +205,7 @@ const WithdrawModalContent = ({
               increase risk of liquidation.
             </AlertDescription>
           </Alert>
-        )}
+        )} */}
 
       {token.address !== honeyAddress && userAccountData.totalDebtBase > 0n && (
         <Alert variant="destructive">
