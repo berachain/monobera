@@ -15,11 +15,13 @@ export const ConnectButton = ({
   isNavItem = false,
   isHoney = false,
   btnClassName,
+  onOpen,
 }: {
   className?: string;
   isNavItem?: boolean;
   isHoney?: boolean;
   btnClassName?: string;
+  onOpen?: () => void;
 }) => {
   const { isConnected, isWrongNetwork, isReady } = useBeraJs();
   return (
@@ -45,7 +47,10 @@ export const ConnectButton = ({
           >
             {!isConnected && (
               <Button
-                onClick={openConnectModal}
+                onClick={() => {
+                  openConnectModal();
+                  onOpen?.();
+                }}
                 type="button"
                 className={cn(
                   "w-full gap-2",
