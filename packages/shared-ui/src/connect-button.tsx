@@ -14,10 +14,12 @@ export const ConnectButton = ({
   className,
   isNavItem = false,
   isHoney = false,
+  btnClassName,
 }: {
   className?: string;
   isNavItem?: boolean;
   isHoney?: boolean;
+  btnClassName?: string;
 }) => {
   const { isConnected, isWrongNetwork, isReady } = useBeraJs();
   return (
@@ -45,7 +47,7 @@ export const ConnectButton = ({
               <Button
                 onClick={openConnectModal}
                 type="button"
-                className={cn("w-full gap-2", !isNavItem && "font-semibold")}
+                className={cn("w-full gap-2", !isNavItem && "font-semibold", btnClassName)}
               >
                 <Icons.wallet
                   className={cn("h-4 w-4", !isNavItem && "h-6 w-6")}

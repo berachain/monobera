@@ -97,13 +97,13 @@ export function HoneyMachine() {
     message: needsApproval
       ? `Approve ${selectedFrom?.symbol}`
       : isMint
-        ? `Mint ${toAmount} HONEY`
-        : `Redeem ${fromAmount} HONEY`,
+      ? `Mint ${toAmount} HONEY`
+      : `Redeem ${fromAmount} HONEY`,
     actionType: needsApproval
       ? TransactionActionType.APPROVAL
       : isMint
-        ? TransactionActionType.MINT_HONEY
-        : TransactionActionType.REDEEM_HONEY,
+      ? TransactionActionType.MINT_HONEY
+      : TransactionActionType.REDEEM_HONEY,
     onError: () => {
       if (txnState) {
         txnState.value = 3;
@@ -149,6 +149,7 @@ export function HoneyMachine() {
         if (buttonState) buttonState.value = 2;
       } else {
         userReady.value = false;
+        if (buttonState) buttonState.value = 0;
       }
     }
   }, [isReady, userReady]);
@@ -240,14 +241,13 @@ export function HoneyMachine() {
                   </div>
                 </>
               ) : (
-                <ConnectButton />
+                <ConnectButton btnClassName="bg-transparent"/>
               )}
             </div>
             <div
               className={cn(
                 "absolute right-[21px] top-[214px] z-30 m-6 w-[332px] overflow-hidden",
-                isReady &&
-                  disableInputs &&
+                (!isReady || disableInputs) &&
                   "pointer-events-none opacity-50 grayscale",
               )}
             >
