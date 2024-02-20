@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Button } from "@bera/ui/button";
 
 import { AmbassadorCard, brigadeGeneral, colonel, kingsOath } from "./tiers";
@@ -23,9 +24,11 @@ export default function AmbassadorCards() {
           <AmbassadorCard ambassador={colonel} />
         </div>
       </div>
-      <Button variant="outline" className="mb-8 mt-12">
-        Learn more about Tiers
-      </Button>
+      <Link href="/program-details">
+        <Button variant="outline" className="mb-8 mt-12">
+          Learn more about Tiers
+        </Button>
+      </Link>
     </div>
   );
 }
