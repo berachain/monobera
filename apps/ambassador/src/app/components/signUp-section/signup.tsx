@@ -2,15 +2,10 @@
 
 import React from "react";
 import Image from "next/image";
-import { cn } from "@bera/ui";
+import Link from "next/link";
+import { cloudinaryUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { useTheme } from "next-themes";
-import { cloudinaryUrl } from "@bera/config";
-import { transform } from "next/dist/build/swc";
-
-type SignUpProps = {
-  cloudinaryUrl: string;
-};
 
 export default function SignUp() {
   const { theme, systemTheme } = useTheme();
@@ -33,22 +28,24 @@ export default function SignUp() {
               height={500}
             />
           </div>
-          <div className="flex flex-col space-x-6 pr-8 pl-4">
-            <h1 className="text-center sm:text-center text-5xl font-extrabold leading-12 pb-6">
+          <div className="flex flex-col space-x-6 pl-4 pr-8">
+            <h1 className="leading-12 pb-6 text-center text-5xl font-extrabold sm:text-center">
               Unlock Your Potential as an {""}
               <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
                 Ambassador
               </span>
             </h1>
             <div className="flex flex-col items-center justify-center">
-              <p className="w-full pb-8 pr-6 text-center text-xl font-regular leading-tight text-white md:leading-normal">
+              <p className="font-regular w-full pb-8 pr-6 text-center text-xl leading-tight text-white md:leading-normal">
                 Experience the collaboration of numerous creators. Register now
                 and become a part of a community comprising over 10,000 local
                 and international creators.
               </p>
-              <Button variant="outline" className="text-muted-foreground">
-                Sign up as an ambassador
-              </Button>
+              <Link href="https://zlhd2dzw2hl.typeform.com/to/ZmYGgsv8">
+                <Button variant="outline" className="text-muted-foreground">
+                  Sign up as an ambassador
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="hidden sm:block">
