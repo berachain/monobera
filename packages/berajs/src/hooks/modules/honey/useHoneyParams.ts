@@ -38,7 +38,6 @@ export const usePollHoneyParams = (collateralList: Address[]) => {
       contracts: calls,
       multicallAddress: multicallAddress,
     });
-
     const obj: Record<Address, CollateralRates> = {};
     results.map((result: any, index: number) => {
       const collateral = collateralList[Math.floor(index / 2)] as Address;

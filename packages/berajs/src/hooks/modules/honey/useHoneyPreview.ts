@@ -16,10 +16,10 @@ export const usePollHoneyPreview = (
   const method = mint
     ? given_in
       ? "previewMint"
-      : "previewExactOutCollateral"
+      : "previewRequiredCollateral"
     : given_in
       ? "previewRedeem"
-      : "previewRequiredCollateral";
+      : "previewHoneyToRedeem";
   const QUERY_KEY = [method, collateral?.address, amount, mint, given_in];
   const swrResponse = useSWR(QUERY_KEY, async () => {
     try {

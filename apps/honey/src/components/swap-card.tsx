@@ -1,23 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
+import { HONEY_PRECOMPILE_ABI } from "@bera/berajs";
 import { erc20HoneyAddress } from "@bera/config";
-import { ApproveButton, ConnectButton } from "@bera/shared-ui";
+import { ApproveButton, ConnectButton, TokenInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { parseUnits } from "viem";
 
-import { TokenInput } from "~/components/token-input";
-// import { HONEY_PRECOMPILE_ABI } from "@bera/berajs";
-import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 
 export function SwapCard() {
   const [tabValue, setTabValue] = useState<"mint" | "burn">("mint");
   const {
-    // fee,
+    fee,
     isFeeLoading,
     payload,
     isReady,
@@ -29,6 +27,7 @@ export function SwapCard() {
     fromAmount,
     setFromAmount,
     setToAmount,
+    setIsTyping,
     toAmount,
     isMint,
     fromBalance,
@@ -53,8 +52,7 @@ export function SwapCard() {
               <Skeleton className="absolute right-6 top-5 h-6 w-40" />
             ) : (
               <div className="absolute right-6 top-5 text-base font-medium text-muted-foreground">
-                {/* Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}% */}
-                Static fee of 0.5%
+                Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
               </div>
             )}
           </CardTitle>
@@ -95,8 +93,8 @@ export function SwapCard() {
                 balance={fromBalance?.formattedBalance}
                 selectable={selectedFrom?.address !== honey?.address}
                 customTokenList={collateralList}
-                hidePrice
                 showExceeding
+                setIsTyping={setIsTyping}
                 setAmount={(amount) => {
                   setGivenIn(true);
                   setFromAmount(amount);
@@ -105,6 +103,7 @@ export function SwapCard() {
               <TokenInput
                 selected={selectedTo}
                 selectedTokens={[selectedFrom, selectedTo]}
+                setIsTyping={setIsTyping}
                 amount={toAmount}
                 setAmount={(amount) => {
                   setGivenIn(false);
@@ -113,9 +112,6 @@ export function SwapCard() {
                 selectable={selectedTo?.address !== honey?.address}
                 customTokenList={collateralList}
                 showExceeding={false}
-                hidePrice
-                disabled
-                // hideBalance
                 hideMax={true}
                 balance={toBalance?.formattedBalance}
               />
@@ -139,8 +135,7 @@ export function SwapCard() {
                 onClick={() => {
                   write({
                     address: erc20HoneyAddress,
-                    // abi: HONEY_PRECOMPILE_ABI,
-                    abi: ERC20_HONEY_ABI,
+                    abi: HONEY_PRECOMPILE_ABI,
                     functionName: isMint ? "mint" : "redeem",
                     params: payload,
                   });
