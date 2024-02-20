@@ -88,11 +88,11 @@ export default function AmbassadorProgram() {
                 </ul>
               </div>
               <Image
-                  src="/placeholder.jpg"
-                  alt="Bera Legion"
-                  width={640}
-                  height={360}
-                />
+                src="/placeholder.jpg"
+                alt="Bera Legion"
+                width={640}
+                height={360}
+              />
             </div>
           </section>
           <section className="mb-6 rounded-lg bg-muted p-4">
@@ -108,12 +108,13 @@ export default function AmbassadorProgram() {
                   Benefits of Becoming an Ambassador
                 </h2>
                 <p className="text-muted-foreground">
-                  Ambassadors enjoy various benefits, including social incentives
-                  such as access to Berachain events, special badges, custom
-                  merchandise, and exclusive networking opportunities; financial
-                  incentives such as microgrants and boosted rewards, as well as
-                  career growth opportunities with the potential for career
-                  placement and peer recognition within the Berachain ecosystem.
+                  Ambassadors enjoy various benefits, including social
+                  incentives such as access to Berachain events, special badges,
+                  custom merchandise, and exclusive networking opportunities;
+                  financial incentives such as microgrants and boosted rewards,
+                  as well as career growth opportunities with the potential for
+                  career placement and peer recognition within the Berachain
+                  ecosystem.
                 </p>
               </div>
             </div>
@@ -152,10 +153,10 @@ export default function AmbassadorProgram() {
                   Onboarding Process
                 </h2>
                 <p className="text-muted-foreground">
-                  New ambassadors undergo an onboarding process where expectations
-                  and Key Performance Indicators (KPIs) are set, relevant
-                  communication channels are accessed, and performance is monitored
-                  during a trial period.
+                  New ambassadors undergo an onboarding process where
+                  expectations and Key Performance Indicators (KPIs) are set,
+                  relevant communication channels are accessed, and performance
+                  is monitored during a trial period.
                 </p>
               </div>
             </div>
