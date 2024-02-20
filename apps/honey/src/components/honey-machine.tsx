@@ -22,6 +22,7 @@ import { parseUnits } from "viem";
 import { erc20ABI } from "wagmi";
 
 import { LoadingBee } from "~/components/loadingBee";
+// import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 
 const STATE_MACHINE_NAME = "pawsAndClaws";
