@@ -111,7 +111,10 @@ export const ActivePositionPNL = ({
   }, [pnl, position]);
 
   const initialCollateral = Number(
-    formatUnits(BigInt(position.position_size ?? 0), 18),
+    formatUnits(
+      BigInt(position.position_size ?? 0) + BigInt(position.open_fee ?? 0),
+      18,
+    ),
   );
 
   const borrowFee = Number(
