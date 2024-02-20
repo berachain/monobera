@@ -40,7 +40,7 @@ import { type Chain } from "viem";
 
 export const navItems = [
   {
-    href: "#",
+    href: "/",
     title: "Home",
   },
   // {
