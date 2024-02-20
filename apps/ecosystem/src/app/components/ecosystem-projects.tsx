@@ -207,13 +207,15 @@ export default function EcosystemProjects() {
             </div>
           ))}
       </div>
-      <Button
-        variant="outline"
-        className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
-        onClick={toggleDisplay}
-      >
-        {viewMore ? "View More" : "View Less"}
-      </Button>
+      {filteredProjectList.length > 4 && (
+        <Button
+          variant="outline"
+          className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
+          onClick={toggleDisplay}
+        >
+          {viewMore ? "View More" : "View Less"}
+        </Button>
+      )}
     </div>
   );
 }
