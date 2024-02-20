@@ -74,6 +74,7 @@ const projectList = [
     description:
       "Swap a variety of tokens effortlessly on our decentralized platform. Provide liquidity to pools and earn BGT rewards.",
     goto: dexUrl,
+    ecosystemType: "Defi",
   },
   {
     icon: <Icons.honeyFav className="h-[52px] w-[52px]" />,
@@ -82,6 +83,7 @@ const projectList = [
     description:
       "A stablecoin that's integral to the Berachain ecosystem. Utilize HONEY for seamless trading, ensuring value consistency.",
     goto: honeyUrl,
+    ecosystemType: "Gaming",
   },
   {
     icon: <Icons.bendFav className="h-[52px] w-[52px]" />,
@@ -90,6 +92,7 @@ const projectList = [
     description:
       "Supply assets and unlock the potential to borrow HONEY. Earn BGT rewards while you supply and borrow.",
     goto: lendUrl,
+    ecosystemType: "Defi",
   },
   {
     icon: <Icons.berpsFav className="h-[52px] w-[52px]" />,
@@ -98,6 +101,7 @@ const projectList = [
     description:
       "Experience the thrill of high leverage trading, tailored for both novices and seasoned traders. With an impressive 100x leverage.",
     goto: perpsUrl,
+    ecosystemType: "SocialFi",
   },
   {
     icon: <Icons.bgtFav className="h-[52px] w-[52px]" />,
@@ -106,6 +110,7 @@ const projectList = [
     description:
       "Engage directly in the governance of BGT, leverage BGT Station for innovative bribe mechanisms, enhancing participation.",
     goto: bgtUrl,
+    ecosystemType: "Infrastructure & Tooling",
   },
   {
     icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
@@ -114,6 +119,7 @@ const projectList = [
     description:
       "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
     goto: blockExplorerUrl,
+    ecosystemType: "Infrastructure & Tooling",
   },
 ];
 
@@ -131,14 +137,18 @@ export default function EcosystemProjects() {
     }
     setViewMore(!viewMore);
   };
-  const filteredProjectList: any = useMemo(
-    () =>
-      projectList?.filter((project: any) => {
-        if (!keywords) return true;
-        return project.name.toLowerCase().includes(keywords.toLowerCase());
-      }),
-    [projectList, keywords],
-  );
+
+  const filteredProjectList = useMemo(() => {
+    return projectList.filter((project) => {
+      const matchesKeywords =
+        !keywords ||
+        project.name.toLowerCase().includes(keywords.toLowerCase());
+      const matchesEcosystemType =
+        ecosystemType === "All" || project.ecosystemType === ecosystemType;
+      return matchesKeywords && matchesEcosystemType;
+    });
+  }, [keywords, ecosystemType]);
+
   return (
     <div
       id="dapps"
@@ -156,7 +166,7 @@ export default function EcosystemProjects() {
         <TabsList className="w-full">
           {ecosystemTypeTabs.map((type) => (
             <TabsTrigger
-              value={type.value as any}
+              value={type.value as string}
               key={type.value}
               className="w-full rounded-sm"
               onClick={() => setEcosystemType(type.value)}
@@ -169,26 +179,28 @@ export default function EcosystemProjects() {
 
       <div className="my-4 w-full border border-solid" />
 
-      <div className="mx-auto grid w-fit grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+      <div className="mx-auto grid w-fit grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
-          .map((fav: any, index: number) => (
+          .map((project: any, index: number) => (
             <div
               key={index}
-              className="mx-auto flex w-full max-w-[260px] flex-col items-center justify-center gap-4 rounded-md border border-solid bg-background p-6"
+              className="mx-auto flex w-full max-w-[260px] flex-col justify-between gap-4 rounded-md border border-solid bg-background p-6"
             >
-              {fav.icon}
-              <div>
-                <div className="text-3xl font-semibold leading-9">
-                  {fav.name}
+              <div className="flex flex-col items-center gap-4">
+                {project.icon}
+                <div>
+                  <div className="text-3xl font-semibold leading-9">
+                    {project.name}
+                  </div>
+                  <div className="font-medium">{project.subtitle}</div>
                 </div>
-                <div className="font-medium ">{fav.subtitle}</div>
+                <div className="flex-grow text-center text-sm leading-5 text-muted-foreground">
+                  {project.description}
+                </div>
               </div>
-              <div className="text-center text-sm leading-5 text-muted-foreground">
-                {fav.description}
-              </div>
-              <Link href={fav.goto}>
-                <div className="flex justify-between gap-2 text-sm text-muted-foreground">
+              <Link href={project.goto}>
+                <div className="flex justify-center gap-2 text-sm text-muted-foreground">
                   Visit Project <Icons.arrowRight />
                 </div>
               </Link>
