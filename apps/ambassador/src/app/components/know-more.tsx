@@ -25,7 +25,7 @@ export default function KnowMore() {
             </div>
 
             <div className="flex items-center lg:mt-8">
-              <Link href={"/dashboard"}>
+              <Link href="/program-details">
                 <Button
                   className="rounded-18 mt-4 w-full text-lg font-semibold leading-7 sm:w-auto"
                   size={"sm"}
