@@ -17,6 +17,8 @@ import BigNumber from "bignumber.js";
 import { getAddress, parseUnits, type Address } from "viem";
 
 export const usePsm = () => {
+  const [isTyping, setIsTyping] = useState(false);
+
   const { tokenDictionary, tokenList } = useTokens();
   const collateralList = tokenList?.filter((token: any) =>
     token.tags?.includes("collateral"),
@@ -97,7 +99,7 @@ export const usePsm = () => {
 
   const { useHoneyPreview, isLoading: isHoneyPreviewLoading } =
     usePollHoneyPreview(
-      collateral,
+      isTyping ? undefined : collateral,
       (givenIn ? fromAmount : toAmount) ?? "0",
       isMint,
       givenIn,
@@ -121,29 +123,17 @@ export const usePsm = () => {
 
     setFromAmount(tempToAmount);
     setToAmount(tempFromAmount);
-    // setGivenIn(!givenIn);
+    setGivenIn(!givenIn);
   };
 
-  // const payload = [
-  //   collateral?.address,
-  //   parseUnits(
-  //     fromAmount ?? "0",
-  //     (isMint ? collateral?.decimals : honey?.decimals) ?? 18,
-  //   ),
-  //   account ?? "",
-  // ];
-
-  const payload = isMint
-    ? [
-        account,
-        selectedFrom?.address,
-        parseUnits((fromAmount ?? "0") as `${number}`, 18),
-      ]
-    : [
-        account,
-        parseUnits((fromAmount ?? "0") as `${number}`, 18),
-        selectedTo?.address,
-      ];
+  const payload = [
+    collateral?.address,
+    parseUnits(
+      fromAmount ?? "0",
+      (isMint ? collateral?.decimals : honey?.decimals) ?? 18,
+    ),
+    account ?? "",
+  ];
 
   const needsApproval = BigNumber(fromAmount ?? "0").gt(
     allowance?.formattedAllowance ?? "0",
@@ -180,5 +170,6 @@ export const usePsm = () => {
     exceedBalance,
     honey,
     collateralList,
+    setIsTyping,
   };
 };

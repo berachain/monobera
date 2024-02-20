@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { HONEY_PRECOMPILE_ABI, TransactionActionType } from "@bera/berajs";
-import { TransactionActionType, truncateHash } from "@bera/berajs";
+import {
+  HONEY_PRECOMPILE_ABI,
+  TransactionActionType,
+  truncateHash,
+} from "@bera/berajs";
 import { erc20HoneyAddress } from "@bera/config";
 import { ConnectButton, Spinner, TokenInput, useTxn } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
@@ -19,7 +22,6 @@ import { parseUnits } from "viem";
 import { erc20ABI } from "wagmi";
 
 import { LoadingBee } from "~/components/loadingBee";
-import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 
 const STATE_MACHINE_NAME = "pawsAndClaws";
@@ -201,7 +203,7 @@ export function HoneyMachine() {
   const performMinting = () =>
     write({
       address: erc20HoneyAddress,
-      abi: ERC20_HONEY_ABI,
+      abi: HONEY_PRECOMPILE_ABI,
       functionName: "mint",
       params: payload,
     });
@@ -209,7 +211,7 @@ export function HoneyMachine() {
   const performRedeeming = () =>
     write({
       address: erc20HoneyAddress,
-      abi: ERC20_HONEY_ABI,
+      abi: HONEY_PRECOMPILE_ABI,
       functionName: "redeem",
       params: payload,
     });
@@ -252,8 +254,7 @@ export function HoneyMachine() {
               <h1 className="relative px-1 text-lg font-semibold text-background">
                 {isMint ? "Mint" : "Redeem"}
                 <div className="absolute right-0 top-1 text-sm font-light">
-                  {/* Static fee of {(Number(fee ?? 0.005) * 100).toFixed(2)}% */}
-                  Static fee of 0.5%
+                  Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
                 </div>
               </h1>
               <Tabs
@@ -292,7 +293,6 @@ export function HoneyMachine() {
                     balance={fromBalance?.formattedBalance}
                     selectable={selectedFrom?.address !== honey?.address}
                     customTokenList={collateralList}
-                    hidePrice
                     showExceeding
                     setAmount={(amount) => {
                       setGivenIn(true);
@@ -312,9 +312,7 @@ export function HoneyMachine() {
                     }}
                     selectable={selectedTo?.address !== honey?.address}
                     customTokenList={collateralList}
-                    hidePrice
                     hideMax
-                    disabled
                     balance={toBalance?.formattedBalance}
                   />
                 </div>
