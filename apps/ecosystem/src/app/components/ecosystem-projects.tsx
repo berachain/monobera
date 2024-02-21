@@ -9,20 +9,16 @@ import {
   blockExplorerUrl,
   dexName,
   dexUrl,
-  docsUrl,
   honeyName,
   honeyUrl,
-  lendDocsUrl,
   lendName,
   lendUrl,
-  perpsDocsUrl,
   perpsName,
   perpsUrl,
 } from "@bera/config";
 import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 // enum EcosystemType {
 //   All = 1,
@@ -34,6 +30,8 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 //   Data = 7,
 //   Infrastructure = 7,
 // }
+
+const ITEMS_PER_PAGE = 6;
 
 // TODO: add in other properties
 const ecosystemTypeTabs = [
@@ -121,19 +119,46 @@ const projectList = [
     goto: blockExplorerUrl,
     ecosystemType: "Infrastructure & Tooling",
   },
+  {
+    icon: <Icons.XOctagon className="h-[52px] w-[52px]" />,
+    name: perpsName,
+    subtitle: "Trade Your Favourite Pairs",
+    description:
+      "Experience the thrill of high leverage trading, tailored for both novices and seasoned traders. With an impressive 100x leverage.",
+    goto: perpsUrl,
+    ecosystemType: "SocialFi",
+  },
+  {
+    icon: <Icons.bee className="h-[52px] w-[52px]" />,
+    name: bgtName,
+    subtitle: "The Hub for BGT Governance",
+    description:
+      "Engage directly in the governance of BGT, leverage BGT Station for innovative bribe mechanisms, enhancing participation.",
+    goto: bgtUrl,
+    ecosystemType: "Infrastructure & Tooling",
+  },
+  {
+    icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
+    name: blockExplorerName,
+    subtitle: "Berachain's block explorer",
+    description:
+      "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
+    goto: blockExplorerUrl,
+    ecosystemType: "Infrastructure & Tooling",
+  },
 ];
 
 export default function EcosystemProjects() {
   const [keywords, setKeywords] = useState<string | null>(null);
   const [ecosystemType, setEcosystemType] = React.useState<string>("All");
-  const [visibleProjects, setVisibleProjects] = React.useState(4);
+  const [visibleProjects, setVisibleProjects] = React.useState(ITEMS_PER_PAGE);
   const [viewMore, setViewMore] = React.useState(true);
 
   const toggleDisplay = () => {
     if (viewMore) {
       setVisibleProjects(projectList.length);
     } else {
-      setVisibleProjects(4);
+      setVisibleProjects(ITEMS_PER_PAGE);
     }
     setViewMore(!viewMore);
   };
@@ -162,20 +187,20 @@ export default function EcosystemProjects() {
         }
       />
 
-      <Tabs defaultValue={"All"} className="hidden w-full sm:block">
-        <TabsList className="w-full">
-          {ecosystemTypeTabs.map((type) => (
-            <TabsTrigger
-              value={type.value as string}
-              key={type.value}
-              className="w-full rounded-sm"
-              onClick={() => setEcosystemType(type.value)}
-            >
+      <div className="flex w-full flex-row items-center justify-center gap-2">
+        {ecosystemTypeTabs.map((type) => (
+          <Button
+            onClick={() => setEcosystemType(type.value)}
+            key={type.value}
+            variant="ghost"
+            className="flex min-w-[50px] items-center justify-center"
+          >
+            <div className="text-sm font-normal text-muted-foreground">
               {type.value}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+            </div>
+          </Button>
+        ))}
+      </div>
 
       <div className="my-4 w-full border border-solid" />
 
@@ -207,7 +232,7 @@ export default function EcosystemProjects() {
             </div>
           ))}
       </div>
-      {filteredProjectList.length > 4 && (
+      {filteredProjectList.length > ITEMS_PER_PAGE && (
         <Button
           variant="outline"
           className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
