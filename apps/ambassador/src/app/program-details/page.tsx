@@ -14,14 +14,14 @@ export default function AmbassadorProgram() {
           content="Learn more about the ambassador program and how you can contribute to the Berachain ecosystem."
         />
       </Head>
-      <div className="flex flex-col items-center justify-center p-4">
+      <div className="flex max-w-[1280px] flex-wrap items-center justify-center p-4">
         <div className="mb-10 text-center">
-          <div className="flex flex-start items-center px-8 justify-between">
+          <div className="flex-start flex items-center justify-between px-8">
             <div className="mt-32">
-              <h1 className="mb-4 text-5xl font-bold text-foreground text-left">
+              <h1 className="mb-4 text-left text-5xl font-bold text-foreground">
                 Ambassador <br /> Program Overview
               </h1>
-              <p className="mb-6 text-xl text-muted-foreground text-left px-1">
+              <p className="mb-6 px-1 text-left text-xl text-muted-foreground">
                 Nurturing Community Growth with the Bera Legion
               </p>
             </div>
@@ -31,10 +31,11 @@ export default function AmbassadorProgram() {
                 alt="Bera Legion"
                 width={420}
                 height={280}
+                layout="responsive"
               />
             </div>
           </div>
-          <p className="mb-4 text-foreground bg-muted px-6 py-4 text-lg rounded-md">
+          <p className="mb-4 rounded-md bg-muted px-6 py-4 text-lg text-foreground">
             The Bera Legion is more than just a program; it&apos;s a commitment
             to fostering a vibrant and engaged community within the Berachain
             ecosystem. With a tiered system designed to empower individuals who
@@ -43,9 +44,9 @@ export default function AmbassadorProgram() {
             Berachain ecosystem.
           </p>
         </div>
-        <div className="mb-6 max-w-2xl flex flex-wrap items-start rounded-lg bg-background text-lg shadow-lg gap-8 justify-center align-middle">
-          <div className="flex flex-start align-middle items-start justify-center gap-8">
-            <section className="flex-grow mb-6 rounded-lg bg-muted p-4">
+        <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background p-6 align-middle text-lg shadow-lg">
+          <div className="flex-start flex flex-col items-start justify-center gap-8 align-middle sm:flex-row">
+            <section className="mb-6 flex-grow rounded-lg bg-muted p-4">
               <div className="flex flex-col rounded-md">
                 <div className="flex-col">
                   <Image
@@ -53,18 +54,19 @@ export default function AmbassadorProgram() {
                     alt="Bera Legion"
                     width={420}
                     height={280}
-                      />
-                  <div className="flex-col flex-start">
+                    layout="responsive"
+                  />
+                  <div className="flex-start flex-col">
                     <h2 className="mb-2 text-2xl font-semibold text-foreground">
-                        General Expectations
+                      General Expectations
                     </h2>
-                    <p className="text-muted-foreground text-wrap">
+                    <p className="text-wrap text-muted-foreground">
                       Ambassadors are expected to actively engage in Berachain
                       community channels, create various types of content,
                       including blogs, guides, videos, and memes, assist in
                       localizing content into different languages, host and
-                      participate in virtual and physical events, represent their
-                      specific region within the Berachain community, and
+                      participate in virtual and physical events, represent
+                      their specific region within the Berachain community, and
                       contribute to regular calls with other ambassadors and the
                       Berachain team.
                     </p>
@@ -72,7 +74,7 @@ export default function AmbassadorProgram() {
                 </div>
               </div>
             </section>
-            <section className="flex-grow mb-6 rounded-lg bg-muted p-4">
+            <section className="mb-6 flex-grow rounded-lg bg-muted p-4">
               <div className="flex rounded-md">
                 <div className="flex-col">
                   <h2 className="mb-2 text-2xl font-semibold text-foreground">
@@ -103,22 +105,24 @@ export default function AmbassadorProgram() {
                 </div>
               </div>
               <Image
-                  src="/BandBera.png"
-                  alt="Bera Legion"
-                  width={420}
-                  height={260}
-                />
+                src="/BandBera.png"
+                alt="Bera Legion"
+                width={420}
+                height={260}
+                layout="responsive"
+              />
             </section>
           </div>
-          <div className="mb-6 max-w-4xl flex flex-wrap items-start rounded-lg bg-background p-6 text-lg shadow-lg gap-8 justify-center align-middle">
-            <div className="grid grid-cols-3 gap-4 w-[800px]">
-              <section className="rounded-lg bg-muted p-4 flex flex-col">
+          <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background p-8 align-middle text-lg shadow-lg">
+            <div className="grid gap-8 lg:grid-cols-3">
+              <section className="flex flex-col rounded-lg bg-muted p-4">
                 <div className="flex flex-col rounded-md">
                   <Image
                     src="/benefits.webp"
                     alt="Bera Legion"
                     width={640}
                     height={360}
+                    layout="responsive"
                   />
                   <div>
                     <h2 className="mb-2 text-2xl font-semibold text-foreground">
@@ -155,6 +159,7 @@ export default function AmbassadorProgram() {
                     alt="Bera Legion"
                     width={640}
                     height={360}
+                    layout="responsive"
                   />
                 </div>
               </section>
@@ -165,6 +170,7 @@ export default function AmbassadorProgram() {
                     alt="Bera Legion"
                     width={640}
                     height={360}
+                    layout="responsive"
                   />
                   <div>
                     <h2 className="mb-2 text-2xl font-semibold text-foreground">
