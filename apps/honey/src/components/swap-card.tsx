@@ -39,7 +39,7 @@ export function SwapCard() {
     collateralList,
     needsApproval,
     exceedBalance,
-    isTyping
+    isTyping,
   } = usePsm();
 
   return (
@@ -131,7 +131,11 @@ export function SwapCard() {
             ) : (
               <Button
                 disabled={
-                  isLoading || !fromAmount || !toAmount || exceedBalance || isTyping
+                  isLoading ||
+                  !fromAmount ||
+                  !toAmount ||
+                  exceedBalance ||
+                  isTyping
                 }
                 onClick={() => {
                   write({

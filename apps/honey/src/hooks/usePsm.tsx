@@ -171,6 +171,6 @@ export const usePsm = () => {
     honey,
     collateralList,
     setIsTyping,
-    isTyping
+    isTyping,
   };
 };
