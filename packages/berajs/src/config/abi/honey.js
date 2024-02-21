@@ -1,4 +1,4 @@
-export const HONEY_PRECOMPILE_ABI = [
+export const HONEY_ROUTER_ABI = [
   {
     type: "function",
     name: "UPGRADE_INTERFACE_VERSION",

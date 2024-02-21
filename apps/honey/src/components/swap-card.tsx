@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { HONEY_PRECOMPILE_ABI } from "@bera/berajs";
-import { erc20HoneyAddress } from "@bera/config";
+import { HONEY_ROUTER_ABI } from "@bera/berajs";
+import { honeyRouterAddress } from "@bera/config";
 import { ApproveButton, ConnectButton, TokenInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -121,7 +121,7 @@ export function SwapCard() {
             ) : needsApproval ? (
               <ApproveButton
                 token={selectedFrom}
-                spender={erc20HoneyAddress}
+                spender={honeyRouterAddress}
                 amount={parseUnits(
                   fromAmount ?? "0",
                   selectedFrom?.decimals ?? 18,
@@ -134,8 +134,8 @@ export function SwapCard() {
                 }
                 onClick={() => {
                   write({
-                    address: erc20HoneyAddress,
-                    abi: HONEY_PRECOMPILE_ABI,
+                    address: honeyRouterAddress,
+                    abi: HONEY_ROUTER_ABI,
                     functionName: isMint ? "mint" : "redeem",
                     params: payload,
                   });

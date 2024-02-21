@@ -1,10 +1,10 @@
-import { erc20HoneyAddress } from "@bera/config";
+import { honeyRouterAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, parseUnits } from "viem";
 import { usePublicClient } from "wagmi";
 import { type Token } from "~/api";
-import { HONEY_PRECOMPILE_ABI } from "~/config";
+import { HONEY_ROUTER_ABI } from "~/config";
 
 export const usePollHoneyPreview = (
   collateral: Token | undefined,
@@ -33,8 +33,8 @@ export const usePollHoneyPreview = (
       }
 
       const result = (await publicClient.readContract({
-        address: erc20HoneyAddress,
-        abi: HONEY_PRECOMPILE_ABI,
+        address: honeyRouterAddress,
+        abi: HONEY_ROUTER_ABI,
         functionName: method,
         args: [collateral.address, formattedAmount],
       })) as bigint;

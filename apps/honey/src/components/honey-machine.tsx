@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import {
-  HONEY_PRECOMPILE_ABI,
+  HONEY_ROUTER_ABI,
   TransactionActionType,
   truncateHash,
 } from "@bera/berajs";
-import { erc20HoneyAddress } from "@bera/config";
+import { honeyRouterAddress } from "@bera/config";
 import { ConnectButton, Spinner, TokenInput, useTxn } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { cn } from "@bera/ui";
@@ -60,6 +60,7 @@ export function HoneyMachine() {
   const { RiveComponent, rive } = useRive({
     src: "/pawsandclaws.riv",
     stateMachines: STATE_MACHINE_NAME,
+    artboard: "PawsAndClaws_Main",
     autoplay: true,
     layout: new Layout({ fit: Fit.Contain }),
   });
@@ -119,6 +120,18 @@ export function HoneyMachine() {
   });
 
   useEffect(() => {
+    if (userReady) {
+      if (isReady) {
+        if (!userReady.value) userReady.value = true;
+      } else {
+        if (userReady.value) userReady.value = false;
+        if (buttonState) buttonState.value = 0;
+        setFromAmount(undefined);
+      }
+    }
+  }, [isReady, userReady]);
+
+  useEffect(() => {
     if (buttonActive) {
       if (!exceedBalance && fromAmount && toAmount) {
         buttonActive.value = true;
@@ -130,29 +143,13 @@ export function HoneyMachine() {
 
   useEffect(() => {
     if (buttonState && txnState && txnState.value === 0) {
-      if (needsApproval) {
-        buttonState.value = 1;
-      } else {
-        if (isMint) {
-          buttonState.value = 2;
-        } else {
-          buttonState.value = 3;
-        }
+      if (fromAmount === undefined) buttonState.value = 0;
+      else if (needsApproval) buttonState.value = 1;
+      else {
+        buttonState.value = isMint ? 2 : 3;
       }
     }
-  }, [needsApproval, isMint, txnState?.value]);
-
-  useEffect(() => {
-    if (userReady) {
-      if (isReady) {
-        userReady.value = true;
-        if (buttonState) buttonState.value = 2;
-      } else {
-        userReady.value = false;
-        if (buttonState) buttonState.value = 0;
-      }
-    }
-  }, [isReady, userReady]);
+  }, [needsApproval, isMint, txnState?.value, fromAmount]);
 
   useEffect(() => {
     if (rive) {
@@ -192,7 +189,7 @@ export function HoneyMachine() {
       abi: erc20ABI as unknown as (typeof erc20ABI)[],
       functionName: "approve",
       params: [
-        erc20HoneyAddress,
+        honeyRouterAddress,
         parseUnits(
           `${fromAmount ?? "0"}` as `${number}`,
           selectedFrom?.decimals ?? 18,
@@ -203,16 +200,16 @@ export function HoneyMachine() {
 
   const performMinting = () =>
     write({
-      address: erc20HoneyAddress,
-      abi: HONEY_PRECOMPILE_ABI,
+      address: honeyRouterAddress,
+      abi: HONEY_ROUTER_ABI,
       functionName: "mint",
       params: payload,
     });
 
   const performRedeeming = () =>
     write({
-      address: erc20HoneyAddress,
-      abi: HONEY_PRECOMPILE_ABI,
+      address: honeyRouterAddress,
+      abi: HONEY_ROUTER_ABI,
       functionName: "redeem",
       params: payload,
     });
@@ -241,7 +238,7 @@ export function HoneyMachine() {
                   </div>
                 </>
               ) : (
-                <ConnectButton btnClassName="bg-transparent"/>
+                <ConnectButton btnClassName="bg-transparent" />
               )}
             </div>
             <div
