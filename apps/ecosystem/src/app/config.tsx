@@ -43,22 +43,6 @@ export const navItems = [
     href: "/",
     title: "Home",
   },
-  // {
-  //   href: "/amm",
-  //   title: "AMM",
-  // },
-  // {
-  //   href: "/honey",
-  //   title: "Honey",
-  // },
-  // {
-  //   href: "/governance",
-  //   title: "Governance",
-  // },
-  // {
-  //   href: "/redeem",
-  //   title: "Redeem",
-  // },
   {
     href: "#",
     title: "Explore",
