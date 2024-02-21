@@ -138,10 +138,10 @@ export default function AmbassadorProgram() {
                       3. Benefits of Becoming an Ambassador
                     </h2>
                     <p className="text-muted-foreground">
-                      Ambassadors benefit from social perks like event access, 
-                      badges, and custom merch, financial rewards like microgrants, 
-                      and career opportunities including placements and recognition 
-                      within the Berachain ecosystem.
+                      Ambassadors benefit from social perks like event access,
+                      badges, and custom merch, financial rewards like
+                      microgrants, and career opportunities including placements
+                      and recognition within the Berachain ecosystem.
                     </p>
                   </div>
                 </div>
