@@ -2,7 +2,13 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
 
-import { AmbassadorCard, brigadeGeneral, colonel, kingsOath } from "./tiers";
+import {
+  AmbassadorCard,
+  Centurions,
+  Imaginifiers,
+  Legates,
+  Optios,
+} from "./tiers";
 
 export default function AmbassadorCards() {
   return (
@@ -15,13 +21,16 @@ export default function AmbassadorCards() {
       </h1>
       <div className="flex flex-wrap justify-center gap-8 p-4 pb-4">
         <div className="order-2 sm:order-1">
-          <AmbassadorCard ambassador={brigadeGeneral} />
+          <AmbassadorCard ambassador={Legates} />
         </div>
         <div className="order-1">
-          <AmbassadorCard ambassador={kingsOath} />
+          <AmbassadorCard ambassador={Centurions} />
         </div>
         <div className="order-3">
-          <AmbassadorCard ambassador={colonel} />
+          <AmbassadorCard ambassador={Optios} />
+        </div>
+        <div className="order-3">
+          <AmbassadorCard ambassador={Imaginifiers} />
         </div>
       </div>
       <Link href="/program-details">
