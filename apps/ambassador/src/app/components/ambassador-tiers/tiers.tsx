@@ -55,7 +55,7 @@ export function AmbassadorCard({ ambassador }: { ambassador: any }) {
 
   return (
     <div
-      className={`relative col-span-1 flex h-[440px] w-[300px] flex-col rounded-lg border border-solid ${getAmbassadorStyle(
+      className={`relative col-span-1 flex h-[360px] w-[300px] flex-col rounded-lg border border-solid ${getAmbassadorStyle(
         ambassador.tier,
       )}`}
     >
