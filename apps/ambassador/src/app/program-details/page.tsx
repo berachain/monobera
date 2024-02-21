@@ -96,13 +96,15 @@ export default function AmbassadorProgram() {
                   </h2>
                   <ul className="text-md list-decimal pl-6 text-muted-foreground">
                     <li>
-                      <h4 className="text-bold">Legates:</h4> Advocates for Berachain&apos;s vision, leveraging
-                      their influence to amplify Berachain&apos;s presence
-                      across various platforms.
+                      <h4 className="text-bold">Legates:</h4> Advocates for
+                      Berachain&apos;s vision, leveraging their influence to
+                      amplify Berachain&apos;s presence across various
+                      platforms.
                     </li>
                     <li>
-                      <h4>Centurions:</h4> Guardians of community harmony, ensuring
-                      positive user experiences and fostering inclusivity.
+                      <h4>Centurions:</h4> Guardians of community harmony,
+                      ensuring positive user experiences and fostering
+                      inclusivity.
                     </li>
                     <li>
                       <h4>Optios:</h4> Architects of memetic influence, crafting
@@ -111,9 +113,9 @@ export default function AmbassadorProgram() {
                     </li>
                     <li>
                       <h4>Imaginifiers:</h4>
-                      Champions of educational content, enriching
-                      the Berachain ecosystem through informative and insightful
-                      content creation.
+                      Champions of educational content, enriching the Berachain
+                      ecosystem through informative and insightful content
+                      creation.
                     </li>
                   </ul>
                 </div>
