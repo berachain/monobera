@@ -22,7 +22,7 @@ import {
 import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { set } from "date-fns";
 
 // enum EcosystemType {
 //   All = 1,
@@ -121,22 +121,41 @@ const projectList = [
     goto: blockExplorerUrl,
     ecosystemType: "Infrastructure & Tooling",
   },
+  {
+    icon: <Icons.XOctagon className="h-[52px] w-[52px]" />,
+    name: perpsName,
+    subtitle: "Trade Your Favourite Pairs",
+    description:
+      "Experience the thrill of high leverage trading, tailored for both novices and seasoned traders. With an impressive 100x leverage.",
+    goto: perpsUrl,
+    ecosystemType: "SocialFi",
+  },
+  {
+    icon: <Icons.bee className="h-[52px] w-[52px]" />,
+    name: bgtName,
+    subtitle: "The Hub for BGT Governance",
+    description:
+      "Engage directly in the governance of BGT, leverage BGT Station for innovative bribe mechanisms, enhancing participation.",
+    goto: bgtUrl,
+    ecosystemType: "Infrastructure & Tooling",
+  },
+  {
+    icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
+    name: blockExplorerName,
+    subtitle: "Berachain's block explorer",
+    description:
+      "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
+    goto: blockExplorerUrl,
+    ecosystemType: "Infrastructure & Tooling",
+  },
 ];
+
+const ITEMS_PER_PAGE = 6;
 
 export default function EcosystemProjects() {
   const [keywords, setKeywords] = useState<string | null>(null);
   const [ecosystemType, setEcosystemType] = React.useState<string>("All");
-  const [visibleProjects, setVisibleProjects] = React.useState(4);
-  const [viewMore, setViewMore] = React.useState(true);
-
-  const toggleDisplay = () => {
-    if (viewMore) {
-      setVisibleProjects(projectList.length);
-    } else {
-      setVisibleProjects(4);
-    }
-    setViewMore(!viewMore);
-  };
+  const [page, setPage] = React.useState(1);
 
   const filteredProjectList = useMemo(() => {
     return projectList.filter((project) => {
@@ -161,61 +180,87 @@ export default function EcosystemProjects() {
           setKeywords(e.target.value)
         }
       />
-
-      <Tabs defaultValue={"All"} className="hidden w-full sm:block">
-        <TabsList className="w-full">
+      <div className="flex w-full">
+        {/* Side Nav Filter */}
+        <div className="flex w-60 flex-col border-r border-solid p-4">
           {ecosystemTypeTabs.map((type) => (
-            <TabsTrigger
-              value={type.value as string}
+            <Button
               key={type.value}
-              className="w-full rounded-sm"
-              onClick={() => setEcosystemType(type.value)}
+              variant="ghost"
+              className="mb-2 rounded-sm px-2 py-1 text-sm hover:bg-muted"
+              onClick={() => {
+                setEcosystemType(type.value);
+                setPage(1);
+              }}
             >
-              {type.value}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
-
-      <div className="my-4 w-full border border-solid" />
-
-      <div className="mx-auto grid w-fit grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {filteredProjectList
-          .slice(0, visibleProjects)
-          .map((project: any, index: number) => (
-            <div
-              key={index}
-              className="mx-auto flex w-full max-w-[260px] flex-col justify-between gap-4 rounded-md border border-solid bg-background p-6"
-            >
-              <div className="flex flex-col items-center gap-4">
-                {project.icon}
-                <div>
-                  <div className="text-3xl font-semibold leading-9">
-                    {project.name}
-                  </div>
-                  <div className="font-medium">{project.subtitle}</div>
-                </div>
-                <div className="flex-grow text-center text-sm leading-5 text-muted-foreground">
-                  {project.description}
-                </div>
+              <div className="text-left text-sm font-normal text-muted-foreground">
+                {type.value}
               </div>
-              <Link href={project.goto}>
-                <div className="flex justify-center gap-2 text-sm text-muted-foreground">
-                  Visit Project <Icons.arrowRight />
-                </div>
-              </Link>
-            </div>
+            </Button>
           ))}
+        </div>
+
+        {/* Project List */}
+        <div className="flex-grow pl-16">
+          <div className="mx-auto grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {filteredProjectList
+              .slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
+              .map((project: any, index: number) => (
+                <div
+                  key={index}
+                  className="mx-auto flex w-full max-w-[260px] flex-col justify-between gap-4 rounded-md border border-solid bg-background p-6"
+                >
+                  <div className="flex flex-col items-center gap-4">
+                    {project.icon}
+                    <div>
+                      <div className="text-3xl font-semibold leading-9">
+                        {project.name}
+                      </div>
+                      <div className="font-medium">{project.subtitle}</div>
+                    </div>
+                    <div className="flex-grow text-center text-sm leading-5 text-muted-foreground">
+                      {project.description}
+                    </div>
+                  </div>
+                  <Link href={project.goto}>
+                    <div className="flex justify-center gap-2 text-sm text-muted-foreground">
+                      Visit Project <Icons.arrowRight />
+                    </div>
+                  </Link>
+                </div>
+              ))}
+          </div>
+
+          {/* Pagination Footer */}
+          <div className="mt-8 flex justify-end">
+            <div className="mt-8 flex justify-end">
+              <div className="flex items-center gap-4">
+                <Button
+                  onClick={() =>
+                    setPage((currentPage) => Math.max(1, currentPage - 1))
+                  }
+                  variant="ghost"
+                  className="rounded-sm px-4 py-2 text-sm text-muted-foreground hover:bg-muted"
+                >
+                  Previous
+                </Button>
+
+                <div className="flex items-center justify-center text-sm text-muted-foreground">
+                  {page}
+                </div>
+
+                <Button
+                  onClick={() => setPage((currentPage) => currentPage + 1)}
+                  variant="ghost"
+                  className="rounded-sm px-4 py-2 text-sm text-muted-foreground hover:bg-muted"
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      {filteredProjectList.length > 4 && (
-        <Button
-          variant="outline"
-          className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
-          onClick={toggleDisplay}
-        >
-          {viewMore ? "View More" : "View Less"}
-        </Button>
-      )}
     </div>
   );
 }
