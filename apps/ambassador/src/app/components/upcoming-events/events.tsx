@@ -22,7 +22,7 @@ export const projects: Project[] = [
   //   numParticipants: "4.20k",
   // },
   {
-    name: "Beras in denver",
+    name: "Beras in Denver",
     image: "/bear_1.png",
     date: "02/29/2024",
     numParticipants: "1.00k+",
