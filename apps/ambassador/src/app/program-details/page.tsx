@@ -45,8 +45,11 @@ export default function AmbassadorProgram() {
           </p>
         </div>
         <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg shadow-lg">
-          <div className="flex-start flex flex-col items-start justify-center gap-8 align-middle sm:flex-row">
-            <section className="mb-6 flex-grow rounded-lg bg-muted p-4">
+          <div className="flex w-full flex-col items-stretch justify-center gap-8 align-middle sm:flex-row">
+            <section
+              className="mb-6 flex-grow rounded-lg bg-muted p-4"
+              style={{ flexBasis: "0" }}
+            >
               <div className="flex flex-col rounded-md">
                 <div className="flex-col ">
                   <div className="flex-start flex-col gap-8 p-6">
@@ -66,19 +69,22 @@ export default function AmbassadorProgram() {
                     <Image
                       src="/SmokeyBongless.png"
                       alt="Bera Legion"
-                      width={420}
-                      height={280}
+                      width={120}
+                      height={80}
                       layout="responsive"
                     />
                   </div>
                 </div>
               </div>
             </section>
-            <section className="mb-6 flex-grow rounded-lg bg-muted">
+            <section
+              className="mb-6 flex-grow rounded-lg bg-muted"
+              style={{ flexBasis: "0" }}
+            >
               <div className="flex rounded-md">
                 <div className="flex-col gap-8 p-6">
                   <Image
-                    src="/BandBera.png"
+                    src="/beralegion.png"
                     alt="Bera Legion"
                     width={320}
                     height={260}
@@ -90,21 +96,22 @@ export default function AmbassadorProgram() {
                   </h2>
                   <ul className="text-md list-decimal pl-6 text-muted-foreground">
                     <li>
-                      Legates: Advocates for Berachain&apos;s vision, leveraging
+                      <h4 className="text-bold">Legates:</h4> Advocates for Berachain&apos;s vision, leveraging
                       their influence to amplify Berachain&apos;s presence
                       across various platforms.
                     </li>
                     <li>
-                      Centurions: Guardians of community harmony, ensuring
+                      <h4>Centurions:</h4> Guardians of community harmony, ensuring
                       positive user experiences and fostering inclusivity.
                     </li>
                     <li>
-                      Optios: Architects of memetic influence, crafting
+                      <h4>Optios:</h4> Architects of memetic influence, crafting
                       impactful memes to enhance brand awareness and community
                       engagement.
                     </li>
                     <li>
-                      Imaginifiers: Champions of educational content, enriching
+                      <h4>Imaginifiers:</h4>
+                      Champions of educational content, enriching
                       the Berachain ecosystem through informative and insightful
                       content creation.
                     </li>
@@ -114,11 +121,11 @@ export default function AmbassadorProgram() {
             </section>
           </div>
           <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg shadow-lg">
-            <div className="grid gap-8 lg:grid-cols-3">
+            <div className="grid w-full items-stretch justify-center gap-8 align-middle sm:flex-row lg:grid-cols-3">
               <section className="flex flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
-                    src="/join.png"
+                    src="/AmbassadorBera.png"
                     alt="Bera Legion"
                     width={640}
                     height={360}
@@ -143,7 +150,7 @@ export default function AmbassadorProgram() {
               <section className="mb-6 rounded-lg bg-muted p-6">
                 <div className="flex flex-col justify-between rounded-md">
                   <Image
-                    src="/objectives.png"
+                    src="/BondBear.png"
                     alt="Bera Legion"
                     width={640}
                     height={360}
@@ -166,7 +173,7 @@ export default function AmbassadorProgram() {
               <section className="mb-6 rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
-                    src="/onboarding.png"
+                    src="/AlienBoo.png"
                     alt="Bera Legion"
                     width={640}
                     height={360}
