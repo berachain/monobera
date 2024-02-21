@@ -14,8 +14,8 @@ export default function AmbassadorProgram() {
           content="Learn more about the ambassador program and how you can contribute to the Berachain ecosystem."
         />
       </Head>
-      <div className="flex max-w-[1280px] flex-wrap items-center justify-center p-4">
-        <div className="mb-10 text-center">
+      <div className="flex max-w-[1440px] flex-wrap items-center justify-center p-4">
+        <div className="mb-6 text-center">
           <div className="flex-start flex items-center justify-between px-8">
             <div className="mt-32">
               <h1 className="mb-4 text-left text-5xl font-bold text-foreground">
@@ -44,23 +44,16 @@ export default function AmbassadorProgram() {
             Berachain ecosystem.
           </p>
         </div>
-        <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background p-6 align-middle text-lg shadow-lg">
+        <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg shadow-lg">
           <div className="flex-start flex flex-col items-start justify-center gap-8 align-middle sm:flex-row">
             <section className="mb-6 flex-grow rounded-lg bg-muted p-4">
               <div className="flex flex-col rounded-md">
-                <div className="flex-col">
-                  <Image
-                    src="/SmokeyBongless.png"
-                    alt="Bera Legion"
-                    width={420}
-                    height={280}
-                    layout="responsive"
-                  />
-                  <div className="flex-start flex-col">
-                    <h2 className="mb-2 text-2xl font-semibold text-foreground">
-                      General Expectations
-                    </h2>
-                    <p className="text-wrap text-muted-foreground">
+                <div className="flex-col ">
+                  <div className="flex-start flex-col gap-8 p-6">
+                    <h1 className="mb-2 text-3xl font-semibold text-foreground">
+                      1. General Expectations
+                    </h1>
+                    <p className="text-wrap pb-8 text-muted-foreground">
                       Ambassadors are expected to actively engage in Berachain
                       community channels, create various types of content,
                       including blogs, guides, videos, and memes, assist in
@@ -70,18 +63,32 @@ export default function AmbassadorProgram() {
                       contribute to regular calls with other ambassadors and the
                       Berachain team.
                     </p>
+                    <Image
+                      src="/SmokeyBongless.png"
+                      alt="Bera Legion"
+                      width={420}
+                      height={280}
+                      layout="responsive"
+                    />
                   </div>
                 </div>
               </div>
             </section>
-            <section className="mb-6 flex-grow rounded-lg bg-muted p-4">
+            <section className="mb-6 flex-grow rounded-lg bg-muted">
               <div className="flex rounded-md">
-                <div className="flex-col">
-                  <h2 className="mb-2 text-2xl font-semibold text-foreground">
-                    Introducing the Berachain Legion: Uniting Advocates for
+                <div className="flex-col gap-8 p-6">
+                  <Image
+                    src="/BandBera.png"
+                    alt="Bera Legion"
+                    width={320}
+                    height={260}
+                    layout="responsive"
+                  />
+                  <h2 className="mb-2 mt-[24px] text-[32px] font-semibold leading-tight text-foreground">
+                    2. Introducing the Berachain Legion: Uniting Advocates for
                     Innovation
                   </h2>
-                  <ul className="list-disc pl-8 text-muted-foreground">
+                  <ul className="text-md list-decimal pl-6 text-muted-foreground">
                     <li>
                       Legates: Advocates for Berachain&apos;s vision, leveraging
                       their influence to amplify Berachain&apos;s presence
@@ -104,21 +111,14 @@ export default function AmbassadorProgram() {
                   </ul>
                 </div>
               </div>
-              <Image
-                src="/BandBera.png"
-                alt="Bera Legion"
-                width={420}
-                height={260}
-                layout="responsive"
-              />
             </section>
           </div>
-          <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background p-8 align-middle text-lg shadow-lg">
+          <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg shadow-lg">
             <div className="grid gap-8 lg:grid-cols-3">
-              <section className="flex flex-col rounded-lg bg-muted p-4">
+              <section className="flex flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
-                    src="/benefits.webp"
+                    src="/join.png"
                     alt="Bera Legion"
                     width={640}
                     height={360}
@@ -126,7 +126,7 @@ export default function AmbassadorProgram() {
                   />
                   <div>
                     <h2 className="mb-2 text-2xl font-semibold text-foreground">
-                      Benefits of Becoming an Ambassador
+                      3. Benefits of Becoming an Ambassador
                     </h2>
                     <p className="text-muted-foreground">
                       Ambassadors enjoy various benefits, including social
@@ -140,11 +140,18 @@ export default function AmbassadorProgram() {
                   </div>
                 </div>
               </section>
-              <section className="mb-6 rounded-lg bg-muted p-4">
-                <div className="flex flex-col rounded-md">
+              <section className="mb-6 rounded-lg bg-muted p-6">
+                <div className="flex flex-col justify-between rounded-md">
+                  <Image
+                    src="/objectives.png"
+                    alt="Bera Legion"
+                    width={640}
+                    height={360}
+                    layout="responsive"
+                  />
                   <div>
                     <h2 className="mb-2 text-2xl font-semibold text-foreground">
-                      Program Objectives
+                      4. Program Objectives
                     </h2>
                     <p className="text-muted-foreground">
                       The Bera Legion, Berachain&apos;s official Ambassador
@@ -154,19 +161,12 @@ export default function AmbassadorProgram() {
                       Growth.
                     </p>
                   </div>
-                  <Image
-                    src="/benefits.webp"
-                    alt="Bera Legion"
-                    width={640}
-                    height={360}
-                    layout="responsive"
-                  />
                 </div>
               </section>
-              <section className="mb-6 rounded-lg bg-muted p-4">
+              <section className="mb-6 rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
-                    src="/benefits.webp"
+                    src="/onboarding.png"
                     alt="Bera Legion"
                     width={640}
                     height={360}
@@ -174,7 +174,7 @@ export default function AmbassadorProgram() {
                   />
                   <div>
                     <h2 className="mb-2 text-2xl font-semibold text-foreground">
-                      Onboarding Process
+                      5. Onboarding Process
                     </h2>
                     <p className="text-muted-foreground">
                       New ambassadors undergo an onboarding process where
