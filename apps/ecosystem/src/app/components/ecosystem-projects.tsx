@@ -20,17 +20,6 @@ import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-// enum EcosystemType {
-//   All = 1,
-//   Defi = 2,
-//   Stablecoins = 3,
-//   Validators = 4,
-//   Gaming = 5,
-//   Metaverse = 6,
-//   Data = 7,
-//   Infrastructure = 7,
-// }
-
 const ITEMS_PER_PAGE = 6;
 
 // TODO: add in other properties
