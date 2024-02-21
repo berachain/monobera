@@ -39,6 +39,7 @@ export function SwapCard() {
     collateralList,
     needsApproval,
     exceedBalance,
+    isTyping
   } = usePsm();
 
   return (
@@ -118,7 +119,7 @@ export function SwapCard() {
             </ul>
             {!isReady ? (
               <ConnectButton className="w-full" />
-            ) : needsApproval ? (
+            ) : needsApproval && !exceedBalance ? (
               <ApproveButton
                 token={selectedFrom}
                 spender={honeyRouterAddress}
@@ -130,7 +131,7 @@ export function SwapCard() {
             ) : (
               <Button
                 disabled={
-                  isLoading || !fromAmount || !toAmount || exceedBalance
+                  isLoading || !fromAmount || !toAmount || exceedBalance || isTyping
                 }
                 onClick={() => {
                   write({
