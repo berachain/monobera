@@ -127,7 +127,7 @@ export default function AmbassadorProgram() {
               <section className="flex flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
-                    src="/AmbassadorBera.png"
+                    src="/alien.png"
                     alt="Bera Legion"
                     width={640}
                     height={360}
@@ -138,13 +138,10 @@ export default function AmbassadorProgram() {
                       3. Benefits of Becoming an Ambassador
                     </h2>
                     <p className="text-muted-foreground">
-                      Ambassadors enjoy various benefits, including social
-                      incentives such as access to Berachain events, special
-                      badges, custom merchandise, and exclusive networking
-                      opportunities; financial incentives such as microgrants
-                      and boosted rewards, as well as career growth
-                      opportunities with the potential for career placement and
-                      peer recognition within the Berachain ecosystem.
+                      Ambassadors benefit from social perks like event access, 
+                      badges, and custom merch, financial rewards like microgrants, 
+                      and career opportunities including placements and recognition 
+                      within the Berachain ecosystem.
                     </p>
                   </div>
                 </div>
@@ -152,7 +149,7 @@ export default function AmbassadorProgram() {
               <section className="mb-6 rounded-lg bg-muted p-6">
                 <div className="flex flex-col justify-between rounded-md">
                   <Image
-                    src="/BondBear.png"
+                    src="/wannabeBond.png"
                     alt="Bera Legion"
                     width={640}
                     height={360}
@@ -175,7 +172,7 @@ export default function AmbassadorProgram() {
               <section className="mb-6 rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
-                    src="/AlienBoo.png"
+                    src="/loltemplars.png"
                     alt="Bera Legion"
                     width={640}
                     height={360}
