@@ -3,7 +3,12 @@
 import React, { useState } from "react";
 import { HONEY_ROUTER_ABI } from "@bera/berajs";
 import { honeyRouterAddress } from "@bera/config";
-import { ApproveButton, ConnectButton, TokenInput } from "@bera/shared-ui";
+import {
+  ApproveButton,
+  ConnectButton,
+  SSRSpinner,
+  TokenInput,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -85,7 +90,7 @@ export function SwapCard() {
           </Tabs>
 
           <div className="border-1 flex flex-col gap-6 border-border">
-            <ul className="divide-y divide-border rounded-2xl border">
+            <ul className="relative divide-y divide-border rounded-2xl border">
               <TokenInput
                 selected={selectedFrom}
                 selectedTokens={[selectedFrom, selectedTo]}
@@ -101,6 +106,7 @@ export function SwapCard() {
                   setFromAmount(amount);
                 }}
               />
+              {(isLoading || isTyping) && <SSRSpinner className="absolute -translate-y-[50%] left-[50%] -translate-x-[50%] bg-background border border-border rounded-md p-2" />}
               <TokenInput
                 selected={selectedTo}
                 selectedTokens={[selectedFrom, selectedTo]}

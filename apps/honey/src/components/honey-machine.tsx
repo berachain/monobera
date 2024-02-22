@@ -7,7 +7,13 @@ import {
   truncateHash,
 } from "@bera/berajs";
 import { honeyRouterAddress } from "@bera/config";
-import { ConnectButton, Spinner, TokenInput, useTxn } from "@bera/shared-ui";
+import {
+  ConnectButton,
+  SSRSpinner,
+  Spinner,
+  TokenInput,
+  useTxn,
+} from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { cn } from "@bera/ui";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -49,6 +55,8 @@ export function HoneyMachine() {
     honey,
     collateralList,
     exceedBalance,
+    isLoading,
+    isTyping,
     onSwitch,
     setGivenIn,
     setSelectedFrom,
@@ -98,13 +106,13 @@ export function HoneyMachine() {
     message: needsApproval
       ? `Approve ${selectedFrom?.symbol}`
       : isMint
-        ? `Mint ${toAmount} HONEY`
-        : `Redeem ${fromAmount} HONEY`,
+      ? `Mint ${toAmount} HONEY`
+      : `Redeem ${fromAmount} HONEY`,
     actionType: needsApproval
       ? TransactionActionType.APPROVAL
       : isMint
-        ? TransactionActionType.MINT_HONEY
-        : TransactionActionType.REDEEM_HONEY,
+      ? TransactionActionType.MINT_HONEY
+      : TransactionActionType.REDEEM_HONEY,
     onError: () => {
       if (txnState) {
         txnState.value = 3;
@@ -134,20 +142,20 @@ export function HoneyMachine() {
   useEffect(() => {
     if (buttonActive) {
       if (!exceedBalance && fromAmount && toAmount) {
-        buttonActive.value = true;
+        if (!buttonActive.value) buttonActive.value = true;
       } else {
-        buttonActive.value = false;
+        if (buttonActive.value) buttonActive.value = false;
       }
     }
   }, [exceedBalance, fromAmount, toAmount]);
 
   useEffect(() => {
     if (buttonState && txnState && txnState.value === 0) {
-      if (fromAmount === undefined) buttonState.value = 0;
-      else if (needsApproval) buttonState.value = 1;
-      else {
-        buttonState.value = isMint ? 2 : 3;
-      }
+      if (fromAmount === undefined && buttonState.value !== 0)
+        buttonState.value = 0;
+      else if (needsApproval && buttonState.value !== 1) buttonState.value = 1;
+      else if (isMint && buttonState.value !== 2) buttonState.value = 2;
+      else if (!isMint && buttonState.value !== 3) buttonState.value = 3;
     }
   }, [needsApproval, isMint, txnState?.value, fromAmount]);
 
@@ -280,7 +288,7 @@ export function HoneyMachine() {
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
-              <ul>
+              <ul className="relative">
                 <div className="rounded-t-md border-2 border-b-0 border-foreground bg-muted">
                   <TokenInput
                     selected={selectedFrom}
@@ -297,6 +305,9 @@ export function HoneyMachine() {
                     }}
                   />
                 </div>
+                {(isLoading || isTyping) && (
+                  <SSRSpinner className="absolute left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-md border border-border bg-background p-2" />
+                )}
                 <div className="rounded-b-md border-2 border-foreground bg-muted">
                   <TokenInput
                     selected={selectedTo}
