@@ -106,7 +106,9 @@ export function SwapCard() {
                   setFromAmount(amount);
                 }}
               />
-              {(isLoading || isTyping) && <SSRSpinner className="absolute -translate-y-[50%] left-[50%] -translate-x-[50%] bg-background border border-border rounded-md p-2" />}
+              {(isLoading || isTyping) && (
+                <SSRSpinner className="absolute -translate-y-[50%] left-[50%] -translate-x-[50%] bg-background border border-border rounded-md p-2" />
+              )}
               <TokenInput
                 selected={selectedTo}
                 selectedTokens={[selectedFrom, selectedTo]}
