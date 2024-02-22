@@ -141,7 +141,7 @@ export function HoneyMachine() {
 
   useEffect(() => {
     if (buttonActive) {
-      if (!exceedBalance && fromAmount && toAmount) {
+      if (!exceedBalance && fromAmount && toAmount && !isTyping && !isLoading) {
         if (!buttonActive.value) buttonActive.value = true;
       } else {
         if (buttonActive.value) buttonActive.value = false;
@@ -150,12 +150,14 @@ export function HoneyMachine() {
   }, [exceedBalance, fromAmount, toAmount]);
 
   useEffect(() => {
-    if (buttonState && txnState && txnState.value === 0) {
-      if (fromAmount === undefined && buttonState.value !== 0)
-        buttonState.value = 0;
-      else if (needsApproval && buttonState.value !== 1) buttonState.value = 1;
-      else if (isMint && buttonState.value !== 2) buttonState.value = 2;
-      else if (!isMint && buttonState.value !== 3) buttonState.value = 3;
+    if (buttonState && txnState) {
+      if (needsApproval) {
+        if (buttonState.value !== 1) buttonState.value = 1;
+      } else if (isMint) {
+        if (buttonState.value !== 2) buttonState.value = 2;
+      } else if (!isMint) {
+        if (buttonState.value !== 3) buttonState.value = 3;
+      }
     }
   }, [needsApproval, isMint, txnState?.value, fromAmount]);
 
