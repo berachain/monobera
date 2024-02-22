@@ -6,6 +6,7 @@ import { usePollAllowances, type Token } from "@bera/berajs";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import { crocDexAddress } from "@bera/config";
+import { parseUnits } from "viem";
 
 const useCreatePool = (tokenWeights: ITokenWeight[]) => {
   const [needsApproval, setNeedsApproval] = useState<Token[]>([]);
@@ -32,8 +33,11 @@ const useCreatePool = (tokenWeights: ITokenWeight[]) => {
           );
           if (
             allowance.formattedAllowance === "0" ||
-            Number(allowance.formattedAllowance) <
-              (getSafeNumber(token?.initialLiquidity) ?? 0)
+            allowance.allowance <
+              parseUnits(
+                token?.initialLiquidity ?? "0",
+                token?.token?.decimals ?? 18,
+              )
           ) {
             return allowance;
           }

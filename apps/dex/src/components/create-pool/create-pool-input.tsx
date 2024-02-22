@@ -1,6 +1,6 @@
 import React from "react";
 import { type Token } from "@bera/berajs";
-import { bgtTokenAddress } from "@bera/config";
+import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { SelectToken } from "@bera/shared-ui";
 
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
@@ -32,9 +32,8 @@ export default function CreatePoolInput({
         onTokenSelection={handleTokenSelection}
         selectedTokens={selectedTokens}
         selectable={selectable}
-        filter={[bgtTokenAddress]}
+        filter={[bgtTokenAddress, nativeTokenAddress]}
       />
-      <p>{isQuoteAsset ? "Quote" : "Base"}</p>
     </li>
   );
 }

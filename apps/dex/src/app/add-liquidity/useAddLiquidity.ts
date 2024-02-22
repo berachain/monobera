@@ -5,11 +5,11 @@ import { useBeraJs, useTokens } from "@bera/berajs";
 import { type Address } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
-import useMultipleTokenApprovals from "~/hooks/useMultipleTokenApprovals";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 import { type PoolV2 } from "../pools/fetchPools";
 import { useCrocPoolPrice } from "~/hooks/useCrocPoolPrice";
 import { crocDexAddress } from "@bera/config";
+import useMultipleTokenApprovalsWithSlippage from "~/hooks/useMultipleTokenApprovalsWithSlippage";
 
 export const useAddLiquidity = (pool: PoolV2 | undefined) => {
   const { account: _account } = useBeraJs();
@@ -18,6 +18,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
   const [totalValue, setTotalValue] = useState<number>(0);
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
+  const [isBaseInput, setIsBaseInput] = useState<boolean>(true);
 
   const [activeInput, setActiveInput] = useState<number | undefined>(undefined);
   const [activeAmount, setActiveAmount] = useState<string | undefined>(
@@ -34,10 +35,14 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     areAllInputsEmpty,
   } = useMultipleTokenInput(pool?.tokens ?? []);
 
-  console.log("tokenInputs", tokenInputs);
-  const { needsApproval, refresh: refreshAllowances } =
-    useMultipleTokenApprovals(tokenInputs, crocDexAddress as Address);
-  console.log("needsApproval", needsApproval);
+  const {
+    needsApproval,
+    needsApprovalNoBera,
+    refresh: refreshAllowances,
+  } = useMultipleTokenApprovalsWithSlippage(
+    tokenInputs,
+    crocDexAddress as Address,
+  );
 
   const { tokenDictionary } = useTokens();
 
@@ -88,6 +93,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     beraValue,
     isNativeBera,
     setIsNativeBera,
+    needsApprovalNoBera,
     poolTokens,
     error,
     isMultipleInputDisabled: error !== undefined,
@@ -106,5 +112,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     setActiveInput,
     activeAmount,
     setActiveAmount,
+    isBaseInput,
+    setIsBaseInput,
   };
 };

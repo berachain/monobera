@@ -57,7 +57,6 @@ export function TokenDialog({
     addNewToken,
     removeToken,
   } = useTokens();
-  console.log("tokenList", tokenList);
   const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
@@ -318,7 +317,7 @@ const TokenDialogRow = ({
       <Button
         variant="ghost"
         className={cn(
-          "flex h-auto w-full items-center justify-start gap-2 p-4 text-left shadow-none ",
+          "flex h-auto w-full items-center justify-start gap-2 p-4 text-left shadow-none",
           isTokenSelected && "cursor-default opacity-50",
         )}
         onClick={() => {
@@ -342,7 +341,7 @@ const TokenDialogRow = ({
           <div className="absolute ml-auto" />
         )}
         {!pendingAddition && isConnected && (
-          <div className="ml-auto text-muted-foreground ">
+          <div className="ml-auto text-muted-foreground truncate">
             <p>{tokenBalance ?? 0}</p>
           </div>
         )}

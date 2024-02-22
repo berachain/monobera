@@ -12,6 +12,10 @@ import CreatePoolInitialPriceInput from "./create-pool-initial-price";
 import CreatePoolExchangeRate from "./create-pool-exchange-rate";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { getBaseCost, getQuoteCost } from "~/app/pools/fetchPools";
+import {
+  useCrocPoolFromTokens,
+  useCrocToken,
+} from "~/hooks/useCrocPoolFromTokens";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -32,6 +36,38 @@ export function CreatePoolInitialLiquidity({
   onContinue,
   onBack,
 }: Props) {
+  const tokenA = tokenWeights[0]?.token;
+  const tokenB = tokenWeights[1]?.token;
+
+  const tokenACrocToken = useCrocToken(tokenA);
+  const tokenBCrocToken = useCrocToken(tokenB);
+
+  const crocPool = useCrocPoolFromTokens(tokenACrocToken, tokenBCrocToken);
+
+  const baseToken: ITokenWeight | undefined =
+    tokenA?.address === crocPool?.baseToken?.tokenAddr
+      ? tokenWeights[0]
+      : tokenWeights[1];
+  const quoteToken: ITokenWeight | undefined =
+    tokenB?.address === crocPool?.quoteToken?.tokenAddr
+      ? tokenWeights[1]
+      : tokenWeights[0];
+
+  const baseTokenIndex: number =
+    tokenA?.address === crocPool?.baseToken?.tokenAddr ? 0 : 1;
+  const quoteTokenIndex: number =
+    tokenB?.address === crocPool?.quoteToken?.tokenAddr ? 1 : 0;
+
+  console.log({
+    tokenA,
+    tokenB,
+    tokenACrocToken,
+    tokenBCrocToken,
+    crocPool,
+    baseToken,
+    quoteToken,
+  });
+
   useEffect(() => {
     onTokenBalanceChange(0, "");
     onTokenBalanceChange(1, "");
@@ -41,18 +77,19 @@ export function CreatePoolInitialLiquidity({
   const quoteCost = getQuoteCost(getSafeNumber(initialPrice));
 
   const handleBaseAssetAmountChange = (value: string): void => {
-    onTokenBalanceChange(0, value);
+    onTokenBalanceChange(baseTokenIndex, value);
     const quoteAmount = baseCost * getSafeNumber(value);
-    onTokenBalanceChange(1, quoteAmount.toString());
+    onTokenBalanceChange(quoteTokenIndex, quoteAmount.toString());
   };
 
   const handleQuoteAssetAmountChange = (value: string): void => {
-    onTokenBalanceChange(1, value);
+    onTokenBalanceChange(quoteTokenIndex, value);
     const baseAmount = quoteCost * getSafeNumber(value);
-    onTokenBalanceChange(0, baseAmount.toString());
+    onTokenBalanceChange(baseTokenIndex, baseAmount.toString());
   };
+
   return (
-    <Card className="w-[350px]  px-6 py-8 shadow-lg sm:w-[480px]">
+    <Card className="w-full  px-6 py-8 shadow-lg sm:w-[480px]">
       <CardTitle className="center mb-3 flex items-center">
         <Icons.chevronLeft
           className="block h-6 w-6 hover:cursor-pointer"
@@ -70,14 +107,14 @@ export function CreatePoolInitialLiquidity({
       <div className="flex flex-col w-full gap-4">
         <ul className="divide divide-y divide-border rounded-lg border">
           <CreatePoolInitialPriceInput
-            baseToken={tokenWeights[0]}
+            baseToken={baseToken}
             initialPrice={initialPrice}
             onInitialPriceChange={onInitialPriceChange}
           />
         </ul>
         <CreatePoolExchangeRate
-          baseToken={tokenWeights[0]}
-          quoteToken={tokenWeights[1]}
+          baseToken={baseToken}
+          quoteToken={quoteToken}
           initialPrice={initialPrice}
         />
         <div className="flex flex-col gap-4">
@@ -89,7 +126,7 @@ export function CreatePoolInitialLiquidity({
                 getSafeNumber(initialPrice) === 0
               }
               key={0}
-              tokenWeight={tokenWeights[0] as ITokenWeight}
+              tokenWeight={baseToken as ITokenWeight}
               onTokenBalanceChange={handleBaseAssetAmountChange}
             />
             <CreatePoolInitialLiquidityInput
@@ -99,7 +136,7 @@ export function CreatePoolInitialLiquidity({
                 getSafeNumber(initialPrice) === 0
               }
               key={1}
-              tokenWeight={tokenWeights[1] as ITokenWeight}
+              tokenWeight={quoteToken as ITokenWeight}
               onTokenBalanceChange={handleQuoteAssetAmountChange}
             />
           </ul>

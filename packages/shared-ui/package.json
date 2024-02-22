@@ -38,7 +38,7 @@
     "swr": "^2.1.5",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4",
-    "usehooks-ts": "^2.9.1",
+    "usehooks-ts": "^2.14.0",
     "viem": "~1.19.13"
   }
 }

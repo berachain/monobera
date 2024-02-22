@@ -62,12 +62,10 @@ export function TokenInput({
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { isLoading: isBalancesLoading, data: token } =
-    useSelectedAssetWalletBalance(selected ? selected?.address ?? "" : "");
+    useSelectedAssetWalletBalance(
+      selected ? getAddress(selected?.address ?? "") ?? "" : "",
+    );
 
-  console.log({
-    selected,
-    token,
-  });
   let tokenBalance = token?.formattedBalance;
 
   if (balance !== undefined) {

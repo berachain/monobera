@@ -28,6 +28,7 @@ const steps: IStep[] = [
     description: "Set the weights of the tokens in the pool",
   },
 ];
+
 export default function CreatePageContent() {
   const {
     tokenWeights,

@@ -8,7 +8,7 @@ import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { toHex } from "viem";
 import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
 import { formatUnits } from "viem";
-import { getAddress } from "viem";
+import { getAddress, parseUnits } from "viem";
 import { type IUserPosition } from "./usePollUserDeposited";
 import { erc20ABI, usePublicClient } from "wagmi";
 import BigNumber from "bignumber.js";
@@ -45,7 +45,6 @@ export interface IUserAmbientPositon extends AmbientPosition {
 export const usePollUserPosition = (pool: PoolV2 | undefined) => {
   const { account } = useBeraJs();
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
 
   const hexChainId = toHex(chainId);
   const { usePoolSpotPrice } = useCrocPoolSpotPrice(pool);
@@ -87,6 +86,7 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           args: [account],
         });
 
+        console.log({ lpBalanceCall });
         const [tokenHoneyPrices, positionsResult, lpBalance] =
           await Promise.all([
             tokenHoneyPricesResult,
@@ -110,29 +110,15 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           return undefined;
         }
 
-        const sqrtPrice = new BigNumber(Math.sqrt(spotPrice).toString());
+        const sqrtPrice = new BigNumber(Math.sqrt(spotPrice));
 
-        // get pool price non display
         const liq = new BigNumber(lpBalance.toString());
 
         const baseAmount = liq.times(sqrtPrice);
-
-        // const quoteAmount = BigInt(liq / sqrtPrice);
         const quoteAmount = liq.div(sqrtPrice);
 
-        console.log({
-          baseAmount,
-          quoteAmount,
-        });
-        const formattedBaseAmount = formatUnits(
-          BigInt(baseAmount.toString()),
-          18,
-        );
-
-        const formattedQuoteAmount = formatUnits(
-          BigInt(quoteAmount.toString()),
-          18,
-        );
+        const formattedBaseAmount = baseAmount.div(10 ** 18).toString();
+        const formattedQuoteAmount = quoteAmount.div(10 ** 18).toString();
 
         const estimatedHoneyValue =
           Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
@@ -141,8 +127,8 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
             Number(formattedQuoteAmount);
 
         const userPosition: IUserPosition = {
-          baseAmount: BigInt(baseAmount.toString()),
-          quoteAmount: BigInt(quoteAmount.toString()),
+          baseAmount,
+          quoteAmount,
           formattedBaseAmount,
           formattedQuoteAmount,
           estimatedHoneyValue,

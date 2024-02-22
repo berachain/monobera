@@ -8,7 +8,7 @@ import {
   formatNumber,
   useCrocEnv,
   useTokenHoneyPrice,
-  getCrocErc20LpAddress,
+  type Token,
 } from "@bera/berajs";
 import { crocDexAddress } from "@bera/config";
 import {
@@ -33,11 +33,14 @@ import {
   initPool,
   CrocPoolView,
   type PriceRange,
+  encodeWarmPath,
+  transformLimits,
 } from "@bera/beracrocswap";
 import { CrocTokenView } from "@bera/beracrocswap/dist/tokens";
 import { type CrocContext } from "@bera/beracrocswap/dist/context";
 import { encodeAbiParameters, parseAbiParameters } from "viem";
 import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
+import { BigNumber } from "ethers";
 
 type Props = {
   tokenWeights: ITokenWeight[];
@@ -68,9 +71,11 @@ export function CreatePoolPreview({
   });
 
   tokenWeights[0]?.initialLiquidity;
-  const baseToken = tokenWeights[0]?.token;
+  const baseToken = tokenWeights[0]?.token as Token;
   const baseTokenInitialLiquidity = tokenWeights[0]?.initialLiquidity;
-  const quoteToken = tokenWeights[1]?.token;
+  const quoteTokenInitialLiquidity = tokenWeights[1]?.initialLiquidity;
+
+  const quoteToken = tokenWeights[1]?.token as Token;
 
   const crocenv = useCrocEnv();
 
@@ -98,6 +103,15 @@ export function CreatePoolPreview({
         crocContext,
       );
 
+      const realBaseToken: Token =
+        baseToken.address === crocPoolView.baseToken.tokenAddr
+          ? baseToken
+          : quoteToken;
+      const realQuoteToken: Token =
+        quoteToken.address === crocPoolView.quoteToken.tokenAddr
+          ? quoteToken
+          : baseToken;
+
       const priceLimits = {
         min: getSafeNumber(initialPrice) * (1 - (slippage ?? 1) / 100),
         max: getSafeNumber(initialPrice) * (1 + (slippage ?? 1) / 100),
@@ -106,19 +120,39 @@ export function CreatePoolPreview({
 
       const initPoolInfo: BeraSdkResponse = initPool(
         Number(initialPrice),
-        baseToken as any,
-        quoteToken as any,
+        realBaseToken,
+        realQuoteToken,
         36000,
       );
 
-      const mintInfo: BeraSdkResponse = await crocPoolView.mintAmbientBase(
-        baseTokenInitialLiquidity ?? 0,
+      const liquidity =
+        realBaseToken.address === tokenWeights[0]?.token?.address
+          ? tokenWeights[0]?.initialLiquidity
+          : tokenWeights[1]?.initialLiquidity;
+
+      const bnLiquidity = parseUnits(liquidity ?? "0", realBaseToken.decimals);
+
+      const transformedLimits = transformLimits(
         limits,
+        realBaseToken.decimals,
+        realQuoteToken.decimals,
+      );
+      const mintCalldata = await encodeWarmPath(
+        realBaseToken.address,
+        realQuoteToken.address,
+        31,
+        0,
+        0,
+        bnLiquidity,
+        transformedLimits[0],
+        transformedLimits[1],
+        0,
+        36000,
       );
 
-      const totalValue =
-        BigInt(initPoolInfo.value ?? 0) + BigInt(mintInfo.value ?? 0);
-      const multiPathArgs = [2, 3, initPoolInfo.calldata, 2, mintInfo.calldata];
+      // const totalValue =
+      //   BigInt(initPoolInfo.value ?? 0) + parseUnits(rawBeraEntry?.initialLiquidity ?? "0", 18)
+      const multiPathArgs = [2, 3, initPoolInfo.calldata, 2, mintCalldata];
 
       const multiCmd = encodeAbiParameters(
         parseAbiParameters("uint8, uint8, bytes, uint8, bytes"),
@@ -129,7 +163,7 @@ export function CreatePoolPreview({
         abi: CROCSWAP_DEX,
         functionName: "userCmd",
         params: [6, multiCmd],
-        value: rawBeraEntry === undefined ? undefined : totalValue,
+        // value: rawBeraEntry === undefined ? undefined : totalValue,
       });
     } catch (error) {
       console.error("Error creating pool:", error);
@@ -140,6 +174,7 @@ export function CreatePoolPreview({
     quoteToken,
     initialPrice,
     baseTokenInitialLiquidity,
+    quoteTokenInitialLiquidity,
     slippage,
     write,
     rawBeraEntry,
@@ -161,12 +196,6 @@ export function CreatePoolPreview({
     );
   }, [tokenWeights, baseTokenHoneyPrice, quoteTokenHoneyPrice]);
 
-  console.log({
-    tokenWeights,
-    baseTokenHoneyPrice,
-    quoteTokenHoneyPrice,
-    total,
-  });
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
       {ModalPortal}

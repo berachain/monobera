@@ -126,8 +126,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.1
       usehooks-ts:
-        specifier: ^2.9.1
-        version: 2.9.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       viem:
         specifier: ~1.19.13
         version: 1.19.15(typescript@5.3.3)(zod@3.22.4)
@@ -265,8 +265,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.1
       usehooks-ts:
-        specifier: ^2.9.1
-        version: 2.9.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       viem:
         specifier: ~1.19.13
         version: 1.19.15(typescript@5.3.3)(zod@3.22.4)
@@ -394,9 +394,12 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.5
         version: 1.0.7(tailwindcss@3.4.1)
+      use-sound:
+        specifier: ^4.0.1
+        version: 4.0.1(react@18.2.0)
       usehooks-ts:
-        specifier: ^2.9.1
-        version: 2.9.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       wagmi:
         specifier: ^1.4.10
         version: 1.4.13(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(viem@1.19.15)(zod@3.22.4)
@@ -525,8 +528,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.1
       usehooks-ts:
-        specifier: ^2.9.1
-        version: 2.9.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       viem:
         specifier: ~1.19.13
         version: 1.19.15(typescript@5.3.3)(zod@3.22.4)
@@ -560,7 +563,7 @@ importers:
         version: 7.7.19
       autoprefixer:
         specifier: ^10.4.14
-        version: 10.4.16(postcss@apps+ecosystem+@bera+tailwind-config+postcss)
+        version: 10.4.16(postcss@8.4.35)
       dotenv-cli:
         specifier: ^7.2.1
         version: 7.3.0
@@ -569,7 +572,7 @@ importers:
         version: 8.56.0
       postcss:
         specifier: link:@bera/tailwind-config/postcss
-        version: link:@bera/tailwind-config/postcss
+        version: 8.4.35
       tailwindcss:
         specifier: ^3.3.2
         version: 3.4.1
@@ -649,8 +652,8 @@ importers:
         specifier: ^1.0.5
         version: 1.0.7(tailwindcss@3.4.1)
       usehooks-ts:
-        specifier: ^2.9.1
-        version: 2.9.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       wagmi:
         specifier: ^1.4.10
         version: 1.4.13(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(viem@1.19.15)(zod@3.22.4)
@@ -779,8 +782,8 @@ importers:
         specifier: ^1.0.5
         version: 1.0.7(tailwindcss@3.4.1)
       usehooks-ts:
-        specifier: ^2.9.1
-        version: 2.9.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       viem:
         specifier: ~1.19.13
         version: 1.19.15(typescript@5.3.3)(zod@3.22.4)
@@ -897,8 +900,8 @@ importers:
         specifier: ^1.0.5
         version: 1.0.7(tailwindcss@3.4.1)
       usehooks-ts:
-        specifier: ^2.9.1
-        version: 2.9.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       wagmi:
         specifier: ^1.4.10
         version: 1.4.13(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(viem@1.19.15)(zod@3.22.4)
@@ -1012,8 +1015,8 @@ importers:
         specifier: ^1.0.5
         version: 1.0.7(tailwindcss@3.4.1)
       usehooks-ts:
-        specifier: ^2.9.1
-        version: 2.9.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       wagmi:
         specifier: ^1.4.10
         version: 1.4.13(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(viem@1.19.15)(zod@3.22.4)
@@ -1127,8 +1130,8 @@ importers:
         specifier: ^1.0.5
         version: 1.0.7(tailwindcss@3.4.1)
       usehooks-ts:
-        specifier: ^2.9.1
-        version: 2.9.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       wagmi:
         specifier: ^1.4.10
         version: 1.4.13(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)(viem@1.19.15)(zod@3.22.4)
@@ -1554,8 +1557,8 @@ importers:
         specifier: ^5.0.4
         version: 5.3.3
       usehooks-ts:
-        specifier: ^2.9.1
-        version: 2.9.4(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.14.0
+        version: 2.14.0(react@18.2.0)
       viem:
         specifier: ~1.19.13
         version: 1.19.15(typescript@5.3.3)(zod@3.22.4)
@@ -9756,7 +9759,7 @@ packages:
       postcss-value-parser: 4.2.0
     dev: true
 
-  /autoprefixer@10.4.16(postcss@apps+ecosystem+@bera+tailwind-config+postcss):
+  /autoprefixer@10.4.16(postcss@8.4.35):
     resolution: {integrity: sha512-7vd3UC6xKp0HLfua5IjZlcXvGAGy7cBAXTg2lyQ/8WpNhd6SiZ8Be+xm3FyBSYJx5GKcpRCzBh7RH4/0dnY+uQ==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -9768,7 +9771,7 @@ packages:
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.0
-      postcss: link:apps/ecosystem/@bera/tailwind-config/postcss
+      postcss: 8.4.35
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -12857,6 +12860,10 @@ packages:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
     dev: true
 
+  /howler@2.2.4:
+    resolution: {integrity: sha512-iARIBPgcQrwtEr+tALF+rapJ8qSc+Set2GJQl7xT1MQzWaVkFebdJhR3alVlSiUf5U7nAANKuj3aWpwerocD5w==}
+    dev: false
+
   /html-encoding-sniffer@2.0.1:
     resolution: {integrity: sha512-D5JbOMBIR/TVZkubHT+OyT2705QvogUW4IBn6nHd756OwieSF9aDYFj4dv6HHEVGYbHaLETa3WggZYWWMyy3ZQ==}
     engines: {node: '>=10'}
@@ -14436,7 +14443,6 @@ packages:
 
   /lodash.debounce@4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
-    dev: true
 
   /lodash.defaults@4.2.0:
     resolution: {integrity: sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==}
@@ -15602,6 +15608,14 @@ packages:
 
   /postcss@8.4.33:
     resolution: {integrity: sha512-Kkpbhhdjw2qQs2O2DGX+8m5OVqEcbB9HRBvuYM9pgrjEFUg30A9LmXNlTAUj4S9kgtGyrMbTzVjH7E+s5Re2yg==}
+    engines: {node: ^10 || ^12 || >=14}
+    dependencies:
+      nanoid: 3.3.7
+      picocolors: 1.0.0
+      source-map-js: 1.0.2
+
+  /postcss@8.4.35:
+    resolution: {integrity: sha512-u5U8qYpBCpN13BsiEB0CbR1Hhh4Gc0zLFuedrHJKMctHCHAGrMdG0PRM/KErzAL3CU6/eckEtmHNB3x6e3c0vA==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.7
@@ -18209,6 +18223,15 @@ packages:
       react: 18.2.0
       tslib: 2.6.2
 
+  /use-sound@4.0.1(react@18.2.0):
+    resolution: {integrity: sha512-hykJ86kNcu6y/FzlSHcQxhjSGMslZx2WlfLpZNoPbvueakv4OF3xPxEtGV2YmculrIaH0tPp9LtG4jgy17xMWg==}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      howler: 2.2.4
+      react: 18.2.0
+    dev: false
+
   /use-sync-external-store@1.2.0(react@18.2.0):
     resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
     peerDependencies:
@@ -18216,15 +18239,14 @@ packages:
     dependencies:
       react: 18.2.0
 
-  /usehooks-ts@2.9.4(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-VOSEbA+BGGORLttsICowNb5CG0D2/IEoVvMEl9OuuOoQi99W6XuNipo3SPFhWo3Bhdwi0Swj1D+IMQDQB9KrwQ==}
+  /usehooks-ts@2.14.0(react@18.2.0):
+    resolution: {integrity: sha512-jnhrjTRJoJS7cFxz63tRYc5mzTKf/h+Ii8P0PDHymT9qDe4ZA2/gzDRmDR4WGausg5X8wMIdghwi3BBCN9JKow==}
     engines: {node: '>=16.15.0'}
     peerDependencies:
-      react: ^16.8.0  || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
+      react: ^16.8.0  || ^17 || ^18
     dependencies:
+      lodash.debounce: 4.0.8
       react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
 
   /utf-8-validate@5.0.10:
     resolution: {integrity: sha512-Z6czzLq4u8fPOyx7TU6X3dvUZVvoJmxSQ+IcrlmagKhilxlhZgxPK6C5Jqbkw1IDUmFTM+cz9QDnnLTwDz/2gQ==}
@@ -18397,7 +18419,7 @@ packages:
     dependencies:
       esbuild: 0.18.20
       less: 4.2.0
-      postcss: 8.4.33
+      postcss: 8.4.35
       rollup: 3.29.4
     optionalDependencies:
       fsevents: 2.3.3

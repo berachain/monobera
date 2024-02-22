@@ -165,6 +165,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   // const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   // const { data: bgtRewards } = useBgtReward(pool?.pool);
 
+  console.log({ pool });
   const { useRecentSwaps, isLoading: isRecentSwapsLoading } =
     usePoolRecentSwaps(pool);
 
@@ -281,6 +282,11 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   const userAmbientPosition = usePosition();
   const userPositionBreakdown = userAmbientPosition?.userPosition;
 
+  console.log({
+    userPositionBreakdown,
+    userAmbientPosition,
+    isPositionBreakdownLoading,
+  });
   return (
     <div className="flex flex-col gap-8">
       <PoolHeader pool={pool} />

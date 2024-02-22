@@ -7,7 +7,7 @@ import {
   CROCSWAP_DEX,
   formatNumber,
   useTokenHoneyPrice,
-  getCrocErc20LpAddress,
+  usePollAssetWalletBalance,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
@@ -45,8 +45,11 @@ import {
 } from "../pools/fetchPools";
 import { useCallback, useMemo } from "react";
 import { getSafeNumber } from "~/utils/getSafeNumber";
-import { useCrocPool } from "~/hooks/useCrocPool";
-import { type PriceRange, type BeraSdkResponse } from "@bera/beracrocswap";
+import {
+  type PriceRange,
+  encodeWarmPath,
+  transformLimits,
+} from "@bera/beracrocswap";
 import { SettingsPopover } from "~/components/settings-popover";
 import { formatUsd } from "../../../../../packages/berajs/src/utils/formatUsd";
 import { useCrocPoolNativeBera } from "~/hooks/useCrocPoolNativeBera";
@@ -64,6 +67,8 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     tokenInputs,
     needsApproval,
     areAllInputsEmpty,
+    isBaseInput,
+    setIsBaseInput,
     refreshAllowances,
     reset,
     updateTokenAmount,
@@ -75,10 +80,12 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     setIsNativeBera,
   } = useAddLiquidity(pool);
 
+  const { refetch } = usePollAssetWalletBalance();
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
       reset();
+      refetch();
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
@@ -137,6 +144,46 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const slippage = useSlippage();
   const baseTokenInitialLiquidity = tokenInputs[0]?.amount;
+  const quoteTokenInitialLiquidity = tokenInputs[1]?.amount;
+
+  const bnBaseAmount = parseUnits(
+    baseTokenInitialLiquidity as string,
+    baseToken.decimals,
+  );
+
+  const bnQuoteAmount = parseUnits(
+    quoteTokenInitialLiquidity as string,
+    baseToken.decimals,
+  );
+
+  const maxBaseApprovalAmount = useMemo(() => {
+    if (!baseTokenInitialLiquidity || !slippage) {
+      return 0n;
+    }
+    const parsedLiq = parseUnits(
+      baseTokenInitialLiquidity as string,
+      baseToken.decimals,
+    );
+    const sI = BigInt(parsedLiq);
+    const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** 18);
+    const minAmountOut = (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
+    return minAmountOut;
+  }, [baseTokenInitialLiquidity, slippage]);
+
+  const maxQuoteApprovalAmount = useMemo(() => {
+    if (!quoteTokenInitialLiquidity || !slippage) {
+      return 0n;
+    }
+    const parsedLiq = parseUnits(
+      quoteTokenInitialLiquidity as string,
+      baseToken.decimals,
+    );
+    const sI = BigInt(parsedLiq);
+    const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** 18);
+    const minAmountOut = (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
+    return minAmountOut;
+  }, [quoteTokenInitialLiquidity, slippage]);
+
   const handleAddLiquidity = useCallback(async () => {
     try {
       if (!crocPool) {
@@ -148,23 +195,36 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       };
       const limits: PriceRange = [priceLimits.min, priceLimits.max];
 
-      console.log({
-        crocPool,
-      });
-      const mintInfo: BeraSdkResponse = await crocPool.mintAmbientBase(
-        baseTokenInitialLiquidity ?? 0,
+      const transformedLimits = transformLimits(
         limits,
+        baseToken.decimals,
+        quoteToken.decimals,
       );
 
-      console.log({
-        mintInfo,
-      });
-      const totalValue = BigInt(mintInfo.value ?? 0);
-      const payload = [2, mintInfo.calldata];
+      let totalValue = 0n;
 
-      console.log({
-        totalValue,
-      });
+      if (baseTokenAddress === nativeTokenAddress) {
+        totalValue = bnBaseAmount;
+      }
+
+      if (quoteTokenAddress === nativeTokenAddress) {
+        totalValue = bnQuoteAmount;
+      }
+
+      const mintCalldata = await encodeWarmPath(
+        baseTokenAddress as string,
+        quoteTokenAddress as string,
+        isBaseInput ? 31 : 32,
+        0,
+        0,
+        isBaseInput ? bnBaseAmount : bnQuoteAmount,
+        transformedLimits[0],
+        transformedLimits[1],
+        0,
+        36000,
+      );
+      const payload = [2, mintCalldata];
+
       write({
         address: crocDexAddress,
         abi: CROCSWAP_DEX,
@@ -178,10 +238,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   }, [
     crocPool,
     baseToken,
+    isBaseInput,
     quoteToken,
     poolPrice,
-    baseTokenInitialLiquidity,
-    slippage,
+    bnBaseAmount,
+    bnQuoteAmount,
     write,
   ]);
 
@@ -199,6 +260,15 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     tokenInputs[0]?.amount,
     tokenInputs[1]?.amount,
   ]);
+
+  const needsApprovalNoBera = needsApproval.filter(
+    (token) => token.address.toLowerCase() !== beraTokenAddress.toLowerCase(),
+  );
+
+  console.log({
+    needsApproval,
+    needsApprovalNoBera,
+  });
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
@@ -258,6 +328,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               }}
               amount={tokenInputs[0]?.amount ?? ""}
               setAmount={(amount: string) => {
+                setIsBaseInput(true);
                 handleBaseAssetAmountChange(amount);
               }}
               price={baseTokenHoneyPrice}
@@ -296,6 +367,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               }}
               amount={tokenInputs[1]?.amount ?? ""}
               setAmount={(amount: string) => {
+                setIsBaseInput(false);
                 handleQuoteAssetAmountChange(amount);
               }}
               weight={quoteToken.normalizedWeight}
@@ -380,16 +452,21 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               />
               <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
             </InfoBoxList>
-            {needsApproval.length > 0 &&
-            !(isBeratoken(needsApproval[0]) && isNativeBera) ? (
+            {(!isNativeBera && needsApproval.length > 0) ||
+            (isNativeBera && needsApprovalNoBera.length > 0) ? (
               <ApproveButton
-                amount={parseUnits(
-                  tokenInputs.find(
-                    (t) => t.address === needsApproval[0]?.address,
-                  )?.amount || "0",
-                  needsApproval[0]?.decimals ?? 18,
-                )}
-                token={needsApproval[0]}
+                amount={
+                  isNativeBera
+                    ? needsApprovalNoBera[0]?.address.toLowerCase() ===
+                      baseToken.address.toLowerCase()
+                      ? maxBaseApprovalAmount
+                      : maxQuoteApprovalAmount
+                    : needsApproval[0]?.address.toLowerCase() ===
+                        baseToken.address.toLowerCase()
+                      ? maxBaseApprovalAmount
+                      : maxQuoteApprovalAmount
+                }
+                token={isNativeBera ? needsApprovalNoBera[0] : needsApproval[0]}
                 spender={crocDexAddress}
                 onApproval={() => refreshAllowances()}
               />

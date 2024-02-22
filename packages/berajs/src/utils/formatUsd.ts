@@ -1,29 +1,34 @@
 export function formatUsd(input: string | number): string {
-  const isNumber = (value: any): value is number => typeof value === "number";
-  const isString = (value: any): value is string => typeof value === "string";
-
-  if (!isNumber(input) && !isString(input)) {
-    throw new Error("Invalid input: input must be a string or a number.");
-  }
-
-  let num: number;
-
-  if (isString(input)) {
-    num = parseFloat(input);
-    if (Number.isNaN(num)) {
-      num = 0;
-      // throw new Error(
-      //   "Invalid input: string input must be convertible to a number.",
-      // );
-    }
-  } else {
-    num = input;
-  }
-
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
   });
+  try {
+    const isNumber = (value: any): value is number => typeof value === "number";
+    const isString = (value: any): value is string => typeof value === "string";
 
-  return formatter.format(num);
+    if (!isNumber(input) && !isString(input)) {
+      return formatter.format(0);
+    }
+
+    let num: number;
+
+    if (isString(input)) {
+      num = parseFloat(input);
+      // biome-ignore lint/suspicious/noGlobalIsNan: <explanation>
+      if (isNaN(num)) {
+        num = 0;
+      }
+    } else {
+      num = input;
+      // biome-ignore lint/suspicious/noGlobalIsNan: <explanation>
+      if (isNaN(num)) {
+        num = 0;
+      }
+    }
+    return formatter.format(num);
+  } catch (e) {
+    console.log(e);
+    return formatter.format(0);
+  }
 }

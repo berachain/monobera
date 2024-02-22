@@ -31,6 +31,7 @@ export const usePoolTable = (sorting: any) => {
     ],
     async (key: any[]) => {
       const page = key[1];
+      console.log("am searching");
       try {
         setOldData(allData === undefined ? undefined : allData ?? []);
         const sortOption =

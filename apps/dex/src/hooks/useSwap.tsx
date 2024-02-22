@@ -211,7 +211,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     ) {
       try {
         // parse minutes to blocks
-        console.log({ swapInfo });
         const sI = BigInt(swapInfo.returnAmount);
         const s = BigInt(slippage * 10 ** 18);
         const minAmountOut =
@@ -261,7 +260,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
           minAmountOut,
         ];
 
-        console.log({ payload });
         setPayload(payload);
       } catch (e) {
         console.log(e);

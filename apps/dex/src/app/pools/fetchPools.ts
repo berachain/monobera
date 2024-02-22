@@ -1,7 +1,7 @@
 import { getCrocErc20LpAddress, type Token } from "@bera/berajs";
 import { type Address } from "wagmi";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
-import { formatUnits } from "ethers/lib/utils";
+import { formatUnits, getAddress } from "viem";
 export interface PoolV2 {
   id: string; // concat base-quote-poolidx
   base: Address;
@@ -143,6 +143,32 @@ export const fetchPools = async (
       `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
         16,
       )}&sortBy=${sort}.${order}&page=${page}&pageLimit=${limit}`,
+    );
+
+    const response = await result.json();
+    const formattedPools: PoolV2[] = response.data.pools.map((result: any) => {
+      return formatPoolData(result);
+    });
+
+    return formattedPools;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+};
+
+export const fetchPoolsWithKeyword = async (
+  page: number,
+  limit: number,
+  sort: string,
+  order: string,
+  keyword: string,
+): Promise<PoolV2[]> => {
+  try {
+    const result = await fetch(
+      `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
+        16,
+      )}&sortBy=${sort}.${order}&page=${page}&pageLimit=${limit}&keyword=${keyword}`,
     );
 
     const response = await result.json();

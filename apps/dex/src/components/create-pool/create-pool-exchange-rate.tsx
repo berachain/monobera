@@ -14,6 +14,8 @@ type Props = {
   initialPrice: string;
 };
 
+export const MIN_PRICE = 0.000001;
+
 export default function CreatePoolExchangeRate({
   baseToken,
   quoteToken,
@@ -29,7 +31,8 @@ export default function CreatePoolExchangeRate({
           <TokenIcon address={baseToken?.token?.address} />
           {initialPrice === "" ||
           initialPrice === "0" ||
-          getSafeNumber(initialPrice) === 0
+          getSafeNumber(initialPrice) === 0 ||
+          getSafeNumber(initialPrice) < MIN_PRICE
             ? 0
             : isPricingBase
               ? 1
@@ -45,7 +48,10 @@ export default function CreatePoolExchangeRate({
         </Button>
         <div className="w-fit flex flex-row gap-1 self-center font-semibold">
           <TokenIcon address={quoteToken?.token?.address} />
-          {initialPrice === "" || initialPrice === "0"
+          {initialPrice === "" ||
+          initialPrice === "0" ||
+          getSafeNumber(initialPrice) === 0 ||
+          getSafeNumber(initialPrice) < MIN_PRICE
             ? 0
             : isPricingBase
               ? formatNumber(baseCost)

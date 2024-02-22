@@ -116,20 +116,24 @@ export default function WithdrawLiquidityContent({
     if (!userPositionBreakdown || amount === 0) {
       return 0;
     }
-    return formatUnits(
-      (userPositionBreakdown.baseAmount * BigInt(amount)) / 100n,
-      baseToken.decimals,
-    );
+    // return formatUnits(
+    //   (userPositionBreakdown.baseAmount * BigInt(amount)) / 100n,
+    //   baseToken.decimals,
+    // );
+    const bnAmountWithdrawn = userPositionBreakdown.baseAmount
+      .times(amount)
+      .div(100);
+    return bnAmountWithdrawn.div(10 ** baseToken.decimals).toString();
   }, [userPositionBreakdown?.baseAmount, amount]);
 
   const quoteAmountWithdrawn = useMemo(() => {
     if (!userPositionBreakdown || amount === 0) {
       return 0;
     }
-    return formatUnits(
-      (userPositionBreakdown.quoteAmount * BigInt(amount)) / 100n,
-      quoteToken.decimals,
-    );
+    const bnAmountWithdrawn = userPositionBreakdown.quoteAmount
+      .times(amount)
+      .div(100);
+    return bnAmountWithdrawn.div(10 ** quoteToken.decimals).toString();
   }, [userPositionBreakdown?.quoteAmount, amount]);
 
   const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
@@ -319,8 +323,8 @@ export default function WithdrawLiquidityContent({
               amount === 0 ||
               isPositionBreakdownLoading ||
               userPositionBreakdown === undefined ||
-              userPositionBreakdown.baseAmount === 0n ||
-              userPositionBreakdown.quoteAmount === 0n
+              userPositionBreakdown.baseAmount.toString() === "0" ||
+              userPositionBreakdown.quoteAmount.toString() === "0"
             }
           >
             <TokenList className="divide-muted bg-muted">

@@ -12,7 +12,8 @@ import {
 } from "@bera/graphql";
 import { formatUnits } from "viem";
 import { decodeCrocPrice } from "@bera/beracrocswap";
-import { BigNumber } from "ethers";
+import { BigNumber } from "bignumber.js";
+import { BigNumber as EthersBigNumber } from "ethers";
 import { getAddress } from "viem";
 import { getCrocErc20LpAddress } from "@bera/berajs";
 import { getSafeNumber } from "~/utils/getSafeNumber";
@@ -43,8 +44,8 @@ interface AmbientPosition {
 }
 
 export interface IUserPosition {
-  baseAmount: bigint;
-  quoteAmount: bigint;
+  baseAmount: BigNumber;
+  quoteAmount: BigNumber;
   formattedBaseAmount: string;
   formattedQuoteAmount: string;
   estimatedHoneyValue: number;
@@ -177,25 +178,16 @@ export const usePollUserDeposited = () => {
           }
           const formattedPool = formatSubgraphPoolData(pool);
           const decodedSpotPrice = decodeCrocPrice(
-            BigNumber.from(poolPrice.toString()),
+            EthersBigNumber.from(poolPrice.toString()),
           );
           const sqrtPrice = Math.sqrt(decodedSpotPrice);
-          const liq = getSafeNumber((lpBalances[i] as any).result);
-          const baseAmount = BigInt(liq * sqrtPrice);
-          const quoteAmount = BigInt(liq / sqrtPrice);
+          const liq = new BigNumber((lpBalances[i] as any).toString());
 
-          const baseInfo = pool?.baseInfo;
-          const quoteInfo = pool?.quoteInfo;
+          const baseAmount = liq.times(sqrtPrice);
+          const quoteAmount = liq.div(sqrtPrice);
 
-          const formattedBaseAmount = formatUnits(
-            baseAmount,
-            baseInfo?.decimals ?? 18,
-          );
-
-          const formattedQuoteAmount = formatUnits(
-            quoteAmount,
-            quoteInfo?.decimals ?? 18,
-          );
+          const formattedBaseAmount = baseAmount.div(10 ** 18).toString();
+          const formattedQuoteAmount = quoteAmount.div(10 ** 18).toString();
 
           const estimatedHoneyValue =
             Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
