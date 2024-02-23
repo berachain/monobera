@@ -216,17 +216,17 @@ export function PlaceOrder({
         </div>
       </div>
       <div className="flex w-full justify-between">
-        <div>POSITION SIZE</div>
-        <div className="align-items flex flex-row items-center gap-1 text-foreground">
-          {formatUsd(posSize)}{" "}
-          <Icons.honey className=" inline h-3 w-3 text-muted-foreground" />
-        </div>
-      </div>
-      <div className="flex w-full justify-between">
         <div>OPENING FEES</div>
         <div className="text-foreground">
           {openingFee}%{" "}
           {/* <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" /> */}
+        </div>
+      </div>
+      <div className="flex w-full justify-between">
+        <div>POSITION SIZE</div>
+        <div className="align-items flex flex-row items-center gap-1 text-foreground">
+          {formatUsd(posSize - posSize * openingFee)}{" "}
+          <Icons.honey className=" inline h-3 w-3 text-muted-foreground" />
         </div>
       </div>
       <ActionButton className="mt-4">
