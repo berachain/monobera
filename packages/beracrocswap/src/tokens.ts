@@ -178,12 +178,15 @@ export class CrocEthView extends CrocTokenView {
 
 export function sortBaseQuoteViews (base: CrocTokenView, quote: CrocTokenView): 
   [CrocTokenView, CrocTokenView] {
-    if(base.tokenAddr.toLowerCase() === AddressZero.toLowerCase() && beraTokenAddress.toLowerCase() > quote.tokenAddr.toLowerCase()) {
-      return [quote, base]
-    }
-    if(quote.tokenAddr.toLowerCase() === AddressZero.toLowerCase() && beraTokenAddress.toLowerCase() < base.tokenAddr.toLowerCase()) { 
-      return [quote, base]
-    }
+   if(base.tokenAddr === AddressZero) {
+    return beraTokenAddress.toLowerCase() > quote.tokenAddr.toLowerCase() ?
+    [quote, base] : [base, quote]
+   }
+   if(quote.tokenAddr === AddressZero) {
+    return beraTokenAddress.toLowerCase() < base.tokenAddr.toLowerCase() ?
+    [quote, base] : [base, quote]
+   }
+  
   return base.tokenAddr.toLowerCase() < quote.tokenAddr.toLowerCase() ?
     [base, quote] : [quote, base]
 }

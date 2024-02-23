@@ -8,12 +8,35 @@ import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import { crocDexAddress } from "@bera/config";
 import { parseUnits } from "viem";
 
-const useCreatePool = (tokenWeights: ITokenWeight[]) => {
+const useCreatePool = ({
+  baseToken,
+  quoteToken,
+  baseAmount,
+  quoteAmount,
+}: {
+  baseToken: Token;
+  quoteToken: Token;
+  baseAmount: string;
+  quoteAmount: string;
+}) => {
   const [needsApproval, setNeedsApproval] = useState<Token[]>([]);
 
-  const tokens: Token[] = tokenWeights
-    .filter((tokenWeight: ITokenWeight) => tokenWeight.token !== undefined)
-    .map((tokenWeight) => tokenWeight.token) as Token[];
+  const tokenWeights: ITokenWeight[] = [
+    {
+      token: baseToken,
+      initialLiquidity: baseAmount,
+      weight: 50,
+      locked: false,
+    },
+    {
+      token: quoteToken,
+      initialLiquidity: quoteAmount,
+      weight: 50,
+      locked: false,
+    },
+  ];
+
+  const tokens = [baseToken, quoteToken];
 
   const { useCurrentAllowancesForContract, refresh: refreshAllowances } =
     usePollAllowances({

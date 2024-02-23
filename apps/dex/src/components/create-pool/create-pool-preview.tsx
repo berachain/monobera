@@ -27,35 +27,43 @@ import { parseUnits } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import useCreatePool from "~/hooks/useCreatePool";
-import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import {
   type BeraSdkResponse,
   initPool,
-  CrocPoolView,
   type PriceRange,
   encodeWarmPath,
   transformLimits,
 } from "@bera/beracrocswap";
-import { CrocTokenView } from "@bera/beracrocswap/dist/tokens";
-import { type CrocContext } from "@bera/beracrocswap/dist/context";
 import { encodeAbiParameters, parseAbiParameters } from "viem";
 import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
-import { BigNumber } from "ethers";
 
 type Props = {
-  tokenWeights: ITokenWeight[];
+  baseToken: Token | undefined;
+  quoteToken: Token | undefined;
+  baseAmount: string;
+  quoteAmount: string;
   error: Error | undefined;
   initialPrice: string;
+  isBaseTokenInput: boolean;
   onBack: () => void;
 };
 
 export function CreatePoolPreview({
-  tokenWeights,
+  baseToken,
+  quoteToken,
+  baseAmount,
+  quoteAmount,
   error,
   initialPrice,
+  isBaseTokenInput,
   onBack,
 }: Props) {
-  const { needsApproval, refreshAllowances } = useCreatePool(tokenWeights);
+  const { needsApproval, refreshAllowances } = useCreatePool({
+    baseToken: baseToken as Token,
+    quoteToken: quoteToken as Token,
+    baseAmount,
+    quoteAmount,
+  });
   const router = useRouter();
 
   const { write, ModalPortal } = useTxn({
@@ -66,51 +74,18 @@ export function CreatePoolPreview({
     actionType: TransactionActionType.CREATE_POOL,
   });
 
-  const rawBeraEntry = tokenWeights.find((tokenWeight) => {
-    return tokenWeight.token?.address === process.env.NEXT_PUBLIC_BERA_ADDRESS;
-  });
-
-  tokenWeights[0]?.initialLiquidity;
-  const baseToken = tokenWeights[0]?.token as Token;
-  const baseTokenInitialLiquidity = tokenWeights[0]?.initialLiquidity;
-  const quoteTokenInitialLiquidity = tokenWeights[1]?.initialLiquidity;
-
-  const quoteToken = tokenWeights[1]?.token as Token;
-
   const crocenv = useCrocEnv();
 
   const slippage = useSlippage();
 
   const handleCreatePool = useCallback(async () => {
     try {
-      const crocContext: Promise<CrocContext> = crocenv.crocEnv
-        ?.context as Promise<CrocContext>;
-
-      const baseAssetCrocTokenView: CrocTokenView = new CrocTokenView(
-        crocContext,
-        baseToken?.address as string,
-        baseToken?.decimals as number,
-      );
-      const quoteAssetCrocTokenView: CrocTokenView = new CrocTokenView(
-        crocContext,
-        quoteToken?.address as string,
-        quoteToken?.decimals as number,
-      );
-
-      const crocPoolView: CrocPoolView = new CrocPoolView(
-        quoteAssetCrocTokenView,
-        baseAssetCrocTokenView,
-        crocContext,
-      );
-
-      const realBaseToken: Token =
-        baseToken.address === crocPoolView.baseToken.tokenAddr
-          ? baseToken
-          : quoteToken;
-      const realQuoteToken: Token =
-        quoteToken.address === crocPoolView.quoteToken.tokenAddr
-          ? quoteToken
-          : baseToken;
+      let inputLiq;
+      if (isBaseTokenInput) {
+        inputLiq = baseAmount;
+      } else {
+        inputLiq = quoteAmount;
+      }
 
       const priceLimits = {
         min: getSafeNumber(initialPrice) * (1 - (slippage ?? 1) / 100),
@@ -120,38 +95,50 @@ export function CreatePoolPreview({
 
       const initPoolInfo: BeraSdkResponse = initPool(
         Number(initialPrice),
-        realBaseToken,
-        realQuoteToken,
+        baseToken as Token,
+        quoteToken as Token,
         36000,
       );
 
-      const liquidity =
-        realBaseToken.address === tokenWeights[0]?.token?.address
-          ? tokenWeights[0]?.initialLiquidity
-          : tokenWeights[1]?.initialLiquidity;
-
-      const bnLiquidity = parseUnits(liquidity ?? "0", realBaseToken.decimals);
+      const bnLiquidity = parseUnits(
+        inputLiq ?? "0",
+        isBaseTokenInput
+          ? (baseToken?.decimals as number)
+          : (quoteToken?.decimals as number),
+      );
 
       const transformedLimits = transformLimits(
         limits,
-        realBaseToken.decimals,
-        realQuoteToken.decimals,
+        baseToken?.decimals as number,
+        quoteToken?.decimals as number,
       );
+
+      console.log(
+        baseToken?.address as string,
+        quoteToken?.address as string,
+        isBaseTokenInput ? 31 : 32,
+        0,
+        0,
+        bnLiquidity - 10005n,
+        transformedLimits[0].toString(),
+        transformedLimits[1].toString(),
+        0,
+        36000,
+      );
+
       const mintCalldata = await encodeWarmPath(
-        realBaseToken.address,
-        realQuoteToken.address,
-        31,
+        baseToken?.address as string,
+        quoteToken?.address as string,
+        isBaseTokenInput ? 31 : 32,
         0,
         0,
-        bnLiquidity,
+        bnLiquidity - 1000000n,
         transformedLimits[0],
         transformedLimits[1],
         0,
         36000,
       );
 
-      // const totalValue =
-      //   BigInt(initPoolInfo.value ?? 0) + parseUnits(rawBeraEntry?.initialLiquidity ?? "0", 18)
       const multiPathArgs = [2, 3, initPoolInfo.calldata, 2, mintCalldata];
 
       const multiCmd = encodeAbiParameters(
@@ -163,7 +150,6 @@ export function CreatePoolPreview({
         abi: CROCSWAP_DEX,
         functionName: "userCmd",
         params: [6, multiCmd],
-        // value: rawBeraEntry === undefined ? undefined : totalValue,
       });
     } catch (error) {
       console.error("Error creating pool:", error);
@@ -173,28 +159,22 @@ export function CreatePoolPreview({
     baseToken,
     quoteToken,
     initialPrice,
-    baseTokenInitialLiquidity,
-    quoteTokenInitialLiquidity,
+    isBaseTokenInput,
     slippage,
     write,
-    rawBeraEntry,
   ]);
 
-  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(
-    tokenWeights[0]?.token?.address,
-  );
+  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
   const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
-    tokenWeights[1]?.token?.address,
+    quoteToken?.address,
   );
 
   const total = useMemo(() => {
     return (
-      getSafeNumber(tokenWeights[0]?.initialLiquidity) *
-        Number(baseTokenHoneyPrice ?? 0) +
-      getSafeNumber(tokenWeights[1]?.initialLiquidity) *
-        Number(quoteTokenHoneyPrice ?? 0)
+      getSafeNumber(baseAmount) * Number(baseTokenHoneyPrice ?? 0) +
+      getSafeNumber(quoteAmount) * Number(quoteTokenHoneyPrice ?? 0)
     );
-  }, [tokenWeights, baseTokenHoneyPrice, quoteTokenHoneyPrice]);
+  }, [baseAmount, quoteAmount, baseTokenHoneyPrice, quoteTokenHoneyPrice]);
 
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
@@ -215,23 +195,22 @@ export function CreatePoolPreview({
         </p>
         <TokenList className="bg-muted ">
           <PreviewToken
-            token={tokenWeights[0]?.token}
+            token={baseToken}
             price={baseTokenHoneyPrice}
-            value={getSafeNumber(tokenWeights[0]?.initialLiquidity)}
+            value={getSafeNumber(baseAmount)}
           />
           <PreviewToken
-            token={tokenWeights[1]?.token}
+            token={quoteToken}
             price={quoteTokenHoneyPrice}
-            value={getSafeNumber(tokenWeights[1]?.initialLiquidity)}
+            value={getSafeNumber(quoteAmount)}
           />
         </TokenList>
         <div className="w-full rounded-lg bg-muted p-3">
           <div className="flex h-fit w-full items-center justify-between text-sm">
             <p className="text-primary">Initial Price</p>
             <p>
-              {formatNumber(getSafeNumber(initialPrice))}{" "}
-              {tokenWeights[0]?.token?.symbol} = 1{" "}
-              {tokenWeights[1]?.token?.symbol}
+              {formatNumber(getSafeNumber(initialPrice))} {baseToken?.symbol} =
+              1 {quoteToken?.symbol}
             </p>
           </div>
           <div className="flex h-fit w-full items-center justify-between text-sm">
@@ -252,14 +231,12 @@ export function CreatePoolPreview({
 
         {needsApproval.length > 0 ? (
           <ApproveButton
-            amount={
-              parseUnits(
-                tokenWeights.find(
-                  (w) => w.token?.address === needsApproval[0]?.address,
-                )?.initialLiquidity || "0",
-                needsApproval[0]?.decimals ?? 18,
-              ) + parseUnits("10", 16)
-            }
+            amount={parseUnits(
+              baseToken?.address === needsApproval[0]?.address
+                ? baseAmount
+                : quoteAmount,
+              needsApproval[0]?.decimals ?? 18,
+            )}
             token={needsApproval[0]}
             spender={crocDexAddress}
             onApproval={() => refreshAllowances()}

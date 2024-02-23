@@ -3,6 +3,7 @@ import { PoolInitEncoder } from "../encoding/init"
 import { BeraSdkResponse } from "../types"
 import { AddressZero } from '@ethersproject/constants';
 import { getCrocErc20LpAddress } from "./getCrocErc20LpAddress";
+import { beraTokenAddress } from "@bera/config";
 // import { beraTokenAddress } from "@bera/config";
 
 interface IToken {
@@ -13,12 +14,16 @@ interface IToken {
 
 function sortBaseQuoteViews (base: IToken, quote: IToken): 
   [IToken, IToken] {
-  // if(base.address.toLowerCase() === AddressZero.toLowerCase() && beraTokenAddress.toLowerCase() > quote.address.toLowerCase()) {
-  //   return [quote, base]
-  // }
-  // if(quote.address.toLowerCase() === AddressZero.toLowerCase() && beraTokenAddress.toLowerCase() < base.address.toLowerCase()) { 
-  //   return [quote, base]
-  // }
+  if(base.address === AddressZero) {
+    console.log('1')
+    return beraTokenAddress.toLowerCase() > quote.address.toLowerCase() ? [quote, base] : [base, quote]
+  }
+
+  if(quote.address === AddressZero) {
+    console.log('2')
+    return beraTokenAddress.toLowerCase() < base.address.toLowerCase() ? [quote, base] : [base, quote]
+  } 
+
   return base.address.toLowerCase() < quote.address.toLowerCase() ?
     [base, quote] : [quote, base]
 }
@@ -54,6 +59,19 @@ export const encodeWarmPath = (
     poolIdx: number,
   ) => {
     let abiCoder = new ethers.utils.AbiCoder()
+    console.log([
+      callCode,
+      baseAddress,
+      quoteAddress,
+      poolIdx,
+      lowerTick,
+      upperTick,
+      qty,
+      limitLow,
+      limitHigh,
+      useSurplus,
+      getCrocErc20LpAddress(baseAddress, quoteAddress),
+    ])
     return abiCoder.encode([
         "uint8", // Type call
         "address", // Base

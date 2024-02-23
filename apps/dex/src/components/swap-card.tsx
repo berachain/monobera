@@ -99,6 +99,7 @@ export function SwapCard({
     outputCurrency,
   });
 
+  const { refetch } = usePollAssetWalletBalance();
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
@@ -116,11 +117,6 @@ export function SwapCard({
 
   const { write, isLoading, ModalPortal } = useTxn({
     actionType: TransactionActionType.SWAP,
-    // message: `Swap ${Number(swapInfo?.formattedSwapAmount).toFixed(4)} ${
-    //   selectedFrom?.symbol
-    // } to ${Number(swapInfo?.formattedReturnAmount).toFixed(4)} ${
-    //   selectedTo?.symbol
-    // }`,
     message: `Swap ${selectedFrom?.symbol} to ${selectedTo?.symbol}`,
     onSuccess: () => {
       setFromAmount(undefined);
@@ -128,6 +124,7 @@ export function SwapCard({
       setToAmount(undefined);
       setOpenPreview(false);
       void refreshAllowance();
+      refetch();
     },
     onError: () => {
       setOpenPreview(false);

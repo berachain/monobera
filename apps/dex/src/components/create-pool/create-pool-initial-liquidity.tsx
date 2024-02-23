@@ -6,88 +6,77 @@ import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
 import CreatePoolInitialLiquidityInput from "~/components/create-pool/create-pool-initial-liquidity-input";
-import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import * as _apollo_client from "@apollo/client";
 import CreatePoolInitialPriceInput from "./create-pool-initial-price";
 import CreatePoolExchangeRate from "./create-pool-exchange-rate";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { getBaseCost, getQuoteCost } from "~/app/pools/fetchPools";
-import {
-  useCrocPoolFromTokens,
-  useCrocToken,
-} from "~/hooks/useCrocPoolFromTokens";
+import { type Token } from "@bera/berajs";
 
 type Props = {
-  tokenWeights: ITokenWeight[];
+  baseToken: Token | undefined;
+  quoteToken: Token | undefined;
+  baseTokenAmount: string;
+  quoteTokenAmount: string;
   error: Error | undefined;
   initialPrice: string;
   onInitialPriceChange: (price: string) => void;
-  onTokenBalanceChange: (index: number, amount: string) => void;
+  setIsBaseTokenInput: (isBaseTokenInput: boolean) => void;
+  setBaseAmount: (amount: string) => void;
+  setQuoteAmount: (amount: string) => void;
   onContinue: () => void;
   onBack: () => void;
 };
 
 export function CreatePoolInitialLiquidity({
-  tokenWeights,
+  baseToken,
+  quoteToken,
+  baseTokenAmount,
+  quoteTokenAmount,
   error,
   initialPrice,
+  setBaseAmount,
+  setQuoteAmount,
   onInitialPriceChange,
-  onTokenBalanceChange,
+  setIsBaseTokenInput,
   onContinue,
   onBack,
 }: Props) {
-  const tokenA = tokenWeights[0]?.token;
-  const tokenB = tokenWeights[1]?.token;
-
-  const tokenACrocToken = useCrocToken(tokenA);
-  const tokenBCrocToken = useCrocToken(tokenB);
-
-  const crocPool = useCrocPoolFromTokens(tokenACrocToken, tokenBCrocToken);
-
-  const baseToken: ITokenWeight | undefined =
-    tokenA?.address === crocPool?.baseToken?.tokenAddr
-      ? tokenWeights[0]
-      : tokenWeights[1];
-  const quoteToken: ITokenWeight | undefined =
-    tokenB?.address === crocPool?.quoteToken?.tokenAddr
-      ? tokenWeights[1]
-      : tokenWeights[0];
-
-  const baseTokenIndex: number =
-    tokenA?.address === crocPool?.baseToken?.tokenAddr ? 0 : 1;
-  const quoteTokenIndex: number =
-    tokenB?.address === crocPool?.quoteToken?.tokenAddr ? 1 : 0;
-
-  console.log({
-    tokenA,
-    tokenB,
-    tokenACrocToken,
-    tokenBCrocToken,
-    crocPool,
-    baseToken,
-    quoteToken,
-  });
-
   useEffect(() => {
-    onTokenBalanceChange(0, "");
-    onTokenBalanceChange(1, "");
+    if (
+      initialPrice === "" ||
+      initialPrice === "0" ||
+      getSafeNumber(initialPrice) === 0
+    ) {
+      setBaseAmount("");
+      setQuoteAmount("");
+    }
   }, [initialPrice]);
 
   const baseCost = getBaseCost(getSafeNumber(initialPrice));
   const quoteCost = getQuoteCost(getSafeNumber(initialPrice));
 
   const handleBaseAssetAmountChange = (value: string): void => {
-    onTokenBalanceChange(baseTokenIndex, value);
+    setBaseAmount(value);
+    setIsBaseTokenInput(true);
     const quoteAmount = baseCost * getSafeNumber(value);
-    onTokenBalanceChange(quoteTokenIndex, quoteAmount.toString());
+    setQuoteAmount(quoteAmount.toString());
   };
 
   const handleQuoteAssetAmountChange = (value: string): void => {
-    onTokenBalanceChange(quoteTokenIndex, value);
+    setQuoteAmount(value);
+    setIsBaseTokenInput(false);
     const baseAmount = quoteCost * getSafeNumber(value);
-    onTokenBalanceChange(baseTokenIndex, baseAmount.toString());
+    setBaseAmount(baseAmount.toString());
   };
 
+  console.log({
+    baseToken,
+    quoteToken,
+  });
+
+  const isInputDisabled =
+    !initialPrice || initialPrice === "0" || getSafeNumber(initialPrice) === 0;
   return (
     <Card className="w-full  px-6 py-8 shadow-lg sm:w-[480px]">
       <CardTitle className="center mb-3 flex items-center">
@@ -120,23 +109,17 @@ export function CreatePoolInitialLiquidity({
         <div className="flex flex-col gap-4">
           <ul className="divide divide-y divide-border rounded-lg border">
             <CreatePoolInitialLiquidityInput
-              disabled={
-                !initialPrice ||
-                initialPrice === "0" ||
-                getSafeNumber(initialPrice) === 0
-              }
+              disabled={isInputDisabled}
               key={0}
-              tokenWeight={baseToken as ITokenWeight}
+              token={baseToken as Token}
+              tokenAmount={baseTokenAmount}
               onTokenBalanceChange={handleBaseAssetAmountChange}
             />
             <CreatePoolInitialLiquidityInput
-              disabled={
-                !initialPrice ||
-                initialPrice === "0" ||
-                getSafeNumber(initialPrice) === 0
-              }
+              disabled={isInputDisabled}
               key={1}
-              tokenWeight={quoteToken as ITokenWeight}
+              token={quoteToken as Token}
+              tokenAmount={quoteTokenAmount}
               onTokenBalanceChange={handleQuoteAssetAmountChange}
             />
           </ul>

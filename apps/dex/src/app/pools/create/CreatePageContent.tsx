@@ -31,34 +31,38 @@ const steps: IStep[] = [
 
 export default function CreatePageContent() {
   const {
-    tokenWeights,
-    totalWeight,
     error,
     swapFee,
     step,
     initialPrice,
+    isBaseTokenInput,
+    tokenA,
+    tokenB,
+    baseToken,
+    quoteToken,
+    baseAmount,
+    quoteAmount,
+    setBaseAmount,
+    setQuoteAmount,
+    setTokenA,
+    setTokenB,
+    setIsBaseTokenInput,
     setInitialPrice,
-    onTokenSelection,
-    onTokenWeightChange,
-    onTokenBalanceChange,
     setSwapFee,
     setStep,
   } = useCreateTokenWeights();
 
+  console.log({ isBaseTokenInput });
   return (
     <div className="flex max-w-[500px] flex-col items-center justify-center gap-8">
       <div className="mt-8 w-full">
         {step === Steps.SET_TOKEN_WEIGHTS && (
           <CreatePool
-            tokenWeights={tokenWeights.sort((a, b) => {
-              if (a.token === undefined) return 1;
-              if (b.token === undefined) return -1;
-              return 0;
-            })}
-            totalWeight={totalWeight}
+            tokenA={tokenA}
+            tokenB={tokenB}
             error={error}
-            onTokenSelection={onTokenSelection}
-            onTokenWeightChange={onTokenWeightChange}
+            setTokenA={setTokenA}
+            setTokenB={setTokenB}
             onContinue={() => !error && setStep(Steps.SET_INITIAL_LIQUIDITY)}
           />
         )}
@@ -73,18 +77,27 @@ export default function CreatePageContent() {
         )}
         {step === Steps.SET_INITIAL_LIQUIDITY && (
           <CreatePoolInitialLiquidity
-            tokenWeights={tokenWeights}
+            baseToken={baseToken}
+            quoteToken={quoteToken}
             error={error}
             initialPrice={initialPrice}
             onInitialPriceChange={setInitialPrice}
-            onTokenBalanceChange={onTokenBalanceChange}
+            setIsBaseTokenInput={setIsBaseTokenInput}
             onContinue={() => !error && setStep(Steps.CREATE_POOL_PREVIEW)}
             onBack={() => setStep(Steps.SET_TOKEN_WEIGHTS)}
+            baseTokenAmount={baseAmount}
+            quoteTokenAmount={quoteAmount}
+            setBaseAmount={setBaseAmount}
+            setQuoteAmount={setQuoteAmount}
           />
         )}
         {step === Steps.CREATE_POOL_PREVIEW && (
           <CreatePoolPreview
-            tokenWeights={tokenWeights}
+            baseToken={baseToken}
+            quoteToken={quoteToken}
+            baseAmount={baseAmount}
+            quoteAmount={quoteAmount}
+            isBaseTokenInput={isBaseTokenInput}
             initialPrice={initialPrice}
             error={undefined}
             onBack={() => setStep(Steps.SET_INITIAL_LIQUIDITY)}

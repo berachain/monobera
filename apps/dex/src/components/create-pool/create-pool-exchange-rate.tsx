@@ -5,12 +5,12 @@ import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { getSafeNumber } from "~/utils/getSafeNumber";
-import { formatNumber } from "@bera/berajs";
+import { type Token, formatNumber } from "@bera/berajs";
 import { getBaseCost, getQuoteCost } from "~/app/pools/fetchPools";
 
 type Props = {
-  baseToken: ITokenWeight | undefined;
-  quoteToken: ITokenWeight | undefined;
+  baseToken: Token | undefined;
+  quoteToken: Token | undefined;
   initialPrice: string;
 };
 
@@ -28,7 +28,7 @@ export default function CreatePoolExchangeRate({
     <li className={"flex w-full flex-col  items-center p-2 overflow-x-scroll"}>
       <div className="flex w-fit flex-row justify-between gap-2">
         <div className="w-fit flex flex-row gap-1 self-center font-semibold">
-          <TokenIcon address={baseToken?.token?.address} />
+          <TokenIcon address={baseToken?.address} />
           {initialPrice === "" ||
           initialPrice === "0" ||
           getSafeNumber(initialPrice) === 0 ||
@@ -37,7 +37,7 @@ export default function CreatePoolExchangeRate({
             : isPricingBase
               ? 1
               : formatNumber(quoteCost)}{" "}
-          {baseToken?.token?.symbol}
+          {baseToken?.symbol}
         </div>
         <Button
           variant={"secondary"}
@@ -47,7 +47,7 @@ export default function CreatePoolExchangeRate({
           <Icons.repeat className="h-4 w-4" />
         </Button>
         <div className="w-fit flex flex-row gap-1 self-center font-semibold">
-          <TokenIcon address={quoteToken?.token?.address} />
+          <TokenIcon address={quoteToken?.address} />
           {initialPrice === "" ||
           initialPrice === "0" ||
           getSafeNumber(initialPrice) === 0 ||
@@ -56,7 +56,7 @@ export default function CreatePoolExchangeRate({
             : isPricingBase
               ? formatNumber(baseCost)
               : 1}{" "}
-          {quoteToken?.token?.symbol}
+          {quoteToken?.symbol}
         </div>
       </div>
     </li>

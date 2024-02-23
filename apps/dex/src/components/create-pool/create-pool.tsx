@@ -11,27 +11,27 @@ import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import { useCrocIsDupePool } from "~/hooks/useCrocIsDupePool";
 
 type Props = {
-  tokenWeights: ITokenWeight[];
-  totalWeight: number;
+  tokenA: Token | undefined;
+  tokenB: Token | undefined;
   error: Error | undefined;
+  setTokenA: (token: Token | undefined) => void;
+  setTokenB: (token: Token | undefined) => void;
   onContinue: () => void;
-  onTokenSelection: (token: Token | undefined, index: number) => void;
-  onTokenWeightChange: (index: number, weight: number) => void;
 };
 
 export function CreatePool({
-  tokenWeights,
+  tokenA,
+  tokenB,
+  setTokenA,
+  setTokenB,
   error,
   onContinue,
-  onTokenSelection,
 }: Props) {
-  const selectedTokens = tokenWeights.map((tokenWeight: ITokenWeight) => {
-    return tokenWeight.token;
-  }) as Token[];
+  const selectedTokens = [tokenA, tokenB] as Token[];
 
   const { useIsDupePool, isLoading } = useCrocIsDupePool({
-    base: tokenWeights[0]?.token,
-    quote: tokenWeights[1]?.token,
+    base: tokenA,
+    quote: tokenB,
   });
   const isDupePool = useIsDupePool();
   return (
@@ -42,18 +42,18 @@ export function CreatePool({
 
       <div className="flex flex-col gap-4">
         <ul className="divide divide-y divide-border rounded-lg border">
-          {tokenWeights.map((tokenWeight, index) => {
-            return (
-              <CreatePoolInput
-                key={index}
-                tokenWeight={tokenWeight}
-                index={index}
-                selectedTokens={selectedTokens}
-                onTokenSelection={onTokenSelection}
-                isQuoteAsset={index === 1}
-              />
-            );
-          })}
+          <CreatePoolInput
+            key={0}
+            token={tokenA}
+            selectedTokens={selectedTokens}
+            onTokenSelection={setTokenA}
+          />
+          <CreatePoolInput
+            key={1}
+            token={tokenB}
+            selectedTokens={selectedTokens}
+            onTokenSelection={setTokenB}
+          />
         </ul>
         {error && (
           <Alert variant="destructive">

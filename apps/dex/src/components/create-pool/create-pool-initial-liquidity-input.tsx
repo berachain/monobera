@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import {
+  type Token,
   useBeraJs,
   usePollAssetWalletBalance,
   useTokenHoneyPrice,
@@ -8,34 +9,46 @@ import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-
-import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
 import { getSafeNumber } from "~/utils/getSafeNumber";
+import { cn } from "@bera/ui";
 
 type Props = {
-  tokenWeight: ITokenWeight;
+  token: Token;
   disabled: boolean;
+  tokenAmount: string;
   onTokenBalanceChange: (amount: string) => void;
 };
 
 export default function CreatePoolInitialLiquidityInput({
-  tokenWeight,
+  token,
+  tokenAmount,
   disabled,
   onTokenBalanceChange,
 }: Props) {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: token } = useSelectedAssetWalletBalance(
-    tokenWeight.token?.address ?? "",
+  const { data: tokenBalanceData } = useSelectedAssetWalletBalance(
+    token?.address ?? "",
   );
-  const tokenBalance = Number(token?.formattedBalance || 0);
+  const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
+  const tokenBalance = Number(tokenBalanceData?.formattedBalance || 0);
 
   const { isConnected } = useBeraJs();
 
-  const { data: tokenHoneyPrice } = useTokenHoneyPrice(
-    tokenWeight?.token?.address,
-  );
+  const { data: tokenHoneyPrice } = useTokenHoneyPrice(token?.address);
 
+  useMemo(() => {
+    if (tokenBalanceData) {
+      if (
+        getSafeNumber(tokenBalanceData.formattedBalance) <
+        getSafeNumber(tokenAmount)
+      ) {
+        setExceeding(true);
+      } else {
+        setExceeding(false);
+      }
+    }
+  }, [tokenBalanceData, tokenAmount]);
   return (
     <li className={"flex w-full flex-col  items-center p-3"}>
       <div className="flex w-full flex-row justify-between">
@@ -44,8 +57,8 @@ export default function CreatePoolInitialLiquidityInput({
           variant="secondary"
         >
           <>
-            <TokenIcon address={tokenWeight.token?.address ?? ""} />
-            {tokenWeight.token?.symbol}
+            <TokenIcon address={token?.address ?? ""} />
+            {token?.symbol}
           </>
         </Button>
         <Input
@@ -54,8 +67,11 @@ export default function CreatePoolInitialLiquidityInput({
           step="any"
           min="0"
           placeholder="0"
-          className="w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-          value={tokenWeight.initialLiquidity}
+          className={cn(
+            "w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0",
+            exceeding && "text-destructive-foreground",
+          )}
+          value={tokenAmount}
           onChange={(e) => {
             onTokenBalanceChange(e.target.value);
           }}
@@ -70,9 +86,9 @@ export default function CreatePoolInitialLiquidityInput({
                 {tokenBalance ? tokenBalance : "0"}
               </p>
               <p
-                className="cursor-pointer self-start text-xs text-muted-foreground hover:underline"
+                className="cursor-pointer self-start text-xs text-muted-foreground hover:underline select-none"
                 onClick={() => {
-                  onTokenBalanceChange(tokenBalance.toString());
+                  !disabled && onTokenBalanceChange(tokenBalance.toString());
                 }}
               >
                 MAX
@@ -80,11 +96,10 @@ export default function CreatePoolInitialLiquidityInput({
             </div>
             <div className="flex flex-row gap-1">
               <p className="self-center p-0 text-xs text-muted-foreground">
-                {tokenWeight.initialLiquidity !== "0" &&
-                  tokenWeight.initialLiquidity !== "" &&
+                {tokenAmount !== "0" &&
+                  tokenAmount !== "" &&
                   formatUsd(
-                    getSafeNumber(tokenWeight.initialLiquidity) *
-                      (tokenHoneyPrice ?? 0),
+                    getSafeNumber(tokenAmount) * (tokenHoneyPrice ?? 0),
                   )}
               </p>
             </div>
