@@ -5,8 +5,8 @@ import { tokenListUrl } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
-import { type Token } from "~/api";
-import POLLING from "~/config/constants/polling";
+import { type Token } from "../api";
+import POLLING from "../config/constants/polling";
 
 interface IUseTokens {
   tokenList: Token[] | undefined;
@@ -20,7 +20,7 @@ interface IUseTokens {
   removeToken: (token: Token) => void;
 }
 
-function tokenListToDict(list: Token[]): { [key: string]: Token } {
+export function tokenListToDict(list: Token[]): { [key: string]: Token } {
   return list.reduce((acc, item) => {
     // @ts-ignore
     acc[item.address] = item;
