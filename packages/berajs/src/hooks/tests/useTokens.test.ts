@@ -1,4 +1,6 @@
 import { renderHook } from "@testing-library/react";
+
+import "@testing-library/jest-dom";
 import fetchMock from "fetch-mock";
 
 import "@testing-library/jest-dom";

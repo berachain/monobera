@@ -3,7 +3,8 @@
   "compilerOptions": {
     "incremental": false,
     "declaration": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
+    "types": ["@testing-library/jest-dom"],
     "paths": {
       "@/components/*": ["components/*"],
       "~/*": ["./src/*"]
