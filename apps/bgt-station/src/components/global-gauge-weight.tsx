@@ -5,7 +5,6 @@ import { blockExplorerUrl } from "@bera/config";
 import { DataTable } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Checkbox } from "@bera/ui/checkbox";
-import uniqolor from "uniqolor";
 
 import { GaugeIcon } from "~/app/validators/validators-table";
 import {
@@ -15,6 +14,9 @@ import {
 import { type GaugeWeight } from "~/hooks/useGaugeWeights";
 
 const options = {
+  responsive: true,
+  cutout: "80%",
+  radius: "95%",
   plugins: {
     legend: {
       display: false,
@@ -158,17 +160,36 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
     datasets: [
       {
         data: pieData?.map((d) => d.amount),
-        backgroundColor: pieData?.map((d) => uniqolor(d.originalLabel).color),
-        borderColor: pieData?.map((d) => uniqolor(d.originalLabel).color),
-        borderWidth: 1,
+        backgroundColor: [
+          "#F35E79",
+          "#27B9C4",
+          "#8051D6",
+          "#129E7D",
+          "#FCC631",
+          "#2882CC",
+          "#3DDBB5",
+        ],
+        hoverBorderColor: [
+          "#F35E7952",
+          "#27B9C452",
+          "#8051D652",
+          "#129E7D52",
+          "#FCC63152",
+          "#2882CC52",
+          "#3DDBB552",
+        ],
+        hoverBorderWidth: 10,
+        borderRadius: 8,
+        spacing: 20,
+        borderWidth: 0,
       },
     ],
   };
 
   return (
     <div className="mt-8 flex w-full flex-col items-center gap-16 lg:flex-row ">
-      <div className="flex w-[350px] items-center justify-center">
-        <BeraChart data={dataP} options={options as any} type="pie" />
+      <div className="flex w-[330px] items-center justify-center">
+        <BeraChart data={dataP} options={options as any} type="doughnut" />
       </div>
       <div className="w-full">
         <DataTable
