@@ -3,7 +3,9 @@
   "compilerOptions": {
     "incremental": false,
     "declaration": true,
+    "baseUrl": "./",
     "paths": {
+      "@/components/*": ["components/*"],
       "~/*": ["./src/*"]
     },
     "typeRoots": ["./src/window.d.ts"]
