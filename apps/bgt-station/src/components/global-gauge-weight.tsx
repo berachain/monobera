@@ -160,6 +160,7 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
     datasets: [
       {
         data: pieData?.map((d) => d.amount),
+        // TODO: switch to berachain colors
         backgroundColor: [
           "#F35E79",
           "#27B9C4",
