@@ -9,7 +9,7 @@
  *
  * Resources for development
  * 1. Add env variables API: https://vercel.com/docs/rest-api/endpoints/projects#create-one-or-more-environment-variables
- * 2. Read env variables API: https://vercel.com/docs/rest-api/endpoints#retrieve-the-environment-variables-of-a-project-by-id-or-name
+ * 2. Read env variables API: https://vercel.com/docs/rest-api/endpoints/projects#retrieve-the-environment-variables-of-a-project-by-id-or-name
  *
  * Example usages:
  *
@@ -106,7 +106,7 @@ const printExampleUsage = () => {
   );
   console.log("--envFileName (required): the env file you are upserting\n");
   console.log(
-    "--project (optional): the project slug on vercel you are upserting to, if not provided will send to all monobera prod projects\n",
+    "--project (optional): the project slug on vercel you are upserting to, if not provided will send to all monobera prod projects. You can have multiple projects separated by commas\n",
   );
   console.log(
     "--production (optional): upserts env to include production, if not included will only push to Development and Preview\n",
@@ -120,7 +120,7 @@ const printExampleUsage = () => {
 };
 
 const simplifyEnvData = (envData) => {
-  return envData.map((createdVariable) => ({
+  return envData?.map((createdVariable) => ({
     key: createdVariable.key,
     value: createdVariable.value,
   }));
@@ -167,7 +167,7 @@ const upsertVercelEnvToProject = (projectName, bearerToken, requestBody) => {
 
 const fetchProjectEnvVariables = (projectName, token) => {
   return fetch(
-    `https://api.vercel.com/v9/projects/${projectName}/env?decrypt=true&source=vercel-cli:pull&teamId=${teamId}`,
+    `https://api.vercel.com/v9/projects/${projectName}/env?teamId=${teamId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -185,6 +185,7 @@ const fetchProjectEnvVariables = (projectName, token) => {
  */
 const writeEnvHistoryFile = async (projectName, envData) => {
   // Convert the array of objects into a .env file format string
+  if (!projectName || !envData) return;
   const envString = envData
     .map(({ key, value }) => `${key}=${value}`)
     .join("\n");
@@ -286,7 +287,8 @@ Continue? (Y/n)`,
   }
 
   // fetch current project env and store in local history file in case of emergency
-  const projectNameToFetchHistory = projectName || allTargetProjects[0];
+  const projectNameToFetchHistory =
+    projectName.split(",")?.[0] || allTargetProjects[0];
   const envData = await fetchProjectEnvVariables(
     projectNameToFetchHistory,
     bearerToken,
@@ -302,7 +304,14 @@ Continue? (Y/n)`,
   }
 
   if (projectName) {
-    await upsertVercelEnvToProject(projectName, bearerToken, requestBody);
+    const projects = projectName.split(",");
+    const promises = [];
+    projects.forEach((projectName) => {
+      promises.push(
+        upsertVercelEnvToProject(projectName, bearerToken, requestBody),
+      );
+    });
+    await Promise.all(promises);
   } else {
     const promises = [];
     allTargetProjects.forEach((projectName) => {
