@@ -8,7 +8,7 @@
  * This script does NOT erase existing keys if they do not exist in the `envFileName` file.
  *
  * Resources for development
- * 1. Add env variables API: https://vercel.com/docs/rest-api/endpoints#create-one-or-more-environment-variables
+ * 1. Add env variables API: https://vercel.com/docs/rest-api/endpoints/projects#create-one-or-more-environment-variables
  * 2. Read env variables API: https://vercel.com/docs/rest-api/endpoints#retrieve-the-environment-variables-of-a-project-by-id-or-name
  *
  * Example usages:
@@ -102,7 +102,7 @@ const printExampleUsage = () => {
     "Usage example: pnpm upsertenv --token=YOUR_VERCEL_AUTH_TOKEN --envFileName=.env.devnet --project=monobera-faucet --production\n\n",
   );
   console.log(
-    "--token (required): your vercel authentication token from your account settings with Berachain team as scope\n",
+    "--token (required): your vercel authentication token from your account settings with Berachain team as scope. You can generate a token by following the instructions here: https://vercel.com/docs/rest-api#creating-an-access-token\n",
   );
   console.log("--envFileName (required): the env file you are upserting\n");
   console.log(
@@ -120,49 +120,50 @@ const printExampleUsage = () => {
 };
 
 const simplifyEnvData = (envData) => {
-  console.log(envData);
   return envData.map((createdVariable) => ({
     key: createdVariable.key,
     value: createdVariable.value,
   }));
 };
 
-const upsertVercelEnvToProject =
-  (projectName, bearerToken, requestBody) => () => {
-    return fetch(
-      `https://api.vercel.com/v10/projects/${projectName}/env?teamId=team_1OTkqDgy6VcVy0OhB8Ksxf8O&upsert=true`,
-      {
-        body: JSON.stringify(requestBody),
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-        },
-        method: "post",
+const upsertVercelEnvToProject = (projectName, bearerToken, requestBody) => {
+  return fetch(
+    `https://api.vercel.com/v10/projects/${projectName}/env?teamId=team_1OTkqDgy6VcVy0OhB8Ksxf8O&upsert=true`,
+    {
+      body: JSON.stringify(requestBody),
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
       },
-    )
-      .then(async (res) => {
-        const data = await res.json();
-        if (data.status && data.status !== 201) {
-          console.log(
-            "An error has occurred while processing your request",
-            key,
-          );
-          console.log(res);
-          process.exit();
-        } else if (data?.created) {
-          if (argv.v || argv.verbose) {
-            console.log(simplifyEnvData(data.created));
-          }
-          console.log("Success! Upserted the above key-value pairs.");
-        }
-      })
-      .catch((e) => {
+      method: "post",
+    },
+  )
+    .then(async (res) => {
+      const data = await res.json();
+      if (data.error || (data.status && data.status !== 201)) {
         console.log(
-          "An error has occurred while upserting your environment variables",
+          "An error has occurred while processing your request for project: ",
+          projectName,
         );
-        console.log(e);
+        console.log(data.error);
         process.exit();
-      });
-  };
+      } else if (data?.created) {
+        if (argv.v || argv.verbose) {
+          console.log(simplifyEnvData(data.created));
+        }
+        console.log(
+          `Success! Upserted the above key-value pairs to project: 
+          ${projectName}.`,
+        );
+      }
+    })
+    .catch((e) => {
+      console.log(
+        "An error has occurred while upserting your environment variables",
+      );
+      console.log(e);
+      process.exit();
+    });
+};
 
 const fetchProjectEnvVariables = (projectName, token) => {
   return fetch(
@@ -201,7 +202,7 @@ const writeEnvHistoryFile = async (projectName, envData) => {
     await mkdir(dirPath, { recursive: true });
 
     await writeFile(historyFilePath, envString);
-    console.log("Environment file has been written successfully.");
+    console.log("Environment history file has been written successfully.");
   } catch (err) {
     console.error("There was an error writing to the file:", err);
   }
@@ -221,24 +222,6 @@ const main = async () => {
   const bearerToken = argv.token;
   // specific project
   const projectName = argv.project;
-
-  if (!projectName) {
-    await question(
-      `
-You did not add a --project option, this means that ${envFilePath} will be pushed to all of the following projects:\n
-${allTargetProjects.join(", ")}\n
-Continue? (Y/n)`,
-    ).then((answer) => {
-      if (answer === "n") {
-        console.log("aborting");
-        process.exit();
-      } else if (answer !== "Y") {
-        console.log("invalid response");
-        process.exit();
-      }
-      rl.close();
-    });
-  }
 
   // check bearerToken, if not tell user
   if (!bearerToken) {
@@ -264,6 +247,24 @@ Continue? (Y/n)`,
     process.exit();
   }
 
+  if (!projectName) {
+    await question(
+      `
+You did not add a --project option, this means that ${envFilePath} will be pushed to all of the following projects:\n
+${allTargetProjects.join(", ")}\n
+Continue? (Y/n)`,
+    ).then((answer) => {
+      if (answer === "n") {
+        console.log("aborting");
+        process.exit();
+      } else if (answer !== "Y") {
+        console.log("invalid response");
+        process.exit();
+      }
+      rl.close();
+    });
+  }
+
   // parse file into envVariables
   const envVariables = readEnvFile(envFilePath);
 
@@ -275,6 +276,14 @@ Continue? (Y/n)`,
       ? ["production", "development", "preview"]
       : ["development", "preview"],
   }));
+
+  if (Object.keys(envVariables) < 1) {
+    console.log(
+      `Env file at path ${envFilePath} does not contain any valid env key-value pairs. Please provide a valid env file.`,
+    );
+    printExampleUsage();
+    process.exit();
+  }
 
   // fetch current project env and store in local history file in case of emergency
   const projectNameToFetchHistory = projectName || allTargetProjects[0];
