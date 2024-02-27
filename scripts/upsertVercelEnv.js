@@ -1,4 +1,4 @@
-// pookie bear is watching
+// pookie bear is watching >;3
 
 /**
  * Notes for usage
