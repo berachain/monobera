@@ -271,7 +271,7 @@ Continue? (Y/n)`,
   const requestBody = Object.entries(envVariables).map(([key, value]) => ({
     key,
     value,
-    type: "sensitive",
+    type: "encrypted",
     target: isProduction
       ? ["production", "development", "preview"]
       : ["development", "preview"],
