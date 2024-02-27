@@ -28,6 +28,7 @@ import { type Address } from "wagmi";
 
 import ValidatorInput from "~/components/validator-input";
 import { DelegateEnum, ImageMapEnum } from "./types";
+import { UnstakeInfoBanner } from "./unstake-info-banner";
 
 export default function Delegate({
   action,
@@ -278,6 +279,7 @@ export default function Delegate({
           </Button>
         </ActionButton>
       </Card>
+      {action === DelegateEnum.UNBOND && <UnstakeInfoBanner />}
     </div>
   );
 }

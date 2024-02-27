@@ -4,6 +4,7 @@ import { type Address } from "viem";
 
 import { getMetaTitle } from "~/utils/metadata";
 import Delegate from "./delegate";
+import DemandBasedQueue from "./demand-based-queue";
 import { DelegateEnum } from "./types";
 
 export const metadata: Metadata = {
@@ -26,14 +27,18 @@ export default function Page({
     action = DelegateEnum.DELEGATE;
   }
 
-  // if (!isAddress(searchParams.validator)) {
-  //   notFound();
-  // }
   return (
-    <Delegate
-      action={action}
-      validator={searchParams.validator as Address}
-      redelegateValidator={searchParams.redelegateValidator}
-    />
+    <div className="flex flex-row">
+      <Delegate
+        action={action}
+        validator={searchParams.validator as Address}
+        redelegateValidator={searchParams.redelegateValidator}
+      />
+      <DemandBasedQueue
+        action={action}
+        validator={searchParams.validator as Address}
+        redelegateValidator={searchParams.redelegateValidator}
+      />
+    </div>
   );
 }
