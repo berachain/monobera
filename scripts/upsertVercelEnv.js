@@ -302,7 +302,7 @@ Continue? (Y/n)`,
   }
 
   if (projectName) {
-    await upsertVercelEnvToProject(projectName, bearerToken, requestBody)();
+    await upsertVercelEnvToProject(projectName, bearerToken, requestBody);
   } else {
     const promises = [];
     allTargetProjects.forEach((projectName) => {
