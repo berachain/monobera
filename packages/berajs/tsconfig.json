@@ -4,12 +4,12 @@
     "incremental": false,
     "declaration": true,
     "baseUrl": ".",
-    "types": ["@testing-library/jest-dom"],
+    "typeRoots": ["./src/window.d.ts", "../../node_modules/@types"],
+    "types": ["jest"],
     "paths": {
       "@/components/*": ["components/*"],
       "~/*": ["./src/*"]
-    },
-    "typeRoots": ["./src/window.d.ts"]
+    }
   },
   "exclude": [
     "node_modules",
