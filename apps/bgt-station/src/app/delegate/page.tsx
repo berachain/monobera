@@ -34,11 +34,7 @@ export default function Page({
         validator={searchParams.validator as Address}
         redelegateValidator={searchParams.redelegateValidator}
       />
-      <DemandBasedQueue
-        action={action}
-        validator={searchParams.validator as Address}
-        redelegateValidator={searchParams.redelegateValidator}
-      />
+      <DemandBasedQueue action={action} />
     </div>
   );
 }

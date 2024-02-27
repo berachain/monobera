@@ -4,20 +4,11 @@ import React from "react";
 import { usePollDelegatorUnbonding } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
-import { type Address } from "wagmi";
 
 import UnbondingQueueTable from "~/components/unbonding-queue-table";
 import { DelegateEnum } from "./types";
 
-export default function DemandBasedQueue({
-  action,
-  validator,
-  redelegateValidator,
-}: {
-  action: DelegateEnum;
-  validator: Address;
-  redelegateValidator: string;
-}) {
+export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
   const getActionText = (action: DelegateEnum) => {
     switch (action) {
       case DelegateEnum.DELEGATE:
@@ -32,7 +23,6 @@ export default function DemandBasedQueue({
   const { useDelegatorUnbondingQueue } = usePollDelegatorUnbonding();
 
   const unbondingQueue = useDelegatorUnbondingQueue();
-  console.log("??????", unbondingQueue);
 
   return (
     <div className="container mx-auto flex w-full min-w-[600px] flex-col gap-8 pb-20">
