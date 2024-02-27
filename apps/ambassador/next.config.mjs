@@ -41,8 +41,8 @@ export default withSentryConfig(
 
     // Suppresses source map uploading logs during build
     silent: true,
-    org: "berachain-xx",
-    project: "javascript-nextjs",
+    org: "berachain-dapps",
+    project: "ambassador",
   },
   {
     // For all available options, see:
