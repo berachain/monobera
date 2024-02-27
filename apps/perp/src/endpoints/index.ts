@@ -73,7 +73,7 @@ export async function getHistoricalSummary(): Promise<any | undefined> {
 export async function getFeesApr(): Promise<any | undefined> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/historical-rewards?countBack=3&resolution=1d`,
+      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/historical-rewards?count_back=3&resolution=1d`,
     );
     const jsonRes = await res.json();
     const historicalSummary = jsonRes.result;
