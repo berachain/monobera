@@ -21,6 +21,7 @@
     "@bera/tailwind-config": "0.1.0",
     "@bera/ui": "0.1.0",
     "@hirohe/react-watermark": "^0.5.0",
+    "@sentry/nextjs": "^7.103.0",
     "@t3-oss/env-nextjs": "^0.2.2",
     "@vercel/analytics": "^1.0.1",
     "framer-motion": "^10.15.0",
