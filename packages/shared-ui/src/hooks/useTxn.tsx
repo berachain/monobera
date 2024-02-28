@@ -15,7 +15,7 @@ import {
   type IContractWrite,
   type IValueSend,
 } from "@bera/berajs";
-import { captureEvent, captureException, captureMessage } from "@sentry/nextjs";
+import { captureEvent, captureException } from "@sentry/nextjs";
 import toast from "react-hot-toast";
 import { useMediaQuery } from "usehooks-ts";
 
@@ -165,7 +165,7 @@ export const useTxn = ({
             });
           }
         }
-        captureException(error, {
+        captureException(new Error("useTxn failed"), {
           event_id: "useTxn_failed",
           data: { message, actionType },
         });
@@ -206,7 +206,13 @@ export const useTxn = ({
           actionType,
           timestamp: Date.now(),
         });
-        captureMessage("useTxn_success");
+        captureEvent(
+          {
+            event_id: "useTxn_success",
+            message: "useTxn Success",
+          },
+          { data: { message, actionType } },
+        );
         onSuccess?.(result);
       },
 
