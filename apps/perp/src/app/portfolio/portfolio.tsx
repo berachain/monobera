@@ -67,11 +67,11 @@ export default function Portfolio({ markets }: { markets: IMarket[] }) {
   const totalVolume = useTotalVolume();
   const totalPnl = useTotalPnl();
   return (
-    <div className="flex flex-col gap-4 lg:flex-row">
+    <div className="flex w-full flex-col gap-4 lg:flex-row">
       <UserGeneralInfo markets={markets} />
-      <div className="flex max-h-[300px] w-full flex-col justify-between rounded-md border border-border bg-muted px-4 py-6">
-        <div className="flex w-full flex-col-reverse justify-between gap-9 sm:flex-row sm:gap-0">
-          <div className="text-xl font-semibold leading-7">
+      <div className="flex w-full flex-col justify-between rounded-md border border-border bg-muted px-4 py-6">
+        <div className="flex w-full flex-col-reverse justify-between sm:flex-row sm:gap-0">
+          <div className="text-xl font-semibold leading-7 my-2 sm:my-0">
             {tabType === "Volume"
               ? formatUsd(Number(totalVolume))
               : formatUsd(Number(totalPnl))}
@@ -82,7 +82,7 @@ export default function Portfolio({ markets }: { markets: IMarket[] }) {
               onValueChange={(value) => setTabType(value as "Volume" | "PnL")}
               className="w-full sm:w-fit"
             >
-              <TabsList className="w-full sm:w-fit">
+              <TabsList className="w-full sm:w-fit border">
                 {["Volume", "PnL"].map((status) => (
                   <TabsTrigger
                     value={status}
@@ -110,8 +110,9 @@ export default function Portfolio({ markets }: { markets: IMarket[] }) {
             />
           </div>
         </div>
-        <div className="relative h-[200px] w-full">
+        <div className="w-full h-full lg:w-[calc(100%-5px)]">
           <BeraChart data={data} options={Options as any} type={"bar"} />
+          <div />
         </div>
       </div>
     </div>
