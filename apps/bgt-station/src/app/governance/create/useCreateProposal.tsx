@@ -4,7 +4,7 @@ import {
   UpdateFriendsOfTheChefRequest,
   UpdateParamsRequest,
 } from "@bera/proto/src";
-import { parseUnits } from "ethers";
+import { parseUnits } from "viem";
 import { toHex } from "viem";
 
 interface VoteValues {

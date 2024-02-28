@@ -1,26 +1,36 @@
+import React from "react";
 import { type Metadata } from "next";
-import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
+import { notFound } from "next/navigation";
 
-import { getMetaTitle } from "~/utils/metadata";
-import PoolPageHeader from "./PoolPageHeader";
+import PoolPageContent from "./PoolPageContent";
+import { isAddress } from "viem";
+import { fetchSelectedPool } from "../pools/fetchPools";
 
-export const metadata: Metadata = {
-  title: getMetaTitle("Pools"),
-  description: "View pools",
-};
+export function generateMetadata(): Metadata {
+  return {
+    title: "Pool | DEX | Berachain",
+  };
+}
 
-export default function Pool({
+export const revalidate = 5;
+
+export default async function PoolPage({
   searchParams,
 }: {
-  searchParams: {
-    pool: "allPools" | "userPools";
-  };
+  searchParams: { base: string; quote: string };
 }) {
-  return (
-    <div className="flex w-full flex-col gap-5">
-      <PoolPageHeader
-        poolType={searchParams.pool !== "userPools" ? "allPools" : "userPools"}
-      />
-    </div>
-  );
+  try {
+    if (!isAddress(searchParams.base) || !isAddress(searchParams.quote)) {
+      notFound();
+    }
+    const pool = await fetchSelectedPool(searchParams.base, searchParams.quote);
+
+    if (!pool) {
+      notFound();
+    }
+    return <PoolPageContent pool={pool} />;
+  } catch (e) {
+    console.log(`Error fetching pools: ${e}`);
+    notFound();
+  }
 }

@@ -1,91 +1,180 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
+import React, { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  DEX_PRECOMPILE_ABI,
+  CROCSWAP_DEX,
   TransactionActionType,
-  useBeraConfig,
+  formatNumber,
+  useCrocEnv,
+  useTokenHoneyPrice,
+  type Token,
 } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { crocDexAddress } from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
   PreviewToken,
   TokenList,
+  useSlippage,
   useTxn,
 } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
-import { parseUnits } from "ethers";
-import { type Address } from "wagmi";
+import { parseUnits } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
-import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
-import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
+import {
+  type BeraSdkResponse,
+  initPool,
+  type PriceRange,
+  encodeWarmPath,
+  transformLimits,
+} from "@bera/beracrocswap";
+import { encodeAbiParameters, parseAbiParameters } from "viem";
+import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
 
 type Props = {
-  tokenWeights: ITokenWeight[];
+  baseToken: Token | undefined;
+  quoteToken: Token | undefined;
+  baseAmount: string;
+  quoteAmount: string;
   error: Error | undefined;
-  poolName: string;
-  fee: number;
-  setPoolName: (poolName: string) => void;
+  initialPrice: string;
+  isBaseTokenInput: boolean;
   onBack: () => void;
 };
 
 export function CreatePoolPreview({
-  tokenWeights,
+  baseToken,
+  quoteToken,
+  baseAmount,
+  quoteAmount,
   error,
-  poolName,
-  fee,
-  setPoolName,
+  initialPrice,
+  isBaseTokenInput,
   onBack,
 }: Props) {
-  const { needsApproval } = useCreatePool(tokenWeights);
-  const { networkConfig } = useBeraConfig();
+  const { needsApproval, refreshAllowances } = useCreatePool({
+    baseToken: baseToken as Token,
+    quoteToken: quoteToken as Token,
+    baseAmount,
+    quoteAmount,
+  });
   const router = useRouter();
 
   const { write, ModalPortal } = useTxn({
-    message: `Create ${poolName} pool`,
+    message: "Create new pool",
     onSuccess: () => {
-      void onCreatePool();
-      router.push("/pool");
+      router.push("/pools");
     },
     actionType: TransactionActionType.CREATE_POOL,
   });
 
-  // holy javascript hell
-  const parsedFee = Number(Number(fee / 100).toFixed(4));
+  const crocenv = useCrocEnv();
 
-  const options = {
-    weights: tokenWeights.map((tokenWeight) => ({
-      asset: tokenWeight.token?.address,
-      weight: tokenWeight.weight,
-    })),
-    swapFee: parseUnits(`${parsedFee}`, 18),
-  };
+  const slippage = useSlippage();
 
-  const rawBeraEntry = tokenWeights.find((tokenWeight) => {
-    return tokenWeight.token?.address === process.env.NEXT_PUBLIC_BERA_ADDRESS;
-  });
+  const handleCreatePool = useCallback(async () => {
+    try {
+      let inputLiq;
+      if (isBaseTokenInput) {
+        inputLiq = baseAmount;
+      } else {
+        inputLiq = quoteAmount;
+      }
 
-  const payload = [
-    poolName,
-    tokenWeights.map((tokenWeight) => tokenWeight.token?.address),
-    tokenWeights.map((tokenWeight) =>
-      parseUnits(
-        tokenWeight.initialLiquidity,
-        tokenWeight.token?.decimals ?? 18,
-      ),
-    ),
-    "balancer",
-    options,
-  ];
+      const priceLimits = {
+        min: getSafeNumber(initialPrice) * (1 - (slippage ?? 1) / 100),
+        max: getSafeNumber(initialPrice) * (1 + (slippage ?? 1) / 100),
+      };
+      const limits: PriceRange = [priceLimits.min, priceLimits.max];
+
+      const initPoolInfo: BeraSdkResponse = initPool(
+        Number(initialPrice),
+        baseToken as Token,
+        quoteToken as Token,
+        36000,
+      );
+
+      const bnLiquidity = parseUnits(
+        inputLiq ?? "0",
+        isBaseTokenInput
+          ? (baseToken?.decimals as number)
+          : (quoteToken?.decimals as number),
+      );
+
+      const transformedLimits = transformLimits(
+        limits,
+        baseToken?.decimals as number,
+        quoteToken?.decimals as number,
+      );
+
+      console.log(
+        baseToken?.address as string,
+        quoteToken?.address as string,
+        isBaseTokenInput ? 31 : 32,
+        0,
+        0,
+        bnLiquidity - 10005n,
+        transformedLimits[0].toString(),
+        transformedLimits[1].toString(),
+        0,
+        36000,
+      );
+
+      const mintCalldata = await encodeWarmPath(
+        baseToken?.address as string,
+        quoteToken?.address as string,
+        isBaseTokenInput ? 31 : 32,
+        0,
+        0,
+        bnLiquidity - 1000000n,
+        transformedLimits[0],
+        transformedLimits[1],
+        0,
+        36000,
+      );
+
+      const multiPathArgs = [2, 3, initPoolInfo.calldata, 2, mintCalldata];
+
+      const multiCmd = encodeAbiParameters(
+        parseAbiParameters("uint8, uint8, bytes, uint8, bytes"),
+        multiPathArgs as any[5],
+      );
+      write({
+        address: crocDexAddress,
+        abi: CROCSWAP_DEX,
+        functionName: "userCmd",
+        params: [6, multiCmd],
+      });
+    } catch (error) {
+      console.error("Error creating pool:", error);
+    }
+  }, [
+    crocenv,
+    baseToken,
+    quoteToken,
+    initialPrice,
+    isBaseTokenInput,
+    slippage,
+    write,
+  ]);
+
+  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
+  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
+    quoteToken?.address,
+  );
+
+  const total = useMemo(() => {
+    return (
+      getSafeNumber(baseAmount) * Number(baseTokenHoneyPrice ?? 0) +
+      getSafeNumber(quoteAmount) * Number(quoteTokenHoneyPrice ?? 0)
+    );
+  }, [baseAmount, quoteAmount, baseTokenHoneyPrice, quoteTokenHoneyPrice]);
 
   return (
     <Card className="w-[350px] shadow-lg sm:w-[480px]">
@@ -96,46 +185,41 @@ export function CreatePoolPreview({
             className="block h-6 w-6 hover:cursor-pointer"
             onClick={onBack}
           />{" "}
-          Create pool
+          Preview
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <Image
-          alt="preview"
-          src={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
-          className="self-center"
-          width={525}
-          height={150}
-        />
-        <div className="flex w-full flex-col gap-1">
-          <p className="pl-1 text-sm font-medium">Give your pool a name</p>
-          <Input
-            className="w-full border-border px-2 text-left font-semibold focus-visible:ring-0"
-            value={poolName}
-            maxLength={120}
-            onChange={(e) => setPoolName(e.target.value)}
-          />
-        </div>
+        <p className="text-sm text-muted-foreground">
+          Please take a moment to review the details before you submit a
+          transaction to create the pool
+        </p>
         <TokenList className="bg-muted ">
-          {tokenWeights.map((tokenWeight, index) => {
-            return (
-              <PreviewToken
-                key={index}
-                token={tokenWeight.token}
-                weight={tokenWeight.weight}
-                value={getSafeNumber(tokenWeight.initialLiquidity)}
-              />
-            );
-          })}
+          <PreviewToken
+            token={baseToken}
+            price={baseTokenHoneyPrice}
+            value={getSafeNumber(baseAmount)}
+          />
+          <PreviewToken
+            token={quoteToken}
+            price={quoteTokenHoneyPrice}
+            value={getSafeNumber(quoteAmount)}
+          />
         </TokenList>
-        <div className="w-full rounded-lg bg-muted p-2">
-          <div className="flex h-[40px] w-full items-center justify-between text-sm">
-            <p className="text-primary">Pool Type</p>
-            <p>Weighted</p>
+        <div className="w-full rounded-lg bg-muted p-3">
+          <div className="flex h-fit w-full items-center justify-between text-sm">
+            <p className="text-primary">Initial Price</p>
+            <p>
+              {formatNumber(getSafeNumber(initialPrice))} {baseToken?.symbol} =
+              1 {quoteToken?.symbol}
+            </p>
           </div>
-          <div className="flex h-[40px] w-full items-center justify-between text-sm">
+          <div className="flex h-fit w-full items-center justify-between text-sm">
+            <p className="text-primary">Estimated Value</p>
+            <p>{formatUsd(total)}</p>
+          </div>
+          <div className="flex h-fit w-full items-center justify-between text-sm">
             <p className="text-primary">Swap Fee</p>
-            <p>{fee}%</p>
+            <p>dynamic</p>
           </div>
         </div>
         {error && (
@@ -148,34 +232,18 @@ export function CreatePoolPreview({
         {needsApproval.length > 0 ? (
           <ApproveButton
             amount={parseUnits(
-              tokenWeights.find(
-                (w) => w.token?.address === needsApproval[0]?.address,
-              )?.initialLiquidity || "0",
+              baseToken?.address === needsApproval[0]?.address
+                ? baseAmount
+                : quoteAmount,
               needsApproval[0]?.decimals ?? 18,
             )}
             token={needsApproval[0]}
-            spender={
-              networkConfig.precompileAddresses.erc20ModuleAddress as Address
-            }
+            spender={crocDexAddress}
+            onApproval={() => refreshAllowances()}
           />
         ) : (
           <ActionButton>
-            <Button
-              className="w-full"
-              onClick={() => {
-                write({
-                  address: networkConfig.precompileAddresses
-                    .erc20DexAddress as Address,
-                  abi: DEX_PRECOMPILE_ABI,
-                  functionName: "createPool",
-                  params: payload,
-                  value:
-                    rawBeraEntry === undefined
-                      ? 0n
-                      : parseUnits(rawBeraEntry.initialLiquidity, 18),
-                });
-              }}
-            >
+            <Button className="w-full" onClick={() => handleCreatePool()}>
               Create Pool
             </Button>
           </ActionButton>

@@ -25,3 +25,6 @@ export * from "./lend-ui";
 export * from "./erc20-module";
 export * from "./lend-reward-helper";
 export * from "./bgt-aggregator";
+export * from "./crocswapdex";
+export * from "./croc-query";
+export * from "./multiswap";

@@ -1,13 +1,14 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { subgraphUrl } from "@bera/config";
+import { crocSubgraphEndpoint } from "@bera/config";
+// import { subgraphUrl } from "@bera/config";
 
 export const client = new ApolloClient({
-  uri: subgraphUrl,
+  uri: crocSubgraphEndpoint,
   cache: new InMemoryCache(),
 });
 
 export const ssrClient = new ApolloClient({
   ssrMode: true,
-  uri: subgraphUrl,
+  uri: crocSubgraphEndpoint,
   cache: new InMemoryCache(),
 });
