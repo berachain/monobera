@@ -112,6 +112,9 @@ const printExampleUsage = () => {
     "--production (optional): upserts env to include production, if not included will only push to Development and Preview\n",
   );
   console.log(
+    "--productionOnly (optional): upserts env to ONLY production, if not included will only push to Development and Preview, overrides --production flag\n",
+  );
+  console.log(
     "--verbose or -v (optional): shows the key/value pairs that were upserted on success\n",
   );
   console.log(
@@ -269,13 +272,22 @@ Continue? (Y/n)`,
   // parse file into envVariables
   const envVariables = readEnvFile(envFilePath);
 
+  const getTargetEnvs = () => {
+    if (isProduction) {
+      ["production", "development", "preview"];
+    }
+    if (argv.productionOnly) {
+      ["production"];
+    } else {
+      ["development", "preview"];
+    }
+  };
+
   const requestBody = Object.entries(envVariables).map(([key, value]) => ({
     key,
     value,
     type: "encrypted",
-    target: isProduction
-      ? ["production", "development", "preview"]
-      : ["development", "preview"],
+    target: getTargetEnvs(),
   }));
 
   if (Object.keys(envVariables) < 1) {
@@ -288,7 +300,7 @@ Continue? (Y/n)`,
 
   // fetch current project env and store in local history file in case of emergency
   const projectNameToFetchHistory =
-    projectName.split(",")?.[0] || allTargetProjects[0];
+    projectName?.split(",")?.[0] || allTargetProjects[0];
   const envData = await fetchProjectEnvVariables(
     projectNameToFetchHistory,
     bearerToken,
