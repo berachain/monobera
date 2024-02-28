@@ -3,3 +3,4 @@ export * from "./useOctTxn";
 export * from "./useSlippage";
 export * from "./useSetSlippage";
 export * from "./useDeadline";
+export * from "./usePrevious";
