@@ -89,6 +89,7 @@ const useBeraContractWrite = ({
         if (process.env.VERCEL_ENV !== "production") {
           console.log(e);
         }
+        console.log(e);
         dispatch({ type: ActionEnum.ERROR });
         const finalMsg = getErrorMessage(e);
         onError?.({

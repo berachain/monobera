@@ -22,6 +22,7 @@ import { defaultBeraConfig } from "~/config";
 import { type NetworkConfig } from "~/config/types";
 import { BeraJsProvider } from "~/contexts/berajsProvider";
 import { TransactionStoreProvider } from "~/hooks/transactions/TransactionStoreContext";
+import { CrocEnvContextProvider } from "../crocenv";
 
 interface IBeraConfig extends PropsWithChildren {
   networkConfig?: NetworkConfig;
@@ -98,7 +99,9 @@ const BeraConfig: React.FC<IBeraConfig> = ({
           theme={darkTheme ? rainbowDarkTheme() : lightTheme()}
         >
           <BeraJsProvider>
-            <TransactionStoreProvider>{children}</TransactionStoreProvider>
+            <TransactionStoreProvider>
+              <CrocEnvContextProvider>{children}</CrocEnvContextProvider>
+            </TransactionStoreProvider>
           </BeraJsProvider>
         </RainbowKitProvider>
       </WagmiConfig>
