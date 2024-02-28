@@ -15,6 +15,7 @@ import {
   type IContractWrite,
   type IValueSend,
 } from "@bera/berajs";
+import { captureException } from "@sentry/nextjs";
 import toast from "react-hot-toast";
 import { useMediaQuery } from "usehooks-ts";
 
@@ -164,6 +165,7 @@ export const useTxn = ({
             });
           }
         }
+        captureException(error, { data: { message, actionType } });
         onError?.(error);
       },
 

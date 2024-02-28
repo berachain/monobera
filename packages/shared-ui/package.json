@@ -10,6 +10,7 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
+    "@sentry/nextjs": "^7.103.0",
     "next-auth": "^4.24.5",
     "react-spinners": "^0.13.8"
   },
