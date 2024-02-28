@@ -278,9 +278,8 @@ Continue? (Y/n)`,
     }
     if (argv.productionOnly) {
       return ["production"];
-    } else {
-      return ["development", "preview"];
     }
+    return ["development", "preview"];
   };
 
   const requestBody = Object.entries(envVariables).map(([key, value]) => ({
