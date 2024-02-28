@@ -25,7 +25,7 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
   const unbondingQueue = useDelegatorUnbondingQueue();
 
   return (
-    <div className="container mx-auto flex w-full min-w-[600px] flex-col gap-8 pb-20">
+    <div className="container mx-auto flex w-full max-w-[800px] flex-col gap-8 pb-20 lg:w-[800px]">
       <Card className="flex flex-col gap-3 p-6">
         <div className="text-lg font-semibold capitalize leading-7 text-foreground">
           Demand based {getActionText(action)}
@@ -35,8 +35,8 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
           Approach where the Unstaking Period is based primarily on the Demand
           of Staking, Restaking and Unstaking
         </div>
-        <div className="flex flex-row gap-2 text-sm">
-          <div className="text-md flex flex-col items-start justify-center gap-1 rounded-md border p-2">
+        <div className="flex flex-row justify-between gap-2 text-sm ">
+          <div className="text-md flex w-[380px] flex-col items-start justify-center gap-1 rounded-md border p-2">
             <div className="align-start text-md font-semibold text-muted-foreground">
               Current {action} Time
             </div>
@@ -44,7 +44,7 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
               1 Day
             </div>
           </div>
-          <div className="text-md flex flex-col items-start justify-center gap-1 rounded-md border border-dashed bg-muted p-2">
+          <div className="text-md flex w-[380px] flex-col items-start justify-center gap-1 rounded-md border border-dashed bg-muted p-2">
             <div className="text-md items-start font-semibold text-muted-foreground">
               Estimated future {action} Time
             </div>

@@ -29,12 +29,16 @@ export default function Page({
 
   return (
     <div className="flex flex-row">
-      <Delegate
-        action={action}
-        validator={searchParams.validator as Address}
-        redelegateValidator={searchParams.redelegateValidator}
-      />
-      <DemandBasedQueue action={action} />
+      <div className="w-1/2">
+        <Delegate
+          action={action}
+          validator={searchParams.validator as Address}
+          redelegateValidator={searchParams.redelegateValidator}
+        />
+      </div>
+      <div className="w-1/2">
+        <DemandBasedQueue action={action} />
+      </div>
     </div>
   );
 }
