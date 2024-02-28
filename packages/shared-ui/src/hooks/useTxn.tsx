@@ -15,7 +15,7 @@ import {
   type IContractWrite,
   type IValueSend,
 } from "@bera/berajs";
-import { captureEvent, captureException } from "@sentry/nextjs";
+import { captureEvent, captureException, captureMessage } from "@sentry/nextjs";
 import toast from "react-hot-toast";
 import { useMediaQuery } from "usehooks-ts";
 
@@ -206,12 +206,7 @@ export const useTxn = ({
           actionType,
           timestamp: Date.now(),
         });
-        captureEvent(
-          {
-            event_id: "useTxn_success",
-          },
-          { data: { message, actionType } },
-        );
+        captureMessage("useTxn_success");
         onSuccess?.(result);
       },
 
