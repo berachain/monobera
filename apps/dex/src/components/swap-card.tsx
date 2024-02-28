@@ -31,6 +31,7 @@ import { Icons } from "@bera/ui/icons";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { captureEvent, captureException } from "~/utils/analytics";
 import { SwapKind, WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
 
@@ -129,12 +130,25 @@ export function SwapCard({
     // }`,
     message: `Swap ${selectedFrom?.symbol} to ${selectedTo?.symbol}`,
     onSuccess: () => {
+      captureEvent(
+        { event_id: "swap_token_success" },
+        {
+          data: {
+            tokenFrom: selectedFrom?.symbol,
+            tokenTo: selectedTo?.symbol,
+          },
+        },
+      );
       setFromAmount(undefined);
       setSwapAmount("");
       setToAmount(undefined);
       setOpenPreview(false);
     },
-    onError: () => {
+    onError: (e: Error | undefined) => {
+      captureException(e, {
+        event_id: "swap_token_failed",
+        data: { tokenFrom: selectedFrom?.symbol, tokenTo: selectedTo?.symbol },
+      });
       setOpenPreview(false);
     },
   });
@@ -152,6 +166,26 @@ export function SwapCard({
       wrapType === WRAP_TYPE.WRAP
         ? TransactionActionType.WRAP
         : TransactionActionType.UNWRAP,
+    onSuccess: () => {
+      captureEvent(
+        {
+          event_id:
+            wrapType === WRAP_TYPE.WRAP
+              ? "wrap_bera_success"
+              : "unwrap_wbera_success",
+        },
+        { data: swapAmount },
+      );
+    },
+    onError: (e: Error | undefined) => {
+      captureException(e, {
+        event_id:
+          wrapType === WRAP_TYPE.WRAP
+            ? "wrap_bera_failed"
+            : "unwrap_wbera_failed",
+        data: swapAmount,
+      });
+    },
   });
 
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();

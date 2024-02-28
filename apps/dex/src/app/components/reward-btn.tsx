@@ -15,6 +15,8 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { parseEther } from "viem";
 import { type Address } from "wagmi";
 
+import { captureEvent, captureException } from "~/utils/analytics";
+
 export function RewardBtn({ poolAddress, ...props }: any) {
   const { isReady } = useBeraJs();
 
@@ -29,7 +31,19 @@ export function RewardBtn({ poolAddress, ...props }: any) {
       amount === bgtRewards ? "All" : Number(amount).toFixed(2)
     } BGT Rewards`,
     actionType: TransactionActionType.CLAIMING_REWARDS,
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      captureEvent(
+        { event_id: "claim_bgt_reward_success" },
+        { data: { claim_amount: Number(amount).toFixed(2) } },
+      );
+      refetch();
+    },
+    onError: (e: Error | undefined) => {
+      captureException(e, {
+        event_id: "claim_bgt_reward_failed",
+        data: { claim_amount: Number(amount).toFixed(2) },
+      });
+    },
   });
 
   return (

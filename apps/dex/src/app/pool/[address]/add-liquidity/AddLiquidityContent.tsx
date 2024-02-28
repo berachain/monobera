@@ -35,6 +35,7 @@ import { parseUnits } from "ethers";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { captureEvent, captureException } from "~/utils/analytics";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import { useAddLiquidity } from "./useAddLiquidity";
@@ -97,8 +98,18 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
+      captureEvent(
+        { event_id: "add_liquidity_to_pool_success" },
+        { data: { poolName: pool?.poolName } },
+      );
       reset();
       router.push("/pool?pool=userPools");
+    },
+    onError: (e: Error | undefined) => {
+      captureException(e, {
+        event_id: "add_liquidity_to_pool_failed",
+        data: { poolName: pool?.poolName },
+      });
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });

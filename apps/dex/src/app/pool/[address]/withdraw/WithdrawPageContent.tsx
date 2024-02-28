@@ -33,6 +33,7 @@ import { Tabs, TabsContent } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
 import { type Address } from "wagmi";
 
+import { captureEvent, captureException } from "~/utils/analytics";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
 
@@ -58,7 +59,17 @@ export default function WithdrawLiquidityContent({
   const { write, ModalPortal } = useTxn({
     message: `Withdraw liquidity from ${pool?.poolName}`,
     onSuccess: () => {
+      captureEvent(
+        { event_id: "withdraw_pool_liquidity_success" },
+        { data: { poolName: pool?.poolName } },
+      );
       reset();
+    },
+    onError: (e: Error | undefined) => {
+      captureException(e, {
+        event_id: "withdraw_pool_liquidity_failed",
+        data: { poolName: pool?.poolName },
+      });
     },
     actionType: TransactionActionType.WITHDRAW_LIQUIDITY,
   });
