@@ -40,24 +40,8 @@ import { type Chain } from "viem";
 
 export const navItems = [
   {
-    href: "/my-bgt",
-    title: "My BGT",
-  },
-  {
-    href: "/amm",
-    title: "AMM",
-  },
-  {
-    href: "/honey",
-    title: "Honey",
-  },
-  {
-    href: "/governance",
-    title: "Governance",
-  },
-  {
-    href: "/redeem",
-    title: "Redeem",
+    href: "/",
+    title: "Home",
   },
   {
     href: "#",

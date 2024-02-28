@@ -58,6 +58,7 @@ export default function ValidatorCard({
       <div className="flex flex-col items-center justify-center gap-1 p-6 pb-4">
         <ValidatorIcon
           address={validator.operatorAddr as Address}
+          description={validator?.description?.identity ?? undefined}
           className="h-12 w-12"
         />
         <div className="flex h-12 w-full items-center justify-center font-medium text-muted-foreground">

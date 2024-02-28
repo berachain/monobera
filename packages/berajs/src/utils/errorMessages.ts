@@ -50,7 +50,7 @@ const errorMsgMap: ErrorMessages = {
     WRONG_LIMIT_PRICE: {
       keywords: ["WRONG_LIMIT_PRICE"],
       errorMSG:
-        "Currently, Limit Prices must be set above the current price for long positions and below for short positions.",
+        "Currently, Limit Prices must be set below the current price for long positions and above for short positions.",
     },
     PRICE_IMPACT_TOO_HIGH: {
       keywords: ["PRICE_IMPACT_TOO_HIGH"],
@@ -131,6 +131,10 @@ const errorMsgMap: ErrorMessages = {
     ARITHMETIC_ERROR: {
       keywords: ["Arithmetic operation resulted in underflow or overflow."],
       errorMSG: "This operation reverted on chain. Please try again later.",
+    },
+    BGT_CLAIMING_ERROR: {
+      keywords: ["unexpected withdraw amount from Rewards Module"],
+      errorMSG: "BGT claiming is currently disabled for maintenance.",
     },
   },
 };

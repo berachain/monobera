@@ -131,6 +131,7 @@ const SupplyModalContent = ({
           showExceeding={true}
           selectable={false}
           setAmount={(amount) => setAmount(amount as `${number}`)}
+          price={Number(reserveData?.formattedPriceInMarketReferenceCurrency)}
         />
       </div>
 

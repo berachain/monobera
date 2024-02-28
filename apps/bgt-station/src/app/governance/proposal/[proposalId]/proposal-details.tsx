@@ -62,12 +62,11 @@ export default function ProposalDetails({
   const globalTotal = useTotalDelegated();
   const userTotal = useTotalDelegatorDelegated();
 
-  const { useProposalVotes, isLoading, useNormalizedTallyResult } =
+  const { useProposalVotes, isLoading, useProposalTallyResult } =
     usePollProposalVotes(proposalId);
 
   const votes = useProposalVotes();
-  const normalizedTally = useNormalizedTallyResult();
-
+  const normalizedTally = useProposalTallyResult(proposalId);
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 
@@ -83,7 +82,12 @@ export default function ProposalDetails({
 
   const votingPower = useMemo(() => {
     if (userTotal && globalTotal) {
-      return userTotal / globalTotal;
+      const ratio = userTotal / globalTotal;
+      // Convert to scientific notation if very small
+      if (ratio > 0 && ratio < 0.01) {
+        return parseFloat(ratio.toPrecision(2));
+      }
+      return ratio;
     }
     return 0;
   }, [userTotal, globalTotal]);

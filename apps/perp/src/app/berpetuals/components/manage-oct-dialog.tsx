@@ -19,20 +19,19 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { parseUnits } from "ethers";
-import { useCopyToClipboard } from "usehooks-ts";
 import { parseEther } from "viem";
 import { type Address } from "wagmi";
 
 const TradeWalletSection = () => {
   const { octPrivKey, octAddress, octBalance, octTxCount } = useOct();
-
+  const [copied, setCopied] = useState(false);
   const { account } = useBeraJs();
 
-  const [_, copy] = useCopyToClipboard();
   const { isValueSendLoading, writeValueSend } = useOctTxn({
     message: "Withdrawing All From One Click Trading Wallet",
   });
 
+  const isBalanceLessThanThreshold = Number(octBalance ?? 0) < 0.1;
   return (
     <div className={"relative rounded-md border border-border p-3"}>
       <p className="text-md pb-4 font-bold leading-normal">
@@ -64,13 +63,13 @@ const TradeWalletSection = () => {
           size={"sm"}
           className="w-full"
           variant={"secondary"}
-          disabled={isValueSendLoading || false}
+          disabled={isValueSendLoading || isBalanceLessThanThreshold}
           onClick={() => {
             writeValueSend({
               address: account as Address,
               value:
                 parseUnits(octBalance.toString(), 18) -
-                parseEther(`${Number(0.15)}`),
+                parseEther(`${Number(0.1)}`),
             });
           }}
         >
@@ -80,9 +79,22 @@ const TradeWalletSection = () => {
           size={"sm"}
           className="w-full"
           variant={"secondary"}
-          onClick={() => copy(octPrivKey)}
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(octPrivKey);
+              setCopied(true);
+            } catch (error) {
+              console.error(error);
+            } finally {
+              setTimeout(() => setCopied(false), 1000);
+            }
+          }}
         >
-          Copy Private Key
+          {copied ? (
+            <Icons.check className="h-4 w-4 text-positive" />
+          ) : (
+            <span>Copy Private Key</span>
+          )}
         </Button>
       </div>
     </div>
@@ -310,7 +322,7 @@ export function ManageOctDialog({
   });
 
   const [showFundSection, setShowFundSection] = useState(false);
-  const isBalanceLessThanThreshold = Number(octBalance ?? 0) < 0.15;
+  const isBalanceLessThanThreshold = Number(octBalance ?? 0) < 0.1;
 
   function revokeDelegation() {
     revokeWrite({

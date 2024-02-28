@@ -7,7 +7,7 @@ export default function Hero() {
   return (
     <div className="mb-[-120px] mt-[-60px] flex flex-col flex-wrap items-center justify-between p-4 sm:px-8 lg:flex-row lg:px-32 xl:px-48">
       <div className="mb-6 flex flex-col items-center justify-center gap-4 lg:items-start">
-        <h1 className="text-[42px] font-extrabold leading-[48px] lg:text-[64px] lg:leading-[72px]">
+        <h1 className="text-center text-[42px] font-extrabold leading-[48px] lg:text-left lg:text-[64px] lg:leading-[72px]">
           <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
             Become a
           </span>{" "}
@@ -18,15 +18,15 @@ export default function Hero() {
             Ambassador
           </span>
         </h1>
-        <div className="text-sm font-medium leading-normal text-muted-foreground sm:text-base lg:text-lg">
+        <div className="text-center text-sm font-medium leading-normal text-muted-foreground sm:text-base lg:text-left lg:text-lg">
           Join the Bera Brigade and <br className="sm:hidden lg:block" />
           help foster the vibrant community of bears.
         </div>
         <div className="mb-6 mt-6 text-center sm:mb-0 sm:text-left">
-          <Link href="/">
+          <Link href="https://zlhd2dzw2hl.typeform.com/to/ZmYGgsv8">
             <Button className="mr-4">Sign up</Button>
           </Link>
-          <Link href="/">
+          <Link href="/program-details">
             <Button variant="secondary">Learn more</Button>
           </Link>
         </div>

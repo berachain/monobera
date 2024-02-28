@@ -48,12 +48,18 @@ const useValueSend = ({
           onSuccess?.(receipt);
         } else {
           const e = new TransactionFailedError();
-          onError?.(e);
+          onError?.({
+            message: e?.message ?? "Transaction failed",
+            hash: receipt,
+          });
         }
       } catch (e: any) {
         console.log(e);
         dispatch({ type: ActionEnum.ERROR });
-        onError?.(e);
+        onError?.({
+          message: e?.message ?? "Transaction failed",
+          hash: e?.transactionHash,
+        });
       }
     },
     [

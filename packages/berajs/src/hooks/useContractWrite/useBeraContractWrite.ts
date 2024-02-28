@@ -47,51 +47,43 @@ const useBeraContractWrite = ({
       let receipt: any | undefined;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
-        // prepareWriteContract causes issues with the gas estimation and fails before writing contract
         const { request: _request } = await prepareWriteContract({
-          account: account,
           address: address,
           abi: abi,
           functionName: functionName,
+          args: params,
           value: value,
-          args: [...params],
           nonce: userNonce,
         });
         // Directly pass request to writeContract
 
-        receipt = await walletClient?.writeContract({
-          account: account,
-          address: address,
-          abi: abi,
-          functionName: functionName,
-          value: value,
-          args: [...params],
-          chain: networkConfig.chain,
-          nonce: userNonce,
-          // gas: 10000000n,
-        });
+        receipt = await walletClient?.writeContract(_request);
         dispatch({ type: ActionEnum.SUBMITTING });
 
-        onSubmission?.(receipt);
-        const confirmationReceipt: any =
-          await publicClient.waitForTransactionReceipt({
-            hash: receipt,
-            pollingInterval: 5000,
-            timeout: 120000,
-            confirmations: 1,
-          });
-        if (confirmationReceipt?.status === "success") {
-          dispatch({ type: ActionEnum.SUCCESS });
-          onSuccess?.(receipt);
-        } else {
-          if (process.env.VERCEL_ENV !== "production")
-            console.log(confirmationReceipt);
-          // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const e = new TransactionFailedError();
-          onError?.({
-            message: "Something went wrong. Please Try again",
-          });
+        if (receipt) {
+          onSubmission?.(receipt);
+          const confirmationReceipt: any =
+            await publicClient.waitForTransactionReceipt({
+              hash: receipt,
+              pollingInterval: 5000,
+              timeout: 120000,
+              confirmations: 2,
+            });
+          if (confirmationReceipt?.status === "success") {
+            dispatch({ type: ActionEnum.SUCCESS });
+            onSuccess?.(receipt);
+          } else {
+            if (process.env.VERCEL_ENV !== "production")
+              console.log(confirmationReceipt);
+            // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const e = new TransactionFailedError();
+            onError?.({
+              message:
+                getErrorMessage(e) ?? "Something went wrong. Please Try again",
+              hash: receipt,
+            });
+          }
         }
       } catch (e: any) {
         if (process.env.VERCEL_ENV !== "production") {
@@ -102,6 +94,7 @@ const useBeraContractWrite = ({
         const finalMsg = getErrorMessage(e);
         onError?.({
           message: finalMsg,
+          hash: e?.transactionHash,
         });
       } finally {
         await refresh();

@@ -11,17 +11,18 @@
     "build": "turbo build",
     "clean": "turbo clean && git clean -xdf node_modules",
     "clean:git": "git clean -xdf node_modules",
-    "dev": "turbo dev --concurrency=20",
-    "build:dex": "turbo build --filter=dex --filter='./packages/*' --concurrency=20",
+    "pullenv": "vercel env pull --environment=production",
+    "dev": "turbo dev --concurrency=19",
+    "build:dex": "turbo build --filter=dex --filter='./packages/*' --concurrency=19",
     "dev:dex": "turbo dev --filter=dex",
-    "dev:honey": "turbo dev --filter=honey --filter='./packages/*' --concurrency=20",
-    "dev:bgt": "turbo dev --filter=bgt-station --filter='./packages/*' --concurrency=20",
-    "dev:lend": "turbo dev --filter=lend --filter='./packages/*' --concurrency=20",
-    "dev:perp": "turbo dev --filter=perp --filter='./packages/*' --concurrency=20",
-    "dev:faucet": "turbo dev --filter=faucet --filter='./packages/*' --concurrency=20",
-    "dev:clue": "turbo dev --filter=validator-clue --filter='./packages/*' --concurrency=20",
-    "dev:ambassador": "turbo dev --filter=ambassador --filter='./packages/*' --concurrency=20",
-    "dev:ecosystem": "turbo dev --filter=ecosystem --filter='./packages/*' --concurrency=20",
+    "dev:honey": "turbo dev --filter=honey --filter='./packages/*' --concurrency=19",
+    "dev:bgt": "turbo dev --filter=bgt-station --filter='./packages/*' --concurrency=19",
+    "dev:lend": "turbo dev --filter=lend --filter='./packages/*' --concurrency=19",
+    "dev:perp": "turbo dev --filter=perp --filter='./packages/*' --concurrency=19",
+    "dev:faucet": "turbo dev --filter=faucet --filter='./packages/*' --concurrency=19",
+    "dev:clue": "turbo dev --filter=validator-clue --filter='./packages/*' --concurrency=19",
+    "dev:ambassador": "turbo dev --filter=ambassador --filter='./packages/*' --concurrency=19",
+    "dev:eccsystem": "turbo dev --filter=ecosystem --filter='./packages/*' --concurrency=19",
     "check-types": "turbo check-types",
     "lint": "biome lint . ",
     "lint:apply": "biome lint . --apply",
@@ -29,7 +30,8 @@
     "format:check": "biome format .",
     "format": "biome format --write .",
     "check": "biome check .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "upsertenv": "node ./scripts/upsertVercelEnv.js"
   },
   "dependencies": {
     "@bera/eslint-config": "0.1.0",
@@ -42,5 +44,8 @@
     "prettier-plugin-tailwindcss": "^0.2.8",
     "turbo": "^1.10.15",
     "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "yargs": "^17.7.2"
   }
 }

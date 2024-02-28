@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Link from "next/link";
 import {
   bgtName,
   bgtUrl,
@@ -8,31 +9,18 @@ import {
   blockExplorerUrl,
   dexName,
   dexUrl,
-  docsUrl,
   honeyName,
   honeyUrl,
-  lendDocsUrl,
   lendName,
   lendUrl,
-  perpsDocsUrl,
   perpsName,
   perpsUrl,
 } from "@bera/config";
 import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-// enum EcosystemType {
-//   All = 1,
-//   Defi = 2,
-//   Stablecoins = 3,
-//   Validators = 4,
-//   Gaming = 5,
-//   Metaverse = 6,
-//   Data = 7,
-//   Infrastructure = 7,
-// }
+const ITEMS_PER_PAGE = 6;
 
 // TODO: add in other properties
 const ecosystemTypeTabs = [
@@ -43,22 +31,25 @@ const ecosystemTypeTabs = [
     value: "Defi",
   },
   {
-    value: "Stablecoins",
+    value: "Bridges",
   },
   {
-    value: "Validators",
+    value: "Wallets and Onramps",
+  },
+  {
+    value: "CEXs",
+  },
+  {
+    value: "NFTs",
   },
   {
     value: "Gaming",
   },
   {
-    value: "Metaverse",
+    value: "SocialFi",
   },
   {
-    value: "Data",
-  },
-  {
-    value: "Infrastructure",
+    value: "Infrastructure & Tooling",
   },
 ];
 // TODO: add in other projects
@@ -70,7 +61,7 @@ const projectList = [
     description:
       "Swap a variety of tokens effortlessly on our decentralized platform. Provide liquidity to pools and earn BGT rewards.",
     goto: dexUrl,
-    learnMore: `${docsUrl}/learn/bex`,
+    ecosystemType: "Defi",
   },
   {
     icon: <Icons.honeyFav className="h-[52px] w-[52px]" />,
@@ -79,7 +70,7 @@ const projectList = [
     description:
       "A stablecoin that's integral to the Berachain ecosystem. Utilize HONEY for seamless trading, ensuring value consistency.",
     goto: honeyUrl,
-    learnMore: `${docsUrl}/learn/protocol/honey-stablecoin`,
+    ecosystemType: "Gaming",
   },
   {
     icon: <Icons.bendFav className="h-[52px] w-[52px]" />,
@@ -88,7 +79,7 @@ const projectList = [
     description:
       "Supply assets and unlock the potential to borrow HONEY. Earn BGT rewards while you supply and borrow.",
     goto: lendUrl,
-    learnMore: lendDocsUrl,
+    ecosystemType: "Defi",
   },
   {
     icon: <Icons.berpsFav className="h-[52px] w-[52px]" />,
@@ -97,7 +88,7 @@ const projectList = [
     description:
       "Experience the thrill of high leverage trading, tailored for both novices and seasoned traders. With an impressive 100x leverage.",
     goto: perpsUrl,
-    learnMore: perpsDocsUrl,
+    ecosystemType: "SocialFi",
   },
   {
     icon: <Icons.bgtFav className="h-[52px] w-[52px]" />,
@@ -106,7 +97,7 @@ const projectList = [
     description:
       "Engage directly in the governance of BGT, leverage BGT Station for innovative bribe mechanisms, enhancing participation.",
     goto: bgtUrl,
-    learnMore: `${docsUrl}/learn/protocol/bgt-station`,
+    ecosystemType: "Infrastructure & Tooling",
   },
   {
     icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
@@ -115,92 +106,130 @@ const projectList = [
     description:
       "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
     goto: blockExplorerUrl,
-    learnMore: `${docsUrl}/developers/beratrail-block-explorer`,
+    ecosystemType: "Infrastructure & Tooling",
+  },
+  {
+    icon: <Icons.XOctagon className="h-[52px] w-[52px]" />,
+    name: perpsName,
+    subtitle: "Trade Your Favourite Pairs",
+    description:
+      "Experience the thrill of high leverage trading, tailored for both novices and seasoned traders. With an impressive 100x leverage.",
+    goto: perpsUrl,
+    ecosystemType: "SocialFi",
+  },
+  {
+    icon: <Icons.bee className="h-[52px] w-[52px]" />,
+    name: bgtName,
+    subtitle: "The Hub for BGT Governance",
+    description:
+      "Engage directly in the governance of BGT, leverage BGT Station for innovative bribe mechanisms, enhancing participation.",
+    goto: bgtUrl,
+    ecosystemType: "Infrastructure & Tooling",
+  },
+  {
+    icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
+    name: blockExplorerName,
+    subtitle: "Berachain's block explorer",
+    description:
+      "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
+    goto: blockExplorerUrl,
+    ecosystemType: "Infrastructure & Tooling",
   },
 ];
 
 export default function EcosystemProjects() {
   const [keywords, setKeywords] = useState<string | null>(null);
   const [ecosystemType, setEcosystemType] = React.useState<string>("All");
-  const [visibleProjects, setVisibleProjects] = React.useState(4);
-  const [viewMore, setViewMore] = React.useState(false);
+  const [visibleProjects, setVisibleProjects] = React.useState(ITEMS_PER_PAGE);
+  const [viewMore, setViewMore] = React.useState(true);
 
   const toggleDisplay = () => {
     if (viewMore) {
       setVisibleProjects(projectList.length);
     } else {
-      setVisibleProjects(3);
+      setVisibleProjects(ITEMS_PER_PAGE);
     }
     setViewMore(!viewMore);
   };
-  const filteredProjectList: any = useMemo(
-    () =>
-      projectList?.filter((project: any) => {
-        if (!keywords) return true;
-        return project.name.toLowerCase().includes(keywords.toLowerCase());
-      }),
-    [projectList, keywords],
-  );
+
+  const filteredProjectList = useMemo(() => {
+    return projectList.filter((project) => {
+      const matchesKeywords =
+        !keywords ||
+        project.name.toLowerCase().includes(keywords.toLowerCase());
+      const matchesEcosystemType =
+        ecosystemType === "All" || project.ecosystemType === ecosystemType;
+      return matchesKeywords && matchesEcosystemType;
+    });
+  }, [keywords, ecosystemType]);
+
   return (
     <div
       id="dapps"
-      className="mt-4 flex flex-col items-center gap-6 text-center"
+      className="mt-16 flex flex-col items-center justify-center gap-6 text-center lg:w-[1280px]"
     >
       <SearchInput
+        className="h-[40px] w-full rounded-md border border-solid bg-background"
         placeholder="Search..."
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setKeywords(e.target.value)
         }
       />
 
-      <Tabs defaultValue={"All"} className="hidden w-full sm:block">
-        <TabsList className="w-full">
-          {ecosystemTypeTabs.map((type) => (
-            <TabsTrigger
-              value={type.value as any}
-              key={type.value}
-              className="w-full rounded-sm"
-              onClick={() => setEcosystemType(type.value)}
-            >
+      <div className="flex w-full flex-row items-center justify-center gap-2">
+        {ecosystemTypeTabs.map((type) => (
+          <Button
+            onClick={() => setEcosystemType(type.value)}
+            key={type.value}
+            variant="ghost"
+            className="flex min-w-[50px] items-center justify-center"
+          >
+            <div className="text-sm font-normal text-muted-foreground">
               {type.value}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
-      <div className="my-4 border-b border-gray-200" />
-      <div className="mx-auto grid w-fit grid-cols-1 gap-6 lg:grid-cols-4 xl:grid-cols-4">
+            </div>
+          </Button>
+        ))}
+      </div>
+
+      <div className="my-4 w-full border border-solid" />
+
+      <div className="mx-auto grid w-fit grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
-          .map((fav: any, index: number) => (
+          .map((project: any, index: number) => (
             <div
               key={index}
-              className="mx-auto flex w-full max-w-[260px] flex-col items-center justify-center gap-4 rounded-md border border-solid bg-background p-6"
+              className="mx-auto flex w-full max-w-[260px] flex-col justify-between gap-4 rounded-md border border-solid bg-background p-6"
             >
-              {fav.icon}
-              <div>
-                <div className="text-3xl font-semibold leading-9">
-                  {fav.name}
+              <div className="flex flex-col items-center gap-4">
+                {project.icon}
+                <div>
+                  <div className="text-3xl font-semibold leading-9">
+                    {project.name}
+                  </div>
+                  <div className="font-medium">{project.subtitle}</div>
                 </div>
-                <div className="font-medium ">{fav.subtitle}</div>
+                <div className="flex-grow text-center text-sm leading-5 text-muted-foreground">
+                  {project.description}
+                </div>
               </div>
-              <div className="text-center text-sm leading-5 text-muted-foreground">
-                {fav.description}
-              </div>
-              <div className="flex justify-between gap-2">
-                <Button onClick={() => window.open(fav.goto)} variant="outline">
-                  View Project <Icons.arrowRight />
-                </Button>
-              </div>
+              <Link href={project.goto}>
+                <div className="flex justify-center gap-2 text-sm text-muted-foreground">
+                  Visit Project <Icons.arrowRight />
+                </div>
+              </Link>
             </div>
           ))}
       </div>
-      <Button
-        variant="outline"
-        className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
-        onClick={toggleDisplay}
-      >
-        {viewMore ? "View More" : "View Less"}
-      </Button>
+      {filteredProjectList.length > ITEMS_PER_PAGE && (
+        <Button
+          variant="outline"
+          className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
+          onClick={toggleDisplay}
+        >
+          {viewMore ? "View More" : "View Less"}
+        </Button>
+      )}
     </div>
   );
 }

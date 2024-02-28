@@ -22,7 +22,7 @@
     "@bera/tailwind-config": "0.1.0",
     "@bera/ui": "0.1.0",
     "@hirohe/react-watermark": "^0.5.0",
-    "@rive-app/react-canvas": "^4.1.1",
+    "@rive-app/react-canvas": "^4.8.1",
     "@t3-oss/env-nextjs": "^0.2.2",
     "@vercel/analytics": "^1.0.1",
     "bignumber.js": "^9.1.2",
