@@ -13,14 +13,13 @@ interface PreviewToken {
   price?: number;
 }
 
-export function PreviewToken({ token, weight, value, price }: PreviewToken) {
+export function PreviewToken({ token, value, price }: PreviewToken) {
   return (
     <li className={"flex w-full flex-row items-center  justify-between p-2"}>
       <div className="flex cursor-not-allowed items-center justify-center gap-2">
         <>
           <TokenIcon address={token?.address ?? ""} />
           <span className="text-sm font-medium">{token?.symbol}</span>
-          {weight && <p className="text-sm text-muted-foreground">{weight}%</p>}
         </>
       </div>
       <div className="flex grow-0 cursor-not-allowed flex-col border-0 p-0 text-right text-sm text-muted-foreground outline-none">

@@ -118,5 +118,6 @@ export const usePollAllowances = ({ contract, tokens }: IUsePollAllowances) => {
   return {
     useCurrentAllowancesForContract,
     useSelectedAllowanceForContract,
+    refresh: () => mutate(QUERY_KEY),
   };
 };
