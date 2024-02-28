@@ -33,7 +33,6 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: TData) => void;
-  customSorting?: SortingState;
   onCustomSortingChange?: (sorting: any) => void;
   className?: string;
   title?: string;
@@ -56,8 +55,6 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   onRowClick,
-  customSorting,
-  onCustomSortingChange = undefined,
   className,
   title,
   enablePagination,
