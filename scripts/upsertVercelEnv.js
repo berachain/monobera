@@ -274,12 +274,12 @@ Continue? (Y/n)`,
 
   const getTargetEnvs = () => {
     if (isProduction) {
-      ["production", "development", "preview"];
+      return ["production", "development", "preview"];
     }
     if (argv.productionOnly) {
-      ["production"];
+      return ["production"];
     } else {
-      ["development", "preview"];
+      return ["development", "preview"];
     }
   };
 
