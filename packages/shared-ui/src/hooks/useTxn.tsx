@@ -165,8 +165,7 @@ export const useTxn = ({
             });
           }
         }
-        captureException(new Error("useTxn failed"), {
-          event_id: "useTxn_failed",
+        captureException("useTxn failed", {
           data: { message, actionType },
         });
         onError?.(error);
