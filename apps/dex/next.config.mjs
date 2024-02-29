@@ -5,7 +5,12 @@ import "./src/env.mjs";
 const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
-  transpilePackages: ["@bera/ui", "@bera/shared-ui", "@bera/berajs"],
+  transpilePackages: [
+    "@bera/ui",
+    "@bera/shared-ui",
+    "@bera/berajs",
+    "@bera/beracrocswap",
+  ],
   compiler: {
     removeConsole: false,
   },
