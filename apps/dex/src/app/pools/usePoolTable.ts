@@ -31,7 +31,6 @@ export const usePoolTable = (sorting: any) => {
     ],
     async (key: any[]) => {
       const page = key[1];
-      console.log("am searching");
       try {
         setOldData(allData === undefined ? undefined : allData ?? []);
         const sortOption =
@@ -75,7 +74,6 @@ export const usePoolTable = (sorting: any) => {
     isAllDataEmpty ||
     (allData && (allData[allData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
 
-  console.log("allData", allData);
   const data = allData ? ([] as PoolV2[]).concat(...allData) : [];
 
   const handleEnter = (e: any) => {

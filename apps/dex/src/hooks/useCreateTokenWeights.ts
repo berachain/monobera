@@ -71,11 +71,6 @@ const useCreateTokenWeights = () => {
     quoteToken?.address ?? "",
   );
 
-  console.log({
-    quoteTokenBalance,
-    baseTokenBalance,
-  });
-
   // track any errors
   useEffect(() => {
     setError(undefined);
@@ -102,11 +97,6 @@ const useCreateTokenWeights = () => {
       step === 2 &&
       (isBaseTokenExceedingBalance || isQuoteTokenExceedingBalance);
 
-    console.log({
-      isBaseTokenExceedingBalance,
-      isQuoteTokenExceedingBalance,
-      isInitialLiquidityExceedingBalance,
-    });
     const isBothBeras = isBeratoken(tokenA) && isBeratoken(tokenB);
     if (isUndefinedToken) {
       setError(new InvalidInputError("Tokens must be selected"));
