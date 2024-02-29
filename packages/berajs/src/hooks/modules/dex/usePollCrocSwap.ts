@@ -93,11 +93,6 @@ export const usePollCrocSwap = ({
 
           const amountOut = result as bigint;
           const formattedAmountOut = formatUnits(amountOut, tokenOutDecimals);
-          console.log("weutsdygihuope");
-          console.log({
-            amountOut,
-            formattedAmountOut,
-          });
           // @ts-ignore
           return {
             ...swapInfo,

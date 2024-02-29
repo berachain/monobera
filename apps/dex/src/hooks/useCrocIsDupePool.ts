@@ -2,17 +2,21 @@ import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Token } from "@bera/berajs";
 import { client, getCrocSelectedPool } from "@bera/graphql";
+import { useCrocPoolFromTokens, useCrocToken } from "./useCrocPoolFromTokens";
 
 export const useCrocIsDupePool = ({
-  base,
-  quote,
+  tokenA,
+  tokenB,
 }: {
-  base: Token | undefined;
-  quote: Token | undefined;
+  tokenA: Token | undefined;
+  tokenB: Token | undefined;
 }) => {
-  const QUERY_KEY = ["isDupePool", base, quote];
+  const crocTokenA = useCrocToken(tokenA);
+  const crocTokenB = useCrocToken(tokenB);
+  const crocPool = useCrocPoolFromTokens(crocTokenA, crocTokenB);
+  const QUERY_KEY = ["isDupePool", crocPool];
   const { isLoading, isValidating } = useSWRImmutable(QUERY_KEY, async () => {
-    if (!base || !quote) {
+    if (!crocPool) {
       return undefined;
     }
     try {
@@ -20,14 +24,15 @@ export const useCrocIsDupePool = ({
         .query({
           query: getCrocSelectedPool,
           variables: {
-            baseAsset: base.address,
-            quoteAsset: quote.address,
+            baseAsset: crocPool.baseToken.tokenAddr,
+            quoteAsset: crocPool.quoteToken.tokenAddr,
           },
         })
         .then((result: any) => {
           return result.data.pools.length > 0;
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
           return false;
         });
 
