@@ -43,14 +43,8 @@ export function CreatePoolInitialLiquidity({
   onBack,
 }: Props) {
   useEffect(() => {
-    if (
-      initialPrice === "" ||
-      initialPrice === "0" ||
-      getSafeNumber(initialPrice) === 0
-    ) {
-      setBaseAmount("");
-      setQuoteAmount("");
-    }
+    setBaseAmount("");
+    setQuoteAmount("");
   }, [initialPrice]);
 
   const baseCost = getBaseCost(getSafeNumber(initialPrice));
@@ -60,20 +54,15 @@ export function CreatePoolInitialLiquidity({
     setBaseAmount(value);
     setIsBaseTokenInput(true);
     const quoteAmount = baseCost * getSafeNumber(value);
-    setQuoteAmount(quoteAmount.toString());
+    setQuoteAmount(quoteAmount === 0 ? "" : quoteAmount.toString());
   };
 
   const handleQuoteAssetAmountChange = (value: string): void => {
     setQuoteAmount(value);
     setIsBaseTokenInput(false);
     const baseAmount = quoteCost * getSafeNumber(value);
-    setBaseAmount(baseAmount.toString());
+    setBaseAmount(baseAmount === 0 ? "" : baseAmount.toString());
   };
-
-  console.log({
-    baseToken,
-    quoteToken,
-  });
 
   const isInputDisabled =
     !initialPrice || initialPrice === "0" || getSafeNumber(initialPrice) === 0;

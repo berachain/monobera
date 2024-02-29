@@ -86,15 +86,12 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           args: [account],
         });
 
-        console.log({ lpBalanceCall });
         const [tokenHoneyPrices, positionsResult, lpBalance] =
           await Promise.all([
             tokenHoneyPricesResult,
             positionsResponse,
             lpBalanceCall,
           ]);
-
-        console.log({ tokenHoneyPrices, positionsResult, lpBalance });
 
         const positions = await positionsResult.json();
 
