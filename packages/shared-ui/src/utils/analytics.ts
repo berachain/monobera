@@ -28,7 +28,10 @@ export const useAnalytics = () => {
   };
 
   const track = (eventName: string, eventData?: { [key: string]: any }) => {
-    mixpanel.track(eventName, eventData);
+    mixpanel.track(eventName, {
+      eventData,
+      project: process.env.NEXT_PUBLIC_PROJECT_NAME ?? "unknown",
+    });
   };
 
   return { track, setAnalyticsUserId, unsetAnalyticsUserId, captureException };

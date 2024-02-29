@@ -15,7 +15,6 @@ import {
   type IContractWrite,
   type IValueSend,
 } from "@bera/berajs";
-import { captureEvent, captureException } from "@sentry/nextjs";
 import toast from "react-hot-toast";
 import { useMediaQuery } from "usehooks-ts";
 
@@ -26,6 +25,7 @@ import {
   SubmissionModal,
   SuccessModal,
 } from "../txn-modals";
+import { useAnalytics } from "../utils/analytics";
 import {
   CLOSE_MODAL,
   OPEN_MODAL,
@@ -110,6 +110,8 @@ export const useTxn = ({
 
   const addRecentTransaction = useAddRecentTransaction();
 
+  const { captureException, track } = useAnalytics();
+
   const { write, isLoading, isSubmitting, isSuccess, isError } =
     useBeraContractWrite({
       /**
@@ -165,6 +167,11 @@ export const useTxn = ({
             });
           }
         }
+        track("useTxn_failed", {
+          operation: "useBeraContractWrite",
+          message,
+          actionType,
+        });
         captureException(error, {
           data: { message, actionType },
         });
@@ -205,13 +212,12 @@ export const useTxn = ({
           actionType,
           timestamp: Date.now(),
         });
-        captureEvent(
-          {
-            event_id: "useTxn_success",
-            message: "useTxn Success",
-          },
-          { data: { message, actionType } },
-        );
+        track("useTxn_success", {
+          message,
+          actionType,
+          hash: result,
+          operation: "useBeraContractWrite",
+        });
         onSuccess?.(result);
       },
 
@@ -237,6 +243,11 @@ export const useTxn = ({
         if (!disableModal) {
           openModal("loadingModal", undefined);
         }
+        track("useTxn_started", {
+          message,
+          actionType,
+          operation: "useBeraContractWrite",
+        });
         onLoading?.();
       },
 
@@ -331,6 +342,14 @@ export const useTxn = ({
           });
         }
       }
+      track("useTxn_failed", {
+        message,
+        actionType,
+        operation: "useValueSend",
+      });
+      captureException(error, {
+        data: { message, actionType },
+      });
       onError?.(error);
     },
 
@@ -368,6 +387,12 @@ export const useTxn = ({
         timestamp: Date.now(),
         actionType: TransactionActionType.BORROW,
       });
+      track("useTxn_success", {
+        message,
+        actionType,
+        hash: result,
+        operation: "useValueSend",
+      });
       onSuccess?.(result);
     },
 
@@ -393,6 +418,11 @@ export const useTxn = ({
       if (!disableModal) {
         openModal("loadingModal", undefined);
       }
+      track("useTxn_started", {
+        message,
+        actionType,
+        operation: "useValueSend",
+      });
       onLoading?.();
     },
 
