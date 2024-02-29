@@ -10,12 +10,11 @@ import {
 } from "@bera/berajs";
 import { bgtTokenAddress, rewardsAddress } from "@bera/config";
 import { ActionButton, TokenInput, useTxn } from "@bera/shared-ui";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { parseEther } from "viem";
 import { type Address } from "wagmi";
-
-import { captureEvent, captureException } from "~/utils/analytics";
 
 export function RewardBtn({ poolAddress, ...props }: any) {
   const { isReady } = useBeraJs();
@@ -26,19 +25,22 @@ export function RewardBtn({ poolAddress, ...props }: any) {
   const { useBgtReward, refetch } = usePollBgtRewards([poolAddress]);
   const { data: bgtRewards } = useBgtReward(poolAddress);
 
+  const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal } = useTxn({
     message: `Claiming ${
       amount === bgtRewards ? "All" : Number(amount).toFixed(2)
     } BGT Rewards`,
     actionType: TransactionActionType.CLAIMING_REWARDS,
     onSuccess: () => {
-      captureEvent(
-        { event_id: "claim_bgt_reward_success" },
-        { data: { claim_amount: Number(amount).toFixed(2) } },
-      );
+      track("claim_bgt_reward_success", {
+        claim_amount: Number(amount).toFixed(2),
+      });
       refetch();
     },
     onError: (e: Error | undefined) => {
+      track("claim_bgt_reward_failed", {
+        claim_amount: Number(amount).toFixed(2),
+      });
       captureException(e, {
         event_id: "claim_bgt_reward_failed",
         data: { claim_amount: Number(amount).toFixed(2) },

@@ -23,6 +23,7 @@ import {
   TokenInput,
   useTxn,
 } from "@bera/shared-ui";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -31,8 +32,8 @@ import { Icons } from "@bera/ui/icons";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
-import { captureEvent, captureException } from "~/utils/analytics";
-import { SwapKind, WRAP_TYPE, useSwap } from "~/hooks/useSwap";
+// import { SwapKind, WRAP_TYPE, useSwap } from "~/hooks/useSwap";
+import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
 
 const DynamicPreview = dynamic(() => import("./preview-dialog"), {
@@ -74,7 +75,7 @@ export function SwapCard({
   className,
 }: ISwapCard) {
   const {
-    setSwapKind,
+    // setSwapKind,
     setSelectedFrom,
     selectedFrom,
     allowance,
@@ -100,11 +101,13 @@ export function SwapCard({
     isWrap,
     wrapType,
     minAmountOut,
-    swapKind,
+    // swapKind,
   } = useSwap({
     inputCurrency,
     outputCurrency,
   });
+
+  const { captureException, track } = useAnalytics();
 
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
@@ -130,21 +133,20 @@ export function SwapCard({
     // }`,
     message: `Swap ${selectedFrom?.symbol} to ${selectedTo?.symbol}`,
     onSuccess: () => {
-      captureEvent(
-        { event_id: "swap_token_success" },
-        {
-          data: {
-            tokenFrom: selectedFrom?.symbol,
-            tokenTo: selectedTo?.symbol,
-          },
-        },
-      );
+      track("swap_token_success", {
+        tokenFrom: selectedFrom?.symbol,
+        tokenTo: selectedTo?.symbol,
+      });
       setFromAmount(undefined);
       setSwapAmount("");
       setToAmount(undefined);
       setOpenPreview(false);
     },
     onError: (e: Error | undefined) => {
+      track("swap_token_failed", {
+        tokenFrom: selectedFrom?.symbol,
+        tokenTo: selectedTo?.symbol,
+      });
       captureException(e, {
         event_id: "swap_token_failed",
         data: { tokenFrom: selectedFrom?.symbol, tokenTo: selectedTo?.symbol },
@@ -167,17 +169,22 @@ export function SwapCard({
         ? TransactionActionType.WRAP
         : TransactionActionType.UNWRAP,
     onSuccess: () => {
-      captureEvent(
-        {
-          event_id:
-            wrapType === WRAP_TYPE.WRAP
-              ? "wrap_bera_success"
-              : "unwrap_wbera_success",
-        },
-        { data: swapAmount },
+      track(
+        wrapType === WRAP_TYPE.WRAP
+          ? "wrap_bera_success"
+          : "unwrap_wbera_success",
+
+        { swapAmount },
       );
     },
     onError: (e: Error | undefined) => {
+      track(
+        wrapType === WRAP_TYPE.WRAP
+          ? "wrap_bera_failed"
+          : "unwrap_wbera_failed",
+
+        { swapAmount },
+      );
       captureException(e, {
         event_id:
           wrapType === WRAP_TYPE.WRAP

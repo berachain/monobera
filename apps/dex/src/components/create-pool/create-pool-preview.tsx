@@ -16,6 +16,7 @@ import {
   TokenList,
   useTxn,
 } from "@bera/shared-ui";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -24,7 +25,6 @@ import { Input } from "@bera/ui/input";
 import { parseUnits } from "ethers";
 import { type Address } from "wagmi";
 
-import { captureEvent, captureException } from "~/utils/analytics";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import onCreatePool from "~/app/api/getPools/api/onCreatePool";
 import useCreatePool from "~/hooks/useCreatePool";
@@ -51,14 +51,17 @@ export function CreatePoolPreview({
   const { networkConfig } = useBeraConfig();
   const router = useRouter();
 
+  const { captureException, track } = useAnalytics();
+
   const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
     onSuccess: () => {
-      captureEvent({ event_id: "create_pool_success" }, { data: { poolName } });
+      track("create_pool_success", { poolName });
       void onCreatePool();
       router.push("/pool");
     },
     onError: (e: Error | undefined) => {
+      track("create_pool_failed", { poolName });
       captureException(e, {
         event_id: "create_pool_failed",
         data: { poolName },
