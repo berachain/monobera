@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
 import { formatAmountSmall, formatter } from "@bera/berajs";
 import {
   DataTableColumnHeader,
@@ -11,25 +12,15 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
-import {
-  type PoolV2,
-  getPoolAddLiquidityUrl,
-  getPoolWithdrawUrl,
-} from "~/app/pools/fetchPools";
-import {
-  usePollUserDeposited,
-  type IUserPool,
-} from "~/hooks/usePollUserDeposited";
+import { getAddress } from "ethers";
 
-export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
-  // const { data: myPools = [] } = usePollUsersPools();
-  // const isDeposited = myPools?.find(
-  //   (myPool: any) => getAddress(myPool.pool) === getAddress(pool?.pool),
-  // );
+import { usePollUsersPools } from "~/hooks/usePollUsersPools";
 
-  const { useIsPoolDeposited } = usePollUserDeposited();
-  const isDeposited = useIsPoolDeposited(pool);
-
+export const PoolSummary = ({ pool }: { pool: Pool }) => {
+  const { data: myPools = [] } = usePollUsersPools();
+  const isDeposited = myPools?.find(
+    (myPool: any) => getAddress(myPool.pool) === getAddress(pool?.pool),
+  );
   return (
     <div className="flex flex-col items-start gap-2">
       <span className="w-[180px] truncate text-left">{pool?.poolName}</span>
@@ -42,12 +33,12 @@ export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
         >
-          {Number(pool?.feeRate).toFixed(2)}%
+          {Number(pool?.formattedSwapFee).toFixed(2)}%
         </Badge>
         {isDeposited && (
           <Badge
             variant="success"
-            className="border-none bg-success px-2 py-1 text-[10px] leading-[10px] "
+            className="border-none bg-success px-2 py-1 text-xs"
           >
             Provided Liquidity
           </Badge>
@@ -56,7 +47,7 @@ export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
     </div>
   );
 };
-export const columns: ColumnDef<PoolV2>[] = [
+export const columns: ColumnDef<Pool>[] = [
   {
     accessorKey: "poolName",
     header: ({ column }) => (
@@ -77,7 +68,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "tvl",
+    accessorKey: "totalValue",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -87,7 +78,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => {
-      const totalValue = formatter.format(row.original?.tvlUsd || 0);
+      const totalValue = formatter.format(row.original?.totalValue || 0);
       // const tvl = row.original.weeklyTvl?.[6] || 0;
       // const tvl24h = row.original.weeklyTvl?.[5] || 1;
       return (
@@ -114,7 +105,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     },
   },
   {
-    accessorKey: "fees",
+    accessorKey: "dailyFees",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -124,7 +115,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => {
-      const dailyFees = formatter.format(row.original.fees || 0);
+      const dailyFees = formatter.format(row.original.dailyFees || 0);
       // const fee = row.original.weeklyFees?.[6] || 0;
       // const fee24h = row.original.weeklyFees?.[5] || 1;
       return (
@@ -151,7 +142,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     },
   },
   {
-    accessorKey: "volume",
+    accessorKey: "dailyVolume",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -161,7 +152,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => {
-      const dailyVolume = formatter.format(row.original.volumeUsd || 0);
+      const dailyVolume = formatter.format(row.original.dailyVolume || 0);
       // const volume = row.original.weeklyVolume?.[6] || 0;
       // const volume24h = row.original.weeklyVolume?.[5] || 1;
       return (
@@ -190,7 +181,6 @@ export const columns: ColumnDef<PoolV2>[] = [
   },
   {
     accessorKey: "bgtApy",
-    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -218,7 +208,6 @@ export const columns: ColumnDef<PoolV2>[] = [
   },
   {
     accessorKey: "totalApy",
-    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -254,7 +243,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     ),
     cell: ({ row }) => (
       <Link
-        href={getPoolAddLiquidityUrl(row.original)}
+        href={`/pool/${row.original.pool}/add-liquidity`}
         onClick={(e) => e.stopPropagation()}
       >
         <Button variant={"outline"} className="flex items-center gap-1">
@@ -280,7 +269,7 @@ export const columns: ColumnDef<PoolV2>[] = [
 //     </div>
 //   );
 // };
-export const my_columns: ColumnDef<IUserPool>[] = [
+export const my_columns: ColumnDef<any>[] = [
   {
     accessorKey: "poolName",
     header: ({ column }) => (
@@ -309,7 +298,7 @@ export const my_columns: ColumnDef<IUserPool>[] = [
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
         >
-          dynamic
+          {Number(row.original?.formattedSwapFee).toFixed(2)}%
         </Badge>
       </div>
     ),
@@ -350,7 +339,7 @@ export const my_columns: ColumnDef<IUserPool>[] = [
   //   },
   // },
   {
-    accessorKey: "userPosition.estimatedHoneyValue",
+    accessorKey: "userBalance",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -360,8 +349,7 @@ export const my_columns: ColumnDef<IUserPool>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center text-sm">
-        {formatter.format(row.original.userPosition?.estimatedHoneyValue ?? 0)}{" "}
-        USD
+        {formatter.format(row.original.userBalance)} USD
       </div>
     ),
   },
@@ -376,8 +364,9 @@ export const my_columns: ColumnDef<IUserPool>[] = [
       />
     ),
     cell: ({ row }) => {
-      const { isSmall, numericValue: formattedBGTRewards } =
-        formatAmountSmall("0");
+      const { isSmall, numericValue: formattedBGTRewards } = formatAmountSmall(
+        row.original.bgtRewards ?? "0",
+      );
       return (
         <Badge
           variant={"warning"}
@@ -389,13 +378,13 @@ export const my_columns: ColumnDef<IUserPool>[] = [
         </Badge>
       );
     },
-    // sortingFn: (rowA, rowB) => {
-    //   const a = rowA.original.bgtRewards ?? 0;
-    //   const b = rowB.original.bgtRewards ?? 0;
-    //   if (a < b) return -1;
-    //   if (a > b) return 1;
-    //   return 0;
-    // },
+    sortingFn: (rowA, rowB) => {
+      const a = rowA.original.bgtRewards ?? 0;
+      const b = rowB.original.bgtRewards ?? 0;
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    },
     filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
   {
@@ -410,7 +399,7 @@ export const my_columns: ColumnDef<IUserPool>[] = [
     cell: ({ row }) => (
       <div className="w-100 flex flex-row items-center justify-center gap-1">
         <Link
-          href={getPoolAddLiquidityUrl(row.original)}
+          href={`/pool/${row.original.pool}/add-liquidity`}
           onClick={(e) => e.stopPropagation()}
         >
           <Button variant={"outline"} className="flex gap-1">
@@ -418,7 +407,7 @@ export const my_columns: ColumnDef<IUserPool>[] = [
           </Button>
         </Link>
         <Link
-          href={getPoolWithdrawUrl(row.original)}
+          href={`/pool/${row.original.pool}/withdraw`}
           onClick={(e) => e.stopPropagation()}
         >
           <Button variant={"outline"} className="flex gap-1">

@@ -14,4 +14,3 @@ export * from "./usePollSwaps";
 export * from "./useBeraPrice";
 export * from "./usePollUserPendingBgtRewards";
 export * from "./usePollPreviewBatchSwap";
-export * from "./usePollCrocSwap";

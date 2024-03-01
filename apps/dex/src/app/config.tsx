@@ -43,7 +43,7 @@ export const navItems = [
     title: "Swap",
   },
   {
-    href: "/pools",
+    href: "/pool",
     title: "Pool",
   },
   {
@@ -132,7 +132,7 @@ export const ctaFeatures = [
   {
     logoURI: "/graphics/pool.png",
     title: "Pool",
-    href: "/pools",
+    href: "/pool",
   },
 ];
 

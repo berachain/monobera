@@ -1,18 +1,17 @@
 import Link from "next/link";
+import { type Pool } from "@bera/bera-router/dist/services/PoolService/types";
+import { truncateHash } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
 import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import {
-  getPoolAddLiquidityUrl,
-  getPoolWithdrawUrl,
-  type PoolV2,
-} from "../pools/fetchPools";
+import { formatUnits } from "viem";
 
-export default function PoolHeader({ pool }: { pool: PoolV2 }) {
+export default function PoolHeader({ pool }: { pool: Pool | undefined }) {
   return (
     <div className="flex w-full flex-col items-center justify-between md:items-end md:justify-center lg:flex-row">
       <div className="flex w-full flex-col items-center gap-4 md:items-start">
-        <Link href={"/pools"} target="_self">
+        <Link href={"/pool"} target="_self">
           <Button
             variant={"ghost"}
             size="sm"
@@ -34,29 +33,26 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
             APY
             <ApyTooltip className="w-3" />:
             <span className="text-sm text-success-foreground">
-              {/* {pool?.totalApy?.toFixed(2)}% */}
-              0%
+              {pool?.totalApy?.toFixed(2)}%
             </span>
           </div>
           <div className="flex w-fit items-center gap-1">
             BGT Rewards:
             <span className="text-sm text-warning-foreground">
-              {/* {pool?.bgtApy?.toFixed(2)}% */}
-              0%
+              {pool?.bgtApy?.toFixed(2)}%
             </span>
           </div>
           <div className="flex w-fit items-center gap-1">
             Fee:
             <span className="text-sm text-success-foreground">
-              {/* {(
+              {(
                 Number(formatUnits(BigInt(pool?.swapFee ?? 0) ?? "", 18)) * 100
               ).toFixed(2)}
-              % */}
-              dynamic
+              %
             </span>
           </div>
 
-          {/* <div className="hidden w-fit items-center gap-1 sm:flex">
+          <div className="hidden w-fit items-center gap-1 sm:flex">
             {" "}
             Pool Contract:
             <span
@@ -68,10 +64,10 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
               {truncateHash(pool?.pool ?? "")}
               <Icons.externalLink className="-mt-1 ml-1 inline-block h-4 w-4 text-muted-foreground" />
             </span>
-          </div> */}
+          </div>
         </div>
       </div>
-      {/* <div className="flex w-fit items-center gap-1 sm:hidden ">
+      <div className="flex w-fit items-center gap-1 sm:hidden ">
         {" "}
         Pool Contract:
         <span
@@ -83,15 +79,20 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
           {truncateHash(pool?.pool ?? "")}
           <Icons.externalLink className="-mt-1 ml-1 inline-block h-4 w-4 text-muted-foreground" />
         </span>
-      </div> */}
+      </div>
       <div className="mt-4 flex gap-2 md:mt-0">
-        <Link href={getPoolAddLiquidityUrl(pool)} target="_self">
-          <Button variant={"outline"}>
+        <Link href={`/pool/${pool?.pool}/add-liquidity`} target="_self">
+          <Button
+            variant={"outline"}
+            onClick={() =>
+              window.open(`/pool/${pool?.pool}/add-liquidity`, "_self")
+            }
+          >
             <Icons.add />
             <span className="ml-1">Add</span>
           </Button>
         </Link>
-        <Link href={getPoolWithdrawUrl(pool)} target="_self">
+        <Link href={`/pool/${pool?.pool}/withdraw`} target="_self">
           <Button variant={"outline"}>
             <Icons.subtract />
             <span className="ml-1">Withdraw</span>

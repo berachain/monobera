@@ -38,42 +38,36 @@ const useTokens = (): IUseTokens => {
   const { data } = useSWRImmutable(
     ["defaultTokenList", localStorageTokenList],
     async () => {
-      try {
-        const tokenList = await fetch(tokenListUrl);
-        const temp = await tokenList.json();
-        if (!temp.tokens)
-          return { list: localStorageTokenList, featured: [], dictionary: {} };
-        const defaultList = temp.tokens.map((token: any) => {
+      const tokenList = await fetch(tokenListUrl);
+      const temp = await tokenList.json();
+      if (!temp.tokens)
+        return { list: localStorageTokenList, featured: [], dictionary: {} };
+      const defaultList = temp.tokens.map((token: any) => {
+        return { ...token, default: true };
+      });
+
+      const defaultFeaturedList = temp.tokens
+        .filter((token: any) => {
+          const isFeatured = (tag: string) => tag === "featured";
+          return token.tags.some(isFeatured);
+          // return { ...token, default: true };
+        })
+        .map((token: any) => {
           return { ...token, default: true };
         });
-
-        const defaultFeaturedList = temp.tokens
-          .filter((token: any) => {
-            const isFeatured = (tag: string) => tag === "featured";
-            return token.tags.some(isFeatured);
-            // return { ...token, default: true };
-          })
-          .map((token: any) => {
-            return { ...token, default: true };
-          });
-        const list = [...defaultList, ...localStorageTokenList];
-        // Make it unique
-        const uniqueList = list.filter(
-          (item, index) =>
-            list.findIndex((i) => i.address === item.address) === index,
-        );
-
-        return {
-          list: uniqueList,
-          customList: [...localStorageTokenList],
-          dictionary: tokenListToDict(list), // i dont know if we still need this since we already have a map
-          gaugeDictionary: temp.gaugeMap ?? undefined,
-          featured: defaultFeaturedList ?? [],
-        };
-      } catch (error) {
-        console.error("Error fetching token list", error);
-        return { list: localStorageTokenList, featured: [], dictionary: {} };
-      }
+      const list = [...defaultList, ...localStorageTokenList];
+      // Make it unique
+      const uniqueList = list.filter(
+        (item, index) =>
+          list.findIndex((i) => i.address === item.address) === index,
+      );
+      return {
+        list: uniqueList,
+        customList: [...localStorageTokenList],
+        dictionary: tokenListToDict(list), // i dont know if we still need this since we already have a map
+        gaugeDictionary: temp.gaugeMap ?? undefined,
+        featured: defaultFeaturedList ?? [],
+      };
     },
     {
       refreshInterval: POLLING.NORMAL,

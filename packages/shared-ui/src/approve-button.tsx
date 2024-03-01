@@ -18,16 +18,9 @@ type Props = {
   spender: string;
   amount?: bigint;
   className?: string;
-  onApproval?: () => void;
 };
 
-export const ApproveButton = ({
-  token,
-  spender,
-  amount,
-  className,
-  onApproval,
-}: Props) => {
+export const ApproveButton = ({ token, spender, amount, className }: Props) => {
   const { refresh } = usePollAllowance({
     contract: spender,
     token: token,
@@ -38,7 +31,6 @@ export const ApproveButton = ({
     actionType: TransactionActionType.APPROVAL,
     onSuccess: () => {
       void refresh();
-      onApproval?.();
     },
   });
   const ref = useRef<HTMLDivElement>(null);

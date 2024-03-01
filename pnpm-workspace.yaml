@@ -10,7 +10,6 @@ packages:
   - apps/ecosystem
   - packages/config/*
   - packages/config/env
-  - packages/beracrocswap
   - packages/graphql
   - packages/proto
   - packages/berajs

@@ -16,7 +16,7 @@ const useMultipleTokenApprovals = (
     .filter((token: TokenInput) => token !== undefined)
     .map((token) => token);
 
-  const { useCurrentAllowancesForContract, refresh } = usePollAllowances({
+  const { useCurrentAllowancesForContract } = usePollAllowances({
     contract: spender,
     tokens,
   });
@@ -45,7 +45,6 @@ const useMultipleTokenApprovals = (
 
   return {
     needsApproval,
-    refresh,
   };
 };
 

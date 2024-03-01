@@ -6,13 +6,17 @@ import Image from "next/image";
 import Link from "next/link";
 // import { RouteNotFound } from "@bera/bera-router";
 import {
-  MULTISWAP_ABI,
+  DEX_PRECOMPILE_ABI,
   TransactionActionType,
   WBERA_ABI,
   useBeraJs,
   usePollAssetWalletBalance,
 } from "@bera/berajs";
-import { cloudinaryUrl, crocMultiSwapAddress } from "@bera/config";
+import {
+  cloudinaryUrl,
+  erc20DexAddress,
+  erc20ModuleAddress,
+} from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
@@ -28,6 +32,7 @@ import { Icons } from "@bera/ui/icons";
 import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
+// import { SwapKind, WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
 
@@ -70,6 +75,7 @@ export function SwapCard({
   className,
 }: ISwapCard) {
   const {
+    // setSwapKind,
     setSelectedFrom,
     selectedFrom,
     allowance,
@@ -85,8 +91,8 @@ export function SwapCard({
     onSwitch,
     setIsTyping,
     swapInfo,
+    value,
     isRouteLoading,
-    refreshAllowance,
     payload,
     exchangeRate,
     // gasPrice,
@@ -95,13 +101,14 @@ export function SwapCard({
     isWrap,
     wrapType,
     minAmountOut,
+    // swapKind,
   } = useSwap({
     inputCurrency,
     outputCurrency,
   });
 
   const { captureException, track } = useAnalytics();
-  const { refetch } = usePollAssetWalletBalance();
+
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
@@ -119,6 +126,11 @@ export function SwapCard({
 
   const { write, isLoading, ModalPortal } = useTxn({
     actionType: TransactionActionType.SWAP,
+    // message: `Swap ${Number(swapInfo?.formattedSwapAmount).toFixed(4)} ${
+    //   selectedFrom?.symbol
+    // } to ${Number(swapInfo?.formattedReturnAmount).toFixed(4)} ${
+    //   selectedTo?.symbol
+    // }`,
     message: `Swap ${selectedFrom?.symbol} to ${selectedTo?.symbol}`,
     onSuccess: () => {
       track("swap_token_success", {
@@ -129,8 +141,6 @@ export function SwapCard({
       setSwapAmount("");
       setToAmount(undefined);
       setOpenPreview(false);
-      void refreshAllowance();
-      refetch();
     },
     onError: (e: Error | undefined) => {
       track("swap_token_failed", {
@@ -201,7 +211,7 @@ export function SwapCard({
             selectedFrom?.decimals ?? 18,
           )}
           token={selectedFrom}
-          spender={crocMultiSwapAddress}
+          spender={erc20ModuleAddress}
         />
       );
     }
@@ -252,11 +262,11 @@ export function SwapCard({
             setOpen={setOpenPreview}
             write={() => {
               write({
-                address: crocMultiSwapAddress,
-                abi: MULTISWAP_ABI,
-                functionName: "multiSwap",
+                address: erc20DexAddress,
+                abi: DEX_PRECOMPILE_ABI,
+                functionName: "batchSwap",
                 params: payload,
-                value: swapInfo.value,
+                value: value,
               });
             }}
             isLoading={isLoading}
@@ -278,11 +288,11 @@ export function SwapCard({
           setOpen={setOpenPreview}
           write={() => {
             write({
-              address: crocMultiSwapAddress,
-              abi: MULTISWAP_ABI,
-              functionName: "multiSwap",
+              address: erc20DexAddress,
+              abi: DEX_PRECOMPILE_ABI,
+              functionName: "batchSwap",
               params: payload,
-              value: (swapInfo as any)?.value,
+              value: value,
             });
           }}
           isLoading={isLoading}

@@ -5,4 +5,3 @@ export * from "./create-pool-input";
 export * from "./create-pool-initial-liquidity";
 export * from "./create-pool-initial-liquidity-input";
 export * from "./create-pool-feedata";
-export * from "./create-pool-initial-price";

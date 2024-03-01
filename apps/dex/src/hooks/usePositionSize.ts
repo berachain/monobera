@@ -6,7 +6,7 @@ import {
   usePollPrices,
   type Token,
 } from "@bera/berajs";
-import { formatUnits } from "viem";
+import { formatUnits } from "ethers";
 
 export const usePositionSize = ({ pool }: { pool: Pool | undefined }) => {
   const [userTotalValue, setUserTotalValue] = useState<number | undefined>(

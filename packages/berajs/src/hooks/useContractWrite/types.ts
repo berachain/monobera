@@ -18,7 +18,7 @@ export interface useContractWriteApi {
   isSubmitting: boolean;
   isSuccess: boolean;
   isError: boolean;
-  write: (props: IContractWrite) => Promise<void>;
+  write: (props: IContractWrite) => void;
 }
 
 export interface useTxnSendWriteApi {

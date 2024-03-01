@@ -1,21 +1,20 @@
 "use client";
 
-import { useBeraJs } from "@bera/berajs";
+import { type Pool } from "@bera/bera-router";
+import { useBeraJs, usePollUserPendingBgtRewards } from "@bera/berajs";
 import { ConnectWalletBear, NotFoundBear } from "@bera/shared-ui";
 
+import { getAbsoluteUrl } from "~/utils/vercel-utils";
 import Loading from "./loading-component";
 import { Banner } from "./reward-banner";
 import RewardsCard from "./rewards-card";
-import {
-  type IUserPool,
-  usePollUserDeposited,
-} from "~/hooks/usePollUserDeposited";
 
 export const Rewards = () => {
+  const { usePoolsPendingBgtRewards, isLoading } = usePollUserPendingBgtRewards(
+    `${getAbsoluteUrl()}/api/getPools/api`,
+  );
+  const userPools = usePoolsPendingBgtRewards();
   const { isReady } = useBeraJs();
-  const { usePositions, isLoading } = usePollUserDeposited();
-  const userPools = usePositions();
-
   return (
     <div>
       <Banner />
@@ -29,14 +28,14 @@ export const Rewards = () => {
               title="You have no rewards"
               subtitle="Only BGT boosted pools are eligible for rewards"
               actionTitle="View Pools with BGT Rewards"
-              actionLink="/pools"
+              actionLink="/pool"
             />
           ) : (
             <>
               {userPools
-                // ?.filter((userPool: PoolV2) => userPool.bgtApy !== undefined)
-                ?.map((pool: IUserPool) => (
-                  <RewardsCard pool={pool} key={pool.poolName} />
+                ?.filter((userPool: Pool) => userPool.bgtApy !== undefined)
+                ?.map((pool: Pool) => (
+                  <RewardsCard pool={pool} key={pool.pool} />
                 ))}
             </>
           )

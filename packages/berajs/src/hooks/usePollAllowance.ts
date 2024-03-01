@@ -30,12 +30,7 @@ export const usePollAllowance = ({ contract, token }: IUsePollAllowances) => {
   const { account, error } = useBeraJs();
 
   const method = "allowance";
-  const QUERY_KEY = [
-    account,
-    token?.address.toLowerCase(),
-    contract.toLowerCase(),
-    method,
-  ];
+  const QUERY_KEY = [account, token?.address, contract, method];
 
   useSWR(
     QUERY_KEY,

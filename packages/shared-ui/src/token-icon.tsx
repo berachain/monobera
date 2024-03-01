@@ -32,7 +32,7 @@ export interface IconProps
     VariantProps<typeof IconVariants> {
   // token?: Token | undefined;
   fetch?: boolean;
-  address: string | undefined;
+  address: string;
 }
 
 export const TokenIcon = ({
@@ -42,13 +42,13 @@ export const TokenIcon = ({
   ...props
 }: IconProps) => {
   const { tokenDictionary } = useTokens();
-  const address = isAddress(adr ?? "") ? getAddress(adr ?? "") : adr;
+  const address = isAddress(adr) ? getAddress(adr) : adr;
   const img = useMemo(() => {
     if (tokenDictionary && address && isAddress(address)) {
       return tokenDictionary[address]?.logoURI;
     }
     return "";
-  }, [tokenDictionary, tokenDictionary?.[address ?? ""]]);
+  }, [tokenDictionary, tokenDictionary?.[address]]);
 
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>

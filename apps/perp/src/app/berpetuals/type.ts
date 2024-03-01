@@ -4,7 +4,7 @@ export interface OrderType {
   optionType: "market" | "limit";
   amount: string;
   limitPrice?: number | undefined;
-  quantity: string | undefined;
+  quantity: number | undefined;
   price?: number | undefined;
   leverage: number | undefined;
   tp: string;

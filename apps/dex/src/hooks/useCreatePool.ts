@@ -1,48 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePollAllowances, type Token } from "@bera/berajs";
+import { useBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
+import { type Address } from "wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
-import { crocDexAddress } from "@bera/config";
-import { parseUnits } from "viem";
 
-const useCreatePool = ({
-  baseToken,
-  quoteToken,
-  baseAmount,
-  quoteAmount,
-}: {
-  baseToken: Token;
-  quoteToken: Token;
-  baseAmount: string;
-  quoteAmount: string;
-}) => {
+const useCreatePool = (tokenWeights: ITokenWeight[]) => {
   const [needsApproval, setNeedsApproval] = useState<Token[]>([]);
+  const { networkConfig } = useBeraConfig();
 
-  const tokenWeights: ITokenWeight[] = [
-    {
-      token: baseToken,
-      initialLiquidity: baseAmount,
-      weight: 50,
-      locked: false,
-    },
-    {
-      token: quoteToken,
-      initialLiquidity: quoteAmount,
-      weight: 50,
-      locked: false,
-    },
-  ];
+  const tokens: Token[] = tokenWeights
+    .filter((tokenWeight: ITokenWeight) => tokenWeight.token !== undefined)
+    .map((tokenWeight) => tokenWeight.token) as Token[];
 
-  const tokens = [baseToken, quoteToken];
-
-  const { useCurrentAllowancesForContract, refresh: refreshAllowances } =
-    usePollAllowances({
-      contract: crocDexAddress,
-      tokens,
-    });
+  const { useCurrentAllowancesForContract } = usePollAllowances({
+    contract: networkConfig.precompileAddresses.erc20ModuleAddress as Address,
+    tokens,
+  });
 
   const allowances = useCurrentAllowancesForContract();
 
@@ -56,11 +32,8 @@ const useCreatePool = ({
           );
           if (
             allowance.formattedAllowance === "0" ||
-            allowance.allowance <
-              parseUnits(
-                token?.initialLiquidity ?? "0",
-                token?.token?.decimals ?? 18,
-              )
+            Number(allowance.formattedAllowance) <
+              (getSafeNumber(token?.initialLiquidity) ?? 0)
           ) {
             return allowance;
           }
@@ -72,7 +45,6 @@ const useCreatePool = ({
 
   return {
     needsApproval,
-    refreshAllowances,
   };
 };
 

@@ -33,7 +33,6 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: TData) => void;
-  onCustomSortingChange?: (sorting: any) => void;
   className?: string;
   title?: string;
   embedded?: boolean;

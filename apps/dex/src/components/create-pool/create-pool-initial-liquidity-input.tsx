@@ -1,54 +1,32 @@
-import React, { useMemo, useState } from "react";
-import {
-  type Token,
-  useBeraJs,
-  usePollAssetWalletBalance,
-  useTokenHoneyPrice,
-} from "@bera/berajs";
+import React from "react";
+import { useBeraJs, usePollAssetWalletBalance } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
+
 import { getSafeNumber } from "~/utils/getSafeNumber";
-import { cn } from "@bera/ui";
+import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 type Props = {
-  token: Token;
-  disabled: boolean;
-  tokenAmount: string;
-  onTokenBalanceChange: (amount: string) => void;
+  tokenWeight: ITokenWeight;
+  index: number;
+  onTokenBalanceChange: (index: number, amount: string) => void;
 };
 
 export default function CreatePoolInitialLiquidityInput({
-  token,
-  tokenAmount,
-  disabled,
+  tokenWeight,
+  index,
   onTokenBalanceChange,
 }: Props) {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: tokenBalanceData } = useSelectedAssetWalletBalance(
-    token?.address ?? "",
+  const { data: token } = useSelectedAssetWalletBalance(
+    tokenWeight.token?.address ?? "",
   );
-  const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
-  const tokenBalance = Number(tokenBalanceData?.formattedBalance || 0);
+  const tokenBalance = Number(token?.formattedBalance || 0);
 
   const { isConnected } = useBeraJs();
 
-  const { data: tokenHoneyPrice } = useTokenHoneyPrice(token?.address);
-
-  useMemo(() => {
-    if (tokenBalanceData) {
-      if (
-        getSafeNumber(tokenBalanceData.formattedBalance) <
-        getSafeNumber(tokenAmount)
-      ) {
-        setExceeding(true);
-      } else {
-        setExceeding(false);
-      }
-    }
-  }, [tokenBalanceData, tokenAmount]);
   return (
     <li className={"flex w-full flex-col  items-center p-3"}>
       <div className="flex w-full flex-row justify-between">
@@ -57,23 +35,26 @@ export default function CreatePoolInitialLiquidityInput({
           variant="secondary"
         >
           <>
-            <TokenIcon address={token?.address ?? ""} />
-            {token?.symbol}
+            <TokenIcon address={tokenWeight.token?.address ?? ""} />
+            {tokenWeight.token?.symbol}
+            <div className=" h-fit text-base text-foreground">
+              {tokenWeight.weight}%
+            </div>
           </>
         </Button>
         <Input
-          disabled={disabled}
           type="number"
           step="any"
           min="0"
           placeholder="0"
-          className={cn(
-            "w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0",
-            exceeding && "text-destructive-foreground",
-          )}
-          value={tokenAmount}
+          className="w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+          value={
+            getSafeNumber(tokenWeight.initialLiquidity) > 0
+              ? tokenWeight.initialLiquidity
+              : ""
+          }
           onChange={(e) => {
-            onTokenBalanceChange(e.target.value);
+            onTokenBalanceChange(index, e.target.value);
           }}
         />
       </div>
@@ -86,9 +67,9 @@ export default function CreatePoolInitialLiquidityInput({
                 {tokenBalance ? tokenBalance : "0"}
               </p>
               <p
-                className="cursor-pointer self-start text-xs text-muted-foreground hover:underline select-none"
+                className="cursor-pointer self-start text-xs text-muted-foreground hover:underline"
                 onClick={() => {
-                  !disabled && onTokenBalanceChange(tokenBalance.toString());
+                  onTokenBalanceChange(index, tokenBalance.toString());
                 }}
               >
                 MAX
@@ -96,11 +77,8 @@ export default function CreatePoolInitialLiquidityInput({
             </div>
             <div className="flex flex-row gap-1">
               <p className="self-center p-0 text-xs text-muted-foreground">
-                {tokenAmount !== "0" &&
-                  tokenAmount !== "" &&
-                  formatUsd(
-                    getSafeNumber(tokenAmount) * (tokenHoneyPrice ?? 0),
-                  )}
+                {/* TODO: change to actual values */}
+                {/* {amount !== 0 && formatUsd((amount * 1).toFixed(2))} */}
               </p>
             </div>
           </div>

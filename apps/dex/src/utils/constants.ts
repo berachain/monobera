@@ -6,7 +6,6 @@ export enum LOCAL_STORAGE_KEYS {
   DEADLINE_TYPE = "DEADLINE_TYPE",
   DEADLINE_VALUE = "DEADLINE_VALUE",
   USE_SIGNATURES = "USE_SIGNATURES",
-  SOUND_ENABLED = "SOUND_ENABLED",
 }
 
 export enum TRANSACTION_TYPES {
@@ -16,7 +15,6 @@ export enum TRANSACTION_TYPES {
 
 export const DEFAULT_DEADLINE = 30; // minutes
 export const DEFAULT_SLIPPAGE = 1; // 0.3%
-export const DEFAULT_SOUND_ENABLED = true; // 1 if true, 0 if false
 
 export enum POLLING {
   FAST = 10000,

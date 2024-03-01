@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useBeraJs } from "@bera/berajs";
-import { parseUnits } from "viem";
+import { parseUnits } from "ethers";
 
 export const useRedeem = () => {
   const [redeemAmount, setRedeemAmount] = useState<string>("");

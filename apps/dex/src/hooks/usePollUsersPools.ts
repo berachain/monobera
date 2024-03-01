@@ -7,7 +7,7 @@ import {
   getAddress,
   parseEther,
   parseUnits,
-} from "viem";
+} from "ethers";
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient, type Address } from "wagmi";
