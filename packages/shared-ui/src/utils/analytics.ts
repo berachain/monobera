@@ -5,7 +5,14 @@ import {
 } from "@sentry/react";
 import mixpanel from "mixpanel-browser";
 
-if (process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN) {
+const isDevelopmentWithoutAnalytics =
+  process.env.NODE_ENV === "development" &&
+  !process.env.NEXT_PUBLIC_DEVELOPMENT_ANALYTICS;
+
+if (
+  process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN &&
+  !isDevelopmentWithoutAnalytics
+) {
   mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN, {
     debug: true,
     track_pageview: true,
@@ -28,6 +35,9 @@ export const useAnalytics = () => {
   };
 
   const track = (eventName: string, eventData?: { [key: string]: any }) => {
+    if (isDevelopmentWithoutAnalytics) {
+      return;
+    }
     mixpanel.track(eventName, {
       eventData,
       project: process.env.NEXT_PUBLIC_PROJECT_NAME ?? "unknown",

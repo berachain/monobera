@@ -167,7 +167,7 @@ export const useTxn = ({
             });
           }
         }
-        track("useTxn_failed", {
+        track("transaction_failed", {
           operation: "useBeraContractWrite",
           message,
           actionType,
@@ -212,7 +212,7 @@ export const useTxn = ({
           actionType,
           timestamp: Date.now(),
         });
-        track("useTxn_success", {
+        track("transaction_success", {
           message,
           actionType,
           hash: result,
@@ -243,7 +243,7 @@ export const useTxn = ({
         if (!disableModal) {
           openModal("loadingModal", undefined);
         }
-        track("useTxn_started", {
+        track("transaction_started", {
           message,
           actionType,
           operation: "useBeraContractWrite",
@@ -342,7 +342,7 @@ export const useTxn = ({
           });
         }
       }
-      track("useTxn_failed", {
+      track("transaction_failed", {
         message,
         actionType,
         operation: "useValueSend",
@@ -387,7 +387,7 @@ export const useTxn = ({
         timestamp: Date.now(),
         actionType: TransactionActionType.BORROW,
       });
-      track("useTxn_success", {
+      track("transaction_success", {
         message,
         actionType,
         hash: result,
@@ -418,7 +418,7 @@ export const useTxn = ({
       if (!disableModal) {
         openModal("loadingModal", undefined);
       }
-      track("useTxn_started", {
+      track("transaction_started", {
         message,
         actionType,
         operation: "useValueSend",
