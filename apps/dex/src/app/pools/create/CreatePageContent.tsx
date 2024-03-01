@@ -32,7 +32,7 @@ const steps: IStep[] = [
 export default function CreatePageContent() {
   const {
     error,
-    swapFee,
+    poolId,
     step,
     initialPrice,
     isBaseTokenInput,
@@ -48,11 +48,10 @@ export default function CreatePageContent() {
     setTokenB,
     setIsBaseTokenInput,
     setInitialPrice,
-    setSwapFee,
+    setPoolId,
     setStep,
   } = useCreateTokenWeights();
 
-  console.log({ isBaseTokenInput });
   return (
     <div className="flex w-full flex-col items-center justify-center gap-8">
       {step === Steps.SET_TOKEN_WEIGHTS && (
@@ -62,14 +61,14 @@ export default function CreatePageContent() {
           error={error}
           setTokenA={setTokenA}
           setTokenB={setTokenB}
-          onContinue={() => !error && setStep(Steps.SET_INITIAL_LIQUIDITY)}
+          onContinue={() => !error && setStep(Steps.SET_SWAP_FEES)}
         />
       )}
       {step === Steps.SET_SWAP_FEES && (
         <CreatePoolFeeData
-          swapFee={swapFee}
+          poolId={poolId}
           error={error}
-          setSwapFee={setSwapFee}
+          setPoolId={setPoolId}
           onContinue={() => !error && setStep(Steps.SET_INITIAL_LIQUIDITY)}
           onBack={() => setStep(Steps.SET_TOKEN_WEIGHTS)}
         />
@@ -98,6 +97,7 @@ export default function CreatePageContent() {
           quoteAmount={quoteAmount}
           isBaseTokenInput={isBaseTokenInput}
           initialPrice={initialPrice}
+          poolId={poolId}
           error={undefined}
           onBack={() => setStep(Steps.SET_INITIAL_LIQUIDITY)}
         />
