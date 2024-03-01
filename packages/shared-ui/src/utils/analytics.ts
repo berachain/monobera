@@ -41,6 +41,7 @@ export const useAnalytics = () => {
     mixpanel.track(eventName, {
       eventData,
       project: process.env.NEXT_PUBLIC_PROJECT_NAME ?? "unknown",
+      env: process.env.NODE_ENV,
     });
   };
 
