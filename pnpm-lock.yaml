@@ -39,6 +39,9 @@ importers:
         specifier: ^5.0.4
         version: 5.3.3
     devDependencies:
+      '@types/mixpanel-browser':
+        specifier: ^2.49.0
+        version: 2.49.0
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
@@ -368,6 +371,9 @@ importers:
       ethers:
         specifier: ^6.8.0
         version: 6.10.0
+      mixpanel-browser:
+        specifier: ^2.49.0
+        version: 2.49.0
       next:
         specifier: ^14.0.4
         version: 14.0.4(@babel/core@7.23.7)(react-dom@18.2.0)(react@18.2.0)
@@ -1471,6 +1477,12 @@ importers:
 
   packages/shared-ui:
     dependencies:
+      '@sentry/nextjs':
+        specifier: ^7.103.0
+        version: 7.103.0(next@14.0.4)(react@18.2.0)
+      mixpanel-browser:
+        specifier: ^2.49.0
+        version: 2.49.0
       next-auth:
         specifier: ^4.24.5
         version: 4.24.5(next@14.0.4)(react-dom@18.2.0)(react@18.2.0)
@@ -8115,6 +8127,10 @@ packages:
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
     dev: true
 
+  /@types/mixpanel-browser@2.49.0:
+    resolution: {integrity: sha512-StmgUnS58d44DmIAEX9Kk8qwisAYCl6E2qulIjYyHXUPuJCPOuyUMTTKBp+aU2F2do+kxAzCxiBtsB4fnBT9Fg==}
+    dev: true
+
   /@types/ms@0.7.34:
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
     dev: false
@@ -13572,6 +13588,10 @@ packages:
       minipass: 3.3.6
       yallist: 4.0.0
     dev: true
+
+  /mixpanel-browser@2.49.0:
+    resolution: {integrity: sha512-RZJCO7XXuuHBAWG5fd9Mavz994M7v7W3Qiaq8NzmN631pa4BQ0vNZQtRFqKcCCOBn4xqOZbX2GkuC7ZkQoL4cQ==}
+    dev: false
 
   /mkdirp-classic@0.5.3:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
