@@ -37,6 +37,7 @@ import {
 } from "@bera/beracrocswap";
 import { encodeAbiParameters, parseAbiParameters } from "viem";
 import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
+import { POOLID, SWAPFEE } from "~/hooks/useCreateTokenWeights";
 
 type Props = {
   baseToken: Token | undefined;
@@ -46,6 +47,7 @@ type Props = {
   error: Error | undefined;
   initialPrice: string;
   isBaseTokenInput: boolean;
+  poolId: POOLID;
   onBack: () => void;
 };
 
@@ -86,6 +88,7 @@ export function CreatePoolPreview({
   error,
   initialPrice,
   isBaseTokenInput,
+  poolId,
   onBack,
 }: Props) {
   const { needsApproval, refreshAllowances } = useCreatePool({
@@ -133,7 +136,7 @@ export function CreatePoolPreview({
         Number(initialPrice),
         baseToken as Token,
         quoteToken as Token,
-        36000,
+        Number(poolId),
       );
 
       const bnLiquidity = parseUnits(
@@ -159,7 +162,7 @@ export function CreatePoolPreview({
         transformedLimits[0],
         transformedLimits[1],
         0,
-        36000,
+        Number(poolId),
       );
 
       const multiPathArgs = [2, 3, initPoolInfo.calldata, 2, mintCalldata];
@@ -242,7 +245,7 @@ export function CreatePoolPreview({
           </div>
           <div className="flex h-fit w-full items-center justify-between text-sm">
             <p className="text-primary">Swap Fee</p>
-            <p>dynamic</p>
+            <p>{SWAPFEE[poolId].toString()}%</p>
           </div>
         </div>
         {error && (

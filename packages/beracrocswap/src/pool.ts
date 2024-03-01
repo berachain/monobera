@@ -53,6 +53,14 @@ export class CrocPoolView {
         return decodeCrocPrice(await sqrtPrice)
     }
 
+    async spotPricePoolIdx (poolIdx: number, block?: BlockTag): Promise<number> {
+        let txArgs = block ? { blockTag: block } : {} 
+        let sqrtPrice = (await this.context).query.queryPrice
+            (this.baseToken.tokenAddr, this.quoteToken.tokenAddr, 
+                poolIdx, txArgs)
+        return decodeCrocPrice(await sqrtPrice)
+    }
+
     async displayPrice (block?: BlockTag): Promise<number> {
         let spotPrice = this.spotPrice(block)
         return this.toDisplayPrice(await spotPrice)
