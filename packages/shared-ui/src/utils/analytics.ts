@@ -21,7 +21,10 @@ if (
 }
 
 export const useAnalytics = () => {
-  const captureException: typeof _captureException = (error, hint) => {
+  const captureException: typeof _captureException = (
+    error: any,
+    hint: any,
+  ) => {
     return _captureException(error, hint);
   };
 
