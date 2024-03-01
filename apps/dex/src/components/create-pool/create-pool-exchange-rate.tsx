@@ -36,7 +36,7 @@ export default function CreatePoolExchangeRate({
               : baseCost}{" "}
           </div>
           <p className="text-xs text-muted-foreground truncate">
-            {baseToken.symbol} per {quoteToken.symbol}
+            {baseToken?.symbol} per {quoteToken?.symbol}
           </p>
         </div>
 
@@ -50,7 +50,7 @@ export default function CreatePoolExchangeRate({
               : quoteCost}{" "}
           </div>
           <p className="text-xs text-muted-foreground truncate">
-            {quoteToken.symbol} per {baseToken.symbol}
+            {quoteToken?.symbol} per {baseToken?.symbol}
           </p>
         </div>
       </div>
