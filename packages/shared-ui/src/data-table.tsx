@@ -34,6 +34,7 @@ interface DataTableProps<TData, TValue> {
   title?: string;
   pagination?: boolean;
   embedded?: boolean;
+  customEmptyDataState?: React.ReactElement;
 }
 
 export function DataTable<TData, TValue>({
@@ -44,6 +45,7 @@ export function DataTable<TData, TValue>({
   title,
   pagination,
   embedded,
+  customEmptyDataState,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -84,7 +86,7 @@ export function DataTable<TData, TValue>({
     >
       <div
         className={cn(
-          "w-full border-b border-border overflow-x-auto overflow-y-auto",
+          "w-full overflow-x-auto overflow-y-auto border-b border-border",
           embedded ? "" : "rounded-tl-md rounded-tr-md",
         )}
       >
@@ -145,7 +147,7 @@ export function DataTable<TData, TValue>({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    {customEmptyDataState ?? "No results."}
                   </TableCell>
                 </TableRow>
               )}
@@ -154,8 +156,8 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {pagination && (
-        <div className="text-primary-foreground text-end p-4">
-          <div className="py-3 inline-flex h-9 items-center justify-start rounded-lg border">
+        <div className="p-4 text-end text-primary-foreground">
+          <div className="inline-flex h-9 items-center justify-start rounded-lg border py-3">
             <div className="flex items-center justify-center gap-2.5 border-r px-3 py-2">
               <button
                 type="button"
@@ -177,7 +179,7 @@ export function DataTable<TData, TValue>({
               </button>
             </div>
             <div className="flex items-center justify-center gap-2.5 p-1 ">
-              <div className="font-['IBM Plex Sans'] leading-tight p-2 text-xs text-foreground">
+              <div className="font-['IBM Plex Sans'] p-2 text-xs leading-tight text-foreground">
                 {`${table.getState().pagination.pageIndex + 1} of ${
                   table.getPageCount() || 1
                 }`}

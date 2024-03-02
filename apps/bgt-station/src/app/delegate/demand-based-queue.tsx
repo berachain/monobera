@@ -22,11 +22,12 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
 
   const { useDelegatorUnbondingQueue } = usePollDelegatorUnbonding();
 
-  const unbondingQueue = useDelegatorUnbondingQueue();
+  const { unbondingQueue, isLoading } = useDelegatorUnbondingQueue();
+  console.log("unbondingQueue", unbondingQueue, isLoading);
 
   return (
-    <div className="container mx-auto flex w-full max-w-[800px] flex-col gap-8 pb-20 lg:w-[800px]">
-      <Card className="flex flex-col gap-3 p-6">
+    <div className="container mx-auto flex w-full flex-col gap-8 pb-20 lg:w-[800px]">
+      <Card className="flex flex-col gap-3 bg-muted p-6">
         <div className="text-lg font-semibold capitalize leading-7 text-foreground">
           Demand based {getActionText(action)}
         </div>
@@ -36,11 +37,11 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
           of Staking, Restaking and Unstaking
         </div>
         <div className="flex flex-row justify-between gap-2 text-sm ">
-          <div className="text-md flex w-[380px] flex-col items-start justify-center gap-1 rounded-md border p-2">
-            <div className="align-start text-md font-semibold text-muted-foreground">
+          <div className="text-md flex w-[380px] flex-col items-start justify-center gap-1 rounded-md border bg-info p-2">
+            <div className="align-start text-md font-semibold text-info-foreground">
               Current {action} Time
             </div>
-            <div className="items-start text-lg font-bold text-foreground">
+            <div className="items-start text-lg font-bold text-info-foreground">
               1 Day
             </div>
           </div>
@@ -85,10 +86,10 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
               </div>
             </div>
             <Card className="flex flex-col gap-3 p-6">
-              {unbondingQueue?.length ? (
-                <UnbondingQueueTable unbondingQueue={unbondingQueue} />
-              ) : (
+              {isLoading ? (
                 <Skeleton className="h-10 w-full" />
+              ) : (
+                <UnbondingQueueTable unbondingQueue={unbondingQueue} />
               )}
             </Card>
           </div>

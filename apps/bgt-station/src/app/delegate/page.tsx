@@ -28,15 +28,16 @@ export default function Page({
   }
 
   return (
-    <div className="flex flex-row">
-      <div className="w-1/2">
+    <div className="flex flex-col md:flex-row">
+      <div className="w-full md:w-1/2">
         <Delegate
           action={action}
           validator={searchParams.validator as Address}
           redelegateValidator={searchParams.redelegateValidator}
         />
       </div>
-      <div className="w-1/2">
+      <div className="hidden flex-shrink-0 flex-grow-0 border-r-2 border-muted md:flex" />
+      <div className="w-full md:w-1/2">
         <DemandBasedQueue action={action} />
       </div>
     </div>

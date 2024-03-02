@@ -25,7 +25,7 @@ export const unstake_queue_columns: ColumnDef<UnbondingQueueColumns>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="BGT Unbonding" />
+      <DataTableColumnHeader column={column} title="Estimated Redemption" />
     ),
     cell: ({ row }) => {
       return (
@@ -42,7 +42,7 @@ export const unstake_queue_columns: ColumnDef<UnbondingQueueColumns>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Time Remaining" />
+      <DataTableColumnHeader column={column} title="Un-stake in" />
     ),
     cell: ({ row }) => {
       return <div className="w-[120px]">{row.original.timeRemaining}</div>;
