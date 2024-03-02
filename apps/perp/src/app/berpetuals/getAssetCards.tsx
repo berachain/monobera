@@ -18,6 +18,7 @@ import type {
   IClosedTrade,
   ILimitOrder,
   IMarketOrder,
+  IPosition,
 } from "./components/order-history";
 import { type ICards } from "./components/order-history-table";
 import { type IMarket } from "./page";
@@ -27,11 +28,13 @@ export const getAssetCardList = ({
   limitOrderItems,
   historyItems,
   markets,
+  allPositions,
 }: {
   marketOrderItems: IMarketOrder[];
   limitOrderItems: ILimitOrder[];
   historyItems: IClosedTrade[];
   markets: IMarket[];
+  allPositions: IPosition[];
 }): {
   marketList: ICards[];
   limitList: ICards[];
@@ -41,7 +44,7 @@ export const getAssetCardList = ({
   return {
     marketList: getMarketListItems(marketOrderItems ?? [], markets),
     limitList: getLimitListItems(limitOrderItems ?? []),
-    historyList: getHisoryListItems(historyItems ?? []),
+    historyList: getHistoryListItems(allPositions ?? []),
     pnlList: getPnlListItems(historyItems ?? []),
   };
 };
@@ -139,7 +142,7 @@ const getMarketListItems = (
           value: (
             <ActivePositionPNL
               position={item}
-              className="max-h-[15px] text-xs font-medium leading-tight text-muted-foreground "
+              className="max-h-[15px] text-xs font-medium leading-tight text-muted-foreground mb-2"
             />
           ),
         },
@@ -220,7 +223,7 @@ const getLimitListItems = (limitOrderItems: ILimitOrder[]): ICards[] => {
   return cards;
 };
 
-const getHisoryListItems = (historyItems: IClosedTrade[]): ICards[] => {
+const getHistoryListItems = (historyItems: IPosition[]): ICards[] => {
   const cards = historyItems.map((item) => {
     const volume = Number(item?.volume);
 
@@ -237,7 +240,8 @@ const getHisoryListItems = (historyItems: IClosedTrade[]): ICards[] => {
       Number(item.funding_rate) +
       Number(item.closing_fee) +
       Number(item.borrowing_fee) +
-      Number(item.vault_fee);
+      Number(item.vault_fee) +
+      Number(item.open_fee);
 
     return {
       title: (
@@ -267,10 +271,10 @@ const getHisoryListItems = (historyItems: IClosedTrade[]): ICards[] => {
           value: (
             <div className="flex flex-row items-center gap-1">
               <div className="text-xs text-muted-foreground">
-                {closeTime.toLocaleDateString()}
+                {item.close_time ? closeTime.toLocaleDateString() : ""}
               </div>
               <div className="text-xs text-muted-foreground">
-                {closeTime.toLocaleTimeString()}
+                {item.close_time ? closeTime.toLocaleTimeString() : "-"}
               </div>
             </div>
           ),
@@ -278,7 +282,9 @@ const getHisoryListItems = (historyItems: IClosedTrade[]): ICards[] => {
         {
           key: "Order Type",
           value: (
-            <p className="text-xs text-muted-foreground">{item.close_type}</p>
+            <p className="text-xs text-muted-foreground">
+              {item.close_type || "-"}
+            </p>
           ),
         },
         {
@@ -293,7 +299,9 @@ const getHisoryListItems = (historyItems: IClosedTrade[]): ICards[] => {
           key: "Close Price",
           value: (
             <p className="text-xs text-muted-foreground">
-              {formatBigIntUsd(item.close_price, 10)}
+              {item.close_price === ""
+                ? "-"
+                : formatBigIntUsd(item.close_price, 10)}
             </p>
           ),
         },
@@ -301,14 +309,16 @@ const getHisoryListItems = (historyItems: IClosedTrade[]): ICards[] => {
           key: "Position Size",
           value: (
             <p className="text-xs text-muted-foreground">
-              {formatUsd(positionSize)}
+              {formatUsd(positionSize ?? 0)}
             </p>
           ),
         },
         {
           key: "Fees",
           value: (
-            <p className="text-xs text-muted-foreground">{formatUsd(fees)}</p>
+            <p className="text-xs text-muted-foreground">
+              {formatUsd(fees ?? 0)}
+            </p>
           ),
         },
         {
@@ -323,7 +333,7 @@ const getHisoryListItems = (historyItems: IClosedTrade[]): ICards[] => {
                     : "text-destructive-foreground",
                 )}
               >
-                {formatUsd(item.pnl)}
+                {formatUsd(Number(item.pnl) - Number(item.open_fee) ?? 0)}
               </span>
             </div>
           ),
@@ -369,7 +379,7 @@ const getPnlListItems = (historyItems: IClosedTrade[]): ICards[] => {
                     : "text-destructive-foreground",
                 )}
               >
-                {formatUsd(item.pnl)}
+                {formatUsd(item.pnl ?? 0)}
               </span>
             </div>
           ),
@@ -393,7 +403,9 @@ const getPnlListItems = (historyItems: IClosedTrade[]): ICards[] => {
         {
           key: "Fees",
           value: (
-            <p className="text-xs text-muted-foreground">{formatUsd(fees)}</p>
+            <p className="text-xs text-muted-foreground">
+              {formatUsd(fees ?? 0)}
+            </p>
           ),
         },
       ],

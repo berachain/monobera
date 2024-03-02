@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@bera/ui";
 import {
   Table,
@@ -21,21 +21,36 @@ import {
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
-  type ColumnFiltersState,
-  type SortingState,
-  type VisibilityState,
+  type TableOptions,
+  type TableState,
 } from "@tanstack/react-table";
+import _ from "lodash";
+
+import { usePrevious } from "./hooks";
+import { Spinner } from "./spinner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: TData) => void;
+  onCustomSortingChange?: (sorting: any) => void;
   className?: string;
   title?: string;
-  pagination?: boolean;
   embedded?: boolean;
+  enablePagination?: boolean;
+  fetchData?: (state: TableState) => Promise<void> | void;
+  stateChangeFetchInclusions?: Array<keyof TableState>;
+  loading?: boolean;
+  additionalTableProps?: Partial<TableOptions<TData>>;
   customEmptyDataState?: React.ReactElement;
 }
+
+const defaultStateChangeFetchInclusions: Array<keyof TableState> = [
+  "columnFilters",
+  "sorting",
+  "pagination",
+  "globalFilter",
+];
 
 export function DataTable<TData, TValue>({
   columns,
@@ -43,38 +58,62 @@ export function DataTable<TData, TValue>({
   onRowClick,
   className,
   title,
-  pagination,
+  enablePagination,
   embedded,
+  fetchData,
+  stateChangeFetchInclusions = defaultStateChangeFetchInclusions,
+  loading = false,
+  additionalTableProps,
   customEmptyDataState,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [state, setState] = useState<TableState>({
+    columnFilters: [],
+    sorting: [],
+    rowSelection: {},
+    columnVisibility: {},
+    columnOrder: [],
+    columnPinning: {},
+    expanded: {},
+    globalFilter: null,
+    columnSizing: {},
+    ...additionalTableProps?.initialState,
+    pagination: {
+      pageIndex: additionalTableProps?.initialState?.pagination?.pageIndex ?? 0,
+      pageSize: additionalTableProps?.initialState?.pagination?.pageSize ?? 10,
+    },
+  } as TableState);
+
+  const previousState = usePrevious(state);
+  useEffect(() => {
+    if (
+      fetchData &&
+      !_.isEqual(
+        _.pick(previousState, stateChangeFetchInclusions),
+        _.pick(state, stateChangeFetchInclusions),
+      )
+    ) {
+      void fetchData(state);
+    }
+  }, [fetchData, previousState, state, stateChangeFetchInclusions]);
 
   const table = useReactTable({
     data,
     columns,
-    state: {
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
-    },
+    state: state,
     enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
+    onStateChange: setState,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    ...(pagination ? { getPaginationRowModel: getPaginationRowModel() } : {}),
+    ...additionalTableProps,
+    ...(enablePagination
+      ? { getPaginationRowModel: getPaginationRowModel() }
+      : {}),
+    meta: {
+      ...additionalTableProps?.meta,
+    },
   });
 
   return (
@@ -155,8 +194,13 @@ export function DataTable<TData, TValue>({
           </Table>
         </div>
       </div>
-      {pagination && (
-        <div className="p-4 text-end text-primary-foreground">
+      {enablePagination && (
+        <div className="flex justify-end p-4 text-primary-foreground">
+          {loading && (
+            <p className="self-center pr-4">
+              <Spinner size={16} color="white" />
+            </p>
+          )}
           <div className="inline-flex h-9 items-center justify-start rounded-lg border py-3">
             <div className="flex items-center justify-center gap-2.5 border-r px-3 py-2">
               <button

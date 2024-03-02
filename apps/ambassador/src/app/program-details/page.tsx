@@ -122,9 +122,9 @@ export default function AmbassadorProgram() {
               </div>
             </section>
           </div>
-          <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg shadow-lg">
-            <div className="grid w-full items-stretch justify-center gap-8 align-middle sm:flex-row lg:grid-cols-3">
-              <section className="flex flex-col rounded-lg bg-muted p-6">
+          <div className="mb-6 flex flex-wrap items-stretch justify-center gap-8 rounded-lg bg-background shadow-lg text-lg">
+            <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-1 lg:grid-cols-3">
+              <section className="flex flex-col rounded-lg bg-muted p-6 h-full">
                 <div className="flex flex-col rounded-md">
                   <Image
                     src="/alien.png"
@@ -134,7 +134,7 @@ export default function AmbassadorProgram() {
                     layout="responsive"
                   />
                   <div>
-                    <h2 className="mb-2 text-2xl font-semibold text-foreground">
+                    <h2 className="mb-2 text-2xl font-semibold text-foreground mt-8">
                       3. Benefits of Becoming an Ambassador
                     </h2>
                     <p className="text-muted-foreground">
@@ -146,7 +146,7 @@ export default function AmbassadorProgram() {
                   </div>
                 </div>
               </section>
-              <section className="mb-6 rounded-lg bg-muted p-6">
+              <section className="flex flex-col rounded-lg bg-muted p-6 h-full">
                 <div className="flex flex-col justify-between rounded-md">
                   <Image
                     src="/wannabeBond.png"
@@ -156,7 +156,7 @@ export default function AmbassadorProgram() {
                     layout="responsive"
                   />
                   <div>
-                    <h2 className="mb-2 text-2xl font-semibold text-foreground">
+                    <h2 className="mb-2 text-2xl font-semibold text-foreground mt-8">
                       4. Program Objectives
                     </h2>
                     <p className="text-muted-foreground">
@@ -169,7 +169,7 @@ export default function AmbassadorProgram() {
                   </div>
                 </div>
               </section>
-              <section className="mb-6 rounded-lg bg-muted p-6">
+              <section className="flex flex-col rounded-lg bg-muted p-6 h-full">
                 <div className="flex flex-col rounded-md">
                   <Image
                     src="/loltemplars.png"
@@ -179,7 +179,7 @@ export default function AmbassadorProgram() {
                     layout="responsive"
                   />
                   <div>
-                    <h2 className="mb-2 text-2xl font-semibold text-foreground">
+                    <h2 className="mb-2 text-2xl font-semibold text-foreground mt-8">
                       5. Onboarding Process
                     </h2>
                     <p className="text-muted-foreground">
