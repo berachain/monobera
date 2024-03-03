@@ -29,7 +29,11 @@ export default function CreatePoolInitialPriceInput({
           className="w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold outline-none ring-0 ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={initialPrice}
           onChange={(e) => {
-            onInitialPriceChange(e.target.value);
+            const newValue = e.target.value;
+            // Ensure the length of numeric part is 10 or less
+            if (newValue.replace(/[^0-9.]/g, "").length <= 10) {
+              onInitialPriceChange(newValue);
+            }
           }}
         />
       </div>
