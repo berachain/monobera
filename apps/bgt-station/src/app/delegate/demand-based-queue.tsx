@@ -23,7 +23,6 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
   const { useDelegatorUnbondingQueue } = usePollDelegatorUnbonding();
 
   const { unbondingQueue, isLoading } = useDelegatorUnbondingQueue();
-  console.log("unbondingQueue", unbondingQueue, isLoading);
 
   return (
     <div className="container mx-auto flex w-full flex-col gap-8 pb-20 lg:w-[800px]">
