@@ -2,6 +2,7 @@ import { getCrocErc20LpAddress, type Token } from "@bera/berajs";
 import { type Address } from "wagmi";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { formatUnits, getAddress } from "viem";
+import BigNumber from "bignumber.js";
 export interface PoolV2 {
   id: string; // concat base-quote-poolidx
   base: Address;
@@ -49,6 +50,20 @@ export const getBaseCost = (initialPrice: number) => {
 export const getQuoteCost = (initialPrice: number) => {
   if (initialPrice === 0) return 0;
   return 1 * initialPrice;
+};
+
+export const getBaseCostBN = (initialPrice: string): string => {
+  const bnInitialPrice = new BigNumber(initialPrice);
+  if (bnInitialPrice.isZero()) return "0";
+  // Perform division and convert the result to a string
+  return new BigNumber(1).dividedBy(bnInitialPrice).toFixed();
+};
+
+export const getQuoteCostBN = (initialPrice: string): string => {
+  const bnInitialPrice = new BigNumber(initialPrice);
+  if (bnInitialPrice.isZero()) return "0";
+  // Perform multiplication (though unnecessary as it's by 1) and convert the result to a string
+  return new BigNumber(1).multipliedBy(bnInitialPrice).toFixed();
 };
 
 export const formatSubgraphPoolData = (result: any): PoolV2 => {
