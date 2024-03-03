@@ -27,6 +27,18 @@ export enum Steps {
   CREATE_POOL_PREVIEW = 3,
 }
 
+export enum POOLID {
+  FIVE_BPS = "36000",
+  THIRTY_BPS = "36001",
+  HUNDRED_BPS = "36002",
+}
+
+export const SWAPFEE = {
+  [POOLID.FIVE_BPS]: 0.05,
+  [POOLID.THIRTY_BPS]: 0.3,
+  [POOLID.HUNDRED_BPS]: 1,
+};
+
 /**
  *
  * @brief A state management hook for preparing the creation of a new pool
@@ -37,7 +49,7 @@ const useCreateTokenWeights = () => {
 
   const [poolName, setPoolName] = useState<string>("");
 
-  const [swapFee, setSwapFee] = useState<number>(0.4);
+  const [poolId, setPoolId] = useState<POOLID>(POOLID.FIVE_BPS);
 
   const [step, setStep] = useState<Steps>(Steps.SET_TOKEN_WEIGHTS);
 
@@ -71,11 +83,6 @@ const useCreateTokenWeights = () => {
     quoteToken?.address ?? "",
   );
 
-  console.log({
-    quoteTokenBalance,
-    baseTokenBalance,
-  });
-
   // track any errors
   useEffect(() => {
     setError(undefined);
@@ -102,11 +109,6 @@ const useCreateTokenWeights = () => {
       step === 2 &&
       (isBaseTokenExceedingBalance || isQuoteTokenExceedingBalance);
 
-    console.log({
-      isBaseTokenExceedingBalance,
-      isQuoteTokenExceedingBalance,
-      isInitialLiquidityExceedingBalance,
-    });
     const isBothBeras = isBeratoken(tokenA) && isBeratoken(tokenB);
     if (isUndefinedToken) {
       setError(new InvalidInputError("Tokens must be selected"));
@@ -123,11 +125,10 @@ const useCreateTokenWeights = () => {
     } else {
       setError(undefined);
     }
-  }, [baseToken, quoteToken, baseAmount, quoteAmount, step, swapFee]);
+  }, [baseToken, quoteToken, baseAmount, quoteAmount, step]);
 
   return {
     error,
-    swapFee,
     poolName,
     step,
     initialPrice,
@@ -138,13 +139,14 @@ const useCreateTokenWeights = () => {
     quoteToken,
     baseAmount,
     quoteAmount,
+    poolId,
+    setPoolId,
     setBaseAmount,
     setQuoteAmount,
     setTokenA,
     setTokenB,
     setIsBaseTokenInput,
     setInitialPrice,
-    setSwapFee,
     setPoolName,
     setStep,
   };

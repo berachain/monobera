@@ -144,7 +144,7 @@ export const PoolSearch = ({
                 onRowClick={(row: any) =>
                   window.open(getPoolUrl(row.original), "_self")
                 }
-                customSorting={sorting}
+                // customSorting={sorting}
                 onCustomSortingChange={(a: any) => handleNewSort(a)}
               />
             </div>
