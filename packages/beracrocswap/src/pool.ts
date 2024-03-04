@@ -66,6 +66,11 @@ export class CrocPoolView {
         return this.toDisplayPrice(await spotPrice)
     }
 
+    async displayPricePoolIdx (poolIdx: number, block?: BlockTag): Promise<number> {
+        let spotPrice = this.spotPricePoolIdx(poolIdx, block)
+        return this.toDisplayPrice(await spotPrice)
+    }
+
     async spotTick (block?: BlockTag): Promise<number> {
         let txArgs = block ? { blockTag: block } : {}
         return (await this.context).query.queryCurveTick
@@ -164,30 +169,30 @@ export class CrocPoolView {
         return this.mintRange(qty, !this.useTrueBase, range, await limits, opts)
     }
 
-    async burnAmbientLiq (liq: BigNumber, limits: PriceRange, opts?: CrocLpOpts): 
+    async burnAmbientLiq (poolIdx: number, liq: BigNumber, limits: PriceRange, opts?: CrocLpOpts): 
         Promise<BeraSdkResponse> {
         let [lowerBound, upperBound] = await this.transformLimits(limits)
-        const calldata = (await this.makeEncoder()).encodeBurnAmbient
+        const calldata = (await this.makeEncoderPoolIDx(poolIdx)).encodeBurnAmbient
             (liq, lowerBound, upperBound, this.maskSurplusFlag(opts), getCrocErc20LpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)))
         return {
             calldata
         }
     }
 
-    async burnAmbientAll (limits: PriceRange, opts?: CrocLpOpts): Promise<BeraSdkResponse> {
+    async burnAmbientAll (poolIdx: number, limits: PriceRange, opts?: CrocLpOpts): Promise<BeraSdkResponse> {
         let [lowerBound, upperBound] = await this.transformLimits(limits)
-        const calldata = (await this.makeEncoder()).encodeBurnAmbientAll
+        const calldata = (await this.makeEncoderPoolIDx(poolIdx)).encodeBurnAmbientAll
             (lowerBound, upperBound, this.maskSurplusFlag(opts), getCrocErc20LpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)))
         return {
             calldata
         }
     }
 
-    async burnRangeLiq (liq: BigNumber, range: TickRange, limits: PriceRange, opts?: CrocLpOpts): 
+    async burnRangeLiq (poolIdx: number, liq: BigNumber, range: TickRange, limits: PriceRange, opts?: CrocLpOpts): 
         Promise<TransactionResponse> {
         let [lowerBound, upperBound] = await this.transformLimits(limits)
         let roundLotLiq = roundForConcLiq(liq)
-        const calldata = (await this.makeEncoder()).encodeBurnConc
+        const calldata = (await this.makeEncoderPoolIDx(poolIdx)).encodeBurnConc
             (range[0], range[1], roundLotLiq, lowerBound, upperBound, this.maskSurplusFlag(opts))
         return this.sendCmd(calldata)
     }
@@ -353,6 +358,9 @@ export class CrocPoolView {
             (await this.context).chain.poolIndex)
     }
 
+    private async makeEncoderPoolIDx(poolIdx: number): Promise<WarmPathEncoder> {
+        return new WarmPathEncoder(this.baseToken.tokenAddr, this.quoteToken.tokenAddr, poolIdx)
+    }
     readonly baseToken: CrocTokenView
     readonly quoteToken: CrocTokenView
     readonly baseDecimals: Promise<number>
