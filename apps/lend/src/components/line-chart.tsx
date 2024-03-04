@@ -1,57 +1,66 @@
-import { useState } from "react";
+import { TimeFrame, type TimeFrame as TimeFrameT } from "@bera/berajs";
+import { HistoryRate } from "@bera/graphql";
 import { Dropdown } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
+import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { type RateItem } from "~/utils/getServerSideData";
-
 export interface LineChartProps {
-  data: LineChartDataProps[];
-}
-export interface LineChartDataProps {
+  attribute: string;
   title: any;
-  data: {
-    "24H": RateItem[];
-    "7D": RateItem[];
-    "30D": RateItem[];
-    ALL_TIME: RateItem[];
-  };
   color: string;
+  data: HistoryRate[];
+  time: TimeFrameT;
+  setTime: (time: TimeFrameT) => void;
+  isLoading: boolean;
 }
-const timeFrame = ["24H", "7D", "30D", "ALL_TIME"];
-export default function LineChart({ data }: LineChartProps) {
-  const [time, setTime] = useState<"24H" | "7D" | "30D" | "ALL_TIME">(
-    "ALL_TIME",
-  );
 
-  const trimTimeString = (timeString: string) => {
+export default function LineChart({
+  attribute,
+  title,
+  color,
+  data,
+  time,
+  setTime,
+  isLoading,
+}: LineChartProps) {
+  const trimTimeString = (unixTime: number) => {
+    const date = new Date(unixTime);
     switch (time) {
-      case "24H":
-        return timeString.slice(11, 16);
-      case "7D":
-      case "30D":
-        return timeString.slice(5, 10);
-      case "ALL_TIME":
-        return timeString.slice(0, 10);
+      case TimeFrame.HOURLY: {
+        const strH = date.toLocaleTimeString().replace(" ", ":").split(":");
+        return `${strH[0]}·${strH[3]}`;
+      }
+      case TimeFrame.WEEKLY: {
+        const strW1 = date.toLocaleTimeString().replace(" ", ":").split(":");
+        const strW2 = date.toLocaleDateString().split("/");
+        return `${strW1[0]}${strW1[3]} ${strW2[0]}/${strW2[1]}`;
+      }
+      case TimeFrame.MONTHLY:
+      case TimeFrame.QUARTERLY: {
+        const strM = date.toLocaleDateString().split("/");
+        return `${strM[0]}/${strM[1]}`;
+      }
       default:
-        return timeString;
+        return date.toLocaleDateString();
     }
   };
 
-  const labels = data[0]!.data[time].map((item: RateItem) =>
-    trimTimeString(item.time),
+  const labels = data.map(
+    (item: HistoryRate) => trimTimeString(item.timestamp * 1000), //local xx
   );
 
   const dataG = {
     labels,
-    datasets: data.map((d: LineChartDataProps) => {
-      return {
-        label: d.title,
-        data: d.data[time].map((item) => Number(item.rate) * 100),
-        borderColor: d.color,
-        backgroundColor: d.color,
-      };
-    }),
+    datasets: [
+      {
+        label: title,
+        //@ts-ignore
+        data: data.map((item) => Number(item[attribute]).toFixed(2)),
+        borderColor: color,
+        backgroundColor: color,
+      },
+    ],
   };
 
   const Options = {
@@ -86,26 +95,26 @@ export default function LineChart({ data }: LineChartProps) {
     <div>
       <div className="mb-6 flex items-end justify-between md:items-center">
         <div className="flex h-full flex-col items-center gap-2 md:flex-row md:gap-8">
-          {data.map((d) => (
-            <div className="flex items-center gap-2 font-medium" key={d.title}>
-              <div
-                className={"h-2 w-2 rounded-full border"}
-                style={{ backgroundColor: d.color, borderColor: d.color }}
-              />
-              {d.title}
-            </div>
-          ))}
+          <div className="flex items-center gap-2 font-medium" key={title}>
+            <div
+              className={"h-2 w-2 rounded-full border"}
+              style={{ backgroundColor: color, borderColor: color }}
+            />
+            {title}
+          </div>
         </div>
         <Tabs defaultValue={time} className="hidden md:block">
           <TabsList>
-            {timeFrame.map((t: string) => (
+            {Object.keys(TimeFrame).map((t: string) => (
               <TabsTrigger
-                value={t}
+                value={TimeFrame[t as keyof typeof TimeFrame]}
                 key={t}
                 className="capitalize"
-                onClick={() => setTime(t as "24H" | "7D" | "30D" | "ALL_TIME")}
+                onClick={() => setTime(TimeFrame[t as keyof typeof TimeFrame])}
               >
-                {t.replaceAll("_", " ").toUpperCase()}
+                {TimeFrame[t as keyof typeof TimeFrame]
+                  .replaceAll("_", " ")
+                  .toUpperCase()}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -113,16 +122,18 @@ export default function LineChart({ data }: LineChartProps) {
         <div className="block md:hidden">
           <Dropdown
             selected={time}
-            selectionList={timeFrame}
-            onSelect={(t: string) =>
-              setTime(t as "24H" | "7D" | "30D" | "ALL_TIME")
-            }
+            selectionList={Object.keys(TimeFrame)}
+            onSelect={(t: string) => setTime(t as TimeFrameT)}
           />
         </div>
       </div>
-      <div className="h-[180px] w-full">
-        <BeraChart data={dataG} type="line" options={Options as any} />
-      </div>
+      {isLoading ? (
+        <Skeleton className="h-[180px] w-full" />
+      ) : (
+        <div className="h-[180px] w-full">
+          <BeraChart data={dataG as any} type="line" options={Options as any} />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,28 +1,25 @@
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { formatter } from "@bera/berajs";
+import { useQuery } from "@apollo/client";
+import {
+  TimeFrame,
+  formatter,
+  getTime,
+  type TimeFrame as TimeFrameT,
+} from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
+import { GetHistoryDayRates, GetHistoryHourRates } from "@bera/graphql";
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { type RateItem } from "~/utils/getServerSideData";
 import Card from "~/components/card";
 import DonutChart from "~/components/donut-chart";
 import LineChart from "~/components/line-chart";
 
-export default function TotalBorrowed({
-  reserveData,
-  graphData,
-}: {
-  reserveData: any;
-  graphData: {
-    "24H": RateItem[];
-    "7D": RateItem[];
-    "30D": RateItem[];
-    ALL_TIME: RateItem[];
-  };
-}) {
+export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
   const ticker = reserveData?.symbol;
+  const color = "#FCD34D ";
   const info = [
     {
       title: "Reserve factor",
@@ -56,7 +53,17 @@ export default function TotalBorrowed({
       ),
     },
   ];
-  const color = "#FCD34D ";
+
+  const [timeframe, setTimeframe] = useState<TimeFrameT>(TimeFrame.HOURLY);
+  const timestamp_gt = useMemo(() => getTime(timeframe), [timeframe]);
+  const { data: graphdata, loading } = useQuery(
+    timeframe === (TimeFrame.HOURLY || TimeFrame.WEEKLY)
+      ? GetHistoryHourRates
+      : GetHistoryDayRates,
+    {
+      variables: { timestamp_gt },
+    },
+  );
   return (
     <div className="w-full">
       <div className="text-2xl font-semibold leading-loose">
@@ -148,13 +155,19 @@ export default function TotalBorrowed({
 
         <div>
           <LineChart
-            data={[
-              {
-                data: graphData,
-                title: "Borrow APY, Variable",
-                color: color,
-              },
-            ]}
+            attribute="borrowRates"
+            time={timeframe}
+            setTime={setTimeframe}
+            data={
+              graphdata?.[
+                timeframe === (TimeFrame.HOURLY || TimeFrame.WEEKLY)
+                  ? "historyHourRates"
+                  : "historyDayRates"
+              ] || []
+            }
+            isLoading={loading}
+            color={color}
+            title="Borrow APY, Variable"
           />
         </div>
 
