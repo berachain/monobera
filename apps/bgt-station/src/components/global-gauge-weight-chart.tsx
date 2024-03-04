@@ -38,10 +38,14 @@ const options = {
       titleColor: "#78716C",
       bodyColor: "#78716C",
       callbacks: {
+        //   TODO: add custom tooltip
         label: (context: {
-          dataset: { label: string };
+          dataIndex: number;
+          dataset: { data: number[] };
           parsed: { y: number | bigint | null };
-        }) => context?.dataset?.label || "",
+        }) => {
+          return context?.dataset?.data[context?.dataIndex] || "";
+        },
       },
     },
   },
@@ -111,6 +115,11 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
 
   return (
     <div className="flex w-[330px] items-center justify-center">
+      <div className="absolute flex flex-col items-center justify-center">
+        Total Staked BGT
+        <div className="text-2xl font-bold">69.42M</div>
+        79.69M BGT Circulating
+      </div>
       <BeraChart data={dataP} options={options as any} type="doughnut" />
     </div>
   );
