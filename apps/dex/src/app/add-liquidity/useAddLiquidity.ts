@@ -69,11 +69,9 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     : "0";
 
 
-  console.log({pool})
   const { usePoolPrice } = useCrocPoolPrice(pool);
   const poolPrice = usePoolPrice();
 
-  console.log({poolPrice})
   useMemo(() => {
     if (!areNoInputsExceeding) {
       setError("Input exceeds balance");
