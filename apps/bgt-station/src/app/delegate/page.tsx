@@ -28,8 +28,8 @@ export default function Page({
   }
 
   return (
-    <div className="flex flex-col md:flex-row">
-      <div className="w-full md:w-1/2">
+    <div className="flex flex-col justify-center md:flex-row">
+      <div className="w-full">
         <Delegate
           action={action}
           validator={searchParams.validator as Address}
@@ -37,7 +37,7 @@ export default function Page({
         />
       </div>
       <div className="hidden flex-shrink-0 flex-grow-0 border-r-2 border-muted md:flex" />
-      <div className="w-full md:w-1/2">
+      <div className="w-full">
         <DemandBasedQueue action={action} />
       </div>
     </div>

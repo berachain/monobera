@@ -4,6 +4,7 @@ import React from "react";
 import { usePollDelegatorUnbonding } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
+import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import UnbondingQueueTable from "~/components/unbonding-queue-table";
@@ -28,9 +29,15 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
   return (
     <div className="container mx-auto flex w-full flex-col gap-8 pb-20 lg:w-[800px]">
       <Card className="flex flex-col gap-3 bg-muted p-6">
-        <div className="text-lg font-semibold capitalize leading-7 text-foreground">
-          Demand based {getActionText(action)}
+        <div className="flex flex-row items-start">
+          <Icons.bgt className="h-[32px] w-[32px]" />
+          <Icons.chevronRight className="h-[32px] w-[32px]" />
+          <Icons.bera className="h-[32px] w-[32px]" />
+          <div className="ml-3 text-lg font-semibold capitalize leading-7 text-foreground">
+            Demand based {getActionText(action)}
+          </div>
         </div>
+
         <div className="flex flex-col gap-1 text-sm">
           Berachain’s Unstaking process takes a novel “Demand Based Unstaking”
           Approach where the Unstaking Period is based primarily on the Demand
@@ -93,13 +100,12 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
                 My Un-Stake Queue
               </div>
             </div>
-            <Card className="flex flex-col gap-3 p-6">
-              {isLoading ? (
-                <Skeleton className="h-10 w-full" />
-              ) : (
-                <UnbondingQueueTable unbondingQueue={unbondingQueue} />
-              )}
-            </Card>
+
+            {isLoading ? (
+              <Skeleton className="h-10 w-full" />
+            ) : (
+              <UnbondingQueueTable unbondingQueue={unbondingQueue} />
+            )}
           </div>
         </>
       )}

@@ -22,8 +22,8 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { parseUnits } from "viem";
 import { useTheme } from "next-themes";
+import { parseUnits } from "viem";
 import { type Address } from "wagmi";
 
 import ValidatorInput from "~/components/validator-input";
@@ -139,7 +139,7 @@ export default function Delegate({
   const bgtBalance = useBgtBalance();
 
   return (
-    <div className="container mx-auto w-full max-w-[600px] pb-20">
+    <div className="container mx-auto w-full max-w-[600px] pb-20 lg:w-[600px]">
       <Tabs
         defaultValue={action}
         onValueChange={(value) => setActiveAction(value as DelegateEnum)}
