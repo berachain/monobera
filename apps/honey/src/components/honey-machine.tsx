@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 // import { HONEY_PRECOMPILE_ABI, TransactionActionType } from "@bera/berajs";
 import { TransactionActionType, truncateHash } from "@bera/berajs";
-import { erc20HoneyAddress } from "@bera/config";
+import { honeyRouterAddress } from "@bera/config";
 import { ConnectButton, Spinner, TokenInput, useTxn } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { cn } from "@bera/ui";
@@ -189,7 +189,7 @@ export function HoneyMachine() {
       abi: erc20ABI as unknown as (typeof erc20ABI)[],
       functionName: "approve",
       params: [
-        erc20HoneyAddress,
+        honeyRouterAddress,
         parseUnits(
           `${fromAmount ?? "0"}` as `${number}`,
           selectedFrom?.decimals ?? 18,
@@ -200,7 +200,7 @@ export function HoneyMachine() {
 
   const performMinting = () =>
     write({
-      address: erc20HoneyAddress,
+      address: honeyRouterAddress,
       abi: ERC20_HONEY_ABI,
       functionName: "mint",
       params: payload,
@@ -208,7 +208,7 @@ export function HoneyMachine() {
 
   const performRedeeming = () =>
     write({
-      address: erc20HoneyAddress,
+      address: honeyRouterAddress,
       abi: ERC20_HONEY_ABI,
       functionName: "redeem",
       params: payload,

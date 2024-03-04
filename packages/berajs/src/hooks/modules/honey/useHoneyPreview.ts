@@ -1,4 +1,4 @@
-import { erc20HoneyAddress } from "@bera/config";
+import { honeyRouterAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, parseUnits } from "viem";
@@ -33,7 +33,7 @@ export const usePollHoneyPreview = (
       }
 
       const result = (await publicClient.readContract({
-        address: erc20HoneyAddress,
+        address: honeyRouterAddress,
         abi: HONEY_PRECOMPILE_ABI,
         functionName: method,
         args: [collateral.address, formattedAmount],

@@ -1,4 +1,4 @@
-import { erc20HoneyAddress, multicallAddress } from "@bera/config";
+import { honeyRouterAddress, multicallAddress } from "@bera/config";
 import BigNumber from "bignumber.js";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
@@ -21,13 +21,13 @@ export const usePollHoneyParams = (collateralList: Address[]) => {
     const calls: any[] = [];
     collateralList.forEach((collateral: Address) => {
       calls.push({
-        address: erc20HoneyAddress,
+        address: honeyRouterAddress,
         abi: HONEY_PRECOMPILE_ABI,
         functionName: "getMintRate",
         args: [collateral],
       });
       calls.push({
-        address: erc20HoneyAddress,
+        address: honeyRouterAddress,
         abi: HONEY_PRECOMPILE_ABI,
         functionName: "getRedeemRate",
         args: [collateral],
