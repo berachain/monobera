@@ -1,26 +1,29 @@
-import { formatter } from "@bera/berajs";
+"use client";
+
+import { useMemo, useState } from "react";
+import { useQuery } from "@apollo/client";
+import {
+  TimeFrame,
+  formatter,
+  getTime,
+  type TimeFrame as TimeFrameT,
+} from "@bera/berajs";
+import {
+  GetHistoryDayRates,
+  GetHistoryHourRates,
+  GetTest,
+} from "@bera/graphql";
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { type RateItem } from "~/utils/getServerSideData";
 import Card from "~/components/card";
 import DonutChart from "~/components/donut-chart";
 import LineChart from "~/components/line-chart";
 
-export default function TotalSupplied({
-  reserveData,
-  graphData,
-}: {
-  reserveData: any;
-  graphData: {
-    "24H": RateItem[];
-    "7D": RateItem[];
-    "30D": RateItem[];
-    ALL_TIME: RateItem[];
-  };
-}) {
+export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
   const ticker = reserveData?.symbol;
+  const color = "#059669";
   const info = [
     {
       title: "Max LTV",
@@ -88,7 +91,17 @@ export default function TotalSupplied({
       ),
     },
   ];
-  const color = "#059669";
+
+  const [timeframe, setTimeframe] = useState<TimeFrameT>(TimeFrame.HOURLY);
+  const timestamp_gt = useMemo(() => getTime(timeframe), [timeframe]);
+  const { data: graphdata, loading } = useQuery(
+    timeframe === (TimeFrame.HOURLY || TimeFrame.WEEKLY)
+      ? GetHistoryHourRates
+      : GetHistoryDayRates,
+    {
+      variables: { timestamp_gt },
+    },
+  );
   return (
     <div>
       <div className="text-2xl font-semibold leading-loose">
@@ -145,13 +158,19 @@ export default function TotalSupplied({
 
         <div>
           <LineChart
-            data={[
-              {
-                data: graphData,
-                title: "Supply APR",
-                color: color,
-              },
-            ]}
+            attribute="supplyRates"
+            time={timeframe}
+            setTime={setTimeframe}
+            data={
+              graphdata?.[
+                timeframe === (TimeFrame.HOURLY || TimeFrame.WEEKLY)
+                  ? "historyHourRates"
+                  : "historyDayRates"
+              ] || []
+            }
+            isLoading={loading}
+            color={color}
+            title={"Supply APR"}
           />
         </div>
 
@@ -183,4 +202,4 @@ export default function TotalSupplied({
       </Card>
     </div>
   );
-}
+};
