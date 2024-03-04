@@ -56,8 +56,12 @@ export const navItems = [
     title: "Governance",
   },
   {
-    href: "/redeem",
-    title: "Redeem",
+    href: "/governance",
+    title: "Governance",
+  },
+  {
+    href: "/gauge",
+    title: "Gauge",
   },
   // {
   //   href: faucetUrl,

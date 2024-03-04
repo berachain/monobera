@@ -8,7 +8,7 @@ import {
 } from "@bera/berajs";
 
 import { Details } from "./components/details";
-import GlobalGaugeWeightInfo from "./components/global-gauge-weight";
+import GlobalGaugeWeightInfo from "../../components/global-gauge-weight";
 import { ValidatorsList } from "./components/validators-list";
 
 export const metadata: Metadata = {
