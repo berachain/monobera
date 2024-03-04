@@ -4,6 +4,12 @@ import { DataTableColumnHeader } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 import { formatUnits } from "viem";
 
+export interface GlobalGaugeColumnsV2 {
+  gauge: JSX.Element;
+  incentiveAmount: number;
+  incentivePercentage: number;
+}
+
 export interface GlobalGaugeColumns {
   gauge: JSX.Element;
   incentiveAmount: number;
@@ -17,6 +23,43 @@ export interface UnbondingQueueColumns {
   timeRemaining: string;
   hide: JSX.Element;
 }
+
+export const global_gauge_weight_columns_v2: ColumnDef<GlobalGaugeColumnsV2>[] =
+  [
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Pool or Address" />
+      ),
+      cell: ({ row }) => (
+        <div className="truncate whitespace-nowrap text-left">
+          {row.original.gauge}
+        </div>
+      ),
+      accessorKey: "gauge",
+      enableSorting: false,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Estimated BGT Incentive/yr"
+        />
+      ),
+      cell: ({ row }) => {
+        const incentiveAmount = row.original.incentiveAmount;
+        const incentivePercentage = row.original.incentivePercentage;
+        return (
+          <div className="flex flex-row items-center">
+            {" "}
+            {formatter.format(incentiveAmount)} (
+            {(incentivePercentage * 100).toFixed(2)}%)
+          </div>
+        );
+      },
+      accessorKey: "incentiveAmount",
+      enableSorting: true,
+    },
+  ];
 
 export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
   {
