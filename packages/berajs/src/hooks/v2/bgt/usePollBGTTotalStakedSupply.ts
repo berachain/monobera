@@ -6,7 +6,8 @@ import POLLING from "~/config/constants/polling";
 import { BGT_ABI } from "~/config/v2/abi";
 import { useBeraConfig } from "~/contexts";
 
-export const usePollBGTTotalSupply = () => {
+// Total staked BGT
+export const usePollBGTTotalStakedSupply = () => {
   const method = "totalSupply";
   const QUERY_KEY = [method];
   const publicClient = usePublicClient();
