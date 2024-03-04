@@ -68,7 +68,6 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     ? tokenInputs.find((tokenInput) => isBeratoken(tokenInput))?.amount
     : "0";
 
-
   const { usePoolPrice } = useCrocPoolPrice(pool);
   const poolPrice = usePoolPrice();
 
