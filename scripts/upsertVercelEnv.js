@@ -14,11 +14,11 @@
  * Example usages:
  *
  * 1. Upsert to all monobera project
- * > pnpm upsertenv --token=b0cR4RAqHXuNBKabQLCVbGw8 --envFileName=.env.devnet
+ * > pnpm upsertenv --token=GBgFq2cLyv1GkDkKNPTuq1zP --envFileName=.env.devnet
  * The above command upserts all env variables in file from root named ".env.devnet" to all monobera-* projects on the berachain vercel
  *
  * 2. Upsert to specific project
- * > pnpm upsertenv --token=b0cR4RAqHXuNBKabQLCVbGw8 --envFileName=.env.devnet --project=monobera-faucet
+ * > pnpm upsertenv --token=GBgFq2cLyv1GkDkKNPTuq1zP --envFileName=.env.devnet --project=monobera-faucet
  * The above command upserts all env variables in file from root named ".env.devnet" to project "monobera-faucet"
  *
  * Arguments:
