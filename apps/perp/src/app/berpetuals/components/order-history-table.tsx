@@ -10,7 +10,12 @@ import {
   pnl_columns,
 } from "./columns";
 import { DataTable } from "@bera/shared-ui";
-import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
+import type {
+  IClosedTrade,
+  ILimitOrder,
+  IMarketOrder,
+  IPosition,
+} from "./order-history";
 import { type BerpTabTypes } from "./order-history-header";
 
 export interface IRow {
@@ -30,18 +35,23 @@ export function OrderHistoryTable({
   openOrders,
   history,
   markets,
+  mobile,
+  allPositions,
 }: {
   tab: BerpTabTypes;
   openPositons: IMarketOrder[];
   openOrders: ILimitOrder[];
   history: IClosedTrade[];
   markets: IMarket[];
+  mobile: boolean;
+  allPositions: IPosition[];
 }) {
   const assetCardItems = useMemo(() => {
     return getAssetCardList({
       marketOrderItems: openPositons,
       limitOrderItems: openOrders,
       historyItems: history,
+      allPositions: allPositions,
       markets,
     });
   }, [openPositons, openOrders, history]);
@@ -54,54 +64,61 @@ export function OrderHistoryTable({
           data={openPositons ?? []}
           className="hidden w-full sm:block"
           embedded
-          pagination
+          enablePagination={!mobile}
         />
       )}
       {tab === "orders" && (
         <DataTable
           columns={orders_columns}
           data={openOrders ?? []}
-          className="hidden w-full min-w-[1000px] sm:block"
+          className="hidden w-full sm:block"
           embedded
-          pagination
+          enablePagination={!mobile}
         />
       )}
       {tab === "history" && (
         <DataTable
           columns={history_columns}
-          data={history ?? []}
-          className="hidden w-full min-w-[850px] sm:block"
+          data={allPositions ?? []}
+          className="hidden w-full sm:block"
           embedded
-          pagination
+          enablePagination={!mobile}
+          additionalTableProps={{
+            initialState: {
+              sorting: [{ id: "open_time", desc: true }],
+            },
+          }}
         />
       )}
       {tab === "pnl" && (
         <DataTable
           columns={pnl_columns}
           data={history ?? []}
-          className="hidden w-full min-w-[1200px] sm:block"
+          className="hidden w-full sm:block"
           embedded
-          pagination
+          enablePagination={!mobile}
         />
       )}
-      <div className="flex flex-col gap-8 px-6 py-8 sm:hidden">
-        {tab === "positions" &&
-          assetCardItems.marketList.map((item, index) => (
-            <AsesetCardMobile card={item} key={index} />
-          ))}
-        {tab === "orders" &&
-          assetCardItems.limitList.map((item, index) => (
-            <AsesetCardMobile card={item} key={index} />
-          ))}
-        {tab === "history" &&
-          assetCardItems.historyList.map((item, index) => (
-            <AsesetCardMobile card={item} key={index} />
-          ))}
-        {tab === "pnl" &&
-          assetCardItems.pnlList.map((item, index) => (
-            <AsesetCardMobile card={item} key={index} />
-          ))}
-      </div>
+      {mobile && (
+        <div className="flex flex-col gap-8 px-6 py-8">
+          {tab === "positions" &&
+            assetCardItems.marketList.map((item, index) => (
+              <AsesetCardMobile card={item} key={index} />
+            ))}
+          {tab === "orders" &&
+            assetCardItems.limitList.map((item, index) => (
+              <AsesetCardMobile card={item} key={index} />
+            ))}
+          {tab === "history" &&
+            assetCardItems.historyList.map((item, index) => (
+              <AsesetCardMobile card={item} key={index} />
+            ))}
+          {tab === "pnl" &&
+            assetCardItems.pnlList.map((item, index) => (
+              <AsesetCardMobile card={item} key={index} />
+            ))}
+        </div>
+      )}
     </div>
   );
 }

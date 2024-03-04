@@ -5,14 +5,19 @@ import { getAddress, type Address } from "viem";
 
 import { handleNativeBera } from "~/utils";
 
-export const useTokenHoneyPrices = (tokenAddresses: string[] | undefined) => {
+export const useTokenHoneyPrices = (
+  tokenAddresses: (string | undefined)[] | undefined,
+) => {
   return useSWR(
     ["tokenHoneyPrices", tokenAddresses],
     async () => {
-      if (!tokenAddresses) {
+      if (
+        !tokenAddresses ||
+        tokenAddresses.some((token) => token === undefined)
+      ) {
         return [];
       }
-      const swappedAddresses = tokenAddresses.map((token: string) =>
+      const swappedAddresses = tokenAddresses.map((token: string | undefined) =>
         handleNativeBera(token).toLowerCase(),
       );
       try {
@@ -58,11 +63,11 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
           },
         })
         .then((res: any) => {
-          return res.data.tokenHoneyPrices[0].price;
+          return res.data.tokenHoneyPrice.price;
         })
         .catch((e: any) => {
           console.log(e);
-          return undefined;
+          return "0";
         });
     },
     {

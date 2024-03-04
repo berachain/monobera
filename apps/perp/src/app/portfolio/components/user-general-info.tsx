@@ -1,11 +1,9 @@
-import { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 
 import type { IMarket } from "~/app/berpetuals/page";
 import { usePollAccountTradingSummary } from "~/hooks/usePollAccountTradingSummary";
-import { usePollDailyPnl } from "~/hooks/usePollDailyPnl";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 
 export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
@@ -16,19 +14,12 @@ export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
   const { useAccountTradingSummary } = usePollAccountTradingSummary();
   const { data } = useAccountTradingSummary();
 
-  const { useDailyPnl } = usePollDailyPnl();
-
   const unrealizedPnl = useTotalUnrealizedPnl(markets);
-  const dailyPnl = useDailyPnl();
-
-  const pnl = useMemo(() => {
-    return unrealizedPnl + dailyPnl;
-  }, [unrealizedPnl, dailyPnl]);
 
   return (
-    <div className="flex max-h-[300px] w-full flex-shrink-0 flex-col gap-8 rounded-md border border-border bg-muted px-4 py-6 lg:w-[270px]">
-      <div className="flex flex-col gap-3 px-1">
-        <div className="text-sm font-medium leading-none text-muted-foreground">
+    <div className="flex h-full w-full flex-col gap-4 flex-1 sm:flex-row lg:flex-col">
+      <div className="flex w-full flex-col gap-1 rounded-md border border-border bg-muted px-4 py-4 lg:w-[270px]">
+        <div className="mb-2 border-b border-border px-1 pb-2 font-medium">
           Current Open Positions
         </div>
         <div className="text-3xl font-semibold leading-9 text-foreground">
@@ -37,17 +28,18 @@ export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
         <div
           className={cn(
             "text-sm font-medium leading-normal",
-            pnl < 0 ? "text-destructive-foreground" : "text-success-foreground",
+            unrealizedPnl < 0
+              ? "text-destructive-foreground"
+              : "text-success-foreground",
           )}
         >
-          {formatUsd(pnl)}
-          <span className="ml-2 text-muted-foreground">24H PnL</span>
+          {formatUsd(unrealizedPnl)}
+          <span className="ml-2 text-muted-foreground">Open PnL</span>
         </div>
       </div>
-
-      <div>
-        <div className="mb-4 border-b border-border px-1 pb-2 font-medium">
-          Details
+      <div className="flex w-full flex-col gap-2 rounded-md border border-border bg-muted px-4 py-4 lg:w-[270px]">
+        <div className="mb-2 border-b border-border px-1 pb-2 font-medium">
+          Lifetime Stats
         </div>
         <div className="p flex flex-col gap-2">
           <div className="flex justify-between px-1 text-sm leading-tight">
@@ -60,7 +52,7 @@ export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
           </div>
           <div className="flex justify-between px-1 text-sm leading-tight">
             <div className="flex flex-row items-center gap-1">
-              Net PnL{" "}
+              Realized PnL{" "}
               <Tooltip text="Cumulative Profit & Loss for this account" />
             </div>
             <div
