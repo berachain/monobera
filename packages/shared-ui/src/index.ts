@@ -10,6 +10,7 @@ export { DataTable } from "./data-table";
 export { DataTableColumnHeader } from "./data-table-column-header";
 export { SearchInput } from "./search-input";
 export { Spinner } from "./spinner";
+export { SSRSpinner } from "./ssr-spinner";
 export { TailwindIndicator } from "./tailwind-indicator";
 export {
   SuccessToast,
