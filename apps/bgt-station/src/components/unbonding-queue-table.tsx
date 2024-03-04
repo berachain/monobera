@@ -11,7 +11,7 @@ import { unstake_queue_columns } from "~/columns/unstake-queue-columns";
 export default function UnbondingQueueTable({
   unbondingQueue,
 }: {
-  unbondingQueue: EntryData[] | undefined;
+  unbondingQueue: EntryData[];
 }) {
   const getDateString = (dateString: string) => {
     const date = new Date(dateString);

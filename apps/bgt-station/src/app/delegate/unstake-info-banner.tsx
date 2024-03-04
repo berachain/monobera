@@ -6,9 +6,9 @@ import { Icons } from "@bera/ui/icons";
 
 export function UnstakeInfoBanner() {
   return (
-    <div className="mt-6 flex w-full flex-row rounded-md border border-[#CA8A04] bg-[#FEFCE8] p-2">
+    <div className="mt-6 flex w-full flex-row rounded-md border border-warning-foreground bg-warning p-2">
       <div className="flex flex-row items-center justify-between gap-2">
-        <div className="flex flex-row items-center justify-center">
+        <div className="flex flex-row items-center justify-between">
           <Icons.bgt className="h-[32px] w-[32px]" />
           <Icons.chevronRight className="h-[32px] w-[32px]" />
           <Icons.bera className="h-[32px] w-[32px]" />
@@ -18,7 +18,7 @@ export function UnstakeInfoBanner() {
         </div>
         <Tooltip
           text={
-            "It’s Important to make note of the fact that When a Unstake/Withdrawal/Redemption Request is initiatied BGT is converted to BERA based on the Conversion Ratio. Think of BGT as a veBERA receipt token. Learn More about it Here."
+            "When a Unstake/Withdrawal/Redemption Request is initiatied BGT is converted to BERA based on the Conversion Ratio."
           }
         />
       </div>

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { usePollDelegatorUnbonding } from "@bera/berajs";
+import { Tooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -20,9 +21,9 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
     }
   };
 
-  const { useDelegatorUnbondingQueue } = usePollDelegatorUnbonding();
+  const useDelegatorUnbondingQueue = usePollDelegatorUnbonding();
 
-  const { unbondingQueue, isLoading } = useDelegatorUnbondingQueue();
+  const { unbondingQueue, isLoading } = useDelegatorUnbondingQueue;
 
   return (
     <div className="container mx-auto flex w-full flex-col gap-8 pb-20 lg:w-[800px]">
@@ -37,16 +38,24 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
         </div>
         <div className="flex flex-row justify-between gap-2 text-sm ">
           <div className="text-md flex w-[380px] flex-col items-start justify-center gap-1 rounded-md border bg-info p-2">
-            <div className="align-start text-md font-semibold text-info-foreground">
-              Current {action} Time
+            <div className="flex w-full flex-row items-stretch justify-between">
+              <div className="align-start text-md font-semibold text-info-foreground">
+                Current {action} Time
+              </div>
+              {/* TODO: add tooltip text */}
+              <Tooltip text="current unbond time" />
             </div>
             <div className="items-start text-lg font-bold text-info-foreground">
               1 Day
             </div>
           </div>
           <div className="text-md flex w-[380px] flex-col items-start justify-center gap-1 rounded-md border border-dashed bg-muted p-2">
-            <div className="text-md items-start font-semibold text-muted-foreground">
-              Estimated future {action} Time
+            <div className="flex w-full flex-row items-stretch justify-between">
+              <div className="text-md items-start font-semibold text-muted-foreground">
+                Estimated future {action} Time
+              </div>
+              {/* TODO: add tooltip text */}
+              <Tooltip text="future unbond time" />
             </div>
             <div className="items-start text-lg font-bold italic text-muted-foreground">
               30 Mins
