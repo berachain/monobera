@@ -2,7 +2,7 @@ import React from "react";
 import { Calendar } from "@bera/ui/calendar";
 import { Card } from "@bera/ui/card";
 
-import { unbonding_queue_columns } from "~/columns/global-gauge-weight";
+import { unbonding_queue_columns } from "~/columns/global-gauge-weight-columns";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   STAKING_PRECOMPILE_ABI,
