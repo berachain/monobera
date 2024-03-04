@@ -33,7 +33,7 @@ export default function GaugeInfoCard() {
         </div>
         <div className="flex w-full flex-row items-stretch justify-between gap-8">
           <div className="text-md flex flex-col items-start gap-4 text-muted-foreground">
-            Active Bribes
+            Total No. of Validators
           </div>
           <div className="text-md flex flex-col gap-4 font-semibold text-foreground">
             690.42k

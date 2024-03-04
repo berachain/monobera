@@ -7,20 +7,19 @@ import { SearchInput } from "@bera/shared-ui";
 
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
+import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
 import GaugeInfoCard from "./gauge-info-card";
 
 export default function Gauge() {
   const [keywords, setKeywords] = React.useState<string | null>(null);
-  const data = [];
+  // TODO: switch to use the new subgraph
+  const { data, isLoading } = useGlobalValidatorGaugeWeight();
   return (
     <div className="container mx-auto mb-20 flex w-full flex-col">
       <div className="flex flex-row gap-[160px] py-12">
-        <div className="w-[1/2]">
-          <GaugeInfoCard />
-        </div>
-        <div className="w-[1/2]">
-          <GlobalGaugeWeightChart gaugeWeights={data ?? []} />
-        </div>
+        <GaugeInfoCard />
+
+        <GlobalGaugeWeightChart gaugeWeights={data ?? []} />
       </div>
       <SearchInput
         placeholder="Search..."

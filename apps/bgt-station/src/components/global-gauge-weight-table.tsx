@@ -40,6 +40,7 @@ const Gauge = ({ address }: { address: string | undefined }) => {
   );
 };
 export default function GlobalGaugeWeightTable({ gaugeWeights = [] }: Props) {
+  console.log(gaugeWeights, "gaugeWeights");
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
   const [disableChecks, setDisableChecks] = React.useState<boolean>(false);
