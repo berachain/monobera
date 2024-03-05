@@ -51,7 +51,7 @@ export function BeraChart({
     <>
       {showDataOnHover && (
         <div className="">
-          <p>{dataPoint} testing</p>
+          <p>{dataPoint}</p>
         </div>
       )}
       <Chart
