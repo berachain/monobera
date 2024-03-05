@@ -47,7 +47,6 @@ export function BeraChart({
 }: ChartProps & { showDataOnHover?: boolean }) {
   const [dataPoint, setDataPoint] = useState<number>(0);
   const chartRef = useRef<ChartJS>(null);
-  console.log("dataPoint", dataPoint);
   return (
     <>
       {showDataOnHover && (
