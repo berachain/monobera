@@ -45,11 +45,7 @@ export const BERACHEF_ABI = [
         type: "tuple",
         internalType: "struct IBeraChef.CuttingBoard",
         components: [
-          {
-            name: "startBlock",
-            type: "uint64",
-            internalType: "uint64",
-          },
+          { name: "startBlock", type: "uint64", internalType: "uint64" },
           {
             name: "weights",
             type: "tuple[]",
