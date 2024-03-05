@@ -172,16 +172,22 @@ export const useOctTxn = ({
           }
         }
         track("transaction_failed", {
-          message,
+          message: error?.message,
           actionType,
           userRejected: !!error?.message?.includes(
             "User rejected the request.",
           ),
           operation: "useOctContractWrite",
         });
-        captureException(error, {
-          data: { message, actionType },
-        });
+        if (
+          !error?.message.includes("User rejected the request.") &&
+          !error?.message.includes("insufficient funds")
+        ) {
+          // only capture the exception if the error is not related to user manual rejection or insufficient funds
+          captureException(error, {
+            data: { message, actionType },
+          });
+        }
         onError?.(error);
       },
 
@@ -349,14 +355,20 @@ export const useOctTxn = ({
         }
       }
       track("transaction_failed", {
-        message,
+        message: error?.message,
         actionType,
         userRejected: !!error?.message?.includes("User rejected the request."),
         operation: "useOctValueSend",
       });
-      captureException(error, {
-        data: { message, actionType },
-      });
+      if (
+        !error?.message.includes("User rejected the request.") &&
+        !error?.message.includes("insufficient funds")
+      ) {
+        // only capture the exception if the error is not related to user manual rejection or insufficient funds
+        captureException(error, {
+          data: { message, actionType },
+        });
+      }
       onError?.(error);
     },
 
