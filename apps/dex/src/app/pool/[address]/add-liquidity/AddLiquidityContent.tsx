@@ -25,6 +25,7 @@ import {
   TxnPreview,
   useTxn,
 } from "@bera/shared-ui";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -94,11 +95,21 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const { networkConfig } = useBeraConfig();
 
+  const { captureException, track } = useAnalytics();
+
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
+      track("add_liquidity_to_pool_success", { poolName: pool?.poolName });
       reset();
       router.push("/pool?pool=userPools");
+    },
+    onError: (e: Error | undefined) => {
+      track("add_liquidity_to_pool_failed", { poolName: pool?.poolName });
+      captureException(e, {
+        event_id: "add_liquidity_to_pool_failed",
+        data: { poolName: pool?.poolName },
+      });
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });

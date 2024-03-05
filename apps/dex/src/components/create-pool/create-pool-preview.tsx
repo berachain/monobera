@@ -16,6 +16,7 @@ import {
   TokenList,
   useTxn,
 } from "@bera/shared-ui";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -50,11 +51,21 @@ export function CreatePoolPreview({
   const { networkConfig } = useBeraConfig();
   const router = useRouter();
 
+  const { captureException, track } = useAnalytics();
+
   const { write, ModalPortal } = useTxn({
     message: `Create ${poolName} pool`,
     onSuccess: () => {
+      track("create_pool_success", { poolName });
       void onCreatePool();
       router.push("/pool");
+    },
+    onError: (e: Error | undefined) => {
+      track("create_pool_failed", { poolName });
+      captureException(e, {
+        event_id: "create_pool_failed",
+        data: { poolName },
+      });
     },
     actionType: TransactionActionType.CREATE_POOL,
   });

@@ -46,6 +46,7 @@
     "typescript": "^5.0.4"
   },
   "devDependencies": {
+    "@types/mixpanel-browser": "^2.49.0",
     "yargs": "^17.7.2"
   }
 }

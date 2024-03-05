@@ -24,6 +24,7 @@ import {
   TxnPreview,
   useTxn,
 } from "@bera/shared-ui";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { cn } from "@bera/ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -55,10 +56,19 @@ export default function WithdrawLiquidityContent({
     setExactOutToken(undefined);
     setWithdrawType(0);
   };
+  const { captureException, track } = useAnalytics();
   const { write, ModalPortal } = useTxn({
     message: `Withdraw liquidity from ${pool?.poolName}`,
     onSuccess: () => {
+      track("withdraw_pool_liquidity_success", { poolName: pool?.poolName });
       reset();
+    },
+    onError: (e: Error | undefined) => {
+      track("withdraw_pool_liquidity_failed", { poolName: pool?.poolName });
+      captureException(e, {
+        event_id: "withdraw_pool_liquidity_failed",
+        data: { poolName: pool?.poolName },
+      });
     },
     actionType: TransactionActionType.WITHDRAW_LIQUIDITY,
   });
