@@ -6,12 +6,15 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useLocalStorage } from "usehooks-ts";
+import { Switch } from "@bera/ui/switch";
 
 import {
   DEFAULT_DEADLINE,
   DEFAULT_SLIPPAGE,
+  DEFAULT_SOUND_ENABLED,
   LOCAL_STORAGE_KEYS,
 } from "~/utils/constants";
+import { set } from "husky";
 
 export enum SELECTION {
   AUTO = "auto",
@@ -37,6 +40,11 @@ export default function SwapSettings() {
   const [deadlineValue, setDeadlineValue] = useLocalStorage<number | string>(
     LOCAL_STORAGE_KEYS.DEADLINE_VALUE,
     DEFAULT_DEADLINE,
+  );
+
+  const [soundEnabled, setSoundEnabled] = useLocalStorage<boolean>(
+    LOCAL_STORAGE_KEYS.SOUND_ENABLED,
+    DEFAULT_SOUND_ENABLED,
   );
 
   return (
@@ -171,6 +179,18 @@ export default function SwapSettings() {
           </div>
         </Alert>
       )}
+
+      <div className="space-y-2">
+        <h4 className="flex items-center gap-1 font-medium leading-none">
+          Sound Enabled
+          <Tooltip text="Enable or disable sounds" />
+        </h4>
+        <Switch
+          id="enable-sound"
+          checked={soundEnabled}
+          onCheckedChange={(e) => setSoundEnabled(e)}
+        />
+      </div>
     </div>
   );
 }

@@ -48,7 +48,7 @@ export default function CreateAPool() {
             Create your own custom recipe 🍝
           </h3>
           <div className="mb-12 mt-6 flex w-full justify-center gap-2 text-center">
-            <Button onClick={() => router.push("/pool/create")}>
+            <Button onClick={() => router.push("/pools/create")}>
               Create a Pool
             </Button>
             <Link href={`${docsUrl}/learn/bex/pools`} target="_blank">

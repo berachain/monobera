@@ -5,7 +5,6 @@ import { subgraphUrl } from "@bera/config";
 import { Documentation, Footer } from "@bera/shared-ui";
 
 import { getMetaTitle } from "~/utils/metadata";
-import CreateAPool from "./components/CreateAPool";
 import Data from "./components/Data";
 import Hero from "./components/Hero";
 
@@ -128,9 +127,6 @@ export default async function Homepage() {
         <div className="container max-w-1280 pb-16">
           <Hero />
           <Data tvl={data?.tvl} volume={data?.volume} />
-          <div className="-mx-full overflow-hidden">
-            <CreateAPool />
-          </div>
           <Documentation className="my-24" />
         </div>
         <Footer />

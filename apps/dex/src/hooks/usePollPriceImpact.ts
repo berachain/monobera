@@ -1,6 +1,6 @@
 import { usePollSwaps, type SwapInfoV2 } from "@bera/berajs";
 import { POLLING } from "@bera/shared-ui/src/utils";
-import { formatUnits, parseUnits } from "ethers";
+import { formatUnits, parseUnits } from "viem";
 import useSWR from "swr";
 import { type Address } from "wagmi";
 

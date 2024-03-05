@@ -18,6 +18,7 @@ import { PlaceOrder } from "./components/place-order";
 import { TPSL } from "./components/tpsl";
 import { type IMarket } from "./page";
 import { type OrderType } from "./type";
+import { getSafeNumber } from "../../../../bgt-station/src/utils/getSafeNumber";
 
 interface ICreatePosition {
   market: IMarket;
@@ -57,17 +58,17 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
 
   const safeAmount = form.amount === "" ? "0" : form.amount;
   useMemo(() => {
-    const honeyAmountPrice = Number(safeAmount) * honeyPrice;
+    const honeyAmountPrice = getSafeNumber(safeAmount) * honeyPrice;
     const leveragedHoneyPrice = honeyAmountPrice * (form.leverage ?? 1);
     if (form.optionType === "market") {
       if (givenHoney) {
         const newQuantity = leveragedHoneyPrice / formattedPrice;
-        setForm({ ...form, quantity: newQuantity });
+        setForm({ ...form, quantity: newQuantity.toString() });
         return;
       }
       if (!givenHoney && form.quantity !== undefined) {
         const newAmount =
-          (form.quantity / (form.leverage ?? 1)) *
+          (Number(form.quantity) / (form.leverage ?? 1)) *
           (formattedPrice / honeyPrice);
         setForm({ ...form, amount: newAmount.toString() });
         return;
@@ -78,14 +79,14 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
     if (form.optionType === "limit") {
       if (givenHoney) {
         const newQuantity = leveragedHoneyPrice / (form.limitPrice ?? 0);
-        setForm({ ...form, quantity: newQuantity });
+        setForm({ ...form, quantity: newQuantity.toString() });
       } else if (
         !givenHoney &&
         form.quantity !== undefined &&
         form.limitPrice !== undefined
       ) {
         const newAmount =
-          (form.quantity / (form.leverage ?? 1)) *
+          (Number(form.quantity) / (form.leverage ?? 1)) *
           (form.limitPrice / honeyPrice);
         setForm({ ...form, amount: newAmount.toString() });
         return;
@@ -260,7 +261,7 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
             value={form.quantity?.toString()}
             onChange={(e) => {
               setGivenHoney(false);
-              setForm({ ...form, quantity: Number(e) });
+              setForm({ ...form, quantity: e });
             }}
             endAdornment={
               <div className="flex items-center gap-1 text-sm text-muted-foreground">

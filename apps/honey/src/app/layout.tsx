@@ -4,9 +4,10 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
 import Script from "next/script";
+import { ApolloProvider } from "@apollo/client";
 import { BeraConfig } from "@bera/berajs";
 import { rpcBannerEnabled } from "@bera/config";
-import { BeraGraphProvider } from "@bera/graphql";
+import { honeyClient } from "@bera/graphql";
 import {
   Footer,
   Header,
@@ -64,7 +65,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         >
           {" "}
           <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
-          <BeraGraphProvider>
+          <ApolloProvider client={honeyClient}>
             <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
               <Header
                 isHoney
@@ -84,7 +85,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <TailwindIndicator />
               <Analytics />
             </BeraConfig>
-          </BeraGraphProvider>
+          </ApolloProvider>
         </body>
       </SWRDevTools>
     </html>
