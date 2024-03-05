@@ -27,7 +27,7 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
   const { unbondingQueue, isLoading } = useDelegatorUnbondingQueue;
 
   return (
-    <div className="container mx-auto flex w-full flex-col gap-8 pb-20 lg:w-[800px]">
+    <div className="container mx-auto flex w-full max-w-[800px] flex-col gap-8 pb-20">
       <Card className="flex flex-col gap-3 bg-muted p-6">
         <div className="flex flex-row items-start">
           <Icons.bgt className="h-[32px] w-[32px]" />
@@ -44,9 +44,9 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
           of Staking, Restaking and Unstaking
         </div>
         <div className="flex flex-row justify-between gap-2 text-sm ">
-          <div className="text-md flex w-[380px] flex-col items-start justify-center gap-1 rounded-md border bg-info p-2">
-            <div className="flex w-full flex-row items-stretch justify-between">
-              <div className="align-start text-md font-semibold text-info-foreground">
+          <div className="text-md flex w-[380px] flex-col items-start justify-between gap-1 rounded-md border bg-info p-2">
+            <div className="xs:flex-col flex w-full flex-row items-stretch justify-between">
+              <div className="text-md items-start font-semibold text-info-foreground ">
                 Current {action} Time
               </div>
               {/* TODO: add tooltip text */}
@@ -57,7 +57,7 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
             </div>
           </div>
           <div className="text-md flex w-[380px] flex-col items-start justify-center gap-1 rounded-md border border-dashed bg-muted p-2">
-            <div className="flex w-full flex-row items-stretch justify-between">
+            <div className="xs:flex-col flex w-full flex-row items-stretch justify-between">
               <div className="text-md items-start font-semibold text-muted-foreground">
                 Estimated future {action} Time
               </div>
