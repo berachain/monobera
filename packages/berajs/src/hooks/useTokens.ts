@@ -13,7 +13,6 @@ interface IUseTokens {
   customTokenList: Token[] | undefined;
   tokenDictionary: { [key: string]: Token } | undefined;
   featuredTokenList: Token[] | undefined;
-  gaugeDictionary: { [key: string]: any } | undefined;
   beraToken: Token | undefined;
   wBeraToken: Token | undefined;
   addNewToken: (token: Token | undefined) => void;
@@ -66,8 +65,7 @@ const useTokens = (): IUseTokens => {
         return {
           list: uniqueList,
           customList: [...localStorageTokenList],
-          dictionary: tokenListToDict(list), // i dont know if we still need this since we already have a map
-          gaugeDictionary: temp.gaugeMap ?? undefined,
+          dictionary: tokenListToDict(list),
           featured: defaultFeaturedList ?? [],
         };
       } catch (error) {
@@ -132,7 +130,6 @@ const useTokens = (): IUseTokens => {
     customTokenList: data?.customList ?? [],
     tokenDictionary: data?.dictionary ?? {},
     featuredTokenList: data?.featured ?? [],
-    gaugeDictionary: data?.gaugeDictionary ?? {},
     beraToken,
     wBeraToken,
     addNewToken,

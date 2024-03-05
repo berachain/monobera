@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   truncateHash,
+  useGauges,
   usePollGlobalValidatorBribes,
   usePollPrices,
   usePollValidatorCuttingBoard,
@@ -28,7 +29,7 @@ export const GaugeIcon = ({
   address: string;
   className?: string;
 }) => {
-  const { gaugeDictionary } = useTokens();
+  const { gaugeDictionary } = useGauges();
 
   return (
     <Avatar className={cn("h-8 w-8", className)}>
@@ -65,7 +66,7 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
   const highestVotedGauge = React.useMemo(() => {
     return cuttingBoard ? cuttingBoard[0].receiver : undefined;
   }, [cuttingBoard]);
-  const { gaugeDictionary } = useTokens();
+  const { gaugeDictionary } = useGauges();
 
   return (
     <>
