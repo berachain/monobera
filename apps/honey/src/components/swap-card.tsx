@@ -1,23 +1,26 @@
 "use client";
 
 import React, { useState } from "react";
-import { erc20HoneyAddress } from "@bera/config";
-import { ApproveButton, ConnectButton } from "@bera/shared-ui";
+import { HONEY_ROUTER_ABI } from "@bera/berajs";
+import { honeyRouterAddress } from "@bera/config";
+import {
+  ApproveButton,
+  ConnectButton,
+  SSRSpinner,
+  TokenInput,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { parseUnits } from "viem";
 
-import { TokenInput } from "~/components/token-input";
-// import { HONEY_PRECOMPILE_ABI } from "@bera/berajs";
-import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 
 export function SwapCard() {
   const [tabValue, setTabValue] = useState<"mint" | "burn">("mint");
   const {
-    // fee,
+    fee,
     isFeeLoading,
     payload,
     isReady,
@@ -29,6 +32,7 @@ export function SwapCard() {
     fromAmount,
     setFromAmount,
     setToAmount,
+    setIsTyping,
     toAmount,
     isMint,
     fromBalance,
@@ -40,6 +44,7 @@ export function SwapCard() {
     collateralList,
     needsApproval,
     exceedBalance,
+    isTyping,
   } = usePsm();
 
   return (
@@ -53,8 +58,7 @@ export function SwapCard() {
               <Skeleton className="absolute right-6 top-5 h-6 w-40" />
             ) : (
               <div className="absolute right-6 top-5 text-base font-medium text-muted-foreground">
-                {/* Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}% */}
-                Static fee of 0.5%
+                Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
               </div>
             )}
           </CardTitle>
@@ -86,7 +90,7 @@ export function SwapCard() {
           </Tabs>
 
           <div className="border-1 flex flex-col gap-6 border-border">
-            <ul className="divide-y divide-border rounded-2xl border">
+            <ul className="relative divide-y divide-border rounded-2xl border">
               <TokenInput
                 selected={selectedFrom}
                 selectedTokens={[selectedFrom, selectedTo]}
@@ -95,16 +99,20 @@ export function SwapCard() {
                 balance={fromBalance?.formattedBalance}
                 selectable={selectedFrom?.address !== honey?.address}
                 customTokenList={collateralList}
-                hidePrice
                 showExceeding
+                setIsTyping={setIsTyping}
                 setAmount={(amount) => {
                   setGivenIn(true);
                   setFromAmount(amount);
                 }}
               />
+              {(isLoading || isTyping) && (
+                <SSRSpinner className="absolute -translate-y-[50%] left-[50%] -translate-x-[50%] bg-background border border-border rounded-md p-2" />
+              )}
               <TokenInput
                 selected={selectedTo}
                 selectedTokens={[selectedFrom, selectedTo]}
+                setIsTyping={setIsTyping}
                 amount={toAmount}
                 setAmount={(amount) => {
                   setGivenIn(false);
@@ -113,19 +121,16 @@ export function SwapCard() {
                 selectable={selectedTo?.address !== honey?.address}
                 customTokenList={collateralList}
                 showExceeding={false}
-                hidePrice
-                disabled
-                // hideBalance
                 hideMax={true}
                 balance={toBalance?.formattedBalance}
               />
             </ul>
             {!isReady ? (
               <ConnectButton className="w-full" />
-            ) : needsApproval ? (
+            ) : needsApproval && !exceedBalance ? (
               <ApproveButton
                 token={selectedFrom}
-                spender={erc20HoneyAddress}
+                spender={honeyRouterAddress}
                 amount={parseUnits(
                   fromAmount ?? "0",
                   selectedFrom?.decimals ?? 18,
@@ -134,13 +139,16 @@ export function SwapCard() {
             ) : (
               <Button
                 disabled={
-                  isLoading || !fromAmount || !toAmount || exceedBalance
+                  isLoading ||
+                  !fromAmount ||
+                  !toAmount ||
+                  exceedBalance ||
+                  isTyping
                 }
                 onClick={() => {
                   write({
-                    address: erc20HoneyAddress,
-                    // abi: HONEY_PRECOMPILE_ABI,
-                    abi: ERC20_HONEY_ABI,
+                    address: honeyRouterAddress,
+                    abi: HONEY_ROUTER_ABI,
                     functionName: isMint ? "mint" : "redeem",
                     params: payload,
                   });

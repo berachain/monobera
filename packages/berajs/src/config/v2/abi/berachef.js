@@ -82,11 +82,7 @@ export const BERACHEF_ABI = [
         type: "tuple",
         internalType: "struct IBeraChef.CuttingBoard",
         components: [
-          {
-            name: "startBlock",
-            type: "uint64",
-            internalType: "uint64",
-          },
+          { name: "startBlock", type: "uint64", internalType: "uint64" },
           {
             name: "weights",
             type: "tuple[]",
@@ -111,7 +107,7 @@ export const BERACHEF_ABI = [
   },
   {
     type: "function",
-    name: "getDelegation",
+    name: "getOperator",
     inputs: [{ name: "valCoinbase", type: "address", internalType: "address" }],
     outputs: [{ name: "", type: "address", internalType: "address" }],
     stateMutability: "view",
@@ -126,11 +122,7 @@ export const BERACHEF_ABI = [
         type: "tuple",
         internalType: "struct IBeraChef.CuttingBoard",
         components: [
-          {
-            name: "startBlock",
-            type: "uint64",
-            internalType: "uint64",
-          },
+          { name: "startBlock", type: "uint64", internalType: "uint64" },
           {
             name: "weights",
             type: "tuple[]",
@@ -157,12 +149,8 @@ export const BERACHEF_ABI = [
     type: "function",
     name: "initialize",
     inputs: [
+      { name: "_distributor", type: "address", internalType: "address" },
       { name: "_governance", type: "address", internalType: "address" },
-      {
-        name: "_distributor",
-        type: "address",
-        internalType: "address",
-      },
       {
         name: "_maxNumWeightsPerCuttingBoard",
         type: "uint8",
@@ -225,11 +213,7 @@ export const BERACHEF_ABI = [
         type: "tuple[]",
         internalType: "struct IBeraChef.Weight[]",
         components: [
-          {
-            name: "receiver",
-            type: "address",
-            internalType: "address",
-          },
+          { name: "receiver", type: "address", internalType: "address" },
           {
             name: "percentageNumerator",
             type: "uint96",
@@ -270,11 +254,7 @@ export const BERACHEF_ABI = [
         type: "tuple",
         internalType: "struct IBeraChef.CuttingBoard",
         components: [
-          {
-            name: "startBlock",
-            type: "uint64",
-            internalType: "uint64",
-          },
+          { name: "startBlock", type: "uint64", internalType: "uint64" },
           {
             name: "weights",
             type: "tuple[]",
@@ -300,12 +280,12 @@ export const BERACHEF_ABI = [
   },
   {
     type: "function",
-    name: "setDelegation",
+    name: "setMaxNumWeightsPerCuttingBoard",
     inputs: [
       {
-        name: "delegationAddress",
-        type: "address",
-        internalType: "address",
+        name: "_maxNumWeightsPerCuttingBoard",
+        type: "uint8",
+        internalType: "uint8",
       },
     ],
     outputs: [],
@@ -313,12 +293,12 @@ export const BERACHEF_ABI = [
   },
   {
     type: "function",
-    name: "setMaxNumWeightsPerCuttingBoard",
+    name: "setOperator",
     inputs: [
       {
-        name: "_maxNumWeightsPerCuttingBoard",
-        type: "uint8",
-        internalType: "uint8",
+        name: "operatorAddress",
+        type: "address",
+        internalType: "address",
       },
     ],
     outputs: [],
@@ -377,17 +357,45 @@ export const BERACHEF_ABI = [
         indexed: false,
         internalType: "struct IBeraChef.Weight[]",
         components: [
-          {
-            name: "receiver",
-            type: "address",
-            internalType: "address",
-          },
+          { name: "receiver", type: "address", internalType: "address" },
           {
             name: "percentageNumerator",
             type: "uint96",
             internalType: "uint96",
           },
         ],
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "CuttingBoardBlockDelaySet",
+    inputs: [
+      {
+        name: "cuttingBoardBlockDelay",
+        type: "uint64",
+        indexed: false,
+        internalType: "uint64",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "FriendsOfTheChefUpdated",
+    inputs: [
+      {
+        name: "receiver",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "isFriend",
+        type: "bool",
+        indexed: false,
+        internalType: "bool",
       },
     ],
     anonymous: false,
@@ -401,6 +409,19 @@ export const BERACHEF_ABI = [
         type: "uint64",
         indexed: false,
         internalType: "uint64",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "MaxNumWeightsPerCuttingBoardSet",
+    inputs: [
+      {
+        name: "maxNumWeightsPerCuttingBoard",
+        type: "uint8",
+        indexed: false,
+        internalType: "uint8",
       },
     ],
     anonymous: false,
@@ -446,11 +467,7 @@ export const BERACHEF_ABI = [
         indexed: false,
         internalType: "struct IBeraChef.Weight[]",
         components: [
-          {
-            name: "receiver",
-            type: "address",
-            internalType: "address",
-          },
+          { name: "receiver", type: "address", internalType: "address" },
           {
             name: "percentageNumerator",
             type: "uint96",
@@ -477,11 +494,7 @@ export const BERACHEF_ABI = [
         indexed: false,
         internalType: "struct IBeraChef.CuttingBoard",
         components: [
-          {
-            name: "startBlock",
-            type: "uint64",
-            internalType: "uint64",
-          },
+          { name: "startBlock", type: "uint64", internalType: "uint64" },
           {
             name: "weights",
             type: "tuple[]",
@@ -506,7 +519,7 @@ export const BERACHEF_ABI = [
   },
   {
     type: "event",
-    name: "SetDelegation",
+    name: "SetOperator",
     inputs: [
       {
         name: "valCoinbase",
@@ -515,7 +528,7 @@ export const BERACHEF_ABI = [
         internalType: "address",
       },
       {
-        name: "delegationAddress",
+        name: "operatorAddress",
         type: "address",
         indexed: true,
         internalType: "address",
@@ -545,11 +558,7 @@ export const BERACHEF_ABI = [
     type: "error",
     name: "ERC1967InvalidImplementation",
     inputs: [
-      {
-        name: "implementation",
-        type: "address",
-        internalType: "address",
-      },
+      { name: "implementation", type: "address", internalType: "address" },
     ],
   },
   { type: "error", name: "ERC1967NonPayable", inputs: [] },
@@ -561,7 +570,7 @@ export const BERACHEF_ABI = [
   { type: "error", name: "NotFriendOfTheChef", inputs: [] },
   { type: "error", name: "NotGovernance", inputs: [] },
   { type: "error", name: "NotInitializing", inputs: [] },
-  { type: "error", name: "NotValidatorOrDelegation", inputs: [] },
+  { type: "error", name: "NotValidatorOrOperator", inputs: [] },
   {
     type: "error",
     name: "OwnableInvalidOwner",

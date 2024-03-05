@@ -30,8 +30,8 @@ export function CreatePool({
   const selectedTokens = [tokenA, tokenB] as Token[];
 
   const { useIsDupePool, isLoading } = useCrocIsDupePool({
-    base: tokenA,
-    quote: tokenB,
+    tokenA,
+    tokenB,
   });
   const isDupePool = useIsDupePool();
   return (

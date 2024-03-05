@@ -40,7 +40,6 @@ const useMultipleTokenApprovalsWithSlippage = (
           const maxAmountIn =
             (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
 
-          console.log({ allowance, maxAmountIn });
           if (allowance.allowance === 0n || allowance.allowance < maxAmountIn) {
             return allowance;
           }
@@ -50,7 +49,6 @@ const useMultipleTokenApprovalsWithSlippage = (
     }
   }, [allowances]);
 
-  console.log({ needsApproval, slippage, refresh });
   return {
     needsApproval,
     needsApprovalNoBera: needsApproval.filter(

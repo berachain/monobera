@@ -6,7 +6,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { type Token, formatNumber } from "@bera/berajs";
-import { getBaseCost, getQuoteCost } from "~/app/pools/fetchPools";
+import { getBaseCostBN, getQuoteCostBN } from "~/app/pools/fetchPools";
 
 type Props = {
   baseToken: Token | undefined;
@@ -14,49 +14,44 @@ type Props = {
   initialPrice: string;
 };
 
-export const MIN_PRICE = 0.000001;
+export const MIN_PRICE = 0.00000001;
 
 export default function CreatePoolExchangeRate({
   baseToken,
   quoteToken,
   initialPrice,
 }: Props) {
-  const [isPricingBase, setIsPricingBase] = useState(false);
-  const baseCost = getBaseCost(getSafeNumber(initialPrice));
-  const quoteCost = getQuoteCost(getSafeNumber(initialPrice));
+  const baseCost = getBaseCostBN(initialPrice);
+  const quoteCost = getQuoteCostBN(initialPrice);
   return (
-    <li className={"flex w-full flex-col  items-center p-2 overflow-x-scroll"}>
-      <div className="flex w-fit flex-row justify-between gap-2">
-        <div className="w-fit flex flex-row gap-1 self-center font-semibold">
-          <TokenIcon address={baseToken?.address} />
-          {initialPrice === "" ||
-          initialPrice === "0" ||
-          getSafeNumber(initialPrice) === 0 ||
-          getSafeNumber(initialPrice) < MIN_PRICE
-            ? 0
-            : isPricingBase
-              ? 1
-              : formatNumber(quoteCost)}{" "}
-          {baseToken?.symbol}
+    <li className={"flex w-full flex-col  items-center overflow-x-scroll"}>
+      <div className="flex w-full flex-col sm:flex-row justify-between gap-2">
+        <div className="w-full sm:w-1/2 min-w-0 flex flex-col gap-1 self-center font-semibold bg-muted p-2 rounded-sm ">
+          <div className="flex flex-row gap-1 truncate">
+            <TokenIcon address={baseToken?.address} />
+            {initialPrice === "" ||
+            initialPrice === "0" ||
+            getSafeNumber(initialPrice) === 0
+              ? 0
+              : baseCost}{" "}
+          </div>
+          <p className="text-xs text-muted-foreground truncate">
+            {baseToken?.symbol} per {quoteToken?.symbol}
+          </p>
         </div>
-        <Button
-          variant={"secondary"}
-          className="p-2"
-          onClick={() => setIsPricingBase(!isPricingBase)}
-        >
-          <Icons.repeat className="h-4 w-4" />
-        </Button>
-        <div className="w-fit flex flex-row gap-1 self-center font-semibold">
-          <TokenIcon address={quoteToken?.address} />
-          {initialPrice === "" ||
-          initialPrice === "0" ||
-          getSafeNumber(initialPrice) === 0 ||
-          getSafeNumber(initialPrice) < MIN_PRICE
-            ? 0
-            : isPricingBase
-              ? formatNumber(baseCost)
-              : 1}{" "}
-          {quoteToken?.symbol}
+
+        <div className="w-full sm:w-1/2  min-w-0 flex flex-col gap-1 self-center font-semibold  bg-muted p-2 rounded-sm">
+          <div className="flex flex-row gap-1 truncate">
+            <TokenIcon address={quoteToken?.address} />
+            {initialPrice === "" ||
+            initialPrice === "0" ||
+            getSafeNumber(initialPrice) === 0
+              ? 0
+              : quoteCost}{" "}
+          </div>
+          <p className="text-xs text-muted-foreground truncate">
+            {quoteToken?.symbol} per {baseToken?.symbol}
+          </p>
         </div>
       </div>
     </li>

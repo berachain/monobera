@@ -221,7 +221,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
         transformedLimits[0],
         transformedLimits[1],
         0,
-        36000,
+        pool.poolIdx,
       );
       const payload = [2, mintCalldata];
 

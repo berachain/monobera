@@ -33,9 +33,7 @@ import { getPoolUrl, type PoolV2 } from "../pools/fetchPools";
 import { SettingsPopover } from "~/components/settings-popover";
 import { Slider } from "@bera/ui/slider";
 import { usePollUserPosition } from "~/hooks/usePollUserPosition";
-import { formatUnits } from "viem";
 import { useCallback, useMemo } from "react";
-import { useCrocPositionSeeds } from "~/hooks/useCrocPositionSeeds";
 import { type PriceRange } from "@bera/beracrocswap";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { useCrocPool } from "~/hooks/useCrocPool";
@@ -116,10 +114,6 @@ export default function WithdrawLiquidityContent({
     if (!userPositionBreakdown || amount === 0) {
       return 0;
     }
-    // return formatUnits(
-    //   (userPositionBreakdown.baseAmount * BigInt(amount)) / 100n,
-    //   baseToken.decimals,
-    // );
     const bnAmountWithdrawn = userPositionBreakdown.baseAmount
       .times(amount)
       .div(100);
@@ -184,10 +178,11 @@ export default function WithdrawLiquidityContent({
       let calldata = "";
 
       if (amount === 100) {
-        const response = await crocPool?.burnAmbientAll(limits);
+        const response = await crocPool?.burnAmbientAll(pool.poolIdx, limits);
         calldata = response?.calldata ?? "";
       } else {
         const response = await crocPool?.burnAmbientLiq(
+          pool.poolIdx,
           liquidityToBurn,
           limits,
         );

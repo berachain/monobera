@@ -3,32 +3,30 @@ import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
 import POLLING from "~/config/constants/polling";
-import { BERACHEF_ABI } from "~/config/v2/abi";
+import { BGT_ABI } from "~/config/v2/abi";
 import { useBeraConfig } from "~/contexts";
 
-export const usePollActiveCuttingBoard = (validatorAddress: `0x${string}`) => {
+// Total staked BGT
+export const usePollBGTTotalStakedSupply = () => {
+  const method = "totalSupply";
+  const QUERY_KEY = [method];
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
-
-  const method = "getActiveCuttingBoard";
-  // validatorCoinbaseAddr
-  const QUERY_KEY = [validatorAddress, method];
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       try {
-        const bgtRewardForDuration = await publicClient.readContract({
-          address: "0x0", // TODO: BERACHEF contract address
-          abi: BERACHEF_ABI,
+        const bgtTotalSupply = await publicClient.readContract({
+          address: "0x0", // TODO: BGT contract address
+          abi: BGT_ABI,
           functionName: method,
           args: [],
         });
 
-        if (!bgtRewardForDuration) {
+        if (!bgtTotalSupply) {
           return undefined;
         }
         return {
-          bgtRewardForDuration,
+          bgtTotalSupply,
         };
       } catch (e) {
         console.log(e);
@@ -40,14 +38,14 @@ export const usePollActiveCuttingBoard = (validatorAddress: `0x${string}`) => {
     },
   );
 
-  const useBGTRewardForDuration = () => {
+  const useTotalBGTSupply = () => {
     const { data = undefined } = useSWRImmutable<number | undefined>(QUERY_KEY);
     return data;
   };
 
   return {
     isLoading,
-    useBGTRewardForDuration,
+    useTotalBGTSupply,
     refresh: () => void mutate(QUERY_KEY),
   };
 };
