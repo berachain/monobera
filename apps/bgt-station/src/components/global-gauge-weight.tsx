@@ -83,6 +83,8 @@ const Gauge = ({ address }: { address: string | undefined }) => {
     </Link>
   );
 };
+
+// TODO: deprecate this component
 export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
