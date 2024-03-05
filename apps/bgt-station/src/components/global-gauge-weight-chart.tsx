@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { truncateHash, useTokens } from "@bera/berajs";
+import { truncateHash, useGauges } from "@bera/berajs";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { type Chart, type TooltipModel } from "chart.js";
 
@@ -13,7 +13,7 @@ interface Props {
 export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const tooltipRef = useRef<string | null>(null);
-  const { gaugeDictionary } = useTokens();
+  const { gaugeDictionary } = useGauges();
   const [tooltipVisible, setTooltipVisible] = React.useState<boolean>(false);
   const [selectedGauge, setSelectedGauge] = React.useState<GaugeWeight>();
   const [color, setColor] = React.useState<string>("");

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { truncateHash, useTokens } from "@bera/berajs";
+import { truncateHash, useGauges } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable } from "@bera/shared-ui";
 import { Checkbox } from "@bera/ui/checkbox";
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const Gauge = ({ address }: { address: string | undefined }) => {
-  const { gaugeDictionary } = useTokens();
+  const { gaugeDictionary } = useGauges();
   const value =
     address === undefined || gaugeDictionary === undefined
       ? ""
@@ -40,7 +40,6 @@ const Gauge = ({ address }: { address: string | undefined }) => {
   );
 };
 export default function GlobalGaugeWeightTable({ gaugeWeights = [] }: Props) {
-  console.log(gaugeWeights, "gaugeWeights");
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
   const [disableChecks, setDisableChecks] = React.useState<boolean>(false);
