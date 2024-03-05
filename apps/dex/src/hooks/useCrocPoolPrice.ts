@@ -14,7 +14,7 @@ export const useCrocPoolPrice = (pool: PoolV2 | undefined) => {
         return undefined;
       }
 
-      return await crocPool.displayPrice();
+      return await crocPool.displayPricePoolIdx(pool.poolIdx);
     },
     {
       refreshInterval: POLLING.NORMAL,

@@ -1,9 +1,16 @@
-export const HONEY_PRECOMPILE_ABI = [
+export const HONEY_ROUTER_ABI = [
   {
     type: "function",
     name: "UPGRADE_INTERFACE_VERSION",
     inputs: [],
     outputs: [{ name: "", type: "string", internalType: "string" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "feeReceiver",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
     stateMutability: "view",
   },
   {
@@ -18,6 +25,13 @@ export const HONEY_PRECOMPILE_ABI = [
     name: "getRedeemRate",
     inputs: [{ name: "asset", type: "address", internalType: "address" }],
     outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "honey",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "contract Honey" }],
     stateMutability: "view",
   },
   {
@@ -37,6 +51,13 @@ export const HONEY_PRECOMPILE_ABI = [
     ],
     outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "numRegisteredAssets",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -70,7 +91,7 @@ export const HONEY_PRECOMPILE_ABI = [
   },
   {
     type: "function",
-    name: "previewExactOutCollateral",
+    name: "previewHoneyToRedeem",
     inputs: [
       { name: "asset", type: "address", internalType: "address" },
       { name: "exactAmount", type: "uint256", internalType: "uint256" },
@@ -85,7 +106,9 @@ export const HONEY_PRECOMPILE_ABI = [
       { name: "asset", type: "address", internalType: "address" },
       { name: "amount", type: "uint256", internalType: "uint256" },
     ],
-    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    outputs: [
+      { name: "honeyAmount", type: "uint256", internalType: "uint256" },
+    ],
     stateMutability: "view",
   },
   {
@@ -145,6 +168,13 @@ export const HONEY_PRECOMPILE_ABI = [
   },
   {
     type: "function",
+    name: "registeredAssets",
+    inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    outputs: [{ name: "", type: "address", internalType: "contract ERC20" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "renounceOwnership",
     inputs: [],
     outputs: [],
@@ -152,8 +182,23 @@ export const HONEY_PRECOMPILE_ABI = [
   },
   {
     type: "function",
+    name: "setFeeReceiver",
+    inputs: [
+      { name: "_feeReceiver", type: "address", internalType: "address" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "setHoney",
-    inputs: [{ name: "_honey", type: "address", internalType: "address" }],
+    inputs: [
+      {
+        name: "_honey",
+        type: "address",
+        internalType: "contract Honey",
+      },
+    ],
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -192,7 +237,7 @@ export const HONEY_PRECOMPILE_ABI = [
       {
         name: "_vaultFactory",
         type: "address",
-        internalType: "address",
+        internalType: "contract VaultFactory",
       },
     ],
     outputs: [],
@@ -247,6 +292,56 @@ export const HONEY_PRECOMPILE_ABI = [
       { name: "newVaultImpl", type: "address", internalType: "address" },
     ],
     outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "vaultFactory",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "contract VaultFactory",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "vaults",
+    inputs: [
+      { name: "asset", type: "address", internalType: "contract ERC20" },
+    ],
+    outputs: [
+      {
+        name: "vault",
+        type: "address",
+        internalType: "contract ERC4626",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "withdrawAllFee",
+    inputs: [{ name: "receiver", type: "address", internalType: "address" }],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "withdrawFee",
+    inputs: [
+      {
+        name: "asset",
+        type: "address",
+        internalType: "contract ERC20",
+      },
+      { name: "shares", type: "uint256", internalType: "uint256" },
+      { name: "receiver", type: "address", internalType: "address" },
+    ],
+    outputs: [{ name: "assets", type: "uint256", internalType: "uint256" }],
     stateMutability: "nonpayable",
   },
   {
