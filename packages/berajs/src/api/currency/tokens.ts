@@ -12,3 +12,12 @@ export type Token = {
   balance?: bigint;
   formattedBalance?: string;
 };
+
+export type Gauge = {
+  logoURI?: string;
+  address: string;
+  name: string;
+  default?: boolean;
+  normalizedWeight?: number;
+  weight?: string | number;
+};

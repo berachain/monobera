@@ -4,6 +4,7 @@ type Address = `0x${string}`;
 export const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_ENDPOINT as string;
 export const subgraphUrl = process.env.NEXT_PUBLIC_SUBGRAPH_URL as string;
 export const tokenListUrl = process.env.NEXT_PUBLIC_TOKEN_LIST as string;
+export const gaugeListUrl = process.env.NEXT_PUBLIC_GAUGE_LIST as string;
 export const validatorList = process.env.NEXT_PUBLIC_VALIDATOR_LIST as string;
 export const publicAnalyticsUrl = process.env.NEXT_PUBLIC_ANALYTICS as string;
 export const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
