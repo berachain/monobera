@@ -2,7 +2,6 @@ type Address = `0x${string}`;
 
 // endpoints
 export const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_ENDPOINT as string;
-export const subgraphUrl = process.env.NEXT_PUBLIC_SUBGRAPH_URL as string;
 export const tokenListUrl = process.env.NEXT_PUBLIC_TOKEN_LIST as string;
 export const validatorList = process.env.NEXT_PUBLIC_VALIDATOR_LIST as string;
 export const publicAnalyticsUrl = process.env.NEXT_PUBLIC_ANALYTICS as string;
@@ -14,6 +13,11 @@ export const blockExplorerName = process.env
 export const lendEndpointUrl = process.env.NEXT_PUBLIC_LEND_ENDPOINT as string;
 export const faucetEndpointUrl = process.env
   .NEXT_PUBLIC_FAUCET_ENDPOINT as string;
+
+// Subgraphs
+export const subgraphUrl = process.env.NEXT_PUBLIC_SUBGRAPH_URL as string;
+export const honeySubgraphUrl = process.env
+  .NEXT_PUBLIC_HONEY_SUBGRAPH_URL as string;
 
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;

@@ -1,10 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { HONEY_PRECOMPILE_ABI, TransactionActionType } from "@bera/berajs";
-import { TransactionActionType, truncateHash } from "@bera/berajs";
+import {
+  HONEY_ROUTER_ABI,
+  TransactionActionType,
+  truncateHash,
+} from "@bera/berajs";
 import { honeyRouterAddress } from "@bera/config";
-import { ConnectButton, Spinner, TokenInput, useTxn } from "@bera/shared-ui";
+import {
+  ConnectButton,
+  SSRSpinner,
+  Spinner,
+  TokenInput,
+  useTxn,
+} from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { cn } from "@bera/ui";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -19,7 +28,6 @@ import { parseUnits } from "viem";
 import { erc20ABI } from "wagmi";
 
 import { LoadingBee } from "~/components/loadingBee";
-import { ERC20_HONEY_ABI } from "~/hooks/abi";
 import { usePsm } from "~/hooks/usePsm";
 
 const STATE_MACHINE_NAME = "pawsAndClaws";
@@ -47,6 +55,8 @@ export function HoneyMachine() {
     honey,
     collateralList,
     exceedBalance,
+    isLoading,
+    isTyping,
     onSwitch,
     setGivenIn,
     setSelectedFrom,
@@ -58,6 +68,7 @@ export function HoneyMachine() {
   const { RiveComponent, rive } = useRive({
     src: "/pawsandclaws.riv",
     stateMachines: STATE_MACHINE_NAME,
+    artboard: "PawsAndClaws_Main",
     autoplay: true,
     layout: new Layout({ fit: Fit.Contain }),
   });
@@ -117,11 +128,23 @@ export function HoneyMachine() {
   });
 
   useEffect(() => {
-    if (buttonActive) {
-      if (!exceedBalance && fromAmount && toAmount) {
-        buttonActive.value = true;
+    if (userReady) {
+      if (isReady) {
+        if (!userReady.value) userReady.value = true;
       } else {
-        buttonActive.value = false;
+        if (userReady.value) userReady.value = false;
+        if (buttonState) buttonState.value = 0;
+        setFromAmount(undefined);
+      }
+    }
+  }, [isReady, userReady]);
+
+  useEffect(() => {
+    if (buttonActive) {
+      if (!exceedBalance && fromAmount && toAmount && !isTyping && !isLoading) {
+        if (!buttonActive.value) buttonActive.value = true;
+      } else {
+        if (buttonActive.value) buttonActive.value = false;
       }
     }
   }, [exceedBalance, fromAmount, toAmount]);
@@ -129,27 +152,14 @@ export function HoneyMachine() {
   useEffect(() => {
     if (buttonState && txnState && txnState.value === 0) {
       if (needsApproval) {
-        buttonState.value = 1;
-      } else {
-        if (isMint) {
-          buttonState.value = 2;
-        } else {
-          buttonState.value = 3;
-        }
+        if (buttonState.value !== 1) buttonState.value = 1;
+      } else if (isMint) {
+        if (buttonState.value !== 2) buttonState.value = 2;
+      } else if (!isMint) {
+        if (buttonState.value !== 3) buttonState.value = 3;
       }
     }
-  }, [needsApproval, isMint, txnState?.value]);
-
-  useEffect(() => {
-    if (userReady) {
-      if (isReady) {
-        userReady.value = true;
-        if (buttonState) buttonState.value = 2;
-      } else {
-        userReady.value = false;
-      }
-    }
-  }, [isReady, userReady]);
+  }, [needsApproval, isMint, txnState?.value, fromAmount]);
 
   useEffect(() => {
     if (rive) {
@@ -201,7 +211,7 @@ export function HoneyMachine() {
   const performMinting = () =>
     write({
       address: honeyRouterAddress,
-      abi: ERC20_HONEY_ABI,
+      abi: HONEY_ROUTER_ABI,
       functionName: "mint",
       params: payload,
     });
@@ -209,7 +219,7 @@ export function HoneyMachine() {
   const performRedeeming = () =>
     write({
       address: honeyRouterAddress,
-      abi: ERC20_HONEY_ABI,
+      abi: HONEY_ROUTER_ABI,
       functionName: "redeem",
       params: payload,
     });
@@ -238,22 +248,20 @@ export function HoneyMachine() {
                   </div>
                 </>
               ) : (
-                <ConnectButton />
+                <ConnectButton btnClassName="bg-transparent" />
               )}
             </div>
             <div
               className={cn(
                 "absolute right-[21px] top-[214px] z-30 m-6 w-[332px] overflow-hidden",
-                isReady &&
-                  disableInputs &&
+                (!isReady || disableInputs) &&
                   "pointer-events-none opacity-50 grayscale",
               )}
             >
               <h1 className="relative px-1 text-lg font-semibold text-background">
                 {isMint ? "Mint" : "Redeem"}
                 <div className="absolute right-0 top-1 text-sm font-light">
-                  {/* Static fee of {(Number(fee ?? 0.005) * 100).toFixed(2)}% */}
-                  Static fee of 0.5%
+                  Static fee of {(Number(fee ?? 0) * 100).toFixed(2)}%
                 </div>
               </h1>
               <Tabs
@@ -282,7 +290,7 @@ export function HoneyMachine() {
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
-              <ul>
+              <ul className="relative">
                 <div className="rounded-t-md border-2 border-b-0 border-foreground bg-muted">
                   <TokenInput
                     selected={selectedFrom}
@@ -292,7 +300,6 @@ export function HoneyMachine() {
                     balance={fromBalance?.formattedBalance}
                     selectable={selectedFrom?.address !== honey?.address}
                     customTokenList={collateralList}
-                    hidePrice
                     showExceeding
                     setAmount={(amount) => {
                       setGivenIn(true);
@@ -300,6 +307,9 @@ export function HoneyMachine() {
                     }}
                   />
                 </div>
+                {(isLoading || isTyping) && (
+                  <SSRSpinner className="absolute left-[50%] -translate-x-[50%] -translate-y-[50%] rounded-md border border-border bg-background p-2" />
+                )}
                 <div className="rounded-b-md border-2 border-foreground bg-muted">
                   <TokenInput
                     selected={selectedTo}
@@ -312,9 +322,7 @@ export function HoneyMachine() {
                     }}
                     selectable={selectedTo?.address !== honey?.address}
                     customTokenList={collateralList}
-                    hidePrice
                     hideMax
-                    disabled
                     balance={toBalance?.formattedBalance}
                   />
                 </div>

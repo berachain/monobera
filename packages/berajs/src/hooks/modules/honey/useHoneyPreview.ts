@@ -4,7 +4,7 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits, parseUnits } from "viem";
 import { usePublicClient } from "wagmi";
 import { type Token } from "~/api";
-import { HONEY_PRECOMPILE_ABI } from "~/config";
+import { HONEY_ROUTER_ABI } from "~/config";
 
 export const usePollHoneyPreview = (
   collateral: Token | undefined,
@@ -16,10 +16,10 @@ export const usePollHoneyPreview = (
   const method = mint
     ? given_in
       ? "previewMint"
-      : "previewExactOutCollateral"
+      : "previewRequiredCollateral"
     : given_in
       ? "previewRedeem"
-      : "previewRequiredCollateral";
+      : "previewHoneyToRedeem";
   const QUERY_KEY = [method, collateral?.address, amount, mint, given_in];
   const swrResponse = useSWR(QUERY_KEY, async () => {
     try {
@@ -34,7 +34,7 @@ export const usePollHoneyPreview = (
 
       const result = (await publicClient.readContract({
         address: honeyRouterAddress,
-        abi: HONEY_PRECOMPILE_ABI,
+        abi: HONEY_ROUTER_ABI,
         functionName: method,
         args: [collateral.address, formattedAmount],
       })) as bigint;

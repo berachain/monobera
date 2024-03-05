@@ -5,7 +5,7 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits, getAddress, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { HONEY_PRECOMPILE_ABI } from "~/config";
+import { HONEY_ROUTER_ABI } from "~/config";
 
 interface CollateralRates {
   mintFee: number;
@@ -22,13 +22,13 @@ export const usePollHoneyParams = (collateralList: Address[]) => {
     collateralList.forEach((collateral: Address) => {
       calls.push({
         address: honeyRouterAddress,
-        abi: HONEY_PRECOMPILE_ABI,
+        abi: HONEY_ROUTER_ABI,
         functionName: "getMintRate",
         args: [collateral],
       });
       calls.push({
         address: honeyRouterAddress,
-        abi: HONEY_PRECOMPILE_ABI,
+        abi: HONEY_ROUTER_ABI,
         functionName: "getRedeemRate",
         args: [collateral],
       });
@@ -38,7 +38,6 @@ export const usePollHoneyParams = (collateralList: Address[]) => {
       contracts: calls,
       multicallAddress: multicallAddress,
     });
-
     const obj: Record<Address, CollateralRates> = {};
     results.map((result: any, index: number) => {
       const collateral = collateralList[Math.floor(index / 2)] as Address;

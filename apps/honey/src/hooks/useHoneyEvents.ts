@@ -1,7 +1,7 @@
 import {
   GetHoneyTxn,
   GetHoneyTxnByType,
-  client,
+  honeyClient,
   type HoneyTxn,
 } from "@bera/graphql";
 import useSWRInfinite from "swr/infinite";
@@ -18,7 +18,7 @@ export const useHoneyEvents = () => {
     (index) => ["allData", index],
     (key: any[]) => {
       const page = key[1];
-      return client
+      return honeyClient
         .query({
           query: GetHoneyTxn,
           variables: { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE },
@@ -38,7 +38,7 @@ export const useHoneyEvents = () => {
     (index) => ["mintData", index],
     (key: any[]) => {
       const page = key[1];
-      return client
+      return honeyClient
         .query({
           query: GetHoneyTxnByType,
           variables: {
@@ -62,7 +62,7 @@ export const useHoneyEvents = () => {
     (index) => ["redeemData", index],
     (key: any[]) => {
       const page = key[1];
-      return client
+      return honeyClient
         .query({
           query: GetHoneyTxnByType,
           variables: {
