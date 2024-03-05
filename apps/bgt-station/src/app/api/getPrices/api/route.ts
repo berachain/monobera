@@ -4,8 +4,8 @@ import {
   nativeTokenAddress,
   subgraphUrl,
 } from "@bera/config";
-import { getAddress } from "viem";
 import lodash from "lodash";
+import { getAddress } from "viem";
 import { type Address } from "wagmi";
 
 export const revalidate = 10;
