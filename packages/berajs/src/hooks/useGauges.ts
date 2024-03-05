@@ -35,9 +35,7 @@ const useGauges = (): IUseGaugess => {
       try {
         const gaugeList = await fetch(gaugeListUrl);
         const temp = await gaugeList.json();
-        console.log(gaugeList, temp, "gauges fetched");
         if (!temp.gauges) {
-          console.log("returning local storage gauge list");
           return { list: localStorageGaugeList, dictionary: {} };
         }
         const defaultList = temp.gauges.map((gauge: Gauge) => {
@@ -50,7 +48,6 @@ const useGauges = (): IUseGaugess => {
           (item, index) =>
             list.findIndex((i) => i.address === item.address) === index,
         );
-        console.log(uniqueList, "uniqueList");
         return {
           list: uniqueList,
           dictionary: gaugeListToDict(list),

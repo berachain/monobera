@@ -77,7 +77,6 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
 
   const externalTooltipHandler = useCallback(
     ({ tooltip }: { tooltip: TooltipModel<"doughnut">; chart: Chart }) => {
-      console.log("test!!!", tooltip, gaugeWeights);
       // hide tooltip
       if (tooltip.opacity === 0) {
         setTooltipVisible(false);
