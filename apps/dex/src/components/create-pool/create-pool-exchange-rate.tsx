@@ -28,7 +28,10 @@ export default function CreatePoolExchangeRate({
       <div className="flex w-full flex-col sm:flex-row justify-between gap-2">
         <div className="w-full sm:w-1/2 min-w-0 flex flex-col gap-1 self-center font-semibold bg-muted p-2 rounded-sm ">
           <div className="flex flex-row gap-1 truncate">
-            <TokenIcon address={baseToken?.address} />
+            <TokenIcon
+              address={baseToken?.address}
+              symbol={baseToken?.symbol}
+            />
             {initialPrice === "" ||
             initialPrice === "0" ||
             getSafeNumber(initialPrice) === 0
@@ -42,7 +45,10 @@ export default function CreatePoolExchangeRate({
 
         <div className="w-full sm:w-1/2  min-w-0 flex flex-col gap-1 self-center font-semibold  bg-muted p-2 rounded-sm">
           <div className="flex flex-row gap-1 truncate">
-            <TokenIcon address={quoteToken?.address} />
+            <TokenIcon
+              address={quoteToken?.address}
+              symbol={quoteToken?.symbol}
+            />
             {initialPrice === "" ||
             initialPrice === "0" ||
             getSafeNumber(initialPrice) === 0

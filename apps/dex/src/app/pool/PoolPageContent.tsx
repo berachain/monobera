@@ -44,12 +44,18 @@ const getTokenDisplay = (
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
-          <TokenIcon address={(event as ISwaps).swapIn.address} />
+          <TokenIcon
+            address={(event as ISwaps).swapIn.address}
+            symbol={(event as ISwaps).swapIn.symbol}
+          />
           <p className="ml-2">{formatNumber((event as ISwaps).swapInAmount)}</p>
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
-          <TokenIcon address={(event as ISwaps).swapOut.address} />
+          <TokenIcon
+            address={(event as ISwaps).swapOut.address}
+            symbol={(event as ISwaps).swapOut.symbol}
+          />
           <p className="ml-2">
             {formatNumber((event as ISwaps).swapOutAmount)}
           </p>
@@ -62,7 +68,7 @@ const getTokenDisplay = (
       {pool.tokens.map((token, i) => {
         return (
           <div className={cn("flex flex-row", i !== 0 && "ml-[-10px]")} key={i}>
-            <TokenIcon address={token.address} />
+            <TokenIcon address={token.address} symbol={token.symbol} />
           </div>
         );
       })}
@@ -282,11 +288,6 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   const userAmbientPosition = usePosition();
   const userPositionBreakdown = userAmbientPosition?.userPosition;
 
-  console.log({
-    userPositionBreakdown,
-    userAmbientPosition,
-    isPositionBreakdownLoading,
-  });
   return (
     <div className="flex flex-col gap-8">
       <PoolHeader pool={pool} />
@@ -399,7 +400,10 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             <div>
               <div className="flex h-8 items-center justify-between">
                 <div className="flex gap-1">
-                  <TokenIcon address={pool.baseInfo.address} />
+                  <TokenIcon
+                    address={pool.baseInfo.address}
+                    symbol={pool.baseInfo.symbol}
+                  />
                   <div className="ml-1 font-medium uppercase">
                     {pool.base === beraTokenAddress
                       ? "wbera"
@@ -419,7 +423,10 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               </div>
               <div className="flex h-8 items-center justify-between">
                 <div className="flex gap-1">
-                  <TokenIcon address={pool.quoteInfo.address} />
+                  <TokenIcon
+                    address={pool.quoteInfo.address}
+                    symbol={pool.quoteInfo.symbol}
+                  />
                   <div className="ml-1 font-medium uppercase">
                     {pool.quote === beraTokenAddress
                       ? "wbera"

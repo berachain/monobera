@@ -180,8 +180,9 @@ export const usePollUserDeposited = () => {
           const decodedSpotPrice = decodeCrocPrice(
             EthersBigNumber.from(poolPrice.toString()),
           );
+
           const sqrtPrice = Math.sqrt(decodedSpotPrice);
-          const liq = new BigNumber((lpBalances[i] as any).toString());
+          const liq = new BigNumber((lpBalances[i]?.result as any).toString());
 
           const baseAmount = liq.times(sqrtPrice);
           const quoteAmount = liq.div(sqrtPrice);
@@ -202,6 +203,7 @@ export const usePollUserDeposited = () => {
             estimatedHoneyValue,
             seeds: BigInt(0),
           };
+
           return {
             ...formattedPool,
             userPosition,

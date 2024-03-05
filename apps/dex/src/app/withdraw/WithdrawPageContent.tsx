@@ -67,7 +67,7 @@ export const TokenSummary = ({
         </p>
         <div className="flex flex-row items-center gap-1 font-medium">
           {isLoading ? "..." : baseAmount}{" "}
-          <TokenIcon address={baseToken.address} />
+          <TokenIcon address={baseToken.address} symbol={baseToken.symbol} />
         </div>
       </div>
       <div className="w-full justify-between items-center flex flex-row">
@@ -76,7 +76,7 @@ export const TokenSummary = ({
         </p>
         <div className="flex flex-row items-center gap-1 font-medium">
           {isLoading ? "..." : quoteAmount}{" "}
-          <TokenIcon address={quoteToken.address} />
+          <TokenIcon address={quoteToken.address} symbol={quoteToken.symbol} />
         </div>{" "}
       </div>
     </div>
@@ -212,6 +212,7 @@ export default function WithdrawLiquidityContent({
             return (
               <TokenIcon
                 address={token.address}
+                symbol={token.symbol}
                 className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
                 key={token.address}
               />
@@ -279,7 +280,11 @@ export default function WithdrawLiquidityContent({
               value={
                 <div className="flex flex-row gap-1 items-center justify-end">
                   <p>{baseAmountWithdrawn}</p>
-                  <TokenIcon address={baseToken.address} size={"md"} />
+                  <TokenIcon
+                    address={baseToken.address}
+                    size={"md"}
+                    symbol={baseToken.symbol}
+                  />
                 </div>
               }
             />
@@ -288,7 +293,11 @@ export default function WithdrawLiquidityContent({
               value={
                 <div className="flex flex-row gap-1 items-center justify-end">
                   <p>{quoteAmountWithdrawn}</p>
-                  <TokenIcon address={quoteToken.address} size={"md"} />
+                  <TokenIcon
+                    address={quoteToken.address}
+                    size={"md"}
+                    symbol={quoteToken.symbol}
+                  />
                 </div>
               }
             />

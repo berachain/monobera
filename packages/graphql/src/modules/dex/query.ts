@@ -18,6 +18,7 @@ export const getAllPools = gql`
           price
         }
       }
+
       swapFee
       sharesDenom
       sharesAddress
@@ -228,6 +229,9 @@ export const getPoolList = gql`
       base
       quote
       timeCreate
+      template {
+        feeRate
+      }
       baseInfo {
         id
         address
@@ -259,6 +263,9 @@ export const getFilteredPoolList = gql`
       base
       quote
       timeCreate
+      template {
+        feeRate
+      }
       baseInfo {
         id
         address
@@ -290,6 +297,9 @@ export const getCrocSelectedPool = gql`
       base
       quote
       timeCreate
+      template {
+        feeRate
+      }
       baseInfo {
         id
         address
