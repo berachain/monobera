@@ -1,6 +1,6 @@
 import { TimeFrame, type TimeFrame as TimeFrameT } from "@bera/berajs";
 import { HistoryRate } from "@bera/graphql";
-import { Dropdown } from "@bera/shared-ui";
+import { Dropdown, Spinner } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -128,7 +128,9 @@ export default function LineChart({
         </div>
       </div>
       {isLoading ? (
-        <Skeleton className="h-[180px] w-full" />
+        <div className="flex h-[180px] w-full items-center justify-center">
+          <Spinner color={color} />
+        </div>
       ) : (
         <div className="h-[180px] w-full">
           <BeraChart data={dataG as any} type="line" options={Options as any} />
