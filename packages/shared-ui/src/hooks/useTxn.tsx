@@ -170,9 +170,6 @@ export const useTxn = ({
         track("transaction_failed", {
           operation: "useBeraContractWrite",
           message: error?.message,
-          userRejected: !!error?.message?.includes(
-            "User rejected the request.",
-          ),
           actionType,
         });
         if (
@@ -354,7 +351,6 @@ export const useTxn = ({
       track("transaction_failed", {
         message: error?.message,
         actionType,
-        userRejected: !!error?.message?.includes("User rejected the request."),
         operation: "useValueSend",
       });
       if (

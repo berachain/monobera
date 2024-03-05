@@ -174,9 +174,6 @@ export const useOctTxn = ({
         track("transaction_failed", {
           message: error?.message,
           actionType,
-          userRejected: !!error?.message?.includes(
-            "User rejected the request.",
-          ),
           operation: "useOctContractWrite",
         });
         if (
@@ -357,7 +354,7 @@ export const useOctTxn = ({
       track("transaction_failed", {
         message: error?.message,
         actionType,
-        userRejected: !!error?.message?.includes("User rejected the request."),
+
         operation: "useOctValueSend",
       });
       if (
