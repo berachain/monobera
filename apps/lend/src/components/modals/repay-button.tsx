@@ -207,7 +207,12 @@ const RepayModalContent = ({
         <ApproveButton
           token={token}
           spender={lendPoolImplementationAddress}
-          amount={parseUnits(BigNumber(amount ?? "0").times(2).toString() as `${number}`, token.decimals)}
+          amount={parseUnits(
+            BigNumber(amount ?? "0")
+              .times(2)
+              .toString() as `${number}`,
+            token.decimals,
+          )}
         />
       )}
     </div>
