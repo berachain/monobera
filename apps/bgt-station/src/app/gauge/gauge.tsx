@@ -13,10 +13,10 @@ import GaugeInfoCard from "./gauge-info-card";
 export default function Gauge() {
   const [keywords, setKeywords] = React.useState<string | null>(null);
   // TODO: switch to use the new subgraph
-  const { data, isLoading } = useGlobalValidatorGaugeWeight();
+  const { data } = useGlobalValidatorGaugeWeight();
   return (
     <div className="container mx-auto mb-20 flex w-full flex-col">
-      <div className="flex flex-row gap-[160px] py-12">
+      <div className="flex flex-col items-center justify-center gap-[160px] py-12 md:flex-row">
         <GaugeInfoCard />
 
         <GlobalGaugeWeightChart gaugeWeights={data ?? []} />

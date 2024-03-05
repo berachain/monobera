@@ -7,7 +7,7 @@ import { Card } from "@bera/ui/card";
 
 export default function GaugeInfoCard() {
   return (
-    <Card className="flex w-[520px] flex-col">
+    <Card className="flex min-w-[520px] flex-col">
       <div className="flex w-full flex-row items-stretch justify-between gap-8 bg-muted p-4">
         <div className="flex flex-col items-start gap-4 text-2xl font-bold">
           Total BGT
@@ -41,16 +41,18 @@ export default function GaugeInfoCard() {
         </div>
       </div>
       <div className="flex w-full flex-row items-stretch justify-between bg-muted">
-        {/* <Image
-                className="max-[600px]:mx-auto"
-                src={`${cloudinaryUrl}/bears/l9oaplrgfkrqw8y6noyp`}
-                alt="proposal-bear"
-                layout="intrinsic"
-                width={220}
-                height={100}
-              /> */}
-        <div className="flex flex-col gap-2 p-4">
-          <div className="text-md m-2 flex flex-col items-start text-muted-foreground">
+        <Image
+          src="/bg/smokey-bear.png"
+          alt="proposal-bear"
+          layout="intrinsic"
+          width={291}
+          height={354}
+        />
+        <div
+          style={{ transform: "translateX(-16%)" }}
+          className="flex flex-col gap-2 p-4"
+        >
+          <div className="text-md m-2 flex max-w-[240px] flex-col items-start text-muted-foreground">
             Estimates are updated weekly. Checkout each validator for their
             bribes distribution breakdown
           </div>
