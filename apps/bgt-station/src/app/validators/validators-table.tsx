@@ -10,7 +10,6 @@ import {
   usePollGlobalValidatorBribes,
   usePollPrices,
   usePollValidatorCuttingBoard,
-  useTokens,
   type PoLValidator,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
@@ -32,7 +31,7 @@ export const GaugeIcon = ({
   const { gaugeDictionary } = useGauges();
 
   return (
-    <Avatar className={cn("h-8 w-8", className)}>
+    <Avatar className={cn("h-6 w-6", className)}>
       <AvatarImage
         src={(gaugeDictionary as any)[getAddress(address)]?.logoURI}
         className="rounded-full"

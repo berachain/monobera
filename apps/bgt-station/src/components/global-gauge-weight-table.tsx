@@ -4,6 +4,7 @@ import { truncateHash, useGauges } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable } from "@bera/shared-ui";
 import { Checkbox } from "@bera/ui/checkbox";
+import { getAddress } from "viem";
 
 import { GaugeIcon } from "~/app/validators/validators-table";
 import {
@@ -26,15 +27,21 @@ const Gauge = ({ address }: { address: string | undefined }) => {
     address && gaugeDictionary && gaugeDictionary[address]?.url
       ? gaugeDictionary[address]?.url
       : `${blockExplorerUrl}/address/${address}`;
+  const name = address && (gaugeDictionary as any)[getAddress(address)]?.name;
   return (
     <Link
       href={url}
       target="_blank"
       className="flex h-full w-[150px] items-center gap-2"
     >
-      <GaugeIcon address={address ?? ""} />
-      <div className="min-w-[150px] cursor-pointer truncate whitespace-nowrap hover:underline">
-        {value}
+      <div className="flex flex-col items-start justify-center ">
+        <div className="text-md text-forgeound flex flex-row items-center justify-center gap-2 font-semibold">
+          <GaugeIcon address={address ?? ""} />
+          {name ?? "Test default gauge"}
+        </div>
+        <div className="flex items-start justify-center truncate whitespace-nowrap text-sm text-muted-foreground hover:underline">
+          {value}
+        </div>
       </div>
     </Link>
   );
