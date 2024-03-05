@@ -170,6 +170,9 @@ export const useTxn = ({
         track("transaction_failed", {
           operation: "useBeraContractWrite",
           message,
+          userRejected: !!error?.message?.includes(
+            "User rejected the request.",
+          ),
           actionType,
         });
         captureException(error, {
@@ -345,6 +348,7 @@ export const useTxn = ({
       track("transaction_failed", {
         message,
         actionType,
+        userRejected: !!error?.message?.includes("User rejected the request."),
         operation: "useValueSend",
       });
       captureException(error, {

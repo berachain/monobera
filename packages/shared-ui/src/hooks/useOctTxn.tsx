@@ -174,6 +174,9 @@ export const useOctTxn = ({
         track("transaction_failed", {
           message,
           actionType,
+          userRejected: !!error?.message?.includes(
+            "User rejected the request.",
+          ),
           operation: "useOctContractWrite",
         });
         captureException(error, {
@@ -348,6 +351,7 @@ export const useOctTxn = ({
       track("transaction_failed", {
         message,
         actionType,
+        userRejected: !!error?.message?.includes("User rejected the request."),
         operation: "useOctValueSend",
       });
       captureException(error, {
