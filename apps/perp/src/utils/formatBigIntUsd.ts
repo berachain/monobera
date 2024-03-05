@@ -5,5 +5,5 @@ export const formatBigIntUsd = (
   value: number | string | bigint,
   decimals = 18,
 ) => {
-  return formatUsd(Number(formatUnits(BigInt(value), decimals)));
+  return formatUsd(Number(formatUnits(BigInt(value ?? 0), decimals)));
 };

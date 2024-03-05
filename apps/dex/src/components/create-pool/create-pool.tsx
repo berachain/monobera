@@ -1,71 +1,60 @@
 import React from "react";
 import { type Token } from "@bera/berajs";
 import { ActionButton } from "@bera/shared-ui";
-import { Alert, AlertDescription } from "@bera/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
 import CreatePoolInput from "~/components/create-pool/create-pool-input";
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
+import { useCrocIsDupePool } from "~/hooks/useCrocIsDupePool";
 
 type Props = {
-  tokenWeights: ITokenWeight[];
-  totalWeight: number;
+  tokenA: Token | undefined;
+  tokenB: Token | undefined;
   error: Error | undefined;
+  setTokenA: (token: Token | undefined) => void;
+  setTokenB: (token: Token | undefined) => void;
   onContinue: () => void;
-  onTokenSelection: (token: Token | undefined, index: number) => void;
-  onAddToken: () => void;
-  onRemove: (index: number) => void;
-  onTokenWeightChange: (index: number, weight: number) => void;
-  onLock: (index: number) => void;
-  onUnlock: (index: number) => void;
 };
 
 export function CreatePool({
-  tokenWeights,
-  totalWeight,
+  tokenA,
+  tokenB,
+  setTokenA,
+  setTokenB,
   error,
   onContinue,
-  onTokenSelection,
-  onAddToken,
-  onRemove,
-  onTokenWeightChange,
-  onLock,
-  onUnlock,
 }: Props) {
-  // const exceeding = totalWeight > 100;
-  const selectedTokens = tokenWeights.map((tokenWeight: ITokenWeight) => {
-    return tokenWeight.token;
-  }) as Token[];
+  const selectedTokens = [tokenA, tokenB] as Token[];
+
+  const { useIsDupePool, isLoading } = useCrocIsDupePool({
+    tokenA,
+    tokenB,
+  });
+  const isDupePool = useIsDupePool();
   return (
     <Card className="w-[350px] px-6 py-8 shadow-lg sm:w-[480px]">
       <CardTitle className="center text-md mb-3 flex w-full self-center p-0 text-center font-semibold sm:text-lg">
-        Choose tokens and allocate weights
+        Choose Base and Quote Tokens
       </CardTitle>
 
       <div className="flex flex-col gap-4">
         <ul className="divide divide-y divide-border rounded-lg border">
-          {tokenWeights.map((tokenWeight, index) => {
-            return (
-              <CreatePoolInput
-                key={index}
-                tokenWeight={tokenWeight}
-                index={index}
-                selectedTokens={selectedTokens}
-                onTokenSelection={onTokenSelection}
-                onRemove={onRemove}
-                onTokenWeightChange={onTokenWeightChange}
-                onLock={onLock}
-                onUnlock={onUnlock}
-              />
-            );
-          })}
+          <CreatePoolInput
+            key={0}
+            token={tokenA}
+            selectedTokens={selectedTokens}
+            onTokenSelection={setTokenA}
+          />
+          <CreatePoolInput
+            key={1}
+            token={tokenB}
+            selectedTokens={selectedTokens}
+            onTokenSelection={setTokenB}
+          />
         </ul>
-        <Icons.plusCircle
-          className="mt-4 h-6 w-6 self-center text-muted-foreground"
-          onClick={onAddToken}
-        />
         {error && (
           <Alert variant="destructive">
             <AlertDescription>
@@ -75,20 +64,19 @@ export function CreatePool({
             </AlertDescription>
           </Alert>
         )}
-        <div className="flex-col items-center justify-center rounded-2xl bg-muted p-3">
-          <div className="flex items-center justify-between ">
-            <div className="text-sm font-normal leading-normal text-stone-400">
-              Total allocated
-            </div>
-            <div className="text-right text-sm font-medium leading-normal">
-              {totalWeight.toFixed(2)}%
-            </div>
-          </div>
-        </div>
+        {isDupePool && (
+          <Alert variant="destructive">
+            <AlertTitle>Similar Pools Already Exist</AlertTitle>
+            <AlertDescription>
+              Please note that creating this pool will not be possible; consider
+              adding liquidity to an existing pool instead.
+            </AlertDescription>
+          </Alert>
+        )}
         <ActionButton>
           <Button
-            disabled={error !== undefined}
-            className="mt-4 w-full"
+            disabled={error !== undefined || isLoading || isDupePool === true}
+            className="w-full"
             onClick={onContinue}
           >
             Next

@@ -21,7 +21,12 @@ import {
   TPSL_TOOLTIP_TEXT,
 } from "../../../utils/tooltip-text";
 import type { IMarket } from "../page";
-import type { IClosedTrade, ILimitOrder, IMarketOrder } from "./order-history";
+import type {
+  IClosedTrade,
+  ILimitOrder,
+  IMarketOrder,
+  IPosition,
+} from "./order-history";
 import { PnLRowHoverState } from "./pnl-row-hover-state";
 
 const MarkPrice = ({ position }: { position: IMarketOrder }) => {
@@ -111,7 +116,10 @@ export const ActivePositionPNL = ({
   }, [pnl, position]);
 
   const initialCollateral = Number(
-    formatUnits(BigInt(position.position_size ?? 0), 18),
+    formatUnits(
+      BigInt(position.position_size ?? 0) + BigInt(position.open_fee ?? 0),
+      18,
+    ),
   );
 
   const borrowFee = Number(
@@ -412,11 +420,7 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Position Size"
-        className="min-w-[120px]"
-      />
+      <DataTableColumnHeader column={column} title="Position Size" />
     ),
     cell: ({ row }) => {
       const positionSize =
@@ -425,14 +429,14 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
       const openPrice = Number(formatUnits(BigInt(row.original.price), 10));
       const size = positionSize / openPrice;
       return (
-        <div className="w-[88px]">
+        <>
           <div className="text-sm font-semibold leading-tight text-foreground ">
             {size.toFixed(4)}
           </div>
           <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
             {formatUsd(positionSize)}
           </div>
-        </div>
+        </>
       );
     },
 
@@ -444,18 +448,14 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
       <DataTableColumnHeader column={column} title="Leverage" />
     ),
     cell: ({ row }) => {
-      return <div className="w-[60px]">{row.original.leverage}x</div>;
+      return <div>{row.original.leverage}x</div>;
     },
     accessorKey: "leverage",
     enableSorting: false,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Execution Price"
-        className="min-w-[140px]"
-      />
+      <DataTableColumnHeader column={column} title="Execution Price" />
     ),
     cell: ({ row }) => {
       const openPrice = Number(formatUnits(BigInt(row.original.price), 10));
@@ -519,14 +519,10 @@ export const orders_columns: ColumnDef<ILimitOrder>[] = [
   },
 ];
 
-export const history_columns: ColumnDef<IClosedTrade>[] = [
+export const history_columns: ColumnDef<IPosition>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Open time"
-        className="min-w-[120px]"
-      />
+      <DataTableColumnHeader column={column} title="Open time" />
     ),
     cell: ({ row }) => {
       const date = new Date(Number(row.original.open_time) * 1000);
@@ -545,19 +541,17 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Close time"
-        className="min-w-[120px]"
-      />
+      <DataTableColumnHeader column={column} title="Close time" />
     ),
     cell: ({ row }) => {
       const date = new Date(Number(row.original.close_time) * 1000);
       return (
         <div>
-          <div className="text-sm">{date.toLocaleDateString()}</div>
+          <div className="text-sm">
+            {row.original.close_time ? date.toLocaleDateString() : "-"}
+          </div>
           <div className="text-xs text-muted-foreground">
-            {date.toLocaleTimeString()}
+            {row.original.close_time ? date.toLocaleTimeString() : ""}
           </div>
         </div>
       );
@@ -567,11 +561,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Market / Side"
-        className="min-w-[120px]"
-      />
+      <DataTableColumnHeader column={column} title="Market / Side" />
     ),
     cell: ({ row }) => (
       <PositionTitle
@@ -590,7 +580,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
     cell: ({ row }) => {
       return (
         <div className=" text-sm font-medium uppercase text-muted-foreground">
-          {row.original.close_type}
+          {row.original.close_type || "-"}
         </div>
       );
     },
@@ -599,11 +589,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Open Price"
-        className="min-w-[120px]"
-      />
+      <DataTableColumnHeader column={column} title="Open Price" />
     ),
     cell: ({ row }) => (
       <div className="text-sm font-medium leading-tight text-foreground">
@@ -624,15 +610,13 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
 
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Close Price"
-        className="min-w-[120px]"
-      />
+      <DataTableColumnHeader column={column} title="Close Price" />
     ),
     cell: ({ row }) => (
       <div className="text-sm font-medium leading-tight text-foreground">
-        {formatBigIntUsd(row.original.close_price, 10)}
+        {row.original.close_price === ""
+          ? "-"
+          : formatBigIntUsd(row.original.close_price, 10)}
       </div>
     ),
     accessorKey: "close_price",
@@ -667,11 +651,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Position Size"
-        className="min-w-[120px]"
-      />
+      <DataTableColumnHeader column={column} title="Position Size" />
     ),
     cell: ({ row }) => {
       const volume = Number(row.original?.volume);
@@ -684,44 +664,16 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="TP / SL"
-        className="min-w-[120px]"
-        tooltip={TPSL_TOOLTIP_TEXT}
-      />
-    ),
-    cell: ({ row }) => (
-      <div className="">
-        <span className="text-success-foreground">
-          {row.original.tp === "0"
-            ? "∞"
-            : formatUsd(Number(formatUnits(BigInt(row.original.tp), 10))) ??
-              "-"}{" "}
-        </span>
-        /
-        <span className="text-destructive-foreground">
-          {" "}
-          {row.original.sl === "0"
-            ? "∞"
-            : formatUsd(Number(formatUnits(BigInt(row.original.sl), 10)))}
-        </span>
-      </div>
-    ),
-    accessorKey: "total",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Fees" />
     ),
     cell: ({ row }) => {
       const fees =
-        Number(row.original.rollover_fee) +
-        Number(row.original.funding_rate) +
-        Number(row.original.closing_fee) +
-        Number(row.original.borrowing_fee) +
-        Number(row.original.vault_fee);
+        Number(row.original.rollover_fee ?? 0) +
+        Number(row.original.funding_rate ?? 0) +
+        Number(row.original.closing_fee ?? 0) +
+        Number(row.original.borrowing_fee ?? 0) +
+        Number(row.original.vault_fee ?? 0) +
+        Number(row.original.open_fee ?? 0);
       return <div>{formatUsd(fees)}</div>;
     },
     accessorKey: "fees",
@@ -737,7 +689,7 @@ export const history_columns: ColumnDef<IClosedTrade>[] = [
           positionSize={
             Number(row.original.volume) / Number(row.original.leverage)
           }
-          pnl={Number(row.original.pnl)}
+          pnl={Number(row.original.pnl) - Number(row.original.open_fee)}
         />
       );
     },

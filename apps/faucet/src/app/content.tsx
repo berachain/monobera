@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { cloudinaryUrl, dexUrl } from "@bera/config";
+import { dexUrl } from "@bera/config";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
@@ -36,26 +35,17 @@ export default function Content() {
 
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
-      <div className="items-center justify-between text-center sm:flex sm:text-left">
+      <div className="items-center justify-between text-center sxlm:flex xl:text-left">
         <div className="flex flex-col gap-4">
           <div className="leading-12 w-full text-5xl font-bold">
             Bootstrap Your
             <br /> Testnet Wallet
           </div>
-          <div className="items-center text-lg font-semibold sm:flex">
+          <div className="items-center text-lg font-semibold xl:flex">
             {" "}
             Fund your testnet wallet with <TokenBadge />
           </div>
         </div>
-        <Image
-          src={`${cloudinaryUrl}/faucet/faucet_v3_uktibg`}
-          alt="machine"
-          width={162}
-          height={198}
-          loading="eager"
-          className="hidden h-[198px] object-cover sm:block xl:hidden"
-          unoptimized
-        />
       </div>
       <div className="flex flex-col gap-1">
         <div className="h-7 text-sm font-medium">

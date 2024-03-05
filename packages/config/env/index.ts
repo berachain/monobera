@@ -2,7 +2,6 @@ type Address = `0x${string}`;
 
 // endpoints
 export const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_ENDPOINT as string;
-export const subgraphUrl = process.env.NEXT_PUBLIC_SUBGRAPH_URL as string;
 export const tokenListUrl = process.env.NEXT_PUBLIC_TOKEN_LIST as string;
 export const gaugeListUrl = process.env.NEXT_PUBLIC_GAUGE_LIST as string;
 export const validatorList = process.env.NEXT_PUBLIC_VALIDATOR_LIST as string;
@@ -15,6 +14,11 @@ export const blockExplorerName = process.env
 export const lendEndpointUrl = process.env.NEXT_PUBLIC_LEND_ENDPOINT as string;
 export const faucetEndpointUrl = process.env
   .NEXT_PUBLIC_FAUCET_ENDPOINT as string;
+
+// Subgraphs
+export const subgraphUrl = process.env.NEXT_PUBLIC_SUBGRAPH_URL as string;
+export const honeySubgraphUrl = process.env
+  .NEXT_PUBLIC_HONEY_SUBGRAPH_URL as string;
 
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;
@@ -90,8 +94,8 @@ export const berachefAddress = process.env
 export const honeyAddress = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
 export const rewardsAddress = process.env
   .NEXT_PUBLIC_REWARDS_ADDRESS as Address;
-export const erc20HoneyAddress = process.env
-  .NEXT_PUBLIC_ERC20_HONEY_ADDRESS as Address;
+export const honeyRouterAddress = process.env
+  .NEXT_PUBLIC_HONEY_ROUTER_ADDRESS as Address;
 export const erc20BribeModule = process.env
   .NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address;
 export const erc20BribeAddress = process.env
@@ -143,3 +147,20 @@ export const bannerEnabled = Boolean(
 export const rpcBannerEnabled = Boolean(
   process.env.NEXT_PUBLIC_RPC_BANNER_ENABLED,
 );
+
+// Crocswap
+export const crocDexAddress = process.env.NEXT_PUBLIC_RPC_CROC_DEX as Address;
+export const crocQueryAddress = process.env
+  .NEXT_PUBLIC_RPC_CROC_QUERY as Address;
+export const crocImpactAddress = process.env
+  .NEXT_PUBLIC_RPC_CROC_IMPACT as Address;
+export const crocMultiPathAddress = process.env
+  .NEXT_PUBLIC_RPC_CROC_MULTIPATH as Address;
+export const crocMultiSwapAddress = process.env
+  .NEXT_PUBLIC_RPC_CROC_MULTISWAP as Address;
+export const crocIndexerEndpoint = process.env
+  .NEXT_PUBLIC_RPC_CROC_INDEXER_ENDPOINT as Address;
+export const crocSubgraphEndpoint = process.env
+  .NEXT_PUBLIC_RPC_CROC_SUBGRAPH as Address;
+export const crocRouterEndpoint = process.env
+  .NEXT_PUBLIC_RPC_CROC_ROUTER_ENDPOINT as Address;
