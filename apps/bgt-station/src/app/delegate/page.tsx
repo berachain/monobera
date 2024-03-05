@@ -28,7 +28,7 @@ export default function Page({
   }
 
   return (
-    <div className="flex flex-col justify-center lg:flex-row">
+    <div className="flex flex-col justify-center xl:flex-row">
       <div className="w-full">
         <Delegate
           action={action}
