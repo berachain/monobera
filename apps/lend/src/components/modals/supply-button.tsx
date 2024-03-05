@@ -18,6 +18,7 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
@@ -195,7 +196,7 @@ const SupplyModalContent = ({
       </div>
 
       {allowance &&
-      Number(allowance.formattedAllowance) >= Number(amount ?? "0") ? (
+      BigNumber(allowance.formattedAllowance).gte(BigNumber(amount ?? "0")) ? (
         <Button
           disabled={
             !amount ||
