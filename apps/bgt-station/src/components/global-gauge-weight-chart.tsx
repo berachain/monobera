@@ -90,7 +90,7 @@ export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
       }
       // set tooltip visible
       tooltipRef.current = `${tooltip.x},${tooltip.y}`;
-      if (tooltip.labelColors && tooltip.labelColors[0]) {
+      if (tooltip.labelColors[0]) {
         setColor(tooltip.labelColors[0].backgroundColor as string);
       }
       setSelectedGauge(
