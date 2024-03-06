@@ -132,6 +132,8 @@ export const wethTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS as Address;
 // PERPS
 export const perpsEndpoints = process.env
   .NEXT_PUBLIC_PERPS_ENDPOINT_URL as string;
+export const perpsCompetitionId = process.env
+  .NEXT_PUBLIC_PERPS_COMPETITION_ID as string;
 
 // Validator clue
 export const validatorClueEndpoint = process.env
