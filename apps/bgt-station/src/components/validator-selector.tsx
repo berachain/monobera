@@ -63,7 +63,7 @@ export default function ValidatorSelector({
     <div>
       <Button
         variant="outline"
-        className="ml-3 max-w-[148px] border-border bg-background shadow md:whitespace-nowrap"
+        className="ml-3 max-w-[148px] whitespace-nowrap border-border bg-background shadow"
         onClick={() => setOpen(true)}
       >
         {validValidator ? (

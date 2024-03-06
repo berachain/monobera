@@ -43,8 +43,8 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
           Approach where the Unstaking Period is based primarily on the Demand
           of Staking, Restaking and Unstaking
         </div>
-        <div className="flex flex-row justify-between gap-2 text-sm ">
-          <div className="text-md flex w-[380px] flex-col items-start justify-between gap-1 rounded-md border bg-info p-2">
+        <div className="flex flex-col justify-between gap-2 sm:flex-row">
+          <div className="text-md flex flex-col items-start justify-between gap-1 rounded-md border border-info-foreground bg-info p-2 sm:w-[380px]">
             <div className="xs:flex-col flex w-full flex-row items-stretch justify-between">
               <div className="text-md items-start font-semibold text-info-foreground ">
                 Current {action} Time
@@ -56,7 +56,7 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
               1 Day
             </div>
           </div>
-          <div className="text-md flex w-[380px] flex-col items-start justify-center gap-1 rounded-md border border-dashed bg-muted p-2">
+          <div className="text-md flex flex-col items-start justify-center gap-1 rounded-md border border-dashed bg-muted p-2 sm:w-[380px]">
             <div className="xs:flex-col flex w-full flex-row items-stretch justify-between">
               <div className="text-md items-start font-semibold text-muted-foreground">
                 Estimated future {action} Time
