@@ -189,7 +189,8 @@ const SupplyModalContent = ({
               <span
                 className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
               >
-                {Number(newHealthFactor.toFixed(2)) < 0 || Number(newHealthFactor) > 1000000000000
+                {Number(newHealthFactor.toFixed(2)) < 0 ||
+                Number(newHealthFactor) > 1000000000000
                   ? "∞"
                   : newHealthFactor.toFixed(2)}
               </span>
