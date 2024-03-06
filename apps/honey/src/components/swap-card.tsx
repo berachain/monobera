@@ -90,7 +90,7 @@ export function SwapCard() {
           </Tabs>
 
           <div className="border-1 flex flex-col gap-6 border-border">
-            <ul className="relative divide-y divide-border rounded-2xl border">
+            <ul className="relative rounded-2xl border">
               <TokenInput
                 selected={selectedFrom}
                 selectedTokens={[selectedFrom, selectedTo]}
@@ -106,8 +106,9 @@ export function SwapCard() {
                   setFromAmount(amount);
                 }}
               />
+              <hr />
               {(isLoading || isTyping) && (
-                <SSRSpinner className="absolute -translate-y-[50%] left-[50%] -translate-x-[50%] bg-background border border-border rounded-md p-2" />
+                <SSRSpinner className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] rounded-md border border-border bg-background p-2" />
               )}
               <TokenInput
                 selected={selectedTo}
