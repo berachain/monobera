@@ -123,7 +123,6 @@ const RepayModalContent = ({
     ),
   });
 
-  console.log("amount", amount);
   return (
     <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">Repay</div>
