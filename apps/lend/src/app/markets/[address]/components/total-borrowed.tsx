@@ -144,7 +144,8 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
                 <Tooltip
                   text={
                     <>
-                      Variable interest rate will fluctuate based on the market <br/>
+                      Variable interest rate will fluctuate based on the market{" "}
+                      <br />
                       conditions. Recommended for short-term positions.
                     </>
                   }

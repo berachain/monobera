@@ -149,8 +149,10 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                     <Tooltip
                       text={
                         <>
-                          This is the total amount available for you to borrow. <br/>
-                          You can borrow based on your collateral and until the <br/>
+                          This is the total amount available for you to borrow.{" "}
+                          <br />
+                          You can borrow based on your collateral and until the{" "}
+                          <br />
                           borrow cap is reached.
                         </>
                       }

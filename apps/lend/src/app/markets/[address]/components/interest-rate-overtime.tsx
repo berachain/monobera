@@ -129,9 +129,12 @@ export default function InterestRateOvertime({
               <Tooltip
                 text={
                   <>
-                    The utilization rate represents the ratio of total borrowed <br/>
-                    funds to total available funds in a lending pool. It&apos;s <br/>
-                    crucial as it directly influences interest rates: higher <br/>
+                    The utilization rate represents the ratio of total borrowed{" "}
+                    <br />
+                    funds to total available funds in a lending pool. It&apos;s{" "}
+                    <br />
+                    crucial as it directly influences interest rates: higher{" "}
+                    <br />
                     utilization means higher interest rates, and vice versa.
                   </>
                 }
