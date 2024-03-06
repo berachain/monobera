@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import Leaderboard from "./leaderboard";
@@ -15,21 +15,6 @@ export default function Home() {
   const [leaderboardType, setLeaderboardType] = useState<LeaderboardType>(
     LeaderboardType.COMPETITION,
   );
-
-  const [mobile, setMobile] = useState(false);
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768 && !mobile) {
-        setMobile(true);
-      } else if (window.innerWidth > 768 && mobile) {
-        setMobile(false);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [mobile]);
 
   return (
     <div className="flex w-full justify-between flex-col mt-4">
@@ -55,9 +40,9 @@ export default function Home() {
         </TabsList>
       </Tabs>
       {leaderboardType === LeaderboardType.COMPETITION ? (
-        <LeaderboardCompetition mobile={mobile} />
+        <LeaderboardCompetition />
       ) : (
-        <Leaderboard mobile={mobile} />
+        <Leaderboard />
       )}
     </div>
   );

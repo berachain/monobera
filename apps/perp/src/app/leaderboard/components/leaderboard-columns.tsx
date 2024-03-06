@@ -1,4 +1,4 @@
-import { formatUsd } from "@bera/berajs";
+import { formatUsd, truncateHash } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { cn } from "@bera/ui";
@@ -9,15 +9,6 @@ const tableTitle: Record<string, string> = {
   "2": "Liquidations",
   "3": "Volume",
 };
-
-function truncateAddress(address: string, length = 4) {
-  if (address.length <= length * 2) {
-    return address;
-  }
-  return `${address.substring(0, length)}...${address.substring(
-    address.length - length,
-  )}`;
-}
 
 const positionToEmoji = (rank: string) => {
   switch (rank) {
@@ -32,7 +23,7 @@ const positionToEmoji = (rank: string) => {
   }
 };
 
-export const getColumns = (type: string, mobile: boolean) => {
+export const getColumns = (type: string) => {
   const leaderboard_columns: ColumnDef<{
     rank: string;
     trader: string;
@@ -65,7 +56,8 @@ export const getColumns = (type: string, mobile: boolean) => {
       cell: ({ row }) => (
         <div className="flex w-full flex-row items-center gap-1 text-xs">
           <Identicon account={row.original.trader} />
-          {mobile ? truncateAddress(row.original.trader) : row.original.trader}
+          <span className="sm:hidden">{truncateHash(row.original.trader)}</span>
+          <span className="hidden sm:block">{row.original.trader}</span>
         </div>
       ),
       accessorKey: "trader",

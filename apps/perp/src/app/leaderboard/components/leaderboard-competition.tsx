@@ -75,7 +75,7 @@ const humanizeQualifications = (qualifications: string[]) => {
   return humanizedQualifications;
 };
 
-export default function LeaderBoard({ mobile }: { mobile: boolean }) {
+export default function LeaderBoardCompetition() {
   enum LeaderboardType {
     PROFIT = 1,
     LIQUIDATION = 2,
@@ -148,8 +148,8 @@ export default function LeaderBoard({ mobile }: { mobile: boolean }) {
   }, [startTime, endTime]);
 
   const columns = useMemo(
-    () => getColumns(leaderboardType as any, mobile) ?? [],
-    [leaderboardType, mobile],
+    () => getColumns(leaderboardType as any) ?? [],
+    [leaderboardType],
   );
 
   const calculateDifferenceInDaysAndHours = useCallback(

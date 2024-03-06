@@ -16,7 +16,7 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useLeaderboard } from "~/hooks/useLeaderboard";
 import { getColumns } from "./leaderboard-columns";
 
-export default function LeaderBoard({ mobile }: { mobile: boolean }) {
+export default function LeaderBoard() {
   enum LeaderboardType {
     PROFIT = 1,
     LIQUIDATION = 2,
@@ -45,7 +45,7 @@ export default function LeaderBoard({ mobile }: { mobile: boolean }) {
   const leaderBoardData = useLeaderBoardData();
   return (
     <div className="mx-auto flex w-full flex-col gap-4">
-      <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:justify-start">
+      <div className="flex w-full flex-col items-center justify-center gap-2 sm:flex-row sm:justify-start">
         <Image
           className="mt-6"
           src={`${cloudinaryUrl}/BERPS/leaderboardAvatar_iuq8wu`}
@@ -172,7 +172,7 @@ export default function LeaderBoard({ mobile }: { mobile: boolean }) {
       </div>
       <div className="w-full ">
         <DataTable
-          columns={getColumns(leaderboardType as any, mobile)}
+          columns={getColumns(leaderboardType as any)}
           data={leaderBoardData ?? []}
           className="w-full"
         />
