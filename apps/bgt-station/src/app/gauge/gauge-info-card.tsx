@@ -7,7 +7,7 @@ import { Card } from "@bera/ui/card";
 
 export default function GaugeInfoCard() {
   return (
-    <Card className="flex min-w-[520px] flex-col">
+    <Card className="flex flex-col overflow-hidden lg:min-w-[520px]">
       <div className="flex w-full flex-row items-stretch justify-between gap-8 bg-muted p-4">
         <div className="flex flex-col items-start gap-4 text-2xl font-bold">
           Total BGT
