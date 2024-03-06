@@ -112,13 +112,11 @@ export default function StatusBanner() {
           <Tooltip
             text={
               <>
-                Net APY (Annual Percentage Yield) is the combined effect of all
-                supply and borrow positions
-                <br />
-                on net worth, including rewards and fees. It is possible to have
-                a negative net APY <br />
-                if debt APY is higher than supply APY + Rewards. See additional
-                disclaimers in notes below.
+                Net APY (Annual Percentage Yield) is the combined effect of all <br/>
+                supply and borrow positions on net worth, including rewards and <br/>
+                fees. It is possible to have a negative net APY if debt APY is <br/>
+                higher than supply APY + Rewards. See additional disclaimers in <br/>
+                notes below.
               </>
             }
           />

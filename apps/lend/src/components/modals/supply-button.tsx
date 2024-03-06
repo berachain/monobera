@@ -56,6 +56,7 @@ export default function SupplyBtn({
   const { refetch: userReservesRefetch } = usePollUserReservesData();
 
   useEffect(() => setOpen(false), [isSuccess]);
+  useEffect(() => setAmount(undefined), [open]);
   return (
     <>
       {ModalPortal}
@@ -131,7 +132,9 @@ const SupplyModalContent = ({
           balance={balance?.formattedBalance ?? "0"}
           showExceeding={true}
           selectable={false}
-          setAmount={(amount) => setAmount(amount as `${number}`)}
+          setAmount={(amount) =>
+            setAmount(amount === "" ? undefined : (amount as `${number}`))
+          }
           price={Number(reserveData?.formattedPriceInMarketReferenceCurrency)}
         />
       </div>

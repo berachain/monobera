@@ -46,6 +46,7 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
         <Link
           href={`${blockExplorerUrl}/address/${reserveData?.underlyingAsset}`}
           target="_blank"
+          className="hover:underline"
         >
           View Contract{" "}
           <Icons.external className="inline h-4 w-4 text-muted-foreground hover:cursor-pointer" />
@@ -140,7 +141,14 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
             <div className="flex flex-col gap-[6px]">
               <div className="text-sm font-normal leading-normal text-muted-foreground">
                 APY, variable
-                <Tooltip text="Variable interest rate will fluctuate based on the market conditions. Recommended for short-term positions." />
+                <Tooltip
+                  text={
+                    <>
+                      Variable interest rate will fluctuate based on the market <br/>
+                      conditions. Recommended for short-term positions.
+                    </>
+                  }
+                />
               </div>
               {reserveData ? (
                 <div className="font-semibold leading-7 md:text-xl">

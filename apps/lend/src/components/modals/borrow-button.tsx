@@ -49,6 +49,7 @@ export default function BorrowBtn({
   const { refetch: userReservesRefetch } = usePollUserReservesData();
 
   useEffect(() => setOpen(false), [isSuccess]);
+  useEffect(() => setAmount(undefined), [open]);
   return (
     <>
       {ModalPortal}
@@ -141,7 +142,9 @@ const BorrowModalContent = ({
           balance={borrowAmout}
           showExceeding={true}
           selectable={false}
-          setAmount={(amount) => setAmount(amount as `${number}`)}
+          setAmount={(amount) =>
+            setAmount(amount === "" ? undefined : (amount as `${number}`))
+          }
           price={Number(reserveData?.formattedPriceInMarketReferenceCurrency)}
         />
       </div>
