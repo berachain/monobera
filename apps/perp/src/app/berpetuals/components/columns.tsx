@@ -672,7 +672,6 @@ export const history_columns: ColumnDef<IPosition>[] = [
         Number(row.original.funding_rate ?? 0) +
         Number(row.original.closing_fee ?? 0) +
         Number(row.original.borrowing_fee ?? 0) +
-        Number(row.original.vault_fee ?? 0) +
         Number(row.original.open_fee ?? 0);
       return <div>{formatUsd(fees)}</div>;
     },

@@ -4,8 +4,8 @@ import React from "react";
 import { DataTable } from "@bera/shared-ui";
 
 import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
-import { history_columns } from "../berpetuals/components/columns";
-import type { IMarket } from "../berpetuals/page";
+import { history_columns } from "../../berpetuals/components/columns";
+import type { IMarket } from "../../berpetuals/page";
 
 export default function TradingHistory({ markets }: { markets: IMarket[] }) {
   // const [voterTypes, setVoterTypes] = React.useState<

@@ -1,7 +1,9 @@
 import {
   formatter,
+  useBeraJs,
   usePollAssetWalletBalance,
   usePollReservesDataList,
+  usePollReservesPrices,
   usePollUserAccountData,
   type Token,
 } from "@bera/berajs";
@@ -9,15 +11,17 @@ import { honeyAddress } from "@bera/config";
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits } from "viem";
+import BigNumber from "bignumber.js";
+import { formatUnits, parseUnits } from "viem";
 
 import Card from "~/components/card";
 import BorrowBtn from "~/components/modals/borrow-button";
 import SupplyBtn from "~/components/modals/supply-button";
 
 export default function UserInfo({ token }: { token: Token | undefined }) {
+  const { isReady } = useBeraJs();
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: tokenBalance } = useSelectedAssetWalletBalance(
+  const { data: tokenBalance, isLoading } = useSelectedAssetWalletBalance(
     token?.address ?? "",
   );
   const { useSelectedReserveData, useBaseCurrencyData } =
@@ -26,27 +30,36 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
   const { data: baseCurrencyData } = useBaseCurrencyData();
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
+  const { useReservesPrices } = usePollReservesPrices();
+  const { data: reservesPrices } = useReservesPrices();
 
-  const supplyAmount =
-    Number(reserveData?.supplyCap) > Number(tokenBalance?.formattedBalance)
+  const tokenPrice =
+    token && reservesPrices && reservesPrices[token.address]
+      ? reservesPrices[token.address].formattedPrice
+      : "1";
+  const supplyAmount = isReady
+    ? Number(reserveData?.supplyCap) > Number(tokenBalance?.formattedBalance)
       ? Number(tokenBalance?.formattedBalance)
-      : Number(reserveData?.supplyCap);
+      : Number(reserveData?.supplyCap)
+    : 0;
 
-  const borrowPower =
-    Number(
-      formatUnits(
-        userAccountData?.availableBorrowsBase ?? "0",
-        baseCurrencyData?.networkBaseTokenPriceDecimals,
-      ),
-    ) / Number(reserveData?.formattedPriceInMarketReferenceCurrency);
+  const borrowBase = formatUnits(
+    userAccountData?.availableBorrowsBase ?? 0n,
+    baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8,
+  );
+  const borrowPower = BigNumber(borrowBase)
+    .div(BigNumber(tokenPrice))
+    .times(0.99)
+    .toFixed(token?.decimals ?? 18);
 
-  const availableLiquidity =
-    Number(reserveData?.totalLiquidity) *
-    Number(reserveData?.formattedPriceInMarketReferenceCurrency) *
-    Number(1 - reserveData?.borrowUsageRatio);
+  const availableLiquidity = BigNumber(reserveData?.totalLiquidity)
+    .times(BigNumber(reserveData?.formattedPriceInMarketReferenceCurrency))
+    .times(BigNumber(1 - reserveData?.borrowUsageRatio))
+    .toFixed(baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8);
 
-  const borrowAmout =
-    borrowPower > availableLiquidity ? availableLiquidity : borrowPower;
+  const borrowAmout = BigNumber(borrowPower).gt(BigNumber(availableLiquidity))
+    ? availableLiquidity
+    : borrowPower;
 
   return (
     <div className="w-full flex-shrink-0 lg:w-[378px]">
@@ -63,8 +76,10 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
               </div>
               <div className="text-muted-foreground">
                 <b className="text-foreground">
-                  {tokenBalance ? (
-                    Number(tokenBalance?.formattedBalance).toLocaleString()
+                  {tokenBalance || !isLoading || !isReady ? (
+                    Number(
+                      tokenBalance?.formattedBalance ?? "0",
+                    ).toLocaleString()
                   ) : (
                     <Skeleton className="inline-block h-5 w-20" />
                   )}
@@ -126,7 +141,7 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                   <div className="mt-[-2px] leading-7 text-muted-foreground">
                     <b>
                       {!Number.isNaN(borrowAmout) ? (
-                        formatter.format(borrowAmout)
+                        formatter.format(Number(borrowAmout))
                       ) : (
                         <Skeleton className="inline-block h-7 w-20" />
                       )}
@@ -142,13 +157,20 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                     {formatter.format(
                       Number(
                         reserveData?.formattedPriceInMarketReferenceCurrency,
-                      ) * borrowAmout,
+                      ) * Number(borrowAmout),
                     )}
                   </div>
                 </div>
                 <div>
                   {token ? (
-                    <BorrowBtn token={token} disabled={borrowAmout === 0} />
+                    <BorrowBtn
+                      token={{
+                        ...token,
+                        balance: parseUnits(borrowPower, token.decimals),
+                        formattedBalance: borrowPower,
+                      }}
+                      disabled={borrowAmout === "0"}
+                    />
                   ) : (
                     <Skeleton className="h-9 w-20" />
                   )}
