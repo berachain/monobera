@@ -48,7 +48,7 @@ export default function ValidatorInput({
     <div className="relative">
       <div
         className="
-        xs:justify-between  flex flex-row items-center rounded-lg border border-solid bg-input p-3"
+        xs:justify-between flex min-h-[73px] flex-row items-center rounded-lg border border-solid bg-input py-3"
       >
         <ValidatorSelector
           validatorAddress={
@@ -66,7 +66,7 @@ export default function ValidatorInput({
         />
         <Input
           type="number"
-          className="max-w-100 h-[73px] border-0 bg-transparent text-right text-lg font-semibold leading-7 outline-none"
+          className="max-w-100 border-0 bg-transparent text-right text-lg font-semibold leading-7 outline-none"
           value={amount}
           placeholder="0.0"
           disabled={disabled || isBalanceLoading}

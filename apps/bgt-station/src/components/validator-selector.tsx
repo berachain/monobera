@@ -63,7 +63,7 @@ export default function ValidatorSelector({
     <div>
       <Button
         variant="outline"
-        className="max-w-[148px] border-border bg-background shadow md:whitespace-nowrap"
+        className="ml-3 max-w-[148px] border-border bg-background shadow md:whitespace-nowrap"
         onClick={() => setOpen(true)}
       >
         {validValidator ? (
@@ -208,8 +208,8 @@ const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
       {isLoading
         ? "Loading"
         : bgtDelegated && Number(bgtDelegated) === 0
-          ? "0 BGT"
-          : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
+        ? "0 BGT"
+        : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`}
     </div>
   );
 };
