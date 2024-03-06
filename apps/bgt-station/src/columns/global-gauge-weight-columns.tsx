@@ -31,7 +31,7 @@ export const global_gauge_weight_columns_v2: ColumnDef<GlobalGaugeColumnsV2>[] =
         <DataTableColumnHeader column={column} title="Pool or Address" />
       ),
       cell: ({ row }) => (
-        <div className="truncate whitespace-nowrap text-left">
+        <div className="truncate whitespace-nowrap text-center">
           {row.original.gauge}
         </div>
       ),
@@ -42,14 +42,15 @@ export const global_gauge_weight_columns_v2: ColumnDef<GlobalGaugeColumnsV2>[] =
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Estimated BGT Incentive/yr"
+          title="Estimated BGT/yr"
+          className="w-full items-center justify-end text-center"
         />
       ),
       cell: ({ row }) => {
         const incentiveAmount = row.original.incentiveAmount;
         const incentivePercentage = row.original.incentivePercentage;
         return (
-          <div className="flex flex-row items-center">
+          <div className="flex w-full flex-row items-center justify-end">
             {" "}
             {formatter.format(incentiveAmount)} (
             {(incentivePercentage * 100).toFixed(2)}%)

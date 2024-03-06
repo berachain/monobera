@@ -17,7 +17,7 @@ export default function Gauge() {
   const { data, isLoading } = useGlobalValidatorGaugeWeight();
   return (
     <div className="container mx-auto mb-20 flex w-full flex-col">
-      <div className="flex flex-col items-center justify-center gap-[160px] py-12 lg:flex-row">
+      <div className="flex flex-col items-center justify-center gap-12 py-12 lg:flex-row xl:gap-[160px]">
         <GaugeInfoCard />
         {isLoading || !data || !data.length ? (
           <div className="flex flex-col gap-16 md:flex-row">

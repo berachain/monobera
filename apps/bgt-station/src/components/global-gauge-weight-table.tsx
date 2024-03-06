@@ -142,7 +142,7 @@ export default function GlobalGaugeWeightTable({
       <DataTable
         columns={global_gauge_weight_columns_v2 as any}
         data={dataT ?? []}
-        className="max-h-[300px] min-w-[490px] shadow"
+        className="max-h-[400px] min-w-[490px] shadow"
       />
     </div>
   );
