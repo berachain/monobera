@@ -12,12 +12,12 @@ import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
 import GaugeInfoCard from "./gauge-info-card";
 
 export default function Gauge() {
-  const [keywords, setKeywords] = React.useState<string | null>(null);
+  const [keywords, setKeywords] = React.useState<string | undefined>(undefined);
   // TODO: switch to use the new subgraph
   const { data, isLoading } = useGlobalValidatorGaugeWeight();
   return (
     <div className="container mx-auto mb-20 flex w-full flex-col">
-      <div className="flex flex-col items-center justify-center gap-[160px] py-12 md:flex-row">
+      <div className="flex flex-col items-center justify-center gap-[160px] py-12 lg:flex-row">
         <GaugeInfoCard />
         {isLoading || !data || !data.length ? (
           <div className="flex flex-col gap-16 md:flex-row">
@@ -43,7 +43,10 @@ export default function Gauge() {
             <Skeleton className="h-10 w-full" />
           </div>
         ) : (
-                      <GlobalGaugeWeightTable gaugeWeights={data ?? []} keywords={keywords} />
+          <GlobalGaugeWeightTable
+            gaugeWeights={data ?? []}
+            keywords={keywords}
+          />
         )}
       </div>
     </div>

@@ -54,7 +54,6 @@ export default function GlobalGaugeWeightTable({
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
   const [disableChecks, setDisableChecks] = React.useState<boolean>(false);
-  console.log("cuttingBoardData", cuttingBoardData);
   const { gaugeDictionary } = useGauges();
   useEffect(() => {
     if (!keywords) {
@@ -73,8 +72,8 @@ export default function GlobalGaugeWeightTable({
 
     const filteredGaugeWeights = gaugeWeights?.filter(
       (gaugeWeight: GaugeWeight) => {
-        const name = gaugeDictionary[gaugeWeight.address]?.name ?? "";
         const address = gaugeWeight.address;
+        const name = (gaugeDictionary as any)[getAddress(address)]?.name ?? "";
 
         const normalizedName = name.toLowerCase();
         const normalizedAddress = address.toLowerCase();
