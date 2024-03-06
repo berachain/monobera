@@ -10,7 +10,7 @@ interface Props {
   gaugeWeights: GaugeWeight[] | undefined;
 }
 
-export default function GlobalGaugeWeight({ gaugeWeights = [] }: Props) {
+export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const tooltipRef = useRef<string | null>(null);
   const { gaugeDictionary } = useGauges();
