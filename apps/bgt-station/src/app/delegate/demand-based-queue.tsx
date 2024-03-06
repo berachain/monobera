@@ -64,6 +64,7 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
               {/* TODO: add tooltip text */}
               <Tooltip text="future unbond time" />
             </div>
+            {/* TODO: add estimated future unbond time */}
             <div className="items-start text-lg font-bold italic text-muted-foreground">
               30 Mins
             </div>
