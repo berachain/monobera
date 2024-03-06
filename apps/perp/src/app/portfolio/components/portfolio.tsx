@@ -1,7 +1,7 @@
 "use client";
 
 import type { IMarket } from "~/app/berpetuals/page";
-import TradingHistory from "~/app/leaderboard/trading-history";
+import TradingHistory from "./trading-history";
 import Portfolio from "../portfolio";
 import UserOpenPositions from "../userAssets";
 
