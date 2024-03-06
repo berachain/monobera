@@ -47,7 +47,6 @@ export interface IPosition {
   pnl: string;
   close_price: string;
   close_type: string;
-  vault_fee: string;
 }
 
 export function OrderHistory({ markets }: { markets: IMarket[] }) {
@@ -140,7 +139,6 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
         close_time: "",
         close_price: "",
         close_type: "",
-        vault_fee: "",
         borrowing_fee: formatUnits(BigInt(position.borrowing_fee ?? 0), 18),
         closing_fee: formatUnits(BigInt(position.closing_fee ?? 0), 18),
         funding_rate: formatUnits(BigInt(position.funding_rate ?? 0), 18),
