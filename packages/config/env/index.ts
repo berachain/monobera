@@ -113,6 +113,8 @@ export const lendRewardsAddress = process.env
   .NEXT_PUBLIC_LEND_REWARDS_ADDRESS as Address;
 export const lendHoneyDebtTokenAddress = process.env
   .NEXT_PUBLIC_LEND_HONEY_DEBT_TOKEN_ADDRESS as Address;
+export const perpsReferralsAddress = process.env
+  .NEXT_PUBLIC_REFERRALS_CONTRACT_ADDRESS as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env
