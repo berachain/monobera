@@ -76,7 +76,13 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
   };
 
   const externalTooltipHandler = useCallback(
-    ({ tooltip }: { tooltip: TooltipModel<"doughnut">; chart: Chart }) => {
+    ({
+      tooltip,
+      chart,
+    }: {
+      tooltip: TooltipModel<"doughnut">;
+      chart: Chart;
+    }) => {
       // hide tooltip
       if (tooltip.opacity === 0) {
         setTooltipVisible(false);
@@ -98,10 +104,11 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
           (gauge) => truncateHash(gauge.address) === tooltip.title[0],
         ),
       );
+      const canvasPosition = chart.canvas.getBoundingClientRect();
       setTooltipVisible(true);
       setTooltipPosition({
-        left: tooltip.x + 650,
-        top: tooltip.y + 300,
+        left: tooltip.x + canvasPosition.left,
+        top: tooltip.y + canvasPosition.top,
       });
     },
     [gaugeWeights],
