@@ -1,30 +1,50 @@
-import { formatUsd } from "@bera/berajs";
+import { formatUsd, truncateHash } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { cn } from "@bera/ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
 const tableTitle: Record<string, string> = {
-  pnl: "Profit & Loss",
-  liquidation: "Liquidations",
-  volume: "Volume",
+  "1": "Realized Profit & Loss",
+  "2": "Liquidations",
+  "3": "Volume",
+};
+
+const positionToEmoji = (rank: string) => {
+  switch (rank) {
+    case "1":
+      return "🥇";
+    case "2":
+      return "🥈";
+    case "3":
+      return "🥉";
+    default:
+      return rank;
+  }
 };
 
 export const getColumns = (type: string) => {
   const leaderboard_columns: ColumnDef<{
+    rank: string;
     trader: string;
     value: any;
   }>[] = [
-    // {
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title="Rank" />
-    //   ),
-    //   cell: ({}) => (
-    //     <div className="w-[70px] text-xs">{new Date().toLocaleDateString()}</div>
-    //   ),
-    //   accessorKey: "market",
-    //   enableSorting: false,
-    // },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Rank" />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="text-xs">
+            {row.original.rank
+              ? positionToEmoji(row.original.rank)
+              : positionToEmoji((row.index + 1).toString())}
+          </div>
+        );
+      },
+      accessorKey: "rank",
+      enableSorting: false,
+    },
     {
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -36,7 +56,8 @@ export const getColumns = (type: string) => {
       cell: ({ row }) => (
         <div className="flex w-full flex-row items-center gap-1 text-xs">
           <Identicon account={row.original.trader} />
-          {row.original.trader}
+          <span className="sm:hidden">{truncateHash(row.original.trader)}</span>
+          <span className="hidden sm:block">{row.original.trader}</span>
         </div>
       ),
       accessorKey: "trader",

@@ -79,7 +79,7 @@ export const RewardsWithdraw = () => {
         <p className="text-sm font-medium text-muted-foreground">
           Est. Rewards
         </p>
-        <div className="flex w-full flex-row justify-between pb-4">
+        <div className="flex w-full flex-row justify-between">
           {isLoading ? (
             <Skeleton className="h-[28px] w-1/4" />
           ) : (

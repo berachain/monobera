@@ -132,6 +132,18 @@ const errorMsgMap: ErrorMessages = {
       keywords: ["Arithmetic operation resulted in underflow or overflow."],
       errorMSG: "This operation reverted on chain. Please try again later.",
     },
+    INVALID_REFERRER: {
+      keywords: ["INVALID_REFERRER"],
+      errorMSG: "The referrer address is invalid.",
+    },
+    ALREADY_REFERRED: {
+      keywords: ["ALREADY_REFERRED"],
+      errorMSG: "You have already been referred.",
+    },
+    REFERRAL_CYCLE: {
+      keywords: ["REFERRAL_CYCLE"],
+      errorMSG: "You cannot be referred by someone you have referred.",
+    },
     BGT_CLAIMING_ERROR: {
       keywords: ["unexpected withdraw amount from Rewards Module"],
       errorMSG: "BGT claiming is currently disabled for maintenance.",

@@ -44,16 +44,22 @@ export default function LeaderBoard() {
 
   const leaderBoardData = useLeaderBoardData();
   return (
-    <div className="mx-auto mt-8 flex w-full flex-col gap-4">
-      <div className="flex w-full flex-col items-center justify-center gap-2 lg:flex-row lg:justify-start">
+    <div className="mx-auto flex w-full flex-col gap-4">
+      <div className="flex w-full flex-col items-center justify-center gap-2 sm:flex-row sm:justify-start">
         <Image
+          className="mt-6"
           src={`${cloudinaryUrl}/BERPS/leaderboardAvatar_iuq8wu`}
           width={64}
           height={64}
           alt="logo"
         />
-        <div className="flex-shrink-0 text-center text-2xl font-semibold leading-loose lg:text-left">
-          Leaderboard
+        <div className="inline-flex h-14 w-full flex-1 flex-col items-center justify-center sm:items-start sm:justify-start">
+          <div className="flex-shrink-0 text-center text-2xl font-semibold leading-loose lg:text-left">
+            Global Leaderboard
+          </div>
+          <div className="font-['IBM Plex Sans'] text-sm font-normal leading-tight text-foreground">
+            Top 10 traders
+          </div>
         </div>
       </div>
       <div className="flex w-full flex-row justify-between gap-2">
@@ -88,12 +94,13 @@ export default function LeaderBoard() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
+        <div className="hidden w-full lg:flex" />
         <Select
           onValueChange={(value: string) => setTimeFrame(value as TimeFrame)}
         >
           <SelectTrigger
             className={
-              "flex w-[180pxpx] items-center justify-start justify-between rounded-2xs sm:hidden"
+              "flex w-[180pxpx] items-center justify-between border border-border rounded-md sm:hidden"
             }
           >
             <SelectValue
@@ -125,7 +132,11 @@ export default function LeaderBoard() {
         <Select
           onValueChange={(value: string) => setTimeFrame(value as TimeFrame)}
         >
-          <SelectTrigger className={"w-[80px] justify-start gap-1 rounded-md"}>
+          <SelectTrigger
+            className={
+              "w-[80px] justify-start gap-1 rounded-md border border-border"
+            }
+          >
             <SelectValue
               placeholder={TimeFrame.QUARTERLY}
               defaultValue={TimeFrame.QUARTERLY}

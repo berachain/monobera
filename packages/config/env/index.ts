@@ -18,6 +18,8 @@ export const faucetEndpointUrl = process.env
 export const subgraphUrl = process.env.NEXT_PUBLIC_SUBGRAPH_URL as string;
 export const honeySubgraphUrl = process.env
   .NEXT_PUBLIC_HONEY_SUBGRAPH_URL as string;
+export const lendSubgraphUrl = process.env
+  .NEXT_PUBLIC_BEND_SUBGRAPH_URL as string;
 
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;
@@ -130,6 +132,8 @@ export const wethTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS as Address;
 // PERPS
 export const perpsEndpoints = process.env
   .NEXT_PUBLIC_PERPS_ENDPOINT_URL as string;
+export const perpsCompetitionId = process.env
+  .NEXT_PUBLIC_PERPS_COMPETITION_ID as string;
 
 // Validator clue
 export const validatorClueEndpoint = process.env
