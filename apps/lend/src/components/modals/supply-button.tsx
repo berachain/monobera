@@ -142,7 +142,7 @@ const SupplyModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="font-semibold">
+          <div className="font-semibold truncate w-[200px] text-right">
             $
             {formatter.format(
               Number(amount ?? "0") *
@@ -189,7 +189,7 @@ const SupplyModalContent = ({
               <span
                 className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
               >
-                {Number(newHealthFactor.toFixed(2)) < 0
+                {Number(newHealthFactor.toFixed(2)) < 0 || Number(newHealthFactor) > 1000000000000
                   ? "∞"
                   : newHealthFactor.toFixed(2)}
               </span>

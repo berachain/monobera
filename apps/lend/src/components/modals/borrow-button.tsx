@@ -189,7 +189,7 @@ const BorrowModalContent = ({
         </div>
         <div className="flex items-center justify-between text-sm leading-tight">
           <div className="text-muted-foreground">Estimated Value</div>
-          <div className="font-semibold">
+          <div className="font-semibold truncate w-[200px] text-right">
             $
             {formatter.format(
               Number(amount ?? "0") *

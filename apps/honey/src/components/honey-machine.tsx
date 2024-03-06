@@ -63,7 +63,7 @@ export function HoneyMachine() {
     setSelectedTo,
     setFromAmount,
     setToAmount,
-    setIsTyping
+    setIsTyping,
   } = usePsm();
 
   const { RiveComponent, rive } = useRive({

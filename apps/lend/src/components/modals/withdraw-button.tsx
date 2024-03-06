@@ -152,7 +152,7 @@ const WithdrawModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="font-semibold">
+          <div className="font-semibold truncate w-[200px] text-right">
             {" "}
             $
             {formatter.format(
