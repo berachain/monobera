@@ -26,7 +26,7 @@ export function DynamicRewardBtn({
         Claim
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="p-4">
+        <DialogContent>
           <RewardModalContent
             {...{ amount, setAmount, onClaim, claimableBgtRewards }}
           />
@@ -54,7 +54,7 @@ const RewardModalContent = ({
   );
 
   return (
-    <div className="flex w-full flex-col gap-8 sm:w-[440px]">
+    <div className="flex w-full flex-col gap-8 sm:w-[450px]">
       <div className="text-lg font-semibold leading-7">Unclaimed Rewards</div>
       <div>
         <Input
