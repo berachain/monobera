@@ -43,7 +43,7 @@ export default function Gauge() {
             <Skeleton className="h-10 w-full" />
           </div>
         ) : (
-          <GlobalGaugeWeightTable gaugeWeights={data ?? []} />
+                      <GlobalGaugeWeightTable gaugeWeights={data ?? []} keywords={keywords} />
         )}
       </div>
     </div>

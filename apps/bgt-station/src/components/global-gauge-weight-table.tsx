@@ -15,6 +15,7 @@ import { type GaugeWeight } from "~/hooks/useGaugeWeights";
 
 interface Props {
   gaugeWeights: GaugeWeight[] | undefined;
+  keywords?: string;
 }
 
 const Gauge = ({ address }: { address: string | undefined }) => {
@@ -46,10 +47,54 @@ const Gauge = ({ address }: { address: string | undefined }) => {
     </Link>
   );
 };
-export default function GlobalGaugeWeightTable({ gaugeWeights = [] }: Props) {
+export default function GlobalGaugeWeightTable({
+  gaugeWeights = [],
+  keywords = "",
+}: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
   const [filter, setFilter] = React.useState<Record<string, boolean>>({});
   const [disableChecks, setDisableChecks] = React.useState<boolean>(false);
+  console.log("cuttingBoardData", cuttingBoardData);
+  const { gaugeDictionary } = useGauges();
+  useEffect(() => {
+    if (!keywords) {
+      const temp = gaugeWeights?.map((data: GaugeWeight) => {
+        return {
+          label: data.address,
+          percentage: data.percentage,
+          amount: data.amount,
+        };
+      });
+      setCuttingBoardData(temp);
+      return;
+    }
+    // Normalize keywords for case-insensitive comparison
+    const normalizedKeywords = keywords.toLowerCase();
+
+    const filteredGaugeWeights = gaugeWeights?.filter(
+      (gaugeWeight: GaugeWeight) => {
+        const name = gaugeDictionary[gaugeWeight.address]?.name ?? "";
+        const address = gaugeWeight.address;
+
+        const normalizedName = name.toLowerCase();
+        const normalizedAddress = address.toLowerCase();
+
+        return (
+          normalizedName.includes(normalizedKeywords) ||
+          normalizedAddress.includes(normalizedKeywords)
+        );
+      },
+    );
+
+    // Map the filtered gaugeWeights to the format needed for cuttingBoardData
+    const temp = filteredGaugeWeights?.map((data: GaugeWeight) => ({
+      label: data.address,
+      percentage: data.percentage,
+      amount: data.amount,
+    }));
+
+    setCuttingBoardData(temp);
+  }, [gaugeWeights, keywords, gaugeDictionary]);
 
   useEffect(() => {
     setDisableChecks(
@@ -68,17 +113,6 @@ export default function GlobalGaugeWeightTable({ gaugeWeights = [] }: Props) {
       [data.label]: !prev[data.label],
     }));
   };
-
-  useEffect(() => {
-    const temp = gaugeWeights?.map((data: GaugeWeight) => {
-      return {
-        label: data.address,
-        percentage: data.percentage,
-        amount: data.amount,
-      };
-    });
-    setCuttingBoardData(temp);
-  }, [gaugeWeights]);
 
   const dataT: GlobalGaugeColumns[] = React.useMemo(() => {
     return (
