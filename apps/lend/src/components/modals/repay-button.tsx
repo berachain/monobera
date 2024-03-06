@@ -180,7 +180,7 @@ const RepayModalContent = ({
         </div>
       </div>
       {allowance &&
-      Number(allowance.formattedAllowance) > Number(amount ?? "0") ? (
+      BigNumber(allowance.formattedAllowance).gte(BigNumber(amount ?? "0")) ? (
         <Button
           disabled={
             !amount || Number(amount) <= 0 || Number(amount) > Number(balance)
@@ -192,7 +192,7 @@ const RepayModalContent = ({
               functionName: "repay",
               params: [
                 token.address,
-                BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0"))
+                (amount ?? "0") === (debtBalance ?? "0")
                   ? maxUint256
                   : parseUnits(amount as `${number}`, token.decimals),
                 2,
@@ -207,7 +207,12 @@ const RepayModalContent = ({
         <ApproveButton
           token={token}
           spender={lendPoolImplementationAddress}
-          amount={parseUnits((amount ?? "0") as `${number}`, token.decimals)}
+          amount={parseUnits(
+            BigNumber(amount ?? "0")
+              .times(2)
+              .toString() as `${number}`,
+            token.decimals,
+          )}
         />
       )}
     </div>
