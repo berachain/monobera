@@ -2,7 +2,7 @@ import React from "react";
 import { type Metadata } from "next";
 
 import { getMetaTitle } from "~/utils/metadata";
-import Redeem from "./redeem";
+import Incentivize from "./incentivize";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Incentivize"),
@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <Redeem />;
+  return <Incentivize />;
 }
