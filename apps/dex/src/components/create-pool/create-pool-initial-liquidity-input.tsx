@@ -57,7 +57,7 @@ export default function CreatePoolInitialLiquidityInput({
           variant="secondary"
         >
           <>
-            <TokenIcon address={token?.address ?? ""} />
+            <TokenIcon address={token?.address ?? ""} symbol={token?.symbol} />
             {token?.symbol}
           </>
         </Button>

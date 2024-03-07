@@ -153,7 +153,9 @@ export function SwapCard({
     if (
       (Number(allowance?.formattedAllowance) ?? 0) < (safeFromAmount ?? 0) &&
       !exceedingBalance &&
-      !isWrap
+      !isWrap &&
+      !isRouteLoading &&
+      swapInfo?.batchSwapSteps.length !== 0
     ) {
       return (
         <ApproveButton
