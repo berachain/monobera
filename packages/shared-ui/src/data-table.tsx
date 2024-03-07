@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@bera/ui";
-import _ from "lodash";
 import {
   Table,
   TableBody,
@@ -22,12 +21,13 @@ import {
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
-  type TableState,
   type TableOptions,
+  type TableState,
 } from "@tanstack/react-table";
-import { Spinner } from "./spinner";
+import _ from "lodash";
 
 import { usePrevious } from "./hooks";
+import { Spinner } from "./spinner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -123,7 +123,7 @@ export function DataTable<TData, TValue>({
     >
       <div
         className={cn(
-          "w-full border-b border-border overflow-x-auto overflow-y-auto",
+          "w-full overflow-x-auto overflow-y-auto",
           embedded ? "" : "rounded-tl-md rounded-tr-md",
         )}
       >
@@ -193,13 +193,13 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {enablePagination && (
-        <div className="flex text-primary-foreground justify-end p-4">
+        <div className="flex justify-end p-4 text-primary-foreground">
           {loading && (
-            <p className="pr-4 self-center">
+            <p className="self-center pr-4">
               <Spinner size={16} color="white" />
             </p>
           )}
-          <div className="py-3 inline-flex h-9 items-center justify-start rounded-lg border">
+          <div className="inline-flex h-9 items-center justify-start rounded-lg border py-3">
             <div className="flex items-center justify-center gap-2.5 border-r px-3 py-2">
               <button
                 type="button"
@@ -221,7 +221,7 @@ export function DataTable<TData, TValue>({
               </button>
             </div>
             <div className="flex items-center justify-center gap-2.5 p-1 ">
-              <div className="font-['IBM Plex Sans'] leading-tight p-2 text-xs text-foreground">
+              <div className="font-['IBM Plex Sans'] p-2 text-xs leading-tight text-foreground">
                 {`${table.getState().pagination.pageIndex + 1} of ${
                   table.getPageCount() || 1
                 }`}

@@ -14,7 +14,7 @@ export const ChartTooltip: React.FC<{
 
   return (
     <div
-      className="flex h-[68px] w-[320px] flex-row overflow-hidden rounded-md border bg-background"
+      className="z-1000 flex h-[68px] w-[320px] flex-row overflow-hidden rounded-md border bg-background"
       style={{ border: `1px solid ${color}` }}
     >
       <div
