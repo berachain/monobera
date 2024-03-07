@@ -53,6 +53,7 @@ export default function GaugeInfoCard() {
       </div>
       <div className="flex w-full flex-col items-center justify-center bg-muted sm:flex-row sm:items-stretch sm:justify-between">
         <Image
+          className="hidden sm:block"
           src="/bg/smokey-bear.png"
           alt="proposal-bear"
           layout="intrinsic"
@@ -60,18 +61,15 @@ export default function GaugeInfoCard() {
           height={354}
         />
         <div className="m-4 flex flex-col items-center justify-center gap-2 py-4">
-          <div className="text-md flex max-w-[240px] flex-col flex-wrap items-start text-right text-muted-foreground">
+          <div className="text-md flex max-w-[240px] flex-col flex-wrap items-start text-muted-foreground sm:text-right">
             Estimates are updated weekly. Checkout each validator for their
             bribes distribution breakdown
           </div>
-          <div className="flex h-[128px] max-w-[240px] flex-col items-start justify-center rounded-md border border-warning-foreground bg-warning px-4">
-            <div className="text-xs font-semibold text-muted-foreground">
+          <div className="flex h-[72px] max-w-[240px] flex-col items-end justify-center rounded-md border border-warning-foreground bg-warning px-4">
+            <div className="whitespace-nowrap text-xs font-semibold text-muted-foreground">
               Estimated Avg. Return per BGT Staked
             </div>
-            <div className="text-xl font-semibold text-foreground">$69.9</div>
-            <div className="mt-4 flex flex-row gap-1 text-xs font-semibold text-muted-foreground">
-              Checkout Bribes <Icons.arrowRight className="h-4 w-4" />
-            </div>
+            <div className="text-2xl font-semibold text-foreground">$69.9</div>
           </div>
         </div>
       </div>
