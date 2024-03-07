@@ -44,6 +44,8 @@ export const TransactionIcon = ({
         return <Icons.withdraw />;
       case TransactionActionType.BORROW:
         return <Icons.borrow />;
+      case TransactionActionType.REFER:
+        return <Icons.ticket />;
 
       case TransactionActionType.REDEEM_HONEY:
         return <Icons.redeemHoney />;

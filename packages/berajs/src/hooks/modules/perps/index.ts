@@ -10,3 +10,5 @@ export * from "./usePollBHoneyPendingWithdraw";
 export * from "./usePollBalanceOfAssets";
 export * from "./usePollMaxDeposit";
 export * from "./usePollPerpsBgtRewards";
+export * from "./usePollReferralsDetails";
+export * from "./usePollTraderReferral";
