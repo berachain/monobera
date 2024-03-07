@@ -56,24 +56,13 @@ export const navItems = [
     title: "Governance",
   },
   {
-    href: "/redeem",
-    title: "Redeem",
+    href: "/incentivize",
+    title: "Incentivize",
   },
-  // {
-  //   href: faucetUrl,
-  //   title: "Faucet",
-  // },
   {
     href: "#",
     title: "Explore",
     children: [
-      // {
-      //   href: bgtUrl,
-      //   type: "external",
-      //   title: bgtName,
-      //   blurb: "The hub for BGT governance",
-      //   icon: <Icons.bgtFav className="h-8 w-8" />,
-      // },
       {
         href: dexUrl,
         type: "external",
