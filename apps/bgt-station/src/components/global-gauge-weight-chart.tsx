@@ -123,39 +123,42 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
   );
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="absolute flex flex-col items-center justify-center">
-        Total Staked BGT
-        <div className="text-2xl font-bold">69.42M</div>
-        79.69M BGT Circulating
-      </div>
-      <div
-        className="z-1 pointer-events-none absolute transition-all duration-200 ease-in-out"
-        style={{
-          left: `${tooltipPosition.left}px`,
-          top: `${tooltipPosition.top}px`,
-        }}
-      >
-        {tooltipComp}
-      </div>
-      <BeraChart
-        data={dataP}
-        options={{
-          responsive: true,
-          cutout: "70%",
-          radius: "100%",
-          plugins: {
-            legend: {
-              display: false,
+    <div className="flex h-full flex-col items-center justify-center">
+      <div className="p-4 text-2xl font-bold">Gauge Weights</div>
+      <div className="flex items-center justify-center">
+        <div className="absolute flex flex-col items-center justify-center">
+          Total Staked BGT
+          <div className="text-2xl font-bold">69.42M</div>
+          79.69M BGT Circulating
+        </div>
+        <div
+          className="z-1 pointer-events-none absolute transition-all duration-200 ease-in-out"
+          style={{
+            left: `${tooltipPosition.left}px`,
+            top: `${tooltipPosition.top}px`,
+          }}
+        >
+          {tooltipComp}
+        </div>
+        <BeraChart
+          data={dataP}
+          options={{
+            responsive: true,
+            cutout: "70%",
+            radius: "100%",
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                enabled: false,
+                external: externalTooltipHandler,
+              },
             },
-            tooltip: {
-              enabled: false,
-              external: externalTooltipHandler,
-            },
-          },
-        }}
-        type="doughnut"
-      />
+          }}
+          type="doughnut"
+        />
+      </div>
     </div>
   );
 }
