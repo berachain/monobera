@@ -8,7 +8,7 @@ import { Icons } from "@bera/ui/icons";
 
 export default function GaugeInfoCard() {
   return (
-    <Card className="flex flex-col overflow-hidden md:w-[520px]">
+    <Card className="flex w-full flex-col overflow-hidden md:w-[520px]">
       <div className="flex w-full flex-row items-stretch justify-between gap-8 bg-muted p-4">
         <div className="flex flex-row items-start gap-2 text-2xl font-bold">
           <Icons.bgt className="h-[32px] w-[32px]" /> Total BGT
