@@ -60,7 +60,11 @@ export const ConnectButton = ({
               </Button>
             )}
             {isWrongNetwork && (
-              <Button onClick={openChainModal} type="button" className="w-full">
+              <Button
+                onClick={openChainModal}
+                type="button"
+                className={cn("w-full", btnClassName)}
+              >
                 Wrong network
               </Button>
             )}
