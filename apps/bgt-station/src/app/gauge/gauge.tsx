@@ -17,7 +17,7 @@ export default function Gauge() {
   const { data, isLoading } = useGlobalValidatorGaugeWeight();
   return (
     <div className="container mx-auto mb-20 flex w-full flex-col">
-      <div className="flex flex-col items-center justify-center gap-12 py-12 lg:flex-row xl:gap-[160px]">
+      <div className="flex flex-col items-center gap-12 py-12 lg:flex-row xl:gap-[160px]">
         <GaugeInfoCard />
         {isLoading || !data || !data.length ? (
           <div className="flex flex-col gap-16 md:flex-row">
@@ -27,27 +27,29 @@ export default function Gauge() {
           <GlobalGaugeWeightChart gaugeWeights={data ?? []} />
         )}
       </div>
-      <SearchInput
-        placeholder="Search..."
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setKeywords(e.target.value)
-        }
-      />
-      <div className="py-4">
-        {isLoading || !data || !data.length ? (
-          <div className="mt-10 flex w-full flex-col gap-2">
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-        ) : (
-          <GlobalGaugeWeightTable
-            gaugeWeights={data ?? []}
-            keywords={keywords}
-          />
-        )}
+      <div className="flex flex-col">
+        <SearchInput
+          placeholder="Search..."
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setKeywords(e.target.value)
+          }
+        />
+        <div className="py-4">
+          {isLoading || !data || !data.length ? (
+            <div className="mt-10 flex w-full flex-col gap-2">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          ) : (
+            <GlobalGaugeWeightTable
+              gaugeWeights={data ?? []}
+              keywords={keywords}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
