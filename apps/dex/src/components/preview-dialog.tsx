@@ -57,7 +57,7 @@ const PreviewToken = ({
             "flex items-center gap-2 rounded-full bg-muted px-2 py-1 text-sm font-medium leading-tight"
           }
         >
-          <TokenIcon address={token?.address ?? ""} />
+          <TokenIcon address={token?.address ?? ""} symbol={token?.symbol} />
           {token?.symbol}
         </div>
       </div>
