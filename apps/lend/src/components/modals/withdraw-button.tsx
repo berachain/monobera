@@ -17,7 +17,6 @@ import {
 } from "@bera/config";
 import { TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { getLTVColor } from "~/utils/get-ltv-color";
 import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -26,6 +25,7 @@ import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { maxUint256 } from "~/utils/constants";
+import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function WithdrawBtn({
   token,
@@ -54,6 +54,7 @@ export default function WithdrawBtn({
   const { refetch: userReservesRefetch } = usePollUserReservesData();
 
   useEffect(() => setOpen(false), [isSuccess]);
+  useEffect(() => setAmount(undefined), [open]);
   return (
     <>
       {" "}
@@ -142,14 +143,16 @@ const WithdrawModalContent = ({
           balance={balance}
           showExceeding={true}
           selectable={false}
-          setAmount={(amount) => setAmount(amount as `${number}`)}
+          setAmount={(amount) =>
+            setAmount(amount === "" ? undefined : (amount as `${number}`))
+          }
           price={Number(reserveData?.formattedPriceInMarketReferenceCurrency)}
         />
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="font-semibold">
+          <div className="font-semibold truncate w-[200px] text-right">
             {" "}
             $
             {formatter.format(

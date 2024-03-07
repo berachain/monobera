@@ -9,6 +9,7 @@ import {
 } from "@bera/config";
 import { TokenIcon, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 
 export default function HowItWorks() {
   return (
@@ -25,7 +26,7 @@ export default function HowItWorks() {
             tokenList={[wbtcTokenAddress, wethTokenAddress]}
             size="2xl"
           />
-          <h3 className="mb-2 text-lg font-semibold mt-4">
+          <h3 className="mb-2 mt-4 text-lg font-semibold">
             Deposit Collateral
           </h3>
           <p>
@@ -42,7 +43,7 @@ export default function HowItWorks() {
           </p>
         </div>
         <div className="flex flex-col">
-          <TokenIcon address={bgtTokenAddress} size="2xl" className="mb-4" />
+          <Icons.bgt className="mb-4 h-12 w-12" />
           <h3 className="mb-2 text-lg font-semibold">Earn BGT Rewards</h3>
           <p>
             Borrowing HONEY qualifies you for increased BGT rewards on BEND.{" "}
