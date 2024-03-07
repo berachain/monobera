@@ -15,7 +15,7 @@ import {
   usePollPrices,
 } from "@bera/berajs";
 import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
-import { ActionButton, useTxn } from "@bera/shared-ui";
+import { ActionButton, SelectToken, TokenInput, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
@@ -43,8 +43,8 @@ export default function Incentivize({}: {}) {
   const bgtBalance = useBgtBalance();
 
   return (
-    <div className="container mx-auto w-full max-w-[600px] pb-20">
-      <Card className="sm:w-[480px mx-6 w-full items-center bg-background sm:mx-0">
+    <div className="container mx-auto w-full max-w-[600px] px-8 pb-20">
+      <Card className="mx-6 w-full items-center bg-background sm:mx-0 sm:w-[480px]">
         <CardHeader>
           <CardTitle className="center flex flex-col justify-between font-bold">
             Incentivize a pool
@@ -54,10 +54,10 @@ export default function Incentivize({}: {}) {
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <div className="text-md flex py-2 font-normal text-foreground">
+          <div className="text-md flex font-semibold text-foreground">
             Search/Enter Pool Address
           </div>
-          <div className="leading-tigh text-sm font-semibold">
+          <div className="text-sm leading-tight">
             <Input
               type="text"
               placeholder="0x0000...0000"
@@ -67,8 +67,41 @@ export default function Incentivize({}: {}) {
               value={poolAddress}
             />
           </div>
+          <div className="text-md flex font-semibold text-foreground">
+            Set Amount
+          </div>
+          <div className="border-1 flex flex-col gap-6 border-border">
+            <ul className="relative divide-y divide-border rounded-2xl border">
+              <TokenInput
+                key=""
+                selected={undefined}
+                selectable={true}
+                onTokenSelection={(token) => {}}
+                amount="0"
+                setAmount={(amount) => {}}
+                price={1}
+                onExceeding={() => {}}
+                showExceeding={true}
+              />
+              <TokenInput
+                key=""
+                selected={undefined}
+                selectable={true}
+                onTokenSelection={(token) => {}}
+                amount="0"
+                setAmount={(amount) => {}}
+                price={1}
+                onExceeding={() => {}}
+                showExceeding={true}
+              />
+            </ul>
+          </div>
         </CardContent>
-        <ActionButton>Incentivize</ActionButton>
+        <div className="flex flex-col p-4">
+          <ActionButton>
+            <Button className="flex w-full gap-1">Incentivize</Button>
+          </ActionButton>
+        </div>
       </Card>
     </div>
   );
