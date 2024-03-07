@@ -31,14 +31,15 @@ export interface IconProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof IconVariants> {
   // token?: Token | undefined;
-  fetch?: boolean;
   address: string | undefined;
+  symbol?: string;
 }
 
 export const TokenIcon = ({
   address: adr,
   className,
   size,
+  symbol,
   ...props
 }: IconProps) => {
   const { tokenDictionary } = useTokens();
@@ -54,7 +55,7 @@ export const TokenIcon = ({
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage src={img} className="rounded-full" alt={address} />
       <AvatarFallback className="h-full w-full border border-foreground bg-background text-inherit">
-        TKN
+        {symbol ? symbol.slice(0, 3) : "TKN"}
       </AvatarFallback>
     </Avatar>
   );

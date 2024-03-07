@@ -48,10 +48,10 @@ export const navItems = [
     href: "#stats",
     title: "Stats",
   },
-  {
-    href: "#transactions",
-    title: "Transactions",
-  },
+  // {
+  //   href: "#transactions",
+  //   title: "Transactions",
+  // },
   {
     href: "#",
     title: "Explore",

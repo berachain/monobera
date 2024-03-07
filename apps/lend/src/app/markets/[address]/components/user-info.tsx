@@ -97,7 +97,17 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
               <div>
                 <div className="text-xs font-medium leading-tight">
                   Available to Supply{" "}
-                  <Tooltip text="This is the total amount that you are able to supply to in this reserve. You are able to supply your wallet balance up until the supply cap is reached." />
+                  <Tooltip
+                    text={
+                      <>
+                        This is the total amount that you are able to supply to{" "}
+                        <br />
+                        in this reserve. You are able to supply your wallet{" "}
+                        <br />
+                        balance up until the supply cap is reached. <br />
+                      </>
+                    }
+                  />
                 </div>
                 <div className="mt-[-2px] leading-7 text-muted-foreground">
                   <b>
@@ -136,7 +146,17 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                 <div>
                   <div className="text-xs font-medium leading-tight">
                     Available to Borrow{" "}
-                    <Tooltip text="This is the total amount available for you to borrow. You can borrow based on your collateral and until the borrow cap is reached." />
+                    <Tooltip
+                      text={
+                        <>
+                          This is the total amount available for you to borrow.{" "}
+                          <br />
+                          You can borrow based on your collateral and until the{" "}
+                          <br />
+                          borrow cap is reached.
+                        </>
+                      }
+                    />
                   </div>
                   <div className="mt-[-2px] leading-7 text-muted-foreground">
                     <b>
