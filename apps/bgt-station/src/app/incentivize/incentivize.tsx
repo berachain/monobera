@@ -18,8 +18,9 @@ import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Card } from "@bera/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useTheme } from "next-themes";
@@ -34,34 +35,40 @@ export default function Incentivize({}: {}) {
   const { theme, systemTheme } = useTheme();
   const t = theme === "system" ? systemTheme : theme;
   const router = useRouter();
+  const [poolAddress, setPoolAddress] = React.useState<string | undefined>(
+    undefined,
+  );
 
   const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const bgtBalance = useBgtBalance();
 
   return (
     <div className="container mx-auto w-full max-w-[600px] pb-20">
-      <Card className="mt-4 flex flex-col gap-3 p-6">
-        <div className="text-lg font-semibold capitalize leading-7 text-foreground">
-          Incentivize a Pool
-        </div>
-        {t ? (
-          <Image
-            src={
-              ImageMapEnum[action.toUpperCase() as keyof typeof ImageMapEnum][
-                t as "light" | "dark"
-              ]
-            }
-            alt="bera banner"
-            width={452}
-            height={175}
-            priority
-            loading="eager"
-          />
-        ) : (
-          <Skeleton className="h-[175px] w-full" />
-        )}
-
-        <ActionButton>Confirm</ActionButton>
+      <Card className="sm:w-[480px mx-6 w-full items-center bg-background sm:mx-0">
+        <CardHeader>
+          <CardTitle className="center flex flex-col justify-between font-bold">
+            Incentivize a pool
+            <div className="text-md flex py-2 font-normal text-muted-foreground">
+              Please select the address
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <div className="text-md flex py-2 font-normal text-foreground">
+            Search/Enter Pool Address
+          </div>
+          <div className="leading-tigh text-sm font-semibold">
+            <Input
+              type="text"
+              placeholder="0x0000...0000"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setPoolAddress(e.target.value)
+              }
+              value={poolAddress}
+            />
+          </div>
+        </CardContent>
+        <ActionButton>Incentivize</ActionButton>
       </Card>
     </div>
   );
