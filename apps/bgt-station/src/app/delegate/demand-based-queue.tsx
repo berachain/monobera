@@ -34,7 +34,7 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
           <Icons.bgt className="h-8 w-8" />
           <Icons.chevronRight className="h-8 w-8" />
           <Icons.bera className="h-8 w-8" />
-          <div className="ml-3 text-lg font-semibold capitalize leading-7 text-foreground">
+          <div className="ml-3 font-semibold capitalize leading-7 text-foreground md:text-lg">
             Demand based {getActionText(action)}
           </div>
         </div>

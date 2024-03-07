@@ -30,7 +30,7 @@ export default {
       padding: {
         DEFAULT: "1rem",
         md: "2rem",
-        lg: "2rem",
+        lg: "4rem",
       },
       screens: {
         sm: "640px",
