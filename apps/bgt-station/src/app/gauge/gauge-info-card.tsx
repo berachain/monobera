@@ -8,7 +8,7 @@ import { Icons } from "@bera/ui/icons";
 
 export default function GaugeInfoCard() {
   return (
-    <Card className="flex flex-col overflow-hidden lg:min-w-[520px]">
+    <Card className="flex flex-col overflow-hidden md:min-w-[520px]">
       <div className="flex w-full flex-row items-stretch justify-between gap-8 bg-muted p-4">
         <div className="flex flex-row items-start gap-2 text-2xl font-bold">
           <Icons.bgt className="h-[32px] w-[32px]" /> Total BGT
@@ -60,11 +60,11 @@ export default function GaugeInfoCard() {
           height={354}
         />
         <div className="m-4 flex flex-col items-center justify-center gap-2 py-4">
-          <div className="text-md flex max-w-[240px] flex-col items-start text-right text-muted-foreground">
+          <div className="text-md flex max-w-[240px] flex-col flex-wrap items-start text-right text-muted-foreground">
             Estimates are updated weekly. Checkout each validator for their
             bribes distribution breakdown
           </div>
-          <div className="flex h-[128px] w-[240px] flex-col items-start justify-center rounded-md border border-warning-foreground bg-warning px-4">
+          <div className="flex h-[128px] max-w-[240px] flex-col items-start justify-center rounded-md border border-warning-foreground bg-warning px-4">
             <div className="text-xs font-semibold text-muted-foreground">
               Estimated Avg. Return per BGT Staked
             </div>
