@@ -25,14 +25,14 @@ export default function GaugeInfoCard() {
           </div>
         </div>
         <div className="flex w-full flex-row items-stretch justify-between gap-8">
-          <div className="text-md flex flex-col items-start gap-4 text-muted-foreground">
+          <div className="text-md flex items-start gap-4 text-muted-foreground">
             Active Bribes
           </div>
-          <div className="flex flex-row">
-            <div className="text-md flex flex-col gap-4 font-semibold text-foreground">
+          <div className="flex flex-row text-right">
+            <div className="text-md flex font-semibold text-foreground">
               690.42k
             </div>
-            <div className="text-md ml-1 flex flex-col gap-4 font-semibold text-muted-foreground">
+            <div className="text-md flex font-semibold text-muted-foreground sm:ml-1">
               (42 Active Gauges)
             </div>
           </div>
@@ -41,11 +41,14 @@ export default function GaugeInfoCard() {
           <div className="text-md flex flex-col items-start gap-4 text-muted-foreground">
             Total No. of Validators
           </div>
-          <div className="flex flex-row">
-            <div className="text-md flex flex-col gap-4 font-semibold text-success-foreground">
-              69 Active /
+          <div className="flex flex-row text-right">
+            <div className="text-md flex flex-col font-semibold text-success-foreground">
+              69 Active
             </div>
-            <div className="text-md ml-1 flex flex-col gap-4 font-semibold text-info-foreground">
+            <div className="text-md flex flex-col font-semibold text-success-foreground">
+              /
+            </div>
+            <div className="text-md flex flex-col font-semibold text-info-foreground sm:ml-1">
               80 Total
             </div>
           </div>
