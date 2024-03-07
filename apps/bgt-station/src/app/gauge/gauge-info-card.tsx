@@ -8,7 +8,7 @@ import { Icons } from "@bera/ui/icons";
 
 export default function GaugeInfoCard() {
   return (
-    <Card className="flex flex-col overflow-hidden md:min-w-[520px]">
+    <Card className="flex flex-col overflow-hidden md:w-[520px]">
       <div className="flex w-full flex-row items-stretch justify-between gap-8 bg-muted p-4">
         <div className="flex flex-row items-start gap-2 text-2xl font-bold">
           <Icons.bgt className="h-[32px] w-[32px]" /> Total BGT
@@ -54,11 +54,11 @@ export default function GaugeInfoCard() {
       <div className="flex w-full flex-col items-center justify-center bg-muted sm:flex-row sm:items-stretch sm:justify-between">
         <Image
           className="hidden sm:block"
-          src="/bg/smokey-bear.png"
+          src={`${cloudinaryUrl}/bears/m7abj0nxzpkh5mcuz5g2`}
           alt="proposal-bear"
           layout="intrinsic"
-          width={291}
-          height={354}
+          width={200}
+          height={300}
         />
         <div className="m-4 flex flex-col items-center justify-center gap-2 py-4">
           <div className="text-md flex max-w-[240px] flex-col flex-wrap items-start text-muted-foreground sm:text-right">
