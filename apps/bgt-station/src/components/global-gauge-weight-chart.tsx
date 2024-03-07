@@ -123,7 +123,7 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
   );
 
   return (
-    <div className="flex w-[450px] items-center justify-center">
+    <div className="flex items-center justify-center">
       <div className="absolute flex flex-col items-center justify-center">
         Total Staked BGT
         <div className="text-2xl font-bold">69.42M</div>
