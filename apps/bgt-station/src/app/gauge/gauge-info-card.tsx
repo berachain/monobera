@@ -51,7 +51,7 @@ export default function GaugeInfoCard() {
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-row items-stretch justify-between bg-muted">
+      <div className="flex w-full flex-col items-center justify-center bg-muted sm:flex-row sm:items-stretch sm:justify-between">
         <Image
           src="/bg/smokey-bear.png"
           alt="proposal-bear"
@@ -59,10 +59,7 @@ export default function GaugeInfoCard() {
           width={291}
           height={354}
         />
-        <div
-          style={{ transform: "translateX(-16%)" }}
-          className="flex flex-col items-center justify-center gap-2 px-4"
-        >
+        <div className="m-4 flex flex-col items-center justify-center gap-2 py-4">
           <div className="text-md flex max-w-[240px] flex-col items-start text-right text-muted-foreground">
             Estimates are updated weekly. Checkout each validator for their
             bribes distribution breakdown
@@ -72,8 +69,8 @@ export default function GaugeInfoCard() {
               Estimated Avg. Return per BGT Staked
             </div>
             <div className="text-xl font-semibold text-foreground">$69.9</div>
-            <div className="mt-4 text-xs font-semibold text-muted-foreground">
-              Checkout Bribes
+            <div className="mt-4 flex flex-row gap-1 text-xs font-semibold text-muted-foreground">
+              Checkout Bribes <Icons.arrowRight className="h-4 w-4" />
             </div>
           </div>
         </div>
