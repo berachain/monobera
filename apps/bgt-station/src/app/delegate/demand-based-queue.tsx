@@ -22,7 +22,8 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
     }
   };
 
-  const useDelegatorUnbondingQueue = usePollDelegatorUnbonding();
+  // TODO: switch to use the new hook
+  const { useDelegatorUnbondingQueue } = usePollDelegatorUnbonding();
 
   const { unbondingQueue, isLoading } = useDelegatorUnbondingQueue;
 
@@ -30,9 +31,9 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
     <div className="container mx-auto flex w-full max-w-[800px] flex-col gap-8 pb-20">
       <Card className="flex flex-col gap-3 bg-muted p-6">
         <div className="flex flex-row items-start">
-          <Icons.bgt className="h-[32px] w-[32px]" />
-          <Icons.chevronRight className="h-[32px] w-[32px]" />
-          <Icons.bera className="h-[32px] w-[32px]" />
+          <Icons.bgt className="h-8 w-8" />
+          <Icons.chevronRight className="h-8 w-8" />
+          <Icons.bera className="h-8 w-8" />
           <div className="ml-3 text-lg font-semibold capitalize leading-7 text-foreground">
             Demand based {getActionText(action)}
           </div>
