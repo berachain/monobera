@@ -60,16 +60,13 @@ export const navItems = [
     title: "Gauge",
   },
   {
+    href: "/incentivize",
+    title: "Incentivize",
+  },
+  {
     href: "#",
     title: "Explore",
     children: [
-      // {
-      //   href: bgtUrl,
-      //   type: "external",
-      //   title: bgtName,
-      //   blurb: "The hub for BGT governance",
-      //   icon: <Icons.bgtFav className="h-8 w-8" />,
-      // },
       {
         href: dexUrl,
         type: "external",
