@@ -59,4 +59,5 @@ export enum TransactionActionType {
   WITHDRAW_HONEY = "Withdraw Honey",
   DELEGATE_OCT = "Delegate",
   REVOKE_OCT = "Revoke",
+  REFER = "Refer",
 }
