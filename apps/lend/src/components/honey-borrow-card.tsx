@@ -22,6 +22,7 @@ import { formatEther } from "viem";
 import BGTRewardsClaimBtn from "./bgt-rewards-claim-btn";
 import BorrowBtn from "./modals/borrow-button";
 import RepayBtn from "./modals/repay-button";
+import { Icons } from "@bera/ui/icons";
 
 export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
@@ -100,7 +101,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
             Your BGT Rewards
           </div>
           <div className="flex items-center gap-1">
-            <TokenIcon address={bgtTokenAddress} className="h-3 w-3" />
+            <Icons.bgt className="w-3 h-3" />
             {isUserBGTRewardLoading ? (
               <Skeleton className="h-4 w-20" />
             ) : (

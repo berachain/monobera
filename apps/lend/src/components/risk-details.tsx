@@ -59,7 +59,7 @@ export const RiskDetails = () => {
               </div>
               <div
                 className={cn(
-                  "flex h-[62px] w-[62px] items-center justify-center rounded-full text-lg font-semibold leading-7",
+                  "flex h-[62px] w-[62px] items-center justify-center rounded-full text-md font-semibold leading-7",
                   `bg-${getLTVColor(healthFactor)}`,
                 )}
               >
@@ -102,7 +102,7 @@ export const RiskDetails = () => {
               </div>
               <div
                 className={cn(
-                  "flex h-[62px] w-[62px] items-center justify-center rounded-full text-lg font-semibold leading-7",
+                  "flex h-[62px] w-[62px] items-center justify-center rounded-full text-md font-semibold leading-7",
                   `bg-${getLTVColor(healthFactor)}`,
                 )}
               >
