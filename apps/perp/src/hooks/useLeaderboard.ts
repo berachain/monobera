@@ -15,7 +15,7 @@ export const useLeaderboard = ({
   const { mutate } = useSWRConfig();
   const { isLoading } = useSWRImmutable(QUERY_KEY, async () => {
     const res = await fetch(
-      `${perpsEndpoints}/trading-leaderboard?sort_by=${sort}&days=${parseInt(
+      `${perpsEndpoints}/trading-leaderboard?page=1&per_page=10&sort_by=${sort}&days=${parseInt(
         interval,
         10,
       )}`,

@@ -240,7 +240,6 @@ const getHistoryListItems = (historyItems: IPosition[]): ICards[] => {
       Number(item.funding_rate) +
       Number(item.closing_fee) +
       Number(item.borrowing_fee) +
-      Number(item.vault_fee) +
       Number(item.open_fee);
 
     return {
@@ -355,8 +354,8 @@ const getPnlListItems = (historyItems: IClosedTrade[]): ICards[] => {
       Number(item.rollover_fee) +
       Number(item.funding_rate) +
       Number(item.closing_fee) +
-      Number(item.borrowing_fee) +
-      Number(item.vault_fee);
+      Number(item.borrowing_fee);
+
     return {
       title: (
         <PositionCardTitle
