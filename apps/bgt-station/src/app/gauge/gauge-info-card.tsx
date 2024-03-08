@@ -64,15 +64,17 @@ export default function GaugeInfoCard() {
           height={300}
         />
         <div className="m-4 flex flex-col items-center justify-center gap-2 py-4">
-          <div className="text-md flex max-w-[240px] flex-col flex-wrap items-start text-muted-foreground sm:text-right">
+          <div className="text-md flex flex-col flex-wrap items-center text-muted-foreground sm:max-w-[240px] sm:items-start sm:text-right">
             Estimates are updated weekly. Checkout each validator for their
             bribes distribution breakdown
           </div>
-          <div className="flex h-[72px] max-w-[240px] flex-col items-end justify-center rounded-md border border-warning-foreground bg-warning px-4">
+          <div className="flex h-[72px] w-full flex-col justify-center rounded-md border border-warning-foreground bg-warning px-4 sm:max-w-[240px]">
             <div className="whitespace-nowrap text-xs font-semibold text-muted-foreground">
               Estimated Avg. Return per BGT Staked
             </div>
-            <div className="text-2xl font-semibold text-foreground">$69.9</div>
+            <div className="text-right text-2xl font-semibold text-foreground">
+              $69.9
+            </div>
           </div>
         </div>
       </div>

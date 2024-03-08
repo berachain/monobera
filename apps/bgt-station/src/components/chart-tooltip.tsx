@@ -10,7 +10,7 @@ export const ChartTooltip: React.FC<{
 }> = ({ color, visible, gauge }) => {
   if (!visible) return null;
   const { gaugeDictionary } = useGauges();
-  const name = (gaugeDictionary as any)[getAddress(gauge.address)]?.name;
+  const name = gaugeDictionary[getAddress(gauge.address)]?.name;
 
   return (
     <div
