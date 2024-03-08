@@ -24,7 +24,7 @@ export default function HoneySupply({ honey }: { honey: any }) {
       <div className="relative rounded-md border border-accent bg-opacity-50 bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3 dark:from-[#1A1608] dark:via-[#201E09] dark:to-[#312A09]">
         <div className="flex flex-row items-center justify-between gap-6">
           <div className="flex flex-shrink-0 items-center gap-4 ">
-            <TokenIcon address={honeyTokenAddress} fetch size="2xl" />
+            <TokenIcon address={honeyTokenAddress} size="2xl" />
             <div>
               <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
                 Supplied
