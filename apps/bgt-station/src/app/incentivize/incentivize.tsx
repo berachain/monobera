@@ -1,34 +1,20 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  TransactionActionType,
-  useBeraConfig,
-  useBeraJs,
-  usePollAccountDelegations,
-  usePollActiveValidators,
-  usePollBgtBalance,
-  usePollDelegatorValidators,
-  usePollGlobalValidatorBribes,
-  usePollPrices,
-} from "@bera/berajs";
-import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
-import { ActionButton, SelectToken, TokenInput, useTxn } from "@bera/shared-ui";
+import { useBeraJs, usePollBgtBalance, type Token } from "@bera/berajs";
+import { ActionButton } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { Skeleton } from "@bera/ui/skeleton";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useTheme } from "next-themes";
-import { parseUnits } from "viem";
-import { type Address } from "wagmi";
 
-import ValidatorInput from "~/components/validator-input";
-import { DelegateEnum, ImageMapEnum } from "./types";
+import useCreateIncentiveTokens, {
+  IncentivizeToken,
+} from "~/hooks/useCreateIncentivizeTokens";
+import AddIncentivizeToken from "./add-incentivize-input";
 
 export default function Incentivize({}: {}) {
   const { isConnected } = useBeraJs();
@@ -41,6 +27,20 @@ export default function Incentivize({}: {}) {
 
   const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
   const bgtBalance = useBgtBalance();
+  const {
+    incentivizeTokens,
+    error,
+    onTokenSelection,
+    onAddToken,
+    onRemove,
+    onTokenAmountChange,
+  } = useCreateIncentiveTokens();
+  console.log("incentivizeTokens", incentivizeTokens);
+  const selectedTokens = incentivizeTokens.map(
+    (incentivizeToken: IncentivizeToken) => {
+      return incentivizeToken.token;
+    },
+  ) as Token[];
 
   return (
     <div className="container mx-auto w-full max-w-[600px] px-8 pb-20">
@@ -72,30 +72,23 @@ export default function Incentivize({}: {}) {
           </div>
           <div className="border-1 flex flex-col gap-6 border-border">
             <ul className="relative divide-y divide-border rounded-2xl border">
-              <TokenInput
-                key=""
-                selected={undefined}
-                selectable={true}
-                onTokenSelection={(token) => {}}
-                amount="0"
-                setAmount={(amount) => {}}
-                price={1}
-                onExceeding={() => {}}
-                showExceeding={true}
-              />
-              <TokenInput
-                key=""
-                selected={undefined}
-                selectable={true}
-                onTokenSelection={(token) => {}}
-                amount="0"
-                setAmount={(amount) => {}}
-                price={1}
-                onExceeding={() => {}}
-                showExceeding={true}
-              />
+              {incentivizeTokens.map((incentivizeToken, index) => (
+                <AddIncentivizeToken
+                  key={index}
+                  incentivizeToken={incentivizeToken}
+                  index={index}
+                  selectedTokens={selectedTokens}
+                  onTokenSelection={onTokenSelection}
+                  onRemove={onRemove}
+                  onTokenAmountChange={onTokenAmountChange}
+                />
+              ))}
             </ul>
           </div>
+          <Icons.plusCircle
+            className="mt-4 h-6 w-6 self-center text-muted-foreground"
+            onClick={onAddToken}
+          />
         </CardContent>
         <div className="flex flex-col p-4">
           <ActionButton>
