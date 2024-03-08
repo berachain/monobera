@@ -18,7 +18,7 @@ import OrderChart from "./components/order-chart";
 import { OrderHistory } from "./components/order-history";
 import CreatePosition from "./create-position";
 import { ReferralModal } from "../referrals/referral-modal";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 const DEFAULT_MARKET = "ETH-USDC";
 export const revalidate = 30;
