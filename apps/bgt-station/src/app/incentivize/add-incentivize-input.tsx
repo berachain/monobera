@@ -28,12 +28,11 @@ export default function AddIncentivizeToken({
   const handleTokenSelection = (token: Token | undefined) => {
     onTokenSelection(token, index);
   };
-  console.log(selectedToken, "selected token");
   const { data: tokenPrice } = useTokenHoneyPrice(
     selectedToken?.token?.address,
   );
   return (
-    <ul className={"flex flex-row items-center justify-between gap-1 px-4"}>
+    <ul className={"flex flex-row items-center justify-between gap-1"}>
       <TokenInput
         selected={selectedToken.token}
         onTokenSelection={handleTokenSelection}
@@ -46,13 +45,15 @@ export default function AddIncentivizeToken({
           onTokenAmountChange(index, Number(amount));
         }}
       />
-      <Button
-        variant="ghost"
-        className="rounded-full p-0 hover:bg-transparent hover:text-red-500"
-        onClick={() => onRemove(index)}
-      >
-        <Icons.close className="h-4 w-4 " />
-      </Button>
+      <div className="flex items-center px-2">
+        <Button
+          variant="ghost"
+          className="rounded-full p-0 hover:bg-transparent hover:text-red-500"
+          onClick={() => onRemove(index)}
+        >
+          <Icons.close className="h-4 w-4 " />
+        </Button>
+      </div>
     </ul>
   );
 }
