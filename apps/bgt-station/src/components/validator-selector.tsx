@@ -148,10 +148,7 @@ const ValidatorModal = ({
           mwg: <ValidatorGauge address={validator.operatorAddr} />,
           bribes:
             validator.bribeTokenList.length !== 0 ? (
-              <TokenIconList
-                showCount={3}
-                tokenList={validator.bribeTokenList}
-              />
+              <TokenIconList showCount={3} tokenList={[]} />
             ) : (
               <p>No bribes</p>
             ),

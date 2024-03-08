@@ -80,7 +80,7 @@ export default function GAME({
                   <div className="scroll-mb-0.5 text-sm text-muted-foreground">
                     {formatter.format(value.bgt)}
                   </div>
-                  <TokenIcon address={bgtTokenAddress} fetch size="sm" />
+                  <TokenIcon address={bgtTokenAddress} size="sm" />
                 </div>
               </div>
             ))}
@@ -197,7 +197,7 @@ export default function GAME({
                   </div>
                   <div className="flex h-full items-end gap-1">
                     <div className="scroll-mb-0.5 text-xs">00.00</div>
-                    <TokenIcon address={bgtTokenAddress} fetch size="sm" />
+                    <TokenIcon address={bgtTokenAddress} size="sm" />
                   </div>
                 </div>
               </div>

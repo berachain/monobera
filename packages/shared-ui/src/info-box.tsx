@@ -18,7 +18,7 @@ export const InfoBoxListItem = ({ title, value }: InfoBoxListItemProps) => {
       <p className="text-xs font-medium text-muted-foreground sm:text-sm w-full">
         {title}
       </p>
-      <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm w-full justify-end items-end">
+      <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm w-full justify-end items-end max-w-[250px] truncate">
         {value}
       </p>
     </div>
