@@ -98,7 +98,7 @@ export function ClaimBribesDialog({
                           key={reward.token}
                         >
                           <div className="flex flex-row items-center justify-center gap-1">
-                            <TokenIcon address={reward.token} fetch size="xl" />
+                            <TokenIcon address={reward.token} size="xl" />
                             <p>{reward.amount.toFixed(2)}</p>
                             <p>
                               {symbols

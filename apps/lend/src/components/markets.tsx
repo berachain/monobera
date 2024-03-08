@@ -48,7 +48,7 @@ function Market({
     >
       <blockquote className="text-foreground">
         <div className="flex items-center gap-2">
-          <TokenIcon address={market.underlyingAsset} fetch size="xl" />
+          <TokenIcon address={market.underlyingAsset} size="xl" />
           <p className="text-xl font-semibold uppercase text-muted-foreground">
             {market.symbol}
           </p>

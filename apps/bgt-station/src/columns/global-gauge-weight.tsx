@@ -77,6 +77,7 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
   },
 ];
 
+// deprecated
 export const unbonding_queue_columns: ColumnDef<UnbondingQueueColumns>[] = [
   {
     header: ({ column }) => (

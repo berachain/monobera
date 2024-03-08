@@ -12,9 +12,9 @@ import { bgtTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { getAddress } from "viem";
 
 import { SelectToken } from ".";
-import { getAddress } from "viem";
 
 type Props = {
   selected: Token | undefined;
@@ -161,16 +161,9 @@ export function TokenInput({
               const filteredValue = formatInputTokenValue(inputValue);
               // Ensure there's only one period
               const periodsCount = filteredValue.split(".").length - 1;
-
               const [_, decimalPart = ""] = filteredValue.split(".");
-              if (decimalPart.length > 18) {
-                // ignore
-                return;
-              }
-
-              if (periodsCount <= 1) {
-                setAmount?.(filteredValue);
-              }
+              if (decimalPart.length > 18) return;
+              if (periodsCount <= 1) setAmount?.(filteredValue);
             }}
           />
         </div>

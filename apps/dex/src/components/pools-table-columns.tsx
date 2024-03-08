@@ -33,10 +33,7 @@ export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   return (
     <div className="flex flex-col items-start gap-2">
       <span className="w-[180px] truncate text-left">{pool?.poolName}</span>
-      <TokenIconList
-        tokenList={pool?.tokens.map((t) => t?.address)}
-        size="lg"
-      />
+      <TokenIconList tokenList={pool?.tokens} size="lg" />
       <div className="flex flex-row items-center gap-1">
         <Badge
           variant={"secondary"}
@@ -301,15 +298,12 @@ export const my_columns: ColumnDef<IUserPool>[] = [
         <span className="w-[180px] truncate text-left">
           {row.original?.poolName}
         </span>
-        <TokenIconList
-          tokenList={row.original?.tokens.map((t: any) => t.address)}
-          size="lg"
-        />
+        <TokenIconList tokenList={row.original?.tokens} size="lg" />
         <Badge
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
         >
-          dynamic
+          {Number(row.original?.feeRate).toFixed(2)}%
         </Badge>
       </div>
     ),

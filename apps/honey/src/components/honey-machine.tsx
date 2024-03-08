@@ -63,6 +63,7 @@ export function HoneyMachine() {
     setSelectedTo,
     setFromAmount,
     setToAmount,
+    setIsTyping,
   } = usePsm();
 
   const { RiveComponent, rive } = useRive({
@@ -301,6 +302,7 @@ export function HoneyMachine() {
                     selectable={selectedFrom?.address !== honey?.address}
                     customTokenList={collateralList}
                     showExceeding
+                    setIsTyping={setIsTyping}
                     setAmount={(amount) => {
                       setGivenIn(true);
                       setFromAmount(amount);
@@ -324,6 +326,7 @@ export function HoneyMachine() {
                     customTokenList={collateralList}
                     hideMax
                     balance={toBalance?.formattedBalance}
+                    setIsTyping={setIsTyping}
                   />
                 </div>
               </ul>

@@ -17,6 +17,7 @@ import { InstrumentDropdown } from "./components/instrument-dropdown";
 import OrderChart from "./components/order-chart";
 import { OrderHistory } from "./components/order-history";
 import CreatePosition from "./create-position";
+import { ReferralModal } from "../referrals/referral-modal";
 
 const DEFAULT_MARKET = "ETH-USDC";
 export const revalidate = 30;
@@ -70,6 +71,7 @@ export default async function Home() {
 
   return (
     <div>
+      <ReferralModal />
       <div className="flex h-fit w-full flex-col lg:flex-row">
         <div className="h-fit w-full flex-shrink-0 flex-grow-0 lg:w-[400px]">
           <InstrumentDropdown
