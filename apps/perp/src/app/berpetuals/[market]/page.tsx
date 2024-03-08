@@ -3,6 +3,7 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { perpsName } from "@bera/config";
 import { type Market } from "@bera/proto/src";
+import { type Address } from "viem";
 
 import { MarketImages } from "~/utils/marketImages";
 import { MarketTokenNames } from "~/utils/marketTokenNames";
@@ -17,10 +18,12 @@ import { InstrumentDropdown } from "../components/instrument-dropdown";
 import OrderChart from "../components/order-chart";
 import { OrderHistory } from "../components/order-history";
 import CreatePosition from "../create-position";
+import { ReferralModal } from "../../referrals/referral-modal";
 import { type IMarket } from "../page";
 
 type Props = {
   params: { market: string };
+  searchParams: { ref: Address | undefined };
 };
 
 export function generateMetadata({ params }: Props): Metadata {
@@ -31,7 +34,7 @@ export function generateMetadata({ params }: Props): Metadata {
 }
 
 export const revalidate = 5;
-export default async function Home({ params }: Props) {
+export default async function Home({ params, searchParams: { ref } }: Props) {
   try {
     const m = getMarkets();
     const p = getGlobalParams();
@@ -67,6 +70,7 @@ export default async function Home({ params }: Props) {
 
     return (
       <div>
+        <ReferralModal referralAddress={ref} />
         <div className="flex h-fit w-full flex-col lg:flex-row">
           <div className="h-fit w-full flex-shrink-0 flex-grow-0 lg:w-[400px]">
             <InstrumentDropdown
