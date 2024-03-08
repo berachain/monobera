@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import {
-  bgtTokenAddress,
   bgtUrl,
   honeyTokenAddress,
   wbtcTokenAddress,
@@ -10,6 +9,7 @@ import {
 import { TokenIcon, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { Token } from "@bera/berajs";
 
 export default function HowItWorks() {
   return (
@@ -23,7 +23,10 @@ export default function HowItWorks() {
       <div className="grid grid-cols-1 gap-8 rounded-2xl border-2 bg-muted  p-6 lg:grid-cols-3">
         <div className="flex flex-col">
           <TokenIconList
-            tokenList={[wbtcTokenAddress, wethTokenAddress]}
+            tokenList={[
+              { address: wbtcTokenAddress, symbol: "WBTC" } as Token,
+              { address: wethTokenAddress, symbol: "WETH" } as Token,
+            ]}
             size="2xl"
           />
           <h3 className="mb-2 mt-4 text-lg font-semibold">
