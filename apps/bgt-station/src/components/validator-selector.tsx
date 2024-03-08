@@ -63,7 +63,7 @@ export default function ValidatorSelector({
     <div>
       <Button
         variant="outline"
-        className="border-border bg-background shadow"
+        className="ml-3 min-w-[148px] whitespace-nowrap border-border bg-background shadow"
         onClick={() => setOpen(true)}
       >
         {validValidator ? (
@@ -78,7 +78,7 @@ export default function ValidatorSelector({
           </div>
         ) : (
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
-            Select validator
+            Select Validator
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
         )}
