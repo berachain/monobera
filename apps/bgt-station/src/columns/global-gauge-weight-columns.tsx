@@ -5,23 +5,23 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { formatUnits } from "viem";
 
 export interface GlobalGaugeColumnsV2 {
-  gauge: JSX.Element;
+  gauge: React.ReactNode;
   incentiveAmount: number;
   incentivePercentage: number;
 }
 
 export interface GlobalGaugeColumns {
-  gauge: JSX.Element;
+  gauge: React.ReactNode;
   incentiveAmount: number;
   incentivePercentage: number;
   tvl: number;
-  hide: JSX.Element;
+  hide: React.ReactNode;
 }
 export interface UnbondingQueueColumns {
-  validator: JSX.Element;
+  validator: React.ReactNode;
   unbondingAmount: bigint;
   timeRemaining: string;
-  hide: JSX.Element;
+  hide: React.ReactNode;
 }
 
 export const global_gauge_weight_columns_v2: ColumnDef<GlobalGaugeColumnsV2>[] =
