@@ -223,7 +223,7 @@ export default function ProposalDetails({
               <div className="flex items-center justify-between">
                 <div>Asset:</div>
                 <div className="flex items-center gap-1 font-medium uppercase text-muted-foreground">
-                  <TokenIcon address={collateralAddress} fetch size={"md"} />{" "}
+                  <TokenIcon address={collateralAddress} size={"md"} />{" "}
                   {collateralAddress === beraTokenAddress // WBERA have no name, have to hardcode it bro ;<
                     ? "WBERA"
                     : tokenInformation?.symbol}

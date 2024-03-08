@@ -11,7 +11,7 @@ export default function TokenCard({ reserveData }: { reserveData: any }) {
     <Card className="div-4 flex flex-col items-center justify-between gap-6 p-4 xl:flex-row">
       <div className="flex w-full flex-col justify-between gap-2 xl:flex-row xl:justify-start xl:gap-6">
         <div className="mb-5 flex w-[250px] items-center gap-4 xl:mb-0">
-          <TokenIcon address={reserveData.token.address} fetch size="2xl" />
+          <TokenIcon address={reserveData.token.address} size="2xl" />
           <div>
             <div className="text-xs	font-medium leading-5 text-muted-foreground">
               {reserveData.token?.name}
