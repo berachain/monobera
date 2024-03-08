@@ -71,7 +71,7 @@ export default function ValidatorCard({
             ~ No bribes ~
           </div>
         ) : (
-          <TokenIconList tokenList={validator.bribeTokenList ?? []} size="xl" />
+          <TokenIconList tokenList={[]} size="xl" />
         )}
 
         <div className="flex h-7 gap-2 text-center text-xl font-semibold">

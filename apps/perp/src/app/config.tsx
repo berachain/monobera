@@ -58,6 +58,10 @@ export const navItems = [
     href: "/leaderboard",
     title: "Leaderboard",
   },
+  {
+    href: "/referrals",
+    title: "Referrals",
+  },
   // {
   //   href: faucetUrl,
   //   title: "Faucet",

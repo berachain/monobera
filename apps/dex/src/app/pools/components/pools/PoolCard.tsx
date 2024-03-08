@@ -23,10 +23,7 @@ export const PoolCard = ({
       className="col-span-1 mx-auto flex w-full max-w-[275px] flex-col justify-end overflow-hidden rounded-xl border border-border bg-background"
     >
       <div className="flex flex-col items-center justify-center gap-1 p-6 pb-4">
-        <TokenIconList
-          tokenList={pool?.tokens?.map((t: any) => t.address) ?? []}
-          size="lg"
-        />
+        <TokenIconList tokenList={pool?.tokens ?? []} size="lg" />
         <div className="flex h-12 w-full items-center justify-center text-sm text-muted-foreground">
           {poolName.length > 60 ? `${poolName.slice(0, 60)}...` : poolName}
         </div>

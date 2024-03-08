@@ -63,7 +63,7 @@ const RewardModalContent = ({
           startAdornment={
             <div className="flex gap-2 text-muted-foreground">
               {" "}
-              <TokenIcon address={bgtTokenAddress} fetch /> BGT
+              <TokenIcon address={bgtTokenAddress} /> BGT
             </div>
           }
           value={amount}

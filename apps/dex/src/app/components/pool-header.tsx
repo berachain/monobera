@@ -23,10 +23,7 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
           </Button>
         </Link>
         <p className="flex w-full justify-center gap-4 text-center text-2xl font-semibold md:justify-start md:text-left">
-          <TokenIconList
-            tokenList={pool?.tokens?.map((t) => t.address) ?? []}
-            size="xl"
-          />
+          <TokenIconList tokenList={pool?.tokens ?? []} size="xl" />
           {pool?.poolName}
         </p>
         <div className="flex w-full flex-row items-center justify-center gap-4 leading-7 text-muted-foreground md:justify-start">
@@ -48,11 +45,7 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
           <div className="flex w-fit items-center gap-1">
             Fee:
             <span className="text-sm text-success-foreground">
-              {/* {(
-                Number(formatUnits(BigInt(pool?.swapFee ?? 0) ?? "", 18)) * 100
-              ).toFixed(2)}
-              % */}
-              dynamic
+              {pool.feeRate.toFixed(2)}%
             </span>
           </div>
 

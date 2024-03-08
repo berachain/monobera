@@ -123,7 +123,7 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     cell: ({ row }) => {
       const tokens = row.original.bribeTokenList;
       return tokens.length !== 0 ? (
-        <TokenIconList tokenList={tokens ?? []} size="lg" showCount={3} />
+        <TokenIconList tokenList={[]} size="lg" showCount={3} />
       ) : (
         <p>no bribes</p>
       );

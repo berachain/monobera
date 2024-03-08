@@ -36,7 +36,7 @@ export default function DonutChart({
   return (
     <div className="relative h-[90px] w-[90px]">
       <div className="absolute top-[38px] w-full text-center text-xs font-medium leading-tight">
-        {percentage.toFixed(2)}%
+        {percentage < 0.01 ? "<0.01" : percentage.toFixed(2)}%
       </div>
       <BeraChart data={data} type="doughnut" options={Options as any} />
     </div>
