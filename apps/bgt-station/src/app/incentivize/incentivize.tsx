@@ -43,11 +43,11 @@ export default function Incentivize({}: {}) {
   ) as Token[];
 
   return (
-    <div className="container mx-auto w-full max-w-[600px] px-8 pb-20">
-      <Card className="mx-6 w-full items-center bg-background sm:mx-0 sm:w-[480px]">
+    <div className="container mx-auto w-full max-w-[480px] px-8 pb-20">
+      <Card className="mx-6 w-full items-center bg-background">
         <CardHeader>
-          <CardTitle className="center flex flex-col justify-between font-bold">
-            Incentivize a pool
+          <CardTitle className="center flex flex-col justify-between text-lg">
+            Incentivize a Pool
             <div className="text-md flex py-2 font-normal text-muted-foreground">
               Please select the address
             </div>
@@ -71,7 +71,7 @@ export default function Incentivize({}: {}) {
             Set Amount
           </div>
           <div className="border-1 flex flex-col gap-6 border-border">
-            <ul className="divide-y divide-border rounded-2xl border">
+            <ul className="divide-y divide-border rounded-lg border">
               {incentivizeTokens.map((incentivizeToken, index) => (
                 <AddIncentivizeToken
                   key={index}
@@ -88,6 +88,25 @@ export default function Incentivize({}: {}) {
             className="mt-4 h-6 w-6 self-center text-muted-foreground"
             onClick={onAddToken}
           />
+          {/* Placeholder */}
+          <div className="flex flex-col rounded-lg bg-muted p-4">
+            <div className="flex flex-row justify-between">
+              <div className="text-md flex font-semibold text-muted-foreground">
+                Detail 1
+              </div>
+              <div className="text-md flex font-semibold text-foreground">
+                Number
+              </div>
+            </div>
+            <div className="flex flex-row justify-between">
+              <div className="text-md flex font-semibold text-muted-foreground">
+                Detail 1
+              </div>
+              <div className="text-md flex font-semibold text-foreground">
+                Number
+              </div>
+            </div>
+          </div>
         </CardContent>
         <div className="flex flex-col p-4">
           <ActionButton>
