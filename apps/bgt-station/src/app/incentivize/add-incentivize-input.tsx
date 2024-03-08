@@ -1,5 +1,5 @@
 import React from "react";
-import { type Token } from "@bera/berajs";
+import { useBeraJs, type Token } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { SelectToken } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -30,6 +30,7 @@ export default function AddIncentivizeToken({
   const handleTokenSelection = (token: Token | undefined) => {
     onTokenSelection(token, index);
   };
+  const { isConnected } = useBeraJs();
   return (
     <li className={"flex flex-row items-center justify-between gap-1 px-4"}>
       <SelectToken
@@ -59,6 +60,42 @@ export default function AddIncentivizeToken({
       >
         <Icons.close className="h-4 w-4 " />
       </Button>
+      {isConnected && selected && tokenBalance !== 0 ? (
+        <div className="mb-4 h-fit w-full cursor-default">
+          {hideBalance ? null : (
+            <div className="mt-[-10px] flex w-full items-center justify-between gap-1">
+              <div className="flex flex-row items-center justify-start gap-1 px-1">
+                <Icons.wallet className="h-3 w-3 text-muted-foreground" />
+                <p className="w-fit max-w-[60px] overflow-hidden truncate p-0 text-xs text-muted-foreground">
+                  {tokenBalance ? tokenBalance : "0"}
+                </p>
+                {!hideMax && (
+                  <p
+                    className="cursor-pointer select-none text-xs text-muted-foreground underline hover:text-foreground"
+                    onClick={() => {
+                      setAmount &&
+                        tokenBalance !== "" &&
+                        tokenBalance !== "0" &&
+                        setAmount(tokenBalance?.toString() ?? "");
+                    }}
+                  >
+                    MAX
+                  </p>
+                )}
+              </div>
+              <div className="flex flex-row gap-1">
+                {!hidePrice && (
+                  <p className="self-center p-0 text-xs text-muted-foreground">
+                    {safeNumberAmount !== 0 &&
+                      !Number.isNaN(safeNumberAmount) &&
+                      formatUsd((safeNumberAmount * price).toFixed(2))}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : null}
     </li>
   );
 }
