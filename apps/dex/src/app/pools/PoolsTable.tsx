@@ -1,26 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { useEffectOnce } from "usehooks-ts";
-
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DataTable, NotFoundBear, SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { columns } from "~/components/pools-table-columns";
+import { usePollUserDeposited } from "~/hooks/usePollUserDeposited";
 import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
-import { usePoolTable } from "./usePoolTable";
 import { getPoolUrl } from "./fetchPools";
-import { usePollUserDeposited } from "~/hooks/usePollUserDeposited";
+import { usePoolTable } from "./usePoolTable";
 
 export const PoolSearch = ({
   poolType,
 }: {
   poolType: "allPools" | "userPools";
 }) => {
-  const [sorting, onCustomSorting] = useState<any>([
+  const [sorting, setSorting] = useState<any>([
     {
       id: "tvl",
       desc: true,
@@ -29,17 +27,18 @@ export const PoolSearch = ({
 
   const [isFirstLoading, setIsLoading] = useState(true);
 
-  useEffectOnce(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 500);
+    }, 250);
 
     return () => clearTimeout(timer);
-  });
+  }, []);
 
   const {
     data,
     search,
+    keyword,
     setKeyword,
     setSearch,
     allDataSize,
@@ -50,14 +49,20 @@ export const PoolSearch = ({
   } = usePoolTable(sorting);
 
   const handleNewSort = (newSort: any) => {
+    if (newSort === sorting) return;
     void setAllDataSize(1);
-    onCustomSorting(newSort);
+    setSorting(newSort);
   };
 
   usePollUserDeposited();
   const [isTyping, setIsTyping] = useState(false);
 
   let typingTimer: NodeJS.Timeout;
+
+  useEffect(() => {
+    if (isTyping) return;
+    setKeyword(search);
+  }, [isTyping, search]);
 
   return (
     <div
@@ -91,7 +96,7 @@ export const PoolSearch = ({
               clearTimeout(typingTimer);
               typingTimer = setTimeout(() => {
                 setIsTyping?.(false);
-              }, 2 * 1000);
+              }, 1000);
               return;
             }}
             placeholder="Search..."
@@ -139,8 +144,8 @@ export const PoolSearch = ({
                 key={data.length}
                 data={data ?? []}
                 columns={columns}
-                title={`All Pools (${data.length})`}
-                className="min-w-[1000px] min-h-[300px]"
+                title={`All Pools (${data?.length ?? "0"})`}
+                className="min-h-[300px] min-w-[1000px]"
                 onRowClick={(row: any) =>
                   window.open(getPoolUrl(row.original), "_self")
                 }
