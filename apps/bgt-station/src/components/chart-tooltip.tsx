@@ -2,15 +2,17 @@ import { truncateHash, useGauges } from "@bera/berajs";
 import { getAddress } from "viem";
 
 import { GaugeIcon } from "~/app/validators/validators-table";
+import { GaugeWeight } from "~/hooks/useGaugeWeights";
 
-export const ChartTooltip: React.FC<{
+type ChartToolTipProps = {
   color: string;
   visible: boolean;
-  gauge?: any;
-}> = ({ color, visible, gauge }) => {
+  gauge: GaugeWeight | undefined;
+};
+export function ChartTooltip({ color, visible, gauge }: ChartToolTipProps) {
   if (!visible) return null;
   const { gaugeDictionary } = useGauges();
-  const name = gaugeDictionary[getAddress(gauge.address)]?.name;
+  const name = gauge && gaugeDictionary[getAddress(gauge.address)]?.name;
 
   return (
     <div
@@ -21,17 +23,17 @@ export const ChartTooltip: React.FC<{
         className="text-md flex min-w-[90px] items-center justify-center font-semibold text-white"
         style={{ backgroundColor: color }}
       >
-        {(gauge.percentage * 100).toFixed(2)}%
+        {gauge && (gauge?.percentage * 100).toFixed(2)}%
       </div>
       <div className="flex flex-col items-start justify-center p-3">
         <div className="text-md text-forgeound flex flex-row items-center justify-center gap-2 font-semibold">
-          <GaugeIcon address={gauge.address ?? ""} />
+          <GaugeIcon address={gauge?.address ?? ""} />
           {name ?? "Test default gauge"}
         </div>
         <div className="flex items-start justify-center text-sm text-muted-foreground">
-          {truncateHash(gauge.address)}
+          {truncateHash(gauge?.address)}
         </div>
       </div>
     </div>
   );
-};
+}

@@ -11,7 +11,7 @@ export default function GaugeInfoCard() {
     <Card className="flex w-full flex-col overflow-hidden md:w-[520px]">
       <div className="flex w-full flex-row items-stretch justify-between gap-8 bg-muted p-4">
         <div className="flex flex-row items-start gap-2 text-2xl font-bold">
-          <Icons.bgt className="h-[32px] w-[32px]" /> Total BGT
+          <Icons.bgt className="h-8 w-8" /> Total BGT
         </div>
         <div className="flex flex-col gap-4 text-2xl font-bold">69.99 M</div>
       </div>
