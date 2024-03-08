@@ -51,6 +51,7 @@ export default function RepayBtn({
   const { refetch: userReservesRefetch } = usePollUserReservesData();
 
   useEffect(() => setOpen(false), [isSuccess]);
+  useEffect(() => setAmount(undefined), [open]);
   return (
     <>
       {ModalPortal}
@@ -132,14 +133,16 @@ const RepayModalContent = ({
           balance={balance}
           showExceeding={true}
           selectable={false}
-          setAmount={(amount) => setAmount(amount as `${number}`)}
+          setAmount={(amount) =>
+            setAmount(amount === "" ? undefined : (amount as `${number}`))
+          }
           price={Number(reserveData?.formattedPriceInMarketReferenceCurrency)}
         />
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="flex items-center font-semibold">
+          <div className="font-semibold truncate w-[200px] text-right">
             $
             {formatter.format(
               Number(amount ?? 0) *

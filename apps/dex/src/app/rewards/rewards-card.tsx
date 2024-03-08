@@ -28,7 +28,7 @@ export default function RewardsCard({ pool }: { pool: IUserPool }) {
   return (
     <div className="flex w-full flex-col items-center justify-between gap-4 rounded-2xl border border-border bg-background p-4 md:p-6 lg:flex-row">
       <div className="flex w-full flex-row gap-3">
-        <TokenIconList tokenList={pool.tokens.map((t) => t.address)} />
+        <TokenIconList tokenList={pool.tokens} />
         <Link
           href={getPoolUrl(pool)}
           className="whitespace-nowrap text-xs font-medium leading-tight hover:underline md:text-sm"

@@ -18,7 +18,7 @@ export default function CreatePoolInitialPriceInput({
     <li className={"flex w-full flex-col items-center p-2"}>
       <div className="flex w-full flex-row justify-between ">
         <div className="w-fit flex flex-row gap-1 self-center font-semibold">
-          <TokenIcon address={baseToken?.address} />
+          <TokenIcon address={baseToken?.address} symbol={baseToken?.symbol} />
           {baseToken?.symbol}
         </div>
         <Input

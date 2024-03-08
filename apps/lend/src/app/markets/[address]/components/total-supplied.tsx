@@ -40,9 +40,9 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
           <br />
           specific collateral. For example, if a collateral has an LTV of 75%,{" "}
           <br />
-          the user can borrow up to 0.75 worth of ETH in the principal currency
+          the user can borrow up to 0.75 worth of ETH in the principal currency{" "}
           <br />
-          for every 1 ETH worth of collateral.
+          for every 1 ETH worth of collateral. <br />
         </>
       ),
     },

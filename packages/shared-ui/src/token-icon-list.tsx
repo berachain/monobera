@@ -1,9 +1,10 @@
 import React from "react";
 
 import { TokenIcon } from "./token-icon";
+import { Token } from "@bera/berajs";
 
 interface ITokenIconList {
-  tokenList: string[];
+  tokenList: Token[];
   size?: "3xl" | "2xl" | "xl" | "lg" | "md" | "sm" | "xs";
   showCount?: number;
 }
@@ -20,10 +21,11 @@ export function TokenIconList({
 
   return (
     <div className="ml-[5px] flex items-center">
-      {tokenList?.map((tokenAddress: string) => (
+      {tokenList?.map((token: Token) => (
         <TokenIcon
-          key={tokenAddress}
-          address={tokenAddress}
+          key={token.address}
+          address={token.address}
+          symbol={token.symbol}
           className="ml-[-5px]"
           size={size}
         />

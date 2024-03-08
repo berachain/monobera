@@ -265,10 +265,6 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     (token) => token.address.toLowerCase() !== beraTokenAddress.toLowerCase(),
   );
 
-  console.log({
-    needsApproval,
-    needsApprovalNoBera,
-  });
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
@@ -278,6 +274,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
           {pool?.tokens?.map((token, i) => {
             return (
               <TokenIcon
+                symbol={token.symbol}
                 address={token.address}
                 className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
                 key={token.address}
@@ -384,7 +381,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               title={"Pool Price"}
               value={
                 poolPrice
-                  ? `${formatNumber(poolPrice)} ${baseToken.symbol} = 1 ${
+                  ? `${formatNumber(poolPrice, 4)} ${baseToken.symbol} = 1 ${
                       quoteToken.symbol
                     }`
                   : "-"

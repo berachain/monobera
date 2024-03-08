@@ -1,4 +1,5 @@
 export const formatInputTokenValue = (inputValue: string) => {
+  if (inputValue === "0") return inputValue;
   // Remove all non-numeric characters except for the decimal point, and remove leading zeros
   let filteredValue = inputValue.replace(/^0+/, "").replace(/[^0-9.eE]/g, "");
 
