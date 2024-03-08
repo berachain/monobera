@@ -9,7 +9,7 @@ import POLLING from "~/config/constants/polling";
 
 interface IUseGaugess {
   gaugeList: Gauge[] | undefined;
-  gaugeDictionary: { [key: string]: any } | undefined;
+  gaugeDictionary: { [key: string]: Gauge } | undefined;
   addNewGauge: (gauge: Gauge | undefined) => void;
   removeGauge: (gauge: Gauge) => void;
 }

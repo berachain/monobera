@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { truncateHash, useGauges } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
@@ -24,11 +24,14 @@ const Gauge = ({ address }: { address: string | undefined }) => {
     address === undefined || gaugeDictionary === undefined
       ? ""
       : gaugeDictionary[address]?.name ?? truncateHash(address);
-  const url =
-    address && gaugeDictionary && gaugeDictionary[address]?.url
-      ? gaugeDictionary[address]?.url
-      : `${blockExplorerUrl}/address/${address}`;
-  const name = address && (gaugeDictionary as any)[getAddress(address)]?.name;
+  const url = useMemo(
+    () =>
+      address && gaugeDictionary && gaugeDictionary[address]?.url
+        ? gaugeDictionary[address]?.url
+        : `${blockExplorerUrl}/address/${address}`,
+    [address, gaugeDictionary],
+  );
+  const name = address && gaugeDictionary[getAddress(address)]?.name;
   return (
     <Link
       href={url}
