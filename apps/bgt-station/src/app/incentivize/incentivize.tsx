@@ -71,13 +71,12 @@ export default function Incentivize({}: {}) {
             Set Amount
           </div>
           <div className="border-1 flex flex-col gap-6 border-border">
-            <ul className="relative divide-y divide-border rounded-2xl border">
+            <ul className="divide-y divide-border rounded-2xl border">
               {incentivizeTokens.map((incentivizeToken, index) => (
                 <AddIncentivizeToken
                   key={index}
-                  incentivizeToken={incentivizeToken}
+                  selectedToken={incentivizeToken}
                   index={index}
-                  selectedTokens={selectedTokens}
                   onTokenSelection={onTokenSelection}
                   onRemove={onRemove}
                   onTokenAmountChange={onTokenAmountChange}
