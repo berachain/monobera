@@ -44,17 +44,17 @@ export default function Incentivize({}: {}) {
 
   return (
     <div className="container mx-auto w-full max-w-[480px] px-8 pb-20">
-      <Card className="mx-6 w-full items-center bg-background">
+      <Card className="mx-6 w-full items-center bg-background shadow-lg">
         <CardHeader>
           <CardTitle className="center flex flex-col justify-between text-lg">
             Incentivize a Pool
-            <div className="text-md flex py-2 font-normal text-muted-foreground">
+            <div className="flex py-2 text-sm font-normal text-muted-foreground">
               Please select the address
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <div className="text-md flex font-semibold text-foreground">
+        <CardContent className="flex flex-col gap-2">
+          <div className="flex text-sm font-semibold text-foreground">
             Search/Enter Pool Address
           </div>
           <div className="text-sm leading-tight">
@@ -67,11 +67,11 @@ export default function Incentivize({}: {}) {
               value={poolAddress}
             />
           </div>
-          <div className="text-md flex font-semibold text-foreground">
+          <div className="flex text-sm font-semibold text-foreground">
             Set Amount
           </div>
           <div className="border-1 flex flex-col gap-6 border-border">
-            <ul className="divide-y divide-border rounded-lg border">
+            <ul className="divide-y divide-border rounded-md border">
               {incentivizeTokens.map((incentivizeToken, index) => (
                 <AddIncentivizeToken
                   key={index}
@@ -85,7 +85,7 @@ export default function Incentivize({}: {}) {
             </ul>
           </div>
           <Icons.plusCircle
-            className="mt-4 h-6 w-6 self-center text-muted-foreground"
+            className="m-4 h-6 w-6 self-center text-muted-foreground"
             onClick={onAddToken}
           />
           {/* Placeholder */}
