@@ -67,7 +67,7 @@ export default function UserTokenCard({
     <Card key={asset.symbol} className="bg-muted p-4">
       <div className="flex flex-row items-center justify-between gap-6">
         <div className="flex flex-shrink-0 items-center gap-4 ">
-          <TokenIcon address={asset.address} fetch size="2xl" />
+          <TokenIcon address={asset.address} size="2xl" />
           <div>
             <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
               {type === "user-supply" && "Deposited"}

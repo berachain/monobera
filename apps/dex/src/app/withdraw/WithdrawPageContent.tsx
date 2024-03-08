@@ -279,7 +279,9 @@ export default function WithdrawLiquidityContent({
               title={`Removing ${baseToken.symbol}`}
               value={
                 <div className="flex flex-row gap-1 items-center justify-end">
-                  <p>{baseAmountWithdrawn}</p>
+                  <p>
+                    {formatNumber(getSafeNumber(baseAmountWithdrawn as any))}
+                  </p>
                   <TokenIcon
                     address={baseToken.address}
                     size={"md"}
@@ -292,7 +294,9 @@ export default function WithdrawLiquidityContent({
               title={`Removing ${quoteToken.symbol}`}
               value={
                 <div className="flex flex-row gap-1 items-center justify-end">
-                  <p>{quoteAmountWithdrawn}</p>
+                  <p>
+                    {formatNumber(getSafeNumber(quoteAmountWithdrawn as any))}
+                  </p>
                   <TokenIcon
                     address={quoteToken.address}
                     size={"md"}
@@ -305,7 +309,7 @@ export default function WithdrawLiquidityContent({
               title={"Pool Price"}
               value={
                 poolPrice
-                  ? `${formatNumber(poolPrice)} ${baseToken.symbol} = 1 ${
+                  ? `${formatNumber(poolPrice, 4)} ${baseToken.symbol} = 1 ${
                       quoteToken.symbol
                     }`
                   : "-"

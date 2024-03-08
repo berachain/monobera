@@ -64,7 +64,7 @@ export const Banner = () => {
       />
       <div className="flex h-full w-full flex-shrink-0 flex-col gap-4 rounded-xl border border-amber-400 bg-gradient-to-br from-[#FFF6D7] via-[#FFEAA3] to-[#FFD977] p-4 dark:from-[#413E33] dark:to-[#453509] lg:w-fit">
         <div className="flex items-center justify-center gap-2 text-3xl font-semibold leading-9 lg:justify-start">
-          <TokenIcon address={bgtTokenAddress} fetch />
+          <TokenIcon address={bgtTokenAddress} />
           {isReady && !isLoading ? (
             <span>
               {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(2)}`}
@@ -92,7 +92,7 @@ export const Banner = () => {
       <div className="flex w-full flex-col gap-2 md:items-center md:justify-center lg:items-start">
         <div className="mx-auto flex w-fit items-center rounded-full bg-background pr-4 lg:mx-0">
           <div className="relative flex h-[32px] w-[32px] items-center">
-            <TokenIcon address={bgtTokenAddress} fetch />
+            <TokenIcon address={bgtTokenAddress} />
           </div>
           <div className="text-wrapper flex w-auto items-center align-middle text-lg font-bold">
             {(bgtApr ?? 0).toFixed(2)}% APY

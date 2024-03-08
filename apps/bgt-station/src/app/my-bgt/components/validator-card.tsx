@@ -189,7 +189,7 @@ export default function ValidatorCard({
           validator.bribeTokenList.length === 0 ? (
             <div className="text-muted-foreground">No active bribes</div>
           ) : (
-            <TokenIconList size="2xl" tokenList={validator.bribeTokenList} />
+            <TokenIconList size="2xl" tokenList={[]} />
           )}
         </div>
         <div className="flex items-center justify-center gap-4 md:hidden">
