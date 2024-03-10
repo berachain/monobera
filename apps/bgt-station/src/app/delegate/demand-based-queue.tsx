@@ -25,7 +25,7 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
   // TODO: switch to use the new hook
   const { useDelegatorUnbondingQueue } = usePollDelegatorUnbonding();
 
-  const { unbondingQueue, isLoading } = useDelegatorUnbondingQueue;
+  const { result: unbondingQueue, isLoading } = useDelegatorUnbondingQueue;
 
   return (
     <div className="container mx-auto flex w-full max-w-[800px] flex-col gap-8 pb-20">
