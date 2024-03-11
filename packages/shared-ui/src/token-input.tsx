@@ -195,8 +195,13 @@ export function TokenInput({
                 {!hidePrice && (
                   <p className="self-center p-0 text-xs text-muted-foreground">
                     {safeNumberAmount !== 0 &&
-                      !Number.isNaN(safeNumberAmount) &&
-                      formatUsd((safeNumberAmount * price).toFixed(2))}
+                      !Number.isNaN(safeNumberAmount) && (
+                        <>
+                          {safeNumberAmount * price < 0.01
+                            ? "< $0.01"
+                            : formatUsd((safeNumberAmount * price).toFixed(2))}
+                        </>
+                      )}
                   </p>
                 )}
               </div>
