@@ -145,7 +145,7 @@ export const PoolSearch = ({
                 data={data ?? []}
                 columns={columns}
                 title={`All Pools (${data?.length ?? "0"})`}
-                className="min-h-[300px] min-w-[1000px]"
+                className="min-w-[1000px]"
                 onRowClick={(row: any) =>
                   window.open(getPoolUrl(row.original), "_self")
                 }
