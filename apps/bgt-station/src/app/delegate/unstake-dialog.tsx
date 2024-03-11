@@ -27,7 +27,7 @@ export function UnstakeDialog({ setActiveAction }: Props) {
             Redeeming BGT will convert it to BERA, this is a irreversible
             action.
           </div>
-          <div className="mt-6 flex flex-col gap-2">
+          <div className="mt-6 flex w-full flex-col gap-2">
             <Button
               className="w-full"
               variant="success"
