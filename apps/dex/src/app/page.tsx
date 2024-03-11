@@ -44,6 +44,7 @@ const getTvl = async () => {
     })
       .then((res) => res.json())
       .catch((e: any) => {
+        console.log("fetching error", e);
         return undefined;
       });
 
