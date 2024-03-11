@@ -28,6 +28,7 @@ import { type Address } from "wagmi";
 
 import ValidatorInput from "~/components/validator-input";
 import { DelegateEnum, ImageMapEnum } from "./types";
+import { UnstakeDialog } from "./unstake-dialog";
 import { UnstakeInfoBanner } from "./unstake-info-banner";
 
 export default function Delegate({
@@ -141,7 +142,7 @@ export default function Delegate({
   return (
     <div className="container mx-auto w-full max-w-[600px] px-8 pb-20 lg:w-[600px]">
       <Tabs
-        defaultValue={action}
+        value={activeAction}
         onValueChange={(value) => setActiveAction(value as DelegateEnum)}
       >
         <TabsList className="w-full">
@@ -280,6 +281,9 @@ export default function Delegate({
         </ActionButton>
       </Card>
       {action === DelegateEnum.UNBOND && <UnstakeInfoBanner />}
+      {action === DelegateEnum.UNBOND && (
+        <UnstakeDialog setActiveAction={setActiveAction} />
+      )}
     </div>
   );
 }
