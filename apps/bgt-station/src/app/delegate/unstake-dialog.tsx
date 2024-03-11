@@ -17,9 +17,9 @@ export function UnstakeDialog({ setActiveAction }: Props) {
   const router = useRouter();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[400px]">
+      <DialogContent className="p-4 sm:max-w-[400px]">
         <div className="flex flex-col items-center justify-center gap-4">
-          <div className="items-center justify-center text-center text-xl font-semibold">
+          <div className="mt-2 items-center justify-center text-center text-xl font-semibold">
             Are you sure <br />
             you want to Redeem?
           </div>
