@@ -25,6 +25,7 @@ import {
   SubmissionModal,
   SuccessModal,
 } from "../txn-modals";
+import { useAnalytics } from "../utils/analytics";
 import {
   CLOSE_MODAL,
   OPEN_MODAL,
@@ -109,6 +110,8 @@ export const useTxn = ({
 
   const addRecentTransaction = useAddRecentTransaction();
 
+  const { captureException, track } = useAnalytics();
+
   const { write, isLoading, isSubmitting, isSuccess, isError } =
     useBeraContractWrite({
       /**
@@ -164,6 +167,20 @@ export const useTxn = ({
             });
           }
         }
+        track("transaction_failed", {
+          operation: "useBeraContractWrite",
+          message: error?.message,
+          actionType,
+        });
+        if (
+          !error?.message.includes("User rejected the request.") &&
+          !error?.message.includes("insufficient funds")
+        ) {
+          // only capture the exception if the error is not related to user manual rejection or insufficient funds
+          captureException(error, {
+            data: { message, actionType },
+          });
+        }
         onError?.(error);
       },
 
@@ -201,6 +218,12 @@ export const useTxn = ({
           actionType,
           timestamp: Date.now(),
         });
+        track("transaction_success", {
+          message,
+          actionType,
+          hash: result,
+          operation: "useBeraContractWrite",
+        });
         onSuccess?.(result);
       },
 
@@ -226,6 +249,11 @@ export const useTxn = ({
         if (!disableModal) {
           openModal("loadingModal", undefined);
         }
+        track("transaction_started", {
+          message,
+          actionType,
+          operation: "useBeraContractWrite",
+        });
         onLoading?.();
       },
 
@@ -320,6 +348,20 @@ export const useTxn = ({
           });
         }
       }
+      track("transaction_failed", {
+        message: error?.message,
+        actionType,
+        operation: "useValueSend",
+      });
+      if (
+        !error?.message.includes("User rejected the request.") &&
+        !error?.message.includes("insufficient funds")
+      ) {
+        // only capture the exception if the error is not related to user manual rejection or insufficient funds
+        captureException(error, {
+          data: { message, actionType },
+        });
+      }
       onError?.(error);
     },
 
@@ -357,6 +399,12 @@ export const useTxn = ({
         timestamp: Date.now(),
         actionType: TransactionActionType.BORROW,
       });
+      track("transaction_success", {
+        message,
+        actionType,
+        hash: result,
+        operation: "useValueSend",
+      });
       onSuccess?.(result);
     },
 
@@ -382,6 +430,11 @@ export const useTxn = ({
       if (!disableModal) {
         openModal("loadingModal", undefined);
       }
+      track("transaction_started", {
+        message,
+        actionType,
+        operation: "useValueSend",
+      });
       onLoading?.();
     },
 
