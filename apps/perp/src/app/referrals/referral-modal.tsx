@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import {
   REFERRALS_ABI,
   TransactionActionType,
@@ -14,14 +13,15 @@ import { useTxn } from "@bera/shared-ui/src/hooks";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { isAddress } from "viem";
+import { isAddress, type Address } from "viem";
 import { ConnectButton } from "@bera/shared-ui";
 
 const BLANK_WALLET_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-export const ReferralModal = () => {
+export const ReferralModal = ({
+  referralAddress,
+}: { referralAddress: Address | undefined }) => {
   const [open, setOpen] = useState(false);
-  const searchParams = useSearchParams();
 
   const { write, ModalPortal, isSuccess } = useTxn({
     actionType: TransactionActionType.REFER,
@@ -33,14 +33,6 @@ export const ReferralModal = () => {
   const referralsContract = perpsReferralsAddress;
 
   const { isConnected, account } = useBeraJs();
-
-  const referralAddress = useMemo(() => {
-    const ref = searchParams.get("ref");
-    if (isAddress(ref ?? "")) {
-      return ref;
-    }
-    return null;
-  }, [searchParams]);
 
   const { isLoading, useGetTraderReferrer } = usePollTraderReferral(
     account ?? "",

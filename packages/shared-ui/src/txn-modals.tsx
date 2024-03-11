@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useBeraConfig } from "@bera/berajs";
+import { blockExplorerName } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import Balancer from "react-wrap-balancer";
@@ -45,8 +46,7 @@ const BaseModal = ({
             onClick={() => window.open(href, "_blank")}
             className="w-full self-center"
           >
-            View Txn on{" "}
-            {process.env.NEXT_PUBLIC_BLOCK_EXPLORER_NAME ?? "Block Explorer"}
+            View Txn on {blockExplorerName}
           </Button>
         )}
       </DialogContent>

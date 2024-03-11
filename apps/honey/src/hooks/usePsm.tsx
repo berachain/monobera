@@ -90,8 +90,12 @@ export const usePsm = () => {
     ModalPortal,
   } = useTxn({
     message: isMint
-      ? `Mint ${Number(toAmount).toFixed(2)} Honey`
-      : `Redeem ${Number(fromAmount).toFixed(2)} Honey`,
+      ? `Mint ${
+          Number(toAmount) < 0.01 ? "<0.01" : Number(toAmount).toFixed(2)
+        } Honey`
+      : `Redeem ${
+          Number(fromAmount) < 0.01 ? "<0.01" : Number(fromAmount).toFixed(2)
+        } Honey`,
     actionType: isMint
       ? TransactionActionType.MINT_HONEY
       : TransactionActionType.REDEEM_HONEY,

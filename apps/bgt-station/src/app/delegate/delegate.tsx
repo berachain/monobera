@@ -27,6 +27,8 @@ import { useTheme } from "next-themes";
 
 import ValidatorInput from "~/components/validator-input";
 import { DelegateEnum, ImageMapEnum } from "./types";
+import { UnstakeDialog } from "./unstake-dialog";
+import { UnstakeInfoBanner } from "./unstake-info-banner";
 
 export default function Delegate({
   action,
@@ -137,9 +139,9 @@ export default function Delegate({
   const bgtBalance = useBgtBalance();
 
   return (
-    <div className="container mx-auto w-full max-w-[600px] pb-20">
+    <div className="container mx-auto w-full max-w-[600px] px-8 pb-20 lg:w-[600px]">
       <Tabs
-        defaultValue={action}
+        value={activeAction}
         onValueChange={(value) => setActiveAction(value as DelegateEnum)}
       >
         <TabsList className="w-full">
@@ -277,6 +279,10 @@ export default function Delegate({
           </Button>
         </ActionButton>
       </Card>
+      {action === DelegateEnum.UNBOND && <UnstakeInfoBanner />}
+      {action === DelegateEnum.UNBOND && (
+        <UnstakeDialog setActiveAction={setActiveAction} />
+      )}
     </div>
   );
 }

@@ -269,7 +269,8 @@ export const usePollDelegatorUnbonding = () => {
   };
 
   const useDelegatorUnbondingQueue = () => {
-    const { data } = useSWRImmutable<UnbondingListResponse>(QUERY_KEY);
+    const { data, isLoading } =
+      useSWRImmutable<UnbondingListResponse>(QUERY_KEY);
     const result = useMemo(() => {
       const temp = data?.entries?.map((entry) => {
         return entry?.entries?.map((entryData) => {
@@ -284,7 +285,7 @@ export const usePollDelegatorUnbonding = () => {
         .sort((a, b) => a.completionTime.localeCompare(b.completionTime));
       return sortedEntries ?? [];
     }, [data]);
-    return result;
+    return { result, isLoading };
   };
   return {
     useDelegatorUnbondingEntries,
