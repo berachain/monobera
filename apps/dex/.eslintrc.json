@@ -1,0 +1,17 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "@sentry/nextjs",
+            "importNames": ["captureException"],
+            "message": "Please use captureException from ~/util/analytics.ts instead."
+          }
+        ]
+      }
+    ]
+  }
+}
