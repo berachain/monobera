@@ -26,6 +26,7 @@ import {
   SubmissionModal,
   SuccessModal,
 } from "../txn-modals";
+import { useAnalytics } from "../utils/analytics";
 import {
   CLOSE_MODAL,
   OPEN_MODAL,
@@ -60,6 +61,8 @@ interface UseTxnApi {
 }
 
 const DURATION = 3000;
+
+const { captureException, track } = useAnalytics();
 
 /**
  * @typedef {Object} IUseTxn
@@ -168,6 +171,20 @@ export const useOctTxn = ({
             });
           }
         }
+        track("transaction_failed", {
+          message: error?.message,
+          actionType,
+          operation: "useOctContractWrite",
+        });
+        if (
+          !error?.message.includes("User rejected the request.") &&
+          !error?.message.includes("insufficient funds")
+        ) {
+          // only capture the exception if the error is not related to user manual rejection or insufficient funds
+          captureException(error, {
+            data: { message, actionType },
+          });
+        }
         onError?.(error);
       },
 
@@ -205,6 +222,11 @@ export const useOctTxn = ({
           timestamp: Date.now(),
           actionType,
         });
+        track("transaction_success", {
+          message,
+          actionType,
+          operation: "useOctContractWrite",
+        });
         onSuccess?.(result);
       },
 
@@ -230,6 +252,11 @@ export const useOctTxn = ({
         if (!disableModal) {
           openModal("loadingModal", undefined);
         }
+        track("transaction_started", {
+          message,
+          actionType,
+          operation: "useOctContractWrite",
+        });
         onLoading?.();
       },
 
@@ -324,6 +351,21 @@ export const useOctTxn = ({
           });
         }
       }
+      track("transaction_failed", {
+        message: error?.message,
+        actionType,
+
+        operation: "useOctValueSend",
+      });
+      if (
+        !error?.message.includes("User rejected the request.") &&
+        !error?.message.includes("insufficient funds")
+      ) {
+        // only capture the exception if the error is not related to user manual rejection or insufficient funds
+        captureException(error, {
+          data: { message, actionType },
+        });
+      }
       onError?.(error);
     },
 
@@ -360,6 +402,11 @@ export const useOctTxn = ({
       //   description: message,
       //   timestamp: Date.now(),
       // });
+      track("transaction_success", {
+        message,
+        actionType,
+        operation: "useOctValueSend",
+      });
       onSuccess?.(result);
     },
 
@@ -385,6 +432,11 @@ export const useOctTxn = ({
       if (!disableModal) {
         openModal("loadingModal", undefined);
       }
+      track("transaction_started", {
+        message,
+        actionType,
+        operation: "useOctValueSend",
+      });
       onLoading?.();
     },
 
