@@ -3,6 +3,14 @@
 import React, { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
+  encodeCrocPrice,
+  encodeWarmPath,
+  initPool,
+  transformLimits,
+  type BeraSdkResponse,
+  type PriceRange,
+} from "@bera/beracrocswap";
+import {
   CROCSWAP_DEX,
   TransactionActionType,
   formatNumber,
@@ -10,6 +18,7 @@ import {
   useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
+import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
 import { crocDexAddress } from "@bera/config";
 import {
   ActionButton,
@@ -19,24 +28,15 @@ import {
   useSlippage,
   useTxn,
 } from "@bera/shared-ui";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { parseUnits } from "viem";
+import { encodeAbiParameters, parseAbiParameters, parseUnits } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import useCreatePool from "~/hooks/useCreatePool";
-import {
-  type BeraSdkResponse,
-  initPool,
-  type PriceRange,
-  encodeWarmPath,
-  transformLimits,
-  encodeCrocPrice,
-} from "@bera/beracrocswap";
-import { encodeAbiParameters, parseAbiParameters } from "viem";
-import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
 import { POOLID, SWAPFEE } from "~/hooks/useCreateTokenWeights";
 
 type Props = {
@@ -99,10 +99,17 @@ export function CreatePoolPreview({
   });
   const router = useRouter();
 
+  const { captureException, track } = useAnalytics();
+
   const { write, ModalPortal } = useTxn({
     message: "Create new pool",
     onSuccess: () => {
+      track("create_pool_success");
       router.push("/pools");
+    },
+    onError: (e: Error | undefined) => {
+      track("create_pool_failed");
+      captureException(e);
     },
     actionType: TransactionActionType.CREATE_POOL,
   });

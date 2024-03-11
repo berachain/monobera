@@ -148,6 +148,11 @@ const errorMsgMap: ErrorMessages = {
       keywords: ["unexpected withdraw amount from Rewards Module"],
       errorMSG: "BGT claiming is currently disabled for maintenance.",
     },
+    STALE_FEED: {
+      keywords: ["STALE_FEED"],
+      errorMSG:
+        "The price feed from the oracle is currently stale. Please try again later.",
+    },
   },
 };
 
