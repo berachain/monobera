@@ -63,7 +63,7 @@ export default function Data({ arcade }: { arcade: boolean }) {
           <DataCard
             title="Honey Price"
             value="$1.00"
-            icon={<Icons.honey />}
+            icon={<Icons.honey className="w-6 h-6"/>}
             arcade={arcade}
             isLoading={loading}
           />

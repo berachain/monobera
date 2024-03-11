@@ -93,6 +93,8 @@ export const useHoneyEvents = () => {
 
   const isRedemptionDataEmpty = redemptionData?.[0]?.length === 0;
 
+  const isAllDataEmpty = allData?.[0]?.length === 0;
+
   const isMintDataReachingEnd =
     isMintDataEmpty ||
     (mintData && (mintData[mintData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
@@ -100,9 +102,9 @@ export const useHoneyEvents = () => {
     isRedemptionDataEmpty ||
     (redemptionData &&
       (redemptionData[redemptionData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
-
   const isAllDataReachingEnd =
-    isMintDataReachingEnd && isRedemptionDataReachingEnd;
+    isAllDataEmpty ||
+    (allData && (allData[allData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
 
   return {
     allData: allData
