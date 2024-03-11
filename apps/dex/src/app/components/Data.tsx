@@ -51,13 +51,13 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
         <DataCard
           title="Total Value Locked"
           isLoading={!isDataReady}
-          value={formatUsd(tvl)}
+          value={tvl ? formatUsd(tvl) : "-"}
           icon={<Icons.lock className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard
           title="24H Volume"
           isLoading={!isDataReady}
-          value={formatUsd(volume)}
+          value={volume ? formatUsd(volume) : "-"}
           icon={<Icons.candleStick className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard

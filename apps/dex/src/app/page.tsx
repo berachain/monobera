@@ -3,6 +3,7 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { Documentation, Footer } from "@bera/shared-ui";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 
 import { getMetaTitle } from "~/utils/metadata";
 import Data from "./components/Data";
@@ -37,9 +38,13 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function Homepage() {
+  const { captureException } = useAnalytics();
   const data = await getTvlAndVolume()
     .then((res) => res)
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      captureException(e);
+    });
+
   try {
     return (
       <>
