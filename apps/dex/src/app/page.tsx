@@ -41,7 +41,9 @@ export default async function Homepage() {
   const { captureException } = useAnalytics();
   const data = await getTvlAndVolume()
     .then((res) => res)
-    .catch((e) => {});
+    .catch((e) => {
+      captureException(e);
+    });
 
   try {
     return (
