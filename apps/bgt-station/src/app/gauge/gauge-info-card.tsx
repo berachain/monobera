@@ -9,7 +9,7 @@ import { Icons } from "@bera/ui/icons";
 export default function GaugeInfoCard() {
   return (
     <Card className="flex w-full flex-col overflow-hidden sm:max-w-[520px]">
-      <div className="flex w-full flex-row items-stretch justify-between gap-8 bg-muted p-4">
+      <div className="flex w-full flex-row items-stretch justify-between gap-8 border-b border-b-muted bg-muted p-4">
         <div className="flex flex-row items-start gap-2 text-2xl font-bold">
           <Icons.bgt className="h-8 w-8" /> Total BGT
         </div>
@@ -24,7 +24,7 @@ export default function GaugeInfoCard() {
             150.69 M
           </div>
         </div>
-        <div className="flex w-full flex-row items-stretch justify-between">
+        <span className="flex w-full flex-row items-stretch justify-between">
           <div className="text-md flex items-start gap-4 text-muted-foreground">
             Active Bribes
           </div>
@@ -34,12 +34,12 @@ export default function GaugeInfoCard() {
               (42 Active Gauges)
             </div>
           </div>
-        </div>
+        </span>
         <div className="flex w-full flex-row items-stretch justify-between">
           <div className="text-md flex flex-col items-start gap-4 text-muted-foreground">
             Total No. of Validators
           </div>
-          <div className="text-righ flex flex-row flex-wrap items-end justify-end gap-1">
+          <span className="text-righ flex flex-row flex-wrap items-end justify-end gap-1">
             <div className="text-md flex flex-col font-semibold text-success-foreground">
               69 Active
             </div>
@@ -49,10 +49,10 @@ export default function GaugeInfoCard() {
             <div className="text-md flex flex-col font-semibold text-info-foreground">
               80 Total
             </div>
-          </div>
+          </span>
         </div>
       </div>
-      <div className="flex w-full flex-col items-center justify-center bg-muted sm:flex-row sm:items-stretch sm:justify-between lg:flex-row">
+      <div className="flex w-full flex-col items-center justify-center border-t border-t-muted bg-muted  sm:flex-row sm:items-stretch sm:justify-between lg:flex-row">
         <div className="hidden sm:block lg:max-w-[200px]">
           <Image
             src={`${cloudinaryUrl}/bears/m7abj0nxzpkh5mcuz5g2`}

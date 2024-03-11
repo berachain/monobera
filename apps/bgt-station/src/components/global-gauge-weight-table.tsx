@@ -26,8 +26,8 @@ const Gauge = ({ address }: { address: string | undefined }) => {
       : gaugeDictionary[address]?.name ?? truncateHash(address);
   const url = useMemo(
     () =>
-      address && gaugeDictionary && gaugeDictionary[address]?.url
-        ? gaugeDictionary[address]?.url
+      address && gaugeDictionary && gaugeDictionary[getAddress(address)]?.url
+        ? gaugeDictionary[getAddress(address)]?.url
         : `${blockExplorerUrl}/address/${address}`,
     [address, gaugeDictionary],
   );
