@@ -21,7 +21,7 @@ export function UnstakeDialog({ setActiveAction }: Props) {
         <div className="flex flex-col items-center justify-center gap-4">
           <div className="items-center justify-center text-center text-xl font-semibold">
             Are you sure <br />
-            you want to redeem?
+            you want to Redeem?
           </div>
           <div className="flex items-center justify-center text-center text-sm font-medium text-muted-foreground">
             Redeeming BGT will convert it to BERA, this is a irreversible
