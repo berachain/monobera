@@ -1,4 +1,4 @@
-import { type Address, type Chain } from "wagmi";
+import { type Address, type Chain } from "viem";
 
 interface PrecompileMapping {
   [key: string]: Address;

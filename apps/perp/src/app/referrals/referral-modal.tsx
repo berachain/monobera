@@ -15,7 +15,6 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { isAddress } from "viem";
-import { type Address } from "wagmi";
 import { ConnectButton } from "@bera/shared-ui";
 
 const BLANK_WALLET_ADDRESS = "0x0000000000000000000000000000000000000000";

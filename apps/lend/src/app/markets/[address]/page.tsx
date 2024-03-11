@@ -1,7 +1,7 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import { honeyTokenAddress } from "@bera/config";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import IndividualMarketAnalytics from "./individual-market-analytics";
 

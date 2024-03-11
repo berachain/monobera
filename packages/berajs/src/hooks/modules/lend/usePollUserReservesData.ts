@@ -15,6 +15,7 @@ export const usePollUserReservesData = () => {
   const { account, error } = useBeraJs();
   const QUERY_KEY = [account, "getUserReservesData"];
   useSWR(QUERY_KEY, async () => {
+    if (!publicClient) return undefined;
     if (!error && account) {
       try {
         const result = (await publicClient.readContract({

@@ -18,8 +18,7 @@ import {
   nativeTokenAddress,
 } from "@bera/config";
 import { useSlippage } from "@bera/shared-ui/src/hooks";
-import { formatUnits } from "viem";
-import { type Address } from "wagmi";
+import { type Address, formatUnits } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";
 

@@ -5,7 +5,7 @@ import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { mutate } from "swr";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 

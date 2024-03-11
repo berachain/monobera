@@ -28,12 +28,13 @@ export function TransactionStoreProvider({
   // Use existing store if it exists, or lazily create one
   const [store] = useState(
     () =>
-      storeSingleton ?? (storeSingleton = createTransactionStore({ provider })),
+      storeSingleton ??
+      (storeSingleton = createTransactionStore({ provider: provider as any })),
   );
 
   // Keep store provider up to date with any wagmi changes
   useEffect(() => {
-    store.setProvider(provider);
+    store.setProvider(provider as any);
   }, [store, provider]);
 
   // Wait for pending transactions whenever address or chainId changes

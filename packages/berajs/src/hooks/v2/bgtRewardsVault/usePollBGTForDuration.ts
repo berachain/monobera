@@ -4,7 +4,6 @@ import { usePublicClient } from "wagmi";
 
 import POLLING from "~/config/constants/polling";
 import { BERACHAIN_REWARDS_VAULT_ABI } from "~/config/v2/abi";
-import { useBeraConfig } from "~/contexts";
 
 export const usePollBGTReward = () => {
   const method = "rewardsDuration";
@@ -13,6 +12,7 @@ export const usePollBGTReward = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       try {
         const bgtRewardForDuration = await publicClient.readContract({
           address: "0x0", // TODO: BERACHAIN_REWARDS_VAULT contract address

@@ -1,8 +1,7 @@
 import { usePollEpochs, usePollPrices, useTokens } from "@bera/berajs";
 import useSWR from "swr";
 // import useSWRImmutable from "swr/immutable";
-import { formatUnits, getAddress } from "viem";
-import { erc20ABI, type Address } from "wagmi";
+import { formatUnits, getAddress, erc20Abi, type Address } from "viem";
 
 interface EpochBribe {
   bribePerProposal: {
@@ -72,7 +71,7 @@ export const useHistoricalBribes = (epochs: EpochBribe[]) => {
         }
         decimalCalls.push({
           address: token,
-          abi: erc20ABI as unknown as (typeof erc20ABI)[],
+          abi: erc20Abi as unknown as (typeof erc20Abi)[],
           functionName: "decimals",
           args: [],
         });

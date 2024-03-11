@@ -220,7 +220,7 @@ export class RouterService {
       | SimulateContractReturnType<
           any[],
           "batchSwap",
-          Chain | undefined,
+          any,
           undefined
         >
       | any
@@ -248,7 +248,7 @@ export class RouterService {
         address: DEX_PRECOMPILE_ADDRESS as Address,
         abi: DEX_PRECOMPILE_ABI as any[],
         functionName: "getPreviewBatchSwap",
-        args: [swapType, batchSwapSteps],
+        args: [swapType, batchSwapSteps as any],
       });
     });
 

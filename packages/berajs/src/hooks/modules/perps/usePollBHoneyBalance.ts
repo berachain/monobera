@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits } from "viem";
-import { erc20ABI, usePublicClient, type Address } from "wagmi";
+import { type Address, erc20Abi, formatUnits } from "viem";
+import { usePublicClient } from "wagmi";
 
 import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
@@ -13,11 +13,13 @@ export const usePollBHoneyBalance = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
+
       if (isConnected) {
         try {
           const result = await publicClient.readContract({
             address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
-            abi: erc20ABI,
+            abi: erc20Abi,
             functionName: "balanceOf",
             args: [account as Address],
           });

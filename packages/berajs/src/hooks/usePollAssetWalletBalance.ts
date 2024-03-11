@@ -1,8 +1,8 @@
 import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, getAddress } from "viem";
-import { erc20ABI, usePublicClient, type Address } from "wagmi";
+import { type Address, erc20Abi, formatUnits, getAddress } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { MULTICALL3_ABI } from "..";
 import { type Token } from "../api/currency/tokens";
@@ -33,6 +33,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (!account || error || !tokenList) return undefined;
       if (account && !error && tokenList) {
         const fullTokenList = [
@@ -51,7 +52,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
           }
           return {
             address: item.address as `0x${string}`,
-            abi: erc20ABI,
+            abi: erc20Abi,
             functionName: "balanceOf",
             args: [account],
           };

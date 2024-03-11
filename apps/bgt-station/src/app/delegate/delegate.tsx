@@ -22,9 +22,8 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { parseUnits } from "viem";
+import { parseUnits, type Address } from "viem";
 import { useTheme } from "next-themes";
-import { type Address } from "wagmi";
 
 import ValidatorInput from "~/components/validator-input";
 import { DelegateEnum, ImageMapEnum } from "./types";

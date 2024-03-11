@@ -1,8 +1,7 @@
 "use client";
 
 import { useCallback, useReducer } from "react";
-import { usePublicClient, useWalletClient } from "wagmi";
-import { prepareWriteContract } from "wagmi/actions";
+import { usePublicClient, useWriteContract } from "wagmi";
 
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
@@ -23,7 +22,7 @@ const useBeraContractWrite = ({
 }: IUseContractWrite = {}): useContractWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { data: walletClient } = useWalletClient();
+  const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
   const { networkConfig } = useBeraConfig();
@@ -45,21 +44,20 @@ const useBeraContractWrite = ({
       dispatch({ type: ActionEnum.LOADING });
       onLoading?.();
       let receipt: any | undefined;
+      if (!publicClient) return;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
-        const { request: _request } = await prepareWriteContract({
+        const { request } = await publicClient.simulateContract({
           address: address,
           abi: abi,
           functionName: functionName,
           args: params,
           value: value,
           nonce: userNonce,
+          account: account,
         });
-        // Directly pass request to writeContract
-
-        receipt = await walletClient?.writeContract(_request);
+        receipt = await writeContractAsync(request);
         dispatch({ type: ActionEnum.SUBMITTING });
-
         if (receipt) {
           onSubmission?.(receipt);
           const confirmationReceipt: any =
@@ -101,7 +99,7 @@ const useBeraContractWrite = ({
       }
     },
     [
-      walletClient,
+      writeContractAsync,
       account,
       publicClient,
       userNonce,

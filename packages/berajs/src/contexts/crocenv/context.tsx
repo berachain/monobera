@@ -33,7 +33,7 @@ const CrocEnvContextProvider = ({ children }: PropsWithChildren) => {
 
   const client = usePublicClient({ chainId: chainId || undefined });
 
-  const provider = useEthersProvider(client);
+  const provider = useEthersProvider(client as any);
 
   const setNewCrocEnv = () => {
     if (!provider) {

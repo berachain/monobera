@@ -13,8 +13,7 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits } from "viem";
-import { type Address } from "wagmi";
+import { formatUnits, type Address } from "viem";
 
 import { formatCommission } from "~/utils/formatCommission";
 

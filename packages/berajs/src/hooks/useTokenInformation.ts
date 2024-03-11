@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useReducer, useState } from "react";
-import { usePublicClient } from "wagmi";
-import { fetchToken } from "wagmi/actions";
+import { useConfig, usePublicClient } from "wagmi";
+import { getToken } from "@wagmi/core";
 
 import { type Token } from "~/api/currency/tokens";
 import { ActionEnum, initialState, reducer } from "../utils/stateReducer";
@@ -29,7 +29,7 @@ const useTokenInformation = (): useTokenInformationApi => {
   );
 
   const publicClient = usePublicClient();
-
+  const config = useConfig();
   const read = useCallback(
     async ({
       address,
@@ -37,13 +37,15 @@ const useTokenInformation = (): useTokenInformationApi => {
     }: IuseTokenInformation): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
       try {
-        const token = await fetchToken({ address: address as `0x${string}` });
+        const token = await getToken(config, {
+          address: address as `0x${string}`,
+        });
 
         const formattedToken: Token = {
           address: address,
           decimals: token.decimals,
-          symbol: token.symbol,
-          name: token.name,
+          symbol: token.symbol as string,
+          name: token.name as string,
           default: isDefault,
         };
 

@@ -13,6 +13,7 @@ export const useIsDelegated = () => {
   const { data: isDelegated, isLoading } = useSWRImmutable(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       try {
         const result = await publicClient.readContract({
           address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,

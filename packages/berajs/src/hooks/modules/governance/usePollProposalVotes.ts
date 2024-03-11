@@ -44,6 +44,7 @@ export const usePollProposalVotes = (proposalId: number) => {
   const QUERY_KEY = [method, proposalId, validatorAddresses];
   const { isLoading } = useSWR(QUERY_KEY, async () => {
     try {
+      if (!publicClient) return undefined;
       const result: Vote[] = await client
         .query({
           query: getVotes,
@@ -149,6 +150,8 @@ export const usePollProposalVotes = (proposalId: number) => {
     const { useTotalDelegated } = usePollActiveValidators();
     const totalBGTDelegated = useTotalDelegated();
     const { data = undefined } = useSWRImmutable([proposalId], async () => {
+      if (!publicClient) return undefined;
+
       const result = (await publicClient
         .readContract({
           address: networkConfig.precompileAddresses

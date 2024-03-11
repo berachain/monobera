@@ -17,8 +17,7 @@ import { DataTable, ValidatorIcon, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { mutate } from "swr";
-import { type Address } from "wagmi";
-
+import { type Address } from "viem";
 import { Banner } from "./banner";
 
 export default function UnbondingQueue({

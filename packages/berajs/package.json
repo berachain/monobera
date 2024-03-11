@@ -19,12 +19,13 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
-    "@bera/config": "0.1.0",
     "@bera/beracrocswap": "0.1.0",
+    "@bera/config": "0.1.0",
     "@bera/graphql": "0.1.0",
-    "@rainbow-me/rainbowkit": "^1.2.0",
-    "bignumber.js": "^9.1.2",
+    "@rainbow-me/rainbowkit": "^2.0.1",
+    "@tanstack/react-query": "^5.26.3",
     "bech32": "^2.0.0",
+    "bignumber.js": "^9.1.2",
     "crypto-js": "^4.1.1",
     "ethers": "^5.5.3",
     "lodash": "^4.17.21",
@@ -32,8 +33,8 @@
     "react-device-detect": "^2.2.3",
     "sha3": "^2.1.4",
     "swr": "^2.1.5",
-    "viem": "~1.19.13",
-    "wagmi": "^1.4.10"
+    "viem": "~2.7.22",
+    "wagmi": "^2.5.7"
   },
   "peerDependencies": {
     "react": "^18.2.0",

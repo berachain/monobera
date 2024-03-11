@@ -16,6 +16,7 @@ export const usePollReservesDataList = () => {
 
   const QUERY_KEY = ["getReservesDataList"];
   const swrResponse = useSWR(QUERY_KEY, async () => {
+    if (!publicClient) return undefined;
     try {
       const result = (await publicClient.readContract({
         address: lendUIDataProviderAddress,

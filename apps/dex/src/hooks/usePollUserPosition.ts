@@ -2,15 +2,14 @@ import { POLLING } from "@bera/shared-ui/src/utils";
 import useSWR, { mutate } from "swr";
 import { type PoolV2 } from "~/app/pools/fetchPools";
 import useSWRImmutable from "swr/immutable";
-import { getCrocErc20LpAddress, useBeraConfig, useBeraJs } from "@bera/berajs";
+import { getCrocErc20LpAddress, useBeraJs } from "@bera/berajs";
 import { client, getTokenHoneyPrices } from "@bera/graphql";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { toHex } from "viem";
 import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
-import { formatUnits } from "viem";
-import { getAddress, parseUnits } from "viem";
+import { getAddress, erc20Abi } from "viem";
 import { type IUserPosition } from "./usePollUserDeposited";
-import { erc20ABI, usePublicClient } from "wagmi";
+import { usePublicClient } from "wagmi";
 import BigNumber from "bignumber.js";
 
 interface AmbientPosition {
@@ -53,6 +52,7 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (!account || !pool || !spotPrice) {
         return undefined;
       }
@@ -81,7 +81,7 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
 
         const lpBalanceCall = publicClient.readContract({
           address: getCrocErc20LpAddress(pool.base, pool.quote) as any,
-          abi: erc20ABI,
+          abi: erc20Abi,
           functionName: "balanceOf",
           args: [account],
         });

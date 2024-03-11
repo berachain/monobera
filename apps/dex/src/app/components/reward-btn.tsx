@@ -12,8 +12,7 @@ import { bgtTokenAddress, rewardsAddress } from "@bera/config";
 import { ActionButton, TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
-import { parseEther } from "viem";
-import { type Address } from "wagmi";
+import { parseEther, type Address } from "viem";
 
 export function RewardBtn({ poolAddress, ...props }: any) {
   const { isReady } = useBeraJs();

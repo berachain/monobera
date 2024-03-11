@@ -32,6 +32,8 @@ export const usePollDelegatorValidators = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
+
       if (isConnected) {
         const result = (await publicClient
           .readContract({
@@ -109,6 +111,8 @@ export const usePollTotalDelegated = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
+
       if (isConnected && delegatorValidators) {
         const call: Call[] = delegatorValidators.map((validator) => {
           return {
@@ -208,6 +212,8 @@ export const usePollDelegatorUnbonding = () => {
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
+
       if (isConnected) {
         const result = (await publicClient
           .readContract({

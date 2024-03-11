@@ -1,7 +1,7 @@
 import { client, getValidatorCuttingBoard, type Weight } from "@bera/graphql";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import POLLING from "~/config/constants/polling";
 

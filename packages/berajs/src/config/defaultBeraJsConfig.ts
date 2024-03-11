@@ -1,4 +1,4 @@
-import { type Chain } from "wagmi";
+import { type Chain } from "viem";
 
 import { isProduction } from "../api/utils/isProduction";
 import { type NetworkConfig } from "./types";
@@ -6,7 +6,6 @@ import { type NetworkConfig } from "./types";
 const BeraChain: Chain = {
   id: 2061,
   name: "Polaris",
-  network: "Polaris",
   nativeCurrency: {
     decimals: 18,
     name: "Polaris",

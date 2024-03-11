@@ -11,6 +11,7 @@ export const useActiveCuttingBoard = (validatorAddress: `0x${string}`) => {
   const method = "getActiveCuttingBoard";
   const QUERY_KEY = [validatorAddress, method];
   return useSWRImmutable(QUERY_KEY, async () => {
+    if (!publicClient) return undefined;
     const result = await publicClient.readContract({
       address: networkConfig.precompileAddresses
         .erc20BgtAddress as `0x${string}`,

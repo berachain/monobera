@@ -5,8 +5,7 @@ import {
   subgraphUrl,
 } from "@bera/config";
 import lodash from "lodash";
-import { getAddress } from "viem";
-import { type Address } from "wagmi";
+import { getAddress, type Address } from "viem";
 
 export const revalidate = 10;
 

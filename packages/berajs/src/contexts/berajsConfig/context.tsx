@@ -4,6 +4,7 @@ import React, { createContext, type PropsWithChildren } from "react";
 import {
   RainbowKitProvider,
   connectorsForWallets,
+  getDefaultConfig,
   lightTheme,
   darkTheme as rainbowDarkTheme,
 } from "@rainbow-me/rainbowkit";
@@ -15,8 +16,8 @@ import {
   rabbyWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { WagmiConfig, configureChains, createConfig } from "wagmi";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { WagmiProvider, createConfig, http } from "wagmi";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { defaultBeraConfig } from "~/config";
 import { type NetworkConfig } from "~/config/types";
@@ -42,69 +43,39 @@ export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
   undefined,
 );
 
-export const projectId = "8b169f8cfd2110ddc5d92a1309534d09";
-
 const BeraConfig: React.FC<IBeraConfig> = ({
   children,
   networkConfig = defaultBeraConfig,
   autoConnect = false,
   darkTheme = false,
 }) => {
-  const { chains, publicClient } = configureChains(
-    [networkConfig.chain],
-    [
-      jsonRpcProvider({
-        rpc: (chain: any) => ({ http: chain.rpcUrls.default.http[0] || "" }),
-      }),
-    ],
-    {
-      retryCount: 0,
-      retryDelay: 20000,
+  const config = getDefaultConfig({
+    appName: "Bears Chain",
+    projectId: "8b169f8cfd2110ddc5d92a1309534d09",
+    chains: [networkConfig.chain],
+    transports: {
+      [networkConfig.chain.id]: http(
+        networkConfig.chain.rpcUrls.default.http[0] || "",
+      ),
     },
-  );
-
-  const appInfo = {
-    appName: "BeraJS",
-  };
-  const connectors = connectorsForWallets([
-    {
-      groupName: "Recommended",
-      wallets: [
-        metaMaskWallet({ chains, projectId }),
-        coinbaseWallet({ chains, appName: appInfo.appName }),
-        walletConnectWallet({ projectId, chains }),
-        ledgerWallet({ chains, projectId }),
-        frameWallet({ chains }),
-        rabbyWallet({ chains }),
-        // phantomWallet({ chains }),
-        // rainbowWallet({ projectId, chains }),
-        // safeWallet({ chains }),
-      ],
-    },
-  ]);
-
-  // TODO make this configurable
-  const config = createConfig({
-    autoConnect: true,
-    connectors,
-    publicClient,
+    ssr: true,
+    multiInjectedProviderDiscovery: true,
   });
+  const queryClient = new QueryClient();
 
   return (
-    <BeraConfigContext.Provider value={{ networkConfig, autoConnect, chains }}>
-      <WagmiConfig config={config}>
-        <RainbowKitProvider
-          appInfo={appInfo}
-          chains={chains}
-          theme={darkTheme ? rainbowDarkTheme() : lightTheme()}
-        >
-          <BeraJsProvider>
-            <TransactionStoreProvider>
-              <CrocEnvContextProvider>{children}</CrocEnvContextProvider>
-            </TransactionStoreProvider>
-          </BeraJsProvider>
-        </RainbowKitProvider>
-      </WagmiConfig>
+    <BeraConfigContext.Provider value={{ networkConfig, autoConnect }}>
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <RainbowKitProvider>
+            <BeraJsProvider>
+              <TransactionStoreProvider>
+                <CrocEnvContextProvider>{children}</CrocEnvContextProvider>
+              </TransactionStoreProvider>
+            </BeraJsProvider>
+          </RainbowKitProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
     </BeraConfigContext.Provider>
   );
 };
