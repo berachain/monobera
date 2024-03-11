@@ -94,8 +94,8 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
         ),
         isWrongNetwork: networkConfig.chain.id === chain?.id ? false : true,
         isReady: useMemo(
-          () => !evmError && account && isMounted && chain !== undefined,
-          [evmError, account, isMounted, chain?.id, status],
+          () => !evmError && account && isMounted && networkConfig.chain.id === chain?.id,
+          [evmError, account, isMounted, chain?.id, status, networkConfig],
         ),
         logout,
         setError,
