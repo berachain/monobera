@@ -16,12 +16,12 @@ const getTvlAndVolume = (): Promise<{ tvl?: number; volume?: number }> => {
       )}`,
     )
       .then((response) => response.json())
-      .then((data) =>
+      .then((data) => {
         res({
           tvl: data?.data?.formattedTVL,
           volume: data?.data?.formattedVolume24H,
-        }),
-      )
+        });
+      })
       .then()
       .catch((e) => {
         rej(e);
