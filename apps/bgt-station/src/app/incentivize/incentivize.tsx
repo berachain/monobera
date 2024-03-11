@@ -1,32 +1,23 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useBeraJs, usePollBgtBalance, type Token } from "@bera/berajs";
+import React from "react";
 import { ActionButton } from "@bera/shared-ui";
-import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { useTheme } from "next-themes";
 
-import useCreateIncentiveTokens, {
-  IncentivizeToken,
-} from "~/hooks/useCreateIncentivizeTokens";
+import useCreateIncentiveTokens from "~/hooks/useCreateIncentivizeTokens";
 import AddIncentivizeToken from "./add-incentivize-input";
 
-export default function Incentivize({}: {}) {
-  const { isConnected } = useBeraJs();
+export default function Incentivize() {
   const { theme, systemTheme } = useTheme();
   const t = theme === "system" ? systemTheme : theme;
-  const router = useRouter();
   const [poolAddress, setPoolAddress] = React.useState<string | undefined>(
     undefined,
   );
 
-  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
-  const bgtBalance = useBgtBalance();
   const {
     incentivizeTokens,
     error,
@@ -35,12 +26,6 @@ export default function Incentivize({}: {}) {
     onRemove,
     onTokenAmountChange,
   } = useCreateIncentiveTokens();
-  console.log("incentivizeTokens", incentivizeTokens);
-  const selectedTokens = incentivizeTokens.map(
-    (incentivizeToken: IncentivizeToken) => {
-      return incentivizeToken.token;
-    },
-  ) as Token[];
 
   return (
     <div className="container mx-auto w-full max-w-[480px] px-8 pb-20">
@@ -58,6 +43,7 @@ export default function Incentivize({}: {}) {
             Search/Enter Pool Address
           </div>
           <div className="text-sm leading-tight">
+            {/* TODO: add pool address validation */}
             <Input
               type="text"
               placeholder="0x0000...0000"
@@ -67,7 +53,7 @@ export default function Incentivize({}: {}) {
               value={poolAddress}
             />
           </div>
-          <div className="flex text-sm font-semibold text-foreground">
+          <div className="mt-4 flex text-sm font-semibold text-foreground">
             Set Amount
           </div>
           <div className="border-1 flex flex-col gap-6 border-border">

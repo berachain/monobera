@@ -1,10 +1,9 @@
-import React from "react";
-import { useBeraJs, useTokenHoneyPrice, type Token } from "@bera/berajs";
-import { bgtTokenAddress } from "@bera/config";
-import { SelectToken, TokenInput } from "@bera/shared-ui";
+import React, { useState } from "react";
+import { useTokenHoneyPrice, type Token } from "@bera/berajs";
+import { TokenInput } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
 
 import { IncentivizeToken } from "~/hooks/useCreateIncentivizeTokens";
 
@@ -31,21 +30,27 @@ export default function AddIncentivizeToken({
   const { data: tokenPrice } = useTokenHoneyPrice(
     selectedToken?.token?.address,
   );
+
+  // TODO: add exceeding and typing state
+  const [exceedingBalance, setExceedingBalance] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   return (
-    <ul className={"flex flex-row items-center justify-between gap-1"}>
+    <ul className={"xs:justify-between flex flex-row items-center gap-1"}>
       <TokenInput
         selected={selectedToken.token}
         onTokenSelection={handleTokenSelection}
         amount={selectedToken.amount ?? ""}
         price={Number(tokenPrice)}
         showExceeding={true}
-        // setIsTyping={(isTyping: boolean) => setIsTyping(isTyping)}
-        // onExceeding={(isExceeding: boolean) => setExceedingBalance(isExceeding)}
+        setIsTyping={(isTyping: boolean) => setIsTyping(isTyping)}
+        onExceeding={(isExceeding: boolean) => setExceedingBalance(isExceeding)}
         setAmount={(amount) => {
           onTokenAmountChange(index, Number(amount));
         }}
       />
-      <div className="flex items-center px-2">
+      <div
+        className={cn("flex items-center px-2", selectedToken.token && "mb-5")}
+      >
         <Button
           variant="ghost"
           className="rounded-full p-0 hover:bg-transparent hover:text-red-500"
