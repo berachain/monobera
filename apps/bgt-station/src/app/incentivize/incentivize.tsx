@@ -75,7 +75,7 @@ export default function Incentivize() {
             onClick={onAddToken}
           />
           {/* Placeholder */}
-          <div className="flex flex-col rounded-lg bg-muted p-4">
+          <div className="flex flex-col gap-1 rounded-lg bg-muted p-4">
             <div className="flex flex-row justify-between">
               <div className="text-md flex font-semibold text-muted-foreground">
                 Detail 1
