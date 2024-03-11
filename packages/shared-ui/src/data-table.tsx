@@ -125,7 +125,7 @@ export function DataTable<TData, TValue>({
     >
       <div
         className={cn(
-          "w-full overflow-x-auto overflow-y-auto",
+          "w-full overflow-x-auto overflow-y-auto border-border",
           embedded ? "" : "rounded-tl-md rounded-tr-md",
         )}
       >
