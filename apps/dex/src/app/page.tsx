@@ -57,7 +57,7 @@ export default async function Homepage() {
       </>
     );
   } catch (e) {
-    console.log(e);
+    captureException(e);
     notFound();
   }
 }
