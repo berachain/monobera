@@ -34,7 +34,7 @@
     "recharts": "^2.5.0",
     "siwe": "^1.1.6",
     "superjson": "1.9.1",
-    "swr": "^2.1.5",
+    "swr": "^2.2.5",
     "tailwindcss-animate": "^1.0.5",
     "usehooks-ts": "^2.14.0",
     "wagmi": "^2.5.7",
