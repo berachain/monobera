@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { usePollAssetWalletBalance, type Token } from "@bera/berajs";
-import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
-import { getAddress } from "viem";
 
 export interface IncentivizeToken {
   token: Token;
@@ -41,28 +39,11 @@ const useCreateIncentiveTokens = () => {
   useEffect(() => {
     setError(undefined);
 
-    // Check for errors in tokenWeights
-    const hasZeroWeight = incentivizeTokens.some(
-      (item) => Number(item.amount) === 0,
-    );
     const isUndefinedToken = incentivizeTokens.some(
       (item) => item.token === undefined,
     );
 
-    // const isExceedingBalance = incentivizeTokens.some((item) => {
-    //   const foundToken = tokens?.find(
-    //     (t: any) =>
-    //       getAddress(t.address) === getAddress(item?.token?.address ?? ""),
-    //   );
-
-    //   return (
-    //     Number(foundToken?.formattedBalance ?? 0) < getSafeNumber(item.amount)
-    //   );
-    // });
-
-    if (hasZeroWeight) {
-      setError(new InvalidInputError("Weight cannot be 0"));
-    } else if (isUndefinedToken) {
+    if (isUndefinedToken) {
       setError(new InvalidInputError("Tokens must be selected"));
     } else {
       setError(undefined);
