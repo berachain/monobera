@@ -120,7 +120,7 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
       visible={tooltipVisible}
       gauge={selectedGauge}
     />
-  ) : null;
+  ) : undefined;
 
   return (
     <div className="flex h-full flex-col items-center justify-center">
