@@ -12,8 +12,6 @@ import useCreateIncentiveTokens from "~/hooks/useCreateIncentivizeTokens";
 import AddIncentivizeToken from "./add-incentivize-input";
 
 export default function Incentivize() {
-  const { theme, systemTheme } = useTheme();
-  const t = theme === "system" ? systemTheme : theme;
   const [poolAddress, setPoolAddress] = React.useState<string | undefined>(
     undefined,
   );
