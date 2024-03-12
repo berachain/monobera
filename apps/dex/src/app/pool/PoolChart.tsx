@@ -213,32 +213,32 @@ export const PoolChart = ({
 
       poolData = {
         ...poolData,
-        volumeUsd:
+        volumeUsd: `${
           formatHoney(poolData?.baseVolumeInHoney) +
-          formatHoney(poolData?.quoteVolumeInHoney),
-        tvlUsd:
+          formatHoney(poolData?.quoteVolumeInHoney)
+        }`,
+        tvlUsd: `${
           formatHoney(poolData?.baseTvlInHoney) +
-          formatHoney(poolData?.quoteTvlInHoney),
+          formatHoney(poolData?.quoteTvlInHoney)
+        }`,
 
-        feesUsd:
+        feesUsd: `${
           formatHoney(poolData?.baseFeesInHoney) +
-          formatHoney(poolData?.quoteFeesInHoney),
+          formatHoney(poolData?.quoteFeesInHoney)
+        }`,
       };
 
-      const volumeTotal = poolData.volumeUsd;
-      const feesTotal = poolData.feesUsd;
-
       if (i < 7) {
-        weeklyVolumeTotal += volumeTotal;
-        weeklyFeesTotal += feesTotal;
+        weeklyVolumeTotal += Number(poolData?.volumeUsd);
+        weeklyFeesTotal += Number(poolData?.feesUsd);
       }
       if (i < 30) {
-        monthlyVolumeTotal += volumeTotal;
-        monthlyFeesTotal += feesTotal;
+        monthlyVolumeTotal += Number(poolData?.volumeUsd);
+        monthlyFeesTotal += Number(poolData?.feesUsd);
       }
       if (i < 90) {
-        quarterlyVolumeTotal += volumeTotal;
-        quarterlyFeesTotal += feesTotal;
+        quarterlyVolumeTotal += Number(poolData?.volumeUsd);
+        quarterlyFeesTotal += Number(poolData?.feesUsd);
       }
 
       return poolData;

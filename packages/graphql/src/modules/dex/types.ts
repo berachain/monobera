@@ -26,10 +26,10 @@ export interface SubgraphCoin {
 }
 export interface PoolDayData {
   id: string;
-  tvlUsd: number;
+  tvlUsd: string;
   date: number;
-  volumeUsd: number;
-  feesUsd: number;
+  volumeUsd: string;
+  feesUsd: string;
   latestTime: number;
   baseTvl: number;
   quoteTvl: number;
