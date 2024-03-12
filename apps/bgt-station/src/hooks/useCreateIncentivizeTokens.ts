@@ -51,9 +51,8 @@ const useCreateIncentiveTokens = () => {
   }, [incentivizeTokens, tokens]);
 
   const onAddToken = () => {
-    console.log("add token", incentivizeTokens);
     // TODO: update number here
-    if (incentivizeTokens.length >= 8) {
+    if (incentivizeTokens.length >= 4) {
       return;
     }
     let updatedIncentiveTokens: IncentivizeToken[] = [...incentivizeTokens];
