@@ -39,9 +39,9 @@ export default function SupplyBtn({
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
-    message: `${supply ? "Supplying" : "Depositing"} ${amount} ${
-      token?.symbol
-    }`,
+    message: `${supply ? "Supplying" : "Depositing"} ${
+      Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
+    } ${token?.symbol}`,
     onSuccess: () => {
       userAccountRefetch();
       reservesDataRefetch();
@@ -142,7 +142,7 @@ const SupplyModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="font-semibold truncate w-[200px] text-right">
+          <div className="w-[200px] truncate text-right font-semibold">
             $
             {formatter.format(
               Number(amount ?? "0") *
