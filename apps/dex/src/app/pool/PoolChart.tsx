@@ -7,6 +7,7 @@ import { Dropdown } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { formatUnits } from "viem";
 
 const Options = {
   responsive: true,
@@ -158,6 +159,10 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
 //   return percentageDifference;
 // }
 
+const formatHoney = (amountInHoney: number) => {
+  return Number(formatUnits(BigInt(amountInHoney), 18));
+};
+
 export const PoolChart = ({
   currentTvl,
   historicalData,
@@ -182,7 +187,7 @@ export const PoolChart = ({
   let latestTvlSeen = 0;
   const completeDailyData: any[] = quarterlyDayStartTimes.map(
     (dayStartTimestamp: number, i) => {
-      const poolData = historicalData?.find(
+      let poolData: PoolDayData | undefined = historicalData?.find(
         (data) => data.latestTime === dayStartTimestamp,
       );
 
@@ -205,38 +210,38 @@ export const PoolChart = ({
           date: dayStartTimestamp,
         };
       }
-      latestTvlSeen = Number(poolData.tvlUsd);
+
+      poolData = {
+        ...poolData,
+        volumeUsd:
+          formatHoney(poolData?.baseVolumeInHoney) +
+          formatHoney(poolData?.quoteVolumeInHoney),
+        tvlUsd:
+          formatHoney(poolData?.baseTvlInHoney) +
+          formatHoney(poolData?.quoteTvlInHoney),
+
+        feesUsd:
+          formatHoney(poolData?.baseFeesInHoney) +
+          formatHoney(poolData?.quoteFeesInHoney),
+      };
+
+      const volumeTotal = poolData.volumeUsd;
+      const feesTotal = poolData.feesUsd;
+
       if (i < 7) {
-        weeklyVolumeTotal += Number(
-          poolData.baseVolumeInHoney + poolData.quoteVolumeInHoney,
-        );
-        weeklyFeesTotal += Number(
-          poolData.baseFeesInHoney + poolData.quoteFeesInHoney,
-        );
+        weeklyVolumeTotal += volumeTotal;
+        weeklyFeesTotal += feesTotal;
       }
       if (i < 30) {
-        monthlyVolumeTotal += Number(
-          poolData.baseVolumeInHoney + poolData.quoteVolumeInHoney,
-        );
-        monthlyFeesTotal += Number(
-          poolData.baseFeesInHoney + poolData.quoteFeesInHoney,
-        );
+        monthlyVolumeTotal += volumeTotal;
+        monthlyFeesTotal += feesTotal;
       }
       if (i < 90) {
-        quarterlyVolumeTotal += Number(
-          poolData.baseVolumeInHoney + poolData.quoteVolumeInHoney,
-        );
-        quarterlyFeesTotal += Number(
-          poolData.baseFeesInHoney + poolData.quoteFeesInHoney,
-        );
+        quarterlyVolumeTotal += volumeTotal;
+        quarterlyFeesTotal += feesTotal;
       }
 
-      return {
-        ...poolData,
-        volumeUsd: poolData.baseVolumeInHoney + poolData.quoteVolumeInHoney,
-        tvlUsd: poolData.baseTvlInHoney + poolData.quoteTvlInHoney,
-        feesUsd: poolData.baseFeesInHoney + poolData.quoteFeesInHoney,
-      };
+      return poolData;
     },
   );
 

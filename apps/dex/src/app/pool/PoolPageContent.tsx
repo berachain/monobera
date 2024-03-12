@@ -24,6 +24,7 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import useSWR from "swr";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
@@ -297,7 +298,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
   const [poolHistory, setPoolHistory] = useState<any | null>(null);
 
-  const fetchPoolHistory = (pool: PoolV2) => {
+  useSWR([pool?.base, pool?.quote, pool?.poolIdx, chainId.toString(16)], () => {
     if (!pool) return;
     return fetch(
       `${crocIndexerEndpoint}/v2/pool_history?chainId=0x${chainId.toString(
@@ -311,12 +312,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
       .catch((e) => {
         captureException(e);
       });
-  };
-
-  useEffect(() => {
-    fetchPoolHistory(pool);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pool]);
+  });
 
   return (
     <div className="flex flex-col gap-8">
