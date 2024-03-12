@@ -1,8 +1,9 @@
 import { getCrocErc20LpAddress, type Token } from "@bera/berajs";
-import { type Address } from "wagmi";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
-import { formatUnits, getAddress } from "viem";
 import BigNumber from "bignumber.js";
+import { formatUnits, getAddress } from "viem";
+import { type Address } from "wagmi";
+
 export interface PoolV2 {
   id: string; // concat base-quote-poolidx
   base: Address;
@@ -94,9 +95,6 @@ export const formatSubgraphPoolData = (result: any): PoolV2 => {
 };
 
 export const formatPoolData = (result: any): PoolV2 => {
-  console.log({
-    result,
-  });
   const baseInfo = result.info.baseInfo;
   const quoteInfo = result.info.quoteInfo;
 
@@ -152,12 +150,13 @@ export const fetchPools = async (
   limit: number,
   sort: string,
   order: string,
+  keyword = "",
 ): Promise<PoolV2[]> => {
   try {
     const result = await fetch(
       `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
         16,
-      )}&sortBy=${sort}.${order}&page=${page}&pageLimit=${limit}`,
+      )}&sortBy=${sort}.${order}&page=${page}&pageLimit=${limit}&keyword=${keyword}`,
     );
 
     const response = await result.json();
