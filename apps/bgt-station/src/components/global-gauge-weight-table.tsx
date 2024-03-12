@@ -49,7 +49,6 @@ const Gauge = ({ address }: { address: string | undefined }) => {
         </div>
         <div className="flex items-start justify-center truncate whitespace-nowrap text-sm text-muted-foreground hover:underline">
           {value}
-          {value}
         </div>
       </div>
     </Link>
