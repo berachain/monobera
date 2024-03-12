@@ -26,15 +26,19 @@ const Gauge = ({ address }: { address: string | undefined }) => {
       : gaugeDictionary[address]?.name ?? truncateHash(address);
   const url = useMemo(
     () =>
-      address && gaugeDictionary && gaugeDictionary[getAddress(address)]?.url
-        ? gaugeDictionary[getAddress(address)]?.url
-        : `${blockExplorerUrl}/address/${address}`,
+      address &&
+      gaugeDictionary &&
+      gaugeDictionary[getAddress(address)]?.url &&
+      gaugeDictionary[getAddress(address)]?.url,
+
     [address, gaugeDictionary],
   );
-  const name = address && gaugeDictionary[getAddress(address)]?.name;
+  const name =
+    address && gaugeDictionary && gaugeDictionary[getAddress(address)]?.name;
+
   return (
     <Link
-      href={url}
+      href={url ?? `${blockExplorerUrl}/address/${address}`}
       target="_blank"
       className="flex h-full w-[150px] items-center gap-2"
     >
@@ -44,6 +48,7 @@ const Gauge = ({ address }: { address: string | undefined }) => {
           {name ?? "Test default gauge"}
         </div>
         <div className="flex items-start justify-center truncate whitespace-nowrap text-sm text-muted-foreground hover:underline">
+          {value}
           {value}
         </div>
       </div>
