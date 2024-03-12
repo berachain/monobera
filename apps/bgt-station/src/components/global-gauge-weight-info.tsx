@@ -1,8 +1,9 @@
 import { usePollPrices } from "@bera/berajs";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import GlobalGaugeWeight from "~/components/global-gauge-weight";
+import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
 import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
+import GlobalGaugeWeightChart from "./global-gauge-weight-chart";
 
 export default function GlobalGaugeWeightInfo() {
   const { usePrices } = usePollPrices();
@@ -23,7 +24,10 @@ export default function GlobalGaugeWeightInfo() {
             </div>
           </div>
         ) : (
-          <GlobalGaugeWeight gaugeWeights={data ?? []} />
+          <div className="mt-8 flex w-full flex-col items-center gap-16 lg:flex-row ">
+            <GlobalGaugeWeightChart gaugeWeights={data ?? []} />
+            <GlobalGaugeWeightTable gaugeWeights={data ?? []} />
+          </div>
         )}
       </>
     </div>
