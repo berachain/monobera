@@ -11,7 +11,8 @@ const isDevelopmentWithoutAnalytics =
 
 if (
   process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN &&
-  !isDevelopmentWithoutAnalytics
+  !isDevelopmentWithoutAnalytics &&
+  !process.env.NEXT_PUBLIC_DISABLE_ANALYTICS
 ) {
   mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN, {
     debug: true,
@@ -25,6 +26,7 @@ export const useAnalytics = () => {
     error: any,
     hint: any,
   ) => {
+    if (process.env.NEXT_PUBLIC_DISABLE_ANALYTICS) return "";
     return _captureException(error, hint);
   };
 
@@ -38,6 +40,7 @@ export const useAnalytics = () => {
   };
 
   const track = (eventName: string, eventData?: { [key: string]: any }) => {
+    if (process.env.NEXT_PUBLIC_DISABLE_ANALYTICS) return;
     if (isDevelopmentWithoutAnalytics) {
       return;
     }
