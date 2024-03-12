@@ -7,6 +7,7 @@ import {
 import { bgtTokenAddress, lendRewardsAddress } from "@bera/config";
 import { Spinner, TokenIcon, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 import { formatEther } from "viem";
 
 export default function BGTRewardsClaimBtn() {
@@ -39,7 +40,7 @@ export default function BGTRewardsClaimBtn() {
       >
         {!rewards || rewards === 0n ? (
           <>
-            <TokenIcon address={bgtTokenAddress} className="h-6 w-6" />
+            <Icons.bgt className="w-6 h-6" />
             No Claimable BGT Rewards
           </>
         ) : isClaimingLoading ? (

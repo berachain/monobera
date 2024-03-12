@@ -4,19 +4,63 @@ import { DataTableColumnHeader } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 import { formatUnits } from "viem";
 
+export interface GlobalGaugeColumnsV2 {
+  gauge: React.ReactNode;
+  incentiveAmount: number;
+  incentivePercentage: number;
+}
+
 export interface GlobalGaugeColumns {
-  gauge: JSX.Element;
+  gauge: React.ReactNode;
   incentiveAmount: number;
   incentivePercentage: number;
   tvl: number;
-  hide: JSX.Element;
+  hide: React.ReactNode;
 }
 export interface UnbondingQueueColumns {
-  validator: JSX.Element;
+  validator: React.ReactNode;
   unbondingAmount: bigint;
   timeRemaining: string;
-  hide: JSX.Element;
+  hide: React.ReactNode;
 }
+
+export const global_gauge_weight_columns_v2: ColumnDef<GlobalGaugeColumnsV2>[] =
+  [
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Pool or Address" />
+      ),
+      cell: ({ row }) => (
+        <div className="truncate whitespace-nowrap text-center">
+          {row.original.gauge}
+        </div>
+      ),
+      accessorKey: "gauge",
+      enableSorting: false,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Estimated BGT/yr"
+          className="w-full items-center justify-end text-center"
+        />
+      ),
+      cell: ({ row }) => {
+        const incentiveAmount = row.original.incentiveAmount;
+        const incentivePercentage = row.original.incentivePercentage;
+        return (
+          <div className="flex w-full flex-row items-center justify-end">
+            {" "}
+            {formatter.format(incentiveAmount)} (
+            {(incentivePercentage * 100).toFixed(2)}%)
+          </div>
+        );
+      },
+      accessorKey: "incentiveAmount",
+      enableSorting: true,
+    },
+  ];
 
 export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
   {
@@ -77,6 +121,7 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
   },
 ];
 
+// deprecated
 export const unbonding_queue_columns: ColumnDef<UnbondingQueueColumns>[] = [
   {
     header: ({ column }) => (

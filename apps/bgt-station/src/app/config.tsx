@@ -60,6 +60,10 @@ export const navItems = [
     title: "Incentivize",
   },
   {
+    href: "/gauge",
+    title: "Gauge",
+  },
+  {
     href: "#",
     title: "Explore",
     children: [

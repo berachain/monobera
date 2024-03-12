@@ -49,7 +49,7 @@ export default function Portfolio() {
   } = usePollDelegatorUnbonding();
 
   const totalUnbonding = useDelegatorTotalUnbonding();
-  const unbondingQueue = useDelegatorUnbondingQueue();
+  const { result: unbondingQueue } = useDelegatorUnbondingQueue();
   const unbondingValidatorCount = useDelegatorTotalUnbondingValidators();
   const { usePrices } = usePollPrices();
   const { data: prices } = usePrices();

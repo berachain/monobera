@@ -78,9 +78,14 @@ export const usePollCrocSwap = ({
         if (batchSwapSteps?.length) {
           const previewBatchSwapSteps = [...batchSwapSteps];
 
-          if (getAddress(tokenIn) === getAddress(nativeTokenAddress)) {
-            if (previewBatchSwapSteps[0]) {
+          if (
+            previewBatchSwapSteps[0] &&
+            getAddress(tokenIn) === getAddress(nativeTokenAddress)
+          ) {
+            if (previewBatchSwapSteps[0].base === nativeTokenAddress) {
               previewBatchSwapSteps[0].base = beraTokenAddress;
+            } else {
+              previewBatchSwapSteps[0].quote = beraTokenAddress;
             }
           }
 

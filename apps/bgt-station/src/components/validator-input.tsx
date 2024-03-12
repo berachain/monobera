@@ -46,32 +46,33 @@ export default function ValidatorInput({
 
   return (
     <div className="relative">
-      <Input
-        type="number"
-        className="h-[73px] p-4 text-right text-lg font-semibold leading-7"
-        value={amount}
-        placeholder="0"
-        disabled={disabled || isBalanceLoading}
-        onChange={(e) => onAmountChange(e.target.value)}
-        startAdornment={
-          <ValidatorSelector
-            validatorAddress={
-              redelegate ? redelegateValidatorAddress : validatorAddress
-            }
-            onSelectValidator={(address) =>
-              router.push(
-                `/delegate?action=${action}&validator=${
-                  redelegate ? validatorAddress : address
-                }${redelegate ? `&redelegateValidator=${address}` : ""}`,
-              )
-            }
-            showDelegated={showDelegated}
-            filter={filter}
-            // emptyMessage={emptyMessage}
-          />
-        }
-      />
-
+      <div
+        className="
+        xs:justify-between flex min-h-[73px] flex-row items-center rounded-lg border border-solid bg-input py-3"
+      >
+        <ValidatorSelector
+          validatorAddress={
+            redelegate ? redelegateValidatorAddress : validatorAddress
+          }
+          onSelectValidator={(address) =>
+            router.push(
+              `/delegate?action=${action}&validator=${
+                redelegate ? validatorAddress : address
+              }${redelegate ? `&redelegateValidator=${address}` : ""}`,
+            )
+          }
+          showDelegated={showDelegated}
+          filter={filter}
+        />
+        <Input
+          type="number"
+          className="max-w-100 border-0 bg-transparent text-right text-lg font-semibold leading-7 outline-none"
+          value={amount}
+          placeholder="0.0"
+          disabled={disabled || isBalanceLoading}
+          onChange={(e) => onAmountChange(e.target.value)}
+        />
+      </div>
       {action === DelegateEnum.DELEGATE && isReady && (
         <div className=" mt-2 flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />

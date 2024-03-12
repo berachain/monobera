@@ -17,6 +17,8 @@ import { InstrumentDropdown } from "./components/instrument-dropdown";
 import OrderChart from "./components/order-chart";
 import { OrderHistory } from "./components/order-history";
 import CreatePosition from "./create-position";
+import { ReferralModal } from "../referrals/referral-modal";
+import { type Address } from "viem";
 
 const DEFAULT_MARKET = "ETH-USDC";
 export const revalidate = 30;
@@ -34,7 +36,13 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default async function Home() {
+export default async function Home({
+  searchParams: { ref },
+}: {
+  searchParams: {
+    ref: Address | undefined;
+  };
+}) {
   const m = getMarkets();
   const p = getGlobalParams();
   const pc = getDailyPriceChange();
@@ -70,6 +78,7 @@ export default async function Home() {
 
   return (
     <div>
+      <ReferralModal referralAddress={ref} />
       <div className="flex h-fit w-full flex-col lg:flex-row">
         <div className="h-fit w-full flex-shrink-0 flex-grow-0 lg:w-[400px]">
           <InstrumentDropdown

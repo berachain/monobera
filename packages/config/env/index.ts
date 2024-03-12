@@ -3,6 +3,7 @@ type Address = `0x${string}`;
 // endpoints
 export const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_ENDPOINT as string;
 export const tokenListUrl = process.env.NEXT_PUBLIC_TOKEN_LIST as string;
+export const gaugeListUrl = process.env.NEXT_PUBLIC_GAUGE_LIST as string;
 export const validatorList = process.env.NEXT_PUBLIC_VALIDATOR_LIST as string;
 export const publicAnalyticsUrl = process.env.NEXT_PUBLIC_ANALYTICS as string;
 export const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
@@ -115,6 +116,8 @@ export const lendRewardsAddress = process.env
   .NEXT_PUBLIC_LEND_REWARDS_ADDRESS as Address;
 export const lendHoneyDebtTokenAddress = process.env
   .NEXT_PUBLIC_LEND_HONEY_DEBT_TOKEN_ADDRESS as Address;
+export const perpsReferralsAddress = process.env
+  .NEXT_PUBLIC_REFERRALS_CONTRACT_ADDRESS as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env

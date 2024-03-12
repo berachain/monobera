@@ -19,6 +19,7 @@ import {
   TokenInput,
   useTxn,
 } from "@bera/shared-ui";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -99,6 +100,8 @@ export function SwapCard({
     outputCurrency,
   });
 
+  const { captureException, track } = useAnalytics();
+
   const { refetch } = usePollAssetWalletBalance();
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
@@ -119,6 +122,10 @@ export function SwapCard({
     actionType: TransactionActionType.SWAP,
     message: `Swap ${selectedFrom?.symbol} to ${selectedTo?.symbol}`,
     onSuccess: () => {
+      track("swap_token_success", {
+        tokenFrom: selectedFrom?.symbol,
+        tokenTo: selectedTo?.symbol,
+      });
       setFromAmount(undefined);
       setSwapAmount("");
       setToAmount(undefined);
@@ -126,7 +133,15 @@ export function SwapCard({
       void refreshAllowance();
       refetch();
     },
-    onError: () => {
+    onError: (e: Error | undefined) => {
+      track("swap_token_failed", {
+        tokenFrom: selectedFrom?.symbol,
+        tokenTo: selectedTo?.symbol,
+      });
+      captureException(e, {
+        event_id: "swap_token_failed",
+        data: { tokenFrom: selectedFrom?.symbol, tokenTo: selectedTo?.symbol },
+      });
       setOpenPreview(false);
     },
   });
@@ -144,6 +159,31 @@ export function SwapCard({
       wrapType === WRAP_TYPE.WRAP
         ? TransactionActionType.WRAP
         : TransactionActionType.UNWRAP,
+    onSuccess: () => {
+      track(
+        wrapType === WRAP_TYPE.WRAP
+          ? "wrap_bera_success"
+          : "unwrap_wbera_success",
+
+        { swapAmount },
+      );
+    },
+    onError: (e: Error | undefined) => {
+      track(
+        wrapType === WRAP_TYPE.WRAP
+          ? "wrap_bera_failed"
+          : "unwrap_wbera_failed",
+
+        { swapAmount },
+      );
+      captureException(e, {
+        event_id:
+          wrapType === WRAP_TYPE.WRAP
+            ? "wrap_bera_failed"
+            : "unwrap_wbera_failed",
+        data: swapAmount,
+      });
+    },
   });
 
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
@@ -153,7 +193,9 @@ export function SwapCard({
     if (
       (Number(allowance?.formattedAllowance) ?? 0) < (safeFromAmount ?? 0) &&
       !exceedingBalance &&
-      !isWrap
+      !isWrap &&
+      !isRouteLoading &&
+      swapInfo?.batchSwapSteps.length !== 0
     ) {
       return (
         <ApproveButton
