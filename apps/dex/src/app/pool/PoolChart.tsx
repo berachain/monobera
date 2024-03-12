@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getDayStartTimestampDaysAgo } from "@bera/bera-router";
 import { formatUsd } from "@bera/berajs";
+import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { type PoolDayData } from "@bera/graphql";
 import { Dropdown } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
@@ -181,12 +182,13 @@ export const PoolChart = ({
   let latestTvlSeen = 0;
   const completeDailyData: any[] = quarterlyDayStartTimes.map(
     (dayStartTimestamp: number, i) => {
-      const poolData = historicalData.find(
-        (data) => data.date === dayStartTimestamp,
+      const poolData = historicalData?.find(
+        (data) => data.latestTime === dayStartTimestamp,
       );
+
       if (!poolData) {
         if (i === 0) {
-          latestTvlSeen = currentTvl;
+          latestTvlSeen = 0;
           return {
             id: "",
             tvlUsd: currentTvl,
@@ -197,7 +199,7 @@ export const PoolChart = ({
         }
         return {
           id: "",
-          tvlUsd: latestTvlSeen,
+          tvlUsd: currentTvl,
           volumeUsd: "0",
           feesUsd: "0",
           date: dayStartTimestamp,
@@ -205,25 +207,45 @@ export const PoolChart = ({
       }
       latestTvlSeen = Number(poolData.tvlUsd);
       if (i < 7) {
-        weeklyVolumeTotal += Number(poolData.volumeUsd);
-        weeklyFeesTotal += Number(poolData.feesUsd);
+        weeklyVolumeTotal += Number(
+          poolData.baseVolumeInHoney + poolData.quoteVolumeInHoney,
+        );
+        weeklyFeesTotal += Number(
+          poolData.baseFeesInHoney + poolData.quoteFeesInHoney,
+        );
       }
       if (i < 30) {
-        monthlyVolumeTotal += Number(poolData.volumeUsd);
-        monthlyFeesTotal += Number(poolData.feesUsd);
+        monthlyVolumeTotal += Number(
+          poolData.baseVolumeInHoney + poolData.quoteVolumeInHoney,
+        );
+        monthlyFeesTotal += Number(
+          poolData.baseFeesInHoney + poolData.quoteFeesInHoney,
+        );
       }
       if (i < 90) {
-        quarterlyVolumeTotal += Number(poolData.volumeUsd);
-        quarterlyFeesTotal += Number(poolData.feesUsd);
+        quarterlyVolumeTotal += Number(
+          poolData.baseVolumeInHoney + poolData.quoteVolumeInHoney,
+        );
+        quarterlyFeesTotal += Number(
+          poolData.baseFeesInHoney + poolData.quoteFeesInHoney,
+        );
       }
-      return poolData;
+
+      return {
+        ...poolData,
+        volumeUsd: poolData.baseVolumeInHoney + poolData.quoteVolumeInHoney,
+        tvlUsd: poolData.baseTvlInHoney + poolData.quoteTvlInHoney,
+        feesUsd: poolData.baseFeesInHoney + poolData.quoteFeesInHoney,
+      };
     },
   );
 
   const extractData = (field: string, numOfDays: number) => {
     return completeDailyData
       .slice(0, numOfDays)
-      .map((dayData: any) => Number(dayData[field]))
+      .map((dayData: any) => {
+        return Number(dayData[field]);
+      })
       .reverse();
   };
 
@@ -286,7 +308,7 @@ export const PoolChart = ({
         setTotal(quarterlyFeesTotal);
       }
     }
-  }, [timeFrame, chart]);
+  }, [historicalData, timeFrame, chart]);
 
   return (
     <Card className="bg-muted p-0">

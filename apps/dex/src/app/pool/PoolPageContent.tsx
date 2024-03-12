@@ -1,12 +1,20 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { formatUsd, formatter, truncateHash, useBeraJs } from "@bera/berajs";
-import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
+import {
+  beraTokenAddress,
+  blockExplorerUrl,
+  chainId,
+  crocIndexerEndpoint,
+} from "@bera/config";
 import { ApyTooltip, TokenIcon } from "@bera/shared-ui";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { cn } from "@bera/ui";
+import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -19,19 +27,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
-import { PoolChart } from "./PoolChart";
-import { type PoolV2 } from "../pools/fetchPools";
-import { Skeleton } from "@bera/ui/skeleton";
 import { usePollUserPosition } from "~/hooks/usePollUserPosition";
-import { type ISwaps, usePoolRecentSwaps } from "~/hooks/usePoolRecentSwaps";
 import {
-  type IProvisions,
   usePoolRecentProvisions,
+  type IProvisions,
 } from "~/hooks/usePoolRecentProvisions";
-
-import { usePoolEvents } from "./usePoolEvents";
+import { usePoolRecentSwaps, type ISwaps } from "~/hooks/usePoolRecentSwaps";
 import { formatNumber } from "../../../../../packages/berajs/src/utils/formatNumber";
-import { Button } from "@bera/ui/button";
+import { type PoolV2 } from "../pools/fetchPools";
+import { PoolChart } from "./PoolChart";
+import { usePoolEvents } from "./usePoolEvents";
+
 interface IPoolPageContent {
   pool: PoolV2;
 }
@@ -171,7 +177,6 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   // const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   // const { data: bgtRewards } = useBgtReward(pool?.pool);
 
-  console.log({ pool });
   const { useRecentSwaps, isLoading: isRecentSwapsLoading } =
     usePoolRecentSwaps(pool);
 
@@ -285,8 +290,33 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   const { usePosition, isLoading: isPositionBreakdownLoading } =
     usePollUserPosition(pool);
 
+  const { captureException } = useAnalytics();
+
   const userAmbientPosition = usePosition();
   const userPositionBreakdown = userAmbientPosition?.userPosition;
+
+  const [poolHistory, setPoolHistory] = useState<any | null>(null);
+
+  const fetchPoolHistory = (pool: PoolV2) => {
+    if (!pool) return;
+    return fetch(
+      `${crocIndexerEndpoint}/v2/pool_history?chainId=0x${chainId.toString(
+        16,
+      )}&base=${pool.base}&quote=${pool.quote}&poolIdx=${pool.poolIdx}&days=7`,
+    )
+      .then((data) => data.json())
+      .then((data) => {
+        setPoolHistory(data?.data);
+      })
+      .catch((e) => {
+        captureException(e);
+      });
+  };
+
+  useEffect(() => {
+    fetchPoolHistory(pool);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pool]);
 
   return (
     <div className="flex flex-col gap-8">
@@ -295,8 +325,13 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
       <div className="flex w-full grid-cols-5 flex-col-reverse gap-4 lg:grid">
         <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">
           <PoolChart
-            currentTvl={Number(pool.tvlUsd) ?? 0}
-            historicalData={[]}
+            currentTvl={
+              pool?.baseTokenHoneyTvl && pool?.quoteTokenHoneyTvl
+                ? Number(pool.baseTokenHoneyTvl) +
+                  Number(pool.quoteTokenHoneyTvl)
+                : 0
+            }
+            historicalData={poolHistory}
           />
           <div className="mb-3 grid grid-cols-2 gap-4 lg:grid-cols-4">
             <Card className="px-4 py-2">
@@ -353,7 +388,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 <h3 className="text-xs font-medium text-muted-foreground">
                   My pool balance
                 </h3>
-                <p className="mt-1 text-lg font-semibold text-foreground">
+                <span className="mt-1 text-lg font-semibold text-foreground">
                   {isReady ? (
                     isPositionBreakdownLoading ? (
                       <Skeleton className="h-[32px] w-[150px]" />
@@ -363,7 +398,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                   ) : (
                     <Skeleton className="h-[32px] w-[150px]" />
                   )}
-                </p>
+                </span>
               </div>
             </CardContent>
           </Card>
