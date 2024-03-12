@@ -3,8 +3,8 @@
 import { type Metadata } from "next";
 import { usePollGlobalValidatorBribes, type PoLValidator } from "@bera/berajs";
 
+import GlobalGaugeWeightInfo from "~/components/global-gauge-weight-info";
 import { Details } from "./components/details";
-import GlobalGaugeWeightInfo from "./components/global-gauge-weight";
 import { ValidatorsList } from "./components/validators-list";
 
 export const metadata: Metadata = {
