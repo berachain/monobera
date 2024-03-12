@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ActionButton, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
+import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
