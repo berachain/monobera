@@ -6,8 +6,11 @@ import { type PoolDayData } from "@bera/graphql";
 import { Dropdown } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
+import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { formatUnits } from "viem";
+
+import { getSafeNumber } from "~/utils/getSafeNumber";
 
 const Options = {
   responsive: true,
@@ -160,15 +163,17 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
 // }
 
 const formatHoney = (amountInHoney: number) => {
-  return Number(formatUnits(BigInt(amountInHoney), 18));
+  return getSafeNumber(formatUnits(BigInt(amountInHoney), 18));
 };
 
 export const PoolChart = ({
   currentTvl,
   historicalData,
+  isLoading,
 }: {
   currentTvl: number;
   historicalData: PoolDayData[];
+  isLoading: boolean;
 }) => {
   const quarterlyDayStartTimes: number[] = [];
   for (let i = 0; i < 90; i++) {
@@ -324,7 +329,11 @@ export const PoolChart = ({
         <CardHeader className="flex w-full flex-col items-center justify-start px-6 py-4 sm:flex-row sm:justify-between">
           <div className="flex w-full flex-row items-end gap-3">
             <div className="w-fit text-xl font-semibold">
-              {formatUsd(total)}
+              {isLoading ? (
+                <Skeleton className="h-[32px] w-[150px]" />
+              ) : (
+                formatUsd(total)
+              )}
             </div>
             {/* <div
               className={cn(
@@ -352,21 +361,25 @@ export const PoolChart = ({
             />
           </div>
         </CardHeader>
-        <TabsContent value={Chart.VOLUME}>
-          <CardContent className="relative min-h-[250px] w-full">
-            <BeraChart data={data} options={Options as any} type="bar" />
-          </CardContent>
-        </TabsContent>
-        <TabsContent value={Chart.TVL}>
-          <CardContent className="relative min-h-[250px] w-full">
-            <BeraChart data={data} options={Options as any} type="line" />
-          </CardContent>
-        </TabsContent>
-        <TabsContent value={Chart.FEES}>
-          <CardContent className="relative min-h-[250px] w-full">
-            <BeraChart data={data} options={Options as any} type="bar" />
-          </CardContent>
-        </TabsContent>
+        {!isLoading && (
+          <>
+            <TabsContent value={Chart.VOLUME}>
+              <CardContent className="relative min-h-[250px] w-full">
+                <BeraChart data={data} options={Options as any} type="bar" />
+              </CardContent>
+            </TabsContent>
+            <TabsContent value={Chart.TVL}>
+              <CardContent className="relative min-h-[250px] w-full">
+                <BeraChart data={data} options={Options as any} type="line" />
+              </CardContent>
+            </TabsContent>
+            <TabsContent value={Chart.FEES}>
+              <CardContent className="relative min-h-[250px] w-full">
+                <BeraChart data={data} options={Options as any} type="bar" />
+              </CardContent>
+            </TabsContent>
+          </>
+        )}
       </Tabs>
     </Card>
   );

@@ -8,7 +8,7 @@ import {
   chainId,
   crocIndexerEndpoint,
 } from "@bera/config";
-import { ApyTooltip, TokenIcon } from "@bera/shared-ui";
+import { ApyTooltip, Spinner, TokenIcon } from "@bera/shared-ui";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -29,6 +29,7 @@ import useSWR from "swr";
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
 import { usePollUserPosition } from "~/hooks/usePollUserPosition";
+import { usePoolHistory } from "~/hooks/usePoolHistory";
 import {
   usePoolRecentProvisions,
   type IProvisions,
@@ -232,8 +233,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -253,8 +254,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -276,8 +277,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -291,27 +292,11 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   const { usePosition, isLoading: isPositionBreakdownLoading } =
     usePollUserPosition(pool);
 
-  const { captureException } = useAnalytics();
-
   const userAmbientPosition = usePosition();
   const userPositionBreakdown = userAmbientPosition?.userPosition;
 
-  const [poolHistory, setPoolHistory] = useState<any | null>(null);
-
-  useSWR([pool?.base, pool?.quote, pool?.poolIdx, chainId.toString(16)], () => {
-    if (!pool) return;
-    return fetch(
-      `${crocIndexerEndpoint}/v2/pool_history?chainId=0x${chainId.toString(
-        16,
-      )}&base=${pool.base}&quote=${pool.quote}&poolIdx=${pool.poolIdx}&days=7`,
-    )
-      .then((data) => data.json())
-      .then((data) => {
-        setPoolHistory(data?.data);
-      })
-      .catch((e) => {
-        captureException(e);
-      });
+  const { poolHistory, isLoading: isPoolHistoryLoading } = usePoolHistory({
+    pool,
   });
 
   return (
@@ -328,6 +313,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 : 0
             }
             historicalData={poolHistory}
+            isLoading={isPoolHistoryLoading}
           />
           <div className="mb-3 grid grid-cols-2 gap-4 lg:grid-cols-4">
             <Card className="px-4 py-2">
