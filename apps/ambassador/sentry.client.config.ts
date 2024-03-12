@@ -27,4 +27,5 @@ Sentry.init({
       blockAllMedia: true,
     }),
   ],
+  enabled: !process.env.NEXT_PUBLIC_DISABLE_ANALYTICS,
 });
