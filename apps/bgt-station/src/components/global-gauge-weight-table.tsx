@@ -6,7 +6,10 @@ import { DataTable } from "@bera/shared-ui";
 import { Checkbox } from "@bera/ui/checkbox";
 import { getAddress } from "viem";
 
-import { GaugeIcon } from "~/app/validators/validators-table";
+import {
+  GaugeCategoryIcon,
+  GaugeIcon,
+} from "~/app/validators/validators-table";
 import {
   global_gauge_weight_columns_v2,
   type GlobalGaugeColumns,
@@ -36,19 +39,25 @@ const Gauge = ({ address }: { address: string | undefined }) => {
   const name =
     address && gaugeDictionary && gaugeDictionary[getAddress(address)]?.name;
 
+  const category =
+    address &&
+    gaugeDictionary &&
+    gaugeDictionary[getAddress(address)]?.categoryName?.toUpperCase();
+
   return (
     <Link
       href={url ?? `${blockExplorerUrl}/address/${address}`}
       target="_blank"
       className="flex h-full w-[150px] items-center gap-2"
     >
-      <div className="flex flex-col items-start justify-center ">
+      <div className="flex flex-col items-start justify-center gap-2">
         <div className="text-md text-forgeound flex flex-row items-center justify-center gap-2 font-semibold">
           <GaugeIcon address={address ?? ""} />
-          {name ?? "Test default gauge"}
+          {name ?? "Default gauge name"}
         </div>
-        <div className="flex items-start justify-center truncate whitespace-nowrap text-sm text-muted-foreground hover:underline">
-          {value}
+        <div className="flex flex-row items-center justify-center gap-2 truncate whitespace-nowrap text-sm text-muted-foreground hover:underline">
+          <GaugeCategoryIcon address={address ?? ""} />
+          {category ?? "Default gauge category"}
         </div>
       </div>
     </Link>

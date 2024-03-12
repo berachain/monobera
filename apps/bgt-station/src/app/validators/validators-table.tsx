@@ -31,7 +31,7 @@ export const GaugeIcon = ({
   const { gaugeDictionary } = useGauges();
 
   return (
-    <Avatar className={cn("h-6 w-6", className)}>
+    <Avatar className={cn("h-5 w-5", className)}>
       <AvatarImage
         src={
           gaugeDictionary ? gaugeDictionary[getAddress(address)]?.logoURI : ""
@@ -53,6 +53,47 @@ export const GaugeIcon = ({
           width={100}
           height={100}
           className="block h-full w-full dark:hidden"
+          alt={"gauge-icon"}
+        />
+      </AvatarFallback>
+    </Avatar>
+  );
+};
+
+export const GaugeCategoryIcon = ({
+  address,
+  className,
+}: {
+  address: string;
+  className?: string;
+}) => {
+  const { gaugeDictionary } = useGauges();
+
+  return (
+    <Avatar className={cn("h-5 w-5", className)}>
+      <AvatarImage
+        src={
+          gaugeDictionary
+            ? gaugeDictionary[getAddress(address)]?.categoryIcon
+            : ""
+        }
+        className="rounded-lg"
+      />
+      <AvatarFallback>
+        {/* DARK MODE */}
+        <Image
+          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/s8kfq1dupk8buydgjxdf`}
+          width={100}
+          height={100}
+          className="hidden h-full w-full rounded-md dark:block"
+          alt={"gauge-icon"}
+        />
+        {/* LIGHT MODE  */}
+        <Image
+          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/ocaxgutrs2voe8umwxxc`}
+          width={100}
+          height={100}
+          className="block h-full w-full rounded-md dark:hidden"
           alt={"gauge-icon"}
         />
       </AvatarFallback>
