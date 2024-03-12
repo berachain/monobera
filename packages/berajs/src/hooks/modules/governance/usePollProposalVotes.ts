@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { client, getVotes, type Vote } from "@bera/graphql";
+import { dexClient, getVotes, type Vote } from "@bera/graphql";
 import lodash from "lodash";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
@@ -45,7 +45,7 @@ export const usePollProposalVotes = (proposalId: number) => {
   const { isLoading } = useSWR(QUERY_KEY, async () => {
     try {
       if (!publicClient) return undefined;
-      const result: Vote[] = await client
+      const result: Vote[] = await dexClient
         .query({
           query: getVotes,
           variables: {

@@ -12,7 +12,6 @@ import {
   usePollBgtBalance,
   usePollDelegatorValidators,
   usePollGlobalValidatorBribes,
-  usePollPrices,
 } from "@bera/berajs";
 import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
@@ -50,9 +49,7 @@ export default function Delegate({
   const { useSelectedAccountDelegation } = usePollAccountDelegations(validator);
   usePollActiveValidators();
   usePollDelegatorValidators();
-
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { useDelegatorPolValidators } = usePollGlobalValidatorBribes(prices);
   const { useDelegatorValidators } = usePollDelegatorValidators();
   const delegatedValidators = useDelegatorValidators();

@@ -3,7 +3,7 @@ import useSWR, { mutate } from "swr";
 import { type PoolV2 } from "~/app/pools/fetchPools";
 import useSWRImmutable from "swr/immutable";
 import { getCrocErc20LpAddress, useBeraJs } from "@bera/berajs";
-import { client, getTokenHoneyPrices } from "@bera/graphql";
+import { dexClient, getTokenHoneyPrices } from "@bera/graphql";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { toHex } from "viem";
 import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
@@ -57,7 +57,7 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
         return undefined;
       }
       try {
-        const tokenHoneyPricesResult = client
+        const tokenHoneyPricesResult = dexClient
           .query({
             query: getTokenHoneyPrices,
             variables: {

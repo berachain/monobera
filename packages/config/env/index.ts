@@ -15,7 +15,8 @@ export const faucetEndpointUrl = process.env
   .NEXT_PUBLIC_FAUCET_ENDPOINT as string;
 
 // Subgraphs
-export const subgraphUrl = process.env.NEXT_PUBLIC_SUBGRAPH_URL as string;
+export const crocSubgraphEndpoint = process.env
+  .NEXT_PUBLIC_RPC_CROC_SUBGRAPH as Address;
 export const honeySubgraphUrl = process.env
   .NEXT_PUBLIC_HONEY_SUBGRAPH_URL as string;
 export const lendSubgraphUrl = process.env
@@ -165,7 +166,5 @@ export const crocMultiSwapAddress = process.env
   .NEXT_PUBLIC_RPC_CROC_MULTISWAP as Address;
 export const crocIndexerEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_INDEXER_ENDPOINT as Address;
-export const crocSubgraphEndpoint = process.env
-  .NEXT_PUBLIC_RPC_CROC_SUBGRAPH as Address;
 export const crocRouterEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_ROUTER_ENDPOINT as Address;

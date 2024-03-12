@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {
   formatUsd,
   usePollEpochs,
-  usePollPrices,
   useTokenInformation,
   useTokens,
   type Token,
@@ -53,8 +52,7 @@ const BribeCard = ({
     }
   }, [tokenInformation]);
 
-  const { usePrice } = usePollPrices();
-  const { data: price } = usePrice(tokenAddress);
+  const price = 0;
   const formattedAmountPerProposal = Number(
     formatUnits(amountPerProposal, token?.decimals ?? 18),
   );

@@ -1,4 +1,4 @@
-import { client, getInflationData, type InflationRate } from "@bera/graphql";
+import { dexClient, getInflationData, type InflationRate } from "@bera/graphql";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
@@ -10,7 +10,7 @@ export const usePollBgtInflation = () => {
   useSWR(
     QUERY_KEY,
     async () => {
-      const inflationData: InflationRate | undefined = await client
+      const inflationData: InflationRate | undefined = await dexClient
         .query({
           query: getInflationData,
           variables: {
@@ -25,7 +25,7 @@ export const usePollBgtInflation = () => {
           );
           return positiveInflationData;
         })
-        .catch((e) => {
+        .catch((e: any) => {
           console.log(e);
           return undefined;
         });

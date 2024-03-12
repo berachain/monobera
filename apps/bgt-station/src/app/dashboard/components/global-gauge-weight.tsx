@@ -1,12 +1,10 @@
-import { usePollPrices } from "@bera/berajs";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import GlobalGaugeWeight from "~/components/global-gauge-weight";
 import { useGlobalValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
 
 export default function GlobalGaugeWeightInfo() {
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { data, isLoading } = useGlobalValidatorGaugeWeight();
   return (
     <div>

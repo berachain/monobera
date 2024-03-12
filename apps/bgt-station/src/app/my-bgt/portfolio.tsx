@@ -8,7 +8,6 @@ import {
   usePollBribes,
   usePollDelegatorUnbonding,
   usePollDelegatorValidators,
-  usePollPrices,
   usePollTotalDelegated,
   type Validator,
 } from "@bera/berajs";
@@ -51,8 +50,7 @@ export default function Portfolio() {
   const totalUnbonding = useDelegatorTotalUnbonding();
   const { result: unbondingQueue } = useDelegatorUnbondingQueue();
   const unbondingValidatorCount = useDelegatorTotalUnbondingValidators();
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { useTotalBribes, useBribeTokens, useBribes } = usePollBribes();
   const totalBribes = useTotalBribes(prices);
   const bribeTokenList = useBribeTokens();

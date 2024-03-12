@@ -6,7 +6,7 @@ import { toHex, type Address, erc20Abi } from "viem";
 import { formatSubgraphPoolData, type PoolV2 } from "~/app/pools/fetchPools";
 import { usePublicClient } from "wagmi";
 import {
-  client,
+  dexClient,
   getFilteredPoolList,
   getTokenHoneyPrices,
 } from "@bera/graphql";
@@ -90,7 +90,7 @@ export const usePollUserDeposited = () => {
         new Set([...baseTokenAddresses, ...quoteTokenAddresses]),
       );
 
-      const tokenHoneyPricesResult = client
+      const tokenHoneyPricesResult = dexClient
         .query({
           query: getTokenHoneyPrices,
           variables: {
@@ -141,7 +141,7 @@ export const usePollUserDeposited = () => {
       });
 
       // // get pool objects for pools user deposited for
-      const poolsResult = client
+      const poolsResult = dexClient
         .query({
           query: getFilteredPoolList,
           variables: {

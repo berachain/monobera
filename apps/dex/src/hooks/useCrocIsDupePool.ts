@@ -1,7 +1,7 @@
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Token } from "@bera/berajs";
-import { client, getCrocSelectedPool } from "@bera/graphql";
+import { dexClient, getCrocSelectedPool } from "@bera/graphql";
 import { useCrocPoolFromTokens, useCrocToken } from "./useCrocPoolFromTokens";
 
 export const useCrocIsDupePool = ({
@@ -20,7 +20,7 @@ export const useCrocIsDupePool = ({
       return undefined;
     }
     try {
-      const poolResult = client
+      const poolResult = dexClient
         .query({
           query: getCrocSelectedPool,
           variables: {
@@ -31,7 +31,7 @@ export const useCrocIsDupePool = ({
         .then((result: any) => {
           return result.data.pools.length > 0;
         })
-        .catch((e) => {
+        .catch((e: any) => {
           console.log(e);
           return false;
         });

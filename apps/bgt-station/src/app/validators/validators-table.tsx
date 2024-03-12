@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import {
   truncateHash,
   usePollGlobalValidatorBribes,
-  usePollPrices,
   usePollValidatorCuttingBoard,
   useTokens,
   type PoLValidator,
@@ -90,8 +89,7 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
 };
 export default function ValidatorsTable() {
   const router = useRouter();
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
   const [keyword, setKeyword] = React.useState("");
   const validators = usePolValidators();
