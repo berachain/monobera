@@ -1,5 +1,3 @@
-"use client";
-
 import { useMemo, useState, useEffect } from "react";
 import type { ClosedTrade, OpenLimitOrder, OpenTrade } from "@bera/proto/src";
 
@@ -9,8 +7,10 @@ import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
 import { getPnl } from "~/hooks/useCalculatePnl";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
 import { type IMarket } from "../page";
-import { OrderHistoryHeader, type BerpTabTypes } from "./order-history-header";
+import { OrderHistoryHeader } from "./order-history-header";
 import { OrderHistoryTable } from "./order-history-table";
+import { type RowSelectionState } from "@tanstack/react-table";
+import { type BerpTabTypes } from "./order-wrapper";
 import { TotalAmount } from "./total-amount";
 import { formatUnits } from "viem";
 
@@ -49,7 +49,28 @@ export interface IPosition {
   close_type: string;
 }
 
-export function OrderHistory({ markets }: { markets: IMarket[] }) {
+export type CloseOrderPayload = {
+  pairIndex: bigint;
+  index: bigint;
+};
+
+export function OrderHistory({
+  markets,
+  tabType,
+  setTabType,
+  selection,
+  setSelection,
+  showOrderLines,
+  setShowOrderLines,
+}: {
+  markets: IMarket[];
+  tabType: BerpTabTypes;
+  setTabType: (tab: BerpTabTypes) => void;
+  selection: RowSelectionState;
+  setSelection: (selection: RowSelectionState) => void;
+  showOrderLines: boolean;
+  setShowOrderLines: (showOrderLines: boolean) => void;
+}) {
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -64,8 +85,6 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
       window.removeEventListener("resize", handleResize);
     };
   }, [mobile]);
-
-  const [tabType, setTabType] = useState<BerpTabTypes>("positions");
 
   const { useMarketOpenPositions } = usePollOpenPositions();
 
@@ -101,18 +120,45 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
   ];
 
   const closePositionsPayload = useMemo(() => {
-    return openPositions?.map((position) => ({
-      pairIndex: BigInt(position.market.pair_index),
-      index: BigInt(position.index),
-    }));
-  }, [openPositions]);
+    return openPositions?.reduce<CloseOrderPayload[]>(
+      (acc, position, index) => {
+        if (selection && Object.keys(selection).length !== 0) {
+          if (selection[index] === true) {
+            acc.push({
+              pairIndex: BigInt(position.market.pair_index),
+              index: BigInt(position.index),
+            });
+          }
+        } else {
+          acc.push({
+            pairIndex: BigInt(position.market.pair_index),
+            index: BigInt(position.index),
+          });
+        }
+        return acc;
+      },
+      [],
+    );
+  }, [openPositions, selection]);
 
   const closeOrdersPayload = useMemo(() => {
-    return openOrders?.map((position) => ({
-      pairIndex: BigInt(position.market.pair_index),
-      index: BigInt(position.index),
-    }));
-  }, [openPositions]);
+    return openOrders?.reduce<CloseOrderPayload[]>((acc, position, index) => {
+      if (selection && Object.keys(selection).length !== 0) {
+        if (selection[index] === true) {
+          acc.push({
+            pairIndex: BigInt(position.market.pair_index),
+            index: BigInt(position.index),
+          });
+        }
+      } else {
+        acc.push({
+          pairIndex: BigInt(position.market.pair_index),
+          index: BigInt(position.index),
+        });
+      }
+      return acc;
+    }, []);
+  }, [openOrders, selection]);
 
   const { usePriceFeed } = usePricesSocket();
 
@@ -163,6 +209,9 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
       <OrderHistoryHeader
         closePositionsPayload={closePositionsPayload}
         closeOrdersPayload={closeOrdersPayload}
+        showOrderLines={showOrderLines}
+        setShowOrderLines={setShowOrderLines}
+        selection={selection}
         {...{ headers, tabType, setTabType }}
       />
       <TotalAmount
@@ -172,7 +221,9 @@ export function OrderHistory({ markets }: { markets: IMarket[] }) {
       />
       <OrderHistoryTable
         tab={tabType}
-        openPositons={openPositions}
+        selection={selection}
+        setSelection={setSelection}
+        openPositions={openPositions}
         openOrders={openOrders}
         allPositions={allPositions}
         history={closedPositions}
