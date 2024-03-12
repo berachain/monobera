@@ -1,7 +1,8 @@
 import { usePollPrices } from "@bera/berajs";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import GlobalGaugeWeight from "~/components/global-gauge-weight";
+import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
+import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
 import { useValidatorGaugeWeight } from "~/hooks/useGaugeWeights";
 
 export default function ValidatorGaugeWeightInfo({
@@ -24,7 +25,10 @@ export default function ValidatorGaugeWeightInfo({
             <Skeleton className="h-10 w-full" />
           </div>
         ) : (
-          <GlobalGaugeWeight gaugeWeights={data ?? []} />
+          <div className="mt-8 flex w-full flex-col items-center gap-16 lg:flex-row ">
+            <GlobalGaugeWeightChart gaugeWeights={data ?? []} />
+            <GlobalGaugeWeightTable gaugeWeights={data ?? []} />
+          </div>
         )}
       </>
     </div>
