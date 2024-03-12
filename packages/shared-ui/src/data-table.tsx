@@ -65,6 +65,7 @@ export function DataTable<TData, TValue>({
   loading = false,
   additionalTableProps,
   customEmptyDataState,
+  onCustomSortingChange,
 }: DataTableProps<TData, TValue>) {
   const [state, setState] = useState<TableState>({
     columnFilters: [],
@@ -115,6 +116,10 @@ export function DataTable<TData, TValue>({
       ...additionalTableProps?.meta,
     },
   });
+
+  useEffect(() => {
+    onCustomSortingChange?.(state?.sorting);
+  }, [state]);
 
   return (
     <div

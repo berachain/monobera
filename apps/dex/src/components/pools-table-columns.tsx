@@ -11,10 +11,11 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
+
 import {
-  type PoolV2,
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
+  type PoolV2,
 } from "~/app/pools/fetchPools";
 import {
   usePollUserDeposited,

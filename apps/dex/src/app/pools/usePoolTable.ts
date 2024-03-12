@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useSWRInfinite from "swr/infinite";
 
-import { type PoolV2, fetchPools } from "./fetchPools";
+import { fetchPools, type PoolV2 } from "./fetchPools";
 
 const DEFAULT_SIZE = 8;
 
@@ -49,6 +49,7 @@ export const usePoolTable = (sorting: any) => {
           DEFAULT_SIZE,
           sortOption,
           sortOrder,
+          keyword,
         );
 
         return newPools ?? [];
@@ -100,6 +101,7 @@ export const usePoolTable = (sorting: any) => {
     isList,
     setIsList,
     handleEnter,
+    keyword,
     setKeyword,
   };
 };
