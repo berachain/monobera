@@ -2,17 +2,13 @@ import { useBeraJs } from "@bera/berajs";
 import { ConnectWalletBear, DataTable, NotFoundBear } from "@bera/shared-ui";
 
 import { my_columns } from "~/components/pools-table-columns";
+import { usePollUserDeposited } from "~/hooks/usePollUserDeposited";
+import { getPoolUrl } from "../../fetchPools";
 import { PoolCard } from "./PoolCard";
 import CardViewLoading from "./card-view-loading";
 import TableViewLoading from "./table-view-loading";
-import { getPoolUrl } from "../../fetchPools";
-import { usePollUserDeposited } from "~/hooks/usePollUserDeposited";
 
-export default function MyPool({
-  isList,
-}: {
-  isList: boolean;
-}) {
+export default function MyPool({ isList }: { isList: boolean }) {
   const { isReady } = useBeraJs();
   const { usePositions, isLoading } = usePollUserDeposited();
   const userPools = usePositions();
@@ -36,7 +32,7 @@ export default function MyPool({
           <DataTable
             data={userPools}
             columns={my_columns}
-            title={`My Pools (${userPools.length})`}
+            title={`My Pools (${userPools?.length ?? "0"})`}
             onRowClick={(row: any) => {
               window.open(getPoolUrl(row.original), "_self");
             }}
