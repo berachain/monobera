@@ -3,7 +3,7 @@ import { getDayStartTimestampDaysAgo } from "@bera/bera-router";
 import { formatUsd } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { type PoolDayData } from "@bera/graphql";
-import { Dropdown } from "@bera/shared-ui";
+import { Dropdown, SSRSpinner } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -361,7 +361,11 @@ export const PoolChart = ({
             />
           </div>
         </CardHeader>
-        {!isLoading && (
+        {isLoading ? (
+          <div className="relative flex min-h-[250px] w-full items-center justify-center">
+            <SSRSpinner size={16} />
+          </div>
+        ) : (
           <>
             <TabsContent value={Chart.VOLUME}>
               <CardContent className="relative min-h-[250px] w-full">
