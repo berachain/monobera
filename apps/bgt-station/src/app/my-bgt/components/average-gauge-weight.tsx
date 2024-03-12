@@ -2,7 +2,8 @@ import { usePollDelegatorValidators } from "@bera/berajs";
 import { cloudinaryUrl, docsUrl } from "@bera/config";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import GlobalGaugeWeight from "~/components/global-gauge-weight";
+import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
+import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
 import { useUserGaugeWeight } from "~/hooks/useGaugeWeights";
 import { Banner } from "./banner";
 
@@ -23,7 +24,10 @@ export default function AverageGaugeWeight() {
               <Skeleton className="h-10 w-full" />
             </div>
           ) : (
-            <GlobalGaugeWeight gaugeWeights={data ?? []} />
+            <div className="mt-8 flex w-full flex-col items-center gap-16 lg:flex-row ">
+              <GlobalGaugeWeightChart gaugeWeights={data ?? []} />
+              <GlobalGaugeWeightTable gaugeWeights={data ?? []} />
+            </div>
           )}
         </>
       ) : (
