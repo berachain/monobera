@@ -16,6 +16,9 @@ export type Token = {
 export type Gauge = {
   logoURI?: string;
   address: string;
+  url?: string;
+  category?: string;
+  categoryIcon?: string;
   name: string;
   default?: boolean;
   normalizedWeight?: number;

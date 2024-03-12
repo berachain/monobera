@@ -39,13 +39,11 @@ export default function GaugeInfoCard() {
           <div className="text-md flex flex-col items-start gap-4 text-muted-foreground">
             Total No. of Validators
           </div>
-          <div className="flex flex-row flex-wrap items-end justify-end gap-1 text-right">
+          <div className="flex flex-row flex-wrap items-end justify-end gap-1 text-right text-foreground">
             <span className="text-md flex flex-col font-semibold text-success-foreground">
               69 Active
             </span>
-            <span className="text-md flex flex-col font-semibold text-foreground">
-              /
-            </span>
+            /
             <span className="text-md flex flex-col font-semibold text-info-foreground">
               80 Total
             </span>

@@ -33,7 +33,9 @@ export const GaugeIcon = ({
   return (
     <Avatar className={cn("h-6 w-6", className)}>
       <AvatarImage
-        src={gaugeDictionary[getAddress(address)]?.logoURI}
+        src={
+          gaugeDictionary ? gaugeDictionary[getAddress(address)]?.logoURI : ""
+        }
         className="rounded-full"
       />
       <AvatarFallback>
