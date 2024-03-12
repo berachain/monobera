@@ -172,7 +172,7 @@ export const PoolChart = ({
   isLoading,
 }: {
   currentTvl: number;
-  historicalData: PoolDayData[];
+  historicalData: PoolDayData[] | undefined;
   isLoading: boolean;
 }) => {
   const quarterlyDayStartTimes: number[] = [];

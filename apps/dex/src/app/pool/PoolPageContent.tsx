@@ -8,6 +8,7 @@ import {
   chainId,
   crocIndexerEndpoint,
 } from "@bera/config";
+import { type PoolDayData } from "@bera/graphql";
 import { ApyTooltip, Spinner, TokenIcon } from "@bera/shared-ui";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { cn } from "@bera/ui";
@@ -233,8 +234,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -254,8 +255,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -277,8 +278,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -295,9 +296,12 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   const userAmbientPosition = usePosition();
   const userPositionBreakdown = userAmbientPosition?.userPosition;
 
-  const { poolHistory, isLoading: isPoolHistoryLoading } = usePoolHistory({
-    pool,
-  });
+  const { usePoolHistoryData, isLoading: isPoolHistoryLoading } =
+    usePoolHistory({
+      pool,
+    });
+
+  const { data: poolHistory } = usePoolHistoryData();
 
   return (
     <div className="flex flex-col gap-8">
