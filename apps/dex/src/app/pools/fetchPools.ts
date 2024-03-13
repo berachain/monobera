@@ -1,7 +1,7 @@
 import { type Token } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
-import { formatUnits, type Address } from "viem";
 import BigNumber from "bignumber.js";
+import { formatUnits, type Address } from "viem";
 
 export interface PoolV2 {
   id: string; // concat base-quote-poolidx
@@ -31,15 +31,15 @@ export const getPoolId = (base: Address, quote: Address) => {
 };
 
 export const getPoolUrl = (pool: PoolV2) => {
-  return `/pool?base=${pool.base}&quote=${pool.quote}`;
+  return `/pool?shareAddress=${pool.shareAddress}`;
 };
 
 export const getPoolAddLiquidityUrl = (pool: PoolV2) => {
-  return `/add-liquidity?base=${pool.base}&quote=${pool.quote}`;
+  return `/add-liquidity?shareAddress=${pool.shareAddress}`;
 };
 
 export const getPoolWithdrawUrl = (pool: PoolV2) => {
-  return `/withdraw?base=${pool.base}&quote=${pool.quote}`;
+  return `/withdraw?shareAddress=${pool.shareAddress}`;
 };
 
 export const getBaseCost = (initialPrice: number) => {
@@ -89,7 +89,7 @@ export const formatSubgraphPoolData = (result: any): PoolV2 => {
     quoteTokenHoneyTvl: 0,
     totalApy: 0,
     bgtApy: 0,
-    shareAddress: "",
+    shareAddress: result.shareAddress?.address,
   };
 };
 
@@ -97,24 +97,18 @@ export const formatPoolData = (result: any): PoolV2 => {
   const baseInfo = result.info.baseInfo;
   const quoteInfo = result.info.quoteInfo;
 
-  const baseTvlFormattedAmount = formatUnits(
-    BigInt(result.stats.baseTvl),
-    baseInfo.decimals,
-  );
-  const quoteTvlFormattedAmount = formatUnits(
-    BigInt(result.stats.quoteTvl),
-    quoteInfo.decimals,
-  );
-
-  const baseTvlHoneyAmount = formatUnits(
-    BigInt(result.stats.baseTvlInHoney),
-    baseInfo.decimals,
-  );
-  const quotTvlHoneyAmount = formatUnits(
-    BigInt(result.stats.quoteTvlInHoney),
-    quoteInfo.decimals,
-  );
-
+  const baseTvlFormattedAmount = new BigNumber(result.stats.baseTvl)
+    .div(10 ** baseInfo.decimals)
+    .toString();
+  const quoteTvlFormattedAmount = new BigNumber(result.stats.quoteTvl)
+    .div(10 ** quoteInfo.decimals)
+    .toString();
+  const baseTvlHoneyAmount = new BigNumber(result.stats.baseTvlInHoney)
+    .div(10 ** 18)
+    .toString();
+  const quotTvlHoneyAmount = new BigNumber(result.stats.quoteTvlInHoney)
+    .div(10 ** 18)
+    .toString();
   const totalTvl =
     parseFloat(baseTvlHoneyAmount) + parseFloat(quotTvlHoneyAmount);
 
@@ -130,6 +124,7 @@ export const formatPoolData = (result: any): PoolV2 => {
       .concat("-")
       .concat(result.info.quoteInfo.symbol),
     tokens: [result.info.baseInfo, result.info.quoteInfo],
+    shareAddress: result.info.shareAddress?.address,
     baseTokens: baseTvlFormattedAmount,
     quoteTokens: quoteTvlFormattedAmount,
     feeRate: result.stats.feeRate / 10000,
@@ -140,7 +135,6 @@ export const formatPoolData = (result: any): PoolV2 => {
     quoteTokenHoneyTvl: parseFloat(quotTvlHoneyAmount),
     totalApy: 0,
     bgtApy: 0,
-    shareAddress: "",
   };
 };
 
@@ -170,6 +164,25 @@ export const fetchPools = async (
   }
 };
 
+export const fetchPoolByAddress = async (
+  shareAddress?: string,
+): Promise<PoolV2 | null> => {
+  try {
+    const result = await fetch(
+      `${crocIndexerEndpoint}/v2/pool_stats/${shareAddress}?chainId=0x${chainId.toString(
+        16,
+      )}`,
+    );
+
+    const response = await result.json();
+
+    return formatPoolData(response.data);
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 export const fetchPoolsWithKeyword = async (
   page: number,
   limit: number,
@@ -196,10 +209,8 @@ export const fetchPoolsWithKeyword = async (
   }
 };
 
-export const fetchSelectedPool = async (base: string, quote: string) => {
-  const response = await fetchPools(0, 100, "tvl", "desc");
-
-  return response.find((pool) => {
-    return pool.base === base && pool.quote === quote;
-  });
+export const fetchSelectedPool = async (shareAddress: string) => {
+  if (!shareAddress) return null;
+  const response = await fetchPoolByAddress(shareAddress);
+  return response;
 };

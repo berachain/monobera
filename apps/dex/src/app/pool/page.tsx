@@ -1,10 +1,10 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-
-import PoolPageContent from "./PoolPageContent";
 import { isAddress } from "viem";
+
 import { fetchSelectedPool } from "../pools/fetchPools";
+import PoolPageContent from "./PoolPageContent";
 
 export function generateMetadata(): Metadata {
   return {
@@ -17,13 +17,13 @@ export const revalidate = 5;
 export default async function PoolPage({
   searchParams,
 }: {
-  searchParams: { base: string; quote: string };
+  searchParams: { shareAddress: string };
 }) {
   try {
-    if (!isAddress(searchParams.base) || !isAddress(searchParams.quote)) {
+    if (!isAddress(searchParams.shareAddress)) {
       notFound();
     }
-    const pool = await fetchSelectedPool(searchParams.base, searchParams.quote);
+    const pool = await fetchSelectedPool(searchParams.shareAddress);
 
     if (!pool) {
       notFound();

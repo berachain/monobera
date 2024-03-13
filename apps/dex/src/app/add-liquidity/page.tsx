@@ -1,11 +1,11 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-
-import { getMetaTitle } from "~/utils/metadata";
-import AddLiquidityContent from "./AddLiquidityContent";
 import { dexName } from "@bera/config";
 import { isAddress } from "viem";
+
+import { getMetaTitle } from "~/utils/metadata";
 import { fetchSelectedPool } from "../pools/fetchPools";
+import AddLiquidityContent from "./AddLiquidityContent";
 
 export function generateMetadata(): Metadata {
   return {
@@ -19,13 +19,13 @@ export const fetchCache = "force-no-store";
 export default async function PoolPage({
   searchParams,
 }: {
-  searchParams: { base: string; quote: string };
+  searchParams: { shareAddress: string };
 }) {
   try {
-    if (!isAddress(searchParams.base) || !isAddress(searchParams.quote)) {
+    if (!isAddress(searchParams.shareAddress)) {
       notFound();
     }
-    const pool = await fetchSelectedPool(searchParams.base, searchParams.quote);
+    const pool = await fetchSelectedPool(searchParams.shareAddress);
 
     if (!pool) {
       notFound();

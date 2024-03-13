@@ -153,7 +153,7 @@ export const getGlobalDexData = gql`
 
 export const getTokenHoneyPrice = gql`
   query GetTokenHoneyPrice($id: String) {
-    tokenHoneyPrice(id: $id ) {
+    tokenHoneyPrice(id: $id) {
       id
       price
     }
@@ -239,7 +239,7 @@ export const getPoolList = gql`
         name
         decimals
       }
-      quoteInfo{
+      quoteInfo {
         id
         address
         symbol
@@ -252,12 +252,7 @@ export const getPoolList = gql`
 
 export const getFilteredPoolList = gql`
   query GetPoolList($baseAssets: [Bytes!], $quoteAssets: [Bytes!]) {
-    pools(
-      where: {
-        base_in: $baseAssets
-        quote_in: $quoteAssets
-      }
-    ) {
+    pools(where: { base_in: $baseAssets, quote_in: $quoteAssets }) {
       id
       poolIdx
       base
@@ -273,12 +268,15 @@ export const getFilteredPoolList = gql`
         name
         decimals
       }
-      quoteInfo{
+      quoteInfo {
         id
         address
         symbol
         name
         decimals
+      }
+      shareAddress {
+        address
       }
     }
   }
@@ -286,12 +284,7 @@ export const getFilteredPoolList = gql`
 
 export const getCrocSelectedPool = gql`
   query GetPoolList($baseAsset: Bytes!, $quoteAsset: Bytes!) {
-    pools(
-      where: {
-        base: $baseAsset
-        quote: $quoteAsset
-      }
-    ) {
+    pools(where: { base: $baseAsset, quote: $quoteAsset }) {
       id
       poolIdx
       base
@@ -307,7 +300,7 @@ export const getCrocSelectedPool = gql`
         name
         decimals
       }
-      quoteInfo{
+      quoteInfo {
         id
         address
         symbol
@@ -321,36 +314,34 @@ export const getCrocSelectedPool = gql`
 export const getRecentSwaps = gql`
   query GetRecentSwaps($poolHash: Bytes!) {
     swaps(
-    first: 50,
-    orderBy:time,
-    orderDirection: desc,
-    where:{
-    pool: $poolHash
-  }) {
-    user
-    baseFlow
-    quoteFlow
-    transactionHash
-    time
-  }
+      first: 50
+      orderBy: time
+      orderDirection: desc
+      where: { pool: $poolHash }
+    ) {
+      user
+      baseFlow
+      quoteFlow
+      transactionHash
+      time
+    }
   }
 `;
 
 export const getRecentProvisions = gql`
   query GetRecentProvisions($poolHash: Bytes!) {
     liquidityChanges(
-    first: 50,
-    orderBy:time,
-    orderDirection: desc,
-    where:{
-    pool: $poolHash
-  }) {
-    user
-    baseFlow
-    quoteFlow
-    changeType
-    transactionHash
-    time
-  }
+      first: 50
+      orderBy: time
+      orderDirection: desc
+      where: { pool: $poolHash }
+    ) {
+      user
+      baseFlow
+      quoteFlow
+      changeType
+      transactionHash
+      time
+    }
   }
 `;
