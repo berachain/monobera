@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { truncateHash, useGauges } from "@bera/berajs";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { type Chart, type TooltipModel } from "chart.js";
@@ -9,6 +9,12 @@ import { ChartTooltip } from "./chart-tooltip";
 interface Props {
   gaugeWeights: GaugeWeight[] | undefined;
 }
+
+const othersColor = {
+  backgroundColor: "#919191",
+  hoverBorderColor: "#91919152",
+};
+const OTHERS_GAUGES = "Others"; // Identifier for aggregated others
 
 export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
@@ -22,10 +28,48 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
     top: 0,
   });
 
+  const { combinedGauges } = useMemo(() => {
+    const threshold = 0.04; // 4%
+    const filtered =
+      gaugeWeights?.filter((gauge) => gauge.percentage >= threshold) || [];
+    const others = gaugeWeights?.reduce(
+      (prev, curr) => {
+        if (curr.percentage < threshold) {
+          return {
+            amount: prev.amount + curr.amount,
+            percentage: prev.percentage + curr.percentage,
+          };
+        }
+        return prev;
+      },
+      { amount: 0, percentage: 0 },
+    );
+
+    let combined = [...filtered];
+
+    // Only add the "Others" gauge if it has a significant amount
+    if (others.amount > 0) {
+      combined.push({
+        address: OTHERS_GAUGES,
+        label: OTHERS_GAUGES,
+        amount: others.amount,
+        percentage: others.percentage,
+      });
+    }
+    console.log("combined", gaugeWeights, combined);
+
+    return {
+      combinedGauges: combined,
+    };
+  }, [gaugeWeights]);
+
   useEffect(() => {
-    const temp = gaugeWeights?.map((data: GaugeWeight) => {
+    const temp = combinedGauges?.map((data: GaugeWeight) => {
       return {
-        label: data.address,
+        label:
+          data.label === OTHERS_GAUGES
+            ? OTHERS_GAUGES
+            : truncateHash(data.label),
         percentage: data.percentage,
         amount: data.amount,
       };
@@ -35,15 +79,19 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
 
   const pieData = React.useMemo(() => {
     return cuttingBoardData?.map((data) => ({
-      label: truncateHash(data.label),
+      label:
+        data.label === OTHERS_GAUGES ? OTHERS_GAUGES : truncateHash(data.label),
       originalLabel: data.label,
       amount: data.amount,
     }));
   }, [cuttingBoardData]);
+  console.log("pieData", pieData, selectedGauge);
 
   const dataP = {
     labels: pieData?.map((d) =>
-      gaugeDictionary ? gaugeDictionary[d.originalLabel]?.name ?? d.label : "",
+      gaugeDictionary
+        ? gaugeDictionary[d.originalLabel]?.name ?? d.label
+        : "Others",
     ),
     datasets: [
       {
@@ -83,6 +131,7 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
       tooltip: TooltipModel<"doughnut">;
       chart: Chart;
     }) => {
+      console.log("tooltip", tooltip);
       // hide tooltip
       if (tooltip.opacity === 0) {
         setTooltipVisible(false);
@@ -99,11 +148,29 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
       if (tooltip.labelColors[0]) {
         setColor(tooltip.labelColors[0].backgroundColor as string);
       }
+
       setSelectedGauge(
-        gaugeWeights?.find(
-          (gauge) => truncateHash(gauge.address) === tooltip.title[0],
+        gaugeWeights?.find((gauge) =>
+          gauge.address === OTHERS_GAUGES
+            ? gauge
+            : truncateHash(gauge.address) === tooltip.title[0],
         ),
       );
+
+      console.log("selectedGauge", gaugeWeights, selectedGauge);
+
+      // if (tooltip.title[0] === OTHERS_GAUGES) {
+      //   setSelectedGauge(
+      //     combinedGauges?.find((gauge) => gauge.label === tooltip.title[0]),
+      //   );
+      // } else {
+      //   setSelectedGauge(
+      //     combinedGauges?.find(
+      //       (gauge) => truncateHash(gauge.address) === tooltip.title[0],
+      //     ),
+      //   );
+      // }
+
       const canvasPosition = chart.canvas.getBoundingClientRect();
       setTooltipVisible(true);
       setTooltipPosition({
