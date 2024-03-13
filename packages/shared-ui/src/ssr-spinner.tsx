@@ -1,9 +1,15 @@
-export const SSRSpinner = ({ className }: { className: string }) => {
+export const SSRSpinner = ({
+  className = "",
+  size = 6,
+}: {
+  className?: string;
+  size?: number;
+}) => {
   return (
     <div role="status" className={className}>
       <svg
         aria-hidden="true"
-        className="h-6 w-6 animate-spin fill-green-600 text-gray-200 dark:text-gray-600"
+        className={`h-${size} w-${size} animate-spin fill-green-600 text-gray-200 dark:text-gray-600`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
