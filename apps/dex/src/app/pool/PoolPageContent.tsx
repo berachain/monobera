@@ -300,6 +300,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
     usePoolHistory({
       pool,
     });
+
   const { data: poolHistory } = usePoolHistoryData();
 
   return (
