@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+
 import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
@@ -22,10 +23,10 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
             <div className="text-sm font-medium"> All Pools</div>
           </Button>
         </Link>
-        <p className="flex w-full justify-center gap-4 text-center text-2xl font-semibold md:justify-start md:text-left">
+        <span className="flex w-full justify-center gap-4 text-center text-2xl font-semibold md:justify-start md:text-left">
           <TokenIconList tokenList={pool?.tokens ?? []} size="xl" />
           {pool?.poolName}
-        </p>
+        </span>
         <div className="flex w-full flex-row items-center justify-center gap-4 leading-7 text-muted-foreground md:justify-start">
           <div className="flex w-fit items-center gap-1">
             APY
