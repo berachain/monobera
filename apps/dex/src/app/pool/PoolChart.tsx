@@ -8,7 +8,8 @@ import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { formatUnits } from "viem";
+import { BigNumber } from "bignumber.js";
+import { formatUnits, parseUnits } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 
@@ -161,9 +162,11 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
 
 //   return percentageDifference;
 // }
-
 const formatHoney = (amountInHoney: number) => {
-  return getSafeNumber(formatUnits(BigInt(amountInHoney), 18));
+  const bnAmount = new BigNumber(amountInHoney.toString());
+  return getSafeNumber(bnAmount.div(10 ** 18).toString());
+
+  // return getSafeNumber(formatUnits(parseUnits(amountInHoney.toString(), 18), 18));
 };
 
 export const PoolChart = ({
