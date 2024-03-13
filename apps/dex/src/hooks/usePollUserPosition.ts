@@ -37,7 +37,7 @@ interface AmbientPosition {
   user: string;
 }
 
-export interface IUserAmbientPositon extends AmbientPosition {
+export interface IUserAmbientPositon {
   userPosition: IUserPosition | undefined;
 }
 
@@ -75,10 +75,6 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
             );
           });
 
-        const positionsResponse = fetch(
-          `${crocIndexerEndpoint}/user_positions?chainId=${hexChainId}&user=${account}`,
-        );
-
         const lpBalanceCall = publicClient.readContract({
           address: getCrocErc20LpAddress(pool.base, pool.quote) as any,
           abi: erc20Abi,
@@ -86,26 +82,10 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           args: [account],
         });
 
-        const [tokenHoneyPrices, positionsResult, lpBalance] =
-          await Promise.all([
-            tokenHoneyPricesResult,
-            positionsResponse,
-            lpBalanceCall,
-          ]);
-
-        const positions = await positionsResult.json();
-
-        const userPoolPosition: AmbientPosition | undefined =
-          positions.data.find(
-            (pos: any) =>
-              pos.base === pool.base &&
-              pos.quote === pool.quote &&
-              pos.chainId === hexChainId,
-          );
-
-        if (!userPoolPosition) {
-          return undefined;
-        }
+        const [tokenHoneyPrices, lpBalance] = await Promise.all([
+          tokenHoneyPricesResult,
+          lpBalanceCall,
+        ]);
 
         const sqrtPrice = new BigNumber(Math.sqrt(spotPrice));
 
@@ -132,7 +112,6 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           seeds: lpBalance,
         };
         return {
-          ...userPoolPosition,
           userPosition,
         };
       } catch (e) {
