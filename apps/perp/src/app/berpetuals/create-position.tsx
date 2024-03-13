@@ -20,12 +20,12 @@ import { type IMarket } from "./page";
 import { type OrderType } from "./type";
 import { getSafeNumber } from "../../../../bgt-station/src/utils/getSafeNumber";
 
-interface ICreatePosition {
+export interface ICreatePosition {
   market: IMarket;
   params: GlobalParams;
 }
 
-export default function CreatePosition({ market, params }: ICreatePosition) {
+export function CreatePosition({ market, params }: ICreatePosition) {
   const [givenHoney, setGivenHoney] = useState<boolean>(true);
 
   const asset = market.name.split("-")[0] as string;

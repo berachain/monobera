@@ -6,7 +6,7 @@ import { cn } from "@bera/ui";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
 import type { IMarket } from "../page";
-import { type BerpTabTypes } from "./order-history-header";
+import { type BerpTabTypes } from "./order-wrapper";
 import { TotalRelativePnLHoverState } from "./total-relative-pnl-hover-state";
 
 export function TotalAmount({
