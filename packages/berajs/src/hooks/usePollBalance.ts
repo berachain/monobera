@@ -1,8 +1,8 @@
 import { nativeTokenAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatEther, formatUnits } from "viem";
-import { erc20ABI, usePublicClient, type Address } from "wagmi";
+import { type Address, erc20Abi, formatEther, formatUnits } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { MULTICALL3_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
@@ -15,7 +15,7 @@ interface BalanceToken extends Token {
 }
 
 interface Call {
-  abi: typeof erc20ABI;
+  abi: typeof erc20Abi;
   address: `0x${string}`;
   functionName: string;
   args: any[];
@@ -34,30 +34,31 @@ export const usePollBalance = ({
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (account && !error && address) {
         if (address !== nativeTokenAddress) {
           const call: Call[] = [
             {
               address: address as `0x${string}`,
-              abi: erc20ABI,
+              abi: erc20Abi,
               functionName: "balanceOf",
               args: [account],
             },
             {
               address: address as `0x${string}`,
-              abi: erc20ABI,
+              abi: erc20Abi,
               functionName: "symbol",
               args: [],
             },
             {
               address: address as `0x${string}`,
-              abi: erc20ABI,
+              abi: erc20Abi,
               functionName: "name",
               args: [],
             },
             {
               address: address as `0x${string}`,
-              abi: erc20ABI,
+              abi: erc20Abi,
               functionName: "decimals",
               args: [],
             },

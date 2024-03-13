@@ -22,6 +22,8 @@ export const usePollHoneyPreview = (
       : "previewHoneyToRedeem";
   const QUERY_KEY = [method, collateral?.address, amount, mint, given_in];
   const swrResponse = useSWR(QUERY_KEY, async () => {
+    if (!publicClient) return undefined;
+
     try {
       if (!collateral || Number(amount) <= 0) return undefined;
 

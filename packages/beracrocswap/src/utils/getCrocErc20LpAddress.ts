@@ -24,11 +24,6 @@ export const getCrocErc20LpAddress = (
     q = quote
   }
 
-  console.log({
-    b,
-    q
-  })
-  
   const salt = ethers.utils.keccak256(
     ethers.utils.solidityPack(["address", "address"], [b, q]),
   );

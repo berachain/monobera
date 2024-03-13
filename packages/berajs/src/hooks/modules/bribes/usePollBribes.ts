@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, getAddress } from "viem";
-import { erc20ABI, usePublicClient, type Address } from "wagmi";
+import { type Address, formatUnits, getAddress, erc20Abi } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
@@ -39,6 +39,7 @@ export const usePollBribes = () => {
     QUERY_KEY,
     async () => {
       try {
+        if (!publicClient) return undefined;
         const result = (await publicClient.readContract({
           address: process.env.NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address,
           abi: BRIBE_PRECOMPILE_ABI,
@@ -98,7 +99,7 @@ export const usePollBribes = () => {
   };
 
   interface Call {
-    abi: typeof erc20ABI;
+    abi: typeof erc20Abi;
     address: `0x${string}`;
     functionName: string;
     args: any[];
@@ -109,10 +110,11 @@ export const usePollBribes = () => {
     const { networkConfig } = useBeraConfig();
     const QUERY_KEY = ["useBribeTokensSymbol", tokens];
     const { data, isLoading } = useSWRImmutable(QUERY_KEY, async () => {
+      if (!publicClient) return undefined;
       if (tokens === undefined || tokens.length === 0) return [];
       const call: Call[] = tokens?.map((address: string) => ({
         address: address as Address,
-        abi: erc20ABI,
+        abi: erc20Abi,
         functionName: "symbol",
         args: [],
       }));

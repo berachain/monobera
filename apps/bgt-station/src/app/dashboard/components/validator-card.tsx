@@ -2,19 +2,14 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  usePollGlobalValidatorBribes,
-  usePollPrices,
-  type PoLValidator,
-} from "@bera/berajs";
+import { usePollGlobalValidatorBribes, type PoLValidator } from "@bera/berajs";
 import { formatter } from "@bera/berajs/src/utils";
 import { BribeApyTooltip, TokenIconList, ValidatorIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits } from "viem";
-import { type Address } from "wagmi";
+import { formatUnits, type Address } from "viem";
 
 import { formatCommission } from "~/utils/formatCommission";
 
@@ -25,8 +20,7 @@ export default function ValidatorCard({
   validator: PoLValidator;
   keyword: string;
 }) {
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { useValidatorvAPY, useValidatorTotalActiveBribeValue } =
     usePollGlobalValidatorBribes(prices);
   const bribeValue = useValidatorTotalActiveBribeValue(validator.operatorAddr);

@@ -1,5 +1,5 @@
 import { lendEndpointUrl } from "@bera/config";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 export interface RateItem {
   asset_address: Address;

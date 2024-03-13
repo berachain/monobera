@@ -1,4 +1,4 @@
-import { client, getGlobalCuttingBoard, type Weight } from "@bera/graphql";
+import { dexClient, getGlobalCuttingBoard, type Weight } from "@bera/graphql";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
@@ -10,7 +10,7 @@ export const usePollGlobalCuttingBoard = () => {
   useSWR(
     QUERY_KEY,
     async () => {
-      const globalCuttingBoard: Weight[] = await client
+      const globalCuttingBoard: Weight[] = await dexClient
         .query({
           query: getGlobalCuttingBoard,
           variables: {
@@ -21,7 +21,7 @@ export const usePollGlobalCuttingBoard = () => {
         .then((res: any) => {
           return res.data.globalCuttingBoardDatas[0].weights;
         })
-        .catch((e) => {
+        .catch((e: any) => {
           console.log(e);
           return undefined;
         });

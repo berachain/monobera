@@ -13,6 +13,7 @@ export const usePollBHoneyPrice = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       try {
         const result = await publicClient.readContract({
           address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,

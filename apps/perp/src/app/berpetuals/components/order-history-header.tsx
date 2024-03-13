@@ -4,7 +4,7 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Switch } from "@bera/ui/switch";
 import { mutate } from "swr";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 

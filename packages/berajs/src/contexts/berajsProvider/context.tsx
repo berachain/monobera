@@ -7,9 +7,10 @@ import React, {
   useState,
   type PropsWithChildren,
 } from "react";
-import { useAccount, useConnect, useNetwork } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
 
 import { useAuth } from "~/hooks";
+import { useBeraConfig } from "../berajsConfig";
 
 export interface IBeraJsAPI {
   account: `0x${string}` | undefined;
@@ -17,7 +18,6 @@ export interface IBeraJsAPI {
   isConnected: boolean;
   isWrongNetwork?: boolean;
   isReady?: boolean;
-  login: (connectorID: string) => void;
   logout: (connectorID: string) => void;
   setError: (error: Error | undefined) => void;
 }
@@ -25,12 +25,13 @@ export interface IBeraJsAPI {
 export const BeraJsContext = createContext<IBeraJsAPI | undefined>(undefined);
 
 const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { login, logout } = useAuth();
+  const { logout } = useAuth();
+  const { networkConfig } = useBeraConfig();
   const { error: evmError } = useConnect();
   const { address: account, status } = useAccount();
   const [error, setError] = useState<Error | undefined>(undefined);
   const [isMounted, setIsMounted] = useState(false);
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
 
   useEffect(() => setIsMounted(true), []);
 
@@ -91,13 +92,15 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
           () => (!evmError && account && isMounted ? true : false),
           [evmError, account, isMounted, status],
         ),
-        isWrongNetwork: !chain?.unsupported ? false : true,
+        isWrongNetwork: networkConfig.chain.id === chain?.id ? false : true,
         isReady: useMemo(
           () =>
-            !evmError && account && isMounted && chain?.unsupported === false,
-          [evmError, account, isMounted, chain?.id, status],
+            !evmError &&
+            account &&
+            isMounted &&
+            networkConfig.chain.id === chain?.id,
+          [evmError, account, isMounted, chain?.id, status, networkConfig],
         ),
-        login,
         logout,
         setError,
       }}

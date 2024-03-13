@@ -35,7 +35,7 @@ import {
   stakingAddress,
 } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
-import { type Chain } from "wagmi";
+import { type Chain } from "wagmi/chains";
 
 export const navItems = [
   {
@@ -214,7 +214,6 @@ export const partnerships = [
 const chain: Chain = {
   id: chainId,
   name: chainName,
-  network: networkName,
   nativeCurrency: {
     decimals: gasTokenDecimals,
     name: gasTokenName,

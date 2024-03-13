@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient, type Address } from "wagmi";
+import { type Address } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { DEX_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
@@ -21,6 +22,7 @@ export const usePollPoolTokens = (poolAddress: `0x${string}`) => {
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       const call: Call[] = [
         {
           abi: DEX_PRECOMPILE_ABI,

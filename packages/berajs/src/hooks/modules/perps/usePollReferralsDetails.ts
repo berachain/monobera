@@ -1,11 +1,12 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient, type Address } from "wagmi";
+import { usePublicClient } from "wagmi";
 import { REFERRALS_ABI } from "~/config";
 import { perpsReferralsAddress } from "@bera/config";
 
 import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
+import { type Address } from "viem";
 
 export const usePollReferralsDetails = () => {
   const publicClient = usePublicClient();
@@ -15,6 +16,7 @@ export const usePollReferralsDetails = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       try {
         const result = await publicClient.readContract({
           address: perpsReferralsAddress,

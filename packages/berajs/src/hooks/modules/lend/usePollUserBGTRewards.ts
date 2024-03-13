@@ -11,6 +11,7 @@ export const usePollLendUserBGTRewards = () => {
   const { account } = useBeraJs();
   const QUERY_KEY = ["getUserBGTRewardsLend", account];
   const swrResponce = useSWR(QUERY_KEY, async () => {
+    if (!publicClient) return undefined;
     if (account) {
       try {
         const result = await publicClient.readContract({

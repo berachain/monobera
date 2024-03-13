@@ -17,6 +17,8 @@ export const usePollBgtRewards = (receivers: string[]) => {
   const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
+
       const calls: any[] = receivers.map((receiver: string) => ({
         address: rewardsAddress,
         abi: REWARDS_PRECOMPILE_ABI,

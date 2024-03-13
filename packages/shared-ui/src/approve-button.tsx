@@ -8,8 +8,7 @@ import {
 } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import { maxInt256 } from "viem";
-import { erc20ABI } from "wagmi";
+import { maxInt256, erc20Abi } from "viem";
 
 import { useTxn } from "./hooks/useTxn";
 
@@ -75,7 +74,7 @@ export const ApproveButton = ({
           onClick={() => {
             write({
               address: token?.address as `0x${string}`,
-              abi: erc20ABI as unknown as (typeof erc20ABI)[],
+              abi: erc20Abi as unknown as (typeof erc20Abi)[],
               functionName: "approve",
               params: [spender, amount],
             });
@@ -90,7 +89,7 @@ export const ApproveButton = ({
         onClick={() => {
           write({
             address: token?.address as `0x${string}`,
-            abi: erc20ABI as unknown as (typeof erc20ABI)[],
+            abi: erc20Abi as unknown as (typeof erc20Abi)[],
             functionName: "approve",
             params: [spender, maxInt256],
           });

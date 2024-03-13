@@ -7,7 +7,7 @@ import {
   bribeApyTooltipText,
 } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import { formatCommission } from "~/utils/formatCommission";
 import { VP } from "~/components/validator-selector";

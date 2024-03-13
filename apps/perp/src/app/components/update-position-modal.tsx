@@ -7,8 +7,7 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
 import { parseUnits } from "ethers";
 import { mutate } from "swr";
-import { formatUnits } from "viem";
-import { type Address } from "wagmi";
+import { formatUnits, type Address } from "viem";
 
 import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";

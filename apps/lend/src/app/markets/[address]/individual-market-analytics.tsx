@@ -7,8 +7,7 @@ import {
   useTokens,
 } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
-import { type Address } from "wagmi";
-
+import { type Address } from "viem";
 import InterestRateOvertime from "./components/interest-rate-overtime";
 import TokenInfoCard from "./components/token-info-card";
 import TotalBorrowed from "./components/total-borrowed";

@@ -5,7 +5,6 @@ import {
   usePollActiveValidators,
   usePollDelegatorValidators,
   usePollGlobalValidatorBribes,
-  usePollPrices,
   type PoLValidator,
   type Validator,
 } from "@bera/berajs";
@@ -45,8 +44,7 @@ export default function ValidatorSelector({
   const { useDelegatorValidators } = usePollDelegatorValidators(); // => this took to long
   const delegatedValidators: Validator[] | undefined = useDelegatorValidators();
 
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { usePolValidators, useDelegatorPolValidators } =
     usePollGlobalValidatorBribes(prices);
   const validators = usePolValidators();

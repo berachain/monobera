@@ -15,6 +15,7 @@ export const usePollBalanceOfAssets = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       try {
         if (account) {
           const result = await publicClient.readContract({

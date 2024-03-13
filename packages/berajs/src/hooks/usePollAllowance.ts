@@ -1,7 +1,7 @@
 import useSWR, { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits } from "viem";
-import { erc20ABI, usePublicClient } from "wagmi";
+import { formatUnits, erc20Abi } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { type Token } from "~/api/currency/tokens";
 import { useBeraJs } from "~/contexts";
@@ -40,10 +40,11 @@ export const usePollAllowance = ({ contract, token }: IUsePollAllowances) => {
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (account && !error && token) {
         const allowance = await publicClient.readContract({
           address: token.address as `0x${string}`,
-          abi: erc20ABI,
+          abi: erc20Abi,
           functionName: method,
           args: [account, contract as `0x${string}`],
         });

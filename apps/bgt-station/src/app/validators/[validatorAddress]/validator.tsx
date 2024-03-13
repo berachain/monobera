@@ -6,7 +6,6 @@ import {
   truncateHash,
   usePollActiveValidators,
   usePollGlobalValidatorBribes,
-  usePollPrices,
 } from "@bera/berajs";
 import { Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
@@ -15,7 +14,6 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { formatUnits, type Address } from "viem";
 
 import BribesAndEmissions from "./bribes-and-emissions";
-// import Uptime from "./uptime";
 import ValidatorActivitiesTable from "./validator-activities-table";
 import ValidatorDetails from "./validator-details";
 import ValidatorGaugeWeightInfo from "./validator-gauge-weight";
@@ -25,13 +23,11 @@ export default function Validator({
 }: {
   validatorAddress: Address;
 }) {
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { usePolValidator } = usePollGlobalValidatorBribes(prices);
   const validator = usePolValidator(validatorAddress);
   const { usePercentageDelegated } = usePollActiveValidators();
   const percentageDelegated = usePercentageDelegated(validatorAddress);
-  // const { data, isLoading } = useHistoricalBribes(allEpochs);
 
   return (
     <div className="relative flex flex-col gap-16">

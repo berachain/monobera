@@ -16,7 +16,7 @@ import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import { useRedeem } from "../../hooks/useRedeem";
 

@@ -16,6 +16,7 @@ export const usePollDelegation = (validatorAddress: `0x${string}`) => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       try {
         const bgtRewardForDuration = await publicClient.readContract({
           address: "0x0", // TODO: BERACHEF contract address
