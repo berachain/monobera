@@ -36,19 +36,23 @@ export default function AddIncentivizeToken({
   const [isTyping, setIsTyping] = useState(false);
   const { isConnected } = useBeraJs();
   return (
-    <ul className="flex flex-row items-center justify-between">
-      <TokenInput
-        selected={selectedToken.token}
-        onTokenSelection={handleTokenSelection}
-        amount={selectedToken.amount ?? ""}
-        price={Number(tokenPrice)}
-        showExceeding={true}
-        setIsTyping={(isTyping: boolean) => setIsTyping(isTyping)}
-        onExceeding={(isExceeding: boolean) => setExceedingBalance(isExceeding)}
-        setAmount={(amount) => {
-          onTokenAmountChange(index, Number(amount));
-        }}
-      />
+    <ul className="flex w-full flex-row items-center justify-between">
+      <div className="flex flex-grow items-center">
+        <TokenInput
+          selected={selectedToken.token}
+          onTokenSelection={handleTokenSelection}
+          amount={selectedToken.amount ?? ""}
+          price={Number(tokenPrice)}
+          showExceeding={true}
+          setIsTyping={(isTyping: boolean) => setIsTyping(isTyping)}
+          onExceeding={(isExceeding: boolean) =>
+            setExceedingBalance(isExceeding)
+          }
+          setAmount={(amount) => {
+            onTokenAmountChange(index, Number(amount));
+          }}
+        />
+      </div>
 
       <div
         className={cn(

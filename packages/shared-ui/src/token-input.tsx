@@ -98,7 +98,7 @@ export function TokenInput({
   }, [exceeding]);
 
   return (
-    <li className={"flex flex-col flex-wrap px-3"}>
+    <li className="flex w-full flex-col flex-wrap px-3">
       <div className="flex flex-row items-center">
         <div className="flex flex-row items-center gap-1">
           <SelectToken

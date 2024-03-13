@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ActionButton } from "@bera/shared-ui";
+import { ActionButton, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -26,7 +26,6 @@ export default function Incentivize() {
   } = useCreateIncentiveTokens();
   useEffect(() => {
     const total = incentivizeTokens.reduce((acc, token) => {
-      // Assuming token.amount is a number. If it's a string, you may need to convert it using parseFloat(token.amount) or a similar method
       return acc + (parseFloat(token.amount) || 0);
     }, 0);
     setTotalIncentiveValue(total);
@@ -44,8 +43,13 @@ export default function Incentivize() {
 
         <div className="mt-8 flex flex-col gap-8">
           <div className="flex flex-col">
-            <div className="flex text-sm font-medium text-foreground">
+            <div className="flex items-center gap-1 text-sm font-medium text-foreground">
               1. Search/Enter Pool Address
+              <Tooltip
+                text="Enter the address of the pool you want to incentivize"
+                className="h-3 w-3"
+              />
+              <span className="text-destructive-foreground">*</span>
             </div>
             <div className="text-sm leading-tight">
               {/* TODO: add pool address validation */}
@@ -60,8 +64,10 @@ export default function Incentivize() {
             </div>
           </div>
           <div className="flex flex-col">
-            <div className="flex text-sm font-medium text-foreground">
+            <div className="flex items-center gap-1 text-sm font-medium text-foreground">
               2. Set a Starting Block No.
+              <Tooltip text="Enter the block number" className="h-3 w-3" />
+              <span className="text-destructive-foreground">*</span>
             </div>
             <div className="text-sm leading-tight">
               {/* TODO: add block number validation */}
@@ -76,8 +82,13 @@ export default function Incentivize() {
             </div>
           </div>
           <div className="flex flex-col">
-            <div className="flex text-sm font-medium text-foreground">
+            <div className="flex items-center gap-1 text-sm font-medium text-foreground">
               3. Select Tokens & Set Amounts
+              <Tooltip
+                text="Select the tokens you want to incentivize with"
+                className="h-3 w-3"
+              />
+              <span className="text-destructive-foreground">*</span>
             </div>
             <div className="border-1 flex flex-col gap-6 border-border">
               <ul className="divide-y divide-border rounded-md border">
