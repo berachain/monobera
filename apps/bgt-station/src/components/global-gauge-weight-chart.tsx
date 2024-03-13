@@ -10,11 +10,44 @@ interface Props {
   gaugeWeights: GaugeWeight[] | undefined;
 }
 
+interface ColorPalettes {
+  backgroundColor: string[];
+  hoverBorderColor: string[];
+}
+
 const othersColor = {
   backgroundColor: "#919191",
   hoverBorderColor: "#91919152",
 };
-const OTHERS_GAUGES = "Others"; // Identifier for aggregated others
+
+const colorPalette: ColorPalettes = {
+  backgroundColor: [
+    "#F35E79",
+    "#27B9C4",
+    "#8051D6",
+    "#129E7D",
+    "#FCC631",
+    "#2882CC",
+    "#3DDBB5",
+  ],
+  hoverBorderColor: [
+    "#F35E7952",
+    "#27B9C452",
+    "#8051D652",
+    "#129E7D52",
+    "#FCC63152",
+    "#2882CC52",
+    "#3DDBB552",
+  ],
+};
+
+const chartOptions = {
+  hoverBorderWidth: 10,
+  borderRadius: 8,
+  spacing: 20,
+  borderWidth: 0,
+};
+export const OTHERS_GAUGES = "Others"; // Identifier for aggregated others
 
 export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
   const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
@@ -23,6 +56,8 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
   const [tooltipVisible, setTooltipVisible] = React.useState<boolean>(false);
   const [selectedGauge, setSelectedGauge] = React.useState<GaugeWeight>();
   const [color, setColor] = React.useState<string>("");
+  const [numOthers, setNumOthers] = React.useState<number>(-1);
+  const [othersIndex, setOthersIndex] = React.useState<number>(-1);
   const [tooltipPosition, setTooltipPosition] = React.useState({
     left: 0,
     top: 0,
@@ -45,7 +80,7 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
       { amount: 0, percentage: 0 },
     );
 
-    let combined = [...filtered];
+    const combined = [...filtered];
 
     // Only add the "Others" gauge if it has a significant amount
     if (others.amount > 0) {
@@ -56,7 +91,8 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
         percentage: others.percentage,
       });
     }
-    console.log("combined", gaugeWeights, combined);
+    setOthersIndex(combined.length - 1);
+    setNumOthers(gaugeWeights?.length - combined.length + 1);
 
     return {
       combinedGauges: combined,
@@ -85,43 +121,55 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
       amount: data.amount,
     }));
   }, [cuttingBoardData]);
-  console.log("pieData", pieData, selectedGauge);
 
-  const dataP = {
-    labels: pieData?.map((d) =>
-      gaugeDictionary
-        ? gaugeDictionary[d.originalLabel]?.name ?? d.label
-        : "Others",
-    ),
-    datasets: [
-      {
-        data: pieData?.map((d) => d.amount),
-        // TODO: switch to berachain colors
-        backgroundColor: [
-          "#F35E79",
-          "#27B9C4",
-          "#8051D6",
-          "#129E7D",
-          "#FCC631",
-          "#2882CC",
-          "#3DDBB5",
-        ],
-        hoverBorderColor: [
-          "#F35E7952",
-          "#27B9C452",
-          "#8051D652",
-          "#129E7D52",
-          "#FCC63152",
-          "#2882CC52",
-          "#3DDBB552",
-        ],
-        hoverBorderWidth: 10,
-        borderRadius: 8,
-        spacing: 20,
-        borderWidth: 0,
-      },
-    ],
-  };
+  const dataP = useMemo(() => {
+    // set others color
+    console.log(othersIndex, pieData.length);
+    const numberOfColors = colorPalette.backgroundColor.length;
+    const gaugeColors: ColorPalettes = {
+      backgroundColor: [],
+      hoverBorderColor: [],
+    };
+
+    pieData.forEach((gauge, index) => {
+      // For all gauges except "Others"
+      if (gauge.label !== OTHERS_GAUGES) {
+        const colorIndex: number = index % numberOfColors;
+        const backgroundColor = colorPalette.backgroundColor[colorIndex];
+        const hoverBorderColor = colorPalette.hoverBorderColor[colorIndex];
+        if (backgroundColor) {
+          gaugeColors.backgroundColor.push(backgroundColor);
+        }
+        if (hoverBorderColor) {
+          gaugeColors.hoverBorderColor.push(hoverBorderColor);
+        }
+      }
+    });
+    if (othersIndex > -1 && pieData.length > 1) {
+      // If "Others" gauge is present, add its colors at the end or the desired position
+      if (pieData.some((gauge) => gauge.label === OTHERS_GAUGES)) {
+        gaugeColors.backgroundColor.push(othersColor.backgroundColor);
+        gaugeColors.hoverBorderColor.push(othersColor.hoverBorderColor);
+      }
+    }
+    return {
+      labels: pieData?.map((d) =>
+        gaugeDictionary
+          ? gaugeDictionary[d.originalLabel]?.name ?? d.label
+          : OTHERS_GAUGES,
+      ),
+      datasets: [
+        {
+          ...{
+            ...chartOptions,
+            backgroundColor: gaugeColors.backgroundColor,
+            hoverBorderColor: gaugeColors.hoverBorderColor,
+          },
+          data: pieData?.map((d) => d.amount),
+        },
+      ],
+    };
+  }, [pieData]);
 
   const externalTooltipHandler = useCallback(
     ({
@@ -131,7 +179,6 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
       tooltip: TooltipModel<"doughnut">;
       chart: Chart;
     }) => {
-      console.log("tooltip", tooltip);
       // hide tooltip
       if (tooltip.opacity === 0) {
         setTooltipVisible(false);
@@ -148,29 +195,13 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
       if (tooltip.labelColors[0]) {
         setColor(tooltip.labelColors[0].backgroundColor as string);
       }
-
       setSelectedGauge(
-        gaugeWeights?.find((gauge) =>
-          gauge.address === OTHERS_GAUGES
-            ? gauge
-            : truncateHash(gauge.address) === tooltip.title[0],
+        combinedGauges?.find(
+          (gauge) =>
+            gauge.label === OTHERS_GAUGES ||
+            truncateHash(gauge.address) === tooltip.title[0],
         ),
       );
-
-      console.log("selectedGauge", gaugeWeights, selectedGauge);
-
-      // if (tooltip.title[0] === OTHERS_GAUGES) {
-      //   setSelectedGauge(
-      //     combinedGauges?.find((gauge) => gauge.label === tooltip.title[0]),
-      //   );
-      // } else {
-      //   setSelectedGauge(
-      //     combinedGauges?.find(
-      //       (gauge) => truncateHash(gauge.address) === tooltip.title[0],
-      //     ),
-      //   );
-      // }
-
       const canvasPosition = chart.canvas.getBoundingClientRect();
       setTooltipVisible(true);
       setTooltipPosition({
@@ -186,6 +217,7 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
       color={color}
       visible={tooltipVisible}
       gauge={selectedGauge}
+      numOthers={numOthers}
     />
   ) : undefined;
 

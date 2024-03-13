@@ -3,19 +3,32 @@ import { getAddress } from "viem";
 
 import { GaugeIcon } from "~/app/validators/validators-table";
 import { GaugeWeight } from "~/hooks/useGaugeWeights";
+import { OTHERS_GAUGES } from "./global-gauge-weight-chart";
 
 type ChartToolTipProps = {
   color: string;
   visible: boolean;
   gauge: GaugeWeight;
+  numOthers?: number;
 };
-export function ChartTooltip({ color, visible, gauge }: ChartToolTipProps) {
+export function ChartTooltip({
+  color,
+  visible,
+  gauge,
+  numOthers,
+}: ChartToolTipProps) {
   if (!visible) return null;
   const { gaugeDictionary } = useGauges();
-  const name = gaugeDictionary
-    ? gaugeDictionary[getAddress(gauge?.address)]?.name
-    : "";
-
+  const name =
+    gauge.address === OTHERS_GAUGES
+      ? OTHERS_GAUGES
+      : gaugeDictionary
+        ? gaugeDictionary[getAddress(gauge?.address)]?.name
+        : "";
+  const otherInfo =
+    gauge.address === OTHERS_GAUGES
+      ? `${numOthers?.toString()} others`
+      : truncateHash(gauge?.address);
   return (
     <div
       className="z-1000 flex h-[68px] w-[320px] flex-row overflow-hidden rounded-md border bg-background"
@@ -33,7 +46,7 @@ export function ChartTooltip({ color, visible, gauge }: ChartToolTipProps) {
           {name ?? "Test default gauge"}
         </div>
         <div className="flex items-start justify-center text-sm text-muted-foreground">
-          {truncateHash(gauge?.address ?? "")}
+          {otherInfo}
         </div>
       </div>
     </div>

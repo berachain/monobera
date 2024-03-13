@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress, type Address } from "viem";
 
+import { OTHERS_GAUGES } from "~/components/global-gauge-weight-chart";
 import { general_validator_columns } from "~/columns/general-validator-columns";
 
 export const GaugeIcon = ({
@@ -33,7 +34,9 @@ export const GaugeIcon = ({
     <Avatar className={cn("h-6 w-6", className)}>
       <AvatarImage
         src={
-          gaugeDictionary ? gaugeDictionary[getAddress(address)]?.logoURI : ""
+          address !== OTHERS_GAUGES && gaugeDictionary
+            ? gaugeDictionary[getAddress(address)]?.logoURI
+            : ""
         }
         className="rounded-full"
       />
