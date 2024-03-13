@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { usePollAssetWalletBalance, type Token } from "@bera/berajs";
 
 export interface IncentivizeToken {
-  token: Token;
+  token: Token | undefined;
   amount: string;
 }
 
