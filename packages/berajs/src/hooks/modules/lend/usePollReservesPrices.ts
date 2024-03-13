@@ -1,8 +1,8 @@
 import { lendOracleAddress, lendPoolImplementationAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits } from "viem";
-import { usePublicClient, type Address } from "wagmi";
+import { type Address, formatUnits } from "viem";
+import { usePublicClient } from "wagmi";
 
 import POLLING from "~/config/constants/polling";
 import { lendOracleABI, lendPoolImplementationABI } from "../../../config/abi";
@@ -15,6 +15,8 @@ export const usePollReservesPrices = () => {
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
+
       const result = await publicClient.readContract({
         address: lendPoolImplementationAddress,
         abi: lendPoolImplementationABI,

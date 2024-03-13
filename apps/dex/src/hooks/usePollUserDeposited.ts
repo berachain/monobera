@@ -2,11 +2,11 @@ import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { CROC_QUERY_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint, crocQueryAddress } from "@bera/config";
-import { toHex } from "viem";
+import { toHex, type Address, erc20Abi } from "viem";
 import { formatSubgraphPoolData, type PoolV2 } from "~/app/pools/fetchPools";
-import { usePublicClient, type Address, erc20ABI } from "wagmi";
+import { usePublicClient } from "wagmi";
 import {
-  client,
+  dexClient,
   getFilteredPoolList,
   getTokenHoneyPrices,
 } from "@bera/graphql";
@@ -68,6 +68,7 @@ export const usePollUserDeposited = () => {
   const hexChainId = toHex(chainId);
   const QUERY_KEY = ["pools", account, hexChainId];
   const { isLoading, isValidating } = useSWRImmutable(QUERY_KEY, async () => {
+    if (!publicClient) return undefined;
     if (!account || !hexChainId) {
       return undefined;
     }
@@ -89,7 +90,7 @@ export const usePollUserDeposited = () => {
         new Set([...baseTokenAddresses, ...quoteTokenAddresses]),
       );
 
-      const tokenHoneyPricesResult = client
+      const tokenHoneyPricesResult = dexClient
         .query({
           query: getTokenHoneyPrices,
           variables: {
@@ -125,7 +126,7 @@ export const usePollUserDeposited = () => {
       const balanceCalls: Call[] = positions.data.map(
         (pool: AmbientPosition) => {
           return {
-            abi: erc20ABI,
+            abi: erc20Abi,
             address: getCrocErc20LpAddress(pool.base, pool.quote),
             functionName: "balanceOf",
             args: [account],
@@ -140,7 +141,7 @@ export const usePollUserDeposited = () => {
       });
 
       // // get pool objects for pools user deposited for
-      const poolsResult = client
+      const poolsResult = dexClient
         .query({
           query: getFilteredPoolList,
           variables: {

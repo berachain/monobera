@@ -29,6 +29,7 @@ export const usePollBHoneyEpochs = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       try {
         const call: Call[] = [
           {

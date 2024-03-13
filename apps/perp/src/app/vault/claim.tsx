@@ -9,7 +9,7 @@ import {
 import { cloudinaryUrl } from "@bera/config";
 import { ApyTooltip } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
-import type { Address } from "wagmi";
+import type { Address } from "viem";
 
 export default function Claim({ feeApr }: { feeApr: string }) {
   const feeAprTrimmed = feeApr.slice(0, -1);

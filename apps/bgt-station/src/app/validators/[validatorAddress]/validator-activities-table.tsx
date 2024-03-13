@@ -10,8 +10,7 @@ import { DataTable } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 // import { Button } from "@bera/ui/button";
 // import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { formatUnits } from "viem";
-import { type Address } from "wagmi";
+import { formatUnits, type Address } from "viem";
 
 import {
   delegators_columns,

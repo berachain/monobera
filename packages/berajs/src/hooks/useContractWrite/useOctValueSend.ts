@@ -6,7 +6,6 @@ import { usePublicClient } from "wagmi";
 
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useOct } from "../useOct";
-import { TransactionFailedError } from "./error";
 import {
   type IUseContractWrite,
   type IValueSend,
@@ -28,6 +27,7 @@ const useOctValueSend = ({
       dispatch({ type: ActionEnum.LOADING });
       onLoading?.();
       let hash: any | undefined;
+      if (!publicClient) return;
       try {
         const provider = new providers.JsonRpcProvider(
           process.env.NEXT_PUBLIC_JSON_RPC_URL,

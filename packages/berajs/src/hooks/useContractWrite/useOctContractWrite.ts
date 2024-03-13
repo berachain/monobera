@@ -4,8 +4,7 @@ import { useCallback, useReducer } from "react";
 import { perpsEndpoints } from "@bera/config";
 import { Contract, Wallet, providers } from "ethers";
 import { encodeFunctionData } from "viem";
-import { usePublicClient, useWalletClient } from "wagmi";
-import { prepareWriteContract } from "wagmi/actions";
+import { usePublicClient, useWriteContract } from "wagmi";
 
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
@@ -25,7 +24,7 @@ const useOctContractWrite = ({
   onSubmission,
 }: IUseContractWrite = {}): useContractWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { data: walletClient } = useWalletClient();
+  const { writeContract } = useWriteContract();
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
   const { networkConfig } = useBeraConfig();
@@ -43,23 +42,23 @@ const useOctContractWrite = ({
       dispatch({ type: ActionEnum.LOADING });
       onLoading?.();
       let hash: any | undefined;
+      if (!publicClient) return;
       try {
         if (!isOctReady) {
-          const { request: _request } = await prepareWriteContract({
+          const { request: _request } = await publicClient.simulateContract({
             address: address,
             abi: abi,
             functionName: functionName,
             args: params,
           });
 
-          hash = await walletClient?.writeContract({
+          hash = await writeContract({
             account: account,
             address: address,
             abi: abi,
             functionName: functionName,
             value: value,
             args: [...params],
-            chain: networkConfig.chain,
             gas: 10000000n,
           });
         } else if (isOctReady) {
@@ -120,7 +119,7 @@ const useOctContractWrite = ({
       }
     },
     [
-      walletClient,
+      writeContract,
       account,
       publicClient,
       onSuccess,

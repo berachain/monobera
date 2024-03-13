@@ -1,12 +1,13 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient, type Address } from "wagmi";
+import { usePublicClient } from "wagmi";
 
 import { GOVERNANCE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraConfig } from "~/contexts";
 import { defaultPagination } from "~/utils";
 import { type Proposal } from "./types";
+import { type Address } from "viem";
 
 export interface ProposalListResponse {
   proposals: Proposal[];
@@ -23,6 +24,7 @@ export const usePollAllProposals = (proposalStatus: number) => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       const result = (await publicClient
         .readContract({
           address: networkConfig.precompileAddresses

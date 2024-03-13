@@ -44,7 +44,6 @@ export const useUserPositionBreakdown = (pool: PoolV2 | undefined) => {
         `${crocIndexerEndpoint}/user_positions?chainId=${hexChainId}&user=${account}`,
       );
       const positions = await response.json();
-      console.log({ positions, pool });
 
       const userPoolPosition: AmbientPosition | undefined = positions.data.find(
         (pos: any) =>

@@ -12,7 +12,6 @@ import {
   usePollBgtBalance,
   usePollDelegatorValidators,
   usePollGlobalValidatorBribes,
-  usePollPrices,
 } from "@bera/berajs";
 import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
@@ -22,9 +21,8 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { parseUnits, type Address } from "viem";
 import { useTheme } from "next-themes";
-import { parseUnits } from "viem";
-import { type Address } from "wagmi";
 
 import ValidatorInput from "~/components/validator-input";
 import { DelegateEnum, ImageMapEnum } from "./types";
@@ -51,9 +49,7 @@ export default function Delegate({
   const { useSelectedAccountDelegation } = usePollAccountDelegations(validator);
   usePollActiveValidators();
   usePollDelegatorValidators();
-
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { useDelegatorPolValidators } = usePollGlobalValidatorBribes(prices);
   const { useDelegatorValidators } = usePollDelegatorValidators();
   const delegatedValidators = useDelegatorValidators();

@@ -23,6 +23,7 @@ export const usePollEpochs = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       const result = (await publicClient.readContract({
         address: networkConfig.precompileAddresses.epochsAddress as Address,
         abi: EPOCHS_PRECOMPILE_ABI,

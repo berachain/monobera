@@ -24,8 +24,7 @@ import {
   useRive,
   useStateMachineInput,
 } from "@rive-app/react-canvas";
-import { parseUnits } from "viem";
-import { erc20ABI } from "wagmi";
+import { parseUnits, erc20Abi } from "viem";
 
 import { LoadingBee } from "~/components/loadingBee";
 import { usePsm } from "~/hooks/usePsm";
@@ -197,7 +196,7 @@ export function HoneyMachine() {
   const performApproval = () => {
     write({
       address: selectedFrom?.address as `0x${string}`,
-      abi: erc20ABI as unknown as (typeof erc20ABI)[],
+      abi: erc20Abi as unknown as (typeof erc20Abi)[],
       functionName: "approve",
       params: [
         honeyRouterAddress,

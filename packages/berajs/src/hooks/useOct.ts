@@ -52,15 +52,15 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { account } = useBeraJs();
-  const { signMessageAsync } = useSignMessage({
-    message: "You are enabling One Click Trading. Use at your own risk!",
-  });
+  const { signMessageAsync } = useSignMessage();
   const { networkConfig } = useBeraConfig();
   const generateKey = useCallback(async () => {
     dispatch({ type: ActionEnum.LOADING });
     onLoading?.();
     try {
-      const signedData = await signMessageAsync();
+      const signedData = await signMessageAsync({
+        message: "You are enabling One Click Trading. Use at your own risk!",
+      });
 
       hash.update(signedData);
       const privKey = hash.digest().toString("hex");

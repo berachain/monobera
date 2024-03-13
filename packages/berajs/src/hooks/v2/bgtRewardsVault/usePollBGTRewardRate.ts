@@ -4,7 +4,6 @@ import { usePublicClient } from "wagmi";
 
 import POLLING from "~/config/constants/polling";
 import { BLOCK_REWARD_CONTROLLER_ABI } from "~/config/v2/abi";
-import { useBeraConfig } from "~/contexts";
 
 export const usePollBGTRewardRate = () => {
   const method = "rewardRate";
@@ -13,6 +12,7 @@ export const usePollBGTRewardRate = () => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       try {
         const bgtRewardRate = await publicClient.readContract({
           address: "0x0", // TODO: BLOCK_REWARD_CONTROLLER contract address

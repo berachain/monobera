@@ -1,8 +1,7 @@
 import { useCallback, useReducer } from "react";
-import { useConnect, useDisconnect } from "wagmi";
+import { useDisconnect } from "wagmi";
 
 import { initialState, reducer } from "~/utils/stateReducer";
-import { type ConnectorNames } from "~/config";
 import { useBeraConfig } from "~/contexts";
 import { connectorLocalStorageKey } from ".";
 
@@ -22,43 +21,9 @@ export interface IuseAuth {
   onLogoutError?: (e?: Error) => void;
 }
 
-const useAuth = ({
-  onSuccess,
-  onError,
-  onLoading,
-  onLogoutError,
-  onLogoutSuccess,
-}: IuseAuth = {}) => {
+const useAuth = ({ onLogoutError, onLogoutSuccess }: IuseAuth = {}) => {
   const [state] = useReducer(reducer, initialState);
-  const { networkConfig } = useBeraConfig();
-  const { connect, connectors } = useConnect({
-    chainId: networkConfig.chain.id,
-  });
-  // const { chains, error, isLoading, pendingChainId, switchNetwork } =
-  // useSwitchNetwork({
-  //   chainId: networkConfig.chain.id,
-  // })
   const { disconnect } = useDisconnect();
-  // const { switchNetworkAsync } = useSwitchNetwork({    chainId: networkConfig.chain.id,
-  // });
-
-  const login = useCallback(
-    (connectorID: ConnectorNames | string) => {
-      try {
-        onLoading?.();
-        const connector = connectors.find((c) => c.id === connectorID);
-        localStorage?.setItem(connectorLocalStorageKey, connectorID);
-        connect({ connector, chainId: networkConfig.chain.id });
-        onSuccess?.();
-        return;
-      } catch (e: any) {
-        onError?.(e);
-        return;
-      }
-    },
-    [onLoading, connectors, connect, onSuccess, onError],
-  );
-
   const logout = useCallback(() => {
     try {
       disconnect();
@@ -74,7 +39,6 @@ const useAuth = ({
     isLoading: state.confirmState === "loading",
     isSuccess: state.confirmState === "success",
     isError: state.confirmState === "fail",
-    login,
     logout,
   };
 };

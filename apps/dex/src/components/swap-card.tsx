@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-// import { RouteNotFound } from "@bera/bera-router";
 import {
   MULTISWAP_ABI,
   TransactionActionType,
@@ -25,8 +24,7 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { parseUnits } from "viem";
-import { type Address } from "wagmi";
+import { parseUnits, type Address } from "viem";
 
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";

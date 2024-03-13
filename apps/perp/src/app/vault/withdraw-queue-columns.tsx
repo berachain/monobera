@@ -9,8 +9,7 @@ import { type HoneyWithdrawalRequest } from "@bera/proto/src";
 import { DataTableColumnHeader, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
-import { formatUnits } from "viem";
-import type { Address } from "wagmi";
+import { formatUnits, type Address } from "viem";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 

@@ -16,6 +16,7 @@ export const usePollTotalSupply = (denom: string | undefined) => {
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (!denom) return;
       const result = await publicClient.readContract({
         address: networkConfig.precompileAddresses.bankAddress as Address,

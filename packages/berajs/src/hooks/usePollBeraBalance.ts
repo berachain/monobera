@@ -15,6 +15,7 @@ export const usePollBeraBalance = ({
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (address) {
         try {
           const balance = await publicClient.getBalance({

@@ -1,12 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  formatUsd,
-  usePollBribes,
-  usePollPrices,
-  type FormattedBribe,
-} from "@bera/berajs";
+import { formatUsd, usePollBribes, type FormattedBribe } from "@bera/berajs";
 import { TokenIcon, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import {
@@ -36,8 +31,7 @@ export function ClaimBribesDialog({
   write,
   isLoading,
 }: Props) {
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { useFormattedValidatorUserBribes, useBribeTokensSymbol } =
     usePollBribes();
   const formattedBribes: FormattedBribe[] =
