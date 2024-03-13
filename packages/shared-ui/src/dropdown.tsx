@@ -25,7 +25,7 @@ export const Dropdown = ({
   return (
     <div {...props} className={cn("w-fit flex-shrink-0", className)}>
       <div className="flex items-center text-muted-foreground md:gap-1">
-        {sortby && <div className="text-sm font-medium">Sort by</div>}
+        {sortby && <div className="text-sm font-medium mr-2">Sort by</div>}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="flex w-fit items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm">

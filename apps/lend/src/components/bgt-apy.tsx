@@ -51,8 +51,7 @@ export const BGTAPYTooltip = ({
           Honey Borrow Rewards
         </div>
         <div className="flex items-center gap-1 text-xs font-medium text-foreground">
-          {bgtApy.toFixed(2)}%{" "}
-          <TokenIcon address={bgtTokenAddress} size={"sm"} />
+          {bgtApy.toFixed(2)}% <Icons.bgt className="h-3 w-3" />
         </div>
       </div>
 
