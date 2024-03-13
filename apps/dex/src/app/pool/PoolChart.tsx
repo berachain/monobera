@@ -8,9 +8,10 @@ import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { formatUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
+import { BigNumber } from "bignumber.js";
 
 const Options = {
   responsive: true,
@@ -163,7 +164,11 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
 // }
 
 const formatHoney = (amountInHoney: number) => {
-  return getSafeNumber(formatUnits(BigInt(amountInHoney), 18));
+  const bnAmount = new BigNumber(amountInHoney.toString());
+  return getSafeNumber(bnAmount.div(10 ** 18).toString());
+
+
+  // return getSafeNumber(formatUnits(parseUnits(amountInHoney.toString(), 18), 18));
 };
 
 export const PoolChart = ({
