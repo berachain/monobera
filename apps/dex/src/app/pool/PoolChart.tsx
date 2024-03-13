@@ -264,6 +264,7 @@ export const PoolChart = ({
   );
 
   const extractData = (field: string, numOfDays: number) => {
+    // TODO: slice 0, MIN(num of days since pool creation date, numOfDays) - if pool was created before then we cap it at that
     return completeDailyData
       .slice(0, numOfDays)
       .map((dayData: any) => {

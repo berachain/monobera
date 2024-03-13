@@ -1,7 +1,7 @@
 import { type Token } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
-import { formatUnits, type Address } from "viem";
 import BigNumber from "bignumber.js";
+import { type Address } from "viem";
 
 export interface PoolV2 {
   id: string; // concat base-quote-poolidx
@@ -97,26 +97,25 @@ export const formatPoolData = (result: any): PoolV2 => {
   const baseInfo = result.info.baseInfo;
   const quoteInfo = result.info.quoteInfo;
 
-  const baseTvlFormattedAmount = formatUnits(
-    BigInt(result.stats.baseTvl),
-    baseInfo.decimals,
-  );
-  const quoteTvlFormattedAmount = formatUnits(
-    BigInt(result.stats.quoteTvl),
-    quoteInfo.decimals,
-  );
+  const baseTvlFormattedAmount = new BigNumber(result.stats.baseTvl)
+    .dividedBy(`1e${baseInfo.decimals}`)
+    .toString();
 
-  const baseTvlHoneyAmount = formatUnits(
-    BigInt(result.stats.baseTvlInHoney),
-    baseInfo.decimals,
-  );
-  const quotTvlHoneyAmount = formatUnits(
-    BigInt(result.stats.quoteTvlInHoney),
-    quoteInfo.decimals,
-  );
+  const quoteTvlFormattedAmount = new BigNumber(result.stats.quoteTvl)
+    .dividedBy(`1e${quoteInfo.decimals}`)
+    .toString();
 
-  const totalTvl =
-    parseFloat(baseTvlHoneyAmount) + parseFloat(quotTvlHoneyAmount);
+  const baseTvlHoneyAmount = new BigNumber(
+    result.stats.baseTvlInHoney,
+  ).dividedBy(`1e${baseInfo.decimals}`);
+
+  const quotTvlHoneyAmount = new BigNumber(
+    result.stats.quoteTvlInHoney,
+  ).dividedBy(`1e${quoteInfo.decimals}`);
+
+  const totalTvl = parseFloat(
+    baseTvlHoneyAmount.plus(quotTvlHoneyAmount).toString(),
+  );
 
   return {
     id: result.info.id,
@@ -136,8 +135,8 @@ export const formatPoolData = (result: any): PoolV2 => {
     tvlUsd: totalTvl,
     volumeUsd: 0,
     fees: 0,
-    baseTokenHoneyTvl: parseFloat(baseTvlHoneyAmount),
-    quoteTokenHoneyTvl: parseFloat(quotTvlHoneyAmount),
+    baseTokenHoneyTvl: parseFloat(baseTvlHoneyAmount.toString()),
+    quoteTokenHoneyTvl: parseFloat(quotTvlHoneyAmount.toString()),
     totalApy: 0,
     bgtApy: 0,
     shareAddress: "",
