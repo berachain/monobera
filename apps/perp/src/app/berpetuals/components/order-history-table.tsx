@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import { AsesetCardMobile } from "~/app/portfolio/userAssets";
 import { getAssetCardList } from "../getAssetCards";
@@ -9,14 +9,19 @@ import {
   orders_columns,
   pnl_columns,
 } from "./columns";
-import { DataTable } from "@bera/shared-ui";
+import { DataTable, usePrevious } from "@bera/shared-ui";
 import type {
   IClosedTrade,
   ILimitOrder,
   IMarketOrder,
   IPosition,
 } from "./order-history";
-import { type BerpTabTypes } from "./order-history-header";
+import {
+  type RowSelectionState,
+  type Updater,
+  type TableState,
+} from "@tanstack/react-table";
+import { type BerpTabTypes } from "./order-wrapper";
 
 export interface IRow {
   key: string;
@@ -31,40 +36,90 @@ export interface ICards {
 
 export function OrderHistoryTable({
   tab,
-  openPositons,
+  openPositions,
   openOrders,
   history,
   markets,
   mobile,
   allPositions,
+  selection,
+  setSelection,
 }: {
   tab: BerpTabTypes;
-  openPositons: IMarketOrder[];
+  openPositions: IMarketOrder[];
   openOrders: ILimitOrder[];
   history: IClosedTrade[];
   markets: IMarket[];
   mobile: boolean;
   allPositions: IPosition[];
+  selection: RowSelectionState;
+  setSelection: (selection: RowSelectionState) => void;
 }) {
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+  const prevPositionLength = usePrevious(openPositions?.length ?? 0);
+  const prevOrderLength = usePrevious(openOrders?.length ?? 0);
+
   const assetCardItems = useMemo(() => {
     return getAssetCardList({
-      marketOrderItems: openPositons,
+      marketOrderItems: openPositions,
       limitOrderItems: openOrders,
       historyItems: history,
       allPositions: allPositions,
       markets,
     });
-  }, [openPositons, openOrders, history]);
+  }, [openPositions, openOrders, history]);
+
+  // edge case for selection when new orders are opened or closed
+  useEffect(() => {
+    if (
+      tab === "positions" &&
+      (openPositions?.length ?? 0) !== prevPositionLength
+    ) {
+      setSelection({});
+    }
+  }, [tab, openPositions]);
+
+  useEffect(() => {
+    if (tab === "orders" && (openOrders?.length ?? 0) !== prevOrderLength) {
+      setSelection({});
+    }
+  }, [tab, openOrders]);
+
+  const handleRowSelectionChange = (updater: Updater<RowSelectionState>) => {
+    const newSelection = updater as RowSelectionState;
+    setSelection(newSelection);
+  };
+
+  // clear selection on sorting and pagination until we implement server side pagination and sorting
+  const fetchData = () => {
+    setSelection({});
+  };
 
   return (
     <div className="relative w-full">
       {tab === "positions" && (
         <DataTable
           columns={getPositionColumns(markets)}
-          data={openPositons ?? []}
+          data={openPositions ?? []}
           className="hidden w-full sm:block"
           embedded
           enablePagination={!mobile}
+          enableSelection
+          fetchData={fetchData}
+          additionalTableProps={{
+            state: {
+              rowSelection: selection,
+              pagination: pagination,
+            },
+            manualPagination: false,
+            pageCount: Math.ceil((openPositions ?? []).length / 10),
+            onPaginationChange: setPagination,
+            onRowSelectionChange: handleRowSelectionChange,
+            autoResetPageIndex: false,
+            meta: {
+              selectVisibleRows: true,
+            },
+          }}
         />
       )}
       {tab === "orders" && (
@@ -74,6 +129,21 @@ export function OrderHistoryTable({
           className="hidden w-full sm:block"
           embedded
           enablePagination={!mobile}
+          enableSelection
+          additionalTableProps={{
+            state: {
+              rowSelection: selection,
+              pagination: pagination,
+            },
+            manualPagination: false,
+            pageCount: Math.ceil((openOrders ?? []).length / 10),
+            onPaginationChange: setPagination,
+            onRowSelectionChange: handleRowSelectionChange,
+            autoResetPageIndex: false,
+            meta: {
+              selectVisibleRows: true,
+            },
+          }}
         />
       )}
       {tab === "history" && (
@@ -87,6 +157,7 @@ export function OrderHistoryTable({
             initialState: {
               sorting: [{ id: "open_time", desc: true }],
             },
+            autoResetPageIndex: false,
           }}
         />
       )}
@@ -97,6 +168,9 @@ export function OrderHistoryTable({
           className="hidden w-full sm:block"
           embedded
           enablePagination={!mobile}
+          additionalTableProps={{
+            autoResetPageIndex: false,
+          }}
         />
       )}
       {mobile && (

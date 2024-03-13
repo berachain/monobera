@@ -1,7 +1,10 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { cn } from "@bera/ui";
+import _ from "lodash";
+import { Checkbox } from "@bera/ui/checkbox";
+import "./types/data-table.d.ts";
+
 import {
   Table,
   TableBody,
@@ -20,11 +23,12 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type CellContext,
+  type HeaderContext,
   type ColumnDef,
   type TableOptions,
   type TableState,
 } from "@tanstack/react-table";
-import _ from "lodash";
 
 import { usePrevious } from "./hooks";
 import { Spinner } from "./spinner";
@@ -38,12 +42,17 @@ interface DataTableProps<TData, TValue> {
   title?: string;
   embedded?: boolean;
   enablePagination?: boolean;
+  enableSelection?: boolean;
   fetchData?: (state: TableState) => Promise<void> | void;
   stateChangeFetchInclusions?: Array<keyof TableState>;
   loading?: boolean;
   additionalTableProps?: Partial<TableOptions<TData>>;
   customEmptyDataState?: React.ReactElement;
 }
+export interface RowSelectHeaderProps<TData, TValue>
+  extends HeaderContext<TData, TValue> {}
+export interface RowSelectCellProps<TData, TValue>
+  extends CellContext<TData, TValue> {}
 
 const defaultStateChangeFetchInclusions: Array<keyof TableState> = [
   "columnFilters",
@@ -52,6 +61,61 @@ const defaultStateChangeFetchInclusions: Array<keyof TableState> = [
   "globalFilter",
 ];
 
+export function RowSelectHeader<TData, TValue>({
+  table,
+}: RowSelectHeaderProps<TData, TValue>) {
+  return (
+    <>
+      {table.options.meta?.selectVisibleRows ? (
+        <Checkbox
+          className="mt-1"
+          checked={
+            table.getIsAllPageRowsSelected()
+              ? true
+              : table.getIsSomePageRowsSelected()
+                ? "indeterminate"
+                : false
+          }
+          onClick={table.getToggleAllPageRowsSelectedHandler()}
+        />
+      ) : (
+        <Checkbox
+          className="mt-1"
+          checked={
+            table.getIsAllRowsSelected()
+              ? true
+              : table.getIsSomeRowsSelected()
+                ? "indeterminate"
+                : false
+          }
+          onClick={table.getToggleAllRowsSelectedHandler()}
+        />
+      )}
+    </>
+  );
+}
+
+export function RowSelectCell<TData, TValue>(
+  props: RowSelectCellProps<TData, TValue>,
+) {
+  return (
+    <Checkbox
+      className="mt-1"
+      checked={props.row.getIsSelected()}
+      disabled={!props.row.getCanSelect()}
+      onClick={props.row.getToggleSelectedHandler()}
+    />
+  );
+}
+
+const rowSelectColumn = {
+  id: "select",
+  header: RowSelectHeader,
+  cell: RowSelectCell,
+  enableHiding: false,
+  enableResizing: false,
+};
+
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -59,6 +123,7 @@ export function DataTable<TData, TValue>({
   className,
   title,
   enablePagination,
+  enableSelection,
   embedded,
   fetchData,
   stateChangeFetchInclusions = defaultStateChangeFetchInclusions,
@@ -67,7 +132,7 @@ export function DataTable<TData, TValue>({
   customEmptyDataState,
   onCustomSortingChange,
 }: DataTableProps<TData, TValue>) {
-  const [state, setState] = useState<TableState>({
+  const initialState = {
     columnFilters: [],
     sorting: [],
     rowSelection: {},
@@ -82,25 +147,44 @@ export function DataTable<TData, TValue>({
       pageIndex: additionalTableProps?.initialState?.pagination?.pageIndex ?? 0,
       pageSize: additionalTableProps?.initialState?.pagination?.pageSize ?? 10,
     },
-  } as TableState);
+  };
+  const [state, setState] = useState<TableState>(initialState as TableState);
 
-  const previousState = usePrevious(state);
+  const mergedState = useMemo(() => {
+    if (additionalTableProps?.state) {
+      return {
+        ...state,
+        ...(additionalTableProps?.state ?? {}),
+      };
+    }
+    return state;
+  }, [state, additionalTableProps?.state]);
+
+  const previousState = usePrevious(mergedState);
   useEffect(() => {
     if (
       fetchData &&
       !_.isEqual(
         _.pick(previousState, stateChangeFetchInclusions),
-        _.pick(state, stateChangeFetchInclusions),
+        _.pick(mergedState, stateChangeFetchInclusions),
       )
     ) {
-      void fetchData(state);
+      void fetchData(mergedState);
     }
-  }, [fetchData, previousState, state, stateChangeFetchInclusions]);
+  }, [fetchData, previousState, mergedState, stateChangeFetchInclusions]);
+
+  const tableColumns = useMemo(() => {
+    if (enableSelection) {
+      return [rowSelectColumn, ...columns];
+    }
+    return columns;
+  }, [columns, enableSelection]);
 
   const table = useReactTable({
+    state: mergedState,
     data,
-    columns,
-    state: state,
+    columns: tableColumns,
+    initialState: initialState,
     enableRowSelection: true,
     onStateChange: setState,
     getCoreRowModel: getCoreRowModel(),
@@ -200,7 +284,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {enablePagination && (
-        <div className="flex justify-end p-4 text-primary-foreground">
+        <div className="border-t flex justify-end p-4 text-primary-foreground">
           {loading && (
             <p className="self-center pr-4">
               <Spinner size={16} color="white" />

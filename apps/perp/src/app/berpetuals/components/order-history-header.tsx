@@ -1,15 +1,16 @@
-"use client";
-
 import { TRADING_ABI, TransactionActionType } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
+import { Switch } from "@bera/ui/switch";
 import { mutate } from "swr";
 import { type Address } from "wagmi";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 
-export type BerpTabTypes = "positions" | "orders" | "history" | "pnl";
+import { RowSelectionState } from "@tanstack/react-table";
+import { type BerpTabTypes } from "./order-wrapper";
+import { type CloseOrderPayload } from "./order-history";
 
 export function OrderHistoryHeader({
   headers,
@@ -17,6 +18,9 @@ export function OrderHistoryHeader({
   setTabType,
   closePositionsPayload,
   closeOrdersPayload,
+  showOrderLines,
+  setShowOrderLines,
+  selection,
 }: {
   headers: {
     title: string;
@@ -25,8 +29,11 @@ export function OrderHistoryHeader({
   }[];
   tabType: BerpTabTypes;
   setTabType: (type: BerpTabTypes) => void;
-  closePositionsPayload: any[];
-  closeOrdersPayload: any[];
+  closePositionsPayload: CloseOrderPayload[];
+  closeOrdersPayload: CloseOrderPayload[];
+  showOrderLines: boolean;
+  setShowOrderLines: (showOrderLines: boolean) => void;
+  selection: RowSelectionState;
 }) {
   const { QUERY_KEY } = usePollOpenPositions();
 
@@ -47,9 +54,11 @@ export function OrderHistoryHeader({
       },
     });
 
+  const selectionSize = Object.keys(selection).length;
+
   return (
     <div>
-      <div className="sm: flex h-[70px] h-fit w-full flex-col items-center justify-between border-y border-border bg-muted px-6 py-4 sm:flex-row">
+      <div className="sm: flex h-fit w-full flex-col items-center justify-between border-y border-border bg-muted px-6 py-4 sm:flex-row">
         <div className=" flex gap-10 text-foreground">
           {headers.map((header, index) => (
             <div
@@ -84,43 +93,73 @@ export function OrderHistoryHeader({
           <div className="mt-4 block w-full border-t border-border pt-4 sm:hidden" />
         )}
         {tabType === "positions" && (
-          <Button
-            className="h-full w-full cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
-            disabled={
-              isClosePositionsLoading || closePositionsPayload?.length === 0
-            }
-            onClick={() => {
-              writePositionsClose({
-                address: process.env
-                  .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                abi: TRADING_ABI,
-                functionName: "closeTradesMarket",
-                params: [closePositionsPayload],
-              });
-            }}
-          >
-            🌋 Close All Positions
-          </Button>
+          <div className="flex">
+            <div className="float-right flex justify-center mr-8 items-center">
+              <span className="text-xs font-medium ">{`${
+                showOrderLines ? "Hide" : "Show"
+              } Order Lines`}</span>
+              <Switch
+                className="ml-2"
+                id="show-orders"
+                checked={showOrderLines}
+                onCheckedChange={(checked) => setShowOrderLines(checked)}
+              />
+            </div>
+            <Button
+              className="h-full min-w-44 w-full cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
+              disabled={
+                isClosePositionsLoading || closePositionsPayload?.length === 0
+              }
+              onClick={() => {
+                writePositionsClose({
+                  address: process.env
+                    .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+                  abi: TRADING_ABI,
+                  functionName: "closeTradesMarket",
+                  params: [closePositionsPayload],
+                });
+              }}
+            >
+              {`🌋 Close ${selectionSize ? selectionSize : "All"} Position${
+                selectionSize && selectionSize === 1 ? "" : "s"
+              }`}
+            </Button>
+          </div>
         )}
 
         {tabType === "orders" && (
-          <Button
-            className="h-full w-full cursor-pointer rounded-md bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
-            disabled={
-              isCloseLimitOrdersLoading || closeOrdersPayload?.length === 0
-            }
-            onClick={() => {
-              writeOrdersClose({
-                address: process.env
-                  .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                abi: TRADING_ABI,
-                functionName: "cancelOpenLimitOrders",
-                params: [closeOrdersPayload],
-              });
-            }}
-          >
-            🌋 Close All Orders
-          </Button>
+          <div className="flex">
+            <div className="float-right flex justify-center mr-8 items-center">
+              <span className="text-xs font-medium ">{`${
+                showOrderLines ? "Hide" : "Show"
+              } Order Lines`}</span>
+              <Switch
+                className="ml-2"
+                id="show-orders"
+                checked={showOrderLines}
+                onCheckedChange={(checked) => setShowOrderLines(checked)}
+              />
+            </div>
+            <Button
+              className="h-full min-w-44 w-full cursor-pointer rounded-md bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
+              disabled={
+                isCloseLimitOrdersLoading || closeOrdersPayload?.length === 0
+              }
+              onClick={() => {
+                writeOrdersClose({
+                  address: process.env
+                    .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+                  abi: TRADING_ABI,
+                  functionName: "cancelOpenLimitOrders",
+                  params: [closeOrdersPayload],
+                });
+              }}
+            >
+              {`🌋 Close ${selectionSize ? selectionSize : "All"} Order${
+                selectionSize && selectionSize === 1 ? "" : "s"
+              }`}
+            </Button>
+          </div>
         )}
       </div>
     </div>

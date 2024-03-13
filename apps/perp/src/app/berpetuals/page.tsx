@@ -3,6 +3,7 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { perpsName } from "@bera/config";
 import { type Market } from "@bera/proto/src";
+import { type Address } from "viem";
 
 import { MarketImages } from "~/utils/marketImages";
 import { MarketTokenNames } from "~/utils/marketTokenNames";
@@ -14,11 +15,8 @@ import {
 } from "~/endpoints";
 import { GeneralInfoBanner } from "./components/general-info-banner";
 import { InstrumentDropdown } from "./components/instrument-dropdown";
-import OrderChart from "./components/order-chart";
-import { OrderHistory } from "./components/order-history";
-import CreatePosition from "./create-position";
 import { ReferralModal } from "../referrals/referral-modal";
-import { type Address } from "viem";
+import OrderWrapper from "./components/order-wrapper";
 
 const DEFAULT_MARKET = "ETH-USDC";
 export const revalidate = 30;
@@ -70,9 +68,9 @@ export default async function Home({
     };
   });
 
-  const defualtMarket = markets.find((m: Market) => m.name === DEFAULT_MARKET);
+  const defaultMarket = markets.find((m: Market) => m.name === DEFAULT_MARKET);
 
-  if (!data || !defualtMarket || !data.params) {
+  if (!data || !defaultMarket || !data.params) {
     notFound();
   }
 
@@ -83,27 +81,20 @@ export default async function Home({
         <div className="h-fit w-full flex-shrink-0 flex-grow-0 lg:w-[400px]">
           <InstrumentDropdown
             markets={markets}
-            selectedMarket={defualtMarket}
+            selectedMarket={defaultMarket}
             priceChange={data.priceChange}
           />
         </div>
         <GeneralInfoBanner
-          market={defualtMarket}
+          market={defaultMarket}
           priceChange={data.priceChange}
         />
       </div>
-      <span className="block lg:hidden">
-        <OrderChart marketName={defualtMarket.name} />
-      </span>
-      <div className="flex w-full flex-col lg:flex-row">
-        <CreatePosition market={defualtMarket} params={data.params} />
-        <div className="h-full w-full pb-[34px] lg:w-screen-w-400">
-          <span className="hidden lg:block">
-            <OrderChart marketName={defualtMarket.name} />
-          </span>
-          <OrderHistory markets={markets} />
-        </div>
-      </div>{" "}
+      <OrderWrapper
+        markets={markets}
+        defaultMarket={defaultMarket}
+        params={data?.params}
+      />
     </div>
   );
 }
