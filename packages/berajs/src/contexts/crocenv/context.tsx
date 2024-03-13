@@ -29,8 +29,6 @@ const CrocEnvContextProvider = ({ children }: PropsWithChildren) => {
 
   const [crocEnv, setCrocEnv] = useState<CrocEnv | undefined>();
 
-  console.log({ crocEnv });
-
   const client = usePublicClient({ chainId: chainId || undefined });
 
   const provider = useEthersProvider(client as any);

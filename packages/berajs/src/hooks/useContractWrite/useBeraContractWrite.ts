@@ -47,6 +47,15 @@ const useBeraContractWrite = ({
       if (!publicClient) return;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
+        console.log({
+          address: address,
+          abi: abi,
+          functionName: functionName,
+          args: params,
+          value: value,
+          nonce: userNonce,
+          account: account,
+        });
         const { request } = await publicClient.simulateContract({
           address: address,
           abi: abi,
@@ -56,7 +65,7 @@ const useBeraContractWrite = ({
           nonce: userNonce,
           account: account,
         });
-        receipt = await writeContractAsync(request);
+        receipt = await writeContractAsync({ ...request });
         dispatch({ type: ActionEnum.SUBMITTING });
         if (receipt) {
           onSubmission?.(receipt);
