@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTokenHoneyPrice, type Token } from "@bera/berajs";
+import { useBeraJs, useTokenHoneyPrice, type Token } from "@bera/berajs";
 import { TokenInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -34,8 +34,9 @@ export default function AddIncentivizeToken({
   // TODO: add exceeding and typing state
   const [exceedingBalance, setExceedingBalance] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const { isConnected } = useBeraJs();
   return (
-    <ul className={"xs:justify-between flex flex-row items-center gap-1"}>
+    <ul className="flex flex-row items-center justify-between">
       <TokenInput
         selected={selectedToken.token}
         onTokenSelection={handleTokenSelection}
@@ -48,8 +49,12 @@ export default function AddIncentivizeToken({
           onTokenAmountChange(index, Number(amount));
         }}
       />
+
       <div
-        className={cn("flex items-center px-2", selectedToken.token && "mb-5")}
+        className={cn(
+          "flex max-w-6 items-center justify-end pr-3",
+          isConnected && selectedToken.token && "mb-5",
+        )}
       >
         <Button
           variant="ghost"

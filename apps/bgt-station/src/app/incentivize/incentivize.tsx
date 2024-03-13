@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ActionButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
@@ -11,9 +11,10 @@ import useCreateIncentiveTokens from "~/hooks/useCreateIncentivizeTokens";
 import AddIncentivizeToken from "./add-incentivize-input";
 
 export default function Incentivize() {
-  const [poolAddress, setPoolAddress] = React.useState<string | undefined>(
-    undefined,
-  );
+  const [poolAddress, setPoolAddress] = useState<string | undefined>(undefined);
+  const [blockNumber, setBlockNumber] = useState<string | undefined>(undefined);
+  const [totalIncentiveValue, setTotalIncentiveValue] =
+    React.useState<number>(0);
 
   const {
     incentivizeTokens,
@@ -23,6 +24,13 @@ export default function Incentivize() {
     onRemove,
     onTokenAmountChange,
   } = useCreateIncentiveTokens();
+  useEffect(() => {
+    const total = incentivizeTokens.reduce((acc, token) => {
+      // Assuming token.amount is a number. If it's a string, you may need to convert it using parseFloat(token.amount) or a similar method
+      return acc + (parseFloat(token.amount) || 0);
+    }, 0);
+    setTotalIncentiveValue(total);
+  }, [incentivizeTokens]);
 
   return (
     <div className="container mx-auto max-w-[480px] pb-20">
@@ -30,14 +38,14 @@ export default function Incentivize() {
         <div className="center flex flex-col justify-between text-lg font-semibold text-foreground">
           Incentivize a Pool
           <div className="flex text-sm font-normal text-muted-foreground">
-            Please select the address
+            Note: Incentives are generally distributed by protocols.
           </div>
         </div>
 
         <div className="mt-8 flex flex-col gap-8">
           <div className="flex flex-col">
             <div className="flex text-sm font-medium text-foreground">
-              Search/Enter Pool Address
+              1. Search/Enter Pool Address
             </div>
             <div className="text-sm leading-tight">
               {/* TODO: add pool address validation */}
@@ -53,23 +61,23 @@ export default function Incentivize() {
           </div>
           <div className="flex flex-col">
             <div className="flex text-sm font-medium text-foreground">
-              Set a Start Block
+              2. Set a Starting Block No.
             </div>
             <div className="text-sm leading-tight">
-              {/* TODO: add pool address validation */}
+              {/* TODO: add block number validation */}
               <Input
                 type="text"
                 placeholder="0x0000...0000"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setPoolAddress(e.target.value)
+                  setBlockNumber(e.target.value)
                 }
-                value={poolAddress}
+                value={blockNumber}
               />
             </div>
           </div>
           <div className="flex flex-col">
             <div className="flex text-sm font-medium text-foreground">
-              Set Amount
+              3. Select Tokens & Set Amounts
             </div>
             <div className="border-1 flex flex-col gap-6 border-border">
               <ul className="divide-y divide-border rounded-md border">
@@ -94,15 +102,23 @@ export default function Incentivize() {
           <div className="flex flex-col gap-1 rounded-lg bg-muted p-4">
             <div className="flex flex-row justify-between">
               <div className="text-md flex font-medium text-muted-foreground">
-                Detail 1
+                Total Incentive Value
               </div>
               <div className="text-md flex font-medium text-foreground">
-                Number
+                ${totalIncentiveValue}
               </div>
             </div>
             <div className="flex flex-row justify-between">
               <div className="text-md flex font-medium text-muted-foreground">
-                Detail 1
+                Incentive Start Block
+              </div>
+              <div className="text-md flex font-medium text-foreground">
+                {blockNumber ?? "~~"}
+              </div>
+            </div>
+            <div className="flex flex-row justify-between">
+              <div className="text-md flex font-medium text-muted-foreground">
+                Est. Start Date
               </div>
               <div className="text-md flex font-medium text-foreground">
                 Number
