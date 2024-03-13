@@ -224,7 +224,7 @@ export const PoolChart = ({
         }`,
         tvlUsd: `${
           formatHoney(poolData?.baseTvlInHoney) +
-          formatHoney(poolData?.quoteTvlInHoney)
+            formatHoney(poolData?.quoteTvlInHoney) || latestTvlSeen
         }`,
 
         feesUsd: `${
@@ -232,6 +232,10 @@ export const PoolChart = ({
           formatHoney(poolData?.quoteFeesInHoney)
         }`,
       };
+
+      latestTvlSeen = poolData?.tvlUsd
+        ? Number(poolData?.tvlUsd)
+        : latestTvlSeen;
 
       if (i < 7) {
         weeklyVolumeTotal += Number(poolData?.volumeUsd);
