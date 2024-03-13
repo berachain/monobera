@@ -112,21 +112,25 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     return getQuoteCost(poolPrice);
   }, [poolPrice]);
 
-
-  const PRESICION = 18
+  const PRESICION = 18;
   const handleBaseAssetAmountChange = (value: string): void => {
     updateTokenAmount(0, value);
     const parsedBaseCost = parseUnits(baseCost.toString(), PRESICION);
     const parsedValue = parseUnits(value, PRESICION);
-    const quoteAmount = (parsedBaseCost * parsedValue) / BigInt(10 ** PRESICION);
-    updateTokenAmount(1, quoteAmount === 0n ? "" : formatUnits(quoteAmount, 18));
+    const quoteAmount =
+      (parsedBaseCost * parsedValue) / BigInt(10 ** PRESICION);
+    updateTokenAmount(
+      1,
+      quoteAmount === 0n ? "" : formatUnits(quoteAmount, 18),
+    );
   };
 
   const handleQuoteAssetAmountChange = (value: string): void => {
     updateTokenAmount(1, value);
     const parsedQuoteCost = parseUnits(quoteCost.toString(), PRESICION);
     const parsedValue = parseUnits(value, PRESICION);
-    const baseAmount = (parsedQuoteCost * parsedValue) / BigInt(10 ** PRESICION);
+    const baseAmount =
+      (parsedQuoteCost * parsedValue) / BigInt(10 ** PRESICION);
     updateTokenAmount(0, baseAmount === 0n ? "" : formatUnits(baseAmount, 18));
   };
 
@@ -199,9 +203,9 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     }
     if (isBaseInput) {
       return 31;
-    } else {
-      return 32;
     }
+
+    return 32;
   };
 
   const getAmount = () => {
@@ -213,9 +217,8 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     }
     if (isBaseInput) {
       return bnBaseAmount;
-    } else {
-      return bnQuoteAmount;
     }
+    return bnQuoteAmount;
   };
   const handleAddLiquidity = useCallback(async () => {
     try {

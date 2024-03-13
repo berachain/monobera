@@ -82,11 +82,10 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           args: [account],
         });
 
-        const [tokenHoneyPrices, lpBalance] =
-          await Promise.all([
-            tokenHoneyPricesResult,
-            lpBalanceCall,
-          ]);
+        const [tokenHoneyPrices, lpBalance] = await Promise.all([
+          tokenHoneyPricesResult,
+          lpBalanceCall,
+        ]);
 
         const sqrtPrice = new BigNumber(Math.sqrt(spotPrice));
 
