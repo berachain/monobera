@@ -20,6 +20,7 @@ export const usePollBgtBalance = () => {
     async () => {
       if (isConnected) {
         try {
+          if (!publicClient) return undefined;
           const result = await publicClient.readContract({
             address: networkConfig.precompileAddresses.bankAddress as Address,
             abi: BANK_PRECOMPILE_ABI,

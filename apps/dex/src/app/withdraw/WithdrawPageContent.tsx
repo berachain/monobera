@@ -177,17 +177,17 @@ export default function WithdrawLiquidityContent({
 
       let calldata = "";
 
-      if (amount === 100) {
-        const response = await crocPool?.burnAmbientAll(pool.poolIdx, limits);
-        calldata = response?.calldata ?? "";
-      } else {
-        const response = await crocPool?.burnAmbientLiq(
-          pool.poolIdx,
-          liquidityToBurn,
-          limits,
-        );
-        calldata = response?.calldata ?? "";
-      }
+      // if (amount === 100) {
+      //   const response = await crocPool?.burnAmbientAll(pool.poolIdx, limits);
+      //   calldata = response?.calldata ?? "";
+      // } else {
+      const response = await crocPool?.burnAmbientLiq(
+        pool.poolIdx,
+        liquidityToBurn,
+        limits,
+      );
+      calldata = response?.calldata ?? "";
+      // }
 
       const payload = [2, calldata];
 

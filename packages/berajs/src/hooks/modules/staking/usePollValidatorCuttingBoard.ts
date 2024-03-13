@@ -1,7 +1,11 @@
-import { client, getValidatorCuttingBoard, type Weight } from "@bera/graphql";
+import {
+  dexClient,
+  getValidatorCuttingBoard,
+  type Weight,
+} from "@bera/graphql";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import POLLING from "~/config/constants/polling";
 
@@ -15,7 +19,7 @@ export const usePollValidatorCuttingBoard = (
     async () => {
       try {
         if (!validatorAddress) return undefined;
-        const validatorCuttingBoard: Weight[] = await client
+        const validatorCuttingBoard: Weight[] = await dexClient
           .query({
             query: getValidatorCuttingBoard,
             variables: {
@@ -27,7 +31,7 @@ export const usePollValidatorCuttingBoard = (
           .then((res: any) => {
             return res.data.cuttingBoards[0].weights;
           })
-          .catch((e) => {
+          .catch((e: any) => {
             console.log(e);
             return undefined;
           });

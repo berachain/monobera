@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits } from "viem";
-import { usePublicClient, type Address } from "wagmi";
+import { type Address, formatUnits } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { GOVERNANCE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
@@ -19,6 +19,7 @@ export const usePollProposal = (proposalId: number) => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       const result = await publicClient.readContract({
         address: networkConfig.precompileAddresses.governanceAddress as Address,
         abi: GOVERNANCE_PRECOMPILE_ABI,

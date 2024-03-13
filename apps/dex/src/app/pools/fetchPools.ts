@@ -1,8 +1,7 @@
-import { getCrocErc20LpAddress, type Token } from "@bera/berajs";
+import { type Token } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
+import { formatUnits, type Address } from "viem";
 import BigNumber from "bignumber.js";
-import { formatUnits, getAddress } from "viem";
-import { type Address } from "wagmi";
 
 export interface PoolV2 {
   id: string; // concat base-quote-poolidx

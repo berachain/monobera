@@ -12,6 +12,7 @@ export const usePollMaxDeposit = () => {
   const QUERY_KEY = [account, method];
   const { isLoading } = useSWRImmutable(QUERY_KEY, async () => {
     try {
+      if (!publicClient) return undefined;
       const result = await publicClient.readContract({
         address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
         abi: BTOKEN_ABI,

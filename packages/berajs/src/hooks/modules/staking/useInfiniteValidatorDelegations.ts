@@ -1,5 +1,6 @@
 import useSWRInfinite from "swr/infinite";
-import { usePublicClient, type Address } from "wagmi";
+import { type Address } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { STAKING_PRECOMPILE_ABI } from "~/config";
 import { useBeraConfig } from "~/contexts";
@@ -20,6 +21,8 @@ export const useInfiniteValidatorDelegations = (
   } = useSWRInfinite(
     (index) => ["validatorDelegations", validatorAddress, index],
     async (key: any[]) => {
+      if (!publicClient) return undefined;
+
       const page = key[2] + 1;
       const pagination: PageRequest = {
         key: "",

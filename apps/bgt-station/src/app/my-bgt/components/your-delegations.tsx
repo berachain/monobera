@@ -2,7 +2,6 @@ import React from "react";
 import {
   usePollDelegatorValidators,
   usePollGlobalValidatorBribes,
-  usePollPrices,
   type PoLValidator,
 } from "@bera/berajs";
 import { cloudinaryUrl, docsUrl } from "@bera/config";
@@ -16,8 +15,7 @@ export default function YourDelegations() {
   const total = useTotalValidatorsDelegated();
   const delegatedValidators = useDelegatorValidators();
 
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { useDelegatorPolValidators } = usePollGlobalValidatorBribes(prices);
   const delegatorPolValidators = useDelegatorPolValidators(
     delegatedValidators?.map((d: any) => d.operatorAddr),

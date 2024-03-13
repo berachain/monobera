@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, getAddress } from "viem";
-import { usePublicClient, type Address } from "wagmi";
+import { type Address, formatUnits, getAddress } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
@@ -21,6 +21,7 @@ export const usePollValidatorBribes = (
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (!validatorAddress) return undefined;
       const result = await publicClient
         .readContract({

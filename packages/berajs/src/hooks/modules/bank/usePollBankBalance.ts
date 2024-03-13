@@ -19,6 +19,7 @@ export const usePollBankBalance = (denom: string | undefined) => {
     async () => {
       if (isConnected && denom) {
         try {
+          if (!publicClient) return undefined;
           const result = await publicClient.readContract({
             address: networkConfig.precompileAddresses.bankAddress as Address,
             abi: BANK_PRECOMPILE_ABI,

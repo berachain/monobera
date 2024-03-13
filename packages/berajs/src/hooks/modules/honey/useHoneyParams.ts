@@ -18,6 +18,7 @@ export const usePollHoneyParams = (collateralList: Address[]) => {
   const QUERY_KEY = [method, ...collateralList];
 
   const swrResponse = useSWR(QUERY_KEY, async () => {
+    if (!publicClient) return undefined;
     const calls: any[] = [];
     collateralList.forEach((collateral: Address) => {
       calls.push({

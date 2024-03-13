@@ -17,6 +17,7 @@ export const usePollBgtSupply = () => {
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       const result = await publicClient.readContract({
         address: networkConfig.precompileAddresses.bankAddress as Address,
         abi: BANK_PRECOMPILE_ABI,

@@ -1,7 +1,8 @@
 import { DEX_PRECOMPILE_ABI, useBeraJs } from "@bera/berajs";
 import { erc20DexAddress, multicallAddress } from "@bera/config";
-import { client, getUserPools, getUserPoolsDetails } from "@bera/graphql";
+import { dexClient, getUserPools, getUserPoolsDetails } from "@bera/graphql";
 import {
+  type Address,
   formatEther,
   formatUnits,
   getAddress,
@@ -10,7 +11,7 @@ import {
 } from "viem";
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient, type Address } from "wagmi";
+import { usePublicClient } from "wagmi";
 
 export const usePollUsersPools = () => {
   const { isReady, account } = useBeraJs();
@@ -20,8 +21,9 @@ export const usePollUsersPools = () => {
   const swrHook = useSWRImmutable(
     isReady && account ? QUERY_KEY : null,
     async () => {
+      if (!publicClient) return undefined;
       try {
-        const res = await client.query({
+        const res = await dexClient.query({
           query: getUserPools,
           variables: { userAddress: account },
         });
@@ -29,7 +31,7 @@ export const usePollUsersPools = () => {
         const poolAddresslist = pools.map((pool: any) => ({
           address: pool.poolAddress,
         }));
-        const userPools = await client.query({
+        const userPools = await dexClient.query({
           query: getUserPoolsDetails,
           variables: { list: poolAddresslist },
         });

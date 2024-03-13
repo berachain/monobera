@@ -1,7 +1,7 @@
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits } from "viem";
-import { erc20ABI, usePublicClient, type Address } from "wagmi";
+import { erc20Abi, formatUnits, type Address } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { type Token } from "~/api/currency/tokens";
 import POLLING from "~/config/constants/polling";
@@ -15,7 +15,7 @@ interface AllowanceToken extends Token {
 }
 
 interface Call {
-  abi: typeof erc20ABI;
+  abi: typeof erc20Abi;
   address: `0x${string}`;
   functionName: string;
   args: any[];
@@ -43,10 +43,11 @@ export const usePollAllowances = ({ contract, tokens }: IUsePollAllowances) => {
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (account && !error) {
         const call: Call[] = tokens.map((item: Token) => ({
           address: item.address as `0x${string}`,
-          abi: erc20ABI,
+          abi: erc20Abi,
           functionName: "allowance",
           args: [account, contract],
         }));

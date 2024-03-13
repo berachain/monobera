@@ -6,7 +6,6 @@ import {
   formatter,
   usePollActiveValidators,
   usePollGlobalValidatorBribes,
-  usePollPrices,
 } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { Card } from "@bera/ui/card";
@@ -24,8 +23,7 @@ export default function Validators({
   const { useTotalValidators, isLoading: isActiveValidatorsLoading } =
     usePollActiveValidators();
   const totalValidators: number = useTotalValidators();
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { useGlobalActiveBribeValue, isLoading: isGlobalBribeLoading } =
     usePollGlobalValidatorBribes(prices);
   const totalBribeValue = useGlobalActiveBribeValue();

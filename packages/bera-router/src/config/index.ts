@@ -22,7 +22,6 @@ import {
 const chain: Chain = {
   id: chainId,
   name: chainName,
-  network: networkName,
   nativeCurrency: {
     decimals: gasTokenDecimals,
     name: gasTokenName,

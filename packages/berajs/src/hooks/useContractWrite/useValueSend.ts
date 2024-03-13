@@ -29,6 +29,7 @@ const useValueSend = ({
       dispatch({ type: ActionEnum.LOADING });
       onLoading?.();
       let receipt: any | undefined;
+      if (!publicClient) return;
       try {
         receipt = await walletClient?.sendTransaction({
           to: address,

@@ -1,5 +1,9 @@
 import { honeyTokenAddress } from "@bera/config";
-import { client, getTokenHoneyPrice, getTokenHoneyPrices } from "@bera/graphql";
+import {
+  dexClient,
+  getTokenHoneyPrice,
+  getTokenHoneyPrices,
+} from "@bera/graphql";
 import useSWR from "swr";
 import { getAddress, type Address } from "viem";
 
@@ -21,7 +25,7 @@ export const useTokenHoneyPrices = (
         handleNativeBera(token).toLowerCase(),
       );
       try {
-        const res = await client.query({
+        const res = await dexClient.query({
           query: getTokenHoneyPrices,
           variables: {
             id: swappedAddresses,
@@ -55,7 +59,7 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
       if (tokenAddress.toLowerCase() === honeyTokenAddress.toLowerCase()) {
         return "1";
       }
-      return await client
+      return await dexClient
         .query({
           query: getTokenHoneyPrice,
           variables: {

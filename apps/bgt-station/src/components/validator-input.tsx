@@ -8,7 +8,7 @@ import {
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import { DelegateEnum } from "../app/delegate/types";
 import ValidatorSelector from "./validator-selector";

@@ -5,7 +5,6 @@ import {
   useBeraJs,
   usePollActiveValidators,
   usePollBribes,
-  usePollPrices,
   usePollTotalDelegated,
   type PoLValidator,
 } from "@bera/berajs";
@@ -39,9 +38,7 @@ export default function ValidatorCard({
 
   const { useValidatorDelegation } = usePollTotalDelegated();
   const userDelegated = useValidatorDelegation(validator.operatorAddr);
-
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { useValidatorBribeTotal, useValidatorUserBribes, QUERY_KEY } =
     usePollBribes();
 

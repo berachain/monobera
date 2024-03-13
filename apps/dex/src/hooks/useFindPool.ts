@@ -1,5 +1,5 @@
 import { handleNativeBera } from "@bera/berajs";
-import { client, getUniquePoolById } from "@bera/graphql";
+import { dexClient, getUniquePoolById } from "@bera/graphql";
 import useSWRImmutable from "swr/immutable";
 
 export const useFindPool = (swapFee: number, tokenWeights: any[]) => {
@@ -9,7 +9,7 @@ export const useFindPool = (swapFee: number, tokenWeights: any[]) => {
     id ? QUERY_KEY : null,
     async () => {
       try {
-        const res = await client.query({
+        const res = await dexClient.query({
           query: getUniquePoolById,
           variables: { id },
         });

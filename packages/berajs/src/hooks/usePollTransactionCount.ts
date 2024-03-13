@@ -15,6 +15,7 @@ export const usePollTransactionCount = ({
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (address) {
         const transactionCount = await publicClient.getTransactionCount({
           address: address as Address,

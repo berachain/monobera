@@ -8,6 +8,7 @@ import {
   formatNumber,
   useTokenHoneyPrice,
   usePollAssetWalletBalance,
+  formatUsd,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
@@ -33,7 +34,7 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import { useAddLiquidity } from "./useAddLiquidity";
@@ -51,7 +52,6 @@ import {
   transformLimits,
 } from "@bera/beracrocswap";
 import { SettingsPopover } from "~/components/settings-popover";
-import { formatUsd } from "../../../../../packages/berajs/src/utils/formatUsd";
 import { useCrocPoolNativeBera } from "~/hooks/useCrocPoolNativeBera";
 
 interface IAddLiquidityContent {
@@ -112,16 +112,26 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     return getQuoteCost(poolPrice);
   }, [poolPrice]);
 
+  const PRESICION = 18;
   const handleBaseAssetAmountChange = (value: string): void => {
     updateTokenAmount(0, value);
-    const quoteAmount = baseCost * getSafeNumber(value);
-    updateTokenAmount(1, quoteAmount === 0 ? "" : quoteAmount.toString());
+    const parsedBaseCost = parseUnits(baseCost.toString(), PRESICION);
+    const parsedValue = parseUnits(value, PRESICION);
+    const quoteAmount =
+      (parsedBaseCost * parsedValue) / BigInt(10 ** PRESICION);
+    updateTokenAmount(
+      1,
+      quoteAmount === 0n ? "" : formatUnits(quoteAmount, 18),
+    );
   };
 
   const handleQuoteAssetAmountChange = (value: string): void => {
     updateTokenAmount(1, value);
-    const baseAmount = quoteCost * getSafeNumber(value);
-    updateTokenAmount(0, baseAmount === 0 ? "" : baseAmount.toString());
+    const parsedQuoteCost = parseUnits(quoteCost.toString(), PRESICION);
+    const parsedValue = parseUnits(value, PRESICION);
+    const baseAmount =
+      (parsedQuoteCost * parsedValue) / BigInt(10 ** PRESICION);
+    updateTokenAmount(0, baseAmount === 0n ? "" : formatUnits(baseAmount, 18));
   };
 
   const baseTokenAddress = isBeratoken(tokenInputs[0])
@@ -184,6 +194,32 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     return minAmountOut;
   }, [quoteTokenInitialLiquidity, slippage]);
 
+  const getPathId = () => {
+    if (baseTokenAddress === nativeTokenAddress) {
+      return 31;
+    }
+    if (quoteTokenAddress === nativeTokenAddress) {
+      return 32;
+    }
+    if (isBaseInput) {
+      return 31;
+    }
+
+    return 32;
+  };
+
+  const getAmount = () => {
+    if (baseTokenAddress === nativeTokenAddress) {
+      return bnBaseAmount;
+    }
+    if (quoteTokenAddress === nativeTokenAddress) {
+      return bnQuoteAmount;
+    }
+    if (isBaseInput) {
+      return bnBaseAmount;
+    }
+    return bnQuoteAmount;
+  };
   const handleAddLiquidity = useCallback(async () => {
     try {
       if (!crocPool) {
@@ -211,13 +247,28 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
         totalValue = bnQuoteAmount;
       }
 
+      const pathId = getPathId();
+      const bnAmount = getAmount();
+      console.log(
+        baseTokenAddress as string,
+        quoteTokenAddress as string,
+        pathId,
+        0,
+        0,
+        bnAmount,
+        transformedLimits[0],
+        transformedLimits[1],
+        0,
+        pool.poolIdx,
+      );
+
       const mintCalldata = await encodeWarmPath(
         baseTokenAddress as string,
         quoteTokenAddress as string,
-        isBaseInput ? 31 : 32,
+        pathId,
         0,
         0,
-        isBaseInput ? bnBaseAmount : bnQuoteAmount,
+        bnAmount,
         transformedLimits[0],
         transformedLimits[1],
         0,
@@ -437,7 +488,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 title={"Pool Price"}
                 value={
                   poolPrice
-                    ? `${formatNumber(poolPrice)} ${baseToken.symbol} = 1 ${
+                    ? `${formatNumber(poolPrice, 4)} ${baseToken.symbol} = 1 ${
                         quoteToken.symbol
                       }`
                     : "-"
