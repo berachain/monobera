@@ -140,7 +140,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
       <div className="flex flex-shrink-0 text-[10px] text-muted-foreground">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <div className="flex h-8 cursor-pointer items-center p-3 hover:underline">
+            <div className="flex text-[14px] h-8 cursor-pointer items-center p-3 hover:underline">
               Market Details
             </div>
           </DialogTrigger>

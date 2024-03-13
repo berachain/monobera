@@ -15,10 +15,8 @@ import {
 } from "~/endpoints";
 import { GeneralInfoBanner } from "../components/general-info-banner";
 import { InstrumentDropdown } from "../components/instrument-dropdown";
-import OrderChart from "../components/order-chart";
-import { OrderHistory } from "../components/order-history";
-import CreatePosition from "../create-position";
 import { ReferralModal } from "../../referrals/referral-modal";
+import OrderWrapper from "../components/order-wrapper";
 import { type IMarket } from "../page";
 
 type Props = {
@@ -62,9 +60,9 @@ export default async function Home({ params, searchParams: { ref } }: Props) {
           historicalInfo === undefined ? 0 : historicalInfo.num_trades,
       };
     });
-    const defualtMarket = markets.find((m: Market) => m.name === params.market);
+    const defaultMarket = markets.find((m: Market) => m.name === params.market);
 
-    if (!data || !defualtMarket) {
+    if (!data || !defaultMarket) {
       notFound();
     }
 
@@ -75,27 +73,20 @@ export default async function Home({ params, searchParams: { ref } }: Props) {
           <div className="h-fit w-full flex-shrink-0 flex-grow-0 lg:w-[400px]">
             <InstrumentDropdown
               markets={markets}
-              selectedMarket={defualtMarket}
+              selectedMarket={defaultMarket}
               priceChange={data.priceChange}
             />
           </div>
           <GeneralInfoBanner
-            market={defualtMarket}
+            market={defaultMarket}
             priceChange={data.priceChange}
           />{" "}
         </div>
-        <span className="block lg:hidden">
-          <OrderChart marketName={defualtMarket.name} />
-        </span>
-        <div className="flex w-full flex-col lg:flex-row">
-          <CreatePosition market={defualtMarket} params={data.params} />
-          <div className="h-full w-full pb-[34px] lg:w-screen-w-400">
-            <span className="hidden lg:block">
-              <OrderChart marketName={defualtMarket.name} />
-            </span>
-            <OrderHistory markets={markets} />
-          </div>
-        </div>{" "}
+        <OrderWrapper
+          markets={markets}
+          defaultMarket={defaultMarket}
+          params={data?.params}
+        />
       </div>
     );
   } catch (e) {

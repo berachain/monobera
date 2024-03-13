@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TRADING_ABI, TransactionActionType } from "@bera/berajs";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
@@ -20,14 +20,29 @@ export function ClosePositionModal({
   disabled = false,
   openPosition,
   className = "",
+  controlledOpen,
+  onOpenChange,
 }: {
-  trigger: any;
+  trigger?: any;
   disabled?: boolean;
   openPosition: IMarketOrder;
   className?: string;
+  controlledOpen?: boolean;
+  onOpenChange?: (state: boolean) => void;
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const { refetch } = usePollOpenPositions();
+
+  useEffect(() => {
+    if (controlledOpen && controlledOpen !== open) {
+      setOpen(controlledOpen);
+    }
+  }, [controlledOpen, open]);
+
+  const handleOpenChange = (state: boolean) => {
+    onOpenChange?.(state);
+    setOpen(state);
+  };
 
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(
@@ -50,7 +65,7 @@ export function ClosePositionModal({
     actionType: TransactionActionType.CANCEL_ORDER,
     onSuccess: () => {
       refetch();
-      setOpen(false);
+      handleOpenChange(false);
     },
   });
 
@@ -68,10 +83,13 @@ export function ClosePositionModal({
 
   return (
     <div className={className}>
-      <div onClick={() => !disabled && setOpen(true)} className="h-full w-full">
+      <div
+        onClick={() => !disabled && handleOpenChange(true)}
+        className="h-full w-full"
+      >
         {trigger}
       </div>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-[342px]">
           <div className="text-lg font-semibold leading-7">Close Position</div>
 

@@ -122,7 +122,11 @@ export default function LineChart({
         <div className="block md:hidden">
           <Dropdown
             selected={time}
-            selectionList={Object.keys(TimeFrame)}
+            selectionList={Object.keys(TimeFrame).map((t: string) =>
+              TimeFrame[t as keyof typeof TimeFrame]
+                .replaceAll("_", " ")
+                .toUpperCase(),
+            )}
             onSelect={(t: string) => setTime(t as TimeFrameT)}
           />
         </div>

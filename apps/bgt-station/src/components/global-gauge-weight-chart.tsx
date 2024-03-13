@@ -114,13 +114,13 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
     [gaugeWeights],
   );
 
-  const tooltipComp = (
+  const tooltipComp = selectedGauge ? (
     <ChartTooltip
       color={color}
       visible={tooltipVisible}
       gauge={selectedGauge}
     />
-  );
+  ) : undefined;
 
   return (
     <div className="flex h-full flex-col items-center justify-center">
@@ -152,6 +152,7 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
               },
               tooltip: {
                 enabled: false,
+                // @ts-ignore
                 external: externalTooltipHandler,
               },
             },

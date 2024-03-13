@@ -7,12 +7,14 @@ import { GaugeWeight } from "~/hooks/useGaugeWeights";
 type ChartToolTipProps = {
   color: string;
   visible: boolean;
-  gauge: GaugeWeight | undefined;
+  gauge: GaugeWeight;
 };
 export function ChartTooltip({ color, visible, gauge }: ChartToolTipProps) {
   if (!visible) return null;
   const { gaugeDictionary } = useGauges();
-  const name = gauge && gaugeDictionary[getAddress(gauge.address)]?.name;
+  const name = gaugeDictionary
+    ? gaugeDictionary[getAddress(gauge?.address)]?.name
+    : "";
 
   return (
     <div
@@ -31,7 +33,7 @@ export function ChartTooltip({ color, visible, gauge }: ChartToolTipProps) {
           {name ?? "Test default gauge"}
         </div>
         <div className="flex items-start justify-center text-sm text-muted-foreground">
-          {truncateHash(gauge?.address)}
+          {truncateHash(gauge?.address ?? "")}
         </div>
       </div>
     </div>
