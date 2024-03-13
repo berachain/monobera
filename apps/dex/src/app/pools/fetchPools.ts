@@ -1,7 +1,7 @@
 import { type Token } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import BigNumber from "bignumber.js";
-import { formatUnits, type Address } from "viem";
+import { type Address } from "viem";
 
 export interface PoolV2 {
   id: string; // concat base-quote-poolidx
@@ -131,8 +131,8 @@ export const formatPoolData = (result: any): PoolV2 => {
     tvlUsd: totalTvl,
     volumeUsd: 0,
     fees: 0,
-    baseTokenHoneyTvl: parseFloat(baseTvlHoneyAmount),
-    quoteTokenHoneyTvl: parseFloat(quotTvlHoneyAmount),
+    baseTokenHoneyTvl: parseFloat(baseTvlHoneyAmount.toString()),
+    quoteTokenHoneyTvl: parseFloat(quotTvlHoneyAmount.toString()),
     totalApy: 0,
     bgtApy: 0,
   };

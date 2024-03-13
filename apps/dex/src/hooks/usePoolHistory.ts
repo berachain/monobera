@@ -23,7 +23,7 @@ export const usePoolHistory = ({ pool }: { pool: PoolV2 }) => {
     return fetch(
       `${crocIndexerEndpoint}/v2/pool_history?chainId=0x${chainId.toString(
         16,
-      )}&base=${pool.base}&quote=${pool.quote}&poolIdx=${pool.poolIdx}&days=7`,
+      )}&base=${pool.base}&quote=${pool.quote}&poolIdx=${pool.poolIdx}&days=90`,
     )
       .then((data) => data.json())
       .then((data) => {

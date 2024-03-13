@@ -310,6 +310,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
       <div className="flex w-full grid-cols-5 flex-col-reverse gap-4 lg:grid">
         <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">
           <PoolChart
+            pool={pool}
             currentTvl={
               pool?.baseTokenHoneyTvl && pool?.quoteTokenHoneyTvl
                 ? Number(pool.baseTokenHoneyTvl) +
