@@ -28,7 +28,7 @@
     "lodash": "^4.17.21",
     "next-auth": "^4.24.5",
     "sha3": "^2.1.4",
-    "viem": "~1.19.13"
+    "viem": "~2.7.22"
   },
   "devDependencies": {
     "@bera/eslint-config": "0.1.0",

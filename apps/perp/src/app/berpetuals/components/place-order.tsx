@@ -19,8 +19,7 @@ import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits, parseUnits } from "viem";
-import { type Address } from "wagmi";
+import { formatUnits, parseUnits, type Address } from "viem";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "../type";
 

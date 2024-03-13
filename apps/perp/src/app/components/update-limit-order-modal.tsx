@@ -9,8 +9,7 @@ import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
 import { parseUnits as ethersParseUnits } from "ethers";
 import { mutate } from "swr";
-import { formatUnits, parseUnits } from "viem";
-import { type Address } from "wagmi";
+import { formatUnits, parseUnits, type Address } from "viem";
 
 import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";

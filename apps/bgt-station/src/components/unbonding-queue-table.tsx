@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { truncateHash, type EntryData } from "@bera/berajs";
 import { DataTable, ValidatorIcon } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import { unstake_queue_columns } from "~/columns/unstake-queue-columns";
 

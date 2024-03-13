@@ -14,11 +14,9 @@ import {
   usePollPerpsBgtRewards,
 } from "@bera/berajs";
 import { DataTable, DynamicRewardBtn, Tooltip, useTxn } from "@bera/shared-ui";
-import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
-import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { parseUnits } from "ethers";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 import { withdraw_queue_columns } from "./withdraw-queue-columns";

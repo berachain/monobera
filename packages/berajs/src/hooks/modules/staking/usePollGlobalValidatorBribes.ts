@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, getAddress } from "viem";
-import { erc20ABI, usePublicClient, type Address } from "wagmi";
+import { formatUnits, getAddress, erc20Abi, type Address } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import { useBeraConfig } from "~/contexts";
@@ -72,6 +72,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
   const GLOBAL_AVG_VAPY = "globalAvgVAPY";
 
   const { isLoading } = useSWRImmutable(QUERY_KEY, async () => {
+    if (!publicClient) return undefined;
     if (!validatorAddresses || !validators || !prices || !tokenDictionary)
       return undefined;
 
@@ -128,7 +129,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
           }
           decimalCalls.push({
             address: token,
-            abi: erc20ABI as unknown as (typeof erc20ABI)[],
+            abi: erc20Abi as unknown as (typeof erc20Abi)[],
             functionName: "decimals",
             args: [],
           });

@@ -1,11 +1,13 @@
 import { erc20ModuleAddress } from "@bera/config";
-import { usePublicClient, type Address } from "wagmi";
+import { type Address } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { ERC20_MODULE_ABI } from "~/config/abi";
 
 export const usePollDenom = () => {
   const publicClient = usePublicClient();
   const getDenom = async (address: Address) => {
+    if (!publicClient) return undefined;
     try {
       await publicClient.readContract({
         address: erc20ModuleAddress,
@@ -25,6 +27,7 @@ export const usePollDenom = () => {
     }
   };
   const getAddress = async (denom: string) => {
+    if (!publicClient) return undefined;
     try {
       return await publicClient.readContract({
         address: erc20ModuleAddress,

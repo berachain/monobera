@@ -19,8 +19,7 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { parseUnits } from "ethers";
-import { parseEther } from "viem";
-import { type Address } from "wagmi";
+import { parseEther, type Address } from "viem";
 
 const TradeWalletSection = () => {
   const { octPrivKey, octAddress, octBalance, octTxCount } = useOct();

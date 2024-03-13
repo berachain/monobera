@@ -2,15 +2,14 @@ import { POLLING } from "@bera/shared-ui/src/utils";
 import useSWR, { mutate } from "swr";
 import { type PoolV2 } from "~/app/pools/fetchPools";
 import useSWRImmutable from "swr/immutable";
-import { getCrocErc20LpAddress, useBeraConfig, useBeraJs } from "@bera/berajs";
-import { client, getTokenHoneyPrices } from "@bera/graphql";
+import { getCrocErc20LpAddress, useBeraJs } from "@bera/berajs";
+import { dexClient, getTokenHoneyPrices } from "@bera/graphql";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { toHex } from "viem";
 import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
-import { formatUnits } from "viem";
-import { getAddress, parseUnits } from "viem";
+import { getAddress, erc20Abi } from "viem";
 import { type IUserPosition } from "./usePollUserDeposited";
-import { erc20ABI, usePublicClient } from "wagmi";
+import { usePublicClient } from "wagmi";
 import BigNumber from "bignumber.js";
 
 interface AmbientPosition {
@@ -38,7 +37,7 @@ interface AmbientPosition {
   user: string;
 }
 
-export interface IUserAmbientPositon extends AmbientPosition {
+export interface IUserAmbientPositon {
   userPosition: IUserPosition | undefined;
 }
 
@@ -53,11 +52,12 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (!account || !pool || !spotPrice) {
         return undefined;
       }
       try {
-        const tokenHoneyPricesResult = client
+        const tokenHoneyPricesResult = dexClient
           .query({
             query: getTokenHoneyPrices,
             variables: {
@@ -75,37 +75,17 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
             );
           });
 
-        const positionsResponse = fetch(
-          `${crocIndexerEndpoint}/user_positions?chainId=${hexChainId}&user=${account}`,
-        );
-
         const lpBalanceCall = publicClient.readContract({
           address: getCrocErc20LpAddress(pool.base, pool.quote) as any,
-          abi: erc20ABI,
+          abi: erc20Abi,
           functionName: "balanceOf",
           args: [account],
         });
 
-        const [tokenHoneyPrices, positionsResult, lpBalance] =
-          await Promise.all([
-            tokenHoneyPricesResult,
-            positionsResponse,
-            lpBalanceCall,
-          ]);
-
-        const positions = await positionsResult.json();
-
-        const userPoolPosition: AmbientPosition | undefined =
-          positions.data.find(
-            (pos: any) =>
-              pos.base === pool.base &&
-              pos.quote === pool.quote &&
-              pos.chainId === hexChainId,
-          );
-
-        if (!userPoolPosition) {
-          return undefined;
-        }
+        const [tokenHoneyPrices, lpBalance] = await Promise.all([
+          tokenHoneyPricesResult,
+          lpBalanceCall,
+        ]);
 
         const sqrtPrice = new BigNumber(Math.sqrt(spotPrice));
 
@@ -132,7 +112,6 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           seeds: lpBalance,
         };
         return {
-          ...userPoolPosition,
           userPosition,
         };
       } catch (e) {

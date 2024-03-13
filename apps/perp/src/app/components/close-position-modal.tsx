@@ -7,8 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits } from "viem";
-import { type Address } from "wagmi";
+import { formatUnits, type Address } from "viem";
 
 import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";

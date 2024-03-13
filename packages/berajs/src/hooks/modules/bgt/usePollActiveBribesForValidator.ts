@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient, type Address } from "wagmi";
+import { Address } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
@@ -18,6 +19,7 @@ export const usePollActiveBribesForValidator = (
     QUERY_KEY,
     async () => {
       if (!validatorAddress) return undefined;
+      if (!publicClient) return undefined;
       const result = await publicClient
         .readContract({
           address: networkConfig.precompileAddresses

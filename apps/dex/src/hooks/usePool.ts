@@ -1,11 +1,11 @@
-import { client, getAllPools } from "@bera/graphql";
+import { dexClient, getAllPools } from "@bera/graphql";
 import useSWR from "swr";
 
 export const usePools = () => {
   const { data } = useSWR(
     ["getAllPools"],
     async () => {
-      return await client
+      return await dexClient
         .query({
           query: getAllPools,
         })

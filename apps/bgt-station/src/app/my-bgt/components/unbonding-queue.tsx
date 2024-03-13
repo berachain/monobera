@@ -12,7 +12,6 @@ import { cloudinaryUrl, docsUrl } from "@bera/config";
 import { useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { mutate } from "swr";
-
 import UnbondingQueueTable from "~/components/unbonding-queue-table";
 import { Banner } from "./banner";
 

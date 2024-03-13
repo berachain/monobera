@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient, type Address } from "wagmi";
+import { usePublicClient } from "wagmi";
 import { REFERRALS_ABI } from "~/config";
 import { perpsReferralsAddress } from "@bera/config";
 
@@ -13,6 +13,7 @@ export const usePollTraderReferral = (traderAddress: string) => {
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       try {
         const result = await publicClient.readContract({
           address: perpsReferralsAddress,

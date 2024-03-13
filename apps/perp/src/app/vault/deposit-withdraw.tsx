@@ -22,7 +22,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { parseUnits } from "ethers";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";

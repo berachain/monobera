@@ -64,7 +64,7 @@ export const ConnectButton = ({
                 Connect
               </Button>
             )}
-            {isWrongNetwork && (
+            {isWrongNetwork && isConnected && (
               <Button
                 onClick={openChainModal}
                 type="button"

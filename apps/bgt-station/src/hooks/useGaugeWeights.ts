@@ -5,7 +5,7 @@ import {
   type Validator,
 } from "@bera/berajs";
 import {
-  client,
+  dexClient,
   getGlobalCuttingBoard,
   getValidatorCuttingBoard,
   type Weight,
@@ -72,7 +72,7 @@ export interface GaugeWeight {
 }
 
 const getValidator = async (address: string): Promise<Weight[]> => {
-  return await client
+  return await dexClient
     .query({
       query: getValidatorCuttingBoard,
       variables: {
@@ -187,7 +187,7 @@ export const useGlobalValidatorGaugeWeight = () => {
     QUERY_KEY,
     async () => {
       try {
-        const globalCuttingBoard: Weight[] = await client
+        const globalCuttingBoard: Weight[] = await dexClient
           .query({
             query: getGlobalCuttingBoard,
             variables: {

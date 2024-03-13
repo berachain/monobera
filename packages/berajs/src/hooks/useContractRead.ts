@@ -30,6 +30,8 @@ const useContractRead = (): useContractReadApi => {
       contractMethod,
       params,
     }: IContractRead): Promise<unknown[]> => {
+      if (!publicClient) return [];
+
       dispatch({ type: ActionEnum.LOADING });
       try {
         const data = await publicClient.readContract({

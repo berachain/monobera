@@ -12,6 +12,7 @@ export const useLatestBlock = () => {
   const { data, isLoading } = useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       try {
         const result = await publicClient.getBlock();
         return result.number;

@@ -4,7 +4,6 @@ import {
   usePollActiveValidators,
   usePollBgtSupply,
   usePollGlobalValidatorBribes,
-  usePollPrices,
 } from "@bera/berajs";
 import { BribeApyTooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
@@ -17,8 +16,7 @@ export function Details() {
   const total = useTotalValidators();
   const { useBgtSupply } = usePollBgtSupply();
   const bgtSupply = useBgtSupply();
-  const { usePrices } = usePollPrices();
-  const { data: prices } = usePrices();
+  const prices = undefined;
   const { useGlobalAvgApy } = usePollGlobalValidatorBribes(prices);
   const avgApy = useGlobalAvgApy();
 

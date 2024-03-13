@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient, type Address } from "wagmi";
+import { type Address } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { type Token } from "~/api";
 import { DEX_PRECOMPILE_ABI } from "~/config";
@@ -25,6 +26,7 @@ export const usePollExchangeRate = (
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       const result = await publicClient.readContract({
         address: networkConfig.precompileAddresses.erc20DexAddress as Address,
         abi: DEX_PRECOMPILE_ABI,

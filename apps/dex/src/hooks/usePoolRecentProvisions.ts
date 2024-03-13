@@ -2,7 +2,7 @@ import { mutate } from "swr";
 import { type PoolV2 } from "~/app/pools/fetchPools";
 import useSWRImmutable from "swr/immutable";
 import { useTokenHoneyPrices } from "@bera/berajs";
-import { client, getRecentProvisions } from "@bera/graphql";
+import { dexClient, getRecentProvisions } from "@bera/graphql";
 import { formatUnits, getAddress } from "viem";
 
 export interface IProvisions {
@@ -26,7 +26,7 @@ export const usePoolRecentProvisions = (pool: PoolV2 | undefined) => {
       return undefined;
     }
     try {
-      const provisions: IProvisions[] | undefined = await client
+      const provisions: IProvisions[] | undefined = await dexClient
         .query({
           query: getRecentProvisions,
           variables: {

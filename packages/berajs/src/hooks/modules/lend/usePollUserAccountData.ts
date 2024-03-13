@@ -18,6 +18,7 @@ export const usePollUserAccountData = () => {
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (account && !error) {
         try {
           const result = await publicClient.readContract({

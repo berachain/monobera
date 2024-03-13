@@ -2,7 +2,7 @@ import { mutate } from "swr";
 import { type PoolV2 } from "~/app/pools/fetchPools";
 import useSWRImmutable from "swr/immutable";
 import { useTokenHoneyPrices, type Token } from "@bera/berajs";
-import { client, getRecentSwaps } from "@bera/graphql";
+import { dexClient, getRecentSwaps } from "@bera/graphql";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { formatUnits, getAddress } from "viem";
 
@@ -30,7 +30,7 @@ export const usePoolRecentSwaps = (pool: PoolV2 | undefined) => {
       return undefined;
     }
     try {
-      const swaps: ISwaps[] | undefined = await client
+      const swaps: ISwaps[] | undefined = await dexClient
         .query({
           query: getRecentSwaps,
           variables: {

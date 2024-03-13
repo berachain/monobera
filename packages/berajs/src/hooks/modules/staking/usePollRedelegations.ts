@@ -6,7 +6,8 @@
 
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { usePublicClient, type Address } from "wagmi";
+import { type Address } from "viem";
+import { usePublicClient } from "wagmi";
 
 import { STAKING_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
@@ -43,6 +44,7 @@ export const usePollRedelegations = (
   useSWR(
     QUERY_KEY,
     async () => {
+      if (!publicClient) return undefined;
       if (account && !error) {
         const result = await publicClient.readContract({
           address: networkConfig.precompileAddresses.stakingAddress as Address,

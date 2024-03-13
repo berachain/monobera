@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useBeraJs, useTokens } from "@bera/berajs";
-import { type Address } from "wagmi";
+import { type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
