@@ -12,6 +12,7 @@ import { BigNumber } from "bignumber.js";
 import { formatUnits, parseUnits } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
+import { PoolV2 } from "../pools/fetchPools";
 
 const Options = {
   responsive: true,
@@ -170,10 +171,12 @@ const formatHoney = (amountInHoney: number) => {
 };
 
 export const PoolChart = ({
+  pool,
   currentTvl,
   historicalData,
   isLoading,
 }: {
+  pool: PoolV2;
   currentTvl: number;
   historicalData: PoolDayData[] | undefined;
   isLoading: boolean;
@@ -182,6 +185,7 @@ export const PoolChart = ({
   for (let i = 0; i < 90; i++) {
     quarterlyDayStartTimes.push(getDayStartTimestampDaysAgo(i));
   }
+  console.log(pool);
 
   let weeklyVolumeTotal = 0;
   let monthlyVolumeTotal = 0;
@@ -239,6 +243,8 @@ export const PoolChart = ({
       latestTvlSeen = poolData?.tvlUsd
         ? Number(poolData?.tvlUsd)
         : latestTvlSeen;
+
+      currentTvl = latestTvlSeen;
 
       if (i < 7) {
         weeklyVolumeTotal += Number(poolData?.volumeUsd);
