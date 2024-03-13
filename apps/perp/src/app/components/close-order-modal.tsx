@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
@@ -21,14 +21,29 @@ export function CloseOrderModal({
   disabled = false,
   openOrder,
   className = "",
+  controlledOpen,
+  onOpenChange,
 }: {
-  trigger: any;
+  trigger?: any;
   disabled?: boolean;
   openOrder: ILimitOrder;
   className?: string;
+  controlledOpen?: boolean;
+  onOpenChange?: (state: boolean) => void;
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const { QUERY_KEY } = usePollOpenPositions();
+
+  useEffect(() => {
+    if (controlledOpen && controlledOpen !== open) {
+      setOpen(controlledOpen);
+    }
+  }, [controlledOpen, open]);
+
+  const handleOpenChange = (state: boolean) => {
+    onOpenChange?.(state);
+    setOpen(state);
+  };
 
   const positionSize =
     Number(formatUnits(BigInt(openOrder.position_size ?? 0), 18)) *
@@ -45,7 +60,7 @@ export function CloseOrderModal({
     actionType: TransactionActionType.CANCEL_ORDER,
     onSuccess: () => {
       void mutate(QUERY_KEY);
-      setOpen(false);
+      handleOpenChange(false);
     },
   });
 
@@ -72,10 +87,13 @@ export function CloseOrderModal({
 
   return (
     <div className={className}>
-      <div onClick={() => !disabled && setOpen(true)} className="h-full w-full">
+      <div
+        onClick={() => !disabled && handleOpenChange(true)}
+        className="h-full w-full"
+      >
         {trigger}
       </div>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-fit">
           <div className="text-lg font-semibold leading-7">
             Cancel Limit Order
