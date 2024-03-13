@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { getDayStartTimestampDaysAgo } from "@bera/bera-router";
 import { formatUsd } from "@bera/berajs";
+import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { type PoolDayData } from "@bera/graphql";
-import { Dropdown } from "@bera/shared-ui";
+import { Dropdown, SSRSpinner } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
+import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { formatUnits } from "viem";
+
+import { getSafeNumber } from "~/utils/getSafeNumber";
 
 const Options = {
   responsive: true,
@@ -157,12 +162,18 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
 //   return percentageDifference;
 // }
 
+const formatHoney = (amountInHoney: number) => {
+  return getSafeNumber(formatUnits(BigInt(amountInHoney), 18));
+};
+
 export const PoolChart = ({
   currentTvl,
   historicalData,
+  isLoading,
 }: {
   currentTvl: number;
-  historicalData: PoolDayData[];
+  historicalData: PoolDayData[] | undefined;
+  isLoading: boolean;
 }) => {
   const quarterlyDayStartTimes: number[] = [];
   for (let i = 0; i < 90; i++) {
@@ -181,12 +192,13 @@ export const PoolChart = ({
   let latestTvlSeen = 0;
   const completeDailyData: any[] = quarterlyDayStartTimes.map(
     (dayStartTimestamp: number, i) => {
-      const poolData = historicalData.find(
-        (data) => data.date === dayStartTimestamp,
+      let poolData: PoolDayData | undefined = historicalData?.find(
+        (data) => data.latestTime === dayStartTimestamp,
       );
+
       if (!poolData) {
         if (i === 0) {
-          latestTvlSeen = currentTvl;
+          latestTvlSeen = 0;
           return {
             id: "",
             tvlUsd: currentTvl,
@@ -197,25 +209,43 @@ export const PoolChart = ({
         }
         return {
           id: "",
-          tvlUsd: latestTvlSeen,
+          tvlUsd: currentTvl,
           volumeUsd: "0",
           feesUsd: "0",
           date: dayStartTimestamp,
         };
       }
-      latestTvlSeen = Number(poolData.tvlUsd);
+
+      poolData = {
+        ...poolData,
+        volumeUsd: `${
+          formatHoney(poolData?.baseVolumeInHoney) +
+          formatHoney(poolData?.quoteVolumeInHoney)
+        }`,
+        tvlUsd: `${
+          formatHoney(poolData?.baseTvlInHoney) +
+          formatHoney(poolData?.quoteTvlInHoney)
+        }`,
+
+        feesUsd: `${
+          formatHoney(poolData?.baseFeesInHoney) +
+          formatHoney(poolData?.quoteFeesInHoney)
+        }`,
+      };
+
       if (i < 7) {
-        weeklyVolumeTotal += Number(poolData.volumeUsd);
-        weeklyFeesTotal += Number(poolData.feesUsd);
+        weeklyVolumeTotal += Number(poolData?.volumeUsd);
+        weeklyFeesTotal += Number(poolData?.feesUsd);
       }
       if (i < 30) {
-        monthlyVolumeTotal += Number(poolData.volumeUsd);
-        monthlyFeesTotal += Number(poolData.feesUsd);
+        monthlyVolumeTotal += Number(poolData?.volumeUsd);
+        monthlyFeesTotal += Number(poolData?.feesUsd);
       }
       if (i < 90) {
-        quarterlyVolumeTotal += Number(poolData.volumeUsd);
-        quarterlyFeesTotal += Number(poolData.feesUsd);
+        quarterlyVolumeTotal += Number(poolData?.volumeUsd);
+        quarterlyFeesTotal += Number(poolData?.feesUsd);
       }
+
       return poolData;
     },
   );
@@ -223,7 +253,9 @@ export const PoolChart = ({
   const extractData = (field: string, numOfDays: number) => {
     return completeDailyData
       .slice(0, numOfDays)
-      .map((dayData: any) => Number(dayData[field]))
+      .map((dayData: any) => {
+        return Number(dayData[field]);
+      })
       .reverse();
   };
 
@@ -286,7 +318,7 @@ export const PoolChart = ({
         setTotal(quarterlyFeesTotal);
       }
     }
-  }, [timeFrame, chart]);
+  }, [historicalData, timeFrame, chart]);
 
   return (
     <Card className="bg-muted p-0">
@@ -297,7 +329,11 @@ export const PoolChart = ({
         <CardHeader className="flex w-full flex-col items-center justify-start px-6 py-4 sm:flex-row sm:justify-between">
           <div className="flex w-full flex-row items-end gap-3">
             <div className="w-fit text-xl font-semibold">
-              {formatUsd(total)}
+              {isLoading ? (
+                <Skeleton className="h-[32px] w-[150px]" />
+              ) : (
+                formatUsd(total)
+              )}
             </div>
             {/* <div
               className={cn(
@@ -325,21 +361,29 @@ export const PoolChart = ({
             />
           </div>
         </CardHeader>
-        <TabsContent value={Chart.VOLUME}>
-          <CardContent className="relative min-h-[250px] w-full">
-            <BeraChart data={data} options={Options as any} type="bar" />
-          </CardContent>
-        </TabsContent>
-        <TabsContent value={Chart.TVL}>
-          <CardContent className="relative min-h-[250px] w-full">
-            <BeraChart data={data} options={Options as any} type="line" />
-          </CardContent>
-        </TabsContent>
-        <TabsContent value={Chart.FEES}>
-          <CardContent className="relative min-h-[250px] w-full">
-            <BeraChart data={data} options={Options as any} type="bar" />
-          </CardContent>
-        </TabsContent>
+        {isLoading ? (
+          <div className="relative flex min-h-[250px] w-full items-center justify-center">
+            <SSRSpinner size={16} />
+          </div>
+        ) : (
+          <>
+            <TabsContent value={Chart.VOLUME}>
+              <CardContent className="relative min-h-[250px] w-full">
+                <BeraChart data={data} options={Options as any} type="bar" />
+              </CardContent>
+            </TabsContent>
+            <TabsContent value={Chart.TVL}>
+              <CardContent className="relative min-h-[250px] w-full">
+                <BeraChart data={data} options={Options as any} type="line" />
+              </CardContent>
+            </TabsContent>
+            <TabsContent value={Chart.FEES}>
+              <CardContent className="relative min-h-[250px] w-full">
+                <BeraChart data={data} options={Options as any} type="bar" />
+              </CardContent>
+            </TabsContent>
+          </>
+        )}
       </Tabs>
     </Card>
   );
