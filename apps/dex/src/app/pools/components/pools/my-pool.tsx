@@ -34,7 +34,7 @@ export default function MyPool({ isList }: { isList: boolean }) {
             columns={my_columns}
             title={`My Pools (${userPools?.length ?? "0"})`}
             onRowClick={(row: any) => {
-              window.open(getPoolUrl(row.original), "_self");
+              window.open(getPoolUrl(row.original, true), "_self");
             }}
           />
         </div>

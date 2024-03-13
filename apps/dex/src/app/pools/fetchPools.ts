@@ -30,8 +30,8 @@ export const getPoolId = (base: Address, quote: Address) => {
   return base.concat("-").concat(quote);
 };
 
-export const getPoolUrl = (pool: PoolV2) => {
-  return `/pool?shareAddress=${pool.shareAddress}`;
+export const getPoolUrl = (pool: PoolV2, isMyPool = false) => {
+  return `/pool?shareAddress=${pool.shareAddress}&isMyPool=${isMyPool}`;
 };
 
 export const getPoolAddLiquidityUrl = (pool: PoolV2) => {
