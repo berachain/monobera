@@ -50,7 +50,7 @@ const Gauge = ({ address }: { address: string | undefined }) => {
       target="_blank"
       className="flex h-full w-[150px] items-center gap-2"
     >
-      <div className="flex flex-col items-start justify-center gap-2">
+      <div className="flex flex-col items-start justify-center gap-1">
         <div className="text-md text-forgeound flex flex-row items-center justify-center gap-2 font-semibold">
           <GaugeIcon address={address ?? ""} />
           {name ?? "Default gauge name"}
