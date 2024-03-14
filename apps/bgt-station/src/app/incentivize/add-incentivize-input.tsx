@@ -10,7 +10,6 @@ import { IncentivizeToken } from "~/hooks/useCreateIncentivizeTokens";
 type Props = {
   selectedToken: IncentivizeToken;
   index: number;
-  selectable?: boolean;
   onTokenSelection: (token: Token | undefined, index: number) => void;
   onRemove: (index: number) => void;
   onTokenAmountChange: (index: number, amount: number) => void;
@@ -22,7 +21,6 @@ export default function AddIncentivizeToken({
   onTokenSelection,
   onRemove,
   onTokenAmountChange,
-  selectable = true,
 }: Props) {
   const handleTokenSelection = (token: Token | undefined) => {
     onTokenSelection(token, index);
