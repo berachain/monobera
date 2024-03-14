@@ -355,7 +355,7 @@ export const my_columns: ColumnDef<IUserPool>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center text-sm">
-        {formatter.format(row.original.userPosition?.estimatedHoneyValue ?? 0)}{" "}
+        {formatter.format(row.original?.userPosition?.estimatedHoneyValue ?? 0)}{" "}
         USD
       </div>
     ),
