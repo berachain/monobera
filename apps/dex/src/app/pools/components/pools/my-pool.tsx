@@ -40,8 +40,6 @@ export default function MyPool({
 
   MyPoolsDataTable.displayName = "MyPoolsDataTable";
 
-  console.log(userPools);
-
   return (
     <>
       {" "}
