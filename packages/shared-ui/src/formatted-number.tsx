@@ -94,7 +94,7 @@ export function FormattedNumber({
   percent?: boolean;
   colored?: boolean; // smol than 0 red, big than 0 green, 0 stays default
   roundDown?: boolean;
-  compactThreshold?: number;
+  compactThreshold?: number; //function serves to determine when a number should be presented in its compact form (with postfixes like K, M, B for thousands, millions, billions, etc.)
   className?: string;
 }) {
   const number = percent ? Number(value) * 100 : Number(value);
@@ -114,8 +114,8 @@ export function FormattedNumber({
   const isSmallerThanMin =
     number !== 0 && Math.abs(number) < Math.abs(minValue);
   let formattedNumber = isSmallerThanMin ? minValue : number;
-  const forceCompact = compact !== false && (compact || number > 99_999);
-
+  const forceCompact =
+    (compactThreshold && number > compactThreshold) || compact;
   // rounding occurs inside of CompactNumber as the prefix, not base number is rounded
   if (roundDown && !forceCompact) {
     formattedNumber =
@@ -130,8 +130,8 @@ export function FormattedNumber({
         number > 0
           ? "text-success-foreground"
           : number < 0
-            ? " text-destructive-foreground"
-            : "",
+          ? " text-destructive-foreground"
+          : "",
       )}
       {...props}
     >
@@ -149,6 +149,7 @@ export function FormattedNumber({
           value={formattedNumber}
           visibleDecimals={decimals}
           roundDown={roundDown}
+          // this is not been used, copied from aave, but wanna keep it in case it get useful someday ;p
           compactThreshold={compactThreshold}
         />
       )}
