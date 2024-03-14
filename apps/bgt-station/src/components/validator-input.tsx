@@ -66,7 +66,7 @@ export default function ValidatorInput({
         />
         <Input
           type="number"
-          className="max-w-100 border-0 bg-transparent text-right text-lg font-semibold leading-7 outline-none"
+          className="max-w-100 border-0 bg-transparent text-right font-semibold leading-7 outline-none sm:text-lg"
           value={amount}
           placeholder="0.0"
           disabled={disabled || isBalanceLoading}
