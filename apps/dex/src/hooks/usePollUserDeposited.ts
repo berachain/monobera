@@ -165,8 +165,8 @@ export const usePollUserDeposited = () => {
           balanceResult,
         ]);
 
-      const userPositions: IUserPool[] = positions.data.map(
-        (position: AmbientPosition, i: number) => {
+      const userPositions: IUserPool[] = positions.data
+        .map((position: AmbientPosition, i: number) => {
           const poolPrice = poolPrices[i]?.result;
           const pool: PoolV2 | undefined = pools.find((p: PoolV2) => {
             return (
@@ -188,8 +188,18 @@ export const usePollUserDeposited = () => {
           const baseAmount = liq.times(sqrtPrice);
           const quoteAmount = liq.div(sqrtPrice);
 
-          const formattedBaseAmount = baseAmount.div(10 ** 18).toString().includes('e') ? '0' : baseAmount.div(10 ** 18).toString();
-          const formattedQuoteAmount = quoteAmount.div(10 ** 18).toString().includes('e') ? '0' : quoteAmount.div(10 ** 18).toString();
+          const formattedBaseAmount = baseAmount
+            .div(10 ** 18)
+            .toString()
+            .includes("e")
+            ? "0"
+            : baseAmount.div(10 ** 18).toString();
+          const formattedQuoteAmount = quoteAmount
+            .div(10 ** 18)
+            .toString()
+            .includes("e")
+            ? "0"
+            : quoteAmount.div(10 ** 18).toString();
 
           const estimatedHoneyValue =
             Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
@@ -209,8 +219,12 @@ export const usePollUserDeposited = () => {
             ...formattedPool,
             userPosition,
           };
-        },
-      ).filter((p: IUserPool) => p.userPosition?.formattedBaseAmount !== '0' && p.userPosition?.formattedQuoteAmount !== '0') as IUserPool[];
+        })
+        .filter(
+          (p: IUserPool) =>
+            p.userPosition?.formattedBaseAmount !== "0" &&
+            p.userPosition?.formattedQuoteAmount !== "0",
+        ) as IUserPool[];
       return userPositions;
     } catch (e) {
       console.log(e);
@@ -236,7 +250,9 @@ export const usePollUserDeposited = () => {
     return data.some(
       (p: IUserPool) =>
         p.base.toLowerCase() === pool.base.toLowerCase() &&
-        p.quote.toLowerCase() === pool.quote.toLowerCase() && p.userPosition?.formattedBaseAmount !== '0' && p.userPosition?.formattedQuoteAmount !== '0',
+        p.quote.toLowerCase() === pool.quote.toLowerCase() &&
+        p.userPosition?.formattedBaseAmount !== "0" &&
+        p.userPosition?.formattedQuoteAmount !== "0",
     );
   };
   return {

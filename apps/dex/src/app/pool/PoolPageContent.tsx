@@ -180,7 +180,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   // const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   // const { data: bgtRewards } = useBgtReward(pool?.pool);
 
-  console.log({ pool })
+  console.log({ pool });
   const { useRecentSwaps, isLoading: isRecentSwapsLoading } =
     usePoolRecentSwaps(pool);
 

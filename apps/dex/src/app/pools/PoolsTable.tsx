@@ -37,20 +37,17 @@ export const PoolSearch = ({
   }, []);
 
   const {
-    data,
     search,
     setKeyword,
     setSearch,
-    size,
-    handleEnter,
-    setSize,
+    data,
+    fetchNextPage,
     isLoadingMore,
-    isDataReachingEnd,
+    isReachingEnd,
   } = usePoolTable(sorting);
 
   const handleNewSort = (newSort: any) => {
     if (newSort === sorting) return;
-    void setSize(1);
     setSorting(newSort);
   };
 
@@ -64,7 +61,6 @@ export const PoolSearch = ({
     setKeyword(search);
   }, [isTyping, search]);
 
-  console.log('size', size)
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -150,7 +146,6 @@ export const PoolSearch = ({
                 onRowClick={(row: any) =>
                   window.open(getPoolUrl(row.original), "_self")
                 }
-                // customSorting={sorting}
                 onCustomSortingChange={(a: any) => handleNewSort(a)}
               />
             </div>
@@ -161,14 +156,11 @@ export const PoolSearch = ({
           {!isFirstLoading && (
             <Button
               className="mt-8"
-              onClick={() => {
-                console.log('GIVE ME MORE')
-                setSize(size + 1)
-              }}
-              disabled={isLoadingMore || isDataReachingEnd}
+              onClick={() => fetchNextPage()}
+              disabled={isLoadingMore || isReachingEnd}
               variant="outline"
             >
-              {isDataReachingEnd ? "No more pools" : "View More"}
+              {isReachingEnd ? "No more pools" : "View More"}
             </Button>
           )}
         </TabsContent>

@@ -97,11 +97,18 @@ export const formatPoolData = (result: any): PoolV2 => {
   const baseInfo = result.info.baseInfo;
   const quoteInfo = result.info.quoteInfo;
 
-
-  const baseTvlFormattedAmount = (new BigNumber(result.stats.baseTvl).div(10 ** baseInfo.decimals)).toString();
-  const quoteTvlFormattedAmount = (new BigNumber(result.stats.quoteTvl).div(10 ** quoteInfo.decimals)).toString();
-  const baseTvlHoneyAmount = (new BigNumber(result.stats.baseTvlInHoney).div(10 ** 18)).toString();
-  const quotTvlHoneyAmount = (new BigNumber(result.stats.quoteTvlInHoney).div(10 ** 18)).toString();
+  const baseTvlFormattedAmount = new BigNumber(result.stats.baseTvl)
+    .div(10 ** baseInfo.decimals)
+    .toString();
+  const quoteTvlFormattedAmount = new BigNumber(result.stats.quoteTvl)
+    .div(10 ** quoteInfo.decimals)
+    .toString();
+  const baseTvlHoneyAmount = new BigNumber(result.stats.baseTvlInHoney)
+    .div(10 ** 18)
+    .toString();
+  const quotTvlHoneyAmount = new BigNumber(result.stats.quoteTvlInHoney)
+    .div(10 ** 18)
+    .toString();
   const totalTvl =
     parseFloat(baseTvlHoneyAmount) + parseFloat(quotTvlHoneyAmount);
 

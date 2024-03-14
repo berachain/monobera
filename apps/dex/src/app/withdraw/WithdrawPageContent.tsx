@@ -202,7 +202,10 @@ export default function WithdrawLiquidityContent({
     }
   }, [liquidityToBurn, amount, crocPool, write]);
 
-  const notDeposited = userPositionBreakdown === undefined || userPositionBreakdown?.formattedBaseAmount === "0" || userPositionBreakdown?.formattedQuoteAmount === "0";
+  const notDeposited =
+    userPositionBreakdown === undefined ||
+    userPositionBreakdown?.formattedBaseAmount === "0" ||
+    userPositionBreakdown?.formattedQuoteAmount === "0";
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}

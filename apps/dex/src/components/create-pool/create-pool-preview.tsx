@@ -133,7 +133,7 @@ export function CreatePoolPreview({
         ? calculateBaseTokenAmount(INITIAL_AMOUNT, encodedPriceNumber)
         : calculateQuoteTokenAmount(INITIAL_AMOUNT, encodedPriceNumber);
 
-      console.log(initialLiquidityAmount)
+      console.log(initialLiquidityAmount);
       const priceLimits = {
         min: getSafeNumber(initialPrice),
         max: getSafeNumber(initialPrice),
