@@ -130,8 +130,8 @@ export function FormattedNumber({
         number > 0
           ? "text-success-foreground"
           : number < 0
-          ? " text-destructive-foreground"
-          : "",
+            ? "text-destructive-foreground"
+            : "",
       )}
       {...props}
     >
