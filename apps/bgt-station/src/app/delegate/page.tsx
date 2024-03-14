@@ -28,7 +28,7 @@ export default function Page({
   }
 
   return (
-    <div className="flex flex-col justify-center xl:flex-row">
+    <div className="flex flex-col justify-center gap-8 xl:flex-row xl:gap-0">
       <div className="w-full">
         <Delegate
           action={action}
@@ -36,7 +36,7 @@ export default function Page({
           redelegateValidator={searchParams.redelegateValidator}
         />
       </div>
-      <div className="hidden flex-shrink-0 flex-grow-0 border-r-2 border-muted md:flex" />
+      <div className="border-t-2 border-muted xl:border-r-2 xl:border-t-0" />
       <div className="w-full">
         <DemandBasedQueue action={action} />
       </div>
