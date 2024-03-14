@@ -220,7 +220,6 @@ export const usePollUserDeposited = (
             userPosition,
           });
         });
-        console.log("pools positions", userPositions);
         return userPositions;
       } catch (e) {
         console.log(e);
