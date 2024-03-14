@@ -17,7 +17,7 @@ export default function MyPool({
   keyword: string;
 }) {
   const { isReady } = useBeraJs();
-  const { usePositions, isLoading, data } = usePollUserDeposited({ keyword });
+  const { isLoading, data } = usePollUserDeposited({ keyword });
 
   const [userPools, setUserPools] = useState<any>(undefined);
   useEffect(() => {
