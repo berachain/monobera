@@ -7,9 +7,11 @@ import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { BigNumber } from "bignumber.js";
+import { formatUnits, parseUnits } from "viem";
+
+import { PoolV2 } from "../pools/fetchPools";
 
 const Options = {
   responsive: true,
@@ -160,17 +162,18 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
 
 //   return percentageDifference;
 // }
-
 const formatHoney = (amountInHoney: number) => {
   const bnAmount = new BigNumber(amountInHoney.toString());
   return getSafeNumber(bnAmount.div(10 ** 18).toString());
 };
 
 export const PoolChart = ({
+  pool,
   currentTvl,
   historicalData,
   isLoading,
 }: {
+  pool: PoolV2;
   currentTvl: number;
   historicalData: PoolDayData[] | undefined;
   isLoading: boolean;
@@ -224,7 +227,7 @@ export const PoolChart = ({
         }`,
         tvlUsd: `${
           formatHoney(poolData?.baseTvlInHoney) +
-          formatHoney(poolData?.quoteTvlInHoney)
+            formatHoney(poolData?.quoteTvlInHoney) || latestTvlSeen
         }`,
 
         feesUsd: `${
@@ -232,6 +235,12 @@ export const PoolChart = ({
           formatHoney(poolData?.quoteFeesInHoney)
         }`,
       };
+
+      latestTvlSeen = poolData?.tvlUsd
+        ? Number(poolData?.tvlUsd)
+        : latestTvlSeen;
+
+      currentTvl = latestTvlSeen;
 
       if (i < 7) {
         weeklyVolumeTotal += Number(poolData?.volumeUsd);
@@ -251,6 +260,7 @@ export const PoolChart = ({
   );
 
   const extractData = (field: string, numOfDays: number) => {
+    // TODO: slice 0, MIN(num of days since pool creation date, numOfDays) - if pool was created before then we cap it at that
     return completeDailyData
       .slice(0, numOfDays)
       .map((dayData: any) => {
