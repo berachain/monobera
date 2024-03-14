@@ -91,7 +91,6 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
 
         const liq = new BigNumber(lpBalance.toString());
 
-        console.log({ liq, sqrtPrice, lpBalance });
         const baseAmount = liq.times(sqrtPrice);
         const quoteAmount = liq.div(sqrtPrice);
 

@@ -18,7 +18,6 @@ const getTvlAndVolume = (): Promise<{ tvl?: number; volume?: number }> => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log({ data });
         res({
           tvl: data?.data?.formattedTVL,
           volume: data?.data?.formattedVolume24H,
