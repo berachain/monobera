@@ -15,6 +15,7 @@ export default function Incentivize() {
   const [blockNumber, setBlockNumber] = useState<string | undefined>(undefined);
   const [totalIncentiveValue, setTotalIncentiveValue] =
     React.useState<number>(0);
+  const estStartTime = "04/20/24 16:00 UTC";
 
   const {
     incentivizeTokens,
@@ -62,6 +63,7 @@ export default function Incentivize() {
                 value={poolAddress}
               />
             </div>
+            <div className="pl-2 text-sm text-muted-foreground">WETH/HONEY</div>
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1 text-sm font-medium text-foreground">
@@ -79,6 +81,9 @@ export default function Incentivize() {
                 }
                 value={blockNumber}
               />
+            </div>
+            <div className="pl-2 text-sm text-muted-foreground">
+              Est Start Time: {estStartTime}
             </div>
           </div>
           <div className="flex flex-col">
@@ -132,7 +137,7 @@ export default function Incentivize() {
                 Est. Start Date
               </div>
               <div className="text-md flex font-medium text-foreground">
-                Number
+                {estStartTime}
               </div>
             </div>
           </div>
