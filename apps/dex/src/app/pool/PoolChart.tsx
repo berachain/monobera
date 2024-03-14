@@ -9,7 +9,6 @@ import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { BigNumber } from "bignumber.js";
-import { formatUnits, parseUnits } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { PoolV2 } from "../pools/fetchPools";
@@ -185,7 +184,6 @@ export const PoolChart = ({
   for (let i = 0; i < 90; i++) {
     quarterlyDayStartTimes.push(getDayStartTimestampDaysAgo(i));
   }
-  console.log(pool);
 
   let weeklyVolumeTotal = 0;
   let monthlyVolumeTotal = 0;

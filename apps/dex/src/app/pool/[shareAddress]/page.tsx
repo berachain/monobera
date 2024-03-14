@@ -3,8 +3,8 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isAddress } from "viem";
 
-import { fetchSelectedPool } from "../pools/fetchPools";
-import PoolPageContent from "./PoolPageContent";
+import { fetchSelectedPool } from "../../pools/fetchPools";
+import PoolPageContent from "../PoolPageContent";
 
 export function generateMetadata(): Metadata {
   return {
@@ -15,15 +15,15 @@ export function generateMetadata(): Metadata {
 export const revalidate = 5;
 
 export default async function PoolPage({
-  searchParams,
+  params,
 }: {
-  searchParams: { shareAddress: string };
+  params: { shareAddress: string };
 }) {
   try {
-    if (!isAddress(searchParams.shareAddress)) {
+    if (!isAddress(params.shareAddress)) {
       notFound();
     }
-    const pool = await fetchSelectedPool(searchParams.shareAddress);
+    const pool = await fetchSelectedPool(params.shareAddress);
 
     if (!pool) {
       notFound();

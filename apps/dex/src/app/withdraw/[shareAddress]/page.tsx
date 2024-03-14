@@ -4,8 +4,8 @@ import { dexName } from "@bera/config";
 import { isAddress } from "viem";
 
 import { getMetaTitle } from "~/utils/metadata";
-import { fetchSelectedPool } from "../pools/fetchPools";
-import WithdrawPageContent from "./WithdrawPageContent";
+import { fetchSelectedPool } from "../../pools/fetchPools";
+import WithdrawPageContent from "../WithdrawPageContent";
 
 export function generateMetadata(): Metadata {
   return {
@@ -17,15 +17,15 @@ export function generateMetadata(): Metadata {
 export const fetchCache = "force-no-store";
 
 export default async function Withdraw({
-  searchParams,
+  params,
 }: {
-  searchParams: { shareAddress: string };
+  params: { shareAddress: string };
 }) {
   try {
-    if (!isAddress(searchParams.shareAddress)) {
+    if (!isAddress(params.shareAddress)) {
       notFound();
     }
-    const pool = await fetchSelectedPool(searchParams.shareAddress);
+    const pool = await fetchSelectedPool(params.shareAddress);
 
     if (!pool) {
       notFound();

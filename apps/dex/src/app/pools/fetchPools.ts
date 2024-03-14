@@ -31,15 +31,15 @@ export const getPoolId = (base: Address, quote: Address) => {
 };
 
 export const getPoolUrl = (pool: PoolV2, isMyPool = false) => {
-  return `/pool?shareAddress=${pool.shareAddress}&isMyPool=${isMyPool}`;
+  return `/pool/${pool.shareAddress}${isMyPool ? "?back=my-pools" : ""}`;
 };
 
 export const getPoolAddLiquidityUrl = (pool: PoolV2) => {
-  return `/add-liquidity?shareAddress=${pool.shareAddress}`;
+  return `/add-liquidity/${pool.shareAddress}`;
 };
 
 export const getPoolWithdrawUrl = (pool: PoolV2) => {
-  return `/withdraw?shareAddress=${pool.shareAddress}`;
+  return `/withdraw/${pool.shareAddress}`;
 };
 
 export const getBaseCost = (initialPrice: number) => {

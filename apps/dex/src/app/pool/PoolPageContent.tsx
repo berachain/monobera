@@ -1,16 +1,9 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { formatUsd, formatter, truncateHash, useBeraJs } from "@bera/berajs";
-import {
-  beraTokenAddress,
-  blockExplorerUrl,
-  chainId,
-  crocIndexerEndpoint,
-} from "@bera/config";
-import { type PoolDayData } from "@bera/graphql";
-import { ApyTooltip, Spinner, TokenIcon } from "@bera/shared-ui";
-import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
+import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
+import { ApyTooltip, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
@@ -25,7 +18,6 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import useSWR from "swr";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
@@ -234,8 +226,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -255,8 +247,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -278,8 +270,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>

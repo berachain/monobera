@@ -13,7 +13,7 @@ import {
 export default function PoolHeader({ pool }: { pool: PoolV2 }) {
   const params = useSearchParams();
 
-  const isMyPool = params.get("isMyPool");
+  const isMyPool = params.get("back") && params.get("back") === "my-pools";
 
   return (
     <div className="flex w-full flex-col items-center justify-between md:items-end md:justify-center lg:flex-row">
