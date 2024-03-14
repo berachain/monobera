@@ -56,10 +56,6 @@ export const navItems = [
     title: "Governance",
   },
   {
-    href: "/incentivize",
-    title: "Incentivize",
-  },
-  {
     href: "/gauge",
     title: "Gauge",
   },
