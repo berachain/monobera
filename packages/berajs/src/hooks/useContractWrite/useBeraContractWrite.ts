@@ -47,7 +47,7 @@ const useBeraContractWrite = ({
       if (!publicClient) return;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
-    
+
         const { request } = await publicClient.simulateContract({
           address: address,
           abi: abi,
