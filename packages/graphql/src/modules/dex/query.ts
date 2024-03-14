@@ -153,7 +153,7 @@ export const getGlobalDexData = gql`
 
 export const getTokenHoneyPrice = gql`
   query GetTokenHoneyPrice($id: String) {
-    tokenHoneyPrice(id: $id ) {
+    tokenHoneyPrice(id: $id) {
       id
       price
     }
@@ -239,7 +239,7 @@ export const getPoolList = gql`
         name
         decimals
       }
-      quoteInfo{
+      quoteInfo {
         id
         address
         symbol
@@ -250,12 +250,36 @@ export const getPoolList = gql`
   }
 `;
 
-export const getFilteredPoolList = gql`
-  query GetPoolList($baseAssets: [Bytes!], $quoteAssets: [Bytes!]) {
+export const searchFilteredPoolList = gql`
+  query GetPoolList(
+    $baseAssets: [Bytes!]
+    $quoteAssets: [Bytes!]
+    $keyword: String
+  ) {
     pools(
       where: {
-        base_in: $baseAssets
-        quote_in: $quoteAssets
+        or: [
+          {
+            base_in: $baseAssets
+            quote_in: $quoteAssets
+            baseInfo_: { name_contains_nocase: $keyword }
+          }
+          {
+            base_in: $baseAssets
+            quote_in: $quoteAssets
+            baseInfo_: { symbol_contains_nocase: $keyword }
+          }
+          {
+            base_in: $baseAssets
+            quote_in: $quoteAssets
+            quoteInfo_: { name_contains_nocase: $keyword }
+          }
+          {
+            base_in: $baseAssets
+            quote_in: $quoteAssets
+            quoteInfo_: { symbol_contains_nocase: $keyword }
+          }
+        ]
       }
     ) {
       id
@@ -273,7 +297,7 @@ export const getFilteredPoolList = gql`
         name
         decimals
       }
-      quoteInfo{
+      quoteInfo {
         id
         address
         symbol
@@ -286,12 +310,7 @@ export const getFilteredPoolList = gql`
 
 export const getCrocSelectedPool = gql`
   query GetPoolList($baseAsset: Bytes!, $quoteAsset: Bytes!) {
-    pools(
-      where: {
-        base: $baseAsset
-        quote: $quoteAsset
-      }
-    ) {
+    pools(where: { base: $baseAsset, quote: $quoteAsset }) {
       id
       poolIdx
       base
@@ -307,7 +326,7 @@ export const getCrocSelectedPool = gql`
         name
         decimals
       }
-      quoteInfo{
+      quoteInfo {
         id
         address
         symbol
@@ -321,36 +340,34 @@ export const getCrocSelectedPool = gql`
 export const getRecentSwaps = gql`
   query GetRecentSwaps($poolHash: Bytes!) {
     swaps(
-    first: 50,
-    orderBy:time,
-    orderDirection: desc,
-    where:{
-    pool: $poolHash
-  }) {
-    user
-    baseFlow
-    quoteFlow
-    transactionHash
-    time
-  }
+      first: 50
+      orderBy: time
+      orderDirection: desc
+      where: { pool: $poolHash }
+    ) {
+      user
+      baseFlow
+      quoteFlow
+      transactionHash
+      time
+    }
   }
 `;
 
 export const getRecentProvisions = gql`
   query GetRecentProvisions($poolHash: Bytes!) {
     liquidityChanges(
-    first: 50,
-    orderBy:time,
-    orderDirection: desc,
-    where:{
-    pool: $poolHash
-  }) {
-    user
-    baseFlow
-    quoteFlow
-    changeType
-    transactionHash
-    time
-  }
+      first: 50
+      orderBy: time
+      orderDirection: desc
+      where: { pool: $poolHash }
+    ) {
+      user
+      baseFlow
+      quoteFlow
+      changeType
+      transactionHash
+      time
+    }
   }
 `;

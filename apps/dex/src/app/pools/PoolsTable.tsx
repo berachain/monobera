@@ -170,7 +170,7 @@ export const PoolSearch = ({
         </TabsContent>
 
         <TabsContent value="userPools">
-          <MyPool isList />
+          <MyPool isList keyword={keyword} />
         </TabsContent>
       </Tabs>
     </div>
