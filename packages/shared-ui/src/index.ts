@@ -49,6 +49,7 @@ export { MainNav } from "./main-nav";
 export { MobileDropdown } from "./mobile-nav";
 export * from "./terms-of-use";
 export * from "./access-deny";
+export { FormattedNumber } from "./formatted-number";
 
 export { useTxn } from "./hooks";
 export * from "./apyTooltip";
