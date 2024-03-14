@@ -97,24 +97,11 @@ export const formatPoolData = (result: any): PoolV2 => {
   const baseInfo = result.info.baseInfo;
   const quoteInfo = result.info.quoteInfo;
 
-  const baseTvlFormattedAmount = formatUnits(
-    BigInt(result.stats.baseTvl),
-    baseInfo.decimals,
-  );
-  const quoteTvlFormattedAmount = formatUnits(
-    BigInt(result.stats.quoteTvl),
-    quoteInfo.decimals,
-  );
 
-  const baseTvlHoneyAmount = formatUnits(
-    BigInt(result.stats.baseTvlInHoney),
-    baseInfo.decimals,
-  );
-  const quotTvlHoneyAmount = formatUnits(
-    BigInt(result.stats.quoteTvlInHoney),
-    quoteInfo.decimals,
-  );
-
+  const baseTvlFormattedAmount = (new BigNumber(result.stats.baseTvl).div(10 ** baseInfo.decimals)).toString();
+  const quoteTvlFormattedAmount = (new BigNumber(result.stats.quoteTvl).div(10 ** quoteInfo.decimals)).toString();
+  const baseTvlHoneyAmount = (new BigNumber(result.stats.baseTvlInHoney).div(10 ** 18)).toString();
+  const quotTvlHoneyAmount = (new BigNumber(result.stats.quoteTvlInHoney).div(10 ** 18)).toString();
   const totalTvl =
     parseFloat(baseTvlHoneyAmount) + parseFloat(quotTvlHoneyAmount);
 
@@ -155,7 +142,7 @@ export const fetchPools = async (
     const result = await fetch(
       `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
         16,
-      )}&sortBy=${sort}.${order}&page=${page}&pageLimit=${limit}&keyword=${keyword}`,
+      )}&sortBy=${sort}.${order}&page=${page}&size=${limit}&keyword=${keyword}`,
     );
 
     const response = await result.json();
@@ -181,7 +168,7 @@ export const fetchPoolsWithKeyword = async (
     const result = await fetch(
       `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
         16,
-      )}&sortBy=${sort}.${order}&page=${page}&pageLimit=${limit}&keyword=${keyword}`,
+      )}&sortBy=${sort}.${order}&page=${page}&size=${limit}&keyword=${keyword}`,
     );
 
     const response = await result.json();
