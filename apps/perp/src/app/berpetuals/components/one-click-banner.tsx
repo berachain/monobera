@@ -25,8 +25,7 @@ const BannerText = {
   [BannerEnum.LOW_BALANCE]: "⚡️ Fund One-Click Trade Wallet",
   [BannerEnum.NOT_FUNDED]: "⚡️ Fund One-Click Trade Wallet",
   [BannerEnum.NOT_GENERATED]: "⚡️ Setup One-Click Trade Wallet",
-  [BannerEnum.NOT_DELEGATED]:
-    "⚡️ Approve your One-Click Trade Wallet to submit transactions",
+  [BannerEnum.NOT_DELEGATED]: "⚡️ Approve One-Click Trade Wallet",
 };
 
 const getStatusColor = (status: BannerEnum) => {
@@ -48,7 +47,7 @@ const getStatusColor = (status: BannerEnum) => {
   }
 };
 
-export function OneClickBanner() {
+export function OneClickBanner({ className }: { className?: string }) {
   // const [on, setOn] = useState<boolean>(false);
   const [oneClickModalOpen, setOneClickModalOpen] = useState<boolean>(false);
   const [fundModalOpen, setFundModalOpen] = useState<boolean>(false);
@@ -83,7 +82,6 @@ export function OneClickBanner() {
 
   const getStatus = () => {
     let status;
-
     if (!on()) {
       status = BannerEnum.OFF;
     } else if (!isOctGenerated) {
@@ -119,8 +117,9 @@ export function OneClickBanner() {
   return (
     <div
       className={cn(
-        "flex w-full justify-end gap-2 border-y border-border px-4 py-2",
+        "flex h-[63px] w-[calc(100%-16px)] lg:w-[160px] flex-shrink-0 rounded-md border border-border m-2 lg:ml-0",
         getStatusColor(getStatus()),
+        className,
       )}
     >
       {/* {getStatus() !== BannerEnum.OFF && (
@@ -142,8 +141,8 @@ export function OneClickBanner() {
           |
         </div>
       )} */}
-      <div className="text-sm font-semibold" onClick={handleBannerClick}>
-        <span className="cursor-pointer text-[10px] hover:underline sm:text-lg">
+      <div className="h-full" onClick={handleBannerClick}>
+        <span className="flex h-full text-[14px] cursor-pointer items-center p-3 hover:underline text-center">
           {BannerText[getStatus()]}
         </span>
       </div>

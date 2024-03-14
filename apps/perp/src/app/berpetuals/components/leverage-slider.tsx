@@ -11,7 +11,7 @@ export function LeverageSlider({
   maxLeverage?: number;
 }) {
   return (
-    <div className="mt-6 w-full min-w-full">
+    <div className="mt-4 w-full min-w-full">
       <div className="flex items-center justify-between pl-2 align-middle text-xs font-medium">
         Leverage Slider
         <Input
