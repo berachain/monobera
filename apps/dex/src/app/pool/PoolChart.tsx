@@ -9,7 +9,6 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { BigNumber } from "bignumber.js";
-import { formatUnits, parseUnits } from "viem";
 
 import { PoolV2 } from "../pools/fetchPools";
 
@@ -240,7 +239,9 @@ export const PoolChart = ({
         ? Number(poolData?.tvlUsd)
         : latestTvlSeen;
 
-      currentTvl = latestTvlSeen;
+      if (i === 0) {
+        currentTvl = latestTvlSeen;
+      }
 
       if (i < 7) {
         weeklyVolumeTotal += Number(poolData?.volumeUsd);

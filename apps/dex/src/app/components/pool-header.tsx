@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -10,17 +11,27 @@ import {
 } from "../pools/fetchPools";
 
 export default function PoolHeader({ pool }: { pool: PoolV2 }) {
+  const params = useSearchParams();
+
+  const isMyPool = params.get("back") && params.get("back") === "my-pools";
+
   return (
     <div className="flex w-full flex-col items-center justify-between md:items-end md:justify-center lg:flex-row">
       <div className="flex w-full flex-col items-center gap-4 md:items-start">
-        <Link href={"/pools"} target="_self">
+        <Link
+          href={isMyPool ? "/pools?pool=userPools" : "/pools"}
+          target="_self"
+        >
           <Button
             variant={"ghost"}
             size="sm"
             className="flex items-center gap-1"
           >
             <Icons.arrowLeft className="h-4 w-4" />
-            <div className="text-sm font-medium"> All Pools</div>
+            <div className="text-sm font-medium">
+              {" "}
+              {isMyPool ? "My Pools" : "All Pools"}
+            </div>
           </Button>
         </Link>
         <span className="flex w-full justify-center gap-4 text-center text-2xl font-semibold md:justify-start md:text-left">
