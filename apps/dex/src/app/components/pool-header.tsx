@@ -84,6 +84,8 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
       </div>
       {
         <div className="flex w-fit items-center gap-1 sm:hidden ">
+          {" "}
+          Pool Contract:
           <span
             className="cursor-pointer px-1 text-sm text-foreground hover:underline"
             onClick={() =>
