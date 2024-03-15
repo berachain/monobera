@@ -50,9 +50,9 @@ export default function AmbassadorProgram() {
               className="mb-6 flex-grow rounded-lg bg-muted p-4"
               style={{ flexBasis: "0" }}
             >
-              <div className="flex flex-col rounded-md">
-                <div className="flex-col ">
-                  <div className="flex-start flex-col gap-8 p-6">
+              <div className="flex h-full flex-col rounded-md">
+                <div className="flex h-full flex-col justify-between gap-8 p-6">
+                  <div>
                     <h1 className="mb-2 text-3xl font-semibold text-foreground">
                       1. General Expectations
                     </h1>
@@ -66,6 +66,9 @@ export default function AmbassadorProgram() {
                       contribute to regular calls with other ambassadors and the
                       Berachain team.
                     </p>
+                  </div>
+
+                  <div className="pt-8 align-bottom">
                     <Image
                       src="/SmokeyBongless.png"
                       alt="Bera Legion"
@@ -122,9 +125,9 @@ export default function AmbassadorProgram() {
               </div>
             </section>
           </div>
-          <div className="mb-6 flex flex-wrap items-stretch justify-center gap-8 rounded-lg bg-background shadow-lg text-lg">
+          <div className="mb-6 flex flex-wrap items-stretch justify-center gap-8 rounded-lg bg-background text-lg shadow-lg">
             <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-1 lg:grid-cols-3">
-              <section className="flex flex-col rounded-lg bg-muted p-6 h-full">
+              <section className="flex h-full flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
                     src="/alien.png"
@@ -134,7 +137,7 @@ export default function AmbassadorProgram() {
                     layout="responsive"
                   />
                   <div>
-                    <h2 className="mb-2 text-2xl font-semibold text-foreground mt-8">
+                    <h2 className="mb-2 mt-8 text-2xl font-semibold text-foreground">
                       3. Benefits of Becoming an Ambassador
                     </h2>
                     <p className="text-muted-foreground">
@@ -146,7 +149,7 @@ export default function AmbassadorProgram() {
                   </div>
                 </div>
               </section>
-              <section className="flex flex-col rounded-lg bg-muted p-6 h-full">
+              <section className="flex h-full flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col justify-between rounded-md">
                   <Image
                     src="/wannabeBond.png"
@@ -156,7 +159,7 @@ export default function AmbassadorProgram() {
                     layout="responsive"
                   />
                   <div>
-                    <h2 className="mb-2 text-2xl font-semibold text-foreground mt-8">
+                    <h2 className="mb-2 mt-8 text-2xl font-semibold text-foreground">
                       4. Program Objectives
                     </h2>
                     <p className="text-muted-foreground">
@@ -169,7 +172,7 @@ export default function AmbassadorProgram() {
                   </div>
                 </div>
               </section>
-              <section className="flex flex-col rounded-lg bg-muted p-6 h-full">
+              <section className="flex h-full flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
                     src="/loltemplars.png"
@@ -179,7 +182,7 @@ export default function AmbassadorProgram() {
                     layout="responsive"
                   />
                   <div>
-                    <h2 className="mb-2 text-2xl font-semibold text-foreground mt-8">
+                    <h2 className="mb-2 mt-8 text-2xl font-semibold text-foreground">
                       5. Onboarding Process
                     </h2>
                     <p className="text-muted-foreground">
