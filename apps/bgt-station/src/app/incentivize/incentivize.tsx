@@ -33,7 +33,7 @@ export default function Incentivize() {
   }, [incentivizeTokens]);
 
   return (
-    <div className="container mx-auto max-w-[480px] pb-20">
+    <div className="mx-auto max-w-[480px]">
       <Card className="w-full items-center justify-center bg-background p-4 shadow-lg sm:w-[480px]">
         <div className="center flex flex-col justify-between text-lg font-semibold text-foreground">
           Incentivize a Pool
@@ -74,7 +74,7 @@ export default function Incentivize() {
             <div className="text-sm leading-tight">
               {/* TODO: add block number validation */}
               <Input
-                type="text"
+                type="number"
                 placeholder="0x0000...0000"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setBlockNumber(e.target.value)
