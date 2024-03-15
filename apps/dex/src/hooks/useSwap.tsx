@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  ICrocSwapStep,
   useGasData,
   usePollAllowance,
   usePollAssetWalletBalance,
@@ -10,7 +11,6 @@ import {
   useTokenInformation,
   useTokens,
   type Token,
-  ICrocSwapStep,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
@@ -18,7 +18,7 @@ import {
   nativeTokenAddress,
 } from "@bera/config";
 import { useSlippage } from "@bera/shared-ui/src/hooks";
-import { type Address, formatUnits } from "viem";
+import { formatUnits, type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";
 
@@ -157,7 +157,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   }, [selectedTo, selectedFrom]);
 
   useEffect(() => {
-    if (isWrap) return;
+    if (isWrap || !swapInfo?.batchSwapSteps?.length) return;
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(swapInfo?.formattedReturnAmount);
     } else {
@@ -166,6 +166,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   }, [swapInfo, isWrap]);
 
   useEffect(() => {
+    if (!swapInfo?.batchSwapSteps?.length) return;
     if (
       swapInfo?.formattedAmountIn &&
       swapInfo?.formattedReturnAmount &&
