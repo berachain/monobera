@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { formatUsd } from "@bera/berajs";
 import { GetSupplyDay, GetVolumeDay } from "@bera/graphql";
-import { Spinner } from "@bera/shared-ui";
+import { FormattedNumber, Spinner } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
@@ -150,7 +149,7 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
   const lastNumber = Number(entries[entries.length - 1]!.amount);
 
   const difference = lastNumber - firstNumber;
-  const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
+  const percentageDifference = difference / Math.abs(firstNumber);
 
   return percentageDifference;
 }
@@ -209,18 +208,15 @@ export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
                     : "text-xl font-semibold leading-7",
                 )}
               >
-                {formatUsd(total)}
+                <FormattedNumber value={total} symbol="USD" compact={false} />
               </div>
-              <div
-                className={cn(
-                  "text-xs font-normal leading-none",
-                  difference >= 0
-                    ? "text-success-foreground"
-                    : "text-destructive-foreground",
-                )}
-              >
-                {difference.toFixed(2)}%
-              </div>
+              <FormattedNumber
+                value={difference}
+                percent
+                compact={false}
+                colored
+                className="text-xs font-normal leading-none"
+              />
             </div>
 
             <div className="flex w-full flex-row items-center justify-start gap-2 sm:justify-end">

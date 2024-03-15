@@ -25,6 +25,7 @@ import { isAddress } from "viem";
 import { SearchInput } from "./search-input";
 import { TokenChip } from "./token-chip";
 import { TokenIcon } from "./token-icon";
+import { FormattedNumber } from "./formatted-number";
 
 type Props = {
   open: boolean;
@@ -342,7 +343,12 @@ const TokenDialogRow = ({
         )}
         {!pendingAddition && isConnected && (
           <div className="ml-auto text-muted-foreground truncate">
-            <p>{tokenBalance ?? 0}</p>
+            {/* <p>{tokenBalance ?? 0}</p> */}
+            <FormattedNumber
+              value={tokenBalance}
+              visibleDecimals={4}
+              compact={false}
+            />
           </div>
         )}
         <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
