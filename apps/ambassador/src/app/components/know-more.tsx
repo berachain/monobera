@@ -17,9 +17,9 @@ export default function KnowMore() {
               </h1>
               <div className="max-w-[300px] flex-wrap items-center md:max-w-[440px] lg:w-full">
                 <h2 className="text-md flex-wrap tracking-tight text-muted-foreground sm:text-lg">
-                  Fellow builder in the making? Submit project details via this
-                  form and please be sure to provide us as much information as
-                  possible.
+                  Interested in becoming a Berachain Ambassador? Learn more
+                  about joining our innovative community and leading the
+                  blockchain revolution.
                 </h2>
               </div>
             </div>
