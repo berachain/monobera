@@ -122,7 +122,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => {
-      const dailyFees = formatter.format(row.original.fees || 0);
+      const dailyFees = formatter.format(row.original?.feesUsd || 0);
       // const fee = row.original.weeklyFees?.[6] || 0;
       // const fee24h = row.original.weeklyFees?.[5] || 1;
       return (
@@ -159,7 +159,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => {
-      const dailyVolume = formatter.format(row.original.volumeUsd || 0);
+      const dailyVolume = formatter.format(row.original?.volumeUsd || 0);
       // const volume = row.original.weeklyVolume?.[6] || 0;
       // const volume24h = row.original.weeklyVolume?.[5] || 1;
       return (
