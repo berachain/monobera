@@ -16,7 +16,11 @@ export interface PoolV2 {
   tvlUsd: number;
   volumeUsd: number;
   feeRate: number;
-  fees: number;
+  feesUsd: number;
+  baseFees: number;
+  quoteFees: number;
+  baseVolume: number;
+  quoteVolume: number;
   baseTokens: string;
   quoteTokens: string;
   baseTokenHoneyTvl: number;
@@ -82,9 +86,13 @@ export const formatSubgraphPoolData = (result: any): PoolV2 => {
     baseTokens: "0",
     quoteTokens: "0",
     feeRate: Number(result.template.feeRate) / 10000,
+    baseFees: 0,
+    quoteFees: 0,
+    baseVolume: 0,
+    quoteVolume: 0,
     tvlUsd: 0,
     volumeUsd: 0,
-    fees: 0,
+    feesUsd: 0,
     baseTokenHoneyTvl: 0,
     quoteTokenHoneyTvl: 0,
     totalApy: 0,
@@ -97,20 +105,60 @@ export const formatPoolData = (result: any): PoolV2 => {
   const baseInfo = result.info.baseInfo;
   const quoteInfo = result.info.quoteInfo;
 
-  const baseTvlFormattedAmount = new BigNumber(result.stats.baseTvl)
-    .div(10 ** baseInfo.decimals)
-    .toString();
-  const quoteTvlFormattedAmount = new BigNumber(result.stats.quoteTvl)
-    .div(10 ** quoteInfo.decimals)
-    .toString();
-  const baseTvlHoneyAmount = new BigNumber(result.stats.baseTvlInHoney)
-    .div(10 ** 18)
-    .toString();
-  const quotTvlHoneyAmount = new BigNumber(result.stats.quoteTvlInHoney)
-    .div(10 ** 18)
-    .toString();
+  const getFormattedAmount = (value: number, decimals = 18) => {
+    return new BigNumber(value).div(10 ** decimals).toString();
+  };
+
+  // format tvl and get total
+  const baseTvlFormattedAmount = getFormattedAmount(
+    result.stats.baseTvl,
+    baseInfo.decimals,
+  );
+  const quoteTvlFormattedAmount = getFormattedAmount(
+    result.stats.quoteTvl,
+    quoteInfo.decimals,
+  );
+  const baseTvlHoneyAmount = getFormattedAmount(result.stats.baseTvlInHoney);
+  const quoteTvlHoneyAmount = getFormattedAmount(result.stats.quoteTvlInHoney);
+
   const totalTvl =
-    parseFloat(baseTvlHoneyAmount) + parseFloat(quotTvlHoneyAmount);
+    parseFloat(baseTvlHoneyAmount) + parseFloat(quoteTvlHoneyAmount);
+
+  // format fees and get total
+  const baseFeesFormattedAmount = getFormattedAmount(
+    result.stats.baseFees,
+    baseInfo.decimals,
+  );
+  const quoteFeesFormattedAmount = getFormattedAmount(
+    result.stats.quoteFees,
+    quoteInfo.decimals,
+  );
+  const baseFeesHoneyAmount = getFormattedAmount(result.stats.baseFeesInHoney);
+  const quoteFeesHoneyAmount = getFormattedAmount(
+    result.stats.quoteFeesInHoney,
+  );
+
+  const totalFees =
+    parseFloat(baseFeesHoneyAmount) + parseFloat(quoteFeesHoneyAmount);
+
+  // format volume and get total
+  const baseVolumeFormattedAmount = getFormattedAmount(
+    result.stats.baseVolume,
+    baseInfo.decimals,
+  );
+  const quoteVolumeFormattedAmount = getFormattedAmount(
+    result.stats.quoteVolume,
+    quoteInfo.decimals,
+  );
+  const baseVolumeHoneyAmount = getFormattedAmount(
+    result.stats.baseVolumeInHoney,
+  );
+  const quoteVolumeHoneyAmount = getFormattedAmount(
+    result.stats.quoteVolumeInHoney,
+  );
+
+  const totalVolume =
+    parseFloat(baseVolumeHoneyAmount) + parseFloat(quoteVolumeHoneyAmount);
 
   return {
     id: result.info.id,
@@ -127,12 +175,16 @@ export const formatPoolData = (result: any): PoolV2 => {
     shareAddress: result.info.shareAddress?.address,
     baseTokens: baseTvlFormattedAmount,
     quoteTokens: quoteTvlFormattedAmount,
+    baseFees: parseFloat(baseFeesFormattedAmount.toString()),
+    quoteFees: parseFloat(quoteFeesFormattedAmount.toString()),
+    baseVolume: parseFloat(baseVolumeFormattedAmount.toString()),
+    quoteVolume: parseFloat(quoteVolumeFormattedAmount.toString()),
     feeRate: result.stats.feeRate / 10000,
     tvlUsd: totalTvl,
-    volumeUsd: 0,
-    fees: 0,
+    volumeUsd: totalVolume,
+    feesUsd: totalFees,
     baseTokenHoneyTvl: parseFloat(baseTvlHoneyAmount.toString()),
-    quoteTokenHoneyTvl: parseFloat(quotTvlHoneyAmount.toString()),
+    quoteTokenHoneyTvl: parseFloat(quoteTvlHoneyAmount.toString()),
     totalApy: 0,
     bgtApy: 0,
   };
