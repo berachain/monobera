@@ -4,9 +4,9 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
-import { formatUsd, formatter } from "@bera/berajs";
 import { cloudinaryUrl, dexUrl } from "@bera/config";
 import { GetGlobalData } from "@bera/graphql";
+import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 import DataCard from "./data-card";
@@ -23,14 +23,26 @@ export default function Data({ arcade }: { arcade: boolean }) {
           <div className="flex w-full flex-1 flex-col gap-4">
             <DataCard
               title="Total Honey Supply"
-              value={formatUsd(totalHoneySupply)}
+              value={
+                <FormattedNumber
+                  value={totalHoneySupply}
+                  symbol="USD"
+                  compact={false}
+                />
+              }
               icon={<Icons.lock className="h-5 w-5" />}
               arcade={arcade}
               isLoading={loading}
             />
             <DataCard
               title="24H Volume"
-              value={formatUsd(dailyVolume)}
+              value={
+                <FormattedNumber
+                  value={dailyVolume}
+                  symbol="USD"
+                  compact={false}
+                />
+              }
               icon={<Icons.candleStick className="h-5 w-5" />}
               arcade={arcade}
               isLoading={loading}
@@ -48,14 +60,28 @@ export default function Data({ arcade }: { arcade: boolean }) {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <DataCard
             title="Total Honey Supply"
-            value={formatter.format(totalHoneySupply)}
+            value={
+              <FormattedNumber
+                value={totalHoneySupply}
+                symbol="USD"
+                compact={false}
+                compactThreshold={9_999_999_999}
+              />
+            }
             icon={<Icons.lock />}
             arcade={arcade}
             isLoading={loading}
           />
           <DataCard
             title="24H Volume"
-            value={formatUsd(dailyVolume)}
+            value={
+              <FormattedNumber
+                value={dailyVolume}
+                symbol="USD"
+                compact={false}
+                compactThreshold={9_999_999_999}
+              />
+            }
             icon={<Icons.candleStick />}
             arcade={arcade}
             isLoading={loading}
@@ -63,7 +89,7 @@ export default function Data({ arcade }: { arcade: boolean }) {
           <DataCard
             title="Honey Price"
             value="$1.00"
-            icon={<Icons.honey className="w-6 h-6" />}
+            icon={<Icons.honey className="h-6 w-6" />}
             arcade={arcade}
             isLoading={loading}
           />
