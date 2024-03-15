@@ -4,7 +4,7 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Switch } from "@bera/ui/switch";
 import { mutate } from "swr";
-import { type Address } from "viem";
+import { type Address, encodeFunctionData } from "viem";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 
@@ -111,12 +111,19 @@ export function OrderHistoryHeader({
                 isClosePositionsLoading || closePositionsPayload?.length === 0
               }
               onClick={() => {
+                const encodedData = closePositionsPayload.map((pos) => {
+                  return encodeFunctionData({
+                    abi: TRADING_ABI,
+                    functionName: "closeTradeMarket",
+                    args: [pos.pairIndex, pos.index],
+                  });
+                });
                 writePositionsClose({
                   address: process.env
                     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
                   abi: TRADING_ABI,
-                  functionName: "closeTradesMarket",
-                  params: [closePositionsPayload],
+                  functionName: "tryAggregate",
+                  params: [false, encodedData],
                 });
               }}
             >
@@ -146,12 +153,19 @@ export function OrderHistoryHeader({
                 isCloseLimitOrdersLoading || closeOrdersPayload?.length === 0
               }
               onClick={() => {
+                const encodedData = closeOrdersPayload.map((order) => {
+                  return encodeFunctionData({
+                    abi: TRADING_ABI,
+                    functionName: "cancelOpenLimitOrder",
+                    args: [order.pairIndex, order.index],
+                  });
+                });
                 writeOrdersClose({
                   address: process.env
                     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
                   abi: TRADING_ABI,
-                  functionName: "cancelOpenLimitOrders",
-                  params: [closeOrdersPayload],
+                  functionName: "tryAggregate",
+                  params: [false, encodedData],
                 });
               }}
             >
