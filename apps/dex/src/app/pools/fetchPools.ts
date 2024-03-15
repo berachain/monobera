@@ -149,7 +149,7 @@ export const fetchPools = async (
     const result = await fetch(
       `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
         16,
-      )}&sortBy=${sort}.${order}&page=${page}&pageLimit=${limit}&keyword=${keyword}`,
+      )}&sortBy=${sort}.${order}&page=${page}&size=${limit}&keyword=${keyword}`,
     );
 
     const response = await result.json();
@@ -175,7 +175,7 @@ export const fetchPoolsWithKeyword = async (
     const result = await fetch(
       `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
         16,
-      )}&sortBy=${sort}.${order}&page=${page}&pageLimit=${limit}&keyword=${keyword}`,
+      )}&sortBy=${sort}.${order}&page=${page}&size=${limit}&keyword=${keyword}`,
     );
 
     const response = await result.json();

@@ -27,6 +27,7 @@
     "@bera/graphql": "0.1.0",
     "@bera/tailwind-config": "0.1.0",
     "@bera/ui": "0.1.0",
+    "@rainbow-me/rainbowkit": "^2.0.1",
     "@biomejs/biome": "1.5.3",
     "@metamask/jazzicon": "^2.0.0",
     "@types/react": "^18.2.0",

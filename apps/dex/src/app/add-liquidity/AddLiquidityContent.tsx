@@ -468,7 +468,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       : wBeraToken
                     : tokenInputs[0]
                 }
-                value={getSafeNumber(tokenInputs[0]?.amount)}
+                value={tokenInputs[0]?.amount}
                 price={baseTokenHoneyPrice}
               />
               <PreviewToken
@@ -479,7 +479,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       : wBeraToken
                     : tokenInputs[1]
                 }
-                value={getSafeNumber(tokenInputs[1]?.amount)}
+                value={tokenInputs[1]?.amount}
                 price={quoteTokenHoneyPrice}
               />
             </TokenList>
