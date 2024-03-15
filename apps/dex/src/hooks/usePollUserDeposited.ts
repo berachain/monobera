@@ -1,22 +1,23 @@
-import { mutate } from "swr";
-import useSWRImmutable from "swr/immutable";
-import { CROC_QUERY_ABI, useBeraConfig, useBeraJs } from "@bera/berajs";
-import { chainId, crocIndexerEndpoint, crocQueryAddress } from "@bera/config";
-import { toHex, type Address, erc20Abi } from "viem";
-import { formatSubgraphPoolData, type PoolV2 } from "~/app/pools/fetchPools";
-import { usePublicClient } from "wagmi";
-import {
-  dexClient,
-  getFilteredPoolList,
-  getTokenHoneyPrices,
-} from "@bera/graphql";
-import { formatUnits } from "viem";
 import { decodeCrocPrice } from "@bera/beracrocswap";
+import {
+  CROC_QUERY_ABI,
+  getCrocErc20LpAddress,
+  useBeraConfig,
+  useBeraJs,
+} from "@bera/berajs";
+import { chainId, crocIndexerEndpoint, crocQueryAddress } from "@bera/config";
+import { dexClient, getTokenHoneyPrices } from "@bera/graphql";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { BigNumber } from "bignumber.js";
 import { BigNumber as EthersBigNumber } from "ethers";
-import { getAddress } from "viem";
-import { getCrocErc20LpAddress } from "@bera/berajs";
+import { mutate } from "swr";
+import useSWRImmutable from "swr/immutable";
+import { erc20Abi, formatUnits, getAddress, toHex, type Address } from "viem";
+import { usePublicClient } from "wagmi";
+
 import { getSafeNumber } from "~/utils/getSafeNumber";
+import { formatSubgraphPoolData, type PoolV2 } from "~/app/pools/fetchPools";
+import { searchFilteredPoolList } from "./../../../../packages/graphql/src/modules/dex/query";
 
 interface AmbientPosition {
   ambientLiq: string;
@@ -61,112 +62,121 @@ interface Call {
   functionName: string;
   args: any[];
 }
-export const usePollUserDeposited = () => {
+export const usePollUserDeposited = (
+  { keyword }: { keyword: string } = { keyword: "" },
+) => {
   const { account } = useBeraJs();
   const publicClient = usePublicClient();
   const { networkConfig } = useBeraConfig();
+  const { captureException } = useAnalytics();
   const hexChainId = toHex(chainId);
-  const QUERY_KEY = ["pools", account, hexChainId];
-  const { isLoading, isValidating } = useSWRImmutable(QUERY_KEY, async () => {
-    if (!publicClient) return undefined;
-    if (!account || !hexChainId) {
-      return undefined;
-    }
-    try {
-      const response = await fetch(
-        `${crocIndexerEndpoint}/user_positions?chainId=${hexChainId}&user=${account}`,
-      );
-      const positions = await response.json();
-
-      const baseTokenAddresses: string[] = [];
-      const quoteTokenAddresses: string[] = [];
-
-      for (const pool of positions.data) {
-        baseTokenAddresses.push(pool.base);
-        quoteTokenAddresses.push(pool.quote);
+  const QUERY_KEY = ["pools", account, hexChainId, keyword];
+  const { isLoading, isValidating, data } = useSWRImmutable(
+    QUERY_KEY,
+    async () => {
+      if (!publicClient) return undefined;
+      if (!account || !hexChainId) {
+        return undefined;
       }
+      try {
+        const response = await fetch(
+          `${crocIndexerEndpoint}/user_positions?chainId=${hexChainId}&user=${account}`,
+        );
+        const positions = await response.json();
 
-      const uniqueTokenAddresses = Array.from(
-        new Set([...baseTokenAddresses, ...quoteTokenAddresses]),
-      );
+        const baseTokenAddresses: string[] = [];
+        const quoteTokenAddresses: string[] = [];
 
-      const tokenHoneyPricesResult = dexClient
-        .query({
-          query: getTokenHoneyPrices,
-          variables: {
-            id: uniqueTokenAddresses,
-          },
-        })
-        .then((res: any) => {
-          return res.data?.tokenHoneyPrices.reduce(
-            (allPrices: any, price: any) => ({
-              ...allPrices,
-              [getAddress(price.id)]: price.price,
-            }),
-            {},
-          );
-        });
+        for (const pool of positions.data) {
+          baseTokenAddresses.push(pool.base);
+          quoteTokenAddresses.push(pool.quote);
+        }
 
-      const calls: Call[] = positions.data.map((pool: AmbientPosition) => {
-        return {
-          abi: CROC_QUERY_ABI,
-          address: crocQueryAddress,
-          functionName: "queryPrice",
-          args: [pool.base, pool.quote, pool.poolIdx],
-        };
-      });
+        const uniqueTokenAddresses = Array.from(
+          new Set([...baseTokenAddresses, ...quoteTokenAddresses]),
+        );
 
-      // get price of all pools so that we can calculate estimated user postions
-      const result = publicClient.multicall({
-        contracts: calls,
-        multicallAddress: networkConfig.precompileAddresses
-          .multicallAddress as Address,
-      });
+        const tokenHoneyPricesResult = dexClient
+          .query({
+            query: getTokenHoneyPrices,
+            variables: {
+              id: uniqueTokenAddresses,
+            },
+          })
+          .then((res: any) => {
+            return res.data?.tokenHoneyPrices.reduce(
+              (allPrices: any, price: any) => ({
+                ...allPrices,
+                [getAddress(price.id)]: price.price,
+              }),
+              {},
+            );
+          });
 
-      const balanceCalls: Call[] = positions.data.map(
-        (pool: AmbientPosition) => {
+        const calls: Call[] = positions.data.map((pool: AmbientPosition) => {
           return {
-            abi: erc20Abi,
-            address: getCrocErc20LpAddress(pool.base, pool.quote),
-            functionName: "balanceOf",
-            args: [account],
+            abi: CROC_QUERY_ABI,
+            address: crocQueryAddress,
+            functionName: "queryPrice",
+            args: [pool.base, pool.quote, pool.poolIdx],
           };
-        },
-      );
-
-      const balanceResult = publicClient.multicall({
-        contracts: balanceCalls,
-        multicallAddress: networkConfig.precompileAddresses
-          .multicallAddress as Address,
-      });
-
-      // // get pool objects for pools user deposited for
-      const poolsResult = dexClient
-        .query({
-          query: getFilteredPoolList,
-          variables: {
-            baseAssets: baseTokenAddresses,
-            quoteAssets: quoteTokenAddresses,
-          },
-        })
-        .then((res: any) => {
-          if (res.error) {
-            console.log(res.error);
-            return undefined;
-          }
-          return res.data.pools;
         });
 
-      const [poolPrices, pools, tokenHoneyPrices, lpBalances] =
-        await Promise.all([
-          result,
-          poolsResult,
-          tokenHoneyPricesResult,
-          balanceResult,
-        ]);
+        // get price of all pools so that we can calculate estimated user postions
+        const result = publicClient.multicall({
+          contracts: calls,
+          multicallAddress: networkConfig.precompileAddresses
+            .multicallAddress as Address,
+        });
 
-      const userPositions: IUserPool[] = positions.data
-        .map((position: AmbientPosition, i: number) => {
+        const balanceCalls: Call[] = positions.data.map(
+          (pool: AmbientPosition) => {
+            return {
+              abi: erc20Abi,
+              address: getCrocErc20LpAddress(pool.base, pool.quote),
+              functionName: "balanceOf",
+              args: [account],
+            };
+          },
+        );
+
+        const balanceResult = publicClient.multicall({
+          contracts: balanceCalls,
+          multicallAddress: networkConfig.precompileAddresses
+            .multicallAddress as Address,
+        });
+
+        // // get pool objects for pools user deposited for
+        const poolsResult = dexClient
+          .query({
+            query: searchFilteredPoolList,
+            variables: {
+              baseAssets: baseTokenAddresses,
+              quoteAssets: quoteTokenAddresses,
+              keyword,
+            },
+          })
+          .then((res: any) => {
+            if (res.error) {
+              console.log(res.error);
+              return undefined;
+            }
+            return res.data.pools;
+          })
+          .catch((e) => {
+            captureException(e);
+          });
+
+        const [poolPrices, pools, tokenHoneyPrices, lpBalances] =
+          await Promise.all([
+            result,
+            poolsResult,
+            tokenHoneyPricesResult,
+            balanceResult,
+          ]);
+
+        const userPositions: IUserPool[] = [];
+        positions.data.forEach((position: AmbientPosition, i: number) => {
           const poolPrice = poolPrices[i]?.result;
           const pool: PoolV2 | undefined = pools.find((p: PoolV2) => {
             return (
@@ -215,22 +225,22 @@ export const usePollUserDeposited = () => {
             seeds: BigInt(0),
           };
 
-          return {
+          userPositions.push({
             ...formattedPool,
             userPosition,
-          };
-        })
-        .filter(
+          });
+        });
+        return userPositions.filter(
           (p: IUserPool) =>
             p.userPosition?.formattedBaseAmount !== "0" &&
             p.userPosition?.formattedQuoteAmount !== "0",
         ) as IUserPool[];
-      return userPositions;
-    } catch (e) {
-      console.log(e);
-      return undefined;
-    }
-  });
+      } catch (e) {
+        console.log(e);
+        return undefined;
+      }
+    },
+  );
 
   const usePositions = () => {
     const { data = undefined } = useSWRImmutable<IUserPool[] | undefined>(
@@ -260,5 +270,6 @@ export const usePollUserDeposited = () => {
     useIsPoolDeposited,
     isLoading: isLoading || isValidating,
     refresh: () => void mutate(QUERY_KEY),
+    data,
   };
 };

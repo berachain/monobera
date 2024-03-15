@@ -38,6 +38,7 @@ export const PoolSearch = ({
 
   const {
     search,
+    keyword,
     setKeyword,
     setSearch,
     data,
@@ -61,6 +62,11 @@ export const PoolSearch = ({
     setKeyword(search);
   }, [isTyping, search]);
 
+  const handleClearSearch = () => {
+    setKeyword("");
+    setSearch("");
+  };
+
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -72,6 +78,7 @@ export const PoolSearch = ({
             value="allPools"
             className="w-full sm:w-fit"
             variant="ghost"
+            onClick={handleClearSearch}
           >
             <Link href="/pools?pool=allPools">All pools</Link>
           </TabsTrigger>
@@ -79,6 +86,7 @@ export const PoolSearch = ({
             value="userPools"
             className="w-full sm:w-fit"
             variant="ghost"
+            onClick={handleClearSearch}
           >
             <Link href="/pools?pool=userPools">My pools</Link>
           </TabsTrigger>
@@ -166,7 +174,7 @@ export const PoolSearch = ({
         </TabsContent>
 
         <TabsContent value="userPools">
-          <MyPool isList />
+          <MyPool isList keyword={keyword} />
         </TabsContent>
       </Tabs>
     </div>

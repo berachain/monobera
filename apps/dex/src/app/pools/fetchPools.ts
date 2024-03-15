@@ -30,16 +30,16 @@ export const getPoolId = (base: Address, quote: Address) => {
   return base.concat("-").concat(quote);
 };
 
-export const getPoolUrl = (pool: PoolV2) => {
-  return `/pool?base=${pool.base}&quote=${pool.quote}`;
+export const getPoolUrl = (pool: PoolV2, isMyPool = false) => {
+  return `/pool/${pool?.shareAddress}${isMyPool ? "?back=my-pools" : ""}`;
 };
 
 export const getPoolAddLiquidityUrl = (pool: PoolV2) => {
-  return `/add-liquidity?base=${pool.base}&quote=${pool.quote}`;
+  return `/add-liquidity/${pool?.shareAddress}`;
 };
 
 export const getPoolWithdrawUrl = (pool: PoolV2) => {
-  return `/withdraw?base=${pool.base}&quote=${pool.quote}`;
+  return `/withdraw/${pool?.shareAddress}`;
 };
 
 export const getBaseCost = (initialPrice: number) => {
