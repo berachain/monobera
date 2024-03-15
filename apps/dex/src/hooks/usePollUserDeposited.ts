@@ -198,8 +198,18 @@ export const usePollUserDeposited = (
           const baseAmount = liq.times(sqrtPrice);
           const quoteAmount = liq.div(sqrtPrice);
 
-          const formattedBaseAmount = baseAmount.div(10 ** 18).toString();
-          const formattedQuoteAmount = quoteAmount.div(10 ** 18).toString();
+          const formattedBaseAmount = baseAmount
+            .div(10 ** 18)
+            .toString()
+            .includes("e")
+            ? "0"
+            : baseAmount.div(10 ** 18).toString();
+          const formattedQuoteAmount = quoteAmount
+            .div(10 ** 18)
+            .toString()
+            .includes("e")
+            ? "0"
+            : quoteAmount.div(10 ** 18).toString();
 
           const estimatedHoneyValue =
             Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
@@ -220,7 +230,11 @@ export const usePollUserDeposited = (
             userPosition,
           });
         });
-        return userPositions;
+        return userPositions.filter(
+          (p: IUserPool) =>
+            p.userPosition?.formattedBaseAmount !== "0" &&
+            p.userPosition?.formattedQuoteAmount !== "0",
+        ) as IUserPool[];
       } catch (e) {
         console.log(e);
         return undefined;
@@ -246,7 +260,9 @@ export const usePollUserDeposited = (
     return data.some(
       (p: IUserPool) =>
         p.base.toLowerCase() === pool.base.toLowerCase() &&
-        p.quote.toLowerCase() === pool.quote.toLowerCase(),
+        p.quote.toLowerCase() === pool.quote.toLowerCase() &&
+        p.userPosition?.formattedBaseAmount !== "0" &&
+        p.userPosition?.formattedQuoteAmount !== "0",
     );
   };
   return {

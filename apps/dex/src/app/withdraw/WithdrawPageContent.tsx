@@ -202,6 +202,10 @@ export default function WithdrawLiquidityContent({
     }
   }, [liquidityToBurn, amount, crocPool, write]);
 
+  const notDeposited =
+    userPositionBreakdown === undefined ||
+    userPositionBreakdown?.formattedBaseAmount === "0" ||
+    userPositionBreakdown?.formattedQuoteAmount === "0";
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
@@ -254,6 +258,7 @@ export default function WithdrawLiquidityContent({
                     <Button
                       key={percent.toString()}
                       variant={"secondary"}
+                      disabled={notDeposited}
                       size={"sm"}
                       className="w-full text-foreground"
                       onClick={() => setAmount(percent)}
@@ -267,6 +272,7 @@ export default function WithdrawLiquidityContent({
             <Slider
               defaultValue={[0]}
               value={[amount]}
+              disabled={notDeposited}
               max={100}
               min={0}
               onValueChange={(value: number[]) => {
