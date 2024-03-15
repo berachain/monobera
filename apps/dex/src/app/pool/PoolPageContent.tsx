@@ -320,7 +320,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                ${formatter.format(pool.tvlUsd)}
+                ${formatter.format(pool?.tvlUsd)}
               </div>
             </Card>
             <Card className="px-4 py-2">
@@ -330,7 +330,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                ${formatter.format(0)}
+                ${formatter.format(pool?.volumeUsd)}
               </div>
             </Card>
             <Card className="px-4 py-2">
@@ -341,7 +341,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
                 {pool.volumeUsd && Number(pool.volumeUsd) !== 0
-                  ? formatUsd(pool.fees ?? "0")
+                  ? formatter.format(pool.feesUsd ?? "0")
                   : "$0"}
               </div>{" "}
             </Card>
