@@ -1,9 +1,9 @@
 "use client";
 
-import { formatUsd, truncateHash, useTokens } from "@bera/berajs";
+import { truncateHash, useTokens } from "@bera/berajs";
 import { blockExplorerUrl, honeyTokenAddress } from "@bera/config";
 import { type HoneyTxn } from "@bera/graphql";
-import { TokenIcon } from "@bera/shared-ui";
+import { FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import {
@@ -24,50 +24,53 @@ const getTokenDisplay = (event: any, tokenDictionary: any) => {
   if (event.txnType === "Mint") {
     return (
       <div className="space-evenly flex flex-row items-center">
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <TokenIcon address={collateral?.address} />
-          <p className="ml-2">
-            {Number(
-              formatUnits(
-                BigInt(event.collateralAmount),
-                collateral?.decimals ?? 18,
-              ),
-            ).toFixed(4)}
-          </p>
+          <FormattedNumber
+            value={formatUnits(
+              BigInt(event.collateralAmount),
+              collateral?.decimals ?? 18,
+            )}
+            compact={false}
+            compactThreshold={999_999}
+          />
         </div>
         <Icons.chevronRight className="mx-2" />
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <TokenIcon address={honeyTokenAddress} />
-          <p className="ml-2">
-            {Number(
-              formatUnits(BigInt(event.honeyAmount), honey?.decimals ?? 18),
-            ).toFixed(4)}
-          </p>
+          <FormattedNumber
+            value={formatUnits(
+              BigInt(event.honeyAmount),
+              honey?.decimals ?? 18,
+            )}
+            compact={false}
+            compactThreshold={999_999}
+          />
         </div>
       </div>
     );
   }
   return (
     <div className="space-evenly flex flex-row items-center">
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <TokenIcon address={honeyTokenAddress} />
-        <p className="ml-2">
-          {Number(
-            formatUnits(BigInt(event.honeyAmount), honey?.decimals ?? 18),
-          ).toFixed(4)}
-        </p>
+        <FormattedNumber
+          value={formatUnits(BigInt(event.honeyAmount), honey?.decimals ?? 18)}
+          compact={false}
+          compactThreshold={999_999}
+        />
       </div>
       <Icons.chevronRight className="mx-2" />
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <TokenIcon address={collateral?.address} />
-        <p className="ml-2">
-          {Number(
-            formatUnits(
-              BigInt(event.collateralAmount),
-              collateral?.decimals ?? 18,
-            ),
-          ).toFixed(4)}
-        </p>
+        <FormattedNumber
+          value={formatUnits(
+            BigInt(event.collateralAmount),
+            collateral?.decimals ?? 18,
+          )}
+          compact={false}
+          compactThreshold={999_999}
+        />
       </div>
     </div>
   );
@@ -140,16 +143,19 @@ export const EventTable = ({
                   {event.txnType}
                 </TableCell>
                 <TableCell>
-                  {formatUsd(
-                    formatUnits(
+                  <FormattedNumber
+                    value={formatUnits(
                       BigInt(
                         event.txnType === "Mint"
                           ? event.honeyAmount
                           : event.collateralAmount,
                       ),
                       18,
-                    ),
-                  )}
+                    )}
+                    symbol="USD"
+                    compact={false}
+                    compactThreshold={999_999}
+                  />
                 </TableCell>
                 <TableCell className="hidden font-medium sm:table-cell">
                   {getTokenDisplay(event, tokenDictionary)}
