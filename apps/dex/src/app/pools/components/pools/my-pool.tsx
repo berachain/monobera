@@ -26,20 +26,6 @@ export default function MyPool({
     }
   }, [data]);
 
-  const MyPoolsDataTable = memo(() => (
-    <DataTable
-      key={"table"}
-      data={userPools}
-      columns={my_columns}
-      title={`My Pools (${userPools?.length ?? "0"})`}
-      onRowClick={(row: any) => {
-        window.open(getPoolUrl(row.original), "_self");
-      }}
-    />
-  ));
-
-  MyPoolsDataTable.displayName = "MyPoolsDataTable";
-
   return (
     <>
       {" "}
@@ -56,7 +42,14 @@ export default function MyPool({
         <NotFoundBear title="No Pools found." />
       ) : isList ? (
         <div className="flex w-full flex-col items-center justify-center gap-4">
-          <MyPoolsDataTable />
+          <DataTable
+            data={userPools}
+            columns={my_columns}
+            title={`My Pools (${userPools?.length ?? "0"})`}
+            onRowClick={(row: any) => {
+              window.open(getPoolUrl(row.original, true), "_self");
+            }}
+          />
         </div>
       ) : (
         <div className="flex w-full flex-col items-center justify-center gap-4">

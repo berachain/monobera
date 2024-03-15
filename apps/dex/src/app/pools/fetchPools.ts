@@ -89,7 +89,7 @@ export const formatSubgraphPoolData = (result: any): PoolV2 => {
     quoteTokenHoneyTvl: 0,
     totalApy: 0,
     bgtApy: 0,
-    shareAddress: "",
+    shareAddress: result.shareAddress?.address,
   };
 };
 
@@ -124,6 +124,7 @@ export const formatPoolData = (result: any): PoolV2 => {
       .concat("-")
       .concat(result.info.quoteInfo.symbol),
     tokens: [result.info.baseInfo, result.info.quoteInfo],
+    shareAddress: result.info.shareAddress?.address,
     baseTokens: baseTvlFormattedAmount,
     quoteTokens: quoteTvlFormattedAmount,
     feeRate: result.stats.feeRate / 10000,
@@ -134,7 +135,6 @@ export const formatPoolData = (result: any): PoolV2 => {
     quoteTokenHoneyTvl: parseFloat(quotTvlHoneyAmount.toString()),
     totalApy: 0,
     bgtApy: 0,
-    shareAddress: "",
   };
 };
 
@@ -164,6 +164,25 @@ export const fetchPools = async (
   }
 };
 
+export const fetchPoolByAddress = async (
+  shareAddress?: string,
+): Promise<PoolV2 | null> => {
+  try {
+    const result = await fetch(
+      `${crocIndexerEndpoint}/v2/pool_stats/${shareAddress}?chainId=0x${chainId.toString(
+        16,
+      )}`,
+    );
+
+    const response = await result.json();
+
+    return formatPoolData(response.data);
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 export const fetchPoolsWithKeyword = async (
   page: number,
   limit: number,
@@ -190,10 +209,8 @@ export const fetchPoolsWithKeyword = async (
   }
 };
 
-export const fetchSelectedPool = async (base: string, quote: string) => {
-  const response = await fetchPools(0, 100, "tvl", "desc");
-
-  return response.find((pool) => {
-    return pool.base === base && pool.quote === quote;
-  });
+export const fetchSelectedPool = async (shareAddress: string) => {
+  if (!shareAddress) return null;
+  const response = await fetchPoolByAddress(shareAddress);
+  return response;
 };
