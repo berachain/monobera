@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  ICrocSwapStep,
   useGasData,
   usePollAllowance,
   usePollAssetWalletBalance,
@@ -10,7 +11,6 @@ import {
   useTokenInformation,
   useTokens,
   type Token,
-  ICrocSwapStep,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
@@ -18,7 +18,7 @@ import {
   nativeTokenAddress,
 } from "@bera/config";
 import { useSlippage } from "@bera/shared-ui/src/hooks";
-import { type Address, formatUnits } from "viem";
+import { formatUnits, type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";
 
@@ -156,6 +156,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [selectedTo, selectedFrom]);
 
+  // populate field of calculated swap amount
   useEffect(() => {
     if (isWrap) return;
     if (swapKind === SwapKind.GIVEN_IN) {
@@ -165,6 +166,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapInfo, isWrap]);
 
+  // calculate exchange rate
   useEffect(() => {
     if (
       swapInfo?.formattedAmountIn &&
@@ -298,6 +300,22 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { data: tokenInPrice } = useTokenHoneyPrice(selectedFrom?.address);
   const { data: tokenOutPrice } = useTokenHoneyPrice(selectedTo?.address);
 
+  const [priceImpact, setPriceImpact] = useState<number | null>(null);
+  // update price impact
+  useEffect(() => {
+    if (
+      !swapInfo?.batchSwapSteps?.length ||
+      !swapInfo?.batchSwapSteps?.length
+    ) {
+      return;
+    }
+
+    const usdIn = tokenInPrice * Number(swapInfo?.formattedAmountIn);
+    const usdOut = tokenOutPrice * Number(swapInfo?.formattedReturnAmount);
+    const priceImpact = (usdOut / usdIn) * 100 - 100;
+    setPriceImpact(parseFloat(priceImpact.toFixed(2)));
+  }, [swapInfo, tokenInPrice, tokenOutPrice]);
+
   const minAmountOut = useMemo(() => {
     if (!payload[2]) return "0";
     const amountOut = payload[2];
@@ -333,5 +351,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     tokenInPrice,
     tokenOutPrice,
     minAmountOut,
+    priceImpact,
   };
 };

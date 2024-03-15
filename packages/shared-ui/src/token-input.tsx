@@ -34,6 +34,7 @@ type Props = {
   onExceeding?: (isExceeding: boolean) => void;
   setIsTyping?: (isTyping: boolean) => void;
   isActionLoading?: boolean | undefined;
+  slippage?: number | null;
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -57,6 +58,7 @@ export function TokenInput({
   onExceeding = undefined,
   hideMax = false,
   isActionLoading = undefined,
+  slippage,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
@@ -193,6 +195,15 @@ export function TokenInput({
               <div className="flex flex-row gap-1">
                 {!hidePrice && (
                   <p className="self-center p-0 text-xs text-muted-foreground">
+                    {slippage && (
+                      <span
+                        className={
+                          slippage < 0 ? "text-red-500" : "text-green-500"
+                        }
+                      >
+                        {`(${slippage > 0 ? "+" : ""}${slippage}%) `}
+                      </span>
+                    )}
                     {safeNumberAmount !== 0 && (
                       <FormattedNumber
                         value={safeNumberAmount * price}

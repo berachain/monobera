@@ -93,6 +93,7 @@ export function SwapCard({
     isWrap,
     wrapType,
     minAmountOut,
+    priceImpact,
   } = useSwap({
     inputCurrency,
     outputCurrency,
@@ -374,6 +375,7 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setToAmount(amount);
                     }}
+                    slippage={priceImpact}
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
                   />
