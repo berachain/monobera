@@ -37,9 +37,8 @@ export default function Page({
         />
       </div>
       <div className="border-t-2 border-muted xl:border-r-2 xl:border-t-0" />
-      <div className="w-full">
-        <DemandBasedQueue action={action} />
-      </div>
+
+      <DemandBasedQueue action={action} />
     </div>
   );
 }

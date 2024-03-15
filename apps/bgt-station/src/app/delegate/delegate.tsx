@@ -136,7 +136,7 @@ export default function Delegate({
   const bgtBalance = useBgtBalance();
 
   return (
-    <div className="w-full max-w-[600px] sm:container sm:px-0 md:px-8 lg:w-[600px]">
+    <div className="mx-auto w-full max-w-[600px] sm:container sm:px-0 md:px-8 lg:w-[600px]">
       <Tabs
         value={activeAction}
         onValueChange={(value) => setActiveAction(value as DelegateEnum)}
