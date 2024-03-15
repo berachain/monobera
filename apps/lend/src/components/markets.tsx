@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { formatUsd, formatter, usePollReservesDataList } from "@bera/berajs";
-import { TokenIcon } from "@bera/shared-ui";
+import { FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
@@ -55,22 +55,31 @@ function Market({
         </div>
 
         <p className="mt-4 text-3xl font-bold leading-6">
-          $
-          {formatter.format(
-            Number(market.totalLiquidity) *
-              Number(market.formattedPriceInMarketReferenceCurrency),
-          )}
+          <FormattedNumber
+            value={
+              Number(market.totalLiquidity) *
+              Number(market.formattedPriceInMarketReferenceCurrency)
+            }
+            symbol="USD"
+          />
         </p>
         <p className="mt-2">
-          <span className="flex items-center gap-2 uppercase text-foreground">
-            {Number(market.totalLiquidity).toLocaleString()} {market.symbol}
-          </span>
+          <FormattedNumber
+            value={market.totalLiquidity}
+            compact={false}
+            className="uppercase text-foreground"
+            symbol={market.symbol}
+          />
         </p>
         <p className="mt-4 text-sm text-muted-foreground">
           Current Token Price
         </p>
         <p className="mt-1 text-sm font-bold text-muted-foreground">
-          {formatUsd(Number(market.formattedPriceInMarketReferenceCurrency))}
+          <FormattedNumber
+            value={market.formattedPriceInMarketReferenceCurrency}
+            symbol="USD"
+            compact={false}
+          />
         </p>
       </blockquote>
     </figure>

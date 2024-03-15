@@ -1,7 +1,7 @@
 import React from "react";
-import { formatter, usePollAssetWalletBalance } from "@bera/berajs";
+import { usePollAssetWalletBalance } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
-import { TokenIcon, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 
 import SupplyBtn from "~/components/modals/supply-button";
 import WithdrawBtn from "~/components/modals/withdraw-button";
@@ -30,18 +30,22 @@ export default function HoneySupply({ honey }: { honey: any }) {
                 Supplied
               </div>
               <div className="h-8 text-lg font-bold uppercase">
-                {formatter.format(aTokenBalance?.formattedBalance ?? "0")}{" "}
+                <FormattedNumber
+                  value={aTokenBalance?.formattedBalance ?? "0"}
+                />{" "}
                 {honey?.symbol}
               </div>
               <div className="text-xs font-medium leading-tight">
-                $
-                {formatter.format(
-                  Number(aTokenBalance?.formattedBalance ?? "0") *
+                <FormattedNumber
+                  value={
+                    Number(aTokenBalance?.formattedBalance ?? "0") *
                     Number(
                       honey?.reserveData
                         ?.formattedPriceInMarketReferenceCurrency ?? "0",
-                    ),
-                )}
+                    )
+                  }
+                  symbol="USD"
+                />
               </div>
             </div>
           </div>
@@ -62,7 +66,7 @@ export default function HoneySupply({ honey }: { honey: any }) {
               />
             </div>
             <div className="text-lg font-bold text-success-foreground">
-              {(Number(honey.reserveData.supplyAPY) * 100).toFixed(2)}%
+              <FormattedNumber value={honey.reserveData.supplyAPY} percent />
             </div>
           </div>
 
