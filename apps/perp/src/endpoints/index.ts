@@ -8,7 +8,7 @@ export async function getMarkets(): Promise<Market[] | undefined> {
     const jsonRes = await res.json();
     return jsonRes.markets;
   } catch (e) {
-    return undefined;
+    return [];
   }
 }
 
@@ -20,7 +20,20 @@ export async function getGlobalParams(): Promise<GlobalParams | undefined> {
     const jsonRes = await res.json();
     return jsonRes.global_params;
   } catch (e) {
-    return undefined;
+    return {
+      group_index: "0",
+      group_name: "crypto",
+      max_leverage: "100",
+      min_leverage: "2",
+      max_collateral_p: "10",
+      max_pos_honey: "100000000000000000000000",
+      current_epoch: "92",
+      max_pending_market_orders: "1000000",
+      market_orders_timeout: "0",
+      max_trades_per_pair: "1000000",
+      global_oi_long: "148188691811081237025922024",
+      global_oi_short: "11481661227866370572270086",
+    };
   }
 }
 
@@ -32,7 +45,7 @@ export async function getDailyPriceChange(): Promise<any | undefined> {
     const jsonRes = await res.json();
     return jsonRes.prices;
   } catch (e) {
-    return undefined;
+    return [0, 0, 0];
   }
 }
 
@@ -66,7 +79,7 @@ export async function getHistoricalSummary(): Promise<any | undefined> {
 
     return historicalSummary;
   } catch (e) {
-    return undefined;
+    return [];
   }
 }
 
@@ -80,6 +93,11 @@ export async function getFeesApr(): Promise<any | undefined> {
 
     return historicalSummary;
   } catch (e) {
-    return undefined;
+    return {
+      apr: "0",
+      combined_fees: "0",
+      fees_to_bgt: "0",
+      fees_to_honey: "0",
+    };
   }
 }
