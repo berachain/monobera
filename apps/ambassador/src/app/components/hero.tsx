@@ -5,7 +5,7 @@ import { Button } from "@bera/ui/button";
 
 export default function Hero() {
   return (
-    <div className="mb-[-120px] mt-[-60px] flex flex-col flex-wrap items-center justify-between p-4 sm:px-8 lg:flex-row lg:px-32 xl:px-48">
+    <div className="mb-[-120px] mt-[-60px] flex flex-col items-center justify-between p-4 sm:px-8 lg:flex-row lg:px-32 xl:px-48">
       <div className="mb-6 flex flex-col items-center justify-center gap-4 lg:items-start">
         <h1 className="text-center text-[42px] font-extrabold leading-[48px] lg:text-left lg:text-[64px] lg:leading-[72px]">
           <span className="bg-gradient-to-r from-[#FFB571] to-[#FF7A00] bg-clip-text text-transparent">
