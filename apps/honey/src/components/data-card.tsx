@@ -10,7 +10,7 @@ export default function DataCard({
 }: {
   icon: React.ReactNode;
   title: string;
-  value: string;
+  value: any;
   arcade: boolean;
   isLoading?: boolean;
 }) {

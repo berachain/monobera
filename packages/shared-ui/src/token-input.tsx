@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import {
   formatInputTokenValue,
-  formatUsd,
   useBeraJs,
   usePollAssetWalletBalance,
   type Token,
@@ -14,7 +13,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { getAddress } from "viem";
 
-import { SelectToken } from ".";
+import { FormattedNumber, SelectToken } from ".";
 
 type Props = {
   selected: Token | undefined;
@@ -194,14 +193,13 @@ export function TokenInput({
               <div className="flex flex-row gap-1">
                 {!hidePrice && (
                   <p className="self-center p-0 text-xs text-muted-foreground">
-                    {safeNumberAmount !== 0 &&
-                      !Number.isNaN(safeNumberAmount) && (
-                        <>
-                          {safeNumberAmount * price < 0.01
-                            ? "< $0.01"
-                            : formatUsd((safeNumberAmount * price).toFixed(2))}
-                        </>
-                      )}
+                    {safeNumberAmount !== 0 && (
+                      <FormattedNumber
+                        value={safeNumberAmount * price}
+                        symbol="USD"
+                        compact={false}
+                      />
+                    )}
                   </p>
                 )}
               </div>

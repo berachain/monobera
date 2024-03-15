@@ -127,11 +127,12 @@ export function FormattedNumber({
       className={cn(
         "relative flex inline-flex flex-row items-center text-nowrap",
         className,
-        number > 0
-          ? "text-success-foreground"
-          : number < 0
-            ? "text-destructive-foreground"
-            : "",
+        colored &&
+          (number > 0
+            ? "text-success-foreground"
+            : number < 0
+              ? "text-destructive-foreground"
+              : ""),
       )}
       {...props}
     >
