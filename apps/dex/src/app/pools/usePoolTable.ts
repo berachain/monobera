@@ -1,105 +1,71 @@
 import { useState } from "react";
-import useSWRInfinite from "swr/infinite";
 
-import { fetchPools, type PoolV2 } from "./fetchPools";
+import { formatPoolData, type PoolV2 } from "./fetchPools";
+import { chainId, crocIndexerEndpoint } from "@bera/config";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 const DEFAULT_SIZE = 8;
 
 export const usePoolTable = (sorting: any) => {
   const [search, setSearch] = useState("");
-  const [hasBgtRewards, setHasBgtRewards] = useState(false);
-  const [isNewPool, setIsNewPool] = useState(false);
-  const [isHotPool, setIsHotPool] = useState(false);
-  const [isList, setIsList] = useState(true);
   const [keyword, setKeyword] = useState("");
 
-  const [oldData, setOldData] = useState<any>(undefined);
-  const {
-    data: allData,
-    size: allDataSize,
-    setSize: setAllDataSize,
-    isLoading: isAllDataLoading,
-  } = useSWRInfinite(
-    (index) => [
-      "search",
-      index,
-      hasBgtRewards,
-      isHotPool,
-      isNewPool,
-      keyword,
-      sorting,
-    ],
-    async (key: any[]) => {
-      const page = key[1];
-      try {
-        setOldData(allData === undefined ? undefined : allData ?? []);
-        const sortOption =
-          sorting[0] !== undefined && sorting[0].id !== undefined
-            ? sorting[0].id
-            : "tvl";
-        const sortOrder =
-          sorting[0] !== undefined && sorting[0].desc !== undefined
-            ? sorting[0].desc === true
-              ? "desc"
-              : "asc"
-            : "desc";
+  const sortOption =
+    sorting[0] !== undefined && sorting[0].id !== undefined
+      ? sorting[0].id
+      : "tvl";
+  const sortOrder =
+    sorting[0] !== undefined && sorting[0].desc !== undefined
+      ? sorting[0].desc === true
+        ? "desc"
+        : "asc"
+      : "desc";
 
-        const newPools = await fetchPools(
-          page,
-          DEFAULT_SIZE,
-          sortOption,
-          sortOrder,
-          keyword,
-        );
+  const { data, fetchNextPage, isFetching, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["projects", sortOption, sortOrder, keyword],
+      queryFn: async ({ pageParam = 1, queryKey }: any) => {
+        try {
+          const res = await fetch(
+            `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
+              16,
+            )}&sortBy=${queryKey[1]}.${
+              queryKey[2]
+            }&page=${pageParam}&size=${DEFAULT_SIZE}&keyword=${queryKey[3]}`,
+          );
 
-        return newPools ?? [];
-      } catch (e) {
-        console.error(e);
-        return [];
-      }
-    },
-    {
-      fallbackData: oldData,
-    },
-  );
+          const response = await res.json();
+          return response.data.pools.map((r: any) => formatPoolData(r));
+        } catch (e) {
+          console.error(e);
+          return [];
+        }
+      },
+      initialPageParam: 1,
+      getNextPageParam: (_lastPage, pages) => {
+        return pages.length + 1;
+      },
+      staleTime: 1000 * 60 * 5, // 5 mins
+    });
 
-  const isAllDataLoadingMore =
-    isAllDataLoading ||
-    (allDataSize > 0 &&
-      allData &&
-      typeof allData[allDataSize - 1] === "undefined");
-
-  const isAllDataEmpty = allData?.[0]?.length === 0;
-
-  const isAllDataReachingEnd =
-    isAllDataEmpty ||
-    (allData && (allData[allData.length - 1]?.length ?? 0) < DEFAULT_SIZE);
-
-  const data = allData ? ([] as PoolV2[]).concat(...allData) : [];
+  const concatData = data ? ([] as PoolV2[]).concat(...data.pages) : [];
 
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {
       setKeyword(search);
     }
   };
+
+  const isReachingEnd =
+    data && data.pages[data.pages.length - 1].length < DEFAULT_SIZE;
+
   return {
-    data: data,
-    isFirstLoad: isAllDataEmpty,
-    allDataSize,
-    setAllDataSize,
-    isAllDataLoadingMore,
-    isAllDataEmpty,
-    isAllDataReachingEnd,
+    data: concatData,
+    fetchNextPage,
+    isReachingEnd,
     search,
     setSearch,
-    hasBgtRewards,
-    setHasBgtRewards,
-    isNewPool,
-    setIsNewPool,
-    isHotPool,
-    setIsHotPool,
-    isList,
-    setIsList,
+    isLoadingMore: isFetching || isFetchingNextPage,
     handleEnter,
     keyword,
     setKeyword,

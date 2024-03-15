@@ -133,6 +133,7 @@ export function CreatePoolPreview({
         ? calculateBaseTokenAmount(INITIAL_AMOUNT, encodedPriceNumber)
         : calculateQuoteTokenAmount(INITIAL_AMOUNT, encodedPriceNumber);
 
+      console.log(initialLiquidityAmount);
       const priceLimits = {
         min: getSafeNumber(initialPrice),
         max: getSafeNumber(initialPrice),
@@ -230,12 +231,12 @@ export function CreatePoolPreview({
           <PreviewToken
             token={baseToken}
             price={baseTokenHoneyPrice}
-            value={getSafeNumber(baseAmount)}
+            value={baseAmount}
           />
           <PreviewToken
             token={quoteToken}
             price={quoteTokenHoneyPrice}
-            value={getSafeNumber(quoteAmount)}
+            value={quoteAmount}
           />
         </TokenList>
         <div className="w-full rounded-lg bg-muted p-3">

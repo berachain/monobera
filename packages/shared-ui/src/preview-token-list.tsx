@@ -5,11 +5,12 @@ import { formatUsd, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 
 import { TokenIcon } from "./token-icon";
+import { getSafeNumber } from "../../../apps/bgt-station/src/utils/getSafeNumber";
 
 interface PreviewToken {
   token: Token | undefined;
   weight?: number | string;
-  value: number | undefined;
+  value: number | string | undefined;
   price?: number;
 }
 
@@ -25,7 +26,9 @@ export function PreviewToken({ token, value, price }: PreviewToken) {
       <div className="flex grow-0 cursor-not-allowed flex-col border-0 p-0 text-right text-sm text-muted-foreground outline-none">
         {value}
         {value !== undefined && price !== undefined && (
-          <span className="text-xs">({formatUsd(value * price)})</span>
+          <span className="text-xs">
+            ({formatUsd(getSafeNumber(value as any) * price)})
+          </span>
         )}
       </div>
     </li>

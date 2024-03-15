@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import { getDayStartTimestampDaysAgo } from "@bera/bera-router";
 import { formatUsd } from "@bera/berajs";
-import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { type PoolDayData } from "@bera/graphql";
 import { Dropdown, SSRSpinner } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { BigNumber } from "bignumber.js";
 import { formatUnits, parseUnits } from "viem";
 
-import { getSafeNumber } from "~/utils/getSafeNumber";
 import { PoolV2 } from "../pools/fetchPools";
 
 const Options = {
@@ -166,8 +165,6 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
 const formatHoney = (amountInHoney: number) => {
   const bnAmount = new BigNumber(amountInHoney.toString());
   return getSafeNumber(bnAmount.div(10 ** 18).toString());
-
-  // return getSafeNumber(formatUnits(parseUnits(amountInHoney.toString(), 18), 18));
 };
 
 export const PoolChart = ({
@@ -185,7 +182,6 @@ export const PoolChart = ({
   for (let i = 0; i < 90; i++) {
     quarterlyDayStartTimes.push(getDayStartTimestampDaysAgo(i));
   }
-  console.log(pool);
 
   let weeklyVolumeTotal = 0;
   let monthlyVolumeTotal = 0;

@@ -12,6 +12,7 @@ import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { getPoolUrl } from "./fetchPools";
 import { usePoolTable } from "./usePoolTable";
+import { mutate } from "swr";
 
 export const PoolSearch = ({
   poolType,
@@ -36,21 +37,18 @@ export const PoolSearch = ({
   }, []);
 
   const {
-    data,
     search,
     keyword,
     setKeyword,
     setSearch,
-    allDataSize,
-    handleEnter,
-    setAllDataSize,
-    isAllDataLoadingMore,
-    isAllDataReachingEnd,
+    data,
+    fetchNextPage,
+    isLoadingMore,
+    isReachingEnd,
   } = usePoolTable(sorting);
 
   const handleNewSort = (newSort: any) => {
     if (newSort === sorting) return;
-    void setAllDataSize(1);
     setSorting(newSort);
   };
 
@@ -145,7 +143,7 @@ export const PoolSearch = ({
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <TableViewLoading />
             </div>
-          ) : data?.length || (data.length === 0 && isAllDataLoadingMore) ? (
+          ) : data?.length || (data.length === 0 && isLoadingMore) ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <DataTable
                 key={data.length}
@@ -156,7 +154,6 @@ export const PoolSearch = ({
                 onRowClick={(row: any) =>
                   window.open(getPoolUrl(row.original), "_self")
                 }
-                // customSorting={sorting}
                 onCustomSortingChange={(a: any) => handleNewSort(a)}
               />
             </div>
@@ -167,11 +164,11 @@ export const PoolSearch = ({
           {!isFirstLoading && (
             <Button
               className="mt-8"
-              onClick={() => setAllDataSize(allDataSize + 1)}
-              disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+              onClick={() => fetchNextPage()}
+              disabled={isLoadingMore || isReachingEnd}
               variant="outline"
             >
-              {isAllDataReachingEnd ? "No more pools" : "View More"}
+              {isReachingEnd ? "No more pools" : "View More"}
             </Button>
           )}
         </TabsContent>
