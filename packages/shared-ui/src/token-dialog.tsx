@@ -344,7 +344,11 @@ const TokenDialogRow = ({
         {!pendingAddition && isConnected && (
           <div className="ml-auto text-muted-foreground truncate">
             {/* <p>{tokenBalance ?? 0}</p> */}
-            <FormattedNumber value={tokenBalance} visibleDecimals={4} compact={false}/>
+            <FormattedNumber
+              value={tokenBalance}
+              visibleDecimals={4}
+              compact={false}
+            />
           </div>
         )}
         <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
