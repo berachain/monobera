@@ -7,7 +7,7 @@ import BackGroundOrbit from "./components/background-orbit";
 import FAQ from "./components/faq";
 import Hero from "./components/hero";
 import KnowMore from "./components/know-more";
-import SignUp from "./components/signup-section/signup";
+import SignUp from "./components/signUp-section/signup";
 import { Projects } from "./components/upcoming-events/events";
 
 export const metadata: Metadata = {
