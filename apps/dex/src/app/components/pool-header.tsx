@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { truncateHash } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
 import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -61,34 +63,25 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
             </span>
           </div>
 
-          {/* <div className="hidden w-fit items-center gap-1 sm:flex">
-            {" "}
-            Pool Contract:
-            <span
-              className="cursor-pointer px-1 text-sm text-foreground hover:underline"
-              onClick={() =>
-                window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
-              }
-            >
-              {truncateHash(pool?.pool ?? "")}
-              <Icons.externalLink className="-mt-1 ml-1 inline-block h-4 w-4 text-muted-foreground" />
-            </span>
-          </div> */}
+          {
+            <div className="hidden w-fit items-center gap-1 sm:flex">
+              {" "}
+              Pool Contract:
+              <span
+                className="cursor-pointer px-1 text-sm text-foreground hover:underline"
+                onClick={() =>
+                  window.open(
+                    `${blockExplorerUrl}/address/${pool?.shareAddress}`,
+                  )
+                }
+              >
+                {truncateHash(pool?.shareAddress ?? "")}
+                <Icons.externalLink className="-mt-1 ml-1 inline-block h-4 w-4 text-muted-foreground" />
+              </span>
+            </div>
+          }
         </div>
       </div>
-      {/* <div className="flex w-fit items-center gap-1 sm:hidden ">
-        {" "}
-        Pool Contract:
-        <span
-          className="cursor-pointer px-1 text-sm text-foreground hover:underline"
-          onClick={() =>
-            window.open(`${blockExplorerUrl}/address/${pool?.pool}`)
-          }
-        >
-          {truncateHash(pool?.pool ?? "")}
-          <Icons.externalLink className="-mt-1 ml-1 inline-block h-4 w-4 text-muted-foreground" />
-        </span>
-      </div> */}
       <div className="mt-4 flex gap-2 md:mt-0">
         <Link href={getPoolAddLiquidityUrl(pool)} target="_self">
           <Button variant={"outline"}>
