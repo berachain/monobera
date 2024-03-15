@@ -34,7 +34,7 @@ export default function MyPool({
           message="You need to connect your wallet to see deposited pools and
         rewards"
         />
-      ) : isLoading && userPools === undefined ? (
+      ) : isLoading && (userPools === undefined || userPools.length === 0) ? (
         <div className="flex w-full flex-col items-center justify-center gap-4">
           {isList ? <TableViewLoading /> : <CardViewLoading />}
         </div>
