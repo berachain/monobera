@@ -1,11 +1,12 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-
-import { getMetaTitle } from "~/utils/metadata";
-import WithdrawPageContent from "./WithdrawPageContent";
 import { dexName } from "@bera/config";
 import { isAddress } from "viem";
-import { fetchSelectedPool } from "../pools/fetchPools";
+
+import { getMetaTitle } from "~/utils/metadata";
+import { fetchSelectedPool } from "../../pools/fetchPools";
+import WithdrawPageContent from "../WithdrawPageContent";
+
 export function generateMetadata(): Metadata {
   return {
     title: getMetaTitle("Withdraw Liquidity"),
@@ -16,15 +17,15 @@ export function generateMetadata(): Metadata {
 export const fetchCache = "force-no-store";
 
 export default async function Withdraw({
-  searchParams,
+  params,
 }: {
-  searchParams: { base: string; quote: string };
+  params: { shareAddress: string };
 }) {
   try {
-    if (!isAddress(searchParams.base) || !isAddress(searchParams.quote)) {
+    if (!isAddress(params.shareAddress)) {
       notFound();
     }
-    const pool = await fetchSelectedPool(searchParams.base, searchParams.quote);
+    const pool = await fetchSelectedPool(params.shareAddress);
 
     if (!pool) {
       notFound();

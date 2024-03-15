@@ -304,6 +304,9 @@ export const searchFilteredPoolList = gql`
         name
         decimals
       }
+      shareAddress {
+        address
+      }
     }
   }
 `;
