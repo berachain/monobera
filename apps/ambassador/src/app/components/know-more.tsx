@@ -23,7 +23,7 @@ export default function KnowMore() {
             </div>
           </div>
 
-          <div className="m-2 flex items-center lg:m-8">
+          <div className="m-2 flex items-start lg:mt-8">
             <Link href="/program-details">
               <Button
                 className="rounded-18 mt-4 w-full text-lg font-semibold leading-7 sm:w-auto"
