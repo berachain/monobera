@@ -1,3 +1,4 @@
+import { memo, useEffect, useState } from "react";
 import { useBeraJs } from "@bera/berajs";
 import { ConnectWalletBear, DataTable, NotFoundBear } from "@bera/shared-ui";
 
@@ -8,10 +9,22 @@ import { PoolCard } from "./PoolCard";
 import CardViewLoading from "./card-view-loading";
 import TableViewLoading from "./table-view-loading";
 
-export default function MyPool({ isList }: { isList: boolean }) {
+export default function MyPool({
+  isList,
+  keyword,
+}: {
+  isList: boolean;
+  keyword: string;
+}) {
   const { isReady } = useBeraJs();
-  const { usePositions, isLoading } = usePollUserDeposited();
-  const userPools = usePositions();
+  const { isLoading, data } = usePollUserDeposited({ keyword });
+
+  const [userPools, setUserPools] = useState<any>(undefined);
+  useEffect(() => {
+    if (data) {
+      setUserPools(data);
+    }
+  }, [data]);
 
   return (
     <>
@@ -21,11 +34,11 @@ export default function MyPool({ isList }: { isList: boolean }) {
           message="You need to connect your wallet to see deposited pools and
         rewards"
         />
-      ) : isLoading ? (
+      ) : isLoading && userPools === undefined ? (
         <div className="flex w-full flex-col items-center justify-center gap-4">
           {isList ? <TableViewLoading /> : <CardViewLoading />}
         </div>
-      ) : userPools === undefined || userPools.length === 0 ? (
+      ) : (userPools === undefined || userPools.length === 0) && !isLoading ? (
         <NotFoundBear title="No Pools found." />
       ) : isList ? (
         <div className="flex w-full flex-col items-center justify-center gap-4">

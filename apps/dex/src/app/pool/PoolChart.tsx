@@ -242,7 +242,9 @@ export const PoolChart = ({
         ? Number(poolData?.tvlUsd)
         : latestTvlSeen;
 
-      currentTvl = latestTvlSeen;
+      if (i === 0) {
+        currentTvl = latestTvlSeen;
+      }
 
       if (i < 7) {
         weeklyVolumeTotal += Number(poolData?.volumeUsd);

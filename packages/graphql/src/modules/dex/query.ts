@@ -250,9 +250,38 @@ export const getPoolList = gql`
   }
 `;
 
-export const getFilteredPoolList = gql`
-  query GetPoolList($baseAssets: [Bytes!], $quoteAssets: [Bytes!]) {
-    pools(where: { base_in: $baseAssets, quote_in: $quoteAssets }) {
+export const searchFilteredPoolList = gql`
+  query GetPoolList(
+    $baseAssets: [Bytes!]
+    $quoteAssets: [Bytes!]
+    $keyword: String
+  ) {
+    pools(
+      where: {
+        or: [
+          {
+            base_in: $baseAssets
+            quote_in: $quoteAssets
+            baseInfo_: { name_contains_nocase: $keyword }
+          }
+          {
+            base_in: $baseAssets
+            quote_in: $quoteAssets
+            baseInfo_: { symbol_contains_nocase: $keyword }
+          }
+          {
+            base_in: $baseAssets
+            quote_in: $quoteAssets
+            quoteInfo_: { name_contains_nocase: $keyword }
+          }
+          {
+            base_in: $baseAssets
+            quote_in: $quoteAssets
+            quoteInfo_: { symbol_contains_nocase: $keyword }
+          }
+        ]
+      }
+    ) {
       id
       poolIdx
       base
