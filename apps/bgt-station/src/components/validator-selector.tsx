@@ -75,7 +75,7 @@ export default function ValidatorSelector({
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
         ) : (
-          <div className="flex items-center gap-2 text-base font-medium leading-normal">
+          <div className="flex items-center gap-2 text-sm font-medium leading-normal sm:text-base">
             Select Validator
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
