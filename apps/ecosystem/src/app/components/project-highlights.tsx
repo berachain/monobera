@@ -88,7 +88,6 @@ export default function ProjectHighlights() {
   useEffect(() => {
     if (sliderRef.current) {
       const firstChild = sliderRef.current.children[0] as HTMLElement;
-      console.log(firstChild, firstChild.offsetWidth, itemWidth, "?????");
       setItemWidth(firstChild.offsetWidth);
     }
   }, []);
@@ -110,7 +109,7 @@ export default function ProjectHighlights() {
     };
 
     updatePosition();
-  }, [currentIndex, itemWidth, highlights.length]);
+  }, [currentIndex, itemWidth]);
 
   const goToPrevious = () => {
     if (sliderRef.current) {
@@ -135,17 +134,21 @@ export default function ProjectHighlights() {
   ];
 
   return (
-    <div className="w-full pb-16 pt-16 xl:w-[1280px]">
+    <div className="w-full px-4 pb-16 pt-16 xl:w-[1280px]">
       <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
         <div className="text-center text-5xl font-bold leading-[48px] text-foreground">
           Project Spotlight
         </div>
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="flex space-x-4">
-            <Button onClick={goToPrevious} className="rounded-full">
-              <Icons.arrowLeft />
+        <div className="flex flex-col items-center justify-center">
+          <div className="flex">
+            <Button
+              onClick={goToPrevious}
+              className="rounded-full"
+              variant="ghost"
+            >
+              <Icons.arrowLeft onClick={goToPrevious} />
             </Button>
-            <Button onClick={goToNext} className="rounded-full">
+            <Button onClick={goToNext} className="rounded-full" variant="ghost">
               <Icons.arrowRight />
             </Button>
           </div>

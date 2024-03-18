@@ -166,7 +166,7 @@ export default function EcosystemProjects() {
   return (
     <div
       id="dapps"
-      className="flex flex-col items-center justify-center gap-6 text-center xl:w-[1280px]"
+      className="flex w-full flex-col items-center justify-center gap-6 px-4 text-center xl:w-[1280px]"
     >
       <SearchInput
         className="h-[40px] w-full rounded-md border border-solid bg-background"
@@ -176,7 +176,7 @@ export default function EcosystemProjects() {
         }
       />
 
-      <div className="flex w-full flex-col items-center justify-between md:flex-row">
+      <div className="flex w-full flex-row flex-wrap items-center sm:justify-between">
         {ecosystemTypeTabs.map((type) => (
           <Button
             onClick={() => setEcosystemType(type.value)}
@@ -191,30 +191,27 @@ export default function EcosystemProjects() {
         ))}
       </div>
 
-      <div className="my-4 w-full border border-solid" />
+      <div className="my-2 w-full border border-solid" />
 
-      <div className="mx-auto grid w-fit grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid w-fit grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
           .map((project: any, index: number) => (
             <div
               key={index}
-              className="mx-auto flex w-full max-w-[260px] flex-col justify-between gap-4 rounded-md border border-solid bg-background p-6"
+              className="mx-auto flex w-full flex-col justify-between rounded-md border border-solid bg-background p-6 hover:bg-muted sm:h-[296px] sm:w-[260px]"
             >
               <div className="flex flex-col items-center gap-4">
                 {project.icon}
                 <div>
-                  <div className="text-3xl font-semibold leading-9">
-                    {project.name}
-                  </div>
-                  <div className="font-medium">{project.subtitle}</div>
+                  <div className="font-semibold">{project.name}</div>
                 </div>
                 <div className="flex-grow text-center text-sm leading-5 text-muted-foreground">
                   {project.description}
                 </div>
               </div>
               <Link href={project.goto}>
-                <div className="flex justify-center gap-2 text-sm text-muted-foreground">
+                <div className="flex justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:rounded-lg hover:bg-white">
                   Visit Project <Icons.arrowRight />
                 </div>
               </Link>

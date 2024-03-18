@@ -7,9 +7,9 @@ import { Button } from "@bera/ui/button";
 
 export default function MyProject() {
   return (
-    <div className="flex flex-col gap-8 pb-16 pt-12 xl:flex-row">
+    <div className="flex w-full flex-col gap-8 px-4 pb-16 pt-12 md:w-auto xl:flex-row">
       <div className="relative">
-        <div className="relative mx-auto flex min-h-[200px] rounded-xl border border-solid bg-muted px-8 py-4 md:min-h-[300px] md:min-w-[400px] lg:w-[660px]">
+        <div className="min-h-[200px] rounded-xl border border-solid bg-muted px-8 py-4 md:min-h-[300px] md:min-w-[400px] lg:w-[660px]">
           <div className="flex flex-col flex-wrap items-center justify-center md:max-w-[320px] md:items-start">
             <div className="top-0 flex flex-col flex-wrap items-center leading-10 md:items-start">
               <h1 className="text-lg font-extrabold tracking-tight text-foreground md:text-2xl md:leading-[72px]">
@@ -51,7 +51,7 @@ export default function MyProject() {
         </div>
       </div>
       <div className="relative">
-        <div className="relative flex min-h-[200px] rounded-xl border border-solid bg-muted px-8 py-4 md:min-h-[300px] md:min-w-[400px] lg:w-[660px]">
+        <div className="min-h-[200px] rounded-xl border border-solid bg-muted px-8 py-4 md:min-h-[300px] md:min-w-[400px] lg:w-[660px]">
           <div className="flex flex-col flex-wrap items-center justify-center md:max-w-[320px] md:items-start">
             <div className="top-0 flex flex-col flex-wrap items-center leading-10 md:items-start lg:left-0">
               <h1 className="text-lg font-extrabold tracking-tight text-foreground md:text-2xl md:leading-[72px]">
