@@ -77,7 +77,7 @@ export function Header({
 
         <div className="flex h-full items-center gap-2 xl:gap-2">
           {!hideTheme && <ThemeToggleMobile />}
-          {isReady && <BGTStatusBtn />}
+          {/* {isReady && <BGTStatusBtn />} */}
           <Link
             className="hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-md sm:flex"
             href={faucetUrl ?? ""}

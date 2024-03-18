@@ -104,7 +104,7 @@ export function PlaceOrder({
       pairIndex: pairIndex,
       index: 0,
       initialPosToken: 0,
-      positionSizeDai: parsedPositionSize, // position size
+      positionSizeHoney: parsedPositionSize, // position size
       openPrice:
         form.optionType === "market"
           ? BigInt(price ?? 0)
