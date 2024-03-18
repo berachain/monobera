@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   formatInputTokenValue,
   useBeraJs,
@@ -34,7 +34,7 @@ type Props = {
   onExceeding?: (isExceeding: boolean) => void;
   setIsTyping?: (isTyping: boolean) => void;
   isActionLoading?: boolean | undefined;
-  slippage?: number | null;
+  priceImpact?: number | null;
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -58,7 +58,7 @@ export function TokenInput({
   onExceeding = undefined,
   hideMax = false,
   isActionLoading = undefined,
-  slippage,
+  priceImpact,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
@@ -97,6 +97,27 @@ export function TokenInput({
   useEffect(() => {
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
   }, [exceeding]);
+
+  const priceImpactColorClass = useMemo(() => {
+    if (!priceImpact) return "";
+    let result = "";
+    if (priceImpact > 10) {
+      result = "text-green-500";
+    } else if (priceImpact > 5) {
+      result = "text-green-400";
+    } else if (priceImpact > 2) {
+      result = "text-green-300";
+    } else if (priceImpact > -3) {
+      result = "text-neutral-400";
+    } else if (priceImpact > -5) {
+      result = "text-amber-300";
+    } else if (priceImpact > -10) {
+      result = "text-red-400";
+    } else {
+      result = "text-red-500";
+    }
+    return result;
+  }, [priceImpact]);
 
   return (
     <li className={"flex flex-col flex-wrap px-3"}>
@@ -169,55 +190,49 @@ export function TokenInput({
           />
         </div>
       </div>
-      {isConnected && selected && tokenBalance !== 0 ? (
-        <div className="mb-4 h-fit w-full cursor-default">
-          {hideBalance ? null : (
-            <div className="mt-[-10px] flex w-full items-center justify-between gap-1">
-              <div className="flex flex-row items-center justify-start gap-1 px-1">
-                <Icons.wallet className="h-3 w-3 text-muted-foreground" />
-                <p className="w-fit max-w-[60px] overflow-hidden truncate p-0 text-xs text-muted-foreground">
-                  {tokenBalance ? tokenBalance : "0"}
+      <div className="mb-4 h-fit w-full cursor-default">
+        <div className="mt-[-10px] flex w-full flex-row-reverse items-center justify-between gap-1">
+          <div className="flex flex-row gap-1">
+            {!hidePrice && (
+              <div className="flex flex-row gap-1 self-center p-0 text-xs text-muted-foreground">
+                {priceImpact && (
+                  <p className={`${priceImpactColorClass}`}>
+                    {`(${priceImpact}%) `}
+                  </p>
+                )}
+                {safeNumberAmount !== 0 && (
+                  <FormattedNumber
+                    value={safeNumberAmount * price}
+                    symbol="USD"
+                    compact={false}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+          {isConnected && selected && tokenBalance !== 0 && (
+            <div className="flex flex-row items-center justify-start gap-1 px-1">
+              <Icons.wallet className="h-3 w-3 text-muted-foreground" />
+              <p className="w-fit max-w-[60px] overflow-hidden truncate p-0 text-xs text-muted-foreground">
+                {tokenBalance ? tokenBalance : "0"}
+              </p>
+              {!hideMax && (
+                <p
+                  className="cursor-pointer select-none text-xs text-muted-foreground underline hover:text-foreground"
+                  onClick={() => {
+                    setAmount &&
+                      tokenBalance !== "" &&
+                      tokenBalance !== "0" &&
+                      setAmount(tokenBalance?.toString() ?? "");
+                  }}
+                >
+                  MAX
                 </p>
-                {!hideMax && (
-                  <p
-                    className="cursor-pointer select-none text-xs text-muted-foreground underline hover:text-foreground"
-                    onClick={() => {
-                      setAmount &&
-                        tokenBalance !== "" &&
-                        tokenBalance !== "0" &&
-                        setAmount(tokenBalance?.toString() ?? "");
-                    }}
-                  >
-                    MAX
-                  </p>
-                )}
-              </div>
-              <div className="flex flex-row gap-1">
-                {!hidePrice && (
-                  <p className="self-center p-0 text-xs text-muted-foreground">
-                    {slippage && (
-                      <span
-                        className={
-                          slippage < 0 ? "text-red-500" : "text-green-500"
-                        }
-                      >
-                        {`(${slippage > 0 ? "+" : ""}${slippage}%) `}
-                      </span>
-                    )}
-                    {safeNumberAmount !== 0 && (
-                      <FormattedNumber
-                        value={safeNumberAmount * price}
-                        symbol="USD"
-                        compact={false}
-                      />
-                    )}
-                  </p>
-                )}
-              </div>
+              )}
             </div>
           )}
         </div>
-      ) : null}
+      </div>
     </li>
   );
 }

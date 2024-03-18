@@ -375,7 +375,7 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setToAmount(amount);
                     }}
-                    slippage={priceImpact}
+                    priceImpact={priceImpact}
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
                   />
