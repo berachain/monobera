@@ -13,7 +13,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { getAddress } from "viem";
 
-import { FormattedNumber, SelectToken } from ".";
+import { FormattedNumber, SelectToken, TooltipCustom } from ".";
 
 type Props = {
   selected: Token | undefined;
@@ -196,9 +196,20 @@ export function TokenInput({
             {!hidePrice && (
               <div className="flex flex-row gap-1 self-center p-0 text-xs text-muted-foreground">
                 {priceImpact && (
-                  <p className={`${priceImpactColorClass}`}>
-                    {`(${priceImpact}%) `}
-                  </p>
+                  <TooltipCustom
+                    anchor="left"
+                    position="right"
+                    tooltipContent={
+                      <p className="text-xs">
+                        The estimated difference between the USD values of input
+                        and output amounts.
+                      </p>
+                    }
+                  >
+                    <p className={`${priceImpactColorClass}`}>
+                      {`(${priceImpact}%) `}
+                    </p>
+                  </TooltipCustom>
                 )}
                 {safeNumberAmount !== 0 && (
                   <FormattedNumber

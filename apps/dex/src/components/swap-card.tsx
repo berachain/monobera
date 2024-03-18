@@ -383,6 +383,8 @@ export function SwapCard({
                 </ul>
                 {priceImpact && priceImpact < -10 && (
                   <TooltipCustom
+                    anchor="bottom-center"
+                    position="bottom-center"
                     tooltipContent={
                       <p className="text-xs">
                         A swap of this size may have a high price impact, given
