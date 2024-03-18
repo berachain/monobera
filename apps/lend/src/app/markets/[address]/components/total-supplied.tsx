@@ -2,18 +2,9 @@
 
 import { useMemo, useState } from "react";
 import { useQuery } from "@apollo/client";
-import {
-  TimeFrame,
-  formatter,
-  getTime,
-  type TimeFrame as TimeFrameT,
-} from "@bera/berajs";
-import {
-  GetHistoryDayRates,
-  GetHistoryHourRates,
-  GetTest,
-} from "@bera/graphql";
-import { Tooltip } from "@bera/shared-ui";
+import { TimeFrame, getTime, type TimeFrame as TimeFrameT } from "@bera/berajs";
+import { GetHistoryDayRates, GetHistoryHourRates } from "@bera/graphql";
+import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -28,9 +19,11 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
     {
       title: "Max LTV",
       value: reserveData ? (
-        `${(Number(reserveData?.formattedBaseLTVasCollateral) * 100).toFixed(
-          2,
-        )}%`
+        <FormattedNumber
+          value={reserveData?.formattedBaseLTVasCollateral}
+          compact={false}
+          percent
+        />
       ) : (
         <Skeleton className="h-7 w-20" />
       ),
@@ -49,9 +42,11 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
     {
       title: "Liquidation Threshold",
       value: reserveData ? (
-        `${(
-          Number(reserveData?.formattedReserveLiquidationThreshold) * 100
-        ).toFixed(2)}%`
+        <FormattedNumber
+          value={reserveData?.formattedReserveLiquidationThreshold}
+          compact={false}
+          percent
+        />
       ) : (
         <Skeleton className="h-7 w-20" />
       ),
@@ -72,9 +67,11 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
     {
       title: "Liquidation Penalty",
       value: reserveData ? (
-        `${(
-          Number(reserveData?.formattedReserveLiquidationBonus) * 100
-        ).toFixed(2)}%`
+        <FormattedNumber
+          value={reserveData?.formattedReserveLiquidationBonus}
+          compact={false}
+          percent
+        />
       ) : (
         <Skeleton className="h-7 w-20" />
       ),
@@ -126,16 +123,23 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
             </div>
             {reserveData ? (
               <div className="font-semibold leading-7 md:text-xl">
-                {formatter.format(Number(reserveData?.totalLiquidity))} of{" "}
-                {formatter.format(Number(reserveData?.supplyCap))}
+                <FormattedNumber value={reserveData?.totalLiquidity} /> of{" "}
+                <FormattedNumber value={reserveData?.supplyCap} />
               </div>
             ) : (
               <Skeleton className="h-7 w-[150px]" />
             )}
             {reserveData ? (
               <div className="text-xs font-medium leading-tight text-muted-foreground">
-                ${formatter.format(Number(reserveData?.totalLiquidityUSD))} of $
-                {formatter.format(Number(reserveData?.supplyCapUSD))}
+                <FormattedNumber
+                  value={reserveData?.totalLiquidityUSD}
+                  symbol="USD"
+                />{" "}
+                of{" "}
+                <FormattedNumber
+                  value={reserveData?.supplyCapUSD}
+                  symbol="USD"
+                />
               </div>
             ) : (
               <Skeleton className="h-4 w-[100px]" />
@@ -148,7 +152,7 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
             </div>
             {reserveData ? (
               <div className="font-semibold leading-7 md:text-xl">
-                {(Number(reserveData.supplyAPY) * 100).toFixed(2)}%
+                <FormattedNumber value={reserveData?.supplyAPY} percent />
               </div>
             ) : (
               <Skeleton className="h-7 w-20" />
