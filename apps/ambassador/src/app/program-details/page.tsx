@@ -14,18 +14,18 @@ export default function AmbassadorProgram() {
           content="Learn more about the ambassador program and how you can contribute to the Berachain ecosystem."
         />
       </Head>
-      <div className="flex max-w-[1440px] flex-wrap items-center justify-center p-4">
+      <div className="flex max-w-[1440px] flex-wrap items-center justify-center sm:p-4">
         <div className="mb-6 text-center">
-          <div className="flex-start flex items-center justify-between px-8">
-            <div className="mt-32">
-              <h1 className="mb-4 text-left text-5xl font-bold text-foreground">
+          <div className="flex-start flex items-center justify-between px-8 sm:items-end">
+            <div className="mt-32 pb-8">
+              <h1 className="mb-4 text-center sm:text-left text-5xl font-bold text-foreground">
                 Ambassador <br /> Program Overview
               </h1>
-              <p className="mb-6 px-1 text-left text-xl text-muted-foreground">
-                Nurturing Community Growth with the Bera Legion
+              <p className="mb-6 px-1 text-center sm:text-left text-xl text-muted-foreground">
+                Nurturing Community Growth <br />with the Bera Legion
               </p>
             </div>
-            <div>
+            <div className="hidden sm:block max-w-[420px]">
               <Image
                 src="/knowmoarbear.png"
                 alt="Bera Legion"
@@ -35,7 +35,7 @@ export default function AmbassadorProgram() {
               />
             </div>
           </div>
-          <p className="mb-4 rounded-md bg-muted px-6 py-4 text-lg text-foreground">
+          <p className="mb-2 rounded-md bg-muted px-6 py-4 text-lg text-foreground">
             The Bera Legion is more than just a program; it&apos;s a commitment
             to fostering a vibrant and engaged community within the Berachain
             ecosystem. With a tiered system designed to empower individuals who
@@ -45,13 +45,13 @@ export default function AmbassadorProgram() {
           </p>
         </div>
         <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg shadow-lg">
-          <div className="flex w-full flex-col items-stretch justify-center gap-8 align-middle sm:flex-row">
+          <div className="flex w-full flex-col items-stretch justify-center gap-6 align-middle sm:flex-row">
             <section
-              className="mb-6 flex-grow rounded-lg bg-muted p-4"
+              className="mb-2 flex-grow rounded-lg bg-muted p-4"
               style={{ flexBasis: "0" }}
-            >
+              >
               <div className="flex h-full flex-col rounded-md">
-                <div className="flex h-full flex-col justify-between gap-8 p-6">
+                <div className="flex h-full flex-col justify-between gap-4 p-4">
                   <div>
                     <h1 className="mb-2 text-3xl font-semibold text-foreground">
                       1. General Expectations
@@ -81,11 +81,11 @@ export default function AmbassadorProgram() {
               </div>
             </section>
             <section
-              className="mb-6 flex-grow rounded-lg bg-muted"
+              className="mb-2 flex-grow rounded-lg bg-muted"
               style={{ flexBasis: "0" }}
-            >
+              >
               <div className="flex rounded-md">
-                <div className="flex-col gap-8 p-6">
+                <div className="flex-col p-6">
                   <Image
                     src="/beralegion.png"
                     alt="Bera Legion"
