@@ -1,15 +1,10 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
-import {
-  TimeFrame,
-  formatter,
-  getTime,
-  type TimeFrame as TimeFrameT,
-} from "@bera/berajs";
+import { TimeFrame, getTime, type TimeFrame as TimeFrameT } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { GetHistoryDayRates, GetHistoryHourRates } from "@bera/graphql";
-import { Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -24,7 +19,11 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
     {
       title: "Reserve factor",
       value: reserveData ? (
-        `${Number(reserveData?.reserveFactor) * 100}%`
+        <FormattedNumber
+          value={reserveData?.reserveFactor}
+          compact={false}
+          percent
+        />
       ) : (
         <Skeleton className="h-7 w-20" />
       ),
@@ -90,16 +89,23 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
               </div>
               {reserveData ? (
                 <div className=" font-semibold leading-7 md:text-xl">
-                  {formatter.format(Number(reserveData?.totalDebt))} of{" "}
-                  {formatter.format(Number(reserveData?.borrowCap))}
+                  <FormattedNumber value={reserveData?.totalDebt} /> of{" "}
+                  <FormattedNumber value={reserveData?.borrowCap} />
                 </div>
               ) : (
                 <Skeleton className="h-7 w-[150px]" />
               )}
               {reserveData ? (
                 <div className="text-xs font-medium leading-tight text-muted-foreground">
-                  ${formatter.format(Number(reserveData?.totalDebtUSD))} of $
-                  {formatter.format(Number(reserveData?.borrowCapUSD))}
+                  <FormattedNumber
+                    value={reserveData?.totalDebtUSD}
+                    symbol="USD"
+                  />{" "}
+                  of{" "}
+                  <FormattedNumber
+                    value={reserveData?.borrowCapUSD}
+                    symbol="USD"
+                  />
                 </div>
               ) : (
                 <Skeleton className="h-4 w-[150px]" />
@@ -114,24 +120,28 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
               </div>
               {reserveData ? (
                 <div className="font-semibold leading-7 md:text-xl">
-                  {formatter.format(
-                    Number(reserveData?.totalLiquidity) *
-                      Number(1 - reserveData?.borrowUsageRatio),
-                  )}
+                  <FormattedNumber
+                    value={
+                      Number(reserveData?.totalLiquidity) *
+                      Number(1 - reserveData?.borrowUsageRatio)
+                    }
+                  />
                 </div>
               ) : (
                 <Skeleton className="h-7 w-[100px]" />
               )}
               {reserveData ? (
                 <div className="text-xs font-medium leading-tight text-muted-foreground">
-                  ${" "}
-                  {formatter.format(
-                    Number(reserveData?.totalLiquidity) *
+                  <FormattedNumber
+                    value={
+                      Number(reserveData?.totalLiquidity) *
                       Number(
                         reserveData?.formattedPriceInMarketReferenceCurrency,
                       ) *
-                      Number(1 - reserveData?.borrowUsageRatio),
-                  )}
+                      Number(1 - reserveData?.borrowUsageRatio)
+                    }
+                    symbol="USD"
+                  />
                 </div>
               ) : (
                 <Skeleton className="h-4 w-[100px]" />
@@ -153,7 +163,10 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
               </div>
               {reserveData ? (
                 <div className="font-semibold leading-7 md:text-xl">
-                  {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
+                  <FormattedNumber
+                    value={reserveData?.variableBorrowAPY}
+                    percent
+                  />
                 </div>
               ) : (
                 <Skeleton className="h-7 w-20" />

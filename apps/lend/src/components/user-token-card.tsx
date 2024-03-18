@@ -1,6 +1,6 @@
 import { formatter, usePollAssetWalletBalance } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
-import { TokenIcon, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -82,18 +82,20 @@ export default function UserTokenCard({
             </div>
 
             <div className="flex h-8 items-center gap-1 text-lg font-bold uppercase">
-              {formatter.format(balance)} {asset.symbol}
+              <FormattedNumber value={balance} symbol={asset.symbol} />
               <Tooltip text={<AssetInfo asset={asset} />} />
             </div>
             <div className="text-xs font-medium leading-tight">
-              $
-              {formatter.format(
-                Number(balance) *
+              <FormattedNumber
+                symbol="USD"
+                value={
+                  Number(balance) *
                   Number(
                     asset.reserveData
                       ?.formattedPriceInMarketReferenceCurrency ?? "0",
-                  ),
-              )}
+                  )
+                }
+              />
             </div>
           </div>
         </div>
@@ -115,7 +117,10 @@ export default function UserTokenCard({
                 />
               </div>
               <div className="text-lg font-bold text-success-foreground">
-                {(Number(asset.reserveData.supplyAPY) * 100).toFixed(2)}%
+                <FormattedNumber
+                  value={asset.reserveData?.supplyAPY ?? 0}
+                  percent
+                />
               </div>
             </div>
           )}
@@ -135,10 +140,10 @@ export default function UserTokenCard({
               />
             </div>
             <div className="text-lg font-bold text-warning-foreground">
-              {(
-                Number(asset.reserveData?.variableBorrowAPY ?? 0) * 100
-              ).toFixed(2)}
-              %
+              <FormattedNumber
+                value={asset.reserveData?.variableBorrowAPY ?? 0}
+                percent
+              />
             </div>
           </div>
         )}
@@ -150,7 +155,10 @@ export default function UserTokenCard({
               <Tooltip text="Variable interest rate will fluctuate based on the market conditions. See additional disclaimers in notes below." />
             </div>
             <div className="text-lg font-bold text-warning-foreground">
-              {(Number(asset.reserveData.variableBorrowAPY) * 100).toFixed(2)}%
+              <FormattedNumber
+                value={asset.reserveData.variableBorrowAPY}
+                percent
+              />
             </div>
           </div>
         )}

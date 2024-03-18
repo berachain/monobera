@@ -1,13 +1,8 @@
-export const getLTVColor = (ltv: number) => {
-  if (ltv < 0) {
-    return "success-foreground";
-  }
-  if (ltv < 1.1) {
-    return "destructive-foreground";
-  }
-  if (ltv < 3) {
-    return "warning-foreground";
-  }
+export const getLTVColor = (ltv: number | "∞") => {
+  if (ltv === "∞") return "success-foreground";
+  if (ltv < 0) return "success-foreground";
+  if (ltv < 1.1) return "destructive-foreground";
+  if (ltv < 3) return "warning-foreground";
   return "success-foreground";
 };
 

@@ -13,8 +13,9 @@ import {
   honeyTokenAddress,
   lendHoneyDebtTokenAddress,
 } from "@bera/config";
-import { TokenIcon, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
 import { formatEther } from "viem";
@@ -22,7 +23,6 @@ import { formatEther } from "viem";
 import BGTRewardsClaimBtn from "./bgt-rewards-claim-btn";
 import BorrowBtn from "./modals/borrow-button";
 import RepayBtn from "./modals/repay-button";
-import { Icons } from "@bera/ui/icons";
 
 export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
@@ -47,7 +47,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
       <div className="flex flex-col gap-4 px-3 py-4">
         <div>
           <div className="flex items-center gap-1 text-xs font-medium leading-5 text-yellow-900 text-opacity-60 dark:text-yellow-200">
-            Your Borrow Capacity Used {bgtApr}{" "}
+            Your Borrow Capacity Used
             <Tooltip
               text={
                 <div className="bg-background">
@@ -61,11 +61,12 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
           </div>
           <div className="flex items-center gap-1 text-3xl font-semibold text-yellow-900 dark:text-yellow-200">
             <TokenIcon address={honeyTokenAddress} className="h-8 w-8" />
-            <span className="opacity-80">
-              {formatter.format(debtTokenBalance?.formattedBalance ?? "0")}
-            </span>
-            {/* @ts-ignore */}/
-            <span>{formatter.format(userTotalBorrowAllowance)}</span>
+            <FormattedNumber
+              className="opacity-80"
+              value={debtTokenBalance?.formattedBalance ?? "0"}
+            />
+            /
+            <FormattedNumber value={userTotalBorrowAllowance ?? "0"} />
           </div>
         </div>
 
@@ -77,7 +78,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
               Earning BGT APY
             </div>
             <div className=" text-xl font-semibold leading-7  text-success-foreground">
-              +{(Number(bgtApr ?? "0") * 100).toFixed(2)}%
+              +<FormattedNumber value={bgtApr ?? "0"} percent />
             </div>
           </div>
           <div>
@@ -85,11 +86,10 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
               Paying Loan APY
             </div>
             <div className="text-xl font-semibold leading-7 text-warning-foreground">
-              -
-              {(
-                Number(honeyAsset?.reserveData?.variableBorrowAPY) * 100
-              ).toFixed(2)}
-              %
+              <FormattedNumber
+                value={-honeyAsset?.reserveData?.variableBorrowAPY}
+                percent
+              />
             </div>
           </div>
         </div>
@@ -101,13 +101,15 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
             Your BGT Rewards
           </div>
           <div className="flex items-center gap-1">
-            <Icons.bgt className="w-3 h-3" />
+            <Icons.bgt className="h-3 w-3" />
             {isUserBGTRewardLoading ? (
               <Skeleton className="h-4 w-20" />
             ) : (
-              <span className="text-sm font-semibold text-yellow-900 dark:text-yellow-200">
-                {formatEther((rewards ?? 0n) as bigint)} BGT
-              </span>
+              <FormattedNumber
+                className="text-sm font-semibold text-yellow-900 dark:text-yellow-200"
+                value={formatEther((rewards ?? 0n) as bigint)}
+                symbol="BGT"
+              />
             )}
           </div>
         </div>

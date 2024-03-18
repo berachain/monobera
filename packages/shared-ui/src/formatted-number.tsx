@@ -84,6 +84,7 @@ export function FormattedNumber({
   colored = false,
   roundDown = false,
   compactThreshold,
+  maxValue,
   className,
   ...props
 }: {
@@ -95,6 +96,7 @@ export function FormattedNumber({
   colored?: boolean; // smol than 0 red, big than 0 green, 0 stays default
   roundDown?: boolean;
   compactThreshold?: number; //function serves to determine when a number should be presented in its compact form (with postfixes like K, M, B for thousands, millions, billions, etc.)
+  maxValue?: number;
   className?: string;
 }) {
   const number = percent ? Number(value) * 100 : Number(value);
@@ -113,6 +115,7 @@ export function FormattedNumber({
   const minValue = 10 ** -(decimals as number);
   const isSmallerThanMin =
     number !== 0 && Math.abs(number) < Math.abs(minValue);
+  const isBiggerThanMax = maxValue && Math.abs(number) > maxValue;
   let formattedNumber = isSmallerThanMin ? minValue : number;
   const forceCompact =
     (compactThreshold && number > compactThreshold) || compact;
@@ -136,11 +139,14 @@ export function FormattedNumber({
       )}
       {...props}
     >
+      {isSmallerThanMin && number < 0 && "-("}
       {isSmallerThanMin && <span className="mr-0.5">{"<"}</span>}
       {symbol?.toLowerCase() === "usd" && !percent && (
         <span className="mr-0.5">$</span>
       )}
-      {!forceCompact ? (
+      {isBiggerThanMax ? (
+        "∞"
+      ) : !forceCompact ? (
         new Intl.NumberFormat("en-US", {
           maximumFractionDigits: decimals,
           minimumFractionDigits: decimals,
@@ -155,6 +161,7 @@ export function FormattedNumber({
         />
       )}
       {percent && <span className="ml-0.5">%</span>}
+      {isSmallerThanMin && number < 0 && ")"}
       {symbol?.toLowerCase() !== "usd" && typeof symbol !== "undefined" && (
         <span className="ml-0.5">{symbol}</span>
       )}
