@@ -23,8 +23,8 @@ export default function Hero() {
           className="absolute left-0 top-0 z-0"
         />
 
-        <div className="z-10 flex w-full flex-col items-center justify-center p-4 md:p-0 lg:absolute lg:items-start">
-          <div className="mt-4 flex flex-col flex-wrap justify-center gap-4 md:justify-start">
+        <div className="z-10 flex w-full flex-col items-center justify-center p-4 md:p-0 xl:absolute xl:items-start">
+          <div className="mt-4 flex flex-col flex-wrap items-center justify-center gap-4 xl:items-start xl:justify-start">
             <h1 className="text-5xl font-extrabold leading-[72px] tracking-tight text-foreground">
               Berachain
               <br />
@@ -37,10 +37,10 @@ export default function Hero() {
             </h2>
           </div>
 
-          <div className="mt-4 flex flex-col flex-wrap justify-center gap-4 md:flex-row md:justify-start">
+          <div className="mt-4 flex flex-col items-center justify-center gap-4 md:flex-row xl:justify-start">
             <Link href={"/dashboard"}>
               <Button
-                className="rounded-18 mt-8 w-full text-lg font-semibold leading-7 sm:w-auto"
+                className="rounded-18 w-full text-lg font-semibold leading-7 sm:w-auto"
                 size={"lg"}
               >
                 <Icons.hammer />
@@ -49,7 +49,7 @@ export default function Hero() {
             </Link>
             <Link href={"/dashboard"}>
               <Button
-                className="rounded-18 mt-8 w-full text-lg font-semibold leading-7 sm:w-auto"
+                className="rounded-18 w-full text-lg font-semibold leading-7 sm:w-auto"
                 size={"lg"}
                 variant="secondary"
               >

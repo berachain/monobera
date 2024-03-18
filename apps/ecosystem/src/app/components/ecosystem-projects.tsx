@@ -166,7 +166,7 @@ export default function EcosystemProjects() {
   return (
     <div
       id="dapps"
-      className="mt-16 flex flex-col items-center justify-center gap-6 text-center lg:w-[1280px]"
+      className="flex flex-col items-center justify-center gap-6 text-center xl:w-[1280px]"
     >
       <SearchInput
         className="h-[40px] w-full rounded-md border border-solid bg-background"
@@ -176,7 +176,7 @@ export default function EcosystemProjects() {
         }
       />
 
-      <div className="flex w-full flex-row items-center justify-center gap-2">
+      <div className="flex w-full flex-col items-center justify-between md:flex-row">
         {ecosystemTypeTabs.map((type) => (
           <Button
             onClick={() => setEcosystemType(type.value)}
@@ -193,7 +193,7 @@ export default function EcosystemProjects() {
 
       <div className="my-4 w-full border border-solid" />
 
-      <div className="mx-auto grid w-fit grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid w-fit grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
           .map((project: any, index: number) => (

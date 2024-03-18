@@ -135,9 +135,9 @@ export default function ProjectHighlights() {
   ];
 
   return (
-    <div className="w-[1280px] px-0 pb-16 pt-[64px]">
-      <div className="flex max-w-[1280px] items-center justify-between px-4 py-8">
-        <div className="text-5xl font-bold leading-[48px] text-foreground">
+    <div className="w-full pb-16 pt-16 xl:w-[1280px]">
+      <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+        <div className="text-center text-5xl font-bold leading-[48px] text-foreground">
           Project Spotlight
         </div>
         <div className="flex flex-col items-center justify-center space-y-4">
