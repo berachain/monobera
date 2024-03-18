@@ -7,7 +7,7 @@ import { Button } from "@bera/ui/button";
 
 export default function MyProject() {
   return (
-    <div className="flex w-full flex-col gap-8 px-4 pb-16 pt-12 md:w-auto xl:flex-row">
+    <div className="flex w-full flex-col gap-8 px-4 pb-16 pt-12 md:w-auto xl:flex-row ">
       <div className="relative">
         <div className="min-h-[200px] rounded-xl border border-solid bg-muted px-8 py-4 md:min-h-[300px] md:min-w-[400px] lg:w-[660px]">
           <div className="flex flex-col flex-wrap items-center justify-center md:max-w-[320px] md:items-start">
