@@ -9,10 +9,8 @@ import { formatUnits } from "viem";
 
 import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
 import { CloseOrderModal } from "~/app/components/close-order-modal";
-import { ClosePositionModal } from "~/app/components/close-position-modal";
 import { PositionTitle } from "~/app/components/position-title";
 import { UpdateLimitOrderModal } from "~/app/components/update-limit-order-modal";
-import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { useCalculatePnl } from "~/hooks/useCalculatePnl";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
@@ -195,7 +193,11 @@ export const PnlWithPercentage = ({
   );
 };
 
-export const getPositionColumns = (markets: IMarket[]) => {
+export const getPositionColumns = (
+  markets: IMarket[],
+  setUpdateOpen: (state: boolean | IMarketOrder) => void,
+  setDeleteOpen: (state: boolean | IMarketOrder) => void,
+) => {
   const positions_columns: ColumnDef<IMarketOrder>[] = [
     {
       header: ({ column }) => (
@@ -349,19 +351,14 @@ export const getPositionColumns = (markets: IMarket[]) => {
         <DataTableColumnHeader column={column} title="Manage" />
       ),
       cell: ({ row }) => (
-        <div className="flex items-center gap-1">
-          <UpdatePositionModal
-            type={"market"}
-            openPosition={row.original}
-            trigger={
-              <Icons.fileEdit className="h-4 w-4 cursor-pointer text-muted-foreground" />
-            }
+        <div className="flex align-center">
+          <Icons.fileEdit
+            className="mt-1 h-4 w-4 cursor-pointer text-muted-foreground"
+            onClick={() => setUpdateOpen(row.original)}
           />
-          <ClosePositionModal
-            trigger={
-              <Icons.close className="h-6 w-6 cursor-pointer text-destructive-foreground" />
-            }
-            openPosition={row.original}
+          <Icons.close
+            className="h-6 w-6 cursor-pointer text-destructive-foreground"
+            onClick={() => setDeleteOpen(row.original)}
           />
         </div>
       ),
