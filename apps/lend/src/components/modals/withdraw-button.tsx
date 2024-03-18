@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  formatter,
   lendPoolImplementationABI,
   useBeraJs,
   usePollReservesDataList,
@@ -15,7 +14,7 @@ import {
   honeyTokenAddress,
   lendPoolImplementationAddress,
 } from "@bera/config";
-import { TokenInput, useTxn } from "@bera/shared-ui";
+import { FormattedNumber, TokenInput, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -96,10 +95,7 @@ const WithdrawModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  const currentHealthFactor =
-    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
-      ? "∞"
-      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+  const currentHealthFactor = formatEther(userAccountData?.healthFactor || "0");
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency:
@@ -154,63 +150,43 @@ const WithdrawModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="w-[200px] truncate text-right font-semibold">
-            {" "}
-            $
-            {formatter.format(
+          <FormattedNumber
+            value={
               Number(amount ?? "0") *
-                Number(reserveData?.formattedPriceInMarketReferenceCurrency),
-            )}
-          </div>
+              Number(reserveData?.formattedPriceInMarketReferenceCurrency)
+            }
+            symbol="USD"
+            className="w-[200px] justify-end truncate text-right font-semibold"
+          />
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Supply APY</div>
           <div className="font-semibold text-success-foreground">
-            {(reserveData.supplyAPR * 100).toFixed(2)}%
+            <FormattedNumber value={reserveData.supplyAPY} percent />
           </div>
         </div>
         {token.address !== honeyTokenAddress && (
           <div className="flex justify-between text-sm leading-tight">
             <div className="text-muted-foreground ">LTV Health Ratio</div>
             <div className="flex items-center gap-1 font-semibold">
-              <span
+              <FormattedNumber
+                value={currentHealthFactor}
+                maxValue={999_999_999}
                 className={cn(
-                  `text-${getLTVColor(
-                    currentHealthFactor === "∞"
-                      ? 10
-                      : Number(currentHealthFactor),
-                  )}`,
+                  `text-${getLTVColor(Number(currentHealthFactor))}`,
                 )}
-              >
-                {currentHealthFactor}{" "}
-              </span>
-              <Icons.moveRight className="inline-block h-6 w-6" />{" "}
-              <span
-                className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
-              >
-                {Number(newHealthFactor.toFixed(2)) < 0
-                  ? "∞"
-                  : newHealthFactor.toFixed(2)}
-              </span>
+              />
+              <Icons.moveRight className="inline-block h-6 w-6" />
+              <FormattedNumber
+                value={newHealthFactor}
+                colored
+                maxValue={999_999_999}
+              />
+              {newHealthFactor.toString()}
             </div>
           </div>
         )}
       </div>
-
-      {/* {token.address !== honeyTokenAddress &&
-        userAccountData.totalDebtBase !== 0n &&
-        newHealthFactor.toNumber() < 1.02 && (
-          <Alert variant="destructive">
-            <AlertTitle className="mb-1">
-              {" "}
-              <Icons.info className="inline-block h-4 w-4" /> Liquidation Risk
-            </AlertTitle>
-            <AlertDescription>
-              Withdrawing this amount will reduce your health factor and
-              increase risk of liquidation.
-            </AlertDescription>
-          </Alert>
-        )} */}
 
       {token.address !== honeyAddress && userAccountData.totalDebtBase > 0n && (
         <Alert variant="destructive">

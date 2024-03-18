@@ -9,7 +9,7 @@ import {
   honeyTokenAddress,
   lendHoneyDebtTokenAddress,
 } from "@bera/config";
-import { TokenIcon, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 export default function BGTApy() {
@@ -21,14 +21,13 @@ export default function BGTApy() {
     address: lendHoneyDebtTokenAddress,
   });
   const bgtApr = useBgtApr(totalBorrowed) ?? 0; // is this apr or apy? i am confused
-  const borrowApy =
-    Number(data?.[honeyTokenAddress]?.variableBorrowAPY ?? "0") * 100;
-
+  const borrowApy = Number(data?.[honeyTokenAddress]?.variableBorrowAPY ?? "0");
+  console.log("borrowApy", borrowApy, "bgtApr", bgtApr);
   return (
     <div className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-accent bg-opacity-10 pr-4 text-xl font-semibold sm:text-3xl">
       <Icons.honey className="h-10 w-10" />
       <Icons.bgt className="-ml-7 h-10 w-10" />
-      {(bgtApr - borrowApy).toFixed(2)}% APY
+      <FormattedNumber value={bgtApr - borrowApy} percent /> APY
       <Tooltip
         size={8}
         text={<BGTAPYTooltip bgtApy={bgtApr ?? 0} borrowApy={borrowApy} />}
@@ -51,7 +50,8 @@ export const BGTAPYTooltip = ({
           Honey Borrow Rewards
         </div>
         <div className="flex items-center gap-1 text-xs font-medium text-foreground">
-          {bgtApy.toFixed(2)}% <Icons.bgt className="h-3 w-3" />
+          <FormattedNumber value={bgtApy} percent />{" "}
+          <Icons.bgt className="h-3 w-3" />
         </div>
       </div>
 
@@ -60,7 +60,7 @@ export const BGTAPYTooltip = ({
           Honey Borrow Apy
         </div>
         <div className="flex items-center gap-1 text-xs font-medium text-foreground">
-          -{borrowApy.toFixed(2)}%
+          <FormattedNumber value={-borrowApy} percent />
         </div>
       </div>
 
@@ -68,12 +68,14 @@ export const BGTAPYTooltip = ({
 
       <div className="flex w-full justify-between leading-5 text-accent">
         <div className="text-xs font-medium">Boosted Borrow APY</div>
-        <div className="flex items-center gap-1 text-xs font-medium">
-          {(bgtApy - borrowApy).toFixed(2)}%
-        </div>
+        <FormattedNumber
+          value={bgtApy - borrowApy}
+          percent
+          className="text-xs font-medium"
+        />
       </div>
 
-      <div className="text-xs text-muted-foreground font-normal mt-2">
+      <div className="mt-2 text-xs font-normal text-muted-foreground">
         Boosted APY is calculated by subtracting the borrow rate and adding the
         BGT Reward rate.
       </div>
