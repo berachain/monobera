@@ -16,6 +16,7 @@ import {
   ActionButton,
   ApproveButton,
   TokenInput,
+  TooltipCustom,
   useTxn,
 } from "@bera/shared-ui";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
@@ -320,7 +321,7 @@ export function SwapCard({
               Swap <SettingsPopover />
             </CardTitle>
             <div className="mt-3">
-              <div className="border-1 flex flex-col gap-6 border-border">
+              <div className="border-1 flex flex-col gap-4 border-border">
                 <ul
                   className={cn(
                     "divide-y divide-border rounded-2xl border",
@@ -380,6 +381,26 @@ export function SwapCard({
                     isActionLoading={isRouteLoading && !isWrap}
                   />
                 </ul>
+                {priceImpact && priceImpact < -10 && (
+                  <TooltipCustom
+                    tooltipContent={
+                      <p className="text-xs">
+                        A swap of this size may have a high price impact, given
+                        the current liquidity in the pool. There may be a large
+                        difference between the amount of your input token and
+                        what you will receive in the output token
+                      </p>
+                    }
+                  >
+                    <Alert variant="destructive">
+                      <AlertDescription className="text-xs">
+                        <Icons.tooltip className="mr-2 mt-[-4px] inline h-4 w-4" />
+                        {`Price Impact Warning: ${priceImpact}%`}
+                      </AlertDescription>
+                    </Alert>
+                  </TooltipCustom>
+                )}
+
                 <div className="flex flex-col gap-2">
                   {!isWrap ? (
                     <div className="flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
