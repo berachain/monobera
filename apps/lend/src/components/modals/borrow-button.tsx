@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  formatter,
   lendPoolImplementationABI,
   useBeraJs,
   usePollReservesDataList,
@@ -11,7 +10,7 @@ import {
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { TokenInput, Tooltip, useTxn } from "@bera/shared-ui";
+import { FormattedNumber, TokenInput, Tooltip, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -108,11 +107,7 @@ const BorrowModalContent = ({
       ? availableLiquidity
       : borrowPower;
 
-  const currentHealthFactor =
-    BigInt(userAccountData?.healthFactor || "0") >
-    parseUnits("1000000000000", 18)
-      ? "∞"
-      : formatUnits(userAccountData.healthFactor, 18);
+  const currentHealthFactor = formatUnits(userAccountData.healthFactor, 18);
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency: formatUnits(
@@ -166,38 +161,29 @@ const BorrowModalContent = ({
             />
           </div>
           <div className="flex items-center gap-1 font-semibold">
-            <span
-              className={cn(
-                `text-${getLTVColor(
-                  currentHealthFactor === "∞"
-                    ? 10
-                    : Number(currentHealthFactor),
-                )}`,
-              )}
-            >
-              {currentHealthFactor === "∞"
-                ? currentHealthFactor
-                : Number(currentHealthFactor).toFixed(2)}{" "}
-            </span>
-            <Icons.moveRight className="inline-block h-6 w-6" />{" "}
-            <span
+            <FormattedNumber
+              value={currentHealthFactor}
+              maxValue={999_999_999}
+              className={cn(`text-${getLTVColor(Number(currentHealthFactor))}`)}
+            />
+            <Icons.moveRight className="inline-block h-6 w-6" />
+            <FormattedNumber
+              value={newHealthFactor}
               className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
-            >
-              {Number(newHealthFactor.toFixed(2)) < 0
-                ? "∞"
-                : newHealthFactor.toFixed(2)}
-            </span>
+              maxValue={999_999_999}
+            />
           </div>
         </div>
         <div className="flex items-center justify-between text-sm leading-tight">
           <div className="text-muted-foreground">Estimated Value</div>
-          <div className="w-[200px] truncate text-right font-semibold">
-            $
-            {formatter.format(
+          <FormattedNumber
+            value={
               Number(amount ?? "0") *
-                Number(reserveData?.formattedPriceInMarketReferenceCurrency),
-            )}
-          </div>
+              Number(reserveData.formattedPriceInMarketReferenceCurrency)
+            }
+            symbol="USD"
+            className="w-[200px] justify-end truncate text-right font-semibold"
+          />
         </div>
         <div className="flex items-center justify-between text-sm leading-tight">
           <div className="text-muted-foreground">
@@ -208,7 +194,7 @@ const BorrowModalContent = ({
             />
           </div>
           <div className="font-semibold text-warning-foreground">
-            {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
+            <FormattedNumber value={reserveData.variableBorrowAPY} percent />
           </div>
         </div>
       </div>

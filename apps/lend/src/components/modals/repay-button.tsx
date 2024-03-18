@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  formatter,
   lendPoolImplementationABI,
   useBeraJs,
   usePollAllowance,
@@ -13,7 +12,12 @@ import {
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { ApproveButton, TokenInput, useTxn } from "@bera/shared-ui";
+import {
+  ApproveButton,
+  FormattedNumber,
+  TokenInput,
+  useTxn,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -105,10 +109,7 @@ const RepayModalContent = ({
   const balance =
     Number(debtBalance) > Number(tokenBalance) ? tokenBalance : debtBalance;
 
-  const currentHealthFactor =
-    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
-      ? "∞"
-      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+  const currentHealthFactor = formatEther(userAccountData.healthFactor);
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency: formatUnits(
@@ -144,43 +145,36 @@ const RepayModalContent = ({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="w-[200px] truncate text-right font-semibold">
-            $
-            {formatter.format(
-              Number(amount ?? 0) *
-                Number(reserveData.formattedPriceInMarketReferenceCurrency),
-            )}
-          </div>
+          <FormattedNumber
+            value={
+              Number(amount ?? "0") *
+              Number(reserveData.formattedPriceInMarketReferenceCurrency)
+            }
+            symbol="USD"
+            className="w-[200px] justify-end truncate text-right font-semibold"
+          />
         </div>
 
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">LTV Health Ratio</div>
           <div className="flex items-center gap-2 font-semibold">
-            <span
-              className={cn(
-                `text-${getLTVColor(
-                  currentHealthFactor === "∞"
-                    ? 10
-                    : Number(currentHealthFactor),
-                )}`,
-              )}
-            >
-              {currentHealthFactor}{" "}
-            </span>
-            <Icons.moveRight className="inline-block h-6 w-6" />{" "}
-            <span
+            <FormattedNumber
+              value={currentHealthFactor}
+              maxValue={999_999_999}
+              className={cn(`text-${getLTVColor(Number(currentHealthFactor))}`)}
+            />
+            <Icons.moveRight className="inline-block h-6 w-6" />
+            <FormattedNumber
+              value={newHealthFactor.lte(0) ? 9_999_999_999 : newHealthFactor}
               className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
-            >
-              {Number(newHealthFactor.toFixed(2)) < 0
-                ? "∞"
-                : newHealthFactor.toFixed(2)}
-            </span>
+              maxValue={999_999_999}
+            />
           </div>
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Loan APY</div>
           <div className="font-semibold text-warning-foreground">
-            {(Number(reserveData.variableBorrowAPY) * 100).toFixed(2)}%
+            <FormattedNumber value={reserveData.variableBorrowAPY} percent />
           </div>
         </div>
       </div>
