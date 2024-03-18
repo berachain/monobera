@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -87,7 +87,7 @@ export function SwapCard({
     refreshAllowance,
     payload,
     exchangeRate,
-    // gasPrice,
+    gasPrice,
     tokenInPrice,
     tokenOutPrice,
     isWrap,
@@ -294,6 +294,12 @@ export function SwapCard({
     return <Connect />;
   };
 
+  const gasPriceLabel = useMemo(() => {
+    if (!gasPrice) return "-";
+    if (parseFloat(gasPrice) < 0.001) return "<0.001";
+    return `${gasPrice}`;
+  }, [gasPrice]);
+
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
@@ -394,7 +400,7 @@ export function SwapCard({
                           Gas fee
                         </p>
                         <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                          {"<0.0001 Bwei"}
+                          {gasPriceLabel}
                         </p>
                       </div>
                     </div>

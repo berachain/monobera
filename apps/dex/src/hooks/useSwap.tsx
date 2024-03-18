@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  ICrocSwapStep,
   useGasData,
   usePollAllowance,
   usePollAssetWalletBalance,
@@ -10,7 +11,6 @@ import {
   useTokenInformation,
   useTokens,
   type Token,
-  ICrocSwapStep,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
@@ -18,8 +18,10 @@ import {
   nativeTokenAddress,
 } from "@bera/config";
 import { useSlippage } from "@bera/shared-ui/src/hooks";
-import { type Address, formatUnits } from "viem";
+import { formatGwei, formatUnits, parseUnits, type Address } from "viem";
+import { useEstimateGas } from "wagmi";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBeratoken } from "~/utils/isBeraToken";
 
 export enum SwapKind {
@@ -48,9 +50,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { read: readOutput, tokenInformation: outputToken } =
     useTokenInformation();
   const { tokenDictionary } = useTokens();
-
-  // TODO: get honey price
-  const gasData = useGasData();
 
   useEffect(() => {
     if (inputCurrency) {
@@ -304,6 +303,15 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
 
+  const gasData = useEstimateGas({
+    to: process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address,
+    value: wrapType === WRAP_TYPE.WRAP ? parseUnits(`${swapAmount}`, 18) : 0n,
+  });
+  const formattedGasPrice =
+    gasData?.data && toAmount && parseFloat(toAmount) > 0
+      ? formatGwei(gasData.data)
+      : null;
+
   return {
     setSwapKind,
     setSelectedFrom,
@@ -325,7 +333,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     error: getSwapError,
     swapInfo,
     exchangeRate,
-    gasPrice: gasData?.formatted.gasPrice,
+    gasPrice: formattedGasPrice,
     isRouteLoading: isSwapLoading || isTyping,
     isWrap,
     wrapType,
