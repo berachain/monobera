@@ -126,12 +126,77 @@ export const TooltipCustom: FC<
     return result;
   }, [anchor]);
 
+  const tooltipArrowStyle = useMemo(() => {
+    // NOTE: Arrow positioning is not implement for all anchor/position combinations, feel free to implement your own
+    let result: {
+      className: null | string;
+      transform: null | string;
+    } = {
+      className: null,
+      transform: null,
+    };
+    if (anchor === "left" && position === "right") {
+      result = {
+        className: "items-center justify-end",
+        transform: "translate(-13px,-9px) rotate(180deg)",
+      };
+    }
+    if (anchor === "right" && position === "left") {
+      result = {
+        className: "items-center",
+        transform: "translate(-3px,-25%)",
+      };
+    }
+    if (anchor === "bottom-center" && position === "bottom-center") {
+      result = {
+        className: "justify-center items-start",
+        transform: "translate(-9px,1px) rotate(-270deg)",
+      };
+    }
+    if (anchor === "top-center" && position === "top-center") {
+      result = {
+        className: "justify-center items-end",
+        transform: "translate(-3px,-17px) rotate(270deg)",
+      };
+    }
+    return result;
+  }, [anchor]);
+
+  const TooltipArrow = () => {
+    if (!tooltipArrowStyle.transform && !tooltipArrowStyle.className)
+      return null;
+    return (
+      <div
+        className={`absolute z-[999] flex h-full w-full ${
+          tooltipArrowStyle.className ?? ""
+        }`}
+      >
+        <div
+          className="flex"
+          style={{ transform: tooltipArrowStyle.transform ?? "" }}
+        >
+          <div
+            className="border-1 z-[2] h-3 w-3 border bg-black"
+            style={{
+              transform: "translateY(20%) scaleX(1.3) rotate(45deg)",
+            }}
+          />
+          <div
+            className="z-[3] h-5 w-4 bg-black"
+            style={{ transform: "translateX(-50%)" }}
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
       className="relative"
     >
+      {/* Tooltip content container */}
       <div
         className={`${
           showTooltip ? "z-[999] opacity-100" : "z-[-1] opacity-0"
@@ -146,12 +211,14 @@ export const TooltipCustom: FC<
         }}
       >
         <div
-          className="border-1 m-[-2] h-fit w-fit p-2"
+          className="border-1 relative h-fit w-fit p-2"
           style={{ transform: tooltipPositionStyle.transform }}
         >
+          <TooltipArrow />
           <div className="rounded-md border bg-black p-4">{tooltipContent}</div>
         </div>
       </div>
+      {/* Wrapped hover area */}
       <div className="z-1">{children}</div>
     </div>
   );
