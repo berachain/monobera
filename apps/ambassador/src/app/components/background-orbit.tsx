@@ -11,7 +11,7 @@ export default function BackGroundOrbit() {
   return (
     <>
       <div className="mx-auto flex flex-col items-center justify-center">
-        <div className="absolute top-[-16%] block h-full w-full dark:hidden">
+        <div className="absolute top-[-16%] z-[-1] block h-full w-full dark:hidden">
           <Image
             src="/globe_bright.png"
             alt="Globe"
@@ -19,7 +19,7 @@ export default function BackGroundOrbit() {
             objectFit="contain"
           />
         </div>
-        <div className="absolute top-[-16%] hidden h-full w-full dark:block">
+        <div className="absolute top-[-16%] z-[-1] hidden h-full w-full dark:block">
           <Image
             src="/globe.png"
             alt="Globe"

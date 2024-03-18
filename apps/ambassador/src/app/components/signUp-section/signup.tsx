@@ -8,17 +8,10 @@ import { Button } from "@bera/ui/button";
 import { useTheme } from "next-themes";
 
 export default function SignUp() {
-  const { theme, systemTheme } = useTheme();
-  const t = !theme || theme === "system" ? systemTheme || "dark" : theme;
-  const bgGradient =
-    t === "dark"
-      ? "bg-gradient-to-t from-[#371605] to-[#4E2C1A]"
-      : "bg-gradient-to-t from-[#FFB571] to-[#FF7A00]";
-
   return (
     <>
       <div className="items-center justify-center">
-        <div className="flex items-center justify-between pt-8">
+        <div className="flex items-center justify-between pt-8 sm:px-8">
           <div className="hidden sm:block">
             <Image
               className="z-10 max-[600px]:mx-auto"
