@@ -1,3 +1,4 @@
+"use client";
 import { FC, PropsWithChildren, ReactNode, useMemo, useState } from "react";
 
 type TooltipPosition =
