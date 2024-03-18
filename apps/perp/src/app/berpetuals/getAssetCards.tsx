@@ -70,7 +70,6 @@ const getMarketListItems = (
       footer: (
         <div className="flex h-11 w-full flex-row gap-4">
           <UpdatePositionModal
-            type={"market"}
             openPosition={item}
             className="h-full w-14"
             trigger={

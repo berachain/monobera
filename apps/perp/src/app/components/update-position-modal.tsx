@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TRADING_ABI, TransactionActionType } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -20,21 +20,35 @@ export function UpdatePositionModal({
   trigger,
   openPosition,
   className = "",
+  controlledOpen,
+  onOpenChange,
 }: {
-  trigger: any;
-  type: "market" | "limit";
+  trigger?: any;
   disabled?: boolean;
   openPosition: IMarketOrder;
   className?: string;
+  controlledOpen?: boolean;
+  onOpenChange?: (state: boolean) => void;
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const [tp, setTp] = useState<string>(
-    formatUnits(BigInt(openPosition?.tp) ?? 0n, 10),
+    formatUnits(BigInt(openPosition?.tp ?? 0) ?? 0n, 10),
   );
   const [sl, setSl] = useState<string>(
-    formatUnits(BigInt(openPosition?.sl) ?? 0n, 10),
+    formatUnits(BigInt(openPosition?.sl ?? 0) ?? 0n, 10),
   );
   const { QUERY_KEY } = usePollOpenPositions();
+
+  useEffect(() => {
+    if (controlledOpen && controlledOpen !== open) {
+      setOpen(controlledOpen);
+    }
+  }, [controlledOpen, open]);
+
+  const handleOpenChange = (state: boolean) => {
+    onOpenChange?.(state);
+    setOpen(state);
+  };
 
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(
@@ -43,7 +57,7 @@ export function UpdatePositionModal({
 
   const positionSize =
     Number(formatUnits(BigInt(openPosition?.position_size ?? 0), 18)) *
-    Number(openPosition.leverage);
+    Number(openPosition?.leverage ?? 0);
   const openPrice = Number(
     formatUnits(BigInt(openPosition?.open_price ?? 0), 10),
   );
@@ -93,10 +107,10 @@ export function UpdatePositionModal({
 
   return (
     <div className={className}>
-      <div onClick={() => setOpen(true)} className="h-full w-full">
+      <div onClick={() => handleOpenChange(true)} className="h-full w-full">
         {trigger}
       </div>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="flex w-full flex-col gap-4 p-4 md:w-fit">
           <div className="text-lg font-semibold leading-7">Update Position</div>
 
@@ -145,8 +159,8 @@ export function UpdatePositionModal({
                   Liquidation Price
                 </div>
                 <div className="text-right text-sm font-semibold leading-5 text-destructive-foreground">
-                  {Number(openPosition.liq_price) !== 0 ? (
-                    formatBigIntUsd(openPosition.liq_price, 10)
+                  {Number(openPosition?.liq_price) !== 0 ? (
+                    formatBigIntUsd(openPosition?.liq_price, 10)
                   ) : (
                     <Skeleton className={"h-[28px] w-[80px]"} />
                   )}
@@ -183,7 +197,7 @@ export function UpdatePositionModal({
             sl={sl}
             formattedPrice={openPrice}
             isUpdate={true}
-            liqPrice={Number(openPosition.liq_price)}
+            liqPrice={Number(openPosition?.liq_price)}
             long={openPosition?.buy === true}
             isSlSubmitLoading={isUpdateSLLoading}
             isTpSubmitLoading={isUpdateTPLoading}

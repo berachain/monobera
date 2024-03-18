@@ -50,9 +50,9 @@ export function ClosePositionModal({
   );
   const positionSize =
     Number(formatUnits(BigInt(openPosition.position_size ?? 0), 18)) *
-    Number(openPosition.leverage);
+    Number(openPosition?.leverage);
   const openPrice = Number(
-    formatUnits(BigInt(openPosition.open_price ?? 0), 10),
+    formatUnits(BigInt(openPosition?.open_price ?? 0), 10),
   );
   const size = positionSize / openPrice;
 
@@ -131,8 +131,8 @@ export function ClosePositionModal({
                   Liquidation Price
                 </div>
                 <div className=" text-right  text-sm  font-semibold leading-5 text-foreground">
-                  {Number(openPosition.liq_price) !== 0 ? (
-                    formatBigIntUsd(openPosition.liq_price, 10)
+                  {Number(openPosition?.liq_price) !== 0 ? (
+                    formatBigIntUsd(openPosition?.liq_price, 10)
                   ) : (
                     <Skeleton className={"h-[28px] w-[80px]"} />
                   )}
