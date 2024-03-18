@@ -64,9 +64,9 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
   );
 
   return (
-    <div className="flex h-[65px] w-full items-center justify-between border-b border-border px-4">
+    <div className="flex h-[65px] w-[calc(100%-16px)] items-center justify-between border border-border px-4 m-2 rounded-md">
       <div className="flex items-center text-muted-foreground">
-        <div className="mr-4">
+        <div className="mr-2">
           <div className="text-xl font-semibold leading-7 text-muted-foreground">
             {price !== undefined ? (
               formatUsd(Number(formatUnits(price, 10)))
@@ -124,13 +124,13 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
             {formatUsd(formattedShortOi)}
           </div>
         </div>
-        <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs xl:block">
+        <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs 2xl:block">
           Borrow Fee (L)
           <div className="text-success-foreground">
             {Number(formattedBorrowingL).toFixed(6)}%
           </div>
         </div>
-        <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs xl:block">
+        <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs 2xl:block">
           Borrow Fee (S)
           <div className="text-destructive-foreground">
             {Number(formattedBorrowingS).toFixed(6)}%
@@ -140,7 +140,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
       <div className="flex flex-shrink-0 text-[10px] text-muted-foreground">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <div className="flex text-[14px] h-8 cursor-pointer items-center p-3 hover:underline">
+            <div className="flex text-[14px] h-8 cursor-pointer items-center hover:underline">
               Market Details
             </div>
           </DialogTrigger>
