@@ -187,18 +187,18 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   ]);
 
   return (
-    <div className="w-full flex-shrink-0 pb-10 lg:min-h-screen-250 lg:w-[400px] lg:border-r lg:border-border">
+    <div className="m-2 flex h-[calc(100%-8px)] w-[calc(100%-16px)] flex-shrink-0 flex-col overflow-auto rounded-md border border-border lg:mt-0 lg:w-[400px]">
       <LongShortTab
         value={form.orderType}
         valueOnChange={(value) => setForm({ ...form, orderType: value })}
       />
-      <div className="w-full px-4 py-6">
+      <div className="flex w-full flex-col overflow-auto">
         <Tabs
           defaultValue={form.optionType}
           onValueChange={(value) =>
             setForm({ ...form, optionType: value as "market" | "limit" })
           }
-          className="mb-4"
+          className="m-4"
         >
           <TabsList className="w-full rounded-sm">
             <TabsTrigger
@@ -217,124 +217,126 @@ export function CreatePosition({ market, params }: ICreatePosition) {
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <div className="flex flex-col gap-2">
-          <CustomizeInput
-            title="Amount"
-            value={form.amount}
-            isExceeding={
-              rawHoneyBalance &&
-              rawHoneyBalance < (parseUnits(safeAmount, 18) ?? 0n)
-            }
-            onChange={(e) => {
-              setGivenHoney(true);
-              setForm({ ...form, amount: e });
-            }}
-            subTitle={
-              <div className="flex items-center gap-1">
-                Balance: {honeyBalance ?? 0}
-                <div
-                  onClick={() => setForm({ ...form, amount: honeyBalance })}
-                  className="cursor-pointer rounded bg-secondary px-1 py-[2px] text-[10px] text-secondary-foreground hover:bg-background"
-                >
-                  MAX
-                </div>
-              </div>
-            }
-            endAdornment={
-              <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                {" "}
-                <Image
-                  src={HONEY_IMG}
-                  alt={"selectedMarket"}
-                  width={24}
-                  height={24}
-                  className="rounded-full"
-                />{" "}
-                HONEY
-              </div>
-            }
-          />
-          <CustomizeInput
-            title="Quantity"
-            disabled={rawPrice === undefined}
-            subTitle={`Leverage: ${form.leverage}x`}
-            value={form.quantity?.toString()}
-            onChange={(e) => {
-              setGivenHoney(false);
-              setForm({ ...form, quantity: e });
-            }}
-            endAdornment={
-              <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                <Image
-                  src={market.imageUri ?? ""}
-                  alt={"selectedMarket"}
-                  width={24}
-                  height={24}
-                  className="rounded-full"
-                />
-                {market.name.split("-")[0]}
-              </div>
-            }
-          />
-          {form.optionType === "limit" && (
+        <div className="mx-4 mb-4 flex w-[calc(100%-32px)] flex-col">
+          <div className="flex flex-col gap-2">
             <CustomizeInput
-              title="Price"
-              subTitle={`Mark: ${formatUsd(formattedPrice)}`}
-              value={form.limitPrice?.toString()}
-              onSubtitleClick={() => {
-                setForm({
-                  ...form,
-                  limitPrice: Number(formattedPrice.toFixed(2)),
-                });
-              }}
+              title="Amount"
+              value={form.amount}
+              isExceeding={
+                rawHoneyBalance &&
+                rawHoneyBalance < (parseUnits(safeAmount, 18) ?? 0n)
+              }
               onChange={(e) => {
-                setForm({ ...form, limitPrice: Number(e) });
+                setGivenHoney(true);
+                setForm({ ...form, amount: e });
               }}
+              subTitle={
+                <div className="flex items-center gap-1">
+                  Balance: {honeyBalance ?? 0}
+                  <div
+                    onClick={() => setForm({ ...form, amount: honeyBalance })}
+                    className="cursor-pointer rounded bg-secondary px-1 py-[2px] text-[10px] text-secondary-foreground hover:bg-background"
+                  >
+                    MAX
+                  </div>
+                </div>
+              }
               endAdornment={
-                <div className="flex items-center text-sm text-muted-foreground">
-                  USD
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  {" "}
+                  <Image
+                    src={HONEY_IMG}
+                    alt={"selectedMarket"}
+                    width={24}
+                    height={24}
+                    className="rounded-full"
+                  />{" "}
+                  HONEY
                 </div>
               }
             />
-          )}
+            <CustomizeInput
+              title="Quantity"
+              disabled={rawPrice === undefined}
+              subTitle={`Leverage: ${form.leverage}x`}
+              value={form.quantity?.toString()}
+              onChange={(e) => {
+                setGivenHoney(false);
+                setForm({ ...form, quantity: e });
+              }}
+              endAdornment={
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <Image
+                    src={market.imageUri ?? ""}
+                    alt={"selectedMarket"}
+                    width={24}
+                    height={24}
+                    className="rounded-full"
+                  />
+                  {market.name.split("-")[0]}
+                </div>
+              }
+            />
+            {form.optionType === "limit" && (
+              <CustomizeInput
+                title="Price"
+                subTitle={`Mark: ${formatUsd(formattedPrice)}`}
+                value={form.limitPrice?.toString()}
+                onSubtitleClick={() => {
+                  setForm({
+                    ...form,
+                    limitPrice: Number(formattedPrice.toFixed(2)),
+                  });
+                }}
+                onChange={(e) => {
+                  setForm({ ...form, limitPrice: Number(e) });
+                }}
+                endAdornment={
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    USD
+                  </div>
+                }
+              />
+            )}
+          </div>
+          <LeverageSlider
+            defaultValue={form.leverage}
+            maxLeverage={maxLeverage}
+            onValueChange={(value: number) =>
+              setForm({ ...form, leverage: value })
+            }
+          />
+          <TPSL
+            className="my-4"
+            leverage={form.leverage ?? 2}
+            formattedPrice={
+              form.optionType === "market"
+                ? rawPrice === undefined
+                  ? undefined
+                  : formattedPrice
+                : form.limitPrice
+            }
+            long={form.orderType === "long"}
+            tp={form.tp}
+            liqPrice={liqPrice}
+            sl={form.sl}
+            tpslOnChange={(value) =>
+              setForm({ ...form, tp: value.tp, sl: value.sl })
+            }
+          />
+          <PlaceOrder
+            form={form}
+            error={error}
+            price={rawPrice}
+            pairIndex={Number(market.pair_index) ?? 0}
+            openingFee={Number(
+              formatUnits(BigInt(market.pair_fixed_fee?.open_fee_p ?? "0"), 10),
+            )}
+            bfLong={formattedBfLong}
+            bfShort={formattedBfShort}
+            liqPrice={liqPrice}
+          />
         </div>
-        <LeverageSlider
-          defaultValue={form.leverage}
-          maxLeverage={maxLeverage}
-          onValueChange={(value: number) =>
-            setForm({ ...form, leverage: value })
-          }
-        />
-        <TPSL
-          className="my-8"
-          leverage={form.leverage ?? 2}
-          formattedPrice={
-            form.optionType === "market"
-              ? rawPrice === undefined
-                ? undefined
-                : formattedPrice
-              : form.limitPrice
-          }
-          long={form.orderType === "long"}
-          tp={form.tp}
-          liqPrice={liqPrice}
-          sl={form.sl}
-          tpslOnChange={(value) =>
-            setForm({ ...form, tp: value.tp, sl: value.sl })
-          }
-        />
-        <PlaceOrder
-          form={form}
-          error={error}
-          price={rawPrice}
-          pairIndex={Number(market.pair_index) ?? 0}
-          openingFee={Number(
-            formatUnits(BigInt(market.pair_fixed_fee?.open_fee_p ?? "0"), 10),
-          )}
-          bfLong={formattedBfLong}
-          bfShort={formattedBfShort}
-          liqPrice={liqPrice}
-        />
       </div>
     </div>
   );

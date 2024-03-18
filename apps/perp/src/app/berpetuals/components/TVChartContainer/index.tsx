@@ -162,7 +162,7 @@ export const TVChartContainer = (props: ChartProps) => {
       theme: theme as "light" | "dark",
       custom_css_url: "./theme.css",
       autosize: props.autosize,
-      height: 500,
+      height: 498,
       loading_screen: {
         backgroundColor: backgroundColor,
       },

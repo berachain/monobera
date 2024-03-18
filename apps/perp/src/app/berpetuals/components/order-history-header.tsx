@@ -58,8 +58,8 @@ export function OrderHistoryHeader({
 
   return (
     <div>
-      <div className="sm: flex h-fit w-full flex-col items-center justify-between border-y border-border bg-muted px-6 py-4 sm:flex-row">
-        <div className=" flex gap-10 text-foreground">
+      <div className="flex w-full flex-col items-center justify-between bg-muted px-6 py-4 sm:flex-row rounded-t-md">
+        <div className="flex flex-1 gap-10 text-foreground mr-4">
           {headers.map((header, index) => (
             <div
               onClick={() => setTabType(header.type as BerpTabTypes)}
@@ -93,9 +93,9 @@ export function OrderHistoryHeader({
           <div className="mt-4 block w-full border-t border-border pt-4 sm:hidden" />
         )}
         {tabType === "positions" && (
-          <div className="flex">
-            <div className="float-right flex justify-center mr-8 items-center">
-              <span className="text-xs font-medium ">{`${
+          <div className="flex flex-grow-0">
+            <div className="float-right flex-grow-0 justify-center mr-4 items-center hidden lg:flex">
+              <span className="text-xs font-medium flex-grow-0">{`${
                 showOrderLines ? "Hide" : "Show"
               } Order Lines`}</span>
               <Switch
@@ -106,7 +106,7 @@ export function OrderHistoryHeader({
               />
             </div>
             <Button
-              className="h-full min-w-44 w-full cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
+              className="h-full cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 w-fit min-w-0"
               disabled={
                 isClosePositionsLoading || closePositionsPayload?.length === 0
               }
@@ -135,9 +135,9 @@ export function OrderHistoryHeader({
         )}
 
         {tabType === "orders" && (
-          <div className="flex">
-            <div className="float-right flex justify-center mr-8 items-center">
-              <span className="text-xs font-medium ">{`${
+          <div className="flex flex-grow-0">
+            <div className="float-right flex-grow-0 justify-center mr-4 items-center hidden lg:flex">
+              <span className="text-xs font-medium flex-grow-0">{`${
                 showOrderLines ? "Hide" : "Show"
               } Order Lines`}</span>
               <Switch
@@ -148,7 +148,7 @@ export function OrderHistoryHeader({
               />
             </div>
             <Button
-              className="h-full min-w-44 w-full cursor-pointer rounded-md bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 sm:w-fit"
+              className="h-full min-w-44 w-full cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 md:w-fit md:min-w-0"
               disabled={
                 isCloseLimitOrdersLoading || closeOrdersPayload?.length === 0
               }

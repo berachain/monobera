@@ -657,7 +657,7 @@ const s = class {
         this._options.autosize || this._options.fullscreen
           ? ""
           : `width="${this._options.width}" height="${this._options.height}"`
-      } title="Financial Chart" frameborder="0" allowTransparency="true" scrolling="no" allowfullscreen style="display:block;">\n\t</iframe>`,
+      } title="Financial Chart" frameborder="0" allowTransparency="true" scrolling="no" allowfullscreen style="display:block;border-radius: 0.75rem">\n\t</iframe>`,
       i,
     ];
   }

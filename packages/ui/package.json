@@ -46,6 +46,7 @@
     "lucide-react": "^0.263.0",
     "next-auth": "^4.24.5",
     "react-chartjs-2": "^5.2.0",
+    "react-resizable-panels": "^2.0.13",
     "tailwind-merge": "^1.12.0",
     "vite-tsconfig-paths": "^4.2.0"
   },
@@ -154,6 +155,10 @@
     "./progress": {
       "import": "./dist/progress.mjs",
       "types": "./dist/progress.d.ts"
+    },
+    "./resizable": {
+      "import": "./dist/resizable.mjs",
+      "types": "./dist/resizable.d.ts"
     },
     "./scroll-area": {
       "import": "./dist/scroll-area.mjs",
@@ -285,6 +290,9 @@
       ],
       "card": [
         "dist/card.d.ts"
+      ],
+      "resizable": [
+        "dist/resizable.d.ts"
       ],
       "sheet": [
         "dist/sheet.d.ts"

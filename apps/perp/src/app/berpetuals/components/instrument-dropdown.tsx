@@ -79,7 +79,7 @@ export function InstrumentDropdown({
     <DropdownMenu onOpenChange={(open) => setDropdownOpen(open)}>
       <DropdownMenuTrigger
         className={cn(
-          "flex h-[65px] w-full cursor-pointer items-center justify-between border-b border-border px-8 py-4 hover:bg-muted lg:border-r",
+          "flex h-[63px] w-full cursor-pointer items-center justify-between px-8 py-4 hover:bg-muted rounded-md",
           dropdownOpen && "bg-muted",
         )}
       >
@@ -111,19 +111,23 @@ export function InstrumentDropdown({
           )}
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="-mt-1 w-screen rounded-none border-border bg-background p-0 lg:w-[400px] lg:border-r ">
-        <div className=" bg-muted px-4 py-2 ">
+      <DropdownMenuContent className="flex flex-col h-[calc(100vh-256px)] lg:h-[calc(100vh-194px)] w-[calc(100vw-24px)] border-border bg-background p-0 lg:w-[400px] border rounded-md my-1 mx-2">
+        <div className="w-full bg-muted px-4 py-2 ">
           <SearchInput
-            className="w-full rounded rounded-none border-none bg-muted"
+            className="w-full border-none bg-muted"
             placeholder="Search Markets"
           />
         </div>
-        <div className="flex h-screen flex-col gap-1 overflow-y-scroll border-t border-border">
-          {markets.map((market, index) => (
-            <Link href={`/berpetuals/${market.name}`} key={market.name}>
+        <div className="w-full flex flex-col gap-1 overflow-y-auto border-t border-border pt-1">
+          {[...markets].map((market, index) => (
+            <Link
+              href={`/berpetuals/${market.name}`}
+              key={market.name}
+              className="shadow-[0_24px_3px_-24px_rgba(255,255,255,0.3)] pb-1 px-1"
+            >
               <DropdownMenuItem
                 key={index}
-                className=" flex h-[60px] flex-row items-center justify-between px-4 hover:bg-muted"
+                className="flex flex-row w-full  h-[60px] items-center justify-between px-4 hover:bg-muted"
                 // onClick={() => setInstrument(instrument)}
               >
                 <div className="flex items-center gap-2 font-medium">
