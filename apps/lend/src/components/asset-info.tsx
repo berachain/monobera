@@ -1,4 +1,5 @@
-import { formatter, usePollReservesDataList } from "@bera/berajs";
+import { usePollReservesDataList } from "@bera/berajs";
+import { FormattedNumber } from "@bera/shared-ui";
 
 import DonutChart from "~/components/donut-chart";
 
@@ -47,13 +48,17 @@ export default function AssetInfo({ asset }: { asset: any }) {
           </div>
 
           <div className="whitespace-nowrap font-semibold leading-7 md:text-xl">
-            {formatter.format(Number(reserveData?.totalLiquidity))} of{" "}
-            {formatter.format(Number(reserveData?.supplyCap))}
+            <FormattedNumber value={reserveData?.totalLiquidity} /> of{" "}
+            <FormattedNumber value={reserveData?.supplyCap} />
           </div>
 
           <div className="text-xs font-medium leading-tight text-muted-foreground">
-            ${formatter.format(Number(reserveData?.totalLiquidityUSD))} of $
-            {formatter.format(Number(reserveData?.supplyCapUSD))}
+            <FormattedNumber
+              value={reserveData?.totalLiquidityUSD}
+              symbol="USD"
+            />{" "}
+            of{" "}
+            <FormattedNumber value={reserveData?.supplyCapUSD} symbol="USD" />
           </div>
         </div>
       </div>

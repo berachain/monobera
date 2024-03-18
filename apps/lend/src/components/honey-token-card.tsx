@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   addTokenToWallet,
-  formatter,
   usePollReservesDataList,
   useTokens,
   type Token,
@@ -11,7 +10,7 @@ import {
   honeyAddress,
   honeyTokenAddress,
 } from "@bera/config";
-import { TokenIcon } from "@bera/shared-ui";
+import { FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -85,7 +84,10 @@ export default function HoneyTokenCard() {
             </div>
             {honey ? (
               <div className="text-2xl font-semibold leading-8">
-                {formatter.format(Number(honey?.totalLiquidity))}
+                <FormattedNumber
+                  value={honey?.totalLiquidity}
+                  compact={false}
+                />
               </div>
             ) : (
               <Skeleton className="w-25 h-8" />
@@ -113,7 +115,7 @@ export default function HoneyTokenCard() {
               </div>
               {honey ? (
                 <div className="text-2xl font-semibold leading-8">
-                  {formatter.format(Number(honey?.totalDebt))}
+                  <FormattedNumber value={honey?.totalDebt} compact={false} />
                 </div>
               ) : (
                 <Skeleton className="w-25 h-8" />
@@ -125,7 +127,10 @@ export default function HoneyTokenCard() {
               </div>
               {honey ? (
                 <div className="text-2xl font-semibold leading-8">
-                  {formatter.format(Number(honey?.formattedAvailableLiquidity))}
+                  <FormattedNumber
+                    value={honey?.formattedAvailableLiquidity}
+                    compact={false}
+                  />
                 </div>
               ) : (
                 <Skeleton className="w-25 h-8" />
