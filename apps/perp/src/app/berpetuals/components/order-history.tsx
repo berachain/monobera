@@ -9,7 +9,10 @@ import { usePricesSocket } from "~/hooks/usePricesSocket";
 import { type IMarket } from "../page";
 import { OrderHistoryHeader } from "./order-history-header";
 import { OrderHistoryTable } from "./order-history-table";
-import { type RowSelectionState } from "@tanstack/react-table";
+import {
+  type RowSelectionState,
+  type PaginationState,
+} from "@tanstack/react-table";
 import { type BerpTabTypes } from "./order-wrapper";
 import { TotalAmount } from "./total-amount";
 import { formatUnits } from "viem";
@@ -60,6 +63,8 @@ export function OrderHistory({
   setTabType,
   selection,
   setSelection,
+  pagination,
+  setPagination,
   showOrderLines,
   setShowOrderLines,
 }: {
@@ -68,6 +73,8 @@ export function OrderHistory({
   setTabType: (tab: BerpTabTypes) => void;
   selection: RowSelectionState;
   setSelection: (selection: RowSelectionState) => void;
+  pagination: PaginationState;
+  setPagination: (pagination: PaginationState) => void;
   showOrderLines: boolean;
   setShowOrderLines: (showOrderLines: boolean) => void;
 }) {
@@ -205,7 +212,7 @@ export function OrderHistory({
   }, [openPositions, priceFeed, closedPositions, mobile, tabType]);
 
   return (
-    <div className="w-full">
+    <div className="flex flex-col w-[calc(100%-16px)] overflow-auto h-full border-border border rounded-md mx-2 mb-10 lg:mb-2 lg:ml-0 lg:w-[calc(100%-8px)]">
       <OrderHistoryHeader
         closePositionsPayload={closePositionsPayload}
         closeOrdersPayload={closeOrdersPayload}
@@ -223,6 +230,8 @@ export function OrderHistory({
         tab={tabType}
         selection={selection}
         setSelection={setSelection}
+        pagination={pagination}
+        setPagination={setPagination}
         openPositions={openPositions}
         openOrders={openOrders}
         allPositions={allPositions}
@@ -231,7 +240,7 @@ export function OrderHistory({
         mobile={mobile}
       />
       <TotalAmount
-        className="hidden sm:flex"
+        className="hidden sm:flex flex-shrink-0"
         markets={markets}
         tabType={tabType}
       />

@@ -88,12 +88,7 @@ export function TotalAmount({
   };
 
   return (
-    <div
-      className={cn(
-        "flex justify-between border-y border-border p-3",
-        className,
-      )}
-    >
+    <div className={cn("flex justify-between p-3", className)}>
       {tabType === "positions" || tabType === "orders"
         ? totalOpenPnL()
         : totalRelativePnL()}

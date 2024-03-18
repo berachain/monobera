@@ -15,6 +15,7 @@ import {
 } from "~/endpoints";
 import { GeneralInfoBanner } from "../components/general-info-banner";
 import { InstrumentDropdown } from "../components/instrument-dropdown";
+import { OneClickBanner } from "../components/one-click-banner";
 import { ReferralModal } from "../../referrals/referral-modal";
 import OrderWrapper from "../components/order-wrapper";
 import { type IMarket } from "../page";
@@ -67,10 +68,11 @@ export default async function Home({ params, searchParams: { ref } }: Props) {
     }
 
     return (
-      <div>
+      <div className="flex flex-col h-full overflow-auto">
         <ReferralModal referralAddress={ref} />
         <div className="flex h-fit w-full flex-col lg:flex-row">
-          <div className="h-fit w-full flex-shrink-0 flex-grow-0 lg:w-[400px]">
+          <OneClickBanner className="flex lg:hidden mb-0" />
+          <div className="h-fit w-[calc(100%-16px)] flex-shrink-0 flex-grow-0 mx-2 mt-2 lg:mr-0 lg:w-[400px] border border-border rounded-md">
             <InstrumentDropdown
               markets={markets}
               selectedMarket={defaultMarket}
@@ -81,6 +83,7 @@ export default async function Home({ params, searchParams: { ref } }: Props) {
             market={defaultMarket}
             priceChange={data.priceChange}
           />{" "}
+          <OneClickBanner className="hidden lg:flex" />
         </div>
         <OrderWrapper
           markets={markets}
