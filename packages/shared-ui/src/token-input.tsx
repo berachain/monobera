@@ -200,10 +200,12 @@ export function TokenInput({
                     anchor="left"
                     position="right"
                     tooltipContent={
-                      <p className="text-xs">
-                        The estimated difference between the USD values of input
-                        and output amounts.
-                      </p>
+                      <div className="w-[150px]">
+                        <p className="text-xs">
+                          The estimated difference between the USD values of
+                          input and output amounts.
+                        </p>
+                      </div>
                     }
                   >
                     <p className={`${priceImpactColorClass}`}>

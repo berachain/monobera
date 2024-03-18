@@ -386,12 +386,14 @@ export function SwapCard({
                     anchor="bottom-center"
                     position="bottom-center"
                     tooltipContent={
-                      <p className="text-xs">
-                        A swap of this size may have a high price impact, given
-                        the current liquidity in the pool. There may be a large
-                        difference between the amount of your input token and
-                        what you will receive in the output token
-                      </p>
+                      <div className="w-[250px]">
+                        <p className="text-xs">
+                          A swap of this size may have a high price impact,
+                          given the current liquidity in the pool. There may be
+                          a large difference between the amount of your input
+                          token and what you will receive in the output token
+                        </p>
+                      </div>
                     }
                   >
                     <Alert variant="destructive">

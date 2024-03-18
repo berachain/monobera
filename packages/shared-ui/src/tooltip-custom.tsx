@@ -1,4 +1,5 @@
 "use client";
+
 import { FC, PropsWithChildren, ReactNode, useMemo, useState } from "react";
 
 type TooltipPosition =
@@ -145,7 +146,7 @@ export const TooltipCustom: FC<
         }}
       >
         <div
-          className="border-1 m-[-2] h-fit w-fit min-w-[250px] p-2"
+          className="border-1 m-[-2] h-fit w-fit p-2"
           style={{ transform: tooltipPositionStyle.transform }}
         >
           <div className="rounded-md border bg-black p-4">{tooltipContent}</div>
