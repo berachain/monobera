@@ -181,7 +181,7 @@ export default function EcosystemProjects() {
           <Button
             onClick={() => setEcosystemType(type.value)}
             key={type.value}
-            variant="ghost"
+            variant={type.value === ecosystemType ? "secondary" : "ghost"}
             className="flex min-w-[50px] items-center justify-center"
           >
             <div className="text-sm font-normal text-muted-foreground">
