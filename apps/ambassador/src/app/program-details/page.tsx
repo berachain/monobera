@@ -22,7 +22,8 @@ export default function AmbassadorProgram() {
                 Ambassador <br /> Program Overview
               </h1>
               <p className="mb-6 px-1 text-center sm:text-left text-xl text-muted-foreground">
-                Nurturing Community Growth <br />with the Bera Legion
+                Nurturing Community Growth <br />
+                with the Bera Legion
               </p>
             </div>
             <div className="hidden sm:block max-w-[420px]">
@@ -49,7 +50,7 @@ export default function AmbassadorProgram() {
             <section
               className="mb-2 flex-grow rounded-lg bg-muted p-4"
               style={{ flexBasis: "0" }}
-              >
+            >
               <div className="flex h-full flex-col rounded-md">
                 <div className="flex h-full flex-col justify-between gap-4 p-4">
                   <div>
@@ -83,7 +84,7 @@ export default function AmbassadorProgram() {
             <section
               className="mb-2 flex-grow rounded-lg bg-muted"
               style={{ flexBasis: "0" }}
-              >
+            >
               <div className="flex rounded-md">
                 <div className="flex-col p-6">
                   <Image
