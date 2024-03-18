@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { addTokenToWallet, formatter, type Token } from "@bera/berajs";
+import { addTokenToWallet, type Token } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
-import { TokenIcon, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -24,34 +24,34 @@ export default function TokenInfoCard({
     {
       title: "Reserve Size",
       amount: !Number.isNaN(reserve) ? (
-        `$${formatter.format(reserve)}`
+        <FormattedNumber value={reserve} symbol="USD" />
       ) : (
-        <Skeleton className="h-8 w-16 " />
+        <Skeleton className="h-8 w-16" />
       ),
     },
     {
       title: "Available Liquidity",
       amount: !Number.isNaN(liquidity) ? (
-        `$${formatter.format(liquidity)}`
+        <FormattedNumber value={liquidity} symbol="USD" />
       ) : (
-        <Skeleton className="h-8 w-16 " />
+        <Skeleton className="h-8 w-16" />
       ),
     },
     {
       title: "Utilization Ratio",
       amount: !Number.isNaN(utilization) ? (
-        `${(utilization * 100).toFixed(2)}%`
+        <FormattedNumber value={utilization} percent />
       ) : (
-        <Skeleton className="h-8 w-16 " />
+        <Skeleton className="h-8 w-16" />
       ),
       tooltip: "Gauge of how much of the lending pool is actively borrowed",
     },
     {
       title: "Oracle Price",
       amount: oraclePrice ? (
-        `$${formatter.format(oraclePrice)}`
+        <FormattedNumber value={oraclePrice} symbol="USD" />
       ) : (
-        <Skeleton className="h-8 w-16 " />
+        <Skeleton className="h-8 w-16" />
       ),
     },
   ];
@@ -92,11 +92,6 @@ export default function TokenInfoCard({
             </div>
             <div className="flex h-8 items-center gap-2 text-xl font-semibold leading-loose md:text-2xl">
               {item.amount}
-              {/* {index === 3 && (
-                <div className="h-fit w-fit rounded-full border border-border bg-muted p-1 hover:cursor-pointer md:rounded-xl">
-                  <Icons.external className="relative h-4 w-4 text-muted-foreground" />
-                </div>
-              )} */}
             </div>
           </div>
         ))}

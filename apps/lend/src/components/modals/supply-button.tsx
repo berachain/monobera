@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  formatter,
   lendPoolImplementationABI,
   useBeraJs,
   usePollAllowance,
@@ -13,7 +12,13 @@ import {
   type Token,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
-import { ApproveButton, TokenInput, Tooltip, useTxn } from "@bera/shared-ui";
+import {
+  ApproveButton,
+  FormattedNumber,
+  TokenInput,
+  Tooltip,
+  useTxn,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -102,10 +107,7 @@ const SupplyModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  const currentHealthFactor =
-    Number(formatEther(userAccountData?.healthFactor || "0")) > 1000000000000
-      ? "∞"
-      : Number(formatEther(userAccountData.healthFactor)).toFixed(2);
+  const currentHealthFactor = formatEther(userAccountData?.healthFactor || "0");
 
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency:
@@ -140,15 +142,16 @@ const SupplyModalContent = ({
       </div>
 
       <div className="flex flex-col gap-2">
-        <div className="flex justify-between  text-sm leading-tight">
+        <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
-          <div className="w-[200px] truncate text-right font-semibold">
-            $
-            {formatter.format(
+          <FormattedNumber
+            value={
               Number(amount ?? "0") *
-                Number(reserveData.formattedPriceInMarketReferenceCurrency),
-            )}
-          </div>
+              Number(reserveData.formattedPriceInMarketReferenceCurrency)
+            }
+            symbol="USD"
+            className="w-[200px] justify-end truncate text-right font-semibold"
+          />
         </div>
         <div className="flex justify-between text-sm leading-tight">
           <div className="flex items-center align-middle text-muted-foreground">
@@ -167,33 +170,26 @@ const SupplyModalContent = ({
             />
           </div>
           <div className="font-semibold text-success-foreground">
-            {(Number(reserveData.supplyAPY) * 100).toFixed(2)}%
+            <FormattedNumber value={reserveData.supplyAPY} percent />
           </div>
         </div>
         {token.address !== honeyTokenAddress && (
           <div className="flex justify-between text-sm leading-tight">
             <div className="text-muted-foreground ">LTV Health Ratio</div>
             <div className="flex items-center gap-1 font-semibold">
-              <span
+              <FormattedNumber
+                value={currentHealthFactor}
+                maxValue={999_999_999}
                 className={cn(
-                  `text-${getLTVColor(
-                    currentHealthFactor === "∞"
-                      ? 10
-                      : Number(currentHealthFactor),
-                  )}`,
+                  `text-${getLTVColor(Number(currentHealthFactor))}`,
                 )}
-              >
-                {currentHealthFactor}{" "}
-              </span>
+              />
               <Icons.moveRight className="inline-block h-6 w-6" />
-              <span
+              <FormattedNumber
+                value={newHealthFactor}
                 className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
-              >
-                {Number(newHealthFactor.toFixed(2)) < 0 ||
-                Number(newHealthFactor) > 1000000000000
-                  ? "∞"
-                  : newHealthFactor.toFixed(2)}
-              </span>
+                maxValue={999_999_999}
+              />
             </div>
           </div>
         )}

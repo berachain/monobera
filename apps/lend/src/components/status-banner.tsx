@@ -1,6 +1,4 @@
 import {
-  formatUsd,
-  formatter,
   useBeraJs,
   usePollAssetWalletBalance,
   usePollBgtRewardsForAddress,
@@ -9,7 +7,7 @@ import {
   usePollUserReservesData,
 } from "@bera/berajs";
 import { lendHoneyDebtTokenAddress } from "@bera/config";
-import { Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -95,19 +93,21 @@ export default function StatusBanner() {
     {
       icon: <Icons.wallet className="h-8 w-8" />,
       title: "Total Supplied",
-      amount: formatUsd(
-        Number(
-          formatUnits(
+      amount: (
+        <FormattedNumber
+          value={formatUnits(
             data?.totalCollateralBase || "0",
             baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
-          ),
-        ),
+          )}
+          symbol="USD"
+          compact={false}
+        />
       ),
     },
     {
       icon: <Icons.lineChart className="h-8 w-8" />,
       title: (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center">
           Net APY{" "}
           <Tooltip
             text={
@@ -126,7 +126,7 @@ export default function StatusBanner() {
           />
         </div>
       ),
-      amount: netAPY === 0 ? "~~" : `${(netAPY * 100).toFixed(2)}%`,
+      amount: netAPY === 0 ? "~~" : <FormattedNumber value={netAPY} percent />,
     },
     {
       icon: <Icons.warning className="h-8 w-8" />,
@@ -140,11 +140,10 @@ export default function StatusBanner() {
             )}`,
           )}
         >
-          {Number(formatUnits(data?.healthFactor || "0", 18)) > 1000000000000
-            ? "∞"
-            : formatter.format(
-                Number(formatUnits(data?.healthFactor || "0", 18)),
-              )}
+          <FormattedNumber
+            value={formatUnits(data?.healthFactor || "0", 18)}
+            maxValue={1_000_000_000_000}
+          />
           <RiskDetails />
         </div>
       ),
@@ -153,17 +152,28 @@ export default function StatusBanner() {
   const info = [
     {
       title: "You can borrow up to",
-      amount: formatUsd(
-        formatUnits(
-          data?.availableBorrowsBase || "0",
-          baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
-        ),
+      amount: (
+        <FormattedNumber
+          value={formatUnits(
+            data?.availableBorrowsBase || "0",
+            baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+          )}
+          compact={false}
+          symbol="USD"
+        />
       ),
     },
     {
       title: "Funds eligible for deposit",
-      amount: formatUsd(
-        getEligibleDepositAmount(reservesDictionary ?? {}, balanceToken ?? []),
+      amount: (
+        <FormattedNumber
+          value={getEligibleDepositAmount(
+            reservesDictionary ?? {},
+            balanceToken ?? [],
+          )}
+          compact={false}
+          symbol="USD"
+        />
       ),
     },
   ];
