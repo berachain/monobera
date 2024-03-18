@@ -48,6 +48,7 @@ interface DataTableProps<TData, TValue> {
   loading?: boolean;
   additionalTableProps?: Partial<TableOptions<TData>>;
   customEmptyDataState?: React.ReactElement;
+  stickyHeaders?: boolean;
 }
 export interface RowSelectHeaderProps<TData, TValue>
   extends HeaderContext<TData, TValue> {}
@@ -131,6 +132,7 @@ export function DataTable<TData, TValue>({
   additionalTableProps,
   customEmptyDataState,
   onCustomSortingChange,
+  stickyHeaders,
 }: DataTableProps<TData, TValue>) {
   const initialState = {
     columnFilters: [],
@@ -208,13 +210,13 @@ export function DataTable<TData, TValue>({
   return (
     <div
       className={cn(
-        "w-full border border-border bg-background",
+        "flex flex-col h-full w-full border border-border bg-background overflow-auto",
         embedded ? "" : "rounded-md",
       )}
     >
       <div
         className={cn(
-          "w-full overflow-x-auto overflow-y-auto border-border",
+          "h-full w-full overflow-x-auto overflow-y-auto border-border",
           embedded ? "" : "rounded-tl-md rounded-tr-md",
         )}
       >
@@ -227,7 +229,12 @@ export function DataTable<TData, TValue>({
                 {title}
               </TableCaption>
             )}
-            <TableHeader className={"relative bg-muted"}>
+            <TableHeader
+              className={cn(
+                "relative bg-muted",
+                stickyHeaders && "sticky top-0",
+              )}
+            >
               {/* {title && (
                 <div className="absolute w-full border-b border-border px-8 py-4 text-2xl font-semibold">
                 
@@ -260,7 +267,7 @@ export function DataTable<TData, TValue>({
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell key={cell.id} className="border-b">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),
@@ -272,7 +279,7 @@ export function DataTable<TData, TValue>({
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={columns.length}
+                    colSpan={columns.length + (enableSelection ? 1 : 0)}
                     className="h-24 text-center"
                   >
                     {customEmptyDataState ?? "No results."}
@@ -284,7 +291,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {enablePagination && (
-        <div className="border-t flex justify-end p-4 text-primary-foreground">
+        <div className="border-t flex justify-end p-2 text-primary-foreground">
           {loading && (
             <p className="self-center pr-4">
               <Spinner size={16} color="white" />

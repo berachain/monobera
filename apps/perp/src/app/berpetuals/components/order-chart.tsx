@@ -11,7 +11,10 @@ import {
 import { type IMarket } from "../page";
 import type { ChartProps } from "./TVChartContainer";
 import { type BerpTabTypes } from "./order-wrapper";
-import { RowSelectionState } from "@tanstack/react-table";
+import {
+  type RowSelectionState,
+  type PaginationState,
+} from "@tanstack/react-table";
 import { CloseOrderModal } from "~/app/components/close-order-modal";
 import { ILimitOrder, IMarketOrder } from "./order-history";
 
@@ -33,7 +36,7 @@ const TVChartContainer = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-[500px] w-full flex-col items-center justify-center">
+      <div className="flex h-full w-full flex-col items-center justify-center">
         Loading
       </div>
     ),
@@ -45,12 +48,14 @@ export function OrderChart({
   marketName,
   selection,
   setSelection,
+  pagination,
   tabType,
   showOrderLines,
 }: {
   markets: IMarket[];
   marketName: string;
   selection: RowSelectionState;
+  pagination: PaginationState;
   setSelection: (selection: RowSelectionState) => void;
   tabType: BerpTabTypes;
   showOrderLines: boolean;
@@ -90,6 +95,8 @@ export function OrderChart({
           if (
             selection &&
             (Object.keys(selection).length === 0 || selection[index]) &&
+            index >= pagination.pageIndex * pagination.pageSize &&
+            index < (pagination.pageIndex + 1) * pagination.pageSize &&
             position?.market?.name === marketName
           ) {
             const positionSize =
@@ -126,6 +133,8 @@ export function OrderChart({
           if (
             selection &&
             (Object.keys(selection).length === 0 || selection[index]) &&
+            index >= pagination.pageIndex * pagination.pageSize &&
+            index < (pagination.pageIndex + 1) * pagination.pageSize &&
             order?.market?.name === marketName
           ) {
             const positionSize =
@@ -165,7 +174,7 @@ export function OrderChart({
   }, [tabType, humanizedOrders, humanizedPositions]);
 
   return (
-    <div className="h-[500px] w-full">
+    <div className="h-full w-full">
       {isMounted ? (
         <>
           {position && (
@@ -189,7 +198,7 @@ export function OrderChart({
           />
         </>
       ) : (
-        <div className="flex h-[500px] w-full flex-col items-center justify-center">
+        <div className="flex h-full w-full flex-col items-center justify-center">
           Loading
         </div>
       )}
