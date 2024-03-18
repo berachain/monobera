@@ -1,5 +1,3 @@
-import { TooltipCustom } from "./tooltip-custom";
-
 export { History } from "./history";
 export { ConnectButton } from "./connect-button";
 export { TokenIcon } from "./token-icon";

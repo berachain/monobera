@@ -15,8 +15,10 @@ import { cloudinaryUrl, crocMultiSwapAddress } from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
+  BREAKPOINTS,
   TokenInput,
   TooltipCustom,
+  useBreakpoint,
   useTxn,
 } from "@bera/shared-ui";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
@@ -296,6 +298,8 @@ export function SwapCard({
     return <Connect />;
   };
 
+  const breakpoint = useBreakpoint();
+
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
@@ -383,11 +387,15 @@ export function SwapCard({
                 </ul>
                 {priceImpact && priceImpact < -10 && (
                   <TooltipCustom
-                    anchor="bottom-center"
-                    position="bottom-center"
+                    anchor={
+                      breakpoint > BREAKPOINTS.md ? "right" : "bottom-center"
+                    }
+                    position={
+                      breakpoint > BREAKPOINTS.md ? "left" : "bottom-center"
+                    }
                     tooltipContent={
                       <div className="w-[250px]">
-                        <p className="text-xs">
+                        <p className="text-xs text-muted-foreground">
                           A swap of this size may have a high price impact,
                           given the current liquidity in the pool. There may be
                           a large difference between the amount of your input
