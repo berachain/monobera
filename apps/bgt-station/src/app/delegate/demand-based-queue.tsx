@@ -9,6 +9,8 @@ import { Skeleton } from "@bera/ui/skeleton";
 
 import UnbondingQueueTable from "~/components/unbonding-queue-table";
 import { DelegateEnum } from "./types";
+import StakingQueueTable from "~/components/staking-queue-table";
+import RedelegateQueueTable from "~/components/redelegate-queue-table";
 
 export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
   const getActionText = (action: DelegateEnum) => {
@@ -28,12 +30,12 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
   const { result: unbondingQueue, isLoading } = useDelegatorUnbondingQueue();
 
   return (
-    <div className="mx-auto flex w-full max-w-[720px] flex-col gap-8 md:px-8">
+    <div className="mx-auto flex w-full max-w-[600px] flex-col gap-8 ">
       <Card className="flex flex-col gap-3 bg-muted p-6">
-        <div className="flex flex-row items-start">
-          <Icons.bgt className="h-8 w-8" />
-          <Icons.chevronRight className="h-8 w-8" />
-          <Icons.bera className="h-8 w-8" />
+        <div className="flex flex-row items-center">
+          <Icons.bgt className="h-6 w-6" />
+          <Icons.chevronRight className="h-6 w-6" />
+          <Icons.bera className="h-6 w-6" />
           <div className="ml-3 font-semibold capitalize leading-7 text-foreground md:text-lg">
             Demand based {getActionText(action)}
           </div>
@@ -57,21 +59,44 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
               1 Day
             </div>
           </div>
-          <div className="text-md flex flex-col items-start justify-center gap-1 rounded-md border border-dashed bg-muted p-2 sm:w-[380px]">
-            <div className="xs:flex-col flex w-full flex-row items-stretch justify-between">
-              <div className="text-md items-start font-semibold text-muted-foreground">
-                Estimated future {action} Time
-              </div>
-              {/* TODO: add tooltip text */}
-              <Tooltip text="future unbond time" />
-            </div>
-            {/* TODO: add estimated future unbond time */}
-            <div className="items-start text-lg font-bold italic text-muted-foreground">
-              30 Mins
-            </div>
-          </div>
         </div>
       </Card>
+      {action === DelegateEnum.DELEGATE && (
+        <>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row gap-2">
+              <Icons.unlock className="h-[24px] w-[24px]" />
+              <div className="text-lg font-semibold capitalize leading-7 text-foreground">
+                My Staking Queue
+              </div>
+            </div>
+
+            {isLoading ? (
+              <Skeleton className="h-10 w-full" />
+            ) : (
+              <StakingQueueTable unbondingQueue={unbondingQueue} />
+            )}
+          </div>
+        </>
+      )}
+      {action === DelegateEnum.REDELEGATE && (
+        <>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row gap-2">
+              <Icons.unlock className="h-[24px] w-[24px]" />
+              <div className="text-lg font-semibold capitalize leading-7 text-foreground">
+                My Redelegate Queue
+              </div>
+            </div>
+
+            {isLoading ? (
+              <Skeleton className="h-10 w-full" />
+            ) : (
+              <RedelegateQueueTable unbondingQueue={unbondingQueue} />
+            )}
+          </div>
+        </>
+      )}
       {action === DelegateEnum.UNBOND && (
         <>
           <div className="flex flex-col gap-2">

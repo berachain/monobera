@@ -284,7 +284,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {enablePagination && (
-        <div className="border-t flex justify-end p-4 text-primary-foreground">
+        <div className="border-t flex justify-end p-4 text-primary-foreground select-none">
           {loading && (
             <p className="self-center pr-4">
               <Spinner size={16} color="white" />

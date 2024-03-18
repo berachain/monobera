@@ -11,3 +11,5 @@ export * from "../ts-proto-gen/perps/v1/berachain/backend/v1/structs";
 export { UpdateParamsRequest, HoneyParams, Exchangeable };
 export { UpdateFriendsOfTheChefRequest };
 export { Any };
+
+export {Validator as ValidatorV2 } from "../ts-proto-gen/beacon-kit-ts/beacon/core/beacon/v1alpha1/types"

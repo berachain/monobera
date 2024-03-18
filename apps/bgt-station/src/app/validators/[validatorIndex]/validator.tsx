@@ -2,33 +2,32 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  truncateHash,
-  usePollActiveValidators,
-  usePollGlobalValidatorBribes,
-} from "@bera/berajs";
+import { truncateHash } from "@bera/berajs";
 import { Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits, type Address } from "viem";
 
 import BribesAndEmissions from "./bribes-and-emissions";
 import ValidatorActivitiesTable from "./validator-activities-table";
 import ValidatorDetails from "./validator-details";
 import ValidatorGaugeWeightInfo from "./validator-gauge-weight";
+import { ValidatorV2 } from "@bera/proto/src";
+import Long from "long";
 
 export default function Validator({
-  validatorAddress,
+  validatorIndex,
 }: {
-  validatorAddress: Address;
+  validatorIndex: number;
 }) {
-  const prices = undefined;
-  const { usePolValidator } = usePollGlobalValidatorBribes(prices);
-  const validator = usePolValidator(validatorAddress);
-  const { usePercentageDelegated } = usePollActiveValidators();
-  const percentageDelegated = usePercentageDelegated(validatorAddress);
-
+  const validator: ValidatorV2 | undefined = {
+    index: Long.UZERO,
+    name: "",
+    description: "",
+    pubkey: "",
+    consensus_power: Long.UZERO,
+    last_proposed_block: "",
+  };
   return (
     <div className="relative flex flex-col gap-16">
       <div>
@@ -41,7 +40,7 @@ export default function Validator({
             Validators
           </Link>
           <div className="text-center">
-            {validator?.status === "BOND_STATUS_BONDED" ? (
+            {true ? (
               <Badge
                 variant="success"
                 className="border-none bg-success px-2 py-1 text-xs"
@@ -59,28 +58,20 @@ export default function Validator({
           </div>
           <div className="flex w-full items-center justify-center gap-2 text-3xl font-bold leading-[48px] md:text-5xl ">
             <ValidatorIcon
-              address={validatorAddress}
-              description={validator?.description?.identity ?? undefined}
+              validatorIndex={validator?.index.toNumber()}
+              description={validator?.description}
               className="h-12 w-12"
             />
-            {validator?.description.moniker ?? (
+            {validator?.name ?? (
               <Skeleton className="inline-block h-12 w-[100px]" />
             )}
           </div>
 
           <div className="flex flex-col items-center justify-center gap-2">
             <div className="text-sm font-medium leading-none text-muted-foreground">
-              Operator address:{" "}
+              Public Key:{" "}
               {validator ? (
-                truncateHash(validator?.operatorAddr, 6)
-              ) : (
-                <Skeleton className="inline-block h-[14px] w-[100px]" />
-              )}
-            </div>
-            <div className="text-sm font-medium leading-none text-muted-foreground">
-              Consensus address:{" "}
-              {validator ? (
-                truncateHash(validator?.consAddr, 6)
+                validator.pubkey
               ) : (
                 <Skeleton className="inline-block h-[14px] w-[100px]" />
               )}
@@ -88,27 +79,11 @@ export default function Validator({
           </div>
         </div>
         <div className="mt-8 flex flex-col items-center gap-16 lg:flex-row lg:gap-4">
-          <ValidatorDetails
-            address={validatorAddress}
-            decription={
-              validator ? validator?.description.details ?? "" : undefined
-            }
-            commissions={`${(
-              Number(
-                formatUnits(
-                  validator?.commission.commissionRates.rate ?? 0n,
-                  18,
-                ),
-              ) * 100
-            ).toString()}%`}
-            votingPower={`${percentageDelegated?.toFixed(2) ?? 0}%`}
-            website={validator?.description.website ?? ""}
-            vApy={validator?.vApy ? validator.vApy.toFixed(2) : "0"}
-          />
+          <ValidatorDetails validator={validator} />
           {/* <Uptime address={validatorAddress} /> */}
         </div>
       </div>
-
+      {/* 
       <BribesAndEmissions
         // historicalBribes={
         //   (data as any)?.historicalBribes as FormattedHistoricalBribes[]
@@ -116,17 +91,17 @@ export default function Validator({
         // cumulativeBribeValue={(data as any)?.cumulativeBribeTotal}
         currentBribeValue={validator?.totalActiveBribeUsdAmount}
         validatorAddress={validatorAddress}
-      />
+      /> */}
 
       <div className="">
         <div className="mb-4 flex items-center gap-1 text-lg font-semibold leading-7">
           Reward Distribution{" "}
           <Tooltip text="Validator block reward allocation towards pools & addresses" />
         </div>
-        <ValidatorGaugeWeightInfo validatorAddress={validatorAddress} />
+        {/* <ValidatorGaugeWeightInfo validatorAddress={validatorAddress} /> */}
       </div>
 
-      <ValidatorActivitiesTable validatorAddress={validatorAddress} />
+      {/* <ValidatorActivitiesTable validatorAddress={validatorAddress} /> */}
     </div>
   );
 }

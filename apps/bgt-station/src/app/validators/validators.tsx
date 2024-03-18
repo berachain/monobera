@@ -2,11 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import {
-  formatter,
-  usePollActiveValidators,
-  usePollGlobalValidatorBribes,
-} from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -14,39 +9,23 @@ import { Skeleton } from "@bera/ui/skeleton";
 import ValidatorsTable from "./validators-table";
 
 export default function Validators({
-  activeGauges,
-  bgtSupply,
+  page,
+  limit,
 }: {
-  activeGauges: number;
-  bgtSupply: number;
+  page: number;
+  limit: number;
 }) {
-  const { useTotalValidators, isLoading: isActiveValidatorsLoading } =
-    usePollActiveValidators();
-  const totalValidators: number = useTotalValidators();
-  const prices = undefined;
-  const { useGlobalActiveBribeValue, isLoading: isGlobalBribeLoading } =
-    usePollGlobalValidatorBribes(prices);
-  const totalBribeValue = useGlobalActiveBribeValue();
-
-  const isDataLoading = isActiveValidatorsLoading || isGlobalBribeLoading;
+  const isDataLoading = false;
   const generalInfo = [
     {
-      amount: isDataLoading ? (
-        <Skeleton className="mb-2 h-10 w-full" />
-      ) : (
-        totalValidators
-      ),
+      amount: isDataLoading ? <Skeleton className="mb-2 h-10 w-full" /> : 0,
       text: "Total validators",
     },
     {
       amount: isDataLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
-        `$${
-          totalBribeValue === undefined || Number.isNaN(totalBribeValue)
-            ? "0.00"
-            : formatter.format(totalBribeValue)
-        }`
+        "$0.00"
       ),
       text: "In bribe rewards",
     },
@@ -54,16 +33,12 @@ export default function Validators({
       amount: isDataLoading ? (
         <Skeleton className="mb-2 h-10 w-full" />
       ) : (
-        `${bgtSupply.toFixed(2)}%`
+        `0.00%`
       ),
       text: "BGT inflation rate",
     },
     {
-      amount: isDataLoading ? (
-        <Skeleton className="mb-2 h-10 w-full" />
-      ) : (
-        activeGauges
-      ),
+      amount: isDataLoading ? <Skeleton className="mb-2 h-10 w-full" /> : 0,
       text: "Active gauges",
     },
   ];
@@ -94,7 +69,7 @@ export default function Validators({
           </Card>
         ))}
       </div>
-      <ValidatorsTable />
+      <ValidatorsTable page={page} limit={limit} />
     </div>
   );
 }

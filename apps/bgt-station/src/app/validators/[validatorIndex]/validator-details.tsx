@@ -5,25 +5,16 @@ import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { ValidatorV2 } from "@bera/proto/src";
 
 // import { type Address } from "viem";
 
 // import { useFetchValidatorUptime } from "~/hooks/useFetchValidatorUptime";
 
 export default function ValidatorDetails({
-  address,
-  decription,
-  commissions,
-  votingPower,
-  website,
-  vApy,
+  validator,
 }: {
-  address: string;
-  decription: React.ReactNode;
-  commissions: string;
-  votingPower: string;
-  website: string;
-  vApy: string;
+  validator: ValidatorV2;
 }) {
   // const { data } = useFetchValidatorUptime(address as Address);
 
@@ -32,8 +23,8 @@ export default function ValidatorDetails({
       Details
       <Card className="flex flex-col p-8">
         <div className="text-sm font-normal leading-normal text-muted-foreground md:flex md:h-[60px] md:items-end md:overflow-y-auto">
-          {decription !== undefined ? (
-            decription
+          {validator.description !== undefined ? (
+            validator.description
           ) : (
             <Skeleton className=" h-[14px] w-full" />
           )}
@@ -42,14 +33,14 @@ export default function ValidatorDetails({
           <div>
             APY <BribeApyTooltip />
           </div>
-          <div className="text-muted-foreground">{vApy}%</div>
+          <div className="text-muted-foreground">0%</div>
         </div>
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
             Commission{" "}
             <Tooltip text="Amount of validator rewards retained by this validator" />
           </div>
-          <div className="text-muted-foreground">{commissions}</div>
+          <div className="text-muted-foreground">0%</div>
         </div>
 
         {/* <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
@@ -66,23 +57,25 @@ export default function ValidatorDetails({
             Voting Power{" "}
             <Tooltip text="Represents the influence in network governance based on amount delegated to this validator" />
           </div>
-          <div className="text-muted-foreground">{votingPower}</div>
+          <div className="text-muted-foreground">
+            {validator.consensus_power.toString()}
+          </div>
         </div>
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>Website</div>
-          <a
+          {/* <a
             className="text-info-foreground hover:underline"
             href={website}
             target="_blank"
             rel="noreferrer"
           >
             {website}
-          </a>
+          </a> */}
         </div>
         <div className="mt-4 flex flex-col justify-between gap-4 sm:flex-row">
           <Link
-            href={`/delegate?action=delegate&validator=${address}`}
+            href={`/delegate?action=delegate&validator=${validator.index.toNumber()}`}
             className="flex-1"
           >
             <Button className="w-full">
@@ -90,7 +83,7 @@ export default function ValidatorDetails({
             </Button>
           </Link>
           <Link
-            href={`/delegate?action=redelegate&validator=${address}`}
+            href={`/delegate?action=redelegate&validator=${validator.index.toNumber()}`}
             className="flex-1"
           >
             <Button className="w-full" variant="outline">
@@ -100,7 +93,7 @@ export default function ValidatorDetails({
             </Button>
           </Link>
           <Link
-            href={`/delegate?action=unbond&validator=${address}`}
+            href={`/delegate?action=unbond&validator=${validator.index.toNumber()}`}
             className="flex-1"
           >
             <Button className="w-full" variant="outline">

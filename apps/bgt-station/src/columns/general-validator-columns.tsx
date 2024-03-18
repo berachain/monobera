@@ -1,95 +1,42 @@
 import React from "react";
-import { type PoLValidator } from "@bera/berajs";
 import {
   DataTableColumnHeader,
-  TokenIconList,
   ValidatorIcon,
   bribeApyTooltipText,
 } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
-import { type Address } from "viem";
+import { ValidatorVotingPower } from "~/components/validator-selector";
+import { ValidatorV2 } from "@bera/proto/src";
 
-import { formatCommission } from "~/utils/formatCommission";
-import { VP } from "~/components/validator-selector";
-import { ValidatorGauge } from "~/app/validators/validators-table";
-
-export const general_validator_columns: ColumnDef<PoLValidator>[] = [
-  // {
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Rank" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const rank = row.original.rank;
-  //     return (
-  //       <div className="flex h-full items-center justify-center">{rank}</div>
-  //     );
-  //   },
-  //   accessorKey: "delegate",
-  //   enableSorting: false,
-  // },
+export const general_validator_columns: ColumnDef<ValidatorV2>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Validator" />
     ),
     cell: ({ row }) => {
-      const moniker = row.original.description.moniker;
+      const moniker = row.original.name;
 
       return (
         <div className="flex items-center gap-2">
           <ValidatorIcon
-            address={row.original.operatorAddr as Address}
-            description={row.original.description?.identity ?? undefined}
+            validatorIndex={row.original.index.toNumber()}
+            description={row.original.description}
             className="h-8 w-8"
           />
           {moniker}{" "}
         </div>
       );
     },
-    accessorKey: "description",
+    accessorKey: "name",
     enableSorting: true,
   },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Voting Power" />
     ),
-    cell: ({ row }) => (
-      <VP
-        operatorAddr={row.original.operatorAddr}
-        tokens={row.original.tokens}
-      />
-    ),
-    accessorKey: "tokens",
+    cell: ({ row }) => <ValidatorVotingPower validator={row.original} />,
+    accessorKey: "votingPower",
     enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.tokens ?? 0;
-      const b = rowB.original.tokens ?? 0;
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Commission" />
-    ),
-    cell: ({ row }) => {
-      const commission = row.original.commission.commissionRates.rate;
-      return (
-        <div className="flex h-full w-[91px] items-center">
-          {" "}
-          {formatCommission(commission)}%
-        </div>
-      );
-    },
-    accessorKey: "commission",
-    enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.commission.commissionRates.rate ?? 0;
-      const b = rowB.original.commission.commissionRates.rate ?? 0;
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
   },
   {
     header: ({ column }) => (
@@ -102,7 +49,7 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     cell: ({ row }) => (
       <div className="flex h-full w-[91px] items-center">
         {" "}
-        {Number(row.original.vApy ?? 0).toFixed(2)}%
+        {Number(0).toFixed(2)}%
       </div>
     ),
     accessorKey: "vApy",
@@ -112,7 +59,7 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
     ),
-    cell: ({ row }) => <ValidatorGauge address={row.original.operatorAddr} />,
+    cell: () => <></>,
     accessorKey: "mostWeightedGauge",
     enableSorting: false,
   },
@@ -120,14 +67,7 @@ export const general_validator_columns: ColumnDef<PoLValidator>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Bribes" />
     ),
-    cell: ({ row }) => {
-      const tokens = row.original.bribeTokenList;
-      return tokens.length !== 0 ? (
-        <TokenIconList tokenList={[]} size="lg" showCount={3} />
-      ) : (
-        <p>no bribes</p>
-      );
-    },
+    cell: () => <></>,
     accessorKey: "bribes",
     enableSorting: false,
   },

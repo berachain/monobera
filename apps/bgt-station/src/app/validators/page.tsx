@@ -1,13 +1,5 @@
 import React from "react";
 import { type Metadata } from "next";
-import {
-  dexClient,
-  getGlobalCuttingBoard,
-  getInflationData,
-  type InflationRate,
-  type Weight,
-} from "@bera/graphql";
-
 import { getMetaTitle } from "~/utils/metadata";
 import Validators from "./validators";
 
@@ -16,6 +8,14 @@ export const metadata: Metadata = {
   description: "View active validators on Berachain",
 };
 
-export default async function Page() {
-  return <Validators activeGauges={0} bgtSupply={0} />;
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: {
+    page: number;
+    limit: number;
+  };
+}) {
+  const { page, limit } = searchParams;
+  return <Validators page={page ?? 0} limit={limit ?? 10} />;
 }

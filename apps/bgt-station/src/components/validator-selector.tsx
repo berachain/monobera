@@ -22,6 +22,7 @@ import { formatUnits, getAddress, type Address } from "viem";
 
 import { ValidatorGauge } from "~/app/validators/validators-table";
 import { validator_table_columns } from "~/columns/validator-table-columns";
+import { ValidatorV2 } from "@bera/proto/src";
 
 export default function ValidatorSelector({
   validatorAddress,
@@ -223,6 +224,19 @@ export const VP = ({
     <div className="flex h-full w-full flex-shrink-0 items-center">
       {formatter.format(Number(formatUnits(tokens, 18)))} (
       {percentageDelegated?.toFixed(2)}%)
+    </div>
+  );
+};
+
+export const ValidatorVotingPower = ({
+  validator,
+}: {
+  validator: ValidatorV2;
+}) => {
+  return (
+    <div className="flex h-full w-full flex-shrink-0 items-center">
+      {validator.consensus_power.toString()} (
+      {validator.consensus_power.toString()})
     </div>
   );
 };
