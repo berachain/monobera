@@ -42,7 +42,7 @@ export default function KnowMore() {
             width={400}
             height={400}
             layout="intrinsic"
-            className="h-[200px] w-[200px] md:h-[300px] md:w-[300px] lg:h-auto lg:w-auto lg:max-w-full"
+            className="h-[200px] w-[200px] md:h-[300px] md:w-[300px] lg:h-auto lg:w-auto"
           />
         </div>
       </div>
