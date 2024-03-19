@@ -22,6 +22,7 @@ export { TxnPreview } from "./txn-preview";
 export { Timeblock } from "./time-block";
 export { PreviewToken, TokenList } from "./preview-token-list";
 export { InfoBoxList, InfoBoxListItem } from "./info-box";
+export { TooltipCustom } from "./tooltip-custom";
 export { Dropdown } from "./dropdown";
 export { HoneyBanner } from "./honey-banner";
 export { LaunchBanner, RPCBanner, CustomizedBanner } from "./launch-banner";
