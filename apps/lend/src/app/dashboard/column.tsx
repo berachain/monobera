@@ -1,6 +1,9 @@
 import React from "react";
-import { formatter } from "@bera/berajs";
-import { DataTableColumnHeader, TokenIcon } from "@bera/shared-ui";
+import {
+  DataTableColumnHeader,
+  FormattedNumber,
+  TokenIcon,
+} from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import InfoButton from "~/components/info-button";
@@ -34,17 +37,23 @@ export const user_supply_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-medium">
-          {formatter.format(Number(row.original.formattedBalance))}
+          <FormattedNumber
+            value={row.original.formattedBalance}
+            compact={false}
+          />
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          $
-          {formatter.format(
-            Number(row.original.formattedBalance) *
+          <FormattedNumber
+            value={
+              Number(row.original.formattedBalance) *
               Number(
                 row.original.reserveData
                   .formattedPriceInMarketReferenceCurrency,
-              ),
-          )}
+              )
+            }
+            compact={false}
+            symbol="USD"
+          />
         </div>
       </div>
     ),
@@ -111,17 +120,23 @@ export const user_borrows_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-medium">
-          {formatter.format(Number(row.original.formattedBalance))}
+          <FormattedNumber
+            value={row.original.formattedBalance}
+            compact={false}
+          />
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          $
-          {formatter.format(
-            Number(row.original.formattedBalance) *
+          <FormattedNumber
+            value={
+              Number(row.original.formattedBalance) *
               Number(
                 row.original.reserveData
                   .formattedPriceInMarketReferenceCurrency,
-              ),
-          )}
+              )
+            }
+            compact={false}
+            symbol="USD"
+          />
         </div>
       </div>
     ),
@@ -184,17 +199,23 @@ export const available_supply_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-medium">
-          {formatter.format(Number(row.original.formattedBalance))}
+          <FormattedNumber
+            value={row.original.formattedBalance}
+            compact={false}
+          />
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          $
-          {formatter.format(
-            Number(row.original.formattedBalance) *
+          <FormattedNumber
+            value={
+              Number(row.original.formattedBalance) *
               Number(
                 row.original.reserveData
                   .formattedPriceInMarketReferenceCurrency,
-              ),
-          )}
+              )
+            }
+            compact={false}
+            symbol="USD"
+          />
         </div>
       </div>
     ),
@@ -279,17 +300,24 @@ export const available_borrows_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-medium">
-          {formatter.format(Number(row.original.formattedBalance))}
+          <FormattedNumber
+            value={row.original.formattedBalance}
+            compact={false}
+            symbol="USD"
+          />
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          $
-          {formatter.format(
-            Number(row.original.formattedBalance) *
+          <FormattedNumber
+            value={
+              Number(row.original.formattedBalance) *
               Number(
                 row.original.reserveData
                   .formattedPriceInMarketReferenceCurrency,
-              ),
-          )}
+              )
+            }
+            compact={false}
+            symbol="USD"
+          />
         </div>
       </div>
     ),

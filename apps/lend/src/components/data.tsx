@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { formatUsd, usePollReservesDataList } from "@bera/berajs";
+import { usePollReservesDataList } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
