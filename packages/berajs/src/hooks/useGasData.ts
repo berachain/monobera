@@ -10,19 +10,22 @@ export const useGasData = ({
   const publicClient = usePublicClient();
 
   const [gasData, setGasData] = useState<bigint | undefined>();
+  const generalGasPriceEstimate = useGasPrice();
   useEffect(() => {
-    if (contractArgs === undefined) {
-      setGasData(BigInt(parseFloat(`${useGasPrice()}`)));
+    if (contractArgs === undefined && generalGasPriceEstimate.data) {
+      setGasData(BigInt(parseFloat(`${generalGasPriceEstimate.data}`)));
       return;
     }
-    if (contractArgs === null) {
+    if (!contractArgs) {
       setGasData(undefined);
       return;
     }
-    publicClient?.estimateContractGas({ ...contractArgs }).then((data) => {
-      setGasData(data);
-    });
-  }, [contractArgs]);
+    publicClient
+      ?.estimateContractGas({ ...(contractArgs as any) })
+      .then((data) => {
+        setGasData(data);
+      });
+  }, [contractArgs, generalGasPriceEstimate]);
 
   return gasData;
 };

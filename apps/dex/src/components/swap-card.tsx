@@ -321,7 +321,8 @@ export function SwapCard({
       !fromAmount ||
       !selectedTo ||
       !selectedFrom ||
-      error !== undefined
+      error !== undefined ||
+      isRouteLoading
     )
       return "-";
     if (gasPrice < 0.01) return "<$0.01";
@@ -334,6 +335,7 @@ export function SwapCard({
     gasPrice,
     hasRouteNotFoundError,
     error,
+    isRouteLoading,
   ]);
   const breakpoint = useBreakpoint();
 
@@ -425,10 +427,14 @@ export function SwapCard({
                 {priceImpact && priceImpact < -10 && (
                   <TooltipCustom
                     anchor={
-                      breakpoint > BREAKPOINTS.md ? "right" : "bottom-center"
+                      breakpoint && breakpoint > BREAKPOINTS.md
+                        ? "right"
+                        : "bottom-center"
                     }
                     position={
-                      breakpoint > BREAKPOINTS.md ? "left" : "bottom-center"
+                      breakpoint && breakpoint > BREAKPOINTS.md
+                        ? "left"
+                        : "bottom-center"
                     }
                     tooltipContent={
                       <div className="w-[250px]">
