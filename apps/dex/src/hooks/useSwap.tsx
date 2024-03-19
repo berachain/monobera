@@ -332,7 +332,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   // Calculate gas for connected wallet user (more accurate)
   const { account } = useBeraJs();
 
-  let gasParams = null;
+  let gasParams;
   if (isWrap) {
     gasParams = {
       address: process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address,
