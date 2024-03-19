@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   ICrocSwapStep,
+  MULTISWAP_ABI,
+  WBERA_ABI,
+  useBeraJs,
   useGasData,
   usePollAllowance,
   usePollAssetWalletBalance,
@@ -18,10 +21,15 @@ import {
   nativeTokenAddress,
 } from "@bera/config";
 import { useSlippage } from "@bera/shared-ui/src/hooks";
-import { formatGwei, formatUnits, parseUnits, type Address } from "viem";
-import { useEstimateGas } from "wagmi";
+import {
+  formatEther,
+  formatGwei,
+  formatUnits,
+  parseUnits,
+  type Address,
+} from "viem";
+import { useGasPrice } from "wagmi";
 
-import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBeratoken } from "~/utils/isBeraToken";
 
 export enum SwapKind {
@@ -303,16 +311,53 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
   }, [payload]);
 
-  const gasData = useEstimateGas({
-    to: isWrap
-      ? (process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address)
-      : crocMultiSwapAddress,
-    value: parseUnits(`${swapAmount}`, 18),
-  });
-  const formattedGasPrice =
-    gasData?.data && toAmount && parseFloat(toAmount) > 0
-      ? formatGwei(gasData.data)
+  // Calculate gas for connected wallet user (more accurate)
+  const { account } = useBeraJs();
+
+  let gasParams = null;
+  if (isWrap) {
+    gasParams = {
+      address: process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address,
+      abi: WBERA_ABI,
+      functionName: wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",
+      args:
+        wrapType === WRAP_TYPE.WRAP ? [] : [parseUnits(`${swapAmount}`, 18)],
+      value: wrapType === WRAP_TYPE.WRAP ? parseUnits(`${swapAmount}`, 18) : 0n,
+      account,
+    };
+  } else if (payload?.length > 1) {
+    gasParams = {
+      address: crocMultiSwapAddress,
+      abi: MULTISWAP_ABI,
+      functionName: "multiSwap",
+      args: payload,
+      value: swapInfo?.value,
+      account,
+    };
+  }
+  const gasData = useGasData({ contractArgs: gasParams });
+  const beraInUsd = useTokenHoneyPrice(process.env.NEXT_PUBLIC_BERA_ADDRESS);
+  const formattedGasPriceInBera = gasData ? parseFloat(formatGwei(gasData)) : 0;
+
+  // Calculate general gas for unconnected wallet user (less accurate)
+  const generalGasEstimateData = useGasPrice();
+  const generalGasEstimateInBera = generalGasEstimateData.data
+    ? parseFloat(
+        formatEther(
+          BigInt(parseFloat(`${generalGasEstimateData.data}`) * 30000),
+        ),
+      )
+    : 0;
+
+  // Format and output final gas price
+  const beraGasPriceToUSD = (priceInBera: number) => {
+    return beraInUsd.data && priceInBera
+      ? parseFloat(beraInUsd.data) * priceInBera
       : null;
+  };
+  const formattedGasPrice = formattedGasPriceInBera
+    ? beraGasPriceToUSD(formattedGasPriceInBera)
+    : beraGasPriceToUSD(generalGasEstimateInBera);
 
   return {
     setSwapKind,

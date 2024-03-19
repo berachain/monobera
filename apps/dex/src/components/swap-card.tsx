@@ -294,11 +294,43 @@ export function SwapCard({
     return <Connect />;
   };
 
+  const hasRouteNotFoundError =
+    selectedFrom &&
+    selectedTo &&
+    swapInfo &&
+    swapInfo.batchSwapSteps.length === 0 &&
+    fromAmount &&
+    fromAmount !== "" &&
+    swapAmount !== "0" &&
+    swapAmount !== "" &&
+    !isRouteLoading &&
+    !isWrap;
+
+  const hasInsufficientBalanceError =
+    isConnected && exceedingBalance && !isBalancesLoading;
+
   const gasPriceLabel = useMemo(() => {
-    if (!gasPrice) return "-";
-    if (parseFloat(gasPrice) < 0.001) return "<0.001";
-    return `${gasPrice}`;
-  }, [gasPrice]);
+    if (
+      !gasPrice ||
+      hasRouteNotFoundError ||
+      !toAmount ||
+      !fromAmount ||
+      !selectedTo ||
+      !selectedFrom ||
+      error !== undefined
+    )
+      return "-";
+    if (gasPrice < 0.01) return "<$0.01";
+    return `$${gasPrice.toFixed(2)}`;
+  }, [
+    toAmount,
+    fromAmount,
+    selectedTo,
+    selectedFrom,
+    gasPrice,
+    hasRouteNotFoundError,
+    error,
+  ]);
 
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
@@ -397,17 +429,22 @@ export function SwapCard({
                       </div>
                       <div className="flex w-full flex-row justify-between">
                         <p className="text-xs font-medium text-muted-foreground sm:text-sm">
-                          Gas fee
+                          Network fee
                         </p>
-                        <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                          {gasPriceLabel}
+                        <p className="cursor-help whitespace-nowrap text-right text-xs font-medium sm:text-sm ">
+                          <span className="flex flex-row items-center gap-1">
+                            {gasPriceLabel !== "-" && (
+                              <Icons.fuel className="h-4 w-4" />
+                            )}
+                            {gasPriceLabel}
+                          </span>
                         </p>
                       </div>
                     </div>
                   ) : (
                     false
                   )}
-                  {isConnected && exceedingBalance && !isBalancesLoading ? (
+                  {hasInsufficientBalanceError ? (
                     <Alert
                       variant="destructive"
                       className="items-center justify-center"
@@ -420,15 +457,13 @@ export function SwapCard({
                   ) : (
                     false
                   )}
-                  {error !== undefined ? (
+                  {error !== undefined && (
                     <Alert variant="destructive">
                       <AlertTitle>Error</AlertTitle>
                       <AlertDescription className="text-xs">
                         {error.message}
                       </AlertDescription>
                     </Alert>
-                  ) : (
-                    false
                   )}
                   {/* {isRouteLoading === true && swapAmount !=='0' && selectedTo !==undefined ? (
                     <Alert variant="info">
@@ -455,16 +490,7 @@ export function SwapCard({
                   ) : (
                     false
                   )} */}
-                  {selectedFrom &&
-                  selectedTo &&
-                  swapInfo &&
-                  swapInfo.batchSwapSteps.length === 0 &&
-                  fromAmount &&
-                  fromAmount !== "" &&
-                  swapAmount !== "0" &&
-                  swapAmount !== "" &&
-                  !isRouteLoading &&
-                  !isWrap ? (
+                  {hasRouteNotFoundError ? (
                     <Alert variant="destructive">
                       <AlertTitle>
                         {" "}
