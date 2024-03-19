@@ -8,7 +8,7 @@ import { ThemeProvider } from "~/components/theme-provider";
 export default function Providers({ children }: PropsWithChildren<any>) {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-      <BeraConfig autoConnect={true}>{children}</BeraConfig>
+      <BeraConfig>{children}</BeraConfig>
     </ThemeProvider>
   );
 }

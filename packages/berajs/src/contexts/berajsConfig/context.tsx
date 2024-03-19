@@ -17,17 +17,16 @@ import { TransactionStoreProvider } from "~/hooks/transactions/TransactionStoreC
 import { CrocEnvContextProvider } from "../crocenv";
 
 interface IBeraConfig extends PropsWithChildren {
-  autoConnect?: boolean;
+  // autoConnect?: boolean; // its always on for dynamic 4 now
   darkTheme?: boolean;
 }
 
 export interface IBeraConfigAPI {
   networkConfig: NetworkConfig;
-  autoConnect: boolean;
+  // autoConnect: boolean; // its always on for dynamic 4 now, may release more feature in the future
   darkTheme?: boolean;
-  walletConnectors?: any;
+  // walletConnectors?: any;
   chains?: any;
-  walletReconnect: () => Promise<void>;
 }
 
 export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
@@ -36,7 +35,7 @@ export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
 
 const BeraConfig: React.FC<IBeraConfig> = ({
   children,
-  autoConnect = false,
+  // autoConnect = false,
   darkTheme = undefined,
 }) => {
   const { theme: nextTheme } = useTheme();
@@ -46,8 +45,8 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         ? "auto"
         : nextTheme
       : darkTheme
-        ? "dark"
-        : "light";
+      ? "dark"
+      : "light";
 
   const config = createConfig({
     //   appName: "Bears Chain",
@@ -64,15 +63,8 @@ const BeraConfig: React.FC<IBeraConfig> = ({
 
   const queryClient = new QueryClient();
 
-  const walletReconnect = async () => {
-    //@ts-ignore
-    await reconnect(config, { connectors: [EthereumWalletConnectors] });
-  };
-
   return (
-    <BeraConfigContext.Provider
-      value={{ networkConfig: defaultBeraConfig, autoConnect, walletReconnect }}
-    >
+    <BeraConfigContext.Provider value={{ networkConfig: defaultBeraConfig }}>
       <DynamicContextProvider
         settings={{
           initialAuthenticationMode: "connect-only",

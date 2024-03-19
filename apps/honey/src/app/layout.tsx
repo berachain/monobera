@@ -66,7 +66,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           {" "}
           <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
           <ApolloProvider client={honeyClient}>
-            <BeraConfig autoConnect={true}>
+            <BeraConfig>
               <Header
                 isHoney
                 navItems={navItems}

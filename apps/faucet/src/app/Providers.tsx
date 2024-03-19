@@ -7,7 +7,7 @@ import { ThemeProvider } from "next-themes";
 export default function Providers({ children }: PropsWithChildren<any>) {
   return (
     <ThemeProvider attribute="class" forcedTheme="light">
-      <BeraConfig autoConnect={false}>{children}</BeraConfig>
+      <BeraConfig>{children}</BeraConfig>
     </ThemeProvider>
   );
 }

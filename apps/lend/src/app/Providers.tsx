@@ -9,7 +9,7 @@ import { ThemeProvider } from "next-themes";
 export default function Providers({ children }: PropsWithChildren<any>) {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-      <BeraConfig autoConnect={true}>
+      <BeraConfig>
         <ApolloProvider client={lendClient}>{children}</ApolloProvider>
       </BeraConfig>
     </ThemeProvider>
