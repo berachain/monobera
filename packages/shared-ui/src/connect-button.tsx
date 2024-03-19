@@ -21,6 +21,7 @@ export const ConnectButton = ({
   btnClassName?: string;
 }) => {
   const { isConnected, isWrongNetwork, isReady } = useBeraJs();
+  console.log("isConnected", isConnected, isWrongNetwork, isReady);
   return (
     <div className={className}>
       {!isConnected && (
