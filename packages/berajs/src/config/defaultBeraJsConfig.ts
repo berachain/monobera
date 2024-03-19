@@ -1,47 +1,67 @@
+import {
+  blockExplorerName,
+  blockExplorerUrl,
+  chainId,
+  chainName,
+  gasTokenDecimals,
+  gasTokenName,
+  gasTokenSymbol,
+  jsonRpcUrl,
+  publicJsonRpcUrl,
+} from "@bera/config";
+import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { type Chain } from "viem";
 
 import { isProduction } from "../api/utils/isProduction";
 import { type NetworkConfig } from "./types";
 
 const BeraChain: Chain = {
-  id: 2061,
-  name: "Polaris",
+  id: chainId,
+  name: chainName,
   nativeCurrency: {
-    decimals: 18,
-    name: "Polaris",
-    symbol: "tbera",
+    decimals: gasTokenDecimals,
+    name: gasTokenName,
+    symbol: gasTokenSymbol,
   },
   blockExplorers: {
     etherscan: {
-      name: "PolarScan",
-      url: "k8s-guardedt-explorer-f0d73f8a8b-1f6003a02eec3390.elb.us-west-2.amazonaws.com",
+      name: blockExplorerName,
+      url: blockExplorerUrl,
     },
     default: {
-      name: "PolarScan",
-      url: "k8s-guardedt-explorer-f0d73f8a8b-1f6003a02eec3390.elb.us-west-2.amazonaws.com",
+      name: blockExplorerName,
+      url: blockExplorerUrl,
     },
   },
   rpcUrls: {
     default: {
-      http: [
-        isProduction()
-          ? "http://guarded.beraswillmakeit.com:8545"
-          : "https://devnet.beraswillmakeit.com",
-      ],
+      http: [jsonRpcUrl],
     },
     public: {
-      http: [
-        isProduction()
-          ? "http://guarded.beraswillmakeit.com:8545"
-          : "https://devnet.beraswillmakeit.com",
-      ],
+      http: [publicJsonRpcUrl],
     },
   },
 };
 
-export const defaultBeraConfig: NetworkConfig = {
-  precompileAddresses: {
-    multicall: "0x0000",
+const evmNetwork: EvmNetwork = {
+  blockExplorerUrls: [blockExplorerUrl],
+  chainId: chainId,
+  chainName: chainName,
+  iconUrls: [gasTokenSymbol],
+  nativeCurrency: {
+    decimals: gasTokenDecimals,
+    name: gasTokenName,
+    symbol: gasTokenSymbol,
   },
+  networkId: chainId,
+  privateCustomerRpcUrls: [jsonRpcUrl],
+  rpcUrls: [publicJsonRpcUrl],
+  vanityName: chainName,
+  name: chainName,
+};
+
+export const defaultBeraConfig: NetworkConfig = {
+  isTestnet: !isProduction(),
   chain: BeraChain,
+  evmNetwork,
 };
