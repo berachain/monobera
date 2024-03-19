@@ -1,4 +1,4 @@
-import { formatter, usePollAssetWalletBalance } from "@bera/berajs";
+import { usePollAssetWalletBalance } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";

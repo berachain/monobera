@@ -1,6 +1,9 @@
 import React from "react";
-import { formatUsd, formatter } from "@bera/berajs";
-import { DataTableColumnHeader, TokenIcon } from "@bera/shared-ui";
+import {
+  DataTableColumnHeader,
+  FormattedNumber,
+  TokenIcon,
+} from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type ColumnDef } from "@tanstack/react-table";
 
@@ -35,13 +38,20 @@ export const market_table_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col pl-1">
         <div className="font-base text-base font-medium">
-          {formatter.format(row.original.totalLiquidity)}
+          <FormattedNumber
+            value={row.original.totalLiquidity}
+            compact={false}
+          />
         </div>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          {formatUsd(
-            Number(row.original.totalLiquidity) *
-              Number(row.original.formattedPriceInMarketReferenceCurrency),
-          )}
+          <FormattedNumber
+            value={
+              Number(row.original.totalLiquidity) *
+              Number(row.original.formattedPriceInMarketReferenceCurrency)
+            }
+            compact={false}
+            symbol="USD"
+          />
         </div>
       </div>
     ),
@@ -64,15 +74,18 @@ export const market_table_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Total Borrowed" />
     ),
-    cell: () => (
+    cell: ({ row }) => (
       <div className="flex flex-col pl-1 text-base">
-        {/* {formatter.format(Number(row.original.totalDebt))} */} ~~
+        <FormattedNumber compact={false} value={row.original.totalDebt} />
         <div className="text-xs font-medium leading-tight text-muted-foreground">
-          {/* $ ~~ */}
-          {/* {formatter.format(
-            row.original.totalDebt *
-              row.original.formattedPriceInMarketReferenceCurrency,
-          )} */}
+          <FormattedNumber
+            compact={false}
+            value={
+              row.original.totalDebt *
+              row.original.formattedPriceInMarketReferenceCurrency
+            }
+            symbol="USD"
+          />
         </div>
       </div>
     ),

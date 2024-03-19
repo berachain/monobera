@@ -126,16 +126,8 @@ export function HoneyTokenInput({
               )}
             </div>
           )}
-          {/* <div className="flex flex-row gap-1">
-              {!hidePrice && (
-                <p className="self-center p-0 text-xs text-muted-foreground">
-                  {amount !== 0 && formatUsd((amount * 1).toFixed(2))}
-                </p>
-              )}
-            </div> */}
         </div>
-      ) : // </div>
-      null}
+      ) : null}
     </li>
   );
 }

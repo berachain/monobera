@@ -1,5 +1,4 @@
-import { formatUsd, formatter } from "@bera/berajs";
-import { TokenIcon, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import InfoButton from "~/components/info-button";
@@ -22,14 +21,19 @@ export default function TokenCard({ reserveData }: { reserveData: any }) {
               />
             </div>
             <div className="text-lg font-bold leading-[22px]">
-              {formatter.format(reserveData.totalLiquidity)}{" "}
-              {reserveData.token?.symbol}
+              <FormattedNumber
+                value={reserveData.totalLiquidity}
+                symbol={reserveData.token?.symbol}
+              />
             </div>
             <div className=" text-xs font-medium leading-5">
-              {formatUsd(
-                Number(reserveData.totalLiquidity) *
-                  Number(reserveData.formattedPriceInMarketReferenceCurrency),
-              )}{" "}
+              <FormattedNumber
+                value={
+                  Number(reserveData.totalLiquidity) *
+                  Number(reserveData.formattedPriceInMarketReferenceCurrency)
+                }
+                symbol="USD"
+              />
             </div>
           </div>
         </div>
@@ -61,7 +65,7 @@ export default function TokenCard({ reserveData }: { reserveData: any }) {
           </div>
           <div className="font-bold xl:text-lg">
             ~~
-            {/* {formatter.format(Number(reserveData.totalDebt))} */}
+            {/* {Number(reserveData.totalDebt)} */}
           </div>
         </div>
       </div>

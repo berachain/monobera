@@ -1,7 +1,11 @@
 import React from "react";
-import { formatUsd, truncateHash } from "@bera/berajs";
+import { truncateHash } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
-import { DataTableColumnHeader, TokenIcon } from "@bera/shared-ui";
+import {
+  DataTableColumnHeader,
+  FormattedNumber,
+  TokenIcon,
+} from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 import { formatDistance } from "date-fns";
@@ -26,7 +30,9 @@ export const transaction_history_columns: ColumnDef<any>[] = [
         row.original.__typename === "HoneyMint"
           ? row.original.mintAmount
           : row.original.collateralAmount;
-      return formatUsd(formatUnits(BigInt(amount), 18));
+      return (
+        <FormattedNumber value={formatUnits(BigInt(amount), 18)} symbol="USD" />
+      );
     },
     accessorKey: "value",
     enableSorting: false,
