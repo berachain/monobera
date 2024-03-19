@@ -17,6 +17,7 @@ import {
 } from "@tanstack/react-table";
 import { CloseOrderModal } from "~/app/components/close-order-modal";
 import { ILimitOrder, IMarketOrder } from "./order-history";
+import { LoadingContainer } from "./loading-container";
 
 export type OrderLine = {
   type: string;
@@ -35,11 +36,6 @@ const TVChartContainer = dynamic(
     ),
   {
     ssr: false,
-    loading: () => (
-      <div className="flex h-full w-full flex-col items-center justify-center">
-        Loading
-      </div>
-    ),
   },
 );
 
@@ -75,6 +71,7 @@ export function OrderChart({
   const [orderOpenState, setOrderOpenState] = useState(false);
   const [position, setPosition] = useState<IMarketOrder>();
   const [order, setOrder] = useState<ILimitOrder>();
+  const [chartReady, setChartReady] = useState(false);
 
   const defaultWidgetProps: Partial<ChartingLibraryWidgetOptions> = {
     symbol: marketName,
@@ -173,35 +170,68 @@ export function OrderChart({
     return [];
   }, [tabType, humanizedOrders, humanizedPositions]);
 
+  console.log("checking", isMounted, chartReady);
+
   return (
-    <div className="h-full w-full">
-      {isMounted ? (
-        <>
-          {position && (
-            <ClosePositionModal
-              controlledOpen={positionOpenState}
-              openPosition={position}
-              onOpenChange={setPositionOpenState}
-            />
-          )}
-          {order && (
-            <CloseOrderModal
-              controlledOpen={orderOpenState}
-              openOrder={order}
-              onOpenChange={setOrderOpenState}
-            />
-          )}
-          <TVChartContainer
-            {...defaultWidgetProps}
-            showOrderLines={showOrderLines}
-            orderLines={orderLines}
+    <div className="h-full w-full grid">
+      <div className="h-full w-full" style={{ gridArea: "1 / 1" }}>
+        {position && (
+          <ClosePositionModal
+            controlledOpen={positionOpenState}
+            openPosition={position}
+            onOpenChange={setPositionOpenState}
           />
-        </>
-      ) : (
-        <div className="flex h-full w-full flex-col items-center justify-center">
-          Loading
-        </div>
+        )}
+        {order && (
+          <CloseOrderModal
+            controlledOpen={orderOpenState}
+            openOrder={order}
+            onOpenChange={setOrderOpenState}
+          />
+        )}
+        <TVChartContainer
+          {...defaultWidgetProps}
+          showOrderLines={showOrderLines}
+          orderLines={orderLines}
+          chartReady={chartReady}
+          setChartReady={setChartReady}
+        />
+      </div>
+      {!(chartReady && isMounted) && (
+        <LoadingContainer style={{ gridArea: "1 / 1" }} />
       )}
     </div>
   );
+
+  // return (
+  //   <div className="h-full w-full">
+  //       {isMounted ? (
+  //         <>
+  //         {position && (
+  //           <ClosePositionModal
+  //             controlledOpen={positionOpenState}
+  //             openPosition={position}
+  //             onOpenChange={setPositionOpenState}
+  //           />
+  //         )}
+  //         {order && (
+  //           <CloseOrderModal
+  //             controlledOpen={orderOpenState}
+  //             openOrder={order}
+  //             onOpenChange={setOrderOpenState}
+  //           />
+  //         )}
+  //         <TVChartContainer
+  //           {...defaultWidgetProps}
+  //           showOrderLines={showOrderLines}
+  //           orderLines={orderLines}
+  //           chartReady={chartReady}
+  //           setChartReady={setChartReady}
+  //         />
+  //       </>
+  //       ) : (
+  //           <LoadingContainer />
+  //         )}
+  //   </div>
+  // );
 }

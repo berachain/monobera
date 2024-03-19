@@ -1,15 +1,22 @@
+import { cn } from "@bera/ui";
+
 export const SSRSpinner = ({
   className = "",
   size = 6,
+  spinnerClassName = "",
 }: {
   className?: string;
   size?: number;
+  spinnerClassName?: string;
 }) => {
   return (
     <div role="status" className={className}>
       <svg
         aria-hidden="true"
-        className={`h-${size} w-${size} animate-spin fill-green-600 text-gray-200 dark:text-gray-600`}
+        className={cn(
+          `h-${size} w-${size} animate-spin fill-green-600 text-gray-200 dark:text-gray-600`,
+          spinnerClassName,
+        )}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

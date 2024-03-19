@@ -12,6 +12,9 @@ import {
 import Datafeed from "../../../../utils/tv-datafeed";
 import styles from "./index.module.css";
 import { type OrderLine } from "../order-chart";
+import { LoadingContainer } from "../loading-container";
+import { cn } from "@bera/ui";
+import { usePrevious } from "@bera/shared-ui";
 
 export const TV_BACKGROUND_COLOR = {
   dark: "#0E0803",
@@ -21,6 +24,8 @@ export const TV_BACKGROUND_COLOR = {
 export type ChartProps = Partial<ChartingLibraryWidgetOptions> & {
   showOrderLines?: boolean;
   orderLines?: OrderLine[];
+  chartReady: boolean;
+  setChartReady: (ready: boolean) => void;
 };
 
 export const TVChartContainer = (props: ChartProps) => {
@@ -28,10 +33,17 @@ export const TVChartContainer = (props: ChartProps) => {
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const tvWidgetRef = useRef<IChartingLibraryWidget | null>(null);
   const orderLineRefs = useRef<IPositionLineAdapter[] | undefined>([]);
-  const [chartReady, setChartReady] = useState(false);
+  // const [chartReady, setChartReady] = useState(false);
 
   const { theme: appTheme, systemTheme } = useTheme();
   const theme = (appTheme === "system" ? systemTheme : appTheme) || "dark";
+  const prevTheme = usePrevious(theme);
+
+  useEffect(() => {
+    if (prevTheme !== theme && props.chartReady) {
+      props.setChartReady(false);
+    }
+  }, [prevTheme, theme, props.chartReady, props.setChartReady]);
 
   const renderOrderLines = () => {
     tvWidgetRef.current?.onChartReady(() => {
@@ -119,7 +131,7 @@ export const TVChartContainer = (props: ChartProps) => {
   };
 
   useEffect(() => {
-    if (chartReady) {
+    if (props.chartReady) {
       if (props.showOrderLines) {
         tvWidgetRef.current?.onChartReady(() => {
           tvWidgetRef.current?.chart().dataReady(() => {
@@ -130,7 +142,7 @@ export const TVChartContainer = (props: ChartProps) => {
         clearOrderLines();
       }
     }
-  }, [props.orderLines, props.showOrderLines, tvWidgetRef, chartReady]);
+  }, [props.orderLines, props.showOrderLines, tvWidgetRef, props.chartReady]);
 
   useEffect(() => {
     const backgroundColor =
@@ -182,7 +194,9 @@ export const TVChartContainer = (props: ChartProps) => {
     tvWidgetRef.current = tvWidget;
 
     tvWidgetRef.current?.onChartReady(() => {
-      setChartReady(true);
+      widgetOptions.overrides &&
+        tvWidgetRef.current?.applyOverrides(widgetOptions.overrides);
+      props.setChartReady(true);
       void tvWidget.headerReady().then(() => {
         const button = tvWidget.createButton();
         button.setAttribute("title", "Click to show a notification popup");
@@ -216,7 +230,7 @@ export const TVChartContainer = (props: ChartProps) => {
     props.fullscreen,
     props.autosize,
     theme,
-    setChartReady,
+    props.setChartReady,
   ]);
 
   return <div ref={chartContainerRef} className={styles.TVChartContainer} />;
