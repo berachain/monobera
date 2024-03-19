@@ -15,7 +15,10 @@ import { cloudinaryUrl, crocMultiSwapAddress } from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
+  BREAKPOINTS,
   TokenInput,
+  TooltipCustom,
+  useBreakpoint,
   useTxn,
 } from "@bera/shared-ui";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
@@ -93,6 +96,7 @@ export function SwapCard({
     isWrap,
     wrapType,
     minAmountOut,
+    priceImpact,
   } = useSwap({
     inputCurrency,
     outputCurrency,
@@ -331,6 +335,7 @@ export function SwapCard({
     hasRouteNotFoundError,
     error,
   ]);
+  const breakpoint = useBreakpoint();
 
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
@@ -357,7 +362,7 @@ export function SwapCard({
               Swap <SettingsPopover />
             </CardTitle>
             <div className="mt-3">
-              <div className="border-1 flex flex-col gap-6 border-border">
+              <div className="border-1 flex flex-col gap-4 border-border">
                 <ul
                   className={cn(
                     "divide-y divide-border rounded-2xl border",
@@ -412,10 +417,39 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setToAmount(amount);
                     }}
+                    priceImpact={priceImpact}
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
                   />
                 </ul>
+                {priceImpact && priceImpact < -10 && (
+                  <TooltipCustom
+                    anchor={
+                      breakpoint > BREAKPOINTS.md ? "right" : "bottom-center"
+                    }
+                    position={
+                      breakpoint > BREAKPOINTS.md ? "left" : "bottom-center"
+                    }
+                    tooltipContent={
+                      <div className="w-[250px]">
+                        <p className="text-xs text-muted-foreground">
+                          A swap of this size may have a high price impact,
+                          given the current liquidity in the pool. There may be
+                          a large difference between the amount of your input
+                          token and what you will receive in the output token
+                        </p>
+                      </div>
+                    }
+                  >
+                    <Alert variant="destructive">
+                      <AlertDescription className="text-xs">
+                        <Icons.tooltip className="mr-2 mt-[-4px] inline h-4 w-4" />
+                        {`Price Impact Warning: ${priceImpact}%`}
+                      </AlertDescription>
+                    </Alert>
+                  </TooltipCustom>
+                )}
+
                 <div className="flex flex-col gap-2">
                   {!isWrap ? (
                     <div className="flex w-full flex-col gap-1 rounded-lg bg-muted p-3">

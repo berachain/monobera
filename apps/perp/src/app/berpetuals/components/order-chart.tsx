@@ -11,9 +11,13 @@ import {
 import { type IMarket } from "../page";
 import type { ChartProps } from "./TVChartContainer";
 import { type BerpTabTypes } from "./order-wrapper";
-import { RowSelectionState } from "@tanstack/react-table";
+import {
+  type RowSelectionState,
+  type PaginationState,
+} from "@tanstack/react-table";
 import { CloseOrderModal } from "~/app/components/close-order-modal";
 import { ILimitOrder, IMarketOrder } from "./order-history";
+import { LoadingContainer } from "./loading-container";
 
 export type OrderLine = {
   type: string;
@@ -32,11 +36,6 @@ const TVChartContainer = dynamic(
     ),
   {
     ssr: false,
-    loading: () => (
-      <div className="flex h-[500px] w-full flex-col items-center justify-center">
-        Loading
-      </div>
-    ),
   },
 );
 
@@ -45,12 +44,14 @@ export function OrderChart({
   marketName,
   selection,
   setSelection,
+  pagination,
   tabType,
   showOrderLines,
 }: {
   markets: IMarket[];
   marketName: string;
   selection: RowSelectionState;
+  pagination: PaginationState;
   setSelection: (selection: RowSelectionState) => void;
   tabType: BerpTabTypes;
   showOrderLines: boolean;
@@ -70,6 +71,7 @@ export function OrderChart({
   const [orderOpenState, setOrderOpenState] = useState(false);
   const [position, setPosition] = useState<IMarketOrder>();
   const [order, setOrder] = useState<ILimitOrder>();
+  const [chartReady, setChartReady] = useState(false);
 
   const defaultWidgetProps: Partial<ChartingLibraryWidgetOptions> = {
     symbol: marketName,
@@ -90,6 +92,8 @@ export function OrderChart({
           if (
             selection &&
             (Object.keys(selection).length === 0 || selection[index]) &&
+            index >= pagination.pageIndex * pagination.pageSize &&
+            index < (pagination.pageIndex + 1) * pagination.pageSize &&
             position?.market?.name === marketName
           ) {
             const positionSize =
@@ -126,6 +130,8 @@ export function OrderChart({
           if (
             selection &&
             (Object.keys(selection).length === 0 || selection[index]) &&
+            index >= pagination.pageIndex * pagination.pageSize &&
+            index < (pagination.pageIndex + 1) * pagination.pageSize &&
             order?.market?.name === marketName
           ) {
             const positionSize =
@@ -164,35 +170,68 @@ export function OrderChart({
     return [];
   }, [tabType, humanizedOrders, humanizedPositions]);
 
+  console.log("checking", isMounted, chartReady);
+
   return (
-    <div className="h-[500px] w-full">
-      {isMounted ? (
-        <>
-          {position && (
-            <ClosePositionModal
-              controlledOpen={positionOpenState}
-              openPosition={position}
-              onOpenChange={setPositionOpenState}
-            />
-          )}
-          {order && (
-            <CloseOrderModal
-              controlledOpen={orderOpenState}
-              openOrder={order}
-              onOpenChange={setOrderOpenState}
-            />
-          )}
-          <TVChartContainer
-            {...defaultWidgetProps}
-            showOrderLines={showOrderLines}
-            orderLines={orderLines}
+    <div className="h-full w-full grid">
+      <div className="h-full w-full" style={{ gridArea: "1 / 1" }}>
+        {position && (
+          <ClosePositionModal
+            controlledOpen={positionOpenState}
+            openPosition={position}
+            onOpenChange={setPositionOpenState}
           />
-        </>
-      ) : (
-        <div className="flex h-[500px] w-full flex-col items-center justify-center">
-          Loading
-        </div>
+        )}
+        {order && (
+          <CloseOrderModal
+            controlledOpen={orderOpenState}
+            openOrder={order}
+            onOpenChange={setOrderOpenState}
+          />
+        )}
+        <TVChartContainer
+          {...defaultWidgetProps}
+          showOrderLines={showOrderLines}
+          orderLines={orderLines}
+          chartReady={chartReady}
+          setChartReady={setChartReady}
+        />
+      </div>
+      {!(chartReady && isMounted) && (
+        <LoadingContainer style={{ gridArea: "1 / 1" }} />
       )}
     </div>
   );
+
+  // return (
+  //   <div className="h-full w-full">
+  //       {isMounted ? (
+  //         <>
+  //         {position && (
+  //           <ClosePositionModal
+  //             controlledOpen={positionOpenState}
+  //             openPosition={position}
+  //             onOpenChange={setPositionOpenState}
+  //           />
+  //         )}
+  //         {order && (
+  //           <CloseOrderModal
+  //             controlledOpen={orderOpenState}
+  //             openOrder={order}
+  //             onOpenChange={setOrderOpenState}
+  //           />
+  //         )}
+  //         <TVChartContainer
+  //           {...defaultWidgetProps}
+  //           showOrderLines={showOrderLines}
+  //           orderLines={orderLines}
+  //           chartReady={chartReady}
+  //           setChartReady={setChartReady}
+  //         />
+  //       </>
+  //       ) : (
+  //           <LoadingContainer />
+  //         )}
+  //   </div>
+  // );
 }

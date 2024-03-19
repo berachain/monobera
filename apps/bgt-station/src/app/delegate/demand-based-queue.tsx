@@ -28,7 +28,7 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
   const { result: unbondingQueue, isLoading } = useDelegatorUnbondingQueue();
 
   return (
-    <div className="container mx-auto flex w-full max-w-[800px] flex-col gap-8 pb-20">
+    <div className="mx-auto flex w-full max-w-[720px] flex-col gap-8 md:px-8">
       <Card className="flex flex-col gap-3 bg-muted p-6">
         <div className="flex flex-row items-start">
           <Icons.bgt className="h-8 w-8" />

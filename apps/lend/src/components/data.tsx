@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { formatUsd, usePollReservesDataList } from "@bera/berajs";
+import { usePollReservesDataList } from "@bera/berajs";
+import { FormattedNumber } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import BGTApy from "./bgt-apy";
@@ -11,7 +12,13 @@ function DataCard({ title, value }: { title: string; value: number }) {
     <div className="flex flex-col items-center gap-2 rounded-sm border border-border bg-muted py-2">
       <div className="flex items-center gap-3 text-sm"> {title}</div>
       {value ? (
-        <div className="text-2xl font-bold leading-8">{formatUsd(value)}</div>
+        <FormattedNumber
+          value={value}
+          compact={false}
+          compactThreshold={999_999_999_999}
+          symbol="USD"
+          className="text-2xl font-bold leading-8"
+        />
       ) : (
         <Skeleton className="h-8 w-full" />
       )}

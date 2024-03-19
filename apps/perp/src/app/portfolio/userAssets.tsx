@@ -1,9 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { DataTable } from "@bera/shared-ui";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { ClosePositionModal } from "~/app/components/close-position-modal";
+import { UpdatePositionModal } from "~/app/components/update-position-modal";
+import type { IMarketOrder } from "../berpetuals/components/order-history";
 import { getPositionColumns } from "../berpetuals/components/columns";
 import type {
   ICards,
@@ -14,6 +17,8 @@ import type { IMarket } from "../berpetuals/page";
 export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
   const { useMarketOpenPositions } = usePollOpenPositions();
   const openPositions = useMarketOpenPositions(markets);
+  const [updateOpen, setUpdateOpen] = useState<boolean | IMarketOrder>(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean | IMarketOrder>(false);
 
   return (
     <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 ">
@@ -26,9 +31,19 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
           </div>
         </div>
       </div>
+      <UpdatePositionModal
+        openPosition={updateOpen as IMarketOrder}
+        controlledOpen={!!updateOpen}
+        onOpenChange={setUpdateOpen}
+      />
+      <ClosePositionModal
+        openPosition={deleteOpen as IMarketOrder}
+        controlledOpen={!!deleteOpen}
+        onOpenChange={setDeleteOpen}
+      />
       <DataTable
         enablePagination
-        columns={getPositionColumns(markets)}
+        columns={getPositionColumns(markets, setUpdateOpen, setDeleteOpen)}
         data={openPositions ?? []}
         className="min-w-[1136px]"
       />

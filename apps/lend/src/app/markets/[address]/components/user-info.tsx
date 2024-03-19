@@ -1,5 +1,4 @@
 import {
-  formatter,
   useBeraJs,
   usePollAssetWalletBalance,
   usePollReservesDataList,
@@ -8,7 +7,7 @@ import {
   type Token,
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
-import { Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
@@ -77,9 +76,10 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
               <div className="text-muted-foreground">
                 <b className="text-foreground">
                   {tokenBalance || !isLoading || !isReady ? (
-                    Number(
-                      tokenBalance?.formattedBalance ?? "0",
-                    ).toLocaleString()
+                    <FormattedNumber
+                      value={tokenBalance?.formattedBalance ?? 0}
+                      compact={false}
+                    />
                   ) : (
                     <Skeleton className="inline-block h-5 w-20" />
                   )}
@@ -112,7 +112,7 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                 <div className="mt-[-2px] leading-7 text-muted-foreground">
                   <b>
                     {!Number.isNaN(supplyAmount) ? (
-                      formatter.format(supplyAmount)
+                      <FormattedNumber value={supplyAmount} />
                     ) : (
                       <Skeleton className="inline-block h-7 w-20" />
                     )}
@@ -124,12 +124,14 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                   )}
                 </div>
                 <div className="text-xs font-medium leading-tight text-muted-foreground">
-                  $
-                  {formatter.format(
-                    Number(
-                      reserveData?.formattedPriceInMarketReferenceCurrency,
-                    ) * supplyAmount,
-                  )}
+                  <FormattedNumber
+                    value={
+                      Number(
+                        reserveData?.formattedPriceInMarketReferenceCurrency,
+                      ) * supplyAmount
+                    }
+                    symbol="USD"
+                  />
                 </div>
               </div>
               <div>
@@ -161,7 +163,7 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                   <div className="mt-[-2px] leading-7 text-muted-foreground">
                     <b>
                       {!Number.isNaN(borrowAmout) ? (
-                        formatter.format(Number(borrowAmout))
+                        <FormattedNumber value={borrowAmout} />
                       ) : (
                         <Skeleton className="inline-block h-7 w-20" />
                       )}
@@ -173,12 +175,14 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                     )}
                   </div>
                   <div className="text-xs font-medium leading-tight text-muted-foreground">
-                    $
-                    {formatter.format(
-                      Number(
-                        reserveData?.formattedPriceInMarketReferenceCurrency,
-                      ) * Number(borrowAmout),
-                    )}
+                    <FormattedNumber
+                      value={
+                        Number(
+                          reserveData?.formattedPriceInMarketReferenceCurrency,
+                        ) * Number(borrowAmout)
+                      }
+                      symbol="USD"
+                    />
                   </div>
                 </div>
                 <div>
