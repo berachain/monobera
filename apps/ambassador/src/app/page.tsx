@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <div className="relative mx-auto flex flex-col gap-16 bg-contain bg-no-repeat sm:gap-64 lg:pt-[140px]">
+      <div className="mx-auto flex flex-col gap-16 bg-contain bg-no-repeat sm:gap-64 lg:pt-[140px]">
         <Hero />
         <div className="-mx-full">
           <div className="relative m-auto mt-8 bg-cover bg-center bg-no-repeat">

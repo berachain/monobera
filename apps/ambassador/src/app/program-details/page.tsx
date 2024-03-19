@@ -17,16 +17,16 @@ export default function AmbassadorProgram() {
       <div className="flex max-w-[1440px] flex-wrap items-center justify-center sm:p-4">
         <div className="mb-6 text-center">
           <div className="flex-start flex items-center justify-between px-8 sm:items-end">
-            <div className="mt-32 pb-8">
-              <h1 className="mb-4 text-center sm:text-left text-5xl font-bold text-foreground">
+            <div className="pb-8">
+              <h1 className="mb-4 text-center text-5xl font-bold text-foreground sm:text-left">
                 Ambassador <br /> Program Overview
               </h1>
-              <p className="mb-6 px-1 text-center sm:text-left text-xl text-muted-foreground">
+              <p className="mb-6 px-1 text-center text-xl text-muted-foreground sm:text-left">
                 Nurturing Community Growth <br />
                 with the Bera Legion
               </p>
             </div>
-            <div className="hidden sm:block max-w-[420px]">
+            <div className="hidden max-w-[420px] sm:block">
               <Image
                 src="/knowmoarbear.png"
                 alt="Bera Legion"
@@ -36,7 +36,7 @@ export default function AmbassadorProgram() {
               />
             </div>
           </div>
-          <p className="mb-2 rounded-md bg-muted px-6 py-4 text-lg text-foreground">
+          <p className="mb-2 rounded-md bg-muted px-6 py-4 text-left text-lg text-foreground">
             The Bera Legion is more than just a program; it&apos;s a commitment
             to fostering a vibrant and engaged community within the Berachain
             ecosystem. With a tiered system designed to empower individuals who
@@ -45,7 +45,7 @@ export default function AmbassadorProgram() {
             Berachain ecosystem.
           </p>
         </div>
-        <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg shadow-lg">
+        <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg">
           <div className="flex w-full flex-col items-stretch justify-center gap-6 align-middle sm:flex-row">
             <section
               className="mb-2 flex-grow rounded-lg bg-muted p-4"
@@ -126,7 +126,7 @@ export default function AmbassadorProgram() {
               </div>
             </section>
           </div>
-          <div className="mb-6 flex flex-wrap items-stretch justify-center gap-8 rounded-lg bg-background text-lg shadow-lg">
+          <div className="mb-6 flex flex-wrap items-stretch justify-center gap-8 rounded-lg bg-background text-lg">
             <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-1 lg:grid-cols-3">
               <section className="flex h-full flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">

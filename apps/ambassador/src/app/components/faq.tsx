@@ -8,7 +8,7 @@ import {
 
 export default function FAQ() {
   return (
-    <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 border-t bg-muted sm:p-8 md:p-32">
+    <div className="mt-16 flex w-full flex-col items-center justify-center gap-4 border-t bg-muted p-16 md:p-32">
       <div className="relative">
         <h1 className="leading-14 leading-24 text-3xl font-extrabold">
           Frequently Asked Questions (FAQ)

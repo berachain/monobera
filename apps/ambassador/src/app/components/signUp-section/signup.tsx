@@ -5,13 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { cloudinaryUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
-import { useTheme } from "next-themes";
 
 export default function SignUp() {
   return (
     <>
-      <div className="items-center justify-center">
-        <div className="flex items-center justify-between pt-8 sm:px-8">
+      <div className="container items-center justify-center">
+        <div className="flex items-center justify-between sm:px-8">
           <div className="hidden sm:block">
             <Image
               className="z-10 max-[600px]:mx-auto"
