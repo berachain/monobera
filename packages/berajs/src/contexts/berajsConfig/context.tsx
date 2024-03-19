@@ -6,6 +6,7 @@ import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { ThemeSetting } from "@dynamic-labs/sdk-react-core/src/lib/context/ThemeContext";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { reconnect } from "@wagmi/core";
 import { useTheme } from "next-themes";
 import { WagmiProvider, createConfig, http } from "wagmi";
 
@@ -26,6 +27,7 @@ export interface IBeraConfigAPI {
   darkTheme?: boolean;
   walletConnectors?: any;
   chains?: any;
+  walletReconnect: () => Promise<void>;
 }
 
 export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
@@ -35,7 +37,7 @@ export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
 const BeraConfig: React.FC<IBeraConfig> = ({
   children,
   autoConnect = false,
-  darkTheme,
+  darkTheme = undefined,
 }) => {
   const { theme: nextTheme } = useTheme();
   const theme: ThemeSetting =
@@ -62,9 +64,14 @@ const BeraConfig: React.FC<IBeraConfig> = ({
 
   const queryClient = new QueryClient();
 
+  const walletReconnect = async () => {
+    //@ts-ignore
+    await reconnect(config, { connectors: [EthereumWalletConnectors] });
+  };
+
   return (
     <BeraConfigContext.Provider
-      value={{ networkConfig: defaultBeraConfig, autoConnect }}
+      value={{ networkConfig: defaultBeraConfig, autoConnect, walletReconnect }}
     >
       <DynamicContextProvider
         settings={{

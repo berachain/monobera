@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type PropsWithChildren } from "react";
+import React from "react";
 import { BeraConfig } from "@bera/berajs";
 
 import { ThemeProvider } from "~/components/theme-provider";
