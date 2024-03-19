@@ -60,8 +60,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Toaster position="bottom-right" />
             </div>
             <div className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
-              <Header navItems={navItems} />
-              {/* hideConnectBtn hideTheme  */}
+              <Header navItems={navItems} hideConnectBtn hideTheme />
               <main
                 className={cn(
                   "min-h-[calc(100vh-72px)] w-full bg-sky-600 pb-[70px]",
