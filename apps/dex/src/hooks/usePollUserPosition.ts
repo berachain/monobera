@@ -107,8 +107,6 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           ? "0"
           : quoteAmount.div(10 ** 18).toString();
 
-        console.log("base", formattedBaseAmount);
-        console.log("quote", Number(formattedQuoteAmount));
         const estimatedHoneyValue =
           Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
             Number(formattedBaseAmount) +
