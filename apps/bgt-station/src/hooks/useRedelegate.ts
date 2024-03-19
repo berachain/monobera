@@ -4,15 +4,15 @@ import {
   STAKING_PRECOMPILE_ABI,
   TransactionActionType,
   truncateHash,
-  useBeraConfig,
   usePollAccountDelegations,
   usePollActiveValidators,
   usePollAssetWalletBalance,
   useTokens,
   type Validator,
 } from "@bera/berajs";
+import { stakingAddress } from "@bera/config";
 import { useTxn } from "@bera/shared-ui";
-import { getAddress, parseUnits, type Address } from "viem";
+import { getAddress, parseUnits } from "viem";
 
 export const useRedelegate = (fromAddress: `0x{string}`) => {
   const [redelegateAmount, setRedelegateAmount] = useState(0);
@@ -25,7 +25,6 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
     usePollAccountDelegations(fromAddress);
   const accountDelegation = useSelectedAccountDelegation();
   const router = useRouter();
-  const { networkConfig } = useBeraConfig();
 
   const { write, isLoading } = useTxn({
     message: `redelegate ${redelegateAmount} BGT from ${truncateHash(
@@ -44,7 +43,7 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
     if (dstValidator && srcValidator) {
       try {
         write({
-          address: networkConfig.precompileAddresses.stakingAddress as Address,
+          address: stakingAddress,
           abi: STAKING_PRECOMPILE_ABI,
           functionName: "beginRedelegate",
           params: [

@@ -61,7 +61,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             </div>
             <div className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
               {/* <Header navItems={navItems} hideConnectBtn hideTheme /> */}
-              <Header navItems={navItems}  hideTheme />
+              <Header navItems={navItems} hideTheme />
               <main
                 className={cn(
                   "min-h-[calc(100vh-72px)] w-full bg-sky-600 pb-[70px]",

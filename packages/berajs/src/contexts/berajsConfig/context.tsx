@@ -56,6 +56,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
     >
       <DynamicContextProvider
         settings={{
+          initialAuthenticationMode: "connect-only",
           environmentId: "ee2b3285-8e46-43fd-9a7e-8ef0955e6472",
           walletConnectors: [EthereumWalletConnectors],
           overrides: { evmNetworks: [defaultBeraConfig.evmNetwork] },

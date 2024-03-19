@@ -1,16 +1,15 @@
+import { bankAddress, stakingToken } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BANK_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig } from "~/contexts";
 
 // this is going to be slow for now until we have event indexing
 export const usePollBgtSupply = () => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
 
   const method = "getSupply";
   const QUERY_KEY = [method];
@@ -19,10 +18,10 @@ export const usePollBgtSupply = () => {
     async () => {
       if (!publicClient) return undefined;
       const result = await publicClient.readContract({
-        address: networkConfig.precompileAddresses.bankAddress as Address,
+        address: bankAddress,
         abi: BANK_PRECOMPILE_ABI,
         functionName: method,
-        args: [process.env.NEXT_PUBLIC_STAKING_TOKEN],
+        args: [stakingToken],
       });
 
       return formatUnits(result as bigint, 18);

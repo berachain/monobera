@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   TransactionActionType,
-  useBeraConfig,
   useBeraJs,
   usePollAccountDelegations,
   usePollActiveValidators,
@@ -28,6 +27,7 @@ import ValidatorInput from "~/components/validator-input";
 import { DelegateEnum, ImageMapEnum } from "./types";
 import { UnstakeDialog } from "./unstake-dialog";
 import { UnstakeInfoBanner } from "./unstake-info-banner";
+import { stakingAddress } from "@bera/config";
 
 export default function Delegate({
   action,
@@ -44,7 +44,6 @@ export default function Delegate({
   const router = useRouter();
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
   const [activeAction, setActiveAction] = React.useState<DelegateEnum>(action);
-  const { networkConfig } = useBeraConfig();
 
   const { useSelectedAccountDelegation } = usePollAccountDelegations(validator);
   usePollActiveValidators();
@@ -240,8 +239,7 @@ export default function Delegate({
               switch (action) {
                 case DelegateEnum.DELEGATE:
                   write({
-                    address: networkConfig.precompileAddresses
-                      .stakingAddress as Address,
+                    address: stakingAddress,
                     abi: STAKING_PRECOMPILE_ABI,
                     functionName: "delegate",
                     params: [validator, parseUnits(amount ?? "0", 18)],
@@ -249,8 +247,7 @@ export default function Delegate({
                   break;
                 case DelegateEnum.REDELEGATE:
                   unbondRedelegate({
-                    address: networkConfig.precompileAddresses
-                      .stakingAddress as Address,
+                    address: stakingAddress,
                     abi: STAKING_PRECOMPILE_ABI,
                     functionName: "beginRedelegate",
                     params: [
@@ -263,8 +260,7 @@ export default function Delegate({
                   break;
                 case DelegateEnum.UNBOND:
                   unbondWrite({
-                    address: networkConfig.precompileAddresses
-                      .stakingAddress as Address,
+                    address: stakingAddress,
                     abi: STAKING_PRECOMPILE_ABI,
                     functionName: "undelegate",
                     params: [validator, parseUnits(amount ?? "0", 18)],

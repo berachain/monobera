@@ -1,41 +1,20 @@
-import { type NetworkConfig } from "@bera/berajs";
 import {
-  bankAddress,
-  berachefAddress,
   bgtName,
   bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
-  chainId,
-  chainName,
   dexName,
   dexUrl,
-  epochsAddress,
-  erc20BgtAddress,
-  erc20DexAddress,
-  erc20ModuleAddress,
-  gasTokenDecimals,
-  gasTokenName,
-  gasTokenSymbol,
-  governanceAddress,
   homepageName,
   homepageUrl,
-  honeyAddress,
   honeyName,
   honeyUrl,
-  jsonRpcUrl,
   lendName,
   lendUrl,
-  multicallAddress,
-  networkName,
   perpsName,
   perpsUrl,
-  publicJsonRpcUrl,
-  rewardsAddress,
-  stakingAddress,
 } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
-import { type Chain } from "wagmi/chains";
 
 export const navItems = [
   {

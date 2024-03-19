@@ -10,7 +10,7 @@ export const SwicthNetworkBtn = ({ className }: { className?: string }) => {
   return (
     <Button
       onClick={async () => {
-        if (walletConnector && walletConnector.supportsNetworkSwitching()) {
+        if (walletConnector?.supportsNetworkSwitching()) {
           setSwitching(true);
           try {
             await walletConnector.switchNetwork({

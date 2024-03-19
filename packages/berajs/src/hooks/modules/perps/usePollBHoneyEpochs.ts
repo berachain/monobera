@@ -1,3 +1,4 @@
+import { multicallAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Address } from "viem";
@@ -5,7 +6,6 @@ import { usePublicClient } from "wagmi";
 
 import { BTOKEN_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig } from "~/contexts";
 
 interface Call {
   abi: any;
@@ -25,7 +25,6 @@ export const usePollBHoneyEpochs = () => {
   const publicClient = usePublicClient();
   const method = "epochs";
   const QUERY_KEY = ["bhoney", method];
-  const { networkConfig } = useBeraConfig();
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
@@ -47,8 +46,7 @@ export const usePollBHoneyEpochs = () => {
         ];
         const result = await publicClient.multicall({
           contracts: call,
-          multicallAddress: networkConfig.precompileAddresses
-            .multicallAddress as Address,
+          multicallAddress: multicallAddress,
         });
 
         const currentEpoch = Number((result[0] as any).result);
