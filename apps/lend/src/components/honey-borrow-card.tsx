@@ -1,14 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  formatter,
   usePollAssetWalletBalance,
   usePollBgtRewardsForAddress,
   usePollLendUserBGTRewards,
   usePollReservesDataList,
 } from "@bera/berajs";
 import {
-  bgtTokenAddress,
   cloudinaryUrl,
   honeyTokenAddress,
   lendHoneyDebtTokenAddress,
