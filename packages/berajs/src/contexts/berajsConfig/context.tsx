@@ -45,8 +45,8 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         ? "auto"
         : nextTheme
       : darkTheme
-      ? "dark"
-      : "light";
+        ? "dark"
+        : "light";
 
   const config = createConfig({
     //   appName: "Bears Chain",
