@@ -304,8 +304,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   }, [payload]);
 
   const gasData = useEstimateGas({
-    to: process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address,
-    value: wrapType === WRAP_TYPE.WRAP ? parseUnits(`${swapAmount}`, 18) : 0n,
+    to: isWrap
+      ? (process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address)
+      : crocMultiSwapAddress,
+    value: parseUnits(`${swapAmount}`, 18),
   });
   const formattedGasPrice =
     gasData?.data && toAmount && parseFloat(toAmount) > 0
