@@ -3,8 +3,10 @@
 import React, { createContext, type PropsWithChildren } from "react";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
+import { ThemeSetting } from "@dynamic-labs/sdk-react-core/src/lib/context/ThemeContext";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useTheme } from "next-themes";
 import { WagmiProvider, createConfig, http } from "wagmi";
 
 import { defaultBeraConfig } from "~/config";
@@ -33,8 +35,18 @@ export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
 const BeraConfig: React.FC<IBeraConfig> = ({
   children,
   autoConnect = false,
-  darkTheme = false,
+  darkTheme,
 }) => {
+  const { theme: nextTheme } = useTheme();
+  const theme: ThemeSetting =
+    darkTheme === undefined
+      ? nextTheme !== "dark" && nextTheme !== "light"
+        ? "auto"
+        : nextTheme
+      : darkTheme
+      ? "dark"
+      : "light";
+
   const config = createConfig({
     //   appName: "Bears Chain",
     //   projectId: "8b169f8cfd2110ddc5d92a1309534d09",
@@ -61,7 +73,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
           walletConnectors: [EthereumWalletConnectors],
           overrides: { evmNetworks: [defaultBeraConfig.evmNetwork] },
         }}
-        theme={darkTheme ? "dark" : "light"}
+        theme={theme ?? "auto"}
       >
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>

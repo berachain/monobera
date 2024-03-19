@@ -7,7 +7,6 @@ import { ThemeProvider } from "~/components/theme-provider";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 export default function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient();
-
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <BeraConfig autoConnect={true}>
