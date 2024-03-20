@@ -28,7 +28,7 @@ export default function SignUp() {
               </span>
             </h1>
             <div className="flex flex-col items-center justify-center">
-              <p className="font-regular w-full pb-8 pr-6 text-center text-xl leading-tight text-white md:leading-normal">
+              <p className="font-regular w-full pb-8 pr-6 text-center text-xl leading-tight text-muted-foreground md:leading-normal">
                 Experience the collaboration of numerous creators. Register now
                 and become a part of a community comprising over 10,000 local
                 and international creators.
