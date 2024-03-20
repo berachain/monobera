@@ -158,7 +158,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   // populate field of calculated swap amount
   useEffect(() => {
-    if (isWrap) return;
+    if (isWrap || !swapInfo?.batchSwapSteps?.length) return;
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(swapInfo?.formattedReturnAmount);
     } else {
@@ -168,6 +168,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   // calculate exchange rate
   useEffect(() => {
+    if (!swapInfo?.batchSwapSteps?.length) return;
     if (
       swapInfo?.formattedAmountIn &&
       swapInfo?.formattedReturnAmount &&
