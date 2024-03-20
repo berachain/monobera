@@ -23,12 +23,12 @@ export default function MyProject() {
             </div>
           </div>
 
-          <div className="m-2 flex items-start lg:mt-auto">
-            <Link href="/dashboard">
+          <div className="flex items-start lg:mt-auto">
+            <Link href="https://forms.clickup.com/9014124274/f/8cmh7qj-2334/W32RVORQNXSRUJDSSB">
               <Button
                 className="rounded-18 mt-4 w-full text-lg font-semibold leading-7 sm:w-auto"
                 size={"sm"}
-                variant="info"
+                variant="outline"
               >
                 Submit
               </Button>
@@ -50,7 +50,7 @@ export default function MyProject() {
         <div className="flex flex-col items-center justify-center p-8 sm:items-start">
           <div className="top-0 flex flex-col items-center leading-7 sm:items-start lg:left-0">
             <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-2xl sm:leading-[72px]">
-              Want to know more?
+              Ecosystem Careers
             </h1>
             <div className="flex-wrap items-center sm:max-w-[300px] md:max-w-[440px] lg:w-full">
               <h2 className="text-md flex-wrap text-center tracking-tight text-muted-foreground sm:text-left sm:text-lg">
@@ -60,14 +60,14 @@ export default function MyProject() {
             </div>
           </div>
 
-          <div className="m-2 flex items-start lg:mt-auto">
+          <div className="flex items-start lg:mt-auto">
             <Link href="/program-details">
               <Button
                 className="rounded-18 mt-4 w-full text-lg font-semibold leading-7 sm:w-auto"
                 size={"sm"}
                 variant="outline"
               >
-                Learn More
+                Apply Now
               </Button>
             </Link>
           </div>

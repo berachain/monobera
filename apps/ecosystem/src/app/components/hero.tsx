@@ -11,7 +11,6 @@ export default function Hero() {
   const { theme, systemTheme } = useTheme();
   const t = !theme || theme === "system" ? systemTheme || "dark" : theme;
   const bg = t === "dark" ? "/dark_bear_bg.png" : "/light_bear_bg.png";
-  console.log("theme", t, bg);
   return (
     <div className="flex h-[483px] w-[1280px] items-center px-4">
       {/* <Image
