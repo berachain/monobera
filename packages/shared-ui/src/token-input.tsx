@@ -146,9 +146,12 @@ export function TokenInput({
             )}
             value={amount}
             onKeyDown={(e: any) => {
-              if (!/^[\d\.]{1}$/.test(e.key)) return; // don't handle non digit key down (ex: a, b, c, shift, cmd, etc.)
               if (e.key === "-" || e.key === "e") {
+                // don't handle non digit key down (ex: a, b, c, shift, cmd, etc.)
                 e.preventDefault();
+              }
+              if (!/^[\d\.]{1}$/.test(e.key)) {
+                return;
               }
               clearTimeout(typingTimer);
               setIsTyping?.(true);
