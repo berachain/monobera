@@ -176,13 +176,13 @@ export default function EcosystemProjects() {
         }
       />
 
-      <div className="flex w-full flex-row flex-wrap items-center sm:justify-between">
+      <div className="flex w-full flex-row flex-wrap items-center lg:justify-between">
         {ecosystemTypeTabs.map((type) => (
           <Button
             onClick={() => setEcosystemType(type.value)}
             key={type.value}
             variant={type.value === ecosystemType ? "secondary" : "ghost"}
-            className="flex min-w-[50px] items-center justify-center"
+            className="flex min-w-[50px] items-center justify-center border-none"
           >
             <div className="text-sm font-normal text-muted-foreground">
               {type.value}
@@ -193,7 +193,7 @@ export default function EcosystemProjects() {
 
       <div className="my-2 w-full border border-solid" />
 
-      <div className="mx-auto grid w-fit grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid w-fit grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
           .map((project: any, index: number) => (
@@ -211,9 +211,12 @@ export default function EcosystemProjects() {
                 </div>
               </div>
               <Link href={project.goto}>
-                <div className="flex justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:rounded-lg hover:bg-white">
+                <Button
+                  variant="ghost"
+                  className="gap-2 text-sm font-medium text-muted-foreground hover:bg-muted-foreground hover:text-foreground"
+                >
                   Visit Project <Icons.arrowRight />
-                </div>
+                </Button>
               </Link>
             </div>
           ))}

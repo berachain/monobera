@@ -8,88 +8,79 @@ import { Button } from "@bera/ui/button";
 export default function MyProject() {
   return (
     <div className="flex w-full flex-col gap-8 px-4 pb-16 pt-12 sm:w-auto xl:flex-row">
-      <div className="relative">
-        <div className="min-h-[200px] rounded-xl border border-solid bg-muted px-8 py-4 sm:min-h-[300px] sm:min-w-[400px] lg:w-[620px]">
-          <div className="flex flex-col flex-wrap items-center justify-center sm:max-w-[320px] sm:items-start">
-            <div className="top-0 flex flex-col flex-wrap items-center leading-10 sm:items-start">
-              <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-2xl sm:leading-[72px]">
-                Get My Project Listed
-              </h1>
-              <div className="max-w-[300px] flex-wrap">
-                <h2 className="text-center text-sm tracking-tight text-muted-foreground sm:text-left sm:text-lg sm:leading-8">
-                  Fellow builder in the making? Submit project details via this
-                  form and please be sure to provide us as much information as
-                  possible.
-                </h2>
-              </div>
+      <div className="flex w-full flex-col justify-between rounded-xl border border-solid bg-muted sm:min-h-[300px] sm:flex-row md:h-[220px] lg:w-full">
+        <div className="flex flex-col items-center justify-center p-8 sm:items-start">
+          <div className="top-0 flex flex-col items-center leading-7 sm:items-start lg:left-0">
+            <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-2xl sm:leading-[72px]">
+              Get My Project Listed
+            </h1>
+            <div className="flex-wrap items-center sm:max-w-[300px] md:max-w-[440px] lg:w-full">
+              <h2 className="text-md flex-wrap text-center tracking-tight text-muted-foreground sm:text-left sm:text-lg">
+                Fellow builder in the making? Submit project details via this
+                form and please be sure to provide us as much information as
+                possible.
+              </h2>
             </div>
+          </div>
 
-            <div className="flex flex-wrap">
-              <Link href={"/dashboard"}>
-                <Button
-                  className="rounded-18 mt-4 w-full text-lg font-semibold leading-7 sm:w-auto"
-                  size={"sm"}
-                  variant="info"
-                >
-                  Submit
-                </Button>
-              </Link>
-            </div>
+          <div className="m-2 flex items-start lg:mt-auto">
+            <Link href="/dashboard">
+              <Button
+                className="rounded-18 mt-4 w-full text-lg font-semibold leading-7 sm:w-auto"
+                size={"sm"}
+                variant="info"
+              >
+                Submit
+              </Button>
+            </Link>
           </div>
         </div>
-        <div className="relative hidden justify-end sm:flex">
-          <div className="absolute bottom-0 right-0">
-            <Image
-              src="/projectbear.png"
-              alt="Project"
-              width={220}
-              height={220}
-              layout="intrinsic"
-              className="h-[150px] w-[150px] lg:h-auto lg:w-auto"
-            />
-          </div>
+        <div className="hidden items-end sm:flex">
+          <Image
+            src="/projectbear.png"
+            alt="Project"
+            width={400}
+            height={400}
+            layout="intrinsic"
+            className="h-[200px] w-[200px] md:h-[300px] md:w-[300px] lg:h-auto lg:w-auto"
+          />
         </div>
       </div>
-      <div className="relative">
-        <div className="min-h-[200px] rounded-xl border border-solid bg-muted px-8 py-4 sm:min-h-[300px] sm:min-w-[400px] lg:w-[620px]">
-          <div className="flex flex-col flex-wrap items-center justify-center sm:max-w-[320px] sm:items-start">
-            <div className="top-0 flex flex-col flex-wrap items-center leading-10 sm:items-start lg:left-0">
-              <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-2xl sm:leading-[72px]">
-                Ecosystem Careers
-              </h1>
-              <div className="max-w-[300px] flex-wrap">
-                <h2 className="text-center text-sm tracking-tight text-muted-foreground sm:text-left sm:text-lg sm:leading-8">
-                  Fellow builder in the making? Submit project details via this
-                  form and please be sure to provide us as much information as
-                  possible.
-                </h2>
-              </div>
+      <div className="flex w-full flex-col justify-between rounded-xl border border-solid bg-muted sm:min-h-[300px] sm:flex-row md:h-[220px] lg:w-full">
+        <div className="flex flex-col items-center justify-center p-8 sm:items-start">
+          <div className="top-0 flex flex-col items-center leading-7 sm:items-start lg:left-0">
+            <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-2xl sm:leading-[72px]">
+              Want to know more?
+            </h1>
+            <div className="flex-wrap items-center sm:max-w-[300px] md:max-w-[440px] lg:w-full">
+              <h2 className="text-md flex-wrap text-center tracking-tight text-muted-foreground sm:text-left sm:text-lg">
+                Fellow builder in the making? Submit project details via this
+                form and please be sure to provide us as much information as
+              </h2>
             </div>
+          </div>
 
-            <div className="flex flex-wrap">
-              <Link href={"/dashboard"}>
-                <Button
-                  className="rounded-18 mt-4 w-full text-lg font-semibold leading-7 sm:w-auto"
-                  size={"sm"}
-                  variant="info"
-                >
-                  Submit
-                </Button>
-              </Link>
-            </div>
+          <div className="m-2 flex items-start lg:mt-auto">
+            <Link href="/program-details">
+              <Button
+                className="rounded-18 mt-4 w-full text-lg font-semibold leading-7 sm:w-auto"
+                size={"sm"}
+                variant="outline"
+              >
+                Learn More
+              </Button>
+            </Link>
           </div>
         </div>
-        <div className="relative hidden justify-end sm:flex">
-          <div className="absolute bottom-0 right-0">
-            <Image
-              src="/careerbear.png"
-              alt="Project"
-              width={200}
-              height={200}
-              layout="intrinsic"
-              className="h-[130px] w-[130px] lg:h-auto lg:w-auto"
-            />
-          </div>
+        <div className="hidden items-end sm:flex">
+          <Image
+            src="/careerbear.png"
+            alt="Project"
+            width={320}
+            height={350}
+            layout="intrinsic"
+            className="h-[200px] w-[200px] md:h-[300px] md:w-[300px] lg:h-auto lg:w-auto"
+          />
         </div>
       </div>
     </div>
