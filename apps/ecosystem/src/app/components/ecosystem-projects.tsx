@@ -9,7 +9,7 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import Papa from "papaparse";
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 8;
 
 // TODO: add in other properties like ids
 const ecosystemTypeTabs = [

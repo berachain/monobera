@@ -159,7 +159,9 @@ export default function ProjectHighlights() {
         ref={sliderRef}
         className="mt-4 flex w-full max-w-lg snap-x gap-4 scroll-smooth transition-transform duration-300 ease-linear lg:flex"
         onTouchStart={(e) => e.stopPropagation()}
-        style={{ transform: `translateX(-${currentIndex * itemWidth - 16}px)` }}
+        style={{
+          transform: `translateX(-${currentIndex * itemWidth + 596}px)`,
+        }}
       >
         {itemsForLooping.map((section, index) => (
           <Link href={section.link} key={index} target="_blank">
