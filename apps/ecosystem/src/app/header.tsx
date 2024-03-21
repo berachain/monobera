@@ -10,7 +10,7 @@ import { Icons } from "@bera/ui/icons";
 export function Header({ navItems }: { navItems: any[] }) {
   const ThemeToggleMobile = dynamic(
     () =>
-      import("../../../../packages/shared-ui/src/theme-toggle-mobile").then(
+      import("@bera/shared-ui/src/theme-toggle-mobile").then(
         (mod) => mod.ThemeToggleMobile,
       ),
     {

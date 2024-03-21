@@ -1,21 +1,20 @@
 import { decodeCrocPrice } from "@bera/beracrocswap";
+import { CROC_QUERY_ABI, getCrocErc20LpAddress, useBeraJs } from "@bera/berajs";
 import {
-  CROC_QUERY_ABI,
-  getCrocErc20LpAddress,
-  useBeraConfig,
-  useBeraJs,
-} from "@bera/berajs";
-import { chainId, crocIndexerEndpoint, crocQueryAddress } from "@bera/config";
+  chainId,
+  crocIndexerEndpoint,
+  crocQueryAddress,
+  multicallAddress,
+} from "@bera/config";
 import { dexClient, getTokenHoneyPrices } from "@bera/graphql";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { BigNumber } from "bignumber.js";
 import { BigNumber as EthersBigNumber } from "ethers";
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi, formatUnits, getAddress, toHex, type Address } from "viem";
+import { erc20Abi, getAddress, toHex, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { getSafeNumber } from "~/utils/getSafeNumber";
 import { formatSubgraphPoolData, type PoolV2 } from "~/app/pools/fetchPools";
 import { searchFilteredPoolList } from "./../../../../packages/graphql/src/modules/dex/query";
 
@@ -67,7 +66,6 @@ export const usePollUserDeposited = (
 ) => {
   const { account } = useBeraJs();
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
   const { captureException } = useAnalytics();
   const hexChainId = toHex(chainId);
   const QUERY_KEY = ["pools", account, hexChainId, keyword];
@@ -125,8 +123,7 @@ export const usePollUserDeposited = (
         // get price of all pools so that we can calculate estimated user postions
         const result = publicClient.multicall({
           contracts: calls,
-          multicallAddress: networkConfig.precompileAddresses
-            .multicallAddress as Address,
+          multicallAddress: multicallAddress,
         });
 
         const balanceCalls: Call[] = positions.data.map(
@@ -142,8 +139,7 @@ export const usePollUserDeposited = (
 
         const balanceResult = publicClient.multicall({
           contracts: balanceCalls,
-          multicallAddress: networkConfig.precompileAddresses
-            .multicallAddress as Address,
+          multicallAddress: multicallAddress,
         });
 
         // // get pool objects for pools user deposited for

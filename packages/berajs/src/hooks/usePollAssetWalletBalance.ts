@@ -1,12 +1,16 @@
-import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
+import {
+  bgtTokenAddress,
+  multicallAddress,
+  nativeTokenAddress,
+} from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, erc20Abi, formatUnits, getAddress } from "viem";
+import { erc20Abi, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { MULTICALL3_ABI } from "..";
 import { type Token } from "../api/currency/tokens";
-import { useBeraConfig, useBeraJs } from "../contexts";
+import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
 
 const REFRESH_BLOCK_INTERVAL = 20000;
@@ -27,7 +31,6 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account, isConnected, error } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
   const { tokenList } = useTokens();
   const QUERY_KEY = [account, isConnected, tokenList, "assetWalletBalances"];
   useSWR(
@@ -43,8 +46,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
         const call: Call[] = fullTokenList.map((item: Token) => {
           if (item.address === nativeTokenAddress) {
             return {
-              address: networkConfig.precompileAddresses
-                .multicallAddress as Address,
+              address: multicallAddress,
               abi: MULTICALL3_ABI,
               functionName: "getEthBalance",
               args: [account],
@@ -60,8 +62,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
         try {
           const result = await publicClient.multicall({
             contracts: call,
-            multicallAddress: networkConfig.precompileAddresses
-              .multicallAddress as Address,
+            multicallAddress: multicallAddress,
           });
 
           const balances = await Promise.all(

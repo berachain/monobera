@@ -16,6 +16,7 @@ import { Setting } from "./settings";
 import { TokenList } from "./token-list";
 import { formatConnectorName } from "./utils";
 import { WalletBalanceInUs } from "./wallet-balance-in-us";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 export default function ConnectedWalletPopover({
   isHoney = false,
@@ -25,10 +26,11 @@ export default function ConnectedWalletPopover({
   const [openPopover, setOpenPopover] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
-  const { account, logout } = useBeraJs();
+  const { account } = useBeraJs();
   const connectorName = useReadLocalStorage<string>("wagmi.wallet");
   const [setting, setSetting] = React.useState(false);
   const [tab, setTab] = React.useState("tokens");
+  const { handleLogOut } = useDynamicContext();
   const Content = (
     <>
       {!setting ? (
@@ -84,7 +86,7 @@ export default function ConnectedWalletPopover({
                 variant="ghost"
                 size="xs"
                 onClick={() => {
-                  logout(connectorName as string);
+                  handleLogOut();
                   setOpenModal(false);
                   setOpenPopover(false);
                 }}

@@ -248,7 +248,7 @@ export function HoneyMachine() {
                   </div>
                 </>
               ) : (
-                <ConnectButton btnClassName="bg-transparent" />
+                <ConnectButton className="bg-transparent" />
               )}
             </div>
             <div

@@ -4,14 +4,14 @@
 // useGetRedelegationForSrcValidator - do we need this?
 // useGetRedelegationForDstValidator - do we need this?
 
+import { stakingAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { STAKING_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig, useBeraJs } from "~/contexts";
+import { useBeraJs } from "~/contexts";
 
 // Returns a list of delegatorAddress's redelegating bonds from srcValidator to dstValidator
 // delegatorAddress: useBeraJs().account
@@ -37,7 +37,6 @@ export const usePollRedelegations = (
 ) => {
   const publicClient = usePublicClient();
   const { account, error } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
 
   const method = "getRedelegations";
   const QUERY_KEY = [account, method];
@@ -47,7 +46,7 @@ export const usePollRedelegations = (
       if (!publicClient) return undefined;
       if (account && !error) {
         const result = await publicClient.readContract({
-          address: networkConfig.precompileAddresses.stakingAddress as Address,
+          address: stakingAddress,
           abi: STAKING_PRECOMPILE_ABI,
           functionName: method,
           args: [account, srcValidator, dstValidator],

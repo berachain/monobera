@@ -1,19 +1,17 @@
 import { useMemo } from "react";
+import { governanceAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, formatUnits } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { GOVERNANCE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig } from "~/contexts";
 import { usePollActiveValidators } from "../staking";
 import { type Proposal } from "./types";
 
 export const usePollProposal = (proposalId: number) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
-
   const method = "getProposal";
   const QUERY_KEY = [proposalId, method];
   const { isLoading } = useSWR(
@@ -21,7 +19,7 @@ export const usePollProposal = (proposalId: number) => {
     async () => {
       if (!publicClient) return undefined;
       const result = await publicClient.readContract({
-        address: networkConfig.precompileAddresses.governanceAddress as Address,
+        address: governanceAddress,
         abi: GOVERNANCE_PRECOMPILE_ABI,
         functionName: method,
         args: [proposalId],

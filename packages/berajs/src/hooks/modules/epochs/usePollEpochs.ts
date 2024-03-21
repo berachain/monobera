@@ -1,11 +1,10 @@
+import { epochsAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { EPOCHS_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig } from "~/contexts";
 
 export interface IEpoch {
   current: number;
@@ -15,8 +14,6 @@ export interface IEpoch {
 // this is going to be slow for now until we have event indexing
 export const usePollEpochs = () => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
-
   const identifierKey = "berachain_epoch_identifier";
   const method = "getCurrentEpoch";
   const QUERY_KEY = [identifierKey, method];
@@ -25,7 +22,7 @@ export const usePollEpochs = () => {
     async () => {
       if (!publicClient) return undefined;
       const result = (await publicClient.readContract({
-        address: networkConfig.precompileAddresses.epochsAddress as Address,
+        address: epochsAddress,
         abi: EPOCHS_PRECOMPILE_ABI,
         functionName: method,
         args: [identifierKey],

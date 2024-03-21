@@ -10,8 +10,8 @@ import { Icons } from "@bera/ui/icons";
 export default function Hero() {
   return (
     <div className="flex flex-col justify-around lg:flex-row">
-      <div className="lg:items-start items-center my-24 flex w-full lg:w-[450px] flex-col gap-8 ">
-        <div className="text-center font-extrabold lg:text-left text-6xl lg:text-4xl xl:text-6xl">
+      <div className="my-24 flex w-full flex-col items-center gap-8 lg:w-[450px] lg:items-start ">
+        <div className="text-center text-6xl font-extrabold lg:text-left lg:text-4xl xl:text-6xl">
           Swap Tokens <br />
           on{" "}
           <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
@@ -26,12 +26,12 @@ export default function Hero() {
           </span>
         </div>
 
-        <div className="text-2xl lg:text-lg xl:text-2xl font-semibold leading-8 text-muted-foreground">
+        <div className="text-2xl font-semibold leading-8 text-muted-foreground lg:text-lg xl:text-2xl">
           Swap tokens, add liquidity, create <br />
           pools, and earn BGT rewards.
         </div>
 
-        <div className="text-center lg:text-left flex gap-3">
+        <div className="flex gap-3 text-center lg:text-left">
           <Link href={"/swap"} className="shadow-dark-shadow">
             <Button
               variant={"primary"}
@@ -43,12 +43,12 @@ export default function Hero() {
           <Link href={"/pools"} className="shadow-dark-shadow">
             <Button variant="outline" className="text-lg lg:text-sm xl:text-lg">
               {" "}
-              <Icons.search className="w-6 h-6 mr-1 inline-block" /> View Pools
+              <Icons.search className="mr-1 inline-block h-6 w-6" /> View Pools
             </Button>
           </Link>
         </div>
 
-        <div className="flex flex-col items-center gap-3 lg:items-start lg:hidden">
+        <div className="flex flex-col items-center gap-3 lg:hidden lg:items-start">
           <Link
             className="flex h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground"
             href={"/pools"}
@@ -76,15 +76,15 @@ export default function Hero() {
       </div>
 
       <Image
-        className="self-center dark:hidden block "
-        src={`${cloudinaryUrl}/DEX/fmo87psttmceptuw6ae0`}
+        className="block self-center dark:hidden "
+        src={`${cloudinaryUrl}/DEX/rjzfm2opk1ga6sxugrms`}
         alt="Create a pool screenshot"
         width={610}
         height={700}
       />
       <Image
-        className="self-center dark:block hidden"
-        src={`${cloudinaryUrl}/DEX/g0ntgyc2atxltdycxymz`}
+        className="hidden self-center dark:block"
+        src={`${cloudinaryUrl}/DEX/aubb5lkityvqbpzbwkp2`}
         alt="Create a pool screenshot"
         width={610}
         height={700}
