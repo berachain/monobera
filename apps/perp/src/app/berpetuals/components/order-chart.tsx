@@ -170,8 +170,6 @@ export function OrderChart({
     return [];
   }, [tabType, humanizedOrders, humanizedPositions]);
 
-  console.log("checking", isMounted, chartReady);
-
   return (
     <div className="h-full w-full grid">
       <div className="h-full w-full" style={{ gridArea: "1 / 1" }}>
