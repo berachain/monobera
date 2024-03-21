@@ -1,18 +1,15 @@
+import { erc20BribeModule } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig } from "~/contexts";
 
 export const usePollActiveBribesForValidator = (
   validatorAddress: `0x${string}`,
 ) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
-
   const method = "getActiveValidatorBribes";
   const QUERY_KEY = [validatorAddress, method];
   useSWR(
@@ -22,8 +19,7 @@ export const usePollActiveBribesForValidator = (
       if (!publicClient) return undefined;
       const result = await publicClient
         .readContract({
-          address: networkConfig.precompileAddresses
-            .erc20BribeModule as Address,
+          address: erc20BribeModule,
           abi: BRIBE_PRECOMPILE_ABI,
           functionName: method,
           args: [validatorAddress],

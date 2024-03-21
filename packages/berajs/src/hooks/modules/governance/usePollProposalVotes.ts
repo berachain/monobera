@@ -1,13 +1,17 @@
 import { useMemo } from "react";
+import {
+  governanceAddress,
+  multicallAddress,
+  stakingAddress,
+} from "@bera/config";
 import { dexClient, getVotes, type Vote } from "@bera/graphql";
 import lodash from "lodash";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { GOVERNANCE_PRECOMPILE_ABI, STAKING_PRECOMPILE_ABI } from "~/config";
-import { useBeraConfig } from "~/contexts";
 import { defaultPagination } from "~/utils";
 import { VoteOption } from "../../../../../proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 import { usePollActiveValidators } from "../staking";
@@ -37,7 +41,6 @@ export interface TallyVote {
 
 export const usePollProposalVotes = (proposalId: number) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
   const { useValidatorAddresses } = usePollActiveValidators();
   const validatorAddresses = useValidatorAddresses();
   const method = "proposalVotes";
@@ -74,7 +77,7 @@ export const usePollProposalVotes = (proposalId: number) => {
       const call: Call[] = result.map((item: any) => {
         paths.push(item.voter);
         return {
-          address: networkConfig.precompileAddresses.stakingAddress as Address,
+          address: stakingAddress,
           abi: STAKING_PRECOMPILE_ABI,
           functionName: "getDelegatorValidators",
           args: [item.voter, defaultPagination],
@@ -82,8 +85,7 @@ export const usePollProposalVotes = (proposalId: number) => {
       });
       const voterValidators = await publicClient.multicall({
         contracts: call,
-        multicallAddress: networkConfig.precompileAddresses
-          .multicallAddress as Address,
+        multicallAddress: multicallAddress,
       });
 
       const obj: Record<string, unknown> = {};
@@ -102,8 +104,7 @@ export const usePollProposalVotes = (proposalId: number) => {
         path.validators.forEach((validator: string) => {
           delegatedPaths.push(path.voter);
           delegatedCalls.push({
-            address: networkConfig.precompileAddresses
-              .stakingAddress as Address,
+            address: stakingAddress,
             abi: STAKING_PRECOMPILE_ABI,
             functionName: "getDelegation",
             args: [path.voter, validator],
@@ -113,8 +114,7 @@ export const usePollProposalVotes = (proposalId: number) => {
 
       const voterDelegations = await publicClient.multicall({
         contracts: delegatedCalls,
-        multicallAddress: networkConfig.precompileAddresses
-          .multicallAddress as Address,
+        multicallAddress: multicallAddress,
       });
 
       delegatedPaths.forEach((path, index) => {
@@ -154,8 +154,7 @@ export const usePollProposalVotes = (proposalId: number) => {
 
       const result = (await publicClient
         .readContract({
-          address: networkConfig.precompileAddresses
-            .governanceAddress as Address,
+          address: governanceAddress,
           abi: GOVERNANCE_PRECOMPILE_ABI,
           functionName: "getProposalTallyResult",
           args: [proposalId],

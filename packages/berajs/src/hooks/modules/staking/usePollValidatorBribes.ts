@@ -6,16 +6,14 @@ import { usePublicClient } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig } from "~/contexts";
 import { usePollEpochs } from "../epochs";
 import { usePollActiveValidators } from "./usePollActiveValidators";
+import { erc20BribeModule } from "@bera/config";
 
 export const usePollValidatorBribes = (
   validatorAddress: Address | undefined,
 ) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
-
   const method = "getAllValidatorBribes";
   const QUERY_KEY = [validatorAddress, method];
   const { isLoading } = useSWR(
@@ -25,8 +23,7 @@ export const usePollValidatorBribes = (
       if (!validatorAddress) return undefined;
       const result = await publicClient
         .readContract({
-          address: networkConfig.precompileAddresses
-            .erc20BribeModule as Address,
+          address: erc20BribeModule,
           abi: BRIBE_PRECOMPILE_ABI,
           functionName: method,
           args: [validatorAddress],

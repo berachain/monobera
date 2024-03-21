@@ -1,19 +1,19 @@
+import { bankAddress, stakingToken } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BANK_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig, useBeraJs } from "~/contexts";
+import { useBeraJs } from "~/contexts";
 
 export const usePollBgtBalance = () => {
   const publicClient = usePublicClient();
   const { isConnected, account } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
 
   const method = "getBalance";
-  const denom = process.env.NEXT_PUBLIC_STAKING_TOKEN;
+  const denom = stakingToken;
   const QUERY_KEY = [account, method, denom, isConnected];
   const { isLoading } = useSWR(
     QUERY_KEY,
@@ -22,7 +22,7 @@ export const usePollBgtBalance = () => {
         try {
           if (!publicClient) return undefined;
           const result = await publicClient.readContract({
-            address: networkConfig.precompileAddresses.bankAddress as Address,
+            address: bankAddress,
             abi: BANK_PRECOMPILE_ABI,
             functionName: method,
             args: [account, denom],

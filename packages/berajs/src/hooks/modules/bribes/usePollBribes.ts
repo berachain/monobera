@@ -6,8 +6,9 @@ import { usePublicClient } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig, useBeraJs } from "~/contexts";
+import { useBeraJs } from "~/contexts";
 import { usePollActiveValidators } from "../staking";
+import { multicallAddress } from "@bera/config";
 
 export interface RawBribe {
   validator: string;
@@ -107,7 +108,6 @@ export const usePollBribes = () => {
 
   const useBribeTokensSymbol = () => {
     const tokens = useBribeTokens();
-    const { networkConfig } = useBeraConfig();
     const QUERY_KEY = ["useBribeTokensSymbol", tokens];
     const { data, isLoading } = useSWRImmutable(QUERY_KEY, async () => {
       if (!publicClient) return undefined;
@@ -121,8 +121,7 @@ export const usePollBribes = () => {
 
       const result = await publicClient.multicall({
         contracts: call,
-        multicallAddress: networkConfig.precompileAddresses
-          .multicallAddress as Address,
+        multicallAddress: multicallAddress,
       });
 
       const symbolDictionary: Record<string, string> = {};
@@ -134,7 +133,6 @@ export const usePollBribes = () => {
     });
     return { data, isLoading };
     // const publicClient = usePublicClient();
-    // const { networkConfig } = useBeraConfig();
     // return useMemo(async () => {
     //   const call: Call[] = tokens?.map((address: string) => ({
     //     address: address as `0x${string}`,

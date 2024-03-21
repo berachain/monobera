@@ -1,16 +1,13 @@
+import { governanceAddress } from "@bera/config";
 import useSWRInfinite from "swr/infinite";
-import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { GOVERNANCE_PRECOMPILE_ABI } from "~/config";
-import { useBeraConfig } from "~/contexts";
 import { type PageRequest } from "~/utils";
 
 const DEFAULT_SIZE = 10;
 export const useInfiniteProposalVotes = (proposalId: number | undefined) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
-
   const {
     data: allData,
     size: allDataSize,
@@ -31,8 +28,7 @@ export const useInfiniteProposalVotes = (proposalId: number | undefined) => {
       };
       const result = (await publicClient
         .readContract({
-          address: networkConfig.precompileAddresses
-            .governanceAddress as Address,
+          address: governanceAddress,
           abi: GOVERNANCE_PRECOMPILE_ABI,
           functionName: "getProposalVotes",
           args: [proposalId, pagination],

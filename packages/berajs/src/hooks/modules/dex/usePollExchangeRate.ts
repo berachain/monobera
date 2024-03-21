@@ -1,12 +1,11 @@
+import { erc20DexAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { type Token } from "~/api";
 import { DEX_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig } from "~/contexts";
 
 export const usePollExchangeRate = (
   poolAddress: `0x${string}`,
@@ -14,8 +13,6 @@ export const usePollExchangeRate = (
   quoteAsset: Token,
 ) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
-
   const method = "getExchangeRate";
   const QUERY_KEY = [
     poolAddress,
@@ -28,7 +25,7 @@ export const usePollExchangeRate = (
     async () => {
       if (!publicClient) return undefined;
       const result = await publicClient.readContract({
-        address: networkConfig.precompileAddresses.erc20DexAddress as Address,
+        address: erc20DexAddress,
         abi: DEX_PRECOMPILE_ABI,
         functionName: method,
         args: [poolAddress],
