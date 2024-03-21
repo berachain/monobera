@@ -20,7 +20,6 @@ export interface IBHoneyEpoch {
   currentEpochEnd: number;
 }
 
-const epochLength = Number(process.env.NEXT_PUBLIC_EPOCH_LENGTH_SECONDS_PERPS);
 export const usePollBHoneyEpochs = () => {
   const publicClient = usePublicClient();
   const method = "epochs";
@@ -44,6 +43,12 @@ export const usePollBHoneyEpochs = () => {
             functionName: "currentEpochStart",
             args: [],
           },
+          {
+            abi: BTOKEN_ABI,
+            address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+            functionName: "currentEpochEnd",
+            args: [],
+          },
         ];
         const result = await publicClient.multicall({
           contracts: call,
@@ -53,11 +58,12 @@ export const usePollBHoneyEpochs = () => {
 
         const currentEpoch = Number((result[0] as any).result);
         const currentEpochStart = Number((result[1] as any).result);
+        const currentEpochEnd = Number((result[2] as any).result);
 
         const epochs = {
           currentEpoch,
           currentEpochStart,
-          currentEpochEnd: currentEpochStart + epochLength,
+          currentEpochEnd: currentEpochEnd,
         };
 
         return epochs;
