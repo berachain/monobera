@@ -1,16 +1,16 @@
-import { POLLING } from "@bera/shared-ui/src/utils";
-import useSWR, { mutate } from "swr";
-import { type PoolV2 } from "~/app/pools/fetchPools";
-import useSWRImmutable from "swr/immutable";
 import { getCrocErc20LpAddress, useBeraJs } from "@bera/berajs";
-import { dexClient, getTokenHoneyPrices } from "@bera/graphql";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
-import { toHex } from "viem";
-import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
-import { getAddress, erc20Abi } from "viem";
-import { type IUserPosition } from "./usePollUserDeposited";
-import { usePublicClient } from "wagmi";
+import { dexClient, getTokenHoneyPrices } from "@bera/graphql";
+import { POLLING } from "@bera/shared-ui/src/utils";
 import BigNumber from "bignumber.js";
+import useSWR, { mutate } from "swr";
+import useSWRImmutable from "swr/immutable";
+import { erc20Abi, getAddress, toHex } from "viem";
+import { usePublicClient } from "wagmi";
+
+import { type PoolV2 } from "~/app/pools/fetchPools";
+import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
+import { type IUserPosition } from "./usePollUserDeposited";
 
 interface AmbientPosition {
   ambientLiq: string;
