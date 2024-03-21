@@ -82,22 +82,3 @@ export async function getHistoricalSummary(): Promise<any | undefined> {
     return [];
   }
 }
-
-export async function getFeesApr(): Promise<any | undefined> {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL}/historical-rewards?count_back=3&resolution=1d`,
-    );
-    const jsonRes = await res.json();
-    const historicalSummary = jsonRes.result;
-
-    return historicalSummary;
-  } catch (e) {
-    return {
-      apr: "0",
-      combined_fees: "0",
-      fees_to_bgt: "0",
-      fees_to_honey: "0",
-    };
-  }
-}
