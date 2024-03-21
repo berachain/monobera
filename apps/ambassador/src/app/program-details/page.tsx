@@ -1,8 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Image from "next/image";
-
-// import Link from "next/link";
+import { cloudinaryUrl } from "@bera/config";
 
 export default function AmbassadorProgram() {
   return (
@@ -46,7 +45,7 @@ export default function AmbassadorProgram() {
           </p>
         </div>
         <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg">
-          <div className="flex w-full flex-col items-stretch justify-center gap-6 align-middle sm:flex-row">
+          <div className="flex w-full flex-col items-stretch justify-center gap-6 align-middle md:flex-row">
             <section
               className="mb-2 flex-grow rounded-lg bg-muted p-4"
               style={{ flexBasis: "0" }}
@@ -71,7 +70,7 @@ export default function AmbassadorProgram() {
 
                   <div className="pt-8 align-bottom">
                     <Image
-                      src="/SmokeyBongless.png"
+                      src={`${cloudinaryUrl}/bears/SmokeyBongless_ebu7vl`}
                       alt="Bera Legion"
                       width={120}
                       height={80}
@@ -88,7 +87,7 @@ export default function AmbassadorProgram() {
               <div className="flex rounded-md">
                 <div className="flex-col p-6">
                   <Image
-                    src="/beralegion.png"
+                    src={`${cloudinaryUrl}/ambassador/ajgmhr9iesd8ypu9r74g`}
                     alt="Bera Legion"
                     width={320}
                     height={260}
@@ -131,7 +130,7 @@ export default function AmbassadorProgram() {
               <section className="flex h-full flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
-                    src="/alien.png"
+                    src={`${cloudinaryUrl}/ambassador/mbmxscjsdetsnztlau9n`}
                     alt="Bera Legion"
                     width={640}
                     height={360}
@@ -153,7 +152,7 @@ export default function AmbassadorProgram() {
               <section className="flex h-full flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col justify-between rounded-md">
                   <Image
-                    src="/wannabeBond.png"
+                    src={`${cloudinaryUrl}/ambassador/dzidviq6hw4sz9cgzrdb`}
                     alt="Bera Legion"
                     width={640}
                     height={360}
@@ -176,7 +175,7 @@ export default function AmbassadorProgram() {
               <section className="flex h-full flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
-                    src="/loltemplars.png"
+                    src={`${cloudinaryUrl}/ambassador/slcfgw2fazn5asmhrek7`}
                     alt="Bera Legion"
                     width={640}
                     height={360}
