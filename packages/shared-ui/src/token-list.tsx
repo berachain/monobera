@@ -2,7 +2,6 @@
 
 import React from "react";
 import {
-  formatter,
   usePollAssetWalletBalance,
   useTokenHoneyPrice,
   type Token,
@@ -11,6 +10,7 @@ import { bgtTokenAddress, blockExplorerUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
+import { FormattedNumber } from "./formatted-number";
 import { TokenIcon } from "./token-icon";
 
 export function TokenRow({
@@ -30,7 +30,10 @@ export function TokenRow({
         <TokenIcon address={asset.address} size="2xl" />
         <div className="font-medium">
           <div className="flex-1 truncate text-sm font-medium leading-6">
-            {formatter.format(Number(asset.formattedBalance))} {asset.symbol}
+            <FormattedNumber
+              value={asset.formattedBalance??0}
+              symbol={asset.symbol}
+            />
             <a
               target="_blank"
               href={`${blockExplorerUrl}/address/${asset.address}`}
@@ -48,9 +51,10 @@ export function TokenRow({
         {isLoading || !tokenPrice ? (
           <Skeleton className="h-8 w-16" />
         ) : (
-          `$${formatter.format(
-            Number(tokenPrice) * Number(asset.formattedBalance),
-          )}`
+          <FormattedNumber
+            value={Number(tokenPrice) * Number(asset.formattedBalance)}
+            symbol="USD"
+          />
         )}
       </div>
     </div>
