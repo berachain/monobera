@@ -11,6 +11,7 @@ export default function Hero() {
   const { theme, systemTheme } = useTheme();
   const t = !theme || theme === "system" ? systemTheme || "dark" : theme;
   const bg = t === "dark" ? "/dark_bear_bg.png" : "/light_bear_bg.png";
+
   return (
     <div className="flex h-[483px] w-[1280px] items-center px-4">
       {/* <Image
@@ -28,7 +29,7 @@ export default function Hero() {
             <br />
             Ecosystem
           </h1>
-          <h2 className="text-md mt-2 whitespace-nowrap leading-8 tracking-tight text-muted-foreground">
+          <h2 className="text-md mt-2 leading-8 tracking-tight text-muted-foreground sm:whitespace-nowrap">
             A hub for all the bAPPs and brojects Building on Berachain.
             <br />
             Want to contribute to the bearchain ecosystem?
