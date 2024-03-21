@@ -6,26 +6,11 @@ import Link from "next/link";
 import { useBeraJs } from "@bera/berajs";
 import { bannerEnabled, faucetUrl, rpcBannerEnabled } from "@bera/config";
 import { cn } from "@bera/ui";
-import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-
+import { ConnectButton } from "./connect-button";
 import { LaunchBanner, RPCBanner } from "./launch-banner";
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
-
-const ConnectBtn = dynamic(
-  () => import("./connect-button").then((mod) => mod.ConnectButton),
-  {
-    ssr: false,
-    loading: () => (
-      <Button>
-        {" "}
-        <Icons.spinner className="relative mr-1 h-6 w-6 animate-spin" />
-        Loading
-      </Button>
-    ),
-  },
-);
 
 const ThemeToggleMobile = dynamic(
   () => import("./theme-toggle-mobile").then((mod) => mod.ThemeToggleMobile),
@@ -85,7 +70,9 @@ export function Header({
           >
             <Icons.faucetFav className="h-10 w-10 hover:opacity-80" />
           </Link>
-          {!hideConnectBtn && <ConnectBtn isNavItem={true} isHoney={isHoney} />}
+          {!hideConnectBtn && (
+            <ConnectButton isNavItem={true} isHoney={isHoney} />
+          )}
           <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />
         </div>
       </div>
