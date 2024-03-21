@@ -63,6 +63,8 @@ export const publicJsonRpcUrl = process.env
   .NEXT_PUBLIC_PUBLIC_JSON_RPC_URL as string;
 
 // Bera token information
+export const gasTokenIconUrl = process.env
+  .NEXT_PUBLIC_NETWORK_ICON_URL as string;
 export const gasTokenSymbol = process.env
   .NEXT_PUBLIC_NETWORK_CURRENCY as string;
 export const gasTokenName = process.env

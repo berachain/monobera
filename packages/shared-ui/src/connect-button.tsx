@@ -13,23 +13,21 @@ export const ConnectButton = ({
   className,
   isNavItem = false,
   isHoney = false,
-  btnClassName,
 }: {
   className?: string;
   isNavItem?: boolean;
   isHoney?: boolean;
-  btnClassName?: string;
 }) => {
   const { isConnected, isWrongNetwork, isReady } = useBeraJs();
   return (
-    <div className={className}>
+    <>
       {!isConnected && (
-        <DynamicConnectButton>
+        <DynamicConnectButton buttonClassName={"w-full"}>
           <Button
             className={cn(
               "w-full gap-2",
               !isNavItem && "font-semibold",
-              btnClassName,
+              className,
             )}
           >
             <Icons.wallet className={cn("h-4 w-4", !isNavItem && "h-6 w-6")} />
@@ -38,9 +36,9 @@ export const ConnectButton = ({
         </DynamicConnectButton>
       )}
       {isWrongNetwork && isConnected && (
-        <SwicthNetworkBtn className={btnClassName} />
+        <SwicthNetworkBtn className={className} />
       )}
       {isReady && <ConnectedWalletPopover isHoney={isHoney} />}
-    </div>
+    </>
   );
 };

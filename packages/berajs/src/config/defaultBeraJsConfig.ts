@@ -4,6 +4,7 @@ import {
   chainId,
   chainName,
   gasTokenDecimals,
+  gasTokenIconUrl,
   gasTokenName,
   gasTokenSymbol,
   jsonRpcUrl,
@@ -47,7 +48,7 @@ const evmNetwork: EvmNetwork = {
   blockExplorerUrls: [blockExplorerUrl],
   chainId: chainId,
   chainName: chainName,
-  iconUrls: [gasTokenSymbol],
+  iconUrls: [gasTokenIconUrl],
   nativeCurrency: {
     decimals: gasTokenDecimals,
     name: gasTokenName,
