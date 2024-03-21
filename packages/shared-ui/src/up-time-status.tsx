@@ -49,7 +49,7 @@ export function UpTimeStatus() {
       </div>
       <div className="flex cursor-pointer items-center gap-2 text-xs font-medium leading-3 text-muted-foreground">
         <div className=" text-success-foreground">
-          {gasData?.formatted.gasPrice}
+          {gasData?.formatted?.gasPrice}
         </div>
         <Icons.fuel className="h-4 w-4" />
         Bwei
