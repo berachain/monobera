@@ -31,7 +31,7 @@ export function TokenRow({
         <div className="font-medium">
           <div className="flex-1 truncate text-sm font-medium leading-6">
             <FormattedNumber
-              value={asset.formattedBalance??0}
+              value={asset.formattedBalance ?? 0}
               symbol={asset.symbol}
             />
             <a
