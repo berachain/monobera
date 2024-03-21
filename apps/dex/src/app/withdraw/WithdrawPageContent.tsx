@@ -285,9 +285,10 @@ export default function WithdrawLiquidityContent({
               title={`Removing ${baseToken.symbol}`}
               value={
                 <div className="flex flex-row items-center justify-end gap-1">
-                  <p>
-                    <FormattedNumber value={baseAmountWithdrawn} />
-                  </p>
+                  <FormattedNumber
+                    value={baseAmountWithdrawn}
+                    compact={false}
+                  />
                   <TokenIcon
                     address={baseToken.address}
                     size={"md"}
@@ -300,9 +301,10 @@ export default function WithdrawLiquidityContent({
               title={`Removing ${quoteToken.symbol}`}
               value={
                 <div className="flex flex-row items-center justify-end gap-1">
-                  <p>
-                    <FormattedNumber value={quoteAmountWithdrawn} />
-                  </p>
+                  <FormattedNumber
+                    value={quoteAmountWithdrawn}
+                    compact={false}
+                  />
                   <TokenIcon
                     address={quoteToken.address}
                     size={"md"}
@@ -318,7 +320,6 @@ export default function WithdrawLiquidityContent({
                   <>
                     <FormattedNumber
                       value={poolPrice}
-                      visibleDecimals={4}
                       symbol={baseToken.symbol}
                     />{" "}
                     = 1 {quoteToken.symbol}
@@ -330,7 +331,13 @@ export default function WithdrawLiquidityContent({
             />
             <InfoBoxListItem
               title={"Estimated Value"}
-              value={<FormattedNumber value={totalHoneyPrice} symbol="USD" />}
+              value={
+                <FormattedNumber
+                  value={totalHoneyPrice}
+                  symbol="USD"
+                  compact={false}
+                />
+              }
             />
             <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
           </InfoBoxList>
@@ -370,7 +377,6 @@ export default function WithdrawLiquidityContent({
                     <>
                       <FormattedNumber
                         value={poolPrice}
-                        visibleDecimals={4}
                         symbol={baseToken.symbol}
                       />{" "}
                       = 1 {quoteToken.symbol}
@@ -382,7 +388,13 @@ export default function WithdrawLiquidityContent({
               />
               <InfoBoxListItem
                 title={"Estimated Value"}
-                value={<FormattedNumber value={totalHoneyPrice} symbol="USD" />}
+                value={
+                  <FormattedNumber
+                    value={totalHoneyPrice}
+                    symbol="USD"
+                    compact={false}
+                  />
+                }
               />
               <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
             </InfoBoxList>

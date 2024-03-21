@@ -144,7 +144,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="flex items-center text-sm text-warning-foreground">
+      <div className="flex items-center justify-center text-sm text-warning-foreground">
         <FormattedNumber value={row.original.bgtApy ?? 0} percent />
       </div>
     ),
@@ -170,7 +170,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center text-sm">
+        <div className="flex items-center justify-center text-sm">
           <FormattedNumber value={row.original.totalApy ?? 0} percent colored />
         </div>
       );

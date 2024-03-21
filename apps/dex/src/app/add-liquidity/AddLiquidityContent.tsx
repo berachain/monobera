@@ -435,7 +435,6 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                     <FormattedNumber
                       value={poolPrice}
                       symbol={baseToken.symbol}
-                      visibleDecimals={4}
                     />{" "}
                     = 1 {quoteToken.symbol}
                   </>
@@ -446,7 +445,13 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
             />
             <InfoBoxListItem
               title={"Total Value"}
-              value={<FormattedNumber value={totalHoneyPrice} symbol="USD" />}
+              value={
+                <FormattedNumber
+                  value={totalHoneyPrice}
+                  symbol="USD"
+                  compact={false}
+                />
+              }
             />
 
             <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
@@ -498,7 +503,6 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       <FormattedNumber
                         value={poolPrice}
                         symbol={baseToken.symbol}
-                        visibleDecimals={4}
                       />{" "}
                       = 1 {quoteToken.symbol}
                     </>
@@ -509,7 +513,13 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               />
               <InfoBoxListItem
                 title={"Total Value"}
-                value={<FormattedNumber value={totalHoneyPrice} symbol="USD" />}
+                value={
+                  <FormattedNumber
+                    value={totalHoneyPrice}
+                    symbol="USD"
+                    compact={false}
+                  />
+                }
               />
               <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
             </InfoBoxList>
