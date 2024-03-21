@@ -226,8 +226,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -247,8 +247,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -270,8 +270,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -394,7 +394,14 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             <div className="mb-4 text-sm font-medium">Tokens</div>
             <div>
               <div className="flex h-8 items-center justify-between">
-                <div className="flex gap-1">
+                <div
+                  className="flex cursor-pointer gap-1 hover:underline"
+                  onClick={() => {
+                    if (pool?.base) {
+                      window.open(`${blockExplorerUrl}/address/${pool.base}`);
+                    }
+                  }}
+                >
                   <TokenIcon
                     address={pool.baseInfo.address}
                     symbol={pool.baseInfo.symbol}
@@ -417,7 +424,14 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="flex h-8 items-center justify-between">
-                <div className="flex gap-1">
+                <div
+                  className="flex cursor-pointer gap-1 hover:underline"
+                  onClick={() => {
+                    if (pool?.quote) {
+                      window.open(`${blockExplorerUrl}/address/${pool.quote}`);
+                    }
+                  }}
+                >
                   <TokenIcon
                     address={pool.quoteInfo.address}
                     symbol={pool.quoteInfo.symbol}
