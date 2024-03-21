@@ -1,13 +1,29 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useBeraJs } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { DynamicConnectButton } from "@dynamic-labs/sdk-react-core";
 
 import ConnectedWalletPopover from "./connected-wallet-popover";
 import { SwicthNetworkBtn } from "./switch-network-btn";
+
+const DynamicConnectButton = dynamic(
+  () =>
+    import("@dynamic-labs/sdk-react-core").then(
+      (mod) => mod.DynamicConnectButton,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <Button>
+        <Icons.spinner className="relative mr-1 h-6 w-6 animate-spin" />
+        Loading
+      </Button>
+    ),
+  },
+);
 
 export const ConnectButton = ({
   className,
