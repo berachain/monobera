@@ -11,9 +11,13 @@ import { ApyTooltip } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 import type { Address } from "viem";
 
-export default function Claim({ feeApr }: { feeApr: string }) {
-  const feeAprTrimmed = feeApr.slice(0, -1);
-  const feeAprNumber = Number(feeAprTrimmed);
+import { usePollFeesApr } from "~/hooks/usePollFeesApr";
+
+export default function Claim() {
+  const { isLoading: isFeesAprLoading, useFeesApr } = usePollFeesApr();
+  let feeApr = useFeesApr();
+  feeApr = feeApr ? Number(feeApr.slice(0, -1)) : 0;
+
   const {
     // isLoading: isHoneyVaultBalanceLoading,
     useFormattedHoneyVaultBalance,
@@ -38,10 +42,10 @@ export default function Claim({ feeApr }: { feeApr: string }) {
     <div className="relative w-full overflow-hidden rounded-md border border-border bg-gradient-to-r from-[#180B01] to-[#3B220F] px-10 py-8">
       <div className=" relative z-10 inline-flex h-[52px] w-fit items-center justify-center gap-1 rounded-md border border-yellow-600 bg-stone-900 px-3 py-2">
         <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-yellow-600">
-          {isLoading || isBgtRewardsLoading || bgtApr === undefined ? (
+          {isLoading || isBgtRewardsLoading || isFeesAprLoading ? (
             <Skeleton className="h-[28px] w-[80px]" />
           ) : (
-            <p>{formatter.format((bgtApr ?? 0) + feeAprNumber)}%</p>
+            <p>{formatter.format((bgtApr ?? 0) + feeApr)}%</p>
             // <p>{feeApr}</p>
           )}
         </div>
