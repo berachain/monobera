@@ -5,18 +5,16 @@ import Image from "next/image";
 import {
   BGT_PRECOMPILE_ABI,
   TransactionActionType,
-  useBeraConfig,
   useBeraJs,
   usePollBgtBalance,
 } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, erc20BgtAddress } from "@bera/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { type Address } from "viem";
 
 import { useRedeem } from "../../hooks/useRedeem";
 
@@ -29,7 +27,6 @@ export default function Redeem() {
     message: "Redeem BERA",
     actionType: TransactionActionType.REDEEM_BERA,
   });
-  const { networkConfig } = useBeraConfig();
 
   return (
     <div className="container mx-auto mb-20 w-full max-w-[564px]">
@@ -107,8 +104,7 @@ export default function Redeem() {
             }
             onClick={() =>
               write({
-                address: networkConfig.precompileAddresses
-                  .erc20BgtAddress as Address,
+                address: erc20BgtAddress,
                 abi: BGT_PRECOMPILE_ABI,
                 functionName: "redeem",
                 params: payload,

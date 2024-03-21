@@ -4,11 +4,9 @@ import { usePublicClient } from "wagmi";
 
 import POLLING from "~/config/constants/polling";
 import { BERACHEF_ABI } from "~/config/v2/abi";
-import { useBeraConfig } from "~/contexts";
 
 export const usePollDelegation = (validatorAddress: `0x${string}`) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
 
   const method = "getOperator";
   // validatorCoinbaseAddr

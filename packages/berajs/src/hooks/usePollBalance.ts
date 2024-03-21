@@ -1,13 +1,13 @@
-import { nativeTokenAddress } from "@bera/config";
+import { multicallAddress, nativeTokenAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, erc20Abi, formatEther, formatUnits } from "viem";
+import { erc20Abi, formatEther, formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { MULTICALL3_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { type Token } from "../api/currency/tokens";
-import { useBeraConfig, useBeraJs } from "../contexts";
+import { useBeraJs } from "../contexts";
 
 interface BalanceToken extends Token {
   balance: bigint;
@@ -28,8 +28,6 @@ export const usePollBalance = ({
 }) => {
   const publicClient = usePublicClient();
   const { account, error } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
-
   const QUERY_KEY = [account, address, "balance"];
   const { isLoading } = useSWR(
     QUERY_KEY,
@@ -65,8 +63,7 @@ export const usePollBalance = ({
           ];
           const result = await publicClient.multicall({
             contracts: call,
-            multicallAddress: networkConfig.precompileAddresses
-              .multicallAddress as Address,
+            multicallAddress: multicallAddress,
           });
 
           const balance: BalanceToken = {
@@ -84,8 +81,7 @@ export const usePollBalance = ({
           return balance;
         }
         const call = {
-          address: networkConfig.precompileAddresses
-            .multicallAddress as Address,
+          address: multicallAddress,
           abi: MULTICALL3_ABI,
           functionName: "getEthBalance",
           args: [account],

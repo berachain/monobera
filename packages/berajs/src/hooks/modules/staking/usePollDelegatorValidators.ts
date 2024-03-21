@@ -1,13 +1,14 @@
 import { useMemo } from "react";
+import { multicallAddress, stakingAddress } from "@bera/config";
 import lodash from "lodash";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, getAddress, type Address } from "viem";
+import { formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { STAKING_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig, useBeraJs } from "~/contexts";
+import { useBeraJs } from "~/contexts";
 import { defaultPagination } from "~/utils";
 import {
   usePollActiveValidators,
@@ -26,7 +27,6 @@ export interface UnbondingDelegationEntry {
 export const usePollDelegatorValidators = () => {
   const publicClient = usePublicClient();
   const { account, isConnected } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
   const method = "getDelegatorValidators";
   const QUERY_KEY = [account, method];
   const { isLoading } = useSWR(
@@ -37,8 +37,7 @@ export const usePollDelegatorValidators = () => {
       if (isConnected) {
         const result = (await publicClient
           .readContract({
-            address: networkConfig.precompileAddresses
-              .stakingAddress as Address,
+            address: stakingAddress,
             abi: STAKING_PRECOMPILE_ABI,
             functionName: "getDelegatorValidators",
             args: [account, defaultPagination],
@@ -103,7 +102,6 @@ interface Call {
 export const usePollTotalDelegated = () => {
   const publicClient = usePublicClient();
   const { account, isConnected } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
   const { useDelegatorValidators } = usePollDelegatorValidators();
   const delegatorValidators = useDelegatorValidators();
   const method = "getDelegation";
@@ -116,8 +114,7 @@ export const usePollTotalDelegated = () => {
       if (isConnected && delegatorValidators) {
         const call: Call[] = delegatorValidators.map((validator) => {
           return {
-            address: networkConfig.precompileAddresses
-              .stakingAddress as Address,
+            address: stakingAddress,
             abi: STAKING_PRECOMPILE_ABI,
             functionName: method,
             args: [account, validator.operatorAddr],
@@ -125,8 +122,7 @@ export const usePollTotalDelegated = () => {
         });
         const result = await publicClient.multicall({
           contracts: call,
-          multicallAddress: networkConfig.precompileAddresses
-            .multicallAddress as Address,
+          multicallAddress: multicallAddress,
         });
 
         const totals = result.map((res: any) => formatUnits(res.result, 18));
@@ -205,7 +201,6 @@ export interface UnbondingListResponse {
 export const usePollDelegatorUnbonding = () => {
   const publicClient = usePublicClient();
   const { account, isConnected } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
   const method = "getDelegatorUnbonding";
   const QUERY_KEY = [account, method];
 
@@ -217,8 +212,7 @@ export const usePollDelegatorUnbonding = () => {
       if (isConnected) {
         const result = (await publicClient
           .readContract({
-            address: networkConfig.precompileAddresses
-              .stakingAddress as Address,
+            address: stakingAddress,
             abi: STAKING_PRECOMPILE_ABI,
             functionName: "getDelegatorUnbondingDelegations",
             args: [account, defaultPagination],

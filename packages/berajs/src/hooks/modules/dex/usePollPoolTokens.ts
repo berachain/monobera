@@ -1,11 +1,10 @@
+import { erc20DexAddress, multicallAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { DEX_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig } from "~/contexts";
 
 interface Call {
   abi: any[];
@@ -16,8 +15,6 @@ interface Call {
 
 export const usePollPoolTokens = (poolAddress: `0x${string}`) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
-
   const QUERY_KEY = [poolAddress, "poolData"];
   useSWR(
     QUERY_KEY,
@@ -26,13 +23,13 @@ export const usePollPoolTokens = (poolAddress: `0x${string}`) => {
       const call: Call[] = [
         {
           abi: DEX_PRECOMPILE_ABI,
-          address: networkConfig.precompileAddresses.erc20DexAddress as Address,
+          address: erc20DexAddress,
           functionName: "getLiquidity",
           args: [poolAddress],
         },
         {
           abi: DEX_PRECOMPILE_ABI,
-          address: networkConfig.precompileAddresses.erc20DexAddress as Address,
+          address: erc20DexAddress,
           functionName: "getTotalShares",
           args: [poolAddress],
         },
@@ -40,8 +37,7 @@ export const usePollPoolTokens = (poolAddress: `0x${string}`) => {
 
       const result = await publicClient.multicall({
         contracts: call,
-        multicallAddress: networkConfig.precompileAddresses
-          .multicallAddress as Address,
+        multicallAddress: multicallAddress,
       });
       return result;
     },
