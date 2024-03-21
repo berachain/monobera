@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -90,7 +90,7 @@ export function SwapCard({
     refreshAllowance,
     payload,
     exchangeRate,
-    // gasPrice,
+    gasPrice,
     tokenInPrice,
     tokenOutPrice,
     isWrap,
@@ -298,6 +298,45 @@ export function SwapCard({
     return <Connect />;
   };
 
+  const hasRouteNotFoundError =
+    selectedFrom &&
+    selectedTo &&
+    swapInfo &&
+    swapInfo.batchSwapSteps.length === 0 &&
+    fromAmount &&
+    fromAmount !== "" &&
+    swapAmount !== "0" &&
+    swapAmount !== "" &&
+    !isRouteLoading &&
+    !isWrap;
+
+  const hasInsufficientBalanceError =
+    isConnected && exceedingBalance && !isBalancesLoading;
+
+  const gasPriceLabel = useMemo(() => {
+    if (
+      !gasPrice ||
+      hasRouteNotFoundError ||
+      !toAmount ||
+      !fromAmount ||
+      !selectedTo ||
+      !selectedFrom ||
+      error !== undefined ||
+      isRouteLoading
+    )
+      return "-";
+    if (gasPrice < 0.01) return "<$0.01";
+    return `$${gasPrice.toFixed(2)}`;
+  }, [
+    toAmount,
+    fromAmount,
+    selectedTo,
+    selectedFrom,
+    gasPrice,
+    hasRouteNotFoundError,
+    error,
+    isRouteLoading,
+  ]);
   const breakpoint = useBreakpoint();
 
   return (
@@ -388,10 +427,14 @@ export function SwapCard({
                 {priceImpact && priceImpact < -10 && (
                   <TooltipCustom
                     anchor={
-                      breakpoint > BREAKPOINTS.md ? "right" : "bottom-center"
+                      breakpoint && breakpoint > BREAKPOINTS.md
+                        ? "right"
+                        : "bottom-center"
                     }
                     position={
-                      breakpoint > BREAKPOINTS.md ? "left" : "bottom-center"
+                      breakpoint && breakpoint > BREAKPOINTS.md
+                        ? "left"
+                        : "bottom-center"
                     }
                     tooltipContent={
                       <div className="w-[250px]">
@@ -426,17 +469,22 @@ export function SwapCard({
                       </div>
                       <div className="flex w-full flex-row justify-between">
                         <p className="text-xs font-medium text-muted-foreground sm:text-sm">
-                          Gas fee
+                          Network fee
                         </p>
-                        <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                          {"<0.0001 Bwei"}
+                        <p className="cursor-help whitespace-nowrap text-right text-xs font-medium sm:text-sm ">
+                          <span className="flex flex-row items-center gap-1">
+                            {gasPriceLabel !== "-" && (
+                              <Icons.fuel className="h-4 w-4" />
+                            )}
+                            {gasPriceLabel}
+                          </span>
                         </p>
                       </div>
                     </div>
                   ) : (
                     false
                   )}
-                  {isConnected && exceedingBalance && !isBalancesLoading ? (
+                  {hasInsufficientBalanceError ? (
                     <Alert
                       variant="destructive"
                       className="items-center justify-center"
@@ -449,15 +497,13 @@ export function SwapCard({
                   ) : (
                     false
                   )}
-                  {error !== undefined ? (
+                  {error !== undefined && (
                     <Alert variant="destructive">
                       <AlertTitle>Error</AlertTitle>
                       <AlertDescription className="text-xs">
                         {error.message}
                       </AlertDescription>
                     </Alert>
-                  ) : (
-                    false
                   )}
                   {/* {isRouteLoading === true && swapAmount !=='0' && selectedTo !==undefined ? (
                     <Alert variant="info">
@@ -484,16 +530,7 @@ export function SwapCard({
                   ) : (
                     false
                   )} */}
-                  {selectedFrom &&
-                  selectedTo &&
-                  swapInfo &&
-                  swapInfo.batchSwapSteps.length === 0 &&
-                  fromAmount &&
-                  fromAmount !== "" &&
-                  swapAmount !== "0" &&
-                  swapAmount !== "" &&
-                  !isRouteLoading &&
-                  !isWrap ? (
+                  {hasRouteNotFoundError ? (
                     <Alert variant="destructive">
                       <AlertTitle>
                         {" "}
