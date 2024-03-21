@@ -2,18 +2,19 @@
 
 "use client";
 
+import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { type PriceRange } from "@bera/beracrocswap";
 import {
-  formatNumber,
-  formatUsd,
-  type Token,
-  TransactionActionType,
   CROCSWAP_DEX,
+  TransactionActionType,
   useTokenHoneyPrice,
+  type Token,
 } from "@bera/berajs";
 import { cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
   ActionButton,
+  FormattedNumber,
   InfoBoxList,
   InfoBoxListItem,
   PreviewToken,
@@ -27,17 +28,16 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-
-import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
-import { getPoolUrl, type PoolV2 } from "../pools/fetchPools";
-import { SettingsPopover } from "~/components/settings-popover";
 import { Slider } from "@bera/ui/slider";
-import { usePollUserPosition } from "~/hooks/usePollUserPosition";
-import { useCallback, useMemo } from "react";
-import { type PriceRange } from "@bera/beracrocswap";
-import { getSafeNumber } from "~/utils/getSafeNumber";
-import { useCrocPool } from "~/hooks/useCrocPool";
 import { BigNumber } from "ethers";
+
+import { getSafeNumber } from "~/utils/getSafeNumber";
+import { SettingsPopover } from "~/components/settings-popover";
+import { useCrocPool } from "~/hooks/useCrocPool";
+import { usePollUserPosition } from "~/hooks/usePollUserPosition";
+import { getPoolUrl, type PoolV2 } from "../pools/fetchPools";
+import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
+
 interface IWithdrawLiquidityContent {
   pool: PoolV2;
 }
@@ -59,9 +59,9 @@ export const TokenSummary = ({
   isLoading,
 }: ITokenSummary) => {
   return (
-    <div className="flex w-full flex-col items-center justify-center rounded-lg p-3 bg-muted gap-3">
-      <p className="text-lg font-semibold text-left w-full">{title}</p>
-      <div className="w-full justify-between items-center flex flex-row">
+    <div className="flex w-full flex-col items-center justify-center gap-3 rounded-lg bg-muted p-3">
+      <p className="w-full text-left text-lg font-semibold">{title}</p>
+      <div className="flex w-full flex-row items-center justify-between">
         <p className="text-sm text-muted-foreground">
           Pooled {baseToken.symbol}
         </p>
@@ -70,7 +70,7 @@ export const TokenSummary = ({
           <TokenIcon address={baseToken.address} symbol={baseToken.symbol} />
         </div>
       </div>
-      <div className="w-full justify-between items-center flex flex-row">
+      <div className="flex w-full flex-row items-center justify-between">
         <p className="text-sm text-muted-foreground">
           Pooled {quoteToken.symbol}
         </p>
@@ -247,9 +247,9 @@ export default function WithdrawLiquidityContent({
             quoteAmount={userPositionBreakdown?.formattedQuoteAmount ?? "0"}
             isLoading={isPositionBreakdownLoading}
           />
-          <div className="w-full p-4 border rounded-lg">
-            <div className="w-full flex flex-row gap-1 justify-between items-center">
-              <p className="text-sm sm:text-lg font-semibold">
+          <div className="w-full rounded-lg border p-4">
+            <div className="flex w-full flex-row items-center justify-between gap-1">
+              <p className="text-sm font-semibold sm:text-lg">
                 {amount.toFixed(2)}%
               </p>
               <div className="flex flex-row gap-2">
@@ -284,9 +284,9 @@ export default function WithdrawLiquidityContent({
             <InfoBoxListItem
               title={`Removing ${baseToken.symbol}`}
               value={
-                <div className="flex flex-row gap-1 items-center justify-end">
+                <div className="flex flex-row items-center justify-end gap-1">
                   <p>
-                    {formatNumber(getSafeNumber(baseAmountWithdrawn as any))}
+                    <FormattedNumber value={baseAmountWithdrawn} />
                   </p>
                   <TokenIcon
                     address={baseToken.address}
@@ -299,9 +299,9 @@ export default function WithdrawLiquidityContent({
             <InfoBoxListItem
               title={`Removing ${quoteToken.symbol}`}
               value={
-                <div className="flex flex-row gap-1 items-center justify-end">
+                <div className="flex flex-row items-center justify-end gap-1">
                   <p>
-                    {formatNumber(getSafeNumber(quoteAmountWithdrawn as any))}
+                    <FormattedNumber value={quoteAmountWithdrawn} />
                   </p>
                   <TokenIcon
                     address={quoteToken.address}
@@ -314,16 +314,23 @@ export default function WithdrawLiquidityContent({
             <InfoBoxListItem
               title={"Pool Price"}
               value={
-                poolPrice
-                  ? `${formatNumber(poolPrice, 4)} ${baseToken.symbol} = 1 ${
-                      quoteToken.symbol
-                    }`
-                  : "-"
+                poolPrice ? (
+                  <>
+                    <FormattedNumber
+                      value={poolPrice}
+                      visibleDecimals={4}
+                      symbol={baseToken.symbol}
+                    />{" "}
+                    = 1 {quoteToken.symbol}
+                  </>
+                ) : (
+                  "-"
+                )
               }
             />
             <InfoBoxListItem
               title={"Estimated Value"}
-              value={formatUsd(totalHoneyPrice)}
+              value={<FormattedNumber value={totalHoneyPrice} symbol="USD" />}
             />
             <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
           </InfoBoxList>
@@ -359,16 +366,23 @@ export default function WithdrawLiquidityContent({
               <InfoBoxListItem
                 title={"Pool Price"}
                 value={
-                  poolPrice
-                    ? `${formatNumber(poolPrice)} ${baseToken.symbol} = 1 ${
-                        quoteToken.symbol
-                      }`
-                    : "-"
+                  poolPrice ? (
+                    <>
+                      <FormattedNumber
+                        value={poolPrice}
+                        visibleDecimals={4}
+                        symbol={baseToken.symbol}
+                      />{" "}
+                      = 1 {quoteToken.symbol}
+                    </>
+                  ) : (
+                    "-"
+                  )
                 }
               />
               <InfoBoxListItem
                 title={"Estimated Value"}
-                value={formatUsd(totalHoneyPrice)}
+                value={<FormattedNumber value={totalHoneyPrice} symbol="USD" />}
               />
               <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
             </InfoBoxList>

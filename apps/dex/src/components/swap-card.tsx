@@ -459,31 +459,6 @@ export function SwapCard({
                   ) : (
                     false
                   )}
-                  {/* {isRouteLoading === true && swapAmount !=='0' && selectedTo !==undefined ? (
-                    <Alert variant="info">
-                      <AlertTitle>Searching for best routes</AlertTitle>
-                      <AlertDescription className="text-xs">
-                        route loading
-                      </AlertDescription>
-                    </Alert>
-                  ) : (
-                    false
-                  )} */}
-                  {/* {showPriceImpact ? (
-                    <Alert variant="destructive">
-                      <AlertTitle>
-                        {" "}
-                        <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
-                        Price Impact Error
-                      </AlertTitle>
-                      <AlertDescription className="text-xs">
-                        This swap will result in a high price impact (-
-                        {priceImpact?.toFixed(2)}%)
-                      </AlertDescription>
-                    </Alert>
-                  ) : (
-                    false
-                  )} */}
                   {selectedFrom &&
                   selectedTo &&
                   swapInfo &&
