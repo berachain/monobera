@@ -12,7 +12,7 @@ import ProjectHighlights from "./components/project-highlights";
 export default function Home() {
   return (
     <main>
-      <div className="container relative mx-auto flex flex-col items-center justify-between bg-contain bg-no-repeat">
+      <div className="relative mx-auto flex w-full flex-col items-center justify-between bg-contain bg-no-repeat px-4">
         <Hero />
         {/* <TopProjects /> */}
         <ProjectHighlights />

@@ -165,7 +165,7 @@ export default function EcosystemProjects() {
         </div>
       )}
 
-      <div className="mx-auto grid w-fit grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid w-fit grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
           .map((project: EcosystemProject, index: number) => (
