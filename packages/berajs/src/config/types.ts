@@ -1,3 +1,4 @@
+import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { type Address, type Chain } from "viem";
 
 interface PrecompileMapping {
@@ -7,7 +8,7 @@ interface PrecompileMapping {
 export interface NetworkConfig {
   isTestnet?: boolean;
   chain: Chain;
-  precompileAddresses: PrecompileMapping;
+  evmNetwork: EvmNetwork;
 }
 
 export enum TransactionActionType {

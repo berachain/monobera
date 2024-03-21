@@ -113,6 +113,7 @@ export const ReferralModal = ({
               <div className="self-center">
                 <ConnectButton
                   className="w-full"
+                  //@ts-ignore
                   onOpen={() => setOpen(false)}
                 />
               </div>

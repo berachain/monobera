@@ -4,7 +4,6 @@ import { type Address, formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { STAKING_PRECOMPILE_ABI } from "~/config";
-import { useBeraConfig } from "~/contexts";
 import { defaultPagination } from "~/utils";
 import { usePollBgtSupply } from "../bank";
 import {
@@ -12,6 +11,7 @@ import {
   getPercentageGlobalVotingPower,
   getValidatorTotalDelegated,
 } from "./utils";
+import { stakingAddress } from "@bera/config";
 
 export interface Validator {
   operatorAddr: string;
@@ -71,14 +71,13 @@ export interface ValidatorListResponse {
 
 export const usePollActiveValidators = () => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
 
   const { isLoading } = useSWRImmutable("getValidators", async () => {
     if (!publicClient) return undefined;
 
     const result = (await publicClient
       .readContract({
-        address: networkConfig.precompileAddresses.stakingAddress as Address,
+        address: stakingAddress,
         abi: STAKING_PRECOMPILE_ABI,
         functionName: "getValidators",
         args: [defaultPagination],

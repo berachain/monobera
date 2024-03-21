@@ -5,7 +5,7 @@ import { usePublicClient, useWriteContract } from "wagmi";
 
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
-import { useBeraConfig, useBeraJs } from "~/contexts";
+import { useBeraJs } from "~/contexts";
 import { usePollTransactionCount } from "../usePollTransactionCount";
 import { TransactionFailedError } from "./error";
 import {
@@ -25,7 +25,6 @@ const useBeraContractWrite = ({
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
 
   const { useTransactionCount, refresh } = usePollTransactionCount({
     address: account,
@@ -104,7 +103,6 @@ const useBeraContractWrite = ({
       account,
       publicClient,
       userNonce,
-      networkConfig,
       onSuccess,
       onError,
       onLoading,

@@ -20,7 +20,7 @@ import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
 import { useLocalStorage } from "usehooks-ts";
 
-import { beraJsConfig, mobileNavItems, navItems } from "./config";
+import { mobileNavItems, navItems } from "./config";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -66,7 +66,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           {" "}
           <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
           <ApolloProvider client={honeyClient}>
-            <BeraConfig autoConnect={true} networkConfig={beraJsConfig}>
+            <BeraConfig>
               <Header
                 isHoney
                 navItems={navItems}

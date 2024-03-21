@@ -5,7 +5,6 @@ import { formatUnits, getAddress, erc20Abi, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
-import { useBeraConfig } from "~/contexts";
 import useTokens from "~/hooks/useTokens";
 import { usePollEpochs } from "../epochs";
 import {
@@ -17,6 +16,11 @@ import {
   getPercentageGlobalVotingPower,
   getValidatorTotalDelegated,
 } from "./utils";
+import {
+  beraTokenAddress,
+  erc20BribeModule,
+  multicallAddress,
+} from "@bera/config";
 
 interface Call {
   abi: any[];
@@ -42,7 +46,6 @@ export interface PoLValidator extends Validator {
 }
 export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
   const {
     useValidatorAddresses,
     useActiveValidators,
@@ -78,7 +81,7 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
 
     // build multicall payload for getting brubes
     const bribeCalls: Call[] = validatorAddresses.map((validatorAddress) => ({
-      address: networkConfig.precompileAddresses.erc20BribeModule as Address,
+      address: erc20BribeModule,
       abi: BRIBE_PRECOMPILE_ABI,
       functionName: "getAllValidatorBribes",
       args: [validatorAddress],
@@ -86,12 +89,11 @@ export const usePollGlobalValidatorBribes = (prices: any | undefined) => {
 
     const response = await publicClient.multicall({
       contracts: bribeCalls,
-      multicallAddress: networkConfig.precompileAddresses
-        .multicallAddress as Address,
+      multicallAddress: multicallAddress,
     });
 
     const result = response.map((res: any) => res.result);
-    const beraAddress = process.env.NEXT_PUBLIC_WBERA_ADDRESS as string;
+    const beraAddress = beraTokenAddress;
     const beraPrice = prices[getAddress(beraAddress)];
 
     let globalBribeUsdAmount = 0;

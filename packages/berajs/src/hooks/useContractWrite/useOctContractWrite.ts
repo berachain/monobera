@@ -9,7 +9,7 @@ import { usePublicClient, useWriteContract } from "wagmi";
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { TRADING_ABI } from "~/config";
-import { useBeraConfig, useBeraJs } from "~/contexts";
+import { useBeraJs } from "~/contexts";
 import { useOct } from "../useOct";
 import {
   type IContractWrite,
@@ -27,7 +27,6 @@ const useOctContractWrite = ({
   const { writeContract } = useWriteContract();
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
-  const { networkConfig } = useBeraConfig();
 
   const { isOctReady, octPrivKey } = useOct();
 
@@ -127,7 +126,6 @@ const useOctContractWrite = ({
       onLoading,
       onSubmission,
       isOctReady,
-      networkConfig,
     ],
   );
 

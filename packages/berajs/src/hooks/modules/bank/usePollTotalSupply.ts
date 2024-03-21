@@ -1,15 +1,14 @@
+import { bankAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BANK_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
-import { useBeraConfig } from "~/contexts";
 
 export const usePollTotalSupply = (denom: string | undefined) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
 
   const method = "getSupply";
   const QUERY_KEY = [denom, method];
@@ -19,7 +18,7 @@ export const usePollTotalSupply = (denom: string | undefined) => {
       if (!publicClient) return undefined;
       if (!denom) return;
       const result = await publicClient.readContract({
-        address: networkConfig.precompileAddresses.bankAddress as Address,
+        address: bankAddress,
         abi: BANK_PRECOMPILE_ABI,
         functionName: method,
         args: [denom],

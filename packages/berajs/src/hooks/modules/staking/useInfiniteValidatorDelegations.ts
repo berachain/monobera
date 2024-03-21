@@ -1,9 +1,9 @@
+import { stakingAddress } from "@bera/config";
 import useSWRInfinite from "swr/infinite";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { STAKING_PRECOMPILE_ABI } from "~/config";
-import { useBeraConfig } from "~/contexts";
 import { type PageRequest } from "~/utils";
 
 const DEFAULT_SIZE = 10;
@@ -11,8 +11,6 @@ export const useInfiniteValidatorDelegations = (
   validatorAddress: Address | undefined,
 ) => {
   const publicClient = usePublicClient();
-  const { networkConfig } = useBeraConfig();
-
   const {
     data: allData,
     size: allDataSize,
@@ -33,7 +31,7 @@ export const useInfiniteValidatorDelegations = (
       };
       const result = (await publicClient
         .readContract({
-          address: networkConfig.precompileAddresses.stakingAddress as Address,
+          address: stakingAddress,
           abi: STAKING_PRECOMPILE_ABI,
           functionName: "getValidatorDelegations",
           args: [validatorAddress, pagination],
