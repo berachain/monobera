@@ -14,6 +14,7 @@ export enum BREAKPOINTS {
 export const useBreakpoint = () => {
   // Helper function to get current breakpoint
   const getBreakpoint = (windowWidth: number) => {
+    if (!windowWidth) return;
     let result = BREAKPOINTS.xl;
     if (windowWidth < BREAKPOINTS.sm) result = BREAKPOINTS.xs;
     else if (windowWidth >= BREAKPOINTS.sm && windowWidth < BREAKPOINTS.md)
@@ -26,20 +27,26 @@ export const useBreakpoint = () => {
   };
 
   // State to store the current breakpoint
-  const [breakpoint, setBreakpoint] = useState(() =>
-    getBreakpoint(window.innerWidth),
+  const [breakpoint, setBreakpoint] = useState<BREAKPOINTS | undefined>(
+    undefined,
   );
 
   useEffect(() => {
     const handleResize = () => {
-      setBreakpoint(getBreakpoint(window.innerWidth));
+      setBreakpoint(getBreakpoint(window?.innerWidth));
     };
 
-    // Listen for window resize events
-    window.addEventListener("resize", handleResize);
+    if (window !== undefined) {
+      // Listen for window resize events
+      window?.addEventListener("resize", handleResize);
+    }
 
     // Cleanup function to remove event listener
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      if (window !== undefined) {
+        window?.removeEventListener("resize", handleResize);
+      }
+    };
   }, []);
 
   return breakpoint;
