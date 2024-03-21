@@ -9,7 +9,7 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import Papa from "papaparse";
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 12;
 
 // TODO: add in other properties like ids
 const ecosystemTypeTabs = [
@@ -157,7 +157,7 @@ export default function EcosystemProjects() {
 
       <div className="my-2 w-full border border-solid" />
       {isLoading && (
-        <div className="flex w-full flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between gap-8">
           <Skeleton className="sm:h-[296px] sm:w-[260px]" />
           <Skeleton className="sm:h-[296px] sm:w-[260px]" />
           <Skeleton className="sm:h-[296px] sm:w-[260px]" />
@@ -165,7 +165,7 @@ export default function EcosystemProjects() {
         </div>
       )}
 
-      <div className="mx-auto grid w-fit grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="mx-auto grid w-fit grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
           .map((project: EcosystemProject, index: number) => (

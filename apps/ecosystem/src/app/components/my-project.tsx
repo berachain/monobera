@@ -7,7 +7,7 @@ import { Button } from "@bera/ui/button";
 
 export default function MyProject() {
   return (
-    <div className="flex w-full flex-col gap-8 px-4 pb-16 pt-12 sm:w-auto xl:flex-row">
+    <div className="flex max-w-[1280px] flex-col gap-8 px-4 pb-16 pt-12 sm:w-auto xl:flex-row">
       <div className="flex w-full flex-col justify-between rounded-xl border border-solid bg-muted sm:min-h-[300px] sm:flex-row md:h-[220px] lg:w-full">
         <div className="flex flex-col items-center justify-center p-8 sm:items-start">
           <div className="top-0 flex flex-col items-center leading-7 sm:items-start lg:left-0">
@@ -39,8 +39,8 @@ export default function MyProject() {
           <Image
             src="/projectbear.png"
             alt="Project"
-            width={400}
-            height={400}
+            width={370}
+            height={30}
             layout="intrinsic"
             className="h-[200px] w-[200px] md:h-[300px] md:w-[300px] lg:h-auto lg:w-auto"
           />
