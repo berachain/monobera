@@ -143,6 +143,18 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     isTyping: isTyping,
   });
 
+  const priceImpactPercentage =
+    swapInfo?.formattedReturnAmount &&
+    swapInfo?.formattedPredictedAmountOut &&
+    !Number.isNaN(parseFloat(swapInfo.formattedReturnAmount)) &&
+    !Number.isNaN(parseFloat(swapInfo.formattedPredictedAmountOut)) &&
+    parseFloat(swapInfo.formattedPredictedAmountOut) !== 0
+      ? (parseFloat(swapInfo.formattedReturnAmount) /
+          parseFloat(swapInfo.formattedPredictedAmountOut)) *
+          100 -
+        100
+      : 0;
+
   useEffect(() => {
     if (
       selectedTo !== undefined &&
@@ -308,22 +320,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { data: tokenInPrice } = useTokenHoneyPrice(selectedFrom?.address);
   const { data: tokenOutPrice } = useTokenHoneyPrice(selectedTo?.address);
 
-  const [priceImpact, setPriceImpact] = useState<number | null>(null);
-  // update price impact
-  useEffect(() => {
-    if (
-      !swapInfo?.batchSwapSteps?.length ||
-      !swapInfo?.batchSwapSteps?.length
-    ) {
-      return;
-    }
-
-    const usdIn = tokenInPrice * Number(swapInfo?.formattedAmountIn);
-    const usdOut = tokenOutPrice * Number(swapInfo?.formattedReturnAmount);
-    const priceImpact = (usdOut / usdIn) * 100 - 100;
-    setPriceImpact(parseFloat(priceImpact.toFixed(2)));
-  }, [swapInfo, tokenInPrice, tokenOutPrice]);
-
   const minAmountOut = useMemo(() => {
     if (!payload[2]) return "0";
     const amountOut = payload[2];
@@ -407,6 +403,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     tokenInPrice,
     tokenOutPrice,
     minAmountOut,
-    priceImpact,
+    priceImpact: priceImpactPercentage,
   };
 };

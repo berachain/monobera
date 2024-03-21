@@ -424,7 +424,7 @@ export function SwapCard({
                     isActionLoading={isRouteLoading && !isWrap}
                   />
                 </ul>
-                {priceImpact && priceImpact < -10 && (
+                {!!priceImpact && priceImpact < -10 && (
                   <TooltipCustom
                     anchor={
                       breakpoint && breakpoint > BREAKPOINTS.md
@@ -450,7 +450,7 @@ export function SwapCard({
                     <Alert variant="destructive">
                       <AlertDescription className="text-xs">
                         <Icons.tooltip className="mr-2 mt-[-4px] inline h-4 w-4" />
-                        {`Price Impact Warning: ${priceImpact}%`}
+                        {`Price Impact Warning: ${priceImpact?.toFixed(2)}%`}
                       </AlertDescription>
                     </Alert>
                   </TooltipCustom>

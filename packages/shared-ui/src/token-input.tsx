@@ -199,7 +199,7 @@ export function TokenInput({
           <div className="flex flex-row gap-1">
             {!hidePrice && (
               <div className="flex flex-row gap-1 self-center p-0 text-xs text-muted-foreground">
-                {priceImpact && (
+                {!!priceImpact && (
                   <TooltipCustom
                     anchor="left"
                     position="right"
@@ -213,7 +213,7 @@ export function TokenInput({
                     }
                   >
                     <p className={`${priceImpactColorClass}`}>
-                      {`(${priceImpact}%) `}
+                      {`(${priceImpact.toFixed(2)}%) `}
                     </p>
                   </TooltipCustom>
                 )}
