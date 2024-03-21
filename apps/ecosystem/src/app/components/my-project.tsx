@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { cloudinaryUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 
 export default function MyProject() {
@@ -37,7 +38,7 @@ export default function MyProject() {
         </div>
         <div className="hidden items-end sm:flex">
           <Image
-            src="/projectbear.png"
+            src={`${cloudinaryUrl}/Ecosystem/rwevtwpxuhtjovnx2vd5`}
             alt="Project"
             width={370}
             height={30}
@@ -74,7 +75,7 @@ export default function MyProject() {
         </div>
         <div className="hidden items-end sm:flex">
           <Image
-            src="/careerbear.png"
+            src={`${cloudinaryUrl}/Ecosystem/wreirhtyrmuvfb3k7bx2`}
             alt="Project"
             width={320}
             height={350}
