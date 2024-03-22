@@ -425,15 +425,16 @@ export function SwapCard({
                     isActionLoading={isRouteLoading && !isWrap}
                   />
                 </ul>
+                {/* Price Impact Section: Pending correct prediction values from previewMultiSwap
                 {!!priceImpact && priceImpact < -10 && (
                   <TooltipCustom
                     anchor={
-                      breakpoint && breakpoint > BREAKPOINTS.md
+                      breakpoint !== undefined && breakpoint! > BREAKPOINTS.md
                         ? "right"
                         : "bottom-center"
                     }
                     position={
-                      breakpoint && breakpoint > BREAKPOINTS.md
+                      breakpoint !== undefined && breakpoint! > BREAKPOINTS.md
                         ? "left"
                         : "bottom-center"
                     }
@@ -455,7 +456,7 @@ export function SwapCard({
                       </AlertDescription>
                     </Alert>
                   </TooltipCustom>
-                )}
+                )} */}
                 {hasInsufficientBalanceError ? (
                   <Alert
                     variant="destructive"
