@@ -34,7 +34,7 @@ type Props = {
   onExceeding?: (isExceeding: boolean) => void;
   setIsTyping?: (isTyping: boolean) => void;
   isActionLoading?: boolean | undefined;
-  priceImpact?: number | null;
+  difference?: number | null;
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -58,7 +58,7 @@ export function TokenInput({
   onExceeding = undefined,
   hideMax = false,
   isActionLoading = undefined,
-  priceImpact,
+  difference,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
@@ -98,26 +98,26 @@ export function TokenInput({
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
   }, [exceeding]);
 
-  const priceImpactColorClass = useMemo(() => {
-    if (!priceImpact) return "";
+  const differenceColorClass = useMemo(() => {
+    if (!difference) return "";
     let result = "";
-    if (priceImpact > 10) {
+    if (difference > 10) {
       result = "text-green-500";
-    } else if (priceImpact > 5) {
+    } else if (difference > 5) {
       result = "text-green-400";
-    } else if (priceImpact > 2) {
+    } else if (difference > 2) {
       result = "text-green-300";
-    } else if (priceImpact > -3) {
+    } else if (difference > -3) {
       result = "text-neutral-400";
-    } else if (priceImpact > -5) {
+    } else if (difference > -5) {
       result = "text-amber-300";
-    } else if (priceImpact > -10) {
+    } else if (difference > -10) {
       result = "text-red-400";
     } else {
       result = "text-red-500";
     }
     return result;
-  }, [priceImpact]);
+  }, [difference]);
 
   return (
     <li className={"flex flex-col flex-wrap px-3"}>
@@ -199,7 +199,7 @@ export function TokenInput({
           <div className="flex flex-row gap-1">
             {!hidePrice && (
               <div className="flex flex-row gap-1 self-center p-0 text-xs text-muted-foreground">
-                {!!priceImpact && (
+                {!!difference && (
                   <TooltipCustom
                     anchor="left"
                     position="right"
@@ -212,8 +212,8 @@ export function TokenInput({
                       </div>
                     }
                   >
-                    <p className={`${priceImpactColorClass}`}>
-                      {`(${priceImpact.toFixed(2)}%) `}
+                    <p className={`${differenceColorClass}`}>
+                      {`(${difference.toFixed(2)}%) `}
                     </p>
                   </TooltipCustom>
                 )}

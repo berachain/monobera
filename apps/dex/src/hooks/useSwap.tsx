@@ -96,6 +96,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     inputToken,
   );
 
+  const { data: tokenInPrice } = useTokenHoneyPrice(selectedFrom?.address);
+  const { data: tokenOutPrice } = useTokenHoneyPrice(selectedTo?.address);
+
   const [isWrap, setIsWrap] = useState(false);
 
   const [wrapType, setWrapType] = useState<WRAP_TYPE | undefined>(undefined);
@@ -155,6 +158,23 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
         100
       : 0;
 
+  const [differenceUSD, setDifferenceUSD] = useState<number | null>(null);
+  // update price impact
+  useEffect(() => {
+    if (
+      !swapInfo?.batchSwapSteps?.length ||
+      !swapInfo?.batchSwapSteps?.length
+    ) {
+      setDifferenceUSD(0);
+      return;
+    }
+
+    const usdIn = tokenInPrice * Number(swapInfo?.formattedAmountIn);
+    const usdOut = tokenOutPrice * Number(swapInfo?.formattedReturnAmount);
+    const differenceUSD = (usdOut / usdIn) * 100 - 100;
+    setDifferenceUSD(parseFloat(differenceUSD.toFixed(2)));
+  }, [swapInfo, tokenInPrice, tokenOutPrice]);
+
   useEffect(() => {
     if (
       selectedTo !== undefined &&
@@ -177,7 +197,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   // populate field of calculated swap amount
   useEffect(() => {
-    if (isWrap || !swapInfo?.batchSwapSteps?.length) return;
+    if (isWrap) return;
+    if (!swapInfo?.batchSwapSteps?.length) {
+      setToAmount(swapInfo?.formattedReturnAmount);
+    }
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(swapInfo?.formattedReturnAmount);
     } else {
@@ -317,9 +340,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [isWrap]);
 
-  const { data: tokenInPrice } = useTokenHoneyPrice(selectedFrom?.address);
-  const { data: tokenOutPrice } = useTokenHoneyPrice(selectedTo?.address);
-
   const minAmountOut = useMemo(() => {
     if (!payload[2]) return "0";
     const amountOut = payload[2];
@@ -404,5 +424,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     tokenOutPrice,
     minAmountOut,
     priceImpact: priceImpactPercentage,
+    differenceUSD,
   };
 };

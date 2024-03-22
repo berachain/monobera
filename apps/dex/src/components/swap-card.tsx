@@ -97,6 +97,7 @@ export function SwapCard({
     wrapType,
     minAmountOut,
     priceImpact,
+    differenceUSD,
   } = useSwap({
     inputCurrency,
     outputCurrency,
@@ -419,7 +420,7 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setToAmount(amount);
                     }}
-                    priceImpact={priceImpact}
+                    difference={differenceUSD}
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
                   />
@@ -455,6 +456,66 @@ export function SwapCard({
                     </Alert>
                   </TooltipCustom>
                 )}
+                {hasInsufficientBalanceError ? (
+                  <Alert
+                    variant="destructive"
+                    className="items-center justify-center"
+                  >
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                      This amount exceeds your total balance
+                    </AlertDescription>
+                  </Alert>
+                ) : (
+                  false
+                )}
+                {error !== undefined && (
+                  <Alert variant="destructive">
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription className="text-xs">
+                      {error.message}
+                    </AlertDescription>
+                  </Alert>
+                )}
+                {/* {isRouteLoading === true && swapAmount !=='0' && selectedTo !==undefined ? (
+                    <Alert variant="info">
+                      <AlertTitle>Searching for best routes</AlertTitle>
+                      <AlertDescription className="text-xs">
+                        route loading
+                      </AlertDescription>
+                    </Alert>
+                  ) : (
+                    false
+                  )} */}
+                {/* {showPriceImpact ? (
+                    <Alert variant="destructive">
+                      <AlertTitle>
+                        {" "}
+                        <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
+                        Price Impact Error
+                      </AlertTitle>
+                      <AlertDescription className="text-xs">
+                        This swap will result in a high price impact (-
+                        {priceImpact?.toFixed(2)}%)
+                      </AlertDescription>
+                    </Alert>
+                  ) : (
+                    false
+                  )} */}
+                {hasRouteNotFoundError ? (
+                  <Alert variant="destructive">
+                    <AlertTitle>
+                      {" "}
+                      <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
+                      Route Not Found
+                    </AlertTitle>
+                    <AlertDescription className="text-xs">
+                      No route found for this swap. Please try a different pair.
+                    </AlertDescription>
+                  </Alert>
+                ) : (
+                  false
+                )}
 
                 <div className="flex flex-col gap-2">
                   {!isWrap ? (
@@ -481,67 +542,6 @@ export function SwapCard({
                         </p>
                       </div>
                     </div>
-                  ) : (
-                    false
-                  )}
-                  {hasInsufficientBalanceError ? (
-                    <Alert
-                      variant="destructive"
-                      className="items-center justify-center"
-                    >
-                      <AlertTitle>Error</AlertTitle>
-                      <AlertDescription>
-                        This amount exceeds your total balance
-                      </AlertDescription>
-                    </Alert>
-                  ) : (
-                    false
-                  )}
-                  {error !== undefined && (
-                    <Alert variant="destructive">
-                      <AlertTitle>Error</AlertTitle>
-                      <AlertDescription className="text-xs">
-                        {error.message}
-                      </AlertDescription>
-                    </Alert>
-                  )}
-                  {/* {isRouteLoading === true && swapAmount !=='0' && selectedTo !==undefined ? (
-                    <Alert variant="info">
-                      <AlertTitle>Searching for best routes</AlertTitle>
-                      <AlertDescription className="text-xs">
-                        route loading
-                      </AlertDescription>
-                    </Alert>
-                  ) : (
-                    false
-                  )} */}
-                  {/* {showPriceImpact ? (
-                    <Alert variant="destructive">
-                      <AlertTitle>
-                        {" "}
-                        <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
-                        Price Impact Error
-                      </AlertTitle>
-                      <AlertDescription className="text-xs">
-                        This swap will result in a high price impact (-
-                        {priceImpact?.toFixed(2)}%)
-                      </AlertDescription>
-                    </Alert>
-                  ) : (
-                    false
-                  )} */}
-                  {hasRouteNotFoundError ? (
-                    <Alert variant="destructive">
-                      <AlertTitle>
-                        {" "}
-                        <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
-                        Route Not Found
-                      </AlertTitle>
-                      <AlertDescription className="text-xs">
-                        No route found for this swap. Please try a different
-                        pair.
-                      </AlertDescription>
-                    </Alert>
                   ) : (
                     false
                   )}
