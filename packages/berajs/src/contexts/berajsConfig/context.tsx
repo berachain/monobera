@@ -49,11 +49,9 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         : "light";
 
   const config = createConfig({
-    //   appName: "Bears Chain",
-    //   projectId: "8b169f8cfd2110ddc5d92a1309534d09",
     chains: [defaultBeraConfig.chain],
-    multiInjectedProviderDiscovery: true, // multiInjectedProviderDiscovery is set to false – this is because Dynamic implements the multi injected provider discovery protocol itself. If you’d like to keep this enabled on Wagmi, go ahead but you might see some undefined behavior.
-    ssr: true,
+    multiInjectedProviderDiscovery: false,
+    ssr: false,
     transports: {
       [defaultBeraConfig.chain.id]: http(
         defaultBeraConfig.chain.rpcUrls.default.http[0] || "",
