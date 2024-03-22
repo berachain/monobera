@@ -19,6 +19,7 @@ import {
   useTxn,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -96,7 +97,7 @@ const RepayModalContent = ({
 
   const allowance = useAllowance();
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const debtBalance = token.formattedBalance;
+  const debtBalance = token.formattedBalance ?? "0";
   const { data: tokenB } = useSelectedAssetWalletBalance(token.address);
   const tokenBalance = tokenB?.formattedBalance;
 
@@ -106,8 +107,9 @@ const RepayModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  const balance =
-    Number(debtBalance) > Number(tokenBalance) ? tokenBalance : debtBalance;
+  const balance = BigNumber(debtBalance).gt(BigNumber(tokenBalance))
+    ? tokenBalance
+    : debtBalance;
 
   const currentHealthFactor = formatEther(userAccountData.healthFactor);
 
@@ -144,6 +146,15 @@ const RepayModalContent = ({
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
+          <div className="text-muted-foreground ">Outstanding Honey</div>
+          <FormattedNumber
+            value={debtBalance}
+            symbol="HONEY"
+            className="w-[200px] justify-end truncate text-right font-semibold"
+          />
+        </div>
+
+        <div className="flex justify-between  text-sm leading-tight">
           <div className="text-muted-foreground ">Estimated Value</div>
           <FormattedNumber
             value={
@@ -160,14 +171,18 @@ const RepayModalContent = ({
           <div className="flex items-center gap-2 font-semibold">
             <FormattedNumber
               value={currentHealthFactor}
-              maxValue={999_999_999}
+              maxValue={999}
               className={cn(`text-${getLTVColor(Number(currentHealthFactor))}`)}
             />
-            <Icons.moveRight className="inline-block h-6 w-6" />
+            <Icons.moveRight className="inline-block h-4 w-6" />
             <FormattedNumber
-              value={newHealthFactor.lte(0) ? 9_999_999_999 : newHealthFactor}
-              className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
-              maxValue={999_999_999}
+              value={newHealthFactor.lte(0) ? 999 : newHealthFactor}
+              className={cn(
+                `text-${getLTVColor(
+                  Number(newHealthFactor.lte(0) ? 999 : newHealthFactor),
+                )}`,
+              )}
+              maxValue={999}
             />
           </div>
         </div>
@@ -178,6 +193,19 @@ const RepayModalContent = ({
           </div>
         </div>
       </div>
+      {Number(amount) > 0 &&
+        BigNumber(debtBalance).gt(BigNumber(tokenBalance)) && (
+          <Alert variant="warning">
+            <AlertTitle>
+              {" "}
+              <Icons.info className="mr-1 inline-block h-4 w-4" />
+              You owe more HONEY than you have in your wallet
+            </AlertTitle>
+            You can still preceed with the repay, but you will need to repay
+            again to fully repay your debt.
+          </Alert>
+        )}
+
       {allowance &&
       BigNumber(allowance.formattedAllowance).gte(BigNumber(amount ?? "0")) ? (
         <Button
