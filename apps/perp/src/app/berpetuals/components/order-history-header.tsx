@@ -99,7 +99,7 @@ export function OrderHistoryHeader({
                 showOrderLines ? "Hide" : "Show"
               } Order Lines`}</span>
               <Switch
-                className="ml-2"
+                className="data-[state=checked]:bg-success-foreground ml-2"
                 id="show-orders"
                 checked={showOrderLines}
                 onCheckedChange={(checked) => setShowOrderLines(checked)}
@@ -141,7 +141,7 @@ export function OrderHistoryHeader({
                 showOrderLines ? "Hide" : "Show"
               } Order Lines`}</span>
               <Switch
-                className="ml-2"
+                className="data-[state=checked]:bg-success-foreground ml-2"
                 id="show-orders"
                 checked={showOrderLines}
                 onCheckedChange={(checked) => setShowOrderLines(checked)}

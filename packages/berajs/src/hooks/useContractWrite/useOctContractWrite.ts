@@ -24,7 +24,7 @@ const useOctContractWrite = ({
   onSubmission,
 }: IUseContractWrite = {}): useContractWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { writeContract } = useWriteContract();
+  const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
 
@@ -44,22 +44,16 @@ const useOctContractWrite = ({
       if (!publicClient) return;
       try {
         if (!isOctReady) {
-          const { request: _request } = await publicClient.simulateContract({
+          const { request } = await publicClient.simulateContract({
             address: address,
             abi: abi,
             functionName: functionName,
             args: params,
+            value: value,
+            account: account,
           });
 
-          hash = await writeContract({
-            account: account,
-            address: address,
-            abi: abi,
-            functionName: functionName,
-            value: value,
-            args: [...params],
-            gas: 10000000n,
-          });
+          hash = await writeContractAsync({ ...request, gas: 10000000n });
         } else if (isOctReady) {
           const provider = new providers.JsonRpcProvider(
             process.env.NEXT_PUBLIC_JSON_RPC_URL,
@@ -118,7 +112,7 @@ const useOctContractWrite = ({
       }
     },
     [
-      writeContract,
+      writeContractAsync,
       account,
       publicClient,
       onSuccess,
