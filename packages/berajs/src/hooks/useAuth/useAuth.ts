@@ -2,8 +2,6 @@ import { useCallback, useReducer } from "react";
 import { useDisconnect } from "wagmi";
 
 import { initialState, reducer } from "~/utils/stateReducer";
-import { useBeraConfig } from "~/contexts";
-import { connectorLocalStorageKey } from ".";
 
 export interface useAuthApi {
   isLoading: boolean;
@@ -27,7 +25,11 @@ const useAuth = ({ onLogoutError, onLogoutSuccess }: IuseAuth = {}) => {
   const logout = useCallback(() => {
     try {
       disconnect();
-      localStorage?.removeItem(connectorLocalStorageKey);
+      localStorage?.removeItem("dynamic_last_used_wallet");
+      localStorage?.removeItem("dynamic_primary_wallet_id");
+      localStorage?.removeItem("dynamic_connected_wallets");
+      localStorage?.removeItem("dynamic_fully_connected");
+      localStorage?.removeItem("wagmi.store");
     } catch (e: any) {
       onLogoutError?.(e);
     } finally {
