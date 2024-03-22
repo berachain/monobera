@@ -121,7 +121,10 @@ export default function EcosystemProjects() {
 
   const filteredProjectList = projectList.filter((project) => {
     const matchesKeywords =
-      !keywords || project.name.toLowerCase().includes(keywords.toLowerCase());
+      !keywords ||
+      project.name.toLowerCase().includes(keywords.toLowerCase()) ||
+      project.description.toLowerCase().includes(keywords.toLowerCase()) ||
+      project.ecosystemType.toLowerCase().includes(keywords.toLowerCase());
     const matchesEcosystemType =
       ecosystemType === "All" || project.ecosystemType === ecosystemType;
     return matchesKeywords && matchesEcosystemType;
