@@ -13,7 +13,7 @@ import { formatUnits, type Address } from "viem";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 
-const gTokenAddress = process.env
+const gTokenContractAddress = process.env
   .NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address;
 
 export const CancelWithdraw = ({
@@ -49,7 +49,7 @@ export const CancelWithdraw = ({
         disabled={isCancelLoading}
         onClick={() =>
           cancelWrite({
-            address: gTokenAddress,
+            address: gTokenContractAddress,
             abi: BTOKEN_ABI,
             functionName: "cancelWithdrawRequest",
             params: [
@@ -68,7 +68,7 @@ export const CancelWithdraw = ({
         disabled={isRedeemLoading || isEpochLoading || !isReady}
         onClick={() =>
           redeemWrite({
-            address: gTokenAddress,
+            address: gTokenContractAddress,
             abi: BTOKEN_ABI,
             functionName: "redeem",
             params: [BigInt(withdrawRequest.shares), account, account],

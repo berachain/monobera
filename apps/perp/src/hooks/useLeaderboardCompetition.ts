@@ -1,4 +1,4 @@
-import { perpsEndpoints, perpsCompetitionId } from "@bera/config";
+import { perpsCompetitionId, perpsEndpoint } from "@bera/config";
 import { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 
@@ -15,7 +15,7 @@ export const useLeaderboard = ({
   const { mutate } = useSWRConfig();
   const { isLoading, isValidating } = useSWRImmutable(QUERY_KEY, async () => {
     const res = await fetch(
-      `${perpsEndpoints}/trading-comp-rankings${
+      `${perpsEndpoint}/trading-comp-rankings${
         wallet ? `/${wallet}` : ""
       }?sort_by=${sort}&comp_id=${perpsCompetitionId}&page=${
         page ?? 1

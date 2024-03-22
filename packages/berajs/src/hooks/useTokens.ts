@@ -1,7 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
-import { tokenListUrl } from "@bera/config";
+import {
+  beraTokenAddress,
+  nativeTokenAddress,
+  tokenListUrl,
+} from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -113,16 +117,12 @@ const useTokens = (): IUseTokens => {
 
   const beraToken: Token | undefined = useMemo(() => {
     if (!data?.dictionary) return undefined;
-    return (data?.dictionary as { [key: string]: Token })[
-      process.env.NEXT_PUBLIC_BERA_ADDRESS as string
-    ];
+    return (data?.dictionary as { [key: string]: Token })[nativeTokenAddress];
   }, [data?.dictionary]);
 
   const wBeraToken: Token | undefined = useMemo(() => {
     if (!data?.dictionary) return undefined;
-    return (data?.dictionary as { [key: string]: Token })[
-      process.env.NEXT_PUBLIC_WBERA_ADDRESS as string
-    ];
+    return (data?.dictionary as { [key: string]: Token })[beraTokenAddress];
   }, [data?.dictionary]);
 
   return {

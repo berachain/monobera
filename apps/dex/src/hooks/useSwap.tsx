@@ -151,10 +151,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       isBeratoken(selectedFrom)
     ) {
       setIsWrap(true);
-      if (selectedFrom.address === process.env.NEXT_PUBLIC_BERA_ADDRESS) {
+      if (selectedFrom.address === nativeTokenAddress) {
         setWrapType(WRAP_TYPE.WRAP);
       }
-      if (selectedFrom.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS) {
+      if (selectedFrom.address === beraTokenAddress) {
         setWrapType(WRAP_TYPE.UNWRAP);
       }
     } else {
@@ -336,7 +336,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   let gasParams = null;
   if (isWrap) {
     gasParams = {
-      address: process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address,
+      address: beraTokenAddress as Address,
       abi: WBERA_ABI,
       functionName: wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",
       args:
@@ -355,7 +355,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     };
   }
   const gasData = useGasData({ contractArgs: gasParams });
-  const beraInUsd = useTokenHoneyPrice(process.env.NEXT_PUBLIC_BERA_ADDRESS);
+  const beraInUsd = useTokenHoneyPrice(nativeTokenAddress);
   const formattedGasPriceInBera = gasData ? parseFloat(formatGwei(gasData)) : 0;
 
   // Calculate general gas for unconnected wallet user (less accurate)

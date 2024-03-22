@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useReducer } from "react";
-import { perpsEndpoints } from "@bera/config";
+import { jsonRpcUrl, perpsEndpoint } from "@bera/config";
 import { Contract, Wallet, providers } from "ethers";
 import { encodeFunctionData } from "viem";
 import { usePublicClient, useWriteContract } from "wagmi";
@@ -61,9 +61,7 @@ const useOctContractWrite = ({
             gas: 10000000n,
           });
         } else if (isOctReady) {
-          const provider = new providers.JsonRpcProvider(
-            process.env.NEXT_PUBLIC_JSON_RPC_URL,
-          );
+          const provider = new providers.JsonRpcProvider(jsonRpcUrl);
 
           const ethersWallet = new Wallet(octPrivKey, provider);
 
@@ -95,7 +93,7 @@ const useOctContractWrite = ({
           });
 
         const botConfirmation = await fetch(
-          `${perpsEndpoints}/canceled/${hash}`,
+          `${perpsEndpoint}/canceled/${hash}`,
         );
         const botConfirmationResult = await botConfirmation.json();
         const cancelReason = botConfirmationResult.result.cancel_reason;

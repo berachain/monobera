@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import { honeyAddress } from "@bera/config";
 import { isAddress } from "viem";
 
 import { getMetaTitle } from "~/utils/metadata";
@@ -17,10 +18,8 @@ export default function Swap({
     outputCurrency: string;
   };
 }) {
-  const {
-    inputCurrency = process.env.NEXT_PUBLIC_HONEY_ADDRESS as string,
-    outputCurrency,
-  } = searchParams;
+  const { inputCurrency = honeyAddress as string, outputCurrency } =
+    searchParams;
   if (!isAddress(inputCurrency) && !isAddress(outputCurrency)) {
     return (
       <div className="container">

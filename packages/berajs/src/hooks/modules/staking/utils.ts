@@ -1,3 +1,4 @@
+import { blockTime } from "@bera/config";
 import { formatUnits } from "viem";
 
 import { type Validator } from "./usePollActiveValidators";
@@ -15,7 +16,6 @@ export const getPercentageGlobalVotingPower = (
 export const getEstimatedBlocksPerYear = (
   percentageGlobalVotingPower: number | undefined,
 ) => {
-  const blockTime = Number(process.env.NEXT_PUBLIC_BLOCKTIME);
   const blocksPerYear = (365 * 24 * 60 * 60) / blockTime;
   return percentageGlobalVotingPower
     ? (percentageGlobalVotingPower * blocksPerYear) / 100

@@ -11,7 +11,11 @@ import {
   useBeraJs,
   usePollAssetWalletBalance,
 } from "@bera/berajs";
-import { cloudinaryUrl, crocMultiSwapAddress } from "@bera/config";
+import {
+  beraTokenAddress,
+  cloudinaryUrl,
+  crocMultiSwapAddress,
+} from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
@@ -218,7 +222,7 @@ export function SwapCard({
             disabled={isWrapLoading}
             onClick={() => {
               wrapWrite({
-                address: process.env.NEXT_PUBLIC_WBERA_ADDRESS as Address,
+                address: beraTokenAddress as Address,
                 abi: WBERA_ABI,
                 functionName:
                   wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",

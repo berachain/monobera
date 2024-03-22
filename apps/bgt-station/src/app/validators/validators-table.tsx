@@ -11,7 +11,7 @@ import {
   usePollValidatorCuttingBoard,
   type PoLValidator,
 } from "@bera/berajs";
-import { blockExplorerUrl } from "@bera/config";
+import { blockExplorerUrl, cloudinaryUrl } from "@bera/config";
 import { DataTable, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -43,7 +43,7 @@ export const GaugeIcon = ({
       <AvatarFallback>
         {/* DARK MODE */}
         <Image
-          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/s8kfq1dupk8buydgjxdf`}
+          src={`${cloudinaryUrl}/shared/s8kfq1dupk8buydgjxdf`}
           width={100}
           height={100}
           className="hidden h-full w-full dark:block"
@@ -51,7 +51,7 @@ export const GaugeIcon = ({
         />
         {/* LIGHT MODE  */}
         <Image
-          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/ocaxgutrs2voe8umwxxc`}
+          src={`${cloudinaryUrl}/shared/ocaxgutrs2voe8umwxxc`}
           width={100}
           height={100}
           className="block h-full w-full dark:hidden"
@@ -84,7 +84,7 @@ export const GaugeCategoryIcon = ({
       <AvatarFallback>
         {/* DARK MODE */}
         <Image
-          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/s8kfq1dupk8buydgjxdf`}
+          src={`${cloudinaryUrl}/shared/s8kfq1dupk8buydgjxdf`}
           width={100}
           height={100}
           className="hidden h-full w-full rounded-md dark:block"
@@ -92,7 +92,7 @@ export const GaugeCategoryIcon = ({
         />
         {/* LIGHT MODE  */}
         <Image
-          src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/shared/ocaxgutrs2voe8umwxxc`}
+          src={`${cloudinaryUrl}/shared/ocaxgutrs2voe8umwxxc`}
           width={100}
           height={100}
           className="block h-full w-full rounded-md dark:hidden"

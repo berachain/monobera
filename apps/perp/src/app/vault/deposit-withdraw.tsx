@@ -9,7 +9,7 @@ import {
   usePollBHoneyPendingWithdraw,
   usePollMaxDeposit,
 } from "@bera/berajs";
-import { honeyAddress } from "@bera/config";
+import { gTokenContractAddress, honeyAddress } from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
@@ -65,14 +65,11 @@ export default function DepositWithdraw() {
     name: "Honey",
   };
 
-  const gTokenAddress = process.env
-    .NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address;
-
   const { useBHoneyEligibleWithdraw } = usePollBHoneyPendingWithdraw();
   const eligibleForWithdraw = useBHoneyEligibleWithdraw();
 
   const { useAllowance } = usePollAllowance({
-    contract: gTokenAddress,
+    contract: gTokenContractAddress,
     token: honey,
   });
 
@@ -148,7 +145,7 @@ export default function DepositWithdraw() {
                 parseUnits(depositAmount === "" ? "0" : depositAmount, 18) ? (
                 <ApproveButton
                   token={honey}
-                  spender={gTokenAddress}
+                  spender={gTokenContractAddress}
                   amount={parseUnits(
                     depositAmount === "" ? "0" : depositAmount,
                     18,
@@ -167,7 +164,7 @@ export default function DepositWithdraw() {
                   }
                   onClick={() =>
                     depositWrite({
-                      address: gTokenAddress,
+                      address: gTokenContractAddress,
                       abi: BTOKEN_ABI,
                       functionName: "deposit",
                       params: [
@@ -207,7 +204,7 @@ export default function DepositWithdraw() {
                   balance={eligibleForWithdraw}
                   selected={{
                     symbol: "BHONEY",
-                    address: gTokenAddress,
+                    address: gTokenContractAddress,
                     decimals: 18,
                     name: "BHONEY",
                     logoURI:
@@ -240,7 +237,7 @@ export default function DepositWithdraw() {
                 }
                 onClick={() =>
                   withdrawWrite({
-                    address: gTokenAddress,
+                    address: gTokenContractAddress,
                     abi: BTOKEN_ABI,
                     functionName: "makeWithdrawRequest",
                     params: withdrawPayload,

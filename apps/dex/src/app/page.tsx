@@ -1,7 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { chainId, crocIndexerEndpoint } from "@bera/config";
+import { chainId, crocIndexerEndpoint, dexName } from "@bera/config";
 import { Documentation, Footer } from "@bera/shared-ui";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 
@@ -32,7 +32,7 @@ const getTvlAndVolume = (): Promise<{ tvl?: number; volume?: number }> => {
 
 export const metadata: Metadata = {
   title: getMetaTitle("Home"),
-  description: `Welcome to ${process.env.NEXT_PUBLIC_DEX_NAME}!`,
+  description: `Welcome to ${dexName}!`,
 };
 
 export const revalidate = 60;

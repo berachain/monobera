@@ -1,4 +1,4 @@
-import { multicallAddress } from "@bera/config";
+import { gTokenContractAddress, multicallAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Address } from "viem";
@@ -32,19 +32,19 @@ export const usePollBHoneyEpochs = () => {
         const call: Call[] = [
           {
             abi: BTOKEN_ABI,
-            address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+            address: gTokenContractAddress,
             functionName: "currentEpoch",
             args: [],
           },
           {
             abi: BTOKEN_ABI,
-            address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+            address: gTokenContractAddress,
             functionName: "currentEpochStart",
             args: [],
           },
           {
             abi: BTOKEN_ABI,
-            address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+            address: gTokenContractAddress,
             functionName: "currentEpochEnd",
             args: [],
           },

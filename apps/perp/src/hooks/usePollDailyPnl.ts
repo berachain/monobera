@@ -1,5 +1,5 @@
 import { useBeraJs } from "@bera/berajs";
-import { perpsEndpoints } from "@bera/config";
+import { perpsEndpoint } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 
@@ -14,7 +14,7 @@ export const usePollDailyPnl = () => {
     async () => {
       if (account) {
         const res = await fetch(
-          `${perpsEndpoints}/trading-summary/traders/${account}?count_back=1&resolution=1d`,
+          `${perpsEndpoint}/trading-summary/traders/${account}?count_back=1&resolution=1d`,
         );
         const data = await res.json();
         const tradingSummary = data.result[0];
