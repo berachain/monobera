@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { ContractFunctionArgs, EstimateContractGasParameters } from "viem";
+import { useEffect, useState } from "react";
+import { EstimateContractGasParameters } from "viem";
 import { useGasPrice, usePublicClient } from "wagmi";
 
 export const useGasData = ({
@@ -24,6 +24,17 @@ export const useGasData = ({
       ?.estimateContractGas({ ...(contractArgs as any) })
       .then((data) => {
         setGasData(data);
+      })
+      .catch((e) => {
+        setGasData(undefined);
+
+        const isFalseAlarm =
+          `${e}`.includes("Unable to decode signature") ||
+          `${e}`.includes("insufficient allowance");
+
+        if (!isFalseAlarm) {
+          console.log(e);
+        }
       });
   }, [contractArgs, generalGasPriceEstimate]);
 

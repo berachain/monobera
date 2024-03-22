@@ -45,6 +45,7 @@ export const ConnectButton = ({
               !isNavItem && "font-semibold",
               className,
             )}
+            as="div"
           >
             <Icons.wallet className={cn("h-4 w-4", !isNavItem && "h-6 w-6")} />
             Connect

@@ -126,7 +126,7 @@ export function FormattedNumber({
   }
 
   return (
-    <div
+    <span
       className={cn(
         "relative flex inline-flex flex-row items-center text-nowrap",
         className,
@@ -134,8 +134,8 @@ export function FormattedNumber({
           (number > 0
             ? "text-success-foreground"
             : number < 0
-              ? "text-destructive-foreground"
-              : ""),
+            ? "text-destructive-foreground"
+            : ""),
       )}
       {...props}
     >
@@ -165,6 +165,6 @@ export function FormattedNumber({
       {symbol?.toLowerCase() !== "usd" && typeof symbol !== "undefined" && (
         <span className="ml-0.5">{symbol}</span>
       )}
-    </div>
+    </span>
   );
 }
