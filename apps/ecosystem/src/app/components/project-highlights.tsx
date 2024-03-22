@@ -90,7 +90,7 @@ export default function ProjectHighlights() {
     } else if (window.innerWidth >= 1024) {
       setCardsVisible(4);
     } else if (window.innerWidth >= 640) {
-      setCardsVisible(2);
+      setCardsVisible(3);
     } else {
       setCardsVisible(1);
     }

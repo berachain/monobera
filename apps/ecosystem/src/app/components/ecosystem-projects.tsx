@@ -182,10 +182,11 @@ export default function EcosystemProjects() {
                 </Avatar>
 
                 <div>
-                  <div className="font-semibold">{project.name}</div>
-                </div>
-                <div className="flex-grow text-center text-sm leading-5 text-muted-foreground">
-                  {project.description}
+                  <div className="text-lg font-semibold">{project.name}</div>
+
+                  <div className="flex-grow text-center text-sm leading-5 text-foreground">
+                    {project.description}
+                  </div>
                 </div>
               </div>
               <Link href={project.goto}>
