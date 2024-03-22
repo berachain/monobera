@@ -2,7 +2,6 @@
 
 import React from "react";
 import {
-  formatter,
   usePollBgtBalance,
   usePollDelegatorUnbonding,
   usePollTotalDelegated,
@@ -26,6 +25,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 // import { formatEther } from "viem";
 
 import { BGTIcon } from "./bgt-icon";
+import { FormattedNumber } from "./formatted-number";
 
 export function BGTStatusBtn() {
   const [openPopover, setOpenPopover] = React.useState(false);
@@ -55,7 +55,7 @@ export function BGTStatusBtn() {
           <div className="group flex h-10 w-fit cursor-pointer items-center rounded-md border border-accent bg-warning px-1 font-medium hover:bg-hover">
             {/* <BGTIcon bg="#FBBF24" stroke="#78350F" size="24" /> */}
             <div className="px-2 text-sm text-warning-foreground">
-              {formatter.format(totalBGT)} BGT
+              <FormattedNumber value={totalBGT} symbol={"BGT"} />
             </div>
             {/* <div className="flex h-7 items-center rounded-full border border-accent bg-gradient-to-br from-stone-50 to-yellow-50 px-3 text-xs text-primary group-hover:from-orange-200 group-hover:to-yellow-400 dark:from-stone-700 dark:to-yellow-950 group-hover:dark:from-lime-900 group-hover:dark:to-yellow-700 lg:hidden xl:flex">
               {/* @ts-ignore */}
@@ -153,7 +153,7 @@ export function BGTStatusDetails() {
               <BGTIcon bg={item.background} stroke={item.stroke} size="32" />
               <div className="font-medium">
                 <div className="flex-1 text-sm font-medium leading-6">
-                  {formatter.format(item.amoumt)} BGT
+                  <FormattedNumber value={item.amoumt} symbol={"BGT"} />
                 </div>
                 <div className="text-xs font-medium leading-5 text-muted-foreground">
                   {item.text}
@@ -162,7 +162,10 @@ export function BGTStatusDetails() {
             </div>
             <div className="whitespace-nowrap text-sm font-medium">
               {userBalance && price ? (
-                `$${formatter.format(Number(item.amoumt) * Number(price))}`
+                <FormattedNumber
+                  value={Number(item.amoumt) * Number(price)}
+                  symbol={"USD"}
+                />
               ) : (
                 <Skeleton className="h-8 w-16" />
               )}
