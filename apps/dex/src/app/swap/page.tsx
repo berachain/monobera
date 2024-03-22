@@ -18,8 +18,7 @@ export default function Swap({
     outputCurrency: string;
   };
 }) {
-  const { inputCurrency = honeyAddress as string, outputCurrency } =
-    searchParams;
+  const { inputCurrency = honeyAddress, outputCurrency } = searchParams;
   if (!isAddress(inputCurrency) && !isAddress(outputCurrency)) {
     return (
       <div className="container">

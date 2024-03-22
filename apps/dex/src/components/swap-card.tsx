@@ -222,7 +222,7 @@ export function SwapCard({
             disabled={isWrapLoading}
             onClick={() => {
               wrapWrite({
-                address: beraTokenAddress as Address,
+                address: beraTokenAddress,
                 abi: WBERA_ABI,
                 functionName:
                   wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",

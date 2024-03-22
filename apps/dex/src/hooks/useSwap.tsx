@@ -336,7 +336,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   let gasParams = null;
   if (isWrap) {
     gasParams = {
-      address: beraTokenAddress as Address,
+      address: beraTokenAddress,
       abi: WBERA_ABI,
       functionName: wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",
       args:
