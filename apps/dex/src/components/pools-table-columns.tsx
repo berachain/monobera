@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { formatAmountSmall, formatter } from "@bera/berajs";
 import {
   DataTableColumnHeader,
+  FormattedNumber,
   TokenIconList,
   apyTooltipText,
 } from "@bera/shared-ui";
@@ -23,14 +23,8 @@ import {
 } from "~/hooks/usePollUserDeposited";
 
 export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
-  // const { data: myPools = [] } = usePollUsersPools();
-  // const isDeposited = myPools?.find(
-  //   (myPool: any) => getAddress(myPool.pool) === getAddress(pool?.pool),
-  // );
-
   const { useIsPoolDeposited } = usePollUserDeposited();
   const isDeposited = useIsPoolDeposited(pool);
-
   return (
     <div className="flex flex-col items-start gap-2">
       <span className="w-[180px] truncate text-left">{pool?.poolName}</span>
@@ -54,6 +48,7 @@ export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
     </div>
   );
 };
+
 export const columns: ColumnDef<PoolV2>[] = [
   {
     accessorKey: "poolName",
@@ -84,29 +79,13 @@ export const columns: ColumnDef<PoolV2>[] = [
         className="min-w-[80px]"
       />
     ),
-    cell: ({ row }) => {
-      const totalValue = formatter.format(row.original?.tvlUsd || 0);
-      // const tvl = row.original.weeklyTvl?.[6] || 0;
-      // const tvl24h = row.original.weeklyTvl?.[5] || 1;
-      return (
-        <div className="flex flex-col gap-1">
-          <div className="text-sm leading-5">${totalValue}</div>
-          {/* <div
-            className={cn(
-              "text-[10px] leading-[10px]",
-              tvl > tvl24h
-                ? "text-success-foreground"
-                : tvl < tvl24h
-                ? "text-destructive-foreground"
-                : " text-foreground",
-            )}
-          >
-            {tvl > tvl24h && "+"}
-            {(((tvl - tvl24h) / (tvl24h ?? 1)) * 100).toFixed(2)}%
-          </div> */}
+    cell: ({ row }) => (
+      <div className="flex flex-col gap-1">
+        <div className="text-sm leading-5">
+          <FormattedNumber value={row.original?.tvlUsd ?? 0} symbol="USD" />
         </div>
-      );
-    },
+      </div>
+    ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
@@ -121,29 +100,13 @@ export const columns: ColumnDef<PoolV2>[] = [
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => {
-      const dailyFees = formatter.format(row.original?.feesUsd || 0);
-      // const fee = row.original.weeklyFees?.[6] || 0;
-      // const fee24h = row.original.weeklyFees?.[5] || 1;
-      return (
-        <div className="flex flex-col gap-1">
-          <div className="text-sm leading-5">${dailyFees}</div>
-          {/* <div
-            className={cn(
-              "text-[10px] leading-[10px]",
-              fee > fee24h
-                ? "text-success-foreground"
-                : fee < fee24h
-                ? "text-destructive-foreground"
-                : " text-foreground",
-            )}
-          >
-            {fee > fee24h && "+"}
-            {(((fee - fee24h) / fee24h) * 100).toFixed(2)}%
-          </div> */}
+    cell: ({ row }) => (
+      <div className="flex flex-col gap-1">
+        <div className="text-sm leading-5">
+          <FormattedNumber value={row.original?.feesUsd ?? 0} symbol="USD" />
         </div>
-      );
-    },
+      </div>
+    ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
@@ -158,30 +121,13 @@ export const columns: ColumnDef<PoolV2>[] = [
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => {
-      const dailyVolume = formatter.format(row.original?.volumeUsd || 0);
-      // const volume = row.original.weeklyVolume?.[6] || 0;
-      // const volume24h = row.original.weeklyVolume?.[5] || 1;
-      return (
-        <div className="flex flex-col gap-1">
-          <div className="text-sm leading-5">${dailyVolume}</div>
-          {/* <div
-            className={cn(
-              "text-[10px] leading-[10px]",
-              volume > volume24h
-                ? "text-success-foreground"
-                : volume < volume24h
-                ? "text-destructive-foreground"
-                : " text-foreground",
-            )}
-          >
-            {volume > volume24h && "+"}
-            {(((volume - volume24h) / volume24h) * 100).toFixed(2)}%
-          </div> */}
+    cell: ({ row }) => (
+      <div className="flex flex-col gap-1">
+        <div className="text-sm leading-5">
+          <FormattedNumber value={row.original?.volumeUsd ?? 0} symbol="USD" />
         </div>
-      );
-    },
-
+      </div>
+    ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
@@ -197,14 +143,11 @@ export const columns: ColumnDef<PoolV2>[] = [
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => {
-      const bgtApy = row.original.bgtApy ?? 0;
-      return (
-        <div className="flex items-center text-sm text-success-foreground">
-          {bgtApy === 0 ? bgtApy : bgtApy < 0.01 ? "<0.01" : bgtApy.toFixed(2)}%
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="flex items-center justify-center text-sm text-warning-foreground">
+        <FormattedNumber value={row.original.bgtApy ?? 0} percent />
+      </div>
+    ),
     sortingFn: (rowA, rowB) => {
       const a = rowA.original.bgtApy ?? 0;
       const b = rowB.original.bgtApy ?? 0;
@@ -227,8 +170,8 @@ export const columns: ColumnDef<PoolV2>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center text-sm">
-          {row.original.totalApy?.toFixed(2)}%
+        <div className="flex items-center justify-center text-sm">
+          <FormattedNumber value={row.original.totalApy ?? 0} percent colored />
         </div>
       );
     },
@@ -264,20 +207,6 @@ export const columns: ColumnDef<PoolV2>[] = [
   },
 ];
 
-// export const PositionSize = (pool: any) => {
-//   const { userTotalValue, isPositionSizeLoading } = usePositionSize({
-//     pool: pool.pool,
-//   });
-//   return (
-//     <div className="text-sm font-medium">
-//       {isPositionSizeLoading ? (
-//         <Skeleton className="h-[32px] w-[140px]" />
-//       ) : (
-//         formatUsd(userTotalValue ?? 0)
-//       )}
-//     </div>
-//   );
-// };
 export const my_columns: ColumnDef<IUserPool>[] = [
   {
     accessorKey: "poolName",
@@ -311,39 +240,6 @@ export const my_columns: ColumnDef<IUserPool>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  // {
-  //   accessorKey: "totalValue",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       tooltip="Total amount of user deposited assets"
-  //       title="Position Size"
-  //       className="whitespace-nowrap"
-  //     />
-  //   ),
-  //   cell: ({ row }) => {
-  //     return <PositionSize pool={row.original as Pool} />;
-  //   },
-  //   enableSorting: false,
-  // },
-  // {
-  //   accessorKey: "fees",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       title="Fees Collected"
-  //       tooltip="Your share of transaction fees the position has collected."
-  //       className="whitespace-nowrap"
-  //     />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const fees = formatter.format(row.original.fees || 0);
-  //     return <div className="flex items-center">${fees}</div>;
-  //   },
-  //   filterFn: (row, id, value) => {
-  //     return value.includes(row.getValue(id));
-  //   },
-  // },
   {
     accessorKey: "userPosition.estimatedHoneyValue",
     header: ({ column }) => (
@@ -355,8 +251,10 @@ export const my_columns: ColumnDef<IUserPool>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center text-sm">
-        {formatter.format(row.original?.userPosition?.estimatedHoneyValue ?? 0)}{" "}
-        USD
+        <FormattedNumber
+          value={row.original?.userPosition?.estimatedHoneyValue ?? 0}
+          symbol="USD"
+        />
       </div>
     ),
   },
@@ -370,27 +268,12 @@ export const my_columns: ColumnDef<IUserPool>[] = [
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => {
-      const { isSmall, numericValue: formattedBGTRewards } =
-        formatAmountSmall("0");
-      return (
-        <Badge
-          variant={"warning"}
-          className="border-none px-2 py-1 font-normal"
-        >
-          {isSmall
-            ? `< ${formattedBGTRewards} BGT`
-            : `${formattedBGTRewards.toFixed(2)} BGT`}
-        </Badge>
-      );
-    },
-    // sortingFn: (rowA, rowB) => {
-    //   const a = rowA.original.bgtRewards ?? 0;
-    //   const b = rowB.original.bgtRewards ?? 0;
-    //   if (a < b) return -1;
-    //   if (a > b) return 1;
-    //   return 0;
-    // },
+    cell: ({ row }) => (
+      <Badge variant={"warning"} className="border-none px-2 py-1 font-normal">
+        <FormattedNumber value={"0"} symbol="BGT" />
+      </Badge>
+    ),
+
     filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
   {
@@ -420,9 +303,6 @@ export const my_columns: ColumnDef<IUserPool>[] = [
             <Icons.subtract className="h-6 w-6" />
           </Button>
         </Link>
-        {/* <Link href={`/pool/${row.original.pool}`}>
-          <Button className="flex gap-1">Details</Button>
-        </Link> */}
       </div>
     ),
     enableSorting: false,

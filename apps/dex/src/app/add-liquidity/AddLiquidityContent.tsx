@@ -1,14 +1,18 @@
 "use client";
 
+import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  TransactionActionType,
-  type Token,
+  encodeWarmPath,
+  transformLimits,
+  type PriceRange,
+} from "@bera/beracrocswap";
+import {
   CROCSWAP_DEX,
-  formatNumber,
-  useTokenHoneyPrice,
+  TransactionActionType,
   usePollAssetWalletBalance,
-  formatUsd,
+  useTokenHoneyPrice,
+  type Token,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
@@ -19,6 +23,7 @@ import {
 import {
   ActionButton,
   ApproveButton,
+  FormattedNumber,
   InfoBoxList,
   InfoBoxListItem,
   PreviewToken,
@@ -36,23 +41,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits, parseUnits } from "viem";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
-import { useAddLiquidity } from "./useAddLiquidity";
+import { SettingsPopover } from "~/components/settings-popover";
+import { useCrocPoolNativeBera } from "~/hooks/useCrocPoolNativeBera";
 import {
   getBaseCost,
   getPoolUrl,
   getQuoteCost,
   type PoolV2,
 } from "../pools/fetchPools";
-import { useCallback, useMemo } from "react";
-import { getSafeNumber } from "~/utils/getSafeNumber";
-import {
-  type PriceRange,
-  encodeWarmPath,
-  transformLimits,
-} from "@bera/beracrocswap";
-import { SettingsPopover } from "~/components/settings-popover";
-import { useCrocPoolNativeBera } from "~/hooks/useCrocPoolNativeBera";
+import { useAddLiquidity } from "./useAddLiquidity";
 
 interface IAddLiquidityContent {
   pool: PoolV2;
@@ -431,16 +430,28 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
             <InfoBoxListItem
               title={"Pool Price"}
               value={
-                poolPrice
-                  ? `${formatNumber(poolPrice, 4)} ${baseToken.symbol} = 1 ${
-                      quoteToken.symbol
-                    }`
-                  : "-"
+                poolPrice ? (
+                  <>
+                    <FormattedNumber
+                      value={poolPrice}
+                      symbol={baseToken.symbol}
+                    />{" "}
+                    = 1 {quoteToken.symbol}
+                  </>
+                ) : (
+                  "-"
+                )
               }
             />
             <InfoBoxListItem
               title={"Total Value"}
-              value={formatUsd(totalHoneyPrice)}
+              value={
+                <FormattedNumber
+                  value={totalHoneyPrice}
+                  symbol="USD"
+                  compact={false}
+                />
+              }
             />
 
             <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
@@ -487,16 +498,28 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               <InfoBoxListItem
                 title={"Pool Price"}
                 value={
-                  poolPrice
-                    ? `${formatNumber(poolPrice, 4)} ${baseToken.symbol} = 1 ${
-                        quoteToken.symbol
-                      }`
-                    : "-"
+                  poolPrice ? (
+                    <>
+                      <FormattedNumber
+                        value={poolPrice}
+                        symbol={baseToken.symbol}
+                      />{" "}
+                      = 1 {quoteToken.symbol}
+                    </>
+                  ) : (
+                    "-"
+                  )
                 }
               />
               <InfoBoxListItem
                 title={"Total Value"}
-                value={formatUsd(totalHoneyPrice)}
+                value={
+                  <FormattedNumber
+                    value={totalHoneyPrice}
+                    symbol="USD"
+                    compact={false}
+                  />
+                }
               />
               <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
             </InfoBoxList>

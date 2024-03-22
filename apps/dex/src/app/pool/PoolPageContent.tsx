@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { formatUsd, formatter, truncateHash, useBeraJs } from "@bera/berajs";
+import { truncateHash, useBeraJs } from "@bera/berajs";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
-import { ApyTooltip, TokenIcon } from "@bera/shared-ui";
+import { ApyTooltip, FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
@@ -28,7 +28,6 @@ import {
   type IProvisions,
 } from "~/hooks/usePoolRecentProvisions";
 import { usePoolRecentSwaps, type ISwaps } from "~/hooks/usePoolRecentSwaps";
-import { formatNumber } from "../../../../../packages/berajs/src/utils/formatNumber";
 import { type PoolV2 } from "../pools/fetchPools";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
@@ -49,7 +48,9 @@ const getTokenDisplay = (
             address={(event as ISwaps).swapIn.address}
             symbol={(event as ISwaps).swapIn.symbol}
           />
-          <p className="ml-2">{formatNumber((event as ISwaps).swapInAmount)}</p>
+          <p className="ml-2">
+            <FormattedNumber value={(event as ISwaps).swapInAmount} />
+          </p>
         </div>
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
@@ -58,7 +59,7 @@ const getTokenDisplay = (
             symbol={(event as ISwaps).swapOut.symbol}
           />
           <p className="ml-2">
-            {formatNumber((event as ISwaps).swapOutAmount)}
+            <FormattedNumber value={(event as ISwaps).swapOutAmount} />
           </p>
         </div>
       </div>
@@ -108,7 +109,7 @@ export const EventTable = ({
         <TableRow>
           <TableHead>Action</TableHead>
           <TableHead>Value</TableHead>
-          <TableHead className="xs:hidden	 hidden	 sm:table-cell	 md:table-cell	 lg:table-cell">
+          <TableHead className="xs:hidden hidden sm:table-cell	 md:table-cell	 lg:table-cell">
             Tokens
           </TableHead>
           <TableHead className="xs:hidden	 hidden	 sm:table-cell	 md:table-cell	 lg:table-cell">
@@ -134,7 +135,10 @@ export const EventTable = ({
               >
                 <TableCell>{getAction(event)}</TableCell>
                 <TableCell>
-                  {formatUsd(event.estimatedHoneyValue ?? "0")}
+                  <FormattedNumber
+                    value={event.estimatedHoneyValue ?? 0}
+                    symbol="USD"
+                  />
                 </TableCell>
                 <TableCell className="xs:hidden	 hidden	 font-medium	 sm:table-cell	 md:table-cell lg:table-cell">
                   {getTokenDisplay(event, pool)}
@@ -321,7 +325,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                ${formatter.format(pool?.tvlUsd)}
+                <FormattedNumber value={pool?.tvlUsd} symbol="USD" />
               </div>
             </Card>
             <Card className="px-4 py-2">
@@ -331,7 +335,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                ${formatter.format(pool?.volumeUsd)}
+                <FormattedNumber value={pool?.volumeUsd} symbol="USD" />
               </div>
             </Card>
             <Card className="px-4 py-2">
@@ -341,9 +345,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                {pool.volumeUsd && Number(pool.volumeUsd) !== 0
-                  ? formatter.format(pool.feesUsd ?? "0")
-                  : "$0"}
+                <FormattedNumber value={pool?.feesUsd} symbol="USD" />
               </div>{" "}
             </Card>
             <Card className="px-4 py-2">
@@ -356,7 +358,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 {/* {(pool?.totalApy ?? 0) > 100000
                   ? formatter.format(pool?.totalApy ?? 0)
                   : (pool?.totalApy ?? 0).toFixed(2)} */}
-                0%
+                <FormattedNumber value={0} percent colored />
               </div>
             </Card>
           </div>
@@ -388,7 +390,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             <div className="mb-8 flex h-8 w-full items-center justify-between text-lg font-semibold">
               Pool Liquidity
               <div className="text-2xl">
-                ${formatter.format(pool?.tvlUsd ?? 0)}
+                <FormattedNumber value={pool?.tvlUsd} symbol="USD" />
               </div>
             </div>
             <div className="mb-4 text-sm font-medium">Tokens</div>
@@ -415,11 +417,13 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
                 <div className="flex gap-2">
                   <div className="font-medium">
-                    {formatter.format(Number(pool.baseTokens))}
+                    <FormattedNumber value={pool?.baseTokens} />
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    {" "}
-                    {formatUsd(pool.baseTokenHoneyTvl)}
+                    <FormattedNumber
+                      value={pool?.baseTokenHoneyTvl}
+                      symbol="USD"
+                    />
                   </div>
                 </div>
               </div>
@@ -445,11 +449,13 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
                 <div className="flex gap-2">
                   <div className="font-medium">
-                    {formatter.format(Number(pool.quoteTokens))}
+                    <FormattedNumber value={pool?.quoteTokens} />
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    {" "}
-                    {formatUsd(pool.quoteTokenHoneyTvl)}
+                    <FormattedNumber
+                      value={pool?.quoteTokenHoneyTvl}
+                      symbol="USD"
+                    />
                   </div>
                 </div>
               </div>
@@ -467,9 +473,12 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                       isPositionBreakdownLoading ? (
                         <Skeleton className="h-[32px] w-[150px]" />
                       ) : (
-                        formatUsd(
-                          userPositionBreakdown?.estimatedHoneyValue ?? 0,
-                        )
+                        <FormattedNumber
+                          value={
+                            userPositionBreakdown?.estimatedHoneyValue ?? 0
+                          }
+                          symbol="USD"
+                        />
                       )
                     ) : (
                       <Skeleton className="h-[32px] w-[150px]" />
