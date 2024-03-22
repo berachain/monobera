@@ -4,7 +4,7 @@ import { useState } from "react";
 import { type IBHoneyEpoch } from "@bera/berajs";
 import { Progress } from "@bera/ui/progress";
 import { Skeleton } from "@bera/ui/skeleton";
-import { format, formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow, isPast } from "date-fns";
 import useSWR from "swr";
 
 import { POLLING } from "~/utils/constants";
@@ -55,7 +55,9 @@ export const Epochs = ({
       const unixTimestamp = epoch?.currentEpochEnd || 0;
       const dateObject = new Date(unixTimestamp * 1000); // Convert to milliseconds
       const formatted = formatDistanceToNow(dateObject, { addSuffix: false });
-      if (formatted === "less than a minute") {
+      if (isPast(dateObject)) {
+        setDuration("Ended");
+      } else if (formatted === "less than a minute") {
         setDuration(" <1 minute");
       } else {
         setDuration(formatted);
