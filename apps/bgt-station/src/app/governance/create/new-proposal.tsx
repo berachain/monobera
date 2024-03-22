@@ -156,7 +156,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       "New gauge proposal will propose a new gauge be whitelisted to receive BGT rewards.",
     // [ProposalTypeEnum.COLLATERAL_PROPOSAL]:
     //   "New collateral proposal will propose a new stablecoin collateral be added to Honey's PSM.",
-    // [ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL]: `New market proposal will propose a new market be added to lendName for the proposed collateral.`,
+    // [ProposalTypeEnum.MARKET_COLLATERAL_PROPOSAL]: `New market proposal will propose a new market be added to ${process.env.NEXT_PUBLIC_LEND_NAME} for the proposed collateral.`,
   };
 
   const ProposalFormSchema = z.union([
