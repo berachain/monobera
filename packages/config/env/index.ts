@@ -73,7 +73,8 @@ export const gasTokenDecimals = Number(
   process.env.NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS,
 );
 
-export const dynamicWalletKey = process.env.NEXT_PUBLIC_DYNAMIC_API_KEY as string;
+export const dynamicWalletKey = process.env
+  .NEXT_PUBLIC_DYNAMIC_API_KEY as string;
 
 export const stakingToken = process.env.NEXT_PUBLIC_STAKING_TOKEN as string;
 export const bech32Prefix = process.env.NEXT_PUBLIC_BECH32_PREFIX as string;
