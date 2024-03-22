@@ -131,20 +131,6 @@ export const TVChartContainer = (props: ChartProps) => {
   };
 
   useEffect(() => {
-    if (props.chartReady) {
-      if (props.showOrderLines) {
-        tvWidgetRef.current?.onChartReady(() => {
-          tvWidgetRef.current?.chart().dataReady(() => {
-            renderOrderLines();
-          });
-        });
-      } else {
-        clearOrderLines();
-      }
-    }
-  }, [props.orderLines, props.showOrderLines, tvWidgetRef, props.chartReady]);
-
-  useEffect(() => {
     const backgroundColor =
       TV_BACKGROUND_COLOR[theme as keyof typeof TV_BACKGROUND_COLOR];
     const widgetOptions: ChartingLibraryWidgetOptions = {
@@ -232,6 +218,20 @@ export const TVChartContainer = (props: ChartProps) => {
     theme,
     props.setChartReady,
   ]);
+
+  useEffect(() => {
+    if (props.chartReady) {
+      if (props.showOrderLines) {
+        tvWidgetRef.current?.onChartReady(() => {
+          tvWidgetRef.current?.chart().dataReady(() => {
+            renderOrderLines();
+          });
+        });
+      } else {
+        clearOrderLines();
+      }
+    }
+  }, [props.orderLines, props.showOrderLines, tvWidgetRef, props.chartReady]);
 
   return <div ref={chartContainerRef} className={styles.TVChartContainer} />;
 };
