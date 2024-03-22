@@ -6,8 +6,10 @@ import { ThemeProvider } from "next-themes";
 
 export default function Providers({ children }: PropsWithChildren<any>) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-      <BeraConfig>{children}</BeraConfig>
-    </ThemeProvider>
+    <BeraConfig>
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        {children}
+      </ThemeProvider>
+    </BeraConfig>
   );
 }
