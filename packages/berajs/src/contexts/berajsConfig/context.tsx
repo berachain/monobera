@@ -6,7 +6,6 @@ import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { ThemeSetting } from "@dynamic-labs/sdk-react-core/src/lib/context/ThemeContext";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { reconnect } from "@wagmi/core";
 import { useTheme } from "next-themes";
 import { WagmiProvider, createConfig, http } from "wagmi";
 
@@ -15,6 +14,7 @@ import { type NetworkConfig } from "~/config/types";
 import { BeraJsProvider } from "~/contexts/berajsProvider";
 import { TransactionStoreProvider } from "~/hooks/transactions/TransactionStoreContext";
 import { CrocEnvContextProvider } from "../crocenv";
+import { dynamicWalletKey } from "@bera/config";
 
 interface IBeraConfig extends PropsWithChildren {
   // autoConnect?: boolean; // its always on for dynamic 4 now
@@ -68,7 +68,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
       <DynamicContextProvider
         settings={{
           initialAuthenticationMode: "connect-only",
-          environmentId: "ee2b3285-8e46-43fd-9a7e-8ef0955e6472",
+          environmentId: dynamicWalletKey,
           walletConnectors: [EthereumWalletConnectors],
           overrides: { evmNetworks: [defaultBeraConfig.evmNetwork] },
         }}
