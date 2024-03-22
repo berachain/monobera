@@ -1,13 +1,9 @@
 "use client";
 
 import React, { useMemo } from "react";
-import {
-  formatUsd,
-  formatter,
-  useLatestBlock,
-  useTokenHoneyPrice,
-} from "@bera/berajs";
+import { useLatestBlock, useTokenHoneyPrice } from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
+import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -19,7 +15,7 @@ export function DataCard({
 }: {
   icon: React.ReactNode;
   title: string;
-  value: string;
+  value: any;
   isLoading?: boolean;
 }) {
   return (
@@ -51,25 +47,53 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
         <DataCard
           title="Total Value Locked"
           isLoading={!isDataReady}
-          value={tvl ? formatUsd(tvl) : "-"}
+          value={
+            <FormattedNumber
+              value={tvl ?? 0}
+              compact={false}
+              compactThreshold={999_999_999_999}
+              symbol="USD"
+            />
+          }
           icon={<Icons.lock className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard
           title="24H Volume"
           isLoading={!isDataReady}
-          value={volume ? formatUsd(volume) : "-"}
+          value={
+            <FormattedNumber
+              value={volume ?? 0}
+              compact={false}
+              compactThreshold={999_999_999_999}
+              symbol="USD"
+            />
+          }
           icon={<Icons.candleStick className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard
           title="BGT Rewards"
           isLoading={!isDataReady}
-          value={`${formatter.format(Number(block) * 0.1)} BGT`}
+          value={
+            <FormattedNumber
+              value={Number(block) * 0.1}
+              compact={false}
+              compactThreshold={999_999_999}
+              symbol="BGT"
+            />
+          }
           icon={<Icons.medal className="h-3 w-3 md:h-6 md:w-6" />}
         />
         <DataCard
           title="Bera Price"
           isLoading={!isDataReady}
-          value={formatUsd(beraPrice ?? "0")}
+          value={
+            <FormattedNumber
+              value={beraPrice ?? 0}
+              compact={false}
+              compactThreshold={999_999_999}
+              symbol="USD"
+            />
+          }
           icon={<Icons.bera className="mt-[2px] h-3 w-3 md:h-6 md:w-6" />}
         />
       </div>

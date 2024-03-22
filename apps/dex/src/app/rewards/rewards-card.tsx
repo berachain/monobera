@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { formatUsd } from "@bera/berajs";
-import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
+import { ApyTooltip, FormattedNumber, TokenIconList } from "@bera/shared-ui";
 
 import { RewardBtn } from "~/app/components/reward-btn";
-import { getPoolUrl } from "../pools/fetchPools";
 import { type IUserPool } from "~/hooks/usePollUserDeposited";
+import { getPoolUrl } from "../pools/fetchPools";
 
 export default function RewardsCard({ pool }: { pool: IUserPool }) {
   const [mobile, setMobile] = useState(false);
@@ -45,7 +44,10 @@ export default function RewardsCard({ pool }: { pool: IUserPool }) {
             ) : (
               formatUsd(0)
             )} */}
-            {formatUsd(pool.userPosition?.estimatedHoneyValue ?? 0)}
+            <FormattedNumber
+              value={pool.userPosition?.estimatedHoneyValue ?? 0}
+              symbol="USD"
+            />
           </div>
           <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
             My TVL
