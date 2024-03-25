@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { faucetEndpointUrl } from "@bera/config";
+import { cloudflareKey, faucetEndpointUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { getAddress, isAddress } from "viem";
@@ -89,7 +89,7 @@ export function DripToken({
     <div>
       <div
         className={cn("cf-turnstile", token ? "hidden" : "block")}
-        data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_KEY!}
+        data-sitekey={cloudflareKey}
         data-theme="light"
         ref={turnstile}
         data-appearance="execute"

@@ -1,4 +1,6 @@
 // @ts-nocheck
+
+import { bech32Prefix } from "@bera/config";
 import { bech32 } from "bech32";
 import { type Address } from "viem";
 
@@ -55,7 +57,7 @@ const bech32Chain = (name: string, prefix: string) => ({
   name,
 });
 
-const prefix = process.env.NEXT_PUBLIC_BECH32_PREFIX as string;
+const prefix = bech32Prefix;
 
 export const BERA = bech32Chain("BERA", prefix);
 

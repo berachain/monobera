@@ -1,3 +1,4 @@
+import { candleFeed, perpsEndpoint } from "@bera/config";
 import type {
   Bar,
   DatafeedConfiguration,
@@ -104,7 +105,7 @@ export const configurationData: DatafeedConfiguration = {
 
 const websocketConnections: Record<string, any> = {};
 
-const websocket = process.env.NEXT_PUBLIC_CANDLEFEED as string;
+const websocket = candleFeed;
 const datafeed: IDatafeedChartApi & IExternalDatafeed = {
   onReady: (callback: OnReadyCallback) => {
     setTimeout(() => callback(configurationData)); // callback must be called asynchronously.
@@ -128,9 +129,7 @@ const datafeed: IDatafeedChartApi & IExternalDatafeed = {
       const isFirst = periodParams.firstDataRequest;
       if (isFirst) {
         const response = await fetch(
-          `${
-            process.env.NEXT_PUBLIC_PERPS_ENDPOINT_URL as string
-          }/history?symbol=${symbolInfo.name}&resolution=${resolution}`,
+          `${perpsEndpoint}/history?symbol=${symbolInfo.name}&resolution=${resolution}`,
         );
         const result = await response.json();
         const bars = result.prices.map((bar: any) => {

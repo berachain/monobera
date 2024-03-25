@@ -1,6 +1,7 @@
+import { gTokenContractAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BTOKEN_ABI } from "~/config";
@@ -19,7 +20,7 @@ export const usePollPerpsBgtRewards = () => {
       if (!publicClient) return undefined;
       try {
         const result = await publicClient.readContract({
-          address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+          address: gTokenContractAddress,
           abi: BTOKEN_ABI,
           functionName: method,
           args: [account],

@@ -1,6 +1,7 @@
+import { gTokenContractAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, erc20Abi, formatUnits } from "viem";
+import { erc20Abi, formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import POLLING from "~/config/constants/polling";
@@ -18,7 +19,7 @@ export const usePollBHoneyBalance = () => {
       if (isConnected) {
         try {
           const result = await publicClient.readContract({
-            address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+            address: gTokenContractAddress,
             abi: erc20Abi,
             functionName: "balanceOf",
             args: [account as Address],

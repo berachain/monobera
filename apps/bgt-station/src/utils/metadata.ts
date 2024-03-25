@@ -1,3 +1,5 @@
+import { bgtName } from "@bera/config";
+
 export function getMetaTitle(text: string) {
-  return `${text} | ${process.env.NEXT_PUBLIC_BGT_NAME}`;
+  return `${text} | ${bgtName}`;
 }

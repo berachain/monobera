@@ -1,14 +1,14 @@
 import { useMemo } from "react";
+import { beraTokenAddress, erc20BribeModule } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, formatUnits, getAddress } from "viem";
+import { formatUnits, getAddress, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { usePollEpochs } from "../epochs";
 import { usePollActiveValidators } from "./usePollActiveValidators";
-import { erc20BribeModule } from "@bera/config";
 
 export const usePollValidatorBribes = (
   validatorAddress: Address | undefined,
@@ -114,7 +114,7 @@ export const usePollValidatorBribes = (
       useActiveValidatorsBribesTotalValuePerProposal(prices);
     return useMemo(() => {
       if (!estimatedBlocksPerYear || perProposalUsd === 0 || !prices) return 0;
-      const beraAddress = process.env.NEXT_PUBLIC_WBERA_ADDRESS as string;
+      const beraAddress = beraTokenAddress;
       const beraPrice = prices[getAddress(beraAddress)];
       const estimatedUsdPerYear = perProposalUsd * estimatedBlocksPerYear;
       const validatorTVL = beraPrice * validatorTokens;

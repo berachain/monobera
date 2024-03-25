@@ -1,3 +1,4 @@
+import { validatorEndpointUrl } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 
@@ -8,7 +9,7 @@ export const useDepositParams = () => {
   const QUERY_KEY = [method];
   useSWRImmutable(QUERY_KEY, async () => {
     const temp = await fetch(
-      `${process.env.NEXT_PUBLIC_VALIDATOR_ENDPOINT}/cosmos/gov/v1beta1/params/deposit`,
+      `${validatorEndpointUrl}/cosmos/gov/v1beta1/params/deposit`,
     );
     const result: DepositParamsResponse = await temp.json();
     return result;

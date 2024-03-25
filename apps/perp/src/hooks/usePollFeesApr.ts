@@ -1,4 +1,4 @@
-import { perpsEndpoints } from "@bera/config";
+import { perpsEndpoint } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
@@ -11,7 +11,7 @@ export const usePollFeesApr = () => {
     async () => {
       try {
         const res = await fetch(
-          `${perpsEndpoints}/historical-rewards?count_back=3&resolution=1d`,
+          `${perpsEndpoint}/historical-rewards?count_back=3&resolution=1d`,
         );
         const data = await res.json();
         const historicalSummary = data.result;
