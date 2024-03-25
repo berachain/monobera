@@ -139,8 +139,7 @@ export function FormattedNumber({
       )}
       {...props}
     >
-      {isSmallerThanMin && number < 0 && "-("}
-      {isSmallerThanMin && <span className="mr-0.5">{"<"}</span>}
+      {isSmallerThanMin && (number < 0 ? ">-" : "<")}{" "}
       {symbol?.toLowerCase() === "usd" && !percent && (
         <span className="mr-0.5">$</span>
       )}
@@ -165,7 +164,6 @@ export function FormattedNumber({
         />
       )}
       {percent && <span className="ml-0.5">%</span>}
-      {isSmallerThanMin && number < 0 && ")"}
       {symbol?.toLowerCase() !== "usd" && typeof symbol !== "undefined" && (
         <span className="ml-0.5">{symbol}</span>
       )}

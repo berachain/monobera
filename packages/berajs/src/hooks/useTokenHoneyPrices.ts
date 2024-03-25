@@ -67,7 +67,7 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
           },
         })
         .then((res: any) => {
-          return res.data.tokenHoneyPrice.price;
+          return res.data.tokenHoneyPrice?.price;
         })
         .catch((e: any) => {
           console.log(e);
