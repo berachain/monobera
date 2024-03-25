@@ -11,6 +11,11 @@ export const MULTISWAP_ABI = [
         name: "_crocImpact",
         type: "address",
       },
+      {
+        internalType: "address",
+        name: "_crocQuery",
+        type: "address",
+      },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
@@ -121,8 +126,24 @@ export const MULTISWAP_ABI = [
         name: "out",
         type: "uint128",
       },
+      {
+        internalType: "uint256",
+        name: "predictedQty",
+        type: "uint256",
+      },
     ],
     stateMutability: "view",
     type: "function",
+  },
+  {
+    inputs: [],
+    name: "retire",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    stateMutability: "payable",
+    type: "receive",
   },
 ];
