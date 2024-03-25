@@ -48,3 +48,10 @@ export interface PoolDayData {
   baseVolumeInHoney: number;
   quoteVolumeInHoney: number;
 }
+
+export interface PoolDayDataV2 {
+  day: number;
+  volume24HInHoney: number;
+  tvlInHoney: number;
+  fees24HInHoney: number;
+}

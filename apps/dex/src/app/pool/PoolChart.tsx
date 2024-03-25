@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { getDayStartTimestampDaysAgo } from "@bera/bera-router";
 import { formatUsd } from "@bera/berajs";
-import { type PoolDayData } from "@bera/graphql";
+import { type PoolDayDataV2 } from "@bera/graphql";
 import { Dropdown, SSRSpinner } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { getSafeNumber } from "~/utils/getSafeNumber";
 import { BigNumber } from "bignumber.js";
 
+import { getSafeNumber } from "~/utils/getSafeNumber";
 import { PoolV2 } from "../pools/fetchPools";
 
 const Options = {
@@ -174,7 +174,7 @@ export const PoolChart = ({
 }: {
   pool: PoolV2;
   currentTvl: number;
-  historicalData: PoolDayData[] | undefined;
+  historicalData: PoolDayDataV2[] | undefined;
   isLoading: boolean;
 }) => {
   const quarterlyDayStartTimes: number[] = [];
@@ -194,8 +194,8 @@ export const PoolChart = ({
   let latestTvlSeen = 0;
   const completeDailyData: any[] = quarterlyDayStartTimes.map(
     (dayStartTimestamp: number, i) => {
-      let poolData: PoolDayData | undefined = historicalData?.find(
-        (data) => data.latestTime === dayStartTimestamp,
+      const poolData: PoolDayDataV2 | undefined = historicalData?.find(
+        (data) => data.day === dayStartTimestamp,
       );
 
       if (!poolData) {
@@ -218,25 +218,15 @@ export const PoolChart = ({
         };
       }
 
-      poolData = {
-        ...poolData,
-        volumeUsd: `${
-          formatHoney(poolData?.baseVolumeInHoney) +
-          formatHoney(poolData?.quoteVolumeInHoney)
-        }`,
-        tvlUsd: `${
-          formatHoney(poolData?.baseTvlInHoney) +
-            formatHoney(poolData?.quoteTvlInHoney) || latestTvlSeen
-        }`,
-
-        feesUsd: `${
-          formatHoney(poolData?.baseFeesInHoney) +
-          formatHoney(poolData?.quoteFeesInHoney)
-        }`,
+      const formattedPoolData = {
+        date: poolData.day,
+        volumeUsd: `${formatHoney(poolData?.volume24HInHoney)}`,
+        tvlUsd: `${formatHoney(poolData?.tvlInHoney)}`,
+        feesUsd: `${formatHoney(poolData?.fees24HInHoney)}`,
       };
 
-      latestTvlSeen = poolData?.tvlUsd
-        ? Number(poolData?.tvlUsd)
+      latestTvlSeen = formattedPoolData?.tvlUsd
+        ? Number(formattedPoolData?.tvlUsd)
         : latestTvlSeen;
 
       if (i === 0) {
@@ -244,19 +234,19 @@ export const PoolChart = ({
       }
 
       if (i < 7) {
-        weeklyVolumeTotal += Number(poolData?.volumeUsd);
-        weeklyFeesTotal += Number(poolData?.feesUsd);
+        weeklyVolumeTotal += Number(formattedPoolData?.volumeUsd);
+        weeklyFeesTotal += Number(formattedPoolData?.feesUsd);
       }
       if (i < 30) {
-        monthlyVolumeTotal += Number(poolData?.volumeUsd);
-        monthlyFeesTotal += Number(poolData?.feesUsd);
+        monthlyVolumeTotal += Number(formattedPoolData?.volumeUsd);
+        monthlyFeesTotal += Number(formattedPoolData?.feesUsd);
       }
       if (i < 90) {
-        quarterlyVolumeTotal += Number(poolData?.volumeUsd);
-        quarterlyFeesTotal += Number(poolData?.feesUsd);
+        quarterlyVolumeTotal += Number(formattedPoolData?.volumeUsd);
+        quarterlyFeesTotal += Number(formattedPoolData?.feesUsd);
       }
 
-      return poolData;
+      return formattedPoolData;
     },
   );
 

@@ -1,5 +1,5 @@
 import { chainId, crocIndexerEndpoint } from "@bera/config";
-import { PoolDayData } from "@bera/graphql";
+import { type PoolDayDataV2 } from "@bera/graphql";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import useSWRImmutable from "swr/immutable";
 
@@ -15,7 +15,7 @@ export const usePoolHistory = ({ pool }: { pool: PoolV2 }) => {
     chainId.toString(16),
   ];
   const { isLoading, isValidating, mutate } = useSWRImmutable<
-    PoolDayData[],
+    PoolDayDataV2[],
     any,
     any
   >(QUERY_KEY, () => {
@@ -35,7 +35,7 @@ export const usePoolHistory = ({ pool }: { pool: PoolV2 }) => {
   });
 
   const usePoolHistoryData = () => {
-    return useSWRImmutable<PoolDayData[], any, any>(QUERY_KEY);
+    return useSWRImmutable<PoolDayDataV2[], any, any>(QUERY_KEY);
   };
 
   return {

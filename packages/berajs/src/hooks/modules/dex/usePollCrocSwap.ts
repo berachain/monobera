@@ -31,6 +31,8 @@ export interface SwapInfoV3 {
   tokenIn: string;
   tokenOut: string;
   value?: bigint;
+  predictedAmountOut: bigint;
+  formattedPredictedAmountOut: string;
 }
 
 export interface ICrocSwapStep {
@@ -64,6 +66,9 @@ export const usePollCrocSwap = ({
             returnAmount: 0n,
             tokenIn,
             tokenOut,
+            priceImpactPercentage: 0,
+            predictedAmountOut: 0n,
+            formattedPredictedAmountOut: "0",
           };
         }
 
@@ -97,13 +102,21 @@ export const usePollCrocSwap = ({
             args: [previewBatchSwapSteps, swapInfo.amountIn],
           });
 
-          const amountOut = result as bigint;
+          const amountOut = (result as bigint[])[0] as bigint;
           const formattedAmountOut = formatUnits(amountOut, tokenOutDecimals);
+          const predictedAmountOut = (result as bigint[])[1] as bigint;
+          const formattedPredictedAmountOut = formatUnits(
+            predictedAmountOut,
+            tokenOutDecimals,
+          );
+
           // @ts-ignore
           return {
             ...swapInfo,
             returnAmount: amountOut,
             formattedReturnAmount: formattedAmountOut,
+            predictedAmountOut,
+            formattedPredictedAmountOut,
           };
         }
 
@@ -120,6 +133,8 @@ export const usePollCrocSwap = ({
           returnAmount: 0n,
           tokenIn,
           tokenOut,
+          predictedAmountOut: 0n,
+          formattedPredictedAmountOut: "0",
         };
       }
     },
@@ -146,6 +161,8 @@ export const getCrocSwap = async (
         returnAmount: 0n,
         tokenIn,
         tokenOut,
+        predictedAmountOut: 0n,
+        formattedPredictedAmountOut: "0",
       };
     }
 
@@ -169,6 +186,8 @@ export const getCrocSwap = async (
         returnAmount: 0n,
         tokenIn,
         tokenOut,
+        predictedAmountOut: 0n,
+        formattedPredictedAmountOut: "0",
       };
 
     const batchSwapSteps: ICrocSwapStep[] = [...result.steps];
@@ -188,6 +207,8 @@ export const getCrocSwap = async (
       tokenIn,
       tokenOut,
       value,
+      predictedAmountOut: 0n,
+      formattedPredictedAmountOut: "0",
     };
 
     return swapInfo;
@@ -202,6 +223,8 @@ export const getCrocSwap = async (
       returnAmount: 0n,
       tokenIn,
       tokenOut,
+      predictedAmountOut: 0n,
+      formattedPredictedAmountOut: "0",
     };
   }
 };

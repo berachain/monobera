@@ -14,6 +14,7 @@ import { Input } from "@bera/ui/input";
 import { getAddress } from "viem";
 
 import { FormattedNumber, SelectToken, TooltipCustom } from ".";
+import { getPriceImpactColorClass } from "./utils/textStyling";
 
 type Props = {
   selected: Token | undefined;
@@ -34,7 +35,7 @@ type Props = {
   onExceeding?: (isExceeding: boolean) => void;
   setIsTyping?: (isTyping: boolean) => void;
   isActionLoading?: boolean | undefined;
-  priceImpact?: number | null;
+  difference?: number | null;
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -58,7 +59,7 @@ export function TokenInput({
   onExceeding = undefined,
   hideMax = false,
   isActionLoading = undefined,
-  priceImpact,
+  difference,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
@@ -98,26 +99,10 @@ export function TokenInput({
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
   }, [exceeding]);
 
-  const priceImpactColorClass = useMemo(() => {
-    if (!priceImpact) return "";
-    let result = "";
-    if (priceImpact > 10) {
-      result = "text-green-500";
-    } else if (priceImpact > 5) {
-      result = "text-green-400";
-    } else if (priceImpact > 2) {
-      result = "text-green-300";
-    } else if (priceImpact > -3) {
-      result = "text-neutral-400";
-    } else if (priceImpact > -5) {
-      result = "text-amber-300";
-    } else if (priceImpact > -10) {
-      result = "text-red-400";
-    } else {
-      result = "text-red-500";
-    }
-    return result;
-  }, [priceImpact]);
+  const differenceColorClass = useMemo(
+    () => getPriceImpactColorClass(difference),
+    [difference],
+  );
 
   return (
     <li className={"flex flex-col flex-wrap px-3"}>
@@ -199,7 +184,7 @@ export function TokenInput({
           <div className="flex flex-row gap-1">
             {!hidePrice && (
               <div className="flex flex-row gap-1 self-center p-0 text-xs text-muted-foreground">
-                {priceImpact && (
+                {!!difference && (
                   <TooltipCustom
                     anchor="left"
                     position="right"
@@ -212,8 +197,8 @@ export function TokenInput({
                       </div>
                     }
                   >
-                    <p className={`${priceImpactColorClass}`}>
-                      {`(${priceImpact}%) `}
+                    <p className={`${differenceColorClass}`}>
+                      {`(${difference.toFixed(2)}%) `}
                     </p>
                   </TooltipCustom>
                 )}
