@@ -21,6 +21,7 @@ import {
   useBreakpoint,
   useTxn,
 } from "@bera/shared-ui";
+import { getPriceImpactColorClass } from "@bera/shared-ui/src/token-input";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
@@ -340,6 +341,8 @@ export function SwapCard({
   ]);
   const breakpoint = useBreakpoint();
 
+  const priceImpactColorClass = getPriceImpactColorClass(priceImpact);
+
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
@@ -425,7 +428,6 @@ export function SwapCard({
                     isActionLoading={isRouteLoading && !isWrap}
                   />
                 </ul>
-                {/* Price Impact Section: Pending correct prediction values from previewMultiSwap
                 {!!priceImpact && priceImpact < -10 && (
                   <TooltipCustom
                     anchor={
@@ -456,7 +458,7 @@ export function SwapCard({
                       </AlertDescription>
                     </Alert>
                   </TooltipCustom>
-                )} */}
+                )}
                 {hasInsufficientBalanceError ? (
                   <Alert
                     variant="destructive"
@@ -521,6 +523,22 @@ export function SwapCard({
                 <div className="flex flex-col gap-2">
                   {!isWrap ? (
                     <div className="flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
+                      {!!priceImpact && priceImpact < -5 && (
+                        <div className="flex w-full flex-row justify-between">
+                          <p className="text-xs font-medium text-muted-foreground sm:text-sm">
+                            Price Impact
+                          </p>
+                          <p
+                            className={`whitespace-nowrap text-right text-xs font-medium sm:text-sm ${
+                              priceImpactColorClass ?? ""
+                            }`}
+                          >
+                            {priceImpact
+                              ? `~${Math.abs(priceImpact).toFixed(2)}%`
+                              : "-"}
+                          </p>
+                        </div>
+                      )}
                       <div className="flex w-full flex-row justify-between">
                         <p className="text-xs font-medium text-muted-foreground sm:text-sm">
                           Exchange rate

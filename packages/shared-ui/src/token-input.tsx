@@ -39,6 +39,29 @@ type Props = {
 
 let typingTimer: NodeJS.Timeout;
 
+export const getPriceImpactColorClass = (
+  priceImpact: number | null | undefined,
+) => {
+  if (!priceImpact) return "";
+  let result = "";
+  if (priceImpact > 10) {
+    result = "text-green-500";
+  } else if (priceImpact > 5) {
+    result = "text-green-400";
+  } else if (priceImpact > 2) {
+    result = "text-green-300";
+  } else if (priceImpact > -3) {
+    result = "text-neutral-400";
+  } else if (priceImpact > -5) {
+    result = "text-amber-300";
+  } else if (priceImpact > -10) {
+    result = "text-red-400";
+  } else {
+    result = "text-red-500";
+  }
+  return result;
+};
+
 export function TokenInput({
   selected,
   selectedTokens,
@@ -98,26 +121,10 @@ export function TokenInput({
     if (exceeding !== undefined && onExceeding) onExceeding(exceeding);
   }, [exceeding]);
 
-  const differenceColorClass = useMemo(() => {
-    if (!difference) return "";
-    let result = "";
-    if (difference > 10) {
-      result = "text-green-500";
-    } else if (difference > 5) {
-      result = "text-green-400";
-    } else if (difference > 2) {
-      result = "text-green-300";
-    } else if (difference > -3) {
-      result = "text-neutral-400";
-    } else if (difference > -5) {
-      result = "text-amber-300";
-    } else if (difference > -10) {
-      result = "text-red-400";
-    } else {
-      result = "text-red-500";
-    }
-    return result;
-  }, [difference]);
+  const differenceColorClass = useMemo(
+    () => getPriceImpactColorClass(difference),
+    [difference],
+  );
 
   return (
     <li className={"flex flex-col flex-wrap px-3"}>
