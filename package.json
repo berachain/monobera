@@ -14,6 +14,7 @@
     "pullenv": "vercel env pull --environment=production",
     "dev": "turbo dev --concurrency=20",
     "build:dex": "turbo build --filter=dex --filter='./packages/*' --concurrency=20",
+    "build:pkg": "turbo build --filter='./packages/*' --concurrency=20",
     "dev:dex": "turbo dev --filter=dex",
     "dev:honey": "turbo dev --filter=honey --filter='./packages/*' --concurrency=20",
     "dev:bgt": "turbo dev --filter=bgt-station --filter='./packages/*' --concurrency=20",

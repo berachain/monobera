@@ -3,11 +3,15 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { cloudinaryUrl, docsUrl } from "@bera/config";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 export default function Hero() {
+  const router = useRouter();
+  const { track } = useAnalytics();
   return (
     <div className="flex flex-col justify-around lg:flex-row">
       <div className="my-24 flex w-full flex-col items-center gap-8 lg:w-[450px] lg:items-start ">
@@ -32,20 +36,27 @@ export default function Hero() {
         </div>
 
         <div className="flex gap-3 text-center lg:text-left">
-          <Link href={"/swap"} className="shadow-dark-shadow">
-            <Button
-              variant={"primary"}
-              className="text-lg lg:text-sm xl:text-lg"
-            >
-              Swap Tokens
-            </Button>
-          </Link>
-          <Link href={"/pools"} className="shadow-dark-shadow">
-            <Button variant="outline" className="text-lg lg:text-sm xl:text-lg">
-              {" "}
-              <Icons.search className="mr-1 inline-block h-6 w-6" /> View Pools
-            </Button>
-          </Link>
+          <Button
+            variant={"primary"}
+            className="text-lg shadow-dark-shadow lg:text-sm xl:text-lg"
+            onClick={() => {
+              track("Home Hero - Swap CTA Clicked");
+              router.push("/swap");
+            }}
+          >
+            Swap Tokens
+          </Button>
+          <Button
+            variant="outline"
+            className="text-lg shadow-dark-shadow lg:text-sm xl:text-lg"
+            onClick={() => {
+              track("Home Hero - Pools CTA Clicked");
+              router.push("/pools");
+            }}
+          >
+            {" "}
+            <Icons.search className="mr-1 inline-block h-6 w-6" /> View Pools
+          </Button>
         </div>
 
         <div className="flex flex-col items-center gap-3 lg:hidden lg:items-start">
