@@ -5,6 +5,7 @@ import { useBeraJs } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { useAccount } from 'wagmi';
 
 import ConnectedWalletPopover from "./connected-wallet-popover";
 import { SwicthNetworkBtn } from "./switch-network-btn";
@@ -34,7 +35,19 @@ export const ConnectButton = ({
   isNavItem?: boolean;
   isHoney?: boolean;
 }) => {
+
+  const { address, isConnected:wagmiIsConnected, chain } = useAccount();
+
   const { isConnected, isWrongNetwork, isReady } = useBeraJs();
+
+  console.log({
+    isConnected,
+    isWrongNetwork,
+    isReady,
+    wagmiIsConnected,
+    chain,
+    address
+  })
   return (
     <>
       {!isConnected && (
